@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="socialize">
+
+	<property file="local.properties" />
+	<property file="build.properties" />
+	<property file="default.properties" />
+	
+    <path id="android.antlibs">
+        <pathelement path="${sdk.dir}/tools/lib/anttasks.jar" />
+        <pathelement path="${sdk.dir}/tools/lib/sdklib.jar" />
+        <pathelement path="${sdk.dir}/tools/lib/androidprefs.jar" />
+    </path>
+
+    <taskdef name="setup"
+        classname="com.android.ant.SetupTask"
+        classpathref="android.antlibs"/>
+	
+    <!-- Emma-instruments tested project classes (compiles the tested project if necessary)
+             and writes instrumented classes to ${instrumentation.absolute.dir}/classes -->
+    <target name="-emma-instrument" depends="compile">
+        <echo>[OVERRIDE] Instrumenting classes from ${out.absolute.dir}/classes...</echo>
+    	<echo>EMMA will create meta data file in ${emma.report.dir}/coverage.em</echo>
+        <!-- It only instruments class files, not any external libs -->
+        <emma enabled="true">
+            <instr verbosity="${verbosity}"
+                   mode="overwrite"
+                   instrpath="${out.absolute.dir}/classes"
+                   outdir="${out.absolute.dir}/classes"
+                   metadatafile="${emma.report.dir}/coverage.em"
+            	   filter="-com.socialize.sample.*,-com.socialize.R*"> <!--Don't need coverage for the sample project itself -->
+            </instr>
+            <!-- TODO: exclusion filters on R*.class and allowing custom exclusion from
+                 user defined file -->
+        	
+        </emma>
+    </target>
+	
+	<setup/>
+
+</project>

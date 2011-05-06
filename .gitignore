@@ -1,0 +1,12 @@
+sdk/.settings
+sdk/gen
+sdk/bin
+sample/.settings
+sample/gen
+sample/bin
+sample/sdk_src/
+test/coverage
+test/test-output
+test/gen
+test/bin
+testlocal.properties

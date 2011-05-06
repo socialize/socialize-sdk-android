@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="socialize-test">
+
+	<property name="verbose" value="false" />
+	<property file="local.properties" />
+	<property file="build.properties" />
+	<property file="default.properties" />
+
+	<path id="android.antlibs">
+		<pathelement path="${sdk.dir}/tools/lib/anttasks.jar" />
+		<pathelement path="${sdk.dir}/tools/lib/sdklib.jar" />
+		<pathelement path="${sdk.dir}/tools/lib/androidprefs.jar" />
+	</path>
+
+	<taskdef name="setup"
+        classname="com.android.ant.SetupTask"
+        classpathref="android.antlibs" />
+
+	<property name="test.runner" value="pl.polidea.instrumentation.PolideaInstrumentationTestRunner" />
+
+	<target name="test" depends="run-coverage-with-reports"/>
+	<target name="run-coverage-with-reports" depends="pre-clean,coverage,pull-reports"/>
+	
+	<target name="pre-clean">
+		<delete dir="${emma.report.dir}" verbose="true" failonerror="false"/>
+		<delete dir="test-output" verbose="true" failonerror="false"/>
+		<delete dir="${instrumentation.absolute.dir}" verbose="true" failonerror="false"/>
+		
+		<echo>Removing JUnit path ${junit.dump.path}</echo>
+		
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="shell" />
+			<arg value="rm" />
+			<arg value="-r" />
+			<arg value="${junit.dump.path}" />
+		</exec>
+		
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="shell" />
+			<arg value="rmdir" />
+			<arg value="${junit.dump.path}" />
+		</exec>
+		
+		<echo>Removing coverage data</echo>
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="shell" />
+			<arg value="rm" />
+			<arg value="${emma.dump.file}" />
+		</exec>
+		
+		<mkdir dir="${emma.report.dir}"/>
+		<mkdir dir="test-output"/>
+		
+		<echo>Creating JUnit report path on device at ${junit.dump.path}</echo>
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="shell" />
+			<arg value="mkdir" />
+			<arg value="${junit.dump.path}" />
+		</exec>
+	</target>
+
+	<target name="pull-reports">
+		<echo>Downloading XML test results...</echo>
+		<mkdir dir="test-output"/>
+		<exec executable="${adb}" failonerror="true" dir="test-output">
+			<arg line="${adb.device.arg}" />
+			<arg value="pull" />
+			<arg value="${junit.dump.path}" />
+		</exec>
+	</target>
+
+	<target name="-pre-compile" depends="override-extensible-classpath"/>
+	<target name="-set-coverage-classpath" depends="override-extensible-classpath-instrumented"/>
+
+	<target name="override-extensible-classpath">
+		<path id="override.path">
+			<path refid="android.target.classpath"/>
+			<path refid="jar.libs.ref"/>
+			<pathelement location="${tested.project.absolute.dir}/bin/classes"/>
+		</path>
+
+		<property name="extensible.classpath" refId="override.path"/>
+		<echo>Extensible classpath AFTER is ${extensible.classpath}</echo>
+	</target>
+
+	<target name="override-extensible-classpath-instrumented">
+		<path id="override.path">
+			<path refid="android.target.classpath"/>
+			<path refid="jar.libs.ref"/>
+			<pathelement location="${tested.project.absolute.dir}/bin/classes"/>
+			<pathelement location="${instrumentation.absolute.dir}/classes"/>
+		</path>
+		<property name="extensible.classpath" refId="override.path"/>
+		<echo>Extensible classpath AFTER is ${extensible.classpath}</echo>
+	</target>
+
+	<target name="compile" depends="-pre-build, -aidl, -renderscript, -resource-src, -pre-compile"
+            description="Compiles project's .java files into .class files">
+		
+		<if condition="${manifest.hasCode}">
+			<then>
+				<condition property="extensible.classpath"
+                    value="${tested.project.absolute.dir}/bin/classes"
+                    else=".">
+					<isset property="tested.project.absolute.dir" />
+				</condition>
+				<condition property="extensible.libs.classpath"
+                    value="${tested.project.absolute.dir}/libs"
+                    else="${jar.libs.dir}">
+					<isset property="tested.project.absolute.dir" />
+				</condition>
+				<javac encoding="${java.encoding}"
+                    source="${java.source}" target="${java.target}"
+                    debug="true" 
+					extdirs=""
+                    destdir="${out.classes.absolute.dir}"
+                    bootclasspathref="android.target.classpath"
+                    verbose="${verbose}"
+                    classpath="${extensible.classpath}"
+                    classpathref="jar.libs.ref">
+					<src path="${source.absolute.dir}" />
+					<src path="${gen.absolute.dir}" />
+					<src refid="project.libraries.src" />
+					<classpath>
+						<fileset dir="${extensible.libs.classpath}" includes="*.jar" />
+					</classpath>
+
+					<compilerarg value="-ARegenerateFrameworkMocks=true"/>
+				</javac>
+			</then>
+			<else>
+				<echo>hasCode = false. Skipping...</echo>
+			</else>
+		</if>
+	</target>
+
+
+	<!-- Overridden from /tools/ant/test_rules.xml -->
+	<target name="coverage" depends="-set-coverage-classpath, -install-instrumented, install"
+	                description="Runs the tests against the instrumented code and generates
+	                            code coverage report">
+
+		<run-tests-helper emma.enabled="true">
+			<extra-instrument-args>
+				<arg value="-e" />
+				<arg value="coverageFile" />
+				<arg value="${emma.dump.file}" />
+
+				<arg value="-e" />
+				<arg value="package" />
+				<arg value="${test.package}" />
+
+				<arg value="-e" />
+				<arg value="junitOutputDirectory" />
+				<arg value="${junit.dump.path}" />
+
+			</extra-instrument-args>
+
+		</run-tests-helper>
+		<echo>Downloading coverage file into project directory...</echo>
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="pull" />
+			<arg value="${emma.dump.file}" />
+			<arg value="${emma.report.dir}/coverage.ec" />
+		</exec>
+		<echo>Extracting coverage report...</echo>
+		
+		<path id="emma.report.src.path">
+			<pathelement path="${tested.project.absolute.dir}/${source.dir}" />
+			<pathelement path="${library.project.src}" />
+		</path>
+		
+		<emma>
+			<!--
+			<report 
+				sourcepath="${tested.project.absolute.dir}/${source.dir}"
+	            verbosity="${verbosity}">
+	        -->
+			<report 
+				sourcepathref="emma.report.src.path" 
+	            verbosity="verbose">
+				
+				<infileset dir="${emma.report.dir}">
+					<include name="coverage.ec" />
+					<include name="coverage.em" />
+				</infileset>
+				<html outfile="${emma.report.dir}/coverage.html" />
+				<!-- Enable if xml output can be used
+				<xml outfile="${emma.report.dir}/coverage.xml" />
+				-->
+			</report>
+		</emma>
+		<echo>Cleaning up temporary files...</echo>
+		<delete dir="${instrumentation.absolute.dir}" />
+		<delete file="${emma.report.dir}/coverage.ec" />
+		<delete file="${emma.report.dir}/coverage.em" />
+		<echo>Saving the report file in ${emma.report.dir}/coverage.html</echo>
+	</target>
+
+	<setup/>
+
+</project>
