@@ -30,4 +30,11 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>sdk_src</name>
+			<type>2</type>
+			<locationURI>_android_sdk_1bc3a/src</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
