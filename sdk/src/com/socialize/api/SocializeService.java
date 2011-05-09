@@ -65,6 +65,7 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 		AsyncGetter getter = new AsyncGetter(RequestType.LIST, session);
 		SocializeGetRequest request = new SocializeGetRequest();
 		request.setEndpoint(endpoint);
+		request.setKey(key);
 		getter.execute(request);
 	}
 

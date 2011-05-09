@@ -1,5 +1,7 @@
 package com.socialize.test;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -80,6 +82,28 @@ public class SocializeServiceTest extends SocializeActivityTest {
 			@Override 
 			public void run() { 
 				service.getAsync(mockSession, endpoint, ids);
+			} 
+		});
+
+		signal.await(30, TimeUnit.SECONDS); 
+		
+		AndroidMock.verify(provider);
+	}
+	
+	public void testServiceAsyncCallsListOnProvider() throws Throwable {
+
+		final String endpoint = "foobar";
+		final String key = "foobar_key";
+		
+		final List<SocializeObject> returned = new LinkedList<SocializeObject>();
+		
+		AndroidMock.expect(provider.list(mockSession, endpoint, key)).andReturn(returned);
+		AndroidMock.replay(provider);
+
+		runTestOnUiThread(new Runnable() { 
+			@Override 
+			public void run() { 
+				service.listAsync(mockSession, endpoint, key);
 			} 
 		});
 
