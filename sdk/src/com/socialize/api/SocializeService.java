@@ -115,6 +115,7 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 
 		RequestType requestType;
 		SocializeSession session;
+		SocializeApiError error = null;
 		
 		public AbstractAsyncProcess(RequestType requestType, SocializeSession session) {
 			super();
@@ -130,9 +131,7 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 				result = doInBackground(request);
 			}
 			catch (SocializeApiError error) {
-				if(listener != null) {
-					listener.onError(error);
-				}
+				this.error = error;
 			}
 			
 			return result;
@@ -141,7 +140,12 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 		@Override
 		protected void onPostExecute(Result result) {
 			if(listener != null) {
-				listener.onResult(requestType, result);
+				if(error != null) {
+					listener.onError(error);
+				}
+				else {
+					listener.onResult(requestType, result);
+				}
 			}
 		}
 
