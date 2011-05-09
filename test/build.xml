@@ -18,12 +18,14 @@
 
 	<property name="test.runner" value="pl.polidea.instrumentation.PolideaInstrumentationTestRunner" />
 
+	<property name="test-output" value="test-output"/>
+	
 	<target name="test" depends="run-coverage-with-reports"/>
 	<target name="run-coverage-with-reports" depends="pre-clean,coverage,pull-reports"/>
 	
 	<target name="pre-clean">
 		<delete dir="${emma.report.dir}" verbose="true" failonerror="false"/>
-		<delete dir="test-output" verbose="true" failonerror="false"/>
+		<delete dir="${test-output}" verbose="true" failonerror="false"/>
 		<delete dir="${instrumentation.absolute.dir}" verbose="true" failonerror="false"/>
 		
 		<echo>Removing JUnit path ${junit.dump.path}</echo>
@@ -52,7 +54,7 @@
 		</exec>
 		
 		<mkdir dir="${emma.report.dir}"/>
-		<mkdir dir="test-output"/>
+		<mkdir dir="${test-output}"/>
 		
 		<echo>Creating JUnit report path on device at ${junit.dump.path}</echo>
 		<exec executable="${adb}" failonerror="true">
@@ -61,16 +63,31 @@
 			<arg value="mkdir" />
 			<arg value="${junit.dump.path}" />
 		</exec>
+		
+		<echo>Clearing logcat buffer</echo>
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="logcat" />
+			<arg value="-c" />
+		</exec>
 	</target>
 
 	<target name="pull-reports">
+
 		<echo>Downloading XML test results...</echo>
-		<mkdir dir="test-output"/>
-		<exec executable="${adb}" failonerror="true" dir="test-output">
+		<exec executable="${adb}" failonerror="true" dir="${test-output}">
 			<arg line="${adb.device.arg}" />
 			<arg value="pull" />
 			<arg value="${junit.dump.path}" />
 		</exec>
+		
+		<echo>Dumping logcat buffer</echo>
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="logcat" />
+			<arg value="-d" />
+		</exec>
+		
 	</target>
 
 	<target name="-pre-compile" depends="override-extensible-classpath"/>

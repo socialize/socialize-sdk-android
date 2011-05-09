@@ -9,12 +9,12 @@ public interface SocializeProvider<T> {
 	
 	public SocializeSession authenticate(String key, String secret, String uuid) throws SocializeApiError;
 
-	public List<T> list(String endpoint, String key) throws SocializeApiError;
+	public List<T> list(SocializeSession session, String endpoint, String key) throws SocializeApiError;
 	
-	public T get(String endpoint, int[] ids) throws SocializeApiError;
+	public T get(SocializeSession session, String endpoint, int[] ids) throws SocializeApiError;
 	
-	public List<T> put(String endpoint, T object) throws SocializeApiError;
+	public List<T> put(SocializeSession session, String endpoint, T object) throws SocializeApiError;
 
-	public List<T> post(String endpoint, T object) throws SocializeApiError;
+	public List<T> post(SocializeSession session, String endpoint, T object) throws SocializeApiError;
 	
 }

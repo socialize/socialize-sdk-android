@@ -1,6 +1,7 @@
 package com.socialize.api.comment;
 
 import com.socialize.api.SocializeService;
+import com.socialize.api.SocializeSession;
 import com.socialize.entity.Comment;
 import com.socialize.provider.comment.CommentProvider;
 
@@ -12,17 +13,17 @@ public class CommentService extends SocializeService<Comment, CommentProvider> {
 		super(provider);
 	}
 
-	public void addComment(String key, String comment) {
+	public void addComment(SocializeSession session, String key, String comment) {
 		Comment c = new Comment();
 		c.setComment(comment);
-		super.putAsync(endpoint, c);
+		super.putAsync(session, endpoint, c);
 	}
 	
-	public void getAllComments(String key) {
-		super.listAsync(endpoint, key);
+	public void getAllComments(SocializeSession session, String key) {
+		super.listAsync(session, endpoint, key);
 	}
 
-	public void getComments(int...id) {
+	public void getComments(SocializeSession session, int...id) {
 		
 	}
 }

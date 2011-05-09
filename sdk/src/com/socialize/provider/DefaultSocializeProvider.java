@@ -4,15 +4,15 @@ import java.util.List;
 
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.SocializeObject;
-import com.socialize.entity.factory.FactoryService;
+import com.socialize.entity.factory.SocializeObjectFactory;
 
 public class DefaultSocializeProvider<T extends SocializeObject> implements SocializeProvider<T> {
 
-	protected FactoryService factoryService;
+	protected SocializeObjectFactory<T> factory;
 	
-	public DefaultSocializeProvider(FactoryService factoryService) {
+	public DefaultSocializeProvider(SocializeObjectFactory<T> factory) {
 		super();
-		this.factoryService = factoryService;
+		this.factory = factory;
 	}
 
 	@Override
@@ -22,28 +22,27 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	}
 
 	@Override
-	public T get(String endpoint, int[] ids) {
+	public T get(SocializeSession session, String endpoint, int[] ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	
 	@Override
-	public List<T> list(String endpoint, String key) {
+	public List<T> list(SocializeSession session, String endpoint, String key) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<T> put(String endpoint, T object) {
+	public List<T> put(SocializeSession session, String endpoint, T object) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<T> post(String endpoint, T object) {
+	public List<T> post(SocializeSession session, String endpoint, T object) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

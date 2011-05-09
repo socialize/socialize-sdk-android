@@ -76,6 +76,7 @@ public class FactoryService {
 	}
 	
 	void initDefaultFactories() {
+		// TODO: Add remaining factories
 		factories.put(Application.class.getName(), new ApplicationFactory(this));
 		factories.put(Comment.class.getName(), new CommentFactory(this));
 	}
