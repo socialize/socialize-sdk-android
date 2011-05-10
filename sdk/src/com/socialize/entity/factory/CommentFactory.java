@@ -21,7 +21,7 @@ public class CommentFactory extends EntryFactory<Comment> {
 	}
 
 	@Override
-	protected Comment instantiate() {
+	public Comment instantiate() {
 		return new Comment();
 	}
 }

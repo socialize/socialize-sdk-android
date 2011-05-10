@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.socialize.api.SocializeSession;
 import com.socialize.api.comment.CommentService;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.factory.FactoryService;
 import com.socialize.listener.comment.CommentListener;
@@ -34,7 +35,9 @@ public final class Socialize {
 	}
 	
 	public void init() {
-		factoryService = new FactoryService(context);
+		SocializeConfig config =new SocializeConfig();
+		config.init(context);
+		factoryService = new FactoryService(config);
 	}
 	
 	public void destroy() {

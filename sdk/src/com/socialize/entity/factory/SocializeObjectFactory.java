@@ -28,12 +28,13 @@ public abstract class SocializeObjectFactory<T extends SocializeObject> {
 		T entry = instantiate();
 		
 		entry.setId(object.getInt("id"));
+		
 		create(object, entry);
 		
 		return entry;
 	}
 	
-	protected abstract T instantiate();
+	public abstract T instantiate();
 	
-	protected abstract void create(JSONObject object, T entry) throws JSONException;
+	public abstract void create(JSONObject object, T entry) throws JSONException;
 }

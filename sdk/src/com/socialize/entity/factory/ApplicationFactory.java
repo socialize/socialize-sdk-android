@@ -16,12 +16,12 @@ public class ApplicationFactory extends SocializeObjectFactory<Application> {
 	}
 
 	@Override
-	protected Application instantiate() {
+	public Application instantiate() {
 		return new Application();
 	}
 
 	@Override
-	protected void create(JSONObject object, Application entry) throws JSONException {
+	public void create(JSONObject object, Application entry) throws JSONException {
 		entry.setName(object.getString("name"));
 	}
 }

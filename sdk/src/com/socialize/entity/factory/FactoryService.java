@@ -1,14 +1,11 @@
 package com.socialize.entity.factory;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import android.content.Context;
-
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Application;
 import com.socialize.entity.Comment;
 import com.socialize.entity.SocializeObject;
@@ -17,29 +14,12 @@ public class FactoryService {
 
 	private final Map<String, SocializeObjectFactory<?>> factories = new HashMap<String, SocializeObjectFactory<?>>();
 	
-	public FactoryService(Context context) {
+	public FactoryService(SocializeConfig config) {
 		super();
 		
-		InputStream in = null;
-		Properties props = null;
+		Properties props = config.getProperties();
+		
 		try {
-			try {
-				in = context.getAssets().open("socialize.properties");
-				
-				if(in != null) {
-					props = new Properties();
-					props.load(in);
-				}
-			}
-			catch (FileNotFoundException ignore) {
-				// TODO: log
-			}
-			finally {
-				if(in != null) {
-					in.close();
-				}
-			}
-			
 			if(props != null) {
 				Set<Object> keySet = props.keySet();
 				
@@ -79,6 +59,10 @@ public class FactoryService {
 		// TODO: Add remaining factories
 		factories.put(Application.class.getName(), new ApplicationFactory(this));
 		factories.put(Comment.class.getName(), new CommentFactory(this));
+	}
+
+	public Map<String, SocializeObjectFactory<?>> getFactories() {
+		return factories;
 	}
 	
 }

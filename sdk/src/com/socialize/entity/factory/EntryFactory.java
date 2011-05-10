@@ -19,7 +19,7 @@ public abstract class EntryFactory<T extends SocializeEntry> extends SocializeOb
 	}
 
 	@Override
-	protected void create(JSONObject object, T entry) throws JSONException {
+	public void create(JSONObject object, T entry) throws JSONException {
 
 		try {
 			SocializeObjectFactory<Application> applicationFactory = factoryService.getFactoryFor(Application.class);
