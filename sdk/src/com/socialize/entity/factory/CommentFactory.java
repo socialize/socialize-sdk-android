@@ -16,12 +16,18 @@ public class CommentFactory extends EntryFactory<Comment> {
 	}
 
 	@Override
-	protected void postCreate(JSONObject object, Comment comment) throws JSONException {
+	protected void postFromJSON(JSONObject object, Comment comment) throws JSONException {
 		comment.setComment(object.getString("comment"));
 	}
 
 	@Override
-	public Comment instantiate() {
+	protected void postToJSON(Comment comment, JSONObject object) throws JSONException {
+		object.put("comment", comment.getComment());
+	}
+
+	@Override
+	public Comment instantiateObject() {
 		return new Comment();
 	}
+	
 }

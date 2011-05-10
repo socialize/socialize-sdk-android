@@ -25,9 +25,9 @@ public class FactoryService {
 				
 				for (Object key : keySet) {
 					String strKey = key.toString();
-					if(strKey.startsWith("factory")) {
+					if(strKey.startsWith("factory.")) {
 						// Get the class name
-						String className = strKey.substring("factory".length() + 1, strKey.length());
+						String className = strKey.substring("factory.".length(), strKey.length());
 						String factoryClass = props.getProperty(strKey);
 						
 						// Instantiate

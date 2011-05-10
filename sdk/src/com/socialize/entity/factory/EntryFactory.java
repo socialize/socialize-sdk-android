@@ -19,30 +19,59 @@ public abstract class EntryFactory<T extends SocializeEntry> extends SocializeOb
 	}
 
 	@Override
-	public void create(JSONObject object, T entry) throws JSONException {
-
+	protected void toJSON(T from, JSONObject to) throws JSONException {
 		try {
 			SocializeObjectFactory<Application> applicationFactory = factoryService.getFactoryFor(Application.class);
 			SocializeObjectFactory<User> userFactory = factoryService.getFactoryFor(User.class);
 			SocializeObjectFactory<Entity> entityFactory = factoryService.getFactoryFor(Entity.class);
 			
 			
-			entry.setApplication(applicationFactory.create(object));
-			entry.setUser(userFactory.create(object));
-			entry.setEntity(entityFactory.create(object));
+			JSONObject application = applicationFactory.toJSON(from.getApplication());
+			JSONObject user = userFactory.toJSON(from.getUser());
+			JSONObject entity = entityFactory.toJSON(from.getEntity());
 			
-			entry.setLat((float)object.getDouble("lat"));
-			entry.setLon((float)object.getDouble("lon"));
-			entry.setDate(UTC_FORMAT.parse(object.getString("date")));
+			to.put("application", application);
+			to.put("user", user);
+			to.put("entity", entity);
+			
+			to.put("lat", from.getLat());
+			to.put("lon", from.getLon());
+			to.put("date", UTC_FORMAT.format(from.getDate()));
 			
 		}
 		catch (Exception e) {
 			throw new JSONException(e.getMessage());
 		}
 		
-		postCreate(object, entry);
+		postToJSON(from, to);
+	}
+
+	@Override
+	protected void fromJSON(JSONObject from, T to) throws JSONException {
+
+		try {
+			SocializeObjectFactory<Application> applicationFactory = factoryService.getFactoryFor(Application.class);
+			SocializeObjectFactory<User> userFactory = factoryService.getFactoryFor(User.class);
+			SocializeObjectFactory<Entity> entityFactory = factoryService.getFactoryFor(Entity.class);
+			
+			to.setApplication(applicationFactory.fromJSON(from));
+			to.setUser(userFactory.fromJSON(from));
+			to.setEntity(entityFactory.fromJSON(from));
+			
+			to.setLat((float)from.getDouble("lat"));
+			to.setLon((float)from.getDouble("lon"));
+			to.setDate(UTC_FORMAT.parse(from.getString("date")));
+			
+		}
+		catch (Exception e) {
+			throw new JSONException(e.getMessage());
+		}
+		
+		postFromJSON(from, to);
 	}
 	
-	protected abstract void postCreate(JSONObject object, T instance) throws JSONException;
+	protected abstract void postToJSON(T from, JSONObject to) throws JSONException;
+	
+	protected abstract void postFromJSON(JSONObject from, T to) throws JSONException;
 	
 }
