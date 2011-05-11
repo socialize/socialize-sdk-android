@@ -25,7 +25,6 @@ public abstract class EntryFactory<T extends SocializeEntry> extends SocializeOb
 			SocializeObjectFactory<User> userFactory = factoryService.getFactoryFor(User.class);
 			SocializeObjectFactory<Entity> entityFactory = factoryService.getFactoryFor(Entity.class);
 			
-			
 			JSONObject application = applicationFactory.toJSON(from.getApplication());
 			JSONObject user = userFactory.toJSON(from.getUser());
 			JSONObject entity = entityFactory.toJSON(from.getEntity());
