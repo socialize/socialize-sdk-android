@@ -21,6 +21,11 @@
  */
 package com.socialize.api;
 
+/**
+ * @author Jason Polites
+ *
+ * @param <T>
+ */
 public class SocializePutRequest<T> extends SocializeRequest {
 
 	private T object;

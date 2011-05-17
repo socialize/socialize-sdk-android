@@ -29,6 +29,12 @@ import com.socialize.entity.SocializeObject;
 import com.socialize.listener.SocializeListener;
 import com.socialize.provider.SocializeProvider;
 
+/**
+ * @author Jason Polites
+ *
+ * @param <T>
+ * @param <P>
+ */
 public class SocializeService<T extends SocializeObject, P extends SocializeProvider<T>> {
 
 	private SocializeListener<T> listener;

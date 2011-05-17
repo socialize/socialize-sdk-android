@@ -21,6 +21,10 @@
  */
 package com.socialize.api;
 
+/**
+ * @author Jason Polites
+ *
+ */
 public class SocializeRequest {
 
 	private String endpoint;

@@ -21,6 +21,10 @@
  */
 package com.socialize.api;
 
+/**
+ * @author Jason Polites
+ *
+ */
 public class SocializeAuthRequest extends SocializeRequest {
 
 	private String consumerKey;

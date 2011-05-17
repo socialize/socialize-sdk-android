@@ -19,22 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity;
+package com.socialize.net;
+
+import org.apache.http.client.HttpClient;
+
+import com.socialize.error.SocializeException;
 
 /**
  * @author Jason Polites
  *
  */
-public class Application extends SocializeObject {
+public interface HttpClientFactory {
 
-	private String name;
+	public void init() throws SocializeException;
 
-	public String getName() {
-		return name;
-	}
+	public void destroy();
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
+	public HttpClient newInstance();
+
 }

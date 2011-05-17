@@ -21,6 +21,10 @@
  */
 package com.socialize.api;
 
+/**
+ * @author Jason Polites
+ *
+ */
 public class SocializeAuthResponse implements SocializeResponse {
 
 	private SocializeSession session;

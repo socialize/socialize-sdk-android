@@ -19,22 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity;
+package com.socialize.error;
+
 
 /**
  * @author Jason Polites
  *
  */
-public class Application extends SocializeObject {
+public class SocializeException extends Exception {
 
-	private String name;
+	private static final long serialVersionUID = 4976401822848745686L;
 
-	public String getName() {
-		return name;
+	public SocializeException() {
+		super();
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public SocializeException(String detailMessage, Throwable throwable) {
+		super(detailMessage, throwable);
 	}
-	
+
+	public SocializeException(String detailMessage) {
+		super(detailMessage);
+	}
+
+	public SocializeException(Throwable throwable) {
+		super(throwable);
+	}
 }

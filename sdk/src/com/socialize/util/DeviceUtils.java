@@ -27,6 +27,10 @@ import android.content.pm.PackageManager;
 import android.telephony.TelephonyManager;
 
 
+/**
+ * @author Jason Polites
+ *
+ */
 public class DeviceUtils {
 	
 	public static final String getUUID(Context context) {

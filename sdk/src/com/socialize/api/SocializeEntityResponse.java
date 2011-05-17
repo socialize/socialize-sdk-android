@@ -24,6 +24,11 @@ package com.socialize.api;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * @author Jason Polites
+ *
+ * @param <T>
+ */
 public class SocializeEntityResponse<T> implements SocializeResponse {
 
 	private List<T> results;

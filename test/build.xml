@@ -45,6 +45,22 @@
 		</exec>
 		-->
 		
+		<echo>Removing old installation of com.socialize.sample</echo>
+		
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="uninstall" />
+			<arg value="com.socialize.sample" />
+		</exec>
+		
+		<echo>Removing old installation of com.socialize.test</echo>
+		
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="uninstall" />
+			<arg value="com.socialize.test" />
+		</exec>
+		
 		<echo>Removing JUnit path ${junit.dump.path}</echo>
 		
 		<exec executable="${adb}" failonerror="true">

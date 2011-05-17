@@ -14,7 +14,7 @@ public class Comments {
 			@Override
 			public void onCreate(Comment entity) {
 				Toast.makeText(context, "Comment [" +
-						entity.getComment() +
+						entity.getText() +
 						"] created", Toast.LENGTH_LONG);
 			}
 		});

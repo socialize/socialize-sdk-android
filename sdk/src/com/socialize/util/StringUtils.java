@@ -19,22 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity;
+package com.socialize.util;
 
 /**
  * @author Jason Polites
  *
  */
-public class Application extends SocializeObject {
+public final class StringUtils {
 
-	private String name;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+	public static final boolean isEmpty(String str) {
+		return str == null || str.trim().length() == 0;
 	}
 	
 }

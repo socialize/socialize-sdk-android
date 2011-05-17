@@ -23,6 +23,10 @@ package com.socialize.api;
 
 import com.socialize.util.HttpUtils;
 
+/**
+ * @author Jason Polites
+ *
+ */
 public class SocializeApiError extends Exception {
 
 	private static final long serialVersionUID = 6929605095508741864L;

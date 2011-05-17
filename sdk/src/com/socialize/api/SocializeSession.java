@@ -23,6 +23,10 @@ package com.socialize.api;
 
 import com.socialize.entity.User;
 
+/**
+ * @author Jason Polites
+ *
+ */
 public interface SocializeSession {
 
 	public User getUser();

@@ -22,6 +22,10 @@
 package com.socialize.api;
 
 
+/**
+ * @author Jason Polites
+ *
+ */
 public interface SocializeResponse {
 
 	

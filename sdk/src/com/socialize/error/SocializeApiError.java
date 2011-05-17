@@ -19,22 +19,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity;
+package com.socialize.error;
+
+import com.socialize.util.HttpUtils;
 
 /**
  * @author Jason Polites
  *
  */
-public class Application extends SocializeObject {
+public class SocializeApiError extends SocializeException {
 
-	private String name;
+	private static final long serialVersionUID = 6929605095508741864L;
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+	private int resultCode;
 	
+	public SocializeApiError(int resultCode) {
+		super();
+		this.resultCode = resultCode;
+	}
+
+	@Override
+	public String getLocalizedMessage() {
+		return getMessage();
+	}
+
+	@Override
+	public String getMessage() {
+		return HttpUtils.getMessageFor(resultCode);
+	}
+
+	public int getResultCode() {
+		return resultCode;
+	}
 }
