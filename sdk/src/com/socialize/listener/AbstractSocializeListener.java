@@ -39,29 +39,22 @@ public abstract class AbstractSocializeListener<T extends SocializeObject> imple
 	@Override
 	public final void onResult(RequestType type, SocializeResponse response) {
 
-		// if(HttpUtils.isHttpError(response.getResultCode())) {
-		// SocializeError error = new SocializeError();
-		// error.setMessage(HttpUtils.getMessageFor(response.getResultCode()));
-		// onError(error);
-		// }
-		// else {
-
 		@SuppressWarnings("unchecked")
 		SocializeEntityResponse<T> entityResponse = (SocializeEntityResponse<T>) response;
 
 		switch (type) {
-		case GET:
-			onGet(entityResponse.getFirstResult());
-			break;
-		case LIST:
-			onList(entityResponse.getResults());
-			break;
-		case POST:
-			onUpdate(entityResponse.getFirstResult());
-			break;
-		case PUT:
-			onCreate(entityResponse.getFirstResult());
-			break;
+			case GET:
+				onGet(entityResponse.getFirstResult());
+				break;
+			case LIST:
+				onList(entityResponse.getResults());
+				break;
+			case POST:
+				onUpdate(entityResponse.getFirstResult());
+				break;
+			case PUT:
+				onCreate(entityResponse.getFirstResult());
+				break;
 		}
 	}
 

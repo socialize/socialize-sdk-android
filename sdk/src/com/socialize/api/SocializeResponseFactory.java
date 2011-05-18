@@ -19,34 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test;
+package com.socialize.api;
 
-import java.util.Stack;
+/**
+ * Produces SocializeEntityResponse instances.
+ * @author Jason Polites
+ *
+ */
+public interface SocializeResponseFactory<T> {
 
-import android.test.ActivityInstrumentationTestCase2;
-
-import com.socialize.sample.Main;
-
-public abstract class SocializeActivityTest extends ActivityInstrumentationTestCase2<Main> {
+	/**
+	 * Creates a single SocializeEntityResponse instance.
+	 * @return
+	 */
+	public SocializeEntityResponse<T> newEntityResponse();
 	
-	private Stack<Object> bucket;
-	
-	public SocializeActivityTest() {
-		super("com.socialize.sample", Main.class);
-	}
-
-	@Override
-	protected void setUp() throws Exception {
-		bucket = new Stack<Object>();
-		super.setUp();
-	}
-	
-	protected void addResult(Object obj) {
-		bucket.push(obj);
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected <T extends Object> T getResult() {
-		return (T) bucket.pop();
-	}
+	/**
+	 * Creates a single SocializeAuthResponse instance.
+	 * @return
+	 */
+	public SocializeAuthResponse newAuthResponse();
 }

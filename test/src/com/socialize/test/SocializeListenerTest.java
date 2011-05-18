@@ -21,6 +21,7 @@
  */
 package com.socialize.test;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -32,6 +33,7 @@ import com.socialize.api.SocializeService;
 import com.socialize.api.SocializeService.RequestType;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.SocializeObject;
+import com.socialize.listener.AbstractSocializeListener;
 import com.socialize.listener.SocializeListener;
 import com.socialize.provider.SocializeProvider;
 
@@ -39,35 +41,29 @@ public class SocializeListenerTest extends SocializeActivityTest {
 
 	private SocializeService<SocializeObject, SocializeProvider<SocializeObject>> service;
 	private SocializeProvider<SocializeObject> provider;
-	private SocializeListener<SocializeObject> listener;
-	private SocializeResponse response;
+//	private SocializeResponse response;
 	private SocializeSession session;
 	
 	private final String endpoint = "foobar";
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks({SocializeProvider.class, SocializeListener.class, SocializeSession.class})
+	@UsesMocks({SocializeProvider.class, SocializeSession.class})
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		provider = AndroidMock.createNiceMock(SocializeProvider.class);
-		listener = AndroidMock.createMock(SocializeListener.class);
-		response = AndroidMock.createNiceMock(SocializeResponse.class);
 		session = AndroidMock.createNiceMock(SocializeSession.class);
-		
 		service = new SocializeService<SocializeObject, SocializeProvider<SocializeObject>>(provider);
-		
-		service.setListener(listener);
-		
-	
-		AndroidMock.replay(response);
 	}
 
+	@SuppressWarnings("unchecked")
+	@UsesMocks({SocializeListener.class})
 	public void testOnResultCalledOnAsyncGetSuccess() throws Throwable {
 		
-		AndroidMock.replay(provider);
-		
 		CountDownLatch signal = new CountDownLatch(1); 
+		
+		SocializeListener<SocializeObject> listener = AndroidMock.createMock(SocializeListener.class);
+		service.setListener(listener);
 		
 		// Must use matcher here 
 		// http://weirdfellow.wordpress.com/2010/07/15/2-matchers-expected-1-recorded/
@@ -89,11 +85,15 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		AndroidMock.verify(listener);
 	}
 	
-	@UsesMocks (SocializeApiError.class)
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({SocializeApiError.class, SocializeListener.class})
 	public void testOnErrorCalledOnFail() throws Throwable {
 		CountDownLatch signal = new CountDownLatch(1); 
 		
 		SocializeApiError dummyError = new SocializeApiError(0);
+		
+		SocializeListener<SocializeObject> listener = AndroidMock.createMock(SocializeListener.class);
+		service.setListener(listener);
 		
 		AndroidMock.makeThreadSafe(provider, true);
 		AndroidMock.makeThreadSafe(session, true);
@@ -119,6 +119,208 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		
 		AndroidMock.verify(provider);
 		AndroidMock.verify(listener);
+	}
+	
+	public void testListenerOnGetCalledOnGET() throws Throwable {
+		
+		SocializeListener<SocializeObject> listener = new AbstractSocializeListener<SocializeObject>() {
+
+			@Override
+			public void onError(SocializeApiError error) {
+				fail();
+			}
+
+			@Override
+			public void onGet(SocializeObject entity) {
+				addResult(true);
+			}
+
+			@Override
+			public void onList(List<SocializeObject> entities) {
+				fail();
+			}
+
+			@Override
+			public void onUpdate(SocializeObject entity) {
+				fail();
+			}
+
+			@Override
+			public void onCreate(SocializeObject entity) {
+				fail();
+			}
+		};
+		
+		service.setListener(listener);
+		
+		CountDownLatch signal = new CountDownLatch(1); 
+		
+		final int[] ids = {0};
+		
+		runTestOnUiThread(new Runnable() {
+			public void run() {
+				service.getAsync(session, endpoint, ids);
+			}
+		});
+		
+		// Just wait for async process to finish
+		signal.await(500, TimeUnit.MILLISECONDS);
+		
+		Boolean result = getResult();
+		
+		assertNotNull(result);
+		assertTrue(result);
+	}
+	
+	public void testListenerOnListCalledOnLIST() throws Throwable {
+		
+		SocializeListener<SocializeObject> listener = new AbstractSocializeListener<SocializeObject>() {
+
+			@Override
+			public void onError(SocializeApiError error) {
+				fail();
+			}
+
+			@Override
+			public void onGet(SocializeObject entity) {
+				fail();
+			}
+
+			@Override
+			public void onList(List<SocializeObject> entities) {
+				addResult(true);
+			}
+
+			@Override
+			public void onUpdate(SocializeObject entity) {
+				fail();
+			}
+
+			@Override
+			public void onCreate(SocializeObject entity) {
+				fail();
+			}
+		};
+		
+		service.setListener(listener);
+		
+		CountDownLatch signal = new CountDownLatch(1); 
+		
+		final String key = "foobar";
+		
+		runTestOnUiThread(new Runnable() {
+			public void run() {
+				service.listAsync(session, endpoint, key);
+			}
+		});
+		
+		// Just wait for async process to finish
+		signal.await(500, TimeUnit.MILLISECONDS);
+		
+		Boolean result = getResult();
+		
+		assertNotNull(result);
+		assertTrue(result);
+	}
+	
+	public void testListenerOnUpdateCalledOnPOST() throws Throwable {
+		SocializeListener<SocializeObject> listener = new AbstractSocializeListener<SocializeObject>() {
+
+			@Override
+			public void onError(SocializeApiError error) {
+				fail();
+			}
+
+			@Override
+			public void onGet(SocializeObject entity) {
+				fail();
+			}
+
+			@Override
+			public void onList(List<SocializeObject> entities) {
+				fail();
+			}
+
+			@Override
+			public void onUpdate(SocializeObject entity) {
+				addResult(true);
+			}
+
+			@Override
+			public void onCreate(SocializeObject entity) {
+				fail();
+			}
+		};
+		
+		service.setListener(listener);
+		
+		CountDownLatch signal = new CountDownLatch(1); 
+		
+		final SocializeObject obj = new SocializeObject();
+		
+		runTestOnUiThread(new Runnable() {
+			public void run() {
+				service.postAsync(session, endpoint, obj);
+			}
+		});
+		
+		// Just wait for async process to finish
+		signal.await(500, TimeUnit.MILLISECONDS);
+		
+		Boolean result = getResult();
+		
+		assertNotNull(result);
+		assertTrue(result);
+	}
+	
+	public void testListenerOnCreateCalledOnPUT() throws Throwable {
+		SocializeListener<SocializeObject> listener = new AbstractSocializeListener<SocializeObject>() {
+
+			@Override
+			public void onError(SocializeApiError error) {
+				fail();
+			}
+
+			@Override
+			public void onGet(SocializeObject entity) {
+				fail();
+			}
+
+			@Override
+			public void onList(List<SocializeObject> entities) {
+				fail();
+			}
+
+			@Override
+			public void onUpdate(SocializeObject entity) {
+				fail();
+			}
+
+			@Override
+			public void onCreate(SocializeObject entity) {
+				addResult(true);
+			}
+		};
+		
+		service.setListener(listener);
+		
+		CountDownLatch signal = new CountDownLatch(1); 
+		
+		final SocializeObject obj = new SocializeObject();
+		
+		runTestOnUiThread(new Runnable() {
+			public void run() {
+				service.putAsync(session, endpoint, obj);
+			}
+		});
+		
+		// Just wait for async process to finish
+		signal.await(500, TimeUnit.MILLISECONDS);
+		
+		Boolean result = getResult();
+		
+		assertNotNull(result);
+		assertTrue(result);
 	}
 	
 }

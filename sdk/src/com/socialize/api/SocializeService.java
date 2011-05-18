@@ -39,6 +39,7 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 
 	private SocializeListener<T> listener;
 	private P provider;
+	private SocializeResponseFactory<T> responseFactory;
 
 	public static enum RequestType {AUTH,PUT,POST,GET,LIST};
 	
@@ -118,6 +119,14 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 		this.listener = listener;
 	}
 	
+	public SocializeResponseFactory<T> getResponseFactory() {
+		return responseFactory;
+	}
+
+	public void setResponseFactory(SocializeResponseFactory<T> responseFactory) {
+		this.responseFactory = responseFactory;
+	}
+
 	abstract class AbstractAsyncProcess<Params, Progress, Result extends SocializeResponse> extends AsyncTask<Params, Progress, Result> {
 
 		RequestType requestType;
@@ -167,7 +176,15 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 
 		@Override
 		protected SocializeAuthResponse doInBackground(SocializeAuthRequest request) throws SocializeApiError {
-			SocializeAuthResponse response = new SocializeAuthResponse();
+			SocializeAuthResponse response = null;
+			
+			if(responseFactory != null) {
+				response = responseFactory.newAuthResponse();
+			}
+			else {
+				response = new SocializeAuthResponse();
+			}
+			
 			SocializeSession session = SocializeService.this.authenticate(request.getConsumerKey(), request.getConsumerSecret(), request.getUuid());
 			response.setSession(session);
 			return response;
@@ -183,7 +200,14 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 		@Override
 		protected SocializeEntityResponse<T> doInBackground(SocializePutRequest<T> request) throws SocializeApiError {
 
-			SocializeEntityResponse<T> response = new SocializeEntityResponse<T>();
+			SocializeEntityResponse<T> response = null;
+			
+			if(responseFactory != null) {
+				response = responseFactory.newEntityResponse();
+			}
+			else {
+				response = new SocializeEntityResponse<T>();
+			}
 
 			List<T> results = null;
 
@@ -214,8 +238,15 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 		@Override
 		protected SocializeEntityResponse<T> doInBackground(SocializeGetRequest request) throws SocializeApiError {
 
-			SocializeEntityResponse<T> response = new SocializeEntityResponse<T>();
-
+			SocializeEntityResponse<T> response = null;
+			
+			if(responseFactory != null) {
+				response = responseFactory.newEntityResponse();
+			}
+			else {
+				response = new SocializeEntityResponse<T>();
+			}
+			
 			switch (requestType) {
 			
 			case GET:
