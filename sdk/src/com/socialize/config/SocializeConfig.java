@@ -22,10 +22,14 @@
 package com.socialize.config;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 import android.content.Context;
+import android.util.Log;
+
+import com.socialize.util.ClassLoaderProvider;
 
 /**
  * @author Jason Polites
@@ -33,11 +37,12 @@ import android.content.Context;
  */
 public class SocializeConfig {
 	
+	public static final String DEFAULT_PROPERTIES = "socialize.properties";
+	
+	
 	private Properties properties;
 	
-	private String propertiesFileName = "socialize.properties";
-	private final String defaultPropertiesFileName = propertiesFileName;
-	
+	private String propertiesFileName = DEFAULT_PROPERTIES;
 	
 	public static final String FACTORY_PREFIX = "factory.";
 	public static final String LOG_LEVEL = "log.level";
@@ -52,7 +57,20 @@ public class SocializeConfig {
 		this.propertiesFileName = propertiesFileName;
 	}
 	
+	/**
+	 * 
+	 * @param context
+	 */
 	public void init(Context context) {
+		init(context, null);
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param classLoaderProvider
+	 */
+	public void init(Context context, ClassLoaderProvider classLoaderProvider) {
 		InputStream in = null;
 		try {
 			try {
@@ -61,12 +79,20 @@ public class SocializeConfig {
 				try {
 					in = context.getAssets().open(propertiesFileName);
 				}
-				catch (FileNotFoundException ignore) {
+				catch (IOException ignore) {
 					// Ignore this, just means no override.
+					Log.w(getClass().getSimpleName(), "Could not load config from [" +
+							propertiesFileName +
+							"].  Using defaults");
 				}
 				
 				if(in == null) {
-					in = Thread.currentThread().getContextClassLoader().getResourceAsStream(defaultPropertiesFileName); // Don't use prop file name
+					if(classLoaderProvider == null) {
+						in = Thread.currentThread().getContextClassLoader().getResourceAsStream(DEFAULT_PROPERTIES); // Don't use prop file name
+					}
+					else {
+						in = classLoaderProvider.getClassloader().getResourceAsStream(DEFAULT_PROPERTIES); // Don't use prop file name
+					}
 				}
 				
 				if(in != null) {
@@ -75,12 +101,13 @@ public class SocializeConfig {
 				}
 				else {
 					throw new FileNotFoundException("Could not locate [" +
-							defaultPropertiesFileName +
+							DEFAULT_PROPERTIES +
 							"] in the classpath");
 				}
 			}
-			catch (FileNotFoundException ignore) {
-				// TODO: log
+			catch (IOException ignore) {
+				// No logger yet.. just Android log
+				Log.w(getClass().getSimpleName(), "Config load error", ignore);
 			}
 			finally {
 				if(in != null) {
@@ -106,7 +133,7 @@ public class SocializeConfig {
 	}
 
 	public String getDefaultPropertiesFileName() {
-		return defaultPropertiesFileName;
+		return DEFAULT_PROPERTIES;
 	}
 	
 }

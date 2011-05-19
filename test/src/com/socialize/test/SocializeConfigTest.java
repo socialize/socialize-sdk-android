@@ -28,7 +28,10 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.config.SocializeConfig;
+import com.socialize.util.ClassLoaderProvider;
 
 public class SocializeConfigTest extends SocializeActivityTest {
 
@@ -88,6 +91,34 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		Assert.assertNotNull(config.getProperties().getProperty("test_value"));
 		
 		Assert.assertEquals("sample", config.getProperties().getProperty("test_value"));
+	}
+	
+	/**
+	 * tests that config load failes when no props file found
+	 */
+	@UsesMocks({ClassLoaderProvider.class, ClassLoader.class})
+	public void testConfigLoadFail() { 
+		
+		final String noFile = "does.not.exist";
+		ClassLoaderProvider mockProvider = AndroidMock.createMock(ClassLoaderProvider.class);
+		ClassLoader mockLoader = AndroidMock.createMock(ClassLoader.class);
+		
+		AndroidMock.expect(mockProvider.getClassloader()).andReturn(mockLoader);
+		AndroidMock.expect(mockLoader.getResourceAsStream(SocializeConfig.DEFAULT_PROPERTIES)).andReturn(null);
+		
+		AndroidMock.replay(mockProvider);
+		AndroidMock.replay(mockLoader);
+		
+		SocializeConfig config = new SocializeConfig(noFile);
+		
+		config.init(getActivity(), mockProvider);
+		
+		AndroidMock.verify(mockProvider);
+		AndroidMock.verify(mockLoader);
+		
+		assertNotNull(config.getProperties());
+		assertEquals(0, config.getProperties().size());
+		
 	}
 	
 }

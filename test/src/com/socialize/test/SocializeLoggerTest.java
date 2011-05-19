@@ -30,7 +30,7 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.log.SocializeLogger.LogLevel;
 
 /**
- * @author jasonpolites
+ * @author Jason Polites
  *
  */
 public class SocializeLoggerTest extends SocializeActivityTest {

@@ -30,6 +30,7 @@ import com.socialize.entity.Comment;
 import com.socialize.entity.factory.FactoryService;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentListener;
+import com.socialize.log.SocializeLogger;
 import com.socialize.net.DefaultHttpClientFactory;
 import com.socialize.net.HttpClientFactory;
 import com.socialize.provider.DefaultSocializeProvider;
@@ -46,6 +47,8 @@ public final class Socialize {
 	private Context context;
 	private DefaultSocializeProvider<?> defaultProvider;
 	private HttpClientFactory clientFactory;
+	private SocializeLogger logger;
+	private SocializeConfig config;
 	
 	public Socialize(Context context) {
 		super();
@@ -64,8 +67,13 @@ public final class Socialize {
 	}
 	
 	public void init() throws SocializeException {
-		SocializeConfig config =new SocializeConfig();
+
+		config = new SocializeConfig();
 		config.init(context);
+		
+		logger = new SocializeLogger();
+		logger.init(config);
+		
 		factoryService = new FactoryService(config);
 		clientFactory = new DefaultHttpClientFactory();
 		clientFactory.init();
