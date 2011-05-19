@@ -39,9 +39,7 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 	@UsesMocks ({SocializeConfig.class, Properties.class})
 	public void testSocializeLoggerInit() {
 		
-		// We can't mock out the Android logger, so we're just going to have the 
-		// test call all the methods to make sure they don't fail :/
-		
+
 		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
 		Properties props = AndroidMock.createMock(Properties.class);
 		
@@ -62,9 +60,39 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 
 	}
 	
+	
+	public void testSocializeLoggerMethods() {
+		
+		// We can't mock out the Android logger, so we're just going to have the 
+		// test call all the methods to make sure they don't fail :/
+		
+		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+		Properties props = AndroidMock.createMock(Properties.class);
+		
+		AndroidMock.expect(config.getProperties()).andReturn(props).atLeastOnce();
+		AndroidMock.expect(props.getProperty(SocializeConfig.LOG_LEVEL)).andReturn(LogLevel.VERBOSE.name());
+		AndroidMock.expect(props.getProperty(SocializeConfig.LOG_TAG)).andReturn("LoggerTest");
+		
+		AndroidMock.replay(config);
+		AndroidMock.replay(props);
+		
+		SocializeLogger logger = new SocializeLogger();
+		
+		logger.init(config);
+		
+		logger.debug("Test message");
+		logger.info("Test message");
+		logger.warn("Test message");
+		logger.warn("Test message", new Exception("Test exception - IGNORE ME"));
+		
+		logger.error("Test message");
+		logger.error("Test message", new Exception("Test exception - IGNORE ME"));
+	}
+	
 	public void testSocializeLoggerConfigVerbose() {
 		SocializeLogger logger = setupLoggerConfigTest(LogLevel.VERBOSE);
 
+		assertTrue(logger.isWarnEnabled());
 		assertTrue(logger.isInfoEnabled());
 		assertTrue(logger.isDebugEnabled());
 		assertTrue(logger.isVerboseEnabled());
@@ -73,6 +101,7 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 	public void testSocializeLoggerConfigDebug() {
 		SocializeLogger logger = setupLoggerConfigTest(LogLevel.DEBUG);
 
+		assertTrue(logger.isWarnEnabled());
 		assertTrue(logger.isInfoEnabled());
 		assertTrue(logger.isDebugEnabled());
 		assertFalse(logger.isVerboseEnabled());
@@ -82,6 +111,7 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 	public void testSocializeLoggerConfigInfo() {
 		SocializeLogger logger = setupLoggerConfigTest(LogLevel.INFO);
 
+		assertTrue(logger.isWarnEnabled());
 		assertTrue(logger.isInfoEnabled());
 		assertFalse(logger.isDebugEnabled());
 		assertFalse(logger.isVerboseEnabled());
@@ -91,6 +121,7 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 	public void testSocializeLoggerConfigWarn() {
 		SocializeLogger logger = setupLoggerConfigTest(LogLevel.WARN);
 
+		assertTrue(logger.isWarnEnabled());
 		assertFalse(logger.isInfoEnabled());
 		assertFalse(logger.isDebugEnabled());
 		assertFalse(logger.isVerboseEnabled());
@@ -99,6 +130,7 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 	public void testSocializeLoggerConfigError() {
 		SocializeLogger logger = setupLoggerConfigTest(LogLevel.ERROR);
 
+		assertFalse(logger.isWarnEnabled());
 		assertFalse(logger.isInfoEnabled());
 		assertFalse(logger.isDebugEnabled());
 		assertFalse(logger.isVerboseEnabled());
