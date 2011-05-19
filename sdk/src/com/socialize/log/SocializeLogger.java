@@ -76,19 +76,19 @@ public class SocializeLogger {
 	}
 	
 	public boolean isVerboseEnabled() {
-		return logLevel.ordinal() >= LogLevel.VERBOSE.ordinal();
+		return logLevel.ordinal() <= LogLevel.VERBOSE.ordinal();
 	}
 	
 	public boolean isDebugEnabled() {
-		return logLevel.ordinal() >= LogLevel.DEBUG.ordinal();
+		return logLevel.ordinal() <= LogLevel.DEBUG.ordinal();
 	}
 	
 	public boolean isInfoEnabled() {
-		return logLevel.ordinal() >= LogLevel.INFO.ordinal();
+		return logLevel.ordinal() <= LogLevel.INFO.ordinal();
 	}
 	
 	public boolean isWarnEnabled() {
-		return logLevel.ordinal() >= LogLevel.WARN.ordinal();
+		return logLevel.ordinal() <= LogLevel.WARN.ordinal();
 	}
 	
 	
