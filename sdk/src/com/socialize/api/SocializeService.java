@@ -26,6 +26,7 @@ import java.util.List;
 import android.os.AsyncTask;
 
 import com.socialize.entity.SocializeObject;
+import com.socialize.error.SocializeApiError;
 import com.socialize.listener.SocializeListener;
 import com.socialize.provider.SocializeProvider;
 
@@ -46,6 +47,11 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 	public SocializeService(P provider) {
 		super();
 		this.provider = provider;
+	}
+	
+	public SocializeService(P provider, SocializeResponseFactory<T> responseFactory) {
+		this(provider);
+		this.responseFactory = responseFactory;
 	}
 
 	public SocializeSession authenticate(String key, String secret, String uuid) throws SocializeApiError {
@@ -111,18 +117,10 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 		authenicator.execute(request);
 	}
 
-	public SocializeListener<T> getListener() {
-		return listener;
-	}
-
 	public void setListener(SocializeListener<T> listener) {
 		this.listener = listener;
 	}
 	
-	public SocializeResponseFactory<T> getResponseFactory() {
-		return responseFactory;
-	}
-
 	public void setResponseFactory(SocializeResponseFactory<T> responseFactory) {
 		this.responseFactory = responseFactory;
 	}

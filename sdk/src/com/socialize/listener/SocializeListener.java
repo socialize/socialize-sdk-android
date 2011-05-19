@@ -21,10 +21,10 @@
  */
 package com.socialize.listener;
 
-import com.socialize.api.SocializeApiError;
 import com.socialize.api.SocializeResponse;
 import com.socialize.api.SocializeService.RequestType;
 import com.socialize.entity.SocializeObject;
+import com.socialize.error.SocializeApiError;
 
 /**
  * @author Jason Polites

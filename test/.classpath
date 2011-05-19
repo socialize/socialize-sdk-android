@@ -6,7 +6,7 @@
 	<classpathentry kind="lib" path="libs/easymock.jar"/>
 	<classpathentry kind="lib" path="libs/javassist-appmakr.jar"/>
 	<classpathentry kind="lib" path="libs/polidea_test_runner_1.1.jar"/>
-	<classpathentry kind="lib" path="libext/AndroidMockGenerator-nodeps.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/sample"/>
+	<classpathentry kind="lib" path="libext/AndroidMockGenerator-appmakr-modified.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -23,8 +23,8 @@ package com.socialize.provider;
 
 import java.util.List;
 
-import com.socialize.api.SocializeApiError;
 import com.socialize.api.SocializeSession;
+import com.socialize.error.SocializeApiError;
 
 /**
  * @author Jason Polites

@@ -21,19 +21,62 @@
  */
 package com.socialize.util;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
+import android.util.Log;
+
 /**
  * @author Jason Polites
  *
  */
 public final class HttpUtils {
+	
+	static final Map<Integer, String> httpStatusCodes = new HashMap<Integer, String>();
+	
+	static {
+		InputStream in = null;
+		try {
+			in = Thread.currentThread().getContextClassLoader().getResourceAsStream("errors.properties");
+			Properties props = new Properties();
+			props.load(in);
+			
+			Set<Object> keys = props.keySet();
+			
+			for (Object object : keys) {
+				try {
+					int code = Integer.parseInt(object.toString());
+					String msg = props.getProperty(object.toString());
+					httpStatusCodes.put(code, msg);
+				}
+				catch (NumberFormatException e) {
+					Log.w(HttpUtils.class.getSimpleName(), object.toString() + " is not an integer");
+				}
+			}
+		}
+		catch (Exception e) {
+			Log.e(HttpUtils.class.getSimpleName(), "Failed to load error codes", e);
+		}
+		finally {
+			if(in != null) {
+				try {
+					in.close();
+				}
+				catch (IOException ignore) {}
+			}
+		}
+		
+	}
 
 	public static final boolean isHttpError(int code) {
 		return (code < 200 || code >= 300);
 	}
-
 	
 	public static final String getMessageFor(int code) {
-		// TODO: finish
-		return null;
+		return httpStatusCodes.get(code);
 	}
 }

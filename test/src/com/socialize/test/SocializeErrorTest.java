@@ -19,36 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api;
+package com.socialize.test;
 
+import com.socialize.error.SocializeApiError;
 import com.socialize.util.HttpUtils;
 
 /**
- * @author Jason Polites
+ * @author jasonpolites
  *
  */
-public class SocializeApiError extends Exception {
+public class SocializeErrorTest extends SocializeActivityTest {
 
-	private static final long serialVersionUID = 6929605095508741864L;
-
-	private int resultCode;
+	public void testSocializeApiError() {
+		final int code = 404;
+		SocializeApiError error = new SocializeApiError(code);
+		
+		// Technically this test is BAD, because we have a dependency on HttpUtils
+		// but we can't easily mock this out because it's static, and it's static 
+		// because of a lack of a goof dependency injection system for Android (as at today!)
+		// HttpUtils is already tested elsewhere.
+		
+		// Get the result we expect:
+		String expected = HttpUtils.getMessageFor(code);
+		
+		assertEquals(expected, error.getMessage());
+		assertEquals(expected, error.getLocalizedMessage());
+		assertEquals(code, error.getResultCode());
+		
+	}
 	
-	public SocializeApiError(int resultCode) {
-		super();
-		this.resultCode = resultCode;
-	}
-
-	@Override
-	public String getLocalizedMessage() {
-		return getMessage();
-	}
-
-	@Override
-	public String getMessage() {
-		return HttpUtils.getMessageFor(resultCode);
-	}
-
-	public int getResultCode() {
-		return resultCode;
-	}
 }

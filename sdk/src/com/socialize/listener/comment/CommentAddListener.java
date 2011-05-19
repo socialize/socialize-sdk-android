@@ -23,8 +23,8 @@ package com.socialize.listener.comment;
 
 import java.util.List;
 
-import com.socialize.api.SocializeApiError;
 import com.socialize.entity.Comment;
+import com.socialize.error.SocializeApiError;
 
 
 /**

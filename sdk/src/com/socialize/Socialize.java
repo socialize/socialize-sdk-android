@@ -53,7 +53,7 @@ public final class Socialize {
 	}
 	
 	public SocializeSession authenticate(String consumerKey, String consumerSecret) {
-		String uuid = DeviceUtils.getUUID(context);
+		String uuid = DeviceUtils.getUDID(context);
 		return defaultProvider.authenticate(consumerKey, consumerSecret, uuid);
 	}
 

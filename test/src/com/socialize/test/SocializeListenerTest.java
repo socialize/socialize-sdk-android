@@ -27,12 +27,12 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.api.SocializeApiError;
 import com.socialize.api.SocializeResponse;
 import com.socialize.api.SocializeService;
 import com.socialize.api.SocializeService.RequestType;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.SocializeObject;
+import com.socialize.error.SocializeApiError;
 import com.socialize.listener.AbstractSocializeListener;
 import com.socialize.listener.SocializeListener;
 import com.socialize.provider.SocializeProvider;

@@ -33,7 +33,7 @@ import android.telephony.TelephonyManager;
  */
 public class DeviceUtils {
 	
-	public static final String getUUID(Context context) {
+	public static final String getUDID(Context context) {
 		if(hasPermission(context, permission.READ_PHONE_STATE)) {
 			TelephonyManager tManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
 			return tManager.getDeviceId();
