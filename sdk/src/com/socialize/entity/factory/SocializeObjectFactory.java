@@ -50,21 +50,21 @@ public abstract class SocializeObjectFactory<T extends SocializeObject> {
 		this.factoryService = factoryService;
 	}
 	
-	public JSONObject toJSON(T entry) throws JSONException {
+	public JSONObject toJSON(T object) throws JSONException {
 		JSONObject json = instantiateJSON();
-		json.put("id", entry.getId());
-		toJSON(entry, json);
+		json.put("id", object.getId());
+		toJSON(object, json);
 		return json;
 	}
 
-	public T fromJSON(JSONObject object) throws JSONException {
-		T entry = instantiateObject();
+	public T fromJSON(JSONObject json) throws JSONException {
+		T object = instantiateObject();
 		
-		entry.setId(object.getInt("id"));
+		object.setId(json.getInt("id"));
 		
-		fromJSON(object, entry);
+		fromJSON(json, object);
 		
-		return entry;
+		return object;
 	}
 	
 	public abstract T instantiateObject();

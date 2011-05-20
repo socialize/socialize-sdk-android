@@ -32,29 +32,36 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Application;
 import com.socialize.entity.Entity;
-import com.socialize.entity.SocializeEntry;
+import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
-import com.socialize.entity.factory.EntryFactory;
 import com.socialize.entity.factory.FactoryService;
+import com.socialize.entity.factory.SocializeActionFactory;
 import com.socialize.entity.factory.SocializeObjectFactory;
 
-public class EntryFactoryTest extends SocializeActivityTest {
+public abstract class AbstractSocializeActionFactoryTest<T extends SocializeAction, F extends SocializeActionFactory<T>> extends SocializeActivityTest {
 
-	private EntryFactory<SocializeEntry> factory;
-	private SocializeEntry entry;
-	private FactoryService factoryService;
-	private SocializeConfig config;
+	protected F factory;
+	protected T action;
+	protected FactoryService factoryService;
+	protected SocializeConfig config;
 	
-	private Application application;
-	private User user;
-	private Entity entity;
+	protected Application application;
+	protected User user;
+	protected Entity entity;
 	
-	private JSONObject json;
+	protected JSONObject json;
+	protected JSONObject jsonApplication;
+	protected JSONObject jsonUser;
+	protected JSONObject jsonEntity;
 	
-	private SocializeObjectFactory<Application> appFactoryMock;
-	private SocializeObjectFactory<User> userFactoryMock;
-	private SocializeObjectFactory<Entity> entityFactoryMock;
-
+	protected SocializeObjectFactory<Application> appFactoryMock;
+	protected SocializeObjectFactory<User> userFactoryMock;
+	protected SocializeObjectFactory<Entity> entityFactoryMock;
+	
+	protected float lat = 10;
+	protected float lon = 20;
+	protected Date date = new Date();
+	protected int id = 10000;
 	
 	@SuppressWarnings("unchecked")
 	@UsesMocks({FactoryService.class, Application.class, User.class, Entity.class})
@@ -68,6 +75,10 @@ public class EntryFactoryTest extends SocializeActivityTest {
 		user = AndroidMock.createMock(User.class);
 		entity = AndroidMock.createMock(Entity.class);
 		
+		jsonApplication = AndroidMock.createNiceMock(JSONObject.class);
+		jsonUser = AndroidMock.createNiceMock(JSONObject.class);
+		jsonEntity = AndroidMock.createNiceMock(JSONObject.class);
+		
 		AndroidMock.expect(config.getProperties()).andReturn(null);
 		AndroidMock.replay(config);
 		
@@ -80,43 +91,16 @@ public class EntryFactoryTest extends SocializeActivityTest {
 		appFactoryMock = AndroidMock.createMock(SocializeObjectFactory.class, factoryService);
 		userFactoryMock = AndroidMock.createMock(SocializeObjectFactory.class, factoryService);
 		entityFactoryMock = AndroidMock.createMock(SocializeObjectFactory.class, factoryService);
-	
-		entry = new SocializeEntry();
-		entry.setLat(10);
-		entry.setLon(20);
-		entry.setDate(new Date());
-		entry.setApplication(application);
-		entry.setUser(user);
-		entry.setEntity(entity);
-		
+
+		action = AndroidMock.createNiceMock(getActionClass());
+
 		json = AndroidMock.createNiceMock(JSONObject.class);
 		
-		factory = new EntryFactory<SocializeEntry>(factoryService) {
-			
-			@Override
-			public SocializeEntry instantiateObject() {
-				return entry;
-			}
-			
-			@Override
-			public JSONObject instantiateJSON() {
-				return json;
-			}
-
-			@Override
-			protected void postToJSON(SocializeEntry from, JSONObject to) throws JSONException {}
-			
-			@Override
-			protected void postFromJSON(JSONObject from, SocializeEntry to) throws JSONException {}
-		};
+		factory = createFactory();
 	}
 
 	@UsesMocks({SocializeObjectFactory.class, JSONObject.class})
 	public void testToJSON() throws JSONException {
-
-		JSONObject jsonApplication = AndroidMock.createNiceMock(JSONObject.class);
-		JSONObject jsonUser = AndroidMock.createNiceMock(JSONObject.class);
-		JSONObject jsonEntity = AndroidMock.createNiceMock(JSONObject.class);
 
 		AndroidMock.expect(factoryService.getFactoryFor(Application.class)).andReturn(appFactoryMock);
 		AndroidMock.expect(factoryService.getFactoryFor(User.class)).andReturn(userFactoryMock);
@@ -130,10 +114,19 @@ public class EntryFactoryTest extends SocializeActivityTest {
 		AndroidMock.expect(json.put("user", jsonUser)).andReturn(json);
 		AndroidMock.expect(json.put("entity", jsonEntity)).andReturn(json);
 		
-		AndroidMock.expect(json.put("lat", entry.getLat())).andReturn(json);
-		AndroidMock.expect(json.put("lon", entry.getLon())).andReturn(json);
-		AndroidMock.expect(json.put("date",SocializeObjectFactory.UTC_FORMAT.format(entry.getDate()))).andReturn(json);
+		AndroidMock.expect(json.put("id", id)).andReturn(json);
+		AndroidMock.expect(json.put("lat", lat)).andReturn(json);
+		AndroidMock.expect(json.put("lon", lon)).andReturn(json);
+		AndroidMock.expect(json.put("date",SocializeObjectFactory.UTC_FORMAT.format(date))).andReturn(json);
 		
+		AndroidMock.expect(action.getId()).andReturn(id);
+		AndroidMock.expect(action.getApplication()).andReturn(application);
+		AndroidMock.expect(action.getUser()).andReturn(user);
+		AndroidMock.expect(action.getEntity()).andReturn(entity);
+		AndroidMock.expect(action.getLat()).andReturn(lat);
+		AndroidMock.expect(action.getLon()).andReturn(lon);
+		AndroidMock.expect(action.getDate()).andReturn(date);
+
 		AndroidMock.replay(jsonApplication);
 		AndroidMock.replay(jsonUser);
 		AndroidMock.replay(jsonEntity);
@@ -143,13 +136,11 @@ public class EntryFactoryTest extends SocializeActivityTest {
 		AndroidMock.replay(entityFactoryMock);
 		AndroidMock.replay(json);
 		
-		factory.toJSON(entry);
+		setupToJSONExpectations();
 		
-		AndroidMock.verify(factoryService);
-		AndroidMock.verify(appFactoryMock);
-		AndroidMock.verify(userFactoryMock);
-		AndroidMock.verify(entityFactoryMock);
-		AndroidMock.verify(json);
+		factory.toJSON(action);
+		
+		doToJSONVerify();
 	}
 	
 	public void testFromJSON() throws JSONException, ParseException {
@@ -162,27 +153,38 @@ public class EntryFactoryTest extends SocializeActivityTest {
 		AndroidMock.expect(userFactoryMock.fromJSON(json)).andReturn(user);
 		AndroidMock.expect(entityFactoryMock.fromJSON(json)).andReturn(entity);
 		
-		entry.setApplication(application);
-		entry.setUser(user);
-		entry.setEntity(entity);
+		action.setApplication(application);
+		action.setUser(user);
+		action.setEntity(entity);
 		
-		AndroidMock.expect((float)json.getDouble("lat")).andReturn(entry.getLat());
-		AndroidMock.expect((float)json.getDouble("lon")).andReturn(entry.getLon());
-		AndroidMock.expect(json.getString("date")).andReturn(SocializeObjectFactory.UTC_FORMAT.format(entry.getDate()));
+		AndroidMock.expect((float)json.getDouble("lat")).andReturn(lat);
+		AndroidMock.expect((float)json.getDouble("lon")).andReturn(lon);
+		AndroidMock.expect(json.getString("date")).andReturn(SocializeObjectFactory.UTC_FORMAT.format(date));
 		
 		AndroidMock.replay(factoryService);
 		AndroidMock.replay(appFactoryMock);
 		AndroidMock.replay(userFactoryMock);
 		AndroidMock.replay(entityFactoryMock);
-		AndroidMock.replay(json);
+		
+		setupFromJSONExpectations();
 		
 		factory.fromJSON(json);
 		
-		AndroidMock.verify(factoryService);
-		AndroidMock.verify(appFactoryMock);
-		AndroidMock.verify(userFactoryMock);
-		AndroidMock.verify(entityFactoryMock);
-		AndroidMock.verify(json);
+		doFromJSONVerify();
 	}
+	
+	
+	protected abstract void setupFromJSONExpectations() throws JSONException;
+	
+	protected abstract void doFromJSONVerify();
+	
+	protected abstract void setupToJSONExpectations() throws JSONException;
+	
+	protected abstract void doToJSONVerify();
+	
+	protected abstract Class<T> getActionClass();
+	
+	protected abstract F createFactory();
+	
 	
 }

@@ -21,6 +21,7 @@
  */
 package com.socialize.entity.factory;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -56,7 +57,9 @@ public class FactoryService {
 						String factoryClass = props.getProperty(strKey);
 						
 						// Instantiate
-						SocializeObjectFactory<?> factory = (SocializeObjectFactory<?>) Class.forName(factoryClass).newInstance();
+						Class<?> clsFactory = Class.forName(factoryClass);
+						Constructor<?> constructor = clsFactory.getDeclaredConstructor(FactoryService.class);
+						SocializeObjectFactory<?> factory = (SocializeObjectFactory<?>) constructor.newInstance(this);
 						factory.factoryService = this;
 						
 						factories.put(className, factory);

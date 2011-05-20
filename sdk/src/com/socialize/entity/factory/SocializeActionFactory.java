@@ -26,7 +26,7 @@ import org.json.JSONObject;
 
 import com.socialize.entity.Application;
 import com.socialize.entity.Entity;
-import com.socialize.entity.SocializeEntry;
+import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 
 /**
@@ -34,13 +34,9 @@ import com.socialize.entity.User;
  *
  * @param <T>
  */
-public abstract class EntryFactory<T extends SocializeEntry> extends SocializeObjectFactory<T> {
+public abstract class SocializeActionFactory<T extends SocializeAction> extends SocializeObjectFactory<T> {
 	
-	public EntryFactory() {
-		super();
-	}
-
-	protected EntryFactory(FactoryService factoryService) {
+	public SocializeActionFactory(FactoryService factoryService) {
 		super(factoryService);
 	}
 

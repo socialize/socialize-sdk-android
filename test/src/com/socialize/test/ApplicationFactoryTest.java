@@ -19,36 +19,62 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity.factory;
+package com.socialize.test;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.socialize.entity.Comment;
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.entity.Application;
+import com.socialize.entity.factory.ApplicationFactory;
 
 /**
  * @author Jason Polites
  *
  */
-public class CommentFactory extends SocializeActionFactory<Comment> {
+
+public class ApplicationFactoryTest extends AbstractSocializeObjectFactoryTest<Application, ApplicationFactory> {
+
+	final String mockName = "test name";
 	
-	public CommentFactory(FactoryService factoryService) {
-		super(factoryService);
+	@Override
+	protected void setupToJSONExpectations() throws JSONException {
+		AndroidMock.expect(object.getName()).andReturn(mockName);
+		AndroidMock.expect(json.put("name", mockName)).andReturn(json);
 	}
 
 	@Override
-	protected void postFromJSON(JSONObject object, Comment comment) throws JSONException {
-		comment.setText(object.getString("comment"));
+	protected void doToJSONVerify() {}
+
+	@Override
+	protected void setupFromJSONExpectations() throws Exception {
+		AndroidMock.expect(json.getString("name")).andReturn(mockName);
+		object.setName(mockName);
 	}
 
 	@Override
-	protected void postToJSON(Comment comment, JSONObject object) throws JSONException {
-		object.put("comment", comment.getText());
+	protected void doFromJSONVerify() {}
+
+	@UsesMocks(Application.class)
+	@Override
+	protected Class<Application> getObjectClass() {
+		return Application.class;
 	}
 
 	@Override
-	public Comment instantiateObject() {
-		return new Comment();
+	protected ApplicationFactory createFactory() {
+		return new ApplicationFactory() {
+			@Override
+			public Application instantiateObject() {
+				return object;
+			}
+
+			@Override
+			public JSONObject instantiateJSON() {
+				return json;
+			}
+		};
 	}
-	
+
 }

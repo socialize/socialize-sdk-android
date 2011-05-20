@@ -128,9 +128,6 @@ public class SocializeConfig {
 		return properties;
 	}
 
-	public String getPropertiesFileName() {
-		return propertiesFileName;
-	}
 
 	public String getDefaultPropertiesFileName() {
 		return DEFAULT_PROPERTIES;

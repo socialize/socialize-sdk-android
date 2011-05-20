@@ -26,7 +26,7 @@ package com.socialize.entity;
  * @author Jason Polites
  *
  */
-public class Comment extends SocializeEntry {
+public class Comment extends SocializeAction {
 
 	private String text;
 

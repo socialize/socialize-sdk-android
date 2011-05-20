@@ -27,7 +27,7 @@ import java.util.Date;
  * @author Jason Polites
  *
  */
-public class SocializeEntry extends SocializeObject {
+public class SocializeAction extends SocializeObject {
 
 	private Application application;
 	private Entity entity;
