@@ -151,4 +151,11 @@ public class SocializeUtilsTest extends SocializeActivityTest {
 			assertNotNull(HttpUtils.getMessageFor(i));
 		}
 	}
+	
+	public void testHttpIsError() {
+		assertTrue(HttpUtils.isHttpError(500));
+		assertTrue(HttpUtils.isHttpError(404));
+		assertFalse(HttpUtils.isHttpError(301));
+		assertFalse(HttpUtils.isHttpError(200));
+	}
 }

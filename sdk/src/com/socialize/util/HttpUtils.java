@@ -73,7 +73,7 @@ public final class HttpUtils {
 	}
 
 	public static final boolean isHttpError(int code) {
-		return (code < 200 || code >= 300);
+		return (code >= 400);
 	}
 	
 	public static final String getMessageFor(int code) {
