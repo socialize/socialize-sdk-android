@@ -36,9 +36,9 @@ import android.util.Log;
  */
 public final class HttpUtils {
 	
-	static final Map<Integer, String> httpStatusCodes = new HashMap<Integer, String>();
+	final Map<Integer, String> httpStatusCodes = new HashMap<Integer, String>();
 	
-	static {
+	public final void init() {
 		InputStream in = null;
 		try {
 			in = Thread.currentThread().getContextClassLoader().getResourceAsStream("errors.properties");
@@ -69,14 +69,13 @@ public final class HttpUtils {
 				catch (IOException ignore) {}
 			}
 		}
-		
 	}
-
-	public static final boolean isHttpError(int code) {
+	
+	public final boolean isHttpError(int code) {
 		return (code >= 400);
 	}
 	
-	public static final String getMessageFor(int code) {
+	public final String getMessageFor(int code) {
 		return httpStatusCodes.get(code);
 	}
 }

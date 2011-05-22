@@ -21,6 +21,7 @@
  */
 package com.socialize.test;
 
+import com.socialize.android.ioc.AndroidIOC;
 import com.socialize.error.SocializeApiError;
 import com.socialize.util.HttpUtils;
 
@@ -40,7 +41,8 @@ public class SocializeErrorTest extends SocializeActivityTest {
 		// HttpUtils is already tested elsewhere.
 		
 		// Get the result we expect:
-		String expected = HttpUtils.getMessageFor(code);
+		HttpUtils utils = AndroidIOC.getInstance().getBean("httputils");
+		String expected = utils.getMessageFor(code);
 		
 		assertEquals(expected, error.getMessage());
 		assertEquals(expected, error.getLocalizedMessage());

@@ -28,6 +28,7 @@ import android.test.mock.MockPackageManager;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.android.ioc.AndroidIOC;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.HttpUtils;
 
@@ -103,6 +104,8 @@ public class SocializeUtilsTest extends SocializeActivityTest {
 	
 	public void testHttpStatusCodes() {
 		
+		HttpUtils utils = AndroidIOC.getInstance().getBean("httputils");
+		
 		// Just test that the codes are loaded.  We assume the messages are correct
 		
 		int[] codes = {
@@ -148,14 +151,15 @@ public class SocializeUtilsTest extends SocializeActivityTest {
 				505};
 		
 		for (int i : codes) {
-			assertNotNull(HttpUtils.getMessageFor(i));
+			assertNotNull(utils.getMessageFor(i));
 		}
 	}
 	
 	public void testHttpIsError() {
-		assertTrue(HttpUtils.isHttpError(500));
-		assertTrue(HttpUtils.isHttpError(404));
-		assertFalse(HttpUtils.isHttpError(301));
-		assertFalse(HttpUtils.isHttpError(200));
+		HttpUtils utils = AndroidIOC.getInstance().getBean("httputils");
+		assertTrue(utils.isHttpError(500));
+		assertTrue(utils.isHttpError(404));
+		assertFalse(utils.isHttpError(301));
+		assertFalse(utils.isHttpError(200));
 	}
 }

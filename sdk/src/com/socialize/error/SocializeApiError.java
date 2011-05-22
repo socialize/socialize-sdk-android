@@ -21,6 +21,7 @@
  */
 package com.socialize.error;
 
+import com.socialize.android.ioc.AndroidIOC;
 import com.socialize.util.HttpUtils;
 
 /**
@@ -45,7 +46,8 @@ public class SocializeApiError extends SocializeException {
 
 	@Override
 	public String getMessage() {
-		return HttpUtils.getMessageFor(resultCode);
+		HttpUtils utils = AndroidIOC.getInstance().getBean("httputils");
+		return utils.getMessageFor(resultCode);
 	}
 
 	public int getResultCode() {

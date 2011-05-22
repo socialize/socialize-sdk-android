@@ -1,0 +1,5 @@
+<beans>
+
+	<bean name="httputils" class="com.socialize.util.HttpUtils" initMethod="init"/>
+
+</beans>

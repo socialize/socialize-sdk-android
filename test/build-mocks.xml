@@ -12,6 +12,7 @@
 		<pathelement path="../sdk/bin"/>
 		<pathelement path="../sample/bin"/>
 		<pathelement path="../sdk/libs/signpost-core-1.2.1.1.jar" />
+		<pathelement path="../sdk/libs/android-ioc-0.0.1.jar" />
 		<pathelement path="libs/AndroidMockRuntime-appmakr-modified.jar" />
 		<pathelement path="${sdk.dir}/platforms/android-7/android.jar" />
 		<pathelement path="${sdk.dir}/tools/lib/anttasks.jar" />
