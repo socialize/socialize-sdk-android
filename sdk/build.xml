@@ -20,7 +20,7 @@
 	<path id="android.libraries.jars"><path refid="project.libraries.jars" /></path>
 
 	<target name="build" depends="compile">
-		<jar destfile="build/android-ioc-${version}.jar" basedir="${out.dir}/classes">
+		<jar destfile="build/socialize-${version}.jar" basedir="${out.dir}/classes">
 			<manifest>
 				<attribute name="Built-By" value="${vendor}" />
 				<attribute name="Implementation-Vendor" value="${vendor}" />
