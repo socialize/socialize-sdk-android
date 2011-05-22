@@ -177,6 +177,7 @@
 					<src refid="project.libraries.src" />
 					<classpath>
 						<fileset dir="${extensible.libs.classpath}" includes="*.jar" />
+						<fileset dir="${library.project.dir}/libs" includes="*.jar" />
 					</classpath>
 
 					<compilerarg value="-ARegenerateFrameworkMocks=true"/>
