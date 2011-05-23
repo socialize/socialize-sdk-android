@@ -23,6 +23,7 @@ package com.socialize;
 
 import android.content.Context;
 
+import com.socialize.android.ioc.AndroidIOC;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.comment.CommentService;
 import com.socialize.config.SocializeConfig;
@@ -56,7 +57,8 @@ public final class Socialize {
 	}
 	
 	public SocializeSession authenticate(String consumerKey, String consumerSecret) {
-		String uuid = DeviceUtils.getUDID(context);
+		DeviceUtils dutils = AndroidIOC.getInstance().getBean("deviceutils");
+		String uuid = dutils.getUDID(context);
 		return defaultProvider.authenticate(consumerKey, consumerSecret, uuid);
 	}
 

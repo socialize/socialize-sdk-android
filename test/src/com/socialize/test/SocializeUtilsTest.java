@@ -55,7 +55,9 @@ public class SocializeUtilsTest extends SocializeActivityTest {
 		AndroidMock.replay(mockContext);
 		AndroidMock.replay(mockManager);
 		
-		DeviceUtils.hasPermission(mockContext, permission);
+		DeviceUtils utils = new DeviceUtils();
+		
+		utils.hasPermission(mockContext, permission);
 		
 		AndroidMock.verify(mockContext);
 		AndroidMock.verify(mockManager);

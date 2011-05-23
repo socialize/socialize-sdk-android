@@ -41,7 +41,7 @@ import java.util.List;
  */
 public final class IOUtils {
 	
-	public static final String read(File file) throws IOException {
+	public final String read(File file) throws IOException {
 
 		InputStream in = null;
 
@@ -56,7 +56,7 @@ public final class IOUtils {
 		}
 	}
 	
-	public static final String[] readLines(File file) throws IOException {
+	public final String[] readLines(File file) throws IOException {
 
 		InputStream in = null;
 
@@ -71,11 +71,11 @@ public final class IOUtils {
 		}
 	}
 
-	public static final String read(InputStream in) throws IOException {
+	public final String read(InputStream in) throws IOException {
 		return read(in, "UTF-8");
 	}
 
-	public static final String read(InputStream is, String charset) throws IOException {
+	public final String read(InputStream is, String charset) throws IOException {
 		if (is != null) {
 			StringBuilder sb = new StringBuilder();
 			String line;
@@ -93,11 +93,11 @@ public final class IOUtils {
 		}
 	}
 	
-	public static final String[] readLines(InputStream in) throws IOException {
+	public final String[] readLines(InputStream in) throws IOException {
 		return readLines(in, "UTF-8");
 	}
 
-	public static final String[] readLines(InputStream is, String charset) throws IOException {
+	public final String[] readLines(InputStream is, String charset) throws IOException {
 
 		String[] strLines = null;
 
@@ -117,7 +117,7 @@ public final class IOUtils {
 	}
 	
 	
-	public static final long pipe(InputStream in, OutputStream out, int bufferSize) throws IOException {
+	public final long pipe(InputStream in, OutputStream out, int bufferSize) throws IOException {
 		
 		int read;
 		long total = 0L;
@@ -134,7 +134,7 @@ public final class IOUtils {
 		return total;
 	}
 	
-	public static final long pipeChannels(InputStream in, FileOutputStream out, int bufferSize) throws IOException {
+	public final long pipeChannels(InputStream in, FileOutputStream out, int bufferSize) throws IOException {
 		
 		int read;
 		long total = 0L;

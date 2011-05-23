@@ -33,7 +33,7 @@ import android.telephony.TelephonyManager;
  */
 public class DeviceUtils {
 	
-	public static final String getUDID(Context context) {
+	public final String getUDID(Context context) {
 		if(hasPermission(context, permission.READ_PHONE_STATE)) {
 			TelephonyManager tManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
 			return tManager.getDeviceId();
@@ -44,7 +44,7 @@ public class DeviceUtils {
 		}
 	}
 	
-	public static final boolean hasPermission(Context context, String permission) {
+	public final boolean hasPermission(Context context, String permission) {
 		return context.getPackageManager().checkPermission(permission, context.getPackageName()) == PackageManager.PERMISSION_GRANTED;
 	}
 }

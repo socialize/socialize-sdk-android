@@ -1,5 +1,8 @@
 <beans>
 
-	<bean name="httputils" class="com.socialize.util.HttpUtils" initMethod="init"/>
+	<bean id="httputils" class="com.socialize.util.HttpUtils" initMethod="init"/>
+	<bean id="deviceutils" class="com.socialize.util.DeviceUtils"/>
+
+	<bean id="config" class="com.socialize.config.SocializeConfig"/>
 
 </beans>

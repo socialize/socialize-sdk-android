@@ -40,7 +40,7 @@ public abstract class SocializeActivityTest extends ActivityInstrumentationTestC
 	protected void setUp() throws Exception {
 		bucket = new Stack<Object>();
 		super.setUp();
-		AndroidIOC.getInstance().initFromClassPath(getActivity());
+		AndroidIOC.getInstance().init(getActivity());
 	}
 	
 	protected void addResult(Object obj) {
