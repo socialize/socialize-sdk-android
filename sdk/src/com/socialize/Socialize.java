@@ -22,21 +22,12 @@
 package com.socialize;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.socialize.android.ioc.AndroidIOC;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.comment.CommentService;
-import com.socialize.config.SocializeConfig;
-import com.socialize.entity.Comment;
-import com.socialize.entity.factory.FactoryService;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.comment.CommentListener;
-import com.socialize.log.SocializeLogger;
-import com.socialize.net.DefaultHttpClientFactory;
-import com.socialize.net.HttpClientFactory;
-import com.socialize.provider.DefaultSocializeProvider;
-import com.socialize.provider.comment.CommentProvider;
-import com.socialize.util.DeviceUtils;
+import com.socialize.listener.comment.CommentAddListener;
 
 /**
  * @author Jason Polites
@@ -44,46 +35,43 @@ import com.socialize.util.DeviceUtils;
  */
 public final class Socialize {
 	
-	private FactoryService factoryService;
-	private Context context;
-	private DefaultSocializeProvider<?> defaultProvider;
-	private HttpClientFactory clientFactory;
-	private SocializeLogger logger;
-	private SocializeConfig config;
+	private SocializeService service;
+	private AndroidIOC container;
+	private boolean initialized = false;
 	
-	public Socialize(Context context) {
-		super();
-		this.context = context;
-	}
-	
-	public SocializeSession authenticate(String consumerKey, String consumerSecret) {
-		DeviceUtils dutils = AndroidIOC.getInstance().getBean("deviceutils");
-		String uuid = dutils.getUDID(context);
-		return defaultProvider.authenticate(consumerKey, consumerSecret, uuid);
-	}
-
-	public void addComment(SocializeSession session, String key, String comment, CommentListener listener) {
-		final CommentService commentService = new CommentService(new CommentProvider(factoryService.getFactoryFor(Comment.class), clientFactory));
-		commentService.setListener(listener);
-		commentService.addComment(session, key, comment);
-	}
-	
-	public void init() throws SocializeException {
-
-		config = new SocializeConfig();
-		config.init(context);
+	public final void init(Context context)  {
 		
-		logger = new SocializeLogger();
-		logger.init(config);
-		
-		factoryService = new FactoryService(config);
-		clientFactory = new DefaultHttpClientFactory();
-		clientFactory.init();
-	}
-	
-	public void destroy() {
-		if(clientFactory != null) {
-			clientFactory.destroy();
+		try {
+			container = AndroidIOC.getInstance();
+			container.init(context);
+			service = container.getBean("socializeService");
+			initialized = true;
+		}
+		catch (Exception e) {
+			Log.e("Socialize", "Failed to initialize Socialize!", e);
 		}
 	}
+	
+	public final void destroy() {
+		initialized = false;
+		
+		if(container != null) {
+			container.destroy();
+		}
+	}
+
+	public void addComment(SocializeSession session, String entity, String comment, CommentAddListener commentAddListener) {
+		if(initialized) {
+			service.addComment(session, entity, comment, commentAddListener);
+		}
+		else {
+			// TODO: externalize strings
+			if(commentAddListener != null) {
+				commentAddListener.onError(new SocializeException("Socialize was not initialized"));
+			}
+			
+			Log.e("Socialize", "Socialize was not initialized");
+		}
+	}
+
 }

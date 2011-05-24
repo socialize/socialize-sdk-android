@@ -19,21 +19,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.provider.comment;
+package com.socialize.listener.comment;
+
+import java.util.List;
 
 import com.socialize.entity.Comment;
-import com.socialize.entity.factory.SocializeObjectFactory;
-import com.socialize.net.HttpClientFactory;
-import com.socialize.provider.DefaultSocializeProvider;
+
 
 /**
  * @author Jason Polites
  *
  */
-public class CommentProvider extends DefaultSocializeProvider<Comment> {
-	
-	public CommentProvider(SocializeObjectFactory<Comment> factory, HttpClientFactory clientFactory) {
-		super(factory, clientFactory);
-	}
+public abstract class CommentGetListener extends CommentListener {
+ 
+	@Override
+	public final void onCreate(Comment entity) {}
+
+	@Override
+	public final void onList(List<Comment> entities) {}
+
+	@Override
+	public final void onUpdate(Comment entity) {}
 
 }
