@@ -36,10 +36,6 @@ public class ApplicationFactory extends SocializeObjectFactory<Application> {
 		super();
 	}
 
-	protected ApplicationFactory(FactoryService factoryService) {
-		super(factoryService);
-	}
-
 	@Override
 	public Application instantiateObject() {
 		return new Application();

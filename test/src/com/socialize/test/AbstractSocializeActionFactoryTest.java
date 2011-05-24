@@ -86,17 +86,18 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		AndroidMock.replay(user);
 		AndroidMock.replay(entity);
 		
-		factoryService = AndroidMock.createMock(FactoryService.class, config);
+		factoryService = AndroidMock.createMock(FactoryService.class);
 		
-		appFactoryMock = AndroidMock.createMock(SocializeObjectFactory.class, factoryService);
-		userFactoryMock = AndroidMock.createMock(SocializeObjectFactory.class, factoryService);
-		entityFactoryMock = AndroidMock.createMock(SocializeObjectFactory.class, factoryService);
-
+		appFactoryMock = AndroidMock.createMock(SocializeObjectFactory.class);
+		userFactoryMock = AndroidMock.createMock(SocializeObjectFactory.class);
+		entityFactoryMock = AndroidMock.createMock(SocializeObjectFactory.class);
+		
 		action = AndroidMock.createNiceMock(getActionClass());
 
 		json = AndroidMock.createNiceMock(JSONObject.class);
 		
 		factory = createFactory();
+		factory.setFactoryService(factoryService);
 	}
 
 	@UsesMocks({SocializeObjectFactory.class, JSONObject.class})

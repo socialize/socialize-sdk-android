@@ -20,6 +20,18 @@
 	<path id="android.libraries.jars"><path refid="project.libraries.jars" /></path>
 
 	<target name="build" depends="compile">
+		
+		<!-- Manually copy config files -->
+		<echo>Out dir is [${out.dir}]</echo>
+		
+		<copy todir="${out.dir}/classes" verbose="true" >
+			<fileset dir="${out.dir}">
+				<include name="android-beans.xml"/>
+				<include name="errors.properties"/>
+				<include name="socialize.properties"/>
+			</fileset>
+		</copy>
+		
 		<jar destfile="build/socialize-${version}.jar" basedir="${out.dir}/classes">
 			<manifest>
 				<attribute name="Built-By" value="${vendor}" />

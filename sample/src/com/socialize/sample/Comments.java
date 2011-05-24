@@ -6,6 +6,7 @@ import android.widget.Toast;
 import com.socialize.Socialize;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Comment;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 
 public class Comments {
@@ -17,6 +18,12 @@ public class Comments {
 						entity.getText() +
 						"] created", Toast.LENGTH_LONG);
 			}
+
+			@Override
+			public void onError(SocializeException error) {
+				Toast.makeText(context, "Error: " + error.getMessage(), Toast.LENGTH_LONG);
+			}
+			
 		});
 	}
 }

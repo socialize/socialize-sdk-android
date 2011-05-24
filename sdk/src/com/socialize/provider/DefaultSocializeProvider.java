@@ -35,12 +35,16 @@ import com.socialize.net.HttpClientFactory;
  */
 public class DefaultSocializeProvider<T extends SocializeObject> implements SocializeProvider<T> {
 
-	protected SocializeObjectFactory<T> factory;
-	protected HttpClientFactory clientFactory;
-	
+	private SocializeObjectFactory<T> objectFactory;
+	private HttpClientFactory clientFactory;
+
+	public DefaultSocializeProvider() {
+		super();
+	}
+
 	public DefaultSocializeProvider(SocializeObjectFactory<T> factory, HttpClientFactory clientFactory) {
 		super();
-		this.factory = factory;
+		this.objectFactory = factory;
 		this.clientFactory = clientFactory;
 	}
 
@@ -73,5 +77,21 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	public List<T> post(SocializeSession session, String endpoint, T object) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public SocializeObjectFactory<T> getObjectFactory() {
+		return objectFactory;
+	}
+
+	public void setObjectFactory(SocializeObjectFactory<T> factory) {
+		this.objectFactory = factory;
+	}
+
+	public HttpClientFactory getClientFactory() {
+		return clientFactory;
+	}
+
+	public void setClientFactory(HttpClientFactory clientFactory) {
+		this.clientFactory = clientFactory;
 	}
 }

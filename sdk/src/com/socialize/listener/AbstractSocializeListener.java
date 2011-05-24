@@ -25,7 +25,7 @@ import java.util.List;
 
 import com.socialize.api.SocializeEntityResponse;
 import com.socialize.api.SocializeResponse;
-import com.socialize.api.SocializeService.RequestType;
+import com.socialize.api.SocializeApi.RequestType;
 import com.socialize.entity.SocializeObject;
 
 

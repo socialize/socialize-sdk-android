@@ -36,9 +36,8 @@ import com.socialize.entity.User;
  */
 public abstract class SocializeActionFactory<T extends SocializeAction> extends SocializeObjectFactory<T> {
 	
-	public SocializeActionFactory(FactoryService factoryService) {
-		super(factoryService);
-	}
+	// Injected
+	private FactoryService factoryService;
 
 	@Override
 	protected void toJSON(T from, JSONObject to) throws JSONException {
@@ -91,6 +90,14 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 		postFromJSON(from, to);
 	}
 	
+	public FactoryService getFactoryService() {
+		return factoryService;
+	}
+
+	public void setFactoryService(FactoryService factoryService) {
+		this.factoryService = factoryService;
+	}
+
 	protected abstract void postToJSON(T from, JSONObject to) throws JSONException;
 	
 	protected abstract void postFromJSON(JSONObject from, T to) throws JSONException;

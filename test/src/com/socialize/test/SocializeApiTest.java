@@ -5,14 +5,14 @@ import java.util.List;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.api.SocializeService;
+import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.SocializeObject;
 import com.socialize.provider.SocializeProvider;
 
-public class SocializeServiceTest extends SocializeActivityTest {
+public class SocializeApiTest extends SocializeActivityTest {
 
-	private SocializeService<SocializeObject, SocializeProvider<SocializeObject>> service;
+	private SocializeApi<SocializeObject, SocializeProvider<SocializeObject>> service;
 	private SocializeProvider<SocializeObject> provider;
 	
 	private SocializeSession mockSession;
@@ -23,7 +23,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 	protected void setUp() throws Exception {
 		super.setUp();
 		provider = AndroidMock.createMock(SocializeProvider.class);
-		service = new SocializeService<SocializeObject, SocializeProvider<SocializeObject>>(provider);
+		service = new SocializeApi<SocializeObject, SocializeProvider<SocializeObject>>(provider);
 		
 		mockSession = AndroidMock.createMock(SocializeSession.class);
 		

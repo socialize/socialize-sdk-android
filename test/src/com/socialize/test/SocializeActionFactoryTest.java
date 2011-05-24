@@ -33,7 +33,7 @@ public class SocializeActionFactoryTest extends AbstractSocializeActionFactoryTe
 
 	@Override
 	protected SocializeActionFactory<SocializeAction> createFactory() {
-		return new SocializeActionFactory<SocializeAction>(factoryService) {
+		return new SocializeActionFactory<SocializeAction>() {
 			
 			@Override
 			public SocializeAction instantiateObject() {

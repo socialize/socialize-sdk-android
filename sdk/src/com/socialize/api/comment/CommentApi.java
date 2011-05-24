@@ -21,31 +21,32 @@
  */
 package com.socialize.api.comment;
 
-import com.socialize.api.SocializeService;
+import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Comment;
-import com.socialize.provider.comment.CommentProvider;
+import com.socialize.listener.comment.CommentListener;
+import com.socialize.provider.SocializeProvider;
 
 /**
  * @author Jason Polites
  *
  */
-public class CommentService extends SocializeService<Comment, CommentProvider> {
+public class CommentApi extends SocializeApi<Comment, SocializeProvider<Comment>> {
 
 	private final String endpoint = "/comment/";
-	
-	public CommentService(CommentProvider provider) {
+
+	public CommentApi(SocializeProvider<Comment> provider) {
 		super(provider);
 	}
 
-	public void addComment(SocializeSession session, String key, String comment) {
+	public void addComment(SocializeSession session, String key, String comment, CommentListener listener) {
 		Comment c = new Comment();
 		c.setText(comment);
-		super.putAsync(session, endpoint, c);
+		super.putAsync(session, endpoint, c, listener);
 	}
 	
-	public void getAllComments(SocializeSession session, String key) {
-		super.listAsync(session, endpoint, key);
+	public void getAllComments(SocializeSession session, String key, CommentListener listener) {
+		super.listAsync(session, endpoint, key, listener);
 	}
 
 	public void getComments(SocializeSession session, int...id) {

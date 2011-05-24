@@ -7,26 +7,27 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.api.SocializeApi;
+import com.socialize.api.SocializeApi.RequestType;
 import com.socialize.api.SocializeEntityResponse;
 import com.socialize.api.SocializeResponse;
 import com.socialize.api.SocializeResponseFactory;
-import com.socialize.api.SocializeService;
-import com.socialize.api.SocializeService.RequestType;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.SocializeObject;
-import com.socialize.error.SocializeApiError;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeListener;
 import com.socialize.provider.SocializeProvider;
 
-public class SocializeServiceAsyncTest extends SocializeActivityTest {
+public class SocializeApiAsyncTest extends SocializeActivityTest {
 
-	private SocializeService<SocializeObject, SocializeProvider<SocializeObject>> service;
+	private SocializeApi<SocializeObject, SocializeProvider<SocializeObject>> service;
 	private SocializeProvider<SocializeObject> provider;
 	private SocializeResponseFactory<SocializeObject> responseFactory;
 	private SocializeEntityResponse<SocializeObject> mockEntityResponse;
 	
 	private CountDownLatch signal;
 	private SocializeSession mockSession;
+	private SocializeListener<SocializeObject> listener;
 	
 
 	@SuppressWarnings("unchecked")
@@ -39,13 +40,13 @@ public class SocializeServiceAsyncTest extends SocializeActivityTest {
 		responseFactory = AndroidMock.createMock(SocializeResponseFactory.class);
 		mockEntityResponse = AndroidMock.createMock(SocializeEntityResponse.class);
 		
-		service = new SocializeService<SocializeObject, SocializeProvider<SocializeObject>>(provider);
+		service = new SocializeApi<SocializeObject, SocializeProvider<SocializeObject>>(provider);
 		
 		mockSession = AndroidMock.createMock(SocializeSession.class);
 		
 		AndroidMock.replay(mockSession);
 		
-		service.setListener(new SocializeListener<SocializeObject>() {
+		listener = new SocializeListener<SocializeObject>() {
 
 			@Override
 			public void onResult(RequestType type, SocializeResponse response) {
@@ -54,11 +55,11 @@ public class SocializeServiceAsyncTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public void onError(SocializeApiError error) {
+			public void onError(SocializeException error) {
 				System.out.println("Service listener onError fired");
 				signal.countDown();
 			}
-		});
+		};
 		
 	}
 	
@@ -70,7 +71,7 @@ public class SocializeServiceAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
-				service.authenticateAsync("test_key", "test_secret", "test_uuid");
+				service.authenticateAsync("test_key", "test_secret", "test_uuid", listener);
 			} 
 		});
 
@@ -90,7 +91,7 @@ public class SocializeServiceAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
-				service.getAsync(mockSession, endpoint, ids);
+				service.getAsync(mockSession, endpoint, ids, listener);
 			} 
 		});
 
@@ -121,7 +122,7 @@ public class SocializeServiceAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
-				service.getAsync(mockSession, endpoint, ids);
+				service.getAsync(mockSession, endpoint, ids, listener);
 			} 
 		});
 
@@ -152,7 +153,7 @@ public class SocializeServiceAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
-				service.listAsync(mockSession, endpoint, key);
+				service.listAsync(mockSession, endpoint, key, listener);
 			} 
 		});
 
@@ -178,7 +179,7 @@ public class SocializeServiceAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
-				service.listAsync(mockSession, endpoint, key);
+				service.listAsync(mockSession, endpoint, key, listener);
 			} 
 		});
 
@@ -198,7 +199,7 @@ public class SocializeServiceAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
-				service.putAsync(mockSession, endpoint, object);
+				service.putAsync(mockSession, endpoint, object, listener);
 			} 
 		});
 
@@ -218,7 +219,7 @@ public class SocializeServiceAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
-				service.postAsync(mockSession, endpoint, object);
+				service.postAsync(mockSession, endpoint, object, listener);
 			} 
 		});
 

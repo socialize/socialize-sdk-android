@@ -23,67 +23,121 @@ package com.socialize;
 
 import android.content.Context;
 
-import com.socialize.android.ioc.AndroidIOC;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.comment.CommentService;
+import com.socialize.api.comment.CommentApi;
 import com.socialize.config.SocializeConfig;
-import com.socialize.entity.Comment;
 import com.socialize.entity.factory.FactoryService;
-import com.socialize.error.SocializeException;
+import com.socialize.error.SocializeApiError;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.log.SocializeLogger;
-import com.socialize.net.DefaultHttpClientFactory;
 import com.socialize.net.HttpClientFactory;
-import com.socialize.provider.DefaultSocializeProvider;
-import com.socialize.provider.comment.CommentProvider;
+import com.socialize.provider.SocializeProvider;
 import com.socialize.util.DeviceUtils;
 
 /**
  * @author Jason Polites
  *
  */
-public final class Socialize {
+public final class SocializeService {
 	
-	private FactoryService factoryService;
 	private Context context;
-	private DefaultSocializeProvider<?> defaultProvider;
+	private FactoryService factoryService;
+	private SocializeProvider<?> authProvider;
 	private HttpClientFactory clientFactory;
 	private SocializeLogger logger;
 	private SocializeConfig config;
+	private DeviceUtils deviceUtils;
 	
-	public Socialize(Context context) {
+	private CommentApi commentApi;
+
+	public SocializeService(Context context) {
 		super();
 		this.context = context;
 	}
 	
-	public SocializeSession authenticate(String consumerKey, String consumerSecret) {
-		DeviceUtils dutils = AndroidIOC.getInstance().getBean("deviceutils");
-		String uuid = dutils.getUDID(context);
-		return defaultProvider.authenticate(consumerKey, consumerSecret, uuid);
+	public SocializeSession authenticate(String consumerKey, String consumerSecret) throws SocializeApiError {
+		String uuid = deviceUtils.getUDID(context);
+		return authProvider.authenticate(consumerKey, consumerSecret, uuid);
 	}
 
 	public void addComment(SocializeSession session, String key, String comment, CommentListener listener) {
-		final CommentService commentService = new CommentService(new CommentProvider(factoryService.getFactoryFor(Comment.class), clientFactory));
-		commentService.setListener(listener);
-		commentService.addComment(session, key, comment);
+//		final CommentApi commentService = new CommentApi(new CommentProvider(factoryService.getFactoryFor(Comment.class), clientFactory));
+		commentApi.addComment(session, key, comment, listener);
 	}
 	
-	public void init() throws SocializeException {
-
-		config = new SocializeConfig();
-		config.init(context);
-		
-		logger = new SocializeLogger();
-		logger.init(config);
-		
-		factoryService = new FactoryService(config);
-		clientFactory = new DefaultHttpClientFactory();
-		clientFactory.init();
-	}
+	// Auto-init from IOC
+//	public void init() throws SocializeException {
+//
+//		config = new SocializeConfig();
+//		config.init(context);
+//		
+//		logger = new SocializeLogger();
+//		logger.init(config);
+//		
+//		factoryService = new FactoryService();
+//		clientFactory = new DefaultHttpClientFactory();
+//		clientFactory.init();
+//	}
 	
 	public void destroy() {
 		if(clientFactory != null) {
 			clientFactory.destroy();
 		}
+	}
+
+	public FactoryService getFactoryService() {
+		return factoryService;
+	}
+
+	public void setFactoryService(FactoryService factoryService) {
+		this.factoryService = factoryService;
+	}
+
+	public SocializeProvider<?> getAuthProvider() {
+		return authProvider;
+	}
+
+	public void setAuthProvider(SocializeProvider<?> provider) {
+		this.authProvider = provider;
+	}
+
+	public HttpClientFactory getClientFactory() {
+		return clientFactory;
+	}
+
+	public void setClientFactory(HttpClientFactory clientFactory) {
+		this.clientFactory = clientFactory;
+	}
+
+	public SocializeLogger getLogger() {
+		return logger;
+	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
+
+	public SocializeConfig getConfig() {
+		return config;
+	}
+
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
+	}
+
+	public DeviceUtils getDeviceUtils() {
+		return deviceUtils;
+	}
+
+	public void setDeviceUtils(DeviceUtils deviceUtils) {
+		this.deviceUtils = deviceUtils;
+	}
+
+	public CommentApi getCommentApi() {
+		return commentApi;
+	}
+
+	public void setCommentApi(CommentApi commentApi) {
+		this.commentApi = commentApi;
 	}
 }

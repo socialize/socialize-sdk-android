@@ -36,18 +36,11 @@ import com.socialize.entity.SocializeObject;
  */
 public abstract class SocializeObjectFactory<T extends SocializeObject> {
 	
-	// Injected
-	protected FactoryService factoryService;
 	
 	public static final DateFormat UTC_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZ");
 	
 	public SocializeObjectFactory() {
 		super();
-	}
-
-	protected SocializeObjectFactory(FactoryService factoryService) {
-		super();
-		this.factoryService = factoryService;
 	}
 	
 	public JSONObject toJSON(T object) throws JSONException {

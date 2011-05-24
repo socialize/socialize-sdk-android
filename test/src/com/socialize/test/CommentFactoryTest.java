@@ -45,7 +45,7 @@ public class CommentFactoryTest extends AbstractSocializeActionFactoryTest<Comme
 
 	@Override
 	protected CommentFactory createFactory() {
-		return new CommentFactory(factoryService) {
+		return new CommentFactory() {
 			@Override
 			public Comment instantiateObject() {
 				return action;

@@ -32,6 +32,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>android-ioc_src</name>
+			<type>2</type>
+			<locationURI>_android_android_ioc_37cf739f/src</locationURI>
+		</link>
+		<link>
 			<name>sdk_src</name>
 			<type>2</type>
 			<locationURI>_android_sdk_1bc3a/src</locationURI>

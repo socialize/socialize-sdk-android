@@ -3,6 +3,68 @@
 	<bean id="httputils" class="com.socialize.util.HttpUtils" initMethod="init"/>
 	<bean id="deviceutils" class="com.socialize.util.DeviceUtils"/>
 
-	<bean id="config" class="com.socialize.config.SocializeConfig"/>
+	<bean id="config" class="com.socialize.config.SocializeConfig">
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>
+	</bean>
+	
+	<bean id="applicationFactory" class="com.socialize.entity.factory.ApplicationFactory">
+		<property name="factoryService" ref="factoryService"/>
+	</bean>
+	
+	<bean id="commentFactory" class="com.socialize.entity.factory.CommentFactory">
+		<property name="factoryService" ref="factoryService"/>
+	</bean>
+	
+	<bean id="factoryService" class="com.socialize.entity.factory.FactoryService">
+		<property name="factories">
+			<map>
+				<entry>
+					<key value="com.socialize.entity.Application"/>
+					<value ref="applicationFactory"/>
+				</entry>
+				<entry>
+				<key value="com.socialize.entity.Comment"/>
+					<value ref="commentFactory"/>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="httpClientFactory" class="com.socialize.net.DefaultHttpClientFactory">
+		<init-method name="init"/>
+		<destroy-method name="destroy"/>
+	</bean>
+	
+	<bean id="logger" class="com.socialize.log.SocializeLogger">
+		<init-method name="init">
+			<arg ref="config"/>
+		</init-method>
+	</bean>
+	
+	<bean id="authProvider" class="com.socialize.provider.DefaultSocializeProvider">
+		<property name="clientFactory" ref="httpClientFactory"/>
+	</bean>
+
+	<bean id="commentProvider" class="com.socialize.provider.DefaultSocializeProvider">
+		<property name="clientFactory" ref="httpClientFactory"/>
+		<property name="objectFactory" ref="commentFactory"/>
+	</bean>
+	
+	<bean id="commentApi" class="com.socialize.api.comment.CommentApi">
+		<constructor-arg ref="commentProvider"/>
+	</bean>
+	
+	<bean id="socializeService" class="com.socialize.SocializeService">
+		<constructor-arg type="context"/>
+		<property name="factoryService" ref="factoryService"/>
+		<property name="authProvider" ref="authProvider"/>
+		<property name="clientFactory" ref="httpClientFactory"/>
+		<property name="logger" ref="logger"/>
+		<property name="config" ref="config"/>
+		<property name="deviceUtils" ref="deviceutils"/>
+		<property name="commentApi" ref="commentApi"/>
+	</bean>
 
 </beans>

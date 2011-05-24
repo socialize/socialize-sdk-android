@@ -36,24 +36,18 @@ import com.socialize.provider.SocializeProvider;
  * @param <T>
  * @param <P>
  */
-public class SocializeService<T extends SocializeObject, P extends SocializeProvider<T>> {
+public class SocializeApi<T extends SocializeObject, P extends SocializeProvider<T>> {
 
-	private SocializeListener<T> listener;
 	private P provider;
 	private SocializeResponseFactory<T> responseFactory;
 
 	public static enum RequestType {AUTH,PUT,POST,GET,LIST};
 	
-	public SocializeService(P provider) {
+	public SocializeApi(P provider) {
 		super();
 		this.provider = provider;
 	}
 	
-	public SocializeService(P provider, SocializeResponseFactory<T> responseFactory) {
-		this(provider);
-		this.responseFactory = responseFactory;
-	}
-
 	public SocializeSession authenticate(String key, String secret, String uuid) throws SocializeApiError {
 		return provider.authenticate(key, secret, uuid);
 	}
@@ -74,16 +68,16 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 		return provider.post(session, endpoint, object);
 	}
 
-	public void listAsync(SocializeSession session, String endpoint, String key) {
-		AsyncGetter getter = new AsyncGetter(RequestType.LIST, session);
+	public void listAsync(SocializeSession session, String endpoint, String key, SocializeListener<T> listener) {
+		AsyncGetter getter = new AsyncGetter(RequestType.LIST, session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
 		request.setEndpoint(endpoint);
 		request.setKey(key);
 		getter.execute(request);
 	}
 
-	public void getAsync(SocializeSession session, String endpoint, int[] ids) {
-		AsyncGetter getter = new AsyncGetter(RequestType.GET, session);
+	public void getAsync(SocializeSession session, String endpoint, int[] ids, SocializeListener<T> listener) {
+		AsyncGetter getter = new AsyncGetter(RequestType.GET, session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
 		request.setEndpoint(endpoint);
 		request.setIds(ids);
@@ -91,8 +85,8 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 	}
 
 	@SuppressWarnings("unchecked")
-	public void putAsync(SocializeSession session, String endpoint, T object) {
-		AsyncPutter poster = new AsyncPutter(RequestType.PUT, session);
+	public void putAsync(SocializeSession session, String endpoint, T object, SocializeListener<T> listener) {
+		AsyncPutter poster = new AsyncPutter(RequestType.PUT, session, listener);
 		SocializePutRequest<T> request = new SocializePutRequest<T>();
 		request.setEndpoint(endpoint);
 		request.setObject(object);
@@ -100,16 +94,16 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 	}
 
 	@SuppressWarnings("unchecked")
-	public void postAsync(SocializeSession session, String endpoint, T object) {
-		AsyncPutter poster = new AsyncPutter(RequestType.POST, session);
+	public void postAsync(SocializeSession session, String endpoint, T object, SocializeListener<T> listener) {
+		AsyncPutter poster = new AsyncPutter(RequestType.POST, session, listener);
 		SocializePutRequest<T> request = new SocializePutRequest<T>();
 		request.setEndpoint(endpoint);
 		request.setObject(object);
 		poster.execute(request);
 	}
 	
-	public void authenticateAsync(String key, String secret, String uuid) {
-		AsyncAuthenicator authenicator = new AsyncAuthenicator(RequestType.AUTH, null);
+	public void authenticateAsync(String key, String secret, String uuid, SocializeListener<T> listener) {
+		AsyncAuthenicator authenicator = new AsyncAuthenicator(RequestType.AUTH, null, listener);
 		SocializeAuthRequest request = new SocializeAuthRequest();
 		request.setConsumerKey(key);
 		request.setConsumerSecret(secret);
@@ -117,9 +111,6 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 		authenicator.execute(request);
 	}
 
-	public void setListener(SocializeListener<T> listener) {
-		this.listener = listener;
-	}
 	
 	public void setResponseFactory(SocializeResponseFactory<T> responseFactory) {
 		this.responseFactory = responseFactory;
@@ -130,11 +121,13 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 		RequestType requestType;
 		SocializeSession session;
 		SocializeApiError error = null;
+		SocializeListener<T> listener = null;
 		
-		public AbstractAsyncProcess(RequestType requestType, SocializeSession session) {
+		public AbstractAsyncProcess(RequestType requestType, SocializeSession session, SocializeListener<T> listener) {
 			super();
 			this.requestType = requestType;
 			this.session = session;
+			this.listener = listener;
 		}
 
 		@Override
@@ -168,8 +161,8 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 	
 	class AsyncAuthenicator extends AbstractAsyncProcess<SocializeAuthRequest, Void, SocializeAuthResponse> {
 
-		public AsyncAuthenicator(RequestType requestType, SocializeSession session) {
-			super(requestType, session);
+		public AsyncAuthenicator(RequestType requestType, SocializeSession session, SocializeListener<T> listener) {
+			super(requestType, session, listener);
 		}
 
 		@Override
@@ -183,7 +176,7 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 				response = new SocializeAuthResponse();
 			}
 			
-			SocializeSession session = SocializeService.this.authenticate(request.getConsumerKey(), request.getConsumerSecret(), request.getUuid());
+			SocializeSession session = SocializeApi.this.authenticate(request.getConsumerKey(), request.getConsumerSecret(), request.getUuid());
 			response.setSession(session);
 			return response;
 		}
@@ -191,8 +184,8 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 
 	class AsyncPutter extends AbstractAsyncProcess<SocializePutRequest<T>, Void, SocializeEntityResponse<T>> {
 
-		public AsyncPutter(RequestType requestType, SocializeSession session) {
-			super(requestType, session);
+		public AsyncPutter(RequestType requestType, SocializeSession session, SocializeListener<T> listener) {
+			super(requestType, session, listener);
 		}
 
 		@Override
@@ -212,11 +205,11 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 			switch (requestType) {
 			
 			case POST:
-				results = SocializeService.this.post(session, request.getEndpoint(), request.getObject());
+				results = SocializeApi.this.post(session, request.getEndpoint(), request.getObject());
 				break;
 
 			case PUT:
-				results = SocializeService.this.put(session, request.getEndpoint(), request.getObject());
+				results = SocializeApi.this.put(session, request.getEndpoint(), request.getObject());
 				break;
 			}
 
@@ -228,9 +221,8 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 
 	class AsyncGetter extends AbstractAsyncProcess<SocializeGetRequest, Void, SocializeEntityResponse<T>> {
 
-		
-		public AsyncGetter(RequestType requestType, SocializeSession session) {
-			super(requestType, session);
+		public AsyncGetter(RequestType requestType, SocializeSession session, SocializeListener<T> listener) {
+			super(requestType, session, listener);
 		}
 
 		@Override
@@ -248,12 +240,12 @@ public class SocializeService<T extends SocializeObject, P extends SocializeProv
 			switch (requestType) {
 			
 			case GET:
-				T result = SocializeService.this.get(session, request.getEndpoint(), request.getIds());
+				T result = SocializeApi.this.get(session, request.getEndpoint(), request.getIds());
 				response.addResult(result);
 				break;
 
 			case LIST:
-				List<T> results = SocializeService.this.list(session, request.getEndpoint(), request.getKey());
+				List<T> results = SocializeApi.this.list(session, request.getEndpoint(), request.getKey());
 				response.setResults(results);
 				break;
 			}

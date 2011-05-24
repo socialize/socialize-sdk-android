@@ -32,10 +32,6 @@ import com.socialize.entity.Comment;
  */
 public class CommentFactory extends SocializeActionFactory<Comment> {
 	
-	public CommentFactory(FactoryService factoryService) {
-		super(factoryService);
-	}
-
 	@Override
 	protected void postFromJSON(JSONObject object, Comment comment) throws JSONException {
 		comment.setText(object.getString("comment"));

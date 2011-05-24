@@ -22,9 +22,9 @@
 package com.socialize.listener;
 
 import com.socialize.api.SocializeResponse;
-import com.socialize.api.SocializeService.RequestType;
+import com.socialize.api.SocializeApi.RequestType;
 import com.socialize.entity.SocializeObject;
-import com.socialize.error.SocializeApiError;
+import com.socialize.error.SocializeException;
 
 /**
  * @author Jason Polites
@@ -35,6 +35,6 @@ public interface SocializeListener<T extends SocializeObject> {
 
 	public void onResult(RequestType type, SocializeResponse response);
 	
-	public void onError(SocializeApiError error);
+	public void onError(SocializeException error);
 	
 }

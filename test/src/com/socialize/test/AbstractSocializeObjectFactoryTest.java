@@ -37,7 +37,7 @@ import com.socialize.entity.factory.SocializeObjectFactory;
 public abstract class AbstractSocializeObjectFactoryTest<T extends SocializeObject, F extends SocializeObjectFactory<T>> extends SocializeActivityTest {
 
 	protected FactoryService factoryService;
-	protected SocializeConfig config;
+//	protected SocializeConfig config;
 	protected F factory;
 	protected JSONObject json;
 	protected int id = 9999;
@@ -48,13 +48,13 @@ public abstract class AbstractSocializeObjectFactoryTest<T extends SocializeObje
 	protected void setUp() throws Exception {
 		super.setUp();
 		
-		config = AndroidMock.createMock(SocializeConfig.class);
+//		config = AndroidMock.createMock(SocializeConfig.class);
 		
-		AndroidMock.expect(config.getProperties()).andReturn(null);
+//		AndroidMock.expect(config.getProperties()).andReturn(null);
 		
-		AndroidMock.replay(config);
+//		AndroidMock.replay(config);
 		
-		factoryService = AndroidMock.createMock(FactoryService.class, config);
+		factoryService = AndroidMock.createMock(FactoryService.class);
 		json = AndroidMock.createNiceMock(JSONObject.class);
 		object = AndroidMock.createNiceMock(getObjectClass());
 		
@@ -75,7 +75,7 @@ public abstract class AbstractSocializeObjectFactoryTest<T extends SocializeObje
 		
 		factory.toJSON(object);
 		
-		AndroidMock.verify(config);
+//		AndroidMock.verify(config);
 		AndroidMock.verify(factoryService);
 		AndroidMock.verify(json);
 		AndroidMock.verify(object);
@@ -97,7 +97,7 @@ public abstract class AbstractSocializeObjectFactoryTest<T extends SocializeObje
 		
 		factory.fromJSON(json);
 		
-		AndroidMock.verify(config);
+//		AndroidMock.verify(config);
 		AndroidMock.verify(factoryService);
 		AndroidMock.verify(json);
 		AndroidMock.verify(object);

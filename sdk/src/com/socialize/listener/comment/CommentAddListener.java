@@ -24,7 +24,6 @@ package com.socialize.listener.comment;
 import java.util.List;
 
 import com.socialize.entity.Comment;
-import com.socialize.error.SocializeApiError;
 
 
 /**
@@ -34,15 +33,12 @@ import com.socialize.error.SocializeApiError;
 public abstract class CommentAddListener extends CommentListener {
 
 	@Override
-	public void onError(SocializeApiError error) {}
+	public final void onGet(Comment entity) {}
 
 	@Override
-	public void onGet(Comment entity) {}
+	public final void onList(List<Comment> entities) {}
 
 	@Override
-	public void onList(List<Comment> entities) {}
-
-	@Override
-	public void onUpdate(Comment entity) {}
+	public final void onUpdate(Comment entity) {}
 
 }
