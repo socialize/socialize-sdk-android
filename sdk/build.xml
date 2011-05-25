@@ -25,7 +25,7 @@
 		<echo>Out dir is [${out.dir}]</echo>
 		
 		<copy todir="${out.dir}/classes" verbose="true" >
-			<fileset dir="${out.dir}">
+			<fileset dir="src">
 				<include name="android-beans.xml"/>
 				<include name="errors.properties"/>
 				<include name="socialize.properties"/>
