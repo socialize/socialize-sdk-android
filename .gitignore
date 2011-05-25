@@ -11,3 +11,4 @@ test/gen
 test/bin
 testlocal.properties
 build
+test/findbugs-output

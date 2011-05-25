@@ -12,9 +12,29 @@
 		<pathelement path="${sdk.dir}/tools/lib/androidprefs.jar" />
 	</path>
 
+	<path id="findbugs.libs">
+		<pathelement path="${findbugs.home}/lib/findbugs-ant.jar" />
+	</path>
+
 	<taskdef name="setup"
         classname="com.android.ant.SetupTask"
         classpathref="android.antlibs" />
+
+	<taskdef name="findbugs" 
+		classname="edu.umd.cs.findbugs.anttask.FindBugsTask"
+		classpathref="findbugs.libs"/>
+
+	<target name="findbugs">
+		<mkdir dir="findbugs-output"/>
+		<property name="sdkdir" refid="android.target.classpath"/>
+		<echo> SDK Dir ${sdkdir} </echo>
+		<findbugs home="${findbugs.home}" output="xml" outputFile="findbugs-output/bcel-fb.xml">
+			<sourcePath path="${library.project.src}" />
+			<auxClasspath path="${sdkdir}"/>
+			<class location="${library.project.build}/socialize-0.0.2.jar" />
+		</findbugs>
+	</target>
+
 
 	<property name="test.runner" value="pl.polidea.instrumentation.PolideaInstrumentationTestRunner" />
 
