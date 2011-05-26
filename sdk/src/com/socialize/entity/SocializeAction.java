@@ -21,7 +21,6 @@
  */
 package com.socialize.entity;
 
-import java.util.Date;
 
 /**
  * @author Jason Polites
@@ -34,7 +33,7 @@ public class SocializeAction extends SocializeObject {
 	private User user;
 	private float lon;
 	private float lat;
-	private Date date;
+	private long date;
 	
 	public Application getApplication() {
 		return application;
@@ -66,10 +65,10 @@ public class SocializeAction extends SocializeObject {
 	public void setLat(float lat) {
 		this.lat = lat;
 	}
-	public Date getDate() {
+	public long getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(long date) {
 		this.date = date;
 	}
 }

@@ -130,7 +130,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		AndroidMock.expect(action.getEntity()).andReturn(entity);
 		AndroidMock.expect(action.getLat()).andReturn(lat);
 		AndroidMock.expect(action.getLon()).andReturn(lon);
-		AndroidMock.expect(action.getDate()).andReturn(date);
+		AndroidMock.expect(action.getDate()).andReturn(date.getTime());
 
 		AndroidMock.replay(jsonApplication);
 		AndroidMock.replay(jsonUser);

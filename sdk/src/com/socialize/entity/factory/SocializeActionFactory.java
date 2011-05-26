@@ -80,7 +80,7 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			
 			to.setLat((float)from.getDouble("lat"));
 			to.setLon((float)from.getDouble("lon"));
-			to.setDate(UTC_FORMAT.parse(from.getString("date")));
+			to.setDate(UTC_FORMAT.parse(from.getString("date")).getTime());
 			
 		}
 		catch (Exception e) {

@@ -30,11 +30,11 @@ public class SocializeGetRequest extends SocializeRequest {
 	private int[] ids;
 	private String key;
 
-	public int[] getIds() {
+	protected int[] getIds() {
 		return ids;
 	}
 
-	public void setIds(int[] ids) {
+	public void setIds(int...ids) {
 		this.ids = ids;
 	}
 
