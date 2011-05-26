@@ -21,7 +21,9 @@
  */
 package com.socialize.test;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.json.JSONException;
@@ -62,6 +64,8 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 	protected float lon = 20;
 	protected Date date = new Date();
 	protected int id = 10000;
+	
+	protected final DateFormat UTC_FORMAT = new SimpleDateFormat(SocializeObjectFactory.UTC_FORMAT_STRING);
 	
 	@SuppressWarnings("unchecked")
 	@UsesMocks({FactoryService.class, Application.class, User.class, Entity.class})
@@ -118,7 +122,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		AndroidMock.expect(json.put("id", id)).andReturn(json);
 		AndroidMock.expect(json.put("lat", lat)).andReturn(json);
 		AndroidMock.expect(json.put("lon", lon)).andReturn(json);
-		AndroidMock.expect(json.put("date",SocializeObjectFactory.UTC_FORMAT.format(date))).andReturn(json);
+		AndroidMock.expect(json.put("date",UTC_FORMAT.format(date))).andReturn(json);
 		
 		AndroidMock.expect(action.getId()).andReturn(id);
 		AndroidMock.expect(action.getApplication()).andReturn(application);
@@ -160,7 +164,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		
 		AndroidMock.expect((float)json.getDouble("lat")).andReturn(lat);
 		AndroidMock.expect((float)json.getDouble("lon")).andReturn(lon);
-		AndroidMock.expect(json.getString("date")).andReturn(SocializeObjectFactory.UTC_FORMAT.format(date));
+		AndroidMock.expect(json.getString("date")).andReturn(UTC_FORMAT.format(date));
 		
 		AndroidMock.replay(factoryService);
 		AndroidMock.replay(appFactoryMock);
