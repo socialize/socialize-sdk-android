@@ -19,24 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api;
+package com.socialize.util;
 
-import com.socialize.entity.User;
+import android.graphics.Bitmap;
 
 /**
  * @author Jason Polites
  *
  */
-public interface SocializeSession {
+public class ImageUtils {
 
-	public User getUser();
-
-	public String getConsumerKey();
-
-	public String getConsumerSecret();
+	public String encode(Bitmap bitmap) {
+		// TODO: implement this
+		return null;
+	}
 	
-	public String getConsumerToken();
+	public Bitmap decode(String encoded) {
+		// TODO: implement this
+		return null;
+	}
 	
-	public String getConsumerTokenSecret();
-
 }

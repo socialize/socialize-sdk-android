@@ -27,14 +27,14 @@ package com.socialize.api;
  */
 public class SocializeGetRequest extends SocializeRequest {
 
-	private int[] ids;
+	private String[] ids;
 	private String key;
 
-	protected int[] getIds() {
+	protected String[] getIds() {
 		return ids;
 	}
 
-	public void setIds(int...ids) {
+	public void setIds(String...ids) {
 		this.ids = ids;
 	}
 

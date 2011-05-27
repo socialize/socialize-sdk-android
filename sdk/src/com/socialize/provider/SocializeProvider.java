@@ -35,9 +35,9 @@ public interface SocializeProvider<T> {
 	
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException;
 
-	public List<T> list(SocializeSession session, String endpoint, String key) throws SocializeException;
+	public List<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException;
 	
-	public T get(SocializeSession session, String endpoint, int[] ids) throws SocializeException;
+	public T get(SocializeSession session, String endpoint, String id) throws SocializeException;
 	
 	public List<T> put(SocializeSession session, String endpoint, T object) throws SocializeException;
 

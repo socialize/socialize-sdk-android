@@ -21,11 +21,85 @@
  */
 package com.socialize.entity;
 
+import android.graphics.Bitmap;
+
 
 /**
  * @author Jason Polites
- *
  */
 public class User extends SocializeObject {
 
+	private String firstName;
+	private String lastName;
+	private String username;
+	private String description;
+	private String location;
+	private String smallImageUri;
+	private String mediumImageUri;
+	private String largeImageUri;
+	private Stats stats;
+	
+	private transient Bitmap image;
+	
+	public String getFirstName() {
+		return firstName;
+	}
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
+	}
+	public String getSmallImageUri() {
+		return smallImageUri;
+	}
+	public void setSmallImageUri(String smallImageUri) {
+		this.smallImageUri = smallImageUri;
+	}
+	public String getMediumImageUri() {
+		return mediumImageUri;
+	}
+	public void setMediumImageUri(String mediumImageUri) {
+		this.mediumImageUri = mediumImageUri;
+	}
+	public String getLargeImageUri() {
+		return largeImageUri;
+	}
+	public void setLargeImageUri(String largeImageUri) {
+		this.largeImageUri = largeImageUri;
+	}
+	public Stats getStats() {
+		return stats;
+	}
+	public void setStats(Stats stats) {
+		this.stats = stats;
+	}
+	
+	public Bitmap getImage() {
+		return image;
+	}
+	public void setImage(Bitmap image) {
+		this.image = image;
+	}
 }

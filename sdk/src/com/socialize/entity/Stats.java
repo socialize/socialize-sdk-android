@@ -19,24 +19,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api;
-
-import com.socialize.entity.User;
+package com.socialize.entity;
 
 /**
  * @author Jason Polites
  *
  */
-public interface SocializeSession {
+public class Stats extends SocializeObject {
 
-	public User getUser();
-
-	public String getConsumerKey();
-
-	public String getConsumerSecret();
+	private int views;
+	private int likes;
+	private int comments;
+	private int shares;
 	
-	public String getConsumerToken();
+	public int getViews() {
+		return views;
+	}
+	public void setViews(int views) {
+		this.views = views;
+	}
+	public int getLikes() {
+		return likes;
+	}
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+	public int getComments() {
+		return comments;
+	}
+	public void setComments(int comments) {
+		this.comments = comments;
+	}
+	public int getShares() {
+		return shares;
+	}
+	public void setShares(int shares) {
+		this.shares = shares;
+	}
 	
-	public String getConsumerTokenSecret();
-
 }

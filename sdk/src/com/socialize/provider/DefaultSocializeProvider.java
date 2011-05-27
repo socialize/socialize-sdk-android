@@ -22,6 +22,7 @@
 package com.socialize.provider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import oauth.signpost.OAuthConsumer;
@@ -32,14 +33,21 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.socialize.api.SocializeSession;
+import com.socialize.api.SocializeSessionImpl;
 import com.socialize.entity.SocializeObject;
+import com.socialize.entity.User;
 import com.socialize.entity.factory.SocializeObjectFactory;
 import com.socialize.error.SocializeException;
 import com.socialize.net.HttpClientFactory;
+import com.socialize.util.IOUtils;
 
 /**
  * @author Jason Polites
@@ -49,12 +57,15 @@ import com.socialize.net.HttpClientFactory;
 public class DefaultSocializeProvider<T extends SocializeObject> implements SocializeProvider<T> {
 
 	private SocializeObjectFactory<T> objectFactory;
+	private SocializeObjectFactory<User> userFactory;
 	private HttpClientFactory clientFactory;
+	private IOUtils ioUtils;
+	
+	private final AuthorizationHeaderSigningStrategy strategy = new AuthorizationHeaderSigningStrategy();
 
 	public DefaultSocializeProvider() {
 		super();
 	}
-
 
 	public DefaultSocializeProvider(SocializeObjectFactory<T> factory, HttpClientFactory clientFactory) {
 		super();
@@ -62,13 +73,29 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		this.clientFactory = clientFactory;
 	}
 
+	protected void sign(SocializeSession session, HttpUriRequest request) throws SocializeException {
+		try {
+			OAuthConsumer consumer = new CommonsHttpOAuthConsumer(session.getConsumerKey(), session.getConsumerSecret());
+			consumer.setSigningStrategy(strategy);
+			consumer.setTokenWithSecret(session.getConsumerToken(), session.getConsumerTokenSecret());
+			consumer.sign(request);
+		}
+		catch (Exception e) {
+			throw new SocializeException(e);
+		}
+	}
+	
 	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException {
 
+		SocializeSessionImpl session = null;
+		
+		endpoint = prepareEndpoint(endpoint);
+		
 		HttpClient client = clientFactory.getClient();
 		HttpPost post = new HttpPost(endpoint);
 		
-		List<NameValuePair> data = new ArrayList<NameValuePair>();
+		List<NameValuePair> data = new ArrayList<NameValuePair>(2);
 		
 		data.add(new BasicNameValuePair("payload", "{'udid':" + uuid + "}"));
 		data.add(new BasicNameValuePair("udid", uuid)); // Legacy
@@ -80,44 +107,118 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			OAuthConsumer consumer = new CommonsHttpOAuthConsumer(key, secret);
 
 			// sign the request
-			consumer.setSigningStrategy(new AuthorizationHeaderSigningStrategy());
+			consumer.setSigningStrategy(strategy);
+			
 			consumer.sign(post);
 			
 			HttpResponse response = client.execute(post);
 			
-			// Parse the response.
-			// TODO: implement response parser
+			String result = ioUtils.read(response.getEntity().getContent());
 			
+			JSONObject json = new JSONObject(result);
+			
+			// Parse the response.
+			session = new SocializeSessionImpl();
+			
+			session.setConsumerKey(key);
+			session.setConsumerSecret(secret);
+			session.setConsumerToken(json.getString("oauth_token"));
+			session.setConsumerTokenSecret(json.getString("oauth_token_secret"));
+			
+			User user = userFactory.fromJSON(json.getJSONObject("user"));
+			
+			session.setUser(user);
 		}
 		catch (Exception e) {
 			throw new SocializeException(e);
 		}
 		
-		// TODO Auto-generated method stub
-		return null;
+		return session;
 	}
 
 	@Override
-	public T get(SocializeSession session, String endpoint, int[] ids) {
-		// TODO Auto-generated method stub
-		return null;
+	public T get(SocializeSession session, String endpoint, String id) throws SocializeException {
+		
+		try {
+			endpoint = prepareEndpoint(endpoint);
+			endpoint += id;
+			
+			HttpClient client = clientFactory.getClient();
+			HttpGet get = new HttpGet(endpoint);
+			
+			sign(session, get);
+			
+			HttpResponse response = client.execute(get);
+
+			String result = ioUtils.read(response.getEntity().getContent());
+			
+			JSONObject json = new JSONObject(result);
+			
+			return objectFactory.fromJSON(json);
+		}
+		catch (Exception e) {
+			throw new SocializeException(e);
+		}
 	}
 
 	@Override
-	public List<T> list(SocializeSession session, String endpoint, String key) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
+
+		List<T> results = null;
+		
+		try {
+			endpoint = prepareEndpoint(endpoint);
+			
+			HttpClient client = clientFactory.getClient();
+			HttpPost post = new HttpPost(endpoint);
+			List<NameValuePair> data = new ArrayList<NameValuePair>();
+			
+			JSONArray array = new JSONArray(Arrays.asList(ids));
+			
+			JSONObject json = new JSONObject();
+			json.put("ids", array);
+			json.put("key", key);
+			
+			data.add(new BasicNameValuePair("payload", json.toString()));
+			
+			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(data);
+			post.setEntity(entity);
+			
+			sign(session, post);
+			
+			HttpResponse response = client.execute(post);
+			
+			String result = ioUtils.read(response.getEntity().getContent());
+			
+			JSONArray list = new JSONArray(result);
+			
+			int length = list.length();
+			
+			results = new ArrayList<T>(length);
+			
+			for (int i = 0; i < length; i++) {
+				results.add(objectFactory.fromJSON(list.getJSONObject(i)));
+			}
+		}
+		catch (Exception e) {
+			throw new SocializeException(e);
+		}
+
+		return results;
 	}
 
 	@Override
 	public List<T> put(SocializeSession session, String endpoint, T object) {
-		// TODO Auto-generated method stub
+		endpoint = prepareEndpoint(endpoint);
+		
+		
+		
 		return null;
 	}
 
 	@Override
 	public List<T> post(SocializeSession session, String endpoint, T object) {
-		// TODO Auto-generated method stub
+		endpoint = prepareEndpoint(endpoint);
 		return null;
 	}
 
@@ -137,13 +238,29 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		this.clientFactory = clientFactory;
 	}
 	
-	
-	
-	public void someMethod () {
-		
-		SocializeObject object = new SocializeObject();
-		
-		object.notifyAll();
-		
+	public IOUtils getIoUtils() {
+		return ioUtils;
 	}
+
+	public void setIoUtils(IOUtils ioUtils) {
+		this.ioUtils = ioUtils;
+	}
+	
+	public SocializeObjectFactory<User> getUserFactory() {
+		return userFactory;
+	}
+	
+	public void setUserFactory(SocializeObjectFactory<User> userFactory) {
+		this.userFactory = userFactory;
+	}
+	
+	private final String prepareEndpoint(String endpoint) {
+		endpoint = endpoint.trim();
+		if(!endpoint.endsWith("/")) {
+			endpoint += "/";
+		}
+		return endpoint;
+	}
+	
+	
 }

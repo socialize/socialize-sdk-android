@@ -33,6 +33,7 @@ public class SocializeSessionImpl implements SocializeSession {
 	private String consumerKey;
 	private String consumerSecret;
 	private String consumerToken;
+	private String consumerTokenSecret;
 	
 	public SocializeSessionImpl() {
 		super();
@@ -86,6 +87,17 @@ public class SocializeSessionImpl implements SocializeSession {
 	public void setConsumerToken(String consumerToken) {
 		this.consumerToken = consumerToken;
 	}
-	
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.SocializeSession#getConsumerTokenSecret()
+	 */
+	@Override
+	public String getConsumerTokenSecret() {
+		return consumerTokenSecret;
+	}
+
+	public void setConsumerTokenSecret(String consumerTokenSecret) {
+		this.consumerTokenSecret = consumerTokenSecret;
+	}
 }

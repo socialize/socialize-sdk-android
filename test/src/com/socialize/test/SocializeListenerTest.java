@@ -71,11 +71,11 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		
 		AndroidMock.replay(listener);
 		
-		final int[] ids = {0};
+		final String id = "foobar";
 		
 		runTestOnUiThread(new Runnable() {
 			public void run() {
-				service.getAsync(session, endpoint, ids, listener);
+				service.getAsync(session, endpoint, id, listener);
 			}
 		});
 		
@@ -100,16 +100,16 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		
 		listener.onError(dummyError);
 		
-		final int[] ids = {0};
+		final String id = "foobar";
 		
-		AndroidMock.expect(provider.get(session, endpoint,ids)).andThrow(dummyError);
+		AndroidMock.expect(provider.get(session, endpoint,id)).andThrow(dummyError);
 		
 		AndroidMock.replay(provider);
 		AndroidMock.replay(listener);
 		
 		runTestOnUiThread(new Runnable() {
 			public void run() {
-				service.getAsync(session, endpoint, ids, listener);
+				service.getAsync(session, endpoint, id, listener);
 			}
 		});
 		
@@ -152,11 +152,11 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		
 		CountDownLatch signal = new CountDownLatch(1); 
 		
-		final int[] ids = {0};
+		final String id = "foobar";
 		
 		runTestOnUiThread(new Runnable() {
 			public void run() {
-				service.getAsync(session, endpoint, ids, listener);
+				service.getAsync(session, endpoint, id, listener);
 			}
 		});
 		
@@ -201,11 +201,12 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		
 		CountDownLatch signal = new CountDownLatch(1); 
 		
-		final String key = "foobar";
+		final String key = "foo";
+		final String[] ids = {"bar"};
 		
 		runTestOnUiThread(new Runnable() {
 			public void run() {
-				service.listAsync(session, endpoint, key, listener);
+				service.listAsync(session, endpoint, key, ids, listener);
 			}
 		});
 		

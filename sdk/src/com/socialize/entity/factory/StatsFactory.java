@@ -19,24 +19,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api;
+package com.socialize.entity.factory;
 
-import com.socialize.entity.User;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.socialize.entity.Stats;
 
 /**
  * @author Jason Polites
  *
  */
-public interface SocializeSession {
+public class StatsFactory extends SocializeObjectFactory<Stats> {
 
-	public User getUser();
+	@Override
+	public Stats instantiateObject() {
+		return new Stats();
+	}
 
-	public String getConsumerKey();
+	@Override
+	protected void fromJSON(JSONObject from, Stats to) throws JSONException {
+		to.setComments(from.getInt("comments"));
+		to.setLikes(from.getInt("likes"));
+		to.setShares(from.getInt("share"));
+		to.setViews(from.getInt("views"));
+	}
 
-	public String getConsumerSecret();
+	@Override
+	protected void toJSON(Stats from, JSONObject to) throws JSONException {
+		// Never sent
+	}
 	
-	public String getConsumerToken();
-	
-	public String getConsumerTokenSecret();
-
 }

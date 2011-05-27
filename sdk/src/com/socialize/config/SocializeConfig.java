@@ -39,14 +39,13 @@ public class SocializeConfig {
 	
 	public static final String DEFAULT_PROPERTIES = "socialize.properties";
 	
-	
 	private Properties properties;
 	
 	private String propertiesFileName = DEFAULT_PROPERTIES;
 	
-	public static final String FACTORY_PREFIX = "factory.";
 	public static final String LOG_LEVEL = "log.level";
 	public static final String LOG_TAG = "log.tag";
+	public static final String API_HOST = "api.host";
 	
 	public SocializeConfig() {
 		super();

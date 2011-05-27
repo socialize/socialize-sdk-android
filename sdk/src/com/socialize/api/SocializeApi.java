@@ -25,6 +25,7 @@ import java.util.List;
 
 import android.os.AsyncTask;
 
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeListener;
@@ -40,6 +41,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 
 	private P provider;
 	private SocializeResponseFactory<T> responseFactory;
+	private SocializeConfig config;
 
 	public static enum RequestType {AUTH,PUT,POST,GET,LIST};
 	
@@ -52,12 +54,12 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return provider.authenticate(endpoint, key, secret, uuid);
 	}
 
-	public List<T> list(SocializeSession session, String endpoint, String key) throws SocializeException {
-		return provider.list(session, endpoint, key);
+	public List<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
+		return provider.list(session, endpoint, key, ids);
 	}
 	
-	public T get(SocializeSession session, String endpoint, int[] ids) throws SocializeException {
-		return provider.get(session, endpoint, ids);
+	public T get(SocializeSession session, String endpoint, String id) throws SocializeException {
+		return provider.get(session, endpoint, id);
 	}
 	
 	public List<T> put(SocializeSession session, String endpoint, T object) throws SocializeException {
@@ -68,19 +70,20 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return provider.post(session, endpoint, object);
 	}
 
-	public void listAsync(SocializeSession session, String endpoint, String key, SocializeListener<T> listener) {
+	public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeListener<T> listener) {
 		AsyncGetter getter = new AsyncGetter(RequestType.LIST, session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
 		request.setEndpoint(endpoint);
 		request.setKey(key);
+		request.setIds(ids);
 		getter.execute(request);
 	}
 
-	public void getAsync(SocializeSession session, String endpoint, int[] ids, SocializeListener<T> listener) {
+	public void getAsync(SocializeSession session, String endpoint, String id, SocializeListener<T> listener) {
 		AsyncGetter getter = new AsyncGetter(RequestType.GET, session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
 		request.setEndpoint(endpoint);
-		request.setIds(ids);
+		request.setIds(id);
 		getter.execute(request);
 	}
 
@@ -105,6 +108,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	public void authenticateAsync(String key, String secret, String uuid, SocializeListener<T> listener) {
 		AsyncAuthenicator authenicator = new AsyncAuthenicator(RequestType.AUTH, null, listener);
 		SocializeAuthRequest request = new SocializeAuthRequest();
+		request.setEndpoint(config.getProperties().getProperty(SocializeConfig.API_HOST) + "/authenticate/");
 		request.setConsumerKey(key);
 		request.setConsumerSecret(secret);
 		request.setUuid(uuid);
@@ -114,6 +118,18 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	
 	public void setResponseFactory(SocializeResponseFactory<T> responseFactory) {
 		this.responseFactory = responseFactory;
+	}
+	
+	public SocializeResponseFactory<T> getResponseFactory() {
+		return responseFactory;
+	}
+	
+	public SocializeConfig getConfig() {
+		return config;
+	}
+
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
 	}
 
 	abstract class AbstractAsyncProcess<Params, Progress, Result extends SocializeResponse> extends AsyncTask<Params, Progress, Result> {
@@ -240,12 +256,12 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			switch (requestType) {
 			
 			case GET:
-				T result = SocializeApi.this.get(session, request.getEndpoint(), request.getIds());
+				T result = SocializeApi.this.get(session, request.getEndpoint(), request.getIds()[0]);
 				response.addResult(result);
 				break;
 
 			case LIST:
-				List<T> results = SocializeApi.this.list(session, request.getEndpoint(), request.getKey());
+				List<T> results = SocializeApi.this.list(session, request.getEndpoint(), request.getKey(), request.getIds());
 				response.setResults(results);
 				break;
 			}

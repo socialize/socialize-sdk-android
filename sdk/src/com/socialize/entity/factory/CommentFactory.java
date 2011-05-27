@@ -46,5 +46,4 @@ public class CommentFactory extends SocializeActionFactory<Comment> {
 	public Comment instantiateObject() {
 		return new Comment();
 	}
-	
 }

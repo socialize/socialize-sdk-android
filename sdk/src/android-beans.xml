@@ -2,6 +2,7 @@
 
 	<bean id="httputils" class="com.socialize.util.HttpUtils" initMethod="init"/>
 	<bean id="deviceutils" class="com.socialize.util.DeviceUtils"/>
+	<bean id="ioUtils" class="com.socialize.util.IOUtils"/>
 
 	<bean id="config" class="com.socialize.config.SocializeConfig">
 		<init-method name="init">
@@ -14,6 +15,10 @@
 	</bean>
 	
 	<bean id="commentFactory" class="com.socialize.entity.factory.CommentFactory">
+		<property name="factoryService" ref="factoryService"/>
+	</bean>
+	
+	<bean id="userFactory" class="com.socialize.entity.factory.UserFactory">
 		<property name="factoryService" ref="factoryService"/>
 	</bean>
 	
@@ -43,8 +48,9 @@
 		</init-method>
 	</bean>
 	
-	<bean id="authProvider" class="com.socialize.provider.DefaultSocializeProvider">
+	<bean id="defaultProvider" class="com.socialize.provider.DefaultSocializeProvider">
 		<property name="clientFactory" ref="httpClientFactory"/>
+		<property name="ioUtils" ref="ioUtils"/>
 	</bean>
 
 	<bean id="commentProvider" class="com.socialize.provider.DefaultSocializeProvider">
@@ -59,7 +65,7 @@
 	<bean id="socializeService" class="com.socialize.SocializeService">
 		<constructor-arg type="context"/>
 		<property name="factoryService" ref="factoryService"/>
-		<property name="authProvider" ref="authProvider"/>
+		<property name="defaultProvider" ref="defaultProvider"/>
 		<property name="clientFactory" ref="httpClientFactory"/>
 		<property name="logger" ref="logger"/>
 		<property name="config" ref="config"/>

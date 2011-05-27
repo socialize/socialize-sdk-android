@@ -44,7 +44,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 	public void testServiceCallsGetOnProvider() throws Throwable {
 
 		final String endpoint = "foobar";
-		final int[] ids = null;
+		final String ids = null;
 		
 		AndroidMock.expect(provider.get(mockSession, endpoint, ids)).andReturn(new SocializeObject());
 		AndroidMock.replay(provider);
@@ -58,13 +58,14 @@ public class SocializeApiTest extends SocializeActivityTest {
 
 		final String endpoint = "foobar";
 		final String key = "foobar_key";
+		final String[] ids = null;
 		
 		final List<SocializeObject> returned = new LinkedList<SocializeObject>();
 		
-		AndroidMock.expect(provider.list(mockSession, endpoint, key)).andReturn(returned);
+		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids)).andReturn(returned);
 		AndroidMock.replay(provider);
 
-		service.list(mockSession, endpoint, key);
+		service.list(mockSession, endpoint, key, ids);
 
 		AndroidMock.verify(provider);
 	}
