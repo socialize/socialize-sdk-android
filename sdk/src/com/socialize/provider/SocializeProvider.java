@@ -24,7 +24,7 @@ package com.socialize.provider;
 import java.util.List;
 
 import com.socialize.api.SocializeSession;
-import com.socialize.error.SocializeApiError;
+import com.socialize.error.SocializeException;
 
 /**
  * @author Jason Polites
@@ -33,14 +33,14 @@ import com.socialize.error.SocializeApiError;
  */
 public interface SocializeProvider<T> {
 	
-	public SocializeSession authenticate(String key, String secret, String uuid) throws SocializeApiError;
+	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException;
 
-	public List<T> list(SocializeSession session, String endpoint, String key) throws SocializeApiError;
+	public List<T> list(SocializeSession session, String endpoint, String key) throws SocializeException;
 	
-	public T get(SocializeSession session, String endpoint, int[] ids) throws SocializeApiError;
+	public T get(SocializeSession session, String endpoint, int[] ids) throws SocializeException;
 	
-	public List<T> put(SocializeSession session, String endpoint, T object) throws SocializeApiError;
+	public List<T> put(SocializeSession session, String endpoint, T object) throws SocializeException;
 
-	public List<T> post(SocializeSession session, String endpoint, T object) throws SocializeApiError;
+	public List<T> post(SocializeSession session, String endpoint, T object) throws SocializeException;
 	
 }

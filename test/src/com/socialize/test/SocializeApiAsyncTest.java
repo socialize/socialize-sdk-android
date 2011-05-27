@@ -65,7 +65,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 	
 	public void testServiceAsyncCallsAuthenticateOnProvider() throws Throwable {
 
-		AndroidMock.expect(provider.authenticate("test_key", "test_secret", "test_uuid")).andReturn(mockSession);
+		AndroidMock.expect(provider.authenticate("test_endpoint", "test_key", "test_secret", "test_uuid")).andReturn(mockSession);
 		AndroidMock.replay(provider);
 
 		runTestOnUiThread(new Runnable() { 

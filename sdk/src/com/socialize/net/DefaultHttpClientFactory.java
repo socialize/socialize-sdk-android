@@ -112,10 +112,10 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.socialize.net.HttpClientFactory#newInstance()
+	 * @see com.socialize.net.HttpClientFactory#getClient()
 	 */
 	@Override
-	public HttpClient newInstance() {
+	public HttpClient getClient() {
 	   return new DefaultHttpClient(connectionManager, params);
 	}
 

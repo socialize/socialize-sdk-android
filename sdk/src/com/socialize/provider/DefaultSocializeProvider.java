@@ -21,16 +21,29 @@
  */
 package com.socialize.provider;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import oauth.signpost.OAuthConsumer;
+import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
+import oauth.signpost.signature.AuthorizationHeaderSigningStrategy;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicNameValuePair;
 
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.SocializeObject;
 import com.socialize.entity.factory.SocializeObjectFactory;
+import com.socialize.error.SocializeException;
 import com.socialize.net.HttpClientFactory;
 
 /**
  * @author Jason Polites
- *
+ * 
  * @param <T>
  */
 public class DefaultSocializeProvider<T extends SocializeObject> implements SocializeProvider<T> {
@@ -42,6 +55,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		super();
 	}
 
+
 	public DefaultSocializeProvider(SocializeObjectFactory<T> factory, HttpClientFactory clientFactory) {
 		super();
 		this.objectFactory = factory;
@@ -49,7 +63,36 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	}
 
 	@Override
-	public SocializeSession authenticate(String key, String secret, String uuid) {
+	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException {
+
+		HttpClient client = clientFactory.getClient();
+		HttpPost post = new HttpPost(endpoint);
+		
+		List<NameValuePair> data = new ArrayList<NameValuePair>();
+		
+		data.add(new BasicNameValuePair("payload", "{'udid':" + uuid + "}"));
+		data.add(new BasicNameValuePair("udid", uuid)); // Legacy
+		
+		try {
+			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(data);
+			post.setEntity(entity);
+			
+			OAuthConsumer consumer = new CommonsHttpOAuthConsumer(key, secret);
+
+			// sign the request
+			consumer.setSigningStrategy(new AuthorizationHeaderSigningStrategy());
+			consumer.sign(post);
+			
+			HttpResponse response = client.execute(post);
+			
+			// Parse the response.
+			// TODO: implement response parser
+			
+		}
+		catch (Exception e) {
+			throw new SocializeException(e);
+		}
+		
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -59,8 +102,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	
+
 	@Override
 	public List<T> list(SocializeSession session, String endpoint, String key) {
 		// TODO Auto-generated method stub
@@ -93,5 +135,15 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 
 	public void setClientFactory(HttpClientFactory clientFactory) {
 		this.clientFactory = clientFactory;
+	}
+	
+	
+	
+	public void someMethod () {
+		
+		SocializeObject object = new SocializeObject();
+		
+		object.notifyAll();
+		
 	}
 }

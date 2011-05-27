@@ -33,10 +33,10 @@ public class SocializeApiTest extends SocializeActivityTest {
 	
 	public void testServiceCallsAuthenticateOnProvider() throws Throwable {
 
-		AndroidMock.expect(provider.authenticate("test_key", "test_secret", "test_uuid")).andReturn(mockSession);
+		AndroidMock.expect(provider.authenticate("test_endpoint", "test_key", "test_secret", "test_uuid")).andReturn(mockSession);
 		AndroidMock.replay(provider);
 
-		service.authenticate("test_key", "test_secret", "test_uuid");
+		service.authenticate("test_endpoint", "test_key", "test_secret", "test_uuid");
 		
 		AndroidMock.verify(provider);
 	}

@@ -27,7 +27,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.comment.CommentApi;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.factory.FactoryService;
-import com.socialize.error.SocializeApiError;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.net.HttpClientFactory;
@@ -55,9 +55,9 @@ public final class SocializeService {
 		this.context = context;
 	}
 	
-	public SocializeSession authenticate(String consumerKey, String consumerSecret) throws SocializeApiError {
+	public SocializeSession authenticate(String endpoint, String consumerKey, String consumerSecret) throws SocializeException {
 		String uuid = deviceUtils.getUDID(context);
-		return authProvider.authenticate(consumerKey, consumerSecret, uuid);
+		return authProvider.authenticate(endpoint, consumerKey, consumerSecret, uuid);
 	}
 
 	public void addComment(SocializeSession session, String key, String comment, CommentListener listener) {

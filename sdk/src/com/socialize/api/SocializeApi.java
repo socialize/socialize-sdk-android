@@ -26,7 +26,7 @@ import java.util.List;
 import android.os.AsyncTask;
 
 import com.socialize.entity.SocializeObject;
-import com.socialize.error.SocializeApiError;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeListener;
 import com.socialize.provider.SocializeProvider;
 
@@ -48,23 +48,23 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		this.provider = provider;
 	}
 	
-	public SocializeSession authenticate(String key, String secret, String uuid) throws SocializeApiError {
-		return provider.authenticate(key, secret, uuid);
+	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException {
+		return provider.authenticate(endpoint, key, secret, uuid);
 	}
 
-	public List<T> list(SocializeSession session, String endpoint, String key) throws SocializeApiError {
+	public List<T> list(SocializeSession session, String endpoint, String key) throws SocializeException {
 		return provider.list(session, endpoint, key);
 	}
 	
-	public T get(SocializeSession session, String endpoint, int[] ids) throws SocializeApiError {
+	public T get(SocializeSession session, String endpoint, int[] ids) throws SocializeException {
 		return provider.get(session, endpoint, ids);
 	}
 	
-	public List<T> put(SocializeSession session, String endpoint, T object) throws SocializeApiError {
+	public List<T> put(SocializeSession session, String endpoint, T object) throws SocializeException {
 		return provider.put(session, endpoint, object);
 	}
 
-	public List<T> post(SocializeSession session, String endpoint, T object) throws SocializeApiError {
+	public List<T> post(SocializeSession session, String endpoint, T object) throws SocializeException {
 		return provider.post(session, endpoint, object);
 	}
 
@@ -120,7 +120,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 
 		RequestType requestType;
 		SocializeSession session;
-		SocializeApiError error = null;
+		SocializeException error = null;
 		SocializeListener<T> listener = null;
 		
 		public AbstractAsyncProcess(RequestType requestType, SocializeSession session, SocializeListener<T> listener) {
@@ -137,7 +137,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			try {
 				result = doInBackground(request);
 			}
-			catch (SocializeApiError error) {
+			catch (SocializeException error) {
 				this.error = error;
 			}
 			
@@ -156,7 +156,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			}
 		}
 
-		protected abstract Result doInBackground(Params param) throws SocializeApiError;
+		protected abstract Result doInBackground(Params param) throws SocializeException;
 	}
 	
 	class AsyncAuthenicator extends AbstractAsyncProcess<SocializeAuthRequest, Void, SocializeAuthResponse> {
@@ -166,7 +166,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		}
 
 		@Override
-		protected SocializeAuthResponse doInBackground(SocializeAuthRequest request) throws SocializeApiError {
+		protected SocializeAuthResponse doInBackground(SocializeAuthRequest request) throws SocializeException {
 			SocializeAuthResponse response = null;
 			
 			if(responseFactory != null) {
@@ -176,7 +176,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				response = new SocializeAuthResponse();
 			}
 			
-			SocializeSession session = SocializeApi.this.authenticate(request.getConsumerKey(), request.getConsumerSecret(), request.getUuid());
+			SocializeSession session = SocializeApi.this.authenticate(request.getEndpoint(), request.getConsumerKey(), request.getConsumerSecret(), request.getUuid());
 			response.setSession(session);
 			return response;
 		}
@@ -189,7 +189,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		}
 
 		@Override
-		protected SocializeEntityResponse<T> doInBackground(SocializePutRequest<T> request) throws SocializeApiError {
+		protected SocializeEntityResponse<T> doInBackground(SocializePutRequest<T> request) throws SocializeException {
 
 			SocializeEntityResponse<T> response = null;
 			
@@ -226,7 +226,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		}
 
 		@Override
-		protected SocializeEntityResponse<T> doInBackground(SocializeGetRequest request) throws SocializeApiError {
+		protected SocializeEntityResponse<T> doInBackground(SocializeGetRequest request) throws SocializeException {
 
 			SocializeEntityResponse<T> response = null;
 			
