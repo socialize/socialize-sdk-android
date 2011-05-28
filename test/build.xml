@@ -48,23 +48,6 @@
 		<delete dir="${test-output}" verbose="true" failonerror="false"/>
 		<delete dir="${instrumentation.absolute.dir}" verbose="true" failonerror="false"/>
 		
-		<!--
-		<echo>Killing ADB</echo>
-		<exec executable="${adb}" failonerror="true">
-			<arg value="kill-server" />
-		</exec>
-		
-		<echo>Starting ADB</echo>
-		<exec executable="${adb}" failonerror="true">
-			<arg value="start-server" />
-		</exec>
-		
-		<echo>Waiting for device...</echo>
-		<exec executable="${adb}" failonerror="true">
-			<arg value="wait-for-device" />
-		</exec>
-		-->
-		
 		<echo>Removing old installation of com.socialize.sample</echo>
 		
 		<exec executable="${adb}" failonerror="true">
