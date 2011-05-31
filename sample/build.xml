@@ -27,11 +27,8 @@
                    instrpath="${out.absolute.dir}/classes"
                    outdir="${out.absolute.dir}/classes"
                    metadatafile="${emma.report.dir}/coverage.em"
-            	   filter="-com.socialize.sample.*,-com.socialize.R*"> <!--Don't need coverage for the sample project itself -->
+            	   filter="-com.socialize.sample.*,-com.socialize.R*,-oauth.*"> <!--Don't need coverage for the sample project itself -->
             </instr>
-            <!-- TODO: exclusion filters on R*.class and allowing custom exclusion from
-                 user defined file -->
-        	
         </emma>
     </target>
 	

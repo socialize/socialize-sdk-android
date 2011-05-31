@@ -211,7 +211,7 @@
 				<arg value="-e" />
 				<arg value="junitOutputDirectory" />
 				<arg value="${junit.dump.path}" />
-
+				
 			</extra-instrument-args>
 
 		</run-tests-helper>
@@ -230,11 +230,6 @@
 		</path>
 		
 		<emma>
-			<!--
-			<report 
-				sourcepath="${tested.project.absolute.dir}/${source.dir}"
-	            verbosity="${verbosity}">
-	        -->
 			<report 
 				sourcepathref="emma.report.src.path" 
 	            verbosity="verbose">
