@@ -209,7 +209,8 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 
 	@Override
 	public List<T> put(SocializeSession session, String endpoint, T object) {
-		endpoint = prepareEndpoint(endpoint);
+		// TODO: Complete
+//		endpoint = prepareEndpoint(endpoint);
 		
 		
 		
@@ -218,7 +219,9 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 
 	@Override
 	public List<T> post(SocializeSession session, String endpoint, T object) {
-		endpoint = prepareEndpoint(endpoint);
+		// TODO: Complete
+//		endpoint = prepareEndpoint(endpoint);
+		
 		return null;
 	}
 

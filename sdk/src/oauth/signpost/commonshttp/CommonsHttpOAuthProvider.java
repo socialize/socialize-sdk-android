@@ -35,7 +35,7 @@ public class CommonsHttpOAuthProvider extends AbstractOAuthProvider {
 
     private static final long serialVersionUID = 1L;
 
-    private transient HttpClient httpClient;
+    private HttpClient httpClient;
 
     public CommonsHttpOAuthProvider(String requestTokenEndpointUrl, String accessTokenEndpointUrl,
             String authorizationWebsiteUrl) {
