@@ -51,10 +51,10 @@
 	<bean id="defaultProvider" class="com.socialize.provider.DefaultSocializeProvider">
 		<property name="clientFactory" ref="httpClientFactory"/>
 		<property name="ioUtils" ref="ioUtils"/>
+		<property name="userFactory" ref="userFactory"/>
 	</bean>
 
-	<bean id="commentProvider" class="com.socialize.provider.DefaultSocializeProvider">
-		<property name="clientFactory" ref="httpClientFactory"/>
+	<bean id="commentProvider" extends="defaultProvider">
 		<property name="objectFactory" ref="commentFactory"/>
 	</bean>
 	

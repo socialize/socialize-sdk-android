@@ -27,7 +27,7 @@ import com.socialize.entity.User;
  * @author Jason Polites
  *
  */
-public class SocializeSessionImpl implements SocializeSession {
+public class SocializeSessionImpl implements WritableSession {
 
 	private User user;
 	private String consumerKey;

@@ -50,7 +50,7 @@ import com.socialize.error.SocializeException;
 public class DefaultHttpClientFactory implements HttpClientFactory {
 
 	// Create a trust manager that does not validate certificate chains like the default TrustManager
-	static 	TrustManager[] trustAllCerts = new TrustManager[]{
+	static TrustManager[] trustAllCerts = new TrustManager[]{
 		new X509TrustManager() {
 
 			@Override

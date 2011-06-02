@@ -28,7 +28,6 @@ import android.test.mock.MockPackageManager;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.android.ioc.AndroidIOC;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.HttpUtils;
 
@@ -103,13 +102,12 @@ public class SocializeUtilsTest extends SocializeActivityTest {
 //		AndroidMock.verify(telephonyManager);
 //	}
 	
-	
-	public void testHttpStatusCodes() {
+	public void testHttpStatusCodes() throws Exception {
 		
-		HttpUtils utils = AndroidIOC.getInstance().getBean("httputils");
+		HttpUtils utils = new HttpUtils();
+		utils.init();
 		
 		// Just test that the codes are loaded.  We assume the messages are correct
-		
 		int[] codes = {
 				100,
 				101,
@@ -158,7 +156,7 @@ public class SocializeUtilsTest extends SocializeActivityTest {
 	}
 	
 	public void testHttpIsError() {
-		HttpUtils utils = AndroidIOC.getInstance().getBean("httputils");
+		HttpUtils utils = new HttpUtils();
 		assertTrue(utils.isHttpError(500));
 		assertTrue(utils.isHttpError(404));
 		assertFalse(utils.isHttpError(301));

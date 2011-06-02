@@ -21,7 +21,11 @@
  */
 package com.socialize.test;
 
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.android.ioc.AndroidIOC;
+import com.socialize.android.ioc.Container;
+import com.socialize.android.ioc.ContainerBuilder;
 import com.socialize.error.SocializeApiError;
 import com.socialize.util.HttpUtils;
 
@@ -31,23 +35,35 @@ import com.socialize.util.HttpUtils;
  */
 public class SocializeErrorTest extends SocializeActivityTest {
 
-	public void testSocializeApiError() {
+	@UsesMocks ({ContainerBuilder.class, Container.class})
+	public void testSocializeApiError() throws Exception {
 		final int code = 404;
 		SocializeApiError error = new SocializeApiError(code);
 		
-		// Technically this test is BAD, because we have a dependency on HttpUtils
-		// but we can't easily mock this out because it's static, and it's static 
-		// because of a lack of a goof dependency injection system for Android (as at today!)
-		// HttpUtils is already tested elsewhere.
+		// Initialize the IOC with mocks
+		HttpUtils utils = new HttpUtils();
 		
+		Container container = AndroidMock.createMock(Container.class);
+		ContainerBuilder builder = AndroidMock.createMock(ContainerBuilder.class, getActivity());
+		
+		AndroidMock.expect(builder.build(getActivity(), (String)null)).andReturn(container);
+		AndroidMock.expect(container.getBean("httputils")).andReturn(utils).anyTimes();
+		
+		AndroidMock.replay(builder);
+		AndroidMock.replay(container);
+	
+		AndroidIOC.getInstance().init(getActivity(), builder);
+
 		// Get the result we expect:
-		HttpUtils utils = AndroidIOC.getInstance().getBean("httputils");
+		
 		String expected = utils.getMessageFor(code);
 		
 		assertEquals(expected, error.getMessage());
 		assertEquals(expected, error.getLocalizedMessage());
 		assertEquals(code, error.getResultCode());
 		
+		AndroidMock.verify(builder);
+		AndroidMock.verify(container);
 	}
 	
 }

@@ -21,33 +21,28 @@
  */
 package com.socialize.provider;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import oauth.signpost.OAuthConsumer;
-import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
-import oauth.signpost.signature.AuthorizationHeaderSigningStrategy;
-
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.socialize.api.SocializeRequestFactory;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.SocializeSessionImpl;
+import com.socialize.api.SocializeSessionFactory;
+import com.socialize.api.WritableSession;
 import com.socialize.entity.SocializeObject;
 import com.socialize.entity.User;
 import com.socialize.entity.factory.SocializeObjectFactory;
 import com.socialize.error.SocializeException;
+import com.socialize.log.SocializeLogger;
 import com.socialize.net.HttpClientFactory;
-import com.socialize.util.IOUtils;
+import com.socialize.util.JSONParser;
 
 /**
  * @author Jason Polites
@@ -59,78 +54,59 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	private SocializeObjectFactory<T> objectFactory;
 	private SocializeObjectFactory<User> userFactory;
 	private HttpClientFactory clientFactory;
-	private IOUtils ioUtils;
-	
-	private final AuthorizationHeaderSigningStrategy strategy = new AuthorizationHeaderSigningStrategy();
+	private SocializeSessionFactory sessionFactory;
+	private SocializeRequestFactory<T> requestFactory;
+	private JSONParser jsonParser;
+	private SocializeLogger logger;
 
-	public DefaultSocializeProvider() {
-		super();
-	}
-
-	public DefaultSocializeProvider(SocializeObjectFactory<T> factory, HttpClientFactory clientFactory) {
+	public DefaultSocializeProvider(
+			SocializeObjectFactory<T> factory, 
+			SocializeObjectFactory<User> userFactory,
+			HttpClientFactory clientFactory,
+			SocializeSessionFactory sessionFactory,
+			SocializeRequestFactory<T> requestFactory,
+			JSONParser jsonParser) {
+		
 		super();
 		this.objectFactory = factory;
 		this.clientFactory = clientFactory;
-	}
-
-	protected void sign(SocializeSession session, HttpUriRequest request) throws SocializeException {
-		try {
-			OAuthConsumer consumer = new CommonsHttpOAuthConsumer(session.getConsumerKey(), session.getConsumerSecret());
-			consumer.setSigningStrategy(strategy);
-			consumer.setTokenWithSecret(session.getConsumerToken(), session.getConsumerTokenSecret());
-			consumer.sign(request);
-		}
-		catch (Exception e) {
-			throw new SocializeException(e);
-		}
+		this.userFactory = userFactory;
+		this.sessionFactory = sessionFactory;
+		this.requestFactory = requestFactory;
+		this.jsonParser = jsonParser;
 	}
 	
 	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException {
 
-		SocializeSessionImpl session = null;
+		WritableSession session = sessionFactory.create(key, secret);
 		
 		endpoint = prepareEndpoint(endpoint);
 		
 		HttpClient client = clientFactory.getClient();
-		HttpPost post = new HttpPost(endpoint);
 		
-		List<NameValuePair> data = new ArrayList<NameValuePair>(2);
-		
-		data.add(new BasicNameValuePair("payload", "{'udid':" + uuid + "}"));
-		data.add(new BasicNameValuePair("udid", uuid)); // Legacy
+		HttpEntity entity = null;
 		
 		try {
-			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(data);
-			post.setEntity(entity);
+			HttpUriRequest request = requestFactory.getAuthRequest(session, endpoint, uuid);
 			
-			OAuthConsumer consumer = new CommonsHttpOAuthConsumer(key, secret);
-
-			// sign the request
-			consumer.setSigningStrategy(strategy);
+			HttpResponse response = client.execute(request);
 			
-			consumer.sign(post);
+			entity = response.getEntity();
 			
-			HttpResponse response = client.execute(post);
-			
-			String result = ioUtils.read(response.getEntity().getContent());
-			
-			JSONObject json = new JSONObject(result);
-			
-			// Parse the response.
-			session = new SocializeSessionImpl();
-			
-			session.setConsumerKey(key);
-			session.setConsumerSecret(secret);
-			session.setConsumerToken(json.getString("oauth_token"));
-			session.setConsumerTokenSecret(json.getString("oauth_token_secret"));
+			JSONObject json = jsonParser.parseObject(entity.getContent());
 			
 			User user = userFactory.fromJSON(json.getJSONObject("user"));
 			
+			session.setConsumerToken(json.getString("oauth_token"));
+			session.setConsumerTokenSecret(json.getString("oauth_token_secret"));
 			session.setUser(user);
 		}
 		catch (Exception e) {
 			throw new SocializeException(e);
+		}
+		finally {
+			closeEntity(entity);
 		}
 		
 		return session;
@@ -139,25 +115,28 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	@Override
 	public T get(SocializeSession session, String endpoint, String id) throws SocializeException {
 		
+		HttpEntity entity = null;
+		
 		try {
 			endpoint = prepareEndpoint(endpoint);
-			endpoint += id;
 			
 			HttpClient client = clientFactory.getClient();
-			HttpGet get = new HttpGet(endpoint);
 			
-			sign(session, get);
+			HttpUriRequest get = requestFactory.getGetRequest(session, endpoint, id);
 			
 			HttpResponse response = client.execute(get);
-
-			String result = ioUtils.read(response.getEntity().getContent());
 			
-			JSONObject json = new JSONObject(result);
+			entity = response.getEntity();
+
+			JSONObject json = jsonParser.parseObject(entity.getContent());
 			
 			return objectFactory.fromJSON(json);
 		}
 		catch (Exception e) {
 			throw new SocializeException(e);
+		}
+		finally {
+			closeEntity(entity);
 		}
 	}
 
@@ -165,32 +144,19 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	public List<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
 
 		List<T> results = null;
+		HttpEntity entity = null;
 		
 		try {
 			endpoint = prepareEndpoint(endpoint);
 			
 			HttpClient client = clientFactory.getClient();
-			HttpPost post = new HttpPost(endpoint);
-			List<NameValuePair> data = new ArrayList<NameValuePair>();
-			
-			JSONArray array = new JSONArray(Arrays.asList(ids));
-			
-			JSONObject json = new JSONObject();
-			json.put("ids", array);
-			json.put("key", key);
-			
-			data.add(new BasicNameValuePair("payload", json.toString()));
-			
-			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(data);
-			post.setEntity(entity);
-			
-			sign(session, post);
-			
+			HttpUriRequest post = requestFactory.getListRequest(session, endpoint, key, ids);
+
 			HttpResponse response = client.execute(post);
 			
-			String result = ioUtils.read(response.getEntity().getContent());
+			entity = response.getEntity();
 			
-			JSONArray list = new JSONArray(result);
+			JSONArray list = jsonParser.parseArray(entity.getContent());
 			
 			int length = list.length();
 			
@@ -203,7 +169,10 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		catch (Exception e) {
 			throw new SocializeException(e);
 		}
-
+		finally {
+			closeEntity(entity);
+		}
+		
 		return results;
 	}
 
@@ -241,14 +210,6 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		this.clientFactory = clientFactory;
 	}
 	
-	public IOUtils getIoUtils() {
-		return ioUtils;
-	}
-
-	public void setIoUtils(IOUtils ioUtils) {
-		this.ioUtils = ioUtils;
-	}
-	
 	public SocializeObjectFactory<User> getUserFactory() {
 		return userFactory;
 	}
@@ -256,7 +217,31 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	public void setUserFactory(SocializeObjectFactory<User> userFactory) {
 		this.userFactory = userFactory;
 	}
-	
+
+	public SocializeSessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	public void setSessionFactory(SocializeSessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	public JSONParser getJsonParser() {
+		return jsonParser;
+	}
+
+	public void setJsonParser(JSONParser jsonParser) {
+		this.jsonParser = jsonParser;
+	}
+
+	public SocializeLogger getLogger() {
+		return logger;
+	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
+
 	private final String prepareEndpoint(String endpoint) {
 		endpoint = endpoint.trim();
 		if(!endpoint.endsWith("/")) {
@@ -265,5 +250,16 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		return endpoint;
 	}
 	
-	
+	private final void closeEntity(HttpEntity entity) {
+		if(entity != null) {
+			try {
+				entity.consumeContent();
+			}
+			catch (IOException e) {
+				if(logger != null) {
+					logger.warn("Failed to fully consume http response content", e);
+				}
+			}
+		}
+	}
 }

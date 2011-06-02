@@ -36,5 +36,5 @@ public interface HttpClientFactory {
 	public void destroy();
 
 	public HttpClient getClient();
-
+	
 }

@@ -25,7 +25,6 @@ import java.util.Stack;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.socialize.android.ioc.AndroidIOC;
 import com.socialize.sample.Main;
 
 public abstract class SocializeActivityTest extends ActivityInstrumentationTestCase2<Main> {
@@ -40,7 +39,7 @@ public abstract class SocializeActivityTest extends ActivityInstrumentationTestC
 	protected void setUp() throws Exception {
 		bucket = new Stack<Object>();
 		super.setUp();
-		AndroidIOC.getInstance().init(getActivity());
+//		AndroidIOC.getInstance().init(getActivity(), getIOCConfig());
 	}
 	
 	protected void addResult(Object obj) {
@@ -50,5 +49,10 @@ public abstract class SocializeActivityTest extends ActivityInstrumentationTestC
 	@SuppressWarnings("unchecked")
 	protected <T extends Object> T getResult() {
 		return (T) bucket.pop();
+	}
+	
+	// Subclasses override where required.
+	protected String getIOCConfig() {
+		return null;
 	}
 }
