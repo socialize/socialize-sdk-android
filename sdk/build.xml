@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="android-ioc" default="build">
+<project name="socialize-sdk" default="build">
 	<property file="local.properties" />
 	<property file="build.properties" />
 	<property file="default.properties" />

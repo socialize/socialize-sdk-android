@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="socialize-test">
+<project name="socialize-sdk-test">
 
 	<property name="verbose" value="false" />
 	<property file="local.properties" />
