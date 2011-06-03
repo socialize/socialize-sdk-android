@@ -18,6 +18,12 @@
 	
 	<path id="android.libraries.src"><path refid="project.libraries.src" /></path>
 	<path id="android.libraries.jars"><path refid="project.libraries.jars" /></path>
+	
+	<target name="-pre-compile">
+		<copy todir="libs" verbose="true">
+			<fileset dir="libext" includes="**/*.jar"/>
+		</copy>
+	</target>
 
 	<target name="build" depends="compile">
 		
@@ -40,5 +46,8 @@
 				<attribute name="Implementation-Version" value="${version}" />
 			</manifest>
 		</jar>
+		
+		<!-- clean up -->
+		<delete dir="libs" includes="**/*.jar" verbose="true"/>
 	</target>
 </project>

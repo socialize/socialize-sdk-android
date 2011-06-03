@@ -139,7 +139,6 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		AndroidMock.replay(appFactoryMock);
 		AndroidMock.replay(userFactoryMock);
 		AndroidMock.replay(entityFactoryMock);
-		AndroidMock.replay(json);
 		
 		setupToJSONExpectations();
 		

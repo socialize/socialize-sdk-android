@@ -77,23 +77,20 @@ public class CommentFactoryTest extends AbstractSocializeActionFactoryTest<Comme
 	}
 
 	@Override
-	protected void setupToJSONExpectations() {
+	protected void setupToJSONExpectations() throws JSONException {
+		
+		final String text = "Test Comment";
+		
+		AndroidMock.expect(action.getText()).andReturn(text);
+		AndroidMock.expect(json.put("comment", text)).andReturn(json);
+		
+		AndroidMock.replay(json);
 		AndroidMock.replay(action);
 	}
 
 	@Override
 	protected void doToJSONVerify() {
+		AndroidMock.verify(json);
 		AndroidMock.verify(action);
 	}
-	
-	public void testToJSON() {
-		
-	}
-	
-	public void testInstantiate() {
-		
-	}
-	
-	
-	
 }

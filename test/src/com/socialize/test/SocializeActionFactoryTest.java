@@ -75,6 +75,7 @@ public class SocializeActionFactoryTest extends AbstractSocializeActionFactoryTe
 
 	@Override
 	protected void setupToJSONExpectations() {
+		AndroidMock.replay(json);
 		AndroidMock.replay(action);
 	}
 
