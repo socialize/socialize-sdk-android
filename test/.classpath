@@ -8,5 +8,7 @@
 	<classpathentry kind="lib" path="libs/polidea_test_runner_1.1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/sample"/>
 	<classpathentry kind="lib" path="libext/AndroidMockGenerator-appmakr-modified.jar"/>
+	<classpathentry kind="lib" path="/sdk/libs/signpost-core-1.2.1.1.jar"/>
+	<classpathentry kind="lib" path="/sdk/libs/signpost-commonshttp4-1.2.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

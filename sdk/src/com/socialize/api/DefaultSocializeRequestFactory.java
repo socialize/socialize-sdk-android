@@ -26,14 +26,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import oauth.signpost.OAuthConsumer;
-import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
-import oauth.signpost.signature.AuthorizationHeaderSigningStrategy;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -41,25 +38,33 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.socialize.entity.SocializeObject;
+import com.socialize.entity.factory.SocializeObjectFactory;
 import com.socialize.error.SocializeException;
+import com.socialize.oauth.OAuthRequestSigner;
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class AbstractSocializeRequestFactory<T extends SocializeObject> implements SocializeRequestFactory<T> {
+public class DefaultSocializeRequestFactory<T extends SocializeObject> implements SocializeRequestFactory<T> {
 
-	private final AuthorizationHeaderSigningStrategy strategy = new AuthorizationHeaderSigningStrategy();
+	private OAuthRequestSigner signer;
+	private SocializeObjectFactory<T> objectFactory;
 	
+	public DefaultSocializeRequestFactory(OAuthRequestSigner signer, SocializeObjectFactory<T> objectFactory) {
+		super();
+		this.signer = signer;
+		this.objectFactory = objectFactory;
+	}
+
 	@Override
 	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String uuid) throws SocializeException {
-		HttpPost post = sign(session, new HttpPost());
+		HttpPost post = signer.sign(session, new HttpPost(endpoint));
 		try {
 			List<NameValuePair> data = new ArrayList<NameValuePair>(2);
 			data.add(new BasicNameValuePair("payload", "{'udid':" + uuid + "}"));
-			data.add(new BasicNameValuePair("udid", uuid)); // Legacy
-			UrlEncodedFormEntity entity;
-			entity = new UrlEncodedFormEntity(data);
+//			data.add(new BasicNameValuePair("udid", uuid)); // Legacy
+			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(data);
 			post.setEntity(entity);
 		}
 		catch (UnsupportedEncodingException e) {
@@ -71,14 +76,14 @@ public abstract class AbstractSocializeRequestFactory<T extends SocializeObject>
 	@Override
 	public HttpUriRequest getGetRequest(SocializeSession session, String endpoint, String id) throws SocializeException {
 		endpoint += id;
-		HttpGet get = sign(session, new HttpGet(endpoint));
+		HttpGet get = signer.sign(session, new HttpGet(endpoint));
 		return get;
 	}
 
 	@Override
 	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
 		
-		HttpPost post = sign(session, new HttpPost());
+		HttpPost post = signer.sign(session, new HttpPost(endpoint));
 		
 		try {
 			List<NameValuePair> data = new ArrayList<NameValuePair>();
@@ -104,17 +109,42 @@ public abstract class AbstractSocializeRequestFactory<T extends SocializeObject>
 		return post;
 	}
 
-	
-	public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+	@Override
+	public HttpUriRequest getPutRequest(SocializeSession session, String endpoint, T object) throws SocializeException {
+		HttpPut put = signer.sign(session, new HttpPut(endpoint));
 		try {
-			OAuthConsumer consumer = new CommonsHttpOAuthConsumer(session.getConsumerKey(), session.getConsumerSecret());
-			consumer.setSigningStrategy(strategy);
-			consumer.setTokenWithSecret(session.getConsumerToken(), session.getConsumerTokenSecret());
-			consumer.sign(request);
-			return request;
+			JSONObject json = objectFactory.toJSON(object);
+			List<NameValuePair> data = new ArrayList<NameValuePair>();
+			data.add(new BasicNameValuePair("payload", json.toString()));
+			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(data);
+			put.setEntity(entity);
 		}
-		catch (Exception e) {
+		catch (JSONException e) {
 			throw new SocializeException(e);
 		}
+		catch (UnsupportedEncodingException e) {
+			throw new SocializeException(e);
+		}
+		return put;
 	}
+
+	@Override
+	public HttpUriRequest getPostRequest(SocializeSession session, String endpoint, T object) throws SocializeException {
+		HttpPost post = signer.sign(session, new HttpPost(endpoint));
+		try {
+			JSONObject json = objectFactory.toJSON(object);
+			List<NameValuePair> data = new ArrayList<NameValuePair>();
+			data.add(new BasicNameValuePair("payload", json.toString()));
+			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(data);
+			post.setEntity(entity);
+		}
+		catch (JSONException e) {
+			throw new SocializeException(e);
+		}
+		catch (UnsupportedEncodingException e) {
+			throw new SocializeException(e);
+		}
+		return post;
+	}
+
 }

@@ -21,32 +21,12 @@
  */
 package com.socialize.test;
 
-import java.util.Stack;
+import android.test.AndroidTestCase;
 
-import android.test.ActivityInstrumentationTestCase2;
+/**
+ * @author Jason Polites
+ *
+ */
+public abstract class SocializeUnitTest extends AndroidTestCase {
 
-import com.socialize.sample.Main;
-
-public abstract class SocializeActivityTest extends ActivityInstrumentationTestCase2<Main> {
-	
-	private Stack<Object> bucket;
-	
-	public SocializeActivityTest() {
-		super("com.socialize.sample", Main.class);
-	}
-
-	@Override
-	protected void setUp() throws Exception {
-		bucket = new Stack<Object>();
-		super.setUp();
-	}
-	
-	protected void addResult(Object obj) {
-		bucket.push(obj);
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected <T extends Object> T getResult() {
-		return (T) bucket.pop();
-	}
 }

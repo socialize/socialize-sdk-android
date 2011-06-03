@@ -19,34 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test;
+package com.socialize.oauth;
 
-import java.util.Stack;
+import oauth.signpost.OAuthConsumer;
+import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 
-import android.test.ActivityInstrumentationTestCase2;
+/**
+ * @author Jason Polites
+ *
+ */
+public class CommonsHttpOAuthConsumerFactory implements OAuthConsumerFactory {
 
-import com.socialize.sample.Main;
-
-public abstract class SocializeActivityTest extends ActivityInstrumentationTestCase2<Main> {
-	
-	private Stack<Object> bucket;
-	
-	public SocializeActivityTest() {
-		super("com.socialize.sample", Main.class);
-	}
-
+	/* (non-Javadoc)
+	 * @see com.socialize.oauth.OAuthConsumerFactory#createConsumer(java.lang.String, java.lang.String)
+	 */
 	@Override
-	protected void setUp() throws Exception {
-		bucket = new Stack<Object>();
-		super.setUp();
+	public OAuthConsumer createConsumer(String key, String secret) {
+		return new CommonsHttpOAuthConsumer(key, secret);
 	}
-	
-	protected void addResult(Object obj) {
-		bucket.push(obj);
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected <T extends Object> T getResult() {
-		return (T) bucket.pop();
-	}
+
 }

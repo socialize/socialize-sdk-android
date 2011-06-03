@@ -64,12 +64,12 @@ public interface SocializeRequestFactory<T extends SocializeObject> {
 	 * @param entity
 	 * @return
 	 */
-	public HttpUriRequest getPutRequest(SocializeSession session, String endpoint,T entity);
+	public HttpUriRequest getPutRequest(SocializeSession session, String endpoint,T entity) throws SocializeException;
 	
 	/**
 	 * 
 	 * @param entity
 	 * @return
 	 */
-	public HttpUriRequest getPostRequest(SocializeSession session, String endpoint,T entity);
+	public HttpUriRequest getPostRequest(SocializeSession session, String endpoint,T entity) throws SocializeException;
 }
