@@ -243,9 +243,7 @@
 					<include name="coverage.em" />
 				</infileset>
 				<html outfile="${emma.report.dir}/coverage.html" />
-				<!-- Enable if xml output can be used
 				<xml outfile="${emma.report.dir}/coverage.xml" />
-				-->
 			</report>
 		</emma>
 		<echo>Cleaning up temporary files...</echo>
