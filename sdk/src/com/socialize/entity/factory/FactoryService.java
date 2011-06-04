@@ -35,39 +35,6 @@ public class FactoryService {
 	
 	public FactoryService() {
 		super();
-//		
-//		Properties props = config.getProperties();
-//		
-//		try {
-//			if(props != null) {
-//				Set<Object> keySet = props.keySet();
-//				
-//				for (Object key : keySet) {
-//					String strKey = key.toString();
-//					if(strKey.startsWith(SocializeConfig.FACTORY_PREFIX)) {
-//						// Get the class name
-//						String className = strKey.substring(SocializeConfig.FACTORY_PREFIX.length(), strKey.length());
-//						String factoryClass = props.getProperty(strKey);
-//						
-//						// Instantiate
-//						Class<?> clsFactory = Class.forName(factoryClass);
-//						Constructor<?> constructor = clsFactory.getDeclaredConstructor(FactoryService.class);
-//						SocializeObjectFactory<?> factory = (SocializeObjectFactory<?>) constructor.newInstance(this);
-//						factory.factoryService = this;
-//						
-//						factories.put(className, factory);
-//					}
-//				}
-//			}
-//			else {
-//				// TODO: Log warn
-//				// Use predefined settings
-//				initDefaultFactories();
-//			}
-//		}
-//		catch (Exception e) {
-//			throw new RuntimeException(e);
-//		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -76,12 +43,6 @@ public class FactoryService {
 		return factory;
 	}
 	
-//	void initDefaultFactories() {
-//		// TODO: Add remaining factories
-//		factories.put(Application.class.getName(), new ApplicationFactory(this));
-//		factories.put(Comment.class.getName(), new CommentFactory(this));
-//	}
-
 	public Map<String, SocializeObjectFactory<?>> getFactories() {
 		return factories;
 	}

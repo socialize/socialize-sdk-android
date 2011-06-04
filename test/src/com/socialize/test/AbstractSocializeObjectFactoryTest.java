@@ -34,7 +34,7 @@ import com.socialize.entity.factory.SocializeObjectFactory;
  * @author Jason Polites
  *
  */
-public abstract class AbstractSocializeObjectFactoryTest<T extends SocializeObject, F extends SocializeObjectFactory<T>> extends SocializeActivityTest {
+public abstract class AbstractSocializeObjectFactoryTest<T extends SocializeObject, F extends SocializeObjectFactory<T>> extends SocializeUnitTest {
 
 	protected FactoryService factoryService;
 //	protected SocializeConfig config;
@@ -104,6 +104,11 @@ public abstract class AbstractSocializeObjectFactoryTest<T extends SocializeObje
 		
 		doFromJSONVerify();
 		
+	}
+	
+	public void testInstantiate() {
+		T instantiateObject = factory.instantiateObject();
+		assertTrue(getObjectClass().isAssignableFrom(instantiateObject.getClass()));
 	}
 	
 	protected abstract void setupToJSONExpectations() throws Exception;

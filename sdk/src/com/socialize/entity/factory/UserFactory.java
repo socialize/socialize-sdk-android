@@ -64,9 +64,9 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	@Override
 	protected void toJSON(User user, JSONObject object) throws JSONException {
 		object.put("first_name", user.getFirstName());
-		object.put("last_name", user.getFirstName());
-		object.put("description", user.getFirstName());
-		object.put("location", user.getFirstName());
+		object.put("last_name", user.getLastName());
+		object.put("description", user.getDescription());
+		object.put("location", user.getLocation());
 		
 		if(user.getImage() != null) {
 			object.put("picture", imageUtils.encode(user.getImage()));

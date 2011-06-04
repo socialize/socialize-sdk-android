@@ -23,9 +23,6 @@ package com.socialize.net;
 
 import java.security.KeyStore;
 
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ClientConnectionManager;
@@ -49,27 +46,6 @@ import com.socialize.error.SocializeException;
  */
 public class DefaultHttpClientFactory implements HttpClientFactory {
 
-	// Create a trust manager that does not validate certificate chains like the default TrustManager
-	static TrustManager[] trustAllCerts = new TrustManager[]{
-		new X509TrustManager() {
-
-			@Override
-			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-				return null;
-			}
-
-			@Override
-			public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) {
-				//No need to implement.
-			}
-
-			@Override
-			public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) {
-				//No need to implement.
-			}
-		}
-	};
-	
 	private HttpParams params;
 	private ClientConnectionManager connectionManager;
 	
