@@ -23,6 +23,8 @@ package com.socialize.test;
 
 import com.socialize.entity.Application;
 import com.socialize.entity.Comment;
+import com.socialize.entity.Entity;
+import com.socialize.entity.SocializeAction;
 import com.socialize.entity.Stats;
 import com.socialize.entity.User;
 
@@ -99,5 +101,64 @@ public class EntityAccessorTests extends SocializeUnitTest {
 		String text = "text";
 		comment.setText(text );
 		assertEquals(text, comment.getText());
+	}
+	
+	public void testSocializeActionAccessors() {
+		SocializeAction action = new SocializeAction();
+		
+		Application app = new Application();
+		Entity entity = new Entity();
+		User user = new User();
+		
+		long date = 123456;
+		int id = 69;
+		float lat = 1.2f, lon = 3.4f;
+		
+		action.setApplication(app);
+		action.setDate(date);
+		action.setEntity(entity);
+		action.setId(id);
+		action.setLat(lat);
+		action.setLon(lon);
+		action.setUser(user);
+		
+		assertSame(app, action.getApplication());
+		assertSame(entity, action.getEntity());
+		assertSame(user, action.getUser());
+		assertEquals(date, action.getDate());
+		assertEquals(id, action.getId());
+		assertEquals(lat, action.getLat());
+		assertEquals(lon, action.getLon());
+		
+	}
+	
+	public void testEntityAccessors() {
+		
+		Entity entity = new Entity();
+		
+		String name = "foo";
+		String key = "bar";
+		
+		int comments = 1;
+		int likes = 2;
+		int id = 3;
+		int shares = 4;
+		int views = 5;
+		
+		entity.setComments(comments );
+		entity.setId(id);
+		entity.setKey(key);
+		entity.setLikes(likes);
+		entity.setName(name);
+		entity.setShares(shares);
+		entity.setViews(views);
+		
+		assertEquals(comments, entity.getComments());
+		assertEquals(likes, entity.getLikes());
+		assertEquals(id, entity.getId());
+		assertEquals(shares, entity.getShares());
+		assertEquals(views, entity.getViews());
+		assertEquals(name, entity.getName());
+		assertEquals(key, entity.getKey());
 	}
 }
