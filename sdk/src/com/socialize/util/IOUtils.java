@@ -31,15 +31,15 @@ import java.io.OutputStream;
  * @author Jason Polites
  *
  */
-public final class IOUtils {
+public class IOUtils {
 
-	public final String read(InputStream in) throws IOException {
+	public String read(InputStream in) throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		pipe(in, out, 1024);
 		return new String(out.toByteArray());
 	}
 	
-	public final long pipe(InputStream in, OutputStream out, int bufferSize) throws IOException {
+	public long pipe(InputStream in, OutputStream out, int bufferSize) throws IOException {
 		
 		int read;
 		long total = 0L;

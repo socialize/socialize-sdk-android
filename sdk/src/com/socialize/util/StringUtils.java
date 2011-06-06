@@ -23,12 +23,24 @@ package com.socialize.util;
 
 /**
  * @author Jason Polites
- *
+ * 
  */
 public final class StringUtils {
 
 	public static final boolean isEmpty(String str) {
 		return str == null || str.trim().length() == 0;
 	}
-	
+
+	public static final String hex(byte[] bytes) {
+		StringBuilder hexString = new StringBuilder();
+
+		for (int i = 0; i < bytes.length; i++) {
+			String hs = Integer.toHexString(0xFF & bytes[i]);
+			if (hs.length() == 1)
+				hexString.append("0");
+			hexString.append(hs);
+		}
+
+		return hexString.toString();
+	}
 }

@@ -26,7 +26,6 @@ import org.json.JSONObject;
 
 import com.socialize.entity.Stats;
 import com.socialize.entity.User;
-import com.socialize.util.ImageUtils;
 
 /**
  * @author Jason Polites
@@ -35,7 +34,7 @@ import com.socialize.util.ImageUtils;
 public class UserFactory extends SocializeObjectFactory<User> {
 	
 	private StatsFactory statsFactory;
-	private ImageUtils imageUtils;
+//	private ImageUtils imageUtils;
 
 	@Override
 	public User instantiateObject() {
@@ -68,9 +67,9 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		object.put("description", user.getDescription());
 		object.put("location", user.getLocation());
 		
-		if(user.getImage() != null) {
-			object.put("picture", imageUtils.encode(user.getImage()));
-		}
+//		if(user.getImage() != null) {
+//			object.put("picture", imageUtils.encode(user.getImage()));
+//		}
 	}
 
 	public StatsFactory getStatsFactory() {
@@ -81,12 +80,12 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		this.statsFactory = statsFactory;
 	}
 
-	public ImageUtils getImageUtils() {
-		return imageUtils;
-	}
-
-	public void setImageUtils(ImageUtils imageUtils) {
-		this.imageUtils = imageUtils;
-	}
+//	public ImageUtils getImageUtils() {
+//		return imageUtils;
+//	}
+//
+//	public void setImageUtils(ImageUtils imageUtils) {
+//		this.imageUtils = imageUtils;
+//	}
 	
 }

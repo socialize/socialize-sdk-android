@@ -23,20 +23,69 @@ package com.socialize.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
+import org.json.JSONObject;
+
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.test.util.JsonAssert;
 import com.socialize.util.IOUtils;
+import com.socialize.util.JSONParser;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
  *
  */
-public class IOUtilsTest extends SocializeUnitTest {
+public class UtilsTests extends SocializeUnitTest {
 
-	public void testRead() throws IOException {
+	public void testIOUtilsRead() throws IOException {
 		String text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 		ByteArrayInputStream bin = new ByteArrayInputStream(text.getBytes());
 		IOUtils utils = new IOUtils();
 		String read = utils.read(bin);
 		assertEquals(text, read);
 	}
+	
+	public void testStringUtils() {
+		String empty = "";
+		String nulll = null;
+		String untrimmed = "  ";
+		String nonEmpty = "foobar";
+		
+		assertTrue(StringUtils.isEmpty(empty));
+		assertTrue(StringUtils.isEmpty(nulll));
+		assertTrue(StringUtils.isEmpty(untrimmed));
+		assertFalse(StringUtils.isEmpty(nonEmpty));
+	}
+	
+	@UsesMocks ({IOUtils.class, InputStream.class})
+	public void testJSONParserParseObject() throws Exception {
+		
+		final String json = "{foo:bar}";
+		
+		IOUtils ioUtils = AndroidMock.createMock(IOUtils.class);
+		InputStream in = AndroidMock.createMock(InputStream.class);
+		
+		AndroidMock.expect(ioUtils.read(in)).andReturn(json);
+
+		JSONParser parser = new JSONParser();
+		parser.setIoUtils(ioUtils);
+		
+		AndroidMock.replay(ioUtils);
+		
+		JSONObject object = parser.parseObject(in);
+		
+		JSONObject expected = new JSONObject(json);
+		
+		JsonAssert.assertJsonObjectEquals(expected, object);
+		
+		object = parser.parseObject(json);
+		
+		JsonAssert.assertJsonObjectEquals(expected, object);
+		
+		AndroidMock.verify(ioUtils);
+	}
+
 }

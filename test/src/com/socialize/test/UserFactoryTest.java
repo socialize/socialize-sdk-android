@@ -52,7 +52,7 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		AndroidMock.expect(object.getLastName()).andReturn(last_name);
 		AndroidMock.expect(object.getDescription()).andReturn(description);
 		AndroidMock.expect(object.getLocation()).andReturn(location);
-		AndroidMock.expect(object.getImage()).andReturn(null);
+//		AndroidMock.expect(object.getImage()).andReturn(null);
 		
 //		if(user.getImage() != null) {
 //			object.put("picture", imageUtils.encode(user.getImage()));
