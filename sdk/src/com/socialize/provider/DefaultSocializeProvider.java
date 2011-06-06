@@ -98,7 +98,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			HttpResponse response = client.execute(request);
 			
 			if(httpUtils.isHttpError(response)) {
-				throw new SocializeApiError(response.getStatusLine().getStatusCode());
+				throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode());
 			}
 			else {
 				entity = response.getEntity();
@@ -137,7 +137,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			HttpResponse response = client.execute(get);
 			
 			if(httpUtils.isHttpError(response)) {
-				throw new SocializeApiError(response.getStatusLine().getStatusCode());
+				throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode());
 			}
 			else {
 				entity = response.getEntity();
@@ -170,7 +170,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			HttpResponse response = client.execute(post);
 			
 			if(httpUtils.isHttpError(response)) {
-				throw new SocializeApiError(response.getStatusLine().getStatusCode());
+				throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode());
 			}
 			else {
 				entity = response.getEntity();
@@ -277,7 +277,8 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		}
 		return endpoint;
 	}
-	
+
+
 	private final void closeEntity(HttpEntity entity) {
 		if(entity != null) {
 			try {

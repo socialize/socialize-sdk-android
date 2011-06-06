@@ -53,7 +53,7 @@ public class Socialize {
 	
 	public void init(Context context)  {
 		try {
-			IOCContainer container = AndroidIOC.getInstance();
+			IOCContainer container = new AndroidIOC();
 			container.init(context);
 			init(context, container);
 		}

@@ -19,41 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.util;
+package com.socialize.test;
 
-
-import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+
+import com.socialize.util.IOUtils;
 
 /**
  * @author Jason Polites
  *
  */
-public final class IOUtils {
+public class IOUtilsTest extends SocializeUnitTest {
 
-	public final String read(InputStream in) throws IOException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		pipe(in, out, 1024);
-		return new String(out.toByteArray());
+	public void testRead() throws IOException {
+		String text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+		ByteArrayInputStream bin = new ByteArrayInputStream(text.getBytes());
+		IOUtils utils = new IOUtils();
+		String read = utils.read(bin);
+		assertEquals(text, read);
 	}
-	
-	public final long pipe(InputStream in, OutputStream out, int bufferSize) throws IOException {
-		
-		int read;
-		long total = 0L;
-		byte[] buffer = new byte[bufferSize];
-		
-		while((read = in.read(buffer)) >= 0) {
-			
-			total+=read;
-			out.write(buffer, 0, read);
-		}
-		
-		out.flush();
-		
-		return total;
-	}
-	
 }

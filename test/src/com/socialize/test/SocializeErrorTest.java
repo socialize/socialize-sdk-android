@@ -38,10 +38,11 @@ public class SocializeErrorTest extends SocializeActivityTest {
 	@UsesMocks ({ContainerBuilder.class, Container.class})
 	public void testSocializeApiError() throws Exception {
 		final int code = 404;
-		SocializeApiError error = new SocializeApiError(code);
 		
-		// Initialize the IOC with mocks
 		HttpUtils utils = new HttpUtils();
+		SocializeApiError error = new SocializeApiError(utils, code);
+		
+
 		
 		Container container = AndroidMock.createMock(Container.class);
 		ContainerBuilder builder = AndroidMock.createMock(ContainerBuilder.class, getActivity());
@@ -51,8 +52,9 @@ public class SocializeErrorTest extends SocializeActivityTest {
 		
 		AndroidMock.replay(builder);
 		AndroidMock.replay(container);
-	
-		AndroidIOC.getInstance().init(getActivity(), builder);
+		
+		AndroidIOC ioc = new AndroidIOC();
+		ioc.init(getActivity(), builder);
 
 		// Get the result we expect:
 		

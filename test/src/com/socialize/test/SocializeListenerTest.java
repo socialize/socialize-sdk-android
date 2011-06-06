@@ -37,6 +37,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.AbstractSocializeListener;
 import com.socialize.listener.SocializeListener;
 import com.socialize.provider.SocializeProvider;
+import com.socialize.util.HttpUtils;
 
 public class SocializeListenerTest extends SocializeActivityTest {
 
@@ -88,7 +89,8 @@ public class SocializeListenerTest extends SocializeActivityTest {
 	public void testOnErrorCalledOnFail() throws Throwable {
 		CountDownLatch signal = new CountDownLatch(1); 
 		
-		SocializeApiError dummyError = new SocializeApiError(0);
+		HttpUtils utils = new HttpUtils();
+		SocializeApiError dummyError = new SocializeApiError(utils, 0);
 		
 		final SocializeListener listener = AndroidMock.createMock(SocializeListener.class);
 		

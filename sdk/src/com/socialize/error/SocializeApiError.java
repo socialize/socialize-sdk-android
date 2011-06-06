@@ -21,7 +21,6 @@
  */
 package com.socialize.error;
 
-import com.socialize.android.ioc.AndroidIOC;
 import com.socialize.util.HttpUtils;
 
 /**
@@ -33,10 +32,12 @@ public class SocializeApiError extends SocializeException {
 	private static final long serialVersionUID = 6929605095508741864L;
 
 	private int resultCode;
+	private HttpUtils utils;
 	
-	public SocializeApiError(int resultCode) {
+	public SocializeApiError(HttpUtils utils, int resultCode) {
 		super();
 		this.resultCode = resultCode;
+		this.utils = utils;
 	}
 
 	@Override
@@ -46,7 +47,6 @@ public class SocializeApiError extends SocializeException {
 
 	@Override
 	public String getMessage() {
-		HttpUtils utils = AndroidIOC.getInstance().getBean("httputils");
 		return utils.getMessageFor(resultCode);
 	}
 
