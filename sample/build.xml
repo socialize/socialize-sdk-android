@@ -27,7 +27,7 @@
                    instrpath="${out.absolute.dir}/classes"
                    outdir="${out.absolute.dir}/classes"
                    metadatafile="${emma.report.dir}/coverage.em"
-            	   filter="-com.socialize.sample.*,-com.socialize.R*,-oauth.*,-com.socialize.android.ioc.*"> <!--Don't need coverage for the sample project itself -->
+            	   filter="-com.socialize.sample.*,-com.socialize.R*,-oauth.*,-com.socialize.android.ioc.*,-net.harder.*"> <!--Don't need coverage for the sample project itself -->
             </instr>
         </emma>
     </target>
