@@ -28,17 +28,19 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.http.HttpResponse;
+
 import android.util.Log;
 
 /**
  * @author Jason Polites
  *
  */
-public final class HttpUtils {
+public class HttpUtils {
 	
 	final Map<Integer, String> httpStatusCodes = new HashMap<Integer, String>();
 	
-	public final void init() {
+	public void init() {
 		InputStream in = null;
 		try {
 			in = Thread.currentThread().getContextClassLoader().getResourceAsStream("errors.properties");
@@ -71,11 +73,15 @@ public final class HttpUtils {
 		}
 	}
 	
-	public final boolean isHttpError(int code) {
+	public boolean isHttpError(HttpResponse response) {
+		return isHttpError(response.getStatusLine().getStatusCode());
+	}
+	
+	public boolean isHttpError(int code) {
 		return (code >= 400);
 	}
 	
-	public final String getMessageFor(int code) {
+	public String getMessageFor(int code) {
 		return httpStatusCodes.get(code);
 	}
 }

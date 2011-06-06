@@ -40,7 +40,7 @@ import com.socialize.provider.SocializeProvider;
 
 public class SocializeListenerTest extends SocializeActivityTest {
 
-	private SocializeApi<SocializeObject, SocializeProvider<SocializeObject>> service;
+	private SocializeApi<SocializeObject, SocializeProvider<SocializeObject>> api;
 	private SocializeProvider<SocializeObject> provider;
 //	private SocializeResponse response;
 	private SocializeSession session;
@@ -54,16 +54,15 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		super.setUp();
 		provider = AndroidMock.createNiceMock(SocializeProvider.class);
 		session = AndroidMock.createNiceMock(SocializeSession.class);
-		service = new SocializeApi<SocializeObject, SocializeProvider<SocializeObject>>(provider);
+		api = new SocializeApi<SocializeObject, SocializeProvider<SocializeObject>>(provider);
 	}
 
-	@SuppressWarnings("unchecked")
 	@UsesMocks({SocializeListener.class})
 	public void testOnResultCalledOnAsyncGetSuccess() throws Throwable {
 		
 		CountDownLatch signal = new CountDownLatch(1); 
 		
-		final SocializeListener<SocializeObject> listener = AndroidMock.createMock(SocializeListener.class);
+		final SocializeListener listener = AndroidMock.createMock(SocializeListener.class);
 		
 		// Must use matcher here 
 		// http://weirdfellow.wordpress.com/2010/07/15/2-matchers-expected-1-recorded/
@@ -75,7 +74,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		
 		runTestOnUiThread(new Runnable() {
 			public void run() {
-				service.getAsync(session, endpoint, id, listener);
+				api.getAsync(session, endpoint, id, listener);
 			}
 		});
 		
@@ -85,14 +84,13 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		AndroidMock.verify(listener);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@UsesMocks ({SocializeException.class, SocializeListener.class})
 	public void testOnErrorCalledOnFail() throws Throwable {
 		CountDownLatch signal = new CountDownLatch(1); 
 		
 		SocializeApiError dummyError = new SocializeApiError(0);
 		
-		final SocializeListener<SocializeObject> listener = AndroidMock.createMock(SocializeListener.class);
+		final SocializeListener listener = AndroidMock.createMock(SocializeListener.class);
 		
 		AndroidMock.makeThreadSafe(provider, true);
 		AndroidMock.makeThreadSafe(session, true);
@@ -109,7 +107,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		
 		runTestOnUiThread(new Runnable() {
 			public void run() {
-				service.getAsync(session, endpoint, id, listener);
+				api.getAsync(session, endpoint, id, listener);
 			}
 		});
 		
@@ -122,7 +120,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 	
 	public void testListenerOnGetCalledOnGET() throws Throwable {
 		
-		final SocializeListener<SocializeObject> listener = new AbstractSocializeListener<SocializeObject>() {
+		final SocializeListener listener = new AbstractSocializeListener<SocializeObject>() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -156,7 +154,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		
 		runTestOnUiThread(new Runnable() {
 			public void run() {
-				service.getAsync(session, endpoint, id, listener);
+				api.getAsync(session, endpoint, id, listener);
 			}
 		});
 		
@@ -171,7 +169,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 	
 	public void testListenerOnListCalledOnLIST() throws Throwable {
 		
-		final SocializeListener<SocializeObject> listener = new AbstractSocializeListener<SocializeObject>() {
+		final SocializeListener listener = new AbstractSocializeListener<SocializeObject>() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -206,7 +204,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		
 		runTestOnUiThread(new Runnable() {
 			public void run() {
-				service.listAsync(session, endpoint, key, ids, listener);
+				api.listAsync(session, endpoint, key, ids, listener);
 			}
 		});
 		
@@ -220,7 +218,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 	}
 	
 	public void testListenerOnUpdateCalledOnPOST() throws Throwable {
-		final SocializeListener<SocializeObject> listener = new AbstractSocializeListener<SocializeObject>() {
+		final SocializeListener listener = new AbstractSocializeListener<SocializeObject>() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -254,7 +252,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		
 		runTestOnUiThread(new Runnable() {
 			public void run() {
-				service.postAsync(session, endpoint, obj, listener);
+				api.postAsync(session, endpoint, obj, listener);
 			}
 		});
 		
@@ -268,7 +266,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 	}
 	
 	public void testListenerOnCreateCalledOnPUT() throws Throwable {
-		final SocializeListener<SocializeObject> listener = new AbstractSocializeListener<SocializeObject>() {
+		final SocializeListener listener = new AbstractSocializeListener<SocializeObject>() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -302,7 +300,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		
 		runTestOnUiThread(new Runnable() {
 			public void run() {
-				service.putAsync(session, endpoint, obj, listener);
+				api.putAsync(session, endpoint, obj, listener);
 			}
 		});
 		

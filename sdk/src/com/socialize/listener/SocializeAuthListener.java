@@ -19,31 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test;
+package com.socialize.listener;
 
-import java.util.Stack;
-
-import android.test.AndroidTestCase;
+import com.socialize.api.SocializeSession;
+import com.socialize.error.SocializeException;
 
 /**
  * @author Jason Polites
- *
  */
-public abstract class SocializeUnitTest extends AndroidTestCase {
-	private Stack<Object> bucket;
+public interface SocializeAuthListener {
+
+	public void onAuthSuccess(SocializeSession session);
 	
-	@Override
-	protected void setUp() throws Exception {
-		bucket = new Stack<Object>();
-		super.setUp();
-	}
+	public void onAuthFail(SocializeException error);
 	
-	protected void addResult(Object obj) {
-		bucket.push(obj);
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected <T extends Object> T getResult() {
-		return (T) bucket.pop();
-	}
 }

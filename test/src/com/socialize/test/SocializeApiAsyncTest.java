@@ -17,19 +17,20 @@ import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeListener;
 import com.socialize.provider.SocializeProvider;
 
 public class SocializeApiAsyncTest extends SocializeActivityTest {
 
-	private SocializeApi<SocializeObject, SocializeProvider<SocializeObject>> service;
+	private SocializeApi<SocializeObject, SocializeProvider<SocializeObject>> api;
 	private SocializeProvider<SocializeObject> provider;
 	private SocializeResponseFactory<SocializeObject> responseFactory;
 	private SocializeEntityResponse<SocializeObject> mockEntityResponse;
 	
 	private CountDownLatch signal;
 	private SocializeSession mockSession;
-	private SocializeListener<SocializeObject> listener;
+	private SocializeListener listener;
 	private SocializeConfig config;
 	private Properties props;
 
@@ -52,33 +53,33 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		config = AndroidMock.createMock(SocializeConfig.class);
 		props = AndroidMock.createMock(Properties.class);
 		
-		service = new SocializeApi<SocializeObject, SocializeProvider<SocializeObject>>(provider);
+		api = new SocializeApi<SocializeObject, SocializeProvider<SocializeObject>>(provider);
 		
-		service.setConfig(config);
+		api.setConfig(config);
 		
 		mockSession = AndroidMock.createMock(SocializeSession.class);
 		
 		AndroidMock.replay(mockSession);
 
 		
-		listener = new SocializeListener<SocializeObject>() {
+		listener = new SocializeListener() {
 
 			@Override
 			public void onResult(RequestType type, SocializeResponse response) {
-				System.out.println("Service listener onResult fired");
+				System.out.println("Api listener onResult fired");
 				signal.countDown(); 
 			}
 
 			@Override
 			public void onError(SocializeException error) {
-				System.out.println("Service listener onError fired");
+				System.out.println("Api listener onError fired");
 				signal.countDown();
 			}
 		};
 		
 	}
 	
-	public void testServiceAsyncCallsAuthenticateOnProvider() throws Throwable {
+	public void testApiAsyncCallsAuthenticateOnProvider() throws Throwable {
 
 		
 		AndroidMock.expect(props.getProperty(SocializeConfig.API_HOST)).andReturn("test_url");
@@ -90,11 +91,27 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		AndroidMock.replay(config);
 		AndroidMock.replay(provider);
 		
+		final SocializeAuthListener alistener = new SocializeAuthListener() {
+			
+			@Override
+			public void onAuthSuccess(SocializeSession session) {
+				System.out.println("Api listener onResult fired");
+				signal.countDown(); 
+				
+			}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				System.out.println("Api listener onError fired");
+				signal.countDown();
+			}
+		};
+		
 
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
-				service.authenticateAsync("test_key", "test_secret", "test_uuid", listener);
+				api.authenticateAsync("test_key", "test_secret", "test_uuid", alistener);
 			} 
 		});
 
@@ -103,7 +120,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		AndroidMock.verify(provider);
 	}
 	
-	public void testServiceAsyncCallsGetOnProvider() throws Throwable {
+	public void testApiAsyncCallsGetOnProvider() throws Throwable {
 
 		final String endpoint = "foobar";
 		final String id = null;
@@ -114,7 +131,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
-				service.getAsync(mockSession, endpoint, id, listener);
+				api.getAsync(mockSession, endpoint, id, listener);
 			} 
 		});
 
@@ -124,14 +141,14 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 	}
 	
 	
-	public void testServiceAsyncGetCallsAddOnResponse() throws Throwable {
+	public void testApiAsyncGetCallsAddOnResponse() throws Throwable {
 
 		final String endpoint = "foobar";
 		final String id = null;
 		
 		SocializeObject obj = new SocializeObject();
 
-		service.setResponseFactory(responseFactory);
+		api.setResponseFactory(responseFactory);
 		
 		AndroidMock.expect(responseFactory.newEntityResponse()).andReturn(mockEntityResponse);
 		AndroidMock.expect(provider.get(mockSession, endpoint, id)).andReturn(obj);
@@ -145,7 +162,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
-				service.getAsync(mockSession, endpoint, id, listener);
+				api.getAsync(mockSession, endpoint, id, listener);
 			} 
 		});
 
@@ -156,7 +173,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		AndroidMock.verify(mockEntityResponse);
 	}
 	
-	public void testServiceAsyncListCallsSetResultsOnResponse() throws Throwable {
+	public void testApiAsyncListCallsSetResultsOnResponse() throws Throwable {
 
 		final String endpoint = "foobar";
 		final String key = "foobar_key";
@@ -164,7 +181,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		
 		final List<SocializeObject> returned = new LinkedList<SocializeObject>();
 		
-		service.setResponseFactory(responseFactory);
+		api.setResponseFactory(responseFactory);
 		
 		AndroidMock.expect(responseFactory.newEntityResponse()).andReturn(mockEntityResponse);
 		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids)).andReturn(returned);
@@ -177,7 +194,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
-				service.listAsync(mockSession, endpoint, key, ids, listener);
+				api.listAsync(mockSession, endpoint, key, ids, listener);
 			} 
 		});
 
@@ -190,7 +207,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 	
 	
 	
-	public void testServiceAsyncCallsListOnProvider() throws Throwable {
+	public void testApiAsyncCallsListOnProvider() throws Throwable {
 
 		final String endpoint = "foobar";
 		final String key = "foobar_key";
@@ -204,7 +221,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
-				service.listAsync(mockSession, endpoint, key, ids, listener);
+				api.listAsync(mockSession, endpoint, key, ids, listener);
 			} 
 		});
 
@@ -213,7 +230,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		AndroidMock.verify(provider);
 	}
 	
-	public void testServiceAsyncCallsPutOnProvider() throws Throwable {
+	public void testApiAsyncCallsPutOnProvider() throws Throwable {
 
 		final String endpoint = "foobar";
 		final SocializeObject object = null;
@@ -224,7 +241,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
-				service.putAsync(mockSession, endpoint, object, listener);
+				api.putAsync(mockSession, endpoint, object, listener);
 			} 
 		});
 
@@ -233,7 +250,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		AndroidMock.verify(provider);
 	}
 	
-	public void testServiceAsyncCallsPostOnProvider() throws Throwable {
+	public void testApiAsyncCallsPostOnProvider() throws Throwable {
 
 		final String endpoint = "foobar";
 		final SocializeObject object = null;
@@ -244,7 +261,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
-				service.postAsync(mockSession, endpoint, object, listener);
+				api.postAsync(mockSession, endpoint, object, listener);
 			} 
 		});
 

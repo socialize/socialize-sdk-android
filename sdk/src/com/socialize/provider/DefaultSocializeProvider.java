@@ -39,9 +39,11 @@ import com.socialize.api.WritableSession;
 import com.socialize.entity.SocializeObject;
 import com.socialize.entity.User;
 import com.socialize.entity.factory.SocializeObjectFactory;
+import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
 import com.socialize.net.HttpClientFactory;
+import com.socialize.util.HttpUtils;
 import com.socialize.util.JSONParser;
 
 /**
@@ -58,6 +60,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	private SocializeRequestFactory<T> requestFactory;
 	private JSONParser jsonParser;
 	private SocializeLogger logger;
+	private HttpUtils httpUtils;
 
 	public DefaultSocializeProvider(
 			SocializeObjectFactory<T> factory, 
@@ -65,7 +68,8 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			HttpClientFactory clientFactory,
 			SocializeSessionFactory sessionFactory,
 			SocializeRequestFactory<T> requestFactory,
-			JSONParser jsonParser) {
+			JSONParser jsonParser,
+			HttpUtils httpUtils) {
 		
 		super();
 		this.objectFactory = factory;
@@ -74,6 +78,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		this.sessionFactory = sessionFactory;
 		this.requestFactory = requestFactory;
 		this.jsonParser = jsonParser;
+		this.httpUtils = httpUtils;
 	}
 	
 	@Override
@@ -92,15 +97,20 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			
 			HttpResponse response = client.execute(request);
 			
-			entity = response.getEntity();
-			
-			JSONObject json = jsonParser.parseObject(entity.getContent());
-			
-			User user = userFactory.fromJSON(json.getJSONObject("user"));
-			
-			session.setConsumerToken(json.getString("oauth_token"));
-			session.setConsumerTokenSecret(json.getString("oauth_token_secret"));
-			session.setUser(user);
+			if(httpUtils.isHttpError(response)) {
+				throw new SocializeApiError(response.getStatusLine().getStatusCode());
+			}
+			else {
+				entity = response.getEntity();
+				
+				JSONObject json = jsonParser.parseObject(entity.getContent());
+				
+				User user = userFactory.fromJSON(json.getJSONObject("user"));
+				
+				session.setConsumerToken(json.getString("oauth_token"));
+				session.setConsumerTokenSecret(json.getString("oauth_token_secret"));
+				session.setUser(user);
+			}
 		}
 		catch (Exception e) {
 			throw new SocializeException(e);
@@ -126,11 +136,16 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			
 			HttpResponse response = client.execute(get);
 			
-			entity = response.getEntity();
+			if(httpUtils.isHttpError(response)) {
+				throw new SocializeApiError(response.getStatusLine().getStatusCode());
+			}
+			else {
+				entity = response.getEntity();
 
-			JSONObject json = jsonParser.parseObject(entity.getContent());
-			
-			return objectFactory.fromJSON(json);
+				JSONObject json = jsonParser.parseObject(entity.getContent());
+				
+				return objectFactory.fromJSON(json);
+			}
 		}
 		catch (Exception e) {
 			throw new SocializeException(e);
@@ -154,16 +169,21 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 
 			HttpResponse response = client.execute(post);
 			
-			entity = response.getEntity();
-			
-			JSONArray list = jsonParser.parseArray(entity.getContent());
-			
-			int length = list.length();
-			
-			results = new ArrayList<T>(length);
-			
-			for (int i = 0; i < length; i++) {
-				results.add(objectFactory.fromJSON(list.getJSONObject(i)));
+			if(httpUtils.isHttpError(response)) {
+				throw new SocializeApiError(response.getStatusLine().getStatusCode());
+			}
+			else {
+				entity = response.getEntity();
+				
+				JSONArray list = jsonParser.parseArray(entity.getContent());
+				
+				int length = list.length();
+				
+				results = new ArrayList<T>(length);
+				
+				for (int i = 0; i < length; i++) {
+					results.add(objectFactory.fromJSON(list.getJSONObject(i)));
+				}
 			}
 		}
 		catch (Exception e) {
@@ -240,6 +260,14 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
+	}
+	
+	public HttpUtils getHttpUtils() {
+		return httpUtils;
+	}
+
+	public void setHttpUtils(HttpUtils httpUtils) {
+		this.httpUtils = httpUtils;
 	}
 
 	private final String prepareEndpoint(String endpoint) {

@@ -34,10 +34,10 @@ import com.socialize.entity.SocializeObject;
  *
  * @param <T>
  */
-public abstract class AbstractSocializeListener<T extends SocializeObject> implements SocializeListener<T> {
+public abstract class AbstractSocializeListener<T extends SocializeObject> implements SocializeListener {
 
 	@Override
-	public final void onResult(RequestType type, SocializeResponse response) {
+	public void onResult(RequestType type, SocializeResponse response) {
 
 		@SuppressWarnings("unchecked")
 		SocializeEntityResponse<T> entityResponse = (SocializeEntityResponse<T>) response;

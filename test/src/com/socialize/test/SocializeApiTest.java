@@ -12,7 +12,7 @@ import com.socialize.provider.SocializeProvider;
 
 public class SocializeApiTest extends SocializeActivityTest {
 
-	private SocializeApi<SocializeObject, SocializeProvider<SocializeObject>> service;
+	private SocializeApi<SocializeObject, SocializeProvider<SocializeObject>> api;
 	private SocializeProvider<SocializeObject> provider;
 	
 	private SocializeSession mockSession;
@@ -23,7 +23,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 	protected void setUp() throws Exception {
 		super.setUp();
 		provider = AndroidMock.createMock(SocializeProvider.class);
-		service = new SocializeApi<SocializeObject, SocializeProvider<SocializeObject>>(provider);
+		api = new SocializeApi<SocializeObject, SocializeProvider<SocializeObject>>(provider);
 		
 		mockSession = AndroidMock.createMock(SocializeSession.class);
 		
@@ -31,17 +31,17 @@ public class SocializeApiTest extends SocializeActivityTest {
 		
 	}
 	
-	public void testServiceCallsAuthenticateOnProvider() throws Throwable {
+	public void testApiCallsAuthenticateOnProvider() throws Throwable {
 
 		AndroidMock.expect(provider.authenticate("test_endpoint", "test_key", "test_secret", "test_uuid")).andReturn(mockSession);
 		AndroidMock.replay(provider);
 
-		service.authenticate("test_endpoint", "test_key", "test_secret", "test_uuid");
+		api.authenticate("test_endpoint", "test_key", "test_secret", "test_uuid");
 		
 		AndroidMock.verify(provider);
 	}
 	
-	public void testServiceCallsGetOnProvider() throws Throwable {
+	public void testApiCallsGetOnProvider() throws Throwable {
 
 		final String endpoint = "foobar";
 		final String ids = null;
@@ -49,12 +49,12 @@ public class SocializeApiTest extends SocializeActivityTest {
 		AndroidMock.expect(provider.get(mockSession, endpoint, ids)).andReturn(new SocializeObject());
 		AndroidMock.replay(provider);
 
-		service.get(mockSession, endpoint, ids);
+		api.get(mockSession, endpoint, ids);
 		
 		AndroidMock.verify(provider);
 	}
 	
-	public void testServiceCallsListOnProvider() throws Throwable {
+	public void testApiCallsListOnProvider() throws Throwable {
 
 		final String endpoint = "foobar";
 		final String key = "foobar_key";
@@ -65,12 +65,12 @@ public class SocializeApiTest extends SocializeActivityTest {
 		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids)).andReturn(returned);
 		AndroidMock.replay(provider);
 
-		service.list(mockSession, endpoint, key, ids);
+		api.list(mockSession, endpoint, key, ids);
 
 		AndroidMock.verify(provider);
 	}
 	
-	public void testServiceCallsPutOnProvider() throws Throwable {
+	public void testApiCallsPutOnProvider() throws Throwable {
 
 		final String endpoint = "foobar";
 		final SocializeObject object = null;
@@ -78,12 +78,12 @@ public class SocializeApiTest extends SocializeActivityTest {
 		AndroidMock.expect(provider.put(mockSession, endpoint, object)).andReturn(null);
 		AndroidMock.replay(provider);
 
-		service.put(mockSession, endpoint, object);
+		api.put(mockSession, endpoint, object);
 
 		AndroidMock.verify(provider);
 	}
 	
-	public void testServiceCallsPostOnProvider() throws Throwable {
+	public void testApiCallsPostOnProvider() throws Throwable {
 
 		final String endpoint = "foobar";
 		final SocializeObject object = null;
@@ -91,7 +91,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		AndroidMock.expect(provider.post(mockSession, endpoint, object)).andReturn(null);
 		AndroidMock.replay(provider);
 
-		service.post(mockSession, endpoint, object);
+		api.post(mockSession, endpoint, object);
 		
 		AndroidMock.verify(provider);
 	}

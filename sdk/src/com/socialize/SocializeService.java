@@ -25,11 +25,8 @@ import android.content.Context;
 
 import com.socialize.api.SocializeSession;
 import com.socialize.api.comment.CommentApi;
-import com.socialize.config.SocializeConfig;
-import com.socialize.entity.factory.FactoryService;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentListener;
-import com.socialize.log.SocializeLogger;
 import com.socialize.net.HttpClientFactory;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.util.DeviceUtils;
@@ -38,16 +35,12 @@ import com.socialize.util.DeviceUtils;
  * @author Jason Polites
  *
  */
-public final class SocializeService {
+public class SocializeService {
 	
 	private Context context;
-	private FactoryService factoryService;
 	private SocializeProvider<?> authProvider;
 	private HttpClientFactory clientFactory;
-	private SocializeLogger logger;
-	private SocializeConfig config;
 	private DeviceUtils deviceUtils;
-	
 	private CommentApi commentApi;
 
 	public SocializeService(Context context) {
@@ -61,36 +54,13 @@ public final class SocializeService {
 	}
 
 	public void addComment(SocializeSession session, String key, String comment, CommentListener listener) {
-//		final CommentApi commentService = new CommentApi(new CommentProvider(factoryService.getFactoryFor(Comment.class), clientFactory));
 		commentApi.addComment(session, key, comment, listener);
 	}
-	
-	// Auto-init from IOC
-//	public void init() throws SocializeException {
-//
-//		config = new SocializeConfig();
-//		config.init(context);
-//		
-//		logger = new SocializeLogger();
-//		logger.init(config);
-//		
-//		factoryService = new FactoryService();
-//		clientFactory = new DefaultHttpClientFactory();
-//		clientFactory.init();
-//	}
 	
 	public void destroy() {
 		if(clientFactory != null) {
 			clientFactory.destroy();
 		}
-	}
-
-	public FactoryService getFactoryService() {
-		return factoryService;
-	}
-
-	public void setFactoryService(FactoryService factoryService) {
-		this.factoryService = factoryService;
 	}
 
 	public SocializeProvider<?> getAuthProvider() {
@@ -107,22 +77,6 @@ public final class SocializeService {
 
 	public void setClientFactory(HttpClientFactory clientFactory) {
 		this.clientFactory = clientFactory;
-	}
-
-	public SocializeLogger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
-	}
-
-	public SocializeConfig getConfig() {
-		return config;
-	}
-
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
 	}
 
 	public DeviceUtils getDeviceUtils() {

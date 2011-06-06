@@ -25,6 +25,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.socialize.android.ioc.AndroidIOC;
+import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
@@ -33,28 +34,36 @@ import com.socialize.listener.comment.CommentAddListener;
  * @author Jason Polites
  *
  */
-public final class Socialize {
+public class Socialize {
 	
 	private SocializeService service;
-	private AndroidIOC container;
+	private IOCContainer container;
 	private boolean initialized = false;
 	
-	public final void init(Context context)  {
-		
+	public void init(Context context, IOCContainer container) {
 		try {
-			container = AndroidIOC.getInstance();
-			container.init(context);
-			service = container.getBean("socializeService");
-			initialized = true;
+			this.container = container;
+			this.service = container.getBean("socializeService");
+			this.initialized = true;
 		}
 		catch (Exception e) {
 			Log.e("Socialize", "Failed to initialize Socialize!", e);
 		}
 	}
 	
-	public final void destroy() {
+	public void init(Context context)  {
+		try {
+			IOCContainer container = AndroidIOC.getInstance();
+			container.init(context);
+			init(context, container);
+		}
+		catch (Exception e) {
+			Log.e("Socialize", "Failed to initialize Socialize!", e);
+		}
+	}
+	
+	public void destroy() {
 		initialized = false;
-		
 		if(container != null) {
 			container.destroy();
 		}
@@ -74,4 +83,7 @@ public final class Socialize {
 		}
 	}
 
+	public boolean isInitialized() {
+		return initialized;
+	}
 }

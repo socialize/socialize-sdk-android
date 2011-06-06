@@ -21,6 +21,7 @@
  */
 package com.socialize.test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -32,6 +33,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.android.testing.mocking.AndroidMock;
@@ -43,6 +45,7 @@ import com.socialize.entity.SocializeObject;
 import com.socialize.entity.factory.SocializeObjectFactory;
 import com.socialize.error.SocializeException;
 import com.socialize.oauth.OAuthRequestSigner;
+import com.socialize.test.util.JsonAssert;
 
 /**
  * @author Jason Polites
@@ -124,6 +127,64 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		assertTrue((Boolean)getResult());
 		assertTrue(getRequest instanceof HttpGet);
 	}
+	
+	
+	public void testListRequestCreate() throws Exception {
+		
+		final String endpoint = "foobar/";
+		final String key = "testid";
+		final String[] ids = {"foo", "bar"};
+		
+		OAuthRequestSigner signer = new OAuthRequestSigner() {
+			
+			@SuppressWarnings("hiding")
+			@Override
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+				assertTrue(request instanceof HttpPost);
+				HttpPost list = (HttpPost) request;
+				assertEquals(list.getURI().toString(), endpoint);
+				
+				addResult(true);
+				return request;
+			}
+		};
+		
+		SocializeRequestFactory<SocializeObject> factory = new DefaultSocializeRequestFactory<SocializeObject>(signer, null);
+		
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+
+		HttpUriRequest req = factory.getListRequest(session, endpoint, key, ids);
+		
+		assertTrue(req instanceof HttpPost);
+		
+		HttpPost post = (HttpPost) req;
+		
+		HttpEntity entity = post.getEntity();
+		
+		assertNotNull(entity);
+		
+		assertTrue(entity instanceof UrlEncodedFormEntity);
+		
+		List<NameValuePair> parsed = URLEncodedUtils.parse(entity);
+		
+		assertEquals(1, parsed.size());
+		
+		NameValuePair nvp = parsed.get(0);
+		
+		assertEquals("payload", nvp.getName());
+		
+		JSONObject jsonExpected = new JSONObject();
+		JSONArray array = new JSONArray(Arrays.asList(ids));
+		jsonExpected.put("ids", array);
+		jsonExpected.put("key", key);
+		
+		JSONObject jsonActual = new JSONObject(nvp.getValue());
+		
+		JsonAssert.assertJsonObjectEquals(jsonExpected, jsonActual);
+		
+		assertTrue((Boolean)getResult());
+	}
+	
 	
 	@SuppressWarnings("unchecked")
 	@UsesMocks({SocializeObjectFactory.class, JSONObject.class, SocializeSession.class})
