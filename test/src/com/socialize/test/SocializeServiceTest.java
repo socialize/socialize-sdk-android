@@ -21,6 +21,9 @@
  */
 package com.socialize.test;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
@@ -29,6 +32,7 @@ import com.socialize.api.comment.CommentApi;
 import com.socialize.entity.Comment;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.util.DeviceUtils;
@@ -40,32 +44,36 @@ import com.socialize.util.DeviceUtils;
 public class SocializeServiceTest extends SocializeUnitTest {
 
 	@SuppressWarnings("unchecked")
-	@UsesMocks ({SocializeProvider.class, CommentApi.class, DeviceUtils.class, SocializeSession.class})
-	public void testAuthenticate() throws SocializeException {
+	@UsesMocks ({SocializeProvider.class, CommentApi.class, DeviceUtils.class, SocializeSession.class, SocializeAuthListener.class})
+	public void testAuthenticate() throws SocializeException, InterruptedException {
 		SocializeProvider<SocializeObject> provider = AndroidMock.createMock(SocializeProvider.class);
 		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
-		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+//		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
 		CommentApi commentApi = AndroidMock.createMock(CommentApi.class, provider);
+		SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
 		
 		final String udid = "foobar";
 		final String consumerKey = "foobar_consumerKey";
 		final String consumerSecret = "foobar_consumerSecret";
 		
 		AndroidMock.expect(deviceUtils.getUDID(getContext())).andReturn(udid);
-		AndroidMock.expect(provider.authenticate("/authenticate/", consumerKey, consumerSecret, udid)).andReturn(session);
+		
+		commentApi.authenticateAsync(consumerKey, consumerSecret, udid, listener);
+		
+//		AndroidMock.expect(provider.authenticate("/authenticate/", consumerKey, consumerSecret, udid)).andReturn(session);
 		
 		AndroidMock.replay(deviceUtils);
-		AndroidMock.replay(provider);
+		AndroidMock.replay(commentApi);
 		
 		SocializeService service = new SocializeService(getContext());
 		
 		service.setDeviceUtils(deviceUtils);
 		service.setCommentApi(commentApi);
 		
-		service.authenticate(consumerKey, consumerSecret, null);
+		service.authenticate(consumerKey, consumerSecret, listener);
 		
 		AndroidMock.verify(deviceUtils);
-		AndroidMock.verify(provider);
+		AndroidMock.verify(commentApi);
 	}
 	
 	@SuppressWarnings("unchecked")
