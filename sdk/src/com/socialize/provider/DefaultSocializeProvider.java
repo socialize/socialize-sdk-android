@@ -157,17 +157,33 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 
 	@Override
 	public List<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
+		endpoint = prepareEndpoint(endpoint);
+		HttpUriRequest request = requestFactory.getListRequest(session, endpoint, key, ids);
+		return doListTypeRequest(request);
+	}
 
+	@Override
+	public List<T> put(SocializeSession session, String endpoint, T object) throws SocializeException {
+		endpoint = prepareEndpoint(endpoint);
+		HttpUriRequest request = requestFactory.getPutRequest(session, endpoint, object);
+		return doListTypeRequest(request);
+	}
+
+	@Override
+	public List<T> post(SocializeSession session, String endpoint, T object) throws SocializeException {
+		endpoint = prepareEndpoint(endpoint);
+		HttpUriRequest request = requestFactory.getPostRequest(session, endpoint, object);
+		return doListTypeRequest(request);
+	}
+	
+	private List<T> doListTypeRequest(HttpUriRequest request) throws SocializeException {
 		List<T> results = null;
 		HttpEntity entity = null;
 		
 		try {
-			endpoint = prepareEndpoint(endpoint);
-			
 			HttpClient client = clientFactory.getClient();
-			HttpUriRequest post = requestFactory.getListRequest(session, endpoint, key, ids);
 
-			HttpResponse response = client.execute(post);
+			HttpResponse response = client.execute(request);
 			
 			if(httpUtils.isHttpError(response)) {
 				throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode());
@@ -194,24 +210,6 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		}
 		
 		return results;
-	}
-
-	@Override
-	public List<T> put(SocializeSession session, String endpoint, T object) {
-		// TODO: Complete
-//		endpoint = prepareEndpoint(endpoint);
-		
-		
-		
-		return null;
-	}
-
-	@Override
-	public List<T> post(SocializeSession session, String endpoint, T object) {
-		// TODO: Complete
-//		endpoint = prepareEndpoint(endpoint);
-		
-		return null;
 	}
 
 	public SocializeObjectFactory<T> getObjectFactory() {
