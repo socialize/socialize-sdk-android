@@ -25,11 +25,15 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.test.util.JsonAssert;
+import com.socialize.util.HttpUtils;
 import com.socialize.util.IOUtils;
 import com.socialize.util.JSONParser;
 import com.socialize.util.StringUtils;
@@ -61,7 +65,7 @@ public class UtilsTests extends SocializeUnitTest {
 	}
 	
 	@UsesMocks ({IOUtils.class, InputStream.class})
-	public void testJSONParserParseObject() throws Exception {
+	public void testJSONParseObject() throws Exception {
 		
 		final String json = "{foo:bar}";
 		
@@ -69,11 +73,11 @@ public class UtilsTests extends SocializeUnitTest {
 		InputStream in = AndroidMock.createMock(InputStream.class);
 		
 		AndroidMock.expect(ioUtils.read(in)).andReturn(json);
+		
+		AndroidMock.replay(ioUtils);
 
 		JSONParser parser = new JSONParser();
 		parser.setIoUtils(ioUtils);
-		
-		AndroidMock.replay(ioUtils);
 		
 		JSONObject object = parser.parseObject(in);
 		
@@ -88,4 +92,51 @@ public class UtilsTests extends SocializeUnitTest {
 		AndroidMock.verify(ioUtils);
 	}
 
+	@UsesMocks ({IOUtils.class, InputStream.class})
+	public void testJSONParseArray() throws Exception {
+		final String json = "[foo1,bar1,foo2,bar2,foo3,bar3]";
+		
+		IOUtils ioUtils = AndroidMock.createMock(IOUtils.class);
+		InputStream in = AndroidMock.createMock(InputStream.class);
+		
+		AndroidMock.expect(ioUtils.read(in)).andReturn(json);
+		
+		AndroidMock.replay(ioUtils);
+		
+		JSONParser parser = new JSONParser();
+		parser.setIoUtils(ioUtils);
+		
+		JSONArray object = parser.parseArray(in);
+		
+		JSONArray expected = new JSONArray(json);
+		
+		JsonAssert.assertJsonArrayEquals(expected, object);
+		
+		object = parser.parseArray(json);
+		
+		JsonAssert.assertJsonArrayEquals(expected, object);
+		
+		AndroidMock.verify(ioUtils);
+		
+	}
+	
+	@UsesMocks ({HttpResponse.class, StatusLine.class})
+	public void testHttpUtilsIsError() {
+		
+		HttpResponse response = AndroidMock.createMock(HttpResponse.class);
+		StatusLine line = AndroidMock.createMock(StatusLine.class);
+		
+		AndroidMock.expect(response.getStatusLine()).andReturn(line);
+		AndroidMock.expect(line.getStatusCode()).andReturn(404);
+		
+		AndroidMock.replay(response);
+		AndroidMock.replay(line);
+		
+		HttpUtils utils = new HttpUtils();
+		assertTrue(utils.isHttpError(response));
+		
+		AndroidMock.verify(response);
+		AndroidMock.verify(line);
+		
+	}
 }

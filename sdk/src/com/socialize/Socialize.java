@@ -52,14 +52,8 @@ public class Socialize {
 	}
 	
 	public void init(Context context)  {
-		try {
-			IOCContainer container = new AndroidIOC();
-			container.init(context);
-			init(context, container);
-		}
-		catch (Exception e) {
-			Log.e("Socialize", "Failed to initialize Socialize!", e);
-		}
+		IOCContainer container = new AndroidIOC();
+		init(context, container);
 	}
 	
 	public void destroy() {
