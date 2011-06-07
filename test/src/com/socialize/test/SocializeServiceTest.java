@@ -40,19 +40,19 @@ import com.socialize.util.DeviceUtils;
 public class SocializeServiceTest extends SocializeUnitTest {
 
 	@SuppressWarnings("unchecked")
-	@UsesMocks ({SocializeProvider.class, DeviceUtils.class, SocializeSession.class})
+	@UsesMocks ({SocializeProvider.class, CommentApi.class, DeviceUtils.class, SocializeSession.class})
 	public void testAuthenticate() throws SocializeException {
 		SocializeProvider<SocializeObject> provider = AndroidMock.createMock(SocializeProvider.class);
 		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		CommentApi commentApi = AndroidMock.createMock(CommentApi.class, provider);
 		
 		final String udid = "foobar";
-		final String endpoint = "foobar_endpoint";
 		final String consumerKey = "foobar_consumerKey";
 		final String consumerSecret = "foobar_consumerSecret";
 		
 		AndroidMock.expect(deviceUtils.getUDID(getContext())).andReturn(udid);
-		AndroidMock.expect(provider.authenticate(endpoint, consumerKey, consumerSecret, udid)).andReturn(session);
+		AndroidMock.expect(provider.authenticate("/authenticate/", consumerKey, consumerSecret, udid)).andReturn(session);
 		
 		AndroidMock.replay(deviceUtils);
 		AndroidMock.replay(provider);
@@ -60,9 +60,9 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		SocializeService service = new SocializeService(getContext());
 		
 		service.setDeviceUtils(deviceUtils);
-		service.setAuthProvider(provider);
+		service.setCommentApi(commentApi);
 		
-		service.authenticate(endpoint, consumerKey, consumerSecret);
+		service.authenticate(consumerKey, consumerSecret, null);
 		
 		AndroidMock.verify(deviceUtils);
 		AndroidMock.verify(provider);

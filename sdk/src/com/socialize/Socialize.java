@@ -28,11 +28,11 @@ import com.socialize.android.ioc.AndroidIOC;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.comment.CommentAddListener;
 
 /**
  * @author Jason Polites
- *
  */
 public class Socialize {
 	
@@ -40,6 +40,21 @@ public class Socialize {
 	private IOCContainer container;
 	private boolean initialized = false;
 	
+	/**
+	 * Initializes a Socialize instance with default settings.
+	 * @param context The current Android context (or Activity)
+	 */
+	public void init(Context context)  {
+		IOCContainer container = new AndroidIOC();
+		init(context, container);
+	}
+	
+	/**
+	 * Initializes a socialize service with a custom object container (Expert use only)
+	 * @param context The current Android context (or Activity)
+	 * @param container A reference to an IOC container
+	 * @see https://github.com/socialize/android-ioc
+	 */
 	public void init(Context context, IOCContainer container) {
 		try {
 			this.container = container;
@@ -51,18 +66,35 @@ public class Socialize {
 		}
 	}
 	
-	public void init(Context context)  {
-		IOCContainer container = new AndroidIOC();
-		init(context, container);
-	}
-	
+	/**
+	 * Destroys the Socialize instance.  Should be called during the onDestroy() method of your Activity.
+	 */
 	public void destroy() {
 		initialized = false;
 		if(container != null) {
 			container.destroy();
 		}
 	}
+	
+	/**
+	 * Authenticates the application against the API
+	 * @param consumerKey The consumer key, obtained from registration as a Socialize Developer.
+	 * @param consumerSecret The consumer secret, obtained from registration as a Socialize Developer.
+	 * @param authListener The callback for authentication outcomes.
+	 * @return
+	 * @throws SocializeException 
+	 */
+	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener authListener) throws SocializeException {
+		service.authenticate(consumerKey, consumerSecret, authListener);
+	}
 
+	/**
+	 * Adds a new comment and associates it with the entity described.
+	 * @param session The current socialize session.
+	 * @param entity The entity key.  Defined when first creating an entity.
+	 * @param comment The comment to add.
+	 * @param commentAddListener A listener to handle callbacks from the post.
+	 */
 	public void addComment(SocializeSession session, String entity, String comment, CommentAddListener commentAddListener) {
 		if(initialized) {
 			service.addComment(session, entity, comment, commentAddListener);
@@ -72,11 +104,14 @@ public class Socialize {
 			if(commentAddListener != null) {
 				commentAddListener.onError(new SocializeException("Socialize was not initialized"));
 			}
-			
 			Log.e("Socialize", "Socialize was not initialized");
 		}
 	}
 
+	/**
+	 * Returns true if this Socialize instance has been initialized.
+	 * @return
+	 */
 	public boolean isInitialized() {
 		return initialized;
 	}

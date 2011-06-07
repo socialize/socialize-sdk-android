@@ -26,9 +26,9 @@ import android.content.Context;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.comment.CommentApi;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.net.HttpClientFactory;
-import com.socialize.provider.SocializeProvider;
 import com.socialize.util.DeviceUtils;
 
 /**
@@ -38,7 +38,6 @@ import com.socialize.util.DeviceUtils;
 public class SocializeService {
 	
 	private Context context;
-	private SocializeProvider<?> authProvider;
 	private HttpClientFactory clientFactory;
 	private DeviceUtils deviceUtils;
 	private CommentApi commentApi;
@@ -48,9 +47,10 @@ public class SocializeService {
 		this.context = context;
 	}
 	
-	public SocializeSession authenticate(String endpoint, String consumerKey, String consumerSecret) throws SocializeException {
+	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener) throws SocializeException {
+		// All Api instances have authenticate, so we can just use any old one
 		String uuid = deviceUtils.getUDID(context);
-		return authProvider.authenticate(endpoint, consumerKey, consumerSecret, uuid);
+		commentApi.authenticateAsync(consumerKey, consumerSecret, uuid, listener);
 	}
 
 	public void addComment(SocializeSession session, String key, String comment, CommentListener listener) {
@@ -61,14 +61,6 @@ public class SocializeService {
 		if(clientFactory != null) {
 			clientFactory.destroy();
 		}
-	}
-
-	public SocializeProvider<?> getAuthProvider() {
-		return authProvider;
-	}
-
-	public void setAuthProvider(SocializeProvider<?> provider) {
-		this.authProvider = provider;
 	}
 
 	public HttpClientFactory getClientFactory() {

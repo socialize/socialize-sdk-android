@@ -63,7 +63,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	private HttpUtils httpUtils;
 
 	public DefaultSocializeProvider(
-			SocializeObjectFactory<T> factory, 
+			SocializeObjectFactory<T> objectFactory, 
 			SocializeObjectFactory<User> userFactory,
 			HttpClientFactory clientFactory,
 			SocializeSessionFactory sessionFactory,
@@ -72,7 +72,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			HttpUtils httpUtils) {
 		
 		super();
-		this.objectFactory = factory;
+		this.objectFactory = objectFactory;
 		this.clientFactory = clientFactory;
 		this.userFactory = userFactory;
 		this.sessionFactory = sessionFactory;
