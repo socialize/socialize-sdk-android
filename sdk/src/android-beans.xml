@@ -21,11 +21,7 @@
 		<property name="factories">
 			<map>
 				<entry>
-					<key value="com.socialize.entity.Application"/>
-					<value ref="applicationFactory"/>
-				</entry>
-				<entry>
-				<key value="com.socialize.entity.Comment"/>
+					<key value="com.socialize.entity.Comment"/>
 					<value ref="commentFactory"/>
 				</entry>
 			</map>
@@ -35,6 +31,8 @@
 	<bean id="userFactory" class="com.socialize.entity.factory.UserFactory">
 		<property name="factoryService" ref="factoryService"/>
 	</bean>
+	
+	<bean id="responseFactory" class="com.socialize.api.DefaultSocializeResponseFactory"/>
 	
 	<bean id="httpClientFactory" class="com.socialize.net.DefaultHttpClientFactory">
 		<init-method name="init"/>
@@ -47,6 +45,10 @@
 		<property name="logger" ref="logger"/>
 	</bean>
 	
+	<bean id="socializeApi" class="com.socialize.api.SocializeApi" abstract="true">
+		<property name="responseFactory" ref="responseFactory"/>
+		<property name="config" ref="config"/>
+	</bean>
 	
 	<!-- OAUTH -->
 	
@@ -82,7 +84,7 @@
 		<property name="logger" ref="logger"/>
 	</bean>
 	
-	<bean id="commentApi" class="com.socialize.api.comment.CommentApi">
+	<bean id="commentApi" class="com.socialize.api.comment.CommentApi" extends="socializeApi">
 		<constructor-arg ref="commentProvider"/>
 	</bean>
 	

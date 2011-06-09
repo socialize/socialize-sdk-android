@@ -21,9 +21,6 @@
  */
 package com.socialize.test;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
@@ -48,7 +45,6 @@ public class SocializeServiceTest extends SocializeUnitTest {
 	public void testAuthenticate() throws SocializeException, InterruptedException {
 		SocializeProvider<SocializeObject> provider = AndroidMock.createMock(SocializeProvider.class);
 		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
-//		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
 		CommentApi commentApi = AndroidMock.createMock(CommentApi.class, provider);
 		SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
 		
@@ -59,8 +55,6 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		AndroidMock.expect(deviceUtils.getUDID(getContext())).andReturn(udid);
 		
 		commentApi.authenticateAsync(consumerKey, consumerSecret, udid, listener);
-		
-//		AndroidMock.expect(provider.authenticate("/authenticate/", consumerKey, consumerSecret, udid)).andReturn(session);
 		
 		AndroidMock.replay(deviceUtils);
 		AndroidMock.replay(commentApi);

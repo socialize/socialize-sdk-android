@@ -24,6 +24,7 @@ package com.socialize.test.integration;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.AndroidIOC;
 import com.socialize.api.DefaultSocializeRequestFactory;
+import com.socialize.api.DefaultSocializeResponseFactory;
 import com.socialize.api.DefaultSocializeSessionFactory;
 import com.socialize.api.comment.CommentApi;
 import com.socialize.config.SocializeConfig;
@@ -58,7 +59,7 @@ public class SocializeIOCTest extends SocializeActivityTest {
 		// Put a count assert to make sure this test fails when new beans are
 		// added
 		// so that developers are reminded to update this test.
-		assertEquals(18, ioc.size());
+		assertEquals(19, ioc.size());
 
 		// Now make sure all our beans are there
 		checkBeanType(ioc, "deviceUtils", DeviceUtils.class);
@@ -78,6 +79,19 @@ public class SocializeIOCTest extends SocializeActivityTest {
 		checkBeanType(ioc, "commentProvider", DefaultSocializeProvider.class);
 		checkBeanType(ioc, "commentApi", CommentApi.class);
 		checkBeanType(ioc, "socializeService", SocializeService.class);
+		checkBeanType(ioc, "responseFactory", DefaultSocializeResponseFactory.class);
+		
+		// Check each bean
+		assertConfig((SocializeConfig) ioc.getBean("config"));
+		assertFactoryService((FactoryService) ioc.getBean("factoryService"));
+	}
+	
+	private void assertConfig(SocializeConfig config) {
+		assertNotNull(config.getProperties());
+	}
+	
+	private void assertFactoryService(FactoryService service) {
+		assertNotNull(service.getFactories());
 	}
 
 	private void checkBeanType(AndroidIOC ioc, String name, Class<?> clazz) {
@@ -85,5 +99,4 @@ public class SocializeIOCTest extends SocializeActivityTest {
 		assertNotNull(bean);
 		assertTrue(clazz.isAssignableFrom(bean.getClass()));
 	}
-
 }
