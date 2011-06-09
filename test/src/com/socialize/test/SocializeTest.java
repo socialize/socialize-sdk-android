@@ -52,7 +52,7 @@ public class SocializeTest extends SocializeUnitTest {
 		Socialize socialize = new Socialize();
 		socialize.init(getContext(), container);
 		
-		assertTrue(socialize.isInitialized());
+		assertFalse(socialize.isInitialized());
 		
 		socialize.destroy();
 		
