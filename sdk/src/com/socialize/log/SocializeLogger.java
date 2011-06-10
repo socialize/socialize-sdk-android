@@ -34,8 +34,12 @@ public class SocializeLogger {
 
 	public static enum LogLevel {VERBOSE,DEBUG,INFO,WARN,ERROR}
 	
+	public static final int INITIALIZE_FAILED = 0;
+	public static final int NOT_INITIALIZED = 1;
+	
 	private LogLevel logLevel = LogLevel.INFO;
 	private String logTag = "Socialize";
+	private SocializeConfig config;
 	
 	public void init(SocializeConfig config) {
 		String ll = config.getProperties().getProperty(SocializeConfig.LOG_LEVEL);
@@ -49,6 +53,32 @@ public class SocializeLogger {
 		if(!StringUtils.isEmpty(tag)) {
 			logTag = tag;
 		}
+		
+		this.config = config;
+	}
+	
+	public void debug(int messageId) {
+		debug(getMessage(messageId));
+	}
+	
+	public void info(int messageId) {
+		info(getMessage(messageId));
+	}
+	
+	public void warn(int messageId) {
+		warn(getMessage(messageId));
+	}
+	
+	public void error(int messageId) {
+		error(getMessage(messageId));
+	}
+	
+	public void warn(int messageId, Throwable error) {
+		warn(getMessage(messageId), error);
+	}
+	
+	public void error(int messageId, Throwable error) {
+		error(getMessage(messageId), error);
 	}
 	
 	public void debug(String msg) {
@@ -91,5 +121,12 @@ public class SocializeLogger {
 		return logLevel.ordinal() <= LogLevel.WARN.ordinal();
 	}
 	
+	public String getMessage(int id) {
+		String msg =  this.config.getProperties().getProperty(SocializeConfig.LOG_MSG + id);
+		if(msg == null) {
+			msg = "";
+		}
+		return msg;
+	}
 	
 }

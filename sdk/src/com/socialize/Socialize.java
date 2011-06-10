@@ -22,14 +22,17 @@
 package com.socialize;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.socialize.android.ioc.AndroidIOC;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.listener.SocializeListener;
 import com.socialize.listener.comment.CommentAddListener;
+import com.socialize.listener.comment.CommentGetListener;
+import com.socialize.listener.comment.CommentListListener;
+import com.socialize.log.SocializeLogger;
 
 /**
  * @author Jason Polites
@@ -37,6 +40,7 @@ import com.socialize.listener.comment.CommentAddListener;
 public class Socialize {
 	
 	private SocializeService service;
+	private SocializeLogger logger;
 	private IOCContainer container;
 	private boolean initialized = false;
 	
@@ -59,10 +63,11 @@ public class Socialize {
 		try {
 			this.container = container;
 			this.service = container.getBean("socializeService");
+			this.logger = container.getBean("logger");
 			this.initialized = true;
 		}
 		catch (Exception e) {
-			Log.e("Socialize", "Failed to initialize Socialize!", e);
+			logger.error(SocializeLogger.INITIALIZE_FAILED, e);
 		}
 	}
 	
@@ -81,7 +86,6 @@ public class Socialize {
 	 * @param consumerKey The consumer key, obtained from registration as a Socialize Developer.
 	 * @param consumerSecret The consumer secret, obtained from registration as a Socialize Developer.
 	 * @param authListener The callback for authentication outcomes.
-	 * @return
 	 * @throws SocializeException 
 	 */
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener authListener) throws SocializeException {
@@ -91,23 +95,52 @@ public class Socialize {
 	/**
 	 * Adds a new comment and associates it with the entity described.
 	 * @param session The current socialize session.
-	 * @param entity The entity key.  Defined when first creating an entity.
+	 * @param entity The entity key.  Defined when first creating an entity, or created on the fly with this call.
 	 * @param comment The comment to add.
 	 * @param commentAddListener A listener to handle callbacks from the post.
 	 */
 	public void addComment(SocializeSession session, String entity, String comment, CommentAddListener commentAddListener) {
-		if(initialized) {
+		if(assertInitialized(commentAddListener)) {
 			service.addComment(session, entity, comment, commentAddListener);
 		}
-		else {
-			// TODO: externalize strings
-			if(commentAddListener != null) {
-				commentAddListener.onError(new SocializeException("Socialize was not initialized"));
-			}
-			Log.e("Socialize", "Socialize was not initialized");
+	}
+	
+	/**
+	 * Lists the comments associated with an entity.
+	 * @param session The current socialize session.
+	 * @param entity The entity key.  Defined when first creating an entity, or created on the fly with this call.
+	 * @param commentListListener A listener to handle callbacks from the post.
+	 */
+	public void listCommentsByEntity(SocializeSession session, String entity, CommentListListener commentListListener) {
+		if(assertInitialized(commentListListener)) {
+			service.listCommentsByEntity(session, entity, commentListListener);
 		}
 	}
-
+	
+	/**
+	 * Lists the comments by comment ID.
+	 * @param session The current socialize session.
+	 * @param commentListListener A listener to handle callbacks from the post.
+	 * @param ids Array of IDs corresponding to pre-existing comments.
+	 */
+	public void listCommentsById(SocializeSession session, CommentListListener commentListListener, int...ids) {
+		if(assertInitialized(commentListListener)) {
+			service.listCommentsById(session, commentListListener, ids);
+		}
+	}
+	
+	/**
+	 * Gets a single comment based on comment ID.
+	 * @param session The current socialize session.
+	 * @param id The ID of the comment.
+	 * @param commentGetListener A listener to handle callbacks from the post.
+	 */
+	public void getComment(SocializeSession session, int id, CommentGetListener commentGetListener) {
+		if(assertInitialized(commentGetListener)) {
+			service.getComment(session, id, commentGetListener);
+		}
+	}
+	
 	/**
 	 * Returns true if this Socialize instance has been initialized.
 	 * @return
@@ -115,4 +148,20 @@ public class Socialize {
 	public boolean isInitialized() {
 		return initialized;
 	}
+	
+	private boolean assertInitialized(SocializeListener listener) {
+		if(!initialized) {
+			if(listener != null) {
+				if(logger != null) {
+					listener.onError(new SocializeException(logger.getMessage(SocializeLogger.NOT_INITIALIZED)));
+				}
+				else {
+					listener.onError(new SocializeException("Not initialized"));
+				}
+			}
+			if(logger != null) logger.error(SocializeLogger.NOT_INITIALIZED);
+		}
+		return initialized;
+	}
+	
 }

@@ -24,7 +24,7 @@ package com.socialize;
 import android.content.Context;
 
 import com.socialize.api.SocializeSession;
-import com.socialize.api.comment.CommentApi;
+import com.socialize.api.entity.CommentApi;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.comment.CommentListener;
@@ -41,7 +41,7 @@ public class SocializeService {
 	private HttpClientFactory clientFactory;
 	private DeviceUtils deviceUtils;
 	private CommentApi commentApi;
-
+	
 	public SocializeService(Context context) {
 		super();
 		this.context = context;
@@ -50,11 +50,23 @@ public class SocializeService {
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener) throws SocializeException {
 		// All Api instances have authenticate, so we can just use any old one
 		String uuid = deviceUtils.getUDID(context);
-		commentApi.authenticateAsync(consumerKey, consumerSecret, uuid, listener);
+		commentApi.authenticate(consumerKey, consumerSecret, uuid, listener);
 	}
 
 	public void addComment(SocializeSession session, String key, String comment, CommentListener listener) {
 		commentApi.addComment(session, key, comment, listener);
+	}
+	
+	public void getComment(SocializeSession session, int id, CommentListener listener) {
+		commentApi.getComment(session, id, listener);
+	}
+	
+	public void listCommentsByEntity(SocializeSession session, String entityKey, CommentListener listener) {
+		commentApi.getCommentsByEntity(session, entityKey, listener);
+	}
+	
+	public void listCommentsById(SocializeSession session, CommentListener listener, int...ids) {
+		commentApi.getCommentsById(session, listener, ids);
 	}
 	
 	public void destroy() {
@@ -63,24 +75,12 @@ public class SocializeService {
 		}
 	}
 
-	public HttpClientFactory getClientFactory() {
-		return clientFactory;
-	}
-
 	public void setClientFactory(HttpClientFactory clientFactory) {
 		this.clientFactory = clientFactory;
 	}
 
-	public DeviceUtils getDeviceUtils() {
-		return deviceUtils;
-	}
-
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
 		this.deviceUtils = deviceUtils;
-	}
-
-	public CommentApi getCommentApi() {
-		return commentApi;
 	}
 
 	public void setCommentApi(CommentApi commentApi) {

@@ -21,32 +21,10 @@
  */
 package com.socialize.test;
 
-import java.util.Stack;
-
-import android.test.AndroidTestCase;
-
 /**
+ * This is just an empty test that needs to be in the root package so the 
+ * test running correctly picks up the tests in the project.  Seems to just be 
+ * and eclipse issue (why not have more of em right?)
  * @author Jason Polites
- *
  */
-public abstract class SocializeUnitTest extends AndroidTestCase {
-	private Stack<Object> bucket;
-	
-	@Override
-	protected void setUp() throws Exception {
-		bucket = new Stack<Object>();
-		super.setUp();
-	}
-	
-	protected void addResult(Object obj) {
-		bucket.push(obj);
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected <T extends Object> T getResult() {
-		if(!bucket.isEmpty()) {
-			return (T) bucket.pop();
-		}
-		return null;
-	}
-}
+public class EmptyTest_DO_NOT_DELETE extends SocializeUnitTest {}

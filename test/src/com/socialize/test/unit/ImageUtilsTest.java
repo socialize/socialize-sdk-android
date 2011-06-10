@@ -19,34 +19,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test;
+package com.socialize.test.unit;
 
-import java.util.Stack;
+import java.io.IOException;
 
-import android.test.AndroidTestCase;
+import com.socialize.test.SocializeActivityTest;
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class SocializeUnitTest extends AndroidTestCase {
-	private Stack<Object> bucket;
-	
-	@Override
-	protected void setUp() throws Exception {
-		bucket = new Stack<Object>();
-		super.setUp();
+public class ImageUtilsTest extends SocializeActivityTest {
+
+	public void testImageUtilsEncoding() throws IOException {
+//		Bitmap real = null;
+//		Bitmap decoded = null;
+//		try {
+//			real = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.android);
+//			
+//			ImageUtils utils = new ImageUtils();
+//			String encoded = utils.encode(real);
+//			
+//			decoded = utils.decode(encoded);
+//			
+//			assertEquals(real.getWidth(), decoded.getWidth());	
+//			assertEquals(real.getHeight(), decoded.getHeight());
+//			
+//			int width = real.getWidth();
+//			int height = real.getHeight();
+//			
+//			for (int x = 0; x < width; x++) {
+//				for (int y = 0; y < height; y++) {
+//					assertEquals(real.getPixel(x, y), decoded.getPixel(x, y));
+//				}
+//			}
+//		}
+//		finally {
+//			if(real != null) real.recycle();
+//			if(decoded != null) decoded.recycle();
+//		}
+//		
+
+		
 	}
 	
-	protected void addResult(Object obj) {
-		bucket.push(obj);
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected <T extends Object> T getResult() {
-		if(!bucket.isEmpty()) {
-			return (T) bucket.pop();
-		}
-		return null;
-	}
 }

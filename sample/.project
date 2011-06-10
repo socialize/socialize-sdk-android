@@ -37,11 +37,6 @@
 			<locationURI>_android_android_ioc_37cf739f/src</locationURI>
 		</link>
 		<link>
-			<name>facebook-api_src</name>
-			<type>2</type>
-			<locationURI>_android_facebook_api_ea40b693/src</locationURI>
-		</link>
-		<link>
 			<name>sdk_src</name>
 			<type>2</type>
 			<locationURI>_android_sdk_1bc3a/src</locationURI>

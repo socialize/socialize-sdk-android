@@ -26,7 +26,7 @@ import com.socialize.android.ioc.AndroidIOC;
 import com.socialize.api.DefaultSocializeRequestFactory;
 import com.socialize.api.DefaultSocializeResponseFactory;
 import com.socialize.api.DefaultSocializeSessionFactory;
-import com.socialize.api.comment.CommentApi;
+import com.socialize.api.entity.CommentApi;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.factory.CommentFactory;
 import com.socialize.entity.factory.FactoryService;

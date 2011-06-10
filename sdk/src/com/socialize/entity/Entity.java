@@ -72,6 +72,15 @@ public class Entity extends SocializeObject {
 		this.name = name;
 	}
 
-
+	/**
+	 * Convenience method to create a new Entity based on a key only.
+	 * @param key
+	 * @return
+	 */
+	public static Entity fromkey(String key) {
+		Entity e = new Entity();
+		e.setKey(key);
+		return e;
+	}
 
 }

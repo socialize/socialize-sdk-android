@@ -80,11 +80,9 @@
 		<constructor-arg ref="commentRequestFactory"/>
 		<constructor-arg ref="jsonParser"/>
 		<constructor-arg ref="httpUtils"/>
-		
-		<property name="logger" ref="logger"/>
 	</bean>
 	
-	<bean id="commentApi" class="com.socialize.api.comment.CommentApi" extends="socializeApi">
+	<bean id="commentApi" class="com.socialize.api.entity.CommentApi" extends="socializeApi">
 		<constructor-arg ref="commentProvider"/>
 	</bean>
 	

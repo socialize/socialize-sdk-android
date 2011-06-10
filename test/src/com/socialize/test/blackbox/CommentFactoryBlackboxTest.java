@@ -19,34 +19,60 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test;
+package com.socialize.test.blackbox;
 
-import java.util.Stack;
-
-import android.test.AndroidTestCase;
+import com.socialize.entity.factory.CommentFactory;
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class SocializeUnitTest extends AndroidTestCase {
-	private Stack<Object> bucket;
+public class CommentFactoryBlackboxTest extends AbstractFactoryBlackBoxTest {
+
 	
+	CommentFactory factory = null;
 	@Override
 	protected void setUp() throws Exception {
-		bucket = new Stack<Object>();
 		super.setUp();
+		factory = new CommentFactory();
+	}
+
+	/**
+	 * [
+		    { 
+		        'entity': 'http://www.example.com/interesting-story/',
+		        'text': 'this was a great story'
+		    },
+		    {
+		        'entity': {
+		            'key': 'http://www.example.com/another-story/',
+		            'name': 'Another Interesting Story'
+		        }
+		    },
+		    { 
+		        'entity': 'http://www.example.com/interesting-story/',
+		        'text': 'I did not think the story was that great'
+		    },
+		]
+	 */
+	public void testCreateRequest() {
+		//Comment comment = new Comment();
 	}
 	
-	protected void addResult(Object obj) {
-		bucket.push(obj);
+	public void testListByIdRequest() {
+		
 	}
 	
-	@SuppressWarnings("unchecked")
-	protected <T extends Object> T getResult() {
-		if(!bucket.isEmpty()) {
-			return (T) bucket.pop();
-		}
-		return null;
+	public void testListByEntityRequest(){
+		
 	}
+	
+	public void testListResponse(){
+		
+	}
+	
+	public void testGetResponse(){
+		
+	}
+	
 }

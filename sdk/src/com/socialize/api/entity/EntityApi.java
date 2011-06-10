@@ -19,34 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test;
+package com.socialize.api.entity;
 
-import java.util.Stack;
-
-import android.test.AndroidTestCase;
+import com.socialize.api.SocializeApi;
+import com.socialize.entity.SocializeObject;
+import com.socialize.listener.SocializeAuthListener;
+import com.socialize.provider.SocializeProvider;
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class SocializeUnitTest extends AndroidTestCase {
-	private Stack<Object> bucket;
+public abstract class EntityApi<T extends SocializeObject> extends SocializeApi<T, SocializeProvider<T>>{
 	
-	@Override
-	protected void setUp() throws Exception {
-		bucket = new Stack<Object>();
-		super.setUp();
+	public EntityApi(SocializeProvider<T> provider) {
+		super(provider);
 	}
-	
-	protected void addResult(Object obj) {
-		bucket.push(obj);
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected <T extends Object> T getResult() {
-		if(!bucket.isEmpty()) {
-			return (T) bucket.pop();
-		}
-		return null;
+
+	public void authenticate(String key, String secret, String uuid, SocializeAuthListener listener) {
+		super.authenticateAsync(key, secret, uuid, listener);
 	}
 }

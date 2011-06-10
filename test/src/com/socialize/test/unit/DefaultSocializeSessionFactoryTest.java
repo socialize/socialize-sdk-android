@@ -19,34 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test;
+package com.socialize.test.unit;
 
-import java.util.Stack;
-
-import android.test.AndroidTestCase;
+import com.socialize.api.DefaultSocializeSessionFactory;
+import com.socialize.api.WritableSession;
+import com.socialize.test.SocializeUnitTest;
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class SocializeUnitTest extends AndroidTestCase {
-	private Stack<Object> bucket;
-	
-	@Override
-	protected void setUp() throws Exception {
-		bucket = new Stack<Object>();
-		super.setUp();
+public class DefaultSocializeSessionFactoryTest extends SocializeUnitTest {
+
+	public void testSessionFactory() {
+		DefaultSocializeSessionFactory factory = new DefaultSocializeSessionFactory();
+		String key= "foo", secret="bar";
+		WritableSession session = factory.create(key, secret);
+		assertNotNull(session);
+		assertEquals(key, session.getConsumerKey());
+		assertEquals(secret, session.getConsumerSecret());
 	}
 	
-	protected void addResult(Object obj) {
-		bucket.push(obj);
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected <T extends Object> T getResult() {
-		if(!bucket.isEmpty()) {
-			return (T) bucket.pop();
-		}
-		return null;
-	}
 }
