@@ -29,10 +29,10 @@ package com.socialize.entity;
 public class Entity extends SocializeObject {
 
 	private String key;
-	private int views;
-	private int likes;
-	private int comments;
-	private int shares;
+	private Integer views;
+	private Integer likes;
+	private Integer comments;
+	private Integer shares;
 	private String name;
 	
 	public String getKey() {
@@ -41,28 +41,28 @@ public class Entity extends SocializeObject {
 	public void setKey(String key) {
 		this.key = key;
 	}
-	public int getViews() {
+	public Integer getViews() {
 		return views;
 	}
-	public void setViews(int views) {
+	public void setViews(Integer views) {
 		this.views = views;
 	}
-	public int getLikes() {
+	public Integer getLikes() {
 		return likes;
 	}
-	public void setLikes(int likes) {
+	public void setLikes(Integer likes) {
 		this.likes = likes;
 	}
-	public int getComments() {
+	public Integer getComments() {
 		return comments;
 	}
-	public void setComments(int comments) {
+	public void setComments(Integer comments) {
 		this.comments = comments;
 	}
-	public int getShares() {
+	public Integer getShares() {
 		return shares;
 	}
-	public void setShares(int shares) {
+	public void setShares(Integer shares) {
 		this.shares = shares;
 	}
 	public String getName() {

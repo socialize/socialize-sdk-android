@@ -28,6 +28,8 @@ import com.socialize.entity.Application;
 import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
+import com.socialize.log.SocializeLogger;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -37,29 +39,59 @@ import com.socialize.entity.User;
 public abstract class SocializeActionFactory<T extends SocializeAction> extends SocializeObjectFactory<T> {
 	
 	// Injected
-	private FactoryService factoryService;
-
+	protected SocializeLogger logger;
+	private ApplicationFactory applicationFactory;
+	private UserFactory userFactory;
+	private EntityFactory entityFactory;
+	
 	@Override
 	protected void toJSON(T from, JSONObject to) throws JSONException {
 		try {
-			SocializeObjectFactory<Application> applicationFactory = factoryService.getFactoryFor(Application.class);
-			SocializeObjectFactory<User> userFactory = factoryService.getFactoryFor(User.class);
-			SocializeObjectFactory<Entity> entityFactory = factoryService.getFactoryFor(Entity.class);
+			Entity entityObject = from.getEntity();
+			String entityKey = from.getEntityKey();
+			Application appObject = from.getApplication();
+			User userObject = from.getUser();
+			Float lat = from.getLat();
+			Float lon = from.getLon();
+			Long date = from.getDate();
 			
-			JSONObject application = applicationFactory.toJSON(from.getApplication());
-			JSONObject user = userFactory.toJSON(from.getUser());
-			JSONObject entity = entityFactory.toJSON(from.getEntity());
+			if(entityObject != null) {
+				JSONObject entity = entityFactory.toJSON(entityObject);
+				to.put("entity", entity);
+			}
+			else if(!StringUtils.isEmpty(entityKey)) {
+				to.put("entity", entityKey);
+			}
 			
-			to.put("application", application);
-			to.put("user", user);
-			to.put("entity", entity);
+			if(appObject != null) {
+				JSONObject application = applicationFactory.toJSON(appObject);
+				to.put("application", application);
+			}
 			
-			to.put("lat", from.getLat());
-			to.put("lon", from.getLon());
-			to.put("date", UTC_FORMAT.format(from.getDate()));
+			if(userObject != null) {
+				JSONObject user = userFactory.toJSON(userObject);
+				to.put("user", user);
+			}
+			
+			if(lat != null) {
+				to.put("lat", lat);
+			}
+			
+			if(lon != null) {
+				to.put("lon", lon);
+			}
+			
+			if(date != null) {
+				to.put("date", UTC_FORMAT.format(date));
+			}
 			
 		}
 		catch (Exception e) {
+			
+			if(e instanceof NullPointerException) {
+				throw new JSONException("NullPointerException at toJSON");
+			}
+			
 			throw new JSONException(e.getMessage());
 		}
 		
@@ -70,44 +102,82 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 	protected void fromJSON(JSONObject from, T to) throws JSONException {
 
 		try {
-			SocializeObjectFactory<Application> applicationFactory = factoryService.getFactoryFor(Application.class);
-			SocializeObjectFactory<User> userFactory = factoryService.getFactoryFor(User.class);
-			SocializeObjectFactory<Entity> entityFactory = factoryService.getFactoryFor(Entity.class);
 			
-			JSONObject application = from.getJSONObject("application");
-			JSONObject user = from.getJSONObject("user");
-			JSONObject entity = from.getJSONObject("entity");
-			
-			if(application != null) {
-				to.setApplication(applicationFactory.fromJSON(application));
+			if(from.has("application")) {
+				JSONObject application = from.getJSONObject("application");
+				if(application != null) {
+					
+					to.setApplication(applicationFactory.fromJSON(application));
+				}
+			}
+
+			if(from.has("user")) {
+				JSONObject user = from.getJSONObject("user");
+				if(user != null) {
+					to.setUser(userFactory.fromJSON(user));
+				}
 			}
 			
-			if(user != null) {
-				to.setUser(userFactory.fromJSON(user));
+			if(from.has("entity")) {
+				JSONObject entity = from.getJSONObject("entity");
+				if(entity != null) {
+					to.setEntity(entityFactory.fromJSON(entity));
+				}
+			}
+
+			if(from.has("lat")) {
+				to.setLat((float)from.getDouble("lat"));
 			}
 			
-			if(entity != null) {
-				to.setEntity(entityFactory.fromJSON(entity));
+			if(from.has("lon")) {
+				to.setLon((float)from.getDouble("lon"));
 			}
 			
-			to.setLat((float)from.getDouble("lat"));
-			to.setLon((float)from.getDouble("lon"));
-			to.setDate(UTC_FORMAT.parse(from.getString("date")).getTime());
-			
+			if(from.has("date")) {
+				to.setDate(UTC_FORMAT.parse(from.getString("date")).getTime());
+			}
 		}
 		catch (Exception e) {
+			if(e instanceof NullPointerException) {
+				throw new JSONException("NullPointerException at fromJSON");
+			}
+			
 			throw new JSONException(e.getMessage());
 		}
 		
 		postFromJSON(from, to);
 	}
 	
-	public FactoryService getFactoryService() {
-		return factoryService;
+	public SocializeLogger getLogger() {
+		return logger;
 	}
 
-	public void setFactoryService(FactoryService factoryService) {
-		this.factoryService = factoryService;
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
+
+	public ApplicationFactory getApplicationFactory() {
+		return applicationFactory;
+	}
+
+	public void setApplicationFactory(ApplicationFactory applicationFactory) {
+		this.applicationFactory = applicationFactory;
+	}
+
+	public UserFactory getUserFactory() {
+		return userFactory;
+	}
+
+	public void setUserFactory(UserFactory userFactory) {
+		this.userFactory = userFactory;
+	}
+
+	public EntityFactory getEntityFactory() {
+		return entityFactory;
+	}
+
+	public void setEntityFactory(EntityFactory entityFactory) {
+		this.entityFactory = entityFactory;
 	}
 
 	protected abstract void postToJSON(T from, JSONObject to) throws JSONException;

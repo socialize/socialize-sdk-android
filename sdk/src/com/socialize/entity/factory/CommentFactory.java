@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.socialize.entity.Comment;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -34,12 +35,27 @@ public class CommentFactory extends SocializeActionFactory<Comment> {
 	
 	@Override
 	protected void postFromJSON(JSONObject object, Comment comment) throws JSONException {
-		comment.setText(object.getString("text"));
+		final String attr = "text";
+		if(object.has(attr)) {
+			comment.setText(object.getString(attr));
+		}
+		else {
+			if(logger != null && logger.isWarnEnabled()) {
+				logger.warn("Attribute [" +
+						attr +
+						"] not found in [" +
+						comment.getClass().getSimpleName() +
+						"]");
+			}
+		}
 	}
 
 	@Override
 	protected void postToJSON(Comment comment, JSONObject object) throws JSONException {
-		object.put("text", comment.getText());
+		String text = comment.getText();
+		if(!StringUtils.isEmpty( text )) {
+			object.put("text", text);
+		}
 	}
 
 	@Override

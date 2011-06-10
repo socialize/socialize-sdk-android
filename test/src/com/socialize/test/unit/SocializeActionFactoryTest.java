@@ -66,7 +66,6 @@ public class SocializeActionFactoryTest extends AbstractSocializeActionFactoryTe
 
 	@Override
 	protected void doFromJSONVerify() {
-		AndroidMock.verify(factoryService);
 		AndroidMock.verify(appFactoryMock);
 		AndroidMock.verify(userFactoryMock);
 		AndroidMock.verify(entityFactoryMock);
@@ -81,7 +80,6 @@ public class SocializeActionFactoryTest extends AbstractSocializeActionFactoryTe
 
 	@Override
 	protected void doToJSONVerify() {
-		AndroidMock.verify(factoryService);
 		AndroidMock.verify(appFactoryMock);
 		AndroidMock.verify(userFactoryMock);
 		AndroidMock.verify(entityFactoryMock);

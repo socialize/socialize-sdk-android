@@ -27,7 +27,6 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeObject;
-import com.socialize.entity.factory.FactoryService;
 import com.socialize.entity.factory.SocializeObjectFactory;
 import com.socialize.test.SocializeUnitTest;
 
@@ -37,25 +36,16 @@ import com.socialize.test.SocializeUnitTest;
  */
 public abstract class AbstractSocializeObjectFactoryTest<T extends SocializeObject, F extends SocializeObjectFactory<T>> extends SocializeUnitTest {
 
-	protected FactoryService factoryService;
-//	protected SocializeConfig config;
 	protected F factory;
 	protected JSONObject json;
-	protected int id = 9999;
+	protected Integer id = new Integer(9999);
 	protected T object;
 	
-	@UsesMocks({FactoryService.class, SocializeConfig.class, JSONObject.class})
+	@UsesMocks({SocializeConfig.class, JSONObject.class})
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		
-//		config = AndroidMock.createMock(SocializeConfig.class);
-		
-//		AndroidMock.expect(config.getProperties()).andReturn(null);
-		
-//		AndroidMock.replay(config);
-		
-		factoryService = AndroidMock.createMock(FactoryService.class);
 		json = AndroidMock.createNiceMock(JSONObject.class);
 		object = AndroidMock.createNiceMock(getObjectClass());
 		
@@ -70,14 +60,11 @@ public abstract class AbstractSocializeObjectFactoryTest<T extends SocializeObje
 		
 		setupToJSONExpectations();
 		
-		AndroidMock.replay(factoryService);
 		AndroidMock.replay(json);
 		AndroidMock.replay(object);
 		
 		factory.toJSON(object);
 		
-//		AndroidMock.verify(config);
-		AndroidMock.verify(factoryService);
 		AndroidMock.verify(json);
 		AndroidMock.verify(object);
 		
@@ -87,19 +74,17 @@ public abstract class AbstractSocializeObjectFactoryTest<T extends SocializeObje
 	
 	public void testFromJSON() throws Exception {
 		
+		AndroidMock.expect(json.has("id")).andReturn(true);
 		AndroidMock.expect(json.getInt("id")).andReturn(id);
 		object.setId(id);
 		
 		setupFromJSONExpectations();
 		
-		AndroidMock.replay(factoryService);
 		AndroidMock.replay(json);
 		AndroidMock.replay(object);
 		
 		factory.fromJSON(json);
 		
-//		AndroidMock.verify(config);
-		AndroidMock.verify(factoryService);
 		AndroidMock.verify(json);
 		AndroidMock.verify(object);
 		

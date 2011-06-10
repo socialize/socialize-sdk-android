@@ -39,11 +39,11 @@ public class EntityAccessorTests extends SocializeUnitTest {
 		
 		Stats stats = new Stats();
 		
-		int comments = 1;
-		int id = 2;
-		int likes = 3;
-		int shares = 4;
-		int views = 5;
+		Integer comments = 1;
+		Integer id = 2;
+		Integer likes = 3;
+		Integer shares = 4;
+		Integer views = 5;
 		
 		stats.setComments(comments);
 		stats.setId(id);
@@ -111,9 +111,9 @@ public class EntityAccessorTests extends SocializeUnitTest {
 		Entity entity = new Entity();
 		User user = new User();
 		
-		long date = 123456;
-		int id = 69;
-		float lat = 1.2f, lon = 3.4f;
+		Long date = 123456l;
+		Integer id = 69;
+		Float lat = 1.2f, lon = 3.4f;
 		
 		action.setApplication(app);
 		action.setDate(date);
@@ -140,11 +140,11 @@ public class EntityAccessorTests extends SocializeUnitTest {
 		String name = "foo";
 		String key = "bar";
 		
-		int comments = 1;
-		int likes = 2;
-		int id = 3;
-		int shares = 4;
-		int views = 5;
+		Integer comments = 1;
+		Integer likes = 2;
+		Integer id = 3;
+		Integer shares = 4;
+		Integer views = 5;
 		
 		entity.setComments(comments );
 		entity.setId(id);

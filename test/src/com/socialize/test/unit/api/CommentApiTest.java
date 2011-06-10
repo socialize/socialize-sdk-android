@@ -69,8 +69,8 @@ public class CommentApiTest extends SocializeUnitTest {
 		Comment result = (Comment) getResult();
 		assertNotNull(result);
 		assertEquals(comment, result.getText());
-		assertNotNull(result.getEntity());
-		assertEquals(key, result.getEntity().getKey());
+		assertNotNull(result.getEntityKey());
+		assertEquals(key, result.getEntityKey());
 	}
 	
 	public void testGetCommentsByEntity() {

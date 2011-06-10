@@ -23,7 +23,6 @@ package com.socialize.api.entity;
 
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Comment;
-import com.socialize.entity.Entity;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.provider.SocializeProvider;
 
@@ -42,7 +41,7 @@ public class CommentApi extends EntityApi<Comment> {
 	public void addComment(SocializeSession session, String key, String comment, CommentListener listener) {
 		Comment c = new Comment();
 		c.setText(comment);
-		c.setEntity(Entity.fromkey(key));
+		c.setEntityKey(key);
 		putAsync(session, ENDPOINT, c, listener);
 	}
 	

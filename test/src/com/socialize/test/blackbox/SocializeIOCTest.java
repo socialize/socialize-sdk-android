@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test.integration;
+package com.socialize.test.blackbox;
 
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.AndroidIOC;
@@ -29,7 +29,6 @@ import com.socialize.api.DefaultSocializeSessionFactory;
 import com.socialize.api.entity.CommentApi;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.factory.CommentFactory;
-import com.socialize.entity.factory.FactoryService;
 import com.socialize.entity.factory.UserFactory;
 import com.socialize.log.SocializeLogger;
 import com.socialize.net.DefaultHttpClientFactory;
@@ -67,7 +66,6 @@ public class SocializeIOCTest extends SocializeActivityTest {
 		checkBeanType(ioc, "jsonParser", JSONParser.class);
 		checkBeanType(ioc, "config", SocializeConfig.class);
 		checkBeanType(ioc, "logger", SocializeLogger.class);
-		checkBeanType(ioc, "factoryService", FactoryService.class);
 		checkBeanType(ioc, "userFactory", UserFactory.class);
 		checkBeanType(ioc, "httpClientFactory", DefaultHttpClientFactory.class);
 		checkBeanType(ioc, "sessionFactory", DefaultSocializeSessionFactory.class);
@@ -83,17 +81,12 @@ public class SocializeIOCTest extends SocializeActivityTest {
 		
 		// Check each bean
 		assertConfig((SocializeConfig) ioc.getBean("config"));
-		assertFactoryService((FactoryService) ioc.getBean("factoryService"));
 	}
 	
 	private void assertConfig(SocializeConfig config) {
 		assertNotNull(config.getProperties());
 	}
 	
-	private void assertFactoryService(FactoryService service) {
-		assertNotNull(service.getFactories());
-	}
-
 	private void checkBeanType(AndroidIOC ioc, String name, Class<?> clazz) {
 		Object bean = ioc.getBean(name);
 		assertNotNull(bean);

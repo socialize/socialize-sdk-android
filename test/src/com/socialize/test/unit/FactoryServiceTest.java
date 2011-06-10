@@ -21,50 +21,41 @@
  */
 package com.socialize.test.unit;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.socialize.entity.SocializeObject;
-import com.socialize.entity.factory.FactoryService;
-import com.socialize.entity.factory.SocializeObjectFactory;
 import com.socialize.test.SocializeUnitTest;
 
 /**
  * @author Jason Polites
- *
+ * @deprecated
  */
 public class FactoryServiceTest extends SocializeUnitTest {
 	
-	public void testFactoryService() {
-		Map<String, SocializeObjectFactory<?>> factories = new HashMap<String, SocializeObjectFactory<?>>();
-		
-		SocializeObjectFactory<SocializeObject> factory = new SocializeObjectFactory<SocializeObject>() {
-			
-			@Override
-			protected void toJSON(SocializeObject from, JSONObject to) throws JSONException {}
-			
-			@Override
-			public SocializeObject instantiateObject() {
-				return null;
-			}
-			
-			@Override
-			protected void fromJSON(JSONObject from, SocializeObject to) throws JSONException {}
-		};
-		
-		factories.put(SocializeObject.class.getName(), factory);
-		
-		FactoryService service = new FactoryService();
-		service.setFactories(factories);
-		
-		SocializeObjectFactory<SocializeObject> factoryReturned = service.getFactoryFor(SocializeObject.class);
-		
-		assertNotNull(factoryReturned);
-		assertSame(factory, factoryReturned);
-		assertNotNull(service.getFactories());
-		assertSame(factories, service.getFactories());
-	}
+//	public void testFactoryService() {
+//		Map<String, SocializeObjectFactory<?>> factories = new HashMap<String, SocializeObjectFactory<?>>();
+//		
+//		SocializeObjectFactory<SocializeObject> factory = new SocializeObjectFactory<SocializeObject>() {
+//			
+//			@Override
+//			protected void toJSON(SocializeObject from, JSONObject to) throws JSONException {}
+//			
+//			@Override
+//			public SocializeObject instantiateObject() {
+//				return null;
+//			}
+//			
+//			@Override
+//			protected void fromJSON(JSONObject from, SocializeObject to) throws JSONException {}
+//		};
+//		
+//		factories.put(SocializeObject.class.getName(), factory);
+//		
+//		FactoryService service = new FactoryService();
+//		service.setFactories(factories);
+//		
+//		SocializeObjectFactory<SocializeObject> factoryReturned = service.getFactoryFor(SocializeObject.class);
+//		
+//		assertNotNull(factoryReturned);
+//		assertSame(factory, factoryReturned);
+//		assertNotNull(service.getFactories());
+//		assertSame(factories, service.getFactories());
+//	}
 }

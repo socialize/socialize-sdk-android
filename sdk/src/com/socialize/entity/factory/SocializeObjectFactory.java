@@ -56,15 +56,24 @@ public abstract class SocializeObjectFactory<T extends SocializeObject> {
 
 	public JSONObject toJSON(T object) throws JSONException {
 		JSONObject json = instantiateJSON();
-		json.put("id", object.getId());
+		
+		Integer id = object.getId();
+		
+		if(id != null) {
+			json.put("id", id);
+		}
+		
 		toJSON(object, json);
+		
 		return json;
 	}
 
 	public T fromJSON(JSONObject json) throws JSONException {
 		T object = instantiateObject();
 		
-		object.setId(json.getInt("id"));
+		if(json.has("id")) {
+			object.setId(json.getInt("id"));
+		}
 		
 		fromJSON(json, object);
 		

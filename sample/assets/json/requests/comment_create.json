@@ -7,10 +7,11 @@
         'entity': {
             'key': 'http://www.example.com/another-story/',
             'name': 'Another Interesting Story'
-        }
+        },
+        'text': 'Another comment'
     },
     { 
         'entity': 'http://www.example.com/interesting-story/',
         'text': 'I did not think the story was that great'
-    },
+    }
 ]

@@ -27,7 +27,7 @@ import com.socialize.entity.SocializeObject;
 
 /**
  * @author Jason Polites
- *
+ * @deprecated No need to have a cache for this.  We can just inject the factory using IOC.
  */
 public class FactoryService {
 

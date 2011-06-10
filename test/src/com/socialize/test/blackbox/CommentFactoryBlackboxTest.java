@@ -21,7 +21,30 @@
  */
 package com.socialize.test.blackbox;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpEntityEnclosingRequest;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.json.JSONArray;
+
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.api.DefaultSocializeRequestFactory;
+import com.socialize.api.SocializeSession;
+import com.socialize.entity.Comment;
+import com.socialize.entity.Entity;
+import com.socialize.entity.factory.ApplicationFactory;
 import com.socialize.entity.factory.CommentFactory;
+import com.socialize.entity.factory.EntityFactory;
+import com.socialize.entity.factory.UserFactory;
+import com.socialize.error.SocializeException;
+import com.socialize.oauth.OAuthRequestSigner;
+import com.socialize.test.util.JsonAssert;
 
 /**
  * @author Jason Polites
@@ -30,33 +53,79 @@ import com.socialize.entity.factory.CommentFactory;
 public class CommentFactoryBlackboxTest extends AbstractFactoryBlackBoxTest {
 
 	
-	CommentFactory factory = null;
+	CommentFactory commentFactory = null;
+	DefaultSocializeRequestFactory<Comment> requestFactory;
+	
+	
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		factory = new CommentFactory();
+		commentFactory = new CommentFactory();
+		commentFactory.setApplicationFactory(new ApplicationFactory());
+		commentFactory.setEntityFactory(new EntityFactory());
+		commentFactory.setUserFactory(new UserFactory());
+		
+		requestFactory = new DefaultSocializeRequestFactory<Comment>(new OAuthRequestSigner() {
+			@Override
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+				return request;
+			}
+		}, commentFactory);
 	}
-
-	/**
-	 * [
-		    { 
-		        'entity': 'http://www.example.com/interesting-story/',
-		        'text': 'this was a great story'
-		    },
-		    {
-		        'entity': {
-		            'key': 'http://www.example.com/another-story/',
-		            'name': 'Another Interesting Story'
-		        }
-		    },
-		    { 
-		        'entity': 'http://www.example.com/interesting-story/',
-		        'text': 'I did not think the story was that great'
-		    },
-		]
-	 */
-	public void testCreateRequest() {
-		//Comment comment = new Comment();
+	
+	@UsesMocks ({SocializeSession.class})
+	public void testCreateRequest() throws Exception {
+		
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		final String endPoint = "foobar";
+		
+		Comment comment0 = new Comment();
+		Comment comment1 = new Comment();
+		Comment comment2 = new Comment();
+		
+		comment0.setEntityKey("http://www.example.com/interesting-story/");
+		comment0.setText("this was a great story");
+		
+		
+		Entity entity0 = new Entity();
+		entity0.setKey("http://www.example.com/another-story/");
+		entity0.setName("Another Interesting Story");
+		
+		comment1.setEntity(entity0);
+		comment1.setText("Another comment");
+		
+		comment2.setEntityKey("http://www.example.com/interesting-story/");
+		comment2.setText("I did not think the story was that great");
+		
+		List<Comment> objects = new ArrayList<Comment>();
+		objects.add(comment0);
+		objects.add(comment1);
+		objects.add(comment2);
+		
+		HttpUriRequest request = requestFactory.getPostRequest(session, endPoint, objects);
+		
+		assertTrue(request instanceof HttpEntityEnclosingRequest);
+		
+		HttpEntityEnclosingRequest eReq = (HttpEntityEnclosingRequest) request;
+		
+		HttpEntity entity = eReq.getEntity();
+		
+		assertNotNull(entity);
+		
+		assertTrue(entity instanceof UrlEncodedFormEntity);
+		
+		List<NameValuePair> parsed = URLEncodedUtils.parse(entity);
+		
+		assertEquals(1, parsed.size());
+		
+		NameValuePair nvp = parsed.get(0);
+		
+		assertEquals("payload", nvp.getName());
+		
+		JSONArray actual = new JSONArray(nvp.getValue());
+		JSONArray expected = new JSONArray(getSampleJSON(JSON_REQUEST_COMMENT_CREATE));
+		
+		JsonAssert.assertJsonArrayEquals(expected, actual);
 	}
 	
 	public void testListByIdRequest() {

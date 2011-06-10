@@ -19,42 +19,60 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity;
+package com.socialize.entity.factory;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.socialize.entity.Entity;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
  *
  */
-public class Stats extends SocializeObject {
+public class EntityFactory extends SocializeObjectFactory<Entity> {
+	
+	public EntityFactory() {
+		super();
+	}
 
-	private Integer views;
-	private Integer likes;
-	private Integer comments;
-	private Integer shares;
-	
-	public Integer getViews() {
-		return views;
+	@Override
+	public Entity instantiateObject() {
+		return new Entity();
 	}
-	public void setViews(Integer views) {
-		this.views = views;
+
+	@Override
+	protected void fromJSON(JSONObject object, Entity entry) throws JSONException {
+		
+		if(object.has("name")) {
+			entry.setName(object.getString("name"));
+		}
+		
+		if(object.has("key")) {
+			entry.setKey(object.getString("key"));
+		}
+		
+		if(object.has("likes")) {
+			entry.setLikes(object.getInt("likes"));
+		}
+		
+		if(object.has("share")) {
+			entry.setShares(object.getInt("share"));
+		}
+		
+		if(object.has("views")) {
+			entry.setViews(object.getInt("views"));
+		}
 	}
-	public Integer getLikes() {
-		return likes;
+
+	@Override
+	protected void toJSON(Entity entry, JSONObject object) throws JSONException {
+		if(!StringUtils.isEmpty(entry.getName())) {
+			object.put("name", entry.getName());
+		}
+		if(!StringUtils.isEmpty(entry.getKey())) {
+			object.put("key", entry.getKey());
+		}
 	}
-	public void setLikes(Integer likes) {
-		this.likes = likes;
-	}
-	public Integer getComments() {
-		return comments;
-	}
-	public void setComments(Integer comments) {
-		this.comments = comments;
-	}
-	public Integer getShares() {
-		return shares;
-	}
-	public void setShares(Integer shares) {
-		this.shares = shares;
-	}
-	
 }
