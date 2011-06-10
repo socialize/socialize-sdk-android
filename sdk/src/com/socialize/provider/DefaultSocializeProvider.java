@@ -23,6 +23,7 @@ package com.socialize.provider;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -161,7 +162,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		HttpUriRequest request = requestFactory.getListRequest(session, endpoint, key, ids);
 		return doListTypeRequest(request);
 	}
-
+	
 	@Override
 	public List<T> put(SocializeSession session, String endpoint, T object) throws SocializeException {
 		endpoint = prepareEndpoint(endpoint);
@@ -170,9 +171,24 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	}
 
 	@Override
+	public List<T> put(SocializeSession session, String endpoint, Collection<T> objects) throws SocializeException {
+		endpoint = prepareEndpoint(endpoint);
+		HttpUriRequest request = requestFactory.getPutRequest(session, endpoint, objects);
+		return doListTypeRequest(request);
+	}
+	
+	@Override
 	public List<T> post(SocializeSession session, String endpoint, T object) throws SocializeException {
 		endpoint = prepareEndpoint(endpoint);
 		HttpUriRequest request = requestFactory.getPostRequest(session, endpoint, object);
+		return doListTypeRequest(request);
+	}
+
+
+	@Override
+	public List<T> post(SocializeSession session, String endpoint, Collection<T> objects) throws SocializeException {
+		endpoint = prepareEndpoint(endpoint);
+		HttpUriRequest request = requestFactory.getPostRequest(session, endpoint, objects);
 		return doListTypeRequest(request);
 	}
 	
@@ -216,40 +232,20 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		return objectFactory;
 	}
 
-	public void setObjectFactory(SocializeObjectFactory<T> factory) {
-		this.objectFactory = factory;
-	}
-
 	public HttpClientFactory getClientFactory() {
 		return clientFactory;
 	}
 
-	public void setClientFactory(HttpClientFactory clientFactory) {
-		this.clientFactory = clientFactory;
-	}
-	
 	public SocializeObjectFactory<User> getUserFactory() {
 		return userFactory;
 	}
 	
-	public void setUserFactory(SocializeObjectFactory<User> userFactory) {
-		this.userFactory = userFactory;
-	}
-
 	public SocializeSessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
 
-	public void setSessionFactory(SocializeSessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
-
 	public JSONParser getJsonParser() {
 		return jsonParser;
-	}
-
-	public void setJsonParser(JSONParser jsonParser) {
-		this.jsonParser = jsonParser;
 	}
 
 	public SocializeLogger getLogger() {
@@ -258,14 +254,6 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
-	}
-	
-	public HttpUtils getHttpUtils() {
-		return httpUtils;
-	}
-
-	public void setHttpUtils(HttpUtils httpUtils) {
-		this.httpUtils = httpUtils;
 	}
 
 	private final String prepareEndpoint(String endpoint) {

@@ -34,12 +34,12 @@ public class CommentFactory extends SocializeActionFactory<Comment> {
 	
 	@Override
 	protected void postFromJSON(JSONObject object, Comment comment) throws JSONException {
-		comment.setText(object.getString("comment"));
+		comment.setText(object.getString("text"));
 	}
 
 	@Override
 	protected void postToJSON(Comment comment, JSONObject object) throws JSONException {
-		object.put("comment", comment.getText());
+		object.put("text", comment.getText());
 	}
 
 	@Override

@@ -21,6 +21,7 @@
  */
 package com.socialize.provider;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.socialize.api.SocializeSession;
@@ -42,5 +43,9 @@ public interface SocializeProvider<T> {
 	public List<T> put(SocializeSession session, String endpoint, T object) throws SocializeException;
 
 	public List<T> post(SocializeSession session, String endpoint, T object) throws SocializeException;
+	
+	public List<T> put(SocializeSession session, String endpoint, Collection<T> object) throws SocializeException;
+
+	public List<T> post(SocializeSession session, String endpoint, Collection<T> object) throws SocializeException;
 	
 }

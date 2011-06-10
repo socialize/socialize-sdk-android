@@ -95,4 +95,73 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		AndroidMock.verify(commentApi);
 	}
 	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({CommentApi.class, CommentListener.class})
+	public void testGetComment() throws SocializeException {
+		SocializeProvider<Comment> provider = AndroidMock.createMock(SocializeProvider.class);
+		CommentApi commentApi = AndroidMock.createMock(CommentApi.class, provider);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		CommentListener listener = AndroidMock.createMock(CommentListener.class);
+		
+		final int id = 69;
+		
+		commentApi.getComment(session, id, listener);
+		
+		AndroidMock.replay(commentApi);
+		
+		SocializeService service = new SocializeService(getContext());
+		
+		service.setCommentApi(commentApi);
+		
+		service.getComment(session, id, listener);
+		
+		AndroidMock.verify(commentApi);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({CommentApi.class, CommentListener.class})
+	public void testListCommentsByEntity() throws SocializeException {
+		SocializeProvider<Comment> provider = AndroidMock.createMock(SocializeProvider.class);
+		CommentApi commentApi = AndroidMock.createMock(CommentApi.class, provider);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		CommentListener listener = AndroidMock.createMock(CommentListener.class);
+		
+		final String key = "foobar";
+		
+		commentApi.getCommentsByEntity(session, key, listener);
+		
+		AndroidMock.replay(commentApi);
+		
+		SocializeService service = new SocializeService(getContext());
+		
+		service.setCommentApi(commentApi);
+		
+		service.listCommentsByEntity(session, key, listener);
+		
+		AndroidMock.verify(commentApi);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({CommentApi.class, CommentListener.class})
+	public void testListCommentsById() throws SocializeException {
+		SocializeProvider<Comment> provider = AndroidMock.createMock(SocializeProvider.class);
+		CommentApi commentApi = AndroidMock.createMock(CommentApi.class, provider);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		CommentListener listener = AndroidMock.createMock(CommentListener.class);
+		
+		final int[] ids = {1,2,3};
+		
+		commentApi.getCommentsById(session, listener, ids);
+		
+		AndroidMock.replay(commentApi);
+		
+		SocializeService service = new SocializeService(getContext());
+		
+		service.setCommentApi(commentApi);
+		
+		service.listCommentsById(session, listener, ids);
+		
+		AndroidMock.verify(commentApi);
+	}
+	
 }

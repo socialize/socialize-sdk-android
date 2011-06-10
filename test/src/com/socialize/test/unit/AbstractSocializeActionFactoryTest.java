@@ -154,9 +154,13 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		AndroidMock.expect(factoryService.getFactoryFor(User.class)).andReturn(userFactoryMock);
 		AndroidMock.expect(factoryService.getFactoryFor(Entity.class)).andReturn(entityFactoryMock);
 		
-		AndroidMock.expect(appFactoryMock.fromJSON(json)).andReturn(application);
-		AndroidMock.expect(userFactoryMock.fromJSON(json)).andReturn(user);
-		AndroidMock.expect(entityFactoryMock.fromJSON(json)).andReturn(entity);
+		AndroidMock.expect(json.getJSONObject("application")).andReturn(jsonApplication);
+		AndroidMock.expect(json.getJSONObject("user")).andReturn(jsonUser);
+		AndroidMock.expect(json.getJSONObject("entity")).andReturn(jsonEntity);
+		
+		AndroidMock.expect(appFactoryMock.fromJSON(jsonApplication)).andReturn(application);
+		AndroidMock.expect(userFactoryMock.fromJSON(jsonUser)).andReturn(user);
+		AndroidMock.expect(entityFactoryMock.fromJSON(jsonEntity)).andReturn(entity);
 		
 		action.setApplication(application);
 		action.setUser(user);

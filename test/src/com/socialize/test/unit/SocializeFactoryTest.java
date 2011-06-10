@@ -21,6 +21,10 @@
  */
 package com.socialize.test.unit;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -158,4 +162,62 @@ public class SocializeFactoryTest extends SocializeActivityTest {
 		
 	}
 
+	@UsesMocks({SocializeObjectFactory.class, JSONArray.class, JSONObject.class, Entity.class})
+	public void testSocializeObjectFactoryToJSONMethodWithCollection() throws JSONException {
+		
+		final Entity entry = AndroidMock.createMock(Entity.class);
+		final JSONArray jsonArray = AndroidMock.createNiceMock(JSONArray.class);
+		final JSONObject json = AndroidMock.createNiceMock(JSONObject.class);
+		final int id = 1;
+		
+		List<Entity> entries = new ArrayList<Entity>();
+		entries.add(entry);
+		entries.add(entry);
+		
+		SocializeObjectFactory<Entity> factory = new SocializeObjectFactory<Entity>() {
+			@Override
+			public Entity instantiateObject() {
+				return entry;
+			}
+
+			@Override
+			public JSONArray instantiateJSONArray() {
+				return jsonArray;
+			}
+
+			@Override
+			public JSONObject instantiateJSON() {
+				return json;
+			}
+
+			@Override
+			protected void fromJSON(JSONObject from, Entity to) throws JSONException {
+			
+			}
+
+			@Override
+			protected void toJSON(Entity from, JSONObject to) throws JSONException {
+				// Just a dummy to make it easier to assert that create() was called
+				from.setKey("foobar");
+			}
+		};
+		
+		entry.setKey("foobar");
+		entry.setKey("foobar");
+		
+		AndroidMock.expect(json.put("id", id)).andReturn(json).times(2);
+		AndroidMock.expect(jsonArray.put(json)).andReturn(jsonArray).times(2);
+		AndroidMock.expect(entry.getId()).andReturn(id).times(2);
+		
+		AndroidMock.replay(entry);
+		AndroidMock.replay(json);
+		AndroidMock.replay(jsonArray);
+		
+		factory.toJSON(entries);
+		
+		AndroidMock.verify(entry);
+		AndroidMock.verify(jsonArray);
+		
+	}
+	
 }

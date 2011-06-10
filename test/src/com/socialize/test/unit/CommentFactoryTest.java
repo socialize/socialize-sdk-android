@@ -62,7 +62,7 @@ public class CommentFactoryTest extends AbstractSocializeActionFactoryTest<Comme
 	protected void setupFromJSONExpectations() throws JSONException {
 		final String text = "Test Comment";
 		
-		AndroidMock.expect(json.getString("comment")).andReturn(text);
+		AndroidMock.expect(json.getString("text")).andReturn(text);
 		
 		action.setText(text);
 		
@@ -82,7 +82,7 @@ public class CommentFactoryTest extends AbstractSocializeActionFactoryTest<Comme
 		final String text = "Test Comment";
 		
 		AndroidMock.expect(action.getText()).andReturn(text);
-		AndroidMock.expect(json.put("comment", text)).andReturn(json);
+		AndroidMock.expect(json.put("text", text)).andReturn(json);
 		
 		AndroidMock.replay(json);
 		AndroidMock.replay(action);

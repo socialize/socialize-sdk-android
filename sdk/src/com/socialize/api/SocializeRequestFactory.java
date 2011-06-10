@@ -21,6 +21,8 @@
  */
 package com.socialize.api;
 
+import java.util.Collection;
+
 import org.apache.http.client.methods.HttpUriRequest;
 
 import com.socialize.entity.SocializeObject;
@@ -64,12 +66,26 @@ public interface SocializeRequestFactory<T extends SocializeObject> {
 	 * @param entity
 	 * @return
 	 */
-	public HttpUriRequest getPutRequest(SocializeSession session, String endpoint,T entity) throws SocializeException;
+	public HttpUriRequest getPutRequest(SocializeSession session, String endpoint, Collection<T> entities) throws SocializeException;
 	
 	/**
 	 * 
 	 * @param entity
 	 * @return
 	 */
-	public HttpUriRequest getPostRequest(SocializeSession session, String endpoint,T entity) throws SocializeException;
+	public HttpUriRequest getPostRequest(SocializeSession session, String endpoint, Collection<T> entities) throws SocializeException;
+	
+	/**
+	 * 
+	 * @param entity
+	 * @return
+	 */
+	public HttpUriRequest getPutRequest(SocializeSession session, String endpoint, T entity) throws SocializeException;
+	
+	/**
+	 * 
+	 * @param entity
+	 * @return
+	 */
+	public HttpUriRequest getPostRequest(SocializeSession session, String endpoint, T entity) throws SocializeException;
 }

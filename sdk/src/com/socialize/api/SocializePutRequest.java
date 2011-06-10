@@ -21,6 +21,8 @@
  */
 package com.socialize.api;
 
+import java.util.Collection;
+
 /**
  * @author Jason Polites
  *
@@ -28,13 +30,22 @@ package com.socialize.api;
  */
 public class SocializePutRequest<T> extends SocializeRequest {
 
+	private Collection<T> objects;
 	private T object;
 
-	public final T getObject() {
+	public Collection<T> getObjects() {
+		return objects;
+	}
+
+	public void setObjects(Collection<T> objects) {
+		this.objects = objects;
+	}
+
+	public T getObject() {
 		return object;
 	}
 
-	public final void setObject(T object) {
+	public void setObject(T object) {
 		this.object = object;
 	}
 }

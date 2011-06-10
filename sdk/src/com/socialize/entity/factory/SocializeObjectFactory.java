@@ -23,7 +23,9 @@ package com.socialize.entity.factory;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,6 +46,14 @@ public abstract class SocializeObjectFactory<T extends SocializeObject> {
 		super();
 	}
 	
+	public JSONArray toJSON(Collection<T> objects) throws JSONException {
+		JSONArray array = instantiateJSONArray();
+		for (T t : objects) {
+			array.put(toJSON(t));
+		}
+		return array;
+	}
+
 	public JSONObject toJSON(T object) throws JSONException {
 		JSONObject json = instantiateJSON();
 		json.put("id", object.getId());
@@ -65,6 +75,10 @@ public abstract class SocializeObjectFactory<T extends SocializeObject> {
 	
 	public JSONObject instantiateJSON() {
 		return new JSONObject();
+	}
+	
+	public JSONArray instantiateJSONArray() {
+		return new JSONArray();
 	}
 	
 	protected abstract void fromJSON(JSONObject from, T to) throws JSONException;

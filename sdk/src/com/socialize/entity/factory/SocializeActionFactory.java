@@ -74,9 +74,21 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			SocializeObjectFactory<User> userFactory = factoryService.getFactoryFor(User.class);
 			SocializeObjectFactory<Entity> entityFactory = factoryService.getFactoryFor(Entity.class);
 			
-			to.setApplication(applicationFactory.fromJSON(from));
-			to.setUser(userFactory.fromJSON(from));
-			to.setEntity(entityFactory.fromJSON(from));
+			JSONObject application = from.getJSONObject("application");
+			JSONObject user = from.getJSONObject("user");
+			JSONObject entity = from.getJSONObject("entity");
+			
+			if(application != null) {
+				to.setApplication(applicationFactory.fromJSON(application));
+			}
+			
+			if(user != null) {
+				to.setUser(userFactory.fromJSON(user));
+			}
+			
+			if(entity != null) {
+				to.setEntity(entityFactory.fromJSON(entity));
+			}
 			
 			to.setLat((float)from.getDouble("lat"));
 			to.setLon((float)from.getDouble("lon"));

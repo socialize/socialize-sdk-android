@@ -234,7 +234,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 	public void testApiAsyncCallsPutOnProvider() throws Throwable {
 
 		final String endpoint = "foobar";
-		final SocializeObject object = null;
+		final SocializeObject object = new SocializeObject();
 		
 		AndroidMock.expect(provider.put(mockSession, endpoint, object)).andReturn(null);
 		AndroidMock.replay(provider);
@@ -254,7 +254,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 	public void testApiAsyncCallsPostOnProvider() throws Throwable {
 
 		final String endpoint = "foobar";
-		final SocializeObject object = null;
+		final SocializeObject object = new SocializeObject();
 		
 		AndroidMock.expect(provider.post(mockSession, endpoint, object)).andReturn(null);
 		AndroidMock.replay(provider);
