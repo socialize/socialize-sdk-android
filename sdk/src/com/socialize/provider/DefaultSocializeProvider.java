@@ -228,29 +228,6 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		return results;
 	}
 
-	public SocializeObjectFactory<T> getObjectFactory() {
-		return objectFactory;
-	}
-
-	public HttpClientFactory getClientFactory() {
-		return clientFactory;
-	}
-
-	public SocializeObjectFactory<User> getUserFactory() {
-		return userFactory;
-	}
-	
-	public SocializeSessionFactory getSessionFactory() {
-		return sessionFactory;
-	}
-
-	public JSONParser getJsonParser() {
-		return jsonParser;
-	}
-
-	public SocializeLogger getLogger() {
-		return logger;
-	}
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;

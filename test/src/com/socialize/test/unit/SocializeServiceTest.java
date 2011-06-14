@@ -27,11 +27,13 @@ import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.api.action.CommentApi;
+import com.socialize.api.action.EntityApi;
 import com.socialize.entity.Comment;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.comment.CommentListener;
+import com.socialize.listener.entity.EntityListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.util.DeviceUtils;
@@ -97,6 +99,31 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		AndroidMock.verify(commentApi);
 	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({EntityApi.class, EntityListener.class})
+	public void testCreateEntity() throws SocializeException {
+		SocializeProvider<Comment> provider = AndroidMock.createMock(SocializeProvider.class);
+		EntityApi api = AndroidMock.createMock(EntityApi.class, provider);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		EntityListener listener = AndroidMock.createMock(EntityListener.class);
+		
+		final String key = "foobar";
+		final String name = "foobar_comment";
+		
+		api.createEntity(session, key, name, listener);
+		
+		AndroidMock.replay(api);
+		
+		SocializeService service = new SocializeService(getContext());
+		
+		service.setEntityApi(api);
+		
+		service.createEntity(session, key, name, listener);
+		
+		AndroidMock.verify(api);
+	}
+	
 	
 	@SuppressWarnings("unchecked")
 	@UsesMocks ({CommentApi.class, CommentListener.class})

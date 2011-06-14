@@ -26,8 +26,10 @@ import android.content.Context;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.api.action.CommentApi;
+import com.socialize.api.action.EntityApi;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.comment.CommentListener;
+import com.socialize.listener.entity.EntityListener;
 import com.socialize.net.HttpClientFactory;
 import com.socialize.util.DeviceUtils;
 
@@ -41,6 +43,7 @@ public class SocializeService {
 	private HttpClientFactory clientFactory;
 	private DeviceUtils deviceUtils;
 	private CommentApi commentApi;
+	private EntityApi entityApi;
 	
 	public SocializeService(Context context) {
 		super();
@@ -53,6 +56,10 @@ public class SocializeService {
 		commentApi.authenticateAsync(consumerKey, consumerSecret, uuid, listener, sessionConsumer);
 	}
 
+	public void createEntity(SocializeSession session, String key, String name, EntityListener listener) {
+		entityApi.createEntity(session, key, name, listener);
+	}
+	
 	public void addComment(SocializeSession session, String key, String comment, CommentListener listener) {
 		commentApi.addComment(session, key, comment, listener);
 	}
@@ -85,5 +92,17 @@ public class SocializeService {
 
 	public void setCommentApi(CommentApi commentApi) {
 		this.commentApi = commentApi;
+	}
+
+	public void setEntityApi(EntityApi entityApi) {
+		this.entityApi = entityApi;
+	}
+
+	public CommentApi getCommentApi() {
+		return commentApi;
+	}
+
+	public EntityApi getEntityApi() {
+		return entityApi;
 	}
 }

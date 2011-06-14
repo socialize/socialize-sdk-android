@@ -33,6 +33,7 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
+import com.socialize.listener.entity.EntityCreateListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.test.SocializeUnitTest;
 
@@ -93,6 +94,36 @@ public class SocializeTest extends SocializeUnitTest {
 		assertTrue(socialize.isInitialized());
 		
 		socialize.addComment(key, comment, listener);
+		
+		AndroidMock.verify(container);
+		AndroidMock.verify(service);
+	}
+	
+	@UsesMocks ({EntityCreateListener.class})
+	public void testCreateEntitySuccess() {
+		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
+		SocializeService service = AndroidMock.createMock(SocializeService.class, getContext());
+		EntityCreateListener listener = AndroidMock.createMock(EntityCreateListener.class);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		SocializeLogger logger = AndroidMock.createNiceMock(SocializeLogger.class);
+		
+		final String key = "foo", name = "bar";
+		
+		AndroidMock.expect(container.getBean("socializeService")).andReturn(service);
+		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
+		
+		service.createEntity(session, key, name, listener);
+		
+		AndroidMock.replay(container);
+		AndroidMock.replay(service);
+		
+		Socialize socialize = new Socialize();
+		socialize.init(getContext(), container);
+		socialize.setSession(session);
+		
+		assertTrue(socialize.isInitialized());
+		
+		socialize.createEntity(key, name, listener);
 		
 		AndroidMock.verify(container);
 		AndroidMock.verify(service);
@@ -218,7 +249,7 @@ public class SocializeTest extends SocializeUnitTest {
 		AndroidMock.verify(service);
 	}
 	
-	public void testNotInitialized() {
+	public void testAddCommentFail() {
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
 		
 		final String key = "foo", comment = "bar";
