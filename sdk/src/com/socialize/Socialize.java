@@ -34,6 +34,7 @@ import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.listener.entity.EntityCreateListener;
+import com.socialize.listener.entity.EntityListListener;
 import com.socialize.log.SocializeLogger;
 
 /**
@@ -118,6 +119,17 @@ public class Socialize implements SocializeSessionConsumer {
 	public void createEntity(String key, String name, EntityCreateListener entityCreateListener) {
 		if(assertAuthenticated(entityCreateListener)) {
 			service.createEntity(session, key, name, entityCreateListener);
+		}
+	}
+	
+	/**
+	 * Lists entities matching the given keys.
+	 * @param entityListListener A listener to handle callbacks from the post.
+	 * @param keys Array of keys corresponding to the entities to return, or null to return all.
+	 */
+	public void listEntitiesByKey(EntityListListener entityListListener, String...keys) {
+		if(assertAuthenticated(entityListListener)) {
+			service.listEntitiesByKey(session, entityListListener, keys);
 		}
 	}
 	

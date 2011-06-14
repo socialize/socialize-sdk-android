@@ -68,6 +68,10 @@ public class SocializeService {
 		commentApi.getComment(session, id, listener);
 	}
 	
+	public void listEntitiesByKey(SocializeSession session, EntityListener listener, String...keys) {
+		entityApi.listEntities(session, listener, keys);
+	}
+	
 	public void listCommentsByEntity(SocializeSession session, String entityKey, CommentListener listener) {
 		commentApi.getCommentsByEntity(session, entityKey, listener);
 	}

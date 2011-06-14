@@ -94,21 +94,25 @@ public class EntityApiTest extends SocializeUnitTest {
 	
 	public void testListEntities() {
 		
+		String[] keys = {"A", "B", "C"};
+		
 		EntityApi api = new EntityApi(provider) {
 			@Override
 			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeActionListener listener) {
-				addResult(session);
-				
+				addResult(ids);
 				assertNull(key);
-				assertNull(ids);
 			}
 		};
 		
-		api.listEntities(session, listener);
+		api.listEntities(session, listener, keys);
 		
-		SocializeSession after = getResult();
+		String[] after = getResult();
 		
 		assertNotNull(after);
+		
+		for (int i = 0; i < after.length; i++) {
+			assertEquals(keys[i], after[i]);
+		}
 	}
 	
 }

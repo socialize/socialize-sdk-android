@@ -29,6 +29,7 @@ import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.api.action.CommentApi;
 import com.socialize.api.action.EntityApi;
 import com.socialize.entity.Comment;
+import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
@@ -193,5 +194,29 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		AndroidMock.verify(commentApi);
 	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({EntityApi.class, EntityListener.class})
+	public void testListEntities() throws SocializeException {
+		SocializeProvider<Entity> provider = AndroidMock.createMock(SocializeProvider.class);
+		EntityApi api = AndroidMock.createMock(EntityApi.class, provider);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		EntityListener listener = AndroidMock.createMock(EntityListener.class);
+		
+		final String[] ids = {"A","B","C"};
+		
+		api.listEntities(session, listener, ids);
+		
+		AndroidMock.replay(api);
+		
+		SocializeService service = new SocializeService(getContext());
+		
+		service.setEntityApi(api);
+		
+		service.listEntitiesByKey(session, listener, ids);
+		
+		AndroidMock.verify(api);
+	}
+	
 	
 }

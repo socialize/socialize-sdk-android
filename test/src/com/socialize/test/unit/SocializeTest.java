@@ -34,6 +34,7 @@ import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.listener.entity.EntityCreateListener;
+import com.socialize.listener.entity.EntityListListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.test.SocializeUnitTest;
 
@@ -312,6 +313,37 @@ public class SocializeTest extends SocializeUnitTest {
 		assertNotNull(error);
 		assertTrue(error instanceof SocializeException);
 		
+	}
+	
+	
+	@UsesMocks ({EntityListListener.class})
+	public void testListEntities() {
+		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
+		SocializeService service = AndroidMock.createMock(SocializeService.class, getContext());
+		EntityListListener listener = AndroidMock.createMock(EntityListListener.class);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		SocializeLogger logger = AndroidMock.createNiceMock(SocializeLogger.class);
+		
+		final String[] ids = {"A","B","C"};
+		
+		AndroidMock.expect(container.getBean("socializeService")).andReturn(service);
+		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
+
+		service.listEntitiesByKey(session, listener, ids);
+		
+		AndroidMock.replay(container);
+		AndroidMock.replay(service);
+		
+		Socialize socialize = new Socialize();
+		socialize.init(getContext(), container);
+		socialize.setSession(session);
+		
+		assertTrue(socialize.isInitialized());
+		
+		socialize.listEntitiesByKey(listener, ids);
+		
+		AndroidMock.verify(container);
+		AndroidMock.verify(service);
 	}
 	
 }

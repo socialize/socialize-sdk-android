@@ -51,8 +51,8 @@ public class EntityApi extends SocializeApi<Entity, SocializeProvider<Entity>> {
 		getAsync(session, ENDPOINT, key, listener);
 	}
 
-	public void listEntities(SocializeSession session, EntityListener listener) {
-		listAsync(session, ENDPOINT, null, null, listener);
+	public void listEntities(SocializeSession session, EntityListener listener, String...keys) {
+		listAsync(session, ENDPOINT, null, keys, listener);
 	}
 	
 }
