@@ -52,7 +52,6 @@ public class SocializeTest extends SocializeUnitTest {
 		AndroidMock.expect(container.getBean("socializeService")).andReturn(service);
 		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
 
-		
 		container.destroy();
 		
 		AndroidMock.replay(container);
@@ -81,7 +80,7 @@ public class SocializeTest extends SocializeUnitTest {
 		
 		AndroidMock.expect(container.getBean("socializeService")).andReturn(service);
 		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
-
+		
 		service.addComment(session, key, comment, listener);
 		
 		AndroidMock.replay(container);
@@ -89,10 +88,11 @@ public class SocializeTest extends SocializeUnitTest {
 		
 		Socialize socialize = new Socialize();
 		socialize.init(getContext(), container);
+		socialize.setSession(session);
 		
 		assertTrue(socialize.isInitialized());
 		
-		socialize.addComment(session, key, comment, listener);
+		socialize.addComment(key, comment, listener);
 		
 		AndroidMock.verify(container);
 		AndroidMock.verify(service);
@@ -118,10 +118,11 @@ public class SocializeTest extends SocializeUnitTest {
 		
 		Socialize socialize = new Socialize();
 		socialize.init(getContext(), container);
+		socialize.setSession(session);
 		
 		assertTrue(socialize.isInitialized());
 		
-		socialize.listCommentsByEntity(session, key,listener);
+		socialize.listCommentsByEntity(key,listener);
 		
 		AndroidMock.verify(container);
 		AndroidMock.verify(service);
@@ -147,10 +148,11 @@ public class SocializeTest extends SocializeUnitTest {
 		
 		Socialize socialize = new Socialize();
 		socialize.init(getContext(), container);
+		socialize.setSession(session);
 		
 		assertTrue(socialize.isInitialized());
 		
-		socialize.listCommentsById(session, listener, ids);
+		socialize.listCommentsById(listener, ids);
 		
 		AndroidMock.verify(container);
 		AndroidMock.verify(service);
@@ -176,10 +178,11 @@ public class SocializeTest extends SocializeUnitTest {
 		
 		Socialize socialize = new Socialize();
 		socialize.init(getContext(), container);
+		socialize.setSession(session);
 		
 		assertTrue(socialize.isInitialized());
 		
-		socialize.getComment(session, id, listener);
+		socialize.getComment(id, listener);
 		
 		AndroidMock.verify(container);
 		AndroidMock.verify(service);
@@ -197,14 +200,15 @@ public class SocializeTest extends SocializeUnitTest {
 		
 		AndroidMock.expect(container.getBean("socializeService")).andReturn(service);
 		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
-
-		service.authenticate(key, secret, listener);
 		
 		AndroidMock.replay(container);
-		AndroidMock.replay(service);
 		
 		Socialize socialize = new Socialize();
 		socialize.init(getContext(), container);
+		
+		service.authenticate(key, secret, listener, socialize);
+
+		AndroidMock.replay(service);
 		
 		assertTrue(socialize.isInitialized());
 		
@@ -214,7 +218,7 @@ public class SocializeTest extends SocializeUnitTest {
 		AndroidMock.verify(service);
 	}
 	
-	public void testAddCommentFail() {
+	public void testNotInitialized() {
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
 		
 		final String key = "foo", comment = "bar";
@@ -223,17 +227,54 @@ public class SocializeTest extends SocializeUnitTest {
 			@Override
 			public void onError(SocializeException error) {
 				addResult(error);
-				
 			}
+
 			@Override
 			public void onCreate(Comment entity) {}
 		};
 
 		Socialize socialize = new Socialize();
+		socialize.setSession(session);
 		
 		assertFalse(socialize.isInitialized());
 		
-		socialize.addComment(session, key, comment, listener);
+		socialize.addComment(key, comment, listener);
+		
+		Exception error = getResult();
+		
+		assertNotNull(error);
+		assertTrue(error instanceof SocializeException);
+		
+	}
+	
+	public void testNotAuthenticated() {
+		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
+		SocializeService service = AndroidMock.createMock(SocializeService.class, getContext());
+		
+		AndroidMock.expect(container.getBean("socializeService")).andReturn(service);
+		AndroidMock.expect(container.getBean("logger")).andReturn(null);
+		
+		AndroidMock.replay(container);
+		
+		final String key = "foo", comment = "bar";
+		
+		CommentAddListener listener = new CommentAddListener() {
+			@Override
+			public void onError(SocializeException error) {
+				addResult(error);
+			}
+
+			@Override
+			public void onCreate(Comment entity) {}
+		};
+
+		Socialize socialize = new Socialize();
+		socialize.init(getContext(), container);
+		
+		assertTrue(socialize.isInitialized());
+		assertFalse(socialize.isAuthenticated());
+		
+		socialize.addComment(key, comment, listener);
 		
 		Exception error = getResult();
 		

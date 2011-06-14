@@ -21,8 +21,6 @@
  */
 package com.socialize.listener;
 
-import com.socialize.api.SocializeApi.RequestType;
-import com.socialize.api.SocializeResponse;
 import com.socialize.error.SocializeException;
 
 /**
@@ -32,8 +30,6 @@ import com.socialize.error.SocializeException;
  */
 public interface SocializeListener {
 
-	public void onResult(RequestType type, SocializeResponse response);
-	
 	public void onError(SocializeException error);
 	
 }

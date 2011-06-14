@@ -19,51 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.listener;
+package com.socialize.api.action;
 
-import java.util.List;
-
-import com.socialize.api.SocializeEntityResponse;
-import com.socialize.api.SocializeResponse;
-import com.socialize.api.SocializeApi.RequestType;
-import com.socialize.entity.SocializeObject;
-
+import com.socialize.api.SocializeApi;
+import com.socialize.api.SocializeSession;
+import com.socialize.entity.Entity;
+import com.socialize.listener.entity.EntityListener;
+import com.socialize.provider.SocializeProvider;
 
 /**
  * @author Jason Polites
  *
- * @param <T>
  */
-public abstract class AbstractSocializeListener<T extends SocializeObject> implements SocializeActionListener {
+public class EntityApi extends SocializeApi<Entity, SocializeProvider<Entity>> {
+	
+	public static final String ENDPOINT = "/entity/";
+	public static final String ENDPOINT_LIST = "/entity/list/"; 
 
-	@Override
-	public void onResult(RequestType type, SocializeResponse response) {
-
-		@SuppressWarnings("unchecked")
-		SocializeEntityResponse<T> entityResponse = (SocializeEntityResponse<T>) response;
-
-		switch (type) {
-			case GET:
-				onGet(entityResponse.getFirstResult());
-				break;
-			case LIST:
-				onList(entityResponse.getResults());
-				break;
-			case POST:
-				onUpdate(entityResponse.getFirstResult());
-				break;
-			case PUT:
-				onCreate(entityResponse.getFirstResult());
-				break;
-		}
+	public EntityApi(SocializeProvider<Entity> provider) {
+		super(provider);
 	}
-
-	public abstract void onGet(T entity);
-
-	public abstract void onList(List<T> entities);
-
-	public abstract void onUpdate(T entity);
-
-	public abstract void onCreate(T entity);
+	
+	public void createEntity(SocializeSession session, String key, String name, EntityListener listener) {
+		Entity c = new Entity();
+		c.setKey(key);
+		c.setName(name);
+		putAsync(session, ENDPOINT, c, listener);
+	}
 
 }

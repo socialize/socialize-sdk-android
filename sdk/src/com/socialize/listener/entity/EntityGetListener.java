@@ -19,51 +19,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.listener;
+package com.socialize.listener.entity;
 
 import java.util.List;
 
-import com.socialize.api.SocializeEntityResponse;
-import com.socialize.api.SocializeResponse;
-import com.socialize.api.SocializeApi.RequestType;
-import com.socialize.entity.SocializeObject;
+import com.socialize.entity.Entity;
 
 
 /**
  * @author Jason Polites
  *
- * @param <T>
  */
-public abstract class AbstractSocializeListener<T extends SocializeObject> implements SocializeActionListener {
+public abstract class EntityGetListener extends EntityListener {
+ 
+	@Override
+	public final void onCreate(Entity entity) {}
 
 	@Override
-	public void onResult(RequestType type, SocializeResponse response) {
+	public final void onList(List<Entity> entities) {}
 
-		@SuppressWarnings("unchecked")
-		SocializeEntityResponse<T> entityResponse = (SocializeEntityResponse<T>) response;
-
-		switch (type) {
-			case GET:
-				onGet(entityResponse.getFirstResult());
-				break;
-			case LIST:
-				onList(entityResponse.getResults());
-				break;
-			case POST:
-				onUpdate(entityResponse.getFirstResult());
-				break;
-			case PUT:
-				onCreate(entityResponse.getFirstResult());
-				break;
-		}
-	}
-
-	public abstract void onGet(T entity);
-
-	public abstract void onList(List<T> entities);
-
-	public abstract void onUpdate(T entity);
-
-	public abstract void onCreate(T entity);
+	@Override
+	public final void onUpdate(Entity entity) {}
 
 }

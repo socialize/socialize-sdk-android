@@ -19,24 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.entity;
+package com.socialize.listener.entity;
 
-import com.socialize.api.SocializeApi;
-import com.socialize.entity.SocializeObject;
-import com.socialize.listener.SocializeAuthListener;
-import com.socialize.provider.SocializeProvider;
+import com.socialize.entity.Entity;
+import com.socialize.listener.AbstractSocializeListener;
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class EntityApi<T extends SocializeObject> extends SocializeApi<T, SocializeProvider<T>>{
-	
-	public EntityApi(SocializeProvider<T> provider) {
-		super(provider);
-	}
-
-	public void authenticate(String key, String secret, String uuid, SocializeAuthListener listener) {
-		super.authenticateAsync(key, secret, uuid, listener);
-	}
-}
+public abstract class EntityListener extends AbstractSocializeListener<Entity> {}

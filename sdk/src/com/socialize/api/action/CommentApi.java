@@ -19,8 +19,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.entity;
+package com.socialize.api.action;
 
+import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Comment;
 import com.socialize.listener.comment.CommentListener;
@@ -29,7 +30,7 @@ import com.socialize.provider.SocializeProvider;
 /**
  * @author Jason Polites
  */
-public class CommentApi extends EntityApi<Comment> {
+public class CommentApi extends SocializeApi<Comment, SocializeProvider<Comment>> {
 
 	public static final String ENDPOINT = "/comment/";
 	public static final String ENDPOINT_LIST = "/comment/list/"; 

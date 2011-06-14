@@ -24,9 +24,9 @@ package com.socialize.test.unit.api;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.entity.CommentApi;
+import com.socialize.api.action.CommentApi;
 import com.socialize.entity.Comment;
-import com.socialize.listener.SocializeListener;
+import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeUnitTest;
@@ -59,7 +59,7 @@ public class CommentApiTest extends SocializeUnitTest {
 		
 		CommentApi api = new CommentApi(provider){
 			@Override
-			public void putAsync(SocializeSession session, String endpoint, Comment object, SocializeListener listener) {
+			public void putAsync(SocializeSession session, String endpoint, Comment object, SocializeActionListener listener) {
 				addResult(object);
 			}
 		};
@@ -79,7 +79,7 @@ public class CommentApiTest extends SocializeUnitTest {
 		
 		CommentApi api = new CommentApi(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeListener listener) {
+			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeActionListener listener) {
 				addResult(key);
 			}
 		};
@@ -99,7 +99,7 @@ public class CommentApiTest extends SocializeUnitTest {
 		CommentApi api = new CommentApi(provider) {
 
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeListener listener) {
+			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeActionListener listener) {
 				addResult(ids);
 			}
 		};
@@ -123,7 +123,7 @@ public class CommentApiTest extends SocializeUnitTest {
 		CommentApi api = new CommentApi(provider) {
 
 			@Override
-			public void getAsync(SocializeSession session, String endpoint, String id, SocializeListener listener) {
+			public void getAsync(SocializeSession session, String endpoint, String id, SocializeActionListener listener) {
 				addResult(id);
 			}
 		};

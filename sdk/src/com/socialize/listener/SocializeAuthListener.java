@@ -27,7 +27,7 @@ import com.socialize.error.SocializeException;
 /**
  * @author Jason Polites
  */
-public interface SocializeAuthListener {
+public interface SocializeAuthListener extends SocializeListener {
 
 	public void onAuthSuccess(SocializeSession session);
 	

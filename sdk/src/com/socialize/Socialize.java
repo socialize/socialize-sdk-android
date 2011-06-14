@@ -26,6 +26,7 @@ import android.content.Context;
 import com.socialize.android.ioc.AndroidIOC;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeListener;
@@ -37,12 +38,13 @@ import com.socialize.log.SocializeLogger;
 /**
  * @author Jason Polites
  */
-public class Socialize {
+public class Socialize implements SocializeSessionConsumer {
 	
 	private SocializeService service;
 	private SocializeLogger logger;
 	private IOCContainer container;
 	private boolean initialized = false;
+	private SocializeSession session;
 	
 	/**
 	 * Initializes a Socialize instance with default settings.
@@ -88,19 +90,20 @@ public class Socialize {
 	 * @param authListener The callback for authentication outcomes.
 	 * @throws SocializeException 
 	 */
-	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener authListener) throws SocializeException {
-		service.authenticate(consumerKey, consumerSecret, authListener);
+	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener authListener)  {
+		if(assertInitialized(authListener)) {
+			service.authenticate(consumerKey, consumerSecret, authListener, this);
+		}
 	}
 
 	/**
 	 * Adds a new comment and associates it with the entity described.
-	 * @param session The current socialize session.
 	 * @param entity The entity key.  Defined when first creating an entity, or created on the fly with this call.
 	 * @param comment The comment to add.
 	 * @param commentAddListener A listener to handle callbacks from the post.
 	 */
-	public void addComment(SocializeSession session, String entity, String comment, CommentAddListener commentAddListener) {
-		if(assertInitialized(commentAddListener)) {
+	public void addComment(String entity, String comment, CommentAddListener commentAddListener) {
+		if(assertAuthenticated(commentAddListener)) {
 			service.addComment(session, entity, comment, commentAddListener);
 		}
 	}
@@ -111,8 +114,8 @@ public class Socialize {
 	 * @param entity The entity key.  Defined when first creating an entity, or created on the fly with this call.
 	 * @param commentListListener A listener to handle callbacks from the post.
 	 */
-	public void listCommentsByEntity(SocializeSession session, String entity, CommentListListener commentListListener) {
-		if(assertInitialized(commentListListener)) {
+	public void listCommentsByEntity(String entity, CommentListListener commentListListener) {
+		if(assertAuthenticated(commentListListener)) {
 			service.listCommentsByEntity(session, entity, commentListListener);
 		}
 	}
@@ -123,8 +126,8 @@ public class Socialize {
 	 * @param commentListListener A listener to handle callbacks from the post.
 	 * @param ids Array of IDs corresponding to pre-existing comments.
 	 */
-	public void listCommentsById(SocializeSession session, CommentListListener commentListListener, int...ids) {
-		if(assertInitialized(commentListListener)) {
+	public void listCommentsById(CommentListListener commentListListener, int...ids) {
+		if(assertAuthenticated(commentListListener)) {
 			service.listCommentsById(session, commentListListener, ids);
 		}
 	}
@@ -135,8 +138,8 @@ public class Socialize {
 	 * @param id The ID of the comment.
 	 * @param commentGetListener A listener to handle callbacks from the post.
 	 */
-	public void getComment(SocializeSession session, int id, CommentGetListener commentGetListener) {
-		if(assertInitialized(commentGetListener)) {
+	public void getComment(int id, CommentGetListener commentGetListener) {
+		if(assertAuthenticated(commentGetListener)) {
 			service.getComment(session, id, commentGetListener);
 		}
 	}
@@ -147,6 +150,31 @@ public class Socialize {
 	 */
 	public boolean isInitialized() {
 		return initialized;
+	}
+	
+	public boolean isAuthenticated() {
+		return session != null;
+	}
+	
+	private boolean assertAuthenticated(SocializeListener listener) {
+		if(assertInitialized(listener)) {
+			if(session != null) {
+				return true;
+			}
+			else {
+				if(listener != null) {
+					if(logger != null) {
+						listener.onError(new SocializeException(logger.getMessage(SocializeLogger.NOT_AUTHENTICATED)));
+					}
+					else {
+						listener.onError(new SocializeException("Not authenticated"));
+					}
+				}
+				if(logger != null) logger.error(SocializeLogger.NOT_AUTHENTICATED);
+			}
+		}
+		
+		return false;
 	}
 	
 	private boolean assertInitialized(SocializeListener listener) {
@@ -163,5 +191,12 @@ public class Socialize {
 		}
 		return initialized;
 	}
-	
+
+	public SocializeSession getSession() {
+		return session;
+	}
+
+	public void setSession(SocializeSession session) {
+		this.session = session;
+	}
 }

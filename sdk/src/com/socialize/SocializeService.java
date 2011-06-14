@@ -24,8 +24,8 @@ package com.socialize;
 import android.content.Context;
 
 import com.socialize.api.SocializeSession;
-import com.socialize.api.entity.CommentApi;
-import com.socialize.error.SocializeException;
+import com.socialize.api.SocializeSessionConsumer;
+import com.socialize.api.action.CommentApi;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.net.HttpClientFactory;
@@ -47,10 +47,10 @@ public class SocializeService {
 		this.context = context;
 	}
 	
-	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener) throws SocializeException {
+	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
 		// All Api instances have authenticate, so we can just use any old one
 		String uuid = deviceUtils.getUDID(context);
-		commentApi.authenticate(consumerKey, consumerSecret, uuid, listener);
+		commentApi.authenticateAsync(consumerKey, consumerSecret, uuid, listener, sessionConsumer);
 	}
 
 	public void addComment(SocializeSession session, String key, String comment, CommentListener listener) {

@@ -35,7 +35,7 @@ import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.AbstractSocializeListener;
-import com.socialize.listener.SocializeListener;
+import com.socialize.listener.SocializeActionListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.HttpUtils;
@@ -59,12 +59,12 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		api = new SocializeApi<SocializeObject, SocializeProvider<SocializeObject>>(provider);
 	}
 
-	@UsesMocks({SocializeListener.class})
+	@UsesMocks({SocializeActionListener.class})
 	public void testOnResultCalledOnAsyncGetSuccess() throws Throwable {
 		
 		CountDownLatch signal = new CountDownLatch(1); 
 		
-		final SocializeListener listener = AndroidMock.createMock(SocializeListener.class);
+		final SocializeActionListener listener = AndroidMock.createMock(SocializeActionListener.class);
 		
 		// Must use matcher here 
 		// http://weirdfellow.wordpress.com/2010/07/15/2-matchers-expected-1-recorded/
@@ -86,14 +86,14 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		AndroidMock.verify(listener);
 	}
 	
-	@UsesMocks ({SocializeException.class, SocializeListener.class})
+	@UsesMocks ({SocializeException.class, SocializeActionListener.class})
 	public void testOnErrorCalledOnFail() throws Throwable {
 		CountDownLatch signal = new CountDownLatch(1); 
 		
 		HttpUtils utils = new HttpUtils();
 		SocializeApiError dummyError = new SocializeApiError(utils, 0);
 		
-		final SocializeListener listener = AndroidMock.createMock(SocializeListener.class);
+		final SocializeActionListener listener = AndroidMock.createMock(SocializeActionListener.class);
 		
 		AndroidMock.makeThreadSafe(provider, true);
 		AndroidMock.makeThreadSafe(session, true);
@@ -123,7 +123,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 	
 	public void testListenerOnGetCalledOnGET() throws Throwable {
 		
-		final SocializeListener listener = new AbstractSocializeListener<SocializeObject>() {
+		final SocializeActionListener listener = new AbstractSocializeListener<SocializeObject>() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -172,7 +172,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 	
 	public void testListenerOnListCalledOnLIST() throws Throwable {
 		
-		final SocializeListener listener = new AbstractSocializeListener<SocializeObject>() {
+		final SocializeActionListener listener = new AbstractSocializeListener<SocializeObject>() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -221,7 +221,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 	}
 	
 	public void testListenerOnUpdateCalledOnPOST() throws Throwable {
-		final SocializeListener listener = new AbstractSocializeListener<SocializeObject>() {
+		final SocializeActionListener listener = new AbstractSocializeListener<SocializeObject>() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -269,7 +269,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 	}
 	
 	public void testListenerOnCreateCalledOnPUT() throws Throwable {
-		final SocializeListener listener = new AbstractSocializeListener<SocializeObject>() {
+		final SocializeActionListener listener = new AbstractSocializeListener<SocializeObject>() {
 
 			@Override
 			public void onError(SocializeException error) {

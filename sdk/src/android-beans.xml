@@ -82,7 +82,7 @@
 		<constructor-arg ref="httpUtils"/>
 	</bean>
 	
-	<bean id="commentApi" class="com.socialize.api.entity.CommentApi" extends="socializeApi">
+	<bean id="commentApi" class="com.socialize.api.action.CommentApi" extends="socializeApi">
 		<constructor-arg ref="commentProvider"/>
 	</bean>
 	

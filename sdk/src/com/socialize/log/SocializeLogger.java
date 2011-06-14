@@ -36,6 +36,7 @@ public class SocializeLogger {
 	
 	public static final int INITIALIZE_FAILED = 0;
 	public static final int NOT_INITIALIZED = 1;
+	public static final int NOT_AUTHENTICATED = 2;
 	
 	private LogLevel logLevel = LogLevel.INFO;
 	private String logTag = "Socialize";
