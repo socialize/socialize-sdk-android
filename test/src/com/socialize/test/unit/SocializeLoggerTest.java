@@ -40,25 +40,18 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 	@UsesMocks ({SocializeConfig.class, Properties.class})
 	public void testSocializeLoggerInit() {
 		
-
 		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-		Properties props = AndroidMock.createMock(Properties.class);
 		
-		AndroidMock.expect(config.getProperties()).andReturn(props).atLeastOnce();
-		AndroidMock.expect(props.getProperty(SocializeConfig.LOG_LEVEL)).andReturn(LogLevel.VERBOSE.name());
-		AndroidMock.expect(props.getProperty(SocializeConfig.LOG_TAG)).andReturn("LoggerTest");
+		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_LEVEL)).andReturn(LogLevel.VERBOSE.name());
+		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_TAG)).andReturn("LoggerTest");
 		
 		AndroidMock.replay(config);
-		AndroidMock.replay(props);
 		
 		SocializeLogger logger = new SocializeLogger();
 		
 		logger.init(config);
 		
 		AndroidMock.verify(config);
-		AndroidMock.verify(props);
-		
-
 	}
 	
 	
@@ -68,14 +61,11 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 		// test call all the methods to make sure they don't fail :/
 		
 		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-		Properties props = AndroidMock.createMock(Properties.class);
 		
-		AndroidMock.expect(config.getProperties()).andReturn(props).atLeastOnce();
-		AndroidMock.expect(props.getProperty(SocializeConfig.LOG_LEVEL)).andReturn(LogLevel.VERBOSE.name());
-		AndroidMock.expect(props.getProperty(SocializeConfig.LOG_TAG)).andReturn("LoggerTest");
+		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_LEVEL)).andReturn(LogLevel.VERBOSE.name());
+		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_TAG)).andReturn("LoggerTest");
 		
 		AndroidMock.replay(config);
-		AndroidMock.replay(props);
 		
 		SocializeLogger logger = new SocializeLogger();
 		
@@ -142,14 +132,11 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 		SocializeLogger logger = new SocializeLogger();
 		
 		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-		Properties props = AndroidMock.createMock(Properties.class);
 		
-		AndroidMock.expect(config.getProperties()).andReturn(props).atLeastOnce();
-		AndroidMock.expect(props.getProperty(SocializeConfig.LOG_LEVEL)).andReturn(level.name());
-		AndroidMock.expect(props.getProperty(SocializeConfig.LOG_TAG)).andReturn("LoggerTest");
+		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_LEVEL)).andReturn(level.name());
+		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_TAG)).andReturn("LoggerTest");
 		
 		AndroidMock.replay(config);
-		AndroidMock.replay(props);
 		
 		logger.init(config);
 		

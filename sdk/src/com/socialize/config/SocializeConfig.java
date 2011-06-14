@@ -128,6 +128,10 @@ public class SocializeConfig {
 		}
 	}
 	
+	public String getProperty(String key) {
+		return getProperty(key, null);
+	}
+	
 	public String getProperty(String key, String defaultValue) {
 		String val = properties.getProperty(key);
 		if(!StringUtils.isEmpty(val)) {
@@ -152,13 +156,11 @@ public class SocializeConfig {
 		return defaultValue;
 	}
 
-	public Properties getProperties() {
-		return properties;
-	}
-
-
 	public String getDefaultPropertiesFileName() {
 		return DEFAULT_PROPERTIES;
 	}
-	
+
+	public Properties getProperties() {
+		return properties;
+	}
 }

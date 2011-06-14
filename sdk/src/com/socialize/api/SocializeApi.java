@@ -157,7 +157,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		
 		AsyncAuthenicator authenicator = new AsyncAuthenicator(RequestType.AUTH, null, wrapper);
 		SocializeAuthRequest request = new SocializeAuthRequest();
-		request.setEndpoint(config.getProperties().getProperty(SocializeConfig.API_HOST) + "/authenticate/");
+		request.setEndpoint(config.getProperty(SocializeConfig.API_HOST) + "/authenticate/");
 		request.setConsumerKey(key);
 		request.setConsumerSecret(secret);
 		request.setUuid(uuid);

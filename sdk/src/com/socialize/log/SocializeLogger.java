@@ -43,13 +43,13 @@ public class SocializeLogger {
 	private SocializeConfig config;
 	
 	public void init(SocializeConfig config) {
-		String ll = config.getProperties().getProperty(SocializeConfig.LOG_LEVEL);
+		String ll = config.getProperty(SocializeConfig.LOG_LEVEL);
 		
 		if(!StringUtils.isEmpty(ll)) {
 			logLevel = LogLevel.valueOf(ll);
 		}
 		
-		String tag = config.getProperties().getProperty(SocializeConfig.LOG_TAG);
+		String tag = config.getProperty(SocializeConfig.LOG_TAG);
 		
 		if(!StringUtils.isEmpty(tag)) {
 			logTag = tag;
@@ -123,7 +123,7 @@ public class SocializeLogger {
 	}
 	
 	public String getMessage(int id) {
-		String msg =  this.config.getProperties().getProperty(SocializeConfig.LOG_MSG + id);
+		String msg =  this.config.getProperty(SocializeConfig.LOG_MSG + id);
 		if(msg == null) {
 			msg = "";
 		}

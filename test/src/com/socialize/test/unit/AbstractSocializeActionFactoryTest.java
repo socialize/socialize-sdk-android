@@ -84,7 +84,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		jsonUser = AndroidMock.createNiceMock(JSONObject.class);
 		jsonEntity = AndroidMock.createNiceMock(JSONObject.class);
 		
-		AndroidMock.expect(config.getProperties()).andReturn(null);
+		AndroidMock.expect(config.getProperty((String)AndroidMock.anyObject())).andReturn(null);
 		AndroidMock.replay(config);
 		
 		AndroidMock.replay(application);

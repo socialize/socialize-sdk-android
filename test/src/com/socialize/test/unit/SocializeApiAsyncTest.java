@@ -35,7 +35,6 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 	private SocializeSessionConsumer mockSessionConsumer;
 	private SocializeActionListener listener;
 	private SocializeConfig config;
-	private Properties props;
 
 	@SuppressWarnings("unchecked")
 	@UsesMocks({
@@ -57,7 +56,6 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		mockSessionConsumer = AndroidMock.createMock(SocializeSessionConsumer.class);
 		
 		config = AndroidMock.createMock(SocializeConfig.class);
-		props = AndroidMock.createMock(Properties.class);
 		
 		api = new SocializeApi<SocializeObject, SocializeProvider<SocializeObject>>(provider);
 		
@@ -87,14 +85,12 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 	public void testApiAsyncCallsAuthenticateOnProvider() throws Throwable {
 
 		
-		AndroidMock.expect(props.getProperty(SocializeConfig.API_HOST)).andReturn("test_url");
-		AndroidMock.expect(config.getProperties()).andReturn(props);
+		AndroidMock.expect(config.getProperty(SocializeConfig.API_HOST)).andReturn("test_url");
 		
 		AndroidMock.expect(provider.authenticate("test_url/authenticate/", "test_key", "test_secret", "test_uuid")).andReturn(mockSession);
 		
 		mockSessionConsumer.setSession(mockSession);
 		
-		AndroidMock.replay(props);
 		AndroidMock.replay(config);
 		AndroidMock.replay(provider);
 		AndroidMock.replay(mockSessionConsumer);
@@ -134,7 +130,6 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		
 		AndroidMock.verify(provider);
 		AndroidMock.verify(mockSessionConsumer);
-		AndroidMock.verify(props);
 		AndroidMock.verify(config);
 	}
 	
