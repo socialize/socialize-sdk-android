@@ -25,6 +25,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.config.SocializeConfig;
 import com.socialize.net.DefaultHttpClientFactory;
 import com.socialize.test.SocializeUnitTest;
 
@@ -32,6 +35,7 @@ import com.socialize.test.SocializeUnitTest;
  * @author Jason Polites
  *
  */
+@UsesMocks (SocializeConfig.class)
 public class DefaultHttpClientFactoryTest extends SocializeUnitTest {
 	
 	DefaultHttpClientFactory factory;
@@ -41,7 +45,16 @@ public class DefaultHttpClientFactoryTest extends SocializeUnitTest {
 	protected void setUp() throws Exception {
 		super.setUp();
 		factory = new DefaultHttpClientFactory();
-		factory.init();
+		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+		
+		AndroidMock.expect(config.getIntProperty(SocializeConfig.HTTP_CONNECTION_TIMEOUT, 10000)).andReturn(60000);
+		AndroidMock.expect(config.getIntProperty(SocializeConfig.HTTP_SOCKET_TIMEOUT, 10000)).andReturn(60000);
+		
+		AndroidMock.replay(config);
+		
+		factory.init(config);
+		
+		AndroidMock.verify(config);
 	}
 
 	@Override

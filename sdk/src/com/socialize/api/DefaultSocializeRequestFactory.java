@@ -43,6 +43,7 @@ import com.socialize.entity.SocializeObject;
 import com.socialize.entity.factory.SocializeObjectFactory;
 import com.socialize.error.SocializeException;
 import com.socialize.oauth.OAuthRequestSigner;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -89,11 +90,16 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 		try {
 			List<NameValuePair> data = new ArrayList<NameValuePair>();
 			
-			JSONArray array = new JSONArray(Arrays.asList(ids));
-			
 			JSONObject json = new JSONObject();
-			json.put("ids", array);
-			json.put("key", key);
+			
+			if(ids != null && ids.length > 0) {
+				JSONArray array = new JSONArray(Arrays.asList(ids));
+				json.put("ids", array);
+			}
+			
+			if(!StringUtils.isEmpty(key)) {
+				json.put("key", key);
+			}
 			
 			data.add(new BasicNameValuePair("payload", json.toString()));
 			

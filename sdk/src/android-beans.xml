@@ -35,7 +35,9 @@
 	<bean id="responseFactory" class="com.socialize.api.DefaultSocializeResponseFactory"/>
 	
 	<bean id="httpClientFactory" class="com.socialize.net.DefaultHttpClientFactory">
-		<init-method name="init"/>
+		<init-method name="init">
+			<arg ref="config"/>
+		</init-method>
 		<destroy-method name="destroy"/>
 	</bean>
 	

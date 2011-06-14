@@ -33,10 +33,12 @@ import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 
+import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 
 /**
@@ -53,7 +55,7 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 	 * @see com.socialize.net.HttpClientFactory#init()
 	 */
 	@Override
-	public void init() throws SocializeException  {
+	public void init(SocializeConfig config) throws SocializeException  {
 		
 		try {
 	        KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -65,7 +67,10 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 	        params = new BasicHttpParams();
 	        HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
 	        HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
-
+	        
+	        HttpConnectionParams.setConnectionTimeout(params, config.getIntProperty(SocializeConfig.HTTP_CONNECTION_TIMEOUT, 10000));
+	        HttpConnectionParams.setSoTimeout(params, config.getIntProperty(SocializeConfig.HTTP_SOCKET_TIMEOUT, 10000));
+	        
 	        SchemeRegistry registry = new SchemeRegistry();
 	        registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
 	        registry.register(new Scheme("https", sf, 443));

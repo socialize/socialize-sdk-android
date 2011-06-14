@@ -30,6 +30,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.socialize.util.ClassLoaderProvider;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -47,6 +48,9 @@ public class SocializeConfig {
 	public static final String LOG_TAG = "log.tag";
 	public static final String LOG_MSG = "log.msg.";
 	public static final String API_HOST = "api.host";
+	
+	public static final String HTTP_CONNECTION_TIMEOUT = "http.connection.timeout";
+	public static final String HTTP_SOCKET_TIMEOUT = "http.socket.timeout";
 	
 	public SocializeConfig() {
 		super();
@@ -122,6 +126,30 @@ public class SocializeConfig {
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public String getProperty(String key, String defaultValue) {
+		String val = properties.getProperty(key);
+		if(!StringUtils.isEmpty(val)) {
+			return val;
+		}
+		return defaultValue;
+	}
+	
+	public long getLongProperty(String key, long defaultValue) {
+		String val = properties.getProperty(key);
+		if(!StringUtils.isEmpty(val)) {
+			return Long.parseLong(val);
+		}
+		return defaultValue;
+	}
+	
+	public int getIntProperty(String key, int defaultValue) {
+		String val = properties.getProperty(key);
+		if(!StringUtils.isEmpty(val)) {
+			return Integer.parseInt(val);
+		}
+		return defaultValue;
 	}
 
 	public Properties getProperties() {

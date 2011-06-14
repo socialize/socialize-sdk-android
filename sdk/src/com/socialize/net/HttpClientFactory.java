@@ -23,6 +23,7 @@ package com.socialize.net;
 
 import org.apache.http.client.HttpClient;
 
+import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 
 /**
@@ -31,7 +32,7 @@ import com.socialize.error.SocializeException;
  */
 public interface HttpClientFactory {
 
-	public void init() throws SocializeException;
+	public void init(SocializeConfig config) throws SocializeException;
 
 	public void destroy();
 

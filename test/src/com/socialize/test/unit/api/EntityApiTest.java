@@ -72,23 +72,43 @@ public class EntityApiTest extends SocializeUnitTest {
 		assertEquals(key, result.getKey());
 	}
 	
-//	public void testGetEntity() {
-//		
-//		int id = 69;
-//		
-//		EntityApi api = new EntityApi(provider) {
-//
-//			@Override
-//			public void getAsync(SocializeSession session, String endpoint, String id, SocializeActionListener listener) {
-//				addResult(id);
-//			}
-//		};
-//		
-//		api.getEntity(session, id, listener);
-//		
-//		String strId = getResult();
-//		
-//		assertNotNull(strId);
-//		assertEquals(String.valueOf(id), strId);
-//	}
+	public void testGetEntity() {
+		
+		String key = "foo";
+		
+		EntityApi api = new EntityApi(provider) {
+
+			@Override
+			public void getAsync(SocializeSession session, String endpoint, String id, SocializeActionListener listener) {
+				addResult(id);
+			}
+		};
+		
+		api.getEntity(session, key, listener);
+		
+		String strId = getResult();
+		
+		assertNotNull(strId);
+		assertEquals(key, strId);
+	}
+	
+	public void testListEntities() {
+		
+		EntityApi api = new EntityApi(provider) {
+			@Override
+			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeActionListener listener) {
+				addResult(session);
+				
+				assertNull(key);
+				assertNull(ids);
+			}
+		};
+		
+		api.listEntities(session, listener);
+		
+		SocializeSession after = getResult();
+		
+		assertNotNull(after);
+	}
+	
 }
