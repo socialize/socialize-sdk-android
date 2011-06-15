@@ -19,50 +19,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.util;
+package com.socialize.test.blackbox;
 
-import com.socialize.log.SocializeLogger;
-
-import android.Manifest.permission;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.telephony.TelephonyManager;
 
+import com.socialize.Socialize;
+import com.socialize.android.ioc.IOCContainer;
+import com.socialize.ioc.SocializeIOC;
+import com.socialize.test.SocializeActivityTest;
 
 /**
  * @author Jason Polites
  *
  */
-public class DeviceUtils {
-	
-	private SocializeLogger logger;
-	
-	public String getUDID(Context context) {
-		if(hasPermission(context, permission.READ_PHONE_STATE)) {
-			TelephonyManager tManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-			return tManager.getDeviceId();
-		}
-		else {
-			// this is fatal
-			if(logger != null) {
-				logger.error(SocializeLogger.NO_UDID);
+public class SocializeBlackboxTest extends SocializeActivityTest {
+
+	public void testDefaultSocializeInit() {
+		Socialize socialize = new Socialize() {
+			@Override
+			public void init(Context context, IOCContainer container) {
+				addResult(container);
+				super.init(context, container);
 			}
-			
-			return null;
-		}
+		};
+		
+		socialize.init(getActivity());
+		
+		IOCContainer container = getResult();
+		
+		assertNotNull(container);
+		assertTrue(container instanceof SocializeIOC);
+		
+		SocializeIOC ioc = (SocializeIOC) container;
+		
+		assertTrue(ioc.size() > 0);
+		
 	}
-	
-	public boolean hasPermission(Context context, String permission) {
-		return context.getPackageManager().checkPermission(permission, context.getPackageName()) == PackageManager.PERMISSION_GRANTED;
-	}
-
-	public SocializeLogger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
-	}
-	
 	
 }

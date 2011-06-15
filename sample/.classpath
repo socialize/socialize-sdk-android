@@ -3,9 +3,9 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="src" path="sdk_src"/>
 	<classpathentry exported="true" kind="lib" path="libs/signpost-commonshttp4-1.2.1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/signpost-core-1.2.1.1.jar"/>
+	<classpathentry kind="src" path="sdk_src"/>
 	<classpathentry kind="src" path="android-ioc_src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

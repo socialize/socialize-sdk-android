@@ -23,11 +23,12 @@ package com.socialize;
 
 import android.content.Context;
 
-import com.socialize.android.ioc.AndroidIOC;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
+import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
+import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeListener;
 import com.socialize.listener.comment.CommentAddListener;
@@ -36,6 +37,8 @@ import com.socialize.listener.comment.CommentListListener;
 import com.socialize.listener.entity.EntityCreateListener;
 import com.socialize.listener.entity.EntityListListener;
 import com.socialize.log.SocializeLogger;
+import com.socialize.util.ClassLoaderProvider;
+import com.socialize.util.ResourceLocator;
 
 /**
  * @author Jason Polites
@@ -51,10 +54,28 @@ public class Socialize implements SocializeSessionConsumer {
 	/**
 	 * Initializes a Socialize instance with default settings.
 	 * @param context The current Android context (or Activity)
+	 * @throws Exception 
 	 */
-	public void init(Context context)  {
-		IOCContainer container = new AndroidIOC();
-		init(context, container);
+	public void init(Context context) {
+		try {
+			SocializeIOC container = new SocializeIOC();
+			ResourceLocator locator = new ResourceLocator();
+			ClassLoaderProvider provider = new ClassLoaderProvider();
+			
+			locator.setClassLoaderProvider(provider);
+			
+			container.init(context, locator);
+			
+			init(context, container);
+		}
+		catch (Exception e) {
+			if(logger != null) {
+				logger.error(SocializeLogger.INITIALIZE_FAILED, e);
+			}
+			else {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**
@@ -71,7 +92,12 @@ public class Socialize implements SocializeSessionConsumer {
 			this.initialized = true;
 		}
 		catch (Exception e) {
-			logger.error(SocializeLogger.INITIALIZE_FAILED, e);
+			if(logger != null) {
+				logger.error(SocializeLogger.INITIALIZE_FAILED, e);
+			}
+			else {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -223,5 +249,18 @@ public class Socialize implements SocializeSessionConsumer {
 
 	public void setSession(SocializeSession session) {
 		this.session = session;
+	}
+	
+	/**
+	 * Returns the configuration for this Socialize instance.
+	 * @return
+	 */
+	public SocializeConfig getConfig() {
+		if(initialized) {
+			return container.getBean("config");
+		}
+		
+		if(logger != null) logger.error(SocializeLogger.NOT_INITIALIZED);
+		return null;
 	}
 }

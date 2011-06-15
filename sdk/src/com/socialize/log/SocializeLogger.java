@@ -37,6 +37,9 @@ public class SocializeLogger {
 	public static final int INITIALIZE_FAILED = 0;
 	public static final int NOT_INITIALIZED = 1;
 	public static final int NOT_AUTHENTICATED = 2;
+	public static final int NO_CONFIG = 3;
+	public static final int NO_UDID = 4;
+	public static final int ERROR_CODE_LOAD_FAIL = 5;
 	
 	private LogLevel logLevel = LogLevel.INFO;
 	private String logTag = "Socialize";
@@ -123,11 +126,16 @@ public class SocializeLogger {
 	}
 	
 	public String getMessage(int id) {
-		String msg =  this.config.getProperty(SocializeConfig.LOG_MSG + id);
-		if(msg == null) {
-			msg = "";
+		if(this.config != null) {
+			String msg =  this.config.getProperty(SocializeConfig.LOG_MSG + id);
+			if(msg == null) {
+				msg = "";
+			}
+			return msg;
 		}
-		return msg;
+		else {
+			return "Log System Error!  The log system has not been initialized correctly.  No config found.";
+		}
 	}
 	
 }

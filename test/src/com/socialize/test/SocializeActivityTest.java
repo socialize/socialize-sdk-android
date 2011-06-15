@@ -25,14 +25,14 @@ import java.util.Stack;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.socialize.sample.Main;
+import com.socialize.sample.EmptyActivity;
 
-public abstract class SocializeActivityTest extends ActivityInstrumentationTestCase2<Main> {
+public abstract class SocializeActivityTest extends ActivityInstrumentationTestCase2<EmptyActivity> {
 	
 	private Stack<Object> bucket;
 	
 	public SocializeActivityTest() {
-		super("com.socialize.sample", Main.class);
+		super("com.socialize.sample", EmptyActivity.class);
 	}
 
 	@Override

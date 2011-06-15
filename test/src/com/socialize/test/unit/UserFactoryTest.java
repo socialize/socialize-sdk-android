@@ -74,6 +74,16 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		
 		Stats stats = AndroidMock.createMock(Stats.class);
 		
+		AndroidMock.expect(json.has("first_name")).andReturn(true);
+		AndroidMock.expect(json.has("last_name")).andReturn(true);
+		AndroidMock.expect(json.has("username")).andReturn(true);
+		AndroidMock.expect(json.has("description")).andReturn(true);
+		AndroidMock.expect(json.has("location")).andReturn(true);
+		AndroidMock.expect(json.has("small_image_uri")).andReturn(true);
+		AndroidMock.expect(json.has("medium_image_uri")).andReturn(true);
+		AndroidMock.expect(json.has("large_image_uri")).andReturn(true);
+		AndroidMock.expect(json.has("stats")).andReturn(true);
+		
 		AndroidMock.expect(json.getString("first_name")).andReturn(first_name);
 		AndroidMock.expect(json.getString("last_name")).andReturn(last_name);
 		AndroidMock.expect(json.getString("username")).andReturn(username);

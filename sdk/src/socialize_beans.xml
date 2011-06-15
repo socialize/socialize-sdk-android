@@ -1,20 +1,44 @@
 <beans>
-
-	<bean id="httpUtils" class="com.socialize.util.HttpUtils" initMethod="init"/>
-	<bean id="deviceUtils" class="com.socialize.util.DeviceUtils"/>
-	<bean id="ioUtils" class="com.socialize.util.IOUtils"/>
-	<bean id="jsonParser" class="com.socialize.util.JSONParser"/>
+	
+	<bean id="classLoaderProvider" class="com.socialize.util.ClassLoaderProvider"/>
+	
+	<bean id="resourceLocator" class="com.socialize.util.ResourceLocator">
+		<property name="classLoaderProvider" ref="classLoaderProvider"/>
+		<property name="logger" ref="logger"/>
+	</bean>
 
 	<bean id="config" class="com.socialize.config.SocializeConfig">
 		<init-method name="init">
 			<arg type="context"/>
 		</init-method>
+		<property name="logger" ref="logger"/>
+		<property name="resourceLocator" ref="resourceLocator"/>
 	</bean>
 	
 	<bean id="logger" class="com.socialize.log.SocializeLogger">
 		<init-method name="init">
 			<arg ref="config"/>
 		</init-method>
+	</bean>
+	
+	<bean id="deviceUtils" class="com.socialize.util.DeviceUtils">
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="httpUtils" class="com.socialize.util.HttpUtils">
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>
+		<property name="resourceLocator" ref="resourceLocator"/>
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="ioUtils" class="com.socialize.util.IOUtils">
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="jsonParser" class="com.socialize.util.JSONParser">
+		<property name="ioUtils" ref="ioUtils"/>
 	</bean>
 	
 	<bean id="factoryService" class="com.socialize.entity.factory.FactoryService">
@@ -82,6 +106,7 @@
 		<constructor-arg ref="commentRequestFactory"/>
 		<constructor-arg ref="jsonParser"/>
 		<constructor-arg ref="httpUtils"/>
+		<constructor-arg ref="ioUtils"/>
 	</bean>
 	
 	<bean id="commentApi" class="com.socialize.api.action.CommentApi" extends="socializeApi">

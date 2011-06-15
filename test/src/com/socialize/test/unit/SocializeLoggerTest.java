@@ -21,8 +21,6 @@
  */
 package com.socialize.test.unit;
 
-import java.util.Properties;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.config.SocializeConfig;
@@ -37,7 +35,7 @@ import com.socialize.test.SocializeActivityTest;
 public class SocializeLoggerTest extends SocializeActivityTest {
 
 	
-	@UsesMocks ({SocializeConfig.class, Properties.class})
+	@UsesMocks ({SocializeConfig.class})
 	public void testSocializeLoggerInit() {
 		
 		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
@@ -54,6 +52,88 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 		AndroidMock.verify(config);
 	}
 	
+	@UsesMocks ({SocializeConfig.class})
+	public void testGetMessageById() {
+		
+		final int id = 69;
+		String expected = "foobar";
+		String logTag = "LoggerTest";
+		
+		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+		
+		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_LEVEL)).andReturn(LogLevel.VERBOSE.name());
+		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_TAG)).andReturn(logTag);
+		AndroidMock.expect(config.getProperty(SocializeConfig.LOG_MSG + id)).andReturn(expected);
+		
+		AndroidMock.replay(config);
+		
+		SocializeLogger logger = new SocializeLogger();
+		
+		logger.init(config);
+		String actual = logger.getMessage(id);
+		
+		AndroidMock.verify(config);
+		
+		assertEquals(expected, actual);
+	}
+	
+	public void testLogById() {
+		
+		SocializeLogger logger = new SocializeLogger() {
+
+			@Override
+			public void debug(String msg) {
+				addResult(msg);
+			}
+
+			@Override
+			public void info(String msg) {
+				addResult(msg);
+			}
+
+			@Override
+			public void warn(String msg) {
+				addResult(msg);
+			}
+
+			@Override
+			public void error(String msg) {
+				addResult(msg);
+			}
+
+			@Override
+			public void warn(String msg, Throwable error) {
+				addResult(msg);
+			}
+
+			@Override
+			public void error(String msg, Throwable error) {
+				addResult(msg);
+			}
+
+			@Override
+			public String getMessage(int id) {
+				return String.valueOf(id);
+			}
+		};
+		
+		logger.debug(0);
+		logger.info(1);
+		logger.warn(2);
+		logger.error(3);
+		logger.warn(4, new Exception());
+		logger.error(5, new Exception());
+		
+		String[] results = new String[6];
+		
+		for (int i = results.length-1; i >= 0; i--) {
+			results[i] = getResult();
+		}
+		
+		for (int i = 0; i < results.length; i++) {
+			assertEquals(String.valueOf(i), results[i]);
+		}
+	}
 	
 	public void testSocializeLoggerMethods() {
 		

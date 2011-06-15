@@ -43,20 +43,23 @@ public class UserFactory extends SocializeObjectFactory<User> {
 
 	@Override
 	protected void fromJSON(JSONObject object, User user) throws JSONException {
-		user.setFirstName(object.getString("first_name"));
-		user.setLastName(object.getString("last_name"));
-		user.setUsername(object.getString("username"));
-		user.setDescription(object.getString("description"));
-		user.setLocation(object.getString("location"));
-		user.setSmallImageUri(object.getString("small_image_uri"));
-		user.setMediumImageUri(object.getString("medium_image_uri"));
-		user.setLargeImageUri(object.getString("large_image_uri"));
 		
-		JSONObject statsJson = object.getJSONObject("stats");
+		if(object.has("first_name")) user.setFirstName(object.getString("first_name"));
+		if(object.has("last_name"))user.setLastName(object.getString("last_name"));
+		if(object.has("username"))user.setUsername(object.getString("username"));
+		if(object.has("description"))user.setDescription(object.getString("description"));
+		if(object.has("location"))user.setLocation(object.getString("location"));
+		if(object.has("small_image_uri"))user.setSmallImageUri(object.getString("small_image_uri"));
+		if(object.has("medium_image_uri"))user.setMediumImageUri(object.getString("medium_image_uri"));
+		if(object.has("large_image_uri"))user.setLargeImageUri(object.getString("large_image_uri"));
 		
-		if(statsJson != null) {
-			Stats stats = statsFactory.fromJSON(statsJson);
-			user.setStats(stats);
+		if(object.has("stats")) {
+			JSONObject statsJson = object.getJSONObject("stats");
+			
+			if(statsJson != null) {
+				Stats stats = statsFactory.fromJSON(statsJson);
+				user.setStats(stats);
+			}
 		}
 	}
 

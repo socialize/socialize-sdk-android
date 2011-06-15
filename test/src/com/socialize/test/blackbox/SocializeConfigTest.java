@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test.unit;
+package com.socialize.test.blackbox;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,8 +33,26 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.config.SocializeConfig;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.ClassLoaderProvider;
+import com.socialize.util.ResourceLocator;
 
 public class SocializeConfigTest extends SocializeActivityTest {
+
+	SocializeConfig config;
+	
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		
+		config = new SocializeConfig();
+		
+		ResourceLocator locator = new ResourceLocator();
+		
+		ClassLoaderProvider provider = new ClassLoaderProvider();
+		locator.setClassLoaderProvider(provider);
+		
+		config.setResourceLocator(locator);
+		
+	}
 
 	/**
 	 * tests that the config object loads correctly based on the props file.
@@ -42,13 +60,12 @@ public class SocializeConfigTest extends SocializeActivityTest {
 	 */
 	public void testConfigLoad() throws IOException {
 		
-		// Load the file manually...
 		Properties props = new Properties();
-		SocializeConfig config = new SocializeConfig();
-		
+
 		InputStream in = null;
 		
 		try {
+			// Load the file manually...
 			in = Thread.currentThread().getContextClassLoader().getResourceAsStream(config.getDefaultPropertiesFileName()); 
 			
 			props.load(in);
@@ -79,14 +96,14 @@ public class SocializeConfigTest extends SocializeActivityTest {
 	 * @throws IOException
 	 */
 	public void testConfigLoadWithoutOverride() throws IOException {
-		SocializeConfig config = new SocializeConfig("does.not.exist");
+		config.setPropertiesFileName("does.not.exist");
 		config.init(getActivity());
 		Assert.assertNotNull(config.getProperties());
 		Assert.assertNull(config.getProperties().getProperty("test_value"));
 	}
 	
 	public void testConfigLoadWithOverride() throws IOException {
-		SocializeConfig config = new SocializeConfig("socialize.sample.properties");
+		config.setPropertiesFileName("socialize.sample.properties");
 		config.init(getActivity());
 		Assert.assertNotNull(config.getProperties());
 		Assert.assertNotNull(config.getProperties().getProperty("test_value"));
@@ -96,26 +113,23 @@ public class SocializeConfigTest extends SocializeActivityTest {
 	
 	/**
 	 * tests that config load failes when no props file found
+	 * @throws IOException 
 	 */
-	@UsesMocks({ClassLoaderProvider.class, ClassLoader.class})
-	public void testConfigLoadFail() { 
+	@UsesMocks({ResourceLocator.class})
+	public void testConfigLoadFail() throws IOException { 
 		
 		final String noFile = "does.not.exist";
-		ClassLoaderProvider mockProvider = AndroidMock.createMock(ClassLoaderProvider.class);
-		ClassLoader mockLoader = AndroidMock.createMock(ClassLoader.class);
+		ResourceLocator mockProvider = AndroidMock.createMock(ResourceLocator.class);
 		
-		AndroidMock.expect(mockProvider.getClassloader()).andReturn(mockLoader);
-		AndroidMock.expect(mockLoader.getResourceAsStream(SocializeConfig.DEFAULT_PROPERTIES)).andReturn(null);
+		AndroidMock.expect(mockProvider.locate(getActivity(), noFile)).andReturn(null);
 		
 		AndroidMock.replay(mockProvider);
-		AndroidMock.replay(mockLoader);
 		
 		SocializeConfig config = new SocializeConfig(noFile);
-		
-		config.init(getActivity(), mockProvider);
+		config.setResourceLocator(mockProvider);
+		config.init(getActivity());
 		
 		AndroidMock.verify(mockProvider);
-		AndroidMock.verify(mockLoader);
 		
 		assertNotNull(config.getProperties());
 		assertEquals(0, config.getProperties().size());

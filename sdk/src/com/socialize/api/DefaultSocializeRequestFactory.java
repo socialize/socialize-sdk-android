@@ -66,6 +66,7 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 		try {
 			List<NameValuePair> data = new ArrayList<NameValuePair>(2);
 			data.add(new BasicNameValuePair("payload", "{'udid':" + uuid + "}"));
+//			data.add(new BasicNameValuePair("udid", uuid)); // legacy
 			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(data);
 			post.setEntity(entity);
 		}

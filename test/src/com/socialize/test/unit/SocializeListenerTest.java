@@ -91,7 +91,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		CountDownLatch signal = new CountDownLatch(1); 
 		
 		HttpUtils utils = new HttpUtils();
-		SocializeApiError dummyError = new SocializeApiError(utils, 0);
+		SocializeApiError dummyError = new SocializeApiError(utils, 0, "foobar");
 		
 		final SocializeActionListener listener = AndroidMock.createMock(SocializeActionListener.class);
 		

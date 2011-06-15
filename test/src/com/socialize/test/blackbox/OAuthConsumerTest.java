@@ -19,50 +19,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.util;
+package com.socialize.test.blackbox;
 
-import com.socialize.log.SocializeLogger;
+import oauth.signpost.OAuthConsumer;
+import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 
-import android.Manifest.permission;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.telephony.TelephonyManager;
-
+import com.socialize.oauth.CommonsHttpOAuthConsumerFactory;
+import com.socialize.test.SocializeUnitTest;
 
 /**
  * @author Jason Polites
  *
  */
-public class DeviceUtils {
-	
-	private SocializeLogger logger;
-	
-	public String getUDID(Context context) {
-		if(hasPermission(context, permission.READ_PHONE_STATE)) {
-			TelephonyManager tManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-			return tManager.getDeviceId();
-		}
-		else {
-			// this is fatal
-			if(logger != null) {
-				logger.error(SocializeLogger.NO_UDID);
-			}
-			
-			return null;
-		}
-	}
-	
-	public boolean hasPermission(Context context, String permission) {
-		return context.getPackageManager().checkPermission(permission, context.getPackageName()) == PackageManager.PERMISSION_GRANTED;
-	}
+public class OAuthConsumerTest extends SocializeUnitTest {
 
-	public SocializeLogger getLogger() {
-		return logger;
+	public void testCommonsHttpOAuthConsumerFactory() {
+		CommonsHttpOAuthConsumerFactory factory = new CommonsHttpOAuthConsumerFactory();
+		String key = "foo", secret = "bar";
+		
+		OAuthConsumer consumer = factory.createConsumer(key, secret);
+		
+		assertNotNull(consumer);
+		assertTrue(consumer instanceof CommonsHttpOAuthConsumer);
+		
+		assertEquals(key, consumer.getConsumerKey());
+		assertEquals(secret, consumer.getConsumerSecret());
 	}
-
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
-	}
-	
 	
 }

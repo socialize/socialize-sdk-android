@@ -30,15 +30,18 @@ import com.socialize.api.action.CommentApi;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.factory.CommentFactory;
 import com.socialize.entity.factory.UserFactory;
+import com.socialize.ioc.SocializeIOC;
 import com.socialize.log.SocializeLogger;
 import com.socialize.net.DefaultHttpClientFactory;
 import com.socialize.oauth.CommonsHttpOAuthConsumerFactory;
 import com.socialize.oauth.DefaultOauthRequestSigner;
 import com.socialize.provider.DefaultSocializeProvider;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.IOUtils;
 import com.socialize.util.JSONParser;
+import com.socialize.util.ResourceLocator;
 
 /**
  * Integration tests to verify that the IOC config for socialize is correct.
@@ -50,18 +53,21 @@ public class SocializeIOCTest extends SocializeActivityTest {
 
 	public void testSocializeBeans() throws Exception {
 
-		AndroidIOC ioc = new AndroidIOC();
-		ioc.init(getActivity());
+		SocializeIOC ioc = new SocializeIOC();
+		ResourceLocator locator = new ResourceLocator();
+		locator.setLogger(new SocializeLogger());
+		locator.setClassLoaderProvider(new ClassLoaderProvider());
+		ioc.init(getActivity(), locator);
 
 		// First just make sure all the beans are there...
 
 		// Put a count assert to make sure this test fails when new beans are
-		// added
-		// so that developers are reminded to update this test.
-		assertEquals(19, ioc.size());
+		// added so that developers are reminded to update this test.
+		assertEquals(21, ioc.size());
 
 		// Now make sure all our beans are there
 		checkBeanType(ioc, "deviceUtils", DeviceUtils.class);
+		checkBeanType(ioc, "resourceLocator", ResourceLocator.class);
 		checkBeanType(ioc, "ioUtils", IOUtils.class);
 		checkBeanType(ioc, "jsonParser", JSONParser.class);
 		checkBeanType(ioc, "config", SocializeConfig.class);

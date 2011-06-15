@@ -45,6 +45,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
 import com.socialize.net.HttpClientFactory;
 import com.socialize.util.HttpUtils;
+import com.socialize.util.IOUtils;
 import com.socialize.util.JSONParser;
 
 /**
@@ -62,6 +63,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	private JSONParser jsonParser;
 	private SocializeLogger logger;
 	private HttpUtils httpUtils;
+	private IOUtils ioUtils;
 
 	public DefaultSocializeProvider(
 			SocializeObjectFactory<T> objectFactory, 
@@ -70,7 +72,8 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			SocializeSessionFactory sessionFactory,
 			SocializeRequestFactory<T> requestFactory,
 			JSONParser jsonParser,
-			HttpUtils httpUtils) {
+			HttpUtils httpUtils,
+			IOUtils ioUtils) {
 		
 		super();
 		this.objectFactory = objectFactory;
@@ -80,6 +83,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		this.requestFactory = requestFactory;
 		this.jsonParser = jsonParser;
 		this.httpUtils = httpUtils;
+		this.ioUtils = ioUtils;
 	}
 	
 	@Override
@@ -99,7 +103,8 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			HttpResponse response = client.execute(request);
 			
 			if(httpUtils.isHttpError(response)) {
-				throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode());
+				String msg = ioUtils.readSafe(response.getEntity().getContent());
+				throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
 			}
 			else {
 				entity = response.getEntity();
@@ -138,7 +143,8 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			HttpResponse response = client.execute(get);
 			
 			if(httpUtils.isHttpError(response)) {
-				throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode());
+				String msg = ioUtils.readSafe(response.getEntity().getContent());
+				throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
 			}
 			else {
 				entity = response.getEntity();
@@ -202,7 +208,8 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			HttpResponse response = client.execute(request);
 			
 			if(httpUtils.isHttpError(response)) {
-				throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode());
+				String msg = ioUtils.readSafe(response.getEntity().getContent());
+				throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
 			}
 			else {
 				entity = response.getEntity();

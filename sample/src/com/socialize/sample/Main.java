@@ -1,60 +1,25 @@
 package com.socialize.sample;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 public class Main extends Activity {
-	
-//	private Socialize socialize;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-//        
-//        socialize = new Socialize();
-//        socialize.init(this);
-//        
-//        socialize.authenticate("", "", new SocializeAuthListener() {
-//			
-//			@Override
-//			public void onError(SocializeException error) {
-//				// Handle error
-//				
-//			}
-//			
-//			@Override
-//			public void onAuthFail(SocializeException error) {
-//				// Handle auth fail
-//			}
-//			
-//			@Override
-//			public void onAuthSuccess(SocializeSession session) {
-//				 socialize.addComment("", "", new CommentAddListener() {
-//
-//					@Override
-//					public void onError(SocializeException error) {
-//						// Handle error
-//						
-//					}
-//
-//					@Override
-//					public void onCreate(Comment entity) {
-//						// On 
-//						
-//					}
-//					 
-//				 });
-//				
-//			}
-//		});
-        
+        Button btn = (Button) findViewById(R.id.btnSample);
+        btn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(Main.this, SampleActivity.class);
+				startActivity(i);
+			}
+		});
     }
-
-	@Override
-	protected void onDestroy() {
-//		socialize.destroy();
-		super.onDestroy();
-	}
-    
 }

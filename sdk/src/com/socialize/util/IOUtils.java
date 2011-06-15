@@ -27,12 +27,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.socialize.log.SocializeLogger;
+
 /**
  * @author Jason Polites
  *
  */
 public class IOUtils {
+	
+	private SocializeLogger logger;
 
+	public String readSafe(InputStream in) {
+		try {
+			return read(in);
+		}
+		catch (IOException e) {
+			if(logger != null) {
+				logger.error("", e);
+			}
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
 	public String read(InputStream in) throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		pipe(in, out, 1024);
@@ -54,6 +71,14 @@ public class IOUtils {
 		out.flush();
 		
 		return total;
+	}
+
+	public SocializeLogger getLogger() {
+		return logger;
+	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
 	}
 	
 }

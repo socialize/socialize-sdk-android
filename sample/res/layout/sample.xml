@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+    
+	<EditText
+		android:id="@+id/txtHost"
+		android:text="http://www.dev.getsocialize.com/v1"
+        android:padding="3dip" 
+        android:textSize="16px"
+        android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"/>
+    
+	<EditText
+		android:id="@+id/txtConsumerKey"
+		android:text="8b71dc5d-a009-463d-954d-74561afee30c"
+        android:padding="3dip" 
+        android:textSize="16px"
+        android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"/>
+        
+	<EditText
+		android:id="@+id/txtConsumerSecret"
+		android:text="c0d0f6e9-4bac-45ae-88e6-7ce6da8d1507"
+        android:padding="3dip" 
+        android:textSize="16px"
+        android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"/>
+        
+    <LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="horizontal">
+			<Button
+				android:id="@+id/btnAuthenticate"
+				android:text="Authenticate" 
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"/>
+			<TextView
+				android:id="@+id/txtAuthResult"
+	            android:padding="3dip" 
+	            android:textSize="16px"
+	            android:layout_width="fill_parent"
+	   			android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+</LinearLayout>

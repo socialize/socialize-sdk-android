@@ -33,11 +33,13 @@ public class SocializeApiError extends SocializeException {
 
 	private int resultCode;
 	private HttpUtils utils;
+	private String message;
 	
-	public SocializeApiError(HttpUtils utils, int resultCode) {
+	public SocializeApiError(HttpUtils utils, int resultCode, String message) {
 		super();
 		this.resultCode = resultCode;
 		this.utils = utils;
+		this.message = message;
 	}
 
 	@Override
@@ -47,7 +49,7 @@ public class SocializeApiError extends SocializeException {
 
 	@Override
 	public String getMessage() {
-		return utils.getMessageFor(resultCode);
+		return utils.getMessageFor(resultCode) + " (" + resultCode + "), " + message;
 	}
 
 	public int getResultCode() {

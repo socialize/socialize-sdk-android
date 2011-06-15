@@ -21,12 +21,14 @@
  */
 package com.socialize.test.unit;
 
+import java.io.InputStream;
+
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.android.ioc.AndroidIOC;
 import com.socialize.android.ioc.Container;
 import com.socialize.android.ioc.ContainerBuilder;
 import com.socialize.error.SocializeApiError;
+import com.socialize.ioc.SocializeIOC;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.HttpUtils;
 
@@ -36,35 +38,37 @@ import com.socialize.util.HttpUtils;
  */
 public class SocializeErrorTest extends SocializeActivityTest {
 
-	@UsesMocks ({ContainerBuilder.class, Container.class})
+	@UsesMocks ({ContainerBuilder.class, Container.class, HttpUtils.class})
 	public void testSocializeApiError() throws Exception {
-		final int code = 404;
+		final int resultCode = 404;
+		final String message = "foobar";
+	
 		
-		HttpUtils utils = new HttpUtils();
-		SocializeApiError error = new SocializeApiError(utils, code);
-		
-
-		
+		HttpUtils utils = AndroidMock.createMock(HttpUtils.class);
 		Container container = AndroidMock.createMock(Container.class);
 		ContainerBuilder builder = AndroidMock.createMock(ContainerBuilder.class, getActivity());
 		
-		AndroidMock.expect(builder.build(getActivity(), (String)null)).andReturn(container);
+		SocializeApiError error = new SocializeApiError(utils, resultCode, message);
+		
+		AndroidMock.expect(utils.getMessageFor(AndroidMock.anyInt())).andReturn("foobar").anyTimes();
+		AndroidMock.expect(builder.build(getActivity(), (InputStream)null)).andReturn(container);
 		AndroidMock.expect(container.getBean("httputils")).andReturn(utils).anyTimes();
 		
+		AndroidMock.replay(utils);
 		AndroidMock.replay(builder);
 		AndroidMock.replay(container);
 		
-		AndroidIOC ioc = new AndroidIOC();
-		ioc.init(getActivity(), builder);
+		SocializeIOC ioc = new SocializeIOC();
+		ioc.init(getActivity(), null, builder);
 
 		// Get the result we expect:
-		
-		String expected = utils.getMessageFor(code);
+		String expected = utils.getMessageFor(resultCode) + " (" + resultCode + "), " + message;
 		
 		assertEquals(expected, error.getMessage());
 		assertEquals(expected, error.getLocalizedMessage());
-		assertEquals(code, error.getResultCode());
+		assertEquals(resultCode, error.getResultCode());
 		
+		AndroidMock.verify(utils);
 		AndroidMock.verify(builder);
 		AndroidMock.verify(container);
 	}

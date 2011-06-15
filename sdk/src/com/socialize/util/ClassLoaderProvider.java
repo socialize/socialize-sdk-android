@@ -26,7 +26,6 @@ package com.socialize.util;
  * Used to decouple classloader dependencies for test cases.
  * 
  * @author Jason Polites
- *
  */
 public class ClassLoaderProvider {
 

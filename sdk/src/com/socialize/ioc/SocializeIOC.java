@@ -19,50 +19,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.util;
+package com.socialize.ioc;
 
-import com.socialize.log.SocializeLogger;
+import java.io.InputStream;
 
-import android.Manifest.permission;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.telephony.TelephonyManager;
 
+import com.socialize.android.ioc.AndroidIOC;
+import com.socialize.util.ResourceLocator;
 
 /**
  * @author Jason Polites
  *
  */
-public class DeviceUtils {
+public class SocializeIOC extends AndroidIOC {
 	
-	private SocializeLogger logger;
-	
-	public String getUDID(Context context) {
-		if(hasPermission(context, permission.READ_PHONE_STATE)) {
-			TelephonyManager tManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-			return tManager.getDeviceId();
+	public void init(Context context, ResourceLocator resourceLocator) throws Exception {
+		InputStream in = null;
+		try {
+			in = resourceLocator.locate(context, "socialize_beans.xml");
+			super.init(context, in);
 		}
-		else {
-			// this is fatal
-			if(logger != null) {
-				logger.error(SocializeLogger.NO_UDID);
+		finally {
+			if(in != null) {
+				in.close();
 			}
-			
-			return null;
 		}
 	}
-	
-	public boolean hasPermission(Context context, String permission) {
-		return context.getPackageManager().checkPermission(permission, context.getPackageName()) == PackageManager.PERMISSION_GRANTED;
-	}
-
-	public SocializeLogger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
-	}
-	
-	
 }
