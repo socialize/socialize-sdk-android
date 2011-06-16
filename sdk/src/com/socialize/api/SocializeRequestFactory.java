@@ -27,13 +27,14 @@ import org.apache.http.client.methods.HttpUriRequest;
 
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
+import com.socialize.provider.AuthProvider;
 
 /**
  * @author Jason Polites
  *
  */
 public interface SocializeRequestFactory<T extends SocializeObject> {
-
+	
 	/**
 	 * 
 	 * @param key
@@ -43,6 +44,19 @@ public interface SocializeRequestFactory<T extends SocializeObject> {
 	 * @throws SocializeException 
 	 */
 	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String uuid) throws SocializeException;
+	
+	/**
+	 * 
+	 * @param session
+	 * @param endpoint
+	 * @param uuid
+	 * @param provider
+	 * @param providerId
+	 * @param providerToken
+	 * @return
+	 * @throws SocializeException
+	 */
+	public HttpUriRequest getAuthRequestWith3rdParty(SocializeSession session, String endpoint, String uuid, AuthProvider provider, String providerId, String providerToken) throws SocializeException;
 	
 	/**
 	 * 

@@ -1,0 +1,128 @@
+<beans>
+	
+	<bean id="classLoaderProvider" class="com.socialize.util.ClassLoaderProvider"/>
+	
+	<bean id="resourceLocator" class="com.socialize.util.ResourceLocator">
+		<property name="classLoaderProvider" ref="classLoaderProvider"/>
+		<property name="logger" ref="logger"/>
+	</bean>
+
+	<bean id="config" class="com.socialize.config.SocializeConfig">
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>
+		<property name="logger" ref="logger"/>
+		<property name="resourceLocator" ref="resourceLocator"/>
+	</bean>
+	
+	<bean id="logger" class="com.socialize.log.SocializeLogger">
+		<init-method name="init">
+			<arg ref="config"/>
+		</init-method>
+	</bean>
+	
+	<bean id="deviceUtils" class="com.socialize.util.DeviceUtils">
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="httpUtils" class="com.socialize.util.HttpUtils">
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>
+		<property name="resourceLocator" ref="resourceLocator"/>
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="ioUtils" class="com.socialize.util.IOUtils">
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="jsonParser" class="com.socialize.util.JSONParser">
+		<property name="ioUtils" ref="ioUtils"/>
+	</bean>
+	
+	<bean id="factoryService" class="com.socialize.entity.factory.FactoryService">
+		<property name="factories">
+			<map>
+				<entry>
+					<key value="com.socialize.entity.Comment"/>
+					<value ref="commentFactory"/>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="userFactory" class="com.socialize.entity.factory.UserFactory">
+		<property name="factoryService" ref="factoryService"/>
+	</bean>
+	
+	<bean id="responseFactory" class="com.socialize.api.DefaultSocializeResponseFactory"/>
+	
+	<bean id="httpClientFactory" class="com.socialize.net.DefaultHttpClientFactory">
+		<init-method name="init">
+			<arg ref="config"/>
+		</init-method>
+		<destroy-method name="destroy"/>
+	</bean>
+	
+	<bean id="sessionFactory" class="com.socialize.api.DefaultSocializeSessionFactory"/>
+	
+	<bean id="abstractProvider" class="com.socialize.provider.DefaultSocializeProvider" abstract="true">
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="socializeApi" class="com.socialize.api.SocializeApi" abstract="true">
+		<property name="responseFactory" ref="responseFactory"/>
+		<property name="config" ref="config"/>
+	</bean>
+	
+	<!-- OAUTH -->
+	
+	<bean id="oauthConsumerFactory" class="com.socialize.oauth.CommonsHttpOAuthConsumerFactory"/>
+	<bean id="oauthSigningStrategy" class="oauth.signpost.signature.AuthorizationHeaderSigningStrategy"/>
+	<bean id="oauthSigner" class="com.socialize.oauth.DefaultOauthRequestSigner">
+		<constructor-arg ref="oauthConsumerFactory"/>
+		<constructor-arg ref="oauthSigningStrategy"/>
+	</bean>
+	
+	<!-- END OAUTH -->
+
+<!-- Comment API -->
+
+	<bean id="commentFactory" class="com.socialize.entity.factory.CommentFactory">
+		<property name="factoryService" ref="factoryService"/>
+	</bean>
+	
+	<bean id="commentRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
+		<constructor-arg ref="oauthSigner"/>
+		<constructor-arg ref="commentFactory"/>
+	</bean>
+
+	<bean id="commentProvider" extends="abstractProvider">
+		<constructor-arg ref="commentFactory"/>
+		<constructor-arg ref="userFactory"/>
+		<constructor-arg ref="httpClientFactory"/>
+		<constructor-arg ref="sessionFactory"/>
+		<constructor-arg ref="commentRequestFactory"/>
+		<constructor-arg ref="jsonParser"/>
+		<constructor-arg ref="httpUtils"/>
+		<constructor-arg ref="ioUtils"/>
+	</bean>
+	
+	<bean id="commentApi" class="com.socialize.api.action.CommentApi" extends="socializeApi">
+		<constructor-arg ref="commentProvider"/>
+	</bean>
+	
+<!-- End Comment API -->
+
+<!-- Socialize Core -->
+
+	<bean id="socializeService" class="com.socialize.SocializeService">
+		<constructor-arg type="context"/>
+		<property name="clientFactory" ref="httpClientFactory"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="commentApi" ref="commentApi"/>
+	</bean>
+	
+<!-- End Socialize Core -->
+</beans>

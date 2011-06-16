@@ -27,9 +27,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -43,6 +43,7 @@ import com.socialize.entity.SocializeObject;
 import com.socialize.entity.factory.SocializeObjectFactory;
 import com.socialize.error.SocializeException;
 import com.socialize.oauth.OAuthRequestSigner;
+import com.socialize.provider.AuthProvider;
 import com.socialize.util.StringUtils;
 
 /**
@@ -59,20 +60,40 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 		this.signer = signer;
 		this.objectFactory = objectFactory;
 	}
-
+	
 	@Override
-	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String uuid) throws SocializeException {
-		HttpPost post = signer.sign(session, new HttpPost(endpoint));
+	public HttpUriRequest getAuthRequestWith3rdParty(SocializeSession session, String endpoint, String udid, AuthProvider provider, String providerId, String providerToken) throws SocializeException {
+		HttpPost post = new HttpPost(endpoint);
 		try {
 			List<NameValuePair> data = new ArrayList<NameValuePair>(1);
-			data.add(new BasicNameValuePair("payload", "{'udid':" + uuid + "}"));
+			
+			JSONObject json = new JSONObject();
+			json.put("udid", udid);
+			
+			if(provider != null && !StringUtils.isEmpty(providerId) && !StringUtils.isEmpty(providerToken)) {
+				json.put("auth_type", provider.getId());
+				json.put("auth_token", providerToken);
+				json.put("auth_id", providerId);
+			}
+			
+			data.add(new BasicNameValuePair("payload", json.toString()));
 			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(data);
 			post.setEntity(entity);
+			
+			signer.sign(session,post);
 		}
 		catch (UnsupportedEncodingException e) {
 			throw new SocializeException(e);
 		}
+		catch (JSONException e) {
+			throw new SocializeException(e);
+		}
 		return post;
+	}
+
+	@Override
+	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String uuid) throws SocializeException {
+		return getAuthRequestWith3rdParty(session, endpoint, uuid, null, null, null);
 	}
 
 	@Override
@@ -85,7 +106,7 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 	@Override
 	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
 		
-		HttpPost post = signer.sign(session, new HttpPost(endpoint));
+		HttpPost post =  new HttpPost(endpoint);
 		
 		try {
 			List<NameValuePair> data = new ArrayList<NameValuePair>();
@@ -105,6 +126,8 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 			
 			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(data);
 			post.setEntity(entity);
+			
+			signer.sign(session, post);
 		}
 		catch (JSONException e) {
 			throw new SocializeException(e);
@@ -118,58 +141,59 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 	
 	@Override
 	public HttpUriRequest getPutRequest(SocializeSession session, String endpoint, T entity) throws SocializeException {
-		HttpPut put = signer.sign(session, new HttpPut(endpoint));
-		populatePutPost(put, entity);
+		HttpPut put = new HttpPut(endpoint); 
+		populatePutPost(session, put, entity);
 		return put;
 	}
 
 	@Override
 	public HttpUriRequest getPostRequest(SocializeSession session, String endpoint, T entity) throws SocializeException {
-		HttpPost post = signer.sign(session, new HttpPost(endpoint));
-		populatePutPost(post, entity);
+		HttpPost post = new HttpPost(endpoint);
+		populatePutPost(session, post, entity);
 		return post;
 	}
 
 	@Override
 	public HttpUriRequest getPutRequest(SocializeSession session, String endpoint, Collection<T> objects) throws SocializeException {
-		HttpPut put = signer.sign(session, new HttpPut(endpoint));
-		populatePutPost(put, objects);
+		HttpPut put = new HttpPut(endpoint);
+		populatePutPost(session, put, objects);
 		return put;
 	}
 
 	@Override
 	public HttpUriRequest getPostRequest(SocializeSession session, String endpoint, Collection<T> objects) throws SocializeException {
-		HttpPost post = signer.sign(session, new HttpPost(endpoint));
-		populatePutPost(post, objects);
+		HttpPost post = new HttpPost(endpoint);
+		populatePutPost(session, post, objects);
 		return post;
 	}
 	
-	private void populatePutPost(HttpEntityEnclosingRequest request, Collection<T> objects) throws SocializeException {
+	private void populatePutPost(SocializeSession session, HttpEntityEnclosingRequestBase request, Collection<T> objects) throws SocializeException {
 		try {
 			String payload = objectFactory.toJSON(objects).toString();
-			populatePutPost(request, payload);
+			populatePutPost(session, request, payload);
 		}
 		catch (JSONException e) {
 			throw new SocializeException(e);
 		}
 	}
 	
-	private void populatePutPost(HttpEntityEnclosingRequest request, T object) throws SocializeException {
+	private void populatePutPost(SocializeSession session, HttpEntityEnclosingRequestBase request, T object) throws SocializeException {
 		try {
 			String payload = objectFactory.toJSON(object).toString();
-			populatePutPost(request, payload);
+			populatePutPost(session, request, payload);
 		}
 		catch (JSONException e) {
 			throw new SocializeException(e);
 		}
 	}
 	
-	private void populatePutPost(HttpEntityEnclosingRequest request, String payload) throws SocializeException {
+	private void populatePutPost(SocializeSession session, HttpEntityEnclosingRequestBase request, String payload) throws SocializeException {
 		try {
 			List<NameValuePair> data = new ArrayList<NameValuePair>();
 			data.add(new BasicNameValuePair("payload", payload));
 			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(data);
 			request.setEntity(entity);
+			signer.sign(session, request);
 		}
 		catch (UnsupportedEncodingException e) {
 			throw new SocializeException(e);

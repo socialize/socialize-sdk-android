@@ -67,6 +67,7 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 				assertTrue(request instanceof HttpPost);
 				HttpPost post = (HttpPost) request;
 				assertEquals(post.getURI().toString(), endpoint);
+				assertNotNull(post.getEntity());
 				addResult(true);
 				return request;
 			}
@@ -95,7 +96,11 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		NameValuePair nvp = parsed.get(0);
 		
 		assertEquals("payload", nvp.getName());
-		assertEquals( "{'udid':" + id + "}", nvp.getValue());
+
+		JSONObject jsonExpected = new JSONObject();
+		jsonExpected.put("udid", id);
+		
+		assertEquals( jsonExpected.toString(), nvp.getValue() );
 		
 		assertTrue((Boolean)getResult());
 	}
