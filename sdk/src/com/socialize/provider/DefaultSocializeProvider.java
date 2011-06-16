@@ -100,11 +100,6 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		try {
 			HttpUriRequest request = requestFactory.getAuthRequest(session, endpoint, uuid);
 			
-//			if(logger != null && logger.isInfoEnabled()) {
-				java.util.logging.Logger.getLogger("org.apache.http.wire").setLevel(java.util.logging.Level.FINEST);
-				java.util.logging.Logger.getLogger("org.apache.http.headers").setLevel(java.util.logging.Level.FINEST);
-//			}
-			
 			HttpResponse response = client.execute(request);
 			
 			if(httpUtils.isHttpError(response)) {
@@ -252,7 +247,6 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		}
 		return endpoint;
 	}
-
 
 	private final void closeEntity(HttpEntity entity) {
 		if(entity != null) {
