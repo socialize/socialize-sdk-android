@@ -5,6 +5,7 @@
 	<property file="local.properties" />
 	<property file="build.properties" />
 	<property file="default.properties" />
+	<property file="${library.project.dir}/build.properties" prefix="socialize.sdk."/>
 
 	<path id="android.antlibs">
 		<pathelement path="${sdk.dir}/tools/lib/anttasks.jar" />
@@ -31,7 +32,7 @@
 		<findbugs home="${findbugs.home}" output="xml" outputFile="findbugs-output/bcel-fb.xml">
 			<sourcePath path="${library.project.src}" />
 			<auxClasspath path="${sdkdir}"/>
-			<class location="${library.project.build}/socialize-0.0.2.jar" />
+			<class location="${library.project.build}/socialize-${socialize.sdk.version}.jar" />
 		</findbugs>
 	</target>
 

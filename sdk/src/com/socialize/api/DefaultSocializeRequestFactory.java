@@ -64,9 +64,8 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String uuid) throws SocializeException {
 		HttpPost post = signer.sign(session, new HttpPost(endpoint));
 		try {
-			List<NameValuePair> data = new ArrayList<NameValuePair>(2);
+			List<NameValuePair> data = new ArrayList<NameValuePair>(1);
 			data.add(new BasicNameValuePair("payload", "{'udid':" + uuid + "}"));
-//			data.add(new BasicNameValuePair("udid", uuid)); // legacy
 			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(data);
 			post.setEntity(entity);
 		}
