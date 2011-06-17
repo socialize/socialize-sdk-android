@@ -84,7 +84,7 @@ public class Socialize implements SocializeSessionConsumer {
 	 * @param container A reference to an IOC container
 	 * @see https://github.com/socialize/android-ioc
 	 */
-	public void init(Context context, IOCContainer container) {
+	public void init(Context context, final IOCContainer container) {
 		try {
 			this.container = container;
 			this.service = container.getBean("socializeService");
@@ -100,6 +100,7 @@ public class Socialize implements SocializeSessionConsumer {
 			}
 		}
 	}
+	
 	
 	/**
 	 * Destroys the Socialize instance.  Should be called during the onDestroy() method of your Activity.

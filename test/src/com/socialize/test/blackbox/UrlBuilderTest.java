@@ -19,39 +19,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action;
+package com.socialize.test.blackbox;
 
-import com.socialize.api.SocializeApi;
-import com.socialize.api.SocializeSession;
-import com.socialize.entity.Entity;
-import com.socialize.listener.entity.EntityListener;
-import com.socialize.provider.SocializeProvider;
+import com.socialize.test.SocializeUnitTest;
+import com.socialize.util.UrlBuilder;
 
 /**
  * @author Jason Polites
- *
  */
-public class EntityApi extends SocializeApi<Entity, SocializeProvider<Entity>> {
-	
-	public static final String ENDPOINT = "/entity/";
+public class UrlBuilderTest extends SocializeUnitTest {
 
-	public EntityApi(SocializeProvider<Entity> provider) {
-		super(provider);
-	}
-	
-	public void createEntity(SocializeSession session, String key, String name, EntityListener listener) {
-		Entity c = new Entity();
-		c.setKey(key);
-		c.setName(name);
-		postAsync(session, ENDPOINT, c, listener);
-	}
-	
-	public void getEntity(SocializeSession session, String key, EntityListener listener) {
-		getAsync(session, ENDPOINT, key, listener);
-	}
+	public void testUrlBuilder() {
 
-	public void listEntities(SocializeSession session, EntityListener listener, String...keys) {
-		listAsync(session, ENDPOINT, null, keys, listener);
+		String endpoint = "foo";
+		String key = "bar";
+		String[] ids = {"A","B","C"};
+		
+		UrlBuilder builder = new UrlBuilder();
+		
+		builder.start(endpoint);
+		builder.addParams(key, ids);
+		
+		String expected = "foo/?bar=A&bar=B&bar=C";
+		String actual = builder.toString();
+		
+		assertEquals(expected, actual);
+	}
+	
+	public void testUrlBuilderEncoding() {
+
+		String endpoint = "foo";
+		String key = "bar";
+		String[] ids = {"with a space and %percent","some && ampersands","a plus++"};
+		
+		UrlBuilder builder = new UrlBuilder();
+		
+		builder.start(endpoint);
+		builder.addParams(key, ids);
+		
+		String expected = "foo/?bar=with+a+space+and+%25percent&bar=some+%26%26+ampersands&bar=a+plus%2B%2B";
+		String actual = builder.toString();
+		
+		assertEquals(expected, actual);
 	}
 	
 }

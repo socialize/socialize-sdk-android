@@ -41,19 +41,9 @@
 		<property name="ioUtils" ref="ioUtils"/>
 	</bean>
 	
-	<bean id="factoryService" class="com.socialize.entity.factory.FactoryService">
-		<property name="factories">
-			<map>
-				<entry>
-					<key value="com.socialize.entity.Comment"/>
-					<value ref="commentFactory"/>
-				</entry>
-			</map>
-		</property>
-	</bean>
 
 	<bean id="userFactory" class="com.socialize.entity.factory.UserFactory">
-		<property name="factoryService" ref="factoryService"/>
+
 	</bean>
 	
 	<bean id="responseFactory" class="com.socialize.api.DefaultSocializeResponseFactory"/>
@@ -90,7 +80,7 @@
 <!-- Comment API -->
 
 	<bean id="commentFactory" class="com.socialize.entity.factory.CommentFactory">
-		<property name="factoryService" ref="factoryService"/>
+
 	</bean>
 	
 	<bean id="commentRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">

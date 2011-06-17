@@ -23,7 +23,6 @@ package com.socialize.api;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -35,7 +34,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,6 +43,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.oauth.OAuthRequestSigner;
 import com.socialize.provider.AuthProvider;
 import com.socialize.util.StringUtils;
+import com.socialize.util.UrlBuilder;
 
 /**
  * @author Jason Polites
@@ -106,37 +105,26 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 	@Override
 	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
 		
-		HttpPost post =  new HttpPost(endpoint);
+		// A List is a GET request with params
+		// See: http://en.wikipedia.org/wiki/Representational_State_Transfer
+		UrlBuilder builder = new UrlBuilder();
+		builder.start(endpoint);
 		
-		try {
-			List<NameValuePair> data = new ArrayList<NameValuePair>();
-			
-			JSONObject json = new JSONObject();
-			
-			if(ids != null && ids.length > 0) {
-				JSONArray array = new JSONArray(Arrays.asList(ids));
-				json.put("ids", array);
-			}
-			
-			if(!StringUtils.isEmpty(key)) {
-				json.put("key", key);
-			}
-			
-			data.add(new BasicNameValuePair("payload", json.toString()));
-			
-			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(data);
-			post.setEntity(entity);
-			
-			signer.sign(session, post);
-		}
-		catch (JSONException e) {
-			throw new SocializeException(e);
-		}
-		catch (UnsupportedEncodingException e) {
-			throw new SocializeException(e);
+		if(!StringUtils.isEmpty(key)) {
+			builder.addParam("key", key);
 		}
 		
-		return post;
+		if(ids != null) {
+			for (String id : ids) {
+				builder.addParam("id", id);
+			}
+		}
+		
+		HttpGet get = new HttpGet(builder.toString());
+
+		signer.sign(session, get);
+	
+		return get;
 	}
 	
 	@Override

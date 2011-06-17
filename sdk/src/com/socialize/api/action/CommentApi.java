@@ -33,7 +33,6 @@ import com.socialize.provider.SocializeProvider;
 public class CommentApi extends SocializeApi<Comment, SocializeProvider<Comment>> {
 
 	public static final String ENDPOINT = "/comment/";
-	public static final String ENDPOINT_LIST = "/comment/list/"; 
 	
 	public CommentApi(SocializeProvider<Comment> provider) {
 		super(provider);
@@ -43,11 +42,11 @@ public class CommentApi extends SocializeApi<Comment, SocializeProvider<Comment>
 		Comment c = new Comment();
 		c.setText(comment);
 		c.setEntityKey(key);
-		putAsync(session, ENDPOINT, c, listener);
+		postAsync(session, ENDPOINT, c, listener);
 	}
 	
 	public void getCommentsByEntity(SocializeSession session, String key, CommentListener listener) {
-		listAsync(session, ENDPOINT_LIST, key, null, listener);
+		listAsync(session, ENDPOINT, key, null, listener);
 	}
 
 	public void getCommentsById(SocializeSession session, CommentListener listener, int...ids) {
@@ -57,7 +56,7 @@ public class CommentApi extends SocializeApi<Comment, SocializeProvider<Comment>
 			strIds[i] = String.valueOf(ids[i]);
 		}
 		
-		listAsync(session, ENDPOINT_LIST, null, strIds, listener);
+		listAsync(session, ENDPOINT, null, strIds, listener);
 	}
 	
 	public void getComment(SocializeSession session, int id, CommentListener listener) {

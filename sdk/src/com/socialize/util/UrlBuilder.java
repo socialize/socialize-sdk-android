@@ -19,39 +19,59 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action;
+package com.socialize.util;
 
-import com.socialize.api.SocializeApi;
-import com.socialize.api.SocializeSession;
-import com.socialize.entity.Entity;
-import com.socialize.listener.entity.EntityListener;
-import com.socialize.provider.SocializeProvider;
+import java.net.URLEncoder;
 
 /**
  * @author Jason Polites
  *
  */
-public class EntityApi extends SocializeApi<Entity, SocializeProvider<Entity>> {
-	
-	public static final String ENDPOINT = "/entity/";
+public class UrlBuilder {
 
-	public EntityApi(SocializeProvider<Entity> provider) {
-		super(provider);
+	private StringBuilder builder;
+	private boolean firstParam = true;
+	
+	public UrlBuilder() {
+		super();
 	}
 	
-	public void createEntity(SocializeSession session, String key, String name, EntityListener listener) {
-		Entity c = new Entity();
-		c.setKey(key);
-		c.setName(name);
-		postAsync(session, ENDPOINT, c, listener);
+	public void start(String baseUri) {
+		baseUri = baseUri.trim();
+		
+		if(this.builder == null) {
+			this.builder = new StringBuilder();
+		}
+		else {
+			this.builder.delete(0, this.builder.length());
+		}
+		
+		this.builder.append(baseUri);
+		if(!baseUri.endsWith("/")) this.builder.append("/");
 	}
 	
-	public void getEntity(SocializeSession session, String key, EntityListener listener) {
-		getAsync(session, ENDPOINT, key, listener);
+	public void addParams(String key, String[] values) {
+		for (String val : values) {
+			addParam(key, val);
+		}
+	}
+	
+	public void addParam(String key, String value) {
+		if(firstParam) {
+			firstParam = false;
+			this.builder.append("?");
+		}
+		else {
+			this.builder.append("&");
+		}
+		
+		this.builder.append(key);
+		this.builder.append("=");
+		this.builder.append(URLEncoder.encode(value));
 	}
 
-	public void listEntities(SocializeSession session, EntityListener listener, String...keys) {
-		listAsync(session, ENDPOINT, null, keys, listener);
+	@Override
+	public String toString() {
+		return this.builder.toString();
 	}
-	
 }

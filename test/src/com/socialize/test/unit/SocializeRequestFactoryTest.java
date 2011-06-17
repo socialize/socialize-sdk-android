@@ -22,7 +22,6 @@
 package com.socialize.test.unit;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -48,7 +47,7 @@ import com.socialize.entity.factory.SocializeObjectFactory;
 import com.socialize.error.SocializeException;
 import com.socialize.oauth.OAuthRequestSigner;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.util.JsonAssert;
+import com.socialize.util.UrlBuilder;
 
 /**
  * @author Jason Polites
@@ -143,11 +142,10 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 			
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
-				assertTrue(request instanceof HttpPost);
-				HttpPost list = (HttpPost) request;
-				assertEquals(list.getURI().toString(), endpoint);
+				assertTrue(request instanceof HttpGet);
+				HttpGet list = (HttpGet) request;
 				
-				addResult(true);
+				addResult(list.getURI().toString());
 				return request;
 			}
 		};
@@ -158,34 +156,18 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 
 		HttpUriRequest req = factory.getListRequest(session, endpoint, key, ids);
 		
-		assertTrue(req instanceof HttpPost);
+		assertTrue(req instanceof HttpGet);
 		
-		HttpPost post = (HttpPost) req;
+		String actual = getResult();
 		
-		HttpEntity entity = post.getEntity();
+		UrlBuilder builder = new UrlBuilder();
+		builder.start(endpoint);
+		builder.addParam("key", key);
+		builder.addParams("id", ids);
 		
-		assertNotNull(entity);
+		String expected = builder.toString();
 		
-		assertTrue(entity instanceof UrlEncodedFormEntity);
-		
-		List<NameValuePair> parsed = URLEncodedUtils.parse(entity);
-		
-		assertEquals(1, parsed.size());
-		
-		NameValuePair nvp = parsed.get(0);
-		
-		assertEquals("payload", nvp.getName());
-		
-		JSONObject jsonExpected = new JSONObject();
-		JSONArray array = new JSONArray(Arrays.asList(ids));
-		jsonExpected.put("ids", array);
-		jsonExpected.put("key", key);
-		
-		JSONObject jsonActual = new JSONObject(nvp.getValue());
-		
-		JsonAssert.assertJsonObjectEquals(jsonExpected, jsonActual);
-		
-		assertTrue((Boolean)getResult());
+		assertEquals(expected, actual);
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -59,7 +59,7 @@ public class CommentApiTest extends SocializeUnitTest {
 		
 		CommentApi api = new CommentApi(provider){
 			@Override
-			public void putAsync(SocializeSession session, String endpoint, Comment object, SocializeActionListener listener) {
+			public void postAsync(SocializeSession session, String endpoint, Comment object, SocializeActionListener listener) {
 				addResult(object);
 			}
 		};
