@@ -26,6 +26,7 @@ import com.socialize.android.ioc.AndroidIOC;
 import com.socialize.api.DefaultSocializeRequestFactory;
 import com.socialize.api.DefaultSocializeResponseFactory;
 import com.socialize.api.DefaultSocializeSessionFactory;
+import com.socialize.api.PreferenceSessionPersister;
 import com.socialize.api.action.CommentApi;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.factory.CommentFactory;
@@ -63,7 +64,7 @@ public class SocializeIOCTest extends SocializeActivityTest {
 
 		// Put a count assert to make sure this test fails when new beans are
 		// added so that developers are reminded to update this test.
-		assertEquals(20, ioc.size());
+		assertEquals(21, ioc.size());
 
 		// Now make sure all our beans are there
 		checkBeanType(ioc, "deviceUtils", DeviceUtils.class);
@@ -84,6 +85,7 @@ public class SocializeIOCTest extends SocializeActivityTest {
 		checkBeanType(ioc, "commentApi", CommentApi.class);
 		checkBeanType(ioc, "socializeService", SocializeService.class);
 		checkBeanType(ioc, "responseFactory", DefaultSocializeResponseFactory.class);
+		checkBeanType(ioc, "sessionPersister",PreferenceSessionPersister.class);
 		
 		// Check each bean
 		assertConfig((SocializeConfig) ioc.getBean("config"));

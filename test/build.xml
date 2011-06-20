@@ -135,7 +135,6 @@
 			<path refid="android.target.classpath"/>
 			<path refid="jar.libs.ref"/>
 			<pathelement location="${tested.project.absolute.dir}/bin/classes"/>
-			<pathelement location="bin"/>
 		</path>
 
 		<property name="extensible.classpath" refId="override.path"/>
@@ -148,7 +147,6 @@
 			<path refid="jar.libs.ref"/>
 			<pathelement location="${tested.project.absolute.dir}/bin/classes"/>
 			<pathelement location="${instrumentation.absolute.dir}/classes"/>
-			<pathelement location="bin"/>
 		</path>
 		<property name="extensible.classpath" refId="override.path"/>
 		<echo>Extensible classpath AFTER is ${extensible.classpath}</echo>

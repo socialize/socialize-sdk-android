@@ -19,13 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test.util;
+package com.socialize.sample.mock;
 
 import android.content.SharedPreferences.Editor;
 
 /**
+ * AndroidMock won't mock out static inner-interfaces, just need to create an empty instance to be mocked.
  * @author Jason Polites
- *
  */
 public class MockEditor implements Editor {
 
@@ -34,7 +34,6 @@ public class MockEditor implements Editor {
 	 */
 	@Override
 	public Editor clear() {
-		
 		return null;
 	}
 
@@ -43,7 +42,6 @@ public class MockEditor implements Editor {
 	 */
 	@Override
 	public boolean commit() {
-		
 		return false;
 	}
 
@@ -52,7 +50,6 @@ public class MockEditor implements Editor {
 	 */
 	@Override
 	public Editor putBoolean(String key, boolean value) {
-		
 		return null;
 	}
 
@@ -61,7 +58,6 @@ public class MockEditor implements Editor {
 	 */
 	@Override
 	public Editor putFloat(String key, float value) {
-		
 		return null;
 	}
 
@@ -70,7 +66,6 @@ public class MockEditor implements Editor {
 	 */
 	@Override
 	public Editor putInt(String key, int value) {
-		
 		return null;
 	}
 
@@ -79,7 +74,6 @@ public class MockEditor implements Editor {
 	 */
 	@Override
 	public Editor putLong(String key, long value) {
-		
 		return null;
 	}
 
@@ -88,7 +82,6 @@ public class MockEditor implements Editor {
 	 */
 	@Override
 	public Editor putString(String key, String value) {
-		
 		return null;
 	}
 
@@ -97,7 +90,6 @@ public class MockEditor implements Editor {
 	 */
 	@Override
 	public Editor remove(String key) {
-		
 		return null;
 	}
 

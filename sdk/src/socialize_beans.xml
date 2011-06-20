@@ -57,8 +57,14 @@
 	
 	<bean id="sessionFactory" class="com.socialize.api.DefaultSocializeSessionFactory"/>
 	
+	<bean id="sessionPersister" class="com.socialize.api.PreferenceSessionPersister">
+		<constructor-arg ref="userFactory"/>
+		<constructor-arg ref="sessionFactory"/>
+	</bean>
+	
 	<bean id="abstractProvider" class="com.socialize.provider.DefaultSocializeProvider" abstract="true">
 		<property name="logger" ref="logger"/>
+		<property name="sessionPersister" ref="sessionPersister"/>
 	</bean>
 	
 	<bean id="socializeApi" class="com.socialize.api.SocializeApi" abstract="true">
