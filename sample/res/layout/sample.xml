@@ -8,31 +8,29 @@
 	<EditText
 		android:id="@+id/txtHost"
 		android:text="http://www.dev.getsocialize.com/v1"
-        android:padding="3dip" 
-        android:textSize="16px"
+        android:textSize="12dp"
         android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"/>
     
 	<EditText
 		android:id="@+id/txtConsumerKey"
 		android:text="8b71dc5d-a009-463d-954d-74561afee30c"
-        android:padding="3dip" 
-        android:textSize="16px"
+        android:textSize="12dp"
         android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"/>
         
 	<EditText
 		android:id="@+id/txtConsumerSecret"
 		android:text="c0d0f6e9-4bac-45ae-88e6-7ce6da8d1507"
-        android:padding="3dip" 
-        android:textSize="16px"
+        android:textSize="12dp"
         android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"/>
         
     <LinearLayout 
 	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:orientation="horizontal">
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:layout_marginBottom="12dip">
 			<Button
 				android:id="@+id/btnAuthenticate"
 				android:text="Authenticate" 
@@ -41,9 +39,65 @@
 			<TextView
 				android:id="@+id/txtAuthResult"
 	            android:padding="3dip" 
-	            android:textSize="16px"
+	            android:textSize="12dp"
 	            android:layout_width="fill_parent"
 	   			android:layout_height="wrap_content"/>
+    </LinearLayout>
+    
+    <LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal">
+		 	<Button
+				android:id="@+id/btnEntity"
+				android:text="Entity" 
+				android:visibility="gone"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:textSize="12dp"/>
+		    
+			<Button
+				android:id="@+id/btnComments"
+				android:text="Comment" 
+				android:visibility="gone"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:textSize="12dp"/>
+    </LinearLayout>
+
+    <LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal">
+			<Button
+				android:id="@+id/btnLike"
+				android:text="Like" 
+				android:visibility="gone"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:textSize="12dp"/>
+				
+			<Button
+				android:id="@+id/btnShare"
+				android:text="Share" 
+				android:visibility="gone"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:textSize="12dp"/>
+    </LinearLayout>
+    
+    <LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal">
+		<Button
+			android:id="@+id/btnView"
+			android:text="View" 
+			android:visibility="gone"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:textSize="12dp"
+			android:layout_gravity="center_horizontal"/>
     </LinearLayout>
 
 </LinearLayout>

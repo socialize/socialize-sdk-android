@@ -19,13 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.util;
+package com.socialize.api;
+
+import android.content.Context;
 
 /**
  * @author Jason Polites
  */
-public class StringUtils {
-	public static final boolean isEmpty(String str) {
-		return str == null || str.trim().length() == 0;
-	}
+public interface SocializeSessionPersister {
+
+	public void save(Context context, SocializeSession session);
+	
+	public SocializeSession load(Context context);
+	
+	public void delete(Context context);
 }

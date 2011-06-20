@@ -3,22 +3,26 @@
 	<property file="local.properties" />
 	<property file="build.properties" />
 	<property file="default.properties" />
-	
-    <path id="android.antlibs">
-        <pathelement path="${sdk.dir}/tools/lib/anttasks.jar" />
-        <pathelement path="${sdk.dir}/tools/lib/sdklib.jar" />
-        <pathelement path="${sdk.dir}/tools/lib/androidprefs.jar" />
-    </path>
 
-    <taskdef name="setup"
+	<path id="android.antlibs">
+		<pathelement path="${sdk.dir}/tools/lib/anttasks.jar" />
+		<pathelement path="${sdk.dir}/tools/lib/sdklib.jar" />
+		<pathelement path="${sdk.dir}/tools/lib/androidprefs.jar" />
+	</path>
+
+	<taskdef name="setup"
         classname="com.android.ant.SetupTask"
         classpathref="android.antlibs"/>
-	
+
 	<setup/>
-	
-	<path id="android.libraries.src"><path refid="project.libraries.src" /></path>
-	<path id="android.libraries.jars"><path refid="project.libraries.jars" /></path>
-	
+
+	<path id="android.libraries.src">
+		<path refid="project.libraries.src" />
+	</path>
+	<path id="android.libraries.jars">
+		<path refid="project.libraries.jars" />
+	</path>
+
 	<target name="-pre-compile">
 		<copy todir="libs" verbose="true">
 			<fileset dir="libext" includes="**/*.jar"/>
@@ -26,10 +30,10 @@
 	</target>
 
 	<target name="build" depends="compile">
-		
+
 		<!-- Manually copy config files -->
 		<echo>Out dir is [${out.dir}]</echo>
-		
+
 		<copy todir="${out.dir}/classes" verbose="true" >
 			<fileset dir="src">
 				<include name="socialize_beans.xml"/>
@@ -37,7 +41,7 @@
 				<include name="socialize.properties"/>
 			</fileset>
 		</copy>
-		
+
 		<jar destfile="build/socialize-${version}.jar" basedir="${out.dir}/classes">
 			<manifest>
 				<attribute name="Built-By" value="${vendor}" />
@@ -46,8 +50,25 @@
 				<attribute name="Implementation-Version" value="${version}" />
 			</manifest>
 		</jar>
-		
+
 		<!-- clean up -->
 		<delete dir="libs" includes="**/*.jar" verbose="true"/>
+	</target>
+
+	<target name="javadoc">
+		<mkdir dir="build/docs/javadoc"/>
+
+		<tstamp>
+			<format property="year" pattern="yyyy" locale="en,UK" />
+		</tstamp>
+
+		<javadoc 
+			sourcepath="src" 
+			destdir="build/docs/javadoc" 
+			packagenames="com.socialize.*" 
+			doctitle="${vendor} SDK v${version} Documentation">
+		 	<header><![CDATA[${vendor} SDK v${version} Documentation<br/>Copyright ${year} ${vendor}<br/>${website}]]></header>
+		 	<footer><![CDATA[Copyright ${year} ${vendor}<br/>${website}]]></footer>
+		</javadoc>
 	</target>
 </project>

@@ -33,9 +33,12 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.content.Context;
+
 import com.socialize.api.SocializeRequestFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionFactory;
+import com.socialize.api.SocializeSessionPersister;
 import com.socialize.api.WritableSession;
 import com.socialize.entity.SocializeObject;
 import com.socialize.entity.User;
@@ -64,8 +67,11 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	private SocializeLogger logger;
 	private HttpUtils httpUtils;
 	private IOUtils ioUtils;
+	private SocializeSessionPersister sessionPersister;
+	private Context context;
 
 	public DefaultSocializeProvider(
+			Context context,
 			SocializeObjectFactory<T> objectFactory, 
 			SocializeObjectFactory<User> userFactory,
 			HttpClientFactory clientFactory,
@@ -84,11 +90,26 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		this.jsonParser = jsonParser;
 		this.httpUtils = httpUtils;
 		this.ioUtils = ioUtils;
+		this.context = context;
 	}
 	
 	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException {
 
+		if(sessionPersister != null) {
+			SocializeSession loaded = sessionPersister.load(context);
+			
+			// Verify that the key/secret matches
+			if(loaded != null) {
+				if(loaded.getConsumerKey() != null && 
+						loaded.getConsumerKey().equals(key) &&
+						loaded.getConsumerSecret() != null && 
+						loaded.getConsumerSecret().equals(secret)) {
+					return loaded;
+				}
+			}
+		}
+		
 		WritableSession session = sessionFactory.create(key, secret);
 		
 		endpoint = prepareEndpoint(endpoint);
@@ -102,13 +123,18 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			
 			HttpResponse response = client.execute(request);
 			
+			entity = response.getEntity();
+			
 			if(httpUtils.isHttpError(response)) {
-				String msg = ioUtils.readSafe(response.getEntity().getContent());
+				
+				if(sessionPersister != null && httpUtils.isAuthError(response)) {
+					sessionPersister.delete(context);
+				}
+				
+				String msg = ioUtils.readSafe(entity.getContent());
 				throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
 			}
 			else {
-				entity = response.getEntity();
-				
 				JSONObject json = jsonParser.parseObject(entity.getContent());
 				
 				User user = userFactory.fromJSON(json.getJSONObject("user"));
@@ -116,6 +142,10 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 				session.setConsumerToken(json.getString("oauth_token"));
 				session.setConsumerTokenSecret(json.getString("oauth_token_secret"));
 				session.setUser(user);
+				
+				if(sessionPersister != null) {
+					sessionPersister.save(context, session);
+				}
 			}
 		}
 		catch (Exception e) {
@@ -142,13 +172,18 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			
 			HttpResponse response = client.execute(get);
 			
+			entity = response.getEntity();
+			
 			if(httpUtils.isHttpError(response)) {
-				String msg = ioUtils.readSafe(response.getEntity().getContent());
+				
+				if(sessionPersister != null && httpUtils.isAuthError(response)) {
+					sessionPersister.delete(context);
+				}
+				
+				String msg = ioUtils.readSafe(entity.getContent());
 				throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
 			}
 			else {
-				entity = response.getEntity();
-
 				JSONObject json = jsonParser.parseObject(entity.getContent());
 				
 				return objectFactory.fromJSON(json);
@@ -207,12 +242,18 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 
 			HttpResponse response = client.execute(request);
 			
+			entity = response.getEntity();
+			
 			if(httpUtils.isHttpError(response)) {
-				String msg = ioUtils.readSafe(response.getEntity().getContent());
+				
+				if(sessionPersister != null && httpUtils.isAuthError(response)) {
+					sessionPersister.delete(context);
+				}
+				
+				String msg = ioUtils.readSafe(entity.getContent());
 				throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
 			}
 			else {
-				entity = response.getEntity();
 				
 				JSONArray list = jsonParser.parseArray(entity.getContent());
 				
@@ -238,6 +279,10 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
+	}
+	
+	public void setSessionPersister(SocializeSessionPersister sessionPersister) {
+		this.sessionPersister = sessionPersister;
 	}
 
 	private final String prepareEndpoint(String endpoint) {

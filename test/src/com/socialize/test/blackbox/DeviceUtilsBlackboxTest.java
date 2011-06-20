@@ -19,13 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.util;
+package com.socialize.test.blackbox;
+
+import com.socialize.test.SocializeUnitTest;
+import com.socialize.util.DeviceUtils;
 
 /**
  * @author Jason Polites
+ *
  */
-public class StringUtils {
-	public static final boolean isEmpty(String str) {
-		return str == null || str.trim().length() == 0;
+public class DeviceUtilsBlackboxTest extends SocializeUnitTest {
+
+	// Can't test behaviour because we can't mock telephonymanager, just black box it.
+	public void testDeviceUtilsGetUDID() {
+		DeviceUtils utils = new DeviceUtils();
+		String udid = utils.getUDID(getContext());
+		assertNotNull(udid);
 	}
+	
 }

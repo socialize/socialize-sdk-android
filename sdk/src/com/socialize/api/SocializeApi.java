@@ -44,7 +44,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	private P provider;
 	private SocializeResponseFactory<T> responseFactory;
 	private SocializeConfig config;
-
+	
 	public static enum RequestType {AUTH,PUT,POST,GET,LIST};
 	
 	public SocializeApi(P provider) {

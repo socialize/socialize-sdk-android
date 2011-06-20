@@ -89,6 +89,7 @@
 	</bean>
 
 	<bean id="commentProvider" extends="abstractProvider">
+		<constructor-arg type="context"/>
 		<constructor-arg ref="commentFactory"/>
 		<constructor-arg ref="userFactory"/>
 		<constructor-arg ref="httpClientFactory"/>

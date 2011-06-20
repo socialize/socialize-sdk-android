@@ -87,6 +87,14 @@ public class HttpUtils {
 		return isHttpError(response.getStatusLine().getStatusCode());
 	}
 	
+	public boolean isAuthError(HttpResponse response) {
+		return isAuthError(response.getStatusLine().getStatusCode());
+	}
+	
+	public boolean isAuthError(int code) {
+		return (code == 401 || code == 403);
+	}
+	
 	public boolean isHttpError(int code) {
 		return (code >= 400);
 	}
