@@ -5,6 +5,9 @@ sample/.settings
 sample/gen
 sample/bin
 sample/sdk_src/
+integration-test/bin
+integration-test/gen
+integration-test/.settings
 test/coverage
 test/test-output
 test/gen

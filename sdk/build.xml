@@ -51,6 +51,12 @@
 			</manifest>
 		</jar>
 
+		<!-- Create the ZIP file for distribution -->
+		<zip destfile="build/socialize-sdk-${version}.zip">
+			<fileset dir="libext" includes="**/*.jar"/>
+			<fileset dir="build" includes="**/*.jar"/>
+		</zip>
+
 		<!-- clean up -->
 		<delete dir="libs" includes="**/*.jar" verbose="true"/>
 	</target>
@@ -67,8 +73,10 @@
 			destdir="build/docs/javadoc" 
 			packagenames="com.socialize.*" 
 			doctitle="${vendor} SDK v${version} Documentation">
-		 	<header><![CDATA[${vendor} SDK v${version} Documentation<br/>Copyright ${year} ${vendor}<br/>${website}]]></header>
-		 	<footer><![CDATA[Copyright ${year} ${vendor}<br/>${website}]]></footer>
+			<header>
+				<![CDATA[${vendor} SDK v${version} Documentation<br/>Copyright ${year} ${vendor}<br/>${website}]]></header>
+			<footer>
+				<![CDATA[Copyright ${year} ${vendor}<br/>${website}]]></footer>
 		</javadoc>
 	</target>
 </project>

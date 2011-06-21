@@ -3,8 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="/sample/libs/signpost-commonshttp4-1.2.1.1.jar"/>
-	<classpathentry kind="lib" path="/sample/libs/signpost-core-1.2.1.1.jar"/>
 	<classpathentry kind="src" path="android-ioc_src"/>
+	<classpathentry kind="lib" path="/socialize-sdk-sample/libs/signpost-commonshttp4-1.2.1.1.jar"/>
+	<classpathentry kind="lib" path="/socialize-sdk-sample/libs/signpost-core-1.2.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
