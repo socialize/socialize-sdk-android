@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2011 SocializeService Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -157,7 +157,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		
 		AsyncAuthenicator authenicator = new AsyncAuthenicator(RequestType.AUTH, null, wrapper);
 		SocializeAuthRequest request = new SocializeAuthRequest();
-		request.setEndpoint(config.getProperty(SocializeConfig.API_HOST) + "/authenticate/");
+		request.setEndpoint("/authenticate/");
 		request.setConsumerKey(key);
 		request.setConsumerSecret(secret);
 		request.setUuid(uuid);

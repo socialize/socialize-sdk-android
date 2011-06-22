@@ -23,7 +23,7 @@ package com.socialize.test.blackbox;
 
 import android.content.Context;
 
-import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.test.SocializeActivityTest;
@@ -35,7 +35,7 @@ import com.socialize.test.SocializeActivityTest;
 public class SocializeBlackboxTest extends SocializeActivityTest {
 
 	public void testDefaultSocializeInit() {
-		Socialize socialize = new Socialize() {
+		SocializeService socialize = new SocializeService() {
 			@Override
 			public void init(Context context, IOCContainer container) {
 				addResult(container);

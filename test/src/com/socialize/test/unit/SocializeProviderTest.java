@@ -42,6 +42,7 @@ import com.socialize.api.SocializeRequestFactory;
 import com.socialize.api.SocializeSessionFactory;
 import com.socialize.api.SocializeSessionPersister;
 import com.socialize.api.WritableSession;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeObject;
 import com.socialize.entity.User;
 import com.socialize.entity.factory.SocializeObjectFactory;
@@ -92,6 +93,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 	IOUtils ioUtils;
 	JSONArray jsonArray;
 	Context mockContext;
+	SocializeConfig config;
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -115,6 +117,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		utils = AndroidMock.createMock(HttpUtils.class);
 		ioUtils = AndroidMock.createMock(IOUtils.class);
 		jsonArray = AndroidMock.createMock(JSONArray.class);
+		config = AndroidMock.createMock(SocializeConfig.class);
 		mockContext = new MockContext();
 	}
 
@@ -171,7 +174,8 @@ public class SocializeProviderTest extends SocializeActivityTest {
 				requestFactory,
 				jsonParser,
 				utils,
-				ioUtils
+				ioUtils,
+				config
 		);
 		
 		provider.setSessionPersister(sessionPersister);
@@ -229,7 +233,8 @@ public class SocializeProviderTest extends SocializeActivityTest {
 				requestFactory,
 				jsonParser,
 				utils,
-				ioUtils
+				ioUtils,
+				config
 		);
 		
 		SocializeObject gotten = provider.get(session, endpoint, id);
@@ -296,7 +301,8 @@ public class SocializeProviderTest extends SocializeActivityTest {
 				requestFactory,
 				jsonParser,
 				utils,
-				ioUtils
+				ioUtils,
+				config
 		);
 		
 		provider.setSessionPersister(sessionPersister);
@@ -369,7 +375,8 @@ public class SocializeProviderTest extends SocializeActivityTest {
 				requestFactory,
 				jsonParser,
 				utils,
-				ioUtils
+				ioUtils,
+				config
 		);
 		
 		List<SocializeObject> list = provider.list(session, endpoint, key, ids);
@@ -438,7 +445,8 @@ public class SocializeProviderTest extends SocializeActivityTest {
 				requestFactory,
 				jsonParser,
 				utils,
-				ioUtils
+				ioUtils,
+				config
 		);
 		
 		List<SocializeObject> list = provider.post(session, endpoint, object);
@@ -510,7 +518,8 @@ public class SocializeProviderTest extends SocializeActivityTest {
 				requestFactory,
 				jsonParser,
 				utils,
-				ioUtils
+				ioUtils,
+				config
 		);
 		
 		List<SocializeObject> list = provider.post(session, endpoint, objects);
@@ -579,7 +588,8 @@ public class SocializeProviderTest extends SocializeActivityTest {
 				requestFactory,
 				jsonParser,
 				utils,
-				ioUtils
+				ioUtils,
+				config
 		);
 		
 		List<SocializeObject> list = provider.put(session, endpoint, object);
@@ -651,7 +661,8 @@ public class SocializeProviderTest extends SocializeActivityTest {
 				requestFactory,
 				jsonParser,
 				utils,
-				ioUtils
+				ioUtils,
+				config
 		);
 		
 		List<SocializeObject> list = provider.put(session, endpoint, objects);

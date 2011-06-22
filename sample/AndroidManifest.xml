@@ -20,6 +20,8 @@
         <activity android:name="ShareActivity"></activity>
         <activity android:name="ViewActivity"></activity>
 		<activity android:name="EmptyActivity"></activity>
+		<activity android:name="Error500Activity"></activity>
+		
     </application>
     
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>

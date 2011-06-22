@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2011 SocializeService Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -46,10 +46,14 @@ public class SocializeApiError extends SocializeException {
 	public String getLocalizedMessage() {
 		return getMessage();
 	}
+	
+	public String getDescription() {
+		return message;
+	}
 
 	@Override
 	public String getMessage() {
-		return utils.getMessageFor(resultCode) + " (" + resultCode + "), " + message;
+		return utils.getMessageFor(resultCode) + " (" + resultCode + ") " + message;
 	}
 
 	public int getResultCode() {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2011 SocializeService Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +20,9 @@
  * THE SOFTWARE.
  */
 package com.socialize.api.action;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
@@ -43,7 +46,11 @@ public class EntityApi extends SocializeApi<Entity, SocializeProvider<Entity>> {
 		Entity c = new Entity();
 		c.setKey(key);
 		c.setName(name);
-		postAsync(session, ENDPOINT, c, listener);
+		
+		List<Entity> list = new ArrayList<Entity>(1);
+		list.add(c);
+		
+		postAsync(session, ENDPOINT, list, listener);
 	}
 	
 	public void getEntity(SocializeSession session, String key, EntityListener listener) {

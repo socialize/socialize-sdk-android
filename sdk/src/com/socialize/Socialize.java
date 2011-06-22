@@ -23,245 +23,31 @@ package com.socialize;
 
 import android.content.Context;
 
-import com.socialize.android.ioc.IOCContainer;
-import com.socialize.api.SocializeSession;
-import com.socialize.api.SocializeSessionConsumer;
-import com.socialize.config.SocializeConfig;
-import com.socialize.error.SocializeException;
-import com.socialize.ioc.SocializeIOC;
-import com.socialize.listener.SocializeAuthListener;
-import com.socialize.listener.SocializeListener;
-import com.socialize.listener.comment.CommentAddListener;
-import com.socialize.listener.comment.CommentGetListener;
-import com.socialize.listener.comment.CommentListListener;
-import com.socialize.listener.entity.EntityCreateListener;
-import com.socialize.listener.entity.EntityListListener;
-import com.socialize.log.SocializeLogger;
-import com.socialize.util.ClassLoaderProvider;
-import com.socialize.util.ResourceLocator;
-
 /**
+ * Singleton helper class to make accessing the socialize service easier.
  * @author Jason Polites
  */
-public class Socialize implements SocializeSessionConsumer {
-	
-	private SocializeService service;
-	private SocializeLogger logger;
-	private IOCContainer container;
-	private boolean initialized = false;
-	private SocializeSession session;
-	
-	/**
-	 * Initializes a Socialize instance with default settings.
-	 * @param context The current Android context (or Activity)
-	 * @throws Exception 
-	 */
-	public void init(Context context) {
-		try {
-			SocializeIOC container = new SocializeIOC();
-			ResourceLocator locator = new ResourceLocator();
-			ClassLoaderProvider provider = new ClassLoaderProvider();
-			
-			locator.setClassLoaderProvider(provider);
-			
-			container.init(context, locator);
-			
-			init(context, container);
-		}
-		catch (Exception e) {
-			if(logger != null) {
-				logger.error(SocializeLogger.INITIALIZE_FAILED, e);
-			}
-			else {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	/**
-	 * Initializes a socialize service with a custom object container (Expert use only)
-	 * @param context The current Android context (or Activity)
-	 * @param container A reference to an IOC container
-	 * @see https://github.com/socialize/android-ioc
-	 */
-	public void init(Context context, final IOCContainer container) {
-		try {
-			this.container = container;
-			this.service = container.getBean("socializeService");
-			this.logger = container.getBean("logger");
-			this.initialized = true;
-		}
-		catch (Exception e) {
-			if(logger != null) {
-				logger.error(SocializeLogger.INITIALIZE_FAILED, e);
-			}
-			else {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	
-	/**
-	 * Destroys the Socialize instance.  Should be called during the onDestroy() method of your Activity.
-	 */
-	public void destroy() {
-		initialized = false;
-		if(container != null) {
-			container.destroy();
-		}
-	}
-	
-	/**
-	 * Authenticates the application against the API
-	 * @param consumerKey The consumer key, obtained from registration as a Socialize Developer.
-	 * @param consumerSecret The consumer secret, obtained from registration as a Socialize Developer.
-	 * @param authListener The callback for authentication outcomes.
-	 * @throws SocializeException 
-	 */
-	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener authListener)  {
-		if(assertInitialized(authListener)) {
-			service.authenticate(consumerKey, consumerSecret, authListener, this);
-		}
-	}
+public class Socialize {
 
-	/**
-	 * Adds a new comment and associates it with the entity described.
-	 * @param entity The entity key.  Defined when first creating an entity, or created on the fly with this call.
-	 * @param comment The comment to add.
-	 * @param commentAddListener A listener to handle callbacks from the post.
-	 */
-	public void addComment(String entity, String comment, CommentAddListener commentAddListener) {
-		if(assertAuthenticated(commentAddListener)) {
-			service.addComment(session, entity, comment, commentAddListener);
+	private static final SocializeService instance = new SocializeService();
+	
+	private Socialize() {
+		super();
+	}
+	
+	public static final void init(Context context) {
+		if(!instance.isInitialized()) {
+			instance.init(context);
 		}
 	}
 	
-	/**
-	 * Creates a new entity.
-	 * @param key The [unique] key for the entity.
-	 * @param name The name for the entity.
-	 * @param entityCreateListener A listener to handle callbacks from the post.
-	 */
-	public void createEntity(String key, String name, EntityCreateListener entityCreateListener) {
-		if(assertAuthenticated(entityCreateListener)) {
-			service.createEntity(session, key, name, entityCreateListener);
+	public static final void destroy(Context context) {
+		if(instance != null) {
+			instance.destroy();
 		}
 	}
 	
-	/**
-	 * Lists entities matching the given keys.
-	 * @param entityListListener A listener to handle callbacks from the post.
-	 * @param keys Array of keys corresponding to the entities to return, or null to return all.
-	 */
-	public void listEntitiesByKey(EntityListListener entityListListener, String...keys) {
-		if(assertAuthenticated(entityListListener)) {
-			service.listEntitiesByKey(session, entityListListener, keys);
-		}
-	}
-	
-	/**
-	 * Lists the comments associated with an entity.
-	 * @param session The current socialize session.
-	 * @param entity The entity key.  Defined when first creating an entity, or created on the fly with this call.
-	 * @param commentListListener A listener to handle callbacks from the post.
-	 */
-	public void listCommentsByEntity(String entity, CommentListListener commentListListener) {
-		if(assertAuthenticated(commentListListener)) {
-			service.listCommentsByEntity(session, entity, commentListListener);
-		}
-	}
-	
-	/**
-	 * Lists the comments by comment ID.
-	 * @param session The current socialize session.
-	 * @param commentListListener A listener to handle callbacks from the post.
-	 * @param ids Array of IDs corresponding to pre-existing comments.
-	 */
-	public void listCommentsById(CommentListListener commentListListener, int...ids) {
-		if(assertAuthenticated(commentListListener)) {
-			service.listCommentsById(session, commentListListener, ids);
-		}
-	}
-	
-	/**
-	 * Gets a single comment based on comment ID.
-	 * @param session The current socialize session.
-	 * @param id The ID of the comment.
-	 * @param commentGetListener A listener to handle callbacks from the post.
-	 */
-	public void getComment(int id, CommentGetListener commentGetListener) {
-		if(assertAuthenticated(commentGetListener)) {
-			service.getComment(session, id, commentGetListener);
-		}
-	}
-	
-	/**
-	 * Returns true if this Socialize instance has been initialized.
-	 * @return
-	 */
-	public boolean isInitialized() {
-		return initialized;
-	}
-	
-	public boolean isAuthenticated() {
-		return session != null;
-	}
-	
-	private boolean assertAuthenticated(SocializeListener listener) {
-		if(assertInitialized(listener)) {
-			if(session != null) {
-				return true;
-			}
-			else {
-				if(listener != null) {
-					if(logger != null) {
-						listener.onError(new SocializeException(logger.getMessage(SocializeLogger.NOT_AUTHENTICATED)));
-					}
-					else {
-						listener.onError(new SocializeException("Not authenticated"));
-					}
-				}
-				if(logger != null) logger.error(SocializeLogger.NOT_AUTHENTICATED);
-			}
-		}
-		
-		return false;
-	}
-	
-	private boolean assertInitialized(SocializeListener listener) {
-		if(!initialized) {
-			if(listener != null) {
-				if(logger != null) {
-					listener.onError(new SocializeException(logger.getMessage(SocializeLogger.NOT_INITIALIZED)));
-				}
-				else {
-					listener.onError(new SocializeException("Not initialized"));
-				}
-			}
-			if(logger != null) logger.error(SocializeLogger.NOT_INITIALIZED);
-		}
-		return initialized;
-	}
-
-	public SocializeSession getSession() {
-		return session;
-	}
-
-	public void setSession(SocializeSession session) {
-		this.session = session;
-	}
-	
-	/**
-	 * Returns the configuration for this Socialize instance.
-	 * @return
-	 */
-	public SocializeConfig getConfig() {
-		if(initialized) {
-			return container.getBean("config");
-		}
-		
-		if(logger != null) logger.error(SocializeLogger.NOT_INITIALIZED);
-		return null;
+	public static final SocializeService getSocialize() {
+		return instance;
 	}
 }

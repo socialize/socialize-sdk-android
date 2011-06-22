@@ -85,9 +85,7 @@
 
 <!-- Comment API -->
 
-	<bean id="commentFactory" class="com.socialize.entity.factory.CommentFactory">
-
-	</bean>
+	<bean id="commentFactory" class="com.socialize.entity.factory.CommentFactory"/>
 	
 	<bean id="commentRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
 		<constructor-arg ref="oauthSigner"/>
@@ -104,21 +102,53 @@
 		<constructor-arg ref="jsonParser"/>
 		<constructor-arg ref="httpUtils"/>
 		<constructor-arg ref="ioUtils"/>
+		<constructor-arg ref="config"/>
 	</bean>
 	
 	<bean id="commentApi" class="com.socialize.api.action.CommentApi" extends="socializeApi">
 		<constructor-arg ref="commentProvider"/>
 	</bean>
+
 	
-<!-- End Comment API -->
+<!-- End Comment API -->	
+
+
+<!-- Entity API -->
+
+	<bean id="entityFactory" class="com.socialize.entity.factory.EntityFactory"/>
+	
+	<bean id="entityRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
+		<constructor-arg ref="oauthSigner"/>
+		<constructor-arg ref="entityFactory"/>
+	</bean>
+
+	<bean id="entityProvider" extends="abstractProvider">
+		<constructor-arg type="context"/>
+		<constructor-arg ref="entityFactory"/>
+		<constructor-arg ref="userFactory"/>
+		<constructor-arg ref="httpClientFactory"/>
+		<constructor-arg ref="sessionFactory"/>
+		<constructor-arg ref="entityRequestFactory"/>
+		<constructor-arg ref="jsonParser"/>
+		<constructor-arg ref="httpUtils"/>
+		<constructor-arg ref="ioUtils"/>
+		<constructor-arg ref="config"/>
+	</bean>
+	
+	<bean id="entityApi" class="com.socialize.api.action.EntityApi" extends="socializeApi">
+		<constructor-arg ref="entityProvider"/>
+	</bean>
+
+<!-- End Entity API -->
 
 <!-- Socialize Core -->
 
-	<bean id="socializeService" class="com.socialize.SocializeService">
+	<bean id="socializeApiHost" class="com.socialize.api.SocializeApiHost">
 		<constructor-arg type="context"/>
 		<property name="clientFactory" ref="httpClientFactory"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="commentApi" ref="commentApi"/>
+		<property name="entityApi" ref="entityApi"/>
 	</bean>
 	
 <!-- End Socialize Core -->

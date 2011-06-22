@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2011 SocializeService Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -42,7 +42,7 @@ public class SocializeLogger {
 	public static final int ERROR_CODE_LOAD_FAIL = 5;
 	
 	private LogLevel logLevel = LogLevel.INFO;
-	private String logTag = "Socialize";
+	private String logTag = "SocializeService";
 	private SocializeConfig config;
 	
 	public void init(SocializeConfig config) {

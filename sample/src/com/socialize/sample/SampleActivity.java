@@ -17,7 +17,6 @@ import com.socialize.listener.SocializeAuthListener;
 
 public class SampleActivity extends Activity {
 
-	Socialize socialize = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +24,9 @@ public class SampleActivity extends Activity {
 		
 		setContentView(R.layout.sample);
 		
-		socialize = new Socialize();
-		socialize.init(this);
-		final SocializeConfig config = socialize.getConfig();
+		Socialize.init(this);
+		
+		final SocializeConfig config = Socialize.getSocialize().getConfig();
 
 		final EditText txtHost = (EditText) findViewById(R.id.txtHost);
 		final EditText txtConsumerKey = (EditText) findViewById(R.id.txtConsumerKey);
@@ -55,7 +54,7 @@ public class SampleActivity extends Activity {
 				// Override the location for the API
 				config.setProperty(SocializeConfig.API_HOST, host);
 				
-				socialize.authenticate(consumerKey, consumerSecret, new SocializeAuthListener() {
+				Socialize.getSocialize().authenticate(consumerKey, consumerSecret, new SocializeAuthListener() {
 					
 					@Override
 					public void onError(SocializeException error) {
@@ -142,9 +141,7 @@ public class SampleActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
-		if(socialize != null) {
-			socialize.destroy();
-		}
+		Socialize.destroy(this);
 		super.onDestroy();
 	}
 	

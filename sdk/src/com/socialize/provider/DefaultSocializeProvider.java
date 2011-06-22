@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2011 SocializeService Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -40,6 +40,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionFactory;
 import com.socialize.api.SocializeSessionPersister;
 import com.socialize.api.WritableSession;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeObject;
 import com.socialize.entity.User;
 import com.socialize.entity.factory.SocializeObjectFactory;
@@ -69,6 +70,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	private IOUtils ioUtils;
 	private SocializeSessionPersister sessionPersister;
 	private Context context;
+	private SocializeConfig config;
 
 	public DefaultSocializeProvider(
 			Context context,
@@ -79,7 +81,8 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			SocializeRequestFactory<T> requestFactory,
 			JSONParser jsonParser,
 			HttpUtils httpUtils,
-			IOUtils ioUtils) {
+			IOUtils ioUtils,
+			SocializeConfig config) {
 		
 		super();
 		this.objectFactory = objectFactory;
@@ -91,6 +94,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		this.httpUtils = httpUtils;
 		this.ioUtils = ioUtils;
 		this.context = context;
+		this.config = config;
 	}
 	
 	@Override
@@ -112,7 +116,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		
 		WritableSession session = sessionFactory.create(key, secret);
 		
-		endpoint = prepareEndpoint(endpoint);
+		endpoint = prepareEndpoint(endpoint, true);
 		
 		HttpClient client = clientFactory.getClient();
 		
@@ -149,6 +153,9 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			}
 		}
 		catch (Exception e) {
+			if(e instanceof SocializeException) {
+				throw (SocializeException) e;
+			}
 			throw new SocializeException(e);
 		}
 		finally {
@@ -190,6 +197,10 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			}
 		}
 		catch (Exception e) {
+			if(e instanceof SocializeException) {
+				throw (SocializeException) e;
+			}
+			
 			throw new SocializeException(e);
 		}
 		finally {
@@ -267,6 +278,9 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			}
 		}
 		catch (Exception e) {
+			if(e instanceof SocializeException) {
+				throw (SocializeException) e;
+			}
 			throw new SocializeException(e);
 		}
 		finally {
@@ -284,12 +298,37 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	public void setSessionPersister(SocializeSessionPersister sessionPersister) {
 		this.sessionPersister = sessionPersister;
 	}
-
+	
 	private final String prepareEndpoint(String endpoint) {
+		return prepareEndpoint(endpoint, false);
+	}
+
+	private final String prepareEndpoint(String endpoint, boolean secure) {
 		endpoint = endpoint.trim();
+		
+		String host = config.getProperty(SocializeConfig.API_HOST).trim();
+		
+		if(!host.startsWith("http")) {
+			if(secure) {
+				host = "https://" + host;
+			}
+			else {
+				host = "http://" + host;
+			}
+		}
+		
+		if(!host.endsWith("/")) {
+			if(!endpoint.startsWith("/")) {
+				host += "/";	
+			}
+		}
+		
+		endpoint = host + endpoint;
+		
 		if(!endpoint.endsWith("/")) {
 			endpoint += "/";
 		}
+		
 		return endpoint;
 	}
 
