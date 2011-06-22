@@ -49,10 +49,10 @@ public abstract class AbstractSocializeListener<T extends SocializeObject> imple
 			case LIST:
 				onList(entityResponse.getResults());
 				break;
-			case POST:
+			case PUT:
 				onUpdate(entityResponse.getFirstResult());
 				break;
-			case PUT:
+			case POST:
 				onCreate(entityResponse.getFirstResult());
 				break;
 		}

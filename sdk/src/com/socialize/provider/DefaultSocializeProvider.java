@@ -40,7 +40,6 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionFactory;
 import com.socialize.api.SocializeSessionPersister;
 import com.socialize.api.WritableSession;
-import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeObject;
 import com.socialize.entity.User;
 import com.socialize.entity.factory.SocializeObjectFactory;
@@ -70,7 +69,6 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	private IOUtils ioUtils;
 	private SocializeSessionPersister sessionPersister;
 	private Context context;
-	private SocializeConfig config;
 
 	public DefaultSocializeProvider(
 			Context context,
@@ -81,8 +79,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			SocializeRequestFactory<T> requestFactory,
 			JSONParser jsonParser,
 			HttpUtils httpUtils,
-			IOUtils ioUtils,
-			SocializeConfig config) {
+			IOUtils ioUtils) {
 		
 		super();
 		this.objectFactory = objectFactory;
@@ -94,7 +91,6 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		this.httpUtils = httpUtils;
 		this.ioUtils = ioUtils;
 		this.context = context;
-		this.config = config;
 	}
 	
 	@Override
@@ -116,7 +112,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		
 		WritableSession session = sessionFactory.create(key, secret);
 		
-		endpoint = prepareEndpoint(endpoint, true);
+		endpoint = prepareEndpoint(session, endpoint, true);
 		
 		HttpClient client = clientFactory.getClient();
 		
@@ -171,7 +167,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		HttpEntity entity = null;
 		
 		try {
-			endpoint = prepareEndpoint(endpoint);
+			endpoint = prepareEndpoint(session, endpoint);
 			
 			HttpClient client = clientFactory.getClient();
 			
@@ -210,28 +206,28 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 
 	@Override
 	public List<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
-		endpoint = prepareEndpoint(endpoint);
+		endpoint = prepareEndpoint(session, endpoint);
 		HttpUriRequest request = requestFactory.getListRequest(session, endpoint, key, ids);
 		return doListTypeRequest(request);
 	}
 	
 	@Override
 	public List<T> put(SocializeSession session, String endpoint, T object) throws SocializeException {
-		endpoint = prepareEndpoint(endpoint);
+		endpoint = prepareEndpoint(session, endpoint);
 		HttpUriRequest request = requestFactory.getPutRequest(session, endpoint, object);
 		return doListTypeRequest(request);
 	}
 
 	@Override
 	public List<T> put(SocializeSession session, String endpoint, Collection<T> objects) throws SocializeException {
-		endpoint = prepareEndpoint(endpoint);
+		endpoint = prepareEndpoint(session, endpoint);
 		HttpUriRequest request = requestFactory.getPutRequest(session, endpoint, objects);
 		return doListTypeRequest(request);
 	}
 	
 	@Override
 	public List<T> post(SocializeSession session, String endpoint, T object) throws SocializeException {
-		endpoint = prepareEndpoint(endpoint);
+		endpoint = prepareEndpoint(session, endpoint);
 		HttpUriRequest request = requestFactory.getPostRequest(session, endpoint, object);
 		return doListTypeRequest(request);
 	}
@@ -239,7 +235,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 
 	@Override
 	public List<T> post(SocializeSession session, String endpoint, Collection<T> objects) throws SocializeException {
-		endpoint = prepareEndpoint(endpoint);
+		endpoint = prepareEndpoint(session, endpoint);
 		HttpUriRequest request = requestFactory.getPostRequest(session, endpoint, objects);
 		return doListTypeRequest(request);
 	}
@@ -299,21 +295,26 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		this.sessionPersister = sessionPersister;
 	}
 	
-	private final String prepareEndpoint(String endpoint) {
-		return prepareEndpoint(endpoint, false);
+	private final String prepareEndpoint(SocializeSession session, String endpoint) {
+		return prepareEndpoint(session, endpoint, false);
 	}
 
-	private final String prepareEndpoint(String endpoint, boolean secure) {
+	private final String prepareEndpoint(SocializeSession session, String endpoint, boolean secure) {
 		endpoint = endpoint.trim();
 		
-		String host = config.getProperty(SocializeConfig.API_HOST).trim();
+		String host = session.getEndpointRoot();
 		
-		if(!host.startsWith("http")) {
-			if(secure) {
-				host = "https://" + host;
-			}
-			else {
-				host = "http://" + host;
+		if(host == null) {
+			logger.error("The session did not have an endpoint configured, using the config");
+		}
+		else {
+			if(!host.startsWith("http")) {
+				if(secure) {
+					host = "https://" + host;
+				}
+				else {
+					host = "http://" + host;
+				}
 			}
 		}
 		

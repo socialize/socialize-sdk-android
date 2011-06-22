@@ -55,7 +55,9 @@
 		<destroy-method name="destroy"/>
 	</bean>
 	
-	<bean id="sessionFactory" class="com.socialize.api.DefaultSocializeSessionFactory"/>
+	<bean id="sessionFactory" class="com.socialize.api.DefaultSocializeSessionFactory">
+		<constructor-arg ref="config"/>
+	</bean>
 	
 	<bean id="sessionPersister" class="com.socialize.api.PreferenceSessionPersister">
 		<constructor-arg ref="userFactory"/>
@@ -102,7 +104,6 @@
 		<constructor-arg ref="jsonParser"/>
 		<constructor-arg ref="httpUtils"/>
 		<constructor-arg ref="ioUtils"/>
-		<constructor-arg ref="config"/>
 	</bean>
 	
 	<bean id="commentApi" class="com.socialize.api.action.CommentApi" extends="socializeApi">
@@ -132,7 +133,6 @@
 		<constructor-arg ref="jsonParser"/>
 		<constructor-arg ref="httpUtils"/>
 		<constructor-arg ref="ioUtils"/>
-		<constructor-arg ref="config"/>
 	</bean>
 	
 	<bean id="entityApi" class="com.socialize.api.action.EntityApi" extends="socializeApi">

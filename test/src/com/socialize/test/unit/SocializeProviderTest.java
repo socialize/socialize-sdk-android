@@ -46,6 +46,7 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeObject;
 import com.socialize.entity.User;
 import com.socialize.entity.factory.SocializeObjectFactory;
+import com.socialize.error.SocializeApiError;
 import com.socialize.net.HttpClientFactory;
 import com.socialize.provider.DefaultSocializeProvider;
 import com.socialize.test.SocializeActivityTest;
@@ -117,7 +118,6 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		utils = AndroidMock.createMock(HttpUtils.class);
 		ioUtils = AndroidMock.createMock(IOUtils.class);
 		jsonArray = AndroidMock.createMock(JSONArray.class);
-		config = AndroidMock.createMock(SocializeConfig.class);
 		mockContext = new MockContext();
 	}
 
@@ -127,15 +127,18 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		final String secret = "bar";
 		final String uuid = "uuid";
 		final String endpoint = "foobar/";
+		final String host = "host";
 		final String oauth_token = "oauth_token";
 		final String oauth_token_secret = "oauth_token_secret";
+		final String url = "https://" + host + "/" + endpoint;
+		
 		
 		AndroidMock.expect(sessionFactory.create(key, secret)).andReturn(session);
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
 		AndroidMock.expect(response.getEntity()).andReturn(entity);
 		AndroidMock.expect(entity.getContent()).andReturn(null);
-		AndroidMock.expect(requestFactory.getAuthRequest(session, endpoint, uuid)).andReturn(request);
+		AndroidMock.expect(requestFactory.getAuthRequest(session, url, uuid)).andReturn(request);
 		AndroidMock.expect(jsonParser.parseObject((InputStream)null)).andReturn(json);
 		AndroidMock.expect(json.getJSONObject("user")).andReturn(json);
 		AndroidMock.expect(json.getString("oauth_token")).andReturn(oauth_token);
@@ -143,6 +146,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(userFactory.fromJSON(json)).andReturn(user);
 		AndroidMock.expect(utils.isHttpError(response)).andReturn(false);
 		AndroidMock.expect(sessionPersister.load(mockContext)).andReturn(null); // No persistence for this one
+		AndroidMock.expect(session.getEndpointRoot()).andReturn(host);
 		
 		// Expect save
 		sessionPersister.save(mockContext, session);
@@ -153,6 +157,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		
 		entity.consumeContent();
 		
+		AndroidMock.replay(session);
 		AndroidMock.replay(sessionFactory);
 		AndroidMock.replay(clientFactory);
 		AndroidMock.replay(requestFactory);
@@ -174,14 +179,14 @@ public class SocializeProviderTest extends SocializeActivityTest {
 				requestFactory,
 				jsonParser,
 				utils,
-				ioUtils,
-				config
+				ioUtils
 		);
 		
 		provider.setSessionPersister(sessionPersister);
 		
 		provider.authenticate(endpoint, key, secret, uuid);
 		
+		AndroidMock.verify(session);
 		AndroidMock.verify(sessionFactory);
 		AndroidMock.verify(clientFactory);
 		AndroidMock.verify(requestFactory);
@@ -199,19 +204,23 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		
 		final String id = "foo";
 		final String endpoint = "foobar/";
+		final String host = "host";
+		final String url = "http://" + host + "/" + endpoint;
 		final SocializeObject object = new SocializeObject();
 		
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
-		AndroidMock.expect(requestFactory.getGetRequest(session, endpoint, id)).andReturn(request);
+		AndroidMock.expect(requestFactory.getGetRequest(session, url, id)).andReturn(request);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
 		AndroidMock.expect(response.getEntity()).andReturn(entity);
 		AndroidMock.expect(entity.getContent()).andReturn(null);
 		AndroidMock.expect(jsonParser.parseObject((InputStream)null)).andReturn(json);
 		AndroidMock.expect(objectFactory.fromJSON(json)).andReturn(object);
 		AndroidMock.expect(utils.isHttpError(response)).andReturn(false);
+		AndroidMock.expect(session.getEndpointRoot()).andReturn(host);
 		
 		entity.consumeContent();
 		
+		AndroidMock.replay(session);
 		AndroidMock.replay(sessionFactory);
 		AndroidMock.replay(clientFactory);
 		AndroidMock.replay(objectFactory);
@@ -233,12 +242,12 @@ public class SocializeProviderTest extends SocializeActivityTest {
 				requestFactory,
 				jsonParser,
 				utils,
-				ioUtils,
-				config
+				ioUtils
 		);
 		
 		SocializeObject gotten = provider.get(session, endpoint, id);
 		
+		AndroidMock.verify(session);
 		AndroidMock.verify(sessionFactory);
 		AndroidMock.verify(clientFactory);
 		AndroidMock.verify(requestFactory);
@@ -258,26 +267,29 @@ public class SocializeProviderTest extends SocializeActivityTest {
 	public void testSessionDeleteOnGetFail() throws Exception {
 		final String id = "foo";
 		final String endpoint = "foobar/";
+		final String host = "host";
+		final String url = "http://" + host + "/" + endpoint;
 		final int statusCode = 69;
 		
 		StatusLine status = AndroidMock.createMock(StatusLine.class);
 		
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
-		AndroidMock.expect(requestFactory.getGetRequest(session, endpoint, id)).andReturn(request);
+		AndroidMock.expect(requestFactory.getGetRequest(session, url, id)).andReturn(request);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
 		AndroidMock.expect(response.getStatusLine()).andReturn(status);
 		AndroidMock.expect(status.getStatusCode()).andReturn(statusCode);
 		AndroidMock.expect(utils.isHttpError(response)).andReturn(true); // Fail
 		AndroidMock.expect(utils.isAuthError(response)).andReturn(true); // Fail
-		AndroidMock.expect(utils.getMessageFor(69)).andReturn("TEST ERROR IGNORE ME"); 
 		AndroidMock.expect(response.getEntity()).andReturn(entity);
 		AndroidMock.expect(entity.getContent()).andReturn(null);
 		AndroidMock.expect(ioUtils.readSafe(null)).andReturn("TEST ERROR IGNORE ME");
+		AndroidMock.expect(session.getEndpointRoot()).andReturn(host);
 		
 		sessionPersister.delete(mockContext);
 		
 		entity.consumeContent();
 		
+		AndroidMock.replay(session);
 		AndroidMock.replay(sessionFactory);
 		AndroidMock.replay(clientFactory);
 		AndroidMock.replay(objectFactory);
@@ -301,8 +313,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 				requestFactory,
 				jsonParser,
 				utils,
-				ioUtils,
-				config
+				ioUtils
 		);
 		
 		provider.setSessionPersister(sessionPersister);
@@ -311,8 +322,12 @@ public class SocializeProviderTest extends SocializeActivityTest {
 			 provider.get(session, endpoint, id);
 			 fail();
 		}
-		catch (Exception e) {}
+		catch (Exception e) {
+			assertTrue(e instanceof SocializeApiError);
+			assertEquals(69, ((SocializeApiError)e).getResultCode());
+		}
 		
+		AndroidMock.verify(session);
 		AndroidMock.verify(sessionFactory);
 		AndroidMock.verify(clientFactory);
 		AndroidMock.verify(requestFactory);
@@ -333,13 +348,14 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		final String key = "foo";
 		final String[] ids = {"foo", "bar"};
 		final String endpoint = "foobar/";
+		final String host = "host";
+		final String url = "http://" + host + "/" + endpoint;
 		final SocializeObject object = new SocializeObject();
 		
 		final int arrayLength = 3;
 		
-		
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
-		AndroidMock.expect(requestFactory.getListRequest(session, endpoint, key, ids)).andReturn(request);
+		AndroidMock.expect(requestFactory.getListRequest(session, url, key, ids)).andReturn(request);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
 		AndroidMock.expect(response.getEntity()).andReturn(entity);
 		AndroidMock.expect(entity.getContent()).andReturn(null);
@@ -350,9 +366,11 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(jsonArray.getJSONObject(2)).andReturn(json);
 		AndroidMock.expect(objectFactory.fromJSON(json)).andReturn(object).times(arrayLength);
 		AndroidMock.expect(utils.isHttpError(response)).andReturn(false);
+		AndroidMock.expect(session.getEndpointRoot()).andReturn(host);
 		
 		entity.consumeContent();
 		
+		AndroidMock.replay(session);
 		AndroidMock.replay(sessionFactory);
 		AndroidMock.replay(clientFactory);
 		AndroidMock.replay(objectFactory);
@@ -375,12 +393,12 @@ public class SocializeProviderTest extends SocializeActivityTest {
 				requestFactory,
 				jsonParser,
 				utils,
-				ioUtils,
-				config
+				ioUtils
 		);
 		
 		List<SocializeObject> list = provider.list(session, endpoint, key, ids);
 		
+		AndroidMock.verify(session);
 		AndroidMock.verify(sessionFactory);
 		AndroidMock.verify(clientFactory);
 		AndroidMock.verify(requestFactory);
@@ -403,13 +421,15 @@ public class SocializeProviderTest extends SocializeActivityTest {
 	public void testPost() throws Exception {
 		
 		final String endpoint = "foobar/";
+		final String host = "host";
+		final String url = "http://" + host + "/" + endpoint;
 		final SocializeObject object = new SocializeObject();
 		
 		final int arrayLength = 3;
 		
 		
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
-		AndroidMock.expect(requestFactory.getPostRequest(session, endpoint, object)).andReturn(request);
+		AndroidMock.expect(requestFactory.getPostRequest(session, url, object)).andReturn(request);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
 		AndroidMock.expect(response.getEntity()).andReturn(entity);
 		AndroidMock.expect(entity.getContent()).andReturn(null);
@@ -420,9 +440,11 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(jsonArray.getJSONObject(2)).andReturn(json);
 		AndroidMock.expect(objectFactory.fromJSON(json)).andReturn(object).times(arrayLength);
 		AndroidMock.expect(utils.isHttpError(response)).andReturn(false);
+		AndroidMock.expect(session.getEndpointRoot()).andReturn(host);
 		
 		entity.consumeContent();
 		
+		AndroidMock.replay(session);
 		AndroidMock.replay(sessionFactory);
 		AndroidMock.replay(clientFactory);
 		AndroidMock.replay(objectFactory);
@@ -445,12 +467,12 @@ public class SocializeProviderTest extends SocializeActivityTest {
 				requestFactory,
 				jsonParser,
 				utils,
-				ioUtils,
-				config
+				ioUtils
 		);
 		
 		List<SocializeObject> list = provider.post(session, endpoint, object);
 		
+		AndroidMock.verify(session);
 		AndroidMock.verify(sessionFactory);
 		AndroidMock.verify(clientFactory);
 		AndroidMock.verify(requestFactory);
@@ -476,13 +498,16 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		final SocializeObject object1 = new SocializeObject();
 		final List<SocializeObject> objects = new ArrayList<SocializeObject>();
 		
+		final String host = "host";
+		final String url = "http://" + host + "/" + endpoint;
+		
 		objects.add(object0);
 		objects.add(object1);
 		
 		final int arrayLength = objects.size();
 		
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
-		AndroidMock.expect(requestFactory.getPostRequest(session, endpoint, objects)).andReturn(request);
+		AndroidMock.expect(requestFactory.getPostRequest(session, url, objects)).andReturn(request);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
 		AndroidMock.expect(response.getEntity()).andReturn(entity);
 		AndroidMock.expect(entity.getContent()).andReturn(null);
@@ -493,9 +518,11 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(objectFactory.fromJSON(json)).andReturn(object0).once();
 		AndroidMock.expect(objectFactory.fromJSON(json)).andReturn(object1).once();
 		AndroidMock.expect(utils.isHttpError(response)).andReturn(false);
+		AndroidMock.expect(session.getEndpointRoot()).andReturn(host);
 		
 		entity.consumeContent();
 		
+		AndroidMock.replay(session);
 		AndroidMock.replay(sessionFactory);
 		AndroidMock.replay(clientFactory);
 		AndroidMock.replay(objectFactory);
@@ -518,8 +545,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 				requestFactory,
 				jsonParser,
 				utils,
-				ioUtils,
-				config
+				ioUtils
 		);
 		
 		List<SocializeObject> list = provider.post(session, endpoint, objects);
@@ -530,6 +556,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 			assertTrue(objects.contains(gotten));
 		}
 		
+		AndroidMock.verify(session);
 		AndroidMock.verify(sessionFactory);
 		AndroidMock.verify(clientFactory);
 		AndroidMock.verify(requestFactory);
@@ -547,12 +574,14 @@ public class SocializeProviderTest extends SocializeActivityTest {
 	public void testPut() throws Exception {
 		
 		final String endpoint = "foobar/";
+		final String host = "host";
+		final String url = "http://" + host + "/" + endpoint;
 		final SocializeObject object = new SocializeObject();
 		
 		final int arrayLength = 3;
 		
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
-		AndroidMock.expect(requestFactory.getPutRequest(session, endpoint, object)).andReturn(request);
+		AndroidMock.expect(requestFactory.getPutRequest(session, url, object)).andReturn(request);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
 		AndroidMock.expect(response.getEntity()).andReturn(entity);
 		AndroidMock.expect(entity.getContent()).andReturn(null);
@@ -563,9 +592,11 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(jsonArray.getJSONObject(2)).andReturn(json);
 		AndroidMock.expect(objectFactory.fromJSON(json)).andReturn(object).times(arrayLength);
 		AndroidMock.expect(utils.isHttpError(response)).andReturn(false);
+		AndroidMock.expect(session.getEndpointRoot()).andReturn(host);
 		
 		entity.consumeContent();
 		
+		AndroidMock.replay(session);
 		AndroidMock.replay(sessionFactory);
 		AndroidMock.replay(clientFactory);
 		AndroidMock.replay(objectFactory);
@@ -588,12 +619,12 @@ public class SocializeProviderTest extends SocializeActivityTest {
 				requestFactory,
 				jsonParser,
 				utils,
-				ioUtils,
-				config
+				ioUtils
 		);
 		
 		List<SocializeObject> list = provider.put(session, endpoint, object);
 		
+		AndroidMock.verify(session);
 		AndroidMock.verify(sessionFactory);
 		AndroidMock.verify(clientFactory);
 		AndroidMock.verify(requestFactory);
@@ -615,6 +646,8 @@ public class SocializeProviderTest extends SocializeActivityTest {
 	public void testPutCollection() throws Exception {
 		
 		final String endpoint = "foobar/";
+		final String host = "host";
+		final String url = "http://" + host + "/" + endpoint;
 		final SocializeObject object0 = new SocializeObject();
 		final SocializeObject object1 = new SocializeObject();
 		final List<SocializeObject> objects = new ArrayList<SocializeObject>();
@@ -625,7 +658,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		final int arrayLength = objects.size();
 		
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
-		AndroidMock.expect(requestFactory.getPutRequest(session, endpoint, objects)).andReturn(request);
+		AndroidMock.expect(requestFactory.getPutRequest(session, url, objects)).andReturn(request);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
 		AndroidMock.expect(response.getEntity()).andReturn(entity);
 		AndroidMock.expect(entity.getContent()).andReturn(null);
@@ -636,9 +669,11 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(objectFactory.fromJSON(json)).andReturn(object0).once();
 		AndroidMock.expect(objectFactory.fromJSON(json)).andReturn(object1).once();
 		AndroidMock.expect(utils.isHttpError(response)).andReturn(false);
+		AndroidMock.expect(session.getEndpointRoot()).andReturn(host);
 		
 		entity.consumeContent();
 		
+		AndroidMock.replay(session);
 		AndroidMock.replay(sessionFactory);
 		AndroidMock.replay(clientFactory);
 		AndroidMock.replay(objectFactory);
@@ -661,8 +696,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 				requestFactory,
 				jsonParser,
 				utils,
-				ioUtils,
-				config
+				ioUtils
 		);
 		
 		List<SocializeObject> list = provider.put(session, endpoint, objects);
@@ -673,6 +707,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 			assertTrue(objects.contains(gotten));
 		}
 		
+		AndroidMock.verify(session);
 		AndroidMock.verify(sessionFactory);
 		AndroidMock.verify(clientFactory);
 		AndroidMock.verify(requestFactory);

@@ -21,6 +21,8 @@
  */
 package com.socialize.test.unit.api;
 
+import java.util.Collection;
+
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
@@ -50,26 +52,34 @@ public class EntityApiTest extends SocializeUnitTest {
 		listener = AndroidMock.createMock(EntityListener.class);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void testCreateEntity() {
 		final String key = "foo";
 		final String name = "bar";
 		
 		EntityApi api = new EntityApi(provider){
+			
+			
 			@Override
-			public void postAsync(SocializeSession session, String endpoint, Entity object, SocializeActionListener listener) {
-				addResult(object);
+			public void postAsync(SocializeSession session, String endpoint, Collection<Entity> objects, SocializeActionListener listener) {
+				addResult(objects);
 			}
+
 		};
 		
 		api.createEntity(session, key, name, listener);
 		
-		Entity result = (Entity) getResult();
-		assertNotNull(result);
+		Collection<Entity> result = (Collection<Entity>) getResult();
 		
-		assertNotNull(result.getName());
-		assertEquals(name, result.getName());
-		assertNotNull(result.getKey());
-		assertEquals(key, result.getKey());
+		assertNotNull(result);
+		assertEquals(1, result.size());
+		
+		Entity e = result.iterator().next();
+		
+		assertNotNull(e.getName());
+		assertEquals(name, e.getName());
+		assertNotNull(e.getKey());
+		assertEquals(key, e.getKey());
 	}
 	
 	public void testGetEntity() {

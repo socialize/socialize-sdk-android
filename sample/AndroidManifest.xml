@@ -16,6 +16,7 @@
         <activity android:name="SampleActivity"></activity>
         <activity android:name="CommentActivity"></activity>
         <activity android:name="EntityActivity"></activity>
+        <activity android:name="EntityListActivity"></activity>
         <activity android:name="LikeActivity"></activity>
         <activity android:name="ShareActivity"></activity>
         <activity android:name="ViewActivity"></activity>

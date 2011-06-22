@@ -2,20 +2,19 @@ package com.socialize.sample.util;
 
 import java.io.PrintWriter;
 
+import android.content.Context;
+
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
-import com.socialize.sample.Error500Activity;
-
-import android.content.Context;
-import android.content.Intent;
 
 public final class ErrorHandler {
 	
-	public static final void handleApiError(Context context, SocializeException error) {
+	public static final String handleApiError(Context context, SocializeException error) {
 		if(error instanceof SocializeApiError) {
 			SocializeApiError serror = (SocializeApiError) error;
 			if(serror.getResultCode() == 500) {
-				writeErrorAndView(context, serror);
+				writeError(context, serror);
+				return "500 Error, file written to device";
 			}
 			else {
 				error.printStackTrace();
@@ -24,9 +23,11 @@ public final class ErrorHandler {
 		else {
 			error.printStackTrace();
 		}
+		
+		return error.getMessage();
 	}
 
-	public static final void writeErrorAndView(Context context, SocializeApiError error) {
+	public static final void writeError(Context context, SocializeApiError error) {
 		PrintWriter writer = null;
 		
 		try {
@@ -42,10 +43,6 @@ public final class ErrorHandler {
 				writer.close();
 			}
 		}
-		
-		Intent i = new Intent(context, Error500Activity.class);
-		context.startActivity(i);
-		
 		
 	}
 	

@@ -48,5 +48,11 @@
 			android:layout_height="wrap_content" />
 			
 	</LinearLayout>
+	
+		<Button
+			android:id="@+id/btnEntityList"
+			android:text="List"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content" />
 
 </LinearLayout>

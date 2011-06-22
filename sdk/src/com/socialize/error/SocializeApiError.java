@@ -53,7 +53,7 @@ public class SocializeApiError extends SocializeException {
 
 	@Override
 	public String getMessage() {
-		return utils.getMessageFor(resultCode) + " (" + resultCode + ") " + message;
+		return utils.getMessageFor(resultCode) + " (" + resultCode + "), " + message;
 	}
 
 	public int getResultCode() {

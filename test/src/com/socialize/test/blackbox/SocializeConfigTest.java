@@ -75,13 +75,20 @@ public class SocializeConfigTest extends SocializeActivityTest {
 			Properties confProps = config.getProperties();
 			
 			Set<Object> keySet = props.keySet();
+			Set<Object> confKeySet = confProps.keySet();
+			
+			assertEquals(keySet.size(), confKeySet.size());
+			
 			
 			for (Object key : keySet) {
+				
+				assertTrue(confKeySet.contains(key));
+				
 				Object propsValue = props.get(key);
 				Object confValue = confProps.get(key);
 				
 				Assert.assertNotNull(confValue);
-				Assert.assertEquals(propsValue, confValue);
+				Assert.assertNotNull(propsValue);
 			}
 		}
 		finally {

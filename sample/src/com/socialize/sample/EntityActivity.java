@@ -1,6 +1,7 @@
 package com.socialize.sample;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,6 +28,7 @@ public class EntityActivity extends Activity {
 		final TextView txtEntityCreateResult = (TextView) findViewById(R.id.txtEntityCreateResult);
 		
 		final Button btnEntityCreate = (Button) findViewById(R.id.btnEntityCreate);
+		final Button btnEntityList = (Button) findViewById(R.id.btnEntityList);
 		
 		if(Socialize.getSocialize().isAuthenticated()) {
 			
@@ -34,6 +36,10 @@ public class EntityActivity extends Activity {
 				
 				@Override
 				public void onClick(View v) {
+					
+					txtEntityCreateResult.setText("");
+					btnEntityCreate.setEnabled(false);
+					
 					String key = txtKey.getText().toString();
 					String name = txtName.getText().toString();
 					
@@ -41,15 +47,27 @@ public class EntityActivity extends Activity {
 						
 						@Override
 						public void onError(SocializeException error) {
-							txtEntityCreateResult.setText("FAIL");
-							ErrorHandler.handleApiError(EntityActivity.this, error);
+							txtEntityCreateResult.setText("FAIL: " + ErrorHandler.handleApiError(EntityActivity.this, error));
+							btnEntityCreate.setEnabled(true);
 						}
 						
 						@Override
 						public void onCreate(Entity entity) {
+							btnEntityCreate.setEnabled(true);
 							txtEntityCreateResult.setText("SUCCESS");
 						}
 					});
+				}
+			});
+			
+			btnEntityList.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent i = new Intent(EntityActivity.this, EntityListActivity.class);
+					Bundle extras = new Bundle();
+					extras.putString("key", txtKey.getText().toString());
+					i.putExtras(extras);
+					startActivity(i);
 				}
 			});
 		}

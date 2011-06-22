@@ -21,8 +21,11 @@
  */
 package com.socialize.test.unit;
 
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.DefaultSocializeSessionFactory;
 import com.socialize.api.WritableSession;
+import com.socialize.config.SocializeConfig;
 import com.socialize.test.SocializeUnitTest;
 
 /**
@@ -31,13 +34,24 @@ import com.socialize.test.SocializeUnitTest;
  */
 public class DefaultSocializeSessionFactoryTest extends SocializeUnitTest {
 
+	@UsesMocks (SocializeConfig.class)
 	public void testSessionFactory() {
-		DefaultSocializeSessionFactory factory = new DefaultSocializeSessionFactory();
+		
+		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+		
+		AndroidMock.expect(config.getProperty(SocializeConfig.API_HOST)).andReturn("foobar");
+		
+		AndroidMock.replay(config);
+		
+		DefaultSocializeSessionFactory factory = new DefaultSocializeSessionFactory(config);
 		String key= "foo", secret="bar";
 		WritableSession session = factory.create(key, secret);
 		assertNotNull(session);
 		assertEquals(key, session.getConsumerKey());
 		assertEquals(secret, session.getConsumerSecret());
+		assertEquals("foobar", session.getEndpointRoot());
+		
+		AndroidMock.verify(config);
 	}
 	
 }

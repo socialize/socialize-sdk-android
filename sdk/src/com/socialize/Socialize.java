@@ -42,7 +42,7 @@ public class Socialize {
 	}
 	
 	public static final void destroy(Context context) {
-		if(instance != null) {
+		if(instance != null && instance.isInitialized()) {
 			instance.destroy();
 		}
 	}

@@ -51,7 +51,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		SocializeApiHost service = AndroidMock.createMock(SocializeApiHost.class, getContext());
 		SocializeLogger logger = AndroidMock.createNiceMock(SocializeLogger.class);
 		
-		AndroidMock.expect(container.getBean("socializeService")).andReturn(service);
+		AndroidMock.expect(container.getBean("socializeApiHost")).andReturn(service);
 		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
 
 		container.destroy();
@@ -80,7 +80,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		final String key = "foo", comment = "bar";
 		
-		AndroidMock.expect(container.getBean("socializeService")).andReturn(service);
+		AndroidMock.expect(container.getBean("socializeApiHost")).andReturn(service);
 		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
 		
 		service.addComment(session, key, comment, listener);
@@ -110,7 +110,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		final String key = "foo", name = "bar";
 		
-		AndroidMock.expect(container.getBean("socializeService")).andReturn(service);
+		AndroidMock.expect(container.getBean("socializeApiHost")).andReturn(service);
 		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
 		
 		service.createEntity(session, key, name, listener);
@@ -140,7 +140,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		final String key = "foo";
 		
-		AndroidMock.expect(container.getBean("socializeService")).andReturn(service);
+		AndroidMock.expect(container.getBean("socializeApiHost")).andReturn(service);
 		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
 
 		service.listCommentsByEntity(session, key, listener);
@@ -170,7 +170,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		final int[] ids = {1,2,3};
 		
-		AndroidMock.expect(container.getBean("socializeService")).andReturn(service);
+		AndroidMock.expect(container.getBean("socializeApiHost")).andReturn(service);
 		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
 
 		service.listCommentsById(session, listener, ids);
@@ -200,7 +200,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		final int id = 1;
 		
-		AndroidMock.expect(container.getBean("socializeService")).andReturn(service);
+		AndroidMock.expect(container.getBean("socializeApiHost")).andReturn(service);
 		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
 
 		service.getComment(session, id, listener);
@@ -230,7 +230,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		final String key = "foo", secret = "bar";
 		
-		AndroidMock.expect(container.getBean("socializeService")).andReturn(service);
+		AndroidMock.expect(container.getBean("socializeApiHost")).andReturn(service);
 		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
 		
 		AndroidMock.replay(container);
@@ -283,7 +283,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
 		SocializeApiHost service = AndroidMock.createMock(SocializeApiHost.class, getContext());
 		
-		AndroidMock.expect(container.getBean("socializeService")).andReturn(service);
+		AndroidMock.expect(container.getBean("socializeApiHost")).andReturn(service);
 		AndroidMock.expect(container.getBean("logger")).andReturn(null);
 		
 		AndroidMock.replay(container);
@@ -326,7 +326,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		final String[] ids = {"A","B","C"};
 		
-		AndroidMock.expect(container.getBean("socializeService")).andReturn(service);
+		AndroidMock.expect(container.getBean("socializeApiHost")).andReturn(service);
 		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
 
 		service.listEntitiesByKey(session, listener, ids);

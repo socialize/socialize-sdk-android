@@ -220,7 +220,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		assertTrue(result);
 	}
 	
-	public void testListenerOnUpdateCalledOnPOST() throws Throwable {
+	public void testListenerOnCreateCalledOnPOST() throws Throwable {
 		final SocializeActionListener listener = new AbstractSocializeListener<SocializeObject>() {
 
 			@Override
@@ -240,12 +240,12 @@ public class SocializeListenerTest extends SocializeActivityTest {
 
 			@Override
 			public void onUpdate(SocializeObject entity) {
-				addResult(true);
+				fail();
 			}
 
 			@Override
 			public void onCreate(SocializeObject entity) {
-				fail();
+				addResult(true);
 			}
 		};
 		
@@ -268,7 +268,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		assertTrue(result);
 	}
 	
-	public void testListenerOnCreateCalledOnPUT() throws Throwable {
+	public void testListenerOnUpdateCalledOnPUT() throws Throwable {
 		final SocializeActionListener listener = new AbstractSocializeListener<SocializeObject>() {
 
 			@Override
@@ -288,12 +288,12 @@ public class SocializeListenerTest extends SocializeActivityTest {
 
 			@Override
 			public void onUpdate(SocializeObject entity) {
-				fail();
+				addResult(true);
 			}
 
 			@Override
 			public void onCreate(SocializeObject entity) {
-				addResult(true);
+				fail();
 			}
 		};
 		

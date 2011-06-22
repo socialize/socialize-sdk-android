@@ -21,10 +21,19 @@
  */
 package com.socialize.api;
 
+import com.socialize.config.SocializeConfig;
+
 /**
  * @author Jason Polites
  */
 public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
+
+	private SocializeConfig config;
+	
+	public DefaultSocializeSessionFactory(SocializeConfig config) {
+		super();
+		this.config = config;
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.api.SocializeSessionFactory#create(java.lang.String, java.lang.String)
@@ -34,6 +43,9 @@ public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 		SocializeSessionImpl session = new SocializeSessionImpl();
 		session.setConsumerKey(key);
 		session.setConsumerSecret(secret);
+		session.setEndpointRoot(config.getProperty(SocializeConfig.API_HOST).trim());
 		return session;
 	}
+	
+	
 }
