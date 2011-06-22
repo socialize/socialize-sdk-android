@@ -160,16 +160,16 @@ public class SocializeService implements SocializeSessionConsumer {
 			service.listEntitiesByKey(session, entityListListener, keys);
 		}
 	}
-	
-	/**
-	 * Lists all entities associated with the current consumer key.
-	 * @param entityListListener
-	 */
-	public void listAllEntities(EntityListListener entityListListener) {
-		if(assertAuthenticated(entityListListener)) {
-			service.listEntitiesByKey(session, entityListListener, (String[]) null);
-		}
-	}
+//	
+//	/**
+//	 * Lists all entities associated with the current consumer key.
+//	 * @param entityListListener
+//	 */
+//	public void listAllEntities(EntityListListener entityListListener) {
+//		if(assertAuthenticated(entityListListener)) {
+//			service.listEntitiesByKey(session, entityListListener, (String[]) null);
+//		}
+//	}
 	
 	/**
 	 * Lists the comments associated with an entity.

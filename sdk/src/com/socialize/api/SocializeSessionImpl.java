@@ -34,7 +34,7 @@ public class SocializeSessionImpl implements WritableSession {
 	private String consumerSecret;
 	private String consumerToken;
 	private String consumerTokenSecret;
-	private String endpointRoot;
+	private String host;
 	
 	public SocializeSessionImpl() {
 		super();
@@ -107,11 +107,16 @@ public class SocializeSessionImpl implements WritableSession {
 	 * @see com.socialize.api.SocializeSession#getEndpointRoot()
 	 */
 	@Override
-	public String getEndpointRoot() {
-		return endpointRoot;
+	public String getHost() {
+		return host;
 	}
 
-	public void setEndpointRoot(String endpointRoot) {
-		this.endpointRoot = endpointRoot;
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.WritableSession#setHost(java.lang.String)
+	 */
+	@Override
+	public void setHost(String host) {
+		this.host = host;
 	}
 }

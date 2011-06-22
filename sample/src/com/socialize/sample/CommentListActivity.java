@@ -8,13 +8,13 @@ import android.app.ListActivity;
 import android.os.Bundle;
 
 import com.socialize.Socialize;
-import com.socialize.entity.Entity;
+import com.socialize.entity.Comment;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.entity.EntityListListener;
+import com.socialize.listener.comment.CommentListListener;
 import com.socialize.sample.util.ErrorHandler;
 
-public class EntityListActivity<T extends SocializeObject>  extends ListActivity {
+public class CommentListActivity<T extends SocializeObject>  extends ListActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,32 +26,32 @@ public class EntityListActivity<T extends SocializeObject>  extends ListActivity
 			
 			String key = getIntent().getExtras().getString("key");
 			
-			Socialize.getSocialize().listEntitiesByKey(new EntityListListener() {
+			Socialize.getSocialize().listCommentsByEntity(key, new CommentListListener() {
 				
 				@Override
 				public void onError(SocializeException error) {
-					new AlertDialog.Builder(EntityListActivity.this).setMessage("Error " + ErrorHandler.handleApiError(EntityListActivity.this, error)).create().show();
+					new AlertDialog.Builder(CommentListActivity.this).setMessage("Error " + ErrorHandler.handleApiError(CommentListActivity.this, error)).create().show();
 				}
 				
 				@Override
-				public void onList(List<Entity> entities) {
+				public void onList(List<Comment> entities) {
 					
 					ArrayList<ListItem> items = new ArrayList<ListItem>(entities.size());
 					
-					for (final Entity entity : entities) {
+					for (final Comment entity : entities) {
 						items.add(new ListItem() {
 							
 							@Override
 							public String getName() {
-								return entity.getName();
+								return entity.getText();
 							}
 						});
 					}
 					
-					ListAdapter adapter = new ListAdapter(EntityListActivity.this, R.layout.list_row, items);
+					ListAdapter adapter = new ListAdapter(CommentListActivity.this, R.layout.list_row, items);
 					setListAdapter(adapter);
 				}
-			}, key);
+			});
 		}
 	}
 	

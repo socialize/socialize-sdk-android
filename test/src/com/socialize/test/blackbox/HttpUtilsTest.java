@@ -21,6 +21,11 @@
  */
 package com.socialize.test.blackbox;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.log.SocializeLogger;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.ClassLoaderProvider;
@@ -98,5 +103,49 @@ public class HttpUtilsTest extends SocializeActivityTest {
 		assertTrue(utils.isHttpError(404));
 		assertFalse(utils.isHttpError(301));
 		assertFalse(utils.isHttpError(200));
+	}
+	
+	@UsesMocks ({HttpResponse.class, StatusLine.class})
+	public void testHttpIsAuthErrorFromResponse() {
+		
+		final int code = 69;
+		
+		HttpResponse response = AndroidMock.createMock(HttpResponse.class);
+		StatusLine statusLine = AndroidMock.createMock(StatusLine.class);
+		
+		AndroidMock.expect(response.getStatusLine()).andReturn(statusLine);
+		AndroidMock.expect(statusLine.getStatusCode()).andReturn(69);
+		
+		AndroidMock.replay(response);
+		AndroidMock.replay(statusLine);
+		
+		HttpUtils utils = new HttpUtils() {
+
+			@Override
+			public boolean isAuthError(int code) {
+				addResult(code);
+				return super.isAuthError(code);
+			}
+		};
+		
+		utils.isAuthError(response);
+		
+		Integer result = getResult();
+		
+		assertNotNull(result);
+		assertEquals(code, result.intValue());
+		
+		AndroidMock.verify(response);
+		AndroidMock.verify(statusLine);
+		
+	}
+	
+	public void testHttpIsAuthError() {
+		HttpUtils utils = new HttpUtils();
+		assertTrue(utils.isAuthError(401));
+		assertTrue(utils.isAuthError(403));
+		assertFalse(utils.isAuthError(301));
+		assertFalse(utils.isAuthError(200));
+		assertFalse(utils.isAuthError(500));
 	}
 }

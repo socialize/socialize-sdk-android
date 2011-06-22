@@ -39,6 +39,6 @@ public interface SocializeSession {
 	
 	public String getConsumerTokenSecret();
 	
-	public String getEndpointRoot();
+	public String getHost();
 
 }

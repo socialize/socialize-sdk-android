@@ -101,10 +101,14 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			
 			// Verify that the key/secret matches
 			if(loaded != null) {
-				if(loaded.getConsumerKey() != null && 
-						loaded.getConsumerKey().equals(key) &&
-						loaded.getConsumerSecret() != null && 
-						loaded.getConsumerSecret().equals(secret)) {
+				
+				String loadedKey = loaded.getConsumerKey();
+				String loadedSecret = loaded.getConsumerSecret();
+				
+				if(loadedKey != null && 
+						loadedKey.equals(key) &&
+						loadedSecret != null && 
+						loadedSecret.equals(secret)) {
 					return loaded;
 				}
 			}
@@ -302,7 +306,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	private final String prepareEndpoint(SocializeSession session, String endpoint, boolean secure) {
 		endpoint = endpoint.trim();
 		
-		String host = session.getEndpointRoot();
+		String host = session.getHost();
 		
 		if(host == null) {
 			logger.error("The session did not have an endpoint configured, using the config");

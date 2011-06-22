@@ -49,7 +49,7 @@ public class DefaultSocializeSessionFactoryTest extends SocializeUnitTest {
 		assertNotNull(session);
 		assertEquals(key, session.getConsumerKey());
 		assertEquals(secret, session.getConsumerSecret());
-		assertEquals("foobar", session.getEndpointRoot());
+		assertEquals("foobar", session.getHost());
 		
 		AndroidMock.verify(config);
 	}

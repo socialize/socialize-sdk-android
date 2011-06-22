@@ -63,7 +63,7 @@ public class EntityActivity extends Activity {
 			btnEntityList.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					Intent i = new Intent(EntityActivity.this, EntityListActivity.class);
+					Intent i = new Intent(EntityActivity.this, CommentListActivity.class);
 					Bundle extras = new Bundle();
 					extras.putString("key", txtKey.getText().toString());
 					i.putExtras(extras);

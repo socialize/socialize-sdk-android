@@ -43,7 +43,7 @@ public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 		SocializeSessionImpl session = new SocializeSessionImpl();
 		session.setConsumerKey(key);
 		session.setConsumerSecret(secret);
-		session.setEndpointRoot(config.getProperty(SocializeConfig.API_HOST).trim());
+		session.setHost(config.getProperty(SocializeConfig.API_HOST).trim());
 		return session;
 	}
 	

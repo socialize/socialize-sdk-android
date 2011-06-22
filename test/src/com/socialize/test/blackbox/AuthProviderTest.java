@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 SocializeService Inc.
+ * Copyright (c) 2011 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,35 +19,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.provider;
+package com.socialize.test.blackbox;
+
+import com.socialize.provider.AuthProvider;
+import com.socialize.test.SocializeUnitTest;
 
 /**
  * @author Jason Polites
  *
  */
-public enum AuthProvider {
+public class AuthProviderTest extends SocializeUnitTest {
 
-	// TODO: Add more providers
-	FACEBOOK ("facebook", 1);
+	public void testAuthProvider() {
+		assertEquals(1, AuthProvider.FACEBOOK.getId());
+		assertEquals("facebook", AuthProvider.FACEBOOK.getName());
+		assertSame(AuthProvider.FACEBOOK, AuthProvider.valueOf("FACEBOOK"));
+	}
 	
-	private final String name;   
-    private final int id; 
-	
-	AuthProvider(String name, int id) {
-		this.name = name;
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	@Override
-	public String toString() {
-		return name;
-	}
 }
