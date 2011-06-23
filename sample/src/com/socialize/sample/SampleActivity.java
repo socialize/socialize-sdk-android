@@ -14,6 +14,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.sample.util.ErrorHandler;
 
 public class SampleActivity extends Activity {
 
@@ -59,8 +60,7 @@ public class SampleActivity extends Activity {
 					@Override
 					public void onError(SocializeException error) {
 						v.setEnabled(true);
-						txtAuthResult.setText("FAIL");
-						error.printStackTrace();
+						txtAuthResult.setText("FAIL: " + ErrorHandler.handleApiError(SampleActivity.this, error));
 						
 						btnComments.setVisibility(View.GONE);
 						btnEntity.setVisibility(View.GONE);

@@ -19,33 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api;
+package com.socialize.entity.factory;
 
-import java.util.List;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.socialize.entity.Like;
 
 /**
  * @author Jason Polites
  *
- * @param <T>
  */
-public class SocializePutRequest<T> extends SocializeRequest {
+public class LikeFactory extends SocializeActionFactory<Like> {
+	
+	@Override
+	protected void postFromJSON(JSONObject object, Like like) throws JSONException {}
 
-	private List<T> objects;
-	private T object;
+	@Override
+	protected void postToJSON(Like comment, JSONObject object) throws JSONException {}
 
-	public List<T> getObjects() {
-		return objects;
-	}
-
-	public void setObjects(List<T> objects) {
-		this.objects = objects;
-	}
-
-	public T getObject() {
-		return object;
-	}
-
-	public void setObject(T object) {
-		this.object = object;
+	@Override
+	public Like instantiateObject() {
+		return new Like();
 	}
 }

@@ -395,7 +395,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(client.execute(request)).andReturn(response);
 		AndroidMock.expect(response.getEntity()).andReturn(entity);
 		AndroidMock.expect(entity.getContent()).andReturn(null);
-		AndroidMock.expect(jsonParser.parseArray((InputStream)null)).andReturn(jsonArray);
+		AndroidMock.expect(jsonParser.parseArray((String)null)).andReturn(jsonArray);
 		AndroidMock.expect(jsonArray.length()).andReturn(arrayLength);
 		AndroidMock.expect(jsonArray.getJSONObject(0)).andReturn(json);
 		AndroidMock.expect(jsonArray.getJSONObject(1)).andReturn(json);
@@ -469,7 +469,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(client.execute(request)).andReturn(response);
 		AndroidMock.expect(response.getEntity()).andReturn(entity);
 		AndroidMock.expect(entity.getContent()).andReturn(null);
-		AndroidMock.expect(jsonParser.parseArray((InputStream)null)).andReturn(jsonArray);
+		AndroidMock.expect(jsonParser.parseArray((String)null)).andReturn(jsonArray);
 		AndroidMock.expect(jsonArray.length()).andReturn(arrayLength);
 		AndroidMock.expect(jsonArray.getJSONObject(0)).andReturn(json);
 		AndroidMock.expect(jsonArray.getJSONObject(1)).andReturn(json);
@@ -547,7 +547,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(client.execute(request)).andReturn(response);
 		AndroidMock.expect(response.getEntity()).andReturn(entity);
 		AndroidMock.expect(entity.getContent()).andReturn(null);
-		AndroidMock.expect(jsonParser.parseArray((InputStream)null)).andReturn(jsonArray);
+		AndroidMock.expect(jsonParser.parseArray((String)null)).andReturn(jsonArray);
 		AndroidMock.expect(jsonArray.length()).andReturn(arrayLength);
 		AndroidMock.expect(jsonArray.getJSONObject(0)).andReturn(json);
 		AndroidMock.expect(jsonArray.getJSONObject(1)).andReturn(json);
@@ -621,7 +621,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(client.execute(request)).andReturn(response);
 		AndroidMock.expect(response.getEntity()).andReturn(entity);
 		AndroidMock.expect(entity.getContent()).andReturn(null);
-		AndroidMock.expect(jsonParser.parseArray((InputStream)null)).andReturn(jsonArray);
+		AndroidMock.expect(jsonParser.parseArray((String)null)).andReturn(jsonArray);
 		AndroidMock.expect(jsonArray.length()).andReturn(arrayLength);
 		AndroidMock.expect(jsonArray.getJSONObject(0)).andReturn(json);
 		AndroidMock.expect(jsonArray.getJSONObject(1)).andReturn(json);
@@ -698,7 +698,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(client.execute(request)).andReturn(response);
 		AndroidMock.expect(response.getEntity()).andReturn(entity);
 		AndroidMock.expect(entity.getContent()).andReturn(null);
-		AndroidMock.expect(jsonParser.parseArray((InputStream)null)).andReturn(jsonArray);
+		AndroidMock.expect(jsonParser.parseArray((String)null)).andReturn(jsonArray);
 		AndroidMock.expect(jsonArray.length()).andReturn(arrayLength);
 		AndroidMock.expect(jsonArray.getJSONObject(0)).andReturn(json);
 		AndroidMock.expect(jsonArray.getJSONObject(1)).andReturn(json);

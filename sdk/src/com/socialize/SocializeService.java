@@ -36,7 +36,11 @@ import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.listener.entity.EntityCreateListener;
+import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.entity.EntityListListener;
+import com.socialize.listener.like.LikeAddListener;
+import com.socialize.listener.like.LikeGetListener;
+import com.socialize.listener.like.LikeListListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.ResourceLocator;
@@ -139,6 +143,39 @@ public class SocializeService implements SocializeSessionConsumer {
 	}
 	
 	/**
+	 * Adds a new like and associates it with the entity described.
+	 * @param entity The entity key.  Defined when first creating an entity, or created on the fly with this call.
+	 * @param likeAddListener A listener to handle callbacks from the post.
+	 */
+	public void addLike(String entity, LikeAddListener likeAddListener) {
+		if(assertAuthenticated(likeAddListener)) {
+			service.addLike(session, entity, likeAddListener);
+		}
+	}
+	
+	/**
+	 * Lists all the likes associated with the given ids.
+	 * @param likeListListener A listener to handle callbacks from the get.
+	 * @param ids
+	 */
+	public void listLikesById(LikeListListener likeListListener, int...ids) {
+		if(assertAuthenticated(likeListListener)) {
+			service.listLikesById(session, likeListListener, ids);
+		}
+	}
+	
+	/**
+	 * Retrieves a single like.
+	 * @param id The ID of the like
+	 * @param likeGetListener A listener to handle callbacks from the get.
+	 */
+	public void getLike(int id, LikeGetListener likeGetListener) {
+		if(assertAuthenticated(likeGetListener)) {
+			service.getLike(session, id, likeGetListener);
+		}
+	}
+	
+	/**
 	 * Creates a new entity.
 	 * @param key The [unique] key for the entity.
 	 * @param name The name for the entity.
@@ -147,6 +184,17 @@ public class SocializeService implements SocializeSessionConsumer {
 	public void createEntity(String key, String name, EntityCreateListener entityCreateListener) {
 		if(assertAuthenticated(entityCreateListener)) {
 			service.createEntity(session, key, name, entityCreateListener);
+		}
+	}
+	
+	/**
+	 * Retrieves a single entity
+	 * @param key
+	 * @param listener
+	 */
+	public void getEntity(String key, EntityGetListener listener) {
+		if(assertAuthenticated(listener)) {
+			service.getEntity(session, key, listener);
 		}
 	}
 	
@@ -263,6 +311,10 @@ public class SocializeService implements SocializeSessionConsumer {
 		this.session = session;
 	}
 	
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
+
 	/**
 	 * Returns the configuration for this SocializeService instance.
 	 * @return

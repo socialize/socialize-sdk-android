@@ -19,35 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity.factory;
+package com.socialize.listener.like;
 
-import java.util.Map;
+import com.socialize.entity.Like;
 
-import com.socialize.entity.SocializeObject;
 
 /**
  * @author Jason Polites
- * @deprecated No need to have a cache for this.  We can just inject the factory using IOC.
+ *
  */
-public class FactoryService {
+public abstract class LikeListListener extends LikeListener {
+ 
+	@Override
+	public final void onCreate(Like entity) {}
 
-	private Map<String, SocializeObjectFactory<?>> factories;
-	
-	public FactoryService() {
-		super();
-	}
+	@Override
+	public final void onGet(Like entity) {}
 
-	@SuppressWarnings("unchecked")
-	public <T extends SocializeObject, F extends SocializeObjectFactory<T>> F getFactoryFor(Class<T> clazz) {
-		F factory = (F) factories.get(clazz.getName());
-		return factory;
-	}
-	
-	public Map<String, SocializeObjectFactory<?>> getFactories() {
-		return factories;
-	}
+	@Override
+	public final void onUpdate(Like entity) {}
 
-	public void setFactories(Map<String, SocializeObjectFactory<?>> factories) {
-		this.factories = factories;
-	}
 }

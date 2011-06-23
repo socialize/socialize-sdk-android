@@ -38,9 +38,9 @@ import com.socialize.entity.SocializeObject;
  */
 public abstract class SocializeObjectFactory<T extends SocializeObject> {
 	
-	public static final String UTC_FORMAT_STRING = "yyyy-MM-dd'T'HH:mm:ssZZ";
+	public static final String DATE_FORMAT_STRING = "yyyy-MM-dd HH:mm:ssZZ";
 	
-	protected final DateFormat UTC_FORMAT = new SimpleDateFormat(UTC_FORMAT_STRING);
+	protected final DateFormat DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT_STRING);
 	
 	public SocializeObjectFactory() {
 		super();

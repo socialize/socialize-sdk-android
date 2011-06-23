@@ -21,7 +21,6 @@
  */
 package com.socialize.api;
 
-import java.util.Collection;
 import java.util.List;
 
 import android.os.AsyncTask;
@@ -29,8 +28,8 @@ import android.os.AsyncTask;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeActionListener;
+import com.socialize.listener.SocializeAuthListener;
 import com.socialize.provider.SocializeProvider;
 
 /**
@@ -68,7 +67,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return provider.put(session, endpoint, object);
 	}
 
-	public List<T> put(SocializeSession session, String endpoint, Collection<T> objects) throws SocializeException {
+	public List<T> put(SocializeSession session, String endpoint, List<T> objects) throws SocializeException {
 		return provider.put(session, endpoint, objects);
 	}
 
@@ -76,7 +75,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return provider.post(session, endpoint, object);
 	}
 	
-	public List<T> post(SocializeSession session, String endpoint, Collection<T> objects) throws SocializeException {
+	public List<T> post(SocializeSession session, String endpoint, List<T> objects) throws SocializeException {
 		return provider.post(session, endpoint, objects);
 	}
 	
@@ -107,7 +106,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void putAsync(SocializeSession session, String endpoint, Collection<T> objects, SocializeActionListener listener) {
+	public void putAsync(SocializeSession session, String endpoint, List<T> objects, SocializeActionListener listener) {
 		AsyncPutter poster = new AsyncPutter(RequestType.PUT, session, listener);
 		SocializePutRequest<T> request = new SocializePutRequest<T>();
 		request.setEndpoint(endpoint);
@@ -125,7 +124,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}
 
 	@SuppressWarnings("unchecked")
-	public void postAsync(SocializeSession session, String endpoint, Collection<T> objects, SocializeActionListener listener) {
+	public void postAsync(SocializeSession session, String endpoint, List<T> objects, SocializeActionListener listener) {
 		AsyncPutter poster = new AsyncPutter(RequestType.POST, session, listener);
 		SocializePutRequest<T> request = new SocializePutRequest<T>();
 		request.setEndpoint(endpoint);

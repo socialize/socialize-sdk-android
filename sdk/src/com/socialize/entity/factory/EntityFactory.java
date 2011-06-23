@@ -57,8 +57,12 @@ public class EntityFactory extends SocializeObjectFactory<Entity> {
 			entry.setLikes(object.getInt("likes"));
 		}
 		
-		if(object.has("share")) {
-			entry.setShares(object.getInt("share"));
+		if(object.has("shares")) {
+			entry.setShares(object.getInt("shares"));
+		}
+		
+		if(object.has("comments")) {
+			entry.setComments(object.getInt("comments"));
 		}
 		
 		if(object.has("views")) {

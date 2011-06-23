@@ -21,6 +21,8 @@
  */
 package com.socialize.entity.factory;
 
+import java.text.ParseException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -82,7 +84,7 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			}
 			
 			if(date != null) {
-				to.put("date", UTC_FORMAT.format(date));
+				to.put("date", DATE_FORMAT.format(date));
 			}
 			
 		}
@@ -103,7 +105,7 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 
 		try {
 			
-			if(from.has("application")) {
+			if(from.has("application") && !from.isNull("application")) {
 				JSONObject application = from.getJSONObject("application");
 				if(application != null) {
 					
@@ -111,30 +113,41 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 				}
 			}
 
-			if(from.has("user")) {
+			if(from.has("user") && !from.isNull("user")) {
 				JSONObject user = from.getJSONObject("user");
 				if(user != null) {
 					to.setUser(userFactory.fromJSON(user));
 				}
 			}
 			
-			if(from.has("entity")) {
+			if(from.has("entity") && !from.isNull("entity")) {
 				JSONObject entity = from.getJSONObject("entity");
 				if(entity != null) {
 					to.setEntity(entityFactory.fromJSON(entity));
 				}
 			}
 
-			if(from.has("lat")) {
+			if(from.has("lat") && !from.isNull("lat")) {
 				to.setLat((float)from.getDouble("lat"));
 			}
 			
-			if(from.has("lon")) {
+			if(from.has("lon") && !from.isNull("lon")) {
 				to.setLon((float)from.getDouble("lon"));
 			}
 			
-			if(from.has("date")) {
-				to.setDate(UTC_FORMAT.parse(from.getString("date")).getTime());
+			if(from.has("date") && !from.isNull("date")) {
+				try {
+					to.setDate(DATE_FORMAT.parse(from.getString("date")).getTime());
+				}
+				catch (ParseException e) {
+					if(logger != null && logger.isWarnEnabled()) {
+						logger.warn("Could not parse date [" +
+								from.getString("date") +
+								"] using format [" +
+								DATE_FORMAT_STRING +
+								"]");
+					}
+				}
 			}
 		}
 		catch (Exception e) {

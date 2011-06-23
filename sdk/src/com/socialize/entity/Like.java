@@ -19,33 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api;
+package com.socialize.entity;
 
-import java.util.List;
 
 /**
  * @author Jason Polites
  *
- * @param <T>
  */
-public class SocializePutRequest<T> extends SocializeRequest {
-
-	private List<T> objects;
-	private T object;
-
-	public List<T> getObjects() {
-		return objects;
-	}
-
-	public void setObjects(List<T> objects) {
-		this.objects = objects;
-	}
-
-	public T getObject() {
-		return object;
-	}
-
-	public void setObject(T object) {
-		this.object = object;
-	}
-}
+public class Like extends SocializeAction {}

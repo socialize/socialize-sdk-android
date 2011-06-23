@@ -16,6 +16,10 @@ public final class ErrorHandler {
 				writeError(context, serror);
 				return "500 Error, file written to device";
 			}
+			else if(serror.getResultCode() == 404) {
+				writeError(context, serror);
+				return "404 Error, file written to device";
+			}
 			else {
 				error.printStackTrace();
 			}

@@ -25,11 +25,15 @@ import android.content.Context;
 
 import com.socialize.api.action.CommentApi;
 import com.socialize.api.action.EntityApi;
+import com.socialize.api.action.LikeApi;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.listener.entity.EntityListener;
+import com.socialize.listener.like.LikeListener;
 import com.socialize.net.HttpClientFactory;
 import com.socialize.util.DeviceUtils;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -42,6 +46,7 @@ public class SocializeApiHost {
 	private DeviceUtils deviceUtils;
 	private CommentApi commentApi;
 	private EntityApi entityApi;
+	private LikeApi likeApi;
 	
 	public SocializeApiHost(Context context) {
 		super();
@@ -50,8 +55,17 @@ public class SocializeApiHost {
 	
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
 		// All Api instances have authenticate, so we can just use any old one
-		String uuid = deviceUtils.getUDID(context);
-		commentApi.authenticateAsync(consumerKey, consumerSecret, uuid, listener, sessionConsumer);
+		String udid = deviceUtils.getUDID(context);
+		
+		// TODO: create test case for this
+		if(StringUtils.isEmpty(udid)) {
+			if(listener != null) {
+				listener.onError(new SocializeException("No UDID provided"));
+			}
+		}
+		else {
+			commentApi.authenticateAsync(consumerKey, consumerSecret, udid, listener, sessionConsumer);
+		}
 	}
 
 	public void createEntity(SocializeSession session, String key, String name, EntityListener listener) {
@@ -70,6 +84,10 @@ public class SocializeApiHost {
 		entityApi.listEntities(session, listener, keys);
 	}
 	
+	public void getEntity(SocializeSession session, String key, EntityListener listener) {
+		entityApi.getEntity(session, key, listener);
+	}
+	
 	public void listCommentsByEntity(SocializeSession session, String entityKey, CommentListener listener) {
 		commentApi.getCommentsByEntity(session, entityKey, listener);
 	}
@@ -77,6 +95,20 @@ public class SocializeApiHost {
 	public void listCommentsById(SocializeSession session, CommentListener listener, int...ids) {
 		commentApi.getCommentsById(session, listener, ids);
 	}
+	
+	public void addLike(SocializeSession session, String key, LikeListener listener) {
+		likeApi.addLike(session, key, listener);
+	}
+	
+	public void listLikesById(SocializeSession session, LikeListener listener, int...ids) {
+		likeApi.getLikesById(session, listener, ids);
+	}
+	
+	public void getLike(SocializeSession session, int id, LikeListener listener) {
+		likeApi.getLike(session, id, listener);
+	}
+	
+
 	
 	public void destroy() {
 		if(clientFactory != null) {
@@ -107,4 +139,14 @@ public class SocializeApiHost {
 	public EntityApi getEntityApi() {
 		return entityApi;
 	}
+
+	public LikeApi getLikeApi() {
+		return likeApi;
+	}
+
+	public void setLikeApi(LikeApi likeApi) {
+		this.likeApi = likeApi;
+	}
+
+
 }

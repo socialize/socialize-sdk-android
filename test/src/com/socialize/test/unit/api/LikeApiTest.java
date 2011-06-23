@@ -26,22 +26,22 @@ import java.util.List;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.EntityApi;
-import com.socialize.entity.Entity;
+import com.socialize.api.action.LikeApi;
+import com.socialize.entity.Like;
 import com.socialize.listener.SocializeActionListener;
-import com.socialize.listener.entity.EntityListener;
+import com.socialize.listener.like.LikeListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeUnitTest;
 
 /**
  * @author Jason Polites
  */
-@UsesMocks ({SocializeSession.class, EntityListener.class, SocializeProvider.class})
-public class EntityApiTest extends SocializeUnitTest {
+@UsesMocks ({SocializeSession.class, LikeListener.class, SocializeProvider.class})
+public class LikeApiTest extends SocializeUnitTest {
 
-	SocializeProvider<Entity> provider;
+	SocializeProvider<Like> provider;
 	SocializeSession session;
-	EntityListener listener;
+	LikeListener listener;
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -49,42 +49,87 @@ public class EntityApiTest extends SocializeUnitTest {
 		super.setUp();
 		provider = AndroidMock.createMock(SocializeProvider.class);
 		session = AndroidMock.createMock(SocializeSession.class);
-		listener = AndroidMock.createMock(EntityListener.class);
+		listener = AndroidMock.createMock(LikeListener.class);
 	}
 
-	public void testCreateEntity() {
+	/**
+	 * More specific test to ensure the like is actually set.
+	 */
+	public void testAddLike() {
 		final String key = "foo";
-		final String name = "bar";
 		
-		EntityApi api = new EntityApi(provider){
-			
+		LikeApi api = new LikeApi(provider){
+
 			@Override
-			public void postAsync(SocializeSession session, String endpoint, List<Entity> objects, SocializeActionListener listener) {
+			public void postAsync(SocializeSession session, String endpoint, List<Like> objects, SocializeActionListener listener) {
 				addResult(objects);
 			}
 
 		};
 		
-		api.createEntity(session, key, name, listener);
+		api.addLike(session, key, listener);
 		
-		List<Entity> result = getResult();
+		
+		List<Like> likes = getResult();
+		
+		assertNotNull(likes);
+		assertEquals(1, likes.size());
+		
+		Like result = likes.get(0);
 		
 		assertNotNull(result);
-		assertEquals(1, result.size());
-		
-		Entity e = result.get(0);
-		
-		assertNotNull(e.getName());
-		assertEquals(name, e.getName());
-		assertNotNull(e.getKey());
-		assertEquals(key, e.getKey());
+		assertNotNull(result.getEntityKey());
+		assertEquals(key, result.getEntityKey());
 	}
 	
-	public void testGetEntity() {
+	public void testGetLikesByEntity() {
 		
-		String key = "foo";
+		final String key = "foo";
 		
-		EntityApi api = new EntityApi(provider) {
+		LikeApi api = new LikeApi(provider) {
+			@Override
+			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeActionListener listener) {
+				addResult(key);
+			}
+		};
+		
+		api.getLikesByEntity(session, key, listener);
+		
+		String after = getResult();
+		
+		assertNotNull(after);
+		assertEquals(key, after);
+	}
+	
+	public void testGetLikesById() {
+		
+		int[] ids = {1,2,3};
+		
+		LikeApi api = new LikeApi(provider) {
+
+			@Override
+			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeActionListener listener) {
+				addResult(ids);
+			}
+		};
+		
+		api.getLikesById(session, listener, ids);
+		
+		String[] after = getResult();
+		
+		assertNotNull(after);
+		
+		for (int i = 0; i < after.length; i++) {
+			assertEquals(String.valueOf(ids[i]), after[i]);
+		}
+		
+	}
+	
+	public void testGetLike() {
+		
+		int id = 69;
+		
+		LikeApi api = new LikeApi(provider) {
 
 			@Override
 			public void getAsync(SocializeSession session, String endpoint, String id, SocializeActionListener listener) {
@@ -92,35 +137,11 @@ public class EntityApiTest extends SocializeUnitTest {
 			}
 		};
 		
-		api.getEntity(session, key, listener);
+		api.getLike(session, id, listener);
 		
 		String strId = getResult();
 		
 		assertNotNull(strId);
-		assertEquals(key, strId);
+		assertEquals(String.valueOf(id), strId);
 	}
-	
-	public void testListEntities() {
-		
-		String[] keys = {"A", "B", "C"};
-		
-		EntityApi api = new EntityApi(provider) {
-			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeActionListener listener) {
-				addResult(ids);
-				assertNull(key);
-			}
-		};
-		
-		api.listEntities(session, listener, keys);
-		
-		String[] after = getResult();
-		
-		assertNotNull(after);
-		
-		for (int i = 0; i < after.length; i++) {
-			assertEquals(keys[i], after[i]);
-		}
-	}
-	
 }

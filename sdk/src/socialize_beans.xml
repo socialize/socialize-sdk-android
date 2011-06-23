@@ -41,10 +41,9 @@
 		<property name="ioUtils" ref="ioUtils"/>
 	</bean>
 	
+	<bean id="userFactory" class="com.socialize.entity.factory.UserFactory"/>
 
-	<bean id="userFactory" class="com.socialize.entity.factory.UserFactory">
-
-	</bean>
+	<bean id="applicationFactory" class="com.socialize.entity.factory.ApplicationFactory"/>
 	
 	<bean id="responseFactory" class="com.socialize.api.DefaultSocializeResponseFactory"/>
 	
@@ -74,6 +73,13 @@
 		<property name="config" ref="config"/>
 	</bean>
 	
+	<bean id="socializeActionFactory" class="com.socialize.entity.factory.SocializeActionFactory" abstract="true">
+		<property name="logger" ref="logger"/>
+		<property name="applicationFactory" ref="applicationFactory"/>
+		<property name="userFactory" ref="userFactory"/>
+		<property name="entityFactory" ref="entityFactory"/>
+	</bean>
+	
 	<!-- OAUTH -->
 	
 	<bean id="oauthConsumerFactory" class="com.socialize.oauth.CommonsHttpOAuthConsumerFactory"/>
@@ -87,7 +93,7 @@
 
 <!-- Comment API -->
 
-	<bean id="commentFactory" class="com.socialize.entity.factory.CommentFactory"/>
+	<bean id="commentFactory" class="com.socialize.entity.factory.CommentFactory" extends="socializeActionFactory"/>
 	
 	<bean id="commentRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
 		<constructor-arg ref="oauthSigner"/>
@@ -116,7 +122,7 @@
 
 <!-- Entity API -->
 
-	<bean id="entityFactory" class="com.socialize.entity.factory.EntityFactory"/>
+	<bean id="entityFactory" class="com.socialize.entity.factory.EntityFactory" extends="socializeActionFactory"/>
 	
 	<bean id="entityRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
 		<constructor-arg ref="oauthSigner"/>
@@ -141,6 +147,34 @@
 
 <!-- End Entity API -->
 
+<!-- Like API -->
+
+	<bean id="likeFactory" class="com.socialize.entity.factory.LikeFactory" extends="socializeActionFactory"/>
+	
+	<bean id="likeRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
+		<constructor-arg ref="oauthSigner"/>
+		<constructor-arg ref="likeFactory"/>
+	</bean>
+
+	<bean id="likeProvider" extends="abstractProvider">
+		<constructor-arg type="context"/>
+		<constructor-arg ref="likeFactory"/>
+		<constructor-arg ref="userFactory"/>
+		<constructor-arg ref="httpClientFactory"/>
+		<constructor-arg ref="sessionFactory"/>
+		<constructor-arg ref="likeRequestFactory"/>
+		<constructor-arg ref="jsonParser"/>
+		<constructor-arg ref="httpUtils"/>
+		<constructor-arg ref="ioUtils"/>
+	</bean>
+	
+	<bean id="likeApi" class="com.socialize.api.action.LikeApi" extends="socializeApi">
+		<constructor-arg ref="likeProvider"/>
+	</bean>
+	
+<!-- End Like API -->	
+
+
 <!-- Socialize Core -->
 
 	<bean id="socializeApiHost" class="com.socialize.api.SocializeApiHost">
@@ -149,6 +183,7 @@
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="commentApi" ref="commentApi"/>
 		<property name="entityApi" ref="entityApi"/>
+		<property name="likeApi" ref="likeApi"/>
 	</bean>
 	
 <!-- End Socialize Core -->

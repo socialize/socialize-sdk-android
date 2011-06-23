@@ -54,6 +54,8 @@ public class SocializeIOCTest extends SocializeActivityTest {
 
 	public void testSocializeBeans() throws Exception {
 
+		// TODO: Add more tests to verify the structure, not just the beans
+		
 		SocializeIOC ioc = new SocializeIOC();
 		ResourceLocator locator = new ResourceLocator();
 		locator.setLogger(new SocializeLogger());
@@ -64,7 +66,7 @@ public class SocializeIOCTest extends SocializeActivityTest {
 
 		// Put a count assert to make sure this test fails when new beans are
 		// added so that developers are reminded to update this test.
-		assertEquals(25, ioc.size());
+		assertEquals(30, ioc.size());
 
 		// Now make sure all our beans are there
 		checkBeanType(ioc, "deviceUtils", DeviceUtils.class);

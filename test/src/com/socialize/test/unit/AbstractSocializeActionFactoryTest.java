@@ -67,7 +67,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 	protected Date date = new Date();
 	protected Integer id = new Integer(10000);
 	
-	protected final DateFormat UTC_FORMAT = new SimpleDateFormat(SocializeObjectFactory.UTC_FORMAT_STRING);
+	protected final DateFormat UTC_FORMAT = new SimpleDateFormat(SocializeObjectFactory.DATE_FORMAT_STRING);
 	
 	@UsesMocks({Application.class, User.class, Entity.class, ApplicationFactory.class, UserFactory.class, EntityFactory.class})
 	@Override

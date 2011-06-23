@@ -19,33 +19,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api;
+package com.socialize.listener.like;
 
 import java.util.List;
+
+import com.socialize.entity.Like;
+
 
 /**
  * @author Jason Polites
  *
- * @param <T>
  */
-public class SocializePutRequest<T> extends SocializeRequest {
+public abstract class LikeAddListener extends LikeListener {
 
-	private List<T> objects;
-	private T object;
+	@Override
+	public final void onGet(Like entity) {}
 
-	public List<T> getObjects() {
-		return objects;
-	}
+	@Override
+	public final void onList(List<Like> entities) {}
 
-	public void setObjects(List<T> objects) {
-		this.objects = objects;
-	}
+	@Override
+	public final void onUpdate(Like entity) {}
 
-	public T getObject() {
-		return object;
-	}
-
-	public void setObject(T object) {
-		this.object = object;
-	}
 }

@@ -7,24 +7,12 @@
 
 	<TextView
 		android:textSize="12dp"
-		android:text="Entity Key"
+		android:text="Key"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content" />
 
 	<EditText
-		android:id="@+id/txtEntityKey"
-		android:textSize="12dp"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content" />
-
-	<TextView
-		android:textSize="12dp"
-		android:text="Comment"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content" />
-
-	<EditText
-		android:id="@+id/txtComment"
+		android:id="@+id/txtKey"
 		android:textSize="12dp"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content" />
@@ -36,12 +24,12 @@
 		android:layout_marginBottom="12dip">
 		
 		<Button
-			android:id="@+id/btnCommentCreate"
+			android:id="@+id/btnLikeCreate"
 			android:text="Create"
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content" />
 		<TextView
-			android:id="@+id/txtCommentCreateResult"
+			android:id="@+id/txtLikeCreateResult"
 			android:padding="3dip"
 			android:textSize="12dp"
 			android:layout_width="fill_parent"
@@ -49,7 +37,6 @@
 			
 	</LinearLayout>
 	
-
 	<LinearLayout
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
@@ -63,7 +50,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content" />
 		<TextView
-			android:id="@+id/txtCommentIdCreated"
+			android:id="@+id/txtLikeIdCreated"
 			android:textSize="12dp"
 			android:padding="4dip"
 			android:layout_margin="4dip"
@@ -79,35 +66,13 @@
 		
 		<TextView
 			android:textSize="12dp"
-			android:text="Key"
+			android:text="Date" 
 			android:padding="4dip"
 			android:layout_margin="4dip"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content" />
 		<TextView
-			android:id="@+id/txtCommentTextCreated"
-			android:textSize="12dp"
-			android:padding="4dip"
-			android:layout_margin="4dip"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
-			
-	</LinearLayout>
-	
-	<LinearLayout
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal">
-		
-		<TextView
-			android:textSize="12dp"
-			android:text="Name"
-			android:padding="4dip"
-			android:layout_margin="4dip"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
-		<TextView
-			android:id="@+id/txtEntityNameCreated"
+			android:id="@+id/txtLikeDateCreated"
 			android:textSize="12dp"
 			android:padding="4dip"
 			android:layout_margin="4dip"

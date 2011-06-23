@@ -266,7 +266,14 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			}
 			else {
 				
-				JSONArray list = jsonParser.parseArray(entity.getContent());
+				// Read the json just for logging
+				String json = ioUtils.readSafe(entity.getContent());
+				
+				if(logger != null && logger.isDebugEnabled()) {
+					logger.debug("JSON Response: " + json);
+				}
+				
+				JSONArray list = jsonParser.parseArray(json);
 				
 				int length = list.length();
 				

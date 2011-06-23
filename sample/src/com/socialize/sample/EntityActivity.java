@@ -1,7 +1,6 @@
 package com.socialize.sample;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,6 +12,7 @@ import com.socialize.Socialize;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.entity.EntityCreateListener;
+import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.sample.util.ErrorHandler;
 
 public class EntityActivity extends Activity {
@@ -28,7 +28,8 @@ public class EntityActivity extends Activity {
 		final TextView txtEntityCreateResult = (TextView) findViewById(R.id.txtEntityCreateResult);
 		
 		final Button btnEntityCreate = (Button) findViewById(R.id.btnEntityCreate);
-		final Button btnEntityList = (Button) findViewById(R.id.btnEntityList);
+		final Button btnEntityGet = (Button) findViewById(R.id.btnEntityGet);
+		
 		
 		if(Socialize.getSocialize().isAuthenticated()) {
 			
@@ -55,25 +56,88 @@ public class EntityActivity extends Activity {
 						public void onCreate(Entity entity) {
 							btnEntityCreate.setEnabled(true);
 							txtEntityCreateResult.setText("SUCCESS");
+							populateEntityData(entity);
 						}
 					});
 				}
 			});
 			
-			btnEntityList.setOnClickListener(new OnClickListener() {
+			
+			btnEntityGet.setOnClickListener(new OnClickListener() {
+				
 				@Override
 				public void onClick(View v) {
-					Intent i = new Intent(EntityActivity.this, CommentListActivity.class);
-					Bundle extras = new Bundle();
-					extras.putString("key", txtKey.getText().toString());
-					i.putExtras(extras);
-					startActivity(i);
+					txtEntityCreateResult.setText("");
+					btnEntityGet.setEnabled(false);
+					String key = txtKey.getText().toString();
+					
+					Socialize.getSocialize().getEntity(key, new EntityGetListener() {
+						
+						@Override
+						public void onError(SocializeException error) {
+							txtEntityCreateResult.setText("FAIL: " + ErrorHandler.handleApiError(EntityActivity.this, error));
+							btnEntityGet.setEnabled(true);
+						}
+						
+						@Override
+						public void onGet(Entity entity) {
+					
+							btnEntityGet.setEnabled(true);
+							
+							if(entity != null) {
+								txtEntityCreateResult.setText("SUCCESS");
+								populateEntityData(entity);
+							}
+							else {
+								txtEntityCreateResult.setText("NOT FOUND");
+							}
+						}
+					});
 				}
 			});
 		}
 		else {
 			// Not authorized, you would normally do a re-auth here
 			txtEntityCreateResult.setText("AUTH FAIL");
+		}
+	}
+	
+	private void populateEntityData(Entity entity) {
+		final TextView txtEntityIdCreated = (TextView) findViewById(R.id.txtEntityIdCreated);
+		final TextView txtEntityKeyCreated = (TextView) findViewById(R.id.txtEntityKeyCreated);
+		final TextView txtEntityNameCreated = (TextView) findViewById(R.id.txtEntityNameCreated);
+		final TextView txtEntityShares = (TextView) findViewById(R.id.txtEntityShares);
+		final TextView txtEntityLikes = (TextView) findViewById(R.id.txtEntityLikes);
+		final TextView txtEntityViews = (TextView) findViewById(R.id.txtEntityViews);
+		final TextView txtEntityComments = (TextView) findViewById(R.id.txtEntityComments);
+		
+		
+		if(entity.getId() != null) {
+			txtEntityIdCreated.setText(entity.getId());
+		}
+		
+		if(entity.getName() != null) {
+			txtEntityNameCreated.setText(entity.getName());
+		}
+		
+		if(entity.getKey() != null) {
+			txtEntityKeyCreated.setText(entity.getKey());
+		}
+		
+		if(entity.getShares() != null) {
+			txtEntityShares.setText(entity.getShares().toString());
+		}
+		
+		if(entity.getLikes() != null) {
+			txtEntityLikes.setText(entity.getLikes().toString());
+		}
+		
+		if(entity.getViews() != null) {
+			txtEntityViews.setText(entity.getViews().toString());
+		}
+		
+		if(entity.getComments() != null) {
+			txtEntityComments.setText(entity.getComments().toString());
 		}
 	}
 

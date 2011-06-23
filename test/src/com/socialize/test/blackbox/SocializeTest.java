@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 SocializeService Inc.
+ * Copyright (c) 2011 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,33 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api;
+package com.socialize.test.blackbox;
 
-import java.util.List;
+import com.socialize.Socialize;
+import com.socialize.test.SocializeActivityTest;
 
 /**
+ * Blackbox test for Socialize static instance
  * @author Jason Polites
  *
- * @param <T>
  */
-public class SocializePutRequest<T> extends SocializeRequest {
+public class SocializeTest extends SocializeActivityTest {
 
-	private List<T> objects;
-	private T object;
-
-	public List<T> getObjects() {
-		return objects;
+	public void testSocialize() {
+		Socialize.init(getActivity());
+		assertNotNull(Socialize.getSocialize());
+		Socialize.destroy(getActivity());
 	}
-
-	public void setObjects(List<T> objects) {
-		this.objects = objects;
-	}
-
-	public T getObject() {
-		return object;
-	}
-
-	public void setObject(T object) {
-		this.object = object;
-	}
+	
 }
