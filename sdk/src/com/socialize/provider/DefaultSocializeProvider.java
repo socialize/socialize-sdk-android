@@ -209,6 +209,43 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	}
 
 	@Override
+	public void delete(SocializeSession session, String endpoint, String id) throws SocializeException {
+		HttpEntity entity = null;
+		
+		try {
+			endpoint = prepareEndpoint(session, endpoint);
+			
+			HttpClient client = clientFactory.getClient();
+			
+			HttpUriRequest del = requestFactory.getDeleteRequest(session, endpoint, id);
+			
+			HttpResponse response = client.execute(del);
+			
+			if(httpUtils.isHttpError(response)) {
+				
+				entity = response.getEntity();
+				
+				if(sessionPersister != null && httpUtils.isAuthError(response)) {
+					sessionPersister.delete(context);
+				}
+				
+				String msg = ioUtils.readSafe(entity.getContent());
+				throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
+			}
+		}
+		catch (Exception e) {
+			if(e instanceof SocializeException) {
+				throw (SocializeException) e;
+			}
+			
+			throw new SocializeException(e);
+		}
+		finally {
+			closeEntity(entity);
+		}
+	}
+
+	@Override
 	public List<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
 		endpoint = prepareEndpoint(session, endpoint);
 		HttpUriRequest request = requestFactory.getListRequest(session, endpoint, key, ids);

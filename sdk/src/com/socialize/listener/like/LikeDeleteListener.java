@@ -19,29 +19,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.listener.comment;
+package com.socialize.listener.like;
 
 import java.util.List;
 
-import com.socialize.entity.Comment;
+import com.socialize.entity.Like;
 
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class CommentGetListener extends CommentListener {
+public abstract class LikeDeleteListener extends LikeListener {
  
 	@Override
-	public final void onCreate(Comment entity) {}
+	public final void onCreate(Like entity) {}
 
 	@Override
-	public final void onList(List<Comment> entities) {}
+	public final void onList(List<Like> entities) {}
 
 	@Override
-	public final void onUpdate(Comment entity) {}
-	
-	@Override
-	public final void onDelete() {}
+	public final void onUpdate(Like entity) {}
 
+	@Override
+	public final void onGet(Like entity) {}
 }

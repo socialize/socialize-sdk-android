@@ -149,6 +149,13 @@ public class SocializeListenerTest extends SocializeActivityTest {
 			public void onCreate(SocializeObject entity) {
 				fail();
 			}
+
+			@Override
+			public void onDelete() {
+				fail();
+			}
+			
+			
 		};
 		
 		CountDownLatch signal = new CountDownLatch(1); 
@@ -158,6 +165,61 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() {
 			public void run() {
 				api.getAsync(session, endpoint, id, listener);
+			}
+		});
+		
+		// Just wait for async process to finish
+		signal.await(500, TimeUnit.MILLISECONDS);
+		
+		Boolean result = getResult();
+		
+		assertNotNull(result);
+		assertTrue(result);
+	}
+	
+	
+	public void testListenerOnDeleteCalledOnDELETE() throws Throwable {
+		
+		final SocializeActionListener listener = new AbstractSocializeListener<SocializeObject>() {
+
+			@Override
+			public void onError(SocializeException error) {
+				fail();
+			}
+
+			@Override
+			public void onGet(SocializeObject entity) {
+				fail();
+			}
+
+			@Override
+			public void onList(List<SocializeObject> entities) {
+				fail();
+			}
+
+			@Override
+			public void onUpdate(SocializeObject entity) {
+				fail();
+			}
+
+			@Override
+			public void onCreate(SocializeObject entity) {
+				fail();
+			}
+
+			@Override
+			public void onDelete() {
+				addResult(true);
+			}
+		};
+		
+		CountDownLatch signal = new CountDownLatch(1); 
+		
+		final String id = "foobar";
+		
+		runTestOnUiThread(new Runnable() {
+			public void run() {
+				api.deleteAsync(session, endpoint, id, listener);
 			}
 		});
 		
@@ -196,6 +258,11 @@ public class SocializeListenerTest extends SocializeActivityTest {
 
 			@Override
 			public void onCreate(SocializeObject entity) {
+				fail();
+			}
+			
+			@Override
+			public void onDelete() {
 				fail();
 			}
 		};
@@ -247,6 +314,11 @@ public class SocializeListenerTest extends SocializeActivityTest {
 			public void onCreate(SocializeObject entity) {
 				addResult(true);
 			}
+			
+			@Override
+			public void onDelete() {
+				fail();
+			}
 		};
 		
 		CountDownLatch signal = new CountDownLatch(1); 
@@ -293,6 +365,11 @@ public class SocializeListenerTest extends SocializeActivityTest {
 
 			@Override
 			public void onCreate(SocializeObject entity) {
+				fail();
+			}
+			
+			@Override
+			public void onDelete() {
 				fail();
 			}
 		};

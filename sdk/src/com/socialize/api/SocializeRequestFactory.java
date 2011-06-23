@@ -102,4 +102,12 @@ public interface SocializeRequestFactory<T extends SocializeObject> {
 	 * @return
 	 */
 	public HttpUriRequest getPostRequest(SocializeSession session, String endpoint, T entity) throws SocializeException;
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws SocializeException 
+	 */
+	public HttpUriRequest getDeleteRequest(SocializeSession session, String endpoint, String id) throws SocializeException;
 }

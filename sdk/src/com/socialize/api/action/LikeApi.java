@@ -51,6 +51,10 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 		postAsync(session, ENDPOINT, list, listener);
 	}
 	
+	public void deleteLike(SocializeSession session, int id, LikeListener listener) {
+		deleteAsync(session, ENDPOINT, String.valueOf(id), listener);
+	}
+	
 	public void getLikesByEntity(SocializeSession session, String key, LikeListener listener) {
 		listAsync(session, ENDPOINT, key, null, listener);
 	}

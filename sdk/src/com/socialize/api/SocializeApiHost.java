@@ -100,6 +100,10 @@ public class SocializeApiHost {
 		likeApi.addLike(session, key, listener);
 	}
 	
+	public void deleteLike(SocializeSession session, int id, LikeListener listener) {
+		likeApi.deleteLike(session, id, listener);
+	}
+	
 	public void listLikesById(SocializeSession session, LikeListener listener, int...ids) {
 		likeApi.getLikesById(session, listener, ids);
 	}

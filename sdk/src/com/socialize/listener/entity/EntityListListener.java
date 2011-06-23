@@ -38,5 +38,8 @@ public abstract class EntityListListener extends EntityListener {
 
 	@Override
 	public final void onUpdate(Entity entity) {}
+	
+	@Override
+	public final void onDelete() {}
 
 }

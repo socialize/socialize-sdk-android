@@ -28,6 +28,7 @@ import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -130,6 +131,33 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		
 		assertTrue((Boolean)getResult());
 		assertTrue(getRequest instanceof HttpGet);
+	}
+	
+	public void testDeleteRequestCreate() throws Exception {
+		
+		final String endpoint = "foobar/";
+		final String id = "testid";
+		
+		OAuthRequestSigner signer = new OAuthRequestSigner() {
+			
+			@Override
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+				assertTrue(request instanceof HttpDelete);
+				HttpDelete get = (HttpDelete) request;
+				assertEquals(get.getURI().toString(), endpoint + id);
+				addResult(true);
+				return request;
+			}
+		};
+		
+		SocializeRequestFactory<SocializeObject> factory = new DefaultSocializeRequestFactory<SocializeObject>(signer, null);
+		
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+
+		HttpUriRequest getRequest = factory.getDeleteRequest(session, endpoint, id);
+		
+		assertTrue((Boolean)getResult());
+		assertTrue(getRequest instanceof HttpDelete);
 	}
 	
 	public void testListRequestCreate() throws Exception {

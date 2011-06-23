@@ -38,5 +38,8 @@ public abstract class CommentListListener extends CommentListener {
 
 	@Override
 	public final void onUpdate(Comment entity) {}
+	
+	@Override
+	public final void onDelete() {}
 
 }

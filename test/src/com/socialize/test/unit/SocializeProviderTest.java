@@ -299,6 +299,46 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		assertSame(object,gotten);
 	}
 	
+	public void testDelete() throws Exception {
+		
+		final String id = "foo";
+		final String endpoint = "foobar/";
+		final String host = "host";
+		final String url = "http://" + host + "/" + endpoint;
+		
+		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
+		AndroidMock.expect(requestFactory.getDeleteRequest(session, url, id)).andReturn(request);
+		AndroidMock.expect(client.execute(request)).andReturn(response);
+		AndroidMock.expect(utils.isHttpError(response)).andReturn(false);
+		AndroidMock.expect(session.getHost()).andReturn(host);
+		
+		AndroidMock.replay(clientFactory);
+		AndroidMock.replay(requestFactory);
+		AndroidMock.replay(client);
+		AndroidMock.replay(utils);
+		AndroidMock.replay(session);
+		
+		DefaultSocializeProvider<SocializeObject> provider = new DefaultSocializeProvider<SocializeObject>(
+				getActivity(),
+				objectFactory,
+				userFactory,
+				clientFactory,
+				sessionFactory,
+				requestFactory,
+				jsonParser,
+				utils,
+				ioUtils
+		);
+		
+		provider.delete(session, endpoint, id);
+		
+		AndroidMock.verify(clientFactory);
+		AndroidMock.verify(requestFactory);
+		AndroidMock.verify(client);
+		AndroidMock.verify(utils);
+		AndroidMock.verify(session);
+	}
+	
 	@UsesMocks (StatusLine.class)
 	public void testSessionDeleteOnGetFail() throws Exception {
 		final String id = "foo";
@@ -356,6 +396,167 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		
 		try {
 			 provider.get(session, endpoint, id);
+			 fail();
+		}
+		catch (Exception e) {
+			assertTrue(e instanceof SocializeApiError);
+			assertEquals(69, ((SocializeApiError)e).getResultCode());
+		}
+		
+		AndroidMock.verify(session);
+		AndroidMock.verify(sessionFactory);
+		AndroidMock.verify(clientFactory);
+		AndroidMock.verify(requestFactory);
+		AndroidMock.verify(jsonParser);
+		AndroidMock.verify(client);
+		AndroidMock.verify(json);
+		AndroidMock.verify(userFactory);
+		AndroidMock.verify(entity);
+		AndroidMock.verify(response);
+		AndroidMock.verify(objectFactory);
+		AndroidMock.verify(utils);
+		AndroidMock.verify(sessionPersister);
+		AndroidMock.verify(status);
+	}
+	
+	
+	@UsesMocks (StatusLine.class)
+	public void testSessionDeleteOnDeleteFail() throws Exception {
+		final String id = "foo";
+		final String endpoint = "foobar/";
+		final String host = "host";
+		final String url = "http://" + host + "/" + endpoint;
+		final int statusCode = 69;
+		
+		StatusLine status = AndroidMock.createMock(StatusLine.class);
+		
+		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
+		AndroidMock.expect(requestFactory.getDeleteRequest(session, url, id)).andReturn(request);
+		AndroidMock.expect(client.execute(request)).andReturn(response);
+		AndroidMock.expect(response.getStatusLine()).andReturn(status);
+		AndroidMock.expect(status.getStatusCode()).andReturn(statusCode);
+		AndroidMock.expect(utils.isHttpError(response)).andReturn(true); // Fail
+		AndroidMock.expect(utils.isAuthError(response)).andReturn(true); // Fail
+		AndroidMock.expect(response.getEntity()).andReturn(entity);
+		AndroidMock.expect(entity.getContent()).andReturn(null);
+		AndroidMock.expect(ioUtils.readSafe(null)).andReturn("TEST ERROR IGNORE ME");
+		AndroidMock.expect(session.getHost()).andReturn(host);
+		
+		sessionPersister.delete(mockContext);
+		
+		entity.consumeContent();
+		
+		AndroidMock.replay(session);
+		AndroidMock.replay(sessionFactory);
+		AndroidMock.replay(clientFactory);
+		AndroidMock.replay(objectFactory);
+		AndroidMock.replay(requestFactory);
+		AndroidMock.replay(jsonParser);
+		AndroidMock.replay(client);
+		AndroidMock.replay(json);
+		AndroidMock.replay(userFactory);
+		AndroidMock.replay(entity);
+		AndroidMock.replay(response);
+		AndroidMock.replay(utils);
+		AndroidMock.replay(sessionPersister);
+		AndroidMock.replay(status);
+		
+		DefaultSocializeProvider<SocializeObject> provider = new DefaultSocializeProvider<SocializeObject>(
+				mockContext,
+				objectFactory,
+				userFactory,
+				clientFactory,
+				sessionFactory,
+				requestFactory,
+				jsonParser,
+				utils,
+				ioUtils
+		);
+		
+		provider.setSessionPersister(sessionPersister);
+		
+		try {
+			 provider.delete(session, endpoint, id);
+			 fail();
+		}
+		catch (Exception e) {
+			assertTrue(e instanceof SocializeApiError);
+			assertEquals(69, ((SocializeApiError)e).getResultCode());
+		}
+		
+		AndroidMock.verify(session);
+		AndroidMock.verify(sessionFactory);
+		AndroidMock.verify(clientFactory);
+		AndroidMock.verify(requestFactory);
+		AndroidMock.verify(jsonParser);
+		AndroidMock.verify(client);
+		AndroidMock.verify(json);
+		AndroidMock.verify(userFactory);
+		AndroidMock.verify(entity);
+		AndroidMock.verify(response);
+		AndroidMock.verify(objectFactory);
+		AndroidMock.verify(utils);
+		AndroidMock.verify(sessionPersister);
+		AndroidMock.verify(status);
+	}
+	
+	@UsesMocks (StatusLine.class)
+	public void testSessionDeleteOnListFail() throws Exception {
+		final String key = "foo";
+		final String endpoint = "foobar/";
+		final String host = "host";
+		final String url = "http://" + host + "/" + endpoint;
+		final int statusCode = 69;
+		
+		StatusLine status = AndroidMock.createMock(StatusLine.class);
+		
+		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
+		AndroidMock.expect(requestFactory.getListRequest(session, url, key, null)).andReturn(request);
+		AndroidMock.expect(client.execute(request)).andReturn(response);
+		AndroidMock.expect(response.getStatusLine()).andReturn(status);
+		AndroidMock.expect(status.getStatusCode()).andReturn(statusCode);
+		AndroidMock.expect(utils.isHttpError(response)).andReturn(true); // Fail
+		AndroidMock.expect(utils.isAuthError(response)).andReturn(true); // Fail
+		AndroidMock.expect(response.getEntity()).andReturn(entity);
+		AndroidMock.expect(entity.getContent()).andReturn(null);
+		AndroidMock.expect(ioUtils.readSafe(null)).andReturn("TEST ERROR IGNORE ME");
+		AndroidMock.expect(session.getHost()).andReturn(host);
+		
+		sessionPersister.delete(mockContext);
+		
+		entity.consumeContent();
+		
+		AndroidMock.replay(session);
+		AndroidMock.replay(sessionFactory);
+		AndroidMock.replay(clientFactory);
+		AndroidMock.replay(objectFactory);
+		AndroidMock.replay(requestFactory);
+		AndroidMock.replay(jsonParser);
+		AndroidMock.replay(client);
+		AndroidMock.replay(json);
+		AndroidMock.replay(userFactory);
+		AndroidMock.replay(entity);
+		AndroidMock.replay(response);
+		AndroidMock.replay(utils);
+		AndroidMock.replay(sessionPersister);
+		AndroidMock.replay(status);
+		
+		DefaultSocializeProvider<SocializeObject> provider = new DefaultSocializeProvider<SocializeObject>(
+				mockContext,
+				objectFactory,
+				userFactory,
+				clientFactory,
+				sessionFactory,
+				requestFactory,
+				jsonParser,
+				utils,
+				ioUtils
+		);
+		
+		provider.setSessionPersister(sessionPersister);
+		
+		try {
+			 provider.list(session, endpoint, key, null);
 			 fail();
 		}
 		catch (Exception e) {

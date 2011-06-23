@@ -40,6 +40,7 @@ import com.socialize.listener.entity.EntityCreateListener;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.entity.EntityListListener;
 import com.socialize.listener.like.LikeAddListener;
+import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.test.SocializeUnitTest;
@@ -330,6 +331,36 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		assertTrue(socialize.isInitialized());
 		
 		socialize.getLike(id, listener);
+		
+		AndroidMock.verify(container);
+		AndroidMock.verify(service);
+	}
+	
+	@UsesMocks ({LikeDeleteListener.class})
+	public void testDeleteLike() {
+		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
+		SocializeApiHost service = AndroidMock.createMock(SocializeApiHost.class, getContext());
+		LikeDeleteListener listener = AndroidMock.createMock(LikeDeleteListener.class);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		SocializeLogger logger = AndroidMock.createNiceMock(SocializeLogger.class);
+		
+		final int id = 1;
+		
+		AndroidMock.expect(container.getBean("socializeApiHost")).andReturn(service);
+		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
+
+		service.deleteLike(session, id, listener);
+		
+		AndroidMock.replay(container);
+		AndroidMock.replay(service);
+		
+		SocializeService socialize = new SocializeService();
+		socialize.init(getContext(), container);
+		socialize.setSession(session);
+		
+		assertTrue(socialize.isInitialized());
+		
+		socialize.deleteLike(id, listener);
 		
 		AndroidMock.verify(container);
 		AndroidMock.verify(service);

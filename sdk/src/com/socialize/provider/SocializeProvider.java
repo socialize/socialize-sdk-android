@@ -48,4 +48,6 @@ public interface SocializeProvider<T> {
 
 	public List<T> post(SocializeSession session, String endpoint, Collection<T> object) throws SocializeException;
 	
+	public void delete(SocializeSession session, String endpoint, String id) throws SocializeException;
+	
 }

@@ -28,6 +28,7 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -100,6 +101,13 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 		endpoint += id;
 		HttpGet get = signer.sign(session, new HttpGet(endpoint));
 		return get;
+	}
+	
+	@Override
+	public HttpUriRequest getDeleteRequest(SocializeSession session, String endpoint, String id) throws SocializeException {
+		endpoint += id;
+		HttpDelete del = signer.sign(session, new HttpDelete(endpoint));
+		return del;
 	}
 
 	@Override

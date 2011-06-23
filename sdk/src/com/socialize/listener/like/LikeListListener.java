@@ -38,5 +38,8 @@ public abstract class LikeListListener extends LikeListener {
 
 	@Override
 	public final void onUpdate(Like entity) {}
+	
+	@Override
+	public final void onDelete() {}
 
 }

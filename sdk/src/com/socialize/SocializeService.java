@@ -39,6 +39,7 @@ import com.socialize.listener.entity.EntityCreateListener;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.entity.EntityListListener;
 import com.socialize.listener.like.LikeAddListener;
+import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.log.SocializeLogger;
@@ -150,6 +151,17 @@ public class SocializeService implements SocializeSessionConsumer {
 	public void addLike(String entity, LikeAddListener likeAddListener) {
 		if(assertAuthenticated(likeAddListener)) {
 			service.addLike(session, entity, likeAddListener);
+		}
+	}
+	
+	/**
+	 * Removes a specific LIKE based on it's unique ID.  The ID would be returned from the original creation call.
+	 * @param id
+	 * @param likeDeleteListener
+	 */
+	public void deleteLike(int id, LikeDeleteListener likeDeleteListener) {
+		if(assertAuthenticated(likeDeleteListener)) {
+			service.deleteLike(session, id, likeDeleteListener);
 		}
 	}
 	

@@ -4,6 +4,7 @@
 	<property file="local.properties" />
 	<property file="build.properties" />
 	<property file="default.properties" />
+	<property file="emma.properties" />
 	
     <path id="android.antlibs">
         <pathelement path="${sdk.dir}/tools/lib/anttasks.jar" />
@@ -27,7 +28,7 @@
                    instrpath="${out.absolute.dir}/classes"
                    outdir="${out.absolute.dir}/classes"
                    metadatafile="${emma.report.dir}/coverage.em"
-            	   filter="-com.socialize.sample.*,-com.socialize.R*,-oauth.*,-com.socialize.android.ioc.*,-com.facebook.*,-net.harder.*"> <!--Don't need coverage for the sample project itself -->
+            	   filter="${emma.excluded}"> <!--Don't need coverage for the sample project itself -->
             </instr>
         </emma>
     </target>

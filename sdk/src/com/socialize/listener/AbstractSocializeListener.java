@@ -55,6 +55,9 @@ public abstract class AbstractSocializeListener<T extends SocializeObject> imple
 			case POST:
 				onCreate(entityResponse.getFirstResult());
 				break;
+			case DELETE:
+				onDelete();
+				break;
 		}
 	}
 
@@ -65,5 +68,7 @@ public abstract class AbstractSocializeListener<T extends SocializeObject> imple
 	public abstract void onUpdate(T entity);
 
 	public abstract void onCreate(T entity);
+	
+	public abstract void onDelete();
 
 }

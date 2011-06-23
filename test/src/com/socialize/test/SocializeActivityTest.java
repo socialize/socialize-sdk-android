@@ -47,6 +47,9 @@ public abstract class SocializeActivityTest extends ActivityInstrumentationTestC
 	
 	@SuppressWarnings("unchecked")
 	protected <T extends Object> T getResult() {
-		return (T) bucket.pop();
+		if(!bucket.isEmpty()) {
+			return (T) bucket.pop();
+		}
+		return null;
 	}
 }

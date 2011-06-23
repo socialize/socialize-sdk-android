@@ -44,7 +44,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	private SocializeResponseFactory<T> responseFactory;
 	private SocializeConfig config;
 	
-	public static enum RequestType {AUTH,PUT,POST,GET,LIST};
+	public static enum RequestType {AUTH,PUT,POST,GET,LIST,DELETE};
 	
 	public SocializeApi(P provider) {
 		super();
@@ -61,6 +61,10 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	
 	public T get(SocializeSession session, String endpoint, String id) throws SocializeException {
 		return provider.get(session, endpoint, id);
+	}
+	
+	public void delete(SocializeSession session, String endpoint, String id) throws SocializeException {
+		provider.delete(session, endpoint, id);
 	}
 	
 	public List<T> put(SocializeSession session, String endpoint, T object) throws SocializeException {
@@ -90,6 +94,14 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 
 	public void getAsync(SocializeSession session, String endpoint, String id, SocializeActionListener listener) {
 		AsyncGetter getter = new AsyncGetter(RequestType.GET, session, listener);
+		SocializeGetRequest request = new SocializeGetRequest();
+		request.setEndpoint(endpoint);
+		request.setIds(id);
+		getter.execute(request);
+	}
+	
+	public void deleteAsync(SocializeSession session, String endpoint, String id, SocializeActionListener listener) {
+		AsyncGetter getter = new AsyncGetter(RequestType.DELETE, session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
 		request.setEndpoint(endpoint);
 		request.setIds(id);
@@ -326,7 +338,12 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				List<T> results = SocializeApi.this.list(session, request.getEndpoint(), request.getKey(), request.getIds());
 				response.setResults(results);
 				break;
+			
+			case DELETE:
+				SocializeApi.this.delete(session, request.getEndpoint(), request.getIds()[0]);
+				break;
 			}
+
 
 			return response;
 		}

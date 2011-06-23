@@ -21,8 +21,13 @@
  */
 package com.socialize.test.blackbox;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
+
+import android.test.mock.MockContext;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
@@ -147,5 +152,33 @@ public class HttpUtilsTest extends SocializeActivityTest {
 		assertFalse(utils.isAuthError(301));
 		assertFalse(utils.isAuthError(200));
 		assertFalse(utils.isAuthError(500));
+	}
+	
+	@UsesMocks ({ResourceLocator.class, SocializeLogger.class})
+	public void testHttpUtilsInitFail() throws IOException {
+		ResourceLocator locator = AndroidMock.createMock(ResourceLocator.class);
+		SocializeLogger logger = AndroidMock.createMock(SocializeLogger.class);
+		MockContext context = new MockContext();
+		
+		
+		// Mock an inputStream from a fail string
+		String failString = "NaN=OK";
+		ByteArrayInputStream bin = new ByteArrayInputStream(failString.getBytes());
+		
+		AndroidMock.expect(locator.locate(context, "errors.properties")).andReturn(bin);
+		AndroidMock.expect(logger.isWarnEnabled()).andReturn(true);
+
+		logger.warn("NaN is not an integer");
+		
+		AndroidMock.replay(locator);
+		AndroidMock.replay(logger);
+		
+		HttpUtils utils = new HttpUtils();
+		utils.setLogger(logger);
+		utils.setResourceLocator(locator);
+		utils.init(context);
+		
+		AndroidMock.verify(locator);
+		AndroidMock.verify(logger);
 	}
 }
