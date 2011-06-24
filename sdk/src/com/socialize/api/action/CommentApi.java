@@ -21,6 +21,9 @@
  */
 package com.socialize.api.action;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Comment;
@@ -42,7 +45,11 @@ public class CommentApi extends SocializeApi<Comment, SocializeProvider<Comment>
 		Comment c = new Comment();
 		c.setText(comment);
 		c.setEntityKey(key);
-		postAsync(session, ENDPOINT, c, listener);
+		
+		List<Comment> list = new ArrayList<Comment>(1);
+		list.add(c);
+		
+		postAsync(session, ENDPOINT, list, listener);
 	}
 	
 	public void getCommentsByEntity(SocializeSession session, String key, CommentListener listener) {

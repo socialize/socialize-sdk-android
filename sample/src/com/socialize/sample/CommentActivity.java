@@ -12,6 +12,7 @@ import com.socialize.Socialize;
 import com.socialize.entity.Comment;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
+import com.socialize.sample.util.ErrorHandler;
 
 public class CommentActivity extends Activity {
 	@Override
@@ -33,18 +34,23 @@ public class CommentActivity extends Activity {
 				
 				@Override
 				public void onClick(View v) {
+					
+					txtCommentCreateResult.setText("");
+					btnCommentCreate.setEnabled(false);
+					
 					String key = txtKey.getText().toString();
 					String name = txtName.getText().toString();
 					
 					Socialize.getSocialize().addComment(key, name, new CommentAddListener() {
 						@Override
 						public void onError(SocializeException error) {
-							txtCommentCreateResult.setText("FAIL: " + error.getMessage());
-							error.printStackTrace();
+							btnCommentCreate.setEnabled(true);
+							txtCommentCreateResult.setText("FAIL: " + ErrorHandler.handleApiError(CommentActivity.this, error));
 						}
 						
 						@Override
 						public void onCreate(Comment entity) {
+							btnCommentCreate.setEnabled(true);
 							txtCommentCreateResult.setText("SUCCESS");
 						}
 					});

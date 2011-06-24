@@ -21,6 +21,8 @@
  */
 package com.socialize.test.unit.api;
 
+import java.util.List;
+
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
@@ -59,14 +61,18 @@ public class CommentApiTest extends SocializeUnitTest {
 		
 		CommentApi api = new CommentApi(provider){
 			@Override
-			public void postAsync(SocializeSession session, String endpoint, Comment object, SocializeActionListener listener) {
+			public void postAsync(SocializeSession session, String endpoint, List<Comment> object, SocializeActionListener listener) {
 				addResult(object);
 			}
 		};
 		
 		api.addComment(session, key, comment, listener);
 		
-		Comment result = (Comment) getResult();
+		List<Comment> list = getResult();
+		assertNotNull(list);
+		assertEquals(1, list.size());
+		
+		Comment result = list.get(0);
 		assertNotNull(result);
 		assertEquals(comment, result.getText());
 		assertNotNull(result.getEntityKey());
