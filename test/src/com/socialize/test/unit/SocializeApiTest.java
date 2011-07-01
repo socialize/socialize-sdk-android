@@ -1,12 +1,12 @@
 package com.socialize.test.unit;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
+import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeActivityTest;
@@ -61,7 +61,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		final String key = "foobar_key";
 		final String[] ids = null;
 		
-		final List<SocializeObject> returned = new LinkedList<SocializeObject>();
+		final ListResult<SocializeObject> returned = new ListResult<SocializeObject>( new LinkedList<SocializeObject>() );
 		
 		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids)).andReturn(returned);
 		AndroidMock.replay(provider);

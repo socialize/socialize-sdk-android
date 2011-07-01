@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 SocializeService Inc.
+ * Copyright (c) 2011 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,29 +19,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.listener.comment;
-
-
-import com.socialize.entity.Comment;
-import com.socialize.entity.ListResult;
-
+package com.socialize.entity;
 
 /**
+ * Represents an error that may occur during an API request.
  * @author Jason Polites
  *
  */
-public abstract class CommentGetListener extends CommentListener {
- 
-	@Override
-	public final void onCreate(Comment entity) {}
+public class ActionError {
 
-	@Override
-	public final void onList(ListResult<Comment> entities) {}
-
-	@Override
-	public final void onUpdate(Comment entity) {}
+	private int errorCode;
+	private String message;
 	
-	@Override
-	public final void onDelete() {}
-
+	public int getErrorCode() {
+		return errorCode;
+	}
+	public void setErrorCode(int errorCode) {
+		this.errorCode = errorCode;
+	}
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
+	}
 }

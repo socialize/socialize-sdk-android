@@ -21,11 +21,11 @@
  */
 package com.socialize.listener;
 
-import java.util.List;
 
 import com.socialize.api.SocializeEntityResponse;
 import com.socialize.api.SocializeResponse;
 import com.socialize.api.SocializeApi.RequestType;
+import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
 
 
@@ -63,7 +63,7 @@ public abstract class AbstractSocializeListener<T extends SocializeObject> imple
 
 	public abstract void onGet(T entity);
 
-	public abstract void onList(List<T> entities);
+	public abstract void onList(ListResult<T> entities);
 
 	public abstract void onUpdate(T entity);
 

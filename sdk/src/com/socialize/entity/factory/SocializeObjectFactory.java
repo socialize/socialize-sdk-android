@@ -21,11 +21,6 @@
  */
 package com.socialize.entity.factory;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,60 +31,20 @@ import com.socialize.entity.SocializeObject;
  *
  * @param <T>
  */
-public abstract class SocializeObjectFactory<T extends SocializeObject> {
+public abstract class SocializeObjectFactory<T extends SocializeObject> extends JSONFactory<T> {
 	
-	public static final String DATE_FORMAT_STRING = "yyyy-MM-dd HH:mm:ssZZ";
-	
-	protected final DateFormat DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT_STRING);
-	
-	public SocializeObjectFactory() {
-		super();
-	}
-	
-	public JSONArray toJSON(Collection<T> objects) throws JSONException {
-		JSONArray array = instantiateJSONArray();
-		for (T t : objects) {
-			array.put(toJSON(t));
+	@Override
+	protected void fromJSON(JSONObject from, T to) throws JSONException {
+		if(from.has("id")) {
+			to.setId(from.getInt("id"));
 		}
-		return array;
 	}
 
-	public JSONObject toJSON(T object) throws JSONException {
-		JSONObject json = instantiateJSON();
-		
-		Integer id = object.getId();
-		
+	@Override
+	protected void toJSON(T from, JSONObject to) throws JSONException {
+		Integer id = from.getId();
 		if(id != null) {
-			json.put("id", id);
+			to.put("id", id);
 		}
-		
-		toJSON(object, json);
-		
-		return json;
 	}
-
-	public T fromJSON(JSONObject json) throws JSONException {
-		T object = instantiateObject();
-		
-		if(json.has("id")) {
-			object.setId(json.getInt("id"));
-		}
-		
-		fromJSON(json, object);
-		
-		return object;
-	}
-	
-	public abstract T instantiateObject();
-	
-	public JSONObject instantiateJSON() {
-		return new JSONObject();
-	}
-	
-	public JSONArray instantiateJSONArray() {
-		return new JSONArray();
-	}
-	
-	protected abstract void fromJSON(JSONObject from, T to) throws JSONException;
-	protected abstract void toJSON(T from, JSONObject to) throws JSONException;
 }

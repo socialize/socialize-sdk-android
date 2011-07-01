@@ -22,9 +22,9 @@
 package com.socialize.provider;
 
 import java.util.Collection;
-import java.util.List;
 
 import com.socialize.api.SocializeSession;
+import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
 
 /**
@@ -36,17 +36,17 @@ public interface SocializeProvider<T> {
 	
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException;
 
-	public List<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException;
+	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException;
 	
 	public T get(SocializeSession session, String endpoint, String id) throws SocializeException;
 	
-	public List<T> put(SocializeSession session, String endpoint, T object) throws SocializeException;
+	public ListResult<T> put(SocializeSession session, String endpoint, T object) throws SocializeException;
 
-	public List<T> post(SocializeSession session, String endpoint, T object) throws SocializeException;
+	public ListResult<T> post(SocializeSession session, String endpoint, T object) throws SocializeException;
 	
-	public List<T> put(SocializeSession session, String endpoint, Collection<T> object) throws SocializeException;
+	public ListResult<T> put(SocializeSession session, String endpoint, Collection<T> object) throws SocializeException;
 
-	public List<T> post(SocializeSession session, String endpoint, Collection<T> object) throws SocializeException;
+	public ListResult<T> post(SocializeSession session, String endpoint, Collection<T> object) throws SocializeException;
 	
 	public void delete(SocializeSession session, String endpoint, String id) throws SocializeException;
 	

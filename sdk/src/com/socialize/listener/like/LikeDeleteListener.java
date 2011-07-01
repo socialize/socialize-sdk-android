@@ -21,9 +21,9 @@
  */
 package com.socialize.listener.like;
 
-import java.util.List;
 
 import com.socialize.entity.Like;
+import com.socialize.entity.ListResult;
 
 
 /**
@@ -36,7 +36,7 @@ public abstract class LikeDeleteListener extends LikeListener {
 	public final void onCreate(Like entity) {}
 
 	@Override
-	public final void onList(List<Like> entities) {}
+	public final void onList(ListResult<Like> entities) {}
 
 	@Override
 	public final void onUpdate(Like entity) {}

@@ -40,8 +40,12 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionFactory;
 import com.socialize.api.SocializeSessionPersister;
 import com.socialize.api.WritableSession;
+import com.socialize.config.SocializeConfig;
+import com.socialize.entity.ActionError;
+import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
 import com.socialize.entity.User;
+import com.socialize.entity.factory.ErrorFactory;
 import com.socialize.entity.factory.SocializeObjectFactory;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
@@ -57,9 +61,13 @@ import com.socialize.util.JSONParser;
  * @param <T>
  */
 public class DefaultSocializeProvider<T extends SocializeObject> implements SocializeProvider<T> {
+	
+	public static final String JSON_ATTR_ERRORS = "errors";
+	public static final String JSON_ATTR_ITEMS = "items";
 
 	private SocializeObjectFactory<T> objectFactory;
 	private SocializeObjectFactory<User> userFactory;
+	private ErrorFactory errorFactory;
 	private HttpClientFactory clientFactory;
 	private SocializeSessionFactory sessionFactory;
 	private SocializeRequestFactory<T> requestFactory;
@@ -68,29 +76,61 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	private HttpUtils httpUtils;
 	private IOUtils ioUtils;
 	private SocializeSessionPersister sessionPersister;
+	private SocializeConfig config;
 	private Context context;
-
-	public DefaultSocializeProvider(
-			Context context,
-			SocializeObjectFactory<T> objectFactory, 
-			SocializeObjectFactory<User> userFactory,
-			HttpClientFactory clientFactory,
-			SocializeSessionFactory sessionFactory,
-			SocializeRequestFactory<T> requestFactory,
-			JSONParser jsonParser,
-			HttpUtils httpUtils,
-			IOUtils ioUtils) {
-		
+	
+	public DefaultSocializeProvider(Context context) {
 		super();
-		this.objectFactory = objectFactory;
-		this.clientFactory = clientFactory;
-		this.userFactory = userFactory;
-		this.sessionFactory = sessionFactory;
-		this.requestFactory = requestFactory;
-		this.jsonParser = jsonParser;
-		this.httpUtils = httpUtils;
-		this.ioUtils = ioUtils;
 		this.context = context;
+	}
+	
+	public void setObjectFactory(SocializeObjectFactory<T> objectFactory) {
+		this.objectFactory = objectFactory;
+	}
+
+	public void setUserFactory(SocializeObjectFactory<User> userFactory) {
+		this.userFactory = userFactory;
+	}
+
+	public void setClientFactory(HttpClientFactory clientFactory) {
+		this.clientFactory = clientFactory;
+	}
+
+	public void setRequestFactory(SocializeRequestFactory<T> requestFactory) {
+		this.requestFactory = requestFactory;
+	}
+
+	public void setJsonParser(JSONParser jsonParser) {
+		this.jsonParser = jsonParser;
+	}
+
+	public void setHttpUtils(HttpUtils httpUtils) {
+		this.httpUtils = httpUtils;
+	}
+
+	public void setIoUtils(IOUtils ioUtils) {
+		this.ioUtils = ioUtils;
+	}
+
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
+	}
+	
+	public void setErrorFactory(ErrorFactory errorFactory) {
+		this.errorFactory = errorFactory;
+	}
+	
+	public void setSessionFactory(SocializeSessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	// TODO: remove?
+	public void init() {
+		java.util.logging.Logger.getLogger("httpclient.wire.headers").setLevel(java.util.logging.Level.FINEST);
+		java.util.logging.Logger.getLogger("httpclient.wire.content").setLevel(java.util.logging.Level.FINEST);
+		java.util.logging.Logger.getLogger("org.apache.http.wire.headers").setLevel(java.util.logging.Level.FINEST);
+		java.util.logging.Logger.getLogger("org.apache.http.wire.content").setLevel(java.util.logging.Level.FINEST);
+		java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.FINEST);
 	}
 	
 	@Override
@@ -104,11 +144,16 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 				
 				String loadedKey = loaded.getConsumerKey();
 				String loadedSecret = loaded.getConsumerSecret();
+				String loadedHost = loaded.getHost();
+				
+				String host = config.getProperty(SocializeConfig.API_HOST);
 				
 				if(loadedKey != null && 
 						loadedKey.equals(key) &&
 						loadedSecret != null && 
-						loadedSecret.equals(secret)) {
+						loadedSecret.equals(secret) &&
+						loadedHost != null && 
+						loadedHost.equals(host)) {
 					return loaded;
 				}
 			}
@@ -246,28 +291,28 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	}
 
 	@Override
-	public List<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
+	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
 		endpoint = prepareEndpoint(session, endpoint);
 		HttpUriRequest request = requestFactory.getListRequest(session, endpoint, key, ids);
 		return doListTypeRequest(request);
 	}
 	
 	@Override
-	public List<T> put(SocializeSession session, String endpoint, T object) throws SocializeException {
+	public ListResult<T> put(SocializeSession session, String endpoint, T object) throws SocializeException {
 		endpoint = prepareEndpoint(session, endpoint);
 		HttpUriRequest request = requestFactory.getPutRequest(session, endpoint, object);
 		return doListTypeRequest(request);
 	}
 
 	@Override
-	public List<T> put(SocializeSession session, String endpoint, Collection<T> objects) throws SocializeException {
+	public ListResult<T> put(SocializeSession session, String endpoint, Collection<T> objects) throws SocializeException {
 		endpoint = prepareEndpoint(session, endpoint);
 		HttpUriRequest request = requestFactory.getPutRequest(session, endpoint, objects);
 		return doListTypeRequest(request);
 	}
 	
 	@Override
-	public List<T> post(SocializeSession session, String endpoint, T object) throws SocializeException {
+	public ListResult<T> post(SocializeSession session, String endpoint, T object) throws SocializeException {
 		endpoint = prepareEndpoint(session, endpoint);
 		HttpUriRequest request = requestFactory.getPostRequest(session, endpoint, object);
 		return doListTypeRequest(request);
@@ -275,15 +320,18 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 
 
 	@Override
-	public List<T> post(SocializeSession session, String endpoint, Collection<T> objects) throws SocializeException {
+	public ListResult<T> post(SocializeSession session, String endpoint, Collection<T> objects) throws SocializeException {
 		endpoint = prepareEndpoint(session, endpoint);
 		HttpUriRequest request = requestFactory.getPostRequest(session, endpoint, objects);
 		return doListTypeRequest(request);
 	}
 	
-	private List<T> doListTypeRequest(HttpUriRequest request) throws SocializeException {
+	private ListResult<T> doListTypeRequest(HttpUriRequest request) throws SocializeException {
 		List<T> results = null;
+		List<ActionError> errors = null;
 		HttpEntity entity = null;
+		
+		ListResult<T> result = null;
 		
 		try {
 			HttpClient client = clientFactory.getClient();
@@ -303,6 +351,8 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			}
 			else {
 				
+				result = new ListResult<T>();
+				
 				// Read the json just for logging
 				String json = ioUtils.readSafe(entity.getContent());
 				
@@ -310,14 +360,35 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 					logger.debug("JSON Response: " + json);
 				}
 				
-				JSONArray list = jsonParser.parseArray(json);
+				JSONObject object = jsonParser.parseObject(json);
 				
-				int length = list.length();
+				if(object.has(JSON_ATTR_ERRORS) && !object.isNull(JSON_ATTR_ERRORS)) {
+					
+					JSONArray errorList = object.getJSONArray(JSON_ATTR_ERRORS);
+					
+					errors = new ArrayList<ActionError>(errorList.length());
+					
+					for (int i = 0; i < errorList.length(); i++) {
+						JSONObject jsonObject = errorList.getJSONObject(i);
+						ActionError error = errorFactory.fromJSON(jsonObject);
+						errors.add(error);
+					}
+					
+					result.setErrors(errors);
+				}
 				
-				results = new ArrayList<T>(length);
-				
-				for (int i = 0; i < length; i++) {
-					results.add(objectFactory.fromJSON(list.getJSONObject(i)));
+				if(object.has(JSON_ATTR_ITEMS) && !object.isNull(JSON_ATTR_ITEMS)) {
+					JSONArray list = object.getJSONArray(JSON_ATTR_ITEMS);
+					
+					int length = list.length();
+					
+					results = new ArrayList<T>(length);
+					
+					for (int i = 0; i < length; i++) {
+						results.add(objectFactory.fromJSON(list.getJSONObject(i)));
+					}
+					
+					result.setResults(results);
 				}
 			}
 		}
@@ -331,7 +402,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			closeEntity(entity);
 		}
 		
-		return results;
+		return result;
 	}
 
 
@@ -348,14 +419,19 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	}
 
 	private final String prepareEndpoint(SocializeSession session, String endpoint, boolean secure) {
+		return prepareEndpoint(session.getHost(), endpoint, secure);
+	}
+	
+	private final String prepareEndpoint(String host, String endpoint, boolean secure) {
 		endpoint = endpoint.trim();
 		
-		String host = session.getHost();
-		
 		if(host == null) {
-			logger.error("The session did not have an endpoint configured, using the config");
+			logger.warn("The session did not have an endpoint configured, using the config");
+			host = config.getProperty(SocializeConfig.API_HOST);
 		}
-		else {
+		
+		if(host != null) {
+			
 			if(!host.startsWith("http")) {
 				if(secure) {
 					host = "https://" + host;
@@ -364,15 +440,19 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 					host = "http://" + host;
 				}
 			}
-		}
-		
-		if(!host.endsWith("/")) {
-			if(!endpoint.startsWith("/")) {
-				host += "/";	
+			
+			if(!host.endsWith("/")) {
+				if(!endpoint.startsWith("/")) {
+					host += "/";	
+				}
 			}
+			
+			endpoint = host + endpoint;
 		}
-		
-		endpoint = host + endpoint;
+		else {
+			logger.error("Could not locate host property in session or config!");
+		}
+
 		
 		if(!endpoint.endsWith("/")) {
 			endpoint += "/";
@@ -393,4 +473,6 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			}
 		}
 	}
+	
+	
 }

@@ -5,6 +5,6 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="src" path="android-ioc_src"/>
 	<classpathentry kind="lib" path="/socialize-sdk-sample/libs/signpost-commonshttp4-1.2.1.1.jar"/>
-	<classpathentry kind="lib" path="/socialize-sdk-sample/libs/signpost-core-1.2.1.1.jar"/>
+	<classpathentry kind="lib" path="/socialize-sdk-sample/libs/signpost-core-1.2.1.1.jar" sourcepath="/oauth-signpost/signpost-core/src/main/java"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

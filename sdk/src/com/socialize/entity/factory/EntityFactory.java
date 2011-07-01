@@ -33,6 +33,11 @@ import com.socialize.util.StringUtils;
  */
 public class EntityFactory extends SocializeObjectFactory<Entity> {
 	
+	private static final String LIKES = "likes";
+	private static final String SHARES = "shares";
+	private static final String COMMENTS = "comments";
+	private static final String VIEWS = "views";
+	
 	public EntityFactory() {
 		super();
 	}
@@ -45,6 +50,8 @@ public class EntityFactory extends SocializeObjectFactory<Entity> {
 	@Override
 	protected void fromJSON(JSONObject object, Entity entry) throws JSONException {
 		
+		super.fromJSON(object, entry);
+		
 		if(object.has("name")) {
 			entry.setName(object.getString("name"));
 		}
@@ -53,25 +60,25 @@ public class EntityFactory extends SocializeObjectFactory<Entity> {
 			entry.setKey(object.getString("key"));
 		}
 		
-		if(object.has("likes")) {
-			entry.setLikes(object.getInt("likes"));
+		if(object.has(LIKES) && !object.isNull(LIKES)) {
+			entry.setLikes(object.getInt(LIKES));
 		}
-		
-		if(object.has("shares")) {
-			entry.setShares(object.getInt("shares"));
+		if(object.has(SHARES) && !object.isNull(SHARES)) {
+			entry.setShares(object.getInt(SHARES));
 		}
-		
-		if(object.has("comments")) {
-			entry.setComments(object.getInt("comments"));
+		if(object.has(COMMENTS) && !object.isNull(COMMENTS)) {
+			entry.setComments(object.getInt(COMMENTS));
 		}
-		
-		if(object.has("views")) {
-			entry.setViews(object.getInt("views"));
+		if(object.has(VIEWS) && !object.isNull(VIEWS)) {
+			entry.setViews(object.getInt(VIEWS));
 		}
 	}
 
 	@Override
 	protected void toJSON(Entity entry, JSONObject object) throws JSONException {
+		
+		super.toJSON(entry, object);
+		
 		if(!StringUtils.isEmpty(entry.getName())) {
 			object.put("name", entry.getName());
 		}

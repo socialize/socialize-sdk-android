@@ -31,6 +31,11 @@ import com.socialize.entity.Stats;
  *
  */
 public class StatsFactory extends SocializeObjectFactory<Stats> {
+	
+	private static final String LIKES = "likes";
+	private static final String SHARES = "shares";
+	private static final String COMMENTS = "comments";
+	private static final String VIEWS = "views";
 
 	@Override
 	public Stats instantiateObject() {
@@ -39,10 +44,20 @@ public class StatsFactory extends SocializeObjectFactory<Stats> {
 
 	@Override
 	protected void fromJSON(JSONObject from, Stats to) throws JSONException {
-		to.setComments(from.getInt("comments"));
-		to.setLikes(from.getInt("likes"));
-		to.setShares(from.getInt("share"));
-		to.setViews(from.getInt("views"));
+		super.fromJSON(from, to);
+		
+		if(from.has(LIKES) && !from.isNull(LIKES)) {
+			to.setLikes(from.getInt(LIKES));
+		}
+		if(from.has(SHARES) && !from.isNull(SHARES)) {
+			to.setShares(from.getInt(SHARES));
+		}
+		if(from.has(COMMENTS) && !from.isNull(COMMENTS)) {
+			to.setComments(from.getInt(COMMENTS));
+		}
+		if(from.has(VIEWS) && !from.isNull(VIEWS)) {
+			to.setViews(from.getInt(VIEWS));
+		}
 	}
 
 	@Override

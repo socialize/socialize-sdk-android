@@ -12,13 +12,13 @@ public final class ErrorHandler {
 	public static final String handleApiError(Context context, SocializeException error) {
 		if(error instanceof SocializeApiError) {
 			SocializeApiError serror = (SocializeApiError) error;
-			if(serror.getResultCode() == 500) {
+			if(serror.getResultCode() > 500) {
 				writeError(context, serror);
-				return "500 Error, file written to device";
+				return serror.getResultCode() + " Error, file written to device";
 			}
-			else if(serror.getResultCode() == 404) {
+			else if(serror.getResultCode() > 400) {
 				writeError(context, serror);
-				return "404 Error, file written to device";
+				return serror.getResultCode() + " Error, file written to device";
 			}
 			else {
 				error.printStackTrace();

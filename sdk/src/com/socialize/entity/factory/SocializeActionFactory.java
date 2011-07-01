@@ -48,6 +48,8 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 	
 	@Override
 	protected void toJSON(T from, JSONObject to) throws JSONException {
+		super.toJSON(from, to);
+		
 		try {
 			Entity entityObject = from.getEntity();
 			String entityKey = from.getEntityKey();
@@ -102,7 +104,8 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 
 	@Override
 	protected void fromJSON(JSONObject from, T to) throws JSONException {
-
+		super.fromJSON(from, to);
+		
 		try {
 			
 			if(from.has("application") && !from.isNull("application")) {

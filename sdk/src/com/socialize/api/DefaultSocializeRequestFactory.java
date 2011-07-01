@@ -106,7 +106,14 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 	@Override
 	public HttpUriRequest getDeleteRequest(SocializeSession session, String endpoint, String id) throws SocializeException {
 		endpoint += id;
+		
+//		UrlBuilder builder = new UrlBuilder();
+//		builder.start(endpoint);
+//		builder.addParam("payload", "{id:" + id + "}");
+//		HttpDelete del = signer.sign(session, new HttpDelete(builder.toString()));
+		
 		HttpDelete del = signer.sign(session, new HttpDelete(endpoint));
+		
 		return del;
 	}
 

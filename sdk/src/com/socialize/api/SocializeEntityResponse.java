@@ -24,6 +24,8 @@ package com.socialize.api;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.socialize.entity.ListResult;
+
 /**
  * @author Jason Polites
  *
@@ -31,25 +33,36 @@ import java.util.List;
  */
 public class SocializeEntityResponse<T> implements SocializeResponse {
 
-	private List<T> results;
+	private ListResult<T> results;
 
-	public List<T> getResults() {
+
+	public ListResult<T> getResults() {
 		return results;
 	}
-	public void setResults(List<T> results) {
+	public void setResults(ListResult<T> results) {
 		this.results = results;
 	}
 	
 	public synchronized void addResult(T result) {
-		if(results == null) {
-			results = new LinkedList<T>();
+		
+		if(results == null) results = new ListResult<T>();
+		
+		List<T> list = results.getResults();
+		
+		if(list == null) {
+			list = new LinkedList<T>();
+			results.setResults(list);
 		}
-		results.add(result);
+		
+		list.add(result);
 	}
 	
 	public T getFirstResult() {
 		if(results != null) {
-			return results.get(0);
+			List<T> list = results.getResults();
+			if(list != null) {
+				return list.get(0);
+			}
 		}
 		return null;
 	}

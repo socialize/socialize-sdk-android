@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 SocializeService Inc.
+ * Copyright (c) 2011 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,37 +21,57 @@
  */
 package com.socialize.entity.factory;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.socialize.entity.Application;
 
 /**
  * @author Jason Polites
  *
  */
-public class ApplicationFactory extends SocializeObjectFactory<Application> {
+public abstract class JSONFactory<T> {
+	public static final String DATE_FORMAT_STRING = "yyyy-MM-dd HH:mm:ssZZ";
 	
-	public ApplicationFactory() {
+	protected final DateFormat DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT_STRING);
+	
+	public JSONFactory() {
 		super();
 	}
-
-	@Override
-	public Application instantiateObject() {
-		return new Application();
-	}
-
-	@Override
-	protected void fromJSON(JSONObject object, Application entry) throws JSONException {
-		super.fromJSON(object, entry);
-		if(object.has("name")) {
-			entry.setName(object.getString("name"));
+	
+	public JSONArray toJSON(Collection<T> objects) throws JSONException {
+		JSONArray array = instantiateJSONArray();
+		for (T t : objects) {
+			array.put(toJSON(t));
 		}
+		return array;
 	}
 
-	@Override
-	protected void toJSON(Application entry, JSONObject object) throws JSONException {
-		super.toJSON(entry, object);
-		object.put("name", entry.getName());
+	public JSONObject toJSON(T object) throws JSONException {
+		JSONObject json = instantiateJSON();
+		toJSON(object, json);
+		return json;
 	}
+
+	public T fromJSON(JSONObject json) throws JSONException {
+		T object = instantiateObject();
+		fromJSON(json, object);
+		return object;
+	}
+	
+	public JSONObject instantiateJSON() {
+		return new JSONObject();
+	}
+	
+	public JSONArray instantiateJSONArray() {
+		return new JSONArray();
+	}
+	
+	public abstract T instantiateObject();
+	
+	protected abstract void fromJSON(JSONObject from, T to) throws JSONException;
+	protected abstract void toJSON(T from, JSONObject to) throws JSONException;
 }

@@ -21,9 +21,9 @@
  */
 package com.socialize.listener.comment;
 
-import java.util.List;
 
 import com.socialize.entity.Comment;
+import com.socialize.entity.ListResult;
 
 
 /**
@@ -36,7 +36,7 @@ public abstract class CommentAddListener extends CommentListener {
 	public final void onGet(Comment entity) {}
 
 	@Override
-	public final void onList(List<Comment> entities) {}
+	public final void onList(ListResult<Comment> entities) {}
 
 	@Override
 	public final void onUpdate(Comment entity) {}

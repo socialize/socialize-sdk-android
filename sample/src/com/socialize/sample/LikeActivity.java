@@ -82,14 +82,11 @@ public class LikeActivity extends Activity {
 					String id =  txtLikeIdCreated.getText().toString();
 					
 					if(id != null) {
-						btnLikeDelete.setEnabled(false);
-						
 						Socialize.getSocialize().deleteLike(Integer.parseInt(id), new LikeDeleteListener() {
 							
 							@Override
 							public void onError(SocializeException error) {
 								txtLikeCreateResult.setText("FAIL: " + ErrorHandler.handleApiError(LikeActivity.this, error));
-								btnLikeDelete.setEnabled(true);
 							}
 							
 							@Override

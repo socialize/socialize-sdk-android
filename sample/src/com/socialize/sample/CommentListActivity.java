@@ -1,7 +1,6 @@
 package com.socialize.sample;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -9,6 +8,7 @@ import android.os.Bundle;
 
 import com.socialize.Socialize;
 import com.socialize.entity.Comment;
+import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentListListener;
@@ -34,11 +34,11 @@ public class CommentListActivity<T extends SocializeObject>  extends ListActivit
 				}
 				
 				@Override
-				public void onList(List<Comment> entities) {
+				public void onList(ListResult<Comment> result) {
 					
-					ArrayList<ListItem> items = new ArrayList<ListItem>(entities.size());
+					ArrayList<ListItem> items = new ArrayList<ListItem>(result.getResults().size());
 					
-					for (final Comment entity : entities) {
+					for (final Comment entity : result.getResults()) {
 						items.add(new ListItem() {
 							
 							@Override

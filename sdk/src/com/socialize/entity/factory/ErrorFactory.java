@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 SocializeService Inc.
+ * Copyright (c) 2011 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,29 +19,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.listener.comment;
+package com.socialize.entity.factory;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import com.socialize.entity.Comment;
-import com.socialize.entity.ListResult;
-
+import com.socialize.entity.ActionError;
 
 /**
  * @author Jason Polites
- *
  */
-public abstract class CommentGetListener extends CommentListener {
- 
-	@Override
-	public final void onCreate(Comment entity) {}
-
-	@Override
-	public final void onList(ListResult<Comment> entities) {}
-
-	@Override
-	public final void onUpdate(Comment entity) {}
+public class ErrorFactory extends JSONFactory<ActionError> {
 	
-	@Override
-	public final void onDelete() {}
+	private static final String MESSAGE = "error";
 
+	@Override
+	public ActionError instantiateObject() {
+		return new ActionError();
+	}
+
+	@Override
+	protected void fromJSON(JSONObject from, ActionError to) throws JSONException {
+		if(from.has(MESSAGE) && !from.isNull(MESSAGE)) {
+			to.setMessage(from.getString(MESSAGE));
+		}
+	}
+
+	@Override
+	protected void toJSON(ActionError from, JSONObject to) throws JSONException {
+		if(from.getMessage() != null) {
+			to.put(MESSAGE, from.getMessage());
+		}
+	}
 }

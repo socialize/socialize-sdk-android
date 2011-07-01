@@ -26,6 +26,7 @@ import java.util.List;
 import android.os.AsyncTask;
 
 import com.socialize.config.SocializeConfig;
+import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeActionListener;
@@ -55,7 +56,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return provider.authenticate(endpoint, key, secret, uuid);
 	}
 
-	public List<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
+	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
 		return provider.list(session, endpoint, key, ids);
 	}
 	
@@ -67,19 +68,19 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		provider.delete(session, endpoint, id);
 	}
 	
-	public List<T> put(SocializeSession session, String endpoint, T object) throws SocializeException {
+	public ListResult<T> put(SocializeSession session, String endpoint, T object) throws SocializeException {
 		return provider.put(session, endpoint, object);
 	}
 
-	public List<T> put(SocializeSession session, String endpoint, List<T> objects) throws SocializeException {
+	public ListResult<T> put(SocializeSession session, String endpoint, List<T> objects) throws SocializeException {
 		return provider.put(session, endpoint, objects);
 	}
 
-	public List<T> post(SocializeSession session, String endpoint, T object) throws SocializeException {
+	public ListResult<T> post(SocializeSession session, String endpoint, T object) throws SocializeException {
 		return provider.post(session, endpoint, object);
 	}
 	
-	public List<T> post(SocializeSession session, String endpoint, List<T> objects) throws SocializeException {
+	public ListResult<T> post(SocializeSession session, String endpoint, List<T> objects) throws SocializeException {
 		return provider.post(session, endpoint, objects);
 	}
 	
@@ -276,7 +277,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				response = new SocializeEntityResponse<T>();
 			}
 
-			List<T> results = null;
+			ListResult<T> results = null;
 
 			switch (requestType) {
 			
@@ -335,7 +336,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				break;
 
 			case LIST:
-				List<T> results = SocializeApi.this.list(session, request.getEndpoint(), request.getKey(), request.getIds());
+				ListResult<T> results = SocializeApi.this.list(session, request.getEndpoint(), request.getKey(), request.getIds());
 				response.setResults(results);
 				break;
 			

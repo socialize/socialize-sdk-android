@@ -21,9 +21,9 @@
  */
 package com.socialize.listener.entity;
 
-import java.util.List;
 
 import com.socialize.entity.Entity;
+import com.socialize.entity.ListResult;
 
 
 /**
@@ -36,7 +36,7 @@ public abstract class EntityGetListener extends EntityListener {
 	public final void onCreate(Entity entity) {}
 
 	@Override
-	public final void onList(List<Entity> entities) {}
+	public final void onList(ListResult<Entity> entities) {}
 
 	@Override
 	public final void onUpdate(Entity entity) {}

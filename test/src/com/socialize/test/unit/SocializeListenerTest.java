@@ -21,7 +21,6 @@
  */
 package com.socialize.test.unit;
 
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -31,6 +30,7 @@ import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeApi.RequestType;
 import com.socialize.api.SocializeResponse;
 import com.socialize.api.SocializeSession;
+import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
@@ -136,7 +136,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public void onList(List<SocializeObject> entities) {
+			public void onList(ListResult<SocializeObject> entities) {
 				fail();
 			}
 
@@ -193,7 +193,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public void onList(List<SocializeObject> entities) {
+			public void onList(ListResult<SocializeObject> entities) {
 				fail();
 			}
 
@@ -247,7 +247,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public void onList(List<SocializeObject> entities) {
+			public void onList(ListResult<SocializeObject> result) {
 				addResult(true);
 			}
 
@@ -301,7 +301,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public void onList(List<SocializeObject> entities) {
+			public void onList(ListResult<SocializeObject> result) {
 				fail();
 			}
 
@@ -354,7 +354,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public void onList(List<SocializeObject> entities) {
+			public void onList(ListResult<SocializeObject> result) {
 				fail();
 			}
 

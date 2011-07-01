@@ -1,7 +1,6 @@
 package com.socialize.test.unit;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -16,10 +15,11 @@ import com.socialize.api.SocializeResponseFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.config.SocializeConfig;
+import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeActionListener;
+import com.socialize.listener.SocializeAuthListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeActivityTest;
 
@@ -64,7 +64,6 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		mockSession = AndroidMock.createMock(SocializeSession.class);
 		
 		AndroidMock.replay(mockSession);
-
 		
 		listener = new SocializeActionListener() {
 
@@ -188,7 +187,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		final String key = "foobar_key";
 		final String[] ids = null;
 		
-		final List<SocializeObject> returned = new LinkedList<SocializeObject>();
+		final ListResult<SocializeObject> returned = new ListResult<SocializeObject>( new LinkedList<SocializeObject>() );
 		
 		api.setResponseFactory(responseFactory);
 		
@@ -222,7 +221,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		final String key = "foobar_key";
 		final String ids[] = null;
 		
-		final List<SocializeObject> returned = new LinkedList<SocializeObject>();
+		final ListResult<SocializeObject> returned = new ListResult<SocializeObject>( new LinkedList<SocializeObject>() );
 		
 		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids)).andReturn(returned);
 		AndroidMock.replay(provider);
