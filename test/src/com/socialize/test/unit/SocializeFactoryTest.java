@@ -89,13 +89,13 @@ public class SocializeFactoryTest extends SocializeActivityTest {
 			}
 
 			@Override
-			protected void fromJSON(JSONObject from, SocializeObject to) throws JSONException {
+			protected void postFromJSON(JSONObject from, SocializeObject to) throws JSONException {
 				// Just a dummy to make it easier to assert that create() was called
 				from.put("foo", "bar");
 			}
 
 			@Override
-			protected void toJSON(SocializeObject from, JSONObject to) throws JSONException {}
+			protected void postToJSON(SocializeObject from, JSONObject to) throws JSONException {}
 
 		};
 		
@@ -135,12 +135,12 @@ public class SocializeFactoryTest extends SocializeActivityTest {
 			}
 
 			@Override
-			protected void fromJSON(JSONObject from, Entity to) throws JSONException {
+			protected void postFromJSON(JSONObject from, Entity to) throws JSONException {
 			
 			}
 
 			@Override
-			protected void toJSON(Entity from, JSONObject to) throws JSONException {
+			protected void postToJSON(Entity from, JSONObject to) throws JSONException {
 				// Just a dummy to make it easier to assert that create() was called
 				from.setKey("foobar");
 			}
@@ -192,12 +192,12 @@ public class SocializeFactoryTest extends SocializeActivityTest {
 			}
 
 			@Override
-			protected void fromJSON(JSONObject from, Entity to) throws JSONException {
+			protected void postFromJSON(JSONObject from, Entity to) throws JSONException {
 			
 			}
 
 			@Override
-			protected void toJSON(Entity from, JSONObject to) throws JSONException {
+			protected void postToJSON(Entity from, JSONObject to) throws JSONException {
 				// Just a dummy to make it easier to assert that create() was called
 				from.setKey("foobar");
 			}

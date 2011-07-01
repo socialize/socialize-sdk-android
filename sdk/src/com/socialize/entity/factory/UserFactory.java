@@ -42,8 +42,7 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	}
 
 	@Override
-	protected void fromJSON(JSONObject object, User user) throws JSONException {
-		super.fromJSON(object, user);
+	protected void postFromJSON(JSONObject object, User user) throws JSONException {
 		
 		if(object.has("first_name")) user.setFirstName(object.getString("first_name"));
 		if(object.has("last_name"))user.setLastName(object.getString("last_name"));
@@ -65,10 +64,7 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	}
 
 	@Override
-	protected void toJSON(User user, JSONObject object) throws JSONException {
-		
-		super.toJSON(user, object);
-		
+	protected void postToJSON(User user, JSONObject object) throws JSONException {
 		object.put("first_name", user.getFirstName());
 		object.put("last_name", user.getLastName());
 		object.put("description", user.getDescription());

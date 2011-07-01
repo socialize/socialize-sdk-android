@@ -7,21 +7,18 @@
     
 	<EditText
 		android:id="@+id/txtHost"
-		android:text="http://www.dev.getsocialize.com/v1"
         android:textSize="12dp"
         android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"/>
     
 	<EditText
 		android:id="@+id/txtConsumerKey"
-		android:text="8b71dc5d-a009-463d-954d-74561afee30c"
         android:textSize="12dp"
         android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"/>
         
 	<EditText
 		android:id="@+id/txtConsumerSecret"
-		android:text="c0d0f6e9-4bac-45ae-88e6-7ce6da8d1507"
         android:textSize="12dp"
         android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"/>

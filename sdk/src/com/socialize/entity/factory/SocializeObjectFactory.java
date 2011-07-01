@@ -38,6 +38,7 @@ public abstract class SocializeObjectFactory<T extends SocializeObject> extends 
 		if(from.has("id")) {
 			to.setId(from.getInt("id"));
 		}
+		postFromJSON(from, to);
 	}
 
 	@Override
@@ -46,5 +47,10 @@ public abstract class SocializeObjectFactory<T extends SocializeObject> extends 
 		if(id != null) {
 			to.put("id", id);
 		}
+		postToJSON(from, to);
 	}
+	
+	protected abstract void postFromJSON(JSONObject from, T to) throws JSONException;
+	
+	protected abstract void postToJSON(T from, JSONObject to) throws JSONException;
 }

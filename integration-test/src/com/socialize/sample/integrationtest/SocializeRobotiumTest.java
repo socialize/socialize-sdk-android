@@ -21,10 +21,6 @@
  */
 package com.socialize.sample.integrationtest;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -37,11 +33,6 @@ public class SocializeRobotiumTest extends ActivityInstrumentationTestCase2<Main
 
 	protected Solo solo;
 	
-	protected String consumerKey;
-	protected String consumerSecret;
-	protected String url;
-	
-	protected Properties properties;
 	
 	public SocializeRobotiumTest() {
 		super("com.socialize.sample", Main.class);
@@ -49,12 +40,7 @@ public class SocializeRobotiumTest extends ActivityInstrumentationTestCase2<Main
 	
 	public void setUp() throws Exception {
 		solo = new Solo(getInstrumentation(), getActivity());
-		loadConfig();
 		solo.clickOnButton(0);
-		
-		assertNotNull(consumerKey);
-		assertNotNull(consumerSecret);
-		assertNotNull(url);
 	}
 	
 	public void testAuthenticate() {
@@ -70,34 +56,17 @@ public class SocializeRobotiumTest extends ActivityInstrumentationTestCase2<Main
 	}
 	
 	protected void authenticate() {
-		solo.clearEditText(0);
-		solo.enterText(0, url);
-		
-		solo.clearEditText(1);
-		solo.enterText(1, consumerKey);
-		
-		solo.clearEditText(2);
-		solo.enterText(2, consumerSecret);
+//		solo.clearEditText(0);
+//		solo.enterText(0, url);
+//		
+//		solo.clearEditText(1);
+//		solo.enterText(1, consumerKey);
+//		
+//		solo.clearEditText(2);
+//		solo.enterText(2, consumerSecret);
 		
 		solo.clickOnButton(0);
 	}
 	
-	private void loadConfig() throws IOException {
-		InputStream in = null;
-		try {
-			in = getActivity().getAssets().open("integration-test.conf"); // located in sample app
-			
-			properties = new Properties();
-			properties.load(in);
-			
-			consumerKey = properties.getProperty("socialize.consumer.key");
-			consumerSecret = properties.getProperty("socialize.consumer.secret");
-			url = properties.getProperty("socialize.api.url");
-		}
-		finally {
-			if (in != null) {
-				in.close();
-			}
-		}
-	}
+
 }

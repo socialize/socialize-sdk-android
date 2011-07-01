@@ -48,9 +48,7 @@ public class EntityFactory extends SocializeObjectFactory<Entity> {
 	}
 
 	@Override
-	protected void fromJSON(JSONObject object, Entity entry) throws JSONException {
-		
-		super.fromJSON(object, entry);
+	protected void postFromJSON(JSONObject object, Entity entry) throws JSONException {
 		
 		if(object.has("name")) {
 			entry.setName(object.getString("name"));
@@ -75,10 +73,7 @@ public class EntityFactory extends SocializeObjectFactory<Entity> {
 	}
 
 	@Override
-	protected void toJSON(Entity entry, JSONObject object) throws JSONException {
-		
-		super.toJSON(entry, object);
-		
+	protected void postToJSON(Entity entry, JSONObject object) throws JSONException {
 		if(!StringUtils.isEmpty(entry.getName())) {
 			object.put("name", entry.getName());
 		}

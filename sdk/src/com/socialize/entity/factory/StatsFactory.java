@@ -43,9 +43,8 @@ public class StatsFactory extends SocializeObjectFactory<Stats> {
 	}
 
 	@Override
-	protected void fromJSON(JSONObject from, Stats to) throws JSONException {
-		super.fromJSON(from, to);
-		
+	protected void postFromJSON(JSONObject from, Stats to) throws JSONException {
+
 		if(from.has(LIKES) && !from.isNull(LIKES)) {
 			to.setLikes(from.getInt(LIKES));
 		}
@@ -61,7 +60,7 @@ public class StatsFactory extends SocializeObjectFactory<Stats> {
 	}
 
 	@Override
-	protected void toJSON(Stats from, JSONObject to) throws JSONException {
+	protected void postToJSON(Stats from, JSONObject to) throws JSONException {
 		// Never sent
 	}
 	

@@ -49,10 +49,22 @@ public class StatsFactoryTest extends AbstractSocializeObjectFactoryTest<Stats, 
 
 	@Override
 	protected void setupFromJSONExpectations() throws Exception {
+		
+		AndroidMock.expect(json.has("comments")).andReturn(true);
+		AndroidMock.expect(json.has("likes")).andReturn(true);
+		AndroidMock.expect(json.has("shares")).andReturn(true);
+		AndroidMock.expect(json.has("views")).andReturn(true);
+		
+		AndroidMock.expect(json.isNull("comments")).andReturn(false);
+		AndroidMock.expect(json.isNull("likes")).andReturn(false);
+		AndroidMock.expect(json.isNull("shares")).andReturn(false);
+		AndroidMock.expect(json.isNull("views")).andReturn(false);
+		
 		AndroidMock.expect(json.getInt("comments")).andReturn(comments);
 		AndroidMock.expect(json.getInt("likes")).andReturn(likes);
-		AndroidMock.expect(json.getInt("share")).andReturn(share);
+		AndroidMock.expect(json.getInt("shares")).andReturn(share);
 		AndroidMock.expect(json.getInt("views")).andReturn(views);
+		
 		object.setComments(comments);
 		object.setLikes(likes);
 		object.setShares(share);

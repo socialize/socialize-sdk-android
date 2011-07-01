@@ -42,16 +42,14 @@ public class ApplicationFactory extends SocializeObjectFactory<Application> {
 	}
 
 	@Override
-	protected void fromJSON(JSONObject object, Application entry) throws JSONException {
-		super.fromJSON(object, entry);
+	protected void postFromJSON(JSONObject object, Application entry) throws JSONException {
 		if(object.has("name")) {
 			entry.setName(object.getString("name"));
 		}
 	}
 
 	@Override
-	protected void toJSON(Application entry, JSONObject object) throws JSONException {
-		super.toJSON(entry, object);
+	protected void postToJSON(Application entry, JSONObject object) throws JSONException {
 		object.put("name", entry.getName());
 	}
 }

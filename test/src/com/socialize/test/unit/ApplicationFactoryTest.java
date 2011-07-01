@@ -49,6 +49,7 @@ public class ApplicationFactoryTest extends AbstractSocializeObjectFactoryTest<A
 
 	@Override
 	protected void setupFromJSONExpectations() throws Exception {
+		AndroidMock.expect(json.has("name")).andReturn(true);
 		AndroidMock.expect(json.getString("name")).andReturn(mockName);
 		object.setName(mockName);
 	}

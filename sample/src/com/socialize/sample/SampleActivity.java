@@ -1,5 +1,9 @@
 package com.socialize.sample;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -19,13 +23,15 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.sample.util.ErrorHandler;
 
 public class SampleActivity extends Activity {
-
+	
+	protected Properties properties;
+	protected String consumerKey;
+	protected String consumerSecret;
+	protected String url;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		setContentView(R.layout.sample);
 		
 		final ProgressDialog progress = ProgressDialog.show(this, "Initializing", "Please wait...");
 		
@@ -33,17 +39,25 @@ public class SampleActivity extends Activity {
 
 			@Override
 			protected Void doInBackground(Void... params) {
+				loadConfig();
 				Socialize.init(SampleActivity.this);
 				return null;
 			}
 
 			@Override
 			protected void onPostExecute(Void result) {
+				setContentView(R.layout.sample);
+				
 				final SocializeConfig config = Socialize.getSocialize().getConfig();
 
 				final EditText txtHost = (EditText) findViewById(R.id.txtHost);
 				final EditText txtConsumerKey = (EditText) findViewById(R.id.txtConsumerKey);
 				final EditText txtConsumerSecret = (EditText) findViewById(R.id.txtConsumerSecret);
+				
+				txtHost.setText(url);
+				txtConsumerKey.setText(consumerKey);
+				txtConsumerSecret.setText(consumerSecret);
+				
 				final TextView txtAuthResult =  (TextView) findViewById(R.id.txtAuthResult);
 				
 				final Button authButton = (Button) findViewById(R.id.btnAuthenticate);
@@ -160,6 +174,33 @@ public class SampleActivity extends Activity {
 	protected void onDestroy() {
 		Socialize.destroy(this);
 		super.onDestroy();
+	}
+	
+	private void loadConfig() {
+		InputStream in = null;
+		try {
+			in = getAssets().open("integration-test.conf"); // located in sample app
+			
+			properties = new Properties();
+			properties.load(in);
+			
+			consumerKey = properties.getProperty("socialize.consumer.key");
+			consumerSecret = properties.getProperty("socialize.consumer.secret");
+			url = properties.getProperty("socialize.api.url");
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		finally {
+			if (in != null) {
+				try {
+					in.close();
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 }
