@@ -76,7 +76,7 @@ public class SocializeIOCTest extends SocializeActivityTest {
 		checkBeanType(ioc, "config", SocializeConfig.class);
 		checkBeanType(ioc, "logger", SocializeLogger.class);
 		checkBeanType(ioc, "userFactory", UserFactory.class);
-		checkBeanType(ioc, "httpClientFactory", DefaultHttpClientFactory.class);
+		checkBeanType(ioc, "clientFactory", DefaultHttpClientFactory.class);
 		checkBeanType(ioc, "sessionFactory", DefaultSocializeSessionFactory.class);
 		checkBeanType(ioc, "oauthConsumerFactory", CommonsHttpOAuthConsumerFactory.class);
 		checkBeanType(ioc, "oauthSigningStrategy", oauth.signpost.signature.AuthorizationHeaderSigningStrategy.class);

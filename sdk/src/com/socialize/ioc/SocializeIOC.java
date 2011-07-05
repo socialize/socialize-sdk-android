@@ -34,16 +34,29 @@ import com.socialize.util.ResourceLocator;
  */
 public class SocializeIOC extends AndroidIOC {
 	
-	public void init(Context context, ResourceLocator resourceLocator) throws Exception {
-		InputStream in = null;
+	public void init(Context context, ResourceLocator resourceLocator, String...configPaths) throws Exception {
+		InputStream[] streams = null;
 		try {
-			in = resourceLocator.locate(context, "socialize_beans.xml");
-			super.init(context, in);
+			streams = new InputStream[configPaths.length];
+			
+			for (int i = 0; i < configPaths.length; i++) {
+				streams[i] = resourceLocator.locate(context, configPaths[i]);
+			}
+
+			super.init(context, streams);
 		}
 		finally {
-			if(in != null) {
-				in.close();
+			if(streams != null) {
+				for (InputStream in : streams) {
+					if(in != null) {
+						in.close();
+					}
+				}
 			}
 		}
+	}
+	
+	public void init(Context context, ResourceLocator resourceLocator) throws Exception {
+		init(context, resourceLocator, "socialize_beans.xml");
 	}
 }

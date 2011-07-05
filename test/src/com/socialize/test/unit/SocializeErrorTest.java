@@ -51,7 +51,7 @@ public class SocializeErrorTest extends SocializeActivityTest {
 		SocializeApiError error = new SocializeApiError(utils, resultCode, message);
 		
 		AndroidMock.expect(utils.getMessageFor(AndroidMock.anyInt())).andReturn("foobar").anyTimes();
-		AndroidMock.expect(builder.build(getActivity(), (InputStream)null)).andReturn(container);
+		AndroidMock.expect(builder.build((InputStream[])null)).andReturn(container);
 		AndroidMock.expect(container.getBean("httputils")).andReturn(utils).anyTimes();
 		
 		AndroidMock.replay(utils);
@@ -59,7 +59,7 @@ public class SocializeErrorTest extends SocializeActivityTest {
 		AndroidMock.replay(container);
 		
 		SocializeIOC ioc = new SocializeIOC();
-		ioc.init(getActivity(), null, builder);
+		ioc.init(getActivity(), builder, (InputStream[]) null);
 
 		// Get the result we expect:
 		String expected = utils.getMessageFor(resultCode) + " (" + resultCode + "), " + message;

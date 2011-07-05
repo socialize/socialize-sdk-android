@@ -51,6 +51,8 @@ import com.socialize.util.ResourceLocator;
  */
 public class SocializeService implements SocializeSessionConsumer {
 	
+	public static final String DEFAULT_BEAN_CONFIG = "socialize_beans.xml";
+	
 	private SocializeApiHost service;
 	private SocializeLogger logger;
 	private IOCContainer container;
@@ -60,9 +62,18 @@ public class SocializeService implements SocializeSessionConsumer {
 	/**
 	 * Initializes a SocializeService instance with default settings.
 	 * @param context The current Android context (or Activity)
-	 * @throws Exception 
+	 * @param context
 	 */
 	public void init(Context context) {
+		init(context, DEFAULT_BEAN_CONFIG);
+	}
+	
+	/**
+	 * Initializes a SocializeService instance with default settings.
+	 * @param context
+	 * @param paths List of paths to config files.  Beans in paths to the right overwrite beans in paths to the left.
+	 */
+	public void init(Context context, String...paths) {
 		try {
 			SocializeIOC container = new SocializeIOC();
 			ResourceLocator locator = new ResourceLocator();
@@ -70,7 +81,7 @@ public class SocializeService implements SocializeSessionConsumer {
 			
 			locator.setClassLoaderProvider(provider);
 			
-			container.init(context, locator);
+			container.init(context, locator, paths);
 			
 			init(context, container);
 		}

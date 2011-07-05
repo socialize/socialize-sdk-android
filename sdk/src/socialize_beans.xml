@@ -49,7 +49,7 @@
 	
 	<bean id="errorFactory" class="com.socialize.entity.factory.ErrorFactory"/>
 	
-	<bean id="httpClientFactory" class="com.socialize.net.DefaultHttpClientFactory">
+	<bean id="clientFactory" class="com.socialize.net.DefaultHttpClientFactory">
 		<init-method name="init">
 			<arg ref="config"/>
 		</init-method>
@@ -174,7 +174,7 @@
 
 	<bean id="socializeApiHost" class="com.socialize.api.SocializeApiHost">
 		<constructor-arg type="context"/>
-		<property name="clientFactory" ref="httpClientFactory"/>
+		<property name="clientFactory" ref="clientFactory"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="commentApi" ref="commentApi"/>
 		<property name="entityApi" ref="entityApi"/>

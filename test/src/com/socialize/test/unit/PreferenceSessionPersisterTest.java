@@ -33,7 +33,7 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.PreferenceSessionPersister;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionFactory;
-import com.socialize.api.WritableSession;
+import com.socialize.api.SocializeSessionImpl;
 import com.socialize.entity.User;
 import com.socialize.entity.factory.UserFactory;
 import com.socialize.sample.mock.MockEditor;
@@ -50,13 +50,14 @@ import com.socialize.test.SocializeActivityTest;
 	SocializeSession.class,
 	User.class,
 	UserFactory.class,
-	SocializeSessionFactory.class})
+	SocializeSessionFactory.class,
+	SocializeSessionImpl.class})
 public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 
 	MockContext context;
 	SharedPreferences prefs;
 	MockEditor editor;
-	WritableSession session;
+	SocializeSessionImpl session;
 	User user = null;
 	UserFactory userFactory;
 	JSONObject jsonObject;
@@ -69,7 +70,7 @@ public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 		context = AndroidMock.createMock(MockContext.class);
 		prefs = AndroidMock.createMock(SharedPreferences.class);
 		editor = AndroidMock.createMock(MockEditor.class);
-		session = AndroidMock.createMock(WritableSession.class);
+		session = AndroidMock.createMock(SocializeSessionImpl.class);
 		user = AndroidMock.createMock(User.class);
 		userFactory = AndroidMock.createMock(UserFactory.class);
 		socializeSessionFactory = AndroidMock.createMock(SocializeSessionFactory.class);

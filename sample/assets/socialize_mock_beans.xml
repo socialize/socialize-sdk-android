@@ -1,0 +1,4 @@
+<!--  Mock bean implementations for testing only! -->
+<beans>
+	<bean id="abstractProvider" class="com.socialize.sample.mock.MockSocializeProvider" abstract="true"/>
+</beans>
