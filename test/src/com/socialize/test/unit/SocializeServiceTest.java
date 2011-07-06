@@ -25,7 +25,7 @@ import android.test.mock.MockContext;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.SocializeService;
+import com.socialize.SocializeServiceImpl;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeApiHost;
 import com.socialize.api.SocializeSession;
@@ -65,7 +65,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(container);
 		
-		SocializeService socialize = new SocializeService();
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		socialize.init(getContext(), container);
 		
 		assertTrue(socialize.isInitialized());
@@ -88,7 +88,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		AndroidMock.replay(container);
 		AndroidMock.replay(logger);
 		
-		SocializeService socialize = new SocializeService();
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		socialize.setLogger(logger);
 		socialize.init(new MockContext(), container);
 		
@@ -114,7 +114,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		AndroidMock.replay(container);
 		AndroidMock.replay(service);
 		
-		SocializeService socialize = new SocializeService();
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		socialize.init(getContext(), container);
 		socialize.setSession(session);
 		
@@ -144,13 +144,13 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		AndroidMock.replay(container);
 		AndroidMock.replay(service);
 		
-		SocializeService socialize = new SocializeService();
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		socialize.init(getContext(), container);
 		socialize.setSession(session);
 		
 		assertTrue(socialize.isInitialized());
 		
-		socialize.addLike(key, listener);
+		socialize.like(key, listener);
 		
 		AndroidMock.verify(container);
 		AndroidMock.verify(service);
@@ -174,7 +174,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		AndroidMock.replay(container);
 		AndroidMock.replay(service);
 		
-		SocializeService socialize = new SocializeService();
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		socialize.init(getContext(), container);
 		socialize.setSession(session);
 		
@@ -204,7 +204,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		AndroidMock.replay(container);
 		AndroidMock.replay(service);
 		
-		SocializeService socialize = new SocializeService();
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		socialize.init(getContext(), container);
 		socialize.setSession(session);
 		
@@ -234,7 +234,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		AndroidMock.replay(container);
 		AndroidMock.replay(service);
 		
-		SocializeService socialize = new SocializeService();
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		socialize.init(getContext(), container);
 		socialize.setSession(session);
 		
@@ -264,7 +264,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		AndroidMock.replay(container);
 		AndroidMock.replay(service);
 		
-		SocializeService socialize = new SocializeService();
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		socialize.init(getContext(), container);
 		socialize.setSession(session);
 		
@@ -294,7 +294,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		AndroidMock.replay(container);
 		AndroidMock.replay(service);
 		
-		SocializeService socialize = new SocializeService();
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		socialize.init(getContext(), container);
 		socialize.setSession(session);
 		
@@ -324,7 +324,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		AndroidMock.replay(container);
 		AndroidMock.replay(service);
 		
-		SocializeService socialize = new SocializeService();
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		socialize.init(getContext(), container);
 		socialize.setSession(session);
 		
@@ -354,13 +354,13 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		AndroidMock.replay(container);
 		AndroidMock.replay(service);
 		
-		SocializeService socialize = new SocializeService();
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		socialize.init(getContext(), container);
 		socialize.setSession(session);
 		
 		assertTrue(socialize.isInitialized());
 		
-		socialize.deleteLike(id, listener);
+		socialize.unlike(id, listener);
 		
 		AndroidMock.verify(container);
 		AndroidMock.verify(service);
@@ -381,7 +381,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(container);
 		
-		SocializeService socialize = new SocializeService();
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		socialize.init(getContext(), container);
 		
 		service.authenticate(key, secret, listener, socialize);
@@ -411,7 +411,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 			public void onCreate(Comment entity) {}
 		};
 
-		SocializeService socialize = new SocializeService();
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		socialize.setSession(session);
 		
 		assertFalse(socialize.isInitialized());
@@ -446,7 +446,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 			public void onCreate(Comment entity) {}
 		};
 
-		SocializeService socialize = new SocializeService();
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		socialize.init(getContext(), container);
 		
 		assertTrue(socialize.isInitialized());
@@ -480,7 +480,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		AndroidMock.replay(container);
 		AndroidMock.replay(service);
 		
-		SocializeService socialize = new SocializeService();
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		socialize.init(getContext(), container);
 		socialize.setSession(session);
 		
@@ -502,7 +502,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 	
 		AndroidMock.replay(container);
 		
-		SocializeService socialize = new SocializeService();
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		socialize.init(new MockContext(), container);
 		
 		SocializeConfig gotten = socialize.getConfig();

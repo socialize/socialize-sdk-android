@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 SocializeService Inc.
+ * Copyright (c) 2011 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,111 +24,48 @@ package com.socialize;
 import android.content.Context;
 
 import com.socialize.android.ioc.IOCContainer;
-import com.socialize.api.SocializeApiHost;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
-import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.listener.SocializeListener;
-import com.socialize.listener.comment.CommentAddListener;
-import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
-import com.socialize.listener.entity.EntityCreateListener;
 import com.socialize.listener.entity.EntityGetListener;
-import com.socialize.listener.entity.EntityListListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
-import com.socialize.listener.like.LikeGetListener;
-import com.socialize.listener.like.LikeListListener;
-import com.socialize.log.SocializeLogger;
-import com.socialize.util.ClassLoaderProvider;
-import com.socialize.util.ResourceLocator;
 
 /**
  * @author Jason Polites
+ *
  */
-public class SocializeService implements SocializeSessionConsumer {
-	
-	public static final String DEFAULT_BEAN_CONFIG = "socialize_beans.xml";
-	
-	private SocializeApiHost service;
-	private SocializeLogger logger;
-	private IOCContainer container;
-	private boolean initialized = false;
-	private SocializeSession session;
-	
+public interface SocializeService {
+
 	/**
 	 * Initializes a SocializeService instance with default settings.
 	 * @param context The current Android context (or Activity)
 	 * @param context
 	 */
-	public void init(Context context) {
-		init(context, DEFAULT_BEAN_CONFIG);
-	}
-	
+	public void init(Context context);
+
 	/**
 	 * Initializes a SocializeService instance with default settings.
 	 * @param context
 	 * @param paths List of paths to config files.  Beans in paths to the right overwrite beans in paths to the left.
 	 */
-	public void init(Context context, String...paths) {
-		try {
-			SocializeIOC container = new SocializeIOC();
-			ResourceLocator locator = new ResourceLocator();
-			ClassLoaderProvider provider = new ClassLoaderProvider();
-			
-			locator.setClassLoaderProvider(provider);
-			
-			container.init(context, locator, paths);
-			
-			init(context, container);
-		}
-		catch (Exception e) {
-			if(logger != null) {
-				logger.error(SocializeLogger.INITIALIZE_FAILED, e);
-			}
-			else {
-				e.printStackTrace();
-			}
-		}
-	}
-	
+	public void init(Context context, String... paths);
+
 	/**
 	 * Initializes a socialize service with a custom object container (Expert use only)
 	 * @param context The current Android context (or Activity)
 	 * @param container A reference to an IOC container
 	 * @see https://github.com/socialize/android-ioc
 	 */
-	public void init(Context context, final IOCContainer container) {
-		try {
-			this.container = container;
-			this.service = container.getBean("socializeApiHost");
-			this.logger = container.getBean("logger");
-			this.initialized = true;
-		}
-		catch (Exception e) {
-			if(logger != null) {
-				logger.error(SocializeLogger.INITIALIZE_FAILED, e);
-			}
-			else {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	
+	public void init(Context context, final IOCContainer container);
+
 	/**
 	 * Destroys the SocializeService instance.  Should be called during the onDestroy() method of your Activity.
 	 */
-	public void destroy() {
-		initialized = false;
-		if(container != null) {
-			container.destroy();
-		}
-	}
-	
+	public void destroy();
+
 	/**
 	 * Authenticates the application against the API
 	 * @param consumerKey The consumer key, obtained from registration as a SocializeService Developer.
@@ -136,218 +73,62 @@ public class SocializeService implements SocializeSessionConsumer {
 	 * @param authListener The callback for authentication outcomes.
 	 * @throws SocializeException 
 	 */
-	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener authListener)  {
-		if(assertInitialized(authListener)) {
-			service.authenticate(consumerKey, consumerSecret, authListener, this);
-		}
-	}
+	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener authListener);
 
-	/**
-	 * Adds a new comment and associates it with the entity described.
-	 * @param entity The entity key.  Defined when first creating an entity, or created on the fly with this call.
-	 * @param comment The comment to add.
-	 * @param commentAddListener A listener to handle callbacks from the post.
-	 */
-	public void addComment(String entity, String comment, CommentAddListener commentAddListener) {
-		if(assertAuthenticated(commentAddListener)) {
-			service.addComment(session, entity, comment, commentAddListener);
-		}
-	}
-	
 	/**
 	 * Adds a new like and associates it with the entity described.
 	 * @param entity The entity key.  Defined when first creating an entity, or created on the fly with this call.
 	 * @param likeAddListener A listener to handle callbacks from the post.
 	 */
-	public void addLike(String entity, LikeAddListener likeAddListener) {
-		if(assertAuthenticated(likeAddListener)) {
-			service.addLike(session, entity, likeAddListener);
-		}
-	}
-	
+	public void like(String entity, LikeAddListener likeAddListener);
+
 	/**
 	 * Removes a specific LIKE based on it's unique ID.  The ID would be returned from the original creation call.
 	 * @param id
 	 * @param likeDeleteListener
 	 */
-	public void deleteLike(int id, LikeDeleteListener likeDeleteListener) {
-		if(assertAuthenticated(likeDeleteListener)) {
-			service.deleteLike(session, id, likeDeleteListener);
-		}
-	}
+	public void unlike(int id, LikeDeleteListener likeDeleteListener);
+
+	/**
+	 * Returns true if this SocializeService instance has been initialized.
+	 * @return
+	 */
+	public boolean isInitialized();
+
+	/**
+	 * Returns true if the current session is authenticated.
+	 * @return
+	 */
+	public boolean isAuthenticated();
+
 	
 	/**
-	 * Lists all the likes associated with the given ids.
-	 * @param likeListListener A listener to handle callbacks from the get.
-	 * @param ids
+	 * Returns a reference to the current session.
+	 * @return
 	 */
-	public void listLikesById(LikeListListener likeListListener, int...ids) {
-		if(assertAuthenticated(likeListListener)) {
-			service.listLikesById(session, likeListListener, ids);
-		}
-	}
-	
+	public SocializeSession getSession();
+
 	/**
-	 * Retrieves a single like.
-	 * @param id The ID of the like
-	 * @param likeGetListener A listener to handle callbacks from the get.
+	 * Returns a reference to the config being used.
+	 * <br/>
+	 * This can be modified BEFORE calling init() if alternate config is required.
+	 * @return
 	 */
-	public void getLike(int id, LikeGetListener likeGetListener) {
-		if(assertAuthenticated(likeGetListener)) {
-			service.getLike(session, id, likeGetListener);
-		}
-	}
-	
-	/**
-	 * Creates a new entity.
-	 * @param key The [unique] key for the entity.
-	 * @param name The name for the entity.
-	 * @param entityCreateListener A listener to handle callbacks from the post.
-	 */
-	public void createEntity(String key, String name, EntityCreateListener entityCreateListener) {
-		if(assertAuthenticated(entityCreateListener)) {
-			service.createEntity(session, key, name, entityCreateListener);
-		}
-	}
-	
-	/**
-	 * Retrieves a single entity
-	 * @param key
-	 * @param listener
-	 */
-	public void getEntity(String key, EntityGetListener listener) {
-		if(assertAuthenticated(listener)) {
-			service.getEntity(session, key, listener);
-		}
-	}
-	
-	/**
-	 * Lists entities matching the given keys.
-	 * @param entityListListener A listener to handle callbacks from the post.
-	 * @param keys Array of keys corresponding to the entities to return, or null to return all.
-	 */
-	public void listEntitiesByKey(EntityListListener entityListListener, String...keys) {
-		if(assertAuthenticated(entityListListener)) {
-			service.listEntitiesByKey(session, entityListListener, keys);
-		}
-	}
-//	
-//	/**
-//	 * Lists all entities associated with the current consumer key.
-//	 * @param entityListListener
-//	 */
-//	public void listAllEntities(EntityListListener entityListListener) {
-//		if(assertAuthenticated(entityListListener)) {
-//			service.listEntitiesByKey(session, entityListListener, (String[]) null);
-//		}
-//	}
-	
+	public SocializeConfig getConfig();
+
 	/**
 	 * Lists the comments associated with an entity.
 	 * @param session The current socialize session.
 	 * @param entity The entity key.  Defined when first creating an entity, or created on the fly with this call.
 	 * @param commentListListener A listener to handle callbacks from the post.
 	 */
-	public void listCommentsByEntity(String entity, CommentListListener commentListListener) {
-		if(assertAuthenticated(commentListListener)) {
-			service.listCommentsByEntity(session, entity, commentListListener);
-		}
-	}
-	
-	/**
-	 * Lists the comments by comment ID.
-	 * @param session The current socialize session.
-	 * @param commentListListener A listener to handle callbacks from the post.
-	 * @param ids Array of IDs corresponding to pre-existing comments.
-	 */
-	public void listCommentsById(CommentListListener commentListListener, int...ids) {
-		if(assertAuthenticated(commentListListener)) {
-			service.listCommentsById(session, commentListListener, ids);
-		}
-	}
-	
-	/**
-	 * Gets a single comment based on comment ID.
-	 * @param session The current socialize session.
-	 * @param id The ID of the comment.
-	 * @param commentGetListener A listener to handle callbacks from the post.
-	 */
-	public void getComment(int id, CommentGetListener commentGetListener) {
-		if(assertAuthenticated(commentGetListener)) {
-			service.getComment(session, id, commentGetListener);
-		}
-	}
-	
-	/**
-	 * Returns true if this SocializeService instance has been initialized.
-	 * @return
-	 */
-	public boolean isInitialized() {
-		return initialized;
-	}
-	
-	public boolean isAuthenticated() {
-		return session != null;
-	}
-	
-	private boolean assertAuthenticated(SocializeListener listener) {
-		if(assertInitialized(listener)) {
-			if(session != null) {
-				return true;
-			}
-			else {
-				if(listener != null) {
-					if(logger != null) {
-						listener.onError(new SocializeException(logger.getMessage(SocializeLogger.NOT_AUTHENTICATED)));
-					}
-					else {
-						listener.onError(new SocializeException("Not authenticated"));
-					}
-				}
-				if(logger != null) logger.error(SocializeLogger.NOT_AUTHENTICATED);
-			}
-		}
-		
-		return false;
-	}
-	
-	private boolean assertInitialized(SocializeListener listener) {
-		if(!initialized) {
-			if(listener != null) {
-				if(logger != null) {
-					listener.onError(new SocializeException(logger.getMessage(SocializeLogger.NOT_INITIALIZED)));
-				}
-				else {
-					listener.onError(new SocializeException("Not initialized"));
-				}
-			}
-			if(logger != null) logger.error(SocializeLogger.NOT_INITIALIZED);
-		}
-		return initialized;
-	}
-
-	public SocializeSession getSession() {
-		return session;
-	}
-
-	public void setSession(SocializeSession session) {
-		this.session = session;
-	}
-	
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
-	}
+	public void listCommentsByEntity(String key, CommentListListener commentListListener);
 
 	/**
-	 * Returns the configuration for this SocializeService instance.
-	 * @return
+	 * Retrieves a single entity
+	 * @param key
+	 * @param listener
 	 */
-	public SocializeConfig getConfig() {
-		if(initialized) {
-			return container.getBean("config");
-		}
-		
-		if(logger != null) logger.error(SocializeLogger.NOT_INITIALIZED);
-		return null;
-	}
+	public void getEntity(String key, EntityGetListener entityGetListener);
+
 }

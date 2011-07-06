@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -35,12 +36,30 @@ public class SampleActivity extends Activity {
 		
 		final ProgressDialog progress = ProgressDialog.show(this, "Initializing", "Please wait...");
 		
+		Bundle extras = this.getIntent().getExtras();
+		
+		boolean mock = false;
+		
+		if(extras != null) {
+			mock = extras.getBoolean("mock");
+		}
+		
+		final boolean isMock = mock;
+		
 		new AsyncTask<Void, Void, Void>() {
 
 			@Override
 			protected Void doInBackground(Void... params) {
+				
 				loadConfig();
-				Socialize.init(SampleActivity.this);
+				
+				if(isMock) {
+					Socialize.init(SampleActivity.this, "socialize_beans.xml", "socialize_mock_beans.xml");
+				}
+				else {
+					Socialize.init(SampleActivity.this);
+				}
+				
 				return null;
 			}
 
@@ -64,8 +83,8 @@ public class SampleActivity extends Activity {
 				final Button btnComments = (Button) findViewById(R.id.btnComments);
 				final Button btnEntity = (Button) findViewById(R.id.btnEntity);
 				final Button btnLike = (Button) findViewById(R.id.btnLike);
-				final Button btnShare = (Button) findViewById(R.id.btnShare);
-				final Button btnView = (Button) findViewById(R.id.btnView);
+//				final Button btnShare = (Button) findViewById(R.id.btnShare);
+//				final Button btnView = (Button) findViewById(R.id.btnView);
 
 				authButton.setOnClickListener(new OnClickListener() {
 					
@@ -91,8 +110,8 @@ public class SampleActivity extends Activity {
 								btnComments.setVisibility(View.GONE);
 								btnEntity.setVisibility(View.GONE);
 								btnLike.setVisibility(View.GONE);
-								btnShare.setVisibility(View.GONE);
-								btnView.setVisibility(View.GONE);
+//								btnShare.setVisibility(View.GONE);
+//								btnView.setVisibility(View.GONE);
 							}
 							
 							@Override
@@ -103,8 +122,8 @@ public class SampleActivity extends Activity {
 								btnComments.setVisibility(View.VISIBLE);
 								btnEntity.setVisibility(View.VISIBLE);
 								btnLike.setVisibility(View.VISIBLE);
-								btnShare.setVisibility(View.VISIBLE);
-								btnView.setVisibility(View.VISIBLE);
+//								btnShare.setVisibility(View.VISIBLE);
+//								btnView.setVisibility(View.VISIBLE);
 							}
 							
 							@Override
@@ -116,8 +135,8 @@ public class SampleActivity extends Activity {
 								btnComments.setVisibility(View.GONE);
 								btnEntity.setVisibility(View.GONE);
 								btnLike.setVisibility(View.GONE);
-								btnShare.setVisibility(View.GONE);
-								btnView.setVisibility(View.GONE);
+//								btnShare.setVisibility(View.GONE);
+//								btnView.setVisibility(View.GONE);
 							}
 						});
 					}
@@ -148,21 +167,21 @@ public class SampleActivity extends Activity {
 					}
 				});
 				
-				btnShare.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						Intent i = new Intent(SampleActivity.this, ShareActivity.class);
-						startActivity(i);
-					}
-				});
-				
-				btnView.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						Intent i = new Intent(SampleActivity.this, ViewActivity.class);
-						startActivity(i);
-					}
-				});
+//				btnShare.setOnClickListener(new OnClickListener() {
+//					@Override
+//					public void onClick(View v) {
+//						Intent i = new Intent(SampleActivity.this, ShareActivity.class);
+//						startActivity(i);
+//					}
+//				});
+//				
+//				btnView.setOnClickListener(new OnClickListener() {
+//					@Override
+//					public void onClick(View v) {
+//						Intent i = new Intent(SampleActivity.this, ViewActivity.class);
+//						startActivity(i);
+//					}
+//				});
 				
 				progress.dismiss();
 			}
@@ -172,6 +191,7 @@ public class SampleActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
+		Log.i(getClass().getSimpleName(), "onDestroy called");
 		Socialize.destroy(this);
 		super.onDestroy();
 	}

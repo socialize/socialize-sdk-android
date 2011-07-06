@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import android.content.Context;
+
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionImpl;
 import com.socialize.entity.ListResult;
@@ -43,6 +45,14 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 
 	private SocializeObjectFactory<T> objectFactory;
 	
+	public MockSocializeProvider() {
+		super();
+	}
+
+	public MockSocializeProvider(Context context) {
+		super();
+	}
+
 	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException {
 		return new SocializeSessionImpl();
@@ -55,7 +65,7 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 
 	@Override
 	public T get(SocializeSession session, String endpoint, String id) throws SocializeException {
-		return objectFactory.instantiateObject();
+		return makeObject();
 	}
 
 	@Override
@@ -86,12 +96,25 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 		List<T> list = new ArrayList<T>(num);
 		
 		for (int i = 0; i < num; i++) {
-			list.add(objectFactory.instantiateObject());
+			list.add(makeObject());
 		}
 		
 		result.setResults(list);
 		return result;
 		
 	}
+	
+	private T makeObject() {
+		T object = objectFactory.instantiateObject();
+		object.setId(1);
+		return object;
+	}
 
+	public SocializeObjectFactory<T> getObjectFactory() {
+		return objectFactory;
+	}
+
+	public void setObjectFactory(SocializeObjectFactory<T> objectFactory) {
+		this.objectFactory = objectFactory;
+	}
 }

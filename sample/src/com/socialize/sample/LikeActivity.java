@@ -14,6 +14,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.sample.util.ErrorHandler;
+import com.socialize.util.StringUtils;
 
 public class LikeActivity extends Activity {
 	@Override
@@ -46,29 +47,36 @@ public class LikeActivity extends Activity {
 					
 					String key = txtKey.getText().toString();
 					
-					Socialize.getSocialize().addLike(key, new LikeAddListener() {
-						
-						@Override
-						public void onError(SocializeException error) {
-							txtLikeCreateResult.setText("FAIL: " + ErrorHandler.handleApiError(LikeActivity.this, error));
-							btnLikeCreate.setEnabled(true);
-						}
-						
-						@Override
-						public void onCreate(Like entity) {
-							btnLikeCreate.setEnabled(true);
-							btnLikeDelete.setEnabled(true);
-							txtLikeCreateResult.setText("SUCCESS");
+					if(!StringUtils.isEmpty(key)) {
+						Socialize.getSocialize().like(key, new LikeAddListener() {
 							
-							if(entity.getId() != null) {
-								txtLikeIdCreated.setText(String.valueOf(entity.getId()));
+							@Override
+							public void onError(SocializeException error) {
+								txtLikeCreateResult.setText("FAIL: " + ErrorHandler.handleApiError(LikeActivity.this, error));
+								btnLikeCreate.setEnabled(true);
 							}
 							
-							if(entity.getDate() != null) {
-								txtLikeDateCreated.setText(String.valueOf(entity.getDate()));
+							@Override
+							public void onCreate(Like entity) {
+								btnLikeCreate.setEnabled(true);
+								btnLikeDelete.setEnabled(true);
+								txtLikeCreateResult.setText("SUCCESS");
+								
+								if(entity.getId() != null) {
+									txtLikeIdCreated.setText(String.valueOf(entity.getId()));
+								}
+								
+								if(entity.getDate() != null) {
+									txtLikeDateCreated.setText(String.valueOf(entity.getDate()));
+								}
 							}
-						}
-					});
+						});
+					}
+					else {
+						txtLikeCreateResult.setText("FAIL: No Key");
+						btnLikeCreate.setEnabled(true);
+					}
+					
 				}
 			});
 			
@@ -81,8 +89,8 @@ public class LikeActivity extends Activity {
 					
 					String id =  txtLikeIdCreated.getText().toString();
 					
-					if(id != null) {
-						Socialize.getSocialize().deleteLike(Integer.parseInt(id), new LikeDeleteListener() {
+					if(!StringUtils.isEmpty(id)) {
+						Socialize.getSocialize().unlike(Integer.parseInt(id), new LikeDeleteListener() {
 							
 							@Override
 							public void onError(SocializeException error) {

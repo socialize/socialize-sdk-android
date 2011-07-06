@@ -29,21 +29,38 @@ import android.content.Context;
  */
 public class Socialize {
 
-	private static final SocializeService instance = new SocializeService();
+	private static final SocializeServiceImpl instance = new SocializeServiceImpl();
+	
+	private static int initCount = 0;
 	
 	private Socialize() {
 		super();
+	}
+	
+	public static final void init(Context context, String...configPaths) {
+		if(!instance.isInitialized()) {
+			instance.init(context, configPaths);
+		}
+		
+		initCount++;
 	}
 	
 	public static final void init(Context context) {
 		if(!instance.isInitialized()) {
 			instance.init(context);
 		}
+		
+		initCount++;
 	}
 	
 	public static final void destroy(Context context) {
-		if(instance != null && instance.isInitialized()) {
-			instance.destroy();
+		
+		initCount--;
+		
+		if(initCount <= 0) {
+			if(instance != null && instance.isInitialized()) {
+				instance.destroy();
+			}
 		}
 	}
 	

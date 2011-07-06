@@ -14,10 +14,20 @@ public class Main extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         Button btn = (Button) findViewById(R.id.btnSample);
+        Button btnMock = (Button) findViewById(R.id.btnSampleWithMocks);
         btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(Main.this, SampleActivity.class);
+				startActivity(i);
+			}
+		});
+        
+        btnMock.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(Main.this, SampleActivity.class);
+				i.putExtra("mock", true);
 				startActivity(i);
 			}
 		});
