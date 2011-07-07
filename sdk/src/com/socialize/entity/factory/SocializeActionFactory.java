@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc* Permission is hereby granted, free of charge, to any person obtaining a copy
+ * Copyright (c) 2011 Socialize Inc. 
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -64,7 +66,7 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			else if(!StringUtils.isEmpty(entityKey)) {
 				to.put("entity", entityKey);
 			}
-			
+
 			if(appObject != null) {
 				JSONObject application = applicationFactory.toJSON(appObject);
 				to.put("application", application);

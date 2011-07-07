@@ -22,13 +22,45 @@
 package com.socialize.sample;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
-public class EmptyActivity extends Activity {
+public class ApiActivity extends Activity {
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.api);
+		
+		final Button btnComments = (Button) findViewById(R.id.btnComments);
+		final Button btnEntity = (Button) findViewById(R.id.btnEntity);
+		final Button btnLike = (Button) findViewById(R.id.btnLike);
+		
+		btnComments.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(ApiActivity.this, CommentActivity.class);
+				startActivity(i);
+			}
+		});
+	
+		btnEntity.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(ApiActivity.this, EntityActivity.class);
+				startActivity(i);
+			}
+		});
+		
+		btnLike.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(ApiActivity.this, LikeActivity.class);
+				startActivity(i);
+			}
+		});
 	}
-
 }

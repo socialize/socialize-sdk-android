@@ -25,13 +25,13 @@
 		
 		<Button
 			android:id="@+id/btnLikeCreate"
-			android:text="Create"
+			android:text="Like"
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content" />
 			
 		<Button
 			android:id="@+id/btnLikeDelete"
-			android:text="Delete"
+			android:text="Unlike"
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content" />
 			

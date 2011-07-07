@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2011 Socialize Inc. 
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -28,6 +28,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeAddListener;
@@ -130,5 +131,13 @@ public interface SocializeService {
 	 * @param listener
 	 */
 	public void getEntity(String key, EntityGetListener entityGetListener);
+
+	/**
+	 * Adds a new comment and associates it with the entity described.
+	 * @param entity The entity key.  Defined when first creating an entity, or created on the fly with this call.
+	 * @param comment The comment to add.
+	 * @param commentAddListener A listener to handle callbacks from the post.
+	 */
+	public void addComment(String key, String name, CommentAddListener commentAddListener);
 
 }

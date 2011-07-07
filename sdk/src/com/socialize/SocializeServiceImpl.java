@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2011 Socialize Inc. 
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -139,12 +139,11 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 
-	/**
-	 * Adds a new comment and associates it with the entity described.
-	 * @param entity The entity key.  Defined when first creating an entity, or created on the fly with this call.
-	 * @param comment The comment to add.
-	 * @param commentAddListener A listener to handle callbacks from the post.
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#addComment(java.lang.String, java.lang.String, com.socialize.listener.comment.CommentAddListener)
 	 */
+	@Override
 	public void addComment(String entity, String comment, CommentAddListener commentAddListener) {
 		if(assertAuthenticated(commentAddListener)) {
 			service.addComment(session, entity, comment, commentAddListener);

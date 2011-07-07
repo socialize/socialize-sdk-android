@@ -44,59 +44,14 @@
     <LinearLayout 
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:orientation="horizontal">
+	    android:orientation="vertical">
 		 	<Button
-				android:id="@+id/btnEntity"
-				android:text="Entity" 
+				android:id="@+id/btnApi"
+				android:text="Access API" 
 				android:visibility="gone"
 				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:textSize="12dp"/>
-		    
-			<Button
-				android:id="@+id/btnComments"
-				android:text="Comment" 
-				android:visibility="gone"
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
+				android:layout_width="fill_parent"
 				android:textSize="12dp"/>
     </LinearLayout>
 
-    <LinearLayout 
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal">
-			<Button
-				android:id="@+id/btnLike"
-				android:text="Like" 
-				android:visibility="gone"
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:textSize="12dp"/>
-			
-			<!-- 
-			<Button
-				android:id="@+id/btnShare"
-				android:text="Share" 
-				android:visibility="gone"
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:textSize="12dp"/>
-			 -->
-    </LinearLayout>
-    <!-- 
-    <LinearLayout 
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal">
-		<Button
-			android:id="@+id/btnView"
-			android:text="View" 
-			android:visibility="gone"
-			android:layout_height="wrap_content"
-			android:layout_width="wrap_content"
-			android:textSize="12dp"
-			android:layout_gravity="center_horizontal"/>
-    </LinearLayout>
-	-->
 </LinearLayout>

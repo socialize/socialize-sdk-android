@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2011 Socialize Inc. 
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -60,53 +60,74 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 
 	@Override
 	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
-		return makeMockListResult(5);
+		return makeMockListResult(ids);
 	}
 
 	@Override
 	public T get(SocializeSession session, String endpoint, String id) throws SocializeException {
-		return makeObject();
+		return makeObject(id);
 	}
 
 	@Override
 	public ListResult<T> put(SocializeSession session, String endpoint, T object) throws SocializeException {
-		return makeMockListResult(5);
+		return makeListResult(object);
 	}
 
 	@Override
 	public ListResult<T> post(SocializeSession session, String endpoint, T object) throws SocializeException {
-		return makeMockListResult(5);
+		return makeListResult(object);
 	}
 
 	@Override
-	public ListResult<T> put(SocializeSession session, String endpoint, Collection<T> object) throws SocializeException {
-		return makeMockListResult(5);
+	public ListResult<T> put(SocializeSession session, String endpoint, Collection<T> objects) throws SocializeException {
+		return makeListResult(objects);
 	}
 
 	@Override
 	public ListResult<T> post(SocializeSession session, String endpoint, Collection<T> object) throws SocializeException {
-		return makeMockListResult(5);
+		return makeListResult(object);
 	}
 
 	@Override
 	public void delete(SocializeSession session, String endpoint, String id) throws SocializeException {}
 	
-	private ListResult<T> makeMockListResult(int num) {
-		ListResult<T> result = new ListResult<T>();
-		List<T> list = new ArrayList<T>(num);
+	protected ListResult<T> makeListResult(Collection<T> objects) {
+		List<T> results = new ArrayList<T>(objects);
 		
-		for (int i = 0; i < num; i++) {
-			list.add(makeObject());
+		int id = 0;
+		
+		for (T t : results) {
+			t.setId(id);
+			id++;
+		}
+		
+		ListResult<T> result = new ListResult<T>(results);
+		return result;
+	}
+	
+	protected ListResult<T> makeListResult(T object) {
+		List<T> results = new ArrayList<T>(1);
+		object.setId(0);
+		results.add(object);
+		ListResult<T> result = new ListResult<T>(results);
+		return result;
+	}
+	
+	protected ListResult<T> makeMockListResult(String[] ids) {
+		ListResult<T> result = new ListResult<T>();
+		List<T> list = new ArrayList<T>(ids.length);
+		
+		for (int i = 0; i < ids.length; i++) {
+			list.add(makeObject(ids[i]));
 		}
 		
 		result.setResults(list);
 		return result;
-		
 	}
 	
-	private T makeObject() {
+	protected T makeObject(String id) {
 		T object = objectFactory.instantiateObject();
-		object.setId(1);
+		object.setId(Integer.parseInt(id));
 		return object;
 	}
 

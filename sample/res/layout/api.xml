@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+    
+ 	<Button
+		android:id="@+id/btnEntity"
+		android:text="Entity" 
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:textSize="12dp"/>
+    
+	<Button
+		android:id="@+id/btnComments"
+		android:text="Comment" 
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:textSize="12dp"/>
+		
+	<Button
+		android:id="@+id/btnLike"
+		android:text="Like" 
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:textSize="12dp"/>
+
+</LinearLayout>

@@ -19,16 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.sample;
+package com.socialize.sample.mock;
 
-import android.app.Activity;
-import android.os.Bundle;
+import com.socialize.entity.Comment;
 
-public class EmptyActivity extends Activity {
+public class MockCommentProvider extends MockSocializeProvider<Comment> {
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected Comment makeObject(String id) {
+		// TODO Auto-generated method stub
+		return super.makeObject(id);
 	}
-
+	
 }

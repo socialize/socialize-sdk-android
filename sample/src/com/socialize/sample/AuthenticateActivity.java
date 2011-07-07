@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2011 Socialize Inc. 
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package com.socialize.sample;
 
 import java.io.IOException;
@@ -23,7 +44,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.sample.util.ErrorHandler;
 
-public class SampleActivity extends Activity {
+public class AuthenticateActivity extends Activity {
 	
 	protected Properties properties;
 	protected String consumerKey;
@@ -54,10 +75,10 @@ public class SampleActivity extends Activity {
 				loadConfig();
 				
 				if(isMock) {
-					Socialize.init(SampleActivity.this, "socialize_beans.xml", "socialize_mock_beans.xml");
+					Socialize.init(AuthenticateActivity.this, "socialize_beans.xml", "socialize_mock_beans.xml");
 				}
 				else {
-					Socialize.init(SampleActivity.this);
+					Socialize.init(AuthenticateActivity.this);
 				}
 				
 				return null;
@@ -65,7 +86,7 @@ public class SampleActivity extends Activity {
 
 			@Override
 			protected void onPostExecute(Void result) {
-				setContentView(R.layout.sample);
+				setContentView(R.layout.authenticate);
 				
 				final SocializeConfig config = Socialize.getSocialize().getConfig();
 
@@ -80,11 +101,7 @@ public class SampleActivity extends Activity {
 				final TextView txtAuthResult =  (TextView) findViewById(R.id.txtAuthResult);
 				
 				final Button authButton = (Button) findViewById(R.id.btnAuthenticate);
-				final Button btnComments = (Button) findViewById(R.id.btnComments);
-				final Button btnEntity = (Button) findViewById(R.id.btnEntity);
-				final Button btnLike = (Button) findViewById(R.id.btnLike);
-//				final Button btnShare = (Button) findViewById(R.id.btnShare);
-//				final Button btnView = (Button) findViewById(R.id.btnView);
+				final Button btnApi = (Button) findViewById(R.id.btnApi);
 
 				authButton.setOnClickListener(new OnClickListener() {
 					
@@ -105,13 +122,9 @@ public class SampleActivity extends Activity {
 							@Override
 							public void onError(SocializeException error) {
 								v.setEnabled(true);
-								txtAuthResult.setText("FAIL: " + ErrorHandler.handleApiError(SampleActivity.this, error));
+								txtAuthResult.setText("FAIL: " + ErrorHandler.handleApiError(AuthenticateActivity.this, error));
 								
-								btnComments.setVisibility(View.GONE);
-								btnEntity.setVisibility(View.GONE);
-								btnLike.setVisibility(View.GONE);
-//								btnShare.setVisibility(View.GONE);
-//								btnView.setVisibility(View.GONE);
+								btnApi.setVisibility(View.GONE);
 							}
 							
 							@Override
@@ -119,11 +132,7 @@ public class SampleActivity extends Activity {
 								v.setEnabled(true);
 								txtAuthResult.setText("SUCCESS");
 								
-								btnComments.setVisibility(View.VISIBLE);
-								btnEntity.setVisibility(View.VISIBLE);
-								btnLike.setVisibility(View.VISIBLE);
-//								btnShare.setVisibility(View.VISIBLE);
-//								btnView.setVisibility(View.VISIBLE);
+								btnApi.setVisibility(View.VISIBLE);
 							}
 							
 							@Override
@@ -132,56 +141,22 @@ public class SampleActivity extends Activity {
 								txtAuthResult.setText("FAIL");
 								error.printStackTrace();
 								
-								btnComments.setVisibility(View.GONE);
-								btnEntity.setVisibility(View.GONE);
-								btnLike.setVisibility(View.GONE);
-//								btnShare.setVisibility(View.GONE);
-//								btnView.setVisibility(View.GONE);
+								btnApi.setVisibility(View.GONE);
 							}
 						});
 					}
 				});
 				
 				
-				btnComments.setOnClickListener(new OnClickListener() {
+
+				btnApi.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						Intent i = new Intent(SampleActivity.this, CommentActivity.class);
+						Intent i = new Intent(AuthenticateActivity.this, ApiActivity.class);
 						startActivity(i);
 					}
 				});
-			
-				btnEntity.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						Intent i = new Intent(SampleActivity.this, EntityActivity.class);
-						startActivity(i);
-					}
-				});
-				
-				btnLike.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						Intent i = new Intent(SampleActivity.this, LikeActivity.class);
-						startActivity(i);
-					}
-				});
-				
-//				btnShare.setOnClickListener(new OnClickListener() {
-//					@Override
-//					public void onClick(View v) {
-//						Intent i = new Intent(SampleActivity.this, ShareActivity.class);
-//						startActivity(i);
-//					}
-//				});
-//				
-//				btnView.setOnClickListener(new OnClickListener() {
-//					@Override
-//					public void onClick(View v) {
-//						Intent i = new Intent(SampleActivity.this, ViewActivity.class);
-//						startActivity(i);
-//					}
-//				});
+
 				
 				progress.dismiss();
 			}
