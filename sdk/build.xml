@@ -58,6 +58,26 @@
 	</target>
 	
 	<target name="package" depends="javadoc">
+		
+		<property name="sample_dir" value="/tmp/sdk-sample"/>
+		
+		<!-- Copy sample to tmp -->
+		
+		<delete dir="${sample_dir}"/>
+		<mkdir dir="${sample_dir}"/>
+		<copy todir="${sample_dir}">
+			<fileset dir="../sample/" excludes="gen/**,bin/**,build/**,codetemplates.xml"/>
+		</copy>
+		<copy todir="${sample_dir}/libs">
+			<fileset dir="build" includes="*.jar"/>
+		</copy>
+		
+		<!-- Clean up sample app for packaging -->
+		<replaceregexp file="${sample_dir}/.classpath" match="&lt;classpathentry kind=&quot;src&quot; path=&quot;socialize-sdk_src&quot;/&gt;" replace="&lt;classpathentry kind=&quot;lib&quot; path=&quot;libs/socialize-${version}.jar&quot;/&gt;" byline="true"/>
+		<replaceregexp file="${sample_dir}/.classpath" match="&lt;classpathentry kind=&quot;src&quot; path=&quot;android-ioc_src&quot;/&gt;" replace=""  byline="true"/>
+		<replaceregexp file="${sample_dir}/default.properties" match="android.library.reference.1=../sdk" replace="" byline="true"/>
+		<replaceregexp file="${sample_dir}/.project" flags="s" match="&lt;linkedResources&gt;.*&lt;/linkedResources&gt;" replace="" />
+		
 		<!-- Create the ZIP file for distribution -->
 		<zip destfile="build/socialize-sdk-${version}.zip">
 			<zipfileset dir="libext" includes="**/*.jar" prefix="lib"/>
@@ -70,14 +90,15 @@
 			</zipfileset>
 			
 			<!-- Add the sample app as a raw eclipse project -->
-			<zipfileset dir="../sample/" prefix="sample" excludes="gen/**,bin/**,build/**,codetemplates.xml"/>
-			<zipfileset dir="build" includes="*.jar" prefix="sample/libs"/>
+			<zipfileset dir="${sample_dir}" prefix="sample" excludes="gen/**,bin/**,build/**,codetemplates.xml"/>
 			
 			<!-- Add Docs -->
 			<zipfileset dir="build/docs"/>
 			<zipfileset dir="doc" includes="**/*.html"/>
 		</zip>
-
+		
+		<!-- clean up 
+		<delete dir="${sample_dir}"/>-->
 	</target>
 
 	<target name="javadoc">
