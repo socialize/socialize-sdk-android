@@ -51,14 +51,33 @@
 			</manifest>
 		</jar>
 
-		<!-- Create the ZIP file for distribution -->
-		<zip destfile="build/socialize-sdk-${version}.zip">
-			<fileset dir="libext" includes="**/*.jar"/>
-			<fileset dir="build" includes="**/*.jar"/>
-		</zip>
-
+		<antcall target="package"/>
+		
 		<!-- clean up -->
 		<delete dir="libs" includes="**/*.jar" verbose="true"/>
+	</target>
+	
+	<target name="package" depends="javadoc">
+		<!-- Create the ZIP file for distribution -->
+		<zip destfile="build/socialize-sdk-${version}.zip">
+			<zipfileset dir="libext" includes="**/*.jar" prefix="lib"/>
+			<zipfileset dir="build" includes="**/*.jar" prefix="dist"/>
+			
+			<zipfileset dir="src" prefix="conf">
+				<include name="socialize_beans.xml"/>
+				<include name="errors.properties"/>
+				<include name="socialize.properties"/>
+			</zipfileset>
+			
+			<!-- Add the sample app as a raw eclipse project -->
+			<zipfileset dir="../sample/" prefix="sample" excludes="gen/**,bin/**,build/**,codetemplates.xml"/>
+			<zipfileset dir="build" includes="*.jar" prefix="sample/libs"/>
+			
+			<!-- Add Docs -->
+			<zipfileset dir="build/docs"/>
+			<zipfileset dir="doc" includes="**/*.html"/>
+		</zip>
+
 	</target>
 
 	<target name="javadoc">
