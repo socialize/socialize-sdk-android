@@ -174,7 +174,7 @@ public class AuthenticateActivity extends Activity {
 	private void loadConfig() {
 		InputStream in = null;
 		try {
-			in = getAssets().open("integration-test.conf"); // located in sample app
+			in = getAssets().open("sample-app.conf"); // located in sample app
 			
 			properties = new Properties();
 			properties.load(in);

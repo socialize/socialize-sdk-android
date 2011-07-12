@@ -116,7 +116,7 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
 				assertTrue(request instanceof HttpGet);
 				HttpGet get = (HttpGet) request;
-				assertEquals(get.getURI().toString(), endpoint + id);
+				assertEquals(get.getURI().toString(), endpoint + id + "/");
 				
 				addResult(true);
 				return request;
@@ -144,7 +144,7 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
 				assertTrue(request instanceof HttpDelete);
 				HttpDelete get = (HttpDelete) request;
-				assertEquals(get.getURI().toString(), endpoint + id);
+				assertEquals(get.getURI().toString(), endpoint + id + "/");
 				addResult(true);
 				return request;
 			}

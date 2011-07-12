@@ -77,6 +77,38 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		AndroidMock.verify(container);
 	}
 	
+	public void testSocializeMultiInitDestroy() {
+		
+		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
+		SocializeApiHost service = AndroidMock.createMock(SocializeApiHost.class, getContext());
+		
+		 //Only once
+		AndroidMock.expect(container.getBean("socializeApiHost")).andReturn(service);
+		AndroidMock.expect(container.getBean("logger")).andReturn(null);
+
+		container.destroy();
+		
+		AndroidMock.replay(container);
+		
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
+		socialize.init(getContext(), container);
+		socialize.init(getContext(), container);
+		socialize.init(getContext(), container);
+		
+		assertTrue(socialize.isInitialized());
+		
+		socialize.destroy();
+		socialize.destroy();
+		
+		assertTrue(socialize.isInitialized());
+		
+		socialize.destroy();
+		
+		assertFalse(socialize.isInitialized());
+		
+		AndroidMock.verify(container);
+	}
+	
 	@UsesMocks ({IOCContainer.class, SocializeLogger.class})
 	public void testInitFail() {
 		IOCContainer container = AndroidMock.createMock(IOCContainer.class);

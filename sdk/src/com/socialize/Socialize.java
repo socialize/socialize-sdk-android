@@ -30,40 +30,25 @@ import android.content.Context;
 public class Socialize {
 
 	private static final SocializeServiceImpl instance = new SocializeServiceImpl();
-	
-	private static int initCount = 0;
-	
+
 	private Socialize() {
 		super();
 	}
-	
+
 	public static final void init(Context context, String...configPaths) {
-		if(!instance.isInitialized()) {
-			instance.init(context, configPaths);
-		}
-		
-		initCount++;
+		instance.init(context, configPaths);
 	}
-	
+
 	public static final void init(Context context) {
-		if(!instance.isInitialized()) {
-			instance.init(context);
-		}
-		
-		initCount++;
+		instance.init(context);
 	}
-	
+
 	public static final void destroy(Context context) {
-		
-		initCount--;
-		
-		if(initCount <= 0) {
-			if(instance != null && instance.isInitialized()) {
-				instance.destroy();
-			}
+		if(instance != null) {
+			instance.destroy();
 		}
 	}
-	
+
 	public static final SocializeService getSocialize() {
 		return instance;
 	}

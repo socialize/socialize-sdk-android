@@ -98,22 +98,15 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 
 	@Override
 	public HttpUriRequest getGetRequest(SocializeSession session, String endpoint, String id) throws SocializeException {
-		endpoint += id;
+		endpoint += id + "/";
 		HttpGet get = signer.sign(session, new HttpGet(endpoint));
 		return get;
 	}
 	
 	@Override
 	public HttpUriRequest getDeleteRequest(SocializeSession session, String endpoint, String id) throws SocializeException {
-		endpoint += id;
-		
-//		UrlBuilder builder = new UrlBuilder();
-//		builder.start(endpoint);
-//		builder.addParam("payload", "{id:" + id + "}");
-//		HttpDelete del = signer.sign(session, new HttpDelete(builder.toString()));
-		
+		endpoint += id + "/";
 		HttpDelete del = signer.sign(session, new HttpDelete(endpoint));
-		
 		return del;
 	}
 

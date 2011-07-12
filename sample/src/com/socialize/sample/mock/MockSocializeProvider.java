@@ -43,7 +43,7 @@ import com.socialize.provider.SocializeProvider;
  */
 public class MockSocializeProvider<T extends SocializeObject> implements SocializeProvider<T> {
 
-	private SocializeObjectFactory<T> objectFactory;
+	protected SocializeObjectFactory<T> objectFactory;
 	
 	public MockSocializeProvider() {
 		super();

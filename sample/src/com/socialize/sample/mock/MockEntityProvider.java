@@ -21,14 +21,30 @@
  */
 package com.socialize.sample.mock;
 
-import com.socialize.entity.Comment;
+import android.content.Context;
 
-public class MockCommentProvider extends MockSocializeProvider<Comment> {
+import com.socialize.entity.Entity;
+
+public class MockEntityProvider extends MockSocializeProvider<Entity> {
+
+	public MockEntityProvider() {
+		super();
+	}
+
+	public MockEntityProvider(Context context) {
+		super(context);
+	}
 
 	@Override
-	protected Comment makeObject(String id) {
-		// TODO Auto-generated method stub
-		return super.makeObject(id);
+	protected Entity makeObject(String id) {
+		Entity object = objectFactory.instantiateObject();
+		object.setId(1);
+		object.setKey(id);
+		object.setComments(2);
+		object.setLikes(4);
+		object.setShares(6);
+		object.setViews(8);
+		object.setName("Mock entity");
+		return object;
 	}
-	
 }

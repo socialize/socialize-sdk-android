@@ -56,8 +56,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private SocializeApiHost service;
 	private SocializeLogger logger;
 	private IOCContainer container;
-	private boolean initialized = false;
 	private SocializeSession session;
+	private int initCount = 0;
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#init(android.content.Context)
@@ -72,24 +72,30 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public void init(Context context, String...paths) {
-		try {
-			SocializeIOC container = new SocializeIOC();
-			ResourceLocator locator = new ResourceLocator();
-			ClassLoaderProvider provider = new ClassLoaderProvider();
-			
-			locator.setClassLoaderProvider(provider);
-			
-			container.init(context, locator, paths);
-			
-			init(context, container);
+		
+		if(!isInitialized()) {
+			try {
+				SocializeIOC container = new SocializeIOC();
+				ResourceLocator locator = new ResourceLocator();
+				ClassLoaderProvider provider = new ClassLoaderProvider();
+				
+				locator.setClassLoaderProvider(provider);
+				
+				container.init(context, locator, paths);
+				
+				init(context, container); // initCount incremented here
+			}
+			catch (Exception e) {
+				if(logger != null) {
+					logger.error(SocializeLogger.INITIALIZE_FAILED, e);
+				}
+				else {
+					e.printStackTrace();
+				}
+			}
 		}
-		catch (Exception e) {
-			if(logger != null) {
-				logger.error(SocializeLogger.INITIALIZE_FAILED, e);
-			}
-			else {
-				e.printStackTrace();
-			}
+		else {
+			this.initCount++;
 		}
 	}
 	
@@ -98,19 +104,24 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public void init(Context context, final IOCContainer container) {
-		try {
-			this.container = container;
-			this.service = container.getBean("socializeApiHost");
-			this.logger = container.getBean("logger");
-			this.initialized = true;
+		if(!isInitialized()) {
+			try {
+				this.container = container;
+				this.service = container.getBean("socializeApiHost");
+				this.logger = container.getBean("logger");
+				this.initCount++;
+			}
+			catch (Exception e) {
+				if(logger != null) {
+					logger.error(SocializeLogger.INITIALIZE_FAILED, e);
+				}
+				else {
+					e.printStackTrace();
+				}
+			}
 		}
-		catch (Exception e) {
-			if(logger != null) {
-				logger.error(SocializeLogger.INITIALIZE_FAILED, e);
-			}
-			else {
-				e.printStackTrace();
-			}
+		else {
+			this.initCount++;
 		}
 	}
 	
@@ -120,12 +131,17 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public void destroy() {
-		initialized = false;
-		if(container != null) {
-			if(logger != null && logger.isInfoEnabled()) {
-				logger.info("Destroying IOC container");
+		initCount--;
+		
+		if(initCount <= 0) {
+			if(container != null) {
+				if(logger != null && logger.isInfoEnabled()) {
+					logger.info("Destroying IOC container");
+				}
+				container.destroy();
 			}
-			container.destroy();
+			
+			initCount = 0;
 		}
 	}
 	
@@ -266,7 +282,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public boolean isInitialized() {
-		return initialized;
+		return this.initCount > 0;
 	}
 	
 	/* (non-Javadoc)
@@ -299,7 +315,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	}
 	
 	private boolean assertInitialized(SocializeListener listener) {
-		if(!initialized) {
+		if(!isInitialized()) {
 			if(listener != null) {
 				if(logger != null) {
 					listener.onError(new SocializeException(logger.getMessage(SocializeLogger.NOT_INITIALIZED)));
@@ -310,7 +326,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			}
 			if(logger != null) logger.error(SocializeLogger.NOT_INITIALIZED);
 		}
-		return initialized;
+		return isInitialized();
 	}
 
 	/* (non-Javadoc)
@@ -334,7 +350,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @return
 	 */
 	public SocializeConfig getConfig() {
-		if(initialized) {
+		if(isInitialized()) {
 			return container.getBean("config");
 		}
 		

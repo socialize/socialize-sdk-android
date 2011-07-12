@@ -25,35 +25,18 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import com.socialize.Socialize;
-import com.socialize.entity.Like;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.like.LikeAddListener;
-import com.socialize.sample.util.ErrorHandler;
 
 public class ShareActivity extends Activity {
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		if(!Socialize.getSocialize().isInitialized()) {
 			Socialize.init(this);
 		}
-		
-Socialize.getSocialize().like("http://someurl", new LikeAddListener() {
-	
-	@Override
-	public void onError(SocializeException error) {
-		
 	}
-	
-	@Override
-	public void onCreate(Like entity) {
-		
-	}
-});
-	}
-	
+
 	@Override
 	protected void onDestroy() {
 		Socialize.destroy(this);
