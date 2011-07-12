@@ -28,6 +28,7 @@ import android.test.mock.MockPackageManager;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.Socialize;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.DeviceUtils;
 
@@ -60,6 +61,12 @@ public class DeviceUtilsTest extends SocializeActivityTest {
 		
 		AndroidMock.verify(mockContext);
 		AndroidMock.verify(mockManager);
+	}
+	
+	public void testDeviceUtilsUserAgentString() {
+		DeviceUtils utils = new DeviceUtils();
+		String userAgentString = utils.getUserAgentString();
+		assertEquals("Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION, userAgentString);
 	}
 	
 	// Can't extend TelephonyManager.. so don't bother trying to test.  urgh!

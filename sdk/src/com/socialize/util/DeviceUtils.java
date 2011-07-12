@@ -32,7 +32,6 @@ import com.socialize.log.SocializeLogger;
 
 /**
  * @author Jason Polites
- *
  */
 public class DeviceUtils {
 	
@@ -72,6 +71,4 @@ public class DeviceUtils {
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
-	
-	
 }
