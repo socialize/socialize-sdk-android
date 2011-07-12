@@ -27,6 +27,9 @@
 		<copy todir="libs" verbose="true">
 			<fileset dir="libext" includes="**/*.jar"/>
 		</copy>
+		
+		<!-- Set the version -->
+		<replaceregexp file="src/com/socialize/Socialize.java" flags="s" match="public\s+static\s+final\s+String\s+VERSION\s*=\s*&quot;.*&quot;" replace="public static final String VERSION = &quot;${version}&quot;" />
 	</target>
 
 	<target name="build" depends="compile">
@@ -100,8 +103,8 @@
 			<zipfileset dir="doc" includes="**/*.html"/>
 		</zip>
 		
-		<!-- clean up 
-		<delete dir="${sample_dir}"/>-->
+		<!-- clean up -->
+		<delete dir="${sample_dir}"/>
 	</target>
 
 	<target name="javadoc">

@@ -21,12 +21,13 @@
  */
 package com.socialize.util;
 
-import com.socialize.log.SocializeLogger;
-
 import android.Manifest.permission;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.telephony.TelephonyManager;
+
+import com.socialize.Socialize;
+import com.socialize.log.SocializeLogger;
 
 
 /**
@@ -36,6 +37,7 @@ import android.telephony.TelephonyManager;
 public class DeviceUtils {
 	
 	private SocializeLogger logger;
+	private String userAgent;
 	
 	public String getUDID(Context context) {
 		if(hasPermission(context, permission.READ_PHONE_STATE)) {
@@ -50,6 +52,13 @@ public class DeviceUtils {
 			
 			return null;
 		}
+	}
+	
+	public String getUserAgentString() {
+		if(userAgent == null) {
+			userAgent = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION;
+		}
+		return userAgent;
 	}
 	
 	public boolean hasPermission(Context context, String permission) {
