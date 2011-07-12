@@ -28,6 +28,9 @@ import android.content.Context;
  * @author Jason Polites
  */
 public class Socialize {
+	
+	// This will be set during the build process
+	public static final String VERSION = "0.0.3";
 
 	private static final SocializeServiceImpl instance = new SocializeServiceImpl();
 
