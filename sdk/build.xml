@@ -16,6 +16,16 @@
 
 	<setup/>
 
+	<path id="javadoc.classpath">
+		<path refid="android.target.classpath" />
+	</path>
+	
+	<path id="javadoc.sourcepath">
+		<pathelement path="src" />
+		<pathelement path="android-ioc_src" />
+	</path>
+		
+	
 	<path id="android.libraries.src">
 		<path refid="project.libraries.src" />
 	</path>
@@ -115,14 +125,25 @@
 		</tstamp>
 
 		<javadoc 
-			sourcepath="src" 
+			sourcepathref="javadoc.sourcepath"
+			classpathref="javadoc.classpath"
 			destdir="build/docs/javadoc" 
-			packagenames="com.socialize.*" 
 			doctitle="${vendor} SDK v${version} Documentation">
+			
 			<header>
-				<![CDATA[${vendor} SDK v${version} Documentation<br/>Copyright ${year} ${vendor}<br/>${website}]]></header>
+				<![CDATA[${vendor} SDK v${version} Documentation<br/>Copyright ${year} ${vendor}<br/>${website}]]>
+			</header>
+			
 			<footer>
-				<![CDATA[Copyright ${year} ${vendor}<br/>${website}]]></footer>
+				<![CDATA[Copyright ${year} ${vendor}<br/>${website}]]>
+			</footer>
+			
+			<link 
+				href="http://developer.android.com/reference/" 
+				offline="true"
+				packagelistloc="${sdk.dir}/docs/reference"/>
+			
+			<link href="http://www.json.org/javadoc/"/>
 		</javadoc>
 	</target>
 </project>

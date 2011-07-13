@@ -42,7 +42,7 @@ public class SocializeLogger {
 	public static final int ERROR_CODE_LOAD_FAIL = 5;
 	
 	private LogLevel logLevel = LogLevel.INFO;
-	private String logTag = "SocializeService";
+	private String logTag = "Socialize";
 	private SocializeConfig config;
 	
 	public void init(SocializeConfig config) {

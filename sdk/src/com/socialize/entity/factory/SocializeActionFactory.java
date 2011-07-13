@@ -55,8 +55,8 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			String entityKey = from.getEntityKey();
 			Application appObject = from.getApplication();
 			User userObject = from.getUser();
-			Float lat = from.getLat();
-			Float lon = from.getLon();
+			Double lat = from.getLat();
+			Double lon = from.getLon();
 			Long date = from.getDate();
 			
 			if(entityObject != null) {
@@ -131,11 +131,11 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			}
 
 			if(from.has("lat") && !from.isNull("lat")) {
-				to.setLat((float)from.getDouble("lat"));
+				to.setLat(from.getDouble("lat"));
 			}
 			
 			if(from.has("lon") && !from.isNull("lon")) {
-				to.setLon((float)from.getDouble("lon"));
+				to.setLon(from.getDouble("lon"));
 			}
 			
 			if(from.has("date") && !from.isNull("date")) {

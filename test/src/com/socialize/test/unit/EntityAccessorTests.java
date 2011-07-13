@@ -113,7 +113,7 @@ public class EntityAccessorTests extends SocializeUnitTest {
 		
 		Long date = 123456l;
 		Integer id = 69;
-		Float lat = 1.2f, lon = 3.4f;
+		Double lat = 1.2d, lon = 3.4d;
 		
 		action.setApplication(app);
 		action.setDate(date);

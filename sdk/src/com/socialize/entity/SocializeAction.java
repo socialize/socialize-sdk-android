@@ -30,8 +30,8 @@ public class SocializeAction extends SocializeObject {
 	private Entity entity;
 	private String entityKey; // Used when only the key is supplied.
 	private User user;
-	private Float lon;
-	private Float lat;
+	private Double lon;
+	private Double lat;
 	private Long date;
 	
 	public Application getApplication() {
@@ -52,16 +52,16 @@ public class SocializeAction extends SocializeObject {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public Float getLon() {
+	public Double getLon() {
 		return lon;
 	}
-	public void setLon(Float lon) {
+	public void setLon(Double lon) {
 		this.lon = lon;
 	}
-	public Float getLat() {
+	public Double getLat() {
 		return lat;
 	}
-	public void setLat(Float lat) {
+	public void setLat(Double lat) {
 		this.lat = lat;
 	}
 	public Long getDate() {

@@ -24,6 +24,8 @@ package com.socialize.api.action;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.location.Location;
+
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Like;
@@ -41,9 +43,14 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 		super(provider);
 	}
 
-	public void addLike(SocializeSession session, String key, LikeListener listener) {
+	public void addLike(SocializeSession session, String key, Location location, LikeListener listener) {
 		Like c = new Like();
 		c.setEntityKey(key);
+		
+		if(location != null) {
+			c.setLon(location.getLongitude());
+			c.setLat(location.getLatitude());
+		}
 		
 		List<Like> list = new ArrayList<Like>(1);
 		list.add(c);

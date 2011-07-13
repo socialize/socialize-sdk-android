@@ -35,79 +35,21 @@ import com.socialize.provider.AuthProvider;
  */
 public interface SocializeRequestFactory<T extends SocializeObject> {
 	
-	/**
-	 * 
-	 * @param key
-	 * @param secret
-	 * @param uuid
-	 * @return
-	 * @throws SocializeException 
-	 */
 	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String uuid) throws SocializeException;
 	
-	/**
-	 * 
-	 * @param session
-	 * @param endpoint
-	 * @param uuid
-	 * @param provider
-	 * @param providerId
-	 * @param providerToken
-	 * @return
-	 * @throws SocializeException
-	 */
 	public HttpUriRequest getAuthRequestWith3rdParty(SocializeSession session, String endpoint, String uuid, AuthProvider provider, String providerId, String providerToken) throws SocializeException;
-	
-	/**
-	 * 
-	 * @param id
-	 * @return
-	 * @throws SocializeException 
-	 */
+
 	public HttpUriRequest getGetRequest(SocializeSession session, String endpoint,String id) throws SocializeException;
-	
-	/**
-	 * 
-	 * @param key
-	 * @param ids
-	 * @return
-	 * @throws SocializeException 
-	 */
+
 	public HttpUriRequest getListRequest(SocializeSession session, String endpoint,String key, String[] ids) throws SocializeException;
-	
-	/**
-	 * 
-	 * @param entity
-	 * @return
-	 */
+
 	public HttpUriRequest getPutRequest(SocializeSession session, String endpoint, Collection<T> entities) throws SocializeException;
-	
-	/**
-	 * 
-	 * @param entity
-	 * @return
-	 */
+
 	public HttpUriRequest getPostRequest(SocializeSession session, String endpoint, Collection<T> entities) throws SocializeException;
-	
-	/**
-	 * 
-	 * @param entity
-	 * @return
-	 */
+
 	public HttpUriRequest getPutRequest(SocializeSession session, String endpoint, T entity) throws SocializeException;
-	
-	/**
-	 * 
-	 * @param entity
-	 * @return
-	 */
+
 	public HttpUriRequest getPostRequest(SocializeSession session, String endpoint, T entity) throws SocializeException;
-	
-	/**
-	 * 
-	 * @param id
-	 * @return
-	 * @throws SocializeException 
-	 */
+
 	public HttpUriRequest getDeleteRequest(SocializeSession session, String endpoint, String id) throws SocializeException;
 }
