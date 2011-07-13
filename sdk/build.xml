@@ -24,7 +24,6 @@
 		<pathelement path="src" />
 		<pathelement path="android-ioc_src" />
 	</path>
-		
 	
 	<path id="android.libraries.src">
 		<path refid="project.libraries.src" />
@@ -54,7 +53,10 @@
 				<include name="socialize.properties"/>
 			</fileset>
 		</copy>
-
+		
+		<delete dir="build"/>
+		<mkdir dir="build"/>
+		
 		<jar destfile="build/socialize-${version}.jar" basedir="${out.dir}/classes">
 			<manifest>
 				<attribute name="Built-By" value="${vendor}" />
@@ -115,6 +117,7 @@
 		
 		<!-- clean up -->
 		<delete dir="${sample_dir}"/>
+		<delete dir="build/docs"/>
 	</target>
 
 	<target name="javadoc">

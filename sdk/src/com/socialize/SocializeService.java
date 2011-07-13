@@ -32,8 +32,8 @@ import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 
 /**
+ * The main Socialize Service.  This is the simplest entry point into the Socialize API.
  * @author Jason Polites
- *
  */
 public interface SocializeService {
 
@@ -66,22 +66,22 @@ public interface SocializeService {
 
 	/**
 	 * Authenticates the application against the API
-	 * @param consumerKey The consumer key, obtained from registration at http://www.getsocialize.com.
+	 * @param consumerKey The consumer url, obtained from registration at http://www.getsocialize.com.
 	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
 	 * @param authListener The callback for authentication outcomes.
 	 */
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener authListener);
 
 	/**
-	 * Adds a new like and associates it with the entity described.
-	 * @param url The url being liked.  Defined when first creating an entity, or created on the fly with this call.
+	 * Adds a new like and associates it with the url described.
+	 * @param url The url being liked.  Defined when first creating a url, or created on the fly with this call.
 	 * @param likeAddListener A listener to handle callbacks from the post.
 	 */
 	public void like(String url, LikeAddListener likeAddListener);
 	
 	/**
-	 * Adds a new like and associates it with the entity described.
-	 * @param url The url being liked.  Defined when first creating an entity, or created on the fly with this call.
+	 * Adds a new like and associates it with the url described.
+	 * @param url The url being liked.  Defined when first creating a url, or created on the fly with this call.
 	 * @param location The location of the device at the time the call was made.
 	 * @param likeAddListener A listener to handle callbacks from the post.
 	 */
@@ -122,26 +122,26 @@ public interface SocializeService {
 	public SocializeConfig getConfig();
 
 	/**
-	 * Lists the comments associated with an entity.
+	 * Lists the comments associated with a url.
 	 * @param session The current socialize session.
-	 * @param entity The entity key.  Defined when first creating an entity, or created on the fly with this call.
+	 * @param url The url url.  Defined when first creating a url, or created on the fly with this call.
 	 * @param commentListListener A listener to handle callbacks from the post.
 	 */
-//	public void listCommentsByEntity(String key, CommentListListener commentListListener);
+//	public void listCommentsByEntity(String url, CommentListListener commentListListener);
 
 	/**
-	 * Retrieves a single entity
-	 * @param key
+	 * Retrieves a single url
+	 * @param url
 	 * @param listener
 	 */
-//	public void getEntity(String key, EntityGetListener entityGetListener);
+//	public void getEntity(String url, EntityGetListener entityGetListener);
 
 	/**
-	 * Adds a new comment and associates it with the entity described.
-	 * @param entity The entity key.  Defined when first creating an entity, or created on the fly with this call.
+	 * Adds a new comment and associates it with the url described.
+	 * @param url The url url.  Defined when first creating a url, or created on the fly with this call.
 	 * @param comment The comment to add.
 	 * @param commentAddListener A listener to handle callbacks from the post.
 	 */
-//	public void addComment(String key, String name, CommentAddListener commentAddListener);
+//	public void addComment(String url, String name, CommentAddListener commentAddListener);
 
 }
