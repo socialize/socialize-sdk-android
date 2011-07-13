@@ -22,6 +22,7 @@
 package com.socialize.api;
 
 import android.content.Context;
+import android.location.Location;
 
 import com.socialize.api.action.CommentApi;
 import com.socialize.api.action.EntityApi;
@@ -96,8 +97,8 @@ public class SocializeApiHost {
 		commentApi.getCommentsById(session, listener, ids);
 	}
 	
-	public void addLike(SocializeSession session, String key, LikeListener listener) {
-		likeApi.addLike(session, key, listener);
+	public void addLike(SocializeSession session, String key, Location location, LikeListener listener) {
+		likeApi.addLike(session, key, location, listener);
 	}
 	
 	public void deleteLike(SocializeSession session, int id, LikeListener listener) {

@@ -35,25 +35,25 @@ public class ApiActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.api);
 		
-		final Button btnComments = (Button) findViewById(R.id.btnComments);
-		final Button btnEntity = (Button) findViewById(R.id.btnEntity);
+//		final Button btnComments = (Button) findViewById(R.id.btnComments);
+//		final Button btnEntity = (Button) findViewById(R.id.btnEntity);
 		final Button btnLike = (Button) findViewById(R.id.btnLike);
 		
-		btnComments.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent i = new Intent(ApiActivity.this, CommentActivity.class);
-				startActivity(i);
-			}
-		});
-	
-		btnEntity.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent i = new Intent(ApiActivity.this, EntityActivity.class);
-				startActivity(i);
-			}
-		});
+//		btnComments.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				Intent i = new Intent(ApiActivity.this, CommentActivity.class);
+//				startActivity(i);
+//			}
+//		});
+//	
+//		btnEntity.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				Intent i = new Intent(ApiActivity.this, EntityActivity.class);
+//				startActivity(i);
+//			}
+//		});
 		
 		btnLike.setOnClickListener(new OnClickListener() {
 			@Override
