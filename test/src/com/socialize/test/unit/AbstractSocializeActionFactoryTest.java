@@ -62,8 +62,8 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 	protected UserFactory userFactoryMock;
 	protected EntityFactory entityFactoryMock;
 	
-	protected Float lat = new Float(10);
-	protected Float lon = new Float(20);
+	protected Double lat = new Double(10);
+	protected Double lon = new Double(20);
 	protected Date date = new Date();
 	protected Integer id = new Integer(10000);
 	
@@ -165,8 +165,8 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		AndroidMock.expect(json.has("lon")).andReturn(true);
 		AndroidMock.expect(json.has("date")).andReturn(true);
 		
-		AndroidMock.expect((float)json.getDouble("lat")).andReturn(lat);
-		AndroidMock.expect((float)json.getDouble("lon")).andReturn(lon);
+		AndroidMock.expect((Double)json.getDouble("lat")).andReturn(lat);
+		AndroidMock.expect((Double)json.getDouble("lon")).andReturn(lon);
 		AndroidMock.expect(json.getString("date")).andReturn(UTC_FORMAT.format(date));
 		
 		AndroidMock.replay(appFactoryMock);
