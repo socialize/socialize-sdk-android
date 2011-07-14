@@ -22,6 +22,7 @@
 package com.socialize.sample;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -63,6 +64,8 @@ public class LikeActivity extends Activity {
 				@Override
 				public void onClick(View v) {
 					
+					final ProgressDialog progress = ProgressDialog.show(LikeActivity.this, "Posting Like", "Please wait...");
+					
 					txtLikeCreateResult.setText("");
 					btnLikeCreate.setEnabled(false);
 					
@@ -75,6 +78,7 @@ public class LikeActivity extends Activity {
 							public void onError(SocializeException error) {
 								txtLikeCreateResult.setText("FAIL: " + ErrorHandler.handleApiError(LikeActivity.this, error));
 								btnLikeCreate.setEnabled(true);
+								progress.dismiss();
 							}
 							
 							@Override
@@ -90,14 +94,16 @@ public class LikeActivity extends Activity {
 								if(entity.getDate() != null) {
 									txtLikeDateCreated.setText(String.valueOf(entity.getDate()));
 								}
+								
+								progress.dismiss();
 							}
 						});
 					}
 					else {
 						txtLikeCreateResult.setText("FAIL: No Key");
 						btnLikeCreate.setEnabled(true);
+						progress.dismiss();
 					}
-					
 				}
 			});
 			
@@ -105,6 +111,9 @@ public class LikeActivity extends Activity {
 				
 				@Override
 				public void onClick(View v) {
+					
+					final ProgressDialog progress = ProgressDialog.show(LikeActivity.this, "Deleting Like", "Please wait...");
+					
 					
 					txtLikeCreateResult.setText("");
 					
@@ -116,6 +125,7 @@ public class LikeActivity extends Activity {
 							@Override
 							public void onError(SocializeException error) {
 								txtLikeCreateResult.setText("FAIL: " + ErrorHandler.handleApiError(LikeActivity.this, error));
+								progress.dismiss();
 							}
 							
 							@Override
@@ -123,11 +133,13 @@ public class LikeActivity extends Activity {
 								txtLikeCreateResult.setText("SUCCESS");
 								txtLikeIdCreated.setText("");
 								txtLikeDateCreated.setText("");
+								progress.dismiss();
 							}
 						});
 					}
 					else {
 						txtLikeCreateResult.setText("FAIL: No ID");
+						progress.dismiss();
 					}
 				}
 			});

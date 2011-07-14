@@ -28,6 +28,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.api.action.CommentApi;
 import com.socialize.api.action.EntityApi;
+import com.socialize.api.action.LikeApi;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeObject;
@@ -35,6 +36,8 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.listener.entity.EntityListener;
+import com.socialize.listener.like.LikeListener;
+import com.socialize.net.HttpClientFactory;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.util.DeviceUtils;
@@ -88,7 +91,7 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		final String key = "foobar";
 		final String comment = "foobar_comment";
 		
-		commentApi.addComment(session, key, comment, listener);
+		commentApi.addComment(session, key, comment, null, listener);
 		
 		AndroidMock.replay(commentApi);
 		
@@ -96,7 +99,7 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		service.setCommentApi(commentApi);
 		
-		service.addComment(session, key, comment, listener);
+		service.addComment(session, key, comment, null, listener);
 		
 		AndroidMock.verify(commentApi);
 	}
@@ -218,5 +221,133 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		AndroidMock.verify(api);
 	}
 	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({EntityApi.class, EntityListener.class})
+	public void testGetEntity() throws SocializeException {
+		SocializeProvider<Entity> provider = AndroidMock.createMock(SocializeProvider.class);
+		EntityApi api = AndroidMock.createMock(EntityApi.class, provider);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		EntityListener listener = AndroidMock.createMock(EntityListener.class);
+		
+		final String key = "foobar";
+		
+		api.getEntity(session, key, listener);
+		
+		AndroidMock.replay(api);
+		
+		SocializeApiHost service = new SocializeApiHost(getContext());
+		
+		service.setEntityApi(api);
+		
+		service.getEntity(session, key, listener);
+		
+		AndroidMock.verify(api);
+	}
 	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({LikeApi.class, LikeListener.class})
+	public void testGetLikeById() throws SocializeException {
+		SocializeProvider<Entity> provider = AndroidMock.createMock(SocializeProvider.class);
+		LikeApi api = AndroidMock.createMock(LikeApi.class, provider);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		LikeListener listener = AndroidMock.createMock(LikeListener.class);
+		
+		int id = 69;
+		
+		api.getLike(session, id, listener);
+		
+		AndroidMock.replay(api);
+		
+		SocializeApiHost service = new SocializeApiHost(getContext());
+		
+		service.setLikeApi(api);
+		
+		service.getLike(session, id, listener);
+		
+		AndroidMock.verify(api);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({LikeApi.class, LikeListener.class})
+	public void testGetLikeByKey() throws SocializeException {
+		SocializeProvider<Entity> provider = AndroidMock.createMock(SocializeProvider.class);
+		LikeApi api = AndroidMock.createMock(LikeApi.class, provider);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		LikeListener listener = AndroidMock.createMock(LikeListener.class);
+		
+		String key = "foobar";
+		
+		api.getLike(session, key, listener);
+		
+		AndroidMock.replay(api);
+		
+		SocializeApiHost service = new SocializeApiHost(getContext());
+		
+		service.setLikeApi(api);
+		
+		service.getLike(session, key, listener);
+		
+		AndroidMock.verify(api);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({LikeApi.class, LikeListener.class})
+	public void testDeleteLike() throws SocializeException {
+		SocializeProvider<Entity> provider = AndroidMock.createMock(SocializeProvider.class);
+		LikeApi api = AndroidMock.createMock(LikeApi.class, provider);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		LikeListener listener = AndroidMock.createMock(LikeListener.class);
+		
+		int id = 69;
+		
+		api.deleteLike(session, id, listener);
+		
+		AndroidMock.replay(api);
+		
+		SocializeApiHost service = new SocializeApiHost(getContext());
+		
+		service.setLikeApi(api);
+		
+		service.deleteLike(session, id, listener);
+		
+		AndroidMock.verify(api);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({LikeApi.class, LikeListener.class})
+	public void testListLikesById() throws SocializeException {
+		SocializeProvider<Entity> provider = AndroidMock.createMock(SocializeProvider.class);
+		LikeApi api = AndroidMock.createMock(LikeApi.class, provider);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		LikeListener listener = AndroidMock.createMock(LikeListener.class);
+		
+		final int[] ids = {1,2,3};
+		
+		api.getLikesById(session, listener, ids);
+		
+		AndroidMock.replay(api);
+		
+		SocializeApiHost service = new SocializeApiHost(getContext());
+		
+		service.setLikeApi(api);
+		
+		service.listLikesById(session, listener, ids);
+		
+		AndroidMock.verify(api);
+	}
+	
+	@UsesMocks ({HttpClientFactory.class})
+	public void testDestroy() {
+		HttpClientFactory factory = AndroidMock.createMock(HttpClientFactory.class);
+		factory.destroy();
+		
+		AndroidMock.replay(factory);
+		
+		SocializeApiHost service = new SocializeApiHost(getContext());
+		service.setClientFactory(factory);
+		
+		service.destroy();
+		
+		AndroidMock.verify(factory);
+	}
 }

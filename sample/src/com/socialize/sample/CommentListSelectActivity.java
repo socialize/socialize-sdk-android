@@ -21,45 +21,33 @@
  */
 package com.socialize.sample;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 
-public class CommentActivity extends Activity {
+import com.socialize.util.StringUtils;
 
+public class CommentListSelectActivity extends CommentBaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.comment_api);
-		
-		final Button btnCreateComment = (Button) findViewById(R.id.btnCreateComment);
-		final Button btnListComments = (Button) findViewById(R.id.btnListComments);
-		final Button btnGetComment = (Button) findViewById(R.id.btnGetComment);
-		
-		btnCreateComment.setOnClickListener(new OnClickListener() {
+		setContentView(R.layout.comment_list_select);
+		final EditText txtCommentKey = (EditText) findViewById(R.id.txtCommentKey);
+		final Button btnCommentList = (Button) findViewById(R.id.btnCommentList);
+
+		btnCommentList.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(CommentActivity.this, CommentCreateActivity.class);
-				startActivity(i);
-			}
-		});
-		
-		btnGetComment.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent i = new Intent(CommentActivity.this, CommentGetActivity.class);
-				startActivity(i);
-			}
-		});
-	
-		btnListComments.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent i = new Intent(CommentActivity.this, CommentListSelectActivity.class);
-				startActivity(i);
+				String key = txtCommentKey.getText().toString();
+				if(!StringUtils.isEmpty(key)) {
+					Intent i = new Intent(CommentListSelectActivity.this, CommentListActivity.class);
+					i.putExtra("key", key);
+					startActivity(i);
+				}
 			}
 		});
 	}

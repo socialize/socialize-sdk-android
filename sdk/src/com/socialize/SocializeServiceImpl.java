@@ -33,9 +33,11 @@ import com.socialize.error.SocializeException;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeListener;
+import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.listener.entity.EntityCreateListener;
+import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.entity.EntityListListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
@@ -153,17 +155,37 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			service.authenticate(consumerKey, consumerSecret, authListener, this);
 		}
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#addComment(java.lang.String, java.lang.String, android.location.Location, com.socialize.listener.comment.CommentAddListener)
+	 */
+	@Override
+	public void addComment(String url, String comment, Location location, CommentAddListener commentAddListener) {
+		if(assertAuthenticated(commentAddListener)) {
+			service.addComment(session, url, comment, location, commentAddListener);
+		}
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#getCommentById(int, com.socialize.listener.comment.CommentGetListener)
+	 */
+	@Override
+	public void getCommentById(int id, CommentGetListener commentGetListener) {
+		if(assertAuthenticated(commentGetListener)) {
+			service.getComment(session, id, commentGetListener);
+		}
+	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#addComment(java.lang.String, java.lang.String, com.socialize.listener.comment.CommentAddListener)
 	 */
-//	@Override
-//	public void addComment(String entity, String comment, CommentAddListener commentAddListener) {
-//		if(assertAuthenticated(commentAddListener)) {
-//			service.addComment(session, entity, comment, commentAddListener);
-//		}
-//	}
+	@Override
+	public void addComment(String url, String comment, CommentAddListener commentAddListener) {
+		addComment(url, comment, null, commentAddListener);
+	}
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#addLike(java.lang.String, com.socialize.listener.like.LikeAddListener)
@@ -211,9 +233,20 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @param id The ID of the like
 	 * @param likeGetListener A listener to handle callbacks from the get.
 	 */
-	public void getLike(int id, LikeGetListener likeGetListener) {
+	public void getLikeById(int id, LikeGetListener likeGetListener) {
 		if(assertAuthenticated(likeGetListener)) {
 			service.getLike(session, id, likeGetListener);
+		}
+	}
+	
+	/**
+	 * Retrieves a single like based on the entity liked.
+	 * @param key The entity key corresponding to the like.
+	 * @param likeGetListener A listener to handle callbacks from the get.
+	 */
+	public void getLike(String key, LikeGetListener likeGetListener) {
+		if(assertAuthenticated(likeGetListener)) {
+			service.getLike(session, key, likeGetListener);
 		}
 	}
 	
@@ -233,12 +266,12 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#getEntity(java.lang.String, com.socialize.listener.entity.EntityGetListener)
 	 */
-//	@Override
-//	public void getEntity(String key, EntityGetListener listener) {
-//		if(assertAuthenticated(listener)) {
-//			service.getEntity(session, key, listener);
-//		}
-//	}
+	@Override
+	public void getEntity(String key, EntityGetListener listener) {
+		if(assertAuthenticated(listener)) {
+			service.getEntity(session, key, listener);
+		}
+	}
 	
 	/**
 	 * Lists entities matching the given keys.
@@ -255,12 +288,12 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#listCommentsByEntity(java.lang.String, com.socialize.listener.comment.CommentListListener)
 	 */
-//	@Override
-//	public void listCommentsByEntity(String entity, CommentListListener commentListListener) {
-//		if(assertAuthenticated(commentListListener)) {
-//			service.listCommentsByEntity(session, entity, commentListListener);
-//		}
-//	}
+	@Override
+	public void listCommentsByEntity(String entity, CommentListListener commentListListener) {
+		if(assertAuthenticated(commentListListener)) {
+			service.listCommentsByEntity(session, entity, commentListListener);
+		}
+	}
 	
 	/**
 	 * Lists the comments by comment ID.

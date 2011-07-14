@@ -3,8 +3,16 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
-    <!-- 
+    android:orientation="vertical" 
+    android:background="#38444f">
+    
+    <ImageView 
+    	android:src="@drawable/socialize_trans_bg_light" 
+    	android:layout_height="wrap_content" 
+    	android:layout_width="wrap_content"
+    	android:layout_gravity="center_vertical|left"
+    	android:padding="10dip"/>
+    	
  	<Button
 		android:id="@+id/btnEntity"
 		android:text="Entity" 
@@ -18,12 +26,10 @@
 		android:layout_height="wrap_content"
 		android:layout_width="fill_parent"
 		android:textSize="12dp"/>
-	-->
 	<Button
 		android:id="@+id/btnLike"
 		android:text="Like" 
 		android:layout_height="wrap_content"
 		android:layout_width="fill_parent"
 		android:textSize="12dp"/>
-
 </LinearLayout>

@@ -144,4 +144,44 @@ public class LikeApiTest extends SocializeUnitTest {
 		assertNotNull(strId);
 		assertEquals(String.valueOf(id), strId);
 	}
+	
+	public void testDeleteLike() {
+		
+		int id = 69;
+		
+		LikeApi api = new LikeApi(provider) {
+			@Override
+			public void deleteAsync(SocializeSession session, String endpoint, String id, SocializeActionListener listener) {
+				addResult(id);
+			}
+		};
+		
+		api.deleteLike(session, id, listener);
+		
+		String strId = getResult();
+		
+		assertNotNull(strId);
+		assertEquals(String.valueOf(id), strId);
+	}
+	
+	public void testGetLikeByKey() {
+		
+		String key = "foobar";
+		
+		LikeApi api = new LikeApi(provider) {
+
+			@Override
+			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeActionListener listener) {
+				addResult(key);
+			}
+
+		};
+		
+		api.getLike(session, key, listener);
+		
+		String strId = getResult();
+		
+		assertNotNull(strId);
+		assertEquals(key, strId);
+	}
 }

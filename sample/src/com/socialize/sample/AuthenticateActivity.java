@@ -117,6 +117,8 @@ public class AuthenticateActivity extends Activity {
 						// Override the location for the API
 						config.setProperty(SocializeConfig.API_HOST, host);
 						
+						final ProgressDialog authProgress = ProgressDialog.show(AuthenticateActivity.this, "Authenticating", "Please wait...");
+						
 						Socialize.getSocialize().authenticate(consumerKey, consumerSecret, new SocializeAuthListener() {
 							
 							@Override
@@ -125,6 +127,8 @@ public class AuthenticateActivity extends Activity {
 								txtAuthResult.setText("FAIL: " + ErrorHandler.handleApiError(AuthenticateActivity.this, error));
 								
 								btnApi.setVisibility(View.GONE);
+								
+								authProgress.dismiss();
 							}
 							
 							@Override
@@ -133,6 +137,8 @@ public class AuthenticateActivity extends Activity {
 								txtAuthResult.setText("SUCCESS");
 								
 								btnApi.setVisibility(View.VISIBLE);
+								
+								authProgress.dismiss();
 							}
 							
 							@Override
@@ -142,13 +148,13 @@ public class AuthenticateActivity extends Activity {
 								error.printStackTrace();
 								
 								btnApi.setVisibility(View.GONE);
+								
+								authProgress.dismiss();
 							}
 						});
 					}
 				});
 				
-				
-
 				btnApi.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
@@ -157,7 +163,6 @@ public class AuthenticateActivity extends Activity {
 					}
 				});
 
-				
 				progress.dismiss();
 			}
 		}.execute((Void)null);

@@ -73,8 +73,8 @@ public class SocializeApiHost {
 		entityApi.createEntity(session, key, name, listener);
 	}
 	
-	public void addComment(SocializeSession session, String key, String comment, CommentListener listener) {
-		commentApi.addComment(session, key, comment, listener);
+	public void addComment(SocializeSession session, String key, String comment, Location location, CommentListener listener) {
+		commentApi.addComment(session, key, comment, location, listener);
 	}
 	
 	public void getComment(SocializeSession session, int id, CommentListener listener) {
@@ -113,7 +113,9 @@ public class SocializeApiHost {
 		likeApi.getLike(session, id, listener);
 	}
 	
-
+	public void getLike(SocializeSession session, String key, LikeListener listener) {
+		likeApi.getLike(session, key, listener);
+	}
 	
 	public void destroy() {
 		if(clientFactory != null) {

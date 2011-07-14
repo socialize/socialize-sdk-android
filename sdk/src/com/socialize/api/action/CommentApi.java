@@ -24,6 +24,8 @@ package com.socialize.api.action;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.location.Location;
+
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Comment;
@@ -41,10 +43,15 @@ public class CommentApi extends SocializeApi<Comment, SocializeProvider<Comment>
 		super(provider);
 	}
 
-	public void addComment(SocializeSession session, String key, String comment, CommentListener listener) {
+	public void addComment(SocializeSession session, String key, String comment, Location location, CommentListener listener) {
 		Comment c = new Comment();
 		c.setText(comment);
 		c.setEntityKey(key);
+		
+		if(location != null) {
+			c.setLat(location.getLatitude());
+			c.setLon(location.getLongitude());
+		}
 		
 		List<Comment> list = new ArrayList<Comment>(1);
 		list.add(c);

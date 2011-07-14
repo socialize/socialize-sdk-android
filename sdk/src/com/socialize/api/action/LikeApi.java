@@ -29,6 +29,9 @@ import android.location.Location;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Like;
+import com.socialize.entity.ListResult;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.like.LikeListener;
 import com.socialize.provider.SocializeProvider;
 
@@ -64,6 +67,26 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 	
 	public void getLikesByEntity(SocializeSession session, String key, LikeListener listener) {
 		listAsync(session, ENDPOINT, key, null, listener);
+	}
+	
+	public void getLike(SocializeSession session, String key, final LikeListener listener) {
+		getLikesByEntity(session, key, new LikeListListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				listener.onError(error);
+			}
+			
+			@Override
+			public void onList(ListResult<Like> entities) {
+				if(entities != null && entities.getResults() != null && entities.getResults().size() > 0) {
+					listener.onGet(entities.getResults().get(0));
+				}
+				else {
+					listener.onError(new SocializeException("No like found"));
+				}
+			}
+		});
 	}
 
 	public void getLikesById(SocializeSession session, LikeListener listener, int...ids) {

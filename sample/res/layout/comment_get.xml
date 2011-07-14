@@ -16,29 +16,16 @@
 
 	<TextView
 		android:textSize="12dp"
-		android:text="Entity Key (URL)"
+		android:text="ID"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content" />
 
 	<EditText
-		android:id="@+id/txtKey"
+		android:id="@+id/txtCommentId"
 		android:textSize="12dp"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content" />
 
-<!-- 
-	<TextView
-		android:textSize="12dp"
-		android:text="Name"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content" />
-
-	<EditText
-		android:id="@+id/txtName"
-		android:textSize="12dp"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content" />
- -->
 	<LinearLayout
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
@@ -46,20 +33,13 @@
 		android:layout_marginBottom="12dip">
 		
 		<Button
-			android:id="@+id/btnEntityGet"
+			android:id="@+id/btnCommentGet"
 			android:text="Get"
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content" />
-			
-		<!-- 
-		<Button
-			android:id="@+id/btnEntityCreate"
-			android:text="Create"
-			android:layout_height="wrap_content"
-			android:layout_width="wrap_content" />
-		-->
+
 		<TextView
-			android:id="@+id/txtEntityCreateResult"
+			android:id="@+id/txtCommentGetResult"
 			android:padding="3dip"
 			android:textSize="12dp"
 			android:layout_width="fill_parent"
@@ -80,7 +60,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content" />
 		<TextView
-			android:id="@+id/txtEntityIdCreated"
+			android:id="@+id/txtCommentIdCreated"
 			android:textSize="12dp"
 			android:padding="4dip"
 			android:layout_margin="4dip"
@@ -96,123 +76,145 @@
 		
 		<TextView
 			android:textSize="12dp"
-			android:text="Key"
+			android:text="Comment"
+			android:padding="4dip"
+			android:layout_margin="4dip"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<TextView
+			android:id="@+id/txtCommentTextCreated"
+			android:textSize="12dp"
+			android:padding="4dip"
+			android:layout_margin="4dip"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+			
+	</LinearLayout>
+	
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		
+		<TextView
+			android:textSize="12dp"
+			android:text="Date"
+			android:padding="4dip"
+			android:layout_margin="4dip"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<TextView
+			android:id="@+id/txtCommentDateCreated"
+			android:textSize="12dp"
+			android:padding="4dip"
+			android:layout_margin="4dip"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+			
+	</LinearLayout>
+	
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		
+		<TextView
+			android:textSize="12dp"
+			android:text="Application"
+			android:padding="4dip"
+			android:layout_margin="4dip"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<TextView
+			android:id="@+id/txtCommentApplicationCreated"
+			android:textSize="12dp"
+			android:padding="4dip"
+			android:layout_margin="4dip"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+			
+	</LinearLayout>
+	
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		
+		<TextView
+			android:textSize="12dp"
+			android:text="User"
+			android:padding="4dip"
+			android:layout_margin="4dip"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<TextView
+			android:id="@+id/txtCommentUserCreated"
+			android:textSize="12dp"
+			android:padding="4dip"
+			android:layout_margin="4dip"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+			
+	</LinearLayout>
+	
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		
+		<TextView
+			android:textSize="12dp"
+			android:text="Lat"
+			android:padding="4dip"
+			android:layout_margin="4dip"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<TextView
+			android:id="@+id/txtCommentLatCreated"
+			android:textSize="12dp"
+			android:padding="4dip"
+			android:layout_margin="4dip"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+			
+	</LinearLayout>
+	
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		
+		<TextView
+			android:textSize="12dp"
+			android:text="Long"
+			android:padding="4dip"
+			android:layout_margin="4dip"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<TextView
+			android:id="@+id/txtCommentLongCreated"
+			android:textSize="12dp"
+			android:padding="4dip"
+			android:layout_margin="4dip"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+			
+	</LinearLayout>
+	
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		
+		<TextView
+			android:textSize="12dp"
+			android:text="Entity"
 			android:padding="4dip"
 			android:layout_margin="4dip"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content" />
 		<TextView
 			android:id="@+id/txtEntityKeyCreated"
-			android:textSize="12dp"
-			android:padding="4dip"
-			android:layout_margin="4dip"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
-			
-	</LinearLayout>
-	
-	<LinearLayout
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal">
-		
-		<TextView
-			android:textSize="12dp"
-			android:text="Name"
-			android:padding="4dip"
-			android:layout_margin="4dip"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
-		<TextView
-			android:id="@+id/txtEntityNameCreated"
-			android:textSize="12dp"
-			android:padding="4dip"
-			android:layout_margin="4dip"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
-			
-	</LinearLayout>
-	
-	<LinearLayout
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal">
-		
-		<TextView
-			android:textSize="12dp"
-			android:text="Shares"
-			android:padding="4dip"
-			android:layout_margin="4dip"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
-		<TextView
-			android:id="@+id/txtEntityShares"
-			android:textSize="12dp"
-			android:padding="4dip"
-			android:layout_margin="4dip"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
-			
-	</LinearLayout>
-	
-	<LinearLayout
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal">
-		
-		<TextView
-			android:textSize="12dp"
-			android:text="Likes"
-			android:padding="4dip"
-			android:layout_margin="4dip"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
-		<TextView
-			android:id="@+id/txtEntityLikes"
-			android:textSize="12dp"
-			android:padding="4dip"
-			android:layout_margin="4dip"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
-			
-	</LinearLayout>
-	
-	<LinearLayout
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal">
-		
-		<TextView
-			android:textSize="12dp"
-			android:text="Views"
-			android:padding="4dip"
-			android:layout_margin="4dip"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
-		<TextView
-			android:id="@+id/txtEntityViews"
-			android:textSize="12dp"
-			android:padding="4dip"
-			android:layout_margin="4dip"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
-			
-	</LinearLayout>
-	
-	<LinearLayout
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal">
-		
-		<TextView
-			android:textSize="12dp"
-			android:text="Comments"
-			android:padding="4dip"
-			android:layout_margin="4dip"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" />
-		<TextView
-			android:id="@+id/txtEntityComments"
 			android:textSize="12dp"
 			android:padding="4dip"
 			android:layout_margin="4dip"
