@@ -28,6 +28,7 @@ import android.location.Location;
 
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
+import com.socialize.entity.ActionError;
 import com.socialize.entity.Like;
 import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
@@ -83,7 +84,14 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 					listener.onGet(entities.getResults().get(0));
 				}
 				else {
-					listener.onError(new SocializeException("No like found"));
+					List<ActionError> errors = entities.getErrors();
+					
+					if(errors != null && errors.size() > 0) {
+						listener.onError(new SocializeException(errors.get(0).getMessage()));
+					}
+					else {
+						listener.onError(new SocializeException("No like found"));
+					}
 				}
 			}
 		});

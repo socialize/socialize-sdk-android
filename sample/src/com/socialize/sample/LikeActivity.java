@@ -35,6 +35,7 @@ import com.socialize.entity.Like;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
+import com.socialize.listener.like.LikeGetListener;
 import com.socialize.sample.util.ErrorHandler;
 import com.socialize.util.StringUtils;
 
@@ -51,6 +52,7 @@ public class LikeActivity extends Activity {
 		
 		final Button btnLikeCreate = (Button) findViewById(R.id.btnLikeCreate);
 		final Button btnLikeDelete = (Button) findViewById(R.id.btnLikeDelete);
+		final Button btnLikeGet = (Button) findViewById(R.id.btnLikeGet);
 		
 		btnLikeDelete.setEnabled(false);
 		
@@ -63,6 +65,8 @@ public class LikeActivity extends Activity {
 				
 				@Override
 				public void onClick(View v) {
+					
+					clearLikeData();
 					
 					final ProgressDialog progress = ProgressDialog.show(LikeActivity.this, "Posting Like", "Please wait...");
 					
@@ -82,18 +86,56 @@ public class LikeActivity extends Activity {
 							}
 							
 							@Override
-							public void onCreate(Like entity) {
+							public void onCreate(Like like) {
 								btnLikeCreate.setEnabled(true);
 								btnLikeDelete.setEnabled(true);
 								txtLikeCreateResult.setText("SUCCESS");
 								
-								if(entity.getId() != null) {
-									txtLikeIdCreated.setText(String.valueOf(entity.getId()));
-								}
+								populateLikeData(like);
 								
-								if(entity.getDate() != null) {
-									txtLikeDateCreated.setText(String.valueOf(entity.getDate()));
-								}
+								progress.dismiss();
+							}
+						});
+					}
+					else {
+						txtLikeCreateResult.setText("FAIL: No Key");
+						btnLikeCreate.setEnabled(true);
+						progress.dismiss();
+					}
+				}
+			});
+			
+			btnLikeGet.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					
+					clearLikeData();
+					
+					final ProgressDialog progress = ProgressDialog.show(LikeActivity.this, "Retrieving Like", "Please wait...");
+					
+					txtLikeCreateResult.setText("");
+					btnLikeCreate.setEnabled(false);
+					
+					String key = txtKey.getText().toString();
+					
+					if(!StringUtils.isEmpty(key)) {
+						Socialize.getSocialize().getLike(key, new LikeGetListener() {
+							
+							@Override
+							public void onError(SocializeException error) {
+								txtLikeCreateResult.setText("FAIL: " + ErrorHandler.handleApiError(LikeActivity.this, error));
+								btnLikeCreate.setEnabled(true);
+								progress.dismiss();
+							}
+							
+							@Override
+							public void onGet(Like like) {
+								btnLikeCreate.setEnabled(true);
+								btnLikeDelete.setEnabled(true);
+								txtLikeCreateResult.setText("SUCCESS");
+								
+								populateLikeData(like);
 								
 								progress.dismiss();
 							}
@@ -114,6 +156,7 @@ public class LikeActivity extends Activity {
 					
 					final ProgressDialog progress = ProgressDialog.show(LikeActivity.this, "Deleting Like", "Please wait...");
 					
+					clearLikeData();
 					
 					txtLikeCreateResult.setText("");
 					
@@ -154,5 +197,24 @@ public class LikeActivity extends Activity {
 	protected void onDestroy() {
 		Socialize.destroy(this);
 		super.onDestroy();
+	}
+	
+	private void populateLikeData(Like like) {
+		final TextView txtLikeIdCreated = (TextView) findViewById(R.id.txtLikeIdCreated);
+		final TextView txtLikeDateCreated = (TextView) findViewById(R.id.txtLikeDateCreated);
+		if(like.getId() != null) {
+			txtLikeIdCreated.setText(String.valueOf(like.getId()));
+		}
+		
+		if(like.getDate() != null) {
+			txtLikeDateCreated.setText(String.valueOf(like.getDate()));
+		}
+	}
+	
+	private void clearLikeData() {
+		final TextView txtLikeIdCreated = (TextView) findViewById(R.id.txtLikeIdCreated);
+		final TextView txtLikeDateCreated = (TextView) findViewById(R.id.txtLikeDateCreated);
+		txtLikeIdCreated.setText("");
+		txtLikeDateCreated.setText("");
 	}
 }
