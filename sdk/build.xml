@@ -97,7 +97,7 @@
 		<move file="${sample_dir}/assets/sample-app.conf.live" tofile="${sample_dir}/assets/sample-app.conf"/>
 		
 		<!-- Create the ZIP file for distribution -->
-		<zip destfile="build/socialize-sdk-${version}.zip">
+		<zip destfile="build/socialize-sdk-android-${version}.zip">
 			<zipfileset dir="libext" includes="**/*.jar" prefix="lib"/>
 			<zipfileset dir="build" includes="**/*.jar" prefix="dist"/>
 			
