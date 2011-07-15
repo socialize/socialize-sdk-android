@@ -33,7 +33,6 @@ public class SocializeRobotiumTest extends ActivityInstrumentationTestCase2<Main
 
 	protected Solo solo;
 	
-	
 	public SocializeRobotiumTest() {
 		super("com.socialize.sample", Main.class);
 	}
@@ -45,26 +44,21 @@ public class SocializeRobotiumTest extends ActivityInstrumentationTestCase2<Main
 	
 	public void testAuthenticate() {
 		authenticate();
-		solo.waitForText("SUCCESS", 1, 5);
+		solo.waitForText("SUCCESS", 1, 30);
 		assertTrue(solo.searchText("SUCCESS"));
+		
+		// go to API
+		solo.clickOnButton(1);
+		solo.waitForActivity("ApiActivity", 10);
 	}
 	
-	public void testAddComment() {
-		authenticate();
-		solo.clickOnButton("Comment");
-		solo.waitForActivity("CommentActivity", 5);
-	}
+//	public void testAddComment() {
+//		authenticate();
+//		solo.clickOnButton("Comment");
+//		solo.waitForActivity("CommentActivity", 5);
+//	}
 	
 	protected void authenticate() {
-//		solo.clearEditText(0);
-//		solo.enterText(0, url);
-//		
-//		solo.clearEditText(1);
-//		solo.enterText(1, consumerKey);
-//		
-//		solo.clearEditText(2);
-//		solo.enterText(2, consumerSecret);
-		
 		solo.clickOnButton(0);
 	}
 	

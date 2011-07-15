@@ -75,22 +75,27 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 			
 			@Override
 			public void onError(SocializeException error) {
-				listener.onError(error);
+				if(listener != null) {
+					listener.onError(error);
+				}
 			}
 			
 			@Override
 			public void onList(ListResult<Like> entities) {
-				if(entities != null && entities.getResults() != null && entities.getResults().size() > 0) {
-					listener.onGet(entities.getResults().get(0));
-				}
-				else {
-					List<ActionError> errors = entities.getErrors();
-					
-					if(errors != null && errors.size() > 0) {
-						listener.onError(new SocializeException(errors.get(0).getMessage()));
+				
+				if(listener != null) {
+					if(entities != null && entities.getResults() != null && entities.getResults().size() > 0) {
+						listener.onGet(entities.getResults().get(0));
 					}
 					else {
-						listener.onError(new SocializeException("No like found"));
+						List<ActionError> errors = entities.getErrors();
+						
+						if(errors != null && errors.size() > 0) {
+							listener.onError(new SocializeException(errors.get(0).getMessage()));
+						}
+						else {
+							listener.onError(new SocializeException("No like found"));
+						}
 					}
 				}
 			}
@@ -98,13 +103,21 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 	}
 
 	public void getLikesById(SocializeSession session, LikeListener listener, int...ids) {
-		String[] strIds = new String[ids.length];
 		
-		for (int i = 0; i < ids.length; i++) {
-			strIds[i] = String.valueOf(ids[i]);
+		if(ids != null) {
+			String[] strIds = new String[ids.length];
+			
+			for (int i = 0; i < ids.length; i++) {
+				strIds[i] = String.valueOf(ids[i]);
+			}
+			
+			listAsync(session, ENDPOINT, null, strIds, listener);
 		}
-		
-		listAsync(session, ENDPOINT, null, strIds, listener);
+		else {
+			if(listener != null) {
+				listener.onError(new SocializeException("No ids supplied"));
+			}
+		}
 	}
 	
 	public void getLike(SocializeSession session, int id, LikeListener listener) {
