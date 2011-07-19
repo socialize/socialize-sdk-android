@@ -114,6 +114,16 @@ public interface SocializeService {
 	public void listCommentsByEntity(String url, CommentListListener commentListListener);
 	
 	/**
+	 * Lists the comments associated with a url.
+	 * @param url The url to which the comments are associated.
+	 * @param startIndex The starting index of the results for pagination.
+	 * @param endIndex The ending index of the results for pagination.
+	 * @param commentListListener A listener to handle callbacks from the post.
+	 */
+	public void listCommentsByEntity(String url, int startIndex, int endIndex, CommentListListener commentListListener);
+	
+	
+	/**
 	 * Retrieves a single comment based on its ID.
 	 * @param id The ID of the comment, returned when it was originally created.
 	 * @param commentGetListener

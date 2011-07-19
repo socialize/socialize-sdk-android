@@ -89,8 +89,12 @@ public class SocializeApiHost {
 		entityApi.getEntity(session, key, listener);
 	}
 	
-	public void listCommentsByEntity(SocializeSession session, String entityKey, CommentListener listener) {
-		commentApi.getCommentsByEntity(session, entityKey, listener);
+	public void listCommentsByEntity(SocializeSession session, String url, CommentListener listener) {
+		commentApi.getCommentsByEntity(session, url, listener);
+	}
+	
+	public void listCommentsByEntity(SocializeSession session, String url, int startIndex, int endIndex, CommentListener listener) {
+		commentApi.getCommentsByEntity(session, url, startIndex, endIndex, listener);
 	}
 	
 	public void listCommentsById(SocializeSession session, CommentListener listener, int...ids) {

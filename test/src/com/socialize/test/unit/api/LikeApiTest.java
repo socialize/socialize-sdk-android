@@ -70,7 +70,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		api.addLike(session, key, null, listener);
 		
 		
-		List<Like> likes = getResult();
+		List<Like> likes = getNextResult();
 		
 		assertNotNull(likes);
 		assertEquals(1, likes.size());
@@ -85,20 +85,29 @@ public class LikeApiTest extends SocializeUnitTest {
 	public void testGetLikesByEntity() {
 		
 		final String key = "foo";
+		int startIndex = 0, endIndex = 10;
 		
 		LikeApi api = new LikeApi(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeActionListener listener) {
+			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(key);
+				addResult(startIndex);
+				addResult(endIndex);
 			}
 		};
 		
-		api.getLikesByEntity(session, key, listener);
+		api.getLikesByEntity(session, key, startIndex, endIndex, listener);
 		
-		String after = getResult();
+		String after = getNextResult();
 		
 		assertNotNull(after);
 		assertEquals(key, after);
+		
+		int afterStartIndex = (Integer) getNextResult();
+		int afterEndIndex = (Integer) getNextResult();
+		
+		assertEquals(startIndex, afterStartIndex);
+		assertEquals(endIndex, afterEndIndex);
 	}
 	
 	public void testGetLikesById() {
@@ -106,16 +115,15 @@ public class LikeApiTest extends SocializeUnitTest {
 		int[] ids = {1,2,3};
 		
 		LikeApi api = new LikeApi(provider) {
-
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeActionListener listener) {
+			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(ids);
 			}
 		};
 		
 		api.getLikesById(session, listener, ids);
 		
-		String[] after = getResult();
+		String[] after = getNextResult();
 		
 		assertNotNull(after);
 		
@@ -139,7 +147,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		
 		api.getLike(session, id, listener);
 		
-		String strId = getResult();
+		String strId = getNextResult();
 		
 		assertNotNull(strId);
 		assertEquals(String.valueOf(id), strId);
@@ -158,7 +166,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		
 		api.deleteLike(session, id, listener);
 		
-		String strId = getResult();
+		String strId = getNextResult();
 		
 		assertNotNull(strId);
 		assertEquals(String.valueOf(id), strId);
@@ -169,17 +177,15 @@ public class LikeApiTest extends SocializeUnitTest {
 		String key = "foobar";
 		
 		LikeApi api = new LikeApi(provider) {
-
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeActionListener listener) {
+			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(key);
 			}
-
 		};
 		
 		api.getLike(session, key, listener);
 		
-		String strId = getResult();
+		String strId = getNextResult();
 		
 		assertNotNull(strId);
 		assertEquals(key, strId);

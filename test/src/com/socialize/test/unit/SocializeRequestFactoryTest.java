@@ -43,6 +43,7 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.DefaultSocializeRequestFactory;
 import com.socialize.api.SocializeRequestFactory;
 import com.socialize.api.SocializeSession;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeObject;
 import com.socialize.entity.factory.SocializeObjectFactory;
 import com.socialize.error.SocializeException;
@@ -192,6 +193,52 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		builder.start(endpoint);
 		builder.addParam("key", key);
 		builder.addParams("id", ids);
+		
+		builder.addParam("first", "0");
+		builder.addParam("last", String.valueOf(SocializeConfig.MAX_LIST_RESULTS));
+		
+		String expected = builder.toString();
+		
+		assertEquals(expected, actual);
+	}
+	
+	public void testListRequestCreatePaginated() throws Exception {
+		
+		final String endpoint = "foobar/";
+		final String key = "testid";
+		final String[] ids = {"foo", "bar"};
+		
+		int start = 0, end = 10;
+		
+		OAuthRequestSigner signer = new OAuthRequestSigner() {
+			
+			@Override
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+				assertTrue(request instanceof HttpGet);
+				HttpGet list = (HttpGet) request;
+				
+				addResult(list.getURI().toString());
+				return request;
+			}
+		};
+		
+		SocializeRequestFactory<SocializeObject> factory = new DefaultSocializeRequestFactory<SocializeObject>(signer, null);
+		
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+
+		HttpUriRequest req = factory.getListRequest(session, endpoint, key, ids, start, end);
+		
+		assertTrue(req instanceof HttpGet);
+		
+		String actual = getResult();
+		
+		UrlBuilder builder = new UrlBuilder();
+		builder.start(endpoint);
+		builder.addParam("key", key);
+		builder.addParams("id", ids);
+		
+		builder.addParam("first", String.valueOf(start));
+		builder.addParam("last", String.valueOf(end));
 		
 		String expected = builder.toString();
 		

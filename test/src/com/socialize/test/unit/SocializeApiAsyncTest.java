@@ -213,7 +213,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		api.setResponseFactory(responseFactory);
 		
 		AndroidMock.expect(responseFactory.newEntityResponse()).andReturn(mockEntityResponse);
-		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids)).andReturn(returned);
+		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, 0, SocializeConfig.MAX_LIST_RESULTS)).andReturn(returned);
 		mockEntityResponse.setResults(returned);
 		
 		AndroidMock.replay(responseFactory);
@@ -234,7 +234,39 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		AndroidMock.verify(mockEntityResponse);
 	}
 	
-	
+	public void testApiAsyncListCallsSetResultsOnResponsePaginated() throws Throwable {
+
+		final String endpoint = "foobar";
+		final String key = "foobar_key";
+		final String[] ids = null;
+		
+		final int start = 0, end = 10;
+		
+		final ListResult<SocializeObject> returned = new ListResult<SocializeObject>( new LinkedList<SocializeObject>() );
+		
+		api.setResponseFactory(responseFactory);
+		
+		AndroidMock.expect(responseFactory.newEntityResponse()).andReturn(mockEntityResponse);
+		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, start, end)).andReturn(returned);
+		mockEntityResponse.setResults(returned);
+		
+		AndroidMock.replay(responseFactory);
+		AndroidMock.replay(provider);
+		AndroidMock.replay(mockEntityResponse);
+
+		runTestOnUiThread(new Runnable() { 
+			@Override 
+			public void run() { 
+				api.listAsync(mockSession, endpoint, key, ids, start, end, listener);
+			} 
+		});
+
+		signal.await(30, TimeUnit.SECONDS); 
+		
+		AndroidMock.verify(responseFactory);
+		AndroidMock.verify(provider);
+		AndroidMock.verify(mockEntityResponse);
+	}
 	
 	public void testApiAsyncCallsListOnProvider() throws Throwable {
 
@@ -244,13 +276,39 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		
 		final ListResult<SocializeObject> returned = new ListResult<SocializeObject>( new LinkedList<SocializeObject>() );
 		
-		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids)).andReturn(returned);
+		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, 0, SocializeConfig.MAX_LIST_RESULTS)).andReturn(returned);
 		AndroidMock.replay(provider);
 
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
 				api.listAsync(mockSession, endpoint, key, ids, listener);
+			} 
+		});
+
+		signal.await(30, TimeUnit.SECONDS); 
+		
+		AndroidMock.verify(provider);
+	}
+	
+	
+	public void testApiAsyncCallsListOnProviderPaginated() throws Throwable {
+
+		final String endpoint = "foobar";
+		final String key = "foobar_key";
+		final String ids[] = null;
+		
+		final int start = 0, end = 10;
+		
+		final ListResult<SocializeObject> returned = new ListResult<SocializeObject>( new LinkedList<SocializeObject>() );
+		
+		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, start, end)).andReturn(returned);
+		AndroidMock.replay(provider);
+
+		runTestOnUiThread(new Runnable() { 
+			@Override 
+			public void run() { 
+				api.listAsync(mockSession, endpoint, key, ids, start, end, listener);
 			} 
 		});
 

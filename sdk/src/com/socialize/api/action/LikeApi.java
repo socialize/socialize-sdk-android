@@ -28,6 +28,7 @@ import android.location.Location;
 
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.ActionError;
 import com.socialize.entity.Like;
 import com.socialize.entity.ListResult;
@@ -70,8 +71,12 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 		listAsync(session, ENDPOINT, key, null, listener);
 	}
 	
+	public void getLikesByEntity(SocializeSession session, String key, int startIndex, int endIndex, LikeListener listener) {
+		listAsync(session, ENDPOINT, key, null, startIndex, endIndex, listener);
+	}
+	
 	public void getLike(SocializeSession session, String key, final LikeListener listener) {
-		getLikesByEntity(session, key, new LikeListListener() {
+		getLikesByEntity(session, key, 0, 1, new LikeListListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -111,7 +116,7 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 				strIds[i] = String.valueOf(ids[i]);
 			}
 			
-			listAsync(session, ENDPOINT, null, strIds, listener);
+			listAsync(session, ENDPOINT, null, strIds, 0, SocializeConfig.MAX_LIST_RESULTS, listener);
 		}
 		else {
 			if(listener != null) {

@@ -68,7 +68,7 @@ public class CommentApiTest extends SocializeUnitTest {
 		
 		api.addComment(session, key, comment, null, listener);
 		
-		List<Comment> list = getResult();
+		List<Comment> list = getNextResult();
 		assertNotNull(list);
 		assertEquals(1, list.size());
 		
@@ -83,19 +83,29 @@ public class CommentApiTest extends SocializeUnitTest {
 		
 		final String key = "foo";
 		
+		int startIndex = 0, endIndex = 10;
+		
 		CommentApi api = new CommentApi(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeActionListener listener) {
+			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(key);
+				addResult(startIndex);
+				addResult(endIndex);
 			}
 		};
 		
-		api.getCommentsByEntity(session, key, listener);
+		api.getCommentsByEntity(session, key, startIndex, endIndex, listener);
 		
-		String after = getResult();
+		String after = getNextResult();
 		
 		assertNotNull(after);
 		assertEquals(key, after);
+		
+		Integer afterStartIndex = getNextResult();
+		Integer afterEndIndex = getNextResult();
+		
+		assertEquals(startIndex, afterStartIndex.intValue());
+		assertEquals(endIndex, afterEndIndex.intValue());
 	}
 	
 	public void testGetCommentsById() {
@@ -103,16 +113,15 @@ public class CommentApiTest extends SocializeUnitTest {
 		int[] ids = {1,2,3};
 		
 		CommentApi api = new CommentApi(provider) {
-
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeActionListener listener) {
+			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(ids);
 			}
 		};
 		
 		api.getCommentsById(session, listener, ids);
 		
-		String[] after = getResult();
+		String[] after = getNextResult();
 		
 		assertNotNull(after);
 		
@@ -136,7 +145,7 @@ public class CommentApiTest extends SocializeUnitTest {
 		
 		api.getComment(session, id, listener);
 		
-		String strId = getResult();
+		String strId = getNextResult();
 		
 		assertNotNull(strId);
 		assertEquals(String.valueOf(id), strId);

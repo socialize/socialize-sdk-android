@@ -27,6 +27,7 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
 import com.socialize.provider.SocializeProvider;
@@ -76,6 +77,24 @@ public class SocializeApiTest extends SocializeActivityTest {
 		AndroidMock.verify(provider);
 	}
 	
+	public void testApiCallsListOnProviderPaginated() throws Throwable {
+
+		final String endpoint = "foobar";
+		final String key = "foobar_key";
+		final String[] ids = null;
+		
+		final int start = 0, end = 10;
+		
+		final ListResult<SocializeObject> returned = new ListResult<SocializeObject>( new LinkedList<SocializeObject>() );
+		
+		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, start, end)).andReturn(returned);
+		AndroidMock.replay(provider);
+
+		api.list(mockSession, endpoint, key, ids, start, end);
+
+		AndroidMock.verify(provider);
+	}
+	
 	public void testApiCallsListOnProvider() throws Throwable {
 
 		final String endpoint = "foobar";
@@ -84,7 +103,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		
 		final ListResult<SocializeObject> returned = new ListResult<SocializeObject>( new LinkedList<SocializeObject>() );
 		
-		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids)).andReturn(returned);
+		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, 0, SocializeConfig.MAX_LIST_RESULTS)).andReturn(returned);
 		AndroidMock.replay(provider);
 
 		api.list(mockSession, endpoint, key, ids);

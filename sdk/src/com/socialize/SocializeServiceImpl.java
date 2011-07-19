@@ -289,12 +289,19 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#listCommentsByEntity(java.lang.String, com.socialize.listener.comment.CommentListListener)
 	 */
 	@Override
-	public void listCommentsByEntity(String entity, CommentListListener commentListListener) {
+	public void listCommentsByEntity(String url, CommentListListener commentListListener) {
 		if(assertAuthenticated(commentListListener)) {
-			service.listCommentsByEntity(session, entity, commentListListener);
+			service.listCommentsByEntity(session, url, commentListListener);
 		}
 	}
 	
+	@Override
+	public void listCommentsByEntity(String url, int startIndex, int endIndex, CommentListListener commentListListener) {
+		if(assertAuthenticated(commentListListener)) {
+			service.listCommentsByEntity(session, url, startIndex, endIndex, commentListListener);
+		}
+	}
+
 	/**
 	 * Lists the comments by comment ID.
 	 * @param session The current socialize session.

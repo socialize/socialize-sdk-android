@@ -177,6 +177,30 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 	
 	@SuppressWarnings("unchecked")
 	@UsesMocks ({CommentApi.class, CommentListener.class})
+	public void testListCommentsByEntityPaginated() throws SocializeException {
+		SocializeProvider<Comment> provider = AndroidMock.createMock(SocializeProvider.class);
+		CommentApi commentApi = AndroidMock.createMock(CommentApi.class, provider);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		CommentListener listener = AndroidMock.createMock(CommentListener.class);
+		
+		final String key = "foobar";
+		final int start = 0, end = 10;
+		
+		commentApi.getCommentsByEntity(session, key, start, end, listener);
+		
+		AndroidMock.replay(commentApi);
+		
+		SocializeApiHost service = new SocializeApiHost(getContext());
+		
+		service.setCommentApi(commentApi);
+		
+		service.listCommentsByEntity(session, key, start, end, listener);
+		
+		AndroidMock.verify(commentApi);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({CommentApi.class, CommentListener.class})
 	public void testListCommentsById() throws SocializeException {
 		SocializeProvider<Comment> provider = AndroidMock.createMock(SocializeProvider.class);
 		CommentApi commentApi = AndroidMock.createMock(CommentApi.class, provider);
@@ -201,6 +225,29 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 	@SuppressWarnings("unchecked")
 	@UsesMocks ({EntityApi.class, EntityListener.class})
 	public void testListEntities() throws SocializeException {
+		SocializeProvider<Entity> provider = AndroidMock.createMock(SocializeProvider.class);
+		EntityApi api = AndroidMock.createMock(EntityApi.class, provider);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		EntityListener listener = AndroidMock.createMock(EntityListener.class);
+		
+		final String[] ids = {"A","B","C"};
+		
+		api.listEntities(session, listener, ids);
+		
+		AndroidMock.replay(api);
+		
+		SocializeApiHost service = new SocializeApiHost(getContext());
+		
+		service.setEntityApi(api);
+		
+		service.listEntitiesByKey(session, listener, ids);
+		
+		AndroidMock.verify(api);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({EntityApi.class, EntityListener.class})
+	public void testListEntitiesPaginated() throws SocializeException {
 		SocializeProvider<Entity> provider = AndroidMock.createMock(SocializeProvider.class);
 		EntityApi api = AndroidMock.createMock(EntityApi.class, provider);
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);

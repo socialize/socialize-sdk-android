@@ -249,6 +249,37 @@ public class SocializeServiceTest extends SocializeUnitTest {
 	}
 	
 	@UsesMocks ({CommentListListener.class})
+	public void testListCommentsByEntityPaginated() {
+		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
+		SocializeApiHost service = AndroidMock.createMock(SocializeApiHost.class, getContext());
+		CommentListListener listener = AndroidMock.createMock(CommentListListener.class);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		SocializeLogger logger = AndroidMock.createNiceMock(SocializeLogger.class);
+		
+		final String key = "foo";
+		final int start = 0, end = 10;
+		
+		AndroidMock.expect(container.getBean("socializeApiHost")).andReturn(service);
+		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
+
+		service.listCommentsByEntity(session, key, start, end, listener);
+		
+		AndroidMock.replay(container);
+		AndroidMock.replay(service);
+		
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
+		socialize.init(getContext(), container);
+		socialize.setSession(session);
+		
+		assertTrue(socialize.isInitialized());
+		
+		socialize.listCommentsByEntity(key, start, end,listener);
+		
+		AndroidMock.verify(container);
+		AndroidMock.verify(service);
+	}
+	
+	@UsesMocks ({CommentListListener.class})
 	public void testListCommentsByIds() {
 		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
 		SocializeApiHost service = AndroidMock.createMock(SocializeApiHost.class, getContext());
@@ -480,7 +511,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		socialize.addComment(key, comment, listener);
 		
-		Exception error = getResult();
+		Exception error = getNextResult();
 		
 		assertNotNull(error);
 		assertTrue(error instanceof SocializeException);
@@ -516,7 +547,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		socialize.addComment(key, comment, listener);
 		
-		Exception error = getResult();
+		Exception error = getNextResult();
 		
 		assertNotNull(error);
 		assertTrue(error instanceof SocializeException);

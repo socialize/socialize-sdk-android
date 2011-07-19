@@ -38,6 +38,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeObject;
 import com.socialize.entity.factory.SocializeObjectFactory;
 import com.socialize.error.SocializeException;
@@ -109,9 +110,18 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 		HttpDelete del = signer.sign(session, new HttpDelete(endpoint));
 		return del;
 	}
+	
 
+	/**
+	 * @see this{@link #getListRequest(SocializeSession, String, String, String[], int, int)}
+	 */
 	@Override
 	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
+		return getListRequest(session, endpoint, key, ids, 0, SocializeConfig.MAX_LIST_RESULTS);
+	}
+
+	@Override
+	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex) throws SocializeException {
 		
 		// A List is a GET request with params
 		// See: http://en.wikipedia.org/wiki/Representational_State_Transfer
@@ -127,6 +137,13 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 				builder.addParam("id", id);
 			}
 		}
+		
+		if(endIndex <= 0) {
+			endIndex = SocializeConfig.MAX_LIST_RESULTS;
+		}
+		
+		builder.addParam("first", String.valueOf(startIndex));
+		builder.addParam("last", String.valueOf(endIndex));
 		
 		HttpGet get = new HttpGet(builder.toString());
 

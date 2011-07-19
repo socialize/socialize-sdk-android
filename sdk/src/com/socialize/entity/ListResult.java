@@ -32,6 +32,7 @@ public class ListResult<T> {
 
 	private List<T> results;
 	private List<ActionError> errors;
+	private int totalCount;
 	
 	public ListResult() {
 		super();
@@ -54,7 +55,13 @@ public class ListResult<T> {
 	public void setErrors(List<ActionError> errors) {
 		this.errors = errors;
 	}
-	
+	public int getTotalCount() {
+		return totalCount;
+	}
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
+	}
+
 	public ListResult<T> add(T item) {
 		if(results == null) results = new LinkedList<T>();
 		results.add(item);
