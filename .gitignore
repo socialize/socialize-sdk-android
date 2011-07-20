@@ -5,6 +5,7 @@ sample/.settings
 sample/gen
 sample/bin
 sample/sdk_src/
+sample/local.properties
 integration-test/bin
 integration-test/gen
 integration-test/.settings
@@ -12,6 +13,9 @@ test/coverage
 test/test-output
 test/gen
 test/bin
-testlocal.properties
+test/local.properties
 build
 test/findbugs-output
+integration-test/local.properties
+*.swp
+integration-test/test-output
