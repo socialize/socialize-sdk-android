@@ -142,12 +142,12 @@ public class EntityAccessorTests extends SocializeUnitTest {
 		
 		Integer comments = 1;
 		Integer likes = 2;
-		Integer id = 3;
+//		Integer id = 3;
 		Integer shares = 4;
 		Integer views = 5;
 		
 		entity.setComments(comments );
-		entity.setId(id);
+//		entity.setId(id);
 		entity.setKey(key);
 		entity.setLikes(likes);
 		entity.setName(name);
@@ -156,7 +156,7 @@ public class EntityAccessorTests extends SocializeUnitTest {
 		
 		assertEquals(comments, entity.getComments());
 		assertEquals(likes, entity.getLikes());
-		assertEquals(id, entity.getId());
+//		assertEquals(id, entity.getId());
 		assertEquals(shares, entity.getShares());
 		assertEquals(views, entity.getViews());
 		assertEquals(name, entity.getName());

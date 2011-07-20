@@ -85,6 +85,8 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		this.context = context;
 	}
 	
+	public void init() {}
+	
 	public void setObjectFactory(SocializeObjectFactory<T> objectFactory) {
 		this.objectFactory = objectFactory;
 	}
