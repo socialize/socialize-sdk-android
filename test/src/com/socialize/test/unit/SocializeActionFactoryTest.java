@@ -61,7 +61,6 @@ public class SocializeActionFactoryTest extends AbstractSocializeActionFactoryTe
 
 	@Override
 	protected void setupFromJSONExpectations() {
-		AndroidMock.replay(json);
 	}
 
 	@Override
@@ -69,13 +68,10 @@ public class SocializeActionFactoryTest extends AbstractSocializeActionFactoryTe
 		AndroidMock.verify(appFactoryMock);
 		AndroidMock.verify(userFactoryMock);
 		AndroidMock.verify(entityFactoryMock);
-		AndroidMock.verify(json);
 	}
 
 	@Override
 	protected void setupToJSONExpectations() {
-		AndroidMock.replay(json);
-		AndroidMock.replay(action);
 	}
 
 	@Override
@@ -83,7 +79,5 @@ public class SocializeActionFactoryTest extends AbstractSocializeActionFactoryTe
 		AndroidMock.verify(appFactoryMock);
 		AndroidMock.verify(userFactoryMock);
 		AndroidMock.verify(entityFactoryMock);
-		AndroidMock.verify(json);
-		AndroidMock.verify(action);
 	}
 }

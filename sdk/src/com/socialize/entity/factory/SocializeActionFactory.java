@@ -64,7 +64,7 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 				to.put("entity", entity);
 			}
 			else if(!StringUtils.isEmpty(entityKey)) {
-				to.put("entity", entityKey);
+				to.put("entity_key", entityKey);
 			}
 
 			if(appObject != null) {
@@ -98,8 +98,6 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			
 			throw new JSONException(e.getMessage());
 		}
-		
-		postToJSON(from, to);
 	}
 
 	@Override
@@ -128,6 +126,10 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 				if(entity != null) {
 					to.setEntity(entityFactory.fromJSON(entity));
 				}
+			}
+			
+			if(from.has("entity_key") && !from.isNull("entity_key")) {
+				to.setEntityKey(from.getString("entity_key"));
 			}
 
 			if(from.has("lat") && !from.isNull("lat")) {
@@ -160,8 +162,6 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			
 			throw new JSONException(e.getMessage());
 		}
-		
-		postFromJSON(from, to);
 	}
 	
 	public SocializeLogger getLogger() {

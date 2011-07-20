@@ -66,15 +66,11 @@ public class CommentFactoryTest extends AbstractSocializeActionFactoryTest<Comme
 		AndroidMock.expect(json.getString("text")).andReturn(text);
 		
 		action.setText(text);
-		
-		AndroidMock.replay(json);
-		AndroidMock.replay(action);
 	}
 
 	@Override
 	protected void doFromJSONVerify() {
-		AndroidMock.verify(json);
-		AndroidMock.verify(action);
+
 	}
 
 	@Override
@@ -84,14 +80,10 @@ public class CommentFactoryTest extends AbstractSocializeActionFactoryTest<Comme
 		
 		AndroidMock.expect(action.getText()).andReturn(text);
 		AndroidMock.expect(json.put("text", text)).andReturn(json);
-		
-		AndroidMock.replay(json);
-		AndroidMock.replay(action);
 	}
 
 	@Override
 	protected void doToJSONVerify() {
-		AndroidMock.verify(json);
-		AndroidMock.verify(action);
+
 	}
 }
