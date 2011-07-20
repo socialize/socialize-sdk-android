@@ -44,7 +44,7 @@ public class SocializeRobotiumTest extends ActivityInstrumentationTestCase2<Main
 	
 	public void testAuthenticate() {
 		authenticate();
-		solo.waitForText("SUCCESS", 1, 30);
+		solo.waitForText("SUCCESS", 1, 60);
 		assertTrue(solo.searchText("SUCCESS"));
 		
 		// go to API
