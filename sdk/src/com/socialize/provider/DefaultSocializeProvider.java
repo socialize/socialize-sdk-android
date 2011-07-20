@@ -124,15 +124,6 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	public void setSessionFactory(SocializeSessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-
-	// TODO: remove?
-	public void init() {
-		java.util.logging.Logger.getLogger("httpclient.wire.headers").setLevel(java.util.logging.Level.FINEST);
-		java.util.logging.Logger.getLogger("httpclient.wire.content").setLevel(java.util.logging.Level.FINEST);
-		java.util.logging.Logger.getLogger("org.apache.http.wire.headers").setLevel(java.util.logging.Level.FINEST);
-		java.util.logging.Logger.getLogger("org.apache.http.wire.content").setLevel(java.util.logging.Level.FINEST);
-		java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.FINEST);
-	}
 	
 	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException {

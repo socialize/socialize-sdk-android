@@ -202,6 +202,10 @@ public class LikeActivity extends Activity {
 	private void populateLikeData(Like like) {
 		final TextView txtLikeIdCreated = (TextView) findViewById(R.id.txtLikeIdCreated);
 		final TextView txtLikeDateCreated = (TextView) findViewById(R.id.txtLikeDateCreated);
+		
+		final TextView txtEntityIdCreated = (TextView) findViewById(R.id.txtEntityIdCreated);
+		final TextView txtEntityKeyCreated = (TextView) findViewById(R.id.txtEntityKeyCreated);
+		
 		if(like.getId() != null) {
 			txtLikeIdCreated.setText(String.valueOf(like.getId()));
 		}
@@ -209,12 +213,27 @@ public class LikeActivity extends Activity {
 		if(like.getDate() != null) {
 			txtLikeDateCreated.setText(String.valueOf(like.getDate()));
 		}
+		
+		if(like.getEntity() != null) {
+			txtEntityIdCreated.setText(String.valueOf(like.getEntity().getId()));
+			txtEntityKeyCreated.setText(like.getEntity().getKey());
+		}
+		else if(like.getEntityKey() != null) {
+			txtEntityKeyCreated.setText(like.getEntityKey());
+		}
 	}
 	
 	private void clearLikeData() {
 		final TextView txtLikeIdCreated = (TextView) findViewById(R.id.txtLikeIdCreated);
 		final TextView txtLikeDateCreated = (TextView) findViewById(R.id.txtLikeDateCreated);
+		
+		final TextView txtEntityIdCreated = (TextView) findViewById(R.id.txtEntityIdCreated);
+		final TextView txtEntityKeyCreated = (TextView) findViewById(R.id.txtEntityKeyCreated);
+		
 		txtLikeIdCreated.setText("");
 		txtLikeDateCreated.setText("");
+		
+		txtEntityIdCreated.setText("");
+		txtEntityKeyCreated.setText("");
 	}
 }
