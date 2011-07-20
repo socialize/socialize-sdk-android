@@ -129,7 +129,7 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 		builder.start(endpoint);
 		
 		if(!StringUtils.isEmpty(key)) {
-			builder.addParam("key", key);
+			builder.addParam("entity_key", key);
 		}
 		
 		if(ids != null) {

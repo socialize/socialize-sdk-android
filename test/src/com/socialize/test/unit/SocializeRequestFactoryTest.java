@@ -191,7 +191,7 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		
 		UrlBuilder builder = new UrlBuilder();
 		builder.start(endpoint);
-		builder.addParam("key", key);
+		builder.addParam("entity_key", key);
 		builder.addParams("id", ids);
 		
 		builder.addParam("first", "0");
@@ -234,7 +234,7 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		
 		UrlBuilder builder = new UrlBuilder();
 		builder.start(endpoint);
-		builder.addParam("key", key);
+		builder.addParam("entity_key", key);
 		builder.addParams("id", ids);
 		
 		builder.addParam("first", String.valueOf(start));
