@@ -99,6 +99,7 @@ public class AuthenticateActivity extends Activity {
 				txtConsumerSecret.setText(consumerSecret);
 				
 				final TextView txtAuthResult =  (TextView) findViewById(R.id.txtAuthResult);
+				final TextView txtAuthUserID =  (TextView) findViewById(R.id.txtAuthUserID);
 				
 				final Button authButton = (Button) findViewById(R.id.btnAuthenticate);
 				final Button btnApi = (Button) findViewById(R.id.btnApi);
@@ -135,6 +136,7 @@ public class AuthenticateActivity extends Activity {
 							public void onAuthSuccess(SocializeSession session) {
 								v.setEnabled(true);
 								txtAuthResult.setText("SUCCESS");
+								txtAuthUserID.setText(session.getUser().getId().toString());
 								
 								btnApi.setVisibility(View.VISIBLE);
 								

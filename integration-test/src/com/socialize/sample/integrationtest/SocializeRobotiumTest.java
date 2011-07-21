@@ -22,6 +22,7 @@
 package com.socialize.sample.integrationtest;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.widget.TextView;
 
 import com.jayway.android.robotium.solo.Solo;
 import com.socialize.sample.Main;
@@ -29,38 +30,54 @@ import com.socialize.sample.Main;
 /**
  * @author Jason Polites
  */
-public class SocializeRobotiumTest extends ActivityInstrumentationTestCase2<Main> {
-
-	protected Solo solo;
+public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestCase2<Main> {
+	
+	public static final int DEFAULT_TIMEOUT_SECONDS = 60;
+	public static final String DEFAULT_ENTITY_URL = "http://socialize.integration.tests.com";
+	public static final String DEFAULT_APPLICATION_NAME = "Socialize Android Sample App";
+	
+	protected Solo robotium;
 	
 	public SocializeRobotiumTest() {
 		super("com.socialize.sample", Main.class);
 	}
 	
 	public void setUp() throws Exception {
-		solo = new Solo(getInstrumentation(), getActivity());
-		solo.clickOnButton(0);
+		robotium = new Solo(getInstrumentation(), getActivity());
 	}
 	
-	public void testAuthenticate() {
-		authenticate();
-		solo.waitForText("SUCCESS", 1, 60);
-		assertTrue(solo.searchText("SUCCESS"));
+	/**
+	 * Returns the user ID from the call to authenticate.
+	 * @return
+	 */
+	protected int authenticate() {
+		robotium.clickOnButton(0);
+		
+		robotium.waitForActivity("AuthenticateActivity", DEFAULT_TIMEOUT_SECONDS);
+		
+		robotium.clickOnButton(0);
+		
+		robotium.waitForText("SUCCESS", 1, DEFAULT_TIMEOUT_SECONDS);
+		assertTrue(robotium.searchText("SUCCESS"));
+		
+		// Get the user Id
+		TextView txt = (TextView) robotium.getView(com.socialize.sample.R.id.txtAuthUserID);
+		
+		int userId = Integer.parseInt(txt.getText().toString());
 		
 		// go to API
-		solo.clickOnButton(1);
-		solo.waitForActivity("ApiActivity", 10);
-	}
-	
-//	public void testAddComment() {
-//		authenticate();
-//		solo.clickOnButton("Comment");
-//		solo.waitForActivity("CommentActivity", 5);
-//	}
-	
-	protected void authenticate() {
-		solo.clickOnButton(0);
-	}
-	
+		robotium.clickOnButton(1);
+		robotium.waitForActivity("ApiActivity", DEFAULT_TIMEOUT_SECONDS);
 
+		return userId;
+	}
+	
+	protected final void sleep(int milliseconds) {
+		synchronized (this) {
+			try {
+				wait(milliseconds);
+			}
+			catch (InterruptedException ignore) {}
+		}
+	}
 }
