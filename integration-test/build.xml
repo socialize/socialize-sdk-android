@@ -39,44 +39,7 @@
 	
 	<property name="test-output" value="test-output"/>
 
-<!-- extension targets. Uncomment the ones where you want to do custom work
-     in between standard targets -->
-<!--
-    <target name="-pre-build">
-    </target>
-    <target name="-pre-compile">
-    </target>
-
-    [This is typically used for code obfuscation.
-     Compiled code location: ${out.classes.absolute.dir}
-     If this is not done in place, override ${out.dex.input.absolute.dir}]
-    <target name="-post-compile">
-    </target>
--->
-
-    <!-- Execute the Android Setup task that will setup some properties
-         specific to the target, and import the build rules files.
-
-         The rules file is imported from
-            <SDK>/tools/ant/
-         Depending on the project type it can be either:
-         - main_rules.xml
-         - lib_rules.xml
-         - test_rules.xml
-
-         To customize existing targets, there are two options:
-         - Customize only one target:
-             - copy/paste the target into this file, *before* the
-               <setup> task.
-             - customize it to your needs.
-         - Customize the whole script.
-             - copy/paste the content of the rules files (minus the top node)
-               into this file, *after* the <setup> task
-             - disable the import of the rules by changing the setup task
-               below to <setup import="false" />.
-             - customize to your needs.
-    -->
-    <setup />
+	<setup />
 	
 	<target name="clean">
 	
@@ -88,6 +51,13 @@
 			<arg value="com.socialize.sample" />
 		</exec>
 		
+		<echo>Removing old installation of com.socialize.sample.integrationtest</echo>
+		
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="uninstall" />
+			<arg value="com.socialize.sample.integrationtest" />
+		</exec>		
 	</target>
 	
 	<target name="pull-reports">
@@ -102,6 +72,12 @@
 			<arg value="${junit.dump.path}" />
 		</exec>
 
+		<echo>Dumping logcat buffer</echo>
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="logcat" />
+			<arg value="-d" />
+		</exec>
 	</target>
 	
 	<target name="integration-test" depends="-install-tested-project, install">
