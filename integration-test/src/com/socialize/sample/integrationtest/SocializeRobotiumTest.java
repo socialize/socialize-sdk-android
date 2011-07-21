@@ -56,6 +56,9 @@ public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestC
 		catch (Throwable e) {
 			e.printStackTrace();
 		}
+		
+		getActivity().finish();
+		
 		super.tearDown();
 	}
 
