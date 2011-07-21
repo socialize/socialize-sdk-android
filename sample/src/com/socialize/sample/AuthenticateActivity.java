@@ -28,7 +28,6 @@ import java.util.Properties;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -55,121 +54,102 @@ public class AuthenticateActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		final ProgressDialog progress = ProgressDialog.show(this, "Initializing", "Please wait...");
-		
-		Bundle extras = this.getIntent().getExtras();
-		
-		boolean mock = false;
-		
-		if(extras != null) {
-			mock = extras.getBoolean("mock");
-		}
-		
-		final boolean isMock = mock;
-		
-		new AsyncTask<Void, Void, Void>() {
+		try {
+			loadConfig();
+			
+			setContentView(R.layout.authenticate);
+			
+			final SocializeConfig config = Socialize.getSocialize().getConfig();
 
-			@Override
-			protected Void doInBackground(Void... params) {
-				
-				loadConfig();
-				
-				if(isMock) {
-					Socialize.init(AuthenticateActivity.this, "socialize_beans.xml", "socialize_mock_beans.xml");
-				}
-				else {
-					Socialize.init(AuthenticateActivity.this);
-				}
-				
-				return null;
-			}
+			final EditText txtHost = (EditText) findViewById(R.id.txtHost);
+			final EditText txtConsumerKey = (EditText) findViewById(R.id.txtConsumerKey);
+			final EditText txtConsumerSecret = (EditText) findViewById(R.id.txtConsumerSecret);
+			
+			txtHost.setText(url);
+			txtConsumerKey.setText(consumerKey);
+			txtConsumerSecret.setText(consumerSecret);
+			
+			final TextView txtAuthResult =  (TextView) findViewById(R.id.txtAuthResult);
+			final TextView txtAuthUserID =  (TextView) findViewById(R.id.txtAuthUserID);
+			
+			final Button authButton = (Button) findViewById(R.id.btnAuthenticate);
+			final Button btnApi = (Button) findViewById(R.id.btnApi);
 
-			@Override
-			protected void onPostExecute(Void result) {
-				setContentView(R.layout.authenticate);
+			authButton.setOnClickListener(new OnClickListener() {
 				
-				final SocializeConfig config = Socialize.getSocialize().getConfig();
-
-				final EditText txtHost = (EditText) findViewById(R.id.txtHost);
-				final EditText txtConsumerKey = (EditText) findViewById(R.id.txtConsumerKey);
-				final EditText txtConsumerSecret = (EditText) findViewById(R.id.txtConsumerSecret);
-				
-				txtHost.setText(url);
-				txtConsumerKey.setText(consumerKey);
-				txtConsumerSecret.setText(consumerSecret);
-				
-				final TextView txtAuthResult =  (TextView) findViewById(R.id.txtAuthResult);
-				final TextView txtAuthUserID =  (TextView) findViewById(R.id.txtAuthUserID);
-				
-				final Button authButton = (Button) findViewById(R.id.btnAuthenticate);
-				final Button btnApi = (Button) findViewById(R.id.btnApi);
-
-				authButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(final View v) {
 					
-					@Override
-					public void onClick(final View v) {
+					v.setEnabled(false);
+					
+					String host = txtHost.getText().toString().trim();
+					String consumerKey = txtConsumerKey.getText().toString().trim();
+					String consumerSecret = txtConsumerSecret.getText().toString().trim();
+					
+					// Override the location for the API
+					config.setProperty(SocializeConfig.API_HOST, host);
+					
+					final ProgressDialog authProgress = ProgressDialog.show(AuthenticateActivity.this, "Authenticating", "Please wait...");
+					
+					Socialize.getSocialize().authenticate(consumerKey, consumerSecret, new SocializeAuthListener() {
 						
-						v.setEnabled(false);
-						
-						String host = txtHost.getText().toString().trim();
-						String consumerKey = txtConsumerKey.getText().toString().trim();
-						String consumerSecret = txtConsumerSecret.getText().toString().trim();
-						
-						// Override the location for the API
-						config.setProperty(SocializeConfig.API_HOST, host);
-						
-						final ProgressDialog authProgress = ProgressDialog.show(AuthenticateActivity.this, "Authenticating", "Please wait...");
-						
-						Socialize.getSocialize().authenticate(consumerKey, consumerSecret, new SocializeAuthListener() {
+						@Override
+						public void onError(SocializeException error) {
+							v.setEnabled(true);
+							txtAuthResult.setText("FAIL: " + ErrorHandler.handleApiError(AuthenticateActivity.this, error));
 							
-							@Override
-							public void onError(SocializeException error) {
-								v.setEnabled(true);
-								txtAuthResult.setText("FAIL: " + ErrorHandler.handleApiError(AuthenticateActivity.this, error));
-								
-								btnApi.setVisibility(View.GONE);
-								
-								authProgress.dismiss();
-							}
+							btnApi.setVisibility(View.GONE);
 							
-							@Override
-							public void onAuthSuccess(SocializeSession session) {
-								v.setEnabled(true);
-								txtAuthResult.setText("SUCCESS");
-								txtAuthUserID.setText(session.getUser().getId().toString());
-								
-								btnApi.setVisibility(View.VISIBLE);
-								
-								authProgress.dismiss();
-							}
+							authProgress.dismiss();
+						}
+						
+						@Override
+						public void onAuthSuccess(SocializeSession session) {
+							v.setEnabled(true);
+							txtAuthResult.setText("SUCCESS");
+							txtAuthUserID.setText(session.getUser().getId().toString());
 							
-							@Override
-							public void onAuthFail(SocializeException error) {
-								v.setEnabled(true);
-								txtAuthResult.setText("FAIL");
-								error.printStackTrace();
-								
-								btnApi.setVisibility(View.GONE);
-								
-								authProgress.dismiss();
-							}
-						});
-					}
-				});
-				
-				btnApi.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						Intent i = new Intent(AuthenticateActivity.this, ApiActivity.class);
-						startActivity(i);
-					}
-				});
-
-				progress.dismiss();
-			}
-		}.execute((Void)null);
-		
+							btnApi.setVisibility(View.VISIBLE);
+							
+							authProgress.dismiss();
+						}
+						
+						@Override
+						public void onAuthFail(SocializeException error) {
+							v.setEnabled(true);
+							txtAuthResult.setText("FAIL");
+							error.printStackTrace();
+							
+							btnApi.setVisibility(View.GONE);
+							
+							authProgress.dismiss();
+						}
+					});
+				}
+			});
+			
+			btnApi.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent i = new Intent(AuthenticateActivity.this, ApiActivity.class);
+					startActivity(i);
+				}
+			});
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
+	
+	
+
+	@Override
+	public void onBackPressed() {
+		// For some reason it looks like robotium is clicking the back button here!
+		// No idea why, but just removing this ablity to solve the problem.
+	}
+
+
 
 	@Override
 	protected void onDestroy() {

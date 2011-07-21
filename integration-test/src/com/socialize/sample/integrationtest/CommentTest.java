@@ -7,14 +7,11 @@ public class CommentTest extends SocializeRobotiumTest {
 
 	private int userId = -1;
 	
-	public void setUp() throws Exception {
-		super.setUp();
+	public void testCreateComment() {
 		userId = authenticate();
+		
 		robotium.clickOnButton("Comment");
 		robotium.waitForActivity("CommentActivity", DEFAULT_TIMEOUT_SECONDS);
-	}
-	
-	public void testCreateComment() {
 		
 		String comment = "Test Comment";
 		
@@ -26,7 +23,7 @@ public class CommentTest extends SocializeRobotiumTest {
 		
 		robotium.waitForText("SUCCESS", 1, DEFAULT_TIMEOUT_SECONDS);
 		
-		sleep(2000);
+		sleep(5000);
 		
 		TextView txt = (TextView) robotium.getCurrentActivity().findViewById(com.socialize.sample.R.id.txtCommentIdCreated);
 		

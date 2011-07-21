@@ -22,6 +22,7 @@
 package com.socialize.sample.integrationtest;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -31,47 +32,60 @@ import com.socialize.sample.Main;
  * @author Jason Polites
  */
 public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestCase2<Main> {
-	
-	public static final int DEFAULT_TIMEOUT_SECONDS = 60;
+
+	public static final int DEFAULT_TIMEOUT_SECONDS = 30;
 	public static final String DEFAULT_ENTITY_URL = "http://socialize.integration.tests.com";
 	public static final String DEFAULT_APPLICATION_NAME = "Socialize Android Sample App";
-	
+
 	protected Solo robotium;
-	
+
 	public SocializeRobotiumTest() {
 		super("com.socialize.sample", Main.class);
 	}
-	
+
 	public void setUp() throws Exception {
 		robotium = new Solo(getInstrumentation(), getActivity());
 	}
-	
+
+	@Override
+	protected void tearDown() throws Exception {
+		Log.e("SocializeRobotiumTest", "tearDown()");
+		try {
+			robotium.finalize();
+		} 
+		catch (Throwable e) {
+			e.printStackTrace();
+		}
+		super.tearDown();
+	}
+
 	/**
 	 * Returns the user ID from the call to authenticate.
 	 * @return
 	 */
 	protected int authenticate() {
-		robotium.clickOnButton(0);
+		robotium.clickOnButton("Launch Sample");
+
+		robotium.waitForActivity("AuthenticateActivity");
 		
-		robotium.waitForActivity("AuthenticateActivity", DEFAULT_TIMEOUT_SECONDS);
-		
-		robotium.clickOnButton(0);
-		
+		robotium.clickOnButton("Authenticate");
+
 		robotium.waitForText("SUCCESS", 1, DEFAULT_TIMEOUT_SECONDS);
-		assertTrue(robotium.searchText("SUCCESS"));
 		
+		assertTrue(robotium.searchText("SUCCESS"));
+
 		// Get the user Id
 		TextView txt = (TextView) robotium.getView(com.socialize.sample.R.id.txtAuthUserID);
-		
+
 		int userId = Integer.parseInt(txt.getText().toString());
-		
+
 		// go to API
-		robotium.clickOnButton(1);
+		robotium.clickOnButton("Access API");
 		robotium.waitForActivity("ApiActivity", DEFAULT_TIMEOUT_SECONDS);
 
 		return userId;
 	}
-	
+
 	protected final void sleep(int milliseconds) {
 		synchronized (this) {
 			try {
