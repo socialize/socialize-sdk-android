@@ -58,6 +58,13 @@
 			<arg value="uninstall" />
 			<arg value="com.socialize.sample.integrationtest" />
 		</exec>		
+		
+		<echo>Clearing logcat buffer</echo>
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="logcat" />
+			<arg value="-c" />
+		</exec>
 	</target>
 	
 	<target name="pull-reports">
