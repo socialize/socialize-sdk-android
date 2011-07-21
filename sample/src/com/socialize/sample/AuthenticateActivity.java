@@ -74,6 +74,7 @@ public class AuthenticateActivity extends Activity {
 			
 			final Button authButton = (Button) findViewById(R.id.btnAuthenticate);
 			final Button btnApi = (Button) findViewById(R.id.btnApi);
+			final Button btnExit = (Button) findViewById(R.id.btnExit);
 
 			authButton.setOnClickListener(new OnClickListener() {
 				
@@ -135,21 +136,24 @@ public class AuthenticateActivity extends Activity {
 					startActivity(i);
 				}
 			});
+			
+			btnExit.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					finish();
+				}
+			});
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	
-
 	@Override
 	public void onBackPressed() {
 		// For some reason it looks like robotium is clicking the back button here!
 		// No idea why, but just removing this ablity to solve the problem.
 	}
-
-
 
 	@Override
 	protected void onDestroy() {
