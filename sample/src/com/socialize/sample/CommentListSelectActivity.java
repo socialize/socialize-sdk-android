@@ -37,15 +37,23 @@ public class CommentListSelectActivity extends CommentBaseActivity {
 		setContentView(R.layout.comment_list_select);
 		final EditText txtCommentKey = (EditText) findViewById(R.id.txtCommentKey);
 		final Button btnCommentList = (Button) findViewById(R.id.btnCommentList);
+		
+		final EditText txtStart = (EditText) findViewById(R.id.txtStart);
+		final EditText txtEnd = (EditText) findViewById(R.id.txtEnd);
 
 		btnCommentList.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				String key = txtCommentKey.getText().toString();
+				String start = txtStart.getText().toString();
+				String end = txtEnd.getText().toString();
+				
 				if(!StringUtils.isEmpty(key)) {
 					Intent i = new Intent(CommentListSelectActivity.this, CommentListActivity.class);
 					i.putExtra("key", key);
+					i.putExtra("start", start);
+					i.putExtra("end", end);
 					startActivity(i);
 				}
 			}

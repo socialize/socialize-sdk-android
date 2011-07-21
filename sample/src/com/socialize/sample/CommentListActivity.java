@@ -40,6 +40,7 @@ import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.sample.util.ErrorHandler;
+import com.socialize.util.StringUtils;
 
 public class CommentListActivity<T extends SocializeObject> extends ListActivity {
 
@@ -55,10 +56,22 @@ public class CommentListActivity<T extends SocializeObject> extends ListActivity
 			
 			if(getIntent().getExtras() != null) {
 				String key = getIntent().getExtras().getString("key");
+				String start = getIntent().getExtras().getString("start");
+				String end = getIntent().getExtras().getString("end");
+				
+				int iStart = 0;
+				int iEnd = 100;
+				
+				if(!StringUtils.isEmpty(start)) {
+					iStart = Integer.parseInt(start);
+				}
+				if(!StringUtils.isEmpty(end)) {
+					iEnd = Integer.parseInt(end);
+				}
 				
 				final ProgressDialog progress = ProgressDialog.show(CommentListActivity.this, "Retrieving", "Please wait...");
 
-				Socialize.getSocialize().listCommentsByEntity(key, 0, 100, new CommentListListener() {
+				Socialize.getSocialize().listCommentsByEntity(key, iStart, iEnd, new CommentListListener() {
 
 					@Override
 					public void onError(SocializeException error) {
