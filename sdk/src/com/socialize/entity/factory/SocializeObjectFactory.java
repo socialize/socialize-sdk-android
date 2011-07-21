@@ -35,7 +35,7 @@ public abstract class SocializeObjectFactory<T extends SocializeObject> extends 
 	
 	@Override
 	protected void fromJSON(JSONObject from, T to) throws JSONException {
-		if(from.has("id")) {
+		if(from.has("id") && !from.isNull("id")) {
 			to.setId(from.getInt("id"));
 		}
 		postFromJSON(from, to);

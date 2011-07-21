@@ -22,81 +22,45 @@
 package com.socialize.sample;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-
-import com.socialize.Socialize;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 public class CommentActivity extends Activity {
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.comment);
+		setContentView(R.layout.comment_api);
 		
-		Socialize.init(this);
+		final Button btnCreateComment = (Button) findViewById(R.id.btnCreateComment);
+		final Button btnListComments = (Button) findViewById(R.id.btnListComments);
+		final Button btnGetComment = (Button) findViewById(R.id.btnGetComment);
 		
-//		final EditText txtKey = (EditText) findViewById(R.id.txtEntityKey);
-//		final EditText txtName = (EditText) findViewById(R.id.txtComment);
-//		final TextView txtCommentCreateResult = (TextView) findViewById(R.id.txtCommentCreateResult);
-//		
-//		final Button btnCommentCreate = (Button) findViewById(R.id.btnCommentCreate);
-//		
-//		if(Socialize.getSocialize().isAuthenticated()) {
-//			
-//			btnCommentCreate.setOnClickListener(new OnClickListener() {
-//				
-//				@Override
-//				public void onClick(View v) {
-//					
-//					txtCommentCreateResult.setText("");
-//					btnCommentCreate.setEnabled(false);
-//					
-//					String key = txtKey.getText().toString();
-//					String name = txtName.getText().toString();
-//					
-//					Socialize.getSocialize().addComment(key, name, new CommentAddListener() {
-//						@Override
-//						public void onError(SocializeException error) {
-//							btnCommentCreate.setEnabled(true);
-//							txtCommentCreateResult.setText("FAIL: " + ErrorHandler.handleApiError(CommentActivity.this, error));
-//						}
-//						
-//						@Override
-//						public void onCreate(Comment comment) {
-//							btnCommentCreate.setEnabled(true);
-//							txtCommentCreateResult.setText("SUCCESS");
-//							populateCommentData(comment);
-//						}
-//					});
-//				}
-//			});
-//		}
-//		else {
-//			// Not authorized, you would normally do a re-auth here
-//			txtCommentCreateResult.setText("AUTH FAIL");
-//		}
-	}
-
-	@Override
-	protected void onDestroy() {
-		Socialize.destroy(this);
-		super.onDestroy();
-	}
+		btnCreateComment.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(CommentActivity.this, CommentCreateActivity.class);
+				startActivity(i);
+			}
+		});
+		
+		btnGetComment.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(CommentActivity.this, CommentGetActivity.class);
+				startActivity(i);
+			}
+		});
 	
-//	private void populateCommentData(Comment comment) {
-//		final TextView txtCommentIdCreated = (TextView) findViewById(R.id.txtCommentIdCreated);
-//		final TextView txtCommentTextCreated = (TextView) findViewById(R.id.txtCommentTextCreated);
-//		final TextView txtEntityKeyCreated = (TextView) findViewById(R.id.txtEntityKeyCreated);
-//		
-//		if(comment.getId() != null) {
-//			txtCommentIdCreated.setText(comment.getId().toString());
-//		}
-//		
-//		if(comment.getText() != null) {
-//			txtCommentTextCreated.setText(comment.getText());
-//		}
-//		
-//		if(comment.getEntity() != null) {
-//			txtEntityKeyCreated.setText(comment.getEntity().getKey());
-//		}
-//	}
+		btnListComments.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(CommentActivity.this, CommentListSelectActivity.class);
+				startActivity(i);
+			}
+		});
+	}
 }

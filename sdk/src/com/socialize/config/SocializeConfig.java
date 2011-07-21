@@ -52,6 +52,8 @@ public class SocializeConfig {
 	public static final String HTTP_CONNECTION_TIMEOUT = "http.connection.timeout";
 	public static final String HTTP_SOCKET_TIMEOUT = "http.socket.timeout";
 	
+	public static final int MAX_LIST_RESULTS = 100;
+	
 	public SocializeConfig() {
 		super();
 	}

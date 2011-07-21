@@ -91,6 +91,9 @@ public class SocializeIOCTest extends SocializeActivityTest {
 		
 		// Check each bean
 		assertConfig((SocializeConfig) ioc.getBean("config"));
+		
+		// Check specific beans
+		checkCommentProvider(ioc);
 	}
 	
 	private void assertConfig(SocializeConfig config) {
@@ -101,5 +104,17 @@ public class SocializeIOCTest extends SocializeActivityTest {
 		Object bean = ioc.getBean(name);
 		assertNotNull(bean);
 		assertTrue(clazz.isAssignableFrom(bean.getClass()));
+	}
+	
+	private void checkCommentProvider(SocializeIOC ioc) {
+		Object bean = ioc.getBean("commentProvider");
+		checkDefaultSocializeProvider(bean);
+	}
+	
+	private void checkDefaultSocializeProvider(Object bean) {
+		assertNotNull(bean);
+		assertTrue((bean instanceof DefaultSocializeProvider));
+		DefaultSocializeProvider<?> provider = (DefaultSocializeProvider<?> ) bean;
+		assertNotNull(provider.getSessionPersister());
 	}
 }

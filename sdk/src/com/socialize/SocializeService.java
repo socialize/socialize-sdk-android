@@ -28,8 +28,13 @@ import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.listener.comment.CommentAddListener;
+import com.socialize.listener.comment.CommentGetListener;
+import com.socialize.listener.comment.CommentListListener;
+import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
+import com.socialize.listener.like.LikeGetListener;
 
 /**
  * The main Socialize Service.  This is the simplest entry point into the Socialize API.
@@ -93,6 +98,61 @@ public interface SocializeService {
 	 * @param likeDeleteListener A listener to handle callbacks from the delete.
 	 */
 	public void unlike(int id, LikeDeleteListener likeDeleteListener);
+	
+	/**
+	 * Retrieves a single like previously associated with an entity.
+	 * @param url The entity to which the like was originally associated.
+	 * @param likeGetListener
+	 */
+	public void getLike(String url, LikeGetListener likeGetListener);
+	
+	/**
+	 * Lists the comments associated with a url.
+	 * @param url The url to which the comments are associated.
+	 * @param commentListListener A listener to handle callbacks from the post.
+	 */
+	public void listCommentsByEntity(String url, CommentListListener commentListListener);
+	
+	/**
+	 * Lists the comments associated with a url.
+	 * @param url The url to which the comments are associated.
+	 * @param startIndex The starting index of the results for pagination.
+	 * @param endIndex The ending index of the results for pagination.
+	 * @param commentListListener A listener to handle callbacks from the post.
+	 */
+	public void listCommentsByEntity(String url, int startIndex, int endIndex, CommentListListener commentListListener);
+	
+	
+	/**
+	 * Retrieves a single comment based on its ID.
+	 * @param id The ID of the comment, returned when it was originally created.
+	 * @param commentGetListener
+	 */
+	public void getCommentById(int id, CommentGetListener commentGetListener);
+
+	/**
+	 * Retrieves a single url
+	 * @param url
+	 * @param listener
+	 */
+	public void getEntity(String url, EntityGetListener entityGetListener);
+	
+	/**
+	 * Adds a new comment and associates it with the url described.
+	 * @param url The url to which the comment is associated. Defined when first creating a url, or created on the fly with this call.
+	 * @param comment The comment to add.
+	 * @param location The location of the device at the time the call was made.
+	 * @param commentAddListener A listener to handle callbacks from the post.
+	 */
+	public void addComment(String url, String comment, Location location, CommentAddListener commentAddListener);
+
+	/**
+	 * Adds a new comment and associates it with the url described.
+	 * @param url The url to which the comment is associated. Defined when first creating a url, or created on the fly with this call.
+	 * @param comment The comment to add.
+	 * @param commentAddListener A listener to handle callbacks from the post.
+	 */
+	public void addComment(String url, String comment, CommentAddListener commentAddListener);
 
 	/**
 	 * Returns true if this SocializeService instance has been initialized.
@@ -120,28 +180,5 @@ public interface SocializeService {
 	 * @return
 	 */
 	public SocializeConfig getConfig();
-
-	/**
-	 * Lists the comments associated with a url.
-	 * @param session The current socialize session.
-	 * @param url The url url.  Defined when first creating a url, or created on the fly with this call.
-	 * @param commentListListener A listener to handle callbacks from the post.
-	 */
-//	public void listCommentsByEntity(String url, CommentListListener commentListListener);
-
-	/**
-	 * Retrieves a single url
-	 * @param url
-	 * @param listener
-	 */
-//	public void getEntity(String url, EntityGetListener entityGetListener);
-
-	/**
-	 * Adds a new comment and associates it with the url described.
-	 * @param url The url url.  Defined when first creating a url, or created on the fly with this call.
-	 * @param comment The comment to add.
-	 * @param commentAddListener A listener to handle callbacks from the post.
-	 */
-//	public void addComment(String url, String name, CommentAddListener commentAddListener);
 
 }

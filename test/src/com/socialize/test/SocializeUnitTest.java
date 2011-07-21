@@ -21,7 +21,8 @@
  */
 package com.socialize.test;
 
-import java.util.Stack;
+import java.util.LinkedList;
+import java.util.List;
 
 import android.test.AndroidTestCase;
 
@@ -30,23 +31,23 @@ import android.test.AndroidTestCase;
  *
  */
 public abstract class SocializeUnitTest extends AndroidTestCase {
-	private Stack<Object> bucket;
+	private List<Object> bucket;
 	
 	@Override
 	protected void setUp() throws Exception {
-		bucket = new Stack<Object>();
+		bucket = new LinkedList<Object>();
 		super.setUp();
 	}
 	
 	protected void addResult(Object obj) {
-		bucket.push(obj);
+		bucket.add(obj);
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected <T extends Object> T getResult() {
+	protected <T extends Object> T getNextResult() {
 		if(!bucket.isEmpty()) {
-			return (T) bucket.pop();
+			return (T) bucket.remove(0);
 		}
-		return null;
+		return (T) null;
 	}
 }

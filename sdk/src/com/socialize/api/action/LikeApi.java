@@ -28,7 +28,12 @@ import android.location.Location;
 
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
+import com.socialize.config.SocializeConfig;
+import com.socialize.entity.ActionError;
 import com.socialize.entity.Like;
+import com.socialize.entity.ListResult;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.like.LikeListener;
 import com.socialize.provider.SocializeProvider;
 
@@ -65,15 +70,59 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 	public void getLikesByEntity(SocializeSession session, String key, LikeListener listener) {
 		listAsync(session, ENDPOINT, key, null, listener);
 	}
+	
+	public void getLikesByEntity(SocializeSession session, String key, int startIndex, int endIndex, LikeListener listener) {
+		listAsync(session, ENDPOINT, key, null, startIndex, endIndex, listener);
+	}
+	
+	public void getLike(SocializeSession session, String key, final LikeListener listener) {
+		getLikesByEntity(session, key, 0, 1, new LikeListListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				if(listener != null) {
+					listener.onError(error);
+				}
+			}
+			
+			@Override
+			public void onList(ListResult<Like> entities) {
+				
+				if(listener != null) {
+					if(entities != null && entities.getResults() != null && entities.getResults().size() > 0) {
+						listener.onGet(entities.getResults().get(0));
+					}
+					else {
+						List<ActionError> errors = entities.getErrors();
+						
+						if(errors != null && errors.size() > 0) {
+							listener.onError(new SocializeException(errors.get(0).getMessage()));
+						}
+						else {
+							listener.onError(new SocializeException("No like found"));
+						}
+					}
+				}
+			}
+		});
+	}
 
 	public void getLikesById(SocializeSession session, LikeListener listener, int...ids) {
-		String[] strIds = new String[ids.length];
 		
-		for (int i = 0; i < ids.length; i++) {
-			strIds[i] = String.valueOf(ids[i]);
+		if(ids != null) {
+			String[] strIds = new String[ids.length];
+			
+			for (int i = 0; i < ids.length; i++) {
+				strIds[i] = String.valueOf(ids[i]);
+			}
+			
+			listAsync(session, ENDPOINT, null, strIds, 0, SocializeConfig.MAX_LIST_RESULTS, listener);
 		}
-		
-		listAsync(session, ENDPOINT, null, strIds, listener);
+		else {
+			if(listener != null) {
+				listener.onError(new SocializeException("No ids supplied"));
+			}
+		}
 	}
 	
 	public void getLike(SocializeSession session, int id, LikeListener listener) {

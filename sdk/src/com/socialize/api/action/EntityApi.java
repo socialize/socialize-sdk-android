@@ -26,6 +26,7 @@ import java.util.List;
 
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.listener.entity.EntityListener;
 import com.socialize.provider.SocializeProvider;
@@ -58,7 +59,7 @@ public class EntityApi extends SocializeApi<Entity, SocializeProvider<Entity>> {
 	}
 
 	public void listEntities(SocializeSession session, EntityListener listener, String...keys) {
-		listAsync(session, ENDPOINT, null, keys, listener);
+		listAsync(session, ENDPOINT, null, keys, 0, SocializeConfig.MAX_LIST_RESULTS, listener);
 	}
 	
 }

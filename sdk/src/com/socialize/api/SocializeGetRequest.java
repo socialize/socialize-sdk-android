@@ -30,6 +30,9 @@ public class SocializeGetRequest extends SocializeRequest {
 	private String[] ids;
 	private String key;
 
+	private int startIndex = 0;
+	private int endIndex = 100;
+	
 	protected String[] getIds() {
 		return ids;
 	}
@@ -44,5 +47,21 @@ public class SocializeGetRequest extends SocializeRequest {
 
 	public void setKey(String key) {
 		this.key = key;
+	}
+
+	public int getStartIndex() {
+		return startIndex;
+	}
+
+	public void setStartIndex(int startIndex) {
+		this.startIndex = startIndex;
+	}
+
+	public int getEndIndex() {
+		return endIndex;
+	}
+
+	public void setEndIndex(int endIndex) {
+		this.endIndex = endIndex;
 	}
 }

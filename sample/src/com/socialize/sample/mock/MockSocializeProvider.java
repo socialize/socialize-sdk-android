@@ -89,6 +89,11 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 	}
 
 	@Override
+	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex) throws SocializeException {
+		return makeMockListResult(ids);
+	}
+
+	@Override
 	public void delete(SocializeSession session, String endpoint, String id) throws SocializeException {}
 	
 	protected ListResult<T> makeListResult(Collection<T> objects) {

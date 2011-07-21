@@ -4,10 +4,7 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/socialize-sdk-sample"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="lib" path="robotium/robotium-solo-2.3.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/socialize-sdk-integration-test/robotium/robotium-solo-2.3-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="libs/polidea_test_runner_1.1.jar"/>
+	<classpathentry kind="lib" path="libs/robotium-solo-2.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

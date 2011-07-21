@@ -64,7 +64,8 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	
 	public static final String JSON_ATTR_ERRORS = "errors";
 	public static final String JSON_ATTR_ITEMS = "items";
-
+	public static final String JSON_ATTR_COUNT = "total_count";
+	
 	private SocializeObjectFactory<T> objectFactory;
 	private SocializeObjectFactory<User> userFactory;
 	private ErrorFactory errorFactory;
@@ -83,6 +84,8 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		super();
 		this.context = context;
 	}
+	
+	public void init() {}
 	
 	public void setObjectFactory(SocializeObjectFactory<T> objectFactory) {
 		this.objectFactory = objectFactory;
@@ -122,15 +125,6 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	
 	public void setSessionFactory(SocializeSessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
-	}
-
-	// TODO: remove?
-	public void init() {
-		java.util.logging.Logger.getLogger("httpclient.wire.headers").setLevel(java.util.logging.Level.FINEST);
-		java.util.logging.Logger.getLogger("httpclient.wire.content").setLevel(java.util.logging.Level.FINEST);
-		java.util.logging.Logger.getLogger("org.apache.http.wire.headers").setLevel(java.util.logging.Level.FINEST);
-		java.util.logging.Logger.getLogger("org.apache.http.wire.content").setLevel(java.util.logging.Level.FINEST);
-		java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.FINEST);
 	}
 	
 	@Override
@@ -291,6 +285,13 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	}
 
 	@Override
+	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex) throws SocializeException {
+		endpoint = prepareEndpoint(session, endpoint);
+		HttpUriRequest request = requestFactory.getListRequest(session, endpoint, key, ids, startIndex, endIndex);
+		return doListTypeRequest(request);
+	}
+
+	@Override
 	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
 		endpoint = prepareEndpoint(session, endpoint);
 		HttpUriRequest request = requestFactory.getListRequest(session, endpoint, key, ids);
@@ -390,6 +391,10 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 					
 					result.setResults(results);
 				}
+				
+				if(object.has(JSON_ATTR_COUNT) && !object.isNull(JSON_ATTR_COUNT)) {
+					result.setTotalCount(object.getInt(JSON_ATTR_COUNT));
+				}
 			}
 		}
 		catch (Exception e) {
@@ -473,6 +478,8 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			}
 		}
 	}
-	
-	
+
+	public SocializeSessionPersister getSessionPersister() {
+		return sessionPersister;
+	}
 }

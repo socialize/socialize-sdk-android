@@ -67,7 +67,7 @@ public class EntityApiTest extends SocializeUnitTest {
 		
 		api.createEntity(session, key, name, listener);
 		
-		List<Entity> result = getResult();
+		List<Entity> result = getNextResult();
 		
 		assertNotNull(result);
 		assertEquals(1, result.size());
@@ -94,7 +94,7 @@ public class EntityApiTest extends SocializeUnitTest {
 		
 		api.getEntity(session, key, listener);
 		
-		String strId = getResult();
+		String strId = getNextResult();
 		
 		assertNotNull(strId);
 		assertEquals(key, strId);
@@ -106,7 +106,7 @@ public class EntityApiTest extends SocializeUnitTest {
 		
 		EntityApi api = new EntityApi(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeActionListener listener) {
+			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(ids);
 				assertNull(key);
 			}
@@ -114,7 +114,7 @@ public class EntityApiTest extends SocializeUnitTest {
 		
 		api.listEntities(session, listener, keys);
 		
-		String[] after = getResult();
+		String[] after = getNextResult();
 		
 		assertNotNull(after);
 		

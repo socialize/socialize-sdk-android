@@ -287,6 +287,62 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		assertTrue(result);
 	}
 	
+	public void testListenerOnListCalledOnLISTPaginated() throws Throwable {
+		
+		final SocializeActionListener listener = new AbstractSocializeListener<SocializeObject>() {
+
+			@Override
+			public void onError(SocializeException error) {
+				fail();
+			}
+
+			@Override
+			public void onGet(SocializeObject entity) {
+				fail();
+			}
+
+			@Override
+			public void onList(ListResult<SocializeObject> result) {
+				addResult(true);
+			}
+
+			@Override
+			public void onUpdate(SocializeObject entity) {
+				fail();
+			}
+
+			@Override
+			public void onCreate(SocializeObject entity) {
+				fail();
+			}
+			
+			@Override
+			public void onDelete() {
+				fail();
+			}
+		};
+		
+		CountDownLatch signal = new CountDownLatch(1); 
+		
+		final String key = "foo";
+		final String[] ids = {"bar"};
+		final int start = 0, end = 10;
+		
+		runTestOnUiThread(new Runnable() {
+			public void run() {
+				api.listAsync(session, key, key, ids, start, end, listener);
+			}
+		});
+		
+		// Just wait for async process to finish
+		signal.await(500, TimeUnit.MILLISECONDS);
+		
+		Boolean result = getResult();
+		
+		assertNotNull(result);
+		assertTrue(result);
+	}
+	
 	public void testListenerOnCreateCalledOnPOST() throws Throwable {
 		final SocializeActionListener listener = new AbstractSocializeListener<SocializeObject>() {
 

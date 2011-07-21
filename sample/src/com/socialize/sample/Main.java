@@ -22,35 +22,74 @@
 package com.socialize.sample;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+
+import com.socialize.Socialize;
 
 public class Main extends Activity {
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         setContentView(R.layout.main);
+        
         Button btn = (Button) findViewById(R.id.btnSample);
         Button btnMock = (Button) findViewById(R.id.btnSampleWithMocks);
+        
         btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(Main.this, AuthenticateActivity.class);
-				startActivity(i);
+				startSocialize(false);
 			}
 		});
         
         btnMock.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(Main.this, AuthenticateActivity.class);
-				i.putExtra("mock", true);
-				startActivity(i);
+				startSocialize(true);
 			}
 		});
     }
+
+	public void onBackPressed() {
+		Log.e("Main", "Back button pushed");
+		super.onBackPressed();
+	}
+	
+	public void startSocialize(final boolean isMock) {
+		
+		final ProgressDialog progress = ProgressDialog.show(Main.this, "Initializing", "Please wait...");
+		
+		new AsyncTask<Void, Void, Void>() {
+
+			@Override
+			protected Void doInBackground(Void... params) {
+				
+				if(isMock) {
+					Socialize.init(Main.this, "socialize_beans.xml", "socialize_mock_beans.xml");
+				}
+				else {
+					Socialize.init(Main.this);
+				}
+				
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(Void result) {
+				progress.dismiss();
+				Intent i = new Intent(Main.this, AuthenticateActivity.class);
+				startActivity(i);
+			}
+		}.execute((Void)null);
+	}
+    
 }

@@ -24,8 +24,11 @@ package com.socialize.api.action;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.location.Location;
+
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.provider.SocializeProvider;
@@ -41,10 +44,15 @@ public class CommentApi extends SocializeApi<Comment, SocializeProvider<Comment>
 		super(provider);
 	}
 
-	public void addComment(SocializeSession session, String key, String comment, CommentListener listener) {
+	public void addComment(SocializeSession session, String key, String comment, Location location, CommentListener listener) {
 		Comment c = new Comment();
 		c.setText(comment);
 		c.setEntityKey(key);
+		
+		if(location != null) {
+			c.setLat(location.getLatitude());
+			c.setLon(location.getLongitude());
+		}
 		
 		List<Comment> list = new ArrayList<Comment>(1);
 		list.add(c);
@@ -55,6 +63,10 @@ public class CommentApi extends SocializeApi<Comment, SocializeProvider<Comment>
 	public void getCommentsByEntity(SocializeSession session, String key, CommentListener listener) {
 		listAsync(session, ENDPOINT, key, null, listener);
 	}
+	
+	public void getCommentsByEntity(SocializeSession session, String key, int startIndex, int endIndex, CommentListener listener) {
+		listAsync(session, ENDPOINT, key, null, startIndex, endIndex, listener);
+	}
 
 	public void getCommentsById(SocializeSession session, CommentListener listener, int...ids) {
 		String[] strIds = new String[ids.length];
@@ -63,7 +75,8 @@ public class CommentApi extends SocializeApi<Comment, SocializeProvider<Comment>
 			strIds[i] = String.valueOf(ids[i]);
 		}
 		
-		listAsync(session, ENDPOINT, null, strIds, listener);
+		// No need for pagination here really
+		listAsync(session, ENDPOINT, null, strIds, 0, SocializeConfig.MAX_LIST_RESULTS, listener);
 	}
 	
 	public void getComment(SocializeSession session, int id, CommentListener listener) {

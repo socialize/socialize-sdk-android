@@ -3,20 +3,31 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
-
+    android:orientation="vertical" 
+    android:background="#38444f">
+    
+    <ImageView 
+    	android:src="@drawable/socialize_trans_bg_light" 
+    	android:layout_height="wrap_content" 
+    	android:layout_width="wrap_content"
+    	android:layout_gravity="center_vertical|left"
+    	android:padding="10dip"/>
+    	
 	<Button
 		android:id="@+id/btnSample"
 		android:text="Launch Sample" 
 		android:layout_gravity="center_vertical|center_horizontal"
 		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"/>
+		android:layout_width="fill_parent"
+		android:textSize="12pt"
+		android:layout_margin="10dip"/>
 		
 	<Button
 		android:id="@+id/btnSampleWithMocks"
 		android:text="Launch Sample With Mocks" 
 		android:layout_gravity="center_vertical|center_horizontal"
 		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"/>
+		android:layout_width="fill_parent"
+		android:layout_margin="10dip"/>
 
 </LinearLayout>

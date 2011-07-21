@@ -1,4 +1,4 @@
 # Local configuration for sample app
 #socialize.consumer.key=
 #socialize.consumer.secret=
-#socialize.api.url=api.getsocialize.com/v1
+#socialize.api.url=http://api.getsocialize.com/v1

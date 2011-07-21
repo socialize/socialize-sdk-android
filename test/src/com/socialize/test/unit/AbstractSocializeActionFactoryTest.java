@@ -64,10 +64,11 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 	
 	protected Double lat = new Double(10);
 	protected Double lon = new Double(20);
-	protected Date date = new Date();
+	protected Date date = new Date(1311193971000L);
 	protected Integer id = new Integer(10000);
+	protected String entity_key = "foobar";
 	
-	protected final DateFormat UTC_FORMAT = new SimpleDateFormat(SocializeObjectFactory.DATE_FORMAT_STRING);
+	protected final DateFormat DATE_FORMAT_STRING = new SimpleDateFormat(SocializeObjectFactory.DATE_FORMAT_STRING);
 	
 	@UsesMocks({Application.class, User.class, Entity.class, ApplicationFactory.class, UserFactory.class, EntityFactory.class})
 	@Override
@@ -94,10 +95,9 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		appFactoryMock = AndroidMock.createMock(ApplicationFactory.class);
 		userFactoryMock = AndroidMock.createMock(UserFactory.class);
 		entityFactoryMock = AndroidMock.createMock(EntityFactory.class);
-		
-		action = AndroidMock.createNiceMock(getActionClass());
 
-		json = AndroidMock.createNiceMock(JSONObject.class);
+		json = AndroidMock.createMock(JSONObject.class);
+		action = AndroidMock.createMock(getActionClass());
 		
 		factory = createFactory();
 		factory.setApplicationFactory(appFactoryMock);
@@ -119,12 +119,13 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		AndroidMock.expect(json.put("id", id)).andReturn(json);
 		AndroidMock.expect(json.put("lat", lat)).andReturn(json);
 		AndroidMock.expect(json.put("lon", lon)).andReturn(json);
-		AndroidMock.expect(json.put("date",UTC_FORMAT.format(date))).andReturn(json);
+		AndroidMock.expect(json.put("date",DATE_FORMAT_STRING.format(date))).andReturn(json);
 		
 		AndroidMock.expect(action.getId()).andReturn(id);
 		AndroidMock.expect(action.getApplication()).andReturn(application);
 		AndroidMock.expect(action.getUser()).andReturn(user);
 		AndroidMock.expect(action.getEntity()).andReturn(entity);
+		AndroidMock.expect(action.getEntityKey()).andReturn(entity_key);
 		AndroidMock.expect(action.getLat()).andReturn(lat);
 		AndroidMock.expect(action.getLon()).andReturn(lon);
 		AndroidMock.expect(action.getDate()).andReturn(date.getTime());
@@ -138,16 +139,39 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		
 		setupToJSONExpectations();
 		
+		AndroidMock.replay(json);
+		AndroidMock.replay(action);
+		
 		factory.toJSON(action);
 		
 		doToJSONVerify();
+		
+		AndroidMock.verify(json);
+		AndroidMock.verify(action);
 	}
 	
 	public void testFromJSON() throws JSONException, ParseException {
 		
+	
+		action.setId(id);
+		action.setLat(lat);
+		action.setLon(lon);
+		action.setDate(date.getTime());
+		
 		AndroidMock.expect(json.has("application")).andReturn(true);
+		AndroidMock.expect(json.isNull("application")).andReturn(false);
+		
 		AndroidMock.expect(json.has("user")).andReturn(true);
+		AndroidMock.expect(json.isNull("user")).andReturn(false);
+		
 		AndroidMock.expect(json.has("entity")).andReturn(true);
+		AndroidMock.expect(json.isNull("entity")).andReturn(false);
+		
+		AndroidMock.expect(json.has("entity_key")).andReturn(false);
+		
+		AndroidMock.expect(json.has("id")).andReturn(true);
+		AndroidMock.expect(json.isNull("id")).andReturn(false);
+		AndroidMock.expect(json.getInt("id")).andReturn(id);
 		
 		AndroidMock.expect(json.getJSONObject("application")).andReturn(jsonApplication);
 		AndroidMock.expect(json.getJSONObject("user")).andReturn(jsonUser);
@@ -165,9 +189,13 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		AndroidMock.expect(json.has("lon")).andReturn(true);
 		AndroidMock.expect(json.has("date")).andReturn(true);
 		
+		AndroidMock.expect(json.isNull("lat")).andReturn(false);
+		AndroidMock.expect(json.isNull("lon")).andReturn(false);
+		AndroidMock.expect(json.isNull("date")).andReturn(false);
+		
 		AndroidMock.expect((Double)json.getDouble("lat")).andReturn(lat);
 		AndroidMock.expect((Double)json.getDouble("lon")).andReturn(lon);
-		AndroidMock.expect(json.getString("date")).andReturn(UTC_FORMAT.format(date));
+		AndroidMock.expect(json.getString("date")).andReturn(DATE_FORMAT_STRING.format(date));
 		
 		AndroidMock.replay(appFactoryMock);
 		AndroidMock.replay(userFactoryMock);
@@ -175,9 +203,15 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		
 		setupFromJSONExpectations();
 		
+		AndroidMock.replay(json);
+		AndroidMock.replay(action);
+		
 		factory.fromJSON(json);
 		
 		doFromJSONVerify();
+		
+		AndroidMock.verify(json);
+		AndroidMock.verify(action);
 	}
 	
 	
