@@ -1,0 +1,22 @@
+Release v0.2.0
+==================
+
+[bug] Making multiple 'like' requests to the same entity results in new entity objects being created [ NOIT ]
+
+[bug] Getting Started Guide missing ');' [ ]
+
+[feature] Get entity [ NOIT ]
+
+[feature] Developer gets paginated results [ NOIT ]
+
+[bug] Multiple operations as anonymous user creates a new user each time [ NOIT ]
+
+[feature] List comments for entity [ NOIT ]
+
+[feature] Get like for entity [ NOIT ]
+
+[feature] Get comment [ NOIT ]
+
+[feature] Create comment on entity [ ]
+
+[feature] List likes for entity [ NOIT ]
