@@ -7,11 +7,16 @@ public class CommentTest extends SocializeRobotiumTest {
 
 	private int userId = -1;
 	
-	public void testCreateComment() {
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
 		userId = authenticate();
 		
 		robotium.clickOnButton("Comment");
 		robotium.waitForActivity("CommentActivity", DEFAULT_TIMEOUT_SECONDS);
+	}
+
+	public void testCreateComment() {
 		
 		String comment = "Test Comment";
 		
@@ -61,5 +66,4 @@ public class CommentTest extends SocializeRobotiumTest {
 		
 		assertEquals(userId, Integer.parseInt(value));
 	}
-	
 }
