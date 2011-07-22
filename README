@@ -1,5 +1,5 @@
-Release v0.2.0
-==================
+Release Notes v0.2.0
+++++++++++++++++++++++++++++++
 
 [bug] Making multiple 'like' requests to the same entity results in new entity objects being created [ NOIT ]
 
