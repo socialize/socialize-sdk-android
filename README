@@ -1,38 +1,50 @@
-Release Notes v0.2.0
-++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Quick Start Guide
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-[bug] Making multiple 'like' requests to the same entity results in new entity objects being created [ NOIT ]
+1. Download the pre-packaged SDK ZIP file at https://github.com/socialize/socialize-sdk-android/downloads
+2. Unzip the SDK.
+3. Open the GettingStarted.html file located in the root of the ZIP.
+4. Integrate Socialize.
+5. Retire to a beach because your app is now so darn good.
 
-[bug] Getting Started Guide missing ');' [ ]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Release Notes 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-[feature] Get entity [ NOIT ]
+v0.2.0
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-[feature] Developer gets paginated results [ NOIT ]
+[bug] Making multiple 'like' requests to the same entity results in new entity objects being created
 
-[bug] Multiple operations as anonymous user creates a new user each time [ NOIT ]
+[bug] Getting Started Guide missing ');' 
 
-[feature] List comments for entity [ NOIT ]
+[feature] Get entity
 
-[feature] Get like for entity [ NOIT ]
+[feature] Developer gets paginated results
 
-[feature] Get comment [ NOIT ]
+[bug] Multiple operations as anonymous user creates a new user each time
 
-[feature] Create comment on entity [ ]
+[feature] List comments for entity
 
-[feature] List likes for entity [ NOIT ]
+[feature] Get like for entity
 
+[feature] Get comment
 
-Release Notes v0.1.0.1
-++++++++++++++++++++++++++++++++++++
-[bug] API url is incorrect in config [ ]
+[feature] Create comment on entity 
 
+[feature] List likes for entity
 
-Release Notes v0.1.0
-++++++++++++++++++++++++++++++++++++
-[feature] Like an entity [ NOIT]
+v0.1.0.1
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] API url is incorrect in config 
 
-[feature] Unlike an entity [ NOIT]
+v0.1.0
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Like an entity
 
-[feature] Authenticate user [ ]
+[feature] Unlike an entity
 
-[feature] Device will send agent in request [ ]
+[feature] Authenticate user 
+
+[feature] Device will send agent in request 

@@ -27,11 +27,13 @@ import android.location.Location;
 import com.socialize.api.action.CommentApi;
 import com.socialize.api.action.EntityApi;
 import com.socialize.api.action.LikeApi;
+import com.socialize.api.action.ViewApi;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.listener.entity.EntityListener;
 import com.socialize.listener.like.LikeListener;
+import com.socialize.listener.view.ViewListener;
 import com.socialize.net.HttpClientFactory;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.StringUtils;
@@ -48,6 +50,7 @@ public class SocializeApiHost {
 	private CommentApi commentApi;
 	private EntityApi entityApi;
 	private LikeApi likeApi;
+	private ViewApi viewApi;
 	
 	public SocializeApiHost(Context context) {
 		super();
@@ -105,6 +108,10 @@ public class SocializeApiHost {
 		likeApi.addLike(session, key, location, listener);
 	}
 	
+	public void addView(SocializeSession session, String key, Location location, ViewListener listener) {
+		viewApi.addView(session, key, location, listener);
+	}
+	
 	public void deleteLike(SocializeSession session, int id, LikeListener listener) {
 		likeApi.deleteLike(session, id, listener);
 	}
@@ -159,5 +166,11 @@ public class SocializeApiHost {
 		this.likeApi = likeApi;
 	}
 
+	public ViewApi getViewApi() {
+		return viewApi;
+	}
 
+	public void setViewApi(ViewApi viewApi) {
+		this.viewApi = viewApi;
+	}
 }
