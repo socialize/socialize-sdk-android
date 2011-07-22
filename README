@@ -20,3 +20,19 @@ Release Notes v0.2.0
 [feature] Create comment on entity [ ]
 
 [feature] List likes for entity [ NOIT ]
+
+
+Release Notes v0.1.0.1
+++++++++++++++++++++++++++++++++++++
+[bug] API url is incorrect in config [ ]
+
+
+Release Notes v0.1.0
+++++++++++++++++++++++++++++++++++++
+[feature] Like an entity [ NOIT]
+
+[feature] Unlike an entity [ NOIT]
+
+[feature] Authenticate user [ ]
+
+[feature] Device will send agent in request [ ]
