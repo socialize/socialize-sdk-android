@@ -35,6 +35,7 @@ import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
+import com.socialize.listener.view.ViewAddListener;
 
 /**
  * The main Socialize Service.  This is the simplest entry point into the Socialize API.
@@ -91,6 +92,21 @@ public interface SocializeService {
 	 * @param likeAddListener A listener to handle callbacks from the post.
 	 */
 	public void like(String url, Location location, LikeAddListener likeAddListener);
+	
+	/**
+	 * Adds a new view and associates it with the url described.
+	 * @param url The url being viewed.  Defined when first creating a url, or created on the fly with this call.
+	 * @param viewAddListener A listener to handle callbacks from the post.
+	 */
+	public void view(String url, ViewAddListener viewAddListener);
+	
+	/**
+	 * Adds a new view and associates it with the url described.
+	 * @param url The url being viewed.  Defined when first creating a url, or created on the fly with this call.
+	 * @param location The location of the device at the time the call was made.
+	 * @param viewAddListener A listener to handle callbacks from the post.
+	 */
+	public void view(String url, Location location, ViewAddListener viewAddListener);
 
 	/**
 	 * Removes a specific LIKE based on it's unique ID.  The ID would be returned from the original creation call.

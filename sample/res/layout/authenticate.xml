@@ -6,68 +6,90 @@
     android:orientation="vertical" 
     android:background="#38444f">
     
-    <ImageView 
-    	android:src="@drawable/socialize_trans_bg_light" 
-    	android:layout_height="wrap_content" 
-    	android:layout_width="wrap_content"
-    	android:layout_gravity="center_vertical|left"
-    	android:padding="10dip"/>
-    	
-    
-	<EditText
-		android:id="@+id/txtHost"
-        android:textSize="12dp"
-        android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"/>
-    
-	<EditText
-		android:id="@+id/txtConsumerKey"
-        android:textSize="12dp"
-        android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"/>
-        
-	<EditText
-		android:id="@+id/txtConsumerSecret"
-        android:textSize="12dp"
-        android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"/>
-        
-    <LinearLayout 
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal"
-	    android:layout_marginBottom="12dip">
-			<Button
-				android:id="@+id/btnAuthenticate"
-				android:text="Authenticate" 
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"/>
-			<TextView
-				android:id="@+id/txtAuthResult"
-	            android:padding="3dip" 
-	            android:textSize="12dp"
-	            android:layout_width="wrap_content"
-	   			android:layout_height="wrap_content"/>
-	   			
-	   		<TextView
-				android:id="@+id/txtAuthUserID"
-	            android:padding="3dip" 
-	            android:textSize="12dp"
-	            android:layout_width="wrap_content"
-	   			android:layout_height="wrap_content"/>
-    </LinearLayout>
-    
     <LinearLayout 
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical">
+		    
+	    <ImageView 
+	    	android:src="@drawable/socialize_trans_bg_light" 
+	    	android:layout_height="wrap_content" 
+	    	android:layout_width="wrap_content"
+	    	android:layout_gravity="center_vertical|left"
+	    	android:padding="10dip"/>
+	    	
+	    
+		<EditText
+			android:id="@+id/txtHost"
+	        android:textSize="12dp"
+	        android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"/>
+	    
+		<EditText
+			android:id="@+id/txtConsumerKey"
+	        android:textSize="12dp"
+	        android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"/>
+	        
+		<EditText
+			android:id="@+id/txtConsumerSecret"
+	        android:textSize="12dp"
+	        android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"/>
+	        
+	    <LinearLayout 
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal"
+		    android:layout_marginBottom="12dip">
+				<Button
+					android:id="@+id/btnAuthenticate"
+					android:text="Authenticate" 
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"/>
+				<TextView
+					android:id="@+id/txtAuthResult"
+		            android:padding="3dip" 
+		            android:textSize="12dp"
+		            android:layout_width="wrap_content"
+		   			android:layout_height="wrap_content"/>
+		   			
+		   		<TextView
+					android:id="@+id/txtAuthUserID"
+		            android:padding="3dip" 
+		            android:textSize="12dp"
+		            android:layout_width="wrap_content"
+		   			android:layout_height="wrap_content"/>
+	    </LinearLayout>	    
+	    
+	</LinearLayout>
+    
+
+    
+
+    
+    <FrameLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical"
+	    android:layout_weight="1">
+	    
 		 	<Button
 				android:id="@+id/btnApi"
 				android:text="Access API" 
 				android:visibility="gone"
 				android:layout_height="wrap_content"
 				android:layout_width="fill_parent"
+				android:layout_gravity="top"
 				android:textSize="12dp"/>
-    </LinearLayout>
+				
+			<Button
+				android:id="@+id/btnExit"
+				android:text="Exit" 
+				android:layout_height="wrap_content"
+				android:layout_width="fill_parent"
+				android:layout_gravity="bottom"
+				android:textSize="12dp"/>
+    </FrameLayout>
 
 </LinearLayout>
