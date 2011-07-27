@@ -19,52 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api;
+package com.socialize.listener.view;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import com.socialize.entity.ListResult;
+import com.socialize.entity.View;
+import com.socialize.listener.AbstractSocializeListener;
 
 /**
  * @author Jason Polites
  *
- * @param <T>
  */
-public class SocializeEntityResponse<T> implements SocializeResponse {
-
-	private ListResult<T> results;
-
-
-	public ListResult<T> getResults() {
-		return results;
-	}
-	public void setResults(ListResult<T> results) {
-		this.results = results;
-	}
-	
-	public synchronized void addResult(T result) {
-		
-		if(results == null) results = new ListResult<T>();
-		
-		List<T> list = results.getItems();
-		
-		if(list == null) {
-			list = new LinkedList<T>();
-			results.setItems(list);
-		}
-		
-		list.add(result);
-	}
-	
-	public synchronized T getFirstResult() {
-		if(results != null) {
-			List<T> list = results.getItems();
-			if(list != null) {
-				return list.get(0);
-			}
-		}
-		return null;
-	}
-	
-}
+public abstract class ViewListener extends AbstractSocializeListener<View> {}

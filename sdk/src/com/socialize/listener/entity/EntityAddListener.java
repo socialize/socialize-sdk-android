@@ -19,52 +19,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api;
+package com.socialize.listener.entity;
 
-import java.util.LinkedList;
-import java.util.List;
 
+import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
+
 
 /**
  * @author Jason Polites
  *
- * @param <T>
  */
-public class SocializeEntityResponse<T> implements SocializeResponse {
+public abstract class EntityAddListener extends EntityListener {
 
-	private ListResult<T> results;
+	@Override
+	public final void onGet(Entity entity) {}
 
+	@Override
+	public final void onList(ListResult<Entity> entities) {}
 
-	public ListResult<T> getResults() {
-		return results;
-	}
-	public void setResults(ListResult<T> results) {
-		this.results = results;
-	}
+	@Override
+	public final void onUpdate(Entity entity) {}
 	
-	public synchronized void addResult(T result) {
-		
-		if(results == null) results = new ListResult<T>();
-		
-		List<T> list = results.getItems();
-		
-		if(list == null) {
-			list = new LinkedList<T>();
-			results.setItems(list);
-		}
-		
-		list.add(result);
-	}
-	
-	public synchronized T getFirstResult() {
-		if(results != null) {
-			List<T> list = results.getItems();
-			if(list != null) {
-				return list.get(0);
-			}
-		}
-		return null;
-	}
-	
+	@Override
+	public final void onDelete() {}
+
 }

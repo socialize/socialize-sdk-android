@@ -71,7 +71,7 @@ public interface SocializeService {
 
 	/**
 	 * Authenticates the application against the API
-	 * @param consumerKey The consumer url, obtained from registration at http://www.getsocialize.com.
+	 * @param consumerKey The consumer key, obtained from registration at http://www.getsocialize.com.
 	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
 	 * @param authListener The callback for authentication outcomes.
 	 */
@@ -79,18 +79,33 @@ public interface SocializeService {
 
 	/**
 	 * Adds a new like and associates it with the url described.
-	 * @param url The url being liked.  Defined when first creating a url, or created on the fly with this call.
+	 * @param url The url being liked. MUST be a valid http URL.  Defined when first creating a url, or created on the fly with this call.
 	 * @param likeAddListener A listener to handle callbacks from the post.
 	 */
 	public void like(String url, LikeAddListener likeAddListener);
 	
 	/**
 	 * Adds a new like and associates it with the url described.
-	 * @param url The url being liked.  Defined when first creating a url, or created on the fly with this call.
+	 * @param url The url being liked. MUST be a valid http URL.  Defined when first creating a url, or created on the fly with this call.
 	 * @param location The location of the device at the time the call was made.
 	 * @param likeAddListener A listener to handle callbacks from the post.
 	 */
 	public void like(String url, Location location, LikeAddListener likeAddListener);
+	
+//	/**
+//	 * Adds a new view and associates it with the url described.
+//	 * @param url The url being viewed. MUST be a valid http URL.  Defined when first creating a url, or created on the fly with this call.
+//	 * @param viewAddListener A listener to handle callbacks from the post.
+//	 */
+//	public void view(String url, ViewAddListener viewAddListener);
+	
+//	/**
+//	 * Adds a new view and associates it with the url described.
+//	 * @param url The url being viewed. MUST be a valid http URL.  Defined when first creating a url, or created on the fly with this call.
+//	 * @param location The location of the device at the time the call was made.
+//	 * @param viewAddListener A listener to handle callbacks from the post.
+//	 */
+//	public void view(String url, Location location, ViewAddListener viewAddListener);
 
 	/**
 	 * Removes a specific LIKE based on it's unique ID.  The ID would be returned from the original creation call.
@@ -101,21 +116,21 @@ public interface SocializeService {
 	
 	/**
 	 * Retrieves a single like previously associated with an entity.
-	 * @param url The entity to which the like was originally associated.
+	 * @param url The url to which the like was originally associated. MUST be a valid http URL.
 	 * @param likeGetListener
 	 */
 	public void getLike(String url, LikeGetListener likeGetListener);
 	
 	/**
 	 * Lists the comments associated with a url.
-	 * @param url The url to which the comments are associated.
+	 * @param url The url to which the comments are associated. MUST be a valid http URL.
 	 * @param commentListListener A listener to handle callbacks from the post.
 	 */
 	public void listCommentsByEntity(String url, CommentListListener commentListListener);
 	
 	/**
 	 * Lists the comments associated with a url.
-	 * @param url The url to which the comments are associated.
+	 * @param url The url to which the comments are associated. MUST be a valid http URL.
 	 * @param startIndex The starting index of the results for pagination.
 	 * @param endIndex The ending index of the results for pagination.
 	 * @param commentListListener A listener to handle callbacks from the post.
@@ -131,15 +146,15 @@ public interface SocializeService {
 	public void getCommentById(int id, CommentGetListener commentGetListener);
 
 	/**
-	 * Retrieves a single url
-	 * @param url
+	 * Retrieves a single entity.
+	 * @param url MUST be a valid http URL.
 	 * @param listener
 	 */
 	public void getEntity(String url, EntityGetListener entityGetListener);
 	
 	/**
 	 * Adds a new comment and associates it with the url described.
-	 * @param url The url to which the comment is associated. Defined when first creating a url, or created on the fly with this call.
+	 * @param url The url to which the comment is associated. MUST be a valid http URL. Defined when first creating a url, or created on the fly with this call.
 	 * @param comment The comment to add.
 	 * @param location The location of the device at the time the call was made.
 	 * @param commentAddListener A listener to handle callbacks from the post.
@@ -148,7 +163,7 @@ public interface SocializeService {
 
 	/**
 	 * Adds a new comment and associates it with the url described.
-	 * @param url The url to which the comment is associated. Defined when first creating a url, or created on the fly with this call.
+	 * @param url The url to which the comment is associated. MUST be a valid http URL. Defined when first creating a url, or created on the fly with this call.
 	 * @param comment The comment to add.
 	 * @param commentAddListener A listener to handle callbacks from the post.
 	 */

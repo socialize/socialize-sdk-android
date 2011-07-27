@@ -26,6 +26,7 @@ import java.util.List;
 import android.os.AsyncTask;
 
 import com.socialize.config.SocializeConfig;
+import com.socialize.entity.ActionError;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
@@ -318,6 +319,38 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			response.setResults(results);
 
 			return response;
+		}
+
+		@Override
+		protected void onPostExecute(SocializeEntityResponse<T> result) {
+			if(listener != null) {
+				if(error != null) {
+					listener.onError(error);
+				}
+				else {
+					ListResult<T> results = result.getResults();
+					
+					if(results != null) {
+						List<T> items = results.getItems();
+						List<ActionError> errors = results.getErrors();
+						
+						if(items == null || items.size() == 0){
+							if(errors != null && errors.size() > 0) {
+								listener.onError(new SocializeException(errors.get(0).getMessage()));
+							}
+							else {
+								listener.onError(new SocializeException("Unknown Error"));
+							}
+						}
+						else {
+							listener.onResult(requestType, result);
+						}
+					}
+					else {
+						listener.onError(new SocializeException("No results found in response"));
+					}
+				}
+			}
 		}
 	}
 

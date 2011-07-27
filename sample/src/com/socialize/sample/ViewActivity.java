@@ -22,7 +22,115 @@
 package com.socialize.sample;
 
 import android.app.Activity;
+import android.os.Bundle;
+
+import com.socialize.Socialize;
 
 public class ViewActivity extends Activity {
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.view);
+		
+		Socialize.init(this);
+		
+//		final EditText txtKey = (EditText) findViewById(R.id.txtKey);
+//		final TextView txtViewCreateResult = (TextView) findViewById(R.id.txtViewCreateResult);
+//		
+//		final Button btnViewCreate = (Button) findViewById(R.id.btnViewCreate);
+//		
+//		if(Socialize.getSocialize().isAuthenticated()) {
+//			
+//			btnViewCreate.setOnClickListener(new OnClickListener() {
+//				
+//				@Override
+//				public void onClick(View v) {
+//					
+//					clearViewData();
+//					
+//					final ProgressDialog progress = ProgressDialog.show(ViewActivity.this, "Posting View", "Please wait...");
+//					
+//					txtViewCreateResult.setText("");
+//					btnViewCreate.setEnabled(false);
+//					
+//					String key = txtKey.getText().toString();
+//					
+//					if(!StringUtils.isEmpty(key)) {
+//						Socialize.getSocialize().view(key, new ViewAddListener() {
+//							
+//							@Override
+//							public void onError(SocializeException error) {
+//								txtViewCreateResult.setText("FAIL: " + ErrorHandler.handleApiError(ViewActivity.this, error));
+//								btnViewCreate.setEnabled(true);
+//								progress.dismiss();
+//							}
+//							
+//							@Override
+//							public void onCreate(com.socialize.entity.View view) {
+//								btnViewCreate.setEnabled(true);
+//								txtViewCreateResult.setText("SUCCESS");
+//								
+//								populateViewData(view);
+//								
+//								progress.dismiss();
+//							}
+//						});
+//					}
+//					else {
+//						txtViewCreateResult.setText("FAIL: No Key");
+//						btnViewCreate.setEnabled(true);
+//						progress.dismiss();
+//					}
+//				}
+//			});
+//		}
+//		else {
+//			// Not authorized, you would normally do a re-auth here
+//			txtViewCreateResult.setText("AUTH FAIL");
+//		}
+	}
 
+	@Override
+	protected void onDestroy() {
+		Socialize.destroy(this);
+		super.onDestroy();
+	}
+	
+//	private void populateViewData(com.socialize.entity.View view) {
+//		final TextView txtViewIdCreated = (TextView) findViewById(R.id.txtViewIdCreated);
+//		final TextView txtViewDateCreated = (TextView) findViewById(R.id.txtViewDateCreated);
+//		
+//		final TextView txtEntityIdCreated = (TextView) findViewById(R.id.txtEntityIdCreated);
+//		final TextView txtEntityKeyCreated = (TextView) findViewById(R.id.txtEntityKeyCreated);
+//		
+//		if(view.getId() != null) {
+//			txtViewIdCreated.setText(String.valueOf(view.getId()));
+//		}
+//		
+//		if(view.getDate() != null) {
+//			txtViewDateCreated.setText(String.valueOf(view.getDate()));
+//		}
+//		
+//		if(view.getEntity() != null) {
+//			txtEntityIdCreated.setText(String.valueOf(view.getEntity().getId()));
+//			txtEntityKeyCreated.setText(view.getEntity().getKey());
+//		}
+//		else if(view.getEntityKey() != null) {
+//			txtEntityKeyCreated.setText(view.getEntityKey());
+//		}
+//	}
+//	
+//	private void clearViewData() {
+//		final TextView txtViewIdCreated = (TextView) findViewById(R.id.txtViewIdCreated);
+//		final TextView txtViewDateCreated = (TextView) findViewById(R.id.txtViewDateCreated);
+//		
+//		final TextView txtEntityIdCreated = (TextView) findViewById(R.id.txtEntityIdCreated);
+//		final TextView txtEntityKeyCreated = (TextView) findViewById(R.id.txtEntityKeyCreated);
+//		
+//		txtViewIdCreated.setText("");
+//		txtViewDateCreated.setText("");
+//		
+//		txtEntityIdCreated.setText("");
+//		txtEntityKeyCreated.setText("");
+//	}
 }

@@ -19,52 +19,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api;
+package com.socialize.api.action;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
-import com.socialize.entity.ListResult;
+import android.location.Location;
+
+import com.socialize.api.SocializeApi;
+import com.socialize.api.SocializeSession;
+import com.socialize.entity.View;
+import com.socialize.listener.view.ViewListener;
+import com.socialize.provider.SocializeProvider;
 
 /**
  * @author Jason Polites
- *
- * @param <T>
  */
-public class SocializeEntityResponse<T> implements SocializeResponse {
+public class ViewApi extends SocializeApi<View, SocializeProvider<View>> {
 
-	private ListResult<T> results;
-
-
-	public ListResult<T> getResults() {
-		return results;
-	}
-	public void setResults(ListResult<T> results) {
-		this.results = results;
-	}
+	public static final String ENDPOINT = "/view/";
 	
-	public synchronized void addResult(T result) {
+	public ViewApi(SocializeProvider<View> provider) {
+		super(provider);
+	}
+
+	public void addView(SocializeSession session, String key, Location location, ViewListener listener) {
+		View c = new View();
+		c.setEntityKey(key);
 		
-		if(results == null) results = new ListResult<T>();
-		
-		List<T> list = results.getItems();
-		
-		if(list == null) {
-			list = new LinkedList<T>();
-			results.setItems(list);
+		if(location != null) {
+			c.setLon(location.getLongitude());
+			c.setLat(location.getLatitude());
 		}
 		
-		list.add(result);
+		List<View> list = new ArrayList<View>(1);
+		list.add(c);
+		
+		postAsync(session, ENDPOINT, list, listener);
 	}
-	
-	public synchronized T getFirstResult() {
-		if(results != null) {
-			List<T> list = results.getItems();
-			if(list != null) {
-				return list.get(0);
-			}
-		}
-		return null;
-	}
-	
 }

@@ -89,8 +89,8 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 			public void onList(ListResult<Like> entities) {
 				
 				if(listener != null) {
-					if(entities != null && entities.getResults() != null && entities.getResults().size() > 0) {
-						listener.onGet(entities.getResults().get(0));
+					if(entities != null && entities.getItems() != null && entities.getItems().size() > 0) {
+						listener.onGet(entities.getItems().get(0));
 					}
 					else {
 						List<ActionError> errors = entities.getErrors();

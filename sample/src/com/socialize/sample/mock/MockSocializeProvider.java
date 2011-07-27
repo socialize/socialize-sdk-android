@@ -126,7 +126,7 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 			list.add(makeObject(ids[i]));
 		}
 		
-		result.setResults(list);
+		result.setItems(list);
 		return result;
 	}
 	

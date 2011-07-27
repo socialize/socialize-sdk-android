@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,50 +19,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api;
+package com.socialize.auth;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import com.socialize.entity.ListResult;
+import java.util.Map;
 
 /**
  * @author Jason Polites
  *
- * @param <T>
  */
-public class SocializeEntityResponse<T> implements SocializeResponse {
+public class AuthProviders {
 
-	private ListResult<T> results;
+	private Map<Integer, AuthProvider> providers;
 
-
-	public ListResult<T> getResults() {
-		return results;
+	public Map<Integer, AuthProvider> getProviders() {
+		return providers;
 	}
-	public void setResults(ListResult<T> results) {
-		this.results = results;
-	}
-	
-	public synchronized void addResult(T result) {
-		
-		if(results == null) results = new ListResult<T>();
-		
-		List<T> list = results.getItems();
-		
-		if(list == null) {
-			list = new LinkedList<T>();
-			results.setItems(list);
-		}
-		
-		list.add(result);
+
+	public void setProviders(Map<Integer, AuthProvider> providers) {
+		this.providers = providers;
 	}
 	
-	public synchronized T getFirstResult() {
-		if(results != null) {
-			List<T> list = results.getItems();
-			if(list != null) {
-				return list.get(0);
-			}
+	public AuthProvider getProvider(AuthProviderType type) {
+		if(providers != null) {
+			return providers.get(type.getId());
 		}
 		return null;
 	}

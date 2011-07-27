@@ -21,6 +21,8 @@
  */
 package com.socialize.test.unit;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -30,6 +32,7 @@ import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeApi.RequestType;
 import com.socialize.api.SocializeResponse;
 import com.socialize.api.SocializeSession;
+import com.socialize.entity.ActionError;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeApiError;
@@ -119,6 +122,101 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		
 		AndroidMock.verify(provider);
 		AndroidMock.verify(listener);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({SocializeException.class, SocializeActionListener.class, ListResult.class})
+	public void testOnErrorCalledOnPOSTFailWithNullItems() throws Throwable {
+		final String errorMessage = "foobar error";
+		final String id = "foobar";
+		
+		CountDownLatch signal = new CountDownLatch(1); 
+		
+		final SocializeActionListener listener = AndroidMock.createMock(SocializeActionListener.class);
+		final SocializeObject object = new SocializeObject();
+		
+		ListResult<SocializeObject> result = (ListResult<SocializeObject>) AndroidMock.createMock(ListResult.class);
+		
+		ActionError error = new ActionError(errorMessage);
+		List<ActionError> errors = new ArrayList<ActionError>(1);
+		errors.add(error);
+		
+		AndroidMock.makeThreadSafe(provider, true);
+		AndroidMock.makeThreadSafe(session, true);
+		AndroidMock.makeThreadSafe(listener, true);
+		
+		listener.onError((SocializeException)AndroidMock.anyObject());
+		
+		AndroidMock.expect(provider.post(session, id, object)).andReturn(result);
+		
+		AndroidMock.expect(result.getItems()).andReturn(null);
+		AndroidMock.expect(result.getErrors()).andReturn(errors);
+		
+		AndroidMock.replay(provider);
+		AndroidMock.replay(listener);
+		AndroidMock.replay(result);
+		
+		runTestOnUiThread(new Runnable() {
+			public void run() {
+				api.postAsync(session, endpoint, object, listener);
+			}
+		});
+		
+		// Just wait for async process to finish
+		signal.await(500, TimeUnit.MILLISECONDS);
+		
+		AndroidMock.verify(provider);
+		AndroidMock.verify(listener);
+		AndroidMock.verify(result);
+	}
+	
+
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({SocializeException.class, SocializeActionListener.class, ListResult.class})
+	public void testOnErrorCalledOnPOSTFailWithEmptyItems() throws Throwable {
+		final String errorMessage = "foobar error";
+		final String id = "foobar";
+		
+		CountDownLatch signal = new CountDownLatch(1); 
+		
+		final SocializeActionListener listener = AndroidMock.createMock(SocializeActionListener.class);
+		final SocializeObject object = new SocializeObject();
+		
+		ListResult<SocializeObject> result = (ListResult<SocializeObject>) AndroidMock.createMock(ListResult.class);
+		
+		ActionError error = new ActionError(errorMessage);
+		List<ActionError> errors = new ArrayList<ActionError>(1);
+		errors.add(error);
+		
+		List<SocializeObject> items = new ArrayList<SocializeObject>();
+		
+		AndroidMock.makeThreadSafe(provider, true);
+		AndroidMock.makeThreadSafe(session, true);
+		AndroidMock.makeThreadSafe(listener, true);
+		
+		listener.onError((SocializeException)AndroidMock.anyObject());
+		
+		AndroidMock.expect(provider.post(session, id, object)).andReturn(result);
+		
+		AndroidMock.expect(result.getItems()).andReturn(items);
+		AndroidMock.expect(result.getErrors()).andReturn(errors);
+		
+		AndroidMock.replay(provider);
+		AndroidMock.replay(listener);
+		AndroidMock.replay(result);
+		
+		runTestOnUiThread(new Runnable() {
+			public void run() {
+				api.postAsync(session, endpoint, object, listener);
+			}
+		});
+		
+		// Just wait for async process to finish
+		signal.await(500, TimeUnit.MILLISECONDS);
+		
+		AndroidMock.verify(provider);
+		AndroidMock.verify(listener);
+		AndroidMock.verify(result);
 	}
 	
 	public void testListenerOnGetCalledOnGET() throws Throwable {
@@ -344,6 +442,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 	}
 	
 	public void testListenerOnCreateCalledOnPOST() throws Throwable {
+		
 		final SocializeActionListener listener = new AbstractSocializeListener<SocializeObject>() {
 
 			@Override
@@ -381,6 +480,15 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		
 		final SocializeObject obj = new SocializeObject();
 		
+		List<SocializeObject> items = new ArrayList<SocializeObject>(1);
+		items.add(obj);
+		
+		ListResult<SocializeObject> listResult = new ListResult<SocializeObject>();
+		listResult.setItems(items);
+		
+		AndroidMock.expect(provider.post(session, endpoint, obj)).andReturn(listResult);
+		AndroidMock.replay(provider);
+		
 		runTestOnUiThread(new Runnable() {
 			public void run() {
 				api.postAsync(session, endpoint, obj, listener);
@@ -389,6 +497,8 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		
 		// Just wait for async process to finish
 		signal.await(500, TimeUnit.MILLISECONDS);
+		
+		AndroidMock.verify(provider);
 		
 		Boolean result = getResult();
 		
@@ -434,6 +544,15 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		
 		final SocializeObject obj = new SocializeObject();
 		
+		List<SocializeObject> items = new ArrayList<SocializeObject>(1);
+		items.add(obj);
+		
+		ListResult<SocializeObject> listResult = new ListResult<SocializeObject>();
+		listResult.setItems(items);
+		
+		AndroidMock.expect(provider.put(session, endpoint, obj)).andReturn(listResult);
+		AndroidMock.replay(provider);
+		
 		runTestOnUiThread(new Runnable() {
 			public void run() {
 				api.putAsync(session, endpoint, obj, listener);
@@ -442,6 +561,8 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		
 		// Just wait for async process to finish
 		signal.await(500, TimeUnit.MILLISECONDS);
+		
+		AndroidMock.verify(provider);
 		
 		Boolean result = getResult();
 		

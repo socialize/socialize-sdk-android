@@ -218,7 +218,7 @@ public class LikeApiTest extends SocializeUnitTest {
 			public void onCreate(Like entity) {}
 		};
 
-		AndroidMock.expect(listResult.getResults()).andReturn(items).times(3);
+		AndroidMock.expect(listResult.getItems()).andReturn(items).times(3);
 		AndroidMock.expect(items.size()).andReturn(1);
 		AndroidMock.expect(items.get(0)).andReturn(like);
 		
@@ -276,7 +276,7 @@ public class LikeApiTest extends SocializeUnitTest {
 			public void onCreate(Like entity) {}
 		};
 
-		AndroidMock.expect(listResult.getResults()).andReturn(items).times(2);
+		AndroidMock.expect(listResult.getItems()).andReturn(items).times(2);
 		AndroidMock.expect(items.size()).andReturn(0);
 		
 		AndroidMock.expect(listResult.getErrors()).andReturn(errors);

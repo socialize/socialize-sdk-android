@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,52 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api;
+package com.socialize.auth;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import com.socialize.entity.ListResult;
+import com.socialize.error.SocializeException;
 
 /**
  * @author Jason Polites
  *
- * @param <T>
  */
-public class SocializeEntityResponse<T> implements SocializeResponse {
+public interface AuthProvider {
 
-	private ListResult<T> results;
-
-
-	public ListResult<T> getResults() {
-		return results;
-	}
-	public void setResults(ListResult<T> results) {
-		this.results = results;
-	}
-	
-	public synchronized void addResult(T result) {
-		
-		if(results == null) results = new ListResult<T>();
-		
-		List<T> list = results.getItems();
-		
-		if(list == null) {
-			list = new LinkedList<T>();
-			results.setItems(list);
-		}
-		
-		list.add(result);
-	}
-	
-	public synchronized T getFirstResult() {
-		if(results != null) {
-			List<T> list = results.getItems();
-			if(list != null) {
-				return list.get(0);
-			}
-		}
-		return null;
-	}
+	/**
+	 * Authenticates using a 3rd party provider.
+	 * @param appId The ID of the app on the 3rd party system.
+	 * @return
+	 * @throws SocializeException
+	 */
+	public AuthProviderResponse authenticate(String appId) throws SocializeException;
 	
 }

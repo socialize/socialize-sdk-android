@@ -195,7 +195,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		like(url, null, likeAddListener);
 	}
 	
-	
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#like(java.lang.String, android.location.Location, com.socialize.listener.like.LikeAddListener)
@@ -206,6 +205,26 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			service.addLike(session, url, location, likeAddListener);
 		}
 	}
+	
+//	/*
+//	 * (non-Javadoc)
+//	 * @see com.socialize.SocializeService#view(java.lang.String, com.socialize.listener.view.ViewAddListener)
+//	 */
+//	@Override
+//	public void view(String url, ViewAddListener viewAddListener) {
+//		view(url, null, viewAddListener);
+//	}
+//
+//	/*
+//	 * (non-Javadoc)
+//	 * @see com.socialize.SocializeService#view(java.lang.String, android.location.Location, com.socialize.listener.view.ViewAddListener)
+//	 */
+//	@Override
+//	public void view(String url, Location location, ViewAddListener viewAddListener) {
+//		if(assertAuthenticated(viewAddListener)) {
+//			service.addView(session, url, location, viewAddListener);
+//		}
+//	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#deleteLike(int, com.socialize.listener.like.LikeDeleteListener)
