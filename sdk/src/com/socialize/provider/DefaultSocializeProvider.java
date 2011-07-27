@@ -389,7 +389,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 						results.add(objectFactory.fromJSON(list.getJSONObject(i)));
 					}
 					
-					result.setResults(results);
+					result.setItems(results);
 				}
 				
 				if(object.has(JSON_ATTR_COUNT) && !object.isNull(JSON_ATTR_COUNT)) {

@@ -82,9 +82,9 @@ public class CommentListActivity<T extends SocializeObject> extends ListActivity
 					@Override
 					public void onList(ListResult<Comment> result) {
 
-						ArrayList<ListItem> items = new ArrayList<ListItem>(result.getResults().size());
+						ArrayList<ListItem> items = new ArrayList<ListItem>(result.getItems().size());
 
-						for (final Comment entity : result.getResults()) {
+						for (final Comment entity : result.getItems()) {
 							items.add(new ListItem() {
 
 								@Override

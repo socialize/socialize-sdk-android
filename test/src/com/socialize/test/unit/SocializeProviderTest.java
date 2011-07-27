@@ -613,7 +613,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.verify(httpUtils);
 		AndroidMock.verify(ioUtils);
 		
-		for (SocializeObject gotten : list.getResults()) {
+		for (SocializeObject gotten : list.getItems()) {
 			assertSame(object,gotten);
 		}
 	}
@@ -765,7 +765,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.verify(httpUtils);
 		AndroidMock.verify(ioUtils);
 		
-		for (SocializeObject gotten : list.getResults()) {
+		for (SocializeObject gotten : list.getItems()) {
 			assertSame(object,gotten);
 		}
 	}
@@ -843,7 +843,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.verify(httpUtils);
 		AndroidMock.verify(ioUtils);
 		
-		for (SocializeObject gotten : list.getResults()) {
+		for (SocializeObject gotten : list.getItems()) {
 			assertSame(object,gotten);
 		}
 	}
@@ -909,9 +909,9 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		
 		ListResult<SocializeObject> list = provider.post(session, endpoint, objects);
 		
-		assertEquals(objects.size(), list.getResults().size());
+		assertEquals(objects.size(), list.getItems().size());
 		
-		for (SocializeObject gotten : list.getResults()) {
+		for (SocializeObject gotten : list.getItems()) {
 			assertTrue(objects.contains(gotten));
 		}
 		
@@ -1001,7 +1001,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.verify(httpUtils);
 		AndroidMock.verify(ioUtils);
 		
-		for (SocializeObject gotten : list.getResults()) {
+		for (SocializeObject gotten : list.getItems()) {
 			assertSame(object,gotten);
 		}
 	}
@@ -1066,9 +1066,9 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		
 		ListResult<SocializeObject> list = provider.put(session, endpoint, objects);
 		
-		assertEquals(objects.size(), list.getResults().size());
+		assertEquals(objects.size(), list.getItems().size());
 		
-		for (SocializeObject gotten : list.getResults()) {
+		for (SocializeObject gotten : list.getItems()) {
 			assertTrue(objects.contains(gotten));
 		}
 		

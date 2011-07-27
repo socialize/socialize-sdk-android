@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class ListResult<T> {
 
-	private List<T> results;
+	private List<T> items;
 	private List<ActionError> errors;
 	private int totalCount;
 	
@@ -40,14 +40,14 @@ public class ListResult<T> {
 	
 	public ListResult(List<T> results) {
 		this();
-		this.results = results;
+		this.items = results;
 	}
 	
-	public List<T> getResults() {
-		return results;
+	public List<T> getItems() {
+		return items;
 	}
-	public void setResults(List<T> results) {
-		this.results = results;
+	public void setItems(List<T> results) {
+		this.items = results;
 	}
 	public List<ActionError> getErrors() {
 		return errors;
@@ -63,8 +63,8 @@ public class ListResult<T> {
 	}
 
 	public ListResult<T> add(T item) {
-		if(results == null) results = new LinkedList<T>();
-		results.add(item);
+		if(items == null) items = new LinkedList<T>();
+		items.add(item);
 		return this;
 	}
 }
