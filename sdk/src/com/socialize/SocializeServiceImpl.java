@@ -43,7 +43,6 @@ import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
-import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.ResourceLocator;
@@ -207,25 +206,25 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#view(java.lang.String, com.socialize.listener.view.ViewAddListener)
-	 */
-	@Override
-	public void view(String url, ViewAddListener viewAddListener) {
-		view(url, null, viewAddListener);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#view(java.lang.String, android.location.Location, com.socialize.listener.view.ViewAddListener)
-	 */
-	@Override
-	public void view(String url, Location location, ViewAddListener viewAddListener) {
-		if(assertAuthenticated(viewAddListener)) {
-			service.addView(session, url, location, viewAddListener);
-		}
-	}
+//	/*
+//	 * (non-Javadoc)
+//	 * @see com.socialize.SocializeService#view(java.lang.String, com.socialize.listener.view.ViewAddListener)
+//	 */
+//	@Override
+//	public void view(String url, ViewAddListener viewAddListener) {
+//		view(url, null, viewAddListener);
+//	}
+//
+//	/*
+//	 * (non-Javadoc)
+//	 * @see com.socialize.SocializeService#view(java.lang.String, android.location.Location, com.socialize.listener.view.ViewAddListener)
+//	 */
+//	@Override
+//	public void view(String url, Location location, ViewAddListener viewAddListener) {
+//		if(assertAuthenticated(viewAddListener)) {
+//			service.addView(session, url, location, viewAddListener);
+//		}
+//	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#deleteLike(int, com.socialize.listener.like.LikeDeleteListener)

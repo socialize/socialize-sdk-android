@@ -32,4 +32,12 @@
 		android:layout_height="wrap_content"
 		android:layout_width="fill_parent"
 		android:textSize="12dp"/>
+	<!-- 
+	<Button
+		android:id="@+id/btnView"
+		android:text="View" 
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:textSize="12dp"/>	
+	 -->
 </LinearLayout>
