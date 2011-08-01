@@ -22,6 +22,7 @@
 package com.socialize.api;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -99,14 +100,14 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 
 	@Override
 	public HttpUriRequest getGetRequest(SocializeSession session, String endpoint, String id) throws SocializeException {
-		endpoint += id + "/";
+		endpoint += URLEncoder.encode(id) + "/";
 		HttpGet get = signer.sign(session, new HttpGet(endpoint));
 		return get;
 	}
 	
 	@Override
 	public HttpUriRequest getDeleteRequest(SocializeSession session, String endpoint, String id) throws SocializeException {
-		endpoint += id + "/";
+		endpoint += URLEncoder.encode(id) + "/";
 		HttpDelete del = signer.sign(session, new HttpDelete(endpoint));
 		return del;
 	}
