@@ -21,23 +21,60 @@
  */
 package com.socialize.auth.facebook;
 
+import android.content.Context;
+import android.content.Intent;
+
+import com.socialize.api.SocializeAuthRequest;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.AuthProviderListener;
+import com.socialize.listener.ListenerHolder;
 
 /**
  * @author Jason Polites
  *
  */
 public class FacebookAuthProvider implements AuthProvider {
+	
+	private Context context;
+	
+	public FacebookAuthProvider(Context context) {
+		super();
+		this.context = context;
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.auth.AuthProvider#authenticate()
 	 */
 	@Override
-	public AuthProviderResponse authenticate(String appId) throws SocializeException {
-		// TODO Auto-generated method stub
-		return null;
+	public void authenticate(SocializeAuthRequest authRequest, String appId, final AuthProviderListener listener) {
+		
+		final String listenerKey = "auth";
+		
+		ListenerHolder.getInstance().put(listenerKey, new AuthProviderListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				ListenerHolder.getInstance().remove(listenerKey);
+				listener.onError(error);
+			}
+			
+			@Override
+			public void onAuthSuccess(AuthProviderResponse response) {
+				ListenerHolder.getInstance().remove(listenerKey);
+				listener.onAuthSuccess(response);
+			}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				ListenerHolder.getInstance().remove(listenerKey);
+				listener.onAuthFail(error);
+			}
+		});
+		
+		Intent i = new Intent(context, FacebookActivity.class);
+		i.putExtra("appId", appId);
+		context.startActivity(i);
 	}
-
 }

@@ -21,6 +21,7 @@
  */
 package com.socialize.api;
 
+import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
 
 public interface WritableSession extends SocializeSession {
@@ -28,4 +29,8 @@ public interface WritableSession extends SocializeSession {
 	public void setConsumerTokenSecret(String secret);
 	public void setUser(User user);
 	public void setHost(String host);
+	public void set3rdPartyUserId(String userId);
+	public void set3rdPartyToken(String token);
+	public void set3rdAppId(String appId);
+	public void setAuthProviderType(AuthProviderType authProviderType);
 }

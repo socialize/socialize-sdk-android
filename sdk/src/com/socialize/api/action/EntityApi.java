@@ -43,7 +43,7 @@ public class EntityApi extends SocializeApi<Entity, SocializeProvider<Entity>> {
 		super(provider);
 	}
 	
-	public void createEntity(SocializeSession session, String key, String name, EntityListener listener) {
+	public void addEntity(SocializeSession session, String key, String name, EntityListener listener) {
 		Entity c = new Entity();
 		c.setKey(key);
 		c.setName(name);

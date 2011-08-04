@@ -26,15 +26,18 @@ import android.location.Location;
 
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
+import com.socialize.listener.entity.EntityAddListener;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
+import com.socialize.listener.view.ViewAddListener;
 
 /**
  * The main Socialize Service.  This is the simplest entry point into the Socialize API.
@@ -70,12 +73,35 @@ public interface SocializeService {
 	public void destroy();
 
 	/**
-	 * Authenticates the application against the API
-	 * @param consumerKey The consumer key, obtained from registration at http://www.getsocialize.com.
+	 * Authenticates the application against the API as an anonymous user.
+	 * @param consumerKey The consumer url, obtained from registration at http://www.getsocialize.com.
 	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
 	 * @param authListener The callback for authentication outcomes.
+	 * @see this{@link #authenticate(String, String, AuthProviderType, String, SocializeAuthListener)}
 	 */
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener authListener);
+
+	/**
+	 * Authenticates the application against the API.
+	 * @param consumerKey The consumer url, obtained from registration at http://www.getsocialize.com.
+	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
+	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
+	 * @param authProviderId The ID of your app in the 3rd party system used to authenticate. (e.g. YOUR Facebook App ID)
+	 * @param authListener The callback for authentication outcomes.
+	 */
+	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, SocializeAuthListener authListener);
+	
+	/**
+	 * Authenticates the application against the API as a user known to your app from a given 3rd party provider.
+	 * @param consumerKey The consumer key, obtained from registration at http://www.getsocialize.com.
+	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
+	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
+	 * @param authProviderId The ID of your app in the 3rd party system used to authenticate. (e.g. YOUR Facebook App ID).
+	 * @param authUserId3rdParty The userId from the 3rd party provider (if available).
+	 * @param authToken3rdParty The auth token from the 3rd party (if available).
+	 * @param authListener The callback for authentication outcomes.
+	 */
+	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty, SocializeAuthListener authListener);
 
 	/**
 	 * Adds a new like and associates it with the url described.
@@ -92,20 +118,20 @@ public interface SocializeService {
 	 */
 	public void like(String url, Location location, LikeAddListener likeAddListener);
 	
-//	/**
-//	 * Adds a new view and associates it with the url described.
-//	 * @param url The url being viewed. MUST be a valid http URL.  Defined when first creating a url, or created on the fly with this call.
-//	 * @param viewAddListener A listener to handle callbacks from the post.
-//	 */
-//	public void view(String url, ViewAddListener viewAddListener);
+	/**
+	 * Adds a new view and associates it with the url described.
+	 * @param url The url being viewed. MUST be a valid http URL.  Defined when first creating a url, or created on the fly with this call.
+	 * @param viewAddListener A listener to handle callbacks from the post.
+	 */
+	public void view(String url, ViewAddListener viewAddListener);
 	
-//	/**
-//	 * Adds a new view and associates it with the url described.
-//	 * @param url The url being viewed. MUST be a valid http URL.  Defined when first creating a url, or created on the fly with this call.
-//	 * @param location The location of the device at the time the call was made.
-//	 * @param viewAddListener A listener to handle callbacks from the post.
-//	 */
-//	public void view(String url, Location location, ViewAddListener viewAddListener);
+	/**
+	 * Adds a new view and associates it with the url described.
+	 * @param url The url being viewed. MUST be a valid http URL.  Defined when first creating a url, or created on the fly with this call.
+	 * @param location The location of the device at the time the call was made.
+	 * @param viewAddListener A listener to handle callbacks from the post.
+	 */
+	public void view(String url, Location location, ViewAddListener viewAddListener);
 
 	/**
 	 * Removes a specific LIKE based on it's unique ID.  The ID would be returned from the original creation call.
@@ -141,16 +167,24 @@ public interface SocializeService {
 	/**
 	 * Retrieves a single comment based on its ID.
 	 * @param id The ID of the comment, returned when it was originally created.
-	 * @param commentGetListener
+	 * @param commentGetListener A listener to handle callbacks from the get.
 	 */
 	public void getCommentById(int id, CommentGetListener commentGetListener);
 
 	/**
 	 * Retrieves a single entity.
-	 * @param url MUST be a valid http URL.
-	 * @param listener
+	 * @param url The unique URL associated with this entity. MUST be a valid http URL.
+	 * @param entityGetListener A listener to handle callbacks from the get.
 	 */
 	public void getEntity(String url, EntityGetListener entityGetListener);
+	
+	/**
+	 * Creates a new entity.
+	 * @param url The unique URL associated with this entity.  MUST be a valid HTTP url.
+	 * @param name The name of the entity.
+	 * @param entityCreateListener A listener to handle callbacks from the post.
+	 */
+	public void addEntity(String url, String name, EntityAddListener entityCreateListener);
 	
 	/**
 	 * Adds a new comment and associates it with the url described.

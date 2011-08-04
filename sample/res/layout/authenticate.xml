@@ -47,6 +47,7 @@
 					android:text="Authenticate" 
 					android:layout_height="wrap_content"
 					android:layout_width="wrap_content"/>
+					
 				<TextView
 					android:id="@+id/txtAuthResult"
 		            android:padding="3dip" 
@@ -62,10 +63,13 @@
 		   			android:layout_height="wrap_content"/>
 	    </LinearLayout>	    
 	    
+		<Button
+			android:id="@+id/btnAuthenticateFB"
+			android:text="Authenticate Facebook" 
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"/>
+	    
 	</LinearLayout>
-    
-
-    
 
     
     <FrameLayout 

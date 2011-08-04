@@ -28,6 +28,8 @@
 		<activity android:name="EmptyActivity"/>
 		<activity android:name="Error500Activity"/>
 		
+		<activity android:name="com.socialize.auth.facebook.FacebookActivity"/>
+		
     </application>
     
     <supports-screens android:anyDensity="true"/> 

@@ -29,6 +29,7 @@ import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.api.action.CommentApi;
 import com.socialize.api.action.EntityApi;
 import com.socialize.api.action.LikeApi;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeObject;
@@ -64,7 +65,7 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.expect(deviceUtils.getUDID(getContext())).andReturn(udid);
 		
-		commentApi.authenticateAsync(consumerKey, consumerSecret, udid, listener, mockSessionConsumer);
+		commentApi.authenticateAsync(consumerKey, consumerSecret, udid, null, null, AuthProviderType.SOCIALIZE, null, listener, mockSessionConsumer, false);
 		
 		AndroidMock.replay(deviceUtils);
 		AndroidMock.replay(commentApi);
@@ -115,7 +116,7 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		final String key = "foobar";
 		final String name = "foobar_comment";
 		
-		api.createEntity(session, key, name, listener);
+		api.addEntity(session, key, name, listener);
 		
 		AndroidMock.replay(api);
 		

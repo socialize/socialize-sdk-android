@@ -21,6 +21,8 @@
  */
 package com.socialize.test.unit;
 
+import java.util.Locale;
+
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.test.mock.MockContext;
@@ -66,7 +68,7 @@ public class DeviceUtilsTest extends SocializeActivityTest {
 	public void testDeviceUtilsUserAgentString() {
 		DeviceUtils utils = new DeviceUtils();
 		String userAgentString = utils.getUserAgentString();
-		assertEquals("Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION, userAgentString);
+		assertEquals("Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + " " + Locale.getDefault().getLanguage() + "_" + Locale.getDefault().getCountry(), userAgentString);
 	}
 	
 	// Can't extend TelephonyManager.. so don't bother trying to test.  urgh!

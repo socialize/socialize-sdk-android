@@ -82,9 +82,26 @@
 		<property name="sessionPersister" ref="sessionPersister"/>
 	</bean>
 	
+	<bean id="authProviders" class="com.socialize.auth.AuthProviders">
+		<property name="providers">
+			<map>
+				<entry>
+					<key value="1" type="integer"/>
+					<value ref="facebookProvider"/>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="facebookProvider" class="com.socialize.auth.facebook.FacebookAuthProvider">
+		<constructor-arg type="context"/>
+	</bean>
+	
 	<bean id="socializeApi" class="com.socialize.api.SocializeApi" abstract="true">
 		<property name="responseFactory" ref="responseFactory"/>
 		<property name="config" ref="config"/>
+		<property name="logger" ref="logger"/>
+		<property name="authProviders" ref="authProviders"/>
 	</bean>
 	
 	<bean id="socializeActionFactory" class="com.socialize.entity.factory.SocializeActionFactory" abstract="true">

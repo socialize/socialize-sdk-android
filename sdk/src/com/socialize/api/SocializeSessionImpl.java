@@ -21,6 +21,7 @@
  */
 package com.socialize.api;
 
+import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
 
 /**
@@ -35,9 +36,34 @@ public class SocializeSessionImpl implements WritableSession {
 	private String consumerToken;
 	private String consumerTokenSecret;
 	private String host;
+	private String appId3rdParty;
+	private String userId3rdParty;
+	private String token3rdParty;
+	private AuthProviderType authProviderType;
 	
 	public SocializeSessionImpl() {
 		super();
+	}
+	
+	@Override
+	public String get3rdPartyUserId() {
+		return userId3rdParty;
+	}
+	
+	@Override
+	public String get3rdPartyToken() {
+		return token3rdParty;
+	}
+	
+	@Override
+	public void set3rdPartyUserId(String userId) {
+		this.userId3rdParty = userId;
+		
+	}
+	
+	@Override
+	public void set3rdPartyToken(String token) {
+		this.token3rdParty = token;
 	}
 
 	/* (non-Javadoc)
@@ -118,5 +144,25 @@ public class SocializeSessionImpl implements WritableSession {
 	@Override
 	public void setHost(String host) {
 		this.host = host;
+	}
+
+	@Override
+	public AuthProviderType getAuthProviderType() {
+		return authProviderType;
+	}
+
+	@Override
+	public void setAuthProviderType(AuthProviderType authProviderType) {
+		this.authProviderType = authProviderType;
+	}
+
+	@Override
+	public String get3rdPartyAppId() {
+		return appId3rdParty;
+	}
+
+	@Override
+	public void set3rdAppId(String appId) {
+		this.appId3rdParty = appId;
 	}
 }

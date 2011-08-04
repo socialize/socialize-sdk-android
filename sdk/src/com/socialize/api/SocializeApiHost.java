@@ -28,6 +28,7 @@ import com.socialize.api.action.CommentApi;
 import com.socialize.api.action.EntityApi;
 import com.socialize.api.action.LikeApi;
 import com.socialize.api.action.ViewApi;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.comment.CommentListener;
@@ -52,13 +53,21 @@ public class SocializeApiHost {
 	private LikeApi likeApi;
 	private ViewApi viewApi;
 	
+	
 	public SocializeApiHost(Context context) {
 		super();
 		this.context = context;
 	}
 	
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
-		// All Api instances have authenticate, so we can just use any old one
+		authenticate(consumerKey, consumerSecret, null, null, AuthProviderType.SOCIALIZE, null, listener, sessionConsumer, false);
+	}
+	
+	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
+		authenticate(consumerKey, consumerSecret, null, null, authProvider, null, listener, sessionConsumer, false);
+	}
+	
+	public void authenticate(String consumerKey, String consumerSecret, String authUserId3rdParty, String authToken3rdParty, AuthProviderType authProvider, String appId3rdParty, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
 		String udid = deviceUtils.getUDID(context);
 		
 		// TODO: create test case for this
@@ -68,12 +77,13 @@ public class SocializeApiHost {
 			}
 		}
 		else {
-			commentApi.authenticateAsync(consumerKey, consumerSecret, udid, listener, sessionConsumer);
+			// All Api instances have authenticate, so we can just use any old one
+			commentApi.authenticateAsync(consumerKey, consumerSecret, udid, authUserId3rdParty, authToken3rdParty, authProvider, appId3rdParty, listener, sessionConsumer, do3rdPartyAuth);
 		}
 	}
 
 	public void createEntity(SocializeSession session, String key, String name, EntityListener listener) {
-		entityApi.createEntity(session, key, name, listener);
+		entityApi.addEntity(session, key, name, listener);
 	}
 	
 	public void addComment(SocializeSession session, String key, String comment, Location location, CommentListener listener) {

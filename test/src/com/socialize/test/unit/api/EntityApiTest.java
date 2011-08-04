@@ -65,7 +65,7 @@ public class EntityApiTest extends SocializeUnitTest {
 
 		};
 		
-		api.createEntity(session, key, name, listener);
+		api.addEntity(session, key, name, listener);
 		
 		List<Entity> result = getNextResult();
 		

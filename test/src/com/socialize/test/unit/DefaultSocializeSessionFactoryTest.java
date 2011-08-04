@@ -25,6 +25,7 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.DefaultSocializeSessionFactory;
 import com.socialize.api.WritableSession;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.test.SocializeUnitTest;
 
@@ -45,10 +46,22 @@ public class DefaultSocializeSessionFactoryTest extends SocializeUnitTest {
 		
 		DefaultSocializeSessionFactory factory = new DefaultSocializeSessionFactory(config);
 		String key= "foo", secret="bar";
-		WritableSession session = factory.create(key, secret);
+		String userId3rdParty = "foobar_userId3rdParty";
+		String token3rdParty = "foobar_token3rdParty";
+		String appId3rdParty = "foobar_appId3rdParty";
+		AuthProviderType authProviderType = AuthProviderType.SOCIALIZE;
+		
+		WritableSession session = factory.create(key, secret, userId3rdParty, token3rdParty, appId3rdParty, authProviderType);
+		
 		assertNotNull(session);
+		
 		assertEquals(key, session.getConsumerKey());
 		assertEquals(secret, session.getConsumerSecret());
+		assertEquals(userId3rdParty, session.get3rdPartyUserId());
+		assertEquals(token3rdParty, session.get3rdPartyToken());
+		assertEquals(appId3rdParty, session.get3rdPartyAppId());
+		assertEquals(authProviderType, session.getAuthProviderType());
+		
 		assertEquals("foobar", session.getHost());
 		
 		AndroidMock.verify(config);

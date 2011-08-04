@@ -28,6 +28,7 @@ import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeApiHost;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.ioc.SocializeIOC;
@@ -36,13 +37,14 @@ import com.socialize.listener.SocializeListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
-import com.socialize.listener.entity.EntityCreateListener;
+import com.socialize.listener.entity.EntityAddListener;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.entity.EntityListListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
+import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.ResourceLocator;
@@ -146,13 +148,45 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#authenticate(java.lang.String, java.lang.String, com.socialize.provider.AuthProvider, com.socialize.listener.SocializeAuthListener)
+	 */
+	@Override
+	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, SocializeAuthListener authListener) {
+		authenticate(consumerKey, consumerSecret, null, null, authProvider, authProviderId, authListener, true);
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#authenticate(java.lang.String, java.lang.String, com.socialize.listener.SocializeAuthListener)
 	 */
 	@Override
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener authListener)  {
+		authenticate(consumerKey, consumerSecret, null, null, AuthProviderType.SOCIALIZE, null, authListener, false);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#authenticate(java.lang.String, java.lang.String, com.socialize.auth.AuthProviderType, java.lang.String, java.lang.String, java.lang.String, com.socialize.listener.SocializeAuthListener)
+	 */
+	@Override
+	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty,
+			SocializeAuthListener authListener) {
+		authenticate(consumerKey, consumerSecret, authUserId3rdParty, authToken3rdParty, authProvider, null, authListener, false);
+	}
+	
+	private void authenticate(
+			String consumerKey, 
+			String consumerSecret, 
+			String authUserId3rdParty, 
+			String authToken3rdParty, 
+			AuthProviderType authProvider, 
+			String appId3rdParty,
+			SocializeAuthListener authListener, 
+			boolean do3rdPartyAuth) {
+		
 		if(assertInitialized(authListener)) {
-			service.authenticate(consumerKey, consumerSecret, authListener, this);
+			service.authenticate(consumerKey, consumerSecret, authUserId3rdParty, authToken3rdParty, authProvider, appId3rdParty, authListener, this, do3rdPartyAuth);
 		}
 	}
 	
@@ -206,25 +240,25 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 	
-//	/*
-//	 * (non-Javadoc)
-//	 * @see com.socialize.SocializeService#view(java.lang.String, com.socialize.listener.view.ViewAddListener)
-//	 */
-//	@Override
-//	public void view(String url, ViewAddListener viewAddListener) {
-//		view(url, null, viewAddListener);
-//	}
-//
-//	/*
-//	 * (non-Javadoc)
-//	 * @see com.socialize.SocializeService#view(java.lang.String, android.location.Location, com.socialize.listener.view.ViewAddListener)
-//	 */
-//	@Override
-//	public void view(String url, Location location, ViewAddListener viewAddListener) {
-//		if(assertAuthenticated(viewAddListener)) {
-//			service.addView(session, url, location, viewAddListener);
-//		}
-//	}
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#view(java.lang.String, com.socialize.listener.view.ViewAddListener)
+	 */
+	@Override
+	public void view(String url, ViewAddListener viewAddListener) {
+		view(url, null, viewAddListener);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#view(java.lang.String, android.location.Location, com.socialize.listener.view.ViewAddListener)
+	 */
+	@Override
+	public void view(String url, Location location, ViewAddListener viewAddListener) {
+		if(assertAuthenticated(viewAddListener)) {
+			service.addView(session, url, location, viewAddListener);
+		}
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#deleteLike(int, com.socialize.listener.like.LikeDeleteListener)
@@ -275,7 +309,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @param name The name for the entity.
 	 * @param entityCreateListener A listener to handle callbacks from the post.
 	 */
-	public void createEntity(String key, String name, EntityCreateListener entityCreateListener) {
+	public void addEntity(String key, String name, EntityAddListener entityCreateListener) {
 		if(assertAuthenticated(entityCreateListener)) {
 			service.createEntity(session, key, name, entityCreateListener);
 		}

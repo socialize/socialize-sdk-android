@@ -38,6 +38,7 @@ import android.widget.TextView;
 
 import com.socialize.Socialize;
 import com.socialize.api.SocializeSession;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
@@ -50,6 +51,18 @@ public class AuthenticateActivity extends Activity {
 	protected String consumerSecret;
 	protected String url;
 	
+	EditText txtHost;
+	EditText txtConsumerKey;
+	EditText txtConsumerSecret;
+	TextView txtAuthResult;
+	TextView txtAuthUserID;
+	SocializeConfig config;
+	
+	 Button authButton;
+	 Button btnAuthenticateFB;
+	 Button btnApi;
+	 Button btnExit;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,75 +72,25 @@ public class AuthenticateActivity extends Activity {
 			
 			setContentView(R.layout.authenticate);
 			
-			final SocializeConfig config = Socialize.getSocialize().getConfig();
-
-			final EditText txtHost = (EditText) findViewById(R.id.txtHost);
-			final EditText txtConsumerKey = (EditText) findViewById(R.id.txtConsumerKey);
-			final EditText txtConsumerSecret = (EditText) findViewById(R.id.txtConsumerSecret);
+			txtHost = (EditText) findViewById(R.id.txtHost);
+			txtConsumerKey = (EditText) findViewById(R.id.txtConsumerKey);
+			txtConsumerSecret = (EditText) findViewById(R.id.txtConsumerSecret);
+			txtAuthResult =  (TextView) findViewById(R.id.txtAuthResult);
+			txtAuthUserID =  (TextView) findViewById(R.id.txtAuthUserID);
+			config = Socialize.getSocialize().getConfig();
 			
 			txtHost.setText(url);
 			txtConsumerKey.setText(consumerKey);
 			txtConsumerSecret.setText(consumerSecret);
 			
-			final TextView txtAuthResult =  (TextView) findViewById(R.id.txtAuthResult);
-			final TextView txtAuthUserID =  (TextView) findViewById(R.id.txtAuthUserID);
 			
-			final Button authButton = (Button) findViewById(R.id.btnAuthenticate);
-			final Button btnApi = (Button) findViewById(R.id.btnApi);
-			final Button btnExit = (Button) findViewById(R.id.btnExit);
+			authButton = (Button) findViewById(R.id.btnAuthenticate);
+			btnAuthenticateFB = (Button) findViewById(R.id.btnAuthenticateFB);
+			btnApi = (Button) findViewById(R.id.btnApi);
+			btnExit = (Button) findViewById(R.id.btnExit);
 
-			authButton.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(final View v) {
-					
-					v.setEnabled(false);
-					
-					String host = txtHost.getText().toString().trim();
-					String consumerKey = txtConsumerKey.getText().toString().trim();
-					String consumerSecret = txtConsumerSecret.getText().toString().trim();
-					
-					// Override the location for the API
-					config.setProperty(SocializeConfig.API_HOST, host);
-					
-					final ProgressDialog authProgress = ProgressDialog.show(AuthenticateActivity.this, "Authenticating", "Please wait...");
-					
-					Socialize.getSocialize().authenticate(consumerKey, consumerSecret, new SocializeAuthListener() {
-						
-						@Override
-						public void onError(SocializeException error) {
-							v.setEnabled(true);
-							txtAuthResult.setText("FAIL: " + ErrorHandler.handleApiError(AuthenticateActivity.this, error));
-							
-							btnApi.setVisibility(View.GONE);
-							
-							authProgress.dismiss();
-						}
-						
-						@Override
-						public void onAuthSuccess(SocializeSession session) {
-							v.setEnabled(true);
-							txtAuthResult.setText("SUCCESS");
-							txtAuthUserID.setText(session.getUser().getId().toString());
-							
-							btnApi.setVisibility(View.VISIBLE);
-							
-							authProgress.dismiss();
-						}
-						
-						@Override
-						public void onAuthFail(SocializeException error) {
-							v.setEnabled(true);
-							txtAuthResult.setText("FAIL");
-							error.printStackTrace();
-							
-							btnApi.setVisibility(View.GONE);
-							
-							authProgress.dismiss();
-						}
-					});
-				}
-			});
+			authButton.setOnClickListener(new AuthenticateClickListener(false));
+			btnAuthenticateFB.setOnClickListener(new AuthenticateClickListener(true));
 			
 			btnApi.setOnClickListener(new OnClickListener() {
 				@Override
@@ -186,6 +149,83 @@ public class AuthenticateActivity extends Activity {
 					e.printStackTrace();
 				}
 			}
+		}
+	}
+	
+	class AuthenticateClickListener implements OnClickListener {
+		
+		private boolean fb;
+		
+		public AuthenticateClickListener(boolean fb) {
+			super();
+			this.fb = fb;
+		}
+
+		@Override
+		public void onClick(final View v) {
+			
+			v.setEnabled(false);
+			
+			String host = txtHost.getText().toString().trim();
+			String consumerKey = txtConsumerKey.getText().toString().trim();
+			String consumerSecret = txtConsumerSecret.getText().toString().trim();
+			
+			// Override the location for the API
+			config.setProperty(SocializeConfig.API_HOST, host);
+			
+			final ProgressDialog authProgress = ProgressDialog.show(AuthenticateActivity.this, "Authenticating", "Please wait...");
+			
+			if(fb) {
+				Socialize.getSocialize().authenticate(consumerKey, consumerSecret, AuthProviderType.FACEBOOK, "209798315709193", new AuthListener(v, authProgress));
+			}
+			else {
+				Socialize.getSocialize().authenticate(consumerKey, consumerSecret, new AuthListener(v, authProgress));
+			}
+		}
+		
+	}
+	
+	class AuthListener implements SocializeAuthListener {
+		
+		 View v;
+		 ProgressDialog authProgress;
+		
+		public AuthListener(final View v, final ProgressDialog authProgress) {
+			super();
+			this.v = v;
+			this.authProgress = authProgress;
+		}
+
+		@Override
+		public void onError(SocializeException error) {
+			v.setEnabled(true);
+			txtAuthResult.setText("FAIL: " + ErrorHandler.handleApiError(AuthenticateActivity.this, error));
+			
+			btnApi.setVisibility(View.GONE);
+			
+			authProgress.dismiss();
+		}
+		
+		@Override
+		public void onAuthSuccess(SocializeSession session) {
+			v.setEnabled(true);
+			txtAuthResult.setText("SUCCESS");
+			txtAuthUserID.setText(session.getUser().getId().toString());
+			
+			btnApi.setVisibility(View.VISIBLE);
+			
+			authProgress.dismiss();
+		}
+		
+		@Override
+		public void onAuthFail(SocializeException error) {
+			v.setEnabled(true);
+			txtAuthResult.setText("FAIL");
+			error.printStackTrace();
+			
+			btnApi.setVisibility(View.GONE);
+			
+			authProgress.dismiss();
 		}
 	}
 	
