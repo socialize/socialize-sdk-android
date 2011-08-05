@@ -24,53 +24,35 @@ package com.socialize.auth.facebook;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.facebook.android.Facebook;
 import com.socialize.activity.SocializeActivity;
-import com.socialize.listener.AuthProviderListener;
-import com.socialize.listener.ListenerHolder;
 
 /**
  * @author Jason Polites
  */
 public class FacebookActivity extends SocializeActivity {
 	
-	private Facebook mFacebook;
-	private FacebookSessionStore facebookSessionStore;
-	private ListenerHolder listenerHolder;
+	private FacebookActivityService service;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		Intent intent = this.getIntent();
-		
-		if(intent != null) {
-			Bundle extras = intent.getExtras();
-			
-			if(extras != null) {
-				String appId = extras.getString("appId");
-				
-				mFacebook = new Facebook(appId);
-				facebookSessionStore = getBean("facebookSessionStore");
-				listenerHolder = getBean("listenerHolder");
-				
-				FacebookService service = new FacebookService(this, mFacebook, facebookSessionStore, (AuthProviderListener) listenerHolder.get("auth"));
-				service.authenticate();
-			}
-			else {
-				finish();
-			}
-		}
-		else {
-			finish();
-		}
+		service = getFacebookActivityService();
+		service.onCreate();
 	}
 	
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
+	public <E> E getBean(String name) {
+		return (E) super.getBean(name);
+	}
+
+	@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(mFacebook != null) {
-        	 mFacebook.authorizeCallback(requestCode, resultCode, data);
-        }
+        service.onActivityResult(requestCode, resultCode, data);
+    }
+    
+    public FacebookActivityService getFacebookActivityService() {
+    	return new FacebookActivityService(this);
     }
 }

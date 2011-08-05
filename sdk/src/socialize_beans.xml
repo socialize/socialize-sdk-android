@@ -41,6 +41,12 @@
 		<property name="ioUtils" ref="ioUtils"/>
 	</bean>
 	
+	<bean id="drawables" class="com.socialize.util.Drawables">
+		<constructor-arg type="activity"/>
+	</bean>
+	
+	<bean id="dialogFactory" class="com.socialize.util.DialogFactory"/>
+	
 	<bean id="userFactory" class="com.socialize.entity.factory.UserFactory"/>
 
 	<bean id="applicationFactory" class="com.socialize.entity.factory.ApplicationFactory"/>

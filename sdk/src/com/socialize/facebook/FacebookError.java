@@ -14,38 +14,37 @@
  * limitations under the License.
  */
 
-package com.facebook.android;
+package com.socialize.facebook;
 
 /**
- * Encapsulation of Dialog Error.
+ * Encapsulation of a Facebook Error: a Facebook request that could not be
+ * fulfilled.
  *
  * @author ssoneff@facebook.com
  */
-public class DialogError extends Throwable {
+public class FacebookError extends Throwable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * The ErrorCode received by the WebView: see
-     * http://developer.android.com/reference/android/webkit/WebViewClient.html
-     */
-    private int mErrorCode;
+    private int mErrorCode = 0;
+    private String mErrorType;
 
-    /** The URL that the dialog was trying to load */
-    private String mFailingUrl;
-
-    public DialogError(String message, int errorCode, String failingUrl) {
+    public FacebookError(String message) {
         super(message);
-        mErrorCode = errorCode;
-        mFailingUrl = failingUrl;
     }
 
-    int getErrorCode() {
+    public FacebookError(String message, String type, int code) {
+        super(message);
+        mErrorType = type;
+        mErrorCode = code;
+    }
+
+    public int getErrorCode() {
         return mErrorCode;
     }
 
-    String getFailingUrl() {
-        return mFailingUrl;
+    public String getErrorType() {
+        return mErrorType;
     }
 
 }

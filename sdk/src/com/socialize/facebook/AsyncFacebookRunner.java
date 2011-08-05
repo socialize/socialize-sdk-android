@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.facebook.android;
+package com.socialize.facebook;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

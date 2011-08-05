@@ -19,19 +19,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.util;
+package com.socialize.android.ioc;
+
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
- * Abstracts the provision of classloaded instances.  
- * Used to decouple classloader dependencies for test cases.
  * 
  * @author Jason Polites
+ *
  */
-public class ClassLoaderProvider {
+public class BeanMapping {
 
-	public ClassLoader getClassloader() {
-		return ClassLoaderProvider.class.getClassLoader();
-//		return Thread.currentThread().getContextClassLoader();
+	private Map<String, BeanRef> beanRefs;
+
+	public Collection<BeanRef> getBeanRefs() {
+		return beanRefs.values();
+	}
+
+	public synchronized void addBeanRef(BeanRef ref) {
+		if(beanRefs == null) {
+			beanRefs = new LinkedHashMap<String, BeanRef>();
+		}
+		beanRefs.put(ref.getName(), ref);
+	}
+
+	public BeanRef getBeanRef(String name) {
+		return beanRefs.get(name);
 	}
 	
+	/**
+	 * Replaces any beans matching those in the provided map
+	 * @param mapping
+	 */
+	public void merge(BeanMapping mapping) {
+		Collection<BeanRef> other = mapping.getBeanRefs();
+		for (BeanRef beanRef : other) {
+			addBeanRef(beanRef);
+		}
+	}
 }

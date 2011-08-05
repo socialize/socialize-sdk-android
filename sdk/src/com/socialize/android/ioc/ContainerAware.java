@@ -19,19 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.util;
+package com.socialize.android.ioc;
 
 /**
- * Abstracts the provision of classloaded instances.  
- * Used to decouple classloader dependencies for test cases.
- * 
+ * Allows objects created by the container to be given a reference to the container upon creation.
  * @author Jason Polites
  */
-public class ClassLoaderProvider {
+public interface ContainerAware {
 
-	public ClassLoader getClassloader() {
-		return ClassLoaderProvider.class.getClassLoader();
-//		return Thread.currentThread().getContextClassLoader();
-	}
+	public void setContainer(Container container);
 	
 }

@@ -36,10 +36,5 @@
 			<type>1</type>
 			<location>/Users/jasonpolites/dev/workspace/socialize-sdk-android/README</location>
 		</link>
-		<link>
-			<name>android-ioc_src</name>
-			<type>2</type>
-			<locationURI>_android_android_ioc_37cf739f/src</locationURI>
-		</link>
 	</linkedResources>
 </projectDescription>

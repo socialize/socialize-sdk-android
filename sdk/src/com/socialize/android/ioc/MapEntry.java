@@ -19,19 +19,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.util;
+package com.socialize.android.ioc;
 
 /**
- * Abstracts the provision of classloaded instances.  
- * Used to decouple classloader dependencies for test cases.
  * 
  * @author Jason Polites
+ *
  */
-public class ClassLoaderProvider {
+public class MapEntry {
 
-	public ClassLoader getClassloader() {
-		return ClassLoaderProvider.class.getClassLoader();
-//		return Thread.currentThread().getContextClassLoader();
-	}
+	private Object key;
+	private Object value;
 	
+	public Object getKey() {
+		return key;
+	}
+	public void setKey(Object key) {
+		this.key = key;
+	}
+	public Object getValue() {
+		return value;
+	}
+	public void setValue(Object value) {
+		this.value = value;
+	}
 }

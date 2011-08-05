@@ -26,12 +26,12 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.facebook.android.DialogError;
-import com.facebook.android.Facebook;
-import com.facebook.android.FacebookError;
-import com.facebook.android.Facebook.DialogListener;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.error.SocializeException;
+import com.socialize.facebook.DialogError;
+import com.socialize.facebook.Facebook;
+import com.socialize.facebook.FacebookError;
+import com.socialize.facebook.Facebook.DialogListener;
 import com.socialize.listener.AuthProviderListener;
 
 /**

@@ -36,22 +36,33 @@
 		<copy todir="libs" verbose="true">
 			<fileset dir="libext" includes="**/*.jar"/>
 		</copy>
-		
 		<!-- Set the version -->
 		<replaceregexp file="src/com/socialize/Socialize.java" flags="s" match="public\s+static\s+final\s+String\s+VERSION\s*=\s*&quot;.*&quot;" replace="public static final String VERSION = &quot;${version}&quot;" />
 	</target>
 
-	<target name="build" depends="compile">
+	<target name="build">
 
+		<antcall target="jar"/>
+		<antcall target="package"/>
+		
+		<!-- clean up -->
+		<delete dir="libs" includes="**/*.jar" verbose="true"/>
+	</target>
+	
+	<target name="jar" depends="compile">
 		<!-- Manually copy config files -->
 		<echo>Out dir is [${out.dir}]</echo>
 
 		<copy todir="${out.dir}/classes" verbose="true" >
-			<fileset dir="src">
+			<fileset dir="bin">
 				<include name="socialize_beans.xml"/>
 				<include name="errors.properties"/>
 				<include name="socialize.properties"/>
 			</fileset>
+		</copy>
+		
+		<copy todir="${out.dir}/classes/res/" verbose="true" >
+			<fileset dir="bin/res" includes="**/**"/>
 		</copy>
 		
 		<delete dir="build"/>
@@ -65,11 +76,6 @@
 				<attribute name="Implementation-Version" value="${version}" />
 			</manifest>
 		</jar>
-
-		<antcall target="package"/>
-		
-		<!-- clean up -->
-		<delete dir="libs" includes="**/*.jar" verbose="true"/>
 	</target>
 	
 	<target name="package" depends="javadoc">

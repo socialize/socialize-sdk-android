@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -21,17 +21,16 @@
  */
 package com.socialize.util;
 
-/**
- * Abstracts the provision of classloaded instances.  
- * Used to decouple classloader dependencies for test cases.
- * 
- * @author Jason Polites
- */
-public class ClassLoaderProvider {
+import android.app.AlertDialog.Builder;
+import android.content.Context;
 
-	public ClassLoader getClassloader() {
-		return ClassLoaderProvider.class.getClassLoader();
-//		return Thread.currentThread().getContextClassLoader();
+/**
+ * A very simple factory class which just allows us to mock the creation of Alert Dialogs for testing.
+ * @author Jason Polites
+ *
+ */
+public class DialogFactory {
+	public Builder getAlertDialogBuilder(Context context) {
+		return new Builder(context);
 	}
-	
 }

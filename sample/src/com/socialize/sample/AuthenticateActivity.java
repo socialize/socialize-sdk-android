@@ -35,13 +35,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.facebook.android.Facebook;
 import com.socialize.Socialize;
 import com.socialize.activity.SocializeActivity;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
+import com.socialize.facebook.Facebook;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.sample.util.ErrorHandler;
 
@@ -114,7 +114,7 @@ public class AuthenticateActivity extends SocializeActivity {
 				@Override
 				public void onClick(View v) {
 					
-					Facebook mFacebook = new Facebook(facebookAppId);
+					Facebook mFacebook = new Facebook(facebookAppId, null);
 					
 					try {
 						mFacebook.logout(AuthenticateActivity.this);
@@ -156,7 +156,7 @@ public class AuthenticateActivity extends SocializeActivity {
 			consumerKey = properties.getProperty("socialize.consumer.key");
 			consumerSecret = properties.getProperty("socialize.consumer.secret");
 			url = properties.getProperty("socialize.api.url");
-			facebookAppId = properties.getProperty("209798315709193");
+			facebookAppId = properties.getProperty("facebook.app.id");
 		}
 		catch (IOException e) {
 			e.printStackTrace();

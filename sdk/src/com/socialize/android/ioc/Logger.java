@@ -19,19 +19,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.util;
+package com.socialize.android.ioc;
 
-/**
- * Abstracts the provision of classloaded instances.  
- * Used to decouple classloader dependencies for test cases.
- * 
- * @author Jason Polites
- */
-public class ClassLoaderProvider {
+import android.util.Log;
 
-	public ClassLoader getClassloader() {
-		return ClassLoaderProvider.class.getClassLoader();
-//		return Thread.currentThread().getContextClassLoader();
+public class Logger {
+
+	public static final String LOG_KEY = "AndroidIOC";
+	
+	public static final void d(String tag, String msg) {
+		Log.d(LOG_KEY, tag + ": " + msg);
+	}
+
+	public static final void i(String tag, String msg) {
+		Log.i(LOG_KEY, tag + ": " + msg);
 	}
 	
+	public static final void w(String tag, String msg) {
+		Log.w(LOG_KEY, tag + ": " + msg);
+	}
+	
+	public static final void w(String tag, String msg, Throwable e) {
+		Log.w(LOG_KEY, tag + ": " + msg, e);
+	}
+
+	public static final void e(String tag, String msg) {
+		Log.e(LOG_KEY, tag + ": " + msg);
+	}
+	
+	public static final void e(String tag, String msg, Throwable e) {
+		Log.e(LOG_KEY, tag + ": " + msg, e);
+	}
 }

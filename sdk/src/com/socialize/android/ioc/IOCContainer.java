@@ -19,19 +19,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.util;
+package com.socialize.android.ioc;
+
+import java.io.InputStream;
+
+import android.content.Context;
 
 /**
- * Abstracts the provision of classloaded instances.  
- * Used to decouple classloader dependencies for test cases.
  * 
  * @author Jason Polites
+ *
  */
-public class ClassLoaderProvider {
+public interface IOCContainer {
 
-	public ClassLoader getClassloader() {
-		return ClassLoaderProvider.class.getClassLoader();
-//		return Thread.currentThread().getContextClassLoader();
-	}
+	public <T extends Object> T getBean(String name);
+
+	/**
+	 * Destroys the container.
+	 */
+	public void destroy();
+
+	/**
+	 * Initializes the container.
+	 * @param context The current context.
+	 * @param builder
+	 * @param in
+	 * @throws Exception
+	 */
+	public void init(Context context, ContainerBuilder builder, InputStream...in) throws Exception;
+
+	public void init(Context context, InputStream...in) throws Exception;
 	
+	public int size();
+
 }

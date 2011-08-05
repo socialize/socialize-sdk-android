@@ -19,19 +19,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.util;
+package com.socialize.android.ioc;
 
-/**
- * Abstracts the provision of classloaded instances.  
- * Used to decouple classloader dependencies for test cases.
- * 
- * @author Jason Polites
- */
-public class ClassLoaderProvider {
+import java.io.InputStream;
 
-	public ClassLoader getClassloader() {
-		return ClassLoaderProvider.class.getClassLoader();
-//		return Thread.currentThread().getContextClassLoader();
+import android.content.Context;
+
+public class AndroidIOC implements IOCContainer {
+	
+	private Container container;
+	private boolean initialized = false;
+	
+	@Override
+	public void init(Context context, InputStream...in) throws Exception {
+		init(context, new ContainerBuilder(context), in);
 	}
 	
+	@Override
+	public void init(Context context, ContainerBuilder builder, InputStream...in) throws Exception {
+		if(!initialized) {
+			container = builder.build(in);
+			initialized = true;
+		}
+	}
+	
+	@Override
+	public int size() {
+		return container.size();
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.android.ioc.IOCContainer#getBean(java.lang.String)
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T extends Object> T getBean(String name) {
+		return (T) container.getBean(name);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.socialize.android.ioc.IOCContainer#destroy()
+	 */
+	@Override
+	public void destroy() {
+		if(container != null) {
+			container.destroy();	
+		}
+		initialized = false;
+	}
 }

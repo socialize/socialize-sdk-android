@@ -36,13 +36,15 @@ import com.socialize.util.StringUtils;
  */
 public class SocializeConfig {
 	
-	public static final String DEFAULT_PROPERTIES = "socialize.properties";
+	public static final String SOCIALIZE_PROPERTIES_PATH = "socialize.properties";
+	public static final String SOCIALIZE_BEANS_PATH = "socialize_beans.xml";
+	public static final String SOCIALIZE_ERRORS_PATH = "errors.properties";
 	
 	private Properties properties;
 	private SocializeLogger logger;
 	private ResourceLocator resourceLocator;
 	
-	private String propertiesFileName = DEFAULT_PROPERTIES;
+	private String propertiesFileName = SOCIALIZE_PROPERTIES_PATH;
 	
 	public static final String LOG_LEVEL = "log.level";
 	public static final String LOG_TAG = "log.tag";
@@ -126,7 +128,7 @@ public class SocializeConfig {
 	}
 
 	public String getDefaultPropertiesFileName() {
-		return DEFAULT_PROPERTIES;
+		return SOCIALIZE_PROPERTIES_PATH;
 	}
 
 	public Properties getProperties() {

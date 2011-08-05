@@ -55,8 +55,6 @@ import com.socialize.util.ResourceLocator;
  */
 public class SocializeServiceImpl implements SocializeSessionConsumer, SocializeService {
 	
-	public static final String DEFAULT_BEAN_CONFIG = "socialize_beans.xml";
-	
 	private SocializeApiHost service;
 	private SocializeLogger logger;
 	private IOCContainer container;
@@ -68,7 +66,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public void init(Context context) {
-		init(context, DEFAULT_BEAN_CONFIG);
+		init(context, SocializeConfig.SOCIALIZE_BEANS_PATH);
 	}
 	
 	/* (non-Javadoc)

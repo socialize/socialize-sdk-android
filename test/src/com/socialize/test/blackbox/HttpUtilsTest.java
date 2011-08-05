@@ -31,6 +31,7 @@ import android.test.mock.MockContext;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.config.SocializeConfig;
 import com.socialize.log.SocializeLogger;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.ClassLoaderProvider;
@@ -165,7 +166,7 @@ public class HttpUtilsTest extends SocializeActivityTest {
 		String failString = "NaN=OK";
 		ByteArrayInputStream bin = new ByteArrayInputStream(failString.getBytes());
 		
-		AndroidMock.expect(locator.locate(context, "errors.properties")).andReturn(bin);
+		AndroidMock.expect(locator.locate(context, SocializeConfig.SOCIALIZE_ERRORS_PATH)).andReturn(bin);
 		AndroidMock.expect(logger.isWarnEnabled()).andReturn(true);
 
 		logger.warn("NaN is not an integer");

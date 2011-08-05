@@ -26,10 +26,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.util.Log;
 
-import com.facebook.android.Facebook;
 import com.socialize.error.SocializeException;
+import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.log.SocializeLogger;
+import com.socialize.util.DialogFactory;
 
 /**
  * @author Jason Polites
@@ -41,14 +42,21 @@ public class FacebookService {
 	private Facebook facebook; 
 	private FacebookSessionStore facebookSessionStore; 
 	private AuthProviderListener listener;
+	private DialogFactory dialogFactory;
 	
-	public FacebookService(Activity context, Facebook facebook, FacebookSessionStore facebookSessionStore, AuthProviderListener listener) {
+	public FacebookService(
+			Activity context, 
+			Facebook facebook, 
+			FacebookSessionStore facebookSessionStore, 
+			AuthProviderListener listener, 
+			DialogFactory dialogFactory) {
 		super();
 		this.context = context;
 		
 		this.facebook = facebook;
 		this.facebookSessionStore = facebookSessionStore;
 		this.listener = listener;
+		this.dialogFactory = dialogFactory;
 	}
 
 	public void authenticate() {
@@ -103,26 +111,9 @@ public class FacebookService {
 		});
 	}
 	
-	public void doErrorUI(final String error) {
-		
+	public void doErrorUI(String error) {
 		try {
-			AlertDialog.Builder builder = new AlertDialog.Builder(context);
-			builder.setTitle("Oops!");
-			builder.setMessage("Oops!\nSomething went wrong...");
-			builder.setCancelable(false);
-			builder.setPositiveButton("Try again", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-					dialog.dismiss();
-					authenticate();
-				}
-			});	
-			builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-					dialog.dismiss();
-					finish();
-				}
-			});	
-			builder.create().show();
+			makeErrorDialog(error).show();
 		}
 		catch (Exception e) {
 			Log.e(SocializeLogger.LOG_TAG, "Facebook error", e);
@@ -131,6 +122,26 @@ public class FacebookService {
 	
 	public void finish() {
 		context.finish();
+	}
+	
+	public AlertDialog makeErrorDialog(String error) {
+		AlertDialog.Builder builder = dialogFactory.getAlertDialogBuilder(context);
+		builder.setTitle("Oops!");
+		builder.setMessage("Oops!\nSomething went wrong...\n[" + error + "]");
+		builder.setCancelable(false);
+		builder.setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.dismiss();
+				authenticate();
+			}
+		});	
+		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.dismiss();
+				finish();
+			}
+		});	
+		return builder.create();
 	}
 	
 }

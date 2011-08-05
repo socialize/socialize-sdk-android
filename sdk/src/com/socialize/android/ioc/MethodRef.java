@@ -19,19 +19,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.util;
+package com.socialize.android.ioc;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
- * Abstracts the provision of classloaded instances.  
- * Used to decouple classloader dependencies for test cases.
- * 
+ * Represents a description of a method to be executed.
  * @author Jason Polites
+ *
  */
-public class ClassLoaderProvider {
+public class MethodRef {
 
-	public ClassLoader getClassloader() {
-		return ClassLoaderProvider.class.getClassLoader();
-//		return Thread.currentThread().getContextClassLoader();
+	private String name;
+	private List<Argument> arguments;
+	
+	public MethodRef() {
+		super();
 	}
+	
+	public MethodRef(String name) {
+		super();
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public List<Argument> getArguments() {
+		return arguments;
+	}
+
+	public synchronized void addArgument(Argument arg) {
+		if(arguments == null) arguments = new LinkedList<Argument>();
+		arguments.add(arg);
+	}
+	
 	
 }

@@ -16,7 +16,8 @@
 
 package com.socialize.auth.facebook;
 
-import com.facebook.android.Facebook;
+import com.socialize.facebook.Facebook;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
