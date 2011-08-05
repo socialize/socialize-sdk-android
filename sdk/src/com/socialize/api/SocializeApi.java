@@ -176,16 +176,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		request.setObjects(objects);
 		poster.execute(request);
 	}
-	
-	/**
-	 * 
-	 * @param key
-	 * @param secret
-	 * @param uuid
-	 * @param listener
-	 * @param sessionConsumer
-	 */
-	@Deprecated
+
 	public void authenticateAsync(String key, String secret, String uuid, final SocializeAuthListener listener, final SocializeSessionConsumer sessionConsumer) {
 		authenticateAsync(key, secret, uuid, null, null, null, null, listener, sessionConsumer, false);
 	}

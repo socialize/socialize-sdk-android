@@ -21,12 +21,12 @@
  */
 package com.socialize.sample;
 
-import android.app.Activity;
 import android.os.Bundle;
 
 import com.socialize.Socialize;
+import com.socialize.activity.SocializeActivity;
 
-public class ViewActivity extends Activity {
+public class ViewActivity extends SocializeActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

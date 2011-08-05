@@ -103,7 +103,6 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 	}
 	
 	public void testApiAsyncCallsAuthenticateOnProvider() throws Throwable {
-
 		
 		AndroidMock.expect(provider.authenticate("/authenticate/", "test_key", "test_secret", "test_uuid")).andReturn(mockSession);
 		
@@ -168,7 +167,6 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		
 		AndroidMock.verify(provider);
 	}
-	
 	
 	public void testApiAsyncGetCallsAddOnResponse() throws Throwable {
 

@@ -38,10 +38,12 @@ import com.socialize.listener.ListenerHolder;
 public class FacebookAuthProvider implements AuthProvider {
 	
 	private Context context;
+	private ListenerHolder holder; // This is a singleton
 	
-	public FacebookAuthProvider(Context context) {
+	public FacebookAuthProvider(Context context, ListenerHolder holder) {
 		super();
 		this.context = context;
+		this.holder = holder;
 	}
 
 	/* (non-Javadoc)
@@ -52,23 +54,23 @@ public class FacebookAuthProvider implements AuthProvider {
 		
 		final String listenerKey = "auth";
 		
-		ListenerHolder.getInstance().put(listenerKey, new AuthProviderListener() {
+		holder.put(listenerKey, new AuthProviderListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
-				ListenerHolder.getInstance().remove(listenerKey);
+				holder.remove(listenerKey);
 				listener.onError(error);
 			}
 			
 			@Override
 			public void onAuthSuccess(AuthProviderResponse response) {
-				ListenerHolder.getInstance().remove(listenerKey);
+				holder.remove(listenerKey);
 				listener.onAuthSuccess(response);
 			}
 			
 			@Override
 			public void onAuthFail(SocializeException error) {
-				ListenerHolder.getInstance().remove(listenerKey);
+				holder.remove(listenerKey);
 				listener.onAuthFail(error);
 			}
 		});

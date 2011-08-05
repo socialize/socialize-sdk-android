@@ -80,6 +80,8 @@
 		<property name="httpUtils" ref="httpUtils"/>
 		<property name="ioUtils" ref="ioUtils"/>
 		<property name="sessionPersister" ref="sessionPersister"/>
+		<property name="facebookSessionStore" ref="facebookSessionStore"/>
+		
 	</bean>
 	
 	<bean id="authProviders" class="com.socialize.auth.AuthProviders">
@@ -93,8 +95,13 @@
 		</property>
 	</bean>
 	
+<!--  Facebook -->
+	<bean id="facebookSessionStore" class="com.socialize.auth.facebook.FacebookSessionStore"/>
+	<bean id="listenerHolder" class="com.socialize.listener.ListenerHolder"/>
+	
 	<bean id="facebookProvider" class="com.socialize.auth.facebook.FacebookAuthProvider">
 		<constructor-arg type="context"/>
+		<constructor-arg ref="listenerHolder"/>
 	</bean>
 	
 	<bean id="socializeApi" class="com.socialize.api.SocializeApi" abstract="true">

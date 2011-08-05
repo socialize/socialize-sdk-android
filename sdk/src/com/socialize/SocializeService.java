@@ -229,5 +229,11 @@ public interface SocializeService {
 	 * @return
 	 */
 	public SocializeConfig getConfig();
+	
+	/**
+	 * Clears the local cache of session data.  This will cause a full authenticate 
+	 * to be required upon the next call to the Socialize API.
+	 */
+	public void clearSessionCache();
 
 }

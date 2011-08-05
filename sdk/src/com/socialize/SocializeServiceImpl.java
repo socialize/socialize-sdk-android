@@ -24,6 +24,7 @@ package com.socialize;
 import android.content.Context;
 import android.location.Location;
 
+import com.socialize.activity.ActivityIOCProvider;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeApiHost;
 import com.socialize.api.SocializeSession;
@@ -113,6 +114,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.service = container.getBean("socializeApiHost");
 				this.logger = container.getBean("logger");
 				this.initCount++;
+				
+				ActivityIOCProvider.getInstance().setContainer(container);
 			}
 			catch (Exception e) {
 				if(logger != null) {
@@ -128,7 +131,11 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 	
-	
+	@Override
+	public void clearSessionCache() {
+		service.clearSessionCache();
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#destroy()
 	 */

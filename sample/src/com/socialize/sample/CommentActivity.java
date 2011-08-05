@@ -21,14 +21,15 @@
  */
 package com.socialize.sample;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class CommentActivity extends Activity {
+import com.socialize.activity.SocializeActivity;
+
+public class CommentActivity extends SocializeActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -21,7 +21,6 @@
  */
 package com.socialize.sample;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
@@ -31,13 +30,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.socialize.Socialize;
+import com.socialize.activity.SocializeActivity;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.sample.util.ErrorHandler;
 import com.socialize.util.StringUtils;
 
-public class EntityActivity extends Activity {
+public class EntityActivity extends SocializeActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

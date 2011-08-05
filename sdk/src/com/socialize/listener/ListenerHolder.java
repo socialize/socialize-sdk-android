@@ -31,12 +31,7 @@ import java.util.TreeMap;
  */
 public class ListenerHolder {
 
-	private static ListenerHolder instance = new ListenerHolder();
 	private Map<String, SocializeListener> listeners = new TreeMap<String, SocializeListener>();
-	
-	public static ListenerHolder getInstance() {
-		return instance;
-	}
 	
 	public void put(String key, SocializeListener listener) {
 		listeners.put(key, listener);

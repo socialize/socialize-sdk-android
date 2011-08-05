@@ -41,6 +41,7 @@ import com.socialize.api.SocializeSessionFactory;
 import com.socialize.api.SocializeSessionPersister;
 import com.socialize.api.WritableSession;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.facebook.FacebookSessionStore;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.ActionError;
 import com.socialize.entity.ListResult;
@@ -81,6 +82,8 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	private SocializeSessionPersister sessionPersister;
 	private SocializeConfig config;
 	private Context context;
+	
+	private FacebookSessionStore facebookSessionStore;
 	
 	public DefaultSocializeProvider(Context context) {
 		super();
@@ -127,6 +130,10 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	
 	public void setSessionFactory(SocializeSessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
+	}
+	
+	public void setFacebookSessionStore(FacebookSessionStore facebookSessionStore) {
+		this.facebookSessionStore = facebookSessionStore;
 	}
 
 	@Override
@@ -183,6 +190,10 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	public void clearSession() {
 		if(sessionPersister != null) {
 			sessionPersister.delete(context);
+		}
+		
+		if(facebookSessionStore != null) {
+			facebookSessionStore.clear(context);
 		}
 	}
 
@@ -524,4 +535,6 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	public SocializeSessionPersister getSessionPersister() {
 		return sessionPersister;
 	}
+	
+	
 }

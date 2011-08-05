@@ -3,8 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="libext/signpost-commonshttp4-1.2.1.1.jar"/>
-	<classpathentry kind="lib" path="libext/signpost-core-1.2.1.1.jar"/>
 	<classpathentry kind="src" path="android-ioc_src"/>
+	<classpathentry exported="true" kind="lib" path="libext/commons-codec-1.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

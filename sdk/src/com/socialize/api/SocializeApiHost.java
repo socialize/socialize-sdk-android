@@ -59,6 +59,10 @@ public class SocializeApiHost {
 		this.context = context;
 	}
 	
+	public void clearSessionCache() {
+		commentApi.clearSession();
+	}
+	
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
 		authenticate(consumerKey, consumerSecret, null, null, AuthProviderType.SOCIALIZE, null, listener, sessionConsumer, false);
 	}
