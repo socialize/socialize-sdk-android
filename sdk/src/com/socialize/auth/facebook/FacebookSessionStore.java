@@ -24,9 +24,9 @@ import android.content.SharedPreferences.Editor;
 
 public class FacebookSessionStore {
 
-	private static final String TOKEN = "access_token";
-	private static final String EXPIRES = "expires_in";
-	private static final String KEY = "facebook-session";
+	public static final String TOKEN = "access_token";
+	public static final String EXPIRES = "expires_in";
+	public static final String KEY = "facebook-session";
 
 	public boolean save(Facebook session, Context context) {
 		Editor editor = context.getSharedPreferences(KEY, Context.MODE_PRIVATE).edit();

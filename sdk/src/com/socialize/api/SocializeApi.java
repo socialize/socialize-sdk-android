@@ -215,73 +215,14 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		}
 
 		final SocializeAuthRequest request = new SocializeAuthRequest();
+		
 		request.setEndpoint("/authenticate/");
 		request.setConsumerKey(key);
 		request.setConsumerSecret(secret);
 		request.setUdid(uuid);
 		
 		if(do3rdPartyAuth && !authProviderType.equals(AuthProviderType.SOCIALIZE)) {
-			
-			request.setAuthProviderType(authProviderType);
-			request.setAppId3rdParty(appId3rdParty);
-			
-			final SocializeActionListener fWrapper = wrapper;
-			
-			// Try loading the session first
-			SocializeSession session = null;
-			try {
-				session = SocializeApi.this.loadSession(request.getEndpoint(), key, secret, authProviderType, appId3rdParty);
-			}
-			catch (SocializeException e) {
-				// No need to throw this, just log it
-				logger.warn("Failed to load saved session data", e);
-			}
-						
-			if(session == null) {
-				// Get the provider for the type
-				AuthProvider authProvider = authProviders.getProvider(authProviderType);
-				
-				if(authProvider != null) {
-					authProvider.authenticate(request, appId3rdParty, new AuthProviderListener() {
-						
-						@Override
-						public void onError(SocializeException error) {
-							if(listener != null) {
-								listener.onError(error);
-							}
-						}
-						
-						@Override
-						public void onAuthSuccess(AuthProviderResponse response) {
-							request.setAuthToken3rdParty(response.getToken());
-							request.setAuthUserId3rdParty(response.getUserId());
-							request.setAuthProviderType(authProviderType);
-							
-							// Do normal auth
-							AsyncAuthenicator authenicator = new AsyncAuthenicator(RequestType.AUTH, null, fWrapper);
-							authenicator.execute(request);
-						}
-						
-						@Override
-						public void onAuthFail(SocializeException error) {
-							if(listener != null) {
-								listener.onAuthFail(error);
-							}
-						}
-					});
-				}
-				else {
-					logger.error("No provider found for auth type [" +
-							authProviderType.getName() +
-							"]");
-				}
-			}
-			else {
-				// We already have a session, just call the listener
-				if(listener != null) {
-					listener.onAuthSuccess(session);
-				}
-			}
+			handle3rdPartyAuth(request, authUserId3rdParty, authToken3rdParty, appId3rdParty, authProviderType, wrapper, listener, key, secret);
 		}
 		else {
 			request.setAuthToken3rdParty(authToken3rdParty);
@@ -289,11 +230,84 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			request.setAuthProviderType(authProviderType);
 			
 			// Do normal auth
-			AsyncAuthenicator authenicator = new AsyncAuthenicator(RequestType.AUTH, null, wrapper);
-			authenicator.execute(request);
+			handleRegularAuth(request, wrapper);
 		}
 	}
+	
+	protected void handleRegularAuth(SocializeAuthRequest request, SocializeActionListener wrapper) {
+		AsyncAuthenicator authenicator = new AsyncAuthenicator(RequestType.AUTH, null, wrapper);
+		authenicator.execute(request);
+	}
 
+	protected void handle3rdPartyAuth(
+			final SocializeAuthRequest request,
+			final String authUserId3rdParty, 
+			final String authToken3rdParty,
+			final String appId3rdParty,
+			final AuthProviderType authProviderType,
+			final SocializeActionListener fWrapper,
+			final SocializeAuthListener listener, 
+			String key, String secret)  {
+	
+		request.setAuthProviderType(authProviderType);
+		request.setAppId3rdParty(appId3rdParty);
+		
+		// Try loading the session first
+		SocializeSession session = null;
+		
+		try {
+			session = loadSession(request.getEndpoint(), key, secret, authProviderType, appId3rdParty);
+		}
+		catch (SocializeException e) {
+			// No need to throw this, just log it
+			logger.warn("Failed to load saved session data", e);
+		}
+					
+		if(session == null) {
+			// Get the provider for the type
+			AuthProvider authProvider = authProviders.getProvider(authProviderType);
+			
+			if(authProvider != null) {
+				authProvider.authenticate(request, appId3rdParty, new AuthProviderListener() {
+					
+					@Override
+					public void onError(SocializeException error) {
+						if(listener != null) {
+							listener.onError(error);
+						}
+					}
+					
+					@Override
+					public void onAuthSuccess(AuthProviderResponse response) {
+						request.setAuthToken3rdParty(response.getToken());
+						request.setAuthUserId3rdParty(response.getUserId());
+						request.setAuthProviderType(authProviderType);
+						
+						// Do normal auth
+						handleRegularAuth(request, fWrapper);
+					}
+					
+					@Override
+					public void onAuthFail(SocializeException error) {
+						if(listener != null) {
+							listener.onAuthFail(error);
+						}
+					}
+				});
+			}
+			else {
+				logger.error("No provider found for auth type [" +
+						authProviderType.getName() +
+						"]");
+			}
+		}
+		else {
+			// We already have a session, just call the listener
+			if(listener != null) {
+				listener.onAuthSuccess(session);
+			}
+		}
+	}
 	
 	public void setResponseFactory(SocializeResponseFactory<T> responseFactory) {
 		this.responseFactory = responseFactory;

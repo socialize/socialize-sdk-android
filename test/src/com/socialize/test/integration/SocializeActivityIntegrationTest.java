@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,44 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test;
+package com.socialize.test.integration;
 
-import java.util.Stack;
+import android.content.Intent;
 
-import android.test.ActivityInstrumentationTestCase2;
+import com.socialize.sample.MockSocializeActivity;
+import com.socialize.test.SocializeActivityTest;
 
-import com.socialize.sample.EmptyActivity;
-
-public abstract class SocializeActivityTest extends ActivityInstrumentationTestCase2<EmptyActivity> {
-	
-	private Stack<Object> bucket;
-	
-	public SocializeActivityTest() {
-		super("com.socialize.sample", EmptyActivity.class);
-	}
-
-	@Override
-	protected void setUp() throws Exception {
-		bucket = new Stack<Object>();
-		super.setUp();
-	}
-	
-	protected void addResult(Object obj) {
-		bucket.push(obj);
+/**
+ * @author Jason Polites
+ *
+ */
+public class SocializeActivityIntegrationTest extends SocializeActivityTest {
+ 
+	public void testSocializeActivity() {
+		Intent i = new Intent(getActivity(), MockSocializeActivity.class);
+		getActivity().startActivity(i);
+		
+		sleep(5000);
+		
 	}
 	
-	@SuppressWarnings("unchecked")
-	protected <T extends Object> T getNextResult() {
-		if(!bucket.isEmpty()) {
-			return (T) bucket.pop();
-		}
-		return null;
-	}
-	
-	protected void sleep(long time) {
-		try {
-			Thread.sleep(time);
-		}
-		catch (InterruptedException ignore) {}
-	}
 }

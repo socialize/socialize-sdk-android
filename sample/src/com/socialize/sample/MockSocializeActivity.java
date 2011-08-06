@@ -19,44 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test;
+package com.socialize.sample;
 
-import java.util.Stack;
+import android.os.Bundle;
 
-import android.test.ActivityInstrumentationTestCase2;
+import com.socialize.activity.SocializeActivity;
+import com.socialize.log.SocializeLogger;
 
-import com.socialize.sample.EmptyActivity;
-
-public abstract class SocializeActivityTest extends ActivityInstrumentationTestCase2<EmptyActivity> {
-	
-	private Stack<Object> bucket;
-	
-	public SocializeActivityTest() {
-		super("com.socialize.sample", EmptyActivity.class);
-	}
-
+public class MockSocializeActivity extends SocializeActivity {
 	@Override
-	protected void setUp() throws Exception {
-		bucket = new Stack<Object>();
-		super.setUp();
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		SocializeLogger logger = getBean("logger");
+		logger.debug("TESTING MOCK ACTIVITY");
+		finish();
 	}
 	
-	protected void addResult(Object obj) {
-		bucket.push(obj);
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected <T extends Object> T getNextResult() {
-		if(!bucket.isEmpty()) {
-			return (T) bucket.pop();
-		}
-		return null;
-	}
-	
-	protected void sleep(long time) {
-		try {
-			Thread.sleep(time);
-		}
-		catch (InterruptedException ignore) {}
-	}
 }

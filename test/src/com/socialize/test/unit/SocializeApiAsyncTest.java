@@ -21,7 +21,9 @@
  */
 package com.socialize.test.unit;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -347,6 +349,47 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 			@Override 
 			public void run() { 
 				api.postAsync(mockSession, endpoint, object, listener);
+			} 
+		});
+
+		signal.await(30, TimeUnit.SECONDS); 
+		
+		AndroidMock.verify(provider);
+	}
+	
+	
+	public void testApiAsyncCallsPostOnProviderWithList() throws Throwable {
+
+		final String endpoint = "foobar";
+		final List<SocializeObject> objects = new ArrayList<SocializeObject>();
+		
+		AndroidMock.expect(provider.post(mockSession, endpoint, objects)).andReturn(null);
+		AndroidMock.replay(provider);
+
+		runTestOnUiThread(new Runnable() { 
+			@Override 
+			public void run() { 
+				api.postAsync(mockSession, endpoint, objects, listener);
+			} 
+		});
+
+		signal.await(30, TimeUnit.SECONDS); 
+		
+		AndroidMock.verify(provider);
+	}
+	
+	public void testApiAsyncCallsPutOnProviderWithList() throws Throwable {
+
+		final String endpoint = "foobar";
+		final List<SocializeObject> objects = new ArrayList<SocializeObject>();
+		
+		AndroidMock.expect(provider.put(mockSession, endpoint, objects)).andReturn(null);
+		AndroidMock.replay(provider);
+
+		runTestOnUiThread(new Runnable() { 
+			@Override 
+			public void run() { 
+				api.putAsync(mockSession, endpoint, objects, listener);
 			} 
 		});
 

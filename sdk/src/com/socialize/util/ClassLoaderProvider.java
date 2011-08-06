@@ -29,7 +29,7 @@ package com.socialize.util;
  */
 public class ClassLoaderProvider {
 
-	public ClassLoader getClassloader() {
+	public ClassLoader getClassLoader() {
 		return ClassLoaderProvider.class.getClassLoader();
 //		return Thread.currentThread().getContextClassLoader();
 	}

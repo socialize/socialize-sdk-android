@@ -37,33 +37,46 @@ import android.util.DisplayMetrics;
 public class Drawables {
 
 	DisplayMetrics metrics = null;
-	Activity context = null;
+	private ClassLoaderProvider classLoaderProvider;
 	
 	public Drawables(Activity context) {
 		super();
-		this.context = context;
 		metrics = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 	}
-
+	
 	public Drawable getDrawable(String name) {
+		return getDrawable(name, metrics.densityDpi);
+	}
+
+	public Drawable getDrawable(String name, int density) {
 
 		String densityPath = "mdpi";
 
-		if (metrics.densityDpi == DisplayMetrics.DENSITY_HIGH) {
+		if (density == DisplayMetrics.DENSITY_HIGH) {
 			densityPath = "hdpi";
 		}
-		else if (metrics.densityDpi == DisplayMetrics.DENSITY_LOW) {
+		else if (density == DisplayMetrics.DENSITY_LOW) {
 			densityPath = "ldpi";
 		}
 
 		InputStream in = null;
 			
 		try {
-			in = Drawables.class.getClassLoader().getResourceAsStream("res/drawable/" + densityPath + "/" + name);
+			
+			ClassLoader loader = null;
+			
+			if(classLoaderProvider != null) {
+				loader =  classLoaderProvider.getClassLoader();
+			}
+			else {
+				loader = Drawables.class.getClassLoader();
+			}
+			
+			in = loader.getResourceAsStream("res/drawable/" + densityPath + "/" + name);
 			
 			if(in != null) {
-				return BitmapDrawable.createFromStream(in, name);
+				return createDrawable(in, name);
 			}
 			
 			return null;
@@ -78,5 +91,17 @@ public class Drawables {
 				}
 			}
 		}
+	}
+	
+	protected Drawable createDrawable(InputStream in, String name) {
+		return BitmapDrawable.createFromStream(in, name);
+	}
+
+	public ClassLoaderProvider getClassLoaderProvider() {
+		return classLoaderProvider;
+	}
+
+	public void setClassLoaderProvider(ClassLoaderProvider classLoaderProvider) {
+		this.classLoaderProvider = classLoaderProvider;
 	}
 }

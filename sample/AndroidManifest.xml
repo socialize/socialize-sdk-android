@@ -27,6 +27,7 @@
         <activity android:name="ViewActivity"/>
 		<activity android:name="EmptyActivity"/>
 		<activity android:name="Error500Activity"/>
+		<activity android:name="MockSocializeActivity"/>
 		
 		<activity android:name="com.socialize.auth.facebook.FacebookActivity"/>
 		

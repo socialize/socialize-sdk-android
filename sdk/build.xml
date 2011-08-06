@@ -104,14 +104,18 @@
 		
 		<!-- Create the ZIP file for distribution -->
 		<zip destfile="build/socialize-sdk-android-${version}.zip">
-			<zipfileset dir="libext" includes="**/*.jar" prefix="lib"/>
 			<zipfileset dir="build" includes="**/*.jar" prefix="dist"/>
 			
+			<!-- 
+			<zipfileset dir="libext" includes="**/*.jar" prefix="lib"/>
 			<zipfileset dir="src" prefix="conf">
+				
 				<include name="socialize_beans.xml"/>
 				<include name="errors.properties"/>
+				
 				<include name="socialize.properties"/>
 			</zipfileset>
+			-->
 			
 			<!-- Add the sample app as a raw eclipse project -->
 			<zipfileset dir="${sample_dir}" prefix="sample" excludes="gen/**,bin/**,build/**,codetemplates.xml,build-qa.xml,build-qa.properties,emma.properties,proguard.cfg,.DS_Store,assets/json/**,assets/socialize.sample.properties"/>

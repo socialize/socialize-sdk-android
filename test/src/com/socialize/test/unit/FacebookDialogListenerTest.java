@@ -111,7 +111,7 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		AndroidMock.verify(facebookSessionStore);
 		AndroidMock.verify(facebook);
 		
-		Boolean result = getResult();
+		Boolean result = getNextResult();
 		assertNotNull(result);
 		assertTrue(result);
 	}
@@ -178,7 +178,7 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		AndroidMock.verify(facebookSessionStore);
 		AndroidMock.verify(facebook);
 		
-		Boolean result = getResult();
+		Boolean result = getNextResult();
 		assertNotNull(result);
 		assertTrue(result);
 	}
@@ -231,8 +231,8 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		
 		dListener.onFacebookError(error);
 		
-		Boolean result0 = getResult();
-		Boolean result1 = getResult();
+		Boolean result0 = getNextResult();
+		Boolean result1 = getNextResult();
 		
 		assertNotNull(result0);
 		assertNotNull(result1);
@@ -290,8 +290,8 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		
 		dListener.onError(error);
 		
-		Boolean result0 = getResult();
-		Boolean result1 = getResult();
+		Boolean result0 = getNextResult();
+		Boolean result1 = getNextResult();
 		
 		assertNotNull(result0);
 		assertNotNull(result1);

@@ -136,7 +136,7 @@ public class HttpUtilsTest extends SocializeActivityTest {
 		
 		utils.isAuthError(response);
 		
-		Integer result = getResult();
+		Integer result = getNextResult();
 		
 		assertNotNull(result);
 		assertEquals(code, result.intValue());

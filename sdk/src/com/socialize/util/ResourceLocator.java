@@ -76,7 +76,7 @@ public class ResourceLocator {
 						" in classpath...");
 			}
 			
-			in = classLoaderProvider.getClassloader().getResourceAsStream(name);
+			in = classLoaderProvider.getClassLoader().getResourceAsStream(name);
 			
 			if(in != null) {
 				if(logger != null && logger.isInfoEnabled()) {

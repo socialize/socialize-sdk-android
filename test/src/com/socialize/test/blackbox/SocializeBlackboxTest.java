@@ -45,7 +45,7 @@ public class SocializeBlackboxTest extends SocializeActivityTest {
 		
 		socialize.init(getActivity());
 		
-		IOCContainer container = getResult();
+		IOCContainer container = getNextResult();
 		
 		assertNotNull(container);
 		assertTrue(container instanceof SocializeIOC);

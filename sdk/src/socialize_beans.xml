@@ -43,6 +43,7 @@
 	
 	<bean id="drawables" class="com.socialize.util.Drawables">
 		<constructor-arg type="activity"/>
+		<property name="classLoaderProvider" ref="classLoaderProvider"/>
 	</bean>
 	
 	<bean id="dialogFactory" class="com.socialize.util.DialogFactory"/>
