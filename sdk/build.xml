@@ -63,7 +63,7 @@
 		</copy>
 		
 		<copy todir="${out.dir}/classes/res/" verbose="true" >
-			<fileset dir="bin/res" includes="**/**"/>
+			<fileset dir="src/res" includes="**/**"/>
 		</copy>
 		
 		<delete dir="build"/>
