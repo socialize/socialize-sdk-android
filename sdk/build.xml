@@ -18,10 +18,11 @@
 
 	<path id="javadoc.classpath">
 		<path refid="android.target.classpath" />
+		<pathelement path="libext/commons-codec-1.4.jar"/>
 	</path>
 	
 	<path id="javadoc.sourcepath">
-		<pathelement path="src" />
+		<pathelement path="src"/>
 		<pathelement path="android-ioc_src" />
 	</path>
 	
@@ -141,7 +142,8 @@
 			sourcepathref="javadoc.sourcepath"
 			classpathref="javadoc.classpath"
 			destdir="build/docs/javadoc" 
-			doctitle="${vendor} SDK v${version} Documentation">
+			doctitle="${vendor} SDK v${version} Documentation" 
+			excludepackagenames="com.google.*,oauth.*">
 			
 			<header>
 				<![CDATA[${vendor} SDK v${version} Documentation<br/>Copyright ${year} ${vendor}<br/>${website}]]>
