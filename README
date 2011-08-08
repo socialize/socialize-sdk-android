@@ -12,6 +12,17 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v0.3.0
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+[feature] Create entity
+
+[feature] Add country and/or language to User Agent
+
+[feature] Developer can Create a "view"
+
+[feature] Developer can Authenticate their socialize users using Facebook Auth
+
 v0.2.1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
