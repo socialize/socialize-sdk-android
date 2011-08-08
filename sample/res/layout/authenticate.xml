@@ -42,11 +42,31 @@
 		    android:layout_height="wrap_content"
 		    android:orientation="horizontal"
 		    android:layout_marginBottom="12dip">
+	    
 				<Button
 					android:id="@+id/btnAuthenticate"
-					android:text="Authenticate" 
+					android:text="Auth Socialize" 
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"/>    
+			    
+				<Button
+					android:id="@+id/btnAuthenticateFB"
+					android:text="Auth Facebook" 
 					android:layout_height="wrap_content"
 					android:layout_width="wrap_content"/>
+					
+				<Button
+					android:id="@+id/btnClearAuth"
+					android:text="Clear Cache" 
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"/>
+	    </LinearLayout>		 
+	    
+	    <LinearLayout 
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal"
+		    android:layout_marginBottom="12dip">
 					
 				<TextView
 					android:id="@+id/txtAuthResult"
@@ -61,22 +81,9 @@
 		            android:textSize="12dp"
 		            android:layout_width="wrap_content"
 		   			android:layout_height="wrap_content"/>
-	    </LinearLayout>	    
-	    
-		<Button
-			android:id="@+id/btnAuthenticateFB"
-			android:text="Authenticate with Facebook" 
-			android:layout_height="wrap_content"
-			android:layout_width="wrap_content"/>
-			
-		<Button
-			android:id="@+id/btnClearAuth"
-			android:text="Clear Session Cache" 
-			android:layout_height="wrap_content"
-			android:layout_width="wrap_content"/>
-	    
+	    </LinearLayout>		    
+	       
 	</LinearLayout>
-
     
     <FrameLayout 
 	    android:layout_width="fill_parent"

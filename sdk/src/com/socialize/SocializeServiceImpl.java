@@ -29,6 +29,7 @@ import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeApiHost;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
+import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
@@ -49,6 +50,7 @@ import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.ResourceLocator;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -131,7 +133,19 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	
 	@Override
 	public void clearSessionCache() {
-		service.clearSessionCache();
+		try {
+			if(session != null) {
+				AuthProvider authProvider = session.getAuthProvider();
+				String get3rdPartyAppId = session.get3rdPartyAppId();
+				
+				if(authProvider != null && !StringUtils.isEmpty(get3rdPartyAppId)) {
+					authProvider.clearCache(get3rdPartyAppId);
+				}	
+			}
+		}
+		finally {
+			service.clearSessionCache();
+		}
 	}
 
 	/* (non-Javadoc)

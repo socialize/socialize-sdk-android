@@ -21,6 +21,7 @@
  */
 package com.socialize.api;
 
+import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
 
@@ -40,6 +41,7 @@ public class SocializeSessionImpl implements WritableSession {
 	private String userId3rdParty;
 	private String token3rdParty;
 	private AuthProviderType authProviderType;
+	private AuthProvider authProvider;
 	
 	public SocializeSessionImpl() {
 		super();
@@ -165,4 +167,15 @@ public class SocializeSessionImpl implements WritableSession {
 	public void set3rdAppId(String appId) {
 		this.appId3rdParty = appId;
 	}
+
+	@Override
+	public AuthProvider getAuthProvider() {
+		return authProvider;
+	}
+	@Override
+	public void setAuthProvider(AuthProvider authProvider) {
+		this.authProvider = authProvider;
+	}
+	
+	
 }

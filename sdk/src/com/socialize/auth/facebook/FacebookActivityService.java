@@ -18,6 +18,8 @@ public class FacebookActivityService {
 	private Drawables drawables;
 	private DialogFactory dialogFactory;
 	
+	private FacebookService service;
+	
 	public FacebookActivityService(FacebookActivity activity) {
 		super();
 		this.activity = activity;
@@ -40,7 +42,7 @@ public class FacebookActivityService {
 				
 				mFacebook = new Facebook(appId, drawables);
 				
-				FacebookService service = getFacebookService();
+				service = getFacebookService();
 				service.authenticate();
 			}
 			else {
@@ -49,6 +51,12 @@ public class FacebookActivityService {
 		}
 		else {
 			activity.finish();
+		}
+	}
+	
+	public void onCancel() {
+		if(service != null) {
+			service.cancel();
 		}
 	}
     

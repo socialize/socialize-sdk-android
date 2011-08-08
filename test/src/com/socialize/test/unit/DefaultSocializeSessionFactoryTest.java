@@ -25,7 +25,9 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.DefaultSocializeSessionFactory;
 import com.socialize.api.WritableSession;
+import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.AuthProviders;
 import com.socialize.config.SocializeConfig;
 import com.socialize.test.SocializeUnitTest;
 
@@ -35,21 +37,27 @@ import com.socialize.test.SocializeUnitTest;
  */
 public class DefaultSocializeSessionFactoryTest extends SocializeUnitTest {
 
-	@UsesMocks (SocializeConfig.class)
+	@UsesMocks ({SocializeConfig.class, AuthProviders.class, AuthProvider.class})
 	public void testSessionFactory() {
 		
+		final AuthProviderType authProviderType = AuthProviderType.SOCIALIZE;
+		
 		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+		AuthProviders providers = AndroidMock.createMock(AuthProviders.class);
+		AuthProvider provider = AndroidMock.createMock(AuthProvider.class);
 		
 		AndroidMock.expect(config.getProperty(SocializeConfig.API_HOST)).andReturn("foobar");
+		AndroidMock.expect(providers.getProvider(authProviderType)).andReturn(provider);
 		
 		AndroidMock.replay(config);
+		AndroidMock.replay(providers);
 		
-		DefaultSocializeSessionFactory factory = new DefaultSocializeSessionFactory(config);
+		DefaultSocializeSessionFactory factory = new DefaultSocializeSessionFactory(config, providers);
 		String key= "foo", secret="bar";
 		String userId3rdParty = "foobar_userId3rdParty";
 		String token3rdParty = "foobar_token3rdParty";
 		String appId3rdParty = "foobar_appId3rdParty";
-		AuthProviderType authProviderType = AuthProviderType.SOCIALIZE;
+		
 		
 		WritableSession session = factory.create(key, secret, userId3rdParty, token3rdParty, appId3rdParty, authProviderType);
 		
@@ -65,6 +73,7 @@ public class DefaultSocializeSessionFactoryTest extends SocializeUnitTest {
 		assertEquals("foobar", session.getHost());
 		
 		AndroidMock.verify(config);
+		AndroidMock.verify(providers);
 	}
 	
 }

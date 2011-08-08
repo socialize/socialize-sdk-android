@@ -65,6 +65,7 @@
 	
 	<bean id="sessionFactory" class="com.socialize.api.DefaultSocializeSessionFactory">
 		<constructor-arg ref="config"/>
+		<constructor-arg ref="authProviders"/>
 	</bean>
 	
 	<bean id="sessionPersister" class="com.socialize.api.PreferenceSessionPersister">
@@ -109,6 +110,7 @@
 	<bean id="facebookProvider" class="com.socialize.auth.facebook.FacebookAuthProvider">
 		<constructor-arg type="context"/>
 		<constructor-arg ref="listenerHolder"/>
+		<property name="logger" ref="logger"/>
 	</bean>
 	
 	<bean id="socializeApi" class="com.socialize.api.SocializeApi" abstract="true">

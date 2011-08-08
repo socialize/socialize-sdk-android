@@ -232,6 +232,11 @@ public class SocializeApiTest extends SocializeActivityTest {
 			public void authenticate(SocializeAuthRequest authRequest, String appId, AuthProviderListener listener) {
 				addResult(listener);
 			}
+
+			@Override
+			public void clearCache(String appId) {
+				fail();
+			}
 		};
 		
 		AndroidMock.expect(request.getEndpoint()).andReturn(endpoint);
@@ -309,6 +314,10 @@ public class SocializeApiTest extends SocializeActivityTest {
 			@Override
 			public void authenticate(SocializeAuthRequest authRequest, String appId, AuthProviderListener listener) {
 				addResult(listener);
+			}
+			@Override
+			public void clearCache(String appId) {
+				fail();
 			}
 		};
 

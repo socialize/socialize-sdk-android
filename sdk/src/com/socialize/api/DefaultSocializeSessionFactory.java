@@ -22,6 +22,7 @@
 package com.socialize.api;
 
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.AuthProviders;
 import com.socialize.config.SocializeConfig;
 
 /**
@@ -30,10 +31,12 @@ import com.socialize.config.SocializeConfig;
 public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 
 	private SocializeConfig config;
+	private AuthProviders authProviders;
 	
-	public DefaultSocializeSessionFactory(SocializeConfig config) {
+	public DefaultSocializeSessionFactory(SocializeConfig config, AuthProviders authProviders) {
 		super();
 		this.config = config;
+		this.authProviders = authProviders;
 	}
 	
 	@Override
@@ -46,6 +49,11 @@ public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 		session.set3rdAppId(appId3rdParty);
 		session.setHost(config.getProperty(SocializeConfig.API_HOST).trim());
 		session.setAuthProviderType(authProviderType);
+		
+		if(authProviderType != null) {
+			session.setAuthProvider(authProviders.getProvider(authProviderType));
+		}
+
 		return session;
 	}
 }

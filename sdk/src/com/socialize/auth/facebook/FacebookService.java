@@ -87,6 +87,11 @@ public class FacebookService {
 		facebook.authorize(context, permissions, facebookDialogListener);
 	}
 	
+	public void cancel() {
+		if(listener != null) {
+			listener.onError(new SocializeException("User canceled request"));
+		}
+	}
 	
 	public void logout() {
 		try {

@@ -33,11 +33,15 @@ public interface AuthProvider {
 
 	/**
 	 * Authenticates using a 3rd party provider.
-	 * @param authRequest TODO
+	 * @param authRequest
 	 * @param appId The id of the account/app to be authenticated.
 	 * @return
 	 * @throws SocializeException
 	 */
 	public void authenticate(SocializeAuthRequest authRequest, String appId, AuthProviderListener listener);
 	
+	/**
+	 * Clears any cached data for this provider.
+	 */
+	public void clearCache(String appId);
 }

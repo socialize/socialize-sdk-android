@@ -28,8 +28,10 @@ import com.socialize.api.SocializeAuthRequest;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.error.SocializeException;
+import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.ListenerHolder;
+import com.socialize.log.SocializeLogger;
 
 /**
  * @author Jason Polites
@@ -39,6 +41,7 @@ public class FacebookAuthProvider implements AuthProvider {
 	
 	private Context context;
 	private ListenerHolder holder; // This is a singleton
+	private SocializeLogger logger;
 	
 	public FacebookAuthProvider(Context context, ListenerHolder holder) {
 		super();
@@ -78,5 +81,30 @@ public class FacebookAuthProvider implements AuthProvider {
 		Intent i = new Intent(context, FacebookActivity.class);
 		i.putExtra("appId", appId);
 		context.startActivity(i);
+	}
+
+	@Override
+	public void clearCache(String appId) {
+		Facebook mFacebook = new Facebook(appId, null);
+		
+		try {
+			mFacebook.logout(context);
+		}
+		catch (Exception e) {
+			if(logger != null) {
+				logger.error("Failed to log out of Facebook", e);
+			}
+			else {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public SocializeLogger getLogger() {
+		return logger;
+	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
 	}
 }

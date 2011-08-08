@@ -27,6 +27,7 @@ import java.util.Properties;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -41,7 +42,6 @@ import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
-import com.socialize.facebook.Facebook;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.sample.util.ErrorHandler;
 
@@ -114,16 +114,21 @@ public class AuthenticateActivity extends SocializeActivity {
 				@Override
 				public void onClick(View v) {
 					
-					Facebook mFacebook = new Facebook(facebookAppId, null);
+					final ProgressDialog progress = ProgressDialog.show(AuthenticateActivity.this, "Clearing Cache", "Please wait...");
 					
-					try {
-						mFacebook.logout(AuthenticateActivity.this);
-					}
-					catch (Exception e) {
-						e.printStackTrace();
-					}
-					
-					Socialize.getSocialize().clearSessionCache();
+					new AsyncTask<Void, Void, Void>() {
+
+						@Override
+						protected Void doInBackground(Void... params) {
+							Socialize.getSocialize().clearSessionCache();
+							return null;
+						}
+
+						@Override
+						protected void onPostExecute(Void result) {
+							progress.dismiss();
+						}
+					}.execute((Void)null);
 				}
 			});
 		}
