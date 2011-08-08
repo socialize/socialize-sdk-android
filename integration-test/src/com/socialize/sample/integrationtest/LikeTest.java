@@ -8,7 +8,7 @@ public class LikeTest extends SocializeRobotiumTest {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		authenticate();
+		authenticateSocialize();
 		
 		robotium.clickOnButton("Like");
 		robotium.waitForActivity("LikeActivity", DEFAULT_TIMEOUT_SECONDS);
@@ -19,9 +19,46 @@ public class LikeTest extends SocializeRobotiumTest {
 		robotium.enterText(0, DEFAULT_ENTITY_URL);
 		robotium.clickOnButton("Add Like");
 		
-		robotium.waitForText("SUCCESS", 1, DEFAULT_TIMEOUT_SECONDS);
+		waitForSuccess();
 		
-		sleep(5000);
+		getLikeId();
+		
+		// Check the date
+		TextView txt = (TextView) robotium.getView(com.socialize.sample.R.id.txtLikeDateCreated);
+		String value = txt.getText().toString();
+		
+		assertNotNull(value);
+		assertTrue(value.trim().length() > 0);
+	}
+	
+	public void testGetLike() {
+		// We need create first
+		robotium.enterText(0, DEFAULT_ENTITY_URL);
+		robotium.clickOnButton("Add Like");
+		waitForSuccess();
+		
+		int likeId = getLikeId();
+		
+		robotium.clickOnButton("Get Like");
+		waitForSuccess();
+		
+		int likeId2 = getLikeId();
+		
+		assertEquals(likeId, likeId2);
+	}
+	
+	public void testDeleteLike() {
+		// We need create first
+		robotium.enterText(0, DEFAULT_ENTITY_URL);
+		robotium.clickOnButton("Add Like");
+		waitForSuccess();
+		robotium.clickOnButton("Remove Like");
+		waitForSuccess();
+	}
+	
+	private int getLikeId() {
+		
+		sleep(2000); // Wait for text field to be updated
 		
 		TextView txt = (TextView) robotium.getCurrentActivity().findViewById(com.socialize.sample.R.id.txtLikeIdCreated);
 		
@@ -29,13 +66,6 @@ public class LikeTest extends SocializeRobotiumTest {
 		assertNotNull(txt);
 		
 		String value = txt.getText().toString();
-		Integer.parseInt(value);
-		
-		// Check the date
-		txt = (TextView) robotium.getView(com.socialize.sample.R.id.txtLikeDateCreated);
-		value = txt.getText().toString();
-		
-		assertNotNull(value);
-		assertTrue(value.trim().length() > 0);
+		return Integer.parseInt(value);
 	}
 }

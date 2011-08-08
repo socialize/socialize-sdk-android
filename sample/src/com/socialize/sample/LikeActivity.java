@@ -21,7 +21,6 @@
  */
 package com.socialize.sample;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
@@ -31,6 +30,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.socialize.Socialize;
+import com.socialize.activity.SocializeActivity;
 import com.socialize.entity.Like;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.like.LikeAddListener;
@@ -39,7 +39,7 @@ import com.socialize.listener.like.LikeGetListener;
 import com.socialize.sample.util.ErrorHandler;
 import com.socialize.util.StringUtils;
 
-public class LikeActivity extends Activity {
+public class LikeActivity extends SocializeActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -156,11 +156,11 @@ public class LikeActivity extends Activity {
 					
 					final ProgressDialog progress = ProgressDialog.show(LikeActivity.this, "Deleting Like", "Please wait...");
 					
-					clearLikeData();
-					
 					txtLikeCreateResult.setText("");
 					
-					String id =  txtLikeIdCreated.getText().toString();
+					String id = txtLikeIdCreated.getText().toString();
+					
+					clearLikeData();
 					
 					if(!StringUtils.isEmpty(id)) {
 						Socialize.getSocialize().unlike(Integer.parseInt(id), new LikeDeleteListener() {

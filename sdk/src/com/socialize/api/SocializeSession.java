@@ -21,6 +21,8 @@
  */
 package com.socialize.api;
 
+import com.socialize.auth.AuthProvider;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
 
 /**
@@ -40,5 +42,15 @@ public interface SocializeSession {
 	public String getConsumerTokenSecret();
 	
 	public String getHost();
+	
+	public String get3rdPartyUserId();
+	
+	public String get3rdPartyToken();
+	
+	public String get3rdPartyAppId();
+
+	public AuthProviderType getAuthProviderType();
+	
+	public AuthProvider getAuthProvider();
 
 }

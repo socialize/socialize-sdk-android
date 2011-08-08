@@ -41,6 +41,13 @@
 		<property name="ioUtils" ref="ioUtils"/>
 	</bean>
 	
+	<bean id="drawables" class="com.socialize.util.Drawables">
+		<constructor-arg type="activity"/>
+		<property name="classLoaderProvider" ref="classLoaderProvider"/>
+	</bean>
+	
+	<bean id="dialogFactory" class="com.socialize.util.DialogFactory"/>
+	
 	<bean id="userFactory" class="com.socialize.entity.factory.UserFactory"/>
 
 	<bean id="applicationFactory" class="com.socialize.entity.factory.ApplicationFactory"/>
@@ -58,6 +65,7 @@
 	
 	<bean id="sessionFactory" class="com.socialize.api.DefaultSocializeSessionFactory">
 		<constructor-arg ref="config"/>
+		<constructor-arg ref="authProviders"/>
 	</bean>
 	
 	<bean id="sessionPersister" class="com.socialize.api.PreferenceSessionPersister">
@@ -80,11 +88,36 @@
 		<property name="httpUtils" ref="httpUtils"/>
 		<property name="ioUtils" ref="ioUtils"/>
 		<property name="sessionPersister" ref="sessionPersister"/>
+		<property name="facebookSessionStore" ref="facebookSessionStore"/>
+		
+	</bean>
+	
+	<bean id="authProviders" class="com.socialize.auth.AuthProviders">
+		<property name="providers">
+			<map>
+				<entry>
+					<key value="1" type="integer"/>
+					<value ref="facebookProvider"/>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+<!--  Facebook -->
+	<bean id="facebookSessionStore" class="com.socialize.auth.facebook.FacebookSessionStore"/>
+	<bean id="listenerHolder" class="com.socialize.listener.ListenerHolder"/>
+	
+	<bean id="facebookProvider" class="com.socialize.auth.facebook.FacebookAuthProvider">
+		<constructor-arg type="context"/>
+		<constructor-arg ref="listenerHolder"/>
+		<property name="logger" ref="logger"/>
 	</bean>
 	
 	<bean id="socializeApi" class="com.socialize.api.SocializeApi" abstract="true">
 		<property name="responseFactory" ref="responseFactory"/>
 		<property name="config" ref="config"/>
+		<property name="logger" ref="logger"/>
+		<property name="authProviders" ref="authProviders"/>
 	</bean>
 	
 	<bean id="socializeActionFactory" class="com.socialize.entity.factory.SocializeActionFactory" abstract="true">
@@ -172,6 +205,26 @@
 	
 <!-- End Like API -->	
 
+<!-- View API -->
+
+	<bean id="viewFactory" class="com.socialize.entity.factory.ViewFactory" extends="socializeActionFactory"/>
+	
+	<bean id="viewRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
+		<constructor-arg ref="oauthSigner"/>
+		<constructor-arg ref="viewFactory"/>
+	</bean>
+
+	<bean id="viewProvider" extends="abstractProvider">
+		<constructor-arg type="context"/>
+		<property name="objectFactory" ref="viewFactory"/>
+		<property name="requestFactory" ref="viewRequestFactory"/>
+	</bean>
+	
+	<bean id="viewApi" class="com.socialize.api.action.ViewApi" extends="socializeApi">
+		<constructor-arg ref="viewProvider"/>
+	</bean>
+	
+<!-- End View API -->
 
 <!-- Socialize Core -->
 
@@ -182,6 +235,7 @@
 		<property name="commentApi" ref="commentApi"/>
 		<property name="entityApi" ref="entityApi"/>
 		<property name="likeApi" ref="likeApi"/>
+		<property name="viewApi" ref="viewApi"/>
 	</bean>
 	
 <!-- End Socialize Core -->

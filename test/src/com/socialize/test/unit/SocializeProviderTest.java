@@ -154,7 +154,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		final String oauth_token_secret = "oauth_token_secret";
 		final String url = "https://" + host + "/" + endpoint;
 		
-		AndroidMock.expect(sessionFactory.create(key, secret)).andReturn(session);
+		AndroidMock.expect(sessionFactory.create(key, secret, null, null, null, null)).andReturn(session);
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
 		AndroidMock.expect(response.getEntity()).andReturn(entity);

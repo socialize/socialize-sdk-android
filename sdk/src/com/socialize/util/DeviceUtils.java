@@ -21,6 +21,8 @@
  */
 package com.socialize.util;
 
+import java.util.Locale;
+
 import android.Manifest.permission;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -55,7 +57,7 @@ public class DeviceUtils {
 	
 	public String getUserAgentString() {
 		if(userAgent == null) {
-			userAgent = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION;
+			userAgent = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_" + Locale.getDefault().getCountry();
 		}
 		return userAgent;
 	}

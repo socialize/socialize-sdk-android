@@ -21,6 +21,8 @@
  */
 package com.socialize.api;
 
+import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.AuthProviders;
 import com.socialize.config.SocializeConfig;
 
 /**
@@ -29,23 +31,29 @@ import com.socialize.config.SocializeConfig;
 public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 
 	private SocializeConfig config;
+	private AuthProviders authProviders;
 	
-	public DefaultSocializeSessionFactory(SocializeConfig config) {
+	public DefaultSocializeSessionFactory(SocializeConfig config, AuthProviders authProviders) {
 		super();
 		this.config = config;
+		this.authProviders = authProviders;
 	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.api.SocializeSessionFactory#create(java.lang.String, java.lang.String)
-	 */
+	
 	@Override
-	public WritableSession create(String key, String secret) {
+	public WritableSession create(String key, String secret, String userId3rdParty, String token3rdParty, String appId3rdParty, AuthProviderType authProviderType) {
 		SocializeSessionImpl session = new SocializeSessionImpl();
 		session.setConsumerKey(key);
 		session.setConsumerSecret(secret);
+		session.set3rdPartyUserId(userId3rdParty);
+		session.set3rdPartyToken(token3rdParty);
+		session.set3rdAppId(appId3rdParty);
 		session.setHost(config.getProperty(SocializeConfig.API_HOST).trim());
+		session.setAuthProviderType(authProviderType);
+		
+		if(authProviderType != null) {
+			session.setAuthProvider(authProviders.getProvider(authProviderType));
+		}
+
 		return session;
 	}
-	
-	
 }

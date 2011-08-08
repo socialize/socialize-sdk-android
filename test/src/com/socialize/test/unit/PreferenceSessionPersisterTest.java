@@ -34,6 +34,7 @@ import com.socialize.api.PreferenceSessionPersister;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionFactory;
 import com.socialize.api.SocializeSessionImpl;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
 import com.socialize.entity.factory.UserFactory;
 import com.socialize.sample.mock.MockEditor;
@@ -80,14 +81,25 @@ public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 		
 		final String key = "foo", secret = "bar", token = "sna", tokenSecret = "fu", json="{foo:bar}";
 		
+		String mock_3rd_party_userid = "foobar_3rd_party_userid";
+		String mock_3rd_party_token = "foobar_3rd_party_token";
+		String mock_3rd_party_app_id = "foobar_3rd_party_app_id";
+		
 		AndroidMock.expect(context.getSharedPreferences("SocializeSession", Context.MODE_PRIVATE)).andReturn(prefs);
 		AndroidMock.expect(prefs.getString("consumer_key", null)).andReturn(key);
 		AndroidMock.expect(prefs.getString("consumer_secret", null)).andReturn(secret);
 		AndroidMock.expect(prefs.getString("consumer_token", null)).andReturn(token);
 		AndroidMock.expect(prefs.getString("consumer_token_secret", null)).andReturn(tokenSecret);
+		
+		AndroidMock.expect(prefs.getString("3rd_party_userid", null)).andReturn(mock_3rd_party_userid);
+		AndroidMock.expect(prefs.getString("3rd_party_token", null)).andReturn(mock_3rd_party_token);
+		AndroidMock.expect(prefs.getString("3rd_party_app_id", null)).andReturn(mock_3rd_party_app_id);
+		AndroidMock.expect(prefs.getInt("3rd_party_type", AuthProviderType.SOCIALIZE.getId())).andReturn(AuthProviderType.FACEBOOK.getId());
+		
+		
 		AndroidMock.expect(prefs.getString("user", null)).andReturn(json);
 		AndroidMock.expect(userFactory.fromJSON((JSONObject)AndroidMock.anyObject())).andReturn(user);
-		AndroidMock.expect(socializeSessionFactory.create(key, secret)).andReturn(session);
+		AndroidMock.expect(socializeSessionFactory.create(key, secret, mock_3rd_party_userid, mock_3rd_party_token, mock_3rd_party_app_id, AuthProviderType.FACEBOOK)).andReturn(session);
 		
 		session.setConsumerToken(token);
 		session.setConsumerTokenSecret(tokenSecret);
@@ -116,6 +128,10 @@ public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 
 		final String key = "foo", secret = "bar", token = "sna", tokenSecret = "fu", json="{foo:bar}";
 		
+		String mock_3rd_party_userid = "foobar_3rd_party_userid";
+		String mock_3rd_party_token = "foobar_3rd_party_token";
+		String mock_3rd_party_app_id = "foobar_3rd_party_app_id";
+		
 		JSONObject jsonObject = new JSONObject() {
 			@Override
 			public String toString() {
@@ -130,12 +146,23 @@ public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 		AndroidMock.expect(session.getConsumerSecret()).andReturn(secret);
 		AndroidMock.expect(session.getConsumerToken()).andReturn(token);
 		AndroidMock.expect(session.getConsumerTokenSecret()).andReturn(tokenSecret);
+		AndroidMock.expect(session.get3rdPartyAppId()).andReturn(mock_3rd_party_app_id);
+		AndroidMock.expect(session.get3rdPartyToken()).andReturn(mock_3rd_party_token);
+		AndroidMock.expect(session.get3rdPartyUserId()).andReturn(mock_3rd_party_userid);
+		AndroidMock.expect(session.getAuthProviderType()).andReturn(AuthProviderType.FACEBOOK);
+		
 		AndroidMock.expect(session.getUser()).andReturn(user);
 		AndroidMock.expect(userFactory.toJSON(user)).andReturn(jsonObject);
 		AndroidMock.expect(editor.putString("consumer_key", key)).andReturn(editor);
 		AndroidMock.expect(editor.putString("consumer_secret", secret)).andReturn(editor);
 		AndroidMock.expect(editor.putString("consumer_token", token)).andReturn(editor);
 		AndroidMock.expect(editor.putString("consumer_token_secret", tokenSecret)).andReturn(editor);
+		AndroidMock.expect(editor.putString("3rd_party_userid", mock_3rd_party_userid)).andReturn(editor);
+		AndroidMock.expect(editor.putString("3rd_party_token", mock_3rd_party_token)).andReturn(editor);
+		AndroidMock.expect(editor.putString("3rd_party_app_id", mock_3rd_party_app_id)).andReturn(editor);
+		AndroidMock.expect(editor.putInt("3rd_party_type", AuthProviderType.FACEBOOK.getId())).andReturn(editor);
+		
+		
 		AndroidMock.expect(editor.putString("user", json)).andReturn(editor);
 		AndroidMock.expect(editor.commit()).andReturn(true);
 		

@@ -26,9 +26,23 @@ import android.os.Bundle;
 
 public class EmptyActivity extends Activity {
 
+	Bundle savedInstanceState;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		this.savedInstanceState = savedInstanceState;
 		super.onCreate(savedInstanceState);
 	}
+	
+	public Bundle getSavedInstanceState() {
+		return savedInstanceState;
+	}
 
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		this.savedInstanceState = outState;
+		super.onSaveInstanceState(outState);
+	}
+	
+	
 }

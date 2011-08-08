@@ -269,7 +269,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		// Just wait for async process to finish
 		signal.await(500, TimeUnit.MILLISECONDS);
 		
-		Boolean result = getResult();
+		Boolean result = getNextResult();
 		
 		assertNotNull(result);
 		assertTrue(result);
@@ -324,7 +324,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		// Just wait for async process to finish
 		signal.await(500, TimeUnit.MILLISECONDS);
 		
-		Boolean result = getResult();
+		Boolean result = getNextResult();
 		
 		assertNotNull(result);
 		assertTrue(result);
@@ -379,7 +379,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		// Just wait for async process to finish
 		signal.await(500, TimeUnit.MILLISECONDS);
 		
-		Boolean result = getResult();
+		Boolean result = getNextResult();
 		
 		assertNotNull(result);
 		assertTrue(result);
@@ -435,7 +435,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		// Just wait for async process to finish
 		signal.await(500, TimeUnit.MILLISECONDS);
 		
-		Boolean result = getResult();
+		Boolean result = getNextResult();
 		
 		assertNotNull(result);
 		assertTrue(result);
@@ -500,7 +500,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		
 		AndroidMock.verify(provider);
 		
-		Boolean result = getResult();
+		Boolean result = getNextResult();
 		
 		assertNotNull(result);
 		assertTrue(result);
@@ -564,7 +564,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		
 		AndroidMock.verify(provider);
 		
-		Boolean result = getResult();
+		Boolean result = getNextResult();
 		
 		assertNotNull(result);
 		assertTrue(result);

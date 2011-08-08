@@ -23,12 +23,12 @@ package com.socialize.sample;
 
 import java.sql.Date;
 
-import android.app.Activity;
 import android.widget.TextView;
 
+import com.socialize.activity.SocializeActivity;
 import com.socialize.entity.Comment;
 
-public abstract class CommentBaseActivity extends Activity {
+public abstract class CommentBaseActivity extends SocializeActivity {
 	
 	protected void clearCommentData() {
 		final TextView txtCommentIdCreated = (TextView) findViewById(R.id.txtCommentIdCreated);

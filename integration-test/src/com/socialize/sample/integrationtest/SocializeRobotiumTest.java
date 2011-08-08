@@ -21,8 +21,13 @@
  */
 package com.socialize.sample.integrationtest;
 
+import java.util.ArrayList;
+
+import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -38,13 +43,18 @@ public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestC
 	public static final String DEFAULT_APPLICATION_NAME = "Socialize Android Sample App";
 
 	protected Solo robotium;
-
+	protected InputMethodManager imm = null;
+	
 	public SocializeRobotiumTest() {
 		super("com.socialize.sample", Main.class);
 	}
 
 	public void setUp() throws Exception {
 		robotium = new Solo(getInstrumentation(), getActivity());
+		imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+		
+		robotium.clickOnButton("Launch Sample");
+		robotium.waitForActivity("AuthenticateActivity");
 	}
 
 	@Override
@@ -65,17 +75,15 @@ public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestC
 	/**
 	 * Returns the user ID from the call to authenticate.
 	 * @return
+	 * @throws Throwable 
 	 */
-	protected int authenticate() {
-		robotium.clickOnButton("Launch Sample");
-
-		robotium.waitForActivity("AuthenticateActivity");
+	protected int authenticateSocialize() {
 		
-		robotium.clickOnButton("Authenticate");
-
-		robotium.waitForText("SUCCESS", 1, DEFAULT_TIMEOUT_SECONDS);
+		hideKeyboard();
 		
-		assertTrue(robotium.searchText("SUCCESS"));
+		robotium.clickOnButton("Auth Socialize");
+
+		waitForSuccess();
 
 		// Get the user Id
 		TextView txt = (TextView) robotium.getView(com.socialize.sample.R.id.txtAuthUserID);
@@ -88,6 +96,12 @@ public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestC
 
 		return userId;
 	}
+	
+	protected void clearCache() {
+		hideKeyboard();
+		robotium.clickOnButton("Clear Cache");
+		waitForSuccess();
+	}
 
 	protected final void sleep(int milliseconds) {
 		synchronized (this) {
@@ -96,5 +110,21 @@ public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestC
 			}
 			catch (InterruptedException ignore) {}
 		}
+	}
+	
+	protected final void hideKeyboard() {
+		// Hide keyboard for all
+		ArrayList<EditText> currentEditTexts = robotium.getCurrentEditTexts();
+		
+		if(currentEditTexts != null) {
+			for (EditText editText : currentEditTexts) {
+				imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+			}
+		}
+	}
+	
+	protected final void waitForSuccess() {
+		robotium.waitForText("SUCCESS", 1, DEFAULT_TIMEOUT_SECONDS);
+		assertTrue(robotium.searchText("SUCCESS"));
 	}
 }

@@ -103,7 +103,7 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		
 		assertEquals( jsonExpected.toString(), nvp.getValue() );
 		
-		assertTrue((Boolean)getResult());
+		assertTrue((Boolean)getNextResult());
 	}
 	
 	public void testGetRequestCreate() throws Exception {
@@ -130,7 +130,7 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 
 		HttpUriRequest getRequest = factory.getGetRequest(session, endpoint, id);
 		
-		assertTrue((Boolean)getResult());
+		assertTrue((Boolean)getNextResult());
 		assertTrue(getRequest instanceof HttpGet);
 	}
 	
@@ -157,7 +157,7 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 
 		HttpUriRequest getRequest = factory.getDeleteRequest(session, endpoint, id);
 		
-		assertTrue((Boolean)getResult());
+		assertTrue((Boolean)getNextResult());
 		assertTrue(getRequest instanceof HttpDelete);
 	}
 	
@@ -187,7 +187,7 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		
 		assertTrue(req instanceof HttpGet);
 		
-		String actual = getResult();
+		String actual = getNextResult();
 		
 		UrlBuilder builder = new UrlBuilder();
 		builder.start(endpoint);
@@ -230,7 +230,7 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		
 		assertTrue(req instanceof HttpGet);
 		
-		String actual = getResult();
+		String actual = getNextResult();
 		
 		UrlBuilder builder = new UrlBuilder();
 		builder.start(endpoint);
@@ -286,7 +286,7 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		
 		HttpUriRequest req = reqFactory.getPostRequest(session, endpoint, object);
 		
-		assertTrue((Boolean)getResult());
+		assertTrue((Boolean)getNextResult());
 		assertTrue(HttpPost.class.isInstance(req));
 		assertTrue(HttpEntityEnclosingRequestBase.class.isAssignableFrom(req.getClass()));
 		
@@ -355,7 +355,7 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		
 		HttpUriRequest req = reqFactory.getPostRequest(session, endpoint, objects);
 		
-		assertTrue((Boolean)getResult());
+		assertTrue((Boolean)getNextResult());
 		assertTrue(HttpPost.class.isInstance(req));
 		assertTrue(HttpEntityEnclosingRequestBase.class.isAssignableFrom(req.getClass()));
 		
@@ -425,7 +425,7 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		
 		HttpUriRequest req = reqFactory.getPutRequest(session, endpoint, objects);
 		
-		assertTrue((Boolean)getResult());
+		assertTrue((Boolean)getNextResult());
 		assertTrue(HttpPut.class.isInstance(req));
 		assertTrue(HttpEntityEnclosingRequestBase.class.isAssignableFrom(req.getClass()));
 		
@@ -490,7 +490,7 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		
 		HttpUriRequest req = reqFactory.getPutRequest(session, endpoint, object);
 		
-		assertTrue((Boolean)getResult());
+		assertTrue((Boolean)getNextResult());
 		assertTrue(HttpPut.class.isInstance(req));
 		assertTrue(HttpEntityEnclosingRequestBase.class.isAssignableFrom(req.getClass()));
 		

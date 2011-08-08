@@ -21,7 +21,6 @@
  */
 package com.socialize.sample;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
@@ -31,13 +30,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.socialize.Socialize;
+import com.socialize.activity.SocializeActivity;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.entity.EntityAddListener;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.sample.util.ErrorHandler;
 import com.socialize.util.StringUtils;
 
-public class EntityActivity extends Activity {
+public class EntityActivity extends SocializeActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,49 +47,56 @@ public class EntityActivity extends Activity {
 		Socialize.init(this);
 		
 		final EditText txtKey = (EditText) findViewById(R.id.txtKey);
-//		final EditText txtName = (EditText) findViewById(R.id.txtName);
+		final EditText txtName = (EditText) findViewById(R.id.txtName);
 		final TextView txtEntityCreateResult = (TextView) findViewById(R.id.txtEntityCreateResult);
 		
-//		final Button btnEntityCreate = (Button) findViewById(R.id.btnEntityCreate);
+		final Button btnEntityCreate = (Button) findViewById(R.id.btnEntityCreate);
 		final Button btnEntityGet = (Button) findViewById(R.id.btnEntityGet);
-		
 		
 		if(Socialize.getSocialize().isAuthenticated()) {
 			
-//			btnEntityCreate.setOnClickListener(new OnClickListener() {
-//				
-//				@Override
-//				public void onClick(View v) {
-//					
-//					txtEntityCreateResult.setText("");
-//					btnEntityCreate.setEnabled(false);
-//					
-//					String key = txtKey.getText().toString();
-//					String name = txtName.getText().toString();
-//					
-//					Socialize.getSocialize().createEntity(key, name, new EntityCreateListener() {
-//						
-//						@Override
-//						public void onError(SocializeException error) {
-//							txtEntityCreateResult.setText("FAIL: " + ErrorHandler.handleApiError(EntityActivity.this, error));
-//							btnEntityCreate.setEnabled(true);
-//						}
-//						
-//						@Override
-//						public void onCreate(Entity entity) {
-//							btnEntityCreate.setEnabled(true);
-//							txtEntityCreateResult.setText("SUCCESS");
-//							populateEntityData(entity);
-//						}
-//					});
-//				}
-//			});
+			btnEntityCreate.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					
+					clearEntityData();
+					
+					txtEntityCreateResult.setText("");
+					btnEntityCreate.setEnabled(false);
+					
+					String key = txtKey.getText().toString();
+					String name = txtName.getText().toString();
+					
+					final ProgressDialog progress = ProgressDialog.show(EntityActivity.this, "Creating", "Please wait...");
+					
+					Socialize.getSocialize().addEntity(key, name, new EntityAddListener() {
+						
+						@Override
+						public void onError(SocializeException error) {
+							txtEntityCreateResult.setText("FAIL: " + ErrorHandler.handleApiError(EntityActivity.this, error));
+							btnEntityCreate.setEnabled(true);
+							progress.dismiss();
+						}
+						
+						@Override
+						public void onCreate(Entity entity) {
+							btnEntityCreate.setEnabled(true);
+							txtEntityCreateResult.setText("SUCCESS");
+							populateEntityData(entity);
+							progress.dismiss();
+						}
+					});
+				}
+			});
 			
 			
 			btnEntityGet.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
+					
+					clearEntityData();
 					
 					txtEntityCreateResult.setText("");
 					btnEntityGet.setEnabled(false);
@@ -134,6 +142,24 @@ public class EntityActivity extends Activity {
 			// Not authorized, you would normally do a re-auth here
 			txtEntityCreateResult.setText("AUTH FAIL");
 		}
+	}
+	
+	private void clearEntityData() {
+		final TextView txtEntityIdCreated = (TextView) findViewById(R.id.txtEntityIdCreated);
+		final TextView txtEntityKeyCreated = (TextView) findViewById(R.id.txtEntityKeyCreated);
+		final TextView txtEntityNameCreated = (TextView) findViewById(R.id.txtEntityNameCreated);
+		final TextView txtEntityShares = (TextView) findViewById(R.id.txtEntityShares);
+		final TextView txtEntityLikes = (TextView) findViewById(R.id.txtEntityLikes);
+		final TextView txtEntityViews = (TextView) findViewById(R.id.txtEntityViews);
+		final TextView txtEntityComments = (TextView) findViewById(R.id.txtEntityComments);
+		
+		txtEntityIdCreated.setText("");
+		txtEntityKeyCreated.setText("");
+		txtEntityNameCreated.setText("");
+		txtEntityShares.setText("");
+		txtEntityLikes.setText("");
+		txtEntityViews.setText("");
+		txtEntityComments.setText("");
 	}
 	
 	private void populateEntityData(Entity entity) {

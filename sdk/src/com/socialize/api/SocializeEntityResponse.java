@@ -35,7 +35,6 @@ public class SocializeEntityResponse<T> implements SocializeResponse {
 
 	private ListResult<T> results;
 
-
 	public ListResult<T> getResults() {
 		return results;
 	}
@@ -60,7 +59,7 @@ public class SocializeEntityResponse<T> implements SocializeResponse {
 	public synchronized T getFirstResult() {
 		if(results != null) {
 			List<T> list = results.getItems();
-			if(list != null) {
+			if(list != null && list.size() > 0) {
 				return list.get(0);
 			}
 		}

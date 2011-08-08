@@ -21,15 +21,26 @@
  */
 package com.socialize.test.unit;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeApi;
+import com.socialize.api.SocializeAuthRequest;
 import com.socialize.api.SocializeSession;
+import com.socialize.auth.AuthProvider;
+import com.socialize.auth.AuthProviderResponse;
+import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.AuthProviders;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.AuthProviderListener;
+import com.socialize.listener.SocializeActionListener;
+import com.socialize.listener.SocializeAuthListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeActivityTest;
 
@@ -61,6 +72,27 @@ public class SocializeApiTest extends SocializeActivityTest {
 
 		api.authenticate("test_endpoint", "test_key", "test_secret", "test_uuid");
 		
+		AndroidMock.verify(provider);
+	}
+	
+	public void testApiCallsAuthenticateOnProvider2() throws Throwable {
+		AndroidMock.expect(provider.authenticate("test_endpoint", "test_key", "test_secret", "test_user_id", "test_token", "test_app_id", AuthProviderType.FACEBOOK,  "test_uuid")).andReturn(mockSession);
+		AndroidMock.replay(provider);
+		api.authenticate("test_endpoint", "test_key", "test_secret", "test_user_id", "test_token", "test_app_id", AuthProviderType.FACEBOOK,  "test_uuid");
+		AndroidMock.verify(provider);
+	}
+	
+	public void testClearSessionCallsClearSessionOnProvider() throws Throwable {
+		provider.clearSession();
+		AndroidMock.replay(provider);
+		api.clearSession();
+		AndroidMock.verify(provider);
+	}
+	
+	public void testLoadSessionCallsLoadSessionOnProvider() throws Throwable {
+		AndroidMock.expect(provider.loadSession("test_endpoint", "test_key", "test_secret", AuthProviderType.FACEBOOK, "test_appid")).andReturn(mockSession);
+		AndroidMock.replay(provider);
+		api.loadSession("test_endpoint", "test_key", "test_secret", AuthProviderType.FACEBOOK, "test_appid");
 		AndroidMock.verify(provider);
 	}
 	
@@ -124,6 +156,33 @@ public class SocializeApiTest extends SocializeActivityTest {
 		AndroidMock.verify(provider);
 	}
 	
+	public void testApiCallsPutOnProviderWithList() throws Throwable {
+
+		final String endpoint = "foobar";
+		final List<SocializeObject> objects = new ArrayList<SocializeObject>();
+		
+		AndroidMock.expect(provider.put(mockSession, endpoint, objects)).andReturn(null);
+		AndroidMock.replay(provider);
+
+		api.put(mockSession, endpoint, objects);
+
+		AndroidMock.verify(provider);
+	}
+	
+	public void testApiCallsPostOnProviderWithList() throws Throwable {
+
+		final String endpoint = "foobar";
+		final List<SocializeObject> objects = new ArrayList<SocializeObject>();
+		
+		AndroidMock.expect(provider.post(mockSession, endpoint, objects)).andReturn(null);
+		AndroidMock.replay(provider);
+
+		api.post(mockSession, endpoint, objects);
+
+		AndroidMock.verify(provider);
+	}
+	
+	
 	public void testApiCallsPostOnProvider() throws Throwable {
 
 		final String endpoint = "foobar";
@@ -135,5 +194,191 @@ public class SocializeApiTest extends SocializeActivityTest {
 		api.post(mockSession, endpoint, object);
 		
 		AndroidMock.verify(provider);
+	}
+	
+	@UsesMocks ({
+		SocializeProvider.class, 
+		SocializeAuthRequest.class,
+		AuthProviderResponse.class,
+		AuthProviders.class,
+		SocializeAuthListener.class,
+		SocializeActionListener.class})
+	@SuppressWarnings("unchecked")
+	public void testHandle3rdPartyAuthSuccess() {
+		
+		String authUserId3rdParty = "foobar_authUserId3rdParty";
+		String authToken3rdParty = "foobar_authToken3rdParty";
+		String appId3rdParty = "foobar_appId3rdParty";
+		String key = "foobar_key";
+		String secret = "foobar_secret";
+		
+		String token = "foobar_token";
+		String user = "foobar_user";
+		String endpoint = "foobar_endpoint";
+		
+		AuthProviderType authProviderType = AuthProviderType.FACEBOOK;
+		
+		SocializeProvider<SocializeObject> provider = AndroidMock.createMock(SocializeProvider.class);
+		AuthProviders authProviders = AndroidMock.createMock(AuthProviders.class);
+		SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
+		SocializeAuthRequest request = AndroidMock.createMock(SocializeAuthRequest.class);
+		SocializeActionListener actionListener = AndroidMock.createMock(SocializeActionListener.class);
+		AuthProviderResponse response = AndroidMock.createMock(AuthProviderResponse.class);
+		
+		MockSocializeApi api = new MockSocializeApi(provider);
+		
+		AuthProvider authProvider = new AuthProvider() {
+			@Override
+			public void authenticate(SocializeAuthRequest authRequest, String appId, AuthProviderListener listener) {
+				addResult(listener);
+			}
+
+			@Override
+			public void clearCache(String appId) {
+				fail();
+			}
+		};
+		
+		AndroidMock.expect(request.getEndpoint()).andReturn(endpoint);
+		AndroidMock.expect(authProviders.getProvider(authProviderType)).andReturn(authProvider);
+		AndroidMock.expect(response.getToken()).andReturn(token);
+		AndroidMock.expect(response.getUserId()).andReturn(user);
+		
+		request.setAuthProviderType(authProviderType);
+		request.setAppId3rdParty(appId3rdParty);
+	
+		api.setAuthProviders(authProviders);
+
+		request.setAuthToken3rdParty(token);
+		request.setAuthUserId3rdParty(user);
+		request.setAuthProviderType(authProviderType);
+		
+		AndroidMock.replay(authProviders);
+		AndroidMock.replay(request);
+		AndroidMock.replay(response);
+		
+		api.handle3rdPartyAuth(request, authUserId3rdParty, authToken3rdParty, appId3rdParty, authProviderType, actionListener, listener, key, secret);
+		
+		AuthProviderListener authProviderListener = getNextResult();
+		String loadSession = getNextResult();
+		
+		assertNotNull(loadSession);
+		assertNotNull(authProviderListener);
+		
+		assertEquals("loadSession", loadSession);
+		
+		// Call success on the listener
+		authProviderListener.onAuthSuccess(response);
+		
+		String handleRegularAuth = getNextResult();
+		assertNotNull(handleRegularAuth);
+		
+		assertEquals("handleRegularAuth", handleRegularAuth);
+		
+		AndroidMock.verify(authProviders);
+		AndroidMock.verify(request);
+		AndroidMock.verify(response);
+	
+	}
+	
+	
+	@UsesMocks ({
+		SocializeProvider.class, 
+		SocializeAuthRequest.class,
+		AuthProviders.class,
+		SocializeAuthListener.class,
+		SocializeActionListener.class,
+		SocializeException.class})
+	@SuppressWarnings("unchecked")
+	public void testHandle3rdPartyAuthFail() {
+		
+		String authUserId3rdParty = "foobar_authUserId3rdParty";
+		String authToken3rdParty = "foobar_authToken3rdParty";
+		String appId3rdParty = "foobar_appId3rdParty";
+		String key = "foobar_key";
+		String secret = "foobar_secret";
+		String endpoint = "foobar_endpoint";
+		
+		AuthProviderType authProviderType = AuthProviderType.FACEBOOK;
+		
+		SocializeProvider<SocializeObject> provider = AndroidMock.createMock(SocializeProvider.class);
+		AuthProviders authProviders = AndroidMock.createMock(AuthProviders.class);
+		SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
+		SocializeAuthRequest request = AndroidMock.createMock(SocializeAuthRequest.class);
+		SocializeActionListener actionListener = AndroidMock.createMock(SocializeActionListener.class);
+		SocializeException error = AndroidMock.createMock(SocializeException.class);
+		
+		MockSocializeApi api = new MockSocializeApi(provider);
+		
+		AuthProvider authProvider = new AuthProvider() {
+			@Override
+			public void authenticate(SocializeAuthRequest authRequest, String appId, AuthProviderListener listener) {
+				addResult(listener);
+			}
+			@Override
+			public void clearCache(String appId) {
+				fail();
+			}
+		};
+
+		listener.onError(error);
+		listener.onError(error);
+		
+		AndroidMock.expect(request.getEndpoint()).andReturn(endpoint);
+		AndroidMock.expect(authProviders.getProvider(authProviderType)).andReturn(authProvider);
+		
+		request.setAuthProviderType(authProviderType);
+		request.setAppId3rdParty(appId3rdParty);
+	
+		api.setAuthProviders(authProviders);
+
+		AndroidMock.replay(authProviders);
+		AndroidMock.replay(request);
+		
+		api.handle3rdPartyAuth(request, authUserId3rdParty, authToken3rdParty, appId3rdParty, authProviderType, actionListener, listener, key, secret);
+		
+		AuthProviderListener authProviderListener = getNextResult();
+		String loadSession = getNextResult();
+		
+		assertNotNull(loadSession);
+		assertNotNull(authProviderListener);
+		
+		assertEquals("loadSession", loadSession);
+		
+		// Call fail on the listener
+		authProviderListener.onAuthFail(error);
+		authProviderListener.onError(error);
+		
+		String handleRegularAuth = getNextResult();
+		assertNull(handleRegularAuth);
+		
+		AndroidMock.verify(authProviders);
+		AndroidMock.verify(request);
+	
+	}
+	
+	
+	public class MockSocializeApi extends SocializeApi<SocializeObject, SocializeProvider<SocializeObject>> {
+
+		public MockSocializeApi(SocializeProvider<SocializeObject> provider) {
+			super(provider);
+		}
+		
+		@Override
+		protected void handleRegularAuth(SocializeAuthRequest request, SocializeActionListener wrapper) {
+			addResult("handleRegularAuth");
+		}
+		
+		@Override
+		public void handle3rdPartyAuth(SocializeAuthRequest request, String authUserId3rdParty, String authToken3rdParty, String appId3rdParty, AuthProviderType authProviderType,
+				SocializeActionListener fWrapper, SocializeAuthListener listener, String key, String secret) {
+			super.handle3rdPartyAuth(request, authUserId3rdParty, authToken3rdParty, appId3rdParty, authProviderType, fWrapper, listener, key, secret);
+		}
+
+		@Override
+		public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderType authProviderType, String appId3rdParty) throws SocializeException {
+			addResult("loadSession");
+			return null;
+		}
 	}
 }

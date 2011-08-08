@@ -21,22 +21,28 @@
  */
 package com.socialize.api;
 
+import com.socialize.auth.AuthProviderType;
+
 /**
  * @author Jason Polites
- *
  */
 public class SocializeAuthRequest extends SocializeRequest {
 
 	private String consumerKey;
 	private String consumerSecret;
-	private String uuid;
+	private String udid;
+	private String authUserId3rdParty;
+	private String authToken3rdParty;
+	private AuthProviderType authProviderType;
+	private String appId3rdParty;
 
-	public String getUuid() {
-		return uuid;
+	
+	public String getUdid() {
+		return udid;
 	}
 
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
+	public void setUdid(String uuid) {
+		this.udid = uuid;
 	}
 
 	public String getConsumerKey() {
@@ -54,4 +60,37 @@ public class SocializeAuthRequest extends SocializeRequest {
 	public void setConsumerSecret(String consumerSecret) {
 		this.consumerSecret = consumerSecret;
 	}
+
+	public String getAuthUserId3rdParty() {
+		return authUserId3rdParty;
+	}
+
+	public void setAuthUserId3rdParty(String authUserId3rdParty) {
+		this.authUserId3rdParty = authUserId3rdParty;
+	}
+
+	public String getAuthToken3rdParty() {
+		return authToken3rdParty;
+	}
+
+	public void setAuthToken3rdParty(String authToken3rdParty) {
+		this.authToken3rdParty = authToken3rdParty;
+	}
+
+	public AuthProviderType getAuthProviderType() {
+		return authProviderType;
+	}
+
+	public void setAuthProviderType(AuthProviderType authProviderType) {
+		this.authProviderType = authProviderType;
+	}
+
+	public String getAppId3rdParty() {
+		return appId3rdParty;
+	}
+
+	public void setAppId3rdParty(String appId3rdParty) {
+		this.appId3rdParty = appId3rdParty;
+	}
+
 }

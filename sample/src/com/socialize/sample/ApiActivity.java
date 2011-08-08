@@ -21,14 +21,15 @@
  */
 package com.socialize.sample;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class ApiActivity extends Activity {
+import com.socialize.activity.SocializeActivity;
+
+public class ApiActivity extends SocializeActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,7 @@ public class ApiActivity extends Activity {
 		final Button btnComments = (Button) findViewById(R.id.btnComments);
 		final Button btnEntity = (Button) findViewById(R.id.btnEntity);
 		final Button btnLike = (Button) findViewById(R.id.btnLike);
-//		final Button btnView = (Button) findViewById(R.id.btnView);
+		final Button btnView = (Button) findViewById(R.id.btnView);
 		
 		btnComments.setOnClickListener(new OnClickListener() {
 			@Override
@@ -64,12 +65,12 @@ public class ApiActivity extends Activity {
 			}
 		});
 		
-//		btnView.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				Intent i = new Intent(ApiActivity.this, ViewActivity.class);
-//				startActivity(i);
-//			}
-//		});
+		btnView.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(ApiActivity.this, ViewActivity.class);
+				startActivity(i);
+			}
+		});
 	}
 }

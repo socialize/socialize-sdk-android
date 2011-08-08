@@ -41,6 +41,12 @@ public class SocializeApiError extends SocializeException {
 		this.utils = utils;
 		this.message = message;
 	}
+	
+	public SocializeApiError(int resultCode, String message) {
+		super();
+		this.resultCode = resultCode;
+		this.message = message;
+	}
 
 	@Override
 	public String getLocalizedMessage() {
@@ -53,7 +59,12 @@ public class SocializeApiError extends SocializeException {
 
 	@Override
 	public String getMessage() {
-		return utils.getMessageFor(resultCode) + " (" + resultCode + "), " + message;
+		
+		if(utils != null) {
+			return utils.getMessageFor(resultCode) + " (" + resultCode + "), " + message;
+		}
+		
+		return  "(" + resultCode + "), " + message;
 	}
 
 	public int getResultCode() {

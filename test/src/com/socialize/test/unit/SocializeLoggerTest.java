@@ -127,7 +127,7 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 		String[] results = new String[6];
 		
 		for (int i = results.length-1; i >= 0; i--) {
-			results[i] = getResult();
+			results[i] = getNextResult();
 		}
 		
 		for (int i = 0; i < results.length; i++) {

@@ -32,6 +32,7 @@ import org.apache.http.HttpResponse;
 
 import android.content.Context;
 
+import com.socialize.config.SocializeConfig;
 import com.socialize.log.SocializeLogger;
 
 /**
@@ -48,7 +49,7 @@ public class HttpUtils {
 	public void init(Context context) {
 		InputStream in = null;
 		try {
-			in = resourceLocator.locate(context, "errors.properties");
+			in = resourceLocator.locate(context, SocializeConfig.SOCIALIZE_ERRORS_PATH);
 			
 			Properties props = new Properties();
 			props.load(in);

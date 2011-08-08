@@ -29,6 +29,7 @@ import com.socialize.SocializeServiceImpl;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeApiHost;
 import com.socialize.api.SocializeSession;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.error.SocializeException;
@@ -36,13 +37,14 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
-import com.socialize.listener.entity.EntityCreateListener;
+import com.socialize.listener.entity.EntityAddListener;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.entity.EntityListListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
+import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.test.SocializeUnitTest;
 
@@ -189,41 +191,41 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		AndroidMock.verify(service);
 	}
 	
-//	@UsesMocks ({ViewAddListener.class})
-//	public void testAddView() {
-//		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
-//		SocializeApiHost service = AndroidMock.createMock(SocializeApiHost.class, getContext());
-//		ViewAddListener listener = AndroidMock.createMock(ViewAddListener.class);
-//		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
-//		SocializeLogger logger = AndroidMock.createNiceMock(SocializeLogger.class);
-//		
-//		final String key = "foo";
-//		
-//		AndroidMock.expect(container.getBean("socializeApiHost")).andReturn(service);
-//		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
-//		
-//		service.addView(session, key, null, listener);
-//		
-//		AndroidMock.replay(container);
-//		AndroidMock.replay(service);
-//		
-//		SocializeServiceImpl socialize = new SocializeServiceImpl();
-//		socialize.init(getContext(), container);
-//		socialize.setSession(session);
-//		
-//		assertTrue(socialize.isInitialized());
-//		
-//		socialize.view(key, listener);
-//		
-//		AndroidMock.verify(container);
-//		AndroidMock.verify(service);
-//	}
+	@UsesMocks ({ViewAddListener.class})
+	public void testAddView() {
+		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
+		SocializeApiHost service = AndroidMock.createMock(SocializeApiHost.class, getContext());
+		ViewAddListener listener = AndroidMock.createMock(ViewAddListener.class);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		SocializeLogger logger = AndroidMock.createNiceMock(SocializeLogger.class);
+		
+		final String key = "foo";
+		
+		AndroidMock.expect(container.getBean("socializeApiHost")).andReturn(service);
+		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
+		
+		service.addView(session, key, null, listener);
+		
+		AndroidMock.replay(container);
+		AndroidMock.replay(service);
+		
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
+		socialize.init(getContext(), container);
+		socialize.setSession(session);
+		
+		assertTrue(socialize.isInitialized());
+		
+		socialize.view(key, listener);
+		
+		AndroidMock.verify(container);
+		AndroidMock.verify(service);
+	}
 	
-	@UsesMocks ({EntityCreateListener.class})
+	@UsesMocks ({EntityAddListener.class})
 	public void testCreateEntitySuccess() {
 		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
 		SocializeApiHost service = AndroidMock.createMock(SocializeApiHost.class, getContext());
-		EntityCreateListener listener = AndroidMock.createMock(EntityCreateListener.class);
+		EntityAddListener listener = AndroidMock.createMock(EntityAddListener.class);
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
 		SocializeLogger logger = AndroidMock.createNiceMock(SocializeLogger.class);
 		
@@ -243,7 +245,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		assertTrue(socialize.isInitialized());
 		
-		socialize.createEntity(key, name, listener);
+		socialize.addEntity(key, name, listener);
 		
 		AndroidMock.verify(container);
 		AndroidMock.verify(service);
@@ -569,7 +571,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		socialize.init(getContext(), container);
 		
-		service.authenticate(key, secret, listener, socialize);
+		service.authenticate(key, secret, null, null, AuthProviderType.SOCIALIZE, null, listener, socialize, false);
 
 		AndroidMock.replay(service);
 		

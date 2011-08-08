@@ -172,7 +172,8 @@
 				<mkdir dir="${library.project.dir}/libs"/>
 					
 				<javac encoding="${java.encoding}"
-                    source="${java.source}" target="${java.target}"
+                    source="${java.source}" 
+					target="${java.target}"
                     debug="true" 
 					extdirs=""
                     destdir="${out.classes.absolute.dir}"

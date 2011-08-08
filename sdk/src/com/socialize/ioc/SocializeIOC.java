@@ -26,6 +26,7 @@ import java.io.InputStream;
 import android.content.Context;
 
 import com.socialize.android.ioc.AndroidIOC;
+import com.socialize.config.SocializeConfig;
 import com.socialize.util.ResourceLocator;
 
 /**
@@ -57,6 +58,6 @@ public class SocializeIOC extends AndroidIOC {
 	}
 	
 	public void init(Context context, ResourceLocator resourceLocator) throws Exception {
-		init(context, resourceLocator, "socialize_beans.xml");
+		init(context, resourceLocator, SocializeConfig.SOCIALIZE_BEANS_PATH);
 	}
 }

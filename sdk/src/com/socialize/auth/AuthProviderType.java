@@ -51,4 +51,17 @@ public enum AuthProviderType {
 	public String toString() {
 		return name;
 	}
+	
+	public static AuthProviderType valueOf(int id) {
+		switch(id) {
+		
+		case 1 : 
+			return FACEBOOK;
+			
+			
+		default :
+			return SOCIALIZE;
+		
+		}
+	}
 }

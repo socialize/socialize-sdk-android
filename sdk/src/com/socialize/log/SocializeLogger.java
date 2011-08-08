@@ -34,6 +34,8 @@ public class SocializeLogger {
 
 	public static enum LogLevel {VERBOSE,DEBUG,INFO,WARN,ERROR}
 	
+	public static String LOG_TAG = "Socialize";
+	
 	public static final int INITIALIZE_FAILED = 0;
 	public static final int NOT_INITIALIZED = 1;
 	public static final int NOT_AUTHENTICATED = 2;
@@ -42,7 +44,6 @@ public class SocializeLogger {
 	public static final int ERROR_CODE_LOAD_FAIL = 5;
 	
 	private LogLevel logLevel = LogLevel.INFO;
-	private String logTag = "Socialize";
 	private SocializeConfig config;
 	
 	public void init(SocializeConfig config) {
@@ -55,7 +56,7 @@ public class SocializeLogger {
 		String tag = config.getProperty(SocializeConfig.LOG_TAG);
 		
 		if(!StringUtils.isEmpty(tag)) {
-			logTag = tag;
+			LOG_TAG = tag;
 		}
 		
 		this.config = config;
@@ -86,27 +87,27 @@ public class SocializeLogger {
 	}
 	
 	public void debug(String msg) {
-		Log.d(logTag, msg);
+		Log.d(LOG_TAG, msg);
 	}
 	
 	public void info(String msg) {
-		Log.i(logTag, msg);
+		Log.i(LOG_TAG, msg);
 	}
 	
 	public void warn(String msg) {
-		Log.w(logTag, msg);
+		Log.w(LOG_TAG, msg);
 	}
 	
 	public void error(String msg) {
-		Log.e(logTag, msg);
+		Log.e(LOG_TAG, msg);
 	}
 	
 	public void warn(String msg, Throwable error) {
-		Log.w(logTag, msg, error);
+		Log.w(LOG_TAG, msg, error);
 	}
 	
 	public void error(String msg, Throwable error) {
-		Log.e(logTag, msg, error);
+		Log.e(LOG_TAG, msg, error);
 	}
 	
 	public boolean isVerboseEnabled() {

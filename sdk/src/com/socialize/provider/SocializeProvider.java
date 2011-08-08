@@ -24,6 +24,7 @@ package com.socialize.provider;
 import java.util.Collection;
 
 import com.socialize.api.SocializeSession;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
 
@@ -34,7 +35,13 @@ import com.socialize.error.SocializeException;
  */
 public interface SocializeProvider<T> {
 	
+	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderType authProviderType, String appId3rdParty) throws SocializeException;
+	
+	public void clearSession();
+	
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException;
+
+	public SocializeSession authenticate(String endpoint, String key, String secret, String userId3rdParty, String token3rdParty, String appId3rdParty, AuthProviderType authProviderType, String uuid) throws SocializeException;
 
 	@Deprecated
 	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException;

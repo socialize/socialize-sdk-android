@@ -28,6 +28,10 @@ import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
+import com.socialize.entity.ListResult;
+import com.socialize.error.SocializeApiError;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.entity.EntityListListener;
 import com.socialize.listener.entity.EntityListener;
 import com.socialize.provider.SocializeProvider;
 
@@ -43,7 +47,7 @@ public class EntityApi extends SocializeApi<Entity, SocializeProvider<Entity>> {
 		super(provider);
 	}
 	
-	public void createEntity(SocializeSession session, String key, String name, EntityListener listener) {
+	public void addEntity(SocializeSession session, String key, String name, EntityListener listener) {
 		Entity c = new Entity();
 		c.setKey(key);
 		c.setName(name);
@@ -54,8 +58,38 @@ public class EntityApi extends SocializeApi<Entity, SocializeProvider<Entity>> {
 		postAsync(session, ENDPOINT, list, listener);
 	}
 	
-	public void getEntity(SocializeSession session, String key, EntityListener listener) {
-		getAsync(session, ENDPOINT, key, listener);
+	public void getEntity(SocializeSession session, final String key, final EntityListener listener) {
+		
+		listAsync(session, ENDPOINT, key, null, 0, 1, new EntityListListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				listener.onError(error);
+			}
+			
+			@Override
+			public void onList(ListResult<Entity> entities) {
+				boolean is404 = false;
+				if(entities != null) {
+					List<Entity> items = entities.getItems();
+					if(items != null && items.size() > 0) {
+						listener.onGet(items.get(0));
+					}
+					else {
+						is404 = true;
+					}
+				}
+				else {
+					is404 = true;
+				}
+				
+				if(is404) {
+					onError(new SocializeApiError(404, "No entity found with key [" +
+							key +
+							"]"));
+				}
+			}
+		});
 	}
 
 	public void listEntities(SocializeSession session, EntityListener listener, String...keys) {

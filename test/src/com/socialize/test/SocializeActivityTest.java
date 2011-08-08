@@ -46,10 +46,17 @@ public abstract class SocializeActivityTest extends ActivityInstrumentationTestC
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected <T extends Object> T getResult() {
+	protected <T extends Object> T getNextResult() {
 		if(!bucket.isEmpty()) {
 			return (T) bucket.pop();
 		}
 		return null;
+	}
+	
+	protected void sleep(long time) {
+		try {
+			Thread.sleep(time);
+		}
+		catch (InterruptedException ignore) {}
 	}
 }

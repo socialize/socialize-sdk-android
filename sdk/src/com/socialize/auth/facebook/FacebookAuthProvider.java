@@ -21,23 +21,90 @@
  */
 package com.socialize.auth.facebook;
 
+import android.content.Context;
+import android.content.Intent;
+
+import com.socialize.api.SocializeAuthRequest;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.error.SocializeException;
+import com.socialize.facebook.Facebook;
+import com.socialize.listener.AuthProviderListener;
+import com.socialize.listener.ListenerHolder;
+import com.socialize.log.SocializeLogger;
 
 /**
  * @author Jason Polites
  *
  */
 public class FacebookAuthProvider implements AuthProvider {
+	
+	private Context context;
+	private ListenerHolder holder; // This is a singleton
+	private SocializeLogger logger;
+	
+	public FacebookAuthProvider(Context context, ListenerHolder holder) {
+		super();
+		this.context = context;
+		this.holder = holder;
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.auth.AuthProvider#authenticate()
 	 */
 	@Override
-	public AuthProviderResponse authenticate(String appId) throws SocializeException {
-		// TODO Auto-generated method stub
-		return null;
+	public void authenticate(SocializeAuthRequest authRequest, String appId, final AuthProviderListener listener) {
+		
+		final String listenerKey = "auth";
+		
+		holder.put(listenerKey, new AuthProviderListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				holder.remove(listenerKey);
+				listener.onError(error);
+			}
+			
+			@Override
+			public void onAuthSuccess(AuthProviderResponse response) {
+				holder.remove(listenerKey);
+				listener.onAuthSuccess(response);
+			}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				holder.remove(listenerKey);
+				listener.onAuthFail(error);
+			}
+		});
+		
+		Intent i = new Intent(context, FacebookActivity.class);
+		i.putExtra("appId", appId);
+		context.startActivity(i);
 	}
 
+	@Override
+	public void clearCache(String appId) {
+		Facebook mFacebook = new Facebook(appId, null);
+		
+		try {
+			mFacebook.logout(context);
+		}
+		catch (Exception e) {
+			if(logger != null) {
+				logger.error("Failed to log out of Facebook", e);
+			}
+			else {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public SocializeLogger getLogger() {
+		return logger;
+	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
 }

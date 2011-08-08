@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
 import com.socialize.entity.factory.UserFactory;
 import com.socialize.log.SocializeLogger;
@@ -65,6 +66,16 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 		editor.putString("consumer_token", session.getConsumerToken());
 		editor.putString("consumer_token_secret", session.getConsumerTokenSecret());
 		
+		editor.putString("3rd_party_userid", session.get3rdPartyUserId());
+		editor.putString("3rd_party_token", session.get3rdPartyToken());
+		editor.putString("3rd_party_app_id", session.get3rdPartyAppId());
+		
+		AuthProviderType authProviderType = session.getAuthProviderType();
+		
+		if(authProviderType != null) {
+			editor.putInt("3rd_party_type", authProviderType.getId());
+		}
+		
 		User user = session.getUser();
 		
 		if(user != null) {
@@ -95,7 +106,15 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 		String key = prefs.getString("consumer_key", null);
 		String secret = prefs.getString("consumer_secret", null);
 		
-		WritableSession session = sessionFactory.create(key, secret);
+		String userId3rdParty = prefs.getString("3rd_party_userid", null);
+		String token3rdParty = prefs.getString("3rd_party_token", null);
+		String appId3rdParty = prefs.getString("3rd_party_app_id", null);
+		
+		int iProviderType = prefs.getInt("3rd_party_type", AuthProviderType.SOCIALIZE.getId());
+		
+		AuthProviderType authProviderType = AuthProviderType.valueOf(iProviderType);
+		
+		WritableSession session = sessionFactory.create(key, secret, userId3rdParty, token3rdParty, appId3rdParty, authProviderType);
 			
 		session.setConsumerToken(prefs.getString("consumer_token", null));
 		session.setConsumerTokenSecret(prefs.getString("consumer_token_secret", null));

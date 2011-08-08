@@ -40,6 +40,8 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionFactory;
 import com.socialize.api.SocializeSessionPersister;
 import com.socialize.api.WritableSession;
+import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.facebook.FacebookSessionStore;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.ActionError;
 import com.socialize.entity.ListResult;
@@ -54,6 +56,7 @@ import com.socialize.net.HttpClientFactory;
 import com.socialize.util.HttpUtils;
 import com.socialize.util.IOUtils;
 import com.socialize.util.JSONParser;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -79,6 +82,8 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	private SocializeSessionPersister sessionPersister;
 	private SocializeConfig config;
 	private Context context;
+	
+	private FacebookSessionStore facebookSessionStore;
 	
 	public DefaultSocializeProvider(Context context) {
 		super();
@@ -127,9 +132,17 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		this.sessionFactory = sessionFactory;
 	}
 	
+	public void setFacebookSessionStore(FacebookSessionStore facebookSessionStore) {
+		this.facebookSessionStore = facebookSessionStore;
+	}
+
 	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException {
-
+		return authenticate(endpoint, key, secret, null, null, null, null, uuid);
+	}
+	
+	@Override
+	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderType authProviderType, String appId3rdParty) throws SocializeException {
 		if(sessionPersister != null) {
 			SocializeSession loaded = sessionPersister.load(context);
 			
@@ -148,12 +161,52 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 						loadedSecret.equals(secret) &&
 						loadedHost != null && 
 						loadedHost.equals(host)) {
+					
+					
+					if(authProviderType != null && !StringUtils.isEmpty(appId3rdParty)) {
+						AuthProviderType loadedAuthProviderType = loaded.getAuthProviderType();
+						String loadedAppId3rdParty = loaded.get3rdPartyAppId();
+						
+						if(loadedAuthProviderType != null && 
+								!StringUtils.isEmpty(loadedAppId3rdParty) && 
+								loadedAuthProviderType.equals(authProviderType) && 
+								loadedAppId3rdParty.equals(appId3rdParty)) {
+							return loaded;
+						}
+						else {
+							return null;
+						}
+					}
+					
 					return loaded;
 				}
 			}
 		}
 		
-		WritableSession session = sessionFactory.create(key, secret);
+		return null;
+	}
+	
+	@Override
+	public void clearSession() {
+		if(sessionPersister != null) {
+			sessionPersister.delete(context);
+		}
+		
+		if(facebookSessionStore != null) {
+			facebookSessionStore.clear(context);
+		}
+	}
+
+	@Override
+	public SocializeSession authenticate(String endpoint, String key, String secret, String userId3rdParty, String token3rdParty, String appId3rdParty, AuthProviderType authProviderType, String uuid) throws SocializeException {
+
+		SocializeSession loaded = loadSession(endpoint, key, secret, authProviderType, appId3rdParty);
+		
+		if(loaded != null) {
+			return loaded;
+		}
+
+		WritableSession session = sessionFactory.create(key, secret, userId3rdParty, token3rdParty, appId3rdParty, authProviderType);
 		
 		endpoint = prepareEndpoint(session, endpoint, true);
 		
@@ -482,4 +535,6 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	public SocializeSessionPersister getSessionPersister() {
 		return sessionPersister;
 	}
+	
+	
 }

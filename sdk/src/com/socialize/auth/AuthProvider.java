@@ -21,7 +21,9 @@
  */
 package com.socialize.auth;
 
+import com.socialize.api.SocializeAuthRequest;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.AuthProviderListener;
 
 /**
  * @author Jason Polites
@@ -31,10 +33,15 @@ public interface AuthProvider {
 
 	/**
 	 * Authenticates using a 3rd party provider.
-	 * @param appId The ID of the app on the 3rd party system.
+	 * @param authRequest
+	 * @param appId The id of the account/app to be authenticated.
 	 * @return
 	 * @throws SocializeException
 	 */
-	public AuthProviderResponse authenticate(String appId) throws SocializeException;
+	public void authenticate(SocializeAuthRequest authRequest, String appId, AuthProviderListener listener);
 	
+	/**
+	 * Clears any cached data for this provider.
+	 */
+	public void clearCache(String appId);
 }

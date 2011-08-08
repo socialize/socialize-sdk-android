@@ -22,6 +22,7 @@
 package com.socialize.api;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -38,12 +39,12 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeObject;
 import com.socialize.entity.factory.SocializeObjectFactory;
 import com.socialize.error.SocializeException;
 import com.socialize.oauth.OAuthRequestSigner;
-import com.socialize.provider.AuthProvider;
 import com.socialize.util.StringUtils;
 import com.socialize.util.UrlBuilder;
 
@@ -63,7 +64,7 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 	}
 	
 	@Override
-	public HttpUriRequest getAuthRequestWith3rdParty(SocializeSession session, String endpoint, String udid, AuthProvider provider, String providerId, String providerToken) throws SocializeException {
+	public HttpUriRequest getAuthRequestWith3rdParty(SocializeSession session, String endpoint, String udid, AuthProviderType provider, String providerId, String providerToken) throws SocializeException {
 		HttpPost post = new HttpPost(endpoint);
 		try {
 			List<NameValuePair> data = new ArrayList<NameValuePair>(1);
@@ -99,18 +100,17 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 
 	@Override
 	public HttpUriRequest getGetRequest(SocializeSession session, String endpoint, String id) throws SocializeException {
-		endpoint += id + "/";
+		endpoint += URLEncoder.encode(id) + "/";
 		HttpGet get = signer.sign(session, new HttpGet(endpoint));
 		return get;
 	}
 	
 	@Override
 	public HttpUriRequest getDeleteRequest(SocializeSession session, String endpoint, String id) throws SocializeException {
-		endpoint += id + "/";
+		endpoint += URLEncoder.encode(id) + "/";
 		HttpDelete del = signer.sign(session, new HttpDelete(endpoint));
 		return del;
 	}
-	
 
 	/**
 	 * @see this{@link #getListRequest(SocializeSession, String, String, String[], int, int)}

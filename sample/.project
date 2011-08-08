@@ -32,11 +32,6 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>android-ioc_src</name>
-			<type>2</type>
-			<locationURI>_android_android_ioc_37cf739f/src</locationURI>
-		</link>
-		<link>
 			<name>socialize-sdk_src</name>
 			<type>2</type>
 			<locationURI>_android_socialize_sdk_caa32434/src</locationURI>
