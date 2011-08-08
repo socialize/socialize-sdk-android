@@ -12,6 +12,16 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v0.2.1
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+[feature] User can read a quick start Installation guide in the readme.txt file in the repo
+
+[feature] User can access/read the repo's readme.txt file in GitHub
+
+[bug] SDK throws NPE when no results returned from POST
+
+
 v0.2.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
