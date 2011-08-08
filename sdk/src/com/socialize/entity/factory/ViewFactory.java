@@ -19,55 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.error;
+package com.socialize.entity.factory;
 
-import com.socialize.util.HttpUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.socialize.entity.View;
 
 /**
  * @author Jason Polites
  *
  */
-public class SocializeApiError extends SocializeException {
-
-	private static final long serialVersionUID = 6929605095508741864L;
-
-	private int resultCode;
-	private HttpUtils utils;
-	private String message;
+public class ViewFactory extends SocializeActionFactory<View> {
 	
-	public SocializeApiError(HttpUtils utils, int resultCode, String message) {
-		super();
-		this.resultCode = resultCode;
-		this.utils = utils;
-		this.message = message;
-	}
-	
-	public SocializeApiError(int resultCode, String message) {
-		super();
-		this.resultCode = resultCode;
-		this.message = message;
-	}
+	@Override
+	protected void postFromJSON(JSONObject object, View view) throws JSONException {}
 
 	@Override
-	public String getLocalizedMessage() {
-		return getMessage();
-	}
-	
-	public String getDescription() {
-		return message;
-	}
+	protected void postToJSON(View comment, JSONObject object) throws JSONException {}
 
 	@Override
-	public String getMessage() {
-		
-		if(utils != null) {
-			return utils.getMessageFor(resultCode) + " (" + resultCode + "), " + message;
-		}
-		
-		return  "(" + resultCode + "), " + message;
-	}
-
-	public int getResultCode() {
-		return resultCode;
+	public View instantiateObject() {
+		return new View();
 	}
 }

@@ -156,11 +156,11 @@ public class LikeActivity extends SocializeActivity {
 					
 					final ProgressDialog progress = ProgressDialog.show(LikeActivity.this, "Deleting Like", "Please wait...");
 					
-					clearLikeData();
-					
 					txtLikeCreateResult.setText("");
 					
-					String id =  txtLikeIdCreated.getText().toString();
+					String id = txtLikeIdCreated.getText().toString();
+					
+					clearLikeData();
 					
 					if(!StringUtils.isEmpty(id)) {
 						Socialize.getSocialize().unlike(Integer.parseInt(id), new LikeDeleteListener() {

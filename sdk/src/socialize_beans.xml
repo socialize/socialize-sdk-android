@@ -205,6 +205,26 @@
 	
 <!-- End Like API -->	
 
+<!-- View API -->
+
+	<bean id="viewFactory" class="com.socialize.entity.factory.ViewFactory" extends="socializeActionFactory"/>
+	
+	<bean id="viewRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
+		<constructor-arg ref="oauthSigner"/>
+		<constructor-arg ref="viewFactory"/>
+	</bean>
+
+	<bean id="viewProvider" extends="abstractProvider">
+		<constructor-arg type="context"/>
+		<property name="objectFactory" ref="viewFactory"/>
+		<property name="requestFactory" ref="viewRequestFactory"/>
+	</bean>
+	
+	<bean id="viewApi" class="com.socialize.api.action.ViewApi" extends="socializeApi">
+		<constructor-arg ref="viewProvider"/>
+	</bean>
+	
+<!-- End View API -->
 
 <!-- Socialize Core -->
 
@@ -215,6 +235,7 @@
 		<property name="commentApi" ref="commentApi"/>
 		<property name="entityApi" ref="entityApi"/>
 		<property name="likeApi" ref="likeApi"/>
+		<property name="viewApi" ref="viewApi"/>
 	</bean>
 	
 <!-- End Socialize Core -->

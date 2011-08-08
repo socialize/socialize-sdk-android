@@ -182,9 +182,9 @@ public interface SocializeService {
 	 * Creates a new entity.
 	 * @param url The unique URL associated with this entity.  MUST be a valid HTTP url.
 	 * @param name The name of the entity.
-	 * @param entityCreateListener A listener to handle callbacks from the post.
+	 * @param entityAddListener A listener to handle callbacks from the post.
 	 */
-	public void addEntity(String url, String name, EntityAddListener entityCreateListener);
+	public void addEntity(String url, String name, EntityAddListener entityAddListener);
 	
 	/**
 	 * Adds a new comment and associates it with the url described.

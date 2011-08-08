@@ -85,10 +85,9 @@ public class EntityApiTest extends SocializeUnitTest {
 		String key = "foo";
 		
 		EntityApi api = new EntityApi(provider) {
-
 			@Override
-			public void getAsync(SocializeSession session, String endpoint, String id, SocializeActionListener listener) {
-				addResult(id);
+			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
+				addResult(key);
 			}
 		};
 		

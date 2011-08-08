@@ -115,11 +115,13 @@ public class AuthenticateActivity extends SocializeActivity {
 				public void onClick(View v) {
 					
 					final ProgressDialog progress = ProgressDialog.show(AuthenticateActivity.this, "Clearing Cache", "Please wait...");
+					txtAuthResult.setText("");
 					
 					new AsyncTask<Void, Void, Void>() {
 
 						@Override
 						protected Void doInBackground(Void... params) {
+							
 							Socialize.getSocialize().clearSessionCache();
 							return null;
 						}
@@ -127,6 +129,7 @@ public class AuthenticateActivity extends SocializeActivity {
 						@Override
 						protected void onPostExecute(Void result) {
 							progress.dismiss();
+							txtAuthResult.setText("SUCCESS");
 						}
 					}.execute((Void)null);
 				}
