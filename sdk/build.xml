@@ -55,7 +55,7 @@
 		<echo>Out dir is [${out.dir}]</echo>
 
 		<copy todir="${out.dir}/classes" verbose="true" >
-			<fileset dir="bin">
+			<fileset dir="src">
 				<include name="socialize_beans.xml"/>
 				<include name="errors.properties"/>
 				<include name="socialize.properties"/>
