@@ -39,7 +39,7 @@ import com.socialize.sample.Main;
 public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestCase2<Main> {
 
 	public static final int DEFAULT_TIMEOUT_SECONDS = 30;
-	public static final String DEFAULT_ENTITY_URL = "http://socialize.integration.tests.com";
+	public static final String DEFAULT_ENTITY_URL = "http://socialize.integration.tests.com?somekey=somevalue&anotherkey=anothervalue";
 	public static final String DEFAULT_APPLICATION_NAME = "Socialize Android Sample App";
 
 	protected Solo robotium;

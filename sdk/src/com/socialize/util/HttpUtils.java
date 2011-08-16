@@ -33,6 +33,8 @@ import org.apache.http.HttpResponse;
 import android.content.Context;
 
 import com.socialize.config.SocializeConfig;
+import com.socialize.error.SocializeApiError;
+import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
 
 /**
@@ -90,6 +92,14 @@ public class HttpUtils {
 	
 	public boolean isAuthError(HttpResponse response) {
 		return isAuthError(response.getStatusLine().getStatusCode());
+	}
+	
+	public boolean isAuthError(SocializeException error) {
+		if(error instanceof SocializeApiError) {
+			SocializeApiError sError = (SocializeApiError) error;
+			return isAuthError(sError.getResultCode());
+		}
+		return false;
 	}
 	
 	public boolean isAuthError(int code) {

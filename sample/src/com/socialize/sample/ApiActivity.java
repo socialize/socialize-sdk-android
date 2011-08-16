@@ -27,7 +27,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.socialize.activity.SocializeActivity;
+import com.socialize.ui.SocializeActivity;
 
 public class ApiActivity extends SocializeActivity {
 

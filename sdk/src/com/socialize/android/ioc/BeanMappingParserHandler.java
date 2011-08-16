@@ -37,6 +37,8 @@ public class BeanMappingParserHandler extends DefaultHandler {
 	public static final String BEAN = "bean";
 	
 	public static final String PROPERTY = "property";
+	public static final String FACTORY = "factory";
+	
 	public static final String INIT_METHOD = "init-method";
 	public static final String DESTROY_METHOD = "destroy-method";
 	public static final String ARG = "arg";
@@ -238,6 +240,14 @@ public class BeanMappingParserHandler extends DefaultHandler {
 			else {
 				Logger.w(getClass().getSimpleName(), "No current map element for map entry.  Map entry types can only be declared within a <map> element");
 			}
+		}
+		else if(localName.equalsIgnoreCase(FACTORY)) {
+			// We have a bean factory...
+			// We expect an ID and beanName
+			FactoryRef ref = new FactoryRef();
+			ref.setMakes(attributes.getValue("makes"));
+			ref.setName(attributes.getValue("id"));
+			beanMapping.addFactoryRef(ref);
 		}
 	}
 	

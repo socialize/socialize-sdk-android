@@ -21,6 +21,8 @@
  */
 package com.socialize.entity;
 
+import com.socialize.util.StringUtils;
+
 import android.graphics.Bitmap;
 
 
@@ -38,8 +40,31 @@ public class User extends SocializeObject {
 	private String mediumImageUri;
 	private String largeImageUri;
 	private Stats stats;
+	private String displayName;
 	
 	private transient Bitmap image;
+	
+	public String getDisplayName() {
+		if(displayName == null) {
+			String fname = getFirstName();
+			String sname = getLastName();
+			if(!StringUtils.isEmpty(fname)) {
+				displayName = fname;
+				
+				if(!StringUtils.isEmpty(sname)) {
+					displayName += " " + sname;
+				}
+			}
+			else {
+//				displayName = getUsername();
+//				if(StringUtils.isEmpty(displayName)) {
+					displayName = "Anonymous";
+//				}
+			}
+		}
+		
+		return displayName;
+	}
 	
 	public String getFirstName() {
 		return firstName;

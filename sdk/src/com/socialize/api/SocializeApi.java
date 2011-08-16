@@ -39,6 +39,7 @@ import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.provider.SocializeProvider;
+import com.socialize.util.HttpUtils;
 
 /**
  * @author Jason Polites
@@ -53,6 +54,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	private SocializeConfig config;
 	private AuthProviders authProviders;
 	private SocializeLogger logger;
+	private HttpUtils httpUtils;
 	
 	public static enum RequestType {AUTH,PUT,POST,GET,LIST,DELETE};
 	
@@ -209,7 +211,12 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				
 				@Override
 				public void onError(SocializeException error) {
-					listener.onError(error);
+					if(httpUtils != null && httpUtils.isAuthError(error)) {
+						listener.onAuthFail(error);
+					}
+					else {
+						listener.onError(error);
+					}
 				}
 			};
 		}
@@ -339,6 +346,14 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
+	}
+	
+	public HttpUtils getHttpUtils() {
+		return httpUtils;
+	}
+
+	public void setHttpUtils(HttpUtils httpUtils) {
+		this.httpUtils = httpUtils;
 	}
 
 	abstract class AbstractAsyncProcess<Params, Progress, Result extends SocializeResponse> extends AsyncTask<Params, Progress, Result> {

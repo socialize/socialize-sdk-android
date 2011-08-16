@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import android.app.Activity;
+import android.graphics.Shader;
+import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
@@ -45,11 +47,15 @@ public class Drawables {
 		context.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 	}
 	
+	public Drawable getDrawable(String name, boolean tileX, boolean tileY) {
+		return getDrawable(name, metrics.densityDpi, tileX, tileY);
+	}
+	
 	public Drawable getDrawable(String name) {
-		return getDrawable(name, metrics.densityDpi);
+		return getDrawable(name, false, false);
 	}
 
-	public Drawable getDrawable(String name, int density) {
+	public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY) {
 
 		String densityPath = "mdpi";
 
@@ -75,8 +81,13 @@ public class Drawables {
 			
 			in = loader.getResourceAsStream("res/drawable/" + densityPath + "/" + name);
 			
+			if(in == null) {
+				// try default
+				in = loader.getResourceAsStream("res/drawable/" + name);
+			}
+			
 			if(in != null) {
-				return createDrawable(in, name);
+				return createDrawable(in, name, tileX, tileY);
 			}
 			
 			return null;
@@ -93,8 +104,27 @@ public class Drawables {
 		}
 	}
 	
-	protected Drawable createDrawable(InputStream in, String name) {
-		return BitmapDrawable.createFromStream(in, name);
+	protected Drawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY) {
+		
+		BitmapDrawable drawable = new BitmapDrawable(in);
+		
+		if(tileX || tileY) {
+		
+			TileMode x = Shader.TileMode.CLAMP;
+			TileMode y = Shader.TileMode.CLAMP;
+			
+			if(tileX) {
+				x = Shader.TileMode.REPEAT;
+			}
+			
+			if(tileY) {
+				y = Shader.TileMode.REPEAT;
+			}
+			
+			drawable.setTileModeXY( x, y );
+		}
+		
+		return drawable;
 	}
 
 	public ClassLoaderProvider getClassLoaderProvider() {

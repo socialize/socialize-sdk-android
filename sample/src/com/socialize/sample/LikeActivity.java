@@ -30,13 +30,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.socialize.Socialize;
-import com.socialize.activity.SocializeActivity;
 import com.socialize.entity.Like;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.sample.util.ErrorHandler;
+import com.socialize.ui.SocializeActivity;
 import com.socialize.util.StringUtils;
 
 public class LikeActivity extends SocializeActivity {

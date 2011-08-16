@@ -21,10 +21,12 @@
  */
 package com.socialize;
 
+import java.util.Arrays;
+
 import android.content.Context;
 import android.location.Location;
+import android.os.AsyncTask;
 
-import com.socialize.activity.ActivityIOCProvider;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeApiHost;
 import com.socialize.api.SocializeSession;
@@ -35,6 +37,7 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.SocializeListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
@@ -48,6 +51,7 @@ import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
+import com.socialize.ui.ActivityIOCProvider;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.ResourceLocator;
 import com.socialize.util.StringUtils;
@@ -63,6 +67,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private SocializeSession session;
 	private int initCount = 0;
 	
+	private String[] initPaths = null;
+	
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#init(android.content.Context)
 	 */
@@ -76,9 +82,69 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public void init(Context context, String...paths) {
+		try {
+			initInternal(context, paths);
+		}
+		catch (Exception e) {
+			if(logger != null) {
+				logger.error(SocializeLogger.INITIALIZE_FAILED, e);
+			}
+			else {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#initAsync(android.content.Context, com.socialize.listener.SocializeInitListener)
+	 */
+	@Override
+	public void initAsync(Context context, SocializeInitListener listener) {
+		initAsync(context, listener, SocializeConfig.SOCIALIZE_BEANS_PATH);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#initAsync(android.content.Context, com.socialize.listener.SocializeInitListener, java.lang.String[])
+	 */
+	@Override
+	public void initAsync(Context context, SocializeInitListener listener, String... paths) {
+		new InitTask(context, paths, listener).execute((Void)null);
+	}
+
+	private IOCContainer initInternal(Context context, String...paths) throws Exception {
+		boolean init = false;
+
+		if(isInitialized()) {
+			for (String path : paths) {
+				if(Arrays.binarySearch(initPaths, path) < 0) {
+					
+					if(logger != null) {
+						logger.info("New path found for beans [" +
+								path +
+								"].  Re-initializing Socialize");
+					}
+					
+					this.initCount = 0;
+					destroy();
+					
+					init = true;
+					
+					break;
+				}
+			}
+		}
+		else {
+			init = true;
+		}
 		
-		if(!isInitialized()) {
+		if(init) {
 			try {
+				initPaths = paths;
+				
+				Arrays.sort(initPaths);
+				
 				SocializeIOC container = new SocializeIOC();
 				ResourceLocator locator = new ResourceLocator();
 				ClassLoaderProvider provider = new ClassLoaderProvider();
@@ -90,18 +156,16 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				init(context, container); // initCount incremented here
 			}
 			catch (Exception e) {
-				if(logger != null) {
-					logger.error(SocializeLogger.INITIALIZE_FAILED, e);
-				}
-				else {
-					e.printStackTrace();
-				}
+				throw e;
 			}
 		}
 		else {
 			this.initCount++;
 		}
+		
+		return container;
 	}
+
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#init(android.content.Context, com.socialize.android.ioc.IOCContainer)
@@ -191,7 +255,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty,
 			SocializeAuthListener authListener) {
-		authenticate(consumerKey, consumerSecret, authUserId3rdParty, authToken3rdParty, authProvider, null, authListener, false);
+		authenticate(consumerKey, consumerSecret, authUserId3rdParty, authToken3rdParty, authProvider, authProviderId, authListener, false);
 	}
 	
 	private void authenticate(
@@ -414,6 +478,18 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		return session != null;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#isAuthenticated(com.socialize.auth.AuthProviderType)
+	 */
+	@Override
+	public boolean isAuthenticated(AuthProviderType providerType) {
+		if(isAuthenticated()) {
+			return (session.getAuthProviderType() != null && session.getAuthProviderType().equals(providerType));
+		}
+		return false;
+	}
+
 	private boolean assertAuthenticated(SocializeListener listener) {
 		if(assertInitialized(listener)) {
 			if(session != null) {
@@ -478,4 +554,73 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		if(logger != null) logger.error(SocializeLogger.NOT_INITIALIZED);
 		return null;
 	}
+	
+	class InitTask extends AsyncTask<Void, Void, IOCContainer> {
+		private Context context;
+		private String[] paths;
+		private Exception error;
+		private SocializeInitListener listener;
+		
+		public InitTask(Context context, String[] paths, SocializeInitListener listener) {
+			super();
+			this.context = context;
+			this.paths = paths;
+			this.listener = listener;
+		}
+
+		@Override
+		protected IOCContainer doInBackground(Void... params) {
+			try {
+				return initInternal(context, paths);
+			}
+			catch (Exception e) {
+				error = e;
+				return null;
+			}
+		}
+
+		@Override
+		protected void onPostExecute(IOCContainer result) {
+			if(result == null) {
+				final String errorMessage = "Failed to initialize Socialize instance";
+				
+				if(listener != null) {
+					if(error != null) {
+						if(error instanceof SocializeException) {
+							listener.onError((SocializeException) error);
+						}
+						else {
+							listener.onError(new SocializeException(error));
+						}
+					}
+					else {
+						listener.onError(new SocializeException(errorMessage));
+					}
+				}
+				else {
+					if(logger != null) {
+						if(error != null) {
+							logger.error(errorMessage, error);
+						}
+						else {
+							logger.error(errorMessage);
+						}
+					}
+					else {
+						if(error != null) {
+							error.printStackTrace();
+						}
+						else {
+							System.err.println(errorMessage);
+						}
+					}
+				}
+			}
+			else {
+				if(listener != null) {
+					listener.onInit(context, result);
+				}
+			}
+		}
+	};
 }

@@ -77,7 +77,7 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 				json.put("auth_token", providerToken);
 				json.put("auth_id", providerId);
 			}
-			
+
 			data.add(new BasicNameValuePair("payload", json.toString()));
 			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(data);
 			post.setEntity(entity);
@@ -95,7 +95,7 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 
 	@Override
 	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String uuid) throws SocializeException {
-		return getAuthRequestWith3rdParty(session, endpoint, uuid, null, null, null);
+		return getAuthRequestWith3rdParty(session, endpoint, uuid, session.getAuthProviderType(), session.get3rdPartyUserId(), session.get3rdPartyToken());
 	}
 
 	@Override

@@ -69,9 +69,8 @@ public class DrawablesTest extends SocializeActivityTest {
 		AndroidMock.replay(in);
 		
 		Drawables drawables = new Drawables(getActivity()) {
-
 			@Override
-			protected Drawable createDrawable(InputStream stream, String name) {
+			protected Drawable createDrawable(InputStream stream, String name, boolean tileX, boolean tileY) {
 				assertEquals(drawable_name, name);
 				assertSame(in, stream);
 				return drawable;
@@ -80,9 +79,9 @@ public class DrawablesTest extends SocializeActivityTest {
 		
 		drawables.setClassLoaderProvider(provider);
 		
-		assertSame(drawable, drawables.getDrawable(drawable_name, DisplayMetrics.DENSITY_LOW));
-		assertSame(drawable, drawables.getDrawable(drawable_name, DisplayMetrics.DENSITY_MEDIUM));
-		assertSame(drawable, drawables.getDrawable(drawable_name, DisplayMetrics.DENSITY_HIGH));
+		assertSame(drawable, drawables.getDrawable(drawable_name, DisplayMetrics.DENSITY_LOW, false, false));
+		assertSame(drawable, drawables.getDrawable(drawable_name, DisplayMetrics.DENSITY_MEDIUM, false, false));
+		assertSame(drawable, drawables.getDrawable(drawable_name, DisplayMetrics.DENSITY_HIGH, false, false));
 		
 		AndroidMock.verify(provider);
 		AndroidMock.verify(loader);

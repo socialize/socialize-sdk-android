@@ -40,6 +40,10 @@ public class SocializeConfig {
 	public static final String SOCIALIZE_BEANS_PATH = "socialize_beans.xml";
 	public static final String SOCIALIZE_ERRORS_PATH = "errors.properties";
 	
+	public static final String SOCIALIZE_CONSUMER_KEY = "socialize.consumer.key";
+	public static final String SOCIALIZE_CONSUMER_SECRET = "socialize.consumer.secret";
+	public static final String SOCIALIZE_FACEBOOK_APP_ID = "facebook.app.id";
+	
 	private Properties properties;
 	private SocializeLogger logger;
 	private ResourceLocator resourceLocator;

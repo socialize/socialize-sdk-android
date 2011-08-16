@@ -44,6 +44,8 @@ public class FacebookService {
 	private AuthProviderListener listener;
 	private DialogFactory dialogFactory;
 	
+	public static final String[] DEFAULT_PERMISSIONS = {"offline_access", "publish_stream"};
+	
 	public FacebookService(
 			Activity context, 
 			Facebook facebook, 
@@ -60,7 +62,7 @@ public class FacebookService {
 	}
 
 	public void authenticate() {
-		authenticate(new String[]{});
+		authenticate(DEFAULT_PERMISSIONS);
 	}
 	
 	public void authenticate(String[] permissions) {

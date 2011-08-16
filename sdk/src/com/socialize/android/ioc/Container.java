@@ -49,15 +49,22 @@ public class Container {
 	protected BeanRef getBeanRef(String name) {
 		return this.mapping.getBeanRef(name);
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public <T extends Object> T getBean(String name) {
+		return (T) getBean(name, (Object[]) null);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T extends Object> T getBean(String name, Object...args) {
+		
+
 		Object bean = beans.get(name);
 		if(bean == null) {
 			BeanRef beanRef = mapping.getBeanRef(name);
 			if(beanRef != null) {
 				if(!beanRef.isSingleton()) {
-					bean = builder.buildBean(this, beanRef);
+					bean = builder.buildBean(this, beanRef, args);
 					builder.setBeanProperties(this, beanRef, bean);
 					builder.initBean(this, beanRef, bean);
 				}

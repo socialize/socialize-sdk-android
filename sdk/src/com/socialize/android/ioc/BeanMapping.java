@@ -33,9 +33,28 @@ import java.util.Map;
 public class BeanMapping {
 
 	private Map<String, BeanRef> beanRefs;
-
+	private Map<String, FactoryRef> factoryRefs;
+	
 	public Collection<BeanRef> getBeanRefs() {
-		return beanRefs.values();
+		if(beanRefs != null) {
+			return beanRefs.values();
+		}
+		return null;
+	}
+	
+	public Collection<FactoryRef> getFactoryRefs() {
+		if(factoryRefs != null) {
+			return factoryRefs.values();
+		}
+		
+		return null;
+	}
+
+	public synchronized void addFactoryRef(FactoryRef ref) {
+		if(factoryRefs == null) {
+			factoryRefs = new LinkedHashMap<String, FactoryRef>();
+		}
+		factoryRefs.put(ref.getName(), ref);
 	}
 
 	public synchronized void addBeanRef(BeanRef ref) {
@@ -46,7 +65,17 @@ public class BeanMapping {
 	}
 
 	public BeanRef getBeanRef(String name) {
-		return beanRefs.get(name);
+		if(beanRefs != null) {
+			return beanRefs.get(name);
+		}
+		return null;
+	}
+	
+	public FactoryRef getFactoryRef(String name) {
+		if(factoryRefs != null) {
+			return factoryRefs.get(name);
+		}
+		return null;
 	}
 	
 	/**
@@ -55,8 +84,19 @@ public class BeanMapping {
 	 */
 	public void merge(BeanMapping mapping) {
 		Collection<BeanRef> other = mapping.getBeanRefs();
-		for (BeanRef beanRef : other) {
-			addBeanRef(beanRef);
+		
+		if(other != null) {
+			for (BeanRef beanRef : other) {
+				addBeanRef(beanRef);
+			}
+		}
+
+		Collection<FactoryRef> otherFs = mapping.getFactoryRefs();
+		
+		if(otherFs != null) {
+			for (FactoryRef factoryRef : otherFs) {
+				addFactoryRef(factoryRef);
+			}
 		}
 	}
 }

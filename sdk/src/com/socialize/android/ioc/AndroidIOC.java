@@ -57,6 +57,16 @@ public class AndroidIOC implements IOCContainer {
 		return (T) container.getBean(name);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.android.ioc.IOCContainer#getBean(java.lang.String, java.lang.Object[])
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> T getBean(String name, Object... args) {
+		return (T) container.getBean(name, args);
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.android.ioc.IOCContainer#destroy()
 	 */

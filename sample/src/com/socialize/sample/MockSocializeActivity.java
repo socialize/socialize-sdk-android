@@ -23,8 +23,8 @@ package com.socialize.sample;
 
 import android.os.Bundle;
 
-import com.socialize.activity.SocializeActivity;
 import com.socialize.log.SocializeLogger;
+import com.socialize.ui.SocializeActivity;
 
 public class MockSocializeActivity extends SocializeActivity {
 	@Override

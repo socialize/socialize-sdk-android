@@ -24,9 +24,13 @@ package com.socialize.util;
 import java.util.Locale;
 
 import android.Manifest.permission;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
+import android.view.Display;
 
 import com.socialize.Socialize;
 import com.socialize.log.SocializeLogger;
@@ -39,11 +43,47 @@ public class DeviceUtils {
 	
 	private SocializeLogger logger;
 	private String userAgent;
+	private float density = 160.0f;
+	
+	public void init(Context context) {
+		if(context instanceof Activity) {
+	        DisplayMetrics metrics = new DisplayMetrics();
+	        Display display = ((Activity)context).getWindowManager().getDefaultDisplay();
+	        display.getMetrics(metrics);
+	        density = metrics.density;
+		}
+		else {
+			String errroMsg = "Unable to determine device screen density.  Socialize must be intialized from an Activity";
+			if(logger != null) {
+				logger.warn(errroMsg);
+			}
+			else {
+				System.err.println(errroMsg);
+			}
+		}
+	}
+	
+	public int getDIP(int pixels) {
+		if(pixels != 0) {
+			return (int) ((float) pixels * density);
+		}
+		return pixels;
+	}
 	
 	public String getUDID(Context context) {
 		if(hasPermission(context, permission.READ_PHONE_STATE)) {
 			TelephonyManager tManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-			return tManager.getDeviceId();
+			
+			String deviceId = tManager.getDeviceId();
+			
+			if(StringUtils.isEmpty(deviceId)) {
+				if(logger != null) {
+					logger.warn("Unable to determine device UDID, reverting to " + Secure.ANDROID_ID);
+				}
+				deviceId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
+			}
+			
+			return deviceId;
 		}
 		else {
 			// this is fatal

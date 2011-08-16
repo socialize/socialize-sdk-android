@@ -32,7 +32,27 @@ import android.content.Context;
  */
 public interface IOCContainer {
 
+	/**
+	 * Gets the bean denoted by the given name (id).  
+	 * If this bean is defined as non-singleton, it will be instantiated in this call.
+	 * @param <T>
+	 * @param name
+	 * @return
+	 */
 	public <T extends Object> T getBean(String name);
+	
+	/**
+	 * Gets the bean denoted by the given name (id).  
+	 * If this bean is defined as non-singleton, it will be instantiated in this call using
+	 * the arguments passed as constructor arguments.
+	 * @param <T>
+	 * @param name
+	 * @param args Optional constructor arguments.  If the bean is defined with fixed constructor arguments, 
+	 * the arguments provided here will be appended to the set of arguments used when instantiating the bean.
+	 * Only applies to non-singleton beans!
+	 * @return
+	 */
+	public <T extends Object> T getBean(String name, Object...args);
 
 	/**
 	 * Destroys the container.

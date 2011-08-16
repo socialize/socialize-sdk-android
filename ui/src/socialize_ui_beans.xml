@@ -1,0 +1,49 @@
+<beans>
+	
+	<factory id="commentItemViewFactory" makes="commentListItem"/>
+	<factory id="listItemLoadingViewFactory" makes="listItemLoadingView"/>
+	
+	<bean id="socializeUIErrorHandler" class="com.socialize.ui.error.DialogErrorHandler"/>
+	
+	<bean id="socializeView" abstract="true">
+		<property name="errorHandler" ref="socializeUIErrorHandler"/>
+	</bean>
+	
+	<bean 
+		id="commentListProvider" 
+		class="com.socialize.ui.provider.SocializeCommentProvider">
+		<constructor-arg type="activity"/>
+		<property name="commentItemViewFactory" ref="commentItemViewFactory"/>
+		<property name="listItemLoadingViewFactory" ref="listItemLoadingViewFactory"/>
+	</bean>
+	
+	<bean 
+		id="commentList" 
+		class="com.socialize.ui.widget.CommentListView"
+		singleton="false"
+		extends="socializeView">
+		<constructor-arg type="activity"/>
+		<constructor-arg ref="commentListProvider"/>
+		<constructor-arg ref="deviceUtils"/> <!-- Defined in socialize_beans.xml -->
+	</bean>
+	
+	<bean 
+		id="commentListItem" 
+		class="com.socialize.ui.widget.CommentListItem"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<init-method name="init"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+	</bean>
+	
+	<bean 
+		id="listItemLoadingView" 
+		class="com.socialize.ui.view.ListItemLoadingView"
+		singleton="false"
+		extends="socializeView">
+		<constructor-arg type="activity"/>
+		<init-method name="init"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+	</bean>
+	
+</beans>

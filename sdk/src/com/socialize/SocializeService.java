@@ -29,6 +29,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -53,11 +54,27 @@ public interface SocializeService {
 
 	/**
 	 * Initializes a SocializeService instance with custom bean configurations (Expert use Only)
-	 * @param context The current Android context (or Activity)
+	 * @param context The current Android context (Activity)
 	 * @param paths List of paths to config files.  Beans in paths to the right overwrite beans in paths to the left.
 	 * @see https://github.com/socialize/android-ioc
 	 */
 	public void init(Context context, String... paths);
+	
+	/**
+	 * Initializes a SocializeService instance asynchronously with default settings.  Should be called during the onCreate() method of your Activity.
+	 * @param context The current Android context (Activity)
+	 * @param listener A listener to handle callbacks from the init.  Any access to Socialize objects must be done AFTER successful init.
+	 */
+	public void initAsync(Context context, SocializeInitListener listener);
+
+	/**
+	 * Initializes a SocializeService instance with custom bean configurations (Expert use Only)
+	 * @param context The current Android context (or Activity)
+	 * @param listener A listener to handle callbacks from the init.  Any access to Socialize objects must be done AFTER successful init.
+	 * @param paths List of paths to config files.  Beans in paths to the right overwrite beans in paths to the left.
+	 * @see https://github.com/socialize/android-ioc
+	 */
+	public void initAsync(Context context, SocializeInitListener listener, String... paths);
 
 	/**
 	 * Initializes a socialize service with a custom object container (Expert use only)
@@ -214,6 +231,13 @@ public interface SocializeService {
 	 * @return
 	 */
 	public boolean isAuthenticated();
+	
+	/**
+	 * Returns true if the current user is already authenticated using the provider specified.
+	 * @param providerType
+	 * @return
+	 */
+	public boolean isAuthenticated(AuthProviderType providerType);
 
 	
 	/**
