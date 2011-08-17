@@ -20,8 +20,6 @@ public class SocializeUI {
 	private static final SocializeUI instance = new SocializeUI();
 	
 	public static final String ENTITY_KEY = "socialize.entity.key";
-	public static final String FACEBOOK_USER_ID = "facebook.user.id";
-	public static final String FACEBOOK_USER_TOKEN = "facebook.user.token";
 	
 	private Map<String, Drawable> drawables;
 	
@@ -87,19 +85,18 @@ public class SocializeUI {
 	}
 	
 	/**
-	 * Sets the FB credentials for the current user if available
+	 * Sets the FB credentials for the current user if available.
 	 * @param context The current activity
 	 * @param userId
 	 * @param token
 	 */
 	public void setFacebookUserCredentials(Activity context, String userId, String token) {
-		Bundle extras = context.getIntent().getExtras();
-		if(extras == null) {
-			extras = new Bundle();
+		if(!Socialize.getSocialize().isInitialized()) {
+			initSocialize(context);
 		}
-		extras.putString(FACEBOOK_USER_ID, userId);
-		extras.putString(FACEBOOK_USER_TOKEN, userId);
-		context.getIntent().putExtras(extras);
+		
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_USER_ID, userId);
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_USER_TOKEN, token);
 	}
 	
 	/**
@@ -113,7 +110,7 @@ public class SocializeUI {
 		if(!Socialize.getSocialize().isInitialized()) {
 			initSocialize(context);
 		}
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_FACEBOOK_APP_ID, appId);
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_APP_ID, appId);
 	}
 	
 	public void setEntityUrl(Activity context, String url) {

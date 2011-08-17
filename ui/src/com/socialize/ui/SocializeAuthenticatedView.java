@@ -13,11 +13,10 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.util.StringUtils;
 
 public abstract class SocializeAuthenticatedView extends SocializeView {
 	
-	public static final String NAMESPACE = "http://getsocialize.com";
-
 	protected String consumerKey;
 	protected String consumerSecret;
 	protected String fbAppId;
@@ -31,7 +30,7 @@ public abstract class SocializeAuthenticatedView extends SocializeView {
 		SocializeUI.getInstance().initUI(container);
 		consumerKey = Socialize.getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		consumerSecret = Socialize.getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-		fbAppId = Socialize.getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_FACEBOOK_APP_ID);
+		fbAppId = Socialize.getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
 	}
 	
 	@Override
@@ -48,22 +47,35 @@ public abstract class SocializeAuthenticatedView extends SocializeView {
 		String token3rdParty = null;
 		
 		if(bundle != null) {
-			userId3rdParty = bundle.getString(SocializeUI.FACEBOOK_USER_ID);
-			token3rdParty = bundle.getString(SocializeUI.FACEBOOK_USER_TOKEN);
+			userId3rdParty = Socialize.getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_USER_ID);
+			token3rdParty = Socialize.getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_USER_TOKEN);
 		}
+		
+		onBeforeAuthenticate();
 		
 		AuthListener listener = new AuthListener();
 		AuthListener3rdParty listener3rdParty = new AuthListener3rdParty();
 		
 		if(isRequires3rdPartyAuth()) {
-			Socialize.getSocialize().authenticate(
-					consumerKey, 
-					consumerSecret, 
-					AuthProviderType.FACEBOOK,
-					fbAppId,
-					userId3rdParty,
-					token3rdParty,
-					listener3rdParty);
+			
+			if(!StringUtils.isEmpty(userId3rdParty) && !StringUtils.isEmpty(token3rdParty)) {
+				Socialize.getSocialize().authenticateKnownUser(
+						consumerKey, 
+						consumerSecret, 
+						AuthProviderType.FACEBOOK,
+						fbAppId,
+						userId3rdParty,
+						token3rdParty,
+						listener3rdParty);
+			}
+			else {
+				Socialize.getSocialize().authenticate(
+						consumerKey, 
+						consumerSecret, 
+						AuthProviderType.FACEBOOK,
+						fbAppId,
+						listener);
+			}
 		}	
 		else {
 			Socialize.getSocialize().authenticate(
@@ -72,6 +84,8 @@ public abstract class SocializeAuthenticatedView extends SocializeView {
 					listener);
 		}
 	}
+	
+	
 	
 	protected class AuthListener3rdParty extends AuthListener {
 		@Override
@@ -89,6 +103,7 @@ public abstract class SocializeAuthenticatedView extends SocializeView {
 	protected class AuthListener implements SocializeAuthListener {
 		@Override
 		public void onError(SocializeException error) {
+			onAfterAuthenticate();
 			showError(context, error.getMessage());
 			error.printStackTrace();
 		}
@@ -96,16 +111,24 @@ public abstract class SocializeAuthenticatedView extends SocializeView {
 		@Override
 		public void onAuthSuccess(SocializeSession session) {
 			// Render the childView
+			onAfterAuthenticate();
 			View view = getView();
 			addView(view);
 		}
 		
 		@Override
 		public void onAuthFail(SocializeException error) {
+			onAfterAuthenticate();
 			showError(context, error.getMessage());
 			error.printStackTrace();
 		}
 	}
+	
+	// Subclasses override
+	protected void onBeforeAuthenticate() {}
+	
+	// Subclasses override
+	protected void onAfterAuthenticate() {}
 	
 	protected abstract boolean isRequires3rdPartyAuth();
 	

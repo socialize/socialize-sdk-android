@@ -49,6 +49,7 @@ public abstract class SocializeView extends BaseView {
 	@Override
 	protected void onAttachedToWindow() {
 		super.onAttachedToWindow();
+		onBeforeSocializeInit();
 		initSocialize();
 		container = ActivityIOCProvider.getInstance().getContainer();
 		setErrorHandler((SocializeUIErrorHandler) container.getBean("socializeUIErrorHandler"));
@@ -62,6 +63,9 @@ public abstract class SocializeView extends BaseView {
 	protected void initSocialize() {
 		Socialize.init(this.getContext());
 	}
+	
+	// Subclasses override
+	protected void onBeforeSocializeInit() {}
 	
 	protected void onPostSocializeInit(IOCContainer container) {}
 }

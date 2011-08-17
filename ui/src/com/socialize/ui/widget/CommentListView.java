@@ -20,9 +20,13 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.socialize.Socialize;
+import com.socialize.api.SocializeSession;
+import com.socialize.auth.AuthProviderType;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.ui.BaseView;
@@ -96,10 +100,38 @@ public class CommentListView extends BaseView {
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String text = editText.getText().toString();
+				final String text = editText.getText().toString();
 				if(!StringUtils.isEmpty(text)) {
 					imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-					doPostComment(text);
+					
+					// TODO: add other providers
+					if(!Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+						Socialize.getSocialize().authenticate(
+								Socialize.getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY), 
+								Socialize.getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET),
+								AuthProviderType.FACEBOOK, 
+								Socialize.getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID),
+								new SocializeAuthListener() {
+
+									@Override
+									public void onError(SocializeException error) {
+										showError(context, error.getMessage());
+									}
+
+									@Override
+									public void onAuthSuccess(SocializeSession session) {
+										doPostComment(text);
+									}
+
+									@Override
+									public void onAuthFail(SocializeException error) {
+										showError(context, error.getMessage());
+									}
+								});
+					}
+					else {
+						doPostComment(text);
+					}
 				}
 			}
 		});
@@ -175,7 +207,6 @@ public class CommentListView extends BaseView {
 		
 		flipper.setDisplayedChild(0);
 		
-//		addView(logo);
 		addView(editPanel);
 		addView(flipper);
 	}
@@ -186,7 +217,7 @@ public class CommentListView extends BaseView {
 		dialog.setMessage("Please wait...");
 		dialog.show();
 		
-		Socialize.getSocialize().addComment("http://aaa.com", comment, new CommentAddListener() {
+		Socialize.getSocialize().addComment(entityKey, comment, new CommentAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {

@@ -42,7 +42,10 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_CONSUMER_KEY = "socialize.consumer.key";
 	public static final String SOCIALIZE_CONSUMER_SECRET = "socialize.consumer.secret";
-	public static final String SOCIALIZE_FACEBOOK_APP_ID = "facebook.app.id";
+	
+	public static final String FACEBOOK_APP_ID = "facebook.app.id";
+	public static final String FACEBOOK_USER_ID = "facebook.user.id";
+	public static final String FACEBOOK_USER_TOKEN = "facebook.user.token";
 	
 	private Properties properties;
 	private SocializeLogger logger;

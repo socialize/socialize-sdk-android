@@ -109,6 +109,13 @@ public interface SocializeService {
 	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, SocializeAuthListener authListener);
 	
 	/**
+	 * @deprecated Too ambiguous.
+	 * @use this{@link #authenticateKnownUser(String, String, AuthProviderType, String, String, String, SocializeAuthListener)}
+	 */
+	@Deprecated
+	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty, SocializeAuthListener authListener);
+	
+	/**
 	 * Authenticates the application against the API as a user known to your app from a given 3rd party provider.
 	 * @param consumerKey The consumer key, obtained from registration at http://www.getsocialize.com.
 	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
@@ -118,8 +125,8 @@ public interface SocializeService {
 	 * @param authToken3rdParty The auth token from the 3rd party (if available).
 	 * @param authListener The callback for authentication outcomes.
 	 */
-	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty, SocializeAuthListener authListener);
-
+	public void authenticateKnownUser(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty, SocializeAuthListener authListener);
+	
 	/**
 	 * Adds a new like and associates it with the url described.
 	 * @param url The url being liked. MUST be a valid http URL.  Defined when first creating a url, or created on the fly with this call.

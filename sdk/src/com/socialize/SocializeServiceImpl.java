@@ -248,14 +248,23 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		authenticate(consumerKey, consumerSecret, null, null, AuthProviderType.SOCIALIZE, null, authListener, false);
 	}
 	
+	
+	
+	@Override
+	public void authenticateKnownUser(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty,
+			SocializeAuthListener authListener) {
+		authenticate(consumerKey, consumerSecret, authUserId3rdParty, authToken3rdParty, authProvider, authProviderId, authListener, false);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#authenticate(java.lang.String, java.lang.String, com.socialize.auth.AuthProviderType, java.lang.String, java.lang.String, java.lang.String, com.socialize.listener.SocializeAuthListener)
 	 */
 	@Override
+	@Deprecated
 	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty,
 			SocializeAuthListener authListener) {
-		authenticate(consumerKey, consumerSecret, authUserId3rdParty, authToken3rdParty, authProvider, authProviderId, authListener, false);
+		authenticateKnownUser(consumerKey, consumerSecret, authProvider, authProviderId, authUserId3rdParty, authToken3rdParty, authListener);
 	}
 	
 	private void authenticate(

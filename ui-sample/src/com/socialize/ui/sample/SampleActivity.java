@@ -10,7 +10,7 @@ public class SampleActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		SocializeUI.getInstance().setFacebookUserCredentials(this, "blah", "blah");
+//		SocializeUI.getInstance().setFacebookUserCredentials(this, "blah", "blah");
 		SocializeUI.getInstance().setAppCredentials(this, "2db4bc2f-5967-47a3-aba9-11102c8912f4", "fd1d7bb8-56eb-41f1-8ade-375831b5ffcf");
 		SocializeUI.getInstance().setEntityUrl(this, "http://aaa.com");
 		
