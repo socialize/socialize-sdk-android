@@ -33,8 +33,8 @@ public class SocializeCommentProvider extends BaseAdapter {
 	private IBeanFactory<ListItemLoadingView> listItemLoadingViewFactory;
 	private List<Comment> comments;
 	private SocializeLogger logger;
-	private int totalCount = 0;
 	private View loadingView;
+	private boolean last = false;
 	
 	public SocializeCommentProvider(Context context) {
 		super();
@@ -42,7 +42,11 @@ public class SocializeCommentProvider extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		return (comments == null) ? 0 : comments.size() + 1;
+		int extra = 1;
+		if(last) {
+			extra = 0;
+		}
+		return (comments == null) ? 0 : comments.size() + extra;
 	}
 
 	@Override
@@ -57,6 +61,26 @@ public class SocializeCommentProvider extends BaseAdapter {
 	public long getItemId(int position) {
 		Comment item = (Comment) getItem(position);
 		return (item == null) ? -1 : item.getId();
+	}
+	
+	@Override
+	public int getItemViewType(int position) {
+		if(last || position < comments.size()) {
+			return 0;
+		}
+		else {
+			return 1;
+		}
+	}
+
+	@Override
+	public int getViewTypeCount() {
+		if(last) {
+			return 1;
+		}
+		else {
+			return 2;
+		}
 	}
 
 	@Override
@@ -143,6 +167,8 @@ public class SocializeCommentProvider extends BaseAdapter {
     							else {
     								System.err.println(errorMsg);
     							}
+    							
+    							holder.userIcon.setImageDrawable(SocializeUI.getInstance().getDrawable(SocializeUI.DEFAULT_USER_ICON));
     						}
     					}
     					else {
@@ -150,7 +176,7 @@ public class SocializeCommentProvider extends BaseAdapter {
     					}
     				}
     				else {
-    					holder.userIcon.setImageDrawable(SocializeUI.getInstance().getDrawable("default_user_icon"));
+    					holder.userIcon.setImageDrawable(SocializeUI.getInstance().getDrawable(SocializeUI.DEFAULT_USER_ICON));
     				}
     			}
     		}
@@ -183,14 +209,6 @@ public class SocializeCommentProvider extends BaseAdapter {
 		this.comments = comments;
 	}
 
-	public int getTotalCount() {
-		return totalCount;
-	}
-
-	public void setTotalCount(int totalCount) {
-		this.totalCount = totalCount;
-	}
-
 	public SocializeLogger getLogger() {
 		return logger;
 	}
@@ -199,4 +217,20 @@ public class SocializeCommentProvider extends BaseAdapter {
 		this.logger = logger;
 	}
 
+	public View getLoadingView() {
+		return loadingView;
+	}
+
+	public void setLoadingView(View loadingView) {
+		this.loadingView = loadingView;
+	}
+
+	public boolean isLast() {
+		return last;
+	}
+
+	public void setLast(boolean last) {
+		this.last = last;
+	}
+	
 }

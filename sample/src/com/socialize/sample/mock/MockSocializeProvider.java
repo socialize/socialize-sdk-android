@@ -29,6 +29,7 @@ import android.content.Context;
 
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionImpl;
+import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
@@ -54,6 +55,16 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 		super();
 	}
 	
+	@Override
+	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderData data) throws SocializeException {
+		return new SocializeSessionImpl();
+	}
+
+	@Override
+	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
+		return new SocializeSessionImpl();
+	}
+
 	@Override
 	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderType authProviderType, String appId3rdParty) throws SocializeException {
 		return new SocializeSessionImpl();

@@ -103,10 +103,10 @@ public interface SocializeService {
 	 * @param consumerKey The consumer url, obtained from registration at http://www.getsocialize.com.
 	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
 	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
-	 * @param authProviderId The ID of your app in the 3rd party system used to authenticate. (e.g. YOUR Facebook App ID)
+	 * @param authProviderAppId The ID of your app in the 3rd party system used to authenticate. (e.g. YOUR Facebook App ID)
 	 * @param authListener The callback for authentication outcomes.
 	 */
-	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, SocializeAuthListener authListener);
+	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderAppId, SocializeAuthListener authListener);
 	
 	/**
 	 * @deprecated Too ambiguous.

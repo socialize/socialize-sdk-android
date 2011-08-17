@@ -38,10 +38,13 @@ import android.test.mock.MockContext;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeRequestFactory;
 import com.socialize.api.SocializeSessionFactory;
 import com.socialize.api.SocializeSessionPersister;
 import com.socialize.api.WritableSession;
+import com.socialize.auth.AuthProviderData;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
@@ -61,6 +64,8 @@ import com.socialize.util.JSONParser;
  */
 @UsesMocks({
 	SocializeObjectFactory.class, 
+	IBeanFactory.class,
+	AuthProviderData.class,
 	UserFactory.class,
 	SocializeSessionPersister.class,
 	HttpClientFactory.class, 
@@ -82,6 +87,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 	SocializeSessionPersister sessionPersister;
 	SocializeObjectFactory<SocializeObject> objectFactory;
 	SocializeRequestFactory<SocializeObject> requestFactory;
+	IBeanFactory<AuthProviderData> authProviderDataFactory;
 	UserFactory userFactory;
 	SocializeSessionFactory sessionFactory;
 	HttpClientFactory clientFactory;
@@ -98,6 +104,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 	JSONArray jsonArray;
 	Context mockContext;
 	SocializeConfig config;
+	AuthProviderData authProviderData;
 	
 	final String jsonString = "{foobar}";
 	
@@ -109,6 +116,8 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		sessionPersister = AndroidMock.createMock(SocializeSessionPersister.class);
 		objectFactory = AndroidMock.createMock(SocializeObjectFactory.class);
 		requestFactory = AndroidMock.createMock(SocializeRequestFactory.class);
+		authProviderDataFactory = AndroidMock.createMock(IBeanFactory.class);
+		authProviderData = AndroidMock.createMock(AuthProviderData.class);
 		userFactory = AndroidMock.createMock(UserFactory.class);
 		sessionFactory = AndroidMock.createMock(SocializeSessionFactory.class);
 		clientFactory = AndroidMock.createMock(HttpClientFactory.class);
@@ -130,6 +139,7 @@ public class SocializeProviderTest extends SocializeActivityTest {
 	private DefaultSocializeProvider<SocializeObject> getNewProvider() {
 		DefaultSocializeProvider<SocializeObject> provider = new DefaultSocializeProvider<SocializeObject>(mockContext);
 		
+		provider.setAuthProviderDataFactory(authProviderDataFactory);
 		provider.setObjectFactory(objectFactory);
 		provider.setUserFactory(userFactory);
 		provider.setClientFactory(clientFactory);
@@ -154,7 +164,19 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		final String oauth_token_secret = "oauth_token_secret";
 		final String url = "https://" + host + "/" + endpoint;
 		
-		AndroidMock.expect(sessionFactory.create(key, secret, null, null, null, null)).andReturn(session);
+		final String firstName = "foo_first";
+		final String lastName = "bar_last";
+		final String profilePicData = "foobar_pic";
+		
+		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
+		
+		AndroidMock.expect(authProviderData.getAuthProviderType()).andReturn(null);
+		AndroidMock.expect(authProviderData.getAppId3rdParty()).andReturn(null);
+		AndroidMock.expect(authProviderData.getUserFirstName()).andReturn(firstName);
+		AndroidMock.expect(authProviderData.getUserLastName()).andReturn(lastName);
+		AndroidMock.expect(authProviderData.getUserProfilePicData()).andReturn(profilePicData);
+		
+		AndroidMock.expect(sessionFactory.create(key, secret, authProviderData)).andReturn(session);
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
 		AndroidMock.expect(response.getEntity()).andReturn(entity);
@@ -169,6 +191,14 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(sessionPersister.load(mockContext)).andReturn(null); // No persistence for this one
 		AndroidMock.expect(session.getHost()).andReturn(host);
 		
+		AndroidMock.expect(user.getFirstName()).andReturn(null);
+		AndroidMock.expect(user.getLastName()).andReturn(null);
+		AndroidMock.expect(user.getProfilePicData()).andReturn(null);
+		
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
+		user.setProfilePicData(profilePicData);
+		
 		// Expect save
 		sessionPersister.save(mockContext, session);
 		
@@ -180,6 +210,8 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		
 		DefaultSocializeProvider<SocializeObject> provider = getNewProvider();
 		
+		AndroidMock.replay(authProviderDataFactory);
+		AndroidMock.replay(authProviderData);
 		AndroidMock.replay(user);
 		AndroidMock.replay(session);
 		AndroidMock.replay(sessionFactory);
@@ -198,6 +230,8 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		
 		provider.authenticate(endpoint, key, secret, uuid);
 		
+		AndroidMock.verify(authProviderData);
+		AndroidMock.verify(authProviderDataFactory);
 		AndroidMock.verify(user);
 		AndroidMock.verify(session);
 		AndroidMock.verify(sessionFactory);
@@ -223,15 +257,19 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		final String endpoint = "foobar/";
 		
 		AndroidMock.expect(sessionPersister.load(mockContext)).andReturn(session); 
-		
+		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
+		AndroidMock.expect(authProviderData.getAuthProviderType()).andReturn(AuthProviderType.SOCIALIZE);
+		AndroidMock.expect(authProviderData.getAppId3rdParty()).andReturn(null);
 		AndroidMock.expect(session.getConsumerKey()).andReturn(key);
 		AndroidMock.expect(session.getConsumerSecret()).andReturn(secret);
 		AndroidMock.expect(session.getHost()).andReturn(host);
 		AndroidMock.expect(config.getProperty(SocializeConfig.API_HOST)).andReturn(host);
-
+		
 		AndroidMock.replay(config);
 		AndroidMock.replay(session);
 		AndroidMock.replay(sessionPersister);
+		AndroidMock.replay(authProviderDataFactory);
+		AndroidMock.replay(authProviderData);
 		
 		DefaultSocializeProvider<SocializeObject> provider = getNewProvider();
 		
@@ -239,9 +277,11 @@ public class SocializeProviderTest extends SocializeActivityTest {
 		
 		provider.authenticate(endpoint, key, secret, uuid);
 		
+		AndroidMock.verify(authProviderDataFactory);
 		AndroidMock.verify(config);
 		AndroidMock.verify(session);
 		AndroidMock.verify(sessionPersister);
+		AndroidMock.verify(authProviderData);
 	}
 	
 	public void testGet() throws Exception {

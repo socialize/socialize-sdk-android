@@ -28,6 +28,7 @@ import com.socialize.api.action.CommentApi;
 import com.socialize.api.action.EntityApi;
 import com.socialize.api.action.LikeApi;
 import com.socialize.api.action.ViewApi;
+import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
@@ -71,6 +72,22 @@ public class SocializeApiHost {
 		authenticate(consumerKey, consumerSecret, null, null, authProvider, null, listener, sessionConsumer, false);
 	}
 	
+	public void authenticate(String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
+		String udid = deviceUtils.getUDID(context);
+		
+		// TODO: create test case for this
+		if(StringUtils.isEmpty(udid)) {
+			if(listener != null) {
+				listener.onError(new SocializeException("No UDID provided"));
+			}
+		}
+		else {
+			// All Api instances have authenticate, so we can just use any old one
+			commentApi.authenticateAsync(consumerKey, consumerSecret, udid, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
+		}
+	}
+	
+	@Deprecated
 	public void authenticate(String consumerKey, String consumerSecret, String authUserId3rdParty, String authToken3rdParty, AuthProviderType authProvider, String appId3rdParty, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
 		String udid = deviceUtils.getUDID(context);
 		

@@ -178,12 +178,14 @@ import com.socialize.util.Drawables;
 
 	}
 
-	public void testAuthenticateCallsAuthenticateWithEmptyPermissions() {
+	public void testAuthenticateCallsAuthenticateWithCorrectPermissions() {
 		FacebookService service = new FacebookService(null, null, null, null, null) {
 			@Override
 			public void authenticate(String[] permissions) {
 				assertNotNull(permissions);
-				assertTrue(permissions.length == 0);
+				assertTrue(permissions.length == 2);
+				assertEquals(FacebookService.DEFAULT_PERMISSIONS[0], permissions[0]);
+				assertEquals(FacebookService.DEFAULT_PERMISSIONS[1], permissions[1]);
 				addResult(true);
 			}
 		};

@@ -27,11 +27,13 @@ import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
 
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeApiHost;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.auth.AuthProvider;
+import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
@@ -65,6 +67,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private SocializeLogger logger;
 	private IOCContainer container;
 	private SocializeSession session;
+	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	private int initCount = 0;
 	
 	private String[] initPaths = null;
@@ -177,6 +180,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.container = container;
 				this.service = container.getBean("socializeApiHost");
 				this.logger = container.getBean("logger");
+				this.authProviderDataFactory = container.getBean("authProviderDataFactory");
 				this.initCount++;
 				
 				ActivityIOCProvider.getInstance().setContainer(container);
@@ -236,8 +240,11 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#authenticate(java.lang.String, java.lang.String, com.socialize.provider.AuthProvider, com.socialize.listener.SocializeAuthListener)
 	 */
 	@Override
-	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, SocializeAuthListener authListener) {
-		authenticate(consumerKey, consumerSecret, null, null, authProvider, authProviderId, authListener, true);
+	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProviderType, String authProviderAppId, SocializeAuthListener authListener) {
+		AuthProviderData data = this.authProviderDataFactory.getBean();
+		data.setAuthProviderType(authProviderType);
+		data.setAppId3rdParty(authProviderAppId);
+		authenticate(consumerKey, consumerSecret, data, authListener, true);
 	}
 
 	/* (non-Javadoc)
@@ -245,10 +252,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener authListener)  {
-		authenticate(consumerKey, consumerSecret, null, null, AuthProviderType.SOCIALIZE, null, authListener, false);
+		AuthProviderData data = this.authProviderDataFactory.getBean();
+		data.setAuthProviderType(AuthProviderType.SOCIALIZE);
+		authenticate(consumerKey, consumerSecret, data, authListener, false);
 	}
-	
-	
 	
 	@Override
 	public void authenticateKnownUser(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty,
@@ -267,6 +274,19 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		authenticateKnownUser(consumerKey, consumerSecret, authProvider, authProviderId, authUserId3rdParty, authToken3rdParty, authListener);
 	}
 	
+	private void authenticate(
+			String consumerKey, 
+			String consumerSecret, 
+			AuthProviderData authProviderData,
+			SocializeAuthListener authListener, 
+			boolean do3rdPartyAuth) {
+		
+		if(assertInitialized(authListener)) {
+			service.authenticate(consumerKey, consumerSecret, authProviderData, authListener, this, do3rdPartyAuth);
+		}
+	}
+	
+	@Deprecated
 	private void authenticate(
 			String consumerKey, 
 			String consumerSecret, 

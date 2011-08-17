@@ -21,6 +21,7 @@
  */
 package com.socialize.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -53,6 +54,11 @@ public class Drawables {
 	
 	public Drawable getDrawable(String name) {
 		return getDrawable(name, false, false);
+	}
+	
+	public Drawable getDrawable(byte[] data) {
+		ByteArrayInputStream bin = new ByteArrayInputStream(data);
+		return new BitmapDrawable(bin);
 	}
 
 	public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY) {

@@ -35,11 +35,13 @@ import org.json.JSONObject;
 
 import android.content.Context;
 
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeRequestFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionFactory;
 import com.socialize.api.SocializeSessionPersister;
 import com.socialize.api.WritableSession;
+import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.facebook.FacebookSessionStore;
 import com.socialize.config.SocializeConfig;
@@ -71,6 +73,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	
 	private SocializeObjectFactory<T> objectFactory;
 	private SocializeObjectFactory<User> userFactory;
+	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	private ErrorFactory errorFactory;
 	private HttpClientFactory clientFactory;
 	private SocializeSessionFactory sessionFactory;
@@ -138,9 +141,14 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 
 	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException {
-		return authenticate(endpoint, key, secret, null, null, null, null, uuid);
+		return authenticate(endpoint, key, secret, authProviderDataFactory.getBean(), uuid);
 	}
 	
+	@Override
+	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderData data) throws SocializeException {
+		return loadSession(endpoint, key, secret, data.getAuthProviderType(), data.getAppId3rdParty());
+	}
+
 	@Override
 	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderType authProviderType, String appId3rdParty) throws SocializeException {
 		if(sessionPersister != null) {
@@ -197,16 +205,18 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		}
 	}
 
+	
+	
 	@Override
-	public SocializeSession authenticate(String endpoint, String key, String secret, String userId3rdParty, String token3rdParty, String appId3rdParty, AuthProviderType authProviderType, String uuid) throws SocializeException {
-
-		SocializeSession loaded = loadSession(endpoint, key, secret, authProviderType, appId3rdParty);
+	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
+		
+		SocializeSession loaded = loadSession(endpoint, key, secret, data);
 		
 		if(loaded != null) {
 			return loaded;
 		}
 
-		WritableSession session = sessionFactory.create(key, secret, userId3rdParty, token3rdParty, appId3rdParty, authProviderType);
+		WritableSession session = sessionFactory.create(key, secret, data);
 		
 		endpoint = prepareEndpoint(session, endpoint, true);
 		
@@ -235,6 +245,18 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 				
 				User user = userFactory.fromJSON(json.getJSONObject("user"));
 				
+				if(StringUtils.isEmpty(user.getFirstName())) {
+					user.setFirstName(data.getUserFirstName());
+				}
+				
+				if(StringUtils.isEmpty(user.getLastName())) {
+					user.setLastName(data.getUserLastName());
+				}
+				
+				if(StringUtils.isEmpty(user.getProfilePicData())) {
+					user.setProfilePicData(data.getUserProfilePicData());
+				}
+				
 				session.setConsumerToken(json.getString("oauth_token"));
 				session.setConsumerTokenSecret(json.getString("oauth_token_secret"));
 				session.setUser(user);
@@ -255,6 +277,19 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		}
 		
 		return session;
+	}
+
+	@Deprecated
+	@Override
+	public SocializeSession authenticate(String endpoint, String key, String secret, String userId3rdParty, String token3rdParty, String appId3rdParty, AuthProviderType authProviderType, String uuid) throws SocializeException {
+
+		AuthProviderData data = authProviderDataFactory.getBean();
+		data.setAppId3rdParty(appId3rdParty);
+		data.setAuthProviderType(authProviderType);
+		data.setToken3rdParty(token3rdParty);
+		data.setUserId3rdParty(userId3rdParty);
+		
+		return authenticate(endpoint, key, secret, data, uuid);
 	}
 
 	@Override
@@ -472,6 +507,10 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		this.sessionPersister = sessionPersister;
 	}
 	
+	public void setAuthProviderDataFactory(IBeanFactory<AuthProviderData> authProviderDataFactory) {
+		this.authProviderDataFactory = authProviderDataFactory;
+	}
+
 	private final String prepareEndpoint(SocializeSession session, String endpoint) {
 		return prepareEndpoint(session, endpoint, false);
 	}

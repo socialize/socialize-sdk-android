@@ -33,6 +33,7 @@ import com.socialize.facebook.Facebook;
 import com.socialize.facebook.FacebookError;
 import com.socialize.facebook.Facebook.DialogListener;
 import com.socialize.listener.AuthProviderListener;
+import com.socialize.util.Base64;
 
 /**
  * @author Jason Polites
@@ -60,15 +61,34 @@ public abstract class FacebookDialogListener implements DialogListener {
 		try {
 			String json = facebook.request("me");
 			
+			Bundle picRequestParams = new Bundle();
+			picRequestParams.putString("type", "square");
+			
+			String profilePicData = facebook.request("me/picture", picRequestParams);
+			String encoded = Base64.encode(profilePicData.getBytes());
+			
 			JSONObject obj = new JSONObject(json);
 			
 			String id = obj.getString("id");
 			String token = values.getString("access_token");
 			
+			String firstName = null;
+			String lastName = null;
+			
+			if(obj.has("first_name") && !obj.isNull("first_name")) {
+				firstName = obj.getString("first_name");
+			}
+			if(obj.has("last_name") && !obj.isNull("last_name")) {
+				lastName = obj.getString("last_name");
+			}
+			
 			if(listener != null) {
 				AuthProviderResponse response = new AuthProviderResponse();
 				response.setUserId(id);
 				response.setToken(token);
+				response.setFirstName(firstName);
+				response.setLastName(lastName);
+				response.setImageData(encoded);
 				listener.onAuthSuccess(response);
 			}
 			else {

@@ -1,5 +1,7 @@
 package com.socialize.ui.widget;
 
+import java.util.List;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -16,7 +18,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.socialize.Socialize;
@@ -29,6 +30,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.BaseView;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.provider.SocializeCommentProvider;
@@ -46,6 +48,10 @@ public class CommentListView extends BaseView {
 	private ProgressDialog dialog;
 	private InputMethodManager imm;
 	private String entityKey;
+	private int startIndex = 0;
+	private int grabLength = 20;
+	private int totalCount = 0;
+	private SocializeLogger logger;
 	
 	public CommentListView(
 			final Context context, 
@@ -170,7 +176,10 @@ public class CommentListView extends BaseView {
 				
 				if(last && !loading) {
 					loading = true;
-					Toast.makeText(context, "Last", Toast.LENGTH_SHORT).show();
+					
+					// Get next set...
+					getNextSet();
+//					Toast.makeText(context, "Last", Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -234,7 +243,14 @@ public class CommentListView extends BaseView {
 	}
 	
 	public void doListComments() {
-		Socialize.getSocialize().listCommentsByEntity(entityKey, new CommentListListener() {
+		
+		startIndex = 0;
+		grabLength = 20;
+		
+		Socialize.getSocialize().listCommentsByEntity(entityKey, 
+			startIndex,
+			grabLength,
+			new CommentListListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -245,8 +261,8 @@ public class CommentListView extends BaseView {
 			
 			@Override
 			public void onList(ListResult<Comment> entities) {
+				totalCount = entities.getTotalCount();
 				provider.setComments(entities.getItems());
-				provider.setTotalCount(entities.getTotalCount());
 				provider.notifyDataSetChanged();
 				flipper.setDisplayedChild(1);
 				editText.setText("");
@@ -257,6 +273,51 @@ public class CommentListView extends BaseView {
 	}
 	
 
+	private void getNextSet() {
+		
+		startIndex+=grabLength;
+		grabLength+=grabLength;
+		
+		if(grabLength > totalCount) {
+			grabLength = totalCount;
+			
+			if(startIndex >= grabLength) {
+				provider.setLast(true);
+				provider.notifyDataSetChanged();
+				loading = false;
+				return;
+			}
+		}
+		
+		Socialize.getSocialize().listCommentsByEntity(entityKey, 
+				startIndex,
+				grabLength,
+				new CommentListListener() {
+				
+				@Override
+				public void onError(SocializeException error) {
+					
+					// Don't show loading anymore
+					if(logger != null) {
+						logger.error("Error retrieving comments", error);
+					}
+					else {
+						error.printStackTrace();
+					}
+					
+					loading = false;
+				}
+				
+				@Override
+				public void onList(ListResult<Comment> entities) {
+					List<Comment> comments = provider.getComments();
+					comments.addAll(entities.getItems());
+					provider.setComments(comments);
+					provider.notifyDataSetChanged();
+					loading = false;
+				}
+			});
+	}
 	@Override
 	protected void onAttachedToWindow() {
 		super.onAttachedToWindow();
@@ -284,4 +345,27 @@ public class CommentListView extends BaseView {
 		this.provider = provider;
 	}
 
+	public int getStartIndex() {
+		return startIndex;
+	}
+
+	public void setStartIndex(int startIndex) {
+		this.startIndex = startIndex;
+	}
+
+	public int getGrabLength() {
+		return grabLength;
+	}
+
+	public void setGrabLength(int grabLength) {
+		this.grabLength = grabLength;
+	}
+
+	public SocializeLogger getLogger() {
+		return logger;
+	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
 }

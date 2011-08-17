@@ -41,6 +41,7 @@ public class User extends SocializeObject {
 	private String largeImageUri;
 	private Stats stats;
 	private String displayName;
+	private String profilePicData;
 	
 	private transient Bitmap image;
 	
@@ -121,10 +122,26 @@ public class User extends SocializeObject {
 		this.stats = stats;
 	}
 	
+	@Deprecated
 	public Bitmap getImage() {
 		return image;
 	}
+	
+	@Deprecated
 	public void setImage(Bitmap image) {
 		this.image = image;
 	}
+
+	/**
+	 * Base64 encoded image data.
+	 * @return
+	 */
+	public String getProfilePicData() {
+		return profilePicData;
+	}
+
+	public void setProfilePicData(String profilePicData) {
+		this.profilePicData = profilePicData;
+	}
+	
 }
