@@ -24,6 +24,7 @@ package com.socialize.api;
 import android.content.Context;
 import android.location.Location;
 
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.action.CommentApi;
 import com.socialize.api.action.EntityApi;
 import com.socialize.api.action.LikeApi;
@@ -53,7 +54,7 @@ public class SocializeApiHost {
 	private EntityApi entityApi;
 	private LikeApi likeApi;
 	private ViewApi viewApi;
-	
+	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	
 	public SocializeApiHost(Context context) {
 		super();
@@ -65,11 +66,15 @@ public class SocializeApiHost {
 	}
 	
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
-		authenticate(consumerKey, consumerSecret, null, null, AuthProviderType.SOCIALIZE, null, listener, sessionConsumer, false);
+		AuthProviderData authProviderData = authProviderDataFactory.getBean();
+		authProviderData.setAuthProviderType(AuthProviderType.SOCIALIZE);
+		authenticate(consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, false);
 	}
 	
 	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
-		authenticate(consumerKey, consumerSecret, null, null, authProvider, null, listener, sessionConsumer, false);
+		AuthProviderData authProviderData = authProviderDataFactory.getBean();
+		authProviderData.setAuthProviderType(authProvider);
+		authenticate(consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, false);
 	}
 	
 	public void authenticate(String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
@@ -204,4 +209,13 @@ public class SocializeApiHost {
 	public void setViewApi(ViewApi viewApi) {
 		this.viewApi = viewApi;
 	}
+
+	public IBeanFactory<AuthProviderData> getAuthProviderDataFactory() {
+		return authProviderDataFactory;
+	}
+
+	public void setAuthProviderDataFactory(IBeanFactory<AuthProviderData> authProviderDataFactory) {
+		this.authProviderDataFactory = authProviderDataFactory;
+	}
+	
 }

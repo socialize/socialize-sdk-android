@@ -57,10 +57,7 @@ public class User extends SocializeObject {
 				}
 			}
 			else {
-//				displayName = getUsername();
-//				if(StringUtils.isEmpty(displayName)) {
-					displayName = "Anonymous";
-//				}
+				displayName = "Anonymous";
 			}
 		}
 		
@@ -143,5 +140,8 @@ public class User extends SocializeObject {
 	public void setProfilePicData(String profilePicData) {
 		this.profilePicData = profilePicData;
 	}
-	
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
 }

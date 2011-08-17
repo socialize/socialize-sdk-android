@@ -241,6 +241,7 @@
 	<bean id="socializeApiHost" class="com.socialize.api.SocializeApiHost">
 		<constructor-arg type="context"/>
 		<property name="clientFactory" ref="clientFactory"/>
+		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="commentApi" ref="commentApi"/>
 		<property name="entityApi" ref="entityApi"/>
