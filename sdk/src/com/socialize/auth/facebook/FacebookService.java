@@ -25,12 +25,14 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.socialize.error.SocializeException;
 import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.DialogFactory;
+import com.socialize.util.IOUtils;
 
 /**
  * @author Jason Polites
@@ -43,6 +45,7 @@ public class FacebookService {
 	private FacebookSessionStore facebookSessionStore; 
 	private AuthProviderListener listener;
 	private DialogFactory dialogFactory;
+	private IOUtils ioUtils;
 	
 	public static final String[] DEFAULT_PERMISSIONS = {"offline_access", "publish_stream"};
 	
@@ -86,13 +89,20 @@ public class FacebookService {
 			}
 		};
 		
+		facebookDialogListener.setIoUtils(ioUtils);
 		facebook.authorize(context, permissions, facebookDialogListener);
 	}
 	
+	public IOUtils getIoUtils() {
+		return ioUtils;
+	}
+
+	public void setIoUtils(IOUtils ioUtils) {
+		this.ioUtils = ioUtils;
+	}
+
 	public void cancel() {
-		if(listener != null) {
-			listener.onError(new SocializeException("User canceled request"));
-		}
+		Toast.makeText(context, "Request canceled", Toast.LENGTH_SHORT).show();
 	}
 	
 	public void logout() {

@@ -50,26 +50,26 @@ public class IOUtils {
 		return "";
 	}
 	
-	public String read(InputStream in) throws IOException {
+	public byte[] readBytes(InputStream in) throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		pipe(in, out, 1024);
-		return new String(out.toByteArray());
+		return out.toByteArray();
+	}
+	
+	public String read(InputStream in) throws IOException {
+		return new String(readBytes(in));
 	}
 	
 	public long pipe(InputStream in, OutputStream out, int bufferSize) throws IOException {
-		
-		int read;
+		int read = 0;
 		long total = 0L;
 		byte[] buffer = new byte[bufferSize];
 		
 		while((read = in.read(buffer)) >= 0) {
-			
 			total+=read;
 			out.write(buffer, 0, read);
 		}
-		
 		out.flush();
-		
 		return total;
 	}
 

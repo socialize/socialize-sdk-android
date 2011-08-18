@@ -41,7 +41,6 @@ public class SocializeCommentProvider extends BaseAdapter {
 	private Drawables drawables;
 	private View loadingView;
 	private boolean last = false;
-	private User currentUser;
 	
 	public SocializeCommentProvider(Context context) {
 		super();
@@ -132,10 +131,7 @@ public class SocializeCommentProvider extends BaseAdapter {
         	Comment item = (Comment) getItem(position);
     		
     		if(item != null) {
-    			if(currentUser == null) {
-    				currentUser = Socialize.getSocialize().getSession().getUser();
-    			}
-
+    			User currentUser = Socialize.getSocialize().getSession().getUser();
     			User user = item.getUser();
     			
     			if(currentUser != null && user != null && currentUser.getId().equals(user.getId())) {

@@ -56,8 +56,10 @@ public class CommentListItem extends LinearLayout {
 		iconLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 		iconLayout.setPadding(four,four,four,four);
 
+//		LinearLayout.LayoutParams userIconLayoutParams = new LinearLayout.LayoutParams(deviceUtils.getDIP(32), deviceUtils.getDIP(32));
 		
 		userIcon = new ImageView(getContext());
+		
 		GradientDrawable iconBorder = new GradientDrawable(
 				GradientDrawable.Orientation.BOTTOM_TOP,
                 new int[] { Color.DKGRAY, Color.DKGRAY });

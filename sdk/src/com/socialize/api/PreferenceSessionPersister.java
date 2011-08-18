@@ -80,7 +80,8 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 		
 		if(user != null) {
 			try {
-				editor.putString("user", userFactory.toJSON(user).toString());
+				String userJSON = userFactory.toJSON(user).toString();
+				editor.putString("user", userJSON);
 			}
 			catch (JSONException e) {
 				if(logger != null) {

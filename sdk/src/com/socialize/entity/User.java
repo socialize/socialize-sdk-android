@@ -45,6 +45,14 @@ public class User extends SocializeObject {
 	
 	private transient Bitmap image;
 	
+	
+	
+	@Override
+	public void setId(Integer id) {
+		// TODO Auto-generated method stub
+		super.setId(id);
+	}
+
 	public String getDisplayName() {
 		if(displayName == null) {
 			String fname = getFirstName();

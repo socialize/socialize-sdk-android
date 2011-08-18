@@ -48,9 +48,19 @@
 	
 	<factory id="authProviderDataFactory" makes="authProviderData"/>	
 	
+	<bean id="cache" class="com.socialize.util.DrawableCache">
+		<constructor-arg type="context"/>
+		<constructor-arg type="integer" value="10"/> <!-- Min size -->
+		<constructor-arg type="integer" value="100"/> <!-- Max size -->
+		<destroy-method name="destroy">
+			<arg type="context"/>
+		</destroy-method>
+	</bean>
+	
 	<bean id="drawables" class="com.socialize.util.Drawables">
 		<constructor-arg type="activity"/>
 		<property name="classLoaderProvider" ref="classLoaderProvider"/>
+		<property name="cache" ref="cache"/>
 	</bean>
 	
 	<bean id="dialogFactory" class="com.socialize.util.DialogFactory"/>

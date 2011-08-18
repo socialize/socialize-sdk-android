@@ -19,6 +19,7 @@
 		<constructor-arg type="activity"/>
 		<property name="commentItemViewFactory" ref="commentItemViewFactory"/>
 		<property name="listItemLoadingViewFactory" ref="listItemLoadingViewFactory"/>
+		<property name="drawables" ref="drawables"/>
 	</bean>
 	
 	<bean 

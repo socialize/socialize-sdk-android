@@ -21,19 +21,24 @@
  */
 package com.socialize.auth.facebook;
 
+import java.io.InputStream;
+import java.net.URL;
+
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.error.SocializeException;
 import com.socialize.facebook.DialogError;
 import com.socialize.facebook.Facebook;
-import com.socialize.facebook.FacebookError;
 import com.socialize.facebook.Facebook.DialogListener;
+import com.socialize.facebook.FacebookError;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.util.Base64;
+import com.socialize.util.IOUtils;
 
 /**
  * @author Jason Polites
@@ -45,6 +50,7 @@ public abstract class FacebookDialogListener implements DialogListener {
 	private Facebook facebook;
 	private Context context;
 	private AuthProviderListener listener;
+	private IOUtils ioUtils;
 
 	public FacebookDialogListener(Context context, Facebook facebook, FacebookSessionStore facebookSessionStore, AuthProviderListener listener) {
 		super();
@@ -60,24 +66,37 @@ public abstract class FacebookDialogListener implements DialogListener {
 		
 		try {
 			String json = facebook.request("me");
-			
-			String encoded = null;
-			
-			try {
-				Bundle picRequestParams = new Bundle();
-				picRequestParams.putString("type", "square");
-				String profilePicData = facebook.request("me/picture", picRequestParams);
-				encoded = Base64.encode(profilePicData.getBytes());
-			}
-			catch (Exception e) {
-				// TODO: log error
-				e.printStackTrace();
-			}
 
 			JSONObject obj = new JSONObject(json);
 			
 			String id = obj.getString("id");
 			String token = values.getString("access_token");
+	
+			String encoded = null;
+			InputStream in = null;
+			
+			try {
+				URL url = new URL("http://graph.facebook.com/"+id+"/picture?type=large");
+				
+				in = url.openConnection().getInputStream();
+				
+				byte[] readBytes = ioUtils.readBytes(in);
+				encoded = Base64.encode(readBytes);
+				
+//				Bundle picRequestParams = new Bundle();
+//				picRequestParams.putString("type", "square");
+//				String profilePicData = facebook.request("me/picture", picRequestParams);
+//				encoded = Base64.encode(profilePicData.getBytes());
+			}
+			catch (Exception e) {
+				// TODO: log error
+				e.printStackTrace();
+			}
+			finally {
+				if(in != null) {
+					in.close();
+				}
+			}
 			
 			String firstName = null;
 			String lastName = null;
@@ -141,14 +160,18 @@ public abstract class FacebookDialogListener implements DialogListener {
 
 	@Override
 	public void onCancel() {
-		if(listener != null) {
-			// TODO: use error code.
-			listener.onError(new SocializeException("User canceled request"));
-		}
-		
+		Toast.makeText(context, "Request canceled", Toast.LENGTH_SHORT).show();
 		onFinish();
 	}
 	
+	public IOUtils getIoUtils() {
+		return ioUtils;
+	}
+
+	public void setIoUtils(IOUtils ioUtils) {
+		this.ioUtils = ioUtils;
+	}
+
 	public abstract void onFinish();
 	
 	public abstract void handleError(Throwable error);

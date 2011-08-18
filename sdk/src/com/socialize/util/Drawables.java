@@ -21,15 +21,14 @@
  */
 package com.socialize.util;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import android.app.Activity;
-import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Shader;
 import android.graphics.Shader.TileMode;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 
@@ -58,12 +57,16 @@ public class Drawables {
 	}
 	
 	public Drawable getDrawable(String key, byte[] data) {
-		ByteArrayInputStream bin = new ByteArrayInputStream(data);
-		return new BitmapDrawable(bin);
-	}
-	
-	public void destroy(Context context) {
-		cache.destroy(context);
+		
+		CacheableDrawable drawable = cache.get(key);
+		
+		if(drawable == null) {
+			Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+			drawable = new CacheableDrawable(bmp, key);
+			cache.put(key, drawable);
+		}
+		
+		return drawable;
 	}
 
 	public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY) {
