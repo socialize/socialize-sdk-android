@@ -292,10 +292,13 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		// Try loading the session first
 		SocializeSession session = null;
 		
+		AuthProviderType authProviderType = authProviderData.getAuthProviderType();
+		String appId3rdParty = authProviderData.getAppId3rdParty();
+		
 		// TODO: externalize this into a validator
-		if(authProviderData.getAuthProviderType() != null && 
-				authProviderData.getAuthProviderType().equals(AuthProviderType.FACEBOOK) && 
-				StringUtils.isEmpty(authProviderData.getAppId3rdParty())) {
+		if(authProviderType != null && 
+				authProviderType.equals(AuthProviderType.FACEBOOK) && 
+				StringUtils.isEmpty(appId3rdParty)) {
 			if(listener != null) {
 				listener.onError(new SocializeException("No app ID found for auth type FACEBOOK"));
 			}
@@ -313,11 +316,10 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 					
 		if(session == null) {
 			// Get the provider for the type
-			AuthProviderType authProviderType = authProviderData.getAuthProviderType();
 			AuthProvider authProvider = authProviders.getProvider(authProviderType);
 			
 			if(authProvider != null) {
-				authProvider.authenticate(request, authProviderData.getAppId3rdParty(), new AuthProviderListener() {
+				authProvider.authenticate(request, appId3rdParty, new AuthProviderListener() {
 					
 					@Override
 					public void onError(SocializeException error) {

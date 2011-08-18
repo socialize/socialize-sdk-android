@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Shader;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
@@ -33,14 +34,14 @@ import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 
 /**
- * Convenience class for getting drawables form raw images
- * 
+ * Convenience class for getting drawables from raw images.
  * @author Jason Polites
  */
 public class Drawables {
 
-	DisplayMetrics metrics = null;
+	private DisplayMetrics metrics = null;
 	private ClassLoaderProvider classLoaderProvider;
+	private DrawableCache cache;
 	
 	public Drawables(Activity context) {
 		super();
@@ -60,16 +61,25 @@ public class Drawables {
 		ByteArrayInputStream bin = new ByteArrayInputStream(data);
 		return new BitmapDrawable(bin);
 	}
+	
+	public void destroy(Context context) {
+		cache.destroy(context);
+	}
 
 	public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY) {
-
-		String densityPath = "mdpi";
-
-		if (density == DisplayMetrics.DENSITY_HIGH) {
-			densityPath = "hdpi";
+		
+		String densityPath = getPath(name, density);
+		String commonPath = getPath(name);
+		
+		CacheableDrawable drawable = cache.get(densityPath);
+		
+		if(drawable == null) {
+			// try default
+			drawable = cache.get(commonPath);
 		}
-		else if (density == DisplayMetrics.DENSITY_LOW) {
-			densityPath = "ldpi";
+		
+		if(drawable != null && !drawable.isRecycled()) {
+			return drawable;
 		}
 
 		InputStream in = null;
@@ -85,18 +95,22 @@ public class Drawables {
 				loader = Drawables.class.getClassLoader();
 			}
 			
-			in = loader.getResourceAsStream("res/drawable/" + densityPath + "/" + name);
+			String path = densityPath;
+			
+			in = loader.getResourceAsStream(path);
 			
 			if(in == null) {
 				// try default
-				in = loader.getResourceAsStream("res/drawable/" + name);
+				path = commonPath;
+				in = loader.getResourceAsStream(path);
 			}
 			
 			if(in != null) {
-				return createDrawable(in, name, tileX, tileY);
+				drawable = createDrawable(in, path, tileX, tileY);
+				cache.put(path, drawable);
 			}
 			
-			return null;
+			return drawable;
 		}
 		finally {
 			if(in != null) {
@@ -110,9 +124,29 @@ public class Drawables {
 		}
 	}
 	
-	protected Drawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY) {
+	protected String getPath(String name) {
+		return "res/drawable/" + name;
+	}
+	
+	protected String getPath(String name, int density) {
+		String densityPath = "mdpi";
+
+		if (density == DisplayMetrics.DENSITY_HIGH) {
+			densityPath = "hdpi";
+		}
+		else if (density == DisplayMetrics.DENSITY_LOW) {
+			densityPath = "ldpi";
+		}
+		else if (density > DisplayMetrics.DENSITY_HIGH) {
+			densityPath = "xhdpi";
+		}
 		
-		BitmapDrawable drawable = new BitmapDrawable(in);
+		return "res/drawable/" + densityPath + "/" + name;
+	}
+	
+	protected CacheableDrawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY) {
+		
+		CacheableDrawable drawable = new CacheableDrawable(in, name);
 		
 		if(tileX || tileY) {
 		
@@ -139,5 +173,13 @@ public class Drawables {
 
 	public void setClassLoaderProvider(ClassLoaderProvider classLoaderProvider) {
 		this.classLoaderProvider = classLoaderProvider;
+	}
+
+	public DrawableCache getCache() {
+		return cache;
+	}
+
+	public void setCache(DrawableCache cache) {
+		this.cache = cache;
 	}
 }
