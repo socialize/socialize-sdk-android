@@ -35,7 +35,7 @@ public abstract class SocializeAuthenticatedView extends SocializeView {
 	
 	@Override
 	protected void initSocialize() {
-		SocializeUI.getInstance().initSocialize(context);
+		SocializeUI.getInstance().initSocialize(getContext());
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public abstract class SocializeAuthenticatedView extends SocializeView {
 		@Override
 		public void onError(SocializeException error) {
 			onAfterAuthenticate();
-			showError(context, error.getMessage());
+			showError(getContext(), error.getMessage());
 			error.printStackTrace();
 		}
 		
@@ -119,7 +119,7 @@ public abstract class SocializeAuthenticatedView extends SocializeView {
 		@Override
 		public void onAuthFail(SocializeException error) {
 			onAfterAuthenticate();
-			showError(context, error.getMessage());
+			showError(getContext(), error.getMessage());
 			error.printStackTrace();
 		}
 	}
@@ -136,7 +136,7 @@ public abstract class SocializeAuthenticatedView extends SocializeView {
 	
 	protected Bundle getBundle() {
 		Bundle bundle = null;
-		
+		Context context = getContext();
 		if(context instanceof Activity) {
 			Activity a = (Activity) context;
 			bundle = a.getIntent().getExtras();

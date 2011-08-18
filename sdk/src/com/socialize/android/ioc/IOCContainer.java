@@ -71,5 +71,11 @@ public interface IOCContainer {
 	public void init(Context context, InputStream...in) throws Exception;
 	
 	public int size();
+	
+	/**
+	 * Allows for re-setting of context.
+	 * @param context
+	 */
+	public void setContext(Context context);
 
 }

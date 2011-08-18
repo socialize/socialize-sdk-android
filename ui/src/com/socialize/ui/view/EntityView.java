@@ -22,6 +22,8 @@ public abstract class EntityView extends SocializeAuthenticatedView {
 	protected View getView() {
 		Bundle bundle = null;
 		
+		Context context = getContext();
+		
 		if(context instanceof Activity) {
 			Activity a = (Activity) context;
 			bundle = a.getIntent().getExtras();

@@ -77,4 +77,13 @@ public class AndroidIOC implements IOCContainer {
 		}
 		initialized = false;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.android.ioc.IOCContainer#setContext(android.content.Context)
+	 */
+	@Override
+	public void setContext(Context context) {
+		container.setContext(context);
+	}
 }

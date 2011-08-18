@@ -21,15 +21,15 @@
  */
 package com.socialize.ui.dialog;
 
-import com.socialize.log.SocializeLogger;
-
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+
+import com.socialize.log.SocializeLogger;
 
 /**
  * Safely renders progress dialogs
  * @author Jason Polites
- *
  */
 public class ProgressDialogFactory {
 	
@@ -37,6 +37,14 @@ public class ProgressDialogFactory {
 
 	public ProgressDialog show(Context context, String title, String message) {
 		try {
+			if(context instanceof Activity) {
+				Activity activity = (Activity) context;
+				while(activity.getParent() != null) {
+					activity = activity.getParent();
+				}
+				context = activity;
+			}
+			
 			ProgressDialog dialog = new ProgressDialog(context);
 			dialog.setTitle("Posting comment");
 			dialog.setMessage("Please wait...");

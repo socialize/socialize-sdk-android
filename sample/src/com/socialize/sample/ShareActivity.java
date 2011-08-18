@@ -31,10 +31,7 @@ public class ShareActivity extends SocializeActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		if(!Socialize.getSocialize().isInitialized()) {
-			Socialize.init(this);
-		}
+		Socialize.init(this);
 	}
 
 	@Override

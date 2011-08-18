@@ -86,9 +86,9 @@ public class FbDialog extends Dialog {
 
 	private void setUpTitle() {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		
-//		Drawable icon = getContext().getResources().getDrawable(R.drawable.facebook_icon);
-		
+
+		//		Drawable icon = getContext().getResources().getDrawable(R.drawable.facebook_icon);
+
 		mTitle = new TextView(getContext());
 		mTitle.setText("Facebook");
 		mTitle.setTextColor(Color.WHITE);
@@ -96,12 +96,12 @@ public class FbDialog extends Dialog {
 		mTitle.setBackgroundColor(FB_BLUE);
 		mTitle.setPadding(MARGIN + PADDING, MARGIN, MARGIN, MARGIN);
 		mTitle.setCompoundDrawablePadding(MARGIN + PADDING);
-		
+
 		if(drawables != null) {
 			Drawable icon = drawables.getDrawable("facebook_icon.png");
 			mTitle.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
 		}
-		
+
 		mContent.addView(mTitle);
 	}
 
@@ -176,7 +176,10 @@ public class FbDialog extends Dialog {
 			if (title != null && title.length() > 0) {
 				mTitle.setText(title);
 			}
-			mSpinner.dismiss();
+			try {
+				mSpinner.dismiss();
+			}
+			catch (Exception ignore) {}
 		}
 
 	}

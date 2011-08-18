@@ -76,10 +76,7 @@ public class SocializeUI {
 	 * @param consumerSecret Your consumer secret, obtained via registration at http://getsocialize.com
 	 */
 	public void setAppCredentials(Context context, String consumerKey, String consumerSecret) {
-		if(!Socialize.getSocialize().isInitialized()) {
-			initSocialize(context);
-		}
-		
+		assertSocializeInitialized(context);
 		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY, consumerKey);
 		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET, consumerSecret);
 	}
@@ -91,10 +88,7 @@ public class SocializeUI {
 	 * @param token
 	 */
 	public void setFacebookUserCredentials(Activity context, String userId, String token) {
-		if(!Socialize.getSocialize().isInitialized()) {
-			initSocialize(context);
-		}
-		
+		assertSocializeInitialized(context);
 		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_USER_ID, userId);
 		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_USER_TOKEN, token);
 	}
@@ -107,9 +101,7 @@ public class SocializeUI {
 	 * @see https://developers.facebook.com/
 	 */
 	public void setFacebookAppId(Context context, String appId) {
-		if(!Socialize.getSocialize().isInitialized()) {
-			initSocialize(context);
-		}
+		assertSocializeInitialized(context);
 		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_APP_ID, appId);
 	}
 	
@@ -120,5 +112,12 @@ public class SocializeUI {
 		}
 		extras.putString(ENTITY_KEY, url);
 		context.getIntent().putExtras(extras);
+	}
+	
+	private void assertSocializeInitialized(Context context) {
+		SocializeConfig config = Socialize.getSocialize().getConfig();
+		if(config == null) {
+			initSocialize(context);
+		}
 	}
 }

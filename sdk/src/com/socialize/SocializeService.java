@@ -230,7 +230,9 @@ public interface SocializeService {
 	/**
 	 * Returns true if this SocializeService instance has been initialized.
 	 * @return
+	 * @deprecated init should always be called! 
 	 */
+	@Deprecated
 	public boolean isInitialized();
 
 	/**

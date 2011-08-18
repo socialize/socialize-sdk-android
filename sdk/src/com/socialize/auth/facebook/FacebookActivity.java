@@ -51,7 +51,6 @@ public class FacebookActivity extends SocializeActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         service.onActivityResult(requestCode, resultCode, data);
-        finish();
     }
     
     public FacebookActivityService getFacebookActivityService() {

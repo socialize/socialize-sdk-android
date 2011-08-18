@@ -166,6 +166,11 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			this.initCount++;
 		}
 		
+		// Always set the context on the container
+		if(container != null) {
+			container.setContext(context);
+		}
+		
 		return container;
 	}
 
@@ -504,7 +509,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public boolean isAuthenticated() {
-		return session != null;
+		return isInitialized() && session != null;
 	}
 	
 	/*

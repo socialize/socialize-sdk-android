@@ -54,7 +54,6 @@ public class CommentListView extends BaseView {
 	private int totalCount = 0;
 	private SocializeLogger logger;
 	private ProgressDialogFactory progressDialogFactory;
-	private Context context;
 	private ProgressDialog dialog = null;
 	
 	public CommentListView(
@@ -65,7 +64,6 @@ public class CommentListView extends BaseView {
 		
 		super(context);
 		
-		this.context = context;
 		this.provider = provider;
 		this.entityKey = entityKey;
 		
@@ -223,7 +221,7 @@ public class CommentListView extends BaseView {
 	}
 	
 	public void doPostComment(String comment) {
-		dialog = progressDialogFactory.show(context, "Posting comment", "Please wait...");
+		dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
 
 		Socialize.getSocialize().addComment(entityKey, comment, new CommentAddListener() {
 			
@@ -330,17 +328,11 @@ public class CommentListView extends BaseView {
 	protected void onAttachedToWindow() {
 		super.onAttachedToWindow();
 		
-		if(Socialize.getSocialize().isInitialized()) {
-			if(Socialize.getSocialize().isAuthenticated()) {
-				doListComments();
-			}
-			else {
-				showError(getContext(), "Socialize not authenticated");
-				flipper.setDisplayedChild(1);
-			}
+		if(Socialize.getSocialize().isAuthenticated()) {
+			doListComments();
 		}
 		else {
-			showError(getContext(), "Socialize not initialized");
+			showError(getContext(), "Socialize not authenticated");
 			flipper.setDisplayedChild(1);
 		}
 	}

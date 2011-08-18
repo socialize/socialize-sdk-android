@@ -34,16 +34,13 @@ import com.socialize.ui.error.SocializeUIErrorHandler;
 public abstract class SocializeView extends BaseView {
 
 	protected IOCContainer container;
-	protected Context context;
 	
 	public SocializeView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		this.context = context;
 	}
 
 	public SocializeView(Context context) {
 		super(context);
-		this.context = context;
 	}
 
 	@Override

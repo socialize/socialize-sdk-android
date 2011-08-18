@@ -25,6 +25,8 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import android.content.Context;
+
 /**
  * @author Jason Polites
  */
@@ -121,5 +123,9 @@ public class Container {
 	
 	protected BeanMapping getBeanMapping() {
 		return mapping;
+	}
+
+	public void setContext(Context context) {
+		builder.setContext(context);
 	}
 }
