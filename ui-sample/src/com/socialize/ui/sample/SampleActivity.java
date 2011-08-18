@@ -11,8 +11,15 @@ public class SampleActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 //		SocializeUI.getInstance().setFacebookUserCredentials(this, "blah", "blah");
-		SocializeUI.getInstance().setAppCredentials(this, "2db4bc2f-5967-47a3-aba9-11102c8912f4", "fd1d7bb8-56eb-41f1-8ade-375831b5ffcf");
-		SocializeUI.getInstance().setEntityUrl(this, "http://aaa.com");
+		
+//		String consumerKey = "f04f5af0-5be0-4ae6-a1f1-8d418c0d7e6b";
+//		String consumerSecret = "7a9a2b20-d4de-4d46-9c0b-f1653f0f1089";
+		
+		String consumerKey = "4d84d055-754b-4b81-9ffa-a44aa1f17fc3";
+		String consumerSecret = "417ad40f-f691-4e48-a8af-9a9f82991cc6";
+		
+		SocializeUI.getInstance().setAppCredentials(this, consumerKey, consumerSecret);
+		SocializeUI.getInstance().setEntityUrl(this, "http://aaaa.com");
 		
 		setContentView(R.layout.main);
 	}

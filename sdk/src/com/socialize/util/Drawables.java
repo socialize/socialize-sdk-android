@@ -56,7 +56,7 @@ public class Drawables {
 		return getDrawable(name, false, false);
 	}
 	
-	public Drawable getDrawable(byte[] data) {
+	public Drawable getDrawable(String key, byte[] data) {
 		ByteArrayInputStream bin = new ByteArrayInputStream(data);
 		return new BitmapDrawable(bin);
 	}

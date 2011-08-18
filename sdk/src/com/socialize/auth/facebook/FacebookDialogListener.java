@@ -61,12 +61,19 @@ public abstract class FacebookDialogListener implements DialogListener {
 		try {
 			String json = facebook.request("me");
 			
-			Bundle picRequestParams = new Bundle();
-			picRequestParams.putString("type", "square");
+			String encoded = null;
 			
-			String profilePicData = facebook.request("me/picture", picRequestParams);
-			String encoded = Base64.encode(profilePicData.getBytes());
-			
+			try {
+				Bundle picRequestParams = new Bundle();
+				picRequestParams.putString("type", "square");
+				String profilePicData = facebook.request("me/picture", picRequestParams);
+				encoded = Base64.encode(profilePicData.getBytes());
+			}
+			catch (Exception e) {
+				// TODO: log error
+				e.printStackTrace();
+			}
+
 			JSONObject obj = new JSONObject(json);
 			
 			String id = obj.getString("id");
@@ -100,6 +107,7 @@ public abstract class FacebookDialogListener implements DialogListener {
 				listener.onError(new SocializeException(e));
 			}
 			else {
+				// TODO: log error
 				e.printStackTrace();
 			}
 		}

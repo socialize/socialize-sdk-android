@@ -33,7 +33,7 @@ public class AuthProviderData {
 	private String userFirstName;
 	private String userLastName;
 	private String userProfilePicData;
-	private AuthProviderType authProviderType;
+	private AuthProviderType authProviderType = AuthProviderType.SOCIALIZE;
 	
 	public AuthProviderData() {
 		super();

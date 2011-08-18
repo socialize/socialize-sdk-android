@@ -7,11 +7,13 @@ import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Comment;
 import com.socialize.entity.User;
@@ -20,6 +22,9 @@ import com.socialize.ui.SocializeUI;
 import com.socialize.ui.view.ListItemLoadingView;
 import com.socialize.ui.view.ViewHolder;
 import com.socialize.ui.widget.CommentListItem;
+import com.socialize.util.Base64;
+import com.socialize.util.Base64DecoderException;
+import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 
 /**
@@ -33,8 +38,10 @@ public class SocializeCommentProvider extends BaseAdapter {
 	private IBeanFactory<ListItemLoadingView> listItemLoadingViewFactory;
 	private List<Comment> comments;
 	private SocializeLogger logger;
+	private Drawables drawables;
 	private View loadingView;
 	private boolean last = false;
+	private User currentUser;
 	
 	public SocializeCommentProvider(Context context) {
 		super();
@@ -43,10 +50,14 @@ public class SocializeCommentProvider extends BaseAdapter {
 	@Override
 	public int getCount() {
 		int extra = 1;
-		if(last) {
+		if(!isDisplayLoading()) {
 			extra = 0;
 		}
 		return (comments == null) ? 0 : comments.size() + extra;
+	}
+	
+	boolean isDisplayLoading() {
+		return !(last || (comments != null && comments.size() == 0));
 	}
 
 	@Override
@@ -65,7 +76,7 @@ public class SocializeCommentProvider extends BaseAdapter {
 	
 	@Override
 	public int getItemViewType(int position) {
-		if(last || position < comments.size()) {
+		if(!isDisplayLoading() || position < comments.size()) {
 			return 0;
 		}
 		else {
@@ -75,7 +86,7 @@ public class SocializeCommentProvider extends BaseAdapter {
 
 	@Override
 	public int getViewTypeCount() {
-		if(last) {
+		if(!isDisplayLoading()) {
 			return 1;
 		}
 		else {
@@ -121,7 +132,15 @@ public class SocializeCommentProvider extends BaseAdapter {
         	Comment item = (Comment) getItem(position);
     		
     		if(item != null) {
+    			if(currentUser == null) {
+    				currentUser = Socialize.getSocialize().getSession().getUser();
+    			}
+
     			User user = item.getUser();
+    			
+    			if(currentUser != null && user != null && currentUser.getId().equals(user.getId())) {
+    				user = currentUser;
+    			}
     			
     			if (holder.comment != null) {
     				holder.comment.setText(item.getText());
@@ -170,6 +189,22 @@ public class SocializeCommentProvider extends BaseAdapter {
     							
     							holder.userIcon.setImageDrawable(SocializeUI.getInstance().getDrawable(SocializeUI.DEFAULT_USER_ICON));
     						}
+    					}
+    					else if(drawables != null && !StringUtils.isEmpty(user.getProfilePicData())) {
+    						try {
+								Drawable drawable = drawables.getDrawable(user.getId().toString(), Base64.decode(user.getProfilePicData()));
+								holder.userIcon.setImageDrawable(drawable);
+							}
+							catch (Base64DecoderException e) {
+								if(logger != null) {
+									logger.error("Invalid image data", e);
+								}
+								else {
+									e.printStackTrace();
+								}
+								
+								holder.userIcon.setImageDrawable(SocializeUI.getInstance().getDrawable(SocializeUI.DEFAULT_USER_ICON));
+							}
     					}
     					else {
     						holder.userIcon.setImageDrawable(SocializeUI.getInstance().getDrawable(SocializeUI.DEFAULT_USER_ICON));
@@ -232,5 +267,12 @@ public class SocializeCommentProvider extends BaseAdapter {
 	public void setLast(boolean last) {
 		this.last = last;
 	}
-	
+
+	public Drawables getDrawables() {
+		return drawables;
+	}
+
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
+	}
 }

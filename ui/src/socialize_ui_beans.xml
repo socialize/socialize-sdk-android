@@ -5,6 +5,10 @@
 	
 	<bean id="socializeUIErrorHandler" class="com.socialize.ui.error.DialogErrorHandler"/>
 	
+	<bean id="progressDialogFactory" class="com.socialize.ui.dialog.ProgressDialogFactory">
+		<property name="logger" ref="logger"/>
+	</bean>
+	
 	<bean id="socializeView" abstract="true">
 		<property name="errorHandler" ref="socializeUIErrorHandler"/>
 	</bean>
@@ -25,6 +29,7 @@
 		<constructor-arg type="activity"/>
 		<constructor-arg ref="commentListProvider"/>
 		<constructor-arg ref="deviceUtils"/> <!-- Defined in socialize_beans.xml -->
+		<property name="progressDialogFactory" ref="progressDialogFactory"/>
 	</bean>
 	
 	<bean 

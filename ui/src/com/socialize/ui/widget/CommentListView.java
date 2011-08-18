@@ -33,6 +33,7 @@ import com.socialize.listener.comment.CommentListListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.BaseView;
 import com.socialize.ui.SocializeUI;
+import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.provider.SocializeCommentProvider;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.StringUtils;
@@ -45,13 +46,16 @@ public class CommentListView extends BaseView {
 	private SocializeButton button;
 	private ListView listView;
 	private boolean loading = true;
-	private ProgressDialog dialog;
+	
 	private InputMethodManager imm;
 	private String entityKey;
 	private int startIndex = 0;
 	private int grabLength = 20;
 	private int totalCount = 0;
 	private SocializeLogger logger;
+	private ProgressDialogFactory progressDialogFactory;
+	private Context context;
+	private ProgressDialog dialog = null;
 	
 	public CommentListView(
 			final Context context, 
@@ -61,12 +65,11 @@ public class CommentListView extends BaseView {
 		
 		super(context);
 		
+		this.context = context;
 		this.provider = provider;
 		this.entityKey = entityKey;
 		
 		int four = deviceUtils.getDIP(4);
-		
-		dialog = new ProgressDialog(context);
 		
 		imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 	
@@ -179,7 +182,6 @@ public class CommentListView extends BaseView {
 					
 					// Get next set...
 					getNextSet();
-//					Toast.makeText(context, "Last", Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -221,11 +223,8 @@ public class CommentListView extends BaseView {
 	}
 	
 	public void doPostComment(String comment) {
-		
-		dialog.setTitle("Posting comment");
-		dialog.setMessage("Please wait...");
-		dialog.show();
-		
+		dialog = progressDialogFactory.show(context, "Posting comment", "Please wait...");
+
 		Socialize.getSocialize().addComment(entityKey, comment, new CommentAddListener() {
 			
 			@Override
@@ -256,18 +255,27 @@ public class CommentListView extends BaseView {
 			public void onError(SocializeException error) {
 				showError(getContext(), error.getMessage());
 				flipper.setDisplayedChild(1);
-				dialog.dismiss();
+				if(dialog != null) {
+					dialog.dismiss();
+				}
 			}
 			
 			@Override
 			public void onList(ListResult<Comment> entities) {
 				totalCount = entities.getTotalCount();
 				provider.setComments(entities.getItems());
+				
+				if(totalCount <= grabLength) {
+					provider.setLast(true);
+				}
+				
 				provider.notifyDataSetChanged();
 				flipper.setDisplayedChild(1);
 				editText.setText("");
 				loading = false;
-				dialog.dismiss();
+				if(dialog != null) {
+					dialog.dismiss();
+				}
 			}
 		});
 	}
@@ -368,4 +376,13 @@ public class CommentListView extends BaseView {
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
+
+	public ProgressDialogFactory getProgressDialogFactory() {
+		return progressDialogFactory;
+	}
+
+	public void setProgressDialogFactory(ProgressDialogFactory progressDialogFactory) {
+		this.progressDialogFactory = progressDialogFactory;
+	}
+	
 }

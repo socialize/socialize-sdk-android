@@ -42,6 +42,7 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.util.HttpUtils;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -290,6 +291,17 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		
 		// Try loading the session first
 		SocializeSession session = null;
+		
+		// TODO: externalize this into a validator
+		if(authProviderData.getAuthProviderType() != null && 
+				authProviderData.getAuthProviderType().equals(AuthProviderType.FACEBOOK) && 
+				StringUtils.isEmpty(authProviderData.getAppId3rdParty())) {
+			if(listener != null) {
+				listener.onError(new SocializeException("No app ID found for auth type FACEBOOK"));
+			}
+			
+			return;
+		}
 		
 		try {
 			session = loadSession(request.getEndpoint(), key, secret, authProviderData);

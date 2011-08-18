@@ -24,6 +24,7 @@ package com.socialize.config;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.Set;
 
 import android.content.Context;
 
@@ -37,6 +38,7 @@ import com.socialize.util.StringUtils;
 public class SocializeConfig {
 	
 	public static final String SOCIALIZE_PROPERTIES_PATH = "socialize.properties";
+	public static final String SOCIALIZE_OVERRIDE_PATH = "socialize.custom.properties";
 	public static final String SOCIALIZE_BEANS_PATH = "socialize_beans.xml";
 	public static final String SOCIALIZE_ERRORS_PATH = "errors.properties";
 	
@@ -94,6 +96,33 @@ public class SocializeConfig {
 				finally {
 					if(in != null) {
 						in.close();
+					}
+				}
+				
+				if(properties != null) {
+					
+					// Look for override
+					try {
+						in = resourceLocator.locate(context, SOCIALIZE_OVERRIDE_PATH);
+						
+						if(in != null) {
+							Properties override = new Properties();
+							override.load(in);
+							
+							// Merge
+							Set<Object> keys = override.keySet();
+							for (Object key : keys) {
+								properties.put(key, override.get(key));
+							}
+						}
+					}
+					catch (IOException ignore) {
+						// ignore
+					}
+					finally {
+						if(in != null) {
+							in.close();
+						}
 					}
 				}
 			}

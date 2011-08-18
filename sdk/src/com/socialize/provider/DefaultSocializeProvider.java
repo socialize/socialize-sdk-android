@@ -204,7 +204,6 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			facebookSessionStore.clear(context);
 		}
 	}
-
 	
 	
 	@Override

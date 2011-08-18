@@ -514,7 +514,12 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public boolean isAuthenticated(AuthProviderType providerType) {
 		if(isAuthenticated()) {
-			return (session.getAuthProviderType() != null && session.getAuthProviderType().equals(providerType));
+			if(session.getAuthProviderType() == null) {
+				return false;
+			}
+			else {
+				return (session.getAuthProviderType().equals(providerType));
+			}
 		}
 		return false;
 	}

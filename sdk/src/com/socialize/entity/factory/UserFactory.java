@@ -34,7 +34,6 @@ import com.socialize.entity.User;
 public class UserFactory extends SocializeObjectFactory<User> {
 	
 	private StatsFactory statsFactory;
-//	private ImageUtils imageUtils;
 	
 	public static final String FIRST_NAME = "first_name";
 	public static final String LAST_NAME = "last_name";
@@ -56,7 +55,7 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		
 		user.setFirstName(getString(object,FIRST_NAME));
 		user.setLastName(getString(object,LAST_NAME));
-		user.setUsername(getString(object,"username"));
+		user.setUsername(getString(object,USERNAME));
 		user.setDescription(getString(object,DESCRIPTION));
 		user.setLocation(getString(object,LOCATION));
 		user.setSmallImageUri(getString(object,SMALL_IMAGE_URI));
@@ -92,13 +91,4 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	public void setStatsFactory(StatsFactory statsFactory) {
 		this.statsFactory = statsFactory;
 	}
-
-//	public ImageUtils getImageUtils() {
-//		return imageUtils;
-//	}
-//
-//	public void setImageUtils(ImageUtils imageUtils) {
-//		this.imageUtils = imageUtils;
-//	}
-	
 }
