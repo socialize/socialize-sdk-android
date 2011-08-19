@@ -15,9 +15,11 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.socialize.Socialize;
@@ -36,6 +38,7 @@ import com.socialize.ui.SocializeUI;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.provider.SocializeCommentProvider;
 import com.socialize.util.DeviceUtils;
+import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 
 public class CommentListView extends BaseView {
@@ -54,18 +57,21 @@ public class CommentListView extends BaseView {
 	private int totalCount = 0;
 	private SocializeLogger logger;
 	private ProgressDialogFactory progressDialogFactory;
+	private Drawables drawables;
 	private ProgressDialog dialog = null;
 	
 	public CommentListView(
 			final Context context, 
 			final SocializeCommentProvider provider,
 			final DeviceUtils deviceUtils, 
+			final Drawables drawables,
 			final String entityKey) {
 		
 		super(context);
 		
 		this.provider = provider;
 		this.entityKey = entityKey;
+		this.drawables = drawables;
 		
 		int four = deviceUtils.getDIP(4);
 		int eight = deviceUtils.getDIP(8);
@@ -76,14 +82,48 @@ public class CommentListView extends BaseView {
 		
 		setOrientation(LinearLayout.VERTICAL);
 		setLayoutParams(fill);
-		setBackgroundColor(SocializeUI.STANDARD_BACKGROUND_COLOR);
+//		setBackgroundColor(SocializeUI.STANDARD_BACKGROUND_COLOR);
+		setBackgroundDrawable(drawables.getDrawable("slate.png", true, true));
+		setPadding(0, 0, 0, 0);
+		
+		LinearLayout titlePanel = new LinearLayout(context);
+		LayoutParams titlePanelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		
+		titlePanelLayoutParams.gravity = Gravity.CENTER_VERTICAL;
+		titlePanel.setLayoutParams(titlePanelLayoutParams);
+		titlePanel.setOrientation(LinearLayout.HORIZONTAL);
+		titlePanel.setPadding(four, four, four, four);
+		titlePanel.setBackgroundDrawable(drawables.getDrawable("header.png", true, false));
+		
+		TextView titleText = new TextView(context);
+		titleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
+		titleText.setTextColor(Color.WHITE);
+		titleText.setText("Comments");
+		titleText.setPadding(0, 0, 0, deviceUtils.getDIP(2));
+		
+		LayoutParams titleTextLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		titleTextLayoutParams.gravity = Gravity.CENTER_VERTICAL;
+//		titleTextLayoutParams.setMargins(four, 0, four, 0);
+		titleText.setLayoutParams(titleTextLayoutParams);
+		
+		ImageView titleImage = new ImageView(context);
+		titleImage.setImageDrawable(drawables.getDrawable("socialize_icon_white.png"));
+		titleImage.setPadding(0, 0, 0, 0);
+		
+		LayoutParams titleImageLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		titleImageLayoutParams.gravity = Gravity.CENTER_VERTICAL;
+		titleImageLayoutParams.setMargins(four, 0, four, 0);
+		titleImage.setLayoutParams(titleImageLayoutParams);
+		
+		titlePanel.addView(titleImage);
+		titlePanel.addView(titleText);
 		
 		LinearLayout editPanel = new LinearLayout(context);
 		LayoutParams editPanelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-		editPanelLayoutParams.setMargins(four, four, four, four);
+		editPanelLayoutParams.setMargins(eight, eight, eight, eight);
 		editPanel.setLayoutParams(editPanelLayoutParams);
 		editPanel.setOrientation(LinearLayout.HORIZONTAL);
-		editPanel.setPadding(eight, eight, eight, eight);
+		editPanel.setPadding(0, 0, 0, 0);
 		
 		LinearLayout.LayoutParams editTextLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,  LinearLayout.LayoutParams.WRAP_CONTENT);
 		editTextLayoutParams.gravity = Gravity.TOP;
@@ -165,10 +205,8 @@ public class CommentListView extends BaseView {
 		
 		//Here is where the magic happens
 		listView.setOnScrollListener(new OnScrollListener(){
-			//useless here, skip!
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {}
-			//dumdumdum
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem,
 				int visibleItemCount, int totalItemCount) {
@@ -187,7 +225,6 @@ public class CommentListView extends BaseView {
 		});
 		
 		listView.requestFocus();
-		
 		
 		contentView.addView(listView);
 		
@@ -218,6 +255,7 @@ public class CommentListView extends BaseView {
 		
 		flipper.setDisplayedChild(0);
 		
+		addView(titlePanel);
 		addView(editPanel);
 		addView(flipper);
 	}
@@ -235,49 +273,59 @@ public class CommentListView extends BaseView {
 			
 			@Override
 			public void onCreate(Comment entity) {
-				doListComments();
+				doListComments(true);
 			}
 		});
 		
 	}
 	
-	public void doListComments() {
+	public void doListComments(boolean update) {
 		
 		startIndex = 0;
 		grabLength = 20;
 		
-		Socialize.getSocialize().listCommentsByEntity(entityKey, 
-			startIndex,
-			grabLength,
-			new CommentListListener() {
-			
-			@Override
-			public void onError(SocializeException error) {
-				showError(getContext(), error.getMessage());
-				flipper.setDisplayedChild(1);
-				if(dialog != null) {
-					dialog.dismiss();
-				}
+		if(update || provider.getComments() == null || provider.getComments().size() == 0) {
+			Socialize.getSocialize().listCommentsByEntity(entityKey, 
+					startIndex,
+					grabLength,
+					new CommentListListener() {
+					
+					@Override
+					public void onError(SocializeException error) {
+						showError(getContext(), error.getMessage());
+						flipper.setDisplayedChild(1);
+						if(dialog != null) {
+							dialog.dismiss();
+						}
+					}
+					
+					@Override
+					public void onList(ListResult<Comment> entities) {
+						totalCount = entities.getTotalCount();
+						provider.setComments(entities.getItems());
+						
+						if(totalCount <= grabLength) {
+							provider.setLast(true);
+						}
+						
+						provider.notifyDataSetChanged();
+						flipper.setDisplayedChild(1);
+						editText.setText("");
+						loading = false;
+						if(dialog != null) {
+							dialog.dismiss();
+						}
+					}
+				});
+		}
+		else {
+			flipper.setDisplayedChild(1);
+			loading = false;
+			provider.notifyDataSetChanged();
+			if(dialog != null) {
+				dialog.dismiss();
 			}
-			
-			@Override
-			public void onList(ListResult<Comment> entities) {
-				totalCount = entities.getTotalCount();
-				provider.setComments(entities.getItems());
-				
-				if(totalCount <= grabLength) {
-					provider.setLast(true);
-				}
-				
-				provider.notifyDataSetChanged();
-				flipper.setDisplayedChild(1);
-				editText.setText("");
-				loading = false;
-				if(dialog != null) {
-					dialog.dismiss();
-				}
-			}
-		});
+		}
 	}
 	
 
@@ -331,7 +379,7 @@ public class CommentListView extends BaseView {
 		super.onAttachedToWindow();
 		
 		if(Socialize.getSocialize().isAuthenticated()) {
-			doListComments();
+			doListComments(false);
 		}
 		else {
 			showError(getContext(), "Socialize not authenticated");
@@ -377,6 +425,14 @@ public class CommentListView extends BaseView {
 
 	public void setProgressDialogFactory(ProgressDialogFactory progressDialogFactory) {
 		this.progressDialogFactory = progressDialogFactory;
+	}
+
+	public Drawables getDrawables() {
+		return drawables;
+	}
+
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
 	}
 	
 }

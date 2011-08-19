@@ -2,6 +2,8 @@ package com.socialize.ui.sample;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.Window;
 
 import com.socialize.Socialize;
 import com.socialize.ui.SocializeUI;
@@ -22,12 +24,23 @@ public class SampleActivity extends Activity {
 		SocializeUI.getInstance().setAppCredentials(this, consumerKey, consumerSecret);
 		SocializeUI.getInstance().setEntityUrl(this, "http://aaa.com");
 		
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
 		setContentView(R.layout.main);
 	}
 
 	@Override
 	protected void onDestroy() {
-		Socialize.getSocialize().destroy(true);
 		super.onDestroy();
 	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK) {
+			Socialize.getSocialize().destroy(true);
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+	
+	
 }

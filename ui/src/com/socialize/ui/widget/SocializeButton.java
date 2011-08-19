@@ -28,9 +28,9 @@ public class SocializeButton extends Button {
 //		background.setCornerRadius(radius);
 //		background.setStroke(1, Color.DKGRAY);
 		
-		int bottom = Color.parseColor("#0092d7");
-		int top = Color.parseColor("#2cb4f5");
-		int stroke = Color.parseColor("#3ebefb");
+		int bottom = Color.parseColor("#00789f");
+		int top = Color.parseColor("#00abe3");
+//		int stroke = Color.parseColor("#3ebefb");
 		int shadow = Color.parseColor("#222222");
 		
 		setTextColor(Color.WHITE);
@@ -44,7 +44,7 @@ public class SocializeButton extends Button {
 		
 		foreground.setShape(GradientDrawable.RECTANGLE);
 //		foreground.setCornerRadius(radius);
-		foreground.setStroke(2,stroke);
+//		foreground.setStroke(2,stroke);
 		
 //		Drawable[] layers = { background, foreground };
 //		
@@ -53,7 +53,7 @@ public class SocializeButton extends Button {
 		
 		setBackgroundDrawable(foreground);
 		
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(deviceUtils.getDIP(64), LinearLayout.LayoutParams.FILL_PARENT); // calc DIP
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(deviceUtils.getDIP(32), deviceUtils.getDIP(32)); // calc DIP
 		params.setMargins(0,0,0,0);
 		params.gravity = Gravity.TOP;
 		setPadding(0,0,0,0);

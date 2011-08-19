@@ -30,7 +30,9 @@
 		<constructor-arg type="activity"/>
 		<constructor-arg ref="commentListProvider"/>
 		<constructor-arg ref="deviceUtils"/> <!-- Defined in socialize_beans.xml -->
+		<constructor-arg ref="drawables"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
+		
 	</bean>
 	
 	<bean 
