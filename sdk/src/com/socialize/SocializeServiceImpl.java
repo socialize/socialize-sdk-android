@@ -229,6 +229,17 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		initCount--;
 		
 		if(initCount <= 0) {
+			destroy(true);
+		}
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#destroy(boolean)
+	 */
+	@Override
+	public void destroy(boolean force) {
+		if(force) {
 			if(container != null) {
 				if(logger != null && logger.isInfoEnabled()) {
 					logger.info("Destroying IOC container");
@@ -238,8 +249,11 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			
 			initCount = 0;
 		}
+		else {
+			destroy();
+		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#authenticate(java.lang.String, java.lang.String, com.socialize.provider.AuthProvider, com.socialize.listener.SocializeAuthListener)

@@ -96,9 +96,11 @@ public class Container {
 
 			if(beanRefs != null) {
 				for (BeanRef beanRef : beanRefs) {
-					Object bean = beans.get(beanRef.getName());
-					if(bean != null) {
-						builder.destroyBean(this, beanRef, bean);
+					if(beanRef.isSingleton()) {
+						Object bean = beans.get(beanRef.getName());
+						if(bean != null) {
+							builder.destroyBean(this, beanRef, bean);
+						}
 					}
 				}
 				

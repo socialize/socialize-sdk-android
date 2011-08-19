@@ -68,6 +68,7 @@ public class CommentListView extends BaseView {
 		this.entityKey = entityKey;
 		
 		int four = deviceUtils.getDIP(4);
+		int eight = deviceUtils.getDIP(8);
 		
 		imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 	
@@ -82,6 +83,7 @@ public class CommentListView extends BaseView {
 		editPanelLayoutParams.setMargins(four, four, four, four);
 		editPanel.setLayoutParams(editPanelLayoutParams);
 		editPanel.setOrientation(LinearLayout.HORIZONTAL);
+		editPanel.setPadding(eight, eight, eight, eight);
 		
 		LinearLayout.LayoutParams editTextLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,  LinearLayout.LayoutParams.WRAP_CONTENT);
 		editTextLayoutParams.gravity = Gravity.TOP;
@@ -96,7 +98,7 @@ public class CommentListView extends BaseView {
 	    editText.setGravity(Gravity.TOP);
 	    editText.setVerticalScrollBarEnabled(true);
 	    editText.setVerticalFadingEdgeEnabled(true);
-	    editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+	    editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
 	    editText.setBackgroundColor(Color.WHITE);
 	    editText.setHint("Post a comment");
 		editText.setLayoutParams(editTextLayoutParams);

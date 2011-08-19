@@ -3,6 +3,7 @@ package com.socialize.ui.sample;
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.socialize.Socialize;
 import com.socialize.ui.SocializeUI;
 
 public class SampleActivity extends Activity {
@@ -22,5 +23,11 @@ public class SampleActivity extends Activity {
 		SocializeUI.getInstance().setEntityUrl(this, "http://aaa.com");
 		
 		setContentView(R.layout.main);
+	}
+
+	@Override
+	protected void onDestroy() {
+		Socialize.getSocialize().destroy(true);
+		super.onDestroy();
 	}
 }

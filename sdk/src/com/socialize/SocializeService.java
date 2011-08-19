@@ -88,6 +88,12 @@ public interface SocializeService {
 	 * Destroys the SocializeService instance.  Should be called during the onDestroy() method of your Activity.
 	 */
 	public void destroy();
+	
+	/**
+	 * Force destroy (Expert only)
+	 * @param force
+	 */
+	public void destroy(boolean force);
 
 	/**
 	 * Authenticates the application against the API as an anonymous user.

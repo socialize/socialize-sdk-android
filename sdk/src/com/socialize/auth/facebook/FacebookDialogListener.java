@@ -76,17 +76,12 @@ public abstract class FacebookDialogListener implements DialogListener {
 			InputStream in = null;
 			
 			try {
-				URL url = new URL("http://graph.facebook.com/"+id+"/picture?type=large");
+				URL url = new URL("http://graph.facebook.com/"+id+"/picture?type=normal");
 				
 				in = url.openConnection().getInputStream();
 				
 				byte[] readBytes = ioUtils.readBytes(in);
 				encoded = Base64.encode(readBytes);
-				
-//				Bundle picRequestParams = new Bundle();
-//				picRequestParams.putString("type", "square");
-//				String profilePicData = facebook.request("me/picture", picRequestParams);
-//				encoded = Base64.encode(profilePicData.getBytes());
 			}
 			catch (Exception e) {
 				// TODO: log error

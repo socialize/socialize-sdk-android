@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -54,6 +55,7 @@ public class SocializeButton extends Button {
 		
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(deviceUtils.getDIP(64), LinearLayout.LayoutParams.FILL_PARENT); // calc DIP
 		params.setMargins(0,0,0,0);
+		params.gravity = Gravity.TOP;
 		setPadding(0,0,0,0);
 		setLayoutParams(params);
 		
