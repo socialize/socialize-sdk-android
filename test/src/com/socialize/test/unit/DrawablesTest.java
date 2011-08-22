@@ -81,7 +81,7 @@ public class DrawablesTest extends SocializeActivityTest {
 		
 		Drawables drawables = new Drawables(getActivity()) {
 			@Override
-			protected CacheableDrawable createDrawable(InputStream stream, String name, boolean tileX, boolean tileY) {
+			protected CacheableDrawable createDrawable(InputStream stream, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY) {
 				assertSame(in, stream);
 				assertFalse(tileX);
 				assertFalse(tileY);
@@ -92,15 +92,13 @@ public class DrawablesTest extends SocializeActivityTest {
 		drawables.setClassLoaderProvider(provider);
 		drawables.setCache(cache);
 		
-		assertSame(drawable, drawables.getDrawable(drawable_name, DisplayMetrics.DENSITY_LOW, false, false));
-		assertSame(drawable, drawables.getDrawable(drawable_name, DisplayMetrics.DENSITY_MEDIUM, false, false));
-		assertSame(drawable, drawables.getDrawable(drawable_name, DisplayMetrics.DENSITY_HIGH, false, false));
+		assertSame(drawable, drawables.getDrawable(drawable_name, DisplayMetrics.DENSITY_LOW, false, false, false));
+		assertSame(drawable, drawables.getDrawable(drawable_name, DisplayMetrics.DENSITY_MEDIUM, false, false, false));
+		assertSame(drawable, drawables.getDrawable(drawable_name, DisplayMetrics.DENSITY_HIGH, false, false, false));
 		
 		AndroidMock.verify(cache);
 		AndroidMock.verify(provider);
 		AndroidMock.verify(loader);
 		AndroidMock.verify(in);
-		
 	}
-	
 }

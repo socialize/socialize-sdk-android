@@ -98,7 +98,7 @@ public class FbDialog extends Dialog {
 		mTitle.setCompoundDrawablePadding(MARGIN + PADDING);
 
 		if(drawables != null) {
-			Drawable icon = drawables.getDrawable("facebook_icon.png");
+			Drawable icon = drawables.getDrawable("facebook_icon.png", true);
 			mTitle.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
 		}
 

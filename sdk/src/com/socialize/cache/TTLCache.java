@@ -168,6 +168,18 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 	}
 	
 	/**
+	 * Adds an object to cache that optionally lives forever.
+	 * @param strKey
+	 * @param object
+	 * @param eternal
+	 * @return
+	 */
+	public boolean put(K strKey, E object, boolean eternal) {
+		return put(strKey, object, defaultTTL, eternal);
+	}
+	
+	
+	/**
 	 * Adds an eternal object to cache.  Eternal objects will never expire, unless they commit suicide.
 	 * @param strKey
 	 * @param object

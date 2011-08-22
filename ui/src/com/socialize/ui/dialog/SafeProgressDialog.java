@@ -21,56 +21,44 @@
  */
 package com.socialize.ui.dialog;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 
-import com.socialize.log.SocializeLogger;
-
 /**
- * Safely renders progress dialogs
  * @author Jason Polites
+ *
  */
-public class ProgressDialogFactory {
-	
-	private SocializeLogger logger;
+public class SafeProgressDialog extends ProgressDialog {
 
-	public ProgressDialog show(Context context, String title, String message) {
+	public SafeProgressDialog(Context context, int theme) {
+		super(context, theme);
+	}
+
+	public SafeProgressDialog(Context context) {
+		super(context);
+	}
+
+	@Override
+	public void dismiss() {
 		try {
-			if(context instanceof Activity) {
-				Activity activity = (Activity) context;
-				while(activity.getParent() != null) {
-					activity = activity.getParent();
-				}
-				context = activity;
-			}
-			
-			ProgressDialog dialog = new SafeProgressDialog(context);
-			dialog.setTitle("Posting comment");
-			dialog.setMessage("Please wait...");
-			dialog.show();
-			return dialog;
+			super.dismiss();
 		}
-		catch (Exception e) {
-			if(logger != null) {
-				logger.error("Error displaying progress dialog", e);
-			}
-			else {
-				e.printStackTrace();
-			}
-			
-			return null;
+		catch (Exception ignore) {
+			ignore.printStackTrace();
 		}
-
+		
 	}
 
-	public SocializeLogger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
+	@Override
+	public void show() {
+		try {
+			super.show();
+		}
+		catch (Exception ignore) {
+			ignore.printStackTrace();
+		}
 	}
 	
 	
+
 }

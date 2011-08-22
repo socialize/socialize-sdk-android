@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.text.InputType;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -15,6 +16,7 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -34,7 +36,6 @@ import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.BaseView;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.provider.SocializeCommentProvider;
 import com.socialize.util.DeviceUtils;
@@ -46,7 +47,8 @@ public class CommentListView extends BaseView {
 	private SocializeCommentProvider provider;
 	private ViewFlipper flipper;
 	private EditText editText;
-	private SocializeButton button;
+//	private SocializeButton button;
+	ImageButton button;
 	private ListView listView;
 	private boolean loading = true;
 	
@@ -82,9 +84,9 @@ public class CommentListView extends BaseView {
 		
 		setOrientation(LinearLayout.VERTICAL);
 		setLayoutParams(fill);
-//		setBackgroundColor(SocializeUI.STANDARD_BACKGROUND_COLOR);
-		setBackgroundDrawable(drawables.getDrawable("slate.png", true, true));
+		setBackgroundDrawable(drawables.getDrawable("crosshatch.png", true, true, true));
 		setPadding(0, 0, 0, 0);
+		setVerticalFadingEdgeEnabled(false);
 		
 		LinearLayout titlePanel = new LinearLayout(context);
 		LayoutParams titlePanelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -93,10 +95,10 @@ public class CommentListView extends BaseView {
 		titlePanel.setLayoutParams(titlePanelLayoutParams);
 		titlePanel.setOrientation(LinearLayout.HORIZONTAL);
 		titlePanel.setPadding(four, four, four, four);
-		titlePanel.setBackgroundDrawable(drawables.getDrawable("header.png", true, false));
+		titlePanel.setBackgroundDrawable(drawables.getDrawable("header.png", true, false, true));
 		
 		TextView titleText = new TextView(context);
-		titleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
+		titleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
 		titleText.setTextColor(Color.WHITE);
 		titleText.setText("Comments");
 		titleText.setPadding(0, 0, 0, deviceUtils.getDIP(2));
@@ -107,7 +109,7 @@ public class CommentListView extends BaseView {
 		titleText.setLayoutParams(titleTextLayoutParams);
 		
 		ImageView titleImage = new ImageView(context);
-		titleImage.setImageDrawable(drawables.getDrawable("socialize_icon_white.png"));
+		titleImage.setImageDrawable(drawables.getDrawable("socialize_icon_white.png", true));
 		titleImage.setPadding(0, 0, 0, 0);
 		
 		LayoutParams titleImageLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -134,18 +136,31 @@ public class CommentListView extends BaseView {
 	    editText.setImeOptions(EditorInfo.IME_ACTION_DONE);  
 	    editText.setMinLines(1);  
 	    editText.setMaxLines(5); 
+	    editText.setMinHeight(deviceUtils.getDIP(42)); 
 	    editText.setRawInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 	    editText.setGravity(Gravity.TOP);
 	    editText.setVerticalScrollBarEnabled(true);
 	    editText.setVerticalFadingEdgeEnabled(true);
 	    editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
 	    editText.setBackgroundColor(Color.WHITE);
-	    editText.setHint("Post a comment");
+	    editText.setHint("Write a comment...");
 		editText.setLayoutParams(editTextLayoutParams);
 		
-		button = new SocializeButton(context, deviceUtils);
-		button.setText("Post");
+		LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(deviceUtils.getDIP(42),deviceUtils.getDIP(42));
+		buttonLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
 		
+		int bottom = Color.parseColor("#00789f");
+		int top = Color.parseColor("#00abe3");
+		
+		button = new ImageButton(context);
+		button.setImageDrawable(drawables.getDrawable("post_icon.png", true));
+		
+		GradientDrawable foreground = new GradientDrawable(
+				GradientDrawable.Orientation.BOTTOM_TOP,
+                new int[] { bottom, top });
+		
+		button.setBackgroundDrawable(foreground);
+		button.setLayoutParams(buttonLayoutParams);
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -202,6 +217,8 @@ public class CommentListView extends BaseView {
 		listView.setAdapter(provider);
 		listView.setLayoutParams(listViewLayoutParams);
 		listView.setDrawingCacheEnabled(true);
+		listView.setCacheColorHint(0);
+		listView.setDividerHeight(deviceUtils.getDIP(1));
 		
 		//Here is where the magic happens
 		listView.setOnScrollListener(new OnScrollListener(){
@@ -219,7 +236,7 @@ public class CommentListView extends BaseView {
 					loading = true;
 					
 					// Get next set...
-					getNextSet();
+//					getNextSet();
 				}
 			}
 		});
@@ -245,7 +262,7 @@ public class CommentListView extends BaseView {
 		
 		loadingScreen.setLayoutParams(loadingScreenLayoutParams);
 		
-		ProgressBar progress = new ProgressBar(context, null, android.R.attr.progressBarStyleLarge);
+		ProgressBar progress = new ProgressBar(context, null, android.R.attr.progressBarStyleSmall);
 		progress.setLayoutParams(progressLayoutParams);
 		
 		loadingScreen.addView(progress);

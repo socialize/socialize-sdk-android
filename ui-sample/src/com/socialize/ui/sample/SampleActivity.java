@@ -22,7 +22,7 @@ public class SampleActivity extends Activity {
 //		String consumerSecret = "417ad40f-f691-4e48-a8af-9a9f82991cc6";
 		
 		SocializeUI.getInstance().setAppCredentials(this, consumerKey, consumerSecret);
-		SocializeUI.getInstance().setEntityUrl(this, "http://aaa.com");
+		SocializeUI.getInstance().setEntityUrl(this, "http://aaaa.com");
 		
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		

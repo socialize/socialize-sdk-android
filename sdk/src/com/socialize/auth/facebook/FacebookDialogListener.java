@@ -76,7 +76,7 @@ public abstract class FacebookDialogListener implements DialogListener {
 			InputStream in = null;
 			
 			try {
-				URL url = new URL("http://graph.facebook.com/"+id+"/picture?type=normal");
+				URL url = new URL("http://graph.facebook.com/"+id+"/picture?type=large");
 				
 				in = url.openConnection().getInputStream();
 				

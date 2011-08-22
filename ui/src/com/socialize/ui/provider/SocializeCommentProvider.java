@@ -24,6 +24,7 @@ import com.socialize.ui.view.ViewHolder;
 import com.socialize.ui.widget.CommentListItem;
 import com.socialize.util.Base64;
 import com.socialize.util.Base64DecoderException;
+import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 
@@ -40,7 +41,10 @@ public class SocializeCommentProvider extends BaseAdapter {
 	private SocializeLogger logger;
 	private Drawables drawables;
 	private View loadingView;
+	private DeviceUtils deviceUtils;
 	private boolean last = false;
+	
+	private final int iconSize = 64;
 	
 	public SocializeCommentProvider(Context context) {
 		super();
@@ -97,6 +101,7 @@ public class SocializeCommentProvider extends BaseAdapter {
 	public View getView(int position, View view, ViewGroup parent) {
 		
         ViewHolder holder;
+        Drawable defaultImage = drawables.getDrawable(SocializeUI.DEFAULT_USER_ICON, deviceUtils.getDIP(iconSize), deviceUtils.getDIP(iconSize), true);
 		
         if (view == null) {
         	
@@ -183,12 +188,12 @@ public class SocializeCommentProvider extends BaseAdapter {
     								System.err.println(errorMsg);
     							}
     							
-    							holder.userIcon.setImageDrawable(SocializeUI.getInstance().getDrawable(SocializeUI.DEFAULT_USER_ICON));
+    							holder.userIcon.setImageDrawable(defaultImage);
     						}
     					}
     					else if(drawables != null && !StringUtils.isEmpty(user.getProfilePicData())) {
     						try {
-								Drawable drawable = drawables.getDrawable(user.getId().toString(), Base64.decode(user.getProfilePicData()));
+								Drawable drawable = drawables.getDrawable(user.getId().toString(), Base64.decode(user.getProfilePicData()), deviceUtils.getDIP(iconSize), deviceUtils.getDIP(iconSize));
 								holder.userIcon.setImageDrawable(drawable);
 							}
 							catch (Base64DecoderException e) {
@@ -199,15 +204,15 @@ public class SocializeCommentProvider extends BaseAdapter {
 									e.printStackTrace();
 								}
 								
-								holder.userIcon.setImageDrawable(SocializeUI.getInstance().getDrawable(SocializeUI.DEFAULT_USER_ICON));
+								holder.userIcon.setImageDrawable(defaultImage);
 							}
     					}
     					else {
-    						holder.userIcon.setImageDrawable(SocializeUI.getInstance().getDrawable(SocializeUI.DEFAULT_USER_ICON));
+    						holder.userIcon.setImageDrawable(defaultImage);
     					}
     				}
     				else {
-    					holder.userIcon.setImageDrawable(SocializeUI.getInstance().getDrawable(SocializeUI.DEFAULT_USER_ICON));
+    					holder.userIcon.setImageDrawable(defaultImage);
     				}
     			}
     		}
@@ -271,4 +276,14 @@ public class SocializeCommentProvider extends BaseAdapter {
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
 	}
+
+	public DeviceUtils getDeviceUtils() {
+		return deviceUtils;
+	}
+
+	public void setDeviceUtils(DeviceUtils deviceUtils) {
+		this.deviceUtils = deviceUtils;
+	}
+	
+	
 }

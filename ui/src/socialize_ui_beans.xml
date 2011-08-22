@@ -20,6 +20,7 @@
 		<property name="commentItemViewFactory" ref="commentItemViewFactory"/>
 		<property name="listItemLoadingViewFactory" ref="listItemLoadingViewFactory"/>
 		<property name="drawables" ref="drawables"/>
+		<property name="deviceUtils" ref="deviceUtils"/><!-- Defined in socialize_beans.xml -->
 	</bean>
 	
 	<bean 
@@ -42,6 +43,7 @@
 		<constructor-arg type="activity"/>
 		<init-method name="init"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="drawables" ref="drawables"/>
 	</bean>
 	
 	<bean 

@@ -1,8 +1,5 @@
 package com.socialize.ui;
 
-import java.util.Map;
-import java.util.TreeMap;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -20,15 +17,13 @@ public class SocializeUI {
 	private static final SocializeUI instance = new SocializeUI();
 	
 	public static final String ENTITY_KEY = "socialize.entity.key";
-	
-	private Map<String, Drawable> drawables;
-	
 	public static final String DEFAULT_USER_ICON = "default_user_icon.png";
 	public static final String SOCIALIZE_LOGO = "socialize_logo.png";
 	public static final String BG_ACCENT = "bg_accent.png";
 	public static int STANDARD_BACKGROUND_COLOR = Color.BLACK;
 	
 	private IOCContainer container;
+	private Drawables drawables;
 	
 	static {
 		STANDARD_BACKGROUND_COLOR = Color.parseColor("#38444f");
@@ -45,19 +40,11 @@ public class SocializeUI {
 	void initUI(IOCContainer container) {
 		this.container = container;
 		if(container != null) {
-			Drawables drawableUtils = container.getBean("drawables");
-			drawables = new TreeMap<String, Drawable>();
-			drawables.put(DEFAULT_USER_ICON, drawableUtils.getDrawable(DEFAULT_USER_ICON));
-			drawables.put(SOCIALIZE_LOGO, drawableUtils.getDrawable(SOCIALIZE_LOGO));
-			drawables.put(BG_ACCENT, drawableUtils.getDrawable(BG_ACCENT, true, false));
+			drawables = container.getBean("drawables");
 		}
 	}
 	
 	void destroy(Context context) {
-		if(drawables != null) {
-			drawables.clear();
-			drawables = null;
-		}
 		Socialize.getSocialize().destroy();
 	}
 	
@@ -65,8 +52,8 @@ public class SocializeUI {
 		return (View) container.getBean(name);
 	}
 	
-	public Drawable getDrawable(String name) {
-		return drawables.get(name);
+	public Drawable getDrawable(String name, boolean eternal) {
+		return drawables.getDrawable(name, eternal);
 	}
 	
 	/**
