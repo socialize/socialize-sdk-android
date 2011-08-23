@@ -5,8 +5,6 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,7 +18,7 @@ public class CommentListItem extends LinearLayout {
 	private TextView comment;
 	private TextView time;
 	private TextView author;
-	private ImageView userIcon;
+//	private ImageView userIcon;
 	private DeviceUtils deviceUtils;
 	private Drawables drawables;
 	private Colors colors;
@@ -40,32 +38,26 @@ public class CommentListItem extends LinearLayout {
 		final int textColor = colors.getColor(Colors.BODY);
 		final int titleColor = colors.getColor(Colors.TITLE);
 		
-		
-//		StateListDrawable bg = new StateListDrawable();
-//		bg.addState(new int[] { android.R.attr.state_pressed },  drawables.getDrawable("slate.png", true, true, true));
-//		bg.addState(StateSet.WILD_CARD,  drawables.getDrawable("slate.png", true, true, true));
-		
 		ListView.LayoutParams layout = new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, ListView.LayoutParams.FILL_PARENT);
 		setDrawingCacheEnabled(true);
-//		setBackgroundDrawable(bg);
 		setBackgroundColor(colors.getColor(Colors.LIST_ITEM_BG));
 		setOrientation(LinearLayout.HORIZONTAL);
 		setLayoutParams(layout);
 		setGravity(Gravity.TOP);
 		setPadding(eight,eight,eight,eight);
 		
-		LinearLayout iconLayout = new LinearLayout(getContext());
-		LinearLayout.LayoutParams iconLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//		LinearLayout iconLayout = new LinearLayout(getContext());
+//		LinearLayout.LayoutParams iconLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
-		iconLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
-		
-		iconLayout.setLayoutParams(iconLayoutParams);
-		iconLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
-		iconLayout.setPadding(four,four,four,four);
+//		iconLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
+//		
+//		iconLayout.setLayoutParams(iconLayoutParams);
+//		iconLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
+//		iconLayout.setPadding(four,four,four,four);
 
-		userIcon = new ImageView(getContext());
-		userIcon.setLayoutParams(iconLayoutParams);
-		userIcon.setScaleType(ScaleType.CENTER_CROP);
+//		userIcon = new ImageView(getContext());
+//		userIcon.setLayoutParams(iconLayoutParams);
+//		userIcon.setScaleType(ScaleType.CENTER_CROP);
 		
 		LinearLayout contentLayout = new LinearLayout(getContext());
 		contentLayout.setOrientation(LinearLayout.VERTICAL);
@@ -115,7 +107,7 @@ public class CommentListItem extends LinearLayout {
 		comment.setTextColor(textColor);
 		comment.setLayoutParams(commentLayoutParams);
 
-		iconLayout.addView(userIcon);
+//		iconLayout.addView(userIcon);
 
 		contentHeaderLayout.addView(author);
 		contentHeaderLayout.addView(time);
@@ -123,7 +115,7 @@ public class CommentListItem extends LinearLayout {
 		contentLayout.addView(contentHeaderLayout);
 		contentLayout.addView(comment);
 		
-		addView(iconLayout);
+//		addView(iconLayout);
 		addView(contentLayout);
 	}
 
@@ -139,9 +131,9 @@ public class CommentListItem extends LinearLayout {
 		return author;
 	}
 
-	public ImageView getUserIcon() {
-		return userIcon;
-	}
+//	public ImageView getUserIcon() {
+//		return userIcon;
+//	}
 
 	public DeviceUtils getDeviceUtils() {
 		return deviceUtils;

@@ -19,6 +19,7 @@ import com.socialize.entity.Comment;
 import com.socialize.entity.User;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUI;
+import com.socialize.ui.util.TimeUtils;
 import com.socialize.ui.view.ListItemLoadingView;
 import com.socialize.ui.view.ViewHolder;
 import com.socialize.util.Base64;
@@ -41,6 +42,7 @@ public class CommentAdapter extends BaseAdapter {
 	private Drawables drawables;
 	private View loadingView;
 	private DeviceUtils deviceUtils;
+	private TimeUtils timeUtils;
 	private boolean last = false;
 	
 	private final int iconSize = 64;
@@ -111,7 +113,7 @@ public class CommentAdapter extends BaseAdapter {
             holder.time = v.getTime();
             holder.userName = v.getAuthor();
             holder.comment = v.getComment();
-    		holder.userIcon =  v.getUserIcon();
+//    		holder.userIcon =  v.getUserIcon();
     		holder.now = new Date();
 
             v.setTag(holder);
@@ -145,6 +147,7 @@ public class CommentAdapter extends BaseAdapter {
     			if (holder.comment != null) {
     				holder.comment.setText(item.getText());
     			}
+    			
     			if (holder.userName != null) {
     				
     				if(user != null) {
@@ -154,23 +157,18 @@ public class CommentAdapter extends BaseAdapter {
     					holder.userName.setText("Anonymous");
     				}
     			}
+    			
     			if (holder.time != null) {
-    				
     				Long date = item.getDate();
     				if(date != null && date > 0) {
-    					long diff = holder.now.getTime() - date.longValue();
-    					
-    					if(diff > 60000) {
-    						holder.time.setText("A while ago ");
-    					}
-    					else {
-    						holder.time.setText("Just now ");
-    					}
+    					long diff = (holder.now.getTime() - date.longValue());
+    					holder.time.setText(timeUtils.getTimeString(diff) + " ");
     				}
     				else {
     					holder.time.setText(" ");
     				}
     			}
+    			
     			if (holder.userIcon != null) {
     				if(user != null) {
     					if(!StringUtils.isEmpty(user.getSmallImageUri())) {
@@ -283,6 +281,12 @@ public class CommentAdapter extends BaseAdapter {
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
 		this.deviceUtils = deviceUtils;
 	}
-	
-	
+
+	public TimeUtils getTimeUtils() {
+		return timeUtils;
+	}
+
+	public void setTimeUtils(TimeUtils timeUtils) {
+		this.timeUtils = timeUtils;
+	}
 }

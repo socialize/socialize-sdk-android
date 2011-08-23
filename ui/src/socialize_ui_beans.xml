@@ -13,6 +13,8 @@
 		<property name="errorHandler" ref="socializeUIErrorHandler"/>
 	</bean>
 	
+	<bean id="timeUtils" class="com.socialize.ui.util.TimeUtils"/>
+	
 	<bean id="colors" class="com.socialize.ui.util.Colors">
 	
 		<init-method name="init"/>
@@ -60,13 +62,14 @@
 	</bean>
 	
 	<bean 
-		id="commentListProvider" 
+		id="commentAdapter" 
 		class="com.socialize.ui.comment.CommentAdapter">
 		<constructor-arg type="activity"/>
 		<property name="commentItemViewFactory" ref="commentItemViewFactory"/>
 		<property name="listItemLoadingViewFactory" ref="listItemLoadingViewFactory"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="deviceUtils" ref="deviceUtils"/><!-- Defined in socialize_beans.xml -->
+		<property name="timeUtils" ref="timeUtils"/>
 	</bean>
 	
 	<bean 
@@ -75,7 +78,7 @@
 		singleton="false"
 		extends="socializeView">
 		<constructor-arg type="activity"/>
-		<constructor-arg ref="commentListProvider"/>
+		<constructor-arg ref="commentAdapter"/>
 		<constructor-arg ref="deviceUtils"/> <!-- Defined in socialize_beans.xml -->
 		<constructor-arg ref="drawables"/>
 		<constructor-arg ref="colors"/>

@@ -21,12 +21,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.socialize.Socialize;
 import com.socialize.api.SocializeSession;
-import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.ListResult;
@@ -44,7 +42,7 @@ import com.socialize.util.StringUtils;
 
 public class CommentListView extends BaseView {
 
-	private int defaultGrabLength = 15;
+	private int defaultGrabLength = 10;
 	private CommentAdapter provider;
 	private ViewFlipper flipper;
 	private EditText editText;
@@ -62,6 +60,7 @@ public class CommentListView extends BaseView {
 	private Drawables drawables;
 	private ProgressDialog dialog = null;
 	private Colors colors;
+	private TextView titleText;
 
 	public CommentListView(
 			final Context context, 
@@ -100,7 +99,7 @@ public class CommentListView extends BaseView {
 		titlePanel.setPadding(four, four, four, four);
 		titlePanel.setBackgroundDrawable(drawables.getDrawable("header.png", true, false, true));
 
-		TextView titleText = new TextView(context);
+		titleText = new TextView(context);
 		titleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
 		titleText.setTextColor(colors.getColor(Colors.HEADER));
 		titleText.setText("Comments");
@@ -172,12 +171,14 @@ public class CommentListView extends BaseView {
 					imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 
 					// TODO: add other providers
-					if(!Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+					// TODO: enable FB auth
+//					if(!Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+					if(!Socialize.getSocialize().isAuthenticated()) {
 						Socialize.getSocialize().authenticate(
 								Socialize.getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY), 
 								Socialize.getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET),
-								AuthProviderType.FACEBOOK, 
-								Socialize.getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID),
+//								AuthProviderType.FACEBOOK, 
+//								Socialize.getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID),
 								new SocializeAuthListener() {
 
 									@Override
@@ -221,10 +222,9 @@ public class CommentListView extends BaseView {
 		listView.setLayoutParams(listViewLayoutParams);
 		listView.setDrawingCacheEnabled(true);
 		listView.setCacheColorHint(0);
-		listView.setDividerHeight(deviceUtils.getDIP(1));
+		listView.setDividerHeight(2);
 		listView.setSmoothScrollbarEnabled(true);
 
-		//Here is where the magic happens
 		listView.setOnScrollListener(new OnScrollListener(){
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {}
@@ -238,7 +238,7 @@ public class CommentListView extends BaseView {
 
 				if(last && !loading) {
 					// Get next set...
-//					getNextSet();
+					getNextSet();
 				}
 			}
 		});
@@ -287,12 +287,25 @@ public class CommentListView extends BaseView {
 			@Override
 			public void onError(SocializeException error) {
 				showError(getContext(), error.getMessage());
-				dialog.dismiss();
+				if(dialog != null) {
+					dialog.dismiss();
+				}
 			}
 
 			@Override
 			public void onCreate(Comment entity) {
-				doListComments(true);
+				List<Comment> comments = provider.getComments();
+				comments.add(0, entity);
+				totalCount++;
+				startIndex++;
+				endIndex++;
+				titleText.setText(totalCount + " Comments");
+				editText.setText("");
+				provider.notifyDataSetChanged();
+				listView.setSelection(0); // scroll to top
+				if(dialog != null) {
+					dialog.dismiss();
+				}
 			}
 		});
 
@@ -325,6 +338,7 @@ public class CommentListView extends BaseView {
 				@Override
 				public void onList(ListResult<Comment> entities) {
 					totalCount = entities.getTotalCount();
+					titleText.setText(totalCount + " Comments");
 					provider.setComments(entities.getItems());
 
 					if(totalCount <= endIndex) {
@@ -332,10 +346,7 @@ public class CommentListView extends BaseView {
 					}
 
 					provider.notifyDataSetChanged();
-					listView.setSelection(0); // scroll to top
-					
 					flipper.setDisplayedChild(1);
-					editText.setText("");
 
 					if(dialog != null) {
 						dialog.dismiss();
@@ -358,9 +369,11 @@ public class CommentListView extends BaseView {
 	}
 
 	private void getNextSet() {
+		
+		loading = true; // Prevent continuous load
 
-		startIndex+=endIndex;
-		endIndex+=endIndex;
+		startIndex+=defaultGrabLength;
+		endIndex+=defaultGrabLength;
 
 		if(endIndex > totalCount) {
 			endIndex = totalCount;
@@ -368,12 +381,9 @@ public class CommentListView extends BaseView {
 			if(startIndex >= endIndex) {
 				provider.setLast(true);
 				provider.notifyDataSetChanged();
-				loading = true; // Prevent continuous load
 				return;
 			}
 		}
-
-		Toast.makeText(getContext(), "Listing comments", Toast.LENGTH_SHORT).show();
 
 		Socialize.getSocialize().listCommentsByEntity(entityKey, 
 				startIndex,
