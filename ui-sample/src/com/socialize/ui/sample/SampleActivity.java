@@ -15,9 +15,11 @@ public class SampleActivity extends Activity {
 		
 //		SocializeUI.getInstance().setFacebookUserCredentials(this, "blah", "blah");
 		
-		String consumerKey = "f04f5af0-5be0-4ae6-a1f1-8d418c0d7e6b";
-		String consumerSecret = "7a9a2b20-d4de-4d46-9c0b-f1653f0f1089";
+		// Stage (Socialize Dev App: 196246)
+		String consumerKey = "807de77a-9981-450a-b0fc-c239c9c3f9b0";
+		String consumerSecret = "0ccc078d-a628-49d0-97ac-bcc892d9666f";
 		
+		// Prod
 //		String consumerKey = "4d84d055-754b-4b81-9ffa-a44aa1f17fc3";
 //		String consumerSecret = "417ad40f-f691-4e48-a8af-9a9f82991cc6";
 		

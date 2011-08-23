@@ -1,7 +1,6 @@
 package com.socialize.ui.view;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -9,6 +8,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.socialize.ui.BaseView;
+import com.socialize.ui.util.Colors;
 import com.socialize.util.DeviceUtils;
 
 /**
@@ -19,6 +19,7 @@ import com.socialize.util.DeviceUtils;
 public class ListItemLoadingView extends BaseView {
 
 	private DeviceUtils deviceUtils;
+	private Colors colors;
 	
 	public ListItemLoadingView(Context context) {
 		super(context);
@@ -27,15 +28,18 @@ public class ListItemLoadingView extends BaseView {
 	public void init() {
 		final int eight = deviceUtils.getDIP(8);
 		
-		ProgressBar progress = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleSmallInverse);
+		ProgressBar progress = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleSmall);
 		TextView text = new TextView(getContext());
 		
-		text.setTextColor(Color.BLACK);
+		progress.setPadding(eight, eight, 0, eight);
+		
+		text.setTextColor(colors.getColor(Colors.BODY));
 		text.setText("Loading...");
+		text.setPadding(eight, eight, eight, eight);
 		
-		ListView.LayoutParams layout = new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, deviceUtils.getDIP(80));
+		ListView.LayoutParams layout = new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, ListView.LayoutParams.WRAP_CONTENT);
 		
-		setBackgroundColor(Color.WHITE);
+		setBackgroundColor(colors.getColor(Colors.LOADING_ITEM_BG));
 		setOrientation(LinearLayout.HORIZONTAL);
 		setLayoutParams(layout);
 		setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
@@ -53,4 +57,11 @@ public class ListItemLoadingView extends BaseView {
 		this.deviceUtils = deviceUtils;
 	}
 
+	public Colors getColors() {
+		return colors;
+	}
+
+	public void setColors(Colors colors) {
+		this.colors = colors;
+	}
 }

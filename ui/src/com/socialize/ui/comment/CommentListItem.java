@@ -1,7 +1,6 @@
-package com.socialize.ui.widget;
+package com.socialize.ui.comment;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -12,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.socialize.ui.util.Colors;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 
@@ -23,6 +23,7 @@ public class CommentListItem extends LinearLayout {
 	private ImageView userIcon;
 	private DeviceUtils deviceUtils;
 	private Drawables drawables;
+	private Colors colors;
 
 	public CommentListItem(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -36,8 +37,8 @@ public class CommentListItem extends LinearLayout {
 		
 		final int eight = deviceUtils.getDIP(8);
 		final int four = deviceUtils.getDIP(4);
-		final int textColor = Color.WHITE;
-		final int titleColor = Color.parseColor("#00abe3");
+		final int textColor = colors.getColor(Colors.BODY);
+		final int titleColor = colors.getColor(Colors.TITLE);
 		
 		
 //		StateListDrawable bg = new StateListDrawable();
@@ -47,7 +48,7 @@ public class CommentListItem extends LinearLayout {
 		ListView.LayoutParams layout = new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, ListView.LayoutParams.FILL_PARENT);
 		setDrawingCacheEnabled(true);
 //		setBackgroundDrawable(bg);
-		setBackgroundColor(Color.parseColor("#454545"));
+		setBackgroundColor(colors.getColor(Colors.LIST_ITEM_BG));
 		setOrientation(LinearLayout.HORIZONTAL);
 		setLayoutParams(layout);
 		setGravity(Gravity.TOP);
@@ -157,5 +158,12 @@ public class CommentListItem extends LinearLayout {
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
 	}
-	
+
+	public Colors getColors() {
+		return colors;
+	}
+
+	public void setColors(Colors colors) {
+		this.colors = colors;
+	}
 }

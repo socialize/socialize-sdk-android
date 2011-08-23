@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.socialize.ui.provider;
+package com.socialize.ui.comment;
 
 import java.util.Date;
 import java.util.List;
@@ -21,7 +21,6 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.view.ListItemLoadingView;
 import com.socialize.ui.view.ViewHolder;
-import com.socialize.ui.widget.CommentListItem;
 import com.socialize.util.Base64;
 import com.socialize.util.Base64DecoderException;
 import com.socialize.util.DeviceUtils;
@@ -33,7 +32,7 @@ import com.socialize.util.StringUtils;
  * @author jasonpolites
  *
  */
-public class SocializeCommentProvider extends BaseAdapter {
+public class CommentAdapter extends BaseAdapter {
 
 	private IBeanFactory<CommentListItem> commentItemViewFactory;
 	private IBeanFactory<ListItemLoadingView> listItemLoadingViewFactory;
@@ -46,7 +45,7 @@ public class SocializeCommentProvider extends BaseAdapter {
 	
 	private final int iconSize = 64;
 	
-	public SocializeCommentProvider(Context context) {
+	public CommentAdapter(Context context) {
 		super();
 	}
 

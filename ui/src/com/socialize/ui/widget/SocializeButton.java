@@ -11,6 +11,12 @@ import android.widget.LinearLayout;
 
 import com.socialize.util.DeviceUtils;
 
+/**
+ * @deprecated
+ * @author jasonpolites
+ *
+ */
+@Deprecated
 public class SocializeButton extends Button {
 	
 	public SocializeButton(Context context, DeviceUtils deviceUtils) {

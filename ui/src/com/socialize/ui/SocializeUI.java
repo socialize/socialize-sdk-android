@@ -2,7 +2,6 @@ package com.socialize.ui;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -20,14 +19,9 @@ public class SocializeUI {
 	public static final String DEFAULT_USER_ICON = "default_user_icon.png";
 	public static final String SOCIALIZE_LOGO = "socialize_logo.png";
 	public static final String BG_ACCENT = "bg_accent.png";
-	public static int STANDARD_BACKGROUND_COLOR = Color.BLACK;
 	
 	private IOCContainer container;
 	private Drawables drawables;
-	
-	static {
-		STANDARD_BACKGROUND_COLOR = Color.parseColor("#38444f");
-	}
 	
 	public static final SocializeUI getInstance() {
 		return instance;
