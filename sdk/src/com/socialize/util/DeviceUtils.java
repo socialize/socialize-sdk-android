@@ -35,7 +35,6 @@ import android.view.Display;
 import com.socialize.Socialize;
 import com.socialize.log.SocializeLogger;
 
-
 /**
  * @author Jason Polites
  */

@@ -205,7 +205,6 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		}
 	}
 	
-	
 	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
 		

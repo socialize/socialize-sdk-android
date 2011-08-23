@@ -24,6 +24,8 @@ package com.socialize.api.action;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
+
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
@@ -43,6 +45,11 @@ public class EntityApi extends SocializeApi<Entity, SocializeProvider<Entity>> {
 	
 	public static final String ENDPOINT = "/entity/";
 
+	public EntityApi(Context context, SocializeProvider<Entity> provider) {
+		super(context, provider);
+	}
+
+	@Deprecated
 	public EntityApi(SocializeProvider<Entity> provider) {
 		super(provider);
 	}

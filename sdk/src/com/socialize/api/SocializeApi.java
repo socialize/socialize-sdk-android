@@ -23,6 +23,8 @@ package com.socialize.api;
 
 import java.util.List;
 
+import android.content.Context;
+import android.location.Location;
 import android.os.AsyncTask;
 
 import com.socialize.android.ioc.IBeanFactory;
@@ -34,11 +36,13 @@ import com.socialize.auth.AuthProviders;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.ActionError;
 import com.socialize.entity.ListResult;
+import com.socialize.entity.SocializeAction;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.location.SocializeLocationProvider;
 import com.socialize.log.SocializeLogger;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.util.HttpUtils;
@@ -59,12 +63,21 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	private AuthProviders authProviders;
 	private SocializeLogger logger;
 	private HttpUtils httpUtils;
+	private SocializeLocationProvider locationProvider;
+	
+	protected Context context;
 	
 	public static enum RequestType {AUTH,PUT,POST,GET,LIST,DELETE};
 	
-	public SocializeApi(P provider) {
+	public SocializeApi(Context context, P provider) {
 		super();
+		this.context = context;
 		this.provider = provider;
+	}
+	
+	@Deprecated
+	public SocializeApi(P provider) {
+		this(null, provider);
 	}
 	
 	public void clearSession() {
@@ -433,6 +446,14 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	public void setHttpUtils(HttpUtils httpUtils) {
 		this.httpUtils = httpUtils;
 	}
+	
+	public SocializeLocationProvider getLocationProvider() {
+		return locationProvider;
+	}
+
+	public void setLocationProvider(SocializeLocationProvider locationProvider) {
+		this.locationProvider = locationProvider;
+	}
 
 	abstract class AbstractAsyncProcess<Params, Progress, Result extends SocializeResponse> extends AsyncTask<Params, Progress, Result> {
 
@@ -517,6 +538,16 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			
 			response.setSession(session);
 			return response;
+		}
+	}
+	
+	protected void setLocation(SocializeAction action, Location location) {
+		if(location == null && context != null && locationProvider != null) {
+			location = locationProvider.getLocation(context);
+		}
+		if(location != null) {
+			action.setLon(location.getLongitude());
+			action.setLat(location.getLatitude());
 		}
 	}
 

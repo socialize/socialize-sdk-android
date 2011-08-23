@@ -76,4 +76,8 @@ public class SocializeAction extends SocializeObject {
 	public void setEntityKey(String entityKey) {
 		this.entityKey = entityKey;
 	}
+	
+	public boolean hasLocation() {
+		return lon != null && lat != null;
+	}
 }

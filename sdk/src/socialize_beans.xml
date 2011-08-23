@@ -1,7 +1,7 @@
 <beans>
 	
 	<bean id="classLoaderProvider" class="com.socialize.util.ClassLoaderProvider"/>
-	
+
 	<bean id="resourceLocator" class="com.socialize.util.ResourceLocator">
 		<property name="classLoaderProvider" ref="classLoaderProvider"/>
 		<property name="logger" ref="logger"/>
@@ -34,6 +34,13 @@
 		</init-method>
 		<property name="resourceLocator" ref="resourceLocator"/>
 		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="locationProvider" class="com.socialize.location.DefaultLocationProvider">
+		<constructor-arg ref="deviceUtils"/>
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>
 	</bean>
 	
 	<bean id="ioUtils" class="com.socialize.util.IOUtils">
@@ -138,6 +145,7 @@
 		<property name="logger" ref="logger"/>
 		<property name="authProviders" ref="authProviders"/>
 		<property name="httpUtils" ref="httpUtils"/>
+		<property name="locationProvider" ref="locationProvider"/>
 	</bean>
 	
 	<bean id="socializeActionFactory" class="com.socialize.entity.factory.SocializeActionFactory" abstract="true">
@@ -176,6 +184,7 @@
 	</bean>
 	
 	<bean id="commentApi" class="com.socialize.api.action.CommentApi" extends="socializeApi">
+		<constructor-arg type="context"/>
 		<constructor-arg ref="commentProvider"/>
 	</bean>
 
@@ -199,6 +208,7 @@
 	</bean>
 	
 	<bean id="entityApi" class="com.socialize.api.action.EntityApi" extends="socializeApi">
+		<constructor-arg type="context"/>
 		<constructor-arg ref="entityProvider"/>
 	</bean>
 
@@ -220,6 +230,7 @@
 	</bean>
 	
 	<bean id="likeApi" class="com.socialize.api.action.LikeApi" extends="socializeApi">
+		<constructor-arg type="context"/>
 		<constructor-arg ref="likeProvider"/>
 	</bean>
 	
@@ -241,6 +252,7 @@
 	</bean>
 	
 	<bean id="viewApi" class="com.socialize.api.action.ViewApi" extends="socializeApi">
+		<constructor-arg type="context"/>
 		<constructor-arg ref="viewProvider"/>
 	</bean>
 	
