@@ -78,7 +78,7 @@ public class CommentListItem extends LinearLayout {
 		LinearLayout.LayoutParams authorLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 	
 		author = new TextView(getContext());
-		author.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+		author.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
 		author.setMaxLines(1);
 		author.setTypeface(Typeface.DEFAULT_BOLD);
 		author.setTextColor(titleColor);
@@ -91,7 +91,7 @@ public class CommentListItem extends LinearLayout {
 		timeLayoutParams.gravity = Gravity.RIGHT;
 		
 		time = new TextView(getContext());
-		time.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
+		time.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
 		time.setMaxLines(1);
 		time.setTypeface(Typeface.DEFAULT, Typeface.ITALIC);
 		time.setTextColor(titleColor);
@@ -103,7 +103,7 @@ public class CommentListItem extends LinearLayout {
 		LinearLayout.LayoutParams commentLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
 		comment = new TextView(getContext());
-		comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
+		comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
 		comment.setTextColor(textColor);
 		comment.setLayoutParams(commentLayoutParams);
 

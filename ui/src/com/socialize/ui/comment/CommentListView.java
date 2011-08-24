@@ -34,6 +34,7 @@ import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.BaseView;
+import com.socialize.ui.SocializeUI;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DeviceUtils;
@@ -163,6 +164,11 @@ public class CommentListView extends BaseView {
 
 		button.setBackgroundDrawable(foreground);
 		button.setLayoutParams(buttonLayoutParams);
+		
+		final String consumerKey = SocializeUI.getInstance().getGlobalConfigValue(getContext(),SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		final String consumerSecret = SocializeUI.getInstance().getGlobalConfigValue(getContext(),SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+//		final String facebookAppId = SocializeUI.getInstance().getGlobalConfigValue(getContext(),SocializeConfig.FACEBOOK_APP_ID);
+		
 		button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -175,10 +181,10 @@ public class CommentListView extends BaseView {
 //					if(!Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 					if(!Socialize.getSocialize().isAuthenticated()) {
 						Socialize.getSocialize().authenticate(
-								Socialize.getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY), 
-								Socialize.getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET),
+								consumerKey, 
+								consumerSecret,
 //								AuthProviderType.FACEBOOK, 
-//								Socialize.getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID),
+//								facebookAppId,
 								new SocializeAuthListener() {
 
 									@Override

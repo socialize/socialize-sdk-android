@@ -83,7 +83,7 @@
 		<constructor-arg ref="drawables"/>
 		<constructor-arg ref="colors"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
-		<property name="defaultGrabLength" value="7"/>
+		<property name="defaultGrabLength" value="7" type="integer"/>
 	</bean>
 	
 	<bean 

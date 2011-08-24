@@ -22,11 +22,11 @@ public class SampleActivity extends Activity {
 		// Prod
 //		String consumerKey = "4d84d055-754b-4b81-9ffa-a44aa1f17fc3";
 //		String consumerSecret = "417ad40f-f691-4e48-a8af-9a9f82991cc6";
+
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		SocializeUI.getInstance().setAppCredentials(this, consumerKey, consumerSecret);
 		SocializeUI.getInstance().setEntityUrl(this, "http://aaaa.com");
-		
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		setContentView(R.layout.main);
 	}
@@ -43,6 +43,4 @@ public class SampleActivity extends Activity {
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
-	
 }

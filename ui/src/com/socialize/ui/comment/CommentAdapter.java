@@ -151,7 +151,7 @@ public class CommentAdapter extends BaseAdapter {
     			if (holder.userName != null) {
     				
     				if(user != null) {
-    					holder.userName.setText(user.getDisplayName());
+    					holder.userName.setText(position + " " + user.getDisplayName());
     				}
     				else {
     					holder.userName.setText("Anonymous");

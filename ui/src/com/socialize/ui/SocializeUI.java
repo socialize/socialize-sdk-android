@@ -2,6 +2,8 @@ package com.socialize.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +17,7 @@ public class SocializeUI {
 
 	private static final SocializeUI instance = new SocializeUI();
 	
+	private static final String CONFIG_KEY = "SocializeConfig";
 	public static final String ENTITY_KEY = "socialize.entity.key";
 	public static final String DEFAULT_USER_ICON = "default_user_icon.png";
 	public static final String SOCIALIZE_LOGO = "socialize_logo.png";
@@ -57,9 +60,11 @@ public class SocializeUI {
 	 * @param consumerSecret Your consumer secret, obtained via registration at http://getsocialize.com
 	 */
 	public void setAppCredentials(Context context, String consumerKey, String consumerSecret) {
-		assertSocializeInitialized(context);
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY, consumerKey);
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET, consumerSecret);
+		SharedPreferences prefs = context.getSharedPreferences(CONFIG_KEY, Context.MODE_PRIVATE);
+		Editor editor = prefs.edit();
+		editor.putString(SocializeConfig.SOCIALIZE_CONSUMER_KEY, consumerKey);
+		editor.putString(SocializeConfig.SOCIALIZE_CONSUMER_SECRET, consumerSecret);
+		editor.commit();
 	}
 	
 	/**
@@ -68,10 +73,17 @@ public class SocializeUI {
 	 * @param userId
 	 * @param token
 	 */
-	public void setFacebookUserCredentials(Activity context, String userId, String token) {
-		assertSocializeInitialized(context);
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_USER_ID, userId);
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_USER_TOKEN, token);
+	public void setFacebookUserCredentials(Context context, String userId, String token) {
+		SharedPreferences prefs = context.getSharedPreferences(CONFIG_KEY, Context.MODE_PRIVATE);
+		Editor editor = prefs.edit();
+		editor.putString(SocializeConfig.FACEBOOK_USER_ID, userId);
+		editor.putString(SocializeConfig.FACEBOOK_USER_TOKEN, token);
+		editor.commit();
+	}
+	
+	public String getGlobalConfigValue(Context context, String key) {
+		SharedPreferences prefs = context.getSharedPreferences(CONFIG_KEY, Context.MODE_PRIVATE);
+		return prefs.getString(key, null);
 	}
 	
 	/**

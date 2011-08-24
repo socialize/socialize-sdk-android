@@ -28,9 +28,9 @@ public abstract class SocializeAuthenticatedView extends SocializeView {
 	@Override
 	protected void onPostSocializeInit(IOCContainer container) {
 		SocializeUI.getInstance().initUI(container);
-		consumerKey = Socialize.getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-		consumerSecret = Socialize.getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-		fbAppId = Socialize.getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
+		consumerKey = SocializeUI.getInstance().getGlobalConfigValue(getContext(), SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		consumerSecret = SocializeUI.getInstance().getGlobalConfigValue(getContext(),SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+		fbAppId = SocializeUI.getInstance().getGlobalConfigValue(getContext(),SocializeConfig.FACEBOOK_APP_ID);
 	}
 	
 	@Override
