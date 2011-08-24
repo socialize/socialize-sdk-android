@@ -95,10 +95,16 @@ public class ContainerBuilder {
 				}
 				
 				if(cargs != null && cargs.length > 0) {
+					
+					beanRef.setContextSensitive(containsContext(cargs));
+					
 					bean = builder.construct(beanRef.getClassName(), cargs);
 				}
 			}
 			else if(args != null && args.length > 0) {
+				
+				beanRef.setContextSensitive(containsContext(args));
+				
 				bean = builder.construct(beanRef.getClassName(), args);
 			}
 			else {
@@ -108,8 +114,6 @@ public class ContainerBuilder {
 			if(bean != null) {
 				Logger.i(getClass().getSimpleName(), "Bean " + beanRef.getName() + " created");
 			}
-			
-			
 		}
 		catch (Exception e) {
 			Logger.e(getClass().getSimpleName(), "Failed to create bean [" +
@@ -124,6 +128,18 @@ public class ContainerBuilder {
 
 		return (T) bean;
 
+	}
+	
+	private boolean containsContext(Object[] args) {
+		if(args != null) {
+			for (Object obj : args) {
+				if(obj instanceof Context) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	public void setBeanProperties(Container container, BeanRef ref, Object bean)  {
@@ -283,6 +299,10 @@ public class ContainerBuilder {
 					if(args == null) {
 						return false;
 					}
+				}
+				
+				if(!beanRef.isContextSensitive()) {
+					beanRef.setContextSensitive(containsContext(args));
 				}
 				
 				Method method = builder.getMethodFor(bean.getClass(), initMethod.getName(), args);

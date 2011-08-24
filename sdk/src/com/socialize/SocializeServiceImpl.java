@@ -174,7 +174,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		return container;
 	}
 
-	
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#init(android.content.Context, com.socialize.android.ioc.IOCContainer)
 	 */

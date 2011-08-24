@@ -36,6 +36,8 @@ public class Container {
 	private BeanMapping mapping;
 	private ContainerBuilder builder;
 	
+	private Context context; // Used only to track the current context.
+	
 	// Parameterless constructor so it can be mocked.
 	protected Container() {
 		super();
@@ -59,8 +61,6 @@ public class Container {
 	
 	@SuppressWarnings("unchecked")
 	public <T extends Object> T getBean(String name, Object...args) {
-		
-
 		Object bean = beans.get(name);
 		if(bean == null) {
 			BeanRef beanRef = mapping.getBeanRef(name);
@@ -96,11 +96,9 @@ public class Container {
 
 			if(beanRefs != null) {
 				for (BeanRef beanRef : beanRefs) {
-					if(beanRef.isSingleton()) {
-						Object bean = beans.get(beanRef.getName());
-						if(bean != null) {
-							builder.destroyBean(this, beanRef, bean);
-						}
+					Object bean = beans.get(beanRef.getName());
+					if(bean != null) {
+						builder.destroyBean(this, beanRef, bean);
 					}
 				}
 				
@@ -128,6 +126,25 @@ public class Container {
 	}
 
 	public void setContext(Context context) {
-		builder.setContext(context);
+		
+		if(this.context != null && !this.context.equals(context)) {
+			// Set for any new beans
+			builder.setContext(context);
+			
+			// Now look for existing singletons
+			Collection<BeanRef> beanRefs = this.mapping.getBeanRefs();
+			
+			for (BeanRef ref : beanRefs) {
+				if(ref.isSingleton() && ref.isContextSensitive()) {
+					// We have a new context, so we need to rebuild this bean
+					Object bean = builder.buildBean(this, ref);
+					builder.setBeanProperties(this, ref, bean);
+					builder.initBean(this, ref, bean);
+					beans.put(ref.getName(), bean);
+				}
+			}
+		}
+		
+		this.context = context;
 	}
 }

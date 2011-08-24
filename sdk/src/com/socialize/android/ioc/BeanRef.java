@@ -47,6 +47,8 @@ public class BeanRef {
 	
 	private boolean initCalled = false;
 	
+	private boolean contextSensitive = false;
+	
 	public void addConstructorArgument(Argument arg) {
 		if(constructorArgs == null) constructorArgs = new LinkedList<Argument>();
 		
@@ -140,5 +142,13 @@ public class BeanRef {
 
 	protected void setInitCalled(boolean initCalled) {
 		this.initCalled = initCalled;
+	}
+
+	public boolean isContextSensitive() {
+		return contextSensitive;
+	}
+
+	protected void setContextSensitive(boolean contextSensitive) {
+		this.contextSensitive = contextSensitive;
 	}
 }

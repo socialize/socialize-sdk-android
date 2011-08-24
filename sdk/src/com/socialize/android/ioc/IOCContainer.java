@@ -55,7 +55,7 @@ public interface IOCContainer {
 	public <T extends Object> T getBean(String name, Object...args);
 
 	/**
-	 * Destroys the container.
+	 * Destroys the container and calls the destroy method of any beans with such a method defined.
 	 */
 	public void destroy();
 
@@ -68,8 +68,18 @@ public interface IOCContainer {
 	 */
 	public void init(Context context, ContainerBuilder builder, InputStream...in) throws Exception;
 
+	/**
+	 * Initializes the container.
+	 * @param context The current context.
+	 * @param in
+	 * @throws Exception
+	 */
 	public void init(Context context, InputStream...in) throws Exception;
 	
+	/**
+	 * Returns the number of beans in the container.
+	 * @return
+	 */
 	public int size();
 	
 	/**
