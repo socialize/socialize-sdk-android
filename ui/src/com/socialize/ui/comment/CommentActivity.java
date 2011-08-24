@@ -19,16 +19,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.location;
+package com.socialize.ui.comment;
 
-import android.location.Location;
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.Window;
+import android.widget.Toast;
+
+import com.socialize.Socialize;
+import com.socialize.ui.SocializeUI;
+import com.socialize.ui.view.CommentView;
 
 /**
  * @author Jason Polites
- *
  */
-public interface SocializeLocationProvider {
-
-	public Location getLocation();
+public class CommentActivity extends Activity {
 	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
+		Bundle extras = getIntent().getExtras();
+		
+		if(extras == null || !extras.containsKey(SocializeUI.ENTITY_KEY)) {
+			Toast.makeText(this, "No entity url provided", Toast.LENGTH_SHORT).show();
+			finish();
+		}
+		else {
+			CommentView view = new CommentView(this);
+			setContentView(view);
+		}
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK) {
+			Socialize.getSocialize().destroy(true);
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 }

@@ -16,8 +16,8 @@ test/bin
 test/local.properties
 ui/bin
 ui/gen
-ui-sample/bin
-ui-sample/gen
+ui-sample/bin/
+ui-sample/gen/
 ui-test/bin
 ui-test/gen
 build

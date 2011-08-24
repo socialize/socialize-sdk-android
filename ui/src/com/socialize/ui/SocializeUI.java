@@ -1,9 +1,10 @@
 package com.socialize.ui;
 
+import java.util.Properties;
+
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -11,13 +12,13 @@ import android.view.View;
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.config.SocializeConfig;
+import com.socialize.ui.comment.CommentActivity;
 import com.socialize.util.Drawables;
 
 public class SocializeUI {
 
 	private static final SocializeUI instance = new SocializeUI();
 	
-	private static final String CONFIG_KEY = "SocializeConfig";
 	public static final String ENTITY_KEY = "socialize.entity.key";
 	public static final String DEFAULT_USER_ICON = "default_user_icon.png";
 	public static final String SOCIALIZE_LOGO = "socialize_logo.png";
@@ -25,6 +26,7 @@ public class SocializeUI {
 	
 	private IOCContainer container;
 	private Drawables drawables;
+	private final Properties customProperties = new Properties();
 	
 	public static final SocializeUI getInstance() {
 		return instance;
@@ -32,6 +34,7 @@ public class SocializeUI {
 	
 	void initSocialize(Context context) {
 		Socialize.getSocialize().init(context, new String[]{"socialize_beans.xml", "socialize_ui_beans.xml"});
+		Socialize.getSocialize().getConfig().merge(customProperties);
 	}
 	
 	void initUI(IOCContainer container) {
@@ -60,11 +63,8 @@ public class SocializeUI {
 	 * @param consumerSecret Your consumer secret, obtained via registration at http://getsocialize.com
 	 */
 	public void setAppCredentials(Context context, String consumerKey, String consumerSecret) {
-		SharedPreferences prefs = context.getSharedPreferences(CONFIG_KEY, Context.MODE_PRIVATE);
-		Editor editor = prefs.edit();
-		editor.putString(SocializeConfig.SOCIALIZE_CONSUMER_KEY, consumerKey);
-		editor.putString(SocializeConfig.SOCIALIZE_CONSUMER_SECRET, consumerSecret);
-		editor.commit();
+		customProperties.put(SocializeConfig.SOCIALIZE_CONSUMER_KEY, consumerKey);
+		customProperties.put(SocializeConfig.SOCIALIZE_CONSUMER_SECRET, consumerSecret);
 	}
 	
 	/**
@@ -74,16 +74,12 @@ public class SocializeUI {
 	 * @param token
 	 */
 	public void setFacebookUserCredentials(Context context, String userId, String token) {
-		SharedPreferences prefs = context.getSharedPreferences(CONFIG_KEY, Context.MODE_PRIVATE);
-		Editor editor = prefs.edit();
-		editor.putString(SocializeConfig.FACEBOOK_USER_ID, userId);
-		editor.putString(SocializeConfig.FACEBOOK_USER_TOKEN, token);
-		editor.commit();
+		customProperties.put(SocializeConfig.FACEBOOK_USER_ID, userId);
+		customProperties.put(SocializeConfig.FACEBOOK_USER_TOKEN, token);
 	}
 	
-	public String getGlobalConfigValue(Context context, String key) {
-		SharedPreferences prefs = context.getSharedPreferences(CONFIG_KEY, Context.MODE_PRIVATE);
-		return prefs.getString(key, null);
+	public void setDebugMode(Context context, boolean debug) {
+		customProperties.put(SocializeConfig.SOCIALIZE_DEBUG_MODE, String.valueOf(debug));
 	}
 	
 	/**
@@ -94,8 +90,17 @@ public class SocializeUI {
 	 * @see https://developers.facebook.com/
 	 */
 	public void setFacebookAppId(Context context, String appId) {
-		assertSocializeInitialized(context);
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_APP_ID, appId);
+		customProperties.put(SocializeConfig.FACEBOOK_APP_ID, appId);
+	}
+	
+	public String getCustomConfigValue(Context context, String key) {
+		return Socialize.getSocialize().getConfig().getProperty(key);
+	}
+	
+	public void showCommentView(Activity context, String url) {
+		Intent i = new Intent(context, CommentActivity.class);
+		i.putExtra(ENTITY_KEY, url);
+		context.startActivity(i);
 	}
 	
 	public void setEntityUrl(Activity context, String url) {
@@ -107,10 +112,7 @@ public class SocializeUI {
 		context.getIntent().putExtras(extras);
 	}
 	
-	private void assertSocializeInitialized(Context context) {
-		SocializeConfig config = Socialize.getSocialize().getConfig();
-		if(config == null) {
-			initSocialize(context);
-		}
+	public Properties getCustomProperties() {
+		return customProperties;
 	}
 }

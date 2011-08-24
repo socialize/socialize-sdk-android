@@ -24,7 +24,6 @@ package com.socialize.api.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
 import android.location.Location;
 
 import com.socialize.api.SocializeApi;
@@ -41,11 +40,6 @@ public class CommentApi extends SocializeApi<Comment, SocializeProvider<Comment>
 
 	public static final String ENDPOINT = "/comment/";
 	
-	public CommentApi(Context context, SocializeProvider<Comment> provider) {
-		super(context, provider);
-	}
-
-	@Deprecated
 	public CommentApi(SocializeProvider<Comment> provider) {
 		super(provider);
 	}

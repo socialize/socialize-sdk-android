@@ -218,16 +218,8 @@ public class CommentAdapter extends BaseAdapter {
 		return view;
 	}
 
-	public IBeanFactory<CommentListItem> getCommentItemViewFactory() {
-		return commentItemViewFactory;
-	}
-
 	public void setCommentItemViewFactory(IBeanFactory<CommentListItem> commentItemViewFactory) {
 		this.commentItemViewFactory = commentItemViewFactory;
-	}
-
-	public IBeanFactory<ListItemLoadingView> getListItemLoadingViewFactory() {
-		return listItemLoadingViewFactory;
 	}
 
 	public void setListItemLoadingViewFactory(IBeanFactory<ListItemLoadingView> listItemLoadingViewFactory) {
@@ -242,16 +234,8 @@ public class CommentAdapter extends BaseAdapter {
 		this.comments = comments;
 	}
 
-	public SocializeLogger getLogger() {
-		return logger;
-	}
-
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
-	}
-
-	public View getLoadingView() {
-		return loadingView;
 	}
 
 	public void setLoadingView(View loadingView) {
@@ -266,24 +250,12 @@ public class CommentAdapter extends BaseAdapter {
 		this.last = last;
 	}
 
-	public Drawables getDrawables() {
-		return drawables;
-	}
-
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
 	}
 
-	public DeviceUtils getDeviceUtils() {
-		return deviceUtils;
-	}
-
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
 		this.deviceUtils = deviceUtils;
-	}
-
-	public TimeUtils getTimeUtils() {
-		return timeUtils;
 	}
 
 	public void setTimeUtils(TimeUtils timeUtils) {

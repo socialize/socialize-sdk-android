@@ -24,7 +24,6 @@ package com.socialize.api.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
 import android.location.Location;
 
 import com.socialize.api.SocializeApi;
@@ -40,11 +39,6 @@ public class ViewApi extends SocializeApi<View, SocializeProvider<View>> {
 
 	public static final String ENDPOINT = "/view/";
 	
-	public ViewApi(Context context, SocializeProvider<View> provider) {
-		super(context, provider);
-	}
-
-	@Deprecated
 	public ViewApi(SocializeProvider<View> provider) {
 		super(provider);
 	}

@@ -41,6 +41,8 @@ import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 
+//TODO: Remove this annotation
+@SuppressWarnings("unused")
 public class CommentListView extends BaseView {
 
 	private int defaultGrabLength = 10;
@@ -165,9 +167,9 @@ public class CommentListView extends BaseView {
 		button.setBackgroundDrawable(foreground);
 		button.setLayoutParams(buttonLayoutParams);
 		
-		final String consumerKey = SocializeUI.getInstance().getGlobalConfigValue(getContext(),SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-		final String consumerSecret = SocializeUI.getInstance().getGlobalConfigValue(getContext(),SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-//		final String facebookAppId = SocializeUI.getInstance().getGlobalConfigValue(getContext(),SocializeConfig.FACEBOOK_APP_ID);
+		final String consumerKey = SocializeUI.getInstance().getCustomConfigValue(getContext(),SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		final String consumerSecret = SocializeUI.getInstance().getCustomConfigValue(getContext(),SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+//		final String facebookAppId = SocializeUI.getInstance().getCustomConfigValue(getContext(),SocializeConfig.FACEBOOK_APP_ID);
 		
 		button.setOnClickListener(new OnClickListener() {
 			@Override
@@ -433,48 +435,24 @@ public class CommentListView extends BaseView {
 		}
 	}
 
-	public CommentAdapter getProvider() {
-		return provider;
-	}
-
 	public void setProvider(CommentAdapter provider) {
 		this.provider = provider;
-	}
-
-	public SocializeLogger getLogger() {
-		return logger;
 	}
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
 
-	public ProgressDialogFactory getProgressDialogFactory() {
-		return progressDialogFactory;
-	}
-
 	public void setProgressDialogFactory(ProgressDialogFactory progressDialogFactory) {
 		this.progressDialogFactory = progressDialogFactory;
-	}
-
-	public Drawables getDrawables() {
-		return drawables;
 	}
 
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
 	}
 
-	public int getDefaultGrabLength() {
-		return defaultGrabLength;
-	}
-
 	public void setDefaultGrabLength(int defaultGrabLength) {
 		this.defaultGrabLength = defaultGrabLength;
-	}
-
-	public Colors getColors() {
-		return colors;
 	}
 
 	public void setColors(Colors colors) {

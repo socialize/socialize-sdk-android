@@ -13,6 +13,8 @@ import com.socialize.ui.util.Colors;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 
+// TODO: Remove this annotation
+@SuppressWarnings("unused")
 public class CommentListItem extends LinearLayout {
 	
 	private TextView comment;
@@ -135,24 +137,12 @@ public class CommentListItem extends LinearLayout {
 //		return userIcon;
 //	}
 
-	public DeviceUtils getDeviceUtils() {
-		return deviceUtils;
-	}
-
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
 		this.deviceUtils = deviceUtils;
 	}
 
-	public Drawables getDrawables() {
-		return drawables;
-	}
-
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
-	}
-
-	public Colors getColors() {
-		return colors;
 	}
 
 	public void setColors(Colors colors) {

@@ -12,8 +12,11 @@ import com.socialize.ui.SocializeUI;
 import com.socialize.util.StringUtils;
 
 public abstract class EntityView extends SocializeAuthenticatedView {
-
 	
+	public EntityView(Context context) {
+		super(context);
+	}
+
 	public EntityView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}

@@ -14,6 +14,10 @@ public class CommentView extends EntityView {
 	public CommentView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
+	
+	public CommentView(Context context) {
+		super(context);
+	}
 
 	@Override
 	protected View getView(Bundle bundle, String entityKey) {

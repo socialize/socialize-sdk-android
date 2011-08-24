@@ -23,7 +23,6 @@ package com.socialize.api;
 
 import java.util.List;
 
-import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
 
@@ -65,19 +64,11 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	private HttpUtils httpUtils;
 	private SocializeLocationProvider locationProvider;
 	
-	protected Context context;
-	
 	public static enum RequestType {AUTH,PUT,POST,GET,LIST,DELETE};
 	
-	public SocializeApi(Context context, P provider) {
-		super();
-		this.context = context;
-		this.provider = provider;
-	}
-	
-	@Deprecated
 	public SocializeApi(P provider) {
-		this(null, provider);
+		super();
+		this.provider = provider;
 	}
 	
 	public void clearSession() {
@@ -542,8 +533,8 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}
 	
 	protected void setLocation(SocializeAction action, Location location) {
-		if(location == null && context != null && locationProvider != null) {
-			location = locationProvider.getLocation(context);
+		if(location == null && locationProvider != null) {
+			location = locationProvider.getLocation();
 		}
 		if(location != null) {
 			action.setLon(location.getLongitude());

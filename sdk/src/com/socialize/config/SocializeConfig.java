@@ -23,6 +23,7 @@ package com.socialize.config;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
@@ -38,12 +39,12 @@ import com.socialize.util.StringUtils;
 public class SocializeConfig {
 	
 	public static final String SOCIALIZE_PROPERTIES_PATH = "socialize.properties";
-	public static final String SOCIALIZE_OVERRIDE_PATH = "socialize.custom.properties";
 	public static final String SOCIALIZE_BEANS_PATH = "socialize_beans.xml";
 	public static final String SOCIALIZE_ERRORS_PATH = "errors.properties";
 	
 	public static final String SOCIALIZE_CONSUMER_KEY = "socialize.consumer.key";
 	public static final String SOCIALIZE_CONSUMER_SECRET = "socialize.consumer.secret";
+	public static final String SOCIALIZE_DEBUG_MODE = "socialize.debug.mode";
 	
 	public static final String FACEBOOK_APP_ID = "facebook.app.id";
 	public static final String FACEBOOK_USER_ID = "facebook.user.id";
@@ -83,7 +84,7 @@ public class SocializeConfig {
 		try {
 			if(resourceLocator != null) {
 				try {
-					in = resourceLocator.locate(context, propertiesFileName);
+					in = resourceLocator.locateInClassPath(context, propertiesFileName);
 					
 					if(in != null) {
 						properties = new Properties();
@@ -103,17 +104,12 @@ public class SocializeConfig {
 					
 					// Look for override
 					try {
-						in = resourceLocator.locate(context, SOCIALIZE_OVERRIDE_PATH);
+						in = resourceLocator.locateInAssets(context, propertiesFileName);
 						
 						if(in != null) {
 							Properties override = new Properties();
 							override.load(in);
-							
-							// Merge
-							Set<Object> keys = override.keySet();
-							for (Object key : keys) {
-								properties.put(key, override.get(key));
-							}
+							merge(override);
 						}
 					}
 					catch (IOException ignore) {
@@ -159,8 +155,24 @@ public class SocializeConfig {
 		return defaultValue;
 	}
 	
+
 	public void setProperty(String key, String value) {
 		properties.put(key, value);
+	}
+	
+	/**
+	 * Merge properties into the config.
+	 * @param other
+	 */
+	public void merge(Properties other) {
+		if(properties == null) {
+			properties = new Properties();
+		}
+		
+		Set<Entry<Object, Object>> entrySet = other.entrySet();
+		for (Entry<Object, Object> entry : entrySet) {
+			properties.put(entry.getKey(), entry.getValue());
+		}
 	}
 
 	public String getDefaultPropertiesFileName() {

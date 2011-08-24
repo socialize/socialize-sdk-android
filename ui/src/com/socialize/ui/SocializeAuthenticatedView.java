@@ -21,6 +21,10 @@ public abstract class SocializeAuthenticatedView extends SocializeView {
 	protected String consumerSecret;
 	protected String fbAppId;
 	
+	public SocializeAuthenticatedView(Context context) {
+		super(context);
+	}
+
 	public SocializeAuthenticatedView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
@@ -28,9 +32,9 @@ public abstract class SocializeAuthenticatedView extends SocializeView {
 	@Override
 	protected void onPostSocializeInit(IOCContainer container) {
 		SocializeUI.getInstance().initUI(container);
-		consumerKey = SocializeUI.getInstance().getGlobalConfigValue(getContext(), SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-		consumerSecret = SocializeUI.getInstance().getGlobalConfigValue(getContext(),SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-		fbAppId = SocializeUI.getInstance().getGlobalConfigValue(getContext(),SocializeConfig.FACEBOOK_APP_ID);
+		consumerKey = SocializeUI.getInstance().getCustomConfigValue(getContext(), SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		consumerSecret = SocializeUI.getInstance().getCustomConfigValue(getContext(),SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+		fbAppId = SocializeUI.getInstance().getCustomConfigValue(getContext(),SocializeConfig.FACEBOOK_APP_ID);
 	}
 	
 	@Override
@@ -47,8 +51,8 @@ public abstract class SocializeAuthenticatedView extends SocializeView {
 		String token3rdParty = null;
 		
 		if(bundle != null) {
-			userId3rdParty = Socialize.getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_USER_ID);
-			token3rdParty = Socialize.getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_USER_TOKEN);
+			userId3rdParty = SocializeUI.getInstance().getCustomConfigValue(getContext(),SocializeConfig.FACEBOOK_USER_ID);
+			token3rdParty = SocializeUI.getInstance().getCustomConfigValue(getContext(),SocializeConfig.FACEBOOK_USER_TOKEN);
 		}
 		
 		onBeforeAuthenticate();

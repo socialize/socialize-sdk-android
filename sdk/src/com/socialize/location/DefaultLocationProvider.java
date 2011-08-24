@@ -38,18 +38,20 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 
 	private DeviceUtils deviceUtils;
 	private Location location;
-
-	public DefaultLocationProvider(DeviceUtils deviceUtils) {
+	private Context context;
+	
+	public DefaultLocationProvider(Context context, DeviceUtils deviceUtils) {
 		super();
 		this.deviceUtils = deviceUtils;
+		this.context = context;
 	}
 	
-	public void init(Context context) {
-		getLocation(context);
+	public void init() {
+		getLocation();
 	}
 
 	@Override
-	public Location getLocation(Context context) {
+	public Location getLocation() {
 
 		if(location == null) {
 			if(deviceUtils.hasPermission(context, "android.permission.ACCESS_FINE_LOCATION")) {
