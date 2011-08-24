@@ -25,3 +25,5 @@ test/findbugs-output
 integration-test/local.properties
 *.swp
 integration-test/test-output
+sample/assets/existing-data/*.json
+sample/assets/sample-app.conf
