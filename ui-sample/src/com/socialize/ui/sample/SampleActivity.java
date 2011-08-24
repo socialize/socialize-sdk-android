@@ -19,6 +19,7 @@ public class SampleActivity extends Activity {
 		btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				SocializeUI.getInstance().setSocializeCredentials("807de77a-9981-450a-b0fc-c239c9c3f9b0", "0ccc078d-a628-49d0-97ac-bcc892d9666f");
 				SocializeUI.getInstance().showCommentView(SampleActivity.this, "http://aaaa.com");
 			}
 		});

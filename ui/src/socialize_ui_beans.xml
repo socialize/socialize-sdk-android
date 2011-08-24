@@ -3,7 +3,9 @@
 	<factory id="commentItemViewFactory" makes="commentListItem"/>
 	<factory id="listItemLoadingViewFactory" makes="listItemLoadingView"/>
 	
-	<bean id="socializeUIErrorHandler" class="com.socialize.ui.error.DialogErrorHandler"/>
+	<bean id="socializeUIErrorHandler" class="com.socialize.ui.error.DialogErrorHandler">
+		<property name="drawables" ref="drawables"/>
+	</bean>
 	
 	<bean id="progressDialogFactory" class="com.socialize.ui.dialog.ProgressDialogFactory">
 		<property name="logger" ref="logger"/>

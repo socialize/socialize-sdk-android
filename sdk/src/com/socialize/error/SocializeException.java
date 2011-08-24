@@ -34,8 +34,12 @@ public class SocializeException extends Exception {
 		super();
 	}
 
+	public SocializeException(String detailMessage, Throwable throwable) {
+		super(detailMessage, throwable);
+	}
+
 	public SocializeException(Throwable throwable) {
-		super(throwable);
+		super(throwable.getMessage(), throwable);
 	}
 
 	public SocializeException(String detailMessage) {

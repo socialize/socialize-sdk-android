@@ -57,7 +57,7 @@ public class DefaultOauthRequestSigner implements OAuthRequestSigner {
 			return request;
 		}
 		catch (Exception e) {
-			throw new SocializeException(e);
+			throw new SocializeException(e.getMessage(), e);
 		}
 	}
 

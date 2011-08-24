@@ -58,38 +58,39 @@ public class SocializeUI {
 	
 	/**
 	 * Sets the credentials for your Socialize App.
-	 * @param context The current activity
 	 * @param consumerKey Your consumer key, obtained via registration at http://getsocialize.com
 	 * @param consumerSecret Your consumer secret, obtained via registration at http://getsocialize.com
 	 */
-	public void setAppCredentials(Context context, String consumerKey, String consumerSecret) {
+	public void setSocializeCredentials(String consumerKey, String consumerSecret) {
 		customProperties.put(SocializeConfig.SOCIALIZE_CONSUMER_KEY, consumerKey);
 		customProperties.put(SocializeConfig.SOCIALIZE_CONSUMER_SECRET, consumerSecret);
 	}
 	
 	/**
 	 * Sets the FB credentials for the current user if available.
-	 * @param context The current activity
 	 * @param userId
 	 * @param token
 	 */
-	public void setFacebookUserCredentials(Context context, String userId, String token) {
+	public void setFacebookUserCredentials(String userId, String token) {
 		customProperties.put(SocializeConfig.FACEBOOK_USER_ID, userId);
 		customProperties.put(SocializeConfig.FACEBOOK_USER_TOKEN, token);
 	}
 	
-	public void setDebugMode(Context context, boolean debug) {
+	/**
+	 * 
+	 * @param debug
+	 */
+	public void setDebugMode(boolean debug) {
 		customProperties.put(SocializeConfig.SOCIALIZE_DEBUG_MODE, String.valueOf(debug));
 	}
 	
 	/**
 	 * Sets the Facebook ID for FB authentication.  
 	 * This is optional.  If not specified the default Socialize FB app will be used.
-	 * @param context
 	 * @param appId Your Facebook App Id, obtained from https://developers.facebook.com/
 	 * @see https://developers.facebook.com/
 	 */
-	public void setFacebookAppId(Context context, String appId) {
+	public void setFacebookAppId(String appId) {
 		customProperties.put(SocializeConfig.FACEBOOK_APP_ID, appId);
 	}
 	
