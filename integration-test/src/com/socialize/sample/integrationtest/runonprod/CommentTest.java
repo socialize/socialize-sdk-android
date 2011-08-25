@@ -1,9 +1,7 @@
 package com.socialize.sample.integrationtest.runonprod;
 import com.socialize.sample.integrationtest.SocializeRobotiumTest;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.R;
 import android.widget.ListView;
@@ -24,9 +22,6 @@ public class CommentTest extends SocializeRobotiumTest {
 		robotium.waitForActivity("CommentListSelectActivity", DEFAULT_TIMEOUT_SECONDS);
 		
 		// get the comment based on ID from the JSON file
-		JSONObject json = getJSON("comments.json");
-		JSONArray jsonArray = json.getJSONArray("items");
-		
 		robotium.enterText(0,DEFAULT_GET_ENTITY);
 		robotium.clickOnButton("List");
 		
@@ -36,7 +31,7 @@ public class CommentTest extends SocializeRobotiumTest {
 		// Check number of comments
 		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(R.id.list);
 		
-		assertEquals(jsonArray.length(), comments.getCount());
+		assertEquals( 10, comments.getCount());
 		
 		// Click on the first comment in list. 
 		robotium.clickInList(0);

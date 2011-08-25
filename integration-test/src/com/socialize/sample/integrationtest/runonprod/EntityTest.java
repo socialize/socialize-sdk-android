@@ -1,6 +1,5 @@
 package com.socialize.sample.integrationtest.runonprod;
 import com.socialize.sample.integrationtest.SocializeRobotiumTest;
-
 import android.widget.TextView;
 
 public class EntityTest extends SocializeRobotiumTest {
