@@ -17,8 +17,6 @@ public class EntityTest extends SocializeRobotiumTest {
 		// We need create first
 		robotium.enterText(0, DEFAULT_GET_ENTITY);
 		robotium.enterText(1, "RobotiumEntityTest");
-		robotium.clickOnButton("Add Entity");
-		waitForSuccess();
 		
 		String entityKey = getEntityKey();
 		
