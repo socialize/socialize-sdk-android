@@ -32,7 +32,6 @@ import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.DialogFactory;
-import com.socialize.util.IOUtils;
 
 /**
  * @author Jason Polites
@@ -45,7 +44,7 @@ public class FacebookService {
 	private FacebookSessionStore facebookSessionStore; 
 	private AuthProviderListener listener;
 	private DialogFactory dialogFactory;
-	private IOUtils ioUtils;
+	private FacebookImageRetriever facebookImageRetriever;
 	
 	public static final String[] DEFAULT_PERMISSIONS = {"offline_access", "publish_stream"};
 	
@@ -89,16 +88,16 @@ public class FacebookService {
 			}
 		};
 		
-		facebookDialogListener.setIoUtils(ioUtils);
+		facebookDialogListener.setFacebookImageRetriever(facebookImageRetriever);
 		facebook.authorize(context, permissions, facebookDialogListener);
 	}
 	
-	public IOUtils getIoUtils() {
-		return ioUtils;
+	public FacebookImageRetriever getFacebookImageRetriever() {
+		return facebookImageRetriever;
 	}
 
-	public void setIoUtils(IOUtils ioUtils) {
-		this.ioUtils = ioUtils;
+	public void setFacebookImageRetriever(FacebookImageRetriever facebookImageRetriever) {
+		this.facebookImageRetriever = facebookImageRetriever;
 	}
 
 	public void cancel() {

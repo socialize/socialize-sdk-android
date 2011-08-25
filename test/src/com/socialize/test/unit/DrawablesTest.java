@@ -60,9 +60,9 @@ public class DrawablesTest extends SocializeActivityTest {
 		AndroidMock.expect(cache.get("res/drawable/ldpi/" + drawable_name)).andReturn(null);
 		AndroidMock.expect(cache.get("res/drawable/mdpi/" + drawable_name)).andReturn(null);
 		AndroidMock.expect(cache.get("res/drawable/hdpi/" + drawable_name)).andReturn(null);
-		AndroidMock.expect(cache.put("res/drawable/ldpi/" + drawable_name, drawable)).andReturn(true);
-		AndroidMock.expect(cache.put("res/drawable/mdpi/" + drawable_name, drawable)).andReturn(true);
-		AndroidMock.expect(cache.put("res/drawable/hdpi/" + drawable_name, drawable)).andReturn(true);
+		AndroidMock.expect(cache.put("res/drawable/ldpi/" + drawable_name, drawable, false)).andReturn(true);
+		AndroidMock.expect(cache.put("res/drawable/mdpi/" + drawable_name, drawable, false)).andReturn(true);
+		AndroidMock.expect(cache.put("res/drawable/hdpi/" + drawable_name, drawable, false)).andReturn(true);
 		AndroidMock.expect(cache.get("res/drawable/" + drawable_name)).andReturn(null).times(3);
 		
 		AndroidMock.expect(provider.getClassLoader()).andReturn(loader).times(3);

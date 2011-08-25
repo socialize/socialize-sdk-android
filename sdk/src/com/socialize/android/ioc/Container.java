@@ -135,12 +135,20 @@ public class Container {
 			Collection<BeanRef> beanRefs = this.mapping.getBeanRefs();
 			
 			for (BeanRef ref : beanRefs) {
-				if(ref.isSingleton() && ref.isContextSensitive()) {
-					// We have a new context, so we need to rebuild this bean
-					Object bean = builder.buildBean(this, ref);
-					builder.setBeanProperties(this, ref, bean);
-					builder.initBean(this, ref, bean);
-					beans.put(ref.getName(), bean);
+				if(ref.isSingleton() ) {
+					if(ref.isContextSensitiveConstructor()) {
+						// We have a new context, so we need to rebuild this bean
+						Object bean = builder.buildBean(this, ref);
+						builder.setBeanProperties(this, ref, bean);
+						builder.initBean(this, ref, bean);
+						beans.put(ref.getName(), bean);
+					}
+					else if(ref.isContextSensitiveInitMethod()) {
+						// Re-call init
+						Object bean = getBean(ref.getName());
+						builder.initBean(this, ref, bean);
+						beans.put(ref.getName(), bean);
+					}
 				}
 			}
 		}

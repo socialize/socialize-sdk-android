@@ -21,9 +21,6 @@
  */
 package com.socialize.auth.facebook;
 
-import java.io.InputStream;
-import java.net.URL;
-
 import org.json.JSONObject;
 
 import android.content.Context;
@@ -37,8 +34,6 @@ import com.socialize.facebook.Facebook;
 import com.socialize.facebook.Facebook.DialogListener;
 import com.socialize.facebook.FacebookError;
 import com.socialize.listener.AuthProviderListener;
-import com.socialize.util.Base64;
-import com.socialize.util.IOUtils;
 
 /**
  * @author Jason Polites
@@ -47,10 +42,10 @@ import com.socialize.util.IOUtils;
 public abstract class FacebookDialogListener implements DialogListener {
 
 	private FacebookSessionStore facebookSessionStore;
+	private FacebookImageRetriever facebookImageRetriever;
 	private Facebook facebook;
 	private Context context;
 	private AuthProviderListener listener;
-	private IOUtils ioUtils;
 
 	public FacebookDialogListener(Context context, Facebook facebook, FacebookSessionStore facebookSessionStore, AuthProviderListener listener) {
 		super();
@@ -71,26 +66,10 @@ public abstract class FacebookDialogListener implements DialogListener {
 			
 			String id = obj.getString("id");
 			String token = values.getString("access_token");
-	
 			String encoded = null;
-			InputStream in = null;
 			
-			try {
-				URL url = new URL("http://graph.facebook.com/"+id+"/picture?type=large");
-				
-				in = url.openConnection().getInputStream();
-				
-				byte[] readBytes = ioUtils.readBytes(in);
-				encoded = Base64.encode(readBytes);
-			}
-			catch (Exception e) {
-				// TODO: log error
-				e.printStackTrace();
-			}
-			finally {
-				if(in != null) {
-					in.close();
-				}
+			if(facebookImageRetriever != null) {
+				encoded = facebookImageRetriever.getEncodedProfileImage(id);
 			}
 			
 			String firstName = null;
@@ -159,12 +138,12 @@ public abstract class FacebookDialogListener implements DialogListener {
 		onFinish();
 	}
 	
-	public IOUtils getIoUtils() {
-		return ioUtils;
+	public FacebookImageRetriever getFacebookImageRetriever() {
+		return facebookImageRetriever;
 	}
 
-	public void setIoUtils(IOUtils ioUtils) {
-		this.ioUtils = ioUtils;
+	public void setFacebookImageRetriever(FacebookImageRetriever facebookImageRetriever) {
+		this.facebookImageRetriever = facebookImageRetriever;
 	}
 
 	public abstract void onFinish();

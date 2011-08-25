@@ -267,7 +267,9 @@ public class Drawables {
 	}
 	
 	private void addToCache(String key, CacheableDrawable drawable, boolean eternal) {
-		cache.put(key, drawable, eternal);
+		if(drawable != null) {
+			cache.put(key, drawable, eternal);
+		}
 	}
 
 }

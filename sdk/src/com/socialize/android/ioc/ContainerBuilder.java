@@ -96,14 +96,14 @@ public class ContainerBuilder {
 				
 				if(cargs != null && cargs.length > 0) {
 					
-					beanRef.setContextSensitive(containsContext(cargs));
+					beanRef.setContextSensitiveConstructor(containsContext(cargs));
 					
 					bean = builder.construct(beanRef.getClassName(), cargs);
 				}
 			}
 			else if(args != null && args.length > 0) {
 				
-				beanRef.setContextSensitive(containsContext(args));
+				beanRef.setContextSensitiveConstructor(containsContext(args));
 				
 				bean = builder.construct(beanRef.getClassName(), args);
 			}
@@ -301,8 +301,8 @@ public class ContainerBuilder {
 					}
 				}
 				
-				if(!beanRef.isContextSensitive()) {
-					beanRef.setContextSensitive(containsContext(args));
+				if(!beanRef.isContextSensitiveConstructor()) {
+					beanRef.setContextSensitiveInitMethod(containsContext(args));
 				}
 				
 				Method method = builder.getMethodFor(bean.getClass(), initMethod.getName(), args);

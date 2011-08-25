@@ -6,7 +6,7 @@
 		<property name="classLoaderProvider" ref="classLoaderProvider"/>
 		<property name="logger" ref="logger"/>
 	</bean>
-
+	
 	<bean id="config" class="com.socialize.config.SocializeConfig">
 		<init-method name="init">
 			<arg type="context"/>
@@ -36,11 +36,27 @@
 		<property name="logger" ref="logger"/>
 	</bean>
 	
+	<bean id="locationManager" class="com.socialize.location.SocializeLocationManager">
+		<constructor-arg ref="deviceUtils"/>
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>
+	</bean>
+	
 	<bean id="locationProvider" class="com.socialize.location.DefaultLocationProvider">
 		<constructor-arg type="context"/>
-		<constructor-arg ref="deviceUtils"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="locationManager" ref="locationManager"/>
+		<property name="locationListenerFactory" ref="locationListenerFactory"/>
+		
 		<init-method name="init"/>
 	</bean>
+	
+	<bean id="locationListener" class="com.socialize.location.SocializeLocationListener" singleton="false">
+		<property name="locationProvider" ref="locationProvider"/>
+	</bean>
+	
+	<factory id="locationListenerFactory" makes="locationListener"/>
 	
 	<bean id="ioUtils" class="com.socialize.util.IOUtils">
 		<property name="logger" ref="logger"/>
@@ -129,6 +145,11 @@
 	
 <!--  Facebook -->
 	<bean id="facebookSessionStore" class="com.socialize.auth.facebook.FacebookSessionStore"/>
+	<bean id="facebookImageRetriever" class="com.socialize.auth.facebook.FacebookImageRetriever">
+		<property name="logger" ref="logger"/>
+		<property name="ioUtils" ref="ioUtils"/>
+	</bean>
+	
 	<bean id="listenerHolder" class="com.socialize.listener.ListenerHolder"/>
 	
 	<bean id="facebookProvider" class="com.socialize.auth.facebook.FacebookAuthProvider">

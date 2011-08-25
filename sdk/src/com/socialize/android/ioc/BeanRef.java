@@ -49,6 +49,9 @@ public class BeanRef {
 	
 	private boolean contextSensitive = false;
 	
+	private boolean contextSensitiveConstructor = false;
+	private boolean contextSensitiveInitMethod = false;
+	
 	public void addConstructorArgument(Argument arg) {
 		if(constructorArgs == null) constructorArgs = new LinkedList<Argument>();
 		
@@ -144,11 +147,35 @@ public class BeanRef {
 		this.initCalled = initCalled;
 	}
 
+	/**
+	 * @deprecated
+	 * @return
+	 */
+	@Deprecated
 	public boolean isContextSensitive() {
 		return contextSensitive;
 	}
 
+	@Deprecated
 	protected void setContextSensitive(boolean contextSensitive) {
 		this.contextSensitive = contextSensitive;
 	}
+
+	public boolean isContextSensitiveConstructor() {
+		return contextSensitiveConstructor;
+	}
+
+	protected void setContextSensitiveConstructor(boolean contextSensitiveConstructor) {
+		this.contextSensitiveConstructor = contextSensitiveConstructor;
+	}
+
+	public boolean isContextSensitiveInitMethod() {
+		return contextSensitiveInitMethod;
+	}
+
+	protected void setContextSensitiveInitMethod(boolean contextSensitiveInitMethod) {
+		this.contextSensitiveInitMethod = contextSensitiveInitMethod;
+	}
+	
+	
 }

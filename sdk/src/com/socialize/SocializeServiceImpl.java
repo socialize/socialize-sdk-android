@@ -86,7 +86,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public void init(Context context, String...paths) {
 		try {
-			initInternal(context, paths);
+			initWithContainer(context, paths);
 		}
 		catch (Exception e) {
 			if(logger != null) {
@@ -113,10 +113,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public void initAsync(Context context, SocializeInitListener listener, String... paths) {
-		new InitTask(context, paths, listener).execute((Void)null);
+		new InitTask(this, context, paths, listener, logger).execute((Void)null);
 	}
 
-	private IOCContainer initInternal(Context context, String...paths) throws Exception {
+	public IOCContainer initWithContainer(Context context, String...paths) throws Exception {
 		boolean init = false;
 
 		if(isInitialized()) {
@@ -278,7 +278,14 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public void authenticateKnownUser(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty,
 			SocializeAuthListener authListener) {
-		authenticate(consumerKey, consumerSecret, authUserId3rdParty, authToken3rdParty, authProvider, authProviderId, authListener, false);
+		
+		AuthProviderData authProviderData = this.authProviderDataFactory.getBean();
+		authProviderData.setAuthProviderType(authProvider);
+		authProviderData.setAppId3rdParty(authProviderId);
+		authProviderData.setToken3rdParty(authToken3rdParty);
+		authProviderData.setUserId3rdParty(authUserId3rdParty);
+		
+		authenticate(consumerKey, consumerSecret, authProviderData, authListener, false);
 	}
 
 	/*
@@ -304,21 +311,21 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 	
-	@Deprecated
-	private void authenticate(
-			String consumerKey, 
-			String consumerSecret, 
-			String authUserId3rdParty, 
-			String authToken3rdParty, 
-			AuthProviderType authProvider, 
-			String appId3rdParty,
-			SocializeAuthListener authListener, 
-			boolean do3rdPartyAuth) {
-		
-		if(assertInitialized(authListener)) {
-			service.authenticate(consumerKey, consumerSecret, authUserId3rdParty, authToken3rdParty, authProvider, appId3rdParty, authListener, this, do3rdPartyAuth);
-		}
-	}
+//	@Deprecated
+//	private void authenticate(
+//			String consumerKey, 
+//			String consumerSecret, 
+//			String authUserId3rdParty, 
+//			String authToken3rdParty, 
+//			AuthProviderType authProvider, 
+//			String appId3rdParty,
+//			SocializeAuthListener authListener, 
+//			boolean do3rdPartyAuth) {
+//		
+//		if(assertInitialized(authListener)) {
+//			service.authenticate(consumerKey, consumerSecret, authUserId3rdParty, authToken3rdParty, authProvider, appId3rdParty, authListener, this, do3rdPartyAuth);
+//		}
+//	}
 	
 	/*
 	 * (non-Javadoc)
@@ -328,17 +335,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	public void addComment(String url, String comment, Location location, CommentAddListener commentAddListener) {
 		if(assertAuthenticated(commentAddListener)) {
 			service.addComment(session, url, comment, location, commentAddListener);
-		}
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#getCommentById(int, com.socialize.listener.comment.CommentGetListener)
-	 */
-	@Override
-	public void getCommentById(int id, CommentGetListener commentGetListener) {
-		if(assertAuthenticated(commentGetListener)) {
-			service.getComment(session, id, commentGetListener);
 		}
 	}
 
@@ -497,17 +493,17 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 	
-	/**
-	 * Gets a single comment based on comment ID.
-	 * @param session The current socialize session.
-	 * @param id The ID of the comment.
-	 * @param commentGetListener A listener to handle callbacks from the post.
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#getCommentById(int, com.socialize.listener.comment.CommentGetListener)
 	 */
-	public void getComment(int id, CommentGetListener commentGetListener) {
+	@Override
+	public void getCommentById(int id, CommentGetListener commentGetListener) {
 		if(assertAuthenticated(commentGetListener)) {
 			service.getComment(session, id, commentGetListener);
 		}
 	}
+
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#isInitialized()
@@ -532,11 +528,18 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public boolean isAuthenticated(AuthProviderType providerType) {
 		if(isAuthenticated()) {
-			if(session.getAuthProviderType() == null) {
+			
+			if(providerType.equals(AuthProviderType.SOCIALIZE)) {
+				return true;
+			}
+			
+			AuthProviderType authProviderType = session.getAuthProviderType();
+			
+			if(authProviderType == null) {
 				return false;
 			}
 			else {
-				return (session.getAuthProviderType().equals(providerType));
+				return (authProviderType.equals(providerType));
 			}
 		}
 		return false;
@@ -607,23 +610,32 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		return null;
 	}
 	
-	class InitTask extends AsyncTask<Void, Void, IOCContainer> {
+	public static class InitTask extends AsyncTask<Void, Void, IOCContainer> {
 		private Context context;
 		private String[] paths;
 		private Exception error;
 		private SocializeInitListener listener;
+		private SocializeServiceImpl service;
+		private SocializeLogger logger;
 		
-		public InitTask(Context context, String[] paths, SocializeInitListener listener) {
+		public InitTask(
+				SocializeServiceImpl service, 
+				Context context, 
+				String[] paths, 
+				SocializeInitListener listener, 
+				SocializeLogger logger) {
 			super();
 			this.context = context;
 			this.paths = paths;
 			this.listener = listener;
+			this.service = service;
+			this.logger = logger;
 		}
 
 		@Override
-		protected IOCContainer doInBackground(Void... params) {
+		public IOCContainer doInBackground(Void... params) {
 			try {
-				return initInternal(context, paths);
+				return service.initWithContainer(context, paths);
 			}
 			catch (Exception e) {
 				error = e;
@@ -632,7 +644,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 
 		@Override
-		protected void onPostExecute(IOCContainer result) {
+		public void onPostExecute(IOCContainer result) {
 			if(result == null) {
 				final String errorMessage = "Failed to initialize Socialize instance";
 				

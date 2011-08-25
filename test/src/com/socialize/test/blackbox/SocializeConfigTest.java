@@ -70,7 +70,7 @@ public class SocializeConfigTest extends SocializeActivityTest {
 			
 			props.load(in);
 			
-			config.init(getActivity());
+			config.init(getActivity(), false); // Don't override
 			
 			Properties confProps = config.getProperties();
 			
@@ -78,7 +78,6 @@ public class SocializeConfigTest extends SocializeActivityTest {
 			Set<Object> confKeySet = confProps.keySet();
 			
 			assertEquals(keySet.size(), confKeySet.size());
-			
 			
 			for (Object key : keySet) {
 				
@@ -102,6 +101,7 @@ public class SocializeConfigTest extends SocializeActivityTest {
 	 * tests that the config loads correctly when no override props is specified.
 	 * @throws IOException
 	 */
+	@SuppressWarnings("deprecation")
 	public void testConfigLoadWithoutOverride() throws IOException {
 		config.setPropertiesFileName("does.not.exist");
 		config.init(getActivity());
@@ -110,7 +110,6 @@ public class SocializeConfigTest extends SocializeActivityTest {
 	}
 	
 	public void testConfigLoadWithOverride() throws IOException {
-		config.setPropertiesFileName("socialize.sample.properties");
 		config.init(getActivity());
 		Assert.assertNotNull(config.getProperties());
 		Assert.assertNotNull(config.getProperties().getProperty("test_value"));
@@ -128,7 +127,8 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		final String noFile = "does.not.exist";
 		ResourceLocator mockProvider = AndroidMock.createMock(ResourceLocator.class);
 		
-		AndroidMock.expect(mockProvider.locate(getActivity(), noFile)).andReturn(null);
+		AndroidMock.expect(mockProvider.locateInClassPath(getActivity(), noFile)).andReturn(null);
+		AndroidMock.expect(mockProvider.locateInAssets(getActivity(), noFile)).andReturn(null);
 		
 		AndroidMock.replay(mockProvider);
 		
@@ -140,7 +140,63 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		
 		assertNotNull(config.getProperties());
 		assertEquals(0, config.getProperties().size());
-		
 	}
 	
+	@UsesMocks({InputStream.class, Properties.class})
+	public void testConfigMerge() {
+		
+		final String noFile = "does.not.exist";
+		
+		SocializeConfig config = new SocializeConfig(noFile);
+		config.setProperty("foo", "bar");
+		
+		assertEquals("bar", config.getProperty("foo"));
+		
+		Properties merged = new Properties();
+		merged.put("foo", "bar_changed");
+		merged.put("new", "value");
+		
+		config.merge(merged);
+		
+		assertNotNull(config.getProperty("new"));
+		assertEquals("value", config.getProperty("new"));
+		assertEquals("bar_changed", config.getProperty("foo"));
+	}
+	
+	@UsesMocks({ResourceLocator.class, InputStream.class, Properties.class})
+	public void testConfigMergesOverride() throws IOException { 
+		
+		final String noFile = "does.not.exist";
+		
+		InputStream primary = AndroidMock.createNiceMock(InputStream.class);
+		InputStream secondary = AndroidMock.createNiceMock(InputStream.class);
+		
+		ResourceLocator mockProvider = AndroidMock.createMock(ResourceLocator.class);
+		
+		AndroidMock.expect(mockProvider.locateInClassPath(getActivity(), noFile)).andReturn(primary);
+		AndroidMock.expect(mockProvider.locateInAssets(getActivity(), noFile)).andReturn(secondary);
+		
+		AndroidMock.replay(primary);
+		AndroidMock.replay(secondary);
+		AndroidMock.replay(mockProvider);
+		
+		SocializeConfig config = new SocializeConfig(noFile) {
+			@Override
+			public void merge(Properties other) {
+				addResult(true);
+			}
+		};
+		
+		config.setResourceLocator(mockProvider);
+		config.init(getActivity());
+		
+		AndroidMock.verify(mockProvider);
+		
+		assertNotNull(config.getProperties());
+		assertEquals(0, config.getProperties().size());
+		
+		Boolean nextResult = getNextResult();
+		assertNotNull(nextResult);
+		assertTrue(nextResult);
+	}
 }

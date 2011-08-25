@@ -21,21 +21,25 @@
  */
 package com.socialize.test.unit;
 
+import android.os.AsyncTask;
 import android.test.mock.MockContext;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeServiceImpl;
+import com.socialize.SocializeServiceImpl.InitTask;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeApiHost;
 import com.socialize.api.SocializeSession;
+import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -324,30 +328,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		verifyDefaultMocks();
 	}
-	
-	@UsesMocks ({CommentGetListener.class})
-	public void testGetComment() {
-		CommentGetListener listener = AndroidMock.createMock(CommentGetListener.class);
-		
-		final int id = 1;
-		
-		setupDefaultMocks();
-		
-		service.getComment(session, id, listener);
-		
-		replayDefaultMocks();
-		
-		SocializeServiceImpl socialize = new SocializeServiceImpl();
-		socialize.init(getContext(), container);
-		socialize.setSession(session);
-		
-		assertTrue(socialize.isInitialized());
-		
-		socialize.getComment(id, listener);
-		
-		verifyDefaultMocks();
-	}
-	
+
 	@UsesMocks ({CommentGetListener.class})
 	public void testGetCommentById() {
 		CommentGetListener listener = AndroidMock.createMock(CommentGetListener.class);
@@ -366,7 +347,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		assertTrue(socialize.isInitialized());
 		
-		socialize.getComment(id, listener);
+		socialize.getCommentById(id, listener);
 		
 		verifyDefaultMocks();
 	}
@@ -515,6 +496,90 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		verifyDefaultMocks();
 	}
 	
+	public void testAuthenticateWithExtraParamsCallAuthenticate() throws SocializeException {
+	
+		SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
+		
+		final String key = "foo", secret = "bar";
+		final String appId = "foobar";
+		
+		setupDefaultMocks();
+		
+		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
+		
+		authProviderData.setAuthProviderType(AuthProviderType.FACEBOOK);
+		authProviderData.setAppId3rdParty(appId);
+		
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
+		
+		service.authenticate(key, secret, authProviderData, listener, socialize, true);
+
+		replayDefaultMocks();
+		
+		socialize.init(getContext(), container);
+		
+		assertTrue(socialize.isInitialized());
+		
+		socialize.authenticate(key, secret, AuthProviderType.FACEBOOK, appId, listener);
+		
+		verifyDefaultMocks();
+	}
+	
+	
+	public void testAuthenticateKnownUser() throws SocializeException {
+		SocializeAuthListener authListener = AndroidMock.createMock(SocializeAuthListener.class);
+		
+		final String consumerKey = "foo", consumerSecret = "bar";
+		final String authProviderId = "foobar", authUserId3rdParty = "foobar_user", authToken3rdParty = "foobar_token";
+		
+		setupDefaultMocks();
+		
+		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
+		
+		authProviderData.setAuthProviderType(AuthProviderType.FACEBOOK);
+		authProviderData.setAppId3rdParty(authProviderId);
+		authProviderData.setToken3rdParty(authToken3rdParty);
+		authProviderData.setUserId3rdParty(authUserId3rdParty);
+		
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
+		
+		service.authenticate(consumerKey, consumerSecret, authProviderData, authListener, socialize, false);
+
+		replayDefaultMocks();
+		
+		socialize.init(getContext(), container);
+		
+		assertTrue(socialize.isInitialized());
+		
+		socialize.authenticateKnownUser(consumerKey, consumerSecret, AuthProviderType.FACEBOOK, authProviderId, authUserId3rdParty, authToken3rdParty, authListener);
+		
+		verifyDefaultMocks();
+		
+	}
+	
+	public void testIsAuthenticatedWithProvider() {
+		
+		
+		session = AndroidMock.createMock(SocializeSession.class);
+		
+		AndroidMock.expect(session.getAuthProviderType()).andReturn(AuthProviderType.FACEBOOK);
+
+		AndroidMock.replay(session);
+		
+		SocializeServiceImpl socialize = new SocializeServiceImpl() {
+			@Override
+			public boolean isAuthenticated() {
+				return true;
+			}
+		};
+		
+		socialize.setSession(session);
+		
+		assertTrue(socialize.isAuthenticated(AuthProviderType.FACEBOOK));
+		
+		AndroidMock.verify(session);
+	}
+	
 	public void testAddCommentFail() {
 		
 		final String key = "foo", comment = "bar";
@@ -620,4 +685,110 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		assertSame(config, gotten);
 	}
 	
+	@UsesMocks (AuthProvider.class)
+	public void testClearSessionCache() {
+		setupDefaultMocks();
+		
+		AuthProvider authProvider = AndroidMock.createMock(AuthProvider.class);
+		
+		final String get3rdPartyAppId = "foobar";
+		
+		AndroidMock.expect(session.getAuthProvider()).andReturn(authProvider);
+		AndroidMock.expect(session.get3rdPartyAppId()).andReturn(get3rdPartyAppId);
+		
+		authProvider.clearCache(get3rdPartyAppId);
+		service.clearSessionCache();
+		
+		replayDefaultMocks();
+		
+		AndroidMock.replay(authProvider);
+		
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
+		socialize.setSession(session);
+		socialize.init(getContext(), container);
+		
+		socialize.clearSessionCache();
+		
+		AndroidMock.verify(authProvider);
+		
+		verifyDefaultMocks();
+	}
+	
+	@UsesMocks ({MockContext.class, SocializeInitListener.class, SocializeServiceImpl.class})
+	public void testInitTaskDoInBackground() throws Exception {
+		
+		MockContext context = AndroidMock.createMock(MockContext.class);
+		SocializeInitListener listener = AndroidMock.createMock(SocializeInitListener.class);
+		SocializeServiceImpl socialize = AndroidMock.createMock(SocializeServiceImpl.class);
+		String[] paths = {"foo", "bar"};
+		
+		AndroidMock.expect(socialize.initWithContainer(context, paths)).andReturn(null);
+		
+		AndroidMock.replay(socialize);
+		
+		InitTask task = new InitTask(socialize, context, paths, listener, logger);
+		
+		assertTrue(AsyncTask.class.isAssignableFrom(task.getClass()));
+		
+		task.doInBackground((Void[])null);
+		
+		AndroidMock.verify(socialize);
+		
+	}
+	
+	@UsesMocks ({
+		MockContext.class, 
+		SocializeInitListener.class, 
+		SocializeServiceImpl.class, 
+		IOCContainer.class})
+	public void testInitTaskOnPostExecute() throws Exception {
+		
+		MockContext context = AndroidMock.createMock(MockContext.class);
+		SocializeInitListener listener = AndroidMock.createMock(SocializeInitListener.class);
+		SocializeServiceImpl socialize = AndroidMock.createMock(SocializeServiceImpl.class);
+		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
+		String[] paths = {"foo", "bar"};
+		
+		listener.onInit(context, container);
+		
+		AndroidMock.replay(listener);
+		
+		InitTask task = new InitTask(socialize, context, paths, listener, logger);
+		
+		task.onPostExecute(container);
+		
+		AndroidMock.verify(listener);
+		
+	}
+	
+	
+	@UsesMocks ({
+		MockContext.class, 
+		SocializeInitListener.class, 
+		SocializeServiceImpl.class, 
+		IOCContainer.class})
+	public void testInitTaskOnPostExecuteWithError() throws Exception {
+		
+		MockContext context = AndroidMock.createMock(MockContext.class);
+		SocializeInitListener listener = AndroidMock.createMock(SocializeInitListener.class);
+		SocializeServiceImpl socialize = AndroidMock.createMock(SocializeServiceImpl.class);
+		SocializeException error = new SocializeException();
+		String[] paths = {"foo", "bar"};
+		
+		AndroidMock.expect(socialize.initWithContainer(context, paths)).andThrow(error);
+		
+		listener.onError(error);
+		
+		AndroidMock.replay(socialize);
+		AndroidMock.replay(listener);
+		
+		InitTask task = new InitTask(socialize, context, paths, listener, logger);
+		
+		task.doInBackground((Void[])null);
+		
+		task.onPostExecute(null);
+		
+		AndroidMock.verify(socialize);
+		AndroidMock.verify(listener);
+	}
 }
