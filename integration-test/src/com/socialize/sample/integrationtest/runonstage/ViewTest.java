@@ -1,4 +1,6 @@
-package com.socialize.sample.integrationtest;
+package com.socialize.sample.integrationtest.runonstage;
+
+import com.socialize.sample.integrationtest.SocializeRobotiumTest;
 
 public class ViewTest extends SocializeRobotiumTest {
 

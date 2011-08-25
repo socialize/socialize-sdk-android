@@ -1,4 +1,5 @@
-package com.socialize.sample.integrationtest;
+package com.socialize.sample.integrationtest.runonprod;
+import com.socialize.sample.integrationtest.SocializeRobotiumTest;
 
 public class AuthenticateTest extends SocializeRobotiumTest {
 
