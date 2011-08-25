@@ -11,11 +11,10 @@ import android.widget.TextView;
 
 public class CommentTest extends SocializeRobotiumTest {
 
-	private int userId = -1;
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		userId = authenticateSocialize();
+		authenticateSocialize();
 		robotium.clickOnButton("Comment");
 		robotium.waitForActivity("CommentActivity", DEFAULT_TIMEOUT_SECONDS);
 	}
