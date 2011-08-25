@@ -1,7 +1,6 @@
-package com.socialize.sample.integrationtest;
-
+package com.socialize.sample.integrationtest.runonstage;
+import com.socialize.sample.integrationtest.SocializeRobotiumTest;
 import android.widget.TextView;
-
 
 public class LikeTest extends SocializeRobotiumTest {
 
@@ -29,22 +28,6 @@ public class LikeTest extends SocializeRobotiumTest {
 		
 		assertNotNull(value);
 		assertTrue(value.trim().length() > 0);
-	}
-	
-	public void testGetLike() {
-		// We need create first
-		robotium.enterText(0, DEFAULT_ENTITY_URL);
-		robotium.clickOnButton("Add Like");
-		waitForSuccess();
-		
-		int likeId = getLikeId();
-		
-		robotium.clickOnButton("Get Like");
-		waitForSuccess();
-		
-		int likeId2 = getLikeId();
-		
-		assertEquals(likeId, likeId2);
 	}
 	
 	public void testDeleteLike() {

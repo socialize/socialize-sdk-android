@@ -5,13 +5,21 @@ import os,sys
 
 config_file_path='../sample/assets/sample-app.conf'
 assets_file_path='../sample/assets/existing-data/'
+
+
+
 def create_android_config(key,secret,url):
+    print '#'*20
+    print '## CREATE conf.js ##'
+    print '#'*20           
+    
     f = open(config_file_path,'w')
     text = 'socialize.consumer.key='+key
     text+= '\nsocialize.consumer.secret='+secret
     text+= '\nsocialize.api.url='+url
     text+= '\n'
     f.write(text)
+    print text
     f.close()
 
 def read_android_config():
@@ -101,17 +109,14 @@ def main(key,secret,url):
     #secret= '7a9a2b20-d4de-4d46-9c0b-f1653f0f1089'
     #url= 'http://stage.getsocialize.com/v1'
 
-    print '#'*20
-    print '## CREATE conf.js ##'
-#    create_conf(key,secret,url)
-    print '#'*20
-    
     auth_url = url+auth_url
     print auth_url
 ## AUTHENTICATION ##
     consumer = oauth.Consumer( key, secret)
     client = oauth.Client( consumer) 
     payload = simplejson.dumps({ 'payload': { 'udid': udid}})
+    
+    
     auth_resp = client.request(auth_url ,'POST', body='payload='+simplejson.dumps({'udid':udid}))
     auth_cont = simplejson.loads(auth_resp[1])
     oauth_secret= auth_cont['oauth_token_secret']
@@ -188,10 +193,10 @@ def main(key,secret,url):
 if __name__ == "__main__":
     args = sys.argv
     if not len(args)==4:
-        print '\tusage: python sdk-cleanup.py <consumer-key> <consumer-secret> <http://api.socialize.com/v1/>'
+        print '\tusage: python sdk-cleanup.py <consumer-key> <consumer-secret> <http://api.socialize.com/v1>'
         sys.exit(2)
     elif not args[3].startswith('http://'):
-        print '\tinvalid format for <http://api.socialize.com/v1/>'
+        print '\tinvalid format for <http://api.socialize.com/v1>'
         sys.exit(2)                              
     key = args[1]
     secret = args[2]
@@ -201,4 +206,8 @@ if __name__ == "__main__":
     key, secret, url = read_android_config()
     if url[-1]!='/':
         url+='/'
-    sys.exit(main(key,secret,url))
+    
+    if not url.startswith('http://api.getsocialize.com'):
+        sys.exit(main(key,secret,url))
+    else:
+        sys.exit(0)
