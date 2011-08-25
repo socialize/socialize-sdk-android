@@ -16,9 +16,6 @@ public class EntityTest extends SocializeRobotiumTest {
 	public void testGetEntity() {
 		// We need create first
 		robotium.enterText(0, DEFAULT_GET_ENTITY);
-		robotium.enterText(1, "RobotiumEntityTest");
-		
-		String entityKey = getEntityKey();
 		
 		robotium.clickOnButton("Get Entity");
 		
@@ -26,7 +23,7 @@ public class EntityTest extends SocializeRobotiumTest {
 		
 		String entityKey2 = getEntityKey();
 		
-		assertEquals(entityKey, entityKey2);
+		assertEquals(DEFAULT_GET_ENTITY, entityKey2);
 	}
 	
 	private String getEntityKey() {
