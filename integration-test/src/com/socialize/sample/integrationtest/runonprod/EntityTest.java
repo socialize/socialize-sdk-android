@@ -1,6 +1,5 @@
 package com.socialize.sample.integrationtest.runonprod;
 import com.socialize.sample.integrationtest.SocializeRobotiumTest;
-
 import android.widget.TextView;
 
 public class EntityTest extends SocializeRobotiumTest {
@@ -17,11 +16,6 @@ public class EntityTest extends SocializeRobotiumTest {
 	public void testGetEntity() {
 		// We need create first
 		robotium.enterText(0, DEFAULT_GET_ENTITY);
-		robotium.enterText(1, "RobotiumEntityTest");
-		robotium.clickOnButton("Add Entity");
-		waitForSuccess();
-		
-		String entityKey = getEntityKey();
 		
 		robotium.clickOnButton("Get Entity");
 		
@@ -29,7 +23,7 @@ public class EntityTest extends SocializeRobotiumTest {
 		
 		String entityKey2 = getEntityKey();
 		
-		assertEquals(entityKey, entityKey2);
+		assertEquals(DEFAULT_GET_ENTITY, entityKey2);
 	}
 	
 	private String getEntityKey() {

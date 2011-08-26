@@ -32,30 +32,7 @@ public class LikeTest extends SocializeRobotiumTest {
 		assertTrue(value.trim().length() > 0);
 	}
 	
-	public void testGetLike() {
-		// We need create first
-		robotium.enterText(0, DEFAULT_GET_ENTITY);
-		robotium.clickOnButton("Add Like");
-		waitForSuccess();
-		
-		int likeId = getLikeId();
-		
-		robotium.clickOnButton("Get Like");
-		waitForSuccess();
-		
-		int likeId2 = getLikeId();
-		
-		assertEquals(likeId, likeId2);
-	}
-	
-	public void testDeleteLike() {
-		// We need create first
-		robotium.enterText(0, DEFAULT_GET_ENTITY);
-		robotium.clickOnButton("Add Like");
-		waitForSuccess();
-		robotium.clickOnButton("Remove Like");
-		waitForSuccess();
-	}
+
 	
 	private int getLikeId() {
 		
