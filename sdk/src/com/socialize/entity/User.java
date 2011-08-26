@@ -44,14 +44,6 @@ public class User extends SocializeObject {
 	private String profilePicData;
 	
 	private transient Bitmap image;
-	
-	
-	
-	@Override
-	public void setId(Integer id) {
-		// TODO Auto-generated method stub
-		super.setId(id);
-	}
 
 	public String getDisplayName() {
 		if(displayName == null) {
@@ -67,9 +59,6 @@ public class User extends SocializeObject {
 			}
 			else if (!StringUtils.isEmpty(uname)) {
 				displayName = uname;
-			}
-			else {
-				displayName = "Anonymous";
 			}
 		}
 		

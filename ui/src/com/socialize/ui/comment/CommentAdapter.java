@@ -139,9 +139,19 @@ public class CommentAdapter extends BaseAdapter {
     		if(item != null) {
     			User currentUser = Socialize.getSocialize().getSession().getUser();
     			User user = item.getUser();
+    			String displayName = null;
     			
     			if(currentUser != null && user != null && currentUser.getId().equals(user.getId())) {
     				user = currentUser;
+    				displayName = "You";
+    			}
+    			
+    			if(user != null && displayName == null) {
+    				displayName = user.getDisplayName();
+    				
+    				if(displayName == null) {
+    					displayName = "Anonymous";
+    				}
     			}
     			
     			if (holder.comment != null) {
@@ -149,12 +159,8 @@ public class CommentAdapter extends BaseAdapter {
     			}
     			
     			if (holder.userName != null) {
-    				
     				if(user != null) {
-    					holder.userName.setText(user.getDisplayName());
-    				}
-    				else {
-    					holder.userName.setText("Anonymous");
+    					holder.userName.setText(displayName);
     				}
     			}
     			
