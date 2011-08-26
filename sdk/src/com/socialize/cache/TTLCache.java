@@ -9,9 +9,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
 
-import com.socialize.log.SocializeLogger;
-
 import android.content.Context;
+
+import com.socialize.log.SocializeLogger;
 
 /**
  * Simple cache object backed by a synchronized map which allows a TTL (Time To Live) for objects in cache.
@@ -19,10 +19,10 @@ import android.content.Context;
  */
 public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 
-	public static final int DEFAULT_CACHE_COUNT = 1000;
+	public static int DEFAULT_CACHE_COUNT = 1000;
 	
-	private TreeMap<Key, TTLObject> objects;
-	private Map<K, Key> keys;
+	private TreeMap<Key<K>, TTLObject<K, E>> objects;
+	private Map<K, Key<K>> keys;
 	
 	private SocializeLogger logger;
 
@@ -50,7 +50,7 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 	
 	private boolean reaping = false;
 	
-	private class Reaper extends TimerTask {
+	protected class Reaper extends TimerTask {
 		public void run() {
 			reap();
 		}
@@ -71,7 +71,7 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 		this.context = context;
 		this.maxCapacity = maxCapacity;	
 		objects = makeMap();
-		keys = new HashMap<K, Key>(initialCapacity);
+		keys = new HashMap<K, Key<K>>(initialCapacity);
 		
 		// Start reaper
 		startReaper();
@@ -100,12 +100,12 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 		startReaper();
 	}
 	
-	private synchronized void clear(boolean destroy) {
+	protected synchronized void clear(boolean destroy) {
 		keys.clear();
 		
-		Collection<TTLObject> values = objects.values();
+		Collection<TTLObject<K, E>> values = objects.values();
 
-		for (TTLObject ttlObject : values) {
+		for (TTLObject<K, E> ttlObject : values) {
 			ttlObject.getObject().onRemove(context, destroy);
 		}
 		
@@ -118,7 +118,7 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 		startReaper();
 	}
 	
-	private synchronized void startReaper() {
+	protected synchronized void startReaper() {
 		stopReaper();
 		
 		if(reapCycle > 0) {
@@ -132,7 +132,7 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 		}
 	}
 	
-	private synchronized void stopReaper() {
+	protected synchronized void stopReaper() {
 		if(reaper != null) {
 			reaper.cancel();
 			reaper = null;
@@ -143,18 +143,6 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 		}
 		
 		reaping = false;
-	}
-	
-	
-	public Set<K> ketSet() {
-		
-		// Force a reap here
-		reap();
-		
-		if(keys != null) {
-			return keys.keySet();
-		}
-		return null;
 	}
 	
 	/**
@@ -194,11 +182,11 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 	 * @param object
 	 * @param ttl milliseconds
 	 */
-	private synchronized boolean put(K k, E object, long ttl, boolean eternal) {
+	protected synchronized boolean put(K k, E object, long ttl, boolean eternal) {
 		// Check the key map first
-		Key key = keys.get(k);
+		Key<K> key = keys.get(k);
 		
-		TTLObject t = new TTLObject(object, k, ttl);
+		TTLObject<K, E> t = new TTLObject<K, E>(object, k, ttl);
 		
 		t.setEternal(eternal);
 		
@@ -210,7 +198,7 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 		
 		if(key != null) {
 			// Remove the object if it exists
-			TTLObject removed = objects.remove(key);
+			TTLObject<K, E> removed = objects.remove(key);
 			
 			if(removed != null) {
 				currentSizeInBytes -= removed.getObject().getSizeInBytes(context);
@@ -221,7 +209,7 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 		}
 		
 		if(!oversize) {
-			key = new Key(k, System.currentTimeMillis());
+			key = new Key<K>(k, System.currentTimeMillis());
 			keys.put(k, key);	
 			objects.put(key, t);
 			
@@ -240,11 +228,11 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 		return false;
 	}
 	
-	private TTLObject getTTLObject(K strKey) {
-		TTLObject obj = null;
+	protected TTLObject<K, E> getTTLObject(K strKey) {
+		TTLObject<K, E> obj = null;
 		
 		// Look for the key
-		Key key = keys.get(strKey);
+		Key<K> key = keys.get(strKey);
 		if(key != null) {
 			obj = objects.get(key);
 		}
@@ -258,8 +246,8 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 	 * @return
 	 */
 	public synchronized E getRaw(K strKey) {
-		TTLObject obj = getTTLObject(strKey);
-		if(obj != null && !expired(obj)) {
+		TTLObject<K, E> obj = getTTLObject(strKey);
+		if(obj != null && !isExpired(obj)) {
 			return obj.getObject();
 		}
 		return null;
@@ -271,8 +259,8 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 	 * @return
 	 */
 	public synchronized E get(K key) {
-		TTLObject obj = getTTLObject(key);
-		if(obj != null && !expired(obj)) {
+		TTLObject<K, E> obj = getTTLObject(key);
+		if(obj != null && !isExpired(obj)) {
 			
 			if(extendOnGet) {
 				extendTTL(key);
@@ -319,11 +307,11 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 	 */
 	public Collection<E> values() {
 		Collection<E> values = null;
-		Collection<TTLObject> ttls = objects.values();
+		Collection<TTLObject<K, E>> ttls = objects.values();
 		if(ttls != null) {
 			values = new ArrayList<E>(ttls.size());
-			for (TTLObject t : ttls) {
-				if(!expired(t)) {
+			for (TTLObject<K, E> t : ttls) {
+				if(!isExpired(t)) {
 					values.add(t.getObject());
 				}
 			}
@@ -337,7 +325,7 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 	 * @return
 	 */
 	public boolean exists(K k) {
-		Key key = keys.get(k);
+		Key<K> key = keys.get(k);
 		if(key != null) {
 			return objects.get(key) != null;
 		}
@@ -365,8 +353,8 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 	}
 	
 	public synchronized E remove(K strKey, boolean destroy) {
-		Key key = keys.get(strKey);
-		TTLObject removed = null;
+		Key<K> key = keys.get(strKey);
+		TTLObject<K, E> removed = null;
 		if(key != null) {
 			removed = objects.remove(key);
 			
@@ -390,9 +378,9 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 	 * @param key
 	 */
 	public synchronized void extendTTL(K strKey) {
-		TTLObject object = getTTLObject(strKey);
+		TTLObject<K, E> object = getTTLObject(strKey);
 		if(object != null) {
-			object.lifeExpectancy = System.currentTimeMillis() + object.ttl;
+			object.setLifeExpectancy(System.currentTimeMillis() + object.getTtl());
 		}
 	}
 
@@ -410,9 +398,11 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 		this.debug = debug;
 	}
 	
-	private boolean expired(TTLObject object) {
-		if(object.getObject() instanceof ISuicidal) {
-			ISuicidal s = (ISuicidal) object.getObject();
+	public boolean isExpired(TTLObject<K, E> object) {
+		E o = object.getObject();
+		
+		if(o instanceof ISuicidal) {
+			ISuicidal<K> s = (ISuicidal<K>) o;
 			if(s.isDead()) {
 				return true;
 			}
@@ -424,7 +414,7 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 		return reap();
 	}
 
-	private synchronized boolean reap() {
+	protected synchronized boolean reap() {
 		
 		if(!reaping) {
 			
@@ -441,23 +431,23 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 				
 				if(size > 0) {
 					
-					Set<Key> localKeys = objects.keySet();
+					Set<Key<K>> localKeys = objects.keySet();
 					
-					TreeMap<Key, TTLObject> newMap = makeMap();
+					TreeMap<Key<K>, TTLObject<K, E>> newMap = makeMap();
 					
 					long time = System.currentTimeMillis();
 					
 					boolean ok = true;
 					
-					TTLObject object = null;
+					TTLObject<K, E> object = null;
 
-					for (Key key : localKeys) {
+					for (Key<K> key : localKeys) {
 						object = objects.get(key);
 						
 						ok = true;
 						
 						if(object.getObject() instanceof ISuicidal) {
-							ISuicidal s = (ISuicidal) object.getObject();
+							ISuicidal<K> s = (ISuicidal<K>) object.getObject();
 							
 							
 							if(s.isDead()) {
@@ -506,7 +496,7 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 						}
 						
 						if(!ok) {
-							keys.remove(key.key);
+							keys.remove(key.getKey());
 							
 							currentSizeInBytes -= object.getObject().getSizeInBytes(context);
 							reaped++;
@@ -534,7 +524,7 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 					
 						}
 
-						Key key = null;
+						Key<K> key = null;
 						
 						while((maxCapacity > 0 && size > maxCapacity) || (maxCapacityBytes > 0 && currentSizeInBytes > maxCapacityBytes)) {
 							key = newMap.firstKey();
@@ -548,9 +538,9 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 							}					
 							
 							
-							TTLObject removed = newMap.remove(key);
+							TTLObject<K, E> removed = newMap.remove(key);
 							
-							keys.remove(key.key);
+							keys.remove(key.getKey());
 							
 							size = newMap.size();
 							
@@ -592,8 +582,8 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 	}
 	
 
-	private TreeMap<Key, TTLObject> makeMap() {
-		return new TreeMap<Key, TTLObject>();
+	protected TreeMap<Key<K>, TTLObject<K, E>> makeMap() {
+		return new TreeMap<Key<K>, TTLObject<K, E>>();
 	}
 
 	public int size() {
@@ -604,152 +594,152 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 		return currentSizeInBytes;
 	}
 	
-	private final class Key implements Comparable<Key> {
-
-		private long time;
-		private K key;
-		
-		private Key(K key, long time) {
-			this.time = time;
-			this.key = key;
-		}
-		
-		/* (non-Javadoc)
-		 * @see java.lang.Comparable#compareTo(java.lang.Object)
-		 */
-		public int compareTo(Key o) {
-			if(o.time > time) {
-				return -1;
-			}
-			else if(o.time < time) {
-				return 1;
-			}
-			else {
-				return o.key.compareTo(key);
-			}
-		}
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + getOuterType().hashCode();
-			result = prime * result + ((key == null) ? 0 : key.hashCode());
-			return result;
-		}
-
-		@SuppressWarnings("unchecked")
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			Key other = (Key) obj;
-			if (!getOuterType().equals(other.getOuterType()))
-				return false;
-			if (key == null) {
-				if (other.key != null)
-					return false;
-			} else if (!key.equals(other.key))
-				return false;
-			return true;
-		}
-
-		public String toString() {
-			return key.toString();
-		}
-
-		private TTLCache<K, E> getOuterType() {
-			return TTLCache.this;
-		}
-	}
+//	protected class Key implements Comparable<Key> {
+//
+//		private long time;
+//		private K key;
+//		
+//		private Key(K key, long time) {
+//			this.time = time;
+//			this.key = key;
+//		}
+//		
+//		/* (non-Javadoc)
+//		 * @see java.lang.Comparable#compareTo(java.lang.Object)
+//		 */
+//		public int compareTo(Key o) {
+//			if(o.time > time) {
+//				return -1;
+//			}
+//			else if(o.time < time) {
+//				return 1;
+//			}
+//			else {
+//				return o.key.compareTo(key);
+//			}
+//		}
+//
+//		@Override
+//		public int hashCode() {
+//			int prime = 31;
+//			int result = 1;
+//			result = prime * result + getOuterType().hashCode();
+//			result = prime * result + ((key == null) ? 0 : key.hashCode());
+//			return result;
+//		}
+//
+//		@SuppressWarnings("unchecked")
+//		@Override
+//		public boolean equals(Object obj) {
+//			if (this == obj)
+//				return true;
+//			if (obj == null)
+//				return false;
+//			if (getClass() != obj.getClass())
+//				return false;
+//			Key other = (Key) obj;
+//			if (!getOuterType().equals(other.getOuterType()))
+//				return false;
+//			if (key == null) {
+//				if (other.key != null)
+//					return false;
+//			} else if (!key.equals(other.key))
+//				return false;
+//			return true;
+//		}
+//
+//		public String toString() {
+//			return key.toString();
+//		}
+//
+//		private TTLCache<K, E> getOuterType() {
+//			return TTLCache.this;
+//		}
+//	}
 	
-	private final class TTLObject {
-		
-		private E object;
-		private K key;
-		private boolean eternal = false;
-		private long lifeExpectancy;
-		private long ttl;
-		
-		public TTLObject(E obj, K key, long ttl) {
-			super();
-			this.object = obj;
-			this.key = key;
-			this.ttl = ttl;
-			
-			if(ttl > 0) {
-				long time = System.currentTimeMillis();
-				
-				if(ttl < (Long.MAX_VALUE - time)) {
-					this.lifeExpectancy = time + ttl;
-				}
-				else {
-					this.lifeExpectancy = ttl;
-				}
-			}
-			else {
-				this.eternal = true;
-			}
-		}
-
-		/**
-		 * @return Returns the expectancy.
-		 */
-		public final long getLifeExpectancy() {
-			return lifeExpectancy;
-		}
-		
-		/**
-		 * @return Returns the ttl.
-		 */
-		public final long getTtl() {
-			return ttl;
-		}
-
-		/**
-		 * @return Returns the object.
-		 */
-		public final E getObject() {
-			return object;
-		}
-
-		/**
-		 * @return the key
-		 */
-		public final K getKey() {
-			return key;
-		}
-
-		public boolean equals(Object obj) {
-			return object.equals(obj);
-		}
-
-		public int hashCode() {
-			return object.hashCode();
-		}
-
-		public String toString() {
-			return object.toString();
-		}
-
-		/**
-		 * @return the eternal
-		 */
-		public final boolean isEternal() {
-			return eternal;
-		}
-
-		/**
-		 * @param eternal the eternal to set
-		 */
-		public final void setEternal(boolean eternal) {
-			this.eternal = eternal;
-		}
-	}
+//	protected class TTLObject {
+//		
+//		private E object;
+//		private K key;
+//		private boolean eternal = false;
+//		private long lifeExpectancy;
+//		private long ttl;
+//		
+//		public TTLObject(E obj, K key, long ttl) {
+//			super();
+//			this.object = obj;
+//			this.key = key;
+//			this.ttl = ttl;
+//			
+//			if(ttl > 0) {
+//				long time = System.currentTimeMillis();
+//				
+//				if(ttl < (Long.MAX_VALUE - time)) {
+//					this.lifeExpectancy = time + ttl;
+//				}
+//				else {
+//					this.lifeExpectancy = ttl;
+//				}
+//			}
+//			else {
+//				this.eternal = true;
+//			}
+//		}
+//
+//		/**
+//		 * @return Returns the expectancy.
+//		 */
+//		public long getLifeExpectancy() {
+//			return lifeExpectancy;
+//		}
+//		
+//		/**
+//		 * @return Returns the ttl.
+//		 */
+//		public long getTtl() {
+//			return ttl;
+//		}
+//
+//		/**
+//		 * @return Returns the object.
+//		 */
+//		public E getObject() {
+//			return object;
+//		}
+//
+//		/**
+//		 * @return the key
+//		 */
+//		public K getKey() {
+//			return key;
+//		}
+//
+//		public boolean equals(Object obj) {
+//			return object.equals(obj);
+//		}
+//
+//		public int hashCode() {
+//			return object.hashCode();
+//		}
+//
+//		public String toString() {
+//			return object.toString();
+//		}
+//
+//		/**
+//		 * @return the eternal
+//		 */
+//		public boolean isEternal() {
+//			return eternal;
+//		}
+//
+//		/**
+//		 * @param eternal the eternal to set
+//		 */
+//		public void setEternal(boolean eternal) {
+//			this.eternal = eternal;
+//		}
+//	}
 	
 	public boolean isExtendOnGet() {
 		return extendOnGet;
@@ -759,19 +749,19 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 		this.extendOnGet = extendOnGet;
 	}
 
-	public final long getMaxCapacityBytes() {
+	public long getMaxCapacityBytes() {
 		return maxCapacityBytes;
 	}
 
-	public final void setMaxCapacityBytes(long maxCapacityBytes) {
+	public void setMaxCapacityBytes(long maxCapacityBytes) {
 		this.maxCapacityBytes = maxCapacityBytes;
 	}
 
-	public final ICacheEventListener<K, E> getEventListener() {
+	public ICacheEventListener<K, E> getEventListener() {
 		return eventListener;
 	}
 
-	public final void setEventListener(ICacheEventListener<K, E> eventListener) {
+	public void setEventListener(ICacheEventListener<K, E> eventListener) {
 		this.eventListener = eventListener;
 	}
 	

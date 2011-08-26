@@ -5,13 +5,13 @@ package com.socialize.test.unit;
 
 import android.content.Context;
 
-import com.socialize.cache.ICacheable;
+import com.socialize.cache.ISuicidal;
 
 /**
  * @author Jason
  *
  */
-public class StringCacheable implements ICacheable<String> {
+public class StringCacheable implements ISuicidal<String> {
 	
 	protected String value;
 	protected String key;
@@ -83,5 +83,9 @@ public class StringCacheable implements ICacheable<String> {
 	public void setValue(String value) {
 		this.value = value;
 	}
-	
+
+	@Override
+	public boolean isDead() {
+		return false;
+	}
 }

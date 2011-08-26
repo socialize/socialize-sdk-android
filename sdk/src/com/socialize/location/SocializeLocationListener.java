@@ -23,12 +23,10 @@ public class SocializeLocationListener implements LocationListener {
 	
 	@Override
 	public void onLocationChanged(Location location) {
-		provider.setLocation(location);
-		provider.getLocationManager().removeUpdates(this);
-	}
-
-	public DefaultLocationProvider getProvider() {
-		return provider;
+		if(provider != null) {
+			provider.setLocation(location);
+			provider.getLocationManager().removeUpdates(this);
+		}
 	}
 
 	public void setProvider(DefaultLocationProvider provider) {

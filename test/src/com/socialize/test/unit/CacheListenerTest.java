@@ -9,7 +9,7 @@ import com.socialize.cache.ICacheEventListener;
  * @author Jason
  *
  */
-public class TestCacheListener implements ICacheEventListener<String, StringCacheable> {
+public class CacheListenerTest implements ICacheEventListener<String, StringCacheable> {
 
 	public int reapStarts = 0;
 	public int reapEnds = 0;

@@ -8,7 +8,7 @@ package com.socialize.cache;
  * <br/>
  * @author Jason
  */
-public interface ISuicidal {
+public interface ISuicidal<K extends Comparable<K>> extends ICacheable<K> {
 
 	/**
 	 * Returns true when the object has died.

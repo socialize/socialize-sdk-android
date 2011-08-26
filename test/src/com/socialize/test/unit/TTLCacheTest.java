@@ -3,16 +3,24 @@
  */
 package com.socialize.test.unit;
 
+import java.util.Collection;
+
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.cache.ICacheableFactory;
+import com.socialize.cache.ISuicidal;
+import com.socialize.cache.Key;
 import com.socialize.cache.TTLCache;
+import com.socialize.cache.TTLObject;
 import com.socialize.test.SocializeUnitTest;
 
 /**
  * @author Jason
  */
-public class TestTTLCache extends SocializeUnitTest {
+public class TTLCacheTest extends SocializeUnitTest {
 
 	private TTLCache<String, StringCacheable> cache;
-	private TestCacheListener listener;
+	private CacheListenerTest listener;
 	
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -22,7 +30,7 @@ public class TestTTLCache extends SocializeUnitTest {
 		cache.setMaxCapacityBytes(20);
 		cache.setHardByteLimit(false);
 		
-		listener = new TestCacheListener();
+		listener = new CacheListenerTest();
 		
 		cache.setEventListener(listener);
 	}
@@ -291,5 +299,222 @@ public class TestTTLCache extends SocializeUnitTest {
 		assertTrue(cache.exists("testKey"));
 		assertFalse(cache.exists("testKey2"));
 		assertTrue(cache.exists("testKey3"));
+	}
+	
+	public void testConstructorUsesDefaultCacheCount() {
+		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>(getContext(), 1);
+		assertEquals(TTLCache.DEFAULT_CACHE_COUNT, cache.getMaxCapacity());
+	}
+	
+	public void testPauseCallsStopOnReaper() {
+		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>(getContext()) {
+			@Override
+			protected synchronized void stopReaper() {
+				addResult(true);
+			}
+		};
+		
+		cache.pause();
+		
+		Boolean result = getNextResult();
+		assertNotNull(result);
+		assertTrue(result);
+	}
+	
+	public void testResumeCallsStartOnReaper() {
+		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>(getContext()) {
+			@Override
+			protected synchronized void startReaper() {
+				addResult(true);
+			}
+		};
+		
+		cache.resume();
+		
+		Boolean result = getNextResult();
+		assertNotNull(result);
+		assertTrue(result);
+	}
+	
+	public void testPutCallPutWithDefaultTTL() {
+		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>(getContext()) {
+
+			@Override
+			protected synchronized boolean put(String k, StringCacheable object, long ttl, boolean eternal) {
+				addResult(ttl);
+				return true;
+			}
+			
+		};
+		
+		cache.put("foobar", null);
+		
+		Long result = getNextResult();
+		assertNotNull(result);
+		assertEquals(cache.getDefaultTTL(), result.longValue());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({TTLObject.class})
+	public void testGetRaw() {
+		final TTLObject<String, StringCacheable> object = AndroidMock.createMock(TTLObject.class);
+		final StringCacheable cacheable = new StringCacheable();
+		
+		AndroidMock.expect(object.getObject()).andReturn(cacheable);
+		
+		AndroidMock.replay(object);
+		
+		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>(getContext()) {
+			@Override
+			protected TTLObject<String, StringCacheable> getTTLObject(String strKey) {
+				return object;
+			}
+
+			@Override
+			public boolean isExpired(TTLObject<String, StringCacheable> object) {
+				return false;
+			}
+		};
+		
+		assertSame(cacheable, cache.getRaw("foobar"));
+		
+		AndroidMock.verify(object);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({TTLObject.class, ICacheableFactory.class})
+	public void testCreateOnEmptyGet() {
+		
+		final String key = "foobar";
+		final TTLObject<String, StringCacheable> object = AndroidMock.createNiceMock(TTLObject.class);
+		final ICacheableFactory<String, StringCacheable> factory = AndroidMock.createMock(ICacheableFactory.class);
+		final StringCacheable cacheable = new StringCacheable();
+		
+		AndroidMock.expect(object.getObject()).andReturn(null);
+		AndroidMock.expect(factory.create(key)).andReturn(cacheable);
+		
+		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>(getContext()) {
+			@Override
+			protected TTLObject<String, StringCacheable> getTTLObject(String strKey) {
+				return object;
+			}
+
+			@Override
+			protected synchronized boolean put(String k, StringCacheable object, long ttl, boolean eternal) {
+				addResult(true);
+				return true;
+			}
+		};
+		
+		cache.setObjectFactory(factory);
+		
+		AndroidMock.replay(object);
+		AndroidMock.replay(factory);
+		
+		assertSame(cacheable, cache.get(key));
+		
+		AndroidMock.verify(object);
+		AndroidMock.verify(factory);
+		
+		Boolean result = getNextResult();
+		assertNotNull(result);
+		assertTrue(result);
+	}
+	
+	public void testValues() {
+		
+		final int expiredCount = 5;
+		int totalCount = 10;
+		
+		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>(getContext()) {
+			@Override
+			public boolean isExpired(TTLObject<String, StringCacheable> object) {
+				Integer nextResult = getNextResult();
+				
+				if(nextResult == null) {
+					addResult(1);
+					return true;
+				}
+				else if(nextResult >= expiredCount) {
+					addResult(++nextResult);
+					return false;
+				}
+				else {
+					addResult(++nextResult);
+					return true;
+				}
+			}
+		};
+		
+		for (int i = 0; i < totalCount; i++) {
+			StringCacheable value = new StringCacheable(String.valueOf(i));
+			cache.put(String.valueOf(i), value);
+		}
+		
+		Collection<StringCacheable> values = cache.values();
+		assertNotNull(values);
+		assertEquals((totalCount - expiredCount), values.size());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks (TTLObject.class)
+	public void testNotExpired() {
+
+		TTLObject<String, StringCacheable> obj = AndroidMock.createMock(TTLObject.class);
+		AndroidMock.expect(obj.getObject()).andReturn(null);
+		AndroidMock.expect(obj.isEternal()).andReturn(false);
+		AndroidMock.expect(obj.getLifeExpectancy()).andReturn(Long.MAX_VALUE);
+		
+		AndroidMock.replay(obj);
+
+		assertFalse(cache.isExpired(obj));
+		
+		AndroidMock.verify(obj);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks (TTLObject.class)
+	public void testExpired() {
+
+		TTLObject<String, StringCacheable> obj = AndroidMock.createMock(TTLObject.class);
+		AndroidMock.expect(obj.getObject()).andReturn(null);
+		AndroidMock.expect(obj.isEternal()).andReturn(false);
+		AndroidMock.expect(obj.getLifeExpectancy()).andReturn(0L);
+		
+		AndroidMock.replay(obj);
+
+		assertTrue(cache.isExpired(obj));
+		
+		AndroidMock.verify(obj);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({TTLObject.class, ISuicidal.class})
+	public void testExpiredSuicical() {
+		
+		TTLCache<String, ISuicidal<String>> cache = new TTLCache<String, ISuicidal<String>>(getContext());
+		
+		TTLObject<String, ISuicidal<String>> obj = AndroidMock.createMock(TTLObject.class);
+		ISuicidal<String> s = AndroidMock.createMock(ISuicidal.class);
+		AndroidMock.expect(obj.getObject()).andReturn(s);
+		AndroidMock.expect( s.isDead() ).andReturn(true);
+		
+		AndroidMock.replay(obj);
+		AndroidMock.replay(s);
+
+		assertTrue(cache.isExpired(obj));
+		
+		AndroidMock.verify(obj);
+		AndroidMock.verify(s);
+	}
+	
+	public void testKey() {
+		
+		Key<String> key1 = new Key<String>("foobar1", 0);
+		Key<String> key2 = new Key<String>("foobar1", 0);
+		Key<String> key3 = new Key<String>("foobar2", 0);
+		
+		assertFalse(key1.equals(key3));
+		assertTrue(key1.equals(key2));
 	}
 }

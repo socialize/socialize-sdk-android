@@ -40,6 +40,7 @@ public class Drawables {
 	private DisplayMetrics metrics = null;
 	private ClassLoaderProvider classLoaderProvider;
 	private DrawableCache cache;
+	private BitmapUtils bitmapUtils;
 	
 	public Drawables(Activity context) {
 		super();
@@ -80,14 +81,13 @@ public class Drawables {
 		CacheableDrawable drawable = cache.get(key);
 		
 		if(drawable == null) {
-			Bitmap bitmap = getScaledBitmap ( BitmapFactory.decodeByteArray(data, 0, data.length), scaleToWidth, scaleToHeight );
+			Bitmap bitmap = bitmapUtils.getScaledBitmap ( BitmapFactory.decodeByteArray(data, 0, data.length), scaleToWidth, scaleToHeight );
 			drawable = new CacheableDrawable(bitmap, key);
 			addToCache(key, drawable, false);
 		}
 		
 		return drawable;
 	}
-	
 
 	public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, boolean eternal) {
 		return getDrawable(name, density, tileX, tileY, -1, -1, eternal);
@@ -150,7 +150,6 @@ public class Drawables {
 			}
 		}
 	}
-	
 
 	public ClassLoaderProvider getClassLoaderProvider() {
 		return classLoaderProvider;
@@ -168,7 +167,10 @@ public class Drawables {
 		this.cache = cache;
 	}
 	
-	
+	public void setBitmapUtils(BitmapUtils bitmapUtils) {
+		this.bitmapUtils = bitmapUtils;
+	}
+
 	protected String getPath(String name) {
 		return "res/drawable/" + name;
 	}
@@ -191,7 +193,7 @@ public class Drawables {
 	
 	protected CacheableDrawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY) {
 		
-		Bitmap bitmap = getScaledBitmap ( BitmapFactory.decodeStream(in), pixelsX, pixelsY );
+		Bitmap bitmap = bitmapUtils.getScaledBitmap ( BitmapFactory.decodeStream(in), pixelsX, pixelsY );
 		
 		CacheableDrawable drawable = new CacheableDrawable(bitmap, name);
 		
@@ -205,71 +207,10 @@ public class Drawables {
 		
 		return drawable;
 	}
-
-	private Bitmap getScaledBitmap(Bitmap bitmap, int scaleToWidth, int scaleToHeight) {
-		
-		Bitmap original = bitmap;
-		
-		if(scaleToWidth > 0 || scaleToHeight > 0) {
-			
-			int width = bitmap.getWidth();
-			int height = bitmap.getHeight();
-			
-			// scale lowest and crop highes
-			if(height != scaleToHeight || width != scaleToWidth) {
-				
-				float ratio = 1.0f;
-				
-				// Scale to smallest
-		
-				if(height > width) {
-					
-					ratio = (float) scaleToWidth / (float) width;
-					width = scaleToWidth;
-					height = Math.round((float) height * ratio);
-					
-					bitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
-					
-					width = bitmap.getWidth();
-					height = bitmap.getHeight();
-					
-					if(height > scaleToHeight) {
-						// crop height
-						int diff = height - scaleToHeight;
-						int half = Math.round((float)diff / 2.0f);
-						bitmap = Bitmap.createBitmap(bitmap, 0, half, width, scaleToHeight);
-					}
-				}
-				else {
-					
-					ratio = (float) scaleToHeight / (float) height;
-					height = scaleToHeight;
-					width = Math.round((float) width * ratio);
-					
-					bitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
-					
-					width = bitmap.getWidth();
-					height = bitmap.getHeight();
-					
-					if(width > scaleToWidth) {
-						// crop width
-						int diff = width - scaleToWidth;
-						int half = Math.round((float)diff / 2.0f);
-						bitmap = Bitmap.createBitmap(bitmap, half, 0, scaleToWidth, height);
-					}
-				}
-				
-				original.recycle();
-			}
-		}
-		
-		return bitmap;
-	}
 	
 	private void addToCache(String key, CacheableDrawable drawable, boolean eternal) {
 		if(drawable != null) {
 			cache.put(key, drawable, eternal);
 		}
 	}
-
 }
