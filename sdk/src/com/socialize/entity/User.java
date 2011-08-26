@@ -57,12 +57,16 @@ public class User extends SocializeObject {
 		if(displayName == null) {
 			String fname = getFirstName();
 			String sname = getLastName();
+			String uname = getUsername();
 			if(!StringUtils.isEmpty(fname)) {
 				displayName = fname;
 				
 				if(!StringUtils.isEmpty(sname)) {
 					displayName += " " + sname;
 				}
+			}
+			else if (!StringUtils.isEmpty(uname)) {
+				displayName = uname;
 			}
 			else {
 				displayName = "Anonymous";

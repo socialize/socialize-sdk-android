@@ -5,8 +5,16 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
     
-    <com.socialize.ui.view.CommentView
-    	android:layout_height="fill_parent" 
-    	android:layout_width="fill_parent"/>
+    <EditText 
+    	android:id="@+id/txtEntity"
+    	android:text="http://aaaa.com"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"/>
+
+    <Button 
+    	android:id="@+id/btnCommentView"
+    	android:text="Show Comments"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"/>
     	
 </LinearLayout>

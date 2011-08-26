@@ -60,10 +60,15 @@
 				<include name="errors.properties"/>
 				<include name="socialize.properties"/>
 			</fileset>
+			
+			<fileset dir="../ui/src">
+				<include name="socialize_ui_beans.xml"/>
+			</fileset>
 		</copy>
 		
 		<copy todir="${out.dir}/classes/res/" verbose="true" >
 			<fileset dir="src/res" includes="**/**"/>
+			<fileset dir="../ui/src/res" includes="**/**"/>
 		</copy>
 		
 		<delete dir="build"/>

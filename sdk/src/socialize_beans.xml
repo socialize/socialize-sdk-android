@@ -79,10 +79,17 @@
 		</destroy-method>
 	</bean>
 	
+	<bean id="bitmapBuilder" class="com.socialize.util.BitmapBuilder"/>
+	
+	<bean id="bitmapUtils" class="com.socialize.util.BitmapUtils">
+		<constructor-arg ref="bitmapBuilder"/>
+	</bean>
+	
 	<bean id="drawables" class="com.socialize.util.Drawables">
 		<constructor-arg type="activity"/>
 		<property name="classLoaderProvider" ref="classLoaderProvider"/>
 		<property name="cache" ref="cache"/>
+		<property name="bitmapUtils" ref="bitmapUtils"/>
 	</bean>
 	
 	<bean id="dialogFactory" class="com.socialize.util.DialogFactory"/>

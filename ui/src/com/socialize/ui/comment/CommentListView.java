@@ -45,7 +45,7 @@ import com.socialize.util.StringUtils;
 @SuppressWarnings("unused")
 public class CommentListView extends BaseView {
 
-	private int defaultGrabLength = 10;
+	private int defaultGrabLength = 20;
 	private CommentAdapter provider;
 	private ViewFlipper flipper;
 	private EditText editText;
