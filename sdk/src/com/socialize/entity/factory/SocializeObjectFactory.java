@@ -53,4 +53,11 @@ public abstract class SocializeObjectFactory<T extends SocializeObject> extends 
 	protected abstract void postFromJSON(JSONObject from, T to) throws JSONException;
 	
 	protected abstract void postToJSON(T from, JSONObject to) throws JSONException;
+	
+	protected String getString(JSONObject obj, String key) throws JSONException {
+		if(obj.has(key) && !obj.isNull(key)) {
+			return obj.getString(key);
+		}
+		return null;
+	}
 }

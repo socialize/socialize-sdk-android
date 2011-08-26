@@ -14,8 +14,16 @@ test/test-output
 test/gen
 test/bin
 test/local.properties
+ui/bin
+ui/gen
+ui-sample/bin/
+ui-sample/gen/
+ui-test/bin
+ui-test/gen
 build
 test/findbugs-output
 integration-test/local.properties
 *.swp
 integration-test/test-output
+sample/assets/existing-data/*.json
+sample/assets/sample-app.conf

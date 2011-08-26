@@ -21,7 +21,16 @@
  */
 package com.socialize.sample.integrationtest;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
@@ -38,21 +47,25 @@ import com.socialize.sample.Main;
  */
 public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestCase2<Main> {
 
-	public static final int DEFAULT_TIMEOUT_SECONDS = 30;
-	public static final String DEFAULT_ENTITY_URL = "http://socialize.integration.tests.com";
-	public static final String DEFAULT_APPLICATION_NAME = "Socialize Android Sample App";
-
+	public static final int DEFAULT_TIMEOUT_SECONDS = 100;
+	public static final String DEFAULT_ENTITY_URL = "http://socialize.integration.tests.com?somekey=somevalue&anotherkey=anothervalue";
+//	public static final String DEFAULT_APPLICATION_NAME = "API Health Check App";
+	public static final String DEFAULT_GET_ENTITY = "http://entity1.com";
+		
 	protected Solo robotium;
 	protected InputMethodManager imm = null;
-	
+
+	private Map<String, JSONObject> jsons = null;
+
 	public SocializeRobotiumTest() {
 		super("com.socialize.sample", Main.class);
 	}
 
 	public void setUp() throws Exception {
+		jsons = new HashMap<String, JSONObject>();
 		robotium = new Solo(getInstrumentation(), getActivity());
 		imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-		
+
 		robotium.clickOnButton("Launch Sample");
 		robotium.waitForActivity("AuthenticateActivity");
 	}
@@ -66,9 +79,9 @@ public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestC
 		catch (Throwable e) {
 			e.printStackTrace();
 		}
-		
+
 		getActivity().finish();
-		
+
 		super.tearDown();
 	}
 
@@ -78,9 +91,9 @@ public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestC
 	 * @throws Throwable 
 	 */
 	protected int authenticateSocialize() {
-		
+
 		hideKeyboard();
-		
+
 		robotium.clickOnButton("Auth Socialize");
 
 		waitForSuccess();
@@ -96,7 +109,7 @@ public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestC
 
 		return userId;
 	}
-	
+
 	protected void clearCache() {
 		hideKeyboard();
 		robotium.clickOnButton("Clear Cache");
@@ -111,20 +124,79 @@ public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestC
 			catch (InterruptedException ignore) {}
 		}
 	}
-	
+
 	protected final void hideKeyboard() {
 		// Hide keyboard for all
 		ArrayList<EditText> currentEditTexts = robotium.getCurrentEditTexts();
-		
+
 		if(currentEditTexts != null) {
 			for (EditText editText : currentEditTexts) {
 				imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 			}
 		}
 	}
-	
+
 	protected final void waitForSuccess() {
 		robotium.waitForText("SUCCESS", 1, DEFAULT_TIMEOUT_SECONDS);
 		assertTrue(robotium.searchText("SUCCESS"));
+	}
+
+	/**
+	 * Returns a json object based on the given path (local to device).  For example "existing-data/myfile.json"
+	 * @param name
+	 * @return
+	 * @throws IOException 
+	 * @throws JSONException 
+	 */
+	protected final JSONObject getJSON(String path)  {
+		InputStream in = null;
+		
+		path = path.trim();
+		
+		if(!path.startsWith("existing-data")) {
+			path  = "existing-data/" + path;
+		}
+		
+		JSONObject json = jsons.get(path);
+
+		if(json == null) {
+			try {
+				in = getActivity().getAssets().open(path);
+
+				if(in == null) {
+					throw new IOException("No file with path [" +
+							path +
+					"] on device");
+				}
+
+				InputStreamReader reader = new InputStreamReader(in);
+				BufferedReader breader = new BufferedReader(reader);
+
+				StringBuilder builder = new StringBuilder();
+				String line = breader.readLine();
+
+				while(line != null) {
+					builder.append(line);
+					builder.append("\n");
+					line = breader.readLine();
+				}
+
+				json = new JSONObject(builder.toString());
+				
+				jsons.put(path, json);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			finally {
+				if(in != null) {
+					try {
+						in.close();
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					}
+				}
+			}
+		}		
+		return json;
 	}
 }

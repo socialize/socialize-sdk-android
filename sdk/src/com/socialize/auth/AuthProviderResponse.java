@@ -30,6 +30,10 @@ public class AuthProviderResponse {
 	private String userId;
 	private String token;
 	
+	private String firstName;
+	private String lastName;
+	private String imageData;
+	
 	public String getUserId() {
 		return userId;
 	}
@@ -41,5 +45,23 @@ public class AuthProviderResponse {
 	}
 	public void setToken(String token) {
 		this.token = token;
+	}
+	public String getFirstName() {
+		return firstName;
+	}
+	public void setFirstName(String name) {
+		this.firstName = name;
+	}
+	public String getImageData() {
+		return imageData;
+	}
+	public void setImageData(String imageUrl) {
+		this.imageData = imageUrl;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 }

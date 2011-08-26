@@ -1,0 +1,112 @@
+<beans>
+	
+	<factory id="commentItemViewFactory" makes="commentListItem"/>
+	<factory id="listItemLoadingViewFactory" makes="listItemLoadingView"/>
+	
+	<bean id="socializeUIErrorHandler" class="com.socialize.ui.error.DialogErrorHandler">
+		<property name="drawables" ref="drawables"/>
+	</bean>
+	
+	<bean id="progressDialogFactory" class="com.socialize.ui.dialog.ProgressDialogFactory">
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="socializeView" abstract="true">
+		<property name="errorHandler" ref="socializeUIErrorHandler"/>
+	</bean>
+	
+	<bean id="timeUtils" class="com.socialize.ui.util.TimeUtils"/>
+	
+	<bean id="colors" class="com.socialize.ui.util.Colors">
+	
+		<init-method name="init"/>
+
+		<property name="colorHexCodes">
+			<map>
+				<entry>
+					<key value="TITLE"/>
+					<value value="#00abe3"/>
+				</entry>
+				<entry>
+					<key value="BODY"/>
+					<value value="#ffffff"/>
+				</entry>
+				<entry>
+					<key value="BUTTON_BOTTOM"/>
+					<value value="#00789f"/>
+				</entry>
+				<entry>
+					<key value="BUTTON_TOP"/>
+					<value value="#00abe3"/>
+				</entry>	
+				<entry>
+					<key value="TEXT_BG"/>
+					<value value="#ffffff"/>
+				</entry>
+				<entry>
+					<key value="HEADER"/>
+					<value value="#ffffff"/>
+				</entry>
+				<entry>
+					<key value="LIST_ITEM_BG"/>
+					<value value="#454545"/>
+				</entry>
+				<entry>
+					<key value="STANDARD_BACKGROUND_COLOR"/>
+					<value value="#38444f"/>
+				</entry>
+				<entry>
+					<key value="LOADING_ITEM_BG"/>
+					<value value="#000000"/>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean 
+		id="commentAdapter" 
+		class="com.socialize.ui.comment.CommentAdapter">
+		<constructor-arg type="activity"/>
+		<property name="commentItemViewFactory" ref="commentItemViewFactory"/>
+		<property name="listItemLoadingViewFactory" ref="listItemLoadingViewFactory"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="deviceUtils" ref="deviceUtils"/><!-- Defined in socialize_beans.xml -->
+		<property name="timeUtils" ref="timeUtils"/>
+	</bean>
+	
+	<bean 
+		id="commentList" 
+		class="com.socialize.ui.comment.CommentListView"
+		singleton="false"
+		extends="socializeView">
+		<constructor-arg type="activity"/>
+		<constructor-arg ref="commentAdapter"/>
+		<constructor-arg ref="deviceUtils"/> <!-- Defined in socialize_beans.xml -->
+		<constructor-arg ref="drawables"/>
+		<constructor-arg ref="colors"/>
+		<property name="progressDialogFactory" ref="progressDialogFactory"/>
+	</bean>
+	
+	<bean 
+		id="commentListItem" 
+		class="com.socialize.ui.comment.CommentListItem"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<init-method name="init"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="colors" ref="colors"/>
+	</bean>
+	
+	<bean 
+		id="listItemLoadingView" 
+		class="com.socialize.ui.view.ListItemLoadingView"
+		singleton="false"
+		extends="socializeView">
+		<constructor-arg type="activity"/>
+		<init-method name="init"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="colors" ref="colors"/>
+	</bean>
+	
+</beans>

@@ -28,6 +28,7 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.facebook.FacebookActivity;
 import com.socialize.auth.facebook.FacebookActivityService;
+import com.socialize.auth.facebook.FacebookImageRetriever;
 import com.socialize.auth.facebook.FacebookService;
 import com.socialize.auth.facebook.FacebookSessionStore;
 import com.socialize.facebook.Facebook;
@@ -49,6 +50,7 @@ public class FacebookActivityTest extends SocializeActivityTest {
 		Intent.class, 
 		FacebookService.class,
 		FacebookSessionStore.class, 
+		FacebookImageRetriever.class,
 		ListenerHolder.class, 
 		AuthProviderListener.class,
 		Facebook.class,
@@ -65,6 +67,8 @@ public class FacebookActivityTest extends SocializeActivityTest {
 		final Intent intent = AndroidMock.createMock(Intent.class);
 		final AuthProviderListener listener = AndroidMock.createMock(AuthProviderListener.class);
 		final DialogFactory dialogFactory = AndroidMock.createMock(DialogFactory.class); 
+		final FacebookImageRetriever facebookImageRetriever = AndroidMock.createMock(FacebookImageRetriever.class); 
+		
 		final FacebookService service = AndroidMock.createMock(FacebookService.class, context, facebook, facebookSessionStore, listener, dialogFactory);
 		
 		FacebookActivityService activityService = new FacebookActivityService(context) {
@@ -84,6 +88,7 @@ public class FacebookActivityTest extends SocializeActivityTest {
 		AndroidMock.expect(context.getBean("listenerHolder")).andReturn(listenerHolder);
 		AndroidMock.expect(context.getBean("drawables")).andReturn(drawables);
 		AndroidMock.expect(context.getBean("dialogFactory")).andReturn(dialogFactory);
+		AndroidMock.expect(context.getBean("facebookImageRetriever")).andReturn(facebookImageRetriever);
 		
 		service.authenticate();
 		

@@ -68,6 +68,11 @@ public class ContainerBuilder {
 
 	@SuppressWarnings("unchecked")
 	public <T extends Object> T buildBean(Container container, BeanRef beanRef)  {
+		return (T) buildBean(container, beanRef, (Object[]) null);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T extends Object> T buildBean(Container container, BeanRef beanRef, Object...args)  {
 		Object bean = null;
 		
 		try {
@@ -75,10 +80,32 @@ public class ContainerBuilder {
 			
 			List<Argument> constructorArgs = beanRef.getConstructorArgs();
 			if(constructorArgs != null && constructorArgs.size() > 0) {
-				Object[] args = getArguments(container, constructorArgs, false);
-				if(args != null && args.length > 0) {
-					bean = builder.construct(beanRef.getClassName(), args);
+				Object[] cargs = getArguments(container, constructorArgs, false);
+				if(cargs != null && cargs.length > 0) {
+					if(args != null && args.length > 0) {
+						// Concat
+						Object[] concat = new Object[cargs.length + args.length];
+						System.arraycopy(cargs, 0, concat, 0, cargs.length);
+						System.arraycopy(args, 0, concat, cargs.length, args.length);
+						cargs = concat;
+					}
 				}
+				else {
+					cargs = args;
+				}
+				
+				if(cargs != null && cargs.length > 0) {
+					
+					beanRef.setContextSensitiveConstructor(containsContext(cargs));
+					
+					bean = builder.construct(beanRef.getClassName(), cargs);
+				}
+			}
+			else if(args != null && args.length > 0) {
+				
+				beanRef.setContextSensitiveConstructor(containsContext(args));
+				
+				bean = builder.construct(beanRef.getClassName(), args);
 			}
 			else {
 				bean = builder.construct(beanRef.getClassName());
@@ -87,8 +114,6 @@ public class ContainerBuilder {
 			if(bean != null) {
 				Logger.i(getClass().getSimpleName(), "Bean " + beanRef.getName() + " created");
 			}
-			
-			
 		}
 		catch (Exception e) {
 			Logger.e(getClass().getSimpleName(), "Failed to create bean [" +
@@ -103,6 +128,18 @@ public class ContainerBuilder {
 
 		return (T) bean;
 
+	}
+	
+	private boolean containsContext(Object[] args) {
+		if(args != null) {
+			for (Object obj : args) {
+				if(obj instanceof Context) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	public void setBeanProperties(Container container, BeanRef ref, Object bean)  {
@@ -157,6 +194,9 @@ public class ContainerBuilder {
 	public Container build(BeanMapping mapping) {
 		Container container = new Container(mapping, this);
 
+		// Build factories
+		buildFactories(container, mapping.getFactoryRefs());
+		
 		// Build beans
 		buildBeans(container, builder, mapping, mapping.getBeanRefs(), 0);
 		
@@ -167,8 +207,11 @@ public class ContainerBuilder {
 		
 		for (Entry<String, Object> entry : entrySet) {
 			BeanRef ref = mapping.getBeanRef(entry.getKey());
-			Object bean = entry.getValue();
-			setBeanProperties(container, ref, bean);
+			
+			if(ref != null) { // Might be a factory
+				Object bean = entry.getValue();
+				setBeanProperties(container, ref, bean);
+			}
 		}
 		
 		initBeans(container, mapping, beans, 0);
@@ -187,20 +230,23 @@ public class ContainerBuilder {
 		
 		for (Entry<String, Object> entry : entrySet) {
 			BeanRef ref = mapping.getBeanRef(entry.getKey());
-			Object bean = entry.getValue();
-			if(!initBean(container, ref, bean)) {
-				Logger.i(getClass().getSimpleName(), "Cannot init bean [" +
-						ref.getName() +
-						"] now.  Marking for later init...");
-				
-				doLaterBeans.put(entry.getKey(), entry.getValue());
-			}
-			else {
-				ref.setInitCalled(true);
-				
-				Logger.i(getClass().getSimpleName(), "Bean [" +
-						ref.getName() +
-						"] initialized.");
+			
+			if(ref != null) {
+				Object bean = entry.getValue();
+				if(!initBean(container, ref, bean)) {
+					Logger.i(getClass().getSimpleName(), "Cannot init bean [" +
+							ref.getName() +
+							"] now.  Marking for later init...");
+					
+					doLaterBeans.put(entry.getKey(), entry.getValue());
+				}
+				else {
+					ref.setInitCalled(true);
+					
+					Logger.i(getClass().getSimpleName(), "Bean [" +
+							ref.getName() +
+							"] initialized.");
+				}
 			}
 		}
 		
@@ -255,6 +301,10 @@ public class ContainerBuilder {
 					}
 				}
 				
+				if(!beanRef.isContextSensitiveConstructor()) {
+					beanRef.setContextSensitiveInitMethod(containsContext(args));
+				}
+				
 				Method method = builder.getMethodFor(bean.getClass(), initMethod.getName(), args);
 				
 				if(method != null) {
@@ -290,6 +340,24 @@ public class ContainerBuilder {
 		}
 		
 		return false;
+	}
+	
+	private void buildFactories(Container container, Collection<FactoryRef> factoryRefs) {
+		if(factoryRefs != null) {
+			for (FactoryRef factoryRef : factoryRefs) {
+				try {
+					BeanFactory<?> factory = BeanFactory.class.newInstance();
+					factory.setBeanName(factoryRef.getMakes());
+					factory.setContainer(container);
+					container.putBean(factoryRef.getName(), factory);
+				}
+				catch (Exception e) {
+					Logger.e(getClass().getSimpleName(), "Failed to create bean [" +
+							factoryRef.getName() +
+							"]", e);
+				}
+			}
+		}
 	}
 	
 	private void buildBeans(Container container, BeanBuilder builder, BeanMapping mapping, Collection<BeanRef> beanRefs, int iteration) {
@@ -369,7 +437,7 @@ public class ContainerBuilder {
 						
 						if(forInit && object != null) {
 							BeanRef beanRef = container.getBeanRef(arg.getValue());
-							if(beanRef.getInitMethod() != null) {
+							if(beanRef != null && beanRef.getInitMethod() != null) {
 								// Make sure this bean has been initialized
 								if(!beanRef.isInitCalled()) {
 									// We can't init this now
@@ -630,4 +698,11 @@ public class ContainerBuilder {
 		return list;
 	}
 
+	public Context getContext() {
+		return context;
+	}
+
+	public void setContext(Context context) {
+		this.context = context;
+	}
 }

@@ -25,8 +25,8 @@ import java.sql.Date;
 
 import android.widget.TextView;
 
-import com.socialize.activity.SocializeActivity;
 import com.socialize.entity.Comment;
+import com.socialize.ui.SocializeActivity;
 
 public abstract class CommentBaseActivity extends SocializeActivity {
 	

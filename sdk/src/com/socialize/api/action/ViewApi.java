@@ -47,10 +47,7 @@ public class ViewApi extends SocializeApi<View, SocializeProvider<View>> {
 		View c = new View();
 		c.setEntityKey(key);
 		
-		if(location != null) {
-			c.setLon(location.getLongitude());
-			c.setLat(location.getLatitude());
-		}
+		setLocation(c, location);
 		
 		List<View> list = new ArrayList<View>(1);
 		list.add(c);

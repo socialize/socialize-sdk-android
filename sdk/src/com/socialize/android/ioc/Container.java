@@ -25,6 +25,8 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import android.content.Context;
+
 /**
  * @author Jason Polites
  */
@@ -33,6 +35,8 @@ public class Container {
 	private Map<String, Object> beans;
 	private BeanMapping mapping;
 	private ContainerBuilder builder;
+	
+	private Context context; // Used only to track the current context.
 	
 	// Parameterless constructor so it can be mocked.
 	protected Container() {
@@ -49,15 +53,20 @@ public class Container {
 	protected BeanRef getBeanRef(String name) {
 		return this.mapping.getBeanRef(name);
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public <T extends Object> T getBean(String name) {
+		return (T) getBean(name, (Object[]) null);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T extends Object> T getBean(String name, Object...args) {
 		Object bean = beans.get(name);
 		if(bean == null) {
 			BeanRef beanRef = mapping.getBeanRef(name);
 			if(beanRef != null) {
 				if(!beanRef.isSingleton()) {
-					bean = builder.buildBean(this, beanRef);
+					bean = builder.buildBean(this, beanRef, args);
 					builder.setBeanProperties(this, beanRef, bean);
 					builder.initBean(this, beanRef, bean);
 				}
@@ -114,5 +123,36 @@ public class Container {
 	
 	protected BeanMapping getBeanMapping() {
 		return mapping;
+	}
+
+	public void setContext(Context context) {
+		
+		if(this.context != null && !this.context.equals(context)) {
+			// Set for any new beans
+			builder.setContext(context);
+			
+			// Now look for existing singletons
+			Collection<BeanRef> beanRefs = this.mapping.getBeanRefs();
+			
+			for (BeanRef ref : beanRefs) {
+				if(ref.isSingleton() ) {
+					if(ref.isContextSensitiveConstructor()) {
+						// We have a new context, so we need to rebuild this bean
+						Object bean = builder.buildBean(this, ref);
+						builder.setBeanProperties(this, ref, bean);
+						builder.initBean(this, ref, bean);
+						beans.put(ref.getName(), bean);
+					}
+					else if(ref.isContextSensitiveInitMethod()) {
+						// Re-call init
+						Object bean = getBean(ref.getName());
+						builder.initBean(this, ref, bean);
+						beans.put(ref.getName(), bean);
+					}
+				}
+			}
+		}
+		
+		this.context = context;
 	}
 }

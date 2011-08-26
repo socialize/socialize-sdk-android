@@ -29,6 +29,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -53,11 +54,27 @@ public interface SocializeService {
 
 	/**
 	 * Initializes a SocializeService instance with custom bean configurations (Expert use Only)
-	 * @param context The current Android context (or Activity)
+	 * @param context The current Android context (Activity)
 	 * @param paths List of paths to config files.  Beans in paths to the right overwrite beans in paths to the left.
 	 * @see https://github.com/socialize/android-ioc
 	 */
 	public void init(Context context, String... paths);
+	
+	/**
+	 * Initializes a SocializeService instance asynchronously with default settings.  Should be called during the onCreate() method of your Activity.
+	 * @param context The current Android context (Activity)
+	 * @param listener A listener to handle callbacks from the init.  Any access to Socialize objects must be done AFTER successful init.
+	 */
+	public void initAsync(Context context, SocializeInitListener listener);
+
+	/**
+	 * Initializes a SocializeService instance with custom bean configurations (Expert use Only)
+	 * @param context The current Android context (or Activity)
+	 * @param listener A listener to handle callbacks from the init.  Any access to Socialize objects must be done AFTER successful init.
+	 * @param paths List of paths to config files.  Beans in paths to the right overwrite beans in paths to the left.
+	 * @see https://github.com/socialize/android-ioc
+	 */
+	public void initAsync(Context context, SocializeInitListener listener, String... paths);
 
 	/**
 	 * Initializes a socialize service with a custom object container (Expert use only)
@@ -71,6 +88,12 @@ public interface SocializeService {
 	 * Destroys the SocializeService instance.  Should be called during the onDestroy() method of your Activity.
 	 */
 	public void destroy();
+	
+	/**
+	 * Force destroy (Expert only)
+	 * @param force
+	 */
+	public void destroy(boolean force);
 
 	/**
 	 * Authenticates the application against the API as an anonymous user.
@@ -86,10 +109,17 @@ public interface SocializeService {
 	 * @param consumerKey The consumer url, obtained from registration at http://www.getsocialize.com.
 	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
 	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
-	 * @param authProviderId The ID of your app in the 3rd party system used to authenticate. (e.g. YOUR Facebook App ID)
+	 * @param authProviderAppId The ID of your app in the 3rd party system used to authenticate. (e.g. YOUR Facebook App ID)
 	 * @param authListener The callback for authentication outcomes.
 	 */
-	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, SocializeAuthListener authListener);
+	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderAppId, SocializeAuthListener authListener);
+	
+	/**
+	 * @deprecated Too ambiguous.
+	 * @use this{@link #authenticateKnownUser(String, String, AuthProviderType, String, String, String, SocializeAuthListener)}
+	 */
+	@Deprecated
+	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty, SocializeAuthListener authListener);
 	
 	/**
 	 * Authenticates the application against the API as a user known to your app from a given 3rd party provider.
@@ -101,8 +131,8 @@ public interface SocializeService {
 	 * @param authToken3rdParty The auth token from the 3rd party (if available).
 	 * @param authListener The callback for authentication outcomes.
 	 */
-	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty, SocializeAuthListener authListener);
-
+	public void authenticateKnownUser(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty, SocializeAuthListener authListener);
+	
 	/**
 	 * Adds a new like and associates it with the url described.
 	 * @param url The url being liked. MUST be a valid http URL.  Defined when first creating a url, or created on the fly with this call.
@@ -206,7 +236,9 @@ public interface SocializeService {
 	/**
 	 * Returns true if this SocializeService instance has been initialized.
 	 * @return
+	 * @deprecated init should always be called! 
 	 */
+	@Deprecated
 	public boolean isInitialized();
 
 	/**
@@ -214,6 +246,13 @@ public interface SocializeService {
 	 * @return
 	 */
 	public boolean isAuthenticated();
+	
+	/**
+	 * Returns true if the current user is already authenticated using the provider specified.
+	 * @param providerType
+	 * @return
+	 */
+	public boolean isAuthenticated(AuthProviderType providerType);
 
 	
 	/**

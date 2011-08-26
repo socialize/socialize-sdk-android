@@ -25,6 +25,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.socialize.error.SocializeException;
 import com.socialize.facebook.Facebook;
@@ -43,6 +44,9 @@ public class FacebookService {
 	private FacebookSessionStore facebookSessionStore; 
 	private AuthProviderListener listener;
 	private DialogFactory dialogFactory;
+	private FacebookImageRetriever facebookImageRetriever;
+	
+	public static final String[] DEFAULT_PERMISSIONS = {"offline_access", "publish_stream"};
 	
 	public FacebookService(
 			Activity context, 
@@ -60,7 +64,7 @@ public class FacebookService {
 	}
 
 	public void authenticate() {
-		authenticate(new String[]{});
+		authenticate(DEFAULT_PERMISSIONS);
 	}
 	
 	public void authenticate(String[] permissions) {
@@ -84,13 +88,20 @@ public class FacebookService {
 			}
 		};
 		
+		facebookDialogListener.setFacebookImageRetriever(facebookImageRetriever);
 		facebook.authorize(context, permissions, facebookDialogListener);
 	}
 	
+	public FacebookImageRetriever getFacebookImageRetriever() {
+		return facebookImageRetriever;
+	}
+
+	public void setFacebookImageRetriever(FacebookImageRetriever facebookImageRetriever) {
+		this.facebookImageRetriever = facebookImageRetriever;
+	}
+
 	public void cancel() {
-		if(listener != null) {
-			listener.onError(new SocializeException("User canceled request"));
-		}
+		Toast.makeText(context, "Request canceled", Toast.LENGTH_SHORT).show();
 	}
 	
 	public void logout() {

@@ -34,7 +34,17 @@ import com.socialize.entity.User;
 public class UserFactory extends SocializeObjectFactory<User> {
 	
 	private StatsFactory statsFactory;
-//	private ImageUtils imageUtils;
+	
+	public static final String FIRST_NAME = "first_name";
+	public static final String LAST_NAME = "last_name";
+	public static final String USERNAME = "username";
+	public static final String DESCRIPTION = "description";
+	public static final String LOCATION = "location";
+	public static final String IMAGE_DATA = "image_data";
+	public static final String SMALL_IMAGE_URI = "small_image_uri";
+	public static final String MEDIUM_IMAGE_URI = "medium_image_uri";
+	public static final String LARGE_IMAGE_URI = "large_image_uri";
+	public static final String STATS = "stats";
 
 	@Override
 	public User instantiateObject() {
@@ -44,17 +54,18 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	@Override
 	protected void postFromJSON(JSONObject object, User user) throws JSONException {
 		
-		if(object.has("first_name")) user.setFirstName(object.getString("first_name"));
-		if(object.has("last_name"))user.setLastName(object.getString("last_name"));
-		if(object.has("username"))user.setUsername(object.getString("username"));
-		if(object.has("description"))user.setDescription(object.getString("description"));
-		if(object.has("location"))user.setLocation(object.getString("location"));
-		if(object.has("small_image_uri"))user.setSmallImageUri(object.getString("small_image_uri"));
-		if(object.has("medium_image_uri"))user.setMediumImageUri(object.getString("medium_image_uri"));
-		if(object.has("large_image_uri"))user.setLargeImageUri(object.getString("large_image_uri"));
+		user.setFirstName(getString(object,FIRST_NAME));
+		user.setLastName(getString(object,LAST_NAME));
+		user.setUsername(getString(object,USERNAME));
+		user.setDescription(getString(object,DESCRIPTION));
+		user.setLocation(getString(object,LOCATION));
+		user.setSmallImageUri(getString(object,SMALL_IMAGE_URI));
+		user.setMediumImageUri(getString(object,MEDIUM_IMAGE_URI));
+		user.setLargeImageUri(getString(object,LARGE_IMAGE_URI));
+		user.setProfilePicData(getString(object,IMAGE_DATA));
 		
-		if(object.has("stats")) {
-			JSONObject statsJson = object.getJSONObject("stats");
+		if(object.has(STATS) && !object.isNull(STATS)) {
+			JSONObject statsJson = object.getJSONObject(STATS);
 			
 			if(statsJson != null) {
 				Stats stats = statsFactory.fromJSON(statsJson);
@@ -65,10 +76,11 @@ public class UserFactory extends SocializeObjectFactory<User> {
 
 	@Override
 	protected void postToJSON(User user, JSONObject object) throws JSONException {
-		object.put("first_name", user.getFirstName());
-		object.put("last_name", user.getLastName());
-		object.put("description", user.getDescription());
-		object.put("location", user.getLocation());
+		object.put(FIRST_NAME, user.getFirstName());
+		object.put(LAST_NAME, user.getLastName());
+		object.put(DESCRIPTION, user.getDescription());
+		object.put(LOCATION, user.getLocation());
+		object.put(IMAGE_DATA, user.getProfilePicData());
 		
 //		if(user.getImage() != null) {
 //			object.put("picture", imageUtils.encode(user.getImage()));
@@ -82,13 +94,4 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	public void setStatsFactory(StatsFactory statsFactory) {
 		this.statsFactory = statsFactory;
 	}
-
-//	public ImageUtils getImageUtils() {
-//		return imageUtils;
-//	}
-//
-//	public void setImageUtils(ImageUtils imageUtils) {
-//		this.imageUtils = imageUtils;
-//	}
-	
 }

@@ -17,6 +17,7 @@ public class FacebookActivityService {
 	private FacebookActivity activity;
 	private Drawables drawables;
 	private DialogFactory dialogFactory;
+	private FacebookImageRetriever facebookImageRetriever;
 	
 	private FacebookService service;
 	
@@ -39,7 +40,7 @@ public class FacebookActivityService {
 				facebookSessionStore = activity.getBean("facebookSessionStore");
 				listenerHolder = activity.getBean("listenerHolder");
 				dialogFactory = activity.getBean("dialogFactory");
-				
+				facebookImageRetriever = activity.getBean("facebookImageRetriever");
 				mFacebook = new Facebook(appId, drawables);
 				
 				service = getFacebookService();
@@ -61,7 +62,9 @@ public class FacebookActivityService {
 	}
     
     public FacebookService getFacebookService() {
-    	return new FacebookService(activity, mFacebook, facebookSessionStore, (AuthProviderListener) listenerHolder.get("auth"), dialogFactory);
+    	FacebookService service = new FacebookService(activity, mFacebook, facebookSessionStore, (AuthProviderListener) listenerHolder.get("auth"), dialogFactory);
+    	service.setFacebookImageRetriever(facebookImageRetriever);
+    	return service;
     }
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {

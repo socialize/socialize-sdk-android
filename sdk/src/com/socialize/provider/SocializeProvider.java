@@ -24,6 +24,7 @@ package com.socialize.provider;
 import java.util.Collection;
 
 import com.socialize.api.SocializeSession;
+import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
@@ -35,12 +36,51 @@ import com.socialize.error.SocializeException;
  */
 public interface SocializeProvider<T> {
 	
+	
+	/**
+	 * Loads a user's authentication session.
+	 * @param endpoint
+	 * @param key
+	 * @param secret
+	 * @param data
+	 * @return
+	 * @throws SocializeException
+	 */
+	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderData data) throws SocializeException;
+	
+	/**
+	 * Loads a user's authentication session.
+	 * @param endpoint
+	 * @param key
+	 * @param secret
+	 * @param authProviderType
+	 * @param appId3rdParty
+	 * @return
+	 * @throws SocializeException
+	 */
 	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderType authProviderType, String appId3rdParty) throws SocializeException;
 	
 	public void clearSession();
 	
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException;
 
+	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException;
+	
+	/**
+	 * @deprecated
+	 * @use this{@link #authenticate(String, String, String, AuthProviderData, String)}
+	 * @param endpoint
+	 * @param key
+	 * @param secret
+	 * @param userId3rdParty
+	 * @param token3rdParty
+	 * @param appId3rdParty
+	 * @param authProviderType
+	 * @param uuid
+	 * @return
+	 * @throws SocializeException
+	 */
+	@Deprecated
 	public SocializeSession authenticate(String endpoint, String key, String secret, String userId3rdParty, String token3rdParty, String appId3rdParty, AuthProviderType authProviderType, String uuid) throws SocializeException;
 
 	@Deprecated

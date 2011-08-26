@@ -21,6 +21,7 @@
  */
 package com.socialize.api;
 
+import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
 import com.socialize.config.SocializeConfig;
@@ -39,6 +40,11 @@ public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 		this.authProviders = authProviders;
 	}
 	
+	@Override
+	public WritableSession create(String key, String secret, AuthProviderData data) {
+		return create(key, secret, data.getUserId3rdParty(), data.getToken3rdParty(), data.getAppId3rdParty(), data.getAuthProviderType());
+	}
+
 	@Override
 	public WritableSession create(String key, String secret, String userId3rdParty, String token3rdParty, String appId3rdParty, AuthProviderType authProviderType) {
 		SocializeSessionImpl session = new SocializeSessionImpl();

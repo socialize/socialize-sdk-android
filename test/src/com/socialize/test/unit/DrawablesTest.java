@@ -24,13 +24,14 @@ package com.socialize.test.unit;
 import java.io.IOException;
 import java.io.InputStream;
 
-import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.util.CacheableDrawable;
 import com.socialize.util.ClassLoaderProvider;
+import com.socialize.util.DrawableCache;
 import com.socialize.util.Drawables;
 
 /**
@@ -41,19 +42,28 @@ import com.socialize.util.Drawables;
 	ClassLoaderProvider.class,
 	ClassLoader.class,
 	InputStream.class,
-	Drawable.class})
+	CacheableDrawable.class,
+	DrawableCache.class})
 public class DrawablesTest extends SocializeActivityTest {
-
 	
 	public void testGetDrawable() throws IOException {
 		
 		final String drawable_name = "foobar";
-		
-		
+
 		ClassLoaderProvider provider = AndroidMock.createMock(ClassLoaderProvider.class);
+		DrawableCache cache = AndroidMock.createMock(DrawableCache.class, getActivity());
 		ClassLoader loader = AndroidMock.createMock(ClassLoader.class);
-		final Drawable drawable = AndroidMock.createMock(Drawable.class);
-		final InputStream in = AndroidMock.createMock(InputStream.class);
+		
+		final InputStream in = AndroidMock.createNiceMock(InputStream.class);
+		final CacheableDrawable drawable = AndroidMock.createMock(CacheableDrawable.class, "foobar");
+		
+		AndroidMock.expect(cache.get("res/drawable/ldpi/" + drawable_name)).andReturn(null);
+		AndroidMock.expect(cache.get("res/drawable/mdpi/" + drawable_name)).andReturn(null);
+		AndroidMock.expect(cache.get("res/drawable/hdpi/" + drawable_name)).andReturn(null);
+		AndroidMock.expect(cache.put("res/drawable/ldpi/" + drawable_name, drawable, false)).andReturn(true);
+		AndroidMock.expect(cache.put("res/drawable/mdpi/" + drawable_name, drawable, false)).andReturn(true);
+		AndroidMock.expect(cache.put("res/drawable/hdpi/" + drawable_name, drawable, false)).andReturn(true);
+		AndroidMock.expect(cache.get("res/drawable/" + drawable_name)).andReturn(null).times(3);
 		
 		AndroidMock.expect(provider.getClassLoader()).andReturn(loader).times(3);
 		AndroidMock.expect(loader.getResourceAsStream("res/drawable/ldpi/" + drawable_name)).andReturn(in);
@@ -64,30 +74,31 @@ public class DrawablesTest extends SocializeActivityTest {
 		in.close();
 		in.close();
 		
+		AndroidMock.replay(cache);
 		AndroidMock.replay(provider);
 		AndroidMock.replay(loader);
 		AndroidMock.replay(in);
 		
 		Drawables drawables = new Drawables(getActivity()) {
-
 			@Override
-			protected Drawable createDrawable(InputStream stream, String name) {
-				assertEquals(drawable_name, name);
+			protected CacheableDrawable createDrawable(InputStream stream, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY) {
 				assertSame(in, stream);
+				assertFalse(tileX);
+				assertFalse(tileY);
 				return drawable;
 			}
 		};
 		
 		drawables.setClassLoaderProvider(provider);
+		drawables.setCache(cache);
 		
-		assertSame(drawable, drawables.getDrawable(drawable_name, DisplayMetrics.DENSITY_LOW));
-		assertSame(drawable, drawables.getDrawable(drawable_name, DisplayMetrics.DENSITY_MEDIUM));
-		assertSame(drawable, drawables.getDrawable(drawable_name, DisplayMetrics.DENSITY_HIGH));
+		assertSame(drawable, drawables.getDrawable(drawable_name, DisplayMetrics.DENSITY_LOW, false, false, false));
+		assertSame(drawable, drawables.getDrawable(drawable_name, DisplayMetrics.DENSITY_MEDIUM, false, false, false));
+		assertSame(drawable, drawables.getDrawable(drawable_name, DisplayMetrics.DENSITY_HIGH, false, false, false));
 		
+		AndroidMock.verify(cache);
 		AndroidMock.verify(provider);
 		AndroidMock.verify(loader);
 		AndroidMock.verify(in);
-		
 	}
-	
 }

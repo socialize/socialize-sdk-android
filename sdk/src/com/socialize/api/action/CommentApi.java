@@ -49,10 +49,7 @@ public class CommentApi extends SocializeApi<Comment, SocializeProvider<Comment>
 		c.setText(comment);
 		c.setEntityKey(key);
 		
-		if(location != null) {
-			c.setLat(location.getLatitude());
-			c.setLon(location.getLongitude());
-		}
+		setLocation(c, location);
 		
 		List<Comment> list = new ArrayList<Comment>(1);
 		list.add(c);

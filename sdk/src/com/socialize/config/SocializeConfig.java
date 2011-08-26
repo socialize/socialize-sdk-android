@@ -23,7 +23,9 @@ package com.socialize.config;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 
 import android.content.Context;
 
@@ -39,6 +41,14 @@ public class SocializeConfig {
 	public static final String SOCIALIZE_PROPERTIES_PATH = "socialize.properties";
 	public static final String SOCIALIZE_BEANS_PATH = "socialize_beans.xml";
 	public static final String SOCIALIZE_ERRORS_PATH = "errors.properties";
+	
+	public static final String SOCIALIZE_CONSUMER_KEY = "socialize.consumer.key";
+	public static final String SOCIALIZE_CONSUMER_SECRET = "socialize.consumer.secret";
+	public static final String SOCIALIZE_DEBUG_MODE = "socialize.debug.mode";
+	
+	public static final String FACEBOOK_APP_ID = "facebook.app.id";
+	public static final String FACEBOOK_USER_ID = "facebook.user.id";
+	public static final String FACEBOOK_USER_TOKEN = "facebook.user.token";
 	
 	private Properties properties;
 	private SocializeLogger logger;
@@ -65,20 +75,35 @@ public class SocializeConfig {
 		this.propertiesFileName = propertiesFileName;
 	}
 	
+	public void init(Context context) {
+		init(context, true);
+	}
+	
 	/**
 	 * 
 	 * @param context
+	 * @param override
 	 */
-	public void init(Context context) {
+	public void init(Context context, boolean override) {
 		InputStream in = null;
 		try {
 			if(resourceLocator != null) {
 				try {
-					in = resourceLocator.locate(context, propertiesFileName);
+					in = resourceLocator.locateInClassPath(context, propertiesFileName);
 					
 					if(in != null) {
-						properties = new Properties();
+						Properties old = null;
+						
+						if(properties != null) {
+							old = properties;
+						}
+						
+						properties = createProperties();
 						properties.load(in);
+						
+						if(old != null) {
+							merge(old);
+						}
 					}
 				}
 				catch (IOException ignore) {
@@ -89,13 +114,34 @@ public class SocializeConfig {
 						in.close();
 					}
 				}
+				
+				if(override) {
+					// Look for override
+					try {
+						in = resourceLocator.locateInAssets(context, propertiesFileName);
+						
+						if(in != null) {
+							Properties overrideProps = createProperties();
+							overrideProps.load(in);
+							merge(overrideProps);
+						}
+					}
+					catch (IOException ignore) {
+						// ignore
+					}
+					finally {
+						if(in != null) {
+							in.close();
+						}
+					}
+				}
 			}
 			
 			if(properties == null) {
 				if(logger != null) {
 					logger.error(SocializeLogger.NO_CONFIG);
 				}
-				properties = new Properties();
+				properties = createProperties();
 			}
 		}
 		catch (Exception e) {
@@ -123,8 +169,27 @@ public class SocializeConfig {
 		return defaultValue;
 	}
 	
+
 	public void setProperty(String key, String value) {
+		if(properties == null) {
+			properties = createProperties();
+		}
 		properties.put(key, value);
+	}
+	
+	/**
+	 * Merge properties into the config.
+	 * @param other
+	 */
+	public void merge(Properties other) {
+		if(properties == null) {
+			properties = createProperties();
+		}
+		
+		Set<Entry<Object, Object>> entrySet = other.entrySet();
+		for (Entry<Object, Object> entry : entrySet) {
+			properties.put(entry.getKey(), entry.getValue());
+		}
 	}
 
 	public String getDefaultPropertiesFileName() {
@@ -143,7 +208,16 @@ public class SocializeConfig {
 		this.resourceLocator = resourceLocator;
 	}
 
+	/**
+	 * @deprecated Filename does not need to be changed.  Just use assets to override with socialize.properties.
+	 * @param propertiesFileName
+	 */
+	@Deprecated
 	public void setPropertiesFileName(String propertiesFileName) {
 		this.propertiesFileName = propertiesFileName;
+	}
+	
+	protected Properties createProperties() {
+		return new Properties();
 	}
 }

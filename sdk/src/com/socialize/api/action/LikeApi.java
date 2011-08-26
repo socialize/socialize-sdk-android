@@ -52,10 +52,7 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 		Like c = new Like();
 		c.setEntityKey(key);
 		
-		if(location != null) {
-			c.setLon(location.getLongitude());
-			c.setLat(location.getLatitude());
-		}
+		setLocation(c, location);
 		
 		List<Like> list = new ArrayList<Like>(1);
 		list.add(c);

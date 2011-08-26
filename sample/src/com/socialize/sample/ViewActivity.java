@@ -30,10 +30,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.socialize.Socialize;
-import com.socialize.activity.SocializeActivity;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.sample.util.ErrorHandler;
+import com.socialize.ui.SocializeActivity;
 import com.socialize.util.StringUtils;
 
 public class ViewActivity extends SocializeActivity {

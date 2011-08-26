@@ -24,17 +24,14 @@ package com.socialize.sample;
 import android.os.Bundle;
 
 import com.socialize.Socialize;
-import com.socialize.activity.SocializeActivity;
+import com.socialize.ui.SocializeActivity;
 
 public class ShareActivity extends SocializeActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		if(!Socialize.getSocialize().isInitialized()) {
-			Socialize.init(this);
-		}
+		Socialize.init(this);
 	}
 
 	@Override

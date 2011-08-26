@@ -64,7 +64,7 @@ public class CommentListActivity<T extends SocializeObject> extends ListActivity
 				
 				if(!StringUtils.isEmpty(start)) {
 					iStart = Integer.parseInt(start);
-				}
+				}	
 				if(!StringUtils.isEmpty(end)) {
 					iEnd = Integer.parseInt(end);
 				}

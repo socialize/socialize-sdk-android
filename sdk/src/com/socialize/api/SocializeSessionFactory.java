@@ -21,6 +21,7 @@
  */
 package com.socialize.api;
 
+import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 
 /**
@@ -33,9 +34,18 @@ public interface SocializeSessionFactory {
 	 * Creates a new session.
 	 * @param key
 	 * @param secret
-	 * @param authProviderType TODO
+	 * @param authProviderType
 	 * @return
 	 */
 	public WritableSession create(String key, String secret, String userId3rdParty, String token3rdParty, String appId3rdParty, AuthProviderType authProviderType);
+	
+	/**
+	 * Creates a new session.
+	 * @param key
+	 * @param secret
+	 * @param data
+	 * @return
+	 */
+	public WritableSession create(String key, String secret, AuthProviderData data);
 	
 }

@@ -30,12 +30,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.socialize.Socialize;
-import com.socialize.activity.SocializeActivity;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.entity.EntityAddListener;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.sample.util.ErrorHandler;
+import com.socialize.ui.SocializeActivity;
 import com.socialize.util.StringUtils;
 
 public class EntityActivity extends SocializeActivity {

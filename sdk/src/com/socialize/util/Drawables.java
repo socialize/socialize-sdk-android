@@ -25,19 +25,22 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import android.app.Activity;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 
 /**
- * Convenience class for getting drawables form raw images
- * 
+ * Convenience class for getting drawables from raw images.
  * @author Jason Polites
  */
 public class Drawables {
 
-	DisplayMetrics metrics = null;
+	private DisplayMetrics metrics = null;
 	private ClassLoaderProvider classLoaderProvider;
+	private DrawableCache cache;
+	private BitmapUtils bitmapUtils;
 	
 	public Drawables(Activity context) {
 		super();
@@ -45,19 +48,65 @@ public class Drawables {
 		context.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 	}
 	
+	public Drawable getDrawable(String name, boolean tileX, boolean tileY, boolean eternal) {
+		return getDrawable(name, metrics.densityDpi, tileX, tileY, -1, -1, eternal);
+	}
+	
 	public Drawable getDrawable(String name) {
-		return getDrawable(name, metrics.densityDpi);
+		return getDrawable(name, -1, -1, false);
+	}
+	
+	public Drawable getDrawable(String name, boolean eternal) {
+		return getDrawable(name, false, false, -1, -1, eternal);
+	}
+	
+	public Drawable getDrawable(String name, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
+		return getDrawable(name, metrics.densityDpi, tileX, tileY, scaleToWidth, scaleToHeight, eternal);
+	}
+	
+	public Drawable getDrawable(String name, int scaleToWidth, int scaleToHeight) {
+		return getDrawable(name, scaleToWidth, scaleToHeight, false);
+	}
+	
+	public Drawable getDrawable(String name, int scaleToWidth, int scaleToHeight, boolean eternal) {
+		return getDrawable(name, false, false, scaleToWidth, scaleToHeight, eternal);
+	}
+	
+	public Drawable getDrawable(String key, byte[] data) {
+		return getDrawable(key, data, -1, -1);
+	}
+	
+	public Drawable getDrawable(String key, byte[] data, int scaleToWidth, int scaleToHeight) {
+		
+		CacheableDrawable drawable = cache.get(key);
+		
+		if(drawable == null) {
+			Bitmap bitmap = bitmapUtils.getScaledBitmap ( BitmapFactory.decodeByteArray(data, 0, data.length), scaleToWidth, scaleToHeight );
+			drawable = new CacheableDrawable(bitmap, key);
+			addToCache(key, drawable, false);
+		}
+		
+		return drawable;
 	}
 
-	public Drawable getDrawable(String name, int density) {
-
-		String densityPath = "mdpi";
-
-		if (density == DisplayMetrics.DENSITY_HIGH) {
-			densityPath = "hdpi";
+	public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, boolean eternal) {
+		return getDrawable(name, density, tileX, tileY, -1, -1, eternal);
+	}
+	
+	public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
+		
+		String densityPath = getPath(name, density);
+		String commonPath = getPath(name);
+		
+		CacheableDrawable drawable = cache.get(densityPath);
+		
+		if(drawable == null) {
+			// try default
+			drawable = cache.get(commonPath);
 		}
-		else if (density == DisplayMetrics.DENSITY_LOW) {
-			densityPath = "ldpi";
+		
+		if(drawable != null && !drawable.isRecycled()) {
+			return drawable;
 		}
 
 		InputStream in = null;
@@ -73,13 +122,22 @@ public class Drawables {
 				loader = Drawables.class.getClassLoader();
 			}
 			
-			in = loader.getResourceAsStream("res/drawable/" + densityPath + "/" + name);
+			String path = densityPath;
 			
-			if(in != null) {
-				return createDrawable(in, name);
+			in = loader.getResourceAsStream(path);
+			
+			if(in == null) {
+				// try default
+				path = commonPath;
+				in = loader.getResourceAsStream(path);
 			}
 			
-			return null;
+			if(in != null) {
+				drawable = createDrawable(in, path, tileX, tileY, scaleToWidth, scaleToHeight);
+				addToCache(path, drawable, eternal);
+			}
+			
+			return drawable;
 		}
 		finally {
 			if(in != null) {
@@ -92,10 +150,6 @@ public class Drawables {
 			}
 		}
 	}
-	
-	protected Drawable createDrawable(InputStream in, String name) {
-		return BitmapDrawable.createFromStream(in, name);
-	}
 
 	public ClassLoaderProvider getClassLoaderProvider() {
 		return classLoaderProvider;
@@ -103,5 +157,60 @@ public class Drawables {
 
 	public void setClassLoaderProvider(ClassLoaderProvider classLoaderProvider) {
 		this.classLoaderProvider = classLoaderProvider;
+	}
+
+	public DrawableCache getCache() {
+		return cache;
+	}
+
+	public void setCache(DrawableCache cache) {
+		this.cache = cache;
+	}
+	
+	public void setBitmapUtils(BitmapUtils bitmapUtils) {
+		this.bitmapUtils = bitmapUtils;
+	}
+
+	protected String getPath(String name) {
+		return "res/drawable/" + name;
+	}
+	
+	protected String getPath(String name, int density) {
+		String densityPath = "mdpi";
+
+		if (density == DisplayMetrics.DENSITY_HIGH) {
+			densityPath = "hdpi";
+		}
+		else if (density == DisplayMetrics.DENSITY_LOW) {
+			densityPath = "ldpi";
+		}
+		else if (density > DisplayMetrics.DENSITY_HIGH) {
+			densityPath = "xhdpi";
+		}
+		
+		return "res/drawable/" + densityPath + "/" + name;
+	}
+	
+	protected CacheableDrawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY) {
+		
+		Bitmap bitmap = bitmapUtils.getScaledBitmap ( BitmapFactory.decodeStream(in), pixelsX, pixelsY );
+		
+		CacheableDrawable drawable = new CacheableDrawable(bitmap, name);
+		
+		if(tileX) {
+			drawable.setTileModeX(Shader.TileMode.REPEAT);
+		}
+		
+		if(tileY) {
+			drawable.setTileModeY(Shader.TileMode.REPEAT);
+		}
+		
+		return drawable;
+	}
+	
+	private void addToCache(String key, CacheableDrawable drawable, boolean eternal) {
+		if(drawable != null) {
+			cache.put(key, drawable, eternal);
+		}
 	}
 }

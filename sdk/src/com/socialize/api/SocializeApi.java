@@ -23,22 +23,29 @@ package com.socialize.api;
 
 import java.util.List;
 
+import android.location.Location;
 import android.os.AsyncTask;
 
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.auth.AuthProvider;
+import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.ActionError;
 import com.socialize.entity.ListResult;
+import com.socialize.entity.SocializeAction;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.location.SocializeLocationProvider;
 import com.socialize.log.SocializeLogger;
 import com.socialize.provider.SocializeProvider;
+import com.socialize.util.HttpUtils;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -50,9 +57,12 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 
 	private P provider;
 	private SocializeResponseFactory<T> responseFactory;
+	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	private SocializeConfig config;
 	private AuthProviders authProviders;
 	private SocializeLogger logger;
+	private HttpUtils httpUtils;
+	private SocializeLocationProvider locationProvider;
 	
 	public static enum RequestType {AUTH,PUT,POST,GET,LIST,DELETE};
 	
@@ -65,6 +75,11 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		provider.clearSession();
 	}
 	
+	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderData data) throws SocializeException {
+		return provider.loadSession(endpoint, key, secret, data);
+	}
+	
+	@Deprecated
 	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderType authProviderType, String appId3rdParty) throws SocializeException {
 		return provider.loadSession(endpoint, key, secret, authProviderType, appId3rdParty);
 	}
@@ -73,6 +88,11 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return provider.authenticate(endpoint, key, secret, uuid);
 	}
 	
+	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
+		return provider.authenticate(endpoint, key, secret, data, uuid);
+	}
+	
+	@Deprecated
 	public SocializeSession authenticate(String endpoint, String key, String secret, String userId3rdParty, String token3rdParty, String appId3rdParty, AuthProviderType authProviderType, String uuid) throws SocializeException {
 		return provider.authenticate(endpoint, key, secret, userId3rdParty, token3rdParty, appId3rdParty, authProviderType, uuid);
 	}
@@ -178,21 +198,19 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}
 
 	public void authenticateAsync(String key, String secret, String uuid, final SocializeAuthListener listener, final SocializeSessionConsumer sessionConsumer) {
-		authenticateAsync(key, secret, uuid, null, null, null, null, listener, sessionConsumer, false);
+		authenticateAsync(key, secret, uuid, new AuthProviderData(), listener, sessionConsumer, false);
 	}
 	
 	public void authenticateAsync(
 			String key, 
 			String secret, 
 			String uuid, 
-			String authUserId3rdParty, 
-			String authToken3rdParty, 
-			final AuthProviderType authProviderType, 
-			final String appId3rdParty,
+			final AuthProviderData data,
 			final SocializeAuthListener listener, 
 			final SocializeSessionConsumer sessionConsumer, 
 			boolean do3rdPartyAuth) {
-		
+	
+
 		SocializeActionListener wrapper = null;
 		
 		if(listener != null) {
@@ -209,7 +227,12 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				
 				@Override
 				public void onError(SocializeException error) {
-					listener.onError(error);
+					if(httpUtils != null && httpUtils.isAuthError(error)) {
+						listener.onAuthFail(error);
+					}
+					else {
+						listener.onError(error);
+					}
 				}
 			};
 		}
@@ -220,43 +243,75 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		request.setConsumerKey(key);
 		request.setConsumerSecret(secret);
 		request.setUdid(uuid);
+		request.setAuthProviderData(data);
+		
+		AuthProviderType authProviderType = data.getAuthProviderType();
 		
 		if(do3rdPartyAuth && !authProviderType.equals(AuthProviderType.SOCIALIZE)) {
-			handle3rdPartyAuth(request, authUserId3rdParty, authToken3rdParty, appId3rdParty, authProviderType, wrapper, listener, key, secret);
+			handle3rdPartyAuth(request, wrapper, listener, key, secret);
 		}
 		else {
-			request.setAuthToken3rdParty(authToken3rdParty);
-			request.setAuthUserId3rdParty(authUserId3rdParty);
-			request.setAuthProviderType(authProviderType);
-			
 			// Do normal auth
 			handleRegularAuth(request, wrapper);
 		}
+	}
+	
+	
+	@Deprecated
+	public void authenticateAsync(
+			String key, 
+			String secret, 
+			String uuid, 
+			String authUserId3rdParty, 
+			String authToken3rdParty, 
+			final AuthProviderType authProviderType, 
+			final String appId3rdParty,
+			final SocializeAuthListener listener, 
+			final SocializeSessionConsumer sessionConsumer, 
+			boolean do3rdPartyAuth) {
+		
+		
+		AuthProviderData data = authProviderDataFactory.getBean();
+		data.setAppId3rdParty(appId3rdParty);
+		data.setUserId3rdParty(authUserId3rdParty);
+		data.setToken3rdParty(authToken3rdParty);
+		data.setAuthProviderType(authProviderType);
+		
+		authenticateAsync(key, secret, uuid, data, listener, sessionConsumer, do3rdPartyAuth);
 	}
 	
 	protected void handleRegularAuth(SocializeAuthRequest request, SocializeActionListener wrapper) {
 		AsyncAuthenicator authenicator = new AsyncAuthenicator(RequestType.AUTH, null, wrapper);
 		authenicator.execute(request);
 	}
-
+	
 	protected void handle3rdPartyAuth(
 			final SocializeAuthRequest request,
-			final String authUserId3rdParty, 
-			final String authToken3rdParty,
-			final String appId3rdParty,
-			final AuthProviderType authProviderType,
 			final SocializeActionListener fWrapper,
 			final SocializeAuthListener listener, 
 			String key, String secret)  {
-	
-		request.setAuthProviderType(authProviderType);
-		request.setAppId3rdParty(appId3rdParty);
+
+		final AuthProviderData authProviderData = request.getAuthProviderData();
 		
 		// Try loading the session first
 		SocializeSession session = null;
 		
+		AuthProviderType authProviderType = authProviderData.getAuthProviderType();
+		String appId3rdParty = authProviderData.getAppId3rdParty();
+		
+		// TODO: externalize this into a validator
+		if(authProviderType != null && 
+				authProviderType.equals(AuthProviderType.FACEBOOK) && 
+				StringUtils.isEmpty(appId3rdParty)) {
+			if(listener != null) {
+				listener.onError(new SocializeException("No app ID found for auth type FACEBOOK"));
+			}
+			
+			return;
+		}
+		
 		try {
-			session = loadSession(request.getEndpoint(), key, secret, authProviderType, appId3rdParty);
+			session = loadSession(request.getEndpoint(), key, secret, authProviderData);
 		}
 		catch (SocializeException e) {
 			// No need to throw this, just log it
@@ -279,9 +334,12 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 					
 					@Override
 					public void onAuthSuccess(AuthProviderResponse response) {
-						request.setAuthToken3rdParty(response.getToken());
-						request.setAuthUserId3rdParty(response.getUserId());
-						request.setAuthProviderType(authProviderType);
+						
+						authProviderData.setUserId3rdParty(response.getUserId());
+						authProviderData.setToken3rdParty(response.getToken());
+						authProviderData.setUserFirstName(response.getFirstName());
+						authProviderData.setUserLastName(response.getLastName());
+						authProviderData.setUserProfilePicData(response.getImageData());
 						
 						// Do normal auth
 						handleRegularAuth(request, fWrapper);
@@ -307,6 +365,29 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				listener.onAuthSuccess(session);
 			}
 		}
+	}
+
+	@Deprecated
+	protected void handle3rdPartyAuth(
+			final SocializeAuthRequest request,
+			final String authUserId3rdParty, 
+			final String authToken3rdParty,
+			final String appId3rdParty,
+			final AuthProviderType authProviderType,
+			final SocializeActionListener fWrapper,
+			final SocializeAuthListener listener, 
+			String key, String secret)  {
+		
+		AuthProviderData data = authProviderDataFactory.getBean();
+		
+		data.setAppId3rdParty(appId3rdParty);
+		data.setUserId3rdParty(authUserId3rdParty);
+		data.setToken3rdParty(authToken3rdParty);
+		data.setAuthProviderType(authProviderType);
+		
+		request.setAuthProviderData(data);
+		
+		handle3rdPartyAuth(request, fWrapper, listener, key, secret);
 	}
 	
 	public void setResponseFactory(SocializeResponseFactory<T> responseFactory) {
@@ -339,6 +420,30 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
+	}
+	
+	public IBeanFactory<AuthProviderData> getAuthProviderDataFactory() {
+		return authProviderDataFactory;
+	}
+
+	public void setAuthProviderDataFactory(IBeanFactory<AuthProviderData> authProviderDataFactory) {
+		this.authProviderDataFactory = authProviderDataFactory;
+	}
+
+	public HttpUtils getHttpUtils() {
+		return httpUtils;
+	}
+
+	public void setHttpUtils(HttpUtils httpUtils) {
+		this.httpUtils = httpUtils;
+	}
+	
+	public SocializeLocationProvider getLocationProvider() {
+		return locationProvider;
+	}
+
+	public void setLocationProvider(SocializeLocationProvider locationProvider) {
+		this.locationProvider = locationProvider;
 	}
 
 	abstract class AbstractAsyncProcess<Params, Progress, Result extends SocializeResponse> extends AsyncTask<Params, Progress, Result> {
@@ -403,23 +508,37 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			
 			SocializeSession session = null;
 			
-			if(request.getAuthProviderType() == null || request.getAuthProviderType().equals(AuthProviderType.SOCIALIZE)) {
+			AuthProviderData authProviderData = request.getAuthProviderData();
+			AuthProviderType authProviderType = authProviderData.getAuthProviderType();
+			
+			if(authProviderType == null || authProviderType.equals(AuthProviderType.SOCIALIZE)) {
 				session = SocializeApi.this.authenticate(request.getEndpoint(), request.getConsumerKey(), request.getConsumerSecret(), request.getUdid());
 			}
 			else {
-				session = SocializeApi.this.authenticate(
-						request.getEndpoint(), 
-						request.getConsumerKey(), 
-						request.getConsumerSecret(),
-						request.getAuthUserId3rdParty(), 
-						request.getAuthToken3rdParty(), 
-						request.getAppId3rdParty(),
-						request.getAuthProviderType(), 
-						request.getUdid());
+				session = SocializeApi.this.authenticate(request.getEndpoint(), request.getConsumerKey(), request.getConsumerSecret(), authProviderData, request.getUdid());
+//				session = SocializeApi.this.authenticate(
+//						request.getEndpoint(), 
+//						request.getConsumerKey(), 
+//						request.getConsumerSecret(),
+//						request.getAuthUserId3rdParty(), 
+//						request.getAuthToken3rdParty(), 
+//						request.getAppId3rdParty(),
+//						request.getAuthProviderType(), 
+//						request.getUdid());
 			}
 			
 			response.setSession(session);
 			return response;
+		}
+	}
+	
+	protected void setLocation(SocializeAction action, Location location) {
+		if(location == null && locationProvider != null) {
+			location = locationProvider.getLocation();
+		}
+		if(location != null) {
+			action.setLon(location.getLongitude());
+			action.setLat(location.getLatitude());
 		}
 	}
 

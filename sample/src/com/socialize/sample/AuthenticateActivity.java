@@ -37,13 +37,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.socialize.Socialize;
-import com.socialize.activity.SocializeActivity;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.sample.util.ErrorHandler;
+import com.socialize.ui.SocializeActivity;
 
 public class AuthenticateActivity extends SocializeActivity {
 

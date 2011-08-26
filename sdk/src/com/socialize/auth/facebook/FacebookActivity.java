@@ -25,7 +25,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
-import com.socialize.activity.SocializeActivity;
+import com.socialize.ui.SocializeActivity;
 
 /**
  * @author Jason Polites
@@ -64,6 +64,4 @@ public class FacebookActivity extends SocializeActivity {
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-    
-    
 }

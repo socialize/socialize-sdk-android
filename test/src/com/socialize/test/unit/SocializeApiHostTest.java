@@ -23,12 +23,14 @@ package com.socialize.test.unit;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeApiHost;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.api.action.CommentApi;
 import com.socialize.api.action.EntityApi;
 import com.socialize.api.action.LikeApi;
+import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
@@ -50,12 +52,22 @@ import com.socialize.util.DeviceUtils;
 public class SocializeApiHostTest extends SocializeUnitTest {
 
 	@SuppressWarnings("unchecked")
-	@UsesMocks ({SocializeProvider.class, CommentApi.class, DeviceUtils.class, SocializeSession.class, SocializeAuthListener.class, SocializeSessionConsumer.class})
-	public void testAuthenticate() throws SocializeException, InterruptedException {
+	@UsesMocks ({
+		SocializeProvider.class, 
+		CommentApi.class, 
+		DeviceUtils.class, 
+		SocializeSession.class, 
+		SocializeAuthListener.class, 
+		SocializeSessionConsumer.class,
+		IBeanFactory.class,
+		AuthProviderData.class})
+	public void testAuthenticateWithAuthProviderData() throws SocializeException, InterruptedException {
 		SocializeProvider<SocializeObject> provider = AndroidMock.createMock(SocializeProvider.class);
 		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
 		CommentApi commentApi = AndroidMock.createMock(CommentApi.class, provider);
 		SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
+		AuthProviderData authProviderData = AndroidMock.createMock(AuthProviderData.class);
+		IBeanFactory<AuthProviderData> authProviderDataFactory = AndroidMock.createMock(IBeanFactory.class);
 		
 		SocializeSessionConsumer mockSessionConsumer = AndroidMock.createMock(SocializeSessionConsumer.class);
 		
@@ -63,10 +75,12 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		final String consumerKey = "foobar_consumerKey";
 		final String consumerSecret = "foobar_consumerSecret";
 		
+		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
 		AndroidMock.expect(deviceUtils.getUDID(getContext())).andReturn(udid);
 		
-		commentApi.authenticateAsync(consumerKey, consumerSecret, udid, null, null, AuthProviderType.SOCIALIZE, null, listener, mockSessionConsumer, false);
+		commentApi.authenticateAsync(consumerKey, consumerSecret, udid, authProviderData, listener, mockSessionConsumer, false);
 		
+		AndroidMock.replay(authProviderDataFactory);
 		AndroidMock.replay(deviceUtils);
 		AndroidMock.replay(commentApi);
 		
@@ -74,9 +88,11 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		service.setDeviceUtils(deviceUtils);
 		service.setCommentApi(commentApi);
+		service.setAuthProviderDataFactory(authProviderDataFactory);
 		
 		service.authenticate(consumerKey, consumerSecret, listener, mockSessionConsumer);
 		
+		AndroidMock.verify(authProviderDataFactory);
 		AndroidMock.verify(deviceUtils);
 		AndroidMock.verify(commentApi);
 	}
@@ -90,6 +106,7 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		SocializeSession.class, 
 		SocializeAuthListener.class, 
 		SocializeSessionConsumer.class})
+	@Deprecated
 	public void testAuthenticate3rdParty() throws SocializeException, InterruptedException {
 		
 		SocializeProvider<SocializeObject> provider = AndroidMock.createMock(SocializeProvider.class);
@@ -122,6 +139,46 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		AndroidMock.verify(commentApi);
 	}
 	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({
+		SocializeProvider.class, 
+		CommentApi.class, 
+		DeviceUtils.class, 
+		SocializeSession.class, 
+		SocializeAuthListener.class, 
+		SocializeSessionConsumer.class})
+	public void testAuthenticate3rdPartyWithAuthProviderData() throws SocializeException, InterruptedException {
+		
+		SocializeProvider<SocializeObject> provider = AndroidMock.createMock(SocializeProvider.class);
+		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
+		CommentApi commentApi = AndroidMock.createMock(CommentApi.class, provider);
+		SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
+		
+		SocializeSessionConsumer mockSessionConsumer = AndroidMock.createMock(SocializeSessionConsumer.class);
+		
+		final String udid = "foobar";
+		final String consumerKey = "foobar_consumerKey";
+		final String consumerSecret = "foobar_consumerSecret";
+		
+		AndroidMock.expect(deviceUtils.getUDID(getContext())).andReturn(udid);
+		
+		AuthProviderData data = new AuthProviderData();
+		
+		commentApi.authenticateAsync(consumerKey, consumerSecret, udid, data, listener, mockSessionConsumer, true);
+		
+		AndroidMock.replay(deviceUtils);
+		AndroidMock.replay(commentApi);
+		
+		SocializeApiHost service = new SocializeApiHost(getContext());
+		
+		service.setDeviceUtils(deviceUtils);
+		service.setCommentApi(commentApi);
+		
+		service.authenticate(consumerKey, consumerSecret, data, listener, mockSessionConsumer, true);
+		
+		AndroidMock.verify(deviceUtils);
+		AndroidMock.verify(commentApi);
+	}
 	
 	@SuppressWarnings("unchecked")
 	@UsesMocks ({CommentApi.class, CommentListener.class})

@@ -30,6 +30,7 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.auth.facebook.FacebookDialogListener;
+import com.socialize.auth.facebook.FacebookImageRetriever;
 import com.socialize.auth.facebook.FacebookSessionStore;
 import com.socialize.error.SocializeException;
 import com.socialize.facebook.DialogError;
@@ -47,21 +48,25 @@ import com.socialize.util.Drawables;
 	Activity.class, 
 	Facebook.class, 
 	FacebookSessionStore.class, 
+	FacebookImageRetriever.class,
 	AuthProviderListener.class,
 	Drawables.class})
 public class FacebookDialogListenerTest extends SocializeActivityTest {
 
+	
 	public void testOnCompleteSuccess() throws Exception {
 		
 		final String appId = "foobar";
 		final String id = "foo";
 		final String token = "bar";
 		final String json = "{id:'" + id + "'}";
+		final String encodedProfileImage = "foobar_image";
 		
 		Activity context = AndroidMock.createMock(Activity.class);
 		Drawables drawables = AndroidMock.createMock(Drawables.class, getActivity());
 		Facebook facebook = AndroidMock.createMock(Facebook.class, appId, drawables);
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
+		FacebookImageRetriever facebookImageRetriever = AndroidMock.createMock(FacebookImageRetriever.class);
 		
 		// Can't mock bundle, so create one with the data we expect.
 		Bundle bundle = new Bundle();
@@ -71,6 +76,7 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 			
 			@Override
 			public void onError(SocializeException error) {
+				error.printStackTrace();
 				fail();
 			}
 			
@@ -79,15 +85,18 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 				assertNotNull(response);
 				assertEquals(token, response.getToken());
 				assertEquals(id, response.getUserId());
+				assertEquals(encodedProfileImage, response.getImageData());
 			}
 			
 			@Override
 			public void onAuthFail(SocializeException error) {
+				error.printStackTrace();
 				fail();
 			}
 		};
 		
 		AndroidMock.expect(facebookSessionStore.save(facebook, context)).andReturn(true);
+		AndroidMock.expect(facebookImageRetriever.getEncodedProfileImage(id)).andReturn(encodedProfileImage);
 		AndroidMock.expect(facebook.request("me")).andReturn(json);
 		
 		FacebookDialogListener dListener = new FacebookDialogListener(context, facebook, facebookSessionStore, listener) {
@@ -103,12 +112,16 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 			}
 		};
 		
+		dListener.setFacebookImageRetriever(facebookImageRetriever);
+		
 		AndroidMock.replay(facebookSessionStore);
+		AndroidMock.replay(facebookImageRetriever);
 		AndroidMock.replay(facebook);
 		
 		dListener.onComplete(bundle);
 		
 		AndroidMock.verify(facebookSessionStore);
+		AndroidMock.verify(facebookImageRetriever);
 		AndroidMock.verify(facebook);
 		
 		Boolean result = getNextResult();

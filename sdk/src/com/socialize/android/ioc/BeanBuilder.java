@@ -27,6 +27,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -194,18 +195,41 @@ public class BeanBuilder {
 	@SuppressWarnings("unchecked")
 	public <T> Constructor<T> getConstructorFor(Class<T> clazz, Object...args) throws SecurityException {
 		Constructor<T>[] constructors = (Constructor<T>[]) clazz.getConstructors();
-		Constructor<T> compatibleConstructor = null;
+		
+		List<Constructor<T>> compatibleConstructors = new ArrayList<Constructor<T>>(3);
+		
 		for (Constructor<T> constructor : constructors) {
 			Class<?>[] params = constructor.getParameterTypes();
 			Type[] types = constructor.getGenericParameterTypes();
 			if(isMethodMatched(params,types, args)) {
-				compatibleConstructor = constructor;
-				break;
+				compatibleConstructors.add(constructor);
 			}
 		}
 
-		if (compatibleConstructor != null) {
-			return compatibleConstructor;
+		if (compatibleConstructors.size() > 0) {
+			
+			if(compatibleConstructors.size() > 1) {
+				// We have more than one possible match.
+				Constructor<T> match = null;
+				for (Constructor<T> constructor : compatibleConstructors) {
+					Class<?>[] params = constructor.getParameterTypes();
+					Type[] types = constructor.getGenericParameterTypes();
+					// Do strict match
+					if(isMethodMatched(params,types, true, args)) {
+						match = constructor;
+						break;
+					}
+				}
+				
+				if(match == null) {
+					match = compatibleConstructors.get(0);
+				}
+				
+				return match;
+			}
+			else {
+				return compatibleConstructors.get(0);
+			}
 		}
 
 		return null;
@@ -233,6 +257,10 @@ public class BeanBuilder {
 	}
 	
 	private boolean isMethodMatched(Class<?>[] params, Type[] genericParams, Object...args) {
+		return isMethodMatched(params, genericParams, false, args);
+	}
+	
+	private boolean isMethodMatched(Class<?>[] params, Type[] genericParams, boolean strict, Object...args) {
 		
 		if (params != null && args != null && params.length == args.length) {
 			boolean match = true;
@@ -243,26 +271,37 @@ public class BeanBuilder {
 				if (arg == null) {
 					arg = Void.TYPE;
 				}
-
-				if (!params[i].isAssignableFrom(arg.getClass())) {
-					if (params[i].isPrimitive()) {
-						match &= isUnboxableToPrimitive(params[i], arg);
-					}
-					else {
-						match = false;
-					}
-				}
-				else if(List.class.isAssignableFrom(params[i])) {
-					match &= isListMatch(genericParams, i, arg);
+				
+				if(List.class.isAssignableFrom(params[i])) {
+					match &= isListMatch(genericParams, i, arg, strict);
 				}
 				else if(Set.class.isAssignableFrom(params[i])) {
-					match &= isSetMatch(genericParams, i, arg);
+					match &= isSetMatch(genericParams, i, arg, strict);
 				}
 				else if(Map.class.isAssignableFrom(params[i])) {
-					match &= isMapMatch(genericParams, i, arg);
+					match &= isMapMatch(genericParams, i, arg, strict);
 				}
 				else {
-					match &= true;
+					boolean assignable = false;
+					
+					if(strict) {
+						assignable = params[i].equals(arg.getClass());
+					}
+					else {
+						assignable = params[i].isAssignableFrom(arg.getClass());
+					}
+					
+					if (!assignable) {
+						if (params[i].isPrimitive()) {
+							match &= isUnboxableToPrimitive(params[i], arg, strict);
+						}
+						else {
+							match = false;
+						}
+					}
+					else {
+						match &= true;
+					}
 				}
 				
 				if(!match) break;
@@ -277,67 +316,100 @@ public class BeanBuilder {
 		return false;
 	}
 	
-	private boolean isListMatch(Type[] genericParams, int index, Object arg) {
+	private boolean isListMatch(Type[] genericParams, int index, Object arg, boolean strict) {
 
-		List<?> asColl = (List<?>) arg;
-
-		if(asColl.size() > 0) {
-			ParameterizedType parType = (ParameterizedType) genericParams[index];
-			
-			Class<?> actualClass = getGenericParameterClass(parType);
-
-			return actualClass.isAssignableFrom(asColl.get(0).getClass());
-		}
-		else {
-			return true;
-		}
-	}
-	
-	private boolean isSetMatch(Type[] genericParams, int index, Object arg) {
-		Set<?> asColl = (Set<?>) arg;
-
-		if(asColl.size() > 0) {
-			ParameterizedType parType = (ParameterizedType) genericParams[index];
-			
-			Type actualType = parType.getActualTypeArguments()[0];
-			Class<?> componentType = asColl.iterator().next().getClass();
-			
-			Class<?> actualClass = getGenericParameterClass(actualType);
-
-			return actualClass.isAssignableFrom(componentType);
-		}
-		else {
-			return true;
-		}
-	}
-	
-	private boolean isMapMatch(Type[] genericParams, int index, Object arg) {
 		
-		Map<?,?> asMap = (Map<?,?>) arg;
-		
-		if(asMap.size() > 0) {
-			
-			ParameterizedType parType = (ParameterizedType) genericParams[index];
-			
-			Type keyType = parType.getActualTypeArguments()[0];
-			Type valType = parType.getActualTypeArguments()[1];
-			
-			Class<?> keyClass = getGenericParameterClass(keyType);
-			Class<?> valClass = getGenericParameterClass(valType);
-			
-			Object key = asMap.keySet().iterator().next();
-			Object value = asMap.get(key);
-			
-			if(keyClass != null && valClass != null) {
-				return (keyClass.isAssignableFrom(key.getClass()) && valClass.isAssignableFrom(value.getClass()));
+		if(List.class.isAssignableFrom(arg.getClass())) {
+			List<?> asColl = (List<?>) arg;
+
+			if(asColl.size() > 0) {
+				ParameterizedType parType = (ParameterizedType) genericParams[index];
+				
+				Class<?> actualClass = getGenericParameterClass(parType);
+
+				if(strict) {
+					return actualClass.equals(asColl.get(0).getClass());
+				}
+				else {
+					return actualClass.isAssignableFrom(asColl.get(0).getClass());
+				}
+				
 			}
 			else {
-				return (keyType.equals(key.getClass()) && valType.equals(value.getClass())) ;
+				return true;
 			}
 		}
-		else {
-			return true;
+		
+		return false;
+	}
+	
+	private boolean isSetMatch(Type[] genericParams, int index, Object arg, boolean strict) {
+		
+		if(Set.class.isAssignableFrom(arg.getClass())) {
+			Set<?> asColl = (Set<?>) arg;
+
+			if(asColl.size() > 0) {
+				ParameterizedType parType = (ParameterizedType) genericParams[index];
+				
+				Type actualType = parType.getActualTypeArguments()[0];
+				Class<?> componentType = asColl.iterator().next().getClass();
+				
+				Class<?> actualClass = getGenericParameterClass(actualType);
+
+				if(strict) {
+					return actualClass.equals(componentType);
+				}
+				else {
+					return actualClass.isAssignableFrom(componentType);
+				}
+			}
+			else {
+				return true;
+			}
 		}
+		
+		return false;
+	}
+	
+	private boolean isMapMatch(Type[] genericParams, int index, Object arg, boolean strict) {
+		
+		if(Map.class.isAssignableFrom(arg.getClass())) {
+			Map<?,?> asMap = (Map<?,?>) arg;
+			
+			if(asMap.size() > 0) {
+				
+				ParameterizedType parType = (ParameterizedType) genericParams[index];
+				
+				Type keyType = parType.getActualTypeArguments()[0];
+				Type valType = parType.getActualTypeArguments()[1];
+				
+				Class<?> keyClass = getGenericParameterClass(keyType);
+				Class<?> valClass = getGenericParameterClass(valType);
+				
+				Object key = asMap.keySet().iterator().next();
+				Object value = asMap.get(key);
+				
+				if(keyClass != null && valClass != null) {
+					
+					if(strict) {
+						return (keyClass.equals(key.getClass()) && valClass.equals(value.getClass()));
+					}
+					else {
+						return (keyClass.isAssignableFrom(key.getClass()) && valClass.isAssignableFrom(value.getClass()));
+					}
+				}
+				else {
+					return (keyType.equals(key.getClass()) && valType.equals(value.getClass())) ;
+				}
+			}
+			else {
+				return true;
+			}
+		}
+		
+		return false;
+		
+
 	}
 	
 	private Class<?> getGenericParameterClass(Type type) {
@@ -363,7 +435,7 @@ public class BeanBuilder {
 		return null;
 	}
 	
-	private boolean isUnboxableToPrimitive(Class<?> clazz, Object arg) {
+	private boolean isUnboxableToPrimitive(Class<?> clazz, Object arg, boolean strict) {
 		if (!clazz.isPrimitive()) {
 			throw new IllegalArgumentException("Internal Error - The class to test against is not a primitive");
 		}
@@ -396,7 +468,12 @@ public class BeanBuilder {
 			return false;
 		}
 
-		return isAssignable(clazz, unboxedType);
+		if(strict) {
+			return clazz.equals(unboxedType);
+		}
+		else {
+			return isAssignable(clazz, unboxedType);
+		}
 	}
 
 	private boolean isAssignable(Class<?> to, Class<?> from) {

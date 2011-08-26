@@ -77,6 +77,12 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		SocializeRequestFactory<SocializeObject> factory = new DefaultSocializeRequestFactory<SocializeObject>(signer, null);
 		
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		
+		AndroidMock.expect(session.getAuthProviderType()).andReturn(null);
+		AndroidMock.expect(session.get3rdPartyUserId()).andReturn(null);
+		AndroidMock.expect(session.get3rdPartyToken()).andReturn(null);
+		
+		AndroidMock.replay(session);
 
 		HttpUriRequest req = factory.getAuthRequest(session, endpoint, id);
 		
@@ -104,6 +110,8 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		assertEquals( jsonExpected.toString(), nvp.getValue() );
 		
 		assertTrue((Boolean)getNextResult());
+		
+		AndroidMock.verify(session);
 	}
 	
 	public void testGetRequestCreate() throws Exception {

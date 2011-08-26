@@ -38,8 +38,7 @@ public class ResourceLocator {
 	private ClassLoaderProvider classLoaderProvider;
 	private SocializeLogger logger;
 
-	public InputStream locate(Context context, String name) throws IOException {
-		
+	public InputStream locateInAssets(Context context, String name) throws IOException {
 		InputStream in = null;
 		
 		try {
@@ -68,7 +67,14 @@ public class ResourceLocator {
 			}
 		}
 		
-		if(in == null && classLoaderProvider != null) {
+		return in;
+	}
+
+	public InputStream locateInClassPath(Context context, String name) throws IOException {
+		
+		InputStream in = null;
+		
+		if(classLoaderProvider != null) {
 			
 			if(logger != null && logger.isInfoEnabled()) {
 				logger.info("Looking for " +
@@ -85,6 +91,17 @@ public class ResourceLocator {
 							" in classpath");
 				}
 			}
+		}
+
+		return in;
+	}
+	
+	public InputStream locate(Context context, String name) throws IOException {
+		
+		InputStream in = locateInAssets(context, name);
+		
+		if(in == null) {
+			in = locateInClassPath(context, name);
 		}
 		
 		if(in == null) {
