@@ -31,7 +31,6 @@ import com.socialize.util.StringUtils;
 /**
  * Provides comments to the comment view.
  * @author jasonpolites
- *
  */
 public class CommentAdapter extends BaseAdapter {
 
@@ -60,7 +59,7 @@ public class CommentAdapter extends BaseAdapter {
 		return (comments == null) ? 0 : comments.size() + extra;
 	}
 	
-	boolean isDisplayLoading() {
+	public boolean isDisplayLoading() {
 		return !(last || (comments != null && comments.size() == 0));
 	}
 
@@ -97,6 +96,10 @@ public class CommentAdapter extends BaseAdapter {
 			return 2;
 		}
 	}
+	
+	protected ViewHolder createViewHolder() {
+		return new ViewHolder();
+	}
 
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
@@ -108,7 +111,7 @@ public class CommentAdapter extends BaseAdapter {
         	
         	CommentListItem v = commentItemViewFactory.getBean();
         	
-            holder = new ViewHolder();
+            holder = createViewHolder();
             
             holder.time = v.getTime();
             holder.userName = v.getAuthor();
