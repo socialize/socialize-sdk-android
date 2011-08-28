@@ -20,6 +20,8 @@ ui-sample/bin/
 ui-sample/gen/
 ui-test/bin
 ui-test/gen
+ui-test/coverage
+ui-test/test-output
 build
 test/findbugs-output
 integration-test/local.properties
