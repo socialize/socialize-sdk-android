@@ -59,8 +59,11 @@ public class DrawablesTest extends SocializeActivityTest {
 		DrawableCache cache = AndroidMock.createMock(DrawableCache.class, getActivity());
 		ClassLoader loader = AndroidMock.createMock(ClassLoader.class);
 		
+		// Can't mock, so just create a dummy one
+		final Bitmap bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+		
 		final InputStream in = AndroidMock.createNiceMock(InputStream.class);
-		final CacheableDrawable drawable = AndroidMock.createMock(CacheableDrawable.class, "foobar");
+		final CacheableDrawable drawable = AndroidMock.createMock(CacheableDrawable.class, bitmap, "foobar");
 		
 		AndroidMock.expect(cache.get("res/drawable/ldpi/" + drawable_name)).andReturn(null);
 		AndroidMock.expect(cache.get("res/drawable/mdpi/" + drawable_name)).andReturn(null);
@@ -105,6 +108,8 @@ public class DrawablesTest extends SocializeActivityTest {
 		AndroidMock.verify(provider);
 		AndroidMock.verify(loader);
 		AndroidMock.verify(in);
+		
+		bitmap.recycle();
 	}
 	
 	public void testCreateDrawableRepeatXY() {
@@ -134,7 +139,7 @@ public class DrawablesTest extends SocializeActivityTest {
 		final Bitmap bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
 		
 		try {
-			final CacheableDrawable drawable = AndroidMock.createMock(CacheableDrawable.class, key);
+			final CacheableDrawable drawable = AndroidMock.createMock(CacheableDrawable.class, bitmap, key);
 			BitmapBuilder builder = AndroidMock.createMock(BitmapBuilder.class);
 			BitmapUtils bitmapUtils = AndroidMock.createMock(BitmapUtils.class, builder);
 			InputStream in = AndroidMock.createMock(InputStream.class);
@@ -193,7 +198,7 @@ public class DrawablesTest extends SocializeActivityTest {
 			BitmapBuilder builder = AndroidMock.createMock(BitmapBuilder.class);
 			BitmapUtils bitmapUtils = AndroidMock.createMock(BitmapUtils.class, builder);
 			
-			final CacheableDrawable drawable = AndroidMock.createMock(CacheableDrawable.class, key);
+			final CacheableDrawable drawable = AndroidMock.createMock(CacheableDrawable.class, bitmap, key);
 			
 			AndroidMock.expect(bitmapUtils.getScaledBitmap ( data, scaleToWidth, scaleToHeight )).andReturn(bitmap);
 			AndroidMock.expect(cache.put(key, drawable, false)).andReturn(true);

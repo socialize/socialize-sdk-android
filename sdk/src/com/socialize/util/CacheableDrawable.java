@@ -21,8 +21,6 @@
  */
 package com.socialize.util;
 
-import java.io.InputStream;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 
@@ -35,16 +33,6 @@ import com.socialize.cache.ICacheable;
 public class CacheableDrawable extends SafeBitmapDrawable implements ICacheable<String> {
 
 	private String key;
-	
-	public CacheableDrawable(String key) {
-		super();
-		this.key = key;
-	}
-
-	public CacheableDrawable(InputStream in, String key) {
-		super(in);
-		this.key = key;
-	}
 	
 	public CacheableDrawable(Bitmap bitmap, String key) {
 		super(bitmap);

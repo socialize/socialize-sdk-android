@@ -57,6 +57,9 @@ public class User extends SocializeObject {
 					displayName += " " + sname;
 				}
 			}
+			else if(!StringUtils.isEmpty(sname)) {
+				displayName = sname;
+			}
 			else if (!StringUtils.isEmpty(uname)) {
 				displayName = uname;
 			}

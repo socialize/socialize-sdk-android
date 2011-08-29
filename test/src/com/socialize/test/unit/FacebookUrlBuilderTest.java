@@ -19,49 +19,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.auth.facebook;
+package com.socialize.test.unit;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.KeyEvent;
-
-import com.socialize.ui.SocializeActivity;
+import com.socialize.auth.facebook.FacebookUrlBuilder;
+import com.socialize.test.SocializeUnitTest;
 
 /**
  * @author Jason Polites
+ *
  */
-public class FacebookActivity extends SocializeActivity {
-	
-	private FacebookActivityService service;
+public class FacebookUrlBuilderTest extends SocializeUnitTest {
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		service = getFacebookActivityService();
-		service.onCreate();
+	public void testFacebookUrlBuilder() {
+		FacebookUrlBuilder builder = new FacebookUrlBuilder();
+		String expected = "http://graph.facebook.com/foobar/picture?type=large";
+		assertEquals(expected, builder.buildProfileImageUrl("foobar"));
 	}
 	
-	@SuppressWarnings("unchecked")
-	@Override
-	public <E> E getBean(String name) {
-		return (E) super.getBean(name);
-	}
-
-	@Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        service.onActivityResult(requestCode, resultCode, data);
-    }
-    
-    public FacebookActivityService getFacebookActivityService() {
-    	return new FacebookActivityService(this);
-    }
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if(keyCode == KeyEvent.KEYCODE_BACK) {
-			service.onCancel();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
 }

@@ -75,6 +75,7 @@
 		<property name="deviceUtils" ref="deviceUtils"/><!-- Defined in socialize_beans.xml -->
 		<property name="timeUtils" ref="timeUtils"/>
 		<property name="userService" ref="userService"/>
+		<property name="base64Utils" ref="base64Utils"/><!-- Defined in socialize_beans.xml -->
 	</bean>
 	
 	<bean 

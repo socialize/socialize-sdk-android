@@ -85,7 +85,7 @@ public class FacebookAuthProvider implements AuthProvider {
 
 	@Override
 	public void clearCache(String appId) {
-		Facebook mFacebook = new Facebook(appId, null);
+		Facebook mFacebook = getFacebook(appId);
 		
 		try {
 			mFacebook.logout(context);
@@ -98,6 +98,10 @@ public class FacebookAuthProvider implements AuthProvider {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	protected Facebook getFacebook(String appId) {
+		return new Facebook(appId, null);
 	}
 
 	public SocializeLogger getLogger() {

@@ -19,49 +19,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.auth.facebook;
+package com.socialize.test.unit;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.KeyEvent;
+import java.util.Map;
 
-import com.socialize.ui.SocializeActivity;
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.auth.AuthProvider;
+import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.AuthProviders;
+import com.socialize.test.SocializeUnitTest;
 
 /**
  * @author Jason Polites
+ *
  */
-public class FacebookActivity extends SocializeActivity {
-	
-	private FacebookActivityService service;
+public class AuthProvidersTest extends SocializeUnitTest {
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		service = getFacebookActivityService();
-		service.onCreate();
-	}
-	
 	@SuppressWarnings("unchecked")
-	@Override
-	public <E> E getBean(String name) {
-		return (E) super.getBean(name);
+	@UsesMocks ({Map.class, AuthProvider.class})
+	public void testGetProvider() {
+		final AuthProviderType type = AuthProviderType.FACEBOOK;
+		Map<Integer, AuthProvider> providerMap = AndroidMock.createMock(Map.class);
+		AuthProvider provider = AndroidMock.createMock(AuthProvider.class);
+		
+		AndroidMock.expect(providerMap.get(type.getId())).andReturn(provider);
+		AndroidMock.replay(providerMap);
+		
+		AuthProviders providers = new AuthProviders();
+		providers.setProviders(providerMap);
+		
+		assertSame(provider, providers.getProvider(type));
+		
+		AndroidMock.verify(providerMap);
 	}
-
-	@Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        service.onActivityResult(requestCode, resultCode, data);
-    }
-    
-    public FacebookActivityService getFacebookActivityService() {
-    	return new FacebookActivityService(this);
-    }
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if(keyCode == KeyEvent.KEYCODE_BACK) {
-			service.onCancel();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+	
 }

@@ -24,7 +24,7 @@ import com.socialize.ui.user.UserService;
 import com.socialize.ui.util.TimeUtils;
 import com.socialize.ui.view.ListItemLoadingView;
 import com.socialize.ui.view.ViewHolder;
-import com.socialize.util.Base64;
+import com.socialize.util.Base64Utils;
 import com.socialize.util.Base64DecoderException;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
@@ -45,6 +45,7 @@ public class CommentAdapter extends BaseAdapter {
 	private DeviceUtils deviceUtils;
 	private TimeUtils timeUtils;
 	private UserService userService;
+	private Base64Utils base64Utils;
 	private boolean last = false;
 	
 	private final int iconSize = 64;
@@ -208,7 +209,7 @@ public class CommentAdapter extends BaseAdapter {
     					}
     					else if(drawables != null && !StringUtils.isEmpty(user.getProfilePicData())) {
     						try {
-								Drawable drawable = drawables.getDrawable(user.getId().toString(), Base64.decode(user.getProfilePicData()), deviceUtils.getDIP(iconSize), deviceUtils.getDIP(iconSize));
+								Drawable drawable = drawables.getDrawable(user.getId().toString(), base64Utils.decode(user.getProfilePicData()), deviceUtils.getDIP(iconSize), deviceUtils.getDIP(iconSize));
 								userIcon.setImageDrawable(drawable);
 							}
 							catch (Base64DecoderException e) {
@@ -280,11 +281,11 @@ public class CommentAdapter extends BaseAdapter {
 		this.timeUtils = timeUtils;
 	}
 
-	public UserService getUserService() {
-		return userService;
-	}
-
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+
+	public void setBase64Utils(Base64Utils base64Utils) {
+		this.base64Utils = base64Utils;
 	}
 }

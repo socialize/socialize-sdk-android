@@ -11,7 +11,7 @@ import com.socialize.util.Drawables;
 
 public class FacebookActivityService {
 
-	private Facebook mFacebook;
+	private Facebook facebook;
 	private FacebookSessionStore facebookSessionStore;
 	private ListenerHolder listenerHolder;
 	private FacebookActivity activity;
@@ -41,7 +41,7 @@ public class FacebookActivityService {
 				listenerHolder = activity.getBean("listenerHolder");
 				dialogFactory = activity.getBean("dialogFactory");
 				facebookImageRetriever = activity.getBean("facebookImageRetriever");
-				mFacebook = new Facebook(appId, drawables);
+				facebook = new Facebook(appId, drawables);
 				
 				service = getFacebookService();
 				service.authenticate();
@@ -62,14 +62,22 @@ public class FacebookActivityService {
 	}
     
     public FacebookService getFacebookService() {
-    	FacebookService service = new FacebookService(activity, mFacebook, facebookSessionStore, (AuthProviderListener) listenerHolder.get("auth"), dialogFactory);
+    	service = new FacebookService(activity, facebook, facebookSessionStore, (AuthProviderListener) listenerHolder.get("auth"), dialogFactory);
     	service.setFacebookImageRetriever(facebookImageRetriever);
     	return service;
     }
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if(mFacebook != null) {
-			mFacebook.authorizeCallback(requestCode, resultCode, data);
+		if(facebook != null) {
+			facebook.authorizeCallback(requestCode, resultCode, data);
 		}
+	}
+	
+	public void setService(FacebookService service) {
+		this.service = service;
+	}
+
+	public void setFacebook(Facebook facebook) {
+		this.facebook = facebook;
 	}
 }

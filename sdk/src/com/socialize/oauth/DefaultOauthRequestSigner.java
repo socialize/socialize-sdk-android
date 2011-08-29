@@ -61,12 +61,7 @@ public class DefaultOauthRequestSigner implements OAuthRequestSigner {
 		}
 	}
 
-	public DeviceUtils getDeviceUtils() {
-		return deviceUtils;
-	}
-
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
 		this.deviceUtils = deviceUtils;
 	}
-	
 }

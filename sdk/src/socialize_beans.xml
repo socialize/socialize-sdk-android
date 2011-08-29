@@ -28,6 +28,8 @@
 		</init-method>
 	</bean>
 	
+	<bean id="base64Utils" class="com.socialize.util.Base64Utils"/>
+	
 	<bean id="httpUtils" class="com.socialize.util.HttpUtils">
 		<init-method name="init">
 			<arg type="context"/>
@@ -150,11 +152,18 @@
 		</property>
 	</bean>
 	
-<!--  Facebook -->
+<!-- 
+	Facebook 
+-->
 	<bean id="facebookSessionStore" class="com.socialize.auth.facebook.FacebookSessionStore"/>
+	
+	<bean id="facebookUrlBuilder" class="com.socialize.auth.facebook.FacebookUrlBuilder"/>
+	
 	<bean id="facebookImageRetriever" class="com.socialize.auth.facebook.FacebookImageRetriever">
 		<property name="logger" ref="logger"/>
 		<property name="ioUtils" ref="ioUtils"/>
+		<property name="facebookUrlBuilder" ref="facebookUrlBuilder"/>
+		<property name="base64Utils" ref="base64Utils"/>
 	</bean>
 	
 	<bean id="listenerHolder" class="com.socialize.listener.ListenerHolder"/>
@@ -182,18 +191,17 @@
 		<property name="entityFactory" ref="entityFactory"/>
 	</bean>
 	
-	<!-- OAUTH -->
+<!-- OAUTH -->
 	
 	<bean id="oauthConsumerFactory" class="com.socialize.oauth.CommonsHttpOAuthConsumerFactory"/>
 	<bean id="oauthSigningStrategy" class="oauth.signpost.signature.AuthorizationHeaderSigningStrategy"/>
 	<bean id="oauthSigner" class="com.socialize.oauth.DefaultOauthRequestSigner">
 		<constructor-arg ref="oauthConsumerFactory"/>
 		<constructor-arg ref="oauthSigningStrategy"/>
-		
 		<property name="deviceUtils" ref="deviceUtils"/>
 	</bean>
 	
-	<!-- END OAUTH -->
+<!-- END OAUTH -->
 
 <!-- Comment API -->
 

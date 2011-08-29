@@ -19,49 +19,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.auth.facebook;
+package com.socialize.test.unit;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.KeyEvent;
-
-import com.socialize.ui.SocializeActivity;
+import com.socialize.entity.User;
+import com.socialize.test.SocializeUnitTest;
 
 /**
  * @author Jason Polites
+ *
  */
-public class FacebookActivity extends SocializeActivity {
-	
-	private FacebookActivityService service;
+public class UserTest extends SocializeUnitTest {
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		service = getFacebookActivityService();
-		service.onCreate();
+	public void testUserDisplayName() {
+
+		String fname = "foo";
+		String lname = "bar";
+		String uname = "snafu";
+		
+		User user0 = new User();
+		User user1 = new User();
+		User user2 = new User();
+		User user3 = new User();
+		
+		user0.setFirstName(fname);
+		
+		user1.setFirstName(fname);
+		user1.setLastName(lname);
+		
+		user2.setLastName(lname);
+		
+		user3.setUsername(uname);
+		
+		assertEquals(fname, user0.getDisplayName());
+		assertEquals(fname + " " + lname, user1.getDisplayName());
+		assertEquals(lname, user2.getDisplayName());
+		assertEquals(uname, user3.getDisplayName());
+		
 	}
 	
-	@SuppressWarnings("unchecked")
-	@Override
-	public <E> E getBean(String name) {
-		return (E) super.getBean(name);
-	}
-
-	@Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        service.onActivityResult(requestCode, resultCode, data);
-    }
-    
-    public FacebookActivityService getFacebookActivityService() {
-    	return new FacebookActivityService(this);
-    }
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if(keyCode == KeyEvent.KEYCODE_BACK) {
-			service.onCancel();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
 }

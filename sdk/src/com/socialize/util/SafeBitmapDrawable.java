@@ -32,22 +32,6 @@ public class SafeBitmapDrawable extends BitmapDrawable {
 		super(res, bitmap);
 	}
 
-	public SafeBitmapDrawable(Resources res, InputStream is) {
-		super(res, is);
-	}
-
-	public SafeBitmapDrawable(Resources res, String filepath) {
-		super(res, filepath);
-	}
-
-	public SafeBitmapDrawable(Resources res) {
-		super(res);
-	}
-
-	public SafeBitmapDrawable(String filepath) {
-		super(filepath);
-	}
-
 	@Override
 	public void draw(Canvas canvas) {
 		Bitmap bmp = getBitmap();
