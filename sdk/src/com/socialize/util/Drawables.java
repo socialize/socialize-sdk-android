@@ -42,8 +42,16 @@ public class Drawables {
 	private DrawableCache cache;
 	private BitmapUtils bitmapUtils;
 	
+	public Drawables() {
+		super();
+	}
+
 	public Drawables(Activity context) {
 		super();
+		init(context);
+	}
+	
+	public void init(Activity context) {
 		metrics = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 	}
@@ -213,4 +221,6 @@ public class Drawables {
 			cache.put(key, drawable, eternal);
 		}
 	}
+	
+	
 }

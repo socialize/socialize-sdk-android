@@ -17,6 +17,8 @@
 	
 	<bean id="timeUtils" class="com.socialize.ui.util.TimeUtils"/>
 	
+	<bean id="userService" class="com.socialize.ui.user.DefaultUserService"/>
+	
 	<bean id="colors" class="com.socialize.ui.util.Colors">
 	
 		<init-method name="init"/>
@@ -72,6 +74,7 @@
 		<property name="drawables" ref="drawables"/>
 		<property name="deviceUtils" ref="deviceUtils"/><!-- Defined in socialize_beans.xml -->
 		<property name="timeUtils" ref="timeUtils"/>
+		<property name="userService" ref="userService"/>
 	</bean>
 	
 	<bean 

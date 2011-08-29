@@ -6,11 +6,48 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public final class ViewHolder {
-	public ViewGroup row;
-	public TextView comment;
-	public TextView time;
-	public TextView userName;
-	public ImageView userIcon;
-	public Date now;
+public class ViewHolder {
+	private ViewGroup row;
+	private TextView comment;
+	private TextView time;
+	private TextView userName;
+	private ImageView userIcon;
+	private Date now;
+	
+	public ViewGroup getRow() {
+		return row;
+	}
+	public void setRow(ViewGroup row) {
+		this.row = row;
+	}
+	public TextView getComment() {
+		return comment;
+	}
+	public void setComment(TextView comment) {
+		this.comment = comment;
+	}
+	public TextView getTime() {
+		return time;
+	}
+	public void setTime(TextView time) {
+		this.time = time;
+	}
+	public TextView getUserName() {
+		return userName;
+	}
+	public void setUserName(TextView userName) {
+		this.userName = userName;
+	}
+	public ImageView getUserIcon() {
+		return userIcon;
+	}
+	public void setUserIcon(ImageView userIcon) {
+		this.userIcon = userIcon;
+	}
+	public Date getNow() {
+		return now;
+	}
+	public void setNow(Date now) {
+		this.now = now;
+	}
 }

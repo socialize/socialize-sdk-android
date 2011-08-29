@@ -15,6 +15,9 @@
             </intent-filter>
         </activity>
         
+        <!-- Required for unit tests -->
+        <activity android:name="com.socialize.ui.sample.EmptyActivity"/>
+        
         <activity android:name="com.socialize.auth.facebook.FacebookActivity"/>
         <activity android:name="com.socialize.ui.comment.CommentActivity"/>
     </application>

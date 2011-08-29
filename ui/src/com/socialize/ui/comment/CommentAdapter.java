@@ -12,13 +12,15 @@ import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Comment;
 import com.socialize.entity.User;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUI;
+import com.socialize.ui.user.UserService;
 import com.socialize.ui.util.TimeUtils;
 import com.socialize.ui.view.ListItemLoadingView;
 import com.socialize.ui.view.ViewHolder;
@@ -42,6 +44,7 @@ public class CommentAdapter extends BaseAdapter {
 	private View loadingView;
 	private DeviceUtils deviceUtils;
 	private TimeUtils timeUtils;
+	private UserService userService;
 	private boolean last = false;
 	
 	private final int iconSize = 64;
@@ -100,24 +103,23 @@ public class CommentAdapter extends BaseAdapter {
 	protected ViewHolder createViewHolder() {
 		return new ViewHolder();
 	}
-
+	
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
 		
         ViewHolder holder;
-        Drawable defaultImage = drawables.getDrawable(SocializeUI.DEFAULT_USER_ICON, deviceUtils.getDIP(iconSize), deviceUtils.getDIP(iconSize), true);
-		
+   
         if (view == null) {
         	
         	CommentListItem v = commentItemViewFactory.getBean();
         	
             holder = createViewHolder();
             
-            holder.time = v.getTime();
-            holder.userName = v.getAuthor();
-            holder.comment = v.getComment();
-//    		holder.userIcon =  v.getUserIcon();
-    		holder.now = new Date();
+            holder.setTime(v.getTime());
+            holder.setUserName(v.getAuthor());
+            holder.setComment(v.getComment());
+//    		userIcon =  v.getUserIcon();
+    		holder.setNow(new Date());
 
             v.setTag(holder);
             
@@ -140,7 +142,7 @@ public class CommentAdapter extends BaseAdapter {
         	Comment item = (Comment) getItem(position);
     		
     		if(item != null) {
-    			User currentUser = Socialize.getSocialize().getSession().getUser();
+    			User currentUser = userService.getCurrentUser();
     			User user = item.getUser();
     			String displayName = null;
     			
@@ -157,33 +159,40 @@ public class CommentAdapter extends BaseAdapter {
     				}
     			}
     			
-    			if (holder.comment != null) {
-    				holder.comment.setText(item.getText());
+    			TextView comment = holder.getComment();
+    			TextView userName = holder.getUserName();
+    			TextView time = holder.getTime();
+    			ImageView userIcon = holder.getUserIcon();
+    			
+    			if (comment != null) {
+    				comment.setText(item.getText());
     			}
     			
-    			if (holder.userName != null) {
+    			if (userName != null) {
     				if(user != null) {
-    					holder.userName.setText(displayName);
+    					userName.setText(displayName);
     				}
     			}
     			
-    			if (holder.time != null) {
+    			if (time != null) {
     				Long date = item.getDate();
     				if(date != null && date > 0) {
-    					long diff = (holder.now.getTime() - date.longValue());
-    					holder.time.setText(timeUtils.getTimeString(diff) + " ");
+    					long diff = (holder.getNow().getTime() - date.longValue());
+    					time.setText(timeUtils.getTimeString(diff) + " ");
     				}
     				else {
-    					holder.time.setText(" ");
+    					time.setText(" ");
     				}
     			}
     			
-    			if (holder.userIcon != null) {
+    			if (userIcon != null) {
+    			    Drawable defaultImage = drawables.getDrawable(SocializeUI.DEFAULT_USER_ICON, deviceUtils.getDIP(iconSize), deviceUtils.getDIP(iconSize), true);
+    					
     				if(user != null) {
     					if(!StringUtils.isEmpty(user.getSmallImageUri())) {
     						try {
     							Uri uri = Uri.parse(user.getSmallImageUri());
-    							holder.userIcon.setImageURI(uri);
+    							userIcon.setImageURI(uri);
     						}
     						catch (Exception e) {
     							String errorMsg = "Not a valid image uri [" + user.getSmallImageUri() + "]";
@@ -194,13 +203,13 @@ public class CommentAdapter extends BaseAdapter {
     								System.err.println(errorMsg);
     							}
     							
-    							holder.userIcon.setImageDrawable(defaultImage);
+    							userIcon.setImageDrawable(defaultImage);
     						}
     					}
     					else if(drawables != null && !StringUtils.isEmpty(user.getProfilePicData())) {
     						try {
 								Drawable drawable = drawables.getDrawable(user.getId().toString(), Base64.decode(user.getProfilePicData()), deviceUtils.getDIP(iconSize), deviceUtils.getDIP(iconSize));
-								holder.userIcon.setImageDrawable(drawable);
+								userIcon.setImageDrawable(drawable);
 							}
 							catch (Base64DecoderException e) {
 								if(logger != null) {
@@ -210,15 +219,15 @@ public class CommentAdapter extends BaseAdapter {
 									e.printStackTrace();
 								}
 								
-								holder.userIcon.setImageDrawable(defaultImage);
+								userIcon.setImageDrawable(defaultImage);
 							}
     					}
     					else {
-    						holder.userIcon.setImageDrawable(defaultImage);
+    						userIcon.setImageDrawable(defaultImage);
     					}
     				}
     				else {
-    					holder.userIcon.setImageDrawable(defaultImage);
+    					userIcon.setImageDrawable(defaultImage);
     				}
     			}
     		}
@@ -269,5 +278,13 @@ public class CommentAdapter extends BaseAdapter {
 
 	public void setTimeUtils(TimeUtils timeUtils) {
 		this.timeUtils = timeUtils;
+	}
+
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
 	}
 }
