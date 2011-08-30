@@ -17,6 +17,8 @@
         
         <!-- Required for unit tests -->
         <activity android:name="com.socialize.ui.sample.EmptyActivity"/>
+        <!-- Required for unit tests -->
+        <activity android:name="com.socialize.ui.sample.test.TestActivity"/>
         
         <activity android:name="com.socialize.auth.facebook.FacebookActivity"/>
         <activity android:name="com.socialize.ui.comment.CommentActivity"/>

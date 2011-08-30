@@ -36,7 +36,6 @@
 		</findbugs>
 	</target>
 
-
 	<property name="test.runner" value="pl.polidea.instrumentation.PolideaInstrumentationTestRunner" />
 
 	<property name="test-output" value="test-output"/>
@@ -174,7 +173,7 @@
 				<javac encoding="${java.encoding}"
                     source="${java.source}" 
 					target="${java.target}"
-                    debug="true" 
+                    debug="on" 
 					extdirs=""
                     destdir="${out.classes.absolute.dir}"
                     bootclasspathref="android.target.classpath"

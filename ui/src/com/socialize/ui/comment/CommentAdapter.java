@@ -69,8 +69,8 @@ public class CommentAdapter extends BaseAdapter {
 
 	@Override
 	public Object getItem(int position) {
-		if(position < comments.size()) {
-			return (comments == null) ? null : comments.get(position);
+		if(comments != null && position < comments.size()) {
+			return comments.get(position);
 		}
 		return null;
 	}

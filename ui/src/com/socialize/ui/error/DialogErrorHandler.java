@@ -4,6 +4,7 @@ import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
@@ -16,18 +17,18 @@ public class DialogErrorHandler implements SocializeUIErrorHandler {
 	@Override
 	public void handleError(Context context, String message) {
 		try {
-			AlertDialog.Builder builder = new AlertDialog.Builder(context);
+			AlertDialog.Builder builder = makeBuilder(context);
 			builder.setTitle("Error");
 			
 			if(drawables != null) {
 				builder.setIcon(drawables.getDrawable("socialize_icon_white.png"));
 			}
 			
-			if(!StringUtils.isEmpty(this.message)) {
+			if(!StringUtils.isEmpty(message)) {
 				builder.setMessage(message);
 			}
 			else {
-				builder.setMessage(message);
+				builder.setMessage(this.message);
 			}
 			
 			builder.setCancelable(false)
@@ -45,6 +46,10 @@ public class DialogErrorHandler implements SocializeUIErrorHandler {
 					message +
 					"]", e);
 		}
+	}
+	
+	protected Builder makeBuilder(Context context) {
+		return new AlertDialog.Builder(context);
 	}
 
 	public void setDrawables(Drawables drawables) {

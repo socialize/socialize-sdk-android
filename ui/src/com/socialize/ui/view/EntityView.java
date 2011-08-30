@@ -7,12 +7,11 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
-import com.socialize.ui.SocializeAuthenticatedView;
 import com.socialize.ui.SocializeUI;
 import com.socialize.util.StringUtils;
 
-public abstract class EntityView extends SocializeAuthenticatedView {
-	
+public abstract class EntityView extends AuthenticatedView {
+
 	public EntityView(Context context) {
 		super(context);
 	}

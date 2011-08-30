@@ -25,6 +25,7 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 
 /**
@@ -45,6 +46,10 @@ public abstract class SocializeActivity extends Activity {
 	protected <E extends Object> E getBean(String name) {
 		return container.getBean(name);
 	}
+	
+	public void setContainer(IOCContainer container) {
+		this.container = container;
+	}
 
 	@Override
 	protected void onDestroy() {
@@ -53,11 +58,15 @@ public abstract class SocializeActivity extends Activity {
 	}
 	
 	protected void initSocialize() {
-		Socialize.init(this);
+		getSocialize().init(this);
 	}
 	
 	protected void destroySocialize() {
-		Socialize.destroy(this);
+		getSocialize().destroy();
+	}
+	
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
 	}
 	
 	protected void onPostSocializeInit(IOCContainer container) {}
