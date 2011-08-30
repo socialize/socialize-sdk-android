@@ -1,8 +1,6 @@
 package com.socialize.ui.view;
 
-import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -18,9 +16,9 @@ import com.socialize.util.StringUtils;
 
 public abstract class AuthenticatedView extends SocializeView {
 	
-	protected String consumerKey;
-	protected String consumerSecret;
-	protected String fbAppId;
+	private String consumerKey;
+	private String consumerSecret;
+	private String fbAppId;
 	
 	public AuthenticatedView(Context context) {
 		super(context);
@@ -43,19 +41,19 @@ public abstract class AuthenticatedView extends SocializeView {
 		getSocializeUI().initSocialize(getContext());
 	}
 	
-	protected SocializeUI getSocializeUI() {
+	public SocializeUI getSocializeUI() {
 		return SocializeUI.getInstance();
 	}
 	
-	protected SocializeService getSocialize() {
+	public SocializeService getSocialize() {
 		return Socialize.getSocialize();
 	}
 	
-	protected SocializeAuthListener getAuthListener() {
+	public SocializeAuthListener getAuthListener() {
 		return new AuthenticatedViewListener(getContext(), this);
 	}
 	
-	protected SocializeAuthListener getAuthListener3rdParty() {
+	public SocializeAuthListener getAuthListener3rdParty() {
 		return new AuthenticatedViewListener3rdParty(getContext(), this);
 	}
 
@@ -65,12 +63,6 @@ public abstract class AuthenticatedView extends SocializeView {
 
 		String userId3rdParty = getSocializeUI().getCustomConfigValue(getContext(),SocializeConfig.FACEBOOK_USER_ID);
 		String token3rdParty = getSocializeUI().getCustomConfigValue(getContext(),SocializeConfig.FACEBOOK_USER_TOKEN);
-		
-//		Bundle bundle = getBundle();
-//		if(bundle != null) {
-//			userId3rdParty = getSocializeUI().getCustomConfigValue(getContext(),SocializeConfig.FACEBOOK_USER_ID);
-//			token3rdParty = getSocializeUI().getCustomConfigValue(getContext(),SocializeConfig.FACEBOOK_USER_TOKEN);
-//		}
 		
 		onBeforeAuthenticate();
 		
@@ -118,29 +110,26 @@ public abstract class AuthenticatedView extends SocializeView {
 		this.fbAppId = fbAppId;
 	}
 
-	// Subclasses override
-	protected void onBeforeAuthenticate() {}
-	
-	// Subclasses override
-	protected void onAfterAuthenticate() {}
-	
-	protected abstract boolean isRequires3rdPartyAuth();
-	
-	protected abstract View getView();
-	
-	/**
-	 * @deprecated
-	 * @return
-	 */
-	@Deprecated
-	protected Bundle getBundle() {
-		Bundle bundle = null;
-		Context context = getContext();
-		if(context instanceof Activity) {
-			Activity a = (Activity) context;
-			bundle = a.getIntent().getExtras();
-		}
-		
-		return bundle;
+	public String getConsumerKey() {
+		return consumerKey;
 	}
+
+	public String getConsumerSecret() {
+		return consumerSecret;
+	}
+
+	public String getFbAppId() {
+		return fbAppId;
+	}
+
+	// Subclasses override
+	public void onBeforeAuthenticate() {}
+	
+	// Subclasses override
+	public void onAfterAuthenticate() {}
+	
+	public abstract boolean isRequires3rdPartyAuth();
+	
+	public abstract View getView();
+	
 }

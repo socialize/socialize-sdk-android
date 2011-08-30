@@ -32,17 +32,17 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 		AuthenticatedView view = new AuthenticatedView(getContext()) {
 			
 			@Override
-			protected boolean isRequires3rdPartyAuth() {
+			public boolean isRequires3rdPartyAuth() {
 				return false;
 			}
 			
 			@Override
-			protected View getView() {
+			public View getView() {
 				return null;
 			}
 
 			@Override
-			protected SocializeUI getSocializeUI() {
+			public SocializeUI getSocializeUI() {
 				return socializeUI;
 			}
 		};
@@ -78,12 +78,12 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 		AuthenticatedView view = new AuthenticatedView(getContext()) {
 			
 			@Override
-			protected SocializeAuthListener getAuthListener3rdParty() {
+			public SocializeAuthListener getAuthListener3rdParty() {
 				return null;
 			}
 			
 			@Override
-			protected SocializeAuthListener getAuthListener() {
+			public SocializeAuthListener getAuthListener() {
 				return listener;
 			}
 
@@ -98,27 +98,27 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 			}
 
 			@Override
-			protected boolean isRequires3rdPartyAuth() {
+			public boolean isRequires3rdPartyAuth() {
 				return true;
 			}
 			
 			@Override
-			protected View getView() {
+			public View getView() {
 				return null;
 			}
 
 			@Override
-			protected SocializeUI getSocializeUI() {
+			public SocializeUI getSocializeUI() {
 				return socializeUI;
 			}
 
 			@Override
-			protected SocializeService getSocialize() {
+			public SocializeService getSocialize() {
 				return socialize;
 			}
 
 			@Override
-			protected void onBeforeAuthenticate() {
+			public void onBeforeAuthenticate() {
 				addResult(true);
 			}
 			
@@ -173,12 +173,12 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 		AuthenticatedView view = new AuthenticatedView(getContext()) {
 			
 			@Override
-			protected SocializeAuthListener getAuthListener3rdParty() {
+			public SocializeAuthListener getAuthListener3rdParty() {
 				return listener;
 			}
 			
 			@Override
-			protected SocializeAuthListener getAuthListener() {
+			public SocializeAuthListener getAuthListener() {
 				return null;
 			}
 
@@ -193,27 +193,27 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 			}
 
 			@Override
-			protected boolean isRequires3rdPartyAuth() {
+			public boolean isRequires3rdPartyAuth() {
 				return true;
 			}
 			
 			@Override
-			protected View getView() {
+			public View getView() {
 				return null;
 			}
 
 			@Override
-			protected SocializeUI getSocializeUI() {
+			public SocializeUI getSocializeUI() {
 				return socializeUI;
 			}
 
 			@Override
-			protected SocializeService getSocialize() {
+			public SocializeService getSocialize() {
 				return socialize;
 			}
 
 			@Override
-			protected void onBeforeAuthenticate() {
+			public void onBeforeAuthenticate() {
 				addResult(true);
 			}
 			
@@ -260,12 +260,12 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 		AuthenticatedView view = new AuthenticatedView(getContext()) {
 			
 			@Override
-			protected SocializeAuthListener getAuthListener3rdParty() {
+			public SocializeAuthListener getAuthListener3rdParty() {
 				return null;
 			}
 			
 			@Override
-			protected SocializeAuthListener getAuthListener() {
+			public SocializeAuthListener getAuthListener() {
 				return listener;
 			}
 
@@ -280,27 +280,27 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 			}
 
 			@Override
-			protected boolean isRequires3rdPartyAuth() {
+			public boolean isRequires3rdPartyAuth() {
 				return false;
 			}
 			
 			@Override
-			protected View getView() {
+			public View getView() {
 				return null;
 			}
 
 			@Override
-			protected SocializeUI getSocializeUI() {
+			public SocializeUI getSocializeUI() {
 				return socializeUI;
 			}
 
 			@Override
-			protected SocializeService getSocialize() {
+			public SocializeService getSocialize() {
 				return socialize;
 			}
 
 			@Override
-			protected void onBeforeAuthenticate() {
+			public void onBeforeAuthenticate() {
 				addResult(true);
 			}
 		};

@@ -25,7 +25,7 @@ public class CommentView extends EntityView {
 	}
 
 	@Override
-	protected boolean isRequires3rdPartyAuth() {
+	public boolean isRequires3rdPartyAuth() {
 		return false;
 	}
 
@@ -35,7 +35,7 @@ public class CommentView extends EntityView {
 	}
 
 	@Override
-	protected void onAfterAuthenticate() {
+	public void onAfterAuthenticate() {
 		if(progress != null) {
 			progress.dismiss();
 		}

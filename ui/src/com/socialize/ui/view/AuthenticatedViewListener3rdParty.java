@@ -40,10 +40,10 @@ public class AuthenticatedViewListener3rdParty extends AuthenticatedViewListener
 	public void onAuthFail(SocializeException error) {
 		// Assume bad token, re-auth with FB
 		view.getSocialize().authenticate(
-				view.consumerKey, 
-				view.consumerSecret, 
+				view.getConsumerKey(), 
+				view.getConsumerSecret(), 
 				AuthProviderType.FACEBOOK,
-				view.fbAppId,
+				view.getFbAppId(),
 				view.getAuthListener());
 	}
 }
