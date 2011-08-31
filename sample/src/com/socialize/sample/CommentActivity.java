@@ -40,6 +40,7 @@ public class CommentActivity extends SocializeActivity {
 		final Button btnListComments = (Button) findViewById(R.id.btnListComments);
 		final Button btnGetComment = (Button) findViewById(R.id.btnGetComment);
 		
+		
 		btnCreateComment.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

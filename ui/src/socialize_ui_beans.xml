@@ -65,6 +65,8 @@
 		</property>
 	</bean>
 	
+	<!-- Comment UI -->
+	
 	<bean 
 		id="commentAdapter" 
 		class="com.socialize.ui.comment.CommentAdapter">
@@ -77,19 +79,7 @@
 		<property name="userService" ref="userService"/>
 		<property name="base64Utils" ref="base64Utils"/><!-- Defined in socialize_beans.xml -->
 	</bean>
-	
-	<bean 
-		id="commentList" 
-		class="com.socialize.ui.comment.CommentListView"
-		singleton="false"
-		extends="socializeView">
-		<constructor-arg type="activity"/>
-		<constructor-arg ref="commentAdapter"/>
-		<constructor-arg ref="deviceUtils"/> <!-- Defined in socialize_beans.xml -->
-		<constructor-arg ref="drawables"/>
-		<constructor-arg ref="colors"/>
-		<property name="progressDialogFactory" ref="progressDialogFactory"/>
-	</bean>
+
 	
 	<bean 
 		id="commentListItem" 
@@ -112,5 +102,49 @@
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="colors" ref="colors"/>
 	</bean>
+	
+	<bean 
+		id="uiViewFactory"
+		abstract="true">
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="colors" ref="colors"/>
+	</bean>
+	
+	<bean 
+		id="commentHeaderFactory" 
+		class="com.socialize.ui.comment.CommentHeaderFactory"
+		extends="uiViewFactory"/>
+		
+	<bean 
+		id="commentEditFieldFactory" 
+		class="com.socialize.ui.comment.CommentEditFieldFactory"
+		extends="uiViewFactory"/>
+		
+	<bean 
+		id="commentContentViewFactory" 
+		class="com.socialize.ui.comment.CommentContentViewFactory"
+		extends="uiViewFactory"/>
+	
+	<bean 
+		id="commentList" 
+		class="com.socialize.ui.comment.CommentListView"
+		singleton="false"
+		extends="socializeView">
+		<constructor-arg type="activity"/>
+		<constructor-arg ref="commentAdapter"/>
+		<constructor-arg ref="deviceUtils"/> <!-- Defined in socialize_beans.xml -->
+		<constructor-arg ref="drawables"/>
+		<constructor-arg ref="colors"/>
+		
+		<init-method name="init"/>
+		
+		<property name="progressDialogFactory" ref="progressDialogFactory"/>
+		<property name="commentHeaderFactory" ref="commentHeaderFactory"/>
+		<property name="commentEditFieldFactory" ref="commentEditFieldFactory"/>
+		<property name="commentContentViewFactory" ref="commentContentViewFactory"/>
+	</bean>
+	
+	<!--  End Comment UI -->
 	
 </beans>
