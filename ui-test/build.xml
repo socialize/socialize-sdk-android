@@ -169,6 +169,9 @@
 					<isset property="tested.project.absolute.dir" />
 				</condition>
 				
+				<!-- Make sure the libs path exists -->
+				<mkdir dir="${source.project.dir}/libs"/>
+				
 				<javac encoding="${java.encoding}"
                     source="${java.source}" 
 					target="${java.target}"
