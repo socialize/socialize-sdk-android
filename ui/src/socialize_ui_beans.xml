@@ -16,6 +16,8 @@
 	</bean>
 	
 	<bean id="timeUtils" class="com.socialize.ui.util.TimeUtils"/>
+	<bean id="keyboardUtils" class="com.socialize.ui.util.KeyboardUtils"/>
+	
 	
 	<bean id="userService" class="com.socialize.ui.user.DefaultUserService"/>
 	
@@ -143,6 +145,8 @@
 		<property name="commentHeaderFactory" ref="commentHeaderFactory"/>
 		<property name="commentEditFieldFactory" ref="commentEditFieldFactory"/>
 		<property name="commentContentViewFactory" ref="commentContentViewFactory"/>
+		
+		<property name="keyboardUtils" ref="keyboardUtils"/>
 	</bean>
 	
 	<!--  End Comment UI -->

@@ -38,7 +38,7 @@ import com.socialize.ui.view.BaseViewFactory;
 public class CommentContentViewFactory extends BaseViewFactory<CommentContentView> {
 	
 	@Override
-	public CommentContentView make(Context context, Object... params) {
+	public CommentContentView make(Context context) {
 		
 		LinearLayout contentView = new LinearLayout(context);
 

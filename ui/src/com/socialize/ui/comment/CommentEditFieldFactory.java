@@ -37,17 +37,16 @@ import com.socialize.ui.view.BaseViewFactory;
 
 /**
  * @author Jason Polites
- *
  */
 public class CommentEditFieldFactory extends BaseViewFactory<CommentEditField> {
 	
 	@Override
-	public CommentEditField make(Context context, Object... params) {
+	public CommentEditField make(Context context) {
 		
-		final int four = getDIP(4);
+		final int  four = getDIP(4);
 		final int eight = getDIP(8);
 		
-		CommentEditField field = new CommentEditField(context);
+		CommentEditField field = newCommentEditField(context);
 
 		LayoutParams editPanelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		editPanelLayoutParams.setMargins(eight, eight, eight, eight);
@@ -97,5 +96,9 @@ public class CommentEditFieldFactory extends BaseViewFactory<CommentEditField> {
 		field.addView(button);
 		
 		return field;
+	}
+	
+	protected CommentEditField newCommentEditField(Context context) {
+		return new CommentEditField(context);
 	}
 }

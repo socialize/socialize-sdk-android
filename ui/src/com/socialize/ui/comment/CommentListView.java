@@ -38,6 +38,7 @@ import com.socialize.ui.BaseView;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.util.Colors;
+import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.ui.view.ViewFactory;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
@@ -62,6 +63,7 @@ public class CommentListView extends BaseView {
 	private ProgressDialog dialog = null;
 	private Colors colors;
 	private DeviceUtils deviceUtils;
+	private KeyboardUtils keyboardUtils;
 	
 	private CommentHeaderFactory commentHeaderFactory;
 	private CommentEditFieldFactory commentEditFieldFactory;
@@ -116,7 +118,7 @@ public class CommentListView extends BaseView {
 			public void onComment(String text) {
 				doPostComment(text);
 			}
-		}));
+		}, keyboardUtils));
 		
 		content.setListAdapter(provider);
 		content.setScrollListener(new CommentScrollListener(new CommentScrollCallback() {
@@ -321,6 +323,9 @@ public class CommentListView extends BaseView {
 	public void setCommentContentViewFactory(CommentContentViewFactory commentContentViewFactory) {
 		this.commentContentViewFactory = commentContentViewFactory;
 	}
-	
+
+	public void setKeyboardUtils(KeyboardUtils keyboardUtils) {
+		this.keyboardUtils = keyboardUtils;
+	}
 	
 }

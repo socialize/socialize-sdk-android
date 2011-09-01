@@ -39,9 +39,8 @@ import com.socialize.ui.view.BaseViewFactory;
 public class CommentHeaderFactory extends BaseViewFactory<CommentHeader> {
 	
 	@Override
-	public CommentHeader make(Context context, Object... params) {
-		
-		final int four = getDIP(4);
+	public CommentHeader make(Context context) {
+		int four = getDIP(4);
 		
 		CommentHeader header = new CommentHeader(context);
 		LayoutParams titlePanelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);

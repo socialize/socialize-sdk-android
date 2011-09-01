@@ -19,20 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.view;
+package com.socialize.ui.util;
 
 import android.content.Context;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 /**
- * Makes views.
  * @author Jason Polites
+ *
  */
-public interface ViewFactory<V extends View> {
+public class KeyboardUtils {
+	
+	private InputMethodManager imm;
+
+	public KeyboardUtils(Context context) {
+		super();
+		this.imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+	}
+
 	/**
-	 * Builds a single view.
-	 * @param context
-	 * @return
+	 * Hides the soft keyboard that was created for the given view.
+	 * @param source
 	 */
-	public V make(Context context);
+	public void hideKeyboard(View source) {
+		imm.hideSoftInputFromWindow(source.getWindowToken(), 0);
+	}
 }

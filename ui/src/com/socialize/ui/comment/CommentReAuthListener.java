@@ -19,20 +19,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.view;
+package com.socialize.ui.comment;
 
 import android.content.Context;
-import android.view.View;
+
+import com.socialize.api.SocializeSession;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
 
 /**
- * Makes views.
  * @author Jason Polites
+ *
  */
-public interface ViewFactory<V extends View> {
-	/**
-	 * Builds a single view.
-	 * @param context
-	 * @return
-	 */
-	public V make(Context context);
+public class CommentReAuthListener implements SocializeAuthListener {
+
+	private CommentButtonCallback callback;
+	private String comment;
+	private Context context;
+	
+	public CommentReAuthListener(Context context, CommentButtonCallback callback, String comment) {
+		super();
+		this.callback = callback;
+		this.comment = comment;
+		this.context = context;
+	}
+	
+	@Override
+	public void onError(SocializeException error) {
+		callback.onError(context, error.getMessage());
+	}
+
+	@Override
+	public void onAuthSuccess(SocializeSession session) {
+		callback.onComment(comment);
+	}
+
+	@Override
+	public void onAuthFail(SocializeException error) {
+		callback.onError(context, error.getMessage());
+	}
+
 }
