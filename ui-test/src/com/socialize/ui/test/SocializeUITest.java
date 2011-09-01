@@ -43,6 +43,18 @@ public abstract class SocializeUITest extends AndroidTestCase {
 		bucket.add(obj);
 	}
 	
+	protected void addResult(int index, Object obj) {
+		bucket.add(index, obj);
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected <T extends Object> T getResult(int index) {
+		if(!bucket.isEmpty()) {
+			return (T) bucket.get(index);
+		}
+		return (T) null;
+	}
+	
 	@SuppressWarnings("unchecked")
 	protected <T extends Object> T getNextResult() {
 		if(!bucket.isEmpty()) {

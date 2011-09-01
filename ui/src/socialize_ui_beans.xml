@@ -16,8 +16,10 @@
 	</bean>
 	
 	<bean id="timeUtils" class="com.socialize.ui.util.TimeUtils"/>
-	<bean id="keyboardUtils" class="com.socialize.ui.util.KeyboardUtils"/>
 	
+	<bean id="keyboardUtils" class="com.socialize.ui.util.KeyboardUtils">
+		<constructor-arg type="context"/>
+	</bean>
 	
 	<bean id="userService" class="com.socialize.ui.user.DefaultUserService"/>
 	
@@ -134,18 +136,17 @@
 		singleton="false"
 		extends="socializeView">
 		<constructor-arg type="activity"/>
-		<constructor-arg ref="commentAdapter"/>
-		<constructor-arg ref="deviceUtils"/> <!-- Defined in socialize_beans.xml -->
-		<constructor-arg ref="drawables"/>
-		<constructor-arg ref="colors"/>
-		
+
 		<init-method name="init"/>
 		
+		<property name="commentAdapter" ref="commentAdapter"/>
+		<property name="deviceUtils" ref="deviceUtils"/> <!-- Defined in socialize_beans.xml -->
+		<property name="drawables" ref="drawables"/>
+		<property name="colors" ref="colors"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
 		<property name="commentHeaderFactory" ref="commentHeaderFactory"/>
 		<property name="commentEditFieldFactory" ref="commentEditFieldFactory"/>
 		<property name="commentContentViewFactory" ref="commentContentViewFactory"/>
-		
 		<property name="keyboardUtils" ref="keyboardUtils"/>
 	</bean>
 	

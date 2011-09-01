@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.text.InputType;
+import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -49,7 +50,7 @@ import com.socialize.util.StringUtils;
 public class CommentListView extends BaseView {
 
 	private int defaultGrabLength = 20;
-	private CommentAdapter provider;
+	private CommentAdapter commentAdapter;
 	private boolean loading = true; // Default to true
 	
 	private String entityKey;
@@ -73,9 +74,28 @@ public class CommentListView extends BaseView {
 	private CommentHeader header;
 	private CommentContentView content;
 
+	public CommentListView(Context context, String entityKey) {
+		this(context);
+		this.entityKey = entityKey;
+	}
+	
+	public CommentListView(Context context) {
+		super(context);
+	}
+
+	/**
+	 * @deprecated Prefer parameterless constructor
+	 * @param context
+	 * @param provider
+	 * @param deviceUtils
+	 * @param drawables
+	 * @param colors
+	 * @param entityKey
+	 */
+	@Deprecated
 	public CommentListView(
 			final Context context, 
-			final CommentAdapter provider,
+			final CommentAdapter commentAdapter,
 			final DeviceUtils deviceUtils, 
 			final Drawables drawables,
 			final Colors colors,
@@ -83,12 +103,11 @@ public class CommentListView extends BaseView {
 
 		super(context);
 
-		this.provider = provider;
+		this.commentAdapter = commentAdapter;
 		this.entityKey = entityKey;
 		this.drawables = drawables;
 		this.colors = colors;
 		this.deviceUtils = deviceUtils;
-
 	}
 	
 	public void init() {
@@ -120,7 +139,7 @@ public class CommentListView extends BaseView {
 			}
 		}, keyboardUtils));
 		
-		content.setListAdapter(provider);
+		content.setListAdapter(commentAdapter);
 		content.setScrollListener(new CommentScrollListener(new CommentScrollCallback() {
 			@Override
 			public void onGetNextSet() {
@@ -153,14 +172,14 @@ public class CommentListView extends BaseView {
 
 			@Override
 			public void onCreate(Comment entity) {
-				List<Comment> comments = provider.getComments();
+				List<Comment> comments = commentAdapter.getComments();
 				comments.add(0, entity);
 				totalCount++;
 				startIndex++;
 				endIndex++;
 				header.setText(totalCount + " Comments");
 				field.clear();
-				provider.notifyDataSetChanged();
+				commentAdapter.notifyDataSetChanged();
 				content.scrollToTop();
 				if(dialog != null) {
 					dialog.dismiss();
@@ -177,7 +196,7 @@ public class CommentListView extends BaseView {
 
 		loading = true;
 
-		if(update || provider.getComments() == null || provider.getComments().size() == 0) {
+		if(update || commentAdapter.getComments() == null || commentAdapter.getComments().size() == 0) {
 			Socialize.getSocialize().listCommentsByEntity(entityKey, 
 					startIndex,
 					endIndex,
@@ -199,13 +218,13 @@ public class CommentListView extends BaseView {
 				public void onList(ListResult<Comment> entities) {
 					totalCount = entities.getTotalCount();
 					header.setText(totalCount + " Comments");
-					provider.setComments(entities.getItems());
+					commentAdapter.setComments(entities.getItems());
 
 					if(totalCount <= endIndex) {
-						provider.setLast(true);
+						commentAdapter.setLast(true);
 					}
 
-					provider.notifyDataSetChanged();
+					commentAdapter.notifyDataSetChanged();
 					
 					content.showList();
 
@@ -220,7 +239,7 @@ public class CommentListView extends BaseView {
 		else {
 			content.showList();
 
-			provider.notifyDataSetChanged();
+			commentAdapter.notifyDataSetChanged();
 			if(dialog != null) {
 				dialog.dismiss();
 			}
@@ -240,8 +259,8 @@ public class CommentListView extends BaseView {
 			endIndex = totalCount;
 
 			if(startIndex >= endIndex) {
-				provider.setLast(true);
-				provider.notifyDataSetChanged();
+				commentAdapter.setLast(true);
+				commentAdapter.notifyDataSetChanged();
 				return;
 			}
 		}
@@ -267,10 +286,10 @@ public class CommentListView extends BaseView {
 
 			@Override
 			public void onList(ListResult<Comment> entities) {
-				List<Comment> comments = provider.getComments();
+				List<Comment> comments = commentAdapter.getComments();
 				comments.addAll(entities.getItems());
-				provider.setComments(comments);
-				provider.notifyDataSetChanged();
+				commentAdapter.setComments(comments);
+				commentAdapter.notifyDataSetChanged();
 				loading = false;
 			}
 		});
@@ -288,8 +307,8 @@ public class CommentListView extends BaseView {
 		}
 	}
 
-	public void setProvider(CommentAdapter provider) {
-		this.provider = provider;
+	public void setCommentAdapter(CommentAdapter commentAdapter) {
+		this.commentAdapter = commentAdapter;
 	}
 
 	public void setLogger(SocializeLogger logger) {
@@ -327,5 +346,12 @@ public class CommentListView extends BaseView {
 	public void setKeyboardUtils(KeyboardUtils keyboardUtils) {
 		this.keyboardUtils = keyboardUtils;
 	}
-	
+
+	public void setEntityKey(String entityKey) {
+		this.entityKey = entityKey;
+	}
+
+	public void setDeviceUtils(DeviceUtils deviceUtils) {
+		this.deviceUtils = deviceUtils;
+	}
 }
