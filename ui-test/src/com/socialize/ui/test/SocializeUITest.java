@@ -44,6 +44,13 @@ public abstract class SocializeUITest extends AndroidTestCase {
 	}
 	
 	protected void addResult(int index, Object obj) {
+		int size = bucket.size();
+		if(size <= index) {
+			for (int i = size; i <= index; i++) {
+				bucket.add(i, "");
+			}
+		}
+		
 		bucket.add(index, obj);
 	}
 	

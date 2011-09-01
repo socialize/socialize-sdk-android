@@ -45,16 +45,20 @@ public class CommentAddButtonListener implements OnClickListener {
 	private Context context;
 	private CommentButtonCallback callback;
 	
+	public CommentAddButtonListener(Context context) {
+		super();
+		this.context = context;
+	}
+
 	public CommentAddButtonListener(
 			Context context, 
 			CommentEditField field, 
 			CommentButtonCallback callback,
 			KeyboardUtils keyboardUtils) {
 		
-		super();
+		this(context);
 		
 		this.field = field;
-		this.context = context;
 		this.callback = callback;
 		this.keyboardUtils = keyboardUtils;
 		this.consumerKey = getSocializeUI().getCustomConfigValue(context,SocializeConfig.SOCIALIZE_CONSUMER_KEY);
@@ -98,4 +102,18 @@ public class CommentAddButtonListener implements OnClickListener {
 			}
 		}
 	}
+
+	public void setField(CommentEditField field) {
+		this.field = field;
+	}
+
+	public void setKeyboardUtils(KeyboardUtils keyboardUtils) {
+		this.keyboardUtils = keyboardUtils;
+	}
+
+	public void setCallback(CommentButtonCallback callback) {
+		this.callback = callback;
+	}
+	
+	
 }

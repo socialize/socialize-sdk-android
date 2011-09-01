@@ -4,46 +4,22 @@ import java.util.List;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
-import android.text.InputType;
-import android.util.AttributeSet;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.ViewFlipper;
 
 import com.socialize.Socialize;
-import com.socialize.api.SocializeSession;
-import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.BaseView;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.ui.view.ViewFactory;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
-import com.socialize.util.StringUtils;
 
 //TODO: Remove this annotation
 @SuppressWarnings("unused")
@@ -66,9 +42,9 @@ public class CommentListView extends BaseView {
 	private DeviceUtils deviceUtils;
 	private KeyboardUtils keyboardUtils;
 	
-	private CommentHeaderFactory commentHeaderFactory;
-	private CommentEditFieldFactory commentEditFieldFactory;
-	private CommentContentViewFactory commentContentViewFactory;
+	private ViewFactory<CommentHeader> commentHeaderFactory;
+	private ViewFactory<CommentEditField> commentEditFieldFactory;
+	private ViewFactory<CommentContentView> commentContentViewFactory;
 	
 	private CommentEditField field;
 	private CommentHeader header;
@@ -127,20 +103,19 @@ public class CommentListView extends BaseView {
 		field = commentEditFieldFactory.make(getContext());
 		content = commentContentViewFactory.make(getContext());
 
-		field.setButtonListener(new CommentAddButtonListener(getContext(), field, new CommentButtonCallback() {
-			@Override
-			public void onError(Context context, String message) {
-				showError(getContext(), message);
-			}
-			
-			@Override
-			public void onComment(String text) {
-				doPostComment(text);
-			}
-		}, keyboardUtils));
+		field.setButtonListener(getCommentAddListener());
 		
 		content.setListAdapter(commentAdapter);
-		content.setScrollListener(new CommentScrollListener(new CommentScrollCallback() {
+		
+		content.setScrollListener(getCommentScrollListener());
+
+		addView(header);
+		addView(field);
+		addView(content);
+	}
+	
+	protected CommentScrollListener getCommentScrollListener() {
+		return new CommentScrollListener(new CommentScrollCallback() {
 			@Override
 			public void onGetNextSet() {
 				getNextSet();
@@ -150,11 +125,21 @@ public class CommentListView extends BaseView {
 			public boolean isLoading() {
 				return loading;
 			}
-		}));
-
-		addView(header);
-		addView(field);
-		addView(content);
+		});
+	}
+	
+	protected CommentAddButtonListener getCommentAddListener() {
+		return new CommentAddButtonListener(getContext(), field, new CommentButtonCallback() {
+			@Override
+			public void onError(Context context, String message) {
+				showError(getContext(), message);
+			}
+			
+			@Override
+			public void onComment(String text) {
+				doPostComment(text);
+			}
+		}, keyboardUtils);
 	}
 
 	public void doPostComment(String comment) {
@@ -331,15 +316,15 @@ public class CommentListView extends BaseView {
 		this.colors = colors;
 	}
 
-	public void setCommentHeaderFactory(CommentHeaderFactory commentHeaderFactory) {
+	public void setCommentHeaderFactory(ViewFactory<CommentHeader> commentHeaderFactory) {
 		this.commentHeaderFactory = commentHeaderFactory;
 	}
 
-	public void setCommentEditFieldFactory(CommentEditFieldFactory commentEditFieldFactory) {
+	public void setCommentEditFieldFactory(ViewFactory<CommentEditField> commentEditFieldFactory) {
 		this.commentEditFieldFactory = commentEditFieldFactory;
 	}
 
-	public void setCommentContentViewFactory(CommentContentViewFactory commentContentViewFactory) {
+	public void setCommentContentViewFactory(ViewFactory<CommentContentView> commentContentViewFactory) {
 		this.commentContentViewFactory = commentContentViewFactory;
 	}
 

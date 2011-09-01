@@ -10,56 +10,66 @@ import android.widget.LinearLayout;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.ui.comment.CommentAdapter;
+import com.socialize.ui.comment.CommentAddButtonListener;
 import com.socialize.ui.comment.CommentContentView;
-import com.socialize.ui.comment.CommentContentViewFactory;
 import com.socialize.ui.comment.CommentEditField;
-import com.socialize.ui.comment.CommentEditFieldFactory;
 import com.socialize.ui.comment.CommentHeader;
-import com.socialize.ui.comment.CommentHeaderFactory;
 import com.socialize.ui.comment.CommentListView;
+import com.socialize.ui.comment.CommentScrollCallback;
+import com.socialize.ui.comment.CommentScrollListener;
 import com.socialize.ui.test.SocializeUITest;
 import com.socialize.ui.util.KeyboardUtils;
+import com.socialize.ui.view.ViewFactory;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 
-@UsesMocks ({
-	CommentHeaderFactory.class,
-	CommentEditFieldFactory.class,
-	CommentContentViewFactory.class,
-	CommentEditField.class,
-	CommentHeader.class,
-	CommentContentView.class,
-	DeviceUtils.class,
-	Drawables.class,
-	KeyboardUtils.class,
-	CommentAdapter.class,
-	Drawable.class
-})
 public class CommentListViewTest extends SocializeUITest {
 	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({
+		ViewFactory.class,
+		CommentEditField.class,
+		CommentHeader.class,
+		CommentContentView.class,
+		DeviceUtils.class,
+		Drawables.class,
+		KeyboardUtils.class,
+		CommentAdapter.class,
+		Drawable.class,
+		CommentAddButtonListener.class,
+		CommentScrollListener.class,
+		CommentScrollCallback.class
+	})
 	public void testInit() {
 		final Context context = getContext();
 		
 		final String entityKey = "foobar";
 		
-		CommentHeaderFactory commentHeaderFactory = AndroidMock.createMock(CommentHeaderFactory.class);
-		CommentEditFieldFactory commentEditFieldFactory = AndroidMock.createMock(CommentEditFieldFactory.class);
-		CommentContentViewFactory commentContentViewFactory = AndroidMock.createMock(CommentContentViewFactory.class);
+		ViewFactory<CommentHeader> commentHeaderFactory = AndroidMock.createMock(ViewFactory.class);
+		ViewFactory<CommentEditField> commentEditFieldFactory = AndroidMock.createMock(ViewFactory.class);
+		ViewFactory<CommentContentView> commentContentViewFactory = AndroidMock.createMock(ViewFactory.class);
 		
-		CommentEditField field = AndroidMock.createMock(CommentEditField.class);
-		CommentHeader header = AndroidMock.createMock(CommentHeader.class);
-		CommentContentView content = AndroidMock.createMock(CommentContentView.class);
+		CommentScrollCallback commentScrollCallback = AndroidMock.createMock(CommentScrollCallback.class);
+		
+		final CommentScrollListener onScrollListener = AndroidMock.createMock(CommentScrollListener.class, commentScrollCallback);
+		final CommentAddButtonListener onClickListener = AndroidMock.createMock(CommentAddButtonListener.class, getContext());
+		
+		CommentEditField field = AndroidMock.createMock(CommentEditField.class, getContext());
+		CommentHeader header = AndroidMock.createMock(CommentHeader.class, getContext());
+		CommentContentView content = AndroidMock.createMock(CommentContentView.class, getContext());
 		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
 		Drawables drawables = AndroidMock.createMock(Drawables.class);
-		KeyboardUtils keyboardUtils = AndroidMock.createMock(KeyboardUtils.class);
+		KeyboardUtils keyboardUtils = AndroidMock.createMock(KeyboardUtils.class, getContext());
 		CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class, context);
 		Drawable drawable = AndroidMock.createMock(Drawable.class);
+		
+		AndroidMock.expect(deviceUtils.getDIP(4)).andReturn(4).times(1);
+		AndroidMock.expect(deviceUtils.getDIP(8)).andReturn(8).times(1);
 		
 		AndroidMock.expect(commentHeaderFactory.make(context)).andReturn(header);
 		AndroidMock.expect(commentEditFieldFactory.make(context)).andReturn(field);
 		AndroidMock.expect(commentContentViewFactory.make(context)).andReturn(content);
-		AndroidMock.expect(deviceUtils.getDIP(4)).andReturn(4).times(1);
-		AndroidMock.expect(deviceUtils.getDIP(8)).andReturn(8).times(1);
+
 		AndroidMock.expect(drawables.getDrawable("crosshatch.png", true, true, true)).andReturn(drawable);
 		
 		field.setButtonListener((OnClickListener) AndroidMock.anyObject());
@@ -101,6 +111,16 @@ public class CommentListViewTest extends SocializeUITest {
 				addResult(4, right);
 				addResult(5, bottom);
 			}
+
+			@Override
+			protected CommentScrollListener getCommentScrollListener() {
+				return onScrollListener;
+			}
+
+			@Override
+			protected CommentAddButtonListener getCommentAddListener() {
+				return onClickListener;
+			}
 		};
 		
 		view.setCommentHeaderFactory(commentHeaderFactory);
@@ -109,6 +129,7 @@ public class CommentListViewTest extends SocializeUITest {
 		view.setDeviceUtils(deviceUtils);
 		view.setKeyboardUtils(keyboardUtils);
 		view.setCommentAdapter(commentAdapter);
+		view.setDrawables(drawables);
 		
 		view.init();
 		
