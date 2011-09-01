@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="socialize-sdk-test">
+<project name="socialize-ui-test">
 
 	<property name="verbose" value="false" />
 	<property file="local.properties" />
 	<property file="build.properties" />
 	<property file="default.properties" />
-	<property file="${library.project.dir}/build.properties" prefix="socialize.sdk."/>
+	<property file="${source.project.dir}/build.properties" prefix="socialize.sdk."/>
 
 	<path id="android.antlibs">
 		<pathelement path="${sdk.dir}/tools/lib/anttasks.jar" />
@@ -169,9 +169,6 @@
 					<isset property="tested.project.absolute.dir" />
 				</condition>
 				
-				<!-- Make sure the libs path exists -->
-				<mkdir dir="${library.project.dir}/libs"/>
-					
 				<javac encoding="${java.encoding}"
                     source="${java.source}" 
 					target="${java.target}"
@@ -187,7 +184,7 @@
 					<src refid="project.libraries.src" />
 					<classpath>
 						<fileset dir="${extensible.libs.classpath}" includes="*.jar" />
-						<fileset dir="${library.project.dir}/libs" includes="*.jar" />
+						<fileset dir="${source.project.dir}/libs" includes="*.jar" />
 					</classpath>
 
 					<compilerarg value="-ARegenerateFrameworkMocks=true"/>
