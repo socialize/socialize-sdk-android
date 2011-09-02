@@ -7,6 +7,7 @@ import android.content.Context;
 import android.widget.LinearLayout;
 
 import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.entity.Comment;
 import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
@@ -145,7 +146,7 @@ public class CommentListView extends BaseView {
 	public void doPostComment(String comment) {
 		dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
 
-		Socialize.getSocialize().addComment(entityKey, comment, new CommentAddListener() {
+		getSocialize().addComment(entityKey, comment, new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -171,7 +172,10 @@ public class CommentListView extends BaseView {
 				}
 			}
 		});
-
+	}
+	
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
 	}
 
 	public void doListComments(boolean update) {
@@ -182,7 +186,7 @@ public class CommentListView extends BaseView {
 		loading = true;
 
 		if(update || commentAdapter.getComments() == null || commentAdapter.getComments().size() == 0) {
-			Socialize.getSocialize().listCommentsByEntity(entityKey, 
+			getSocialize().listCommentsByEntity(entityKey, 
 					startIndex,
 					endIndex,
 					new CommentListListener() {
@@ -250,7 +254,7 @@ public class CommentListView extends BaseView {
 			}
 		}
 
-		Socialize.getSocialize().listCommentsByEntity(entityKey, 
+		getSocialize().listCommentsByEntity(entityKey, 
 				startIndex,
 				endIndex,
 				new CommentListListener() {
@@ -283,7 +287,7 @@ public class CommentListView extends BaseView {
 	protected void onAttachedToWindow() {
 		super.onAttachedToWindow();
 
-		if(Socialize.getSocialize().isAuthenticated()) {
+		if(getSocialize().isAuthenticated()) {
 			doListComments(false);
 		}
 		else {
@@ -346,5 +350,41 @@ public class CommentListView extends BaseView {
 
 	protected void setLoading(boolean loading) {
 		this.loading = loading;
+	}
+
+	protected void setField(CommentEditField field) {
+		this.field = field;
+	}
+
+	protected void setHeader(CommentHeader header) {
+		this.header = header;
+	}
+
+	protected void setContent(CommentContentView content) {
+		this.content = content;
+	}
+
+	protected void setStartIndex(int startIndex) {
+		this.startIndex = startIndex;
+	}
+
+	protected void setEndIndex(int endIndex) {
+		this.endIndex = endIndex;
+	}
+
+	protected void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
+	}
+
+	public int getStartIndex() {
+		return startIndex;
+	}
+
+	public int getEndIndex() {
+		return endIndex;
+	}
+
+	public int getTotalCount() {
+		return totalCount;
 	}
 }

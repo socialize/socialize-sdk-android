@@ -1,5 +1,8 @@
 package com.socialize.ui.test.comment;
 
+import java.util.List;
+
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -9,6 +12,11 @@ import android.widget.LinearLayout;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.SocializeService;
+import com.socialize.SocializeServiceImpl;
+import com.socialize.entity.Comment;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.ui.comment.CommentAdapter;
 import com.socialize.ui.comment.CommentAddButtonListener;
 import com.socialize.ui.comment.CommentContentView;
@@ -17,6 +25,7 @@ import com.socialize.ui.comment.CommentHeader;
 import com.socialize.ui.comment.CommentListView;
 import com.socialize.ui.comment.CommentScrollCallback;
 import com.socialize.ui.comment.CommentScrollListener;
+import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.test.SocializeUITest;
 import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.ui.view.ViewFactory;
@@ -209,6 +218,158 @@ public class CommentListViewTest extends SocializeUITest {
 		assertEquals("foobar_error", message);
 	}
 	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({
+		Comment.class, 
+		ProgressDialog.class,
+		ProgressDialogFactory.class,
+		CommentAdapter.class,
+		List.class,
+		CommentEditField.class,
+		CommentHeader.class,
+		CommentContentView.class})
+	public void testPostCommentSuccess() {
+		
+		final int totalCount = 69;
+		final int startIndex = 0;
+		final int endIndex = 10;
+		final String commentString = "foobar_comment";
+		
+		final Comment comment = AndroidMock.createMock(Comment.class);
+		final ProgressDialog dialog = AndroidMock.createMock(ProgressDialog.class, getContext());
+		final ProgressDialogFactory progressDialogFactory = AndroidMock.createMock(ProgressDialogFactory.class);
+		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class, getContext());
+		final List<Comment> comments = AndroidMock.createMock(List.class);
+		final CommentEditField field = AndroidMock.createMock(CommentEditField.class, getContext());
+		final CommentHeader header = AndroidMock.createMock(CommentHeader.class, getContext());
+		final CommentContentView content = AndroidMock.createMock(CommentContentView.class, getContext());
+		
+		AndroidMock.expect(progressDialogFactory.show(getContext(), "Posting comment", "Please wait...")).andReturn(dialog);
+		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
+
+		comments.add(0, comment);
+		header.setText((totalCount+1) + " Comments");
+		field.clear();
+		commentAdapter.notifyDataSetChanged();
+		content.scrollToTop();
+		dialog.dismiss();
+		
+		AndroidMock.replay(progressDialogFactory);
+		AndroidMock.replay(commentAdapter);
+		AndroidMock.replay(comments);
+		AndroidMock.replay(header);
+		AndroidMock.replay(field);
+		AndroidMock.replay(content);
+		AndroidMock.replay(dialog);
+		
+		
+		// Because of the use of an anonymous inner class as the callback
+		// we need to override the SocializeService instance to capture the callback
+		// class and call it directly
+		
+		final SocializeService socialize = new SocializeServiceImpl() {
+			@Override
+			public void addComment(String url, String str, CommentAddListener commentAddListener) {
+				// call onCreate manually for the test.
+				assertEquals(commentString, str);
+				commentAddListener.onCreate(comment);
+			}
+		};
+		
+		PublicCommentListView view = new PublicCommentListView(getContext()) {
+			@Override
+			protected SocializeService getSocialize() {
+				return socialize;
+			}
+		};
+		
+		view.setCommentAdapter(commentAdapter);
+		view.setProgressDialogFactory(progressDialogFactory);
+		view.setHeader(header);
+		view.setField(field);
+		view.setContent(content);
+		view.setStartIndex(startIndex);
+		view.setEndIndex(endIndex);
+		view.setTotalCount(totalCount);
+		
+		view.doPostComment(commentString);
+		
+		AndroidMock.verify(progressDialogFactory);
+		AndroidMock.verify(commentAdapter);
+		AndroidMock.verify(comments);
+		AndroidMock.verify(header);
+		AndroidMock.verify(field);
+		AndroidMock.verify(content);
+		AndroidMock.verify(dialog);
+		
+		// Make sure indexes were updated
+		assertEquals(totalCount+1, view.getTotalCount());
+		assertEquals(startIndex+1, view.getStartIndex());
+		assertEquals(endIndex+1, view.getEndIndex());
+	}
+	
+	@UsesMocks ({
+		ProgressDialog.class,
+		ProgressDialogFactory.class,
+		SocializeException.class})
+	public void testPostCommentFail() {
+		
+		final String errorString = "foobar_error";
+		
+		final SocializeException error = AndroidMock.createMock(SocializeException.class);
+		final ProgressDialog dialog = AndroidMock.createMock(ProgressDialog.class, getContext());
+		final ProgressDialogFactory progressDialogFactory = AndroidMock.createMock(ProgressDialogFactory.class);
+
+		dialog.dismiss();
+		
+		AndroidMock.expect(progressDialogFactory.show(getContext(), "Posting comment", "Please wait...")).andReturn(dialog);
+		AndroidMock.expect(error.getMessage()).andReturn(errorString);
+		
+		AndroidMock.replay(progressDialogFactory);
+		AndroidMock.replay(dialog);
+		AndroidMock.replay(error);
+		
+		// Because of the use of an anonymous inner class as the callback
+		// we need to override the SocializeService instance to capture the callback
+		// class and call it directly
+		
+		final SocializeService socialize = new SocializeServiceImpl() {
+			@Override
+			public void addComment(String url, String str, CommentAddListener commentAddListener) {
+				// call onError manually for the test.
+				commentAddListener.onError(error);
+			}
+		};
+		
+		PublicCommentListView view = new PublicCommentListView(getContext()) {
+			@Override
+			protected SocializeService getSocialize() {
+				return socialize;
+			}
+
+			@Override
+			public void showError(Context context, String message) {
+				// Expect this
+				addResult(message);
+			}
+		};
+		
+		view.setProgressDialogFactory(progressDialogFactory);
+		
+		view.doPostComment("foobar");
+		
+		AndroidMock.verify(progressDialogFactory);
+		AndroidMock.verify(dialog);
+		AndroidMock.verify(error);
+		
+		String result = getNextResult();
+		
+		assertNotNull(result);
+		assertEquals(errorString, result);
+		
+	}
+	
+	
 	class PublicCommentListView extends CommentListView {
 
 		public PublicCommentListView(Context context) {
@@ -229,5 +390,36 @@ public class CommentListViewTest extends SocializeUITest {
 		public void setLoading(boolean loading) {
 			super.setLoading(loading);
 		}
+
+		@Override
+		public void setField(CommentEditField field) {
+			super.setField(field);
+		}
+
+		@Override
+		public void setHeader(CommentHeader header) {
+			super.setHeader(header);
+		}
+
+		@Override
+		public void setContent(CommentContentView content) {
+			super.setContent(content);
+		}
+
+		@Override
+		public void setStartIndex(int startIndex) {
+			super.setStartIndex(startIndex);
+		}
+
+		@Override
+		public void setEndIndex(int endIndex) {
+			super.setEndIndex(endIndex);
+		}
+
+		@Override
+		public void setTotalCount(int totalCount) {
+			super.setTotalCount(totalCount);
+		}
+		
 	}
 }
