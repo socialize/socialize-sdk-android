@@ -155,4 +155,79 @@ public class CommentListViewTest extends SocializeUITest {
 		
 	}
 	
+	public void testGetCommentScrollListener() {
+		PublicCommentListView view = new PublicCommentListView(getContext()) {
+			@Override
+			protected void getNextSet() {
+				addResult(true);
+			}
+		};
+		
+		view.setLoading(true);
+		
+		CommentScrollListener commentScrollListener = view.getCommentScrollListener();
+		
+		assertNotNull(commentScrollListener.getCallback());
+		
+		commentScrollListener.getCallback().onGetNextSet();
+		
+		assertTrue(commentScrollListener.getCallback().isLoading());
+		
+		Boolean nextResult = getNextResult();
+		
+		assertNotNull(nextResult);
+		assertTrue(nextResult);
+	}
+	
+	public void testGetCommentAddListener() {
+		PublicCommentListView view = new PublicCommentListView(getContext()) {
+			@Override
+			public void doPostComment(String comment) {
+				addResult(0, comment);
+			}
+
+			@Override
+			public void showError(Context context, String message) {
+				addResult(1, message);
+			}
+		};
+		
+		CommentAddButtonListener commentScrollListener = view.getCommentAddListener();
+		
+		assertNotNull(commentScrollListener.getCallback());
+		
+		commentScrollListener.getCallback().onComment("foobar");
+		commentScrollListener.getCallback().onError(getContext(), "foobar_error");
+		
+		String comment = getResult(0);
+		String message = getResult(1);
+		
+		assertNotNull(comment);
+		assertNotNull(message);
+		
+		assertEquals("foobar", comment);
+		assertEquals("foobar_error", message);
+	}
+	
+	class PublicCommentListView extends CommentListView {
+
+		public PublicCommentListView(Context context) {
+			super(context);
+		}
+
+		@Override
+		public CommentScrollListener getCommentScrollListener() {
+			return super.getCommentScrollListener();
+		}
+
+		@Override
+		public CommentAddButtonListener getCommentAddListener() {
+			return super.getCommentAddListener();
+		}
+
+		@Override
+		public void setLoading(boolean loading) {
+			super.setLoading(loading);
+		}
+	}
 }

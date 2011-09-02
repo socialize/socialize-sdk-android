@@ -233,7 +233,7 @@ public class CommentListView extends BaseView {
 		}
 	}
 
-	private void getNextSet() {
+	protected void getNextSet() {
 		
 		loading = true; // Prevent continuous load
 
@@ -338,5 +338,13 @@ public class CommentListView extends BaseView {
 
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
 		this.deviceUtils = deviceUtils;
+	}
+
+	public boolean isLoading() {
+		return loading;
+	}
+
+	protected void setLoading(boolean loading) {
+		this.loading = loading;
 	}
 }

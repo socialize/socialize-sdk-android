@@ -108,7 +108,15 @@ public class SocializeUI {
 	}
 	
 	public String getCustomConfigValue(Context context, String key) {
-		return getSocialize().getConfig().getProperty(key);
+		
+		SocializeService socialize = getSocialize();
+		SocializeConfig config = socialize.getConfig();
+		
+		if(config != null) {
+			return config.getProperty(key);
+		}
+		
+		return null;
 	}
 	
 	public void showCommentView(Activity context, String url) {

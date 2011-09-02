@@ -114,6 +114,8 @@ public class CommentAddButtonListener implements OnClickListener {
 	public void setCallback(CommentButtonCallback callback) {
 		this.callback = callback;
 	}
-	
-	
+
+	public CommentButtonCallback getCallback() {
+		return callback;
+	}
 }

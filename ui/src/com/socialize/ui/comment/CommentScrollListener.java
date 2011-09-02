@@ -59,4 +59,7 @@ public class CommentScrollListener implements OnScrollListener {
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {}
 
+	public CommentScrollCallback getCallback() {
+		return callback;
+	}
 }
