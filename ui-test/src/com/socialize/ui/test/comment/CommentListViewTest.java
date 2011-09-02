@@ -15,8 +15,10 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
 import com.socialize.SocializeServiceImpl;
 import com.socialize.entity.Comment;
+import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
+import com.socialize.listener.comment.CommentListListener;
 import com.socialize.ui.comment.CommentAdapter;
 import com.socialize.ui.comment.CommentAddButtonListener;
 import com.socialize.ui.comment.CommentContentView;
@@ -167,7 +169,7 @@ public class CommentListViewTest extends SocializeUITest {
 	public void testGetCommentScrollListener() {
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
 			@Override
-			protected void getNextSet() {
+			public void getNextSet() {
 				addResult(true);
 			}
 		};
@@ -217,6 +219,9 @@ public class CommentListViewTest extends SocializeUITest {
 		assertEquals("foobar", comment);
 		assertEquals("foobar_error", message);
 	}
+	
+	
+	
 	
 	@SuppressWarnings("unchecked")
 	@UsesMocks ({
@@ -369,6 +374,349 @@ public class CommentListViewTest extends SocializeUITest {
 		
 	}
 	
+
+	@UsesMocks ({CommentAdapter.class})
+	public void testGetNextSetIsLast() {
+		
+		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class, getContext());
+		
+		commentAdapter.setLast(true);
+		commentAdapter.notifyDataSetChanged();
+		
+		AndroidMock.replay(commentAdapter);
+		
+		PublicCommentListView view = new PublicCommentListView(getContext()) {
+			@Override
+			protected SocializeService getSocialize() {
+				fail(); // Shouldn't be called
+				return null;
+			}
+		};
+		
+		// Orchestrate the completion state
+		final int totalCount = 69;
+		final int endIndex = 70;
+		final int startIndex = 60;
+		final int grabLength = 10;
+		
+		view.setCommentAdapter(commentAdapter);
+		view.setStartIndex(startIndex);
+		view.setEndIndex(endIndex);
+		view.setTotalCount(totalCount);
+		view.setDefaultGrabLength(grabLength);
+		
+		view.getNextSet();
+		
+		AndroidMock.verify(commentAdapter);
+		
+		assertEquals(totalCount, view.getEndIndex());
+		assertEquals(startIndex+grabLength, view.getStartIndex());
+		assertFalse(view.isLoading());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({
+		CommentAdapter.class,
+		List.class,
+		ListResult.class})
+	public void testGetNextSet() {
+		
+		final int totalCount = 169;
+		final int startIndex = 0;
+		final int endIndex = 70;
+		
+		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class, getContext());
+		final List<Comment> comments = AndroidMock.createMock(List.class);
+		final List<Comment> listResultComments = AndroidMock.createMock(List.class);
+		
+		final ListResult<Comment> entities = AndroidMock.createMock(ListResult.class);
+
+		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
+		AndroidMock.expect(entities.getItems()).andReturn(listResultComments);
+		AndroidMock.expect(comments.addAll(listResultComments)).andReturn(true);
+		
+		commentAdapter.setComments(comments);
+		commentAdapter.notifyDataSetChanged();
+		
+		AndroidMock.replay(entities);
+		AndroidMock.replay(commentAdapter);
+		AndroidMock.replay(comments);
+		
+		// Because of the use of an anonymous inner class as the callback
+		// we need to override the SocializeService instance to capture the callback
+		// class and call it directly
+		final SocializeService socialize = new SocializeServiceImpl() {
+			@Override
+			public void listCommentsByEntity(String url, int startIndex, int endIndex, CommentListListener commentListListener) {
+				commentListListener.onList(entities);
+			}
+		};
+		
+		PublicCommentListView view = new PublicCommentListView(getContext()) {
+			@Override
+			protected SocializeService getSocialize() {
+				return socialize;
+			}
+		};
+		
+		view.setCommentAdapter(commentAdapter);
+		view.setStartIndex(startIndex);
+		view.setEndIndex(endIndex);
+		view.setTotalCount(totalCount);
+		view.setDefaultGrabLength(10);
+		
+		view.getNextSet();
+		
+		AndroidMock.verify(commentAdapter);
+		AndroidMock.verify(comments);
+		AndroidMock.verify(entities);
+		
+		assertFalse(view.isLoading());
+	}
+	
+	
+
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({
+		CommentAdapter.class,
+		List.class,
+		CommentHeader.class,
+		CommentContentView.class,
+		ListResult.class})
+	public void testDoListCommentsSuccessEmptyCommentsWithoutUpdate() {
+		
+		final int totalCount = 69;
+		final int startIndex = 0;
+		final int endIndex = 70;
+		
+		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class, getContext());
+		final List<Comment> comments = AndroidMock.createMock(List.class);
+		final List<Comment> listResultComments = AndroidMock.createMock(List.class);
+		
+		final CommentHeader header = AndroidMock.createMock(CommentHeader.class, getContext());
+		final CommentContentView content = AndroidMock.createMock(CommentContentView.class, getContext());
+		final ListResult<Comment> entities = AndroidMock.createMock(ListResult.class);
+		
+		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
+		AndroidMock.expect(comments.size()).andReturn(0); // Empty comments
+		AndroidMock.expect(entities.getItems()).andReturn(listResultComments);
+		AndroidMock.expect(entities.getTotalCount()).andReturn(totalCount);
+
+		commentAdapter.setComments(listResultComments);
+		commentAdapter.setLast(true);
+		header.setText(totalCount + " Comments");
+		commentAdapter.notifyDataSetChanged();
+		content.showList();
+		
+		AndroidMock.replay(entities);
+		AndroidMock.replay(commentAdapter);
+		AndroidMock.replay(comments);
+		AndroidMock.replay(header);
+		AndroidMock.replay(content);
+		
+		// Because of the use of an anonymous inner class as the callback
+		// we need to override the SocializeService instance to capture the callback
+		// class and call it directly
+		final SocializeService socialize = new SocializeServiceImpl() {
+			@Override
+			public void listCommentsByEntity(String url, int startIndex, int endIndex, CommentListListener commentListListener) {
+				commentListListener.onList(entities);
+			}
+		};
+		
+		PublicCommentListView view = new PublicCommentListView(getContext()) {
+			@Override
+			protected SocializeService getSocialize() {
+				return socialize;
+			}
+		};
+		
+		view.setCommentAdapter(commentAdapter);
+		view.setHeader(header);
+		view.setContent(content);
+		view.setStartIndex(startIndex);
+		view.setDefaultGrabLength(endIndex);
+		
+		view.doListComments(false);
+		
+		AndroidMock.verify(commentAdapter);
+		AndroidMock.verify(comments);
+		AndroidMock.verify(header);
+		AndroidMock.verify(content);
+		AndroidMock.verify(entities);
+		
+		assertEquals(totalCount, view.getTotalCount());
+		assertFalse(view.isLoading());
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({
+		SocializeException.class,
+		CommentAdapter.class,
+		List.class})
+	public void testDoListCommentsFailEmptyCommentsWithoutUpdate() {
+		
+		final String errorString = "foobar_error";
+		
+		final SocializeException error = AndroidMock.createMock(SocializeException.class);
+		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class, getContext());
+		final List<Comment> comments = AndroidMock.createMock(List.class);
+		final CommentContentView content = AndroidMock.createMock(CommentContentView.class, getContext());
+		
+		content.showList();
+		AndroidMock.expect(error.getMessage()).andReturn(errorString);
+		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
+		AndroidMock.expect(comments.size()).andReturn(0); // Empty comments
+		
+		AndroidMock.replay(commentAdapter);
+		AndroidMock.replay(comments);
+		AndroidMock.replay(content);
+		AndroidMock.replay(error);
+		
+		// Because of the use of an anonymous inner class as the callback
+		// we need to override the SocializeService instance to capture the callback
+		// class and call it directly
+		final SocializeService socialize = new SocializeServiceImpl() {
+			@Override
+			public void listCommentsByEntity(String url, int startIndex, int endIndex, CommentListListener commentListListener) {
+				commentListListener.onError(error);
+			}
+		};
+		
+		PublicCommentListView view = new PublicCommentListView(getContext()) {
+			@Override
+			protected SocializeService getSocialize() {
+				return socialize;
+			}
+
+			@Override
+			public void showError(Context context, String message) {
+				addResult(message);
+			}
+		};
+		
+		view.setCommentAdapter(commentAdapter);
+		view.setContent(content);
+		view.doListComments(false);
+		
+		AndroidMock.verify(commentAdapter);
+		AndroidMock.verify(comments);
+		AndroidMock.verify(error);
+		AndroidMock.verify(content);
+		
+		String result = getNextResult();
+		
+		assertNotNull(result);
+		assertEquals(errorString, result);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({
+		CommentAdapter.class,
+		List.class,
+		CommentContentView.class})
+	public void testDoListCommentsSuccessPopulatedCommentsWithoutUpdate() {
+		
+		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class, getContext());
+		final List<Comment> comments = AndroidMock.createMock(List.class);
+		final CommentContentView content = AndroidMock.createMock(CommentContentView.class, getContext());
+		
+		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
+		AndroidMock.expect(comments.size()).andReturn(10); // Populated comments
+
+		commentAdapter.notifyDataSetChanged();
+		content.showList();
+		
+		AndroidMock.replay(commentAdapter);
+		AndroidMock.replay(comments);
+		AndroidMock.replay(content);
+		
+		PublicCommentListView view = new PublicCommentListView(getContext());
+		
+		view.setCommentAdapter(commentAdapter);
+		view.setContent(content);
+		
+		view.doListComments(false);
+		
+		AndroidMock.verify(commentAdapter);
+		AndroidMock.verify(comments);
+		AndroidMock.verify(content);
+		
+		assertFalse(view.isLoading());
+	}
+	
+
+	@UsesMocks ({SocializeService.class})
+	public void testOnAttachedToWindowSuccess() {
+		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
+		
+		AndroidMock.expect(socialize.isAuthenticated()).andReturn(true);
+		AndroidMock.replay(socialize);
+		
+		PublicCommentListView view = new PublicCommentListView(getContext()) {
+			@Override
+			protected SocializeService getSocialize() {
+				return socialize;
+			}
+
+			@Override
+			public void doListComments(boolean update) {
+				addResult(update);
+			}
+		};
+		
+		view.onAttachedToWindow();
+		
+		Boolean update = getNextResult();
+		
+		assertNotNull(update);
+		assertFalse(update);
+		
+		AndroidMock.verify(socialize);
+	}
+	
+	@UsesMocks ({
+		SocializeService.class,
+		CommentContentView.class})
+	public void testOnAttachedToWindowFail() {
+		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
+		final CommentContentView content = AndroidMock.createMock(CommentContentView.class, getContext());
+		
+		AndroidMock.expect(socialize.isAuthenticated()).andReturn(false);
+		content.showList();
+		
+		AndroidMock.replay(socialize);
+		AndroidMock.replay(content);
+		
+		PublicCommentListView view = new PublicCommentListView(getContext()) {
+			@Override
+			protected SocializeService getSocialize() {
+				return socialize;
+			}
+
+			@Override
+			public void doListComments(boolean update) {
+				fail();
+			}
+
+			@Override
+			public void showError(Context context, String message) {
+				addResult(message);
+			}
+		};
+		
+		view.setContent(content);
+		view.onAttachedToWindow();
+		
+		String error = getNextResult();
+		
+		assertNotNull(error);
+		assertEquals("Socialize not authenticated", error);
+		
+		AndroidMock.verify(socialize);
+		AndroidMock.verify(content);
+	}
 	
 	class PublicCommentListView extends CommentListView {
 
@@ -420,6 +768,15 @@ public class CommentListViewTest extends SocializeUITest {
 		public void setTotalCount(int totalCount) {
 			super.setTotalCount(totalCount);
 		}
-		
+
+		@Override
+		public void getNextSet() {
+			super.getNextSet();
+		}
+
+		@Override
+		public void onAttachedToWindow() {
+			super.onAttachedToWindow();
+		}
 	}
 }

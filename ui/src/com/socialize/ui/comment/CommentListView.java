@@ -60,33 +60,6 @@ public class CommentListView extends BaseView {
 		super(context);
 	}
 
-	/**
-	 * @deprecated Prefer parameterless constructor
-	 * @param context
-	 * @param provider
-	 * @param deviceUtils
-	 * @param drawables
-	 * @param colors
-	 * @param entityKey
-	 */
-	@Deprecated
-	public CommentListView(
-			final Context context, 
-			final CommentAdapter commentAdapter,
-			final DeviceUtils deviceUtils, 
-			final Drawables drawables,
-			final Colors colors,
-			final String entityKey) {
-
-		super(context);
-
-		this.commentAdapter = commentAdapter;
-		this.entityKey = entityKey;
-		this.drawables = drawables;
-		this.colors = colors;
-		this.deviceUtils = deviceUtils;
-	}
-	
 	public void init() {
 
 		int four = deviceUtils.getDIP(4);
@@ -184,8 +157,10 @@ public class CommentListView extends BaseView {
 		endIndex = defaultGrabLength;
 
 		loading = true;
+		
+		List<Comment> comments = commentAdapter.getComments();
 
-		if(update || commentAdapter.getComments() == null || commentAdapter.getComments().size() == 0) {
+		if(update || comments == null || comments.size() == 0) {
 			getSocialize().listCommentsByEntity(entityKey, 
 					startIndex,
 					endIndex,
@@ -250,6 +225,7 @@ public class CommentListView extends BaseView {
 			if(startIndex >= endIndex) {
 				commentAdapter.setLast(true);
 				commentAdapter.notifyDataSetChanged();
+				loading = false;
 				return;
 			}
 		}
