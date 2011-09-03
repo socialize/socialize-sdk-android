@@ -48,19 +48,6 @@ public class CommentListItem extends LinearLayout {
 		setGravity(Gravity.TOP);
 		setPadding(eight,eight,eight,eight);
 		
-//		LinearLayout iconLayout = new LinearLayout(getContext());
-//		LinearLayout.LayoutParams iconLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		
-//		iconLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
-//		
-//		iconLayout.setLayoutParams(iconLayoutParams);
-//		iconLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
-//		iconLayout.setPadding(four,four,four,four);
-
-//		userIcon = new ImageView(getContext());
-//		userIcon.setLayoutParams(iconLayoutParams);
-//		userIcon.setScaleType(ScaleType.CENTER_CROP);
-		
 		LinearLayout contentLayout = new LinearLayout(getContext());
 		contentLayout.setOrientation(LinearLayout.VERTICAL);
 		contentLayout.setGravity(Gravity.LEFT);
@@ -84,7 +71,6 @@ public class CommentListItem extends LinearLayout {
 		author.setMaxLines(1);
 		author.setTypeface(Typeface.DEFAULT_BOLD);
 		author.setTextColor(titleColor);
-//		author.setShadowLayer(1, 1, 1, Color.BLACK);
 		author.setLayoutParams(authorLayoutParams);
 		author.setSingleLine();
 
@@ -97,7 +83,6 @@ public class CommentListItem extends LinearLayout {
 		time.setMaxLines(1);
 		time.setTypeface(Typeface.DEFAULT, Typeface.ITALIC);
 		time.setTextColor(titleColor);
-//		time.setShadowLayer(1, 1, 1, Color.BLACK);
 		time.setLayoutParams(timeLayoutParams);
 		time.setSingleLine();
 		time.setGravity(Gravity.RIGHT);
@@ -109,15 +94,24 @@ public class CommentListItem extends LinearLayout {
 		comment.setTextColor(textColor);
 		comment.setLayoutParams(commentLayoutParams);
 
-//		iconLayout.addView(userIcon);
-
 		contentHeaderLayout.addView(author);
 		contentHeaderLayout.addView(time);
 		
 		contentLayout.addView(contentHeaderLayout);
 		contentLayout.addView(comment);
 		
+//		LinearLayout iconLayout = new LinearLayout(getContext());
+//		LinearLayout.LayoutParams iconLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//		iconLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
+//		iconLayout.setLayoutParams(iconLayoutParams);
+//		iconLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
+//		iconLayout.setPadding(four,four,four,four);
+//		userIcon = new ImageView(getContext());
+//		userIcon.setLayoutParams(iconLayoutParams);
+//		userIcon.setScaleType(ScaleType.CENTER_CROP);
+//		iconLayout.addView(userIcon);
 //		addView(iconLayout);
+		
 		addView(contentLayout);
 	}
 

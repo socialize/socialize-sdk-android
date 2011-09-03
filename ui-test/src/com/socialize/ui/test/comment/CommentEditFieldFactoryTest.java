@@ -57,9 +57,6 @@ public class CommentEditFieldFactoryTest extends SocializeUITest {
 		factory.make(getContext());
 		
 		AndroidMock.verify(field);
-//		AndroidMock.verify(deviceUtils);
-//		AndroidMock.verify(colors);
-//		AndroidMock.verify(drawables);
 	}
 	
 }
