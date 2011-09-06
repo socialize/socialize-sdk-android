@@ -6,6 +6,7 @@ sample/gen
 sample/bin
 sample/sdk_src/
 sample/local.properties
+sample/assets/sample-app.conf
 integration-test/bin
 integration-test/gen
 integration-test/.settings
