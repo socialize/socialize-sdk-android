@@ -65,10 +65,9 @@ public class UserAuthDataFactoryTest extends AbstractSocializeObjectFactoryTest<
 		object.setId(id);
 	}
 	
-	
 	public void testFromJSONFail() throws JSONException {
 		
-		
+		AndroidMock.expect(json.has("id")).andReturn(false);
 		AndroidMock.expect(json.has("auth_id")).andReturn(true);
 		AndroidMock.expect(json.has("auth_type")).andReturn(true);
 		

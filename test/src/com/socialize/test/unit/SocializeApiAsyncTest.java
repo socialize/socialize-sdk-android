@@ -28,6 +28,8 @@ import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import android.app.ProgressDialog;
+
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeApi;
@@ -102,6 +104,48 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 				signal.countDown();
 			}
 		};
+	}
+	
+	public void testDialogDismissWorksOnError() throws Throwable {
+		AndroidMock.expect(provider.authenticate("/authenticate/", "test_key", "test_secret", "test_uuid")).andThrow(new SocializeException("TEST ERROR IGNORE ME!"));
+		AndroidMock.replay(provider);
+		
+		final ProgressDialog authProgress = ProgressDialog.show(getActivity(), "Authenticating", "Please wait...");
+		
+
+		final SocializeAuthListener alistener = new SocializeAuthListener() {
+			
+			@Override
+			public void onAuthSuccess(SocializeSession session) {
+				authProgress.dismiss();
+				signal.countDown(); 
+				fail();
+			}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				authProgress.dismiss();
+				signal.countDown();
+				fail();
+			}
+
+
+			@Override
+			public void onError(SocializeException error) {
+				authProgress.dismiss();
+				signal.countDown();
+			}
+		};
+		
+
+		runTestOnUiThread(new Runnable() { 
+			@Override 
+			public void run() { 
+				api.authenticateAsync("test_key", "test_secret", "test_uuid", alistener, mockSessionConsumer);
+			} 
+		});
+		
+		signal.await(30, TimeUnit.SECONDS); 
 	}
 	
 	public void testApiAsyncCallsAuthenticateOnProvider() throws Throwable {

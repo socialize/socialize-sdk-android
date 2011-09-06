@@ -21,6 +21,9 @@
  */
 package com.socialize.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.socialize.util.StringUtils;
 
 import android.graphics.Bitmap;
@@ -40,7 +43,7 @@ public class User extends SocializeObject {
 	private String mediumImageUri;
 	private String largeImageUri;
 	private Stats stats;
-	private UserAuthData authData;
+	private List<UserAuthData> authData;
 	private String displayName;
 	private String profilePicData;
 	
@@ -150,13 +153,18 @@ public class User extends SocializeObject {
 		this.displayName = displayName;
 	}
 
-	public UserAuthData getAuthData() {
+	public List<UserAuthData> getAuthData() {
 		return authData;
 	}
+	
+	public synchronized void addUserAuthData(UserAuthData authData) {
+		if(this.authData == null) {
+			this.authData = new ArrayList<UserAuthData>(5);
+		}
+		this.authData.add(authData);
+	}
 
-	public void setAuthData(UserAuthData authData) {
+	public void setAuthData(List<UserAuthData> authData) {
 		this.authData = authData;
 	}
-	
-	
 }

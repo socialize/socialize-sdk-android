@@ -46,8 +46,8 @@ public abstract class AbstractSocializeObjectFactoryTest<T extends SocializeObje
 	protected void setUp() throws Exception {
 		super.setUp();
 		
-		json = AndroidMock.createNiceMock(JSONObject.class);
-		object = AndroidMock.createNiceMock(getObjectClass());
+		json = AndroidMock.createMock(JSONObject.class);
+		object = AndroidMock.createMock(getObjectClass());
 		
 		factory = createFactory();
 	}
@@ -75,6 +75,7 @@ public abstract class AbstractSocializeObjectFactoryTest<T extends SocializeObje
 	public void testFromJSON() throws Exception {
 		
 		AndroidMock.expect(json.has("id")).andReturn(true);
+		AndroidMock.expect(json.isNull("id")).andReturn(false);
 		AndroidMock.expect(json.getInt("id")).andReturn(id);
 		object.setId(id);
 		

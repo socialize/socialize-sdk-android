@@ -541,8 +541,12 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 					host += "/";	
 				}
 			}
-			
+			else if (endpoint.startsWith("/")) {
+				endpoint = endpoint.substring(1, endpoint.length());
+			}
+				
 			endpoint = host + endpoint;
+			
 		}
 		else {
 			logger.error("Could not locate host property in session or config!");

@@ -45,6 +45,8 @@ public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<Entity
 	protected void setupToJSONExpectations() throws JSONException {
 		AndroidMock.expect(object.getName()).andReturn(mockName);
 		AndroidMock.expect(object.getKey()).andReturn(mockKey);
+		AndroidMock.expect(json.put("name", mockName)).andReturn(json);
+		AndroidMock.expect(json.put("key", mockKey)).andReturn(json);
 	}
 
 	@Override
@@ -52,12 +54,20 @@ public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<Entity
 
 	@Override
 	protected void setupFromJSONExpectations() throws Exception {
+
 		AndroidMock.expect(json.has("name")).andReturn(true);
 		AndroidMock.expect(json.has("key")).andReturn(true);
 		AndroidMock.expect(json.has("likes")).andReturn(true);
 		AndroidMock.expect(json.has("shares")).andReturn(true);
 		AndroidMock.expect(json.has("comments")).andReturn(true);
 		AndroidMock.expect(json.has("views")).andReturn(true);
+		
+		AndroidMock.expect(json.isNull("name")).andReturn(false);
+		AndroidMock.expect(json.isNull("key")).andReturn(false);
+		AndroidMock.expect(json.isNull("likes")).andReturn(false);
+		AndroidMock.expect(json.isNull("shares")).andReturn(false);
+		AndroidMock.expect(json.isNull("comments")).andReturn(false);
+		AndroidMock.expect(json.isNull("views")).andReturn(false);
 		
 		AndroidMock.expect(json.getString("name")).andReturn(mockName);
 		AndroidMock.expect(json.getString("key")).andReturn(mockKey);

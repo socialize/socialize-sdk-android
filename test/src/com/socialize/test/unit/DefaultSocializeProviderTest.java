@@ -82,7 +82,7 @@ import com.socialize.util.JSONParser;
 	HttpEntity.class,
 	HttpUtils.class,
 	IOUtils.class})
-public class SocializeProviderTest extends SocializeActivityTest {
+public class DefaultSocializeProviderTest extends SocializeActivityTest {
 	
 	SocializeSessionPersister sessionPersister;
 	SocializeObjectFactory<SocializeObject> objectFactory;

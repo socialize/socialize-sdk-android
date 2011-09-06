@@ -60,4 +60,11 @@ public abstract class SocializeObjectFactory<T extends SocializeObject> extends 
 		}
 		return null;
 	}
+	
+	protected int getInt(JSONObject obj, String key) throws JSONException {
+		if(obj.has(key) && !obj.isNull(key)) {
+			return obj.getInt(key);
+		}
+		return 0;
+	}
 }

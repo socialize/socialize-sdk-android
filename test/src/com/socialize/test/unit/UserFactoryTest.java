@@ -21,6 +21,7 @@
  */
 package com.socialize.test.unit;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,7 +29,9 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.entity.Stats;
 import com.socialize.entity.User;
+import com.socialize.entity.UserAuthData;
 import com.socialize.entity.factory.StatsFactory;
+import com.socialize.entity.factory.UserAuthDataFactory;
 import com.socialize.entity.factory.UserFactory;
 
 /**
@@ -45,6 +48,9 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 	final String small_image_uri = "mock_small_image_uri";
 	final String medium_image_uri = "mock_medium_image_uri";
 	final String large_image_uri = "mock_large_image_uri";
+	final String image_data = "mock_image_data";
+	
+	private JSONArray array;
 	
 	@Override
 	protected void setupToJSONExpectations() throws JSONException {
@@ -52,28 +58,28 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		AndroidMock.expect(object.getLastName()).andReturn(last_name);
 		AndroidMock.expect(object.getDescription()).andReturn(description);
 		AndroidMock.expect(object.getLocation()).andReturn(location);
-//		AndroidMock.expect(object.getImage()).andReturn(null);
-		
-//		if(user.getImage() != null) {
-//			object.put("picture", imageUtils.encode(user.getImage()));
-//		}
+		AndroidMock.expect(object.getProfilePicData()).andReturn(image_data);
 		
 		AndroidMock.expect(json.put("first_name", first_name)).andReturn(json);
 		AndroidMock.expect(json.put("last_name", last_name)).andReturn(json);
 		AndroidMock.expect(json.put("description", description)).andReturn(json);
 		AndroidMock.expect(json.put("location", location)).andReturn(json);
-		
+		AndroidMock.expect(json.put("image_data", image_data)).andReturn(json);
 	}
 
 	@Override
 	protected void doToJSONVerify() {}
 
-	@UsesMocks({Stats.class})
+	@UsesMocks({Stats.class, UserAuthData.class})
 	@Override
 	protected void setupFromJSONExpectations() throws Exception {
 		
 		Stats stats = AndroidMock.createMock(Stats.class);
+		UserAuthData authData = AndroidMock.createMock(UserAuthData.class);
 		
+		array = AndroidMock.createMock(JSONArray.class);
+		
+		AndroidMock.expect(json.has("image_data")).andReturn(true);
 		AndroidMock.expect(json.has("first_name")).andReturn(true);
 		AndroidMock.expect(json.has("last_name")).andReturn(true);
 		AndroidMock.expect(json.has("username")).andReturn(true);
@@ -83,7 +89,21 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		AndroidMock.expect(json.has("medium_image_uri")).andReturn(true);
 		AndroidMock.expect(json.has("large_image_uri")).andReturn(true);
 		AndroidMock.expect(json.has("stats")).andReturn(true);
+		AndroidMock.expect(json.has("third_party_auth")).andReturn(true);
 		
+		AndroidMock.expect(json.isNull("image_data")).andReturn(false);
+		AndroidMock.expect(json.isNull("first_name")).andReturn(false);
+		AndroidMock.expect(json.isNull("last_name")).andReturn(false);
+		AndroidMock.expect(json.isNull("username")).andReturn(false);
+		AndroidMock.expect(json.isNull("description")).andReturn(false);
+		AndroidMock.expect(json.isNull("location")).andReturn(false);
+		AndroidMock.expect(json.isNull("small_image_uri")).andReturn(false);
+		AndroidMock.expect(json.isNull("medium_image_uri")).andReturn(false);
+		AndroidMock.expect(json.isNull("large_image_uri")).andReturn(false);
+		AndroidMock.expect(json.isNull("stats")).andReturn(false);
+		AndroidMock.expect(json.isNull("third_party_auth")).andReturn(false);
+		
+		AndroidMock.expect(json.getString("image_data")).andReturn(image_data);
 		AndroidMock.expect(json.getString("first_name")).andReturn(first_name);
 		AndroidMock.expect(json.getString("last_name")).andReturn(last_name);
 		AndroidMock.expect(json.getString("username")).andReturn(username);
@@ -93,6 +113,12 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		AndroidMock.expect(json.getString("medium_image_uri")).andReturn(medium_image_uri);
 		AndroidMock.expect(json.getString("large_image_uri")).andReturn(large_image_uri);
 		AndroidMock.expect(json.getJSONObject("stats")).andReturn(json);
+		
+		AndroidMock.expect(json.getJSONArray("third_party_auth")).andReturn(array);
+		AndroidMock.expect(array.length()).andReturn(1).times(2);
+		AndroidMock.expect(array.getJSONObject(0)).andReturn(json);
+		
+		AndroidMock.expect(factory.getUserAuthDataFactory().fromJSON(json)).andReturn(authData);
 		AndroidMock.expect(factory.getStatsFactory().fromJSON(json)).andReturn(stats);
 	
 		object.setFirstName(first_name);
@@ -103,13 +129,19 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		object.setSmallImageUri(small_image_uri);
 		object.setMediumImageUri(medium_image_uri);
 		object.setLargeImageUri(large_image_uri);
+		object.setProfilePicData(image_data);
 		object.setStats(stats);
+		object.addUserAuthData(authData);
 		
+		AndroidMock.replay(array);
+		AndroidMock.replay(factory.getUserAuthDataFactory());
 		AndroidMock.replay(factory.getStatsFactory());
 	}
 
 	@Override
 	protected void doFromJSONVerify() {
+		AndroidMock.verify(array);
+		AndroidMock.verify(factory.getUserAuthDataFactory());
 		AndroidMock.verify(factory.getStatsFactory());
 	}
 
@@ -118,11 +150,13 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		return User.class;
 	}
 
-	@UsesMocks({StatsFactory.class})
+	@UsesMocks({StatsFactory.class, UserAuthDataFactory.class})
 	@Override
 	protected UserFactory createFactory() {
 		
 		final StatsFactory statsFactory = AndroidMock.createMock(StatsFactory.class);
+		final UserAuthDataFactory userAuthDataFactory = AndroidMock.createMock(UserAuthDataFactory.class);
+		
 		
 		UserFactory factory = new UserFactory() {
 			@Override
@@ -137,6 +171,7 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		};
 		
 		factory.setStatsFactory(statsFactory);
+		factory.setUserAuthDataFactory(userAuthDataFactory);
 		
 		return factory;
 	}

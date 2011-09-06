@@ -232,7 +232,13 @@ public class AuthenticateActivity extends SocializeActivity {
 
 			btnApi.setVisibility(View.GONE);
 
-			authProgress.dismiss();
+			try {
+				authProgress.dismiss();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 		}
 
 		@Override
@@ -243,7 +249,12 @@ public class AuthenticateActivity extends SocializeActivity {
 
 			btnApi.setVisibility(View.VISIBLE);
 
-			authProgress.dismiss();
+			try {
+				authProgress.dismiss();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		@Override
@@ -254,7 +265,12 @@ public class AuthenticateActivity extends SocializeActivity {
 
 			btnApi.setVisibility(View.GONE);
 
-			authProgress.dismiss();
+			try {
+				authProgress.dismiss();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
