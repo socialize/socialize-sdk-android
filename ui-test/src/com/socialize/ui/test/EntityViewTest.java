@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
@@ -110,6 +111,41 @@ public class EntityViewTest extends SocializeUIActivityTest {
 		
 		AndroidMock.verify(activity);
 		AndroidMock.verify(intent);
+	}
+	
+	public void testGetErrorView() {
+		PublicEntityView view = new PublicEntityView(getContext()) {
+			
+			@Override
+			public boolean isRequires3rdPartyAuth() {
+				return false;
+			}
+			
+			@Override
+			protected View getView(Bundle bundle, String entityKey) {
+				return null;
+			}
+		};
+		
+		View errorView = view.getErrorView(getContext());
+		
+		assertNotNull(errorView);
+		assertTrue((errorView instanceof TextView));
+		TextView txt = (TextView) errorView;
+		assertEquals("Socialize Error! No entity url specified", txt.getText().toString());
+	}
+	
+	abstract class PublicEntityView extends EntityView {
+
+		public PublicEntityView(Context context) {
+			super(context);
+		}
+
+		@Override
+		public View getErrorView(Context context) {
+			return super.getErrorView(context);
+		}
+		
 	}
 	
 }

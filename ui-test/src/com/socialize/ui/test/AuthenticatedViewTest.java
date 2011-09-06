@@ -1,5 +1,9 @@
 package com.socialize.ui.test;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 
 import com.google.android.testing.mocking.AndroidMock;
@@ -320,6 +324,60 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 		
 		AndroidMock.verify(socializeUI);
 		AndroidMock.verify(socialize);
+	}
+	
+	@UsesMocks ({Activity.class, Intent.class})
+	public void testGetBundleValue() {
+		
+		final String key = "foobar";
+		Bundle mockBundle = new Bundle();
+		mockBundle.putString(SocializeUI.ENTITY_KEY, key);
+		
+		final Activity activity = AndroidMock.createMock(Activity.class);
+		Intent intent = AndroidMock.createMock(Intent.class);
+		
+		AndroidMock.expect(activity.getIntent()).andReturn(intent);
+		AndroidMock.expect(intent.getExtras()).andReturn(mockBundle);
+		
+		AndroidMock.replay(activity);
+		AndroidMock.replay(intent);
+		
+		PublicAuthenticatedView view = new PublicAuthenticatedView(getContext()) {
+			
+			@Override
+			public boolean isRequires3rdPartyAuth() {
+				return false;
+			}
+			
+			@Override
+			public View getView() {
+				return null;
+			}
+
+			@Override
+			protected Context getViewContext() {
+				return activity;
+			}
+		};
+		
+		String value = view.getBundleValue(SocializeUI.ENTITY_KEY);
+		
+		AndroidMock.verify(activity);
+		AndroidMock.verify(intent);
+		
+		assertNotNull(value);
+		assertEquals(key, value);
+	}
+	
+	abstract class PublicAuthenticatedView extends AuthenticatedView {
+		public PublicAuthenticatedView(Context context) {
+			super(context);
+		}
+
+		@Override
+		public String getBundleValue(String key) {
+			return super.getBundleValue(key);
+		}
 	}
 	
 }
