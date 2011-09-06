@@ -40,6 +40,7 @@ public class User extends SocializeObject {
 	private String mediumImageUri;
 	private String largeImageUri;
 	private Stats stats;
+	private UserAuthData authData;
 	private String displayName;
 	private String profilePicData;
 	
@@ -148,4 +149,14 @@ public class User extends SocializeObject {
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
+
+	public UserAuthData getAuthData() {
+		return authData;
+	}
+
+	public void setAuthData(UserAuthData authData) {
+		this.authData = authData;
+	}
+	
+	
 }

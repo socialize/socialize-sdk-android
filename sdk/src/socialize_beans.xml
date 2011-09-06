@@ -95,8 +95,14 @@
 	</bean>
 	
 	<bean id="dialogFactory" class="com.socialize.util.DialogFactory"/>
-	
 	<bean id="userFactory" class="com.socialize.entity.factory.UserFactory"/>
+	<bean id="userAuthDataFactory" class="com.socialize.entity.factory.UserAuthDataFactory"/>
+	<bean id="statsFactory" class="com.socialize.entity.factory.StatsFactory"/>
+	
+	<bean id="userFactory" class="com.socialize.entity.factory.UserFactory">
+		<property name="statsFactory" ref="statsFactory"/>
+		<property name="userAuthDataFactory" ref="userAuthDataFactory"/>
+	</bean>
 
 	<bean id="applicationFactory" class="com.socialize.entity.factory.ApplicationFactory"/>
 	

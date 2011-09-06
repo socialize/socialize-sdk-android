@@ -1,6 +1,8 @@
 package com.socialize.ui.view;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -15,11 +17,11 @@ import com.socialize.ui.SocializeView;
 import com.socialize.util.StringUtils;
 
 public abstract class AuthenticatedView extends SocializeView {
-	
+
 	private String consumerKey;
 	private String consumerSecret;
 	private String fbAppId;
-	
+
 	public AuthenticatedView(Context context) {
 		super(context);
 	}
@@ -27,7 +29,7 @@ public abstract class AuthenticatedView extends SocializeView {
 	public AuthenticatedView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
-	
+
 	@Override
 	public void onPostSocializeInit(IOCContainer container) {
 		getSocializeUI().initUI(container);
@@ -35,26 +37,48 @@ public abstract class AuthenticatedView extends SocializeView {
 		consumerSecret = getSocializeUI().getCustomConfigValue(getContext(),SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 		fbAppId = getSocializeUI().getCustomConfigValue(getContext(),SocializeConfig.FACEBOOK_APP_ID);
 	}
-	
+
 	@Override
 	protected void initSocialize() {
 		getSocializeUI().initSocialize(getContext());
 	}
-	
+
 	public SocializeUI getSocializeUI() {
 		return SocializeUI.getInstance();
 	}
-	
+
 	public SocializeService getSocialize() {
 		return Socialize.getSocialize();
 	}
-	
+
 	public SocializeAuthListener getAuthListener() {
 		return new AuthenticatedViewListener(getContext(), this);
 	}
-	
+
 	public SocializeAuthListener getAuthListener3rdParty() {
 		return new AuthenticatedViewListener3rdParty(getContext(), this);
+	}
+
+	protected String getBundleValue(String key) {
+		Bundle bundle = null;
+
+		Context context = getViewContext();
+
+		if(context instanceof Activity) {
+			Activity a = (Activity) context;
+			bundle = a.getIntent().getExtras();
+		}
+
+		if(bundle != null) {
+			return  bundle.getString(SocializeUI.ENTITY_KEY);
+		}
+
+		return null;
+	}
+
+	// Wrapped so it can be mocked.
+	protected Context getViewContext() {
+		return getContext();
 	}
 
 	@Override
@@ -63,14 +87,14 @@ public abstract class AuthenticatedView extends SocializeView {
 
 		String userId3rdParty = getSocializeUI().getCustomConfigValue(getContext(),SocializeConfig.FACEBOOK_USER_ID);
 		String token3rdParty = getSocializeUI().getCustomConfigValue(getContext(),SocializeConfig.FACEBOOK_USER_TOKEN);
-		
+
 		onBeforeAuthenticate();
-		
+
 		SocializeAuthListener listener = getAuthListener();
 		SocializeAuthListener listener3rdParty = getAuthListener3rdParty();
-		
+
 		if(isRequires3rdPartyAuth()) {
-			
+
 			if(!StringUtils.isEmpty(userId3rdParty) && !StringUtils.isEmpty(token3rdParty)) {
 				getSocialize().authenticateKnownUser(
 						consumerKey, 
@@ -97,7 +121,7 @@ public abstract class AuthenticatedView extends SocializeView {
 					listener);
 		}
 	}
-	
+
 	public void setConsumerKey(String consumerKey) {
 		this.consumerKey = consumerKey;
 	}
@@ -124,12 +148,12 @@ public abstract class AuthenticatedView extends SocializeView {
 
 	// Subclasses override
 	public void onBeforeAuthenticate() {}
-	
+
 	// Subclasses override
 	public void onAfterAuthenticate() {}
-	
+
 	public abstract boolean isRequires3rdPartyAuth();
-	
+
 	public abstract View getView();
-	
+
 }

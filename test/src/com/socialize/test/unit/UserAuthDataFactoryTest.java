@@ -26,20 +26,20 @@ import org.json.JSONObject;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.entity.Stats;
-import com.socialize.entity.factory.StatsFactory;
+import com.socialize.auth.AuthProviderType;
+import com.socialize.entity.UserAuthData;
+import com.socialize.entity.factory.UserAuthDataFactory;
 
 /**
  * @author Jason Polites
  *
  */
-@UsesMocks (Stats.class)
-public class StatsFactoryTest extends AbstractSocializeObjectFactoryTest<Stats, StatsFactory> {
+@UsesMocks (UserAuthData.class)
+public class UserAuthDataFactoryTest extends AbstractSocializeObjectFactoryTest<UserAuthData, UserAuthDataFactory> {
 
-	private Integer comments = 11;
-	private Integer likes = 22;
-	private Integer share = 33;
-	private Integer views = 44;
+	private Integer id = 69;
+	private String type = "facebook";
+	private String type_error = "no_such_provider";
 	
 	@Override
 	protected void setupToJSONExpectations() throws JSONException {
@@ -52,25 +52,39 @@ public class StatsFactoryTest extends AbstractSocializeObjectFactoryTest<Stats, 
 	@Override
 	protected void setupFromJSONExpectations() throws Exception {
 		
-		AndroidMock.expect(json.has("comments")).andReturn(true);
-		AndroidMock.expect(json.has("likes")).andReturn(true);
-		AndroidMock.expect(json.has("shares")).andReturn(true);
-		AndroidMock.expect(json.has("views")).andReturn(true);
+		AndroidMock.expect(json.has("auth_id")).andReturn(true);
+		AndroidMock.expect(json.has("auth_type")).andReturn(true);
 		
-		AndroidMock.expect(json.isNull("comments")).andReturn(false);
-		AndroidMock.expect(json.isNull("likes")).andReturn(false);
-		AndroidMock.expect(json.isNull("shares")).andReturn(false);
-		AndroidMock.expect(json.isNull("views")).andReturn(false);
+		AndroidMock.expect(json.isNull("auth_id")).andReturn(false);
+		AndroidMock.expect(json.isNull("auth_type")).andReturn(false);
 		
-		AndroidMock.expect(json.getInt("comments")).andReturn(comments);
-		AndroidMock.expect(json.getInt("likes")).andReturn(likes);
-		AndroidMock.expect(json.getInt("shares")).andReturn(share);
-		AndroidMock.expect(json.getInt("views")).andReturn(views);
+		AndroidMock.expect(json.getInt("auth_id")).andReturn(id);
+		AndroidMock.expect(json.getString("auth_type")).andReturn(type);
 		
-		object.setComments(comments);
-		object.setLikes(likes);
-		object.setShares(share);
-		object.setViews(views);
+		object.setAuthProviderType(AuthProviderType.FACEBOOK);
+		object.setId(id);
+	}
+	
+	
+	public void testFromJSONFail() throws JSONException {
+		
+		
+		AndroidMock.expect(json.has("auth_id")).andReturn(true);
+		AndroidMock.expect(json.has("auth_type")).andReturn(true);
+		
+		AndroidMock.expect(json.isNull("auth_id")).andReturn(false);
+		AndroidMock.expect(json.isNull("auth_type")).andReturn(false);
+		
+		AndroidMock.expect(json.getInt("auth_id")).andReturn(id);
+		AndroidMock.expect(json.getString("auth_type")).andReturn(type_error);
+		
+		AndroidMock.replay(json);
+		
+		object = factory.fromJSON(json);
+		
+		AndroidMock.verify(json);
+		
+		assertNull(object.getAuthProviderType());
 	}
 
 	@Override
@@ -79,16 +93,16 @@ public class StatsFactoryTest extends AbstractSocializeObjectFactoryTest<Stats, 
 	}
 
 	@Override
-	protected Class<Stats> getObjectClass() {
-		return Stats.class;
+	protected Class<UserAuthData> getObjectClass() {
+		return UserAuthData.class;
 	}
 
 	@Override
-	protected StatsFactory createFactory() {
+	protected UserAuthDataFactory createFactory() {
 		
-		StatsFactory factory = new StatsFactory() {
+		UserAuthDataFactory factory = new UserAuthDataFactory() {
 			@Override
-			public Stats instantiateObject() {
+			public UserAuthData instantiateObject() {
 				return object;
 			}
 

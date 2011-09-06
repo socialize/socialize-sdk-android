@@ -69,9 +69,9 @@ public abstract class AbstractSocializeObjectFactoryTest<T extends SocializeObje
 		AndroidMock.verify(object);
 		
 		doToJSONVerify();
-		
 	}
 	
+
 	public void testFromJSON() throws Exception {
 		
 		AndroidMock.expect(json.has("id")).andReturn(true);

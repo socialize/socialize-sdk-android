@@ -26,6 +26,7 @@ import org.json.JSONObject;
 
 import com.socialize.entity.Stats;
 import com.socialize.entity.User;
+import com.socialize.entity.UserAuthData;
 
 /**
  * @author Jason Polites
@@ -34,6 +35,7 @@ import com.socialize.entity.User;
 public class UserFactory extends SocializeObjectFactory<User> {
 	
 	private StatsFactory statsFactory;
+	private UserAuthDataFactory userAuthDataFactory;
 	
 	public static final String FIRST_NAME = "first_name";
 	public static final String LAST_NAME = "last_name";
@@ -45,6 +47,7 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	public static final String MEDIUM_IMAGE_URI = "medium_image_uri";
 	public static final String LARGE_IMAGE_URI = "large_image_uri";
 	public static final String STATS = "stats";
+	public static final String THIRD_PARTY_AUTH = "third_party_auth";
 
 	@Override
 	public User instantiateObject() {
@@ -67,9 +70,18 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		if(object.has(STATS) && !object.isNull(STATS)) {
 			JSONObject statsJson = object.getJSONObject(STATS);
 			
-			if(statsJson != null) {
+			if(statsJson != null && statsFactory != null) {
 				Stats stats = statsFactory.fromJSON(statsJson);
 				user.setStats(stats);
+			}
+		}
+		
+		if(object.has(THIRD_PARTY_AUTH) && !object.isNull(THIRD_PARTY_AUTH)) {
+			JSONObject authJson = object.getJSONObject(THIRD_PARTY_AUTH);
+			
+			if(authJson != null && userAuthDataFactory != null) {
+				UserAuthData authData = userAuthDataFactory.fromJSON(authJson);
+				user.setAuthData(authData);
 			}
 		}
 	}
@@ -81,17 +93,21 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		object.put(DESCRIPTION, user.getDescription());
 		object.put(LOCATION, user.getLocation());
 		object.put(IMAGE_DATA, user.getProfilePicData());
-		
-//		if(user.getImage() != null) {
-//			object.put("picture", imageUtils.encode(user.getImage()));
-//		}
 	}
 
 	public StatsFactory getStatsFactory() {
 		return statsFactory;
 	}
 
+	public UserAuthDataFactory getUserAuthDataFactory() {
+		return userAuthDataFactory;
+	}
+
 	public void setStatsFactory(StatsFactory statsFactory) {
 		this.statsFactory = statsFactory;
+	}
+
+	public void setUserAuthDataFactory(UserAuthDataFactory userAuthDataFactory) {
+		this.userAuthDataFactory = userAuthDataFactory;
 	}
 }

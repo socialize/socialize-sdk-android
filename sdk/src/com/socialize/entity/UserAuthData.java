@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,46 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.auth;
+package com.socialize.entity;
+
+import com.socialize.auth.AuthProviderType;
 
 /**
  * @author Jason Polites
  *
  */
-public enum AuthProviderType {
-	
-	SOCIALIZE ("socialize", 0),
-	FACEBOOK ("facebook", 1);
-	// TODO: Add more auth providers
-	
-	private final String name;   
-    private final int id; 
-	
-	AuthProviderType(String name, int id) {
-		this.name = name;
-		this.id = id;
-	}
+public class UserAuthData extends SocializeObject {
 
-	public String getName() {
-		return name;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	@Override
-	public String toString() {
-		return name;
-	}
+	private AuthProviderType authProviderType;
 	
-	public static AuthProviderType valueOf(int id) {
-		switch(id) {
-		case 1 : 
-			return FACEBOOK;
-		default :
-			return SOCIALIZE;
-		
-		}
+	public AuthProviderType getAuthProviderType() {
+		return authProviderType;
+	}
+	public void setAuthProviderType(AuthProviderType authProviderType) {
+		this.authProviderType = authProviderType;
 	}
 }

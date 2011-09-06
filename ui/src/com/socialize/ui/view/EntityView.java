@@ -41,11 +41,6 @@ public abstract class EntityView extends AuthenticatedView {
 		return getErrorView(context);
 	}
 	
-	// Wrapped so it can be mocked.
-	protected Context getViewContext() {
-		return getContext();
-	}
-	
 	protected View getErrorView(Context context) {
 		TextView error = new TextView(context);
 		error.setText("Socialize Error! No entity url specified");
