@@ -79,12 +79,14 @@
 			<arg value="${junit.dump.path}" />
 		</exec>
 
+		<!--
 		<echo>Dumping logcat buffer</echo>
 		<exec executable="${adb}" failonerror="true">
 			<arg line="${adb.device.arg}" />
 			<arg value="logcat" />
 			<arg value="-d" />
 		</exec>
+		-->
 	</target>
 	
 	<target name="integration-test" depends="-install-tested-project, install">

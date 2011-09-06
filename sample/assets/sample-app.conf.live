@@ -1,5 +1,0 @@
-# Local configuration for sample app
-#socialize.consumer.key=
-#socialize.consumer.secret=
-#facebook.app.id=
-socialize.api.url=http://api.getsocialize.com/v1

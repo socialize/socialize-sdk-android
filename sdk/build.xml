@@ -105,9 +105,6 @@
 		<replaceregexp file="${sample_dir}/default.properties" match="android.library.reference.1=../sdk" replace="" byline="true"/>
 		<replaceregexp file="${sample_dir}/.project" flags="s" match="&lt;linkedResources&gt;.*&lt;/linkedResources&gt;" replace="" />
 		
-		<delete file="${sample_dir}/assets/sample-app.conf"/>
-		<move file="${sample_dir}/assets/sample-app.conf.live" tofile="${sample_dir}/assets/sample-app.conf"/>
-		
 		<!-- Create the ZIP file for distribution -->
 		<zip destfile="build/socialize-sdk-android-${version}.zip">
 			<zipfileset dir="build" includes="**/*.jar" prefix="dist"/>
