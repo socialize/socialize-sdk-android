@@ -1,4 +1,4 @@
-Socialize SDK Android
+Socialize Android SDK
 =====================
 
 Contents:
@@ -8,3 +8,4 @@ Contents:
    
    getting_started
    socialize_ui
+   sdk_user_guide

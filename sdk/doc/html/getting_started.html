@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Getting Started Guide &mdash; Socialize SDK Android v0.4.0 documentation</title>
+    <title>Getting Started Guide &mdash; Socialize Android SDK v0.5.0 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.4.0',
+        VERSION:     '0.5.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,9 +22,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Socialize SDK Android v0.4.0 documentation" href="index.html" />
-    <link rel="next" title="Socialize UI" href="socialize_ui.html" />
-    <link rel="prev" title="Socialize SDK Android" href="index.html" /> 
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="Socialize Android SDK v0.5.0 documentation" href="index.html" />
+    <link rel="next" title="Socialize UI (Recommended for most users)" href="socialize_ui.html" />
+    <link rel="prev" title="Socialize Android SDK" href="index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -34,12 +35,12 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="socialize_ui.html" title="Socialize UI"
+          <a href="socialize_ui.html" title="Socialize UI (Recommended for most users)"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Socialize SDK Android"
+          <a href="index.html" title="Socialize Android SDK"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Socialize SDK Android v0.4.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK v0.5.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -54,10 +55,10 @@
 <h2>Installing the SDK<a class="headerlink" href="#installing-the-sdk" title="Permalink to this headline">¶</a></h2>
 <p>The Socialize SDK is delivered as a single JAR file, simply copy the socialize-x.x.x.jar file
 from the <strong>dist</strong> folder to the <strong>libs</strong> path of your Android project.</p>
-<div class="section" id="note-applications-targeting-older-versions-of-android-1-6-and-below">
-<h3>NOTE: Applications targeting older versions of Android (1.6 and below)<a class="headerlink" href="#note-applications-targeting-older-versions-of-android-1-6-and-below" title="Permalink to this headline">¶</a></h3>
+<p>If you&#8217;re using eclipse, you&#8217;ll need to add the socialize-x.x.x.jar as a referenced library:</p>
+<img alt="_images/library_refs.png" src="_images/library_refs.png" />
+<p><strong>NOTE: Applications targeting older versions of Android (1.6 and below)</strong></p>
 <p>Socialize does not support Android versions below v2.1-update1</p>
-</div>
 </div>
 <div class="section" id="configure-your-androidmanifest-xml">
 <h2>Configure your AndroidManifest.xml<a class="headerlink" href="#configure-your-androidmanifest-xml" title="Permalink to this headline">¶</a></h2>
@@ -73,61 +74,13 @@ from the <strong>dist</strong> folder to the <strong>libs</strong> path of your 
 &lt;/manifest&gt;
 </pre>
 </div>
-<div class="section" id="initializing-the-socialize-instance-in-your-application">
-<h2>Initializing the Socialize instance in your application<a class="headerlink" href="#initializing-the-socialize-instance-in-your-application" title="Permalink to this headline">¶</a></h2>
-<p>The Socialize SDK should be initialized in the onCreate() method of your Activity, and destroyed in the onDestroy() method</p>
-<pre class="literal-block">
-<strong>import</strong> com.socialize.Socialize;
-
-<strong>protected</strong> <strong>void</strong> onCreate(Bundle savedInstanceState) {
-        <strong>super</strong>.onCreate(savedInstanceState);
-
-        Socialize.init(<strong>this</strong>);
-        ...
-}
-
-<strong>protected</strong> <strong>void</strong> onDestroy() {
-        Socialize.destroy(<strong>this</strong>);
-        ...
-        <strong>super</strong>.onDestroy();
-}
-</pre>
-</div>
-<div class="section" id="calling-the-socialize-api">
-<h2>Calling the Socialize API<a class="headerlink" href="#calling-the-socialize-api" title="Permalink to this headline">¶</a></h2>
-<p>Every call against the Socialize SDK MUST be authenticated.</p>
-<p>On the first successful call to &#8220;authenticate&#8221; the credentials are automatically cached in the
-application so subsequent calls are much faster.</p>
-<p>ALL calls to the Socialize SDK are <em>asynchronous</em>.
-This means they will not interrupt your users&#8217; use of your application.</p>
-<p>You are notified of the outcome of calls to the Socialize service via a <em>SocializeListener</em>
-passed into each call to the Socialize SDK.</p>
-<div class="section" id="authentication">
-<h3>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h3>
-<p>To authenticate your application for Socialize, simply call the <strong>authenticate</strong> method:</p>
-<pre class="literal-block">
-Socialize.getSocialize().authenticate(
-        consumerKey,
-        consumerSecret,
-        <strong>new</strong> SocializeAuthListener() {
-
-        <strong>public</strong> <strong>void</strong> onAuthSuccess(SocializeSession session) {
-                // Success!
-        }
-
-        <strong>public</strong> <strong>void</strong> onAuthFail(SocializeException error) {
-                // Handle auth fail
-        }
-
-        <strong>public</strong> <strong>void</strong> onError(SocializeException error) {
-                // Handle error
-        }
-});
-</pre>
-</div>
-<div class="section" id="calling-sdk-methods">
-<h3>Calling SDK methods<a class="headerlink" href="#calling-sdk-methods" title="Permalink to this headline">¶</a></h3>
-</div>
+<div class="section" id="next-steps">
+<h2>Next Steps...<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h2>
+<p>Once Socialize is installed, you have two options:</p>
+<p>If you want the quickest way to integrate Socialize in your app:</p>
+<p>Go to &#8211;&gt; <a class="reference internal" href="socialize_ui.html"><em>Socialize UI (Recommended for most users)</em></a></p>
+<p>If you want full control over how your social interaction works:</p>
+<p>Go to &#8211;&gt; <a class="reference internal" href="sdk_user_guide.html"><em>SDK User Guide (Recommended for expert users)</em></a></p>
 </div>
 </div>
 
@@ -140,27 +93,19 @@ Socialize.getSocialize().authenticate(
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Getting Started Guide</a><ul>
-<li><a class="reference internal" href="#installing-the-sdk">Installing the SDK</a><ul>
-<li><a class="reference internal" href="#note-applications-targeting-older-versions-of-android-1-6-and-below">NOTE: Applications targeting older versions of Android (1.6 and below)</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#installing-the-sdk">Installing the SDK</a></li>
 <li><a class="reference internal" href="#configure-your-androidmanifest-xml">Configure your AndroidManifest.xml</a></li>
-<li><a class="reference internal" href="#initializing-the-socialize-instance-in-your-application">Initializing the Socialize instance in your application</a></li>
-<li><a class="reference internal" href="#calling-the-socialize-api">Calling the Socialize API</a><ul>
-<li><a class="reference internal" href="#authentication">Authentication</a></li>
-<li><a class="reference internal" href="#calling-sdk-methods">Calling SDK methods</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#next-steps">Next Steps...</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
-                        title="previous chapter">Socialize SDK Android</a></p>
+                        title="previous chapter">Socialize Android SDK</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="socialize_ui.html"
-                        title="next chapter">Socialize UI</a></p>
+                        title="next chapter">Socialize UI (Recommended for most users)</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/getting_started.txt"
@@ -190,17 +135,16 @@ Socialize.getSocialize().authenticate(
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="socialize_ui.html" title="Socialize UI"
+          <a href="socialize_ui.html" title="Socialize UI (Recommended for most users)"
              >next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Socialize SDK Android"
+          <a href="index.html" title="Socialize Android SDK"
              >previous</a> |</li>
-        <li><a href="index.html">Socialize SDK Android v0.4.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK v0.5.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Socialize Inc.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>
