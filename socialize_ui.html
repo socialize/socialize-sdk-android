@@ -1,0 +1,132 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Socialize UI (Recommended for most users) &mdash; Socialize Android SDK v0.5.0 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="top" title="Socialize Android SDK v0.5.0 documentation" href="index.html" />
+    <link rel="next" title="SDK User Guide (Recommended for expert users)" href="sdk_user_guide.html" />
+    <link rel="prev" title="Getting Started Guide" href="getting_started.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="sdk_user_guide.html" title="SDK User Guide (Recommended for expert users)"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="getting_started.html" title="Getting Started Guide"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Socialize Android SDK v0.5.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="socialize-ui-recommended-for-most-users">
+<h1>Socialize UI (Recommended for most users)<a class="headerlink" href="#socialize-ui-recommended-for-most-users" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>As of v0.4.0 of the Socialize SDK we are providing pre-built UI views that can
+quickly and easily be dropped in to your app, saving you the time of building
+these views yourself!</p>
+<div class="section" id="configure-your-androidmanifest-xml">
+<h3>Configure your AndroidManifest.xml<a class="headerlink" href="#configure-your-androidmanifest-xml" title="Permalink to this headline">¶</a></h3>
+<p>Add the following lines to your AndroidManifest.xml under the <strong>&lt;application...&gt;</strong> element</p>
+<script src="https://gist.github.com/1201498.js?file=ui_manifest.xml"></script><p>Add the following lines to your AndroidManifest.xml under the <strong>&lt;manifest...&gt;</strong> element</p>
+<script src="https://gist.github.com/1201498.js?file=ui_manifest_permissions.xml"></script></div>
+<div class="section" id="initialize-the-socialize-ui-system">
+<h3>Initialize the Socialize UI System<a class="headerlink" href="#initialize-the-socialize-ui-system" title="Permalink to this headline">¶</a></h3>
+<p>To incorporate the Socialize UI views into your app you need to initialize the UI system with your
+Socialize app key and secret.</p>
+<p><strong>NOTE:</strong> If you are using Socialize UI exclusively (that is, you&#8217;re not calling the SDK directly)
+you do not need to call <strong>init</strong> on the Socialize SDK yourself.  This is done for you.</p>
+<p>First you need to specify your Socialize app key.  This can either be done in code:</p>
+<script src="https://gist.github.com/1132979.js?file=setup_ui.java"></script><p>Or by creating a configuration file in your <strong>assets</strong> path called <strong>socialize.properties</strong></p>
+<script src="https://gist.github.com/1132979.js?file=setup_ui.properties"></script><p>(Replace 00000000-0000-0000-000000000000 with your key/secret from your Socialize account)</p>
+</div>
+</div>
+<div class="section" id="socialize-comment-view">
+<h2>Socialize Comment View<a class="headerlink" href="#socialize-comment-view" title="Permalink to this headline">¶</a></h2>
+<p>v0.4.0 of the Socialize SDK introduced the &#8220;Comment View&#8221; which provides the creation and viewing
+of comments associated with an entity (URL).</p>
+<img alt="_images/comment_view.png" src="_images/comment_view.png" />
+<p>Currently this supports only anonymous users, but future releases will incorporate
+additional authentication systems such as Facebook and Twitter.</p>
+<div class="section" id="diplaying-the-comment-view">
+<h3>Diplaying the Comment View<a class="headerlink" href="#diplaying-the-comment-view" title="Permalink to this headline">¶</a></h3>
+<p>When you want to launch the comment view, simply call <strong>showCommentView</strong> from the SocializeUI instance:</p>
+<script src="https://gist.github.com/1132979.js?file=show_comment_view.java"></script><p>Here&#8217;s an example of calling it on a button click:</p>
+<script src="https://gist.github.com/1132979.js?file=show_comment_view_onclick.java"></script></div>
+<div class="section" id="a-complete-example">
+<h3>A Complete Example<a class="headerlink" href="#a-complete-example" title="Permalink to this headline">¶</a></h3>
+<p>Here&#8217;s a complete example in an Activity:</p>
+<script src="https://gist.github.com/1132979.js?file=comment_view_activity.java"></script></div>
+</div>
+<div class="section" id="socialize-action-bar">
+<h2>Socialize Action Bar<a class="headerlink" href="#socialize-action-bar" title="Permalink to this headline">¶</a></h2>
+<p><em>Coming Soon!</em></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Socialize UI (Recommended for most users)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#socialize-comment-view">Socialize Comment View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#socialize-action-bar">Socialize Action Bar</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">SDK User Guide (Recommended for expert users)</a></li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="sdk_user_guide.html" title="SDK User Guide (Recommended for expert users)"
+             >next</a></li>
+        <li class="right" >
+          <a href="getting_started.html" title="Getting Started Guide"
+             >previous</a> |</li>
+        <li><a href="index.html">Socialize Android SDK v0.5.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Socialize Inc.
+    </div>
+  </body>
+</html>
