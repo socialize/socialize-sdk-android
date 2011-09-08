@@ -23,6 +23,7 @@ package com.socialize.sample;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 
 import android.app.ProgressDialog;
@@ -40,6 +41,8 @@ import com.socialize.Socialize;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
+import com.socialize.entity.User;
+import com.socialize.entity.UserAuthData;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.sample.util.ErrorHandler;
@@ -59,6 +62,7 @@ public class AuthenticateActivity extends SocializeActivity {
 	EditText txtConsumerSecret;
 	TextView txtAuthResult;
 	TextView txtAuthUserID;
+	TextView txtAuthUser3rdPartyID;
 	SocializeConfig config;
 
 	Button btnAuth;
@@ -85,6 +89,7 @@ public class AuthenticateActivity extends SocializeActivity {
 			txtConsumerSecret = (EditText) findViewById(R.id.txtConsumerSecret);
 			txtAuthResult =  (TextView) findViewById(R.id.txtAuthResult);
 			txtAuthUserID =  (TextView) findViewById(R.id.txtAuthUserID);
+			txtAuthUser3rdPartyID =  (TextView) findViewById(R.id.txtAuthUser3rdPartyID);
 			config = Socialize.getSocialize().getConfig();
 
 			txtHost.setText(url);
@@ -291,6 +296,17 @@ public class AuthenticateActivity extends SocializeActivity {
 			txtAuthUserID.setText(session.getUser().getId().toString());
 
 			btnApi.setVisibility(View.VISIBLE);
+			
+			User user = session.getUser();
+			List<UserAuthData> authData = user.getAuthData();
+			
+			if(authData != null && authData.size() > 0) {
+				UserAuthData userAuthData = authData.get(0);
+				txtAuthUser3rdPartyID.setText("3rd Party ID: " + userAuthData.getId());
+			}
+			else {
+				txtAuthUser3rdPartyID.setText("3rd Party ID: NONE");
+			}
 
 			try {
 				authProgress.dismiss();
