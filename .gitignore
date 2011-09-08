@@ -2,6 +2,7 @@ sdk/.settings
 sdk/gen
 sdk/bin
 sdk/doc/html
+gh-pages
 sample/.settings
 sample/gen
 sample/bin
