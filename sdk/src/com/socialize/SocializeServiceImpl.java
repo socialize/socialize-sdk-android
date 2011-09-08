@@ -212,7 +212,9 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				
 				if(authProvider != null && !StringUtils.isEmpty(get3rdPartyAppId)) {
 					authProvider.clearCache(get3rdPartyAppId);
-				}	
+				}
+				
+				session = null;
 			}
 		}
 		finally {

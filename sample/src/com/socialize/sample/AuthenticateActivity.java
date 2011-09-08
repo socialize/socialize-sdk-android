@@ -44,6 +44,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.sample.util.ErrorHandler;
 import com.socialize.ui.SocializeActivity;
+import com.socialize.util.StringUtils;
 
 public class AuthenticateActivity extends SocializeActivity {
 
@@ -60,8 +61,12 @@ public class AuthenticateActivity extends SocializeActivity {
 	TextView txtAuthUserID;
 	SocializeConfig config;
 
-	Button authButton;
-	Button btnAuthenticateFB;
+	Button btnAuth;
+	Button btnAuthFB;
+	
+	Button btnCheckAuth;
+	Button btnCheckAuthFB;
+	
 	Button btnApi;
 	Button btnExit;
 	Button btnClearAuth;
@@ -86,14 +91,18 @@ public class AuthenticateActivity extends SocializeActivity {
 			txtConsumerKey.setText(consumerKey);
 			txtConsumerSecret.setText(consumerSecret);
 
-			authButton = (Button) findViewById(R.id.btnAuthenticate);
-			btnAuthenticateFB = (Button) findViewById(R.id.btnAuthenticateFB);
+			btnAuth = (Button) findViewById(R.id.btnAuthenticate);
+			btnAuthFB = (Button) findViewById(R.id.btnAuthenticateFB);
+			
+			btnCheckAuth = (Button) findViewById(R.id.btnCheckAuthenticate);
+			btnCheckAuthFB = (Button) findViewById(R.id.btnCheckAuthenticateFB);
+			
 			btnApi = (Button) findViewById(R.id.btnApi);
 			btnExit = (Button) findViewById(R.id.btnExit);
 			btnClearAuth = (Button) findViewById(R.id.btnClearAuth);
 
-			authButton.setOnClickListener(new AuthenticateClickListener(false));
-			btnAuthenticateFB.setOnClickListener(new AuthenticateClickListener(true));
+			btnAuth.setOnClickListener(new AuthenticateClickListener(false));
+			btnAuthFB.setOnClickListener(new AuthenticateClickListener(true));
 
 			btnApi.setOnClickListener(new OnClickListener() {
 				@Override
@@ -107,6 +116,32 @@ public class AuthenticateActivity extends SocializeActivity {
 				@Override
 				public void onClick(View v) {
 					finish();
+				}
+			});
+			
+			btnCheckAuth.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					if(Socialize.getSocialize().isAuthenticated()) {
+						txtAuthResult.setText("AUTHENTICATED");
+					}
+					else {
+						txtAuthResult.setText("NOT AUTHENTICATED");
+					}
+				}
+			});
+			
+			btnCheckAuthFB.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					if(Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+						txtAuthResult.setText("AUTHENTICATED");
+					}
+					else {
+						txtAuthResult.setText("NOT AUTHENTICATED");
+					}
 				}
 			});
 
@@ -161,10 +196,10 @@ public class AuthenticateActivity extends SocializeActivity {
 			properties = new Properties();
 			properties.load(in);
 
-			consumerKey = properties.getProperty("socialize.consumer.key");
-			consumerSecret = properties.getProperty("socialize.consumer.secret");
-			url = properties.getProperty("socialize.api.url");
-			facebookAppId = properties.getProperty("facebook.app.id");
+			consumerKey = getConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_KEY, properties);
+			consumerSecret = getConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_SECRET, properties);
+			url = getConfigValue(SocializeConfig.API_HOST, properties);
+			facebookAppId = getConfigValue(SocializeConfig.FACEBOOK_APP_ID, properties);
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -179,6 +214,14 @@ public class AuthenticateActivity extends SocializeActivity {
 				}
 			}
 		}
+	}
+	
+	private String getConfigValue(String key, Properties properties) {
+		String value = properties.getProperty(key);
+		if(StringUtils.isEmpty(value)) {
+			value = Socialize.getSocialize().getConfig().getProperty(key);
+		}
+		return value;
 	}
 
 	class AuthenticateClickListener implements OnClickListener {
