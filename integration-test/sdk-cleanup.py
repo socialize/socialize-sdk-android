@@ -16,7 +16,7 @@ def create_android_config(key,secret,url):
     f = open(config_file_path,'w')
     text = 'socialize.consumer.key='+key
     text+= '\nsocialize.consumer.secret='+secret
-    text+= '\nsocialize.api.url='+url
+    text+= '\napi.host='+url
     text+= '\n'
     f.write(text)
     print text
@@ -33,7 +33,7 @@ def read_android_config():
                 key = li[li.find('=')+1:]
             elif li.startswith('socialize.consumer.secret'):
                 secret = li[li.find('=')+1:]
-            elif li.startswith('socialize.api.url'):
+            elif li.startswith('api.host'):
                 url =  li[li.find('=')+1:]
                 if not url.startswith('http'):    ## if not start with http
                     url = 'http://'+url           ## using http:// protocal
