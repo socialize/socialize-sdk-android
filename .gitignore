@@ -1,11 +1,14 @@
 sdk/.settings
 sdk/gen
 sdk/bin
+sdk/doc/html
+gh-pages
 sample/.settings
 sample/gen
 sample/bin
 sample/sdk_src/
 sample/local.properties
+sample/assets/sample-app.conf
 integration-test/bin
 integration-test/gen
 integration-test/.settings
@@ -20,6 +23,8 @@ ui-sample/bin/
 ui-sample/gen/
 ui-test/bin
 ui-test/gen
+ui-test/coverage-ui
+ui-test/test-output-ui
 build
 test/findbugs-output
 integration-test/local.properties

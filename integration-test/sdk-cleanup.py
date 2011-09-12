@@ -8,7 +8,7 @@ assets_file_path='../sample/assets/existing-data/'
 
 
 
-def create_android_config(key,secret,url):
+def create_android_config(key,secret,url,fb_app_id):
     print '#'*20
     print '## CREATE conf.js ##'
     print '#'*20           
@@ -16,7 +16,8 @@ def create_android_config(key,secret,url):
     f = open(config_file_path,'w')
     text = 'socialize.consumer.key='+key
     text+= '\nsocialize.consumer.secret='+secret
-    text+= '\nsocialize.api.url='+url
+    text+= '\napi.host='+url
+    text+= '\nfacebook.app.id='+fb_app_id
     text+= '\n'
     f.write(text)
     print text
@@ -33,7 +34,7 @@ def read_android_config():
                 key = li[li.find('=')+1:]
             elif li.startswith('socialize.consumer.secret'):
                 secret = li[li.find('=')+1:]
-            elif li.startswith('socialize.api.url'):
+            elif li.startswith('api.host'):
                 url =  li[li.find('=')+1:]
                 if not url.startswith('http'):    ## if not start with http
                     url = 'http://'+url           ## using http:// protocal
@@ -63,8 +64,8 @@ def print_json(item, fname=None):
             print simplejson.dumps(item,sort_keys=True, indent=4)
 
     else:
-        print '\t**generate outfile:',fname
         fname = assets_file_path+fname
+        print '\t**generate outfile:',fname
         if not os.path.exists(assets_file_path):
             
             os.makedirs(dir)
@@ -75,6 +76,7 @@ def print_json(item, fname=None):
 
 def remove(fname):
     try:
+        fname = assets_file_path+fname
         os.remove(fname)
         print '\t %s DELETED'%fname
     except OSError:
@@ -192,8 +194,8 @@ def main(key,secret,url):
 
 if __name__ == "__main__":
     args = sys.argv
-    if not len(args)==4:
-        print '\tusage: python sdk-cleanup.py <consumer-key> <consumer-secret> <http://api.socialize.com/v1>'
+    if len(args)<4:
+        print '\tusage: python sdk-cleanup.py <consumer-key> <consumer-secret> <http://api.socialize.com/v1> [facebook_app_id]'
         sys.exit(2)
     elif not args[3].startswith('http://'):
         print '\tinvalid format for <http://api.socialize.com/v1>'
@@ -201,8 +203,10 @@ if __name__ == "__main__":
     key = args[1]
     secret = args[2]
     url = args[3]             
-    
-    create_android_config(key,secret,url)
+    fb_app_id = '0' # default facebook app id
+    if len(args)==5:
+        fb_app_id = args[4]
+    create_android_config(key,secret,url,fb_app_id)
     key, secret, url = read_android_config()
     if url[-1]!='/':
         url+='/'

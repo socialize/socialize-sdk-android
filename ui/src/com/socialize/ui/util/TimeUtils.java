@@ -25,37 +25,48 @@ package com.socialize.ui.util;
  * @author Jason Polites
  */
 public class TimeUtils {
-
+	
+	public static final long minute = 60;
+	public static final long hour = minute*60;
+	public static final long day = hour*24;
+	public static final long month = day*30;
+	public static final long year = day*365;
+	
 	public String getTimeString(long diffMilliseconds) {
 		
 		StringBuilder builder = new StringBuilder();
 		
 		long diff = diffMilliseconds / 1000;
-		int minute = 60;
-		int hour = minute*60;
-		int day = hour*24;
 		
 		String unit = null;
-		int value = 0;
 		
-		if(diff > minute) {
+		long value = 0;
+		
+		if(diff >= minute && diff < year) {
 			
 			// is minutes
 			if(diff > hour) {
 				if(diff > day) {
-					unit = "day";
-					value = (int) diff / day;
+					
+					if(diff > month) {
+						unit = "month";
+						value = diff / month;
+					}
+					else {
+						unit = "day";
+						value = diff / day;
+					}
 				}
 				else {
 					// Calc hours
 					unit = "hour";
-					value = (int) diff / hour;
+					value = diff / hour;
 				}
 			}
 			else {
 				// Calc minutes
 				unit = "minute";
-				value = (int) diff / minute;
+				value = diff / minute;
 			}
 			
 			builder.append(value);
@@ -68,8 +79,11 @@ public class TimeUtils {
 			
 			builder.append(" ago");
 		}
-		else {
+		else if(diff < minute) {
 			builder.append("Just now");
+		}
+		else {
+			builder.append("Over a year ago");
 		}
 		
 		return builder.toString();

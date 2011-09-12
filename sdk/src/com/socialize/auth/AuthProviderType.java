@@ -54,11 +54,8 @@ public enum AuthProviderType {
 	
 	public static AuthProviderType valueOf(int id) {
 		switch(id) {
-		
 		case 1 : 
 			return FACEBOOK;
-			
-			
 		default :
 			return SOCIALIZE;
 		

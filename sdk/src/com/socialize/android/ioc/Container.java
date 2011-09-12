@@ -67,8 +67,14 @@ public class Container {
 			if(beanRef != null) {
 				if(!beanRef.isSingleton()) {
 					bean = builder.buildBean(this, beanRef, args);
-					builder.setBeanProperties(this, beanRef, bean);
-					builder.initBean(this, beanRef, bean);
+					
+					if(bean == null) {
+						Logger.e(getClass().getSimpleName(), "Failed to instantiate non-singleton bean with name " + name);
+					}
+					else {
+						builder.setBeanProperties(this, beanRef, bean);
+						builder.initBean(this, beanRef, bean);
+					}
 				}
 			}
 			else {

@@ -45,9 +45,9 @@ public class ProgressDialogFactory {
 				context = activity;
 			}
 			
-			ProgressDialog dialog = new SafeProgressDialog(context);
-			dialog.setTitle("Posting comment");
-			dialog.setMessage("Please wait...");
+			ProgressDialog dialog = makeDialog(context);
+			dialog.setTitle(title);
+			dialog.setMessage(message);
 			dialog.show();
 			return dialog;
 		}
@@ -61,16 +61,13 @@ public class ProgressDialogFactory {
 			
 			return null;
 		}
-
 	}
-
-	public SocializeLogger getLogger() {
-		return logger;
+	
+	protected ProgressDialog makeDialog(Context context) {
+		return new SafeProgressDialog(context);
 	}
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
-	
-	
 }

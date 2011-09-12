@@ -49,36 +49,24 @@ public class EntityFactory extends SocializeObjectFactory<Entity> {
 
 	@Override
 	protected void postFromJSON(JSONObject object, Entity entry) throws JSONException {
-		
-		if(object.has("name")) {
-			entry.setName(object.getString("name"));
-		}
-		
-		if(object.has("key")) {
-			entry.setKey(object.getString("key"));
-		}
-		
-		if(object.has(LIKES) && !object.isNull(LIKES)) {
-			entry.setLikes(object.getInt(LIKES));
-		}
-		if(object.has(SHARES) && !object.isNull(SHARES)) {
-			entry.setShares(object.getInt(SHARES));
-		}
-		if(object.has(COMMENTS) && !object.isNull(COMMENTS)) {
-			entry.setComments(object.getInt(COMMENTS));
-		}
-		if(object.has(VIEWS) && !object.isNull(VIEWS)) {
-			entry.setViews(object.getInt(VIEWS));
-		}
+		entry.setName(getString(object, "name"));
+		entry.setKey(getString(object, "key"));
+		entry.setLikes(getInt(object, LIKES));
+		entry.setShares(getInt(object, SHARES));
+		entry.setComments(getInt(object, COMMENTS));
+		entry.setViews(getInt(object, VIEWS));
 	}
 
 	@Override
 	protected void postToJSON(Entity entry, JSONObject object) throws JSONException {
-		if(!StringUtils.isEmpty(entry.getName())) {
-			object.put("name", entry.getName());
+		String name = entry.getName();
+		String key = entry.getKey();
+		
+		if(!StringUtils.isEmpty(name)) {
+			object.put("name", name);
 		}
-		if(!StringUtils.isEmpty(entry.getKey())) {
-			object.put("key", entry.getKey());
+		if(!StringUtils.isEmpty(key)) {
+			object.put("key", key);
 		}
 	}
 }

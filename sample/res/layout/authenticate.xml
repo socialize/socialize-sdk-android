@@ -67,6 +67,26 @@
 		    android:layout_height="wrap_content"
 		    android:orientation="horizontal"
 		    android:layout_marginBottom="12dip">
+	    
+				<Button
+					android:id="@+id/btnCheckAuthenticate"
+					android:text="Check Auth" 
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"/>    
+			    
+				<Button
+					android:id="@+id/btnCheckAuthenticateFB"
+					android:text="Check Auth FB" 
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"/>
+
+	    </LinearLayout>		   
+	    
+	    <LinearLayout 
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal"
+		    android:layout_marginBottom="12dip">
 					
 				<TextView
 					android:id="@+id/txtAuthResult"
@@ -81,6 +101,14 @@
 		            android:textSize="12dp"
 		            android:layout_width="wrap_content"
 		   			android:layout_height="wrap_content"/>
+		   			
+		   		<TextView
+					android:id="@+id/txtAuthUser3rdPartyID"
+		            android:padding="3dip" 
+		            android:textSize="12dp"
+		            android:layout_width="wrap_content"
+		   			android:layout_height="wrap_content"/>
+		   			
 	    </LinearLayout>		    
 	       
 	</LinearLayout>

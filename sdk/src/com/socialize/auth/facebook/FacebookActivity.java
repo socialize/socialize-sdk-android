@@ -41,7 +41,7 @@ public class FacebookActivity extends SocializeActivity {
 		service.onCreate();
 	}
 	
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	@Override
 	public <E> E getBean(String name) {
 		return (E) super.getBean(name);

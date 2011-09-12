@@ -212,7 +212,9 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				
 				if(authProvider != null && !StringUtils.isEmpty(get3rdPartyAppId)) {
 					authProvider.clearCache(get3rdPartyAppId);
-				}	
+				}
+				
+				session = null;
 			}
 		}
 		finally {
@@ -263,6 +265,40 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		data.setAuthProviderType(authProviderType);
 		data.setAppId3rdParty(authProviderAppId);
 		authenticate(consumerKey, consumerSecret, data, authListener, true);
+	}
+
+	@Override
+	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProviderType, SocializeAuthListener authListener) {
+		if(authProviderType.equals(AuthProviderType.FACEBOOK)) {
+			// Use the default app id from config
+			String appId = getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
+			
+			if(!StringUtils.isEmpty(appId)) {
+				authenticate(consumerKey, consumerSecret, authProviderType, appId, authListener);
+			}
+			else {
+				if(logger != null) {
+					logger.warn("No app ID found in config for auth provider [" +
+							authProviderType.name() +
+							"].  Authenticating anonymously");
+				}
+				// Anonymous
+				authenticate(consumerKey, consumerSecret, authListener);	
+			}
+		}
+		else if(authProviderType.equals(AuthProviderType.SOCIALIZE)) {
+			// Anonymous
+			authenticate(consumerKey, consumerSecret, authListener);
+		}
+		else {
+			if(logger != null) {
+				logger.warn("Unrecognized auth provider [" +
+						authProviderType.name() +
+						"].  Authenticating anonymously");
+			}
+			// Anonymous
+			authenticate(consumerKey, consumerSecret, authListener);
+		}
 	}
 
 	/* (non-Javadoc)

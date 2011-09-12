@@ -17,6 +17,12 @@
 	
 	<bean id="timeUtils" class="com.socialize.ui.util.TimeUtils"/>
 	
+	<bean id="keyboardUtils" class="com.socialize.ui.util.KeyboardUtils">
+		<constructor-arg type="context"/>
+	</bean>
+	
+	<bean id="userService" class="com.socialize.ui.user.DefaultUserService"/>
+	
 	<bean id="colors" class="com.socialize.ui.util.Colors">
 	
 		<init-method name="init"/>
@@ -63,6 +69,8 @@
 		</property>
 	</bean>
 	
+	<!-- Comment UI -->
+	
 	<bean 
 		id="commentAdapter" 
 		class="com.socialize.ui.comment.CommentAdapter">
@@ -72,20 +80,10 @@
 		<property name="drawables" ref="drawables"/>
 		<property name="deviceUtils" ref="deviceUtils"/><!-- Defined in socialize_beans.xml -->
 		<property name="timeUtils" ref="timeUtils"/>
+		<property name="userService" ref="userService"/>
+		<property name="base64Utils" ref="base64Utils"/><!-- Defined in socialize_beans.xml -->
 	</bean>
-	
-	<bean 
-		id="commentList" 
-		class="com.socialize.ui.comment.CommentListView"
-		singleton="false"
-		extends="socializeView">
-		<constructor-arg type="activity"/>
-		<constructor-arg ref="commentAdapter"/>
-		<constructor-arg ref="deviceUtils"/> <!-- Defined in socialize_beans.xml -->
-		<constructor-arg ref="drawables"/>
-		<constructor-arg ref="colors"/>
-		<property name="progressDialogFactory" ref="progressDialogFactory"/>
-	</bean>
+
 	
 	<bean 
 		id="commentListItem" 
@@ -108,5 +106,50 @@
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="colors" ref="colors"/>
 	</bean>
+	
+	<bean 
+		id="uiViewFactory"
+		abstract="true">
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="colors" ref="colors"/>
+	</bean>
+	
+	<bean 
+		id="commentHeaderFactory" 
+		class="com.socialize.ui.comment.CommentHeaderFactory"
+		extends="uiViewFactory"/>
+		
+	<bean 
+		id="commentEditFieldFactory" 
+		class="com.socialize.ui.comment.CommentEditFieldFactory"
+		extends="uiViewFactory"/>
+		
+	<bean 
+		id="commentContentViewFactory" 
+		class="com.socialize.ui.comment.CommentContentViewFactory"
+		extends="uiViewFactory"/>
+	
+	<bean 
+		id="commentList" 
+		class="com.socialize.ui.comment.CommentListView"
+		singleton="false"
+		extends="socializeView">
+		<constructor-arg type="activity"/>
+
+		<init-method name="init"/>
+		
+		<property name="commentAdapter" ref="commentAdapter"/>
+		<property name="deviceUtils" ref="deviceUtils"/> <!-- Defined in socialize_beans.xml -->
+		<property name="drawables" ref="drawables"/>
+		<property name="colors" ref="colors"/>
+		<property name="progressDialogFactory" ref="progressDialogFactory"/>
+		<property name="commentHeaderFactory" ref="commentHeaderFactory"/>
+		<property name="commentEditFieldFactory" ref="commentEditFieldFactory"/>
+		<property name="commentContentViewFactory" ref="commentContentViewFactory"/>
+		<property name="keyboardUtils" ref="keyboardUtils"/>
+	</bean>
+	
+	<!--  End Comment UI -->
 	
 </beans>

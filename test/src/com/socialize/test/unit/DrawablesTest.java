@@ -24,11 +24,16 @@ package com.socialize.test.unit;
 import java.io.IOException;
 import java.io.InputStream;
 
+import android.graphics.Bitmap;
+import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.util.BitmapBuilder;
+import com.socialize.util.BitmapUtils;
 import com.socialize.util.CacheableDrawable;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.DrawableCache;
@@ -54,8 +59,11 @@ public class DrawablesTest extends SocializeActivityTest {
 		DrawableCache cache = AndroidMock.createMock(DrawableCache.class, getActivity());
 		ClassLoader loader = AndroidMock.createMock(ClassLoader.class);
 		
+		// Can't mock, so just create a dummy one
+		final Bitmap bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+		
 		final InputStream in = AndroidMock.createNiceMock(InputStream.class);
-		final CacheableDrawable drawable = AndroidMock.createMock(CacheableDrawable.class, "foobar");
+		final CacheableDrawable drawable = AndroidMock.createMock(CacheableDrawable.class, bitmap, "foobar");
 		
 		AndroidMock.expect(cache.get("res/drawable/ldpi/" + drawable_name)).andReturn(null);
 		AndroidMock.expect(cache.get("res/drawable/mdpi/" + drawable_name)).andReturn(null);
@@ -100,5 +108,225 @@ public class DrawablesTest extends SocializeActivityTest {
 		AndroidMock.verify(provider);
 		AndroidMock.verify(loader);
 		AndroidMock.verify(in);
+		
+		bitmap.recycle();
 	}
+	
+	public void testCreateDrawableRepeatXY() {
+		doTestCreateDrawableRepeatXY(true, true);
+	}
+	
+	public void testCreateDrawableRepeatXOnly() {
+		doTestCreateDrawableRepeatXY(true, false);
+	}
+	
+	public void testCreateDrawableRepeatYOnly() {
+		doTestCreateDrawableRepeatXY(false, true);
+	}
+	
+	public void testCreateDrawableNoRepeat() {
+		doTestCreateDrawableRepeatXY(false, false);
+	}
+	
+	@UsesMocks ({CacheableDrawable.class, BitmapUtils.class, BitmapBuilder.class, InputStream.class})
+	protected void doTestCreateDrawableRepeatXY(boolean repeatX, boolean repeatY) {
+		
+		final String key = "foobar";
+		final int pixelsX = 10;
+		final int pixelsY = 20;
+		
+		// Can't mock, so just create a dummy one
+		final Bitmap bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+		
+		try {
+			final CacheableDrawable drawable = AndroidMock.createMock(CacheableDrawable.class, bitmap, key);
+			BitmapBuilder builder = AndroidMock.createMock(BitmapBuilder.class);
+			BitmapUtils bitmapUtils = AndroidMock.createMock(BitmapUtils.class, builder);
+			InputStream in = AndroidMock.createMock(InputStream.class);
+			
+			AndroidMock.expect(bitmapUtils.getScaledBitmap ( in , pixelsX, pixelsY )).andReturn(bitmap);
+			
+			if(repeatX) {
+				drawable.setTileModeX(Shader.TileMode.REPEAT);
+			}
+			
+			if(repeatY) {
+				drawable.setTileModeY(Shader.TileMode.REPEAT);
+			}
+			
+			PublicDrawables drawables = new PublicDrawables() {
+				@Override
+				protected CacheableDrawable createDrawable(Bitmap bmp, String name) {
+					assertSame(bitmap, bmp);
+					assertEquals(key, name);
+					return drawable;
+				}
+			};
+			
+			drawables.setBitmapUtils(bitmapUtils);
+			
+			AndroidMock.replay(bitmapUtils);
+			AndroidMock.replay(drawable);
+			
+			assertSame(drawable, drawables.createDrawable(in, key, repeatX, repeatY, pixelsX, pixelsY));
+			
+			AndroidMock.verify(bitmapUtils);
+			AndroidMock.verify(drawable);
+		}
+		finally {
+			bitmap.recycle();
+		}
+	}
+
+	
+	@UsesMocks ({DrawableCache.class, CacheableDrawable.class, BitmapUtils.class, BitmapBuilder.class})
+	public void testGetDrawableFromBytes() {
+		
+		final String key = "foobar";
+		final byte[] data = {};
+		final int scaleToWidth = 10;
+		final int scaleToHeight = 20;
+		
+		// Can't mock, so just create a dummy one
+		final Bitmap bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+		
+		try {
+			
+			assertNotNull(bitmap);
+			
+			DrawableCache cache = AndroidMock.createMock(DrawableCache.class, getActivity());
+			BitmapBuilder builder = AndroidMock.createMock(BitmapBuilder.class);
+			BitmapUtils bitmapUtils = AndroidMock.createMock(BitmapUtils.class, builder);
+			
+			final CacheableDrawable drawable = AndroidMock.createMock(CacheableDrawable.class, bitmap, key);
+			
+			AndroidMock.expect(bitmapUtils.getScaledBitmap ( data, scaleToWidth, scaleToHeight )).andReturn(bitmap);
+			AndroidMock.expect(cache.put(key, drawable, false)).andReturn(true);
+			AndroidMock.expect(cache.get(key)).andReturn(null);
+			
+			PublicDrawables drawables = new PublicDrawables() {
+				@Override
+				protected CacheableDrawable createDrawable(Bitmap bmp, String name) {
+					assertSame(bitmap, bmp);
+					assertEquals(key, name);
+					return drawable;
+				}
+			};
+			
+			drawables.setBitmapUtils(bitmapUtils);
+			drawables.setCache(cache);
+			
+			AndroidMock.replay(bitmapUtils);
+			AndroidMock.replay(cache);
+			
+			drawables.getDrawable(key, data, scaleToWidth, scaleToHeight);
+			
+			AndroidMock.verify(bitmapUtils);
+			AndroidMock.verify(cache);
+			
+		}
+		finally {
+			bitmap.recycle();
+		}
+	}
+	
+	@UsesMocks(DisplayMetrics.class)
+	public void testCallFlow0() {
+		
+		String name = "foobar";
+		boolean tileX = true;
+		boolean tileY = false;
+		boolean eternal = true;
+		
+		DisplayMetrics metrics = new DisplayMetrics();
+		metrics.densityDpi = 69;
+		
+		PublicDrawables drawables = new PublicDrawables() {
+			@Override
+			public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
+				addResult(name);
+				addResult(density);
+				addResult(tileX);
+				addResult(tileY);
+				addResult(scaleToWidth);
+				addResult(scaleToHeight);
+				addResult(eternal);
+				return null;
+			}
+		};
+		
+		drawables.setMetrics(metrics);
+		drawables.getDrawable(name, tileX, tileY, eternal);
+		
+		// reverse order for asserts
+		assertEquals(eternal, getNextResult());
+		assertEquals(-1, getNextResult());
+		assertEquals(-1, getNextResult());
+		assertEquals(tileY, getNextResult());
+		assertEquals(tileX, getNextResult());
+		assertEquals(metrics.densityDpi, getNextResult());
+		assertEquals(name, getNextResult());
+	}
+	
+	public void testCallFlow1() {
+		
+		String name = "foobar";
+		
+		PublicDrawables drawables = new PublicDrawables() {
+			@Override
+			public Drawable getDrawable(String name, int scaleToWidth, int scaleToHeight, boolean eternal) {
+				addResult(name);
+				addResult(scaleToWidth);
+				addResult(scaleToHeight);
+				addResult(eternal);
+				return null;
+			}
+		};
+		
+		drawables.getDrawable(name);
+		
+		// reverse order for asserts
+		assertEquals(false, getNextResult());
+		assertEquals(-1, getNextResult());
+		assertEquals(-1, getNextResult());
+		assertEquals(name, getNextResult());
+	}
+	
+	public void testCallFlow2() {
+		
+		String name = "foobar";
+		boolean eternal = true;
+		
+		PublicDrawables drawables = new PublicDrawables() {
+			@Override
+			public Drawable getDrawable(String name, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
+				addResult(name);
+				addResult(tileX);
+				addResult(tileY);
+				addResult(scaleToWidth);
+				addResult(scaleToHeight);
+				addResult(eternal);
+				return null;
+			}
+		};
+		
+		drawables.getDrawable(name, eternal);
+		
+		// reverse order for asserts
+		assertEquals(eternal, getNextResult());
+		assertEquals(-1, getNextResult());
+		assertEquals(-1, getNextResult());
+		assertEquals(false, getNextResult());
+		assertEquals(false, getNextResult());
+		assertEquals(name, getNextResult());
+	}
+	
+	class PublicDrawables extends Drawables {
+		@Override
+		public CacheableDrawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY) {
+			return super.createDrawable(in, name, tileX, tileY, pixelsX, pixelsY);
+		}
+	}
+	
+	
 }

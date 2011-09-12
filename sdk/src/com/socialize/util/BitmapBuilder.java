@@ -37,6 +37,10 @@ public class BitmapBuilder {
 		return BitmapFactory.decodeStream(in);
 	}
 	
+	public Bitmap decode(byte[] data) {
+		return BitmapFactory.decodeByteArray(data, 0, data.length);
+	}
+	
 	public Bitmap crop(Bitmap source, int x, int y, int width, int height) {
 		return Bitmap.createBitmap(source, x, y, width, height);
 	}

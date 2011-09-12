@@ -115,6 +115,16 @@ public interface SocializeService {
 	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderAppId, SocializeAuthListener authListener);
 	
 	/**
+	 * Authenticates the application against the API.
+	 * @param consumerKey The consumer url, obtained from registration at http://www.getsocialize.com.
+	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
+	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
+	 * @param authListener The callback for authentication outcomes.
+	 */
+	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, SocializeAuthListener authListener);
+	
+	
+	/**
 	 * @deprecated Too ambiguous.
 	 * @use this{@link #authenticateKnownUser(String, String, AuthProviderType, String, String, String, SocializeAuthListener)}
 	 */
@@ -236,7 +246,7 @@ public interface SocializeService {
 	/**
 	 * Returns true if this SocializeService instance has been initialized.
 	 * @return
-	 * @deprecated init should always be called! 
+	 * @deprecated Init should always be called so that each corresponding call to destroy is matched.
 	 */
 	@Deprecated
 	public boolean isInitialized();

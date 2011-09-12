@@ -76,6 +76,10 @@ public class Facebook {
 	private int mAuthActivityCode;
 	private DialogListener mAuthDialogListener;
 	private Drawables drawables;
+	
+	public Facebook() {
+		super();
+	}
 
 	/**
 	 * Constructor for Facebook object.

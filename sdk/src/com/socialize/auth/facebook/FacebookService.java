@@ -48,6 +48,10 @@ public class FacebookService {
 	
 	public static final String[] DEFAULT_PERMISSIONS = {"offline_access", "publish_stream"};
 	
+	public FacebookService() {
+		super();
+	}
+
 	public FacebookService(
 			Activity context, 
 			Facebook facebook, 

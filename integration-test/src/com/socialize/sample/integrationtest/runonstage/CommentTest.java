@@ -1,9 +1,13 @@
 package com.socialize.sample.integrationtest.runonstage;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.socialize.sample.integrationtest.SocializeRobotiumTest;
+import com.socialize.util.IOUtils;
 
 import android.widget.TextView;
 
@@ -51,16 +55,55 @@ public class CommentTest extends SocializeRobotiumTest {
 		assertNotNull(value);
 		assertTrue(value.trim().length() > 0);
 		
-//		// Assert the application itself
-//		txt = (TextView) robotium.getView(com.socialize.sample.R.id.txtCommentApplicationCreated);
-//		value = txt.getText().toString();
-//		assertEquals(DEFAULT_APPLICATION_NAME, value);
+		// Assert the user id
+		txt = (TextView) robotium.getView(com.socialize.sample.R.id.txtCommentUserCreated);
+		value = txt.getText().toString();
+		assertEquals(userId, Integer.parseInt(value));
+	}
+	
+	public void testCreateCommentUTF8() throws IOException {
+		
+		InputStream open = getActivity().getAssets().open("utf8.txt");
+		
+		IOUtils ioUtils = new IOUtils();
+		String comment = ioUtils.read(open);
+		
+		open.close();
+		
+		robotium.clickOnButton("Create Comment");
+		robotium.waitForActivity("CommentCreateActivity", DEFAULT_TIMEOUT_SECONDS);
+		robotium.enterText(0, DEFAULT_ENTITY_URL);
+		robotium.enterText(1, comment);
+		robotium.clickOnButton("Create");
+		
+		waitForSuccess();
+
+		sleep(2000);
+		TextView txt = (TextView) robotium.getCurrentActivity().findViewById(com.socialize.sample.R.id.txtCommentIdCreated);
+		
+		// This is ID, it should be integer
+		assertNotNull(txt);
+		String value = txt.getText().toString();
+		Integer.parseInt(value);
+		
+		// Assert the comment itself
+		txt = (TextView) robotium.getView(com.socialize.sample.R.id.txtCommentTextCreated);
+		value = txt.getText().toString();
+		assertEquals(comment, value);
+		
+		// Check the date
+		txt = (TextView) robotium.getView(com.socialize.sample.R.id.txtCommentDateCreated);
+		value = txt.getText().toString();
+		assertNotNull(value);
+		assertTrue(value.trim().length() > 0);
 		
 		// Assert the user id
 		txt = (TextView) robotium.getView(com.socialize.sample.R.id.txtCommentUserCreated);
 		value = txt.getText().toString();
 		assertEquals(userId, Integer.parseInt(value));
 	}
+	
+	
 	public void testGetComment() throws JSONException{
 		robotium.clickOnButton("Get Comment");
 		robotium.waitForActivity("CommentGetActivity", DEFAULT_TIMEOUT_SECONDS);

@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.entity.Stats;
 import com.socialize.entity.factory.StatsFactory;
 
@@ -32,6 +33,7 @@ import com.socialize.entity.factory.StatsFactory;
  * @author Jason Polites
  *
  */
+@UsesMocks (Stats.class)
 public class StatsFactoryTest extends AbstractSocializeObjectFactoryTest<Stats, StatsFactory> {
 
 	private Integer comments = 11;

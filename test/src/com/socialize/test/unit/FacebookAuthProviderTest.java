@@ -21,6 +21,9 @@
  */
 package com.socialize.test.unit;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+
 import android.app.Activity;
 import android.content.Intent;
 
@@ -29,6 +32,7 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.auth.facebook.FacebookAuthProvider;
 import com.socialize.error.SocializeException;
+import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.ListenerHolder;
 import com.socialize.listener.SocializeListener;
@@ -97,6 +101,30 @@ public class FacebookAuthProviderTest extends SocializeUnitTest {
 		
 		AndroidMock.verify(context);
 		AndroidMock.verify(listener);
+	}
+	
+	@UsesMocks ({Facebook.class})
+	public void testClearCache() throws MalformedURLException, IOException {
+		
+		final String appId = "foobar";
+		
+		final Facebook facebook = AndroidMock.createMock(Facebook.class);
+		
+		AndroidMock.expect(facebook.logout(getContext())).andReturn(null);
+		
+		AndroidMock.replay(facebook);
+		
+		FacebookAuthProvider facebookAuthProvider = new FacebookAuthProvider(getContext(), null) {
+
+			@Override
+			protected Facebook getFacebook(String appId) {
+				return facebook;
+			}
+		};
+		
+		facebookAuthProvider.clearCache(appId);
+		
+		AndroidMock.verify(facebook);
 	}
 	
 }

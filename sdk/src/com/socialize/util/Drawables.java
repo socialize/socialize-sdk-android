@@ -26,7 +26,6 @@ import java.io.InputStream;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
@@ -42,8 +41,16 @@ public class Drawables {
 	private DrawableCache cache;
 	private BitmapUtils bitmapUtils;
 	
+	public Drawables() {
+		super();
+	}
+
 	public Drawables(Activity context) {
 		super();
+		init(context);
+	}
+	
+	public void init(Activity context) {
 		metrics = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 	}
@@ -81,8 +88,8 @@ public class Drawables {
 		CacheableDrawable drawable = cache.get(key);
 		
 		if(drawable == null) {
-			Bitmap bitmap = bitmapUtils.getScaledBitmap ( BitmapFactory.decodeByteArray(data, 0, data.length), scaleToWidth, scaleToHeight );
-			drawable = new CacheableDrawable(bitmap, key);
+			Bitmap bitmap = bitmapUtils.getScaledBitmap ( data, scaleToWidth, scaleToHeight );
+			drawable = createDrawable(bitmap, key);
 			addToCache(key, drawable, false);
 		}
 		
@@ -170,6 +177,10 @@ public class Drawables {
 	public void setBitmapUtils(BitmapUtils bitmapUtils) {
 		this.bitmapUtils = bitmapUtils;
 	}
+	
+	public void setMetrics(DisplayMetrics metrics) {
+		this.metrics = metrics;
+	}
 
 	protected String getPath(String name) {
 		return "res/drawable/" + name;
@@ -193,9 +204,9 @@ public class Drawables {
 	
 	protected CacheableDrawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY) {
 		
-		Bitmap bitmap = bitmapUtils.getScaledBitmap ( BitmapFactory.decodeStream(in), pixelsX, pixelsY );
+		Bitmap bitmap = bitmapUtils.getScaledBitmap ( in , pixelsX, pixelsY );
 		
-		CacheableDrawable drawable = new CacheableDrawable(bitmap, name);
+		CacheableDrawable drawable = createDrawable(bitmap, name);
 		
 		if(tileX) {
 			drawable.setTileModeX(Shader.TileMode.REPEAT);
@@ -208,9 +219,15 @@ public class Drawables {
 		return drawable;
 	}
 	
+	protected CacheableDrawable createDrawable(Bitmap bitmap, String name) {
+		return new CacheableDrawable(bitmap, name);
+	}
+	
 	private void addToCache(String key, CacheableDrawable drawable, boolean eternal) {
 		if(drawable != null) {
 			cache.put(key, drawable, eternal);
 		}
 	}
+	
+	
 }

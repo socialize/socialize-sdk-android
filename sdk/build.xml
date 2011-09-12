@@ -32,6 +32,20 @@
 	<path id="android.libraries.jars">
 		<path refid="project.libraries.jars" />
 	</path>
+	
+	<target name="check-paths">
+	
+		<property environment="env"/> 
+		
+		<echo>${env.PATH}</echo>
+		
+		<condition property="sphinx.available"> 
+			<or> 
+				<available file="sphinx-build" filepath="${env.PATH}"/> 
+			</or> 
+		</condition> 
+		
+	</target>
 
 	<target name="-pre-compile">
 		<copy todir="libs" verbose="true">
@@ -84,61 +98,62 @@
 		</jar>
 	</target>
 	
-	<target name="package" depends="javadoc">
+	<!-- Python is required on target system for this to work!-->
+	<target name="sphinx" description="Uses sphinx to generate SDK documentation" if="sphinx.available" depends="check-paths">
 		
-		<property name="sample_dir" value="/tmp/sdk-sample"/>
+		<delete dir="build/docs/static"/>
+		<delete dir="build/docs/user_guide" verbose="true"/>
+		<mkdir dir="build/docs/user_guide"/>
+
+		<exec executable="sphinx-build" failonerror="true" dir="${basedir}">
+	       	<arg value="-a"/>
+	        <arg value="-E"/>
+			<arg value="doc/sphinx/source"/>
+			<arg value="build/docs/user_guide"/>
+		</exec>
 		
-		<!-- Copy sample to tmp -->
+		<!-- Manually rename folders and references with underscore -->
+		<replaceregexp flags="g" match="_static" replace="static">
+			<fileset dir="build/docs/user_guide" includes="**/*.html **/*.js **/*.css"/>
+		</replaceregexp>
 		
-		<delete dir="${sample_dir}"/>
-		<mkdir dir="${sample_dir}"/>
-		<copy todir="${sample_dir}">
-			<fileset dir="../sample/" excludes="gen/**,bin/**,build/**,codetemplates.xml"/>
+		<replaceregexp flags="g" match="_images" replace="images">
+			<fileset dir="build/docs/user_guide" includes="**/*.html **/*.js **/*.css"/>
+		</replaceregexp>
+		
+		<replaceregexp flags="g" match="_sources" replace="sources">
+			<fileset dir="build/docs/user_guide" includes="**/*.html **/*.js **/*.css"/>
+		</replaceregexp>
+
+		<move file="build/docs/user_guide/_static" tofile="build/docs/user_guide/static" verbose="true"/>
+		<move file="build/docs/user_guide/_images" tofile="build/docs/user_guide/images" verbose="true"/>
+		<move file="build/docs/user_guide/_sources" tofile="build/docs/user_guide/sources" verbose="true"/>
+		
+		<copy 
+			file="doc/sphinx/source/_static/nature.css" 
+			todir="build/docs/user_guide/static" 
+			verbose="true" 
+			failonerror="true" 
+			overwrite="true"/>
+		
+		<copy 
+			file="doc/UserGuide.html" 
+			todir="build" 
+			verbose="true" 
+			failonerror="true" 
+			overwrite="true"/>
+		
+		<copy 
+			todir="build/docs/user_guide/static" 
+			verbose="true" 
+			failonerror="true" 
+			overwrite="true">
+			<fileset dir="doc/static"/>
 		</copy>
-		<copy todir="${sample_dir}/libs">
-			<fileset dir="build" includes="*.jar"/>
-		</copy>
-		
-		<!-- Clean up sample app for packaging -->
-		<replaceregexp file="${sample_dir}/.classpath" match="&lt;classpathentry kind=&quot;src&quot; path=&quot;socialize-sdk_src&quot;/&gt;" replace="&lt;classpathentry kind=&quot;lib&quot; path=&quot;libs/socialize-${version}.jar&quot;/&gt;" byline="true"/>
-		<replaceregexp file="${sample_dir}/.classpath" match="&lt;classpathentry kind=&quot;src&quot; path=&quot;android-ioc_src&quot;/&gt;" replace=""  byline="true"/>
-		<replaceregexp file="${sample_dir}/default.properties" match="android.library.reference.1=../sdk" replace="" byline="true"/>
-		<replaceregexp file="${sample_dir}/.project" flags="s" match="&lt;linkedResources&gt;.*&lt;/linkedResources&gt;" replace="" />
-		
-		<delete file="${sample_dir}/assets/sample-app.conf"/>
-		<move file="${sample_dir}/assets/sample-app.conf.live" tofile="${sample_dir}/assets/sample-app.conf"/>
-		
-		<!-- Create the ZIP file for distribution -->
-		<zip destfile="build/socialize-sdk-android-${version}.zip">
-			<zipfileset dir="build" includes="**/*.jar" prefix="dist"/>
-			
-			<!-- 
-			<zipfileset dir="libext" includes="**/*.jar" prefix="lib"/>
-			<zipfileset dir="src" prefix="conf">
-				
-				<include name="socialize_beans.xml"/>
-				<include name="errors.properties"/>
-				
-				<include name="socialize.properties"/>
-			</zipfileset>
-			-->
-			
-			<!-- Add the sample app as a raw eclipse project -->
-			<zipfileset dir="${sample_dir}" prefix="sample" excludes="gen/**,bin/**,build/**,codetemplates.xml,build-qa.xml,build-qa.properties,emma.properties,proguard.cfg,.DS_Store,assets/json/**,assets/socialize.sample.properties"/>
-			
-			<!-- Add Docs -->
-			<zipfileset dir="build/docs"/>
-			<zipfileset dir="doc" includes="**/*.html"/>
-		</zip>
-		
-		<!-- clean up -->
-		<delete dir="${sample_dir}"/>
-		<delete dir="build/docs"/>
 	</target>
 
 	<target name="javadoc">
 		<mkdir dir="build/docs/javadoc"/>
-
 		<tstamp>
 			<format property="year" pattern="yyyy" locale="en,UK" />
 		</tstamp>
@@ -165,5 +180,44 @@
 			
 			<link href="http://www.json.org/javadoc/"/>
 		</javadoc>
+	</target>
+	
+	<target name="package" depends="javadoc, sphinx">
+		
+		<property name="sample_dir" value="/tmp/sdk-sample"/>
+		
+		<!-- Copy sample to tmp -->
+		
+		<delete dir="${sample_dir}"/>
+		<mkdir dir="${sample_dir}"/>
+		<copy todir="${sample_dir}">
+			<fileset dir="../sample/" excludes="gen/**,bin/**,build/**,codetemplates.xml"/>
+		</copy>
+		<copy todir="${sample_dir}/libs">
+			<fileset dir="build" includes="*.jar"/>
+		</copy>
+		
+		<!-- Clean up sample app for packaging -->
+		<replaceregexp file="${sample_dir}/.classpath" match="&lt;classpathentry kind=&quot;src&quot; path=&quot;socialize-sdk_src&quot;/&gt;" replace="&lt;classpathentry kind=&quot;lib&quot; path=&quot;libs/socialize-${version}.jar&quot;/&gt;" byline="true"/>
+		<replaceregexp file="${sample_dir}/.classpath" match="&lt;classpathentry kind=&quot;src&quot; path=&quot;android-ioc_src&quot;/&gt;" replace=""  byline="true"/>
+		<replaceregexp file="${sample_dir}/default.properties" match="android.library.reference.1=../sdk" replace="" byline="true"/>
+		<replaceregexp file="${sample_dir}/.project" flags="s" match="&lt;linkedResources&gt;.*&lt;/linkedResources&gt;" replace="" />
+		
+		<!-- Create the ZIP file for distribution -->
+		<zip destfile="build/socialize-sdk-android-${version}.zip">
+			<zipfileset dir="build" includes="**/*.jar" prefix="dist"/>
+			
+			<!-- Add the sample app as a raw eclipse project -->
+			<zipfileset dir="${sample_dir}" prefix="sample" excludes="gen/**,bin/**,build/**,codetemplates.xml,build-qa.xml,build-qa.properties,emma.properties,proguard.cfg,.DS_Store,assets/json/**,assets/socialize.sample.properties"/>
+			
+			<!-- Add Docs -->
+			<zipfileset dir="build/docs" prefix="docs"/>
+			<zipfileset dir="build" includes="UserGuide.html"/>
+		</zip>
+		
+		<!-- clean up -->
+		<delete dir="${sample_dir}"/>
+		<delete dir="build/docs"/>
+		<delete file="build/UserGuide.html"/>
 	</target>
 </project>

@@ -42,7 +42,7 @@ public class Main extends Activity {
         setContentView(R.layout.main);
         
         Button btn = (Button) findViewById(R.id.btnSample);
-        Button btnMock = (Button) findViewById(R.id.btnSampleWithMocks);
+//        Button btnMock = (Button) findViewById(R.id.btnSampleWithMocks);
         
         btn.setOnClickListener(new OnClickListener() {
 			@Override
@@ -51,12 +51,12 @@ public class Main extends Activity {
 			}
 		});
         
-        btnMock.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				startSocialize(true);
-			}
-		});
+//        btnMock.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				startSocialize(true);
+//			}
+//		});
     }
 
 	public void onBackPressed() {

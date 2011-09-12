@@ -57,7 +57,7 @@ public class IOUtils {
 	}
 	
 	public String read(InputStream in) throws IOException {
-		return new String(readBytes(in));
+		return new String(readBytes(in), "UTF-8");
 	}
 	
 	public long pipe(InputStream in, OutputStream out, int bufferSize) throws IOException {

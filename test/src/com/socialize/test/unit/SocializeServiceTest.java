@@ -496,6 +496,99 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		verifyDefaultMocks();
 	}
 	
+	@UsesMocks ({SocializeConfig.class})
+	public void testAuthenticateWithout3rdPartyId() throws Exception {
+		final String appId = "foobar";
+		
+		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+	
+		AndroidMock.expect(config.getProperty(SocializeConfig.FACEBOOK_APP_ID)).andReturn(appId);
+		
+		AndroidMock.replay(config);
+		
+		SocializeServiceImpl service = new SocializeServiceImpl() {
+
+			@Override
+			public SocializeConfig getConfig() {
+				return config;
+			}
+
+			@Override
+			public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProviderType, String authProviderAppId, SocializeAuthListener authListener) {
+				addResult(authProviderAppId);
+			}
+		};
+		
+		service.authenticate("foo", "bar", AuthProviderType.FACEBOOK, null);
+		
+		String result = getNextResult();
+		
+		assertNotNull(result);
+		assertEquals(appId, result);
+		
+		AndroidMock.verify(config);
+		
+	}
+	
+	
+	@UsesMocks ({SocializeConfig.class})
+	public void testAuthenticateWithout3rdPartyIdMissingConfig() throws Exception {
+		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+	
+		AndroidMock.expect(config.getProperty(SocializeConfig.FACEBOOK_APP_ID)).andReturn(null);
+		
+		AndroidMock.replay(config);
+		
+		SocializeServiceImpl service = new SocializeServiceImpl() {
+
+			@Override
+			public SocializeConfig getConfig() {
+				return config;
+			}
+
+			@Override
+			public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
+				addResult(true);
+			}
+		};
+		
+		service.authenticate("foo", "bar", AuthProviderType.FACEBOOK, null);
+		
+		Boolean result = getNextResult();
+		
+		assertNotNull(result);
+		assertTrue(result);
+		
+		AndroidMock.verify(config);
+		
+	}
+	
+	@UsesMocks ({SocializeConfig.class})
+	public void testAuthenticateWithout3rdPartyIdSocialize() throws Exception {
+		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+	
+		SocializeServiceImpl service = new SocializeServiceImpl() {
+
+			@Override
+			public SocializeConfig getConfig() {
+				return config;
+			}
+
+			@Override
+			public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
+				addResult(true);
+			}
+		};
+		
+		service.authenticate("foo", "bar", AuthProviderType.SOCIALIZE, null);
+		
+		Boolean result = getNextResult();
+		
+		assertNotNull(result);
+		assertTrue(result);
+		
+	}
+	
 	public void testAuthenticateWithExtraParamsCallAuthenticate() throws SocializeException {
 	
 		SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);

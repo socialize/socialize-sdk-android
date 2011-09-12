@@ -23,10 +23,9 @@ package com.socialize.auth.facebook;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 
 import com.socialize.log.SocializeLogger;
-import com.socialize.util.Base64;
+import com.socialize.util.Base64Utils;
 import com.socialize.util.IOUtils;
 
 /**
@@ -37,6 +36,8 @@ public class FacebookImageRetriever {
 
 	private IOUtils ioUtils;
 	private SocializeLogger logger;
+	private FacebookUrlBuilder facebookUrlBuilder;
+	private Base64Utils base64Utils;
 	
 	/**
 	 * Returns a base64 encoded string of the profile picture for the user with the given FB ID.
@@ -48,10 +49,9 @@ public class FacebookImageRetriever {
 		InputStream in = null;
 		
 		try {
-			URL url = new URL("http://graph.facebook.com/"+id+"/picture?type=large");
-			in = url.openConnection().getInputStream();
+			in = facebookUrlBuilder.getProfileImageStream(id);
 			byte[] readBytes = ioUtils.readBytes(in);
-			encoded = Base64.encode(readBytes);
+			encoded = base64Utils.encode(readBytes);
 		}
 		catch (Exception e) {
 			logger.error("Error retrieving facebook profile picture", e);
@@ -70,6 +70,7 @@ public class FacebookImageRetriever {
 		return encoded;
 	}
 
+	
 	public IOUtils getIoUtils() {
 		return ioUtils;
 	}
@@ -85,5 +86,17 @@ public class FacebookImageRetriever {
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
-	
+
+	public FacebookUrlBuilder getFacebookUrlBuilder() {
+		return facebookUrlBuilder;
+	}
+
+	public void setFacebookUrlBuilder(FacebookUrlBuilder facebookUrlBuilder) {
+		this.facebookUrlBuilder = facebookUrlBuilder;
+	}
+
+	public void setBase64Utils(Base64Utils base64Utils) {
+		this.base64Utils = base64Utils;
+	}
+
 }

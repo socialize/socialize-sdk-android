@@ -36,7 +36,6 @@
 		</findbugs>
 	</target>
 
-
 	<property name="test.runner" value="pl.polidea.instrumentation.PolideaInstrumentationTestRunner" />
 
 	<property name="test-output" value="test-output"/>
@@ -118,13 +117,14 @@
 			<arg value="${junit.dump.path}" />
 		</exec>
 		
+	<!--
 		<echo>Dumping logcat buffer</echo>
 		<exec executable="${adb}" failonerror="true">
 			<arg line="${adb.device.arg}" />
 			<arg value="logcat" />
 			<arg value="-d" />
 		</exec>
-		
+	-->	
 	</target>
 
 	<target name="-pre-compile" depends="override-extensible-classpath"/>
@@ -174,7 +174,7 @@
 				<javac encoding="${java.encoding}"
                     source="${java.source}" 
 					target="${java.target}"
-                    debug="true" 
+                    debug="on" 
 					extdirs=""
                     destdir="${out.classes.absolute.dir}"
                     bootclasspathref="android.target.classpath"

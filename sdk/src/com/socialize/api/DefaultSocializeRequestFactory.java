@@ -204,7 +204,7 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 		try {
 			List<NameValuePair> data = new ArrayList<NameValuePair>();
 			data.add(new BasicNameValuePair("payload", payload));
-			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(data);
+			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(data, "UTF-8");
 			request.setEntity(entity);
 			signer.sign(session, request);
 		}

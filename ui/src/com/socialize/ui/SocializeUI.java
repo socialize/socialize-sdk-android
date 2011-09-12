@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.config.SocializeConfig;
 import com.socialize.ui.comment.CommentActivity;
@@ -19,6 +20,7 @@ public class SocializeUI {
 
 	private static final SocializeUI instance = new SocializeUI();
 	
+	public static final String USER_ID = "socialize.user.id";
 	public static final String ENTITY_KEY = "socialize.entity.key";
 	public static final String DEFAULT_USER_ICON = "default_user_icon.png";
 	public static final String SOCIALIZE_LOGO = "socialize_logo.png";
@@ -32,20 +34,32 @@ public class SocializeUI {
 		return instance;
 	}
 	
-	void initSocialize(Context context) {
-		Socialize.getSocialize().init(context, new String[]{"socialize_beans.xml", "socialize_ui_beans.xml"});
-		Socialize.getSocialize().getConfig().merge(customProperties);
+	public SocializeService getSocialize() {
+		return Socialize.getSocialize();
 	}
 	
-	void initUI(IOCContainer container) {
+	public void initSocialize(Context context) {
+		getSocialize().init(context, new String[]{"socialize_beans.xml", "socialize_ui_beans.xml"});
+		getSocialize().getConfig().merge(customProperties);
+	}
+	
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
+	}
+
+	public void initUI(IOCContainer container) {
 		this.container = container;
 		if(container != null) {
 			drawables = container.getBean("drawables");
 		}
 	}
 	
-	void destroy(Context context) {
-		Socialize.getSocialize().destroy();
+	public void setContainer(IOCContainer container) {
+		this.container = container;
+	}
+
+	public void destroy(Context context) {
+		getSocialize().destroy();
 	}
 	
 	public View getView(String name) {
@@ -95,7 +109,15 @@ public class SocializeUI {
 	}
 	
 	public String getCustomConfigValue(Context context, String key) {
-		return Socialize.getSocialize().getConfig().getProperty(key);
+		
+		SocializeService socialize = getSocialize();
+		SocializeConfig config = socialize.getConfig();
+		
+		if(config != null) {
+			return config.getProperty(key);
+		}
+		
+		return null;
 	}
 	
 	public void showCommentView(Activity context, String url) {
@@ -105,12 +127,13 @@ public class SocializeUI {
 	}
 	
 	public void setEntityUrl(Activity context, String url) {
-		Bundle extras = context.getIntent().getExtras();
+		Intent intent = context.getIntent();
+		Bundle extras = intent.getExtras();
 		if(extras == null) {
 			extras = new Bundle();
 		}
 		extras.putString(ENTITY_KEY, url);
-		context.getIntent().putExtras(extras);
+		intent.putExtras(extras);
 	}
 	
 	public Properties getCustomProperties() {

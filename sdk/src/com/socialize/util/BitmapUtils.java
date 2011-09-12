@@ -21,6 +21,8 @@
  */
 package com.socialize.util;
 
+import java.io.InputStream;
+
 import android.graphics.Bitmap;
 
 /**
@@ -33,6 +35,14 @@ public class BitmapUtils {
 	public BitmapUtils(BitmapBuilder bitmapBuilder) {
 		super();
 		this.bitmapBuilder = bitmapBuilder;
+	}
+	
+	public Bitmap getScaledBitmap(byte[] data, int scaleToWidth, int scaleToHeight) {
+		return getScaledBitmap(bitmapBuilder.decode(data), scaleToWidth, scaleToHeight);
+	}
+	
+	public Bitmap getScaledBitmap(InputStream in, int scaleToWidth, int scaleToHeight) {
+		return getScaledBitmap(bitmapBuilder.decode(in), scaleToWidth, scaleToHeight);
 	}
 
 	public Bitmap getScaledBitmap(Bitmap bitmap, int scaleToWidth, int scaleToHeight) {
@@ -93,5 +103,9 @@ public class BitmapUtils {
 		}
 
 		return bitmap;
+	}
+
+	public BitmapBuilder getBitmapBuilder() {
+		return bitmapBuilder;
 	}
 }
