@@ -61,32 +61,36 @@ public class Container {
 	
 	@SuppressWarnings("unchecked")
 	public <T extends Object> T getBean(String name, Object...args) {
-		Object bean = beans.get(name);
-		if(bean == null) {
-			BeanRef beanRef = mapping.getBeanRef(name);
-			if(beanRef != null) {
-				if(!beanRef.isSingleton()) {
-					bean = builder.buildBean(this, beanRef, args);
-					
-					if(bean == null) {
-						Logger.e(getClass().getSimpleName(), "Failed to instantiate non-singleton bean with name " + name);
-					}
-					else {
-						builder.setBeanProperties(this, beanRef, bean);
-						builder.initBean(this, beanRef, bean);
+		if(beans != null) {
+			Object bean = beans.get(name);
+			if(bean == null) {
+				BeanRef beanRef = mapping.getBeanRef(name);
+				if(beanRef != null) {
+					if(!beanRef.isSingleton()) {
+						bean = builder.buildBean(this, beanRef, args);
+						
+						if(bean == null) {
+							Logger.e(getClass().getSimpleName(), "Failed to instantiate non-singleton bean with name " + name);
+						}
+						else {
+							builder.setBeanProperties(this, beanRef, bean);
+							builder.initBean(this, beanRef, bean);
+						}
 					}
 				}
+				else {
+					Logger.e(getClass().getSimpleName(), "No such bean with name " + name);
+				}
+				
 			}
-			else {
-				Logger.e(getClass().getSimpleName(), "No such bean with name " + name);
-			}
-			
+			return (T) bean;
 		}
-		return (T) bean;
+		
+		return null;
 	}
 	
 	public boolean containsBean(String name) {
-		return beans.containsKey(name);
+		return (beans == null) ? false : beans.containsKey(name);
 	}
 	
 	public int size() {

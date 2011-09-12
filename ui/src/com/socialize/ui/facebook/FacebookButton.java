@@ -46,8 +46,8 @@ public class FacebookButton extends LinearLayout {
 	private ImageView imageView = null;
 	private TextView textView = null;
 	private int height = 40;
-	private int textSize = 16;
-	private String text = "Log in to Facebook";
+	private int textSize = 12;
+	private String text = "Sign in with Facebook";
 
 	public FacebookButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
