@@ -65,8 +65,28 @@
 					<key value="LOADING_ITEM_BG"/>
 					<value value="#000000"/>
 				</entry>
+				<entry>
+					<key value="FACEBOOK_BG"/>
+					<value value="#3b5997"/>
+				</entry>
 			</map>
 		</property>
+	</bean>
+	
+	<!-- Facebook -->
+	
+	
+	
+	<bean 
+		id="facebookButton" 
+		class="com.socialize.ui.facebook.FacebookButton"		
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="colors" ref="colors"/>
+		
+		<init-method name="init"/>
 	</bean>
 	
 	<!-- Comment UI -->

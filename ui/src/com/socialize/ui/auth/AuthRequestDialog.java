@@ -19,25 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.comment;
+package com.socialize.ui.auth;
 
+import android.app.Dialog;
 import android.content.Context;
 
-import com.socialize.ui.header.BaseHeaderFactory;
-
 /**
+ * Prompts the user to authenticate
  * @author Jason Polites
- *
  */
-public class CommentHeaderFactory extends BaseHeaderFactory<CommentHeader> {
-
-	@Override
-	protected String getHeaderText() {
-		return "Comments";
+public class AuthRequestDialog extends Dialog {
+	
+	public AuthRequestDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
+		super(context, cancelable, cancelListener);
 	}
 
-	@Override
-	protected CommentHeader createHeaderInstance(Context context) {
-		return new CommentHeader(context);
+	public AuthRequestDialog(Context context, int theme) {
+		super(context, theme);
 	}
+
+	public AuthRequestDialog(Context context) {
+		super(context);
+	}
+
 }

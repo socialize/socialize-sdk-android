@@ -32,7 +32,7 @@ public abstract class EntityView extends AuthenticatedView {
 		}
 		
 		if(bundle != null) {
-			String entityKey = bundle.getString(SocializeUI.ENTITY_KEY);
+			String entityKey = bundle.getString(getEntityKey());
 			if(!StringUtils.isEmpty(entityKey)) {
 				return getView(bundle, entityKey);
 			}
@@ -48,4 +48,8 @@ public abstract class EntityView extends AuthenticatedView {
 	}
 	
 	protected abstract View getView(Bundle bundle, String entityKey);
+	
+	protected String getEntityKey() {
+		return SocializeUI.ENTITY_KEY;
+	}
 }

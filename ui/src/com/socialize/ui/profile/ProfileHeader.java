@@ -19,25 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.comment;
+package com.socialize.ui.profile;
 
 import android.content.Context;
 
-import com.socialize.ui.header.BaseHeaderFactory;
+import com.socialize.ui.header.SocializeHeader;
 
 /**
  * @author Jason Polites
  *
  */
-public class CommentHeaderFactory extends BaseHeaderFactory<CommentHeader> {
+public class ProfileHeader extends SocializeHeader {
 
-	@Override
-	protected String getHeaderText() {
-		return "Comments";
+	public ProfileHeader(Context context) {
+		super(context);
 	}
 
-	@Override
-	protected CommentHeader createHeaderInstance(Context context) {
-		return new CommentHeader(context);
-	}
 }

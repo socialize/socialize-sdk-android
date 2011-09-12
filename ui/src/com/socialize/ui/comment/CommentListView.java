@@ -132,7 +132,14 @@ public class CommentListView extends BaseView {
 			@Override
 			public void onCreate(Comment entity) {
 				List<Comment> comments = commentAdapter.getComments();
-				comments.add(0, entity);
+				if(comments != null) {
+					comments.add(0, entity);
+				}
+				else {
+					// TODO: handle error!
+				}
+				
+				
 				totalCount++;
 				startIndex++;
 				endIndex++;

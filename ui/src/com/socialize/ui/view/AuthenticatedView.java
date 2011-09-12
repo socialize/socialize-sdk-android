@@ -1,6 +1,8 @@
 package com.socialize.ui.view;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -21,6 +23,7 @@ public abstract class AuthenticatedView extends SocializeView {
 	private String consumerKey;
 	private String consumerSecret;
 	private String fbAppId;
+	private Dialog progress;
 
 	public AuthenticatedView(Context context) {
 		super(context);
@@ -149,11 +152,18 @@ public abstract class AuthenticatedView extends SocializeView {
 	// Subclasses override
 	public void onBeforeAuthenticate() {}
 
-	// Subclasses override
-	public void onAfterAuthenticate() {}
-
 	public abstract boolean isRequires3rdPartyAuth();
 
 	public abstract View getView();
 
+	@Override
+	protected void onBeforeSocializeInit() {
+		progress = ProgressDialog.show(getContext(), "Loading Socialize", "Please wait...");
+	}
+
+	public void onAfterAuthenticate() {
+		if(progress != null) {
+			progress.dismiss();
+		}
+	}
 }

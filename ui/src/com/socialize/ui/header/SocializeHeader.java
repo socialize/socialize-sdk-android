@@ -19,25 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.comment;
+package com.socialize.ui.header;
 
 import android.content.Context;
-
-import com.socialize.ui.header.BaseHeaderFactory;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
  * @author Jason Polites
  *
  */
-public class CommentHeaderFactory extends BaseHeaderFactory<CommentHeader> {
+public class SocializeHeader extends LinearLayout {
+	
+	private TextView titleText;
 
-	@Override
-	protected String getHeaderText() {
-		return "Comments";
+	public SocializeHeader(Context context) {
+		super(context);
 	}
 
-	@Override
-	protected CommentHeader createHeaderInstance(Context context) {
-		return new CommentHeader(context);
+	public TextView getTitleText() {
+		return titleText;
+	}
+
+	public void setTitleText(TextView titleText) {
+		this.titleText = titleText;
+	}
+	
+	public void setText(String text) {
+		this.titleText.setText(text);
 	}
 }

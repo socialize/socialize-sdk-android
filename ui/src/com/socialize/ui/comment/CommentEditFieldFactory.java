@@ -26,6 +26,8 @@ import android.graphics.drawable.GradientDrawable;
 import android.text.InputType;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -94,6 +96,10 @@ public class CommentEditFieldFactory extends BaseViewFactory<CommentEditField> {
 		
 		field.addView(editText);
 		field.addView(button);
+		
+		View fb = (View)container.getBean("facebookButton");
+		
+		field.addView(fb);
 		
 		return field;
 	}

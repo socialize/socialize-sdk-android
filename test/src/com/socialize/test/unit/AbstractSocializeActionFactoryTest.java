@@ -118,7 +118,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		
 		AndroidMock.expect(json.put("id", id)).andReturn(json);
 		AndroidMock.expect(json.put("lat", lat)).andReturn(json);
-		AndroidMock.expect(json.put("lon", lon)).andReturn(json);
+		AndroidMock.expect(json.put("lng", lon)).andReturn(json);
 		AndroidMock.expect(json.put("date",DATE_FORMAT_STRING.format(date))).andReturn(json);
 		
 		AndroidMock.expect(action.getId()).andReturn(id);
@@ -186,15 +186,15 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		action.setEntity(entity);
 		
 		AndroidMock.expect(json.has("lat")).andReturn(true);
-		AndroidMock.expect(json.has("lon")).andReturn(true);
+		AndroidMock.expect(json.has("lng")).andReturn(true);
 		AndroidMock.expect(json.has("date")).andReturn(true);
 		
 		AndroidMock.expect(json.isNull("lat")).andReturn(false);
-		AndroidMock.expect(json.isNull("lon")).andReturn(false);
+		AndroidMock.expect(json.isNull("lng")).andReturn(false);
 		AndroidMock.expect(json.isNull("date")).andReturn(false);
 		
 		AndroidMock.expect((Double)json.getDouble("lat")).andReturn(lat);
-		AndroidMock.expect((Double)json.getDouble("lon")).andReturn(lon);
+		AndroidMock.expect((Double)json.getDouble("lng")).andReturn(lon);
 		AndroidMock.expect(json.getString("date")).andReturn(DATE_FORMAT_STRING.format(date));
 		
 		AndroidMock.replay(appFactoryMock);

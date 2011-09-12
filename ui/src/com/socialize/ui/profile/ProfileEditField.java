@@ -19,25 +19,51 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.comment;
+package com.socialize.ui.profile;
 
 import android.content.Context;
-
-import com.socialize.ui.header.BaseHeaderFactory;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 /**
  * @author Jason Polites
  *
  */
-public class CommentHeaderFactory extends BaseHeaderFactory<CommentHeader> {
+public class ProfileEditField extends LinearLayout {
+	
+	private ImageButton button;
+	private EditText editText;
 
-	@Override
-	protected String getHeaderText() {
-		return "Comments";
+	public ProfileEditField(Context context) {
+		super(context);
+	}
+	
+	public void setButtonListener(OnClickListener listener) {
+		button.setOnClickListener(listener);
+	}
+	
+	public String getText() {
+		return editText.getText().toString();
+	}
+	
+	public void clear() {
+		editText.setText("");
 	}
 
-	@Override
-	protected CommentHeader createHeaderInstance(Context context) {
-		return new CommentHeader(context);
+	public void setButton(ImageButton button) {
+		this.button = button;
+	}
+
+	public void setEditText(EditText editText) {
+		this.editText = editText;
+	}
+
+	public EditText getEditText() {
+		return editText;
+	}
+
+	public ImageButton getButton() {
+		return button;
 	}
 }

@@ -103,9 +103,9 @@ For example:
 
 .. parsed-literal::
 
-	**http://www.getsocialize.com (valid URL preferred)**
+	**.www.getsocialize.com (valid URL preferred)**
 	
-	http://myuniqekey (Not a *real* URL, but will still work)
+	http://myuniqekey.com (Not a *real* URL, but will still work)
 	
 Creating an Entity
 ~~~~~~~~~~~~~~~~~~

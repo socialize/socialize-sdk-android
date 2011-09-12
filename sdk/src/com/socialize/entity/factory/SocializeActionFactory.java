@@ -82,7 +82,7 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			}
 			
 			if(lon != null) {
-				to.put("lon", lon);
+				to.put("lng", lon);
 			}
 			
 			if(date != null) {
@@ -136,8 +136,8 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 				to.setLat(from.getDouble("lat"));
 			}
 			
-			if(from.has("lon") && !from.isNull("lon")) {
-				to.setLon(from.getDouble("lon"));
+			if(from.has("lng") && !from.isNull("lng")) {
+				to.setLon(from.getDouble("lng"));
 			}
 			
 			if(from.has("date") && !from.isNull("date")) {
