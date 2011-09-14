@@ -23,10 +23,10 @@ package com.socialize.ui.auth;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.socialize.ui.button.SocializeButton;
 import com.socialize.ui.facebook.FacebookButton;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.StringUtils;
@@ -38,7 +38,6 @@ import com.socialize.util.StringUtils;
 public class AuthRequestDialogView extends LinearLayout {
 
 	private FacebookButton facebookSignInButton;
-	private SocializeButton socializeSkipAuthButton;
 	private DeviceUtils deviceUtils;
 	private TextView textView;
 	private String text;
@@ -55,6 +54,7 @@ public class AuthRequestDialogView extends LinearLayout {
 
 		fill.setMargins(0,0,0,0);
 		
+		setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
 		setOrientation(LinearLayout.VERTICAL);
 		setLayoutParams(fill);
 		setPadding(padding, padding, padding, padding);
@@ -63,18 +63,18 @@ public class AuthRequestDialogView extends LinearLayout {
 			textView = new TextView(getContext());
 			textView.setTextColor(Color.WHITE);
 			textView.setText(text);
+			textView.setGravity(Gravity.TOP | Gravity.LEFT);
 			addView(textView);
 		}
-		addView(facebookSignInButton);
-		addView(socializeSkipAuthButton);
+		
+		if(facebookSignInButton != null) {
+			addView(facebookSignInButton);
+		}
+		
 	}
 
 	public void setFacebookSignInButton(FacebookButton facebookSignInButton) {
 		this.facebookSignInButton = facebookSignInButton;
-	}
-
-	public void setSocializeSkipAuthButton(SocializeButton socializeSkipAuthButton) {
-		this.socializeSkipAuthButton = socializeSkipAuthButton;
 	}
 
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
@@ -85,10 +85,6 @@ public class AuthRequestDialogView extends LinearLayout {
 		return facebookSignInButton;
 	}
 
-	public SocializeButton getSocializeSkipAuthButton() {
-		return socializeSkipAuthButton;
-	}
-
 	public void setText(String text) {
 		this.text = text;
 		
@@ -96,6 +92,4 @@ public class AuthRequestDialogView extends LinearLayout {
 			textView.setText(text);
 		}
 	}
-	
-	
 }

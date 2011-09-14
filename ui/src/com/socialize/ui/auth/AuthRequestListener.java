@@ -21,10 +21,12 @@
  */
 package com.socialize.ui.auth;
 
+import android.app.Dialog;
+
 /**
  * @author Jason Polites
  *
  */
 public interface AuthRequestListener {
-	public void onResult(AuthRequestDialog dialog);
+	public void onResult(Dialog dialog);
 }

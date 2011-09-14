@@ -29,17 +29,8 @@ import android.content.Context;
  */
 public interface CommentButtonCallback {
 
-	/**
-	 * @param context
-	 * @param message
-	 */
-	public void onError(Context context, String message);
-
-	/**
-	 * @param text
-	 */
-	public void onComment(String text);
-
+	public void onError(Context context, Exception e);
 	
+	public void onComment(String text);
 	
 }

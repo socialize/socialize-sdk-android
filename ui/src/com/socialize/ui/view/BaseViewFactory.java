@@ -23,8 +23,6 @@ package com.socialize.ui.view;
 
 import android.view.View;
 
-import com.socialize.android.ioc.Container;
-import com.socialize.android.ioc.ContainerAware;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
@@ -33,12 +31,11 @@ import com.socialize.util.Drawables;
  * @author Jason Polites
  *
  */
-public abstract class BaseViewFactory<V extends View> implements ViewFactory<V>, ContainerAware {
+public abstract class BaseViewFactory<V extends View> implements ViewFactory<V> {
 
 	protected DeviceUtils deviceUtils;
 	protected Drawables drawables;
 	protected Colors colors;
-	protected Container container;
 
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
 		this.deviceUtils = deviceUtils;
@@ -54,10 +51,5 @@ public abstract class BaseViewFactory<V extends View> implements ViewFactory<V>,
 
 	public int getDIP(int pixels) {
 		return (deviceUtils == null) ? pixels : deviceUtils.getDIP(pixels);
-	}
-
-	@Override
-	public void setContainer(Container container) {
-		this.container = container;
 	}
 }

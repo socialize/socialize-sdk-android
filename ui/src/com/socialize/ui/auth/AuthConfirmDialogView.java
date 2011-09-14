@@ -19,44 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.comment;
+package com.socialize.ui.auth;
 
 import android.content.Context;
 
-import com.socialize.api.SocializeSession;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
+import com.socialize.ui.button.SocializeButton;
 
 /**
  * @author Jason Polites
- *
  */
-public class CommentReAuthListener implements SocializeAuthListener {
+public class AuthConfirmDialogView extends AuthRequestDialogView {
 
-	private CommentButtonCallback callback;
-	private String comment;
-	private Context context;
+	private SocializeButton socializeSkipAuthButton;
 	
-	public CommentReAuthListener(Context context, CommentButtonCallback callback, String comment) {
-		super();
-		this.callback = callback;
-		this.comment = comment;
-		this.context = context;
+	public AuthConfirmDialogView(Context context) {
+		super(context);
 	}
 	
-	@Override
-	public void onError(SocializeException error) {
-		callback.onError(context, error);
+	public void init() {
+		super.init();
+		addView(socializeSkipAuthButton);
 	}
 
-	@Override
-	public void onAuthSuccess(SocializeSession session) {
-		callback.onComment(comment);
+	public void setSocializeSkipAuthButton(SocializeButton socializeSkipAuthButton) {
+		this.socializeSkipAuthButton = socializeSkipAuthButton;
 	}
 
-	@Override
-	public void onAuthFail(SocializeException error) {
-		callback.onError(context, error);
+	public SocializeButton getSocializeSkipAuthButton() {
+		return socializeSkipAuthButton;
 	}
-
 }

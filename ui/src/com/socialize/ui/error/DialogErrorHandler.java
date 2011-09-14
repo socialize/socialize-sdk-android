@@ -1,19 +1,44 @@
 package com.socialize.ui.error;
 
-import com.socialize.util.Drawables;
-import com.socialize.util.StringUtils;
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
 
+import com.socialize.config.SocializeConfig;
+import com.socialize.error.SocializeApiError;
+import com.socialize.util.Drawables;
+import com.socialize.util.StringUtils;
+
 public class DialogErrorHandler implements SocializeUIErrorHandler {
 
 	private Drawables drawables;
 	private String message;
+	private SocializeConfig config;
 	
+	@Override
+	public void handleError(Context context, Exception e) {
+		if(!config.getBooleanProperty(SocializeConfig.SOCIALIZE_DEBUG_MODE, false)) {
+			String message = "An unexpected error occurred.  Please try again";
+			if(e instanceof SocializeApiError) {
+				int code = ((SocializeApiError)e).getResultCode();
+				if(code == 500) {
+					message += "\n\nServer Error (" + code + ")";
+				}
+				else {
+					message += "\n\n(" + e.getMessage() + ")";
+				}
+			}
+			
+			handleError(context, message);
+		}
+		else {
+			handleError(context, e.getMessage());
+		}
+	}
+
+	@Deprecated
 	@Override
 	public void handleError(Context context, String message) {
 		try {
@@ -59,5 +84,8 @@ public class DialogErrorHandler implements SocializeUIErrorHandler {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
+
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
+	}
 }

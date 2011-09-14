@@ -17,7 +17,14 @@ public abstract class BaseView extends LinearLayout {
 	public BaseView(Context context) {
 		super(context);
 	}
+	
+	public void showError(Context context, Exception e) {
+		if(errorHandler != null) {
+			errorHandler.handleError(context, e);
+		}
+	}
 
+	@Deprecated
 	public void showError(Context context, String message) {
 		if(errorHandler != null) {
 			errorHandler.handleError(context, message);

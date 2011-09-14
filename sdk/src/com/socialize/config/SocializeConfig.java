@@ -169,7 +169,14 @@ public class SocializeConfig {
 		return defaultValue;
 	}
 	
-
+	public boolean getBooleanProperty(String key, boolean defaultValue) {
+		String val = properties.getProperty(key);
+		if(!StringUtils.isEmpty(val)) {
+			return Boolean.parseBoolean(val);
+		}
+		return defaultValue;
+	}
+	
 	public void setProperty(String key, String value) {
 		if(properties == null) {
 			properties = createProperties();

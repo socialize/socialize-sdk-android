@@ -2,13 +2,14 @@ package com.socialize.ui.comment;
 
 import java.util.List;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.view.Menu;
 import android.widget.LinearLayout;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Comment;
 import com.socialize.entity.ListResult;
@@ -17,7 +18,7 @@ import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.BaseView;
-import com.socialize.ui.auth.AuthRequestDialog;
+import com.socialize.ui.auth.AuthRequestDialogFactory;
 import com.socialize.ui.auth.AuthRequestListener;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.util.Colors;
@@ -54,7 +55,7 @@ public class CommentListView extends BaseView {
 	private CommentEditField field;
 	private CommentHeader header;
 	private CommentContentView content;
-	private AuthRequestDialog authRequestDialog;
+	private IBeanFactory<AuthRequestDialogFactory> authRequestDialogFactory;
 
 	public CommentListView(Context context, String entityKey) {
 		this(context);
@@ -109,17 +110,19 @@ public class CommentListView extends BaseView {
 	
 	protected CommentAddButtonListener getCommentAddListener() {
 		return new CommentAddButtonListener(getContext(), field, new CommentButtonCallback() {
-			@Override
-			public void onError(Context context, String message) {
-				showError(getContext(), message);
-			}
 			
+			@Override
+			public void onError(Context context, Exception e) {
+				showError(getContext(), e);
+			}
+
 			@Override
 			public void onComment(final String text) {
 				if(!getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-					authRequestDialog.show(new AuthRequestListener() {
+					AuthRequestDialogFactory dialog = authRequestDialogFactory.getBean();
+					dialog.show(getContext(), new AuthRequestListener() {
 						@Override
-						public void onResult(AuthRequestDialog dialog) {
+						public void onResult(Dialog dialog) {
 							doPostComment(text);
 						}
 					});
@@ -139,7 +142,7 @@ public class CommentListView extends BaseView {
 
 			@Override
 			public void onError(SocializeException error) {
-				showError(getContext(), error.getMessage());
+				showError(getContext(), error);
 				if(dialog != null) {
 					dialog.dismiss();
 				}
@@ -191,7 +194,7 @@ public class CommentListView extends BaseView {
 
 				@Override
 				public void onError(SocializeException error) {
-					showError(getContext(), error.getMessage());
+					showError(getContext(), error);
 					content.showList();
 					
 					if(dialog != null) {
@@ -290,7 +293,7 @@ public class CommentListView extends BaseView {
 			doListComments(false);
 		}
 		else {
-			showError(getContext(), "Socialize not authenticated");
+			showError(getContext(), new SocializeException("Socialize not authenticated"));
 			content.showList();
 		}
 	}
@@ -387,7 +390,7 @@ public class CommentListView extends BaseView {
 		return totalCount;
 	}
 
-	public void setAuthRequestDialog(AuthRequestDialog authRequestDialog) {
-		this.authRequestDialog = authRequestDialog;
+	public void setAuthRequestDialogFactory(IBeanFactory<AuthRequestDialogFactory> authRequestDialogFactory) {
+		this.authRequestDialogFactory = authRequestDialogFactory;
 	}
 }

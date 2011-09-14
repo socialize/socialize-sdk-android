@@ -21,72 +21,50 @@
  */
 package com.socialize.ui.auth;
 
-import com.socialize.api.SocializeSession;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
-import com.socialize.log.SocializeLogger;
-
-import android.app.Dialog;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.view.View;
 
+import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.error.SocializeException;
+import com.socialize.log.SocializeLogger;
+import com.socialize.util.Drawables;
+
 /**
- * Prompts the user to authenticate
  * @author Jason Polites
+ *
  */
-public class AuthRequestDialog extends Dialog {
+public class AuthConfirmDialogFactory  {
 	
-	private AuthRequestDialogView authRequestDialogView;
+	private IBeanFactory<AuthConfirmDialogView> authConfirmDialogViewFactory;
+	private Drawables drawables;
 	private SocializeLogger logger;
 	
-	public AuthRequestDialog(Context context) {
-		super(context);
+	public AuthConfirmDialogFactory() {
+		super();
 	}
 
-	public void init() {
-		setTitle("Authenticate");
-		setContentView(authRequestDialogView);
-	}
+	public void show(Context context, final AuthRequestListener listener) {
 
-	public void setAuthRequestDialogView(AuthRequestDialogView authRequestDialogView) {
-		this.authRequestDialogView = authRequestDialogView;
-	}
-
-	public void show(final AuthRequestListener listener) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		AuthConfirmDialogView view = authConfirmDialogViewFactory.getBean();
+		builder.setView(view);
 		
-		authRequestDialogView.getSocializeSkipAuthButton().setOnClickListener(new View.OnClickListener() {
+		final AlertDialog alertDialog = builder.create();
+		
+		alertDialog.setIcon(drawables.getDrawable("socialize_icon_white.png"));
+		alertDialog.setTitle("Post Anonymously");
+		
+		view.getSocializeSkipAuthButton().setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				dismiss();
-				listener.onResult(AuthRequestDialog.this);
+				alertDialog.dismiss();
+				listener.onResult(alertDialog);
 			}
 		});
 		
-		authRequestDialogView.getFacebookSignInButton().setAuthListener(new SocializeAuthListener() {
-			
-			@Override
-			public void onError(SocializeException error) {
-				handleError("Error during auth", error);
-				dismiss();
-				listener.onResult(AuthRequestDialog.this);
-			}
-			
-			@Override
-			public void onAuthSuccess(SocializeSession session) {
-				// TODO: Launch profile view
-				dismiss();
-				listener.onResult(AuthRequestDialog.this);
-			}
-			
-			@Override
-			public void onAuthFail(SocializeException error) {
-				handleError("Error during auth", error);
-				dismiss();
-				listener.onResult(AuthRequestDialog.this);
-			}
-		});
 		
-		super.show();
+	    alertDialog.show();
 	}
 	
 	protected void handleError(String msg, SocializeException error) {
@@ -98,7 +76,15 @@ public class AuthRequestDialog extends Dialog {
 		}
 	}
 
+	public void setAuthConfirmDialogViewFactory(IBeanFactory<AuthConfirmDialogView> authConfirmDialogViewFactory) {
+		this.authConfirmDialogViewFactory = authConfirmDialogViewFactory;
+	}
+
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
+	}
+
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
 	}
 }

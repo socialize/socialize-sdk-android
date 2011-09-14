@@ -23,8 +23,10 @@ package com.socialize.ui.button;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -39,20 +41,29 @@ import com.socialize.util.StringUtils;
  */
 public class SocializeButton extends LinearLayout {
 	
+	public static enum TEXT_ALIGN {LEFT, CENTER, RIGHT};
+	
 	private Drawables drawables;
 	private Colors colors;
 	private DeviceUtils deviceUtils;
 	private ImageView imageView = null;
 	private TextView textView = null;
+	
 	private int height = 32;
 	private int width = 0;
 	private int textSize = 12;
+	
 	private String text = "";
 	private String imageName;
+	
+	private boolean bold = false;
+	private boolean italic = false;
 	
 	private String bottomColor;
 	private String topColor;
 	private String strokeColor;
+	
+	private String textAlign = "left";
 
 	public SocializeButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -100,12 +111,55 @@ public class SocializeButton extends LinearLayout {
 		setPadding(padding, padding, padding, padding);
 		setClickable(true);
 		
+		TEXT_ALIGN align = TEXT_ALIGN.LEFT;
+		
+		if(!StringUtils.isEmpty(textAlign)) {
+			textAlign = textAlign.trim().toUpperCase();
+			try {
+				align = TEXT_ALIGN.valueOf(textAlign);
+			}
+			catch (Exception ignore) {
+				ignore.printStackTrace();
+			}
+		}
+		
+		switch (align) {
+			case LEFT:
+				setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+				break;
+	
+			case CENTER:
+				setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER);
+				break;
+	
+			case RIGHT:
+				setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+				break;
+	
+			default:
+				break;
+		}
+		
 		LayoutParams imageLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		LayoutParams textLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
 		textView = new TextView(getContext());
 		textView.setTextColor(Color.WHITE);
-		textView.setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, textSize);
+		
+		if(bold) {
+			if(italic) {
+				textView.setTypeface(Typeface.DEFAULT_BOLD, Typeface.BOLD_ITALIC);
+			}
+			else {
+				textView.setTypeface(Typeface.DEFAULT_BOLD);
+			}
+		}
+		else if(italic) {
+			textView.setTypeface(Typeface.DEFAULT, Typeface.ITALIC);
+		}
+		
+		setTextSize(textSize);
+		
 		textView.setText(text);
 		textView.setLayoutParams(textLayout);
 		
@@ -142,6 +196,10 @@ public class SocializeButton extends LinearLayout {
 	}
 
 	public void setTextSize(int textSize) {
+		if(textView != null) {
+			textView.setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, textSize);
+		}
+		
 		this.textSize = textSize;
 	}
 	
@@ -170,5 +228,17 @@ public class SocializeButton extends LinearLayout {
 
 	public void setWidth(int width) {
 		this.width = width;
+	}
+
+	public void setTextAlign(String textAlign) {
+		this.textAlign = textAlign;
+	}
+
+	public void setBold(boolean bold) {
+		this.bold = bold;
+	}
+
+	public void setItalic(boolean italic) {
+		this.italic = italic;
 	}
 }

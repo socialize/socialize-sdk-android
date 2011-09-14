@@ -6,6 +6,7 @@ import android.widget.LinearLayout;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
+import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.BaseView;
 import com.socialize.ui.dialog.ProgressDialogFactory;
@@ -80,8 +81,7 @@ public class ProfileEditView extends BaseView {
 
 		}
 		else {
-			showError(getContext(), "Socialize not authenticated");
-
+			showError(getContext(), new SocializeException("Socialize not authenticated"));
 		}
 	}
 

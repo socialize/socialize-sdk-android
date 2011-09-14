@@ -45,7 +45,11 @@
 				<entry>
 					<key value="BUTTON_TOP"/>
 					<value value="#00abe3"/>
-				</entry>	
+				</entry>
+				<entry>
+					<key value="BUTTON_STROKE"/>
+					<value value="#00435c"/>
+				</entry>						
 				<entry>
 					<key value="TEXT_BG"/>
 					<value value="#ffffff"/>
@@ -89,7 +93,7 @@
 				<entry>
 					<key value="GRAY_BTN_STROKE"/>
 					<value value="#333333"/>
-				</entry>					
+				</entry>	
 			</map>
 		</property>
 	</bean>
@@ -113,14 +117,55 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="Skip"/>
-		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
-		<property name="topColor" value="GRAY_BTN_TOP"/>
-		<property name="strokeColor" value="GRAY_BTN_STROKE"/>
-		<property name="width" value="160" type="integer"/>
+		<property name="text" value="Post Anonymously"/>
+		<property name="bottomColor" value="BUTTON_BOTTOM"/>
+		<property name="topColor" value="BUTTON_TOP"/>
+		<property name="strokeColor" value="BUTTON_STROKE"/>
+		<property name="width" value="200" type="integer"/>
+		<property name="height" value="42" type="integer"/>
+		<property name="textSize" value="16" type="integer"/>
+		<property name="textAlign" value="center"/>
 	</bean>
 	
 	<!-- Authenticate Dialog -->
+	<factory id="authRequestDialogFactory" makes="authRequestDialog"/>
+	<factory id="authConfirmDialogFactory" makes="authConfirmDialog"/>
+	<factory id="authRequestDialogViewFactory" makes="authRequestDialogView"/>
+	<factory id="authConfirmDialogViewFactory" makes="authConfirmDialogView"/>
+	
+	<!-- 
+		<factory id="authConfirmDialogHeaderFactory" makes="authConfirmDialogHeader"/>
+	
+		<bean 
+			id="authConfirmDialogHeader" 
+			class="com.socialize.ui.auth.AuthConfirmDialogHeader"		
+			singleton="false">
+			<constructor-arg type="activity"/>
+			<property name="deviceUtils" ref="deviceUtils"/>
+			<property name="drawables" ref="drawables"/>
+			<init-method name="init"/>
+		</bean>
+	 -->
+	 
+	<bean 
+		id="authRequestDialog" 
+		class="com.socialize.ui.auth.AuthRequestDialogFactory"		
+		singleton="false">
+		<property name="logger" ref="logger"/>
+		<property name="authConfirmDialogFactory" ref="authConfirmDialogFactory"/>
+		<property name="authRequestDialogViewFactory" ref="authRequestDialogViewFactory"/>
+		<property name="drawables" ref="drawables"/>
+	</bean>
+	
+	<bean 
+		id="authConfirmDialog" 
+		class="com.socialize.ui.auth.AuthConfirmDialogFactory"		
+		singleton="false">
+		<property name="logger" ref="logger"/>
+		<property name="authConfirmDialogViewFactory" ref="authConfirmDialogViewFactory"/>
+		<property name="drawables" ref="drawables"/>
+	</bean>
+	
 	<bean 
 		id="authRequestDialogView" 
 		class="com.socialize.ui.auth.AuthRequestDialogView"		
@@ -128,16 +173,18 @@
 		<constructor-arg type="activity"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="facebookSignInButton" ref="facebookSignInButton"/>
-		<property name="socializeSkipAuthButton" ref="socializeSkipAuthButton"/>
+		<property name="text" value="Authenticate with Facebook to manage your privacy settings and retain your comments across applications."/>
 		<init-method name="init"/>
 	</bean>
 	
 	<bean 
-		id="authRequestDialog" 
-		class="com.socialize.ui.auth.AuthRequestDialog"		
+		id="authConfirmDialogView" 
+		class="com.socialize.ui.auth.AuthConfirmDialogView"		
 		singleton="false">
 		<constructor-arg type="activity"/>
-		<property name="authRequestDialogView" ref="authRequestDialogView"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="socializeSkipAuthButton" ref="socializeSkipAuthButton"/>
+		<property name="text" value="Authenticate with Facebook to manage your privacy settings and retain your comments across applications."/>
 		<init-method name="init"/>
 	</bean>
 	
@@ -163,9 +210,11 @@
 		<property name="bottomColor" value="FACEBOOK_BOTTOM"/>
 		<property name="topColor" value="FACEBOOK_TOP"/>
 		<property name="strokeColor" value="FACEBOOK_STROKE"/>
-		<property name="width" value="160" type="integer"/>
+		<property name="width" value="200" type="integer"/>
+		<property name="height" value="42" type="integer"/>
+		<property name="textSize" value="16" type="integer"/>
 	</bean>
-	
+
 	<!-- Comment UI -->
 	
 	<bean 
@@ -245,7 +294,7 @@
 		<property name="commentEditFieldFactory" ref="commentEditFieldFactory"/>
 		<property name="commentContentViewFactory" ref="commentContentViewFactory"/>
 		<property name="keyboardUtils" ref="keyboardUtils"/>
-		<property name="authRequestDialog" ref="authRequestDialog"/>
+		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
 	</bean>
 	
 	<!--  End Comment UI -->
