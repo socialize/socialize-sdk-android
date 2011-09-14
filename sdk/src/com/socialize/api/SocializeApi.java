@@ -303,6 +303,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		if(authProviderType != null && 
 				authProviderType.equals(AuthProviderType.FACEBOOK) && 
 				StringUtils.isEmpty(appId3rdParty)) {
+			
 			if(listener != null) {
 				listener.onError(new SocializeException("No app ID found for auth type FACEBOOK"));
 			}

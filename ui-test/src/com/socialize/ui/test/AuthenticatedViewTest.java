@@ -29,9 +29,9 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 		final String fbId = "foobar";
 		
 		socializeUI.initUI(container);
-		AndroidMock.expect(socializeUI.getCustomConfigValue(getContext(), SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(key);
-		AndroidMock.expect(socializeUI.getCustomConfigValue(getContext(), SocializeConfig.SOCIALIZE_CONSUMER_SECRET)).andReturn(secret);
-		AndroidMock.expect(socializeUI.getCustomConfigValue(getContext(), SocializeConfig.FACEBOOK_APP_ID)).andReturn(fbId);
+		AndroidMock.expect(socializeUI.getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(key);
+		AndroidMock.expect(socializeUI.getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_SECRET)).andReturn(secret);
+		AndroidMock.expect(socializeUI.getCustomConfigValue(SocializeConfig.FACEBOOK_APP_ID)).andReturn(fbId);
 		
 		AuthenticatedView view = new AuthenticatedView(getContext()) {
 			
@@ -69,8 +69,8 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 		final String secret = "bar";
 		final String fbId = "fb_foobar";
 		
-		AndroidMock.expect(socializeUI.getCustomConfigValue(getContext(), SocializeConfig.FACEBOOK_USER_ID)).andReturn(null);
-		AndroidMock.expect(socializeUI.getCustomConfigValue(getContext(), SocializeConfig.FACEBOOK_USER_TOKEN)).andReturn(null);
+		AndroidMock.expect(socializeUI.getCustomConfigValue(SocializeConfig.FACEBOOK_USER_ID)).andReturn(null);
+		AndroidMock.expect(socializeUI.getCustomConfigValue(SocializeConfig.FACEBOOK_USER_TOKEN)).andReturn(null);
 		
 		socialize.authenticate(
 				key, 
@@ -162,8 +162,8 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 		final String fbToken = "fb_token_foobar";
 		
 		
-		AndroidMock.expect(socializeUI.getCustomConfigValue(getContext(), SocializeConfig.FACEBOOK_USER_ID)).andReturn(fbUserId);
-		AndroidMock.expect(socializeUI.getCustomConfigValue(getContext(), SocializeConfig.FACEBOOK_USER_TOKEN)).andReturn(fbToken);
+		AndroidMock.expect(socializeUI.getCustomConfigValue(SocializeConfig.FACEBOOK_USER_ID)).andReturn(fbUserId);
+		AndroidMock.expect(socializeUI.getCustomConfigValue(SocializeConfig.FACEBOOK_USER_TOKEN)).andReturn(fbToken);
 		
 		socialize.authenticateKnownUser(
 				key, 
@@ -253,8 +253,8 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 		final String key = "foo";
 		final String secret = "bar";
 		
-		AndroidMock.expect(socializeUI.getCustomConfigValue(getContext(), SocializeConfig.FACEBOOK_USER_ID)).andReturn(null);
-		AndroidMock.expect(socializeUI.getCustomConfigValue(getContext(), SocializeConfig.FACEBOOK_USER_TOKEN)).andReturn(null);
+		AndroidMock.expect(socializeUI.getCustomConfigValue(SocializeConfig.FACEBOOK_USER_ID)).andReturn(null);
+		AndroidMock.expect(socializeUI.getCustomConfigValue(SocializeConfig.FACEBOOK_USER_TOKEN)).andReturn(null);
 		
 		socialize.authenticate(
 				key, 

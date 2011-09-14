@@ -36,9 +36,9 @@ public abstract class AuthenticatedView extends SocializeView {
 	@Override
 	public void onPostSocializeInit(IOCContainer container) {
 		getSocializeUI().initUI(container);
-		consumerKey = getSocializeUI().getCustomConfigValue(getContext(), SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-		consumerSecret = getSocializeUI().getCustomConfigValue(getContext(),SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-		fbAppId = getSocializeUI().getCustomConfigValue(getContext(),SocializeConfig.FACEBOOK_APP_ID);
+		consumerKey = getSocializeUI().getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		consumerSecret = getSocializeUI().getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+		fbAppId = getSocializeUI().getCustomConfigValue(SocializeConfig.FACEBOOK_APP_ID);
 	}
 
 	@Override
@@ -88,8 +88,8 @@ public abstract class AuthenticatedView extends SocializeView {
 	public void onAttachedToWindow() {
 		super.onAttachedToWindow();
 
-		String userId3rdParty = getSocializeUI().getCustomConfigValue(getContext(),SocializeConfig.FACEBOOK_USER_ID);
-		String token3rdParty = getSocializeUI().getCustomConfigValue(getContext(),SocializeConfig.FACEBOOK_USER_TOKEN);
+		String userId3rdParty = getSocializeUI().getCustomConfigValue(SocializeConfig.FACEBOOK_USER_ID);
+		String token3rdParty = getSocializeUI().getCustomConfigValue(SocializeConfig.FACEBOOK_USER_TOKEN);
 
 		onBeforeAuthenticate();
 

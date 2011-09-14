@@ -21,8 +21,14 @@
  */
 package com.socialize.ui.auth;
 
+import com.socialize.api.SocializeSession;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
+import com.socialize.log.SocializeLogger;
+
 import android.app.Dialog;
 import android.content.Context;
+import android.view.View;
 
 /**
  * Prompts the user to authenticate
@@ -30,16 +36,69 @@ import android.content.Context;
  */
 public class AuthRequestDialog extends Dialog {
 	
-	public AuthRequestDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
-		super(context, cancelable, cancelListener);
-	}
-
-	public AuthRequestDialog(Context context, int theme) {
-		super(context, theme);
-	}
-
+	private AuthRequestDialogView authRequestDialogView;
+	private SocializeLogger logger;
+	
 	public AuthRequestDialog(Context context) {
 		super(context);
 	}
 
+	public void init() {
+		setTitle("Authenticate");
+		setContentView(authRequestDialogView);
+	}
+
+	public void setAuthRequestDialogView(AuthRequestDialogView authRequestDialogView) {
+		this.authRequestDialogView = authRequestDialogView;
+	}
+
+	public void show(final AuthRequestListener listener) {
+		
+		authRequestDialogView.getSocializeSkipAuthButton().setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dismiss();
+				listener.onResult(AuthRequestDialog.this);
+			}
+		});
+		
+		authRequestDialogView.getFacebookSignInButton().setAuthListener(new SocializeAuthListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				handleError("Error during auth", error);
+				dismiss();
+				listener.onResult(AuthRequestDialog.this);
+			}
+			
+			@Override
+			public void onAuthSuccess(SocializeSession session) {
+				// TODO: Launch profile view
+				dismiss();
+				listener.onResult(AuthRequestDialog.this);
+			}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				handleError("Error during auth", error);
+				dismiss();
+				listener.onResult(AuthRequestDialog.this);
+			}
+		});
+		
+		super.show();
+	}
+	
+	protected void handleError(String msg, SocializeException error) {
+		if(logger != null) {
+			logger.error(msg, error);
+		}
+		else {
+			error.printStackTrace();
+		}
+	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
 }

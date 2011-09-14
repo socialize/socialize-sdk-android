@@ -9,6 +9,7 @@
 	
 	<bean id="progressDialogFactory" class="com.socialize.ui.dialog.ProgressDialogFactory">
 		<property name="logger" ref="logger"/>
+		<property name="drawables" ref="drawables"/>
 	</bean>
 	
 	<bean id="socializeView" abstract="true">
@@ -66,27 +67,103 @@
 					<value value="#000000"/>
 				</entry>
 				<entry>
-					<key value="FACEBOOK_BG"/>
-					<value value="#3b5997"/>
+					<key value="FACEBOOK_BOTTOM"/>
+					<value value="#2f4a7b"/>
 				</entry>
+				<entry>
+					<key value="FACEBOOK_TOP"/>
+					<value value="#516b9d"/>
+				</entry>	
+				<entry>
+					<key value="FACEBOOK_STROKE"/>
+					<value value="#1a3360"/>
+				</entry>
+				<entry>
+					<key value="GRAY_BTN_BOTTOM"/>
+					<value value="#555555"/>
+				</entry>
+				<entry>
+					<key value="GRAY_BTN_TOP"/>
+					<value value="#717171"/>
+				</entry>	
+				<entry>
+					<key value="GRAY_BTN_STROKE"/>
+					<value value="#333333"/>
+				</entry>					
 			</map>
 		</property>
 	</bean>
 	
-	<!-- Facebook -->
-	
-	
+	<!-- General UI -->
 	
 	<bean 
-		id="facebookButton" 
-		class="com.socialize.ui.facebook.FacebookButton"		
-		singleton="false">
+		id="socializeButton" 
+		class="com.socialize.ui.button.SocializeButton"		
+		singleton="false"
+		abstract="true">
 		<constructor-arg type="activity"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="colors" ref="colors"/>
-		
 		<init-method name="init"/>
+	</bean>
+	
+	<bean 
+		id="socializeSkipAuthButton" 
+		singleton="false"
+		extends="socializeButton">
+		<constructor-arg type="activity"/>
+		<property name="text" value="Skip"/>
+		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
+		<property name="topColor" value="GRAY_BTN_TOP"/>
+		<property name="strokeColor" value="GRAY_BTN_STROKE"/>
+		<property name="width" value="160" type="integer"/>
+	</bean>
+	
+	<!-- Authenticate Dialog -->
+	<bean 
+		id="authRequestDialogView" 
+		class="com.socialize.ui.auth.AuthRequestDialogView"		
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="facebookSignInButton" ref="facebookSignInButton"/>
+		<property name="socializeSkipAuthButton" ref="socializeSkipAuthButton"/>
+		<init-method name="init"/>
+	</bean>
+	
+	<bean 
+		id="authRequestDialog" 
+		class="com.socialize.ui.auth.AuthRequestDialog"		
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="authRequestDialogView" ref="authRequestDialogView"/>
+		<init-method name="init"/>
+	</bean>
+	
+	<!-- Facebook -->
+	<bean 
+		id="facebookAuthClickListener" 
+		class="com.socialize.ui.facebook.FacebookAuthClickListener"		
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="config" ref="config"/>
+		<property name="dialogFactory" ref="progressDialogFactory"/>
+	</bean>
+	
+	<bean 
+		id="facebookSignInButton" 
+		class="com.socialize.ui.facebook.FacebookButton"		
+		singleton="false"
+		extends="socializeButton">
+		<constructor-arg type="activity"/>
+		<property name="facebookAuthClickListener" ref="facebookAuthClickListener"/>
+		<property name="text" value="Sign in with Facebook"/>
+		<property name="imageName" value="fb_button.png"/>
+		<property name="bottomColor" value="FACEBOOK_BOTTOM"/>
+		<property name="topColor" value="FACEBOOK_TOP"/>
+		<property name="strokeColor" value="FACEBOOK_STROKE"/>
+		<property name="width" value="160" type="integer"/>
 	</bean>
 	
 	<!-- Comment UI -->
@@ -168,6 +245,7 @@
 		<property name="commentEditFieldFactory" ref="commentEditFieldFactory"/>
 		<property name="commentContentViewFactory" ref="commentContentViewFactory"/>
 		<property name="keyboardUtils" ref="keyboardUtils"/>
+		<property name="authRequestDialog" ref="authRequestDialog"/>
 	</bean>
 	
 	<!--  End Comment UI -->

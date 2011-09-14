@@ -61,9 +61,8 @@ public class CommentAddButtonListener implements OnClickListener {
 		this.field = field;
 		this.callback = callback;
 		this.keyboardUtils = keyboardUtils;
-		this.consumerKey = getSocializeUI().getCustomConfigValue(context,SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-		this.consumerSecret = getSocializeUI().getCustomConfigValue(context,SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-//		final String facebookAppId = SocializeUI.getInstance().getCustomConfigValue(getContext(),SocializeConfig.FACEBOOK_APP_ID);
+		this.consumerKey = getSocializeUI().getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		this.consumerSecret = getSocializeUI().getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 	}
 	
 	protected SocializeUI getSocializeUI() {
@@ -86,7 +85,7 @@ public class CommentAddButtonListener implements OnClickListener {
 			
 			keyboardUtils.hideKeyboard(field.getEditText());
 
-			// TODO: add other providers
+			// TODO: add auth popup
 			// TODO: enable FB auth
 //			if(!Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 			if(!getSocialize().isAuthenticated()) {

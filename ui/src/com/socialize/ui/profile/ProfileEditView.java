@@ -1,28 +1,13 @@
 package com.socialize.ui.profile;
 
-import java.util.List;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.widget.LinearLayout;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
-import com.socialize.entity.Comment;
-import com.socialize.entity.ListResult;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.comment.CommentAddListener;
-import com.socialize.listener.comment.CommentListListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.BaseView;
-import com.socialize.ui.comment.CommentAdapter;
-import com.socialize.ui.comment.CommentAddButtonListener;
-import com.socialize.ui.comment.CommentButtonCallback;
-import com.socialize.ui.comment.CommentContentView;
-import com.socialize.ui.comment.CommentEditField;
-import com.socialize.ui.comment.CommentHeader;
-import com.socialize.ui.comment.CommentScrollCallback;
-import com.socialize.ui.comment.CommentScrollListener;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.util.KeyboardUtils;

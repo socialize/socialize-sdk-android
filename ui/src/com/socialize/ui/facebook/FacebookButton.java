@@ -22,32 +22,17 @@
 package com.socialize.ui.facebook;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.socialize.ui.util.Colors;
-import com.socialize.util.DeviceUtils;
-import com.socialize.util.Drawables;
+import com.socialize.listener.SocializeAuthListener;
+import com.socialize.ui.button.SocializeButton;
 
 /**
  * @author Jason Polites
  */
-public class FacebookButton extends LinearLayout {
+public class FacebookButton extends SocializeButton {
 	
-	private Drawables drawables;
-	private Colors colors;
-	private DeviceUtils deviceUtils;
-	private ImageView imageView = null;
-	private TextView textView = null;
-	private int height = 40;
-	private int textSize = 12;
-	private String text = "Sign in with Facebook";
+	private FacebookAuthClickListener facebookAuthClickListener;
 
 	public FacebookButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -58,64 +43,15 @@ public class FacebookButton extends LinearLayout {
 	}
 
 	public void init() {
-		int pHeight = deviceUtils.getDIP(height);
-		LayoutParams fill = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, pHeight);
-
-		fill.setMargins(0,0,0,0);
-		
-		setOrientation(LinearLayout.HORIZONTAL);
-		setLayoutParams(fill);
-		setBackgroundColor(colors.getColor(Colors.FACEBOOK_BG));
-		setPadding(0, 0, 0, 0);
-		
-		LayoutParams imageLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		LayoutParams textLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		
-		imageView = new ImageView(getContext());
-		imageView.setImageDrawable(drawables.getDrawable("fb_button.png"));
-		imageView.setLayoutParams(imageLayout);
-		
-		textView = new TextView(getContext());
-		textView.setTextColor(Color.WHITE);
-		textView.setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, textSize);
-		textView.setText(text);
-		textView.setLayoutParams(textLayout);
-		
-		addView(imageView);
-		addView(textView);
+		super.init();
+		setOnClickListener(facebookAuthClickListener);
 	}
 	
-	@Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        Rect rect = new Rect();
-        Paint paint = new Paint();
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(Color.parseColor("#29447e"));
-        paint.setStrokeWidth(3);
-        getLocalVisibleRect(rect);
-        canvas.drawRect(rect, paint);       
-    }
-
-	public void setDrawables(Drawables drawables) {
-		this.drawables = drawables;
+	public void setAuthListener(SocializeAuthListener listener) {
+		facebookAuthClickListener.setListener(listener);
 	}
 
-	public void setColors(Colors colors) {
-		this.colors = colors;
+	public void setFacebookAuthClickListener(FacebookAuthClickListener facebookAuthClickListener) {
+		this.facebookAuthClickListener = facebookAuthClickListener;
 	}
-
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
-	}
-
-	public void setTextSize(int textSize) {
-		this.textSize = textSize;
-	}
-	
-	
 }

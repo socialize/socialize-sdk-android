@@ -134,7 +134,13 @@ public abstract class FacebookDialogListener implements DialogListener {
 
 	@Override
 	public void onCancel() {
-		Toast.makeText(context, "Request canceled", Toast.LENGTH_SHORT).show();
+		if(listener != null) {
+			listener.onError(new SocializeException("Request canceled"));
+		}
+		else {
+			Toast.makeText(context, "Request canceled", Toast.LENGTH_SHORT).show();
+		}
+		
 		onFinish();
 	}
 	

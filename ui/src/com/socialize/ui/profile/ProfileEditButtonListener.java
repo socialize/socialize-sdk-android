@@ -65,7 +65,9 @@ public class ProfileEditButtonListener implements OnClickListener {
 		this.field = field;
 		this.callback = callback;
 		this.keyboardUtils = keyboardUtils;
-		this.facebookAppId = SocializeUI.getInstance().getCustomConfigValue(context,SocializeConfig.FACEBOOK_APP_ID);
+		this.consumerKey = SocializeUI.getInstance().getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		this.consumerSecret = SocializeUI.getInstance().getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+		this.facebookAppId = SocializeUI.getInstance().getCustomConfigValue(SocializeConfig.FACEBOOK_APP_ID);
 	}
 	
 	protected SocializeUI getSocializeUI() {
@@ -89,7 +91,6 @@ public class ProfileEditButtonListener implements OnClickListener {
 			keyboardUtils.hideKeyboard(field.getEditText());
 
 			// TODO: add other providers
-			// TODO: enable FB auth
 			if(!Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 				getSocialize().authenticate(
 						consumerKey, 

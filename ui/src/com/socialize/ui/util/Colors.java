@@ -42,7 +42,9 @@ public class Colors {
 	public static final String LIST_ITEM_BG = "LIST_ITEM_BG";
 	public static final String STANDARD_BACKGROUND_COLOR = "STANDARD_BACKGROUND_COLOR";
 	public static final String LOADING_ITEM_BG = "LOADING_ITEM_BG";
-	public static final String FACEBOOK_BG = "FACEBOOK_BG";;
+	public static final String FACEBOOK_BOTTOM = "FACEBOOK_BOTTOM";
+	public static final String FACEBOOK_TOP = "FACEBOOK_TOP";
+	public static final String FACEBOOK_STROKE = "FACEBOOK_STROKE";
 	
 	private Map<String, String> colorHexCodes;
 	private Map<String, Integer> colors;

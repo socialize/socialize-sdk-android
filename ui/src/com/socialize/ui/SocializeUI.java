@@ -108,7 +108,7 @@ public class SocializeUI {
 		customProperties.put(SocializeConfig.FACEBOOK_APP_ID, appId);
 	}
 	
-	public String getCustomConfigValue(Context context, String key) {
+	public String getCustomConfigValue(String key) {
 		
 		SocializeService socialize = getSocialize();
 		SocializeConfig config = socialize.getConfig();

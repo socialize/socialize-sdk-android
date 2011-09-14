@@ -21,23 +21,10 @@
  */
 package com.socialize.ui.auth;
 
-import android.content.Context;
-
-import com.socialize.ui.view.BaseViewFactory;
-
 /**
  * @author Jason Polites
  *
  */
-public class AuthRequestDialogViewFactory extends BaseViewFactory<AuthRequestDialogView> {
-
-	/* (non-Javadoc)
-	 * @see com.socialize.ui.view.ViewFactory#make(android.content.Context)
-	 */
-	@Override
-	public AuthRequestDialogView make(Context context) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+public interface AuthRequestListener {
+	public void onResult(AuthRequestDialog dialog);
 }

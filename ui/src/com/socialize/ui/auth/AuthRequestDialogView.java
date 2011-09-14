@@ -22,8 +22,14 @@
 package com.socialize.ui.auth;
 
 import android.content.Context;
-import android.util.AttributeSet;
+import android.graphics.Color;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.socialize.ui.button.SocializeButton;
+import com.socialize.ui.facebook.FacebookButton;
+import com.socialize.util.DeviceUtils;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -31,11 +37,65 @@ import android.widget.LinearLayout;
  */
 public class AuthRequestDialogView extends LinearLayout {
 
-	public AuthRequestDialogView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
-
+	private FacebookButton facebookSignInButton;
+	private SocializeButton socializeSkipAuthButton;
+	private DeviceUtils deviceUtils;
+	private TextView textView;
+	private String text;
+	
 	public AuthRequestDialogView(Context context) {
 		super(context);
 	}
+	
+	public void init() {
+		
+		int padding = deviceUtils.getDIP(8);
+		
+		LayoutParams fill = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
+
+		fill.setMargins(0,0,0,0);
+		
+		setOrientation(LinearLayout.VERTICAL);
+		setLayoutParams(fill);
+		setPadding(padding, padding, padding, padding);
+		
+		if(!StringUtils.isEmpty(text)) {
+			textView = new TextView(getContext());
+			textView.setTextColor(Color.WHITE);
+			textView.setText(text);
+			addView(textView);
+		}
+		addView(facebookSignInButton);
+		addView(socializeSkipAuthButton);
+	}
+
+	public void setFacebookSignInButton(FacebookButton facebookSignInButton) {
+		this.facebookSignInButton = facebookSignInButton;
+	}
+
+	public void setSocializeSkipAuthButton(SocializeButton socializeSkipAuthButton) {
+		this.socializeSkipAuthButton = socializeSkipAuthButton;
+	}
+
+	public void setDeviceUtils(DeviceUtils deviceUtils) {
+		this.deviceUtils = deviceUtils;
+	}
+
+	public FacebookButton getFacebookSignInButton() {
+		return facebookSignInButton;
+	}
+
+	public SocializeButton getSocializeSkipAuthButton() {
+		return socializeSkipAuthButton;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+		
+		if(textView != null) {
+			textView.setText(text);
+		}
+	}
+	
+	
 }

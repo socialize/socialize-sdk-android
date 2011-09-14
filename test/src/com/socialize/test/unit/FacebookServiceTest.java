@@ -160,7 +160,6 @@ import com.socialize.util.Drawables;
 			}
 		};
 
-
 		// Expect
 		AndroidMock.expect(facebook.logout(context)).andThrow(new IOException(errorMessage));
 		AndroidMock.replay(facebook);

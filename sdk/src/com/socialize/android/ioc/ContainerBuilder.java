@@ -432,7 +432,27 @@ public class ContainerBuilder {
 			switch(arg.getType()) {
 				case BEAN:
 					// Look for the bean
-					if(container.containsBean(arg.getValue())) {
+					if(!container.containsBean(arg.getValue())) {
+						BeanRef beanRef = container.getBeanRef(arg.getValue());
+						if(beanRef != null) {
+							if(!beanRef.isSingleton()) {
+								// Not a singleton, create one
+								object = container.getBean(arg.getValue());
+							}
+							else {
+								Logger.w(getClass().getSimpleName(), "No bean found with name [" +
+										arg.getValue() +
+										"].  May not have been created yet");
+							}
+						}
+						else {
+							// We can't construct this now
+							Logger.w(getClass().getSimpleName(), "No bean definition found with name [" +
+									arg.getValue() +
+									"].  May not have been created yet");
+						}
+					}
+					else {
 						object = container.getBean(arg.getValue());
 						
 						if(forInit && object != null) {
@@ -448,12 +468,6 @@ public class ContainerBuilder {
 								}
 							}
 						}
-					}
-					else {
-						// We can't construct this now
-						Logger.w(getClass().getSimpleName(), "No bean found with name [" +
-								arg.getValue() +
-								"].  May not have been created yet");
 					}
 					
 					break;

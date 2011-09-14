@@ -43,6 +43,7 @@ public class DeviceUtils {
 	private SocializeLogger logger;
 	private String userAgent;
 	private float density = 160.0f;
+	private String packageName;
 	
 	public void init(Context context) {
 		if(context instanceof Activity) {
@@ -50,6 +51,7 @@ public class DeviceUtils {
 	        Display display = ((Activity)context).getWindowManager().getDefaultDisplay();
 	        display.getMetrics(metrics);
 	        density = metrics.density;
+	        packageName = context.getPackageName();
 		}
 		else {
 			String errroMsg = "Unable to determine device screen density.  Socialize must be intialized from an Activity";
@@ -96,7 +98,7 @@ public class DeviceUtils {
 	
 	public String getUserAgentString() {
 		if(userAgent == null) {
-			userAgent = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_" + Locale.getDefault().getCountry();
+			userAgent = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_" + Locale.getDefault().getCountry() + "; BundleID/" + packageName;
 		}
 		return userAgent;
 	}

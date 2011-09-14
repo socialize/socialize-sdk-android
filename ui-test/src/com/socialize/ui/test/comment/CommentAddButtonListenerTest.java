@@ -44,8 +44,8 @@ public class CommentAddButtonListenerTest extends SocializeUITest {
 		
 		keyboardUtils.hideKeyboard(mockET);
 		
-		AndroidMock.expect(socializeUI.getCustomConfigValue(getContext(), SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(consumerKey);
-		AndroidMock.expect(socializeUI.getCustomConfigValue(getContext(), SocializeConfig.SOCIALIZE_CONSUMER_SECRET)).andReturn(consumerSecret);
+		AndroidMock.expect(socializeUI.getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(consumerKey);
+		AndroidMock.expect(socializeUI.getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_SECRET)).andReturn(consumerSecret);
 		
 		socialize.authenticate(AndroidMock.eq(consumerKey), AndroidMock.eq(consumerSecret), (CommentReAuthListener) AndroidMock.anyObject());
 		

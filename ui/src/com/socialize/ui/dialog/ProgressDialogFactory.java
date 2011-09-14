@@ -26,6 +26,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 
 import com.socialize.log.SocializeLogger;
+import com.socialize.util.Drawables;
 
 /**
  * Safely renders progress dialogs
@@ -34,6 +35,7 @@ import com.socialize.log.SocializeLogger;
 public class ProgressDialogFactory {
 	
 	private SocializeLogger logger;
+	private Drawables drawables;
 
 	public ProgressDialog show(Context context, String title, String message) {
 		try {
@@ -48,6 +50,7 @@ public class ProgressDialogFactory {
 			ProgressDialog dialog = makeDialog(context);
 			dialog.setTitle(title);
 			dialog.setMessage(message);
+			dialog.setIcon(drawables.getDrawable("socialize_icon_white.png"));
 			dialog.show();
 			return dialog;
 		}
@@ -70,4 +73,10 @@ public class ProgressDialogFactory {
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
+
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
+	}
+	
+	
 }

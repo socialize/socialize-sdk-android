@@ -4,10 +4,12 @@ import java.util.List;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.view.Menu;
 import android.widget.LinearLayout;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Comment;
 import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
@@ -15,6 +17,8 @@ import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.BaseView;
+import com.socialize.ui.auth.AuthRequestDialog;
+import com.socialize.ui.auth.AuthRequestListener;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.util.KeyboardUtils;
@@ -50,6 +54,7 @@ public class CommentListView extends BaseView {
 	private CommentEditField field;
 	private CommentHeader header;
 	private CommentContentView content;
+	private AuthRequestDialog authRequestDialog;
 
 	public CommentListView(Context context, String entityKey) {
 		this(context);
@@ -110,13 +115,24 @@ public class CommentListView extends BaseView {
 			}
 			
 			@Override
-			public void onComment(String text) {
-				doPostComment(text);
+			public void onComment(final String text) {
+				if(!getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+					authRequestDialog.show(new AuthRequestListener() {
+						@Override
+						public void onResult(AuthRequestDialog dialog) {
+							doPostComment(text);
+						}
+					});
+				}
+				else {
+					doPostComment(text);
+				}
 			}
 		}, keyboardUtils);
 	}
 
 	public void doPostComment(String comment) {
+		
 		dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
 
 		getSocialize().addComment(entityKey, comment, new CommentAddListener() {
@@ -369,5 +385,9 @@ public class CommentListView extends BaseView {
 
 	public int getTotalCount() {
 		return totalCount;
+	}
+
+	public void setAuthRequestDialog(AuthRequestDialog authRequestDialog) {
+		this.authRequestDialog = authRequestDialog;
 	}
 }

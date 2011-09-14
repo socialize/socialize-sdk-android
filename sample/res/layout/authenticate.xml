@@ -10,7 +10,8 @@
     <LinearLayout 
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:orientation="vertical">
+	    android:orientation="vertical"
+	    android:scrollbars="vertical">
 		    
 	    <ImageView 
 	    	android:src="@drawable/socialize_trans_bg_light" 
@@ -111,14 +112,6 @@
 		   			
 	    </LinearLayout>		    
 	       
-	</LinearLayout>
-    
-    <FrameLayout 
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:orientation="vertical"
-	    android:layout_weight="1">
-	    
 		 	<Button
 				android:id="@+id/btnApi"
 				android:text="Access API" 
@@ -135,6 +128,8 @@
 				android:layout_width="fill_parent"
 				android:layout_gravity="bottom"
 				android:textSize="12dp"/>
-    </FrameLayout>
+	       
+	</LinearLayout>
+
 
 </LinearLayout>
