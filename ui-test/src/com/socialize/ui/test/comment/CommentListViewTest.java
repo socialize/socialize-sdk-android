@@ -196,11 +196,12 @@ public class CommentListViewTest extends SocializeUITest {
 			public void doPostComment(String comment) {
 				addResult(0, comment);
 			}
-
+			
 			@Override
-			public void showError(Context context, String message) {
+			public void showError(Context context, Exception message) {
 				addResult(1, message);
 			}
+			
 		};
 		
 		CommentAddButtonListener commentScrollListener = view.getCommentAddListener();
@@ -208,16 +209,16 @@ public class CommentListViewTest extends SocializeUITest {
 		assertNotNull(commentScrollListener.getCallback());
 		
 		commentScrollListener.getCallback().onComment("foobar");
-		commentScrollListener.getCallback().onError(getContext(), "foobar_error");
+		commentScrollListener.getCallback().onError(getContext(), new Exception("foobar_error"));
 		
 		String comment = getResult(0);
-		String message = getResult(1);
+		Exception message = getResult(1);
 		
 		assertNotNull(comment);
 		assertNotNull(message);
 		
 		assertEquals("foobar", comment);
-		assertEquals("foobar_error", message);
+		assertEquals("foobar_error", message.getMessage());
 	}
 	
 	
