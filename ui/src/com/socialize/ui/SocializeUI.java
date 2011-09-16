@@ -100,7 +100,6 @@ public class SocializeUI {
 	
 	/**
 	 * Sets the Facebook ID for FB authentication.  
-	 * This is optional.  If not specified the default Socialize FB app will be used.
 	 * @param appId Your Facebook App Id, obtained from https://developers.facebook.com/
 	 * @see https://developers.facebook.com/
 	 */
