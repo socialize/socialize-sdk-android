@@ -65,19 +65,61 @@ and destroyed in the <strong>onDestroy()</strong> method</p>
 application so subsequent calls are much faster.</p>
 <div class="section" id="authenticating-with-facebook">
 <h3>Authenticating with Facebook<a class="headerlink" href="#authenticating-with-facebook" title="Permalink to this headline">¶</a></h3>
-<p>We recommend authenticating with 3rd parties (e.g. Facebook) as this provides a better user experience
+<p>Although not required, we stongly recommend authenticating with 3rd parties (e.g. Facebook) as this provides a better user experience
 and ensures that user profiles and IDs are retained across app sessions and installs.</p>
-<p>If you already have a Facebook application, you specify the ID of your Facebook application in the call
+<p>If you don&#8217;t want to use Facebook for authentication, you can always just use <a class="reference internal" href="#auth-anon"><em>Anonymous Authentication</em></a>.</p>
+<p><strong>You must already have a Facebook application</strong> to enable Facebook authentication in Socialize.</p>
+<p>A Facebook application is nothing more than an account on Facebook which links your Android application to
+a Facebook account and is required to &#8220;authorize&#8221; your Android app to access a user&#8217;s Facebook profile.</p>
+<p>If you already have a Facebook app, simply specify the ID of your Facebook app in the call
 to authenticate:</p>
-<script src="https://gist.github.com/1132956.js?file=authenticate_fb.java"></script><p>If you do not already have a Facebook app, then you can use the default Socialize Facebook app by simply
-omitting the app ID from the call:</p>
-<script src="https://gist.github.com/1132956.js?file=authenticate_fb2.java"></script></div>
+<div class="section" id="facebook-authentication-code-snippet">
+<span id="fb-snippet"></span><h4>Facebook Authentication Code Snippet<a class="headerlink" href="#facebook-authentication-code-snippet" title="Permalink to this headline">¶</a></h4>
+<script src="https://gist.github.com/1132956.js?file=authenticate_fb.java"></script><p>If you <strong>do not</strong> already have a Facebook app just follow these simple steps:</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p class="first">First create a Facebook app.  Go to <a class="reference external" href="https://developers.facebook.com/apps">https://developers.facebook.com/apps</a> and create a new app:</p>
+<blockquote>
+<div><img alt="images/fb_add.png" src="images/fb_add.png" />
+</div></blockquote>
+</li>
+<li><p class="first">Your newly created Facebook app will have an ID, which is the ID used in Socialize and can be found on your Facebook Developer page:</p>
+<blockquote>
+<div><p>For example, this is the Facebook App page for Socialize:</p>
+<img alt="images/fb_id.png" src="images/fb_id.png" />
+</div></blockquote>
+</li>
+<li><p class="first">Export the hash key from your Android keystore.  All Android apps are required to be signed prior to running on a device and you will already have created a keystore while building your Android app.</p>
+<blockquote>
+<div><p>Your keystore contains a public key which Facebook needs to identify your Android app.</p>
+<p>On your development machine (where you are building your Android app), run the following command to generate a key hash:</p>
+<div class="highlight-python"><pre>keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore
+| openssl sha1 -binary
+| openssl base64</pre>
+</div>
+<p><strong>Make sure you use the correct key store to generate the hash</strong>.  The example above (taken from the Facebook documentation)
+indicates use of the <strong>debug.keystore</strong>.  You should use whichever keystore you chose when building the version of your app
+you are going to publish.</p>
+</div></blockquote>
+</li>
+<li><p class="first">Next add your key hash to your Facebook app.</p>
+<blockquote>
+<div><p>Paste your key into the &#8220;key hash&#8221; section of your Facebook app.</p>
+<img alt="images/fb_hash.png" src="images/fb_hash.png" />
+<p>Generally it makes sense to add BOTH your <strong>debug</strong> and your <strong>release</strong> keys to Facebook to avoid problems during development and testing.</p>
+</div></blockquote>
+</li>
+</ol>
+</div></blockquote>
+<p>You should now be ready to authenticate user&#8217;s of your app with Facebook when they are using Socialize, jump to the <a class="reference internal" href="#fb-snippet"><em>Facebook Authentication Code Snippet</em></a> to find out how.</p>
+</div>
+</div>
 <div class="section" id="authenticating-with-twitter">
 <h3>Authenticating with Twitter<a class="headerlink" href="#authenticating-with-twitter" title="Permalink to this headline">¶</a></h3>
 <p><em>Coming Soon!</em></p>
 </div>
 <div class="section" id="anonymous-authentication">
-<h3>Anonymous Authentication<a class="headerlink" href="#anonymous-authentication" title="Permalink to this headline">¶</a></h3>
+<span id="auth-anon"></span><h3>Anonymous Authentication<a class="headerlink" href="#anonymous-authentication" title="Permalink to this headline">¶</a></h3>
 <p>We recommend authenticating with 3rd parties (e.g. Facebook) as this provides a better user experience
 and ensures that user profiles and IDs are retained across app sessions and installs, however if you just
 want anonymous authentication, simply call the <strong>authenticate</strong> method:</p>
@@ -96,9 +138,9 @@ because your content is not web based you can simply create a URL from key that 
 your entity.</p>
 <p>For example:</p>
 <pre class="literal-block">
-<strong>http://www.getsocialize.com (valid URL preferred)</strong>
+<strong>.www.getsocialize.com (valid URL preferred)</strong>
 
-<a class="reference external" href="http://myuniqekey">http://myuniqekey</a> (Not a <em>real</em> URL, but will still work)
+<a class="reference external" href="http://myuniqekey.com">http://myuniqekey.com</a> (Not a <em>real</em> URL, but will still work)
 </pre>
 <div class="section" id="creating-an-entity">
 <h3>Creating an Entity<a class="headerlink" href="#creating-an-entity" title="Permalink to this headline">¶</a></h3>
@@ -155,11 +197,8 @@ of the comment which was returned from the inital call to <strong>addComment</st
 <div class="section" id="listing-comments">
 <h3>Listing Comments<a class="headerlink" href="#listing-comments" title="Permalink to this headline">¶</a></h3>
 <p>To list all comments for an entity use the <strong>listCommentsByEntity</strong> method.  This will return a <strong>maximum of 100 comments</strong></p>
-<script src="https://gist.github.com/1132965.js?file=listcomments_np.java"></script><div class="section" id="comments-with-pagination">
-<h4>Comments with pagination<a class="headerlink" href="#comments-with-pagination" title="Permalink to this headline">¶</a></h4>
-<p>The <strong>recommended</strong> approach is to use pagination when listing comments:</p>
+<script src="https://gist.github.com/1132965.js?file=listcomments_np.java"></script><p>The <strong>recommended</strong> approach is to use pagination when listing comments:</p>
 <script src="https://gist.github.com/1132965.js?file=listcomments.java"></script></div>
-</div>
 </div>
 <div class="section" id="share">
 <h2>Share<a class="headerlink" href="#share" title="Permalink to this headline">¶</a></h2>
