@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.config.SocializeConfig;
 import com.socialize.ui.error.DialogErrorHandler;
 import com.socialize.ui.sample.mock.MockAlertDialog;
 import com.socialize.ui.sample.mock.MockDialogBuilder;
@@ -18,16 +19,19 @@ public class DialogErrorHandlerTest extends SocializeUIActivityTest {
 		MockDialogBuilder.class, 
 		MockAlertDialog.class,
 		Drawables.class,
-		Drawable.class
+		Drawable.class,
+		SocializeConfig.class
 		})
-	public void testHandleError() {
+	public void testHandleErrorWithDebug() {
 		
 		final String message = "foobar";
+		final Exception error = new Exception(message);
 		
 		final MockDialogBuilder builder = AndroidMock.createMock(MockDialogBuilder.class, getActivity());
 		MockAlertDialog dialog = AndroidMock.createMock(MockAlertDialog.class, getActivity());
 		Drawables drawables = AndroidMock.createMock(Drawables.class);
 		Drawable drawable = AndroidMock.createMock(Drawable.class);
+		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
 		
 		AndroidMock.expect(builder.setTitle("Error")).andReturn(builder);
 		AndroidMock.expect(builder.setMessage(message)).andReturn(builder);
@@ -36,6 +40,7 @@ public class DialogErrorHandlerTest extends SocializeUIActivityTest {
 		AndroidMock.expect(builder.create()).andReturn(dialog);
 		AndroidMock.expect(drawables.getDrawable("socialize_icon_white.png")).andReturn(drawable);
 		AndroidMock.expect(builder.setIcon(drawable)).andReturn(builder);
+		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.SOCIALIZE_DEBUG_MODE, false)).andReturn(true);
 		
 		dialog.show();
 		
@@ -46,15 +51,19 @@ public class DialogErrorHandlerTest extends SocializeUIActivityTest {
 			}
 		};
 		
+		handler.setConfig(config);
+		
 		AndroidMock.replay(builder);
 		AndroidMock.replay(dialog);
 		AndroidMock.replay(drawables);
+		AndroidMock.replay(config);
 		
 		handler.setDrawables(drawables);
-		handler.handleError(getActivity(), message);
+		handler.handleError(getActivity(), error);
 		
 		AndroidMock.verify(builder);
 		AndroidMock.verify(dialog);
 		AndroidMock.verify(drawables);
+		AndroidMock.verify(config);
 	}
 }

@@ -59,9 +59,9 @@ public class SocializeButton extends LinearLayout {
 	private boolean bold = false;
 	private boolean italic = false;
 	
-	private String bottomColor;
-	private String topColor;
-	private String strokeColor;
+	private String bottomColor = Colors.BUTTON_BOTTOM;
+	private String topColor = Colors.BUTTON_TOP;
+	private String strokeColor = Colors.BUTTON_STROKE;
 	
 	private String textAlign = "left";
 
@@ -74,8 +74,6 @@ public class SocializeButton extends LinearLayout {
 	}
 
 	public void init() {
-		
-		
 		int padding = deviceUtils.getDIP(8);
 		int radius = deviceUtils.getDIP(4);
 		int textPadding = deviceUtils.getDIP(4);
@@ -83,9 +81,7 @@ public class SocializeButton extends LinearLayout {
 		int top = colors.getColor(topColor);
 		int stroke = colors.getColor(strokeColor);
 		
-		GradientDrawable background = new GradientDrawable(
-				GradientDrawable.Orientation.BOTTOM_TOP,
-				new int[] { bottom, top });
+		GradientDrawable background = makeGradient(bottom, top);
 		
 		background.setCornerRadius(radius);
 		background.setStroke(1, stroke);
@@ -101,7 +97,7 @@ public class SocializeButton extends LinearLayout {
 			pHeight = deviceUtils.getDIP(height);
 		}
 			
-		LayoutParams fill = new LinearLayout.LayoutParams(pWidth, pHeight);
+		LayoutParams fill = makeLayoutParams(pWidth, pHeight);
 
 		fill.setMargins(padding, padding, padding, padding);
 		
@@ -140,10 +136,10 @@ public class SocializeButton extends LinearLayout {
 				break;
 		}
 		
-		LayoutParams imageLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		LayoutParams textLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		LayoutParams imageLayout = makeLayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		LayoutParams textLayout = makeLayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
-		textView = new TextView(getContext());
+		textView = makeTextView();
 		textView.setTextColor(Color.WHITE);
 		
 		if(bold) {
@@ -164,7 +160,7 @@ public class SocializeButton extends LinearLayout {
 		textView.setLayoutParams(textLayout);
 		
 		if(!StringUtils.isEmpty(imageName)) {
-			imageView = new ImageView(getContext());
+			imageView = makeImageView();
 			imageView.setImageDrawable(drawables.getDrawable(imageName));
 			imageView.setLayoutParams(imageLayout);
 			
@@ -178,7 +174,25 @@ public class SocializeButton extends LinearLayout {
 		
 		addView(textView);
 	}
+	// use a method so we can mock
+	protected ImageView makeImageView() {
+		return new ImageView(getContext());
+	}
+	// use a method so we can mock
+	protected TextView makeTextView() {
+		return new TextView(getContext());
+	}
+	// use a method so we can mock
+	protected LayoutParams makeLayoutParams(int width, int height) {
+		return new LinearLayout.LayoutParams(width, height);
+	}
 
+	protected GradientDrawable makeGradient(int bottom, int top) {
+		return new GradientDrawable(
+				GradientDrawable.Orientation.BOTTOM_TOP,
+				new int[] { bottom, top });
+	}
+	
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
 	}

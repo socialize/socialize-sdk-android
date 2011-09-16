@@ -114,14 +114,14 @@ public interface SocializeService {
 	 */
 	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderAppId, SocializeAuthListener authListener);
 	
-	/**
-	 * Authenticates the application against the API.
-	 * @param consumerKey The consumer url, obtained from registration at http://www.getsocialize.com.
-	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
-	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
-	 * @param authListener The callback for authentication outcomes.
-	 */
-	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, SocializeAuthListener authListener);
+//	/**
+//	 * Authenticates the application against the API.
+//	 * @param consumerKey The consumer url, obtained from registration at http://www.getsocialize.com.
+//	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
+//	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
+//	 * @param authListener The callback for authentication outcomes.
+//	 */
+//	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, SocializeAuthListener authListener);
 	
 	
 	/**

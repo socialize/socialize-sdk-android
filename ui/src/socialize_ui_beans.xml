@@ -5,6 +5,7 @@
 	
 	<bean id="socializeUIErrorHandler" class="com.socialize.ui.error.DialogErrorHandler">
 		<property name="drawables" ref="drawables"/>
+		<property name="config" ref="config"/>
 	</bean>
 	
 	<bean id="progressDialogFactory" class="com.socialize.ui.dialog.ProgressDialogFactory">

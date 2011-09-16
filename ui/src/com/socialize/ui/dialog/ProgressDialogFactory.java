@@ -50,8 +50,13 @@ public class ProgressDialogFactory {
 			ProgressDialog dialog = makeDialog(context);
 			dialog.setTitle(title);
 			dialog.setMessage(message);
-			dialog.setIcon(drawables.getDrawable("socialize_icon_white.png"));
+			
+			if(drawables != null) {
+				dialog.setIcon(drawables.getDrawable("socialize_icon_white.png"));
+			}
+			
 			dialog.show();
+			
 			return dialog;
 		}
 		catch (Exception e) {

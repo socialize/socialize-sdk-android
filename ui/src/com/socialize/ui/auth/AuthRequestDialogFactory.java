@@ -44,10 +44,6 @@ public class AuthRequestDialogFactory  {
 	private Drawables drawables;
 	private SocializeLogger logger;
 	
-	public AuthRequestDialogFactory() {
-		super();
-	}
-
 	public void show(final Context context, final AuthRequestListener listener) {
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);

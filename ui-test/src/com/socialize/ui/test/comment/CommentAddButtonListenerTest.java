@@ -11,10 +11,10 @@ import com.socialize.ui.comment.CommentAddButtonListener;
 import com.socialize.ui.comment.CommentButtonCallback;
 import com.socialize.ui.comment.CommentEditField;
 import com.socialize.ui.comment.CommentReAuthListener;
-import com.socialize.ui.test.SocializeUITest;
+import com.socialize.ui.test.SocializeUITestCase;
 import com.socialize.ui.util.KeyboardUtils;
 
-public class CommentAddButtonListenerTest extends SocializeUITest {
+public class CommentAddButtonListenerTest extends SocializeUITestCase {
 
 	
 	@UsesMocks ({

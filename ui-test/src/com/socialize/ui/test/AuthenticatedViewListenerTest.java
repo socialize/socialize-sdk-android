@@ -20,13 +20,10 @@ public class AuthenticatedViewListenerTest extends SocializeUIActivityTest {
 		AuthenticatedView view = AndroidMock.createMock(AuthenticatedView.class, getActivity());
 		SocializeException error = AndroidMock.createMock(SocializeException.class);
 		
-		final String errorMessage = "foobar";
-		
-		AndroidMock.expect(error.getMessage()).andReturn(errorMessage);
 		error.printStackTrace();
 		
 		view.onAfterAuthenticate();
-		view.showError(getActivity(), errorMessage);
+		view.showError(getActivity(), error);
 		
 		AndroidMock.replay(view);
 		AndroidMock.replay(error);
@@ -60,13 +57,10 @@ public class AuthenticatedViewListenerTest extends SocializeUIActivityTest {
 		AuthenticatedView view = AndroidMock.createMock(AuthenticatedView.class, getActivity());
 		SocializeException error = AndroidMock.createMock(SocializeException.class);
 		
-		final String errorMessage = "foobar";
-		
-		AndroidMock.expect(error.getMessage()).andReturn(errorMessage);
 		error.printStackTrace();
 		
 		view.onAfterAuthenticate();
-		view.showError(getActivity(), errorMessage);
+		view.showError(getActivity(), error);
 		
 		AndroidMock.replay(view);
 		AndroidMock.replay(error);

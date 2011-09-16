@@ -5,10 +5,10 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.error.SocializeException;
 import com.socialize.ui.comment.CommentButtonCallback;
 import com.socialize.ui.comment.CommentReAuthListener;
-import com.socialize.ui.test.SocializeUITest;
+import com.socialize.ui.test.SocializeUITestCase;
 
 @UsesMocks ({CommentButtonCallback.class})
-public class CommentReAuthListenerTest extends SocializeUITest {
+public class CommentReAuthListenerTest extends SocializeUITestCase {
 
 	CommentButtonCallback callback;
 	CommentReAuthListener listener;

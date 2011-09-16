@@ -9,12 +9,12 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.ui.comment.CommentEditField;
 import com.socialize.ui.comment.CommentEditFieldFactory;
-import com.socialize.ui.test.SocializeUITest;
+import com.socialize.ui.test.SocializeUITestCase;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 
-public class CommentEditFieldFactoryTest extends SocializeUITest {
+public class CommentEditFieldFactoryTest extends SocializeUITestCase {
 
 	@UsesMocks ({CommentEditField.class, DeviceUtils.class, Colors.class, Drawables.class})
 	public void testMake() {

@@ -4,12 +4,12 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.ui.comment.CommentHeader;
 import com.socialize.ui.comment.CommentHeaderFactory;
-import com.socialize.ui.test.SocializeUITest;
+import com.socialize.ui.test.SocializeUITestCase;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 
-public class CommentHeaderFactoryTest extends SocializeUITest {
+public class CommentHeaderFactoryTest extends SocializeUITestCase {
 	
 	@UsesMocks ({
 		DeviceUtils.class,

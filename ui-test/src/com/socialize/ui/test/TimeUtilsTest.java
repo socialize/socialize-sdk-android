@@ -3,7 +3,7 @@ package com.socialize.ui.test;
 import com.socialize.ui.util.TimeUtils;
 
 
-public class TimeUtilsTest extends SocializeUITest {
+public class TimeUtilsTest extends SocializeUITestCase {
 
 	// Just integration tests
 	public void testTimeUtils() {

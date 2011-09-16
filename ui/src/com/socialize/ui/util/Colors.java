@@ -37,14 +37,12 @@ public class Colors {
 	public static final String BODY = "BODY";
 	public static final String HEADER = "HEADER";
 	public static final String BUTTON_BOTTOM = "BUTTON_BOTTOM";
+	public static final String BUTTON_STROKE = "BUTTON_STROKE";
 	public static final String BUTTON_TOP = "BUTTON_TOP";
 	public static final String TEXT_BG = "TEXT_BG";
 	public static final String LIST_ITEM_BG = "LIST_ITEM_BG";
 	public static final String STANDARD_BACKGROUND_COLOR = "STANDARD_BACKGROUND_COLOR";
 	public static final String LOADING_ITEM_BG = "LOADING_ITEM_BG";
-	public static final String FACEBOOK_BOTTOM = "FACEBOOK_BOTTOM";
-	public static final String FACEBOOK_TOP = "FACEBOOK_TOP";
-	public static final String FACEBOOK_STROKE = "FACEBOOK_STROKE";
 	
 	private Map<String, String> colorHexCodes;
 	private Map<String, Integer> colors;

@@ -21,7 +21,7 @@
  */
 package com.socialize.ui.test;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.test.AndroidTestCase;
@@ -30,12 +30,12 @@ import android.test.AndroidTestCase;
  * @author Jason Polites
  *
  */
-public abstract class SocializeUITest extends AndroidTestCase {
+public abstract class SocializeUITestCase extends AndroidTestCase {
 	private List<Object> bucket;
 	
 	@Override
 	protected void setUp() throws Exception {
-		bucket = new LinkedList<Object>();
+		bucket = new ArrayList<Object>();
 		super.setUp();
 	}
 	
@@ -47,11 +47,10 @@ public abstract class SocializeUITest extends AndroidTestCase {
 		int size = bucket.size();
 		if(size <= index) {
 			for (int i = size; i <= index; i++) {
-				bucket.add(i, "");
+				bucket.add(i, null);
 			}
 		}
-		
-		bucket.add(index, obj);
+		bucket.set(index, obj);
 	}
 	
 	@SuppressWarnings("unchecked")

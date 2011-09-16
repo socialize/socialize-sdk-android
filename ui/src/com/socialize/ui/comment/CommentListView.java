@@ -117,21 +117,25 @@ public class CommentListView extends BaseView {
 			}
 
 			@Override
-			public void onComment(final String text) {
+			public void onComment(String text) {
 				if(!getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 					AuthRequestDialogFactory dialog = authRequestDialogFactory.getBean();
-					dialog.show(getContext(), new AuthRequestListener() {
-						@Override
-						public void onResult(Dialog dialog) {
-							doPostComment(text);
-						}
-					});
+					dialog.show(getContext(), getCommentAuthListener(text));
 				}
 				else {
 					doPostComment(text);
 				}
 			}
 		}, keyboardUtils);
+	}
+	
+	protected AuthRequestListener getCommentAuthListener(final String text) {
+		return new AuthRequestListener() {
+			@Override
+			public void onResult(Dialog dialog) {
+				doPostComment(text);
+			}
+		};
 	}
 
 	public void doPostComment(String comment) {
