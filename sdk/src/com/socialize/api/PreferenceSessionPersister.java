@@ -127,6 +127,9 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 				JSONObject json = new JSONObject(userJson);
 				User user = userFactory.fromJSON(json);
 				session.setUser(user);
+				
+				// Update the user synchronously
+				
 			}
 			catch (JSONException e) {
 				if(logger != null) {

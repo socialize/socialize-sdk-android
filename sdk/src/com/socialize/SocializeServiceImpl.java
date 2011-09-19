@@ -51,6 +51,7 @@ import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
+import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.ActivityIOCProvider;
@@ -488,6 +489,17 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#getUser(int, com.socialize.listener.user.UserGetListener)
+	 */
+	@Override
+	public void getUser(int id, UserGetListener listener) {
+		if(assertAuthenticated(listener)) {
+			service.getUser(session, id, listener);
+		}
+	}
+
 	/**
 	 * Lists entities matching the given keys.
 	 * @param entityListListener A listener to handle callbacks from the post.

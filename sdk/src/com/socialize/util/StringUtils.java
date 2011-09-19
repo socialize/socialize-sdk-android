@@ -28,4 +28,16 @@ public class StringUtils {
 	public static final boolean isEmpty(String str) {
 		return str == null || str.trim().length() == 0;
 	}
+	
+	public static final boolean equals(String str0, String str1) {
+		if(str0 == str1) {
+			return true;
+		}
+		else if(str0 == null || str1 == null) {
+			return false;
+		}
+		else {
+			return str0.equals(str1);
+		}
+	}
 }

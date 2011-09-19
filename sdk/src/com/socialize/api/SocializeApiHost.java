@@ -28,6 +28,7 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.action.CommentApi;
 import com.socialize.api.action.EntityApi;
 import com.socialize.api.action.LikeApi;
+import com.socialize.api.action.UserApi;
 import com.socialize.api.action.ViewApi;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
@@ -36,6 +37,7 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.listener.entity.EntityListener;
 import com.socialize.listener.like.LikeListener;
+import com.socialize.listener.user.UserListener;
 import com.socialize.listener.view.ViewListener;
 import com.socialize.net.HttpClientFactory;
 import com.socialize.util.DeviceUtils;
@@ -54,6 +56,7 @@ public class SocializeApiHost {
 	private EntityApi entityApi;
 	private LikeApi likeApi;
 	private ViewApi viewApi;
+	private UserApi userApi;
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	
 	public SocializeApiHost(Context context) {
@@ -62,7 +65,7 @@ public class SocializeApiHost {
 	}
 	
 	public void clearSessionCache() {
-		commentApi.clearSession();
+		userApi.clearSession();
 	}
 	
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
@@ -88,7 +91,7 @@ public class SocializeApiHost {
 		}
 		else {
 			// All Api instances have authenticate, so we can just use any old one
-			commentApi.authenticateAsync(consumerKey, consumerSecret, udid, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
+			userApi.authenticateAsync(consumerKey, consumerSecret, udid, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
 		}
 	}
 	
@@ -164,6 +167,10 @@ public class SocializeApiHost {
 		likeApi.getLike(session, key, listener);
 	}
 	
+	public void getUser(SocializeSession session, int id, UserListener listener) {
+		userApi.getUser(session, id, listener);
+	}	
+	
 	public void destroy() {
 		if(clientFactory != null) {
 			clientFactory.destroy();
@@ -208,6 +215,14 @@ public class SocializeApiHost {
 
 	public void setViewApi(ViewApi viewApi) {
 		this.viewApi = viewApi;
+	}
+	
+	public UserApi getUserApi() {
+		return userApi;
+	}
+
+	public void setUserApi(UserApi userApi) {
+		this.userApi = userApi;
 	}
 
 	public IBeanFactory<AuthProviderData> getAuthProviderDataFactory() {

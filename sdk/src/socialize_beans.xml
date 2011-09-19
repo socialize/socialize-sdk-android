@@ -95,7 +95,6 @@
 	</bean>
 	
 	<bean id="dialogFactory" class="com.socialize.util.DialogFactory"/>
-	<bean id="userFactory" class="com.socialize.entity.factory.UserFactory"/>
 	<bean id="userAuthDataFactory" class="com.socialize.entity.factory.UserAuthDataFactory"/>
 	<bean id="statsFactory" class="com.socialize.entity.factory.StatsFactory"/>
 	
@@ -295,6 +294,25 @@
 	
 <!-- End View API -->
 
+<!-- User API -->
+
+	<bean id="userRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
+		<constructor-arg ref="oauthSigner"/>
+		<constructor-arg ref="userFactory"/>
+	</bean>
+
+	<bean id="userProvider" extends="abstractProvider">
+		<constructor-arg type="context"/>
+		<property name="objectFactory" ref="userFactory"/>
+		<property name="requestFactory" ref="userRequestFactory"/>
+	</bean>
+	
+	<bean id="userApi" class="com.socialize.api.action.UserApi" extends="socializeApi">
+		<constructor-arg ref="userProvider"/>
+	</bean>
+	
+<!-- End User API -->
+
 <!-- Socialize Core -->
 
 	<bean id="socializeApiHost" class="com.socialize.api.SocializeApiHost">
@@ -306,6 +324,7 @@
 		<property name="entityApi" ref="entityApi"/>
 		<property name="likeApi" ref="likeApi"/>
 		<property name="viewApi" ref="viewApi"/>
+		<property name="userApi" ref="userApi"/>
 	</bean>
 	
 <!-- End Socialize Core -->

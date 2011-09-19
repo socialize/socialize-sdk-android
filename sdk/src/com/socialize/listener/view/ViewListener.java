@@ -28,4 +28,7 @@ import com.socialize.listener.AbstractSocializeListener;
  * @author Jason Polites
  *
  */
-public abstract class ViewListener extends AbstractSocializeListener<View> {}
+public abstract class ViewListener extends AbstractSocializeListener<View> {
+	@Override
+	public final void onDelete() {}
+}

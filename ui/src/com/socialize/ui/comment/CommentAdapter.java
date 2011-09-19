@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -17,21 +19,21 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Comment;
 import com.socialize.entity.User;
 import com.socialize.log.SocializeLogger;
+import com.socialize.ui.SocializeUI;
 import com.socialize.ui.user.UserService;
 import com.socialize.ui.util.TimeUtils;
 import com.socialize.ui.view.ListItemLoadingView;
 import com.socialize.ui.view.ViewHolder;
+import com.socialize.util.Base64DecoderException;
 import com.socialize.util.Base64Utils;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
+import com.socialize.util.StringUtils;
 
 /**
  * Provides comments to the comment view.
  * @author jasonpolites
  */
-
-// TODO: remove this annotation
-@SuppressWarnings("unused")
 public class CommentAdapter extends BaseAdapter {
 
 	private IBeanFactory<CommentListItem> commentItemViewFactory;
@@ -43,8 +45,8 @@ public class CommentAdapter extends BaseAdapter {
 	private DeviceUtils deviceUtils;
 	private TimeUtils timeUtils;
 	private UserService userService;
-	private Base64Utils base64Utils;
 	private boolean last = false;
+	private Base64Utils base64Utils;
 	
 	private final int iconSize = 64;
 	
@@ -117,7 +119,7 @@ public class CommentAdapter extends BaseAdapter {
             holder.setTime(v.getTime());
             holder.setUserName(v.getAuthor());
             holder.setComment(v.getComment());
-//    		userIcon =  v.getUserIcon();
+            holder.setUserIcon(v.getUserIcon());
     		holder.setNow(new Date());
 
             v.setTag(holder);
@@ -184,53 +186,51 @@ public class CommentAdapter extends BaseAdapter {
     				}
     			}
     			
-    			// TODO: uncomment when we do profile screen
-    			
-//    			if (userIcon != null) {
-//    			    Drawable defaultImage = drawables.getDrawable(SocializeUI.DEFAULT_USER_ICON, deviceUtils.getDIP(iconSize), deviceUtils.getDIP(iconSize), true);
-//    					
-//    				if(user != null) {
-//    					if(!StringUtils.isEmpty(user.getSmallImageUri())) {
-//    						try {
-//    							Uri uri = Uri.parse(user.getSmallImageUri());
-//    							userIcon.setImageURI(uri);
-//    						}
-//    						catch (Exception e) {
-//    							String errorMsg = "Not a valid image uri [" + user.getSmallImageUri() + "]";
-//    							if(logger != null) {
-//    								logger.error(errorMsg, e);
-//    							}
-//    							else {
-//    								System.err.println(errorMsg);
-//    							}
-//    							
-//    							userIcon.setImageDrawable(defaultImage);
-//    						}
-//    					}
-//    					else if(drawables != null && !StringUtils.isEmpty(user.getProfilePicData())) {
-//    						try {
-//								Drawable drawable = drawables.getDrawable(user.getId().toString(), base64Utils.decode(user.getProfilePicData()), deviceUtils.getDIP(iconSize), deviceUtils.getDIP(iconSize));
-//								userIcon.setImageDrawable(drawable);
-//							}
-//							catch (Base64DecoderException e) {
-//								if(logger != null) {
-//									logger.error("Invalid image data", e);
-//								}
-//								else {
-//									e.printStackTrace();
-//								}
-//								
-//								userIcon.setImageDrawable(defaultImage);
-//							}
-//    					}
-//    					else {
-//    						userIcon.setImageDrawable(defaultImage);
-//    					}
-//    				}
-//    				else {
-//    					userIcon.setImageDrawable(defaultImage);
-//    				}
-//    			}
+    			if (userIcon != null) {
+    			    Drawable defaultImage = drawables.getDrawable(SocializeUI.DEFAULT_USER_ICON, deviceUtils.getDIP(iconSize), deviceUtils.getDIP(iconSize), true);
+    					
+    				if(user != null) {
+    					if(!StringUtils.isEmpty(user.getSmallImageUri())) {
+    						try {
+    							Uri uri = Uri.parse(user.getSmallImageUri());
+    							userIcon.setImageURI(uri);
+    						}
+    						catch (Exception e) {
+    							String errorMsg = "Not a valid image uri [" + user.getSmallImageUri() + "]";
+    							if(logger != null) {
+    								logger.error(errorMsg, e);
+    							}
+    							else {
+    								System.err.println(errorMsg);
+    							}
+    							
+    							userIcon.setImageDrawable(defaultImage);
+    						}
+    					}
+    					else if(drawables != null && !StringUtils.isEmpty(user.getProfilePicData())) {
+    						try {
+								Drawable drawable = drawables.getDrawable(user.getId().toString(), base64Utils.decode(user.getProfilePicData()), deviceUtils.getDIP(iconSize), deviceUtils.getDIP(iconSize));
+								userIcon.setImageDrawable(drawable);
+							}
+							catch (Base64DecoderException e) {
+								if(logger != null) {
+									logger.error("Invalid image data", e);
+								}
+								else {
+									e.printStackTrace();
+								}
+								
+								userIcon.setImageDrawable(defaultImage);
+							}
+    					}
+    					else {
+    						userIcon.setImageDrawable(defaultImage);
+    					}
+    				}
+    				else {
+    					userIcon.setImageDrawable(defaultImage);
+    				}
+    			}
     		}
         }
         

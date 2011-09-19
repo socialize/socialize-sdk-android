@@ -54,7 +54,7 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	public User instantiateObject() {
 		return new User();
 	}
-
+	
 	@Override
 	protected void postFromJSON(JSONObject object, User user) throws JSONException {
 		

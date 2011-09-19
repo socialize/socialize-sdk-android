@@ -40,8 +40,4 @@ public abstract class ViewAddListener extends ViewListener {
 
 	@Override
 	public final void onUpdate(View entity) {}
-	
-	@Override
-	public final void onDelete() {}
-
 }

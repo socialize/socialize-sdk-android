@@ -38,6 +38,7 @@ import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
+import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.view.ViewAddListener;
 
 /**
@@ -113,16 +114,6 @@ public interface SocializeService {
 	 * @param authListener The callback for authentication outcomes.
 	 */
 	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderAppId, SocializeAuthListener authListener);
-	
-//	/**
-//	 * Authenticates the application against the API.
-//	 * @param consumerKey The consumer url, obtained from registration at http://www.getsocialize.com.
-//	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
-//	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
-//	 * @param authListener The callback for authentication outcomes.
-//	 */
-//	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, SocializeAuthListener authListener);
-	
 	
 	/**
 	 * @deprecated Too ambiguous.
@@ -243,6 +234,13 @@ public interface SocializeService {
 	 */
 	public void addComment(String url, String comment, CommentAddListener commentAddListener);
 
+	/**
+	 * Retrieves a Socialize User based on their Socialize user ID.
+	 * @param id The id of the user.
+	 * @param userGetListener A listener to handle callbacks from the get.
+	 */
+	public void getUser(int id, UserGetListener userGetListener);
+	
 	/**
 	 * Returns true if this SocializeService instance has been initialized.
 	 * @return

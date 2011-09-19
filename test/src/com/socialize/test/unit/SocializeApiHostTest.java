@@ -30,6 +30,7 @@ import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.api.action.CommentApi;
 import com.socialize.api.action.EntityApi;
 import com.socialize.api.action.LikeApi;
+import com.socialize.api.action.UserApi;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Comment;
@@ -54,7 +55,7 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 	@SuppressWarnings("unchecked")
 	@UsesMocks ({
 		SocializeProvider.class, 
-		CommentApi.class, 
+		UserApi.class, 
 		DeviceUtils.class, 
 		SocializeSession.class, 
 		SocializeAuthListener.class, 
@@ -64,7 +65,7 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 	public void testAuthenticateWithAuthProviderData() throws SocializeException, InterruptedException {
 		SocializeProvider<SocializeObject> provider = AndroidMock.createMock(SocializeProvider.class);
 		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
-		CommentApi commentApi = AndroidMock.createMock(CommentApi.class, provider);
+		UserApi userApi = AndroidMock.createMock(UserApi.class, provider);
 		SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
 		AuthProviderData authProviderData = AndroidMock.createMock(AuthProviderData.class);
 		IBeanFactory<AuthProviderData> authProviderDataFactory = AndroidMock.createMock(IBeanFactory.class);
@@ -78,23 +79,23 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
 		AndroidMock.expect(deviceUtils.getUDID(getContext())).andReturn(udid);
 		
-		commentApi.authenticateAsync(consumerKey, consumerSecret, udid, authProviderData, listener, mockSessionConsumer, false);
+		userApi.authenticateAsync(consumerKey, consumerSecret, udid, authProviderData, listener, mockSessionConsumer, false);
 		
 		AndroidMock.replay(authProviderDataFactory);
 		AndroidMock.replay(deviceUtils);
-		AndroidMock.replay(commentApi);
+		AndroidMock.replay(userApi);
 		
 		SocializeApiHost service = new SocializeApiHost(getContext());
 		
 		service.setDeviceUtils(deviceUtils);
-		service.setCommentApi(commentApi);
+		service.setUserApi(userApi);
 		service.setAuthProviderDataFactory(authProviderDataFactory);
 		
 		service.authenticate(consumerKey, consumerSecret, listener, mockSessionConsumer);
 		
 		AndroidMock.verify(authProviderDataFactory);
 		AndroidMock.verify(deviceUtils);
-		AndroidMock.verify(commentApi);
+		AndroidMock.verify(userApi);
 	}
 	
 	
@@ -142,7 +143,7 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 	@SuppressWarnings("unchecked")
 	@UsesMocks ({
 		SocializeProvider.class, 
-		CommentApi.class, 
+		UserApi.class, 
 		DeviceUtils.class, 
 		SocializeSession.class, 
 		SocializeAuthListener.class, 
@@ -151,7 +152,7 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		SocializeProvider<SocializeObject> provider = AndroidMock.createMock(SocializeProvider.class);
 		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
-		CommentApi commentApi = AndroidMock.createMock(CommentApi.class, provider);
+		UserApi userApi = AndroidMock.createMock(UserApi.class, provider);
 		SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
 		
 		SocializeSessionConsumer mockSessionConsumer = AndroidMock.createMock(SocializeSessionConsumer.class);
@@ -164,20 +165,20 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AuthProviderData data = new AuthProviderData();
 		
-		commentApi.authenticateAsync(consumerKey, consumerSecret, udid, data, listener, mockSessionConsumer, true);
+		userApi.authenticateAsync(consumerKey, consumerSecret, udid, data, listener, mockSessionConsumer, true);
 		
 		AndroidMock.replay(deviceUtils);
-		AndroidMock.replay(commentApi);
+		AndroidMock.replay(userApi);
 		
 		SocializeApiHost service = new SocializeApiHost(getContext());
 		
 		service.setDeviceUtils(deviceUtils);
-		service.setCommentApi(commentApi);
+		service.setUserApi(userApi);
 		
 		service.authenticate(consumerKey, consumerSecret, data, listener, mockSessionConsumer, true);
 		
 		AndroidMock.verify(deviceUtils);
-		AndroidMock.verify(commentApi);
+		AndroidMock.verify(userApi);
 	}
 	
 	@SuppressWarnings("unchecked")

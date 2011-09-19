@@ -361,12 +361,51 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			}
 		}
 		else {
-			// We already have a session, just call the listener
+			// We already have a session
+			// then just call the listener
 			if(listener != null) {
 				listener.onAuthSuccess(session);
 			}
 		}
 	}
+//	
+//	protected void updateLocalUser(SocializeSession session, AuthProviderData data) {
+//		User user = session.getUser();
+//		
+//		if(user != null && data != null) {
+//			boolean save = false;
+//			
+//			if(!StringUtils.equals(user.getFirstName(), data.getUserFirstName())) {
+//				user.setFirstName(data.getUserFirstName());
+//				save = true;
+//			}
+//			
+//			if(!StringUtils.equals(user.getLastName(), data.getUserLastName())) {
+//				user.setLastName(data.getUserLastName());
+//				save = true;
+//			}
+//			
+//			if(!StringUtils.equals(user.getProfilePicData(), data.getUserProfilePicData())) {
+//				user.setProfilePicData(data.getUserProfilePicData());
+//				save = true;
+//			}
+//			
+//			List<UserAuthData> authData = user.getAuthData();
+//			
+//			if(authData == null || authData.size() == 0) {
+//				authData = new ArrayList<UserAuthData>(1);
+//				
+//				UserAuthData uad = new UserAuthData();
+//				uad.setId(Integer.parseInt(data.getUserId3rdParty()));
+//				uad.setAuthProviderType(data.getAuthProviderType());
+//				
+//				authData.add(uad);
+//				user.setAuthData(authData);
+//				
+//				save = true;
+//			}
+//		}
+//	}
 
 	@Deprecated
 	protected void handle3rdPartyAuth(
