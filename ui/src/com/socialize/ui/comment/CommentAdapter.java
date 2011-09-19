@@ -28,6 +28,7 @@ import com.socialize.util.Base64DecoderException;
 import com.socialize.util.Base64Utils;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
+import com.socialize.util.HttpUtils;
 import com.socialize.util.StringUtils;
 
 /**
@@ -47,8 +48,9 @@ public class CommentAdapter extends BaseAdapter {
 	private UserService userService;
 	private boolean last = false;
 	private Base64Utils base64Utils;
+	private HttpUtils httpUtils;
 	
-	private final int iconSize = 64;
+	private int iconSize = 64;
 	
 	public CommentAdapter(Context context) {
 		super();
@@ -186,17 +188,22 @@ public class CommentAdapter extends BaseAdapter {
     				}
     			}
     			
-    			if (userIcon != null) {
-    			    Drawable defaultImage = drawables.getDrawable(SocializeUI.DEFAULT_USER_ICON, deviceUtils.getDIP(iconSize), deviceUtils.getDIP(iconSize), true);
+    			if (userIcon != null && drawables != null) {
+    				
+    				int densitySize = deviceUtils.getDIP(iconSize);
+    				
+    			    Drawable defaultImage = drawables.getDrawable(SocializeUI.DEFAULT_USER_ICON, densitySize, densitySize, true);
     					
     				if(user != null) {
-    					if(!StringUtils.isEmpty(user.getSmallImageUri())) {
+    					String imageUrl = user.getMediumImageUri();
+    					
+    					if(!StringUtils.isEmpty(imageUrl)) {
     						try {
-    							Uri uri = Uri.parse(user.getSmallImageUri());
+    							Uri uri = httpUtils.toURI(imageUrl);
     							userIcon.setImageURI(uri);
     						}
     						catch (Exception e) {
-    							String errorMsg = "Not a valid image uri [" + user.getSmallImageUri() + "]";
+    							String errorMsg = "Not a valid image uri [" + imageUrl + "]";
     							if(logger != null) {
     								logger.error(errorMsg, e);
     							}
@@ -207,7 +214,7 @@ public class CommentAdapter extends BaseAdapter {
     							userIcon.setImageDrawable(defaultImage);
     						}
     					}
-    					else if(drawables != null && !StringUtils.isEmpty(user.getProfilePicData())) {
+    					else if(!StringUtils.isEmpty(user.getProfilePicData())) {
     						try {
 								Drawable drawable = drawables.getDrawable(user.getId().toString(), base64Utils.decode(user.getProfilePicData()), deviceUtils.getDIP(iconSize), deviceUtils.getDIP(iconSize));
 								userIcon.setImageDrawable(drawable);
@@ -287,5 +294,13 @@ public class CommentAdapter extends BaseAdapter {
 
 	public void setBase64Utils(Base64Utils base64Utils) {
 		this.base64Utils = base64Utils;
+	}
+
+	public void setIconSize(int iconSize) {
+		this.iconSize = iconSize;
+	}
+
+	public void setHttpUtils(HttpUtils httpUtils) {
+		this.httpUtils = httpUtils;
 	}
 }

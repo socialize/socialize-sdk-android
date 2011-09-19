@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,11 +15,15 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Comment;
 import com.socialize.entity.User;
+import com.socialize.ui.SocializeUI;
 import com.socialize.ui.comment.CommentAdapter;
 import com.socialize.ui.comment.CommentListItem;
 import com.socialize.ui.user.UserService;
 import com.socialize.ui.util.TimeUtils;
 import com.socialize.ui.view.ViewHolder;
+import com.socialize.util.DeviceUtils;
+import com.socialize.util.Drawables;
+import com.socialize.util.HttpUtils;
 
 public class CommentAdapterTest extends SocializeUIActivityTest {
 
@@ -257,26 +263,37 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		ViewHolder.class,
 		ImageView.class,
 		TimeUtils.class,
+		HttpUtils.class,
 		UserService.class,
-		User.class})
+		User.class,
+		Drawables.class,
+		Drawable.class,
+		DeviceUtils.class,
+		Uri.class})
 	public void testGetViewWithNullView() {
 		
 		final int position = 69;
+		final int iconSize = 29;
 		final int userId = 10001;
 		final String text = "foobar";
 		final long date = 10000;
 		final String timeString = "foobar_timestring";
-		
 		final Date now = new Date(date-1);
-
 		final Context context = getContext();
+		final String imageUrl = "foobar_url";
 		
 		UserService userService = AndroidMock.createMock(UserService.class);
 		IBeanFactory<CommentListItem> commentItemViewFactory = AndroidMock.createMock(IBeanFactory.class);
 		TimeUtils timeUtils = AndroidMock.createMock(TimeUtils.class);
-		
+		Drawables drawables = AndroidMock.createMock(Drawables.class);
+		Drawable drawable = AndroidMock.createMock(Drawable.class);
+		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
+		HttpUtils httpUtils = AndroidMock.createMock(HttpUtils.class);
+		ImageView icon = AndroidMock.createMock(ImageView.class, context);
+	
 		CommentListItem item = AndroidMock.createNiceMock(CommentListItem.class, context);
 		List<Comment> comments = AndroidMock.createMock(List.class);
+		Uri uri = Uri.EMPTY;
 		
 		User user = AndroidMock.createMock(User.class);
 		
@@ -292,14 +309,24 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		AndroidMock.expect(comments.size()).andReturn(position+1);
 		AndroidMock.expect(commentItemViewFactory.getBean()).andReturn(item);
 		
+		AndroidMock.expect(item.getUserIcon()).andReturn(icon);
 		AndroidMock.expect(item.getTime()).andReturn(time);
 		AndroidMock.expect(item.getAuthor()).andReturn(userName);
 		AndroidMock.expect(item.getComment()).andReturn(commentText);
 		
+		AndroidMock.expect(user.getMediumImageUri()).andReturn(imageUrl);
+		AndroidMock.expect(httpUtils.toURI(imageUrl)).andReturn(uri);
+		
+		AndroidMock.expect(deviceUtils.getDIP(iconSize)).andReturn(iconSize);
+		AndroidMock.expect(drawables.getDrawable(SocializeUI.DEFAULT_USER_ICON, iconSize, iconSize, true)).andReturn(drawable);
+		
 		holder.setNow((Date)AndroidMock.anyObject());
         holder.setTime(time);
+        holder.setUserIcon(icon);
         holder.setUserName(userName);
         holder.setComment(commentText);
+        
+        icon.setImageURI(uri);
 		
 		AndroidMock.expect(userService.getCurrentUser()).andReturn(user);
 		AndroidMock.expect(comment.getUser()).andReturn(user);
@@ -309,14 +336,10 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		AndroidMock.expect(holder.getTime()).andReturn(time);
 		AndroidMock.expect(holder.getUserName()).andReturn(userName);
 		AndroidMock.expect(holder.getComment()).andReturn(commentText);
-		AndroidMock.expect(holder.getUserIcon()).andReturn(null);
+		AndroidMock.expect(holder.getUserIcon()).andReturn(icon);
 		AndroidMock.expect(holder.getNow()).andReturn(now).anyTimes();
-
 		AndroidMock.expect(comment.getText()).andReturn(text);
-
-		
 		AndroidMock.expect(timeUtils.getTimeString(AndroidMock.anyLong())).andReturn(timeString);
-		
 		AndroidMock.expect(comment.getDate()).andReturn(date);
 		
 		CommentAdapter adapter = new CommentAdapter(getContext()) {
@@ -332,12 +355,22 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 			}
 		};
 		
+		adapter.setIconSize(iconSize);
 		adapter.setUserService(userService);
 		adapter.setComments(comments);
 		adapter.setTimeUtils(timeUtils);
+		adapter.setHttpUtils(httpUtils);
 		adapter.setCommentItemViewFactory(commentItemViewFactory);
+		adapter.setDrawables(drawables);
+		adapter.setDeviceUtils(deviceUtils);
+		
+		AndroidMock.replay(drawables);
+		AndroidMock.replay(drawable);
+		AndroidMock.replay(deviceUtils);
+		AndroidMock.replay(httpUtils);
 		
 		AndroidMock.replay(comments);
+		AndroidMock.replay(icon);
 		AndroidMock.replay(userService);
 		AndroidMock.replay(timeUtils);
 		AndroidMock.replay(comment);
@@ -353,7 +386,13 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		assertEquals(timeString + " ", time.getText().toString());
 		assertEquals("You", userName.getText().toString());
 		
+		AndroidMock.verify(drawables);
+		AndroidMock.verify(drawable);
+		AndroidMock.verify(deviceUtils);
+		AndroidMock.verify(httpUtils);
+		
 		AndroidMock.verify(comments);
+		AndroidMock.verify(icon);
 		AndroidMock.verify(userService);
 		AndroidMock.verify(timeUtils);
 		AndroidMock.verify(comment);
