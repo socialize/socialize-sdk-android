@@ -215,6 +215,20 @@
 		<property name="height" value="42" type="integer"/>
 		<property name="textSize" value="16" type="integer"/>
 	</bean>
+	
+	<bean 
+		id="facebookSignOutButton" 
+		singleton="false"
+		extends="socializeButton">
+		<constructor-arg type="activity"/>
+		<property name="text" value="Sign out of Facebook"/>
+		<property name="imageName" value="fb_button.png"/>
+		<property name="bottomColor" value="FACEBOOK_BOTTOM"/>
+		<property name="topColor" value="FACEBOOK_TOP"/>
+		<property name="strokeColor" value="FACEBOOK_STROKE"/>
+		<property name="height" value="36" type="integer"/>
+		<property name="textSize" value="14" type="integer"/>
+	</bean>
 
 	<!-- Comment UI -->
 	
@@ -225,11 +239,11 @@
 		<property name="commentItemViewFactory" ref="commentItemViewFactory"/>
 		<property name="listItemLoadingViewFactory" ref="listItemLoadingViewFactory"/>
 		<property name="drawables" ref="drawables"/>
+		<property name="logger" ref="logger"/>
 		<property name="deviceUtils" ref="deviceUtils"/><!-- Defined in socialize_beans.xml -->
 		<property name="timeUtils" ref="timeUtils"/>
-		<property name="userService" ref="userService"/>
 		<property name="base64Utils" ref="base64Utils"/><!-- Defined in socialize_beans.xml -->
-		<property name="httpUtils" ref="httpUtils"/><!-- Defined in socialize_beans.xml -->
+		<property name="imageLoader" ref="imageLoader"/><!-- Defined in socialize_beans.xml -->
 	</bean>
 
 	
@@ -299,5 +313,91 @@
 	</bean>
 	
 	<!--  End Comment UI -->
+	
+	<!-- Profile UI -->
+	
+	<bean 
+		id="profileLayoutView" 
+		class="com.socialize.ui.profile.ProfileLayoutView"
+		singleton="false"
+		extends="socializeView">
+		<constructor-arg type="activity"/>
+
+		<init-method name="init"/>
+		
+		<property name="drawables" ref="drawables"/>
+		<property name="httpUtils" ref="httpUtils"/>
+		<property name="userService" ref="userService"/>
+		<property name="progressDialogFactory" ref="progressDialogFactory"/>
+		<property name="profileHeaderFactory" ref="profileHeaderFactory"/>
+		<property name="profileContentViewFactory" ref="profileContentViewFactory"/>
+		<property name="imageLoader" ref="imageLoader"/><!-- Defined in socialize_beans.xml -->
+	</bean>
+	
+	<bean 
+		id="profileHeaderFactory" 
+		class="com.socialize.ui.profile.ProfileHeaderFactory"
+		extends="uiViewFactory"/>
+		
+	<bean 
+		id="profileContentViewFactory" 
+		class="com.socialize.ui.profile.ProfileContentViewFactory"
+		extends="uiViewFactory">
+		<property name="profileCancelButtonFactory" ref="profileCancelButtonFactory"/>
+		<property name="profileSaveButtonFactory" ref="profileSaveButtonFactory"/>
+		<property name="profileEditButtonFactory" ref="profileEditButtonFactory"/>	
+		<property name="facebookSignOutButtonFactory" ref="facebookSignOutButtonFactory"/>	
+	</bean>
+		
+	<bean 
+		id="profileEditButton" 
+		singleton="false"
+		extends="socializeButton">
+		<constructor-arg type="activity"/>
+		<property name="text" value="Edit Profile"/>
+		<property name="bottomColor" value="BUTTON_BOTTOM"/>
+		<property name="topColor" value="BUTTON_TOP"/>
+		<property name="strokeColor" value="BUTTON_STROKE"/>
+		<property name="height" value="36" type="integer"/>
+		<property name="textSize" value="14" type="integer"/>
+		<property name="textAlign" value="center"/>
+	</bean>
+	
+	<bean 
+		id="profileSaveButton" 
+		singleton="false"
+		extends="socializeButton">
+		<constructor-arg type="activity"/>
+		<property name="text" value="Save"/>
+		<property name="bottomColor" value="BUTTON_BOTTOM"/>
+		<property name="topColor" value="BUTTON_TOP"/>
+		<property name="strokeColor" value="BUTTON_STROKE"/>
+		<property name="height" value="36" type="integer"/>
+		<property name="textSize" value="14" type="integer"/>
+		<property name="textAlign" value="center"/>
+	</bean>
+	
+	<bean 
+		id="profileCancelButton" 
+		singleton="false"
+		extends="socializeButton">
+		<constructor-arg type="activity"/>
+		<property name="text" value="Cancel"/>
+		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
+		<property name="topColor" value="GRAY_BTN_TOP"/>
+		<property name="strokeColor" value="GRAY_BTN_STROKE"/>
+		<property name="height" value="36" type="integer"/>
+		<property name="textSize" value="14" type="integer"/>
+		<property name="textAlign" value="center"/>
+	</bean>
+	
+	<factory id="profileCancelButtonFactory" makes="profileCancelButton"/>
+	<factory id="profileSaveButtonFactory" makes="profileSaveButton"/>
+	<factory id="profileEditButtonFactory" makes="profileEditButton"/>
+	<factory id="facebookSignOutButtonFactory" makes="facebookSignOutButton"/>
+	
+	<!-- End Profile UI -->
+	
+	
 	
 </beans>

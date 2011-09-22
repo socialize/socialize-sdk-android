@@ -49,8 +49,8 @@ public class SocializeButton extends LinearLayout {
 	private ImageView imageView = null;
 	private TextView textView = null;
 	
-	private int height = 32;
-	private int width = 0;
+	private Integer height = 32;
+	private Integer width = null;
 	private int textSize = 12;
 	
 	private String text = "";
@@ -89,11 +89,17 @@ public class SocializeButton extends LinearLayout {
 		int pWidth = LinearLayout.LayoutParams.WRAP_CONTENT;
 		int pHeight = LinearLayout.LayoutParams.WRAP_CONTENT;
 		
-		if(width > 0) {
+		if(width == null) {
+			pWidth = LinearLayout.LayoutParams.FILL_PARENT;
+		}
+		else if(width > 0) {
 			pWidth = deviceUtils.getDIP(width);
 		}
 		
-		if(height > 0) {
+		if(height == null) {
+			pHeight = LinearLayout.LayoutParams.FILL_PARENT;
+		}
+		else if(height > 0) {
 			pHeight = deviceUtils.getDIP(height);
 		}
 			
@@ -205,7 +211,7 @@ public class SocializeButton extends LinearLayout {
 		this.deviceUtils = deviceUtils;
 	}
 
-	public void setHeight(int height) {
+	public void setHeight(Integer height) {
 		this.height = height;
 	}
 
@@ -240,7 +246,7 @@ public class SocializeButton extends LinearLayout {
 		this.imageName = imageName;
 	}
 
-	public void setWidth(int width) {
+	public void setWidth(Integer width) {
 		this.width = width;
 	}
 

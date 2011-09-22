@@ -19,41 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.view;
+package com.socialize.ui.profile;
 
-import android.view.View;
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.Window;
+import android.widget.Toast;
 
-import com.socialize.ui.util.Colors;
-import com.socialize.util.DeviceUtils;
-import com.socialize.util.Drawables;
+import com.socialize.ui.SocializeUI;
 
 /**
  * @author Jason Polites
- *
  */
-public abstract class BaseViewFactory<V extends View> implements ViewFactory<V> {
-
-	protected DeviceUtils deviceUtils;
-	protected Drawables drawables;
-	protected Colors colors;
-
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
-	}
-	
-	public void setDrawables(Drawables drawables) {
-		this.drawables = drawables;
-	}
-
-	public void setColors(Colors colors) {
-		this.colors = colors;
-	}
-
-	public int getDIP(int pixels) {
-		return (deviceUtils == null) ? pixels : deviceUtils.getDIP(pixels);
-	}
-	
-	public int getColor(String color) {
-		return (colors == null) ? 0 : colors.getColor(color);
+public class ProfileActivity extends Activity {
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
+		Bundle extras = getIntent().getExtras();
+		
+		if(extras == null || !extras.containsKey(SocializeUI.USER_ID)) {
+			Toast.makeText(this, "No user id provided", Toast.LENGTH_SHORT).show();
+			finish();
+		}
+		else {
+			ProfileView view = new ProfileView(this);
+			setContentView(view);
+		}
 	}
 }

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
+import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.ui.error.SocializeUIErrorHandler;
 
 public abstract class BaseView extends LinearLayout {
@@ -30,5 +32,13 @@ public abstract class BaseView extends LinearLayout {
 
 	public void setErrorHandler(SocializeUIErrorHandler errorHandler) {
 		this.errorHandler = errorHandler;
+	}
+	
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
+	}
+	
+	protected SocializeUI getSocializeUI() {
+		return SocializeUI.getInstance();
 	}
 }

@@ -65,7 +65,7 @@ public interface SocializeProvider<T> {
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException;
 
 	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException;
-	
+
 	/**
 	 * @deprecated
 	 * @use this{@link #authenticate(String, String, String, AuthProviderData, String)}

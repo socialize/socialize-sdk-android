@@ -32,6 +32,7 @@ import com.socialize.util.IOUtils;
  * @author Jason Polites
  * @deprecated Facebook data is extracted on the server now.
  */
+@Deprecated
 public class FacebookImageRetriever {
 
 	private IOUtils ioUtils;

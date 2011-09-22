@@ -196,17 +196,17 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 		
 		oversize = (hardByteLimit && maxCapacityBytes > 0 && newSize > maxCapacityBytes);
 		
-		if(key != null) {
-			// Remove the object if it exists
-			TTLObject<K, E> removed = objects.remove(key);
-			
-			if(removed != null) {
-				currentSizeInBytes -= removed.getObject().getSizeInBytes(context);
-				removed.getObject().onRemove(context, true);
-				newSize = currentSizeInBytes + addedSize;
-				oversize = (hardByteLimit && maxCapacityBytes > 0 && newSize > maxCapacityBytes);
-			}
-		}
+//		if(key != null) {
+//			// Remove the object if it exists
+//			TTLObject<K, E> removed = objects.remove(key);
+//			
+//			if(removed != null) {
+//				currentSizeInBytes -= removed.getObject().getSizeInBytes(context);
+//				removed.getObject().onRemove(context, true);
+//				newSize = currentSizeInBytes + addedSize;
+//				oversize = (hardByteLimit && maxCapacityBytes > 0 && newSize > maxCapacityBytes);
+//			}
+//		}
 		
 		if(!oversize) {
 			key = new Key<K>(k, System.currentTimeMillis());

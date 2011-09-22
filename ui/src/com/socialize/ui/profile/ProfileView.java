@@ -1,4 +1,7 @@
-package com.socialize.ui.view;
+package com.socialize.ui.profile;
+
+import com.socialize.ui.SocializeUI;
+import com.socialize.ui.view.EntityView;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,11 +19,11 @@ public class ProfileView extends EntityView {
 
 	@Override
 	protected View getView(Bundle bundle, String entityKey) {
-		return container.getBean("profileView", entityKey);
+		return container.getBean("profileLayoutView", entityKey);
 	}
 
 	@Override
-	public boolean isRequires3rdPartyAuth() {
-		return true;
+	protected String getEntityKey() {
+		return SocializeUI.USER_ID;
 	}
 }

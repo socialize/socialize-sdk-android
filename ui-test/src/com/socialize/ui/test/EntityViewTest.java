@@ -46,6 +46,11 @@ public class EntityViewTest extends SocializeUIActivityTest {
 				addResult(entityKey);
 				return null;
 			}
+			
+			@Override
+			protected String getEntityKey() {
+				return SocializeUI.ENTITY_KEY;
+			}
 		};
 		
 		AndroidMock.replay(activity);
@@ -96,8 +101,11 @@ public class EntityViewTest extends SocializeUIActivityTest {
 				addResult(true);
 				return null;
 			}
-			
-			
+
+			@Override
+			protected String getEntityKey() {
+				return SocializeUI.ENTITY_KEY;
+			}
 		};
 		
 		AndroidMock.replay(activity);
@@ -124,6 +132,11 @@ public class EntityViewTest extends SocializeUIActivityTest {
 			@Override
 			protected View getView(Bundle bundle, String entityKey) {
 				return null;
+			}
+			
+			@Override
+			protected String getEntityKey() {
+				return SocializeUI.ENTITY_KEY;
 			}
 		};
 		

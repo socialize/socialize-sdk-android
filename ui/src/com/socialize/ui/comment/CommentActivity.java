@@ -29,7 +29,6 @@ import android.widget.Toast;
 
 import com.socialize.Socialize;
 import com.socialize.ui.SocializeUI;
-import com.socialize.ui.view.CommentView;
 
 /**
  * @author Jason Polites

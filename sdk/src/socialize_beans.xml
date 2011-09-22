@@ -164,13 +164,15 @@
 	
 	<bean id="facebookUrlBuilder" class="com.socialize.auth.facebook.FacebookUrlBuilder"/>
 	
+	<!-- 
 	<bean id="facebookImageRetriever" class="com.socialize.auth.facebook.FacebookImageRetriever">
 		<property name="logger" ref="logger"/>
 		<property name="ioUtils" ref="ioUtils"/>
 		<property name="facebookUrlBuilder" ref="facebookUrlBuilder"/>
 		<property name="base64Utils" ref="base64Utils"/>
 	</bean>
-	
+	-->
+	 
 	<bean id="listenerHolder" class="com.socialize.listener.ListenerHolder"/>
 	
 	<bean id="facebookProvider" class="com.socialize.auth.facebook.FacebookAuthProvider">
@@ -328,4 +330,26 @@
 	</bean>
 	
 <!-- End Socialize Core -->
+
+
+<!--  Image Loader -->
+	<bean id="imageUrlLoader" class="com.socialize.image.ImageUrlLoader"/>
+
+	<bean id="imageLoadAsyncTask" class="com.socialize.image.ImageLoadAsyncTask">
+		<property name="imageUrlLoader" ref="imageUrlLoader"/>
+		<property name="logger" ref="logger"/>
+		<property name="cache" ref="cache"/>
+	</bean>
+
+	<bean id="imageLoader" class="com.socialize.image.ImageLoader">
+		<property name="drawables" ref="drawables"/>
+		<property name="imageLoadAsyncTask" ref="imageLoadAsyncTask"/>
+		<property name="logger" ref="logger"/>
+		
+		<init-method name="init"/>
+		<destroy-method name="destroy"/>
+	</bean>
+
+<!--  End Image Loader -->
+
 </beans>

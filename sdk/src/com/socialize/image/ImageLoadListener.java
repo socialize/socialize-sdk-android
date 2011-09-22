@@ -19,36 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.view;
+package com.socialize.image;
 
-import com.socialize.ui.SocializeUI;
-
-import android.content.Context;
-import android.view.View;
+import android.graphics.drawable.Drawable;
 
 /**
  * @author Jason Polites
  *
  */
-public class UserView extends AuthenticatedView {
+public interface ImageLoadListener {
 
-	public UserView(Context context) {
-		super(context);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.ui.view.AuthenticatedView#isRequires3rdPartyAuth()
-	 */
-	@Override
-	public boolean isRequires3rdPartyAuth() {
-		return false;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.ui.view.AuthenticatedView#getView()
-	 */
-	@Override
-	public View getView() {
-		return container.getBean("userProfileView", getBundleValue(SocializeUI.USER_ID));
-	}
+	public void onImageLoad(Drawable drawable);
+	
+	public void onImageLoadFail(Exception error);
+	
 }

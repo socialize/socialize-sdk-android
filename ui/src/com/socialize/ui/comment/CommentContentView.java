@@ -23,6 +23,7 @@ package com.socialize.ui.comment;
 
 import android.content.Context;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ViewFlipper;
@@ -49,6 +50,11 @@ public class CommentContentView extends ViewFlipper {
 	
 	public void setScrollListener(OnScrollListener listener) {
 		this.listView.setOnScrollListener(listener);
+	}
+	
+	@Deprecated
+	public void setOnItemClickListener(OnItemClickListener listener) {
+		this.listView.setOnItemClickListener(listener);
 	}
 	
 	public void showList() {

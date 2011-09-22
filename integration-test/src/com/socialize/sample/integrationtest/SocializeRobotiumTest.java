@@ -137,8 +137,7 @@ public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestC
 	}
 
 	protected final void waitForSuccess() {
-		robotium.waitForText("SUCCESS", 1, DEFAULT_TIMEOUT_SECONDS);
-		assertTrue(robotium.searchText("SUCCESS"));
+		assertTrue(robotium.waitForText("SUCCESS", 1, DEFAULT_TIMEOUT_SECONDS));
 	}
 
 	/**

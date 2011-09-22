@@ -263,8 +263,8 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		ViewHolder.class,
 		ImageView.class,
 		TimeUtils.class,
-		HttpUtils.class,
-		UserService.class,
+//		HttpUtils.class,
+//		UserService.class,
 		User.class,
 		Drawables.class,
 		Drawable.class,
@@ -282,13 +282,13 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		final Context context = getContext();
 		final String imageUrl = "foobar_url";
 		
-		UserService userService = AndroidMock.createMock(UserService.class);
+//		UserService userService = AndroidMock.createMock(UserService.class);
 		IBeanFactory<CommentListItem> commentItemViewFactory = AndroidMock.createMock(IBeanFactory.class);
 		TimeUtils timeUtils = AndroidMock.createMock(TimeUtils.class);
 		Drawables drawables = AndroidMock.createMock(Drawables.class);
 		Drawable drawable = AndroidMock.createMock(Drawable.class);
 		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
-		HttpUtils httpUtils = AndroidMock.createMock(HttpUtils.class);
+//		HttpUtils httpUtils = AndroidMock.createMock(HttpUtils.class);
 		ImageView icon = AndroidMock.createMock(ImageView.class, context);
 	
 		CommentListItem item = AndroidMock.createNiceMock(CommentListItem.class, context);
@@ -315,7 +315,7 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		AndroidMock.expect(item.getComment()).andReturn(commentText);
 		
 		AndroidMock.expect(user.getMediumImageUri()).andReturn(imageUrl);
-		AndroidMock.expect(httpUtils.toURI(imageUrl)).andReturn(uri);
+//		AndroidMock.expect(httpUtils.toURI(imageUrl)).andReturn(uri);
 		
 		AndroidMock.expect(deviceUtils.getDIP(iconSize)).andReturn(iconSize);
 		AndroidMock.expect(drawables.getDrawable(SocializeUI.DEFAULT_USER_ICON, iconSize, iconSize, true)).andReturn(drawable);
@@ -328,7 +328,7 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
         
         icon.setImageURI(uri);
 		
-		AndroidMock.expect(userService.getCurrentUser()).andReturn(user);
+//		AndroidMock.expect(userService.getCurrentUser()).andReturn(user);
 		AndroidMock.expect(comment.getUser()).andReturn(user);
 		
 		AndroidMock.expect(user.getId()).andReturn(userId).anyTimes();
@@ -356,10 +356,10 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		};
 		
 		adapter.setIconSize(iconSize);
-		adapter.setUserService(userService);
+//		adapter.setUserService(userService);
 		adapter.setComments(comments);
 		adapter.setTimeUtils(timeUtils);
-		adapter.setHttpUtils(httpUtils);
+//		adapter.setHttpUtils(httpUtils);
 		adapter.setCommentItemViewFactory(commentItemViewFactory);
 		adapter.setDrawables(drawables);
 		adapter.setDeviceUtils(deviceUtils);
@@ -367,11 +367,11 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		AndroidMock.replay(drawables);
 		AndroidMock.replay(drawable);
 		AndroidMock.replay(deviceUtils);
-		AndroidMock.replay(httpUtils);
+//		AndroidMock.replay(httpUtils);
 		
 		AndroidMock.replay(comments);
 		AndroidMock.replay(icon);
-		AndroidMock.replay(userService);
+//		AndroidMock.replay(userService);
 		AndroidMock.replay(timeUtils);
 		AndroidMock.replay(comment);
 		AndroidMock.replay(holder);
@@ -389,11 +389,11 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		AndroidMock.verify(drawables);
 		AndroidMock.verify(drawable);
 		AndroidMock.verify(deviceUtils);
-		AndroidMock.verify(httpUtils);
+//		AndroidMock.verify(httpUtils);
 		
 		AndroidMock.verify(comments);
 		AndroidMock.verify(icon);
-		AndroidMock.verify(userService);
+//		AndroidMock.verify(userService);
 		AndroidMock.verify(timeUtils);
 		AndroidMock.verify(comment);
 		AndroidMock.verify(holder);

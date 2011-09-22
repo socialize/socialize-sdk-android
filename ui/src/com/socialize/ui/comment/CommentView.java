@@ -1,4 +1,7 @@
-package com.socialize.ui.view;
+package com.socialize.ui.comment;
+
+import com.socialize.ui.SocializeUI;
+import com.socialize.ui.view.EntityView;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -25,11 +28,6 @@ public class CommentView extends EntityView {
 	}
 
 	@Override
-	public boolean isRequires3rdPartyAuth() {
-		return false;
-	}
-
-	@Override
 	protected void onBeforeSocializeInit() {
 		progress = ProgressDialog.show(getContext(), "Loading Socialize", "Please wait...");
 	}
@@ -39,5 +37,10 @@ public class CommentView extends EntityView {
 		if(progress != null) {
 			progress.dismiss();
 		}
+	}
+	
+	@Override
+	protected String getEntityKey() {
+		return SocializeUI.ENTITY_KEY;
 	}
 }

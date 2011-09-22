@@ -57,21 +57,27 @@ public class AuthProviderData {
 	public void setAppId3rdParty(String appId3rdParty) {
 		this.appId3rdParty = appId3rdParty;
 	}
+	@Deprecated
 	public String getUserFirstName() {
 		return userFirstName;
 	}
+	@Deprecated
 	public void setUserFirstName(String userFullName) {
 		this.userFirstName = userFullName;
 	}
+	@Deprecated
 	public String getUserLastName() {
 		return userLastName;
 	}
+	@Deprecated
 	public void setUserLastName(String userLastName) {
 		this.userLastName = userLastName;
 	}
+	@Deprecated
 	public String getUserProfilePicData() {
 		return userProfilePicData;
 	}
+	@Deprecated
 	public void setUserProfilePicData(String userProfilePicData) {
 		this.userProfilePicData = userProfilePicData;
 	}

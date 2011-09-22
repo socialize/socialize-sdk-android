@@ -7,7 +7,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
-import com.socialize.ui.SocializeUI;
 import com.socialize.util.StringUtils;
 
 public abstract class EntityView extends AuthenticatedView {
@@ -49,7 +48,5 @@ public abstract class EntityView extends AuthenticatedView {
 	
 	protected abstract View getView(Bundle bundle, String entityKey);
 	
-	protected String getEntityKey() {
-		return SocializeUI.ENTITY_KEY;
-	}
+	protected abstract String getEntityKey();
 }

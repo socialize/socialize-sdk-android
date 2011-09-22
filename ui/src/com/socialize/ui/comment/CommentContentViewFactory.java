@@ -47,20 +47,16 @@ public class CommentContentViewFactory extends BaseViewFactory<CommentContentVie
 		contentView.setLayoutParams(contentViewLayoutParams);
 		contentView.setOrientation(LinearLayout.VERTICAL);
 
-		LayoutParams listViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		LayoutParams listViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 
 		listViewLayoutParams.weight = 1.0f;
 
 		ListView listView = new ListView(context);
-//		listView.setAdapter(provider);
 		listView.setLayoutParams(listViewLayoutParams);
 		listView.setDrawingCacheEnabled(true);
 		listView.setCacheColorHint(0);
 		listView.setDividerHeight(2);
 		listView.setSmoothScrollbarEnabled(true);
-//		listView.setOnScrollListener(listener);
-
-		listView.requestFocus();
 
 		contentView.addView(listView);
 

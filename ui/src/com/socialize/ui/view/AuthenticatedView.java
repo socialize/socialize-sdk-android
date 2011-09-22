@@ -58,6 +58,7 @@ public abstract class AuthenticatedView extends SocializeView {
 		return new AuthenticatedViewListener(getContext(), this);
 	}
 
+	@Deprecated
 	public SocializeAuthListener getAuthListener3rdParty() {
 		return new AuthenticatedViewListener3rdParty(getContext(), this);
 	}
@@ -152,7 +153,10 @@ public abstract class AuthenticatedView extends SocializeView {
 	// Subclasses override
 	public void onBeforeAuthenticate() {}
 
-	public abstract boolean isRequires3rdPartyAuth();
+	@Deprecated
+	public boolean isRequires3rdPartyAuth() {
+		return false;
+	}
 
 	public abstract View getView();
 

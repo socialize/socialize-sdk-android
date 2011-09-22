@@ -30,6 +30,7 @@ import android.content.Context;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class AuthenticatedViewListener3rdParty extends AuthenticatedViewListener {
 
 	public AuthenticatedViewListener3rdParty(Context context, AuthenticatedView view) {

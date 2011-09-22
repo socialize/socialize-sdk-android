@@ -45,6 +45,8 @@ public class CommentListItem extends LinearLayout {
 		setLayoutParams(layout);
 		setGravity(Gravity.TOP);
 		setPadding(eight,eight,eight,eight);
+//		setFocusable(true);
+//		setClickable(true);
 		
 		LinearLayout contentLayout = new LinearLayout(getContext());
 		contentLayout.setOrientation(LinearLayout.VERTICAL);

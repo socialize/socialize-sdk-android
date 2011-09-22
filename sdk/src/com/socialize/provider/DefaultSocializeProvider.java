@@ -204,7 +204,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			facebookSessionStore.clear(context);
 		}
 	}
-	
+
 	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
 		
@@ -243,17 +243,17 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 				
 				User user = userFactory.fromJSON(json.getJSONObject("user"));
 				
-				if(StringUtils.isEmpty(user.getFirstName())) {
-					user.setFirstName(data.getUserFirstName());
-				}
-				
-				if(StringUtils.isEmpty(user.getLastName())) {
-					user.setLastName(data.getUserLastName());
-				}
-				
-				if(StringUtils.isEmpty(user.getProfilePicData())) {
-					user.setProfilePicData(data.getUserProfilePicData());
-				}
+//				if(StringUtils.isEmpty(user.getFirstName())) {
+//					user.setFirstName(data.getUserFirstName());
+//				}
+//				
+//				if(StringUtils.isEmpty(user.getLastName())) {
+//					user.setLastName(data.getUserLastName());
+//				}
+//				
+//				if(StringUtils.isEmpty(user.getProfilePicData())) {
+//					user.setProfilePicData(data.getUserProfilePicData());
+//				}
 				
 				session.setConsumerToken(json.getString("oauth_token"));
 				session.setConsumerTokenSecret(json.getString("oauth_token_secret"));

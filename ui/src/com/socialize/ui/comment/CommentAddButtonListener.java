@@ -85,15 +85,10 @@ public class CommentAddButtonListener implements OnClickListener {
 			
 			keyboardUtils.hideKeyboard(field.getEditText());
 
-			// TODO: add auth popup
-			// TODO: enable FB auth
-//			if(!Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 			if(!getSocialize().isAuthenticated()) {
 				getSocialize().authenticate(
 						consumerKey, 
 						consumerSecret,
-//						AuthProviderType.FACEBOOK, 
-//						facebookAppId,
 						new CommentReAuthListener(context, callback, text));
 			}
 			else {

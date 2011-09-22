@@ -140,14 +140,12 @@ public class User extends SocializeObject {
 	/**
 	 * Base64 encoded image data.
 	 * @return
-	 * @deprecated Image data will come from server as URL every time.
 	 */
 	public String getProfilePicData() {
 		return profilePicData;
 	}
 
 	/**
-	 * @deprecated Image data will come from server as URL every time.
 	 * @param profilePicData
 	 */
 	public void setProfilePicData(String profilePicData) {

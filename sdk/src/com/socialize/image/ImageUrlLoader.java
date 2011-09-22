@@ -19,51 +19,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.profile;
+package com.socialize.image;
 
-import android.content.Context;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+
+import com.socialize.util.CacheableDrawable;
 
 /**
  * @author Jason Polites
- *
+ * 
  */
-public class ProfileEditField extends LinearLayout {
-	
-	private ImageButton button;
-	private EditText editText;
+public class ImageUrlLoader {
 
-	public ProfileEditField(Context context) {
-		super(context);
-	}
-	
-	public void setButtonListener(OnClickListener listener) {
-		button.setOnClickListener(listener);
-	}
-	
-	public String getText() {
-		return editText.getText().toString();
-	}
-	
-	public void clear() {
-		editText.setText("");
-	}
-
-	public void setButton(ImageButton button) {
-		this.button = button;
-	}
-
-	public void setEditText(EditText editText) {
-		this.editText = editText;
-	}
-
-	public EditText getEditText() {
-		return editText;
-	}
-
-	public ImageButton getButton() {
-		return button;
+	public Drawable loadImageFromUrl(String url) throws IOException {
+		URL imageUrl = new URL(url);
+		URLConnection conn = null;
+		InputStream is = null;
+		
+		try {
+			conn = imageUrl.openConnection();
+			is = conn.getInputStream();
+			Bitmap bitmap = BitmapFactory.decodeStream(is);
+			return new CacheableDrawable(bitmap, url);
+		}
+		finally {
+			if (is != null) {
+				is.close();
+			}
+		}
 	}
 }

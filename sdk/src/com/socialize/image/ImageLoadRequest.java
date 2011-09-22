@@ -19,41 +19,66 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.view;
+package com.socialize.image;
 
-import android.view.View;
+import java.util.LinkedList;
+import java.util.List;
 
-import com.socialize.ui.util.Colors;
-import com.socialize.util.DeviceUtils;
-import com.socialize.util.Drawables;
 
 /**
+ * Represents a request for a single image.
  * @author Jason Polites
  *
  */
-public abstract class BaseViewFactory<V extends View> implements ViewFactory<V> {
+public class ImageLoadRequest {
 
-	protected DeviceUtils deviceUtils;
-	protected Drawables drawables;
-	protected Colors colors;
-
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	private int id;
+	private String url;
+	private List<ImageLoadListener> listeners;
+	private boolean canceled;
+	
+	public String getUrl() {
+		return url;
 	}
 	
-	public void setDrawables(Drawables drawables) {
-		this.drawables = drawables;
-	}
-
-	public void setColors(Colors colors) {
-		this.colors = colors;
-	}
-
-	public int getDIP(int pixels) {
-		return (deviceUtils == null) ? pixels : deviceUtils.getDIP(pixels);
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	
-	public int getColor(String color) {
-		return (colors == null) ? 0 : colors.getColor(color);
+	public List<ImageLoadListener> getListeners() {
+		return listeners;
 	}
+	
+	public boolean isCanceled() {
+		return canceled;
+	}
+
+	public void setCanceled(boolean canceled) {
+		this.canceled = canceled;
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public synchronized void addListeners(List<ImageLoadListener> listener) {
+		if(listeners == null) {
+			listeners = new LinkedList<ImageLoadListener>();
+		}
+		
+		listeners.addAll(listener);
+	}
+	
+	public synchronized void addListener(ImageLoadListener listener) {
+		if(listeners == null) {
+			listeners = new LinkedList<ImageLoadListener>();
+		}
+		
+		listeners.add(listener);
+	}
+
 }

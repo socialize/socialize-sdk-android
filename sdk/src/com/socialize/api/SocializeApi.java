@@ -338,9 +338,9 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 						
 						authProviderData.setUserId3rdParty(response.getUserId());
 						authProviderData.setToken3rdParty(response.getToken());
-						authProviderData.setUserFirstName(response.getFirstName());
-						authProviderData.setUserLastName(response.getLastName());
-						authProviderData.setUserProfilePicData(response.getImageData());
+//						authProviderData.setUserFirstName(response.getFirstName());
+//						authProviderData.setUserLastName(response.getLastName());
+//						authProviderData.setUserProfilePicData(response.getImageData());
 						
 						// Do normal auth
 						handleRegularAuth(request, fWrapper);
@@ -368,45 +368,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			}
 		}
 	}
-//	
-//	protected void updateLocalUser(SocializeSession session, AuthProviderData data) {
-//		User user = session.getUser();
-//		
-//		if(user != null && data != null) {
-//			boolean save = false;
-//			
-//			if(!StringUtils.equals(user.getFirstName(), data.getUserFirstName())) {
-//				user.setFirstName(data.getUserFirstName());
-//				save = true;
-//			}
-//			
-//			if(!StringUtils.equals(user.getLastName(), data.getUserLastName())) {
-//				user.setLastName(data.getUserLastName());
-//				save = true;
-//			}
-//			
-//			if(!StringUtils.equals(user.getProfilePicData(), data.getUserProfilePicData())) {
-//				user.setProfilePicData(data.getUserProfilePicData());
-//				save = true;
-//			}
-//			
-//			List<UserAuthData> authData = user.getAuthData();
-//			
-//			if(authData == null || authData.size() == 0) {
-//				authData = new ArrayList<UserAuthData>(1);
-//				
-//				UserAuthData uad = new UserAuthData();
-//				uad.setId(Integer.parseInt(data.getUserId3rdParty()));
-//				uad.setAuthProviderType(data.getAuthProviderType());
-//				
-//				authData.add(uad);
-//				user.setAuthData(authData);
-//				
-//				save = true;
-//			}
-//		}
-//	}
-
 	@Deprecated
 	protected void handle3rdPartyAuth(
 			final SocializeAuthRequest request,
@@ -556,15 +517,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			}
 			else {
 				session = SocializeApi.this.authenticate(request.getEndpoint(), request.getConsumerKey(), request.getConsumerSecret(), authProviderData, request.getUdid());
-//				session = SocializeApi.this.authenticate(
-//						request.getEndpoint(), 
-//						request.getConsumerKey(), 
-//						request.getConsumerSecret(),
-//						request.getAuthUserId3rdParty(), 
-//						request.getAuthToken3rdParty(), 
-//						request.getAppId3rdParty(),
-//						request.getAuthProviderType(), 
-//						request.getUdid());
 			}
 			
 			response.setSession(session);

@@ -14,6 +14,7 @@ import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.config.SocializeConfig;
 import com.socialize.ui.comment.CommentActivity;
+import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.util.Drawables;
 
 public class SocializeUI {
@@ -125,14 +126,38 @@ public class SocializeUI {
 		context.startActivity(i);
 	}
 	
+	public void showUserProfileView(Activity context, String userId) {
+		Intent i = new Intent(context, ProfileActivity.class);
+		i.putExtra(USER_ID, userId);
+		context.startActivity(i);
+	}
+	
+	public void showUserProfileViewForResult(Activity context, String userId, int requestCode) {
+		Intent i = new Intent(context, ProfileActivity.class);
+		i.putExtra(USER_ID, userId);
+		context.startActivityForResult(i, requestCode);
+	}
+	
 	public void setEntityUrl(Activity context, String url) {
 		Intent intent = context.getIntent();
+		Bundle extras = getExtras(intent);
+		extras.putString(ENTITY_KEY, url);
+		intent.putExtras(extras);
+	}
+	
+	public void setUserId(Activity context, String userId) {
+		Intent intent = context.getIntent();
+		Bundle extras = getExtras(intent);
+		extras.putString(USER_ID, userId);
+		intent.putExtras(extras);
+	}
+	
+	protected Bundle getExtras(Intent intent) {
 		Bundle extras = intent.getExtras();
 		if(extras == null) {
 			extras = new Bundle();
-		}
-		extras.putString(ENTITY_KEY, url);
-		intent.putExtras(extras);
+		}	
+		return extras;
 	}
 	
 	public Properties getCustomProperties() {

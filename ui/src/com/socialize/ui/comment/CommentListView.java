@@ -2,17 +2,20 @@ package com.socialize.ui.comment;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 
-import com.socialize.Socialize;
-import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Comment;
 import com.socialize.entity.ListResult;
+import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -77,7 +80,6 @@ public class CommentListView extends BaseView {
 		setLayoutParams(fill);
 		setBackgroundDrawable(drawables.getDrawable("crosshatch.png", true, true, true));
 		setPadding(0, 0, 0, 0);
-		setVerticalFadingEdgeEnabled(false);
 
 		header = commentHeaderFactory.make(getContext());
 		field = commentEditFieldFactory.make(getContext());
@@ -88,6 +90,7 @@ public class CommentListView extends BaseView {
 		content.setListAdapter(commentAdapter);
 		
 		content.setScrollListener(getCommentScrollListener());
+//		content.setOnItemClickListener(getCommentOnItemClickListener());
 
 		addView(header);
 		addView(field);
@@ -106,6 +109,25 @@ public class CommentListView extends BaseView {
 				return loading;
 			}
 		});
+	}
+	
+	@Deprecated
+	protected OnItemClickListener getCommentOnItemClickListener() {
+		return new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Comment comment = commentAdapter.getComments().get(position);
+				User user = comment.getUser();
+				if(user != null && user.getId() != null) {
+					getSocializeUI().showUserProfileView((Activity) getContext(), user.getId().toString());
+				}
+				else {
+					if(logger != null) {
+						logger.warn("No user for comment " + comment.getId());
+					}
+				}
+			}
+		};
 	}
 	
 	protected CommentAddButtonListener getCommentAddListener() {
@@ -177,9 +199,7 @@ public class CommentListView extends BaseView {
 		});
 	}
 	
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
-	}
+
 
 	public void doListComments(boolean update) {
 
