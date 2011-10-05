@@ -137,9 +137,6 @@ public class SocializeButton extends LinearLayout {
 			case RIGHT:
 				setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
 				break;
-	
-			default:
-				break;
 		}
 		
 		LayoutParams imageLayout = makeLayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
