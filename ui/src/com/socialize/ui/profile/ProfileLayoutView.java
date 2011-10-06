@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
@@ -150,7 +149,6 @@ public class ProfileLayoutView extends BaseView {
 					error.printStackTrace();
 					userIcon.post(new Runnable() {
 						public void run() {
-							userIcon.setBackgroundColor(Color.WHITE);
 							userIcon.setImageDrawable(defaultProfilePicture);
 						}
 					});
@@ -163,13 +161,11 @@ public class ProfileLayoutView extends BaseView {
 						public void run() {
 							drawable.setAlpha(255);
 							content.setProfileDrawable(drawable);
-							userIcon.setBackgroundColor(Color.WHITE);
 							userIcon.setImageDrawable(drawable);
 						}
 					});
 				}
 			});
-			
 		}
 		else {
 			content.getProfilePicture().setImageDrawable(defaultProfilePicture);

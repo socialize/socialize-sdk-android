@@ -59,31 +59,6 @@ public class ProfileActivity extends SocializeUIActivity {
 		}
 	}
 
-	@Override
-//	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-//		// TODO: May need to inpect the view if we ever want more than one
-//		// context menu.
-//		menu.setHeaderTitle("Choose an image from...");
-//		menu.add(0, 0, 0, "Gallery");
-//		menu.add(0, 1, 1, "Camera");
-//	}
-//
-//	@Override
-//	public boolean onContextItemSelected(MenuItem item) {
-//		if (item.getItemId() == 0) {
-//			Intent intent = new Intent();
-//			intent.setType("image/*");
-//			intent.setAction(Intent.ACTION_GET_CONTENT);
-//			startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_PIC_REQUEST);
-//		}
-//		else if (item.getItemId() == 1) {
-//			Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//			startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
-//		}
-//
-//		return true;
-//	}
-
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == CAMERA_PIC_REQUEST) {
 			if (data != null) {

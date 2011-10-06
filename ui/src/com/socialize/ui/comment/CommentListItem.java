@@ -1,7 +1,10 @@
 package com.socialize.ui.comment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.GradientDrawable.Orientation;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -35,6 +38,7 @@ public class CommentListItem extends LinearLayout {
 		
 		final int eight = deviceUtils.getDIP(8);
 		final int four = deviceUtils.getDIP(4);
+		final int imagePadding = deviceUtils.getDIP(2);
 		final int textColor = colors.getColor(Colors.BODY);
 		final int titleColor = colors.getColor(Colors.TITLE);
 		
@@ -110,6 +114,13 @@ public class CommentListItem extends LinearLayout {
 //		iconLayout.setPadding(four,four,four,four);
 		userIcon = new ImageView(getContext());
 		userIcon.setLayoutParams(iconLayoutParams);
+		userIcon.setPadding(imagePadding, imagePadding, imagePadding, imagePadding);
+		
+		GradientDrawable imageBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] {Color.WHITE, Color.WHITE});
+		imageBG.setStroke(deviceUtils.getDIP(1), Color.BLACK);
+		
+		userIcon.setBackgroundDrawable(imageBG);
+		
 		userIcon.setScaleType(ScaleType.CENTER);
 		iconLayout.addView(userIcon);
 		

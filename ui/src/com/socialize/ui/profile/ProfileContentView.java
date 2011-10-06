@@ -23,7 +23,6 @@ package com.socialize.ui.profile;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.view.View;
@@ -203,11 +202,11 @@ public class ProfileContentView extends LinearLayout {
 		layers[0] = profileDrawable;
 		layers[1] = drawables.getDrawable("camera.png");
 		
-		layers[0].setAlpha(128);
+		layers[0].setAlpha(64);
 		
 		LayerDrawable layerDrawable = new LayerDrawable(layers);
 		profilePicture.setImageDrawable(layerDrawable);
-		profilePicture.setBackgroundColor(Color.TRANSPARENT);
+		profilePicture.getBackground().setAlpha(0);
 		
 		editMode = true;
 	}
@@ -229,7 +228,7 @@ public class ProfileContentView extends LinearLayout {
 		profileDrawable.setAlpha(255);
 		
 		profilePicture.setImageDrawable(profileDrawable);
-		profilePicture.setBackgroundColor(Color.WHITE);
+		profilePicture.getBackground().setAlpha(255);
 		
 		revertUserDisplayName();
 		
@@ -257,7 +256,7 @@ public class ProfileContentView extends LinearLayout {
 		originalProfileDrawable = profileDrawable;
 		
 		profilePicture.setImageDrawable(getProfileDrawable());
-		profilePicture.setBackgroundColor(Color.WHITE);
+		profilePicture.getBackground().setAlpha(255);
 		
 		editMode = false;
 	}
@@ -268,7 +267,6 @@ public class ProfileContentView extends LinearLayout {
 	public void onImageEdit() {
 		if(editMode) {
 			contextMenu.show();
-//			profilePicture.showContextMenu();
 		}
 	}
 }

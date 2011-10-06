@@ -22,6 +22,7 @@
 package com.socialize.ui.profile;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
@@ -67,7 +68,7 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		view.setContextMenu(profileImageContextMenuFactory.getBean());
 		
 		final int padding = getDIP(4);
-		final int imagePadding = 2;
+		final int imagePadding = getDIP(4);
 		final int margin = getDIP(8);
 		final int imageSize = 200; //getDIP(200);
 		final int editTextStroke = getDIP(2);
@@ -115,30 +116,22 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		
 		FacebookSignOutClickListener facebookSignOutClickListener = facebookSignOutClickListenerFactory.getBean();
 		
-//		ViewGroup.LayoutParams saveButtonLayout = saveButton.getLayoutParams();
-//		ViewGroup.LayoutParams cancelButtonLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-//
-//		saveButtonLayout.setMargins(0, 0, 0, 0);
-//		cancelButtonLayout.setMargins(0, 0, margin, 0);
-//		
-//		saveButtonLayout.weight = 1;
-//		cancelButtonLayout.weight = 1;
-		
 		saveButton.setVisibility(View.GONE);
-//		saveButton.setLayoutParams(saveButtonLayout);
-		
 		cancelButton.setVisibility(View.GONE);
-//		cancelButton.setLayoutParams(cancelButtonLayout);
-		
 		editButton.setVisibility(View.GONE);
-		
 		facebookSignOutButton.setVisibility(View.GONE);
 		
 		textLayout.setMargins(margin, 0, 0, 0);
 		textEditLayout.setMargins(margin,0,margin,0);
 		
+		GradientDrawable imageBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] {Color.WHITE, Color.WHITE});
+		imageBG.setStroke(2, Color.BLACK);
+		
+//		imageLayout.setMargins(1, 1, 1, 1);
 		profilePicture.setLayoutParams(imageLayout);
 		profilePicture.setPadding(imagePadding, imagePadding, imagePadding, imagePadding);
+		profilePicture.setBackgroundDrawable(imageBG);
+//		profilePicture.setScaleType(ScaleType.CENTER);
 	
 		displayName.setTextColor(titleColor);
 		

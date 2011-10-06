@@ -425,7 +425,7 @@
 		<constructor-arg type="activity"/>
 		<property name="text" value="Save"/>
 		<property name="height" value="36" type="integer"/>
-		<property name="width" value="80" type="integer"/>
+		<property name="width" value="70" type="integer"/>
 		<property name="textSize" value="11" type="integer"/>
 		<property name="textAlign" value="center"/>
 		<property name="padding" value="2" type="integer"/>
@@ -444,7 +444,7 @@
 		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
 		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>
 		<property name="height" value="36" type="integer"/>
-		<property name="width" value="60" type="integer"/>
+		<property name="width" value="70" type="integer"/>
 		<property name="textSize" value="11" type="integer"/>
 		<property name="textAlign" value="center"/>
 		<property name="padding" value="2" type="integer"/>
