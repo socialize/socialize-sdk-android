@@ -22,16 +22,16 @@ public class ProfileView extends EntityView {
 	}
 
 	@Override
-	protected View getView(Bundle bundle, String entityKey) {
+	protected View getView(Bundle bundle, Object...entityKeys) {
 		if(profileLayoutView == null) {
-			profileLayoutView = container.getBean("profileLayoutView", entityKey);
+			profileLayoutView = container.getBean("profileLayoutView", entityKeys);
 		}
 		return profileLayoutView;
 	}
 
 	@Override
-	protected String getEntityKey() {
-		return SocializeUI.USER_ID;
+	protected String[] getEntityKeys() {
+		return  new String[]{SocializeUI.USER_ID, SocializeUI.COMMENT_ID};
 	}
 	
 	/**

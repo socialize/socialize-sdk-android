@@ -74,7 +74,10 @@ public class UserApi extends SocializeApi<User, SocializeProvider<User>> {
 
 			@Override
 			public void onUpdate(User user) {
-				// Save this user to the local session
+				// Update local in-memory user
+				session.getUser().merge(user);
+				
+				// Save this user to the local session for next load
 				if(sessionPersister != null) {
 					sessionPersister.saveUser(context, user);
 				}

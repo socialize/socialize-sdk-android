@@ -123,7 +123,15 @@ public class CommentAdapter extends BaseAdapter {
        		tmpUser = item.getUser();
        	}
        	
+       	User currentUser = getSocializeUI().getSocialize().getSession().getUser();
+       	
+       	if(currentUser != null && currentUser.equals(tmpUser)) {
+       		// Use this user as we may have been updated
+       		tmpUser = currentUser;
+       	}
+       	
        	final User user = tmpUser;
+       	
    
         if (view == null) {
         	
@@ -173,12 +181,6 @@ public class CommentAdapter extends BaseAdapter {
 
     			String displayName = null;
     			
-//    			User currentUser = userService.getCurrentUser();
-//    			if(currentUser != null && user != null && currentUser.getId().equals(user.getId())) {
-//    				user = currentUser;
-//    				displayName = "You";
-//    			}
-    			
     			if(user != null && displayName == null) {
     				displayName = user.getDisplayName();
     				
@@ -193,14 +195,13 @@ public class CommentAdapter extends BaseAdapter {
 						@Override
 						public void onClick(View v) {
 							if(user != null && user.getId() != null) {
-								getSocializeUI().showUserProfileView(context, user.getId().toString());
+								getSocializeUI().showUserProfileViewForResult(context, user.getId().toString(), item.getId().toString(), CommentActivity.PROFILE_UPDATE);
 							}
 							else {
 								if(logger != null) {
 									logger.warn("No user for comment " + item.getId());
 								}
 							}
-							
 						}
 					});
     			}
@@ -208,6 +209,7 @@ public class CommentAdapter extends BaseAdapter {
     			TextView comment = holder.getComment();
     			TextView userName = holder.getUserName();
     			TextView time = holder.getTime();
+    			
     			final ImageView userIcon = holder.getUserIcon();
     			
     			if (comment != null) {

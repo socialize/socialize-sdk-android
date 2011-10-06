@@ -50,8 +50,6 @@ public class CommentListItem extends LinearLayout {
 		setLayoutParams(layout);
 		setGravity(Gravity.TOP);
 		setPadding(eight,eight,eight,eight);
-//		setFocusable(true);
-//		setClickable(true);
 		
 		LinearLayout contentLayout = new LinearLayout(getContext());
 		contentLayout.setOrientation(LinearLayout.VERTICAL);
@@ -106,13 +104,11 @@ public class CommentListItem extends LinearLayout {
 		contentLayout.addView(comment);
 		
 		LinearLayout iconLayout = new LinearLayout(getContext());
-//		LinearLayout.LayoutParams iconLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
 		LinearLayout.LayoutParams iconLayoutParams = new LinearLayout.LayoutParams(iconSize, iconSize);
 		iconLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
 		iconLayout.setLayoutParams(iconLayoutParams);
 		iconLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
-//		iconLayout.setPadding(four,four,four,four);
 		userIcon = new ImageView(getContext());
 		userIcon.setLayoutParams(iconLayoutParams);
 		userIcon.setPadding(imagePadding, imagePadding, imagePadding, imagePadding);

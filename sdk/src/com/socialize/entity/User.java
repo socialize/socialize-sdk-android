@@ -26,8 +26,6 @@ import java.util.List;
 
 import com.socialize.util.StringUtils;
 
-import android.graphics.Bitmap;
-
 
 /**
  * @author Jason Polites
@@ -47,7 +45,18 @@ public class User extends SocializeObject {
 	private String displayName;
 	private String profilePicData;
 	
-	private transient Bitmap image;
+	public void merge(User user) {
+		setFirstName(user.getFirstName());
+		setLastName(user.getLastName());
+		setUsername(user.getUsername());
+		setLocation(user.getLocation());
+		setSmallImageUri(user.getSmallImageUri());
+		setMediumImageUri(user.getMediumImageUri());
+		setLargeImageUri(user.getLargeImageUri());
+		setStats(user.getStats());
+		setAuthData(user.getAuthData());
+		setProfilePicData(profilePicData);
+	}
 
 	public String getDisplayName() {
 		if(displayName == null) {
@@ -126,16 +135,6 @@ public class User extends SocializeObject {
 	public void setStats(Stats stats) {
 		this.stats = stats;
 	}
-	
-	@Deprecated
-	public Bitmap getImage() {
-		return image;
-	}
-	
-	@Deprecated
-	public void setImage(Bitmap image) {
-		this.image = image;
-	}
 
 	/**
 	 * Base64 encoded image data.
@@ -145,9 +144,6 @@ public class User extends SocializeObject {
 		return profilePicData;
 	}
 
-	/**
-	 * @param profilePicData
-	 */
 	public void setProfilePicData(String profilePicData) {
 		this.profilePicData = profilePicData;
 	}

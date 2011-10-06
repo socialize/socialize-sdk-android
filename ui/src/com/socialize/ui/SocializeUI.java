@@ -22,6 +22,7 @@ public class SocializeUI {
 	private static final SocializeUI instance = new SocializeUI();
 	
 	public static final String USER_ID = "socialize.user.id";
+	public static final String COMMENT_ID = "socialize.comment.id";
 	public static final String ENTITY_KEY = "socialize.entity.key";
 	public static final String DEFAULT_USER_ICON = "default_user_icon.png";
 	public static final String SOCIALIZE_LOGO = "socialize_logo.png";
@@ -135,6 +136,13 @@ public class SocializeUI {
 	public void showUserProfileViewForResult(Activity context, String userId, int requestCode) {
 		Intent i = new Intent(context, ProfileActivity.class);
 		i.putExtra(USER_ID, userId);
+		context.startActivityForResult(i, requestCode);
+	}
+	
+	public void showUserProfileViewForResult(Activity context, String userId, String commentId, int requestCode) {
+		Intent i = new Intent(context, ProfileActivity.class);
+		i.putExtra(USER_ID, userId);
+		i.putExtra(COMMENT_ID, commentId);
 		context.startActivityForResult(i, requestCode);
 	}
 	

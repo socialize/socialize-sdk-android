@@ -276,28 +276,28 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}
 	
 	
-	@Deprecated
-	public void authenticateAsync(
-			String key, 
-			String secret, 
-			String uuid, 
-			String authUserId3rdParty, 
-			String authToken3rdParty, 
-			final AuthProviderType authProviderType, 
-			final String appId3rdParty,
-			final SocializeAuthListener listener, 
-			final SocializeSessionConsumer sessionConsumer, 
-			boolean do3rdPartyAuth) {
-		
-		
-		AuthProviderData data = authProviderDataFactory.getBean();
-		data.setAppId3rdParty(appId3rdParty);
-		data.setUserId3rdParty(authUserId3rdParty);
-		data.setToken3rdParty(authToken3rdParty);
-		data.setAuthProviderType(authProviderType);
-		
-		authenticateAsync(key, secret, uuid, data, listener, sessionConsumer, do3rdPartyAuth);
-	}
+//	@Deprecated
+//	public void authenticateAsync(
+//			String key, 
+//			String secret, 
+//			String uuid, 
+//			String authUserId3rdParty, 
+//			String authToken3rdParty, 
+//			final AuthProviderType authProviderType, 
+//			final String appId3rdParty,
+//			final SocializeAuthListener listener, 
+//			final SocializeSessionConsumer sessionConsumer, 
+//			boolean do3rdPartyAuth) {
+//		
+//		
+//		AuthProviderData data = authProviderDataFactory.getBean();
+//		data.setAppId3rdParty(appId3rdParty);
+//		data.setUserId3rdParty(authUserId3rdParty);
+//		data.setToken3rdParty(authToken3rdParty);
+//		data.setAuthProviderType(authProviderType);
+//		
+//		authenticateAsync(key, secret, uuid, data, listener, sessionConsumer, do3rdPartyAuth);
+//	}
 	
 	protected void handleRegularAuth(SocializeAuthRequest request, SocializeActionListener wrapper) {
 		AsyncAuthenicator authenicator = new AsyncAuthenicator(RequestType.AUTH, null, wrapper);

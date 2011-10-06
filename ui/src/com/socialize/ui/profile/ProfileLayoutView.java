@@ -11,10 +11,12 @@ import android.widget.LinearLayout;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
+import com.socialize.entity.Comment;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.image.ImageLoadListener;
 import com.socialize.image.ImageLoader;
+import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.ui.BaseView;
 import com.socialize.ui.dialog.ProgressDialogFactory;
@@ -28,6 +30,7 @@ import com.socialize.util.StringUtils;
 public class ProfileLayoutView extends BaseView {
 
 	private String userId;
+	private String commentId;
 	
 	private Drawables drawables;
 	private UserService userService;
@@ -45,16 +48,18 @@ public class ProfileLayoutView extends BaseView {
 	
 	private Drawable defaultProfilePicture;
 	
-//	private Activity context;
-
 	public ProfileLayoutView(Activity context, String userId) {
 		this(context);
 		this.userId = userId;
-//		this.context = context;
 		
 		if(this.userId != null) {
 			this.userId = this.userId.trim();
 		}
+	}
+	
+	public ProfileLayoutView(Activity context, String userId, String commentId) {
+		this(context, userId);
+		this.commentId = commentId;
 	}
 	
 	public ProfileLayoutView(Context context) {
@@ -73,10 +78,7 @@ public class ProfileLayoutView extends BaseView {
 
 		header = profileHeaderFactory.make(getContext());
 		content = profileContentViewFactory.make(getContext());
-		
 		defaultProfilePicture = drawables.getDrawable("large_user_icon.png");
-		
-//		context.registerForContextMenu(content.getProfilePicture());
 
 		addView(header);
 		addView(content);
@@ -92,9 +94,30 @@ public class ProfileLayoutView extends BaseView {
 
 		if(getSocialize().isAuthenticated()) {
 			doGetUserProfile();
+			doGetComment();
 		}
 		else {
 			showError(getContext(), new SocializeException("Socialize not authenticated"));
+		}
+	}
+	
+	public void doGetComment() {
+		if(!StringUtils.isEmpty(commentId)) {
+			int id = Integer.parseInt(commentId);
+			getSocialize().getCommentById(id, new CommentGetListener() {
+				
+				@Override
+				public void onError(SocializeException error) {
+					// Ignore.. 
+					// TODO: log error
+					error.printStackTrace();
+				}
+				
+				@Override
+				public void onGet(Comment entity) {
+					content.setComment(entity.getText());
+				}
+			});
 		}
 	}
 	

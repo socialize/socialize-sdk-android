@@ -30,8 +30,12 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
+import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.SocializeUIActivity;
+import com.socialize.ui.comment.CommentActivity;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -54,10 +58,22 @@ public class ProfileActivity extends SocializeUIActivity {
 			finish();
 		}
 		else {
+			
+			// If WE are the user being viewed, assume a profile update
+			String userId = extras.getString(SocializeUI.USER_ID);
+			if(!StringUtils.isEmpty(userId) && Integer.parseInt(userId) == getSocialize().getSession().getUser().getId()) {
+				setResult(CommentActivity.PROFILE_UPDATE);
+			}
+			
 			view = new ProfileView(this);
 			setContentView(view);
 		}
 	}
+	
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
+	}
+	
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == CAMERA_PIC_REQUEST) {
@@ -95,5 +111,4 @@ public class ProfileActivity extends SocializeUIActivity {
 			}
 		}
 	}
-
 }

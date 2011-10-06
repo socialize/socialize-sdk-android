@@ -90,7 +90,6 @@ public class CommentListView extends BaseView {
 		content.setListAdapter(commentAdapter);
 		
 		content.setScrollListener(getCommentScrollListener());
-//		content.setOnItemClickListener(getCommentOnItemClickListener());
 
 		addView(header);
 		addView(field);
@@ -109,25 +108,6 @@ public class CommentListView extends BaseView {
 				return loading;
 			}
 		});
-	}
-	
-	@Deprecated
-	protected OnItemClickListener getCommentOnItemClickListener() {
-		return new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Comment comment = commentAdapter.getComments().get(position);
-				User user = comment.getUser();
-				if(user != null && user.getId() != null) {
-					getSocializeUI().showUserProfileView((Activity) getContext(), user.getId().toString());
-				}
-				else {
-					if(logger != null) {
-						logger.warn("No user for comment " + comment.getId());
-					}
-				}
-			}
-		};
 	}
 	
 	protected CommentAddButtonListener getCommentAddListener() {
@@ -416,5 +396,12 @@ public class CommentListView extends BaseView {
 
 	public void setAuthRequestDialogFactory(IBeanFactory<AuthRequestDialogFactory> authRequestDialogFactory) {
 		this.authRequestDialogFactory = authRequestDialogFactory;
+	}
+
+	/**
+	 * Called when the current logged in user updates their profile.
+	 */
+	public void onProfileUpdate() {
+		commentAdapter.notifyDataSetChanged();
 	}
 }

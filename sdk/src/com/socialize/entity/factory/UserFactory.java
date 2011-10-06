@@ -99,6 +99,10 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		object.put(DESCRIPTION, user.getDescription());
 		object.put(LOCATION, user.getLocation());
 		object.put(IMAGE_DATA, user.getProfilePicData());
+		
+		object.put(SMALL_IMAGE_URI, user.getSmallImageUri());
+		object.put(MEDIUM_IMAGE_URI, user.getMediumImageUri());
+		object.put(LARGE_IMAGE_URI, user.getLargeImageUri());
 	}
 
 	public StatsFactory getStatsFactory() {

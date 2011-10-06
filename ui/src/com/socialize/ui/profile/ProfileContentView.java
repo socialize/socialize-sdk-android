@@ -44,6 +44,7 @@ public class ProfileContentView extends LinearLayout {
 
 	private ImageView profilePicture;
 	private TextView displayName;
+	private TextView commentView;
 	private EditText displayNameEdit;
 	private SocializeButton facebookSignOutButton;
 	
@@ -81,8 +82,20 @@ public class ProfileContentView extends LinearLayout {
 	public void setDisplayName(TextView displayName) {
 		this.displayName = displayName;
 	}
+	
 	public void setDisplayNameEdit(EditText displayNameEdit) {
 		this.displayNameEdit = displayNameEdit;
+	}
+
+	public void setCommentView(TextView commentView) {
+		this.commentView = commentView;
+	}
+	
+	public void setComment(String comment) {
+		if(commentView != null) {
+			commentView.setText(comment);
+			commentView.setVisibility(View.VISIBLE);
+		}
 	}
 
 	public Drawable getProfileDrawable() {

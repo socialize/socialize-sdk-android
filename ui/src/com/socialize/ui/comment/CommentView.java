@@ -13,6 +13,7 @@ import android.view.View;
 public class CommentView extends EntityView {
 	
 	private Dialog progress;
+	private CommentListView commentListView;
 	
 	public CommentView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -23,8 +24,11 @@ public class CommentView extends EntityView {
 	}
 
 	@Override
-	protected View getView(Bundle bundle, String entityKey) {
-		return container.getBean("commentList", entityKey);
+	protected View getView(Bundle bundle, Object...entityKey) {
+		if(commentListView == null) {
+			commentListView =  container.getBean("commentList", entityKey[0]);
+		}
+		return commentListView;
 	}
 
 	@Override
@@ -40,7 +44,14 @@ public class CommentView extends EntityView {
 	}
 	
 	@Override
-	protected String getEntityKey() {
-		return SocializeUI.ENTITY_KEY;
+	protected String[] getEntityKeys() {
+		return new String[]{SocializeUI.ENTITY_KEY};
+	}
+
+	/**
+	 * Called when the current logged in user updates their profile.
+	 */
+	public void onProfileUpdate() {
+		commentListView.onProfileUpdate();
 	}
 }

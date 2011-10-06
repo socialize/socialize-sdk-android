@@ -80,9 +80,16 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		
 		editPanelLayoutParams.setMargins(margin, margin, margin, margin);
 		view.setLayoutParams(editPanelLayoutParams);
-		view.setOrientation(LinearLayout.HORIZONTAL);
+		view.setOrientation(LinearLayout.VERTICAL);
 		view.setPadding(0, 0, 0, 0);
 		view.setGravity(Gravity.TOP);
+		
+		LinearLayout masterLayout = new LinearLayout(context);
+		LayoutParams masterLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+		
+		masterLayout.setLayoutParams(masterLayoutParams);
+		masterLayout.setOrientation(LinearLayout.HORIZONTAL);
+		masterLayout.setGravity(Gravity.TOP);
 		
 		LinearLayout nameLayout = new LinearLayout(context);
 		LayoutParams nameLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -104,10 +111,25 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		LayoutParams imageLayout = new LinearLayout.LayoutParams(imageSize,imageSize);
 		LayoutParams textLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		LayoutParams textEditLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		LayoutParams commentViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		
 		
 		final ImageView profilePicture = new ImageView(context);
 		final TextView displayName = new TextView(context);
 		final EditText displayNameEdit = new EditText(context);
+		final TextView commentView = new TextView(context);
+		
+		commentView.setVisibility(View.GONE);
+		
+		GradientDrawable commentBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Color.WHITE, Color.WHITE});
+		commentBG.setCornerRadius(10.0f);
+		commentBG.setStroke(2, colors.getColor(Colors.TEXT_STROKE));
+		
+		commentView.setBackgroundDrawable(commentBG);
+		commentView.setPadding(padding, padding, padding, padding);
+		commentView.setLayoutParams(commentViewLayout);
+		commentView.setMinHeight(getDIP(40));
+		commentView.setTextColor(Color.BLACK);
 		
 		final SocializeButton editButton = profileEditButtonFactory.getBean();
 		final SocializeButton saveButton = profileSaveButtonFactory.getBean();
@@ -128,7 +150,6 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		GradientDrawable imageBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] {Color.WHITE, Color.WHITE});
 		imageBG.setStroke(2, Color.BLACK);
 		
-//		imageLayout.setMargins(1, 1, 1, 1);
 		profilePicture.setLayoutParams(imageLayout);
 		profilePicture.setPadding(imagePadding, imagePadding, imagePadding, imagePadding);
 		profilePicture.setBackgroundDrawable(imageBG);
@@ -169,6 +190,7 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		view.setSaveButton(saveButton);
 		view.setCancelButton(cancelButton);
 		view.setEditButton(editButton);
+		view.setCommentView(commentView);
 		
 		editButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -204,8 +226,11 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		
 		nameLayout.addView(buttonLayout);
 		
-		view.addView(profilePicture);
-		view.addView(nameLayout);
+		masterLayout.addView(profilePicture);
+		masterLayout.addView(nameLayout);
+		
+		view.addView(masterLayout);
+		view.addView(commentView);
 
 		return view;
 	}

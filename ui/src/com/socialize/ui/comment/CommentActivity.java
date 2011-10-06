@@ -21,6 +21,7 @@
  */
 package com.socialize.ui.comment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.Toast;
@@ -34,6 +35,10 @@ import com.socialize.ui.SocializeUIActivity;
  */
 public class CommentActivity extends SocializeUIActivity {
 	
+	public static final int PROFILE_UPDATE = 1347;
+	
+	private CommentView view;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -45,7 +50,7 @@ public class CommentActivity extends SocializeUIActivity {
 			finish();
 		}
 		else {
-			CommentView view = new CommentView(this);
+			view = new CommentView(this);
 			setContentView(view);
 		}
 	}
@@ -56,5 +61,12 @@ public class CommentActivity extends SocializeUIActivity {
 			Socialize.getSocialize().destroy(true);
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == PROFILE_UPDATE) {
+			// Profile has updated... need to reload the view
+			view.onProfileUpdate();
+		}
 	}
 }
