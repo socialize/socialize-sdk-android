@@ -97,7 +97,7 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		
 		buttonLayout.setLayoutParams(buttonLayoutParams);
 		buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
-		buttonLayout.setGravity(Gravity.TOP);
+		buttonLayout.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
 		
 		LayoutParams imageLayout = new LinearLayout.LayoutParams(imageSize,imageSize);
 		LayoutParams textLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -115,20 +115,20 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		
 		FacebookSignOutClickListener facebookSignOutClickListener = facebookSignOutClickListenerFactory.getBean();
 		
-		LayoutParams saveButtonLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-		LayoutParams cancelButtonLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-
-		saveButtonLayout.setMargins(0, 0, 0, 0);
-		cancelButtonLayout.setMargins(0, 0, margin, 0);
-		
-		saveButtonLayout.weight = 1;
-		cancelButtonLayout.weight = 1;
+//		ViewGroup.LayoutParams saveButtonLayout = saveButton.getLayoutParams();
+//		ViewGroup.LayoutParams cancelButtonLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+//
+//		saveButtonLayout.setMargins(0, 0, 0, 0);
+//		cancelButtonLayout.setMargins(0, 0, margin, 0);
+//		
+//		saveButtonLayout.weight = 1;
+//		cancelButtonLayout.weight = 1;
 		
 		saveButton.setVisibility(View.GONE);
-		saveButton.setLayoutParams(saveButtonLayout);
+//		saveButton.setLayoutParams(saveButtonLayout);
 		
 		cancelButton.setVisibility(View.GONE);
-		cancelButton.setLayoutParams(cancelButtonLayout);
+//		cancelButton.setLayoutParams(cancelButtonLayout);
 		
 		editButton.setVisibility(View.GONE);
 		

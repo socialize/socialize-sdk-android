@@ -102,16 +102,18 @@ public class CommentListItem extends LinearLayout {
 		
 		LinearLayout iconLayout = new LinearLayout(getContext());
 		LinearLayout.LayoutParams iconLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		
+//		LinearLayout.LayoutParams iconLayoutParams = new LinearLayout.LayoutParams(100, 100);
 		iconLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
 		iconLayout.setLayoutParams(iconLayoutParams);
 		iconLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
-		iconLayout.setPadding(four,four,four,four);
+//		iconLayout.setPadding(four,four,four,four);
 		userIcon = new ImageView(getContext());
 		userIcon.setLayoutParams(iconLayoutParams);
-		userIcon.setScaleType(ScaleType.CENTER_CROP);
+		userIcon.setScaleType(ScaleType.CENTER);
 		iconLayout.addView(userIcon);
-		addView(iconLayout);
 		
+		addView(iconLayout);
 		addView(contentLayout);
 	}
 

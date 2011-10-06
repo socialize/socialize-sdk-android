@@ -138,6 +138,8 @@
 		<property name="topColor" value="BUTTON_TOP"/>
 		<property name="strokeTopColor" value="BUTTON_TOP_STROKE"/>
 		<property name="strokeBottomColor" value="BUTTON_BOTTOM_STROKE"/>
+		<property name="padding" value="8" type="integer"/>
+		
 		<init-method name="init"/>
 	</bean>
 	
@@ -266,6 +268,7 @@
 		<property name="strokeTopColor" value="FACEBOOK_TOP_STROKE"/>
 		<property name="strokeBottomColor" value="FACEBOOK_BOTTOM_STROKE"/>
 		<property name="height" value="36" type="integer"/>
+		<property name="width" value="150" type="integer"/>
 		<property name="textSize" value="11" type="integer"/>
 	</bean>
 
@@ -409,8 +412,10 @@
 		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
 		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>		
 		<property name="height" value="36" type="integer"/>
+		<property name="width" value="150" type="integer"/>
 		<property name="textSize" value="11" type="integer"/>
 		<property name="textAlign" value="center"/>
+		
 	</bean>
 	
 	<bean 
@@ -420,8 +425,12 @@
 		<constructor-arg type="activity"/>
 		<property name="text" value="Save"/>
 		<property name="height" value="36" type="integer"/>
+		<property name="width" value="80" type="integer"/>
 		<property name="textSize" value="11" type="integer"/>
 		<property name="textAlign" value="center"/>
+		<property name="padding" value="2" type="integer"/>
+		<property name="bold" value="true" type="boolean"/>
+		
 	</bean>
 	
 	<bean 
@@ -435,8 +444,10 @@
 		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
 		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>
 		<property name="height" value="36" type="integer"/>
+		<property name="width" value="60" type="integer"/>
 		<property name="textSize" value="11" type="integer"/>
 		<property name="textAlign" value="center"/>
+		<property name="padding" value="2" type="integer"/>
 	</bean>
 	
 	<bean 

@@ -45,6 +45,7 @@ public abstract class BaseHeaderFactory<H extends SocializeHeader> extends BaseV
 	@Override
 	public H make(Context context) {
 		int four = getDIP(4);
+		int eight = getDIP(8);
 		
 		H header = createHeaderInstance(context);
 		
@@ -54,12 +55,13 @@ public abstract class BaseHeaderFactory<H extends SocializeHeader> extends BaseV
 		header.setOrientation(LinearLayout.HORIZONTAL);
 		header.setPadding(four, four, four, four);
 		
-		
 		GradientDrawable background = new GradientDrawable(
 				GradientDrawable.Orientation.BOTTOM_TOP,
 				new int[] { Color.BLACK, Color.BLACK });
 		
-		Drawable[] layers = new Drawable[] {background, drawables.getDrawable("header.png", true, false, true)};
+		Drawable headerBG = drawables.getDrawable("header.png", true, false, true);
+		
+		Drawable[] layers = new Drawable[] {background, headerBG};
 		
 		LayerDrawable bg = new LayerDrawable(layers);
 		bg.setLayerInset(1, 0, 0, 0, 1);
@@ -82,7 +84,7 @@ public abstract class BaseHeaderFactory<H extends SocializeHeader> extends BaseV
 
 		LayoutParams titleImageLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		titleImageLayoutParams.gravity = Gravity.CENTER_VERTICAL;
-		titleImageLayoutParams.setMargins(four, 0, four, 0);
+		titleImageLayoutParams.setMargins(eight, 0, four, 0);
 		titleImage.setLayoutParams(titleImageLayoutParams);
 
 		header.setTitleText(titleText);

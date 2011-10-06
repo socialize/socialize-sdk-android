@@ -235,7 +235,7 @@ public class CommentAdapter extends BaseAdapter {
     				
     				int densitySize = deviceUtils.getDIP(iconSize);
     				
-    			    final Drawable defaultImage = drawables.getDrawable(SocializeUI.DEFAULT_USER_ICON, densitySize, densitySize, true);
+    			    final Drawable defaultImage = drawables.getDrawable(SocializeUI.DEFAULT_USER_ICON, true);
     					
     				if(user != null) {
     					String imageUrl = user.getSmallImageUri();

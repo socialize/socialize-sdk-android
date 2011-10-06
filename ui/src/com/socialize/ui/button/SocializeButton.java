@@ -54,6 +54,7 @@ public class SocializeButton extends LinearLayout {
 	private Integer height = 32;
 	private Integer width = null;
 	private int textSize = 12;
+	private int padding = 0;
 	
 	private String text = "";
 	private String imageName;
@@ -78,7 +79,7 @@ public class SocializeButton extends LinearLayout {
 	}
 
 	public void init() {
-		int padding = deviceUtils.getDIP(8);
+		int dipPadding = deviceUtils.getDIP(padding);
 		int radius = deviceUtils.getDIP(4);
 		int textPadding = deviceUtils.getDIP(4);
 		int bottom = colors.getColor(bottomColor);
@@ -126,12 +127,12 @@ public class SocializeButton extends LinearLayout {
 			
 		LayoutParams fill = makeLayoutParams(pWidth, pHeight);
 
-		fill.setMargins(padding, padding, padding, padding);
+		fill.setMargins(dipPadding, dipPadding, dipPadding, dipPadding);
 		
 		setOrientation(LinearLayout.HORIZONTAL);
 		setLayoutParams(fill);
 		setBackgroundDrawable(layers);
-		setPadding(padding, padding, padding, padding);
+		setPadding(dipPadding, dipPadding, dipPadding, dipPadding);
 		setClickable(true);
 		
 		TEXT_ALIGN align = TEXT_ALIGN.LEFT;
@@ -296,5 +297,9 @@ public class SocializeButton extends LinearLayout {
 
 	public void setItalic(boolean italic) {
 		this.italic = italic;
+	}
+
+	public void setPadding(int padding) {
+		this.padding = padding;
 	}
 }
