@@ -183,18 +183,48 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 	 * @param ttl milliseconds
 	 */
 	protected synchronized boolean put(K k, E object, long ttl, boolean eternal) {
+		
 		// Check the key map first
-		Key<K> key = keys.get(k);
-		
-		TTLObject<K, E> t = new TTLObject<K, E>(object, k, ttl);
-		
-		t.setEternal(eternal);
-		
-		long addedSize = object.getSizeInBytes(context);
-		long newSize = currentSizeInBytes + addedSize;
-		boolean oversize = false;
-		
-		oversize = (hardByteLimit && maxCapacityBytes > 0 && newSize > maxCapacityBytes);
+		if(exists(k)) {
+			TTLObject<K, E> ttlObject = getTTLObject(k);
+			ttlObject.setEternal(eternal);
+			ttlObject.extendLife(ttl);
+			ttlObject.setObject(object);
+			
+			if(eventListener != null) {
+				eventListener.onPut(object);
+			}	
+			
+			return true;
+		}
+		else {
+			TTLObject<K, E> t = new TTLObject<K, E>(object, k, ttl);
+			
+			t.setEternal(eternal);
+			
+			long addedSize = object.getSizeInBytes(context);
+			long newSize = currentSizeInBytes + addedSize;
+			boolean oversize = false;
+			
+			oversize = (hardByteLimit && maxCapacityBytes > 0 && newSize > maxCapacityBytes);
+			
+			if(!oversize) {
+				Key<K> key = new Key<K>(k, System.currentTimeMillis());
+				keys.put(k, key);	
+				objects.put(key, t);
+				
+				t.getObject().onPut(context, k);
+				
+				// Increment size
+				currentSizeInBytes = newSize;
+				
+				if(eventListener != null) {
+					eventListener.onPut(object);
+				}		
+				
+				return true;
+			}
+		}
 		
 //		if(key != null) {
 //			// Remove the object if it exists
@@ -208,23 +238,6 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 //			}
 //		}
 		
-		if(!oversize) {
-			key = new Key<K>(k, System.currentTimeMillis());
-			keys.put(k, key);	
-			objects.put(key, t);
-			
-			t.getObject().onPut(context, k);
-			
-			// Increment size
-			currentSizeInBytes = newSize;
-			
-			if(eventListener != null) {
-				eventListener.onPut(object);
-			}		
-			
-			return true;
-		}
-
 		return false;
 	}
 	

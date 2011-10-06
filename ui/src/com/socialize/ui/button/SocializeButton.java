@@ -24,7 +24,9 @@ package com.socialize.ui.button;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.ImageView;
@@ -61,7 +63,9 @@ public class SocializeButton extends LinearLayout {
 	
 	private String bottomColor = Colors.BUTTON_BOTTOM;
 	private String topColor = Colors.BUTTON_TOP;
-	private String strokeColor = Colors.BUTTON_STROKE;
+	private String strokeTopColor = Colors.BUTTON_TOP_STROKE;
+	private String strokeBottomColor = Colors.BUTTON_BOTTOM_STROKE;
+	private String backgroundColor = null;
 	
 	private String textAlign = "left";
 
@@ -79,12 +83,29 @@ public class SocializeButton extends LinearLayout {
 		int textPadding = deviceUtils.getDIP(4);
 		int bottom = colors.getColor(bottomColor);
 		int top = colors.getColor(topColor);
-		int stroke = colors.getColor(strokeColor);
+		int strokeTop = colors.getColor(strokeTopColor);
+		int strokeBottom = colors.getColor(strokeBottomColor);
+		int bgColor = Color.BLACK;
+		
+		if(!StringUtils.isEmpty(backgroundColor)) {
+			bgColor = colors.getColor(backgroundColor);
+		}
+		
+		GradientDrawable base = makeGradient(bgColor, bgColor);
+		base.setCornerRadius(radius+deviceUtils.getDIP(2)); // Add 2 pixels to make it look nicer
+		
+		GradientDrawable stroke = makeGradient(strokeBottom, strokeTop);
+		stroke.setCornerRadius(radius+deviceUtils.getDIP(1)); // Add 1 pixel to make it look nicer
 		
 		GradientDrawable background = makeGradient(bottom, top);
 		
 		background.setCornerRadius(radius);
-		background.setStroke(1, stroke);
+		
+		LayerDrawable layers = new LayerDrawable(new Drawable[] {base, stroke, background});
+		
+		layers.setLayerInset(1, 1, 1, 1, 1);
+		layers.setLayerInset(2, 2, 2, 2, 2);
+		
 		
 		int pWidth = LinearLayout.LayoutParams.WRAP_CONTENT;
 		int pHeight = LinearLayout.LayoutParams.WRAP_CONTENT;
@@ -109,7 +130,7 @@ public class SocializeButton extends LinearLayout {
 		
 		setOrientation(LinearLayout.HORIZONTAL);
 		setLayoutParams(fill);
-		setBackgroundDrawable(background);
+		setBackgroundDrawable(layers);
 		setPadding(padding, padding, padding, padding);
 		setClickable(true);
 		
@@ -212,6 +233,10 @@ public class SocializeButton extends LinearLayout {
 		this.height = height;
 	}
 
+	/**
+	 * Set the text size in DIP
+	 * @param textSize
+	 */
 	public void setTextSize(int textSize) {
 		if(textView != null) {
 			textView.setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, textSize);
@@ -235,8 +260,22 @@ public class SocializeButton extends LinearLayout {
 		this.topColor = topColor;
 	}
 
+	@Deprecated
 	public void setStrokeColor(String strokeColor) {
-		this.strokeColor = strokeColor;
+		setStrokeTopColor(strokeColor);
+		setStrokeBottomColor(strokeColor);
+	}
+
+	public void setStrokeTopColor(String strokeTopColor) {
+		this.strokeTopColor = strokeTopColor;
+	}
+
+	public void setStrokeBottomColor(String strokeBottomColor) {
+		this.strokeBottomColor = strokeBottomColor;
+	}
+	
+	public void setBackgroundColor(String backgroundColor) {
+		this.backgroundColor = backgroundColor;
 	}
 
 	public void setImageName(String imageName) {

@@ -30,6 +30,7 @@ import com.socialize.util.Base64Utils;
 import com.socialize.util.CacheableDrawable;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
+import com.socialize.util.SafeBitmapDrawable;
 import com.socialize.util.StringUtils;
 
 /**
@@ -51,7 +52,7 @@ public class CommentAdapter extends BaseAdapter {
 	private ImageLoader imageLoader;
 	private Activity context;
 	
-	private int iconSize = 64;
+	private int iconSize = 100;
 	
 	public CommentAdapter(Activity context) {
 		super();
@@ -247,6 +248,10 @@ public class CommentAdapter extends BaseAdapter {
     							CacheableDrawable cached = drawables.getCache().get(imageUrl);
     							
     							if(cached != null && !cached.isRecycled()) {
+    								if(logger != null && logger.isInfoEnabled()) {
+										logger.info("CommentAdpater setting image icon to cached image " + cached);
+									}
+    								
     								userIcon.setImageDrawable(cached);
     							}
     							else {
@@ -257,18 +262,21 @@ public class CommentAdapter extends BaseAdapter {
     										error.printStackTrace();
     										userIcon.post(new Runnable() {
     											public void run() {
+    												if(logger != null && logger.isInfoEnabled()) {
+    													logger.info("CommentAdpater setting image icon to default image");
+    												}
     												userIcon.setImageDrawable(defaultImage);
     											}
     										});
     									}
     									
     									@Override
-    									public void onImageLoad(final Drawable drawable) {
+    									public void onImageLoad(final SafeBitmapDrawable drawable) {
     										// Must be run on UI thread
     										userIcon.post(new Runnable() {
     											public void run() {
     												if(logger != null && logger.isInfoEnabled()) {
-    													logger.info("CommentAdpater setting image icon for " + userIcon);
+    													logger.info("CommentAdpater setting image icon to " + drawable);
     												}
     												userIcon.setImageDrawable(drawable);
     											}
@@ -291,7 +299,7 @@ public class CommentAdapter extends BaseAdapter {
     					}
     					else if(!StringUtils.isEmpty(user.getProfilePicData())) {
     						try {
-								Drawable drawable = drawables.getDrawable(user.getId().toString(), base64Utils.decode(user.getProfilePicData()), deviceUtils.getDIP(iconSize), deviceUtils.getDIP(iconSize));
+								Drawable drawable = drawables.getDrawable(user.getId().toString(), base64Utils.decode(user.getProfilePicData()), densitySize, densitySize);
 								userIcon.setImageDrawable(drawable);
 							}
 							catch (Base64DecoderException e) {

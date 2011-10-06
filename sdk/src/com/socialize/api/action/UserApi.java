@@ -42,7 +42,22 @@ public class UserApi extends SocializeApi<User, SocializeProvider<User>> {
 		getAsync(session, ENDPOINT, String.valueOf(id), listener);
 	}
 	
-	
-	
-	
+	/**
+	 * Saves the CURRENT user details.
+	 * @param session
+	 * @param firstName
+	 * @param lastName
+	 * @param encodedImage Base64 encoded PNG image data.
+	 * @param listener
+	 */
+	public void saveUserProfile(SocializeSession session, String firstName, String lastName, String encodedImage, UserListener listener) {
+		User user = session.getUser();
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
+		user.setProfilePicData(encodedImage);
+		
+		String endpoint = ENDPOINT + user.getId() + "/";
+		
+		postAsync(session, endpoint, user, listener);
+	}
 }

@@ -27,11 +27,11 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.DrawableCache;
+import com.socialize.util.SafeBitmapDrawable;
 
 /**
  * @author Jason Polites
@@ -81,7 +81,7 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 							if(listeners != null) {
 								// Get the image
 								try {
-									Drawable drawable = null;
+									SafeBitmapDrawable drawable = null;
 									
 									if(cache != null) {
 										drawable = cache.get(url);
@@ -140,7 +140,7 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 		return null;
 	}
 	
-	protected Drawable loadImage(String url) throws Exception {
+	protected SafeBitmapDrawable loadImage(String url) throws Exception {
 		return imageUrlLoader.loadImageFromUrl(url);
 	}
 	

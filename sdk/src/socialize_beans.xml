@@ -84,7 +84,8 @@
 	<bean id="bitmapBuilder" class="com.socialize.util.BitmapBuilder"/>
 	
 	<bean id="bitmapUtils" class="com.socialize.util.BitmapUtils">
-		<constructor-arg ref="bitmapBuilder"/>
+		<property name="bitmapBuilder" ref="bitmapBuilder"/>
+		<property name="base64Utils" ref="base64Utils"/>
 	</bean>
 	
 	<bean id="drawables" class="com.socialize.util.Drawables">
@@ -197,6 +198,14 @@
 		<property name="userFactory" ref="userFactory"/>
 		<property name="entityFactory" ref="entityFactory"/>
 	</bean>
+	
+	<bean 
+		id="facebook" 
+		class="com.socialize.facebook.Facebook"
+		singleton="false">
+		<constructor-arg ref="drawables"/>
+	</bean>
+	
 	
 <!-- OAUTH -->
 	

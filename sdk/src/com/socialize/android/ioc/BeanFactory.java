@@ -30,4 +30,10 @@ public class BeanFactory<T> implements IBeanFactory<T> {
 	public T getBean() {
 		return (T) container.getBean(beanName);
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public T getBean(Object... args) {
+		return (T) container.getBean(beanName, args);
+	}
 }

@@ -19,16 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.android.ioc;
+package com.socialize.ui.profile;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+
+import com.socialize.listener.user.UserSaveListener;
 
 /**
- * A bean factory allows beans to create new non-singleton beans without needing to know about the container.
+ * Saves user profile information from a view.
  * @author Jason Polites
- *
  */
-public interface IBeanFactory<T> {
+public interface ProfileSaver {
 
-	public T getBean();
+	/**
+	 * Saves user profile information for the current user.
+	 * @param name
+	 * @param image
+	 */
+	public void save(Context context, String name, Bitmap image, UserSaveListener listener);
 	
-	public T getBean(Object...args);
 }

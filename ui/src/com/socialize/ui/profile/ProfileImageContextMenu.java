@@ -19,16 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.android.ioc;
+package com.socialize.ui.profile;
 
 /**
- * A bean factory allows beans to create new non-singleton beans without needing to know about the container.
  * @author Jason Polites
  *
  */
-public interface IBeanFactory<T> {
+public interface ProfileImageContextMenu {
 
-	public T getBean();
+	public void show();
 	
-	public T getBean(Object...args);
 }

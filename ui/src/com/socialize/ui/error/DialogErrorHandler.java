@@ -28,7 +28,7 @@ public class DialogErrorHandler implements SocializeUIErrorHandler {
 					message += "\n\nServer Error (" + code + ")";
 				}
 				else {
-					message += "\n\n(" + e.getMessage() + ")";
+					message += "\n\n" + e.getMessage();
 				}
 			}
 			

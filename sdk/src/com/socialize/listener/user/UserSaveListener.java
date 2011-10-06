@@ -19,16 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.android.ioc;
+package com.socialize.listener.user;
+
+import com.socialize.entity.ListResult;
+import com.socialize.entity.User;
 
 /**
- * A bean factory allows beans to create new non-singleton beans without needing to know about the container.
  * @author Jason Polites
  *
  */
-public interface IBeanFactory<T> {
+public abstract class UserSaveListener extends UserListener {
 
-	public T getBean();
-	
-	public T getBean(Object...args);
+	/* (non-Javadoc)
+	 * @see com.socialize.listener.AbstractSocializeListener#onGet(com.socialize.entity.SocializeObject)
+	 */
+	@Override
+	public final void onGet(User entity) {}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.listener.AbstractSocializeListener#onList(com.socialize.entity.ListResult)
+	 */
+	@Override
+	public final void onList(ListResult<User> entities) {}
+
 }

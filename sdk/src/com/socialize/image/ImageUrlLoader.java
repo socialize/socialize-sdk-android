@@ -28,9 +28,9 @@ import java.net.URLConnection;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 
 import com.socialize.util.CacheableDrawable;
+import com.socialize.util.SafeBitmapDrawable;
 
 /**
  * @author Jason Polites
@@ -38,7 +38,7 @@ import com.socialize.util.CacheableDrawable;
  */
 public class ImageUrlLoader {
 
-	public Drawable loadImageFromUrl(String url) throws IOException {
+	public SafeBitmapDrawable loadImageFromUrl(String url) throws IOException {
 		URL imageUrl = new URL(url);
 		URLConnection conn = null;
 		InputStream is = null;

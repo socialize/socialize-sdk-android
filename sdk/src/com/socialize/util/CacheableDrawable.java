@@ -83,4 +83,9 @@ public class CacheableDrawable extends SafeBitmapDrawable implements ICacheable<
 	public String getKey() {
 		return key;
 	}
+
+	@Override
+	public String toString() {
+		return key;
+	}
 }

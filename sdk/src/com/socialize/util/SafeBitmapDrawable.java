@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
 
 
 /**
@@ -34,9 +35,11 @@ public class SafeBitmapDrawable extends BitmapDrawable {
 
 	@Override
 	public void draw(Canvas canvas) {
-		Bitmap bmp = getBitmap();
-		if(bmp != null && !bmp.isRecycled()) {
+		if(!isRecycled()) {
 			super.draw(canvas);
+		}
+		else {
+			Log.w("SafeBitmapDrawable", "Bitmap is null or recycled");
 		}
 	}
 	

@@ -22,6 +22,10 @@
 package com.socialize.ui.header;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.ImageView;
@@ -49,7 +53,18 @@ public abstract class BaseHeaderFactory<H extends SocializeHeader> extends BaseV
 		header.setLayoutParams(titlePanelLayoutParams);
 		header.setOrientation(LinearLayout.HORIZONTAL);
 		header.setPadding(four, four, four, four);
-		header.setBackgroundDrawable(drawables.getDrawable("header.png", true, false, true));
+		
+		
+		GradientDrawable background = new GradientDrawable(
+				GradientDrawable.Orientation.BOTTOM_TOP,
+				new int[] { Color.BLACK, Color.BLACK });
+		
+		Drawable[] layers = new Drawable[] {background, drawables.getDrawable("header.png", true, false, true)};
+		
+		LayerDrawable bg = new LayerDrawable(layers);
+		bg.setLayerInset(1, 0, 0, 0, 1);
+		
+		header.setBackgroundDrawable(bg);
 		
 		TextView titleText = new TextView(context);
 		titleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);

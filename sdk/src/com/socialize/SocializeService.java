@@ -39,6 +39,7 @@ import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.user.UserGetListener;
+import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
 
 /**
@@ -240,6 +241,15 @@ public interface SocializeService {
 	 * @param userGetListener A listener to handle callbacks from the get.
 	 */
 	public void getUser(int id, UserGetListener userGetListener);
+	
+	/**
+	 * Saves the profile for the current logged in user.
+	 * @param firstName User first name.
+	 * @param lastName User last name.
+	 * @param encodedImage A Base64 encoded PNG file used for the user's profile picture.
+	 * @param listener A listener to handle callbacks from the post.
+	 */
+	public void saveCurrentUserProfile(String firstName, String lastName, String encodedImage, UserSaveListener listener);
 	
 	/**
 	 * Returns true if this SocializeService instance has been initialized.

@@ -19,42 +19,58 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.comment;
+package com.socialize.ui.profile;
 
-import android.os.Bundle;
-import android.view.KeyEvent;
-import android.widget.Toast;
+import android.content.Context;
+import android.graphics.Bitmap;
 
 import com.socialize.Socialize;
-import com.socialize.ui.SocializeUI;
-import com.socialize.ui.SocializeUIActivity;
+import com.socialize.SocializeService;
+import com.socialize.listener.user.UserSaveListener;
+import com.socialize.util.BitmapUtils;
 
 /**
  * @author Jason Polites
+ *
  */
-public class CommentActivity extends SocializeUIActivity {
+public class DefaultProfileSaver implements ProfileSaver {
 	
+	private BitmapUtils bitmapUtils;
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.ui.profile.ProfileSaver#save(android.content.Context, java.lang.String, android.graphics.Bitmap, com.socialize.listener.user.UserSaveListener)
+	 */
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public void save(Context context, String name, Bitmap image, UserSaveListener listener) {
 		
-		Bundle extras = getIntent().getExtras();
+		String encodedImage = null;
 		
-		if(extras == null || !extras.containsKey(SocializeUI.ENTITY_KEY)) {
-			Toast.makeText(this, "No entity url provided", Toast.LENGTH_SHORT).show();
-			finish();
+		if(image != null && !image.isRecycled()) {
+			encodedImage = bitmapUtils.encode(image);
 		}
-		else {
-			CommentView view = new CommentView(this);
-			setContentView(view);
+		
+		String firstName = name;
+		String lastName = null;
+		
+		// Split the name.
+		String[] names = name.split("\\s+");
+		
+		if(names.length > 1) {
+			firstName = names[0];
+			lastName = names[1];
 		}
+		
+		getSocialize().saveCurrentUserProfile(firstName, lastName, encodedImage,listener);
+	}
+
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
+	}
+
+	public void setBitmapUtils(BitmapUtils bitmapUtils) {
+		this.bitmapUtils = bitmapUtils;
 	}
 	
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if(keyCode == KeyEvent.KEYCODE_BACK) {
-			Socialize.getSocialize().destroy(true);
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+	
 }

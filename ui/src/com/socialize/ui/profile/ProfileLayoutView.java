@@ -1,7 +1,9 @@
 package com.socialize.ui.profile;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -19,7 +21,9 @@ import com.socialize.ui.BaseView;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.user.UserService;
 import com.socialize.ui.view.ViewFactory;
+import com.socialize.util.BitmapUtils;
 import com.socialize.util.Drawables;
+import com.socialize.util.SafeBitmapDrawable;
 import com.socialize.util.StringUtils;
 
 public class ProfileLayoutView extends BaseView {
@@ -38,12 +42,16 @@ public class ProfileLayoutView extends BaseView {
 	private ProgressDialogFactory progressDialogFactory;
 	
 	private ImageLoader imageLoader;
+	private BitmapUtils bitmapUtils;
 	
 	private Drawable defaultProfilePicture;
+	
+//	private Activity context;
 
-	public ProfileLayoutView(Context context, String userId) {
+	public ProfileLayoutView(Activity context, String userId) {
 		this(context);
 		this.userId = userId;
+//		this.context = context;
 		
 		if(this.userId != null) {
 			this.userId = this.userId.trim();
@@ -68,6 +76,8 @@ public class ProfileLayoutView extends BaseView {
 		content = profileContentViewFactory.make(getContext());
 		
 		defaultProfilePicture = drawables.getDrawable("large_user_icon.png");
+		
+//		context.registerForContextMenu(content.getProfilePicture());
 
 		addView(header);
 		addView(content);
@@ -116,6 +126,17 @@ public class ProfileLayoutView extends BaseView {
 		});
 	}
 	
+	/**
+	 * Called when the profile picture has been changed by the user.
+	 * @param bitmap
+	 */
+	public void onImageChange(Bitmap bitmap) {
+		if(bitmap != null) {
+			Bitmap scaled = bitmapUtils.getScaledBitmap(bitmap, 200, 200);
+			content.onProfilePictureChange(scaled);
+		}
+	}
+	
 	public void setUserDetails(User user) {
 		
 		String profilePicData = user.getMediumImageUri();
@@ -136,7 +157,7 @@ public class ProfileLayoutView extends BaseView {
 				}
 				
 				@Override
-				public void onImageLoad(final Drawable drawable) {
+				public void onImageLoad(final SafeBitmapDrawable drawable) {
 					// Must be run on UI thread
 					userIcon.post(new Runnable() {
 						public void run() {
@@ -159,13 +180,13 @@ public class ProfileLayoutView extends BaseView {
 		User currentUser = userService.getCurrentUser();
 		
 		if(currentUser != null && currentUser.getId().equals(user.getId())) {
-			content.getDisplayNameEdit().setText(user.getDisplayName());
-			content.getEditProfileButton().setVisibility(View.VISIBLE);
+			content.setUserDisplayName(user.getDisplayName());
+			content.getEditButton().setVisibility(View.VISIBLE);
 			content.getFacebookSignOutButton().setVisibility(View.VISIBLE);
 		}
 		else {
 			content.getDisplayNameEdit().setVisibility(View.GONE);
-			content.getEditProfileButton().setVisibility(View.GONE);
+			content.getEditButton().setVisibility(View.GONE);
 			content.getFacebookSignOutButton().setVisibility(View.GONE);
 		}
 	}
@@ -197,4 +218,10 @@ public class ProfileLayoutView extends BaseView {
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
+
+	public void setBitmapUtils(BitmapUtils bitmapUtils) {
+		this.bitmapUtils = bitmapUtils;
+	}
+	
+	
 }

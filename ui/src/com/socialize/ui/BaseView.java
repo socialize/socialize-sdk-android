@@ -1,5 +1,6 @@
 package com.socialize.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
@@ -40,5 +41,13 @@ public abstract class BaseView extends LinearLayout {
 	
 	protected SocializeUI getSocializeUI() {
 		return SocializeUI.getInstance();
+	}
+	
+	protected Activity getActivity() {
+		Context context = getContext();
+		if(context instanceof Activity) {
+			return (Activity) context;
+		}
+		return null;
 	}
 }

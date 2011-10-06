@@ -19,42 +19,58 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.comment;
+package com.socialize.ui.facebook;
 
-import android.os.Bundle;
-import android.view.KeyEvent;
-import android.widget.Toast;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 import com.socialize.Socialize;
-import com.socialize.ui.SocializeUI;
-import com.socialize.ui.SocializeUIActivity;
+import com.socialize.util.Drawables;
 
 /**
  * @author Jason Polites
+ * 
  */
-public class CommentActivity extends SocializeUIActivity {
-	
+public class FacebookSignOutClickListener implements OnClickListener {
+
+	private Activity context;
+	private Drawables drawables;
+
+	public FacebookSignOutClickListener(Activity context) {
+		super();
+		this.context = context;
+	}
+
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public void onClick(View v) {
+
+		new AlertDialog.Builder(context)
 		
-		Bundle extras = getIntent().getExtras();
-		
-		if(extras == null || !extras.containsKey(SocializeUI.ENTITY_KEY)) {
-			Toast.makeText(this, "No entity url provided", Toast.LENGTH_SHORT).show();
-			finish();
-		}
-		else {
-			CommentView view = new CommentView(this);
-			setContentView(view);
-		}
+		.setIcon(drawables.getDrawable("fb_button.png"))
+		.setTitle("Sign Out of Facebook")
+		.setMessage("Are you sure you want to sign out of Facebook?")
+		.setCancelable(true)
+		.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				Socialize.getSocialize().clearSessionCache();
+				context.finish();
+			}
+		})
+		.setNegativeButton("No", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		})
+		.create()
+		.show();
+	}
+
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
 	}
 	
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if(keyCode == KeyEvent.KEYCODE_BACK) {
-			Socialize.getSocialize().destroy(true);
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+	
 }

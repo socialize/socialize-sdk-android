@@ -22,10 +22,10 @@
 package com.socialize.ui.profile;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.GradientDrawable.Orientation;
+import android.text.InputFilter;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -38,6 +38,7 @@ import android.widget.TextView;
 
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.ui.button.SocializeButton;
+import com.socialize.ui.facebook.FacebookSignOutClickListener;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.view.BaseViewFactory;
 
@@ -51,7 +52,9 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 	private IBeanFactory<SocializeButton> profileSaveButtonFactory;
 	private IBeanFactory<SocializeButton> profileEditButtonFactory;
 	private IBeanFactory<SocializeButton> facebookSignOutButtonFactory;
-	
+	private IBeanFactory<ProfileSaveButtonListener> profileSaveButtonListenerFactory;
+	private IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory;
+	private IBeanFactory<ProfileImageContextMenu> profileImageContextMenuFactory;
 
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.view.ViewFactory#make(android.content.Context)
@@ -60,10 +63,15 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 	public ProfileContentView make(Context context) {
 		final ProfileContentView view = newProfileContentView(context);
 		
+		view.setDrawables(drawables);
+		view.setContextMenu(profileImageContextMenuFactory.getBean());
+		
 		final int padding = getDIP(4);
 		final int imagePadding = 2;
 		final int margin = getDIP(8);
-		final int imageSize = getDIP(100);
+		final int imageSize = 200; //getDIP(200);
+		final int editTextStroke = getDIP(2);
+		final float editTextRadius = editTextStroke;
 		final int titleColor = getColor(Colors.TITLE);
 		
 		LayoutParams editPanelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -103,6 +111,9 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		final SocializeButton saveButton = profileSaveButtonFactory.getBean();
 		final SocializeButton cancelButton = profileCancelButtonFactory.getBean();
 		final SocializeButton facebookSignOutButton = facebookSignOutButtonFactory.getBean();
+		final ProfileSaveButtonListener saveListener = profileSaveButtonListenerFactory.getBean(context, view);
+		
+		FacebookSignOutClickListener facebookSignOutClickListener = facebookSignOutClickListenerFactory.getBean();
 		
 		LayoutParams saveButtonLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		LayoutParams cancelButtonLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -131,69 +142,63 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 	
 		displayName.setTextColor(titleColor);
 		
-		displayName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
+		displayName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
 		displayName.setMaxLines(1);
-		displayName.setTypeface(Typeface.DEFAULT_BOLD);
+		displayName.setTypeface(Typeface.DEFAULT);
 		displayName.setTextColor(titleColor);
 		displayName.setSingleLine();
 		displayName.setLayoutParams(textLayout);
 		
+		GradientDrawable textBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int [] {colors.getColor(Colors.TEXT_BG), colors.getColor(Colors.TEXT_BG)});
+		
+		textBG.setStroke(editTextStroke, colors.getColor(Colors.TEXT_STROKE));
+		textBG.setCornerRadius(editTextRadius);
+		
 		displayNameEdit.setLayoutParams(textEditLayout);
 		displayNameEdit.setMinLines(1);  
 		displayNameEdit.setMaxLines(1); 
+		displayNameEdit.setSingleLine(true);
 		displayNameEdit.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-		displayNameEdit.setBackgroundColor(colors.getColor(Colors.TEXT_BG));
+		displayNameEdit.setBackgroundDrawable(textBG);
 		displayNameEdit.setVisibility(View.GONE);
 		displayNameEdit.setPadding(padding, padding, padding, padding);
+		
+		InputFilter[] maxLength = new InputFilter[1]; 
+		maxLength[0] = new InputFilter.LengthFilter(128); 
+		
+		displayNameEdit.setFilters(maxLength);
 		
 		view.setProfilePicture(profilePicture);
 		view.setDisplayName(displayName);
 		view.setDisplayNameEdit(displayNameEdit);
-		view.setEditProfileButton(editButton);
 		view.setFacebookSignOutButton(facebookSignOutButton);
+		view.setSaveButton(saveButton);
+		view.setCancelButton(cancelButton);
+		view.setEditButton(editButton);
 		
 		editButton.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
-				displayName.setVisibility(View.GONE);
-				editButton.setVisibility(View.GONE);
-				facebookSignOutButton.setVisibility(View.GONE);
-				
-				displayNameEdit.setVisibility(View.VISIBLE);
-				saveButton.setVisibility(View.VISIBLE);
-				cancelButton.setVisibility(View.VISIBLE);
-				
-				Drawable[] layers = new Drawable[2];
-				layers[0] = view.getProfileDrawable();
-				layers[1] = drawables.getDrawable("edit_overlay.png");
-				
-				layers[0].setAlpha(128);
-				
-				LayerDrawable layerDrawable = new LayerDrawable(layers);
-				profilePicture.setImageDrawable(layerDrawable);
-				profilePicture.setBackgroundColor(Color.TRANSPARENT);
+				view.onEdit();
 			}
 		});
 		
 		cancelButton.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
-				displayNameEdit.setVisibility(View.GONE);
-				saveButton.setVisibility(View.GONE);
-				cancelButton.setVisibility(View.GONE);
-				
-				displayName.setVisibility(View.VISIBLE);
-				editButton.setVisibility(View.VISIBLE);
-				facebookSignOutButton.setVisibility(View.VISIBLE);
-				
-				view.getProfileDrawable().setAlpha(255);
-				
-				profilePicture.setImageDrawable(view.getProfileDrawable());
-				profilePicture.setBackgroundColor(Color.WHITE);
+				view.onCancel();
 			}
 		});
+		
+		profilePicture.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				view.onImageEdit();
+			}
+		});
+		
+		saveButton.setOnClickListener(saveListener);
+		facebookSignOutButton.setOnClickListener(facebookSignOutClickListener);
 		
 		nameLayout.addView(displayName);
 		nameLayout.addView(displayNameEdit);
@@ -230,5 +235,16 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 	public void setFacebookSignOutButtonFactory(IBeanFactory<SocializeButton> facebookSignOutButtonFactory) {
 		this.facebookSignOutButtonFactory = facebookSignOutButtonFactory;
 	}
-	
+
+	public void setProfileSaveButtonListenerFactory(IBeanFactory<ProfileSaveButtonListener> profileSaveButtonListenerFactory) {
+		this.profileSaveButtonListenerFactory = profileSaveButtonListenerFactory;
+	}
+
+	public void setProfileImageContextMenuFactory(IBeanFactory<ProfileImageContextMenu> profileImageContextMenuFactory) {
+		this.profileImageContextMenuFactory = profileImageContextMenuFactory;
+	}
+
+	public void setFacebookSignOutClickListenerFactory(IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory) {
+		this.facebookSignOutClickListenerFactory = facebookSignOutClickListenerFactory;
+	}
 }

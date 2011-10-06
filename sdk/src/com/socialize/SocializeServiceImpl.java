@@ -52,6 +52,7 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.user.UserGetListener;
+import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.ActivityIOCProvider;
@@ -497,6 +498,17 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	public void getUser(int id, UserGetListener listener) {
 		if(assertAuthenticated(listener)) {
 			service.getUser(session, id, listener);
+		}
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#saveCurrentUserProfile(java.lang.String, java.lang.String, java.lang.String, com.socialize.listener.user.UserSaveListener)
+	 */
+	@Override
+	public void saveCurrentUserProfile(String firstName, String lastName, String encodedImage, UserSaveListener listener) {
+		if(assertAuthenticated(listener)) {
+			service.saveUserProfile(session, firstName, lastName, encodedImage, listener);
 		}
 	}
 

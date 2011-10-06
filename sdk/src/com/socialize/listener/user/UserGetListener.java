@@ -40,6 +40,6 @@ public abstract class UserGetListener extends UserListener {
 	 * @see com.socialize.listener.AbstractSocializeListener#onUpdate(com.socialize.entity.SocializeObject)
 	 */
 	@Override
-	public void onUpdate(User entity) {}
+	public final void onUpdate(User entity) {}
 
 }

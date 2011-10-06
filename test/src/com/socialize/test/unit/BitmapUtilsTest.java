@@ -60,7 +60,8 @@ public class BitmapUtilsTest extends SocializeUnitTest {
 		}
 		
 		BitmapBuilder builder = new BitmapBuilder();
-		BitmapUtils utils = new BitmapUtils(builder);
+		BitmapUtils utils = new BitmapUtils();
+		utils.setBitmapBuilder(builder);
 		
 		// We expect the lowest value to scale, and the highest to crop
 		Bitmap scaled = utils.getScaledBitmap(bitmap, scaledWidth, scaledHeight);
@@ -108,7 +109,8 @@ public class BitmapUtilsTest extends SocializeUnitTest {
 		}
 		
 		BitmapBuilder builder = new BitmapBuilder();
-		BitmapUtils utils = new BitmapUtils(builder);
+		BitmapUtils utils = new BitmapUtils();
+		utils.setBitmapBuilder(builder);
 		
 		// We expect the lowest value to scale, and the highest to crop
 		Bitmap scaled = utils.getScaledBitmap(bitmap, scaledWidth, scaledHeight);

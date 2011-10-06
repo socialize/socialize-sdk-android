@@ -153,7 +153,11 @@ public class SocializeApiHost {
 	
 	public void getUser(SocializeSession session, int id, UserListener listener) {
 		userApi.getUser(session, id, listener);
-	}	
+	}
+	
+	public void saveUserProfile(SocializeSession session, String firstName, String lastName, String encodedImage, UserListener listener) {
+		userApi.saveUserProfile(session, firstName, lastName, encodedImage, listener);
+	}
 	
 	public void destroy() {
 		if(clientFactory != null) {

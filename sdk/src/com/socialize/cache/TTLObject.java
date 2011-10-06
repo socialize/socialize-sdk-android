@@ -41,7 +41,10 @@ public class TTLObject<K extends Comparable<K>, E extends ICacheable<K>> {
 		this.object = obj;
 		this.key = key;
 		this.ttl = ttl;
-		
+		extendLife(ttl);
+	}
+	
+	public void extendLife(long ttl) {
 		if(ttl > 0) {
 			long time = System.currentTimeMillis();
 			

@@ -21,11 +21,10 @@
  */
 package com.socialize.image;
 
-import android.graphics.drawable.Drawable;
-
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.CacheableDrawable;
 import com.socialize.util.Drawables;
+import com.socialize.util.SafeBitmapDrawable;
 
 /**
  * Loads images from a url.
@@ -102,7 +101,7 @@ public class ImageLoader {
 				}
 				
 				@Override
-				public void onImageLoad(Drawable drawable) {
+				public void onImageLoad(SafeBitmapDrawable drawable) {
 					if(drawable instanceof CacheableDrawable) {
 						drawables.getCache().put(url, (CacheableDrawable) drawable, false);
 					}

@@ -41,12 +41,20 @@
 				</entry>
 				<entry>
 					<key value="BUTTON_BOTTOM"/>
-					<value value="#00789f"/>
+					<value value="#146288"/>
 				</entry>
 				<entry>
 					<key value="BUTTON_TOP"/>
-					<value value="#00abe3"/>
+					<value value="#1481a1"/>
 				</entry>
+				<entry>
+					<key value="BUTTON_TOP_STROKE"/>
+					<value value="#19a1b9"/>
+				</entry>
+				<entry>
+					<key value="BUTTON_BOTTOM_STROKE"/>
+					<value value="#166d93"/>
+				</entry>				
 				<entry>
 					<key value="BUTTON_STROKE"/>
 					<value value="#00435c"/>
@@ -54,6 +62,10 @@
 				<entry>
 					<key value="TEXT_BG"/>
 					<value value="#ffffff"/>
+				</entry>
+				<entry>
+					<key value="TEXT_STROKE"/>
+					<value value="#00b0e4"/>
 				</entry>
 				<entry>
 					<key value="HEADER"/>
@@ -84,6 +96,14 @@
 					<value value="#1a3360"/>
 				</entry>
 				<entry>
+					<key value="FACEBOOK_TOP_STROKE"/>
+					<value value="#6787b6"/>
+				</entry>
+				<entry>
+					<key value="FACEBOOK_BOTTOM_STROKE"/>
+					<value value="#355389"/>
+				</entry>
+				<entry>
 					<key value="GRAY_BTN_BOTTOM"/>
 					<value value="#555555"/>
 				</entry>
@@ -92,8 +112,12 @@
 					<value value="#717171"/>
 				</entry>	
 				<entry>
-					<key value="GRAY_BTN_STROKE"/>
-					<value value="#333333"/>
+					<key value="GRAY_BTN_TOP_STROKE"/>
+					<value value="#8f8f8f"/>
+				</entry>	
+				<entry>
+					<key value="GRAY_BTN_BOTTOM_STROKE"/>
+					<value value="#5e5e5e"/>
 				</entry>	
 			</map>
 		</property>
@@ -110,6 +134,10 @@
 		<property name="drawables" ref="drawables"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="colors" ref="colors"/>
+		<property name="bottomColor" value="BUTTON_BOTTOM"/>
+		<property name="topColor" value="BUTTON_TOP"/>
+		<property name="strokeTopColor" value="BUTTON_TOP_STROKE"/>
+		<property name="strokeBottomColor" value="BUTTON_BOTTOM_STROKE"/>
 		<init-method name="init"/>
 	</bean>
 	
@@ -119,9 +147,10 @@
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
 		<property name="text" value="Post Anonymously"/>
-		<property name="bottomColor" value="BUTTON_BOTTOM"/>
-		<property name="topColor" value="BUTTON_TOP"/>
-		<property name="strokeColor" value="BUTTON_STROKE"/>
+		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
+		<property name="topColor" value="GRAY_BTN_TOP"/>
+		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
+		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>
 		<property name="width" value="200" type="integer"/>
 		<property name="height" value="42" type="integer"/>
 		<property name="textSize" value="16" type="integer"/>
@@ -200,6 +229,14 @@
 	</bean>
 	
 	<bean 
+		id="facebookSignOutClickListener" 
+		class="com.socialize.ui.facebook.FacebookSignOutClickListener"		
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="drawables" ref="drawables"/>
+	</bean>
+	
+	<bean 
 		id="facebookSignInButton" 
 		class="com.socialize.ui.facebook.FacebookButton"		
 		singleton="false"
@@ -210,7 +247,8 @@
 		<property name="imageName" value="fb_button.png"/>
 		<property name="bottomColor" value="FACEBOOK_BOTTOM"/>
 		<property name="topColor" value="FACEBOOK_TOP"/>
-		<property name="strokeColor" value="FACEBOOK_STROKE"/>
+		<property name="strokeTopColor" value="FACEBOOK_TOP_STROKE"/>
+		<property name="strokeBottomColor" value="FACEBOOK_BOTTOM_STROKE"/>
 		<property name="width" value="200" type="integer"/>
 		<property name="height" value="42" type="integer"/>
 		<property name="textSize" value="16" type="integer"/>
@@ -225,9 +263,10 @@
 		<property name="imageName" value="fb_button.png"/>
 		<property name="bottomColor" value="FACEBOOK_BOTTOM"/>
 		<property name="topColor" value="FACEBOOK_TOP"/>
-		<property name="strokeColor" value="FACEBOOK_STROKE"/>
+		<property name="strokeTopColor" value="FACEBOOK_TOP_STROKE"/>
+		<property name="strokeBottomColor" value="FACEBOOK_BOTTOM_STROKE"/>
 		<property name="height" value="36" type="integer"/>
-		<property name="textSize" value="14" type="integer"/>
+		<property name="textSize" value="11" type="integer"/>
 	</bean>
 
 	<!-- Comment UI -->
@@ -244,9 +283,9 @@
 		<property name="timeUtils" ref="timeUtils"/>
 		<property name="base64Utils" ref="base64Utils"/><!-- Defined in socialize_beans.xml -->
 		<property name="imageLoader" ref="imageLoader"/><!-- Defined in socialize_beans.xml -->
+		<property name="iconSize" value="64" type="integer"/>
 	</bean>
 
-	
 	<bean 
 		id="commentListItem" 
 		class="com.socialize.ui.comment.CommentListItem"
@@ -326,12 +365,12 @@
 		<init-method name="init"/>
 		
 		<property name="drawables" ref="drawables"/>
-		<property name="httpUtils" ref="httpUtils"/>
 		<property name="userService" ref="userService"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
 		<property name="profileHeaderFactory" ref="profileHeaderFactory"/>
 		<property name="profileContentViewFactory" ref="profileContentViewFactory"/>
 		<property name="imageLoader" ref="imageLoader"/><!-- Defined in socialize_beans.xml -->
+		<property name="bitmapUtils" ref="bitmapUtils"/><!-- Defined in socialize_beans.xml -->
 	</bean>
 	
 	<bean 
@@ -340,13 +379,23 @@
 		extends="uiViewFactory"/>
 		
 	<bean 
+		id="profileImageContextMenu" 
+		class="com.socialize.ui.profile.DefaultProfileImageContextMenu" 
+		singleton="false">
+		<constructor-arg type="activity"/>	
+	</bean>
+	
+	<bean 
 		id="profileContentViewFactory" 
 		class="com.socialize.ui.profile.ProfileContentViewFactory"
 		extends="uiViewFactory">
 		<property name="profileCancelButtonFactory" ref="profileCancelButtonFactory"/>
 		<property name="profileSaveButtonFactory" ref="profileSaveButtonFactory"/>
 		<property name="profileEditButtonFactory" ref="profileEditButtonFactory"/>	
-		<property name="facebookSignOutButtonFactory" ref="facebookSignOutButtonFactory"/>	
+		<property name="facebookSignOutButtonFactory" ref="facebookSignOutButtonFactory"/>
+		<property name="facebookSignOutClickListenerFactory" ref="facebookSignOutClickListenerFactory"/>
+		<property name="profileSaveButtonListenerFactory" ref="profileSaveButtonListenerFactory"/>	
+		<property name="profileImageContextMenuFactory" ref="profileImageContextMenuFactory"/>	
 	</bean>
 		
 	<bean 
@@ -354,12 +403,13 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="Edit Profile"/>
-		<property name="bottomColor" value="BUTTON_BOTTOM"/>
-		<property name="topColor" value="BUTTON_TOP"/>
-		<property name="strokeColor" value="BUTTON_STROKE"/>
+		<property name="text" value="Edit Your Profile"/>
+		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
+		<property name="topColor" value="GRAY_BTN_TOP"/>
+		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
+		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>		
 		<property name="height" value="36" type="integer"/>
-		<property name="textSize" value="14" type="integer"/>
+		<property name="textSize" value="11" type="integer"/>
 		<property name="textAlign" value="center"/>
 	</bean>
 	
@@ -369,11 +419,8 @@
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
 		<property name="text" value="Save"/>
-		<property name="bottomColor" value="BUTTON_BOTTOM"/>
-		<property name="topColor" value="BUTTON_TOP"/>
-		<property name="strokeColor" value="BUTTON_STROKE"/>
 		<property name="height" value="36" type="integer"/>
-		<property name="textSize" value="14" type="integer"/>
+		<property name="textSize" value="11" type="integer"/>
 		<property name="textAlign" value="center"/>
 	</bean>
 	
@@ -385,19 +432,37 @@
 		<property name="text" value="Cancel"/>
 		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
 		<property name="topColor" value="GRAY_BTN_TOP"/>
-		<property name="strokeColor" value="GRAY_BTN_STROKE"/>
+		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
+		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>
 		<property name="height" value="36" type="integer"/>
-		<property name="textSize" value="14" type="integer"/>
+		<property name="textSize" value="11" type="integer"/>
 		<property name="textAlign" value="center"/>
+	</bean>
+	
+	<bean 
+		id="profileSaver" 
+		singleton="true"
+		class="com.socialize.ui.profile.DefaultProfileSaver">
+		<property name="bitmapUtils" ref="bitmapUtils"/>
+	</bean>
+	
+	<bean 
+		id="profileSaveButtonListener" 
+		singleton="false"
+		class="com.socialize.ui.profile.ProfileSaveButtonListener">
+		<property name="profileSaver" ref="profileSaver"/>
+		<property name="errorHandler" ref="socializeUIErrorHandler"/>
+		<property name="progressDialogFactory" ref="progressDialogFactory"/>
 	</bean>
 	
 	<factory id="profileCancelButtonFactory" makes="profileCancelButton"/>
 	<factory id="profileSaveButtonFactory" makes="profileSaveButton"/>
 	<factory id="profileEditButtonFactory" makes="profileEditButton"/>
 	<factory id="facebookSignOutButtonFactory" makes="facebookSignOutButton"/>
+	<factory id="facebookSignOutClickListenerFactory" makes="facebookSignOutClickListener"/>
+	<factory id="profileSaveButtonListenerFactory" makes="profileSaveButtonListener"/>
+	<factory id="profileImageContextMenuFactory" makes="profileImageContextMenu"/>
 	
 	<!-- End Profile UI -->
-	
-	
 	
 </beans>

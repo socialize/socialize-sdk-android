@@ -21,7 +21,7 @@
  */
 package com.socialize.image;
 
-import android.graphics.drawable.Drawable;
+import com.socialize.util.SafeBitmapDrawable;
 
 /**
  * @author Jason Polites
@@ -29,7 +29,7 @@ import android.graphics.drawable.Drawable;
  */
 public interface ImageLoadListener {
 
-	public void onImageLoad(Drawable drawable);
+	public void onImageLoad(SafeBitmapDrawable drawable);
 	
 	public void onImageLoadFail(Exception error);
 	
