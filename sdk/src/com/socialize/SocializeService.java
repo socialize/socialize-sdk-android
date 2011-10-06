@@ -249,7 +249,7 @@ public interface SocializeService {
 	 * @param encodedImage A Base64 encoded PNG file used for the user's profile picture.
 	 * @param listener A listener to handle callbacks from the post.
 	 */
-	public void saveCurrentUserProfile(String firstName, String lastName, String encodedImage, UserSaveListener listener);
+	public void saveCurrentUserProfile(Context context, String firstName, String lastName, String encodedImage, UserSaveListener listener);
 	
 	/**
 	 * Returns true if this SocializeService instance has been initialized.

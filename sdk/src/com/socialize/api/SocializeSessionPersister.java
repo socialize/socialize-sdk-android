@@ -23,6 +23,8 @@ package com.socialize.api;
 
 import android.content.Context;
 
+import com.socialize.entity.User;
+
 /**
  * @author Jason Polites
  */
@@ -33,4 +35,6 @@ public interface SocializeSessionPersister {
 	public SocializeSession load(Context context);
 	
 	public void delete(Context context);
+	
+	public void saveUser(Context context, User user);
 }

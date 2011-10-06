@@ -320,6 +320,7 @@
 	
 	<bean id="userApi" class="com.socialize.api.action.UserApi" extends="socializeApi">
 		<constructor-arg ref="userProvider"/>
+		<property name="sessionPersister" ref="sessionPersister"/>
 	</bean>
 	
 <!-- End User API -->

@@ -46,10 +46,11 @@ public abstract class BaseHeaderFactory<H extends SocializeHeader> extends BaseV
 	public H make(Context context) {
 		int four = getDIP(4);
 		int eight = getDIP(8);
+		int height = getDIP(57);
 		
 		H header = createHeaderInstance(context);
 		
-		LayoutParams titlePanelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		LayoutParams titlePanelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, height);
 		titlePanelLayoutParams.gravity = Gravity.CENTER_VERTICAL;
 		header.setLayoutParams(titlePanelLayoutParams);
 		header.setOrientation(LinearLayout.HORIZONTAL);

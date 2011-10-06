@@ -21,6 +21,8 @@
  */
 package com.socialize.ui.profile;
 
+import com.socialize.util.DeviceUtils;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -33,6 +35,7 @@ import android.content.Intent;
 public class DefaultProfileImageContextMenu implements ProfileImageContextMenu {
 
 	private Activity context;
+	private DeviceUtils deviceUtils;
 	
 	public DefaultProfileImageContextMenu(Activity context) {
 		super();
@@ -45,29 +48,34 @@ public class DefaultProfileImageContextMenu implements ProfileImageContextMenu {
 	@Override
 	public void show() {
 		
-		final String items[] = {"From Gallery", "From Camera"};
-
-		AlertDialog.Builder ab=new AlertDialog.Builder(context);
-		ab.setTitle("New Profile Picture");
-		ab.setItems(items, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface d, int choice) {
-				if (choice == 0) {
-					launchGallery();
+		if(deviceUtils != null && deviceUtils.hasCamera()) {
+			final String items[] = {"From Gallery", "From Camera"};
+			
+			AlertDialog.Builder ab=new AlertDialog.Builder(context);
+			ab.setTitle("New Profile Picture");
+			ab.setItems(items, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface d, int choice) {
+					if (choice == 0) {
+						launchGallery();
+					}
+					else if (choice == 1) {
+						launchCamera();
+					}
 				}
-				else if (choice == 1) {
-					launchCamera();
+			});
+			
+			ab.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.cancel();
 				}
-			}
-		});
-		
-		ab.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.cancel();
-			}
-		});
-		
-		ab.show();
+			});
+			
+			ab.show();
+		}
+		else {
+			launchGallery();
+		}
 	}
 	
 	protected void launchGallery() {
@@ -82,4 +90,7 @@ public class DefaultProfileImageContextMenu implements ProfileImageContextMenu {
 		context.startActivityForResult(cameraIntent, ProfileActivity.CAMERA_PIC_REQUEST);
 	}
 
+	public void setDeviceUtils(DeviceUtils deviceUtils) {
+		this.deviceUtils = deviceUtils;
+	}
 }

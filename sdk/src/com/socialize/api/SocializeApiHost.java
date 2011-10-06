@@ -155,8 +155,8 @@ public class SocializeApiHost {
 		userApi.getUser(session, id, listener);
 	}
 	
-	public void saveUserProfile(SocializeSession session, String firstName, String lastName, String encodedImage, UserListener listener) {
-		userApi.saveUserProfile(session, firstName, lastName, encodedImage, listener);
+	public void saveUserProfile(Context context, SocializeSession session, String firstName, String lastName, String encodedImage, UserListener listener) {
+		userApi.saveUserProfile(context, session, firstName, lastName, encodedImage, listener);
 	}
 	
 	public void destroy() {

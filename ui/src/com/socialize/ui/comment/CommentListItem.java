@@ -41,6 +41,7 @@ public class CommentListItem extends LinearLayout {
 		final int imagePadding = deviceUtils.getDIP(2);
 		final int textColor = colors.getColor(Colors.BODY);
 		final int titleColor = colors.getColor(Colors.TITLE);
+		final int iconSize = deviceUtils.getDIP(64);
 		
 		ListView.LayoutParams layout = new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, ListView.LayoutParams.FILL_PARENT);
 		setDrawingCacheEnabled(true);
@@ -105,9 +106,9 @@ public class CommentListItem extends LinearLayout {
 		contentLayout.addView(comment);
 		
 		LinearLayout iconLayout = new LinearLayout(getContext());
-		LinearLayout.LayoutParams iconLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//		LinearLayout.LayoutParams iconLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
-//		LinearLayout.LayoutParams iconLayoutParams = new LinearLayout.LayoutParams(100, 100);
+		LinearLayout.LayoutParams iconLayoutParams = new LinearLayout.LayoutParams(iconSize, iconSize);
 		iconLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
 		iconLayout.setLayoutParams(iconLayoutParams);
 		iconLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
@@ -121,7 +122,8 @@ public class CommentListItem extends LinearLayout {
 		
 		userIcon.setBackgroundDrawable(imageBG);
 		
-		userIcon.setScaleType(ScaleType.CENTER);
+		userIcon.setScaleType(ScaleType.CENTER_CROP);
+		
 		iconLayout.addView(userIcon);
 		
 		addView(iconLayout);

@@ -64,7 +64,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	private HttpUtils httpUtils;
 	private SocializeLocationProvider locationProvider;
 	
-	public static enum RequestType {AUTH,PUT,POST,GET,LIST,DELETE};
+	public static enum RequestType {AUTH,PUT,POST,PUT_AS_POST,GET,LIST,DELETE};
 	
 	public SocializeApi(P provider) {
 		super();
@@ -129,7 +129,10 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return provider.post(session, endpoint, objects);
 	}
 	
-
+	public T putAsPost(SocializeSession session, String endpoint, T object) throws SocializeException {
+		return provider.putAsPost(session, endpoint, object);
+	}
+	
 	public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
 		AsyncGetter getter = new AsyncGetter(RequestType.LIST, session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
@@ -194,6 +197,22 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		SocializePutRequest<T> request = new SocializePutRequest<T>();
 		request.setEndpoint(endpoint);
 		request.setObjects(objects);
+		poster.execute(request);
+	}
+
+	/**
+	 * Does a POST, but expects a single object in return.
+	 * @param session
+	 * @param endpoint
+	 * @param object
+	 * @param listener
+	 */
+	@SuppressWarnings("unchecked")
+	public void putAsPostAsync(SocializeSession session, String endpoint, T object, SocializeActionListener listener) {
+		AsyncPutter poster = new AsyncPutter(RequestType.PUT_AS_POST, session, listener);
+		SocializePutRequest<T> request = new SocializePutRequest<T>();
+		request.setEndpoint(endpoint);
+		request.setObject(object);
 		poster.execute(request);
 	}
 
@@ -565,6 +584,8 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 					results = SocializeApi.this.post(session, request.getEndpoint(), request.getObject());
 				}
 				
+				response.setResults(results);
+				
 				break;
 
 			case PUT:
@@ -576,10 +597,17 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 					results = SocializeApi.this.put(session, request.getEndpoint(), request.getObject());
 				}
 				
+				response.setResults(results);
+				
 				break;
+				
+			case PUT_AS_POST:
+				
+				if(request.getObject() != null) {
+					T result = SocializeApi.this.putAsPost(session, request.getEndpoint(), request.getObject());
+					response.addResult(result);
+				}
 			}
-
-			response.setResults(results);
 
 			return response;
 		}
@@ -602,13 +630,14 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 								listener.onError(new SocializeException(errors.get(0).getMessage()));
 							}
 							else {
-								listener.onError(new SocializeException("Unknown Error"));
+								listener.onError(new SocializeException("No results found in response"));
 							}
 						}
 						else {
 							listener.onResult(requestType, result);
 						}
 					}
+					
 					else {
 						listener.onError(new SocializeException("No results found in response"));
 					}

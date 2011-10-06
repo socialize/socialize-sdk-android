@@ -503,12 +503,12 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	
 	/*
 	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#saveCurrentUserProfile(java.lang.String, java.lang.String, java.lang.String, com.socialize.listener.user.UserSaveListener)
+	 * @see com.socialize.SocializeService#saveCurrentUserProfile(android.content.Context, java.lang.String, java.lang.String, java.lang.String, com.socialize.listener.user.UserSaveListener)
 	 */
 	@Override
-	public void saveCurrentUserProfile(String firstName, String lastName, String encodedImage, UserSaveListener listener) {
+	public void saveCurrentUserProfile(Context context, String firstName, String lastName, String encodedImage, UserSaveListener listener) {
 		if(assertAuthenticated(listener)) {
-			service.saveUserProfile(session, firstName, lastName, encodedImage, listener);
+			service.saveUserProfile(context, session, firstName, lastName, encodedImage, listener);
 		}
 	}
 

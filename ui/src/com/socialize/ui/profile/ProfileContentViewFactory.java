@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
@@ -70,7 +71,7 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		final int padding = getDIP(4);
 		final int imagePadding = getDIP(4);
 		final int margin = getDIP(8);
-		final int imageSize = 200; //getDIP(200);
+		final int imageSize = getDIP(133);
 		final int editTextStroke = getDIP(2);
 		final float editTextRadius = editTextStroke;
 		final int titleColor = getColor(Colors.TITLE);
@@ -131,7 +132,7 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		profilePicture.setLayoutParams(imageLayout);
 		profilePicture.setPadding(imagePadding, imagePadding, imagePadding, imagePadding);
 		profilePicture.setBackgroundDrawable(imageBG);
-//		profilePicture.setScaleType(ScaleType.CENTER);
+		profilePicture.setScaleType(ScaleType.CENTER_CROP);
 	
 		displayName.setTextColor(titleColor);
 		

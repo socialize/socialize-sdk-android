@@ -292,45 +292,9 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 
 	@Override
 	public T get(SocializeSession session, String endpoint, String id) throws SocializeException {
-		
-		HttpEntity entity = null;
-		
-		try {
-			endpoint = prepareEndpoint(session, endpoint);
-			
-			HttpClient client = clientFactory.getClient();
-			
-			HttpUriRequest get = requestFactory.getGetRequest(session, endpoint, id);
-			
-			HttpResponse response = client.execute(get);
-			
-			entity = response.getEntity();
-			
-			if(httpUtils.isHttpError(response)) {
-				
-				if(sessionPersister != null && httpUtils.isAuthError(response)) {
-					sessionPersister.delete(context);
-				}
-				
-				String msg = ioUtils.readSafe(entity.getContent());
-				throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
-			}
-			else {
-				JSONObject json = jsonParser.parseObject(entity.getContent());
-				
-				return objectFactory.fromJSON(json);
-			}
-		}
-		catch (Exception e) {
-			if(e instanceof SocializeException) {
-				throw (SocializeException) e;
-			}
-			
-			throw new SocializeException(e);
-		}
-		finally {
-			closeEntity(entity);
-		}
+		endpoint = prepareEndpoint(session, endpoint);
+		HttpUriRequest get = requestFactory.getGetRequest(session, endpoint, id);
+		return doGetTypeRequest(get);
 	}
 
 	@Override
@@ -405,12 +369,56 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		return doListTypeRequest(request);
 	}
 
+	@Override
+	public T putAsPost(SocializeSession session, String endpoint, T object) throws SocializeException {
+		endpoint = prepareEndpoint(session, endpoint);
+		HttpUriRequest request = requestFactory.getPostRequest(session, endpoint, object);
+		return doGetTypeRequest(request);
+	}
 
 	@Override
 	public ListResult<T> post(SocializeSession session, String endpoint, Collection<T> objects) throws SocializeException {
 		endpoint = prepareEndpoint(session, endpoint);
 		HttpUriRequest request = requestFactory.getPostRequest(session, endpoint, objects);
 		return doListTypeRequest(request);
+	}
+	
+	private T doGetTypeRequest(HttpUriRequest request) throws SocializeException {
+		HttpEntity entity = null;
+		
+		try {
+			
+			HttpClient client = clientFactory.getClient();
+			
+			HttpResponse response = client.execute(request);
+			
+			entity = response.getEntity();
+			
+			if(httpUtils.isHttpError(response)) {
+				
+				if(sessionPersister != null && httpUtils.isAuthError(response)) {
+					sessionPersister.delete(context);
+				}
+				
+				String msg = ioUtils.readSafe(entity.getContent());
+				throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
+			}
+			else {
+				JSONObject json = jsonParser.parseObject(entity.getContent());
+				
+				return objectFactory.fromJSON(json);
+			}
+		}
+		catch (Exception e) {
+			if(e instanceof SocializeException) {
+				throw (SocializeException) e;
+			}
+			
+			throw new SocializeException(e);
+		}
+		finally {
+			closeEntity(entity);
+		}
 	}
 	
 	private ListResult<T> doListTypeRequest(HttpUriRequest request) throws SocializeException {
@@ -453,9 +461,11 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 					
 					JSONArray errorList = object.getJSONArray(JSON_ATTR_ERRORS);
 					
-					errors = new ArrayList<ActionError>(errorList.length());
+					int length = errorList.length();
 					
-					for (int i = 0; i < errorList.length(); i++) {
+					errors = new ArrayList<ActionError>(length);
+					
+					for (int i = 0; i < length; i++) {
 						JSONObject jsonObject = errorList.getJSONObject(i);
 						ActionError error = errorFactory.fromJSON(jsonObject);
 						errors.add(error);

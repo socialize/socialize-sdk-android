@@ -51,6 +51,31 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 		this.userFactory = userFactory;
 		this.sessionFactory = sessionFactory;
 	}
+	
+	@Override
+	public void saveUser(Context context, User user) {
+		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+		Editor editor = prefs.edit();
+		saveUser(editor, user);
+		editor.commit();
+	}
+	
+	protected void saveUser(Editor editor, User user) {
+		if(user != null) {
+			try {
+				String userJSON = userFactory.toJSON(user).toString();
+				editor.putString("user", userJSON);
+			}
+			catch (JSONException e) {
+				if(logger != null) {
+					logger.error("Failed to serialize user object", e);
+				}
+				else {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.api.SocializeSessionPersister#save(android.content.Context, com.socialize.api.SocializeSession)

@@ -52,6 +52,9 @@ public abstract class AbstractSocializeListener<T extends SocializeObject> imple
 			case PUT:
 				onUpdate(entityResponse.getFirstResult());
 				break;
+			case PUT_AS_POST:
+				onUpdate(entityResponse.getFirstResult());
+				break;
 			case POST:
 				onCreate(entityResponse.getFirstResult());
 				break;

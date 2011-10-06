@@ -21,10 +21,15 @@
  */
 package com.socialize.api.action;
 
+import android.content.Context;
+
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.SocializeSessionPersister;
 import com.socialize.entity.User;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.user.UserListener;
+import com.socialize.listener.user.UserSaveListener;
 import com.socialize.provider.SocializeProvider;
 
 /**
@@ -33,6 +38,8 @@ import com.socialize.provider.SocializeProvider;
 public class UserApi extends SocializeApi<User, SocializeProvider<User>> {
 
 	public static final String ENDPOINT = "/user/";
+	
+	private SocializeSessionPersister sessionPersister;
 	
 	public UserApi(SocializeProvider<User> provider) {
 		super(provider);
@@ -50,7 +57,7 @@ public class UserApi extends SocializeApi<User, SocializeProvider<User>> {
 	 * @param encodedImage Base64 encoded PNG image data.
 	 * @param listener
 	 */
-	public void saveUserProfile(SocializeSession session, String firstName, String lastName, String encodedImage, UserListener listener) {
+	public void saveUserProfile(final Context context, final SocializeSession session, String firstName, String lastName, String encodedImage, final UserListener listener) {
 		User user = session.getUser();
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
@@ -58,6 +65,26 @@ public class UserApi extends SocializeApi<User, SocializeProvider<User>> {
 		
 		String endpoint = ENDPOINT + user.getId() + "/";
 		
-		postAsync(session, endpoint, user, listener);
+		putAsPostAsync(session, endpoint, user, new UserSaveListener() {
+
+			@Override
+			public void onError(SocializeException error) {
+				listener.onError(error);
+			}
+
+			@Override
+			public void onUpdate(User user) {
+				// Save this user to the local session
+				if(sessionPersister != null) {
+					sessionPersister.saveUser(context, user);
+				}
+				
+				listener.onUpdate(user);
+			}
+		});
+	}
+
+	public void setSessionPersister(SocializeSessionPersister sessionPersister) {
+		this.sessionPersister = sessionPersister;
 	}
 }

@@ -61,7 +61,7 @@ public class DefaultProfileSaver implements ProfileSaver {
 			lastName = names[1];
 		}
 		
-		getSocialize().saveCurrentUserProfile(firstName, lastName, encodedImage,listener);
+		getSocialize().saveCurrentUserProfile(context, firstName, lastName, encodedImage,listener);
 	}
 
 	protected SocializeService getSocialize() {
