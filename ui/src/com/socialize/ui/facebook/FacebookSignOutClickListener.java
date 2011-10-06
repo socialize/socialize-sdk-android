@@ -21,7 +21,6 @@
  */
 package com.socialize.ui.facebook;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.View;
@@ -36,18 +35,12 @@ import com.socialize.util.Drawables;
  */
 public class FacebookSignOutClickListener implements OnClickListener {
 
-	private Activity context;
 	private Drawables drawables;
-
-	public FacebookSignOutClickListener(Activity context) {
-		super();
-		this.context = context;
-	}
 
 	@Override
 	public void onClick(View v) {
 
-		new AlertDialog.Builder(context)
+		new AlertDialog.Builder(v.getContext())
 		
 		.setIcon(drawables.getDrawable("fb_button.png"))
 		.setTitle("Sign Out of Facebook")
@@ -56,12 +49,12 @@ public class FacebookSignOutClickListener implements OnClickListener {
 		.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				Socialize.getSocialize().clearSessionCache();
-				context.finish();
+				dialog.dismiss();
 			}
 		})
 		.setNegativeButton("No", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				dialog.cancel();
+				dialog.dismiss();
 			}
 		})
 		.create()

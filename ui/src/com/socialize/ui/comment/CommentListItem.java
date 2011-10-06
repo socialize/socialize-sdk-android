@@ -38,7 +38,7 @@ public class CommentListItem extends LinearLayout {
 		
 		final int eight = deviceUtils.getDIP(8);
 		final int four = deviceUtils.getDIP(4);
-		final int imagePadding = deviceUtils.getDIP(2);
+		final int imagePadding = deviceUtils.getDIP(4);
 		final int textColor = colors.getColor(Colors.BODY);
 		final int titleColor = colors.getColor(Colors.TITLE);
 		final int iconSize = deviceUtils.getDIP(64);

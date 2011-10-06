@@ -21,7 +21,6 @@
  */
 package com.socialize.ui.dialog;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 
@@ -39,14 +38,6 @@ public class ProgressDialogFactory {
 
 	public ProgressDialog show(Context context, String title, String message) {
 		try {
-			if(context instanceof Activity) {
-				Activity activity = (Activity) context;
-				while(activity.getParent() != null) {
-					activity = activity.getParent();
-				}
-				context = activity;
-			}
-			
 			ProgressDialog dialog = makeDialog(context);
 			dialog.setTitle(title);
 			dialog.setMessage(message);
@@ -82,6 +73,4 @@ public class ProgressDialogFactory {
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
 	}
-	
-	
 }

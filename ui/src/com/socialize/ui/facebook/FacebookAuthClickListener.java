@@ -22,7 +22,6 @@
 package com.socialize.ui.facebook;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -45,17 +44,11 @@ public class FacebookAuthClickListener implements OnClickListener {
 	private SocializeAuthListener listener;
 	private ProgressDialogFactory dialogFactory;
 	private ProgressDialog dialog; 
-	private Context context;
-
-	public FacebookAuthClickListener(Context context) {
-		super();
-		this.context = context;
-	}
 
 	@Override
 	public void onClick(View view) {
 		
-		dialog = dialogFactory.show(context, "Facebook", "Authenticating...");
+		dialog = dialogFactory.show(view.getContext(), "Facebook", "Authenticating...");
 		
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);

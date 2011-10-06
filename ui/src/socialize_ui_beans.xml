@@ -225,7 +225,6 @@
 		id="facebookAuthClickListener" 
 		class="com.socialize.ui.facebook.FacebookAuthClickListener"		
 		singleton="false">
-		<constructor-arg type="activity"/>
 		<property name="config" ref="config"/>
 		<property name="dialogFactory" ref="progressDialogFactory"/>
 	</bean>
@@ -234,7 +233,6 @@
 		id="facebookSignOutClickListener" 
 		class="com.socialize.ui.facebook.FacebookSignOutClickListener"		
 		singleton="false">
-		<constructor-arg type="activity"/>
 		<property name="drawables" ref="drawables"/>
 	</bean>
 	

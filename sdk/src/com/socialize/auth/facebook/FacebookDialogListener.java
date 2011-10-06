@@ -42,7 +42,6 @@ import com.socialize.listener.AuthProviderListener;
 public abstract class FacebookDialogListener implements DialogListener {
 
 	private FacebookSessionStore facebookSessionStore;
-//	private FacebookImageRetriever facebookImageRetriever;
 	private Facebook facebook;
 	private Context context;
 	private AuthProviderListener listener;
@@ -65,29 +64,11 @@ public abstract class FacebookDialogListener implements DialogListener {
 			
 			String id = obj.getString("id");
 			String token = values.getString("access_token");
-//			String encoded = null;
-			
-//			if(facebookImageRetriever != null) {
-//				encoded = facebookImageRetriever.getEncodedProfileImage(id);
-//			}
-			
-//			String firstName = null;
-//			String lastName = null;
-//			
-//			if(obj.has("first_name") && !obj.isNull("first_name")) {
-//				firstName = obj.getString("first_name");
-//			}
-//			if(obj.has("last_name") && !obj.isNull("last_name")) {
-//				lastName = obj.getString("last_name");
-//			}
 			
 			if(listener != null) {
 				AuthProviderResponse response = new AuthProviderResponse();
 				response.setUserId(id);
 				response.setToken(token);
-//				response.setFirstName(firstName);
-//				response.setLastName(lastName);
-//				response.setImageData(encoded);
 				listener.onAuthSuccess(response);
 			}
 			else {
@@ -142,14 +123,6 @@ public abstract class FacebookDialogListener implements DialogListener {
 		
 		onFinish();
 	}
-	
-//	public FacebookImageRetriever getFacebookImageRetriever() {
-//		return facebookImageRetriever;
-//	}
-//
-//	public void setFacebookImageRetriever(FacebookImageRetriever facebookImageRetriever) {
-//		this.facebookImageRetriever = facebookImageRetriever;
-//	}
 
 	public abstract void onFinish();
 	
