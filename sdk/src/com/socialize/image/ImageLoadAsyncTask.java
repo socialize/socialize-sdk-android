@@ -21,7 +21,6 @@
  */
 package com.socialize.image;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -40,13 +39,13 @@ import com.socialize.util.SafeBitmapDrawable;
 public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 
 	private Queue<ImageLoadRequest> requests;
-	private Map<Integer, ImageLoadRequest> requestsInProcess;
+	private Map<Object, ImageLoadRequest> requestsInProcess;
 	private boolean running = false;
-	
+
 	private SocializeLogger logger;
 	private ImageUrlLoader imageUrlLoader;
 	private DrawableCache cache;
-	
+
 	public ImageLoadAsyncTask() {
 		super();
 	}
@@ -54,79 +53,55 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 	@Override
 	protected Void doInBackground(Void... args) {
 		if(requests != null) {
-			
+
 			while(running) {
-				int size = requests.size();
-				
-				while (size > 0) {
-					
+
+				while (!requests.isEmpty()) {
+
 					if(logger != null && logger.isInfoEnabled()) {
 						logger.info("ImageLoadAsyncTask has [" +
-								size +
-								"] images to load");
+								requests.size() +
+						"] images to load");
 					}
-					
+
 					ImageLoadRequest request = requests.poll();
-					
-					String url = request.getUrl();
-					
+
 					if(!request.isCanceled()) {
-						
-							if(logger != null && logger.isInfoEnabled()) {
-								logger.info("ImageLoadAsyncTask found image to load at: " + url);
+
+						String url = request.getUrl();
+
+						if(logger != null && logger.isInfoEnabled()) {
+							logger.info("ImageLoadAsyncTask found image to load at: " + url);
+						}
+
+						try {
+							SafeBitmapDrawable drawable = null;
+
+							if(cache != null) {
+								drawable = cache.get(url);
+							}
+
+							if(drawable == null) {
+								drawable = loadImage(url);
+								if(logger != null && logger.isInfoEnabled()) {
+									logger.info("ImageLoadAsyncTask image loaded from: " + url);
+								}
 							}
 							
-							List<ImageLoadListener> listeners = request.getListeners();
-							
-							if(listeners != null) {
-								// Get the image
-								try {
-									SafeBitmapDrawable drawable = null;
-									
-									if(cache != null) {
-										drawable = cache.get(url);
-									}
-									
-									if(drawable == null) {
-										drawable = loadImage(url);
-										
-										if(logger != null && logger.isInfoEnabled()) {
-											logger.info("ImageLoadAsyncTask image loaded from: " + url);
-										}
-									}
-									
-									for (ImageLoadListener listener : listeners) {
-										
-										if(request.isCanceled()) {
-											break;
-										}
-										
-										if(logger != null && logger.isInfoEnabled()) {
-											logger.info("ImageLoadAsyncTask notifying listener for image: " + url);
-										}
-										
-										listener.onImageLoad(drawable);
-									}
-								}
-								catch (Exception e) {
-									for (ImageLoadListener listener : listeners) {
-										listener.onImageLoadFail(e);
-									}
-								}
-								finally {
-									requestsInProcess.remove(url);
-								}
+							requestsInProcess.remove(url);
+							request.notifyListeners(drawable);
+						}
+						catch (Exception e) {
+							request.notifyListeners(e);
 						}
 					}
 					else {
 						if(logger != null && logger.isInfoEnabled()) {
-							logger.info("ImageLoadAsyncTask request canceled for id " + request.getId());
+							logger.info("ImageLoadAsyncTask request canceled for " + request.getUrl());
 						}
 					}
-
-					size = requests.size();
 				}
-				
+
 				synchronized(this) {
 					if(running) {
 						try {
@@ -139,47 +114,57 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 		}
 		return null;
 	}
-	
+
 	protected SafeBitmapDrawable loadImage(String url) throws Exception {
 		return imageUrlLoader.loadImageFromUrl(url);
 	}
-	
-	public void cancel(int id) {
-		ImageLoadRequest request = requestsInProcess.get(id);
-		if(request != null) {
-			request.setCanceled(true);
+
+	public void cancel(Object id) {
+		if(requestsInProcess != null) {
+			ImageLoadRequest request = requestsInProcess.get(id);
+			if(request != null) {
+				request.setCanceled(true);
+			}
 		}
 	}
-	
+
 	public synchronized void enqueue(ImageLoadRequest request) {
 		if(running) {
-			String url = request.getUrl();
-					
-			if(logger != null && logger.isInfoEnabled()) {
-				logger.info("Image with url [" +
-						url +
-						"] is NOT being loaded.. adding listener to queue");
-			}
 			
-			requests.add(request);
-			requestsInProcess.put(request.getId(), request);
-			notifyAll();	
+			String url = request.getUrl();
+			
+			ImageLoadRequest current = requestsInProcess.get(url);
+			
+			if(current != null && !current.isCanceled()) {
+				if(logger != null && logger.isInfoEnabled()) {
+					logger.info("Image with url [" +
+							url +
+					"] is NOT being loaded.. adding listener to queue");
+				}
+				
+				current.merge(request);
+			}
+			else {
+				requests.add(request);
+				requestsInProcess.put(request.getUrl(), request);
+				notifyAll();		
+			}
 		}
 		else {
 			if(logger != null) {
 				logger.warn("Image load task is not running.  Enqeueu request ignored");
 			}
 		}
-		
+
 	}
-	
+
 	public void start() {
 		requests = new ConcurrentLinkedQueue<ImageLoadRequest>();
-		requestsInProcess = new ConcurrentHashMap<Integer, ImageLoadRequest>();
+		requestsInProcess = new ConcurrentHashMap<Object, ImageLoadRequest>();
 		running = true;
 		execute((Void) null);
 	}
-	
+
 	public synchronized void stop() {
 		running = false;
 		notifyAll();
@@ -199,6 +184,4 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 	public void setCache(DrawableCache cache) {
 		this.cache = cache;
 	}
-	
-	
 }

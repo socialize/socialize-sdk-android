@@ -41,16 +41,17 @@ public class EntityViewTest extends SocializeUIActivityTest {
 			}
 			
 			@Override
-			protected View getView(Bundle bundle, String entityKey) {
+			protected View getView(Bundle bundle, Object... entityKeys) {
 				addResult(bundle);
-				addResult(entityKey);
+				addResult(entityKeys[0]);
 				return null;
 			}
-			
+
 			@Override
-			protected String getEntityKey() {
-				return SocializeUI.ENTITY_KEY;
+			protected String[] getEntityKeys() {
+				return new String[]{SocializeUI.ENTITY_KEY};
 			}
+
 		};
 		
 		AndroidMock.replay(activity);
@@ -92,20 +93,21 @@ public class EntityViewTest extends SocializeUIActivityTest {
 			}
 			
 			@Override
-			protected View getView(Bundle bundle, String entityKey) {
+			protected View getView(Bundle bundle, Object... entityKeys) {
 				return null;
 			}
 
+			@Override
+			protected String[] getEntityKeys() {
+				return new String[]{SocializeUI.ENTITY_KEY};
+			}
+			
 			@Override
 			protected View getErrorView(Context context) {
 				addResult(true);
 				return null;
 			}
 
-			@Override
-			protected String getEntityKey() {
-				return SocializeUI.ENTITY_KEY;
-			}
 		};
 		
 		AndroidMock.replay(activity);
@@ -130,14 +132,15 @@ public class EntityViewTest extends SocializeUIActivityTest {
 			}
 			
 			@Override
-			protected View getView(Bundle bundle, String entityKey) {
+			protected View getView(Bundle bundle, Object... entityKeys) {
 				return null;
 			}
-			
+
 			@Override
-			protected String getEntityKey() {
-				return SocializeUI.ENTITY_KEY;
+			protected String[] getEntityKeys() {
+				return new String[]{SocializeUI.ENTITY_KEY};
 			}
+	
 		};
 		
 		View errorView = view.getErrorView(getContext());

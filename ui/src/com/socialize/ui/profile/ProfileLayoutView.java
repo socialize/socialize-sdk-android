@@ -15,6 +15,7 @@ import com.socialize.entity.Comment;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.image.ImageLoadListener;
+import com.socialize.image.ImageLoadRequest;
 import com.socialize.image.ImageLoader;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.user.UserGetListener;
@@ -115,7 +116,7 @@ public class ProfileLayoutView extends BaseView {
 				
 				@Override
 				public void onGet(Comment entity) {
-					content.setComment(entity.getText());
+					content.setComment(entity);
 				}
 			});
 		}
@@ -123,7 +124,7 @@ public class ProfileLayoutView extends BaseView {
 	
 	public void doGetUserProfile() {
 		int id = Integer.parseInt(userId);
-		dialog = progressDialogFactory.show(getContext(), "Loading profile", "Please wait...");
+		dialog = progressDialogFactory.show(getContext(), "Loading", "Please wait...");
 		
 		getSocialize().getUser(id, new UserGetListener() {
 			
@@ -165,6 +166,7 @@ public class ProfileLayoutView extends BaseView {
 		final ImageView userIcon = content.getProfilePicture();
 		
 		if(!StringUtils.isEmpty(profilePicData)) {
+			userIcon.getBackground().setAlpha(64);
 			
 			imageLoader.loadImage(profilePicData, new ImageLoadListener() {
 				@Override
@@ -173,18 +175,20 @@ public class ProfileLayoutView extends BaseView {
 					userIcon.post(new Runnable() {
 						public void run() {
 							userIcon.setImageDrawable(defaultProfilePicture);
+							userIcon.getBackground().setAlpha(255);
 						}
 					});
 				}
 				
 				@Override
-				public void onImageLoad(final SafeBitmapDrawable drawable) {
+				public void onImageLoad(ImageLoadRequest request, final SafeBitmapDrawable drawable) {
 					// Must be run on UI thread
 					userIcon.post(new Runnable() {
 						public void run() {
 							drawable.setAlpha(255);
 							content.setProfileDrawable(drawable);
 							userIcon.setImageDrawable(drawable);
+							userIcon.getBackground().setAlpha(255);
 						}
 					});
 				}

@@ -17,7 +17,11 @@
 		<property name="errorHandler" ref="socializeUIErrorHandler"/>
 	</bean>
 	
-	<bean id="timeUtils" class="com.socialize.ui.util.TimeUtils"/>
+	<bean id="dateUtils" class="com.socialize.ui.util.DateUtils"/>
+	
+	<bean id="geoUtils" class="com.socialize.ui.util.GeoUtils">
+		<constructor-arg type="context"/>
+	</bean>
 	
 	<bean id="keyboardUtils" class="com.socialize.ui.util.KeyboardUtils">
 		<constructor-arg type="context"/>
@@ -281,7 +285,7 @@
 		<property name="drawables" ref="drawables"/>
 		<property name="logger" ref="logger"/>
 		<property name="deviceUtils" ref="deviceUtils"/><!-- Defined in socialize_beans.xml -->
-		<property name="timeUtils" ref="timeUtils"/>
+		<property name="dateUtils" ref="dateUtils"/>
 		<property name="base64Utils" ref="base64Utils"/><!-- Defined in socialize_beans.xml -->
 		<property name="imageLoader" ref="imageLoader"/><!-- Defined in socialize_beans.xml -->
 		<property name="iconSize" value="64" type="integer"/>
@@ -398,6 +402,8 @@
 		<property name="facebookSignOutClickListenerFactory" ref="facebookSignOutClickListenerFactory"/>
 		<property name="profileSaveButtonListenerFactory" ref="profileSaveButtonListenerFactory"/>	
 		<property name="profileImageContextMenuFactory" ref="profileImageContextMenuFactory"/>	
+		<property name="geoUtils" ref="geoUtils"/>	
+		<property name="dateUtils" ref="dateUtils"/>	
 	</bean>
 		
 	<bean 
@@ -414,7 +420,6 @@
 		<property name="width" value="150" type="integer"/>
 		<property name="textSize" value="11" type="integer"/>
 		<property name="textAlign" value="center"/>
-		
 	</bean>
 	
 	<bean 

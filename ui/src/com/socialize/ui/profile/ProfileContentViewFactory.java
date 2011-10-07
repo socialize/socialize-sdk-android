@@ -27,6 +27,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.text.InputFilter;
+import android.text.method.ScrollingMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -36,12 +37,15 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.ui.button.SocializeButton;
 import com.socialize.ui.facebook.FacebookSignOutClickListener;
 import com.socialize.ui.util.Colors;
+import com.socialize.ui.util.DateUtils;
+import com.socialize.ui.util.GeoUtils;
 import com.socialize.ui.view.BaseViewFactory;
 
 /**
@@ -57,6 +61,8 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 	private IBeanFactory<ProfileSaveButtonListener> profileSaveButtonListenerFactory;
 	private IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory;
 	private IBeanFactory<ProfileImageContextMenu> profileImageContextMenuFactory;
+	private GeoUtils geoUtils;
+	private DateUtils dateUtils;
 
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.view.ViewFactory#make(android.content.Context)
@@ -67,12 +73,16 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		
 		view.setDrawables(drawables);
 		view.setContextMenu(profileImageContextMenuFactory.getBean());
+		view.setGeoUtils(geoUtils);
+		view.setDateUtils(dateUtils);
 		
 		final int padding = getDIP(4);
 		final int imagePadding = getDIP(4);
 		final int margin = getDIP(8);
 		final int imageSize = getDIP(133);
 		final int editTextStroke = getDIP(2);
+		final int minTextHeight = getDIP(50);
+		final int maxTextHeight = getDIP(200);
 		final float editTextRadius = editTextStroke;
 		final int titleColor = getColor(Colors.TITLE);
 		
@@ -85,7 +95,7 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		view.setGravity(Gravity.TOP);
 		
 		LinearLayout masterLayout = new LinearLayout(context);
-		LayoutParams masterLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+		LayoutParams masterLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,getDIP(150));
 		
 		masterLayout.setLayoutParams(masterLayoutParams);
 		masterLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -112,24 +122,43 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		LayoutParams textLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		LayoutParams textEditLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		LayoutParams commentViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		LayoutParams commentMetaLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		
 		
 		final ImageView profilePicture = new ImageView(context);
 		final TextView displayName = new TextView(context);
 		final EditText displayNameEdit = new EditText(context);
 		final TextView commentView = new TextView(context);
+		final TextView commentMeta = new TextView(context);
+		
+		commentMetaLayout.gravity = Gravity.RIGHT;
+		commentMeta.setGravity(Gravity.RIGHT);
+		commentMeta.setLayoutParams(commentMetaLayout);
+		commentMeta.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+		commentMeta.setTextColor(Color.WHITE);
 		
 		commentView.setVisibility(View.GONE);
+		commentMeta.setVisibility(View.GONE);
 		
-		GradientDrawable commentBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Color.WHITE, Color.WHITE});
+		GradientDrawable commentBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Color.BLACK, Color.BLACK});
 		commentBG.setCornerRadius(10.0f);
-		commentBG.setStroke(2, colors.getColor(Colors.TEXT_STROKE));
+		commentBG.setStroke(2, Color.WHITE);
+		commentBG.setAlpha(64);
+		
+		commentViewLayout.setMargins(0, margin, 0, margin);
 		
 		commentView.setBackgroundDrawable(commentBG);
-		commentView.setPadding(padding, padding, padding, padding);
+		commentView.setPadding(margin, margin, margin, margin);
 		commentView.setLayoutParams(commentViewLayout);
-		commentView.setMinHeight(getDIP(40));
-		commentView.setTextColor(Color.BLACK);
+		commentView.setMinHeight(minTextHeight);
+		commentView.setMinimumHeight(minTextHeight);
+		commentView.setMaxHeight(maxTextHeight);
+		commentView.setTextColor(Color.WHITE);
+		commentView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
+		commentView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+		commentView.setScroller(new Scroller(context)); 
+		commentView.setScrollbarFadingEnabled(true);
+		commentView.setMovementMethod(new ScrollingMovementMethod());
 		
 		final SocializeButton editButton = profileEditButtonFactory.getBean();
 		final SocializeButton saveButton = profileSaveButtonFactory.getBean();
@@ -149,6 +178,7 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		
 		GradientDrawable imageBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] {Color.WHITE, Color.WHITE});
 		imageBG.setStroke(2, Color.BLACK);
+		imageBG.setAlpha(64);
 		
 		profilePicture.setLayoutParams(imageLayout);
 		profilePicture.setPadding(imagePadding, imagePadding, imagePadding, imagePadding);
@@ -191,6 +221,7 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		view.setCancelButton(cancelButton);
 		view.setEditButton(editButton);
 		view.setCommentView(commentView);
+		view.setCommentMeta(commentMeta);
 		
 		editButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -231,6 +262,7 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		
 		view.addView(masterLayout);
 		view.addView(commentView);
+		view.addView(commentMeta);
 
 		return view;
 	}
@@ -266,4 +298,13 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 	public void setFacebookSignOutClickListenerFactory(IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory) {
 		this.facebookSignOutClickListenerFactory = facebookSignOutClickListenerFactory;
 	}
+
+	public void setGeoUtils(GeoUtils geoUtils) {
+		this.geoUtils = geoUtils;
+	}
+
+	public void setDateUtils(DateUtils dateUtils) {
+		this.dateUtils = dateUtils;
+	}
+	
 }

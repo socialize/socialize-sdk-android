@@ -19,10 +19,11 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Comment;
 import com.socialize.entity.User;
 import com.socialize.image.ImageLoadListener;
+import com.socialize.image.ImageLoadRequest;
 import com.socialize.image.ImageLoader;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUI;
-import com.socialize.ui.util.TimeUtils;
+import com.socialize.ui.util.DateUtils;
 import com.socialize.ui.view.ListItemLoadingView;
 import com.socialize.ui.view.ViewHolder;
 import com.socialize.util.Base64DecoderException;
@@ -46,7 +47,7 @@ public class CommentAdapter extends BaseAdapter {
 	private Drawables drawables;
 	private View loadingView;
 	private DeviceUtils deviceUtils;
-	private TimeUtils timeUtils;
+	private DateUtils dateUtils;
 	private boolean last = false;
 	private Base64Utils base64Utils;
 	private ImageLoader imageLoader;
@@ -132,7 +133,6 @@ public class CommentAdapter extends BaseAdapter {
        	
        	final User user = tmpUser;
        	
-   
         if (view == null) {
         	
         	CommentListItem v = commentItemViewFactory.getBean();
@@ -151,18 +151,10 @@ public class CommentAdapter extends BaseAdapter {
         } 
         else {
             holder = (ViewHolder) view.getTag();
-        	
-        	// We have an old view, we may need to cancel the image load
-        	if(holder.getItemId() != null && 
-        			holder.getImageUrl() != null && 
-        			user != null && 
-        			user.getSmallImageUri() != null && 
-        			position != holder.getItemId() &&
-        			!holder.getImageUrl().equals(user.getSmallImageUri())) {
-        		imageLoader.cancel(holder.getItemId());
-        	}
+            if(holder.getImageUrl() != null) {
+            	imageLoader.cancel(holder.getImageUrl());
+            }
         }
-        
         
         if(position >= comments.size()) {
         	// Last one, get loading view
@@ -226,7 +218,7 @@ public class CommentAdapter extends BaseAdapter {
     				Long date = item.getDate();
     				if(date != null && date > 0) {
     					long diff = (holder.getNow().getTime() - date.longValue());
-    					time.setText(timeUtils.getTimeString(diff) + " ");
+    					time.setText(dateUtils.getTimeString(diff) + " ");
     				}
     				else {
     					time.setText(" ");
@@ -243,6 +235,7 @@ public class CommentAdapter extends BaseAdapter {
     					String imageUrl = user.getSmallImageUri();
     					
     					holder.setImageUrl(imageUrl);
+    					userIcon.getBackground().setAlpha(255);
     					
     					if(!StringUtils.isEmpty(imageUrl)) {
     						try {
@@ -253,34 +246,41 @@ public class CommentAdapter extends BaseAdapter {
     								if(logger != null && logger.isInfoEnabled()) {
 										logger.info("CommentAdpater setting image icon to cached image " + cached);
 									}
-    								
     								userIcon.setImageDrawable(cached);
     							}
     							else {
-    								userIcon.setImageDrawable(defaultImage);
-        							imageLoader.loadImage(item.getId(), imageUrl, new ImageLoadListener() {
+    								userIcon.setImageDrawable(null);
+    								userIcon.getBackground().setAlpha(64);
+    								
+        							imageLoader.loadImage(imageUrl, new ImageLoadListener() {
     									@Override
     									public void onImageLoadFail(Exception error) {
-    										error.printStackTrace();
+    										logError("Error loading image", error);
+    										
     										userIcon.post(new Runnable() {
     											public void run() {
     												if(logger != null && logger.isInfoEnabled()) {
     													logger.info("CommentAdpater setting image icon to default image");
     												}
     												userIcon.setImageDrawable(defaultImage);
+    												userIcon.getBackground().setAlpha(255);
     											}
     										});
     									}
     									
     									@Override
-    									public void onImageLoad(final SafeBitmapDrawable drawable) {
+    									public void onImageLoad(final ImageLoadRequest request, final SafeBitmapDrawable drawable) {
     										// Must be run on UI thread
     										userIcon.post(new Runnable() {
     											public void run() {
-    												if(logger != null && logger.isInfoEnabled()) {
-    													logger.info("CommentAdpater setting image icon to " + drawable);
+    												if(request == null || !request.isCanceled()) {
+    													if(logger != null && logger.isInfoEnabled()) {
+        													logger.info("CommentAdpater setting image icon to " + drawable);
+        												}
+        												userIcon.setImageDrawable(drawable);
     												}
-    												userIcon.setImageDrawable(drawable);
+    												
+    												userIcon.getBackground().setAlpha(255);
     											}
     										});
     									}
@@ -305,12 +305,8 @@ public class CommentAdapter extends BaseAdapter {
 								userIcon.setImageDrawable(drawable);
 							}
 							catch (Base64DecoderException e) {
-								if(logger != null) {
-									logger.error("Invalid image data", e);
-								}
-								else {
-									e.printStackTrace();
-								}
+								
+								logError("Invalid image data", e);
 								
 								userIcon.setImageDrawable(defaultImage);
 							}
@@ -369,8 +365,8 @@ public class CommentAdapter extends BaseAdapter {
 		this.deviceUtils = deviceUtils;
 	}
 
-	public void setTimeUtils(TimeUtils timeUtils) {
-		this.timeUtils = timeUtils;
+	public void setDateUtils(DateUtils dateUtils) {
+		this.dateUtils = dateUtils;
 	}
 
 	public void setBase64Utils(Base64Utils base64Utils) {
@@ -387,5 +383,14 @@ public class CommentAdapter extends BaseAdapter {
 	
 	protected SocializeUI getSocializeUI() {
 		return SocializeUI.getInstance();
+	}
+	
+	protected void logError(String msg, Exception e) {
+		if(logger != null) {
+			logger.error(msg, e);
+		}
+		else {
+			e.printStackTrace();
+		}
 	}
 }

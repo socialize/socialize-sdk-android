@@ -60,20 +60,17 @@ public class ImageLoader {
 	 * Cancels the load of a previous request.
 	 * @param url
 	 */
-	public void cancel(int id) {
+	public void cancel(Object id) {
 		imageLoadAsyncTask.cancel(id);
 	}
 	
-	public void loadImage(final String url, final ImageLoadListener listener) {
-		loadImage(-1, url, listener);
-	}
 	
 	/**
 	 * Asynchrnously loads the image at the given url and calls the listener when it is loaded.
 	 * @param url
 	 * @param listener
 	 */
-	public void loadImage(int id, final String url, final ImageLoadListener listener) {
+	public void loadImage(final String url, final ImageLoadListener listener) {
 		
 		// Look in cache
 		CacheableDrawable drawable = drawables.getCache().get(url);
@@ -82,7 +79,8 @@ public class ImageLoader {
 			if(logger != null && logger.isInfoEnabled()) {
 				logger.info("ImageLoader loading image from cache for " + url);
 			}
-			listener.onImageLoad(drawable);
+			
+			listener.onImageLoad(null, drawable);
 		}
 		else {
 			
@@ -92,7 +90,6 @@ public class ImageLoader {
 			
 			ImageLoadRequest request = makeRequest();
 			request.setUrl(url);
-			request.setId(id);
 			request.addListener(new ImageLoadListener() {
 				
 				@Override
@@ -101,12 +98,12 @@ public class ImageLoader {
 				}
 				
 				@Override
-				public void onImageLoad(SafeBitmapDrawable drawable) {
+				public void onImageLoad(ImageLoadRequest request, SafeBitmapDrawable drawable) {
 					if(drawable instanceof CacheableDrawable) {
 						drawables.getCache().put(url, (CacheableDrawable) drawable, false);
 					}
 					
-					listener.onImageLoad(drawable);
+					listener.onImageLoad(request, drawable);
 				}
 			});
 			

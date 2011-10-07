@@ -21,8 +21,10 @@
  */
 package com.socialize.image;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Collection;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import com.socialize.util.SafeBitmapDrawable;
 
 
 /**
@@ -32,9 +34,8 @@ import java.util.List;
  */
 public class ImageLoadRequest {
 
-	private int id;
 	private String url;
-	private List<ImageLoadListener> listeners;
+	private ConcurrentLinkedQueue<ImageLoadListener> listeners;
 	private boolean canceled;
 	
 	public String getUrl() {
@@ -45,10 +46,6 @@ public class ImageLoadRequest {
 		this.url = url;
 	}
 	
-	public List<ImageLoadListener> getListeners() {
-		return listeners;
-	}
-	
 	public boolean isCanceled() {
 		return canceled;
 	}
@@ -57,17 +54,35 @@ public class ImageLoadRequest {
 		this.canceled = canceled;
 	}
 	
-	public int getId() {
-		return id;
+	public void notifyListeners(SafeBitmapDrawable drawable) {
+		while(!listeners.isEmpty()) {
+			if(isCanceled()) {
+				listeners.clear();
+				break;
+			}
+			ImageLoadListener listener = listeners.poll();
+			listener.onImageLoad(this, drawable);
+		}
 	}
-
-	public void setId(int id) {
-		this.id = id;
+	
+	public void notifyListeners(Exception error) {
+		while(!listeners.isEmpty()) {
+			if(isCanceled()) {
+				listeners.clear();
+				break;
+			}
+			ImageLoadListener listener = listeners.poll();
+			listener.onImageLoadFail(error);
+		}
 	}
-
-	public synchronized void addListeners(List<ImageLoadListener> listener) {
+	
+	public void merge(ImageLoadRequest request) {
+		addListeners(request.listeners);
+	}
+	
+	public synchronized void addListeners(Collection<ImageLoadListener> listener) {
 		if(listeners == null) {
-			listeners = new LinkedList<ImageLoadListener>();
+			listeners = new ConcurrentLinkedQueue<ImageLoadListener>();
 		}
 		
 		listeners.addAll(listener);
@@ -75,10 +90,35 @@ public class ImageLoadRequest {
 	
 	public synchronized void addListener(ImageLoadListener listener) {
 		if(listeners == null) {
-			listeners = new LinkedList<ImageLoadListener>();
+			listeners = new ConcurrentLinkedQueue<ImageLoadListener>();
 		}
 		
 		listeners.add(listener);
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((url == null) ? 0 : url.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ImageLoadRequest other = (ImageLoadRequest) obj;
+		if (url == null) {
+			if (other.url != null)
+				return false;
+		}
+		else if (!url.equals(other.url))
+			return false;
+		return true;
+	}
 }

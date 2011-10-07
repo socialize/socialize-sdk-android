@@ -18,12 +18,10 @@ import com.socialize.entity.User;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.comment.CommentAdapter;
 import com.socialize.ui.comment.CommentListItem;
-import com.socialize.ui.user.UserService;
-import com.socialize.ui.util.TimeUtils;
+import com.socialize.ui.util.DateUtils;
 import com.socialize.ui.view.ViewHolder;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
-import com.socialize.util.HttpUtils;
 
 public class CommentAdapterTest extends SocializeUIActivityTest {
 
@@ -262,7 +260,7 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		List.class,
 		ViewHolder.class,
 		ImageView.class,
-		TimeUtils.class,
+		DateUtils.class,
 //		HttpUtils.class,
 //		UserService.class,
 		User.class,
@@ -284,7 +282,7 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		
 //		UserService userService = AndroidMock.createMock(UserService.class);
 		IBeanFactory<CommentListItem> commentItemViewFactory = AndroidMock.createMock(IBeanFactory.class);
-		TimeUtils timeUtils = AndroidMock.createMock(TimeUtils.class);
+		DateUtils timeUtils = AndroidMock.createMock(DateUtils.class);
 		Drawables drawables = AndroidMock.createMock(Drawables.class);
 		Drawable drawable = AndroidMock.createMock(Drawable.class);
 		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
@@ -358,7 +356,7 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		adapter.setIconSize(iconSize);
 //		adapter.setUserService(userService);
 		adapter.setComments(comments);
-		adapter.setTimeUtils(timeUtils);
+		adapter.setDateUtils(timeUtils);
 //		adapter.setHttpUtils(httpUtils);
 		adapter.setCommentItemViewFactory(commentItemViewFactory);
 		adapter.setDrawables(drawables);

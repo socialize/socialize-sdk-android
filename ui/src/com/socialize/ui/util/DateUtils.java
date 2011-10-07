@@ -21,18 +21,23 @@
  */
 package com.socialize.ui.util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+
 /**
  * @author Jason Polites
- * @deprecated Use DateUtils
  */
-@Deprecated
-public class TimeUtils {
+public class DateUtils {
 	
 	public static final long minute = 60;
 	public static final long hour = minute*60;
 	public static final long day = hour*24;
 	public static final long month = day*30;
 	public static final long year = day*365;
+	
+	private static final DateFormat SIMPLE_DATE = new SimpleDateFormat("h:mm a 'on' dd MMM yyyy");
 	
 	public String getTimeString(long diffMilliseconds) {
 		
@@ -89,6 +94,15 @@ public class TimeUtils {
 		}
 		
 		return builder.toString();
+	}
+	
+	/**
+	 * Returns a simple one-line date string used for display.
+	 * @param date
+	 * @return
+	 */
+	public String getSimpleDateString(Date date) {
+		return SIMPLE_DATE.format(date);
 	}
 	
 }
