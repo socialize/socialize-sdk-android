@@ -43,7 +43,8 @@ public class SocializeButtonTest extends SocializeUITestCase {
 		
 		AndroidMock.expect(colors.getColor(Colors.BUTTON_BOTTOM)).andReturn(1);
 		AndroidMock.expect(colors.getColor(Colors.BUTTON_TOP)).andReturn(1);
-		AndroidMock.expect(colors.getColor(Colors.BUTTON_STROKE)).andReturn(stroke);
+		AndroidMock.expect(colors.getColor(Colors.BUTTON_BOTTOM_STROKE)).andReturn(stroke);
+		AndroidMock.expect(colors.getColor(Colors.BUTTON_TOP_STROKE)).andReturn(stroke);
 		
 		AndroidMock.expect(deviceUtils.getDIP(8)).andReturn(padding);
 		AndroidMock.expect(deviceUtils.getDIP(4)).andReturn(radius);

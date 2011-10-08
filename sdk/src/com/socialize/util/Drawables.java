@@ -60,7 +60,7 @@ public class Drawables {
 	}
 	
 	public Drawable getDrawable(String name) {
-		return getDrawable(name, -1, -1, true);
+		return getDrawable(name, -1, -1, false);
 	}
 	
 	public Drawable getDrawable(String name, boolean eternal) {

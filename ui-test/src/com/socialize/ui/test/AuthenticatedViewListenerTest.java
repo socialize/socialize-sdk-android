@@ -72,6 +72,7 @@ public class AuthenticatedViewListenerTest extends SocializeUIActivityTest {
 		AndroidMock.verify(error);
 	}
 	
+	@Deprecated
 	@UsesMocks ({AuthenticatedView.class, SocializeException.class, SocializeService.class, SocializeAuthListener.class})
 	public void test3rdPartyOnAuthFail() {
 		AuthenticatedView view = AndroidMock.createMock(AuthenticatedView.class, getActivity());

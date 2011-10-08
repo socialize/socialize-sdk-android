@@ -1,9 +1,9 @@
 package com.socialize.ui.test;
 
-import com.socialize.ui.util.TimeUtils;
+import com.socialize.ui.util.DateUtils;
 
 
-public class TimeUtilsTest extends SocializeUITestCase {
+public class DateUtilsTest extends SocializeUITestCase {
 
 	// Just integration tests
 	public void testTimeUtils() {
@@ -29,7 +29,7 @@ public class TimeUtilsTest extends SocializeUITestCase {
 		long e = 2 * month;
 		long f = 400 * day;
 		
-		TimeUtils timeUtils = new TimeUtils();
+		DateUtils timeUtils = new DateUtils();
 		
 		String aValue = timeUtils.getTimeString(a);
 		String bValue = timeUtils.getTimeString(b);

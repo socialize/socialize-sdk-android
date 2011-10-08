@@ -63,9 +63,10 @@ public class Container {
 	public <T extends Object> T getBean(String name, Object...args) {
 		if(beans != null) {
 			Object bean = beans.get(name);
-			if(bean == null) {
-				BeanRef beanRef = mapping.getBeanRef(name);
-				if(beanRef != null) {
+			BeanRef beanRef = mapping.getBeanRef(name);
+			
+			if(beanRef != null) {
+				if(bean == null) {
 					if(!beanRef.isSingleton()) {
 						bean = builder.buildBean(this, beanRef, args);
 						
@@ -78,11 +79,14 @@ public class Container {
 						}
 					}
 				}
-				else {
-					Logger.e(getClass().getSimpleName(), "No such bean with name " + name);
-				}
-				
+				else if(beanRef.isLazyInit() && !beanRef.isInitCalled()) {
+					builder.initBean(this, beanRef, bean);
+				}	
 			}
+			else if(bean == null) { // might be a factory
+				Logger.w(getClass().getSimpleName(), "No such bean with name " + name);
+			}
+
 			return (T) bean;
 		}
 		
@@ -150,14 +154,25 @@ public class Container {
 						// We have a new context, so we need to rebuild this bean
 						Object bean = builder.buildBean(this, ref);
 						builder.setBeanProperties(this, ref, bean);
-						builder.initBean(this, ref, bean);
+						
+						if(!ref.isLazyInit()) {
+							builder.initBean(this, ref, bean);
+						}
+						
 						beans.put(ref.getName(), bean);
 					}
 					else if(ref.isContextSensitiveInitMethod()) {
-						// Re-call init
-						Object bean = getBean(ref.getName());
-						builder.initBean(this, ref, bean);
-						beans.put(ref.getName(), bean);
+						
+						if(ref.isLazyInit()) {
+							// Mark for re-init
+							ref.setInitCalled(false);
+						}
+						else {
+							// Re-call init
+							Object bean = getBean(ref.getName());
+							builder.initBean(this, ref, bean);
+							beans.put(ref.getName(), bean);	
+						}
 					}
 				}
 			}

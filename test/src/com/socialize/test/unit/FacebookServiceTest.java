@@ -39,6 +39,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.facebook.Facebook;
 import com.socialize.facebook.Facebook.DialogListener;
 import com.socialize.listener.AuthProviderListener;
+import com.socialize.sample.mock.MockAlertDialog;
 import com.socialize.sample.mock.MockBuilder;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.DialogFactory;
@@ -197,13 +198,14 @@ import com.socialize.util.Drawables;
 		assertTrue(result);
 	}
 
-	@UsesMocks (MockBuilder.class)
+	@UsesMocks ({MockBuilder.class, MockAlertDialog.class})
 	public void testErrorUI() {
 
 		final String errorMessage = "foobar_error";
 		final String appId = "foobar";
 
 		Activity context = AndroidMock.createMock(Activity.class);
+		MockAlertDialog dialog = AndroidMock.createMock(MockAlertDialog.class,getActivity());
 		Drawables drawables = AndroidMock.createMock(Drawables.class, getActivity());
 		Facebook facebook = AndroidMock.createMock(Facebook.class, appId, drawables);
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
@@ -219,16 +221,20 @@ import com.socialize.util.Drawables;
 		AndroidMock.expect(builder.setCancelable(false)).andReturn(builder);
 		AndroidMock.expect(builder.setPositiveButton(AndroidMock.eq("Try again"), (OnClickListener) AndroidMock.anyObject())).andReturn(builder);	
 		AndroidMock.expect(builder.setNegativeButton(AndroidMock.eq("Cancel"), (OnClickListener) AndroidMock.anyObject())).andReturn(builder);	
-		AndroidMock.expect(builder.create()).andReturn(null);
+		AndroidMock.expect(builder.create()).andReturn(dialog);
+		
+		dialog.show();
 
 		AndroidMock.replay(dialogFactory);
 		AndroidMock.replay(builder);
+		AndroidMock.replay(dialog);
 
 		FacebookService service = new FacebookService(context, facebook, facebookSessionStore, authProviderListener, dialogFactory);
 		service.doErrorUI(errorMessage);
 
 		AndroidMock.verify(dialogFactory);
 		AndroidMock.verify(builder);
+		AndroidMock.verify(dialog);
 	}
 
 	public void testDoError() throws Throwable {

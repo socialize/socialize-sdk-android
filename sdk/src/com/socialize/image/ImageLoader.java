@@ -53,7 +53,7 @@ public class ImageLoader {
 		if(logger != null && logger.isInfoEnabled()) {
 			logger.info("ImageLoader stopping image load task");
 		}
-		imageLoadAsyncTask.stop();
+		imageLoadAsyncTask.destroy();
 	}
 	
 	/**

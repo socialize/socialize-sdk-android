@@ -161,7 +161,10 @@ public class FacebookService {
 				finish();
 			}
 		});	
-		return builder.create();
+		
+		AlertDialog dialog = builder.create();
+		
+		return dialog;
 	}
 	
 }

@@ -11,12 +11,10 @@ import android.view.View;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
-import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.SocializeView;
-import com.socialize.util.StringUtils;
 
 public abstract class AuthenticatedView extends SocializeView {
 
@@ -89,41 +87,41 @@ public abstract class AuthenticatedView extends SocializeView {
 	public void onAttachedToWindow() {
 		super.onAttachedToWindow();
 
-		String userId3rdParty = getSocializeUI().getCustomConfigValue(SocializeConfig.FACEBOOK_USER_ID);
-		String token3rdParty = getSocializeUI().getCustomConfigValue(SocializeConfig.FACEBOOK_USER_TOKEN);
+//		String userId3rdParty = getSocializeUI().getCustomConfigValue(SocializeConfig.FACEBOOK_USER_ID);
+//		String token3rdParty = getSocializeUI().getCustomConfigValue(SocializeConfig.FACEBOOK_USER_TOKEN);
 
 		onBeforeAuthenticate();
 
 		SocializeAuthListener listener = getAuthListener();
-		SocializeAuthListener listener3rdParty = getAuthListener3rdParty();
+//		SocializeAuthListener listener3rdParty = getAuthListener3rdParty();
 
-		if(isRequires3rdPartyAuth()) {
-
-			if(!StringUtils.isEmpty(userId3rdParty) && !StringUtils.isEmpty(token3rdParty)) {
-				getSocialize().authenticateKnownUser(
-						consumerKey, 
-						consumerSecret, 
-						AuthProviderType.FACEBOOK,
-						fbAppId,
-						userId3rdParty,
-						token3rdParty,
-						listener3rdParty);
-			}
-			else {
-				getSocialize().authenticate(
-						consumerKey, 
-						consumerSecret, 
-						AuthProviderType.FACEBOOK,
-						fbAppId,
-						listener);
-			}
-		}	
-		else {
+//		if(isRequires3rdPartyAuth()) {
+//
+//			if(!StringUtils.isEmpty(userId3rdParty) && !StringUtils.isEmpty(token3rdParty)) {
+//				getSocialize().authenticateKnownUser(
+//						consumerKey, 
+//						consumerSecret, 
+//						AuthProviderType.FACEBOOK,
+//						fbAppId,
+//						userId3rdParty,
+//						token3rdParty,
+//						listener3rdParty);
+//			}
+//			else {
+//				getSocialize().authenticate(
+//						consumerKey, 
+//						consumerSecret, 
+//						AuthProviderType.FACEBOOK,
+//						fbAppId,
+//						listener);
+//			}
+//		}	
+//		else {
 			getSocialize().authenticate(
 					consumerKey, 
 					consumerSecret, 
 					listener);
-		}
+//		}
 	}
 
 	public void setConsumerKey(String consumerKey) {
@@ -152,11 +150,6 @@ public abstract class AuthenticatedView extends SocializeView {
 
 	// Subclasses override
 	public void onBeforeAuthenticate() {}
-
-	@Deprecated
-	public boolean isRequires3rdPartyAuth() {
-		return false;
-	}
 
 	public abstract View getView();
 

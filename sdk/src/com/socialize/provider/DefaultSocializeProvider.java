@@ -242,19 +242,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 				JSONObject json = jsonParser.parseObject(entity.getContent());
 				
 				User user = userFactory.fromJSON(json.getJSONObject("user"));
-				
-//				if(StringUtils.isEmpty(user.getFirstName())) {
-//					user.setFirstName(data.getUserFirstName());
-//				}
-//				
-//				if(StringUtils.isEmpty(user.getLastName())) {
-//					user.setLastName(data.getUserLastName());
-//				}
-//				
-//				if(StringUtils.isEmpty(user.getProfilePicData())) {
-//					user.setProfilePicData(data.getUserProfilePicData());
-//				}
-				
+
 				session.setConsumerToken(json.getString("oauth_token"));
 				session.setConsumerTokenSecret(json.getString("oauth_token_secret"));
 				session.setUser(user);

@@ -36,6 +36,7 @@ import com.socialize.util.IOUtils;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class FacebookImageRetrieverTest extends SocializeUnitTest {
 
 	@UsesMocks ({

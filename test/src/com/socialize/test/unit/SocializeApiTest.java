@@ -228,8 +228,6 @@ public class SocializeApiTest extends SocializeActivityTest {
 	@SuppressWarnings("unchecked")
 	public void testHandle3rdPartyAuthSuccess() {
 		
-//		String authUserId3rdParty = "foobar_authUserId3rdParty";
-//		String authToken3rdParty = "foobar_authToken3rdParty";
 		String appId3rdParty = "foobar_appId3rdParty";
 		String key = "foobar_key";
 		String secret = "foobar_secret";
@@ -237,10 +235,6 @@ public class SocializeApiTest extends SocializeActivityTest {
 		String token = "foobar_token";
 		String user = "foobar_user";
 		String endpoint = "foobar_endpoint";
-		
-		String firstName = "foobar_firstName";
-		String lastName = "foobar_lastName";
-		String imageData = "foobar_imageData";
 		
 		AuthProviderType authProviderType = AuthProviderType.FACEBOOK;
 		
@@ -275,15 +269,9 @@ public class SocializeApiTest extends SocializeActivityTest {
 		AndroidMock.expect(authProviders.getProvider(authProviderType)).andReturn(authProvider);
 		AndroidMock.expect(response.getToken()).andReturn(token);
 		AndroidMock.expect(response.getUserId()).andReturn(user);
-		AndroidMock.expect(response.getFirstName()).andReturn(firstName);
-		AndroidMock.expect(response.getLastName()).andReturn(lastName);
-		AndroidMock.expect(response.getImageData()).andReturn(imageData);
 		
 		authProviderData.setUserId3rdParty(user);
 		authProviderData.setToken3rdParty(token);
-		authProviderData.setUserFirstName(firstName);
-		authProviderData.setUserLastName(lastName);
-		authProviderData.setUserProfilePicData(imageData);
 		
 		api.setAuthProviders(authProviders);
 		api.setAuthProviderDataFactory(authProviderDataFactory);

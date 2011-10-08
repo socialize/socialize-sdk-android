@@ -53,6 +53,7 @@ public class BeanMappingParserHandler extends DefaultHandler {
 	public static final String MAP_VALUE = "value";
 	public static final String MAP_ENTRY = "entry";
 	
+	
 	private BeanMapping beanMapping;
 	
 	private BeanRef currentBean = null;
@@ -101,6 +102,15 @@ public class BeanMappingParserHandler extends DefaultHandler {
 			}
 			else {
 				currentBean.setAbstractBean(false);
+			}
+			
+			String lazy = attributes.getValue("lazy-init");
+			
+			if(lazy != null && lazy.trim().length() > 0) {
+				currentBean.setLazyInit(Boolean.parseBoolean(lazy));
+			}
+			else {
+				currentBean.setLazyInit(false);
 			}
 			
 			beanMapping.addBeanRef(currentBean);

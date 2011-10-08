@@ -38,28 +38,17 @@ public class AuthProviderDataTest extends SocializeUnitTest {
 		
 		String appId3rdParty = "foobar_appId3rdParty";
 		String token3rdParty = "foobar_token3rdParty";
-		String userFullName = "foobar_userFullName";
 		String userId3rdParty = "foobar_userId3rdParty";
-		String userLastName = "foobar_userLastName";
-		String userProfilePicData = "foobar_userProfilePicData";
 		AuthProviderType authProviderType = AuthProviderType.FACEBOOK;
 		
 		data.setAppId3rdParty(appId3rdParty);
 		data.setAuthProviderType(authProviderType);
 		data.setToken3rdParty(token3rdParty);
-		data.setUserFirstName(userFullName);
 		data.setUserId3rdParty(userId3rdParty);
-		data.setUserLastName(userLastName);
-		data.setUserProfilePicData(userProfilePicData);
 		
 		assertEquals(appId3rdParty, data.getAppId3rdParty());
 		assertEquals(authProviderType, data.getAuthProviderType());
 		assertEquals(token3rdParty, data.getToken3rdParty());
-		assertEquals(userFullName, data.getUserFirstName());
 		assertEquals(userId3rdParty, data.getUserId3rdParty());
-		assertEquals(userLastName, data.getUserLastName());
-		assertEquals(userProfilePicData, data.getUserProfilePicData());
-		
 	}
-	
 }

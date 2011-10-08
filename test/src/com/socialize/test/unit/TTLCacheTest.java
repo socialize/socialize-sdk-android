@@ -100,13 +100,13 @@ public class TTLCacheTest extends SocializeUnitTest {
 	/**
 	 * Tests that the onRemove method is called when an object is replaced.
 	 */
-	public void testOnRemoveCalledOnReplace() {
+	public void testOnRemoveNOTCalledOnReplace() {
 		StringCacheable testObj = new StringCacheable("test");
 		StringCacheable testObj2 = new StringCacheable("test2");
 		cache.put("testKey", testObj);
 		cache.put("testKey", testObj2);
 		
-		assertEquals(1, testObj.getOnRemoveCount());
+		assertEquals(0, testObj.getOnRemoveCount());
 	}
 	
 	/**

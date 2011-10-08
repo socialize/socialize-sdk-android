@@ -34,6 +34,11 @@ public class BitmapUtils {
 	private BitmapBuilder bitmapBuilder;
 	private Base64Utils base64Utils;
 	
+	public BitmapUtils(BitmapBuilder bitmapBuilder) {
+		super();
+		this.bitmapBuilder = bitmapBuilder;
+	}
+	
 	public BitmapUtils() {
 		super();
 	}

@@ -56,7 +56,7 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 
 			while(running) {
 
-				while (!requests.isEmpty()) {
+				while (!requests.isEmpty() && running) {
 
 					if(logger != null && logger.isInfoEnabled()) {
 						logger.info("ImageLoadAsyncTask has [" +
@@ -167,9 +167,14 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 
 	public synchronized void stop() {
 		running = false;
+		if(requests != null) {
+			requests.clear();
+		}
+		if(requests != null) {
+			requestsInProcess.clear();
+		}
+		
 		notifyAll();
-		requests.clear();
-		requestsInProcess.clear();
 		cancel(true);
 	}
 
@@ -183,5 +188,9 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 
 	public void setCache(DrawableCache cache) {
 		this.cache = cache;
+	}
+	
+	public void destroy() {
+		stop();
 	}
 }

@@ -48,7 +48,7 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 	final String small_image_uri = "mock_small_image_uri";
 	final String medium_image_uri = "mock_medium_image_uri";
 	final String large_image_uri = "mock_large_image_uri";
-	final String image_data = "mock_image_data";
+	final String picture = "mock_image_data";
 	
 	private JSONArray array;
 	
@@ -58,13 +58,21 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		AndroidMock.expect(object.getLastName()).andReturn(last_name);
 		AndroidMock.expect(object.getDescription()).andReturn(description);
 		AndroidMock.expect(object.getLocation()).andReturn(location);
-		AndroidMock.expect(object.getProfilePicData()).andReturn(image_data);
+		AndroidMock.expect(object.getProfilePicData()).andReturn(picture);
+		
+		AndroidMock.expect(object.getSmallImageUri()).andReturn(small_image_uri);
+		AndroidMock.expect(object.getMediumImageUri()).andReturn(medium_image_uri);
+		AndroidMock.expect(object.getLargeImageUri()).andReturn(large_image_uri);
 		
 		AndroidMock.expect(json.put("first_name", first_name)).andReturn(json);
 		AndroidMock.expect(json.put("last_name", last_name)).andReturn(json);
 		AndroidMock.expect(json.put("description", description)).andReturn(json);
 		AndroidMock.expect(json.put("location", location)).andReturn(json);
-		AndroidMock.expect(json.put("image_data", image_data)).andReturn(json);
+		AndroidMock.expect(json.put("picture", picture)).andReturn(json);
+		
+		AndroidMock.expect(json.put("small_image_uri", small_image_uri)).andReturn(json);
+		AndroidMock.expect(json.put("medium_image_uri", medium_image_uri)).andReturn(json);
+		AndroidMock.expect(json.put("large_image_uri", large_image_uri)).andReturn(json);
 	}
 
 	@Override
@@ -79,7 +87,7 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		
 		array = AndroidMock.createMock(JSONArray.class);
 		
-		AndroidMock.expect(json.has("image_data")).andReturn(true);
+		AndroidMock.expect(json.has("picture")).andReturn(true);
 		AndroidMock.expect(json.has("first_name")).andReturn(true);
 		AndroidMock.expect(json.has("last_name")).andReturn(true);
 		AndroidMock.expect(json.has("username")).andReturn(true);
@@ -91,7 +99,7 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		AndroidMock.expect(json.has("stats")).andReturn(true);
 		AndroidMock.expect(json.has("third_party_auth")).andReturn(true);
 		
-		AndroidMock.expect(json.isNull("image_data")).andReturn(false);
+		AndroidMock.expect(json.isNull("picture")).andReturn(false);
 		AndroidMock.expect(json.isNull("first_name")).andReturn(false);
 		AndroidMock.expect(json.isNull("last_name")).andReturn(false);
 		AndroidMock.expect(json.isNull("username")).andReturn(false);
@@ -103,7 +111,7 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		AndroidMock.expect(json.isNull("stats")).andReturn(false);
 		AndroidMock.expect(json.isNull("third_party_auth")).andReturn(false);
 		
-		AndroidMock.expect(json.getString("image_data")).andReturn(image_data);
+		AndroidMock.expect(json.getString("picture")).andReturn(picture);
 		AndroidMock.expect(json.getString("first_name")).andReturn(first_name);
 		AndroidMock.expect(json.getString("last_name")).andReturn(last_name);
 		AndroidMock.expect(json.getString("username")).andReturn(username);
@@ -129,7 +137,7 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		object.setSmallImageUri(small_image_uri);
 		object.setMediumImageUri(medium_image_uri);
 		object.setLargeImageUri(large_image_uri);
-		object.setProfilePicData(image_data);
+		object.setProfilePicData(picture);
 		object.setStats(stats);
 		object.addUserAuthData(authData);
 		

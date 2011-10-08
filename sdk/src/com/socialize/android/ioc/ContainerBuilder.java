@@ -231,7 +231,7 @@ public class ContainerBuilder {
 		for (Entry<String, Object> entry : entrySet) {
 			BeanRef ref = mapping.getBeanRef(entry.getKey());
 			
-			if(ref != null) {
+			if(ref != null && !ref.isLazyInit()) {
 				Object bean = entry.getValue();
 				if(!initBean(container, ref, bean)) {
 					Logger.i(getClass().getSimpleName(), "Cannot init bean [" +

@@ -36,11 +36,6 @@ public class EntityViewTest extends SocializeUIActivityTest {
 			}
 
 			@Override
-			public boolean isRequires3rdPartyAuth() {
-				return false;
-			}
-			
-			@Override
 			protected View getView(Bundle bundle, Object... entityKeys) {
 				addResult(bundle);
 				addResult(entityKeys[0]);
@@ -86,11 +81,6 @@ public class EntityViewTest extends SocializeUIActivityTest {
 			protected Context getViewContext() {
 				return activity;
 			}
-
-			@Override
-			public boolean isRequires3rdPartyAuth() {
-				return false;
-			}
 			
 			@Override
 			protected View getView(Bundle bundle, Object... entityKeys) {
@@ -125,12 +115,6 @@ public class EntityViewTest extends SocializeUIActivityTest {
 	
 	public void testGetErrorView() {
 		PublicEntityView view = new PublicEntityView(getContext()) {
-			
-			@Override
-			public boolean isRequires3rdPartyAuth() {
-				return false;
-			}
-			
 			@Override
 			protected View getView(Bundle bundle, Object... entityKeys) {
 				return null;

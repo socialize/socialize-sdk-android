@@ -164,17 +164,17 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		final String oauth_token_secret = "oauth_token_secret";
 		final String url = "https://" + host + "/" + endpoint;
 		
-		final String firstName = "foo_first";
-		final String lastName = "bar_last";
-		final String profilePicData = "foobar_pic";
+//		final String firstName = "foo_first";
+//		final String lastName = "bar_last";
+//		final String profilePicData = "foobar_pic";
 		
 		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
 		
 		AndroidMock.expect(authProviderData.getAuthProviderType()).andReturn(null);
 		AndroidMock.expect(authProviderData.getAppId3rdParty()).andReturn(null);
-		AndroidMock.expect(authProviderData.getUserFirstName()).andReturn(firstName);
-		AndroidMock.expect(authProviderData.getUserLastName()).andReturn(lastName);
-		AndroidMock.expect(authProviderData.getUserProfilePicData()).andReturn(profilePicData);
+//		AndroidMock.expect(authProviderData.getUserFirstName()).andReturn(firstName);
+//		AndroidMock.expect(authProviderData.getUserLastName()).andReturn(lastName);
+//		AndroidMock.expect(authProviderData.getUserProfilePicData()).andReturn(profilePicData);
 		
 		AndroidMock.expect(sessionFactory.create(key, secret, authProviderData)).andReturn(session);
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
@@ -191,13 +191,13 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(sessionPersister.load(mockContext)).andReturn(null); // No persistence for this one
 		AndroidMock.expect(session.getHost()).andReturn(host);
 		
-		AndroidMock.expect(user.getFirstName()).andReturn(null);
-		AndroidMock.expect(user.getLastName()).andReturn(null);
-		AndroidMock.expect(user.getProfilePicData()).andReturn(null);
+//		AndroidMock.expect(user.getFirstName()).andReturn(null);
+//		AndroidMock.expect(user.getLastName()).andReturn(null);
+//		AndroidMock.expect(user.getProfilePicData()).andReturn(null);
 		
-		user.setFirstName(firstName);
-		user.setLastName(lastName);
-		user.setProfilePicData(profilePicData);
+//		user.setFirstName(firstName);
+//		user.setLastName(lastName);
+//		user.setProfilePicData(profilePicData);
 		
 		// Expect save
 		sessionPersister.save(mockContext, session);

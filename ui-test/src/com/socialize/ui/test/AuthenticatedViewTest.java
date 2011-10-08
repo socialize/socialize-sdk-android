@@ -36,11 +36,6 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 		AuthenticatedView view = new AuthenticatedView(getContext()) {
 			
 			@Override
-			public boolean isRequires3rdPartyAuth() {
-				return false;
-			}
-			
-			@Override
 			public View getView() {
 				return null;
 			}
@@ -99,11 +94,6 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 			@Override
 			protected void initSocialize() {
 				// Do nothing for this test
-			}
-
-			@Override
-			public boolean isRequires3rdPartyAuth() {
-				return true;
 			}
 			
 			@Override
@@ -195,11 +185,6 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 			protected void initSocialize() {
 				// Do nothing for this test
 			}
-
-			@Override
-			public boolean isRequires3rdPartyAuth() {
-				return true;
-			}
 			
 			@Override
 			public View getView() {
@@ -282,11 +267,6 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 			protected void initSocialize() {
 				// Do nothing for this test
 			}
-
-			@Override
-			public boolean isRequires3rdPartyAuth() {
-				return false;
-			}
 			
 			@Override
 			public View getView() {
@@ -343,11 +323,6 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 		AndroidMock.replay(intent);
 		
 		PublicAuthenticatedView view = new PublicAuthenticatedView(getContext()) {
-			
-			@Override
-			public boolean isRequires3rdPartyAuth() {
-				return false;
-			}
 			
 			@Override
 			public View getView() {
