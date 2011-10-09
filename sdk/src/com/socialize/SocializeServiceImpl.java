@@ -206,6 +206,12 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	}
 	
 	@Override
+	public void clear3rdPartySession(AuthProviderType type) {
+		// TODO: implement for specific/multiple provider types.
+		clearSessionCache();
+	}
+
+	@Override
 	public void clearSessionCache() {
 		try {
 			if(session != null) {
@@ -649,6 +655,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		return session;
 	}
 
+	@Override
 	public void setSession(SocializeSession session) {
 		this.session = session;
 	}

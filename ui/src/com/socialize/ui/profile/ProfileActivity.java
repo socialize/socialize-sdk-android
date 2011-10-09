@@ -74,7 +74,6 @@ public class ProfileActivity extends SocializeUIActivity {
 		return Socialize.getSocialize();
 	}
 	
-
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == CAMERA_PIC_REQUEST) {
 			if (data != null) {

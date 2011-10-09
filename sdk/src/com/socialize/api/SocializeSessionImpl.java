@@ -176,6 +176,4 @@ public class SocializeSessionImpl implements WritableSession {
 	public void setAuthProvider(AuthProvider authProvider) {
 		this.authProvider = authProvider;
 	}
-	
-	
 }

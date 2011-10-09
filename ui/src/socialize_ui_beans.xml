@@ -238,6 +238,9 @@
 		class="com.socialize.ui.facebook.FacebookSignOutClickListener"		
 		singleton="false">
 		<property name="drawables" ref="drawables"/>
+		<property name="logger" ref="logger"/>
+		<property name="config" ref="config"/>
+		<property name="facebookSignOutTaskFactory" ref="facebookSignOutTaskFactory"/>
 	</bean>
 	
 	<bean 
@@ -273,6 +276,16 @@
 		<property name="width" value="150" type="integer"/>
 		<property name="textSize" value="11" type="integer"/>
 	</bean>
+	
+	<bean 
+		id="facebookSignOutTask" 
+		singleton="false"
+		class="com.socialize.ui.facebook.FacebookSignOutTask">
+		<property name="logger" ref="logger"/>
+		<property name="dialogFactory" ref="progressDialogFactory"/>
+	</bean>
+	
+	<factory id="facebookSignOutTaskFactory" makes="facebookSignOutTask"/>
 
 	<!-- Comment UI -->
 	

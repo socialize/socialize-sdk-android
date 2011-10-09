@@ -21,12 +21,20 @@
  */
 package com.socialize.ui.facebook;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.socialize.Socialize;
+import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.api.SocializeSession;
+import com.socialize.config.SocializeConfig;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
+import com.socialize.log.SocializeLogger;
 import com.socialize.util.Drawables;
 
 /**
@@ -36,9 +44,12 @@ import com.socialize.util.Drawables;
 public class FacebookSignOutClickListener implements OnClickListener {
 
 	private Drawables drawables;
+	private IBeanFactory<FacebookSignOutTask> facebookSignOutTaskFactory;
+	private SocializeConfig config;
+	private SocializeLogger logger;
 
 	@Override
-	public void onClick(View v) {
+	public void onClick(final View v) {
 
 		new AlertDialog.Builder(v.getContext())
 		
@@ -48,8 +59,39 @@ public class FacebookSignOutClickListener implements OnClickListener {
 		.setCancelable(true)
 		.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				Socialize.getSocialize().clearSessionCache();
 				dialog.dismiss();
+				FacebookSignOutTask task = facebookSignOutTaskFactory.getBean(v.getContext());
+				task.setFacebookSignOutListener(new FacebookSignOutListener() {
+					@Override
+					public void onSignOut() {
+						
+						String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+						String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+						
+						// Re-authenticate as anonymous
+						Socialize.getSocialize().authenticate(consumerKey, consumerSecret, new SocializeAuthListener() {
+							
+							@Override
+							public void onError(SocializeException error) {
+								logError("Error during authentication", error);
+								exitProfileActivity(v);
+							}
+							
+							@Override
+							public void onAuthSuccess(SocializeSession session) {
+								exitProfileActivity(v);
+							}
+							
+							@Override
+							public void onAuthFail(SocializeException error) {
+								logError("Error during authentication", error);
+								exitProfileActivity(v);
+							}
+						});
+					}
+				});
+				
+				task.execute((Void[])null);
 			}
 		})
 		.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -60,9 +102,37 @@ public class FacebookSignOutClickListener implements OnClickListener {
 		.create()
 		.show();
 	}
+	
+	protected void exitProfileActivity(final View v) {
+		Context context = v.getContext();
+		if(context instanceof Activity) {
+			((Activity)context).finish();
+		}
+	}
+	
+	protected void logError(String msg, Exception error) {
+		if(logger != null) {
+			logger.error(msg, error);
+		}
+		else {
+			error.printStackTrace();
+		}
+	}
 
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
+	}
+
+	public void setFacebookSignOutTaskFactory(IBeanFactory<FacebookSignOutTask> facebookSignOutTaskFactory) {
+		this.facebookSignOutTaskFactory = facebookSignOutTaskFactory;
+	}
+
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
+	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
 	}
 	
 	

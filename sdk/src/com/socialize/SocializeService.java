@@ -292,5 +292,11 @@ public interface SocializeService {
 	 * to be required upon the next call to the Socialize API.
 	 */
 	public void clearSessionCache();
+	
+	/**
+	 * Clears the session of the given 3rd party auth data (logs out from Facebook/Twitter etc).
+	 * @param type
+	 */
+	public void clear3rdPartySession(AuthProviderType type);
 
 }

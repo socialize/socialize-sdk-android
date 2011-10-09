@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,21 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api;
+package com.socialize.ui.facebook;
 
-import com.socialize.auth.AuthProvider;
-import com.socialize.auth.AuthProviderType;
-import com.socialize.entity.User;
+/**
+ * @author Jason Polites
+ *
+ */
+public interface FacebookSignOutListener {
 
-public interface WritableSession extends SocializeSession {
-	public void setConsumerToken(String token);
-	public void setConsumerTokenSecret(String secret);
-	public void setUser(User user);
-	public void setHost(String host);
-	public void set3rdPartyUserId(String userId);
-	public void set3rdPartyToken(String token);
-	public void set3rdAppId(String appId);
-	public void setAuthProviderType(AuthProviderType authProviderType);
-	public void setAuthProvider(AuthProvider authProvider);
-
+	public void onSignOut();
+	
 }
