@@ -79,9 +79,11 @@ public class SocializeButton extends LinearLayout {
 	}
 
 	public void init() {
+		
 		int dipPadding = deviceUtils.getDIP(padding);
 		int radius = deviceUtils.getDIP(4);
 		int textPadding = deviceUtils.getDIP(4);
+		
 		int bottom = colors.getColor(bottomColor);
 		int top = colors.getColor(topColor);
 		int strokeTop = colors.getColor(strokeTopColor);

@@ -64,7 +64,7 @@ public abstract class BaseHeaderFactory<H extends SocializeHeader> extends BaseV
 		
 		Drawable[] layers = new Drawable[] {background, headerBG};
 		
-		LayerDrawable bg = new LayerDrawable(layers);
+		LayerDrawable bg = newLayerDrawable(layers);
 		bg.setLayerInset(1, 0, 0, 0, 1);
 		
 		header.setBackgroundDrawable(bg);
@@ -94,6 +94,11 @@ public abstract class BaseHeaderFactory<H extends SocializeHeader> extends BaseV
 		header.addView(titleText);
 		
 		return header;
+	}
+	
+	// So we can mock
+	protected LayerDrawable newLayerDrawable(Drawable[] layers) {
+		return new LayerDrawable(layers);
 	}
 	
 	protected abstract String getHeaderText();

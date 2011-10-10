@@ -55,7 +55,7 @@ public class User extends SocializeObject {
 		setLargeImageUri(user.getLargeImageUri());
 		setStats(user.getStats());
 		setAuthData(user.getAuthData());
-		setProfilePicData(profilePicData);
+		setProfilePicData(user.getProfilePicData());
 	}
 
 	public String getDisplayName() {

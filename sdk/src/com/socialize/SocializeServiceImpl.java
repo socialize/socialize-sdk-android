@@ -123,7 +123,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 
 		if(isInitialized()) {
 			for (String path : paths) {
-				if(Arrays.binarySearch(initPaths, path) < 0) {
+				if(binarySearch(initPaths, path) < 0) {
 					
 					if(logger != null) {
 						logger.info("New path found for beans [" +
@@ -132,6 +132,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 					}
 					
 					this.initCount = 0;
+					
 					destroy();
 					
 					init = true;
@@ -148,11 +149,11 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			try {
 				initPaths = paths;
 				
-				Arrays.sort(initPaths);
+				sort(initPaths);
 				
-				SocializeIOC container = new SocializeIOC();
-				ResourceLocator locator = new ResourceLocator();
-				ClassLoaderProvider provider = new ClassLoaderProvider();
+				SocializeIOC container = newSocializeIOC();
+				ResourceLocator locator = newResourceLocator();
+				ClassLoaderProvider provider = newClassLoaderProvider();
 				
 				locator.setClassLoaderProvider(provider);
 				
@@ -176,6 +177,31 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		return container;
 	}
 
+	// So we can mock
+	protected SocializeIOC newSocializeIOC() {
+		return new SocializeIOC();
+	}
+	
+	// So we can mock
+	protected ResourceLocator newResourceLocator() {
+		return new ResourceLocator();
+	}
+	
+	// So we can mock
+	protected ClassLoaderProvider newClassLoaderProvider() {
+		return new ClassLoaderProvider();
+	}
+	
+	// So we can mock
+	protected int binarySearch(String[] array, String str) {
+		return Arrays.binarySearch(array, str);
+	}
+	
+	// So we can mock
+	protected void sort(Object[] array) {
+		Arrays.sort(array);
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#init(android.content.Context, com.socialize.android.ioc.IOCContainer)
 	 */

@@ -56,11 +56,10 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 		
 		sleep(1000);
 		
-		// Results are in reverse order
-		IOCContainer containerAfter = getNextResult();
-		SocializeUIErrorHandler errorHandlerAfter = getNextResult();
-		String initSocialize = getNextResult();
 		String onBeforeSocializeInit = getNextResult();
+		String initSocialize = getNextResult();
+		SocializeUIErrorHandler errorHandlerAfter = getNextResult();
+		IOCContainer containerAfter = getNextResult();
 		
 		assertNotNull(containerAfter);
 		assertNotNull(errorHandlerAfter);

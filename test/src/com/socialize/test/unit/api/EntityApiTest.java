@@ -28,7 +28,11 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.EntityApi;
 import com.socialize.entity.Entity;
+import com.socialize.entity.ListResult;
+import com.socialize.error.SocializeApiError;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeActionListener;
+import com.socialize.listener.entity.EntityListListener;
 import com.socialize.listener.entity.EntityListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeUnitTest;
@@ -120,6 +124,96 @@ public class EntityApiTest extends SocializeUnitTest {
 		for (int i = 0; i < after.length; i++) {
 			assertEquals(keys[i], after[i]);
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({SocializeException.class, Entity.class, ListResult.class, List.class})
+	public void testGetEntityListenerSuccess() {
+		
+		String key = "foo";
+		
+		EntityApi api = new EntityApi(provider) {
+			@Override
+			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
+				addResult(listener);
+			}
+		};
+		
+		Entity entity = AndroidMock.createMock(Entity.class);
+		ListResult<Entity> entities = AndroidMock.createMock(ListResult.class);
+		List<Entity> items = AndroidMock.createMock(List.class);
+		SocializeException exception = AndroidMock.createMock(SocializeException.class);
+		
+		AndroidMock.expect(entities.getItems()).andReturn(items);
+		AndroidMock.expect(items.size()).andReturn(1);
+		AndroidMock.expect(items.get(0)).andReturn(entity);
+		
+		listener.onGet(entity);
+		listener.onError(exception);
+		
+		AndroidMock.replay(entities);
+		AndroidMock.replay(items);
+		AndroidMock.replay(listener);
+		
+		api.getEntity(session, key, listener);
+		
+		// get the listener
+		EntityListListener listenerFound = getNextResult();
+		
+		assertNotNull(listenerFound);
+		
+		// Force each method call to simulate behavior.
+		listenerFound.onError(exception);
+		listenerFound.onList(entities);
+		
+		AndroidMock.verify(entities);
+		AndroidMock.verify(items);
+		AndroidMock.verify(listener);
+
+	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({SocializeException.class, Entity.class, ListResult.class, List.class})
+	public void testGetEntityListenerFail404() {
+		
+		String key = "foo";
+		
+		EntityApi api = new EntityApi(provider) {
+			@Override
+			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
+				addResult(listener);
+			}
+		};
+		
+		ListResult<Entity> entities = AndroidMock.createMock(ListResult.class);
+		List<Entity> items = AndroidMock.createMock(List.class);
+		SocializeException exception = AndroidMock.createMock(SocializeException.class);
+		
+		AndroidMock.expect(entities.getItems()).andReturn(items);
+		AndroidMock.expect(items.size()).andReturn(0);
+		
+		listener.onError(exception);
+		listener.onError((SocializeApiError) AndroidMock.anyObject());
+		
+		AndroidMock.replay(entities);
+		AndroidMock.replay(items);
+		AndroidMock.replay(listener);
+		
+		api.getEntity(session, key, listener);
+		
+		// get the listener
+		EntityListListener listenerFound = getNextResult();
+		
+		assertNotNull(listenerFound);
+		
+		// Force each method call to simulate behavior.
+		listenerFound.onError(exception);
+		listenerFound.onList(entities);
+		
+		AndroidMock.verify(entities);
+		AndroidMock.verify(items);
+		AndroidMock.verify(listener);
+
 	}
 	
 }

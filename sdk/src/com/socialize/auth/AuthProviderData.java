@@ -30,9 +30,6 @@ public class AuthProviderData {
 	private String userId3rdParty; 
 	private String token3rdParty; 
 	private String appId3rdParty;
-	private String userFirstName;
-	private String userLastName;
-	private String userProfilePicData;
 	private AuthProviderType authProviderType = AuthProviderType.SOCIALIZE;
 	
 	public AuthProviderData() {
@@ -57,35 +54,10 @@ public class AuthProviderData {
 	public void setAppId3rdParty(String appId3rdParty) {
 		this.appId3rdParty = appId3rdParty;
 	}
-	@Deprecated
-	public String getUserFirstName() {
-		return userFirstName;
-	}
-	@Deprecated
-	public void setUserFirstName(String userFullName) {
-		this.userFirstName = userFullName;
-	}
-	@Deprecated
-	public String getUserLastName() {
-		return userLastName;
-	}
-	@Deprecated
-	public void setUserLastName(String userLastName) {
-		this.userLastName = userLastName;
-	}
-	@Deprecated
-	public String getUserProfilePicData() {
-		return userProfilePicData;
-	}
-	@Deprecated
-	public void setUserProfilePicData(String userProfilePicData) {
-		this.userProfilePicData = userProfilePicData;
-	}
 	public AuthProviderType getAuthProviderType() {
 		return authProviderType;
 	}
 	public void setAuthProviderType(AuthProviderType authProviderType) {
 		this.authProviderType = authProviderType;
 	}
-	
 }

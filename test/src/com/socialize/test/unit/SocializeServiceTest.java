@@ -21,6 +21,7 @@
  */
 package com.socialize.test.unit;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.test.mock.MockContext;
 
@@ -38,6 +39,7 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.error.SocializeException;
+import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.comment.CommentAddListener;
@@ -53,6 +55,8 @@ import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.test.SocializeUnitTest;
+import com.socialize.util.ClassLoaderProvider;
+import com.socialize.util.ResourceLocator;
 
 /**
  * @author Jason Polites
@@ -883,5 +887,94 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		AndroidMock.verify(socialize);
 		AndroidMock.verify(listener);
+	}
+	
+	@UsesMocks ({SocializeIOC.class, ResourceLocator.class, ClassLoaderProvider.class})
+	public void testInitWithContainer() throws Exception {
+		
+		final SocializeIOC socializeIOC = AndroidMock.createMock(SocializeIOC.class);
+		final ClassLoaderProvider classLoaderProvider = AndroidMock.createMock(ClassLoaderProvider.class);
+		final ResourceLocator resourceLocator = AndroidMock.createMock(ResourceLocator.class);
+		
+		final Context context = new MockContext();
+		
+		final String[] mockPaths = {"foobar"};
+		
+		SocializeServiceImpl service = new SocializeServiceImpl() {
+			
+			@Override
+			public void init(Context context, IOCContainer container) {
+				addResult(context);
+				addResult(container);
+			}
+
+			@Override
+			public boolean isInitialized() {
+				return true;
+			}
+
+			@Override
+			protected SocializeIOC newSocializeIOC() {
+				return socializeIOC;
+			}
+
+			@Override
+			protected ResourceLocator newResourceLocator() {
+				return resourceLocator;
+			}
+
+			@Override
+			protected ClassLoaderProvider newClassLoaderProvider() {
+				return classLoaderProvider;
+			}
+
+			@Override
+			protected int binarySearch(String[] array, String str) {
+				// Simulate not found
+				addResult("binarySearch_" + str);
+				return -1;
+			}
+			
+			@Override
+			public void destroy() {
+				addResult("destroy");
+			}
+
+			@Override
+			protected void sort(Object[] array) {
+				addResult("sort");
+			}
+		};
+		
+		
+		resourceLocator.setClassLoaderProvider(classLoaderProvider);
+		socializeIOC.init(context, resourceLocator, mockPaths);
+		
+		AndroidMock.replay(socializeIOC);
+		AndroidMock.replay(resourceLocator);
+		
+		service.initWithContainer(context, mockPaths);
+		
+		AndroidMock.verify(socializeIOC);
+		AndroidMock.verify(resourceLocator);
+		
+		// Reverse order for asserts
+		String binarySearch = getNextResult();
+		String destroy = getNextResult();
+		String sort = getNextResult();
+		Context foundContext = getNextResult();
+		IOCContainer foundContainer = getNextResult();
+		
+		assertNotNull(binarySearch);
+		assertNotNull(destroy);
+		assertNotNull(sort);
+		assertNotNull(foundContext);
+		assertNotNull(foundContainer);
+		
+		assertEquals("binarySearch_foobar", binarySearch);
+		assertEquals("destroy", destroy);
+		assertEquals("sort", sort);
+		assertSame(context, foundContext);
+		assertSame(socializeIOC, foundContainer);
 	}
 }

@@ -27,6 +27,7 @@ import com.socialize.api.SocializeResponse;
 import com.socialize.api.SocializeApi.RequestType;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
+import com.socialize.error.SocializeException;
 
 
 /**
@@ -73,5 +74,8 @@ public abstract class AbstractSocializeListener<T extends SocializeObject> imple
 	public abstract void onCreate(T entity);
 	
 	public abstract void onDelete();
+
+	@Override
+	public abstract void onError(SocializeException error);
 
 }

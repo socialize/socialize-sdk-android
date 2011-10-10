@@ -54,8 +54,8 @@ public class EntityViewTest extends SocializeUIActivityTest {
 		
 		view.getView();
 		
-		String entityKey = getNextResult();
 		Bundle bundle = getNextResult();
+		String entityKey = getNextResult();
 		
 		assertNotNull(entityKey);
 		assertNotNull(bundle);

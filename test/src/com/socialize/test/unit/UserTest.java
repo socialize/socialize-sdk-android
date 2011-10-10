@@ -21,7 +21,13 @@
  */
 package com.socialize.test.unit;
 
+import java.util.List;
+
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.entity.Stats;
 import com.socialize.entity.User;
+import com.socialize.entity.UserAuthData;
 import com.socialize.test.SocializeUnitTest;
 
 /**
@@ -55,6 +61,55 @@ public class UserTest extends SocializeUnitTest {
 		assertEquals(lname, user2.getDisplayName());
 		assertEquals(uname, user3.getDisplayName());
 		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({User.class, Stats.class, List.class})
+	public void testMerge() {
+		
+		User mockUser = AndroidMock.createMock(User.class);
+		User realUser = new User();
+		Stats stats = AndroidMock.createMock(Stats.class);
+		List<UserAuthData> authData = AndroidMock.createMock(List.class);
+		
+		final String firstName = "foobar_firstName";
+		final String lastName = "foobar_lastName";
+		final String userName = "foobar_userName";
+		final String location = "foobar_location";
+		final String small_url = "foobar_small_url";
+		final String medium_url = "foobar_medium_url";
+		final String large_url = "foobar_large_url";
+		final String picture = "foobar_picture";
+		
+		AndroidMock.expect(mockUser.getFirstName()).andReturn(firstName);
+		AndroidMock.expect(mockUser.getLastName()).andReturn(lastName);
+		AndroidMock.expect(mockUser.getUsername()).andReturn(userName);
+		AndroidMock.expect(mockUser.getLocation()).andReturn(location);
+		AndroidMock.expect(mockUser.getSmallImageUri()).andReturn(small_url);
+		AndroidMock.expect(mockUser.getMediumImageUri()).andReturn(medium_url);
+		AndroidMock.expect(mockUser.getLargeImageUri()).andReturn(large_url);
+		AndroidMock.expect(mockUser.getProfilePicData()).andReturn(picture);
+		
+		AndroidMock.expect(mockUser.getStats()).andReturn(stats);
+		AndroidMock.expect(mockUser.getAuthData()).andReturn(authData);
+		
+		AndroidMock.replay(mockUser);
+		
+		realUser.merge(mockUser);
+		
+		AndroidMock.verify(mockUser);
+		
+		assertEquals(firstName, realUser.getFirstName());
+		assertEquals(lastName, realUser.getLastName());
+		assertEquals(userName, realUser.getUsername());
+		assertEquals(location, realUser.getLocation());
+		assertEquals(small_url, realUser.getSmallImageUri());
+		assertEquals(medium_url, realUser.getMediumImageUri());
+		assertEquals(large_url, realUser.getLargeImageUri());
+		assertEquals(picture, realUser.getProfilePicData());
+		
+		assertSame(stats, realUser.getStats());
+		assertSame(authData, realUser.getAuthData());
 	}
 	
 }

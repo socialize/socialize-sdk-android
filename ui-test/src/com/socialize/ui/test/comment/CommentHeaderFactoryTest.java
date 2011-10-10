@@ -1,5 +1,9 @@
 package com.socialize.ui.test.comment;
 
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.ui.comment.CommentHeader;
@@ -19,10 +23,12 @@ public class CommentHeaderFactoryTest extends SocializeUITestCase {
 	public void testMake() {
 		
 		// Just tests for runtime failures
-		
 		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
 		Colors colors = AndroidMock.createMock(Colors.class);
 		Drawables drawables = AndroidMock.createMock(Drawables.class);
+		Drawable[] layers = {new BitmapDrawable(), new BitmapDrawable()};
+		
+		final LayerDrawable layer = new LayerDrawable(layers);
 		
 		AndroidMock.expect(deviceUtils.getDIP(AndroidMock.anyInt())).andReturn(0).anyTimes();
 		AndroidMock.expect(colors.getColor((String)AndroidMock.anyObject())).andReturn(0).anyTimes();
@@ -33,7 +39,12 @@ public class CommentHeaderFactoryTest extends SocializeUITestCase {
 		AndroidMock.replay(colors);
 		AndroidMock.replay(drawables);
 
-		CommentHeaderFactory factory = new CommentHeaderFactory();
+		CommentHeaderFactory factory = new CommentHeaderFactory() {
+			@Override
+			protected LayerDrawable newLayerDrawable(Drawable[] layers) {
+				return layer;
+			}
+		};
 		
 		factory.setColors(colors);
 		factory.setDeviceUtils(deviceUtils);
