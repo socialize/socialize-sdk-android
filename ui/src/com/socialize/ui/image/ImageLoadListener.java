@@ -19,40 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.image;
+package com.socialize.ui.image;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-import com.socialize.util.CacheableDrawable;
 import com.socialize.util.SafeBitmapDrawable;
 
 /**
  * @author Jason Polites
- * 
+ *
  */
-public class ImageUrlLoader {
+public interface ImageLoadListener {
 
-	public SafeBitmapDrawable loadImageFromUrl(String url) throws IOException {
-		URL imageUrl = new URL(url);
-		URLConnection conn = null;
-		InputStream is = null;
-		
-		try {
-			conn = imageUrl.openConnection();
-			is = conn.getInputStream();
-			Bitmap bitmap = BitmapFactory.decodeStream(is);
-			return new CacheableDrawable(bitmap, url);
-		}
-		finally {
-			if (is != null) {
-				is.close();
-			}
-		}
-	}
+	public void onImageLoad(ImageLoadRequest request, SafeBitmapDrawable drawable);
+	
+	public void onImageLoadFail(Exception error);
+	
 }

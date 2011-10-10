@@ -127,7 +127,7 @@
 		</property>
 	</bean>
 	
-	<!-- General UI -->
+<!-- General UI -->
 	
 	<bean 
 		id="socializeButton" 
@@ -163,7 +163,7 @@
 		<property name="textAlign" value="center"/>
 	</bean>
 	
-	<!-- Authenticate Dialog -->
+<!-- Authenticate Dialog -->
 	<factory id="authRequestDialogFactory" makes="authRequestDialog"/>
 	<factory id="authConfirmDialogFactory" makes="authConfirmDialog"/>
 	<factory id="authRequestDialogViewFactory" makes="authRequestDialogView"/>
@@ -287,7 +287,7 @@
 	
 	<factory id="facebookSignOutTaskFactory" makes="facebookSignOutTask"/>
 
-	<!-- Comment UI -->
+<!-- Comment UI -->
 	
 	<bean 
 		id="commentAdapter" 
@@ -369,9 +369,9 @@
 		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
 	</bean>
 	
-	<!--  End Comment UI -->
+<!--  End Comment UI -->
 	
-	<!-- Profile UI -->
+<!-- Profile UI -->
 	
 	<bean 
 		id="profileLayoutView" 
@@ -491,6 +491,26 @@
 	<factory id="profileSaveButtonListenerFactory" makes="profileSaveButtonListener"/>
 	<factory id="profileImageContextMenuFactory" makes="profileImageContextMenu"/>
 	
-	<!-- End Profile UI -->
+<!-- End Profile UI -->
+	
+
+<!--  Image Loader  -->
+	<bean id="imageUrlLoader" class="com.socialize.ui.image.ImageUrlLoader"/>
+	
+	<bean id="imageLoadAsyncTask" class="com.socialize.ui.image.ImageLoadAsyncTask">
+		<property name="imageUrlLoader" ref="imageUrlLoader"/>
+		<property name="logger" ref="logger"/>
+		<property name="cache" ref="cache"/>
+	</bean>
+
+	<bean id="imageLoader" class="com.socialize.ui.image.ImageLoader" lazy-init="true">
+		<property name="drawables" ref="drawables"/>
+		<property name="imageLoadAsyncTask" ref="imageLoadAsyncTask"/>
+		<property name="logger" ref="logger"/>
+		<init-method name="init"/>
+		<destroy-method name="destroy"/>
+	</bean>
+<!--  End Image Loader -->
+
 	
 </beans>

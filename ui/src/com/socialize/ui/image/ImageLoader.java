@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.image;
+package com.socialize.ui.image;
 
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.CacheableDrawable;
