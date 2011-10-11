@@ -503,7 +503,7 @@
 		<property name="cache" ref="cache"/>
 	</bean>
 
-	<bean id="imageLoader" class="com.socialize.ui.image.ImageLoader" lazy-init="true">
+	<bean id="imageLoader" class="com.socialize.ui.image.ImageLoader">
 		<property name="drawables" ref="drawables"/>
 		<property name="imageLoadAsyncTask" ref="imageLoadAsyncTask"/>
 		<property name="logger" ref="logger"/>
