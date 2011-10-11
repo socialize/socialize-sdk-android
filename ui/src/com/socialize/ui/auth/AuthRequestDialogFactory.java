@@ -88,6 +88,11 @@ public class AuthRequestDialogFactory  {
 				alertDialog.dismiss();
 				listener.onResult(alertDialog);
 			}
+
+			@Override
+			public void onCancel() {
+				// Do nothing
+			}
 		});
 		
 	    alertDialog.show();

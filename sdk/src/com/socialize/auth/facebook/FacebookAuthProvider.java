@@ -76,6 +76,12 @@ public class FacebookAuthProvider implements AuthProvider {
 				holder.remove(listenerKey);
 				listener.onAuthFail(error);
 			}
+
+			@Override
+			public void onCancel() {
+				holder.remove(listenerKey);
+				listener.onCancel();
+			}
 		});
 		
 		Intent i = new Intent(context, FacebookActivity.class);

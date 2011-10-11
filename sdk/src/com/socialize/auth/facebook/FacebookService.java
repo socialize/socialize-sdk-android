@@ -44,7 +44,6 @@ public class FacebookService {
 	private FacebookSessionStore facebookSessionStore; 
 	private AuthProviderListener listener;
 	private DialogFactory dialogFactory;
-//	private FacebookImageRetriever facebookImageRetriever;
 	
 	public static final String[] DEFAULT_PERMISSIONS = {"offline_access", "publish_stream"};
 	
@@ -92,18 +91,9 @@ public class FacebookService {
 			}
 		};
 		
-//		facebookDialogListener.setFacebookImageRetriever(facebookImageRetriever);
 		facebook.authorize(context, permissions, facebookDialogListener);
 	}
 	
-//	public FacebookImageRetriever getFacebookImageRetriever() {
-//		return facebookImageRetriever;
-//	}
-//
-//	public void setFacebookImageRetriever(FacebookImageRetriever facebookImageRetriever) {
-//		this.facebookImageRetriever = facebookImageRetriever;
-//	}
-
 	public void cancel() {
 		Toast.makeText(context, "Request canceled", Toast.LENGTH_SHORT).show();
 	}

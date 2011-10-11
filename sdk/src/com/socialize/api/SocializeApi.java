@@ -371,6 +371,15 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 							listener.onAuthFail(error);
 						}
 					}
+
+					@Override
+					public void onCancel() {
+						if(listener != null) {
+							listener.onCancel();
+						}
+					}
+					
+					
 				});
 			}
 			else {

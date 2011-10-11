@@ -59,4 +59,8 @@ public class CommentReAuthListener implements SocializeAuthListener {
 		callback.onError(context, error);
 	}
 
+	@Override
+	public void onCancel() {
+		// Nothing
+	}
 }

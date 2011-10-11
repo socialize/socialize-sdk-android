@@ -33,4 +33,6 @@ public interface AuthProviderListener extends SocializeListener {
 	public void onAuthSuccess(AuthProviderResponse response);
 	
 	public void onAuthFail(SocializeException error);
+	
+	public void onCancel();
 }

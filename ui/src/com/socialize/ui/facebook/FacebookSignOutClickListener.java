@@ -87,6 +87,11 @@ public class FacebookSignOutClickListener implements OnClickListener {
 								logError("Error during authentication", error);
 								exitProfileActivity(v);
 							}
+
+							@Override
+							public void onCancel() {
+								exitProfileActivity(v);
+							}
 						});
 					}
 				});

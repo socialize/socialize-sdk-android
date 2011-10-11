@@ -48,6 +48,8 @@ public class FacebookAuthClickListener implements OnClickListener {
 	@Override
 	public void onClick(View view) {
 		
+		view.setEnabled(false);
+		
 		dialog = dialogFactory.show(view.getContext(), "Facebook", "Authenticating...");
 		
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
@@ -79,6 +81,14 @@ public class FacebookAuthClickListener implements OnClickListener {
 				dialog.dismiss();
 				if(listener != null) {
 					listener.onAuthFail(error);
+				}
+			}
+
+			@Override
+			public void onCancel() {
+				dialog.dismiss();
+				if(listener != null) {
+					listener.onCancel();
 				}
 			}
 		});

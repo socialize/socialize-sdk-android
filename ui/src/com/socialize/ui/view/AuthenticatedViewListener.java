@@ -51,6 +51,11 @@ public class AuthenticatedViewListener implements SocializeAuthListener {
 	}
 	
 	@Override
+	public void onCancel() {
+		// Nothing
+	}
+
+	@Override
 	public void onAuthSuccess(SocializeSession session) {
 		// Render the childView
 		view.onAfterAuthenticate();
