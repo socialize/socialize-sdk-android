@@ -81,6 +81,7 @@ public class CommentEditFieldFactory extends BaseViewFactory<CommentEditField> {
 
 		ImageButton button = new ImageButton(context);
 		button.setImageDrawable(drawables.getDrawable("post_icon.png", true));
+		button.setPadding(getDIP(5), 0, 0, four);
 
 		GradientDrawable foreground = new GradientDrawable(
 				GradientDrawable.Orientation.BOTTOM_TOP,

@@ -108,8 +108,8 @@ public class CommentDetailLayoutView extends BaseView {
 			}
 		};
 		
-		content.getProfilePicture().setOnClickListener(profileClickListener);
-		content.getDisplayName().setOnClickListener(profileClickListener);
+		content.getHeaderView().setOnClickListener(profileClickListener);
+//		content.getDisplayName().setOnClickListener(profileClickListener);
 
 		addView(header);
 		addView(content);

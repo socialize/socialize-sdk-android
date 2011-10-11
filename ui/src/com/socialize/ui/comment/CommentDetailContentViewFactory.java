@@ -69,20 +69,20 @@ public class CommentDetailContentViewFactory extends BaseViewFactory<CommentDeta
 		final float editTextRadius = editTextStroke;
 		final int titleColor = getColor(Colors.TITLE);
 		
-		LayoutParams editPanelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		LayoutParams masterLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+		masterLayout.setMargins(margin, margin, margin, margin);
 		
-		editPanelLayoutParams.setMargins(margin, margin, margin, margin);
-		view.setLayoutParams(editPanelLayoutParams);
+		view.setLayoutParams(masterLayout);
 		view.setOrientation(LinearLayout.VERTICAL);
 		view.setPadding(0, 0, 0, 0);
 		view.setGravity(Gravity.TOP);
 		
-		LinearLayout masterLayout = new LinearLayout(context);
+		LinearLayout headerLayout = new LinearLayout(context);
 		LayoutParams masterLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		
-		masterLayout.setLayoutParams(masterLayoutParams);
-		masterLayout.setOrientation(LinearLayout.HORIZONTAL);
-		masterLayout.setGravity(Gravity.TOP);
+		headerLayout.setLayoutParams(masterLayoutParams);
+		headerLayout.setOrientation(LinearLayout.HORIZONTAL);
+		headerLayout.setGravity(Gravity.TOP);
 		
 		LinearLayout nameLayout = new LinearLayout(context);
 		LayoutParams nameLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -117,6 +117,7 @@ public class CommentDetailContentViewFactory extends BaseViewFactory<CommentDeta
 		commentBG.setAlpha(64);
 		
 		commentViewLayout.setMargins(0, margin, 0, margin);
+		commentViewLayout.weight = 1.0f;
 		
 		commentView.setBackgroundDrawable(commentBG);
 		commentView.setPadding(margin, margin, margin, margin);
@@ -171,14 +172,15 @@ public class CommentDetailContentViewFactory extends BaseViewFactory<CommentDeta
 		view.setLocation(location);
 		view.setCommentView(commentView);
 		view.setCommentMeta(commentMeta);
+		view.setHeaderView(headerLayout);
 		
 		nameLayout.addView(displayName);
 		nameLayout.addView(location);
 		
-		masterLayout.addView(profilePicture);
-		masterLayout.addView(nameLayout);
+		headerLayout.addView(profilePicture);
+		headerLayout.addView(nameLayout);
 		
-		view.addView(masterLayout);
+		view.addView(headerLayout);
 		view.addView(commentView);
 		view.addView(commentMeta);
 

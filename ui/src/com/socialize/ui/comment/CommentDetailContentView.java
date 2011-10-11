@@ -48,6 +48,8 @@ public class CommentDetailContentView extends LinearLayout {
 	private GeoUtils geoUtils;
 	private DateUtils dateUtils;
 	
+	private View headerView;
+	
 	public CommentDetailContentView(Context context) {
 		super(context);
 	}
@@ -106,6 +108,14 @@ public class CommentDetailContentView extends LinearLayout {
 
 	public void setLocation(TextView location) {
 		this.location = location;
+	}
+	
+	public View getHeaderView() {
+		return headerView;
+	}
+
+	public void setHeaderView(View headerView) {
+		this.headerView = headerView;
 	}
 
 	public void setComment(Comment comment) {
