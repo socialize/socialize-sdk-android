@@ -52,6 +52,10 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	public void setUp() throws Exception {
 		robotium = new Solo(getInstrumentation(), getActivity());
 		imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+		
+		robotium.clearEditText(0);
+		robotium.enterText(0, DEFAULT_GET_ENTITY);
+		robotium.clickOnButton(0);
 	}
 
 	@Override
