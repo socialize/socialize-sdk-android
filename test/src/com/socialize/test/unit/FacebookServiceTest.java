@@ -159,6 +159,11 @@ import com.socialize.util.Drawables;
 			public void onAuthFail(SocializeException error) {
 				fail();
 			}
+			
+			@Override
+			public void onCancel() {
+				fail();
+			}
 		};
 
 		// Expect

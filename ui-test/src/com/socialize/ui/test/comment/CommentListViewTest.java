@@ -35,7 +35,6 @@ import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.test.SocializeUIActivityTest;
 import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.ui.view.ViewFactory;
-import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 
 public class CommentListViewTest extends SocializeUIActivityTest {
@@ -46,7 +45,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		CommentEditField.class,
 		CommentHeader.class,
 		CommentContentView.class,
-		DeviceUtils.class,
 		Drawables.class,
 		KeyboardUtils.class,
 		CommentAdapter.class,
@@ -72,14 +70,10 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		CommentEditField field = AndroidMock.createMock(CommentEditField.class, getContext());
 		CommentHeader header = AndroidMock.createMock(CommentHeader.class, getContext());
 		CommentContentView content = AndroidMock.createMock(CommentContentView.class, getContext());
-		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
 		Drawables drawables = AndroidMock.createMock(Drawables.class);
 		KeyboardUtils keyboardUtils = AndroidMock.createMock(KeyboardUtils.class, getContext());
 		CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class, getActivity());
 		Drawable drawable = AndroidMock.createMock(Drawable.class);
-		
-		AndroidMock.expect(deviceUtils.getDIP(4)).andReturn(4).times(1);
-		AndroidMock.expect(deviceUtils.getDIP(8)).andReturn(8).times(1);
 		
 		AndroidMock.expect(commentHeaderFactory.make(context)).andReturn(header);
 		AndroidMock.expect(commentEditFieldFactory.make(context)).andReturn(field);
@@ -94,7 +88,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		AndroidMock.replay(commentHeaderFactory);
 		AndroidMock.replay(commentEditFieldFactory);
 		AndroidMock.replay(commentContentViewFactory);
-		AndroidMock.replay(deviceUtils);
 		AndroidMock.replay(drawables);
 		AndroidMock.replay(field);
 		AndroidMock.replay(content);
@@ -141,7 +134,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		view.setCommentHeaderFactory(commentHeaderFactory);
 		view.setCommentEditFieldFactory(commentEditFieldFactory);
 		view.setCommentContentViewFactory(commentContentViewFactory);
-		view.setDeviceUtils(deviceUtils);
 		view.setKeyboardUtils(keyboardUtils);
 		view.setCommentAdapter(commentAdapter);
 		view.setDrawables(drawables);
@@ -163,7 +155,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		AndroidMock.verify(commentHeaderFactory);
 		AndroidMock.verify(commentEditFieldFactory);
 		AndroidMock.verify(commentContentViewFactory);
-		AndroidMock.verify(deviceUtils);
 		AndroidMock.verify(drawables);
 		AndroidMock.verify(field);
 		AndroidMock.verify(content);

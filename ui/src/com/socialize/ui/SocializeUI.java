@@ -14,6 +14,7 @@ import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.config.SocializeConfig;
 import com.socialize.ui.comment.CommentActivity;
+import com.socialize.ui.comment.CommentDetailActivity;
 import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.util.Drawables;
 
@@ -139,8 +140,8 @@ public class SocializeUI {
 		context.startActivityForResult(i, requestCode);
 	}
 	
-	public void showUserProfileViewForResult(Activity context, String userId, String commentId, int requestCode) {
-		Intent i = new Intent(context, ProfileActivity.class);
+	public void showCommentDetailViewForResult(Activity context, String userId, String commentId, int requestCode) {
+		Intent i = new Intent(context, CommentDetailActivity.class);
 		i.putExtra(USER_ID, userId);
 		i.putExtra(COMMENT_ID, commentId);
 		context.startActivityForResult(i, requestCode);

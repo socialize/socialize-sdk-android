@@ -11,7 +11,7 @@ import android.view.View;
 
 public class ProfileView extends EntityView {
 	
-	ProfileLayoutView profileLayoutView = null;
+	private ProfileLayoutView profileLayoutView = null;
 	
 	public ProfileView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -31,7 +31,7 @@ public class ProfileView extends EntityView {
 
 	@Override
 	protected String[] getEntityKeys() {
-		return  new String[]{SocializeUI.USER_ID, SocializeUI.COMMENT_ID};
+		return new String[]{SocializeUI.USER_ID};
 	}
 	
 	/**

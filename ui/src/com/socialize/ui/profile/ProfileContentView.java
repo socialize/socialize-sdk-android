@@ -21,23 +21,17 @@
  */
 package com.socialize.ui.profile;
 
-import java.util.Date;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
-import android.location.Address;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.socialize.entity.Comment;
 import com.socialize.ui.button.SocializeButton;
-import com.socialize.ui.util.DateUtils;
-import com.socialize.ui.util.GeoUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.SafeBitmapDrawable;
 import com.socialize.util.StringUtils;
@@ -50,8 +44,6 @@ public class ProfileContentView extends LinearLayout {
 
 	private ImageView profilePicture;
 	private TextView displayName;
-	private TextView commentView;
-	private TextView commentMeta;
 	private EditText displayNameEdit;
 	private SocializeButton facebookSignOutButton;
 	
@@ -65,8 +57,6 @@ public class ProfileContentView extends LinearLayout {
 	private SafeBitmapDrawable profileDrawable;
 	private SafeBitmapDrawable originalProfileDrawable;
 	private Drawables drawables;
-	private GeoUtils geoUtils;
-	private DateUtils dateUtils;
 	
 	private Bitmap tmpProfileImage;
 	
@@ -94,37 +84,6 @@ public class ProfileContentView extends LinearLayout {
 	
 	public void setDisplayNameEdit(EditText displayNameEdit) {
 		this.displayNameEdit = displayNameEdit;
-	}
-
-	public void setCommentView(TextView commentView) {
-		this.commentView = commentView;
-	}
-	
-	public void setComment(Comment comment) {
-		if(commentView != null) {
-			commentView.setText(comment.getText());
-			commentView.setVisibility(View.VISIBLE);
-		}
-		
-		if(commentMeta != null) {
-			commentMeta.setVisibility(View.VISIBLE);
-			
-			String meta = "";
-			if(comment.getDate() != null) {
-				Date commentDate = new Date(comment.getDate());
-				meta = dateUtils.getSimpleDateString(commentDate);
-			}
-			
-			if(comment.getLat() != null && comment.getLon() != null) {
-				Address address = geoUtils.geoCode(comment.getLat(), comment.getLon());
-				
-				if(address != null) {
-					meta += " from " + geoUtils.getSimpleLocation(address);
-				}
-			}
-			
-			commentMeta.setText(meta);
-		}
 	}
 
 	public Drawable getProfileDrawable() {
@@ -224,20 +183,6 @@ public class ProfileContentView extends LinearLayout {
 
 	public void setContextMenu(ProfileImageContextMenu contextMenu) {
 		this.contextMenu = contextMenu;
-	}
-	
-
-	public void setCommentMeta(TextView commentMeta) {
-		this.commentMeta = commentMeta;
-	}
-
-	
-	public void setGeoUtils(GeoUtils geoUtils) {
-		this.geoUtils = geoUtils;
-	}
-	
-	public void setDateUtils(DateUtils dateUtils) {
-		this.dateUtils = dateUtils;
 	}
 
 	/**

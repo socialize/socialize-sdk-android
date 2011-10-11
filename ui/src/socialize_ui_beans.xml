@@ -347,6 +347,16 @@
 		id="commentContentViewFactory" 
 		class="com.socialize.ui.comment.CommentContentViewFactory"
 		extends="uiViewFactory"/>
+		
+	<bean 
+		id="commentDetailContentViewFactory" 
+		class="com.socialize.ui.comment.CommentDetailContentViewFactory"
+		extends="uiViewFactory">
+		
+		<property name="geoUtils" ref="geoUtils"/>
+		<property name="dateUtils" ref="dateUtils"/>
+		
+	</bean>
 	
 	<bean 
 		id="commentList" 
@@ -358,15 +368,30 @@
 		<init-method name="init"/>
 		
 		<property name="commentAdapter" ref="commentAdapter"/>
-		<property name="deviceUtils" ref="deviceUtils"/> <!-- Defined in socialize_beans.xml -->
 		<property name="drawables" ref="drawables"/>
-		<property name="colors" ref="colors"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
 		<property name="commentHeaderFactory" ref="commentHeaderFactory"/>
 		<property name="commentEditFieldFactory" ref="commentEditFieldFactory"/>
 		<property name="commentContentViewFactory" ref="commentContentViewFactory"/>
 		<property name="keyboardUtils" ref="keyboardUtils"/>
 		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
+	</bean>
+	
+	<bean 
+		id="commentDetailLayoutView" 
+		class="com.socialize.ui.comment.CommentDetailLayoutView"
+		singleton="false"
+		extends="socializeView">
+		
+		<constructor-arg type="activity"/>
+
+		<init-method name="init"/>
+		
+		<property name="drawables" ref="drawables"/>
+		<property name="progressDialogFactory" ref="progressDialogFactory"/>
+		<property name="commentHeaderFactory" ref="commentHeaderFactory"/>
+		<property name="commentDetailContentViewFactory" ref="commentDetailContentViewFactory"/>
+		<property name="imageLoader" ref="imageLoader"/>
 	</bean>
 	
 <!--  End Comment UI -->
@@ -415,8 +440,6 @@
 		<property name="facebookSignOutClickListenerFactory" ref="facebookSignOutClickListenerFactory"/>
 		<property name="profileSaveButtonListenerFactory" ref="profileSaveButtonListenerFactory"/>	
 		<property name="profileImageContextMenuFactory" ref="profileImageContextMenuFactory"/>	
-		<property name="geoUtils" ref="geoUtils"/>	
-		<property name="dateUtils" ref="dateUtils"/>	
 	</bean>
 		
 	<bean 

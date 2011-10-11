@@ -274,6 +274,9 @@ public class AuthenticateActivity extends SocializeActivity {
 		}
 
 		@Override
+		public void onCancel() {}
+
+		@Override
 		public void onError(SocializeException error) {
 			v.setEnabled(true);
 			txtAuthResult.setText("FAIL: " + ErrorHandler.handleApiError(AuthenticateActivity.this, error));

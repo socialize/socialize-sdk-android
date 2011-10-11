@@ -2,20 +2,15 @@ package com.socialize.ui.comment;
 
 import java.util.List;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Comment;
 import com.socialize.entity.ListResult;
-import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -24,14 +19,11 @@ import com.socialize.ui.BaseView;
 import com.socialize.ui.auth.AuthRequestDialogFactory;
 import com.socialize.ui.auth.AuthRequestListener;
 import com.socialize.ui.dialog.ProgressDialogFactory;
-import com.socialize.ui.util.Colors;
 import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.ui.view.ViewFactory;
-import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 
-//TODO: Remove this annotation
-@SuppressWarnings("unused")
+
 public class CommentListView extends BaseView {
 
 	private int defaultGrabLength = 20;
@@ -47,8 +39,6 @@ public class CommentListView extends BaseView {
 	private ProgressDialogFactory progressDialogFactory;
 	private Drawables drawables;
 	private ProgressDialog dialog = null;
-	private Colors colors;
-	private DeviceUtils deviceUtils;
 	private KeyboardUtils keyboardUtils;
 	
 	private ViewFactory<CommentHeader> commentHeaderFactory;
@@ -70,9 +60,6 @@ public class CommentListView extends BaseView {
 	}
 
 	public void init() {
-
-		int four = deviceUtils.getDIP(4);
-		int eight = deviceUtils.getDIP(8);
 
 		LayoutParams fill = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
 
@@ -322,10 +309,6 @@ public class CommentListView extends BaseView {
 		this.defaultGrabLength = defaultGrabLength;
 	}
 
-	public void setColors(Colors colors) {
-		this.colors = colors;
-	}
-
 	public void setCommentHeaderFactory(ViewFactory<CommentHeader> commentHeaderFactory) {
 		this.commentHeaderFactory = commentHeaderFactory;
 	}
@@ -344,10 +327,6 @@ public class CommentListView extends BaseView {
 
 	public void setEntityKey(String entityKey) {
 		this.entityKey = entityKey;
-	}
-
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
 	}
 
 	public boolean isLoading() {

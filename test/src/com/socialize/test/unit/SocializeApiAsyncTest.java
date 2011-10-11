@@ -137,6 +137,14 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 				authProgress.dismiss();
 				signal.countDown();
 			}
+			
+			@Override
+			public void onCancel() {
+				authProgress.dismiss();
+				signal.countDown(); 
+				fail();
+			}
+			
 		};
 		
 
@@ -179,6 +187,13 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 			public void onError(SocializeException error) {
 				System.out.println("Api listener onError fired");
 				signal.countDown();
+			}
+			
+			@Override
+			public void onCancel() {
+				System.out.println("Api listener onCancel fired");
+				signal.countDown(); 
+				fail();
 			}
 		};
 		

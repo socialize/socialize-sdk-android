@@ -187,7 +187,7 @@ public class CommentAdapter extends BaseAdapter {
 						@Override
 						public void onClick(View v) {
 							if(user != null && user.getId() != null) {
-								getSocializeUI().showUserProfileViewForResult(context, user.getId().toString(), item.getId().toString(), CommentActivity.PROFILE_UPDATE);
+								getSocializeUI().showCommentDetailViewForResult(context, user.getId().toString(), item.getId().toString(), CommentActivity.PROFILE_UPDATE);
 							}
 							else {
 								if(logger != null) {

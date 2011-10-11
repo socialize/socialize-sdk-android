@@ -92,6 +92,11 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 				error.printStackTrace();
 				fail();
 			}
+
+			@Override
+			public void onCancel() {
+				fail();
+			}
 		};
 		
 		AndroidMock.expect(facebookSessionStore.save(facebook, context)).andReturn(true);
@@ -164,6 +169,11 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 			public void onAuthFail(SocializeException error) {
 				fail();
 			}
+			
+			@Override
+			public void onCancel() {
+				fail();
+			}
 		};
 		
 		AndroidMock.expect(facebookSessionStore.save(facebook, context)).andReturn(true);
@@ -226,6 +236,11 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 			public void onAuthFail(SocializeException error) {
 				fail();
 			}
+			
+			@Override
+			public void onCancel() {
+				fail();
+			}
 		};
 		
 		FacebookDialogListener dListener = new FacebookDialogListener(context, facebook, facebookSessionStore, listener) {
@@ -283,6 +298,11 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 			
 			@Override
 			public void onAuthFail(SocializeException error) {
+				fail();
+			}
+			
+			@Override
+			public void onCancel() {
 				fail();
 			}
 		};

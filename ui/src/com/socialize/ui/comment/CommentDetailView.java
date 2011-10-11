@@ -19,35 +19,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.user;
+package com.socialize.ui.comment;
 
 import android.content.Context;
-import android.widget.LinearLayout;
+import android.os.Bundle;
+import android.view.View;
 
-import com.socialize.ui.BaseView;
-import com.socialize.util.Drawables;
+import com.socialize.ui.SocializeUI;
+import com.socialize.ui.view.EntityView;
 
 /**
  * @author Jason Polites
  *
  */
-public class UserProfileView extends BaseView {
-	
-	private Drawables drawables;
+public class CommentDetailView extends EntityView {
 
-	public UserProfileView(Context context) {
+	private CommentDetailLayoutView commentLayoutView;
+	
+	public CommentDetailView(Context context) {
 		super(context);
 	}
 
-	public void init() {
-		LayoutParams fill = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
-		setOrientation(LinearLayout.VERTICAL);
-		setLayoutParams(fill);
-		setBackgroundDrawable(drawables.getDrawable("crosshatch.png", true, true, true));
-		setPadding(0, 0, 0, 0);
+	/* (non-Javadoc)
+	 * @see com.socialize.ui.view.EntityView#getView(android.os.Bundle, java.lang.Object[])
+	 */
+	@Override
+	protected View getView(Bundle bundle, Object... entityKeys) {
+		if(commentLayoutView == null) {
+			commentLayoutView = container.getBean("commentDetailLayoutView", entityKeys);
+		}
+		return commentLayoutView;
 	}
 
-	public void setDrawables(Drawables drawables) {
-		this.drawables = drawables;
+	/* (non-Javadoc)
+	 * @see com.socialize.ui.view.EntityView#getEntityKeys()
+	 */
+	@Override
+	protected String[] getEntityKeys() {
+		return new String[]{SocializeUI.USER_ID, SocializeUI.COMMENT_ID};
 	}
+
 }
