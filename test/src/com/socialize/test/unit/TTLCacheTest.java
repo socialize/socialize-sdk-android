@@ -284,7 +284,7 @@ public class TTLCacheTest extends SocializeUnitTest {
 		cache.put("testKey2", testObj2);
 
 		try {
-			Thread.sleep(100);
+			Thread.sleep(500);
 		} catch (InterruptedException ignore) {
 			ignore.printStackTrace();
 		}	

@@ -38,24 +38,15 @@ import com.socialize.test.SocializeUnitTest;
  * @author Jason Polites
  *
  */
-
-@UsesMocks ({JSONObject.class})
 public class GenericActionFactoryTest extends SocializeUnitTest {
-//	
-//	JSONObject json = null;
-//	
-//	@Override
-//	protected void setUp() throws Exception {
-//		super.setUp();
-//		json = AndroidMock.createMock(JSONObject.class);
-//	}
+	
 //
 //	@UsesMocks ({CommentFactory.class, JSONObject.class})
 //	public void testInstantiateObjectComment() throws JSONException {
 //		CommentFactory commentFactory = AndroidMock.createMock(CommentFactory.class);
 //		GenericActionFactory factory = new GenericActionFactory();
 //		factory.setCommentFactory(commentFactory);
-//		testInstantiateObject("comment", factory, commentFactory);
+//		doTest("comment", factory, commentFactory);
 //	}
 //	
 //	@UsesMocks ({ViewFactory.class})
@@ -63,7 +54,7 @@ public class GenericActionFactoryTest extends SocializeUnitTest {
 //		ViewFactory objectFactory = AndroidMock.createMock(ViewFactory.class);
 //		GenericActionFactory factory = new GenericActionFactory();
 //		factory.setViewFactory(objectFactory);
-//		testInstantiateObject("view", factory, objectFactory);
+//		doTest("view", factory, objectFactory);
 //	}
 //	
 //	@UsesMocks ({LikeFactory.class})
@@ -71,7 +62,7 @@ public class GenericActionFactoryTest extends SocializeUnitTest {
 //		LikeFactory objectFactory = AndroidMock.createMock(LikeFactory.class);
 //		GenericActionFactory factory = new GenericActionFactory();
 //		factory.setLikeFactory(objectFactory);
-//		testInstantiateObject("like", factory, objectFactory);
+//		doTest("like", factory, objectFactory);
 //	}
 //	
 //	@UsesMocks ({ShareFactory.class})
@@ -79,11 +70,11 @@ public class GenericActionFactoryTest extends SocializeUnitTest {
 //		ShareFactory objectFactory = AndroidMock.createMock(ShareFactory.class);
 //		GenericActionFactory factory = new GenericActionFactory();
 //		factory.setShareFactory(objectFactory);
-//		testInstantiateObject("share", factory, objectFactory);
+//		doTest("share", factory, objectFactory);
 //	}
 //	
-//	private void testInstantiateObject(String type, GenericActionFactory factory, SocializeActionFactory<?> objectFactory) throws JSONException {
-//
+//	private void doTest(String type, GenericActionFactory factory, SocializeActionFactory<?> objectFactory) throws JSONException {
+//		JSONObject json = AndroidMock.createMock(JSONObject.class);
 //		AndroidMock.expect(json.has("activity_type")).andReturn(true);
 //		AndroidMock.expect(json.isNull("activity_type")).andReturn(false);
 //		AndroidMock.expect(json.getString("activity_type")).andReturn(type);
