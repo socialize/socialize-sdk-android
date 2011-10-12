@@ -69,7 +69,7 @@ public class CommentListActivity<T extends SocializeObject> extends ListActivity
 					iEnd = Integer.parseInt(end);
 				}
 				
-				final ProgressDialog progress = ProgressDialog.show(CommentListActivity.this, "Retrieving", "Please wait...");
+				final ProgressDialog progress = ProgressDialog.show(this, "Retrieving", "Please wait...");
 
 				Socialize.getSocialize().listCommentsByEntity(key, iStart, iEnd, new CommentListListener() {
 

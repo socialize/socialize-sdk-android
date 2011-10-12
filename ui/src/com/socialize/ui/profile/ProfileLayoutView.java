@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.user.UserGetListener;
@@ -174,7 +175,10 @@ public class ProfileLayoutView extends BaseView {
 		
 		User currentUser = userService.getCurrentUser();
 		
-		if(SocializeUI.getInstance().isFacebookSupported() && currentUser != null && currentUser.getId().equals(user.getId())) {
+		if(SocializeUI.getInstance().isFacebookSupported() && 
+				currentUser != null && currentUser.getId().equals(user.getId()) && 
+				Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+			
 			content.setUserDisplayName(user.getDisplayName());
 			content.getEditButton().setVisibility(View.VISIBLE);
 			content.getFacebookSignOutButton().setVisibility(View.VISIBLE);

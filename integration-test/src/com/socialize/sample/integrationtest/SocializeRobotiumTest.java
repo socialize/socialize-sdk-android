@@ -34,7 +34,6 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -72,7 +71,6 @@ public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestC
 
 	@Override
 	protected void tearDown() throws Exception {
-		Log.e("SocializeRobotiumTest", "tearDown()");
 		try {
 			robotium.finalize();
 		} 

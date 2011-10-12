@@ -20,6 +20,8 @@ public class LikeTest extends SocializeRobotiumTest {
 		robotium.enterText(0, DEFAULT_GET_ENTITY);
 		robotium.clickOnButton("Add Like");
 		
+		sleep(1000);
+		
 		waitForSuccess();
 		
 		getLikeId();

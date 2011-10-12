@@ -46,7 +46,7 @@
 	</bean>
 	
 	<bean id="locationProvider" class="com.socialize.location.DefaultLocationProvider">
-		<constructor-arg type="context"/>
+		<constructor-arg type="activity"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="locationManager" ref="locationManager"/>
 		<property name="locationListenerFactory" ref="locationListenerFactory"/>

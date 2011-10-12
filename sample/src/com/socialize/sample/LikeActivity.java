@@ -68,7 +68,7 @@ public class LikeActivity extends SocializeActivity {
 					
 					clearLikeData();
 					
-					final ProgressDialog progress = ProgressDialog.show(LikeActivity.this, "Posting Like", "Please wait...");
+					final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Posting Like", "Please wait...");
 					
 					txtLikeCreateResult.setText("");
 					btnLikeCreate.setEnabled(false);
@@ -82,7 +82,13 @@ public class LikeActivity extends SocializeActivity {
 							public void onError(SocializeException error) {
 								txtLikeCreateResult.setText("FAIL: " + ErrorHandler.handleApiError(LikeActivity.this, error));
 								btnLikeCreate.setEnabled(true);
-								progress.dismiss();
+								try {
+									progress.dismiss();
+								}
+								catch (Exception e) {
+									e.printStackTrace();
+								}
+								
 							}
 							
 							@Override
@@ -93,7 +99,12 @@ public class LikeActivity extends SocializeActivity {
 								
 								populateLikeData(like);
 								
-								progress.dismiss();
+								try {
+									progress.dismiss();
+								}
+								catch (Exception e) {
+									e.printStackTrace();
+								}
 							}
 						});
 					}
@@ -112,7 +123,7 @@ public class LikeActivity extends SocializeActivity {
 					
 					clearLikeData();
 					
-					final ProgressDialog progress = ProgressDialog.show(LikeActivity.this, "Retrieving Like", "Please wait...");
+					final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Retrieving Like", "Please wait...");
 					
 					txtLikeCreateResult.setText("");
 					btnLikeCreate.setEnabled(false);
@@ -154,7 +165,7 @@ public class LikeActivity extends SocializeActivity {
 				@Override
 				public void onClick(View v) {
 					
-					final ProgressDialog progress = ProgressDialog.show(LikeActivity.this, "Deleting Like", "Please wait...");
+					final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Deleting Like", "Please wait...");
 					
 					txtLikeCreateResult.setText("");
 					

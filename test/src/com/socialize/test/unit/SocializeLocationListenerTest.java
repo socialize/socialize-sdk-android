@@ -21,6 +21,7 @@
  */
 package com.socialize.test.unit;
 
+import android.app.Activity;
 import android.location.Location;
 
 import com.google.android.testing.mocking.AndroidMock;
@@ -28,20 +29,26 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.location.SocializeLocationListener;
 import com.socialize.location.SocializeLocationManager;
 import com.socialize.sample.mock.MockDefaultLocationProvider;
-import com.socialize.test.SocializeUnitTest;
+import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.DeviceUtils;
 
 /**
  * @author Jason Polites
  */
-public class SocializeLocationListenerTest extends SocializeUnitTest {
+public class SocializeLocationListenerTest extends SocializeActivityTest {
 
-	@UsesMocks ({MockDefaultLocationProvider.class, Location.class, SocializeLocationManager.class, DeviceUtils.class})
+	@UsesMocks ({
+		MockDefaultLocationProvider.class, 
+		Location.class, 
+		SocializeLocationManager.class, 
+		DeviceUtils.class})
 	public void testLocationChangeSetsLocation() {
 		
 		String providerStr = "foobar";
 		
-		MockDefaultLocationProvider provider = AndroidMock.createMock(MockDefaultLocationProvider.class, getContext());
+		Activity activity = getActivity();
+		
+		MockDefaultLocationProvider provider = AndroidMock.createMock(MockDefaultLocationProvider.class, activity);
 		Location location = AndroidMock.createMock(Location.class, providerStr);
 		DeviceUtils utils = AndroidMock.createMock(DeviceUtils.class);
 		SocializeLocationManager manager = AndroidMock.createMock(SocializeLocationManager.class, utils);

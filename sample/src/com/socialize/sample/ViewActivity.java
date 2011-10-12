@@ -58,7 +58,7 @@ public class ViewActivity extends SocializeActivity {
 					
 					clearViewData();
 					
-					final ProgressDialog progress = ProgressDialog.show(ViewActivity.this, "Posting View", "Please wait...");
+					final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Posting View", "Please wait...");
 					
 					txtViewCreateResult.setText("");
 					btnViewCreate.setEnabled(false);

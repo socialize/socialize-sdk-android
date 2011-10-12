@@ -119,9 +119,13 @@ public class CommentTest extends SocializeRobotiumTest {
 
 		robotium.enterText(0, id);
 		robotium.clickOnButton("Get");
+		
+		sleep(1000);
+		
 		waitForSuccess();
 		
-		sleep(2000);
+		sleep(1000);
+		
 		// Check Comment ID
 		TextView txt = (TextView) robotium.getCurrentActivity().findViewById(com.socialize.sample.R.id.txtCommentId);
 		

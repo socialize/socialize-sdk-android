@@ -68,7 +68,7 @@ public class EntityActivity extends SocializeActivity {
 					String key = txtKey.getText().toString();
 					String name = txtName.getText().toString();
 					
-					final ProgressDialog progress = ProgressDialog.show(EntityActivity.this, "Creating", "Please wait...");
+					final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Creating", "Please wait...");
 					
 					Socialize.getSocialize().addEntity(key, name, new EntityAddListener() {
 						
@@ -103,7 +103,7 @@ public class EntityActivity extends SocializeActivity {
 					String key = txtKey.getText().toString();
 					
 					if(!StringUtils.isEmpty(key)) {
-						final ProgressDialog progress = ProgressDialog.show(EntityActivity.this, "Retrieving", "Please wait...");
+						final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Retrieving", "Please wait...");
 						
 						Socialize.getSocialize().getEntity(key, new EntityGetListener() {
 							

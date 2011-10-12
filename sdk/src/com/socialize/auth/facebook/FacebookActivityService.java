@@ -45,7 +45,10 @@ public class FacebookActivityService {
 				facebook = new Facebook(appId, drawables);
 				
 				service = getFacebookService();
-				service.authenticate(config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true));
+				
+				boolean sso = config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true);
+				
+				service.authenticate(sso);
 			}
 			else {
 				activity.finish();

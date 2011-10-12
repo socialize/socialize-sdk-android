@@ -346,8 +346,9 @@ import com.socialize.util.Drawables;
 		AndroidMock.replay(dialog);
 		
 		FacebookService service = new FacebookService(context, facebook, facebookSessionStore, authProviderListener, dialogFactory) {
+			
 			@Override
-			public void authenticate() {
+			public void authenticate(String[] permissions, boolean sso) {
 				addResult("auth_called");
 			}
 
