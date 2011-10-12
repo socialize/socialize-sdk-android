@@ -295,6 +295,7 @@ public class TTLCacheTest extends SocializeUnitTest {
 		assertEquals(3, cache.size());
 		
 		assertTrue(cache.doReap());
+		
 		assertEquals(2, cache.size());
 		
 		assertTrue(cache.exists("testKey"));

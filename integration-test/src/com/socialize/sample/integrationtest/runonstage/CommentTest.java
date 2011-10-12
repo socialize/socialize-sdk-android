@@ -120,8 +120,6 @@ public class CommentTest extends SocializeRobotiumTest {
 		robotium.enterText(0, id);
 		robotium.clickOnButton("Get");
 		
-		sleep(1000);
-		
 		waitForSuccess();
 		
 		sleep(1000);
