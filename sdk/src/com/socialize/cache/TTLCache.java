@@ -461,63 +461,73 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 					for (Key<K> key : localKeys) {
 						object = objects.get(key);
 						
-						ok = true;
-						
-						if(object.getObject() instanceof ISuicidal) {
-							ISuicidal<K> s = (ISuicidal<K>) object.getObject();
+						if(object != null) {
+							ok = true;
 							
-							
-							if(s.isDead()) {
+							if(object.getObject() instanceof ISuicidal) {
+								ISuicidal<K> s = (ISuicidal<K>) object.getObject();
 								
-								size--;
-								
-								if(debug && logger != null) {
+								if(s.isDead()) {
 									
-									String msg = "Object [" +
-											object.getObject().toString() +
-											"] has comitted suicide and will be purged from cache [" +
-											size +
-											"] objects remain";
+									size--;
 									
-									logger.debug(msg);
-								}	
-								
-								ok = false;
-							}
-						}
-						
-						if(ok) {
-							if(object.isEternal() || object.getLifeExpectancy() >= time) {
-								// Save
-								newMap.put(key, object);
-							}
-							else {
-								
-								ok = false;
-								
-								size--;
-								
-								if(debug && logger != null) {
+									if(debug && logger != null) {
+										
+										String msg = "Object [" +
+												object.getObject().toString() +
+												"] has comitted suicide and will be purged from cache [" +
+												size +
+												"] objects remain";
+										
+										logger.debug(msg);
+									}	
 									
-									String msg = "Object [" +
-											object.getObject().toString() +
-											"] with ttl of [" +
-											object.getTtl() +
-											"] has expired and will be purged from cache [" +
-											size +
-											"] objects remain";
-									
-									logger.debug(msg);
+									ok = false;
 								}
 							}
-						}
-						
-						if(!ok) {
-							keys.remove(key.getKey());
 							
-							currentSizeInBytes -= object.getObject().getSizeInBytes(context);
-							reaped++;
-							object.getObject().onRemove(context, true);
+							if(ok) {
+								if(object.isEternal() || object.getLifeExpectancy() >= time) {
+									// Save
+									newMap.put(key, object);
+								}
+								else {
+									
+									ok = false;
+									
+									size--;
+									
+									if(debug && logger != null) {
+										
+										String msg = "Object [" +
+												object.getObject().toString() +
+												"] with ttl of [" +
+												object.getTtl() +
+												"] has expired and will be purged from cache [" +
+												size +
+												"] objects remain";
+										
+										logger.debug(msg);
+									}
+								}
+							}
+							
+							if(!ok) {
+								keys.remove(key.getKey());
+								
+								currentSizeInBytes -= object.getObject().getSizeInBytes(context);
+								reaped++;
+								object.getObject().onRemove(context, true);
+							}
+						}
+						else {
+							if(logger != null) {
+								logger.warn("No object found with key [" +
+										key +
+										"]");
+								
+								objects.remove(key);
+							}
 						}
 					}
 					
