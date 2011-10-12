@@ -235,7 +235,7 @@ import com.socialize.util.Drawables;
 		AndroidMock.replay(dialog);
 
 		FacebookService service = new FacebookService(context, facebook, facebookSessionStore, authProviderListener, dialogFactory);
-		service.doErrorUI(errorMessage);
+		service.doErrorUI(errorMessage, null, false);
 
 		AndroidMock.verify(dialogFactory);
 		AndroidMock.verify(builder);
@@ -250,7 +250,7 @@ import com.socialize.util.Drawables;
 
 		final FacebookService service = new FacebookService(getActivity(), null, null, null, null) {
 			@Override
-			public void doErrorUI(String error) {
+			public void doErrorUI(String error, String[] permissions, boolean sso) {
 				addResult(error);
 				lock.countDown();
 			}
@@ -259,7 +259,7 @@ import com.socialize.util.Drawables;
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
-				service.doError(new Throwable(errorMessage));
+				service.doError(new Throwable(errorMessage), null, false);
 			} 
 		});
 
@@ -281,7 +281,7 @@ import com.socialize.util.Drawables;
 
 		final FacebookService service = new FacebookService(getActivity(), null, null, null, null) {
 			@Override
-			public AlertDialog makeErrorDialog(String error) {
+			public AlertDialog makeErrorDialog(String error, String[] permissions, boolean sso) {
 				addResult(error);
 				return mockDialog;
 			}
@@ -290,7 +290,7 @@ import com.socialize.util.Drawables;
 
 		AndroidMock.replay(mockDialog);
 
-		service.doErrorUI(error);
+		service.doErrorUI(error, null, false);
 
 		String result = getNextResult();
 
@@ -357,7 +357,7 @@ import com.socialize.util.Drawables;
 			}
 		};
 		
-		service.makeErrorDialog(error);
+		service.makeErrorDialog(error, null, false);
 		
 		// Reverse order
 		Boolean created = getNextResult();
