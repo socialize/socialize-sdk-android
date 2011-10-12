@@ -171,13 +171,17 @@ public class CommentAdapter extends BaseAdapter {
     			
     			holder.setItemId(position);
 
-    			String displayName = null;
+    			String displayName = "";
     			
-    			if(user != null && displayName == null) {
+    			if(user != null) {
     				displayName = user.getDisplayName();
-    				
     				if(displayName == null) {
-    					displayName = "Anonymous";
+    					// Use the item user
+    					displayName = item.getUser().getDisplayName();
+    					
+    					if(displayName == null) {
+    						displayName = "Anonymous";
+    					}
     				}
     			}
     			
@@ -209,9 +213,7 @@ public class CommentAdapter extends BaseAdapter {
     			}
     			
     			if (userName != null) {
-    				if(user != null) {
-    					userName.setText(displayName);
-    				}
+    				userName.setText(displayName);
     			}
     			
     			if (time != null) {
