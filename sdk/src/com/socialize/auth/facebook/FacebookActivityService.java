@@ -3,6 +3,7 @@ package com.socialize.auth.facebook;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.socialize.config.SocializeConfig;
 import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.ListenerHolder;
@@ -17,6 +18,7 @@ public class FacebookActivityService {
 	private FacebookActivity activity;
 	private Drawables drawables;
 	private DialogFactory dialogFactory;
+	private SocializeConfig config;
 	
 	private FacebookService service;
 	
@@ -39,10 +41,11 @@ public class FacebookActivityService {
 				facebookSessionStore = activity.getBean("facebookSessionStore");
 				listenerHolder = activity.getBean("listenerHolder");
 				dialogFactory = activity.getBean("dialogFactory");
+				config = activity.getBean("config");
 				facebook = new Facebook(appId, drawables);
 				
 				service = getFacebookService();
-				service.authenticate();
+				service.authenticate(config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true));
 			}
 			else {
 				activity.finish();

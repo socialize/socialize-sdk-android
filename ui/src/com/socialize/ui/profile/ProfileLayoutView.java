@@ -15,6 +15,7 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.ui.BaseView;
+import com.socialize.ui.SocializeUI;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.image.ImageLoadListener;
 import com.socialize.ui.image.ImageLoadRequest;
@@ -173,7 +174,7 @@ public class ProfileLayoutView extends BaseView {
 		
 		User currentUser = userService.getCurrentUser();
 		
-		if(currentUser != null && currentUser.getId().equals(user.getId())) {
+		if(SocializeUI.getInstance().isFacebookSupported() && currentUser != null && currentUser.getId().equals(user.getId())) {
 			content.setUserDisplayName(user.getDisplayName());
 			content.getEditButton().setVisibility(View.VISIBLE);
 			content.getFacebookSignOutButton().setVisibility(View.VISIBLE);

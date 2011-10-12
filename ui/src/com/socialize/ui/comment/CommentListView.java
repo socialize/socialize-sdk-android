@@ -108,8 +108,15 @@ public class CommentListView extends BaseView {
 			@Override
 			public void onComment(String text) {
 				if(!getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-					AuthRequestDialogFactory dialog = authRequestDialogFactory.getBean();
-					dialog.show(getContext(), getCommentAuthListener(text));
+					// Check that FB is enabled for this installation
+					if(getSocializeUI().isFacebookSupported()) {
+						AuthRequestDialogFactory dialog = authRequestDialogFactory.getBean();
+						dialog.show(getContext(), getCommentAuthListener(text));
+					}
+					else {
+						// Just post as anon
+						doPostComment(text);
+					}
 				}
 				else {
 					doPostComment(text);

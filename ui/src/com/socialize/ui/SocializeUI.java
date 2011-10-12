@@ -17,6 +17,7 @@ import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.comment.CommentDetailActivity;
 import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.util.Drawables;
+import com.socialize.util.StringUtils;
 
 public class SocializeUI {
 
@@ -93,10 +94,6 @@ public class SocializeUI {
 		customProperties.put(SocializeConfig.FACEBOOK_USER_TOKEN, token);
 	}
 	
-	/**
-	 * 
-	 * @param debug
-	 */
 	public void setDebugMode(boolean debug) {
 		customProperties.put(SocializeConfig.SOCIALIZE_DEBUG_MODE, String.valueOf(debug));
 	}
@@ -108,6 +105,22 @@ public class SocializeUI {
 	 */
 	public void setFacebookAppId(String appId) {
 		customProperties.put(SocializeConfig.FACEBOOK_APP_ID, appId);
+	}
+	
+	/**
+	 * Enables/disables Single Sign On for Facebook.
+	 * @param enabled True if enabled.  Default is true.
+	 */
+	public void setFacebookSingleSignOnEnabled(boolean enabled) {
+		customProperties.put(SocializeConfig.FACEBOOK_SSO_ENABLED, String.valueOf(enabled));
+	}
+	
+	/**
+	 * Returns true if a Facebook ID has been set.
+	 * @return
+	 */
+	public boolean isFacebookSupported() {
+		return !StringUtils.isEmpty(getCustomConfigValue(SocializeConfig.FACEBOOK_APP_ID));
 	}
 	
 	public String getCustomConfigValue(String key) {
