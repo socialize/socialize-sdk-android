@@ -135,6 +135,11 @@ public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestC
 	}
 
 	protected final void waitForSuccess() {
+		// It seems robotium sometimes finds success before the 
+		// progress dialog is closed, resulting in an abnormal abort
+		// which causes a test failure.
+		// Add a sleep to hack it
+		sleep(1000);
 		assertTrue(robotium.waitForText("SUCCESS", 1, DEFAULT_TIMEOUT_SECONDS));
 	}
 
