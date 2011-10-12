@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.socialize.entity.User;
 import com.socialize.ui.button.SocializeButton;
 import com.socialize.util.Drawables;
 import com.socialize.util.SafeBitmapDrawable;
@@ -236,7 +237,10 @@ public class ProfileContentView extends LinearLayout {
 		editMode = false;
 	}
 	
-	public void onSave() {
+	public void onSave(User user) {
+		
+		displayName.setText(user.getDisplayName());
+		
 		displayNameEdit.setVisibility(View.GONE);
 		saveButton.setVisibility(View.GONE);
 		cancelButton.setVisibility(View.GONE);

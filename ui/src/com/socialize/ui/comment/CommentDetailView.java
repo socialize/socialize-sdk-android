@@ -59,4 +59,11 @@ public class CommentDetailView extends EntityView {
 		return new String[]{SocializeUI.USER_ID, SocializeUI.COMMENT_ID};
 	}
 
+	/**
+	 * 
+	 */
+	public void onProfileUpdate() {
+		commentLayoutView.onProfileUpdate();
+	}
+
 }

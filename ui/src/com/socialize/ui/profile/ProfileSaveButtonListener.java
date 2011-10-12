@@ -78,7 +78,7 @@ public class ProfileSaveButtonListener implements OnClickListener {
 			@Override
 			public void onUpdate(User entity) {
 				progress.dismiss();
-				view.onSave();
+				view.onSave(entity);
 			}
 		});
 	}

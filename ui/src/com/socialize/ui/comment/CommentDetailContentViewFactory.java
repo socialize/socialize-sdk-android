@@ -125,7 +125,7 @@ public class CommentDetailContentViewFactory extends BaseViewFactory<CommentDeta
 		commentView.setMinHeight(minTextHeight);
 		commentView.setMinimumHeight(minTextHeight);
 		commentView.setTextColor(Color.WHITE);
-		commentView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
+		commentView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
 		commentView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
 		commentView.setScroller(new Scroller(context)); 
 		commentView.setScrollbarFadingEnabled(true);
