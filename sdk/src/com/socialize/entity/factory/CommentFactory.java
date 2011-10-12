@@ -59,7 +59,7 @@ public class CommentFactory extends SocializeActionFactory<Comment> {
 	}
 
 	@Override
-	public Comment instantiateObject() {
+	public Comment instantiateObject(JSONObject object) {
 		return new Comment();
 	}
 }

@@ -30,6 +30,7 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
+import com.socialize.listener.activity.ActivityListListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -191,7 +192,7 @@ public interface SocializeService {
 	 * @param url The url to which the comments are associated. MUST be a valid http URL.
 	 * @param startIndex The starting index of the results for pagination.
 	 * @param endIndex The ending index of the results for pagination.
-	 * @param commentListListener A listener to handle callbacks from the post.
+	 * @param commentListListener A listener to handle callbacks from the get.
 	 */
 	public void listCommentsByEntity(String url, int startIndex, int endIndex, CommentListListener commentListListener);
 	
@@ -298,5 +299,21 @@ public interface SocializeService {
 	 * @param type
 	 */
 	public void clear3rdPartySession(AuthProviderType type);
+	
+	/**
+	 * Lists a user's activity.
+	 * @param userId The ID of the user for whom activity will be listed.
+	 * @param activityListListener A listener to handle callbacks from the get.
+	 */
+	public void listActivityByUser(int userId, ActivityListListener activityListListener);
+	
+	/**
+	 * Lists a user's activity with pagination.
+	 * @param userId The ID of the user for whom activity will be listed.
+	 * @param startIndex The starting index of the results for pagination.
+	 * @param endIndex The ending index of the results for pagination.
+	 * @param activityListListener A listener to handle callbacks from the get.
+	 */
+	public void listActivityByUser(int userId, int startIndex, int endIndex, ActivityListListener activityListListener);
 
 }

@@ -39,7 +39,7 @@ public class LikeFactory extends SocializeActionFactory<Like> {
 	protected void postToJSON(Like comment, JSONObject object) throws JSONException {}
 
 	@Override
-	public Like instantiateObject() {
+	public Like instantiateObject(JSONObject object) {
 		return new Like();
 	}
 }

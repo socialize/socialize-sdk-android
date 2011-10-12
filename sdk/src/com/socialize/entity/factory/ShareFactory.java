@@ -24,49 +24,22 @@ package com.socialize.entity.factory;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.socialize.entity.Entity;
-import com.socialize.util.StringUtils;
+import com.socialize.entity.Share;
 
 /**
  * @author Jason Polites
  *
  */
-public class EntityFactory extends SocializeObjectFactory<Entity> {
+public class ShareFactory extends SocializeActionFactory<Share> {
 	
-	private static final String LIKES = "likes";
-	private static final String SHARES = "shares";
-	private static final String COMMENTS = "comments";
-	private static final String VIEWS = "views";
-	
-	public EntityFactory() {
-		super();
-	}
+	@Override
+	protected void postFromJSON(JSONObject object, Share share) throws JSONException {}
 
 	@Override
-	public Entity instantiateObject(JSONObject object) {
-		return new Entity();
-	}
+	protected void postToJSON(Share share, JSONObject object) throws JSONException {}
 
 	@Override
-	protected void postFromJSON(JSONObject object, Entity entry) throws JSONException {
-		entry.setName(getString(object, "name"));
-		entry.setKey(getString(object, "key"));
-		entry.setLikes(getInt(object, LIKES));
-		entry.setShares(getInt(object, SHARES));
-		entry.setComments(getInt(object, COMMENTS));
-		entry.setViews(getInt(object, VIEWS));
-	}
-
-	@Override
-	protected void postToJSON(Entity entry, JSONObject object) throws JSONException {
-		String name = entry.getName();
-		String key = entry.getKey();
-		
-		if(!StringUtils.isEmpty(name)) {
-			object.put("name", name);
-		}
-		if(!StringUtils.isEmpty(key)) {
-			object.put("key", key);
-		}
+	public Share instantiateObject(JSONObject object) {
+		return new Share();
 	}
 }

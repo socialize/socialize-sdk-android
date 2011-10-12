@@ -25,6 +25,7 @@ import android.content.Context;
 import android.location.Location;
 
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.api.action.ActivityApi;
 import com.socialize.api.action.CommentApi;
 import com.socialize.api.action.EntityApi;
 import com.socialize.api.action.LikeApi;
@@ -34,6 +35,7 @@ import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.listener.activity.ActivityListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.listener.entity.EntityListener;
 import com.socialize.listener.like.LikeListener;
@@ -57,6 +59,7 @@ public class SocializeApiHost {
 	private LikeApi likeApi;
 	private ViewApi viewApi;
 	private UserApi userApi;
+	private ActivityApi activityApi;
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	
 	public SocializeApiHost(Context context) {
@@ -159,6 +162,14 @@ public class SocializeApiHost {
 		userApi.saveUserProfile(context, session, firstName, lastName, encodedImage, listener);
 	}
 	
+	public void listActivityByUser(SocializeSession session, int id, ActivityListener listener) {
+		activityApi.getActivityByUser(session, id, listener);
+	}
+	
+	public void listActivityByUser(SocializeSession session, int id, int startIndex, int endIndex, ActivityListener listener) {
+		activityApi.getActivityByUser(session, id, startIndex, endIndex, listener);
+	}
+	
 	public void destroy() {
 		if(clientFactory != null) {
 			clientFactory.destroy();
@@ -211,6 +222,14 @@ public class SocializeApiHost {
 
 	public void setUserApi(UserApi userApi) {
 		this.userApi = userApi;
+	}
+	
+	public ActivityApi getActivityApi() {
+		return activityApi;
+	}
+
+	public void setActivityApi(ActivityApi activityApi) {
+		this.activityApi = activityApi;
 	}
 
 	public IBeanFactory<AuthProviderData> getAuthProviderDataFactory() {

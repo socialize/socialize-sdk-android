@@ -19,24 +19,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity;
+package com.socialize.api.action;
 
-import com.socialize.api.action.ActionType;
-
+import com.socialize.api.SocializeApi;
+import com.socialize.api.SocializeSession;
+import com.socialize.entity.SocializeAction;
+import com.socialize.listener.activity.ActivityListener;
+import com.socialize.provider.SocializeProvider;
 
 /**
  * @author Jason Polites
- *
  */
-public class View extends SocializeAction {
-	
-	@Override
-	public ActionType getActionType() {
-		return ActionType.VIEW;
-	}
+public class ActivityApi extends SocializeApi<SocializeAction, SocializeProvider<SocializeAction>> {
 
-	@Override
-	public String getDisplayText() {
-		return null;
+	public static final String ENDPOINT = "/user/";
+	public static final String ENDPOINT_SUFFIX = "/activity/";
+	
+	public ActivityApi(SocializeProvider<SocializeAction> provider) {
+		super(provider);
+	}
+	
+	public void getActivityByUser(SocializeSession session, int id, ActivityListener listener) {
+		String userId = String.valueOf(id);
+		String endpoint = getEndpoint(userId);
+		listAsync(session, endpoint, listener);
+	}
+	
+	public void getActivityByUser(SocializeSession session, int id, int startIndex, int endIndex, ActivityListener listener) {
+		String userId = String.valueOf(id);
+		String endpoint = getEndpoint(userId);
+		listAsync(session, endpoint, startIndex, endIndex, listener);
+	}
+	
+	protected String getEndpoint(String id) {
+		return ENDPOINT + id + ENDPOINT_SUFFIX;
 	}
 }

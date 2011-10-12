@@ -28,11 +28,10 @@ import com.socialize.api.action.ActionType;
  * @author Jason Polites
  *
  */
-public class View extends SocializeAction {
-	
+public class Share extends SocializeAction {
 	@Override
 	public ActionType getActionType() {
-		return ActionType.VIEW;
+		return ActionType.SHARE;
 	}
 
 	@Override

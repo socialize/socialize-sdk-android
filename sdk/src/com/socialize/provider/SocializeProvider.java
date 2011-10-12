@@ -88,6 +88,8 @@ public interface SocializeProvider<T> {
 	
 	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex) throws SocializeException;
 	
+	public ListResult<T> list(SocializeSession session, String endpoint, int startIndex, int endIndex) throws SocializeException;
+	
 	public T get(SocializeSession session, String endpoint, String id) throws SocializeException;
 	
 	public ListResult<T> put(SocializeSession session, String endpoint, T object) throws SocializeException;

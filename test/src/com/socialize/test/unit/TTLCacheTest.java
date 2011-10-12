@@ -4,6 +4,7 @@
 package com.socialize.test.unit;
 
 import java.util.Collection;
+import java.util.TreeMap;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
@@ -516,5 +517,30 @@ public class TTLCacheTest extends SocializeUnitTest {
 		
 		assertFalse(key1.equals(key3));
 		assertTrue(key1.equals(key2));
+	}
+	
+	public void testKeyCompare() {
+		Key<String> key1 = new Key<String>("foobar1", 100);
+		Key<String> key2 = new Key<String>("foobar1", 200);
+		
+		// key1 is oldest
+		TreeMap<Key<String>, String> sorted = new TreeMap<Key<String>, String>();
+		
+		sorted.put(key1, "foo");
+		sorted.put(key2, "bar");
+		
+		Key<String> firstKey = sorted.firstKey();
+		
+		assertSame(key1, firstKey);
+		
+		TreeMap<Key<String>, String> sorted2 = new TreeMap<Key<String>, String>();
+		
+		sorted2.put(key2, "bar");
+		sorted2.put(key1, "foo");
+		
+		Key<String> firstKey2 = sorted.firstKey();
+		
+		assertSame(key1, firstKey2);
+		
 	}
 }

@@ -165,10 +165,9 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		final StatsFactory statsFactory = AndroidMock.createMock(StatsFactory.class);
 		final UserAuthDataFactory userAuthDataFactory = AndroidMock.createMock(UserAuthDataFactory.class);
 		
-		
 		UserFactory factory = new UserFactory() {
 			@Override
-			public User instantiateObject() {
+			public User instantiateObject(JSONObject json) {
 				return object;
 			}
 

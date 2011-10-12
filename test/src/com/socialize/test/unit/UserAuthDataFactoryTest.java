@@ -101,7 +101,7 @@ public class UserAuthDataFactoryTest extends AbstractSocializeObjectFactoryTest<
 		
 		UserAuthDataFactory factory = new UserAuthDataFactory() {
 			@Override
-			public UserAuthData instantiateObject() {
+			public UserAuthData instantiateObject(JSONObject json) {
 				return object;
 			}
 

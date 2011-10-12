@@ -19,24 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity;
+package com.socialize.listener.activity;
 
-import com.socialize.api.action.ActionType;
-
+import com.socialize.entity.SocializeAction;
+import com.socialize.listener.AbstractSocializeListener;
 
 /**
  * @author Jason Polites
  *
  */
-public class View extends SocializeAction {
-	
-	@Override
-	public ActionType getActionType() {
-		return ActionType.VIEW;
-	}
-
-	@Override
-	public String getDisplayText() {
-		return null;
-	}
-}
+public abstract class ActivityListener extends AbstractSocializeListener<SocializeAction> {}

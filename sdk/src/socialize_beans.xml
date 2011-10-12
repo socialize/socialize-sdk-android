@@ -316,6 +316,39 @@
 	
 <!-- End User API -->
 
+<!-- Activity API -->
+
+	<bean 
+		id="activityFactory" 
+		class="com.socialize.entity.factory.GenericActionFactory" 
+		extends="socializeActionFactory">
+		
+		<property name="logger" ref="logger"/>
+		<property name="commentFactory" ref="commentFactory"/>
+		<property name="likeFactory" ref="likeFactory"/>
+		<property name="viewFactory" ref="viewFactory"/>
+		<property name="shareFactory" ref="shareFactory"/>
+		
+	</bean>
+	
+	<bean id="activityRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
+		<constructor-arg ref="oauthSigner"/>
+		<constructor-arg ref="activityFactory"/>
+	</bean>
+
+	<bean id="activityProvider" extends="abstractProvider">
+		<constructor-arg type="context"/>
+		<property name="objectFactory" ref="activityFactory"/>
+		<property name="requestFactory" ref="activityRequestFactory"/>
+	</bean>
+	
+	<bean id="activityApi" class="com.socialize.api.action.ActivityApi" extends="socializeApi">
+		<constructor-arg ref="activityProvider"/>
+	</bean>
+	
+
+<!-- End Activity API -->
+
 <!-- Socialize Core -->
 
 	<bean id="socializeApiHost" class="com.socialize.api.SocializeApiHost">
@@ -328,6 +361,7 @@
 		<property name="likeApi" ref="likeApi"/>
 		<property name="viewApi" ref="viewApi"/>
 		<property name="userApi" ref="userApi"/>
+		<property name="activityApi" ref="activityApi"/>
 	</bean>
 	
 <!-- End Socialize Core -->

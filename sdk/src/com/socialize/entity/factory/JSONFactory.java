@@ -57,8 +57,10 @@ public abstract class JSONFactory<T> {
 	}
 
 	public T fromJSON(JSONObject json) throws JSONException {
-		T object = instantiateObject();
-		fromJSON(json, object);
+		T object = instantiateObject(json);
+		if(object != null) {
+			fromJSON(json, object);
+		}
 		return object;
 	}
 	
@@ -70,7 +72,7 @@ public abstract class JSONFactory<T> {
 		return new JSONArray();
 	}
 	
-	public abstract T instantiateObject();
+	public abstract T instantiateObject(JSONObject object);
 	
 	protected abstract void fromJSON(JSONObject from, T to) throws JSONException;
 	protected abstract void toJSON(T from, JSONObject to) throws JSONException;

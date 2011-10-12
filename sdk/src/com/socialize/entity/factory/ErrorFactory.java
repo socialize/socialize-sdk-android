@@ -34,7 +34,7 @@ public class ErrorFactory extends JSONFactory<ActionError> {
 	private static final String MESSAGE = "error";
 
 	@Override
-	public ActionError instantiateObject() {
+	public ActionError instantiateObject(JSONObject object) {
 		return new ActionError();
 	}
 

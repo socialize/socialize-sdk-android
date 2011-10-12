@@ -187,6 +187,10 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 		// Check the key map first
 		if(exists(k)) {
 			TTLObject<K, E> ttlObject = getTTLObject(k);
+			
+			Key<K> key = keys.get(k);
+			key.setTime(System.currentTimeMillis());
+			
 			ttlObject.setEternal(eternal);
 			ttlObject.extendLife(ttl);
 			ttlObject.setObject(object);

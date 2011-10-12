@@ -19,54 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity.factory;
+package com.socialize.listener.activity;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.socialize.entity.Entity;
-import com.socialize.util.StringUtils;
+import com.socialize.entity.SocializeAction;
 
 /**
+ * Used when listing activity for a user.
  * @author Jason Polites
- *
  */
-public class EntityFactory extends SocializeObjectFactory<Entity> {
-	
-	private static final String LIKES = "likes";
-	private static final String SHARES = "shares";
-	private static final String COMMENTS = "comments";
-	private static final String VIEWS = "views";
-	
-	public EntityFactory() {
-		super();
-	}
+public abstract class ActivityListListener extends ActivityListener {
 
 	@Override
-	public Entity instantiateObject(JSONObject object) {
-		return new Entity();
-	}
+	public final void onGet(SocializeAction entity) {}
 
 	@Override
-	protected void postFromJSON(JSONObject object, Entity entry) throws JSONException {
-		entry.setName(getString(object, "name"));
-		entry.setKey(getString(object, "key"));
-		entry.setLikes(getInt(object, LIKES));
-		entry.setShares(getInt(object, SHARES));
-		entry.setComments(getInt(object, COMMENTS));
-		entry.setViews(getInt(object, VIEWS));
-	}
+	public final void onUpdate(SocializeAction entity) {}
 
 	@Override
-	protected void postToJSON(Entity entry, JSONObject object) throws JSONException {
-		String name = entry.getName();
-		String key = entry.getKey();
-		
-		if(!StringUtils.isEmpty(name)) {
-			object.put("name", name);
-		}
-		if(!StringUtils.isEmpty(key)) {
-			object.put("key", key);
-		}
-	}
+	public final void onCreate(SocializeAction entity) {}
+
+	@Override
+	public final void onDelete() {}
 }

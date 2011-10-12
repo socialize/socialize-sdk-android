@@ -51,7 +51,7 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	public static final String THIRD_PARTY_AUTH = "third_party_auth";
 
 	@Override
-	public User instantiateObject() {
+	public User instantiateObject(JSONObject object) {
 		return new User();
 	}
 	

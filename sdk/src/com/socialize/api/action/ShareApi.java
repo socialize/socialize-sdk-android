@@ -19,24 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity;
+package com.socialize.api.action;
 
-import com.socialize.api.action.ActionType;
-
+import com.socialize.api.SocializeApi;
+import com.socialize.entity.Share;
+import com.socialize.provider.SocializeProvider;
 
 /**
  * @author Jason Polites
- *
  */
-public class View extends SocializeAction {
-	
-	@Override
-	public ActionType getActionType() {
-		return ActionType.VIEW;
-	}
+public class ShareApi extends SocializeApi<Share, SocializeProvider<Share>> {
 
-	@Override
-	public String getDisplayText() {
-		return null;
+	public static final String ENDPOINT = "/share/";
+	
+	public ShareApi(SocializeProvider<Share> provider) {
+		super(provider);
 	}
 }
