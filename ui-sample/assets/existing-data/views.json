@@ -1,0 +1,65 @@
+{
+    "errors": [],
+    "items": [
+        {
+            "application": {
+                "id": 322931,
+                "name": "Android UI Integration Test App"
+            },
+            "date": "2011-10-13 20:10:28+0000",
+            "entity": {
+                "comments": 10,
+                "key": "http://entity1.com",
+                "likes": 1,
+                "name": "First Entity",
+                "shares": 1,
+                "views": 1
+            },
+            "id": 19539627,
+            "lat": 49.453075792435214,
+            "lng": 85.86384733609705,
+            "share_location": 1,
+            "user": {
+                "city": null,
+                "first_name": null,
+                "id": 52639871,
+                "last_name": null,
+                "meta": null,
+                "small_image_uri": null,
+                "state": null,
+                "third_party_auth": [],
+                "username": "User52639871"
+            }
+        },
+        {
+            "application": {
+                "id": 322931,
+                "name": "Android UI Integration Test App"
+            },
+            "date": "2011-10-13 20:10:28+0000",
+            "entity": {
+                "comments": 0,
+                "key": "http://entity2.com",
+                "likes": 1,
+                "name": "Second Entity",
+                "shares": 1,
+                "views": 1
+            },
+            "id": 19539628,
+            "lat": 23.628232119679623,
+            "lng": 70.80069297010937,
+            "share_location": 1,
+            "user": {
+                "city": null,
+                "first_name": null,
+                "id": 52639871,
+                "last_name": null,
+                "meta": null,
+                "small_image_uri": null,
+                "state": null,
+                "third_party_auth": [],
+                "username": "User52639871"
+            }
+        }
+    ]
+}

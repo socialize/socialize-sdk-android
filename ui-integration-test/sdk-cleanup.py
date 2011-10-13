@@ -3,8 +3,8 @@ import simplejson
 import random as rand
 import os,sys
 
-config_file_path='../sample/assets/sample-app.conf'
-assets_file_path='../sample/assets/existing-data/'
+config_file_path='../ui-sample/assets/socialize.properties'
+assets_file_path='../ui-sample/assets/existing-data/'
 
 def create_android_config(key,secret,url,fb_app_id):
     print '#'*20
@@ -23,7 +23,7 @@ def create_android_config(key,secret,url,fb_app_id):
 
 def read_android_config():
     file = open(config_file_path,'r')
-#file = open('../sample/assets/sample-app.conf','r')
+#file = open('../ui-sample/assets/sample-app.conf','r')
 
     for line in file :
         li=line.strip()

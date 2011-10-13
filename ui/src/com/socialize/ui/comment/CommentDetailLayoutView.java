@@ -227,7 +227,7 @@ public class CommentDetailLayoutView extends BaseView {
 		}
 		
 		content.getDisplayName().setText(user.getDisplayName());
-		content.getLocation().setText(user.getLocation());
+//		content.getLocation().setText(user.getLocation());
 	}
 	
 	public void setDrawables(Drawables drawables) {

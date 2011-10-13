@@ -98,7 +98,7 @@ public class CommentDetailContentViewFactory extends BaseViewFactory<CommentDeta
 		
 		final ImageView profilePicture = new ImageView(context);
 		final TextView displayName = new TextView(context);
-		final TextView location = new TextView(context);
+//		final TextView location = new TextView(context);
 		final TextView commentView = new TextView(context);
 		final TextView commentMeta = new TextView(context);
 		
@@ -150,13 +150,13 @@ public class CommentDetailContentViewFactory extends BaseViewFactory<CommentDeta
 		displayName.setSingleLine();
 		displayName.setLayoutParams(textLayout);
 		
-		location.setTextColor(titleColor);
-		location.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-		location.setMaxLines(1);
-		location.setTypeface(Typeface.DEFAULT);
-		location.setTextColor(titleColor);
-		location.setSingleLine();
-		location.setLayoutParams(textLayout);
+//		location.setTextColor(titleColor);
+//		location.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+//		location.setMaxLines(1);
+//		location.setTypeface(Typeface.DEFAULT);
+//		location.setTextColor(titleColor);
+//		location.setSingleLine();
+//		location.setLayoutParams(textLayout);
 		
 		GradientDrawable textBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int [] {colors.getColor(Colors.TEXT_BG), colors.getColor(Colors.TEXT_BG)});
 		
@@ -169,13 +169,13 @@ public class CommentDetailContentViewFactory extends BaseViewFactory<CommentDeta
 		
 		view.setProfilePicture(profilePicture);
 		view.setDisplayName(displayName);
-		view.setLocation(location);
+//		view.setLocation(location);
 		view.setCommentView(commentView);
 		view.setCommentMeta(commentMeta);
 		view.setHeaderView(headerLayout);
 		
 		nameLayout.addView(displayName);
-		nameLayout.addView(location);
+//		nameLayout.addView(location);
 		
 		headerLayout.addView(profilePicture);
 		headerLayout.addView(nameLayout);
