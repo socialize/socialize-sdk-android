@@ -167,7 +167,8 @@ public class ProfileLayoutView extends BaseView {
 			});
 		}
 		else {
-			content.getProfilePicture().setImageDrawable(defaultProfilePicture);
+			userIcon.setImageDrawable(defaultProfilePicture);
+			userIcon.getBackground().setAlpha(255);
 			content.setProfileDrawable(defaultProfilePicture);
 		}
 		
