@@ -120,11 +120,13 @@ def main(key,secret,url):
     
     
     auth_resp = client.request(auth_url ,'POST', body='payload='+simplejson.dumps({'udid':udid}))
-    auth_cont = simplejson.loads(auth_resp[1])
-    oauth_secret= auth_cont['oauth_token_secret']
-    oauth_token= auth_cont['oauth_token']
-    token = oauth.Token(oauth_token,oauth_secret) 
-
+    try:
+        auth_cont = simplejson.loads(auth_resp[1])
+        oauth_secret= auth_cont['oauth_token_secret']
+        oauth_token= auth_cont['oauth_token']
+        token = oauth.Token(oauth_token,oauth_secret) 
+    except:
+        resp = simplejson.loads(auth_resp)
 ## Create client with oauth token
     client=oauth.Client(consumer,token)
     print '#'*20
