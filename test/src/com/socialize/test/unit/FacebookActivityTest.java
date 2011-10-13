@@ -30,6 +30,7 @@ import com.socialize.auth.facebook.FacebookActivity;
 import com.socialize.auth.facebook.FacebookActivityService;
 import com.socialize.auth.facebook.FacebookService;
 import com.socialize.auth.facebook.FacebookSessionStore;
+import com.socialize.config.SocializeConfig;
 import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.ListenerHolder;
@@ -53,7 +54,8 @@ public class FacebookActivityTest extends SocializeActivityTest {
 		AuthProviderListener.class,
 		Facebook.class,
 		Drawables.class,
-		DialogFactory.class})
+		DialogFactory.class,
+		SocializeConfig.class})
 	public void testOnCreate() {
 		
 		final String appId = "foobar";
@@ -64,7 +66,8 @@ public class FacebookActivityTest extends SocializeActivityTest {
 		final FacebookActivity context = AndroidMock.createMock(FacebookActivity.class);
 		final Intent intent = AndroidMock.createMock(Intent.class);
 		final AuthProviderListener listener = AndroidMock.createMock(AuthProviderListener.class);
-		final DialogFactory dialogFactory = AndroidMock.createMock(DialogFactory.class); 
+		final DialogFactory dialogFactory = AndroidMock.createMock(DialogFactory.class);
+		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
 		
 		final FacebookService service = AndroidMock.createMock(FacebookService.class, context, facebook, facebookSessionStore, listener, dialogFactory);
 		
@@ -85,15 +88,19 @@ public class FacebookActivityTest extends SocializeActivityTest {
 		AndroidMock.expect(context.getBean("listenerHolder")).andReturn(listenerHolder);
 		AndroidMock.expect(context.getBean("drawables")).andReturn(drawables);
 		AndroidMock.expect(context.getBean("dialogFactory")).andReturn(dialogFactory);
+		AndroidMock.expect(context.getBean("config")).andReturn(config);
+		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true)).andReturn(true);
 		
-		service.authenticate();
+		service.authenticate(true);
 		
+		AndroidMock.replay(config);
 		AndroidMock.replay(context);
 		AndroidMock.replay(intent);
 		AndroidMock.replay(service);
 		
 		activityService.onCreate();
 		
+		AndroidMock.verify(config);
 		AndroidMock.verify(context);
 		AndroidMock.verify(intent);
 		AndroidMock.verify(service);

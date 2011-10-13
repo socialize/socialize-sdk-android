@@ -21,9 +21,9 @@
  */
 package com.socialize.test.unit;
 
+import android.app.Activity;
 import android.location.Criteria;
 import android.location.Location;
-import android.test.mock.MockContext;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
@@ -31,7 +31,7 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.location.DefaultLocationProvider;
 import com.socialize.location.SocializeLocationListener;
 import com.socialize.location.SocializeLocationManager;
-import com.socialize.test.SocializeUnitTest;
+import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.DeviceUtils;
 
 /**
@@ -40,15 +40,15 @@ import com.socialize.util.DeviceUtils;
  */
 @UsesMocks ({
 	DeviceUtils.class, 
-	MockContext.class, 
+	Activity.class, 
 	SocializeLocationManager.class, 
 	SocializeLocationListener.class,
 	Location.class,
 	IBeanFactory.class})
-public class DefaultLocationProviderTest extends SocializeUnitTest {
+public class DefaultLocationProviderTest extends SocializeActivityTest {
 
 	DeviceUtils deviceUtils;
-	MockContext context;
+	Activity context;
 	SocializeLocationManager locationManager;
 	IBeanFactory<SocializeLocationListener> locationListenerFactory;
 	SocializeLocationListener listener;
@@ -59,7 +59,7 @@ public class DefaultLocationProviderTest extends SocializeUnitTest {
 		super.setUp();
 		
 		deviceUtils = AndroidMock.createMock(DeviceUtils.class);
-		context = AndroidMock.createMock(MockContext.class);
+		context = AndroidMock.createMock(Activity.class);
 		locationManager = AndroidMock.createMock(SocializeLocationManager.class, deviceUtils);
 		locationListenerFactory = AndroidMock.createMock(IBeanFactory.class);
 		listener = AndroidMock.createMock(SocializeLocationListener.class);
@@ -117,7 +117,7 @@ public class DefaultLocationProviderTest extends SocializeUnitTest {
 		AndroidMock.expect(locationManager.isProviderEnabled(strProvider)).andReturn(true);
 		AndroidMock.expect(locationListenerFactory.getBean()).andReturn(listener);
 
-		locationManager.requestLocationUpdates(strProvider,1L, 0.0f, listener);
+		locationManager.requestLocationUpdates(context, strProvider,1L, 0.0f, listener);
 		
 		DefaultLocationProvider provider = new DefaultLocationProvider(context);
 		provider.setLocationManager(locationManager);

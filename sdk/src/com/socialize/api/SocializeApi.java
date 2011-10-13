@@ -500,7 +500,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 
 		RequestType requestType;
 		SocializeSession session;
-		SocializeException error = null;
+		Exception error = null;
 		SocializeActionListener listener = null;
 		
 		public AbstractAsyncProcess(RequestType requestType, SocializeSession session, SocializeActionListener listener) {
@@ -517,7 +517,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			try {
 				result = doInBackground(request);
 			}
-			catch (SocializeException error) {
+			catch (Exception error) {
 				this.error = error;
 			}
 			
@@ -528,7 +528,12 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		protected void onPostExecute(Result result) {
 			if(listener != null) {
 				if(error != null) {
-					listener.onError(error);
+					if(error instanceof SocializeException) {
+						listener.onError((SocializeException)error);
+					}
+					else {
+						listener.onError(new SocializeException(error));
+					}
 				}
 				else {
 					listener.onResult(requestType, result);
@@ -646,7 +651,12 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		protected void onPostExecute(SocializeEntityResponse<T> result) {
 			if(listener != null) {
 				if(error != null) {
-					listener.onError(error);
+					if(error instanceof SocializeException) {
+						listener.onError((SocializeException)error);
+					}
+					else {
+						listener.onError(new SocializeException(error));
+					}
 				}
 				else {
 					ListResult<T> results = result.getResults();

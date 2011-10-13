@@ -56,7 +56,7 @@ public class CommentCreateActivity extends CommentBaseActivity {
 				@Override
 				public void onClick(View v) {
 					
-					final ProgressDialog progress = ProgressDialog.show(CommentCreateActivity.this, "Posting Comment", "Please wait...");
+					final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Posting Comment", "Please wait...");
 					
 					
 					txtCommentCreateResult.setText("");

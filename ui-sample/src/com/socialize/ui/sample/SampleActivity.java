@@ -24,6 +24,7 @@ public class SampleActivity extends Activity {
 			public void onClick(View v) {
 				String entityKey = txtEntity.getText().toString();
 				SocializeUI.getInstance().setFacebookAppId("209798315709193");
+//				SocializeUI.getInstance().setFacebookSingleSignOnEnabled(false);
 				SocializeUI.getInstance().showCommentView(SampleActivity.this, entityKey);
 			}
 		});
