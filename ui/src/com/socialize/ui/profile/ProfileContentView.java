@@ -31,7 +31,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.socialize.Socialize;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
+import com.socialize.ui.SocializeUI;
 import com.socialize.ui.button.SocializeButton;
 import com.socialize.util.Drawables;
 import com.socialize.util.SafeBitmapDrawable;
@@ -219,7 +222,13 @@ public class ProfileContentView extends LinearLayout {
 		cancelButton.setVisibility(View.GONE);
 		displayName.setVisibility(View.VISIBLE);
 		editButton.setVisibility(View.VISIBLE);
-		facebookSignOutButton.setVisibility(View.VISIBLE);
+		
+		
+		if(SocializeUI.getInstance().isFacebookSupported() &&
+				Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+			facebookSignOutButton.setVisibility(View.VISIBLE);
+		}
+	
 		
 		if(tmpProfileImage != null && !tmpProfileImage.isRecycled()) {
 			tmpProfileImage.recycle();
@@ -246,7 +255,11 @@ public class ProfileContentView extends LinearLayout {
 		cancelButton.setVisibility(View.GONE);
 		displayName.setVisibility(View.VISIBLE);
 		editButton.setVisibility(View.VISIBLE);
-		facebookSignOutButton.setVisibility(View.VISIBLE);
+		
+		if(SocializeUI.getInstance().isFacebookSupported() &&
+				Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+			facebookSignOutButton.setVisibility(View.VISIBLE);
+		}
 		
 		profileDrawable.setAlpha(255);
 		

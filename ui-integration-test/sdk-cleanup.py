@@ -15,7 +15,6 @@ def create_android_config(key,secret,url,fb_app_id):
     text = 'socialize.consumer.key='+key
     text+= '\nsocialize.consumer.secret='+secret
     text+= '\napi.host='+url
-    text+= '\nfacebook.app.id='+fb_app_id
     text+= '\n'
     f.write(text)
     print text
