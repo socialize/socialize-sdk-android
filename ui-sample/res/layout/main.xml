@@ -40,6 +40,12 @@
         android:checked="false"/>
         
     <Button 
+    	android:id="@+id/btnClearCache"
+    	android:text="Clear Auth Cache"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"/>	
+    	        
+    <Button 
     	android:id="@+id/btnCommentView"
     	android:text="Show Comments"
     	android:layout_width="wrap_content"

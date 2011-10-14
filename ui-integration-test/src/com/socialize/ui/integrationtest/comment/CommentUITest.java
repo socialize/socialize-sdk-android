@@ -75,6 +75,40 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		assertEquals(txtComment, comment);
 	}
 	
+	public void testAddCommentWithFacebookAndSSO() {
+		
+		final String txtComment = "UI Integration Test Comment FB Auth";
+
+		startWithFacebook(true);
+		
+		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(CommentActivity.LIST_VIEW_ID);
+		
+		int count =  comments.getCount();
+		
+		robotium.enterText(0, txtComment);
+		robotium.clickOnImageButton(0);
+		
+		robotium.waitForView(AuthRequestDialogView.class, 1, 5000);
+		
+		AuthRequestDialogView confirm = findView(AuthRequestDialogView.class);
+
+		assertNotNull(confirm);
+		
+		robotium.clickOnView(confirm.getFacebookSignInButton());
+		robotium.waitForDialogToClose(5000);
+		robotium.waitForDialogToClose(5000);
+		
+		assertNotNull(comments);
+		assertEquals( count+1, comments.getCount());
+		
+		Comment item = (Comment) comments.getItemAtPosition(0);
+		
+		assertNotNull(item);
+		
+		String comment = item.getText();
+		assertEquals(txtComment, comment);
+	}
+	
 
 	public void testCommentListAndView() {
 		

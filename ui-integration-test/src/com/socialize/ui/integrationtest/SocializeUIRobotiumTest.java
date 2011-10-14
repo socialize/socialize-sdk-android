@@ -68,6 +68,8 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 		}
 		
 		robotium.clickOnButton(1);
+		robotium.clickOnButton(2);
+		robotium.clickOnButton(3);
 		
 		robotium.waitForActivity("CommentActivity", 5000);
 		robotium.waitForView(ListView.class, 1, 5000);
@@ -79,7 +81,7 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 		robotium.enterText(0, DEFAULT_GET_ENTITY);
 		robotium.clearEditText(1);
 		robotium.clickOnButton(0);
-		robotium.clickOnButton(1);
+		robotium.clickOnButton(3);
 		robotium.waitForActivity("CommentActivity", 5000);
 		robotium.waitForView(ListView.class, 1, 5000);
 		
