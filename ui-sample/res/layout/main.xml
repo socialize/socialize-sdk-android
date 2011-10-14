@@ -33,6 +33,12 @@
         android:text="Facebook SSO Enabled" 
         android:checked="true"/>
         
+	<CheckBox android:id="@+id/chkMockFB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Use Mocked Facebook Auth" 
+        android:checked="false"/>
+        
     <Button 
     	android:id="@+id/btnCommentView"
     	android:text="Show Comments"

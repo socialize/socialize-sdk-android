@@ -6,7 +6,7 @@
                 "id": 322931,
                 "name": "Android UI Integration Test App"
             },
-            "date": "2011-10-14 21:16:19+0000",
+            "date": "2011-10-14 22:53:52+0000",
             "entity": {
                 "comments": 10,
                 "key": "http://entity1.com",
@@ -15,9 +15,9 @@
                 "shares": 1,
                 "views": 0
             },
-            "id": 32946,
-            "lat": 4.734520756295224,
-            "lng": 89.16364430512652,
+            "id": 32950,
+            "lat": 23.402063662447258,
+            "lng": 28.39110610268716,
             "medium": {
                 "id": 1,
                 "medium": "Twitter"
@@ -27,13 +27,13 @@
             "user": {
                 "city": null,
                 "first_name": null,
-                "id": 52640241,
+                "id": 52640277,
                 "last_name": null,
                 "meta": null,
                 "small_image_uri": null,
                 "state": null,
                 "third_party_auth": [],
-                "username": "User52640241"
+                "username": "User52640277"
             }
         },
         {
@@ -41,7 +41,7 @@
                 "id": 322931,
                 "name": "Android UI Integration Test App"
             },
-            "date": "2011-10-14 21:16:19+0000",
+            "date": "2011-10-14 22:53:52+0000",
             "entity": {
                 "comments": 0,
                 "key": "http://entity2.com",
@@ -50,9 +50,9 @@
                 "shares": 1,
                 "views": 0
             },
-            "id": 32947,
-            "lat": 77.19244898549759,
-            "lng": 89.30089594085304,
+            "id": 32951,
+            "lat": 21.94361832716256,
+            "lng": 31.023868699883778,
             "medium": {
                 "id": 2,
                 "medium": "Facebook"
@@ -62,13 +62,13 @@
             "user": {
                 "city": null,
                 "first_name": null,
-                "id": 52640241,
+                "id": 52640277,
                 "last_name": null,
                 "meta": null,
                 "small_image_uri": null,
                 "state": null,
                 "third_party_auth": [],
-                "username": "User52640241"
+                "username": "User52640277"
             }
         }
     ]

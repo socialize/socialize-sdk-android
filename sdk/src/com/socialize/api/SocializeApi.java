@@ -378,9 +378,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 						
 						authProviderData.setUserId3rdParty(response.getUserId());
 						authProviderData.setToken3rdParty(response.getToken());
-//						authProviderData.setUserFirstName(response.getFirstName());
-//						authProviderData.setUserLastName(response.getLastName());
-//						authProviderData.setUserProfilePicData(response.getImageData());
 						
 						// Do normal auth
 						handleRegularAuth(request, fWrapper);

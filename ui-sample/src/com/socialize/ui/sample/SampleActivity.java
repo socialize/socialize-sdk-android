@@ -21,12 +21,21 @@ public class SampleActivity extends Activity {
 		
 		final EditText txtFB = (EditText) findViewById(R.id.txtFBId);
 		final CheckBox chkSSO = (CheckBox) findViewById(R.id.chkFacebook);
+		final CheckBox chkMockFB = (CheckBox) findViewById(R.id.chkMockFB);
 		final Button btn = (Button) findViewById(R.id.btnCommentView);
 		
 		btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				String entityKey = txtEntity.getText().toString();
+				
+				if(chkMockFB.isChecked()) {
+					SocializeUI.getInstance().setBeanOverrides("socialize_ui_mock_beans.xml");
+				}
+				else {
+					SocializeUI.getInstance().setBeanOverrides(null);
+				}
+				
 				SocializeUI.getInstance().setFacebookAppId(txtFB.getText().toString());
 				SocializeUI.getInstance().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				SocializeUI.getInstance().showCommentView(SampleActivity.this, entityKey);

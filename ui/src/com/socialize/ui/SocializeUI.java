@@ -33,6 +33,7 @@ public class SocializeUI {
 	private IOCContainer container;
 	private Drawables drawables;
 	private final Properties customProperties = new Properties();
+	private String beanOverride;
 	
 	public static final SocializeUI getInstance() {
 		return instance;
@@ -43,7 +44,17 @@ public class SocializeUI {
 	}
 	
 	public void initSocialize(Context context) {
-		getSocialize().init(context, new String[]{"socialize_beans.xml", "socialize_ui_beans.xml"});
+		
+		String[] config = null;
+		
+		if(!StringUtils.isEmpty(beanOverride)) {
+			config = new String[]{"socialize_beans.xml", "socialize_ui_beans.xml", beanOverride};
+		}
+		else {
+			config = new String[]{"socialize_beans.xml", "socialize_ui_beans.xml"};
+		}
+		
+		getSocialize().init(context,config);
 		getSocialize().getConfig().merge(customProperties);
 	}
 	
@@ -184,5 +195,13 @@ public class SocializeUI {
 	
 	public Properties getCustomProperties() {
 		return customProperties;
+	}
+
+	/**
+	 * EXPERT ONLY (Not documented)
+	 * @param beanOverride
+	 */
+	public void setBeanOverrides(String beanOverride) {
+		this.beanOverride = beanOverride;
 	}
 }

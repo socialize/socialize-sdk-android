@@ -23,9 +23,9 @@ package com.socialize.ui.integrationtest;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -88,21 +88,19 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 
 	@Override
 	protected void tearDown() throws Exception {
-//		try {
-//			robotium.finalize();
-//		} 
-//		catch (Throwable e) {
-//			throw new Exception(e);
-//		}
-		
-		ArrayList<Activity> allOpenedActivities = robotium.getAllOpenedActivities();
-		
-		for (Activity activity : allOpenedActivities) {
-			activity.finish();
+		try {
+			robotium.finish();
+		} 
+		catch (Throwable e) {
+			throw new Exception(e);
 		}
 		
-		robotium.getActivityMonitor().getLastActivity().finish();
-		getActivity().finish();
+//		ArrayList<Activity> allOpenedActivities = robotium.getAllOpenedActivities();
+//		
+//		for (Activity activity : allOpenedActivities) {
+//			activity.finish();
+//		}
+		
 		super.tearDown();
 	}
 
@@ -125,6 +123,17 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 				imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 			}
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected <T extends View> T findView(Class<T> viewClass) {
+		ArrayList<View> currentViews = robotium.getCurrentViews();
+		for (View view : currentViews) {
+			if(viewClass.isAssignableFrom(view.getClass())) {
+				return (T) view;
+			}
+		}
+		return null;
 	}
 
 }

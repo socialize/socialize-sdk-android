@@ -105,9 +105,16 @@ public class ResourceLocator {
 		}
 		
 		if(in == null) {
-			throw new FileNotFoundException("Could not locate [" +
-					name +
-					"] in any location");
+			if(logger != null) {
+				logger.error("Could not locate [" +
+						name +
+						"] in any location");
+			}
+			else {
+				new FileNotFoundException("Could not locate [" +
+						name +
+						"] in any location").printStackTrace();
+			}
 		}
 		
 		return in;

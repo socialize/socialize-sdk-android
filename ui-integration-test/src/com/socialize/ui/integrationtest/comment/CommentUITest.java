@@ -6,6 +6,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.socialize.entity.Comment;
+import com.socialize.ui.auth.AuthConfirmDialogView;
+import com.socialize.ui.auth.AuthRequestDialogView;
 import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.integrationtest.SocializeUIRobotiumTest;
 
@@ -35,6 +37,42 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		String comment = item.getText();
 		assertEquals(txtComment, comment);
 		
+	}
+	
+	public void testAddAnonCommentWithFacebookAndSSO() {
+		
+		final String txtComment = "UI Integration Test Comment";
+
+		startWithFacebook(true);
+		
+		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(CommentActivity.LIST_VIEW_ID);
+		
+		int count =  comments.getCount();
+		
+		robotium.enterText(0, txtComment);
+		robotium.clickOnImageButton(0);
+		
+		robotium.waitForView(AuthRequestDialogView.class, 1,  1000);
+		robotium.goBack();
+		robotium.waitForView(AuthConfirmDialogView.class, 1,  1000);
+		robotium.clickOnText("Post Anonymously", 1);
+		
+		AuthConfirmDialogView confirm = findView(AuthConfirmDialogView.class);
+
+		assertNotNull(confirm);
+		
+		robotium.clickOnView(confirm.getSocializeSkipAuthButton());
+		robotium.waitForDialogToClose(5000);
+		
+		assertNotNull(comments);
+		assertEquals( count+1, comments.getCount());
+		
+		Comment item = (Comment) comments.getItemAtPosition(0);
+		
+		assertNotNull(item);
+		
+		String comment = item.getText();
+		assertEquals(txtComment, comment);
 	}
 	
 
