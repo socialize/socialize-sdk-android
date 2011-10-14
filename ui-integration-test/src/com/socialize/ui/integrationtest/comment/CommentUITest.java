@@ -5,21 +5,49 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.socialize.entity.Comment;
 import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.integrationtest.SocializeUIRobotiumTest;
 
 public class CommentUITest extends SocializeUIRobotiumTest {
+	
+	public void testCommentAddWithoutFacebook() {
+		
+		final String txtComment = "UI Integration Test Comment";
+
+		startWithoutFacebook();
+		
+		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(CommentActivity.LIST_VIEW_ID);
+		
+		int count =  comments.getCount();
+		
+		robotium.enterText(0, txtComment);
+		robotium.clickOnImageButton(0);
+		robotium.waitForDialogToClose(5000);
+	
+		assertNotNull(comments);
+		assertEquals( count+1, comments.getCount());
+		
+		Comment item = (Comment) comments.getItemAtPosition(0);
+		
+		assertNotNull(item);
+		
+		String comment = item.getText();
+		assertEquals(txtComment, comment);
+		
+	}
+	
 
 	public void testCommentListAndView() {
-		robotium.waitForActivity("CommentActivity");
 		
-		// Wait for comments to load
-		robotium.waitForView(ListView.class);
+		startWithoutFacebook();
 		
 		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(CommentActivity.LIST_VIEW_ID);
 		
 		assertNotNull(comments);
-		assertEquals( 10, comments.getCount());
+		assertTrue("Unexepected number of comments.  Expected >= 10 but found " +
+				comments.getCount() +
+				"", comments.getCount() >= 10);
 		
 		// Click on the first comment in list. 
 		robotium.clickInList(0);

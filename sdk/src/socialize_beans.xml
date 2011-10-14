@@ -115,6 +115,7 @@
 			<arg ref="config"/>
 		</init-method>
 		<destroy-method name="destroy"/>
+		<property name="logger" ref="logger"/>
 	</bean>
 	
 	<bean id="sessionFactory" class="com.socialize.api.DefaultSocializeSessionFactory">

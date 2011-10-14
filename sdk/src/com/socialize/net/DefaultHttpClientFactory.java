@@ -40,6 +40,7 @@ import org.apache.http.protocol.HTTP;
 
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
+import com.socialize.log.SocializeLogger;
 
 /**
  * Produces HttpClients with appropriate config.
@@ -50,6 +51,7 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 
 	private HttpParams params;
 	private ClientConnectionManager connectionManager;
+	private SocializeLogger logger;
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.net.HttpClientFactory#init()
@@ -58,6 +60,10 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 	public void init(SocializeConfig config) throws SocializeException  {
 		
 		try {
+			if(logger != null && logger.isInfoEnabled()) {
+				logger.info("Initializing " + getClass().getSimpleName());
+			}
+			
 	        KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
 	        trustStore.load(null, null);
 
@@ -76,6 +82,10 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 	        registry.register(new Scheme("https", sf, 443));
 
 	        connectionManager = new ThreadSafeClientConnManager(params, registry);
+	        
+	        if(logger != null && logger.isInfoEnabled()) {
+				logger.info("Initialized " + getClass().getSimpleName());
+			}
 		}
 		catch (Exception e) {
 			throw new SocializeException(e);
@@ -87,8 +97,14 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 	 */
 	@Override
 	public void destroy() {
+		if(logger != null && logger.isInfoEnabled()) {
+			logger.info("Destroying " + getClass().getSimpleName());
+		}
 		if(connectionManager != null) {
 			connectionManager.shutdown();
+		}
+		if(logger != null && logger.isInfoEnabled()) {
+			logger.info("Destroyed " + getClass().getSimpleName());
 		}
 	}
 
@@ -100,4 +116,7 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 	   return new DefaultHttpClient(connectionManager, params);
 	}
 
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
 }
