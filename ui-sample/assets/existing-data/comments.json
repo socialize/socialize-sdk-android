@@ -6,7 +6,7 @@
                 "id": 322931,
                 "name": "Android UI Integration Test App"
             },
-            "date": "2011-10-14 22:53:51+0000",
+            "date": "2011-10-14 23:27:32+0000",
             "entity": {
                 "comments": 1,
                 "key": "http://entity1.com",
@@ -15,21 +15,21 @@
                 "shares": 0,
                 "views": 0
             },
-            "id": 245585,
-            "lat": 11.371190728562476,
-            "lng": 41.89602325761699,
+            "id": 245611,
+            "lat": 16.362668701483823,
+            "lng": 88.88029116837394,
             "share_location": 1,
             "text": "POST comment #0",
             "user": {
                 "city": null,
                 "first_name": null,
-                "id": 52640277,
+                "id": 52640302,
                 "last_name": null,
                 "meta": null,
                 "small_image_uri": null,
                 "state": null,
                 "third_party_auth": [],
-                "username": "User52640277"
+                "username": "User52640302"
             }
         },
         {
@@ -37,7 +37,7 @@
                 "id": 322931,
                 "name": "Android UI Integration Test App"
             },
-            "date": "2011-10-14 22:53:51+0000",
+            "date": "2011-10-14 23:27:32+0000",
             "entity": {
                 "comments": 2,
                 "key": "http://entity1.com",
@@ -46,21 +46,21 @@
                 "shares": 0,
                 "views": 0
             },
-            "id": 245586,
-            "lat": 33.36066888196681,
-            "lng": 85.01791732943191,
+            "id": 245612,
+            "lat": 42.44504832739991,
+            "lng": 76.67341011265242,
             "share_location": 1,
             "text": "POST comment #1",
             "user": {
                 "city": null,
                 "first_name": null,
-                "id": 52640277,
+                "id": 52640302,
                 "last_name": null,
                 "meta": null,
                 "small_image_uri": null,
                 "state": null,
                 "third_party_auth": [],
-                "username": "User52640277"
+                "username": "User52640302"
             }
         },
         {
@@ -68,7 +68,7 @@
                 "id": 322931,
                 "name": "Android UI Integration Test App"
             },
-            "date": "2011-10-14 22:53:51+0000",
+            "date": "2011-10-14 23:27:32+0000",
             "entity": {
                 "comments": 3,
                 "key": "http://entity1.com",
@@ -77,21 +77,21 @@
                 "shares": 0,
                 "views": 0
             },
-            "id": 245587,
-            "lat": 42.188675443911166,
-            "lng": 36.45799139845668,
+            "id": 245613,
+            "lat": 13.507270220258057,
+            "lng": 37.131591776384305,
             "share_location": 1,
             "text": "POST comment #2",
             "user": {
                 "city": null,
                 "first_name": null,
-                "id": 52640277,
+                "id": 52640302,
                 "last_name": null,
                 "meta": null,
                 "small_image_uri": null,
                 "state": null,
                 "third_party_auth": [],
-                "username": "User52640277"
+                "username": "User52640302"
             }
         },
         {
@@ -99,7 +99,7 @@
                 "id": 322931,
                 "name": "Android UI Integration Test App"
             },
-            "date": "2011-10-14 22:53:51+0000",
+            "date": "2011-10-14 23:27:32+0000",
             "entity": {
                 "comments": 4,
                 "key": "http://entity1.com",
@@ -108,21 +108,21 @@
                 "shares": 0,
                 "views": 0
             },
-            "id": 245588,
-            "lat": 3.537322449817127,
-            "lng": 1.2283976774252814,
+            "id": 245614,
+            "lat": 57.134686533267164,
+            "lng": 77.6785130829332,
             "share_location": 1,
             "text": "POST comment #3",
             "user": {
                 "city": null,
                 "first_name": null,
-                "id": 52640277,
+                "id": 52640302,
                 "last_name": null,
                 "meta": null,
                 "small_image_uri": null,
                 "state": null,
                 "third_party_auth": [],
-                "username": "User52640277"
+                "username": "User52640302"
             }
         },
         {
@@ -130,7 +130,7 @@
                 "id": 322931,
                 "name": "Android UI Integration Test App"
             },
-            "date": "2011-10-14 22:53:51+0000",
+            "date": "2011-10-14 23:27:32+0000",
             "entity": {
                 "comments": 5,
                 "key": "http://entity1.com",
@@ -139,21 +139,21 @@
                 "shares": 0,
                 "views": 0
             },
-            "id": 245589,
-            "lat": 48.881700888075414,
-            "lng": 21.588154898691283,
+            "id": 245615,
+            "lat": 1.619164016609539,
+            "lng": 12.755250699200706,
             "share_location": 1,
             "text": "POST comment #4",
             "user": {
                 "city": null,
                 "first_name": null,
-                "id": 52640277,
+                "id": 52640302,
                 "last_name": null,
                 "meta": null,
                 "small_image_uri": null,
                 "state": null,
                 "third_party_auth": [],
-                "username": "User52640277"
+                "username": "User52640302"
             }
         },
         {
@@ -161,7 +161,7 @@
                 "id": 322931,
                 "name": "Android UI Integration Test App"
             },
-            "date": "2011-10-14 22:53:51+0000",
+            "date": "2011-10-14 23:27:32+0000",
             "entity": {
                 "comments": 6,
                 "key": "http://entity1.com",
@@ -170,21 +170,21 @@
                 "shares": 0,
                 "views": 0
             },
-            "id": 245590,
-            "lat": 50.78289501388751,
-            "lng": 85.51210546799139,
+            "id": 245616,
+            "lat": 16.639826129984733,
+            "lng": 86.02176456948914,
             "share_location": 1,
             "text": "POST comment #5",
             "user": {
                 "city": null,
                 "first_name": null,
-                "id": 52640277,
+                "id": 52640302,
                 "last_name": null,
                 "meta": null,
                 "small_image_uri": null,
                 "state": null,
                 "third_party_auth": [],
-                "username": "User52640277"
+                "username": "User52640302"
             }
         },
         {
@@ -192,7 +192,7 @@
                 "id": 322931,
                 "name": "Android UI Integration Test App"
             },
-            "date": "2011-10-14 22:53:51+0000",
+            "date": "2011-10-14 23:27:32+0000",
             "entity": {
                 "comments": 7,
                 "key": "http://entity1.com",
@@ -201,21 +201,21 @@
                 "shares": 0,
                 "views": 0
             },
-            "id": 245591,
-            "lat": 47.64734858466177,
-            "lng": 20.877060158757534,
+            "id": 245617,
+            "lat": 86.61510038719513,
+            "lng": 5.056166487525325,
             "share_location": 1,
             "text": "POST comment #6",
             "user": {
                 "city": null,
                 "first_name": null,
-                "id": 52640277,
+                "id": 52640302,
                 "last_name": null,
                 "meta": null,
                 "small_image_uri": null,
                 "state": null,
                 "third_party_auth": [],
-                "username": "User52640277"
+                "username": "User52640302"
             }
         },
         {
@@ -223,7 +223,7 @@
                 "id": 322931,
                 "name": "Android UI Integration Test App"
             },
-            "date": "2011-10-14 22:53:51+0000",
+            "date": "2011-10-14 23:27:32+0000",
             "entity": {
                 "comments": 8,
                 "key": "http://entity1.com",
@@ -232,21 +232,21 @@
                 "shares": 0,
                 "views": 0
             },
-            "id": 245592,
-            "lat": 83.9670334756804,
-            "lng": 79.67949098077891,
+            "id": 245618,
+            "lat": 26.29069005433434,
+            "lng": 4.802240816515413,
             "share_location": 1,
             "text": "POST comment #7",
             "user": {
                 "city": null,
                 "first_name": null,
-                "id": 52640277,
+                "id": 52640302,
                 "last_name": null,
                 "meta": null,
                 "small_image_uri": null,
                 "state": null,
                 "third_party_auth": [],
-                "username": "User52640277"
+                "username": "User52640302"
             }
         },
         {
@@ -254,7 +254,7 @@
                 "id": 322931,
                 "name": "Android UI Integration Test App"
             },
-            "date": "2011-10-14 22:53:51+0000",
+            "date": "2011-10-14 23:27:32+0000",
             "entity": {
                 "comments": 9,
                 "key": "http://entity1.com",
@@ -263,21 +263,21 @@
                 "shares": 0,
                 "views": 0
             },
-            "id": 245593,
-            "lat": 84.67139219692875,
-            "lng": 7.191656205334618,
+            "id": 245619,
+            "lat": 23.5695520428518,
+            "lng": 29.32795233826552,
             "share_location": 1,
             "text": "POST comment #8",
             "user": {
                 "city": null,
                 "first_name": null,
-                "id": 52640277,
+                "id": 52640302,
                 "last_name": null,
                 "meta": null,
                 "small_image_uri": null,
                 "state": null,
                 "third_party_auth": [],
-                "username": "User52640277"
+                "username": "User52640302"
             }
         },
         {
@@ -285,7 +285,7 @@
                 "id": 322931,
                 "name": "Android UI Integration Test App"
             },
-            "date": "2011-10-14 22:53:51+0000",
+            "date": "2011-10-14 23:27:32+0000",
             "entity": {
                 "comments": 10,
                 "key": "http://entity1.com",
@@ -294,21 +294,21 @@
                 "shares": 0,
                 "views": 0
             },
-            "id": 245594,
-            "lat": 87.92726664370107,
-            "lng": 5.4488869555808,
+            "id": 245620,
+            "lat": 60.06465610689916,
+            "lng": 56.63831036094387,
             "share_location": 1,
             "text": "POST comment #9",
             "user": {
                 "city": null,
                 "first_name": null,
-                "id": 52640277,
+                "id": 52640302,
                 "last_name": null,
                 "meta": null,
                 "small_image_uri": null,
                 "state": null,
                 "third_party_auth": [],
-                "username": "User52640277"
+                "username": "User52640302"
             }
         }
     ]
