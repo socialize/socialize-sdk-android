@@ -149,7 +149,7 @@ For example:
 
 	**http://www.getsocialize.com (valid URL preferred)**
 	
-	http://notarealurl.com (Not a *real* URL, but will still work)
+	*http://notarealurl.com (Not a real URL, but will still work)*
 	
 Creating an Entity
 ~~~~~~~~~~~~~~~~~~
