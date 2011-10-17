@@ -5,7 +5,7 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.ui.ActivityIOCProvider;
 
-public class ActivityIOCProviderTest extends SocializeUITest {
+public class ActivityIOCProviderTest extends SocializeUITestCase {
 
 	@UsesMocks (IOCContainer.class)
 	public void testActivityIOCProviderGetBean() {

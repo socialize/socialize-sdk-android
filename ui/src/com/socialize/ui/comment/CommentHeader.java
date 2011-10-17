@@ -22,30 +22,15 @@
 package com.socialize.ui.comment;
 
 import android.content.Context;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+
+import com.socialize.ui.header.SocializeHeader;
 
 /**
  * @author Jason Polites
  *
  */
-public class CommentHeader extends LinearLayout {
-	
-	private TextView titleText;
-
+public class CommentHeader extends SocializeHeader {
 	public CommentHeader(Context context) {
 		super(context);
-	}
-
-	public TextView getTitleText() {
-		return titleText;
-	}
-
-	public void setTitleText(TextView titleText) {
-		this.titleText = titleText;
-	}
-	
-	public void setText(String text) {
-		this.titleText.setText(text);
 	}
 }

@@ -46,21 +46,57 @@ public class AuthProviderResponse {
 	public void setToken(String token) {
 		this.token = token;
 	}
+	
+	/**
+	 * @deprecated 3rd party data is extracted from the server now
+	 * @return
+	 */
+	@Deprecated
 	public String getFirstName() {
 		return firstName;
 	}
+	
+	/**
+	 * @deprecated 3rd party data is extracted from the server now
+	 * @param name
+	 */
+	@Deprecated
 	public void setFirstName(String name) {
 		this.firstName = name;
 	}
+	
+	/**
+	 * @deprecated 3rd party data is extracted from the server now
+	 * @return
+	 */
+	@Deprecated
 	public String getImageData() {
 		return imageData;
 	}
+	
+	/**
+	 * @deprecated 3rd party data is extracted from the server now
+	 * @param imageUrl
+	 */
+	@Deprecated
 	public void setImageData(String imageUrl) {
 		this.imageData = imageUrl;
 	}
+	
+	/**
+	 * @deprecated 3rd party data is extracted from the server now
+	 * @return
+	 */
+	@Deprecated
 	public String getLastName() {
 		return lastName;
 	}
+	
+	/**
+	 * @deprecated 3rd party data is extracted from the server now
+	 * @param lastName
+	 */
+	@Deprecated
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}

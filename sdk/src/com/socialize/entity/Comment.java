@@ -21,6 +21,8 @@
  */
 package com.socialize.entity;
 
+import com.socialize.api.action.ActionType;
+
 
 /**
  * @author Jason Polites
@@ -36,5 +38,15 @@ public class Comment extends SocializeAction {
 
 	public void setText(String comment) {
 		this.text = comment;
+	}
+
+	@Override
+	public ActionType getActionType() {
+		return ActionType.COMMENT;
+	}
+
+	@Override
+	public String getDisplayText() {
+		return text;
 	}
 }

@@ -30,4 +30,5 @@ public interface IBeanFactory<T> {
 
 	public T getBean();
 	
+	public T getBean(Object...args);
 }

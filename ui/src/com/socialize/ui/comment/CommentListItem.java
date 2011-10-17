@@ -1,28 +1,29 @@
 package com.socialize.ui.comment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.GradientDrawable.Orientation;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DeviceUtils;
-import com.socialize.util.Drawables;
 
-// TODO: Remove this annotation
-@SuppressWarnings("unused")
 public class CommentListItem extends LinearLayout {
 	
 	private TextView comment;
 	private TextView time;
 	private TextView author;
-//	private ImageView userIcon;
+	private ImageView userIcon;
 	private DeviceUtils deviceUtils;
-	private Drawables drawables;
 	private Colors colors;
 
 	public CommentListItem(Context context, AttributeSet attrs) {
@@ -37,8 +38,10 @@ public class CommentListItem extends LinearLayout {
 		
 		final int eight = deviceUtils.getDIP(8);
 		final int four = deviceUtils.getDIP(4);
+		final int imagePadding = deviceUtils.getDIP(4);
 		final int textColor = colors.getColor(Colors.BODY);
 		final int titleColor = colors.getColor(Colors.TITLE);
+		final int iconSize = deviceUtils.getDIP(64);
 		
 		ListView.LayoutParams layout = new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, ListView.LayoutParams.FILL_PARENT);
 		setDrawingCacheEnabled(true);
@@ -93,6 +96,7 @@ public class CommentListItem extends LinearLayout {
 		comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
 		comment.setTextColor(textColor);
 		comment.setLayoutParams(commentLayoutParams);
+		comment.setMaxLines(5);
 
 		contentHeaderLayout.addView(author);
 		contentHeaderLayout.addView(time);
@@ -100,18 +104,26 @@ public class CommentListItem extends LinearLayout {
 		contentLayout.addView(contentHeaderLayout);
 		contentLayout.addView(comment);
 		
-//		LinearLayout iconLayout = new LinearLayout(getContext());
-//		LinearLayout.LayoutParams iconLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//		iconLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
-//		iconLayout.setLayoutParams(iconLayoutParams);
-//		iconLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
-//		iconLayout.setPadding(four,four,four,four);
-//		userIcon = new ImageView(getContext());
-//		userIcon.setLayoutParams(iconLayoutParams);
-//		userIcon.setScaleType(ScaleType.CENTER_CROP);
-//		iconLayout.addView(userIcon);
-//		addView(iconLayout);
+		LinearLayout iconLayout = new LinearLayout(getContext());
 		
+		LinearLayout.LayoutParams iconLayoutParams = new LinearLayout.LayoutParams(iconSize, iconSize);
+		iconLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
+		iconLayout.setLayoutParams(iconLayoutParams);
+		iconLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
+		userIcon = new ImageView(getContext());
+		userIcon.setLayoutParams(iconLayoutParams);
+		userIcon.setPadding(imagePadding, imagePadding, imagePadding, imagePadding);
+		
+		GradientDrawable imageBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] {Color.WHITE, Color.WHITE});
+		imageBG.setStroke(deviceUtils.getDIP(1), Color.BLACK);
+		
+		userIcon.setBackgroundDrawable(imageBG);
+		
+		userIcon.setScaleType(ScaleType.CENTER_CROP);
+		
+		iconLayout.addView(userIcon);
+		
+		addView(iconLayout);
 		addView(contentLayout);
 	}
 
@@ -127,16 +139,12 @@ public class CommentListItem extends LinearLayout {
 		return author;
 	}
 
-//	public ImageView getUserIcon() {
-//		return userIcon;
-//	}
+	public ImageView getUserIcon() {
+		return userIcon;
+	}
 
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
 		this.deviceUtils = deviceUtils;
-	}
-
-	public void setDrawables(Drawables drawables) {
-		this.drawables = drawables;
 	}
 
 	public void setColors(Colors colors) {

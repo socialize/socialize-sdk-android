@@ -65,7 +65,7 @@ public interface SocializeProvider<T> {
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException;
 
 	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException;
-	
+
 	/**
 	 * @deprecated
 	 * @use this{@link #authenticate(String, String, String, AuthProviderData, String)}
@@ -88,11 +88,15 @@ public interface SocializeProvider<T> {
 	
 	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex) throws SocializeException;
 	
+	public ListResult<T> list(SocializeSession session, String endpoint, int startIndex, int endIndex) throws SocializeException;
+	
 	public T get(SocializeSession session, String endpoint, String id) throws SocializeException;
 	
 	public ListResult<T> put(SocializeSession session, String endpoint, T object) throws SocializeException;
 
 	public ListResult<T> post(SocializeSession session, String endpoint, T object) throws SocializeException;
+	
+	public T putAsPost(SocializeSession session, String endpoint, T object) throws SocializeException;
 	
 	public ListResult<T> put(SocializeSession session, String endpoint, Collection<T> object) throws SocializeException;
 

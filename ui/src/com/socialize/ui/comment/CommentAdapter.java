@@ -6,8 +6,10 @@ package com.socialize.ui.comment;
 import java.util.Date;
 import java.util.List;
 
-import android.content.Context;
+import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -17,21 +19,25 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Comment;
 import com.socialize.entity.User;
 import com.socialize.log.SocializeLogger;
-import com.socialize.ui.user.UserService;
-import com.socialize.ui.util.TimeUtils;
+import com.socialize.ui.SocializeUI;
+import com.socialize.ui.image.ImageLoadListener;
+import com.socialize.ui.image.ImageLoadRequest;
+import com.socialize.ui.image.ImageLoader;
+import com.socialize.ui.util.DateUtils;
 import com.socialize.ui.view.ListItemLoadingView;
 import com.socialize.ui.view.ViewHolder;
+import com.socialize.util.Base64DecoderException;
 import com.socialize.util.Base64Utils;
+import com.socialize.util.CacheableDrawable;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
+import com.socialize.util.SafeBitmapDrawable;
+import com.socialize.util.StringUtils;
 
 /**
  * Provides comments to the comment view.
  * @author jasonpolites
  */
-
-// TODO: remove this annotation
-@SuppressWarnings("unused")
 public class CommentAdapter extends BaseAdapter {
 
 	private IBeanFactory<CommentListItem> commentItemViewFactory;
@@ -41,15 +47,17 @@ public class CommentAdapter extends BaseAdapter {
 	private Drawables drawables;
 	private View loadingView;
 	private DeviceUtils deviceUtils;
-	private TimeUtils timeUtils;
-	private UserService userService;
-	private Base64Utils base64Utils;
+	private DateUtils dateUtils;
 	private boolean last = false;
+	private Base64Utils base64Utils;
+	private ImageLoader imageLoader;
+	private Activity context;
 	
-	private final int iconSize = 64;
+	private int iconSize = 100;
 	
-	public CommentAdapter(Context context) {
+	public CommentAdapter(Activity context) {
 		super();
+		this.context = context;
 	}
 
 	@Override
@@ -104,10 +112,27 @@ public class CommentAdapter extends BaseAdapter {
 	}
 	
 	@Override
-	public View getView(int position, View view, ViewGroup parent) {
+	public View getView(int position, View oldView, ViewGroup parent) {
 		
         ViewHolder holder;
-   
+        View view = oldView;
+        User tmpUser = null;
+        
+       	final Comment item = (Comment) getItem(position);
+       	
+       	if(item != null) {
+       		tmpUser = item.getUser();
+       	}
+       	
+       	User currentUser = getSocializeUI().getSocialize().getSession().getUser();
+       	
+       	if(currentUser != null && currentUser.equals(tmpUser)) {
+       		// Use this user as we may have been updated
+       		tmpUser = currentUser;
+       	}
+       	
+       	final User user = tmpUser;
+       	
         if (view == null) {
         	
         	CommentListItem v = commentItemViewFactory.getBean();
@@ -117,7 +142,7 @@ public class CommentAdapter extends BaseAdapter {
             holder.setTime(v.getTime());
             holder.setUserName(v.getAuthor());
             holder.setComment(v.getComment());
-//    		userIcon =  v.getUserIcon();
+            holder.setUserIcon(v.getUserIcon());
     		holder.setNow(new Date());
 
             v.setTag(holder);
@@ -126,6 +151,9 @@ public class CommentAdapter extends BaseAdapter {
         } 
         else {
             holder = (ViewHolder) view.getTag();
+            if(holder.getImageUrl() != null) {
+            	imageLoader.cancel(holder.getImageUrl());
+            }
         }
         
         if(position >= comments.size()) {
@@ -138,99 +166,161 @@ public class CommentAdapter extends BaseAdapter {
         	view = loadingView;
         }
         else {
-        	Comment item = (Comment) getItem(position);
     		
     		if(item != null) {
-    			User currentUser = userService.getCurrentUser();
-    			User user = item.getUser();
-    			String displayName = null;
     			
-    			if(currentUser != null && user != null && currentUser.getId().equals(user.getId())) {
-    				user = currentUser;
-    				displayName = "You";
+    			holder.setItemId(position);
+
+    			String displayName = "";
+    			
+    			if(user != null) {
+    				displayName = user.getDisplayName();
+    				if(displayName == null) {
+    					// Use the item user
+    					displayName = item.getUser().getDisplayName();
+    					
+    					if(displayName == null) {
+    						displayName = "Anonymous";
+    					}
+    				}
     			}
     			
-    			if(user != null && displayName == null) {
-    				displayName = user.getDisplayName();
-    				
-    				if(displayName == null) {
-    					displayName = "Anonymous";
-    				}
+    			if(user != null) {
+    				view.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							if(user != null && user.getId() != null) {
+								getSocializeUI().showCommentDetailViewForResult(context, user.getId().toString(), item.getId().toString(), CommentActivity.PROFILE_UPDATE);
+							}
+							else {
+								if(logger != null) {
+									logger.warn("No user for comment " + item.getId());
+								}
+							}
+						}
+					});
     			}
     			
     			TextView comment = holder.getComment();
     			TextView userName = holder.getUserName();
     			TextView time = holder.getTime();
-    			ImageView userIcon = holder.getUserIcon();
+    			
+    			final ImageView userIcon = holder.getUserIcon();
     			
     			if (comment != null) {
     				comment.setText(item.getText());
     			}
     			
     			if (userName != null) {
-    				if(user != null) {
-    					userName.setText(displayName);
-    				}
+    				userName.setText(displayName);
     			}
     			
     			if (time != null) {
     				Long date = item.getDate();
     				if(date != null && date > 0) {
     					long diff = (holder.getNow().getTime() - date.longValue());
-    					time.setText(timeUtils.getTimeString(diff) + " ");
+    					time.setText(dateUtils.getTimeString(diff) + " ");
     				}
     				else {
     					time.setText(" ");
     				}
     			}
     			
-    			// TODO: uncomment when we do profile screen
-    			
-//    			if (userIcon != null) {
-//    			    Drawable defaultImage = drawables.getDrawable(SocializeUI.DEFAULT_USER_ICON, deviceUtils.getDIP(iconSize), deviceUtils.getDIP(iconSize), true);
-//    					
-//    				if(user != null) {
-//    					if(!StringUtils.isEmpty(user.getSmallImageUri())) {
-//    						try {
-//    							Uri uri = Uri.parse(user.getSmallImageUri());
-//    							userIcon.setImageURI(uri);
-//    						}
-//    						catch (Exception e) {
-//    							String errorMsg = "Not a valid image uri [" + user.getSmallImageUri() + "]";
-//    							if(logger != null) {
-//    								logger.error(errorMsg, e);
-//    							}
-//    							else {
-//    								System.err.println(errorMsg);
-//    							}
-//    							
-//    							userIcon.setImageDrawable(defaultImage);
-//    						}
-//    					}
-//    					else if(drawables != null && !StringUtils.isEmpty(user.getProfilePicData())) {
-//    						try {
-//								Drawable drawable = drawables.getDrawable(user.getId().toString(), base64Utils.decode(user.getProfilePicData()), deviceUtils.getDIP(iconSize), deviceUtils.getDIP(iconSize));
-//								userIcon.setImageDrawable(drawable);
-//							}
-//							catch (Base64DecoderException e) {
-//								if(logger != null) {
-//									logger.error("Invalid image data", e);
-//								}
-//								else {
-//									e.printStackTrace();
-//								}
-//								
-//								userIcon.setImageDrawable(defaultImage);
-//							}
-//    					}
-//    					else {
-//    						userIcon.setImageDrawable(defaultImage);
-//    					}
-//    				}
-//    				else {
-//    					userIcon.setImageDrawable(defaultImage);
-//    				}
-//    			}
+    			if (userIcon != null && drawables != null) {
+    				
+    				int densitySize = deviceUtils.getDIP(iconSize);
+    				
+    			    final Drawable defaultImage = drawables.getDrawable(SocializeUI.DEFAULT_USER_ICON, true);
+    					
+    				if(user != null) {
+    					String imageUrl = user.getSmallImageUri();
+    					
+    					holder.setImageUrl(imageUrl);
+    					userIcon.getBackground().setAlpha(255);
+    					
+    					if(!StringUtils.isEmpty(imageUrl)) {
+    						try {
+    							// Check the cache
+    							CacheableDrawable cached = drawables.getCache().get(imageUrl);
+    							
+    							if(cached != null && !cached.isRecycled()) {
+    								if(logger != null && logger.isInfoEnabled()) {
+										logger.info("CommentAdpater setting image icon to cached image " + cached);
+									}
+    								userIcon.setImageDrawable(cached);
+    							}
+    							else {
+    								userIcon.setImageDrawable(null);
+    								userIcon.getBackground().setAlpha(64);
+    								
+        							imageLoader.loadImage(imageUrl, new ImageLoadListener() {
+    									@Override
+    									public void onImageLoadFail(Exception error) {
+    										logError("Error loading image", error);
+    										
+    										userIcon.post(new Runnable() {
+    											public void run() {
+    												if(logger != null && logger.isInfoEnabled()) {
+    													logger.info("CommentAdpater setting image icon to default image");
+    												}
+    												userIcon.setImageDrawable(defaultImage);
+    												userIcon.getBackground().setAlpha(255);
+    											}
+    										});
+    									}
+    									
+    									@Override
+    									public void onImageLoad(final ImageLoadRequest request, final SafeBitmapDrawable drawable) {
+    										// Must be run on UI thread
+    										userIcon.post(new Runnable() {
+    											public void run() {
+    												if(request == null || !request.isCanceled()) {
+    													if(logger != null && logger.isInfoEnabled()) {
+        													logger.info("CommentAdpater setting image icon to " + drawable);
+        												}
+        												userIcon.setImageDrawable(drawable);
+    												}
+    												
+    												userIcon.getBackground().setAlpha(255);
+    											}
+    										});
+    									}
+    								});
+    							}
+    						}
+    						catch (Exception e) {
+    							String errorMsg = "Not a valid image uri [" + imageUrl + "]";
+    							if(logger != null) {
+    								logger.error(errorMsg, e);
+    							}
+    							else {
+    								System.err.println(errorMsg);
+    							}
+    							
+    							userIcon.setImageDrawable(defaultImage);
+    						}
+    					}
+    					else if(!StringUtils.isEmpty(user.getProfilePicData())) {
+    						try {
+								Drawable drawable = drawables.getDrawable(user.getId().toString(), base64Utils.decode(user.getProfilePicData()), densitySize, densitySize);
+								userIcon.setImageDrawable(drawable);
+							}
+							catch (Base64DecoderException e) {
+								
+								logError("Invalid image data", e);
+								
+								userIcon.setImageDrawable(defaultImage);
+							}
+    					}
+    					else {
+    						userIcon.setImageDrawable(defaultImage);
+    					}
+    				}
+    				else {
+    					userIcon.setImageDrawable(defaultImage);
+    				}
+    			}
     		}
         }
         
@@ -277,15 +367,32 @@ public class CommentAdapter extends BaseAdapter {
 		this.deviceUtils = deviceUtils;
 	}
 
-	public void setTimeUtils(TimeUtils timeUtils) {
-		this.timeUtils = timeUtils;
-	}
-
-	public void setUserService(UserService userService) {
-		this.userService = userService;
+	public void setDateUtils(DateUtils dateUtils) {
+		this.dateUtils = dateUtils;
 	}
 
 	public void setBase64Utils(Base64Utils base64Utils) {
 		this.base64Utils = base64Utils;
+	}
+
+	public void setIconSize(int iconSize) {
+		this.iconSize = iconSize;
+	}
+
+	public void setImageLoader(ImageLoader imageLoader) {
+		this.imageLoader = imageLoader;
+	}
+	
+	protected SocializeUI getSocializeUI() {
+		return SocializeUI.getInstance();
+	}
+	
+	protected void logError(String msg, Exception e) {
+		if(logger != null) {
+			logger.error(msg, e);
+		}
+		else {
+			e.printStackTrace();
+		}
 	}
 }

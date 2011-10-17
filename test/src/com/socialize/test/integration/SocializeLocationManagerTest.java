@@ -80,7 +80,7 @@ public class SocializeLocationManagerTest extends SocializeActivityTest {
 			public void onLocationChanged(Location location) {}
 		};
 		
-		manager.requestLocationUpdates(bestProvider, 0, 0, listener);
+		manager.requestLocationUpdates(getActivity(), bestProvider, 0, 0, listener);
 		manager.removeUpdates(listener);
 		
 		AndroidMock.verify(deviceUtils);

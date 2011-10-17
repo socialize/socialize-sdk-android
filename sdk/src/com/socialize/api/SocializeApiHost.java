@@ -25,17 +25,21 @@ import android.content.Context;
 import android.location.Location;
 
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.api.action.ActivityApi;
 import com.socialize.api.action.CommentApi;
 import com.socialize.api.action.EntityApi;
 import com.socialize.api.action.LikeApi;
+import com.socialize.api.action.UserApi;
 import com.socialize.api.action.ViewApi;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.listener.activity.ActivityListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.listener.entity.EntityListener;
 import com.socialize.listener.like.LikeListener;
+import com.socialize.listener.user.UserListener;
 import com.socialize.listener.view.ViewListener;
 import com.socialize.net.HttpClientFactory;
 import com.socialize.util.DeviceUtils;
@@ -54,6 +58,8 @@ public class SocializeApiHost {
 	private EntityApi entityApi;
 	private LikeApi likeApi;
 	private ViewApi viewApi;
+	private UserApi userApi;
+	private ActivityApi activityApi;
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	
 	public SocializeApiHost(Context context) {
@@ -62,7 +68,7 @@ public class SocializeApiHost {
 	}
 	
 	public void clearSessionCache() {
-		commentApi.clearSession();
+		userApi.clearSession();
 	}
 	
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
@@ -88,26 +94,10 @@ public class SocializeApiHost {
 		}
 		else {
 			// All Api instances have authenticate, so we can just use any old one
-			commentApi.authenticateAsync(consumerKey, consumerSecret, udid, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
+			userApi.authenticateAsync(consumerKey, consumerSecret, udid, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
 		}
 	}
 	
-	@Deprecated
-	public void authenticate(String consumerKey, String consumerSecret, String authUserId3rdParty, String authToken3rdParty, AuthProviderType authProvider, String appId3rdParty, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
-		String udid = deviceUtils.getUDID(context);
-		
-		// TODO: create test case for this
-		if(StringUtils.isEmpty(udid)) {
-			if(listener != null) {
-				listener.onError(new SocializeException("No UDID provided"));
-			}
-		}
-		else {
-			// All Api instances have authenticate, so we can just use any old one
-			commentApi.authenticateAsync(consumerKey, consumerSecret, udid, authUserId3rdParty, authToken3rdParty, authProvider, appId3rdParty, listener, sessionConsumer, do3rdPartyAuth);
-		}
-	}
-
 	public void createEntity(SocializeSession session, String key, String name, EntityListener listener) {
 		entityApi.addEntity(session, key, name, listener);
 	}
@@ -164,6 +154,22 @@ public class SocializeApiHost {
 		likeApi.getLike(session, key, listener);
 	}
 	
+	public void getUser(SocializeSession session, int id, UserListener listener) {
+		userApi.getUser(session, id, listener);
+	}
+	
+	public void saveUserProfile(Context context, SocializeSession session, String firstName, String lastName, String encodedImage, UserListener listener) {
+		userApi.saveUserProfile(context, session, firstName, lastName, encodedImage, listener);
+	}
+	
+	public void listActivityByUser(SocializeSession session, int id, ActivityListener listener) {
+		activityApi.getActivityByUser(session, id, listener);
+	}
+	
+	public void listActivityByUser(SocializeSession session, int id, int startIndex, int endIndex, ActivityListener listener) {
+		activityApi.getActivityByUser(session, id, startIndex, endIndex, listener);
+	}
+	
 	public void destroy() {
 		if(clientFactory != null) {
 			clientFactory.destroy();
@@ -208,6 +214,22 @@ public class SocializeApiHost {
 
 	public void setViewApi(ViewApi viewApi) {
 		this.viewApi = viewApi;
+	}
+	
+	public UserApi getUserApi() {
+		return userApi;
+	}
+
+	public void setUserApi(UserApi userApi) {
+		this.userApi = userApi;
+	}
+	
+	public ActivityApi getActivityApi() {
+		return activityApi;
+	}
+
+	public void setActivityApi(ActivityApi activityApi) {
+		this.activityApi = activityApi;
 	}
 
 	public IBeanFactory<AuthProviderData> getAuthProviderDataFactory() {

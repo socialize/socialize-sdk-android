@@ -21,12 +21,16 @@
  */
 package com.socialize.util;
 
+import java.util.List;
 import java.util.Locale;
 
 import android.Manifest.permission;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.provider.MediaStore;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
@@ -39,21 +43,25 @@ import com.socialize.log.SocializeLogger;
  * @author Jason Polites
  */
 public class DeviceUtils {
-	
+
 	private SocializeLogger logger;
 	private String userAgent;
 	private float density = 160.0f;
-	
+	private String packageName;
+	private boolean hasCamera;
+
 	public void init(Context context) {
-		if(context instanceof Activity) {
-	        DisplayMetrics metrics = new DisplayMetrics();
-	        Display display = ((Activity)context).getWindowManager().getDefaultDisplay();
-	        display.getMetrics(metrics);
-	        density = metrics.density;
+		if (context instanceof Activity) {
+			DisplayMetrics metrics = new DisplayMetrics();
+			Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
+			display.getMetrics(metrics);
+			density = metrics.density;
+			packageName = context.getPackageName();
+			hasCamera = isIntentAvailable(context, MediaStore.ACTION_IMAGE_CAPTURE);
 		}
 		else {
 			String errroMsg = "Unable to determine device screen density.  Socialize must be intialized from an Activity";
-			if(logger != null) {
+			if (logger != null) {
 				logger.warn(errroMsg);
 			}
 			else {
@@ -61,48 +69,60 @@ public class DeviceUtils {
 			}
 		}
 	}
-	
+
+	public boolean isIntentAvailable(Context context, String action) {
+		final PackageManager packageManager = context.getPackageManager();
+		final Intent intent = new Intent(action);
+		List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+		return list.size() > 0;
+	}
+
 	public int getDIP(int pixels) {
-		if(pixels != 0) {
+		if (pixels != 0) {
 			return (int) ((float) pixels * density);
 		}
 		return pixels;
 	}
-	
+
 	public String getUDID(Context context) {
-		if(hasPermission(context, permission.READ_PHONE_STATE)) {
+		if (hasPermission(context, permission.READ_PHONE_STATE)) {
 			TelephonyManager tManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-			
+
 			String deviceId = tManager.getDeviceId();
-			
-			if(StringUtils.isEmpty(deviceId)) {
-				if(logger != null) {
+
+			if (StringUtils.isEmpty(deviceId)) {
+				if (logger != null) {
 					logger.warn("Unable to determine device UDID, reverting to " + Secure.ANDROID_ID);
 				}
 				deviceId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
 			}
-			
+
 			return deviceId;
 		}
 		else {
 			// this is fatal
-			if(logger != null) {
+			if (logger != null) {
 				logger.error(SocializeLogger.NO_UDID);
 			}
-			
+
 			return null;
 		}
 	}
-	
+
 	public String getUserAgentString() {
-		if(userAgent == null) {
-			userAgent = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_" + Locale.getDefault().getCountry();
+		if (userAgent == null) {
+			userAgent = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_"
+					+ Locale.getDefault().getCountry() + "; BundleID/" + packageName;
 		}
 		return userAgent;
 	}
-	
+
 	public boolean hasPermission(Context context, String permission) {
 		return context.getPackageManager().checkPermission(permission, context.getPackageName()) == PackageManager.PERMISSION_GRANTED;
+	}
+
+	public boolean hasCamera() {
+		return hasCamera;
 	}
 
 	public SocializeLogger getLogger() {

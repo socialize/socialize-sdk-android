@@ -36,7 +36,7 @@ public class SocializeActionFactoryTest extends AbstractSocializeActionFactoryTe
 		return new SocializeActionFactory<SocializeAction>() {
 			
 			@Override
-			public SocializeAction instantiateObject() {
+			public SocializeAction instantiateObject(JSONObject json) {
 				return action;
 			}
 			

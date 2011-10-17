@@ -46,6 +46,7 @@ public class BeanRef {
 	private boolean abstractBean = false;
 	
 	private boolean initCalled = false;
+	private boolean lazyInit = false;
 	
 	private boolean contextSensitive = false;
 	
@@ -176,6 +177,13 @@ public class BeanRef {
 	protected void setContextSensitiveInitMethod(boolean contextSensitiveInitMethod) {
 		this.contextSensitiveInitMethod = contextSensitiveInitMethod;
 	}
-	
+
+	public boolean isLazyInit() {
+		return lazyInit;
+	}
+
+	public void setLazyInit(boolean lazyInit) {
+		this.lazyInit = lazyInit;
+	}
 	
 }

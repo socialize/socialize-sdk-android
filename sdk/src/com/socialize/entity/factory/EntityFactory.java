@@ -43,7 +43,7 @@ public class EntityFactory extends SocializeObjectFactory<Entity> {
 	}
 
 	@Override
-	public Entity instantiateObject() {
+	public Entity instantiateObject(JSONObject object) {
 		return new Entity();
 	}
 

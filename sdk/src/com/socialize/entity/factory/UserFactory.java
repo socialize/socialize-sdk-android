@@ -43,7 +43,7 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	public static final String USERNAME = "username";
 	public static final String DESCRIPTION = "description";
 	public static final String LOCATION = "location";
-	public static final String IMAGE_DATA = "image_data";
+	public static final String IMAGE_DATA = "picture";
 	public static final String SMALL_IMAGE_URI = "small_image_uri";
 	public static final String MEDIUM_IMAGE_URI = "medium_image_uri";
 	public static final String LARGE_IMAGE_URI = "large_image_uri";
@@ -51,10 +51,10 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	public static final String THIRD_PARTY_AUTH = "third_party_auth";
 
 	@Override
-	public User instantiateObject() {
+	public User instantiateObject(JSONObject object) {
 		return new User();
 	}
-
+	
 	@Override
 	protected void postFromJSON(JSONObject object, User user) throws JSONException {
 		
@@ -99,6 +99,10 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		object.put(DESCRIPTION, user.getDescription());
 		object.put(LOCATION, user.getLocation());
 		object.put(IMAGE_DATA, user.getProfilePicData());
+		
+		object.put(SMALL_IMAGE_URI, user.getSmallImageUri());
+		object.put(MEDIUM_IMAGE_URI, user.getMediumImageUri());
+		object.put(LARGE_IMAGE_URI, user.getLargeImageUri());
 	}
 
 	public StatsFactory getStatsFactory() {

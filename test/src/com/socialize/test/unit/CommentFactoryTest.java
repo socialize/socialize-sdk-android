@@ -47,7 +47,7 @@ public class CommentFactoryTest extends AbstractSocializeActionFactoryTest<Comme
 	protected CommentFactory createFactory() {
 		return new CommentFactory() {
 			@Override
-			public Comment instantiateObject() {
+			public Comment instantiateObject(JSONObject json) {
 				return action;
 			}
 			

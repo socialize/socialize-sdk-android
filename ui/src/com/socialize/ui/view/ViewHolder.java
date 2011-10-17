@@ -13,6 +13,8 @@ public class ViewHolder {
 	private TextView userName;
 	private ImageView userIcon;
 	private Date now;
+	private Integer itemId;
+	private String imageUrl;
 	
 	public ViewGroup getRow() {
 		return row;
@@ -49,5 +51,17 @@ public class ViewHolder {
 	}
 	public void setNow(Date now) {
 		this.now = now;
+	}
+	public Integer getItemId() {
+		return itemId;
+	}
+	public void setItemId(Integer itemId) {
+		this.itemId = itemId;
+	}
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 }

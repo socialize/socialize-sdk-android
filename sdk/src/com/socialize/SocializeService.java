@@ -30,6 +30,7 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
+import com.socialize.listener.activity.ActivityListListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -38,6 +39,8 @@ import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
+import com.socialize.listener.user.UserGetListener;
+import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
 
 /**
@@ -115,16 +118,6 @@ public interface SocializeService {
 	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderAppId, SocializeAuthListener authListener);
 	
 	/**
-	 * Authenticates the application against the API.
-	 * @param consumerKey The consumer url, obtained from registration at http://www.getsocialize.com.
-	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
-	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
-	 * @param authListener The callback for authentication outcomes.
-	 */
-	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, SocializeAuthListener authListener);
-	
-	
-	/**
 	 * @deprecated Too ambiguous.
 	 * @use this{@link #authenticateKnownUser(String, String, AuthProviderType, String, String, String, SocializeAuthListener)}
 	 */
@@ -199,7 +192,7 @@ public interface SocializeService {
 	 * @param url The url to which the comments are associated. MUST be a valid http URL.
 	 * @param startIndex The starting index of the results for pagination.
 	 * @param endIndex The ending index of the results for pagination.
-	 * @param commentListListener A listener to handle callbacks from the post.
+	 * @param commentListListener A listener to handle callbacks from the get.
 	 */
 	public void listCommentsByEntity(String url, int startIndex, int endIndex, CommentListListener commentListListener);
 	
@@ -244,6 +237,22 @@ public interface SocializeService {
 	public void addComment(String url, String comment, CommentAddListener commentAddListener);
 
 	/**
+	 * Retrieves a Socialize User based on their Socialize user ID.
+	 * @param id The id of the user.
+	 * @param userGetListener A listener to handle callbacks from the get.
+	 */
+	public void getUser(int id, UserGetListener userGetListener);
+	
+	/**
+	 * Saves the profile for the current logged in user.
+	 * @param firstName User first name.
+	 * @param lastName User last name.
+	 * @param encodedImage A Base64 encoded PNG file used for the user's profile picture.
+	 * @param listener A listener to handle callbacks from the post.
+	 */
+	public void saveCurrentUserProfile(Context context, String firstName, String lastName, String encodedImage, UserSaveListener listener);
+	
+	/**
 	 * Returns true if this SocializeService instance has been initialized.
 	 * @return
 	 * @deprecated Init should always be called so that each corresponding call to destroy is matched.
@@ -284,5 +293,27 @@ public interface SocializeService {
 	 * to be required upon the next call to the Socialize API.
 	 */
 	public void clearSessionCache();
+	
+	/**
+	 * Clears the session of the given 3rd party auth data (logs out from Facebook/Twitter etc).
+	 * @param type
+	 */
+	public void clear3rdPartySession(AuthProviderType type);
+	
+	/**
+	 * Lists a user's activity.
+	 * @param userId The ID of the user for whom activity will be listed.
+	 * @param activityListListener A listener to handle callbacks from the get.
+	 */
+	public void listActivityByUser(int userId, ActivityListListener activityListListener);
+	
+	/**
+	 * Lists a user's activity with pagination.
+	 * @param userId The ID of the user for whom activity will be listed.
+	 * @param startIndex The starting index of the results for pagination.
+	 * @param endIndex The ending index of the results for pagination.
+	 * @param activityListListener A listener to handle callbacks from the get.
+	 */
+	public void listActivityByUser(int userId, int startIndex, int endIndex, ActivityListListener activityListListener);
 
 }

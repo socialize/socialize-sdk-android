@@ -137,7 +137,7 @@
 			overwrite="true"/>
 		
 		<copy 
-			file="doc/UserGuide.html" 
+			file="doc/read_me_first.html" 
 			todir="build" 
 			verbose="true" 
 			failonerror="true" 
@@ -212,12 +212,12 @@
 			
 			<!-- Add Docs -->
 			<zipfileset dir="build/docs" prefix="docs"/>
-			<zipfileset dir="build" includes="UserGuide.html"/>
+			<zipfileset dir="build" includes="read_me_first.html"/>
 		</zip>
 		
 		<!-- clean up -->
 		<delete dir="${sample_dir}"/>
 		<delete dir="build/docs"/>
-		<delete file="build/UserGuide.html"/>
+		<delete file="build/read_me_first.html"/>
 	</target>
 </project>

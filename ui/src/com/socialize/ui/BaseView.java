@@ -1,9 +1,12 @@
 package com.socialize.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
+import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.ui.error.SocializeUIErrorHandler;
 
 public abstract class BaseView extends LinearLayout {
@@ -17,10 +20,10 @@ public abstract class BaseView extends LinearLayout {
 	public BaseView(Context context) {
 		super(context);
 	}
-
-	public void showError(Context context, String message) {
+	
+	public void showError(Context context, Exception e) {
 		if(errorHandler != null) {
-			errorHandler.handleError(context, message);
+			errorHandler.handleError(context, e);
 		}
 	}
 
@@ -30,5 +33,21 @@ public abstract class BaseView extends LinearLayout {
 
 	public void setErrorHandler(SocializeUIErrorHandler errorHandler) {
 		this.errorHandler = errorHandler;
+	}
+	
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
+	}
+	
+	protected SocializeUI getSocializeUI() {
+		return SocializeUI.getInstance();
+	}
+	
+	protected Activity getActivity() {
+		Context context = getContext();
+		if(context instanceof Activity) {
+			return (Activity) context;
+		}
+		return null;
 	}
 }

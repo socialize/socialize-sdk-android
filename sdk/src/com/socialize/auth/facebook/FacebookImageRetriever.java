@@ -21,82 +21,77 @@
  */
 package com.socialize.auth.facebook;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import com.socialize.log.SocializeLogger;
-import com.socialize.util.Base64Utils;
-import com.socialize.util.IOUtils;
 
 /**
  * @author Jason Polites
- *
+ * @deprecated Facebook data is extracted on the server now.
  */
+@Deprecated
 public class FacebookImageRetriever {
-
-	private IOUtils ioUtils;
-	private SocializeLogger logger;
-	private FacebookUrlBuilder facebookUrlBuilder;
-	private Base64Utils base64Utils;
-	
-	/**
-	 * Returns a base64 encoded string of the profile picture for the user with the given FB ID.
-	 * @param id
-	 * @return
-	 */
-	public String getEncodedProfileImage(String id) {
-		String encoded = null;
-		InputStream in = null;
-		
-		try {
-			in = facebookUrlBuilder.getProfileImageStream(id);
-			byte[] readBytes = ioUtils.readBytes(in);
-			encoded = base64Utils.encode(readBytes);
-		}
-		catch (Exception e) {
-			logger.error("Error retrieving facebook profile picture", e);
-		}
-		finally {
-			if(in != null) {
-				try {
-					in.close();
-				}
-				catch (IOException e) {
-					logger.error("Error closing stream", e);
-				}
-			}
-		}
-		
-		return encoded;
-	}
-
-	
-	public IOUtils getIoUtils() {
-		return ioUtils;
-	}
-
-	public void setIoUtils(IOUtils ioUtils) {
-		this.ioUtils = ioUtils;
-	}
-
-	public SocializeLogger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
-	}
-
-	public FacebookUrlBuilder getFacebookUrlBuilder() {
-		return facebookUrlBuilder;
-	}
-
-	public void setFacebookUrlBuilder(FacebookUrlBuilder facebookUrlBuilder) {
-		this.facebookUrlBuilder = facebookUrlBuilder;
-	}
-
-	public void setBase64Utils(Base64Utils base64Utils) {
-		this.base64Utils = base64Utils;
-	}
+//
+//	private IOUtils ioUtils;
+//	private SocializeLogger logger;
+//	private FacebookUrlBuilder facebookUrlBuilder;
+//	private Base64Utils base64Utils;
+//	
+//	/**
+//	 * Returns a base64 encoded string of the profile picture for the user with the given FB ID.
+//	 * @param id
+//	 * @return
+//	 */
+//	public String getEncodedProfileImage(String id) {
+//		String encoded = null;
+//		InputStream in = null;
+//		
+//		try {
+//			in = facebookUrlBuilder.getProfileImageStream(id);
+//			byte[] readBytes = ioUtils.readBytes(in);
+//			encoded = base64Utils.encode(readBytes);
+//		}
+//		catch (Exception e) {
+//			logger.error("Error retrieving facebook profile picture", e);
+//		}
+//		finally {
+//			if(in != null) {
+//				try {
+//					in.close();
+//				}
+//				catch (IOException e) {
+//					logger.error("Error closing stream", e);
+//				}
+//			}
+//		}
+//		
+//		return encoded;
+//	}
+//
+//	
+//	public IOUtils getIoUtils() {
+//		return ioUtils;
+//	}
+//
+//	public void setIoUtils(IOUtils ioUtils) {
+//		this.ioUtils = ioUtils;
+//	}
+//
+//	public SocializeLogger getLogger() {
+//		return logger;
+//	}
+//
+//	public void setLogger(SocializeLogger logger) {
+//		this.logger = logger;
+//	}
+//
+//	public FacebookUrlBuilder getFacebookUrlBuilder() {
+//		return facebookUrlBuilder;
+//	}
+//
+//	public void setFacebookUrlBuilder(FacebookUrlBuilder facebookUrlBuilder) {
+//		this.facebookUrlBuilder = facebookUrlBuilder;
+//	}
+//
+//	public void setBase64Utils(Base64Utils base64Utils) {
+//		this.base64Utils = base64Utils;
+//	}
 
 }

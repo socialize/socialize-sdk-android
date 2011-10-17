@@ -33,6 +33,7 @@ public class ListResult<T> {
 	private List<T> items;
 	private List<ActionError> errors;
 	private int totalCount;
+	private T singleObject;
 	
 	public ListResult() {
 		super();
@@ -60,6 +61,12 @@ public class ListResult<T> {
 	}
 	public void setTotalCount(int totalCount) {
 		this.totalCount = totalCount;
+	}
+	public T getSingleObject() {
+		return singleObject;
+	}
+	public void setSingleObject(T singleObject) {
+		this.singleObject = singleObject;
 	}
 
 	public ListResult<T> add(T item) {

@@ -23,7 +23,9 @@ package com.socialize.ui.util;
 
 /**
  * @author Jason Polites
+ * @deprecated Use DateUtils
  */
+@Deprecated
 public class TimeUtils {
 	
 	public static final long minute = 60;

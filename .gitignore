@@ -12,6 +12,14 @@ sample/assets/sample-app.conf
 integration-test/bin
 integration-test/gen
 integration-test/.settings
+ui-integration-test/bin
+ui-integration-test/gen
+ui-integration-test/.settings
+ui-integration-test/local.properties
+ui-integration-test/test-output
+ui-integration-test/running-sdk-cleanup.txt
+ui-integration-test/coverage
+ui-sample/assets/socialize.properties
 test/coverage
 test/test-output
 test/gen

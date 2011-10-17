@@ -2,12 +2,13 @@ package com.socialize.ui.comment;
 
 import java.util.List;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.widget.LinearLayout;
 
-import com.socialize.Socialize;
-import com.socialize.SocializeService;
+import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Comment;
 import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
@@ -15,15 +16,14 @@ import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.BaseView;
+import com.socialize.ui.auth.AuthRequestDialogFactory;
+import com.socialize.ui.auth.AuthRequestListener;
 import com.socialize.ui.dialog.ProgressDialogFactory;
-import com.socialize.ui.util.Colors;
 import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.ui.view.ViewFactory;
-import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 
-//TODO: Remove this annotation
-@SuppressWarnings("unused")
+
 public class CommentListView extends BaseView {
 
 	private int defaultGrabLength = 20;
@@ -39,8 +39,6 @@ public class CommentListView extends BaseView {
 	private ProgressDialogFactory progressDialogFactory;
 	private Drawables drawables;
 	private ProgressDialog dialog = null;
-	private Colors colors;
-	private DeviceUtils deviceUtils;
 	private KeyboardUtils keyboardUtils;
 	
 	private ViewFactory<CommentHeader> commentHeaderFactory;
@@ -50,6 +48,7 @@ public class CommentListView extends BaseView {
 	private CommentEditField field;
 	private CommentHeader header;
 	private CommentContentView content;
+	private IBeanFactory<AuthRequestDialogFactory> authRequestDialogFactory;
 
 	public CommentListView(Context context, String entityKey) {
 		this(context);
@@ -62,16 +61,12 @@ public class CommentListView extends BaseView {
 
 	public void init() {
 
-		int four = deviceUtils.getDIP(4);
-		int eight = deviceUtils.getDIP(8);
-
 		LayoutParams fill = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
 
 		setOrientation(LinearLayout.VERTICAL);
 		setLayoutParams(fill);
 		setBackgroundDrawable(drawables.getDrawable("crosshatch.png", true, true, true));
 		setPadding(0, 0, 0, 0);
-		setVerticalFadingEdgeEnabled(false);
 
 		header = commentHeaderFactory.make(getContext());
 		field = commentEditFieldFactory.make(getContext());
@@ -104,26 +99,50 @@ public class CommentListView extends BaseView {
 	
 	protected CommentAddButtonListener getCommentAddListener() {
 		return new CommentAddButtonListener(getContext(), field, new CommentButtonCallback() {
-			@Override
-			public void onError(Context context, String message) {
-				showError(getContext(), message);
-			}
 			
 			@Override
+			public void onError(Context context, Exception e) {
+				showError(getContext(), e);
+			}
+
+			@Override
 			public void onComment(String text) {
-				doPostComment(text);
+				if(!getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+					// Check that FB is enabled for this installation
+					if(getSocializeUI().isFacebookSupported()) {
+						AuthRequestDialogFactory dialog = authRequestDialogFactory.getBean();
+						dialog.show(getContext(), getCommentAuthListener(text));
+					}
+					else {
+						// Just post as anon
+						doPostComment(text);
+					}
+				}
+				else {
+					doPostComment(text);
+				}
 			}
 		}, keyboardUtils);
 	}
+	
+	protected AuthRequestListener getCommentAuthListener(final String text) {
+		return new AuthRequestListener() {
+			@Override
+			public void onResult(Dialog dialog) {
+				doPostComment(text);
+			}
+		};
+	}
 
 	public void doPostComment(String comment) {
+		
 		dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
 
 		getSocialize().addComment(entityKey, comment, new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {
-				showError(getContext(), error.getMessage());
+				showError(getContext(), error);
 				if(dialog != null) {
 					dialog.dismiss();
 				}
@@ -132,7 +151,14 @@ public class CommentListView extends BaseView {
 			@Override
 			public void onCreate(Comment entity) {
 				List<Comment> comments = commentAdapter.getComments();
-				comments.add(0, entity);
+				if(comments != null) {
+					comments.add(0, entity);
+				}
+				else {
+					// TODO: handle error!
+				}
+				
+				
 				totalCount++;
 				startIndex++;
 				endIndex++;
@@ -147,9 +173,7 @@ public class CommentListView extends BaseView {
 		});
 	}
 	
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
-	}
+
 
 	public void doListComments(boolean update) {
 
@@ -168,7 +192,7 @@ public class CommentListView extends BaseView {
 
 				@Override
 				public void onError(SocializeException error) {
-					showError(getContext(), error.getMessage());
+					showError(getContext(), error);
 					content.showList();
 					
 					if(dialog != null) {
@@ -267,7 +291,7 @@ public class CommentListView extends BaseView {
 			doListComments(false);
 		}
 		else {
-			showError(getContext(), "Socialize not authenticated");
+			showError(getContext(), new SocializeException("Socialize not authenticated"));
 			content.showList();
 		}
 	}
@@ -292,10 +316,6 @@ public class CommentListView extends BaseView {
 		this.defaultGrabLength = defaultGrabLength;
 	}
 
-	public void setColors(Colors colors) {
-		this.colors = colors;
-	}
-
 	public void setCommentHeaderFactory(ViewFactory<CommentHeader> commentHeaderFactory) {
 		this.commentHeaderFactory = commentHeaderFactory;
 	}
@@ -314,10 +334,6 @@ public class CommentListView extends BaseView {
 
 	public void setEntityKey(String entityKey) {
 		this.entityKey = entityKey;
-	}
-
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
 	}
 
 	public boolean isLoading() {
@@ -362,5 +378,16 @@ public class CommentListView extends BaseView {
 
 	public int getTotalCount() {
 		return totalCount;
+	}
+
+	public void setAuthRequestDialogFactory(IBeanFactory<AuthRequestDialogFactory> authRequestDialogFactory) {
+		this.authRequestDialogFactory = authRequestDialogFactory;
+	}
+
+	/**
+	 * Called when the current logged in user updates their profile.
+	 */
+	public void onProfileUpdate() {
+		commentAdapter.notifyDataSetChanged();
 	}
 }

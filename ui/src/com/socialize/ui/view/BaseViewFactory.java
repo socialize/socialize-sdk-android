@@ -52,4 +52,8 @@ public abstract class BaseViewFactory<V extends View> implements ViewFactory<V> 
 	public int getDIP(int pixels) {
 		return (deviceUtils == null) ? pixels : deviceUtils.getDIP(pixels);
 	}
+	
+	public int getColor(String color) {
+		return (colors == null) ? 0 : colors.getColor(color);
+	}
 }

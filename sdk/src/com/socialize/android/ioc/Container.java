@@ -61,32 +61,40 @@ public class Container {
 	
 	@SuppressWarnings("unchecked")
 	public <T extends Object> T getBean(String name, Object...args) {
-		Object bean = beans.get(name);
-		if(bean == null) {
+		if(beans != null) {
+			Object bean = beans.get(name);
 			BeanRef beanRef = mapping.getBeanRef(name);
+			
 			if(beanRef != null) {
-				if(!beanRef.isSingleton()) {
-					bean = builder.buildBean(this, beanRef, args);
-					
-					if(bean == null) {
-						Logger.e(getClass().getSimpleName(), "Failed to instantiate non-singleton bean with name " + name);
-					}
-					else {
-						builder.setBeanProperties(this, beanRef, bean);
-						builder.initBean(this, beanRef, bean);
+				if(bean == null) {
+					if(!beanRef.isSingleton()) {
+						bean = builder.buildBean(this, beanRef, args);
+						
+						if(bean == null) {
+							Logger.e(getClass().getSimpleName(), "Failed to instantiate non-singleton bean with name " + name);
+						}
+						else {
+							builder.setBeanProperties(this, beanRef, bean);
+							builder.initBean(this, beanRef, bean);
+						}
 					}
 				}
+				else if(beanRef.isLazyInit() && !beanRef.isInitCalled()) {
+					builder.initBean(this, beanRef, bean);
+				}	
 			}
-			else {
-				Logger.e(getClass().getSimpleName(), "No such bean with name " + name);
+			else if(bean == null) { // might be a factory
+				Logger.w(getClass().getSimpleName(), "No such bean with name " + name);
 			}
-			
+
+			return (T) bean;
 		}
-		return (T) bean;
+		
+		return null;
 	}
 	
 	public boolean containsBean(String name) {
-		return beans.containsKey(name);
+		return (beans == null) ? false : beans.containsKey(name);
 	}
 	
 	public int size() {
@@ -146,14 +154,25 @@ public class Container {
 						// We have a new context, so we need to rebuild this bean
 						Object bean = builder.buildBean(this, ref);
 						builder.setBeanProperties(this, ref, bean);
-						builder.initBean(this, ref, bean);
+						
+						if(!ref.isLazyInit()) {
+							builder.initBean(this, ref, bean);
+						}
+						
 						beans.put(ref.getName(), bean);
 					}
 					else if(ref.isContextSensitiveInitMethod()) {
-						// Re-call init
-						Object bean = getBean(ref.getName());
-						builder.initBean(this, ref, bean);
-						beans.put(ref.getName(), bean);
+						
+						if(ref.isLazyInit()) {
+							// Mark for re-init
+							ref.setInitCalled(false);
+						}
+						else {
+							// Re-call init
+							Object bean = getBean(ref.getName());
+							builder.initBean(this, ref, bean);
+							beans.put(ref.getName(), bean);	
+						}
 					}
 				}
 			}

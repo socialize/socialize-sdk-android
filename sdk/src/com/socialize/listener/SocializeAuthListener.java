@@ -33,4 +33,6 @@ public interface SocializeAuthListener extends SocializeListener {
 	
 	public void onAuthFail(SocializeException error);
 	
+	public void onCancel();
+	
 }

@@ -21,9 +21,22 @@
  */
 package com.socialize.entity;
 
+import com.socialize.api.action.ActionType;
+
 
 /**
  * @author Jason Polites
  *
  */
-public class Like extends SocializeAction {}
+public class Like extends SocializeAction {
+	
+	@Override
+	public ActionType getActionType() {
+		return ActionType.LIKE;
+	}
+
+	@Override
+	public String getDisplayText() {
+		return null;
+	}
+}

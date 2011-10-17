@@ -21,7 +21,8 @@
  */
 package com.socialize.ui.test;
 
-import java.util.Stack;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -29,28 +30,46 @@ import com.socialize.ui.sample.EmptyActivity;
 
 public abstract class SocializeUIActivityTest extends ActivityInstrumentationTestCase2<EmptyActivity> {
 	
-	private Stack<Object> bucket;
-	
 	public SocializeUIActivityTest() {
 		super("com.socialize.ui.sample", EmptyActivity.class);
 	}
 
+	private List<Object> bucket;
+	
 	@Override
 	protected void setUp() throws Exception {
-		bucket = new Stack<Object>();
+		bucket = new ArrayList<Object>();
 		super.setUp();
 	}
 	
 	protected void addResult(Object obj) {
-		bucket.push(obj);
+		bucket.add(obj);
+	}
+	
+	protected void addResult(int index, Object obj) {
+		int size = bucket.size();
+		if(size <= index) {
+			for (int i = size; i <= index; i++) {
+				bucket.add(i, null);
+			}
+		}
+		bucket.set(index, obj);
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected <T extends Object> T getResult(int index) {
+		if(!bucket.isEmpty()) {
+			return (T) bucket.get(index);
+		}
+		return (T) null;
 	}
 	
 	@SuppressWarnings("unchecked")
 	protected <T extends Object> T getNextResult() {
 		if(!bucket.isEmpty()) {
-			return (T) bucket.pop();
+			return (T) bucket.remove(0);
 		}
-		return null;
+		return (T) null;
 	}
 	
 	protected void sleep(long time) {

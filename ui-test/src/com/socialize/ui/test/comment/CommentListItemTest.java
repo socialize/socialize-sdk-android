@@ -17,9 +17,7 @@ public class CommentListItemTest extends SocializeUIActivityTest {
 		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
 		Colors colors = AndroidMock.createMock(Colors.class);
 		
-		AndroidMock.expect(deviceUtils.getDIP(8)).andReturn(8);
-		AndroidMock.expect(deviceUtils.getDIP(4)).andReturn(4);
-		
+		AndroidMock.expect(deviceUtils.getDIP(AndroidMock.anyInt())).andReturn(4).anyTimes();
 		AndroidMock.expect(colors.getColor(Colors.BODY)).andReturn(1);
 		AndroidMock.expect(colors.getColor(Colors.TITLE)).andReturn(1);
 		AndroidMock.expect(colors.getColor(Colors.LIST_ITEM_BG)).andReturn(1);

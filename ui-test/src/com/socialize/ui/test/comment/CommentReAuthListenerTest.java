@@ -5,10 +5,10 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.error.SocializeException;
 import com.socialize.ui.comment.CommentButtonCallback;
 import com.socialize.ui.comment.CommentReAuthListener;
-import com.socialize.ui.test.SocializeUITest;
+import com.socialize.ui.test.SocializeUITestCase;
 
 @UsesMocks ({CommentButtonCallback.class})
-public class CommentReAuthListenerTest extends SocializeUITest {
+public class CommentReAuthListenerTest extends SocializeUITestCase {
 
 	CommentButtonCallback callback;
 	CommentReAuthListener listener;
@@ -23,11 +23,10 @@ public class CommentReAuthListenerTest extends SocializeUITest {
 
 	@UsesMocks (SocializeException.class)
 	public void testOnError() {
-		String errorMessage = "foobar_message";
+//		String errorMessage = "foobar_message";
 		SocializeException error = AndroidMock.createMock(SocializeException.class);
 		
-		AndroidMock.expect(error.getMessage()).andReturn(errorMessage);
-		callback.onError(getContext(), errorMessage);
+		callback.onError(getContext(), error);
 		
 		AndroidMock.replay(error);
 		AndroidMock.replay(callback);
@@ -50,11 +49,9 @@ public class CommentReAuthListenerTest extends SocializeUITest {
 	}
 	
 	public void testOnAuthFail() {
-		String errorMessage = "foobar_message";
 		SocializeException error = AndroidMock.createMock(SocializeException.class);
 		
-		AndroidMock.expect(error.getMessage()).andReturn(errorMessage);
-		callback.onError(getContext(), errorMessage);
+		callback.onError(getContext(), error);
 		
 		AndroidMock.replay(error);
 		AndroidMock.replay(callback);

@@ -21,11 +21,11 @@
  */
 package com.socialize.ui.dialog;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 
 import com.socialize.log.SocializeLogger;
+import com.socialize.util.Drawables;
 
 /**
  * Safely renders progress dialogs
@@ -34,21 +34,20 @@ import com.socialize.log.SocializeLogger;
 public class ProgressDialogFactory {
 	
 	private SocializeLogger logger;
+	private Drawables drawables;
 
 	public ProgressDialog show(Context context, String title, String message) {
 		try {
-			if(context instanceof Activity) {
-				Activity activity = (Activity) context;
-				while(activity.getParent() != null) {
-					activity = activity.getParent();
-				}
-				context = activity;
-			}
-			
 			ProgressDialog dialog = makeDialog(context);
 			dialog.setTitle(title);
 			dialog.setMessage(message);
+			
+			if(drawables != null) {
+				dialog.setIcon(drawables.getDrawable("socialize_icon_white.png"));
+			}
+			
 			dialog.show();
+			
 			return dialog;
 		}
 		catch (Exception e) {
@@ -69,5 +68,9 @@ public class ProgressDialogFactory {
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
+	}
+
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
 	}
 }

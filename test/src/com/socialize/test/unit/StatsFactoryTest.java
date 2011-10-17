@@ -88,7 +88,7 @@ public class StatsFactoryTest extends AbstractSocializeObjectFactoryTest<Stats, 
 		
 		StatsFactory factory = new StatsFactory() {
 			@Override
-			public Stats instantiateObject() {
+			public Stats instantiateObject(JSONObject json) {
 				return object;
 			}
 

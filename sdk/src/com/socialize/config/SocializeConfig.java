@@ -46,6 +46,10 @@ public class SocializeConfig {
 	public static final String SOCIALIZE_CONSUMER_SECRET = "socialize.consumer.secret";
 	public static final String SOCIALIZE_DEBUG_MODE = "socialize.debug.mode";
 	
+	/**
+	 * true if Single Sign On is enabled.  Default is true.
+	 */
+	public static final String FACEBOOK_SSO_ENABLED = "facebook.sso.enabled";
 	public static final String FACEBOOK_APP_ID = "facebook.app.id";
 	public static final String FACEBOOK_USER_ID = "facebook.user.id";
 	public static final String FACEBOOK_USER_TOKEN = "facebook.user.token";
@@ -169,7 +173,14 @@ public class SocializeConfig {
 		return defaultValue;
 	}
 	
-
+	public boolean getBooleanProperty(String key, boolean defaultValue) {
+		String val = properties.getProperty(key);
+		if(!StringUtils.isEmpty(val)) {
+			return Boolean.parseBoolean(val);
+		}
+		return defaultValue;
+	}
+	
 	public void setProperty(String key, String value) {
 		if(properties == null) {
 			properties = createProperties();

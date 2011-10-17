@@ -97,7 +97,7 @@ public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<Entity
 	protected EntityFactory createFactory() {
 		return new EntityFactory() {
 			@Override
-			public Entity instantiateObject() {
+			public Entity instantiateObject(JSONObject json) {
 				return object;
 			}
 

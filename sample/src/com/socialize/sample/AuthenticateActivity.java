@@ -250,7 +250,7 @@ public class AuthenticateActivity extends SocializeActivity {
 			// Override the location for the API
 			config.setProperty(SocializeConfig.API_HOST, host);
 
-			final ProgressDialog authProgress = ProgressDialog.show(AuthenticateActivity.this, "Authenticating", "Please wait...");
+			final ProgressDialog authProgress = ProgressDialog.show(v.getContext(), "Authenticating", "Please wait...");
 
 			if(fb) {
 				Socialize.getSocialize().authenticate(consumerKey, consumerSecret, AuthProviderType.FACEBOOK, facebookAppId, new AuthListener(v, authProgress));
@@ -272,6 +272,9 @@ public class AuthenticateActivity extends SocializeActivity {
 			this.v = v;
 			this.authProgress = authProgress;
 		}
+
+		@Override
+		public void onCancel() {}
 
 		@Override
 		public void onError(SocializeException error) {

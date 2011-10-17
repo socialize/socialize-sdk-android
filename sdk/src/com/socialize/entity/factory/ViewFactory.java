@@ -39,7 +39,7 @@ public class ViewFactory extends SocializeActionFactory<View> {
 	protected void postToJSON(View comment, JSONObject object) throws JSONException {}
 
 	@Override
-	public View instantiateObject() {
+	public View instantiateObject(JSONObject object) {
 		return new View();
 	}
 }

@@ -35,4 +35,5 @@ public interface WritableSession extends SocializeSession {
 	public void set3rdAppId(String appId);
 	public void setAuthProviderType(AuthProviderType authProviderType);
 	public void setAuthProvider(AuthProvider authProvider);
+
 }

@@ -46,7 +46,7 @@ public class CommentReAuthListener implements SocializeAuthListener {
 	
 	@Override
 	public void onError(SocializeException error) {
-		callback.onError(context, error.getMessage());
+		callback.onError(context, error);
 	}
 
 	@Override
@@ -56,7 +56,11 @@ public class CommentReAuthListener implements SocializeAuthListener {
 
 	@Override
 	public void onAuthFail(SocializeException error) {
-		callback.onError(context, error.getMessage());
+		callback.onError(context, error);
 	}
 
+	@Override
+	public void onCancel() {
+		// Nothing
+	}
 }

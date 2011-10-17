@@ -101,15 +101,29 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 	@Override
 	public HttpUriRequest getGetRequest(SocializeSession session, String endpoint, String id) throws SocializeException {
 		endpoint += URLEncoder.encode(id) + "/";
+		return getGetRequest(session, endpoint);
+	}
+	
+	public HttpUriRequest getGetRequest(SocializeSession session, String endpoint) throws SocializeException {
 		HttpGet get = signer.sign(session, new HttpGet(endpoint));
 		return get;
 	}
-	
+
 	@Override
 	public HttpUriRequest getDeleteRequest(SocializeSession session, String endpoint, String id) throws SocializeException {
 		endpoint += URLEncoder.encode(id) + "/";
 		HttpDelete del = signer.sign(session, new HttpDelete(endpoint));
 		return del;
+	}
+
+	@Override
+	public HttpUriRequest getListRequest(SocializeSession session, String endpoint) throws SocializeException {
+		return getListRequest(session, endpoint, null, null, 0, SocializeConfig.MAX_LIST_RESULTS);
+	}
+
+	@Override
+	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, int startIndex, int endIndex) throws SocializeException {
+		return getListRequest(session, endpoint, null, null, startIndex, endIndex);
 	}
 
 	/**

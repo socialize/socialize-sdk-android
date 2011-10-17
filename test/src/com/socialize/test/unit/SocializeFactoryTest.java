@@ -84,7 +84,7 @@ public class SocializeFactoryTest extends SocializeActivityTest {
 		
 		SocializeObjectFactory<SocializeObject> factory = new SocializeObjectFactory<SocializeObject>() {
 			@Override
-			public SocializeObject instantiateObject() {
+			public SocializeObject instantiateObject(JSONObject json) {
 				return entry;
 			}
 
@@ -125,7 +125,7 @@ public class SocializeFactoryTest extends SocializeActivityTest {
 		
 		SocializeObjectFactory<Entity> factory = new SocializeObjectFactory<Entity>() {
 			@Override
-			public Entity instantiateObject() {
+			public Entity instantiateObject(JSONObject json) {
 				return entry;
 			}
 
@@ -177,7 +177,7 @@ public class SocializeFactoryTest extends SocializeActivityTest {
 		
 		SocializeObjectFactory<Entity> factory = new SocializeObjectFactory<Entity>() {
 			@Override
-			public Entity instantiateObject() {
+			public Entity instantiateObject(JSONObject json) {
 				return entry;
 			}
 

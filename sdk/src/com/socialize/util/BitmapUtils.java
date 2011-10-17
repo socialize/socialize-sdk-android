@@ -21,6 +21,7 @@
  */
 package com.socialize.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 import android.graphics.Bitmap;
@@ -31,12 +32,17 @@ import android.graphics.Bitmap;
 public class BitmapUtils {
 	
 	private BitmapBuilder bitmapBuilder;
+	private Base64Utils base64Utils;
 	
 	public BitmapUtils(BitmapBuilder bitmapBuilder) {
 		super();
 		this.bitmapBuilder = bitmapBuilder;
 	}
 	
+	public BitmapUtils() {
+		super();
+	}
+
 	public Bitmap getScaledBitmap(byte[] data, int scaleToWidth, int scaleToHeight) {
 		return getScaledBitmap(bitmapBuilder.decode(data), scaleToWidth, scaleToHeight);
 	}
@@ -44,8 +50,28 @@ public class BitmapUtils {
 	public Bitmap getScaledBitmap(InputStream in, int scaleToWidth, int scaleToHeight) {
 		return getScaledBitmap(bitmapBuilder.decode(in), scaleToWidth, scaleToHeight);
 	}
-
+	
 	public Bitmap getScaledBitmap(Bitmap bitmap, int scaleToWidth, int scaleToHeight) {
+		return getScaledBitmap(bitmap, scaleToWidth, scaleToHeight, true);
+	}
+
+	public String encode(Bitmap bitmap) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();  
+		bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmap object   
+        byte[] image = baos.toByteArray();
+        return base64Utils.encode(image);
+        
+	}
+	
+	/**
+	 * Returns a scaled bitmap, cropped if necessary.
+	 * @param bitmap
+	 * @param scaleToWidth
+	 * @param scaleToHeight
+	 * @param recycleOriginal
+	 * @return
+	 */
+	public Bitmap getScaledBitmap(Bitmap bitmap, int scaleToWidth, int scaleToHeight, boolean recycleOriginal) {
 
 		Bitmap original = bitmap;
 
@@ -98,14 +124,21 @@ public class BitmapUtils {
 					}
 				}
 
-				original.recycle();
+				
+				if(recycleOriginal) {
+					original.recycle();
+				}
 			}
 		}
 
 		return bitmap;
 	}
 
-	public BitmapBuilder getBitmapBuilder() {
-		return bitmapBuilder;
+	public void setBitmapBuilder(BitmapBuilder bitmapBuilder) {
+		this.bitmapBuilder = bitmapBuilder;
+	}
+
+	public void setBase64Utils(Base64Utils base64Utils) {
+		this.base64Utils = base64Utils;
 	}
 }

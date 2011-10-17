@@ -21,10 +21,12 @@
  */
 package com.socialize.entity;
 
+import com.socialize.api.action.ActionType;
+
 /**
  * @author Jason Polites
  */
-public class SocializeAction extends SocializeObject {
+public abstract class SocializeAction extends SocializeObject {
 
 	private Application application;
 	private Entity entity;
@@ -80,4 +82,12 @@ public class SocializeAction extends SocializeObject {
 	public boolean hasLocation() {
 		return lon != null && lat != null;
 	}
+	
+	public abstract ActionType getActionType();
+	
+	/**
+	 * Returns the text to display for this action when rendering on screen (e.g. in a list)
+	 * @return
+	 */
+	public abstract String getDisplayText();
 }

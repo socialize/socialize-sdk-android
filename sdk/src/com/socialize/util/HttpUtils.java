@@ -31,6 +31,7 @@ import java.util.Set;
 import org.apache.http.HttpResponse;
 
 import android.content.Context;
+import android.net.Uri;
 
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeApiError;
@@ -122,4 +123,7 @@ public class HttpUtils {
 		this.logger = logger;
 	}
 	
+	public Uri toURI(String url) {
+		return Uri.parse(url);
+	}
 }

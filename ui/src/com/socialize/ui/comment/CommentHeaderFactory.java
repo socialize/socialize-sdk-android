@@ -22,58 +22,22 @@
 package com.socialize.ui.comment;
 
 import android.content.Context;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.LinearLayout.LayoutParams;
 
-import com.socialize.ui.util.Colors;
-import com.socialize.ui.view.BaseViewFactory;
+import com.socialize.ui.header.BaseHeaderFactory;
 
 /**
  * @author Jason Polites
  *
  */
-public class CommentHeaderFactory extends BaseViewFactory<CommentHeader> {
-	
+public class CommentHeaderFactory extends BaseHeaderFactory<CommentHeader> {
+
 	@Override
-	public CommentHeader make(Context context) {
-		int four = getDIP(4);
-		
-		CommentHeader header = new CommentHeader(context);
-		LayoutParams titlePanelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		titlePanelLayoutParams.gravity = Gravity.CENTER_VERTICAL;
-		header.setLayoutParams(titlePanelLayoutParams);
-		header.setOrientation(LinearLayout.HORIZONTAL);
-		header.setPadding(four, four, four, four);
-		header.setBackgroundDrawable(drawables.getDrawable("header.png", true, false, true));
-		
-		TextView titleText = new TextView(context);
-		titleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-		titleText.setTextColor(colors.getColor(Colors.HEADER));
-		titleText.setText("Comments");
-		titleText.setPadding(0, 0, 0, deviceUtils.getDIP(2));
+	protected String getHeaderText() {
+		return "Comments";
+	}
 
-		LayoutParams titleTextLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		titleTextLayoutParams.gravity = Gravity.CENTER_VERTICAL;
-		titleText.setLayoutParams(titleTextLayoutParams);
-
-		ImageView titleImage = new ImageView(context);
-		titleImage.setImageDrawable(drawables.getDrawable("socialize_icon_white.png", true));
-		titleImage.setPadding(0, 0, 0, 0);
-
-		LayoutParams titleImageLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		titleImageLayoutParams.gravity = Gravity.CENTER_VERTICAL;
-		titleImageLayoutParams.setMargins(four, 0, four, 0);
-		titleImage.setLayoutParams(titleImageLayoutParams);
-
-		header.setTitleText(titleText);
-		
-		header.addView(titleImage);
-		header.addView(titleText);
-		
-		return header;
+	@Override
+	protected CommentHeader createHeaderInstance(Context context) {
+		return new CommentHeader(context);
 	}
 }

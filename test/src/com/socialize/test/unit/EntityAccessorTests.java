@@ -21,6 +21,7 @@
  */
 package com.socialize.test.unit;
 
+import com.socialize.api.action.ActionType;
 import com.socialize.entity.Application;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
@@ -105,7 +106,18 @@ public class EntityAccessorTests extends SocializeUnitTest {
 	}
 	
 	public void testSocializeActionAccessors() {
-		SocializeAction action = new SocializeAction();
+		SocializeAction action = new SocializeAction() {
+
+			@Override
+			public ActionType getActionType() {
+				return null;
+			}
+
+			@Override
+			public String getDisplayText() {
+				return null;
+			}
+		};
 		
 		Application app = new Application();
 		Entity entity = new Entity();

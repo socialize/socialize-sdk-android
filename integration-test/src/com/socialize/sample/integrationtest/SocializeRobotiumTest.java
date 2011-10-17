@@ -34,7 +34,6 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -49,7 +48,6 @@ public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestC
 
 	public static final int DEFAULT_TIMEOUT_SECONDS = 100;
 	public static final String DEFAULT_ENTITY_URL = "http://socialize.integration.tests.com?somekey=somevalue&anotherkey=anothervalue";
-//	public static final String DEFAULT_APPLICATION_NAME = "API Health Check App";
 	public static final String DEFAULT_GET_ENTITY = "http://entity1.com";
 		
 	protected Solo robotium;
@@ -72,7 +70,6 @@ public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestC
 
 	@Override
 	protected void tearDown() throws Exception {
-		Log.e("SocializeRobotiumTest", "tearDown()");
 		try {
 			robotium.finalize();
 		} 
@@ -137,8 +134,12 @@ public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestC
 	}
 
 	protected final void waitForSuccess() {
-		robotium.waitForText("SUCCESS", 1, DEFAULT_TIMEOUT_SECONDS);
-		assertTrue(robotium.searchText("SUCCESS"));
+		// It seems robotium sometimes finds success before the 
+		// progress dialog is closed, resulting in an abnormal abort
+		// which causes a test failure.
+		// Add a sleep to hack it
+		sleep(1000);
+		assertTrue(robotium.waitForText("SUCCESS", 1, DEFAULT_TIMEOUT_SECONDS));
 	}
 
 	/**

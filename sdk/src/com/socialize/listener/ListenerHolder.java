@@ -27,7 +27,6 @@ import java.util.TreeMap;
 /**
  * Singleton (application scoped) container to retain a reference to a listener between activities.
  * @author Jason Polites
- *
  */
 public class ListenerHolder {
 

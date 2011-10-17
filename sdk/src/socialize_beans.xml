@@ -46,7 +46,7 @@
 	</bean>
 	
 	<bean id="locationProvider" class="com.socialize.location.DefaultLocationProvider">
-		<constructor-arg type="context"/>
+		<constructor-arg type="activity"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="locationManager" ref="locationManager"/>
 		<property name="locationListenerFactory" ref="locationListenerFactory"/>
@@ -84,7 +84,8 @@
 	<bean id="bitmapBuilder" class="com.socialize.util.BitmapBuilder"/>
 	
 	<bean id="bitmapUtils" class="com.socialize.util.BitmapUtils">
-		<constructor-arg ref="bitmapBuilder"/>
+		<property name="bitmapBuilder" ref="bitmapBuilder"/>
+		<property name="base64Utils" ref="base64Utils"/>
 	</bean>
 	
 	<bean id="drawables" class="com.socialize.util.Drawables">
@@ -95,7 +96,6 @@
 	</bean>
 	
 	<bean id="dialogFactory" class="com.socialize.util.DialogFactory"/>
-	<bean id="userFactory" class="com.socialize.entity.factory.UserFactory"/>
 	<bean id="userAuthDataFactory" class="com.socialize.entity.factory.UserAuthDataFactory"/>
 	<bean id="statsFactory" class="com.socialize.entity.factory.StatsFactory"/>
 	
@@ -115,6 +115,7 @@
 			<arg ref="config"/>
 		</init-method>
 		<destroy-method name="destroy"/>
+		<property name="logger" ref="logger"/>
 	</bean>
 	
 	<bean id="sessionFactory" class="com.socialize.api.DefaultSocializeSessionFactory">
@@ -164,14 +165,7 @@
 	<bean id="facebookSessionStore" class="com.socialize.auth.facebook.FacebookSessionStore"/>
 	
 	<bean id="facebookUrlBuilder" class="com.socialize.auth.facebook.FacebookUrlBuilder"/>
-	
-	<bean id="facebookImageRetriever" class="com.socialize.auth.facebook.FacebookImageRetriever">
-		<property name="logger" ref="logger"/>
-		<property name="ioUtils" ref="ioUtils"/>
-		<property name="facebookUrlBuilder" ref="facebookUrlBuilder"/>
-		<property name="base64Utils" ref="base64Utils"/>
-	</bean>
-	
+	 
 	<bean id="listenerHolder" class="com.socialize.listener.ListenerHolder"/>
 	
 	<bean id="facebookProvider" class="com.socialize.auth.facebook.FacebookAuthProvider">
@@ -196,6 +190,14 @@
 		<property name="userFactory" ref="userFactory"/>
 		<property name="entityFactory" ref="entityFactory"/>
 	</bean>
+	
+	<bean 
+		id="facebook" 
+		class="com.socialize.facebook.Facebook"
+		singleton="false">
+		<constructor-arg ref="drawables"/>
+	</bean>
+	
 	
 <!-- OAUTH -->
 	
@@ -295,6 +297,59 @@
 	
 <!-- End View API -->
 
+<!-- User API -->
+
+	<bean id="userRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
+		<constructor-arg ref="oauthSigner"/>
+		<constructor-arg ref="userFactory"/>
+	</bean>
+
+	<bean id="userProvider" extends="abstractProvider">
+		<constructor-arg type="context"/>
+		<property name="objectFactory" ref="userFactory"/>
+		<property name="requestFactory" ref="userRequestFactory"/>
+	</bean>
+	
+	<bean id="userApi" class="com.socialize.api.action.UserApi" extends="socializeApi">
+		<constructor-arg ref="userProvider"/>
+		<property name="sessionPersister" ref="sessionPersister"/>
+	</bean>
+	
+<!-- End User API -->
+
+<!-- Activity API -->
+
+	<bean 
+		id="activityFactory" 
+		class="com.socialize.entity.factory.GenericActionFactory" 
+		extends="socializeActionFactory">
+		
+		<property name="logger" ref="logger"/>
+		<property name="commentFactory" ref="commentFactory"/>
+		<property name="likeFactory" ref="likeFactory"/>
+		<property name="viewFactory" ref="viewFactory"/>
+		<property name="shareFactory" ref="shareFactory"/>
+		
+	</bean>
+	
+	<bean id="activityRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
+		<constructor-arg ref="oauthSigner"/>
+		<constructor-arg ref="activityFactory"/>
+	</bean>
+
+	<bean id="activityProvider" extends="abstractProvider">
+		<constructor-arg type="context"/>
+		<property name="objectFactory" ref="activityFactory"/>
+		<property name="requestFactory" ref="activityRequestFactory"/>
+	</bean>
+	
+	<bean id="activityApi" class="com.socialize.api.action.ActivityApi" extends="socializeApi">
+		<constructor-arg ref="activityProvider"/>
+	</bean>
+	
+
+<!-- End Activity API -->
+
 <!-- Socialize Core -->
 
 	<bean id="socializeApiHost" class="com.socialize.api.SocializeApiHost">
@@ -306,7 +361,10 @@
 		<property name="entityApi" ref="entityApi"/>
 		<property name="likeApi" ref="likeApi"/>
 		<property name="viewApi" ref="viewApi"/>
+		<property name="userApi" ref="userApi"/>
+		<property name="activityApi" ref="activityApi"/>
 	</bean>
 	
 <!-- End Socialize Core -->
+
 </beans>

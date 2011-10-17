@@ -44,7 +44,6 @@ public class FacebookService {
 	private FacebookSessionStore facebookSessionStore; 
 	private AuthProviderListener listener;
 	private DialogFactory dialogFactory;
-	private FacebookImageRetriever facebookImageRetriever;
 	
 	public static final String[] DEFAULT_PERMISSIONS = {"offline_access", "publish_stream"};
 	
@@ -66,12 +65,27 @@ public class FacebookService {
 		this.listener = listener;
 		this.dialogFactory = dialogFactory;
 	}
-
+	
+	/**
+	 * Authenticates with default permissions and Single Sign On.
+	 */
 	public void authenticate() {
 		authenticate(DEFAULT_PERMISSIONS);
 	}
 	
+	public void authenticate(boolean sso) {
+		authenticate(DEFAULT_PERMISSIONS, sso);
+	}
+	
+	/**
+	 * Authenticates with Single Sign On.
+	 * @param permissions
+	 */
 	public void authenticate(String[] permissions) {
+		authenticate(permissions, true);
+	}
+	
+	public void authenticate(final String[] permissions, final boolean sso) {
 		facebookSessionStore.restore(facebook, context);
 		
 		FacebookDialogListener facebookDialogListener = new FacebookDialogListener(context, facebook, facebookSessionStore, listener) {
@@ -87,23 +101,19 @@ public class FacebookService {
 					listener.onError(new SocializeException(error));
 				}
 				else {
-					doError(error);
+					doError(error, permissions, sso);
 				}
 			}
 		};
 		
-		facebookDialogListener.setFacebookImageRetriever(facebookImageRetriever);
-		facebook.authorize(context, permissions, facebookDialogListener);
+		if(sso) {
+			facebook.authorize(context, permissions, facebookDialogListener);
+		}
+		else {
+			facebook.authorize(context, permissions, Facebook.FORCE_DIALOG_AUTH, facebookDialogListener);
+		}
 	}
 	
-	public FacebookImageRetriever getFacebookImageRetriever() {
-		return facebookImageRetriever;
-	}
-
-	public void setFacebookImageRetriever(FacebookImageRetriever facebookImageRetriever) {
-		this.facebookImageRetriever = facebookImageRetriever;
-	}
-
 	public void cancel() {
 		Toast.makeText(context, "Request canceled", Toast.LENGTH_SHORT).show();
 	}
@@ -122,18 +132,18 @@ public class FacebookService {
 		}
 	}
 	
-	public void doError(final Throwable e) {
+	public void doError(final Throwable e, final String[] permissions, final boolean sso) {
 		context.runOnUiThread(new Runnable() {
 			public void run() {
 				Log.e(SocializeLogger.LOG_TAG, "Facebook error", e);
-				doErrorUI(e.getMessage());
+				doErrorUI(e.getMessage(), permissions, sso);
 			}
 		});
 	}
 	
-	public void doErrorUI(String error) {
+	public void doErrorUI(String error, String[] permissions, boolean sso) {
 		try {
-			makeErrorDialog(error).show();
+			makeErrorDialog(error, permissions, sso).show();
 		}
 		catch (Exception e) {
 			Log.e(SocializeLogger.LOG_TAG, "Facebook error", e);
@@ -144,7 +154,7 @@ public class FacebookService {
 		context.finish();
 	}
 	
-	public AlertDialog makeErrorDialog(String error) {
+	public AlertDialog makeErrorDialog(String error, final String[] permissions, final boolean sso) {
 		AlertDialog.Builder builder = dialogFactory.getAlertDialogBuilder(context);
 		builder.setTitle("Oops!");
 		builder.setMessage("Oops!\nSomething went wrong...\n[" + error + "]");
@@ -152,7 +162,7 @@ public class FacebookService {
 		builder.setPositiveButton("Try again", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.dismiss();
-				authenticate();
+				authenticate(permissions, sso);
 			}
 		});	
 		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -161,7 +171,10 @@ public class FacebookService {
 				finish();
 			}
 		});	
-		return builder.create();
+		
+		AlertDialog dialog = builder.create();
+		
+		return dialog;
 	}
 	
 }

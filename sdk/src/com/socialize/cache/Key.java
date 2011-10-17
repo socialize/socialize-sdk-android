@@ -90,4 +90,8 @@ public class Key<K extends Comparable<K>> implements Comparable<Key<K>> {
 	public K getKey() {
 		return key;
 	}
+
+	void setTime(long time) {
+		this.time = time;
+	}
 }

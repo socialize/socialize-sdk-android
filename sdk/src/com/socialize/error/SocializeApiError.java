@@ -22,6 +22,7 @@
 package com.socialize.error;
 
 import com.socialize.util.HttpUtils;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -61,10 +62,20 @@ public class SocializeApiError extends SocializeException {
 	public String getMessage() {
 		
 		if(utils != null) {
-			return utils.getMessageFor(resultCode) + " (" + resultCode + "), " + message;
+			String codeMessage = utils.getMessageFor(resultCode) ;
+			String msg = codeMessage + " (" + resultCode + ")";
+			if(!StringUtils.isEmpty(message)) {
+				msg += ", " + message;
+			}
+			return msg;
 		}
 		
-		return  "(" + resultCode + "), " + message;
+		if(StringUtils.isEmpty(message)) {
+			return  "(" + resultCode + ")";
+		}
+		else {
+			return  "(" + resultCode + "), " + message;
+		}
 	}
 
 	public int getResultCode() {

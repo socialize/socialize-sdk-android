@@ -7,9 +7,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
-import com.socialize.ui.SocializeUI;
-import com.socialize.util.StringUtils;
-
 public abstract class EntityView extends AuthenticatedView {
 
 	public EntityView(Context context) {
@@ -32,9 +29,15 @@ public abstract class EntityView extends AuthenticatedView {
 		}
 		
 		if(bundle != null) {
-			String entityKey = bundle.getString(SocializeUI.ENTITY_KEY);
-			if(!StringUtils.isEmpty(entityKey)) {
-				return getView(bundle, entityKey);
+			
+			String[] entityKeys = getEntityKeys();
+			
+			if(entityKeys != null && entityKeys.length > 0) {
+				Object[] values = new String[entityKeys.length];
+				for (int i = 0; i < entityKeys.length; i++) {
+					values[i] = bundle.getString(entityKeys[i]);
+				}
+				return getView(bundle, values);
 			}
 		}
 		
@@ -47,5 +50,7 @@ public abstract class EntityView extends AuthenticatedView {
 		return error;
 	}
 	
-	protected abstract View getView(Bundle bundle, String entityKey);
+	protected abstract View getView(Bundle bundle, Object...entityKeys);
+	
+	protected abstract String[] getEntityKeys();
 }

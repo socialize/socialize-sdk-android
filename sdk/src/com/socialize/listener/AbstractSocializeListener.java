@@ -27,6 +27,7 @@ import com.socialize.api.SocializeResponse;
 import com.socialize.api.SocializeApi.RequestType;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
+import com.socialize.error.SocializeException;
 
 
 /**
@@ -52,6 +53,9 @@ public abstract class AbstractSocializeListener<T extends SocializeObject> imple
 			case PUT:
 				onUpdate(entityResponse.getFirstResult());
 				break;
+			case PUT_AS_POST:
+				onUpdate(entityResponse.getFirstResult());
+				break;
 			case POST:
 				onCreate(entityResponse.getFirstResult());
 				break;
@@ -70,5 +74,8 @@ public abstract class AbstractSocializeListener<T extends SocializeObject> imple
 	public abstract void onCreate(T entity);
 	
 	public abstract void onDelete();
+
+	@Override
+	public abstract void onError(SocializeException error);
 
 }

@@ -21,13 +21,14 @@
  */
 package com.socialize.location;
 
-import com.socialize.util.DeviceUtils;
-
+import android.app.Activity;
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+
+import com.socialize.util.DeviceUtils;
 
 /**
  * Just provides a wrapper around LocationManager because LocationManager cannot be mocked :/
@@ -61,11 +62,20 @@ public class SocializeLocationManager {
 		return (lm == null) ? false : lm.isProviderEnabled(provider);
 	}
 	
-	public void requestLocationUpdates(String provider, long minTime, float minDistance, LocationListener listener) {
-		if(lm != null) lm.requestLocationUpdates(provider, minTime, minDistance, listener);
+	public void requestLocationUpdates(Activity activity, final String provider, final long minTime, final float minDistance, final LocationListener listener) {
+		if(lm != null) {
+			activity.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					lm.requestLocationUpdates(provider, minTime, minDistance, listener);
+				}
+			});
+		}
 	}
 
-	public void removeUpdates(LocationListener listener) {
-		if(lm != null) lm.removeUpdates(listener);
+	public void removeUpdates(final LocationListener listener) {
+		if(lm != null) {
+			lm.removeUpdates(listener);
+		}
 	}
 }

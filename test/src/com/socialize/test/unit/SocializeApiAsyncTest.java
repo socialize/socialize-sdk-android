@@ -60,6 +60,8 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 	private SocializeSessionConsumer mockSessionConsumer;
 	private SocializeActionListener listener;
 	private SocializeConfig config;
+	
+	private final int timeout = 20;
 
 	@SuppressWarnings("unchecked")
 	@UsesMocks({
@@ -135,6 +137,14 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 				authProgress.dismiss();
 				signal.countDown();
 			}
+			
+			@Override
+			public void onCancel() {
+				authProgress.dismiss();
+				signal.countDown(); 
+				fail();
+			}
+			
 		};
 		
 
@@ -145,7 +155,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 			} 
 		});
 		
-		signal.await(30, TimeUnit.SECONDS); 
+		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS));  
 	}
 	
 	public void testApiAsyncCallsAuthenticateOnProvider() throws Throwable {
@@ -178,6 +188,13 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 				System.out.println("Api listener onError fired");
 				signal.countDown();
 			}
+			
+			@Override
+			public void onCancel() {
+				System.out.println("Api listener onCancel fired");
+				signal.countDown(); 
+				fail();
+			}
 		};
 		
 
@@ -188,7 +205,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 			} 
 		});
 
-		signal.await(30, TimeUnit.SECONDS); 
+		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS)); 
 		
 		AndroidMock.verify(provider);
 		AndroidMock.verify(mockSessionConsumer);
@@ -209,7 +226,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 			} 
 		});
 
-		signal.await(30, TimeUnit.SECONDS); 
+		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS)); 
 		
 		AndroidMock.verify(provider);
 	}
@@ -239,7 +256,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 			} 
 		});
 
-		signal.await(30, TimeUnit.SECONDS); 
+		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS));  
 		
 		AndroidMock.verify(responseFactory);
 		AndroidMock.verify(provider);
@@ -271,7 +288,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 			} 
 		});
 
-		signal.await(30, TimeUnit.SECONDS); 
+		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS));  
 		
 		AndroidMock.verify(responseFactory);
 		AndroidMock.verify(provider);
@@ -305,7 +322,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 			} 
 		});
 
-		signal.await(30, TimeUnit.SECONDS); 
+		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS));  
 		
 		AndroidMock.verify(responseFactory);
 		AndroidMock.verify(provider);
@@ -330,7 +347,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 			} 
 		});
 
-		signal.await(30, TimeUnit.SECONDS); 
+		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS));  
 		
 		AndroidMock.verify(provider);
 	}
@@ -356,7 +373,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 			} 
 		});
 
-		signal.await(30, TimeUnit.SECONDS); 
+		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS));  
 		
 		AndroidMock.verify(provider);
 	}
@@ -376,7 +393,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 			} 
 		});
 
-		signal.await(30, TimeUnit.SECONDS); 
+		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS));  
 		
 		AndroidMock.verify(provider);
 	}
@@ -396,7 +413,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 			} 
 		});
 
-		signal.await(30, TimeUnit.SECONDS); 
+		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS));  
 		
 		AndroidMock.verify(provider);
 	}
@@ -417,7 +434,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 			} 
 		});
 
-		signal.await(30, TimeUnit.SECONDS); 
+		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS));  
 		
 		AndroidMock.verify(provider);
 	}
@@ -437,7 +454,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 			} 
 		});
 
-		signal.await(30, TimeUnit.SECONDS); 
+		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS));  
 		
 		AndroidMock.verify(provider);
 	}

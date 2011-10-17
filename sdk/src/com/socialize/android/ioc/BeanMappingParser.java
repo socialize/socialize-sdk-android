@@ -107,50 +107,67 @@ public class BeanMappingParser {
 			if(streams.length > 1) {
 				BeanMapping secondary = null;
 				for (InputStream in : streams) {
-					BeanMappingParserHandler handler = getNewHandler();
 					
-					parser.parse(in, handler);
-					
-					if(mapping == null) {
-						mapping = handler.getBeanMapping();
+					if(in != null) {
+						BeanMappingParserHandler handler = getNewHandler();
+						
+						parser.parse(in, handler);
+						
+						if(mapping == null) {
+							mapping = handler.getBeanMapping();
+						}
+						else {
+							secondary = handler.getBeanMapping();
+							mapping.merge(secondary);
+						}
 					}
 					else {
-						secondary = handler.getBeanMapping();
-						mapping.merge(secondary);
+						Logger.w("BeanMappingParser", "Bean mapping config stream was null, skipping...");
 					}
 				}
 			}
 			else {
-				BeanMappingParserHandler handler = getNewHandler();
-				parser.parse(streams[0], handler);
-				mapping = handler.getBeanMapping();
+				if(streams[0] != null) {
+					BeanMappingParserHandler handler = getNewHandler();
+					parser.parse(streams[0], handler);
+					mapping = handler.getBeanMapping();	
+				}
+				else {
+					Logger.e("BeanMappingParser", "Bean mapping config stream was null");
+				}
 			}
 			
-			// Check for extends
-			Collection<BeanRef> beanRefs = mapping.getBeanRefs();
-			
-			if(beanRefs != null) {
-				for (BeanRef beanRef : beanRefs) {
-					if(beanRef.getExtendsBean() != null && beanRef.getExtendsBean().trim().length() > 0) {
-						
-						// Copy props without overwriting
-						BeanRef extended = mapping.getBeanRef(beanRef.getExtendsBean());
-						
-						if(extended != null) {
-							if(utils == null) utils = new ParserUtils();
-							utils.merge(extended, beanRef);
+			if(mapping != null) {
+				// Check for extends
+				Collection<BeanRef> beanRefs = mapping.getBeanRefs();
+				
+				if(beanRefs != null) {
+					for (BeanRef beanRef : beanRefs) {
+						if(beanRef.getExtendsBean() != null && beanRef.getExtendsBean().trim().length() > 0) {
+							
+							// Copy props without overwriting
+							BeanRef extended = mapping.getBeanRef(beanRef.getExtendsBean());
+							
+							if(extended != null) {
+								if(utils == null) utils = new ParserUtils();
+								utils.merge(extended, beanRef);
+							}
+							else {
+								Logger.w("BeanMappingParser", "No such bean [" +
+										beanRef.getExtendsBean() +
+										"] found in extends reference for bean [" +
+										beanRef.getName() +
+										"]");
+							}
+							
 						}
-						else {
-							Logger.w("BeanMappingParser", "No such bean [" +
-									beanRef.getExtendsBean() +
-									"] found in extends reference for bean [" +
-									beanRef.getName() +
-									"]");
-						}
-						
-					}
-				}	
+					}	
+				}
 			}
+			else {
+				Logger.e("BeanMappingParser", "Unable to parse mapping. No config files found!");
+			}
+	
 		}
 		catch (Exception e) {
 			Logger.e("BeanMappingParser", "IOC Parse error", e);

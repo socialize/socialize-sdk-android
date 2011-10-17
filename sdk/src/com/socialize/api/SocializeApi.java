@@ -64,7 +64,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	private HttpUtils httpUtils;
 	private SocializeLocationProvider locationProvider;
 	
-	public static enum RequestType {AUTH,PUT,POST,GET,LIST,DELETE};
+	public static enum RequestType {AUTH,PUT,POST,PUT_AS_POST,GET,LIST,EMPTY_LIST,DELETE};
 	
 	public SocializeApi(P provider) {
 		super();
@@ -105,6 +105,14 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return provider.list(session, endpoint, key, ids, startIndex, endIndex);
 	}
 	
+	public ListResult<T> list(SocializeSession session, String endpoint) throws SocializeException {
+		return provider.list(session, endpoint, 0, SocializeConfig.MAX_LIST_RESULTS);
+	}
+	
+	public ListResult<T> list(SocializeSession session, String endpoint, int startIndex, int endIndex) throws SocializeException {
+		return provider.list(session, endpoint, startIndex, endIndex);
+	}
+	
 	public T get(SocializeSession session, String endpoint, String id) throws SocializeException {
 		return provider.get(session, endpoint, id);
 	}
@@ -129,7 +137,10 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return provider.post(session, endpoint, objects);
 	}
 	
-
+	public T putAsPost(SocializeSession session, String endpoint, T object) throws SocializeException {
+		return provider.putAsPost(session, endpoint, object);
+	}
+	
 	public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
 		AsyncGetter getter = new AsyncGetter(RequestType.LIST, session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
@@ -143,6 +154,19 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	
 	public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeActionListener listener) {
 		listAsync(session, endpoint, key, ids, 0, SocializeConfig.MAX_LIST_RESULTS, listener);
+	}
+	
+	public void listAsync(SocializeSession session, String endpoint, int startIndex, int endIndex, SocializeActionListener listener) {
+		AsyncGetter getter = new AsyncGetter(RequestType.EMPTY_LIST, session, listener);
+		SocializeGetRequest request = new SocializeGetRequest();
+		request.setEndpoint(endpoint);
+		request.setStartIndex(startIndex);
+		request.setEndIndex(endIndex);
+		getter.execute(request);
+	}
+	
+	public void listAsync(SocializeSession session, String endpoint, SocializeActionListener listener) {
+		listAsync(session, endpoint, 0, SocializeConfig.MAX_LIST_RESULTS, listener);
 	}
 
 	public void getAsync(SocializeSession session, String endpoint, String id, SocializeActionListener listener) {
@@ -194,6 +218,22 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		SocializePutRequest<T> request = new SocializePutRequest<T>();
 		request.setEndpoint(endpoint);
 		request.setObjects(objects);
+		poster.execute(request);
+	}
+
+	/**
+	 * Does a POST, but expects a single object in return.
+	 * @param session
+	 * @param endpoint
+	 * @param object
+	 * @param listener
+	 */
+	@SuppressWarnings("unchecked")
+	public void putAsPostAsync(SocializeSession session, String endpoint, T object, SocializeActionListener listener) {
+		AsyncPutter poster = new AsyncPutter(RequestType.PUT_AS_POST, session, listener);
+		SocializePutRequest<T> request = new SocializePutRequest<T>();
+		request.setEndpoint(endpoint);
+		request.setObject(object);
 		poster.execute(request);
 	}
 
@@ -257,28 +297,28 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}
 	
 	
-	@Deprecated
-	public void authenticateAsync(
-			String key, 
-			String secret, 
-			String uuid, 
-			String authUserId3rdParty, 
-			String authToken3rdParty, 
-			final AuthProviderType authProviderType, 
-			final String appId3rdParty,
-			final SocializeAuthListener listener, 
-			final SocializeSessionConsumer sessionConsumer, 
-			boolean do3rdPartyAuth) {
-		
-		
-		AuthProviderData data = authProviderDataFactory.getBean();
-		data.setAppId3rdParty(appId3rdParty);
-		data.setUserId3rdParty(authUserId3rdParty);
-		data.setToken3rdParty(authToken3rdParty);
-		data.setAuthProviderType(authProviderType);
-		
-		authenticateAsync(key, secret, uuid, data, listener, sessionConsumer, do3rdPartyAuth);
-	}
+//	@Deprecated
+//	public void authenticateAsync(
+//			String key, 
+//			String secret, 
+//			String uuid, 
+//			String authUserId3rdParty, 
+//			String authToken3rdParty, 
+//			final AuthProviderType authProviderType, 
+//			final String appId3rdParty,
+//			final SocializeAuthListener listener, 
+//			final SocializeSessionConsumer sessionConsumer, 
+//			boolean do3rdPartyAuth) {
+//		
+//		
+//		AuthProviderData data = authProviderDataFactory.getBean();
+//		data.setAppId3rdParty(appId3rdParty);
+//		data.setUserId3rdParty(authUserId3rdParty);
+//		data.setToken3rdParty(authToken3rdParty);
+//		data.setAuthProviderType(authProviderType);
+//		
+//		authenticateAsync(key, secret, uuid, data, listener, sessionConsumer, do3rdPartyAuth);
+//	}
 	
 	protected void handleRegularAuth(SocializeAuthRequest request, SocializeActionListener wrapper) {
 		AsyncAuthenicator authenicator = new AsyncAuthenicator(RequestType.AUTH, null, wrapper);
@@ -303,6 +343,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		if(authProviderType != null && 
 				authProviderType.equals(AuthProviderType.FACEBOOK) && 
 				StringUtils.isEmpty(appId3rdParty)) {
+			
 			if(listener != null) {
 				listener.onError(new SocializeException("No app ID found for auth type FACEBOOK"));
 			}
@@ -337,9 +378,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 						
 						authProviderData.setUserId3rdParty(response.getUserId());
 						authProviderData.setToken3rdParty(response.getToken());
-						authProviderData.setUserFirstName(response.getFirstName());
-						authProviderData.setUserLastName(response.getLastName());
-						authProviderData.setUserProfilePicData(response.getImageData());
 						
 						// Do normal auth
 						handleRegularAuth(request, fWrapper);
@@ -351,6 +389,15 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 							listener.onAuthFail(error);
 						}
 					}
+
+					@Override
+					public void onCancel() {
+						if(listener != null) {
+							listener.onCancel();
+						}
+					}
+					
+					
 				});
 			}
 			else {
@@ -360,13 +407,13 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			}
 		}
 		else {
-			// We already have a session, just call the listener
+			// We already have a session
+			// then just call the listener
 			if(listener != null) {
 				listener.onAuthSuccess(session);
 			}
 		}
 	}
-
 	@Deprecated
 	protected void handle3rdPartyAuth(
 			final SocializeAuthRequest request,
@@ -450,7 +497,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 
 		RequestType requestType;
 		SocializeSession session;
-		SocializeException error = null;
+		Exception error = null;
 		SocializeActionListener listener = null;
 		
 		public AbstractAsyncProcess(RequestType requestType, SocializeSession session, SocializeActionListener listener) {
@@ -467,7 +514,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			try {
 				result = doInBackground(request);
 			}
-			catch (SocializeException error) {
+			catch (Exception error) {
 				this.error = error;
 			}
 			
@@ -478,7 +525,12 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		protected void onPostExecute(Result result) {
 			if(listener != null) {
 				if(error != null) {
-					listener.onError(error);
+					if(error instanceof SocializeException) {
+						listener.onError((SocializeException)error);
+					}
+					else {
+						listener.onError(new SocializeException(error));
+					}
 				}
 				else {
 					listener.onResult(requestType, result);
@@ -516,15 +568,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			}
 			else {
 				session = SocializeApi.this.authenticate(request.getEndpoint(), request.getConsumerKey(), request.getConsumerSecret(), authProviderData, request.getUdid());
-//				session = SocializeApi.this.authenticate(
-//						request.getEndpoint(), 
-//						request.getConsumerKey(), 
-//						request.getConsumerSecret(),
-//						request.getAuthUserId3rdParty(), 
-//						request.getAuthToken3rdParty(), 
-//						request.getAppId3rdParty(),
-//						request.getAuthProviderType(), 
-//						request.getUdid());
 			}
 			
 			response.setSession(session);
@@ -573,6 +616,8 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 					results = SocializeApi.this.post(session, request.getEndpoint(), request.getObject());
 				}
 				
+				response.setResults(results);
+				
 				break;
 
 			case PUT:
@@ -584,10 +629,17 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 					results = SocializeApi.this.put(session, request.getEndpoint(), request.getObject());
 				}
 				
+				response.setResults(results);
+				
 				break;
+				
+			case PUT_AS_POST:
+				
+				if(request.getObject() != null) {
+					T result = SocializeApi.this.putAsPost(session, request.getEndpoint(), request.getObject());
+					response.addResult(result);
+				}
 			}
-
-			response.setResults(results);
 
 			return response;
 		}
@@ -596,7 +648,12 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		protected void onPostExecute(SocializeEntityResponse<T> result) {
 			if(listener != null) {
 				if(error != null) {
-					listener.onError(error);
+					if(error instanceof SocializeException) {
+						listener.onError((SocializeException)error);
+					}
+					else {
+						listener.onError(new SocializeException(error));
+					}
 				}
 				else {
 					ListResult<T> results = result.getResults();
@@ -610,13 +667,14 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 								listener.onError(new SocializeException(errors.get(0).getMessage()));
 							}
 							else {
-								listener.onError(new SocializeException("Unknown Error"));
+								listener.onError(new SocializeException("No results found in response"));
 							}
 						}
 						else {
 							listener.onResult(requestType, result);
 						}
 					}
+					
 					else {
 						listener.onError(new SocializeException("No results found in response"));
 					}
@@ -643,6 +701,8 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				response = new SocializeEntityResponse<T>();
 			}
 			
+			ListResult<T> results = null;
+			
 			switch (requestType) {
 			
 			case GET:
@@ -651,7 +711,12 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				break;
 
 			case LIST:
-				ListResult<T> results = SocializeApi.this.list(session, request.getEndpoint(), request.getKey(), request.getIds(), request.getStartIndex(), request.getEndIndex());
+				results = SocializeApi.this.list(session, request.getEndpoint(), request.getKey(), request.getIds(), request.getStartIndex(), request.getEndIndex());
+				response.setResults(results);
+				break;
+				
+			case EMPTY_LIST:
+				results = SocializeApi.this.list(session, request.getEndpoint(), request.getStartIndex(), request.getEndIndex());
 				response.setResults(results);
 				break;
 			
@@ -659,7 +724,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				SocializeApi.this.delete(session, request.getEndpoint(), request.getIds()[0]);
 				break;
 			}
-
 
 			return response;
 		}

@@ -39,6 +39,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.facebook.Facebook;
 import com.socialize.facebook.Facebook.DialogListener;
 import com.socialize.listener.AuthProviderListener;
+import com.socialize.sample.mock.MockAlertDialog;
 import com.socialize.sample.mock.MockBuilder;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.DialogFactory;
@@ -158,8 +159,12 @@ import com.socialize.util.Drawables;
 			public void onAuthFail(SocializeException error) {
 				fail();
 			}
+			
+			@Override
+			public void onCancel() {
+				fail();
+			}
 		};
-
 
 		// Expect
 		AndroidMock.expect(facebook.logout(context)).andThrow(new IOException(errorMessage));
@@ -198,13 +203,14 @@ import com.socialize.util.Drawables;
 		assertTrue(result);
 	}
 
-	@UsesMocks (MockBuilder.class)
+	@UsesMocks ({MockBuilder.class, MockAlertDialog.class})
 	public void testErrorUI() {
 
 		final String errorMessage = "foobar_error";
 		final String appId = "foobar";
 
 		Activity context = AndroidMock.createMock(Activity.class);
+		MockAlertDialog dialog = AndroidMock.createMock(MockAlertDialog.class,getActivity());
 		Drawables drawables = AndroidMock.createMock(Drawables.class, getActivity());
 		Facebook facebook = AndroidMock.createMock(Facebook.class, appId, drawables);
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
@@ -220,16 +226,20 @@ import com.socialize.util.Drawables;
 		AndroidMock.expect(builder.setCancelable(false)).andReturn(builder);
 		AndroidMock.expect(builder.setPositiveButton(AndroidMock.eq("Try again"), (OnClickListener) AndroidMock.anyObject())).andReturn(builder);	
 		AndroidMock.expect(builder.setNegativeButton(AndroidMock.eq("Cancel"), (OnClickListener) AndroidMock.anyObject())).andReturn(builder);	
-		AndroidMock.expect(builder.create()).andReturn(null);
+		AndroidMock.expect(builder.create()).andReturn(dialog);
+		
+		dialog.show();
 
 		AndroidMock.replay(dialogFactory);
 		AndroidMock.replay(builder);
+		AndroidMock.replay(dialog);
 
 		FacebookService service = new FacebookService(context, facebook, facebookSessionStore, authProviderListener, dialogFactory);
-		service.doErrorUI(errorMessage);
+		service.doErrorUI(errorMessage, null, false);
 
 		AndroidMock.verify(dialogFactory);
 		AndroidMock.verify(builder);
+		AndroidMock.verify(dialog);
 	}
 
 	public void testDoError() throws Throwable {
@@ -240,7 +250,7 @@ import com.socialize.util.Drawables;
 
 		final FacebookService service = new FacebookService(getActivity(), null, null, null, null) {
 			@Override
-			public void doErrorUI(String error) {
+			public void doErrorUI(String error, String[] permissions, boolean sso) {
 				addResult(error);
 				lock.countDown();
 			}
@@ -249,7 +259,7 @@ import com.socialize.util.Drawables;
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
-				service.doError(new Throwable(errorMessage));
+				service.doError(new Throwable(errorMessage), null, false);
 			} 
 		});
 
@@ -271,7 +281,7 @@ import com.socialize.util.Drawables;
 
 		final FacebookService service = new FacebookService(getActivity(), null, null, null, null) {
 			@Override
-			public AlertDialog makeErrorDialog(String error) {
+			public AlertDialog makeErrorDialog(String error, String[] permissions, boolean sso) {
 				addResult(error);
 				return mockDialog;
 			}
@@ -280,7 +290,7 @@ import com.socialize.util.Drawables;
 
 		AndroidMock.replay(mockDialog);
 
-		service.doErrorUI(error);
+		service.doErrorUI(error, null, false);
 
 		String result = getNextResult();
 
@@ -336,8 +346,9 @@ import com.socialize.util.Drawables;
 		AndroidMock.replay(dialog);
 		
 		FacebookService service = new FacebookService(context, facebook, facebookSessionStore, authProviderListener, dialogFactory) {
+			
 			@Override
-			public void authenticate() {
+			public void authenticate(String[] permissions, boolean sso) {
 				addResult("auth_called");
 			}
 
@@ -347,7 +358,7 @@ import com.socialize.util.Drawables;
 			}
 		};
 		
-		service.makeErrorDialog(error);
+		service.makeErrorDialog(error, null, false);
 		
 		// Reverse order
 		Boolean created = getNextResult();

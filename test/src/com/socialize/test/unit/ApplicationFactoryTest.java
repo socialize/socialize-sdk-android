@@ -67,7 +67,7 @@ public class ApplicationFactoryTest extends AbstractSocializeObjectFactoryTest<A
 	protected ApplicationFactory createFactory() {
 		return new ApplicationFactory() {
 			@Override
-			public Application instantiateObject() {
+			public Application instantiateObject(JSONObject json) {
 				return object;
 			}
 

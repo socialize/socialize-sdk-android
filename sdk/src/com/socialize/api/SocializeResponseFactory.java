@@ -39,4 +39,5 @@ public interface SocializeResponseFactory<T> {
 	 * @return
 	 */
 	public SocializeAuthResponse newAuthResponse();
+	
 }
