@@ -24,7 +24,7 @@ public class DialogErrorHandlerTest extends SocializeUIActivityTest {
 		})
 	public void testHandleErrorWithDebug() {
 		
-		final String message = "foobar";
+		final String message = "An unexpected error occurred.  Please try again";
 		final Exception error = new Exception(message);
 		
 		final MockDialogBuilder builder = AndroidMock.createMock(MockDialogBuilder.class, getActivity());
