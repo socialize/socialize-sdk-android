@@ -144,6 +144,7 @@ public abstract class AuthenticatedView extends SocializeView {
 	protected void onBeforeSocializeInit() {
 		if(showLoadProgress()) {
 			progress = ProgressDialog.show(getContext(), "Loading Socialize", "Please wait...");
+			progress.setCancelable(true);
 		}
 	}
 

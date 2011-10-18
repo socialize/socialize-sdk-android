@@ -153,6 +153,9 @@ public class Container {
 					if(ref.isContextSensitiveConstructor()) {
 						// We have a new context, so we need to rebuild this bean
 						Object bean = builder.buildBean(this, ref);
+						
+						builder.destroyBean(this, ref, bean);
+						
 						builder.setBeanProperties(this, ref, bean);
 						
 						if(!ref.isLazyInit()) {
@@ -170,6 +173,7 @@ public class Container {
 						else {
 							// Re-call init
 							Object bean = getBean(ref.getName());
+							builder.destroyBean(this, ref, bean);
 							builder.initBean(this, ref, bean);
 							beans.put(ref.getName(), bean);	
 						}

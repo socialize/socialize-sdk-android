@@ -5,6 +5,11 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
     
+    <TextView 
+    	android:id="@+id/text"
+    	android:layout_width="fill_parent"
+    	android:layout_height="200dp"/>
+    
     <com.socialize.ui.actionbar.ActionBarView
    		android:id="@+id/socializeActionBar"
     	android:layout_width="fill_parent"

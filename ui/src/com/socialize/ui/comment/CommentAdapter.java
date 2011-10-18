@@ -327,6 +327,10 @@ public class CommentAdapter extends BaseAdapter {
             }
         }
         
+        if(view == null) {
+        	view = oldView;
+        }
+        
 		return view;
 	}
 

@@ -3,6 +3,14 @@
 	<factory id="commentItemViewFactory" makes="commentListItem"/>
 	<factory id="listItemLoadingViewFactory" makes="listItemLoadingView"/>
 	
+	<bean 
+		id="entityCache" 
+		class="com.socialize.ui.cache.EntityCache">
+		<constructor-arg type="integer" value="5"/> <!-- Min size -->
+		<constructor-arg type="integer" value="100"/> <!-- Max size -->
+		<destroy-method name="destroy"/>
+	</bean>
+	
 	<bean id="socializeUIErrorHandler" class="com.socialize.ui.error.DialogErrorHandler">
 		<property name="drawables" ref="drawables"/>
 		<property name="config" ref="config"/>
@@ -529,6 +537,7 @@
 		</init-method>
 		
 		<property name="drawables" ref="drawables"/>
+		<property name="entityCache" ref="entityCache"/>
 		<property name="logger" ref="logger"/>
 		<property name="buttonFactory" ref="actionBarButtonFactory"/>
 	</bean>

@@ -36,6 +36,7 @@ import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.BaseView;
 import com.socialize.ui.SocializeUI;
+import com.socialize.ui.cache.EntityCache;
 import com.socialize.util.Drawables;
 
 /**
@@ -50,6 +51,7 @@ public class ActionBarLayoutView extends BaseView {
 	private ActionBarButton viewButton;
 	
 	private Drawables drawables;
+	private EntityCache entityCache;
 	private SocializeLogger logger;
 	
 	private IBeanFactory<ActionBarButton> buttonFactory;
@@ -91,8 +93,8 @@ public class ActionBarLayoutView extends BaseView {
 		setLayoutParams(masterParams);
 		
 		viewButton.init(context, LayoutParams.FILL_PARENT, 1.0f);
-		likeButton.init(context, 100, 0.0f);
-		commentButton.init(context, 100, 0.0f);
+		likeButton.init(context, 90, 0.0f);
+		commentButton.init(context, 90, 0.0f);
 		
 		viewButton.setText("--");
 		likeButton.setText("--");
@@ -107,28 +109,35 @@ public class ActionBarLayoutView extends BaseView {
 	@Override
 	protected void onAttachedToWindow() {
 		super.onAttachedToWindow();
-		getSocialize().view(entityKey, new ViewAddListener() {
-			@Override
-			public void onError(SocializeException error) {
-				error.printStackTrace();
-				getEntityData();
-			}
-			
-			@Override
-			public void onCreate(View entity) {
-				getEntityData();
-			}
-		});
+		
+		Entity entity = entityCache.getEntity(entityKey);
+		
+		if(entity == null) {
+			getSocialize().view(entityKey, new ViewAddListener() {
+				@Override
+				public void onError(SocializeException error) {
+					error.printStackTrace();
+					getEntityData();
+				}
+				
+				@Override
+				public void onCreate(View entity) {
+					getEntityData();
+				}
+			});
+		}
+		else {
+			entityCache.extendTTL(entityKey);
+			setEntityData(entity);
+		}
 	}
 	
 	protected void getEntityData() {
 		getSocialize().getEntity(entityKey, new EntityGetListener() {
-			
 			@Override
 			public void onGet(Entity entity) {
-				viewButton.setText(entity.getViews().toString());
-				likeButton.setText(entity.getLikes().toString());
-				commentButton.setText(entity.getComments().toString());
+				entityCache.putEntity(entity);
+				setEntityData(entity);
 			}
 			
 			@Override
@@ -141,6 +150,12 @@ public class ActionBarLayoutView extends BaseView {
 				}
 			}
 		});
+	}
+	
+	protected void setEntityData(Entity entity) {
+		viewButton.setText(entity.getViews().toString());
+		likeButton.setText(entity.getLikes().toString());
+		commentButton.setText(entity.getComments().toString());
 	}
 	
 	// So we can mock for tests
@@ -191,6 +206,8 @@ public class ActionBarLayoutView extends BaseView {
 	public void setButtonFactory(IBeanFactory<ActionBarButton> buttonFactory) {
 		this.buttonFactory = buttonFactory;
 	}
-	
-	
+
+	public void setEntityCache(EntityCache entityCache) {
+		this.entityCache = entityCache;
+	}
 }

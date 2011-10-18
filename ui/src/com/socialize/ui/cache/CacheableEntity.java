@@ -19,59 +19,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.actionbar;
+package com.socialize.ui.cache;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.util.AttributeSet;
-import android.view.View;
 
-import com.socialize.ui.SocializeUI;
-import com.socialize.ui.view.EntityView;
+import com.socialize.cache.ICacheable;
+import com.socialize.entity.Entity;
 
 /**
  * @author Jason Polites
+ *
  */
-public class ActionBarView extends EntityView {
-	
-	private ActionBarLayoutView actionBarLayoutView;
+public class CacheableEntity implements ICacheable<String> {
 
-	public ActionBarView(Context context) {
-		super(context);
-	}
+	private Entity entity;
 	
-	public ActionBarView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.ui.view.EntityView#getView(android.os.Bundle, java.lang.Object[])
-	 */
-	@Override
-	protected View getView(Bundle bundle, Object... entityKeys) {
-		if(actionBarLayoutView == null) {
-			actionBarLayoutView = container.getBean("actionBarLayoutView", entityKeys);
-		}
-		return actionBarLayoutView;
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.socialize.ui.view.EntityView#getEntityKeys()
-	 */
-	@Override
-	protected String[] getEntityKeys() {
-		return new String[]{SocializeUI.ENTITY_KEY};
-	}
-	
-	@Override
-	protected boolean showLoadProgress() {
-		// Don't display loading 
-		return false;
+	public CacheableEntity(Entity entity) {
+		super();
+		this.entity = entity;
 	}
 
 	@Override
-	public void showError(Context context, Exception e) {
-		// Don't display popup
-		e.printStackTrace();
+	public long getSizeInBytes(Context context) {
+		return 0;
+	}
+
+	@Override
+	public boolean onRemove(Context context, boolean destroy) {
+		return true;
+	}
+
+	@Override
+	public boolean onPut(Context context, String key) {
+		return true;
+	}
+
+	@Override
+	public boolean onGet(Context context) {
+		return true;
+	}
+
+	@Override
+	public String getKey() {
+		return entity.getKey();
+	}
+
+	public Entity getEntity() {
+		return entity;
 	}
 }

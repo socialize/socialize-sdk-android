@@ -76,9 +76,7 @@
 		<constructor-arg type="context"/>
 		<constructor-arg type="integer" value="10"/> <!-- Min size -->
 		<constructor-arg type="integer" value="100"/> <!-- Max size -->
-		<destroy-method name="destroy">
-			<arg type="context"/>
-		</destroy-method>
+		<destroy-method name="destroy"/>
 	</bean>
 	
 	<bean id="bitmapBuilder" class="com.socialize.util.BitmapBuilder"/>

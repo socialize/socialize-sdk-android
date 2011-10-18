@@ -44,7 +44,7 @@ public abstract class SocializeView extends BaseView {
 	public SocializeView(Context context) {
 		super(context);
 	}
-
+	
 	@Override
 	protected void onAttachedToWindow() {
 		super.onAttachedToWindow();

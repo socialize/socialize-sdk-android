@@ -257,6 +257,9 @@ public class ContainerBuilder {
 	
 	public void destroyBean(Container container, BeanRef beanRef, Object bean) {
 		if(bean != null && beanRef.getDestroyMethod() != null) {
+			
+			Logger.i(getClass().getSimpleName(), "Destroying bean " + beanRef.getName());
+			
 			Object[] args = getArguments(container, beanRef.getDestroyMethod().getArguments(), false);
 			
 			Method method = builder.getMethodFor(bean.getClass(), beanRef.getDestroyMethod().getName(), args);

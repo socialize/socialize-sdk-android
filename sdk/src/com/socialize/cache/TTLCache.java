@@ -57,13 +57,25 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 	}
 	
 	protected Context context;
+	
+	public TTLCache() {
+		this(null, 10, DEFAULT_CACHE_COUNT);
+	}
+	
+	public TTLCache(int initialCapacity, int maxCapacity) {
+		this(null, initialCapacity, maxCapacity);
+	}
+	
+	public TTLCache(int initialCapacity) {
+		this(null, initialCapacity, DEFAULT_CACHE_COUNT);
+	}
 
 	public TTLCache(Context context) {
-		this(context, 10,DEFAULT_CACHE_COUNT);
+		this(context, 10, DEFAULT_CACHE_COUNT);
 	}
 	
 	public TTLCache(Context context, int initialCapacity) {
-		this(context, initialCapacity,DEFAULT_CACHE_COUNT);
+		this(context, initialCapacity, DEFAULT_CACHE_COUNT);
 	}
 	
 	public TTLCache(Context context, int initialCapacity, int maxCapacity) {
@@ -80,7 +92,7 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 	/**
 	 * Empties the cache and destroys all persistent states.
 	 */
-	public void destroy(Context context) {
+	public void destroy() {
 		stopReaper();
 		clear(true);
 	}
