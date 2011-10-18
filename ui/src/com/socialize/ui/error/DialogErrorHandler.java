@@ -34,9 +34,9 @@ public class DialogErrorHandler implements SocializeUIErrorHandler {
 			
 			handleError(context, message);
 		}
-		else {
-			handleError(context, e.getMessage());
-		}
+//		else {
+//			handleError(context, e.getMessage());
+//		}
 	}
 
 	protected void handleError(Context context, String message) {

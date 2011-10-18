@@ -1,6 +1,7 @@
 package com.socialize.ui.sample;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -28,6 +29,7 @@ public class SampleActivity extends SocializeActivity {
 		final CheckBox chkMockFB = (CheckBox) findViewById(R.id.chkMockFB);
 		final Button btn = (Button) findViewById(R.id.btnCommentView);
 		final Button btnClearCache = (Button) findViewById(R.id.btnClearCache);
+		final Button btnActionView = (Button) findViewById(R.id.btnActionView);
 		
 		btn.setOnClickListener(new OnClickListener() {
 			@Override
@@ -65,6 +67,14 @@ public class SampleActivity extends SocializeActivity {
 						dialog.dismiss();
 					}
 				}.execute((Void)null);
+			}
+		});
+		
+		btnActionView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(SampleActivity.this, ActionBarActivity.class));
 			}
 		});
 		

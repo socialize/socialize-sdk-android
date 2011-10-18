@@ -49,6 +49,12 @@
     	android:id="@+id/btnCommentView"
     	android:text="Show Comments"
     	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"/>	
+    	
+    <Button 
+    	android:id="@+id/btnActionView"
+    	android:text="Show Action Bar"
+    	android:layout_width="wrap_content"
     	android:layout_height="wrap_content"/>	        
     	
 </LinearLayout>

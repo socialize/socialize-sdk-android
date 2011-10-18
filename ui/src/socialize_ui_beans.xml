@@ -470,7 +470,6 @@
 		<property name="textAlign" value="center"/>
 		<property name="padding" value="2" type="integer"/>
 		<property name="bold" value="true" type="boolean"/>
-		
 	</bean>
 	
 	<bean 
@@ -515,6 +514,36 @@
 	<factory id="profileImageContextMenuFactory" makes="profileImageContextMenu"/>
 	
 <!-- End Profile UI -->
+
+<!-- Action Bar UI -->
+	
+	<bean 
+		id="actionBarLayoutView" 
+		class="com.socialize.ui.actionbar.ActionBarLayoutView"
+		singleton="false">
+		
+		<constructor-arg type="activity"/>
+		
+		<init-method name="init">
+			<arg type="activity"/>
+		</init-method>
+		
+		<property name="drawables" ref="drawables"/>
+		<property name="logger" ref="logger"/>
+		<property name="buttonFactory" ref="actionBarButtonFactory"/>
+	</bean>
+	
+	<bean 
+		id="actionBarButton" 
+		class="com.socialize.ui.actionbar.ActionBarButton"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+	</bean>
+	
+	<factory id="actionBarButtonFactory" makes="actionBarButton"/>
+	
+<!-- End Action Bar UI -->
 	
 
 <!--  Image Loader  -->

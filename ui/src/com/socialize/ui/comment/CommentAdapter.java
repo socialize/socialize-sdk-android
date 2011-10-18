@@ -134,20 +134,21 @@ public class CommentAdapter extends BaseAdapter {
        	final User user = tmpUser;
        	
         if (view == null) {
+            holder = createViewHolder();
         	
         	CommentListItem v = commentItemViewFactory.getBean();
         	
-            holder = createViewHolder();
-            
-            holder.setTime(v.getTime());
-            holder.setUserName(v.getAuthor());
-            holder.setComment(v.getComment());
-            holder.setUserIcon(v.getUserIcon());
-    		holder.setNow(new Date());
+        	if(v != null) {
+                holder.setTime(v.getTime());
+                holder.setUserName(v.getAuthor());
+                holder.setComment(v.getComment());
+                holder.setUserIcon(v.getUserIcon());
+        		holder.setNow(new Date());
 
-            v.setTag(holder);
-            
-            view = v;
+                v.setTag(holder);
+        	}
+        	
+        	view = v;
         } 
         else {
             holder = (ViewHolder) view.getTag();
@@ -156,172 +157,174 @@ public class CommentAdapter extends BaseAdapter {
             }
         }
         
-        if(position >= comments.size()) {
-        	// Last one, get loading view
-        	if(loadingView == null) {
-        		loadingView = listItemLoadingViewFactory.getBean();
-        		loadingView.setTag(holder);
-        	}
-        	
-        	view = loadingView;
-        }
-        else {
-    		
-    		if(item != null) {
-    			
-    			holder.setItemId(position);
+        if(view != null) {
+        	if(position >= comments.size()) {
+            	// Last one, get loading view
+            	if(loadingView == null) {
+            		loadingView = listItemLoadingViewFactory.getBean();
+            		loadingView.setTag(holder);
+            	}
+            	
+            	view = loadingView;
+            }
+            else {
+        		
+        		if(item != null) {
+        			
+        			holder.setItemId(position);
 
-    			String displayName = "";
-    			
-    			if(user != null) {
-    				displayName = user.getDisplayName();
-    				if(displayName == null) {
-    					// Use the item user
-    					displayName = item.getUser().getDisplayName();
-    					
-    					if(displayName == null) {
-    						displayName = "Anonymous";
-    					}
-    				}
-    			}
-    			
-    			if(user != null) {
-    				view.setOnClickListener(new OnClickListener() {
-						
-						@Override
-						public void onClick(View v) {
-							if(user != null && user.getId() != null) {
-								getSocializeUI().showCommentDetailViewForResult(context, user.getId().toString(), item.getId().toString(), CommentActivity.PROFILE_UPDATE);
-							}
-							else {
-								if(logger != null) {
-									logger.warn("No user for comment " + item.getId());
-								}
-							}
-						}
-					});
-    			}
-    			
-    			TextView comment = holder.getComment();
-    			TextView userName = holder.getUserName();
-    			TextView time = holder.getTime();
-    			
-    			final ImageView userIcon = holder.getUserIcon();
-    			
-    			if (comment != null) {
-    				comment.setText(item.getText());
-    			}
-    			
-    			if (userName != null) {
-    				userName.setText(displayName);
-    			}
-    			
-    			if (time != null) {
-    				Long date = item.getDate();
-    				if(date != null && date > 0) {
-    					long diff = (holder.getNow().getTime() - date.longValue());
-    					time.setText(dateUtils.getTimeString(diff) + " ");
-    				}
-    				else {
-    					time.setText(" ");
-    				}
-    			}
-    			
-    			if (userIcon != null && drawables != null) {
-    				
-    				int densitySize = deviceUtils.getDIP(iconSize);
-    				
-    			    final Drawable defaultImage = drawables.getDrawable(SocializeUI.DEFAULT_USER_ICON, true);
-    					
-    				if(user != null) {
-    					String imageUrl = user.getSmallImageUri();
-    					
-    					holder.setImageUrl(imageUrl);
-    					userIcon.getBackground().setAlpha(255);
-    					
-    					if(!StringUtils.isEmpty(imageUrl)) {
-    						try {
-    							// Check the cache
-    							CacheableDrawable cached = drawables.getCache().get(imageUrl);
-    							
-    							if(cached != null && !cached.isRecycled()) {
-    								if(logger != null && logger.isInfoEnabled()) {
-										logger.info("CommentAdpater setting image icon to cached image " + cached);
-									}
-    								userIcon.setImageDrawable(cached);
+        			String displayName = "";
+        			
+        			if(user != null) {
+        				displayName = user.getDisplayName();
+        				if(displayName == null) {
+        					// Use the item user
+        					displayName = item.getUser().getDisplayName();
+        					
+        					if(displayName == null) {
+        						displayName = "Anonymous";
+        					}
+        				}
+        			}
+        			
+        			if(user != null) {
+        				view.setOnClickListener(new OnClickListener() {
+    						
+    						@Override
+    						public void onClick(View v) {
+    							if(user != null && user.getId() != null) {
+    								getSocializeUI().showCommentDetailViewForResult(context, user.getId().toString(), item.getId().toString(), CommentActivity.PROFILE_UPDATE);
     							}
     							else {
-    								userIcon.setImageDrawable(null);
-    								userIcon.getBackground().setAlpha(64);
-    								
-        							imageLoader.loadImage(imageUrl, new ImageLoadListener() {
-    									@Override
-    									public void onImageLoadFail(Exception error) {
-    										logError("Error loading image", error);
-    										
-    										userIcon.post(new Runnable() {
-    											public void run() {
-    												if(logger != null && logger.isInfoEnabled()) {
-    													logger.info("CommentAdpater setting image icon to default image");
-    												}
-    												userIcon.setImageDrawable(defaultImage);
-    												userIcon.getBackground().setAlpha(255);
-    											}
-    										});
+    								if(logger != null) {
+    									logger.warn("No user for comment " + item.getId());
+    								}
+    							}
+    						}
+    					});
+        			}
+        			
+        			TextView comment = holder.getComment();
+        			TextView userName = holder.getUserName();
+        			TextView time = holder.getTime();
+        			
+        			final ImageView userIcon = holder.getUserIcon();
+        			
+        			if (comment != null) {
+        				comment.setText(item.getText());
+        			}
+        			
+        			if (userName != null) {
+        				userName.setText(displayName);
+        			}
+        			
+        			if (time != null) {
+        				Long date = item.getDate();
+        				if(date != null && date > 0) {
+        					long diff = (holder.getNow().getTime() - date.longValue());
+        					time.setText(dateUtils.getTimeString(diff) + " ");
+        				}
+        				else {
+        					time.setText(" ");
+        				}
+        			}
+        			
+        			if (userIcon != null && drawables != null) {
+        				
+        				int densitySize = deviceUtils.getDIP(iconSize);
+        				
+        			    final Drawable defaultImage = drawables.getDrawable(SocializeUI.DEFAULT_USER_ICON, true);
+        					
+        				if(user != null) {
+        					String imageUrl = user.getSmallImageUri();
+        					
+        					holder.setImageUrl(imageUrl);
+        					userIcon.getBackground().setAlpha(255);
+        					
+        					if(!StringUtils.isEmpty(imageUrl)) {
+        						try {
+        							// Check the cache
+        							CacheableDrawable cached = drawables.getCache().get(imageUrl);
+        							
+        							if(cached != null && !cached.isRecycled()) {
+        								if(logger != null && logger.isInfoEnabled()) {
+    										logger.info("CommentAdpater setting image icon to cached image " + cached);
     									}
-    									
-    									@Override
-    									public void onImageLoad(final ImageLoadRequest request, final SafeBitmapDrawable drawable) {
-    										// Must be run on UI thread
-    										userIcon.post(new Runnable() {
-    											public void run() {
-    												if(request == null || !request.isCanceled()) {
-    													if(logger != null && logger.isInfoEnabled()) {
-        													logger.info("CommentAdpater setting image icon to " + drawable);
+        								userIcon.setImageDrawable(cached);
+        							}
+        							else {
+        								userIcon.setImageDrawable(null);
+        								userIcon.getBackground().setAlpha(64);
+        								
+            							imageLoader.loadImage(imageUrl, new ImageLoadListener() {
+        									@Override
+        									public void onImageLoadFail(Exception error) {
+        										logError("Error loading image", error);
+        										
+        										userIcon.post(new Runnable() {
+        											public void run() {
+        												if(logger != null && logger.isInfoEnabled()) {
+        													logger.info("CommentAdpater setting image icon to default image");
         												}
-        												userIcon.setImageDrawable(drawable);
-    												}
-    												
-    												userIcon.getBackground().setAlpha(255);
-    											}
-    										});
-    									}
-    								});
+        												userIcon.setImageDrawable(defaultImage);
+        												userIcon.getBackground().setAlpha(255);
+        											}
+        										});
+        									}
+        									
+        									@Override
+        									public void onImageLoad(final ImageLoadRequest request, final SafeBitmapDrawable drawable) {
+        										// Must be run on UI thread
+        										userIcon.post(new Runnable() {
+        											public void run() {
+        												if(request == null || !request.isCanceled()) {
+        													if(logger != null && logger.isInfoEnabled()) {
+            													logger.info("CommentAdpater setting image icon to " + drawable);
+            												}
+            												userIcon.setImageDrawable(drawable);
+        												}
+        												
+        												userIcon.getBackground().setAlpha(255);
+        											}
+        										});
+        									}
+        								});
+        							}
+        						}
+        						catch (Exception e) {
+        							String errorMsg = "Not a valid image uri [" + imageUrl + "]";
+        							if(logger != null) {
+        								logger.error(errorMsg, e);
+        							}
+        							else {
+        								System.err.println(errorMsg);
+        							}
+        							
+        							userIcon.setImageDrawable(defaultImage);
+        						}
+        					}
+        					else if(!StringUtils.isEmpty(user.getProfilePicData())) {
+        						try {
+    								Drawable drawable = drawables.getDrawable(user.getId().toString(), base64Utils.decode(user.getProfilePicData()), densitySize, densitySize);
+    								userIcon.setImageDrawable(drawable);
     							}
-    						}
-    						catch (Exception e) {
-    							String errorMsg = "Not a valid image uri [" + imageUrl + "]";
-    							if(logger != null) {
-    								logger.error(errorMsg, e);
+    							catch (Base64DecoderException e) {
+    								
+    								logError("Invalid image data", e);
+    								
+    								userIcon.setImageDrawable(defaultImage);
     							}
-    							else {
-    								System.err.println(errorMsg);
-    							}
-    							
-    							userIcon.setImageDrawable(defaultImage);
-    						}
-    					}
-    					else if(!StringUtils.isEmpty(user.getProfilePicData())) {
-    						try {
-								Drawable drawable = drawables.getDrawable(user.getId().toString(), base64Utils.decode(user.getProfilePicData()), densitySize, densitySize);
-								userIcon.setImageDrawable(drawable);
-							}
-							catch (Base64DecoderException e) {
-								
-								logError("Invalid image data", e);
-								
-								userIcon.setImageDrawable(defaultImage);
-							}
-    					}
-    					else {
-    						userIcon.setImageDrawable(defaultImage);
-    					}
-    				}
-    				else {
-    					userIcon.setImageDrawable(defaultImage);
-    				}
-    			}
-    		}
+        					}
+        					else {
+        						userIcon.setImageDrawable(defaultImage);
+        					}
+        				}
+        				else {
+        					userIcon.setImageDrawable(defaultImage);
+        				}
+        			}
+        		}
+            }
         }
         
 		return view;
