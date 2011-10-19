@@ -63,6 +63,9 @@ public class ActionBarButton extends LinearLayout {
 			width = deviceUtils.getDIP(width);
 		}
 		
+		int leftPadding = deviceUtils.getDIP(5);
+		int rightPadding = deviceUtils.getDIP(2);
+		
 		LayoutParams masterParams = new LayoutParams(width,deviceUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT));
 		masterParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 		masterParams.weight = weight;
@@ -84,7 +87,7 @@ public class ActionBarButton extends LinearLayout {
 		
 		imageView.setImageDrawable(icon);
 		imageView.setLayoutParams(iconParams);
-		imageView.setPadding(10, 0, 5, 0);
+		imageView.setPadding(leftPadding, 0, rightPadding, 0);
 		
 		textView.setLayoutParams(textParams);
 		textView.setPadding(0, 0, 0, 0);

@@ -121,13 +121,18 @@ public class ActionBarLayoutView extends BaseView {
 		masterParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
 		setLayoutParams(masterParams);
 		
+		int width = deviceUtils.getDIP(ActionBarView.ACTION_BAR_BUTTON_WIDTH);
+		
+		int likeWidth = width - deviceUtils.getDIP(5);
+		int commentWidth = width + deviceUtils.getDIP(5);
+		
 		viewButton.init(context, LayoutParams.FILL_PARENT, 1.0f);
-		likeButton.init(context, 90, 0.0f);
-		commentButton.init(context, 90, 0.0f);
+		likeButton.init(context, likeWidth, 0.0f);
+		commentButton.init(context, commentWidth, 0.0f);
 		
 		viewButton.setText("--");
 		likeButton.setText("--");
-		commentButton.setText("--");
+		commentButton.setText("Comment");
 		
 		addView(viewButton);
 		addView(likeButton);
@@ -174,7 +179,6 @@ public class ActionBarLayoutView extends BaseView {
 		
 		viewButton.setText("--");
 		likeButton.setText("--");
-		commentButton.setText("--");
 		
 		getEntityData();
 	}
@@ -184,21 +188,16 @@ public class ActionBarLayoutView extends BaseView {
 		if(localEntity != null) {
 			
 			if(localEntity.isLiked()) {
-//				final ProgressDialog dialog = progressDialogFactory.show(getContext(), "Like", "Removing like...");
-//				dialog.setCancelable(true);
-				
 				// Unlike
 				getSocialize().unlike(localEntity.getLikeId(), new LikeDeleteListener() {
 					
 					@Override
 					public void onError(SocializeException error) {
 						logError("Error deleting like", error);
-//						dialog.dismiss();
 					}
 					
 					@Override
 					public void onDelete() {
-//						dialog.dismiss();
 						localEntity.setLiked(false);
 						localEntity.getEntity().setLikes(localEntity.getEntity().getLikes()-1);
 						setEntityData(localEntity);
@@ -206,20 +205,16 @@ public class ActionBarLayoutView extends BaseView {
 				});
 			}
 			else {
-//				final ProgressDialog dialog = progressDialogFactory.show(getContext(), "Like", "Posting like...");
-				
 				// Unlike
 				getSocialize().like(entityKey, new LikeAddListener() {
 					
 					@Override
 					public void onError(SocializeException error) {
 						logError("Error posting like", error);
-//						dialog.dismiss();
 					}
 					
 					@Override
 					public void onCreate(Like entity) {
-//						dialog.dismiss();
 						localEntity.getEntity().setLikes(localEntity.getEntity().getLikes()+1);
 						localEntity.setLiked(true);
 						localEntity.setLikeId(entity.getId());
@@ -275,13 +270,13 @@ public class ActionBarLayoutView extends BaseView {
 		this.localEntity = ce;
 		Entity entity = ce.getEntity();
 		viewButton.setText(entity.getViews().toString());
-		likeButton.setText(entity.getLikes().toString());
-		commentButton.setText(entity.getComments().toString());
 		
 		if(ce.isLiked()) {
+			likeButton.setText("Unlike");
 			likeButton.setIcon(likeIconHi);
 		}
 		else {
+			likeButton.setText("Like");
 			likeButton.setIcon(likeIcon);
 		}
 	}

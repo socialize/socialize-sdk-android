@@ -35,6 +35,7 @@ import com.socialize.ui.view.EntityView;
 public class ActionBarView extends EntityView {
 	
 	public static final int ACTION_BAR_HEIGHT = 60;
+	public static final int ACTION_BAR_BUTTON_WIDTH = 60;
 	
 	private ActionBarLayoutView actionBarLayoutView;
 
