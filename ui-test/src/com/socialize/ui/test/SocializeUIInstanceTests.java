@@ -168,22 +168,26 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		AndroidMock.verify(container);	
 	}
 
-	@UsesMocks ({Drawables.class})
+	@UsesMocks ({Drawables.class, IOCContainer.class})
 	public void testGetDrawable() {
 		Drawables drawables = AndroidMock.createMock(Drawables.class);
+		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
 
 		String name = "foobar";
 		boolean eternal = false;
 		
+		AndroidMock.expect( container.getBean("drawables")).andReturn(drawables);
 		AndroidMock.expect( drawables.getDrawable(name, eternal) ).andReturn(null);
 		
+		AndroidMock.replay(container);
 		AndroidMock.replay(drawables);
 
 		SocializeUI socializeUI = new SocializeUI();
-		socializeUI.setDrawables(drawables);
+		socializeUI.initUI(container);
 
 		socializeUI.getDrawable(name, eternal);
 
+		AndroidMock.verify(container);
 		AndroidMock.verify(drawables);	
 	}
 	
