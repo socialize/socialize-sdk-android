@@ -64,7 +64,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	private HttpUtils httpUtils;
 	private SocializeLocationProvider locationProvider;
 	
-	public static enum RequestType {AUTH,PUT,POST,PUT_AS_POST,GET,LIST,EMPTY_LIST,DELETE};
+	public static enum RequestType {AUTH,PUT,POST,PUT_AS_POST,GET,LIST,LIST_WITHOUT_ENTITY,DELETE};
 	
 	public SocializeApi(P provider) {
 		super();
@@ -157,7 +157,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}
 	
 	public void listAsync(SocializeSession session, String endpoint, int startIndex, int endIndex, SocializeActionListener listener) {
-		AsyncGetter getter = new AsyncGetter(RequestType.EMPTY_LIST, session, listener);
+		AsyncGetter getter = new AsyncGetter(RequestType.LIST_WITHOUT_ENTITY, session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
 		request.setEndpoint(endpoint);
 		request.setStartIndex(startIndex);
@@ -715,7 +715,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				response.setResults(results);
 				break;
 				
-			case EMPTY_LIST:
+			case LIST_WITHOUT_ENTITY:
 				results = SocializeApi.this.list(session, request.getEndpoint(), request.getStartIndex(), request.getEndIndex());
 				response.setResults(results);
 				break;

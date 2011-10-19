@@ -8,6 +8,7 @@
 		class="com.socialize.ui.cache.EntityCache">
 		<constructor-arg type="integer" value="5"/> <!-- Min size -->
 		<constructor-arg type="integer" value="100"/> <!-- Max size -->
+		<property name="timeToLive" value="600000" type="integer"/> <!--  milliseconds -->
 		<destroy-method name="destroy"/>
 	</bean>
 	
@@ -537,9 +538,11 @@
 		</init-method>
 		
 		<property name="drawables" ref="drawables"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="entityCache" ref="entityCache"/>
 		<property name="logger" ref="logger"/>
 		<property name="buttonFactory" ref="actionBarButtonFactory"/>
+		<property name="progressDialogFactory" ref="progressDialogFactory"/>
 	</bean>
 	
 	<bean 
@@ -554,7 +557,6 @@
 	
 <!-- End Action Bar UI -->
 	
-
 <!--  Image Loader  -->
 	<bean id="imageUrlLoader" class="com.socialize.ui.image.ImageUrlLoader"/>
 	
@@ -572,6 +574,5 @@
 		<destroy-method name="destroy"/>
 	</bean>
 <!--  End Image Loader -->
-
 	
 </beans>

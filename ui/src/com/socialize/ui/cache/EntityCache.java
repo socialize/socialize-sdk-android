@@ -42,14 +42,16 @@ public class EntityCache extends TTLCache<String, CacheableEntity> {
 		super(initialCapacity, maxCapacity);
 	}
 
-	private long timeToLive = 2 * 60 * 1000; // 2 minutes
+	private long timeToLive = 10 * 60 * 1000; // 10 minutes
 
 	public void setTimeToLive(long timeToLive) {
 		this.timeToLive = timeToLive;
 	}
 	
-	public void putEntity(Entity entity) {
-		put(entity.getKey(), new CacheableEntity(entity), timeToLive);
+	public CacheableEntity putEntity(Entity entity) {
+		CacheableEntity ce = new CacheableEntity(entity);
+		put(entity.getKey(), ce, timeToLive);
+		return ce;
 	}
 	
 	public Entity getEntity(String key) {

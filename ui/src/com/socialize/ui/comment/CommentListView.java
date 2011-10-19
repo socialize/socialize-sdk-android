@@ -49,7 +49,7 @@ public class CommentListView extends BaseView {
 	private CommentHeader header;
 	private CommentContentView content;
 	private IBeanFactory<AuthRequestDialogFactory> authRequestDialogFactory;
-
+	
 	public CommentListView(Context context, String entityKey) {
 		this(context);
 		this.entityKey = entityKey;
@@ -158,14 +158,17 @@ public class CommentListView extends BaseView {
 					// TODO: handle error!
 				}
 				
-				
 				totalCount++;
 				startIndex++;
 				endIndex++;
+				
 				header.setText(totalCount + " Comments");
 				field.clear();
+				
 				commentAdapter.notifyDataSetChanged();
+				
 				content.scrollToTop();
+				
 				if(dialog != null) {
 					dialog.dismiss();
 				}
@@ -283,10 +286,10 @@ public class CommentListView extends BaseView {
 			}
 		});
 	}
+	
 	@Override
-	protected void onAttachedToWindow() {
-		super.onAttachedToWindow();
-
+	protected void onViewLoad() {
+		super.onViewLoad();
 		if(getSocialize().isAuthenticated()) {
 			doListComments(false);
 		}
@@ -339,7 +342,7 @@ public class CommentListView extends BaseView {
 	public boolean isLoading() {
 		return loading;
 	}
-
+	
 	protected void setLoading(boolean loading) {
 		this.loading = loading;
 	}

@@ -81,11 +81,10 @@ public class ProfileLayoutView extends BaseView {
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();
 	}
-
+	
 	@Override
-	protected void onAttachedToWindow() {
-		super.onAttachedToWindow();
-
+	protected void onViewLoad() {
+		super.onViewLoad();
 		if(getSocialize().isAuthenticated()) {
 			doGetUserProfile();
 		}

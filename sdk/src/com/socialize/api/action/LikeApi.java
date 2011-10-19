@@ -29,9 +29,10 @@ import android.location.Location;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
-import com.socialize.entity.ActionError;
 import com.socialize.entity.Like;
 import com.socialize.entity.ListResult;
+import com.socialize.entity.User;
+import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.like.LikeListener;
@@ -72,36 +73,58 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 		listAsync(session, ENDPOINT, key, null, startIndex, endIndex, listener);
 	}
 	
-	public void getLike(SocializeSession session, String key, final LikeListener listener) {
-		getLikesByEntity(session, key, 0, 1, new LikeListListener() {
-			
-			@Override
-			public void onError(SocializeException error) {
-				if(listener != null) {
-					listener.onError(error);
-				}
-			}
-			
-			@Override
-			public void onList(ListResult<Like> entities) {
-				
-				if(listener != null) {
-					if(entities != null && entities.getItems() != null && entities.getItems().size() > 0) {
-						listener.onGet(entities.getItems().get(0));
-					}
-					else {
-						List<ActionError> errors = entities.getErrors();
-						
-						if(errors != null && errors.size() > 0) {
-							listener.onError(new SocializeException(errors.get(0).getMessage()));
+	/**
+	 * Retrieves a like for the current user based on the entity URL provided.
+	 * @param session
+	 * @param entityUrl
+	 * @param listener
+	 */
+	public void getLike(SocializeSession session, final String entityUrl, final LikeListener listener) {
+		final User user = session.getUser();
+		if(user != null) {
+			String endpoint = "/user/" + user.getId().toString() + ENDPOINT;
+			listAsync(session, endpoint, entityUrl, null, 0, 1, new LikeListListener() {
+				@Override
+				public void onList(ListResult<Like> entities) {
+					boolean is404 = false;
+					if(entities != null) {
+						List<Like> items = entities.getItems();
+						if(items != null && items.size() > 0) {
+							Like like = items.get(0);
+							if(like != null) {
+								listener.onGet(like);
+							}
+							else {
+								is404 = true;
+							}
 						}
 						else {
-							listener.onError(new SocializeException("No like found"));
+							is404 = true;
 						}
 					}
+					else {
+						is404 = true;
+					}
+					
+					if(is404) {
+						onError(new SocializeApiError(404, "No likes found for entity with key [" +
+								entityUrl +
+								"] for user [" +
+								user.getId() +
+								"]"));
+					}
 				}
+				@Override
+				public void onError(SocializeException error) {
+					listener.onError(error);
+				}
+			});
+		}
+		else {
+			if(listener != null) {
+				listener.onError(new SocializeException("No user found in current session"));
 			}
-		});
+		}
 	}
 
 	public void getLikesById(SocializeSession session, LikeListener listener, int...ids) {

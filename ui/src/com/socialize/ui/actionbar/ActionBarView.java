@@ -34,6 +34,8 @@ import com.socialize.ui.view.EntityView;
  */
 public class ActionBarView extends EntityView {
 	
+	public static final int ACTION_BAR_HEIGHT = 60;
+	
 	private ActionBarLayoutView actionBarLayoutView;
 
 	public ActionBarView(Context context) {
@@ -43,7 +45,7 @@ public class ActionBarView extends EntityView {
 	public ActionBarView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.view.EntityView#getView(android.os.Bundle, java.lang.Object[])
 	 */
@@ -63,12 +65,6 @@ public class ActionBarView extends EntityView {
 		return new String[]{SocializeUI.ENTITY_KEY};
 	}
 	
-	@Override
-	protected boolean showLoadProgress() {
-		// Don't display loading 
-		return false;
-	}
-
 	@Override
 	public void showError(Context context, Exception e) {
 		// Don't display popup

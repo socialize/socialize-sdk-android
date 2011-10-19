@@ -46,17 +46,27 @@ public abstract class SocializeView extends BaseView {
 	}
 	
 	@Override
-	protected void onAttachedToWindow() {
-		super.onAttachedToWindow();
-		onBeforeSocializeInit();
-		initSocialize();
-		container = ActivityIOCProvider.getInstance().getContainer();
-		
-		if(container != null) {
-			setErrorHandler((SocializeUIErrorHandler) container.getBean("socializeUIErrorHandler"));
+	protected void onViewLoad() {
+		super.onViewLoad();
+		doSocializeInit();
+	}
+	
+	@Override
+	protected void onViewUpdate() {
+		super.onViewUpdate();
+		doSocializeInit();
+	}
+
+	protected void doSocializeInit() {
+		if(!isInEditMode()) {
+			onBeforeSocializeInit();
+			initSocialize();
+			container = ActivityIOCProvider.getInstance().getContainer();
+			if(container != null) {
+				setErrorHandler((SocializeUIErrorHandler) container.getBean("socializeUIErrorHandler"));
+			}
+			onPostSocializeInit(container);
 		}
-		
-		onPostSocializeInit(container);
 	}
 	
 	protected <E extends Object> E getBean(String name) {

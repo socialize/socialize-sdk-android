@@ -7,12 +7,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
+import android.widget.ScrollView;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.config.SocializeConfig;
+import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.comment.CommentDetailActivity;
 import com.socialize.ui.profile.ProfileActivity;
@@ -56,10 +62,6 @@ public class SocializeUI {
 		
 		getSocialize().init(context,config);
 		getSocialize().getConfig().merge(customProperties);
-	}
-	
-	public void setDrawables(Drawables drawables) {
-		this.drawables = drawables;
 	}
 
 	public void initUI(IOCContainer container) {
@@ -183,6 +185,75 @@ public class SocializeUI {
 		Bundle extras = getExtras(intent);
 		extras.putString(USER_ID, userId);
 		intent.putExtras(extras);
+	}
+	
+	public void setContentViewWithActionBar(Activity parent, int resId) {
+		setContentViewWithActionBar(parent, resId, true);
+	}
+	
+	public void setContentViewWithActionBar(Activity parent, int resId, boolean scroll) {
+		LayoutInflater layoutInflater = (LayoutInflater) parent.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
+		View original = layoutInflater.inflate(resId, null);
+		setContentViewWithActionBar(parent, original, scroll);
+	}
+	
+	public void setContentViewWithActionBar(Activity parent, View original) {
+		setContentViewWithActionBar(parent, original, true);
+	}
+	
+	public void setContentViewWithActionBar(Activity parent, View original, boolean scroll) {
+		
+		int id = getNextViewId(original);
+		
+		RelativeLayout barLayout = new RelativeLayout(parent);
+		RelativeLayout originalLayout = new RelativeLayout(parent);
+		
+		ActionBarView bar = new ActionBarView(parent);
+		bar.setId(id);
+		
+		LayoutParams barParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		barParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		
+		LayoutParams originalParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		originalParams.addRule(RelativeLayout.ABOVE, id);
+		
+		bar.setLayoutParams(barParams);
+		originalLayout.setLayoutParams(originalParams);
+		
+		if(scroll && !(original instanceof ScrollView) ) {
+			ScrollView scrollView = new ScrollView(parent);
+			scrollView.setFillViewport(true);
+			scrollView.addView(original);
+			originalLayout.addView(scrollView);
+		}
+		else {
+			originalLayout.addView(original);
+		}
+		
+		barLayout.addView(bar);
+		barLayout.addView(originalLayout);
+		parent.setContentView(barLayout);
+	}
+	
+	protected int getNextViewId(View original) {
+		int id = Integer.MAX_VALUE;
+		
+		if(original instanceof ViewGroup) {
+			ViewGroup group = (ViewGroup) original;
+			id = 0;
+			int childCount = group.getChildCount();
+			
+			for (int i = 0; i < childCount; i++) {
+				View child = group.getChildAt(i);
+				if(child.getId() > id) {
+					id = child.getId();
+				}
+			}
+			
+			id++;
+		}
+		
+		return id;
 	}
 	
 	protected Bundle getExtras(Intent intent) {

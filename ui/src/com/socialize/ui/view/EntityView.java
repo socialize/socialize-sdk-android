@@ -19,9 +19,10 @@ public abstract class EntityView extends AuthenticatedView {
 
 	@Override
 	public View getView() {
-		Bundle bundle = null;
 		
 		Context context = getViewContext();
+		
+		Bundle bundle = null;
 		
 		if(context instanceof Activity) {
 			Activity a = (Activity) context;

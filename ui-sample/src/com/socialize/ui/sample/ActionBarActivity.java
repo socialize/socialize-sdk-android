@@ -9,7 +9,9 @@ public class ActionBarActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		SocializeUI.getInstance().setEntityUrl(this, "http://entity1.com");
-		setContentView(R.layout.action_bar);
+//		setContentView(R.layout.action_bar);
+		
+		SocializeUI.getInstance().setEntityUrl(this, "http://entity3.com");
+		SocializeUI.getInstance().setContentViewWithActionBar(this, R.layout.action_bar, true);
 	}
 }

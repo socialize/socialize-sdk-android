@@ -19,55 +19,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.view;
+package com.socialize.ui.actionbar;
 
 import android.content.Context;
-import android.view.View;
-
-import com.socialize.api.SocializeSession;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
+import android.util.AttributeSet;
+import android.view.Gravity;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
+ * Simply used to display Socialize when viewed in layout editor.
  * @author Jason Polites
- *
  */
-public class AuthenticatedViewListener implements SocializeAuthListener {
-	
-	protected AuthenticatedView view;
-	protected Context context;
-	
-	public AuthenticatedViewListener(Context context, AuthenticatedView view) {
-		super();
-		this.view = view;
-		this.context = context;
+public class ActionBarEditView extends LinearLayout {
+
+	public ActionBarEditView(Context context) {
+		super(context);
+		init();
 	}
 
-	@Override
-	public void onError(SocializeException error) {
-		view.onAfterAuthenticate();
-		view.showError(context, error);
-		error.printStackTrace();
+	public ActionBarEditView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		init();
 	}
 	
-	@Override
-	public void onCancel() {
-		// Nothing
-	}
-
-	@Override
-	public void onAuthSuccess(SocializeSession session) {
-		// Render the childView
-		view.onAfterAuthenticate();
-		View v = view.getView();
-		view.removeAllViews();
-		view.addView(v);
-	}
-	
-	@Override
-	public void onAuthFail(SocializeException error) {
-		view.onAfterAuthenticate();
-		view.showError(context, error);
-		error.printStackTrace();
+	public void init() {
+		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT,90);
+		masterParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		LayoutParams textParams = new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
+		textParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		TextView view = new TextView(getContext());
+		view.setText("Socialize Action Bar");
+		setLayoutParams(masterParams);
+		view.setLayoutParams(textParams);
+		addView(view);
 	}
 }

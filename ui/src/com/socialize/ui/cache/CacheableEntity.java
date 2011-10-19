@@ -33,6 +33,8 @@ import com.socialize.entity.Entity;
 public class CacheableEntity implements ICacheable<String> {
 
 	private Entity entity;
+	private boolean liked;
+	private int likeId;
 	
 	public CacheableEntity(Entity entity) {
 		super();
@@ -67,4 +69,21 @@ public class CacheableEntity implements ICacheable<String> {
 	public Entity getEntity() {
 		return entity;
 	}
+
+	public boolean isLiked() {
+		return liked;
+	}
+
+	public void setLiked(boolean liked) {
+		this.liked = liked;
+	}
+
+	public int getLikeId() {
+		return likeId;
+	}
+
+	public void setLikeId(int likeId) {
+		this.likeId = likeId;
+	}
+	
 }

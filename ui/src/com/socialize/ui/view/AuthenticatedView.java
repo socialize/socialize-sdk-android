@@ -1,8 +1,6 @@
 package com.socialize.ui.view;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -21,7 +19,6 @@ public abstract class AuthenticatedView extends SocializeView {
 	private String consumerKey;
 	private String consumerSecret;
 	private String fbAppId;
-	private Dialog progress;
 
 	public AuthenticatedView(Context context) {
 		super(context);
@@ -96,14 +93,22 @@ public abstract class AuthenticatedView extends SocializeView {
 	}
 
 	@Override
-	public void onAttachedToWindow() {
-		super.onAttachedToWindow();
+	protected void onViewLoad() {
+		super.onViewLoad();
 		SocializeAuthListener listener = getAuthListener();
 		onBeforeAuthenticate();
 		getSocialize().authenticate(
 				consumerKey, 
 				consumerSecret, 
 				listener);
+	}
+
+	@Override
+	protected void onViewUpdate() {
+		super.onViewUpdate();
+		
+		// Make sure we notify after authenticate
+		onAfterAuthenticate();
 	}
 
 	public void setConsumerKey(String consumerKey) {
@@ -132,25 +137,8 @@ public abstract class AuthenticatedView extends SocializeView {
 
 	// Subclasses override
 	public void onBeforeAuthenticate() {}
+	public void onAfterAuthenticate() {}
 
 	public abstract View getView();
-	
-	// Subclasses override.
-	protected boolean showLoadProgress() {
-		return true;
-	}
 
-	@Override
-	protected void onBeforeSocializeInit() {
-		if(showLoadProgress()) {
-			progress = ProgressDialog.show(getContext(), "Loading Socialize", "Please wait...");
-			progress.setCancelable(true);
-		}
-	}
-
-	public void onAfterAuthenticate() {
-		if(showLoadProgress() && progress != null) {
-			progress.dismiss();
-		}
-	}
 }

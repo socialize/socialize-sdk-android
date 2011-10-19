@@ -119,9 +119,8 @@ public class CommentDetailLayoutView extends BaseView {
 	}
 
 	@Override
-	protected void onAttachedToWindow() {
-		super.onAttachedToWindow();
-
+	protected void onViewLoad() {
+		super.onViewLoad();
 		if(getSocialize().isAuthenticated()) {
 			
 			dialog = progressDialogFactory.show(getContext(), "Loading", "Please wait...");

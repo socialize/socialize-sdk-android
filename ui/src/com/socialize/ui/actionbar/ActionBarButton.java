@@ -23,10 +23,12 @@ package com.socialize.ui.actionbar;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.graphics.drawable.LayerDrawable;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -61,7 +63,7 @@ public class ActionBarButton extends LinearLayout {
 			width = deviceUtils.getDIP(width);
 		}
 		
-		LayoutParams masterParams = new LayoutParams(width,deviceUtils.getDIP(60));
+		LayoutParams masterParams = new LayoutParams(width,deviceUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT));
 		masterParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 		masterParams.weight = weight;
 		
@@ -86,9 +88,13 @@ public class ActionBarButton extends LinearLayout {
 		
 		textView.setLayoutParams(textParams);
 		textView.setPadding(0, 0, 0, 0);
+		textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+		textView.setTypeface(Typeface.DEFAULT_BOLD);
+		textView.setTextColor(Color.WHITE);
 		
 		content.addView(imageView);
 		content.addView(textView);
+		
 		
 		GradientDrawable bottomLeft = new GradientDrawable(Orientation.BOTTOM_TOP, new int[]{Color.BLACK, Color.BLACK});
 		
@@ -112,6 +118,10 @@ public class ActionBarButton extends LinearLayout {
 
 	public void setIcon(Drawable icon) {
 		this.icon = icon;
+		
+		if(imageView != null) {
+			imageView.setImageDrawable(icon);
+		}
 	}
 
 	public void setListener(ActionBarButtonListener listener) {

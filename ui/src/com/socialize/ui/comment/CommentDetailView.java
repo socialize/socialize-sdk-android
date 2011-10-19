@@ -65,5 +65,4 @@ public class CommentDetailView extends EntityView {
 	public void onProfileUpdate() {
 		commentLayoutView.onProfileUpdate();
 	}
-
 }
