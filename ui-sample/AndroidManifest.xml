@@ -20,7 +20,8 @@
         <!-- Required for unit tests -->
         <activity android:name="com.socialize.ui.sample.test.TestActivity"/>
         
-        <activity android:name="com.socialize.ui.sample.ActionBarActivity"/>
+        <activity android:name=".ActionBarAutoActivity"/>
+        <activity android:name=".ActionBarManualActivity"/>
         
         <!-- Base Activities Required by Socialize UI -->
         <activity android:name="com.socialize.auth.facebook.FacebookActivity"/>

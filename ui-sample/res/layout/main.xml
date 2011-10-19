@@ -52,9 +52,15 @@
     	android:layout_height="wrap_content"/>	
     	
     <Button 
-    	android:id="@+id/btnActionView"
-    	android:text="Show Action Bar"
+    	android:id="@+id/btnActionViewAuto"
+    	android:text="Show Action Bar (auto)"
     	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"/>	        
+    	android:layout_height="wrap_content"/>	
+    	
+    <Button 
+    	android:id="@+id/btnActionViewManual"
+    	android:text="Show Action Bar (manual)"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"/>        
     	
 </LinearLayout>

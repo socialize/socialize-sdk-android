@@ -29,7 +29,8 @@ public class SampleActivity extends SocializeActivity {
 		final CheckBox chkMockFB = (CheckBox) findViewById(R.id.chkMockFB);
 		final Button btn = (Button) findViewById(R.id.btnCommentView);
 		final Button btnClearCache = (Button) findViewById(R.id.btnClearCache);
-		final Button btnActionView = (Button) findViewById(R.id.btnActionView);
+		final Button btnActionViewAuto = (Button) findViewById(R.id.btnActionViewAuto);
+		final Button btnActionViewManual = (Button) findViewById(R.id.btnActionViewManual);
 		
 		btn.setOnClickListener(new OnClickListener() {
 			@Override
@@ -70,11 +71,16 @@ public class SampleActivity extends SocializeActivity {
 			}
 		});
 		
-		btnActionView.setOnClickListener(new OnClickListener() {
-			
+		btnActionViewAuto.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(SampleActivity.this, ActionBarActivity.class));
+				startActivity(new Intent(SampleActivity.this, ActionBarAutoActivity.class));
+			}
+		});
+		btnActionViewManual.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(SampleActivity.this, ActionBarManualActivity.class));
 			}
 		});
 		
