@@ -23,93 +23,65 @@ package com.socialize.ui.actionbar;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.graphics.drawable.LayerDrawable;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.util.DeviceUtils;
 
 /**
  * @author Jason Polites
- *
+ * 
  */
 public class ActionBarButton extends LinearLayout {
 
 	private Drawable icon;
+	private String text;
+
 	private ActionBarButtonListener listener;
 	private Drawable background;
-	private TextView textView;
-	private ImageView imageView;
 	private DeviceUtils deviceUtils;
-	
+	private ActionBarItem actionBarItem;
+
+	private IBeanFactory<ActionBarItem> actionBarItemFactory;
+
 	public ActionBarButton(Context context) {
 		super(context);
 	}
-	
-	public void init(Context context, int width, float weight) {
-		
-		textView = new TextView(context);
-		imageView = new ImageView(context);
-		
-		if(width > 0) {
+
+	public void init(int width, float weight) {
+
+		if (width > 0) {
 			width = deviceUtils.getDIP(width);
 		}
-		
-		int leftPadding = deviceUtils.getDIP(5);
-		int rightPadding = deviceUtils.getDIP(2);
-		
-		LayoutParams masterParams = new LayoutParams(width,deviceUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT));
+
+		LayoutParams masterParams = new LayoutParams(width, deviceUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT));
 		masterParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 		masterParams.weight = weight;
-		
+
 		setLayoutParams(masterParams);
-		
-		LinearLayout content = new LinearLayout(context);
-		
-		LayoutParams contentParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		contentParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
-		
-		content.setLayoutParams(contentParams);
-		
-		LayoutParams iconParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		iconParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
-		
-		LayoutParams textParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		textParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
-		
-		imageView.setImageDrawable(icon);
-		imageView.setLayoutParams(iconParams);
-		imageView.setPadding(leftPadding, 0, rightPadding, 0);
-		
-		textView.setLayoutParams(textParams);
-		textView.setPadding(0, 0, 0, 0);
-		textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-		textView.setTypeface(Typeface.DEFAULT_BOLD);
-		textView.setTextColor(Color.WHITE);
-		
-		content.addView(imageView);
-		content.addView(textView);
-		
-		
-		GradientDrawable bottomLeft = new GradientDrawable(Orientation.BOTTOM_TOP, new int[]{Color.BLACK, Color.BLACK});
-		
-		LayerDrawable bg = new LayerDrawable(new Drawable[] {bottomLeft, background});
-		
+
+		actionBarItem = actionBarItemFactory.getBean();
+		actionBarItem.setIcon(icon);
+		actionBarItem.setText(text);
+		actionBarItem.init();
+
+		GradientDrawable bottomLeft = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Color.BLACK, Color.BLACK });
+
+		LayerDrawable bg = new LayerDrawable(new Drawable[] { bottomLeft, background });
+
 		bg.setLayerInset(1, 1, 0, 0, 1);
-		
+
 		setBackgroundDrawable(bg);
-		
-		addView(content);
-		
-		if(listener != null) {
+
+		addView(actionBarItem);
+
+		if (listener != null) {
 			setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -121,9 +93,9 @@ public class ActionBarButton extends LinearLayout {
 
 	public void setIcon(Drawable icon) {
 		this.icon = icon;
-		
-		if(imageView != null) {
-			imageView.setImageDrawable(icon);
+
+		if (actionBarItem != null) {
+			actionBarItem.setIcon(icon);
 		}
 	}
 
@@ -134,16 +106,24 @@ public class ActionBarButton extends LinearLayout {
 	public void setBackground(Drawable background) {
 		this.background = background;
 	}
-	
+
 	public void setText(String text) {
-		if(this.textView != null) {
-			this.textView.setText(text);
+		this.text = text;
+
+		if (this.actionBarItem != null) {
+			this.actionBarItem.setText(text);
 		}
 	}
 
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
 		this.deviceUtils = deviceUtils;
 	}
-	
-	
+
+	public View getActionBarItem() {
+		return actionBarItem;
+	}
+
+	public void setActionBarItemFactory(IBeanFactory<ActionBarItem> itemFactory) {
+		this.actionBarItemFactory = itemFactory;
+	}
 }

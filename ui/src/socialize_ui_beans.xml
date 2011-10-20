@@ -542,6 +542,8 @@
 		<property name="entityCache" ref="entityCache"/>
 		<property name="logger" ref="logger"/>
 		<property name="buttonFactory" ref="actionBarButtonFactory"/>
+		<property name="tickerFactory" ref="actionBarTickerFactory"/>
+		<property name="itemFactory" ref="actionBarItemFactory"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
 	</bean>
 	
@@ -551,9 +553,29 @@
 		singleton="false">
 		<constructor-arg type="activity"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="actionBarItemFactory" ref="actionBarItemFactory"/>
+	</bean>
+	
+	<bean 
+		id="actionBarItem" 
+		class="com.socialize.ui.actionbar.ActionBarItem"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+	</bean>
+	
+	<bean 
+		id="actionBarTicker" 
+		class="com.socialize.ui.actionbar.ActionBarTicker"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="drawables" ref="drawables"/>
 	</bean>
 	
 	<factory id="actionBarButtonFactory" makes="actionBarButton"/>
+	<factory id="actionBarItemFactory" makes="actionBarItem"/>
+	<factory id="actionBarTickerFactory" makes="actionBarTicker"/>
 	
 <!-- End Action Bar UI -->
 	

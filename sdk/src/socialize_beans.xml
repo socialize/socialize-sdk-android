@@ -90,6 +90,7 @@
 		<constructor-arg type="activity"/>
 		<property name="classLoaderProvider" ref="classLoaderProvider"/>
 		<property name="cache" ref="cache"/>
+		<property name="logger" ref="logger"/>
 		<property name="bitmapUtils" ref="bitmapUtils"/>
 	</bean>
 	

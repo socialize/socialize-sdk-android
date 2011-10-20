@@ -22,7 +22,6 @@
 package com.socialize.ui.actionbar;
 
 import android.app.Activity;
-//import android.app.ProgressDialog;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 
@@ -57,7 +56,11 @@ public class ActionBarLayoutView extends BaseView {
 	private String entityKey;
 	private ActionBarButton commentButton;
 	private ActionBarButton likeButton;
-	private ActionBarButton viewButton;
+	private ActionBarTicker ticker;
+	
+	private ActionBarItem viewsItem;
+	private ActionBarItem commentsItem;
+	private ActionBarItem likesItem;
 	
 	private Drawables drawables;
 	private EntityCache entityCache;
@@ -67,6 +70,8 @@ public class ActionBarLayoutView extends BaseView {
 	private Drawable likeIconHi;
 	
 	private IBeanFactory<ActionBarButton> buttonFactory;
+	private IBeanFactory<ActionBarTicker> tickerFactory;
+	private IBeanFactory<ActionBarItem> itemFactory;
 	
 	private ProgressDialogFactory progressDialogFactory;
 	private CacheableEntity localEntity;
@@ -82,20 +87,33 @@ public class ActionBarLayoutView extends BaseView {
 		if(logger != null && logger.isInfoEnabled()) {
 			logger.info("init called on " + getClass().getSimpleName());
 		}
-
-		Drawable commentIcon = drawables.getDrawable("icon_comment.png");
+		
 		likeIcon = drawables.getDrawable("icon_like.png");
 		likeIconHi = drawables.getDrawable("icon_like_hi.png");
-		Drawable viewIcon = drawables.getDrawable("icon_view.png");
-		Drawable commentBg = drawables.getDrawable("action_bar_button_hi.png", true, false, true);
-		Drawable viewBg = drawables.getDrawable("action_bar_button.png", true, false, true);
+
+		Drawable commentIcon = drawables.getDrawable("icon_comment.png");
+//		Drawable viewIcon = drawables.getDrawable("icon_view.png");
+		Drawable commentBg = drawables.getDrawable("action_bar_button_hi66.png", true, false, true);
+		Drawable viewBg = drawables.getDrawable("action_bar_button66.png", true, false, true);
 		
-		viewButton = buttonFactory.getBean();
+		ticker = tickerFactory.getBean();
+		
+		viewsItem = itemFactory.getBean();
+		commentsItem = itemFactory.getBean();
+		likesItem  = itemFactory.getBean();
+		
+//		viewsItem.setIcon(viewIcon);
+//		commentsItem.setIcon(commentIcon);
+//		likesItem.setIcon(likeIcon);
+		
+		ticker.setBackgroundDrawable(viewBg);
+		
+		ticker.addTickerView(viewsItem);
+		ticker.addTickerView(commentsItem);
+		ticker.addTickerView(likesItem);
+		
 		likeButton = buttonFactory.getBean();
 		commentButton = buttonFactory.getBean();
-		
-		viewButton.setIcon(viewIcon);
-		viewButton.setBackground(viewBg);
 		
 		commentButton.setIcon(commentIcon);
 		commentButton.setBackground(commentBg);
@@ -123,18 +141,25 @@ public class ActionBarLayoutView extends BaseView {
 		
 		int width = deviceUtils.getDIP(ActionBarView.ACTION_BAR_BUTTON_WIDTH);
 		
-		int likeWidth = width - deviceUtils.getDIP(5);
-		int commentWidth = width + deviceUtils.getDIP(5);
+		int likeWidth = width - deviceUtils.getDIP(10);
+		int commentWidth = width + deviceUtils.getDIP(3);
 		
-		viewButton.init(context, LayoutParams.FILL_PARENT, 1.0f);
-		likeButton.init(context, likeWidth, 0.0f);
-		commentButton.init(context, commentWidth, 0.0f);
+		viewsItem.init();
+		commentsItem.init();
+		likesItem.init();
 		
-		viewButton.setText("--");
+		ticker.init(LayoutParams.FILL_PARENT, 1.0f);
+		likeButton.init(likeWidth, 0.0f);
+		commentButton.init(commentWidth, 0.0f);
+		
+		viewsItem.setText("--");
+		commentsItem.setText("--");
+		likesItem.setText("--");
+		
 		likeButton.setText("--");
 		commentButton.setText("Comment");
 		
-		addView(viewButton);
+		addView(ticker);
 		addView(likeButton);
 		addView(commentButton);
 	}
@@ -142,6 +167,8 @@ public class ActionBarLayoutView extends BaseView {
 	@Override
 	protected void onViewLoad() {
 		super.onViewLoad();
+		
+		ticker.startTicker();
 		
 		if(logger != null && logger.isInfoEnabled()) {
 			logger.info("onViewLoad called on " + getClass().getSimpleName());
@@ -171,13 +198,18 @@ public class ActionBarLayoutView extends BaseView {
 	
 	@Override
 	protected void onViewUpdate() {
+		super.onViewUpdate();
+		
 		if(logger != null && logger.isInfoEnabled()) {
 			logger.info("onViewUpdate called on " + getClass().getSimpleName());
 		}
 		
-		super.onViewUpdate();
+		ticker.resetTicker();
 		
-		viewButton.setText("--");
+		viewsItem.setText("--");
+		commentsItem.setText("--");
+		likesItem.setText("--");
+		
 		likeButton.setText("--");
 		
 		getEntityData();
@@ -268,8 +300,12 @@ public class ActionBarLayoutView extends BaseView {
 	
 	protected void setEntityData(CacheableEntity ce) {
 		this.localEntity = ce;
+		
 		Entity entity = ce.getEntity();
-		viewButton.setText(entity.getViews().toString());
+		
+		viewsItem.setText(getCountText(entity.getViews(), "View"));
+		commentsItem.setText(getCountText(entity.getComments(), "Comment"));
+		likesItem.setText(getCountText(entity.getLikes(), "Like"));
 		
 		if(ce.isLiked()) {
 			likeButton.setText("Unlike");
@@ -279,6 +315,25 @@ public class ActionBarLayoutView extends BaseView {
 			likeButton.setText("Like");
 			likeButton.setIcon(likeIcon);
 		}
+	}
+	
+	protected String getCountText(Integer value, String type) {
+		String viewText = "";
+		
+		int iVal = value.intValue();
+		
+		if(iVal != 1) {
+			type += "s";
+		}
+		
+		if(iVal > 999) {
+			viewText = "999+";
+		}
+		else {
+			viewText = value.toString();
+		}
+		viewText += " " + type;
+		return viewText;
 	}
 	
 	protected void logError(String msg, Exception error) {
@@ -307,10 +362,6 @@ public class ActionBarLayoutView extends BaseView {
 		this.likeButton = likeButton;
 	}
 
-	public void setViewButton(ActionBarButton viewButton) {
-		this.viewButton = viewButton;
-	}
-
 	public String getEntityKey() {
 		return entityKey;
 	}
@@ -321,10 +372,6 @@ public class ActionBarLayoutView extends BaseView {
 
 	public ActionBarButton getLikeButton() {
 		return likeButton;
-	}
-
-	public ActionBarButton getViewButton() {
-		return viewButton;
 	}
 
 	public void setDrawables(Drawables drawables) {
@@ -353,5 +400,13 @@ public class ActionBarLayoutView extends BaseView {
 
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
 		this.deviceUtils = deviceUtils;
+	}
+
+	public void setTickerFactory(IBeanFactory<ActionBarTicker> tickerFactory) {
+		this.tickerFactory = tickerFactory;
+	}
+
+	public void setItemFactory(IBeanFactory<ActionBarItem> itemFactory) {
+		this.itemFactory = itemFactory;
 	}
 }

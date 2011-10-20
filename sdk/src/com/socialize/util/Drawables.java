@@ -24,6 +24,8 @@ package com.socialize.util;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.socialize.log.SocializeLogger;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Shader;
@@ -40,6 +42,7 @@ public class Drawables {
 	private ClassLoaderProvider classLoaderProvider;
 	private DrawableCache cache;
 	private BitmapUtils bitmapUtils;
+	private SocializeLogger logger;
 	
 	public Drawables() {
 		super();
@@ -134,6 +137,13 @@ public class Drawables {
 			in = loader.getResourceAsStream(path);
 			
 			if(in == null) {
+				
+				if(logger != null && logger.isInfoEnabled()) {
+					logger.info("No drawable found in path [" +
+							path +
+							"].  Trying common path");
+				}
+				
 				// try default
 				path = commonPath;
 				in = loader.getResourceAsStream(path);
@@ -142,6 +152,13 @@ public class Drawables {
 			if(in != null) {
 				drawable = createDrawable(in, path, tileX, tileY, scaleToWidth, scaleToHeight);
 				addToCache(path, drawable, eternal);
+			}
+			else {
+				if(logger != null && logger.isWarnEnabled()) {
+					logger.warn("No drawable found in path [" +
+							path +
+							"], returning null");
+				}
 			}
 			
 			return drawable;
@@ -180,6 +197,10 @@ public class Drawables {
 	
 	public void setMetrics(DisplayMetrics metrics) {
 		this.metrics = metrics;
+	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
 	}
 
 	protected String getPath(String name) {
