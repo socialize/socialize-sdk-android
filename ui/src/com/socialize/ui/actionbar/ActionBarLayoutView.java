@@ -56,11 +56,13 @@ public class ActionBarLayoutView extends BaseView {
 	private String entityKey;
 	private ActionBarButton commentButton;
 	private ActionBarButton likeButton;
+	private ActionBarButton shareButton;
 	private ActionBarTicker ticker;
 	
 	private ActionBarItem viewsItem;
 	private ActionBarItem commentsItem;
 	private ActionBarItem likesItem;
+	private ActionBarItem sharesItem;
 	
 	private Drawables drawables;
 	private EntityCache entityCache;
@@ -92,31 +94,39 @@ public class ActionBarLayoutView extends BaseView {
 		likeIconHi = drawables.getDrawable("icon_like_hi.png");
 
 		Drawable commentIcon = drawables.getDrawable("icon_comment.png");
-//		Drawable viewIcon = drawables.getDrawable("icon_view.png");
-		Drawable commentBg = drawables.getDrawable("action_bar_button_hi66.png", true, false, true);
-		Drawable viewBg = drawables.getDrawable("action_bar_button66.png", true, false, true);
+		Drawable viewIcon = drawables.getDrawable("icon_view.png");
+		Drawable shareIcon = drawables.getDrawable("icon_share.png");
+		Drawable commentBg = drawables.getDrawable("action_bar_button_hi.png", true, false, true);
 		
 		ticker = tickerFactory.getBean();
 		
 		viewsItem = itemFactory.getBean();
 		commentsItem = itemFactory.getBean();
-		likesItem  = itemFactory.getBean();
+		likesItem = itemFactory.getBean();
+		sharesItem = itemFactory.getBean();
 		
-//		viewsItem.setIcon(viewIcon);
-//		commentsItem.setIcon(commentIcon);
-//		likesItem.setIcon(likeIcon);
-		
-		ticker.setBackgroundDrawable(viewBg);
+		viewsItem.setIcon(viewIcon);
+		commentsItem.setIcon(commentIcon);
+		likesItem.setIcon(likeIcon);
+		sharesItem.setIcon(shareIcon);
 		
 		ticker.addTickerView(viewsItem);
 		ticker.addTickerView(commentsItem);
 		ticker.addTickerView(likesItem);
+		ticker.addTickerView(sharesItem);
 		
 		likeButton = buttonFactory.getBean();
 		commentButton = buttonFactory.getBean();
+		shareButton = buttonFactory.getBean();
 		
 		commentButton.setIcon(commentIcon);
 		commentButton.setBackground(commentBg);
+		
+		likeButton.setIcon(likeIcon);
+		likeButton.setBackground(commentBg);
+		
+		shareButton.setIcon(shareIcon);
+		shareButton.setBackground(commentBg);
 		
 		commentButton.setListener(new ActionBarButtonListener() {
 			@Override
@@ -131,9 +141,7 @@ public class ActionBarLayoutView extends BaseView {
 				postLike();
 			}
 		});
-		
-		likeButton.setIcon(likeIcon);
-		likeButton.setBackground(commentBg);
+
 		
 		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, deviceUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT));
 		masterParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
@@ -143,24 +151,30 @@ public class ActionBarLayoutView extends BaseView {
 		
 		int likeWidth = width - deviceUtils.getDIP(10);
 		int commentWidth = width + deviceUtils.getDIP(3);
+		int shareWidth = width - deviceUtils.getDIP(10);
 		
 		viewsItem.init();
 		commentsItem.init();
 		likesItem.init();
+		sharesItem.init();
 		
 		ticker.init(LayoutParams.FILL_PARENT, 1.0f);
 		likeButton.init(likeWidth, 0.0f);
 		commentButton.init(commentWidth, 0.0f);
+		shareButton.init(shareWidth, 0.0f);
 		
 		viewsItem.setText("--");
 		commentsItem.setText("--");
 		likesItem.setText("--");
+		sharesItem.setText("--");
 		
 		likeButton.setText("--");
+		shareButton.setText("Share");
 		commentButton.setText("Comment");
 		
 		addView(ticker);
 		addView(likeButton);
+		addView(shareButton);
 		addView(commentButton);
 	}
 	
@@ -209,6 +223,7 @@ public class ActionBarLayoutView extends BaseView {
 		viewsItem.setText("--");
 		commentsItem.setText("--");
 		likesItem.setText("--");
+		sharesItem.setText("--");
 		
 		likeButton.setText("--");
 		
@@ -306,6 +321,7 @@ public class ActionBarLayoutView extends BaseView {
 		viewsItem.setText(getCountText(entity.getViews(), "View"));
 		commentsItem.setText(getCountText(entity.getComments(), "Comment"));
 		likesItem.setText(getCountText(entity.getLikes(), "Like"));
+		sharesItem.setText(getCountText(entity.getShares(), "Share"));
 		
 		if(ce.isLiked()) {
 			likeButton.setText("Unlike");
@@ -332,7 +348,7 @@ public class ActionBarLayoutView extends BaseView {
 		else {
 			viewText = value.toString();
 		}
-		viewText += " " + type;
+//		viewText += " " + type;
 		return viewText;
 	}
 	
