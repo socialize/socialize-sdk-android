@@ -241,6 +241,11 @@ public class CommentListView extends BaseView {
 
 	protected void getNextSet() {
 		
+		
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.info("getNextSet called on CommentListView");
+		}
+		
 		loading = true; // Prevent continuous load
 
 		startIndex+=defaultGrabLength;
@@ -251,7 +256,7 @@ public class CommentListView extends BaseView {
 
 			if(startIndex >= endIndex) {
 				commentAdapter.setLast(true);
-				commentAdapter.notifyDataSetChanged();
+//				commentAdapter.notifyDataSetChanged();
 				loading = false;
 				return;
 			}

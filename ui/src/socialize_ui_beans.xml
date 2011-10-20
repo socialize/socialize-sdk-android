@@ -378,6 +378,7 @@
 		
 		<property name="commentAdapter" ref="commentAdapter"/>
 		<property name="drawables" ref="drawables"/>
+		<property name="logger" ref="logger"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
 		<property name="commentHeaderFactory" ref="commentHeaderFactory"/>
 		<property name="commentEditFieldFactory" ref="commentEditFieldFactory"/>
@@ -532,10 +533,7 @@
 		singleton="false">
 		
 		<constructor-arg type="activity"/>
-		
-		<init-method name="init">
-			<arg type="activity"/>
-		</init-method>
+		<init-method name="init"/>
 		
 		<property name="drawables" ref="drawables"/>
 		<property name="deviceUtils" ref="deviceUtils"/>

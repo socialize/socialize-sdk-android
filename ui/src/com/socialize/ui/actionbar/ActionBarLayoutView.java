@@ -84,7 +84,7 @@ public class ActionBarLayoutView extends BaseView {
 		this.entityKey = entityKey;
 	}
 	
-	public void init(final Activity context) {
+	public void init() {
 		
 		if(logger != null && logger.isInfoEnabled()) {
 			logger.info("init called on " + getClass().getSimpleName());
@@ -131,7 +131,7 @@ public class ActionBarLayoutView extends BaseView {
 		commentButton.setListener(new ActionBarButtonListener() {
 			@Override
 			public void onClick(ActionBarButton button) {
-				SocializeUI.getInstance().showCommentView(context, entityKey);
+				SocializeUI.getInstance().showCommentView(getActivity(), entityKey);
 			}
 		});
 		

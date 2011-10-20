@@ -83,8 +83,9 @@ public class CommentAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int position) {
-		Comment item = (Comment) getItem(position);
-		return (item == null) ? -1 : item.getId();
+		return position;
+//		Comment item = (Comment) getItem(position);
+//		return (item == null) ? -1 : item.getId();
 	}
 	
 	@Override
@@ -332,6 +333,13 @@ public class CommentAdapter extends BaseAdapter {
         }
         
 		return view;
+	}
+	
+	
+
+	@Override
+	public void notifyDataSetChanged() {
+		super.notifyDataSetChanged();
 	}
 
 	public void setCommentItemViewFactory(IBeanFactory<CommentListItem> commentItemViewFactory) {

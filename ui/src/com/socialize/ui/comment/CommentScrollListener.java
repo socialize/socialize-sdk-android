@@ -42,7 +42,7 @@ public class CommentScrollListener implements OnScrollListener {
 	 */
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-		//what is the bottom item that is visible
+		// what is the bottom item that is visible
 		int lastInScreen = firstVisibleItem + visibleItemCount;
 
 		boolean last = (lastInScreen == totalItemCount);

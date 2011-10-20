@@ -107,7 +107,7 @@ public class FacebookAuthProvider implements AuthProvider {
 	}
 	
 	protected Facebook getFacebook(String appId) {
-		return new Facebook(appId, null);
+		return new Facebook(appId);
 	}
 
 	public SocializeLogger getLogger() {

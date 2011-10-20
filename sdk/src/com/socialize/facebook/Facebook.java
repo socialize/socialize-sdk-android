@@ -20,8 +20,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-import com.socialize.util.Drawables;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -75,11 +73,6 @@ public class Facebook {
 	private String[] mAuthPermissions;
 	private int mAuthActivityCode;
 	private DialogListener mAuthDialogListener;
-	private Drawables drawables;
-	
-	public Facebook() {
-		super();
-	}
 
 	/**
 	 * Constructor for Facebook object.
@@ -88,12 +81,11 @@ public class Facebook {
 	 *            Your Facebook application ID. Found at
 	 *            www.facebook.com/developers/apps.php.
 	 */
-	public Facebook(String appId, Drawables drawables) {
+	public Facebook(String appId) {
 		if (appId == null) {
 			throw new IllegalArgumentException("You must specify your application ID when instantiating " + "a Facebook object. See README for details.");
 		}
 		mAppId = appId;
-		this.drawables = drawables;
 	}
 
 	/**
@@ -358,6 +350,10 @@ public class Facebook {
 						mAuthDialogListener.onCancel();
 					}
 					else {
+						String description = data.getStringExtra("error_description");
+						if (description != null) {
+							error = error + ":" + description;
+						}
 						Log.d("Facebook-authorize", "Login failed: " + error);
 						mAuthDialogListener.onFacebookError(new FacebookError(error));
 					}
@@ -594,7 +590,7 @@ public class Facebook {
 			Util.showAlert(context, "Error", "Application requires permission to access the Internet");
 		}
 		else {
-			new FbDialog(context, url, listener, drawables).show();
+			new FbDialog(context, url, listener).show();
 		}
 	}
 

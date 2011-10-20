@@ -16,29 +16,28 @@
 
 package com.socialize.facebook;
 
+import android.R;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.socialize.facebook.Facebook.DialogListener;
-import com.socialize.util.Drawables;
 
 public class FbDialog extends Dialog {
 
@@ -54,16 +53,14 @@ public class FbDialog extends Dialog {
 	private String mUrl;
 	private DialogListener mListener;
 	private ProgressDialog mSpinner;
+	private ImageView mCrossImage;
 	private WebView mWebView;
-	private LinearLayout mContent;
-	private TextView mTitle;
-	private Drawables drawables;
+	private FrameLayout mContent;
 
-	public FbDialog(Context context, String url, DialogListener listener, Drawables drawables) {
-		super(context);
+	public FbDialog(Context context, String url, DialogListener listener) {
+		super(context, android.R.style.Theme_Translucent_NoTitleBar);
 		mUrl = url;
 		mListener = listener;
-		this.drawables = drawables;
 	}
 
 	@Override
@@ -73,39 +70,52 @@ public class FbDialog extends Dialog {
 		mSpinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		mSpinner.setMessage("Loading...");
 
-		mContent = new LinearLayout(getContext());
-		mContent.setOrientation(LinearLayout.VERTICAL);
-		setUpTitle();
-		setUpWebView();
-		Display display = getWindow().getWindowManager().getDefaultDisplay();
-		final float scale = getContext().getResources().getDisplayMetrics().density;
-		int orientation = getContext().getResources().getConfiguration().orientation;
-		float[] dimensions = (orientation == Configuration.ORIENTATION_LANDSCAPE) ? DIMENSIONS_DIFF_LANDSCAPE : DIMENSIONS_DIFF_PORTRAIT;
-		addContentView(mContent, new LinearLayout.LayoutParams(display.getWidth() - ((int) (dimensions[0] * scale + 0.5f)), display.getHeight() - ((int) (dimensions[1] * scale + 0.5f))));
-	}
-
-	private void setUpTitle() {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		mContent = new FrameLayout(getContext());
 
-		//		Drawable icon = getContext().getResources().getDrawable(R.drawable.facebook_icon);
+		/*
+		 * Create the 'x' image, but don't add to the mContent layout yet at
+		 * this point, we only need to know its drawable width and height to
+		 * place the webview
+		 */
+		createCrossImage();
 
-		mTitle = new TextView(getContext());
-		mTitle.setText("Facebook");
-		mTitle.setTextColor(Color.WHITE);
-		mTitle.setTypeface(Typeface.DEFAULT_BOLD);
-		mTitle.setBackgroundColor(FB_BLUE);
-		mTitle.setPadding(MARGIN + PADDING, MARGIN, MARGIN, MARGIN);
-		mTitle.setCompoundDrawablePadding(MARGIN + PADDING);
+		/*
+		 * Now we know 'x' drawable width and height, layout the webivew and add
+		 * it the mContent layout
+		 */
+		int crossWidth = mCrossImage.getDrawable().getIntrinsicWidth();
+		setUpWebView(crossWidth / 2);
 
-		if(drawables != null) {
-			Drawable icon = drawables.getDrawable("facebook_icon.png", true);
-			mTitle.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
-		}
-
-		mContent.addView(mTitle);
+		/*
+		 * Finally add the 'x' image to the mContent layout and add mContent to
+		 * the Dialog view
+		 */
+		mContent.addView(mCrossImage, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		addContentView(mContent, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 	}
 
-	private void setUpWebView() {
+	private void createCrossImage() {
+		mCrossImage = new ImageView(getContext());
+		// Dismiss the dialog when user click on the 'x'
+		mCrossImage.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mListener.onCancel();
+				FbDialog.this.dismiss();
+			}
+		});
+//		Drawable crossDrawable = getContext().getResources().getDrawable(R.drawable.close);
+//		mCrossImage.setImageDrawable(crossDrawable);
+		/*
+		 * 'x' should not be visible while webview is loading make it visible
+		 * only after webview has fully loaded
+		 */
+		mCrossImage.setVisibility(View.INVISIBLE);
+	}
+
+	private void setUpWebView(int margin) {
+		LinearLayout webViewContainer = new LinearLayout(getContext());
 		mWebView = new WebView(getContext());
 		mWebView.setVerticalScrollBarEnabled(false);
 		mWebView.setHorizontalScrollBarEnabled(false);
@@ -113,7 +123,11 @@ public class FbDialog extends Dialog {
 		mWebView.getSettings().setJavaScriptEnabled(true);
 		mWebView.loadUrl(mUrl);
 		mWebView.setLayoutParams(FILL);
-		mContent.addView(mWebView);
+		mWebView.setVisibility(View.INVISIBLE);
+
+		webViewContainer.setPadding(margin, margin, margin, margin);
+		webViewContainer.addView(mWebView);
+		mContent.addView(webViewContainer);
 	}
 
 	private class FbWebViewClient extends WebViewClient {
@@ -172,15 +186,14 @@ public class FbDialog extends Dialog {
 		@Override
 		public void onPageFinished(WebView view, String url) {
 			super.onPageFinished(view, url);
-			String title = mWebView.getTitle();
-			if (title != null && title.length() > 0) {
-				mTitle.setText(title);
-			}
-			try {
-				mSpinner.dismiss();
-			}
-			catch (Exception ignore) {}
+			mSpinner.dismiss();
+			/*
+			 * Once webview is fully loaded, set the mContent background to be
+			 * transparent and make visible the 'x' image.
+			 */
+			mContent.setBackgroundColor(Color.TRANSPARENT);
+			mWebView.setVisibility(View.VISIBLE);
+			mCrossImage.setVisibility(View.VISIBLE);
 		}
-
 	}
 }
