@@ -55,10 +55,10 @@ public class ActionBarItem extends LinearLayout {
 		imageView = new ImageView(getContext());
 		textView = new TextView(getContext());
 		
-		int leftPadding = deviceUtils.getDIP(5);
-		int rightPadding = deviceUtils.getDIP(2);
+		int leftPadding = deviceUtils.getDIP(3);
+		int rightPadding = deviceUtils.getDIP(1);
 		
-		LayoutParams masterParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		masterParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 				
 		setLayoutParams(masterParams);

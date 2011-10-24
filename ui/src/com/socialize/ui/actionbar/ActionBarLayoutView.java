@@ -147,11 +147,11 @@ public class ActionBarLayoutView extends BaseView {
 		masterParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
 		setLayoutParams(masterParams);
 		
-		int width = deviceUtils.getDIP(ActionBarView.ACTION_BAR_BUTTON_WIDTH);
+		int width = 80;//deviceUtils.getDIP(ActionBarView.ACTION_BAR_BUTTON_WIDTH);
 		
-		int likeWidth = width - deviceUtils.getDIP(10);
-		int commentWidth = width + deviceUtils.getDIP(3);
-		int shareWidth = width - deviceUtils.getDIP(10);
+		int likeWidth = width-5;
+		int commentWidth = width + 15;
+		int shareWidth = width- 5;
 		
 		viewsItem.init();
 		commentsItem.init();
@@ -349,6 +349,7 @@ public class ActionBarLayoutView extends BaseView {
 			viewText = value.toString();
 		}
 //		viewText += " " + type;
+		viewText="999+";
 		return viewText;
 	}
 	
