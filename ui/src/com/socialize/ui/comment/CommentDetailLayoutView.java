@@ -196,9 +196,9 @@ public class CommentDetailLayoutView extends BaseView {
 		if(!StringUtils.isEmpty(profilePicData)) {
 			userIcon.getBackground().setAlpha(64);
 			
-			imageLoader.loadImage(profilePicData, new ImageLoadListener() {
+			imageLoader.loadImage(user.getId(), profilePicData, new ImageLoadListener() {
 				@Override
-				public void onImageLoadFail(Exception error) {
+				public void onImageLoadFail(ImageLoadRequest request, Exception error) {
 					error.printStackTrace();
 					userIcon.post(new Runnable() {
 						public void run() {
@@ -209,7 +209,7 @@ public class CommentDetailLayoutView extends BaseView {
 				}
 				
 				@Override
-				public void onImageLoad(ImageLoadRequest request, final SafeBitmapDrawable drawable) {
+				public void onImageLoad(ImageLoadRequest request, final SafeBitmapDrawable drawable, boolean async) {
 					// Must be run on UI thread
 					userIcon.post(new Runnable() {
 						public void run() {

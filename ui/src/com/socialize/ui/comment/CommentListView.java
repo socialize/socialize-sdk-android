@@ -215,7 +215,7 @@ public class CommentListView extends BaseView {
 						commentAdapter.setLast(true);
 					}
 
-					commentAdapter.notifyDataSetChanged();
+//					commentAdapter.notifyDataSetChanged();
 					
 					content.showList();
 

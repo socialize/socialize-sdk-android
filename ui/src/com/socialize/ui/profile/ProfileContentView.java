@@ -28,12 +28,12 @@ import android.graphics.drawable.LayerDrawable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.socialize.Socialize;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
+import com.socialize.ui.BaseView;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.button.SocializeButton;
 import com.socialize.util.Drawables;
@@ -44,7 +44,7 @@ import com.socialize.util.StringUtils;
  * @author Jason Polites
  *
  */
-public class ProfileContentView extends LinearLayout {
+public class ProfileContentView extends BaseView {
 
 	private ImageView profilePicture;
 	private TextView displayName;
@@ -193,27 +193,29 @@ public class ProfileContentView extends LinearLayout {
 	 * Called when this control is instructed to enter "edit" mode.
 	 */
 	public void onEdit() {
-		displayName.setVisibility(View.GONE);
-		editButton.setVisibility(View.GONE);
-		facebookSignOutButton.setVisibility(View.GONE);
-		
-		displayNameEdit.setVisibility(View.VISIBLE);
-		saveButton.setVisibility(View.VISIBLE);
-		cancelButton.setVisibility(View.VISIBLE);
-		
-		displayNameEdit.selectAll();
-		
-		Drawable[] layers = new Drawable[2];
-		layers[0] = profileDrawable;
-		layers[1] = drawables.getDrawable("camera.png");
-		
-		layers[0].setAlpha(64);
-		
-		LayerDrawable layerDrawable = new LayerDrawable(layers);
-		profilePicture.setImageDrawable(layerDrawable);
-		profilePicture.getBackground().setAlpha(0);
-		
-		editMode = true;
+		if(profileDrawable != null) {
+			displayName.setVisibility(View.GONE);
+			editButton.setVisibility(View.GONE);
+			facebookSignOutButton.setVisibility(View.GONE);
+			
+			displayNameEdit.setVisibility(View.VISIBLE);
+			saveButton.setVisibility(View.VISIBLE);
+			cancelButton.setVisibility(View.VISIBLE);
+			
+			displayNameEdit.selectAll();
+			
+			Drawable[] layers = new Drawable[2];
+			layers[0] = profileDrawable;
+			layers[1] = drawables.getDrawable("camera.png");
+			
+			layers[0].setAlpha(64);
+			
+			LayerDrawable layerDrawable = new LayerDrawable(layers);
+			profilePicture.setImageDrawable(layerDrawable);
+			profilePicture.getBackground().setAlpha(0);
+			
+			editMode = true;
+		}
 	}
 	
 	public void onCancel() {

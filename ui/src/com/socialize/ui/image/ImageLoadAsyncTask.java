@@ -39,7 +39,7 @@ import com.socialize.util.SafeBitmapDrawable;
 public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 
 	private Queue<ImageLoadRequest> requests;
-	private Map<Object, ImageLoadRequest> requestsInProcess;
+	private Map<String, ImageLoadRequest> requestsInProcess;
 	private boolean running = false;
 
 	private SocializeLogger logger;
@@ -119,9 +119,9 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 		return imageUrlLoader.loadImageFromUrl(url);
 	}
 
-	public void cancel(Object id) {
+	public void cancel(String url) {
 		if(requestsInProcess != null) {
-			ImageLoadRequest request = requestsInProcess.get(id);
+			ImageLoadRequest request = requestsInProcess.get(url);
 			if(request != null) {
 				request.setCanceled(true);
 			}
@@ -139,14 +139,16 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 				if(logger != null && logger.isInfoEnabled()) {
 					logger.info("Image with url [" +
 							url +
-					"] is NOT being loaded.. adding listener to queue");
+					"] already being loaded. Adding listener to queue on current request [" +
+					current.getUrl() +
+					"]");
 				}
 				
 				current.merge(request);
 			}
 			else {
 				requests.add(request);
-				requestsInProcess.put(request.getUrl(), request);
+				requestsInProcess.put(url, request);
 				notifyAll();		
 			}
 		}
@@ -160,7 +162,7 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 
 	public void start() {
 		requests = new ConcurrentLinkedQueue<ImageLoadRequest>();
-		requestsInProcess = new ConcurrentHashMap<Object, ImageLoadRequest>();
+		requestsInProcess = new ConcurrentHashMap<String, ImageLoadRequest>();
 		running = true;
 		execute((Void) null);
 	}
@@ -192,5 +194,13 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 	
 	public void destroy() {
 		stop();
+	}
+
+	public boolean isEmpty() {
+		return requestsInProcess.isEmpty();
+	}
+
+	public boolean isLoading(String url) {
+		return requestsInProcess.containsKey(url);
 	}
 }

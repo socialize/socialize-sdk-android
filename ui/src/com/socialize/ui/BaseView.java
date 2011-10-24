@@ -17,6 +17,8 @@ public abstract class BaseView extends LinearLayout {
 	
 	private int loadCount = 0;
 	
+	private boolean loaded = false;
+	
 	public BaseView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
@@ -92,8 +94,14 @@ public abstract class BaseView extends LinearLayout {
 	protected View getEditModeView() {
 		return new ActionBarEditView(getContext());
 	}
+	
+	public boolean isLoaded() {
+		return loaded;
+	}
 
 	protected void onViewUpdate() {}
 
-	protected void onViewLoad() {}
+	protected void onViewLoad() {
+		loaded = true;
+	}
 }

@@ -29,8 +29,8 @@ import com.socialize.util.SafeBitmapDrawable;
  */
 public interface ImageLoadListener {
 
-	public void onImageLoad(ImageLoadRequest request, SafeBitmapDrawable drawable);
+	public void onImageLoad(ImageLoadRequest request, SafeBitmapDrawable drawable, boolean async);
 	
-	public void onImageLoadFail(Exception error);
+	public void onImageLoadFail(ImageLoadRequest request, Exception error);
 	
 }

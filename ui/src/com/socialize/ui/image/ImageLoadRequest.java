@@ -35,8 +35,10 @@ import com.socialize.util.SafeBitmapDrawable;
 public class ImageLoadRequest {
 
 	private String url;
+	private Integer itemId;
 	private ConcurrentLinkedQueue<ImageLoadListener> listeners;
 	private boolean canceled;
+//	private ImageView imageView;
 	
 	public String getUrl() {
 		return url;
@@ -61,7 +63,7 @@ public class ImageLoadRequest {
 				break;
 			}
 			ImageLoadListener listener = listeners.poll();
-			listener.onImageLoad(this, drawable);
+			listener.onImageLoad(this, drawable, true);
 		}
 	}
 	
@@ -72,7 +74,7 @@ public class ImageLoadRequest {
 				break;
 			}
 			ImageLoadListener listener = listeners.poll();
-			listener.onImageLoadFail(error);
+			listener.onImageLoadFail(this, error);
 		}
 	}
 	
@@ -95,6 +97,22 @@ public class ImageLoadRequest {
 		
 		listeners.add(listener);
 	}
+
+	public Integer getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(Integer itemId) {
+		this.itemId = itemId;
+	}
+	
+//	public ImageView getImageView() {
+//		return imageView;
+//	}
+//
+//	public void setImageView(ImageView imageView) {
+//		this.imageView = imageView;
+//	}
 
 	@Override
 	public int hashCode() {
