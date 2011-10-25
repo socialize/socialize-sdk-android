@@ -543,6 +543,7 @@
 		<property name="tickerFactory" ref="actionBarTickerFactory"/>
 		<property name="itemFactory" ref="actionBarItemFactory"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
+		<property name="shareDialogFactory" ref="shareDialogFactory"/>
 	</bean>
 	
 	<bean 
@@ -576,7 +577,115 @@
 	<factory id="actionBarTickerFactory" makes="actionBarTicker"/>
 	
 <!-- End Action Bar UI -->
+
+<!-- Share UI -->
 	
+	<bean 
+		id="facebookShareButton" 
+		singleton="false"
+		extends="socializeButton">
+		<constructor-arg type="activity"/>
+		<property name="customClickListener" ref="facebookShareClickListener"/>
+		<property name="text" value="Share on Facebook"/>
+		<property name="imageName" value="fb_button.png"/>
+		<property name="bottomColor" value="FACEBOOK_BOTTOM"/>
+		<property name="topColor" value="FACEBOOK_TOP"/>
+		<property name="strokeTopColor" value="FACEBOOK_TOP_STROKE"/>
+		<property name="strokeBottomColor" value="FACEBOOK_BOTTOM_STROKE"/>
+		<property name="width" value="180" type="integer"/>
+		<property name="height" value="42" type="integer"/>
+		<property name="textSize" value="14" type="integer"/>
+		<property name="imagePaddingLeft" value="6" type="integer"/>
+		<property name="imagePaddingRight" value="4" type="integer"/>
+	</bean>	
+	
+	<bean 
+		id="emailShareButton" 
+		singleton="false"
+		extends="socializeButton">
+		<constructor-arg type="activity"/>
+		<property name="customClickListener" ref="emailShareClickListener"/>
+		<property name="text" value="Share via Email"/>
+		<property name="imageName" value="email_button.png"/>
+		<property name="width" value="180" type="integer"/>
+		<property name="height" value="42" type="integer"/>
+		<property name="textSize" value="14" type="integer"/>
+		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
+		<property name="topColor" value="GRAY_BTN_TOP"/>
+		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
+		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>				
+	</bean>
+	
+	<bean 
+		id="smsShareButton" 
+		singleton="false"
+		extends="socializeButton">
+		<constructor-arg type="activity"/>
+		<property name="customClickListener" ref="smsShareClickListener"/>
+		<property name="text" value="Share via SMS"/>
+		<property name="imageName" value="sms_button.png"/>
+		<property name="width" value="180" type="integer"/>
+		<property name="height" value="42" type="integer"/>
+		<property name="textSize" value="14" type="integer"/>
+		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
+		<property name="topColor" value="GRAY_BTN_TOP"/>
+		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
+		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>				
+	</bean>	
+	
+	<bean id="shareMessageBuilder" class="com.socialize.ui.share.ShareMessageBuilder">
+		<property name="deviceUtils" ref="deviceUtils"/>
+	</bean>	
+	
+	<bean id="shareClickListener" abstract="true">
+		<property name="logger" ref="logger"/>
+		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
+	</bean>
+	
+	<bean 
+		id="facebookShareClickListener" 
+		class="com.socialize.ui.share.FacebookShareClickListener" 
+		extends="shareClickListener"/>
+		
+	<bean 
+		id="emailShareClickListener" 
+		class="com.socialize.ui.share.EmailShareClickListener" 
+		extends="shareClickListener"/>
+		
+	<bean 
+		id="smsShareClickListener" 
+		class="com.socialize.ui.share.SmsShareClickListener" 
+		extends="shareClickListener"/>		
+		
+	<bean 
+		id="otherShareClickListener" 
+		class="com.socialize.ui.share.OtherShareClickListener" 
+		extends="shareClickListener"/>
+	
+	<bean 
+		id="shareDialogView" 
+		class="com.socialize.ui.share.ShareDialogView" 
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="facebookShareButton" ref="facebookShareButton"/>
+		<property name="emailShareButton" ref="emailShareButton"/>
+		<property name="smsShareButton" ref="smsShareButton"/>
+		<property name="otherShareClickListener" ref="otherShareClickListener"/>
+		
+		<init-method name="init"/>
+	</bean>	
+	
+	<bean id="shareDialogFactory" class="com.socialize.ui.share.ShareDialogFactory">
+		<property name="shareDialogViewFactory" ref="shareDialogViewFactory"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="logger" ref="logger"/>
+	</bean>		
+	
+	<factory id="shareDialogViewFactory" makes="shareDialogView"/>
+	
+<!-- End Share UI -->	
+
 <!--  Image Loader  -->
 	<bean id="imageUrlLoader" class="com.socialize.ui.image.ImageUrlLoader"/>
 	

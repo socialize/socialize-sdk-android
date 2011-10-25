@@ -32,6 +32,10 @@ public class SocializeUI {
 	public static final String USER_ID = "socialize.user.id";
 	public static final String COMMENT_ID = "socialize.comment.id";
 	public static final String ENTITY_KEY = "socialize.entity.key";
+	public static final String ENTITY_NAME = "socialize.entity.name";
+	public static final String ENTITY_DESCRIPTION = "socialize.entity.desc";
+	public static final String ENTITY_URL_AS_LINK = "socialize.entity.url.link";
+	
 	public static final String DEFAULT_USER_ICON = "default_user_icon.png";
 	public static final String SOCIALIZE_LOGO = "socialize_logo.png";
 	public static final String BG_ACCENT = "bg_accent.png";
@@ -173,6 +177,37 @@ public class SocializeUI {
 		context.startActivityForResult(i, requestCode);
 	}
 	
+	/**
+	 * 
+	 * @param context
+	 * @param name
+	 * @param description
+	 */
+	public void setEntityMetaData(Activity context, String name, String description) {
+		Intent intent = context.getIntent();
+		Bundle extras = getExtras(intent);
+		extras.putString(ENTITY_NAME, name);
+		extras.putString(ENTITY_DESCRIPTION, description);
+		intent.putExtras(extras);
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param asLink
+	 */
+	public void setUseEntityUrlAsLink(Activity context, boolean asLink) {
+		Intent intent = context.getIntent();
+		Bundle extras = getExtras(intent);
+		extras.putBoolean(ENTITY_URL_AS_LINK, asLink);
+		intent.putExtras(extras);
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param url
+	 */
 	public void setEntityUrl(Activity context, String url) {
 		Intent intent = context.getIntent();
 		Bundle extras = getExtras(intent);

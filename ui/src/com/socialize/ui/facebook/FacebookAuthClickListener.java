@@ -46,7 +46,7 @@ public class FacebookAuthClickListener implements OnClickListener {
 	private ProgressDialog dialog; 
 
 	@Override
-	public void onClick(View view) {
+	public void onClick(final View view) {
 		
 		view.setEnabled(false);
 		
@@ -66,6 +66,7 @@ public class FacebookAuthClickListener implements OnClickListener {
 				if(listener != null) {
 					listener.onError(error);
 				}
+				view.setEnabled(true);
 			}
 			
 			@Override
@@ -74,6 +75,7 @@ public class FacebookAuthClickListener implements OnClickListener {
 				if(listener != null) {
 					listener.onAuthSuccess(session);
 				}
+				view.setEnabled(true);
 			}
 			
 			@Override
@@ -82,6 +84,7 @@ public class FacebookAuthClickListener implements OnClickListener {
 				if(listener != null) {
 					listener.onAuthFail(error);
 				}
+				view.setEnabled(true);
 			}
 
 			@Override
@@ -90,6 +93,7 @@ public class FacebookAuthClickListener implements OnClickListener {
 				if(listener != null) {
 					listener.onCancel();
 				}
+				view.setEnabled(true);
 			}
 		});
 	}

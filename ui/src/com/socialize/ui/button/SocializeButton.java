@@ -56,6 +56,9 @@ public class SocializeButton extends LinearLayout {
 	private int textSize = 12;
 	private int padding = 0;
 	
+	private int imagePaddingLeft = 0;
+	private int imagePaddingRight = 0;
+	
 	private String text = "";
 	private String imageName;
 	
@@ -69,6 +72,8 @@ public class SocializeButton extends LinearLayout {
 	private String backgroundColor = null;
 	
 	private String textAlign = "left";
+	
+	private OnClickListener customClickListener;
 
 	public SocializeButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -108,7 +113,6 @@ public class SocializeButton extends LinearLayout {
 		
 		layers.setLayerInset(1, 1, 1, 1, 1);
 		layers.setLayerInset(2, 2, 2, 2, 2);
-		
 		
 		int pWidth = LinearLayout.LayoutParams.WRAP_CONTENT;
 		int pHeight = LinearLayout.LayoutParams.WRAP_CONTENT;
@@ -190,6 +194,7 @@ public class SocializeButton extends LinearLayout {
 			imageView = makeImageView();
 			imageView.setImageDrawable(drawables.getDrawable(imageName));
 			imageView.setLayoutParams(imageLayout);
+			imageView.setPadding(deviceUtils.getDIP(imagePaddingLeft), 0, deviceUtils.getDIP(imagePaddingRight), 0);
 			
 			addView(imageView);
 			
@@ -200,6 +205,10 @@ public class SocializeButton extends LinearLayout {
 		}
 		
 		addView(textView);
+		
+		if(customClickListener != null) {
+			setOnClickListener(customClickListener);
+		}
 	}
 	// use a method so we can mock
 	protected ImageView makeImageView() {
@@ -303,5 +312,17 @@ public class SocializeButton extends LinearLayout {
 
 	public void setPadding(int padding) {
 		this.padding = padding;
+	}
+
+	public void setCustomClickListener(OnClickListener customClickListener) {
+		this.customClickListener = customClickListener;
+	}
+
+	public void setImagePaddingLeft(int imagePaddingLeft) {
+		this.imagePaddingLeft = imagePaddingLeft;
+	}
+
+	public void setImagePaddingRight(int imagePaddingRight) {
+		this.imagePaddingRight = imagePaddingRight;
 	}
 }

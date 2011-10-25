@@ -44,6 +44,7 @@ import com.socialize.ui.SocializeUI;
 import com.socialize.ui.cache.CacheableEntity;
 import com.socialize.ui.cache.EntityCache;
 import com.socialize.ui.dialog.ProgressDialogFactory;
+import com.socialize.ui.share.ShareDialogFactory;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 
@@ -78,6 +79,8 @@ public class ActionBarLayoutView extends BaseView {
 	private ProgressDialogFactory progressDialogFactory;
 	private CacheableEntity localEntity;
 	private DeviceUtils deviceUtils;
+	
+	private ShareDialogFactory shareDialogFactory;
 	
 	public ActionBarLayoutView(Activity context, String entityKey) {
 		super(context);
@@ -139,6 +142,15 @@ public class ActionBarLayoutView extends BaseView {
 			@Override
 			public void onClick(ActionBarButton button) {
 				postLike();
+			}
+		});
+		
+		shareButton.setListener(new ActionBarButtonListener() {
+			@Override
+			public void onClick(ActionBarButton button) {
+				if(shareDialogFactory != null) {
+					shareDialogFactory.show(getContext());
+				}
 			}
 		});
 		
@@ -430,5 +442,9 @@ public class ActionBarLayoutView extends BaseView {
 
 	public void setItemFactory(IBeanFactory<ActionBarItem> itemFactory) {
 		this.itemFactory = itemFactory;
+	}
+
+	public void setShareDialogFactory(ShareDialogFactory shareDialogFactory) {
+		this.shareDialogFactory = shareDialogFactory;
 	}
 }

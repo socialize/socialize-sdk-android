@@ -29,7 +29,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
 import android.provider.MediaStore;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
@@ -48,6 +50,7 @@ public class DeviceUtils {
 	private String userAgent;
 	private float density = 160.0f;
 	private String packageName;
+	private String appName;
 	private boolean hasCamera;
 
 	public void init(Context context) {
@@ -57,6 +60,15 @@ public class DeviceUtils {
 			display.getMetrics(metrics);
 			density = metrics.density;
 			packageName = context.getPackageName();
+			
+			Resources appR = context.getResources(); 
+			CharSequence txt = appR.getText(appR.getIdentifier("app_name", 
+			"string", context.getPackageName())); 
+			appName = txt.toString();
+			
+			if(StringUtils.isEmpty(appName)) {
+				appName = packageName;
+			}
 			hasCamera = isIntentAvailable(context, MediaStore.ACTION_IMAGE_CAPTURE);
 		}
 		else {
@@ -107,6 +119,33 @@ public class DeviceUtils {
 
 			return null;
 		}
+	}
+	
+	/**
+	 * Returns the Android market url for this app.
+	 * @param http If true an HTTP link is returned, otherwise a market:// link is returned.
+	 * @return
+	 */
+	public String getMarketUrl(boolean http) {
+		StringBuilder builder = new StringBuilder();
+		
+		if(http) {
+			builder.append("https://market.android.com/details?id=");
+		}
+		else {
+			builder.append("market://details?id=");
+		}
+		
+		builder.append(packageName);
+		return builder.toString();
+	}
+	
+	public String getPackageName() {
+		return packageName;
+	}
+
+	public String getAppName() {
+		return appName;
 	}
 
 	public String getUserAgentString() {
