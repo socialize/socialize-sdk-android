@@ -141,7 +141,13 @@ public class ActionBarLayoutView extends BaseView {
 				postLike();
 			}
 		});
-
+		
+		ticker.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(android.view.View v) {
+				ticker.skipToNext();
+			}
+		});
 		
 		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, deviceUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT));
 		masterParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
@@ -349,7 +355,6 @@ public class ActionBarLayoutView extends BaseView {
 			viewText = value.toString();
 		}
 //		viewText += " " + type;
-		viewText="999+";
 		return viewText;
 	}
 	

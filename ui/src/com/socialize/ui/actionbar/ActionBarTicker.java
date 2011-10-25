@@ -92,6 +92,12 @@ public class ActionBarTicker extends LinearLayout {
 		}
 	}
 	
+	public void skipToNext() {
+		if(rotator != null) {
+			rotator.skipToNext();
+		}
+	}
+	
 	public void resetTicker() {
 		if(rotator != null) {
 			rotator.reset();
