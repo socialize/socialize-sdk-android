@@ -42,9 +42,7 @@ public class FacebookActivityService {
 				listenerHolder = activity.getBean("listenerHolder");
 				dialogFactory = activity.getBean("dialogFactory");
 				config = activity.getBean("config");
-//				facebook = new Facebook(appId, drawables);
-				facebook = new Facebook(appId);
-				
+				facebook = new Facebook(appId, drawables);
 				service = getFacebookService();
 				
 				boolean sso = config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true);

@@ -74,12 +74,16 @@ public class SampleActivity extends SocializeActivity {
 		btnActionViewAuto.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				SocializeUI.getInstance().setFacebookAppId(txtFB.getText().toString());
+				SocializeUI.getInstance().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				startActivity(new Intent(SampleActivity.this, ActionBarAutoActivity.class));
 			}
 		});
 		btnActionViewManual.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				SocializeUI.getInstance().setFacebookAppId(txtFB.getText().toString());
+				SocializeUI.getInstance().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				startActivity(new Intent(SampleActivity.this, ActionBarManualActivity.class));
 			}
 		});

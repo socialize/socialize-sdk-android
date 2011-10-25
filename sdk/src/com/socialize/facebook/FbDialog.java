@@ -16,7 +16,6 @@
 
 package com.socialize.facebook;
 
-import android.R;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -38,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.socialize.facebook.Facebook.DialogListener;
+import com.socialize.util.Drawables;
 
 public class FbDialog extends Dialog {
 
@@ -56,11 +56,13 @@ public class FbDialog extends Dialog {
 	private ImageView mCrossImage;
 	private WebView mWebView;
 	private FrameLayout mContent;
+	private Drawables drawables;
 
-	public FbDialog(Context context, String url, DialogListener listener) {
+	public FbDialog(Context context, String url, DialogListener listener, Drawables drawables) {
 		super(context, android.R.style.Theme_Translucent_NoTitleBar);
 		mUrl = url;
 		mListener = listener;
+		this.drawables = drawables;
 	}
 
 	@Override
@@ -105,8 +107,10 @@ public class FbDialog extends Dialog {
 				FbDialog.this.dismiss();
 			}
 		});
+		
 //		Drawable crossDrawable = getContext().getResources().getDrawable(R.drawable.close);
-//		mCrossImage.setImageDrawable(crossDrawable);
+		Drawable crossDrawable = drawables.getDrawable("fb_cross.png");
+		mCrossImage.setImageDrawable(crossDrawable);
 		/*
 		 * 'x' should not be visible while webview is loading make it visible
 		 * only after webview has fully loaded
