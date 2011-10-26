@@ -8,11 +8,8 @@ import android.view.View;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
-import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
-import com.socialize.listener.SocializeAuthListener;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.view.AuthenticatedView;
 

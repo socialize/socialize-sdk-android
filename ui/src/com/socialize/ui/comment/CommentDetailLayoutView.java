@@ -104,12 +104,11 @@ public class CommentDetailLayoutView extends BaseView {
 		OnClickListener profileClickListener = new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				SocializeUI.getInstance().showUserProfileView(getActivity(), userId);
+				SocializeUI.getInstance().showUserProfileViewForResult(getActivity(), userId, CommentActivity.PROFILE_UPDATE);
 			}
 		};
 		
 		content.getHeaderView().setOnClickListener(profileClickListener);
-//		content.getDisplayName().setOnClickListener(profileClickListener);
 
 		addView(header);
 		addView(content);
@@ -224,11 +223,12 @@ public class CommentDetailLayoutView extends BaseView {
 			});
 		}
 		else {
-			content.getProfilePicture().setImageDrawable(defaultProfilePicture);
+			userIcon.setImageDrawable(defaultProfilePicture);
+			userIcon.getBackground().setAlpha(255);
 		}
 		
 		content.getDisplayName().setText(user.getDisplayName());
-		content.getLocation().setText(user.getLocation());
+//		content.getLocation().setText(user.getLocation());
 	}
 	
 	public void setDrawables(Drawables drawables) {
@@ -253,5 +253,11 @@ public class CommentDetailLayoutView extends BaseView {
 
 	public void setImageLoader(ImageLoader imageLoader) {
 		this.imageLoader = imageLoader;
+	}
+
+	public void onProfileUpdate() {
+		dialog = progressDialogFactory.show(getContext(), "Loading", "Please wait...");
+		count = 1;
+		doGetUserProfile();
 	}
 }

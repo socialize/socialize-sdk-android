@@ -209,7 +209,7 @@
 		<constructor-arg type="activity"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="facebookSignInButton" ref="facebookSignInButton"/>
-		<property name="text" value="Authenticate with Facebook to manage your privacy settings and retain your comments across applications."/>
+		<property name="text" value="Sign in with Facebook to ensure your comment is saved."/>
 		<init-method name="init"/>
 	</bean>
 	
@@ -220,7 +220,7 @@
 		<constructor-arg type="activity"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="socializeSkipAuthButton" ref="socializeSkipAuthButton"/>
-		<property name="text" value="Authenticate with Facebook to manage your privacy settings and retain your comments across applications."/>
+		<property name="text" value="Your data is safe with us, but you can still post anonymously if you're shy."/>
 		<init-method name="init"/>
 	</bean>
 	
@@ -470,7 +470,6 @@
 		<property name="textAlign" value="center"/>
 		<property name="padding" value="2" type="integer"/>
 		<property name="bold" value="true" type="boolean"/>
-		
 	</bean>
 	
 	<bean 
@@ -515,6 +514,36 @@
 	<factory id="profileImageContextMenuFactory" makes="profileImageContextMenu"/>
 	
 <!-- End Profile UI -->
+
+<!-- Action Bar UI -->
+	
+	<bean 
+		id="actionBarLayoutView" 
+		class="com.socialize.ui.actionbar.ActionBarLayoutView"
+		singleton="false">
+		
+		<constructor-arg type="activity"/>
+		
+		<init-method name="init">
+			<arg type="activity"/>
+		</init-method>
+		
+		<property name="drawables" ref="drawables"/>
+		<property name="logger" ref="logger"/>
+		<property name="buttonFactory" ref="actionBarButtonFactory"/>
+	</bean>
+	
+	<bean 
+		id="actionBarButton" 
+		class="com.socialize.ui.actionbar.ActionBarButton"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+	</bean>
+	
+	<factory id="actionBarButtonFactory" makes="actionBarButton"/>
+	
+<!-- End Action Bar UI -->
 	
 
 <!--  Image Loader  -->

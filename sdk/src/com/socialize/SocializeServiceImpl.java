@@ -154,6 +154,9 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				
 				SocializeIOC container = newSocializeIOC();
 				ResourceLocator locator = newResourceLocator();
+				
+				locator.setLogger(newLogger());
+				
 				ClassLoaderProvider provider = newClassLoaderProvider();
 				
 				locator.setClassLoaderProvider(provider);
@@ -186,6 +189,11 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	// So we can mock
 	protected ResourceLocator newResourceLocator() {
 		return new ResourceLocator();
+	}
+	
+	// So we can mock
+	protected SocializeLogger newLogger() {
+		return new SocializeLogger();
 	}
 	
 	// So we can mock

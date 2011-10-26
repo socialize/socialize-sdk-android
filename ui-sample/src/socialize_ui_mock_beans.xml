@@ -1,0 +1,8 @@
+<beans>
+	<bean 
+		id="facebookProvider" 
+		class="com.socialize.ui.sample.mock.MockFacebookAuthProvider">
+		<property name="config" ref="config"/>
+		<init-method name="init"/>
+	</bean>
+</beans>

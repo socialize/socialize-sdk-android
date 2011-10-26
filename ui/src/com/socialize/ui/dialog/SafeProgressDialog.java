@@ -41,7 +41,9 @@ public class SafeProgressDialog extends ProgressDialog {
 	@Override
 	public void dismiss() {
 		try {
-			super.dismiss();
+			if(isShowing()) {
+				super.dismiss();
+			}
 		}
 		catch (Exception ignore) {
 			ignore.printStackTrace();

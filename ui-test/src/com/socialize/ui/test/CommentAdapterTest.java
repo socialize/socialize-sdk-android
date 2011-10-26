@@ -1,14 +1,10 @@
 package com.socialize.ui.test;
 
-import java.util.Date;
 import java.util.List;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
@@ -254,7 +250,6 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		assertEquals(1, adapter.getViewTypeCount());
 	}
 	
-	@SuppressWarnings("unchecked")
 	@UsesMocks ({
 		IBeanFactory.class,
 		CommentListItem.class,

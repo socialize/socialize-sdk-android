@@ -889,12 +889,13 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		AndroidMock.verify(listener);
 	}
 	
-	@UsesMocks ({SocializeIOC.class, ResourceLocator.class, ClassLoaderProvider.class})
+	@UsesMocks ({SocializeIOC.class, ResourceLocator.class, ClassLoaderProvider.class, SocializeLogger.class})
 	public void testInitWithContainer() throws Exception {
 		
 		final SocializeIOC socializeIOC = AndroidMock.createMock(SocializeIOC.class);
 		final ClassLoaderProvider classLoaderProvider = AndroidMock.createMock(ClassLoaderProvider.class);
 		final ResourceLocator resourceLocator = AndroidMock.createMock(ResourceLocator.class);
+		final SocializeLogger logger = AndroidMock.createMock(SocializeLogger.class);
 		
 		final Context context = new MockContext();
 		
@@ -927,7 +928,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 			protected ClassLoaderProvider newClassLoaderProvider() {
 				return classLoaderProvider;
 			}
-
+			
 			@Override
 			protected int binarySearch(String[] array, String str) {
 				// Simulate not found
@@ -944,10 +945,17 @@ public class SocializeServiceTest extends SocializeUnitTest {
 			protected void sort(Object[] array) {
 				addResult("sort");
 			}
+
+			@Override
+			protected SocializeLogger newLogger() {
+				return logger;
+			}
 		};
 		
 		
 		resourceLocator.setClassLoaderProvider(classLoaderProvider);
+		resourceLocator.setLogger(logger);
+		
 		socializeIOC.init(context, resourceLocator, mockPaths);
 		
 		AndroidMock.replay(socializeIOC);

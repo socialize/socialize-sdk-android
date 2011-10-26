@@ -42,7 +42,7 @@ public class CommentDetailContentView extends LinearLayout {
 
 	private ImageView profilePicture;
 	private TextView displayName;
-	private TextView location;
+//	private TextView location;
 	private TextView commentView;
 	private TextView commentMeta;
 	private GeoUtils geoUtils;
@@ -102,13 +102,13 @@ public class CommentDetailContentView extends LinearLayout {
 		this.dateUtils = dateUtils;
 	}
 	
-	public TextView getLocation() {
-		return location;
-	}
-
-	public void setLocation(TextView location) {
-		this.location = location;
-	}
+//	public TextView getLocation() {
+//		return location;
+//	}
+//
+//	public void setLocation(TextView location) {
+//		this.location = location;
+//	}
 	
 	public View getHeaderView() {
 		return headerView;

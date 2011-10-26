@@ -61,7 +61,7 @@ public class ProfileActivity extends SocializeUIActivity {
 			
 			// If WE are the user being viewed, assume a profile update
 			String userId = extras.getString(SocializeUI.USER_ID);
-			if(SocializeUI.getInstance().isFacebookSupported() && !StringUtils.isEmpty(userId) && Integer.parseInt(userId) == getSocialize().getSession().getUser().getId()) {
+			if(!StringUtils.isEmpty(userId) && Integer.parseInt(userId) == getSocialize().getSession().getUser().getId()) {
 				setResult(CommentActivity.PROFILE_UPDATE);
 			}
 			

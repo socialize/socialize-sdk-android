@@ -52,6 +52,7 @@ public class CommentContentViewFactory extends BaseViewFactory<CommentContentVie
 		listViewLayoutParams.weight = 1.0f;
 
 		ListView listView = new ListView(context);
+		listView.setId(CommentActivity.LIST_VIEW_ID);
 		listView.setLayoutParams(listViewLayoutParams);
 		listView.setDrawingCacheEnabled(true);
 		listView.setCacheColorHint(0);

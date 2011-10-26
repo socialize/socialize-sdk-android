@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="sdk" default="help">
+
+<!-- The local.properties file is created and updated by the 'android'
+     tool.
+     It contains the path to the SDK. It should *NOT* be checked into
+     Version Control Systems. -->
+    <property file="local.properties" />
+
+    <!-- The build.properties file can be created by you and is never touched
+         by the 'android' tool. This is the place to change some of the
+         default property values used by the Ant rules.
+         Here are some properties you may want to change/update:
+
+         source.dir
+             The name of the source directory. Default is 'src'.
+         out.dir
+             The name of the output directory. Default is 'bin'.
+
+         Properties related to the SDK location or the project target should
+         be updated using the 'android' tool with the 'update' action.
+
+         This file is an integral part of the build system for your
+         application and should be checked into Version Control Systems.
+
+         -->
+    <property file="build.properties" />
+
+    <!-- The default.properties file is created and updated by the 'android'
+         tool, as well as ADT.
+         This file is an integral part of the build system for your
+         application and should be checked into Version Control Systems. -->
+    <property file="default.properties" />
+	
+	<property name="test.runner" value="pl.polidea.instrumentation.PolideaInstrumentationTestRunner" />
+
+    <!-- Required pre-setup import -->
+    <import file="${sdk.dir}/tools/ant/pre_setup.xml" />
+	
+	<property name="test-output" value="test-output"/>
+
+	
+	<target name="clean">
+	
+		<echo>Removing old installation of com.socialize.ui.sample</echo>
+		
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="uninstall" />
+			<arg value="com.socialize.ui.sample" />
+		</exec>
+		
+		<echo>Removing old installation of com.socialize.ui.integrationtest</echo>
+		
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="uninstall" />
+			<arg value="com.socialize.ui.integrationtest" />
+		</exec>		
+		
+		
+		<echo>Removing JUnit path ${junit.dump.path}</echo>
+					
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="shell" />
+			<arg value="rm" />
+			<arg value="-r" />
+			<arg value="${junit.dump.path}" />
+		</exec>
+		
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="shell" />
+			<arg value="rmdir" />
+			<arg value="${junit.dump.path}" />
+		</exec>
+		
+		<echo>Removing coverage data</echo>
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="shell" />
+			<arg value="rm" />
+			<arg value="${emma.dump.file}" />
+		</exec>
+		
+		<mkdir dir="${emma.report.dir}"/>
+		<mkdir dir="${test-output}"/>
+		
+		<echo>Creating JUnit report path on device at ${junit.dump.path}</echo>
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="shell" />
+			<arg value="mkdir" />
+			<arg value="${junit.dump.path}" />
+		</exec>
+		
+		<echo>Clearing logcat buffer</echo>
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="logcat" />
+			<arg value="-c" />
+		</exec>
+	</target>
+	
+	<target name="pull-reports">
+		
+		<delete dir="${test-output}"/>
+		<mkdir dir="${test-output}"/>
+		
+		<echo>Downloading XML test results...</echo>
+		<exec executable="${adb}" failonerror="true" dir="${test-output}">
+			<arg line="${adb.device.arg}" />
+			<arg value="pull" />
+			<arg value="${junit.dump.path}" />
+		</exec>
+
+		<!--
+		<echo>Dumping logcat buffer</echo>
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="logcat" />
+			<arg value="-d" />
+		</exec>
+		-->
+	</target>
+	
+	<!-- Overridden from /tools/ant/test_rules.xml -->
+	<target name="coverage" depends="-set-coverage-classpath, -install-instrumented, install"
+	                description="Runs the tests against the instrumented code and generates
+	                            code coverage report">
+
+		<run-tests-helper emma.enabled="true">
+			<extra-instrument-args>
+				<arg value="-e" />
+				<arg value="coverageFile" />
+				<arg value="${emma.dump.file}" />
+
+				<arg value="-e" />
+				<arg value="package" />
+				<arg value="${test.package}" />
+
+				<arg value="-e" />
+				<arg value="junitOutputDirectory" />
+				<arg value="${junit.dump.path}" />
+				
+			</extra-instrument-args>
+
+		</run-tests-helper>
+		
+		<echo>Downloading coverage file into project directory...</echo>
+		<exec executable="${adb}">
+			<arg line="${adb.device.arg}" />
+			<arg value="pull" />
+			<arg value="${emma.dump.file}" />
+			<arg value="${emma.report.dir}/coverage.ec" />
+		</exec>
+		<echo>Extracting coverage report...</echo>
+		
+		<path id="emma.report.src.path">
+			<pathelement path="${tested.project.absolute.dir}/${source.dir}" />
+			<pathelement path="${library.project.src}" />
+		</path>
+		
+		<echo>emma.report.src.path is ${emma.report.src.path}</echo>
+		
+		<emma>
+			<report 
+				sourcepathref="emma.report.src.path" 
+	            verbosity="verbose">
+				
+				<infileset dir="${emma.report.dir}">
+					<include name="coverage.ec" />
+					<include name="coverage.em" />
+				</infileset>
+				<html outfile="${emma.report.dir}/coverage.html" />
+				<xml outfile="${emma.report.dir}/coverage.xml" />
+			</report>
+		</emma>
+		
+		<echo>Cleaning up temporary files...</echo>
+		<delete dir="${instrumentation.absolute.dir}" />
+		<delete file="${emma.report.dir}/coverage.ec" />
+		<delete file="${emma.report.dir}/coverage.em" />
+		<echo>Saving the report file in ${emma.report.dir}/coverage.html</echo>
+	</target>
+	
+	<target name="integration-test" depends="-install-tested-project, install">
+		<echo>Creating JUnit report path on device at ${junit.dump.path}</echo>
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="shell" />
+			<arg value="mkdir" />
+			<arg value="/sdcard/Android" />
+		</exec>
+		
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="shell" />
+			<arg value="mkdir" />
+			<arg value="${junit.dump.path}" />
+		</exec>
+		
+		<run-tests-helper>
+			<extra-instrument-args>
+				<arg value="-e" />
+				<arg value="package" />
+				<arg value="${test.package}" />
+
+				<arg value="-e" />
+				<arg value="junitOutputDirectory" />
+				<arg value="${junit.dump.path}" />
+			</extra-instrument-args>
+
+		</run-tests-helper>
+	</target>
+	
+	<target name="test" depends="clean, integration-test, pull-reports"/>
+	<target name="test-with-coverage" depends="clean, coverage, pull-reports"/>
+
+	<setup />
+</project>

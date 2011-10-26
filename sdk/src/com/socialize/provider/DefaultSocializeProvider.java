@@ -200,6 +200,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 			sessionPersister.delete(context);
 		}
 		
+		// TODO: this should be in the auth provider for FB!
 		if(facebookSessionStore != null) {
 			facebookSessionStore.clear(context);
 		}

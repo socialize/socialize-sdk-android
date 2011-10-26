@@ -25,9 +25,10 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import com.jayway.android.robotium.solo.Solo;
 import com.socialize.ui.sample.SampleActivity;
@@ -40,6 +41,7 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	public static final int DEFAULT_TIMEOUT_SECONDS = 100;
 	public static final String DEFAULT_ENTITY_URL = "http://socialize.integration.tests.com?somekey=somevalue&anotherkey=anothervalue";
 	public static final String DEFAULT_GET_ENTITY = "http://entity1.com";
+	public static final String SOCIALIZE_FACEBOOK_ID = "209798315709193";
 		
 	protected Solo robotium;
 	protected InputMethodManager imm = null;
@@ -50,26 +52,57 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	}
 
 	public void setUp() throws Exception {
-		robotium = new Solo(getInstrumentation(), getActivity());
 		imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-		
+		robotium = new Solo(getInstrumentation(), getActivity());
+		robotium.waitForActivity("SampleActivity", 5000);
+	}
+	
+	protected void startWithFacebook(boolean sso) {
 		robotium.clearEditText(0);
 		robotium.enterText(0, DEFAULT_GET_ENTITY);
+		robotium.clearEditText(1);
+		robotium.enterText(1, SOCIALIZE_FACEBOOK_ID);
+		
+		if(!sso) {
+			robotium.clickOnButton(0);
+		}
+		
+		robotium.clickOnButton(1);
+		robotium.clickOnButton(2);
+		robotium.clickOnButton(3);
+		
+		robotium.waitForActivity("CommentActivity", 5000);
+		robotium.waitForView(ListView.class, 1, 5000);
+		sleep(2000);
+	}
+	
+	protected void startWithoutFacebook() {
+		robotium.clearEditText(0);
+		robotium.enterText(0, DEFAULT_GET_ENTITY);
+		robotium.clearEditText(1);
 		robotium.clickOnButton(0);
+		robotium.clickOnButton(3);
+		robotium.waitForActivity("CommentActivity", 5000);
+		robotium.waitForView(ListView.class, 1, 5000);
+		
+		sleep(5000);
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
-		Log.e("SocializeRobotiumTest", "tearDown()");
 		try {
-			robotium.finalize();
+			robotium.finish();
 		} 
 		catch (Throwable e) {
-			e.printStackTrace();
+			throw new Exception(e);
 		}
-
-		getActivity().finish();
-
+		
+//		ArrayList<Activity> allOpenedActivities = robotium.getAllOpenedActivities();
+//		
+//		for (Activity activity : allOpenedActivities) {
+//			activity.finish();
+//		}
+		
 		super.tearDown();
 	}
 
@@ -92,6 +125,17 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 				imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 			}
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected <T extends View> T findView(Class<T> viewClass) {
+		ArrayList<View> currentViews = robotium.getCurrentViews();
+		for (View view : currentViews) {
+			if(viewClass.isAssignableFrom(view.getClass())) {
+				return (T) view;
+			}
+		}
+		return null;
 	}
 
 }

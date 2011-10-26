@@ -54,11 +54,14 @@ public class DefaultProfileSaver implements ProfileSaver {
 		String lastName = null;
 		
 		// Split the name.
+		name = name.trim();
 		String[] names = name.split("\\s+");
 		
 		if(names.length > 1) {
 			firstName = names[0];
-			lastName = names[1];
+			
+			// Last name is everything else
+			lastName = name.substring(firstName.length(), name.length()).trim();
 		}
 		
 		getSocialize().saveCurrentUserProfile(context, firstName, lastName, encodedImage,listener);

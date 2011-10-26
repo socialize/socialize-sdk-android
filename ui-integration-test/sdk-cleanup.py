@@ -3,10 +3,10 @@ import simplejson
 import random as rand
 import os,sys
 
-config_file_path='../sample/assets/sample-app.conf'
-assets_file_path='../sample/assets/existing-data/'
+config_file_path='../ui-sample/assets/socialize.properties'
+assets_file_path='../ui-sample/assets/existing-data/'
 
-def create_android_config(key,secret,url,fb_app_id):
+def create_android_config(key,secret,url,fb_user_id,fb_token):
     print '#'*20
     print '## CREATE conf.js ##'
     print '#'*20           
@@ -15,7 +15,9 @@ def create_android_config(key,secret,url,fb_app_id):
     text = 'socialize.consumer.key='+key
     text+= '\nsocialize.consumer.secret='+secret
     text+= '\napi.host='+url
-    text+= '\nfacebook.app.id='+fb_app_id
+    text+= '\nlog.level=INFO'
+    text+= '\nfacebook.user.id='+fb_user_id
+    text+= '\nfacebook.token='+fb_token
     text+= '\n'
     f.write(text)
     print text
@@ -23,7 +25,7 @@ def create_android_config(key,secret,url,fb_app_id):
 
 def read_android_config():
     file = open(config_file_path,'r')
-#file = open('../sample/assets/sample-app.conf','r')
+#file = open('../ui-sample/assets/sample-app.conf','r')
 
     for line in file :
         li=line.strip()
@@ -193,7 +195,7 @@ def main(key,secret,url):
 if __name__ == "__main__":
     args = sys.argv
     if len(args)<4:
-        print '\tusage: python sdk-cleanup.py <consumer-key> <consumer-secret> <http://api.socialize.com/v1> [facebook_app_id]'
+        print '\tusage: python sdk-cleanup.py <consumer-key> <consumer-secret> <http://api.socialize.com/v1> [facebook_user_id] [facebook_token]'
         sys.exit(2)
     elif not args[3].startswith('http://'):
         print '\tinvalid format for <http://api.socialize.com/v1>'
@@ -201,10 +203,10 @@ if __name__ == "__main__":
     key = args[1]
     secret = args[2]
     url = args[3]             
-    fb_app_id = '0' # default facebook app id
-    if len(args)==5:
-        fb_app_id = args[4]
-    create_android_config(key,secret,url,fb_app_id)
+    if len(args)>=6:
+        fb_user_id = args[4]
+        fb_token = args[5]
+    create_android_config(key, secret, url, fb_user_id, fb_token)
     key, secret, url = read_android_config()
     if url[-1]!='/':
         url+='/'

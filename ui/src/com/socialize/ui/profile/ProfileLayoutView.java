@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,7 +45,7 @@ public class ProfileLayoutView extends BaseView {
 	private ImageLoader imageLoader;
 	private BitmapUtils bitmapUtils;
 	
-	private Drawable defaultProfilePicture;
+	private SafeBitmapDrawable defaultProfilePicture;
 	
 	public ProfileLayoutView(Activity context, String userId) {
 		this(context);
@@ -73,7 +72,7 @@ public class ProfileLayoutView extends BaseView {
 
 		header = profileHeaderFactory.make(getContext());
 		content = profileContentViewFactory.make(getContext());
-		defaultProfilePicture = drawables.getDrawable("large_user_icon.png");
+		defaultProfilePicture = (SafeBitmapDrawable) drawables.getDrawable("large_user_icon.png");
 
 		addView(header);
 		addView(content);
@@ -168,20 +167,24 @@ public class ProfileLayoutView extends BaseView {
 			});
 		}
 		else {
-			content.getProfilePicture().setImageDrawable(defaultProfilePicture);
+			userIcon.setImageDrawable(defaultProfilePicture);
+			userIcon.getBackground().setAlpha(255);
+			content.setProfileDrawable(defaultProfilePicture);
 		}
 		
 		content.getDisplayName().setText(user.getDisplayName());
 		
 		User currentUser = userService.getCurrentUser();
 		
-		if(SocializeUI.getInstance().isFacebookSupported() && 
-				currentUser != null && currentUser.getId().equals(user.getId()) && 
-				Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+		if(currentUser != null && currentUser.getId().equals(user.getId())) {
 			
 			content.setUserDisplayName(user.getDisplayName());
 			content.getEditButton().setVisibility(View.VISIBLE);
-			content.getFacebookSignOutButton().setVisibility(View.VISIBLE);
+			
+			if(SocializeUI.getInstance().isFacebookSupported() &&
+					Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+				content.getFacebookSignOutButton().setVisibility(View.VISIBLE);
+			}
 		}
 		else {
 			content.getDisplayNameEdit().setVisibility(View.GONE);

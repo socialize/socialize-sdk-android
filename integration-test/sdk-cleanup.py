@@ -6,8 +6,6 @@ import os,sys
 config_file_path='../sample/assets/sample-app.conf'
 assets_file_path='../sample/assets/existing-data/'
 
-
-
 def create_android_config(key,secret,url,fb_app_id):
     print '#'*20
     print '## CREATE conf.js ##'
@@ -121,16 +119,18 @@ def main(key,secret,url):
     view_url='view/'
     udid = '1234566788'
 
-#    key='f04f5af0-5be0-4ae6-a1f1-8d418c0d7e6b'
-    #secret= '7a9a2b20-d4de-4d46-9c0b-f1653f0f1089'
-    #url= 'http://stage.getsocialize.com/v1'
-
     auth_url = url+auth_url
     print auth_url
+    
+    print '#'*20
+    print '## CLEANUP SCRIPT START ##'
+    print '#'*20
+    
 ## AUTHENTICATION ##
     consumer = oauth.Consumer( key, secret)
     client = oauth.Client( consumer) 
     payload = simplejson.dumps({ 'payload': { 'udid': udid}})
+    
     try:    
         auth_resp = client.request(auth_url ,'POST', body='payload='+simplejson.dumps({'udid':udid}))
         auth_cont = simplejson.loads(auth_resp[1])
@@ -139,6 +139,7 @@ def main(key,secret,url):
         token = oauth.Token(oauth_token,oauth_secret)
     except:
         print auth_resp
+
 ## Create client with oauth token
     client=oauth.Client(consumer,token)
     print '#'*20
