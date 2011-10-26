@@ -32,6 +32,7 @@ import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeApiHost;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
+import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
@@ -52,6 +53,7 @@ import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
+import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
@@ -445,6 +447,19 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 	
+	
+	@Override
+	public void share(String url, String text, ShareType shareType, ShareAddListener shareAddListener) {
+		share(url, text, shareType, null, shareAddListener);
+	}
+	
+	@Override
+	public void share(String url, String text, ShareType shareType, Location location, ShareAddListener shareAddListener) {
+		if(assertAuthenticated(shareAddListener)) {
+			service.addShare(session, url, text, shareType, location, shareAddListener);
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#view(java.lang.String, com.socialize.listener.view.ViewAddListener)

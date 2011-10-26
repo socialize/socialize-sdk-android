@@ -26,6 +26,7 @@ import android.location.Location;
 
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.listener.SocializeAuthListener;
@@ -39,6 +40,7 @@ import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
+import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
@@ -172,6 +174,27 @@ public interface SocializeService {
 	 * @param likeDeleteListener A listener to handle callbacks from the delete.
 	 */
 	public void unlike(int id, LikeDeleteListener likeDeleteListener);
+	
+	/**
+	 * Records a share event against the given url.  NOTE: This does NOT perform sharing to any 3rd party social network.  
+	 * It simply records a share event within Socialize.
+	 * @param url The url being viewed. MUST be a valid http URL.  Defined when first creating a url, or created on the fly with this call.
+	 * @param text The text being shared.
+	 * @param shareType The social network on which the share occurred.
+	 * @param shareAddListener A listener to handle callbacks from the post.
+	 */
+	public void share(String url, String text, ShareType shareType, ShareAddListener shareAddListener);
+	
+	/**
+	 * Records a share event against the given url.  NOTE: This does NOT perform sharing to any 3rd party social network.  
+	 * It simply records a share event within Socialize.
+	 * @param url The url being viewed. MUST be a valid http URL.  Defined when first creating a url, or created on the fly with this call.
+	 * @param text The text being shared.
+	 * @param shareType The social network on which the share occurred. 
+	 * @param location The location of the device at the time the call was made.
+	 * @param shareAddListener A listener to handle callbacks from the post.
+	 */
+	public void share(String url, String text, ShareType shareType, Location location, ShareAddListener shareAddListener);
 	
 	/**
 	 * Retrieves a single like previously associated with an entity.

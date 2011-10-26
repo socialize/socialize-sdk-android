@@ -29,6 +29,8 @@ import com.socialize.api.action.ActivityApi;
 import com.socialize.api.action.CommentApi;
 import com.socialize.api.action.EntityApi;
 import com.socialize.api.action.LikeApi;
+import com.socialize.api.action.ShareApi;
+import com.socialize.api.action.ShareType;
 import com.socialize.api.action.UserApi;
 import com.socialize.api.action.ViewApi;
 import com.socialize.auth.AuthProviderData;
@@ -39,6 +41,7 @@ import com.socialize.listener.activity.ActivityListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.listener.entity.EntityListener;
 import com.socialize.listener.like.LikeListener;
+import com.socialize.listener.share.ShareListener;
 import com.socialize.listener.user.UserListener;
 import com.socialize.listener.view.ViewListener;
 import com.socialize.net.HttpClientFactory;
@@ -59,6 +62,7 @@ public class SocializeApiHost {
 	private LikeApi likeApi;
 	private ViewApi viewApi;
 	private UserApi userApi;
+	private ShareApi shareApi;
 	private ActivityApi activityApi;
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	
@@ -136,6 +140,10 @@ public class SocializeApiHost {
 	
 	public void addView(SocializeSession session, String key, Location location, ViewListener listener) {
 		viewApi.addView(session, key, location, listener);
+	}
+	
+	public void addShare(SocializeSession session, String key, String text, ShareType shareType, Location location, ShareListener listener) {
+		shareApi.addShare(session, key, text, shareType, location, listener);
 	}
 	
 	public void deleteLike(SocializeSession session, int id, LikeListener listener) {
@@ -224,6 +232,14 @@ public class SocializeApiHost {
 		this.userApi = userApi;
 	}
 	
+	public ShareApi getShareApi() {
+		return shareApi;
+	}
+
+	public void setShareApi(ShareApi shareApi) {
+		this.shareApi = shareApi;
+	}
+
 	public ActivityApi getActivityApi() {
 		return activityApi;
 	}

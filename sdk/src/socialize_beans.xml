@@ -296,6 +296,27 @@
 	
 <!-- End View API -->
 
+<!-- Share API -->
+
+	<bean id="shareFactory" class="com.socialize.entity.factory.ShareFactory" extends="socializeActionFactory"/>
+	
+	<bean id="shareRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
+		<constructor-arg ref="oauthSigner"/>
+		<constructor-arg ref="shareFactory"/>
+	</bean>
+
+	<bean id="shareProvider" extends="abstractProvider">
+		<constructor-arg type="context"/>
+		<property name="objectFactory" ref="shareFactory"/>
+		<property name="requestFactory" ref="shareRequestFactory"/>
+	</bean>
+	
+	<bean id="shareApi" class="com.socialize.api.action.ShareApi" extends="socializeApi">
+		<constructor-arg ref="shareProvider"/>
+	</bean>
+	
+<!-- End Share API -->
+
 <!-- User API -->
 
 	<bean id="userRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
@@ -361,6 +382,7 @@
 		<property name="likeApi" ref="likeApi"/>
 		<property name="viewApi" ref="viewApi"/>
 		<property name="userApi" ref="userApi"/>
+		<property name="shareApi" ref="shareApi"/>
 		<property name="activityApi" ref="activityApi"/>
 	</bean>
 	

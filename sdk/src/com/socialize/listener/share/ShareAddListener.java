@@ -19,63 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity;
+package com.socialize.listener.share;
 
-import com.socialize.api.action.ActionType;
+
+import com.socialize.entity.ListResult;
+import com.socialize.entity.Share;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class Share extends SocializeAction {
-	
-	private String text;
-	private String mediumName;
-	private int medium;
-	private boolean propagate;
-	
-	@Override
-	public ActionType getActionType() {
-		return ActionType.SHARE;
-	}
+public abstract class ShareAddListener extends ShareListener {
 
 	@Override
-	public String getDisplayText() {
-		return null;
-	}
+	public final void onGet(Share entity) {}
 
-	public String getText() {
-		return text;
-	}
+	@Override
+	public final void onList(ListResult<Share> entities) {}
 
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public int getMedium() {
-		return medium;
-	}
-
-	public void setMedium(int medium) {
-		this.medium = medium;
-	}
-
-	public boolean isPropagate() {
-		return propagate;
-	}
-
-	public void setPropagate(boolean propagate) {
-		this.propagate = propagate;
-	}
-
-	public String getMediumName() {
-		return mediumName;
-	}
-
-	public void setMediumName(String mediumName) {
-		this.mediumName = mediumName;
-	}
-	
-	
+	@Override
+	public final void onUpdate(Share entity) {}
 }

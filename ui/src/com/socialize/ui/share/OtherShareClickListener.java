@@ -21,6 +21,8 @@
  */
 package com.socialize.ui.share;
 
+import com.socialize.api.action.ShareType;
+
 
 /**
  * @author Jason Polites
@@ -35,5 +37,10 @@ public class OtherShareClickListener extends SimpleShareClickListener {
 	@Override
 	protected boolean isHtml() {
 		return false;
+	}
+	
+	@Override
+	protected ShareType getShareType() {
+		return ShareType.EMAIL;
 	}
 }

@@ -58,7 +58,6 @@ public enum AuthProviderType {
 			return FACEBOOK;
 		default :
 			return SOCIALIZE;
-		
 		}
 	}
 }

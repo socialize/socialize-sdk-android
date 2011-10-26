@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,63 +19,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity;
-
-import com.socialize.api.action.ActionType;
+package com.socialize.api.action;
 
 
 /**
  * @author Jason Polites
- *
  */
-public class Share extends SocializeAction {
+public enum ShareType {
+	FACEBOOK ("facebook", 1),
+	TWITTER ("twitter", 2),
+	EMAIL ("email", 3),
+	SMS ("sms", 3),
+	OTHER ("other", 3);
 	
-	private String text;
-	private String mediumName;
-	private int medium;
-	private boolean propagate;
+	private final String name;   
+    private final int id; 
 	
+	ShareType(String name, int id) {
+		this.name = name;
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public int getId() {
+		return id;
+	}
+
 	@Override
-	public ActionType getActionType() {
-		return ActionType.SHARE;
-	}
-
-	@Override
-	public String getDisplayText() {
-		return null;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public int getMedium() {
-		return medium;
-	}
-
-	public void setMedium(int medium) {
-		this.medium = medium;
-	}
-
-	public boolean isPropagate() {
-		return propagate;
-	}
-
-	public void setPropagate(boolean propagate) {
-		this.propagate = propagate;
-	}
-
-	public String getMediumName() {
-		return mediumName;
-	}
-
-	public void setMediumName(String mediumName) {
-		this.mediumName = mediumName;
+	public String toString() {
+		return name;
 	}
 	
-	
+	public static ShareType valueOf(int id) {
+		switch(id) {
+		case 1 : 
+			return FACEBOOK;
+		case 2 : 
+			return TWITTER;	
+		case 3 : 
+			return EMAIL;				
+		default :
+			return OTHER;
+		}
+	}
 }

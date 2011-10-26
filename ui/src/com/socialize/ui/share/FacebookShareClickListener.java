@@ -29,6 +29,7 @@ import android.os.Bundle;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
@@ -180,6 +181,11 @@ public class FacebookShareClickListener extends ShareClickListener {
 	@Override
 	protected boolean isIncludeSocialize() {
 		return true;
+	}
+	
+	@Override
+	protected ShareType getShareType() {
+		return ShareType.FACEBOOK;
 	}
 	
 	protected SocializeUI getSocializeUI() {

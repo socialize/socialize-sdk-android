@@ -1,5 +1,7 @@
 package com.socialize.ui.share;
 
+import com.socialize.api.action.ShareType;
+
 import android.app.Activity;
 import android.content.Intent;
 
@@ -21,5 +23,10 @@ public class SmsShareClickListener extends ShareClickListener {
 	@Override
 	protected boolean isIncludeSocialize() {
 		return true;
+	}
+	
+	@Override
+	protected ShareType getShareType() {
+		return ShareType.SMS;
 	}
 }
