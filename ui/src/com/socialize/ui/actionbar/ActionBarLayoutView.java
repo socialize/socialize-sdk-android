@@ -44,6 +44,7 @@ import com.socialize.ui.SocializeUI;
 import com.socialize.ui.cache.CacheableEntity;
 import com.socialize.ui.cache.EntityCache;
 import com.socialize.ui.dialog.ProgressDialogFactory;
+import com.socialize.ui.facebook.FacebookWallPoster;
 import com.socialize.ui.share.ShareDialogFactory;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
@@ -80,6 +81,7 @@ public class ActionBarLayoutView extends BaseView {
 	private CacheableEntity localEntity;
 	private DeviceUtils deviceUtils;
 	
+	private FacebookWallPoster facebookWallPoster;
 	private ShareDialogFactory shareDialogFactory;
 	
 	public ActionBarLayoutView(Activity context, String entityKey) {
@@ -293,6 +295,9 @@ public class ActionBarLayoutView extends BaseView {
 						button.hideLoading();
 					}
 				});
+				
+				// TODO: Inspect user prefs
+				facebookWallPoster.postLike(getActivity(), null);
 			}
 		}
 	}
@@ -453,5 +458,9 @@ public class ActionBarLayoutView extends BaseView {
 
 	public void setShareDialogFactory(ShareDialogFactory shareDialogFactory) {
 		this.shareDialogFactory = shareDialogFactory;
+	}
+
+	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
+		this.facebookWallPoster = facebookWallPoster;
 	}
 }

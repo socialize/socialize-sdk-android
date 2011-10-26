@@ -84,7 +84,7 @@ public class ShareMessageBuilder {
 		
 	}
 	
-	public String buildShareMessage(Activity context, String comment, boolean html) {
+	public String buildShareMessage(Activity context, String comment, boolean html, boolean includeSocialize) {
 		
 		StringBuilder builder = new StringBuilder();
 		
@@ -102,9 +102,11 @@ public class ShareMessageBuilder {
 			isUseLink = extras.getBoolean(SocializeUI.ENTITY_URL_AS_LINK);
 		}
 		
-		if(!StringUtils.isEmpty(comment)) {
-			builder.append(comment);
+		if(StringUtils.isEmpty(comment)) {
+			comment = "Check this out:";
 		}
+		
+		builder.append(comment);
 
 		builder.append(getNewLine(html));
 		
@@ -132,25 +134,30 @@ public class ShareMessageBuilder {
 			builder.append(entityDescription);
 		}
 		
-		builder.append(getNewLine(html));
-		builder.append(getNewLine(html));
-		builder.append("Shared from ");
-		
-		if(html) builder.append("<a href=\"");
-		
-		builder.append(deviceUtils.getMarketUrl(html));
-		
-		if(html) builder.append("\">");
-		if(html) builder.append(deviceUtils.getAppName());
-		if(html) builder.append("</a>");
-		
-		builder.append(" using ");
-		
-		if(html) {
-			builder.append("<a href=\"http://www.getsocialize.com\">Socialize</a>");
-		}
-		else {
-			builder.append("Socialize");
+		if(includeSocialize) {
+			builder.append(getNewLine(html));
+			builder.append(getNewLine(html));
+			builder.append("Shared from ");
+			
+			if(html) {
+				builder.append("<a href=\"");
+				builder.append(deviceUtils.getMarketUrl(html));
+				builder.append("\">");
+				builder.append(deviceUtils.getAppName());
+				builder.append("</a>");
+			}
+			else {
+				builder.append(deviceUtils.getAppName());
+			}
+			
+			builder.append(" using ");
+			
+			if(html) {
+				builder.append("<a href=\"http://www.getsocialize.com\">Socialize for Android</a>.  ");
+			}
+			else {
+				builder.append("Socialize for Android. http://www.getsocialize.com");
+			}
 		}
 		
 		return builder.toString();

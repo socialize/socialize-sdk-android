@@ -22,6 +22,10 @@
 		<property name="drawables" ref="drawables"/>
 	</bean>
 	
+	<bean id="alertDialogFactory" class="com.socialize.ui.dialog.AlertDialogFactory">
+		<property name="drawables" ref="drawables"/>
+	</bean>	
+	
 	<bean id="socializeView" abstract="true">
 		<property name="errorHandler" ref="socializeUIErrorHandler"/>
 	</bean>
@@ -298,6 +302,14 @@
 		<property name="dialogFactory" ref="progressDialogFactory"/>
 	</bean>
 	
+	<bean 
+		id="facebookWallPoster" 
+		class="com.socialize.ui.facebook.FacebookWallPoster">
+		<property name="logger" ref="logger"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+	</bean>
+	
 	<factory id="facebookSignOutTaskFactory" makes="facebookSignOutTask"/>
 
 <!-- Comment UI -->
@@ -389,6 +401,7 @@
 		<property name="commentContentViewFactory" ref="commentContentViewFactory"/>
 		<property name="keyboardUtils" ref="keyboardUtils"/>
 		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
+		<property name="facebookWallPoster" ref="facebookWallPoster"/>
 	</bean>
 	
 	<bean 
@@ -548,6 +561,7 @@
 		<property name="itemFactory" ref="actionBarItemFactory"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
 		<property name="shareDialogFactory" ref="shareDialogFactory"/>
+		<property name="facebookWallPoster" ref="facebookWallPoster"/>
 	</bean>
 	
 	<bean 
@@ -651,9 +665,11 @@
 		class="com.socialize.ui.share.FacebookShareClickListener" 
 		extends="shareClickListener">
 		<property name="deviceUtils" ref="deviceUtils"/>
-		<property name="drawables" ref="drawables"/>
+		<property name="facebookWallPoster" ref="facebookWallPoster"/>
 		<property name="config" ref="config"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
+		<property name="alertDialogFactory" ref="alertDialogFactory"/>
+		<property name="logger" ref="logger"/>
 	</bean>
 		
 	<bean 

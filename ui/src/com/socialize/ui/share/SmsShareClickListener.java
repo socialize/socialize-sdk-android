@@ -17,4 +17,9 @@ public class SmsShareClickListener extends ShareClickListener {
 	protected boolean isHtml() {
 		return false;
 	}
+	
+	@Override
+	protected boolean isIncludeSocialize() {
+		return true;
+	}
 }

@@ -21,56 +21,14 @@
  */
 package com.socialize.ui.dialog;
 
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Context;
 
-import com.socialize.log.SocializeLogger;
-import com.socialize.util.Drawables;
-
 /**
- * Safely renders progress dialogs
  * @author Jason Polites
+ *
  */
-public class ProgressDialogFactory implements DialogFactory<ProgressDialog> {
-	
-	private SocializeLogger logger;
-	private Drawables drawables;
+public interface DialogFactory<D extends Dialog> {
 
-	public ProgressDialog show(Context context, String title, String message) {
-		try {
-			ProgressDialog dialog = makeDialog(context);
-			dialog.setTitle(title);
-			dialog.setMessage(message);
-			
-			if(drawables != null) {
-				dialog.setIcon(drawables.getDrawable("socialize_icon_white.png"));
-			}
-			
-			dialog.show();
-			
-			return dialog;
-		}
-		catch (Exception e) {
-			if(logger != null) {
-				logger.error("Error displaying progress dialog", e);
-			}
-			else {
-				e.printStackTrace();
-			}
-			
-			return null;
-		}
-	}
-	
-	protected ProgressDialog makeDialog(Context context) {
-		return new SafeProgressDialog(context);
-	}
-
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
-	}
-
-	public void setDrawables(Drawables drawables) {
-		this.drawables = drawables;
-	}
+	public D show(Context context, String title, String message);
 }

@@ -19,58 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.dialog;
+package com.socialize.ui.facebook;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-
-import com.socialize.log.SocializeLogger;
-import com.socialize.util.Drawables;
+import android.app.Activity;
 
 /**
- * Safely renders progress dialogs
  * @author Jason Polites
+ *
  */
-public class ProgressDialogFactory implements DialogFactory<ProgressDialog> {
+public interface FacebookWallPostListener {
+
+	public void onPost(Activity parent);
 	
-	private SocializeLogger logger;
-	private Drawables drawables;
-
-	public ProgressDialog show(Context context, String title, String message) {
-		try {
-			ProgressDialog dialog = makeDialog(context);
-			dialog.setTitle(title);
-			dialog.setMessage(message);
-			
-			if(drawables != null) {
-				dialog.setIcon(drawables.getDrawable("socialize_icon_white.png"));
-			}
-			
-			dialog.show();
-			
-			return dialog;
-		}
-		catch (Exception e) {
-			if(logger != null) {
-				logger.error("Error displaying progress dialog", e);
-			}
-			else {
-				e.printStackTrace();
-			}
-			
-			return null;
-		}
-	}
+	public void onError(Activity parent, String message, Throwable error);
 	
-	protected ProgressDialog makeDialog(Context context) {
-		return new SafeProgressDialog(context);
-	}
-
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
-	}
-
-	public void setDrawables(Drawables drawables) {
-		this.drawables = drawables;
-	}
 }

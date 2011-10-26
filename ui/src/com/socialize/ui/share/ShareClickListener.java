@@ -69,7 +69,7 @@ public abstract class ShareClickListener implements OnClickListener {
 			String body = null;
 			if(isGenerateShareMessage()) {
 				subject = shareMessageBuilder.buildShareSubject(activity);
-				body = shareMessageBuilder.buildShareMessage(activity, comment, isHtml());
+				body = shareMessageBuilder.buildShareMessage(activity, comment, isHtml(), isIncludeSocialize());
 			}
 				
 			doShare(activity, title, subject, body, comment);
@@ -87,6 +87,8 @@ public abstract class ShareClickListener implements OnClickListener {
 	protected abstract void doShare(Activity parent, String title, String subject, String body, String comment);
 	
 	protected abstract boolean isHtml();
+	
+	protected abstract boolean isIncludeSocialize();
 	
 	protected boolean isGenerateShareMessage() {
 		return true;

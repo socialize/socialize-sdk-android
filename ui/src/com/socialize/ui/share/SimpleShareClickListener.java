@@ -47,5 +47,10 @@ public abstract class SimpleShareClickListener extends ShareClickListener {
 		parent.startActivity(Intent.createChooser(msg, title));
 	}
 	
+	@Override
+	protected boolean isIncludeSocialize() {
+		return true;
+	}
+
 	protected abstract String getMimeType();
 }

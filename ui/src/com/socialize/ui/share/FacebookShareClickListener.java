@@ -21,10 +21,6 @@
  */
 package com.socialize.ui.share;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.MalformedURLException;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -34,18 +30,16 @@ import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.facebook.FacebookSessionStore;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
-import com.socialize.facebook.AsyncFacebookRunner;
-import com.socialize.facebook.AsyncFacebookRunner.RequestListener;
-import com.socialize.facebook.Facebook;
-import com.socialize.facebook.FacebookError;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUI;
+import com.socialize.ui.dialog.AlertDialogFactory;
 import com.socialize.ui.dialog.ProgressDialogFactory;
+import com.socialize.ui.facebook.FacebookWallPostListener;
+import com.socialize.ui.facebook.FacebookWallPoster;
 import com.socialize.util.DeviceUtils;
-import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 
 /**
@@ -55,9 +49,11 @@ import com.socialize.util.StringUtils;
 public class FacebookShareClickListener extends ShareClickListener {
 
 	private DeviceUtils deviceUtils;
-	private Drawables drawables;
 	private SocializeConfig config;
 	private ProgressDialogFactory progressDialogFactory;
+	private AlertDialogFactory alertDialogFactory;
+	private SocializeLogger logger;
+	private FacebookWallPoster facebookWallPoster;
 	
 	@Override
 	protected void doShare(final Activity parent, final String title, final String subject, final String body, final String comment) {
@@ -79,7 +75,7 @@ public class FacebookShareClickListener extends ShareClickListener {
 
 					@Override
 					public void onError(SocializeException error) {
-						doError(error);
+						doError(error, parent);
 					}
 
 					@Override
@@ -89,7 +85,7 @@ public class FacebookShareClickListener extends ShareClickListener {
 
 					@Override
 					public void onAuthFail(SocializeException error) {
-						doError(error);
+						doError(error, parent);
 					}
 
 					@Override
@@ -101,50 +97,45 @@ public class FacebookShareClickListener extends ShareClickListener {
 		}
 	}
 	
-	protected void doShareFB(Activity parent, String title, String subject, String body, String comment) {
+	/**
+	 * @param error
+	 * @param parent
+	 */
+	protected void doError(SocializeException e, Activity parent) {
+		if(logger != null) {
+			logger.error("Error sharing to Facebook", e);
+		}
+		else {
+			e.printStackTrace();
+		}
+		alertDialogFactory.show(parent, "Error", "Share failed.  Please try again");
+	}
+
+	protected void doShareFB(final Activity parent, String title, String subject, String body, String comment) {
+		
+		// We're not going to use the default share text
+		String caption = "Download the app now to join the conversation.";
+		String linkName = deviceUtils.getAppName();
+		String link = deviceUtils.getMarketUrl(false);
 		
 		final ProgressDialog dialog = progressDialogFactory.show(parent, "Share", "Sharing to Facebook...");
 		
 		String appId = getSocializeUI().getCustomConfigValue(SocializeConfig.FACEBOOK_APP_ID);
 		
-		subject = getSubject(parent);
-		body = getContent(parent, comment);
-
-		Bundle params = new Bundle();
-		params.putString("name", subject);
-		params.putString("message", body);
-		params.putString("link", deviceUtils.getMarketUrl(false));
-		params.putString("caption", deviceUtils.getAppName());
+		facebookWallPoster.post(parent, appId, linkName, body, link, caption, new FacebookWallPostListener() {
+			@Override
+			public void onPost(Activity parent) {
+				dialog.dismiss();
+				alertDialogFactory.show(parent, "Success", "Share successful!");
+			}
+			
+			@Override
+			public void onError(Activity parent, String message, Throwable error) {
+				dialog.dismiss();
+				alertDialogFactory.show(parent, "Error", "Share failed.  Please try again");
+			}
+		});
 		
-		Facebook fb = new Facebook(appId, drawables);
-		
-		FacebookSessionStore store = new FacebookSessionStore();
-		store.restore(fb, parent);
-		
-		AsyncFacebookRunner runner = new AsyncFacebookRunner(fb);
-		
-		runner.request("me/feed", params, "POST", new RequestListener() {
-			public void onMalformedURLException(MalformedURLException e, Object state) {
-				dialog.dismiss();
-				doError(e);
-			}
-			public void onIOException(IOException e, Object state) {
-				dialog.dismiss();
-				doError(e);
-			}
-			public void onFileNotFoundException(final FileNotFoundException e, Object state) {
-				dialog.dismiss();
-				doError(e);
-			}
-			public void onFacebookError(FacebookError e, Object state) {
-				dialog.dismiss();
-				doError(e);
-			}
-			public void onComplete(final String response, Object state) {
-				// TODO: add success dialog
-				dialog.dismiss();
-			}
-		}, null);	
 	}
 	
 	protected String getSubject(Activity activity) {
@@ -180,14 +171,15 @@ public class FacebookShareClickListener extends ShareClickListener {
 		return builder.toString();
 	}
 	
-	protected void doError(Throwable e) {
-		// TODO: Add error dialog
-		e.printStackTrace();
-	}
 	
 	@Override
 	protected boolean isHtml() {
 		return false;
+	}
+	
+	@Override
+	protected boolean isIncludeSocialize() {
+		return true;
 	}
 	
 	protected SocializeUI getSocializeUI() {
@@ -202,10 +194,6 @@ public class FacebookShareClickListener extends ShareClickListener {
 		this.deviceUtils = deviceUtils;
 	}
 
-	public void setDrawables(Drawables drawables) {
-		this.drawables = drawables;
-	}
-
 	public void setConfig(SocializeConfig config) {
 		this.config = config;
 	}
@@ -213,4 +201,18 @@ public class FacebookShareClickListener extends ShareClickListener {
 	public void setProgressDialogFactory(ProgressDialogFactory progressDialogFactory) {
 		this.progressDialogFactory = progressDialogFactory;
 	}
+
+	public void setAlertDialogFactory(AlertDialogFactory alertDialogFactory) {
+		this.alertDialogFactory = alertDialogFactory;
+	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
+
+	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
+		this.facebookWallPoster = facebookWallPoster;
+	}
+	
+	
 }

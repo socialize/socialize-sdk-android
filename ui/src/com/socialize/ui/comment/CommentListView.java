@@ -19,6 +19,7 @@ import com.socialize.ui.BaseView;
 import com.socialize.ui.auth.AuthRequestDialogFactory;
 import com.socialize.ui.auth.AuthRequestListener;
 import com.socialize.ui.dialog.ProgressDialogFactory;
+import com.socialize.ui.facebook.FacebookWallPoster;
 import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.ui.view.ViewFactory;
 import com.socialize.util.Drawables;
@@ -49,6 +50,8 @@ public class CommentListView extends BaseView {
 	private CommentHeader header;
 	private CommentContentView content;
 	private IBeanFactory<AuthRequestDialogFactory> authRequestDialogFactory;
+	
+	private FacebookWallPoster facebookWallPoster;
 	
 	public CommentListView(Context context, String entityKey) {
 		this(context);
@@ -174,6 +177,9 @@ public class CommentListView extends BaseView {
 				}
 			}
 		});
+		
+		// TODO: check fb permissions 
+		facebookWallPoster.postComment(getActivity(), comment, null);
 	}
 	
 
@@ -382,6 +388,10 @@ public class CommentListView extends BaseView {
 
 	public int getEndIndex() {
 		return endIndex;
+	}
+
+	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
+		this.facebookWallPoster = facebookWallPoster;
 	}
 
 	public int getTotalCount() {

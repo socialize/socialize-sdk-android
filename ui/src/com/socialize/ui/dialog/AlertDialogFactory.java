@@ -21,56 +21,55 @@
  */
 package com.socialize.ui.dialog;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-
-import com.socialize.log.SocializeLogger;
 import com.socialize.util.Drawables;
+import com.socialize.util.StringUtils;
+
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.Context;
+import android.content.DialogInterface;
 
 /**
- * Safely renders progress dialogs
  * @author Jason Polites
+ *
  */
-public class ProgressDialogFactory implements DialogFactory<ProgressDialog> {
-	
-	private SocializeLogger logger;
+public class AlertDialogFactory implements DialogFactory<AlertDialog> {
+
 	private Drawables drawables;
-
-	public ProgressDialog show(Context context, String title, String message) {
-		try {
-			ProgressDialog dialog = makeDialog(context);
-			dialog.setTitle(title);
-			dialog.setMessage(message);
-			
-			if(drawables != null) {
-				dialog.setIcon(drawables.getDrawable("socialize_icon_white.png"));
-			}
-			
-			dialog.show();
-			
-			return dialog;
+	
+	@Override
+	public AlertDialog show(Context context, String title, String message) {
+		AlertDialog.Builder builder = makeBuilder(context);
+		builder.setTitle(title);
+		
+		if(drawables != null) {
+			builder.setIcon(drawables.getDrawable("socialize_icon_white.png"));
 		}
-		catch (Exception e) {
-			if(logger != null) {
-				logger.error("Error displaying progress dialog", e);
-			}
-			else {
-				e.printStackTrace();
-			}
-			
-			return null;
+		
+		if(!StringUtils.isEmpty(message)) {
+			builder.setMessage(message);
 		}
+		
+		builder.setCancelable(true)
+		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.dismiss();
+			}
+		});
+		
+		AlertDialog alert = builder.create();
+		
+		alert.show();
+		
+		return alert;
 	}
 	
-	protected ProgressDialog makeDialog(Context context) {
-		return new SafeProgressDialog(context);
-	}
-
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
+	protected Builder makeBuilder(Context context) {
+		return new AlertDialog.Builder(context);
 	}
 
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
 	}
+
 }
