@@ -29,7 +29,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.provider.MediaStore;
@@ -129,12 +128,12 @@ public class DeviceUtils {
 	public String getMarketUrl(boolean http) {
 		StringBuilder builder = new StringBuilder();
 		
-		if(http) {
+//		if(http) {
 			builder.append("https://market.android.com/details?id=");
-		}
-		else {
-			builder.append("market://details?id=");
-		}
+//		}
+//		else {
+//			builder.append("market://details?id=");
+//		}
 		
 		builder.append(packageName);
 		return builder.toString();

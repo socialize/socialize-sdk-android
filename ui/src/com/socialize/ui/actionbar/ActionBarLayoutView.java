@@ -141,7 +141,7 @@ public class ActionBarLayoutView extends BaseView {
 		likeButton.setListener(new ActionBarButtonListener() {
 			@Override
 			public void onClick(ActionBarButton button) {
-				postLike();
+				postLike(likeButton);
 			}
 		});
 		
@@ -194,6 +194,7 @@ public class ActionBarLayoutView extends BaseView {
 		addView(likeButton);
 		addView(shareButton);
 		addView(commentButton);
+		
 	}
 	
 	@Override
@@ -248,9 +249,11 @@ public class ActionBarLayoutView extends BaseView {
 		getEntityData();
 	}
 
-	protected void postLike() {
+	protected void postLike(final ActionBarButton button) {
 		
 		if(localEntity != null) {
+			
+			button.showLoading();
 			
 			if(localEntity.isLiked()) {
 				// Unlike
@@ -259,6 +262,7 @@ public class ActionBarLayoutView extends BaseView {
 					@Override
 					public void onError(SocializeException error) {
 						logError("Error deleting like", error);
+						button.hideLoading();
 					}
 					
 					@Override
@@ -266,6 +270,7 @@ public class ActionBarLayoutView extends BaseView {
 						localEntity.setLiked(false);
 						localEntity.getEntity().setLikes(localEntity.getEntity().getLikes()-1);
 						setEntityData(localEntity);
+						button.hideLoading();
 					}
 				});
 			}
@@ -276,6 +281,7 @@ public class ActionBarLayoutView extends BaseView {
 					@Override
 					public void onError(SocializeException error) {
 						logError("Error posting like", error);
+						button.hideLoading();
 					}
 					
 					@Override
@@ -284,6 +290,7 @@ public class ActionBarLayoutView extends BaseView {
 						localEntity.setLiked(true);
 						localEntity.setLikeId(entity.getId());
 						setEntityData(localEntity);
+						button.hideLoading();
 					}
 				});
 			}

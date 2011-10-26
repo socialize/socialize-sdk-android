@@ -126,4 +126,17 @@ public class ActionBarButton extends LinearLayout {
 	public void setActionBarItemFactory(IBeanFactory<ActionBarItem> itemFactory) {
 		this.actionBarItemFactory = itemFactory;
 	}
+	
+	
+	public void showLoading() {
+		if(actionBarItem != null) {
+			actionBarItem.showLoading();
+		}
+	}
+	
+	public void hideLoading() {
+		if(actionBarItem != null) {
+			actionBarItem.hideLoading();
+		}
+	}	
 }

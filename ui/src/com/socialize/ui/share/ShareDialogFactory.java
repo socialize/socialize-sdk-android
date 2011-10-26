@@ -46,6 +46,9 @@ public class ShareDialogFactory  {
 		final AlertDialog alertDialog = builder.create();
 		alertDialog.setIcon(drawables.getDrawable("socialize_icon_white.png"));
 		alertDialog.setTitle("Share");
+		
+		view.setParent(alertDialog);
+		
 	    alertDialog.show();
 	}
 	

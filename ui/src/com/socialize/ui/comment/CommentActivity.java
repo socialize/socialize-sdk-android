@@ -63,7 +63,7 @@ public class CommentActivity extends SocializeUIActivity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK) {
-			Socialize.getSocialize().destroy(true);
+			Socialize.getSocialize().destroy();
 		}
 		return super.onKeyDown(keyCode, event);
 	}

@@ -38,6 +38,8 @@ public class Container {
 	
 	private Context context; // Used only to track the current context.
 	
+	private boolean destroyed = false;
+	
 	// Parameterless constructor so it can be mocked.
 	protected Container() {
 		super();
@@ -125,6 +127,12 @@ public class Container {
 			beans.clear();
 			beans = null;
 		}
+		
+		destroyed = true;
+	}
+	
+	public boolean isDestroyed() {
+		return destroyed;
 	}
 	
 	protected void putBean(String name, Object bean) {
@@ -153,9 +161,6 @@ public class Container {
 					if(ref.isContextSensitiveConstructor()) {
 						// We have a new context, so we need to rebuild this bean
 						Object bean = builder.buildBean(this, ref);
-						
-						builder.destroyBean(this, ref, bean);
-						
 						builder.setBeanProperties(this, ref, bean);
 						
 						if(!ref.isLazyInit()) {
@@ -173,7 +178,6 @@ public class Container {
 						else {
 							// Re-call init
 							Object bean = getBean(ref.getName());
-							builder.destroyBean(this, ref, bean);
 							builder.initBean(this, ref, bean);
 							beans.put(ref.getName(), bean);	
 						}

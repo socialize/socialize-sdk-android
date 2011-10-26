@@ -63,12 +63,20 @@ public final class Util {
 		StringBuilder sb = new StringBuilder();
 
 		for (String key : parameters.keySet()) {
-			if (parameters.getByteArray(key) != null) {
+			
+			Object object = parameters.get(key);
+			
+			if(object instanceof byte[]) {
 				continue;
 			}
-
-			sb.append("Content-Disposition: form-data; name=\"" + key + "\"\r\n\r\n" + parameters.getString(key));
-			sb.append("\r\n" + "--" + boundary + "\r\n");
+			else if(object instanceof String) {
+				sb.append("Content-Disposition: form-data; name=\"" + key + "\"\r\n\r\n" + object.toString());
+				sb.append("\r\n" + "--" + boundary + "\r\n");
+			}
+			
+//			if (parameters.getByteArray(key) != null) {
+//				continue;
+//			}
 		}
 
 		return sb.toString();
@@ -158,9 +166,16 @@ public final class Util {
 		if (!method.equals("GET")) {
 			Bundle dataparams = new Bundle();
 			for (String key : params.keySet()) {
-				if (params.getByteArray(key) != null) {
-					dataparams.putByteArray(key, params.getByteArray(key));
+				Object object = params.get(key);
+				if(object instanceof byte[]) {
+					dataparams.putByteArray(key, (byte[])object);
 				}
+				else if(object instanceof String) {
+					dataparams.putByteArray(key, ((String)object).getBytes());
+				}
+//				if (params.getByteArray(key) != null) {
+//					dataparams.putByteArray(key, params.getByteArray(key));
+//				}
 			}
 
 			// use method override

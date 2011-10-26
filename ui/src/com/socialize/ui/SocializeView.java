@@ -27,7 +27,6 @@ import android.util.AttributeSet;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
-import com.socialize.ui.ActivityIOCProvider;
 import com.socialize.ui.error.SocializeUIErrorHandler;
 
 /**

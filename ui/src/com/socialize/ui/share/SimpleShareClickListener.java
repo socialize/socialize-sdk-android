@@ -31,7 +31,7 @@ import android.text.Html;
 public abstract class SimpleShareClickListener extends ShareClickListener {
 	
 	@Override
-	protected void doShare(Activity parent, String title, String subject, String body) {
+	protected void doShare(Activity parent, String title, String subject, String body, String comment) {
 		Intent msg  = new Intent(android.content.Intent.ACTION_SEND);
 		msg.setType(getMimeType());
 		msg.putExtra(Intent.EXTRA_TITLE, title);

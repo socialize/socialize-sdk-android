@@ -21,12 +21,14 @@
  */
 package com.socialize.ui.share;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -44,6 +46,7 @@ public class ShareDialogView extends BaseView {
 	private SocializeButton smsShareButton;
 	private OtherShareClickListener otherShareClickListener;
 	private DeviceUtils deviceUtils;
+	private Dialog parent;
 	
 	public ShareDialogView(Context context) {
 		super(context);
@@ -77,15 +80,27 @@ public class ShareDialogView extends BaseView {
 		otherOptions.setLayoutParams(textLayout);
 		otherOptions.setOnClickListener(otherShareClickListener);
 		
+		OnClickListener closeDialogOnClick = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(parent != null) {
+					parent.dismiss();
+				}
+			}
+		};
+		
 		if(facebookShareButton != null) {
+			facebookShareButton.addOnClickListenerBefore(closeDialogOnClick);
 			addView(facebookShareButton);
 		}
 		
 		if(emailShareButton != null) {
+			emailShareButton.addOnClickListenerBefore(closeDialogOnClick);
 			addView(emailShareButton);
 		}
 		
 		if(smsShareButton != null) {
+			smsShareButton.addOnClickListenerBefore(closeDialogOnClick);
 			addView(smsShareButton);
 		}
 		
@@ -111,6 +126,8 @@ public class ShareDialogView extends BaseView {
 	public void setSmsShareButton(SocializeButton smsShareButton) {
 		this.smsShareButton = smsShareButton;
 	}
-	
-	
+
+	public void setParent(Dialog parent) {
+		this.parent = parent;
+	}
 }

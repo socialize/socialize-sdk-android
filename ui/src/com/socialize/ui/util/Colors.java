@@ -37,6 +37,7 @@ public class Colors {
 	public static final String BODY = "BODY";
 	public static final String HEADER = "HEADER";
 	public static final String BUTTON_BOTTOM = "BUTTON_BOTTOM";
+	public static final String SOCIALIZE_BLUE = "SOCIALIZE_BLUE";
 	
 	/**
 	 * @deprecated

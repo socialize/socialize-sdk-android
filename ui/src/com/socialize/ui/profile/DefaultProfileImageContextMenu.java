@@ -79,6 +79,7 @@ public class DefaultProfileImageContextMenu implements ProfileImageContextMenu {
 	}
 	
 	protected void launchGallery() {
+//		Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		Intent intent = new Intent();
 		intent.setType("image/*");
 		intent.setAction(Intent.ACTION_GET_CONTENT);

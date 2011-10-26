@@ -21,6 +21,9 @@
  */
 package com.socialize.ui.button;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -29,6 +32,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -74,7 +78,9 @@ public class SocializeButton extends LinearLayout {
 	private String textAlign = "left";
 	
 	private OnClickListener customClickListener;
-
+	private List<OnClickListener> beforeListeners;
+	private List<OnClickListener> afterListeners;
+	
 	public SocializeButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
@@ -195,7 +201,7 @@ public class SocializeButton extends LinearLayout {
 			imageView.setImageDrawable(drawables.getDrawable(imageName));
 			imageView.setLayoutParams(imageLayout);
 			imageView.setPadding(deviceUtils.getDIP(imagePaddingLeft), 0, deviceUtils.getDIP(imagePaddingRight), 0);
-			
+
 			addView(imageView);
 			
 			textView.setPadding(textPadding, 0, 0, 0);
@@ -205,11 +211,30 @@ public class SocializeButton extends LinearLayout {
 		}
 		
 		addView(textView);
-		
-		if(customClickListener != null) {
-			setOnClickListener(customClickListener);
-		}
+			
+		setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(final View v) {
+				
+				if(beforeListeners != null) {
+					for (OnClickListener listener : beforeListeners) {
+						listener.onClick(v);
+					}
+				}
+				
+				if(customClickListener != null) {
+					customClickListener.onClick(v);
+				}
+				
+				if(afterListeners != null) {
+					for (OnClickListener listener : afterListeners) {
+						listener.onClick(v);
+					}
+				}
+			}
+		});
 	}
+	
 	// use a method so we can mock
 	protected ImageView makeImageView() {
 		return new ImageView(getContext());
@@ -324,5 +349,20 @@ public class SocializeButton extends LinearLayout {
 
 	public void setImagePaddingRight(int imagePaddingRight) {
 		this.imagePaddingRight = imagePaddingRight;
+	}
+	
+	public void addOnClickListenerAfter(OnClickListener listener) {
+		if(afterListeners == null) {
+			afterListeners = new ArrayList<View.OnClickListener>(3);
+		}
+		afterListeners.add(listener);
+	}
+	
+	public void addOnClickListenerBefore(OnClickListener listener) {
+		if(beforeListeners == null) {
+			beforeListeners = new ArrayList<View.OnClickListener>(3);
+		}
+		
+		beforeListeners.add(listener);
 	}
 }

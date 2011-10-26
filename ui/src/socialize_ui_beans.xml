@@ -53,6 +53,10 @@
 					<value value="#ffffff"/>
 				</entry>
 				<entry>
+					<key value="SOCIALIZE_BLUE"/>
+					<value value="#00abe3"/>
+				</entry>
+				<entry>
 					<key value="BUTTON_BOTTOM"/>
 					<value value="#146288"/>
 				</entry>
@@ -645,7 +649,12 @@
 	<bean 
 		id="facebookShareClickListener" 
 		class="com.socialize.ui.share.FacebookShareClickListener" 
-		extends="shareClickListener"/>
+		extends="shareClickListener">
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="config" ref="config"/>
+		<property name="progressDialogFactory" ref="progressDialogFactory"/>
+	</bean>
 		
 	<bean 
 		id="emailShareClickListener" 
