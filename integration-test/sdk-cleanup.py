@@ -96,6 +96,20 @@ def make_request(client, req_url, method, data, outfile=None):
     except ValueError:
         print resp[1]      
 
+def get_request(client, req_url, params):
+    resp=client.request(uri=req_url, method='GET' )
+    if resp[0]['status']!='200':
+        print 'ERROR:',resp[0]['status']
+        print resp[1]
+        sys.exit(2)
+    
+    try:
+        cont = simplejson.loads(resp[1])
+        print_json(resp[1],outfile)    
+    except ValueError:
+        print resp[1]   
+
+
 def main(key,secret,url):
     sig = oauth.SignatureMethod_HMAC_SHA1()    
     auth_url = 'authenticate/'
@@ -117,16 +131,14 @@ def main(key,secret,url):
     consumer = oauth.Consumer( key, secret)
     client = oauth.Client( consumer) 
     payload = simplejson.dumps({ 'payload': { 'udid': udid}})
-    
-    
-    auth_resp = client.request(auth_url ,'POST', body='payload='+simplejson.dumps({'udid':udid}))
-    try:
+    try:    
+        auth_resp = client.request(auth_url ,'POST', body='payload='+simplejson.dumps({'udid':udid}))
         auth_cont = simplejson.loads(auth_resp[1])
         oauth_secret= auth_cont['oauth_token_secret']
         oauth_token= auth_cont['oauth_token']
-        token = oauth.Token(oauth_token,oauth_secret) 
+        token = oauth.Token(oauth_token,oauth_secret)
     except:
-        resp = simplejson.loads(auth_resp)
+        print auth_resp
 ## Create client with oauth token
     client=oauth.Client(consumer,token)
     print '#'*20
@@ -194,6 +206,7 @@ def main(key,secret,url):
     req_url = url+view_url 
     make_request(client, req_url,method='POST', data=views, outfile='views.json')    
 
+
 if __name__ == "__main__":
     args = sys.argv
     if len(args)<4:
@@ -215,5 +228,8 @@ if __name__ == "__main__":
     
     if not url.startswith('http://api.getsocialize.com'):
         sys.exit(main(key,secret,url))
+
+
+
     else:
         sys.exit(0)
