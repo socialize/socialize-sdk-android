@@ -80,6 +80,7 @@ public class UserTest extends SocializeUnitTest {
 		final String medium_url = "foobar_medium_url";
 		final String large_url = "foobar_large_url";
 		final String picture = "foobar_picture";
+		final boolean autoPostFB = false;
 		
 		AndroidMock.expect(mockUser.getFirstName()).andReturn(firstName);
 		AndroidMock.expect(mockUser.getLastName()).andReturn(lastName);
@@ -89,6 +90,7 @@ public class UserTest extends SocializeUnitTest {
 		AndroidMock.expect(mockUser.getMediumImageUri()).andReturn(medium_url);
 		AndroidMock.expect(mockUser.getLargeImageUri()).andReturn(large_url);
 		AndroidMock.expect(mockUser.getProfilePicData()).andReturn(picture);
+		AndroidMock.expect(mockUser.isAutoPostToFacebook()).andReturn(autoPostFB);
 		
 		AndroidMock.expect(mockUser.getStats()).andReturn(stats);
 		AndroidMock.expect(mockUser.getAuthData()).andReturn(authData);
@@ -107,6 +109,7 @@ public class UserTest extends SocializeUnitTest {
 		assertEquals(medium_url, realUser.getMediumImageUri());
 		assertEquals(large_url, realUser.getLargeImageUri());
 		assertEquals(picture, realUser.getProfilePicData());
+		assertEquals(autoPostFB, realUser.isAutoPostToFacebook());
 		
 		assertSame(stats, realUser.getStats());
 		assertSame(authData, realUser.getAuthData());
