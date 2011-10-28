@@ -17,8 +17,6 @@ public abstract class BaseView extends LinearLayout {
 	
 	private int loadCount = 0;
 	
-	private boolean loaded = false;
-	
 	public BaseView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
@@ -66,10 +64,10 @@ public abstract class BaseView extends LinearLayout {
 					onViewUpdate();
 				}
 			}
-			else if(visibility == View.INVISIBLE || visibility == View.GONE)
-			{
-				decrementLoaded();
-			}
+//			else if(visibility == View.INVISIBLE || visibility == View.GONE)
+//			{
+//				decrementLoaded();
+//			}
 		}
 		else {
 			// Add the default Socialize View for display
@@ -84,9 +82,9 @@ public abstract class BaseView extends LinearLayout {
 		loadCount++;
 	}
 	
-	protected void decrementLoaded() {
-		if(loadCount > 0) loadCount--;
-	}
+//	protected void decrementLoaded() {
+//		if(loadCount > 0) loadCount--;
+//	}
 	
 	protected boolean checkLoaded() {
 		boolean loaded = (loadCount > 0);
@@ -99,19 +97,13 @@ public abstract class BaseView extends LinearLayout {
 		return null;
 	}
 	
-	public boolean isLoaded() {
-		return loaded;
-	}
-	
 	public void assignId(View parent) {
 		setId(getNextViewId(parent));
 	}
 
 	protected void onViewUpdate() {}
 
-	protected void onViewLoad() {
-		loaded = true;
-	}
+	protected void onViewLoad() {}
 	
 	protected int getNextViewId(View parent) {
 		int id = Integer.MAX_VALUE;

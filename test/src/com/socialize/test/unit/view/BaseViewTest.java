@@ -118,64 +118,64 @@ public class BaseViewTest extends SocializeActivityTest {
 		assertNotNull(val);
 		assertEquals(success, val);
 	}	
-	
-	public void test_onWindowVisibilityChangedInvisible() {
-		
-		final String success = "decrementLoaded";
-		
-		PublicBaseView view = new PublicBaseView(getActivity()) {
-			@Override
-			public boolean isInEditMode() {
-				return false;
-			}
-
-			@Override
-			public boolean checkLoaded() {
-				return true;
-			}
-
-			@Override
-			public void decrementLoaded() {
-				addResult(success);
-			}
-		};
-		
-		view.onWindowVisibilityChanged(View.INVISIBLE);
-		
-		String val = getNextResult();
-		
-		assertNotNull(val);
-		assertEquals(success, val);
-	}	
-	
-	public void test_onWindowVisibilityChangedGone() {
-		
-		final String success = "decrementLoaded";
-		
-		PublicBaseView view = new PublicBaseView(getActivity()) {
-			@Override
-			public boolean isInEditMode() {
-				return false;
-			}
-
-			@Override
-			public boolean checkLoaded() {
-				return true;
-			}
-
-			@Override
-			public void decrementLoaded() {
-				addResult(success);
-			}
-		};
-		
-		view.onWindowVisibilityChanged(View.GONE);
-		
-		String val = getNextResult();
-		
-		assertNotNull(val);
-		assertEquals(success, val);
-	}		
+//	
+//	public void test_onWindowVisibilityChangedInvisible() {
+//		
+//		final String success = "decrementLoaded";
+//		
+//		PublicBaseView view = new PublicBaseView(getActivity()) {
+//			@Override
+//			public boolean isInEditMode() {
+//				return false;
+//			}
+//
+//			@Override
+//			public boolean checkLoaded() {
+//				return true;
+//			}
+//
+//			@Override
+//			public void decrementLoaded() {
+//				addResult(success);
+//			}
+//		};
+//		
+//		view.onWindowVisibilityChanged(View.INVISIBLE);
+//		
+//		String val = getNextResult();
+//		
+//		assertNotNull(val);
+//		assertEquals(success, val);
+//	}	
+//	
+//	public void test_onWindowVisibilityChangedGone() {
+//		
+//		final String success = "decrementLoaded";
+//		
+//		PublicBaseView view = new PublicBaseView(getActivity()) {
+//			@Override
+//			public boolean isInEditMode() {
+//				return false;
+//			}
+//
+//			@Override
+//			public boolean checkLoaded() {
+//				return true;
+//			}
+//
+//			@Override
+//			public void decrementLoaded() {
+//				addResult(success);
+//			}
+//		};
+//		
+//		view.onWindowVisibilityChanged(View.GONE);
+//		
+//		String val = getNextResult();
+//		
+//		assertNotNull(val);
+//		assertEquals(success, val);
+//	}		
 	
 	public void test_checkLoaded() {
 		PublicBaseView view = new PublicBaseView(getActivity());
@@ -284,9 +284,9 @@ public class BaseViewTest extends SocializeActivityTest {
 			super.incrementLoaded();
 		}
 
-		@Override
-		public void decrementLoaded() {
-			super.decrementLoaded();
-		}
+//		@Override
+//		public void decrementLoaded() {
+//			super.decrementLoaded();
+//		}
 	}
 }
