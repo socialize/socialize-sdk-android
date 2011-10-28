@@ -32,6 +32,7 @@ import com.socialize.ui.comment.CommentHeader;
 import com.socialize.ui.comment.CommentListView;
 import com.socialize.ui.comment.CommentScrollCallback;
 import com.socialize.ui.comment.CommentScrollListener;
+import com.socialize.ui.dialog.DialogFactory;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.facebook.FacebookWallPoster;
 import com.socialize.ui.test.SocializeUIActivityTest;
@@ -320,7 +321,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 	@UsesMocks ({
 		Comment.class, 
 		ProgressDialog.class,
-		ProgressDialogFactory.class,
+		DialogFactory.class,
 		CommentAdapter.class,
 		List.class,
 		CommentEditField.class,
@@ -338,7 +339,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		final Comment comment = AndroidMock.createMock(Comment.class);
 		final ProgressDialog dialog = AndroidMock.createMock(ProgressDialog.class, getActivity());
-		final ProgressDialogFactory progressDialogFactory = AndroidMock.createMock(ProgressDialogFactory.class);
+		final DialogFactory<ProgressDialog> progressDialogFactory = AndroidMock.createMock(DialogFactory.class);
 		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class, getContext());
 		final List<Comment> comments = AndroidMock.createMock(List.class);
 		final CommentEditField field = AndroidMock.createMock(CommentEditField.class, getContext());
@@ -349,9 +350,9 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 
 		facebookWallPoster.postComment(getActivity(), commentString, null);
 		
-		dialog.setTitle(title);
-		dialog.setMessage(message);
-		dialog.show();
+//		dialog.setTitle(title);
+//		dialog.setMessage(message);
+//		dialog.show();
 		
 		AndroidMock.expect(progressDialogFactory.show(getContext(), title, message)).andReturn(dialog);
 		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
@@ -425,9 +426,10 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		assertEquals(endIndex+1, view.getEndIndex());
 	}
 	
+	@SuppressWarnings("unchecked")
 	@UsesMocks ({
 		ProgressDialog.class,
-		ProgressDialogFactory.class,
+		DialogFactory.class,
 		SocializeException.class,
 		FacebookWallPoster.class})
 	public void testPostCommentFail() {
@@ -438,13 +440,13 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		final SocializeException error = AndroidMock.createMock(SocializeException.class);
 		final ProgressDialog dialog = AndroidMock.createMock(ProgressDialog.class, getContext());
-		final ProgressDialogFactory progressDialogFactory = AndroidMock.createMock(ProgressDialogFactory.class);
+		final DialogFactory<ProgressDialog> progressDialogFactory = AndroidMock.createMock(DialogFactory.class);
 		final FacebookWallPoster facebookWallPoster = AndroidMock.createMock(FacebookWallPoster.class);
 
 		dialog.dismiss();
-		dialog.setTitle(title);
-		dialog.setMessage(message);
-		dialog.show();
+//		dialog.setTitle(title);
+//		dialog.setMessage(message);
+//		dialog.show();
 		
 		AndroidMock.expect(progressDialogFactory.show(getContext(), title, message)).andReturn(dialog);
 		

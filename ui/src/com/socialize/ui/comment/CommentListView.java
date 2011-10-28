@@ -18,7 +18,7 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.auth.AuthRequestDialogFactory;
 import com.socialize.ui.auth.AuthRequestListener;
-import com.socialize.ui.dialog.ProgressDialogFactory;
+import com.socialize.ui.dialog.DialogFactory;
 import com.socialize.ui.facebook.FacebookWallPoster;
 import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.ui.view.ViewFactory;
@@ -37,7 +37,7 @@ public class CommentListView extends BaseView {
 	private int totalCount = 0;
 	
 	private SocializeLogger logger;
-	private ProgressDialogFactory progressDialogFactory;
+	private DialogFactory<ProgressDialog> progressDialogFactory;
 	private Drawables drawables;
 	private ProgressDialog dialog = null;
 	private KeyboardUtils keyboardUtils;
@@ -319,7 +319,7 @@ public class CommentListView extends BaseView {
 		this.logger = logger;
 	}
 
-	public void setProgressDialogFactory(ProgressDialogFactory progressDialogFactory) {
+	public void setProgressDialogFactory(DialogFactory<ProgressDialog> progressDialogFactory) {
 		this.progressDialogFactory = progressDialogFactory;
 	}
 
