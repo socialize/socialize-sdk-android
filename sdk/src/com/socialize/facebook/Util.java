@@ -63,20 +63,20 @@ public final class Util {
 		StringBuilder sb = new StringBuilder();
 
 		for (String key : parameters.keySet()) {
-			
+
 			Object object = parameters.get(key);
-			
-			if(object instanceof byte[]) {
+
+			if (object instanceof byte[]) {
 				continue;
 			}
-			else if(object instanceof String) {
+			else if (object instanceof String) {
 				sb.append("Content-Disposition: form-data; name=\"" + key + "\"\r\n\r\n" + object.toString());
 				sb.append("\r\n" + "--" + boundary + "\r\n");
 			}
-			
-//			if (parameters.getByteArray(key) != null) {
-//				continue;
-//			}
+
+			// if (parameters.getByteArray(key) != null) {
+			// continue;
+			// }
 		}
 
 		return sb.toString();
@@ -155,73 +155,79 @@ public final class Util {
 		String strBoundary = "3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f";
 		String endLine = "\r\n";
 
-		OutputStream os;
+		OutputStream os = null;
 
-		if (method.equals("GET")) {
-			url = url + "?" + encodeUrl(params);
-		}
-		Log.d("Facebook-Util", method + " URL: " + url);
-		HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
-		conn.setRequestProperty("User-Agent", System.getProperties().getProperty("http.agent") + " FacebookAndroidSDK");
-		if (!method.equals("GET")) {
-			Bundle dataparams = new Bundle();
-			for (String key : params.keySet()) {
-				Object object = params.get(key);
-				if(object instanceof byte[]) {
-					dataparams.putByteArray(key, (byte[])object);
-				}
-				else if(object instanceof String) {
-					dataparams.putByteArray(key, ((String)object).getBytes());
-				}
-//				if (params.getByteArray(key) != null) {
-//					dataparams.putByteArray(key, params.getByteArray(key));
-//				}
-			}
-
-			// use method override
-			if (!params.containsKey("method")) {
-				params.putString("method", method);
-			}
-
-			if (params.containsKey("access_token")) {
-				String decoded_token = URLDecoder.decode(params.getString("access_token"));
-				params.putString("access_token", decoded_token);
-			}
-
-			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + strBoundary);
-			conn.setDoOutput(true);
-			conn.setDoInput(true);
-			conn.setRequestProperty("Connection", "Keep-Alive");
-			conn.connect();
-			os = new BufferedOutputStream(conn.getOutputStream());
-
-			os.write(("--" + strBoundary + endLine).getBytes());
-			os.write((encodePostBody(params, strBoundary)).getBytes());
-			os.write((endLine + "--" + strBoundary + endLine).getBytes());
-
-			if (!dataparams.isEmpty()) {
-
-				for (String key : dataparams.keySet()) {
-					os.write(("Content-Disposition: form-data; filename=\"" + key + "\"" + endLine).getBytes());
-					os.write(("Content-Type: content/unknown" + endLine + endLine).getBytes());
-					os.write(dataparams.getByteArray(key));
-					os.write((endLine + "--" + strBoundary + endLine).getBytes());
-
-				}
-			}
-			os.flush();
-		}
-
-		String response = "";
 		try {
-			response = read(conn.getInputStream());
+
+			if (method.equals("GET")) {
+				url = url + "?" + encodeUrl(params);
+			}
+			Log.d("Facebook-Util", method + " URL: " + url);
+			HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+			conn.setRequestProperty("User-Agent", System.getProperties().getProperty("http.agent") + " FacebookAndroidSDK");
+			if (!method.equals("GET")) {
+				Bundle dataparams = new Bundle();
+				for (String key : params.keySet()) {
+					Object object = params.get(key);
+					if (object instanceof byte[]) {
+						dataparams.putByteArray(key, (byte[]) object);
+					}
+					else if (object instanceof String) {
+						dataparams.putByteArray(key, ((String) object).getBytes());
+					}
+				}
+
+				// use method override
+				if (!params.containsKey("method")) {
+					params.putString("method", method);
+				}
+
+				if (params.containsKey("access_token")) {
+					String decoded_token = URLDecoder.decode(params.getString("access_token"));
+					params.putString("access_token", decoded_token);
+				}
+
+				conn.setRequestMethod("POST");
+				conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + strBoundary);
+				conn.setDoOutput(true);
+				conn.setDoInput(true);
+				conn.setRequestProperty("Connection", "Keep-Alive");
+				conn.connect();
+				os = new BufferedOutputStream(conn.getOutputStream());
+
+				os.write(("--" + strBoundary + endLine).getBytes());
+				os.write((encodePostBody(params, strBoundary)).getBytes());
+				os.write((endLine + "--" + strBoundary + endLine).getBytes());
+
+				if (!dataparams.isEmpty()) {
+
+					for (String key : dataparams.keySet()) {
+						os.write(("Content-Disposition: form-data; filename=\"" + key + "\"" + endLine).getBytes());
+						os.write(("Content-Type: content/unknown" + endLine + endLine).getBytes());
+						os.write(dataparams.getByteArray(key));
+						os.write((endLine + "--" + strBoundary + endLine).getBytes());
+
+					}
+				}
+				os.flush();
+			}
+
+			String response = "";
+			try {
+				response = read(conn.getInputStream());
+			}
+			catch (FileNotFoundException e) {
+				// Error Stream contains JSON that we can parse to a FB error
+				response = read(conn.getErrorStream());
+			}
+
+			return response;
 		}
-		catch (FileNotFoundException e) {
-			// Error Stream contains JSON that we can parse to a FB error
-			response = read(conn.getErrorStream());
+		finally {
+			if (os != null) {
+				os.close();
+			}
 		}
-		return response;
 	}
 
 	private static String read(InputStream in) throws IOException {

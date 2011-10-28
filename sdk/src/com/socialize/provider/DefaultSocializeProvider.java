@@ -489,7 +489,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 				}
 			}
 		}
-		catch (Exception e) {
+		catch (Throwable e) {
 			if(e instanceof SocializeException) {
 				throw (SocializeException) e;
 			}

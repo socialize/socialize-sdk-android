@@ -227,8 +227,9 @@ public class ActionBarLayoutView extends BaseView {
 			});
 		}
 		else {
-			entityCache.extendTTL(entityKey);
-			setEntityData(entity);
+//			entityCache.extendTTL(entityKey);
+//			setEntityData(entity);
+			getEntityData();
 		}
 	}
 	
@@ -351,10 +352,10 @@ public class ActionBarLayoutView extends BaseView {
 		
 		Entity entity = ce.getEntity();
 		
-		viewsItem.setText(getCountText(entity.getViews(), "View"));
-		commentsItem.setText(getCountText(entity.getComments(), "Comment"));
-		likesItem.setText(getCountText(entity.getLikes(), "Like"));
-		sharesItem.setText(getCountText(entity.getShares(), "Share"));
+		viewsItem.setText(getCountText(entity.getViews()));
+		commentsItem.setText(getCountText(entity.getComments()));
+		likesItem.setText(getCountText(entity.getLikes()));
+		sharesItem.setText(getCountText(entity.getShares()));
 		
 		if(ce.isLiked()) {
 			likeButton.setText("Unlike");
@@ -366,22 +367,15 @@ public class ActionBarLayoutView extends BaseView {
 		}
 	}
 	
-	protected String getCountText(Integer value, String type) {
+	protected String getCountText(Integer value) {
 		String viewText = "";
-		
 		int iVal = value.intValue();
-		
-		if(iVal != 1) {
-			type += "s";
-		}
-		
 		if(iVal > 999) {
 			viewText = "999+";
 		}
 		else {
 			viewText = value.toString();
 		}
-//		viewText += " " + type;
 		return viewText;
 	}
 	

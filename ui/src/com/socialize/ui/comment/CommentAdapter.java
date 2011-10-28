@@ -25,7 +25,6 @@ import com.socialize.ui.image.ImageLoadRequest;
 import com.socialize.ui.image.ImageLoader;
 import com.socialize.ui.util.DateUtils;
 import com.socialize.ui.view.ListItemLoadingView;
-import com.socialize.ui.view.ViewHolder;
 import com.socialize.util.Base64DecoderException;
 import com.socialize.util.Base64Utils;
 import com.socialize.util.CacheableDrawable;
@@ -110,10 +109,6 @@ public class CommentAdapter extends BaseAdapter {
 		}
 	}
 
-	protected ViewHolder createViewHolder() {
-		return new ViewHolder();
-	}
-
 	@Override
 	public View getView(final int position, View oldView, ViewGroup parent) {
 
@@ -164,34 +159,31 @@ public class CommentAdapter extends BaseAdapter {
 
 					String displayName = "";
 
-					if(user != null) {
-						displayName = user.getDisplayName();
-						if(displayName == null) {
-							// Use the item user
-							displayName = item.getUser().getDisplayName();
+					displayName = user.getDisplayName();
+					
+					if(displayName == null) {
+						// Use the item user
+						displayName = item.getUser().getDisplayName();
 
-							if(displayName == null) {
-								displayName = "Anonymous";
-							}
+						if(displayName == null) {
+							displayName = "Anonymous";
 						}
 					}
 
-					if(user != null) {
-						view.setOnClickListener(new OnClickListener() {
+					view.setOnClickListener(new OnClickListener() {
 
-							@Override
-							public void onClick(View v) {
-								if(user != null && user.getId() != null) {
-									getSocializeUI().showCommentDetailViewForResult(context, user.getId().toString(), item.getId().toString(), CommentActivity.PROFILE_UPDATE);
-								}
-								else {
-									if(logger != null) {
-										logger.warn("No user for comment " + item.getId());
-									}
+						@Override
+						public void onClick(View v) {
+							if(user != null && user.getId() != null) {
+								getSocializeUI().showCommentDetailViewForResult(context, user.getId().toString(), item.getId().toString(), CommentActivity.PROFILE_UPDATE);
+							}
+							else {
+								if(logger != null) {
+									logger.warn("No user for comment " + item.getId());
 								}
 							}
-						});
-					}
+						}
+					});
 
 					TextView comment = view.getComment();
 					TextView userName = view.getAuthor();

@@ -37,7 +37,7 @@ public class DateUtils {
 	public static final long month = day*30;
 	public static final long year = day*365;
 	
-	private static final DateFormat SIMPLE_DATE = new SimpleDateFormat("h:mm a 'on' dd MMM yyyy");
+	private final DateFormat SIMPLE_DATE = new SimpleDateFormat("h:mm a 'on' dd MMM yyyy");
 	
 	public String getTimeString(long diffMilliseconds) {
 		
@@ -101,7 +101,7 @@ public class DateUtils {
 	 * @param date
 	 * @return
 	 */
-	public String getSimpleDateString(Date date) {
+	public synchronized String getSimpleDateString(Date date) {
 		return SIMPLE_DATE.format(date);
 	}
 	

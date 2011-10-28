@@ -45,6 +45,8 @@ public class User extends SocializeObject {
 	private String displayName;
 	private String profilePicData;
 	
+	private boolean autoPostToFacebook = true;
+	
 	public void merge(User user) {
 		setFirstName(user.getFirstName());
 		setLastName(user.getLastName());
@@ -56,6 +58,7 @@ public class User extends SocializeObject {
 		setStats(user.getStats());
 		setAuthData(user.getAuthData());
 		setProfilePicData(user.getProfilePicData());
+		setAutoPostToFacebook(user.isAutoPostToFacebook());
 	}
 
 	public String getDisplayName() {
@@ -165,5 +168,13 @@ public class User extends SocializeObject {
 
 	public void setAuthData(List<UserAuthData> authData) {
 		this.authData = authData;
+	}
+
+	public boolean isAutoPostToFacebook() {
+		return autoPostToFacebook;
+	}
+
+	public void setAutoPostToFacebook(boolean autoPostToFacebook) {
+		this.autoPostToFacebook = autoPostToFacebook;
 	}
 }

@@ -12,7 +12,7 @@
 	
     <EditText 
     	android:id="@+id/txtEntity" 
-    	android:text="http://entity1.com"
+    	android:text="http://aaaa.com"
     	android:layout_width="fill_parent"
     	android:layout_height="wrap_content"/>   
    

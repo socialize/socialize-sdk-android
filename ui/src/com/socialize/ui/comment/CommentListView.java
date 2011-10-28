@@ -263,7 +263,7 @@ public class CommentListView extends BaseView {
 
 			if(startIndex >= endIndex) {
 				commentAdapter.setLast(true);
-//				commentAdapter.notifyDataSetChanged();
+				commentAdapter.notifyDataSetChanged();
 				loading = false;
 				return;
 			}

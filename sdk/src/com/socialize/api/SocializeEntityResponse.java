@@ -42,9 +42,15 @@ public class SocializeEntityResponse<T> implements SocializeResponse {
 		this.results = results;
 	}
 	
-	public synchronized void addResult(T result) {
+	public void addResult(T result) {
 		
-		if(results == null) results = new ListResult<T>();
+		if(results == null)  {
+			synchronized (this) {
+				if(results == null)  {
+					results = new ListResult<T>();
+				}
+			}
+		}
 		
 		List<T> list = results.getItems();
 		
@@ -56,7 +62,7 @@ public class SocializeEntityResponse<T> implements SocializeResponse {
 		list.add(result);
 	}
 	
-	public synchronized T getFirstResult() {
+	public T getFirstResult() {
 		if(results != null) {
 			List<T> list = results.getItems();
 			if(list != null && list.size() > 0) {

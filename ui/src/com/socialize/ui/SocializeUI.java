@@ -176,12 +176,6 @@ public class SocializeUI {
 		context.startActivityForResult(i, requestCode);
 	}
 	
-	/**
-	 * 
-	 * @param context
-	 * @param name
-	 * @param description
-	 */
 	public void setEntityMetaData(Activity context, String name, String description) {
 		Intent intent = context.getIntent();
 		Bundle extras = getExtras(intent);
@@ -190,11 +184,6 @@ public class SocializeUI {
 		intent.putExtras(extras);
 	}
 	
-	/**
-	 * 
-	 * @param context
-	 * @param asLink
-	 */
 	public void setUseEntityUrlAsLink(Activity context, boolean asLink) {
 		Intent intent = context.getIntent();
 		Bundle extras = getExtras(intent);
@@ -202,16 +191,15 @@ public class SocializeUI {
 		intent.putExtras(extras);
 	}
 	
-	/**
-	 * 
-	 * @param context
-	 * @param url
-	 */
-	public void setEntityUrl(Activity context, String url) {
-		Intent intent = context.getIntent();
+	public void setEntityUrl(Activity context, Intent intent, String url) {
 		Bundle extras = getExtras(intent);
 		extras.putString(ENTITY_KEY, url);
 		intent.putExtras(extras);
+	}
+	
+	public void setEntityUrl(Activity context, String url) {
+		Intent intent = context.getIntent();
+		setEntityUrl(context, intent, url);
 	}
 	
 	public void setUserId(Activity context, String userId) {
@@ -221,22 +209,21 @@ public class SocializeUI {
 		intent.putExtras(extras);
 	}
 	
-	public void setContentViewWithActionBar(Activity parent, int resId) {
-		setContentViewWithActionBar(parent, resId, true);
+	public View addActionBar(Activity parent, int resId) {
+		return addActionBar(parent, resId, true);
 	}
 	
-	public void setContentViewWithActionBar(Activity parent, int resId, boolean scroll) {
+	public View addActionBar(Activity parent, int resId, boolean addScrollView) {
 		LayoutInflater layoutInflater = (LayoutInflater) parent.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
 		View original = layoutInflater.inflate(resId, null);
-		setContentViewWithActionBar(parent, original, scroll);
+		return addActionBar(parent, original, addScrollView);
 	}
 	
-	public void setContentViewWithActionBar(Activity parent, View original) {
-		setContentViewWithActionBar(parent, original, true);
+	public View addActionBar(Activity parent, View original) {
+		return addActionBar(parent, original, true);
 	}
 	
-	public void setContentViewWithActionBar(Activity parent, View original, boolean scroll) {
-		
+	public View addActionBar(Activity parent, View original, boolean addScrollView) {
 		RelativeLayout barLayout = new RelativeLayout(parent);
 		RelativeLayout originalLayout = new RelativeLayout(parent);
 		
@@ -253,7 +240,7 @@ public class SocializeUI {
 		socializeActionBar.setLayoutParams(barParams);
 		originalLayout.setLayoutParams(originalParams);
 		
-		if(scroll && !(original instanceof ScrollView) ) {
+		if(addScrollView && !(original instanceof ScrollView) ) {
 			ScrollView scrollView = new ScrollView(parent);
 			scrollView.setFillViewport(true);
 			scrollView.addView(original);
@@ -265,7 +252,26 @@ public class SocializeUI {
 		
 		barLayout.addView(originalLayout);
 		barLayout.addView(socializeActionBar);
-		parent.setContentView(barLayout);
+		
+		return barLayout;
+	}
+	
+	public void setContentViewWithActionBar(Activity parent, int resId) {
+		setContentViewWithActionBar(parent, resId, true);
+	}
+	
+	public void setContentViewWithActionBar(Activity parent, int resId, boolean scroll) {
+		LayoutInflater layoutInflater = (LayoutInflater) parent.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
+		View original = layoutInflater.inflate(resId, null);
+		setContentViewWithActionBar(parent, original, scroll);
+	}
+	
+	public void setContentViewWithActionBar(Activity parent, View original) {
+		setContentViewWithActionBar(parent, original, true);
+	}
+	
+	public void setContentViewWithActionBar(Activity parent, View original, boolean addScrollView) {
+		parent.setContentView(addActionBar(parent, original, addScrollView));
 	}
 	
 	protected Bundle getExtras(Intent intent) {

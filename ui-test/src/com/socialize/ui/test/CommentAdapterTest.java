@@ -17,7 +17,6 @@ import com.socialize.ui.SocializeUI;
 import com.socialize.ui.comment.CommentAdapter;
 import com.socialize.ui.comment.CommentListItem;
 import com.socialize.ui.util.DateUtils;
-import com.socialize.ui.view.ViewHolder;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 
@@ -255,7 +254,6 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		CommentListItem.class,
 		Comment.class,
 		List.class,
-		ViewHolder.class,
 		ImageView.class,
 		DateUtils.class,
 		User.class,

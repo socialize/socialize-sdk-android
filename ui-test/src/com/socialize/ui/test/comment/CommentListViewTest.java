@@ -509,6 +509,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class, getActivity());
 		
+		commentAdapter.notifyDataSetChanged();
 		commentAdapter.setLast(true);
 		
 		AndroidMock.replay(commentAdapter);
@@ -532,6 +533,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		view.setEndIndex(endIndex);
 		view.setTotalCount(totalCount);
 		view.setDefaultGrabLength(grabLength);
+		
 		
 		view.getNextSet();
 		

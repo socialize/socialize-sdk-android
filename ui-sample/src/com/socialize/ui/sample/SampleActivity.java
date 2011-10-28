@@ -32,11 +32,10 @@ public class SampleActivity extends SocializeActivity {
 		final Button btnActionViewAuto = (Button) findViewById(R.id.btnActionViewAuto);
 		final Button btnActionViewManual = (Button) findViewById(R.id.btnActionViewManual);
 		
+		
 		btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String entityKey = txtEntity.getText().toString();
-				
 				if(chkMockFB.isChecked()) {
 					SocializeUI.getInstance().setBeanOverrides("socialize_ui_mock_beans.xml");
 				}
@@ -46,7 +45,7 @@ public class SampleActivity extends SocializeActivity {
 				
 				SocializeUI.getInstance().setFacebookAppId(txtFB.getText().toString());
 				SocializeUI.getInstance().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
-				SocializeUI.getInstance().showCommentView(SampleActivity.this, entityKey);
+				SocializeUI.getInstance().showCommentView(SampleActivity.this, txtEntity.getText().toString());
 			}
 		});
 		
@@ -74,17 +73,22 @@ public class SampleActivity extends SocializeActivity {
 		btnActionViewAuto.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Intent intent = new Intent(SampleActivity.this, ActionBarAutoActivity.class);
+				SocializeUI.getInstance().setEntityUrl(SampleActivity.this, intent, txtEntity.getText().toString());
 				SocializeUI.getInstance().setFacebookAppId(txtFB.getText().toString());
 				SocializeUI.getInstance().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
-				startActivity(new Intent(SampleActivity.this, ActionBarAutoActivity.class));
+				startActivity(intent);
 			}
 		});
+		
 		btnActionViewManual.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Intent intent = new Intent(SampleActivity.this, ActionBarManualActivity.class);
+				SocializeUI.getInstance().setEntityUrl(SampleActivity.this, intent, txtEntity.getText().toString());
 				SocializeUI.getInstance().setFacebookAppId(txtFB.getText().toString());
 				SocializeUI.getInstance().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
-				startActivity(new Intent(SampleActivity.this, ActionBarManualActivity.class));
+				startActivity(intent);
 			}
 		});
 		
