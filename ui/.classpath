@@ -5,6 +5,5 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="lib" path="libext/commons-codec-1.4.jar"/>
 	<classpathentry kind="src" path="socialize-sdk_src"/>
-	<classpathentry kind="src" path="socialize-ads_src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
