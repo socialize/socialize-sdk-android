@@ -6,17 +6,17 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
+import com.socialize.error.SocializeErrorHandler;
 import com.socialize.ui.ActivityIOCProvider;
 import com.socialize.ui.SocializeView;
-import com.socialize.ui.error.SocializeUIErrorHandler;
 
 public class SocializeViewTest extends SocializeUIActivityTest {
 
-	@UsesMocks ({IOCContainer.class, SocializeUIErrorHandler.class})
+	@UsesMocks ({IOCContainer.class, SocializeErrorHandler.class})
 	public void testOnAttachedToWindow() throws Throwable {
 		
 		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
-		SocializeUIErrorHandler errorHandler = AndroidMock.createMock(SocializeUIErrorHandler.class);
+		SocializeErrorHandler errorHandler = AndroidMock.createMock(SocializeErrorHandler.class);
 		
 		AndroidMock.expect(container.getBean("socializeUIErrorHandler")).andReturn(errorHandler);
 		
@@ -42,7 +42,7 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 			}
 
 			@Override
-			public void setErrorHandler(SocializeUIErrorHandler errorHandler) {
+			public void setErrorHandler(SocializeErrorHandler errorHandler) {
 				addResult(errorHandler);
 			}
 		};
@@ -58,7 +58,7 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 		
 		String onBeforeSocializeInit = getNextResult();
 		String initSocialize = getNextResult();
-		SocializeUIErrorHandler errorHandlerAfter = getNextResult();
+		SocializeErrorHandler errorHandlerAfter = getNextResult();
 		IOCContainer containerAfter = getNextResult();
 		
 		assertNotNull(containerAfter);

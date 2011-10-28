@@ -1,19 +1,19 @@
-package com.socialize.ui;
+package com.socialize.view;
 
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
-import com.socialize.ui.actionbar.ActionBarEditView;
-import com.socialize.ui.error.SocializeUIErrorHandler;
+import com.socialize.error.SocializeErrorHandler;
 
 public abstract class BaseView extends LinearLayout {
 	
-	private SocializeUIErrorHandler errorHandler;
+	private SocializeErrorHandler errorHandler;
 	
 	private int loadCount = 0;
 	
@@ -33,20 +33,16 @@ public abstract class BaseView extends LinearLayout {
 		}
 	}
 
-	public SocializeUIErrorHandler getErrorHandler() {
+	public SocializeErrorHandler getErrorHandler() {
 		return errorHandler;
 	}
 
-	public void setErrorHandler(SocializeUIErrorHandler errorHandler) {
+	public void setErrorHandler(SocializeErrorHandler errorHandler) {
 		this.errorHandler = errorHandler;
 	}
 	
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();
-	}
-	
-	protected SocializeUI getSocializeUI() {
-		return SocializeUI.getInstance();
 	}
 	
 	protected Activity getActivity() {
@@ -70,9 +66,9 @@ public abstract class BaseView extends LinearLayout {
 					onViewUpdate();
 				}
 			}
-			else if(visibility == View.INVISIBLE)
+			else if(visibility == View.INVISIBLE || visibility == View.GONE)
 			{
-				if(loadCount > 0) loadCount--;
+				decrementLoaded();
 			}
 		}
 		else {
@@ -84,19 +80,31 @@ public abstract class BaseView extends LinearLayout {
 		}
 	}
 	
-	private boolean checkLoaded() {
-		boolean loaded = (loadCount > 0);
+	protected void incrementLoaded() {
 		loadCount++;
+	}
+	
+	protected void decrementLoaded() {
+		if(loadCount > 0) loadCount--;
+	}
+	
+	protected boolean checkLoaded() {
+		boolean loaded = (loadCount > 0);
+		incrementLoaded();
 		return loaded;
 	}
 	
 	// Subclasses override
 	protected View getEditModeView() {
-		return new ActionBarEditView(getContext());
+		return null;
 	}
 	
 	public boolean isLoaded() {
 		return loaded;
+	}
+	
+	public void assignId(View parent) {
+		setId(getNextViewId(parent));
 	}
 
 	protected void onViewUpdate() {}
@@ -104,4 +112,28 @@ public abstract class BaseView extends LinearLayout {
 	protected void onViewLoad() {
 		loaded = true;
 	}
+	
+	protected int getNextViewId(View parent) {
+		int id = Integer.MAX_VALUE;
+		
+		if(parent instanceof ViewGroup) {
+			ViewGroup group = (ViewGroup) parent;
+			id = 0;
+			int childCount = group.getChildCount();
+			
+			for (int i = 0; i < childCount; i++) {
+				View child = group.getChildAt(i);
+				int childId = child.getId();
+				if(childId > id) {
+					id = childId;
+				}
+			}
+			
+			if(id < Integer.MAX_VALUE) {
+				id++;
+			}
+		}
+		
+		return id;
+	}	
 }

@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ScrollView;
@@ -238,21 +237,20 @@ public class SocializeUI {
 	
 	public void setContentViewWithActionBar(Activity parent, View original, boolean scroll) {
 		
-		int id = getNextViewId(original);
-		
 		RelativeLayout barLayout = new RelativeLayout(parent);
 		RelativeLayout originalLayout = new RelativeLayout(parent);
 		
-		ActionBarView bar = new ActionBarView(parent);
-		bar.setId(id);
+		ActionBarView socializeActionBar = new ActionBarView(parent);
+		socializeActionBar.assignId(original);
+		socializeActionBar.setAdsEnabled(true);
 		
 		LayoutParams barParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		barParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		
 		LayoutParams originalParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		originalParams.addRule(RelativeLayout.ABOVE, id);
+		originalParams.addRule(RelativeLayout.ABOVE, socializeActionBar.getId());
 		
-		bar.setLayoutParams(barParams);
+		socializeActionBar.setLayoutParams(barParams);
 		originalLayout.setLayoutParams(originalParams);
 		
 		if(scroll && !(original instanceof ScrollView) ) {
@@ -265,30 +263,9 @@ public class SocializeUI {
 			originalLayout.addView(original);
 		}
 		
-		barLayout.addView(bar);
 		barLayout.addView(originalLayout);
+		barLayout.addView(socializeActionBar);
 		parent.setContentView(barLayout);
-	}
-	
-	protected int getNextViewId(View original) {
-		int id = Integer.MAX_VALUE;
-		
-		if(original instanceof ViewGroup) {
-			ViewGroup group = (ViewGroup) original;
-			id = 0;
-			int childCount = group.getChildCount();
-			
-			for (int i = 0; i < childCount; i++) {
-				View child = group.getChildAt(i);
-				if(child.getId() > id) {
-					id = child.getId();
-				}
-			}
-			
-			id++;
-		}
-		
-		return id;
 	}
 	
 	protected Bundle getExtras(Intent intent) {

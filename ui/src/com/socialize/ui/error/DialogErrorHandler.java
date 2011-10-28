@@ -8,10 +8,11 @@ import android.util.Log;
 
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeApiError;
+import com.socialize.error.SocializeErrorHandler;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 
-public class DialogErrorHandler implements SocializeUIErrorHandler {
+public class DialogErrorHandler implements SocializeErrorHandler {
 
 	private Drawables drawables;
 	private String message;

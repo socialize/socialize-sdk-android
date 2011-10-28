@@ -28,10 +28,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.socialize.entity.User;
+import com.socialize.error.SocializeErrorHandler;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.ui.dialog.ProgressDialogFactory;
-import com.socialize.ui.error.SocializeUIErrorHandler;
 
 /**
  * @author Jason Polites
@@ -41,7 +41,7 @@ public class ProfileSaveButtonListener implements OnClickListener {
 
 	private ProfileContentView view;
 	private ProfileSaver profileSaver;
-	private SocializeUIErrorHandler errorHandler;
+	private SocializeErrorHandler errorHandler;
 	private ProgressDialogFactory progressDialogFactory;
 	private Context context;
 	
@@ -87,7 +87,7 @@ public class ProfileSaveButtonListener implements OnClickListener {
 		this.profileSaver = profileSaver;
 	}
 
-	public void setErrorHandler(SocializeUIErrorHandler errorHandler) {
+	public void setErrorHandler(SocializeErrorHandler errorHandler) {
 		this.errorHandler = errorHandler;
 	}
 

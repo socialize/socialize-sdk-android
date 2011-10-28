@@ -38,6 +38,7 @@ public class AuthenticatedViewListenerTest extends SocializeUIActivityTest {
 		
 		view.onAfterAuthenticate();
 		AndroidMock.expect(view.getView()).andReturn(subView);
+		view.removeAllViews();
 		view.addView(subView);
 		
 		AndroidMock.replay(view);

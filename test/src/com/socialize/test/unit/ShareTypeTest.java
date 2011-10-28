@@ -19,52 +19,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action;
+package com.socialize.test.unit;
 
+import com.socialize.api.action.ShareType;
+import com.socialize.test.SocializeUnitTest;
 
 /**
  * @author Jason Polites
+ *
  */
-public enum ShareType {
-	FACEBOOK ("facebook", 1),
-	TWITTER ("twitter", 2),
-	EMAIL ("email", 3),
-	SMS ("sms", 3),
-	OTHER ("other", 3);
-	
-	private final String name;   
-    private final int id; 
-	
-	ShareType(String name, int id) {
-		this.name = name;
-		this.id = id;
-	}
+public class ShareTypeTest extends SocializeUnitTest {
 
-	public String getName() {
-		return name;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	@Override
-	public String toString() {
-		return name;
+	public void testShareType() {
+		assertEquals(ShareType.FACEBOOK, ShareType.valueOf(1));
+		assertEquals(ShareType.TWITTER, ShareType.valueOf(2));
+		assertEquals(ShareType.EMAIL, ShareType.valueOf(3));
+		assertEquals(ShareType.SMS, ShareType.valueOf(4));
+		assertEquals(ShareType.OTHER, ShareType.valueOf(5));
+		
+		assertEquals("facebook", ShareType.FACEBOOK.getName());
+		assertEquals("twitter", ShareType.TWITTER.getName());
+		assertEquals("email", ShareType.EMAIL.getName());
+		assertEquals("sms", ShareType.SMS.getName());
+		assertEquals("other", ShareType.OTHER.getName());
 	}
 	
-	public static ShareType valueOf(int id) {
-		switch(id) {
-		case 1 : 
-			return FACEBOOK;
-		case 2 : 
-			return TWITTER;	
-		case 3 : 
-			return EMAIL;	
-		case 4 : 
-			return SMS;				
-		default :
-			return OTHER;
-		}
-	}
 }

@@ -81,11 +81,11 @@ public class SocializeApiHost {
 		authenticate(consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, false);
 	}
 	
-	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
-		AuthProviderData authProviderData = authProviderDataFactory.getBean();
-		authProviderData.setAuthProviderType(authProvider);
-		authenticate(consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, false);
-	}
+//	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
+//		AuthProviderData authProviderData = authProviderDataFactory.getBean();
+//		authProviderData.setAuthProviderType(authProvider);
+//		authenticate(consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, false);
+//	}
 	
 	public void authenticate(String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
 		String udid = deviceUtils.getUDID(context);

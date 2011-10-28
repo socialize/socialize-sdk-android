@@ -321,6 +321,109 @@ public class DrawablesTest extends SocializeActivityTest {
 		assertEquals(name, getNextResult());
 	}
 	
+	
+	public void testCallFlow3() {
+		
+		String name = "foobar";
+		boolean eternal = true;
+		
+		int scaleToHeight = 20;
+		int scaleToWidth = 40;
+		boolean tileY = true;
+		boolean tileX = false;
+		
+		DisplayMetrics metrics = new DisplayMetrics();
+		metrics.densityDpi = 69;
+		
+		PublicDrawables drawables = new PublicDrawables() {
+			@Override
+			public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
+				addResult(name);
+				addResult(density);
+				addResult(tileX);
+				addResult(tileY);
+				addResult(scaleToWidth);
+				addResult(scaleToHeight);
+				addResult(eternal);
+				return null;
+			}
+		};
+		
+		drawables.setMetrics(metrics);
+		
+		drawables.getDrawable(name, tileX, tileY, scaleToWidth, scaleToHeight, eternal);
+		
+		// reverse order for asserts
+		assertEquals(eternal, getNextResult());
+		assertEquals(scaleToHeight, getNextResult());
+		assertEquals(scaleToWidth, getNextResult());
+		assertEquals(tileY, getNextResult());
+		assertEquals(tileX, getNextResult());
+		assertEquals(metrics.densityDpi, getNextResult());
+		assertEquals(name, getNextResult());
+	}
+	
+	public void testCallFlow4() {
+		
+		String name = "foobar";
+		boolean eternal = false;
+		
+		int scaleToHeight = 20;
+		int scaleToWidth = 40;
+		
+		PublicDrawables drawables = new PublicDrawables() {
+			@Override
+			public Drawable getDrawable(String name, int scaleToWidth, int scaleToHeight, boolean eternal) {
+				addResult(name);
+				addResult(scaleToWidth);
+				addResult(scaleToHeight);
+				addResult(eternal);
+				return null;
+			}
+		};
+		
+		drawables.getDrawable(name, scaleToWidth, scaleToHeight);
+		
+		// reverse order for asserts
+		assertEquals(eternal, getNextResult());
+		assertEquals(scaleToHeight, getNextResult());
+		assertEquals(scaleToWidth, getNextResult());
+		assertEquals(name, getNextResult());
+	}	
+	
+	public void testCallFlow5() {
+		
+		String name = "foobar";
+		boolean eternal = false;
+		
+		int scaleToHeight = 20;
+		int scaleToWidth = 40;
+		
+		PublicDrawables drawables = new PublicDrawables() {
+			@Override
+			public Drawable getDrawable(String name, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
+				addResult(name);
+				addResult(tileX);
+				addResult(tileY);
+				addResult(scaleToWidth);
+				addResult(scaleToHeight);
+				addResult(eternal);
+				return null;
+			}
+		};
+		
+		drawables.getDrawable(name, scaleToWidth, scaleToHeight, eternal);
+		
+		// reverse order for asserts
+		assertEquals(eternal, getNextResult());
+		assertEquals(scaleToHeight, getNextResult());
+		assertEquals(scaleToWidth, getNextResult());
+		assertEquals(false, getNextResult());
+		assertEquals(false, getNextResult());
+		assertEquals(name, getNextResult());
+	}		
+	
+	
 	class PublicDrawables extends Drawables {
 		@Override
 		public CacheableDrawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY) {

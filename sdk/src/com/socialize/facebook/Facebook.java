@@ -76,6 +76,10 @@ public class Facebook {
 	private int mAuthActivityCode;
 	private DialogListener mAuthDialogListener;
 	private Drawables drawables;
+	
+	public Facebook() {
+		super();
+	}
 
 	/**
 	 * Constructor for Facebook object.
@@ -664,6 +668,10 @@ public class Facebook {
 
 	public void setAppId(String appId) {
 		mAppId = appId;
+	}
+	
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
 	}
 
 	/**

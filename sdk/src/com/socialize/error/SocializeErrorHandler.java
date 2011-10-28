@@ -1,7 +1,7 @@
-package com.socialize.ui.error;
+package com.socialize.error;
 
 import android.content.Context;
 
-public interface SocializeUIErrorHandler {
+public interface SocializeErrorHandler {
 	public void handleError(Context context, Exception e);
 }

@@ -36,7 +36,6 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.user.UserGetListener;
-import com.socialize.ui.BaseView;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.image.ImageLoadListener;
@@ -46,6 +45,8 @@ import com.socialize.ui.view.ViewFactory;
 import com.socialize.util.Drawables;
 import com.socialize.util.SafeBitmapDrawable;
 import com.socialize.util.StringUtils;
+import com.socialize.view.BaseView;
+
 
 /**
  * @author Jason Polites

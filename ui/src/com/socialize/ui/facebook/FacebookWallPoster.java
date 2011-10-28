@@ -136,7 +136,19 @@ public class FacebookWallPoster {
 		String linkName = deviceUtils.getAppName();
 		String link = deviceUtils.getMarketUrl(false);
 		String appId = getSocializeUI().getCustomConfigValue(SocializeConfig.FACEBOOK_APP_ID);
-		post(parent, appId, linkName, message, link, caption, listener);
+		
+		if(!StringUtils.isEmpty(appId)) {
+			post(parent, appId, linkName, message, link, caption, listener);
+		}
+		else {
+			String error = "Cannot post message to Facebook.  No app id found";
+			if(logger != null) {
+				logger.warn(error);
+			}
+			else {
+				System.err.println(error);
+			}
+		}
 	}
 	
 	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, final FacebookWallPostListener listener) {

@@ -6,18 +6,19 @@
                 "id": 322931,
                 "name": "Android UI Integration Test App"
             },
-            "date": "2011-10-15 00:01:16+0000",
+            "date": "2011-10-28 20:12:11+0000",
             "entity": {
                 "comments": 10,
                 "key": "http://entity1.com",
                 "likes": 1,
                 "name": "First Entity",
                 "shares": 1,
+                "type": "url",
                 "views": 0
             },
-            "id": 32960,
-            "lat": 81.71100816874065,
-            "lng": 5.787371427031793,
+            "id": 33015,
+            "lat": 18.998895695107613,
+            "lng": 6.591786378784203,
             "medium": {
                 "id": 1,
                 "medium": "Twitter"
@@ -27,13 +28,13 @@
             "user": {
                 "city": null,
                 "first_name": null,
-                "id": 52640320,
+                "id": 52755812,
                 "last_name": null,
                 "meta": null,
                 "small_image_uri": null,
                 "state": null,
                 "third_party_auth": [],
-                "username": "User52640320"
+                "username": "User52755812"
             }
         },
         {
@@ -41,18 +42,19 @@
                 "id": 322931,
                 "name": "Android UI Integration Test App"
             },
-            "date": "2011-10-15 00:01:16+0000",
+            "date": "2011-10-28 20:12:11+0000",
             "entity": {
                 "comments": 0,
                 "key": "http://entity2.com",
                 "likes": 1,
                 "name": "Second Entity",
                 "shares": 1,
+                "type": "url",
                 "views": 0
             },
-            "id": 32961,
-            "lat": 73.40443384089751,
-            "lng": 82.45032201623096,
+            "id": 33016,
+            "lat": 51.692137982377076,
+            "lng": 73.44338126046512,
             "medium": {
                 "id": 2,
                 "medium": "Facebook"
@@ -62,13 +64,13 @@
             "user": {
                 "city": null,
                 "first_name": null,
-                "id": 52640320,
+                "id": 52755812,
                 "last_name": null,
                 "meta": null,
                 "small_image_uri": null,
                 "state": null,
                 "third_party_auth": [],
-                "username": "User52640320"
+                "username": "User52755812"
             }
         }
     ]

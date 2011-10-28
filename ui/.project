@@ -32,6 +32,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>socialize-ads_src</name>
+			<type>2</type>
+			<locationURI>_android_socialize_ads_caa2e0aa/src</locationURI>
+		</link>
+		<link>
 			<name>socialize-sdk_src</name>
 			<type>2</type>
 			<locationURI>_android_socialize_sdk_caa32434/src</locationURI>

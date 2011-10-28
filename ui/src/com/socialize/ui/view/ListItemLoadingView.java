@@ -7,9 +7,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.socialize.ui.BaseView;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DeviceUtils;
+import com.socialize.view.BaseView;
 
 /**
  * Renders a simple loading spinner.

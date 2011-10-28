@@ -82,7 +82,10 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 	public void getLike(SocializeSession session, final String entityUrl, final LikeListener listener) {
 		final User user = session.getUser();
 		if(user != null) {
-			String endpoint = "/user/" + user.getId().toString() + ENDPOINT;
+			
+			final Integer userId = user.getId();
+			
+			String endpoint = "/user/" + userId.toString() + ENDPOINT;
 			listAsync(session, endpoint, entityUrl, null, 0, 1, new LikeListListener() {
 				@Override
 				public void onList(ListResult<Like> entities) {
@@ -110,7 +113,7 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 						onError(new SocializeApiError(404, "No likes found for entity with key [" +
 								entityUrl +
 								"] for user [" +
-								user.getId() +
+								userId +
 								"]"));
 					}
 				}

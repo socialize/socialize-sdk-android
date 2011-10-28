@@ -15,7 +15,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.log.SocializeLogger;
-import com.socialize.ui.BaseView;
+import com.socialize.ui.SocializeUI;
 import com.socialize.ui.auth.AuthRequestDialogFactory;
 import com.socialize.ui.auth.AuthRequestListener;
 import com.socialize.ui.dialog.ProgressDialogFactory;
@@ -23,7 +23,7 @@ import com.socialize.ui.facebook.FacebookWallPoster;
 import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.ui.view.ViewFactory;
 import com.socialize.util.Drawables;
-
+import com.socialize.view.BaseView;
 
 public class CommentListView extends BaseView {
 
@@ -178,11 +178,12 @@ public class CommentListView extends BaseView {
 			}
 		});
 		
-		// TODO: check fb permissions 
-		facebookWallPoster.postComment(getActivity(), comment, null);
+		// TODO: check user permissions
+		if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+			facebookWallPoster.postComment(getActivity(), comment, null);
+		}
+		
 	}
-	
-
 
 	public void doListComments(boolean update) {
 
@@ -407,5 +408,9 @@ public class CommentListView extends BaseView {
 	 */
 	public void onProfileUpdate() {
 		commentAdapter.notifyDataSetChanged();
+	}
+	
+	protected SocializeUI getSocializeUI() {
+		return SocializeUI.getInstance();
 	}
 }

@@ -24,10 +24,9 @@ package com.socialize.ui;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.socialize.Socialize;
-import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
-import com.socialize.ui.error.SocializeUIErrorHandler;
+import com.socialize.error.SocializeErrorHandler;
+import com.socialize.view.BaseView;
 
 /**
  * @author Jason Polites
@@ -62,7 +61,7 @@ public abstract class SocializeView extends BaseView {
 			initSocialize();
 			container = ActivityIOCProvider.getInstance().getContainer();
 			if(container != null) {
-				setErrorHandler((SocializeUIErrorHandler) container.getBean("socializeUIErrorHandler"));
+				setErrorHandler((SocializeErrorHandler) container.getBean("socializeUIErrorHandler"));
 			}
 			onPostSocializeInit(container);
 		}
@@ -80,8 +79,8 @@ public abstract class SocializeView extends BaseView {
 		getSocialize().init(this.getContext());
 	}
 	
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
+	protected SocializeUI getSocializeUI() {
+		return SocializeUI.getInstance();
 	}
 	
 	// Subclasses override

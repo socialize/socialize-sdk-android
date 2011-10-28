@@ -160,11 +160,11 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 	@UsesMocks (Comment.class)
 	public void testGetItemId() {
 		
-		final int id = 69;
+//		final int id = 69;
 		final int position = 0;
 		final Comment comment = AndroidMock.createMock(Comment.class);
 		
-		AndroidMock.expect(comment.getId()).andReturn(id);
+//		AndroidMock.expect(comment.getId()).andReturn(id);
 		
 		CommentAdapter adapter = new CommentAdapter(getContext()) {
 			@Override
@@ -175,7 +175,7 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		
 		AndroidMock.replay(comment);
 		
-		assertEquals(id, adapter.getItemId(position));
+		assertEquals(position, adapter.getItemId(position));
 		
 		AndroidMock.verify(comment);
 	}

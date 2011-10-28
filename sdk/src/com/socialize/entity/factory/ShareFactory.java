@@ -54,10 +54,10 @@ public class ShareFactory extends SocializeActionFactory<Share> {
 		if(object.has(medium) && !object.isNull(medium)) {
 			JSONObject mediumObject = object.getJSONObject(medium);
 			if(mediumObject.has("id") && !mediumObject.isNull("id")) {
-				share.setMedium(object.getInt("id"));
+				share.setMedium(mediumObject.getInt("id"));
 			}
 			if(mediumObject.has(medium) && !mediumObject.isNull(medium)) {
-				share.setMediumName(object.getString(medium));
+				share.setMediumName(mediumObject.getString(medium));
 			}
 		}
 	}

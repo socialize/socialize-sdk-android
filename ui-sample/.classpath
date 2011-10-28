@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="libs/commons-codec-1.4.jar"/>
 	<classpathentry kind="src" path="socialize-ui_src"/>
 	<classpathentry kind="src" path="socialize-sdk_src"/>
+	<classpathentry kind="src" path="socialize-ads_src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

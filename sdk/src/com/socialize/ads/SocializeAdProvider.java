@@ -19,52 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action;
+package com.socialize.ads;
 
+import android.view.View;
 
 /**
  * @author Jason Polites
+ *
  */
-public enum ShareType {
-	FACEBOOK ("facebook", 1),
-	TWITTER ("twitter", 2),
-	EMAIL ("email", 3),
-	SMS ("sms", 3),
-	OTHER ("other", 3);
-	
-	private final String name;   
-    private final int id; 
-	
-	ShareType(String name, int id) {
-		this.name = name;
-		this.id = id;
-	}
+public interface SocializeAdProvider {
 
-	public String getName() {
-		return name;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	@Override
-	public String toString() {
-		return name;
-	}
+	public void wrap(View parent);
 	
-	public static ShareType valueOf(int id) {
-		switch(id) {
-		case 1 : 
-			return FACEBOOK;
-		case 2 : 
-			return TWITTER;	
-		case 3 : 
-			return EMAIL;	
-		case 4 : 
-			return SMS;				
-		default :
-			return OTHER;
-		}
-	}
 }

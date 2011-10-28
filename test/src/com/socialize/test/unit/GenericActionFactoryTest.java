@@ -21,17 +21,6 @@
  */
 package com.socialize.test.unit;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.entity.factory.CommentFactory;
-import com.socialize.entity.factory.GenericActionFactory;
-import com.socialize.entity.factory.LikeFactory;
-import com.socialize.entity.factory.ShareFactory;
-import com.socialize.entity.factory.SocializeActionFactory;
-import com.socialize.entity.factory.ViewFactory;
 import com.socialize.test.SocializeUnitTest;
 
 /**

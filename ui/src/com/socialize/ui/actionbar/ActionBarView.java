@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.socialize.ads.SocializeAdProvider;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.view.EntityView;
 
@@ -38,7 +39,10 @@ public class ActionBarView extends EntityView {
 	public static final int ACTION_BAR_BUTTON_WIDTH = 80;
 	
 	private ActionBarLayoutView actionBarLayoutView;
-
+	private SocializeAdProvider socializeAdProvider;
+	
+	private boolean adsEnabled = false;
+	
 	public ActionBarView(Context context) {
 		super(context);
 	}
@@ -52,10 +56,24 @@ public class ActionBarView extends EntityView {
 	 */
 	@Override
 	protected View getView(Bundle bundle, Object... entityKeys) {
+		
 		if(actionBarLayoutView == null) {
 			actionBarLayoutView = container.getBean("actionBarLayoutView", entityKeys);
 		}
+		
 		return actionBarLayoutView;
+	}
+	
+	@Override
+	protected void onViewLoad() {
+		super.onViewLoad();
+		
+		if(adsEnabled) {
+			socializeAdProvider = container.getBean("socializeAdProvider");
+			if(socializeAdProvider != null) {
+				socializeAdProvider.wrap(this);
+			}
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -70,5 +88,14 @@ public class ActionBarView extends EntityView {
 	public void showError(Context context, Exception e) {
 		// Don't display popup
 		e.printStackTrace();
+	}
+
+	public void setAdsEnabled(boolean adsEnabled) {
+		this.adsEnabled = adsEnabled;
+	}
+
+	@Override
+	protected View getEditModeView() {
+		return new ActionBarEditView(getContext());
 	}
 }

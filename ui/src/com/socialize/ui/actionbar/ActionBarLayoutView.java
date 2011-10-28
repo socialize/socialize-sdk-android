@@ -28,6 +28,7 @@ import android.view.Gravity;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.View;
@@ -39,7 +40,6 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
-import com.socialize.ui.BaseView;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.cache.CacheableEntity;
 import com.socialize.ui.cache.EntityCache;
@@ -48,6 +48,7 @@ import com.socialize.ui.facebook.FacebookWallPoster;
 import com.socialize.ui.share.ShareDialogFactory;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
+import com.socialize.view.BaseView;
 
 /**
  * @author Jason Polites
@@ -297,7 +298,9 @@ public class ActionBarLayoutView extends BaseView {
 				});
 				
 				// TODO: Inspect user prefs
-				facebookWallPoster.postLike(getActivity(), null);
+				if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+					facebookWallPoster.postLike(getActivity(), null);
+				}
 			}
 		}
 	}

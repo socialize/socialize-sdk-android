@@ -32,9 +32,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.socialize.ui.BaseView;
 import com.socialize.ui.button.SocializeButton;
 import com.socialize.util.DeviceUtils;
+import com.socialize.view.BaseView;
 
 /**
  * @author Jason Polites

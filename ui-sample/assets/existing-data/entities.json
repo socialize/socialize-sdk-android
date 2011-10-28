@@ -7,6 +7,7 @@
             "likes": 0,
             "name": "First Entity",
             "shares": 0,
+            "type": "url",
             "views": 0
         },
         {
@@ -15,6 +16,7 @@
             "likes": 0,
             "name": "Second Entity",
             "shares": 0,
+            "type": "url",
             "views": 0
         }
     ]

@@ -30,6 +30,8 @@ import com.socialize.api.action.LikeApi;
 import com.socialize.entity.ActionError;
 import com.socialize.entity.Like;
 import com.socialize.entity.ListResult;
+import com.socialize.entity.User;
+import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.like.LikeListener;
@@ -176,21 +178,24 @@ public class LikeApiTest extends SocializeUnitTest {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks({ListResult.class, LikeListener.class, Like.class, List.class})
+	@UsesMocks({ListResult.class, LikeListener.class, Like.class, List.class, User.class, SocializeSession.class})
 	public void testGetLikeByKeyWithResults() {
 
 		String key = "foobar";
+		Integer userId = 69;
 		
 		final Like like = AndroidMock.createMock(Like.class);
 		final ListResult<Like> listResult = (ListResult<Like>) AndroidMock.createMock(ListResult.class);
 		List<Like> items = (List<Like>) AndroidMock.createMock(List.class);
 		
+		User user = AndroidMock.createMock(User.class);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
 		
 		LikeApi api = new LikeApi(provider) {
-
 			@Override
-			public void getLikesByEntity(SocializeSession session, String key, int startIndex, int endIndex, LikeListener listener) {
-				listener.onList(listResult);
+			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
+				LikeListener ll = (LikeListener) listener;
+				ll.onList(listResult);
 			}
 		};
 		
@@ -218,37 +223,45 @@ public class LikeApiTest extends SocializeUnitTest {
 			public void onCreate(Like entity) {}
 		};
 
-		AndroidMock.expect(listResult.getItems()).andReturn(items).times(3);
+		AndroidMock.expect(listResult.getItems()).andReturn(items);
 		AndroidMock.expect(items.size()).andReturn(1);
 		AndroidMock.expect(items.get(0)).andReturn(like);
 		
+		AndroidMock.expect(session.getUser()).andReturn(user);
+		AndroidMock.expect(user.getId()).andReturn(userId);
+		
 		AndroidMock.replay(listResult);
 		AndroidMock.replay(items);
+		AndroidMock.replay(session);
+		AndroidMock.replay(user);
 		
 		api.getLike(session, key, likeListener);
 		
 		AndroidMock.verify(listResult);
 		AndroidMock.verify(items);
+		AndroidMock.verify(session);
+		AndroidMock.verify(user);
 	}
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks({ListResult.class, LikeListener.class, ActionError.class, Like.class, List.class})
+	@UsesMocks({ListResult.class, LikeListener.class, ActionError.class, Like.class, List.class, SocializeSession.class, User.class})
 	public void testGetLikeByKeyWithNoResults() {
 
 		String key = "foobar";
-		final String errorMessage = "foobar_message";
+		
+		Integer userId = 69;
+		
+		User user = AndroidMock.createMock(User.class);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
 		
 		final ListResult<Like> listResult = (ListResult<Like>) AndroidMock.createMock(ListResult.class);
-		ActionError error = AndroidMock.createMock(ActionError.class);
-		List<ActionError> errors =  (List<ActionError>) AndroidMock.createMock(List.class);
 		List<Like> items = (List<Like>) AndroidMock.createMock(List.class);
 		
-		
 		LikeApi api = new LikeApi(provider) {
-
 			@Override
-			public void getLikesByEntity(SocializeSession session, String key, int startIndex, int endIndex, LikeListener listener) {
-				listener.onList(listResult);
+			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
+				LikeListener ll = (LikeListener) listener;
+				ll.onList(listResult);
 			}
 		};
 		
@@ -257,7 +270,8 @@ public class LikeApiTest extends SocializeUnitTest {
 			@Override
 			public void onError(SocializeException error) {
 				assertNotNull(error);
-				assertEquals(errorMessage, error.getMessage());
+				assertTrue(error instanceof SocializeApiError);
+				assertEquals(404, ((SocializeApiError)error).getResultCode());
 			}
 			
 			@Override
@@ -276,25 +290,23 @@ public class LikeApiTest extends SocializeUnitTest {
 			public void onCreate(Like entity) {}
 		};
 
-		AndroidMock.expect(listResult.getItems()).andReturn(items).times(2);
+		AndroidMock.expect(session.getUser()).andReturn(user);
+		AndroidMock.expect(user.getId()).andReturn(userId);
+		
+		AndroidMock.expect(listResult.getItems()).andReturn(items);
 		AndroidMock.expect(items.size()).andReturn(0);
 		
-		AndroidMock.expect(listResult.getErrors()).andReturn(errors);
-		AndroidMock.expect(errors.size()).andReturn(1);
-		AndroidMock.expect(errors.get(0)).andReturn(error);
-		AndroidMock.expect(error.getMessage()).andReturn(errorMessage);
-		
+		AndroidMock.replay(user);
+		AndroidMock.replay(session);
 		AndroidMock.replay(listResult);
 		AndroidMock.replay(items);
-		AndroidMock.replay(errors);
-		AndroidMock.replay(error);
 		
 		api.getLike(session, key, likeListener);
 		
+		AndroidMock.verify(user);
+		AndroidMock.verify(session);
 		AndroidMock.verify(listResult);
 		AndroidMock.verify(items);
-		AndroidMock.verify(errors);
-		AndroidMock.verify(error);
 	}
 	
 	public void testGetLikeByKeyWithUsesCorrectPagination() {
@@ -332,22 +344,41 @@ public class LikeApiTest extends SocializeUnitTest {
 		assertEquals(String.valueOf(id), strId);
 	}
 	
+	@UsesMocks ({SocializeSession.class, User.class})
 	public void testGetLikeByKey() {
 		
 		String key = "foobar";
+		Integer userId = 69;
+		
+		User user = AndroidMock.createMock(User.class);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		
+		AndroidMock.expect(session.getUser()).andReturn(user);
+		AndroidMock.expect(user.getId()).andReturn(userId);
+		
+		AndroidMock.replay(user);
+		AndroidMock.replay(session);
 		
 		LikeApi api = new LikeApi(provider) {
 			@Override
 			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(key);
+				addResult(endpoint);
 			}
 		};
 		
 		api.getLike(session, key, listener);
 		
+		AndroidMock.verify(user);
+		AndroidMock.verify(session);
+		
 		String strId = getNextResult();
+		String endpoint = getNextResult();
 		
 		assertNotNull(strId);
 		assertEquals(key, strId);
+		
+		assertNotNull(endpoint);
+		assertEquals("/user/69/like/", endpoint);
 	}
 }

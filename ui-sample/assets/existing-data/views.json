@@ -6,29 +6,30 @@
                 "id": 322931,
                 "name": "Android UI Integration Test App"
             },
-            "date": "2011-10-15 00:01:17+0000",
+            "date": "2011-10-28 20:12:11+0000",
             "entity": {
                 "comments": 10,
                 "key": "http://entity1.com",
                 "likes": 1,
                 "name": "First Entity",
                 "shares": 1,
+                "type": "url",
                 "views": 1
             },
-            "id": 19539656,
-            "lat": 82.01292334745031,
-            "lng": 29.841024701723647,
+            "id": 19540527,
+            "lat": 68.52827060554657,
+            "lng": 86.2897343505437,
             "share_location": 1,
             "user": {
                 "city": null,
                 "first_name": null,
-                "id": 52640320,
+                "id": 52755812,
                 "last_name": null,
                 "meta": null,
                 "small_image_uri": null,
                 "state": null,
                 "third_party_auth": [],
-                "username": "User52640320"
+                "username": "User52755812"
             }
         },
         {
@@ -36,29 +37,30 @@
                 "id": 322931,
                 "name": "Android UI Integration Test App"
             },
-            "date": "2011-10-15 00:01:17+0000",
+            "date": "2011-10-28 20:12:11+0000",
             "entity": {
                 "comments": 0,
                 "key": "http://entity2.com",
                 "likes": 1,
                 "name": "Second Entity",
                 "shares": 1,
+                "type": "url",
                 "views": 1
             },
-            "id": 19539657,
-            "lat": 75.89106289968339,
-            "lng": 59.7899718807507,
+            "id": 19540528,
+            "lat": 72.11192336599403,
+            "lng": 83.24302233114024,
             "share_location": 1,
             "user": {
                 "city": null,
                 "first_name": null,
-                "id": 52640320,
+                "id": 52755812,
                 "last_name": null,
                 "meta": null,
                 "small_image_uri": null,
                 "state": null,
                 "third_party_auth": [],
-                "username": "User52640320"
+                "username": "User52755812"
             }
         }
     ]

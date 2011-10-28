@@ -33,12 +33,12 @@ import android.widget.TextView;
 import com.socialize.Socialize;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
-import com.socialize.ui.BaseView;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.button.SocializeButton;
 import com.socialize.util.Drawables;
 import com.socialize.util.SafeBitmapDrawable;
 import com.socialize.util.StringUtils;
+import com.socialize.view.BaseView;
 
 /**
  * @author Jason Polites

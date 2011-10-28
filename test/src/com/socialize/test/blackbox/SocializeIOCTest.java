@@ -69,7 +69,7 @@ public class SocializeIOCTest extends SocializeActivityTest {
 
 		// Put a count assert to make sure this test fails when new beans are
 		// added so that developers are reminded to update this test.
-		assertEquals(59, ioc.size());
+		assertEquals(63, ioc.size());
 
 		// Now make sure all our beans are there
 		checkBeanType(ioc, "deviceUtils", DeviceUtils.class);

@@ -414,28 +414,29 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			}
 		}
 	}
-	@Deprecated
-	protected void handle3rdPartyAuth(
-			final SocializeAuthRequest request,
-			final String authUserId3rdParty, 
-			final String authToken3rdParty,
-			final String appId3rdParty,
-			final AuthProviderType authProviderType,
-			final SocializeActionListener fWrapper,
-			final SocializeAuthListener listener, 
-			String key, String secret)  {
-		
-		AuthProviderData data = authProviderDataFactory.getBean();
-		
-		data.setAppId3rdParty(appId3rdParty);
-		data.setUserId3rdParty(authUserId3rdParty);
-		data.setToken3rdParty(authToken3rdParty);
-		data.setAuthProviderType(authProviderType);
-		
-		request.setAuthProviderData(data);
-		
-		handle3rdPartyAuth(request, fWrapper, listener, key, secret);
-	}
+	
+//	@Deprecated
+//	protected void handle3rdPartyAuth(
+//			final SocializeAuthRequest request,
+//			final String authUserId3rdParty, 
+//			final String authToken3rdParty,
+//			final String appId3rdParty,
+//			final AuthProviderType authProviderType,
+//			final SocializeActionListener fWrapper,
+//			final SocializeAuthListener listener, 
+//			String key, String secret)  {
+//		
+//		AuthProviderData data = authProviderDataFactory.getBean();
+//		
+//		data.setAppId3rdParty(appId3rdParty);
+//		data.setUserId3rdParty(authUserId3rdParty);
+//		data.setToken3rdParty(authToken3rdParty);
+//		data.setAuthProviderType(authProviderType);
+//		
+//		request.setAuthProviderData(data);
+//		
+//		handle3rdPartyAuth(request, fWrapper, listener, key, secret);
+//	}
 	
 	public void setResponseFactory(SocializeResponseFactory<T> responseFactory) {
 		this.responseFactory = responseFactory;

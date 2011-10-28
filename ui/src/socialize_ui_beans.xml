@@ -711,6 +711,23 @@
 	
 <!-- End Share UI -->	
 
+<!-- Socialize Ad View -->
+
+	<bean 
+		id="socializeAdView" 
+		class="com.socialize.ads.SocializeAdView"
+		singleton="false">
+		
+		<constructor-arg type="activity"/>
+		<init-method name="init"/>
+		
+		<property name="drawables" ref="drawables"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+<!-- End Socialize Ad View -->
+
 <!--  Image Loader  -->
 	<bean id="imageUrlLoader" class="com.socialize.ui.image.ImageUrlLoader"/>
 	

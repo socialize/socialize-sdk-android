@@ -51,6 +51,9 @@ public class DeviceUtils {
 	private String packageName;
 	private String appName;
 	private boolean hasCamera;
+	
+	private int displayHeight;
+	private int displayWidth;
 
 	public void init(Context context) {
 		if (context instanceof Activity) {
@@ -58,6 +61,10 @@ public class DeviceUtils {
 			Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
 			display.getMetrics(metrics);
 			density = metrics.density;
+			
+			displayHeight = display.getHeight();
+			displayWidth = display.getWidth();
+			
 			packageName = context.getPackageName();
 			
 			Resources appR = context.getResources(); 
@@ -170,4 +177,14 @@ public class DeviceUtils {
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
+
+	public int getDisplayHeight() {
+		return displayHeight;
+	}
+
+	public int getDisplayWidth() {
+		return displayWidth;
+	}
+	
+	
 }

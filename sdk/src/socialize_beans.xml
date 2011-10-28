@@ -171,6 +171,7 @@
 		<constructor-arg type="context"/>
 		<constructor-arg ref="listenerHolder"/>
 		<property name="logger" ref="logger"/>
+		<property name="drawables" ref="drawables"/>
 	</bean>
 	
 	<bean id="socializeApi" class="com.socialize.api.SocializeApi" abstract="true">
