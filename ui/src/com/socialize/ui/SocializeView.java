@@ -23,9 +23,11 @@ package com.socialize.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.socialize.android.ioc.IOCContainer;
-import com.socialize.error.SocializeErrorHandler;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeInitListener;
 import com.socialize.view.BaseView;
 
 /**
@@ -44,26 +46,59 @@ public abstract class SocializeView extends BaseView {
 	}
 	
 	@Override
-	protected void onViewLoad() {
+	protected final void onViewLoad() {
 		super.onViewLoad();
-		doSocializeInit();
+		doSocializeInit(getInitLoadListener());
 	}
 	
 	@Override
-	protected void onViewUpdate() {
+	protected final void onViewUpdate() {
 		super.onViewUpdate();
-		doSocializeInit();
+		doSocializeInit(getInitUpdateListener());
 	}
+	
+	protected SocializeInitListener getInitLoadListener() {
+		return new SocializeInitListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				Log.e("Socialize", "Error initializing Socialize", error);
+			}
+			
+			@Override
+			public void onInit(Context context, IOCContainer c) {
+				container = c;
+				onViewLoad(container);
+			}
+		};
+	}
+	
+	protected SocializeInitListener getInitUpdateListener() {
+		return new SocializeInitListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				Log.e("Socialize", "Error initializing Socialize", error);
+			}
+			
+			@Override
+			public void onInit(Context context, IOCContainer c) {
+				container = c;
+				onViewUpdate(container);
+			}
+		};
+	}	
+	
+	// Subclasses override
+	public void onViewLoad(IOCContainer container) {};
+	
+	// Subclasses override
+	public void onViewUpdate(IOCContainer container) {};
 
-	protected void doSocializeInit() {
+	protected void doSocializeInit(SocializeInitListener listener) {
 		if(!isInEditMode()) {
 			onBeforeSocializeInit();
-			initSocialize();
-			container = ActivityIOCProvider.getInstance().getContainer();
-			if(container != null) {
-				setErrorHandler((SocializeErrorHandler) container.getBean("socializeUIErrorHandler"));
-			}
-			onPostSocializeInit(container);
+			initSocialize(listener);
 		}
 	}
 	
@@ -75,8 +110,9 @@ public abstract class SocializeView extends BaseView {
 		this.container = container;
 	}
 
-	protected void initSocialize() {
-		getSocialize().init(this.getContext());
+	protected void initSocialize(SocializeInitListener listener) {
+		getSocializeUI().initSocializeAsync(this.getContext(), listener);
+//		getSocialize().init(this.getContext());
 	}
 	
 	protected SocializeUI getSocializeUI() {
@@ -85,6 +121,4 @@ public abstract class SocializeView extends BaseView {
 	
 	// Subclasses override
 	protected void onBeforeSocializeInit() {}
-	
-	protected void onPostSocializeInit(IOCContainer container) {}
 }

@@ -337,6 +337,9 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		final int endIndex = 10;
 		final String commentString = "foobar_comment";
 		
+		final String entityKey = "foobar_entity_key";
+		final String entityName = "foobar_entity_name";
+		
 		final Comment comment = AndroidMock.createMock(Comment.class);
 		final ProgressDialog dialog = AndroidMock.createMock(ProgressDialog.class, getActivity());
 		final DialogFactory<ProgressDialog> progressDialogFactory = AndroidMock.createMock(DialogFactory.class);
@@ -348,7 +351,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		final FacebookWallPoster facebookWallPoster = AndroidMock.createMock(FacebookWallPoster.class);
 
-		facebookWallPoster.postComment(getActivity(), commentString, null);
+		facebookWallPoster.postComment(getActivity(), entityKey, entityName, commentString, true, null);
 		
 //		dialog.setTitle(title);
 //		dialog.setMessage(message);
@@ -438,6 +441,9 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		final String message = "Please wait...";
 		final String comment = "foobar";
 		
+		final String entityKey = "foobar_entity_key";
+		final String entityName = "foobar_entity_name";
+		
 		final SocializeException error = AndroidMock.createMock(SocializeException.class);
 		final ProgressDialog dialog = AndroidMock.createMock(ProgressDialog.class, getContext());
 		final DialogFactory<ProgressDialog> progressDialogFactory = AndroidMock.createMock(DialogFactory.class);
@@ -450,7 +456,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		AndroidMock.expect(progressDialogFactory.show(getContext(), title, message)).andReturn(dialog);
 		
-		facebookWallPoster.postComment(getActivity(), comment, null);
+		facebookWallPoster.postComment(getActivity(), entityKey, entityName, comment, true, null);
 		
 		AndroidMock.replay(progressDialogFactory);
 		AndroidMock.replay(dialog);

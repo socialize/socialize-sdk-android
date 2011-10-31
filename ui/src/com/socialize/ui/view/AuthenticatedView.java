@@ -8,6 +8,7 @@ import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.config.SocializeConfig;
+import com.socialize.error.SocializeErrorHandler;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.SocializeView;
@@ -27,11 +28,38 @@ public abstract class AuthenticatedView extends SocializeView {
 	}
 
 	@Override
-	public void onPostSocializeInit(IOCContainer container) {
+	public final void onViewLoad(IOCContainer container) {
+		super.onViewLoad(container);
+		
+		getSocializeUI().initSocialize(getContext());
 		getSocializeUI().initUI(container);
+		
+		setErrorHandler((SocializeErrorHandler) container.getBean("socializeUIErrorHandler"));
+		
 		consumerKey = getConsumerKey(container);
 		consumerSecret = getConsumerSecret(container);
 		fbAppId = getFacebookAppId(container);
+		
+		SocializeAuthListener listener = getAuthListener(container);
+		
+		onBeforeAuthenticate(container);
+		
+		getSocialize().authenticate(
+				consumerKey, 
+				consumerSecret, 
+				listener);
+	}
+	
+	@Override
+	public void onViewUpdate(IOCContainer container) {
+		super.onViewUpdate(container);
+		
+		if(container != null) {
+			setErrorHandler((SocializeErrorHandler) container.getBean("socializeUIErrorHandler"));
+		}
+		
+		// Make sure we notify after authenticate to dismiss any pending dialogs.
+		onAfterAuthenticate(container);
 	}
 	
 	protected String getConsumerKey(IOCContainer container) {
@@ -45,11 +73,6 @@ public abstract class AuthenticatedView extends SocializeView {
 	protected String getFacebookAppId(IOCContainer container) {
 		return getSocializeUI().getCustomConfigValue(SocializeConfig.FACEBOOK_APP_ID);
 	}
-	
-	@Override
-	protected void initSocialize() {
-		getSocializeUI().initSocialize(getContext());
-	}
 
 	public SocializeUI getSocializeUI() {
 		return SocializeUI.getInstance();
@@ -59,54 +82,13 @@ public abstract class AuthenticatedView extends SocializeView {
 		return Socialize.getSocialize();
 	}
 
-	public SocializeAuthListener getAuthListener() {
-		return new AuthenticatedViewListener(getContext(), this);
+	public SocializeAuthListener getAuthListener(IOCContainer container) {
+		return new AuthenticatedViewListener(getContext(), this, container);
 	}
-
-	@Deprecated
-	public SocializeAuthListener getAuthListener3rdParty() {
-		return new AuthenticatedViewListener3rdParty(getContext(), this);
-	}
-
-//	protected String getBundleValue(String key) {
-//		Bundle bundle = null;
-//
-//		Context context = getViewContext();
-//
-//		if(context instanceof Activity) {
-//			Activity a = (Activity) context;
-//			bundle = a.getIntent().getExtras();
-//		}
-//
-//		if(bundle != null) {
-//			return  bundle.getString(SocializeUI.ENTITY_KEY);
-//		}
-//
-//		return null;
-//	}
 
 	// Wrapped so it can be mocked.
 	protected Context getViewContext() {
 		return getContext();
-	}
-
-	@Override
-	protected void onViewLoad() {
-		super.onViewLoad();
-		SocializeAuthListener listener = getAuthListener();
-		onBeforeAuthenticate();
-		getSocialize().authenticate(
-				consumerKey, 
-				consumerSecret, 
-				listener);
-	}
-
-	@Override
-	protected void onViewUpdate() {
-		super.onViewUpdate();
-		
-		// Make sure we notify after authenticate
-		onAfterAuthenticate();
 	}
 
 	public void setConsumerKey(String consumerKey) {
@@ -134,9 +116,9 @@ public abstract class AuthenticatedView extends SocializeView {
 	}
 
 	// Subclasses override
-	public void onBeforeAuthenticate() {}
-	public void onAfterAuthenticate() {}
-
+	public void onBeforeAuthenticate(IOCContainer container) {}
+	public void onAfterAuthenticate(IOCContainer container) {}
+	
 	public abstract View getView();
 
 }

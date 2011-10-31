@@ -22,8 +22,10 @@
 package com.socialize.ui.view;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 
+import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
@@ -36,16 +38,18 @@ public class AuthenticatedViewListener implements SocializeAuthListener {
 	
 	protected AuthenticatedView view;
 	protected Context context;
+	protected IOCContainer container;
 	
-	public AuthenticatedViewListener(Context context, AuthenticatedView view) {
+	public AuthenticatedViewListener(Context context, AuthenticatedView view, IOCContainer container) {
 		super();
 		this.view = view;
 		this.context = context;
+		this.container = container;
 	}
 
 	@Override
 	public void onError(SocializeException error) {
-		view.onAfterAuthenticate();
+		view.onAfterAuthenticate(container);
 		view.showError(context, error);
 		error.printStackTrace();
 	}
@@ -58,15 +62,20 @@ public class AuthenticatedViewListener implements SocializeAuthListener {
 	@Override
 	public void onAuthSuccess(SocializeSession session) {
 		// Render the childView
-		view.onAfterAuthenticate();
+		view.onAfterAuthenticate(container); // Dialogs dismissed here
 		View v = view.getView();
-		view.removeAllViews();
-		view.addView(v);
+		if(v != null) {
+			view.removeAllViews();
+			view.addView(v);
+		}
+		else {
+			Log.e("Socialize", view.getClass().getSimpleName() + " failed to produce a view");
+		}
 	}
 	
 	@Override
 	public void onAuthFail(SocializeException error) {
-		view.onAfterAuthenticate();
+		view.onAfterAuthenticate(container);
 		view.showError(context, error);
 		error.printStackTrace();
 	}

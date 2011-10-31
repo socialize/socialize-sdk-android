@@ -27,7 +27,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.socialize.ads.SocializeAdProvider;
-import com.socialize.ui.SocializeUI;
+import com.socialize.android.ioc.IOCContainer;
 import com.socialize.ui.view.EntityView;
 
 /**
@@ -42,7 +42,7 @@ public class ActionBarView extends EntityView {
 	private SocializeAdProvider socializeAdProvider;
 	
 	private boolean adsEnabled = false;
-	private boolean isEntityKeyUrl = true;
+	private boolean entityKeyIsUrl = true;
 	private String entityKey;
 	private String entityName;
 	
@@ -59,30 +59,15 @@ public class ActionBarView extends EntityView {
 	 */
 	@Override
 	protected View getView(Bundle bundle, Object... entityKeys) {
-		
-		this.entityKey = (String) entityKeys[0];
-		
-		if(entityKeys.length > 1) {
-			this.entityName = (String) entityKeys[1];
-		}
-		
-		if(entityKeys.length > 2) {
-			Boolean isUrl = (Boolean) entityKeys[2];
-			if( isUrl != null) {
-				this.isEntityKeyUrl = isUrl;
-			}
-		}
-		
 		if(actionBarLayoutView == null) {
 			actionBarLayoutView = container.getBean("actionBarLayoutView", this);
 		}
-		
 		return actionBarLayoutView;
 	}
 	
 	@Override
-	protected void onViewLoad() {
-		super.onViewLoad();
+	public void onAfterAuthenticate(IOCContainer container) {
+		super.onAfterAuthenticate(container);
 		if(adsEnabled) {
 			socializeAdProvider = container.getBean("socializeAdProvider");
 			if(socializeAdProvider != null) {
@@ -112,7 +97,7 @@ public class ActionBarView extends EntityView {
 	 */
 	@Override
 	protected String[] getEntityKeys() {
-		return new String[]{SocializeUI.ENTITY_KEY, SocializeUI.ENTITY_NAME, SocializeUI.ENTITY_URL_AS_LINK};
+		return null;
 	}
 	
 	@Override
@@ -131,10 +116,16 @@ public class ActionBarView extends EntityView {
 	}
 
 	public boolean isEntityKeyUrl() {
-		return isEntityKeyUrl;
+		return entityKeyIsUrl;
 	}
 
-	public void setEntityKeyUrl(boolean isEntityKeyUrl) {
-		this.isEntityKeyUrl = isEntityKeyUrl;
+	public void setEntityKeyIsUrl(boolean entityKeyIsUrl) {
+		this.entityKeyIsUrl = entityKeyIsUrl;
+	}
+	
+	public void reload() {
+		if(actionBarLayoutView != null) {
+			actionBarLayoutView.reload();
+		}
 	}
 }

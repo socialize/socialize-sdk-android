@@ -23,8 +23,8 @@ package com.socialize.ui.comment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
-import android.widget.Toast;
 
 import com.socialize.Socialize;
 import com.socialize.ui.SocializeUI;
@@ -51,7 +51,7 @@ public class CommentActivity extends SocializeUIActivity {
 		Bundle extras = getIntent().getExtras();
 		
 		if(extras == null || !extras.containsKey(SocializeUI.ENTITY_KEY)) {
-			Toast.makeText(this, "No entity url provided", Toast.LENGTH_SHORT).show();
+			Log.i("Socialize", "No entity url found for Comment Activity. Aborting");
 			finish();
 		}
 		else {

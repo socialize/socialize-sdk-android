@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.android.ioc.IOCContainer;
 import com.socialize.error.SocializeException;
 import com.socialize.ui.view.AuthenticatedView;
 import com.socialize.ui.view.AuthenticatedViewListener;
@@ -11,58 +12,61 @@ import com.socialize.ui.view.AuthenticatedViewListener;
 public class AuthenticatedViewListenerTest extends SocializeUIActivityTest {
 
 	
-	@UsesMocks ({AuthenticatedView.class, SocializeException.class})
+	@UsesMocks ({AuthenticatedView.class, SocializeException.class, IOCContainer.class})
 	public void testOnError() {
 		AuthenticatedView view = AndroidMock.createMock(AuthenticatedView.class, getActivity());
 		SocializeException error = AndroidMock.createMock(SocializeException.class);
+		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
 		
 		error.printStackTrace();
 		
-		view.onAfterAuthenticate();
+		view.onAfterAuthenticate(container);
 		view.showError(getActivity(), error);
 		
 		AndroidMock.replay(view);
 		AndroidMock.replay(error);
 		
-		AuthenticatedViewListener listener = new AuthenticatedViewListener(getActivity(), view);
+		AuthenticatedViewListener listener = new AuthenticatedViewListener(getActivity(), view, container);
 		listener.onError(error);
 		
 		AndroidMock.verify(view);
 		AndroidMock.verify(error);
 	}
 	
-	@UsesMocks ({AuthenticatedView.class, View.class})
+	@UsesMocks ({AuthenticatedView.class, View.class, IOCContainer.class})
 	public void testOnAuthSuccess() {
 		AuthenticatedView view = AndroidMock.createMock(AuthenticatedView.class, getActivity());
 		View subView = AndroidMock.createMock(View.class, getActivity());
+		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
 		
-		view.onAfterAuthenticate();
+		view.onAfterAuthenticate(container);
 		AndroidMock.expect(view.getView()).andReturn(subView);
 		view.removeAllViews();
 		view.addView(subView);
 		
 		AndroidMock.replay(view);
 		
-		AuthenticatedViewListener listener = new AuthenticatedViewListener(getActivity(), view);
+		AuthenticatedViewListener listener = new AuthenticatedViewListener(getActivity(), view, container);
 		listener.onAuthSuccess(null);
 		
 		AndroidMock.verify(view);
 	}
 	
-	@UsesMocks ({AuthenticatedView.class, SocializeException.class})
+	@UsesMocks ({AuthenticatedView.class, SocializeException.class, IOCContainer.class})
 	public void testOnAuthFail() {
 		AuthenticatedView view = AndroidMock.createMock(AuthenticatedView.class, getActivity());
 		SocializeException error = AndroidMock.createMock(SocializeException.class);
+		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
 		
 		error.printStackTrace();
 		
-		view.onAfterAuthenticate();
+		view.onAfterAuthenticate(container);
 		view.showError(getActivity(), error);
 		
 		AndroidMock.replay(view);
 		AndroidMock.replay(error);
 		
-		AuthenticatedViewListener listener = new AuthenticatedViewListener(getActivity(), view);
+		AuthenticatedViewListener listener = new AuthenticatedViewListener(getActivity(), view, container);
 		listener.onAuthFail(error);
 		
 		AndroidMock.verify(view);

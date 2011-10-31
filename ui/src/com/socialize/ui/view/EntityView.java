@@ -40,6 +40,9 @@ public abstract class EntityView extends AuthenticatedView {
 				}
 				return getView(bundle, values);
 			}
+			else {
+				return getView(bundle, (Object[]) null);
+			}
 		}
 		
 		return getErrorView(context);

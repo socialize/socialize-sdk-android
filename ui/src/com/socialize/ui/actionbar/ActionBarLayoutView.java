@@ -122,9 +122,9 @@ public class ActionBarLayoutView extends BaseView {
 		ticker.addTickerView(likesItem);
 		ticker.addTickerView(sharesItem);
 		
-		likeButton = buttonFactory.getBean(actionBarView);
-		commentButton = buttonFactory.getBean(actionBarView);
-		shareButton = buttonFactory.getBean(actionBarView);
+		likeButton = buttonFactory.getBean();
+		commentButton = buttonFactory.getBean();
+		shareButton = buttonFactory.getBean();
 		
 		commentButton.setIcon(commentIcon);
 		commentButton.setBackground(commentBg);
@@ -236,10 +236,7 @@ public class ActionBarLayoutView extends BaseView {
 		}
 	}
 	
-	@Override
-	protected void onViewUpdate() {
-		super.onViewUpdate();
-		
+	public void reload() {
 		final String entityKey = actionBarView.getEntityKey();
 		
 		if(logger != null && logger.isInfoEnabled()) {
@@ -252,10 +249,15 @@ public class ActionBarLayoutView extends BaseView {
 		commentsItem.setText("--");
 		likesItem.setText("--");
 		sharesItem.setText("--");
-		
 		likeButton.setText("--");
 		
 		getEntityData(entityKey);
+	}
+	
+	@Override
+	protected void onViewUpdate() {
+		super.onViewUpdate();
+		reload();
 	}
 
 	protected void postLike(final ActionBarButton button) {

@@ -17,6 +17,8 @@ import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.config.SocializeConfig;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeInitListener;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.comment.CommentDetailActivity;
@@ -32,7 +34,6 @@ public class SocializeUI {
 	public static final String COMMENT_ID = "socialize.comment.id";
 	public static final String ENTITY_KEY = "socialize.entity.key";
 	public static final String ENTITY_NAME = "socialize.entity.name";
-//	public static final String ENTITY_DESCRIPTION = "socialize.entity.desc";
 	public static final String ENTITY_URL_AS_LINK = "socialize.entity.url.link";
 	
 	public static final String DEFAULT_USER_ICON = "default_user_icon.png";
@@ -53,7 +54,35 @@ public class SocializeUI {
 	}
 	
 	public void initSocialize(Context context) {
+		String[] config = getConfig();
+		getSocialize().init(context,config);
+		getSocialize().getConfig().merge(customProperties);
+	}
+	
+	public void initSocializeAsync(Context context, final SocializeInitListener listener) {
 		
+		String[] config = getConfig();
+		
+		SocializeInitListener overrideListener = new SocializeInitListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				listener.onError(error);
+			}
+			
+			@Override
+			public void onInit(Context context, IOCContainer container) {
+				getSocialize().getConfig().merge(customProperties);
+				listener.onInit(context, container);
+				
+			}
+		};
+		
+		getSocialize().initAsync(context, overrideListener, config);
+		
+	}
+	
+	protected String[] getConfig() {
 		String[] config = null;
 		
 		if(!StringUtils.isEmpty(beanOverride)) {
@@ -63,8 +92,7 @@ public class SocializeUI {
 			config = new String[]{"socialize_beans.xml", "socialize_ui_beans.xml"};
 		}
 		
-		getSocialize().init(context,config);
-		getSocialize().getConfig().merge(customProperties);
+		return config;
 	}
 
 	public void initUI(IOCContainer container) {
@@ -150,13 +178,7 @@ public class SocializeUI {
 		
 		return null;
 	}
-	
-	/**
-	 * @deprecated Use this{@link #showCommentView(Activity, String, String, boolean)}
-	 * @param context
-	 * @param url
-	 */
-	@Deprecated
+
 	public void showCommentView(Activity context, String url) {
 		Intent i = new Intent(context, CommentActivity.class);
 		i.putExtra(ENTITY_KEY, url);
@@ -168,13 +190,13 @@ public class SocializeUI {
 	 * @param context
 	 * @param url
 	 * @param entityName
-	 * @param isUrl
+	 * @param entityKeyIsUrl
 	 */
-	public void showCommentView(Activity context, String url, String entityName, boolean isUrl) {
+	public void showCommentView(Activity context, String url, String entityName, boolean entityKeyIsUrl) {
 		Intent i = new Intent(context, CommentActivity.class);
 		i.putExtra(ENTITY_KEY, url);
 		i.putExtra(ENTITY_NAME, entityName);
-		i.putExtra(ENTITY_URL_AS_LINK, isUrl);
+		i.putExtra(ENTITY_URL_AS_LINK, entityKeyIsUrl);
 		context.startActivity(i);
 	}
 	
@@ -197,21 +219,20 @@ public class SocializeUI {
 		context.startActivityForResult(i, requestCode);
 	}
 	
-//	public void setEntityMetaData(Activity context, String name, String description) {
-//		Intent intent = context.getIntent();
-//		Bundle extras = getExtras(intent);
-//		extras.putString(ENTITY_NAME, name);
-//		extras.putString(ENTITY_DESCRIPTION, description);
-//		intent.putExtras(extras);
-//	}
-//	
-//	public void setUseEntityUrlAsLink(Activity context, boolean asLink) {
-//		Intent intent = context.getIntent();
-//		Bundle extras = getExtras(intent);
-//		extras.putBoolean(ENTITY_URL_AS_LINK, asLink);
-//		intent.putExtras(extras);
-//	}
+	public void setEntityName(Activity context, String name) {
+		Intent intent = context.getIntent();
+		Bundle extras = getExtras(intent);
+		extras.putString(ENTITY_NAME, name);
+		intent.putExtras(extras);
+	}
 	
+	public void setUseEntityUrlAsLink(Activity context, boolean asLink) {
+		Intent intent = context.getIntent();
+		Bundle extras = getExtras(intent);
+		extras.putBoolean(ENTITY_URL_AS_LINK, asLink);
+		intent.putExtras(extras);
+	}
+
 	public void setEntityUrl(Activity context, Intent intent, String url) {
 		Bundle extras = getExtras(intent);
 		extras.putString(ENTITY_KEY, url);
@@ -230,27 +251,46 @@ public class SocializeUI {
 		intent.putExtras(extras);
 	}
 	
-	public View addActionBar(Activity parent, int resId) {
-		return addActionBar(parent, resId, true);
+	public View showActionBar(Activity parent, View original, String entityKey) {
+		return showActionBar(parent, original, entityKey, null, true);
 	}
 	
-	public View addActionBar(Activity parent, int resId, boolean addScrollView) {
+	public View showActionBar(Activity parent, View original, String entityKey, boolean addScrollView) {
+		return showActionBar(parent, original, entityKey, null, true, addScrollView);
+	}
+	
+	public View showActionBar(Activity parent, int resId, String entityKey) {
+		return showActionBar(parent, resId, entityKey, null, true);
+	}
+	
+	public View showActionBar(Activity parent, int resId, String entityKey, boolean addScrollView) {
+		return showActionBar(parent, resId, entityKey, null, true, addScrollView);
+	}
+	
+	public View showActionBar(Activity parent, int resId, String entityKey, String entityName, boolean isEntityKeyUrl) {
+		return showActionBar(parent, resId, entityKey, entityName, isEntityKeyUrl, true);
+	}
+	
+	public View showActionBar(Activity parent, int resId, String entityKey, String entityName, boolean isEntityKeyUrl, boolean addScrollView) {
 		LayoutInflater layoutInflater = (LayoutInflater) parent.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
 		View original = layoutInflater.inflate(resId, null);
-		return addActionBar(parent, original, addScrollView);
+		return showActionBar(parent, original, entityKey, entityName, isEntityKeyUrl, addScrollView);
 	}
 	
-	public View addActionBar(Activity parent, View original) {
-		return addActionBar(parent, original, true);
+	public View showActionBar(Activity parent, View original, String entityKey, String entityName, boolean isEntityKeyUrl) {
+		return showActionBar(parent, original, entityKey, entityName, isEntityKeyUrl, true);
 	}
 	
-	public View addActionBar(Activity parent, View original, boolean addScrollView) {
+	public View showActionBar(Activity parent, View original, String entityKey, String entityName, boolean isEntityKeyUrl, boolean addScrollView) {
 		RelativeLayout barLayout = new RelativeLayout(parent);
 		RelativeLayout originalLayout = new RelativeLayout(parent);
 		
 		ActionBarView socializeActionBar = new ActionBarView(parent);
 		socializeActionBar.assignId(original);
 		socializeActionBar.setAdsEnabled(true);
+		socializeActionBar.setEntityKey(entityKey);
+		socializeActionBar.setEntityName(entityName);
+		socializeActionBar.setEntityKeyIsUrl(isEntityKeyUrl);
 		
 		LayoutParams barParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		barParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
@@ -277,24 +317,6 @@ public class SocializeUI {
 		barLayout.addView(socializeActionBar);
 		
 		return barLayout;
-	}
-	
-	public void setContentViewWithActionBar(Activity parent, int resId) {
-		setContentViewWithActionBar(parent, resId, true);
-	}
-	
-	public void setContentViewWithActionBar(Activity parent, int resId, boolean scroll) {
-		LayoutInflater layoutInflater = (LayoutInflater) parent.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
-		View original = layoutInflater.inflate(resId, null);
-		setContentViewWithActionBar(parent, original, scroll);
-	}
-	
-	public void setContentViewWithActionBar(Activity parent, View original) {
-		setContentViewWithActionBar(parent, original, true);
-	}
-	
-	public void setContentViewWithActionBar(Activity parent, View original, boolean addScrollView) {
-		parent.setContentView(addActionBar(parent, original, addScrollView));
 	}
 	
 	protected Bundle getExtras(Intent intent) {

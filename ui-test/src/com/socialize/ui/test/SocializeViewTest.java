@@ -7,6 +7,7 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.error.SocializeErrorHandler;
+import com.socialize.listener.SocializeInitListener;
 import com.socialize.ui.ActivityIOCProvider;
 import com.socialize.ui.SocializeView;
 
@@ -27,7 +28,7 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 		final SocializeView view = new SocializeView(getActivity()) {
 			
 			@Override
-			protected void initSocialize() {
+			protected void initSocialize(SocializeInitListener listener) {
 				addResult("initSocialize");
 			}
 
@@ -37,7 +38,7 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 			}
 
 			@Override
-			protected void onPostSocializeInit(IOCContainer container) {
+			public void onViewLoad(IOCContainer container) {
 				addResult(container);
 			}
 
@@ -75,10 +76,10 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 	}
 	
 
-	@UsesMocks ({SocializeService.class})
+	@UsesMocks ({SocializeService.class, SocializeInitListener.class})
 	public void testInitSocialize() {
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
-		
+		final SocializeInitListener listener = AndroidMock.createMock(SocializeInitListener.class);
 		socialize.init((Context) AndroidMock.anyObject());
 		
 		AndroidMock.replay(socialize);
@@ -90,7 +91,7 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 			}
 		};
 		
-		activity.initSocialize();
+		activity.initSocialize(listener);
 		
 		AndroidMock.verify(socialize);
 	}
@@ -125,8 +126,8 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 		}
 
 		@Override
-		public void initSocialize() {
-			super.initSocialize();
+		public void initSocialize(SocializeInitListener listener) {
+			super.initSocialize(listener);
 		}
 	}
 	

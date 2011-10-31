@@ -1,5 +1,6 @@
 package com.socialize.ui.comment;
 
+import com.socialize.android.ioc.IOCContainer;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.view.EntityView;
 
@@ -37,7 +38,7 @@ public class CommentView extends EntityView {
 	}
 
 	@Override
-	public void onAfterAuthenticate() {
+	public void onAfterAuthenticate(IOCContainer container) {
 		if(progress != null) {
 			progress.dismiss();
 		}

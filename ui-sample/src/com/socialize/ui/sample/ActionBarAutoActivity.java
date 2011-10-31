@@ -1,14 +1,15 @@
 package com.socialize.ui.sample;
 
+import android.os.Bundle;
+import android.view.View;
+
 import com.socialize.ui.SocializeUI;
 
-import android.app.Activity;
-import android.os.Bundle;
+public class ActionBarAutoActivity extends ActionBarActivity {
 
-public class ActionBarAutoActivity extends Activity {
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(SocializeUI.getInstance().addActionBar(this, R.layout.action_bar_auto));
+	protected void onCreate(Bundle savedInstanceState, String entityKey, String entityName, boolean isEntityKeyUrl) {
+		View actionBarWrapped = SocializeUI.getInstance().showActionBar(this, R.layout.action_bar_auto, entityKey, entityName, isEntityKeyUrl);
+		setContentView(actionBarWrapped);
 	}
 }

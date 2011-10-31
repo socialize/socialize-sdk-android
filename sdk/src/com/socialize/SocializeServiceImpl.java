@@ -135,6 +135,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 					
 					this.initCount = 0;
 					
+					// Destroy the container so we don't double up on caches etc.
 					destroy();
 					
 					init = true;
