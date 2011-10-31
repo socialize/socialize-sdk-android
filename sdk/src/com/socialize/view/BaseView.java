@@ -43,7 +43,7 @@ public abstract class BaseView extends LinearLayout {
 		return Socialize.getSocialize();
 	}
 	
-	protected Activity getActivity() {
+	public Activity getActivity() {
 		Context context = getContext();
 		if(context instanceof Activity) {
 			return (Activity) context;

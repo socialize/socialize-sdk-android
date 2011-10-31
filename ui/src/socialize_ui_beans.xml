@@ -603,7 +603,6 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="customClickListener" ref="facebookShareClickListener"/>
 		<property name="text" value="Share on Facebook"/>
 		<property name="imageName" value="fb_button.png"/>
 		<property name="bottomColor" value="FACEBOOK_BOTTOM"/>
@@ -622,7 +621,6 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="customClickListener" ref="emailShareClickListener"/>
 		<property name="text" value="Share via Email"/>
 		<property name="imageName" value="email_button.png"/>
 		<property name="width" value="180" type="integer"/>
@@ -639,7 +637,6 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="customClickListener" ref="smsShareClickListener"/>
 		<property name="text" value="Share via SMS"/>
 		<property name="imageName" value="sms_button.png"/>
 		<property name="width" value="180" type="integer"/>
@@ -663,7 +660,8 @@
 	<bean 
 		id="facebookShareClickListener" 
 		class="com.socialize.ui.share.FacebookShareClickListener" 
-		extends="shareClickListener">
+		extends="shareClickListener"
+		singleton="false">
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="facebookWallPoster" ref="facebookWallPoster"/>
 		<property name="config" ref="config"/>
@@ -675,17 +673,20 @@
 	<bean 
 		id="emailShareClickListener" 
 		class="com.socialize.ui.share.EmailShareClickListener" 
-		extends="shareClickListener"/>
+		extends="shareClickListener"
+		singleton="false"/>
 		
 	<bean 
 		id="smsShareClickListener" 
 		class="com.socialize.ui.share.SmsShareClickListener" 
-		extends="shareClickListener"/>		
+		extends="shareClickListener"
+		singleton="false"/>		
 		
 	<bean 
 		id="otherShareClickListener" 
 		class="com.socialize.ui.share.OtherShareClickListener" 
-		extends="shareClickListener"/>
+		extends="shareClickListener"
+		singleton="false"/>
 	
 	<bean 
 		id="shareDialogView" 
@@ -698,6 +699,11 @@
 		<property name="smsShareButton" ref="smsShareButton"/>
 		<property name="otherShareClickListener" ref="otherShareClickListener"/>
 		
+		<property name="facebookShareClickListenerFactory" ref="facebookShareClickListenerFactory"/>
+		<property name="emailShareClickListenerFactory" ref="emailShareClickListenerFactory"/>
+		<property name="smsShareClickListenerFactory" ref="smsShareClickListenerFactory"/>
+		<property name="otherShareClickListenerFactory" ref="otherShareClickListenerFactory"/>
+		
 		<init-method name="init"/>
 	</bean>	
 	
@@ -707,6 +713,10 @@
 		<property name="logger" ref="logger"/>
 	</bean>		
 	
+	<factory id="facebookShareClickListenerFactory" makes="facebookShareClickListener"/>
+	<factory id="emailShareClickListenerFactory" makes="emailShareClickListener"/>
+	<factory id="smsShareClickListenerFactory" makes="smsShareClickListener"/>
+	<factory id="otherShareClickListenerFactory" makes="otherShareClickListener"/>		
 	<factory id="shareDialogViewFactory" makes="shareDialogView"/>
 	
 <!-- End Share UI -->	

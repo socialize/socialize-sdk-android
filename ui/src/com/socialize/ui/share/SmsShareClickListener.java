@@ -1,11 +1,16 @@
 package com.socialize.ui.share;
 
-import com.socialize.api.action.ShareType;
-
 import android.app.Activity;
 import android.content.Intent;
 
+import com.socialize.api.action.ShareType;
+import com.socialize.ui.actionbar.ActionBarView;
+
 public class SmsShareClickListener extends ShareClickListener {
+	
+	public SmsShareClickListener(ActionBarView actionBarView) {
+		super(actionBarView);
+	}
 
 	@Override
 	protected void doShare(Activity parent, String title, String subject, String body, String comment) {

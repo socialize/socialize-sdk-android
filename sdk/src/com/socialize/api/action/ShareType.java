@@ -26,8 +26,8 @@ package com.socialize.api.action;
  * @author Jason Polites
  */
 public enum ShareType {
-	FACEBOOK ("facebook", 1),
-	TWITTER ("twitter", 2),
+	FACEBOOK ("facebook", 2),
+	TWITTER ("twitter", 1),
 	EMAIL ("email", 3),
 	SMS ("sms", 3),
 	OTHER ("other", 3);

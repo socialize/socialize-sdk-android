@@ -32,7 +32,7 @@ public class SocializeUI {
 	public static final String COMMENT_ID = "socialize.comment.id";
 	public static final String ENTITY_KEY = "socialize.entity.key";
 	public static final String ENTITY_NAME = "socialize.entity.name";
-	public static final String ENTITY_DESCRIPTION = "socialize.entity.desc";
+//	public static final String ENTITY_DESCRIPTION = "socialize.entity.desc";
 	public static final String ENTITY_URL_AS_LINK = "socialize.entity.url.link";
 	
 	public static final String DEFAULT_USER_ICON = "default_user_icon.png";
@@ -151,9 +151,30 @@ public class SocializeUI {
 		return null;
 	}
 	
+	/**
+	 * @deprecated Use this{@link #showCommentView(Activity, String, String, boolean)}
+	 * @param context
+	 * @param url
+	 */
+	@Deprecated
 	public void showCommentView(Activity context, String url) {
 		Intent i = new Intent(context, CommentActivity.class);
 		i.putExtra(ENTITY_KEY, url);
+		context.startActivity(i);
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param url
+	 * @param entityName
+	 * @param isUrl
+	 */
+	public void showCommentView(Activity context, String url, String entityName, boolean isUrl) {
+		Intent i = new Intent(context, CommentActivity.class);
+		i.putExtra(ENTITY_KEY, url);
+		i.putExtra(ENTITY_NAME, entityName);
+		i.putExtra(ENTITY_URL_AS_LINK, isUrl);
 		context.startActivity(i);
 	}
 	
@@ -176,20 +197,20 @@ public class SocializeUI {
 		context.startActivityForResult(i, requestCode);
 	}
 	
-	public void setEntityMetaData(Activity context, String name, String description) {
-		Intent intent = context.getIntent();
-		Bundle extras = getExtras(intent);
-		extras.putString(ENTITY_NAME, name);
-		extras.putString(ENTITY_DESCRIPTION, description);
-		intent.putExtras(extras);
-	}
-	
-	public void setUseEntityUrlAsLink(Activity context, boolean asLink) {
-		Intent intent = context.getIntent();
-		Bundle extras = getExtras(intent);
-		extras.putBoolean(ENTITY_URL_AS_LINK, asLink);
-		intent.putExtras(extras);
-	}
+//	public void setEntityMetaData(Activity context, String name, String description) {
+//		Intent intent = context.getIntent();
+//		Bundle extras = getExtras(intent);
+//		extras.putString(ENTITY_NAME, name);
+//		extras.putString(ENTITY_DESCRIPTION, description);
+//		intent.putExtras(extras);
+//	}
+//	
+//	public void setUseEntityUrlAsLink(Activity context, boolean asLink) {
+//		Intent intent = context.getIntent();
+//		Bundle extras = getExtras(intent);
+//		extras.putBoolean(ENTITY_URL_AS_LINK, asLink);
+//		intent.putExtras(extras);
+//	}
 	
 	public void setEntityUrl(Activity context, Intent intent, String url) {
 		Bundle extras = getExtras(intent);
@@ -241,8 +262,10 @@ public class SocializeUI {
 		originalLayout.setLayoutParams(originalParams);
 		
 		if(addScrollView && !(original instanceof ScrollView) ) {
+			LayoutParams scrollViewParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 			ScrollView scrollView = new ScrollView(parent);
 			scrollView.setFillViewport(true);
+			scrollView.setLayoutParams(scrollViewParams);
 			scrollView.addView(original);
 			originalLayout.addView(scrollView);
 		}

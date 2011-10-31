@@ -32,6 +32,8 @@ public class CommentListView extends BaseView {
 	private boolean loading = true; // Default to true
 	
 	private String entityKey;
+	private String entityName;
+	private boolean useLink;
 	private int startIndex = 0;
 	private int endIndex = defaultGrabLength;
 	private int totalCount = 0;
@@ -53,10 +55,16 @@ public class CommentListView extends BaseView {
 	
 	private FacebookWallPoster facebookWallPoster;
 	
-	public CommentListView(Context context, String entityKey) {
+	public CommentListView(Context context, String entityKey, String entityName, boolean useLink) {
 		this(context);
 		this.entityKey = entityKey;
+		this.entityName = entityName;
+		this.useLink = useLink;
 	}
+	
+	public CommentListView(Context context, String entityKey) {
+		this(context, entityKey, null, true);
+	}	
 	
 	public CommentListView(Context context) {
 		super(context);
@@ -180,7 +188,7 @@ public class CommentListView extends BaseView {
 		
 		// TODO: check user permissions
 		if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-			facebookWallPoster.postComment(getActivity(), comment, null);
+			facebookWallPoster.postComment(getActivity(), entityKey, entityName, comment, useLink, null);
 		}
 		
 	}

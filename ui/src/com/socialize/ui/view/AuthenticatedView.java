@@ -1,8 +1,6 @@
 package com.socialize.ui.view;
 
-import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -70,22 +68,22 @@ public abstract class AuthenticatedView extends SocializeView {
 		return new AuthenticatedViewListener3rdParty(getContext(), this);
 	}
 
-	protected String getBundleValue(String key) {
-		Bundle bundle = null;
-
-		Context context = getViewContext();
-
-		if(context instanceof Activity) {
-			Activity a = (Activity) context;
-			bundle = a.getIntent().getExtras();
-		}
-
-		if(bundle != null) {
-			return  bundle.getString(SocializeUI.ENTITY_KEY);
-		}
-
-		return null;
-	}
+//	protected String getBundleValue(String key) {
+//		Bundle bundle = null;
+//
+//		Context context = getViewContext();
+//
+//		if(context instanceof Activity) {
+//			Activity a = (Activity) context;
+//			bundle = a.getIntent().getExtras();
+//		}
+//
+//		if(bundle != null) {
+//			return  bundle.getString(SocializeUI.ENTITY_KEY);
+//		}
+//
+//		return null;
+//	}
 
 	// Wrapped so it can be mocked.
 	protected Context getViewContext() {

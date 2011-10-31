@@ -25,11 +25,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.text.Html;
 
+import com.socialize.ui.actionbar.ActionBarView;
+
 /**
  * @author Jason Polites
  */
 public abstract class SimpleShareClickListener extends ShareClickListener {
 	
+	public SimpleShareClickListener(ActionBarView actionBarView) {
+		super(actionBarView);
+	}
+
 	@Override
 	protected void doShare(Activity parent, String title, String subject, String body, String comment) {
 		Intent msg  = new Intent(android.content.Intent.ACTION_SEND);

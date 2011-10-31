@@ -23,8 +23,6 @@ package com.socialize.ui.share;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -34,7 +32,7 @@ import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.log.SocializeLogger;
-import com.socialize.ui.SocializeUI;
+import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.util.StringUtils;
 
 /**
@@ -45,7 +43,14 @@ public abstract class ShareClickListener implements OnClickListener {
 
 	private SocializeLogger logger;
 	protected ShareMessageBuilder shareMessageBuilder;
+	private ActionBarView actionBarView;
 	
+	
+	public ShareClickListener(ActionBarView actionBarView) {
+		super();
+		this.actionBarView = actionBarView;
+	}
+
 	protected Activity getActivity(View v) {
 		Context context = v.getContext();
 		
@@ -75,13 +80,13 @@ public abstract class ShareClickListener implements OnClickListener {
 		
 		if(activity != null) {
 			
-			Intent intent = activity.getIntent();
-			Bundle extras = intent.getExtras();
+//			Intent intent = activity.getIntent();
+//			Bundle extras = intent.getExtras();
 			
 			String entityKey = null;
 			
-			if(extras != null) {
-				entityKey = extras.getString(SocializeUI.ENTITY_KEY);
+//			if(extras != null) {
+//				entityKey = extras.getString(SocializeUI.ENTITY_KEY);
 				
 				String text = comment;
 				
@@ -114,20 +119,20 @@ public abstract class ShareClickListener implements OnClickListener {
 				String subject = null;
 				String body = null;
 				if(isGenerateShareMessage()) {
-					subject = shareMessageBuilder.buildShareSubject(activity);
-					body = shareMessageBuilder.buildShareMessage(activity, comment, isHtml(), isIncludeSocialize());
+					subject = shareMessageBuilder.buildShareSubject(actionBarView.getEntityKey(), actionBarView.getEntityName());
+					body = shareMessageBuilder.buildShareMessage(actionBarView.getEntityKey(), actionBarView.getEntityName(), comment, isHtml(), isIncludeSocialize());
 				}
 					
 				doShare(activity, title, subject, body, comment);				
-			}			
+//			}			
 		}
-		else {
-			if(logger != null) {
-				logger.error("Unable to complete share.  Entity key was not found in extras bundle under [" +
-						SocializeUI.ENTITY_KEY +
-						"].  Make sure you set the entity key before calling the Socialize UI.");
-			}
-		}
+//		else {
+//			if(logger != null) {
+//				logger.error("Unable to complete share.  Entity key was not found in extras bundle under [" +
+//						SocializeUI.ENTITY_KEY +
+//						"].  Make sure you set the entity key before calling the Socialize UI.");
+//			}
+//		}
 	}
 
 	public void setLogger(SocializeLogger logger) {

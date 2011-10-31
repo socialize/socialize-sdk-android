@@ -42,6 +42,9 @@ public class ActionBarView extends EntityView {
 	private SocializeAdProvider socializeAdProvider;
 	
 	private boolean adsEnabled = false;
+	private boolean isEntityKeyUrl = true;
+	private String entityKey;
+	private String entityName;
 	
 	public ActionBarView(Context context) {
 		super(context);
@@ -57,8 +60,21 @@ public class ActionBarView extends EntityView {
 	@Override
 	protected View getView(Bundle bundle, Object... entityKeys) {
 		
+		this.entityKey = (String) entityKeys[0];
+		
+		if(entityKeys.length > 1) {
+			this.entityName = (String) entityKeys[1];
+		}
+		
+		if(entityKeys.length > 2) {
+			Boolean isUrl = (Boolean) entityKeys[2];
+			if( isUrl != null) {
+				this.isEntityKeyUrl = isUrl;
+			}
+		}
+		
 		if(actionBarLayoutView == null) {
-			actionBarLayoutView = container.getBean("actionBarLayoutView", entityKeys);
+			actionBarLayoutView = container.getBean("actionBarLayoutView", this);
 		}
 		
 		return actionBarLayoutView;
@@ -67,7 +83,6 @@ public class ActionBarView extends EntityView {
 	@Override
 	protected void onViewLoad() {
 		super.onViewLoad();
-		
 		if(adsEnabled) {
 			socializeAdProvider = container.getBean("socializeAdProvider");
 			if(socializeAdProvider != null) {
@@ -76,12 +91,28 @@ public class ActionBarView extends EntityView {
 		}
 	}
 	
+	public String getEntityKey() {
+		return entityKey;
+	}
+
+	public void setEntityKey(String entityKey) {
+		this.entityKey = entityKey;
+	}
+
+	public String getEntityName() {
+		return entityName;
+	}
+
+	public void setEntityName(String entityName) {
+		this.entityName = entityName;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.view.EntityView#getEntityKeys()
 	 */
 	@Override
 	protected String[] getEntityKeys() {
-		return new String[]{SocializeUI.ENTITY_KEY};
+		return new String[]{SocializeUI.ENTITY_KEY, SocializeUI.ENTITY_NAME, SocializeUI.ENTITY_URL_AS_LINK};
 	}
 	
 	@Override
@@ -97,5 +128,13 @@ public class ActionBarView extends EntityView {
 	@Override
 	protected View getEditModeView() {
 		return new ActionBarEditView(getContext());
+	}
+
+	public boolean isEntityKeyUrl() {
+		return isEntityKeyUrl;
+	}
+
+	public void setEntityKeyUrl(boolean isEntityKeyUrl) {
+		this.isEntityKeyUrl = isEntityKeyUrl;
 	}
 }

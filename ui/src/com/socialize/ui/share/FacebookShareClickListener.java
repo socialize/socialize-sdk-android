@@ -23,8 +23,6 @@ package com.socialize.ui.share;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.os.Bundle;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
@@ -36,6 +34,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUI;
+import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.dialog.AlertDialogFactory;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.facebook.FacebookWallPostListener;
@@ -56,6 +55,10 @@ public class FacebookShareClickListener extends ShareClickListener {
 	private SocializeLogger logger;
 	private FacebookWallPoster facebookWallPoster;
 	
+	public FacebookShareClickListener(ActionBarView actionBarView) {
+		super(actionBarView);
+	}
+
 	@Override
 	protected void doShare(final Activity parent, final String title, final String subject, final String body, final String comment) {
 
@@ -139,25 +142,25 @@ public class FacebookShareClickListener extends ShareClickListener {
 		
 	}
 	
-	protected String getSubject(Activity activity) {
-		Intent intent = activity.getIntent();
-		Bundle extras = intent.getExtras();
-		
-		String entityKey = null;
-		String entityName = null;
-		
-		if(extras != null) {
-			entityKey = extras.getString(SocializeUI.ENTITY_KEY);
-			entityName = extras.getString(SocializeUI.ENTITY_NAME);
-		}
-		
-		if(!StringUtils.isEmpty(entityName)) {
-			return entityName;
-		}
-		else {
-			return entityKey;
-		}
-	}
+//	protected String getSubject(Activity activity) {
+//		Intent intent = activity.getIntent();
+//		Bundle extras = intent.getExtras();
+//		
+//		String entityKey = null;
+//		String entityName = null;
+//		
+//		if(extras != null) {
+//			entityKey = extras.getString(SocializeUI.ENTITY_KEY);
+//			entityName = extras.getString(SocializeUI.ENTITY_NAME);
+//		}
+//		
+//		if(!StringUtils.isEmpty(entityName)) {
+//			return entityName;
+//		}
+//		else {
+//			return entityKey;
+//		}
+//	}
 	
 	protected String getContent(Activity activity, String comment) {
 		StringBuilder builder = new StringBuilder();

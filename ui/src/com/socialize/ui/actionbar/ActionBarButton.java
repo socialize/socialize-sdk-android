@@ -47,11 +47,13 @@ public class ActionBarButton extends LinearLayout {
 	private Drawable background;
 	private DeviceUtils deviceUtils;
 	private ActionBarItem actionBarItem;
+	private ActionBarView actionBarView;
 
 	private IBeanFactory<ActionBarItem> actionBarItemFactory;
 
-	public ActionBarButton(Context context) {
+	public ActionBarButton(Context context, ActionBarView actionBarView) {
 		super(context);
+		this.actionBarView = actionBarView;
 	}
 
 	public void init(int width, float weight) {

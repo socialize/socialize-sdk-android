@@ -56,7 +56,7 @@ import com.socialize.view.BaseView;
  */
 public class ActionBarLayoutView extends BaseView {
 
-	private String entityKey;
+//	private String entityKey;
 	private ActionBarButton commentButton;
 	private ActionBarButton likeButton;
 	private ActionBarButton shareButton;
@@ -84,10 +84,11 @@ public class ActionBarLayoutView extends BaseView {
 	
 	private FacebookWallPoster facebookWallPoster;
 	private ShareDialogFactory shareDialogFactory;
+	private ActionBarView actionBarView;
 	
-	public ActionBarLayoutView(Activity context, String entityKey) {
+	public ActionBarLayoutView(Activity context, ActionBarView actionBarView) {
 		super(context);
-		this.entityKey = entityKey;
+		this.actionBarView = actionBarView;
 	}
 	
 	public void init() {
@@ -121,9 +122,9 @@ public class ActionBarLayoutView extends BaseView {
 		ticker.addTickerView(likesItem);
 		ticker.addTickerView(sharesItem);
 		
-		likeButton = buttonFactory.getBean();
-		commentButton = buttonFactory.getBean();
-		shareButton = buttonFactory.getBean();
+		likeButton = buttonFactory.getBean(actionBarView);
+		commentButton = buttonFactory.getBean(actionBarView);
+		shareButton = buttonFactory.getBean(actionBarView);
 		
 		commentButton.setIcon(commentIcon);
 		commentButton.setBackground(commentBg);
@@ -137,7 +138,7 @@ public class ActionBarLayoutView extends BaseView {
 		commentButton.setListener(new ActionBarButtonListener() {
 			@Override
 			public void onClick(ActionBarButton button) {
-				SocializeUI.getInstance().showCommentView(getActivity(), entityKey);
+				SocializeUI.getInstance().showCommentView(getActivity(), actionBarView.getEntityKey(), actionBarView.getEntityName(), actionBarView.isEntityKeyUrl());
 			}
 		});
 		
@@ -152,7 +153,7 @@ public class ActionBarLayoutView extends BaseView {
 			@Override
 			public void onClick(ActionBarButton button) {
 				if(shareDialogFactory != null) {
-					shareDialogFactory.show(getContext());
+					shareDialogFactory.show(getContext(), actionBarView);
 				}
 			}
 		});
@@ -204,6 +205,8 @@ public class ActionBarLayoutView extends BaseView {
 	protected void onViewLoad() {
 		super.onViewLoad();
 		
+		final String entityKey = actionBarView.getEntityKey();
+		
 		ticker.startTicker();
 		
 		if(logger != null && logger.isInfoEnabled()) {
@@ -217,25 +220,27 @@ public class ActionBarLayoutView extends BaseView {
 				@Override
 				public void onError(SocializeException error) {
 					error.printStackTrace();
-					getEntityData();
+					getEntityData(entityKey);
 				}
 				
 				@Override
 				public void onCreate(View entity) {
-					getEntityData();
+					getEntityData(entityKey);
 				}
 			});
 		}
 		else {
 //			entityCache.extendTTL(entityKey);
 //			setEntityData(entity);
-			getEntityData();
+			getEntityData(entityKey);
 		}
 	}
 	
 	@Override
 	protected void onViewUpdate() {
 		super.onViewUpdate();
+		
+		final String entityKey = actionBarView.getEntityKey();
 		
 		if(logger != null && logger.isInfoEnabled()) {
 			logger.info("onViewUpdate called on " + getClass().getSimpleName());
@@ -250,12 +255,13 @@ public class ActionBarLayoutView extends BaseView {
 		
 		likeButton.setText("--");
 		
-		getEntityData();
+		getEntityData(entityKey);
 	}
 
 	protected void postLike(final ActionBarButton button) {
 		
 		if(localEntity != null) {
+			String entityKey = actionBarView.getEntityKey();
 			
 			button.showLoading();
 			
@@ -300,13 +306,13 @@ public class ActionBarLayoutView extends BaseView {
 				
 				// TODO: Inspect user prefs
 				if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-					facebookWallPoster.postLike(getActivity(), null);
+					facebookWallPoster.postLike(getActivity(), actionBarView.getEntityKey(), actionBarView.getEntityName(), null, actionBarView.isEntityKeyUrl(), null);
 				}
 			}
 		}
 	}
 	
-	protected void getEntityData() {
+	protected void getEntityData(final String entityKey) {
 		
 		// Get the like
 		getSocialize().getLike(entityKey, new LikeGetListener() {
@@ -393,20 +399,12 @@ public class ActionBarLayoutView extends BaseView {
 		return Socialize.getSocialize();
 	}
 
-	public void setEntityKey(String entityKey) {
-		this.entityKey = entityKey;
-	}
-
 	public void setCommentButton(ActionBarButton commentButton) {
 		this.commentButton = commentButton;
 	}
 
 	public void setLikeButton(ActionBarButton likeButton) {
 		this.likeButton = likeButton;
-	}
-
-	public String getEntityKey() {
-		return entityKey;
 	}
 
 	public ActionBarButton getCommentButton() {

@@ -22,12 +22,18 @@
 package com.socialize.ui.share;
 
 import com.socialize.api.action.ShareType;
+import com.socialize.ui.actionbar.ActionBarView;
 
 
 /**
  * @author Jason Polites
  */
 public class EmailShareClickListener extends SimpleShareClickListener {
+	
+	public EmailShareClickListener(ActionBarView actionBarView) {
+		super(actionBarView);
+	}
+
 	@Override
 	protected String getMimeType() {
 		return "message/rfc822";

@@ -22,6 +22,7 @@
 package com.socialize.ui.share;
 
 import com.socialize.api.action.ShareType;
+import com.socialize.ui.actionbar.ActionBarView;
 
 
 /**
@@ -29,6 +30,11 @@ import com.socialize.api.action.ShareType;
  *
  */
 public class OtherShareClickListener extends SimpleShareClickListener {
+	
+	public OtherShareClickListener(ActionBarView actionBarView) {
+		super(actionBarView);
+	}
+
 	@Override
 	protected String getMimeType() {
 		return "text/plain";

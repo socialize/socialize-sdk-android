@@ -21,10 +21,6 @@
  */
 package com.socialize.ui.share;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-
 import com.socialize.entity.User;
 import com.socialize.ui.SocializeUI;
 import com.socialize.util.DeviceUtils;
@@ -42,22 +38,22 @@ public class ShareMessageBuilder {
 		super();
 	}
 
-	public String buildShareSubject(Activity context) {
+	public String buildShareSubject(String entityKey, String entityName) {
 		
 		StringBuilder builder = new StringBuilder();
 		
 		User currentUser = getSocializeUI().getSocialize().getSession().getUser();
 		
-		Intent intent = context.getIntent();
-		Bundle extras = intent.getExtras();
-		
-		String entityKey = null;
-		String entityName = null;
-		
-		if(extras != null) {
-			entityKey = extras.getString(SocializeUI.ENTITY_KEY);
-			entityName = extras.getString(SocializeUI.ENTITY_NAME);
-		}
+//		Intent intent = context.getIntent();
+//		Bundle extras = intent.getExtras();
+//		
+//		String entityKey = null;
+//		String entityName = null;
+//		
+//		if(extras != null) {
+//			entityKey = extras.getString(SocializeUI.ENTITY_KEY);
+//			entityName = extras.getString(SocializeUI.ENTITY_NAME);
+//		}
 		
 		if(currentUser != null) {
 			String name = currentUser.getDisplayName();
@@ -84,23 +80,23 @@ public class ShareMessageBuilder {
 		
 	}
 	
-	public String buildShareMessage(Activity context, String comment, boolean html, boolean includeSocialize) {
+	public String buildShareMessage(String entityKey, String entityName, String comment, boolean html, boolean includeSocialize) {
 		
 		StringBuilder builder = new StringBuilder();
 		
-		Intent intent = context.getIntent();
-		Bundle extras = intent.getExtras();
-		String entityKey = null;
-		String entityName = null;
+//		Intent intent = context.getIntent();
+//		Bundle extras = intent.getExtras();
+//		String entityKey = null;
+//		String entityName = null;
 		String entityDescription = null;
 		boolean isUseLink = false;
 		
-		if(extras != null) {
-			entityKey = extras.getString(SocializeUI.ENTITY_KEY);
-			entityName = extras.getString(SocializeUI.ENTITY_NAME);
-			entityDescription = extras.getString(SocializeUI.ENTITY_DESCRIPTION);
-			isUseLink = extras.getBoolean(SocializeUI.ENTITY_URL_AS_LINK);
-		}
+//		if(extras != null) {
+//			entityKey = extras.getString(SocializeUI.ENTITY_KEY);
+//			entityName = extras.getString(SocializeUI.ENTITY_NAME);
+//			entityDescription = extras.getString(SocializeUI.ENTITY_DESCRIPTION);
+////			isUseLink = extras.getBoolean(SocializeUI.ENTITY_URL_AS_LINK);
+//		}
 		
 		if(StringUtils.isEmpty(comment)) {
 			comment = "Check this out:";

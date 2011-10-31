@@ -29,7 +29,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.socialize.Socialize;
@@ -59,24 +58,24 @@ public class FacebookWallPoster {
 	private SocializeLogger logger;
 	private DeviceUtils deviceUtils;
 	
-	public void postLike(final Activity parent, final FacebookWallPostListener listener) {
+	public void postLike(final Activity parent, String entityKey, String entityName, String comment, boolean isUseLink, final FacebookWallPostListener listener) {
 		
 		String linkName = deviceUtils.getAppName();
 		
 		StringBuilder builder = new StringBuilder();
 		
-		Intent intent = parent.getIntent();
-		Bundle extras = intent.getExtras();
-		String entityKey = null;
-		String entityName = null;
-		boolean isUseLink = false;
+//		Intent intent = parent.getIntent();
+//		Bundle extras = intent.getExtras();
+//		String entityKey = null;
+//		String entityName = null;
+//		boolean isUseLink = false;
 		
 		builder.append("Likes ");
 		
-		if(extras != null) {
-			entityKey = extras.getString(SocializeUI.ENTITY_KEY);
-			entityName = extras.getString(SocializeUI.ENTITY_NAME);
-			isUseLink = extras.getBoolean(SocializeUI.ENTITY_URL_AS_LINK);
+//		if(extras != null) {
+//			entityKey = extras.getString(SocializeUI.ENTITY_KEY);
+//			entityName = extras.getString(SocializeUI.ENTITY_NAME);
+//			isUseLink = extras.getBoolean(SocializeUI.ENTITY_URL_AS_LINK);
 			
 			if(isUseLink || StringUtils.isEmpty(entityName)) {
 				builder.append(entityKey);
@@ -86,7 +85,7 @@ public class FacebookWallPoster {
 				builder.append(entityName);
 				builder.append("\n\n");
 			}
-		}	
+//		}	
 		
 		builder.append("Posted from ");
 		builder.append(linkName);
@@ -95,22 +94,22 @@ public class FacebookWallPoster {
 		post(parent, builder.toString(), listener);
 	}
 	
-	public void postComment(final Activity parent, String comment, final FacebookWallPostListener listener) {
+	public void postComment(final Activity parent, String entityKey, String entityName, String comment, boolean isUseLink, final FacebookWallPostListener listener) {
 		
 		String linkName = deviceUtils.getAppName();
 		
 		StringBuilder builder = new StringBuilder();
 		
-		Intent intent = parent.getIntent();
-		Bundle extras = intent.getExtras();
-		String entityKey = null;
-		String entityName = null;
-		boolean isUseLink = false;
+//		Intent intent = parent.getIntent();
+//		Bundle extras = intent.getExtras();
+//		String entityKey = null;
+//		String entityName = null;
+//		boolean isUseLink = false;
 		
-		if(extras != null) {
-			entityKey = extras.getString(SocializeUI.ENTITY_KEY);
-			entityName = extras.getString(SocializeUI.ENTITY_NAME);
-			isUseLink = extras.getBoolean(SocializeUI.ENTITY_URL_AS_LINK);
+//		if(extras != null) {
+//			entityKey = extras.getString(SocializeUI.ENTITY_KEY);
+//			entityName = extras.getString(SocializeUI.ENTITY_NAME);
+//			isUseLink = extras.getBoolean(SocializeUI.ENTITY_URL_AS_LINK);
 			
 			if(isUseLink || StringUtils.isEmpty(entityName)) {
 				builder.append(entityKey);
@@ -120,7 +119,7 @@ public class FacebookWallPoster {
 				builder.append(entityName);
 				builder.append("\n\n");
 			}
-		}	
+//		}	
 		
 		builder.append(comment);
 		builder.append("\n\n");

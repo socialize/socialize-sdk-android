@@ -30,7 +30,7 @@ import android.content.Context;
 public class Socialize {
 	
 	// This will be set during the build process
-	public static final String VERSION = "0.6.0";
+	public static final String VERSION = "0.7.0";
 
 	private static final SocializeServiceImpl instance = new SocializeServiceImpl();
 

@@ -26,7 +26,7 @@ package com.socialize.ui.actionbar;
  *
  */
 public interface ActionBarButtonListener {
-
+	
 	/**
 	 * Called when a button on the action bar is clicked.
 	 * @param button
