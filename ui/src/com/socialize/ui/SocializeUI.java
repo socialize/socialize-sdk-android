@@ -74,7 +74,6 @@ public class SocializeUI {
 			public void onInit(Context context, IOCContainer container) {
 				getSocialize().getConfig().merge(customProperties);
 				listener.onInit(context, container);
-				
 			}
 		};
 		
