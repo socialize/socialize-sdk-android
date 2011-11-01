@@ -120,7 +120,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		new InitTask(this, context, paths, listener, logger).execute((Void)null);
 	}
 
-	public IOCContainer initWithContainer(Context context, String...paths) throws Exception {
+	public synchronized IOCContainer initWithContainer(Context context, String...paths) throws Exception {
 		boolean init = false;
 
 		if(isInitialized()) {
@@ -217,7 +217,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#init(android.content.Context, com.socialize.android.ioc.IOCContainer)
 	 */
 	@Override
-	public void init(Context context, final IOCContainer container) {
+	public synchronized void init(Context context, final IOCContainer container) {
 		if(!isInitialized()) {
 			try {
 				this.container = container;

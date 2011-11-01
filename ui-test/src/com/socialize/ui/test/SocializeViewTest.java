@@ -1,6 +1,7 @@
 package com.socialize.ui.test;
 
 import android.content.Context;
+import android.view.View;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
@@ -46,6 +47,13 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 			public void setErrorHandler(SocializeErrorHandler errorHandler) {
 				addResult(errorHandler);
 			}
+
+			@Override
+			public View getLoadingView() {
+				return null;
+			}
+			
+			
 		};
 		
 		runTestOnUiThread(new Runnable() {
@@ -128,6 +136,11 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 		@Override
 		public void initSocialize(SocializeInitListener listener) {
 			super.initSocialize(listener);
+		}
+
+		@Override
+		public View getLoadingView() {
+			return null;
 		}
 	}
 	

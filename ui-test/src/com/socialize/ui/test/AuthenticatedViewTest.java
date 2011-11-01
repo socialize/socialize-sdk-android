@@ -32,6 +32,11 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 			public View getView() {
 				return null;
 			}
+			
+			@Override
+			public View getLoadingView() {
+				return null;
+			}
 
 			@Override
 			public SocializeUI getSocializeUI() {
