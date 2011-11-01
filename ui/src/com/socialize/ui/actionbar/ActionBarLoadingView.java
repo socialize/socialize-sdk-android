@@ -64,7 +64,7 @@ public class ActionBarLoadingView extends LinearLayout {
 		TextView text = new TextView(getContext());
 		text.setTextColor(Color.GRAY);
 		text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-		text.setText("Loading Socialize...");
+		text.setText("Loading...");
 		text.setPadding(padding, padding, padding, padding);
 		
 		LayoutParams progressLayoutParams = new LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);

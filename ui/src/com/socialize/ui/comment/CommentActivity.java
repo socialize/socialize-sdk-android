@@ -29,6 +29,7 @@ import android.view.KeyEvent;
 import com.socialize.Socialize;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.SocializeUIActivity;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -55,8 +56,15 @@ public class CommentActivity extends SocializeUIActivity {
 			finish();
 		}
 		else {
-			view = new CommentView(this);
-			setContentView(view);
+			String entityKey = extras.getString(SocializeUI.ENTITY_KEY);
+			if(StringUtils.isEmpty(entityKey)) {
+				Log.i("Socialize", "No entity url found for Comment Activity. Aborting");
+				finish();
+			}
+			else {
+				view = new CommentView(this);
+				setContentView(view);	
+			}
 		}
 	}
 	
