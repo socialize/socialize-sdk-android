@@ -117,7 +117,6 @@ public abstract class SocializeView extends BaseView {
 
 	protected void initSocialize(SocializeInitListener listener) {
 		getSocializeUI().initSocializeAsync(this.getContext(), listener);
-//		getSocialize().init(this.getContext());
 	}
 	
 	protected SocializeUI getSocializeUI() {

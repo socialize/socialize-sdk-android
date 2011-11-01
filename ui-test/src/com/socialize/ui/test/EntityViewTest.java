@@ -89,6 +89,7 @@ public class EntityViewTest extends SocializeUIActivityTest {
 			
 			@Override
 			protected View getView(Bundle bundle, Object... entityKeys) {
+				addResult("success");
 				return null;
 			}
 
@@ -108,7 +109,7 @@ public class EntityViewTest extends SocializeUIActivityTest {
 		
 		view.getView();
 		
-		Boolean result = getNextResult();
+		String result = getNextResult();
 		
 		assertNotNull(result);
 		

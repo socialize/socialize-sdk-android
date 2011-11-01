@@ -4,18 +4,22 @@ import android.view.View;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.config.SocializeConfig;
+import com.socialize.listener.SocializeAuthListener;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.view.AuthenticatedView;
 
 public class AuthenticatedViewTest extends SocializeUIActivityTest {
 
-	@UsesMocks ({SocializeUI.class, IOCContainer.class})
-	public void testOnPostSocializeInit() {
+	@UsesMocks ({SocializeUI.class, IOCContainer.class, SocializeService.class, SocializeAuthListener.class})
+	public void testOnViewLoad() {
 		
 		final SocializeUI socializeUI = AndroidMock.createMock(SocializeUI.class);
 		final IOCContainer container = AndroidMock.createMock(IOCContainer.class);
+		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
+		final SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
 		
 		final String key = "foo";
 		final String secret = "bar";
@@ -25,6 +29,8 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 		AndroidMock.expect(socializeUI.getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(key);
 		AndroidMock.expect(socializeUI.getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_SECRET)).andReturn(secret);
 		AndroidMock.expect(socializeUI.getCustomConfigValue(SocializeConfig.FACEBOOK_APP_ID)).andReturn(fbId);
+		
+		socialize.authenticate(key, secret, listener);
 		
 		AuthenticatedView view = new AuthenticatedView(getContext()) {
 			
@@ -41,6 +47,16 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 			@Override
 			public SocializeUI getSocializeUI() {
 				return socializeUI;
+			}
+
+			@Override
+			public SocializeService getSocialize() {
+				return socialize;
+			}
+
+			@Override
+			public SocializeAuthListener getAuthListener(IOCContainer container) {
+				return listener;
 			}
 		};
 		

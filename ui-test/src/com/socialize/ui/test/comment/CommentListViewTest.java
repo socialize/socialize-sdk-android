@@ -411,6 +411,9 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		view.setEndIndex(endIndex);
 		view.setTotalCount(totalCount);
 		view.setFacebookWallPoster(facebookWallPoster);
+		view.setEntityKey(entityKey);
+		view.setEntityName(entityName);
+		view.setUseLink(true);
 		
 		view.doPostComment(commentString);
 		
@@ -495,6 +498,9 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		view.setProgressDialogFactory(progressDialogFactory);
 		view.setFacebookWallPoster(facebookWallPoster);
+		view.setEntityKey(entityKey);
+		view.setEntityName(entityName);
+		view.setUseLink(true);
 		
 		view.doPostComment(comment);
 		

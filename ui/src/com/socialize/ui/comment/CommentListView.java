@@ -410,6 +410,14 @@ public class CommentListView extends BaseView {
 	public void setAuthRequestDialogFactory(IBeanFactory<AuthRequestDialogFactory> authRequestDialogFactory) {
 		this.authRequestDialogFactory = authRequestDialogFactory;
 	}
+	
+	public void setUseLink(boolean useLink) {
+		this.useLink = useLink;
+	}
+
+	public void setEntityName(String entityName) {
+		this.entityName = entityName;
+	}
 
 	/**
 	 * Called when the current logged in user updates their profile.

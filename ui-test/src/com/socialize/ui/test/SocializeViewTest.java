@@ -5,55 +5,48 @@ import android.view.View;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.ui.ActivityIOCProvider;
+import com.socialize.ui.SocializeUI;
 import com.socialize.ui.SocializeView;
 
 public class SocializeViewTest extends SocializeUIActivityTest {
 
 	@UsesMocks ({IOCContainer.class, SocializeErrorHandler.class})
-	public void testOnAttachedToWindow() throws Throwable {
+	public void testOnWindowVisibilityChanged() throws Throwable {
 		
-		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
-		SocializeErrorHandler errorHandler = AndroidMock.createMock(SocializeErrorHandler.class);
+//		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
+//		SocializeErrorHandler errorHandler = AndroidMock.createMock(SocializeErrorHandler.class);
 		
-		AndroidMock.expect(container.getBean("socializeUIErrorHandler")).andReturn(errorHandler);
+//		AndroidMock.expect(container.getBean("socializeUIErrorHandler")).andReturn(errorHandler);
 		
-		AndroidMock.replay(container);
+//		AndroidMock.replay(container);
 		
-		ActivityIOCProvider.getInstance().setContainer(container);
+//		ActivityIOCProvider.getInstance().setContainer(container);
 		
 		final SocializeView view = new SocializeView(getActivity()) {
 			
-			@Override
-			protected void initSocialize(SocializeInitListener listener) {
-				addResult("initSocialize");
-			}
+//			@Override
+//			protected void onBeforeSocializeInit() {
+//				addResult("onBeforeSocializeInit");
+//			}
 
 			@Override
-			protected void onBeforeSocializeInit() {
-				addResult("onBeforeSocializeInit");
+			protected void doSocializeInit(SocializeInitListener listener) {
+				addResult("doSocializeInit");
 			}
 
-			@Override
-			public void onViewLoad(IOCContainer container) {
-				addResult(container);
-			}
-
-			@Override
-			public void setErrorHandler(SocializeErrorHandler errorHandler) {
-				addResult(errorHandler);
-			}
+//			@Override
+//			public void setErrorHandler(SocializeErrorHandler errorHandler) {
+//				addResult(errorHandler);
+//			}
 
 			@Override
 			public View getLoadingView() {
 				return null;
 			}
-			
-			
 		};
 		
 		runTestOnUiThread(new Runnable() {
@@ -65,43 +58,42 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 		
 		sleep(1000);
 		
-		String onBeforeSocializeInit = getNextResult();
+//		String onBeforeSocializeInit = getNextResult();
 		String initSocialize = getNextResult();
-		SocializeErrorHandler errorHandlerAfter = getNextResult();
-		IOCContainer containerAfter = getNextResult();
+//		SocializeErrorHandler errorHandlerAfter = getNextResult();
 		
-		assertNotNull(containerAfter);
-		assertNotNull(errorHandlerAfter);
+//		assertNotNull(errorHandlerAfter);
 		assertNotNull(initSocialize);
-		assertNotNull(onBeforeSocializeInit);
+//		assertNotNull(onBeforeSocializeInit);
 		
-		assertSame(container, containerAfter);
-		assertSame(errorHandler, errorHandlerAfter);
-		assertEquals("initSocialize", initSocialize);
-		assertEquals("onBeforeSocializeInit", onBeforeSocializeInit);
+//		assertSame(errorHandler, errorHandlerAfter);
+		assertEquals("doSocializeInit", initSocialize);
+//		assertEquals("onBeforeSocializeInit", onBeforeSocializeInit);
 		
-		AndroidMock.verify(container);
+//		AndroidMock.verify(container);
 	}
 	
 
-	@UsesMocks ({SocializeService.class, SocializeInitListener.class})
+	@UsesMocks ({ SocializeInitListener.class, SocializeUI.class})
 	public void testInitSocialize() {
-		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		final SocializeInitListener listener = AndroidMock.createMock(SocializeInitListener.class);
-		socialize.init((Context) AndroidMock.anyObject());
+		final SocializeUI socializeUI = AndroidMock.createMock(SocializeUI.class);
 		
-		AndroidMock.replay(socialize);
+		socializeUI.initSocializeAsync((Context) AndroidMock.anyObject(), AndroidMock.eq( listener ));
+		
+		AndroidMock.replay(socializeUI);
 		
 		PublicView activity = new PublicView(getActivity()) {
+
 			@Override
-			protected SocializeService getSocialize() {
-				return socialize;
+			protected SocializeUI getSocializeUI() {
+				return socializeUI;
 			}
 		};
 		
 		activity.initSocialize(listener);
 		
-		AndroidMock.verify(socialize);
+		AndroidMock.verify(socializeUI);
 	}
 	
 	@UsesMocks ({IOCContainer.class})
@@ -137,7 +129,7 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 		public void initSocialize(SocializeInitListener listener) {
 			super.initSocialize(listener);
 		}
-
+		
 		@Override
 		public View getLoadingView() {
 			return null;
