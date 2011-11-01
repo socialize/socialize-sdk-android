@@ -68,13 +68,13 @@ public class DeviceUtils {
 			packageName = context.getPackageName();
 			
 			Resources appR = context.getResources(); 
-			CharSequence txt = appR.getText(appR.getIdentifier("app_name", 
-			"string", context.getPackageName())); 
+			CharSequence txt = appR.getText(appR.getIdentifier("app_name",  "string", context.getPackageName())); 
 			appName = txt.toString();
 			
 			if(StringUtils.isEmpty(appName)) {
 				appName = packageName;
 			}
+			
 			hasCamera = isIntentAvailable(context, MediaStore.ACTION_IMAGE_CAPTURE);
 		}
 		else {

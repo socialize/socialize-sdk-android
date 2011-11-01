@@ -24,6 +24,7 @@ package com.socialize.ui;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.error.SocializeException;
@@ -48,6 +49,10 @@ public abstract class SocializeView extends BaseView {
 	@Override
 	protected final void onViewLoad() {
 		super.onViewLoad();
+		View loading = getLoadingView();
+		if(loading != null) {
+			addView(loading);
+		}
 		doSocializeInit(getInitLoadListener());
 	}
 	
@@ -118,6 +123,8 @@ public abstract class SocializeView extends BaseView {
 	protected SocializeUI getSocializeUI() {
 		return SocializeUI.getInstance();
 	}
+	
+	public abstract View getLoadingView();
 	
 	// Subclasses override
 	protected void onBeforeSocializeInit() {}

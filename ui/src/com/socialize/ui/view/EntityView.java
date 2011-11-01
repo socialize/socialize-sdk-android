@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.TextView;
 
 public abstract class EntityView extends AuthenticatedView {
 
@@ -30,9 +29,7 @@ public abstract class EntityView extends AuthenticatedView {
 		}
 		
 		if(bundle != null) {
-			
 			String[] entityKeys = getEntityKeys();
-			
 			if(entityKeys != null && entityKeys.length > 0) {
 				Object[] values = new String[entityKeys.length];
 				for (int i = 0; i < entityKeys.length; i++) {
@@ -40,18 +37,9 @@ public abstract class EntityView extends AuthenticatedView {
 				}
 				return getView(bundle, values);
 			}
-			else {
-				return getView(bundle, (Object[]) null);
-			}
 		}
 		
-		return getErrorView(context);
-	}
-	
-	protected View getErrorView(Context context) {
-		TextView error = new TextView(context);
-		error.setText("Socialize Error! No entity url specified");
-		return error;
+		return getView(bundle, (Object[]) null);
 	}
 	
 	protected abstract View getView(Bundle bundle, Object...entityKeys);

@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 public class CommentView extends EntityView {
@@ -26,10 +27,16 @@ public class CommentView extends EntityView {
 
 	@Override
 	protected View getView(Bundle bundle, Object...entityKey) {
-		if(commentListView == null) {
-			commentListView =  container.getBean("commentList", entityKey[0]);
+		if (entityKey != null) {
+			if(commentListView == null) {
+				commentListView =  container.getBean("commentList", entityKey[0]);
+			}
+			return commentListView;
 		}
-		return commentListView;
+		else {
+			Log.e("Socialize", "No entity url specified for comment view");
+			return null;
+		}
 	}
 
 	@Override
@@ -54,5 +61,10 @@ public class CommentView extends EntityView {
 	 */
 	public void onProfileUpdate() {
 		commentListView.onProfileUpdate();
+	}
+	
+	@Override
+	public View getLoadingView() {
+		return null;
 	}
 }

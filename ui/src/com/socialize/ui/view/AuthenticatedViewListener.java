@@ -64,8 +64,8 @@ public class AuthenticatedViewListener implements SocializeAuthListener {
 		// Render the childView
 		view.onAfterAuthenticate(container); // Dialogs dismissed here
 		View v = view.getView();
+		view.removeAllViews();
 		if(v != null) {
-			view.removeAllViews();
 			view.addView(v);
 		}
 		else {

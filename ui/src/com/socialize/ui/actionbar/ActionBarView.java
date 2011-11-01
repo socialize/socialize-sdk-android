@@ -54,6 +54,13 @@ public class ActionBarView extends EntityView {
 		super(context, attrs);
 	}
 	
+	@Override
+	public View getLoadingView() {
+		ActionBarLoadingView loadingView = new ActionBarLoadingView(getContext());
+		loadingView.init(getActivity());
+		return loadingView;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.view.EntityView#getView(android.os.Bundle, java.lang.Object[])
 	 */

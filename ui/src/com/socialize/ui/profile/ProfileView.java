@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 public class ProfileView extends EntityView {
@@ -23,10 +24,16 @@ public class ProfileView extends EntityView {
 
 	@Override
 	protected View getView(Bundle bundle, Object...entityKeys) {
-		if(profileLayoutView == null) {
-			profileLayoutView = container.getBean("profileLayoutView", entityKeys);
+		if (entityKeys != null) {
+			if(profileLayoutView == null) {
+				profileLayoutView = container.getBean("profileLayoutView", entityKeys);
+			}
+			return profileLayoutView;
 		}
-		return profileLayoutView;
+		else {
+			Log.e("Socialize", "No user id specified for " + getClass().getSimpleName());
+			return null;
+		}			
 	}
 
 	@Override
@@ -40,5 +47,10 @@ public class ProfileView extends EntityView {
 	 */
 	public void onImageChange(Bitmap bitmap) {
 		profileLayoutView.onImageChange(bitmap);
+	}
+	
+	@Override
+	public View getLoadingView() {
+		return null;
 	}
 }

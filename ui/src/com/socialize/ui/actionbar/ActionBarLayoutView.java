@@ -56,7 +56,6 @@ import com.socialize.view.BaseView;
  */
 public class ActionBarLayoutView extends BaseView {
 
-//	private String entityKey;
 	private ActionBarButton commentButton;
 	private ActionBarButton likeButton;
 	private ActionBarButton shareButton;

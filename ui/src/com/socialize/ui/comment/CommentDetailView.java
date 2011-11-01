@@ -23,6 +23,7 @@ package com.socialize.ui.comment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.socialize.ui.SocializeUI;
@@ -45,10 +46,16 @@ public class CommentDetailView extends EntityView {
 	 */
 	@Override
 	protected View getView(Bundle bundle, Object... entityKeys) {
-		if(commentLayoutView == null) {
-			commentLayoutView = container.getBean("commentDetailLayoutView", entityKeys);
+		if (entityKeys != null) {
+			if(commentLayoutView == null) {
+				commentLayoutView = container.getBean("commentDetailLayoutView", entityKeys);
+			}
+			return commentLayoutView;
 		}
-		return commentLayoutView;
+		else {
+			Log.e("Socialize", "No user id specified for " + getClass().getSimpleName());
+			return null;
+		}		
 	}
 
 	/* (non-Javadoc)
@@ -59,10 +66,12 @@ public class CommentDetailView extends EntityView {
 		return new String[]{SocializeUI.USER_ID, SocializeUI.COMMENT_ID};
 	}
 
-	/**
-	 * 
-	 */
 	public void onProfileUpdate() {
 		commentLayoutView.onProfileUpdate();
+	}
+
+	@Override
+	public View getLoadingView() {
+		return null;
 	}
 }
