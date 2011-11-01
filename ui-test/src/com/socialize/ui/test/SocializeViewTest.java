@@ -8,7 +8,6 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.listener.SocializeInitListener;
-import com.socialize.ui.ActivityIOCProvider;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.SocializeView;
 
