@@ -300,8 +300,8 @@ public class ActionBarLayoutView extends BaseView {
 						localEntity.getEntity().setLikes(localEntity.getEntity().getLikes()+1);
 						localEntity.setLiked(true);
 						localEntity.setLikeId(entity.getId());
-						setEntityData(localEntity);
 						button.hideLoading();
+						setEntityData(localEntity);
 					}
 				});
 				

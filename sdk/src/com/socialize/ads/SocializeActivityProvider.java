@@ -27,7 +27,7 @@ import android.view.View;
  * @author Jason Polites
  *
  */
-public interface SocializeAdProvider {
+public interface SocializeActivityProvider {
 
 	public void wrap(View parent);
 	

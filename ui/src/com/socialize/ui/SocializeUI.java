@@ -286,7 +286,6 @@ public class SocializeUI {
 		
 		ActionBarView socializeActionBar = new ActionBarView(parent);
 		socializeActionBar.assignId(original);
-		socializeActionBar.setAdsEnabled(true);
 		socializeActionBar.setEntityKey(entityKey);
 		socializeActionBar.setEntityName(entityName);
 		socializeActionBar.setEntityKeyIsUrl(isEntityKeyUrl);

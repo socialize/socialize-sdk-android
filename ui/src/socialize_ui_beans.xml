@@ -721,11 +721,16 @@
 	
 <!-- End Share UI -->	
 
-<!-- Socialize Ad View -->
+<!-- Socialize Activity View
+	<bean 
+		id="socializeActivityProvider" 
+		class="com.socialize.ui.activity.provider.SlideUpActivityProvider">
+		<property name="socializeActivityViewFactory" ref="socializeActivityViewFactory"/>
+	</bean>
 
 	<bean 
-		id="socializeAdView" 
-		class="com.socialize.ads.SocializeAdView"
+		id="socializeActivityView" 
+		class="com.socialize.ui.activity.SocializeActivityView"
 		singleton="false">
 		
 		<constructor-arg type="activity"/>
@@ -736,7 +741,9 @@
 		<property name="logger" ref="logger"/>
 	</bean>
 	
-<!-- End Socialize Ad View -->
+	<factory id="socializeActivityViewFactory" makes="socializeActivityView"/>
+ -->
+<!-- End Socialize Activity View -->
 
 <!--  Image Loader  -->
 	<bean id="imageUrlLoader" class="com.socialize.ui.image.ImageUrlLoader"/>
