@@ -96,8 +96,8 @@ public class ActionBarLayoutView extends BaseView {
 			logger.info("init called on " + getClass().getSimpleName());
 		}
 		
-		likeIcon = drawables.getDrawable("icon_like.png");
-		likeIconHi = drawables.getDrawable("icon_like_hi.png");
+		likeIcon = drawables.getDrawable("icon_like.png", true);
+		likeIconHi = drawables.getDrawable("icon_like_hi.png", true);
 
 		Drawable commentIcon = drawables.getDrawable("icon_comment.png", true);
 		Drawable viewIcon = drawables.getDrawable("icon_view.png", true);
