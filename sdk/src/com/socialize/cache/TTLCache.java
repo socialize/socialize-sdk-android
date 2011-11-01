@@ -525,10 +525,19 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 							}
 							
 							if(!ok) {
+								
+								if(logger != null && logger.isInfoEnabled()) {
+									logger.info("Removing with key [" +
+											key +
+											"] during reap");
+								}								
+								
 								keys.remove(key.getKey());
 								
 								currentSizeInBytes -= object.getObject().getSizeInBytes(context);
+								
 								reaped++;
+								
 								object.getObject().onRemove(context, true);
 							}
 						}
