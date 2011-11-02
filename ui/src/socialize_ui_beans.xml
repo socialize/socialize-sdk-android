@@ -697,7 +697,6 @@
 		<property name="facebookShareButton" ref="facebookShareButton"/>
 		<property name="emailShareButton" ref="emailShareButton"/>
 		<property name="smsShareButton" ref="smsShareButton"/>
-		<property name="otherShareClickListener" ref="otherShareClickListener"/>
 		
 		<property name="facebookShareClickListenerFactory" ref="facebookShareClickListenerFactory"/>
 		<property name="emailShareClickListenerFactory" ref="emailShareClickListenerFactory"/>
