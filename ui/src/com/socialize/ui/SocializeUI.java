@@ -19,6 +19,7 @@ import com.socialize.android.ioc.IOCContainer;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
+import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.comment.CommentDetailActivity;
@@ -251,36 +252,66 @@ public class SocializeUI {
 	}
 	
 	public View showActionBar(Activity parent, View original, String entityKey) {
+		return showActionBar(parent, original, entityKey, null, true, null);
+	}
+	
+	public View showActionBar(Activity parent, View original, String entityKey, ActionBarListener listener) {
 		return showActionBar(parent, original, entityKey, null, true);
 	}
 	
+	public View showActionBar(Activity parent, View original, String entityKey, boolean addScrollView, ActionBarListener listener) {
+		return showActionBar(parent, original, entityKey, null, true, addScrollView, listener);
+	}
+	
 	public View showActionBar(Activity parent, View original, String entityKey, boolean addScrollView) {
-		return showActionBar(parent, original, entityKey, null, true, addScrollView);
+		return showActionBar(parent, original, entityKey, null, true, addScrollView, null);
 	}
 	
 	public View showActionBar(Activity parent, int resId, String entityKey) {
-		return showActionBar(parent, resId, entityKey, null, true);
+		return showActionBar(parent, resId, entityKey, null, true, null);
+	}
+	
+	public View showActionBar(Activity parent, int resId, String entityKey, ActionBarListener listener) {
+		return showActionBar(parent, resId, entityKey, null, true, listener);
 	}
 	
 	public View showActionBar(Activity parent, int resId, String entityKey, boolean addScrollView) {
-		return showActionBar(parent, resId, entityKey, null, true, addScrollView);
+		return showActionBar(parent, resId, entityKey, null, true, addScrollView, null);
+	}
+	
+	public View showActionBar(Activity parent, int resId, String entityKey, boolean addScrollView, ActionBarListener listener) {
+		return showActionBar(parent, resId, entityKey, null, true, addScrollView, listener);
 	}
 	
 	public View showActionBar(Activity parent, int resId, String entityKey, String entityName, boolean isEntityKeyUrl) {
-		return showActionBar(parent, resId, entityKey, entityName, isEntityKeyUrl, true);
+		return showActionBar(parent, resId, entityKey, entityName, isEntityKeyUrl, true, null);
+	}
+	
+	public View showActionBar(Activity parent, int resId, String entityKey, String entityName, boolean isEntityKeyUrl, ActionBarListener listener) {
+		return showActionBar(parent, resId, entityKey, entityName, isEntityKeyUrl, true, listener);
+	}
+	
+	public View showActionBar(Activity parent, int resId, String entityKey, String entityName, boolean isEntityKeyUrl, boolean addScrollView, ActionBarListener listener) {
+		LayoutInflater layoutInflater = (LayoutInflater) parent.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
+		View original = layoutInflater.inflate(resId, null);
+		return showActionBar(parent, original, entityKey, entityName, isEntityKeyUrl, addScrollView, listener);
 	}
 	
 	public View showActionBar(Activity parent, int resId, String entityKey, String entityName, boolean isEntityKeyUrl, boolean addScrollView) {
 		LayoutInflater layoutInflater = (LayoutInflater) parent.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
 		View original = layoutInflater.inflate(resId, null);
-		return showActionBar(parent, original, entityKey, entityName, isEntityKeyUrl, addScrollView);
+		return showActionBar(parent, original, entityKey, entityName, isEntityKeyUrl, null);
 	}
 	
 	public View showActionBar(Activity parent, View original, String entityKey, String entityName, boolean isEntityKeyUrl) {
-		return showActionBar(parent, original, entityKey, entityName, isEntityKeyUrl, true);
+		return showActionBar(parent, original, entityKey, entityName, isEntityKeyUrl, true, null);
 	}
 	
-	public View showActionBar(Activity parent, View original, String entityKey, String entityName, boolean isEntityKeyUrl, boolean addScrollView) {
+	public View showActionBar(Activity parent, View original, String entityKey, String entityName, boolean isEntityKeyUrl, ActionBarListener listener) {
+		return showActionBar(parent, original, entityKey, entityName, isEntityKeyUrl, true, listener);
+	}
+	
+	public View showActionBar(Activity parent, View original, String entityKey, String entityName, boolean isEntityKeyUrl, boolean addScrollView, ActionBarListener listener) {
 		RelativeLayout barLayout = new RelativeLayout(parent);
 		RelativeLayout originalLayout = new RelativeLayout(parent);
 		
@@ -298,6 +329,10 @@ public class SocializeUI {
 		
 		socializeActionBar.setLayoutParams(barParams);
 		originalLayout.setLayoutParams(originalParams);
+		
+		if(listener != null) {
+			listener.onCreate(socializeActionBar);
+		}
 		
 		if(addScrollView && !(original instanceof ScrollView) ) {
 			LayoutParams scrollViewParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);

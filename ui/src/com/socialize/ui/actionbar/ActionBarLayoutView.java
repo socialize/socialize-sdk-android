@@ -102,7 +102,21 @@ public class ActionBarLayoutView extends BaseView {
 		Drawable commentIcon = drawables.getDrawable("icon_comment.png", true);
 		Drawable viewIcon = drawables.getDrawable("icon_view.png", true);
 		Drawable shareIcon = drawables.getDrawable("icon_share.png", true);
-		Drawable commentBg = drawables.getDrawable("action_bar_button_hi.png", true, false, true);
+		
+		Drawable commentBg = drawables.getDrawable("action_bar_button_hi.png#comment", true, false, true);
+		Drawable shareBg = drawables.getDrawable("action_bar_button_hi.png#share", true, false, true);
+		Drawable likeBg = drawables.getDrawable("action_bar_button_hi.png#like", true, false, true);
+		
+		int width = ActionBarView.ACTION_BAR_BUTTON_WIDTH;
+		
+		int likeWidth = width - 5;
+		int commentWidth = width + 15;
+		int shareWidth = width- 5;
+//		int height = deviceUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT);
+		
+//		commentBg.setBounds(0, 0, commentWidth, height);
+//		shareBg.setBounds(0, 0, shareWidth, height);
+//		likeBg.setBounds(0, 0, likeWidth, height);
 		
 		ticker = tickerFactory.getBean();
 		
@@ -129,10 +143,10 @@ public class ActionBarLayoutView extends BaseView {
 		commentButton.setBackground(commentBg);
 		
 		likeButton.setIcon(likeIcon);
-		likeButton.setBackground(commentBg);
+		likeButton.setBackground(likeBg);
 		
 		shareButton.setIcon(shareIcon);
-		shareButton.setBackground(commentBg);
+		shareButton.setBackground(shareBg);
 		
 		commentButton.setListener(new ActionBarButtonListener() {
 			@Override
@@ -167,12 +181,6 @@ public class ActionBarLayoutView extends BaseView {
 		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, deviceUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT));
 		masterParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
 		setLayoutParams(masterParams);
-		
-		int width = ActionBarView.ACTION_BAR_BUTTON_WIDTH;
-		
-		int likeWidth = width - 5;
-		int commentWidth = width + 15;
-		int shareWidth = width- 5;
 		
 		viewsItem.init();
 		commentsItem.init();
@@ -458,5 +466,13 @@ public class ActionBarLayoutView extends BaseView {
 
 	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
 		this.facebookWallPoster = facebookWallPoster;
+	}
+
+	public void stopTicker() {
+		ticker.stopTicker();
+	}
+
+	public void startTicker() {
+		ticker.startTicker();
 	}
 }

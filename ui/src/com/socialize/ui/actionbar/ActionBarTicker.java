@@ -98,6 +98,12 @@ public class ActionBarTicker extends LinearLayout {
 		}
 	}
 	
+	public void stopTicker() {
+		if(rotator != null) {
+			rotator.stop();
+		}
+	}
+	
 	public void resetTicker() {
 		if(rotator != null) {
 			rotator.reset();

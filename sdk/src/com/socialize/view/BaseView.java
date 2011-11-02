@@ -64,10 +64,6 @@ public abstract class BaseView extends LinearLayout {
 					onViewUpdate();
 				}
 			}
-//			else if(visibility == View.INVISIBLE || visibility == View.GONE)
-//			{
-//				decrementLoaded();
-//			}
 		}
 		else {
 			// Add the default Socialize View for display
@@ -81,10 +77,6 @@ public abstract class BaseView extends LinearLayout {
 	protected void incrementLoaded() {
 		loadCount++;
 	}
-	
-//	protected void decrementLoaded() {
-//		if(loadCount > 0) loadCount--;
-//	}
 	
 	protected boolean checkLoaded() {
 		boolean loaded = (loadCount > 0);

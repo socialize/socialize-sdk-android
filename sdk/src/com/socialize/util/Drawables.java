@@ -220,6 +220,12 @@ public class Drawables {
 			densityPath = "xhdpi";
 		}
 		
+		int indexOf = name.indexOf('#');
+		
+		if(indexOf >= 0) {
+			name = name.substring(0, indexOf);
+		}
+		
 		return "res/drawable/" + densityPath + "/" + name;
 	}
 	

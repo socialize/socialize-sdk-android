@@ -78,6 +78,14 @@ public class RotatingFadeViewAnimator {
 		view.startAnimation(fadeIn);
 	}
 	
+	public void stop() {
+		for (View view : views) {
+			view.clearAnimation();
+			view.setVisibility(View.GONE);
+		}
+		currentView = 0;
+	}
+	
 	public void reset() {
 		restartAt(0);
 	}
