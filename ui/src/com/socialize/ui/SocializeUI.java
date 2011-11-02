@@ -20,6 +20,7 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.ui.actionbar.ActionBarListener;
+import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.comment.CommentDetailActivity;
@@ -124,8 +125,8 @@ public class SocializeUI {
 	 * @param consumerSecret Your consumer secret, obtained via registration at http://getsocialize.com
 	 */
 	public void setSocializeCredentials(String consumerKey, String consumerSecret) {
-		customProperties.put(SocializeConfig.SOCIALIZE_CONSUMER_KEY, consumerKey);
-		customProperties.put(SocializeConfig.SOCIALIZE_CONSUMER_SECRET, consumerSecret);
+		setCustomProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY, consumerKey);
+		setCustomProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET, consumerSecret);
 	}
 	
 	/**
@@ -134,12 +135,12 @@ public class SocializeUI {
 	 * @param token
 	 */
 	public void setFacebookUserCredentials(String userId, String token) {
-		customProperties.put(SocializeConfig.FACEBOOK_USER_ID, userId);
-		customProperties.put(SocializeConfig.FACEBOOK_USER_TOKEN, token);
+		setCustomProperty(SocializeConfig.FACEBOOK_USER_ID, userId);
+		setCustomProperty(SocializeConfig.FACEBOOK_USER_TOKEN, token);
 	}
 	
 	public void setDebugMode(boolean debug) {
-		customProperties.put(SocializeConfig.SOCIALIZE_DEBUG_MODE, String.valueOf(debug));
+		setCustomProperty(SocializeConfig.SOCIALIZE_DEBUG_MODE, String.valueOf(debug));
 	}
 	
 	/**
@@ -148,7 +149,13 @@ public class SocializeUI {
 	 * @see https://developers.facebook.com/
 	 */
 	public void setFacebookAppId(String appId) {
-		customProperties.put(SocializeConfig.FACEBOOK_APP_ID, appId);
+		setCustomProperty(SocializeConfig.FACEBOOK_APP_ID, appId);
+	}
+	
+	protected void setCustomProperty(String key, String value) {
+		if(!StringUtils.isEmpty(value)) {
+			customProperties.put(key, value);
+		}
 	}
 	
 	/**
@@ -156,7 +163,7 @@ public class SocializeUI {
 	 * @param enabled True if enabled.  Default is true.
 	 */
 	public void setFacebookSingleSignOnEnabled(boolean enabled) {
-		customProperties.put(SocializeConfig.FACEBOOK_SSO_ENABLED, String.valueOf(enabled));
+		setCustomProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, String.valueOf(enabled));
 	}
 	
 	/**
@@ -180,7 +187,7 @@ public class SocializeUI {
 	}
 
 	public void showCommentView(Activity context, String url) {
-		Intent i = new Intent(context, CommentActivity.class);
+		Intent i = newIntent(context, CommentActivity.class);
 		i.putExtra(ENTITY_KEY, url);
 		context.startActivity(i);
 	}
@@ -193,7 +200,7 @@ public class SocializeUI {
 	 * @param entityKeyIsUrl
 	 */
 	public void showCommentView(Activity context, String url, String entityName, boolean entityKeyIsUrl) {
-		Intent i = new Intent(context, CommentActivity.class);
+		Intent i = newIntent(context, CommentActivity.class);
 		i.putExtra(ENTITY_KEY, url);
 		i.putExtra(ENTITY_NAME, entityName);
 		i.putExtra(ENTITY_URL_AS_LINK, entityKeyIsUrl);
@@ -201,22 +208,42 @@ public class SocializeUI {
 	}
 	
 	public void showUserProfileView(Activity context, String userId) {
-		Intent i = new Intent(context, ProfileActivity.class);
+		Intent i = newIntent(context, ProfileActivity.class);
 		i.putExtra(USER_ID, userId);
 		context.startActivity(i);
 	}
 	
 	public void showUserProfileViewForResult(Activity context, String userId, int requestCode) {
-		Intent i = new Intent(context, ProfileActivity.class);
+		Intent i = newIntent(context, ProfileActivity.class);
 		i.putExtra(USER_ID, userId);
 		context.startActivityForResult(i, requestCode);
 	}
 	
 	public void showCommentDetailViewForResult(Activity context, String userId, String commentId, int requestCode) {
-		Intent i = new Intent(context, CommentDetailActivity.class);
+		Intent i = newIntent(context, CommentDetailActivity.class);
 		i.putExtra(USER_ID, userId);
 		i.putExtra(COMMENT_ID, commentId);
 		context.startActivityForResult(i, requestCode);
+	}
+	
+	protected Intent newIntent(Activity context, Class<?> cls) {
+		return new Intent(context, cls);
+	}
+	
+	protected RelativeLayout newRelativeLayout(Activity parent) {
+		return new RelativeLayout(parent);
+	}
+	
+	protected ActionBarView newActionBarView(Activity parent) {
+		return new ActionBarView(parent);
+	}
+	
+	protected LayoutParams newLayoutParams(int width, int height) {
+		return new LayoutParams(width, height);
+	}
+	
+	protected ScrollView newScrollView(Activity parent) {
+		return new ScrollView(parent);
 	}
 	
 	public void setEntityName(Activity context, String name) {
@@ -252,79 +279,53 @@ public class SocializeUI {
 	}
 	
 	public View showActionBar(Activity parent, View original, String entityKey) {
-		return showActionBar(parent, original, entityKey, null, true, null);
+		return showActionBar(parent, original, entityKey, null, true, true, null);
 	}
 	
 	public View showActionBar(Activity parent, View original, String entityKey, ActionBarListener listener) {
-		return showActionBar(parent, original, entityKey, null, true);
+		return showActionBar(parent, original, entityKey, null, true, true, listener);
 	}
 	
-	public View showActionBar(Activity parent, View original, String entityKey, boolean addScrollView, ActionBarListener listener) {
-		return showActionBar(parent, original, entityKey, null, true, addScrollView, listener);
-	}
-	
-	public View showActionBar(Activity parent, View original, String entityKey, boolean addScrollView) {
-		return showActionBar(parent, original, entityKey, null, true, addScrollView, null);
+	public View showActionBar(Activity parent, View original, String entityKey, ActionBarOptions options, ActionBarListener listener) {
+		return showActionBar(parent, original, entityKey, options.getEntityName(), options.isEntityKeyUrl(), options.isAddScrollView(), listener);
 	}
 	
 	public View showActionBar(Activity parent, int resId, String entityKey) {
-		return showActionBar(parent, resId, entityKey, null, true, null);
+		return showActionBar(parent, resId, entityKey, null, true, true, null);
 	}
 	
 	public View showActionBar(Activity parent, int resId, String entityKey, ActionBarListener listener) {
-		return showActionBar(parent, resId, entityKey, null, true, listener);
+		return showActionBar(parent, resId, entityKey, null, true, true, listener);
 	}
 	
-	public View showActionBar(Activity parent, int resId, String entityKey, boolean addScrollView) {
-		return showActionBar(parent, resId, entityKey, null, true, addScrollView, null);
+	public View showActionBar(Activity parent, int resId, String entityKey, ActionBarOptions options, ActionBarListener listener) {
+		return showActionBar(parent, resId, entityKey, options.getEntityName(), options.isEntityKeyUrl(), options.isAddScrollView(), listener);
 	}
 	
-	public View showActionBar(Activity parent, int resId, String entityKey, boolean addScrollView, ActionBarListener listener) {
-		return showActionBar(parent, resId, entityKey, null, true, addScrollView, listener);
-	}
-	
-	public View showActionBar(Activity parent, int resId, String entityKey, String entityName, boolean isEntityKeyUrl) {
-		return showActionBar(parent, resId, entityKey, entityName, isEntityKeyUrl, true, null);
-	}
-	
-	public View showActionBar(Activity parent, int resId, String entityKey, String entityName, boolean isEntityKeyUrl, ActionBarListener listener) {
-		return showActionBar(parent, resId, entityKey, entityName, isEntityKeyUrl, true, listener);
-	}
-	
-	public View showActionBar(Activity parent, int resId, String entityKey, String entityName, boolean isEntityKeyUrl, boolean addScrollView, ActionBarListener listener) {
-		LayoutInflater layoutInflater = (LayoutInflater) parent.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
-		View original = layoutInflater.inflate(resId, null);
+	protected View showActionBar(Activity parent, int resId, String entityKey, String entityName, boolean isEntityKeyUrl, boolean addScrollView, ActionBarListener listener) {
+		View original = inflateView(parent, resId);
 		return showActionBar(parent, original, entityKey, entityName, isEntityKeyUrl, addScrollView, listener);
 	}
 	
-	public View showActionBar(Activity parent, int resId, String entityKey, String entityName, boolean isEntityKeyUrl, boolean addScrollView) {
+	protected View inflateView(Activity parent, int resId) {
 		LayoutInflater layoutInflater = (LayoutInflater) parent.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
-		View original = layoutInflater.inflate(resId, null);
-		return showActionBar(parent, original, entityKey, entityName, isEntityKeyUrl, null);
+		return layoutInflater.inflate(resId, null);
 	}
 	
-	public View showActionBar(Activity parent, View original, String entityKey, String entityName, boolean isEntityKeyUrl) {
-		return showActionBar(parent, original, entityKey, entityName, isEntityKeyUrl, true, null);
-	}
-	
-	public View showActionBar(Activity parent, View original, String entityKey, String entityName, boolean isEntityKeyUrl, ActionBarListener listener) {
-		return showActionBar(parent, original, entityKey, entityName, isEntityKeyUrl, true, listener);
-	}
-	
-	public View showActionBar(Activity parent, View original, String entityKey, String entityName, boolean isEntityKeyUrl, boolean addScrollView, ActionBarListener listener) {
-		RelativeLayout barLayout = new RelativeLayout(parent);
-		RelativeLayout originalLayout = new RelativeLayout(parent);
+	protected View showActionBar(Activity parent, View original, String entityKey, String entityName, boolean isEntityKeyUrl, boolean addScrollView, ActionBarListener listener) {
+		RelativeLayout barLayout = newRelativeLayout(parent);
+		RelativeLayout originalLayout = newRelativeLayout(parent);
 		
-		ActionBarView socializeActionBar = new ActionBarView(parent);
+		ActionBarView socializeActionBar = newActionBarView(parent);
 		socializeActionBar.assignId(original);
 		socializeActionBar.setEntityKey(entityKey);
 		socializeActionBar.setEntityName(entityName);
 		socializeActionBar.setEntityKeyIsUrl(isEntityKeyUrl);
 		
-		LayoutParams barParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		LayoutParams barParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		barParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		
-		LayoutParams originalParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		LayoutParams originalParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		originalParams.addRule(RelativeLayout.ABOVE, socializeActionBar.getId());
 		
 		socializeActionBar.setLayoutParams(barParams);
@@ -335,8 +336,8 @@ public class SocializeUI {
 		}
 		
 		if(addScrollView && !(original instanceof ScrollView) ) {
-			LayoutParams scrollViewParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-			ScrollView scrollView = new ScrollView(parent);
+			LayoutParams scrollViewParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+			ScrollView scrollView = newScrollView(parent);
 			scrollView.setFillViewport(true);
 			scrollView.setLayoutParams(scrollViewParams);
 			scrollView.addView(original);

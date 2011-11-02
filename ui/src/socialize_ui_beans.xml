@@ -304,7 +304,7 @@
 	
 	<bean 
 		id="facebookWallPoster" 
-		class="com.socialize.ui.facebook.FacebookWallPoster">
+		class="com.socialize.ui.facebook.DefaultFacebookWallPoster">
 		<property name="logger" ref="logger"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="deviceUtils" ref="deviceUtils"/>

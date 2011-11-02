@@ -47,7 +47,7 @@ public abstract class SocializeView extends BaseView {
 	}
 	
 	@Override
-	protected final void onViewLoad() {
+	protected void onViewLoad() {
 		super.onViewLoad();
 		View loading = getLoadingView();
 		if(loading != null) {
@@ -57,7 +57,7 @@ public abstract class SocializeView extends BaseView {
 	}
 	
 	@Override
-	protected final void onViewUpdate() {
+	protected void onViewUpdate() {
 		super.onViewUpdate();
 		doSocializeInit(getInitUpdateListener());
 	}

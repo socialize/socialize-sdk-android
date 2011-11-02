@@ -1,4 +1,4 @@
-package com.socialize.ui.integrationtest.comment;
+package com.socialize.ui.test.integrationtest.comment;
 
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
@@ -9,7 +9,7 @@ import com.socialize.entity.Comment;
 import com.socialize.ui.auth.AuthConfirmDialogView;
 import com.socialize.ui.auth.AuthRequestDialogView;
 import com.socialize.ui.comment.CommentActivity;
-import com.socialize.ui.integrationtest.SocializeUIRobotiumTest;
+import com.socialize.ui.test.integrationtest.SocializeUIRobotiumTest;
 
 public class CommentUITest extends SocializeUIRobotiumTest {
 	

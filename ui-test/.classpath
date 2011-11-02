@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="libs/javassist-appmakr.jar"/>
 	<classpathentry kind="lib" path="libs/polidea_test_runner_1.1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/socialize-ui-sample"/>
+	<classpathentry kind="lib" path="libs/socialize-robotium-2.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

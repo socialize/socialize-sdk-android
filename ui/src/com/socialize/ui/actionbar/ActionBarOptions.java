@@ -19,22 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.facebook;
-
-import android.app.Activity;
+package com.socialize.ui.actionbar;
 
 /**
  * @author Jason Polites
  *
  */
-public interface FacebookWallPoster {
-
-	public void postLike(final Activity parent, String entityKey, String entityName, String comment, boolean isUseLink, final FacebookWallPostListener listener);
-
-	public void postComment(final Activity parent, String entityKey, String entityName, String comment, boolean isUseLink, final FacebookWallPostListener listener);
-
-	public void post(final Activity parent, String message, final FacebookWallPostListener listener);
-
-	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, final FacebookWallPostListener listener);
-
+public class ActionBarOptions {
+	private String entityName;
+	private boolean isEntityKeyUrl = true;
+	private boolean addScrollView = true;
+	
+	public String getEntityName() {
+		return entityName;
+	}
+	public void setEntityName(String entityName) {
+		this.entityName = entityName;
+	}
+	public boolean isEntityKeyUrl() {
+		return isEntityKeyUrl;
+	}
+	public void setEntityKeyUrl(boolean isEntityKeyUrl) {
+		this.isEntityKeyUrl = isEntityKeyUrl;
+	}
+	public boolean isAddScrollView() {
+		return addScrollView;
+	}
+	public void setAddScrollView(boolean addScrollView) {
+		this.addScrollView = addScrollView;
+	}
 }

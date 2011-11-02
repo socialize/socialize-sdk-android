@@ -47,7 +47,10 @@ public class CommentView extends EntityView {
 	@Override
 	public void onAfterAuthenticate(IOCContainer container) {
 		if(progress != null) {
-			progress.dismiss();
+			try {
+				progress.dismiss();
+			}
+			catch (Exception ignore) {}
 		}
 	}
 	

@@ -8,6 +8,7 @@
 	<path id="mock.classpath">
 		<pathelement path="libs/easymock.jar" />
 		<pathelement path="libs/javassist-appmakr.jar" />
+		<pathelement path="libs/socialize-robotium-2.5.jar" />
 		<pathelement path="../ui-test/bin"/>
 		<pathelement path="../ui/bin"/>
 		<pathelement path="../ui-sample/bin"/>
