@@ -39,7 +39,7 @@
 
 	<property name="test.runner" value="pl.polidea.instrumentation.PolideaInstrumentationTestRunner" />
 
-	<property name="test-output" value="test-output-ui"/>
+	<property name="test-output" value="test-output"/>
 	
 	<target name="test" depends="run-coverage-with-reports"/>
 	<target name="run-coverage-with-reports" depends="pre-clean,coverage,pull-reports"/>
