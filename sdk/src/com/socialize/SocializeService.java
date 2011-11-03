@@ -275,11 +275,10 @@ public interface SocializeService {
 	public void saveCurrentUserProfile(Context context, String firstName, String lastName, String encodedImage, UserSaveListener listener);
 	
 	/**
-	 * Returns true if this SocializeService instance has been initialized.
+	 * Returns true if this SocializeService instance has been initialized.  
+	 * PLEASE NOTE: Init should always be called so that each corresponding call to destroy is matched.
 	 * @return
-	 * @deprecated Init should always be called so that each corresponding call to destroy is matched.
 	 */
-	@Deprecated
 	public boolean isInitialized();
 
 	/**

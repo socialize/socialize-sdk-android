@@ -58,6 +58,10 @@
 		<property name="locationProvider" ref="locationProvider"/>
 	</bean>
 	
+	<bean id="initializationAsserter" class="com.socialize.init.DefaultInitializationAsserter">
+		<property name="logger" ref="logger"/>
+	</bean>
+	
 	<factory id="locationListenerFactory" makes="locationListener"/>
 	
 	<bean id="ioUtils" class="com.socialize.util.IOUtils">

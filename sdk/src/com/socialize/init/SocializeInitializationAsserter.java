@@ -1,7 +1,8 @@
+package com.socialize.init;
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,30 +20,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.util;
+
+
+import com.socialize.SocializeService;
+import com.socialize.api.SocializeSession;
+import com.socialize.listener.SocializeListener;
 
 /**
  * @author Jason Polites
+ *
  */
-public class StringUtils {
+public interface SocializeInitializationAsserter {
+
+	public boolean assertAuthenticated(SocializeService service, SocializeSession session, SocializeListener listener);
 	
-	public static final boolean isEmpty(String[] str) {
-		return str == null || str.length == 0;
-	}
-	
-	public static final boolean isEmpty(String str) {
-		return str == null || str.trim().length() == 0;
-	}
-	
-	public static final boolean equals(String str0, String str1) {
-		if(str0 == str1) {
-			return true;
-		}
-		else if(str0 == null || str1 == null) {
-			return false;
-		}
-		else {
-			return str0.equals(str1);
-		}
-	}
+	public boolean assertInitialized(SocializeService service, SocializeListener listener);
 }

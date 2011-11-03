@@ -41,7 +41,10 @@ public class CommentView extends EntityView {
 
 	@Override
 	protected void onBeforeSocializeInit() {
-		progress = ProgressDialog.show(getContext(), "Loading Socialize", "Please wait...");
+		try {
+			progress = ProgressDialog.show(getContext(), "Loading Socialize", "Please wait...");
+		}
+		catch (Exception ignore) {}
 	}
 
 	@Override

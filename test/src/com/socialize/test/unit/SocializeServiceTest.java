@@ -28,6 +28,7 @@ import android.test.mock.MockContext;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.SocializeService;
 import com.socialize.SocializeServiceImpl;
 import com.socialize.SocializeServiceImpl.InitTask;
 import com.socialize.android.ioc.IBeanFactory;
@@ -41,9 +42,11 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.error.SocializeException;
+import com.socialize.init.SocializeInitializationAsserter;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
+import com.socialize.listener.SocializeListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -65,7 +68,7 @@ import com.socialize.util.ResourceLocator;
  * @author Jason Polites
  *
  */
-@UsesMocks({IOCContainer.class, SocializeApiHost.class, SocializeSession.class, SocializeLogger.class})
+@UsesMocks({IOCContainer.class, SocializeApiHost.class, SocializeSession.class, SocializeLogger.class, SocializeInitializationAsserter.class})
 public class SocializeServiceTest extends SocializeUnitTest {
 	
 	IOCContainer container;
@@ -74,7 +77,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 	IBeanFactory<AuthProviderData> authProviderDataFactory;
 	AuthProviderData authProviderData;
 	SocializeSession session;
-
+	
 	@SuppressWarnings("unchecked")
 	private void setupDefaultMocks() {
 		container = AndroidMock.createMock(IOCContainer.class);
@@ -87,6 +90,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		AndroidMock.expect(container.getBean("authProviderDataFactory")).andReturn(authProviderDataFactory);
 		AndroidMock.expect(container.getBean("socializeApiHost")).andReturn(service);
 		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
+		AndroidMock.expect(container.getBean("initializationAsserter")).andReturn(null);
 	}
 	
 	private void replayDefaultMocks() {

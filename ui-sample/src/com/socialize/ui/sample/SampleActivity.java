@@ -26,7 +26,7 @@ public class SampleActivity extends SocializeActivity {
 		
 		final EditText txtFB = (EditText) findViewById(R.id.txtFBId);
 		final CheckBox chkSSO = (CheckBox) findViewById(R.id.chkFacebook);
-		final CheckBox chkMockFB = (CheckBox) findViewById(R.id.chkMockFB);
+
 		final Button btn = (Button) findViewById(R.id.btnCommentView);
 		final Button btnClearCache = (Button) findViewById(R.id.btnClearCache);
 		final Button btnActionViewAuto = (Button) findViewById(R.id.btnActionViewAuto);
@@ -36,12 +36,7 @@ public class SampleActivity extends SocializeActivity {
 		btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(chkMockFB.isChecked()) {
-					SocializeUI.getInstance().setBeanOverrides("socialize_ui_mock_beans.xml");
-				}
-				else {
-					SocializeUI.getInstance().setBeanOverrides(null);
-				}
+				setupOverrides();
 				
 				SocializeUI.getInstance().setFacebookAppId(txtFB.getText().toString());
 				SocializeUI.getInstance().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
@@ -73,6 +68,7 @@ public class SampleActivity extends SocializeActivity {
 		btnActionViewAuto.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				setupOverrides();
 				Intent intent = new Intent(SampleActivity.this, ActionBarAutoActivity.class);
 				SocializeUI.getInstance().setEntityUrl(SampleActivity.this, intent, txtEntity.getText().toString());
 				SocializeUI.getInstance().setFacebookAppId(txtFB.getText().toString());
@@ -84,6 +80,7 @@ public class SampleActivity extends SocializeActivity {
 		btnActionViewManual.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				setupOverrides();
 				Intent intent = new Intent(SampleActivity.this, ActionBarManualActivity.class);
 				SocializeUI.getInstance().setEntityUrl(SampleActivity.this, intent, txtEntity.getText().toString());
 				SocializeUI.getInstance().setFacebookAppId(txtFB.getText().toString());
@@ -92,5 +89,26 @@ public class SampleActivity extends SocializeActivity {
 			}
 		});
 		
+	}
+	
+	protected void setupOverrides() {
+		
+		final CheckBox chkMockFB = (CheckBox) findViewById(R.id.chkMockFB);
+		final CheckBox chkMockSocialize = (CheckBox) findViewById(R.id.chkMockSocialize);
+		
+		if(chkMockFB.isChecked()) {
+			if(chkMockSocialize.isChecked()) {
+				SocializeUI.getInstance().setBeanOverrides("socialize_ui_mock_beans.xml", "socialize_ui_mock_socialize_beans.xml");
+			}
+			else {
+				SocializeUI.getInstance().setBeanOverrides("socialize_ui_mock_beans.xml");
+			}
+		}
+		else if(chkMockSocialize.isChecked()) {
+			SocializeUI.getInstance().setBeanOverrides("socialize_ui_mock_socialize_beans.xml");
+		}
+		else {
+			SocializeUI.getInstance().setBeanOverrides((String[]) null);
+		}
 	}
 }

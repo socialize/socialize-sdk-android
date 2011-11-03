@@ -38,6 +38,7 @@ import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
+import com.socialize.init.SocializeInitializationAsserter;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
@@ -72,6 +73,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private IOCContainer container;
 	private SocializeSession session;
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
+	private SocializeInitializationAsserter asserter;
 	private int initCount = 0;
 	
 	private String[] initPaths = null;
@@ -224,6 +226,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.service = container.getBean("socializeApiHost");
 				this.logger = container.getBean("logger");
 				this.authProviderDataFactory = container.getBean("authProviderDataFactory");
+				this.asserter = container.getBean("initializationAsserter");
 				this.initCount++;
 				
 				ActivityIOCProvider.getInstance().setContainer(container);
@@ -687,7 +690,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		return false;
 	}
 
-	private boolean assertAuthenticated(SocializeListener listener) {
+	protected boolean assertAuthenticated(SocializeListener listener) {
+		if(asserter != null) {
+			return asserter.assertAuthenticated(this, session, listener);
+		}
 		if(assertInitialized(listener)) {
 			if(session != null) {
 				return true;
@@ -708,7 +714,11 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		return false;
 	}
 	
-	private boolean assertInitialized(SocializeListener listener) {
+	protected boolean assertInitialized(SocializeListener listener) {
+		if(asserter != null) {
+			return asserter.assertInitialized(this, listener);
+		}
+		
 		if(!isInitialized()) {
 			if(listener != null) {
 				if(logger != null) {
@@ -720,7 +730,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			}
 			if(logger != null) logger.error(SocializeLogger.NOT_INITIALIZED);
 		}
-		return isInitialized();
+		
+		return isInitialized();		
 	}
 
 	/* (non-Javadoc)

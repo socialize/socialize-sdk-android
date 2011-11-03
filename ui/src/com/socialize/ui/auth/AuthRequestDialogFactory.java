@@ -95,7 +95,10 @@ public class AuthRequestDialogFactory  {
 			}
 		});
 		
-	    alertDialog.show();
+		try {
+			  alertDialog.show();
+		}
+		catch (Exception ignore) {}
 	}
 	
 	protected void handleError(String msg, SocializeException error) {

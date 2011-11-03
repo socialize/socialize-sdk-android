@@ -112,11 +112,6 @@ public class ActionBarLayoutView extends BaseView {
 		int likeWidth = width - 5;
 		int commentWidth = width + 15;
 		int shareWidth = width- 5;
-//		int height = deviceUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT);
-		
-//		commentBg.setBounds(0, 0, commentWidth, height);
-//		shareBg.setBounds(0, 0, shareWidth, height);
-//		likeBg.setBounds(0, 0, likeWidth, height);
 		
 		ticker = tickerFactory.getBean();
 		
@@ -237,8 +232,6 @@ public class ActionBarLayoutView extends BaseView {
 			});
 		}
 		else {
-//			entityCache.extendTTL(entityKey);
-//			setEntityData(entity);
 			getEntityData(entityKey);
 		}
 	}

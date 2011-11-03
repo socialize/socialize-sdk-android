@@ -45,7 +45,7 @@ public class SocializeUI {
 	private IOCContainer container;
 	private Drawables drawables;
 	private final Properties customProperties = new Properties();
-	private String beanOverride;
+	private String[] beanOverrides;
 	
 	public static final SocializeUI getInstance() {
 		return instance;
@@ -86,8 +86,17 @@ public class SocializeUI {
 	protected String[] getConfig() {
 		String[] config = null;
 		
-		if(!StringUtils.isEmpty(beanOverride)) {
-			config = new String[]{"socialize_beans.xml", "socialize_ui_beans.xml", beanOverride};
+		if(!StringUtils.isEmpty(beanOverrides)) {
+			
+			config = new String[beanOverrides.length + 2];
+			config[0] = "socialize_beans.xml";
+			config[1] = "socialize_ui_beans.xml";
+			
+			for (int i = 0; i < beanOverrides.length; i++) {
+				config[i+2] = beanOverrides[i];
+			}
+			
+//			config = new String[]{"socialize_beans.xml", "socialize_ui_beans.xml", beanOverride};
 		}
 		else {
 			config = new String[]{"socialize_beans.xml", "socialize_ui_beans.xml"};
@@ -108,6 +117,7 @@ public class SocializeUI {
 	}
 
 	public void destroy(Context context) {
+		customProperties.clear();
 		getSocialize().destroy();
 	}
 	
@@ -155,6 +165,9 @@ public class SocializeUI {
 	protected void setCustomProperty(String key, String value) {
 		if(!StringUtils.isEmpty(value)) {
 			customProperties.put(key, value);
+		}
+		else {
+			customProperties.remove(key);
 		}
 	}
 	
@@ -369,7 +382,7 @@ public class SocializeUI {
 	 * EXPERT ONLY (Not documented)
 	 * @param beanOverride
 	 */
-	public void setBeanOverrides(String beanOverride) {
-		this.beanOverride = beanOverride;
+	public void setBeanOverrides(String...beanOverrides) {
+		this.beanOverrides = beanOverrides;
 	}
 }

@@ -13,6 +13,24 @@ import com.socialize.ui.test.integrationtest.SocializeUIRobotiumTest;
 
 public class CommentUITest extends SocializeUIRobotiumTest {
 	
+	@Override
+	protected void startWithFacebook(boolean sso) {
+		super.startWithFacebook(sso);
+		showComments();
+		robotium.waitForActivity("CommentActivity", 5000);
+		robotium.waitForView(ListView.class, 1, 5000);
+		sleep(2000);
+	}
+
+	@Override
+	protected void startWithoutFacebook() {
+		super.startWithoutFacebook();
+		showComments();
+		robotium.waitForActivity("CommentActivity", 5000);
+		robotium.waitForView(ListView.class, 1, 5000);
+		sleep(2000);
+	}
+
 	public void testCommentAddWithoutFacebook() {
 		
 		final String txtComment = "UI Integration Test Comment";

@@ -33,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.ui.SocializeUI;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.button.SocializeButton;
 import com.socialize.util.DeviceUtils;
@@ -98,7 +99,7 @@ public class ShareDialogView extends BaseView {
 			}
 		};
 		
-		if(facebookShareButton != null) {
+		if(facebookShareButton != null && getSocializeUI().isFacebookSupported()) {
 			facebookShareButton.setCustomClickListener(facebookShareClickListenerFactory.getBean(actionBarView));
 			facebookShareButton.addOnClickListenerBefore(closeDialogOnClick);
 			addView(facebookShareButton);
@@ -153,6 +154,10 @@ public class ShareDialogView extends BaseView {
 
 	public void setSmsShareClickListenerFactory(IBeanFactory<SmsShareClickListener> smsShareClickListenerFactory) {
 		this.smsShareClickListenerFactory = smsShareClickListenerFactory;
+	}
+	
+	protected SocializeUI getSocializeUI() {
+		return SocializeUI.getInstance();
 	}
 	
 }

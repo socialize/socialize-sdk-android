@@ -31,6 +31,8 @@ ui-sample/bin/
 ui-sample/gen/
 ui-test/bin
 ui-test/gen
+ui-test/coverage
+ui-test/test-output
 ui-test/coverage-ui
 ui-test/test-output-ui
 build

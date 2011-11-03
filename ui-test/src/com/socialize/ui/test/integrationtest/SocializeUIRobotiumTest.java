@@ -28,9 +28,10 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import com.jayway.android.robotium.solo.Solo;
+import com.socialize.Socialize;
+import com.socialize.ui.SocializeUI;
 import com.socialize.ui.sample.SampleActivity;
 
 /**
@@ -55,6 +56,47 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 		imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 		robotium = new Solo(getInstrumentation(), getActivity());
 		robotium.waitForActivity("SampleActivity", 5000);
+		hideKeyboard();
+	}
+	
+	
+	
+	protected void toggleFacebookSSO(boolean on) {
+		if(!on) {
+			robotium.clickOnButton(0);
+		}
+	}
+	
+	protected void toggleMockedFacebook(boolean on) {
+		if(on) {
+			robotium.clickOnButton(1);
+		}
+	}
+	
+	protected void toggleMockedSocialize(boolean on) {
+		if(on) {
+			robotium.clickOnButton(2);
+		}
+	}	
+	
+	protected void clearAuthCache() {
+		robotium.clickOnButton(3);
+		sleep(500);
+		
+		assertNull(Socialize.getSocialize().getSession());
+		
+	}
+	
+	protected void showComments() {
+		robotium.clickOnButton(4);
+	}
+	
+	protected void showActionBarAuto() {
+		robotium.clickOnButton(5);
+	}
+	
+	protected void showActionBarManual() {
+		robotium.clickOnButton(6);
 	}
 	
 	protected void startWithFacebook(boolean sso) {
@@ -62,30 +104,16 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 		robotium.enterText(0, DEFAULT_GET_ENTITY);
 		robotium.clearEditText(1);
 		robotium.enterText(1, SOCIALIZE_FACEBOOK_ID);
-		
-		if(!sso) {
-			robotium.clickOnButton(0);
-		}
-		
-		robotium.clickOnButton(1);
-		robotium.clickOnButton(2);
-		robotium.clickOnButton(3);
-		
-		robotium.waitForActivity("CommentActivity", 5000);
-		robotium.waitForView(ListView.class, 1, 5000);
-		sleep(2000);
+		toggleFacebookSSO(sso);
+		toggleMockedFacebook(true);
+		clearAuthCache();
 	}
 	
 	protected void startWithoutFacebook() {
 		robotium.clearEditText(0);
 		robotium.enterText(0, DEFAULT_GET_ENTITY);
 		robotium.clearEditText(1);
-		robotium.clickOnButton(0);
-		robotium.clickOnButton(3);
-		robotium.waitForActivity("CommentActivity", 5000);
-		robotium.waitForView(ListView.class, 1, 5000);
-		
-		sleep(5000);
+		clearAuthCache();
 	}
 
 	@Override
@@ -97,11 +125,7 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 			throw new Exception(e);
 		}
 		
-//		ArrayList<Activity> allOpenedActivities = robotium.getAllOpenedActivities();
-//		
-//		for (Activity activity : allOpenedActivities) {
-//			activity.finish();
-//		}
+		SocializeUI.getInstance().destroy(getActivity());
 		
 		super.tearDown();
 	}
