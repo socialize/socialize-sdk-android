@@ -280,6 +280,7 @@ public class TTLCacheTest extends SocializeUnitTest {
 		StringCacheable testObj2 = new StringCacheable("test2");
 		StringCacheable testObj3 = new StringCacheable("test3");
 
+		cache.pause();
 		cache.put("testKey", testObj);
 		cache.put("testKey2", testObj2);
 
@@ -293,6 +294,8 @@ public class TTLCacheTest extends SocializeUnitTest {
 		cache.put("testKey3", testObj3);
 		
 		assertEquals(3, cache.size());
+		
+		cache.resume();
 		
 		assertTrue(cache.doReap());
 		
