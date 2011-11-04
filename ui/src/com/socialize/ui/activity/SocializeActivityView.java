@@ -310,6 +310,8 @@ public class SocializeActivityView extends BaseView implements RecommendationCon
 				view.setText(entity.getKey());
 			}
 			
+			view.setCount(entity.getLikes());
+			
 			this.addContentItem(view);
 		}
 		this.peek();

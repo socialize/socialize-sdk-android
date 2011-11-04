@@ -83,10 +83,11 @@ public class SocializeActivityEntityView extends BaseView {
 		textParams.weight = 1.0f;
 		
 		textView = new TextView(getContext());
-		textView.setText(text);
 		textView.setTextColor(textColor);
 		textView.setLayoutParams(textParams);
 		textView.setGravity((Gravity.CENTER_VERTICAL | Gravity.LEFT));
+		
+		setText(text);
 		
 		LayoutParams imageParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
 		imageParams.gravity = (Gravity.CENTER_VERTICAL | Gravity.RIGHT);
@@ -123,6 +124,11 @@ public class SocializeActivityEntityView extends BaseView {
 	}
 
 	public void setText(String text) {
+		
+		if(text != null && text.length() > 30) {
+			text = text.substring(0, 30) + "...";
+		}
+		
 		this.text = text;
 		if(textView != null) {
 			textView.setText(text);

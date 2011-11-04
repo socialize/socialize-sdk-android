@@ -18,7 +18,7 @@
 		
 	    <EditText 
 	    	android:id="@+id/txtEntity" 
-	    	android:text="http://aaaa.com"
+	    	android:text="http://jusbiebernews.tumblr.com/post/3805316077"
 	    	android:layout_width="fill_parent"
 	    	android:layout_height="wrap_content"/>   
 	   
