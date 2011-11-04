@@ -34,7 +34,7 @@ public class CacheableEntity implements ICacheable<String> {
 
 	private Entity entity;
 	private boolean liked;
-	private int likeId;
+	private long likeId;
 	
 	public CacheableEntity(Entity entity) {
 		super();
@@ -78,11 +78,11 @@ public class CacheableEntity implements ICacheable<String> {
 		this.liked = liked;
 	}
 
-	public int getLikeId() {
+	public long getLikeId() {
 		return likeId;
 	}
 
-	public void setLikeId(int likeId) {
+	public void setLikeId(long likeId) {
 		this.likeId = likeId;
 	}
 	

@@ -2,7 +2,6 @@ package com.socialize.ui.activity;
 
 import android.content.Context;
 import android.graphics.Rect;
-import android.util.Log;
 import android.widget.LinearLayout;
 
 public abstract class SocializeActivityViewChild extends LinearLayout {
@@ -33,11 +32,5 @@ public abstract class SocializeActivityViewChild extends LinearLayout {
 	public void getHitRect(Rect outRect) {
 	    super.getHitRect(outRect);
 	    adjustHitRect(outRect);
-	    
-	    Log.e("DEBUG", "Rect is top/botton [" +
-	    		outRect.top +
-	    		"/" +
-	    		outRect.bottom +
-	    		"]");
 	}
 }

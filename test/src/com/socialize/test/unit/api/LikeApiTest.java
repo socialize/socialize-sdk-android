@@ -182,7 +182,7 @@ public class LikeApiTest extends SocializeUnitTest {
 	public void testGetLikeByKeyWithResults() {
 
 		String key = "foobar";
-		Integer userId = 69;
+		Long userId = 69L;
 		
 		final Like like = AndroidMock.createMock(Like.class);
 		final ListResult<Like> listResult = (ListResult<Like>) AndroidMock.createMock(ListResult.class);
@@ -249,7 +249,7 @@ public class LikeApiTest extends SocializeUnitTest {
 
 		String key = "foobar";
 		
-		Integer userId = 69;
+		Long userId = 69L;
 		
 		User user = AndroidMock.createMock(User.class);
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
@@ -348,7 +348,7 @@ public class LikeApiTest extends SocializeUnitTest {
 	public void testGetLikeByKey() {
 		
 		String key = "foobar";
-		Integer userId = 69;
+		Long userId = 69L;
 		
 		User user = AndroidMock.createMock(User.class);
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);

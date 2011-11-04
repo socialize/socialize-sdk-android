@@ -487,7 +487,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#deleteLike(int, com.socialize.listener.like.LikeDeleteListener)
 	 */
 	@Override
-	public void unlike(int id, LikeDeleteListener likeDeleteListener) {
+	public void unlike(long id, LikeDeleteListener likeDeleteListener) {
 		if(assertAuthenticated(likeDeleteListener)) {
 			service.deleteLike(session, id, likeDeleteListener);
 		}
@@ -509,7 +509,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @param id The ID of the like
 	 * @param likeGetListener A listener to handle callbacks from the get.
 	 */
-	public void getLikeById(int id, LikeGetListener likeGetListener) {
+	public void getLikeById(long id, LikeGetListener likeGetListener) {
 		if(assertAuthenticated(likeGetListener)) {
 			service.getLike(session, id, likeGetListener);
 		}
@@ -554,7 +554,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#getUser(int, com.socialize.listener.user.UserGetListener)
 	 */
 	@Override
-	public void getUser(int id, UserGetListener listener) {
+	public void getUser(long id, UserGetListener listener) {
 		if(assertAuthenticated(listener)) {
 			service.getUser(session, id, listener);
 		}
@@ -643,7 +643,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#getCommentById(int, com.socialize.listener.comment.CommentGetListener)
 	 */
 	@Override
-	public void getCommentById(int id, CommentGetListener commentGetListener) {
+	public void getCommentById(long id, CommentGetListener commentGetListener) {
 		if(assertAuthenticated(commentGetListener)) {
 			service.getComment(session, id, commentGetListener);
 		}

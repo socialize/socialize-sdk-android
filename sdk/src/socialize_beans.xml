@@ -375,6 +375,14 @@
 
 <!-- End Activity API -->
 
+<!-- Recommendation API -->
+
+	<bean id="recommendationApi" class="com.socialize.api.action.RecommendationApi" extends="socializeApi">
+		<constructor-arg ref="entityProvider"/>
+	</bean>
+
+<!-- End Recommendation API -->
+
 <!-- Socialize Core -->
 
 	<bean id="socializeApiHost" class="com.socialize.api.SocializeApiHost">
@@ -389,6 +397,7 @@
 		<property name="userApi" ref="userApi"/>
 		<property name="shareApi" ref="shareApi"/>
 		<property name="activityApi" ref="activityApi"/>
+		<property name="recommendationApi" ref="recommendationApi"/>
 	</bean>
 	
 <!-- End Socialize Core -->

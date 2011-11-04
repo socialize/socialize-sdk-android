@@ -126,17 +126,14 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 		return getListRequest(session, endpoint, null, null, startIndex, endIndex);
 	}
 
-	/**
-	 * @see this{@link #getListRequest(SocializeSession, String, String, String[], int, int)}
-	 */
 	@Override
-	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
-		return getListRequest(session, endpoint, key, ids, 0, SocializeConfig.MAX_LIST_RESULTS);
+	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids, String idKey) throws SocializeException {
+		return getListRequest(session, endpoint, key, ids, idKey, 0, SocializeConfig.MAX_LIST_RESULTS);
 	}
 
 	@Override
-	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex) throws SocializeException {
-		
+	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids, String idKey, int startIndex, int endIndex) throws SocializeException {
+
 		// A List is a GET request with params
 		// See: http://en.wikipedia.org/wiki/Representational_State_Transfer
 		UrlBuilder builder = new UrlBuilder();
@@ -148,7 +145,7 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 		
 		if(ids != null) {
 			for (String id : ids) {
-				builder.addParam("id", id);
+				builder.addParam(idKey, id);
 			}
 		}
 		
@@ -164,6 +161,19 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 		signer.sign(session, get);
 	
 		return get;
+	}
+
+	/**
+	 * @see this{@link #getListRequest(SocializeSession, String, String, String[], int, int)}
+	 */
+	@Override
+	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
+		return getListRequest(session, endpoint, key, ids, 0, SocializeConfig.MAX_LIST_RESULTS);
+	}
+
+	@Override
+	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex) throws SocializeException {
+		return getListRequest(session, endpoint, key, ids, "id", startIndex, endIndex);
 	}
 	
 	@Override

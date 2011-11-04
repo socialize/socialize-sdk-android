@@ -5,31 +5,31 @@ import android.view.ViewParent;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 
-import com.socialize.ads.SocializeActivityProvider;
+import com.socialize.activity.SocializeActivityFactory;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.ui.activity.SocializeActivityView;
 
-public class SlideUpActivityProvider implements SocializeActivityProvider {
+public class SlideUpActivityProvider implements SocializeActivityFactory<SocializeActivityView> {
 
 	private IBeanFactory<SocializeActivityView> socializeActivityViewFactory;
 	
 	@Override
-	public void wrap(View view) {
-		SocializeActivityView socializeAdView = null;
+	public SocializeActivityView wrap(View view) {
+		SocializeActivityView socializeActivityView = null;
 		ViewParent parent = view.getParent();
 		
 		if(parent instanceof RelativeLayout) {
 			
 			RelativeLayout frame = (RelativeLayout) parent;
 			
-			if(socializeAdView == null) {
-				socializeAdView = socializeActivityViewFactory.getBean();
+			if(socializeActivityView == null) {
+				socializeActivityView = socializeActivityViewFactory.getBean();
 
 				RelativeLayout.LayoutParams barParams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 				barParams.addRule(RelativeLayout.ABOVE, view.getId());
 				
-				socializeAdView.setLayoutParams(barParams);
-				socializeAdView.setVisibility(View.GONE);
+				socializeActivityView.setLayoutParams(barParams);
+				socializeActivityView.setVisibility(View.GONE);
 				
 				// Position in front of original, but behind actionbar
 				int childCount = frame.getChildCount();
@@ -38,14 +38,14 @@ public class SlideUpActivityProvider implements SocializeActivityProvider {
 					View child = frame.getChildAt(i);
 					
 					if(child == view) {
-						frame.addView(socializeAdView, i);
+						frame.addView(socializeActivityView, i);
 						break;
 					}
 				}
-				
-				socializeAdView.slide();
 			}
 		}	
+		
+		return socializeActivityView;
 	}
 
 	public void setSocializeActivityViewFactory(IBeanFactory<SocializeActivityView> socializeAdViewFactory) {

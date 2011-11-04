@@ -84,6 +84,11 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 	}
 	
 	@Override
+	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids, String idKey, int startIndex, int endIndex) throws SocializeException {
+		return makeMockListResult(new String[5]);
+	}
+
+	@Override
 	public ListResult<T> list(SocializeSession session, String endpoint, int startIndex, int endIndex) throws SocializeException {
 		return makeMockListResult(new String[5]);
 	}
@@ -134,7 +139,7 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 	protected ListResult<T> makeListResult(Collection<T> objects) {
 		List<T> results = new ArrayList<T>(objects);
 		
-		int id = 0;
+		long id = 0;
 		
 		for (T t : results) {
 			t.setId(id);
@@ -147,7 +152,7 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 	
 	protected ListResult<T> makeListResult(T object) {
 		List<T> results = new ArrayList<T>(1);
-		object.setId(0);
+		object.setId(0L);
 		results.add(object);
 		ListResult<T> result = new ListResult<T>(results);
 		return result;
@@ -168,7 +173,7 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 	protected T makeObject(String id) {
 		T object = objectFactory.instantiateObject(null);
 		if(id != null) {
-			object.setId(Integer.parseInt(id));
+			object.setId(Long.parseLong(id));
 		}
 		return object;
 	}

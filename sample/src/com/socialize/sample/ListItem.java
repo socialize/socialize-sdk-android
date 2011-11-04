@@ -25,5 +25,5 @@ public interface ListItem {
 
 	public String getName();
 	
-	public int getId();
+	public long getId();
 }

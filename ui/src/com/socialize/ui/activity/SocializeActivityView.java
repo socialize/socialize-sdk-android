@@ -1,16 +1,23 @@
 package com.socialize.ui.activity;
 
+import java.util.List;
+
 import android.content.Context;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.TranslateAnimation;
 
+import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.entity.Entity;
 import com.socialize.log.SocializeLogger;
+import com.socialize.ui.recommendation.RecommendationConsumer;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
+import com.socialize.util.StringUtils;
 import com.socialize.view.BaseView;
 
-public class SocializeActivityView extends BaseView {
+public class SocializeActivityView extends BaseView implements RecommendationConsumer<Entity> {
 	
 	enum DisplayState {HIDDEN, DOWN, UP};
 	
@@ -18,6 +25,7 @@ public class SocializeActivityView extends BaseView {
 	private TranslateAnimation slideDown;
 	private TranslateAnimation peek;
 	private TranslateAnimation close;
+	private TranslateAnimation closeFromUp;
 	
 	private DeviceUtils deviceUtils;
 	private Drawables drawables;
@@ -25,12 +33,14 @@ public class SocializeActivityView extends BaseView {
 	@SuppressWarnings("unused")
 	private SocializeLogger logger;
 	
-	private float coveragePercent = 0.5f;
+	private float coveragePercent = 0.3f;
 	
 	private SocializeActivityHandle handle;
 	private SocializeActivityContent content;
 	
 	private DisplayState displayState = DisplayState.HIDDEN;
+	
+	private IBeanFactory<SocializeActivityEntityView> socializeActivityEntityViewFactory;
 	
 	private int height;
 	private int handleHeight = 30;
@@ -69,6 +79,26 @@ public class SocializeActivityView extends BaseView {
 		addView(content);
 	}
 	
+	public void loadContent() {
+		
+	}
+	
+	public void clearContent() {
+		if(content != null) {
+			content.removeAllViews();
+		}
+	}
+	
+	public void addContentItem(View child) {
+		if(content != null) {
+			content.addView(child);
+		}
+	}
+	
+	public void setHandleText(String text) {
+		handle.setTitle(text);
+	}
+	
 	public void slideUp() {
 		clearAnimation();
 		displayState = DisplayState.UP;
@@ -76,21 +106,51 @@ public class SocializeActivityView extends BaseView {
 	}
 	
 	public void slideDown() {
-		clearAnimation();
-		displayState = DisplayState.DOWN;
-		startAnimation(slideDown);
+		if(displayState.equals(DisplayState.UP)) {
+			clearAnimation();
+			displayState = DisplayState.DOWN;
+			startAnimation(slideDown);
+		}
 	}
 	
 	public void peek() {
-		clearAnimation();
-		displayState = DisplayState.DOWN;
-		startAnimation(peek);
+		if(displayState.equals(DisplayState.HIDDEN)) {
+			clearAnimation();
+			displayState = DisplayState.DOWN;
+			startAnimation(peek);	
+		}
 	}
 	
 	public void close() {
+		close(false);
+	}
+	
+	public void close(boolean force) {
 		clearAnimation();
-		displayState = DisplayState.HIDDEN;
-		startAnimation(close);
+		if(force) {
+			switch (displayState) {
+			case UP:
+				displayState = DisplayState.HIDDEN;
+				startAnimation(closeFromUp);
+				break;
+			case DOWN:
+				displayState = DisplayState.HIDDEN;
+				startAnimation(close);
+				break;
+			}
+		}
+		else {
+			switch (displayState) {
+				case UP:
+					slideDown();
+					break;
+				case DOWN:
+					displayState = DisplayState.HIDDEN;
+					startAnimation(close);
+					break;
+				}
+		}
+
 	}
 	
 	public void slide() {
@@ -162,7 +222,6 @@ public class SocializeActivityView extends BaseView {
 				
 				handle.notifyMove(yOffset);
 				content.notifyMove(yOffset);
-				
 			}
 			@Override
 			public void onAnimationRepeat(Animation animation) {}
@@ -194,23 +253,30 @@ public class SocializeActivityView extends BaseView {
 		close = new TranslateAnimation(
 			Animation.ABSOLUTE, 0.0f, Animation.ABSOLUTE, 0.0f,
 			Animation.ABSOLUTE, endPosition, Animation.ABSOLUTE, height
-		);			
+		);
+		
+		closeFromUp = new TranslateAnimation(
+			Animation.ABSOLUTE, 0.0f, Animation.ABSOLUTE, 0.0f,
+			Animation.ABSOLUTE, 0.0f, Animation.ABSOLUTE, height
+		);
 				
 		slideUp.setAnimationListener(visibleAnimation);	
 		slideDown.setAnimationListener(visibleAnimation);	
 		peek.setAnimationListener(visibleAnimation);	
 		close.setAnimationListener(hideAnimation);	
+		closeFromUp.setAnimationListener(hideAnimation);	
 		
 		slideUp.setFillAfter(true);
 		slideDown.setFillAfter(true);
 		peek.setFillAfter(true);
 		close.setFillAfter(true);
+		closeFromUp.setFillAfter(true);
 		
-		peek.setDuration(1000);
-		peek.setStartOffset(1000);
-		slideUp.setDuration(1000);
-		slideDown.setDuration(1000);
+		peek.setDuration(500);
+		slideUp.setDuration(500);
+		slideDown.setDuration(500);
 		close.setDuration(500);
+		closeFromUp.setDuration(800);
 	}
 
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
@@ -223,5 +289,29 @@ public class SocializeActivityView extends BaseView {
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
+	}
+	
+	public void setSocializeActivityEntityViewFactory(IBeanFactory<SocializeActivityEntityView> socializeActivityEntityViewFactory) {
+		this.socializeActivityEntityViewFactory = socializeActivityEntityViewFactory;
+	}
+
+	@Override
+	public void consume(List<Entity> items) {
+		this.clearContent();
+		this.setHandleText("People who liked this also liked....");
+		for (Entity entity : items) {
+			
+			SocializeActivityEntityView view = socializeActivityEntityViewFactory.getBean();
+			
+			if(!StringUtils.isEmpty(entity.getName())) {
+				view.setText(entity.getName());
+			}
+			else {
+				view.setText(entity.getKey());
+			}
+			
+			this.addContentItem(view);
+		}
+		this.peek();
 	}
 }

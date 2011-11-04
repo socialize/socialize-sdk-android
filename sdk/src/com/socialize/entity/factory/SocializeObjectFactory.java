@@ -36,14 +36,14 @@ public abstract class SocializeObjectFactory<T extends SocializeObject> extends 
 	@Override
 	protected void fromJSON(JSONObject from, T to) throws JSONException {
 		if(from.has("id") && !from.isNull("id")) {
-			to.setId(from.getInt("id"));
+			to.setId(from.getLong("id"));
 		}
 		postFromJSON(from, to);
 	}
 
 	@Override
 	protected void toJSON(T from, JSONObject to) throws JSONException {
-		Integer id = from.getId();
+		Long id = from.getId();
 		if(id != null) {
 			to.put("id", id);
 		}

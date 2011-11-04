@@ -19,16 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ads;
+package com.socialize.ui.actionbar;
 
-import android.view.View;
+import com.socialize.entity.Like;
 
 /**
  * @author Jason Polites
  *
  */
-public interface SocializeActivityProvider {
+public interface OnActionBarEventListener {
 
-	public void wrap(View parent);
+	public void onGetLike(Like like);
 	
+	public void onLike(Like like);
+	
+	public void onUnlike();
 }

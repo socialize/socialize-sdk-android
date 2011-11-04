@@ -68,17 +68,17 @@ public class MockSocializeApiHost extends SocializeApiHost {
 	}
 
 	@Override
-	public void deleteLike(SocializeSession session, int id, LikeListener listener) {
+	public void deleteLike(SocializeSession session, long id, LikeListener listener) {
 		listener.onDelete();
 	}
 
 	@Override
-	public void getComment(SocializeSession session, int id, CommentListener listener) {
+	public void getComment(SocializeSession session, long id, CommentListener listener) {
 		listener.onGet(new Comment());
 	}
 
 	@Override
-	public void getLike(SocializeSession session, int id, LikeListener listener) {
+	public void getLike(SocializeSession session, long id, LikeListener listener) {
 		listener.onError(new SocializeApiError(404, "MOCK 404 - NOT A REAL ERROR!"));
 	}
 
@@ -128,17 +128,17 @@ public class MockSocializeApiHost extends SocializeApiHost {
 	}
 
 	@Override
-	public void getUser(SocializeSession session, int id, UserListener listener) {
+	public void getUser(SocializeSession session, long id, UserListener listener) {
 		listener.onGet(new User());
 	}
 
 	@Override
-	public void listActivityByUser(SocializeSession session, int id, ActivityListener listener) {
+	public void listActivityByUser(SocializeSession session, long id, ActivityListener listener) {
 		listener.onList(null);
 	}
 
 	@Override
-	public void listActivityByUser(SocializeSession session, int id, int startIndex, int endIndex, ActivityListener listener) {
+	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, ActivityListener listener) {
 		listener.onList(null);
 	}
 	

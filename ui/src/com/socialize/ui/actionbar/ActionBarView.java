@@ -26,8 +26,14 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.socialize.ads.SocializeActivityProvider;
+import com.socialize.activity.SocializeActivityFactory;
 import com.socialize.android.ioc.IOCContainer;
+import com.socialize.entity.Entity;
+import com.socialize.entity.Like;
+import com.socialize.entity.SocializeObject;
+import com.socialize.ui.activity.SocializeActivityProvider;
+import com.socialize.ui.activity.SocializeActivityView;
+import com.socialize.ui.recommendation.RecommendationConsumer;
 import com.socialize.ui.view.EntityView;
 
 /**
@@ -39,7 +45,9 @@ public class ActionBarView extends EntityView {
 	public static final int ACTION_BAR_BUTTON_WIDTH = 80;
 	
 	private ActionBarLayoutView actionBarLayoutView;
-	private SocializeActivityProvider socializeActivityProvider;
+	private SocializeActivityView socializeActivityView;
+	private SocializeActivityFactory<SocializeActivityView> socializeActivityFactory;
+	private SocializeActivityProvider<SocializeObject, Entity, RecommendationConsumer<Entity>> socializeActivityProvider;
 	
 	private boolean entityKeyIsUrl = true;
 	private String entityKey;
@@ -68,15 +76,41 @@ public class ActionBarView extends EntityView {
 		if(actionBarLayoutView == null) {
 			actionBarLayoutView = container.getBean("actionBarLayoutView", this);
 		}
+		
+		if(socializeActivityProvider == null) {
+			socializeActivityProvider = container.getBean("socializeActivityProvider");
+		}
+		
+		if(socializeActivityView != null) {
+			actionBarLayoutView.setOnActionBarEventListener(new OnActionBarEventListener() {
+				
+				@Override
+				public void onUnlike() {
+					socializeActivityView.close(true);
+				}
+				
+				@Override
+				public void onGetLike(Like like) {
+					socializeActivityProvider.loadActivity(like, socializeActivityView);
+				}
+
+				@Override
+				public void onLike(Like like) {
+					socializeActivityProvider.loadActivity(like, socializeActivityView);
+				}
+			});
+		}
+		
 		return actionBarLayoutView;
 	}
+	
 	
 	@Override
 	public void onAfterAuthenticate(IOCContainer container) {
 		super.onAfterAuthenticate(container);
-		socializeActivityProvider = container.getBean("socializeActivityProvider");
-		if(socializeActivityProvider != null) {
-			socializeActivityProvider.wrap(this);
+		socializeActivityFactory = container.getBean("socializeActivityFactory");
+		if(socializeActivityFactory != null) {
+			socializeActivityView = socializeActivityFactory.wrap(this);
 		}
 	}
 	

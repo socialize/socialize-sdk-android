@@ -32,7 +32,6 @@ public class SampleActivity extends SocializeActivity {
 		final Button btnActionViewAuto = (Button) findViewById(R.id.btnActionViewAuto);
 		final Button btnActionViewManual = (Button) findViewById(R.id.btnActionViewManual);
 		
-		
 		btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

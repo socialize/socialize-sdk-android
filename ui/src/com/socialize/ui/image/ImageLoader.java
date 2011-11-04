@@ -70,7 +70,7 @@ public class ImageLoader {
 	 * @param url
 	 * @param listener
 	 */
-	public void loadImage(final int id, final String url, final ImageLoadListener listener) {
+	public void loadImage(final long id, final String url, final ImageLoadListener listener) {
 		
 		ImageLoadRequest request = makeRequest();
 		request.setUrl(url);

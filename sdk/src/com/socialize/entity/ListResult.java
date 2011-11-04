@@ -68,6 +68,16 @@ public class ListResult<T> {
 	public void setSingleObject(T singleObject) {
 		this.singleObject = singleObject;
 	}
+	
+	public int size() {
+		if(items != null) {
+			return items.size();
+		}
+		else if(singleObject != null) {
+			return 1;
+		}
+		return 0;
+	}
 
 	public ListResult<T> add(T item) {
 		if(items == null) items = new LinkedList<T>();

@@ -45,7 +45,7 @@ public class UserApi extends SocializeApi<User, SocializeProvider<User>> {
 		super(provider);
 	}
 	
-	public void getUser(SocializeSession session, int id, UserListener listener) {
+	public void getUser(SocializeSession session, long id, UserListener listener) {
 		getAsync(session, ENDPOINT, String.valueOf(id), listener);
 	}
 	

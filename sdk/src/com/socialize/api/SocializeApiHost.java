@@ -29,6 +29,7 @@ import com.socialize.api.action.ActivityApi;
 import com.socialize.api.action.CommentApi;
 import com.socialize.api.action.EntityApi;
 import com.socialize.api.action.LikeApi;
+import com.socialize.api.action.RecommendationApi;
 import com.socialize.api.action.ShareApi;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.UserApi;
@@ -64,6 +65,8 @@ public class SocializeApiHost {
 	private UserApi userApi;
 	private ShareApi shareApi;
 	private ActivityApi activityApi;
+	private RecommendationApi recommendationApi;
+	
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	
 	public SocializeApiHost(Context context) {
@@ -110,7 +113,7 @@ public class SocializeApiHost {
 		commentApi.addComment(session, key, comment, location, listener);
 	}
 	
-	public void getComment(SocializeSession session, int id, CommentListener listener) {
+	public void getComment(SocializeSession session, long id, CommentListener listener) {
 		commentApi.getComment(session, id, listener);
 	}
 	
@@ -120,6 +123,10 @@ public class SocializeApiHost {
 	
 	public void getEntity(SocializeSession session, String key, EntityListener listener) {
 		entityApi.getEntity(session, key, listener);
+	}
+	
+	public void listRecommendedEntitiesByLike(SocializeSession session, EntityListener listener, long id) {
+		recommendationApi.listRecommendedEntityesForLike(session, listener, id);
 	}
 	
 	public void listCommentsByEntity(SocializeSession session, String url, CommentListener listener) {
@@ -146,7 +153,7 @@ public class SocializeApiHost {
 		shareApi.addShare(session, key, text, shareType, location, listener);
 	}
 	
-	public void deleteLike(SocializeSession session, int id, LikeListener listener) {
+	public void deleteLike(SocializeSession session, long id, LikeListener listener) {
 		likeApi.deleteLike(session, id, listener);
 	}
 	
@@ -154,7 +161,7 @@ public class SocializeApiHost {
 		likeApi.getLikesById(session, listener, ids);
 	}
 	
-	public void getLike(SocializeSession session, int id, LikeListener listener) {
+	public void getLike(SocializeSession session, long id, LikeListener listener) {
 		likeApi.getLike(session, id, listener);
 	}
 	
@@ -162,7 +169,7 @@ public class SocializeApiHost {
 		likeApi.getLike(session, key, listener);
 	}
 	
-	public void getUser(SocializeSession session, int id, UserListener listener) {
+	public void getUser(SocializeSession session, long id, UserListener listener) {
 		userApi.getUser(session, id, listener);
 	}
 	
@@ -170,11 +177,11 @@ public class SocializeApiHost {
 		userApi.saveUserProfile(context, session, firstName, lastName, encodedImage, listener);
 	}
 	
-	public void listActivityByUser(SocializeSession session, int id, ActivityListener listener) {
+	public void listActivityByUser(SocializeSession session, long id, ActivityListener listener) {
 		activityApi.getActivityByUser(session, id, listener);
 	}
 	
-	public void listActivityByUser(SocializeSession session, int id, int startIndex, int endIndex, ActivityListener listener) {
+	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, ActivityListener listener) {
 		activityApi.getActivityByUser(session, id, startIndex, endIndex, listener);
 	}
 	
@@ -246,6 +253,14 @@ public class SocializeApiHost {
 
 	public void setActivityApi(ActivityApi activityApi) {
 		this.activityApi = activityApi;
+	}
+	
+	public RecommendationApi getRecommendationApi() {
+		return recommendationApi;
+	}
+
+	public void setRecommendationApi(RecommendationApi recommendationApi) {
+		this.recommendationApi = recommendationApi;
 	}
 
 	public IBeanFactory<AuthProviderData> getAuthProviderDataFactory() {

@@ -93,7 +93,7 @@ public class CommentListActivity<T extends SocializeObject> extends ListActivity
 								}
 
 								@Override
-								public int getId() {
+								public long getId() {
 									return entity.getId();
 								}
 							});

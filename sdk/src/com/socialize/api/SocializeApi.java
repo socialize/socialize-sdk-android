@@ -101,6 +101,10 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return provider.list(session, endpoint, key, ids, 0, SocializeConfig.MAX_LIST_RESULTS);
 	}
 	
+	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids, String idKey, int startIndex, int endIndex) throws SocializeException {
+		return provider.list(session, endpoint, key, ids, idKey, startIndex, endIndex);
+	}
+	
 	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex) throws SocializeException {
 		return provider.list(session, endpoint, key, ids, startIndex, endIndex);
 	}
@@ -142,11 +146,16 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}
 	
 	public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
+		listAsync(session, endpoint, key, ids, "id", startIndex, endIndex, listener);
+	}
+	
+	public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, String idKey, int startIndex, int endIndex, SocializeActionListener listener) {
 		AsyncGetter getter = new AsyncGetter(RequestType.LIST, session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
 		request.setEndpoint(endpoint);
 		request.setKey(key);
 		request.setIds(ids);
+		request.setIdKey(idKey);
 		request.setStartIndex(startIndex);
 		request.setEndIndex(endIndex);
 		getter.execute(request);
@@ -712,7 +721,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				break;
 
 			case LIST:
-				results = SocializeApi.this.list(session, request.getEndpoint(), request.getKey(), request.getIds(), request.getStartIndex(), request.getEndIndex());
+				results = SocializeApi.this.list(session, request.getEndpoint(), request.getKey(), request.getIds(), request.getIdKey(), request.getStartIndex(), request.getEndIndex());
 				response.setResults(results);
 				break;
 				

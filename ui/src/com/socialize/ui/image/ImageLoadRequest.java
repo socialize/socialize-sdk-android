@@ -35,7 +35,7 @@ import com.socialize.util.SafeBitmapDrawable;
 public class ImageLoadRequest {
 
 	private String url;
-	private Integer itemId;
+	private Long itemId;
 	private ConcurrentLinkedQueue<ImageLoadListener> listeners;
 	private boolean canceled;
 //	private ImageView imageView;
@@ -98,11 +98,11 @@ public class ImageLoadRequest {
 		listeners.add(listener);
 	}
 
-	public Integer getItemId() {
+	public Long getItemId() {
 		return itemId;
 	}
 
-	public void setItemId(Integer itemId) {
+	public void setItemId(Long itemId) {
 		this.itemId = itemId;
 	}
 	

@@ -172,7 +172,7 @@ public interface SocializeService {
 	 * @param id The ID of the like to be deleted.
 	 * @param likeDeleteListener A listener to handle callbacks from the delete.
 	 */
-	public void unlike(int id, LikeDeleteListener likeDeleteListener);
+	public void unlike(long id, LikeDeleteListener likeDeleteListener);
 	
 	/**
 	 * Records a share event against the given url.  NOTE: This does NOT perform sharing to any 3rd party social network.  
@@ -224,7 +224,7 @@ public interface SocializeService {
 	 * @param id The ID of the comment, returned when it was originally created.
 	 * @param commentGetListener A listener to handle callbacks from the get.
 	 */
-	public void getCommentById(int id, CommentGetListener commentGetListener);
+	public void getCommentById(long id, CommentGetListener commentGetListener);
 
 	/**
 	 * Retrieves a single entity.
@@ -263,7 +263,7 @@ public interface SocializeService {
 	 * @param id The id of the user.
 	 * @param userGetListener A listener to handle callbacks from the get.
 	 */
-	public void getUser(int id, UserGetListener userGetListener);
+	public void getUser(long id, UserGetListener userGetListener);
 	
 	/**
 	 * Saves the profile for the current logged in user.

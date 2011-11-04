@@ -19,6 +19,7 @@ public class SocializeActivityHandle extends SocializeActivityViewChild {
 	private ImageView imageView;
 	private ImageView socializeLogo;
 	private Drawables drawables;
+	private String title = "";
 	
 	public SocializeActivityHandle(Context context, SocializeActivityView parent, int height) {
 		super(context, parent);
@@ -26,8 +27,7 @@ public class SocializeActivityHandle extends SocializeActivityViewChild {
 	}
 
 	public void init() {
-		setBackgroundColor(Color.parseColor("#00abe3"));
-		setBackgroundDrawable(drawables.getDrawable("ad_bar_bg.png", true, false, true));
+		setBackgroundDrawable(drawables.getDrawable("toolbar_bg.png", true, false, true));
 		
 		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, height);
 		params.setMargins(0,0,0,0);
@@ -36,7 +36,7 @@ public class SocializeActivityHandle extends SocializeActivityViewChild {
 		setOrientation(HORIZONTAL);
 		
 		text = new TextView(getContext());
-		text.setText("Ad text here");
+		text.setText(title);
 		text.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
 		text.setPadding(4, 0, 4, 0);
 		text.setTypeface(Typeface.DEFAULT_BOLD);
@@ -45,11 +45,11 @@ public class SocializeActivityHandle extends SocializeActivityViewChild {
 		
 		imageView = new ImageView(getContext());
 		imageView.setPadding(4, 0, 4, 0);
-		imageView.setImageDrawable(drawables.getDrawable("close.png"));
+		imageView.setImageDrawable(drawables.getDrawable("toolbar_close.png"));
 		
 		socializeLogo = new ImageView(getContext());
 		socializeLogo.setPadding(4, 0, 4, 0);
-		socializeLogo.setImageDrawable(drawables.getDrawable("socialize_icon_white.png"));
+		socializeLogo.setImageDrawable(drawables.getDrawable("icon_like_hi.png"));
 		
 		LayoutParams textParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		textParams.weight = 1.0f;
@@ -59,6 +59,7 @@ public class SocializeActivityHandle extends SocializeActivityViewChild {
 		LayoutParams imageParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		imageParams.weight = 0.0f;
 		imageParams.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+		imageParams.setMargins(10, 0, 0, 0);
 		
 		imageView.setLayoutParams(imageParams);
 		
@@ -75,6 +76,13 @@ public class SocializeActivityHandle extends SocializeActivityViewChild {
 	
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
+	}
+	
+	public void setTitle(String str) {
+		if(text != null) {
+			text.setText(str);
+		}
+		this.title = str;
 	}
 
 	@Override

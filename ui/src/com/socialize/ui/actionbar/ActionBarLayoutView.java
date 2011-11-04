@@ -85,6 +85,8 @@ public class ActionBarLayoutView extends BaseView {
 	private ShareDialogFactory shareDialogFactory;
 	private ActionBarView actionBarView;
 	
+	private OnActionBarEventListener onActionBarEventListener;
+	
 	public ActionBarLayoutView(Activity context, ActionBarView actionBarView) {
 		super(context);
 		this.actionBarView = actionBarView;
@@ -283,6 +285,10 @@ public class ActionBarLayoutView extends BaseView {
 						localEntity.getEntity().setLikes(localEntity.getEntity().getLikes()-1);
 						setEntityData(localEntity);
 						button.hideLoading();
+						
+						if(onActionBarEventListener != null) {
+							onActionBarEventListener.onUnlike();
+						}
 					}
 				});
 			}
@@ -303,6 +309,10 @@ public class ActionBarLayoutView extends BaseView {
 						localEntity.setLikeId(entity.getId());
 						button.hideLoading();
 						setEntityData(localEntity);
+						
+						if(onActionBarEventListener != null) {
+							onActionBarEventListener.onLike(entity);
+						}
 					}
 				});
 				
@@ -325,6 +335,10 @@ public class ActionBarLayoutView extends BaseView {
 				putEntity.setLiked(true);
 				putEntity.setLikeId(like.getId());
 				setEntityData(putEntity);
+				
+				if(onActionBarEventListener != null) {
+					onActionBarEventListener.onGetLike(like);
+				}
 			}
 			
 			@Override
@@ -467,5 +481,9 @@ public class ActionBarLayoutView extends BaseView {
 
 	public void startTicker() {
 		ticker.startTicker();
+	}
+
+	public void setOnActionBarEventListener(OnActionBarEventListener onActionBarEventListener) {
+		this.onActionBarEventListener = onActionBarEventListener;
 	}
 }

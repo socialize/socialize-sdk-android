@@ -76,7 +76,7 @@ public class CommentApi extends SocializeApi<Comment, SocializeProvider<Comment>
 		listAsync(session, ENDPOINT, null, strIds, 0, SocializeConfig.MAX_LIST_RESULTS, listener);
 	}
 	
-	public void getComment(SocializeSession session, int id, CommentListener listener) {
+	public void getComment(SocializeSession session, long id, CommentListener listener) {
 		getAsync(session, ENDPOINT, String.valueOf(id), listener);
 	}
 

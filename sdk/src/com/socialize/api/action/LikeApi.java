@@ -61,7 +61,7 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 		postAsync(session, ENDPOINT, list, listener);
 	}
 	
-	public void deleteLike(SocializeSession session, int id, LikeListener listener) {
+	public void deleteLike(SocializeSession session, long id, LikeListener listener) {
 		deleteAsync(session, ENDPOINT, String.valueOf(id), listener);
 	}
 	
@@ -83,7 +83,7 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 		final User user = session.getUser();
 		if(user != null) {
 			
-			final Integer userId = user.getId();
+			final Long userId = user.getId();
 			
 			String endpoint = "/user/" + userId.toString() + ENDPOINT;
 			listAsync(session, endpoint, entityUrl, null, 0, 1, new LikeListListener() {
@@ -148,7 +148,7 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 		}
 	}
 	
-	public void getLike(SocializeSession session, int id, LikeListener listener) {
+	public void getLike(SocializeSession session, long id, LikeListener listener) {
 		getAsync(session, ENDPOINT, String.valueOf(id), listener);
 	}
 
