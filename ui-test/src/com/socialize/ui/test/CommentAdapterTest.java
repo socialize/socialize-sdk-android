@@ -30,7 +30,8 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		
 		AndroidMock.expect(comments.size()).andReturn(0);
 		
-		CommentAdapter adapter = new CommentAdapter(getContext());
+		CommentAdapter adapter = new CommentAdapter();
+		adapter.init(getContext());
 		
 		adapter.setLast(false);
 		adapter.setComments(comments);
@@ -50,7 +51,8 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		
 		AndroidMock.expect(comments.size()).andReturn(1);
 		
-		CommentAdapter adapter = new CommentAdapter(getContext());
+		CommentAdapter adapter = new CommentAdapter();
+		adapter.init(getContext());
 		
 		adapter.setLast(false);
 		adapter.setComments(comments);
@@ -70,13 +72,13 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		
 		AndroidMock.expect(comments.size()).andReturn(count);
 		
-		CommentAdapter adapter = new CommentAdapter(getContext()) {
+		CommentAdapter adapter = new CommentAdapter() {
 			@Override
 			public boolean isDisplayLoading() {
 				return true;
 			}
 		};
-		
+		adapter.init(getContext());
 		adapter.setLast(false);
 		adapter.setComments(comments);
 		
@@ -95,13 +97,13 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		
 		AndroidMock.expect(comments.size()).andReturn(count);
 		
-		CommentAdapter adapter = new CommentAdapter(getContext()) {
+		CommentAdapter adapter = new CommentAdapter() {
 			@Override
 			public boolean isDisplayLoading() {
 				return false;
 			}
 		};
-		
+		adapter.init(getContext());
 		adapter.setLast(false);
 		adapter.setComments(comments);
 		
@@ -122,8 +124,9 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		AndroidMock.expect(comments.get(position)).andReturn(item);
 		AndroidMock.expect(comments.size()).andReturn(position+1);
 		
-		CommentAdapter adapter = new CommentAdapter(getContext());
+		CommentAdapter adapter = new CommentAdapter();
 		
+		adapter.init(getContext());
 		adapter.setLast(false);
 		adapter.setComments(comments);
 		
@@ -144,8 +147,9 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		
 		AndroidMock.expect(comments.size()).andReturn(position);
 		
-		CommentAdapter adapter = new CommentAdapter(getContext());
+		CommentAdapter adapter = new CommentAdapter();
 		
+		adapter.init(getContext());
 		adapter.setLast(false);
 		adapter.setComments(comments);
 		
@@ -165,12 +169,14 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		
 //		AndroidMock.expect(comment.getId()).andReturn(id);
 		
-		CommentAdapter adapter = new CommentAdapter(getContext()) {
+		CommentAdapter adapter = new CommentAdapter() {
 			@Override
 			public Object getItem(int position) {
 				return comment;
 			}
 		};
+		
+		adapter.init(getContext());
 		
 		AndroidMock.replay(comment);
 		
@@ -188,13 +194,14 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		
 		AndroidMock.expect(comments.size()).andReturn(position+1);
 		
-		CommentAdapter adapter = new CommentAdapter(getContext()) {
+		CommentAdapter adapter = new CommentAdapter() {
 			@Override
 			public boolean isDisplayLoading() {
 				return true;
 			}
 		};
 		
+		adapter.init(getContext());
 		adapter.setComments(comments);
 		
 		AndroidMock.replay(comments);
@@ -213,12 +220,13 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		
 		AndroidMock.expect(comments.size()).andReturn(position);
 		
-		CommentAdapter adapter = new CommentAdapter(getContext()) {
+		CommentAdapter adapter = new CommentAdapter() {
 			@Override
 			public boolean isDisplayLoading() {
 				return true;
 			}
 		};
+		adapter.init(getContext());
 		
 		adapter.setComments(comments);
 		
@@ -230,22 +238,24 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 	}
 	
 	public void testGetItemViewTypeCountForLoading() {
-		CommentAdapter adapter = new CommentAdapter(getContext()) {
+		CommentAdapter adapter = new CommentAdapter() {
 			@Override
 			public boolean isDisplayLoading() {
 				return true;
 			}
 		};
+		adapter.init(getContext());
 		assertEquals(2, adapter.getViewTypeCount());
 	}
 	
 	public void testGetItemViewTypeCountForNonLoading() {
-		CommentAdapter adapter = new CommentAdapter(getContext()) {
+		CommentAdapter adapter = new CommentAdapter() {
 			@Override
 			public boolean isDisplayLoading() {
 				return false;
 			}
 		};
+		adapter.init(getContext());
 		assertEquals(1, adapter.getViewTypeCount());
 	}
 	
