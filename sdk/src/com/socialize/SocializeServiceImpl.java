@@ -266,7 +266,9 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			}
 		}
 		finally {
-			service.clearSessionCache();
+			if(service != null) {
+				service.clearSessionCache();
+			}
 		}
 	}
 
@@ -315,40 +317,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		authenticate(consumerKey, consumerSecret, data, authListener, true);
 	}
 
-//	@Override
-//	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProviderType, SocializeAuthListener authListener) {
-//		if(authProviderType.equals(AuthProviderType.FACEBOOK)) {
-//			// Use the default app id from config
-//			String appId = getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
-//			
-//			if(!StringUtils.isEmpty(appId)) {
-//				authenticate(consumerKey, consumerSecret, authProviderType, appId, authListener);
-//			}
-//			else {
-//				if(logger != null) {
-//					logger.warn("No app ID found in config for auth provider [" +
-//							authProviderType.name() +
-//							"].  Authenticating anonymously");
-//				}
-//				// Anonymous
-//				authenticate(consumerKey, consumerSecret, authListener);	
-//			}
-//		}
-//		else if(authProviderType.equals(AuthProviderType.SOCIALIZE)) {
-//			// Anonymous
-//			authenticate(consumerKey, consumerSecret, authListener);
-//		}
-//		else {
-//			if(logger != null) {
-//				logger.warn("Unrecognized auth provider [" +
-//						authProviderType.name() +
-//						"].  Authenticating anonymously");
-//			}
-//			// Anonymous
-//			authenticate(consumerKey, consumerSecret, authListener);
-//		}
-//	}
-
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#authenticate(java.lang.String, java.lang.String, com.socialize.listener.SocializeAuthListener)
 	 */
@@ -394,22 +362,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			service.authenticate(consumerKey, consumerSecret, authProviderData, authListener, this, do3rdPartyAuth);
 		}
 	}
-	
-//	@Deprecated
-//	private void authenticate(
-//			String consumerKey, 
-//			String consumerSecret, 
-//			String authUserId3rdParty, 
-//			String authToken3rdParty, 
-//			AuthProviderType authProvider, 
-//			String appId3rdParty,
-//			SocializeAuthListener authListener, 
-//			boolean do3rdPartyAuth) {
-//		
-//		if(assertInitialized(authListener)) {
-//			service.authenticate(consumerKey, consumerSecret, authUserId3rdParty, authToken3rdParty, authProvider, appId3rdParty, authListener, this, do3rdPartyAuth);
-//		}
-//	}
 	
 	/*
 	 * (non-Javadoc)
@@ -841,4 +793,12 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			}
 		}
 	};
+	
+	/**
+	 * EXPERT ONLY (Not documented)
+	 * @return
+	 */
+	IOCContainer getContainer() {
+		return container;
+	}
 }

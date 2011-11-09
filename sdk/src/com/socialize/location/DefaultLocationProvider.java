@@ -40,12 +40,12 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 	private SocializeLocationManager locationManager;
 	private IBeanFactory<SocializeLocationListener> locationListenerFactory;
 	
-	public DefaultLocationProvider(Activity context) {
+	public DefaultLocationProvider() {
 		super();
-		this.context = context;
 	}
 	
-	public void init() {
+	public void init(Activity context) {
+		this.context = context;
 		getLocation();
 	}
 

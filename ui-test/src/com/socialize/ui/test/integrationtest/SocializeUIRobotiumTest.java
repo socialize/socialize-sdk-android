@@ -33,12 +33,16 @@ import com.jayway.android.robotium.solo.Solo;
 import com.socialize.Socialize;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.sample.SampleActivity;
+import com.socialize.ui.test.ResultHolder;
+import com.socialize.ui.test.util.TestUtils;
 
 /**
  * @author Jason Polites
  */
 public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTestCase2<SampleActivity> {
 
+	protected final ResultHolder holder = new ResultHolder();
+	
 	public static final int DEFAULT_TIMEOUT_SECONDS = 100;
 	public static final String DEFAULT_ENTITY_URL = "http://socialize.integration.tests.com?somekey=somevalue&anotherkey=anothervalue";
 	public static final String DEFAULT_GET_ENTITY = "http://entity1.com";
@@ -47,19 +51,17 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	protected Solo robotium;
 	protected InputMethodManager imm = null;
 
-
 	public SocializeUIRobotiumTest() {
 		super("com.socialize.ui.sample", SampleActivity.class);
 	}
 
 	public void setUp() throws Exception {
+		holder.setUp();
 		imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 		robotium = new Solo(getInstrumentation(), getActivity());
 		robotium.waitForActivity("SampleActivity", 5000);
 		hideKeyboard();
 	}
-	
-	
 	
 	protected void toggleFacebookSSO(boolean on) {
 		if(!on) {
@@ -82,9 +84,7 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	protected void clearAuthCache() {
 		robotium.clickOnButton(3);
 		sleep(500);
-		
 		assertNull(Socialize.getSocialize().getSession());
-		
 	}
 	
 	protected void showComments() {
@@ -130,6 +130,22 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 		super.tearDown();
 	}
 
+	protected void addResult(Object obj) {
+		holder.addResult(obj);
+	}
+	
+	protected void addResult(int index, Object obj) {
+		holder.addResult(index, obj);
+	}
+	
+	protected <T extends Object> T getResult(int index) {
+		return holder.getResult(index);
+	}
+	
+	protected <T extends Object> T getNextResult() {
+		return holder.getNextResult();
+	}
+	
 
 	protected final void sleep(int milliseconds) {
 		synchronized (this) {
@@ -151,15 +167,8 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	protected <T extends View> T findView(Class<T> viewClass) {
-		ArrayList<View> currentViews = robotium.getCurrentViews();
-		for (View view : currentViews) {
-			if(viewClass.isAssignableFrom(view.getClass())) {
-				return (T) view;
-			}
-		}
-		return null;
+		return TestUtils.findView(getActivity(), viewClass, 20000);
 	}
 
 }

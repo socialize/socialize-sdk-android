@@ -97,7 +97,8 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		AndroidMock.replay(deviceUtils);
 		AndroidMock.replay(userApi);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		service.init(getContext());
 		
 		service.setDeviceUtils(deviceUtils);
 		service.setUserApi(userApi);
@@ -140,7 +141,8 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		AndroidMock.replay(deviceUtils);
 		AndroidMock.replay(userApi);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		service.init(getContext());
 		
 		service.setDeviceUtils(deviceUtils);
 		service.setUserApi(userApi);
@@ -166,7 +168,8 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(commentApi);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		service.init(getContext());
 		
 		service.setCommentApi(commentApi);
 		
@@ -190,7 +193,8 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(api);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		service.init(getContext());
 		
 		service.setEntityApi(api);
 		
@@ -214,7 +218,9 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(commentApi);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		
+		service.init(getContext());
 		
 		service.setCommentApi(commentApi);
 		
@@ -237,7 +243,8 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(commentApi);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		service.init(getContext());
 		
 		service.setCommentApi(commentApi);
 		
@@ -261,7 +268,8 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(commentApi);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		service.init(getContext());
 		
 		service.setCommentApi(commentApi);
 		
@@ -284,7 +292,8 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(commentApi);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		service.init(getContext());
 		
 		service.setCommentApi(commentApi);
 		
@@ -307,7 +316,8 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(api);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		service.init(getContext());
 		
 		service.setEntityApi(api);
 		
@@ -330,7 +340,9 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(api);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		
+		service.init(getContext());
 		
 		service.setEntityApi(api);
 		
@@ -353,7 +365,9 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(api);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		
+		service.init(getContext());
 		
 		service.setEntityApi(api);
 		
@@ -376,7 +390,9 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(api);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		
+		service.init(getContext());
 		
 		service.setLikeApi(api);
 		
@@ -399,7 +415,9 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(api);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		
+		service.init(getContext());
 		
 		service.setLikeApi(api);
 		
@@ -422,7 +440,9 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(api);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		
+		service.init(getContext());
 		
 		service.setLikeApi(api);
 		
@@ -445,7 +465,9 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(api);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		
+		service.init(getContext());
 		
 		service.setLikeApi(api);
 		
@@ -461,7 +483,9 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(factory);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		
+		service.init(getContext());
 		service.setClientFactory(factory);
 		
 		service.destroy();
@@ -479,7 +503,9 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(api);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		
+		service.init(getContext());
 		
 		service.setUserApi(api);
 		
@@ -504,7 +530,9 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(commentApi);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		
+		service.init(getContext());
 		
 		service.setLikeApi(commentApi);
 		
@@ -527,7 +555,9 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(commentApi);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		
+		service.init(getContext());
 		
 		service.setViewApi(commentApi);
 		
@@ -552,7 +582,9 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(commentApi);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		
+		service.init(getContext());
 		
 		service.setShareApi(commentApi);
 		
@@ -575,7 +607,9 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(api);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		
+		service.init(getContext());
 		
 		service.setUserApi(api);
 		
@@ -600,7 +634,9 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(api);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		
+		service.init(getContext());
 		
 		service.setUserApi(api);
 		
@@ -623,7 +659,9 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(api);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		
+		service.init(getContext());
 		
 		service.setActivityApi(api);
 		
@@ -648,7 +686,9 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(api);
 		
-		SocializeApiHost service = new SocializeApiHost(getContext());
+		SocializeApiHost service = new SocializeApiHost();
+		
+		service.init(getContext());
 		
 		service.setActivityApi(api);
 		

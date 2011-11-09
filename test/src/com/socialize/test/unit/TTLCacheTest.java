@@ -26,7 +26,8 @@ public class TTLCacheTest extends SocializeUnitTest {
 	protected void setUp() throws Exception {
 		super.setUp();
 		
-		cache = new TTLCache<String, StringCacheable>(getContext(), 1, 2);
+		cache = new TTLCache<String, StringCacheable>(1, 2);
+		cache.init(getContext());
 		cache.setDebug(true);
 		cache.setMaxCapacityBytes(20);
 		cache.setHardByteLimit(false);
@@ -307,18 +308,19 @@ public class TTLCacheTest extends SocializeUnitTest {
 	}
 	
 	public void testConstructorUsesDefaultCacheCount() {
-		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>(getContext(), 1);
+		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>(1);
+		cache.init(getContext());
 		assertEquals(TTLCache.DEFAULT_CACHE_COUNT, cache.getMaxCapacity());
 	}
 	
 	public void testPauseCallsStopOnReaper() {
-		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>(getContext()) {
+		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>() {
 			@Override
 			protected synchronized void stopReaper() {
 				addResult(true);
 			}
 		};
-		
+		cache.init(getContext());
 		cache.pause();
 		
 		Boolean result = getNextResult();
@@ -327,13 +329,13 @@ public class TTLCacheTest extends SocializeUnitTest {
 	}
 	
 	public void testResumeCallsStartOnReaper() {
-		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>(getContext()) {
+		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>() {
 			@Override
 			protected synchronized void startReaper() {
 				addResult(true);
 			}
 		};
-		
+		cache.init(getContext());
 		cache.resume();
 		
 		Boolean result = getNextResult();
@@ -342,7 +344,7 @@ public class TTLCacheTest extends SocializeUnitTest {
 	}
 	
 	public void testPutCallPutWithDefaultTTL() {
-		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>(getContext()) {
+		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>() {
 
 			@Override
 			protected synchronized boolean put(String k, StringCacheable object, long ttl, boolean eternal) {
@@ -351,7 +353,7 @@ public class TTLCacheTest extends SocializeUnitTest {
 			}
 			
 		};
-		
+		cache.init(getContext());
 		cache.put("foobar", null);
 		
 		Long result = getNextResult();
@@ -369,7 +371,7 @@ public class TTLCacheTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(object);
 		
-		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>(getContext()) {
+		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>() {
 			@Override
 			protected TTLObject<String, StringCacheable> getTTLObject(String strKey) {
 				return object;
@@ -380,6 +382,8 @@ public class TTLCacheTest extends SocializeUnitTest {
 				return false;
 			}
 		};
+		
+		cache.init(getContext());
 		
 		assertSame(cacheable, cache.getRaw("foobar"));
 		
@@ -398,7 +402,7 @@ public class TTLCacheTest extends SocializeUnitTest {
 		AndroidMock.expect(object.getObject()).andReturn(null);
 		AndroidMock.expect(factory.create(key)).andReturn(cacheable);
 		
-		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>(getContext()) {
+		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>() {
 			@Override
 			protected TTLObject<String, StringCacheable> getTTLObject(String strKey) {
 				return object;
@@ -410,6 +414,8 @@ public class TTLCacheTest extends SocializeUnitTest {
 				return true;
 			}
 		};
+		
+		cache.init(getContext());
 		
 		cache.setObjectFactory(factory);
 		
@@ -431,7 +437,7 @@ public class TTLCacheTest extends SocializeUnitTest {
 		final int expiredCount = 5;
 		int totalCount = 10;
 		
-		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>(getContext()) {
+		TTLCache<String, StringCacheable> cache = new TTLCache<String, StringCacheable>() {
 			@Override
 			public boolean isExpired(TTLObject<String, StringCacheable> object) {
 				Integer nextResult = getNextResult();
@@ -450,6 +456,8 @@ public class TTLCacheTest extends SocializeUnitTest {
 				}
 			}
 		};
+		
+		cache.init(getContext());
 		
 		for (int i = 0; i < totalCount; i++) {
 			StringCacheable value = new StringCacheable(String.valueOf(i));
@@ -497,7 +505,8 @@ public class TTLCacheTest extends SocializeUnitTest {
 	@UsesMocks ({TTLObject.class, ISuicidal.class})
 	public void testExpiredSuicical() {
 		
-		TTLCache<String, ISuicidal<String>> cache = new TTLCache<String, ISuicidal<String>>(getContext());
+		TTLCache<String, ISuicidal<String>> cache = new TTLCache<String, ISuicidal<String>>();
+		cache.init(getContext());
 		
 		TTLObject<String, ISuicidal<String>> obj = AndroidMock.createMock(TTLObject.class);
 		ISuicidal<String> s = AndroidMock.createMock(ISuicidal.class);

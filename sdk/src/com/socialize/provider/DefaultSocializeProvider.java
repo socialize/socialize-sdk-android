@@ -88,12 +88,13 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	
 	private FacebookSessionStore facebookSessionStore;
 	
-	public DefaultSocializeProvider(Context context) {
+	public DefaultSocializeProvider() {
 		super();
-		this.context = context;
 	}
 	
-	public void init() {}
+	public void init(Context context) {
+		this.context = context;
+	}
 	
 	public void setObjectFactory(SocializeObjectFactory<T> objectFactory) {
 		this.objectFactory = objectFactory;

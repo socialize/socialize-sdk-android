@@ -1,6 +1,5 @@
 <beans>
 	<bean id="socializeApiHost" class="com.socialize.ui.sample.mock.MockSocializeApiHost">
-		<constructor-arg type="context"/>
 		<property name="clientFactory" ref="clientFactory"/>
 		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
@@ -11,6 +10,10 @@
 		<property name="userApi" ref="userApi"/>
 		<property name="shareApi" ref="shareApi"/>
 		<property name="activityApi" ref="activityApi"/>
+		
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>			
 	</bean>	
 	
 	<bean id="initializationAsserter" class="com.socialize.ui.sample.mock.MockInitializationAsserter"/>

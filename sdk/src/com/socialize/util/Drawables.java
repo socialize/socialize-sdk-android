@@ -48,6 +48,11 @@ public class Drawables {
 		super();
 	}
 
+	/**
+	 * @deprecated
+	 * @param context
+	 */
+	@Deprecated
 	public Drawables(Activity context) {
 		super();
 		init(context);

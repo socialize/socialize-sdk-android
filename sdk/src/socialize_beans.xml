@@ -46,12 +46,13 @@
 	</bean>
 	
 	<bean id="locationProvider" class="com.socialize.location.DefaultLocationProvider">
-		<constructor-arg type="activity"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="locationManager" ref="locationManager"/>
 		<property name="locationListenerFactory" ref="locationListenerFactory"/>
 		
-		<init-method name="init"/>
+		<init-method name="init">
+			<arg type="activity"/>
+		</init-method>
 	</bean>
 	
 	<bean id="locationListener" class="com.socialize.location.SocializeLocationListener" singleton="false">
@@ -77,9 +78,11 @@
 	<factory id="authProviderDataFactory" makes="authProviderData"/>	
 	
 	<bean id="cache" class="com.socialize.util.DrawableCache">
-		<constructor-arg type="context"/>
 		<constructor-arg type="integer" value="10"/> <!-- Min size -->
 		<constructor-arg type="integer" value="100"/> <!-- Max size -->
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>		
 		<destroy-method name="destroy"/>
 	</bean>
 	
@@ -91,11 +94,13 @@
 	</bean>
 	
 	<bean id="drawables" class="com.socialize.util.Drawables">
-		<constructor-arg type="activity"/>
 		<property name="classLoaderProvider" ref="classLoaderProvider"/>
 		<property name="cache" ref="cache"/>
 		<property name="logger" ref="logger"/>
 		<property name="bitmapUtils" ref="bitmapUtils"/>
+		<init-method name="init">
+			<arg type="activity"/>
+		</init-method>		
 	</bean>
 	
 	<bean id="dialogFactory" class="com.socialize.util.DialogFactory"/>
@@ -132,9 +137,10 @@
 	</bean>
 	
 	<bean id="abstractProvider" class="com.socialize.provider.DefaultSocializeProvider" abstract="true">
-		<constructor-arg type="context"/>
 		
-		<init-method name="init"/>
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>	
 		
 		<property name="logger" ref="logger"/>
 		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
@@ -172,10 +178,12 @@
 	<bean id="listenerHolder" class="com.socialize.listener.ListenerHolder"/>
 	
 	<bean id="facebookProvider" class="com.socialize.auth.facebook.FacebookAuthProvider">
-		<constructor-arg type="context"/>
-		<constructor-arg ref="listenerHolder"/>
 		<property name="logger" ref="logger"/>
 		<property name="drawables" ref="drawables"/>
+		<init-method name="init">
+			<arg type="context"/>
+			<arg ref="listenerHolder"/>
+		</init-method>
 	</bean>
 	
 	<bean id="socializeApi" class="com.socialize.api.SocializeApi" abstract="true">
@@ -225,7 +233,6 @@
 	</bean>
 
 	<bean id="commentProvider" extends="abstractProvider">
-		<constructor-arg type="context"/>
 		<property name="objectFactory" ref="commentFactory"/>
 		<property name="requestFactory" ref="commentRequestFactory"/>
 	</bean>
@@ -248,7 +255,6 @@
 	</bean>
 
 	<bean id="entityProvider" extends="abstractProvider">
-		<constructor-arg type="context"/>
 		<property name="objectFactory" ref="entityFactory"/>
 		<property name="requestFactory" ref="entityRequestFactory"/>
 	</bean>
@@ -269,7 +275,6 @@
 	</bean>
 
 	<bean id="likeProvider" extends="abstractProvider">
-		<constructor-arg type="context"/>
 		<property name="objectFactory" ref="likeFactory"/>
 		<property name="requestFactory" ref="likeRequestFactory"/>
 	</bean>
@@ -290,7 +295,6 @@
 	</bean>
 
 	<bean id="viewProvider" extends="abstractProvider">
-		<constructor-arg type="context"/>
 		<property name="objectFactory" ref="viewFactory"/>
 		<property name="requestFactory" ref="viewRequestFactory"/>
 	</bean>
@@ -311,7 +315,6 @@
 	</bean>
 
 	<bean id="shareProvider" extends="abstractProvider">
-		<constructor-arg type="context"/>
 		<property name="objectFactory" ref="shareFactory"/>
 		<property name="requestFactory" ref="shareRequestFactory"/>
 	</bean>
@@ -330,7 +333,6 @@
 	</bean>
 
 	<bean id="userProvider" extends="abstractProvider">
-		<constructor-arg type="context"/>
 		<property name="objectFactory" ref="userFactory"/>
 		<property name="requestFactory" ref="userRequestFactory"/>
 	</bean>
@@ -363,7 +365,6 @@
 	</bean>
 
 	<bean id="activityProvider" extends="abstractProvider">
-		<constructor-arg type="context"/>
 		<property name="objectFactory" ref="activityFactory"/>
 		<property name="requestFactory" ref="activityRequestFactory"/>
 	</bean>
@@ -386,7 +387,6 @@
 <!-- Socialize Core -->
 
 	<bean id="socializeApiHost" class="com.socialize.api.SocializeApiHost">
-		<constructor-arg type="context"/>
 		<property name="clientFactory" ref="clientFactory"/>
 		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
@@ -398,6 +398,10 @@
 		<property name="shareApi" ref="shareApi"/>
 		<property name="activityApi" ref="activityApi"/>
 		<property name="recommendationApi" ref="recommendationApi"/>
+		
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>			
 	</bean>
 	
 <!-- End Socialize Core -->

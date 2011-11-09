@@ -55,8 +55,7 @@ public class CommentAdapter extends BaseAdapter {
 
 	private int iconSize = 100;
 
-	public CommentAdapter(Activity context) {
-		super();
+	public void init(Activity context) {
 		this.context = context;
 		now = new Date();
 	}

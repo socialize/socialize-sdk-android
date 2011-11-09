@@ -72,7 +72,8 @@ public class DefaultLocationProviderTest extends SocializeActivityTest {
 		
 		AndroidMock.replay(deviceUtils);
 		
-		DefaultLocationProvider provider = new DefaultLocationProvider(context);
+		DefaultLocationProvider provider = new DefaultLocationProvider();
+		provider.init(context);
 		provider.setDeviceUtils(deviceUtils);
 		
 		assertNull(provider.getLocation());
@@ -90,7 +91,8 @@ public class DefaultLocationProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(locationManager.getBestProvider((Criteria)AndroidMock.anyObject(), AndroidMock.eq(true))).andReturn(strProvider);
 		AndroidMock.expect(locationManager.getLastKnownLocation(strProvider)).andReturn(location);
 		
-		DefaultLocationProvider provider = new DefaultLocationProvider(context);
+		DefaultLocationProvider provider = new DefaultLocationProvider();
+		provider.init(context);
 		provider.setLocationManager(locationManager);
 		provider.setDeviceUtils(deviceUtils);
 		
@@ -119,7 +121,8 @@ public class DefaultLocationProviderTest extends SocializeActivityTest {
 
 		locationManager.requestLocationUpdates(context, strProvider,1L, 0.0f, listener);
 		
-		DefaultLocationProvider provider = new DefaultLocationProvider(context);
+		DefaultLocationProvider provider = new DefaultLocationProvider();
+		provider.init(context);
 		provider.setLocationManager(locationManager);
 		provider.setDeviceUtils(deviceUtils);
 		provider.setLocationListenerFactory(locationListenerFactory);

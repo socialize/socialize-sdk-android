@@ -2,10 +2,10 @@ package com.socialize.ui.activity;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+@SuppressWarnings("unused")
 public class SocializeActivityContent extends SocializeActivityViewChild {
 	
 	private int height;

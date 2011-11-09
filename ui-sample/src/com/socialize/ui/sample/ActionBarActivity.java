@@ -16,6 +16,7 @@ public abstract class ActionBarActivity extends Activity {
 		boolean isEntityKeyUrl = true;
 		
 		Bundle extras = this.getIntent().getExtras();
+		
 		if(extras != null) {
 			entityKey = extras.getString(SocializeUI.ENTITY_KEY);
 			entityName = extras.getString(SocializeUI.ENTITY_NAME);
@@ -23,7 +24,6 @@ public abstract class ActionBarActivity extends Activity {
 		}
 		
 		onCreate(savedInstanceState, entityKey, entityName, isEntityKeyUrl);
-		
 	}
 
 	protected abstract void onCreate(Bundle savedInstanceState, String entityKey, String entityName, boolean isEntityKeyUrl);

@@ -87,7 +87,7 @@ public class DrawablesTest extends SocializeActivityTest {
 		AndroidMock.replay(loader);
 		AndroidMock.replay(in);
 		
-		Drawables drawables = new Drawables(getActivity()) {
+		Drawables drawables = new Drawables() {
 			@Override
 			protected CacheableDrawable createDrawable(InputStream stream, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY) {
 				assertSame(in, stream);
@@ -97,6 +97,7 @@ public class DrawablesTest extends SocializeActivityTest {
 			}
 		};
 		
+		drawables.init(getActivity());
 		drawables.setClassLoaderProvider(provider);
 		drawables.setCache(cache);
 		

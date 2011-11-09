@@ -1,5 +1,6 @@
 package com.socialize.ui.sample;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,10 +13,10 @@ import android.widget.EditText;
 
 import com.socialize.Socialize;
 import com.socialize.auth.AuthProviderType;
-import com.socialize.ui.SocializeActivity;
 import com.socialize.ui.SocializeUI;
+import com.socialize.ui.SocializeUIBeanOverrider;
 
-public class SampleActivity extends SocializeActivity {
+public class SampleActivity extends Activity {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,7 +53,14 @@ public class SampleActivity extends SocializeActivity {
 
 					@Override
 					protected Void doInBackground(Void... params) {
-						Socialize.getSocialize().clear3rdPartySession(AuthProviderType.FACEBOOK);
+						try {
+							Socialize.getSocialize().init(SampleActivity.this);
+							Socialize.getSocialize().clear3rdPartySession(AuthProviderType.FACEBOOK);
+						} 
+						finally {
+							Socialize.getSocialize().destroy();
+						}
+						
 						return null;
 					}
 
@@ -95,19 +103,21 @@ public class SampleActivity extends SocializeActivity {
 		final CheckBox chkMockFB = (CheckBox) findViewById(R.id.chkMockFB);
 		final CheckBox chkMockSocialize = (CheckBox) findViewById(R.id.chkMockSocialize);
 		
+		SocializeUIBeanOverrider overrider = new SocializeUIBeanOverrider();
+		
 		if(chkMockFB.isChecked()) {
 			if(chkMockSocialize.isChecked()) {
-				SocializeUI.getInstance().setBeanOverrides("socialize_ui_mock_beans.xml", "socialize_ui_mock_socialize_beans.xml");
+				overrider.setBeanOverrides("socialize_ui_mock_beans.xml", "socialize_ui_mock_socialize_beans.xml");
 			}
 			else {
-				SocializeUI.getInstance().setBeanOverrides("socialize_ui_mock_beans.xml");
+				overrider.setBeanOverrides("socialize_ui_mock_beans.xml");
 			}
 		}
 		else if(chkMockSocialize.isChecked()) {
-			SocializeUI.getInstance().setBeanOverrides("socialize_ui_mock_socialize_beans.xml");
+			overrider.setBeanOverrides("socialize_ui_mock_socialize_beans.xml");
 		}
 		else {
-			SocializeUI.getInstance().setBeanOverrides((String[]) null);
+			overrider.setBeanOverrides((String[]) null);
 		}
 	}
 }

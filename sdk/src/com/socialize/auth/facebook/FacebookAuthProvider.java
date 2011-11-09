@@ -45,12 +45,15 @@ public class FacebookAuthProvider implements AuthProvider {
 	private SocializeLogger logger;
 	private Drawables drawables;
 	
-	public FacebookAuthProvider(Context context, ListenerHolder holder) {
+	public FacebookAuthProvider() {
 		super();
+	}
+
+	public void init(Context context, ListenerHolder holder) {
 		this.context = context;
 		this.holder = holder;
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see com.socialize.auth.AuthProvider#authenticate()
 	 */

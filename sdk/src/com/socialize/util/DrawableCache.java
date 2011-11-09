@@ -21,8 +21,6 @@
  */
 package com.socialize.util;
 
-import android.content.Context;
-
 import com.socialize.cache.TTLCache;
 
 /**
@@ -30,15 +28,15 @@ import com.socialize.cache.TTLCache;
  */
 public class DrawableCache extends TTLCache<String, CacheableDrawable> {
 
-	public DrawableCache(Context context, int initialCapacity, int maxCapacity) {
-		super(context, initialCapacity, maxCapacity);
+	public DrawableCache() {
+		super();
 	}
 
-	public DrawableCache(Context context, int initialCapacity) {
-		super(context, initialCapacity);
+	public DrawableCache(int initialCapacity, int maxCapacity) {
+		super(initialCapacity, maxCapacity);
 	}
 
-	public DrawableCache(Context context) {
-		super(context);
+	public DrawableCache(int initialCapacity) {
+		super(initialCapacity);
 	}
 }

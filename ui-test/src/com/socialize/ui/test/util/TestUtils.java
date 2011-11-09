@@ -54,6 +54,69 @@ public class TestUtils {
 		}
 	}
 	
+	public static <V extends View> V findView(Activity activity, Class<V> viewClass, long timeoutMs) {
+		return findView(activity.getWindow().getDecorView(), viewClass, timeoutMs);
+	}
+	
+	public static <V extends View> V findView(View view, Class<V> viewClass, long timeoutMs) {
+		if(view instanceof ViewGroup) {
+			return findView(((ViewGroup)view), viewClass, timeoutMs);
+		}
+		return null;
+	}	
+	
+	public static <V extends View> V findView(ViewGroup view, Class<V> viewClass, long timeoutMs) {
+		long startTime = System.currentTimeMillis();
+		return findView(view, viewClass, timeoutMs, startTime);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static <V extends View> V findView(ViewGroup view, Class<V> viewClass, long timeoutMs, long startTime) {
+		if(viewClass.isAssignableFrom(view.getClass())) {
+			return (V) view;
+		}
+		else {
+			View found = findView(view, viewClass);
+			
+			if(found != null) {
+				return (V) found;
+			}
+			
+			long endTime = System.currentTimeMillis();
+			
+			if(endTime - startTime > timeoutMs) {
+				return null;
+			}
+			else {
+				// Wait
+				sleep((int) (timeoutMs / 10));
+				return findView(view, viewClass, timeoutMs, startTime);
+			}
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <V extends View> V findView(ViewGroup view, Class<V> viewClass) {
+		int count = view.getChildCount();
+		for (int i = 0; i < count; i++) {
+			View child = view.getChildAt(i);
+			
+			if(viewClass.isAssignableFrom(child.getClass())) {
+				return (V) child;
+			}
+			
+			if(child instanceof ViewGroup && (child != view)) {
+				
+				View found = findView((ViewGroup)child, viewClass);
+				
+				if(found != null) {
+					return (V) found;
+				}
+			}
+		}
+		return null;
+	}
+	
 	public static boolean findText(ViewGroup view, String text) {
 		
 		int count = view.getChildCount();

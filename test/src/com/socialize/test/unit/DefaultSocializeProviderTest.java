@@ -137,7 +137,8 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 	}
 	
 	private DefaultSocializeProvider<SocializeObject> getNewProvider() {
-		DefaultSocializeProvider<SocializeObject> provider = new DefaultSocializeProvider<SocializeObject>(mockContext);
+		DefaultSocializeProvider<SocializeObject> provider = new DefaultSocializeProvider<SocializeObject>();
+		provider.init(mockContext);
 		
 		provider.setAuthProviderDataFactory(authProviderDataFactory);
 		provider.setObjectFactory(objectFactory);

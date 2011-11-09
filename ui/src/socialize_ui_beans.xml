@@ -33,11 +33,15 @@
 	<bean id="dateUtils" class="com.socialize.ui.util.DateUtils"/>
 	
 	<bean id="geoUtils" class="com.socialize.ui.util.GeoUtils">
-		<constructor-arg type="context"/>
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>	
 	</bean>
 	
 	<bean id="keyboardUtils" class="com.socialize.ui.util.KeyboardUtils">
-		<constructor-arg type="context"/>
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>	
 	</bean>
 	
 	<bean id="userService" class="com.socialize.ui.user.DefaultUserService"/>
@@ -317,7 +321,6 @@
 	<bean 
 		id="commentAdapter" 
 		class="com.socialize.ui.comment.CommentAdapter">
-		<constructor-arg type="activity"/>
 		<property name="commentItemViewFactory" ref="commentItemViewFactory"/>
 		<property name="listItemLoadingViewFactory" ref="listItemLoadingViewFactory"/>
 		<property name="drawables" ref="drawables"/>
@@ -327,6 +330,10 @@
 		<property name="base64Utils" ref="base64Utils"/><!-- Defined in socialize_beans.xml -->
 		<property name="imageLoader" ref="imageLoader"/><!-- Defined in socialize_beans.xml -->
 		<property name="iconSize" value="64" type="integer"/>
+		
+		<init-method name="init">
+			<arg type="activity"/>
+		</init-method>			
 	</bean>
 
 	<bean 
@@ -720,7 +727,7 @@
 	
 <!-- End Share UI -->	
 
-<!-- Socialize Activity View -->
+<!-- Socialize Activity View
 	<bean 
 		id="socializeActivityFactory" 
 		class="com.socialize.ui.activity.provider.SlideUpActivityProvider">
@@ -762,7 +769,7 @@
 	
 	<factory id="socializeActivityEntityViewFactory" makes="socializeActivityEntityView"/>
 	<factory id="socializeActivityViewFactory" makes="socializeActivityView"/>
-
+ -->
 <!-- End Socialize Activity View -->
 
 <!--  Image Loader  -->

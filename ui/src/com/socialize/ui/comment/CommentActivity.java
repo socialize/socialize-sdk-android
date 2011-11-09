@@ -52,13 +52,13 @@ public class CommentActivity extends SocializeUIActivity {
 		Bundle extras = getIntent().getExtras();
 		
 		if(extras == null || !extras.containsKey(SocializeUI.ENTITY_KEY)) {
-			Log.i("Socialize", "No entity url found for Comment Activity. Aborting");
+			Log.w("Socialize", "No entity url found for Comment Activity. Aborting");
 			finish();
 		}
 		else {
 			String entityKey = extras.getString(SocializeUI.ENTITY_KEY);
 			if(StringUtils.isEmpty(entityKey)) {
-				Log.i("Socialize", "No entity url found for Comment Activity. Aborting");
+				Log.w("Socialize", "No entity url found for Comment Activity. Aborting");
 				finish();
 			}
 			else {

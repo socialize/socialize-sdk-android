@@ -96,14 +96,20 @@ public class ContainerBuilder {
 				
 				if(cargs != null && cargs.length > 0) {
 					
-					beanRef.setContextSensitiveConstructor(containsContext(cargs));
+					if(containsContext(cargs) && beanRef.isSingleton()) {
+						logContextConstructorWarning(beanRef);
+						beanRef.setContextSensitiveConstructor(true);
+					}
 					
 					bean = builder.construct(beanRef.getClassName(), cargs);
 				}
 			}
 			else if(args != null && args.length > 0) {
 				
-				beanRef.setContextSensitiveConstructor(containsContext(args));
+				if(containsContext(args) && beanRef.isSingleton()) {
+					logContextConstructorWarning(beanRef);
+					beanRef.setContextSensitiveConstructor(true);
+				}
 				
 				bean = builder.construct(beanRef.getClassName(), args);
 			}
@@ -123,11 +129,18 @@ public class ContainerBuilder {
 		
 		if(bean != null && bean instanceof ContainerAware) {
 			ContainerAware aware = (ContainerAware) bean;
-			aware.setContainer(container);
+			aware.onCreate(container);
 		}
 
 		return (T) bean;
 
+	}
+	
+	private void logContextConstructorWarning(BeanRef beanRef) {
+		Logger.w(getClass().getSimpleName(), "Bean " + beanRef.getName() + " [" +
+				beanRef.getClassName() +
+				"] defines a constructor with an Android context.  This is STRONGLY DISCORAGED for singleton beans  as changes in context may lead to orphaned beans.  Consider using an init-method");
+		
 	}
 	
 	private boolean containsContext(Object[] args) {
@@ -287,6 +300,11 @@ public class ContainerBuilder {
 						beanRef.getClassName() +
 						"]");
 			}
+		}
+		
+		if(bean instanceof ContainerAware) {
+			ContainerAware aware = (ContainerAware) bean;
+			aware.onDestroy(container);
 		}
 	}
 	

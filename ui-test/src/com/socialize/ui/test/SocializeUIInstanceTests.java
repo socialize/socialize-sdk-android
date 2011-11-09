@@ -22,6 +22,7 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.ui.SocializeUI;
+import com.socialize.ui.SocializeUIBeanOverrider;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.actionbar.ActionBarView;
@@ -349,7 +350,8 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 	
 	public void test_getConfigWithOverride() {
 		PublicSocializeUI publicSocializeUI = new PublicSocializeUI();
-		publicSocializeUI.setBeanOverrides("foobar");
+		SocializeUIBeanOverrider overrider = new SocializeUIBeanOverrider();
+		overrider.setBeanOverrides(publicSocializeUI, "foobar");
 		String[] config = publicSocializeUI.getConfig();
 		assertNotNull(config);
 		assertEquals(3, config.length);

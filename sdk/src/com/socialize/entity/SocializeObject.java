@@ -29,6 +29,15 @@ public class SocializeObject {
 
 	private Long id;
 
+	public SocializeObject() {
+		this(-1L);
+	}
+	
+	public SocializeObject(Long id) {
+		super();
+		this.id = id;
+	}
+
 	public Long getId() {
 		return id;
 	}

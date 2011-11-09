@@ -40,7 +40,7 @@ public class GeoUtils {
 	private Geocoder geocoder;
 	private SocializeLogger logger;
 	
-	public GeoUtils(Context context) {
+	public void init(Context context) {
 		geocoder = new Geocoder(context, Locale.getDefault());
 	}
 	

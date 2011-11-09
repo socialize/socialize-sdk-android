@@ -28,7 +28,6 @@ import android.test.mock.MockContext;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.SocializeService;
 import com.socialize.SocializeServiceImpl;
 import com.socialize.SocializeServiceImpl.InitTask;
 import com.socialize.android.ioc.IBeanFactory;
@@ -46,7 +45,6 @@ import com.socialize.init.SocializeInitializationAsserter;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
-import com.socialize.listener.SocializeListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;

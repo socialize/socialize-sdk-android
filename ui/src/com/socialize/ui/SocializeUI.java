@@ -3,10 +3,12 @@ package com.socialize.ui;
 import java.util.Properties;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -87,16 +89,12 @@ public class SocializeUI {
 		String[] config = null;
 		
 		if(!StringUtils.isEmpty(beanOverrides)) {
-			
 			config = new String[beanOverrides.length + 2];
 			config[0] = "socialize_beans.xml";
 			config[1] = "socialize_ui_beans.xml";
-			
 			for (int i = 0; i < beanOverrides.length; i++) {
 				config[i+2] = beanOverrides[i];
 			}
-			
-//			config = new String[]{"socialize_beans.xml", "socialize_ui_beans.xml", beanOverride};
 		}
 		else {
 			config = new String[]{"socialize_beans.xml", "socialize_ui_beans.xml"};
@@ -202,7 +200,12 @@ public class SocializeUI {
 	public void showCommentView(Activity context, String url) {
 		Intent i = newIntent(context, CommentActivity.class);
 		i.putExtra(ENTITY_KEY, url);
-		context.startActivity(i);
+		try {
+			context.startActivity(i);
+		} 
+		catch (ActivityNotFoundException e) {
+			Log.e("Socialize", "Could not find CommentActivity.  Make sure you have added this to your AndroidManifest.xml");
+		}	
 	}
 	
 	/**
@@ -217,26 +220,49 @@ public class SocializeUI {
 		i.putExtra(ENTITY_KEY, url);
 		i.putExtra(ENTITY_NAME, entityName);
 		i.putExtra(ENTITY_URL_AS_LINK, entityKeyIsUrl);
-		context.startActivity(i);
+		
+		try {
+			context.startActivity(i);
+		} 
+		catch (ActivityNotFoundException e) {
+			Log.e("Socialize", "Could not find CommentActivity.  Make sure you have added this to your AndroidManifest.xml");
+		}
 	}
 	
 	public void showUserProfileView(Activity context, String userId) {
 		Intent i = newIntent(context, ProfileActivity.class);
 		i.putExtra(USER_ID, userId);
-		context.startActivity(i);
+		try {
+			context.startActivity(i);
+		} 
+		catch (ActivityNotFoundException e) {
+			Log.e("Socialize", "Could not find ProfileActivity.  Make sure you have added this to your AndroidManifest.xml");
+		}
 	}
 	
 	public void showUserProfileViewForResult(Activity context, String userId, int requestCode) {
 		Intent i = newIntent(context, ProfileActivity.class);
 		i.putExtra(USER_ID, userId);
-		context.startActivityForResult(i, requestCode);
+		
+		try {
+			context.startActivityForResult(i, requestCode);
+		} 
+		catch (ActivityNotFoundException e) {
+			Log.e("Socialize", "Could not find ProfileActivity.  Make sure you have added this to your AndroidManifest.xml");
+		}	
 	}
 	
 	public void showCommentDetailViewForResult(Activity context, String userId, String commentId, int requestCode) {
 		Intent i = newIntent(context, CommentDetailActivity.class);
 		i.putExtra(USER_ID, userId);
 		i.putExtra(COMMENT_ID, commentId);
-		context.startActivityForResult(i, requestCode);
+		
+		try {
+			context.startActivityForResult(i, requestCode);
+		} 
+		catch (ActivityNotFoundException e) {
+			Log.e("Socialize", "Could not find CommentDetailActivity.  Make sure you have added this to your AndroidManifest.xml");
+		}
 	}
 	
 	protected Intent newIntent(Activity context, Class<?> cls) {
@@ -382,7 +408,7 @@ public class SocializeUI {
 	 * EXPERT ONLY (Not documented)
 	 * @param beanOverride
 	 */
-	public void setBeanOverrides(String...beanOverrides) {
+	void setBeanOverrides(String...beanOverrides) {
 		this.beanOverrides = beanOverrides;
 	}
 }

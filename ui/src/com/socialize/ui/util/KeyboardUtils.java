@@ -33,11 +33,10 @@ public class KeyboardUtils {
 	
 	private InputMethodManager imm;
 
-	public KeyboardUtils(Context context) {
-		super();
+	public void init(Context context) {
 		this.imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 	}
-
+	
 	/**
 	 * Hides the soft keyboard that was created for the given view.
 	 * @param source

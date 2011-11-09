@@ -27,6 +27,15 @@ package com.socialize.android.ioc;
  */
 public interface ContainerAware {
 
-	public void setContainer(Container container);
+	/**
+	 * Called when the container created this bean.
+	 * @param container
+	 */
+	public void onCreate(Container container);
 	
+	/**
+	 * Called when the container is destroyed, or this bean instance is removed/replaced
+	 * @param container
+	 */
+	public void onDestroy(Container container);
 }
