@@ -1,11 +1,69 @@
 package com.socialize.ui.test.util;
 
 import android.app.Activity;
+import android.app.Instrumentation;
+import android.app.Instrumentation.ActivityMonitor;
+import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.socialize.ui.SocializeUIBeanOverrider;
+import com.socialize.ui.test.ResultHolder;
+
 public class TestUtils {
+	
+	static ResultHolder holder;
+	static ActivityMonitor monitor;
+	static Instrumentation instrumentation;
+	
+	public static void addResult(Object obj) {
+		holder.addResult(obj);
+	}
+	
+	public static void addResult(int index, Object obj) {
+		holder.addResult(index, obj);
+	}
+	
+	public static <T extends Object> T getResult(int index) {
+		return holder.getResult(index);
+	}
+	
+	public static <T extends Object> T getNextResult() {
+		return holder.getNextResult();
+	}	
+	
+	public static void setUp(ActivityInstrumentationTestCase2<?> testCase)  {
+		holder = new ResultHolder();
+		holder.setUp();
+		instrumentation = testCase.getInstrumentation();
+	}
+	
+	public static void tearDown() {
+		holder.clear();
+		
+		if(monitor != null) {
+			Activity lastActivity = monitor.getLastActivity();
+			if(lastActivity != null) {
+				lastActivity.finish();
+			}
+			instrumentation.removeMonitor(monitor);
+		}
+		
+		monitor = null;
+	}
+	
+	public static void setUpActivityMonitor(Class<?> activityClass) {
+		monitor = new ActivityMonitor(activityClass.getName(), null, false);
+		instrumentation.addMonitor(monitor);
+	}
+	
+	public static Activity waitForActivity(long timeout) {
+		if(monitor != null) {
+			return monitor.waitForActivityWithTimeout(timeout);
+		}
+		return null;
+	}
 	
 	public static final void sleep(int milliseconds) {
 		try {
@@ -55,7 +113,8 @@ public class TestUtils {
 	}
 	
 	public static <V extends View> V findView(Activity activity, Class<V> viewClass, long timeoutMs) {
-		return findView(activity.getWindow().getDecorView(), viewClass, timeoutMs);
+		V view = findView(activity.getWindow().getDecorView(), viewClass, timeoutMs);
+		return view;
 	}
 	
 	public static <V extends View> V findView(View view, Class<V> viewClass, long timeoutMs) {
@@ -141,5 +200,26 @@ public class TestUtils {
 		return false;
 	}
 	
+	
+	
+	public static void setupSocializeOverrides(boolean mockFacebook, boolean mockSocialize) {
+		
+		SocializeUIBeanOverrider overrider = new SocializeUIBeanOverrider();
+		
+		if(mockFacebook) {
+			if(mockSocialize) {
+				overrider.setBeanOverrides("socialize_ui_mock_beans.xml", "socialize_ui_mock_socialize_beans.xml");
+			}
+			else {
+				overrider.setBeanOverrides("socialize_ui_mock_beans.xml");
+			}
+		}
+		else if(mockSocialize) {
+			overrider.setBeanOverrides("socialize_ui_mock_socialize_beans.xml");
+		}
+		else {
+			overrider.setBeanOverrides((String[]) null);
+		}
+	}
 	
 }

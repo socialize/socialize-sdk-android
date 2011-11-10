@@ -79,7 +79,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 	@SuppressWarnings("unchecked")
 	private void setupDefaultMocks() {
 		container = AndroidMock.createMock(IOCContainer.class);
-		service = AndroidMock.createMock(SocializeApiHost.class, getContext());
+		service = AndroidMock.createMock(SocializeApiHost.class);
 		logger = AndroidMock.createNiceMock(SocializeLogger.class);
 		authProviderDataFactory = (IBeanFactory<AuthProviderData>) AndroidMock.createMock(IBeanFactory.class);
 		authProviderData = AndroidMock.createMock(AuthProviderData.class);

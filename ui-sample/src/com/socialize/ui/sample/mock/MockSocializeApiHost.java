@@ -51,7 +51,6 @@ public class MockSocializeApiHost extends SocializeApiHost implements ContainerA
 	@Override
 	public void authenticate(String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
 		listener.onAuthSuccess(new SocializeSessionImpl());
-		
 		if(delegate != null) delegate.authenticate(consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
 	}
 

@@ -34,7 +34,6 @@ import com.socialize.Socialize;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.sample.SampleActivity;
 import com.socialize.ui.test.ResultHolder;
-import com.socialize.ui.test.util.TestUtils;
 
 /**
  * @author Jason Polites
@@ -63,6 +62,22 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 		hideKeyboard();
 	}
 	
+
+	@Override
+	protected void tearDown() throws Exception {
+		
+		SocializeUI.getInstance().destroy(getActivity(), true);
+		
+		try {
+			robotium.finish();
+		} 
+		catch (Throwable e) {
+			e.printStackTrace();
+		}
+		
+		super.tearDown();
+	}	
+	
 	protected void toggleFacebookSSO(boolean on) {
 		if(!on) {
 			robotium.clickOnButton(0);
@@ -83,7 +98,7 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	
 	protected void clearAuthCache() {
 		robotium.clickOnButton(3);
-		sleep(500);
+		robotium.waitForDialogToClose(5000);
 		assertNull(Socialize.getSocialize().getSession());
 	}
 	
@@ -116,19 +131,6 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 		clearAuthCache();
 	}
 
-	@Override
-	protected void tearDown() throws Exception {
-		try {
-			robotium.finish();
-		} 
-		catch (Throwable e) {
-			throw new Exception(e);
-		}
-		
-		SocializeUI.getInstance().destroy(getActivity());
-		
-		super.tearDown();
-	}
 
 	protected void addResult(Object obj) {
 		holder.addResult(obj);
@@ -167,8 +169,17 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected <T extends View> T findView(Class<T> viewClass) {
-		return TestUtils.findView(getActivity(), viewClass, 20000);
+		
+		ArrayList<View> currentViews = robotium.getCurrentViews();
+		for (View view : currentViews) {
+			if(viewClass.isAssignableFrom(view.getClass())) {
+				return (T) view;
+			}
+		}
+		return null;		
+//		return TestUtils.findView(getActivity(), viewClass, 20000);
 	}
 
 }

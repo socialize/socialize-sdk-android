@@ -7,7 +7,10 @@ import com.socialize.location.SocializeLocationManager;
 
 public class MockDefaultLocationProvider extends DefaultLocationProvider {
 	
-	
+	public MockDefaultLocationProvider() {
+		super();
+	}
+
 	@Override
 	public void setLocation(Location location) {
 		super.setLocation(location);

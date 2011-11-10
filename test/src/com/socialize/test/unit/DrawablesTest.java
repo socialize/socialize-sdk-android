@@ -56,7 +56,7 @@ public class DrawablesTest extends SocializeActivityTest {
 		final String drawable_name = "foobar";
 
 		ClassLoaderProvider provider = AndroidMock.createMock(ClassLoaderProvider.class);
-		DrawableCache cache = AndroidMock.createMock(DrawableCache.class, getActivity());
+		DrawableCache cache = AndroidMock.createMock(DrawableCache.class);
 		ClassLoader loader = AndroidMock.createMock(ClassLoader.class);
 		
 		// Can't mock, so just create a dummy one
@@ -195,7 +195,7 @@ public class DrawablesTest extends SocializeActivityTest {
 			
 			assertNotNull(bitmap);
 			
-			DrawableCache cache = AndroidMock.createMock(DrawableCache.class, getActivity());
+			DrawableCache cache = AndroidMock.createMock(DrawableCache.class);
 			BitmapBuilder builder = AndroidMock.createMock(BitmapBuilder.class);
 			BitmapUtils bitmapUtils = AndroidMock.createMock(BitmapUtils.class, builder);
 			

@@ -70,10 +70,9 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		robotium.enterText(0, txtComment);
 		robotium.clickOnImageButton(0);
 		
-		robotium.waitForView(AuthRequestDialogView.class, 1,  1000);
+		assertTrue(robotium.waitForView(AuthRequestDialogView.class, 1,  1000));
 		robotium.goBack();
-		robotium.waitForView(AuthConfirmDialogView.class, 1,  1000);
-		robotium.clickOnText("Post Anonymously", 1);
+		assertTrue(robotium.waitForView(AuthConfirmDialogView.class, 1,  1000));
 		
 		AuthConfirmDialogView confirm = findView(AuthConfirmDialogView.class);
 
@@ -114,9 +113,11 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		
 		robotium.clickOnView(confirm.getFacebookSignInButton());
 		robotium.waitForDialogToClose(5000);
-		robotium.waitForDialogToClose(5000);
 		
 		assertNotNull(comments);
+		
+		sleep(2000);
+		
 		assertEquals( count+1, comments.getCount());
 		
 		Comment item = (Comment) comments.getItemAtPosition(0);

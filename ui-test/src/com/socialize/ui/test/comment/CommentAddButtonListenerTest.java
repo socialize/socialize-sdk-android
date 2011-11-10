@@ -33,7 +33,7 @@ public class CommentAddButtonListenerTest extends SocializeUITestCase {
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		
 		CommentEditField field = AndroidMock.createMock(CommentEditField.class, getContext());
-		KeyboardUtils keyboardUtils = AndroidMock.createMock(KeyboardUtils.class, getContext());
+		KeyboardUtils keyboardUtils = AndroidMock.createMock(KeyboardUtils.class);
 		CommentButtonCallback callback = AndroidMock.createMock(CommentButtonCallback.class);
 		
 		EditText mockET = new EditText(getContext());

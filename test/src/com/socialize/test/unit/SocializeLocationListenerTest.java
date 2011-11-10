@@ -21,7 +21,6 @@
  */
 package com.socialize.test.unit;
 
-import android.app.Activity;
 import android.location.Location;
 
 import com.google.android.testing.mocking.AndroidMock;
@@ -46,9 +45,7 @@ public class SocializeLocationListenerTest extends SocializeActivityTest {
 		
 		String providerStr = "foobar";
 		
-		Activity activity = getActivity();
-		
-		MockDefaultLocationProvider provider = AndroidMock.createMock(MockDefaultLocationProvider.class, activity);
+		MockDefaultLocationProvider provider = AndroidMock.createMock(MockDefaultLocationProvider.class);
 		Location location = AndroidMock.createMock(Location.class, providerStr);
 		DeviceUtils utils = AndroidMock.createMock(DeviceUtils.class);
 		SocializeLocationManager manager = AndroidMock.createMock(SocializeLocationManager.class, utils);

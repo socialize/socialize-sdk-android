@@ -30,7 +30,7 @@ public class SocializeObject {
 	private Long id;
 
 	public SocializeObject() {
-		this(-1L);
+		super();
 	}
 	
 	public SocializeObject(Long id) {

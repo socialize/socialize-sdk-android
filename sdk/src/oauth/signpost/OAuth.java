@@ -25,9 +25,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gdata.util.common.base.PercentEscaper;
+
+
 import oauth.signpost.http.HttpParameters;
 
-import com.google.gdata.util.common.base.PercentEscaper;
 
 public class OAuth {
 

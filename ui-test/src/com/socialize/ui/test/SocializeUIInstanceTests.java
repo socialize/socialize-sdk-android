@@ -161,7 +161,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 			}
 		};
 
-		socialize.destroy();
+		socialize.destroy(false);
 
 		AndroidMock.replay(socialize);
 

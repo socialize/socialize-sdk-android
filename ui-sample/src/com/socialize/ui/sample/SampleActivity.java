@@ -12,7 +12,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.socialize.Socialize;
-import com.socialize.auth.AuthProviderType;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.SocializeUIBeanOverrider;
 
@@ -36,8 +35,8 @@ public class SampleActivity extends Activity {
 		btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				SocializeUI.getInstance().destroy(SampleActivity.this, true);
 				setupOverrides();
-				
 				SocializeUI.getInstance().setFacebookAppId(txtFB.getText().toString());
 				SocializeUI.getInstance().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				SocializeUI.getInstance().showCommentView(SampleActivity.this, txtEntity.getText().toString());
@@ -55,7 +54,7 @@ public class SampleActivity extends Activity {
 					protected Void doInBackground(Void... params) {
 						try {
 							Socialize.getSocialize().init(SampleActivity.this);
-							Socialize.getSocialize().clear3rdPartySession(AuthProviderType.FACEBOOK);
+							Socialize.getSocialize().clearSessionCache();
 						} 
 						finally {
 							Socialize.getSocialize().destroy();

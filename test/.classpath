@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="libs/polidea_test_runner_1.1.jar"/>
 	<classpathentry kind="lib" path="libext/AndroidMockGenerator-appmakr-modified.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/socialize-sdk-sample"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

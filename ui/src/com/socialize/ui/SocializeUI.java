@@ -115,8 +115,12 @@ public class SocializeUI {
 	}
 
 	public void destroy(Context context) {
+		destroy(context, false);
+	}
+	
+	public void destroy(Context context, boolean force) {
 		customProperties.clear();
-		getSocialize().destroy();
+		getSocialize().destroy(force);
 	}
 	
 	public View getView(String name) {

@@ -74,8 +74,8 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		CommentHeader header = AndroidMock.createMock(CommentHeader.class, getContext());
 		CommentContentView content = AndroidMock.createMock(CommentContentView.class, getContext());
 		Drawables drawables = AndroidMock.createMock(Drawables.class);
-		KeyboardUtils keyboardUtils = AndroidMock.createMock(KeyboardUtils.class, getContext());
-		CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class, getActivity());
+		KeyboardUtils keyboardUtils = AndroidMock.createMock(KeyboardUtils.class);
+		CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
 		Drawable drawable = AndroidMock.createMock(Drawable.class);
 		
 		AndroidMock.expect(commentHeaderFactory.make(context)).andReturn(header);
@@ -343,7 +343,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		final Comment comment = AndroidMock.createMock(Comment.class);
 		final ProgressDialog dialog = AndroidMock.createMock(ProgressDialog.class, getActivity());
 		final DialogFactory<ProgressDialog> progressDialogFactory = AndroidMock.createMock(DialogFactory.class);
-		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class, getContext());
+		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
 		final List<Comment> comments = AndroidMock.createMock(List.class);
 		final CommentEditField field = AndroidMock.createMock(CommentEditField.class, getContext());
 		final CommentHeader header = AndroidMock.createMock(CommentHeader.class, getContext());
@@ -519,7 +519,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 	@UsesMocks ({CommentAdapter.class})
 	public void testGetNextSetIsLast() {
 		
-		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class, getActivity());
+		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
 		
 		commentAdapter.notifyDataSetChanged();
 		commentAdapter.setLast(true);
@@ -567,7 +567,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		final int startIndex = 0;
 		final int endIndex = 70;
 		
-		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class, getActivity());
+		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
 		final List<Comment> comments = AndroidMock.createMock(List.class);
 		final List<Comment> listResultComments = AndroidMock.createMock(List.class);
 		
@@ -631,7 +631,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		final int startIndex = 0;
 		final int endIndex = 70;
 		
-		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class, getActivity());
+		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
 		final List<Comment> comments = AndroidMock.createMock(List.class);
 		final List<Comment> listResultComments = AndroidMock.createMock(List.class);
 		
@@ -699,7 +699,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 	public void testDoListCommentsFailEmptyCommentsWithoutUpdate() {
 		
 		final SocializeException error = AndroidMock.createMock(SocializeException.class);
-		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class, getActivity());
+		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
 		final List<Comment> comments = AndroidMock.createMock(List.class);
 		final CommentContentView content = AndroidMock.createMock(CommentContentView.class, getContext());
 		
@@ -755,7 +755,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		CommentContentView.class})
 	public void testDoListCommentsSuccessPopulatedCommentsWithoutUpdate() {
 		
-		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class, getActivity());
+		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
 		final List<Comment> comments = AndroidMock.createMock(List.class);
 		final CommentContentView content = AndroidMock.createMock(CommentContentView.class, getContext());
 		

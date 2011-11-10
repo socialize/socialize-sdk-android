@@ -6,7 +6,7 @@ import java.util.List;
 public class ResultHolder {
 	private List<Object> bucket;
 	
-	public void setUp() throws Exception {
+	public void setUp() {
 		bucket = new ArrayList<Object>();
 	}
 	
@@ -38,5 +38,9 @@ public class ResultHolder {
 			return (T) bucket.remove(0);
 		}
 		return (T) null;
+	}
+	
+	public void clear() {
+		if(bucket != null) bucket.clear();
 	}
 }

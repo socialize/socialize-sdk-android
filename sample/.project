@@ -30,11 +30,4 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>socialize-sdk_src</name>
-			<type>2</type>
-			<locationURI>_android_socialize_sdk_caa32434/src</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>
