@@ -27,8 +27,8 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.location.SocializeLocationListener;
 import com.socialize.location.SocializeLocationManager;
-import com.socialize.sample.mock.MockDefaultLocationProvider;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.mock.MockDefaultLocationProvider;
 import com.socialize.util.DeviceUtils;
 
 /**

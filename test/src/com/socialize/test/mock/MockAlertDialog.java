@@ -1,4 +1,4 @@
-package com.socialize.sample.mock;
+package com.socialize.test.mock;
 
 import android.app.AlertDialog;
 import android.content.Context;

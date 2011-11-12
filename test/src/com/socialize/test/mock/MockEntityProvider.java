@@ -19,20 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.sample;
+package com.socialize.test.mock;
 
-import android.os.Bundle;
+import android.content.Context;
 
-import com.socialize.log.SocializeLogger;
-import com.socialize.ui.SocializeActivity;
+import com.socialize.entity.Entity;
 
-public class MockSocializeActivity extends SocializeActivity {
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		SocializeLogger logger = getBean("logger");
-		logger.debug("TESTING MOCK ACTIVITY");
-		finish();
+public class MockEntityProvider extends MockSocializeProvider<Entity> {
+
+	public MockEntityProvider() {
+		super();
 	}
-	
+
+	public MockEntityProvider(Context context) {
+		super(context);
+	}
+
+	@Override
+	protected Entity makeObject(String id) {
+		Entity object = objectFactory.instantiateObject(null);
+		object.setId(1L);
+		object.setKey(id);
+		object.setComments(2);
+		object.setLikes(4);
+		object.setShares(6);
+		object.setViews(8);
+		object.setName("Mock entity");
+		return object;
+	}
 }

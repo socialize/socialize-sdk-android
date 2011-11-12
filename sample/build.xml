@@ -1,65 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="socialize-sdk-sample" default="help">
 
-    <!-- The local.properties file is created and updated by the 'android' tool.
-         It contains the path to the SDK. It should *NOT* be checked into
-         Version Control Systems. -->
     <loadproperties srcFile="local.properties" />
-
-    <!-- The ant.properties file can be created by you. It is only edited by the
-         'android' tool to add properties to it.
-         This is the place to change some Ant specific build properties.
-         Here are some properties you may want to change/update:
-
-         source.dir
-             The name of the source directory. Default is 'src'.
-         out.dir
-             The name of the output directory. Default is 'bin'.
-
-         For other overridable properties, look at the beginning of the rules
-         files in the SDK, at tools/ant/build.xml
-
-         Properties related to the SDK location or the project target should
-         be updated using the 'android' tool with the 'update' action.
-
-         This file is an integral part of the build system for your
-         application and should be checked into Version Control Systems.
-
-         -->
     <property file="ant.properties" />
-
-    <!-- The project.properties file is created and updated by the 'android'
-         tool, as well as ADT.
-
-         This contains project specific properties such as project target, and library
-         dependencies. Lower level build properties are stored in ant.properties
-         (or in .classpath for Eclipse projects).
-
-         This file is an integral part of the build system for your
-         application and should be checked into Version Control Systems. -->
     <loadproperties srcFile="project.properties" />
 
-    <!-- quick check on sdk.dir -->
-    <fail
-            message="sdk.dir is missing. Make sure to generate local.properties using 'android update project'"
-            unless="sdk.dir"
-    />
-
-
-<!-- extension targets. Uncomment the ones where you want to do custom work
-     in between standard targets -->
-<!--
-    <target name="-pre-build">
-    </target>
-    <target name="-pre-compile">
-    </target>
-
-    /* This is typically used for code obfuscation.
-       Compiled code location: ${out.classes.absolute.dir}
-       If this is not done in place, override ${out.dex.input.absolute.dir} */
-    <target name="-post-compile">
-    </target>
--->
+    <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project'"
+            unless="sdk.dir"/>
 
 	<!-- 
 		################################################################################################
@@ -69,77 +16,63 @@
 	
     <property file="emma.properties" />
 	
-    <!-- Compiles this project's .java files into .class files. -->
     <target name="-compile" depends="-build-setup, -pre-build, -code-gen, -pre-compile">
-        <do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">
-            <!-- If android rules are used for a test project, its classpath should include
-                 tested project's location -->
-            <condition property="extensible.classpath"
+       
+		<do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">
+
+        	<condition property="extensible.classpath"
                     value="${tested.project.absolute.dir}/bin/classes"
                     else=".">
                 <isset property="tested.project.absolute.dir" />
             </condition>
+			
             <condition property="extensible.libs.classpath"
                     value="${tested.project.absolute.dir}/${jar.libs.dir}"
                     else="${jar.libs.dir}">
                 <isset property="tested.project.absolute.dir" />
             </condition>
+			
+			<echo>Compiling sample project from src ${source.absolute.dir} to ${out.classes.absolute.dir}</echo>
         	
-        	
-            <javac encoding="${java.encoding}"
-                    source="${java.source}" target="${java.target}"
-                    debug="true" extdirs=""
-                    destdir="${out.classes.absolute.dir}"
-                    bootclasspathref="android.target.classpath"
-                    verbose="${verbose}"
-                    classpath="${extensible.classpath}"
-                    classpathref="jar.libs.ref" >
+            <javac 
+        		encoding="${java.encoding}"
+                source="${java.source}" 
+        		target="${java.target}"
+                debug="true" 
+        		extdirs=""
+                destdir="${out.classes.absolute.dir}"
+                bootclasspathref="android.target.classpath"
+                verbose="${verbose}"
+                classpath="${extensible.classpath}"
+                classpathref="jar.libs.ref" >
+            	
                 <src path="${source.absolute.dir}" />
                 <src path="${gen.absolute.dir}" />
+            	
                 <classpath>
                     <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
                     <path refid="android.target.classpath"/>
                 </classpath>
+            	
             </javac>        	
+        	
+        	<path id="emma.instrpath">
+        		<pathelement path="${library.project.classes}" />
+        	</path>       
+			
+            <echo>[OVERRIDE] Instrumenting classes from ${library.project.classes} to ${out.classes.absolute.dir}</echo>
+        	<echo>EMMA will create meta data file in ${emma.report.dir}/coverage.em</echo>
 
-        	<!-- if the project is a library then we generate a jar file -->
-            <if condition="${project.is.library}">
-                <then>
-                    <echo>Creating library output jar file...</echo>
-                    <property name="out.library.jar.file" location="${out.absolute.dir}/classes.jar" />
-                    <if>
-                        <condition>
-                            <length string="${android.package.excludes}" trim="true" when="greater" length="0" />
-                        </condition>
-                        <then>
-                            <echo>Custom jar packaging exclusion: ${android.package.excludes}</echo>
-                        </then>
-                    </if>
-                	<delete file="${out.library.jar.file}"/>
-                    <jar destfile="${out.library.jar.file}">
-                        <fileset dir="${out.classes.absolute.dir}" excludes="**/R.class **/R$*.class"/>
-                        <fileset dir="${source.absolute.dir}" excludes="**/*.java ${android.package.excludes}" />
-                    </jar>
-                </then>
-            </if>
-
-            <!-- if the project is instrumented, intrument the classes -->
-            <if condition="${build.is.instrumented}">
-                <then>
-                    <echo>[OVERRIDE] Instrumenting classes from ${out.absolute.dir}/classes...</echo>
-                	<echo>EMMA will create meta data file in ${emma.report.dir}/coverage.em</echo>
-                    <!-- It only instruments class files, not any external libs -->
-                    <emma enabled="true">
-                        <instr verbosity="${verbosity}"
-                               mode="overwrite"
-                               instrpath="${out.absolute.dir}/classes"
-                               outdir="${out.absolute.dir}/classes"
-                               metadatafile="${emma.report.dir}/coverage.em"
-                        	   filter="${emma.excluded}"> <!--Don't need coverage for the sample project itself -->
-                        </instr>
-                    </emma>                	
-                </then>
-            </if>
+        	<emma enabled="true">
+                <instr verbosity="${verbosity}"
+                       mode="overwrite"
+                       instrpathref="emma.instrpath"
+                       outdir="${out.classes.absolute.dir}"
+                       metadatafile="${emma.report.dir}/coverage.em"
+                	   filter="${emma.excluded}">
+                </instr>
+            </emma> 
+			
         </do-only-if-manifest-hasCode>
     </target>	
 	
@@ -161,9 +94,7 @@
          In all cases you must update the value of version-tag below to read 'custom' instead of an integer,
          in order to avoid having your file be overridden by tools such as "android update project"
     -->
-    <!-- version-tag: 1 -->
+    <!-- version-tag: custom -->
     <import file="${sdk.dir}/tools/ant/build.xml" />
-	
-	
 
 </project>
