@@ -55,22 +55,18 @@
 		SOCIALIZE TARGETS
 		################################################################################################
 	-->		
-
 		<target name="socialize-test">
 			<antcall target="clean-all"/>
 			
-			<!--<ant dir="../sdk" target="instrument" inheritall="false"/>-->
-			<!--<ant dir="../sample" target="instrument" inheritall="false"/>-->
-				
-			<antcall target="instrument"/>
-			<antcall target="uninstall"/>
-			<antcall target="installi"/>
-			
+			<property name="build.is.instrumented" value="true" />
 			<property name="emma.enabled" value="true" />
 			
+			<ant dir="../sample" target="instrument" inheritall="false"/>
+			<antcall target="instrument" inheritall="true" inheritrefs="true"/>
+			<antcall target="uninstall" inheritall="true" inheritrefs="true"/>
+			<antcall target="installi" inheritall="true" inheritrefs="true"/>
 			<antcall target="test" inheritall="true" inheritrefs="true"/>
-			
-			<antcall target="pull-reports"/>
+			<antcall target="pull-reports" inheritall="true" inheritrefs="true"/>
 		</target>
 		
 		<target name="clean-all">
@@ -78,7 +74,6 @@
 			<ant dir="../sample" target="clean" inheritall="false"/>
 			<antcall target="clean"/>
 			<delete dir="${test-output}" verbose="true" failonerror="false"/>
-			
 		    	
             <echo>Cleaning up coverage files...</echo>
     		<delete file="${emma.report.dir}/coverage.ec" />
@@ -100,6 +95,21 @@
         		<arg value="-r" />
                 <arg value="${junit.dump.path}" />
             </exec>   
+			
+			<echo>Creating JUnit report path on device at ${junit.dump.path}</echo>
+			<exec executable="${adb}" failonerror="true">
+				<arg line="${adb.device.arg}" />
+				<arg value="shell" />
+				<arg value="mkdir" />
+				<arg value="${junit.dump.path}" />
+			</exec>
+			
+			<echo>Clearing logcat buffer</echo>
+			<exec executable="${adb}" failonerror="true">
+				<arg line="${adb.device.arg}" />
+				<arg value="logcat" />
+				<arg value="-c" />
+			</exec>			
 			
 			<mkdir dir="${test-output}"/>
 		</target>
@@ -149,10 +159,8 @@
                 <isset property="tested.project.absolute.dir" />
             </condition>
         	
-        	
         	<echo>Compiling without mocks</echo>
         	<echo>Compiling test project from ${source.absolute.dir}, ${tested.project.src} to bin/intermediate</echo>
-        		        	
         	
         	<mkdir dir="bin/intermediate"/>
         	
@@ -264,7 +272,11 @@
                     	
         				<arg value="-e" />
 	        				<arg value="emma" />
-	        				<arg value="true" />                    	
+	        				<arg value="true" />        
+                    	
+        				<arg value="-e" />
+	        				<arg value="coverage" />
+	        				<arg value="true" />                       	
 
         				<arg value="-e" />
 	        				<arg value="junitOutputDirectory" />
@@ -297,7 +309,7 @@
         					<include name="coverage.ec" />
         					<include name="coverage.em" />
         				</infileset>
-                    	2
+                    	
         				<html outfile="${emma.report.dir}/coverage.html" />
         				<xml outfile="${emma.report.dir}/coverage.xml" />
                     	

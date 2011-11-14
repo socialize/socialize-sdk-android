@@ -38,7 +38,7 @@
 		<!-- Add to assets too (for 2.1) -->
 		<copy todir="${build.tmp}/assets" verbose="true">
 			<fileset dir="${socialize.src.path}">
-				<include name="errors.properties"/>
+				<include name="socialize.errors.properties"/>
 				<include name="socialize_beans.xml"/>
 				<include name="socialize.properties"/>
 			</fileset>

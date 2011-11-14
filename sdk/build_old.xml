@@ -71,7 +71,7 @@
 		<copy todir="${out.dir}/classes" verbose="true" >
 			<fileset dir="src">
 				<include name="socialize_beans.xml"/>
-				<include name="errors.properties"/>
+				<include name="socialize.errors.properties"/>
 				<include name="socialize.properties"/>
 			</fileset>
 			
