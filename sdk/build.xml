@@ -3,6 +3,7 @@
 
     <loadproperties srcFile="local.properties" />
     <property file="ant.properties" />
+	<property file="emma.properties" />
     <loadproperties srcFile="project.properties" />
     <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project'" unless="sdk.dir"/>
 
@@ -226,6 +227,91 @@
 		<delete dir="build/docs"/>
 		<delete file="build/read_me_first.html"/>
 	</target>	
+	
+	<target name="compile-instrumented">
+	   
+		<property name="build.is.instrumented" value="true" />
+		<property name="emma.enabled" value="true" />
+		<antcall target="-compile" inheritall="true" inheritrefs="true"/>
+	</target>
+	
+	<!-- 
+		################################################################################################
+		COMPILE OVERRIDE
+		################################################################################################
+	-->		
+    <!-- Compiles this project's .java files into .class files. -->
+    <target name="-compile" depends="-build-setup, -pre-build, -code-gen, -pre-compile">
+        <do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">
+            <!-- If android rules are used for a test project, its classpath should include
+                 tested project's location -->
+            <condition property="extensible.classpath"
+                    value="${tested.project.absolute.dir}/bin/classes"
+                    else=".">
+                <isset property="tested.project.absolute.dir" />
+            </condition>
+            <condition property="extensible.libs.classpath"
+                    value="${tested.project.absolute.dir}/${jar.libs.dir}"
+                    else="${jar.libs.dir}">
+                <isset property="tested.project.absolute.dir" />
+            </condition>
+            <javac encoding="${java.encoding}"
+                    source="${java.source}" target="${java.target}"
+                    debug="true" extdirs=""
+                    destdir="${out.classes.absolute.dir}"
+                    bootclasspathref="android.target.classpath"
+                    verbose="${verbose}"
+                    classpath="${extensible.classpath}"
+                    classpathref="jar.libs.ref">
+                <src path="${source.absolute.dir}" />
+                <src path="${gen.absolute.dir}" />
+                <classpath>
+                    <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
+                </classpath>
+            </javac>
+
+            <!-- if the project is instrumented, intrument the classes -->
+            <if condition="${build.is.instrumented}">
+                <then>
+                    <echo>Instrumenting classes from ${out.absolute.dir}/classes...</echo>
+                    <echo>[OVERRIDE] Instrumenting classes from ${out.absolute.dir}/classes to ${out.absolute.dir}/classes</echo>
+                	<echo>EMMA will create meta data file in ${emma.report.dir}/coverage.em</echo>
+                	
+                    <!-- It only instruments class files, not any external libs -->
+                    <emma enabled="true">
+                        <instr 
+							verbosity="${verbosity}"
+							mode="overwrite"
+							instrpath="${out.absolute.dir}/classes"
+							outdir="${out.absolute.dir}/classes"
+							metadatafile="${emma.report.dir}/coverage.em"
+							filter="${emma.excluded}">
+                        </instr>
+                    </emma>
+                </then>
+            </if>
+            
+            <!-- if the project is a library then we generate a jar file -->
+            <if condition="${project.is.library}">
+                <then>
+                    <echo>Creating library output jar file...</echo>
+                    <property name="out.library.jar.file" location="${out.absolute.dir}/classes.jar" />
+                    <if>
+                        <condition>
+                            <length string="${android.package.excludes}" trim="true" when="greater" length="0" />
+                        </condition>
+                        <then>
+                            <echo>Custom jar packaging exclusion: ${android.package.excludes}</echo>
+                        </then>
+                    </if>
+                    <jar destfile="${out.library.jar.file}">
+                        <fileset dir="${out.classes.absolute.dir}" excludes="**/R.class **/R$*.class"/>
+                        <fileset dir="${source.absolute.dir}" excludes="**/*.java ${android.package.excludes}" />
+                    </jar>
+                </then>
+            </if>            
+        </do-only-if-manifest-hasCode>
+    </target>	
 	
 	<!-- 
 		################################################################################################

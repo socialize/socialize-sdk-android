@@ -8,9 +8,10 @@
 	<path id="mock.classpath">
 		<pathelement path="libs/easymock.jar" />
 		<pathelement path="libs/javassist-appmakr.jar" />
-		<pathelement path="../test/bin"/>
-		<pathelement path="../sdk/bin"/>
-		<pathelement path="../sample/bin"/>
+		<pathelement path="libs/socialize-robotium-2.5.jar" />
+		<pathelement path="../test/bin/classes"/>
+		<pathelement path="../sdk/bin/classes"/>
+		<pathelement path="../sample/bin/classes"/>
 		<pathelement path="libs/AndroidMockRuntime-appmakr-modified.jar" />
 		<pathelement path="${sdk.dir}/platforms/android-7/android.jar" />
 		<pathelement path="${sdk.dir}/tools/lib/anttasks.jar" />
@@ -19,21 +20,44 @@
 	</path>
 	
 	<target name="build-mocks">
+		
+		<mkdir dir="../test/bin/intermediate"/>
 
-		<delete verbose="true" failonerror="false">
-			<fileset dir="../test/bin" includes="**/**" excludes="**/*Mock*"/>
+		<delete failonerror="false">
+			<fileset dir="../test/bin/classes" includes="**/**"/>
 		</delete>
 		
 		<javac
             debug="true" 
-            destdir="../test/bin"
+            destdir="../test/bin/intermediate"
             verbose="true"
             classpathref="mock.classpath"
 			includeantruntime="false">
 			<src path="../test/src" />
 			<src path="../test/gen" />
+			<compilerarg value="-proc:none"/>
+		</javac>		
+		
+		<javac
+            debug="true" 
+            destdir="../test/bin/classes"
+            verbose="true"
+            classpathref="mock.classpath"
+			includeantruntime="false">
+			
+			<src path="../test/src" />
+			<src path="../test/gen" />
+			
+            <classpath>
+            	<path location="../test/bin/intermediate"/>
+            </classpath>
+			
 			<compilerarg value="-ARegenerateFrameworkMocks=true"/>
 		</javac>
+		
+		<delete failonerror="false">
+			<fileset dir="../test/bin/intermediate" includes="**/**"/>
+		</delete>		
 	</target>
 
 </project>

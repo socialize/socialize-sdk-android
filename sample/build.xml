@@ -51,11 +51,12 @@
             	
                 <classpath>
                     <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
+                	<path location="../sdk/bin/classes"/>     
                     <path refid="android.target.classpath"/>
                 </classpath>
             	
             </javac>        	
-        	
+        	<!--
         	<path id="emma.instrpath">
         		<pathelement path="${library.project.classes}" />
         	</path>       
@@ -72,6 +73,7 @@
                 	   filter="${emma.excluded}">
                 </instr>
             </emma> 
+            -->
 			
         </do-only-if-manifest-hasCode>
     </target>	

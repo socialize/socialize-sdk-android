@@ -21,10 +21,7 @@
  */
 package com.socialize.test.integration;
 
-import android.content.Intent;
-
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.mock.MockSocializeActivity;
 
 /**
  * @author Jason Polites

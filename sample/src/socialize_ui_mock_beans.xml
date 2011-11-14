@@ -1,0 +1,14 @@
+<beans>
+	<bean 
+		id="facebookProvider" 
+		class="com.socialize.test.mock.MockFacebookAuthProvider">
+		<property name="config" ref="config"/>
+		<init-method name="init"/>
+	</bean>
+	
+	<bean 
+		id="facebookWallPoster" 
+		class="com.socialize.test.mock.MockFacebookWallPoster">
+	</bean>
+	
+</beans>

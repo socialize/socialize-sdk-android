@@ -28,7 +28,18 @@
 		<activity android:name="EmptyActivity"/>
 		<activity android:name="Error500Activity"/>
 		
-		<activity android:name="com.socialize.auth.facebook.FacebookActivity"/>
+	    <!-- Required for UI tests -->
+	    <activity android:name="com.socialize.sample.ui.SampleActivity"/>
+	    <activity android:name="com.socialize.sample.ui.EmptyActivity"/>
+	    <activity android:name="com.socialize.sample.ui.TestActivity"/>
+	    <activity android:name="com.socialize.sample.ui.ActionBarAutoActivity"/>
+	    <activity android:name="com.socialize.sample.ui.ActionBarManualActivity"/>
+	    
+	    <!-- Activities Required by Socialize UI -->
+	    <activity android:name="com.socialize.auth.facebook.FacebookActivity"/>
+	    <activity android:name="com.socialize.ui.comment.CommentActivity"/>
+	    <activity android:name="com.socialize.ui.comment.CommentDetailActivity"/>
+	    <activity android:name="com.socialize.ui.profile.ProfileActivity"/>	    		
 		
     </application>
     

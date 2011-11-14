@@ -1,0 +1,20 @@
+<beans>
+	<bean id="socializeApiHost" class="com.socialize.test.mock.MockSocializeApiHost">
+		<property name="clientFactory" ref="clientFactory"/>
+		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="commentApi" ref="commentApi"/>
+		<property name="entityApi" ref="entityApi"/>
+		<property name="likeApi" ref="likeApi"/>
+		<property name="viewApi" ref="viewApi"/>
+		<property name="userApi" ref="userApi"/>
+		<property name="shareApi" ref="shareApi"/>
+		<property name="activityApi" ref="activityApi"/>
+		
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>			
+	</bean>	
+	
+	<bean id="initializationAsserter" class="com.socialize.test.mock.MockInitializationAsserter"/>
+</beans>

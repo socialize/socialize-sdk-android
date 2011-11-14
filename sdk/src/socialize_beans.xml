@@ -53,6 +53,8 @@
 		<init-method name="init">
 			<arg type="activity"/>
 		</init-method>
+		
+		<destroy-method name="destroy"/>
 	</bean>
 	
 	<bean id="locationListener" class="com.socialize.location.SocializeLocationListener" singleton="false">

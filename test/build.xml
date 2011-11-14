@@ -55,19 +55,29 @@
 		SOCIALIZE TARGETS
 		################################################################################################
 	-->		
-		<target name="socialize-test">
+		<target name="socialize-test" depends="init">
+			
+			<property name="build.is.instrumented" value="true" />
+			<property name="emma.enabled" value="true" />
+			
+			<antcall target="test" inheritall="true" inheritrefs="true"/>
+			<antcall target="pull-reports" inheritall="true" inheritrefs="true"/>
+		</target>
+	
+		<target name="init" depends="clean-all">
 			<antcall target="clean-all"/>
 			
 			<property name="build.is.instrumented" value="true" />
 			<property name="emma.enabled" value="true" />
 			
-			<ant dir="../sample" target="instrument" inheritall="false"/>
+			<ant dir="../sdk" target="compile-instrumented" inheritall="false" inheritrefs="true"/>
+			<ant dir="../sample" target="instrument" inheritall="false" inheritrefs="true"/>
+			
 			<antcall target="instrument" inheritall="true" inheritrefs="true"/>
 			<antcall target="uninstall" inheritall="true" inheritrefs="true"/>
 			<antcall target="installi" inheritall="true" inheritrefs="true"/>
-			<antcall target="test" inheritall="true" inheritrefs="true"/>
-			<antcall target="pull-reports" inheritall="true" inheritrefs="true"/>
-		</target>
+
+		</target>	
 		
 		<target name="clean-all">
 			<ant dir="../sdk" target="clean" inheritall="false"/>
@@ -181,6 +191,10 @@
             	
                 <classpath>
                     <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
+                	
+                	<path location="${tested.project.dir}/bin/classes"/>
+                	<path location="${library.project.dir}/bin/classes"/>
+                	
                 </classpath>
             	
             	<compilerarg value="-proc:none"/>
@@ -207,6 +221,8 @@
                 <classpath>
                     <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
                     <path refid="android.target.classpath"/>
+                	<path location="${tested.project.dir}/bin/classes"/>
+                	<path location="${library.project.dir}/bin/classes"/>                	
                 	<path location="bin/intermediate"/>
                 </classpath>
             	
