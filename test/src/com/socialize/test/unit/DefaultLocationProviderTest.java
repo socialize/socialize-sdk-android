@@ -69,16 +69,20 @@ public class DefaultLocationProviderTest extends SocializeActivityTest {
 		
 		AndroidMock.expect(deviceUtils.hasPermission(context, "android.permission.ACCESS_FINE_LOCATION")).andReturn(false).anyTimes();
 		AndroidMock.expect(deviceUtils.hasPermission(context, "android.permission.ACCESS_COARSE_LOCATION")).andReturn(false).anyTimes();
+		AndroidMock.expect(locationListenerFactory.getBean()).andReturn(listener);
 		
 		AndroidMock.replay(deviceUtils);
+		AndroidMock.replay(locationListenerFactory);
 		
 		DefaultLocationProvider provider = new DefaultLocationProvider();
 		provider.setDeviceUtils(deviceUtils);
+		provider.setLocationListenerFactory(locationListenerFactory);
 		provider.init(context);
 		
 		assertNull(provider.getLocation());
 		
 		AndroidMock.verify(deviceUtils);
+		AndroidMock.verify(locationListenerFactory);
 	}
 	
 	public void testLastKnownLocationAvailable() {
@@ -90,19 +94,23 @@ public class DefaultLocationProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(deviceUtils.hasPermission(context, "android.permission.ACCESS_FINE_LOCATION")).andReturn(true);
 		AndroidMock.expect(locationManager.getBestProvider((Criteria)AndroidMock.anyObject(), AndroidMock.eq(true))).andReturn(strProvider);
 		AndroidMock.expect(locationManager.getLastKnownLocation(strProvider)).andReturn(location);
+		AndroidMock.expect(locationListenerFactory.getBean()).andReturn(listener);
 		
 		AndroidMock.replay(deviceUtils);
 		AndroidMock.replay(locationManager);
+		AndroidMock.replay(locationListenerFactory);
 		
 		DefaultLocationProvider provider = new DefaultLocationProvider();
 		provider.setLocationManager(locationManager);
 		provider.setDeviceUtils(deviceUtils);
+		provider.setLocationListenerFactory(locationListenerFactory);
 		provider.init(context);
 		
 		Location loc = provider.getLocation();
 		
 		AndroidMock.verify(deviceUtils);
 		AndroidMock.verify(locationManager);
+		AndroidMock.verify(locationListenerFactory);
 		
 		assertNotNull(loc);
 		assertSame(location, loc);

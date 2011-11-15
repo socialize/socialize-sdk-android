@@ -47,7 +47,9 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 	
 	public void init(Activity context) {
 		this.context = context;
-		listener = locationListenerFactory.getBean();
+		if(locationListenerFactory != null) {
+			listener = locationListenerFactory.getBean();
+		}
 		getLocation();
 	}
 	
@@ -84,7 +86,7 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 			if(mostRecentLocation != null) {
 				location = mostRecentLocation;
 			}
-			else if(locationManager.isProviderEnabled(provider)) {
+			else if(locationManager.isProviderEnabled(provider) && listener != null) {
 				locationManager.requestLocationUpdates(context, provider, 1, 0, listener);
 			}
 		}
