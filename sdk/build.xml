@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="sdk" default="help">
 
-    <loadproperties srcFile="local.properties" />
+	<property file="local.properties" />
     <property file="ant.properties" />
 	<property file="emma.properties" />
     <loadproperties srcFile="project.properties" />
