@@ -8,6 +8,8 @@
 		
 		<!-- Copy resources, excluding library src, to temp folder -->
 		<property name="build.tmp" value="build_tmp"/>
+		
+		<delete dir="${build.tmp}"/>
 		<mkdir dir="${build.tmp}"/>
 		
 		<copy todir="${build.tmp}/src" verbose="true" >
@@ -30,19 +32,22 @@
 			<fileset dir=".">
 				<include name="build.xml"/>
 				<include name="AndroidManifest.xml"/>
-				<include name="build.properties"/>
-				<include name="default.properties"/>
+				<include name="ant.properties"/>
+				<include name="local.properties"/>
+				<include name="project.properties"/>
 			</fileset>
 		</copy>
 		
-		<!-- Add to assets too (for 2.1) -->
+		<!-- Add to assets too (for 2.1)
 		<copy todir="${build.tmp}/assets" verbose="true">
 			<fileset dir="${socialize.src.path}">
 				<include name="socialize.errors.properties"/>
 				<include name="socialize_beans.xml"/>
+				<include name="socialize_ui_beans.xml"/>
 				<include name="socialize.properties"/>
 			</fileset>
 		</copy>
+		 -->
 		
 		<!-- Get the socialize.jar -->
 		<copy todir="${build.tmp}/libs" verbose="true" >
@@ -51,8 +56,9 @@
 			</fileset>
 		</copy>
 		
-		<!-- Remove lib ref from default.props -->
-		<replaceregexp file="${build.tmp}/default.properties" match="android.library.reference.1=../sdk" replace="" />
+		<!-- Remove lib ref from default.props
+		<replaceregexp file="${build.tmp}/ant.properties" match="android.library.reference.1=../sdk" replace="" />
+		 -->
 		
 		<!-- Call release on the build temp -->
 		<ant antfile="${build.tmp}/build.xml" target="debug" inheritAll="false" useNativeBasedir="true"/>

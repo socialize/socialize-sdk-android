@@ -47,7 +47,7 @@
 	</target>	
 	
 	<target name="build">
-
+		<antcall target="clean"/>
 		<antcall target="jar"/>
 		<antcall target="package"/>
 		
@@ -55,9 +55,7 @@
 		<delete dir="libs" includes="**/*.jar" verbose="true"/>
 	</target>
 
-	<target name="jar" depends="-compile">
-		
-		<ant dir="../ui" target="-compile"/>
+	<target name="jar" depends="compile-for-build">
 		
 		<!-- Manually copy config files -->
 		<echo>Out dir is [${out.dir}]</echo>
@@ -65,20 +63,14 @@
 		<copy todir="${out.dir}/classes" verbose="true" >
 			<fileset dir="src">
 				<include name="socialize_beans.xml"/>
+				<include name="socialize_ui_beans.xml"/>
 				<include name="socialize.errors.properties"/>
 				<include name="socialize.properties"/>
 			</fileset>
-			
-			<fileset dir="../ui/src">
-				<include name="socialize_ui_beans.xml"/>
-			</fileset>
-			
-			<fileset dir="../ui/bin/classes"/>
 		</copy>
 		
 		<copy todir="${out.dir}/classes/res/" verbose="true" >
 			<fileset dir="src/res" includes="**/**"/>
-			<fileset dir="../ui/src/res" includes="**/**"/>
 		</copy>
 		
 		<delete dir="build"/>
@@ -229,11 +221,16 @@
 	</target>	
 	
 	<target name="compile-instrumented">
-	   
 		<property name="build.is.instrumented" value="true" />
 		<property name="emma.enabled" value="true" />
 		<antcall target="-compile" inheritall="true" inheritrefs="true"/>
 	</target>
+	
+	<target name="compile-for-build">
+		<property name="build.is.instrumented" value="false" />
+		<property name="emma.enabled" value="false" />
+		<antcall target="-compile" inheritall="true" inheritrefs="true"/>
+	</target>	
 	
 	<!-- 
 		################################################################################################
