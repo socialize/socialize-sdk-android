@@ -6,7 +6,7 @@ import android.os.Bundle;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.ui.SocializeActivity;
 
-public class TestActivity extends SocializeActivity {
+public class SampleSocializeActivity extends SocializeActivity {
 	
 	TestActivityCallback localCallBack;
 	TestSocializeActivityCallback localSocializeCallBack;

@@ -430,6 +430,8 @@ public class DrawablesTest extends SocializeActivityTest {
 		public CacheableDrawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY) {
 			return super.createDrawable(in, name, tileX, tileY, pixelsX, pixelsY);
 		}
+		
+		
 	}
 	
 	

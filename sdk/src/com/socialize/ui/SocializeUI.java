@@ -49,7 +49,7 @@ public class SocializeUI {
 	private final Properties customProperties = new Properties();
 	private String[] beanOverrides;
 	
-	public static final SocializeUI getInstance() {
+	public static SocializeUI getInstance() {
 		return instance;
 	}
 	

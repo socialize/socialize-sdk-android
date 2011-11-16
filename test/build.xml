@@ -57,35 +57,36 @@
 		SOCIALIZE TARGETS
 		################################################################################################
 	-->		
-		<target name="socialize-test" depends="init">
-			
+	
+		<target name="socialize-test" depends="build-all, install-all">
 			<property name="build.is.instrumented" value="true" />
+			<property name="build.target" value="instrument" />  
 			<property name="emma.enabled" value="true" />
-			
 			<antcall target="test" inheritall="true" inheritrefs="true"/>
 			<antcall target="pull-reports" inheritall="true" inheritrefs="true"/>
 		</target>
 	
-		<target name="init" depends="clean-all">
-			<antcall target="clean-all"/>
-			
+		<target name="install-all">
 			<property name="build.is.instrumented" value="true" />
+			<property name="build.target" value="instrument" />  
 			<property name="emma.enabled" value="true" />
-			
-			<ant dir="../sdk" target="compile-instrumented" inheritall="false" inheritrefs="true"/>
-			<ant dir="../sample" target="instrument" inheritall="false" inheritrefs="true"/>
-			
-			<antcall target="instrument" inheritall="true" inheritrefs="true"/>
 			<antcall target="uninstall" inheritall="true" inheritrefs="true"/>
 			<antcall target="installi" inheritall="true" inheritrefs="true"/>
-
-		</target>	
-		
+		</target>
+	
+		<target name="build-all" depends="clean-all">
+			<property name="build.is.instrumented" value="true" />
+			<property name="build.target" value="instrument" />  
+			<property name="emma.enabled" value="true" />
+			<antcall target="instrument" inheritall="true" inheritrefs="true"/>
+		</target>
+	
 		<target name="clean-all">
-			<ant dir="../sdk" target="clean" inheritall="false"/>
-			<ant dir="../sample" target="clean" inheritall="false"/>
+			<ant dir="../sdk" target="clean" inheritall="false" inheritrefs="false"/>
+			<ant dir="../sample" target="clean" inheritall="false" inheritrefs="false"/>
 			<antcall target="clean"/>
-			<delete dir="${test-output}" verbose="true" failonerror="false"/>
+			
+			<delete dir="${test-output}" verbose="${verbose}" failonerror="false"/>
 		    	
             <echo>Cleaning up coverage files...</echo>
     		<delete file="${emma.report.dir}/coverage.ec" />
@@ -157,6 +158,13 @@
 	</path>	
 	
     <target name="-compile" depends="-build-setup, -pre-build, -code-gen, -pre-compile">
+    	
+    	<echo></echo>
+    	<echo>##################################################################################################</echo>
+    	<echo>######################################### BUILDING TEST ##########################################</echo>
+    	<echo>##################################################################################################</echo>
+    	<echo></echo>        	
+    	
         <do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">
             
         	<condition property="extensible.classpath"
@@ -185,19 +193,15 @@
                 destdir="bin/intermediate"
                 bootclasspathref="android.target.classpath"
                 verbose="${verbose}"
-                classpath="${extensible.classpath}"
-                classpathref="jar.libs.ref" >
+	            classpath="${extensible.classpath}"
+	            classpathref="jar.libs.ref">
             	
-                <src path="${source.absolute.dir}" />
-                <src path="${gen.absolute.dir}" />
-            	
-                <classpath>
-                    <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
-                	
-                	<path location="${tested.project.dir}/bin/classes"/>
-                	<path location="${library.project.dir}/bin/classes"/>
-                	
-                </classpath>
+		        <src path="${source.absolute.dir}" />
+		        <src path="${gen.absolute.dir}" />
+	            	
+		        <classpath>
+		            <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
+		        </classpath>
             	
             	<compilerarg value="-proc:none"/>
             </javac>    
@@ -214,19 +218,17 @@
                 destdir="${out.classes.absolute.dir}"
                 bootclasspathref="android.target.classpath"
                 verbose="${verbose}"
-                classpath="${extensible.classpath}"
-                classpathref="jar.libs.ref" >
+	            classpath="${extensible.classpath}"
+	            classpathref="jar.libs.ref">
             	
-                <src path="${source.absolute.dir}" />
-                <src path="${gen.absolute.dir}" />
-            	
-                <classpath>
-                    <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
-                    <path refid="android.target.classpath"/>
-                	<path location="${tested.project.dir}/bin/classes"/>
-                	<path location="${library.project.dir}/bin/classes"/>                	
-                	<path location="bin/intermediate"/>
-                </classpath>
+		        <src path="${source.absolute.dir}" />
+		        <src path="${gen.absolute.dir}" />
+	            	
+		        <classpath>
+		            <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
+		        	<path refid="android.target.classpath"/>
+		        	<path location="bin/intermediate"/>
+		        </classpath>
             	
             	<compilerarg value="-ARegenerateFrameworkMocks=true"/>
             </javac>  
@@ -373,6 +375,7 @@
     -->
 	
     <!-- version-tag: custom -->
-    <import file="${sdk.dir}/tools/ant/build.xml" />
+	<!-- <import file="../sdk/ant/custom_build.xml" /> -->
+	<import file="${sdk.dir}/tools/ant/build.xml" />
 
 </project>

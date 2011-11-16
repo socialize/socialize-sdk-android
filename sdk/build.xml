@@ -22,7 +22,7 @@
 	</target>
 	
 	<!-- version-tag: custom -->
-    <import file="${sdk.dir}/tools/ant/build.xml" />
+	<import file="${sdk.dir}/tools/ant/build.xml" />
 	
 	<!-- 
 		################################################################################################
@@ -54,8 +54,16 @@
 		<!-- clean up -->
 		<delete dir="libs" includes="**/*.jar" verbose="true"/>
 	</target>
+	
+	<target name="jar" depends="compile-for-build, -jar"/>
+	<target name="jar-instrumented" depends="compile-instrumented">
+		<property name="build.path" value="build-instrumented"/>
+		<antcall target="-jar"/>
+	</target>
 
-	<target name="jar" depends="compile-for-build">
+	<target name="-jar">
+		
+		<property name="build.path" value="build"/>
 		
 		<!-- Manually copy config files -->
 		<echo>Out dir is [${out.dir}]</echo>
@@ -67,16 +75,20 @@
 				<include name="socialize.errors.properties"/>
 				<include name="socialize.properties"/>
 			</fileset>
+			
 		</copy>
 		
 		<copy todir="${out.dir}/classes/res/" verbose="true" >
 			<fileset dir="src/res" includes="**/**"/>
 		</copy>
 		
-		<delete dir="build"/>
-		<mkdir dir="build"/>
+		<delete dir="${build.path}"/>
+		<mkdir dir="${build.path}"/>
 		
-		<jar destfile="build/socialize-${version}.jar" basedir="${out.dir}/classes">
+		<jar destfile="${build.path}/socialize-${version}.jar">
+			
+			<fileset dir="${out.dir}/classes" excludes="**/R.class **/R$*.class"/>
+			
 			<manifest>
 				<attribute name="Built-By" value="${vendor}" />
 				<attribute name="Implementation-Vendor" value="${vendor}" />
@@ -85,8 +97,7 @@
 			</manifest>
 		</jar>
 	</target>
-	
-
+		
 	<!-- Python is required on target system for this to work!-->
 	<target name="sphinx" description="Uses sphinx to generate SDK documentation" if="sphinx.available" depends="check-paths">
 		
@@ -222,7 +233,6 @@
 	
 	<target name="compile-instrumented">
 		<property name="build.is.instrumented" value="true" />
-		<property name="emma.enabled" value="true" />
 		<antcall target="-compile" inheritall="true" inheritrefs="true"/>
 	</target>
 	
@@ -239,6 +249,13 @@
 	-->		
     <!-- Compiles this project's .java files into .class files. -->
     <target name="-compile" depends="-build-setup, -pre-build, -code-gen, -pre-compile">
+    	
+    	<echo></echo>
+    	<echo>##################################################################################################</echo>
+    	<echo>########################################## BUILDING SDK ##########################################</echo>
+    	<echo>##################################################################################################</echo>
+    	<echo></echo>
+    	
         <do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">
             <!-- If android rules are used for a test project, its classpath should include
                  tested project's location -->

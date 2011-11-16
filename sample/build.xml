@@ -3,21 +3,50 @@
 
 	<property file="local.properties" />
     <property file="ant.properties" />
+    <property file="emma.properties" />
     <loadproperties srcFile="project.properties" />
+	
+	<!-- Copy source from library project -->
+	<delete dir="src_ext"/>
+	<mkdir dir="${source.dir}"/>
+	<copy todir="${source.dir}">
+		<fileset dir="../sdk/src"/>
+		<fileset dir="src"/>
+	</copy>	
 
     <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project'"
             unless="sdk.dir"/>
 
 	<!-- 
 		################################################################################################
-		OVERRIDE DEFAULT COMPILE TARGET FROM ANDROID TO FIX EMMA COVERAGE REPORTS 
+		OVERRIDE DEFAULT COMPILE TARGET FROM ANDROID TO REMOVE COVERAGE CREATION
 		################################################################################################
 	-->	
-	
-    <property file="emma.properties" />
-	
+
     <target name="-compile" depends="-build-setup, -pre-build, -code-gen, -pre-compile">
        
+    	<echo></echo>
+    	<echo>##################################################################################################</echo>
+    	<echo>######################################## BUILDING SAMPLE #########################################</echo>
+    	<echo>##################################################################################################</echo>
+    	<echo></echo>    	
+    	
+    	<!--
+    	<property name="library_src" value="${source.absolute.dir}_library"/>
+    	
+    	<delete dir="${library_src}"/>
+    	<mkdir dir="${library_src}"/>
+    	
+    	<copy todir="${out.absolute.dir}/classes" verbose="true">
+    		<fileset dir="../sdk/src" includes="**/*.xml,**.*.properties"/>
+    	</copy>
+    	-->
+    	
+    	<!-- Overwrite jar libs ref -->
+    	<path id="jar.libs.ref">
+    		<fileset dir="../sdk/libs"/>
+    	</path>
+    	
 		<do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">
 
         	<condition property="extensible.classpath"
@@ -33,49 +62,49 @@
             </condition>
 			
 			<echo>Compiling sample project from src ${source.absolute.dir} to ${out.classes.absolute.dir}</echo>
-        	
-            <javac 
-        		encoding="${java.encoding}"
-                source="${java.source}" 
-        		target="${java.target}"
-                debug="true" 
-        		extdirs=""
-                destdir="${out.classes.absolute.dir}"
-                bootclasspathref="android.target.classpath"
-                verbose="${verbose}"
-                classpath="${extensible.classpath}"
-                classpathref="jar.libs.ref" >
+			
+			
+            <javac encoding="${java.encoding}"
+                    source="${java.source}" 
+            		target="${java.target}"
+                    debug="true" 
+            		extdirs=""
+                    destdir="${out.classes.absolute.dir}"
+                    bootclasspathref="android.target.classpath"
+                    verbose="${verbose}"
+                    classpath="${extensible.classpath}"
+                    classpathref="jar.libs.ref">
             	
                 <src path="${source.absolute.dir}" />
                 <src path="${gen.absolute.dir}" />
             	
-                <classpath>
+            	 <classpath>
                     <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
-                	<path location="../sdk/bin/classes"/>     
-                    <path refid="android.target.classpath"/>
                 </classpath>
-            	
-            </javac>        	
-        	<!--
-        	<path id="emma.instrpath">
-        		<pathelement path="${library.project.classes}" />
-        	</path>       
+            </javac>	
 			
-            <echo>[OVERRIDE] Instrumenting classes from ${library.project.classes} to ${out.classes.absolute.dir}</echo>
-        	<echo>EMMA will create meta data file in ${emma.report.dir}/coverage.em</echo>
-
-        	<emma enabled="true">
-                <instr verbosity="${verbosity}"
-                       mode="overwrite"
-                       instrpathref="emma.instrpath"
-                       outdir="${out.classes.absolute.dir}"
-                       metadatafile="${emma.report.dir}/coverage.em"
-                	   filter="${emma.excluded}">
-                </instr>
-            </emma> 
-            -->
-			
+            <!-- if the project is instrumented, intrument the classes -->
+            <if condition="${build.is.instrumented}">
+                <then>
+                    <echo>Instrumenting classes from ${out.absolute.dir}/classes...</echo>
+                    <echo>[OVERRIDE] Instrumenting classes from ${out.absolute.dir}/classes to ${out.absolute.dir}/classes</echo>
+                	<echo>EMMA will create meta data file in ${emma.report.dir}/coverage.em</echo>
+                	
+                    <!-- It only instruments class files, not any external libs -->
+                    <emma enabled="true">
+                        <instr 
+							verbosity="${verbosity}"
+							mode="overwrite"
+							instrpath="${out.absolute.dir}/classes"
+							outdir="${out.absolute.dir}/classes"
+							metadatafile="${emma.report.dir}/coverage.em"
+							filter="${emma.excluded}">
+                        </instr>
+                    </emma>
+                </then>
+            </if>			
         </do-only-if-manifest-hasCode>
+    	
     </target>	
 	
     <!-- Import the actual build file.
@@ -97,6 +126,8 @@
          in order to avoid having your file be overridden by tools such as "android update project"
     -->
     <!-- version-tag: custom -->
-    <import file="${sdk.dir}/tools/ant/build.xml" />
+	
+	<!-- <import file="../sdk/ant/custom_build.xml" /> -->
+	<import file="${sdk.dir}/tools/ant/build.xml" />
 
 </project>

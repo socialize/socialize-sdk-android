@@ -21,7 +21,7 @@ import com.socialize.android.ioc.IOCContainer;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
-import com.socialize.sample.ui.TestActivity;
+import com.socialize.sample.ui.SampleSocializeActivity;
 import com.socialize.sample.ui.TestActivityCallback;
 import com.socialize.sample.ui.TestActivityCallbackHolder;
 import com.socialize.test.mock.MockRelativeLayoutParams;
@@ -251,7 +251,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		};
 		
 		TestActivityCallbackHolder.callback = callback;
-		Intent i = new Intent(getActivity(), TestActivity.class);
+		Intent i = new Intent(getActivity(), SampleSocializeActivity.class);
 		
 		int requestCode = 69;
 		

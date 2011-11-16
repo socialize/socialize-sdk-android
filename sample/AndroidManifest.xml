@@ -31,7 +31,7 @@
 	    <!-- Required for UI tests -->
 	    <activity android:name="com.socialize.sample.ui.SampleActivity"/>
 	    <activity android:name="com.socialize.sample.ui.EmptyActivity"/>
-	    <activity android:name="com.socialize.sample.ui.TestActivity"/>
+	    <activity android:name="com.socialize.sample.ui.SampleSocializeActivity"/>
 	    <activity android:name="com.socialize.sample.ui.ActionBarAutoActivity"/>
 	    <activity android:name="com.socialize.sample.ui.ActionBarManualActivity"/>
 	    

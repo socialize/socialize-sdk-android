@@ -3,6 +3,7 @@ sdk/gen
 sdk/bin
 sdk/doc/html
 sdk/local.properties
+sample/src_ext
 gh-pages
 sample/.settings
 sample/gen

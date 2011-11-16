@@ -255,7 +255,7 @@ public class Drawables {
 		return new CacheableDrawable(bitmap, name);
 	}
 	
-	private void addToCache(String key, CacheableDrawable drawable, boolean eternal) {
+	protected void addToCache(String key, CacheableDrawable drawable, boolean eternal) {
 		if(drawable != null) {
 			cache.put(key, drawable, eternal);
 		}

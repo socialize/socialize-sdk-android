@@ -32,6 +32,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.socialize.Socialize;
+import com.socialize.sample.ui.SampleActivity;
 
 public class Main extends Activity {
 	
@@ -42,7 +43,7 @@ public class Main extends Activity {
         setContentView(R.layout.main);
         
         Button btn = (Button) findViewById(R.id.btnSample);
-//        Button btnMock = (Button) findViewById(R.id.btnSampleWithMocks);
+        Button btnUI = (Button) findViewById(R.id.btnSampleUI);
         
         btn.setOnClickListener(new OnClickListener() {
 			@Override
@@ -50,6 +51,14 @@ public class Main extends Activity {
 				startSocialize(false);
 			}
 		});
+        
+        btnUI.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(Main.this, SampleActivity.class);
+				startActivity(i);
+			}
+		});        
         
 //        btnMock.setOnClickListener(new OnClickListener() {
 //			@Override

@@ -9,7 +9,7 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
-import com.socialize.sample.ui.TestActivity;
+import com.socialize.sample.ui.SampleSocializeActivity;
 import com.socialize.sample.ui.TestActivityCallbackHolder;
 import com.socialize.sample.ui.TestSocializeActivityCallback;
 import com.socialize.ui.ActivityIOCProvider;
@@ -35,7 +35,7 @@ public class SocializeActivityTestCase extends SocializeUIActivityTest {
 		
 		TestActivityCallbackHolder.callback = callback;
 		
-		Intent i = new Intent(getActivity(), TestActivity.class);
+		Intent i = new Intent(getActivity(), SampleSocializeActivity.class);
 		
 		int code = 69;
 		
