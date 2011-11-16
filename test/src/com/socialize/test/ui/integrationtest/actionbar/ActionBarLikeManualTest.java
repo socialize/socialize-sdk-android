@@ -41,8 +41,6 @@ public class ActionBarLikeManualTest extends ActivityInstrumentationTestCase2<Ac
 		intent.putExtras(extras);
 		setActivityIntent(intent);
 		
-//		getInstrumentation().waitForIdleSync();
-		
 		final ActionBarLayoutView actionBar = TestUtils.findView(getActivity(), ActionBarLayoutView.class, 5000);	
 		
 		assertNotNull(actionBar);

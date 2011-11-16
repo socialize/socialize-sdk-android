@@ -38,17 +38,6 @@
 			</fileset>
 		</copy>
 		
-		<!-- Add to assets too (for 2.1)
-		<copy todir="${build.tmp}/assets" verbose="true">
-			<fileset dir="${socialize.src.path}">
-				<include name="socialize.errors.properties"/>
-				<include name="socialize_beans.xml"/>
-				<include name="socialize_ui_beans.xml"/>
-				<include name="socialize.properties"/>
-			</fileset>
-		</copy>
-		 -->
-		
 		<!-- Get the socialize.jar -->
 		<copy todir="${build.tmp}/libs" verbose="true" >
 			<fileset dir="${socialize.jar.path}">
@@ -56,12 +45,18 @@
 			</fileset>
 		</copy>
 		
-		<!-- Remove lib ref from default.props
+		<!-- Remove lib ref from default.props -->
 		<replaceregexp file="${build.tmp}/ant.properties" match="android.library.reference.1=../sdk" replace="" />
-		 -->
+		
+		<!-- replace references to sdk -->
+		<replaceregexp file="${build.tmp}/build.xml" match="../sdk" replace="../../sdk" byline="true" flags="g"/>
 		
 		<!-- Call release on the build temp -->
-		<ant antfile="${build.tmp}/build.xml" target="debug" inheritAll="false" useNativeBasedir="true"/>
+		<ant antfile="${build.tmp}/build.xml" inheritAll="false" useNativeBasedir="true">
+			<target name="copy-library-src"/>
+			<target name="debug"/>
+			<target name="clean-library-src"/>
+		</ant>
 		
 		<!-- Pull the APK -->
 		<copy todir="build" verbose="true">

@@ -23,6 +23,7 @@ package com.socialize.ui.share;
 
 import com.socialize.api.action.ShareType;
 import com.socialize.ui.actionbar.ActionBarView;
+import com.socialize.ui.actionbar.OnActionBarEventListener;
 
 
 /**
@@ -30,8 +31,8 @@ import com.socialize.ui.actionbar.ActionBarView;
  */
 public class EmailShareClickListener extends SimpleShareClickListener {
 	
-	public EmailShareClickListener(ActionBarView actionBarView) {
-		super(actionBarView);
+	public EmailShareClickListener(ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
+		super(actionBarView, onActionBarEventListener);
 	}
 
 	@Override

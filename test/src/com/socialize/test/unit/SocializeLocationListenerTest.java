@@ -51,7 +51,7 @@ public class SocializeLocationListenerTest extends SocializeActivityTest {
 		SocializeLocationManager manager = AndroidMock.createMock(SocializeLocationManager.class, utils);
 		
 		SocializeLocationListener listener = new SocializeLocationListener();
-		listener.setProvider(provider);
+		listener.setLocationProvider(provider);
 
 		AndroidMock.expect(provider.getLocationManager()).andReturn(manager);
 		manager.removeUpdates(listener);

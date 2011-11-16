@@ -29,7 +29,6 @@ import android.view.View;
 import com.socialize.activity.SocializeActivityFactory;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.entity.Entity;
-import com.socialize.entity.Like;
 import com.socialize.entity.SocializeObject;
 import com.socialize.ui.activity.SocializeActivityProvider;
 import com.socialize.ui.activity.SocializeActivityView;
@@ -81,25 +80,31 @@ public class ActionBarView extends EntityView {
 			socializeActivityProvider = container.getBean("socializeActivityProvider");
 		}
 		
-		if(socializeActivityView != null) {
-			actionBarLayoutView.setOnActionBarEventListener(new OnActionBarEventListener() {
-				
-				@Override
-				public void onUnlike() {
-					socializeActivityView.close(true);
-				}
-				
-				@Override
-				public void onGetLike(Like like) {
-					socializeActivityProvider.loadActivity(like, socializeActivityView);
-				}
-
-				@Override
-				public void onLike(Like like) {
-					socializeActivityProvider.loadActivity(like, socializeActivityView);
-				}
-			});
-		}
+//		if(socializeActivityView != null) {
+//			actionBarLayoutView.setOnActionBarEventListener(new OnActionBarEventListener() {
+//				
+//				@Override
+//				public void onUnlike() {
+//					socializeActivityView.close(true);
+//				}
+//				
+//				@Override
+//				public void onGetLike(Like like) {
+//					socializeActivityProvider.loadActivity(like, socializeActivityView);
+//				}
+//
+//				@Override
+//				public void onLike(Like like) {
+//					socializeActivityProvider.loadActivity(like, socializeActivityView);
+//				}
+//
+//				@Override
+//				public void onShare(Share share) {}
+//
+//				@Override
+//				public void onGetEntity(Entity entity) {}
+//			});
+//		}
 		
 		return actionBarLayoutView;
 	}

@@ -26,14 +26,15 @@ import android.content.Intent;
 import android.text.Html;
 
 import com.socialize.ui.actionbar.ActionBarView;
+import com.socialize.ui.actionbar.OnActionBarEventListener;
 
 /**
  * @author Jason Polites
  */
 public abstract class SimpleShareClickListener extends ShareClickListener {
-	
-	public SimpleShareClickListener(ActionBarView actionBarView) {
-		super(actionBarView);
+
+	public SimpleShareClickListener(ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
+		super(actionBarView, onActionBarEventListener);
 	}
 
 	@Override

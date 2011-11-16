@@ -163,7 +163,7 @@ public class ActionBarLayoutView extends BaseView {
 			@Override
 			public void onClick(ActionBarButton button) {
 				if(shareDialogFactory != null) {
-					shareDialogFactory.show(getContext(), actionBarView);
+					shareDialogFactory.show(getContext(), actionBarView, onActionBarEventListener);
 				}
 			}
 		});
@@ -339,6 +339,10 @@ public class ActionBarLayoutView extends BaseView {
 				if(onActionBarEventListener != null) {
 					onActionBarEventListener.onGetLike(like);
 				}
+				
+				if(onActionBarEventListener != null) {
+					onActionBarEventListener.onGetEntity(like.getEntity());
+				}				
 			}
 			
 			@Override

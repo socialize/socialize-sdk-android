@@ -57,6 +57,12 @@ public interface ApiHost {
 
 	public void getEntity(SocializeSession session, String key, EntityListener listener);
 
+	/**
+	 * EXPERIMENTAL
+	 * @param session
+	 * @param listener
+	 * @param id
+	 */
 	public void listRecommendedEntitiesByLike(SocializeSession session, EntityListener listener, long id);
 
 	public void listCommentsByEntity(SocializeSession session, String url, CommentListener listener);

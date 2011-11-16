@@ -5,11 +5,12 @@ import android.content.Intent;
 
 import com.socialize.api.action.ShareType;
 import com.socialize.ui.actionbar.ActionBarView;
+import com.socialize.ui.actionbar.OnActionBarEventListener;
 
 public class SmsShareClickListener extends ShareClickListener {
 	
-	public SmsShareClickListener(ActionBarView actionBarView) {
-		super(actionBarView);
+	public SmsShareClickListener(ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
+		super(actionBarView, onActionBarEventListener);
 	}
 
 	@Override

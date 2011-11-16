@@ -35,6 +35,7 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.actionbar.ActionBarView;
+import com.socialize.ui.actionbar.OnActionBarEventListener;
 import com.socialize.ui.dialog.AlertDialogFactory;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.facebook.FacebookWallPostListener;
@@ -54,9 +55,9 @@ public class FacebookShareClickListener extends ShareClickListener {
 	private AlertDialogFactory alertDialogFactory;
 	private SocializeLogger logger;
 	private FacebookWallPoster facebookWallPoster;
-	
-	public FacebookShareClickListener(ActionBarView actionBarView) {
-		super(actionBarView);
+
+	public FacebookShareClickListener(ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
+		super(actionBarView, onActionBarEventListener);
 	}
 
 	@Override

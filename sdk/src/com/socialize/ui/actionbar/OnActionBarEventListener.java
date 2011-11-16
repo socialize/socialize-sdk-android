@@ -21,7 +21,9 @@
  */
 package com.socialize.ui.actionbar;
 
+import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
+import com.socialize.entity.Share;
 
 /**
  * @author Jason Polites
@@ -34,4 +36,8 @@ public interface OnActionBarEventListener {
 	public void onLike(Like like);
 	
 	public void onUnlike();
+	
+	public void onShare(Share share);
+	
+	public void onGetEntity(Entity entity);
 }

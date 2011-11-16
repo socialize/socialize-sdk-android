@@ -28,6 +28,7 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.actionbar.ActionBarView;
+import com.socialize.ui.actionbar.OnActionBarEventListener;
 import com.socialize.util.Drawables;
 
 /**
@@ -39,7 +40,7 @@ public class ShareDialogFactory  {
 	private Drawables drawables;
 	private SocializeLogger logger;
 	
-	public void show(final Context context, ActionBarView actionBarView) {
+	public void show(final Context context, ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		ShareDialogView view = shareDialogViewFactory.getBean(actionBarView);
 		builder.setView(view);

@@ -727,7 +727,7 @@
 	
 <!-- End Share UI -->	
 
-<!-- Socialize Activity View
+<!-- Socialize Activity View -->
 	<bean 
 		id="socializeActivityFactory" 
 		class="com.socialize.ui.activity.provider.SlideUpActivityProvider">
@@ -769,7 +769,7 @@
 	
 	<factory id="socializeActivityEntityViewFactory" makes="socializeActivityEntityView"/>
 	<factory id="socializeActivityViewFactory" makes="socializeActivityView"/>
- -->
+
 <!-- End Socialize Activity View -->
 
 <!--  Image Loader  -->

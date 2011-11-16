@@ -33,6 +33,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.actionbar.ActionBarView;
+import com.socialize.ui.actionbar.OnActionBarEventListener;
 import com.socialize.util.StringUtils;
 
 /**
@@ -44,11 +45,12 @@ public abstract class ShareClickListener implements OnClickListener {
 	private SocializeLogger logger;
 	protected ShareMessageBuilder shareMessageBuilder;
 	private ActionBarView actionBarView;
+	private OnActionBarEventListener onActionBarEventListener;
 	
-	
-	public ShareClickListener(ActionBarView actionBarView) {
+	public ShareClickListener(ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
 		super();
 		this.actionBarView = actionBarView;
+		this.onActionBarEventListener = onActionBarEventListener;
 	}
 
 	protected Activity getActivity(View v) {
@@ -101,8 +103,11 @@ public abstract class ShareClickListener implements OnClickListener {
 					}
 	
 					@Override
-					public void onCreate(Share entity) {
-						// Update UI.
+					public void onCreate(Share share) {
+						// TOOD: Update UI?
+						if(onActionBarEventListener != null) {
+							onActionBarEventListener.onShare(share);
+						}
 					}
 				});			
 
@@ -142,4 +147,10 @@ public abstract class ShareClickListener implements OnClickListener {
 	protected boolean isGenerateShareMessage() {
 		return true;
 	}
+
+	public void setOnActionBarEventListener(OnActionBarEventListener onActionBarEventListener) {
+		this.onActionBarEventListener = onActionBarEventListener;
+	}
+	
+	
 }

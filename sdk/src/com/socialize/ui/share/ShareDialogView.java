@@ -35,6 +35,7 @@ import android.widget.TextView;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.actionbar.ActionBarView;
+import com.socialize.ui.actionbar.OnActionBarEventListener;
 import com.socialize.ui.button.SocializeButton;
 import com.socialize.util.DeviceUtils;
 import com.socialize.view.BaseView;
@@ -53,13 +54,16 @@ public class ShareDialogView extends BaseView {
 	private IBeanFactory<FacebookShareClickListener> facebookShareClickListenerFactory;
 	private IBeanFactory<SmsShareClickListener> smsShareClickListenerFactory;
 	
+	private OnActionBarEventListener onActionBarEventListener;
+	
 	private DeviceUtils deviceUtils;
 	private Dialog parent;
 	private ActionBarView actionBarView;
 	
-	public ShareDialogView(Context context, ActionBarView actionBarView) {
+	public ShareDialogView(Context context, ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
 		super(context);
 		this.actionBarView = actionBarView;
+		this.onActionBarEventListener = onActionBarEventListener;
 	}
 	
 	public void init() {
@@ -88,7 +92,7 @@ public class ShareDialogView extends BaseView {
 		textLayout.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
 		
 		otherOptions.setLayoutParams(textLayout);
-		otherOptions.setOnClickListener(otherShareClickListenerFactory.getBean(actionBarView));
+		otherOptions.setOnClickListener(otherShareClickListenerFactory.getBean(actionBarView, onActionBarEventListener));
 		
 		OnClickListener closeDialogOnClick = new OnClickListener() {
 			@Override
@@ -100,19 +104,19 @@ public class ShareDialogView extends BaseView {
 		};
 		
 		if(facebookShareButton != null && getSocializeUI().isFacebookSupported()) {
-			facebookShareButton.setCustomClickListener(facebookShareClickListenerFactory.getBean(actionBarView));
+			facebookShareButton.setCustomClickListener(facebookShareClickListenerFactory.getBean(actionBarView, onActionBarEventListener));
 			facebookShareButton.addOnClickListenerBefore(closeDialogOnClick);
 			addView(facebookShareButton);
 		}
 		
 		if(emailShareButton != null) {
-			emailShareButton.setCustomClickListener(emailShareClickListenerFactory.getBean(actionBarView));
+			emailShareButton.setCustomClickListener(emailShareClickListenerFactory.getBean(actionBarView, onActionBarEventListener));
 			emailShareButton.addOnClickListenerBefore(closeDialogOnClick);
 			addView(emailShareButton);
 		}
 		
 		if(smsShareButton != null) {
-			smsShareButton.setCustomClickListener(smsShareClickListenerFactory.getBean(actionBarView));
+			smsShareButton.setCustomClickListener(smsShareClickListenerFactory.getBean(actionBarView, onActionBarEventListener));
 			smsShareButton.addOnClickListenerBefore(closeDialogOnClick);
 			addView(smsShareButton);
 		}
@@ -155,7 +159,7 @@ public class ShareDialogView extends BaseView {
 	public void setSmsShareClickListenerFactory(IBeanFactory<SmsShareClickListener> smsShareClickListenerFactory) {
 		this.smsShareClickListenerFactory = smsShareClickListenerFactory;
 	}
-	
+
 	protected SocializeUI getSocializeUI() {
 		return SocializeUI.getInstance();
 	}
