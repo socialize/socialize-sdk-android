@@ -6,13 +6,20 @@
     <property file="emma.properties" />
     <loadproperties srcFile="project.properties" />
 	
-	<!-- Copy source from library project -->
-	<delete dir="src_ext"/>
-	<mkdir dir="${source.dir}"/>
-	<copy todir="${source.dir}">
-		<fileset dir="../sdk/src"/>
-		<fileset dir="src"/>
-	</copy>	
+	<target name="copy-library-src">
+		<!-- Copy source from library project -->
+		<antcall target="clean-library-src"/>
+		<mkdir dir="${source.dir}"/>
+		<copy todir="${source.dir}">
+			<fileset dir="../sdk/src"/>
+			<fileset dir="src"/>
+		</copy>	
+	</target>
+	
+	<target name="clean-library-src">
+		<!-- Don't use variable in case we accidentally delete src! -->
+		<delete dir="src_ext"/>
+	</target>
 
     <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project'"
             unless="sdk.dir"/>
@@ -30,17 +37,6 @@
     	<echo>######################################## BUILDING SAMPLE #########################################</echo>
     	<echo>##################################################################################################</echo>
     	<echo></echo>    	
-    	
-    	<!--
-    	<property name="library_src" value="${source.absolute.dir}_library"/>
-    	
-    	<delete dir="${library_src}"/>
-    	<mkdir dir="${library_src}"/>
-    	
-    	<copy todir="${out.absolute.dir}/classes" verbose="true">
-    		<fileset dir="../sdk/src" includes="**/*.xml,**.*.properties"/>
-    	</copy>
-    	-->
     	
     	<!-- Overwrite jar libs ref -->
     	<path id="jar.libs.ref">
@@ -127,7 +123,7 @@
     -->
     <!-- version-tag: custom -->
 	
-	<!-- <import file="../sdk/ant/custom_build.xml" /> -->
-	<import file="${sdk.dir}/tools/ant/build.xml" />
+	<import file="../sdk/ant/android_r15_build.xml" />
+	<!-- <import file="${sdk.dir}/tools/ant/build.xml" /> -->
 
 </project>

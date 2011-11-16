@@ -58,23 +58,21 @@
 		################################################################################################
 	-->		
 	
-		<target name="socialize-test" depends="build-all, install-all">
+		<target name="test" depends="build-all, install-all">
 			<property name="build.is.instrumented" value="true" />
 			<property name="build.target" value="instrument" />  
 			<property name="emma.enabled" value="true" />
-			<antcall target="test" inheritall="true" inheritrefs="true"/>
+			<antcall target="-test" inheritall="true" inheritrefs="true"/>
 			<antcall target="pull-reports" inheritall="true" inheritrefs="true"/>
 		</target>
 	
 		<target name="install-all">
-			<property name="build.is.instrumented" value="true" />
-			<property name="build.target" value="instrument" />  
-			<property name="emma.enabled" value="true" />
 			<antcall target="uninstall" inheritall="true" inheritrefs="true"/>
 			<antcall target="installi" inheritall="true" inheritrefs="true"/>
 		</target>
 	
 		<target name="build-all" depends="clean-all">
+			<ant dir="../sample" target="copy-library-src" inheritall="false" inheritrefs="false"/>
 			<property name="build.is.instrumented" value="true" />
 			<property name="build.target" value="instrument" />  
 			<property name="emma.enabled" value="true" />
@@ -84,11 +82,13 @@
 		<target name="clean-all">
 			<ant dir="../sdk" target="clean" inheritall="false" inheritrefs="false"/>
 			<ant dir="../sample" target="clean" inheritall="false" inheritrefs="false"/>
+			<ant dir="../sample" target="clean-library-src" inheritall="false" inheritrefs="false"/>
+			
 			<antcall target="clean"/>
 			
 			<delete dir="${test-output}" verbose="${verbose}" failonerror="false"/>
 		    	
-            <echo>Cleaning up coverage files...</echo>
+            <echo>Cleaning up local coverage files...</echo>
     		<delete file="${emma.report.dir}/coverage.ec" />
     		<delete file="${emma.report.dir}/coverage.em" />
         	
@@ -163,7 +163,13 @@
     	<echo>##################################################################################################</echo>
     	<echo>######################################### BUILDING TEST ##########################################</echo>
     	<echo>##################################################################################################</echo>
-    	<echo></echo>        	
+    	<echo></echo>    
+    	
+    	<!-- Overwrite jar libs ref.  We need to do this to exclude the library project -->
+    	<path id="jar.libs.ref">
+    		<fileset dir="../sdk/libs"/>
+    		<fileset dir="libs"/>
+    	</path>
     	
         <do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">
             
@@ -233,6 +239,28 @@
             	<compilerarg value="-ARegenerateFrameworkMocks=true"/>
             </javac>  
         	
+            <!-- if the project is instrumented, intrument the classes -->
+			
+            <if condition="${build.is.instrumented}">
+                <then>
+                    <echo>Instrumenting classes from ${out.absolute.dir}/classes...</echo>
+                    <echo>[OVERRIDE] Instrumenting classes from ${out.absolute.dir}/classes to ${out.absolute.dir}/classes</echo>
+                	<echo>EMMA will create meta data file in ${emma.report.dir}/coverage.em</echo>
+                	
+                    <!-- It only instruments class files, not any external libs -->
+                    <emma enabled="true">
+                        <instr 
+							verbosity="${verbosity}"
+							mode="overwrite"
+							instrpath="${out.absolute.dir}/classes"
+							outdir="${out.absolute.dir}/classes"
+							metadatafile="${emma.report.dir}/coverage.em"
+							filter="${emma.excluded}">
+                        </instr>
+                    </emma>
+                </then>
+            </if>		        	
+        	
         	<delete verbose="${verbose}">
 				<fileset dir="bin/intermediate"/>
 			</delete>
@@ -245,7 +273,7 @@
 		################################################################################################
 	-->		
 	
-   	<target name="test" depends="-test-project-check"
+   	<target name="-test" depends="-test-project-check"
                 description="Runs tests from the package defined in test.package property">
 
         <property name="tested.project.absolute.dir" location="${tested.project.dir}" />
@@ -270,15 +298,6 @@
             <then>
                 <echo>Code Coverage enabled.  Saving EMMA report to device location ${emma.dump.file}</echo>
             	
-            	<echo>Removing old coverage file from device</echo>
-                
-            	<exec executable="${adb}" failonerror="false">
-                    <arg line="${adb.device.arg}" />
-                    <arg value="shell" />
-                    <arg value="rm" />
-                    <arg value="${emma.dump.file}" />
-                </exec>            	
-            	
             	<echo>Running tests with coverage</echo>
                 <run-tests-helper emma.enabled="true">
                     <extra-instrument-args>
@@ -290,9 +309,11 @@
 	        				<arg value="package" />
 	        				<arg value="${test.package}" />
                     	
+                    	<!--
         				<arg value="-e" />
 	        				<arg value="emma" />
 	        				<arg value="true" />        
+                    	-->
                     	
         				<arg value="-e" />
 	        				<arg value="coverage" />
@@ -375,7 +396,70 @@
     -->
 	
     <!-- version-tag: custom -->
-	<!-- <import file="../sdk/ant/custom_build.xml" /> -->
-	<import file="${sdk.dir}/tools/ant/build.xml" />
+	<import file="../sdk/ant/android_r15_build.xml" />
+	<!-- <import file="${sdk.dir}/tools/ant/build.xml" /> -->
 
+	
+
+	<!-- Overrides for http://code.google.com/p/android/issues/detail?id=21640-->
+		
+	    <!-- Converts this project's .class files into .dex files -->
+	    <target name="-dex" depends="-compile, -post-compile, -obfuscate">
+	        <do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">
+	            <!-- only convert to dalvik bytecode is *not* a library -->
+	            <do-only-if-not-library elseText="Library project: do not convert bytecode..." >
+	                <!-- special case for instrumented builds: need to use no-locals and need
+	                     to pass in the emma jar. -->
+	                <if condition="${build.is.instrumented}">
+	                    <then>
+	                    	<if condition="${project.is.test}">
+	                    		<then>
+	                    			<dex-helper />
+	                    		</then>
+	                        	<else>
+	    	                    	<echo>Adding emma_device.jar during DEX</echo>
+	    	                        <dex-helper nolocals="true">
+	    	                            <external-libs>
+	    	                                <fileset file="${emma.dir}/emma_device.jar" />
+	    	                            </external-libs>
+	    	                        </dex-helper>                    		
+	    	                    </else>                    		
+	                    	</if>
+	                    </then>
+	                    <else>
+	                        <dex-helper />
+	                    </else>
+	                </if>
+	            </do-only-if-not-library>
+	        </do-only-if-manifest-hasCode>
+	    </target>
+		
+	    <!-- Packages the application. -->
+	    <target name="-package" depends="-dex, -package-resources">
+	        <!-- only package apk if *not* a library project -->
+	        <do-only-if-not-library elseText="Library project: do not package apk..." >
+	            <if condition="${build.is.instrumented}">
+	                <then>
+		            	<if condition="${project.is.test}">
+		            		<then>
+		            			<package-helper />
+		            		</then>
+	    	            	<else>
+	    	                  	<echo>Adding emma_device.jar during PACKAGE</echo>
+	    	                    <package-helper>
+	    	                        <extra-jars>
+	    	                            <!-- Injected from external file -->
+	    	                            <jarfile path="${emma.dir}/emma_device.jar" />
+	    	                        </extra-jars>
+	    	                    </package-helper>                		
+	    	                </else>  	            		
+		            	</if>
+	                </then>
+	                <else>
+	                    <package-helper />
+	                </else>
+	            </if>
+	        </do-only-if-not-library>
+	    </target>
+			
 </project>
