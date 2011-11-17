@@ -89,7 +89,7 @@ public class DrawablesTest extends SocializeActivityTest {
 		
 		Drawables drawables = new Drawables() {
 			@Override
-			protected CacheableDrawable createDrawable(InputStream stream, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY) {
+			protected CacheableDrawable createDrawable(InputStream stream, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY, int forceDensity) {
 				assertSame(in, stream);
 				assertFalse(tileX);
 				assertFalse(tileY);
@@ -169,7 +169,7 @@ public class DrawablesTest extends SocializeActivityTest {
 			AndroidMock.replay(bitmapUtils);
 			AndroidMock.replay(drawable);
 			
-			assertSame(drawable, drawables.createDrawable(in, key, repeatX, repeatY, pixelsX, pixelsY));
+			assertSame(drawable, drawables.createDrawable(in, key, repeatX, repeatY, pixelsX, pixelsY, -1));
 			
 			AndroidMock.verify(bitmapUtils);
 			AndroidMock.verify(drawable);
@@ -427,11 +427,9 @@ public class DrawablesTest extends SocializeActivityTest {
 	
 	class PublicDrawables extends Drawables {
 		@Override
-		public CacheableDrawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY) {
-			return super.createDrawable(in, name, tileX, tileY, pixelsX, pixelsY);
+		public CacheableDrawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY, int forceDensity) {
+			return super.createDrawable(in, name, tileX, tileY, pixelsX, pixelsY, forceDensity);
 		}
-		
-		
 	}
 	
 	

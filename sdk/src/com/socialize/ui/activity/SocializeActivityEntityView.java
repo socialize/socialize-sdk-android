@@ -35,8 +35,8 @@ import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
 
 /**
+ * Represents a single enetit, with a number of likes.
  * @author Jason Polites
- *
  */
 public class SocializeActivityEntityView extends BaseView {
 

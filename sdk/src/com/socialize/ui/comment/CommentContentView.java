@@ -51,6 +51,10 @@ public class CommentContentView extends ViewFlipper {
 		this.listView.setOnScrollListener(listener);
 	}
 	
+	public void showLoading() {
+		setDisplayedChild(0);
+	}
+	
 	public void showList() {
 		setDisplayedChild(1);
 	}

@@ -19,39 +19,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.share;
+package com.socialize.ui.actionbar.slider;
 
-import com.socialize.api.action.ShareType;
-import com.socialize.ui.actionbar.ActionBarView;
-import com.socialize.ui.actionbar.OnActionBarEventListener;
+import android.graphics.drawable.Drawable;
+import android.view.View;
 
+import com.socialize.ui.actionbar.slider.ActionBarSliderView.DisplayState;
 
 /**
  * @author Jason Polites
+ *
  */
-public class EmailShareClickListener extends SimpleShareClickListener {
+public interface ActionBarSliderItem {
 	
+	public String getId();
 	
-	public EmailShareClickListener(ActionBarView actionBarView) {
-		super(actionBarView);
-	}
-
-	public EmailShareClickListener(ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
-		super(actionBarView, onActionBarEventListener);
-	}
-
-	@Override
-	protected String getMimeType() {
-		return "message/rfc822";
-	}
-
-	@Override
-	protected boolean isHtml() {
-		return true;
-	}
-
-	@Override
-	protected ShareType getShareType() {
-		return ShareType.EMAIL;
-	}
+	/**
+	 * Returns the view to be displayed in the slider.
+	 * @return
+	 */
+	public View getView();
+	
+	/**
+	 * Returns the percentage of the screen to consume with the slider as a percentage.
+	 * @return
+	 */
+	public float getSliderTopPosition();
+	
+	/**
+	 * If true the slider can be maximized.
+	 * @return
+	 */
+	public DisplayState getStartPosition();
+	
+	/**
+	 * If false the slider closes when restored either from maximized position, or restored position.
+	 * @return
+	 */
+	public boolean isPeekOnClose();
+	
+	public String getIconImage();
+	
+	public String getTitle();
 }

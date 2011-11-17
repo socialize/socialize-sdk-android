@@ -22,12 +22,14 @@
 package com.socialize.ui.recommendation;
 
 import com.socialize.Socialize;
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeApiHost;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.entity.EntityListListener;
+import com.socialize.ui.activity.SocializeActivityEntityView;
 
 /**
  * @author Jason Polites
@@ -35,6 +37,7 @@ import com.socialize.listener.entity.EntityListListener;
 public class LikeRecommendationProvider implements RecommendationProvider<Like, Entity> {
 	
 	private SocializeApiHost socializeApiHost;
+	private IBeanFactory<SocializeActivityEntityView> socializeActivityEntityViewFactory;
 	
 	@Override
 	public void loadActivity(Like item, RecommendationConsumer<Entity> consumer) {
@@ -49,7 +52,7 @@ public class LikeRecommendationProvider implements RecommendationProvider<Like, 
 				if(entities != null) {
 					int size = entities.size();
 					if(size > 0 ) {
-						consumer.consume(entities.getItems());
+//						consumer.consume(entities.getItems());
 					}
 				}
 			}

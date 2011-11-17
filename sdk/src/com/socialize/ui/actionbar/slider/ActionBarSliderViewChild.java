@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2011 Socialize Inc.
  * 
@@ -19,16 +20,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.activity;
+package com.socialize.ui.actionbar.slider;
 
-import com.socialize.entity.SocializeObject;
+import android.content.Context;
+import android.graphics.Rect;
+import android.widget.LinearLayout;
 
 /**
  * @author Jason Polites
  *
  */
-public interface SocializeActivityProvider<IN extends SocializeObject, OUT extends SocializeObject, C extends SocializeActivityConsumer<OUT>> {
-
-	public void loadActivity(IN item, C consumer);
+public abstract class ActionBarSliderViewChild extends LinearLayout {
 	
+	private ActionBarSliderView parentAdView;
+	
+	private int yOffset = 0;
+	
+	public ActionBarSliderViewChild(Context context, ActionBarSliderView parent) {
+		super(context);
+		this.parentAdView = parent;
+	}
+	
+	protected ActionBarSliderView getParentAdView() {
+		return parentAdView;
+	}
+	
+	public void notifyMove(int offset) {
+		this.yOffset = offset;
+	}
+	
+	protected void adjustHitRect(Rect rect) {
+		rect.bottom += yOffset;
+		rect.top += yOffset;
+	}
+
+	@Override
+	public void getHitRect(Rect outRect) {
+	    super.getHitRect(outRect);
+	    adjustHitRect(outRect);
+	}
 }

@@ -47,6 +47,10 @@ public abstract class ShareClickListener implements OnClickListener {
 	private ActionBarView actionBarView;
 	private OnActionBarEventListener onActionBarEventListener;
 	
+	public ShareClickListener(ActionBarView actionBarView) {
+		this(actionBarView, null);
+	}
+	
 	public ShareClickListener(ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
 		super();
 		this.actionBarView = actionBarView;
@@ -106,7 +110,7 @@ public abstract class ShareClickListener implements OnClickListener {
 					public void onCreate(Share share) {
 						// TOOD: Update UI?
 						if(onActionBarEventListener != null) {
-							onActionBarEventListener.onShare(share);
+							onActionBarEventListener.onPostShare(actionBarView, share);
 						}
 					}
 				});			

@@ -41,6 +41,7 @@ import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUI;
+import com.socialize.ui.actionbar.OnActionBarEventListener.ActionBarEvent;
 import com.socialize.ui.cache.CacheableEntity;
 import com.socialize.ui.cache.EntityCache;
 import com.socialize.ui.dialog.ProgressDialogFactory;
@@ -148,6 +149,9 @@ public class ActionBarLayoutView extends BaseView {
 		commentButton.setListener(new ActionBarButtonListener() {
 			@Override
 			public void onClick(ActionBarButton button) {
+				if(onActionBarEventListener != null) {
+					onActionBarEventListener.onClick(actionBarView, ActionBarEvent.COMMENT);
+				}
 				SocializeUI.getInstance().showCommentView(getActivity(), actionBarView.getEntityKey(), actionBarView.getEntityName(), actionBarView.isEntityKeyUrl());
 			}
 		});
@@ -155,6 +159,9 @@ public class ActionBarLayoutView extends BaseView {
 		likeButton.setListener(new ActionBarButtonListener() {
 			@Override
 			public void onClick(ActionBarButton button) {
+				if(onActionBarEventListener != null) {
+					onActionBarEventListener.onClick(actionBarView, ActionBarEvent.LIKE);
+				}
 				postLike(likeButton);
 			}
 		});
@@ -162,15 +169,21 @@ public class ActionBarLayoutView extends BaseView {
 		shareButton.setListener(new ActionBarButtonListener() {
 			@Override
 			public void onClick(ActionBarButton button) {
-				if(shareDialogFactory != null) {
-					shareDialogFactory.show(getContext(), actionBarView, onActionBarEventListener);
+				if(onActionBarEventListener != null) {
+					onActionBarEventListener.onClick(actionBarView, ActionBarEvent.SHARE);
 				}
+//				if(shareDialogFactory != null) {
+//					shareDialogFactory.show(getContext(), actionBarView, onActionBarEventListener);
+//				}
 			}
 		});
 		
 		ticker.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(android.view.View v) {
+				if(onActionBarEventListener != null) {
+					onActionBarEventListener.onClick(actionBarView, ActionBarEvent.VIEW);
+				}				
 				ticker.skipToNext();
 			}
 		});
@@ -287,7 +300,7 @@ public class ActionBarLayoutView extends BaseView {
 						button.hideLoading();
 						
 						if(onActionBarEventListener != null) {
-							onActionBarEventListener.onUnlike();
+							onActionBarEventListener.onPostUnlike(actionBarView);
 						}
 					}
 				});
@@ -311,7 +324,7 @@ public class ActionBarLayoutView extends BaseView {
 						setEntityData(localEntity);
 						
 						if(onActionBarEventListener != null) {
-							onActionBarEventListener.onLike(entity);
+							onActionBarEventListener.onPostLike(actionBarView, entity);
 						}
 					}
 				});
@@ -337,11 +350,11 @@ public class ActionBarLayoutView extends BaseView {
 				setEntityData(putEntity);
 				
 				if(onActionBarEventListener != null) {
-					onActionBarEventListener.onGetLike(like);
+					onActionBarEventListener.onGetLike(actionBarView, like);
 				}
 				
 				if(onActionBarEventListener != null) {
-					onActionBarEventListener.onGetEntity(like.getEntity());
+					onActionBarEventListener.onGetEntity(actionBarView, like.getEntity());
 				}				
 			}
 			

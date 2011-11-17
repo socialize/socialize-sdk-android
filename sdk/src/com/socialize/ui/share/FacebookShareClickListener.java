@@ -56,6 +56,10 @@ public class FacebookShareClickListener extends ShareClickListener {
 	private SocializeLogger logger;
 	private FacebookWallPoster facebookWallPoster;
 
+	public FacebookShareClickListener(ActionBarView actionBarView) {
+		super(actionBarView);
+	}
+
 	public FacebookShareClickListener(ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
 		super(actionBarView, onActionBarEventListener);
 	}

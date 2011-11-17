@@ -2,11 +2,13 @@ package com.socialize.sample.ui;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -96,6 +98,9 @@ public class SampleActivity extends Activity {
 			}
 		});
 		
+		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow( txtEntity.getWindowToken(), 0);
+		imm.hideSoftInputFromWindow( getWindow().getDecorView().getWindowToken(), 0);
 	}
 	
 	protected void setupOverrides() {

@@ -59,6 +59,14 @@ public class CommentAdapter extends BaseAdapter {
 		this.context = context;
 		now = new Date();
 	}
+	
+	public void reset() {
+		if(comments != null) {
+			comments.clear();
+		}
+		last = false;
+		now = new Date();
+	}
 
 	@Override
 	public int getCount() {

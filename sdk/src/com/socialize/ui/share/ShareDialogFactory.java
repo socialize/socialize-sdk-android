@@ -42,7 +42,7 @@ public class ShareDialogFactory  {
 	
 	public void show(final Context context, ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		ShareDialogView view = shareDialogViewFactory.getBean(actionBarView);
+		ShareDialogView view = shareDialogViewFactory.getBean(actionBarView, onActionBarEventListener);
 		builder.setView(view);
 		
 		final AlertDialog alertDialog = builder.create();

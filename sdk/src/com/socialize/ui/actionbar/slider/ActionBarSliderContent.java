@@ -19,39 +19,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.share;
+package com.socialize.ui.actionbar.slider;
 
-import com.socialize.api.action.ShareType;
-import com.socialize.ui.actionbar.ActionBarView;
-import com.socialize.ui.actionbar.OnActionBarEventListener;
-
+import android.content.Context;
+import android.graphics.Color;
 
 /**
  * @author Jason Polites
+ *
  */
-public class EmailShareClickListener extends SimpleShareClickListener {
+public class ActionBarSliderContent extends ActionBarSliderViewChild {
 	
+	private int height;
 	
-	public EmailShareClickListener(ActionBarView actionBarView) {
-		super(actionBarView);
+	public ActionBarSliderContent(Context context, ActionBarSliderView parent, int height) {
+		super(context, parent);
+		this.height = height;
 	}
-
-	public EmailShareClickListener(ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
-		super(actionBarView, onActionBarEventListener);
-	}
-
-	@Override
-	protected String getMimeType() {
-		return "message/rfc822";
-	}
-
-	@Override
-	protected boolean isHtml() {
-		return true;
-	}
-
-	@Override
-	protected ShareType getShareType() {
-		return ShareType.EMAIL;
+	
+	public void init() {
+		setBackgroundColor(Color.parseColor("#313131"));
+		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, height);
+		params.setMargins(0,0,0,0);
+		setLayoutParams(params);	
+		setOrientation(VERTICAL);
 	}
 }

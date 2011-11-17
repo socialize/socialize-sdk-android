@@ -66,6 +66,8 @@ public class Container {
 	
 	@SuppressWarnings("unchecked")
 	public <T extends Object> T getBean(String name, Object...args) {
+		args = cleanNulls(name, args);
+		
 		if(beans != null) {
 			Object bean = beans.get(name);
 			BeanRef beanRef = mapping.getBeanRef(name);
@@ -96,6 +98,46 @@ public class Container {
 		}
 		
 		return null;
+	}
+	
+	protected Object[] cleanNulls(String beanName, Object[] args) {
+		
+		if(args != null) {
+			Object[] nonNull = null;
+			int nullCount = 0;
+			
+			for (Object object : args) {
+				if(object == null) {
+					nullCount++;
+				}
+			}
+			
+			if(nullCount > 0) {
+				
+				Logger.w(getClass().getSimpleName(), "Some arguments passed to getBean were null for bean [" +
+						beanName +
+						"].  Stripping nulls from argument list");				
+				
+				if(nullCount < args.length) {
+					nonNull = new Object[args.length - nullCount];
+					int i = 0;
+					
+					for (Object object : args) {
+						if(object != null) {
+							nonNull[i] = object;
+							i++;
+						}
+					}
+					
+					return nonNull;
+				}
+				else {
+					return null;
+				}
+			}
+		}	
+		
+		return args;
 	}
 	
 	public boolean containsBean(String name) {

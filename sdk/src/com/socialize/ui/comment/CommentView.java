@@ -69,6 +69,10 @@ public class CommentView extends EntityView {
 		commentListView.onProfileUpdate();
 	}
 	
+	public void reload() {
+		commentListView.reload();
+	}
+	
 	@Override
 	public View getLoadingView() {
 		return null;

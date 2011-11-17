@@ -60,6 +60,10 @@ public class ShareDialogView extends BaseView {
 	private Dialog parent;
 	private ActionBarView actionBarView;
 	
+	public ShareDialogView(Context context, ActionBarView actionBarView) {
+		this(context, actionBarView, null);
+	}
+	
 	public ShareDialogView(Context context, ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
 		super(context);
 		this.actionBarView = actionBarView;

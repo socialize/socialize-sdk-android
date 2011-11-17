@@ -19,39 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.share;
+package com.socialize.ui.actionbar.slider;
 
-import com.socialize.api.action.ShareType;
-import com.socialize.ui.actionbar.ActionBarView;
-import com.socialize.ui.actionbar.OnActionBarEventListener;
-
+import android.view.View;
 
 /**
  * @author Jason Polites
+ *
  */
-public class EmailShareClickListener extends SimpleShareClickListener {
+public interface ActionBarSliderFactory<V extends View> {
+
+	public V wrap(View parent);
 	
-	
-	public EmailShareClickListener(ActionBarView actionBarView) {
-		super(actionBarView);
-	}
-
-	public EmailShareClickListener(ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
-		super(actionBarView, onActionBarEventListener);
-	}
-
-	@Override
-	protected String getMimeType() {
-		return "message/rfc822";
-	}
-
-	@Override
-	protected boolean isHtml() {
-		return true;
-	}
-
-	@Override
-	protected ShareType getShareType() {
-		return ShareType.EMAIL;
-	}
 }

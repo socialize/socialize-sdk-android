@@ -21,8 +21,6 @@
  */
 package com.socialize.ui.recommendation;
 
-import java.util.List;
-
 import com.socialize.entity.SocializeObject;
 import com.socialize.ui.activity.SocializeActivityConsumer;
 
@@ -30,8 +28,7 @@ import com.socialize.ui.activity.SocializeActivityConsumer;
  * @author Jason Polites
  *
  */
-public interface RecommendationConsumer<E extends SocializeObject> extends SocializeActivityConsumer<E> {
+public interface RecommendationConsumer<E extends SocializeObject> extends SocializeActivityConsumer {
 
-	public void consume(List<E> recommendations);
 	
 }

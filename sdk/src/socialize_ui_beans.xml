@@ -727,12 +727,52 @@
 	
 <!-- End Share UI -->	
 
-<!-- Socialize Activity View -->
+<!-- Socialize Action Bar Slider -->
 	<bean 
-		id="socializeActivityFactory" 
-		class="com.socialize.ui.activity.provider.SlideUpActivityProvider">
-		<property name="socializeActivityViewFactory" ref="socializeActivityViewFactory"/>
+		id="actionBarSliderFactory" 
+		class="com.socialize.ui.actionbar.slider.DefaultActionBarSliderFactory">
+		<property name="actionBarSliderViewFactory" ref="actionBarSliderViewFactory"/>
 	</bean>
+	
+	<bean 
+		id="actionBarSliderView" 
+		class="com.socialize.ui.actionbar.slider.ActionBarSliderView" 
+		singleton="false">
+		
+		<constructor-arg type="activity"/>
+		
+		<property name="drawables" ref="drawables"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="logger" ref="logger"/>
+		
+		<init-method name="init"/>
+	</bean>
+		
+	<bean 
+		id="sliderActionBarListener" 
+		class="com.socialize.ui.actionbar.SliderActionBarListener">
+		<property name="shareSliderItemFactory" ref="shareSliderItemFactory"/>
+		<property name="viewSliderItemFactory" ref="viewSliderItemFactory"/>
+	</bean>		
+	
+	<bean 
+		id="shareSliderItem" 
+		class="com.socialize.ui.actionbar.slider.share.ShareSliderItem" 
+		singleton="false">
+		<property name="viewFactory" ref="shareDialogViewFactory"/>
+	</bean>
+	
+	<bean 
+		id="viewSliderItem" 
+		class="com.socialize.ui.actionbar.slider.view.ViewSliderItem" 
+		singleton="false">
+		<constructor-arg type="activity"/>
+	</bean>	
+	
+	<factory id="actionBarSliderViewFactory" makes="actionBarSliderView"/>
+	<factory id="shareSliderItemFactory" makes="shareSliderItem"/>
+	<factory id="viewSliderItemFactory" makes="viewSliderItem"/>
+	<!-- 
 	
 	<bean 
 		id="socializeActivityProvider" 
@@ -768,9 +808,9 @@
 	</bean>	
 	
 	<factory id="socializeActivityEntityViewFactory" makes="socializeActivityEntityView"/>
-	<factory id="socializeActivityViewFactory" makes="socializeActivityView"/>
+	 -->
 
-<!-- End Socialize Activity View -->
+<!-- End Socialize Action Bar Slider -->
 
 <!--  Image Loader  -->
 	<bean id="imageUrlLoader" class="com.socialize.ui.image.ImageUrlLoader"/>

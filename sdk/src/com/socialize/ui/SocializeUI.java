@@ -127,6 +127,10 @@ public class SocializeUI {
 		return (View) container.getBean(name);
 	}
 	
+	public Drawable getDrawable(String name, int density, boolean eternal) {
+		return drawables.getDrawable(name, density, eternal);
+	}
+	
 	public Drawable getDrawable(String name, boolean eternal) {
 		return drawables.getDrawable(name, eternal);
 	}

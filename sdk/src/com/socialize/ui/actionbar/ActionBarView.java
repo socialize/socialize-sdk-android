@@ -26,13 +26,12 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.socialize.activity.SocializeActivityFactory;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.entity.Entity;
-import com.socialize.entity.SocializeObject;
-import com.socialize.ui.activity.SocializeActivityProvider;
-import com.socialize.ui.activity.SocializeActivityView;
-import com.socialize.ui.recommendation.RecommendationConsumer;
+import com.socialize.entity.Like;
+import com.socialize.entity.Share;
+import com.socialize.ui.actionbar.slider.ActionBarSliderFactory;
+import com.socialize.ui.actionbar.slider.ActionBarSliderView;
 import com.socialize.ui.view.EntityView;
 
 /**
@@ -44,13 +43,15 @@ public class ActionBarView extends EntityView {
 	public static final int ACTION_BAR_BUTTON_WIDTH = 80;
 	
 	private ActionBarLayoutView actionBarLayoutView;
-	private SocializeActivityView socializeActivityView;
-	private SocializeActivityFactory<SocializeActivityView> socializeActivityFactory;
-	private SocializeActivityProvider<SocializeObject, Entity, RecommendationConsumer<Entity>> socializeActivityProvider;
+	private ActionBarSliderView slider;
+	private ActionBarSliderFactory<ActionBarSliderView> sliderFactory;
 	
 	private boolean entityKeyIsUrl = true;
 	private String entityKey;
 	private String entityName;
+	
+	private OnActionBarEventListener onActionBarEventListener;
+	private OnActionBarEventListener systemOnActionBarEventListener;
 	
 	public ActionBarView(Context context) {
 		super(context);
@@ -76,35 +77,11 @@ public class ActionBarView extends EntityView {
 			actionBarLayoutView = container.getBean("actionBarLayoutView", this);
 		}
 		
-		if(socializeActivityProvider == null) {
-			socializeActivityProvider = container.getBean("socializeActivityProvider");
+		if(systemOnActionBarEventListener == null) {
+			systemOnActionBarEventListener = container.getBean("sliderActionBarListener");
 		}
 		
-//		if(socializeActivityView != null) {
-//			actionBarLayoutView.setOnActionBarEventListener(new OnActionBarEventListener() {
-//				
-//				@Override
-//				public void onUnlike() {
-//					socializeActivityView.close(true);
-//				}
-//				
-//				@Override
-//				public void onGetLike(Like like) {
-//					socializeActivityProvider.loadActivity(like, socializeActivityView);
-//				}
-//
-//				@Override
-//				public void onLike(Like like) {
-//					socializeActivityProvider.loadActivity(like, socializeActivityView);
-//				}
-//
-//				@Override
-//				public void onShare(Share share) {}
-//
-//				@Override
-//				public void onGetEntity(Entity entity) {}
-//			});
-//		}
+		setListeners();
 		
 		return actionBarLayoutView;
 	}
@@ -113,11 +90,67 @@ public class ActionBarView extends EntityView {
 	@Override
 	public void onAfterAuthenticate(IOCContainer container) {
 		super.onAfterAuthenticate(container);
-		socializeActivityFactory = container.getBean("socializeActivityFactory");
-		if(socializeActivityFactory != null) {
-			socializeActivityView = socializeActivityFactory.wrap(this);
+		sliderFactory = container.getBean("actionBarSliderFactory");
+		if(sliderFactory != null) {
+			slider = sliderFactory.wrap(this);
 		}
 	}
+	
+	protected void setListeners() {
+		if(actionBarLayoutView != null) {
+			if(onActionBarEventListener != null) {
+				if(systemOnActionBarEventListener != null) {
+					
+					actionBarLayoutView.setOnActionBarEventListener(new OnActionBarEventListener() {
+						
+						@Override
+						public void onPostUnlike(ActionBarView actionBar) {
+							systemOnActionBarEventListener.onPostUnlike(actionBar);
+							onActionBarEventListener.onPostUnlike(actionBar);
+						}
+						
+						@Override
+						public void onPostShare(ActionBarView actionBar, Share share) {
+							systemOnActionBarEventListener.onPostShare(actionBar, share);
+							onActionBarEventListener.onPostShare(actionBar, share);
+						}
+						
+						@Override
+						public void onPostLike(ActionBarView actionBar, Like like) {
+							systemOnActionBarEventListener.onPostLike(actionBar, like);
+							onActionBarEventListener.onPostLike(actionBar, like);
+						}
+						
+						@Override
+						public void onGetLike(ActionBarView actionBar, Like like) {
+							systemOnActionBarEventListener.onGetLike(actionBar, like);
+							onActionBarEventListener.onGetLike(actionBar, like);
+						}
+						
+						@Override
+						public void onGetEntity(ActionBarView actionBar, Entity entity) {
+							systemOnActionBarEventListener.onGetEntity(actionBar, entity);
+							onActionBarEventListener.onGetEntity(actionBar, entity);
+						}
+						
+						@Override
+						public void onClick(ActionBarView actionBar, ActionBarEvent evt) {
+							systemOnActionBarEventListener.onClick(actionBar, evt);
+							onActionBarEventListener.onClick(actionBar, evt);
+						}
+					});
+					
+				}
+				else {
+					actionBarLayoutView.setOnActionBarEventListener(onActionBarEventListener);
+				}
+			}
+			else if(systemOnActionBarEventListener != null) {
+				actionBarLayoutView.setOnActionBarEventListener(systemOnActionBarEventListener);
+			}
+		}
+	}
+	
 	
 	public String getEntityKey() {
 		return entityKey;
@@ -133,6 +166,10 @@ public class ActionBarView extends EntityView {
 
 	public void setEntityName(String entityName) {
 		this.entityName = entityName;
+	}
+	
+	protected ActionBarSliderView getSlider() {
+		return slider;
 	}
 
 	/* (non-Javadoc)
@@ -162,7 +199,15 @@ public class ActionBarView extends EntityView {
 		this.entityKeyIsUrl = entityKeyIsUrl;
 	}
 	
-	public void reload() {
+	public void setOnActionBarEventListener(OnActionBarEventListener onActionBarEventListener) {
+		this.onActionBarEventListener = onActionBarEventListener;
+		
+		if(actionBarLayoutView != null) {
+			actionBarLayoutView.setOnActionBarEventListener(onActionBarEventListener);
+		}
+	}
+
+	public void refresh() {
 		if(actionBarLayoutView != null) {
 			actionBarLayoutView.reload();
 		}

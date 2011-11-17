@@ -19,16 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.activity;
-
-import android.view.View;
+package com.socialize.ui.activity;
 
 /**
  * @author Jason Polites
  *
  */
-public interface SocializeActivityFactory<V extends View> {
+public interface SocializeActivityProducer {
 
-	public V wrap(View parent);
-	
 }

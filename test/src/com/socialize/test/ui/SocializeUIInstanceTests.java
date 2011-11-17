@@ -666,7 +666,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		
 		PublicSocializeUI publicSocializeUI = new PublicSocializeUI() {
 			
-			public View showActionBar(
+			public ActionBarView showActionBar(
 					Activity parent, 
 					View original, 
 					String entityKey, 
@@ -717,7 +717,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		
 		PublicSocializeUI publicSocializeUI = new PublicSocializeUI() {
 			
-			public View showActionBar(
+			public ActionBarView showActionBar(
 					Activity parent, 
 					View original, 
 					String entityKey, 
@@ -780,7 +780,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		
 		PublicSocializeUI publicSocializeUI = new PublicSocializeUI() {
 			
-			public View showActionBar(
+			public ActionBarView showActionBar(
 					Activity parent, 
 					View original, 
 					String entityKey, 
@@ -834,7 +834,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		
 		PublicSocializeUI publicSocializeUI = new PublicSocializeUI() {
 			
-			public View showActionBar(
+			public ActionBarView showActionBar(
 					Activity parent, 
 					View original, 
 					String entityKey, 
@@ -891,7 +891,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		
 		PublicSocializeUI publicSocializeUI = new PublicSocializeUI() {
 			
-			public View showActionBar(
+			public ActionBarView showActionBar(
 					Activity parent, 
 					View original, 
 					String entityKey, 
@@ -960,7 +960,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		
 		PublicSocializeUI publicSocializeUI = new PublicSocializeUI() {
 			
-			public View showActionBar(
+			public ActionBarView showActionBar(
 					Activity parent, 
 					View original, 
 					String entityKey, 
@@ -1187,7 +1187,5 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		public View inflateView(Activity parent, int resId) {
 			return super.inflateView(parent, resId);
 		}
-		
-		
 	}
 }

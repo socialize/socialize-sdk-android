@@ -22,12 +22,12 @@
 package com.socialize.ui.recommendation;
 
 import com.socialize.entity.SocializeObject;
-import com.socialize.ui.activity.SocializeActivityProvider;
+import com.socialize.ui.activity.SocializeEntityActivityProvider;
 
 /**
  * @author Jason Polites
  *
  */
-public interface RecommendationProvider<IN extends SocializeObject, OUT extends SocializeObject> extends SocializeActivityProvider<IN, OUT, RecommendationConsumer<OUT>> {
+public interface RecommendationProvider<IN extends SocializeObject, OUT extends SocializeObject> extends SocializeEntityActivityProvider<IN, RecommendationConsumer<OUT>> {
 	public void provide(IN in, RecommendationConsumer<OUT> consumer);
 }

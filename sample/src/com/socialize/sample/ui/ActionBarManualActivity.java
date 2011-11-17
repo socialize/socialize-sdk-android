@@ -13,6 +13,6 @@ public class ActionBarManualActivity extends ActionBarActivity {
 		socializeActionBarView.setEntityKey(entityKey);
 		socializeActionBarView.setEntityName(entityName);
 		socializeActionBarView.setEntityKeyIsUrl(isEntityKeyUrl);
-		socializeActionBarView.reload(); // Optional.. only if changing entity key.
+		socializeActionBarView.refresh(); // Optional.. only if changing entity key.
 	}
 }

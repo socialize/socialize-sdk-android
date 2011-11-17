@@ -21,16 +21,14 @@
  */
 package com.socialize.ui.activity;
 
-import java.util.List;
-
-import com.socialize.entity.SocializeObject;
+import android.view.View;
 
 /**
  * @author Jason Polites
  *
  */
-public interface SocializeActivityConsumer<E extends SocializeObject> {
+public interface SocializeActivityConsumer {
 
-	public void consume(List<E> items);
+	public void consume(View view);
 	
 }

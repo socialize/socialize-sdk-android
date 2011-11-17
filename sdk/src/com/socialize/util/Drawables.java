@@ -75,6 +75,10 @@ public class Drawables {
 		return getDrawable(name, false, false, -1, -1, eternal);
 	}
 	
+	public Drawable getDrawable(String name, int forceDensity, boolean eternal) {
+		return getDrawable(name, metrics.densityDpi, false, false, -1, -1, eternal, forceDensity);
+	}	
+	
 	public Drawable getDrawable(String name, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
 		return getDrawable(name, metrics.densityDpi, tileX, tileY, scaleToWidth, scaleToHeight, eternal);
 	}
@@ -109,6 +113,10 @@ public class Drawables {
 	}
 	
 	public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
+		return getDrawable(name, density, tileX, tileY, scaleToWidth, scaleToHeight, eternal, density);
+	}
+	
+	public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal, int forceDensity) {
 		
 		String densityPath = getPath(name, density);
 		String commonPath = getPath(name);
@@ -155,7 +163,7 @@ public class Drawables {
 			}
 			
 			if(in != null) {
-				drawable = createDrawable(in, path, tileX, tileY, scaleToWidth, scaleToHeight);
+				drawable = createDrawable(in, path, tileX, tileY, scaleToWidth, scaleToHeight, forceDensity);
 				addToCache(path, drawable, eternal);
 			}
 			else {
@@ -234,9 +242,9 @@ public class Drawables {
 		return "res/drawable/" + densityPath + "/" + name;
 	}
 	
-	protected CacheableDrawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY) {
+	protected CacheableDrawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY, int forceDensity) {
 		
-		Bitmap bitmap = bitmapUtils.getScaledBitmap ( in , pixelsX, pixelsY );
+		Bitmap bitmap = bitmapUtils.getScaledBitmap ( in , pixelsX, pixelsY , forceDensity);
 		
 		CacheableDrawable drawable = createDrawable(bitmap, name);
 		

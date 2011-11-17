@@ -30,14 +30,18 @@ import com.socialize.entity.Share;
  *
  */
 public interface OnActionBarEventListener {
+	
+	public enum ActionBarEvent {VIEW, LIKE, COMMENT, SHARE}; 
 
-	public void onGetLike(Like like);
+	public void onGetLike(ActionBarView actionBar, Like like);
 	
-	public void onLike(Like like);
+	public void onPostLike(ActionBarView actionBar, Like like);
 	
-	public void onUnlike();
+	public void onPostUnlike(ActionBarView actionBar);
 	
-	public void onShare(Share share);
+	public void onPostShare(ActionBarView actionBar, Share share);
 	
-	public void onGetEntity(Entity entity);
+	public void onGetEntity(ActionBarView actionBar, Entity entity);
+	
+	public void onClick(ActionBarView actionBar, ActionBarEvent evt);
 }

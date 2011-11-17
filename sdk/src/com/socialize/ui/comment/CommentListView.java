@@ -192,8 +192,14 @@ public class CommentListView extends BaseView {
 		}
 		
 	}
+	
+	public void reload() {
+		content.showLoading();
+		commentAdapter.reset();
+		doListComments(true);
+	}
 
-	public void doListComments(boolean update) {
+	public void doListComments(final boolean update) {
 
 		startIndex = 0;
 		endIndex = defaultGrabLength;
@@ -230,7 +236,10 @@ public class CommentListView extends BaseView {
 						commentAdapter.setLast(true);
 					}
 
-//					commentAdapter.notifyDataSetChanged();
+					if(update) {
+						commentAdapter.notifyDataSetChanged();
+						content.scrollToTop();
+					}
 					
 					content.showList();
 
@@ -255,7 +264,6 @@ public class CommentListView extends BaseView {
 	}
 
 	protected void getNextSet() {
-		
 		
 		if(logger != null && logger.isDebugEnabled()) {
 			logger.info("getNextSet called on CommentListView");

@@ -1,4 +1,25 @@
-package com.socialize.ui.activity;
+/*
+ * Copyright (c) 2011 Socialize Inc.
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package com.socialize.ui.actionbar.slider;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -11,17 +32,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.socialize.util.Drawables;
+import com.socialize.util.StringUtils;
 
-public class SocializeActivityHandle extends SocializeActivityViewChild {
+/**
+ * @author Jason Polites
+ *
+ */
+public class ActionBarSliderHandle extends ActionBarSliderViewChild {
 
 	private int height;
 	private TextView text;
-	private ImageView imageView;
-	private ImageView socializeLogo;
+	private ImageView closeButtonImage;
+	private ImageView icon;
 	private Drawables drawables;
 	private String title = "";
 	
-	public SocializeActivityHandle(Context context, SocializeActivityView parent, int height) {
+	public ActionBarSliderHandle(Context context, ActionBarSliderView parent, int height) {
 		super(context, parent);
 		this.height = height;
 	}
@@ -43,13 +69,12 @@ public class SocializeActivityHandle extends SocializeActivityViewChild {
 		text.setTextColor(Color.WHITE);
 		text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
 		
-		imageView = new ImageView(getContext());
-		imageView.setPadding(4, 0, 4, 0);
-		imageView.setImageDrawable(drawables.getDrawable("toolbar_close.png"));
+		closeButtonImage = new ImageView(getContext());
+		closeButtonImage.setPadding(4, 0, 4, 0);
+		closeButtonImage.setImageDrawable(drawables.getDrawable("toolbar_close.png"));
 		
-		socializeLogo = new ImageView(getContext());
-		socializeLogo.setPadding(4, 0, 4, 0);
-		socializeLogo.setImageDrawable(drawables.getDrawable("icon_like_hi.png"));
+		icon = new ImageView(getContext());
+		icon.setPadding(4, 0, 4, 0);
 		
 		LayoutParams textParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		textParams.weight = 1.0f;
@@ -61,17 +86,17 @@ public class SocializeActivityHandle extends SocializeActivityViewChild {
 		imageParams.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
 		imageParams.setMargins(10, 0, 0, 0);
 		
-		imageView.setLayoutParams(imageParams);
+		closeButtonImage.setLayoutParams(imageParams);
 		
 		LayoutParams logoParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		logoParams.weight = 0.0f;
 		logoParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
 		
-		socializeLogo.setLayoutParams(logoParams);
+		icon.setLayoutParams(logoParams);
 		
-		addView(socializeLogo);
+		addView(icon);
 		addView(text);
-		addView(imageView);
+		addView(closeButtonImage);
 	}
 	
 	public void setDrawables(Drawables drawables) {
@@ -84,11 +109,22 @@ public class SocializeActivityHandle extends SocializeActivityViewChild {
 		}
 		this.title = str;
 	}
+	
+	public void setIconImage(String imageName) {
+		
+		if(StringUtils.isEmpty(imageName)) {
+			icon.setVisibility(GONE);
+		}
+		else {
+			icon.setImageDrawable(drawables.getDrawable(imageName));
+			icon.setVisibility(VISIBLE);
+		}
+	}
 
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
 		Rect rect = new Rect();
-		imageView.getHitRect(rect);
+		closeButtonImage.getHitRect(rect);
 		adjustHitRect(rect);
 		if(rect.contains((int)ev.getX(), (int)ev.getY())) {
 			getParentAdView().close();
