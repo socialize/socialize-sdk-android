@@ -27,6 +27,7 @@ test/test-output
 test/gen
 test/bin
 test/local.properties
+test/private
 ui/bin
 ui/gen
 ui-sample/bin/

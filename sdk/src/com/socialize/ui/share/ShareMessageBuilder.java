@@ -21,6 +21,7 @@
  */
 package com.socialize.ui.share;
 
+import com.socialize.api.SocializeSession;
 import com.socialize.entity.User;
 import com.socialize.ui.SocializeUI;
 import com.socialize.util.DeviceUtils;
@@ -41,19 +42,13 @@ public class ShareMessageBuilder {
 	public String buildShareSubject(String entityKey, String entityName) {
 		
 		StringBuilder builder = new StringBuilder();
+		SocializeSession session = getSocializeUI().getSocialize().getSession();
 		
-		User currentUser = getSocializeUI().getSocialize().getSession().getUser();
+		User currentUser = null;
 		
-//		Intent intent = context.getIntent();
-//		Bundle extras = intent.getExtras();
-//		
-//		String entityKey = null;
-//		String entityName = null;
-//		
-//		if(extras != null) {
-//			entityKey = extras.getString(SocializeUI.ENTITY_KEY);
-//			entityName = extras.getString(SocializeUI.ENTITY_NAME);
-//		}
+		if(session != null) {
+			currentUser = session.getUser();
+		}
 		
 		if(currentUser != null) {
 			String name = currentUser.getDisplayName();
@@ -77,7 +72,6 @@ public class ShareMessageBuilder {
 		}
 		
 		return builder.toString();
-		
 	}
 	
 	public String buildShareMessage(String entityKey, String entityName, String comment, boolean html, boolean includeSocialize) {

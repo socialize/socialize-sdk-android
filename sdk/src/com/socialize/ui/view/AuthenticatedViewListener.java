@@ -49,7 +49,9 @@ public class AuthenticatedViewListener implements SocializeAuthListener {
 
 	@Override
 	public void onError(SocializeException error) {
+		// Ensure we notify any pending dialogs
 		view.onAfterAuthenticate(container);
+		view.removeAllViews();
 		view.showError(context, error);
 		error.printStackTrace();
 	}

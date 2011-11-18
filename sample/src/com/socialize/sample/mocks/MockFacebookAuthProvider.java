@@ -1,4 +1,4 @@
-package com.socialize.test.mock;
+package com.socialize.sample.mocks;
 
 import com.socialize.api.SocializeAuthRequest;
 import com.socialize.auth.AuthProvider;

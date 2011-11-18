@@ -125,6 +125,10 @@ public abstract class SocializeView extends BaseView {
 	
 	public abstract View getLoadingView();
 	
+	public View getLoadFailView() {
+		return null;
+	}
+	
 	// Subclasses override
 	protected void onBeforeSocializeInit() {}
 }

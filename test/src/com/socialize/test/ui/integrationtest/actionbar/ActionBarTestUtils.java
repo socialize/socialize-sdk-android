@@ -4,7 +4,7 @@ import static junit.framework.Assert.fail;
 
 import com.socialize.SocializeBeanAccess;
 import com.socialize.api.ApiHost;
-import com.socialize.test.mock.MockSocializeApiHost;
+import com.socialize.sample.mocks.MockSocializeApiHost;
 
 public class ActionBarTestUtils {
 	public static void setApiHostDelegate(ApiHost delegate) {

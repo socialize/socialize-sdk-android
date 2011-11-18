@@ -1,4 +1,4 @@
-package com.socialize.test.mock;
+package com.socialize.sample.mocks;
 
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
