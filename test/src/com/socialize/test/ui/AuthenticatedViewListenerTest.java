@@ -18,10 +18,10 @@ public class AuthenticatedViewListenerTest extends SocializeUIActivityTest {
 		SocializeException error = AndroidMock.createMock(SocializeException.class);
 		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
 		
-		error.printStackTrace();
-		
 		view.onAfterAuthenticate(container);
+		view.removeAllViews();
 		view.showError(getActivity(), error);
+		error.printStackTrace();
 		
 		AndroidMock.replay(view);
 		AndroidMock.replay(error);

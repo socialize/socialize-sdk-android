@@ -68,10 +68,12 @@ public class CommentEntryView extends BaseView {
 		
 		LinearLayout buttonLayout = new LinearLayout(getContext());
 		
-		checkBox = new AutoPostFacebookOption(getContext()); // TODO: make a factory
-		checkBox.init();
-		checkBox.setChecked(Socialize.getSocialize().getSession().getUser().isAutoPostToFacebook());
-		
+		if(getSocializeUI().isFacebookSupported()) {
+			checkBox = new AutoPostFacebookOption(getContext()); // TODO: make a factory
+			checkBox.init();
+			checkBox.setChecked(Socialize.getSocialize().getSession().getUser().isAutoPostToFacebook());
+		}
+
 		LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		LayoutParams commentFieldParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
@@ -117,7 +119,14 @@ public class CommentEntryView extends BaseView {
 				@Override
 				public void onClick(View v) {
 					keyboardUtils.hideKeyboard(commentField);
-					listener.onComment(commentField.getText().toString().trim(), checkBox.isChecked());
+					boolean autoPost = false;
+					
+					if(checkBox != null) {
+						autoPost =checkBox.isChecked(); 
+					}
+					
+					listener.onComment(commentField.getText().toString().trim(), autoPost);
+					
 				}
 			});
 			
@@ -126,7 +135,11 @@ public class CommentEntryView extends BaseView {
 		
 		addView(commentLabel);
 		addView(commentField);
-		addView(checkBox);
+		
+		if(checkBox != null) {
+			addView(checkBox);
+		}
+		
 		addView(buttonLayout);
 	}
 	
@@ -135,7 +148,6 @@ public class CommentEntryView extends BaseView {
 	protected void onViewRendered(int width, int height) {
 		super.onViewRendered(width, height);
 		commentField.requestFocus();
-//		keyboardUtils.showKeyboard(commentField);
 	}
 
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
@@ -157,7 +169,10 @@ public class CommentEntryView extends BaseView {
 	protected void reset() {
 		keyboardUtils.hideKeyboard(commentField);
 		commentField.setText("");
-		checkBox.setChecked(Socialize.getSocialize().getSession().getUser().isAutoPostToFacebook());
+		
+		if(checkBox != null) {
+			checkBox.setChecked(Socialize.getSocialize().getSession().getUser().isAutoPostToFacebook());
+		}
 	}
 	
 	protected EditText getCommentField() {
