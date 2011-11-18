@@ -145,7 +145,7 @@ public class DrawablesTest extends SocializeActivityTest {
 			BitmapUtils bitmapUtils = AndroidMock.createMock(BitmapUtils.class, builder);
 			InputStream in = AndroidMock.createMock(InputStream.class);
 			
-			AndroidMock.expect(bitmapUtils.getScaledBitmap ( in , pixelsX, pixelsY )).andReturn(bitmap);
+			AndroidMock.expect(bitmapUtils.getScaledBitmap ( in , pixelsX, pixelsY, -1 )).andReturn(bitmap);
 			
 			if(repeatX) {
 				drawable.setTileModeX(Shader.TileMode.REPEAT);

@@ -359,9 +359,12 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		AndroidMock.expect(progressDialogFactory.show(getContext(), title, message)).andReturn(dialog);
 		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
+		AndroidMock.expect(commentAdapter.getTotalCount()).andReturn(totalCount).anyTimes();
 
 		comments.add(0, comment);
-		header.setText((totalCount+1) + " Comments");
+		header.setText((totalCount) + " Comments");
+
+		commentAdapter.setTotalCount((totalCount+1));
 		field.clear();
 		commentAdapter.notifyDataSetChanged();
 		content.scrollToTop();
@@ -409,7 +412,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		view.setContent(content);
 		view.setStartIndex(startIndex);
 		view.setEndIndex(endIndex);
-		view.setTotalCount(totalCount);
 		view.setFacebookWallPoster(facebookWallPoster);
 		view.setEntityKey(entityKey);
 		view.setEntityName(entityName);
@@ -427,7 +429,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		AndroidMock.verify(facebookWallPoster);
 		
 		// Make sure indexes were updated
-		assertEquals(totalCount+1, view.getTotalCount());
 		assertEquals(startIndex+1, view.getStartIndex());
 		assertEquals(endIndex+1, view.getEndIndex());
 	}
@@ -519,11 +520,14 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 	@UsesMocks ({CommentAdapter.class})
 	public void testGetNextSetIsLast() {
 		
+		final int totalCount = 69;
 		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
+		
 		
 		commentAdapter.notifyDataSetChanged();
 		commentAdapter.setLast(true);
 		
+		AndroidMock.expect(commentAdapter.getTotalCount()).andReturn(totalCount).anyTimes();
 		AndroidMock.replay(commentAdapter);
 		
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
@@ -535,7 +539,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		};
 		
 		// Orchestrate the completion state
-		final int totalCount = 69;
+		
 		final int endIndex = 70;
 		final int startIndex = 60;
 		final int grabLength = 10;
@@ -543,7 +547,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		view.setCommentAdapter(commentAdapter);
 		view.setStartIndex(startIndex);
 		view.setEndIndex(endIndex);
-		view.setTotalCount(totalCount);
 		view.setDefaultGrabLength(grabLength);
 		
 		
@@ -563,7 +566,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		ListResult.class})
 	public void testGetNextSet() {
 		
-		final int totalCount = 169;
 		final int startIndex = 0;
 		final int endIndex = 70;
 		
@@ -576,6 +578,8 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
 		AndroidMock.expect(entities.getItems()).andReturn(listResultComments);
 		AndroidMock.expect(comments.addAll(listResultComments)).andReturn(true);
+		AndroidMock.expect(commentAdapter.getTotalCount()).andReturn(69).anyTimes();
+		
 		
 		commentAdapter.setComments(comments);
 		commentAdapter.notifyDataSetChanged();
@@ -604,7 +608,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		view.setCommentAdapter(commentAdapter);
 		view.setStartIndex(startIndex);
 		view.setEndIndex(endIndex);
-		view.setTotalCount(totalCount);
 		view.setDefaultGrabLength(10);
 		
 		view.getNextSet();
@@ -642,10 +645,12 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
 		AndroidMock.expect(comments.size()).andReturn(0); // Empty comments
 		AndroidMock.expect(entities.getItems()).andReturn(listResultComments);
-		AndroidMock.expect(entities.getTotalCount()).andReturn(totalCount);
+		AndroidMock.expect(entities.getTotalCount()).andReturn(totalCount).anyTimes();
+		AndroidMock.expect(commentAdapter.getTotalCount()).andReturn(totalCount).anyTimes();
 
 		commentAdapter.setComments(listResultComments);
 		commentAdapter.setLast(true);
+		commentAdapter.setTotalCount(totalCount);
 		header.setText(totalCount + " Comments");
 		content.showList();
 		
@@ -680,14 +685,14 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		view.doListComments(false);
 		
+		assertEquals(totalCount, view.getTotalCount());
+		assertFalse(view.isLoading());
+		
 		AndroidMock.verify(commentAdapter);
 		AndroidMock.verify(comments);
 		AndroidMock.verify(header);
 		AndroidMock.verify(content);
 		AndroidMock.verify(entities);
-		
-		assertEquals(totalCount, view.getTotalCount());
-		assertFalse(view.isLoading());
 	}
 	
 	
@@ -758,27 +763,35 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
 		final List<Comment> comments = AndroidMock.createMock(List.class);
 		final CommentContentView content = AndroidMock.createMock(CommentContentView.class, getContext());
+		final CommentHeader header = AndroidMock.createMock(CommentHeader.class, getContext());
 		
 		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
 		AndroidMock.expect(comments.size()).andReturn(10); // Populated comments
 
+		AndroidMock.expect(commentAdapter.getTotalCount()).andReturn(10); // Populated comments
+		
 		commentAdapter.notifyDataSetChanged();
 		content.showList();
+		
+		header.setText(10 + " Comments");
 		
 		AndroidMock.replay(commentAdapter);
 		AndroidMock.replay(comments);
 		AndroidMock.replay(content);
+		AndroidMock.replay(header);
 		
 		PublicCommentListView view = new PublicCommentListView(getContext());
 		
 		view.setCommentAdapter(commentAdapter);
 		view.setContent(content);
+		view.setHeader(header);
 		
 		view.doListComments(false);
 		
 		AndroidMock.verify(commentAdapter);
 		AndroidMock.verify(comments);
 		AndroidMock.verify(content);
+		AndroidMock.verify(header);
 		
 		assertFalse(view.isLoading());
 	}
@@ -906,11 +919,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		@Override
 		public void setEndIndex(int endIndex) {
 			super.setEndIndex(endIndex);
-		}
-
-		@Override
-		public void setTotalCount(int totalCount) {
-			super.setTotalCount(totalCount);
 		}
 
 		@Override

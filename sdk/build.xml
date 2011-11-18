@@ -3,7 +3,6 @@
 
 	<property file="local.properties" />
     <property file="ant.properties" />
-	<property file="emma.properties" />
     <loadproperties srcFile="project.properties" />
     <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project'" unless="sdk.dir"/>
 
@@ -283,27 +282,6 @@
                     <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
                 </classpath>
             </javac>
-
-            <!-- if the project is instrumented, intrument the classes -->
-            <if condition="${build.is.instrumented}">
-                <then>
-                    <echo>Instrumenting classes from ${out.absolute.dir}/classes...</echo>
-                    <echo>[OVERRIDE] Instrumenting classes from ${out.absolute.dir}/classes to ${out.absolute.dir}/classes</echo>
-                	<echo>EMMA will create meta data file in ${emma.report.dir}/coverage.em</echo>
-                	
-                    <!-- It only instruments class files, not any external libs -->
-                    <emma enabled="true">
-                        <instr 
-							verbosity="${verbosity}"
-							mode="overwrite"
-							instrpath="${out.absolute.dir}/classes"
-							outdir="${out.absolute.dir}/classes"
-							metadatafile="${emma.report.dir}/coverage.em"
-							filter="${emma.excluded}">
-                        </instr>
-                    </emma>
-                </then>
-            </if>
             
             <!-- if the project is a library then we generate a jar file -->
             <if condition="${project.is.library}">

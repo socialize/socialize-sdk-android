@@ -53,6 +53,8 @@ public class CommentAdapter extends BaseAdapter {
 	private Activity context;
 	private Date now;
 
+	private int totalCount = 0;
+	
 	private int iconSize = 100;
 
 	public void init(Activity context) {
@@ -397,6 +399,14 @@ public class CommentAdapter extends BaseAdapter {
 
 	public void setImageLoader(ImageLoader imageLoader) {
 		this.imageLoader = imageLoader;
+	}
+
+	public int getTotalCount() {
+		return totalCount;
+	}
+
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
 	}
 
 	protected SocializeUI getSocializeUI() {

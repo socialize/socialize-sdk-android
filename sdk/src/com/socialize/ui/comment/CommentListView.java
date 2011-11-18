@@ -36,7 +36,7 @@ public class CommentListView extends BaseView {
 	private boolean useLink;
 	private int startIndex = 0;
 	private int endIndex = defaultGrabLength;
-	private int totalCount = 0;
+//	private int totalCount = 0;
 	
 	private SocializeLogger logger;
 	private DialogFactory<ProgressDialog> progressDialogFactory;
@@ -169,14 +169,16 @@ public class CommentListView extends BaseView {
 					// TODO: handle error!
 				}
 				
-				totalCount++;
 				startIndex++;
 				endIndex++;
 				
-				header.setText(totalCount + " Comments");
+				
 				field.clear();
 				
+				commentAdapter.setTotalCount(commentAdapter.getTotalCount() + 1);
 				commentAdapter.notifyDataSetChanged();
+				
+				header.setText(commentAdapter.getTotalCount() + " Comments");
 				
 				content.scrollToTop();
 				
@@ -228,9 +230,10 @@ public class CommentListView extends BaseView {
 
 				@Override
 				public void onList(ListResult<Comment> entities) {
-					totalCount = entities.getTotalCount();
+					int totalCount = entities.getTotalCount();
 					header.setText(totalCount + " Comments");
 					commentAdapter.setComments(entities.getItems());
+					commentAdapter.setTotalCount(totalCount);
 
 					if(totalCount <= endIndex) {
 						commentAdapter.setLast(true);
@@ -253,7 +256,7 @@ public class CommentListView extends BaseView {
 		}
 		else {
 			content.showList();
-
+			header.setText(commentAdapter.getTotalCount() + " Comments");
 			commentAdapter.notifyDataSetChanged();
 			if(dialog != null) {
 				dialog.dismiss();
@@ -274,8 +277,8 @@ public class CommentListView extends BaseView {
 		startIndex+=defaultGrabLength;
 		endIndex+=defaultGrabLength;
 
-		if(endIndex > totalCount) {
-			endIndex = totalCount;
+		if(endIndex > commentAdapter.getTotalCount()) {
+			endIndex = commentAdapter.getTotalCount();
 
 			if(startIndex >= endIndex) {
 				commentAdapter.setLast(true);
@@ -395,10 +398,6 @@ public class CommentListView extends BaseView {
 		this.endIndex = endIndex;
 	}
 
-	protected void setTotalCount(int totalCount) {
-		this.totalCount = totalCount;
-	}
-
 	public int getStartIndex() {
 		return startIndex;
 	}
@@ -412,7 +411,7 @@ public class CommentListView extends BaseView {
 	}
 
 	public int getTotalCount() {
-		return totalCount;
+		return commentAdapter.getTotalCount();
 	}
 
 	public void setAuthRequestDialogFactory(IBeanFactory<AuthRequestDialogFactory> authRequestDialogFactory) {
