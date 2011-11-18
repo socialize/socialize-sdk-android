@@ -26,15 +26,17 @@ Socialize UI (Recommended for most users)
 
 What's New!
 ------------
-1. NEW: Facebook authentication for Comments.
-2. NEW: User's can now manage their profile, including name and picture.
-3. Several performance improvements and bug fixes.
+1. NEW: Socialize Action Bar
+2. NEW: Share to Facebook
+3. NEW: Auto-post Comments and Likes to Facebook
+4. NEW: Updated and improved user experience for commenting
+5. Fixed a few bugs with the older Comment list view
 
 Introduction
 ------------
-As of v0.4.0 of the Socialize SDK we are providing pre-built UI views that can 
-quickly and easily be dropped in to your app, saving you the time of building 
-these views yourself!
+v0.7.0 of the Socialize SDK introduces a completely new control we call the "Action Bar".
+This is a one-stop-shop of social features that can be quickly and easily dropped into your app, and 
+provides a central entry point into all the features of the Socialize SDK.
 
 Configure your AndroidManifest.xml
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -72,41 +74,37 @@ Or by creating a configuration file in your **assets** path called **socialize.p
 
 (Replace 00000000-0000-0000-000000000000 with your key/secret from your Socialize account)
 
-Socialize Comment View
-----------------------
-v0.4.0 of the Socialize SDK introduced the "Comment View" which provides the creation and viewing 
-of comments associated with an entity (URL).  
+Socialize Action Bar
+--------------------
+Brand new in v0.7.0 of the Socialize SDK for Android is the "Action Bar" which provides a single 
+entry point into the entire set of Socialize features.
 
-.. image:: images/comment_view2.png	
-.. image:: images/comment_view3.png
-.. image:: images/comment_view4.png		
+.. image:: images/ab_view0.png	
+.. image:: images/ab_view1.png
+.. image:: images/ab_view2.png	
 
-Diplaying the Comment View
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Displaying the Action Bar
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-When you want to launch the comment view, simply call **showCommentView** from the SocializeUI instance:
-
-.. raw:: html
-
-	<script src="https://gist.github.com/1132979.js?file=show_comment_view.java"></script>
-
-Here's an example of calling it on a button click:
+The Action Bar is designed to automatically "pin" iteself to the bottom of your view.  
+Adding the Action Bar to your app is done with a simple call to **showActionBar** from the SocializeUI instance:
 
 .. raw:: html
 
-	<script src="https://gist.github.com/1132979.js?file=show_comment_view_onclick.java"></script>
+	<script src="https://gist.github.com/1376163.js?file=action_bar_init.java"></script>
 
 Adding Facebook Authentication
 ------------------------------
 
-It is strongly recommended that users be able to authenticate with Facebook when posting comments.
+It is strongly recommended that users be able to authenticate with Facebook when using Socialize so as to 
+maximize the exposure, and promotion of your app.
 
 This provides significant benefits to both your application, and your users including:
 
 1. Improved user experience through personalized comments
 2. Automatic profile creation (user name and profile picture)
-3. Ability to automatically post user comments to Facebook (coming soon)
-4. Promotes your app on Facebook by associating your app with comments (coming soon)
+3. Ability to automatically post user comments and likes to Facebook
+4. Promotes your app on Facebook by associating your app with comments
 
 To add Facebook authentication, you'll need a Facebook App ID.  If you already have a Facebook app, 
 you can skip this section.
@@ -149,15 +147,6 @@ If you **do not** already have a Facebook app just follow these simple steps:
 	
 You should now be ready to authenticate user's of your app with Facebook when they are using Socialize, jump to the :ref:`fb_snippet` to find out how.  	
 
-Adding Facebook Authentication to Socialize
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-To add Facebook authentication, simple specify your Facebook App ID when you initialize Socialize:
-
-.. raw:: html
-
-	<script src="https://gist.github.com/1132979.js?file=show_comment_view_onclick_fb.java"></script>
-
 Enabling/Disabling Facebook Single Sign On (SSO)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -167,7 +156,31 @@ If you have experienced problems with this (e.g. the "invalid_key" error), you c
 
 .. raw:: html
 
-	<script src="https://gist.github.com/1132979.js?file=show_comment_view_onclick_fb_nosso.java"></script>
+	<script src="https://gist.github.com/1376163.js?file=no_fb.java"></script>
+	
+Socialize Comment View
+----------------------
+v0.4.0 of the Socialize SDK introduced the "Comment View" which provides the creation and viewing 
+of comments associated with an entity (URL).  
+
+.. image:: images/comment_view2.png	
+.. image:: images/comment_view3.png
+.. image:: images/comment_view4.png		
+
+Diplaying the Comment View
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When you want to launch the comment view, simply call **showCommentView** from the SocializeUI instance:
+
+.. raw:: html
+
+	<script src="https://gist.github.com/1132979.js?file=show_comment_view.java"></script>
+
+Here's an example of calling it on a button click:
+
+.. raw:: html
+
+	<script src="https://gist.github.com/1132979.js?file=show_comment_view_onclick.java"></script>
 
 A Complete Example
 ~~~~~~~~~~~~~~~~~~
@@ -178,6 +191,3 @@ Here's a complete example in an Activity:
 
 	<script src="https://gist.github.com/1132979.js?file=comment_view_activity_fb.java"></script>
 
-Socialize Action Bar
---------------------
-*Coming Soon!*

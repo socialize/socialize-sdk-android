@@ -345,6 +345,10 @@ public class SocializeUI {
 		return showActionBar(parent, resId, entityKey, null, true, true, listener);
 	}
 	
+	public View showActionBar(Activity parent, int resId, String entityKey, ActionBarOptions options) {
+		return showActionBar(parent, resId, entityKey, options.getEntityName(), options.isEntityKeyUrl(), options.isAddScrollView(), null);
+	}
+		
 	public View showActionBar(Activity parent, int resId, String entityKey, ActionBarOptions options, ActionBarListener listener) {
 		return showActionBar(parent, resId, entityKey, options.getEntityName(), options.isEntityKeyUrl(), options.isAddScrollView(), listener);
 	}

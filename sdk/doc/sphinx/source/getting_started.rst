@@ -15,21 +15,6 @@ If you're using eclipse, you'll need to add the socialize-x.x.x.jar as a referen
 
 Socialize does not support Android versions below v2.1-update1
 
-Configure your AndroidManifest.xml
-----------------------------------
-Add the following lines to your AndroidManifest.xml under the <manifest...> element:
-
-.. parsed-literal::
-
-	<manifest...>
-	
-		<application.../>
-		
-		**<uses-permission android:name="android.permission.INTERNET"/>
-		<uses-permission android:name="android.permission.READ_PHONE_STATE" />**
-		
-	</manifest>
-	
 	
 Next Steps...
 -------------
