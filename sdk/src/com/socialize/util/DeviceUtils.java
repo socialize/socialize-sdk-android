@@ -30,6 +30,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.provider.MediaStore;
 import android.provider.Settings.Secure;
@@ -51,7 +52,7 @@ public class DeviceUtils {
 	private String packageName;
 	private String appName;
 	private boolean hasCamera;
-	
+	private int orientation;
 	private int displayHeight;
 	private int displayWidth;
 
@@ -64,6 +65,18 @@ public class DeviceUtils {
 			
 			displayHeight = display.getHeight();
 			displayWidth = display.getWidth();
+			
+			if (displayWidth == displayHeight) {
+				orientation = Configuration.ORIENTATION_SQUARE;
+			} 
+			else { 
+				if (displayWidth < displayHeight) {
+					orientation = Configuration.ORIENTATION_PORTRAIT;
+				} 
+				else { 
+					orientation = Configuration.ORIENTATION_LANDSCAPE;
+				}
+			}
 			
 			packageName = context.getPackageName();
 			
@@ -185,6 +198,8 @@ public class DeviceUtils {
 	public int getDisplayWidth() {
 		return displayWidth;
 	}
-	
-	
+
+	public int getOrientation() {
+		return orientation;
+	}
 }

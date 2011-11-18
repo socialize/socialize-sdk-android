@@ -230,6 +230,10 @@ public class ActionBarLayoutView extends BaseView {
 			logger.info("onViewLoad called on " + getClass().getSimpleName());
 		}
 		
+		if(onActionBarEventListener != null) {
+			onActionBarEventListener.onLoad(actionBarView);
+		}				
+		
 		CacheableEntity entity = entityCache.get(entityKey);
 		
 		if(entity == null) {
@@ -265,6 +269,10 @@ public class ActionBarLayoutView extends BaseView {
 		likesItem.setText("--");
 		sharesItem.setText("--");
 		likeButton.setText("--");
+		
+		if(onActionBarEventListener != null) {
+			onActionBarEventListener.onUpdate(actionBarView);
+		}		
 		
 		getEntityData(entityKey);
 	}

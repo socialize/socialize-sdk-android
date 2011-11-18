@@ -24,13 +24,18 @@ package com.socialize.ui.actionbar.slider;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
+import android.view.animation.BounceInterpolator;
 import android.view.animation.TranslateAnimation;
+
+import com.socialize.util.DeviceUtils;
 
 /**
  * @author Jason Polites
  *
  */
 public class SliderAnimationSet {
+	
+	private DeviceUtils deviceUtils;
 	
 	private TranslateAnimation maximizeFromClose;
 	private TranslateAnimation maximizeFromPeek;
@@ -96,13 +101,13 @@ public class SliderAnimationSet {
 	}
 	
 	public void init(ActionBarSliderItem item, final ActionBarSliderView slider) {
-		float slideStartPosition = item.getSliderTopPosition();
+		int slideHeight = item.getSliderContentHeight();
 		
 		int h = slider.getDeviceHeight();
 		
-		if(slideStartPosition < 1.0f) {
-			h = Math.round((float) h * slideStartPosition);
-		}	
+		if(slideHeight > 0) {
+			h = deviceUtils.getDIP(slideHeight) + (slider.getDeviceHeight() - slider.getActionBarTop()) + slider.getHandleHeight();
+		}
 		
 		final int height = h;
 		
@@ -186,4 +191,7 @@ public class SliderAnimationSet {
 		anim.setDuration(duration);
 	}
 	
+	public void setDeviceUtils(DeviceUtils deviceUtils) {
+		this.deviceUtils = deviceUtils;
+	}
 }

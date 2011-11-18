@@ -21,34 +21,30 @@
  */
 package com.socialize.ui.actionbar.slider.share;
 
-import android.graphics.drawable.Drawable;
+import android.app.Activity;
 import android.view.View;
 
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
-import com.socialize.ui.actionbar.slider.ActionBarSliderItem;
+import com.socialize.ui.actionbar.slider.AbstractSliderItem;
 import com.socialize.ui.actionbar.slider.ActionBarSliderView.DisplayState;
 import com.socialize.ui.share.ShareDialogView;
 
 /**
  * @author Jason Polites
  */
-public class ShareSliderItem implements ActionBarSliderItem {
+public class ShareSliderItem extends AbstractSliderItem {
 
 	private IBeanFactory<ShareDialogView> viewFactory;
-	private ActionBarView actionBarView;
-	private OnActionBarEventListener onActionBarEventListener;
 	
 	@Override
 	public String getId() {
 		return "share";
 	}
 
-	public ShareSliderItem(ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
-		super();
-		this.actionBarView = actionBarView;
-		this.onActionBarEventListener = onActionBarEventListener;
+	public ShareSliderItem(Activity context, ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
+		super(context, actionBarView, onActionBarEventListener);
 	}
 
 	/* (non-Javadoc)
@@ -59,12 +55,9 @@ public class ShareSliderItem implements ActionBarSliderItem {
 		return viewFactory.getBean(actionBarView, onActionBarEventListener);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.ui.actionbar.slider.ActionBarSliderItem#getSliderTopPosition()
-	 */
 	@Override
-	public float getSliderTopPosition() {
-		return 1.0f;
+	public int getSliderContentHeight() {
+		return -1;
 	}
 
 	/* (non-Javadoc)

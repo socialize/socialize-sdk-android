@@ -23,6 +23,7 @@ package com.socialize.ui.share;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.widget.EditText;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
@@ -60,9 +61,11 @@ public class FacebookShareClickListener extends ShareClickListener {
 		super(actionBarView);
 	}
 
-	public FacebookShareClickListener(ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
-		super(actionBarView, onActionBarEventListener);
+
+	public FacebookShareClickListener(ActionBarView actionBarView, EditText commentView, OnActionBarEventListener onActionBarEventListener) {
+		super(actionBarView, commentView, onActionBarEventListener);
 	}
+
 
 	@Override
 	protected void doShare(final Activity parent, final String title, final String subject, final String body, final String comment) {

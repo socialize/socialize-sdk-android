@@ -138,6 +138,18 @@ public class ActionBarView extends EntityView {
 							systemOnActionBarEventListener.onClick(actionBar, evt);
 							onActionBarEventListener.onClick(actionBar, evt);
 						}
+
+						@Override
+						public void onUpdate(ActionBarView actionBar) {
+							systemOnActionBarEventListener.onUpdate(actionBar);
+							onActionBarEventListener.onUpdate(actionBar);
+						}
+						
+						@Override
+						public void onLoad(ActionBarView actionBar) {
+							systemOnActionBarEventListener.onLoad(actionBar);
+							onActionBarEventListener.onLoad(actionBar);
+						}
 					});
 					
 				}

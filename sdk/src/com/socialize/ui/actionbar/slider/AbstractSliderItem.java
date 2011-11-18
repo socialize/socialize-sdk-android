@@ -19,50 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.share;
+package com.socialize.ui.actionbar.slider;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.text.Html;
-import android.widget.EditText;
 
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 
 /**
  * @author Jason Polites
+ *
  */
-public abstract class SimpleShareClickListener extends ShareClickListener {
+public abstract class AbstractSliderItem implements ActionBarSliderItem {
 
-	public SimpleShareClickListener(ActionBarView actionBarView) {
-		super(actionBarView);
-	}
-
-	public SimpleShareClickListener(ActionBarView actionBarView, EditText commentView, OnActionBarEventListener onActionBarEventListener) {
-		super(actionBarView, commentView, onActionBarEventListener);
-	}
-
-	@Override
-	protected void doShare(Activity parent, String title, String subject, String body, String comment) {
-		Intent msg  = new Intent(android.content.Intent.ACTION_SEND);
-		msg.setType(getMimeType());
-		msg.putExtra(Intent.EXTRA_TITLE, title);
-		
-		if(isHtml()) {
-			msg.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(body));
-		}
-		else {
-			msg.putExtra(Intent.EXTRA_TEXT, body);
-		}
-		
-		msg.putExtra(Intent.EXTRA_SUBJECT, subject);
-		parent.startActivity(Intent.createChooser(msg, title));
-	}
+	protected Activity context;
+	protected ActionBarView actionBarView;
+	protected OnActionBarEventListener onActionBarEventListener;
 	
 	@Override
-	protected boolean isIncludeSocialize() {
-		return true;
+	public String getId() {
+		return "view";
+	}
+	
+	public AbstractSliderItem(Activity context, ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
+		super();
+		this.context = context;
+		this.actionBarView = actionBarView;
+		this.onActionBarEventListener = onActionBarEventListener;
 	}
 
-	protected abstract String getMimeType();
 }

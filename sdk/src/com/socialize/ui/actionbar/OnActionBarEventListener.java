@@ -44,4 +44,8 @@ public interface OnActionBarEventListener {
 	public void onGetEntity(ActionBarView actionBar, Entity entity);
 	
 	public void onClick(ActionBarView actionBar, ActionBarEvent evt);
+	
+	public void onUpdate(ActionBarView actionBar);
+	
+	public void onLoad(ActionBarView actionBar);
 }

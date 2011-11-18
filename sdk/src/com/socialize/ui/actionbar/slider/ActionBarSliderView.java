@@ -27,6 +27,7 @@ import java.util.TreeMap;
 import android.content.Context;
 import android.view.View;
 
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.util.DeviceUtils;
@@ -43,6 +44,7 @@ public class ActionBarSliderView extends BaseView {
 	
 	private DeviceUtils deviceUtils;
 	private Drawables drawables;
+	private IBeanFactory<SliderAnimationSet> sliderAnimationSetFactory;
 	
 	private Map<String, SliderAnimationSet> animations;
 	private SliderAnimationSet currentAnimationSet;
@@ -114,7 +116,7 @@ public class ActionBarSliderView extends BaseView {
 			content.removeAllViews();
 		}
 	}
-	
+
 	public boolean showLastItem() {
 		if(currentItem != null) {
 			showSliderItem(currentItem);
@@ -141,7 +143,7 @@ public class ActionBarSliderView extends BaseView {
 					currentAnimationSet = animations.get(item.getId());
 					
 					if(currentAnimationSet == null) {
-						currentAnimationSet = new SliderAnimationSet();
+						currentAnimationSet = sliderAnimationSetFactory.getBean();
 						currentAnimationSet.init(item, this);
 						animations.put(item.getId(), currentAnimationSet);
 					}
@@ -272,6 +274,10 @@ public class ActionBarSliderView extends BaseView {
 	public void setParentViewlocation(int[] parentViewlocation) {
 		this.parentViewlocation = parentViewlocation;
 	}
+	
+	public void setSliderAnimationSetFactory(IBeanFactory<SliderAnimationSet> sliderAnimationSetFactory) {
+		this.sliderAnimationSetFactory = sliderAnimationSetFactory;
+	}
 
 	protected boolean isMoving() {
 		return moving;
@@ -308,4 +314,5 @@ public class ActionBarSliderView extends BaseView {
 	protected int getDeviceHeight() {
 		return deviceHeight;
 	}
+
 }

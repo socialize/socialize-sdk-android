@@ -23,12 +23,14 @@ package com.socialize.ui.share;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -78,26 +80,65 @@ public class ShareDialogView extends BaseView {
 
 		fill.setMargins(0,0,0,0);
 		
-		setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+		LinearLayout buttonLayout = new LinearLayout(getContext());
+		
+		LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		
+		EditText commentField = new EditText(getContext());
+		LayoutParams commentFieldParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		
 		setOrientation(LinearLayout.VERTICAL);
+		
+		TextView otherOptions = null;
+		
+		TextView commentLabel = new TextView(getContext());
+		commentLabel.setText("Add a comment (optional)");
+		commentLabel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+		commentLabel.setTextColor(Color.WHITE);
+		commentLabel.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+		commentLabel.setPadding(0, padding, 0, 0);
+		
+		
+		TextView shareLabel = new TextView(getContext());
+		shareLabel.setText("Share to:");
+		shareLabel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+		shareLabel.setTextColor(Color.WHITE);
+		shareLabel.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+		shareLabel.setPadding(0, padding, 0, 0);		
+		
+		buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
+		
+		commentField.setGravity(Gravity.TOP | Gravity.LEFT);
+		
+		if(deviceUtils.getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
+			setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+			commentField.setLines(4);
+			
+			otherOptions = new TextView(getContext());
+			SpannableString content = new SpannableString("More options...");
+			content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+			otherOptions.setText(content);
+			otherOptions.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+			otherOptions.setTextColor(Color.WHITE);
+			otherOptions.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+			otherOptions.setPadding(0, deviceUtils.getDIP(24), 0, 0);
+			
+			LayoutParams otherOptionsLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			otherOptionsLayout.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+			
+			otherOptions.setLayoutParams(otherOptionsLayout);
+			otherOptions.setOnClickListener(otherShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener));
+		}
+		else {
+			setGravity(Gravity.TOP | Gravity.LEFT);
+		}
+		
+		commentField.setLayoutParams(commentFieldParams);
+		buttonLayout.setLayoutParams(buttonLayoutParams);
+
 		setLayoutParams(fill);
 		setPadding(padding, padding, padding, padding);
-		
-		TextView otherOptions = new TextView(getContext());
-		SpannableString content = new SpannableString("More options...");
-		content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-		otherOptions.setText(content);
-		otherOptions.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-		otherOptions.setTextColor(Color.WHITE);
-		otherOptions.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
-		otherOptions.setPadding(0, padding, 0, 0);
-		
-		LayoutParams textLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		textLayout.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
-		
-		otherOptions.setLayoutParams(textLayout);
-		otherOptions.setOnClickListener(otherShareClickListenerFactory.getBean(actionBarView, onActionBarEventListener));
-		
+
 		OnClickListener closeDialogOnClick = new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -108,24 +149,32 @@ public class ShareDialogView extends BaseView {
 		};
 		
 		if(facebookShareButton != null && getSocializeUI().isFacebookSupported()) {
-			facebookShareButton.setCustomClickListener(facebookShareClickListenerFactory.getBean(actionBarView, onActionBarEventListener));
+			facebookShareButton.setCustomClickListener(facebookShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener));
 			facebookShareButton.addOnClickListenerBefore(closeDialogOnClick);
-			addView(facebookShareButton);
+			buttonLayout.addView(facebookShareButton);
 		}
 		
 		if(emailShareButton != null) {
-			emailShareButton.setCustomClickListener(emailShareClickListenerFactory.getBean(actionBarView, onActionBarEventListener));
+			emailShareButton.setCustomClickListener(emailShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener));
 			emailShareButton.addOnClickListenerBefore(closeDialogOnClick);
-			addView(emailShareButton);
+			buttonLayout.addView(emailShareButton);
 		}
 		
 		if(smsShareButton != null) {
-			smsShareButton.setCustomClickListener(smsShareClickListenerFactory.getBean(actionBarView, onActionBarEventListener));
+			smsShareButton.setCustomClickListener(smsShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener));
 			smsShareButton.addOnClickListenerBefore(closeDialogOnClick);
-			addView(smsShareButton);
+			buttonLayout.addView(smsShareButton);
 		}
 		
-		addView(otherOptions);
+		
+		addView(commentLabel);
+		addView(commentField);
+		addView(shareLabel);
+		addView(buttonLayout);
+		
+		if(otherOptions != null) {
+			addView(otherOptions);
+		}		
 	}
 
 	public void setDeviceUtils(DeviceUtils deviceUtils) {

@@ -23,6 +23,7 @@ package com.socialize.ui.actionbar.slider;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.view.MotionEvent;
 
 /**
  * @author Jason Polites
@@ -43,5 +44,10 @@ public class ActionBarSliderContent extends ActionBarSliderViewChild {
 		params.setMargins(0,0,0,0);
 		setLayoutParams(params);	
 		setOrientation(VERTICAL);
+	}
+	
+	@Override
+	public boolean onTouchEvent (MotionEvent event) {
+		return true;
 	}
 }

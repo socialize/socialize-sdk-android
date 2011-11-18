@@ -69,6 +69,17 @@ public class SliderActionBarListener implements OnActionBarEventListener {
 	 */
 	@Override
 	public void onGetEntity(ActionBarView actionBar, Entity entity) {}
+	
+
+	@Override
+	public void onUpdate(ActionBarView actionBar) {
+		actionBar.getSlider().close();
+	}
+
+	@Override
+	public void onLoad(ActionBarView actionBar) {
+		actionBar.getSlider().close();
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.actionbar.OnActionBarEventListener#onClick(com.socialize.ui.actionbar.ActionBarView, com.socialize.ui.actionbar.OnActionBarEventListener.ActionBarEvent)

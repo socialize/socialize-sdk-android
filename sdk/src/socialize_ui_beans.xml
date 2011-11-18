@@ -610,17 +610,17 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="Share on Facebook"/>
+		<property name="text" value="facebook"/>
 		<property name="imageName" value="fb_button.png"/>
 		<property name="bottomColor" value="FACEBOOK_BOTTOM"/>
 		<property name="topColor" value="FACEBOOK_TOP"/>
 		<property name="strokeTopColor" value="FACEBOOK_TOP_STROKE"/>
 		<property name="strokeBottomColor" value="FACEBOOK_BOTTOM_STROKE"/>
-		<property name="width" value="180" type="integer"/>
-		<property name="height" value="42" type="integer"/>
+		<property name="width" value="100" type="integer"/>
+		<property name="height" value="36" type="integer"/>
 		<property name="textSize" value="14" type="integer"/>
-		<property name="imagePaddingLeft" value="6" type="integer"/>
-		<property name="imagePaddingRight" value="4" type="integer"/>
+		<property name="padding" value="4" type="integer"/>
+		<property name="imagePaddingLeft" value="4" type="integer"/>
 	</bean>	
 	
 	<bean 
@@ -628,11 +628,12 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="Share via Email"/>
+		<property name="text" value="Email"/>
 		<property name="imageName" value="email_button.png"/>
-		<property name="width" value="180" type="integer"/>
-		<property name="height" value="42" type="integer"/>
-		<property name="textSize" value="14" type="integer"/>
+		<property name="width" value="80" type="integer"/>
+		<property name="height" value="36" type="integer"/>
+		<property name="textSize" value="12" type="integer"/>
+		<property name="padding" value="4" type="integer"/>
 		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
 		<property name="topColor" value="GRAY_BTN_TOP"/>
 		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
@@ -644,11 +645,12 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="Share via SMS"/>
+		<property name="text" value="SMS"/>
 		<property name="imageName" value="sms_button.png"/>
-		<property name="width" value="180" type="integer"/>
-		<property name="height" value="42" type="integer"/>
-		<property name="textSize" value="14" type="integer"/>
+		<property name="width" value="80" type="integer"/>
+		<property name="height" value="36" type="integer"/>
+		<property name="textSize" value="12" type="integer"/>
+		<property name="padding" value="4" type="integer"/>
 		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
 		<property name="topColor" value="GRAY_BTN_TOP"/>
 		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
@@ -744,6 +746,7 @@
 		<property name="drawables" ref="drawables"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="logger" ref="logger"/>
+		<property name="sliderAnimationSetFactory" ref="sliderAnimationSetFactory"/>
 		
 		<init-method name="init"/>
 	</bean>
@@ -759,6 +762,7 @@
 		id="shareSliderItem" 
 		class="com.socialize.ui.actionbar.slider.share.ShareSliderItem" 
 		singleton="false">
+		<constructor-arg type="activity"/>
 		<property name="viewFactory" ref="shareDialogViewFactory"/>
 	</bean>
 	
@@ -769,9 +773,18 @@
 		<constructor-arg type="activity"/>
 	</bean>	
 	
+	<bean 
+		id="sliderAnimationSet" 
+		class="com.socialize.ui.actionbar.slider.SliderAnimationSet" 
+		singleton="false">
+		<property name="deviceUtils" ref="deviceUtils"/>
+	</bean>		
+	
 	<factory id="actionBarSliderViewFactory" makes="actionBarSliderView"/>
 	<factory id="shareSliderItemFactory" makes="shareSliderItem"/>
 	<factory id="viewSliderItemFactory" makes="viewSliderItem"/>
+	<factory id="sliderAnimationSetFactory" makes="sliderAnimationSet"/>
+	
 	<!-- 
 	
 	<bean 

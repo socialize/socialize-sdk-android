@@ -25,6 +25,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.EditText;
 
 import com.socialize.Socialize;
 import com.socialize.api.action.ShareType;
@@ -46,15 +47,17 @@ public abstract class ShareClickListener implements OnClickListener {
 	protected ShareMessageBuilder shareMessageBuilder;
 	private ActionBarView actionBarView;
 	private OnActionBarEventListener onActionBarEventListener;
+	private EditText commentView;
 	
 	public ShareClickListener(ActionBarView actionBarView) {
-		this(actionBarView, null);
+		this(actionBarView, null, null);
 	}
 	
-	public ShareClickListener(ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
+	public ShareClickListener(ActionBarView actionBarView, EditText commentView, OnActionBarEventListener onActionBarEventListener) {
 		super();
 		this.actionBarView = actionBarView;
 		this.onActionBarEventListener = onActionBarEventListener;
+		this.commentView = commentView;
 	}
 
 	protected Activity getActivity(View v) {
@@ -82,6 +85,11 @@ public abstract class ShareClickListener implements OnClickListener {
 		Activity activity = getActivity(v);
 
 		String comment = null;
+		
+		if(commentView != null) {
+			comment = commentView.getText().toString();
+		}
+		
 		String entityKey = actionBarView.getEntityKey();
 
 		if(entityKey != null) {

@@ -25,10 +25,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.socialize.util.Drawables;
@@ -42,7 +44,7 @@ public class ActionBarSliderHandle extends ActionBarSliderViewChild {
 
 	private int height;
 	private TextView text;
-	private ImageView closeButtonImage;
+	private LinearLayout closeButton;
 	private ImageView icon;
 	private Drawables drawables;
 	private String title = "";
@@ -58,7 +60,7 @@ public class ActionBarSliderHandle extends ActionBarSliderViewChild {
 		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, height);
 		params.setMargins(0,0,0,0);
 		setLayoutParams(params);	
-		
+		setPadding(0, 0, 0, 0);
 		setOrientation(HORIZONTAL);
 		
 		text = new TextView(getContext());
@@ -69,34 +71,32 @@ public class ActionBarSliderHandle extends ActionBarSliderViewChild {
 		text.setTextColor(Color.WHITE);
 		text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
 		
-		closeButtonImage = new ImageView(getContext());
-		closeButtonImage.setPadding(4, 0, 4, 0);
-		closeButtonImage.setImageDrawable(drawables.getDrawable("toolbar_close.png"));
+		closeButton = new LinearLayout(getContext());
+		closeButton.setPadding(0, 0, 0, 0);
+		closeButton.setBackgroundDrawable(drawables.getDrawable("toolbar_close.png", DisplayMetrics.DENSITY_DEFAULT, true));
 		
 		icon = new ImageView(getContext());
-		icon.setPadding(4, 0, 4, 0);
 		
 		LayoutParams textParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		textParams.weight = 1.0f;
 		
+		LayoutParams closeImageParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+		closeImageParams.weight = 0.0f;
+		closeImageParams.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+		closeImageParams.setMargins(0, 0, 0, 0);
+		
+		LayoutParams iconParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		iconParams.weight = 0.0f;
+		iconParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
+		iconParams.setMargins(0, 0, 0, 0);		
+		
 		text.setLayoutParams(textParams);
-		
-		LayoutParams imageParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		imageParams.weight = 0.0f;
-		imageParams.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
-		imageParams.setMargins(10, 0, 0, 0);
-		
-		closeButtonImage.setLayoutParams(imageParams);
-		
-		LayoutParams logoParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		logoParams.weight = 0.0f;
-		logoParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
-		
-		icon.setLayoutParams(logoParams);
+		closeButton.setLayoutParams(closeImageParams);
+		icon.setLayoutParams(iconParams);
 		
 		addView(icon);
 		addView(text);
-		addView(closeButtonImage);
+		addView(closeButton);
 	}
 	
 	public void setDrawables(Drawables drawables) {
@@ -124,13 +124,13 @@ public class ActionBarSliderHandle extends ActionBarSliderViewChild {
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
 		Rect rect = new Rect();
-		closeButtonImage.getHitRect(rect);
+		closeButton.getHitRect(rect);
 		adjustHitRect(rect);
-		if(rect.contains((int)ev.getX(), (int)ev.getY())) {
-			getParentAdView().close();
+		if(rect.contains((int)Math.ceil(ev.getX()), (int)Math.ceil(ev.getY()))) {
+			getSlider().close();
 		}
 		else {
-			getParentAdView().slide();
+			getSlider().slide();
 		}
 		return true;
 	}

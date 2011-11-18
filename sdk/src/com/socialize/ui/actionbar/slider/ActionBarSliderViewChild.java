@@ -32,17 +32,17 @@ import android.widget.LinearLayout;
  */
 public abstract class ActionBarSliderViewChild extends LinearLayout {
 	
-	private ActionBarSliderView parentAdView;
+	private ActionBarSliderView slider;
 	
 	private int yOffset = 0;
 	
 	public ActionBarSliderViewChild(Context context, ActionBarSliderView parent) {
 		super(context);
-		this.parentAdView = parent;
+		this.slider = parent;
 	}
 	
-	protected ActionBarSliderView getParentAdView() {
-		return parentAdView;
+	protected ActionBarSliderView getSlider() {
+		return slider;
 	}
 	
 	public void notifyMove(int offset) {

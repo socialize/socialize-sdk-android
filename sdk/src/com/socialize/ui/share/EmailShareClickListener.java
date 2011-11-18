@@ -21,6 +21,8 @@
  */
 package com.socialize.ui.share;
 
+import android.widget.EditText;
+
 import com.socialize.api.action.ShareType;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
@@ -36,9 +38,11 @@ public class EmailShareClickListener extends SimpleShareClickListener {
 		super(actionBarView);
 	}
 
-	public EmailShareClickListener(ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
-		super(actionBarView, onActionBarEventListener);
+
+	public EmailShareClickListener(ActionBarView actionBarView, EditText commentView, OnActionBarEventListener onActionBarEventListener) {
+		super(actionBarView, commentView, onActionBarEventListener);
 	}
+
 
 	@Override
 	protected String getMimeType() {

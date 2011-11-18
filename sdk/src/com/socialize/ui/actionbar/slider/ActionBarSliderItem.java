@@ -21,7 +21,6 @@
  */
 package com.socialize.ui.actionbar.slider;
 
-import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.socialize.ui.actionbar.slider.ActionBarSliderView.DisplayState;
@@ -44,7 +43,7 @@ public interface ActionBarSliderItem {
 	 * Returns the percentage of the screen to consume with the slider as a percentage.
 	 * @return
 	 */
-	public float getSliderTopPosition();
+	public int getSliderContentHeight();
 	
 	/**
 	 * If true the slider can be maximized.

@@ -29,28 +29,21 @@ import android.widget.TextView;
 
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
-import com.socialize.ui.actionbar.slider.ActionBarSliderItem;
+import com.socialize.ui.actionbar.slider.AbstractSliderItem;
 import com.socialize.ui.actionbar.slider.ActionBarSliderView.DisplayState;
 
 /**
  * @author Jason Polites
  */
-public class ViewSliderItem implements ActionBarSliderItem {
+public class ViewSliderItem extends AbstractSliderItem {
 
-	private ActionBarView actionBarView;
-	private OnActionBarEventListener onActionBarEventListener;
-	private Activity context;
-	
 	@Override
 	public String getId() {
 		return "view";
 	}
 	
 	public ViewSliderItem(Activity context, ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
-		super();
-		this.actionBarView = actionBarView;
-		this.onActionBarEventListener = onActionBarEventListener;
-		this.context = context;
+		super(context, actionBarView, onActionBarEventListener);
 	}
 
 	/* (non-Javadoc)
@@ -71,12 +64,9 @@ public class ViewSliderItem implements ActionBarSliderItem {
 		return layout;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.ui.actionbar.slider.ActionBarSliderItem#getSliderTopPosition()
-	 */
 	@Override
-	public float getSliderTopPosition() {
-		return 0.5f;
+	public int getSliderContentHeight() {
+		return 75;
 	}
 
 	/* (non-Javadoc)
@@ -84,7 +74,7 @@ public class ViewSliderItem implements ActionBarSliderItem {
 	 */
 	@Override
 	public DisplayState getStartPosition() {
-		return DisplayState.PEEK;
+		return DisplayState.MAXIMIZE;
 	}
 
 	/* (non-Javadoc)
@@ -97,11 +87,11 @@ public class ViewSliderItem implements ActionBarSliderItem {
 
 	@Override
 	public String getIconImage() {
-		return null;
+		return "icon_view.png";
 	}
 
 	@Override
 	public String getTitle() {
-		return "";
+		return "More Info";
 	}
 }

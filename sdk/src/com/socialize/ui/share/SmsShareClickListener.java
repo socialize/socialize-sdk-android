@@ -2,6 +2,7 @@ package com.socialize.ui.share;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.widget.EditText;
 
 import com.socialize.api.action.ShareType;
 import com.socialize.ui.actionbar.ActionBarView;
@@ -14,9 +15,11 @@ public class SmsShareClickListener extends ShareClickListener {
 		super(actionBarView);
 	}
 
-	public SmsShareClickListener(ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
-		super(actionBarView, onActionBarEventListener);
+
+	public SmsShareClickListener(ActionBarView actionBarView, EditText commentView, OnActionBarEventListener onActionBarEventListener) {
+		super(actionBarView, commentView, onActionBarEventListener);
 	}
+
 
 	@Override
 	protected void doShare(Activity parent, String title, String subject, String body, String comment) {

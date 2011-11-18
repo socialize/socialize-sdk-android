@@ -84,27 +84,15 @@ public class ShareMessageBuilder {
 		
 		StringBuilder builder = new StringBuilder();
 		
-//		Intent intent = context.getIntent();
-//		Bundle extras = intent.getExtras();
-//		String entityKey = null;
-//		String entityName = null;
 		String entityDescription = null;
+		
 		boolean isUseLink = false;
-		
-//		if(extras != null) {
-//			entityKey = extras.getString(SocializeUI.ENTITY_KEY);
-//			entityName = extras.getString(SocializeUI.ENTITY_NAME);
-//			entityDescription = extras.getString(SocializeUI.ENTITY_DESCRIPTION);
-////			isUseLink = extras.getBoolean(SocializeUI.ENTITY_URL_AS_LINK);
-//		}
-		
-		if(StringUtils.isEmpty(comment)) {
-			comment = "Check this out:";
-		}
-		
-		builder.append(comment);
 
-		builder.append(getNewLine(html));
+		if(!StringUtils.isEmpty(comment)) {
+			builder.append(comment);
+			builder.append(getNewLine(html));
+			builder.append(getNewLine(html));
+		}
 		
 		if(!StringUtils.isEmpty(entityKey)) {
 			if(isUseLink && html) {
