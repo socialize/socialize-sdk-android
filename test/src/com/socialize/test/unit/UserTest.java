@@ -80,7 +80,6 @@ public class UserTest extends SocializeUnitTest {
 		final String medium_url = "foobar_medium_url";
 		final String large_url = "foobar_large_url";
 		final String picture = "foobar_picture";
-		final boolean autoPostFB = false;
 		
 		AndroidMock.expect(mockUser.getFirstName()).andReturn(firstName);
 		AndroidMock.expect(mockUser.getLastName()).andReturn(lastName);

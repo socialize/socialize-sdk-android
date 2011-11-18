@@ -5,11 +5,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.socialize.entity.Comment;
-import com.socialize.ui.auth.AuthConfirmDialogView;
-import com.socialize.ui.auth.AuthRequestDialogView;
-import com.socialize.ui.comment.CommentActivity;
 import com.socialize.test.ui.integrationtest.SocializeUIRobotiumTest;
+import com.socialize.ui.comment.CommentActivity;
 
 public class CommentUITest extends SocializeUIRobotiumTest {
 	

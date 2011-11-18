@@ -14,6 +14,7 @@ public class ActionBarAutoActivity extends ActionBarActivity {
 		ActionBarOptions options = new ActionBarOptions();
 		options.setEntityName(entityName);
 		options.setEntityKeyUrl(isEntityKeyUrl);
+		options.setAddScrollView(false);
 		View actionBarWrapped = SocializeUI.getInstance().showActionBar(this, R.layout.action_bar_auto, entityKey, options, null);
 		setContentView(actionBarWrapped);
 	}

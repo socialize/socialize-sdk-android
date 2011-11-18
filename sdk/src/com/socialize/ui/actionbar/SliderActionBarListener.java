@@ -36,6 +36,7 @@ public class SliderActionBarListener implements OnActionBarEventListener {
 	private ActionBarEvent lastEvent;
 
 	private IBeanFactory<ActionBarSliderItem> shareSliderItemFactory;
+	@SuppressWarnings("unused")
 	private IBeanFactory<ActionBarSliderItem> viewSliderItemFactory;
 	
 	/* (non-Javadoc)
