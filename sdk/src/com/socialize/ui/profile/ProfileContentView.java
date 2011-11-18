@@ -25,6 +25,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -49,6 +50,7 @@ public class ProfileContentView extends BaseView {
 	private ImageView profilePicture;
 	private TextView displayName;
 	private EditText displayNameEdit;
+	private AutoPostFacebookOption autoPostFacebook;
 	private SocializeButton facebookSignOutButton;
 	
 	private SocializeButton editButton;
@@ -168,6 +170,14 @@ public class ProfileContentView extends BaseView {
 		}
 	}
 	
+	public boolean getUpdatedAutoPostFBPreference() {
+		return autoPostFacebook.isChecked();
+	}
+	
+	public void setAutoPostFacebook(AutoPostFacebookOption autoPostFacebook) {
+		this.autoPostFacebook = autoPostFacebook;
+	}
+
 	/**
 	 * Returns the newly updated user profile name.
 	 * @return
@@ -188,6 +198,10 @@ public class ProfileContentView extends BaseView {
 	public void setContextMenu(ProfileImageContextMenu contextMenu) {
 		this.contextMenu = contextMenu;
 	}
+	
+	public AutoPostFacebookOption getAutoPostFacebook() {
+		return autoPostFacebook;
+	}
 
 	/**
 	 * Called when this control is instructed to enter "edit" mode.
@@ -206,13 +220,15 @@ public class ProfileContentView extends BaseView {
 			
 			Drawable[] layers = new Drawable[2];
 			layers[0] = profileDrawable;
-			layers[1] = drawables.getDrawable("camera.png");
+			layers[1] = drawables.getDrawable("camera.png", DisplayMetrics.DENSITY_DEFAULT, true);
 			
 			layers[0].setAlpha(64);
 			
 			LayerDrawable layerDrawable = new LayerDrawable(layers);
 			profilePicture.setImageDrawable(layerDrawable);
 			profilePicture.getBackground().setAlpha(0);
+			
+			autoPostFacebook.setEnabled(true);
 			
 			editMode = true;
 		}
@@ -228,6 +244,7 @@ public class ProfileContentView extends BaseView {
 		
 		if(SocializeUI.getInstance().isFacebookSupported() &&
 				Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+			facebookSignOutButton.setVisibility(View.VISIBLE);
 			facebookSignOutButton.setVisibility(View.VISIBLE);
 		}
 	
@@ -245,6 +262,8 @@ public class ProfileContentView extends BaseView {
 		
 		revertUserDisplayName();
 		
+		autoPostFacebook.setEnabled(false);
+		
 		editMode = false;
 	}
 	
@@ -260,6 +279,7 @@ public class ProfileContentView extends BaseView {
 		
 		if(SocializeUI.getInstance().isFacebookSupported() &&
 				Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+			facebookSignOutButton.setVisibility(View.VISIBLE);
 			facebookSignOutButton.setVisibility(View.VISIBLE);
 		}
 		
@@ -277,6 +297,8 @@ public class ProfileContentView extends BaseView {
 		
 		profilePicture.setImageDrawable(getProfileDrawable());
 		profilePicture.getBackground().setAlpha(255);
+		
+		autoPostFacebook.setEnabled(false);
 		
 		editMode = false;
 	}

@@ -102,6 +102,14 @@ public class ProfileLayoutView extends BaseView {
 			@Override
 			public void onGet(User user) {
 				
+				// Merge the current session user
+				User sessionUser = Socialize.getSocialize().getSession().getUser();
+				
+				if(sessionUser.getId().equals(user.getId())) {
+					sessionUser.merge(user);
+					user = sessionUser;
+				}
+				
 				// Set the user details into the view elements
 				setUserDetails(user);
 				
@@ -176,19 +184,21 @@ public class ProfileLayoutView extends BaseView {
 		User currentUser = userService.getCurrentUser();
 		
 		if(currentUser != null && currentUser.getId().equals(user.getId())) {
-			
 			content.setUserDisplayName(user.getDisplayName());
 			content.getEditButton().setVisibility(View.VISIBLE);
 			
 			if(SocializeUI.getInstance().isFacebookSupported() &&
 					Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 				content.getFacebookSignOutButton().setVisibility(View.VISIBLE);
+				content.getAutoPostFacebook().setVisibility(View.VISIBLE);
+				content.getAutoPostFacebook().setChecked(user.isAutoPostToFacebook());
 			}
 		}
 		else {
 			content.getDisplayNameEdit().setVisibility(View.GONE);
 			content.getEditButton().setVisibility(View.GONE);
 			content.getFacebookSignOutButton().setVisibility(View.GONE);
+			content.getAutoPostFacebook().setVisibility(View.GONE);
 		}
 	}
 	

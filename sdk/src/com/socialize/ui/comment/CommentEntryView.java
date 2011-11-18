@@ -26,13 +26,14 @@ import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.socialize.Socialize;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.button.SocializeButton;
+import com.socialize.ui.profile.AutoPostFacebookOption;
 import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.util.DeviceUtils;
 import com.socialize.view.BaseView;
@@ -50,6 +51,7 @@ public class CommentEntryView extends BaseView {
 	private DeviceUtils deviceUtils;
 	private KeyboardUtils keyboardUtils;
 	private EditText commentField;
+	private AutoPostFacebookOption checkBox;
 	
 	public CommentEntryView(Context context, CommentAddButtonListener listener) {
 		super(context);
@@ -65,44 +67,10 @@ public class CommentEntryView extends BaseView {
 		fill.setMargins(0,0,0,0);
 		
 		LinearLayout buttonLayout = new LinearLayout(getContext());
-		LinearLayout checkboxLayout = new LinearLayout(getContext());
 		
-		TextView checkboxLabel = new TextView(getContext());
-		checkboxLabel.setText("Let my facebook friends in on the action!");
-		checkboxLabel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-		checkboxLabel.setTextColor(Color.WHITE);
-		checkboxLabel.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-		
-		final CheckBox checkBox = new CheckBox(getContext());
-		
-		LayoutParams checkboxMasterLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		LayoutParams checkboxLabelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
-		LayoutParams checkboxLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.FILL_PARENT);
-		
-		checkboxLabel.setLayoutParams(checkboxLabelLayoutParams);
-		checkBox.setLayoutParams(checkboxLayoutParams);
-		checkboxLayout.setLayoutParams(checkboxMasterLayoutParams);
-		
-		checkboxLayout.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-		checkBox.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-		checkboxLabel.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-		
-		checkboxMasterLayoutParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
-		checkboxLabelLayoutParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
-		checkboxLayoutParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
-		
-		checkboxLayout.setOrientation(HORIZONTAL);
-		
-		checkboxLayout.addView(checkBox);
-		checkboxLayout.addView(checkboxLabel);
-		
-		checkboxLabel.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				checkBox.setChecked(!checkBox.isChecked());
-			}
-		});
+		checkBox = new AutoPostFacebookOption(getContext()); // TODO: make a factory
+		checkBox.init();
+		checkBox.setChecked(Socialize.getSocialize().getSession().getUser().isAutoPostToFacebook());
 		
 		LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		LayoutParams commentFieldParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -136,7 +104,7 @@ public class CommentEntryView extends BaseView {
 			cancelCommentButton.setCustomClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					doCancel();
+					reset();
 					listener.onCancel();
 				}
 			});
@@ -149,7 +117,7 @@ public class CommentEntryView extends BaseView {
 				@Override
 				public void onClick(View v) {
 					keyboardUtils.hideKeyboard(commentField);
-					listener.onComment(commentField.getText().toString().trim());
+					listener.onComment(commentField.getText().toString().trim(), checkBox.isChecked());
 				}
 			});
 			
@@ -158,7 +126,7 @@ public class CommentEntryView extends BaseView {
 		
 		addView(commentLabel);
 		addView(commentField);
-		addView(checkboxLayout);
+		addView(checkBox);
 		addView(buttonLayout);
 	}
 	
@@ -186,9 +154,10 @@ public class CommentEntryView extends BaseView {
 		this.cancelCommentButton = cancelCommentButton;
 	}
 	
-	protected void doCancel() {
+	protected void reset() {
 		keyboardUtils.hideKeyboard(commentField);
 		commentField.setText("");
+		checkBox.setChecked(Socialize.getSocialize().getSession().getUser().isAutoPostToFacebook());
 	}
 	
 	protected EditText getCommentField() {

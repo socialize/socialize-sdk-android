@@ -44,8 +44,10 @@ import com.socialize.listener.entity.EntityListener;
 import com.socialize.listener.like.LikeListener;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.listener.user.UserListener;
+import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewListener;
 import com.socialize.net.HttpClientFactory;
+import com.socialize.ui.profile.UserProfile;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.StringUtils;
 
@@ -262,6 +264,10 @@ public class SocializeApiHost implements ApiHost {
 	@Override
 	public void saveUserProfile(Context context, SocializeSession session, String firstName, String lastName, String encodedImage, UserListener listener) {
 		userApi.saveUserProfile(context, session, firstName, lastName, encodedImage, listener);
+	}
+	
+	public void saveUserProfile(Context context, SocializeSession session, UserProfile profile, UserSaveListener listener) {
+		userApi.saveUserProfile(context, session, profile, listener);
 	}
 	
 	/* (non-Javadoc)

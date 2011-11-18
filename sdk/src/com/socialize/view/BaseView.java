@@ -140,12 +140,12 @@ public abstract class BaseView extends LinearLayout {
 					}
 				}
 				
-				while(id <= lastId) {
+				while(id < lastId) {
 					id++;
 				}
 				
-				lastId = id;
-				return id;
+				lastId = id+1;
+				return lastId;
 			}
 		}
 		

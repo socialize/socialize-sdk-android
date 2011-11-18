@@ -43,7 +43,7 @@ public class Main extends Activity {
         setContentView(R.layout.main);
         
         Button btn = (Button) findViewById(R.id.btnSample);
-        Button btnUI = (Button) findViewById(R.id.btnSampleUI);
+        Button btnUI = (Button) findViewById(R.id.btnSampleSocializeUI);
         
         btn.setOnClickListener(new OnClickListener() {
 			@Override

@@ -5,13 +5,13 @@ import java.util.List;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Comment;
 import com.socialize.entity.ListResult;
@@ -139,9 +139,9 @@ public class CommentListView extends BaseView {
 		field = commentEditFieldFactory.make(getContext());
 		content = commentContentViewFactory.make(getContext());
 		
-		commentEntryPage = commentEntryFactory.getBean(getCommentAddListener());
-		
-
+		if(commentEntryFactory != null) {
+			commentEntryPage = commentEntryFactory.getBean(getCommentAddListener());
+		}
 		
 		content.setListAdapter(commentAdapter);
 		content.setScrollListener(getCommentScrollListener());
@@ -189,35 +189,35 @@ public class CommentListView extends BaseView {
 			}
 
 			@Override
-			public void onComment(String text) {
+			public void onComment(String text, boolean autoPostToFacebook) {
 				if(!getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 					// Check that FB is enabled for this installation
 					if(getSocializeUI().isFacebookSupported()) {
 						AuthRequestDialogFactory dialog = authRequestDialogFactory.getBean();
-						dialog.show(getContext(), getCommentAuthListener(text));
+						dialog.show(getContext(), getCommentAuthListener(text, autoPostToFacebook));
 					}
 					else {
 						// Just post as anon
-						doPostComment(text);
+						doPostComment(text, false);
 					}
 				}
 				else {
-					doPostComment(text);
+					doPostComment(text, autoPostToFacebook);
 				}
 			}
 		});
 	}
 	
-	protected AuthRequestListener getCommentAuthListener(final String text) {
+	protected AuthRequestListener getCommentAuthListener(final String text, final boolean autoPostToFacebook) {
 		return new AuthRequestListener() {
 			@Override
 			public void onResult(Dialog dialog) {
-				doPostComment(text);
+				doPostComment(text, autoPostToFacebook);
 			}
 		};
 	}
 
-	public void doPostComment(String comment) {
+	public void doPostComment(String comment, boolean autoPostToFacebook) {
 		
 		dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
 
@@ -262,8 +262,14 @@ public class CommentListView extends BaseView {
 			}
 		});
 		
-		// TODO: check user permissions
-		if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+		// Won't persist.. but that's ok.
+		SocializeSession session = getSocialize().getSession();
+		
+		if(session != null && session.getUser() != null) {
+			session.getUser().setAutoPostToFacebook(autoPostToFacebook);
+		}
+		
+		if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) && autoPostToFacebook) {
 			facebookWallPoster.postComment(getActivity(), entityKey, entityName, comment, useLink, null);
 		}
 		
@@ -404,17 +410,22 @@ public class CommentListView extends BaseView {
 			slider = sliderFactory.wrap(getSliderAnchor(), ZOrder.FRONT, height);
 		}
 		
-		slider.loadItem(commentEntryPage);
-		
-		field.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if(slider != null) {
-					slider.showSliderItem(commentEntryPage);
+		if(commentEntryPage != null) {
+			slider.loadItem(commentEntryPage);
+			
+			field.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if(slider != null) {
+						slider.showSliderItem(commentEntryPage);
+					}
 				}
-			}
-		});		
-		
+			});		
+		}
+		else if(field != null) {
+			field.setVisibility(GONE);
+		}
+
 		if(getSocialize().isAuthenticated()) {
 			doListComments(false);
 		}
@@ -525,6 +536,10 @@ public class CommentListView extends BaseView {
 	 */
 	public void onProfileUpdate() {
 		commentAdapter.notifyDataSetChanged();
+		
+		if(slider != null) {
+			slider.clearContent();
+		}
 	}
 	
 	protected SocializeUI getSocializeUI() {

@@ -101,11 +101,11 @@ public class SliderActionBarListener implements OnActionBarEventListener {
 						item = shareSliderItemFactory.getBean(actionBar, this);
 					}
 					break;
-				case VIEW:
-					if(viewSliderItemFactory != null) {
-						item = viewSliderItemFactory.getBean(actionBar, this);
-					}					
-					break;
+//				case VIEW:
+//					if(viewSliderItemFactory != null) {
+//						item = viewSliderItemFactory.getBean(actionBar, this);
+//					}					
+//					break;
 			}
 			
 			if(item != null) {

@@ -3,17 +3,11 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-    
-   	<com.socialize.ui.actionbar.ActionBarView
-	  	android:id="@+id/socializeActionBar"
-	   	android:layout_width="fill_parent"
-	   	android:layout_height="wrap_content"
-	   	android:layout_alignParentBottom="true"/>
 
 	<ScrollView 
 		android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
-	    android:layout_above="@id/socializeActionBar"
+	    android:layout_above="@+id/socializeActionBar"
 	    android:fillViewport="true">
 	    
 		<LinearLayout 
@@ -21,6 +15,9 @@
 		    android:orientation="vertical"
 		    android:layout_width="fill_parent"
 		    android:layout_height="fill_parent">
+		    
+		    
+		   <!-- Your existing content goes here -->
 		    
 		   <TextView 
 		   		android:id="@+id/text"
@@ -30,6 +27,13 @@
 		
 		</LinearLayout>	    
 	</ScrollView>
+	    
+	<!-- The ActionBar MUST appear AFTER your content in your layout -->
+   	<com.socialize.ui.actionbar.ActionBarView
+	  	android:id="@id/socializeActionBar"
+	   	android:layout_width="fill_parent"
+	   	android:layout_height="wrap_content"
+	   	android:layout_alignParentBottom="true"/>
 </RelativeLayout>
 
 

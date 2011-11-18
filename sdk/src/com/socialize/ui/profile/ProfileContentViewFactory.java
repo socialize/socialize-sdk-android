@@ -40,6 +40,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.Scroller;
 import android.widget.TextView;
 
+import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.ui.button.SocializeButton;
 import com.socialize.ui.facebook.FacebookSignOutClickListener;
@@ -125,6 +126,10 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		final TextView commentView = new TextView(context);
 		final TextView commentMeta = new TextView(context);
 		
+		AutoPostFacebookOption checkBox = new AutoPostFacebookOption(context);
+		checkBox.init();
+		checkBox.setChecked(Socialize.getSocialize().getSession().getUser().isAutoPostToFacebook()); // TODO: Make a factory
+		
 		commentMetaLayout.gravity = Gravity.RIGHT;
 		commentMeta.setGravity(Gravity.RIGHT);
 		commentMeta.setLayoutParams(commentMetaLayout);
@@ -133,6 +138,7 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		
 		commentView.setVisibility(View.GONE);
 		commentMeta.setVisibility(View.GONE);
+		checkBox.setEnabled(false);
 		
 		GradientDrawable commentBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Color.BLACK, Color.BLACK});
 		commentBG.setCornerRadius(10.0f);
@@ -166,6 +172,7 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		cancelButton.setVisibility(View.GONE);
 		editButton.setVisibility(View.GONE);
 		facebookSignOutButton.setVisibility(View.GONE);
+		checkBox.setVisibility(View.GONE);
 		
 		textLayout.setMargins(margin, 0, 0, 0);
 		textEditLayout.setMargins(margin,0,margin,0);
@@ -214,6 +221,7 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		view.setSaveButton(saveButton);
 		view.setCancelButton(cancelButton);
 		view.setEditButton(editButton);
+		view.setAutoPostFacebook(checkBox);
 		
 		editButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -255,6 +263,7 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		view.addView(masterLayout);
 		view.addView(commentView);
 		view.addView(commentMeta);
+		view.addView(checkBox);
 
 		return view;
 	}

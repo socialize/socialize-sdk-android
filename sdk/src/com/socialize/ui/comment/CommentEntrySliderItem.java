@@ -109,14 +109,14 @@ public class CommentEntrySliderItem implements ActionBarSliderItem {
 	@Override
 	public void onClear(ActionBarSliderView slider) {
 		if(currentView != null) {
-			currentView.doCancel();
+			currentView.reset();
 		}
 	}
 
 	@Override
 	public void onClose(ActionBarSliderView slider) {
 		if(currentView != null) {
-			currentView.doCancel();
+			currentView.reset();
 		}
 	}
 

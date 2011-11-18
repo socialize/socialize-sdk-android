@@ -31,6 +31,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.user.UserListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.provider.SocializeProvider;
+import com.socialize.ui.profile.UserProfile;
 
 /**
  * @author Jason Polites
@@ -49,6 +50,43 @@ public class UserApi extends SocializeApi<User, SocializeProvider<User>> {
 		getAsync(session, ENDPOINT, String.valueOf(id), listener);
 	}
 	
+	public void saveUserProfile(final Context context, final SocializeSession session, UserProfile profile, final UserListener listener) {
+		User user = session.getUser();
+		user.setFirstName(profile.getFirstName());
+		user.setLastName(profile.getLastName());
+		user.setProfilePicData(profile.getEncodedImage());
+		user.setAutoPostToFacebook(profile.isAutoPostFacebook());
+		
+		saveUserProfile(context, session, user, listener);
+	}
+	
+	protected void saveUserProfile(final Context context, final SocializeSession session, User user, final UserListener listener) {
+
+		String endpoint = ENDPOINT + user.getId() + "/";
+		
+		putAsPostAsync(session, endpoint, user, new UserSaveListener() {
+
+			@Override
+			public void onError(SocializeException error) {
+				listener.onError(error);
+			}
+
+			@Override
+			public void onUpdate(User savedUser) {
+				// Update local in-memory user
+				User sessionUser = session.getUser();
+				sessionUser.merge(savedUser);
+				
+				// Save this user to the local session for next load
+				if(sessionPersister != null) {
+					sessionPersister.saveUser(context, sessionUser);
+				}
+				
+				listener.onUpdate(sessionUser);
+			}
+		});
+	}
+	
 	/**
 	 * Saves the CURRENT user details.
 	 * @param session
@@ -62,29 +100,7 @@ public class UserApi extends SocializeApi<User, SocializeProvider<User>> {
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setProfilePicData(encodedImage);
-		
-		String endpoint = ENDPOINT + user.getId() + "/";
-		
-		putAsPostAsync(session, endpoint, user, new UserSaveListener() {
-
-			@Override
-			public void onError(SocializeException error) {
-				listener.onError(error);
-			}
-
-			@Override
-			public void onUpdate(User user) {
-				// Update local in-memory user
-				session.getUser().merge(user);
-				
-				// Save this user to the local session for next load
-				if(sessionPersister != null) {
-					sessionPersister.saveUser(context, user);
-				}
-				
-				listener.onUpdate(user);
-			}
-		});
+		saveUserProfile(context, session, user, listener);
 	}
 
 	public void setSessionPersister(SocializeSessionPersister sessionPersister) {

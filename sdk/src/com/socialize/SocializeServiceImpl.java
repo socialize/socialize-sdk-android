@@ -59,6 +59,7 @@ import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.ActivityIOCProvider;
+import com.socialize.ui.profile.UserProfile;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.ResourceLocator;
 import com.socialize.util.StringUtils;
@@ -513,6 +514,15 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 	
+	
+	
+	@Override
+	public void saveCurrentUserProfile(Context context, UserProfile profile, UserSaveListener listener) {
+		if(assertAuthenticated(listener)) {
+			service.saveUserProfile(context, session, profile, listener);
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#saveCurrentUserProfile(android.content.Context, java.lang.String, java.lang.String, java.lang.String, com.socialize.listener.user.UserSaveListener)

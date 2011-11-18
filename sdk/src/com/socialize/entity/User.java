@@ -58,7 +58,7 @@ public class User extends SocializeObject {
 		setStats(user.getStats());
 		setAuthData(user.getAuthData());
 		setProfilePicData(user.getProfilePicData());
-		setAutoPostToFacebook(user.isAutoPostToFacebook());
+//		setAutoPostToFacebook(user.isAutoPostToFacebook()); // Don't merge this!
 	}
 
 	public String getDisplayName() {

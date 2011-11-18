@@ -43,6 +43,7 @@ import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
+import com.socialize.ui.profile.UserProfile;
 
 /**
  * The main Socialize Service.  This is the simplest entry point into the Socialize API.
@@ -271,8 +272,18 @@ public interface SocializeService {
 	 * @param lastName User last name.
 	 * @param encodedImage A Base64 encoded PNG file used for the user's profile picture.
 	 * @param listener A listener to handle callbacks from the post.
+	 * @deprecated
 	 */
+	@Deprecated
 	public void saveCurrentUserProfile(Context context, String firstName, String lastName, String encodedImage, UserSaveListener listener);
+	
+	/**
+	 * Saves the profile for the current logged in user.
+	 * @param context The current context.
+	 * @param profile The profile for the user.
+	 * @param listener A listener to handle callbacks from the post.
+	 */
+	public void saveCurrentUserProfile(Context context, UserProfile profile, UserSaveListener listener);
 	
 	/**
 	 * Returns true if this SocializeService instance has been initialized.  

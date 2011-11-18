@@ -42,29 +42,12 @@ public class DefaultProfileSaver implements ProfileSaver {
 	 * @see com.socialize.ui.profile.ProfileSaver#save(android.content.Context, java.lang.String, android.graphics.Bitmap, com.socialize.listener.user.UserSaveListener)
 	 */
 	@Override
-	public void save(Context context, String name, Bitmap image, UserSaveListener listener) {
-		
-		String encodedImage = null;
-		
+	public void save(Context context, UserProfile profile, UserSaveListener listener) {
+		Bitmap image = profile.getImage();
 		if(image != null && !image.isRecycled()) {
-			encodedImage = bitmapUtils.encode(image);
+			profile.setEncodedImage(bitmapUtils.encode(image));
 		}
-		
-		String firstName = name;
-		String lastName = null;
-		
-		// Split the name.
-		name = name.trim();
-		String[] names = name.split("\\s+");
-		
-		if(names.length > 1) {
-			firstName = names[0];
-			
-			// Last name is everything else
-			lastName = name.substring(firstName.length(), name.length()).trim();
-		}
-		
-		getSocialize().saveCurrentUserProfile(context, firstName, lastName, encodedImage,listener);
+		getSocialize().saveCurrentUserProfile(context, profile,listener);
 	}
 
 	protected SocializeService getSocialize() {

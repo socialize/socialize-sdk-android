@@ -31,7 +31,7 @@ public interface CommentButtonCallback {
 
 	public void onError(Context context, Exception e);
 	
-	public void onComment(String text);
+	public void onComment(String text, boolean autoPostToFacebook);
 	
 	public void onCancel();
 	

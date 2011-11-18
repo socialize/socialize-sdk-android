@@ -1078,6 +1078,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		listener.onCreate(socializeActionBar);
 		
 		scrollView.setFillViewport(true);
+		scrollView.setScrollContainer(false);
 		scrollView.setLayoutParams(scrollViewParams);
 		scrollView.addView(original);
 		originalLayout.addView(scrollView);

@@ -61,7 +61,6 @@ public class DefaultActionBarSliderFactory implements ActionBarSliderFactory<Act
 			
 			for (int i = 0; i < childCount; i++) {
 				View child = frame.getChildAt(i);
-				
 				if(child == view) {
 					if(order.equals(ZOrder.BEHIND)) {
 						// Position in front of original, but behind view

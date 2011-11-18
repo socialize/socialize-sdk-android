@@ -22,7 +22,6 @@
 package com.socialize.ui.profile;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 
 import com.socialize.listener.user.UserSaveListener;
 
@@ -34,9 +33,8 @@ public interface ProfileSaver {
 
 	/**
 	 * Saves user profile information for the current user.
-	 * @param name
-	 * @param image
+	 * @param profile
 	 */
-	public void save(Context context, String name, Bitmap image, UserSaveListener listener);
+	public void save(Context context, UserProfile profile, UserSaveListener listener);
 	
 }

@@ -3,6 +3,7 @@ package com.socialize.test.ui.comment;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.util.DisplayMetrics;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
@@ -33,7 +34,7 @@ public class CommentHeaderFactoryTest extends SocializeUITestCase {
 		AndroidMock.expect(deviceUtils.getDIP(AndroidMock.anyInt())).andReturn(0).anyTimes();
 		AndroidMock.expect(colors.getColor((String)AndroidMock.anyObject())).andReturn(0).anyTimes();
 		AndroidMock.expect(drawables.getDrawable("header.png", true, false, true)).andReturn(null);
-		AndroidMock.expect(drawables.getDrawable("socialize_icon_white.png", true)).andReturn(null);
+		AndroidMock.expect(drawables.getDrawable("socialize_icon_white.png", DisplayMetrics.DENSITY_DEFAULT, true)).andReturn(null);
 		
 		AndroidMock.replay(deviceUtils);
 		AndroidMock.replay(colors);

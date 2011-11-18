@@ -23,10 +23,11 @@
 		android:layout_margin="10dip"/>
 	
 	<Button
-		android:id="@+id/btnSampleUI"
+		android:id="@+id/btnSampleSocializeUI"
 		android:text="Launch UI Sample" 
 		android:layout_gravity="center_vertical|center_horizontal"
 		android:layout_height="wrap_content"
 		android:layout_width="fill_parent"
 		android:layout_margin="10dip"/>
+	
 </LinearLayout>

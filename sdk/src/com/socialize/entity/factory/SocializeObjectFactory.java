@@ -61,6 +61,13 @@ public abstract class SocializeObjectFactory<T extends SocializeObject> extends 
 		return null;
 	}
 	
+	protected boolean getBoolean(JSONObject obj, String key, boolean defaultValue) throws JSONException {
+		if(obj.has(key) && !obj.isNull(key)) {
+			return obj.getBoolean(key);
+		}
+		return defaultValue;
+	}	
+	
 	protected int getInt(JSONObject obj, String key) throws JSONException {
 		if(obj.has(key) && !obj.isNull(key)) {
 			return obj.getInt(key);

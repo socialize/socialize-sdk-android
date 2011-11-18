@@ -63,8 +63,15 @@ public class ProfileSaveButtonListener implements OnClickListener {
 		// Get the updated info
 		Bitmap updatedProfileImage = view.getUpdatedProfileImage();
 		String updatedUserDisplayName = view.getUpdatedUserDisplayName();
+		boolean autoPostFB = view.getUpdatedAutoPostFBPreference();
 		
-		profileSaver.save(context, updatedUserDisplayName, updatedProfileImage, new UserSaveListener() {
+		UserProfile profile = new UserProfile();
+		
+		profile.setFullName(updatedUserDisplayName);
+		profile.setImage(updatedProfileImage);
+		profile.setAutoPostFacebook(autoPostFB);
+		
+		profileSaver.save(context, profile, new UserSaveListener() {
 			
 			@Override
 			public void onError(SocializeException error) {

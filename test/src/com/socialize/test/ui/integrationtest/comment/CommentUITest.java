@@ -30,7 +30,7 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		robotium.waitForView(ListView.class, 1, 5000);
 		sleep(2000);
 	}
-
+/*
 	public void testCommentAddWithoutFacebook() {
 		
 		final String txtComment = "UI Integration Test Comment";
@@ -128,7 +128,7 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		assertEquals(txtComment, comment);
 	}
 	
-
+*/
 	public void testCommentListAndView() {
 		
 		startWithoutFacebook();

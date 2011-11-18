@@ -336,8 +336,7 @@ public class ActionBarLayoutView extends BaseView {
 					}
 				});
 				
-				// TODO: Inspect user prefs
-				if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+				if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) && getSocialize().getSession().getUser().isAutoPostToFacebook()) {
 					facebookWallPoster.postLike(getActivity(), actionBarView.getEntityKey(), actionBarView.getEntityName(), null, actionBarView.isEntityKeyUrl(), null);
 				}
 			}
