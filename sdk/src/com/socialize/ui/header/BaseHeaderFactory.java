@@ -26,6 +26,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.ImageView;
@@ -80,7 +81,7 @@ public abstract class BaseHeaderFactory<H extends SocializeHeader> extends BaseV
 		titleText.setLayoutParams(titleTextLayoutParams);
 
 		ImageView titleImage = new ImageView(context);
-		titleImage.setImageDrawable(drawables.getDrawable("socialize_icon_white.png", true));
+		titleImage.setImageDrawable(drawables.getDrawable("socialize_icon_white.png", DisplayMetrics.DENSITY_DEFAULT, true));
 		titleImage.setPadding(0, 0, 0, 0);
 
 		LayoutParams titleImageLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);

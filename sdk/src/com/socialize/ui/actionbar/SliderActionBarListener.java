@@ -25,7 +25,7 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.Share;
-import com.socialize.ui.actionbar.slider.ActionBarSliderItem;
+import com.socialize.ui.slider.ActionBarSliderItem;
 
 /**
  * @author Jason Polites

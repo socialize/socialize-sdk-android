@@ -22,19 +22,22 @@
 package com.socialize.ui.util;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 /**
  * @author Jason Polites
- *
  */
 public class KeyboardUtils {
 	
 	private InputMethodManager imm;
+	private boolean hardwareKeyboard = false;
 
 	public void init(Context context) {
 		this.imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+		int keyboard = context.getResources().getConfiguration().keyboard;
+		hardwareKeyboard = (keyboard != Configuration.KEYBOARD_NOKEYS);
 	}
 	
 	/**
@@ -43,5 +46,11 @@ public class KeyboardUtils {
 	 */
 	public void hideKeyboard(View source) {
 		imm.hideSoftInputFromWindow(source.getWindowToken(), 0);
+	}
+	
+	public void showKeyboard(View source) {
+		if(!hardwareKeyboard) {
+			imm.showSoftInput(source, 0);
+		}
 	}
 }

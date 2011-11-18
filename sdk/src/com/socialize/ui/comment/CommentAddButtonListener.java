@@ -22,26 +22,21 @@
 package com.socialize.ui.comment;
 
 import android.content.Context;
-import android.view.View;
-import android.view.View.OnClickListener;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.config.SocializeConfig;
 import com.socialize.ui.SocializeUI;
-import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
  *
  */
-public class CommentAddButtonListener implements OnClickListener {
+public class CommentAddButtonListener {
 
-	private CommentEditField field;
 	private String consumerKey;
 	private String consumerSecret;
-	private KeyboardUtils keyboardUtils;
 	private Context context;
 	private CommentButtonCallback callback;
 	
@@ -52,15 +47,11 @@ public class CommentAddButtonListener implements OnClickListener {
 
 	public CommentAddButtonListener(
 			Context context, 
-			CommentEditField field, 
-			CommentButtonCallback callback,
-			KeyboardUtils keyboardUtils) {
+			CommentButtonCallback callback) {
 		
 		this(context);
 		
-		this.field = field;
 		this.callback = callback;
-		this.keyboardUtils = keyboardUtils;
 		this.consumerKey = getSocializeUI().getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		this.consumerSecret = getSocializeUI().getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 	}
@@ -73,36 +64,22 @@ public class CommentAddButtonListener implements OnClickListener {
 		return Socialize.getSocialize();
 	}
 	
-	/* (non-Javadoc)
-	 * @see android.view.View.OnClickListener#onClick(android.view.View)
-	 */
-	@Override
-	public void onClick(View v) {
-		
-		final String text = field.getText();
-		
-		if(!StringUtils.isEmpty(text)) {
-			
-			keyboardUtils.hideKeyboard(field.getEditText());
+	public void onCancel() {
+		callback.onCancel();
+	}
 
+	public void onComment(String comment) {
+		if(!StringUtils.isEmpty(comment)) {
 			if(!getSocialize().isAuthenticated()) {
 				getSocialize().authenticate(
 						consumerKey, 
 						consumerSecret,
-						new CommentReAuthListener(context, callback, text));
+						new CommentReAuthListener(context, callback, comment));
 			}
 			else {
-				callback.onComment(text);
+				callback.onComment(comment);
 			}
 		}
-	}
-
-	public void setField(CommentEditField field) {
-		this.field = field;
-	}
-
-	public void setKeyboardUtils(KeyboardUtils keyboardUtils) {
-		this.keyboardUtils = keyboardUtils;
 	}
 
 	public void setCallback(CommentButtonCallback callback) {

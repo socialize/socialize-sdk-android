@@ -21,7 +21,6 @@
  */
 package com.socialize.ui.share;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -29,7 +28,6 @@ import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -59,7 +57,6 @@ public class ShareDialogView extends BaseView {
 	private OnActionBarEventListener onActionBarEventListener;
 	
 	private DeviceUtils deviceUtils;
-	private Dialog parent;
 	private ActionBarView actionBarView;
 	
 	public ShareDialogView(Context context, ActionBarView actionBarView) {
@@ -139,30 +136,19 @@ public class ShareDialogView extends BaseView {
 		setLayoutParams(fill);
 		setPadding(padding, padding, padding, padding);
 
-		OnClickListener closeDialogOnClick = new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if(parent != null) {
-					parent.dismiss();
-				}
-			}
-		};
 		
 		if(facebookShareButton != null && getSocializeUI().isFacebookSupported()) {
 			facebookShareButton.setCustomClickListener(facebookShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener));
-			facebookShareButton.addOnClickListenerBefore(closeDialogOnClick);
 			buttonLayout.addView(facebookShareButton);
 		}
 		
 		if(emailShareButton != null) {
 			emailShareButton.setCustomClickListener(emailShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener));
-			emailShareButton.addOnClickListenerBefore(closeDialogOnClick);
 			buttonLayout.addView(emailShareButton);
 		}
 		
 		if(smsShareButton != null) {
 			smsShareButton.setCustomClickListener(smsShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener));
-			smsShareButton.addOnClickListenerBefore(closeDialogOnClick);
 			buttonLayout.addView(smsShareButton);
 		}
 		
@@ -191,10 +177,6 @@ public class ShareDialogView extends BaseView {
 
 	public void setSmsShareButton(SocializeButton smsShareButton) {
 		this.smsShareButton = smsShareButton;
-	}
-
-	public void setParent(Dialog parent) {
-		this.parent = parent;
 	}
 
 	public void setOtherShareClickListenerFactory(IBeanFactory<OtherShareClickListener> otherShareClickListenerFactory) {

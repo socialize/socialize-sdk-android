@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2011 Socialize Inc.
  * 
@@ -20,43 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.actionbar.slider;
+package com.socialize.ui.slider;
 
-import android.content.Context;
-import android.graphics.Rect;
-import android.widget.LinearLayout;
+import android.view.View;
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class ActionBarSliderViewChild extends LinearLayout {
-	
-	private ActionBarSliderView slider;
-	
-	private int yOffset = 0;
-	
-	public ActionBarSliderViewChild(Context context, ActionBarSliderView parent) {
-		super(context);
-		this.slider = parent;
-	}
-	
-	protected ActionBarSliderView getSlider() {
-		return slider;
-	}
-	
-	public void notifyMove(int offset) {
-		this.yOffset = offset;
-	}
-	
-	protected void adjustHitRect(Rect rect) {
-		rect.bottom += yOffset;
-		rect.top += yOffset;
-	}
+public interface ActionBarSliderFactory<V extends View> {
 
-	@Override
-	public void getHitRect(Rect outRect) {
-	    super.getHitRect(outRect);
-	    adjustHitRect(outRect);
-	}
+	public enum ZOrder {FRONT, BEHIND};
+	
+	public V wrap(View parent, ZOrder order, int peekHeight);
+	
 }

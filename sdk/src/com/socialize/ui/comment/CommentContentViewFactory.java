@@ -42,14 +42,14 @@ public class CommentContentViewFactory extends BaseViewFactory<CommentContentVie
 		
 		LinearLayout contentView = new LinearLayout(context);
 
-		LayoutParams contentViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		contentViewLayoutParams.weight = 1.0f;
+		LayoutParams contentViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
+//		contentViewLayoutParams.weight = 1.0f;
 		contentView.setLayoutParams(contentViewLayoutParams);
 		contentView.setOrientation(LinearLayout.VERTICAL);
 
 		LayoutParams listViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 
-		listViewLayoutParams.weight = 1.0f;
+//		listViewLayoutParams.weight = 1.0f;
 
 		ListView listView = new ListView(context);
 		listView.setId(CommentActivity.LIST_VIEW_ID);

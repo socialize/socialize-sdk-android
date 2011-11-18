@@ -19,12 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.actionbar.slider;
+package com.socialize.ui.slider;
 
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.view.animation.BounceInterpolator;
 import android.view.animation.TranslateAnimation;
 
 import com.socialize.util.DeviceUtils;
@@ -136,6 +135,7 @@ public class SliderAnimationSet {
 			public void onAnimationEnd(Animation animation) {
 				slider.setVisibility(View.GONE);
 				slider.setMoving(false);
+				slider.clearAnimation();
 			}
 		};
 				

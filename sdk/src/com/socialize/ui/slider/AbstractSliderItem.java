@@ -19,16 +19,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.actionbar.slider;
+package com.socialize.ui.slider;
 
-import android.view.View;
+import android.app.Activity;
+
+import com.socialize.ui.actionbar.ActionBarView;
+import com.socialize.ui.actionbar.OnActionBarEventListener;
 
 /**
  * @author Jason Polites
  *
  */
-public interface ActionBarSliderFactory<V extends View> {
+public abstract class AbstractSliderItem implements ActionBarSliderItem {
 
-	public V wrap(View parent);
+	protected Activity context;
+	protected ActionBarView actionBarView;
+	protected OnActionBarEventListener onActionBarEventListener;
+	
+	@Override
+	public String getId() {
+		return "view";
+	}
+	
+	public AbstractSliderItem(Activity context, ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
+		super();
+		this.context = context;
+		this.actionBarView = actionBarView;
+		this.onActionBarEventListener = onActionBarEventListener;
+	}
+
+	@Override
+	public void onClear(ActionBarSliderView slider) {}
+
+	@Override
+	public void onClose(ActionBarSliderView slider) {}
+
+	@Override
+	public void onCreate(ActionBarSliderView slider) {}
+	
 	
 }

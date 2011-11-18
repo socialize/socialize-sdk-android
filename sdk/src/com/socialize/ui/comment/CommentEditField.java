@@ -22,48 +22,43 @@
 package com.socialize.ui.comment;
 
 import android.content.Context;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 /**
  * @author Jason Polites
- *
+ * @deprecated
  */
+@Deprecated
 public class CommentEditField extends LinearLayout {
 	
-	private ImageButton button;
-	private EditText editText;
+//	private ImageButton button;
+//	private TextView editText;
 
 	public CommentEditField(Context context) {
 		super(context);
 	}
 	
-	public void setButtonListener(OnClickListener listener) {
-		button.setOnClickListener(listener);
-	}
+//	public String getText() {
+//		return editText.getText().toString();
+//	}
 	
-	public String getText() {
-		return editText.getText().toString();
-	}
-	
-	public void clear() {
-		editText.setText("");
-	}
+//	public void clear() {
+//		editText.setText("");
+//	}
 
-	public void setButton(ImageButton button) {
-		this.button = button;
-	}
+//	public void setButton(ImageButton button) {
+//		this.button = button;
+//	}
 
-	public void setEditText(EditText editText) {
-		this.editText = editText;
-	}
+//	public void setEditText(TextView editText) {
+//		this.editText = editText;
+//	}
 
-	public EditText getEditText() {
-		return editText;
-	}
+//	public TextView getEditText() {
+//		return editText;
+//	}
 
-	public ImageButton getButton() {
-		return button;
-	}
+//	public ImageButton getButton() {
+//		return button;
+//	}
 }

@@ -33,7 +33,9 @@ import com.socialize.util.Drawables;
 
 /**
  * @author Jason Polites
+ * @deprecated No longer used
  */
+@Deprecated
 public class ShareDialogFactory  {
 	
 	private IBeanFactory<ShareDialogView> shareDialogViewFactory;
@@ -49,7 +51,7 @@ public class ShareDialogFactory  {
 		alertDialog.setIcon(drawables.getDrawable("socialize_icon_white.png"));
 		alertDialog.setTitle("Share");
 		
-		view.setParent(alertDialog);
+//		view.setParent(alertDialog);
 		
 	    alertDialog.show();
 	}

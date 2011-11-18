@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.actionbar.slider;
+package com.socialize.ui.slider;
 
 import android.content.Context;
 import android.graphics.Color;

@@ -5,7 +5,11 @@ import java.util.List;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.auth.AuthProviderType;
@@ -20,7 +24,9 @@ import com.socialize.ui.auth.AuthRequestDialogFactory;
 import com.socialize.ui.auth.AuthRequestListener;
 import com.socialize.ui.dialog.DialogFactory;
 import com.socialize.ui.facebook.FacebookWallPoster;
-import com.socialize.ui.util.KeyboardUtils;
+import com.socialize.ui.slider.ActionBarSliderFactory;
+import com.socialize.ui.slider.ActionBarSliderFactory.ZOrder;
+import com.socialize.ui.slider.ActionBarSliderView;
 import com.socialize.ui.view.ViewFactory;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
@@ -42,18 +48,27 @@ public class CommentListView extends BaseView {
 	private DialogFactory<ProgressDialog> progressDialogFactory;
 	private Drawables drawables;
 	private ProgressDialog dialog = null;
-	private KeyboardUtils keyboardUtils;
 	
 	private ViewFactory<CommentHeader> commentHeaderFactory;
-	private ViewFactory<CommentEditField> commentEditFieldFactory;
+	private ViewFactory<View> commentEditFieldFactory;
 	private ViewFactory<CommentContentView> commentContentViewFactory;
 	
-	private CommentEditField field;
+	private View field;
 	private CommentHeader header;
 	private CommentContentView content;
 	private IBeanFactory<AuthRequestDialogFactory> authRequestDialogFactory;
 	
+	private IBeanFactory<CommentEntrySliderItem> commentEntryFactory;
+	
+	private ActionBarSliderView slider;
+	private ActionBarSliderFactory<ActionBarSliderView> sliderFactory;
+	
 	private FacebookWallPoster facebookWallPoster;
+	
+	private RelativeLayout layoutAnchor;
+	private ViewGroup sliderAnchor;
+	
+	private CommentEntrySliderItem commentEntryPage;
 	
 	public CommentListView(Context context, String entityKey, String entityName, boolean useLink) {
 		this(context);
@@ -62,7 +77,7 @@ public class CommentListView extends BaseView {
 		this.useLink = useLink;
 	}
 	
-	public CommentListView(Context context, String entityKey) {
+	public CommentListView(Context context,String entityKey) {
 		this(context, entityKey, null, true);
 	}	
 	
@@ -78,22 +93,72 @@ public class CommentListView extends BaseView {
 		setLayoutParams(fill);
 		setBackgroundDrawable(drawables.getDrawable("crosshatch.png", true, true, true));
 		setPadding(0, 0, 0, 0);
+		
+		layoutAnchor = new RelativeLayout(getContext());
+		
+		LayoutParams innerParams = new LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+		
+		layoutAnchor.setLayoutParams(innerParams);
+		
+		LinearLayout top = new LinearLayout(getContext());
+		LinearLayout middle = new LinearLayout(getContext());
+		sliderAnchor = new LinearLayout(getContext());
+		
+		int topId = getNextViewId(getParentView());
+		int middleId = getNextViewId(getParentView());
+		int bottomId = getNextViewId(getParentView());
+		
+		top.setPadding(0, 0, 0, 0);
+		middle.setPadding(0, 0, 0, 0);
+		sliderAnchor.setPadding(0, 0, 0, 0);
+		
+		top.setId(topId);
+		middle.setId(middleId);
+		sliderAnchor.setId(bottomId);
+		
+		RelativeLayout.LayoutParams topParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		RelativeLayout.LayoutParams middleParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+		RelativeLayout.LayoutParams bottomParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		
+		topParams.setMargins(0, 0, 0, 0);
+		middleParams.setMargins(0, 0, 0, 0);
+		bottomParams.setMargins(0, 0, 0, 0);	
+		
+		topParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+		bottomParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		
+		middleParams.addRule(RelativeLayout.BELOW, topId);
+		middleParams.addRule(RelativeLayout.ABOVE, bottomId);		
+		
+		top.setLayoutParams(topParams);
+		middle.setLayoutParams(middleParams);
+		sliderAnchor.setLayoutParams(bottomParams);
+
 
 		header = commentHeaderFactory.make(getContext());
 		field = commentEditFieldFactory.make(getContext());
 		content = commentContentViewFactory.make(getContext());
+		
+		commentEntryPage = commentEntryFactory.getBean(getCommentAddListener());
+		
 
-		field.setButtonListener(getCommentAddListener());
 		
 		content.setListAdapter(commentAdapter);
-		
 		content.setScrollListener(getCommentScrollListener());
 
-		addView(header);
-		addView(field);
-		addView(content);
+		top.addView(header);
+		middle.addView(content);
+		sliderAnchor.addView(field);		
+		
+		layoutAnchor.addView(top);
+		layoutAnchor.addView(middle);
+		layoutAnchor.addView(sliderAnchor);
+		
+		addView(layoutAnchor);
 	}
-	
+
+
+
 	protected CommentScrollListener getCommentScrollListener() {
 		return new CommentScrollListener(new CommentScrollCallback() {
 			@Override
@@ -109,11 +174,18 @@ public class CommentListView extends BaseView {
 	}
 	
 	protected CommentAddButtonListener getCommentAddListener() {
-		return new CommentAddButtonListener(getContext(), field, new CommentButtonCallback() {
+		return new CommentAddButtonListener(getContext(), new CommentButtonCallback() {
 			
 			@Override
 			public void onError(Context context, Exception e) {
 				showError(getContext(), e);
+			}
+
+			@Override
+			public void onCancel() {
+				if(slider != null) {
+					slider.close();
+				}
 			}
 
 			@Override
@@ -133,7 +205,7 @@ public class CommentListView extends BaseView {
 					doPostComment(text);
 				}
 			}
-		}, keyboardUtils);
+		});
 	}
 	
 	protected AuthRequestListener getCommentAuthListener(final String text) {
@@ -172,8 +244,10 @@ public class CommentListView extends BaseView {
 				startIndex++;
 				endIndex++;
 				
-				
-				field.clear();
+				if(slider != null) {
+					slider.clearContent();
+					slider.close();
+				}
 				
 				commentAdapter.setTotalCount(commentAdapter.getTotalCount() + 1);
 				commentAdapter.notifyDataSetChanged();
@@ -318,16 +392,36 @@ public class CommentListView extends BaseView {
 		});
 	}
 	
+//	@Override
+//	protected void onViewLoad() {
+//		super.onViewLoad();
+//
+//	}
+	
 	@Override
-	protected void onViewLoad() {
-		super.onViewLoad();
+	protected void onViewRendered(int width, int height) {
+		if(sliderFactory != null && slider == null) {
+			slider = sliderFactory.wrap(getSliderAnchor(), ZOrder.FRONT, height);
+		}
+		
+		slider.loadItem(commentEntryPage);
+		
+		field.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(slider != null) {
+					slider.showSliderItem(commentEntryPage);
+				}
+			}
+		});		
+		
 		if(getSocialize().isAuthenticated()) {
 			doListComments(false);
 		}
 		else {
 			showError(getContext(), new SocializeException("Socialize not authenticated"));
 			content.showList();
-		}
+		}		
 	}
 
 	public void setCommentAdapter(CommentAdapter commentAdapter) {
@@ -354,16 +448,12 @@ public class CommentListView extends BaseView {
 		this.commentHeaderFactory = commentHeaderFactory;
 	}
 
-	public void setCommentEditFieldFactory(ViewFactory<CommentEditField> commentEditFieldFactory) {
+	public void setCommentEditFieldFactory(ViewFactory<View> commentEditFieldFactory) {
 		this.commentEditFieldFactory = commentEditFieldFactory;
 	}
 
 	public void setCommentContentViewFactory(ViewFactory<CommentContentView> commentContentViewFactory) {
 		this.commentContentViewFactory = commentContentViewFactory;
-	}
-
-	public void setKeyboardUtils(KeyboardUtils keyboardUtils) {
-		this.keyboardUtils = keyboardUtils;
 	}
 
 	public void setEntityKey(String entityKey) {
@@ -378,7 +468,7 @@ public class CommentListView extends BaseView {
 		this.loading = loading;
 	}
 
-	protected void setField(CommentEditField field) {
+	protected void setField(View field) {
 		this.field = field;
 	}
 
@@ -404,6 +494,10 @@ public class CommentListView extends BaseView {
 
 	public int getEndIndex() {
 		return endIndex;
+	}
+	
+	public void setCommentEntryFactory(IBeanFactory<CommentEntrySliderItem> commentEntryFactory) {
+		this.commentEntryFactory = commentEntryFactory;
 	}
 
 	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
@@ -435,5 +529,17 @@ public class CommentListView extends BaseView {
 	
 	protected SocializeUI getSocializeUI() {
 		return SocializeUI.getInstance();
+	}
+
+	protected RelativeLayout getLayoutAnchor() {
+		return layoutAnchor;
+	}
+
+	protected ViewGroup getSliderAnchor() {
+		return sliderAnchor;
+	}
+
+	public void setSliderFactory(ActionBarSliderFactory<ActionBarSliderView> sliderFactory) {
+		this.sliderFactory = sliderFactory;
 	}
 }

@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2011 Socialize Inc.
  * 
@@ -19,33 +20,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.actionbar.slider;
+package com.socialize.ui.slider;
 
-import android.app.Activity;
-
-import com.socialize.ui.actionbar.ActionBarView;
-import com.socialize.ui.actionbar.OnActionBarEventListener;
+import android.content.Context;
+import android.graphics.Rect;
+import android.widget.LinearLayout;
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class AbstractSliderItem implements ActionBarSliderItem {
-
-	protected Activity context;
-	protected ActionBarView actionBarView;
-	protected OnActionBarEventListener onActionBarEventListener;
+public abstract class ActionBarSliderViewChild extends LinearLayout {
 	
+	private ActionBarSliderView slider;
+	
+	private int yOffset = 0;
+	
+	public ActionBarSliderViewChild(Context context, ActionBarSliderView parent) {
+		super(context);
+		this.slider = parent;
+	}
+	
+	protected ActionBarSliderView getSlider() {
+		return slider;
+	}
+	
+	public void notifyMove(int offset) {
+		this.yOffset = offset;
+	}
+	
+	protected void adjustHitRect(Rect rect) {
+		rect.bottom += yOffset;
+		rect.top += yOffset;
+	}
+
 	@Override
-	public String getId() {
-		return "view";
+	public void getHitRect(Rect outRect) {
+	    super.getHitRect(outRect);
+	    adjustHitRect(outRect);
 	}
-	
-	public AbstractSliderItem(Activity context, ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
-		super();
-		this.context = context;
-		this.actionBarView = actionBarView;
-		this.onActionBarEventListener = onActionBarEventListener;
-	}
-
 }

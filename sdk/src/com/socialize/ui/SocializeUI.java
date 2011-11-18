@@ -388,6 +388,7 @@ public class SocializeUI {
 			scrollView.setFillViewport(true);
 			scrollView.setLayoutParams(scrollViewParams);
 			scrollView.addView(original);
+			scrollView.setScrollContainer(false);
 			originalLayout.addView(scrollView);
 		}
 		else {

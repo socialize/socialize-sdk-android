@@ -19,49 +19,59 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.actionbar.slider.share;
+package com.socialize.ui.comment;
 
-import android.app.Activity;
 import android.view.View;
 
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.ui.actionbar.ActionBarView;
-import com.socialize.ui.actionbar.OnActionBarEventListener;
-import com.socialize.ui.share.ShareDialogView;
-import com.socialize.ui.slider.AbstractSliderItem;
+import com.socialize.ui.slider.ActionBarSliderItem;
+import com.socialize.ui.slider.ActionBarSliderView;
 import com.socialize.ui.slider.ActionBarSliderView.DisplayState;
 
 /**
  * @author Jason Polites
+ *
  */
-public class ShareSliderItem extends AbstractSliderItem {
-
-	private IBeanFactory<ShareDialogView> viewFactory;
+public class CommentEntrySliderItem implements ActionBarSliderItem {
 	
-	@Override
-	public String getId() {
-		return "share";
-	}
+	private IBeanFactory<CommentEntryView> viewFactory;
+	
+	private CommentEntryView currentView;
+	
+	private CommentAddButtonListener listener;
 
-	public ShareSliderItem(Activity context, ActionBarView actionBarView, OnActionBarEventListener onActionBarEventListener) {
-		super(context, actionBarView, onActionBarEventListener);
+	public CommentEntrySliderItem(CommentAddButtonListener listener) {
+		super();
+		this.listener = listener;
 	}
 
 	/* (non-Javadoc)
-	 * @see com.socialize.ui.actionbar.slider.ActionBarSliderItem#getView()
+	 * @see com.socialize.ui.slider.ActionBarSliderItem#getId()
+	 */
+	@Override
+	public String getId() {
+		return "comment";
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.ui.slider.ActionBarSliderItem#getView()
 	 */
 	@Override
 	public View getView() {
-		return viewFactory.getBean(actionBarView, onActionBarEventListener);
+		currentView = viewFactory.getBean(listener);
+		return currentView;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.socialize.ui.slider.ActionBarSliderItem#getSliderContentHeight()
+	 */
 	@Override
 	public int getSliderContentHeight() {
 		return -1;
 	}
 
 	/* (non-Javadoc)
-	 * @see com.socialize.ui.actionbar.slider.ActionBarSliderItem#getStartPosition()
+	 * @see com.socialize.ui.slider.ActionBarSliderItem#getStartPosition()
 	 */
 	@Override
 	public DisplayState getStartPosition() {
@@ -69,24 +79,50 @@ public class ShareSliderItem extends AbstractSliderItem {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.socialize.ui.actionbar.slider.ActionBarSliderItem#isRestore()
+	 * @see com.socialize.ui.slider.ActionBarSliderItem#isPeekOnClose()
 	 */
 	@Override
 	public boolean isPeekOnClose() {
 		return false;
 	}
 
-	public void setViewFactory(IBeanFactory<ShareDialogView> viewFactory) {
+	/* (non-Javadoc)
+	 * @see com.socialize.ui.slider.ActionBarSliderItem#getIconImage()
+	 */
+	@Override
+	public String getIconImage() {
+		return "icon_comment.png";
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.ui.slider.ActionBarSliderItem#getTitle()
+	 */
+	@Override
+	public String getTitle() {
+		return "Add Comment";
+	}
+
+	public void setViewFactory(IBeanFactory<CommentEntryView> viewFactory) {
 		this.viewFactory = viewFactory;
 	}
 
 	@Override
-	public String getIconImage() {
-		return "icon_share.png";
+	public void onClear(ActionBarSliderView slider) {
+		if(currentView != null) {
+			currentView.doCancel();
+		}
 	}
 
 	@Override
-	public String getTitle() {
-		return "Share";
+	public void onClose(ActionBarSliderView slider) {
+		if(currentView != null) {
+			currentView.doCancel();
+		}
 	}
+
+	@Override
+	public void onCreate(ActionBarSliderView slider) {
+	}
+	
+	
 }

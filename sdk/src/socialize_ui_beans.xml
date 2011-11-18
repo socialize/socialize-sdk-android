@@ -409,7 +409,66 @@
 		<property name="keyboardUtils" ref="keyboardUtils"/>
 		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
 		<property name="facebookWallPoster" ref="facebookWallPoster"/>
+		<property name="commentEntryFactory" ref="commentEntrySliderItemFactory"/>
+		<property name="sliderFactory" ref="actionBarSliderFactory"/>
+		
 	</bean>
+	
+	<!--  Comment items -->
+	<bean 
+		id="commentEntrySliderItem" 
+		class="com.socialize.ui.comment.CommentEntrySliderItem" 
+		singleton="false">
+		<property name="viewFactory" ref="commentEntryViewFactory"/>
+	</bean>		
+	
+	<bean 
+		id="postCommentButton" 
+		singleton="false"
+		extends="socializeButton">
+		<constructor-arg type="activity"/>
+		<property name="text" value="Post Comment"/>
+		<property name="height" value="36" type="integer"/>
+		<property name="width" value="100" type="integer"/>
+		<property name="textSize" value="11" type="integer"/>
+		<property name="textAlign" value="center"/>
+		<property name="padding" value="2" type="integer"/>
+		<property name="bold" value="true" type="boolean"/>
+	</bean>
+	
+	<bean 
+		id="cancelCommentButton" 
+		singleton="false"
+		extends="socializeButton">
+		<constructor-arg type="activity"/>
+		<property name="text" value="Cancel"/>
+		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
+		<property name="topColor" value="GRAY_BTN_TOP"/>
+		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
+		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>
+		<property name="height" value="36" type="integer"/>
+		<property name="width" value="70" type="integer"/>
+		<property name="textSize" value="11" type="integer"/>
+		<property name="textAlign" value="center"/>
+		<property name="padding" value="2" type="integer"/>
+	</bean>	
+	
+	<bean 
+		id="commentEntryView" 
+		class="com.socialize.ui.comment.CommentEntryView" 
+		singleton="false">
+		<constructor-arg type="activity"/>
+		
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="keyboardUtils" ref="keyboardUtils"/>
+		<property name="postCommentButton" ref="postCommentButton"/>
+		<property name="cancelCommentButton" ref="cancelCommentButton"/>
+		
+		<init-method name="init"/>
+	</bean>		
+	
+	<factory id="commentEntrySliderItemFactory" makes="commentEntrySliderItem"/>
+	<factory id="commentEntryViewFactory" makes="commentEntryView"/>	
 	
 	<bean 
 		id="commentDetailLayoutView" 
@@ -630,7 +689,7 @@
 		<constructor-arg type="activity"/>
 		<property name="text" value="Email"/>
 		<property name="imageName" value="email_button.png"/>
-		<property name="width" value="80" type="integer"/>
+		<property name="width" value="90" type="integer"/>
 		<property name="height" value="36" type="integer"/>
 		<property name="textSize" value="12" type="integer"/>
 		<property name="padding" value="4" type="integer"/>
@@ -647,7 +706,7 @@
 		<constructor-arg type="activity"/>
 		<property name="text" value="SMS"/>
 		<property name="imageName" value="sms_button.png"/>
-		<property name="width" value="80" type="integer"/>
+		<property name="width" value="90" type="integer"/>
 		<property name="height" value="36" type="integer"/>
 		<property name="textSize" value="12" type="integer"/>
 		<property name="padding" value="4" type="integer"/>
@@ -729,16 +788,17 @@
 	
 <!-- End Share UI -->	
 
-<!-- Socialize Action Bar Slider -->
+<!-- Socialize Slider -->
 	<bean 
 		id="actionBarSliderFactory" 
-		class="com.socialize.ui.actionbar.slider.DefaultActionBarSliderFactory">
+		class="com.socialize.ui.slider.DefaultActionBarSliderFactory">
 		<property name="actionBarSliderViewFactory" ref="actionBarSliderViewFactory"/>
+		<property name="logger" ref="logger"/>
 	</bean>
 	
 	<bean 
 		id="actionBarSliderView" 
-		class="com.socialize.ui.actionbar.slider.ActionBarSliderView" 
+		class="com.socialize.ui.slider.ActionBarSliderView" 
 		singleton="false">
 		
 		<constructor-arg type="activity"/>
@@ -775,7 +835,7 @@
 	
 	<bean 
 		id="sliderAnimationSet" 
-		class="com.socialize.ui.actionbar.slider.SliderAnimationSet" 
+		class="com.socialize.ui.slider.SliderAnimationSet" 
 		singleton="false">
 		<property name="deviceUtils" ref="deviceUtils"/>
 	</bean>		
@@ -823,7 +883,7 @@
 	<factory id="socializeActivityEntityViewFactory" makes="socializeActivityEntityView"/>
 	 -->
 
-<!-- End Socialize Action Bar Slider -->
+<!-- End Socialize Slider -->
 
 <!--  Image Loader  -->
 	<bean id="imageUrlLoader" class="com.socialize.ui.image.ImageUrlLoader"/>

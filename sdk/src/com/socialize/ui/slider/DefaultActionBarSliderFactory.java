@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.actionbar.slider;
+package com.socialize.ui.slider;
 
 import android.view.View;
 import android.view.ViewParent;
@@ -27,6 +27,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.log.SocializeLogger;
 
 /**
  * @author Jason Polites
@@ -35,9 +36,10 @@ import com.socialize.android.ioc.IBeanFactory;
 public class DefaultActionBarSliderFactory implements ActionBarSliderFactory<ActionBarSliderView> {
 
 	private IBeanFactory<ActionBarSliderView> actionBarSliderViewFactory;
+	private SocializeLogger logger;
 	
 	@Override
-	public ActionBarSliderView wrap(View view) {
+	public ActionBarSliderView wrap(View view, ZOrder order, int peekHeight) {
 		
 		ActionBarSliderView actionBarSlider = null;
 		ViewParent parent = view.getParent();
@@ -48,26 +50,36 @@ public class DefaultActionBarSliderFactory implements ActionBarSliderFactory<Act
 			
 			int[] location = new int[]{view.getLeft(), view.getTop()};
 			
-			actionBarSlider = actionBarSliderViewFactory.getBean(location);
+			actionBarSlider = actionBarSliderViewFactory.getBean(location, peekHeight);
 
-			RelativeLayout.LayoutParams barParams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-			barParams.addRule(RelativeLayout.ABOVE, view.getId());
+			RelativeLayout.LayoutParams barParams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);;
 			
 			actionBarSlider.setLayoutParams(barParams);
 			actionBarSlider.setVisibility(View.GONE);
 			
-			// Position in front of original, but behind actionbar
 			int childCount = frame.getChildCount();
 			
 			for (int i = 0; i < childCount; i++) {
 				View child = frame.getChildAt(i);
 				
 				if(child == view) {
-					frame.addView(actionBarSlider, i);
+					if(order.equals(ZOrder.BEHIND)) {
+						// Position in front of original, but behind view
+						frame.addView(actionBarSlider, i);
+					}
+					else {
+						// Position in front of original and view
+						frame.addView(actionBarSlider, i+1);
+					}
 					break;
 				}
 			}
 		}	
+		else {
+			if(logger != null) {
+				logger.warn("Unable to wrap view with a slider.  The view being wrapped is not contained in a RelativeLayout!");
+			}
+		}
 		
 		return actionBarSlider;
 	}
@@ -75,4 +87,10 @@ public class DefaultActionBarSliderFactory implements ActionBarSliderFactory<Act
 	public void setActionBarSliderViewFactory(IBeanFactory<ActionBarSliderView> actionBarSliderViewFactory) {
 		this.actionBarSliderViewFactory = actionBarSliderViewFactory;
 	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
+	
+	
 }

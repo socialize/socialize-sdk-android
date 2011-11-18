@@ -19,35 +19,54 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.actionbar.slider;
+package com.socialize.ui.slider;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.view.MotionEvent;
+import android.view.View;
+
+import com.socialize.ui.slider.ActionBarSliderView.DisplayState;
 
 /**
  * @author Jason Polites
  *
  */
-public class ActionBarSliderContent extends ActionBarSliderViewChild {
+public interface ActionBarSliderItem {
 	
-	private int height;
+	public String getId();
 	
-	public ActionBarSliderContent(Context context, ActionBarSliderView parent, int height) {
-		super(context, parent);
-		this.height = height;
-	}
+	/**
+	 * Returns the view to be displayed in the slider.
+	 * @return
+	 */
+	public View getView();
 	
-	public void init() {
-		setBackgroundColor(Color.parseColor("#313131"));
-		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, height);
-		params.setMargins(0,0,0,0);
-		setLayoutParams(params);	
-		setOrientation(VERTICAL);
-	}
+	/**
+	 * Returns height of the slider content in pixels, or -1 for whole screen.
+	 * @return
+	 */
+	public int getSliderContentHeight();
 	
-	@Override
-	public boolean onTouchEvent (MotionEvent event) {
-		return true;
-	}
+	/**
+	 * If true the slider can be maximized.
+	 * @return
+	 */
+	public DisplayState getStartPosition();
+	
+	/**
+	 * If false the slider closes when restored either from maximized position, or restored position.
+	 * @return
+	 */
+	public boolean isPeekOnClose();
+	
+	public String getIconImage();
+	
+	public String getTitle();
+	
+	/**
+	 * Clears the content of the item.
+	 */
+	public void onClear(ActionBarSliderView slider);
+	
+	public void onClose(ActionBarSliderView slider);
+	
+	public void onCreate(ActionBarSliderView slider);
 }

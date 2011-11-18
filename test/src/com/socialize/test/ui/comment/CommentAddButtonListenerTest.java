@@ -1,5 +1,6 @@
 package com.socialize.test.ui.comment;
 
+import android.view.View;
 import android.widget.EditText;
 
 import com.google.android.testing.mocking.AndroidMock;
@@ -18,7 +19,7 @@ public class CommentAddButtonListenerTest extends SocializeUITestCase {
 
 	
 	@UsesMocks ({
-		CommentEditField.class, 
+		View.class, 
 		KeyboardUtils.class, 
 		CommentButtonCallback.class, 
 		SocializeUI.class, 
@@ -32,15 +33,15 @@ public class CommentAddButtonListenerTest extends SocializeUITestCase {
 		final SocializeUI socializeUI = AndroidMock.createMock(SocializeUI.class);
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		
-		CommentEditField field = AndroidMock.createMock(CommentEditField.class, getContext());
+		View field = AndroidMock.createMock(View.class, getContext());
 		KeyboardUtils keyboardUtils = AndroidMock.createMock(KeyboardUtils.class);
 		CommentButtonCallback callback = AndroidMock.createMock(CommentButtonCallback.class);
 		
 		EditText mockET = new EditText(getContext());
 		
-		AndroidMock.expect(field.getText()).andReturn(text);
+//		AndroidMock.expect(field.getText()).andReturn(text);
 		AndroidMock.expect(socialize.isAuthenticated()).andReturn(false);
-		AndroidMock.expect(field.getEditText()).andReturn(mockET);
+//		AndroidMock.expect(field.getEditText()).andReturn(mockET);
 		
 		keyboardUtils.hideKeyboard(mockET);
 		
@@ -54,7 +55,7 @@ public class CommentAddButtonListenerTest extends SocializeUITestCase {
 		AndroidMock.replay(socializeUI);
 		AndroidMock.replay(keyboardUtils);
 		
-		CommentAddButtonListener listener = new CommentAddButtonListener(getContext(), field, callback, keyboardUtils) {
+		CommentAddButtonListener listener = new CommentAddButtonListener(getContext(), callback) {
 			@Override
 			protected SocializeUI getSocializeUI() {
 				return socializeUI;
@@ -66,7 +67,7 @@ public class CommentAddButtonListenerTest extends SocializeUITestCase {
 			}
 		};
 		
-		listener.onClick(null);
+		listener.onComment(null);
 		
 		AndroidMock.verify(field);
 		AndroidMock.verify(socialize);

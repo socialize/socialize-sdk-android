@@ -30,8 +30,9 @@ import com.socialize.android.ioc.IOCContainer;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.Share;
-import com.socialize.ui.actionbar.slider.ActionBarSliderFactory;
-import com.socialize.ui.actionbar.slider.ActionBarSliderView;
+import com.socialize.ui.slider.ActionBarSliderFactory;
+import com.socialize.ui.slider.ActionBarSliderView;
+import com.socialize.ui.slider.ActionBarSliderFactory.ZOrder;
 import com.socialize.ui.view.EntityView;
 
 /**
@@ -92,7 +93,7 @@ public class ActionBarView extends EntityView {
 		super.onAfterAuthenticate(container);
 		sliderFactory = container.getBean("actionBarSliderFactory");
 		if(sliderFactory != null) {
-			slider = sliderFactory.wrap(this);
+			slider = sliderFactory.wrap(this, ZOrder.BEHIND, 0);
 		}
 	}
 	

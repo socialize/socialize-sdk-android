@@ -29,8 +29,8 @@ import android.widget.TextView;
 
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
-import com.socialize.ui.actionbar.slider.AbstractSliderItem;
-import com.socialize.ui.actionbar.slider.ActionBarSliderView.DisplayState;
+import com.socialize.ui.slider.AbstractSliderItem;
+import com.socialize.ui.slider.ActionBarSliderView.DisplayState;
 
 /**
  * @author Jason Polites

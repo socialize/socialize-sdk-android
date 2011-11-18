@@ -1,9 +1,5 @@
 package com.socialize.ui.comment;
 
-import com.socialize.android.ioc.IOCContainer;
-import com.socialize.ui.SocializeUI;
-import com.socialize.ui.view.EntityView;
-
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -11,6 +7,10 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+
+import com.socialize.android.ioc.IOCContainer;
+import com.socialize.ui.SocializeUI;
+import com.socialize.ui.view.EntityView;
 
 public class CommentView extends EntityView {
 	
@@ -29,7 +29,7 @@ public class CommentView extends EntityView {
 	protected View getView(Bundle bundle, Object...entityKey) {
 		if (entityKey != null) {
 			if(commentListView == null) {
-				commentListView =  container.getBean("commentList", entityKey[0]);
+				commentListView = container.getBean("commentList", entityKey[0]);
 			}
 			return commentListView;
 		}
@@ -61,7 +61,7 @@ public class CommentView extends EntityView {
 	protected String[] getEntityKeys() {
 		return new String[]{SocializeUI.ENTITY_KEY};
 	}
-
+	
 	/**
 	 * Called when the current logged in user updates their profile.
 	 */

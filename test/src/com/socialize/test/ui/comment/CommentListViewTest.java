@@ -84,7 +84,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 
 		AndroidMock.expect(drawables.getDrawable("crosshatch.png", true, true, true)).andReturn(drawable);
 		
-		field.setButtonListener((OnClickListener) AndroidMock.anyObject());
+		field.setOnClickListener((OnClickListener) AndroidMock.anyObject());
 		content.setListAdapter(commentAdapter);
 		content.setScrollListener((OnScrollListener) AndroidMock.anyObject());
 		
@@ -135,9 +135,9 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		};
 		
 		view.setCommentHeaderFactory(commentHeaderFactory);
-		view.setCommentEditFieldFactory(commentEditFieldFactory);
+//		view.setCommentEditFieldFactory(commentEditFieldFactory);
 		view.setCommentContentViewFactory(commentContentViewFactory);
-		view.setKeyboardUtils(keyboardUtils);
+//		view.setKeyboardUtils(keyboardUtils);
 		view.setCommentAdapter(commentAdapter);
 		view.setDrawables(drawables);
 		
@@ -365,7 +365,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		header.setText((totalCount) + " Comments");
 
 		commentAdapter.setTotalCount((totalCount+1));
-		field.clear();
+//		field.clear();
 		commentAdapter.notifyDataSetChanged();
 		content.scrollToTop();
 		dialog.dismiss();
@@ -897,7 +897,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		}
 
 		@Override
-		public void setField(CommentEditField field) {
+		public void setField(View field) {
 			super.setField(field);
 		}
 

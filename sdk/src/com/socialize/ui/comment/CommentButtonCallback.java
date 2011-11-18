@@ -33,4 +33,6 @@ public interface CommentButtonCallback {
 	
 	public void onComment(String text);
 	
+	public void onCancel();
+	
 }

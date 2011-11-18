@@ -46,7 +46,6 @@ import com.socialize.ui.cache.CacheableEntity;
 import com.socialize.ui.cache.EntityCache;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.facebook.FacebookWallPoster;
-import com.socialize.ui.share.ShareDialogFactory;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
@@ -83,7 +82,7 @@ public class ActionBarLayoutView extends BaseView {
 	private DeviceUtils deviceUtils;
 	
 	private FacebookWallPoster facebookWallPoster;
-	private ShareDialogFactory shareDialogFactory;
+//	private ShareDialogFactory shareDialogFactory;
 	private ActionBarView actionBarView;
 	
 	private OnActionBarEventListener onActionBarEventListener;
@@ -490,10 +489,6 @@ public class ActionBarLayoutView extends BaseView {
 
 	public void setItemFactory(IBeanFactory<ActionBarItem> itemFactory) {
 		this.itemFactory = itemFactory;
-	}
-
-	public void setShareDialogFactory(ShareDialogFactory shareDialogFactory) {
-		this.shareDialogFactory = shareDialogFactory;
 	}
 
 	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {

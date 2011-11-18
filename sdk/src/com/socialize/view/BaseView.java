@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.LinearLayout;
 
 import com.socialize.Socialize;
@@ -16,6 +17,9 @@ public abstract class BaseView extends LinearLayout {
 	private SocializeErrorHandler errorHandler;
 	
 	private int loadCount = 0;
+	private int lastId = 0;
+	
+	private boolean rendered = false;
 	
 	public BaseView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -64,6 +68,9 @@ public abstract class BaseView extends LinearLayout {
 					onViewUpdate();
 				}
 			}
+			else {
+				rendered = false;
+			}
 		}
 		else {
 			// Add the default Socialize View for display
@@ -74,6 +81,16 @@ public abstract class BaseView extends LinearLayout {
 		}
 	}
 	
+	@Override
+	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+		super.onSizeChanged(w, h, oldw, oldh);
+		
+		if(!rendered) {
+			rendered = true;
+			onViewRendered(w, h);
+		}
+	}
+
 	protected void incrementLoaded() {
 		loadCount++;
 	}
@@ -97,27 +114,41 @@ public abstract class BaseView extends LinearLayout {
 
 	protected void onViewLoad() {}
 	
+	protected void onViewRendered(int width, int height) {};
+	
+	protected View getParentView() {
+		ViewParent parent = getParent();
+		if(parent instanceof View) {
+			return (View) parent;
+		}
+		return this;
+	}
+	
 	protected int getNextViewId(View parent) {
-		int id = Integer.MAX_VALUE;
-		
 		if(parent instanceof ViewGroup) {
 			ViewGroup group = (ViewGroup) parent;
-			id = 0;
 			int childCount = group.getChildCount();
 			
-			for (int i = 0; i < childCount; i++) {
-				View child = group.getChildAt(i);
-				int childId = child.getId();
-				if(childId > id) {
-					id = childId;
+			if(childCount > 0) {
+				int id = 0;
+				
+				for (int i = 0; i < childCount; i++) {
+					View child = group.getChildAt(i);
+					int childId = child.getId();
+					if(childId > id) {
+						id = childId;
+					}
 				}
-			}
-			
-			if(id < Integer.MAX_VALUE) {
-				id++;
+				
+				while(id <= lastId) {
+					id++;
+				}
+				
+				lastId = id;
+				return id;
 			}
 		}
 		
-		return id;
+		return ++lastId;
 	}	
 }

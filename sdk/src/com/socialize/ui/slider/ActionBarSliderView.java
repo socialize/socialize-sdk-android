@@ -19,13 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.actionbar.slider;
+package com.socialize.ui.slider;
 
 import java.util.Map;
 import java.util.TreeMap;
 
 import android.content.Context;
 import android.view.View;
+import android.view.animation.Animation;
 
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.log.SocializeLogger;
@@ -49,7 +50,6 @@ public class ActionBarSliderView extends BaseView {
 	private Map<String, SliderAnimationSet> animations;
 	private SliderAnimationSet currentAnimationSet;
 	
-	@SuppressWarnings("unused")
 	private SocializeLogger logger;
 	
 	private int[] parentViewlocation;
@@ -63,6 +63,7 @@ public class ActionBarSliderView extends BaseView {
 	private int actionBarTop;
 	private int actionBarHeight;
 	private int deviceHeight;
+	private int peekHeight;
 	
 	private boolean moving = false;
 	
@@ -72,9 +73,10 @@ public class ActionBarSliderView extends BaseView {
 		super(context);
 	}
 	
-	public ActionBarSliderView(Context context, int[] parentLocation) {
+	public ActionBarSliderView(Context context, int[] parentLocation, int peekHeight) {
 		super(context);
 		this.parentViewlocation = parentLocation;
+		this.peekHeight = peekHeight;
 	}
 
 	public void init() {
@@ -84,11 +86,16 @@ public class ActionBarSliderView extends BaseView {
 		
 		animations = new TreeMap<String, SliderAnimationSet>();
 		
-		if(parentViewlocation != null) {
-			actionBarTop = parentViewlocation[1];
+		if(peekHeight > 0) {
+			actionBarTop = peekHeight;
 		}
 		else {
-			actionBarTop = deviceHeight - actionBarHeight;
+			if(parentViewlocation != null) {
+				actionBarTop = parentViewlocation[1];
+			}
+			else {
+				actionBarTop = deviceHeight - actionBarHeight;
+			}
 		}
 		
 		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
@@ -112,8 +119,8 @@ public class ActionBarSliderView extends BaseView {
 	}
 	
 	public void clearContent() {
-		if(content != null) {
-			content.removeAllViews();
+		if(currentItem != null) {
+			currentItem.onClear(this);
 		}
 	}
 
@@ -125,28 +132,49 @@ public class ActionBarSliderView extends BaseView {
 		return false;
 	}
 	
+	public synchronized void loadItem(ActionBarSliderItem item) {
+		if(logger != null && logger.isInfoEnabled()) {
+			logger.info("Loading slider item for " + item.getId());
+		}
+		
+		if(currentItem != item) {
+			currentItem = item;
+			content.removeAllViews();
+			content.addView(item.getView());
+			handle.setTitle(item.getTitle());
+			handle.setIconImage(item.getIconImage());
+			
+			currentAnimationSet = animations.get(item.getId());
+			
+			if(currentAnimationSet == null) {
+				currentAnimationSet = sliderAnimationSetFactory.getBean();
+				currentAnimationSet.init(item, this);
+				animations.put(item.getId(), currentAnimationSet);
+			}		
+			
+			currentItem.onCreate(this);
+		}
+	}
+	
 	public void showSliderItem(ActionBarSliderItem item) {
+		if(logger != null && logger.isInfoEnabled()) {
+			logger.info("Showing slider item for " + item.getId());
+		}
 		if(content != null) {
 			if(item != null) {
 				DisplayState state = item.getStartPosition();
 				
 				if(item != currentItem) {
+					if(logger != null && logger.isInfoEnabled()) {
+						logger.info("Don't have item [" +
+								item.getId() +
+								"], current state is " + displayState);
+					}					
+					
+					
 					close();
-					currentItem = item;
 					
-					content.removeAllViews();
-					content.addView(item.getView());
-					
-					handle.setTitle(item.getTitle());
-					handle.setIconImage(item.getIconImage());
-					
-					currentAnimationSet = animations.get(item.getId());
-					
-					if(currentAnimationSet == null) {
-						currentAnimationSet = sliderAnimationSetFactory.getBean();
-						currentAnimationSet.init(item, this);
-						animations.put(item.getId(), currentAnimationSet);
-					}
+					loadItem(item);
 					
 					switch (state) {
 						case PEEK:
@@ -158,6 +186,12 @@ public class ActionBarSliderView extends BaseView {
 					}
 				}
 				else {
+					if(logger != null && logger.isInfoEnabled()) {
+						logger.info("Already have item [" +
+								item.getId() +
+								"], current state is " + displayState);
+					}						
+					
 					if(!displayState.equals(state)) {
 						switch (state) {
 							case PEEK:
@@ -184,56 +218,77 @@ public class ActionBarSliderView extends BaseView {
 	}
 	
 	public void maximize() {
+		if(logger != null && logger.isInfoEnabled()) {
+			logger.info("maximize called in state " + displayState);
+		}			
 		
 		switch (displayState) {
 			case CLOSE:
-				clearAnimation();
-				displayState = DisplayState.MAXIMIZE;
-				startAnimation(currentAnimationSet.getMaximizeFromClose());
+				startAnimationForState(currentAnimationSet.getMaximizeFromClose(), DisplayState.MAXIMIZE);
 				break;
 			case PEEK:
-				clearAnimation();
-				displayState = DisplayState.MAXIMIZE;
-				startAnimation(currentAnimationSet.getMaximizeFromPeek());
+				startAnimationForState(currentAnimationSet.getMaximizeFromPeek(), DisplayState.MAXIMIZE);
 				break;				
 		}
-
+	}
+	
+	protected void startAnimationForState(Animation animation, DisplayState state) {
+		// Animation doesn't always seem to work.. force an invalidate
+		setVisibility(View.VISIBLE);
+//		invalidate();				
+		clearAnimation();
+		displayState = state;
+		
+		if(logger != null && logger.isInfoEnabled()) {
+			logger.info("starting animation for state " + state);
+		}	
+		
+		startAnimation(animation);
 	}
 	
 	public void peek() {
 		
+		if(logger != null && logger.isInfoEnabled()) {
+			logger.info("peek called in state " + displayState);
+		}	
+		
 		switch (displayState) {
 			case CLOSE:
-				clearAnimation();
-				displayState = DisplayState.PEEK;
-				startAnimation(currentAnimationSet.getPeekFromClose());
+				startAnimationForState(currentAnimationSet.getPeekFromClose(), DisplayState.PEEK);
 				break;
 			case MAXIMIZE:
-				clearAnimation();
-				displayState = DisplayState.PEEK;
-				startAnimation(currentAnimationSet.getPeekFromMaximize());
+				startAnimationForState(currentAnimationSet.getPeekFromMaximize(), DisplayState.PEEK);
 				break;	
 		}
-		
 	}
 	
 	public void close() {
+		if(logger != null && logger.isInfoEnabled()) {
+			logger.info("close called in state " + displayState);
+		}			
+
 		switch (displayState) {
 			case MAXIMIZE:
-				clearAnimation();
-				startAnimation(currentAnimationSet.getCloseFromMaximized());
+				startAnimationForState(currentAnimationSet.getCloseFromMaximized(), DisplayState.CLOSE);
 				break;
 			case PEEK:
-				clearAnimation();
-				startAnimation(currentAnimationSet.getCloseFromPeek());
+				startAnimationForState(currentAnimationSet.getCloseFromPeek(), DisplayState.CLOSE);
 				break;
 		}			
+		
+		if(currentItem != null) {
+			currentItem.onClose(this);
+		}
 		
 		displayState = DisplayState.CLOSE;
 	}
 	
 	
 	public void slide() {
+		if(logger != null && logger.isInfoEnabled()) {
+			logger.info("slide called in state " + displayState);
+		}				
+		
 		if(!moving) {
 			moving = true;
 			switch(displayState) {
