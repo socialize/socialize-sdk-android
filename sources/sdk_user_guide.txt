@@ -1,6 +1,10 @@
-=============================================
-SDK User Guide (Recommended for expert users)
-=============================================
+.. raw:: html
+
+	<link rel="stylesheet" href="static/css/gist.css" type="text/css" />
+	
+==============================
+Socialize SDK (Advanced) Guide
+==============================
 
 Introduction
 ------------
@@ -55,42 +59,7 @@ Facebook Authentication Code Snippet
 
 	<script src="https://gist.github.com/1132956.js?file=authenticate_fb.java"></script>
 
-
-If you **do not** already have a Facebook app just follow these simple steps:
-
-	1. First create a Facebook app.  Go to https://developers.facebook.com/apps and create a new app:
-	
-		.. image:: images/fb_add.png
-		
-	2. Your newly created Facebook app will have an ID, which is the ID used in Socialize and can be found on your Facebook Developer page:
-	
-		For example, this is the Facebook App page for Socialize:
-		
-		.. image:: images/fb_id.png
-		
-	3. Export the hash key from your Android keystore.  All Android apps are required to be signed prior to running on a device and you will already have created a keystore while building your Android app.
-		  
-		Your keystore contains a public key which Facebook needs to identify your Android app.
-		
-		On your development machine (where you are building your Android app), run the following command to generate a key hash::
-
-			keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore 
-			| openssl sha1 -binary
-			| openssl base64
-			
-		**Make sure you use the correct key store to generate the hash**.  The example above (taken from the Facebook documentation)
-		indicates use of the **debug.keystore**.  You should use whichever keystore you chose when building the version of your app 
-		you are going to publish.
-	
-	4. Next add your key hash to your Facebook app.
-		
-		Paste your key into the "key hash" section of your Facebook app.
-		
-		.. image:: images/fb_hash.png
-		
-		Generally it makes sense to add BOTH your **debug** and your **release** keys to Facebook to avoid problems during development and testing.
-	
-You should now be ready to authenticate user's of your app with Facebook when they are using Socialize, jump to the :ref:`fb_snippet` to find out how.  	
+If you **do not** already have a Facebook app refer to :doc:`facebook` for more information.
 
 Authenticating with Twitter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -245,13 +214,9 @@ To list all comments for an entity use the **listCommentsByEntity** method.  Thi
 
 
 Comments with pagination
-########################
+~~~~~~~~~~~~~~~~~~~~~~~~
 The **recommended** approach is to use pagination when listing comments:
 
 .. raw:: html
 
 	<script src="https://gist.github.com/1132965.js?file=listcomments.java"></script>
-
-Share
------
-Coming Soon!

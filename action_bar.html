@@ -1,0 +1,142 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Socialize Action Bar &mdash; Socialize Android SDK 0.7.0 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.7.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="shortcut icon" href="static/favicon.ico"/>
+    <link rel="top" title="Socialize Android SDK 0.7.0 documentation" href="index.html" />
+    <link rel="next" title="Socialize Comments" href="comment_view.html" />
+    <link rel="prev" title="Facebook Integration" href="facebook.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="comment_view.html" title="Socialize Comments"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="facebook.html" title="Facebook Integration"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Socialize Android SDK 0.7.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <link rel="stylesheet" href="static/css/gist.css" type="text/css" /><div class="section" id="socialize-action-bar">
+<h1>Socialize Action Bar<a class="headerlink" href="#socialize-action-bar" title="Permalink to this headline">¶</a></h1>
+<p>Brand new in v0.7.0 of the Socialize SDK for Android is the &#8220;Action Bar&#8221; which provides a single
+entry point into the entire set of Socialize features.</p>
+<img alt="images/ab_view0.png" src="images/ab_view0.png" />
+<img alt="images/ab_view1.png" src="images/ab_view1.png" />
+<img alt="images/ab_view2.png" src="images/ab_view2.png" />
+<div class="section" id="displaying-the-action-bar">
+<h2>Displaying the Action Bar<a class="headerlink" href="#displaying-the-action-bar" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="using-socialize-properties-configuration">
+<h3>Using socialize.properties configuration<a class="headerlink" href="#using-socialize-properties-configuration" title="Permalink to this headline">¶</a></h3>
+<p>Refer to the <a class="reference internal" href="getting_started.html"><em>Getting Started</em></a> section for details on configuring your <strong>socialize.properties</strong> file.</p>
+<script src="https://gist.github.com/1376163.js?file=no_conf.java"></script></div>
+<div class="section" id="using-programmatic-configuration">
+<h3>Using programmatic configuration<a class="headerlink" href="#using-programmatic-configuration" title="Permalink to this headline">¶</a></h3>
+<p>If you prefer to do things the old fashioned way, you can set all the parameters programmatically.</p>
+<script src="https://gist.github.com/1376163.js?file=action_bar_init.java"></script></div>
+</div>
+<div class="section" id="advanced-features">
+<h2>Advanced Features<a class="headerlink" href="#advanced-features" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="disabling-the-scrollview">
+<h3>Disabling the ScrollView<a class="headerlink" href="#disabling-the-scrollview" title="Permalink to this headline">¶</a></h3>
+<p>By default the ActionBar will create a ScrollView to house your existing content.
+This is typically necessary so that the ActionBar doesn&#8217;t impede the use of your existing content.</p>
+<p>If you don&#8217;t want your content to be scrollable however, you can disable this feature by using <strong>ActionBarOptions</strong></p>
+<script src="https://gist.github.com/1376163.js?file=init_with_options.java"></script></div>
+<div class="section" id="actionbar-creation-listener">
+<h3>ActionBar Creation Listener<a class="headerlink" href="#actionbar-creation-listener" title="Permalink to this headline">¶</a></h3>
+<p>If you need or want to obtain a reference to the ActionBar view at runtime, you can use a creation listener to listen
+for the &#8220;onCreate&#8221; event of the ActionBar:</p>
+<script src="https://gist.github.com/1376163.js?file=init_with_listener.java"></script></div>
+<div class="section" id="actionbar-event-listener">
+<h3>ActionBar Event Listener<a class="headerlink" href="#actionbar-event-listener" title="Permalink to this headline">¶</a></h3>
+<p>If you want to attach your own events to user operations on the ActionBar you can bind an <strong>OnActionBarEventListener</strong>
+to capture these:</p>
+<script src="https://gist.github.com/1376163.js?file=event_listener.java"></script></div>
+<div class="section" id="xml-based-layout-experimental">
+<h3>XML Based Layout (Experimental)<a class="headerlink" href="#xml-based-layout-experimental" title="Permalink to this headline">¶</a></h3>
+<p>If the &#8220;auto-pin&#8221; feature of the Action Bar is not to your liking, or doesn&#8217;t play well with your existing layout
+you can always just add the view manually.</p>
+<p><strong>NOTE:</strong> There are some fairly important things the Action Bar expects that you should be aware of:</p>
+<ol class="arabic simple">
+<li>It MUST be included inside a RelativeLayout.  This is because several of the UI features need to be able to slide &#8220;over&#8221; your existing content.</li>
+<li>It MUST be positioned at the bottom of your view.</li>
+<li>It MUST be included as the LAST element in your XML layout, otherwise you may get some strange behaviour with layers sliding over/under content.</li>
+</ol>
+<p>Here is the recommended way to include the Action Bar in your XML layout:</p>
+<script src="https://gist.github.com/1376163.js?file=manual_layout.xml"></script></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html">Facebook Integration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Socialize Action Bar</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#displaying-the-action-bar">Displaying the Action Bar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-features">Advanced Features</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="comment_view.html">Socialize Comments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="comment_view.html" title="Socialize Comments"
+             >next</a></li>
+        <li class="right" >
+          <a href="facebook.html" title="Facebook Integration"
+             >previous</a> |</li>
+        <li><a href="index.html">Socialize Android SDK 0.7.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Socialize Inc.
+    </div>
+  </body>
+</html>

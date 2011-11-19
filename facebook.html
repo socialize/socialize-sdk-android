@@ -1,0 +1,151 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Facebook Integration &mdash; Socialize Android SDK 0.7.0 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.7.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="shortcut icon" href="static/favicon.ico"/>
+    <link rel="top" title="Socialize Android SDK 0.7.0 documentation" href="index.html" />
+    <link rel="next" title="Socialize Action Bar" href="action_bar.html" />
+    <link rel="prev" title="Getting Started" href="getting_started.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="action_bar.html" title="Socialize Action Bar"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="getting_started.html" title="Getting Started"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Socialize Android SDK 0.7.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <link rel="stylesheet" href="static/css/gist.css" type="text/css" /><div class="section" id="facebook-integration">
+<h1>Facebook Integration<a class="headerlink" href="#facebook-integration" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="adding-facebook-authentication">
+<h2>Adding Facebook Authentication<a class="headerlink" href="#adding-facebook-authentication" title="Permalink to this headline">¶</a></h2>
+<p>It is strongly recommended that users be able to authenticate with Facebook when using Socialize so as to
+maximize the exposure, and promotion of your app.</p>
+<p>This provides significant benefits to both your application, and your users including:</p>
+<ol class="arabic simple">
+<li>Improved user experience through personalized comments</li>
+<li>Automatic profile creation (user name and profile picture)</li>
+<li>Ability to automatically post user comments and likes to Facebook</li>
+<li>Promotes your app on Facebook by associating your app with comments</li>
+</ol>
+<p>To add Facebook authentication, you&#8217;ll need a Facebook App ID.  If you already have a Facebook app,
+you can skip this section.</p>
+<div class="section" id="creating-a-facebook-application">
+<h3>Creating a Facebook Application<a class="headerlink" href="#creating-a-facebook-application" title="Permalink to this headline">¶</a></h3>
+<p>If you <strong>do not</strong> already have a Facebook app just follow these simple steps:</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p class="first">First create a Facebook app.  Go to <a class="reference external" href="https://developers.facebook.com/apps">https://developers.facebook.com/apps</a> and create a new app:</p>
+<blockquote>
+<div><img alt="images/fb_add.png" src="images/fb_add.png" />
+</div></blockquote>
+</li>
+<li><p class="first">Your newly created Facebook app will have an ID, which is the ID used in Socialize and can be found on your Facebook Developer page:</p>
+<blockquote>
+<div><p>For example, this is the Facebook App page for Socialize:</p>
+<img alt="images/fb_id.png" src="images/fb_id.png" />
+</div></blockquote>
+</li>
+<li><p class="first">Export the hash key from your Android keystore.  All Android apps are required to be signed prior to running on a device and you will already have created a keystore while building your Android app.</p>
+<blockquote>
+<div><p>Your keystore contains a public key which Facebook needs to identify your Android app.</p>
+<p>On your development machine (where you are building your Android app), run the following command to generate a key hash:</p>
+<div class="highlight-python"><pre>keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore openssl sha1 -binary openssl base64</pre>
+</div>
+<p><strong>Make sure you use the correct key store to generate the hash</strong>.  The example above (taken from the Facebook documentation)
+indicates use of the <strong>debug.keystore</strong>.  You should use whichever keystore you chose when building the version of your app
+you are going to publish.</p>
+</div></blockquote>
+</li>
+<li><p class="first">Next add your key hash to your Facebook app.</p>
+<blockquote>
+<div><p>Paste your key into the &#8220;key hash&#8221; section of your Facebook app.</p>
+<img alt="images/fb_hash.png" src="images/fb_hash.png" />
+<p>Generally it makes sense to add BOTH your <strong>debug</strong> and your <strong>release</strong> keys to Facebook to avoid problems during development and testing.</p>
+</div></blockquote>
+</li>
+</ol>
+</div></blockquote>
+<p>You should now be ready to authenticate user&#8217;s of your app with Facebook when they are using Socialize, jump to the <a class="reference internal" href="sdk_user_guide.html#fb-snippet"><em>Facebook Authentication Code Snippet</em></a> to find out how.</p>
+</div>
+<div class="section" id="enabling-disabling-facebook-single-sign-on-sso">
+<h3>Enabling/Disabling Facebook Single Sign On (SSO)<a class="headerlink" href="#enabling-disabling-facebook-single-sign-on-sso" title="Permalink to this headline">¶</a></h3>
+<p>Some users have reported having problems with the Single Sign On implementation in the Facebook SDK.</p>
+<p>If you have experienced problems with this (e.g. the &#8220;invalid_key&#8221; error), you can easily disable this feature:</p>
+<script src="https://gist.github.com/1376163.js?file=no_fb.java"></script></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Facebook Integration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#adding-facebook-authentication">Adding Facebook Authentication</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comment_view.html">Socialize Comments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a></li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="action_bar.html" title="Socialize Action Bar"
+             >next</a></li>
+        <li class="right" >
+          <a href="getting_started.html" title="Getting Started"
+             >previous</a> |</li>
+        <li><a href="index.html">Socialize Android SDK 0.7.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Socialize Inc.
+    </div>
+  </body>
+</html>

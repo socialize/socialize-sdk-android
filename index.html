@@ -1,18 +1,22 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Socialize Android SDK &mdash; Socialize Android SDK v0.6.0 documentation</title>
-    <link rel="stylesheet" href="static/nature.css" type="text/css" />
+    <title>Socialize Android SDK &mdash; Socialize Android SDK 0.7.0 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.6.0',
+        VERSION:     '0.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,17 +26,17 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v0.6.0 documentation" href="#" />
-    <link rel="next" title="Getting Started Guide" href="getting_started.html" /> 
+    <link rel="top" title="Socialize Android SDK 0.7.0 documentation" href="#" />
+    <link rel="next" title="Getting Started" href="getting_started.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="getting_started.html" title="Getting Started Guide"
+          <a href="getting_started.html" title="Getting Started"
              accesskey="N">next</a></li>
-        <li><a href="#">Socialize Android SDK v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="#">Socialize Android SDK 0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -46,21 +50,31 @@
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="getting_started.html#installing-the-sdk">Installing the SDK</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting_started.html#configure-your-androidmanifest-xml">Configure your AndroidManifest.xml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting_started.html#next-steps">Next Steps...</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#what-s-new">What&#8217;s New!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#install-the-sdk">1. Install the SDK</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#set-up-your-socialize-keys">2. Set up your Socialize Keys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#configure-your-androidmanifest-xml">3. Configure your AndroidManifest.xml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#configure-facebook-integration">4. Configure Facebook Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#include-socialize-in-your-app">5. Include Socialize in your App!</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="socialize_ui.html">Socialize UI (Recommended for most users)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="socialize_ui.html#what-s-new">What&#8217;s New!</a></li>
-<li class="toctree-l2"><a class="reference internal" href="socialize_ui.html#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="socialize_ui.html#socialize-comment-view">Socialize Comment View</a></li>
-<li class="toctree-l2"><a class="reference internal" href="socialize_ui.html#adding-facebook-authentication">Adding Facebook Authentication</a></li>
-<li class="toctree-l2"><a class="reference internal" href="socialize_ui.html#socialize-action-bar">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html">Facebook Integration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="facebook.html#adding-facebook-authentication">Adding Facebook Authentication</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">SDK User Guide (Recommended for expert users)</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html">Socialize Action Bar</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="action_bar.html#displaying-the-action-bar">Displaying the Action Bar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="action_bar.html#advanced-features">Advanced Features</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="comment_view.html">Socialize Comments</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="comment_view.html#diplaying-the-comment-view">Diplaying the Comment View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comment_view.html#a-complete-example">A Complete Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="sdk_user_guide.html#introduction">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sdk_user_guide.html#initializing-socialize">Initializing Socialize</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sdk_user_guide.html#authentication">Authentication</a></li>
@@ -68,7 +82,6 @@
 <li class="toctree-l2"><a class="reference internal" href="sdk_user_guide.html#view">View</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sdk_user_guide.html#like">Like</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sdk_user_guide.html#comment">Comment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sdk_user_guide.html#share">Share</a></li>
 </ul>
 </li>
 </ul>
@@ -83,9 +96,11 @@
         <div class="sphinxsidebarwrapper">
 <h3><a href="#">Table Of Contents</a></h3>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="socialize_ui.html">Socialize UI (Recommended for most users)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">SDK User Guide (Recommended for expert users)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comment_view.html">Socialize Comments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a></li>
 </ul>
 
         </div>
@@ -96,9 +111,9 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="getting_started.html" title="Getting Started Guide"
+          <a href="getting_started.html" title="Getting Started"
              >next</a></li>
-        <li><a href="#">Socialize Android SDK v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="#">Socialize Android SDK 0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
