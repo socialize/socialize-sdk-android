@@ -40,7 +40,7 @@
     	
     	<!-- Overwrite jar libs ref -->
     	<path id="jar.libs.ref">
-    		<fileset dir="../sdk/libs"/>
+    		<fileset dir="../sdk/libext"/>
     	</path>
     	
 		<do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">

@@ -167,7 +167,7 @@
     	
     	<!-- Overwrite jar libs ref.  We need to do this to exclude the library project -->
     	<path id="jar.libs.ref">
-    		<fileset dir="../sdk/libs"/>
+    		<fileset dir="../sdk/libext"/>
     		<fileset dir="libs"/>
     	</path>
     	
