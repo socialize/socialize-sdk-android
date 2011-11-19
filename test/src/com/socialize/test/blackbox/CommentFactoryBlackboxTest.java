@@ -122,8 +122,11 @@ public class CommentFactoryBlackboxTest extends AbstractFactoryBlackBoxTest {
 		
 		assertEquals("payload", nvp.getName());
 		
-		JSONArray actual = new JSONArray(nvp.getValue());
-		JSONArray expected = new JSONArray(getSampleJSON(JSON_REQUEST_COMMENT_CREATE));
+		String strActual = nvp.getValue();
+		String strExpected = getSampleJSON(JSON_REQUEST_COMMENT_CREATE);
+		
+		JSONArray actual = new JSONArray(strActual);
+		JSONArray expected = new JSONArray(strExpected);
 		
 		JsonAssert.assertJsonArrayEquals(expected, actual);
 	}

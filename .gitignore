@@ -2,6 +2,8 @@ sdk/.settings
 sdk/gen
 sdk/bin
 sdk/doc/html
+sdk/local.properties
+sample/src_ext
 gh-pages
 sample/.settings
 sample/gen
@@ -9,6 +11,7 @@ sample/bin
 sample/sdk_src/
 sample/local.properties
 sample/assets/sample-app.conf
+sample/assets/socialize.properties
 integration-test/bin
 integration-test/gen
 integration-test/.settings
@@ -25,12 +28,15 @@ test/test-output
 test/gen
 test/bin
 test/local.properties
+test/private
 ui/bin
 ui/gen
 ui-sample/bin/
 ui-sample/gen/
 ui-test/bin
 ui-test/gen
+ui-test/coverage
+ui-test/test-output
 ui-test/coverage-ui
 ui-test/test-output-ui
 build

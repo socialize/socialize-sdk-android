@@ -57,15 +57,45 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 	}
 	
 	protected Context context;
+	
+	@SuppressWarnings("deprecation")
+	public TTLCache() {
+		this(null, 10, DEFAULT_CACHE_COUNT);
+	}
+	
+	@SuppressWarnings("deprecation")
+	public TTLCache(int initialCapacity, int maxCapacity) {
+		this(null, initialCapacity, maxCapacity);
+	}
+	
+	@SuppressWarnings("deprecation")
+	public TTLCache(int initialCapacity) {
+		this(null, initialCapacity, DEFAULT_CACHE_COUNT);
+	}
 
+	/**
+	 * Constructors should not refer to Context
+	 * @param context
+	 */
+	@Deprecated
 	public TTLCache(Context context) {
-		this(context, 10,DEFAULT_CACHE_COUNT);
+		this(context, 10, DEFAULT_CACHE_COUNT);
 	}
 	
+	/**
+	 * Constructors should not refer to Context
+	 * @param context
+	 */
+	@Deprecated
 	public TTLCache(Context context, int initialCapacity) {
-		this(context, initialCapacity,DEFAULT_CACHE_COUNT);
+		this(context, initialCapacity, DEFAULT_CACHE_COUNT);
 	}
 	
+	/**
+	 * Constructors should not refer to Context
+	 * @param context
+	 */
+	@Deprecated
 	public TTLCache(Context context, int initialCapacity, int maxCapacity) {
 		super();
 		this.context = context;
@@ -80,7 +110,7 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 	/**
 	 * Empties the cache and destroys all persistent states.
 	 */
-	public void destroy(Context context) {
+	public void destroy() {
 		stopReaper();
 		clear(true);
 	}
@@ -513,10 +543,19 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 							}
 							
 							if(!ok) {
+								
+								if(logger != null && logger.isInfoEnabled()) {
+									logger.info("Removing with key [" +
+											key +
+											"] during reap");
+								}								
+								
 								keys.remove(key.getKey());
 								
 								currentSizeInBytes -= object.getObject().getSizeInBytes(context);
+								
 								reaped++;
+								
 								object.getObject().onRemove(context, true);
 							}
 						}
@@ -621,153 +660,6 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 		return currentSizeInBytes;
 	}
 	
-//	protected class Key implements Comparable<Key> {
-//
-//		private long time;
-//		private K key;
-//		
-//		private Key(K key, long time) {
-//			this.time = time;
-//			this.key = key;
-//		}
-//		
-//		/* (non-Javadoc)
-//		 * @see java.lang.Comparable#compareTo(java.lang.Object)
-//		 */
-//		public int compareTo(Key o) {
-//			if(o.time > time) {
-//				return -1;
-//			}
-//			else if(o.time < time) {
-//				return 1;
-//			}
-//			else {
-//				return o.key.compareTo(key);
-//			}
-//		}
-//
-//		@Override
-//		public int hashCode() {
-//			int prime = 31;
-//			int result = 1;
-//			result = prime * result + getOuterType().hashCode();
-//			result = prime * result + ((key == null) ? 0 : key.hashCode());
-//			return result;
-//		}
-//
-//		@SuppressWarnings("unchecked")
-//		@Override
-//		public boolean equals(Object obj) {
-//			if (this == obj)
-//				return true;
-//			if (obj == null)
-//				return false;
-//			if (getClass() != obj.getClass())
-//				return false;
-//			Key other = (Key) obj;
-//			if (!getOuterType().equals(other.getOuterType()))
-//				return false;
-//			if (key == null) {
-//				if (other.key != null)
-//					return false;
-//			} else if (!key.equals(other.key))
-//				return false;
-//			return true;
-//		}
-//
-//		public String toString() {
-//			return key.toString();
-//		}
-//
-//		private TTLCache<K, E> getOuterType() {
-//			return TTLCache.this;
-//		}
-//	}
-	
-//	protected class TTLObject {
-//		
-//		private E object;
-//		private K key;
-//		private boolean eternal = false;
-//		private long lifeExpectancy;
-//		private long ttl;
-//		
-//		public TTLObject(E obj, K key, long ttl) {
-//			super();
-//			this.object = obj;
-//			this.key = key;
-//			this.ttl = ttl;
-//			
-//			if(ttl > 0) {
-//				long time = System.currentTimeMillis();
-//				
-//				if(ttl < (Long.MAX_VALUE - time)) {
-//					this.lifeExpectancy = time + ttl;
-//				}
-//				else {
-//					this.lifeExpectancy = ttl;
-//				}
-//			}
-//			else {
-//				this.eternal = true;
-//			}
-//		}
-//
-//		/**
-//		 * @return Returns the expectancy.
-//		 */
-//		public long getLifeExpectancy() {
-//			return lifeExpectancy;
-//		}
-//		
-//		/**
-//		 * @return Returns the ttl.
-//		 */
-//		public long getTtl() {
-//			return ttl;
-//		}
-//
-//		/**
-//		 * @return Returns the object.
-//		 */
-//		public E getObject() {
-//			return object;
-//		}
-//
-//		/**
-//		 * @return the key
-//		 */
-//		public K getKey() {
-//			return key;
-//		}
-//
-//		public boolean equals(Object obj) {
-//			return object.equals(obj);
-//		}
-//
-//		public int hashCode() {
-//			return object.hashCode();
-//		}
-//
-//		public String toString() {
-//			return object.toString();
-//		}
-//
-//		/**
-//		 * @return the eternal
-//		 */
-//		public boolean isEternal() {
-//			return eternal;
-//		}
-//
-//		/**
-//		 * @param eternal the eternal to set
-//		 */
-//		public void setEternal(boolean eternal) {
-//			this.eternal = eternal;
-//		}
-//	}
-	
 	public boolean isExtendOnGet() {
 		return extendOnGet;
 	}
@@ -840,8 +732,10 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 	}
 
 	/**
-	 * General init method.  Subclasses override.
+	 * Sets the context
 	 * @param context
 	 */
-	public void init(Context context) {}
+	public void init(Context context) {
+		this.context = context;
+	}
 }

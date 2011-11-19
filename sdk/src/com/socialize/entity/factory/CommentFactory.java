@@ -36,7 +36,7 @@ public class CommentFactory extends SocializeActionFactory<Comment> {
 	@Override
 	protected void postFromJSON(JSONObject object, Comment comment) throws JSONException {
 		final String attr = "text";
-		if(object.has(attr)) {
+		if(object.has(attr) && !object.isNull(attr)) {
 			comment.setText(object.getString(attr));
 		}
 		else {

@@ -358,6 +358,10 @@ public class Facebook {
 						mAuthDialogListener.onCancel();
 					}
 					else {
+						String description = data.getStringExtra("error_description");
+						if (description != null) {
+							error = error + ":" + description;
+						}
 						Log.d("Facebook-authorize", "Login failed: " + error);
 						mAuthDialogListener.onFacebookError(new FacebookError(error));
 					}
@@ -664,6 +668,10 @@ public class Facebook {
 
 	public void setAppId(String appId) {
 		mAppId = appId;
+	}
+	
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
 	}
 
 	/**

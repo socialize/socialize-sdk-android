@@ -67,20 +67,25 @@ public class DefaultLocationProviderTest extends SocializeActivityTest {
 
 	public void testDoesNotHavePermission() {
 		
-		AndroidMock.expect(deviceUtils.hasPermission(context, "android.permission.ACCESS_FINE_LOCATION")).andReturn(false);
-		AndroidMock.expect(deviceUtils.hasPermission(context, "android.permission.ACCESS_COARSE_LOCATION")).andReturn(false);
+		AndroidMock.expect(deviceUtils.hasPermission(context, "android.permission.ACCESS_FINE_LOCATION")).andReturn(false).anyTimes();
+		AndroidMock.expect(deviceUtils.hasPermission(context, "android.permission.ACCESS_COARSE_LOCATION")).andReturn(false).anyTimes();
+		AndroidMock.expect(locationListenerFactory.getBean()).andReturn(listener);
 		
 		AndroidMock.replay(deviceUtils);
+		AndroidMock.replay(locationListenerFactory);
 		
-		DefaultLocationProvider provider = new DefaultLocationProvider(context);
+		DefaultLocationProvider provider = new DefaultLocationProvider();
 		provider.setDeviceUtils(deviceUtils);
+		provider.setLocationListenerFactory(locationListenerFactory);
+		provider.init(context);
 		
 		assertNull(provider.getLocation());
 		
 		AndroidMock.verify(deviceUtils);
+		AndroidMock.verify(locationListenerFactory);
 	}
 	
-	public void testLastKnownLocationAvaiable() {
+	public void testLastKnownLocationAvailable() {
 		
 		final String strProvider = "foobar";
 		
@@ -89,18 +94,23 @@ public class DefaultLocationProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(deviceUtils.hasPermission(context, "android.permission.ACCESS_FINE_LOCATION")).andReturn(true);
 		AndroidMock.expect(locationManager.getBestProvider((Criteria)AndroidMock.anyObject(), AndroidMock.eq(true))).andReturn(strProvider);
 		AndroidMock.expect(locationManager.getLastKnownLocation(strProvider)).andReturn(location);
-		
-		DefaultLocationProvider provider = new DefaultLocationProvider(context);
-		provider.setLocationManager(locationManager);
-		provider.setDeviceUtils(deviceUtils);
+		AndroidMock.expect(locationListenerFactory.getBean()).andReturn(listener);
 		
 		AndroidMock.replay(deviceUtils);
 		AndroidMock.replay(locationManager);
+		AndroidMock.replay(locationListenerFactory);
+		
+		DefaultLocationProvider provider = new DefaultLocationProvider();
+		provider.setLocationManager(locationManager);
+		provider.setDeviceUtils(deviceUtils);
+		provider.setLocationListenerFactory(locationListenerFactory);
+		provider.init(context);
 		
 		Location loc = provider.getLocation();
 		
 		AndroidMock.verify(deviceUtils);
 		AndroidMock.verify(locationManager);
+		AndroidMock.verify(locationListenerFactory);
 		
 		assertNotNull(loc);
 		assertSame(location, loc);
@@ -111,23 +121,25 @@ public class DefaultLocationProviderTest extends SocializeActivityTest {
 		
 		final String strProvider = "foobar";
 		
-		AndroidMock.expect(deviceUtils.hasPermission(context, "android.permission.ACCESS_FINE_LOCATION")).andReturn(true);
-		AndroidMock.expect(locationManager.getBestProvider((Criteria)AndroidMock.anyObject(), AndroidMock.eq(true))).andReturn(strProvider);
-		AndroidMock.expect(locationManager.getLastKnownLocation(strProvider)).andReturn(null);
-		AndroidMock.expect(locationManager.isProviderEnabled(strProvider)).andReturn(true);
-		AndroidMock.expect(locationListenerFactory.getBean()).andReturn(listener);
+		AndroidMock.expect(deviceUtils.hasPermission(context, "android.permission.ACCESS_FINE_LOCATION")).andReturn(true).anyTimes();
+		AndroidMock.expect(locationManager.getBestProvider((Criteria)AndroidMock.anyObject(), AndroidMock.eq(true))).andReturn(strProvider).anyTimes();
+		AndroidMock.expect(locationManager.getLastKnownLocation(strProvider)).andReturn(null).anyTimes();
+		AndroidMock.expect(locationManager.isProviderEnabled(strProvider)).andReturn(true).anyTimes();
+		AndroidMock.expect(locationListenerFactory.getBean()).andReturn(listener).anyTimes();
 
 		locationManager.requestLocationUpdates(context, strProvider,1L, 0.0f, listener);
-		
-		DefaultLocationProvider provider = new DefaultLocationProvider(context);
-		provider.setLocationManager(locationManager);
-		provider.setDeviceUtils(deviceUtils);
-		provider.setLocationListenerFactory(locationListenerFactory);
-		
+		locationManager.requestLocationUpdates(context, strProvider,1L, 0.0f, listener);
+
 		AndroidMock.replay(locationListenerFactory);
 		AndroidMock.replay(deviceUtils);
 		AndroidMock.replay(locationManager);
 		
+		DefaultLocationProvider provider = new DefaultLocationProvider();
+		provider.setLocationManager(locationManager);
+		provider.setDeviceUtils(deviceUtils);
+		provider.setLocationListenerFactory(locationListenerFactory);
+		provider.init(context);
+
 		Location loc = provider.getLocation();
 		
 		AndroidMock.verify(locationListenerFactory);

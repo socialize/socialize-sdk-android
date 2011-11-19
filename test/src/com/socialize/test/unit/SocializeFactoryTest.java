@@ -80,7 +80,7 @@ public class SocializeFactoryTest extends SocializeActivityTest {
 		
 		final SocializeObject entry = AndroidMock.createMock(SocializeObject.class);
 		final JSONObject json = AndroidMock.createNiceMock(JSONObject.class);
-		final int id = 1;
+		final long id = 1;
 		
 		SocializeObjectFactory<SocializeObject> factory = new SocializeObjectFactory<SocializeObject>() {
 			@Override
@@ -102,7 +102,7 @@ public class SocializeFactoryTest extends SocializeActivityTest {
 		entry.setId(id);
 		
 		AndroidMock.expect(json.has("id")).andReturn(true);
-		AndroidMock.expect(json.getInt("id")).andReturn(id);
+		AndroidMock.expect(json.getLong("id")).andReturn(id);
 		AndroidMock.expect(json.put("foo", "bar")).andReturn(json);
 		
 		AndroidMock.replay(entry);
@@ -121,7 +121,7 @@ public class SocializeFactoryTest extends SocializeActivityTest {
 		
 		final Entity entry = AndroidMock.createMock(Entity.class);
 		final JSONObject json = AndroidMock.createNiceMock(JSONObject.class);
-		final Integer id = new Integer(1);
+		final Long id = new Long(1);
 		
 		SocializeObjectFactory<Entity> factory = new SocializeObjectFactory<Entity>() {
 			@Override
@@ -169,7 +169,7 @@ public class SocializeFactoryTest extends SocializeActivityTest {
 		final Entity entry = AndroidMock.createMock(Entity.class);
 		final JSONArray jsonArray = AndroidMock.createNiceMock(JSONArray.class);
 		final JSONObject json = AndroidMock.createNiceMock(JSONObject.class);
-		final int id = 1;
+		final long id = 1;
 		
 		List<Entity> entries = new ArrayList<Entity>();
 		entries.add(entry);

@@ -42,17 +42,29 @@ public class BitmapUtils {
 	public BitmapUtils() {
 		super();
 	}
-
+	
 	public Bitmap getScaledBitmap(byte[] data, int scaleToWidth, int scaleToHeight) {
-		return getScaledBitmap(bitmapBuilder.decode(data), scaleToWidth, scaleToHeight);
+		return getScaledBitmap(bitmapBuilder.decode(data), scaleToWidth, scaleToHeight, Bitmap.DENSITY_NONE);
 	}
 	
 	public Bitmap getScaledBitmap(InputStream in, int scaleToWidth, int scaleToHeight) {
-		return getScaledBitmap(bitmapBuilder.decode(in), scaleToWidth, scaleToHeight);
+		return getScaledBitmap(bitmapBuilder.decode(in), scaleToWidth, scaleToHeight, Bitmap.DENSITY_NONE);
 	}
 	
 	public Bitmap getScaledBitmap(Bitmap bitmap, int scaleToWidth, int scaleToHeight) {
-		return getScaledBitmap(bitmap, scaleToWidth, scaleToHeight, true);
+		return getScaledBitmap(bitmap, scaleToWidth, scaleToHeight, true, Bitmap.DENSITY_NONE);
+	}	
+
+	public Bitmap getScaledBitmap(byte[] data, int scaleToWidth, int scaleToHeight, int density) {
+		return getScaledBitmap(bitmapBuilder.decode(data), scaleToWidth, scaleToHeight, density);
+	}
+	
+	public Bitmap getScaledBitmap(InputStream in, int scaleToWidth, int scaleToHeight, int density) {
+		return getScaledBitmap(bitmapBuilder.decode(in), scaleToWidth, scaleToHeight, density);
+	}
+	
+	public Bitmap getScaledBitmap(Bitmap bitmap, int scaleToWidth, int scaleToHeight, int density) {
+		return getScaledBitmap(bitmap, scaleToWidth, scaleToHeight, true, density);
 	}
 
 	public String encode(Bitmap bitmap) {
@@ -71,8 +83,9 @@ public class BitmapUtils {
 	 * @param recycleOriginal
 	 * @return
 	 */
-	public Bitmap getScaledBitmap(Bitmap bitmap, int scaleToWidth, int scaleToHeight, boolean recycleOriginal) {
+	public Bitmap getScaledBitmap(Bitmap bitmap, int scaleToWidth, int scaleToHeight, boolean recycleOriginal, int density) {
 
+		bitmap.setDensity(density);
 		Bitmap original = bitmap;
 
 		if (scaleToWidth > 0 || scaleToHeight > 0) {

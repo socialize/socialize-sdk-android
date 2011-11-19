@@ -39,13 +39,13 @@ public class ActivityApi extends SocializeApi<SocializeAction, SocializeProvider
 		super(provider);
 	}
 	
-	public void getActivityByUser(SocializeSession session, int id, ActivityListener listener) {
+	public void getActivityByUser(SocializeSession session, long id, ActivityListener listener) {
 		String userId = String.valueOf(id);
 		String endpoint = getEndpoint(userId);
 		listAsync(session, endpoint, listener);
 	}
 	
-	public void getActivityByUser(SocializeSession session, int id, int startIndex, int endIndex, ActivityListener listener) {
+	public void getActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, ActivityListener listener) {
 		String userId = String.valueOf(id);
 		String endpoint = getEndpoint(userId);
 		listAsync(session, endpoint, startIndex, endIndex, listener);

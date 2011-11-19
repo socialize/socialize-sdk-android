@@ -75,7 +75,8 @@ public class FacebookAuthProviderTest extends SocializeUnitTest {
 		AndroidMock.replay(context);
 		AndroidMock.replay(listener);
 		
-		FacebookAuthProvider provider = new FacebookAuthProvider(context, holder);
+		FacebookAuthProvider provider = new FacebookAuthProvider();
+		provider.init(context, holder);
 		provider.authenticate(null, appId, listener);
 		
 		// We should have a listener from the put method
@@ -114,13 +115,15 @@ public class FacebookAuthProviderTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(facebook);
 		
-		FacebookAuthProvider facebookAuthProvider = new FacebookAuthProvider(getContext(), null) {
+		FacebookAuthProvider facebookAuthProvider = new FacebookAuthProvider() {
 
 			@Override
 			protected Facebook getFacebook(String appId) {
 				return facebook;
 			}
 		};
+		
+		facebookAuthProvider.init(getContext(), null);
 		
 		facebookAuthProvider.clearCache(appId);
 		

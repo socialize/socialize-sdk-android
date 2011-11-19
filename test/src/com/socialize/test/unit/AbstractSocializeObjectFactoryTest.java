@@ -38,7 +38,7 @@ public abstract class AbstractSocializeObjectFactoryTest<T extends SocializeObje
 
 	protected F factory;
 	protected JSONObject json;
-	protected Integer id = new Integer(9999);
+	protected Long id = new Long(9999);
 	protected T object;
 	
 	@UsesMocks({SocializeConfig.class, JSONObject.class})
@@ -76,7 +76,7 @@ public abstract class AbstractSocializeObjectFactoryTest<T extends SocializeObje
 		
 		AndroidMock.expect(json.has("id")).andReturn(true);
 		AndroidMock.expect(json.isNull("id")).andReturn(false);
-		AndroidMock.expect(json.getInt("id")).andReturn(id);
+		AndroidMock.expect(json.getLong("id")).andReturn(id);
 		object.setId(id);
 		
 		setupFromJSONExpectations();

@@ -64,7 +64,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	private HttpUtils httpUtils;
 	private SocializeLocationProvider locationProvider;
 	
-	public static enum RequestType {AUTH,PUT,POST,PUT_AS_POST,GET,LIST,EMPTY_LIST,DELETE};
+	public static enum RequestType {AUTH,PUT,POST,PUT_AS_POST,GET,LIST,LIST_WITHOUT_ENTITY,DELETE};
 	
 	public SocializeApi(P provider) {
 		super();
@@ -99,6 +99,10 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 
 	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
 		return provider.list(session, endpoint, key, ids, 0, SocializeConfig.MAX_LIST_RESULTS);
+	}
+	
+	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids, String idKey, int startIndex, int endIndex) throws SocializeException {
+		return provider.list(session, endpoint, key, ids, idKey, startIndex, endIndex);
 	}
 	
 	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex) throws SocializeException {
@@ -142,11 +146,16 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}
 	
 	public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
+		listAsync(session, endpoint, key, ids, "id", startIndex, endIndex, listener);
+	}
+	
+	public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, String idKey, int startIndex, int endIndex, SocializeActionListener listener) {
 		AsyncGetter getter = new AsyncGetter(RequestType.LIST, session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
 		request.setEndpoint(endpoint);
 		request.setKey(key);
 		request.setIds(ids);
+		request.setIdKey(idKey);
 		request.setStartIndex(startIndex);
 		request.setEndIndex(endIndex);
 		getter.execute(request);
@@ -157,7 +166,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}
 	
 	public void listAsync(SocializeSession session, String endpoint, int startIndex, int endIndex, SocializeActionListener listener) {
-		AsyncGetter getter = new AsyncGetter(RequestType.EMPTY_LIST, session, listener);
+		AsyncGetter getter = new AsyncGetter(RequestType.LIST_WITHOUT_ENTITY, session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
 		request.setEndpoint(endpoint);
 		request.setStartIndex(startIndex);
@@ -414,28 +423,29 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			}
 		}
 	}
-	@Deprecated
-	protected void handle3rdPartyAuth(
-			final SocializeAuthRequest request,
-			final String authUserId3rdParty, 
-			final String authToken3rdParty,
-			final String appId3rdParty,
-			final AuthProviderType authProviderType,
-			final SocializeActionListener fWrapper,
-			final SocializeAuthListener listener, 
-			String key, String secret)  {
-		
-		AuthProviderData data = authProviderDataFactory.getBean();
-		
-		data.setAppId3rdParty(appId3rdParty);
-		data.setUserId3rdParty(authUserId3rdParty);
-		data.setToken3rdParty(authToken3rdParty);
-		data.setAuthProviderType(authProviderType);
-		
-		request.setAuthProviderData(data);
-		
-		handle3rdPartyAuth(request, fWrapper, listener, key, secret);
-	}
+	
+//	@Deprecated
+//	protected void handle3rdPartyAuth(
+//			final SocializeAuthRequest request,
+//			final String authUserId3rdParty, 
+//			final String authToken3rdParty,
+//			final String appId3rdParty,
+//			final AuthProviderType authProviderType,
+//			final SocializeActionListener fWrapper,
+//			final SocializeAuthListener listener, 
+//			String key, String secret)  {
+//		
+//		AuthProviderData data = authProviderDataFactory.getBean();
+//		
+//		data.setAppId3rdParty(appId3rdParty);
+//		data.setUserId3rdParty(authUserId3rdParty);
+//		data.setToken3rdParty(authToken3rdParty);
+//		data.setAuthProviderType(authProviderType);
+//		
+//		request.setAuthProviderData(data);
+//		
+//		handle3rdPartyAuth(request, fWrapper, listener, key, secret);
+//	}
 	
 	public void setResponseFactory(SocializeResponseFactory<T> responseFactory) {
 		this.responseFactory = responseFactory;
@@ -711,11 +721,11 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				break;
 
 			case LIST:
-				results = SocializeApi.this.list(session, request.getEndpoint(), request.getKey(), request.getIds(), request.getStartIndex(), request.getEndIndex());
+				results = SocializeApi.this.list(session, request.getEndpoint(), request.getKey(), request.getIds(), request.getIdKey(), request.getStartIndex(), request.getEndIndex());
 				response.setResults(results);
 				break;
 				
-			case EMPTY_LIST:
+			case LIST_WITHOUT_ENTITY:
 				results = SocializeApi.this.list(session, request.getEndpoint(), request.getStartIndex(), request.getEndIndex());
 				response.setResults(results);
 				break;

@@ -274,7 +274,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		api.setResponseFactory(responseFactory);
 		
 		AndroidMock.expect(responseFactory.newEntityResponse()).andReturn(mockEntityResponse);
-		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, 0, SocializeConfig.MAX_LIST_RESULTS)).andReturn(returned);
+		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, "id", 0, SocializeConfig.MAX_LIST_RESULTS)).andReturn(returned);
 		mockEntityResponse.setResults(returned);
 		
 		AndroidMock.replay(responseFactory);
@@ -308,7 +308,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		api.setResponseFactory(responseFactory);
 		
 		AndroidMock.expect(responseFactory.newEntityResponse()).andReturn(mockEntityResponse);
-		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, start, end)).andReturn(returned);
+		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, "id", start, end)).andReturn(returned);
 		mockEntityResponse.setResults(returned);
 		
 		AndroidMock.replay(responseFactory);
@@ -337,7 +337,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		
 		final ListResult<SocializeObject> returned = new ListResult<SocializeObject>( new LinkedList<SocializeObject>() );
 		
-		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, 0, SocializeConfig.MAX_LIST_RESULTS)).andReturn(returned);
+		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, "id", 0, SocializeConfig.MAX_LIST_RESULTS)).andReturn(returned);
 		AndroidMock.replay(provider);
 
 		runTestOnUiThread(new Runnable() { 
@@ -363,7 +363,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		
 		final ListResult<SocializeObject> returned = new ListResult<SocializeObject>( new LinkedList<SocializeObject>() );
 		
-		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, start, end)).andReturn(returned);
+		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, "id", start, end)).andReturn(returned);
 		AndroidMock.replay(provider);
 
 		runTestOnUiThread(new Runnable() { 

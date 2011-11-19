@@ -30,6 +30,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.provider.MediaStore;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
@@ -48,7 +50,11 @@ public class DeviceUtils {
 	private String userAgent;
 	private float density = 160.0f;
 	private String packageName;
+	private String appName;
 	private boolean hasCamera;
+	private int orientation;
+	private int displayHeight;
+	private int displayWidth;
 
 	public void init(Context context) {
 		if (context instanceof Activity) {
@@ -56,7 +62,32 @@ public class DeviceUtils {
 			Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
 			display.getMetrics(metrics);
 			density = metrics.density;
+			
+			displayHeight = display.getHeight();
+			displayWidth = display.getWidth();
+			
+			if (displayWidth == displayHeight) {
+				orientation = Configuration.ORIENTATION_SQUARE;
+			} 
+			else { 
+				if (displayWidth < displayHeight) {
+					orientation = Configuration.ORIENTATION_PORTRAIT;
+				} 
+				else { 
+					orientation = Configuration.ORIENTATION_LANDSCAPE;
+				}
+			}
+			
 			packageName = context.getPackageName();
+			
+			Resources appR = context.getResources(); 
+			CharSequence txt = appR.getText(appR.getIdentifier("app_name",  "string", context.getPackageName())); 
+			appName = txt.toString();
+			
+			if(StringUtils.isEmpty(appName)) {
+				appName = packageName;
+			}
+			
 			hasCamera = isIntentAvailable(context, MediaStore.ACTION_IMAGE_CAPTURE);
 		}
 		else {
@@ -108,11 +139,38 @@ public class DeviceUtils {
 			return null;
 		}
 	}
+	
+	/**
+	 * Returns the Android market url for this app.
+	 * @param http If true an HTTP link is returned, otherwise a market:// link is returned.
+	 * @return
+	 */
+	public String getMarketUrl(boolean http) {
+		StringBuilder builder = new StringBuilder();
+		
+//		if(http) {
+			builder.append("https://market.android.com/details?id=");
+//		}
+//		else {
+//			builder.append("market://details?id=");
+//		}
+		
+		builder.append(packageName);
+		return builder.toString();
+	}
+	
+	public String getPackageName() {
+		return packageName;
+	}
+
+	public String getAppName() {
+		return appName;
+	}
 
 	public String getUserAgentString() {
 		if (userAgent == null) {
 			userAgent = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_"
-					+ Locale.getDefault().getCountry() + "; BundleID/" + packageName;
+					+ Locale.getDefault().getCountry() + "; BundleID/" + packageName + ";";
 		}
 		return userAgent;
 	}
@@ -131,5 +189,17 @@ public class DeviceUtils {
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
+	}
+
+	public int getDisplayHeight() {
+		return displayHeight;
+	}
+
+	public int getDisplayWidth() {
+		return displayWidth;
+	}
+
+	public int getOrientation() {
+		return orientation;
 	}
 }

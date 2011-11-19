@@ -32,6 +32,7 @@ import android.test.mock.MockContext;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.config.SocializeConfig;
+import com.socialize.error.SocializeApiError;
 import com.socialize.log.SocializeLogger;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.ClassLoaderProvider;
@@ -153,6 +154,36 @@ public class HttpUtilsTest extends SocializeActivityTest {
 		assertFalse(utils.isAuthError(301));
 		assertFalse(utils.isAuthError(200));
 		assertFalse(utils.isAuthError(500));
+	}
+	
+	@UsesMocks ({SocializeApiError.class})
+	public void test_isAuthErrorWithException() {
+		
+		int resultCode = 69;
+		String message = "foobar";
+		
+		SocializeApiError error = AndroidMock.createMock(SocializeApiError.class, resultCode, message);
+		
+		AndroidMock.expect(error.getResultCode()).andReturn(resultCode);
+		
+		AndroidMock.replay(error);
+		
+		HttpUtils utils = new HttpUtils() {
+			@Override
+			public boolean isAuthError(int code) {
+				addResult(code);
+				return false;
+			}
+		};
+		
+		utils.isAuthError(error);
+		
+		AndroidMock.verify(error);
+		
+		Integer result = getNextResult();
+		
+		assertNotNull(result);
+		assertEquals(resultCode, result.intValue());
 	}
 	
 	@UsesMocks ({ResourceLocator.class, SocializeLogger.class})

@@ -32,9 +32,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>socialize-sdk_src</name>
+			<name>sdk_src</name>
 			<type>2</type>
-			<locationURI>_android_socialize_sdk_caa32434/src</locationURI>
+			<location>/Users/jasonpolites/dev/workspace/socialize-sdk-android/sdk/src</location>
 		</link>
 	</linkedResources>
 </projectDescription>

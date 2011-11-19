@@ -86,6 +86,8 @@ public interface SocializeProvider<T> {
 	@Deprecated
 	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException;
 	
+	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids, String idKey, int startIndex, int endIndex) throws SocializeException;
+	
 	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex) throws SocializeException;
 	
 	public ListResult<T> list(SocializeSession session, String endpoint, int startIndex, int endIndex) throws SocializeException;

@@ -59,6 +59,4 @@ public class MethodRef {
 		if(arguments == null) arguments = new LinkedList<Argument>();
 		arguments.add(arg);
 	}
-	
-	
 }

@@ -1,0 +1,67 @@
+{
+    "errors": [],
+    "items": [
+        {
+            "application": {
+                "id": 322931,
+                "name": "Android UI Integration Test App"
+            },
+            "date": "2011-11-09 21:12:46+0000",
+            "entity": {
+                "comments": 10,
+                "key": "http://entity1.com",
+                "likes": 1,
+                "name": "First Entity",
+                "shares": 1,
+                "type": "url",
+                "views": 1
+            },
+            "id": 19540693,
+            "lat": 56.552224483517136,
+            "lng": 58.73554374097224,
+            "share_location": true,
+            "user": {
+                "city": null,
+                "first_name": null,
+                "id": 52842612,
+                "last_name": null,
+                "meta": null,
+                "small_image_uri": null,
+                "state": null,
+                "third_party_auth": [],
+                "username": "User52842612"
+            }
+        },
+        {
+            "application": {
+                "id": 322931,
+                "name": "Android UI Integration Test App"
+            },
+            "date": "2011-11-09 21:12:46+0000",
+            "entity": {
+                "comments": 0,
+                "key": "http://entity2.com",
+                "likes": 1,
+                "name": "Second Entity",
+                "shares": 1,
+                "type": "url",
+                "views": 1
+            },
+            "id": 19540694,
+            "lat": 89.11088674441102,
+            "lng": 37.68686598759741,
+            "share_location": true,
+            "user": {
+                "city": null,
+                "first_name": null,
+                "id": 52842612,
+                "last_name": null,
+                "meta": null,
+                "small_image_uri": null,
+                "state": null,
+                "third_party_auth": [],
+                "username": "User52842612"
+            }
+        }
+    ]
+}

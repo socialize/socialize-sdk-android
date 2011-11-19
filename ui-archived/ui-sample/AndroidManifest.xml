@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="com.socialize.ui.sample"
+      android:versionCode="1"
+      android:versionName="1.0">
+      
+    <uses-sdk android:minSdkVersion="7" />
+
+    <application android:icon="@drawable/icon" android:label="@string/app_name">
+        <activity android:name=".SampleActivity"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <!-- Required for unit tests -->
+        <activity android:name="com.socialize.ui.sample.EmptyActivity"/>
+        <!-- Required for unit tests -->
+        <activity android:name="com.socialize.ui.sample.test.TestActivity"/>
+        
+        <activity android:name=".ActionBarAutoActivity"/>
+        <activity android:name=".ActionBarManualActivity"/>
+        
+        <!-- Base Activities Required by Socialize UI -->
+        <activity android:name="com.socialize.auth.facebook.FacebookActivity"/>
+        <activity android:name="com.socialize.ui.comment.CommentActivity"/>
+        <activity android:name="com.socialize.ui.comment.CommentDetailActivity"/>
+        <activity android:name="com.socialize.ui.profile.ProfileActivity"/>
+    </application>
+   
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="android.permission.INTERNET"/>
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+</manifest>

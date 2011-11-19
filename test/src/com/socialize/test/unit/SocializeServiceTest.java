@@ -22,6 +22,7 @@
 package com.socialize.test.unit;
 
 import android.content.Context;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.test.mock.MockContext;
 
@@ -33,12 +34,14 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeApiHost;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.error.SocializeException;
+import com.socialize.init.SocializeInitializationAsserter;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
@@ -52,6 +55,7 @@ import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
+import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.test.SocializeUnitTest;
@@ -62,7 +66,7 @@ import com.socialize.util.ResourceLocator;
  * @author Jason Polites
  *
  */
-@UsesMocks({IOCContainer.class, SocializeApiHost.class, SocializeSession.class, SocializeLogger.class})
+@UsesMocks({IOCContainer.class, SocializeApiHost.class, SocializeSession.class, SocializeLogger.class, SocializeInitializationAsserter.class})
 public class SocializeServiceTest extends SocializeUnitTest {
 	
 	IOCContainer container;
@@ -71,11 +75,11 @@ public class SocializeServiceTest extends SocializeUnitTest {
 	IBeanFactory<AuthProviderData> authProviderDataFactory;
 	AuthProviderData authProviderData;
 	SocializeSession session;
-
+	
 	@SuppressWarnings("unchecked")
 	private void setupDefaultMocks() {
 		container = AndroidMock.createMock(IOCContainer.class);
-		service = AndroidMock.createMock(SocializeApiHost.class, getContext());
+		service = AndroidMock.createMock(SocializeApiHost.class);
 		logger = AndroidMock.createNiceMock(SocializeLogger.class);
 		authProviderDataFactory = (IBeanFactory<AuthProviderData>) AndroidMock.createMock(IBeanFactory.class);
 		authProviderData = AndroidMock.createMock(AuthProviderData.class);
@@ -84,6 +88,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		AndroidMock.expect(container.getBean("authProviderDataFactory")).andReturn(authProviderDataFactory);
 		AndroidMock.expect(container.getBean("socializeApiHost")).andReturn(service);
 		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
+		AndroidMock.expect(container.getBean("initializationAsserter")).andReturn(null);
 	}
 	
 	private void replayDefaultMocks() {
@@ -212,6 +217,78 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		assertTrue(socialize.isInitialized());
 		
 		socialize.like(key, listener);
+		
+		verifyDefaultMocks();
+	}
+	
+	@UsesMocks ({ShareAddListener.class, Location.class})
+	public void testAddShareWithLocation() {
+		ShareAddListener listener = AndroidMock.createMock(ShareAddListener.class);
+		Location location = AndroidMock.createMock(Location.class, "foobar");
+		
+		setupDefaultMocks();
+		
+		final String key = "foo";
+		final String text = "bar";
+		
+		service.addShare(session, key, text, ShareType.OTHER, location, listener);
+		
+		replayDefaultMocks();
+		
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
+		socialize.init(getContext(), container);
+		socialize.setSession(session);
+		
+		assertTrue(socialize.isInitialized());
+		
+		socialize.share(key, text, ShareType.OTHER, location, listener);
+		
+		verifyDefaultMocks();
+	}	
+	
+	@UsesMocks ({ShareAddListener.class})
+	public void testAddShareWithoutLocation() {
+		
+		final String key = "foo";
+		final String text = "bar";
+		
+		ShareAddListener listener = AndroidMock.createMock(ShareAddListener.class);
+		
+		setupDefaultMocks();
+		replayDefaultMocks();
+		
+		SocializeServiceImpl socialize = new SocializeServiceImpl() {
+
+			@Override
+			public void share(String url, String text, ShareType shareType, Location location, ShareAddListener shareAddListener) {
+				addResult(url);
+				addResult(text);
+				addResult(shareType);
+				addResult(shareAddListener);
+			}
+			
+		};
+		socialize.init(getContext(), container);
+		socialize.setSession(session);
+		
+		assertTrue(socialize.isInitialized());
+		
+		socialize.share(key, text, ShareType.OTHER, listener);
+		
+		String urlAfter = getNextResult();
+		String textAfter = getNextResult();
+		ShareType shareTypeAfter = getNextResult();
+		ShareAddListener listenerAfter = getNextResult();
+		
+		assertNotNull(listenerAfter);
+		assertNotNull(shareTypeAfter);
+		assertNotNull(textAfter);
+		assertNotNull(urlAfter);
+		
+		assertSame(listener, listenerAfter);
+		assertEquals(ShareType.OTHER, shareTypeAfter);
+		assertEquals(key, urlAfter);
+		assertEquals(text, textAfter);
 		
 		verifyDefaultMocks();
 	}

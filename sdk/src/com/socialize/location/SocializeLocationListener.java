@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 public class SocializeLocationListener implements LocationListener {
 	
-	private DefaultLocationProvider provider;
+	private DefaultLocationProvider locationProvider;
 	
 	public SocializeLocationListener() {
 		super();
@@ -23,13 +23,13 @@ public class SocializeLocationListener implements LocationListener {
 	
 	@Override
 	public void onLocationChanged(Location location) {
-		if(provider != null) {
-			provider.setLocation(location);
-			provider.getLocationManager().removeUpdates(this);
+		if(locationProvider != null) {
+			locationProvider.setLocation(location);
+			locationProvider.getLocationManager().removeUpdates(this);
 		}
 	}
 
-	public void setProvider(DefaultLocationProvider provider) {
-		this.provider = provider;
+	public void setLocationProvider(DefaultLocationProvider locationProvider) {
+		this.locationProvider = locationProvider;
 	}
 }

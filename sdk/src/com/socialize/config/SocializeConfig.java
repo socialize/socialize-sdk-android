@@ -40,10 +40,11 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_PROPERTIES_PATH = "socialize.properties";
 	public static final String SOCIALIZE_BEANS_PATH = "socialize_beans.xml";
-	public static final String SOCIALIZE_ERRORS_PATH = "errors.properties";
+	public static final String SOCIALIZE_ERRORS_PATH = "socialize.errors.properties";
 	
 	public static final String SOCIALIZE_CONSUMER_KEY = "socialize.consumer.key";
 	public static final String SOCIALIZE_CONSUMER_SECRET = "socialize.consumer.secret";
+	
 	public static final String SOCIALIZE_DEBUG_MODE = "socialize.debug.mode";
 	
 	/**

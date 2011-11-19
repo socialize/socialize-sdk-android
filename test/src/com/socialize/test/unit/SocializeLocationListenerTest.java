@@ -21,15 +21,14 @@
  */
 package com.socialize.test.unit;
 
-import android.app.Activity;
 import android.location.Location;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.location.SocializeLocationListener;
 import com.socialize.location.SocializeLocationManager;
-import com.socialize.sample.mock.MockDefaultLocationProvider;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.mock.MockDefaultLocationProvider;
 import com.socialize.util.DeviceUtils;
 
 /**
@@ -46,15 +45,13 @@ public class SocializeLocationListenerTest extends SocializeActivityTest {
 		
 		String providerStr = "foobar";
 		
-		Activity activity = getActivity();
-		
-		MockDefaultLocationProvider provider = AndroidMock.createMock(MockDefaultLocationProvider.class, activity);
+		MockDefaultLocationProvider provider = AndroidMock.createMock(MockDefaultLocationProvider.class);
 		Location location = AndroidMock.createMock(Location.class, providerStr);
 		DeviceUtils utils = AndroidMock.createMock(DeviceUtils.class);
 		SocializeLocationManager manager = AndroidMock.createMock(SocializeLocationManager.class, utils);
 		
 		SocializeLocationListener listener = new SocializeLocationListener();
-		listener.setProvider(provider);
+		listener.setLocationProvider(provider);
 
 		AndroidMock.expect(provider.getLocationManager()).andReturn(manager);
 		manager.removeUpdates(listener);

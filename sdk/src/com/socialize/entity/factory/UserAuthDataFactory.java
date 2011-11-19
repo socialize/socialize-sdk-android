@@ -48,7 +48,7 @@ public class UserAuthDataFactory extends SocializeObjectFactory<UserAuthData> {
 	protected void postFromJSON(JSONObject from, UserAuthData to) throws JSONException {
 
 		if(from.has(AUTH_ID) && !from.isNull(AUTH_ID)) {
-			to.setId(from.getInt(AUTH_ID));
+			to.setId(from.getLong(AUTH_ID));
 		}
 		
 		if(from.has(AUTH_TYPE) && !from.isNull(AUTH_TYPE)) {

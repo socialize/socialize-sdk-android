@@ -35,47 +35,34 @@ public class BeanMapping {
 	private Map<String, BeanRef> beanRefs;
 	private Map<String, FactoryRef> factoryRefs;
 	
+	public BeanMapping() {
+		super();
+		this.factoryRefs = new LinkedHashMap<String, FactoryRef>();
+		this.beanRefs = new LinkedHashMap<String, BeanRef>();
+	}
+
 	public Collection<BeanRef> getBeanRefs() {
-		if(beanRefs != null) {
-			return beanRefs.values();
-		}
-		return null;
+		return beanRefs.values();
 	}
 	
 	public Collection<FactoryRef> getFactoryRefs() {
-		if(factoryRefs != null) {
-			return factoryRefs.values();
-		}
-		
-		return null;
+		return factoryRefs.values();
 	}
 
-	public synchronized void addFactoryRef(FactoryRef ref) {
-		if(factoryRefs == null) {
-			factoryRefs = new LinkedHashMap<String, FactoryRef>();
-		}
+	public void addFactoryRef(FactoryRef ref) {
 		factoryRefs.put(ref.getName(), ref);
 	}
 
-	public synchronized void addBeanRef(BeanRef ref) {
-		if(beanRefs == null) {
-			beanRefs = new LinkedHashMap<String, BeanRef>();
-		}
+	public void addBeanRef(BeanRef ref) {
 		beanRefs.put(ref.getName(), ref);
 	}
 
 	public BeanRef getBeanRef(String name) {
-		if(beanRefs != null) {
-			return beanRefs.get(name);
-		}
-		return null;
+		return beanRefs.get(name);
 	}
 	
 	public FactoryRef getFactoryRef(String name) {
-		if(factoryRefs != null) {
-			return factoryRefs.get(name);
-		}
-		return null;
+		return factoryRefs.get(name);
 	}
 	
 	/**

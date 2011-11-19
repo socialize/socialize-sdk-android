@@ -37,7 +37,7 @@ import com.socialize.entity.factory.UserAuthDataFactory;
 @UsesMocks (UserAuthData.class)
 public class UserAuthDataFactoryTest extends AbstractSocializeObjectFactoryTest<UserAuthData, UserAuthDataFactory> {
 
-	private Integer id = 69;
+	private Long id = 69L;
 	private String type = "facebook";
 	private String type_error = "no_such_provider";
 	
@@ -58,7 +58,7 @@ public class UserAuthDataFactoryTest extends AbstractSocializeObjectFactoryTest<
 		AndroidMock.expect(json.isNull("auth_id")).andReturn(false);
 		AndroidMock.expect(json.isNull("auth_type")).andReturn(false);
 		
-		AndroidMock.expect(json.getInt("auth_id")).andReturn(id);
+		AndroidMock.expect(json.getLong("auth_id")).andReturn(id);
 		AndroidMock.expect(json.getString("auth_type")).andReturn(type);
 		
 		object.setAuthProviderType(AuthProviderType.FACEBOOK);
@@ -74,7 +74,7 @@ public class UserAuthDataFactoryTest extends AbstractSocializeObjectFactoryTest<
 		AndroidMock.expect(json.isNull("auth_id")).andReturn(false);
 		AndroidMock.expect(json.isNull("auth_type")).andReturn(false);
 		
-		AndroidMock.expect(json.getInt("auth_id")).andReturn(id);
+		AndroidMock.expect(json.getLong("auth_id")).andReturn(id);
 		AndroidMock.expect(json.getString("auth_type")).andReturn(type_error);
 		
 		AndroidMock.replay(json);

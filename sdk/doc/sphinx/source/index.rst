@@ -7,5 +7,7 @@ Contents:
    :maxdepth: 2
    
    getting_started
-   socialize_ui
+   facebook
+   action_bar
+   comment_view
    sdk_user_guide

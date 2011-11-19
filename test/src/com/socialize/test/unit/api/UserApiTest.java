@@ -81,7 +81,7 @@ public class UserApiTest extends SocializeUnitTest {
 	@UsesMocks ({User.class})
 	public void testSaveUserProfile() {
 		
-		final int id = 69;
+		final long id = 69;
 		
 		Context context = new MockContext();
 		String firstName = "foo";
@@ -122,7 +122,7 @@ public class UserApiTest extends SocializeUnitTest {
 	@UsesMocks ({SocializeException.class, SocializeSessionPersister.class})
 	public void testSaveUserProfileListener() {
 		
-		final int id = 69;
+		final long id = 69;
 		
 		Context context = new MockContext();
 		String firstName = "foo";

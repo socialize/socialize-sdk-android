@@ -24,6 +24,8 @@ package com.socialize.util;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.socialize.log.SocializeLogger;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Shader;
@@ -40,11 +42,17 @@ public class Drawables {
 	private ClassLoaderProvider classLoaderProvider;
 	private DrawableCache cache;
 	private BitmapUtils bitmapUtils;
+	private SocializeLogger logger;
 	
 	public Drawables() {
 		super();
 	}
 
+	/**
+	 * @deprecated
+	 * @param context
+	 */
+	@Deprecated
 	public Drawables(Activity context) {
 		super();
 		init(context);
@@ -66,6 +74,10 @@ public class Drawables {
 	public Drawable getDrawable(String name, boolean eternal) {
 		return getDrawable(name, false, false, -1, -1, eternal);
 	}
+	
+	public Drawable getDrawable(String name, int forceDensity, boolean eternal) {
+		return getDrawable(name, metrics.densityDpi, false, false, -1, -1, eternal, forceDensity);
+	}	
 	
 	public Drawable getDrawable(String name, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
 		return getDrawable(name, metrics.densityDpi, tileX, tileY, scaleToWidth, scaleToHeight, eternal);
@@ -101,6 +113,10 @@ public class Drawables {
 	}
 	
 	public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
+		return getDrawable(name, density, tileX, tileY, scaleToWidth, scaleToHeight, eternal, density);
+	}
+	
+	public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal, int forceDensity) {
 		
 		String densityPath = getPath(name, density);
 		String commonPath = getPath(name);
@@ -134,14 +150,28 @@ public class Drawables {
 			in = loader.getResourceAsStream(path);
 			
 			if(in == null) {
+				
+				if(logger != null && logger.isInfoEnabled()) {
+					logger.info("No drawable found in path [" +
+							path +
+							"].  Trying common path");
+				}
+				
 				// try default
 				path = commonPath;
 				in = loader.getResourceAsStream(path);
 			}
 			
 			if(in != null) {
-				drawable = createDrawable(in, path, tileX, tileY, scaleToWidth, scaleToHeight);
+				drawable = createDrawable(in, path, tileX, tileY, scaleToWidth, scaleToHeight, forceDensity);
 				addToCache(path, drawable, eternal);
+			}
+			else {
+				if(logger != null && logger.isWarnEnabled()) {
+					logger.warn("No drawable found in path [" +
+							path +
+							"], returning null");
+				}
 			}
 			
 			return drawable;
@@ -182,6 +212,10 @@ public class Drawables {
 		this.metrics = metrics;
 	}
 
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
+
 	protected String getPath(String name) {
 		return "res/drawable/" + name;
 	}
@@ -199,12 +233,18 @@ public class Drawables {
 			densityPath = "xhdpi";
 		}
 		
+		int indexOf = name.indexOf('#');
+		
+		if(indexOf >= 0) {
+			name = name.substring(0, indexOf);
+		}
+		
 		return "res/drawable/" + densityPath + "/" + name;
 	}
 	
-	protected CacheableDrawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY) {
+	protected CacheableDrawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY, int forceDensity) {
 		
-		Bitmap bitmap = bitmapUtils.getScaledBitmap ( in , pixelsX, pixelsY );
+		Bitmap bitmap = bitmapUtils.getScaledBitmap ( in , pixelsX, pixelsY , forceDensity);
 		
 		CacheableDrawable drawable = createDrawable(bitmap, name);
 		
@@ -223,7 +263,7 @@ public class Drawables {
 		return new CacheableDrawable(bitmap, name);
 	}
 	
-	private void addToCache(String key, CacheableDrawable drawable, boolean eternal) {
+	protected void addToCache(String key, CacheableDrawable drawable, boolean eternal) {
 		if(drawable != null) {
 			cache.put(key, drawable, eternal);
 		}

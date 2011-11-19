@@ -41,6 +41,10 @@ public interface SocializeRequestFactory<T extends SocializeObject> {
 
 	public HttpUriRequest getGetRequest(SocializeSession session, String endpoint,String id) throws SocializeException;
 
+	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids, String idKey) throws SocializeException;
+	
+	public HttpUriRequest getListRequest(SocializeSession session, String endpoint,String key, String[] ids, String idKey, int startIndex, int endIndex) throws SocializeException;
+	
 	public HttpUriRequest getListRequest(SocializeSession session, String endpoint,String key, String[] ids) throws SocializeException;
 
 	public HttpUriRequest getListRequest(SocializeSession session, String endpoint,String key, String[] ids, int startIndex, int endIndex) throws SocializeException;

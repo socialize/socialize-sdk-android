@@ -41,7 +41,7 @@ public class EntityAccessorTests extends SocializeUnitTest {
 		Stats stats = new Stats();
 		
 		Integer comments = 1;
-		Integer id = 2;
+		Long id = 2L;
 		Integer likes = 3;
 		Integer shares = 4;
 		Integer views = 5;
@@ -124,7 +124,7 @@ public class EntityAccessorTests extends SocializeUnitTest {
 		User user = new User();
 		
 		Long date = 123456l;
-		Integer id = 69;
+		Long id = 69L;
 		Double lat = 1.2d, lon = 3.4d;
 		
 		action.setApplication(app);

@@ -29,6 +29,12 @@ import com.socialize.api.action.ActionType;
  *
  */
 public class Share extends SocializeAction {
+	
+	private String text;
+	private String mediumName;
+	private int medium;
+	private boolean propagate;
+	
 	@Override
 	public ActionType getActionType() {
 		return ActionType.SHARE;
@@ -38,4 +44,38 @@ public class Share extends SocializeAction {
 	public String getDisplayText() {
 		return null;
 	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public int getMedium() {
+		return medium;
+	}
+
+	public void setMedium(int medium) {
+		this.medium = medium;
+	}
+
+	public boolean isPropagate() {
+		return propagate;
+	}
+
+	public void setPropagate(boolean propagate) {
+		this.propagate = propagate;
+	}
+
+	public String getMediumName() {
+		return mediumName;
+	}
+
+	public void setMediumName(String mediumName) {
+		this.mediumName = mediumName;
+	}
+	
+	
 }

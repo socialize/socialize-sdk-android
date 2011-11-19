@@ -65,7 +65,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 	protected Double lat = new Double(10);
 	protected Double lon = new Double(20);
 	protected Date date = new Date(1311193971000L);
-	protected Integer id = new Integer(10000);
+	protected Long id = new Long(10000);
 	protected String entity_key = "foobar";
 	
 	protected final DateFormat DATE_FORMAT_STRING = new SimpleDateFormat(SocializeObjectFactory.DATE_FORMAT_STRING);
@@ -171,7 +171,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		
 		AndroidMock.expect(json.has("id")).andReturn(true);
 		AndroidMock.expect(json.isNull("id")).andReturn(false);
-		AndroidMock.expect(json.getInt("id")).andReturn(id);
+		AndroidMock.expect(json.getLong("id")).andReturn(id);
 		
 		AndroidMock.expect(json.getJSONObject("application")).andReturn(jsonApplication);
 		AndroidMock.expect(json.getJSONObject("user")).andReturn(jsonUser);

@@ -155,7 +155,7 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 				}
 			}
 		}
-		catch (Exception e) {
+		catch (Throwable e) {
 			if(e instanceof NullPointerException) {
 				throw new JSONException("NullPointerException at fromJSON");
 			}

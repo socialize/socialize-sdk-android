@@ -39,9 +39,9 @@ import com.socialize.error.SocializeException;
 import com.socialize.facebook.Facebook;
 import com.socialize.facebook.Facebook.DialogListener;
 import com.socialize.listener.AuthProviderListener;
-import com.socialize.sample.mock.MockAlertDialog;
-import com.socialize.sample.mock.MockBuilder;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.mock.MockAlertDialog;
+import com.socialize.test.mock.MockBuilder;
 import com.socialize.util.DialogFactory;
 import com.socialize.util.Drawables;
 

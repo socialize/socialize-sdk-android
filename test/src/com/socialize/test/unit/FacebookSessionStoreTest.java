@@ -29,8 +29,8 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.facebook.FacebookSessionStore;
 import com.socialize.facebook.Facebook;
-import com.socialize.sample.mock.MockEditor;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.mock.MockEditor;
 import com.socialize.util.Drawables;
 
 /**

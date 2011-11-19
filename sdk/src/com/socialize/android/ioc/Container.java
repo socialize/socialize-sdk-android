@@ -23,6 +23,8 @@ package com.socialize.android.ioc;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
@@ -38,6 +40,8 @@ public class Container {
 	
 	private Context context; // Used only to track the current context.
 	
+	private boolean destroyed = false;
+	
 	// Parameterless constructor so it can be mocked.
 	protected Container() {
 		super();
@@ -48,6 +52,7 @@ public class Container {
 		this();
 		this.mapping = mapping;
 		this.builder = builder;
+		this.context = builder.getContext();
 	}
 	
 	protected BeanRef getBeanRef(String name) {
@@ -61,6 +66,8 @@ public class Container {
 	
 	@SuppressWarnings("unchecked")
 	public <T extends Object> T getBean(String name, Object...args) {
+		args = cleanNulls(name, args);
+		
 		if(beans != null) {
 			Object bean = beans.get(name);
 			BeanRef beanRef = mapping.getBeanRef(name);
@@ -91,6 +98,46 @@ public class Container {
 		}
 		
 		return null;
+	}
+	
+	protected Object[] cleanNulls(String beanName, Object[] args) {
+		
+		if(args != null) {
+			Object[] nonNull = null;
+			int nullCount = 0;
+			
+			for (Object object : args) {
+				if(object == null) {
+					nullCount++;
+				}
+			}
+			
+			if(nullCount > 0) {
+				
+				Logger.w(getClass().getSimpleName(), "Some arguments passed to getBean were null for bean [" +
+						beanName +
+						"].  Stripping nulls from argument list");				
+				
+				if(nullCount < args.length) {
+					nonNull = new Object[args.length - nullCount];
+					int i = 0;
+					
+					for (Object object : args) {
+						if(object != null) {
+							nonNull[i] = object;
+							i++;
+						}
+					}
+					
+					return nonNull;
+				}
+				else {
+					return null;
+				}
+			}
+		}	
+		
+		return args;
 	}
 	
 	public boolean containsBean(String name) {
@@ -125,9 +172,28 @@ public class Container {
 			beans.clear();
 			beans = null;
 		}
+		
+		destroyed = true;
+	}
+	
+	public boolean isDestroyed() {
+		return destroyed;
 	}
 	
 	protected void putBean(String name, Object bean) {
+		
+		Object old = beans.get(name);
+		
+		if(old != null) {
+			Logger.i(getClass().getSimpleName(), "Replacing existing bean instance [" +
+					name +
+					"]");
+			
+			if(old instanceof ContainerAware) {
+				((ContainerAware)old).onDestroy(this);
+			}
+		}
+		
 		beans.put(name, bean);
 	}
 	
@@ -141,43 +207,50 @@ public class Container {
 
 	public void setContext(Context context) {
 		
-		if(this.context != null && !this.context.equals(context)) {
-			// Set for any new beans
-			builder.setContext(context);
-			
-			// Now look for existing singletons
-			Collection<BeanRef> beanRefs = this.mapping.getBeanRefs();
-			
-			for (BeanRef ref : beanRefs) {
-				if(ref.isSingleton() ) {
-					if(ref.isContextSensitiveConstructor()) {
-						// We have a new context, so we need to rebuild this bean
-						Object bean = builder.buildBean(this, ref);
-						builder.setBeanProperties(this, ref, bean);
-						
-						if(!ref.isLazyInit()) {
-							builder.initBean(this, ref, bean);
+		if(!destroyed) {
+			if(this.context != null && this.context != context) {
+				// Set for any new beans
+				builder.setContext(context);
+				
+				// Now look for existing singletons
+				Collection<BeanRef> beanRefs = this.mapping.getBeanRefs();
+				
+				List<BeanRef> replaced = new LinkedList<BeanRef>();
+				
+				for (BeanRef ref : beanRefs) {
+					
+					if(ref.isSingleton() ) {
+						if(ref.isContextSensitiveConstructor()) {
+							// We have a new context, so we need to rebuild this bean
+							Object bean = builder.buildBean(this, ref);
+							builder.setBeanProperties(this, ref, bean);
+							
+							if(!ref.isLazyInit()) {
+								builder.initBean(this, ref, bean);
+							}
+							
+							putBean(ref.getName(), bean);
+							
+							// We need to check for any other objects who are referencing this object as a property or as a contructor argument.
+							replaced.add(ref);
 						}
-						
-						beans.put(ref.getName(), bean);
-					}
-					else if(ref.isContextSensitiveInitMethod()) {
-						
-						if(ref.isLazyInit()) {
-							// Mark for re-init
-							ref.setInitCalled(false);
-						}
-						else {
-							// Re-call init
-							Object bean = getBean(ref.getName());
-							builder.initBean(this, ref, bean);
-							beans.put(ref.getName(), bean);	
+						else if(ref.isContextSensitiveInitMethod()) {
+							
+							if(ref.isLazyInit()) {
+								// Mark for re-init
+								ref.setInitCalled(false);
+							}
+							else {
+								// Re-call init
+								Object bean = getBean(ref.getName());
+								builder.initBean(this, ref, bean);
+							}
 						}
 					}
 				}
 			}
+			
+			this.context = context;
 		}
-		
-		this.context = context;
 	}
 }

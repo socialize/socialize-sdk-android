@@ -49,6 +49,7 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	public static final String LARGE_IMAGE_URI = "large_image_uri";
 	public static final String STATS = "stats";
 	public static final String THIRD_PARTY_AUTH = "third_party_auth";
+	public static final String AUTO_POST_FACEBOOK = "auto_post_fb";
 
 	@Override
 	public User instantiateObject(JSONObject object) {
@@ -67,6 +68,7 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		user.setMediumImageUri(getString(object,MEDIUM_IMAGE_URI));
 		user.setLargeImageUri(getString(object,LARGE_IMAGE_URI));
 		user.setProfilePicData(getString(object,IMAGE_DATA));
+		user.setAutoPostToFacebook(getBoolean(object,AUTO_POST_FACEBOOK, true));
 		
 		if(object.has(STATS) && !object.isNull(STATS)) {
 			JSONObject statsJson = object.getJSONObject(STATS);
@@ -99,10 +101,10 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		object.put(DESCRIPTION, user.getDescription());
 		object.put(LOCATION, user.getLocation());
 		object.put(IMAGE_DATA, user.getProfilePicData());
-		
 		object.put(SMALL_IMAGE_URI, user.getSmallImageUri());
 		object.put(MEDIUM_IMAGE_URI, user.getMediumImageUri());
 		object.put(LARGE_IMAGE_URI, user.getLargeImageUri());
+		object.put(AUTO_POST_FACEBOOK, user.isAutoPostToFacebook());
 	}
 
 	public StatsFactory getStatsFactory() {

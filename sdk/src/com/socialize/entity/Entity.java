@@ -75,7 +75,7 @@ public class Entity extends SocializeObject {
 	}
 
 	@Override
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		// Should not be called
 		Log.e("Entity", "setID called on Entity!");
 	}

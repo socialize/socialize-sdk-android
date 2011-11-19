@@ -41,15 +41,22 @@ public class Key<K extends Comparable<K>> implements Comparable<Key<K>> {
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(Key<K> o) {
-		if (o.time > time) {
-			return -1;
+		if(o != null) {
+			if (o.time > time) {
+				return -1;
+			}
+			else if (o.time < time) {
+				return 1;
+			}
+			else if(o.key != null) {
+				return o.key.compareTo(key);
+			}
+			else {
+				return 0;
+			}
 		}
-		else if (o.time < time) {
-			return 1;
-		}
-		else {
-			return o.key.compareTo(key);
-		}
+		
+		return 0;
 	}
 
 	@Override

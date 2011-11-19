@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="socialize-ui-sample" default="help">
+
+    <loadproperties srcFile="local.properties" />
+    <property file="ant.properties" />
+    <loadproperties srcFile="project.properties" />
+
+    <fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project'"
+            unless="sdk.dir"/>
+
+	<!-- 
+		################################################################################################
+		OVERRIDE DEFAULT COMPILE TARGET FROM ANDROID TO FIX EMMA COVERAGE REPORTS 
+		################################################################################################
+	-->	
+	
+    <property file="emma.properties" />
+	
+    <target name="-compile" depends="-build-setup, -pre-build, -code-gen, -pre-compile">
+       
+		<do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">
+
+        	<condition property="extensible.classpath"
+                    value="${tested.project.absolute.dir}/bin/classes"
+                    else=".">
+                <isset property="tested.project.absolute.dir" />
+            </condition>
+			
+            <condition property="extensible.libs.classpath"
+                    value="${tested.project.absolute.dir}/${jar.libs.dir}"
+                    else="${jar.libs.dir}">
+                <isset property="tested.project.absolute.dir" />
+            </condition>
+			
+			<echo>Compiling sample project from src ${source.absolute.dir} to ${out.classes.absolute.dir}</echo>
+        	
+            <javac 
+        		encoding="${java.encoding}"
+                source="${java.source}" 
+        		target="${java.target}"
+                debug="true" 
+        		extdirs=""
+                destdir="${out.classes.absolute.dir}"
+                bootclasspathref="android.target.classpath"
+                verbose="${verbose}"
+                classpath="${extensible.classpath}"
+                classpathref="jar.libs.ref" >
+            	
+                <src path="${source.absolute.dir}" />
+                <src path="${gen.absolute.dir}" />
+            	
+                <classpath>
+                    <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
+                    <path refid="android.target.classpath"/>
+                </classpath>
+            	
+            </javac>        	
+        	
+        	<path id="emma.instrpath">
+        		<pathelement path="${library.project.classes}" />
+        	</path>       
+			
+            <echo>[OVERRIDE] Instrumenting classes from ${library.project.classes} to ${out.classes.absolute.dir}</echo>
+        	<echo>EMMA will create meta data file in ${emma.report.dir}/coverage.em</echo>
+
+        	<emma enabled="true">
+                <instr verbosity="${verbosity}"
+                       mode="overwrite"
+                       instrpathref="emma.instrpath"
+                       outdir="${out.classes.absolute.dir}"
+                       metadatafile="${emma.report.dir}/coverage.em"
+                	   filter="${emma.excluded}">
+                </instr>
+            </emma> 
+			
+        </do-only-if-manifest-hasCode>
+    </target>	
+	
+    <!-- Import the actual build file.
+
+         To customize existing targets, there are two options:
+         - Customize only one target:
+             - copy/paste the target into this file, *before* the
+               <import> task.
+             - customize it to your needs.
+         - Customize the whole content of build.xml
+             - copy/paste the content of the rules files (minus the top node)
+               into this file, replacing the <import> task.
+             - customize to your needs.
+
+         ***********************
+         ****** IMPORTANT ******
+         ***********************
+         In all cases you must update the value of version-tag below to read 'custom' instead of an integer,
+         in order to avoid having your file be overridden by tools such as "android update project"
+    -->
+    <!-- version-tag: custom -->
+    <import file="${sdk.dir}/tools/ant/build.xml" />
+
+</project>

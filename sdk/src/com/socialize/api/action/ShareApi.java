@@ -21,8 +21,15 @@
  */
 package com.socialize.api.action;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import android.location.Location;
+
 import com.socialize.api.SocializeApi;
+import com.socialize.api.SocializeSession;
 import com.socialize.entity.Share;
+import com.socialize.listener.share.ShareListener;
 import com.socialize.provider.SocializeProvider;
 
 /**
@@ -34,5 +41,20 @@ public class ShareApi extends SocializeApi<Share, SocializeProvider<Share>> {
 	
 	public ShareApi(SocializeProvider<Share> provider) {
 		super(provider);
+	}
+	
+	public void addShare(SocializeSession session, String key, String text, ShareType shareType, Location location, ShareListener listener) {
+		Share c = new Share();
+		c.setEntityKey(key);
+		c.setText(text);
+		c.setMedium(shareType.getId());
+		c.setMediumName(shareType.getName());
+		
+		setLocation(c, location);
+		
+		List<Share> list = new ArrayList<Share>(1);
+		list.add(c);
+		
+		postAsync(session, ENDPOINT, list, listener);
 	}
 }

@@ -56,7 +56,7 @@ public class DrawablesTest extends SocializeActivityTest {
 		final String drawable_name = "foobar";
 
 		ClassLoaderProvider provider = AndroidMock.createMock(ClassLoaderProvider.class);
-		DrawableCache cache = AndroidMock.createMock(DrawableCache.class, getActivity());
+		DrawableCache cache = AndroidMock.createMock(DrawableCache.class);
 		ClassLoader loader = AndroidMock.createMock(ClassLoader.class);
 		
 		// Can't mock, so just create a dummy one
@@ -87,9 +87,9 @@ public class DrawablesTest extends SocializeActivityTest {
 		AndroidMock.replay(loader);
 		AndroidMock.replay(in);
 		
-		Drawables drawables = new Drawables(getActivity()) {
+		Drawables drawables = new Drawables() {
 			@Override
-			protected CacheableDrawable createDrawable(InputStream stream, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY) {
+			protected CacheableDrawable createDrawable(InputStream stream, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY, int forceDensity) {
 				assertSame(in, stream);
 				assertFalse(tileX);
 				assertFalse(tileY);
@@ -97,6 +97,7 @@ public class DrawablesTest extends SocializeActivityTest {
 			}
 		};
 		
+		drawables.init(getActivity());
 		drawables.setClassLoaderProvider(provider);
 		drawables.setCache(cache);
 		
@@ -144,7 +145,7 @@ public class DrawablesTest extends SocializeActivityTest {
 			BitmapUtils bitmapUtils = AndroidMock.createMock(BitmapUtils.class, builder);
 			InputStream in = AndroidMock.createMock(InputStream.class);
 			
-			AndroidMock.expect(bitmapUtils.getScaledBitmap ( in , pixelsX, pixelsY )).andReturn(bitmap);
+			AndroidMock.expect(bitmapUtils.getScaledBitmap ( in , pixelsX, pixelsY, -1 )).andReturn(bitmap);
 			
 			if(repeatX) {
 				drawable.setTileModeX(Shader.TileMode.REPEAT);
@@ -168,7 +169,7 @@ public class DrawablesTest extends SocializeActivityTest {
 			AndroidMock.replay(bitmapUtils);
 			AndroidMock.replay(drawable);
 			
-			assertSame(drawable, drawables.createDrawable(in, key, repeatX, repeatY, pixelsX, pixelsY));
+			assertSame(drawable, drawables.createDrawable(in, key, repeatX, repeatY, pixelsX, pixelsY, -1));
 			
 			AndroidMock.verify(bitmapUtils);
 			AndroidMock.verify(drawable);
@@ -194,7 +195,7 @@ public class DrawablesTest extends SocializeActivityTest {
 			
 			assertNotNull(bitmap);
 			
-			DrawableCache cache = AndroidMock.createMock(DrawableCache.class, getActivity());
+			DrawableCache cache = AndroidMock.createMock(DrawableCache.class);
 			BitmapBuilder builder = AndroidMock.createMock(BitmapBuilder.class);
 			BitmapUtils bitmapUtils = AndroidMock.createMock(BitmapUtils.class, builder);
 			
@@ -321,10 +322,113 @@ public class DrawablesTest extends SocializeActivityTest {
 		assertEquals(name, getNextResult());
 	}
 	
+	
+	public void testCallFlow3() {
+		
+		String name = "foobar";
+		boolean eternal = true;
+		
+		int scaleToHeight = 20;
+		int scaleToWidth = 40;
+		boolean tileY = true;
+		boolean tileX = false;
+		
+		DisplayMetrics metrics = new DisplayMetrics();
+		metrics.densityDpi = 69;
+		
+		PublicDrawables drawables = new PublicDrawables() {
+			@Override
+			public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
+				addResult(name);
+				addResult(density);
+				addResult(tileX);
+				addResult(tileY);
+				addResult(scaleToWidth);
+				addResult(scaleToHeight);
+				addResult(eternal);
+				return null;
+			}
+		};
+		
+		drawables.setMetrics(metrics);
+		
+		drawables.getDrawable(name, tileX, tileY, scaleToWidth, scaleToHeight, eternal);
+		
+		// reverse order for asserts
+		assertEquals(eternal, getNextResult());
+		assertEquals(scaleToHeight, getNextResult());
+		assertEquals(scaleToWidth, getNextResult());
+		assertEquals(tileY, getNextResult());
+		assertEquals(tileX, getNextResult());
+		assertEquals(metrics.densityDpi, getNextResult());
+		assertEquals(name, getNextResult());
+	}
+	
+	public void testCallFlow4() {
+		
+		String name = "foobar";
+		boolean eternal = false;
+		
+		int scaleToHeight = 20;
+		int scaleToWidth = 40;
+		
+		PublicDrawables drawables = new PublicDrawables() {
+			@Override
+			public Drawable getDrawable(String name, int scaleToWidth, int scaleToHeight, boolean eternal) {
+				addResult(name);
+				addResult(scaleToWidth);
+				addResult(scaleToHeight);
+				addResult(eternal);
+				return null;
+			}
+		};
+		
+		drawables.getDrawable(name, scaleToWidth, scaleToHeight);
+		
+		// reverse order for asserts
+		assertEquals(eternal, getNextResult());
+		assertEquals(scaleToHeight, getNextResult());
+		assertEquals(scaleToWidth, getNextResult());
+		assertEquals(name, getNextResult());
+	}	
+	
+	public void testCallFlow5() {
+		
+		String name = "foobar";
+		boolean eternal = false;
+		
+		int scaleToHeight = 20;
+		int scaleToWidth = 40;
+		
+		PublicDrawables drawables = new PublicDrawables() {
+			@Override
+			public Drawable getDrawable(String name, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
+				addResult(name);
+				addResult(tileX);
+				addResult(tileY);
+				addResult(scaleToWidth);
+				addResult(scaleToHeight);
+				addResult(eternal);
+				return null;
+			}
+		};
+		
+		drawables.getDrawable(name, scaleToWidth, scaleToHeight, eternal);
+		
+		// reverse order for asserts
+		assertEquals(eternal, getNextResult());
+		assertEquals(scaleToHeight, getNextResult());
+		assertEquals(scaleToWidth, getNextResult());
+		assertEquals(false, getNextResult());
+		assertEquals(false, getNextResult());
+		assertEquals(name, getNextResult());
+	}		
+	
+	
 	class PublicDrawables extends Drawables {
 		@Override
-		public CacheableDrawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY) {
-			return super.createDrawable(in, name, tileX, tileY, pixelsX, pixelsY);
+		public CacheableDrawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY, int forceDensity) {
+			return super.createDrawable(in, name, tileX, tileY, pixelsX, pixelsY, forceDensity);
 		}
 	}
 	

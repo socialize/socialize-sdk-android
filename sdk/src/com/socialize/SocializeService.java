@@ -26,11 +26,11 @@ import android.location.Location;
 
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
-import com.socialize.listener.activity.ActivityListListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -39,9 +39,11 @@ import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
+import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
+import com.socialize.ui.profile.UserProfile;
 
 /**
  * The main Socialize Service.  This is the simplest entry point into the Socialize API.
@@ -171,7 +173,28 @@ public interface SocializeService {
 	 * @param id The ID of the like to be deleted.
 	 * @param likeDeleteListener A listener to handle callbacks from the delete.
 	 */
-	public void unlike(int id, LikeDeleteListener likeDeleteListener);
+	public void unlike(long id, LikeDeleteListener likeDeleteListener);
+	
+	/**
+	 * Records a share event against the given url.  NOTE: This does NOT perform sharing to any 3rd party social network.  
+	 * It simply records a share event within Socialize.
+	 * @param url The url being viewed. MUST be a valid http URL.  Defined when first creating a url, or created on the fly with this call.
+	 * @param text The text being shared.
+	 * @param shareType The social network on which the share occurred.
+	 * @param shareAddListener A listener to handle callbacks from the post.
+	 */
+	public void share(String url, String text, ShareType shareType, ShareAddListener shareAddListener);
+	
+	/**
+	 * Records a share event against the given url.  NOTE: This does NOT perform sharing to any 3rd party social network.  
+	 * It simply records a share event within Socialize.
+	 * @param url The url being viewed. MUST be a valid http URL.  Defined when first creating a url, or created on the fly with this call.
+	 * @param text The text being shared.
+	 * @param shareType The social network on which the share occurred. 
+	 * @param location The location of the device at the time the call was made.
+	 * @param shareAddListener A listener to handle callbacks from the post.
+	 */
+	public void share(String url, String text, ShareType shareType, Location location, ShareAddListener shareAddListener);
 	
 	/**
 	 * Retrieves a single like previously associated with an entity.
@@ -202,7 +225,7 @@ public interface SocializeService {
 	 * @param id The ID of the comment, returned when it was originally created.
 	 * @param commentGetListener A listener to handle callbacks from the get.
 	 */
-	public void getCommentById(int id, CommentGetListener commentGetListener);
+	public void getCommentById(long id, CommentGetListener commentGetListener);
 
 	/**
 	 * Retrieves a single entity.
@@ -241,7 +264,7 @@ public interface SocializeService {
 	 * @param id The id of the user.
 	 * @param userGetListener A listener to handle callbacks from the get.
 	 */
-	public void getUser(int id, UserGetListener userGetListener);
+	public void getUser(long id, UserGetListener userGetListener);
 	
 	/**
 	 * Saves the profile for the current logged in user.
@@ -249,15 +272,24 @@ public interface SocializeService {
 	 * @param lastName User last name.
 	 * @param encodedImage A Base64 encoded PNG file used for the user's profile picture.
 	 * @param listener A listener to handle callbacks from the post.
+	 * @deprecated
 	 */
+	@Deprecated
 	public void saveCurrentUserProfile(Context context, String firstName, String lastName, String encodedImage, UserSaveListener listener);
 	
 	/**
-	 * Returns true if this SocializeService instance has been initialized.
-	 * @return
-	 * @deprecated Init should always be called so that each corresponding call to destroy is matched.
+	 * Saves the profile for the current logged in user.
+	 * @param context The current context.
+	 * @param profile The profile for the user.
+	 * @param listener A listener to handle callbacks from the post.
 	 */
-	@Deprecated
+	public void saveCurrentUserProfile(Context context, UserProfile profile, UserSaveListener listener);
+	
+	/**
+	 * Returns true if this SocializeService instance has been initialized.  
+	 * PLEASE NOTE: Init should always be called so that each corresponding call to destroy is matched.
+	 * @return
+	 */
 	public boolean isInitialized();
 
 	/**
@@ -300,20 +332,20 @@ public interface SocializeService {
 	 */
 	public void clear3rdPartySession(AuthProviderType type);
 	
-	/**
-	 * Lists a user's activity.
-	 * @param userId The ID of the user for whom activity will be listed.
-	 * @param activityListListener A listener to handle callbacks from the get.
-	 */
-	public void listActivityByUser(int userId, ActivityListListener activityListListener);
+//	/**
+//	 * Lists a user's activity.
+//	 * @param userId The ID of the user for whom activity will be listed.
+//	 * @param activityListListener A listener to handle callbacks from the get.
+//	 */
+//	public void listActivityByUser(int userId, ActivityListListener activityListListener);
 	
-	/**
-	 * Lists a user's activity with pagination.
-	 * @param userId The ID of the user for whom activity will be listed.
-	 * @param startIndex The starting index of the results for pagination.
-	 * @param endIndex The ending index of the results for pagination.
-	 * @param activityListListener A listener to handle callbacks from the get.
-	 */
-	public void listActivityByUser(int userId, int startIndex, int endIndex, ActivityListListener activityListListener);
+//	/**
+//	 * Lists a user's activity with pagination.
+//	 * @param userId The ID of the user for whom activity will be listed.
+//	 * @param startIndex The starting index of the results for pagination.
+//	 * @param endIndex The ending index of the results for pagination.
+//	 * @param activityListListener A listener to handle callbacks from the get.
+//	 */
+//	public void listActivityByUser(int userId, int startIndex, int endIndex, ActivityListListener activityListListener);
 
 }

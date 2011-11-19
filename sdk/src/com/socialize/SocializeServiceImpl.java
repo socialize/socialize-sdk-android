@@ -32,16 +32,17 @@ import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeApiHost;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
+import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
+import com.socialize.init.SocializeInitializationAsserter;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.SocializeListener;
-import com.socialize.listener.activity.ActivityListListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -52,11 +53,13 @@ import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
+import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.ActivityIOCProvider;
+import com.socialize.ui.profile.UserProfile;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.ResourceLocator;
 import com.socialize.util.StringUtils;
@@ -71,6 +74,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private IOCContainer container;
 	private SocializeSession session;
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
+	private SocializeInitializationAsserter asserter;
 	private int initCount = 0;
 	
 	private String[] initPaths = null;
@@ -119,7 +123,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		new InitTask(this, context, paths, listener, logger).execute((Void)null);
 	}
 
-	public IOCContainer initWithContainer(Context context, String...paths) throws Exception {
+	public synchronized IOCContainer initWithContainer(Context context, String...paths) throws Exception {
 		boolean init = false;
 
 		if(isInitialized()) {
@@ -134,6 +138,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 					
 					this.initCount = 0;
 					
+					// Destroy the container so we don't double up on caches etc.
 					destroy();
 					
 					init = true;
@@ -215,13 +220,14 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#init(android.content.Context, com.socialize.android.ioc.IOCContainer)
 	 */
 	@Override
-	public void init(Context context, final IOCContainer container) {
+	public synchronized void init(Context context, final IOCContainer container) {
 		if(!isInitialized()) {
 			try {
 				this.container = container;
 				this.service = container.getBean("socializeApiHost");
 				this.logger = container.getBean("logger");
 				this.authProviderDataFactory = container.getBean("authProviderDataFactory");
+				this.asserter = container.getBean("initializationAsserter");
 				this.initCount++;
 				
 				ActivityIOCProvider.getInstance().setContainer(container);
@@ -261,7 +267,9 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			}
 		}
 		finally {
-			service.clearSessionCache();
+			if(service != null) {
+				service.clearSessionCache();
+			}
 		}
 	}
 
@@ -292,6 +300,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			}
 			
 			initCount = 0;
+			initPaths = null;
 		}
 		else {
 			destroy();
@@ -309,40 +318,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		data.setAppId3rdParty(authProviderAppId);
 		authenticate(consumerKey, consumerSecret, data, authListener, true);
 	}
-
-//	@Override
-//	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProviderType, SocializeAuthListener authListener) {
-//		if(authProviderType.equals(AuthProviderType.FACEBOOK)) {
-//			// Use the default app id from config
-//			String appId = getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
-//			
-//			if(!StringUtils.isEmpty(appId)) {
-//				authenticate(consumerKey, consumerSecret, authProviderType, appId, authListener);
-//			}
-//			else {
-//				if(logger != null) {
-//					logger.warn("No app ID found in config for auth provider [" +
-//							authProviderType.name() +
-//							"].  Authenticating anonymously");
-//				}
-//				// Anonymous
-//				authenticate(consumerKey, consumerSecret, authListener);	
-//			}
-//		}
-//		else if(authProviderType.equals(AuthProviderType.SOCIALIZE)) {
-//			// Anonymous
-//			authenticate(consumerKey, consumerSecret, authListener);
-//		}
-//		else {
-//			if(logger != null) {
-//				logger.warn("Unrecognized auth provider [" +
-//						authProviderType.name() +
-//						"].  Authenticating anonymously");
-//			}
-//			// Anonymous
-//			authenticate(consumerKey, consumerSecret, authListener);
-//		}
-//	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#authenticate(java.lang.String, java.lang.String, com.socialize.listener.SocializeAuthListener)
@@ -390,22 +365,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 	
-//	@Deprecated
-//	private void authenticate(
-//			String consumerKey, 
-//			String consumerSecret, 
-//			String authUserId3rdParty, 
-//			String authToken3rdParty, 
-//			AuthProviderType authProvider, 
-//			String appId3rdParty,
-//			SocializeAuthListener authListener, 
-//			boolean do3rdPartyAuth) {
-//		
-//		if(assertInitialized(authListener)) {
-//			service.authenticate(consumerKey, consumerSecret, authUserId3rdParty, authToken3rdParty, authProvider, appId3rdParty, authListener, this, do3rdPartyAuth);
-//		}
-//	}
-	
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#addComment(java.lang.String, java.lang.String, android.location.Location, com.socialize.listener.comment.CommentAddListener)
@@ -445,6 +404,19 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 	
+	
+	@Override
+	public void share(String url, String text, ShareType shareType, ShareAddListener shareAddListener) {
+		share(url, text, shareType, null, shareAddListener);
+	}
+	
+	@Override
+	public void share(String url, String text, ShareType shareType, Location location, ShareAddListener shareAddListener) {
+		if(assertAuthenticated(shareAddListener)) {
+			service.addShare(session, url, text, shareType, location, shareAddListener);
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#view(java.lang.String, com.socialize.listener.view.ViewAddListener)
@@ -469,7 +441,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#deleteLike(int, com.socialize.listener.like.LikeDeleteListener)
 	 */
 	@Override
-	public void unlike(int id, LikeDeleteListener likeDeleteListener) {
+	public void unlike(long id, LikeDeleteListener likeDeleteListener) {
 		if(assertAuthenticated(likeDeleteListener)) {
 			service.deleteLike(session, id, likeDeleteListener);
 		}
@@ -491,7 +463,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @param id The ID of the like
 	 * @param likeGetListener A listener to handle callbacks from the get.
 	 */
-	public void getLikeById(int id, LikeGetListener likeGetListener) {
+	public void getLikeById(long id, LikeGetListener likeGetListener) {
 		if(assertAuthenticated(likeGetListener)) {
 			service.getLike(session, id, likeGetListener);
 		}
@@ -536,12 +508,21 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#getUser(int, com.socialize.listener.user.UserGetListener)
 	 */
 	@Override
-	public void getUser(int id, UserGetListener listener) {
+	public void getUser(long id, UserGetListener listener) {
 		if(assertAuthenticated(listener)) {
 			service.getUser(session, id, listener);
 		}
 	}
 	
+	
+	
+	@Override
+	public void saveCurrentUserProfile(Context context, UserProfile profile, UserSaveListener listener) {
+		if(assertAuthenticated(listener)) {
+			service.saveUserProfile(context, session, profile, listener);
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#saveCurrentUserProfile(android.content.Context, java.lang.String, java.lang.String, java.lang.String, com.socialize.listener.user.UserSaveListener)
@@ -585,29 +566,28 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			service.listCommentsByEntity(session, url, startIndex, endIndex, commentListListener);
 		}
 	}
-	
-	
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#listActivityByUser(int, com.socialize.listener.activity.ActivityListListener)
-	 */
-	@Override
-	public void listActivityByUser(int userId, ActivityListListener activityListListener) {
-		if(assertAuthenticated(activityListListener)) {
-			service.listActivityByUser(session, userId, activityListListener);
-		}
-	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#listActivityByUser(int, int, int, com.socialize.listener.activity.ActivityListListener)
-	 */
-	@Override
-	public void listActivityByUser(int userId, int startIndex, int endIndex, ActivityListListener activityListListener) {
-		if(assertAuthenticated(activityListListener)) {
-			service.listActivityByUser(session, userId, startIndex, endIndex, activityListListener);
-		}
-	}
+//	/*
+//	 * (non-Javadoc)
+//	 * @see com.socialize.SocializeService#listActivityByUser(int, com.socialize.listener.activity.ActivityListListener)
+//	 */
+//	@Override
+//	public void listActivityByUser(int userId, ActivityListListener activityListListener) {
+//		if(assertAuthenticated(activityListListener)) {
+//			service.listActivityByUser(session, userId, activityListListener);
+//		}
+//	}
+//
+//	/*
+//	 * (non-Javadoc)
+//	 * @see com.socialize.SocializeService#listActivityByUser(int, int, int, com.socialize.listener.activity.ActivityListListener)
+//	 */
+//	@Override
+//	public void listActivityByUser(int userId, int startIndex, int endIndex, ActivityListListener activityListListener) {
+//		if(assertAuthenticated(activityListListener)) {
+//			service.listActivityByUser(session, userId, startIndex, endIndex, activityListListener);
+//		}
+//	}
 
 	/**
 	 * Lists the comments by comment ID.
@@ -626,7 +606,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#getCommentById(int, com.socialize.listener.comment.CommentGetListener)
 	 */
 	@Override
-	public void getCommentById(int id, CommentGetListener commentGetListener) {
+	public void getCommentById(long id, CommentGetListener commentGetListener) {
 		if(assertAuthenticated(commentGetListener)) {
 			service.getComment(session, id, commentGetListener);
 		}
@@ -673,7 +653,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		return false;
 	}
 
-	private boolean assertAuthenticated(SocializeListener listener) {
+	protected boolean assertAuthenticated(SocializeListener listener) {
+		if(asserter != null) {
+			return asserter.assertAuthenticated(this, session, listener);
+		}
 		if(assertInitialized(listener)) {
 			if(session != null) {
 				return true;
@@ -694,7 +677,11 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		return false;
 	}
 	
-	private boolean assertInitialized(SocializeListener listener) {
+	protected boolean assertInitialized(SocializeListener listener) {
+		if(asserter != null) {
+			return asserter.assertInitialized(this, listener);
+		}
+		
 		if(!isInitialized()) {
 			if(listener != null) {
 				if(logger != null) {
@@ -706,7 +693,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			}
 			if(logger != null) logger.error(SocializeLogger.NOT_INITIALIZED);
 		}
-		return isInitialized();
+		
+		return isInitialized();		
 	}
 
 	/* (non-Javadoc)
@@ -816,4 +804,12 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			}
 		}
 	};
+	
+	/**
+	 * EXPERT ONLY (Not documented)
+	 * @return
+	 */
+	IOCContainer getContainer() {
+		return container;
+	}
 }

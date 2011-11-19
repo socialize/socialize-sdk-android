@@ -349,18 +349,27 @@ public class BeanBuilder {
 			Set<?> asColl = (Set<?>) arg;
 
 			if(asColl.size() > 0) {
-				ParameterizedType parType = (ParameterizedType) genericParams[index];
 				
-				Type actualType = parType.getActualTypeArguments()[0];
-				Class<?> componentType = asColl.iterator().next().getClass();
+				Type type = genericParams[index];
 				
-				Class<?> actualClass = getGenericParameterClass(actualType);
+				if(type instanceof ParameterizedType) {
+					ParameterizedType parType = (ParameterizedType) genericParams[index];
+					
+					Type actualType = parType.getActualTypeArguments()[0];
+					Class<?> componentType = asColl.iterator().next().getClass();
+					
+					Class<?> actualClass = getGenericParameterClass(actualType);
 
-				if(strict) {
-					return actualClass.equals(componentType);
+					if(strict) {
+						return actualClass.equals(componentType);
+					}
+					else {
+						return actualClass.isAssignableFrom(componentType);
+					}
 				}
-				else {
-					return actualClass.isAssignableFrom(componentType);
+				else{
+					// Assume we're ok
+					return true;
 				}
 			}
 			else {
@@ -378,28 +387,37 @@ public class BeanBuilder {
 			
 			if(asMap.size() > 0) {
 				
-				ParameterizedType parType = (ParameterizedType) genericParams[index];
 				
-				Type keyType = parType.getActualTypeArguments()[0];
-				Type valType = parType.getActualTypeArguments()[1];
+				Type type = genericParams[index];
 				
-				Class<?> keyClass = getGenericParameterClass(keyType);
-				Class<?> valClass = getGenericParameterClass(valType);
-				
-				Object key = asMap.keySet().iterator().next();
-				Object value = asMap.get(key);
-				
-				if(keyClass != null && valClass != null) {
+				if(type instanceof ParameterizedType) {
+					ParameterizedType parType = (ParameterizedType) genericParams[index];
 					
-					if(strict) {
-						return (keyClass.equals(key.getClass()) && valClass.equals(value.getClass()));
+					Type keyType = parType.getActualTypeArguments()[0];
+					Type valType = parType.getActualTypeArguments()[1];
+					
+					Class<?> keyClass = getGenericParameterClass(keyType);
+					Class<?> valClass = getGenericParameterClass(valType);
+					
+					Object key = asMap.keySet().iterator().next();
+					Object value = asMap.get(key);
+					
+					if(keyClass != null && valClass != null) {
+						
+						if(strict) {
+							return (keyClass.equals(key.getClass()) && valClass.equals(value.getClass()));
+						}
+						else {
+							return (keyClass.isAssignableFrom(key.getClass()) && valClass.isAssignableFrom(value.getClass()));
+						}
 					}
 					else {
-						return (keyClass.isAssignableFrom(key.getClass()) && valClass.isAssignableFrom(value.getClass()));
+						return (keyType.equals(key.getClass()) && valType.equals(value.getClass())) ;
 					}
 				}
 				else {
-					return (keyType.equals(key.getClass()) && valType.equals(value.getClass())) ;
+					// Assume we're ok
+					return true;
 				}
 			}
 			else {
