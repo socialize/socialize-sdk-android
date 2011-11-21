@@ -44,6 +44,7 @@ public class FacebookAuthProvider implements AuthProvider {
 	private ListenerHolder holder; // This is a singleton
 	private SocializeLogger logger;
 	private Drawables drawables;
+	private FacebookSessionStore facebookSessionStore;
 	
 	public FacebookAuthProvider() {
 		super();
@@ -95,7 +96,7 @@ public class FacebookAuthProvider implements AuthProvider {
 	}
 
 	@Override
-	public void clearCache(String appId) {
+	public void clearCache(Context context, String appId) {
 		Facebook mFacebook = getFacebook(appId);
 		
 		try {
@@ -107,6 +108,11 @@ public class FacebookAuthProvider implements AuthProvider {
 			}
 			else {
 				e.printStackTrace();
+			}
+		}
+		finally {
+			if(facebookSessionStore != null) {
+				facebookSessionStore.clear(context);
 			}
 		}
 	}
@@ -126,4 +132,10 @@ public class FacebookAuthProvider implements AuthProvider {
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
 	}
+
+	public void setFacebookSessionStore(FacebookSessionStore facebookSessionStore) {
+		this.facebookSessionStore = facebookSessionStore;
+	}
+	
+	
 }

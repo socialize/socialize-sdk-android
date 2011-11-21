@@ -75,6 +75,10 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		provider.clearSession();
 	}
 	
+	public void clearSession(AuthProviderType type) {
+		provider.clearSession(type);
+	}
+	
 	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderData data) throws SocializeException {
 		return provider.loadSession(endpoint, key, secret, data);
 	}

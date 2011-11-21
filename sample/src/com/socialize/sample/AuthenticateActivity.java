@@ -152,7 +152,7 @@ public class AuthenticateActivity extends SocializeActivity {
 
 			btnClearAuth.setOnClickListener(new OnClickListener() {
 				@Override
-				public void onClick(View v) {
+				public void onClick(final View v) {
 					
 					final ProgressDialog progress = ProgressDialog.show(AuthenticateActivity.this, "Clearing Cache", "Please wait...");
 					txtAuthResult.setText("");
@@ -162,7 +162,7 @@ public class AuthenticateActivity extends SocializeActivity {
 						@Override
 						protected Void doInBackground(Void... params) {
 							
-							Socialize.getSocialize().clearSessionCache();
+							Socialize.getSocialize().clearSessionCache(v.getContext());
 							return null;
 						}
 

@@ -21,6 +21,8 @@
  */
 package com.socialize.auth;
 
+import android.content.Context;
+
 import com.socialize.api.SocializeAuthRequest;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.AuthProviderListener;
@@ -43,5 +45,5 @@ public interface AuthProvider {
 	/**
 	 * Clears any cached data for this provider.
 	 */
-	public void clearCache(String appId);
+	public void clearCache(Context context, String appId);
 }

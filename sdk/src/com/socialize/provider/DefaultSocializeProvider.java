@@ -43,7 +43,6 @@ import com.socialize.api.SocializeSessionPersister;
 import com.socialize.api.WritableSession;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.facebook.FacebookSessionStore;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.ActionError;
 import com.socialize.entity.ListResult;
@@ -86,7 +85,7 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	private SocializeConfig config;
 	private Context context;
 	
-	private FacebookSessionStore facebookSessionStore;
+//	private FacebookSessionStore facebookSessionStore;
 	
 	public DefaultSocializeProvider() {
 		super();
@@ -136,10 +135,6 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		this.sessionFactory = sessionFactory;
 	}
 	
-	public void setFacebookSessionStore(FacebookSessionStore facebookSessionStore) {
-		this.facebookSessionStore = facebookSessionStore;
-	}
-
 	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException {
 		return authenticate(endpoint, key, secret, authProviderDataFactory.getBean(), uuid);
@@ -195,6 +190,15 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		return null;
 	}
 	
+	
+	
+	@Override
+	public void clearSession(AuthProviderType type) {
+		if(sessionPersister != null) {
+			sessionPersister.delete(context, type);
+		}
+	}
+
 	@Override
 	public void clearSession() {
 		if(sessionPersister != null) {
@@ -202,9 +206,9 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		}
 		
 		// TODO: this should be in the auth provider for FB!
-		if(facebookSessionStore != null) {
-			facebookSessionStore.clear(context);
-		}
+//		if(facebookSessionStore != null) {
+//			facebookSessionStore.clear(context);
+//		}
 	}
 
 	@Override

@@ -183,7 +183,10 @@ public class ProfileLayoutView extends BaseView {
 		
 		User currentUser = userService.getCurrentUser();
 		
+		content.setCurrentUser(currentUser);
+		
 		if(currentUser != null && currentUser.getId().equals(user.getId())) {
+			content.setLoggedOnUser(true);
 			content.setUserDisplayName(user.getDisplayName());
 			content.getEditButton().setVisibility(View.VISIBLE);
 			
@@ -193,8 +196,11 @@ public class ProfileLayoutView extends BaseView {
 				content.getAutoPostFacebook().setVisibility(View.VISIBLE);
 				content.getAutoPostFacebook().setChecked(user.isAutoPostToFacebook());
 			}
+			
+			content.onFacebookChanged();
 		}
 		else {
+			content.setLoggedOnUser(false);
 			content.getDisplayNameEdit().setVisibility(View.GONE);
 			content.getEditButton().setVisibility(View.GONE);
 			content.getFacebookSignOutButton().setVisibility(View.GONE);

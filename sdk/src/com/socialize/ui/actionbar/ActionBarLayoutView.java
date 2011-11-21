@@ -82,8 +82,9 @@ public class ActionBarLayoutView extends BaseView {
 	private DeviceUtils deviceUtils;
 	
 	private FacebookWallPoster facebookWallPoster;
-//	private ShareDialogFactory shareDialogFactory;
 	private ActionBarView actionBarView;
+	
+	final String loadingText = "...";
 	
 	private OnActionBarEventListener onActionBarEventListener;
 	
@@ -201,12 +202,12 @@ public class ActionBarLayoutView extends BaseView {
 		commentButton.init(commentWidth, 0.0f);
 		shareButton.init(shareWidth, 0.0f);
 		
-		viewsItem.setText("--");
-		commentsItem.setText("--");
-		likesItem.setText("--");
-		sharesItem.setText("--");
+		viewsItem.setText(loadingText);
+		commentsItem.setText(loadingText);
+		likesItem.setText(loadingText);
+		sharesItem.setText(loadingText);
 		
-		likeButton.setText("--");
+		likeButton.setText(loadingText);
 		shareButton.setText("Share");
 		commentButton.setText("Comment");
 		
@@ -263,11 +264,11 @@ public class ActionBarLayoutView extends BaseView {
 		
 		ticker.resetTicker();
 		
-		viewsItem.setText("--");
-		commentsItem.setText("--");
-		likesItem.setText("--");
-		sharesItem.setText("--");
-		likeButton.setText("--");
+		viewsItem.setText(loadingText);
+		commentsItem.setText(loadingText);
+		likesItem.setText(loadingText);
+		sharesItem.setText(loadingText);
+		likeButton.setText(loadingText);
 		
 		if(onActionBarEventListener != null) {
 			onActionBarEventListener.onUpdate(actionBarView);

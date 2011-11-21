@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.content.Context;
+
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.android.ioc.IBeanFactory;
@@ -257,7 +259,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public void clearCache(String appId) {
+			public void clearCache(Context context, String appId) {
 				fail();
 			}
 		};
@@ -345,7 +347,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 				addResult(listener);
 			}
 			@Override
-			public void clearCache(String appId) {
+			public void clearCache(Context context, String appId) {
 				fail();
 			}
 		};

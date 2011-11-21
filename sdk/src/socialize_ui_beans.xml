@@ -283,6 +283,17 @@
 	</bean>
 	
 	<bean 
+		id="facebookSignInButtonSmall" 
+		class="com.socialize.ui.facebook.FacebookButton"		
+		singleton="false"
+		extends="facebookSignInButton">
+		<constructor-arg type="activity"/>
+		<property name="height" value="36" type="integer"/>
+		<property name="width" value="150" type="integer"/>
+		<property name="textSize" value="11" type="integer"/>
+	</bean>	
+	
+	<bean 
 		id="facebookSignOutButton" 
 		singleton="false"
 		extends="socializeButton">
@@ -530,6 +541,7 @@
 		<property name="profileSaveButtonFactory" ref="profileSaveButtonFactory"/>
 		<property name="profileEditButtonFactory" ref="profileEditButtonFactory"/>	
 		<property name="facebookSignOutButtonFactory" ref="facebookSignOutButtonFactory"/>
+		<property name="facebookSignInButtonFactory" ref="facebookSignInButtonFactory"/>
 		<property name="facebookSignOutClickListenerFactory" ref="facebookSignOutClickListenerFactory"/>
 		<property name="profileSaveButtonListenerFactory" ref="profileSaveButtonListenerFactory"/>	
 		<property name="profileImageContextMenuFactory" ref="profileImageContextMenuFactory"/>	
@@ -602,6 +614,7 @@
 	<factory id="profileSaveButtonFactory" makes="profileSaveButton"/>
 	<factory id="profileEditButtonFactory" makes="profileEditButton"/>
 	<factory id="facebookSignOutButtonFactory" makes="facebookSignOutButton"/>
+	<factory id="facebookSignInButtonFactory" makes="facebookSignInButtonSmall"/>
 	<factory id="facebookSignOutClickListenerFactory" makes="facebookSignOutClickListener"/>
 	<factory id="profileSaveButtonListenerFactory" makes="profileSaveButtonListener"/>
 	<factory id="profileImageContextMenuFactory" makes="profileImageContextMenu"/>

@@ -74,6 +74,9 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 	public void clearSession() {}
 	
 	@Override
+	public void clearSession(AuthProviderType type) {}
+
+	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException {
 		return new SocializeSessionImpl();
 	}

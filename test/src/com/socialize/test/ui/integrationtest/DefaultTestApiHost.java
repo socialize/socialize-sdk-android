@@ -9,6 +9,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderData;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.activity.ActivityListener;
 import com.socialize.listener.comment.CommentListener;
@@ -21,6 +22,13 @@ import com.socialize.listener.view.ViewListener;
 public class DefaultTestApiHost implements ApiHost {
 	
 	static String message = "Unexpected call to ";
+
+	
+	
+	@Override
+	public void clearSessionCache(AuthProviderType authProviderType) {
+		fail(message + "clearSessionCache (authProviderType)");
+	}
 
 	@Override
 	public void clearSessionCache() {

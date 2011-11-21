@@ -76,6 +76,21 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 			}
 		}
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.SocializeSessionPersister#delete(android.content.Context, com.socialize.auth.AuthProviderType)
+	 */
+	@Override
+	public void delete(Context context, AuthProviderType type) {
+		// TODO: this should be by type
+		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+		Editor editor = prefs.edit();
+		editor.remove("3rd_party_userid");
+		editor.remove("3rd_party_token");
+		editor.putInt("3rd_party_type", AuthProviderType.SOCIALIZE.getId());
+		editor.commit();
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.api.SocializeSessionPersister#save(android.content.Context, com.socialize.api.SocializeSession)

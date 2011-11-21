@@ -247,20 +247,35 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	}
 	
 	@Override
-	public void clear3rdPartySession(AuthProviderType type) {
+	public void clear3rdPartySession(Context context, AuthProviderType type) {
 		// TODO: implement for specific/multiple provider types.
-		clearSessionCache();
+		try {
+			if(session != null) {
+				AuthProvider authProvider = session.getAuthProvider();
+				String get3rdPartyAppId = session.get3rdPartyAppId();
+				if(authProvider != null && !StringUtils.isEmpty(get3rdPartyAppId)) {
+					authProvider.clearCache(context, get3rdPartyAppId);
+				}
+				
+				session.clear(type);
+			}
+		}
+		finally {
+			if(service != null) {
+				service.clearSessionCache(type);
+			}
+		}
 	}
 
 	@Override
-	public void clearSessionCache() {
+	public void clearSessionCache(Context context) {
 		try {
 			if(session != null) {
 				AuthProvider authProvider = session.getAuthProvider();
 				String get3rdPartyAppId = session.get3rdPartyAppId();
 				
 				if(authProvider != null && !StringUtils.isEmpty(get3rdPartyAppId)) {
-					authProvider.clearCache(get3rdPartyAppId);
+					authProvider.clearCache(context, get3rdPartyAppId);
 				}
 				
 				session = null;

@@ -52,5 +52,7 @@ public interface SocializeSession {
 	public AuthProviderType getAuthProviderType();
 	
 	public AuthProvider getAuthProvider();
+	
+	public void clear(AuthProviderType type);
 
 }

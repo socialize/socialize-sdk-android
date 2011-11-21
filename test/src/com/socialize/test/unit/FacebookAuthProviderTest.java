@@ -125,7 +125,7 @@ public class FacebookAuthProviderTest extends SocializeUnitTest {
 		
 		facebookAuthProvider.init(getContext(), null);
 		
-		facebookAuthProvider.clearCache(appId);
+		facebookAuthProvider.clearCache(getContext(), appId);
 		
 		AndroidMock.verify(facebook);
 	}

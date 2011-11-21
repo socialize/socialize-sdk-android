@@ -26,6 +26,7 @@ import android.location.Location;
 
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderData;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.activity.ActivityListener;
 import com.socialize.listener.comment.CommentListener;
@@ -41,6 +42,8 @@ import com.socialize.listener.view.ViewListener;
  */
 public interface ApiHost {
 
+	public void clearSessionCache(AuthProviderType authProviderType);
+	
 	public void clearSessionCache();
 
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer);
