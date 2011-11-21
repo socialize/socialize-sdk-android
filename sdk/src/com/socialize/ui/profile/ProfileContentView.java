@@ -52,6 +52,7 @@ public class ProfileContentView extends BaseView {
 	private EditText displayNameEdit;
 	private AutoPostFacebookOption autoPostFacebook;
 	private SocializeButton facebookSignOutButton;
+	private SocializeButton facebookSignInButton;
 	
 	private SocializeButton editButton;
 	private SocializeButton saveButton;
@@ -64,6 +65,8 @@ public class ProfileContentView extends BaseView {
 	private SafeBitmapDrawable originalProfileDrawable;
 	private Drawables drawables;
 	
+	private User currentUser;
+	private boolean isLoggedOnUser = false;
 	private Bitmap tmpProfileImage;
 	
 	private boolean editMode = false;
@@ -113,6 +116,10 @@ public class ProfileContentView extends BaseView {
 		this.facebookSignOutButton = facebookSignOutButton;
 	}
 	
+	public void setFacebookSignInButton(SocializeButton facebookSignInButton) {
+		this.facebookSignInButton = facebookSignInButton;
+	}
+
 	public void setUserDisplayName(String name) {
 		this.userDisplayName = name;
 		revertUserDisplayName();
@@ -159,6 +166,26 @@ public class ProfileContentView extends BaseView {
 		this.drawables = drawables;
 	}
 	
+	public void onFacebookChanged() {
+		if(SocializeUI.getInstance().isFacebookSupported() && isLoggedOnUser) {
+			if(Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+				facebookSignOutButton.setVisibility(View.VISIBLE);
+				facebookSignInButton.setVisibility(View.GONE);
+				autoPostFacebook.setVisibility(View.VISIBLE);
+			}
+			else {
+				facebookSignOutButton.setVisibility(View.GONE);
+				facebookSignInButton.setVisibility(View.VISIBLE);
+				autoPostFacebook.setVisibility(View.GONE);
+			}
+		}
+		else {
+			facebookSignOutButton.setVisibility(View.GONE);
+			facebookSignInButton.setVisibility(View.GONE);
+			autoPostFacebook.setVisibility(View.GONE);
+		}
+	}
+	
 	public void onProfilePictureChange(Bitmap bitmap) {
 		if(bitmap != null) {
 			if(tmpProfileImage != null && !tmpProfileImage.isRecycled()) {
@@ -203,14 +230,37 @@ public class ProfileContentView extends BaseView {
 		return autoPostFacebook;
 	}
 
+	@Override
+	protected void onViewLoad() {
+		super.onViewLoad();
+		onFacebookChanged();
+	}
+
+	public User getCurrentUser() {
+		return currentUser;
+	}
+
+	public void setCurrentUser(User currentUser) {
+		this.currentUser = currentUser;
+	}
+
+	public boolean isLoggedOnUser() {
+		return isLoggedOnUser;
+	}
+
+	public void setLoggedOnUser(boolean isLoggedOnUser) {
+		this.isLoggedOnUser = isLoggedOnUser;
+	}
+
 	/**
 	 * Called when this control is instructed to enter "edit" mode.
 	 */
 	public void onEdit() {
-		if(profileDrawable != null) {
+		if(profileDrawable != null && isLoggedOnUser) {
 			displayName.setVisibility(View.GONE);
 			editButton.setVisibility(View.GONE);
 			facebookSignOutButton.setVisibility(View.GONE);
+			facebookSignInButton.setVisibility(View.GONE);
 			
 			displayNameEdit.setVisibility(View.VISIBLE);
 			saveButton.setVisibility(View.VISIBLE);
@@ -239,16 +289,13 @@ public class ProfileContentView extends BaseView {
 		saveButton.setVisibility(View.GONE);
 		cancelButton.setVisibility(View.GONE);
 		displayName.setVisibility(View.VISIBLE);
-		editButton.setVisibility(View.VISIBLE);
 		
-		
-		if(SocializeUI.getInstance().isFacebookSupported() &&
-				Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-			facebookSignOutButton.setVisibility(View.VISIBLE);
-			facebookSignOutButton.setVisibility(View.VISIBLE);
+		if(isLoggedOnUser) {
+			editButton.setVisibility(View.VISIBLE);
 		}
-	
 		
+		onFacebookChanged();
+	
 		if(tmpProfileImage != null && !tmpProfileImage.isRecycled()) {
 			tmpProfileImage.recycle();
 			tmpProfileImage = null;
@@ -275,13 +322,12 @@ public class ProfileContentView extends BaseView {
 		saveButton.setVisibility(View.GONE);
 		cancelButton.setVisibility(View.GONE);
 		displayName.setVisibility(View.VISIBLE);
-		editButton.setVisibility(View.VISIBLE);
 		
-		if(SocializeUI.getInstance().isFacebookSupported() &&
-				Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-			facebookSignOutButton.setVisibility(View.VISIBLE);
-			facebookSignOutButton.setVisibility(View.VISIBLE);
-		}
+		if(isLoggedOnUser) {
+			editButton.setVisibility(View.VISIBLE);
+		}		
+		
+		onFacebookChanged();
 		
 		profileDrawable.setAlpha(255);
 		

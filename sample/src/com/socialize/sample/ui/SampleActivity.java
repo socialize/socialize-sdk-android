@@ -57,7 +57,7 @@ public class SampleActivity extends Activity {
 					protected Void doInBackground(Void... params) {
 						try {
 							Socialize.getSocialize().init(SampleActivity.this);
-							Socialize.getSocialize().clearSessionCache();
+							Socialize.getSocialize().clearSessionCache(SampleActivity.this);
 						} 
 						finally {
 							Socialize.getSocialize().destroy();

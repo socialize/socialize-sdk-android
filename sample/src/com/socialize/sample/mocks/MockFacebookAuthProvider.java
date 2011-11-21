@@ -1,5 +1,7 @@
 package com.socialize.sample.mocks;
 
+import android.content.Context;
+
 import com.socialize.api.SocializeAuthRequest;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderResponse;
@@ -27,7 +29,7 @@ public class MockFacebookAuthProvider implements AuthProvider {
 	}
 
 	@Override
-	public void clearCache(String appId) {}
+	public void clearCache(Context context, String appId) {}
 
 	public void setConfig(SocializeConfig config) {
 		this.config = config;

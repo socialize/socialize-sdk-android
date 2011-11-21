@@ -43,10 +43,19 @@ public class SocializeSessionImpl implements WritableSession {
 	private AuthProviderType authProviderType;
 	private AuthProvider authProvider;
 	
+	
 	public SocializeSessionImpl() {
 		super();
 	}
 	
+	@Override
+	public void clear(AuthProviderType type) {
+		token3rdParty = null;
+		userId3rdParty = null;
+		authProviderType = AuthProviderType.SOCIALIZE;
+		authProvider = null;
+	}
+
 	@Override
 	public String get3rdPartyUserId() {
 		return userId3rdParty;

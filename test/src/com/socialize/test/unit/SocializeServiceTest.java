@@ -870,7 +870,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		AndroidMock.expect(session.getAuthProvider()).andReturn(authProvider);
 		AndroidMock.expect(session.get3rdPartyAppId()).andReturn(get3rdPartyAppId);
 		
-		authProvider.clearCache(get3rdPartyAppId);
+		authProvider.clearCache(getContext(), get3rdPartyAppId);
 		service.clearSessionCache();
 		
 		replayDefaultMocks();
@@ -881,7 +881,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		socialize.setSession(session);
 		socialize.init(getContext(), container);
 		
-		socialize.clearSessionCache();
+		socialize.clearSessionCache(getContext());
 		
 		AndroidMock.verify(authProvider);
 		

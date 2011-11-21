@@ -62,6 +62,8 @@ public interface SocializeProvider<T> {
 	
 	public void clearSession();
 	
+	public void clearSession(AuthProviderType type);
+	
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException;
 
 	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException;

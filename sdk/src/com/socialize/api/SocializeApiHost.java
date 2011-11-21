@@ -87,6 +87,14 @@ public class SocializeApiHost implements ApiHost {
 		userApi.clearSession();
 	}
 	
+	
+	@Override
+	public void clearSessionCache(AuthProviderType authProviderType) {
+		userApi.clearSession(authProviderType);
+		
+		
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.api.ApiHost#authenticate(java.lang.String, java.lang.String, com.socialize.listener.SocializeAuthListener, com.socialize.api.SocializeSessionConsumer)
 	 */

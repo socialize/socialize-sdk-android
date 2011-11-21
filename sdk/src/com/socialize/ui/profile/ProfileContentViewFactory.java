@@ -42,7 +42,11 @@ import android.widget.TextView;
 
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.api.SocializeSession;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
 import com.socialize.ui.button.SocializeButton;
+import com.socialize.ui.facebook.FacebookButton;
 import com.socialize.ui.facebook.FacebookSignOutClickListener;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.view.BaseViewFactory;
@@ -57,6 +61,7 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 	private IBeanFactory<SocializeButton> profileSaveButtonFactory;
 	private IBeanFactory<SocializeButton> profileEditButtonFactory;
 	private IBeanFactory<SocializeButton> facebookSignOutButtonFactory;
+	private IBeanFactory<FacebookButton> facebookSignInButtonFactory;
 	private IBeanFactory<ProfileSaveButtonListener> profileSaveButtonListenerFactory;
 	private IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory;
 	private IBeanFactory<ProfileImageContextMenu> profileImageContextMenuFactory;
@@ -164,6 +169,8 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		final SocializeButton saveButton = profileSaveButtonFactory.getBean();
 		final SocializeButton cancelButton = profileCancelButtonFactory.getBean();
 		final SocializeButton facebookSignOutButton = facebookSignOutButtonFactory.getBean();
+		final FacebookButton facebookSignInButton = facebookSignInButtonFactory.getBean();
+		
 		final ProfileSaveButtonListener saveListener = profileSaveButtonListenerFactory.getBean(context, view);
 		
 		FacebookSignOutClickListener facebookSignOutClickListener = facebookSignOutClickListenerFactory.getBean();
@@ -172,6 +179,7 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		cancelButton.setVisibility(View.GONE);
 		editButton.setVisibility(View.GONE);
 		facebookSignOutButton.setVisibility(View.GONE);
+		facebookSignInButton.setVisibility(View.GONE);
 		checkBox.setVisibility(View.GONE);
 		
 		textLayout.setMargins(margin, 0, 0, 0);
@@ -218,6 +226,7 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		view.setDisplayName(displayName);
 		view.setDisplayNameEdit(displayNameEdit);
 		view.setFacebookSignOutButton(facebookSignOutButton);
+		view.setFacebookSignInButton(facebookSignInButton);
 		view.setSaveButton(saveButton);
 		view.setCancelButton(cancelButton);
 		view.setEditButton(editButton);
@@ -246,11 +255,33 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 		
 		saveButton.setOnClickListener(saveListener);
 		facebookSignOutButton.setOnClickListener(facebookSignOutClickListener);
+		facebookSignInButton.setAuthListener(new SocializeAuthListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				view.showError(view.getContext(), error);
+			}
+			
+			@Override
+			public void onCancel() { }
+			
+			@Override
+			public void onAuthSuccess(SocializeSession session) {
+				// Reload profile view
+				view.onFacebookChanged();
+			}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				view.showError(view.getContext(), error);
+			}
+		});
 		
 		nameLayout.addView(displayName);
 		nameLayout.addView(displayNameEdit);
-		nameLayout.addView(facebookSignOutButton);
 		nameLayout.addView(editButton);
+		nameLayout.addView(facebookSignOutButton);
+		nameLayout.addView(facebookSignInButton);
 		
 		buttonLayout.addView(cancelButton);
 		buttonLayout.addView(saveButton);
@@ -298,5 +329,9 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 
 	public void setFacebookSignOutClickListenerFactory(IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory) {
 		this.facebookSignOutClickListenerFactory = facebookSignOutClickListenerFactory;
+	}
+
+	public void setFacebookSignInButtonFactory(IBeanFactory<FacebookButton> facebookSignInButtonFactory) {
+		this.facebookSignInButtonFactory = facebookSignInButtonFactory;
 	}
 }

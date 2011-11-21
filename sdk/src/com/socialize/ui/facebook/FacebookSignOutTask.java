@@ -56,7 +56,7 @@ public class FacebookSignOutTask extends AsyncTask<Void, Void, Void> {
 	 */
 	@Override
 	protected Void doInBackground(Void... args) {
-		Socialize.getSocialize().clear3rdPartySession(AuthProviderType.FACEBOOK);
+		Socialize.getSocialize().clear3rdPartySession(context, AuthProviderType.FACEBOOK);
 		return null;
 	}
 

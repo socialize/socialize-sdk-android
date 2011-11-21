@@ -324,13 +324,13 @@ public interface SocializeService {
 	 * Clears the local cache of session data.  This will cause a full authenticate 
 	 * to be required upon the next call to the Socialize API.
 	 */
-	public void clearSessionCache();
+	public void clearSessionCache(Context context);
 	
 	/**
 	 * Clears the session of the given 3rd party auth data (logs out from Facebook/Twitter etc).
 	 * @param type
 	 */
-	public void clear3rdPartySession(AuthProviderType type);
+	public void clear3rdPartySession(Context context, AuthProviderType type);
 	
 //	/**
 //	 * Lists a user's activity.

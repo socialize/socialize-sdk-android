@@ -107,6 +107,8 @@ public class ShareDialogView extends BaseView {
 		
 		commentField.setGravity(Gravity.TOP | Gravity.LEFT);
 		
+		boolean landscape = false;
+		
 		if(deviceUtils.getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
 			setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
 			commentField.setLines(4);
@@ -128,6 +130,8 @@ public class ShareDialogView extends BaseView {
 		}
 		else {
 			setGravity(Gravity.TOP | Gravity.LEFT);
+			commentField.setLines(1);
+			landscape = true;
 		}
 		
 		commentField.setLayoutParams(commentFieldParams);
@@ -152,15 +156,22 @@ public class ShareDialogView extends BaseView {
 			buttonLayout.addView(smsShareButton);
 		}
 		
-		
-		addView(commentLabel);
-		addView(commentField);
-		addView(shareLabel);
-		addView(buttonLayout);
-		
-		if(otherOptions != null) {
-			addView(otherOptions);
-		}		
+		if(landscape) {
+			addView(shareLabel);
+			addView(buttonLayout);			
+			addView(commentLabel);
+			addView(commentField);
+		}
+		else {
+			addView(commentLabel);
+			addView(commentField);
+			addView(shareLabel);
+			addView(buttonLayout);
+			
+			if(otherOptions != null) {
+				addView(otherOptions);
+			}				
+		}
 	}
 
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
