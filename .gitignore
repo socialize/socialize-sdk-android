@@ -12,6 +12,10 @@ sample/sdk_src/
 sample/local.properties
 sample/assets/sample-app.conf
 sample/assets/socialize.properties
+simple-sample/local.properties
+simple-sample/bin
+simple-sample/gen
+simple-sample/.settings
 integration-test/bin
 integration-test/gen
 integration-test/.settings
