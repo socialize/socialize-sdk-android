@@ -12,6 +12,29 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v0.7.0
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+[bug] Images  are not scaled correctly for MDPI
+[feature] Socialize action bar (view,comment,like)
+[bug] Images don't always load on MDPI comment view
+[bug] FB Sign in button doesn't work after hitting back from the first time
+[feature] Developer can allow end users to Share entity using Facebook
+[feature] Add spinner to like
+[feature] Posting comments should auto post to FB
+[feature] Likes should auto post to FB wall
+[feature] Add share to ActionBar
+[feature] Developer can create a share (SDK)
+[bug] Comment list enters infinite loop when accessed from Action Bar
+[bug] User Agent is missing trailing semi colon
+[bug] Like button keeps spinning after a few successive hits
+[bug] Share is broken in action bar
+[feature] Add comment to share
+[bug] Facebook button should not appear in share window if FB not available
+[feature] User can change auto-post preferences
+[feature] Add comment screen
+[feature] SDK User can learn about new action bar features in documentation
+
 v0.6.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
