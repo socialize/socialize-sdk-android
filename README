@@ -4,13 +4,46 @@ Quick Start Guide
 
 1. Download the pre-packaged SDK ZIP file at https://github.com/socialize/socialize-sdk-android/downloads
 2. Unzip the SDK.
-3. Open the GettingStarted.html file located in the root of the ZIP.
+3. Open the read_me_first.html file located in the root of the ZIP.
 4. Integrate Socialize.
 5. Retire to a beach because your app is now so darn good.
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+v1.0
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+[feature] Add simple sample app to SDK download
+[feature] Camera icon on profile image edit is too small
+[bug] Crash if user attempts to edit profile before profile picture has loaded
+[bug] Share in landscape does not have enough room to display buttons
+[bug] Posting app link to FB doesn't include image icon
+[bug] After signing in or out of FB for the first time, the "edit profile" menu option takes you to the wrong user (the old one)
+
+v0.7.0
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+[bug] Images  are not scaled correctly for MDPI
+[feature] Socialize action bar (view,comment,like)
+[bug] Images don't always load on MDPI comment view
+[bug] FB Sign in button doesn't work after hitting back from the first time
+[feature] Developer can allow end users to Share entity using Facebook
+[feature] Add spinner to like
+[feature] Posting comments should auto post to FB
+[feature] Likes should auto post to FB wall
+[feature] Add share to ActionBar
+[feature] Developer can create a share (SDK)
+[bug] Comment list enters infinite loop when accessed from Action Bar
+[bug] User Agent is missing trailing semi colon
+[bug] Like button keeps spinning after a few successive hits
+[bug] Share is broken in action bar
+[feature] Add comment to share
+[bug] Facebook button should not appear in share window if FB not available
+[feature] User can change auto-post preferences
+[feature] Add comment screen
+[feature] SDK User can learn about new action bar features in documentation
 
 v0.6.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
