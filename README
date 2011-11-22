@@ -4,13 +4,23 @@ Quick Start Guide
 
 1. Download the pre-packaged SDK ZIP file at https://github.com/socialize/socialize-sdk-android/downloads
 2. Unzip the SDK.
-3. Open the GettingStarted.html file located in the root of the ZIP.
+3. Open the read_me_first.html file located in the root of the ZIP.
 4. Integrate Socialize.
 5. Retire to a beach because your app is now so darn good.
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+v1.0
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+[feature] Add simple sample app to SDK download
+[feature] Camera icon on profile image edit is too small
+[bug] Crash if user attempts to edit profile before profile picture has loaded
+[bug] Share in landscape does not have enough room to display buttons
+[bug] Posting app link to FB doesn't include image icon
+[bug] After signing in or out of FB for the first time, the "edit profile" menu option takes you to the wrong user (the old one)
 
 v0.7.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
