@@ -1,5 +1,7 @@
 package com.socialize.ui;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import android.app.Activity;
@@ -21,11 +23,14 @@ import com.socialize.android.ioc.IOCContainer;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
+import com.socialize.listener.SocializeListener;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.comment.CommentDetailActivity;
+import com.socialize.ui.comment.CommentView;
+import com.socialize.ui.comment.OnCommentViewActionListener;
 import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
@@ -43,6 +48,9 @@ public class SocializeUI {
 	public static final String DEFAULT_USER_ICON = "default_user_icon.png";
 	public static final String SOCIALIZE_LOGO = "socialize_logo.png";
 	public static final String BG_ACCENT = "bg_accent.png";
+	
+	
+	public static final Map<String, SocializeListener> STATIC_LISTENERS = new HashMap<String, SocializeListener>();
 	
 	private IOCContainer container;
 	private Drawables drawables;
@@ -203,6 +211,16 @@ public class SocializeUI {
 		}
 		
 		return null;
+	}
+	
+	public void showCommentView(Activity context, String url, String entityName, boolean entityKeyIsUrl, OnCommentViewActionListener listener) {
+		STATIC_LISTENERS.put(CommentView.COMMENT_LISTENER, listener);
+		showCommentView(context, url, entityName, entityKeyIsUrl);
+	}
+	
+	public void showCommentView(Activity context, String url, OnCommentViewActionListener listener) {
+		STATIC_LISTENERS.put(CommentView.COMMENT_LISTENER, listener);
+		showCommentView(context, url);
 	}
 
 	public void showCommentView(Activity context, String url) {

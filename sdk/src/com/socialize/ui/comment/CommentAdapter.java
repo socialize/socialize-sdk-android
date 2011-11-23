@@ -162,37 +162,43 @@ public class CommentAdapter extends BaseAdapter {
 				returnView = loadingView;
 			}
 			else {
-				final String imageUrl = user.getSmallImageUri();
 
 				if(item != null) {
-
-					String displayName = "";
-
-					displayName = user.getDisplayName();
 					
-					if(displayName == null) {
-						// Use the item user
-						displayName = item.getUser().getDisplayName();
-
+					String displayName = "";
+					String imageUrl = null;
+					
+					if(user != null) {
+						imageUrl = user.getSmallImageUri();
+						displayName = user.getDisplayName();
+						
 						if(displayName == null) {
-							displayName = "Anonymous";
-						}
-					}
+							// Use the item user
+							displayName = item.getUser().getDisplayName();
 
-					view.setOnClickListener(new OnClickListener() {
-
-						@Override
-						public void onClick(View v) {
-							if(user != null && user.getId() != null) {
-								getSocializeUI().showCommentDetailViewForResult(context, user.getId().toString(), item.getId().toString(), CommentActivity.PROFILE_UPDATE);
+							if(displayName == null) {
+								displayName = "Anonymous";
 							}
-							else {
-								if(logger != null) {
-									logger.warn("No user for comment " + item.getId());
+						}
+						
+						view.setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+								if(user != null && user.getId() != null) {
+									getSocializeUI().showCommentDetailViewForResult(context, user.getId().toString(), item.getId().toString(), CommentActivity.PROFILE_UPDATE);
+								}
+								else {
+									if(logger != null) {
+										logger.warn("No user for comment " + item.getId());
+									}
 								}
 							}
-						}
-					});
+						});						
+					}
+					else {
+						displayName = "Anonymous";
+					}
 
 					TextView comment = view.getComment();
 					TextView userName = view.getAuthor();

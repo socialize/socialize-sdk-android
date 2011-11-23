@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.socialize.android.ioc.IOCContainer;
+import com.socialize.listener.ListenerHolder;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.view.EntityView;
 
@@ -16,6 +17,9 @@ public class CommentView extends EntityView {
 	
 	private Dialog progress;
 	private CommentListView commentListView;
+	
+	public static final String COMMENT_LISTENER = "socialize.comment.listener";
+
 	
 	public CommentView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -28,9 +32,19 @@ public class CommentView extends EntityView {
 	@Override
 	protected View getView(Bundle bundle, Object...entityKey) {
 		if (entityKey != null) {
+			
+			// TODO: always create?
 			if(commentListView == null) {
 				commentListView = container.getBean("commentList", entityKey[0]);
+				
+				ListenerHolder holder  = container.getBean("listenerHolder");
+				
+				if(holder != null) {
+					OnCommentViewActionListener onCommentViewActionListener = holder.get(COMMENT_LISTENER);
+					commentListView.setOnCommentViewActionListener(onCommentViewActionListener);
+				}				
 			}
+			
 			return commentListView;
 		}
 		else {
@@ -38,7 +52,7 @@ public class CommentView extends EntityView {
 			return null;
 		}
 	}
-
+	
 	@Override
 	protected void onBeforeSocializeInit() {
 		try {

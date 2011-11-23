@@ -28,7 +28,6 @@ import java.util.List;
 import android.content.Context;
 
 import com.socialize.api.SocializeSession;
-import com.socialize.api.SocializeSessionImpl;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.ListResult;
@@ -36,6 +35,7 @@ import com.socialize.entity.SocializeObject;
 import com.socialize.entity.factory.SocializeObjectFactory;
 import com.socialize.error.SocializeException;
 import com.socialize.provider.SocializeProvider;
+import com.socialize.sample.mocks.MockSocializeSession;
 
 /**
  * Mock provider used to test sample app UI interaction without access the real API.
@@ -57,17 +57,17 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 	
 	@Override
 	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderData data) throws SocializeException {
-		return new SocializeSessionImpl();
+		return new MockSocializeSession();
 	}
 
 	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
-		return new SocializeSessionImpl();
+		return new MockSocializeSession();
 	}
 
 	@Override
 	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderType authProviderType, String appId3rdParty) throws SocializeException {
-		return new SocializeSessionImpl();
+		return new MockSocializeSession();
 	}
 
 	@Override
@@ -78,12 +78,12 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 
 	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException {
-		return new SocializeSessionImpl();
+		return new MockSocializeSession();
 	}
 	
 	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, String userId3rdParty, String token3rdParty, String appId3rdParty, AuthProviderType authProviderType, String uuid) throws SocializeException {
-		return new SocializeSessionImpl();
+		return new MockSocializeSession();
 	}
 	
 	@Override

@@ -248,7 +248,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		assertNotNull(commentScrollListener.getCallback());
 		
 		commentScrollListener.getCallback().onComment("foobar", false);
-		commentScrollListener.getCallback().onError(getContext(), new Exception("foobar_error"));
+		commentScrollListener.getCallback().onError(getContext(), new SocializeException("foobar_error"));
 		
 		AndroidMock.verify(authRequestDialogFactory);
 		AndroidMock.verify(authRequestDialog);
@@ -296,7 +296,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		assertNotNull(commentScrollListener.getCallback());
 		
 		commentScrollListener.getCallback().onComment("foobar", false);
-		commentScrollListener.getCallback().onError(getContext(), new Exception("foobar_error"));
+		commentScrollListener.getCallback().onError(getContext(), new SocializeException("foobar_error"));
 		
 		AndroidMock.verify(socializeService);
 		

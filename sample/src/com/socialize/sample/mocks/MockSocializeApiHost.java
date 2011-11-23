@@ -1,5 +1,7 @@
 package com.socialize.sample.mocks;
 
+import java.util.List;
+
 import android.location.Location;
 import android.util.Log;
 
@@ -9,13 +11,15 @@ import com.socialize.api.ApiHost;
 import com.socialize.api.SocializeApiHost;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
-import com.socialize.api.SocializeSessionImpl;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
+import com.socialize.entity.ListResult;
 import com.socialize.entity.Share;
+import com.socialize.entity.SocializeAction;
+import com.socialize.entity.SocializeObject;
 import com.socialize.entity.User;
 import com.socialize.entity.View;
 import com.socialize.error.SocializeApiError;
@@ -28,9 +32,12 @@ import com.socialize.listener.share.ShareListener;
 import com.socialize.listener.user.UserListener;
 import com.socialize.listener.view.ViewListener;
 
+
+@SuppressWarnings("unchecked")
 public class MockSocializeApiHost extends SocializeApiHost implements ContainerAware {
 
 	private ApiHost delegate;
+	public static ListResult<?> listResult;
 	
 	@Override
 	public void onCreate(Container container) {
@@ -44,13 +51,17 @@ public class MockSocializeApiHost extends SocializeApiHost implements ContainerA
 
 	@Override
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
-		listener.onAuthSuccess(new SocializeSessionImpl());
+		MockSocializeSession mockSocializeSession = new MockSocializeSession();
+		listener.onAuthSuccess(mockSocializeSession);
+		sessionConsumer.setSession(mockSocializeSession);
 		if(delegate != null) delegate.authenticate(consumerKey, consumerSecret, listener, sessionConsumer);
 	}
 
 	@Override
 	public void authenticate(String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
-		listener.onAuthSuccess(new SocializeSessionImpl());
+		MockSocializeSession mockSocializeSession = new MockSocializeSession();
+		listener.onAuthSuccess(mockSocializeSession);
+		sessionConsumer.setSession(mockSocializeSession);
 		if(delegate != null) delegate.authenticate(consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
 	}
 
@@ -138,26 +149,31 @@ public class MockSocializeApiHost extends SocializeApiHost implements ContainerA
 	@Override
 	public void listEntitiesByKey(SocializeSession session, EntityListener listener, String... keys) {
 		if(delegate != null) delegate.listEntitiesByKey(session, listener, keys);
+		listener.onList((ListResult<Entity>) listResult);
 	}
 
 	@Override
 	public void listCommentsByEntity(SocializeSession session, String url, CommentListener listener) {
 		if(delegate != null) delegate.listCommentsByEntity(session, url, listener);
+		listener.onList((ListResult<Comment>) listResult);
 	}
 
 	@Override
 	public void listCommentsByEntity(SocializeSession session, String url, int startIndex, int endIndex, CommentListener listener) {
 		if(delegate != null) delegate.listCommentsByEntity(session, url, startIndex, endIndex, listener);
+		listener.onList((ListResult<Comment>) listResult);
 	}
 
 	@Override
 	public void listCommentsById(SocializeSession session, CommentListener listener, int... ids) {
 		if(delegate != null) delegate.listCommentsById(session, listener, ids);
+		listener.onList((ListResult<Comment>) listResult);
 	}
 
 	@Override
 	public void listLikesById(SocializeSession session, LikeListener listener, int... ids) {
 		if(delegate != null) delegate.listLikesById(session, listener, ids);
+		listener.onList((ListResult<Like>) listResult);
 	}
 
 	@Override
@@ -169,11 +185,13 @@ public class MockSocializeApiHost extends SocializeApiHost implements ContainerA
 	@Override
 	public void listActivityByUser(SocializeSession session, long id, ActivityListener listener) {
 		if(delegate != null) delegate.listActivityByUser(session, id, listener);
+		listener.onList((ListResult<SocializeAction>) listResult);
 	}
 
 	@Override
 	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, ActivityListener listener) {
 		if(delegate != null) delegate.listActivityByUser(session, id, startIndex, endIndex, listener);
+		listener.onList((ListResult<SocializeAction>) listResult);
 	}
 
 	public ApiHost getDelegate() {
@@ -183,4 +201,11 @@ public class MockSocializeApiHost extends SocializeApiHost implements ContainerA
 	public void setDelegate(ApiHost delegate) {
 		this.delegate = delegate;
 	}
+	
+	public static <T extends SocializeObject> void orchestrateListResult(Class<T> clazz, List<T> list) {
+		ListResult<T> lr = new ListResult<T>();
+		lr.setItems(list);
+		listResult = lr;
+	}
+	
 }
