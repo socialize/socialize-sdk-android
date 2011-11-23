@@ -21,6 +21,8 @@
  */
 package com.socialize.ui.comment;
 
+import com.socialize.error.SocializeException;
+
 import android.content.Context;
 
 /**
@@ -29,7 +31,7 @@ import android.content.Context;
  */
 public interface CommentButtonCallback {
 
-	public void onError(Context context, Exception e);
+	public void onError(Context context, SocializeException e);
 	
 	public void onComment(String text, boolean autoPostToFacebook);
 	

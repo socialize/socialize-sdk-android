@@ -42,7 +42,6 @@ public class CommentListView extends BaseView {
 	private boolean useLink;
 	private int startIndex = 0;
 	private int endIndex = defaultGrabLength;
-//	private int totalCount = 0;
 	
 	private SocializeLogger logger;
 	private DialogFactory<ProgressDialog> progressDialogFactory;
@@ -69,6 +68,8 @@ public class CommentListView extends BaseView {
 	private ViewGroup sliderAnchor;
 	
 	private CommentEntrySliderItem commentEntryPage;
+	
+	private OnCommentViewActionListener onCommentViewActionListener;
 	
 	public CommentListView(Context context, String entityKey, String entityName, boolean useLink) {
 		this(context);
@@ -157,8 +158,6 @@ public class CommentListView extends BaseView {
 		addView(layoutAnchor);
 	}
 
-
-
 	protected CommentScrollListener getCommentScrollListener() {
 		return new CommentScrollListener(new CommentScrollCallback() {
 			@Override
@@ -177,8 +176,12 @@ public class CommentListView extends BaseView {
 		return new CommentAddButtonListener(getContext(), new CommentButtonCallback() {
 			
 			@Override
-			public void onError(Context context, Exception e) {
+			public void onError(Context context, SocializeException e) {
 				showError(getContext(), e);
+				
+				if(onCommentViewActionListener != null) {
+					onCommentViewActionListener.onError(e);
+				}				
 			}
 
 			@Override
@@ -229,6 +232,10 @@ public class CommentListView extends BaseView {
 				if(dialog != null) {
 					dialog.dismiss();
 				}
+				
+				if(onCommentViewActionListener != null) {
+					onCommentViewActionListener.onError(error);
+				}						
 			}
 
 			@Override
@@ -259,6 +266,10 @@ public class CommentListView extends BaseView {
 				if(dialog != null) {
 					dialog.dismiss();
 				}
+				
+				if(onCommentViewActionListener != null) {
+					onCommentViewActionListener.onPostComment(entity);
+				}
 			}
 		});
 		
@@ -278,7 +289,16 @@ public class CommentListView extends BaseView {
 	public void reload() {
 		content.showLoading();
 		commentAdapter.reset();
+		
+		if(onCommentViewActionListener != null) {
+			onCommentViewActionListener.onReload(this);
+		}
+		
 		doListComments(true);
+	}
+	
+	public CommentAdapter getCommentAdapter() {
+		return commentAdapter;
 	}
 
 	public void doListComments(final boolean update) {
@@ -288,7 +308,7 @@ public class CommentListView extends BaseView {
 
 		loading = true;
 		
-		List<Comment> comments = commentAdapter.getComments();
+		final List<Comment> comments = commentAdapter.getComments();
 
 		if(update || comments == null || comments.size() == 0) {
 			getSocialize().listCommentsByEntity(entityKey, 
@@ -306,6 +326,10 @@ public class CommentListView extends BaseView {
 					}
 
 					loading = false;
+					
+					if(onCommentViewActionListener != null) {
+						onCommentViewActionListener.onError(error);
+					}					
 				}
 
 				@Override
@@ -319,7 +343,7 @@ public class CommentListView extends BaseView {
 						commentAdapter.setLast(true);
 					}
 
-					if(update) {
+					if(update || comments == null) {
 						commentAdapter.notifyDataSetChanged();
 						content.scrollToTop();
 					}
@@ -331,6 +355,10 @@ public class CommentListView extends BaseView {
 					}
 
 					loading = false;
+					
+					if(onCommentViewActionListener != null) {
+						onCommentViewActionListener.onCommentList(CommentListView.this, entities.getItems(), startIndex, endIndex);
+					}
 				}
 			});
 		}
@@ -343,6 +371,10 @@ public class CommentListView extends BaseView {
 			}
 
 			loading = false;
+			
+			if(onCommentViewActionListener != null) {
+				onCommentViewActionListener.onCommentList(CommentListView.this, comments, startIndex, endIndex);
+			}			
 		}
 	}
 
@@ -385,6 +417,10 @@ public class CommentListView extends BaseView {
 				}
 
 				loading = false;
+				
+				if(onCommentViewActionListener != null) {
+					onCommentViewActionListener.onError(error);
+				}				
 			}
 
 			@Override
@@ -398,12 +434,14 @@ public class CommentListView extends BaseView {
 		});
 	}
 	
-//	@Override
-//	protected void onViewLoad() {
-//		super.onViewLoad();
-//
-//	}
-	
+	@Override
+	protected void onViewLoad() {
+		super.onViewLoad();
+		if(onCommentViewActionListener != null) {
+			onCommentViewActionListener.onCreate(this);
+		}		
+	}
+
 	@Override
 	protected void onViewRendered(int width, int height) {
 		if(sliderFactory != null && slider == null) {
@@ -430,8 +468,19 @@ public class CommentListView extends BaseView {
 			doListComments(false);
 		}
 		else {
-			showError(getContext(), new SocializeException("Socialize not authenticated"));
+			SocializeException e = new SocializeException("Socialize not authenticated");
+			
+			showError(getContext(),e);
+			
+			if(onCommentViewActionListener != null) {
+				onCommentViewActionListener.onError(e);
+			}
+			
 			content.showList();
+		}	
+		
+		if(onCommentViewActionListener != null) {
+			onCommentViewActionListener.onRender(this);
 		}		
 	}
 
@@ -530,7 +579,7 @@ public class CommentListView extends BaseView {
 	public void setEntityName(String entityName) {
 		this.entityName = entityName;
 	}
-
+	
 	/**
 	 * Called when the current logged in user updates their profile.
 	 */
@@ -556,5 +605,9 @@ public class CommentListView extends BaseView {
 
 	public void setSliderFactory(ActionBarSliderFactory<ActionBarSliderView> sliderFactory) {
 		this.sliderFactory = sliderFactory;
+	}
+
+	public void setOnCommentViewActionListener(OnCommentViewActionListener onCommentViewActionListener) {
+		this.onCommentViewActionListener = onCommentViewActionListener;
 	}
 }

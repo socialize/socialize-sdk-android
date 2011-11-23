@@ -32,7 +32,6 @@ public class ActionBarCommentTest extends ActivityInstrumentationTestCase2<Actio
 	public void testCommentButtonOpensCommentView() throws Throwable {
 		
 		TestUtils.setupSocializeOverrides(true, true);
-		
 		TestUtils.setUpActivityMonitor(CommentActivity.class);
 		
 		Intent intent = new Intent();

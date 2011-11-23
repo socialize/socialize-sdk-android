@@ -22,7 +22,12 @@
 package com.socialize.listener;
 
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
+
+import com.socialize.log.SocializeLogger;
+import com.socialize.ui.SocializeUI;
 
 /**
  * Singleton (application scoped) container to retain a reference to a listener between activities.
@@ -31,6 +36,25 @@ import java.util.TreeMap;
 public class ListenerHolder {
 
 	private Map<String, SocializeListener> listeners = new TreeMap<String, SocializeListener>();
+	
+	private SocializeLogger logger;
+	
+	public void init() {
+		Map<String, SocializeListener> statics = SocializeUI.STATIC_LISTENERS;
+		if(!statics.isEmpty()) {
+			Set<Entry<String, SocializeListener>> entrySet = statics.entrySet();
+			for (Entry<String, SocializeListener> entry : entrySet) {
+				
+				if(logger != null && logger.isInfoEnabled()) {
+					logger.info("Registering listener [" +
+							entry.getKey() +
+							"] from static scope");
+				}
+				
+				listeners.put(entry.getKey(), entry.getValue());
+			}
+		}
+	}
 	
 	public void put(String key, SocializeListener listener) {
 		listeners.put(key, listener);
@@ -44,4 +68,10 @@ public class ListenerHolder {
 	public void remove(String key) {
 		listeners.remove(key);
 	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
+	
+	
 }
