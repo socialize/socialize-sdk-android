@@ -12,6 +12,14 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v1.0.2
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] Comment list displays cached (incorrect) results when loading a different entity from ActionBar 
+
+v1.0.1
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Internal release
+
 v1.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
