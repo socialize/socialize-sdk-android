@@ -64,6 +64,16 @@ public class CommentApi extends SocializeApi<Comment, SocializeProvider<Comment>
 	public void getCommentsByEntity(SocializeSession session, String key, int startIndex, int endIndex, CommentListener listener) {
 		listAsync(session, ENDPOINT, key, null, startIndex, endIndex, listener);
 	}
+	
+	public void getCommentsByUser(SocializeSession session, long userId, CommentListener listener) {
+		String endpoint = "/user/" + userId + ENDPOINT;
+		listAsync(session, endpoint, listener);
+	}
+	
+	public void getCommentsByUser(SocializeSession session, long userId, int startIndex, int endIndex, CommentListener listener) {
+		String endpoint = "/user/" + userId + ENDPOINT;
+		listAsync(session, endpoint, startIndex, endIndex, listener);
+	}	
 
 	public void getCommentsById(SocializeSession session, CommentListener listener, int...ids) {
 		String[] strIds = new String[ids.length];

@@ -39,6 +39,7 @@ import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
+import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
@@ -202,6 +203,22 @@ public interface SocializeService {
 	 * @param likeGetListener
 	 */
 	public void getLike(String url, LikeGetListener likeGetListener);
+	
+	/**
+	 * Lists the likes associated with a single user.
+	 * @param userId The user
+	 * @param likeListListener
+	 */
+	public void listLikesByUser(long userId, LikeListListener likeListListener);
+	
+	/**
+	 * Lists the likes associated with a single user.
+	 * @param userId The user
+	 * @param startIndex The starting index of the results for pagination.
+	 * @param endIndex The ending index of the results for pagination.
+	 * @param likeListListener
+	 */
+	public void listLikesByUser(long userId, int startIndex, int endIndex, LikeListListener likeListListener);	
 	
 	/**
 	 * Lists the comments associated with a url.

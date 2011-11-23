@@ -21,10 +21,7 @@
  */
 package com.socialize.sample;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-import java.util.Properties;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -47,11 +44,10 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.sample.util.ErrorHandler;
 import com.socialize.ui.SocializeActivity;
-import com.socialize.util.StringUtils;
 
 public class AuthenticateActivity extends SocializeActivity {
 
-	protected Properties properties;
+//	protected Properties properties;
 	protected String consumerKey;
 	protected String consumerSecret;
 	protected String url;
@@ -194,40 +190,49 @@ public class AuthenticateActivity extends SocializeActivity {
 	}
 
 	private void loadConfig() {
-		InputStream in = null;
-		try {
-			in = getAssets().open("sample-app.conf"); // located in sample app
+//		InputStream in = null;
+//		try {
+			
+			
+			
+			SocializeConfig cfg = Socialize.getSocialize().getConfig();
+			
+			consumerKey =  cfg.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+			consumerSecret =  cfg.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+			url =  cfg.getProperty(SocializeConfig.API_HOST);
+			facebookAppId = cfg.getProperty(SocializeConfig.FACEBOOK_APP_ID);		
+			
 
-			properties = new Properties();
-			properties.load(in);
-
-			consumerKey = getConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_KEY, properties);
-			consumerSecret = getConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_SECRET, properties);
-			url = getConfigValue(SocializeConfig.API_HOST, properties);
-			facebookAppId = getConfigValue(SocializeConfig.FACEBOOK_APP_ID, properties);
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		finally {
-			if (in != null) {
-				try {
-					in.close();
-				}
-				catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+//			in = getAssets().open("sample-app.conf"); // located in sample app
+//			properties = new Properties();
+//			properties.load(in);
+//			consumerKey = getConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_KEY, properties);
+//			consumerSecret = getConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_SECRET, properties);
+//			url = getConfigValue(SocializeConfig.API_HOST, properties);
+//			facebookAppId = getConfigValue(SocializeConfig.FACEBOOK_APP_ID, properties);
+//		}
+//		catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		finally {
+//			if (in != null) {
+//				try {
+//					in.close();
+//				}
+//				catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}
 	}
 	
-	private String getConfigValue(String key, Properties properties) {
-		String value = properties.getProperty(key);
-		if(StringUtils.isEmpty(value)) {
-			value = Socialize.getSocialize().getConfig().getProperty(key);
-		}
-		return value;
-	}
+//	private String getConfigValue(String key, Properties properties) {
+//		String value = properties.getProperty(key);
+//		if(StringUtils.isEmpty(value)) {
+//			value = Socialize.getSocialize().getConfig().getProperty(key);
+//		}
+//		return value;
+//	}
 
 	class AuthenticateClickListener implements OnClickListener {
 

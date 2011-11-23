@@ -421,6 +421,20 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	
 	
 	@Override
+	public void listLikesByUser(long userId, LikeListListener likeListListener) {
+		if(assertAuthenticated(likeListListener)) {
+			service.listLikesByUser(session, userId, likeListListener);
+		}
+	}
+
+	@Override
+	public void listLikesByUser(long userId, int startIndex, int endIndex, LikeListListener likeListListener) {
+		if(assertAuthenticated(likeListListener)) {
+			service.listLikesByUser(session, userId, startIndex, endIndex, likeListListener);
+		}
+	}
+
+	@Override
 	public void share(String url, String text, ShareType shareType, ShareAddListener shareAddListener) {
 		share(url, text, shareType, null, shareAddListener);
 	}

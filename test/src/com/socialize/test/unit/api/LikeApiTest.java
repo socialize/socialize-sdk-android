@@ -134,6 +134,53 @@ public class LikeApiTest extends SocializeUnitTest {
 		assertEquals(endIndex, afterEndIndex);
 	}
 	
+	public void testGetLikesByUser() {
+		
+		final int key = 69;
+		
+		LikeApi api = new LikeApi(provider) {
+			
+			public void listAsync(SocializeSession session, String endpoint, int startIndex, int endIndex, SocializeActionListener listener) {
+				addResult(key);
+			}
+		};
+		
+		api.getLikesByUser(session, key, listener);
+		
+		Integer after = (Integer) getNextResult();
+		
+		assertNotNull(after);
+		assertEquals(key, after.intValue());
+	}
+	
+	public void testGetLikesByUserPaginated() {
+		
+		final int key = 69;
+		int startIndex = 0, endIndex = 10;
+		
+		LikeApi api = new LikeApi(provider) {
+			@Override
+			public void listAsync(SocializeSession session, String endpoint, int startIndex, int endIndex, SocializeActionListener listener) {
+				addResult(key);
+				addResult(startIndex);
+				addResult(endIndex);
+			}
+		};
+		
+		api.getLikesByUser(session, key, startIndex, endIndex, listener);
+		
+		Integer after = (Integer) getNextResult();
+		
+		assertNotNull(after);
+		assertEquals(key, after.intValue());
+		
+		int afterStartIndex = (Integer) getNextResult();
+		int afterEndIndex = (Integer) getNextResult();
+		
+		assertEquals(startIndex, afterStartIndex);
+		assertEquals(endIndex, afterEndIndex);
+	}	
+	
 	public void testGetLikesById() {
 		
 		int[] ids = {1,2,3};

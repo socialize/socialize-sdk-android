@@ -54,4 +54,13 @@ public class ViewApi extends SocializeApi<View, SocializeProvider<View>> {
 		
 		postAsync(session, ENDPOINT, list, listener);
 	}
+	
+	public void getViewsByEntity(SocializeSession session, String key, int startIndex, int endIndex, ViewListener listener) {
+		listAsync(session, ENDPOINT, key, null, startIndex, endIndex, listener);
+	}
+	
+	public void getViewsByUser(SocializeSession session, long userId, ViewListener listener) {
+		String endpoint = "/user/" + userId + ENDPOINT;
+		listAsync(session, endpoint, listener);
+	}		
 }

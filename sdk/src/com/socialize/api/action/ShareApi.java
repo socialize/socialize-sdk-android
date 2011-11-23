@@ -57,4 +57,13 @@ public class ShareApi extends SocializeApi<Share, SocializeProvider<Share>> {
 		
 		postAsync(session, ENDPOINT, list, listener);
 	}
+	
+	public void getSharesByEntity(SocializeSession session, String key, int startIndex, int endIndex, ShareListener listener) {
+		listAsync(session, ENDPOINT, key, null, startIndex, endIndex, listener);
+	}
+	
+	public void getSharesByUser(SocializeSession session, long userId, ShareListener listener) {
+		String endpoint = "/user/" + userId + ENDPOINT;
+		listAsync(session, endpoint, listener);
+	}	
 }

@@ -50,6 +50,9 @@ public abstract class AbstractSocializeListener<T extends SocializeObject> imple
 			case LIST:
 				onList(entityResponse.getResults());
 				break;
+			case LIST_WITHOUT_ENTITY:
+				onList(entityResponse.getResults());
+				break;				
 			case PUT:
 				onUpdate(entityResponse.getFirstResult());
 				break;

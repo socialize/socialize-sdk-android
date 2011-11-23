@@ -95,6 +95,10 @@ public interface ApiHost {
 	public void listActivityByUser(SocializeSession session, long id, ActivityListener listener);
 
 	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, ActivityListener listener);
+	
+	public void listLikesByUser(SocializeSession session, long userId, LikeListener listener);
+	
+	public void listLikesByUser(SocializeSession session, long userId, int startIndex, int endIndex, LikeListener listener);
 
 	public void destroy();
 }

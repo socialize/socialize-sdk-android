@@ -31,10 +31,12 @@ import android.widget.TextView;
 
 import com.socialize.Socialize;
 import com.socialize.entity.Like;
+import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
+import com.socialize.listener.like.LikeListListener;
 import com.socialize.sample.util.ErrorHandler;
 import com.socialize.ui.SocializeActivity;
 import com.socialize.util.StringUtils;
@@ -49,10 +51,12 @@ public class LikeActivity extends SocializeActivity {
 		
 		final EditText txtKey = (EditText) findViewById(R.id.txtKey);
 		final TextView txtLikeCreateResult = (TextView) findViewById(R.id.txtLikeCreateResult);
+		final TextView txtMisc = (TextView) findViewById(R.id.txtMisc);
 		
 		final Button btnLikeCreate = (Button) findViewById(R.id.btnLikeCreate);
 		final Button btnLikeDelete = (Button) findViewById(R.id.btnLikeDelete);
 		final Button btnLikeGet = (Button) findViewById(R.id.btnLikeGet);
+		final Button btnLikeList = (Button) findViewById(R.id.btnLikeList);
 		
 		btnLikeDelete.setEnabled(false);
 		
@@ -195,6 +199,38 @@ public class LikeActivity extends SocializeActivity {
 						txtLikeCreateResult.setText("FAIL: No ID");
 						progress.dismiss();
 					}
+				}
+			});
+			
+			btnLikeList.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Retrieving Likes", "Please wait...");
+					
+					txtLikeCreateResult.setText("");
+					
+					clearLikeData();
+					
+					long userId = Socialize.getSocialize().getSession().getUser().getId();
+					
+					Socialize.getSocialize().listLikesByUser(userId, new LikeListListener() {
+						
+						@Override
+						public void onList(ListResult<Like> entities) {
+							txtLikeCreateResult.setText("SUCCESS");
+							txtMisc.setText(String.valueOf(entities.getItems().size()));
+							txtLikeIdCreated.setText("");
+							txtLikeDateCreated.setText("");
+							progress.dismiss();
+						}
+						
+						@Override
+						public void onError(SocializeException error) {
+							txtLikeCreateResult.setText("FAIL: " + ErrorHandler.handleApiError(LikeActivity.this, error));
+							progress.dismiss();
+						}
+					});
 				}
 			});
 		}
