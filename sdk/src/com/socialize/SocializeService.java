@@ -100,6 +100,14 @@ public interface SocializeService {
 	 * @param force
 	 */
 	public void destroy(boolean force);
+	
+	/**
+	 * Authenticates the application against the API as an anonymous user.
+	 * NOTE:  This assumes the consumer key/secret have been specified in assets/socialize.properties
+	 * @param authListener
+	 * @see this{@link #authenticate(String, String, SocializeAuthListener)}
+	 */
+	public void authenticate(SocializeAuthListener authListener);
 
 	/**
 	 * Authenticates the application against the API as an anonymous user.
@@ -110,6 +118,14 @@ public interface SocializeService {
 	 */
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener authListener);
 
+	/**
+	 * Authenticates the application against the API.
+	 * NOTE:  This assumes the consumer key/secret have been specified in assets/socialize.properties
+	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
+	 * @param authListener The callback for authentication outcomes.
+	 */
+	public void authenticate(AuthProviderType authProvider, SocializeAuthListener authListener);
+	
 	/**
 	 * Authenticates the application against the API.
 	 * @param consumerKey The consumer url, obtained from registration at http://www.getsocialize.com.
