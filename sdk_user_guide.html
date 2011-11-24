@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Socialize SDK (Advanced) Guide &mdash; Socialize Android SDK 0.7.0 documentation</title>
+    <title>Socialize SDK (Advanced) Guide &mdash; Socialize Android SDK 1.0.3 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.7.0',
+        VERSION:     '1.0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK 0.7.0 documentation" href="index.html" />
+    <link rel="top" title="Socialize Android SDK 1.0.3 documentation" href="index.html" />
     <link rel="prev" title="Socialize Comments" href="comment_view.html" /> 
   </head>
   <body>
@@ -36,7 +36,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="comment_view.html" title="Socialize Comments"
              accesskey="P">previous</a></li>
-        <li><a href="index.html">Socialize Android SDK 0.7.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK 1.0.3 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -79,7 +79,8 @@ a Facebook account and is required to &#8220;authorize&#8221; your Android app t
 to authenticate:</p>
 <div class="section" id="facebook-authentication-code-snippet">
 <span id="fb-snippet"></span><h4>Facebook Authentication Code Snippet<a class="headerlink" href="#facebook-authentication-code-snippet" title="Permalink to this headline">¶</a></h4>
-<script src="https://gist.github.com/1132956.js?file=authenticate_fb.java"></script><p>If you <strong>do not</strong> already have a Facebook app refer to <a class="reference internal" href="facebook.html"><em>Facebook Integration</em></a> for more information.</p>
+<script src="https://gist.github.com/1132956.js?file=authenticate_fb.java"></script><p>If you have specified your Socialize consumer key, secret AND your Facebook App ID in <strong>assets/socialize.properties</strong></p>
+<script src="https://gist.github.com/1132956.js?file=auth_fb_with_props.java"></script><p>If you <strong>do not</strong> already have a Facebook app refer to <a class="reference internal" href="facebook.html"><em>Facebook Integration</em></a> for more information.</p>
 </div>
 </div>
 <div class="section" id="authenticating-with-twitter">
@@ -91,7 +92,8 @@ to authenticate:</p>
 <p>We recommend authenticating with 3rd parties (e.g. Facebook) as this provides a better user experience
 and ensures that user profiles and IDs are retained across app sessions and installs, however if you just
 want anonymous authentication, simply call the <strong>authenticate</strong> method:</p>
-<script src="https://gist.github.com/1132956.js?file=authenticate.java"></script></div>
+<script src="https://gist.github.com/1132956.js?file=authenticate.java"></script><p>If you have specified your Socialize consumer key, secret in <strong>assets/socialize.properties</strong></p>
+<script src="https://gist.github.com/1132956.js?file=auth_with_props.java"></script></div>
 </div>
 <div class="section" id="entities">
 <h2>Entities<a class="headerlink" href="#entities" title="Permalink to this headline">¶</a></h2>
@@ -149,6 +151,10 @@ in your app are the most popular, and what is of most interest to your users.</p
 <p>Removing a like (i.e. an &#8216;unlike&#8217;) is done via the <strong>unlike</strong> method.  In order to remove a like, you will
 need the ID of the like.  This is returned from the initial call to <strong>like</strong></p>
 <script src="https://gist.github.com/1132969.js?file=unlike.java"></script></div>
+<div class="section" id="listing-a-likes-for-a-user">
+<h3>Listing a &#8216;Likes&#8217; for a User<a class="headerlink" href="#listing-a-likes-for-a-user" title="Permalink to this headline">¶</a></h3>
+<p>To obtain a list of all entities &#8216;liked&#8217; by a single user, use the <strong>listLikesByUser</strong> method:</p>
+<script src="https://gist.github.com/1132969.js?file=list_likes.java"></script></div>
 </div>
 <div class="section" id="comment">
 <h2>Comment<a class="headerlink" href="#comment" title="Permalink to this headline">¶</a></h2>
@@ -207,7 +213,7 @@ of the comment which was returned from the inital call to <strong>addComment</st
         <li class="right" style="margin-right: 10px">
           <a href="comment_view.html" title="Socialize Comments"
              >previous</a></li>
-        <li><a href="index.html">Socialize Android SDK 0.7.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK 1.0.3 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

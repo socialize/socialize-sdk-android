@@ -59,6 +59,12 @@ Facebook Authentication Code Snippet
 
 	<script src="https://gist.github.com/1132956.js?file=authenticate_fb.java"></script>
 
+If you have specified your Socialize consumer key, secret AND your Facebook App ID in **assets/socialize.properties**
+
+.. raw:: html
+
+	<script src="https://gist.github.com/1132956.js?file=auth_fb_with_props.java"></script>
+
 If you **do not** already have a Facebook app refer to :doc:`facebook` for more information.
 
 Authenticating with Twitter
@@ -77,25 +83,11 @@ want anonymous authentication, simply call the **authenticate** method:
 
 	<script src="https://gist.github.com/1132956.js?file=authenticate.java"></script>
 
-.. .. parsed-literal::
+If you have specified your Socialize consumer key, secret in **assets/socialize.properties**
 
-.. Socialize.getSocialize().authenticate(
-		consumerKey,
-		consumerSecret,
-		**new** SocializeAuthListener() {
-		
-		**public** **void** onAuthSuccess(SocializeSession session) {
-			// Success!
-		}
-		
-		**public** **void** onAuthFail(SocializeException error) {
-			// Handle auth fail
-		}
-		
-		**public** **void** onError(SocializeException error) {
-			// Handle error
-		}
-	});
+.. raw:: html
+
+	<script src="https://gist.github.com/1132956.js?file=auth_with_props.java"></script>
 	
 Entities
 --------
@@ -182,6 +174,14 @@ need the ID of the like.  This is returned from the initial call to **like**
 .. raw:: html
 
 	<script src="https://gist.github.com/1132969.js?file=unlike.java"></script>
+
+Listing a 'Likes' for a User
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+To obtain a list of all entities 'liked' by a single user, use the **listLikesByUser** method:
+
+.. raw:: html
+
+	<script src="https://gist.github.com/1132969.js?file=list_likes.java"></script>
 
 Comment
 -------
