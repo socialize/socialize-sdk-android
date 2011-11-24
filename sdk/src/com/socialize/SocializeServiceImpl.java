@@ -333,7 +333,100 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		data.setAppId3rdParty(authProviderAppId);
 		authenticate(consumerKey, consumerSecret, data, authListener, true);
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#authenticate(com.socialize.listener.SocializeAuthListener)
+	 */
+	@Override
+	public void authenticate(SocializeAuthListener authListener) {
+		SocializeConfig config = getConfig();
+		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+		
+		if(checkKeys(consumerKey, consumerSecret, authListener)) {
+			authenticate(consumerKey, consumerSecret, authListener);
+		}
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#authenticate(com.socialize.auth.AuthProviderType, com.socialize.listener.SocializeAuthListener)
+	 */
+	@Override
+	public void authenticate(AuthProviderType authProviderType, SocializeAuthListener authListener) {
+		SocializeConfig config = getConfig();
+		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+		
+		if(checkKeys(consumerKey, consumerSecret, authListener)) {
+			// TODO: Add aother auth providers
+			switch (authProviderType) {
+			
+			case FACEBOOK:
+					String authProviderAppId = config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
+					
+					if(StringUtils.isEmpty(authProviderAppId)) {
+						String msg = "No facebook app id specified";
+						if(authListener != null) {
+							authListener.onError(new SocializeException(msg));
+						}
+						
+						if(logger != null) {
+							logger.error(msg);
+						}
+						else {
+							System.err.println(msg);
+						}
+					}
+					else {
+						authenticate(consumerKey, consumerSecret, authProviderType, authProviderAppId, authListener);
+					}
+					break;
 
+			default:
+				authenticate(consumerKey, consumerSecret, authListener);
+				break;
+			}
+		}
+	}
+
+	protected boolean checkKeys(String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
+		if(StringUtils.isEmpty(consumerKey)) {
+			String msg = "No consumer key specified";
+			if(authListener != null) {
+				authListener.onError(new SocializeException(msg));
+			}
+			
+			if(logger != null) {
+				logger.error(msg);
+			}
+			else {
+				System.err.println(msg);
+			}
+			
+			return false;
+		}
+		
+		if(StringUtils.isEmpty(consumerSecret)) {
+			String msg = "No consumer secret specified";
+			if(authListener != null) {
+				authListener.onError(new SocializeException(msg));
+			}
+			
+			if(logger != null) {
+				logger.error(msg);
+			}
+			else {
+				System.err.println(msg);
+			}
+			
+			return false;
+		}	
+		
+		return true;
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#authenticate(java.lang.String, java.lang.String, com.socialize.listener.SocializeAuthListener)
 	 */
@@ -420,6 +513,20 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	}
 	
 	
+	@Override
+	public void listLikesByUser(long userId, LikeListListener likeListListener) {
+		if(assertAuthenticated(likeListListener)) {
+			service.listLikesByUser(session, userId, likeListListener);
+		}
+	}
+
+	@Override
+	public void listLikesByUser(long userId, int startIndex, int endIndex, LikeListListener likeListListener) {
+		if(assertAuthenticated(likeListListener)) {
+			service.listLikesByUser(session, userId, startIndex, endIndex, likeListListener);
+		}
+	}
+
 	@Override
 	public void share(String url, String text, ShareType shareType, ShareAddListener shareAddListener) {
 		share(url, text, shareType, null, shareAddListener);

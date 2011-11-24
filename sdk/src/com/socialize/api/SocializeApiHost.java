@@ -91,8 +91,6 @@ public class SocializeApiHost implements ApiHost {
 	@Override
 	public void clearSessionCache(AuthProviderType authProviderType) {
 		userApi.clearSession(authProviderType);
-		
-		
 	}
 
 	/* (non-Javadoc)
@@ -104,12 +102,6 @@ public class SocializeApiHost implements ApiHost {
 		authProviderData.setAuthProviderType(AuthProviderType.SOCIALIZE);
 		authenticate(consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, false);
 	}
-	
-//	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
-//		AuthProviderData authProviderData = authProviderDataFactory.getBean();
-//		authProviderData.setAuthProviderType(authProvider);
-//		authenticate(consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, false);
-//	}
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.api.ApiHost#authenticate(java.lang.String, java.lang.String, com.socialize.auth.AuthProviderData, com.socialize.listener.SocializeAuthListener, com.socialize.api.SocializeSessionConsumer, boolean)
@@ -210,6 +202,17 @@ public class SocializeApiHost implements ApiHost {
 		likeApi.addLike(session, key, location, listener);
 	}
 	
+	
+	@Override
+	public void listLikesByUser(SocializeSession session, long userId, LikeListener listener) {
+		likeApi.getLikesByUser(session, userId, listener);
+	}
+
+	@Override
+	public void listLikesByUser(SocializeSession session, long userId, int startIndex, int endIndex, LikeListener listener) {
+		likeApi.getLikesByUser(session, userId, startIndex, endIndex, listener);
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.api.ApiHost#addView(com.socialize.api.SocializeSession, java.lang.String, android.location.Location, com.socialize.listener.view.ViewListener)
 	 */
@@ -383,4 +386,5 @@ public class SocializeApiHost implements ApiHost {
 	public void setAuthProviderDataFactory(IBeanFactory<AuthProviderData> authProviderDataFactory) {
 		this.authProviderDataFactory = authProviderDataFactory;
 	}
+
 }

@@ -23,8 +23,16 @@ public class DefaultTestApiHost implements ApiHost {
 	
 	static String message = "Unexpected call to ";
 
-	
-	
+	@Override
+	public void listLikesByUser(SocializeSession session, long userId, LikeListener listener) {
+		fail(message + "listLikesByUser");
+	}
+
+	@Override
+	public void listLikesByUser(SocializeSession session, long userId, int startIndex, int endIndex, LikeListener listener) {
+		fail(message + "listLikesByUser");
+	}
+
 	@Override
 	public void clearSessionCache(AuthProviderType authProviderType) {
 		fail(message + "clearSessionCache (authProviderType)");

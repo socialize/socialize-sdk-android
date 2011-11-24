@@ -39,6 +39,7 @@ import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
+import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
@@ -99,6 +100,14 @@ public interface SocializeService {
 	 * @param force
 	 */
 	public void destroy(boolean force);
+	
+	/**
+	 * Authenticates the application against the API as an anonymous user.
+	 * NOTE:  This assumes the consumer key/secret have been specified in assets/socialize.properties
+	 * @param authListener
+	 * @see this{@link #authenticate(String, String, SocializeAuthListener)}
+	 */
+	public void authenticate(SocializeAuthListener authListener);
 
 	/**
 	 * Authenticates the application against the API as an anonymous user.
@@ -109,6 +118,14 @@ public interface SocializeService {
 	 */
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener authListener);
 
+	/**
+	 * Authenticates the application against the API.
+	 * NOTE:  This assumes the consumer key/secret have been specified in assets/socialize.properties
+	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
+	 * @param authListener The callback for authentication outcomes.
+	 */
+	public void authenticate(AuthProviderType authProvider, SocializeAuthListener authListener);
+	
 	/**
 	 * Authenticates the application against the API.
 	 * @param consumerKey The consumer url, obtained from registration at http://www.getsocialize.com.
@@ -202,6 +219,22 @@ public interface SocializeService {
 	 * @param likeGetListener
 	 */
 	public void getLike(String url, LikeGetListener likeGetListener);
+	
+	/**
+	 * Lists the likes associated with a single user.
+	 * @param userId The user
+	 * @param likeListListener
+	 */
+	public void listLikesByUser(long userId, LikeListListener likeListListener);
+	
+	/**
+	 * Lists the likes associated with a single user.
+	 * @param userId The user
+	 * @param startIndex The starting index of the results for pagination.
+	 * @param endIndex The ending index of the results for pagination.
+	 * @param likeListListener
+	 */
+	public void listLikesByUser(long userId, int startIndex, int endIndex, LikeListListener likeListListener);	
 	
 	/**
 	 * Lists the comments associated with a url.

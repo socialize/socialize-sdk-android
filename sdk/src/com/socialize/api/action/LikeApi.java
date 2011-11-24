@@ -67,6 +67,16 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 	
 	public void getLikesByEntity(SocializeSession session, String key, LikeListener listener) {
 		listAsync(session, ENDPOINT, key, null, listener);
+	}	
+	
+	public void getLikesByUser(SocializeSession session, long userId, LikeListener listener) {
+		String endpoint = "/user/" + userId + ENDPOINT;
+		listAsync(session, endpoint, listener);
+	}
+	
+	public void getLikesByUser(SocializeSession session, long userId, int startIndex, int endIndex, LikeListener listener) {
+		String endpoint = "/user/" + userId + ENDPOINT;
+		listAsync(session, endpoint, startIndex, endIndex, listener);
 	}
 	
 	public void getLikesByEntity(SocializeSession session, String key, int startIndex, int endIndex, LikeListener listener) {
