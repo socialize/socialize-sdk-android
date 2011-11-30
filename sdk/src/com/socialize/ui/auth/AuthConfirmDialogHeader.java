@@ -37,6 +37,7 @@ import com.socialize.util.Drawables;
  * @author Jason Polites
  * @deprecated
  */
+@Deprecated
 public class AuthConfirmDialogHeader extends LinearLayout {
 
 	private Dialog dialog;

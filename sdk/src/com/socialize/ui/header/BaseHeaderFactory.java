@@ -29,6 +29,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -39,12 +40,13 @@ import com.socialize.ui.view.BaseViewFactory;
 
 /**
  * @author Jason Polites
- *
+ * @deprecated
  */
-public abstract class BaseHeaderFactory<H extends SocializeHeader> extends BaseViewFactory<H> {
+@Deprecated
+public abstract class BaseHeaderFactory<H extends SocializeHeader, P extends View> extends BaseViewFactory<H, P> {
 	
 	@Override
-	public H make(Context context) {
+	public H make(Context context, P parent) {
 		int four = getDIP(4);
 		int eight = getDIP(8);
 		int height = getDIP(57);

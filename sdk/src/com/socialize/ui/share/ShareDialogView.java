@@ -139,20 +139,24 @@ public class ShareDialogView extends BaseView {
 
 		setLayoutParams(fill);
 		setPadding(padding, padding, padding, padding);
+		
+		FacebookShareClickListener facebookShareClickListener = facebookShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
+		EmailShareClickListener emailShareClickListener = emailShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
+		SmsShareClickListener smsShareClickListener = smsShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
 
 		
-		if(facebookShareButton != null && getSocializeUI().isFacebookSupported()) {
-			facebookShareButton.setCustomClickListener(facebookShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener));
+		if(facebookShareButton != null && facebookShareClickListener.isAvailableOnDevice(getActivity())) {
+			facebookShareButton.setCustomClickListener(facebookShareClickListener);
 			buttonLayout.addView(facebookShareButton);
 		}
 		
-		if(emailShareButton != null) {
-			emailShareButton.setCustomClickListener(emailShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener));
+		if(emailShareButton != null && emailShareClickListener.isAvailableOnDevice(getActivity())) {
+			emailShareButton.setCustomClickListener(emailShareClickListener);
 			buttonLayout.addView(emailShareButton);
 		}
 		
-		if(smsShareButton != null) {
-			smsShareButton.setCustomClickListener(smsShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener));
+		if(smsShareButton != null && smsShareClickListener.isAvailableOnDevice(getActivity())) {
+			smsShareButton.setCustomClickListener(smsShareClickListener);
 			buttonLayout.addView(smsShareButton);
 		}
 		

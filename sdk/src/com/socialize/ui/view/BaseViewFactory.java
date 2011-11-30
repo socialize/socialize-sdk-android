@@ -29,9 +29,10 @@ import com.socialize.util.Drawables;
 
 /**
  * @author Jason Polites
- *
+ * @deprecated
  */
-public abstract class BaseViewFactory<V extends View> implements ViewFactory<V> {
+@Deprecated
+public abstract class BaseViewFactory<V extends View, P extends View> implements ViewFactory<V, P> {
 
 	protected DeviceUtils deviceUtils;
 	protected Drawables drawables;

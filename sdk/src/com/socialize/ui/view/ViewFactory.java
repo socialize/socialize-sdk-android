@@ -27,12 +27,15 @@ import android.view.View;
 /**
  * Makes views.
  * @author Jason Polites
+ * @deprecated Changed to use standard IOC factory
  */
-public interface ViewFactory<V extends View> {
+@Deprecated
+public interface ViewFactory<V extends View, P extends View> {
 	/**
 	 * Builds a single view.
 	 * @param context
+	 * @param parent 
 	 * @return
 	 */
-	public V make(Context context);
+	public V make(Context context, P parent);
 }

@@ -38,10 +38,11 @@ import com.socialize.ui.view.BaseViewFactory;
 /**
  * @author Jason Polites
  */
-public class CommentEditFieldFactory extends BaseViewFactory<View> {
+@Deprecated
+public class CommentEditFieldFactory extends BaseViewFactory<View, CommentListView> {
 	
 	@Override
-	public View make(Context context) {
+	public View make(Context context, CommentListView parent) {
 		
 		final int  four = getDIP(4);
 		final int eight = getDIP(8);

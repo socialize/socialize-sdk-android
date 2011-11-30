@@ -44,8 +44,7 @@ public abstract class SimpleShareClickListener extends ShareClickListener {
 
 	@Override
 	protected void doShare(Activity parent, String title, String subject, String body, String comment) {
-		Intent msg  = new Intent(android.content.Intent.ACTION_SEND);
-		msg.setType(getMimeType());
+		Intent msg = getIntent();
 		msg.putExtra(Intent.EXTRA_TITLE, title);
 		
 		if(isHtml()) {
@@ -58,6 +57,17 @@ public abstract class SimpleShareClickListener extends ShareClickListener {
 		msg.putExtra(Intent.EXTRA_SUBJECT, subject);
 		parent.startActivity(Intent.createChooser(msg, title));
 	}
+	
+	protected Intent getIntent() {
+		Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
+		sendIntent.setType(getMimeType());
+		return sendIntent;
+	}
+
+	@Override
+	public boolean isAvailableOnDevice(Activity parent) {
+		return isAvailable(parent, getIntent());
+	}	
 	
 	@Override
 	protected boolean isIncludeSocialize() {

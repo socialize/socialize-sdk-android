@@ -33,12 +33,13 @@ import com.socialize.ui.view.BaseViewFactory;
 
 /**
  * @author Jason Polites
- *
+ * @deprecated
  */
-public class CommentContentViewFactory extends BaseViewFactory<CommentContentView> {
+@Deprecated
+public class CommentContentViewFactory extends BaseViewFactory<CommentContentView, CommentListView> {
 	
 	@Override
-	public CommentContentView make(Context context) {
+	public CommentContentView make(Context context, CommentListView parent) {
 		
 		LinearLayout contentView = new LinearLayout(context);
 

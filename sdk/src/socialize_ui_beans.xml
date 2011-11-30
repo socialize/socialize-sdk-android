@@ -371,37 +371,25 @@
 	</bean>
 	
 	<bean 
-		id="uiViewFactory"
-		abstract="true">
+		id="socializeHeader" 
+		class="com.socialize.ui.header.SocializeHeader"
+		singleton="false">
+		<constructor-arg type="activity"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
-		<property name="drawables" ref="drawables"/>
 		<property name="colors" ref="colors"/>
+		<property name="drawables" ref="drawables"/>
+		<init-method name="init"/>
 	</bean>
 	
 	<bean 
-		id="commentHeaderFactory" 
-		class="com.socialize.ui.comment.CommentHeaderFactory"
-		extends="uiViewFactory"/>
-		
-	<bean 
-		id="commentEditFieldFactory" 
-		class="com.socialize.ui.comment.CommentEditFieldFactory"
-		extends="uiViewFactory"/>
-		
-	<bean 
-		id="commentContentViewFactory" 
-		class="com.socialize.ui.comment.CommentContentViewFactory"
-		extends="uiViewFactory"/>
-		
-	<bean 
-		id="commentDetailContentViewFactory" 
-		class="com.socialize.ui.comment.CommentDetailContentViewFactory"
-		extends="uiViewFactory">
-		
-		<property name="geoUtils" ref="geoUtils"/>
-		<property name="dateUtils" ref="dateUtils"/>
-		
-	</bean>
+		id="commentHeader" 
+		extends="socializeHeader"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="headerText" value="Comments"/>
+	</bean>	
+	
+	<factory id="commentHeaderFactory" makes="commentHeader"/>	
 	
 	<bean 
 		id="commentList" 
@@ -425,6 +413,50 @@
 		<property name="sliderFactory" ref="actionBarSliderFactory"/>
 		
 	</bean>
+	
+	<bean 
+		id="commentContentView" 
+		class="com.socialize.ui.comment.CommentContentView"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<init-method name="init"/>
+	</bean>	
+	
+	<factory id="commentContentViewFactory" makes="commentContentView"/>	
+	
+	<bean 
+		id="commentEditField" 
+		class="com.socialize.ui.comment.CommentEditField"
+		singleton="false">
+		
+		<constructor-arg type="activity"/>
+
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="colors" ref="colors"/>
+		
+		<init-method name="init"/>
+		
+	</bean>
+	
+	<factory id="commentEditFieldFactory" makes="commentEditField"/>	
+	
+	<bean 
+		id="commentDetailContentView" 
+		class="com.socialize.ui.comment.CommentDetailContentView"
+		singleton="false">
+		
+		<constructor-arg type="activity"/>
+
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="colors" ref="colors"/>
+		<property name="geoUtils" ref="geoUtils"/>
+		<property name="dateUtils" ref="dateUtils"/>
+		
+		<init-method name="init"/>
+		
+	</bean>
+	
+	<factory id="commentDetailContentViewFactory" makes="commentDetailContentView"/>		
 	
 	<!--  Comment items -->
 	<bean 
@@ -508,24 +540,18 @@
 		class="com.socialize.ui.profile.ProfileLayoutView"
 		singleton="false"
 		extends="socializeView">
+		
 		<constructor-arg type="activity"/>
 
-		<init-method name="init"/>
-		
 		<property name="drawables" ref="drawables"/>
-		<property name="userService" ref="userService"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
 		<property name="profileHeaderFactory" ref="profileHeaderFactory"/>
 		<property name="profileContentViewFactory" ref="profileContentViewFactory"/>
-		<property name="imageLoader" ref="imageLoader"/><!-- Defined in socialize_beans.xml -->
 		<property name="bitmapUtils" ref="bitmapUtils"/><!-- Defined in socialize_beans.xml -->
+		
+		<init-method name="init"/>
 	</bean>
 	
-	<bean 
-		id="profileHeaderFactory" 
-		class="com.socialize.ui.profile.ProfileHeaderFactory"
-		extends="uiViewFactory"/>
-		
 	<bean 
 		id="profileImageContextMenu" 
 		class="com.socialize.ui.profile.DefaultProfileImageContextMenu" 
@@ -535,9 +561,22 @@
 	</bean>
 	
 	<bean 
-		id="profileContentViewFactory" 
-		class="com.socialize.ui.profile.ProfileContentViewFactory"
-		extends="uiViewFactory">
+		id="profileHeader" 
+		extends="socializeHeader"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="headerText" value="Profile"/>
+	</bean>		
+	
+	<factory id="profileHeaderFactory" makes="profileHeader"/>		
+	
+	<bean 
+		id="profileContentView" 
+		class="com.socialize.ui.profile.ProfileContentView" 
+		singleton="false">
+		
+		<constructor-arg type="activity"/>	
+		
 		<property name="profileCancelButtonFactory" ref="profileCancelButtonFactory"/>
 		<property name="profileSaveButtonFactory" ref="profileSaveButtonFactory"/>
 		<property name="profileEditButtonFactory" ref="profileEditButtonFactory"/>	
@@ -545,8 +584,19 @@
 		<property name="facebookSignInButtonFactory" ref="facebookSignInButtonFactory"/>
 		<property name="facebookSignOutClickListenerFactory" ref="facebookSignOutClickListenerFactory"/>
 		<property name="profileSaveButtonListenerFactory" ref="profileSaveButtonListenerFactory"/>	
-		<property name="profileImageContextMenuFactory" ref="profileImageContextMenuFactory"/>	
+		<property name="profileImageContextMenuFactory" ref="profileImageContextMenuFactory"/>
+		
+		<property name="userService" ref="userService"/>
+		<property name="imageLoader" ref="imageLoader"/>	
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="colors" ref="colors"/>
+		<property name="drawables" ref="drawables"/>
+		
+		<init-method name="init"/>
+		
 	</bean>
+		
+	<factory id="profileContentViewFactory" makes="profileContentView"/>				
 		
 	<bean 
 		id="profileEditButton" 

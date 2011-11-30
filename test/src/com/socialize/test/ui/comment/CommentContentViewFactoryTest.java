@@ -9,7 +9,7 @@ public class CommentContentViewFactoryTest extends SocializeUITestCase {
 	public void testMake() {
 		// Just tests for runtime failures
 		CommentContentViewFactory factory = new CommentContentViewFactory();
-		assertTrue((factory.make(getContext()) instanceof CommentContentView));
+		assertTrue((factory.make(getContext(), null) instanceof CommentContentView));
 	}
 	
 }

@@ -58,6 +58,10 @@ public class User extends SocializeObject {
 		setStats(user.getStats());
 		setAuthData(user.getAuthData());
 		setProfilePicData(user.getProfilePicData());
+		
+		// Set to null to re-create
+		displayName = null;
+		
 //		setAutoPostToFacebook(user.isAutoPostToFacebook()); // Don't merge this!
 	}
 

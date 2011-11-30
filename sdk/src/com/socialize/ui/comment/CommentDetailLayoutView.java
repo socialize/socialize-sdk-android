@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Comment;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
@@ -38,10 +39,10 @@ import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.dialog.ProgressDialogFactory;
+import com.socialize.ui.header.SocializeHeader;
 import com.socialize.ui.image.ImageLoadListener;
 import com.socialize.ui.image.ImageLoadRequest;
 import com.socialize.ui.image.ImageLoader;
-import com.socialize.ui.view.ViewFactory;
 import com.socialize.util.Drawables;
 import com.socialize.util.SafeBitmapDrawable;
 import com.socialize.util.StringUtils;
@@ -55,7 +56,7 @@ public class CommentDetailLayoutView extends BaseView {
 
 	private String userId;
 	private String commentId;
-	private CommentHeader header;
+	private SocializeHeader header;
 	private CommentDetailContentView content;
 	private ProgressDialog dialog = null;
 	private Drawable defaultProfilePicture;
@@ -64,8 +65,8 @@ public class CommentDetailLayoutView extends BaseView {
 	
 	// Injected
 	private Drawables drawables;
-	private ViewFactory<CommentHeader> commentHeaderFactory;
-	private CommentDetailContentViewFactory commentDetailContentViewFactory;
+	private IBeanFactory<SocializeHeader> commentHeaderFactory;
+	private IBeanFactory<CommentDetailContentView> commentDetailContentViewFactory;
 	private ProgressDialogFactory progressDialogFactory;
 	private ImageLoader imageLoader;
 	// End injected
@@ -98,8 +99,8 @@ public class CommentDetailLayoutView extends BaseView {
 		setPadding(0, 0, 0, 0);
 		setVerticalFadingEdgeEnabled(false);
 
-		header = commentHeaderFactory.make(getContext());
-		content = commentDetailContentViewFactory.make(getContext());
+		header = commentHeaderFactory.getBean();
+		content = commentDetailContentViewFactory.getBean();
 		defaultProfilePicture = drawables.getDrawable("default_user_icon.png");
 		
 		OnClickListener profileClickListener = new OnClickListener() {
@@ -243,12 +244,12 @@ public class CommentDetailLayoutView extends BaseView {
 		this.progressDialogFactory = progressDialogFactory;
 	}
 
-	public void setCommentHeaderFactory(ViewFactory<CommentHeader> profileHeaderFactory) {
+	public void setCommentHeaderFactory(IBeanFactory<SocializeHeader> profileHeaderFactory) {
 		this.commentHeaderFactory = profileHeaderFactory;
 	}
 
-	public void setCommentDetailContentViewFactory(CommentDetailContentViewFactory profileContentViewFactory) {
-		this.commentDetailContentViewFactory = profileContentViewFactory;
+	public void setCommentDetailContentViewFactory(IBeanFactory<CommentDetailContentView> commentDetailContentViewFactory) {
+		this.commentDetailContentViewFactory = commentDetailContentViewFactory;
 	}
 
 	public void setImageLoader(ImageLoader imageLoader) {

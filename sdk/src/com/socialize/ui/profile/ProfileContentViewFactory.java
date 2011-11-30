@@ -48,14 +48,18 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.ui.button.SocializeButton;
 import com.socialize.ui.facebook.FacebookButton;
 import com.socialize.ui.facebook.FacebookSignOutClickListener;
+import com.socialize.ui.image.ImageLoader;
+import com.socialize.ui.user.UserService;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.view.BaseViewFactory;
+import com.socialize.util.SafeBitmapDrawable;
 
 /**
  * @author Jason Polites
  *
  */
-public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentView> {
+@Deprecated
+public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentView, ProfileLayoutView> {
 	
 	private IBeanFactory<SocializeButton> profileCancelButtonFactory;
 	private IBeanFactory<SocializeButton> profileSaveButtonFactory;
@@ -65,15 +69,21 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 	private IBeanFactory<ProfileSaveButtonListener> profileSaveButtonListenerFactory;
 	private IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory;
 	private IBeanFactory<ProfileImageContextMenu> profileImageContextMenuFactory;
+	
+	private UserService userService;
+	private ImageLoader imageLoader;
 
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.view.ViewFactory#make(android.content.Context)
 	 */
 	@Override
-	public ProfileContentView make(Context context) {
+	public ProfileContentView make(Context context, final ProfileLayoutView parent) {
 		final ProfileContentView view = newProfileContentView(context);
 		
 		view.setDrawables(drawables);
+		view.setUserService(userService);
+		view.setImageLoader(imageLoader);
+		view.setDefaultProfilePicture((SafeBitmapDrawable) drawables.getDrawable("large_user_icon.png"));
 		view.setContextMenu(profileImageContextMenuFactory.getBean());
 		
 		final int padding = getDIP(4);
@@ -268,7 +278,8 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 			@Override
 			public void onAuthSuccess(SocializeSession session) {
 				// Reload profile view
-				view.onFacebookChanged();
+				parent.doGetUserProfile();
+//				view.setUserDetails(session.getUser());
 			}
 			
 			@Override
@@ -300,7 +311,7 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 	}
 	
 	protected ProfileContentView newProfileContentView(Context context) {
-		return new ProfileContentView(context);
+		return new ProfileContentView(context, null);
 	}
 
 	public void setProfileCancelButtonFactory(IBeanFactory<SocializeButton> profileCancelButtonFactory) {
@@ -333,5 +344,13 @@ public class ProfileContentViewFactory extends BaseViewFactory<ProfileContentVie
 
 	public void setFacebookSignInButtonFactory(IBeanFactory<FacebookButton> facebookSignInButtonFactory) {
 		this.facebookSignInButtonFactory = facebookSignInButtonFactory;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
+	public void setImageLoader(ImageLoader imageLoader) {
+		this.imageLoader = imageLoader;
 	}
 }

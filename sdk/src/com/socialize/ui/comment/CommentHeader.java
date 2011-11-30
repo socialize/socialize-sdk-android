@@ -27,8 +27,9 @@ import com.socialize.ui.header.SocializeHeader;
 
 /**
  * @author Jason Polites
- *
+ * @deprecated No need for a separate class
  */
+@Deprecated
 public class CommentHeader extends SocializeHeader {
 	public CommentHeader(Context context) {
 		super(context);

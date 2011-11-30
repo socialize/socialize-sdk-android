@@ -42,6 +42,7 @@ public class Colors {
 	/**
 	 * @deprecated
 	 */
+	@Deprecated
 	public static final String BUTTON_STROKE = "BUTTON_STROKE";
 	
 	public static final String BUTTON_TOP_STROKE = "BUTTON_TOP_STROKE";

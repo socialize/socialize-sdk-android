@@ -51,7 +51,7 @@ public class CommentHeaderFactoryTest extends SocializeUITestCase {
 		factory.setDeviceUtils(deviceUtils);
 		factory.setDrawables(drawables);
 		
-		assertTrue((factory.make(getContext()) instanceof CommentHeader));
+		assertTrue((factory.make(getContext(), null) instanceof CommentHeader));
 		
 		AndroidMock.verify(deviceUtils);
 		AndroidMock.verify(colors);

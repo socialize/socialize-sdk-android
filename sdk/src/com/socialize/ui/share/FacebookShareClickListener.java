@@ -65,7 +65,11 @@ public class FacebookShareClickListener extends ShareClickListener {
 	public FacebookShareClickListener(ActionBarView actionBarView, EditText commentView, OnActionBarEventListener onActionBarEventListener) {
 		super(actionBarView, commentView, onActionBarEventListener);
 	}
-
+	
+	@Override
+	public boolean isAvailableOnDevice(Activity parent) {
+		return getSocializeUI().isFacebookSupported();
+	}	
 
 	@Override
 	protected void doShare(final Activity parent, final String title, final String subject, final String body, final String comment) {

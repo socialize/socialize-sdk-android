@@ -46,7 +46,8 @@ import com.socialize.ui.view.BaseViewFactory;
 /**
  * @author Jason Polites
  */
-public class CommentDetailContentViewFactory extends BaseViewFactory<CommentDetailContentView> {
+@Deprecated
+public class CommentDetailContentViewFactory extends BaseViewFactory<CommentDetailContentView, CommentDetailLayoutView> {
 
 	private GeoUtils geoUtils;
 	private DateUtils dateUtils;
@@ -55,7 +56,7 @@ public class CommentDetailContentViewFactory extends BaseViewFactory<CommentDeta
 	 * @see com.socialize.ui.view.ViewFactory#make(android.content.Context)
 	 */
 	@Override
-	public CommentDetailContentView make(final Context context) {
+	public CommentDetailContentView make(final Context context, CommentDetailLayoutView parent) {
 		final CommentDetailContentView view = newCommentDetailContentView(context);
 		
 		view.setGeoUtils(geoUtils);

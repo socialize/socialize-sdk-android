@@ -27,9 +27,10 @@ import com.socialize.ui.header.BaseHeaderFactory;
 
 /**
  * @author Jason Polites
- *
+ * @deprecated
  */
-public class CommentHeaderFactory extends BaseHeaderFactory<CommentHeader> {
+@Deprecated
+public class CommentHeaderFactory extends BaseHeaderFactory<CommentHeader, CommentDetailLayoutView> {
 
 	@Override
 	protected String getHeaderText() {

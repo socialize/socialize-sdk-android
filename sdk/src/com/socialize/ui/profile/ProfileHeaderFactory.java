@@ -27,9 +27,10 @@ import com.socialize.ui.header.BaseHeaderFactory;
 
 /**
  * @author Jason Polites
- *
+ * @deprecated
  */
-public class ProfileHeaderFactory extends BaseHeaderFactory<ProfileHeader> {
+@Deprecated
+public class ProfileHeaderFactory extends BaseHeaderFactory<ProfileHeader, ProfileLayoutView> {
 
 	@Override
 	protected String getHeaderText() {
