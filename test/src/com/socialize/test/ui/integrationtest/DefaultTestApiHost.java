@@ -94,6 +94,16 @@ public class DefaultTestApiHost implements ApiHost {
 	}
 
 	@Override
+	public void listCommentsByUser(SocializeSession session, long userId, CommentListener listener) {
+		fail(message + "listCommentsByUser");
+	}
+
+	@Override
+	public void listCommentsByUser(SocializeSession session, long userId, int startIndex, int endIndex, CommentListener listener) {
+		fail(message + "listCommentsByUser");
+	}
+
+	@Override
 	public void listCommentsById(SocializeSession session, CommentListener listener, int... ids) {
 		fail(message + "listCommentsById");
 	}

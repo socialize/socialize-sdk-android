@@ -21,6 +21,7 @@
         <activity android:name="CommentGetActivity"/>
         <activity android:name="CommentListSelectActivity"/>
         <activity android:name="CommentListActivity"/>
+        <activity android:name="CommentUserListActivity"/>
         <activity android:name="EntityActivity"/>
         <activity android:name="LikeActivity"/>
         <activity android:name="ShareActivity"/>

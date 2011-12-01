@@ -49,7 +49,7 @@ import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 
 /**
- * Posts to the FB wall
+ * Posts to the Facebook wall.
  * @author Jason Polites
  */
 public class DefaultFacebookWallPoster implements FacebookWallPoster {
@@ -119,13 +119,8 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			post(parent, appId, linkName, message, link, caption, listener);
 		}
 		else {
-			String error = "Cannot post message to Facebook.  No app id found";
-			if(logger != null) {
-				logger.warn(error);
-			}
-			else {
-				System.err.println(error);
-			}
+			String msg = "Cannot post message to Facebook.  No app id found.  Make sure you specify facebook.app.id in socialize.properties";
+			onError(parent, msg, new SocializeException(msg), listener);
 		}
 	}
 	
@@ -189,10 +184,8 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 								}
 								
 								onError(parent, msg, new SocializeException(msg), listener);
-								
 							}
 							else {
-								
 								onError(parent, defaultErrorMessage, new SocializeException("Facebook Error (Unknown)"), listener);
 							}
 							
@@ -213,7 +206,6 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 						}
 					});
 				}
-
 			}
 		}, null);	
 	}
@@ -237,11 +229,18 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	protected void onError(final Activity parent, final String msg, final Throwable e, final FacebookWallPostListener listener) {
 		
 		if(logger != null) {
-			logger.error("Error sharing to Facebook: " + msg, e);
+			if(e != null) {
+				logger.error(msg, e);
+			}
+			else {
+				logger.error(msg);
+			}
 		}
 		else {
 			System.err.println(msg);
-			e.printStackTrace();
+			if(e != null) {
+				e.printStackTrace();
+			}
 		}
 		
 		if(listener != null) {

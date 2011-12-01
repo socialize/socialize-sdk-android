@@ -194,6 +194,24 @@ public class SocializeApiHost implements ApiHost {
 		commentApi.getCommentsById(session, listener, ids);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.ApiHost#listCommentsByUser(com.socialize.api.SocializeSession, long, com.socialize.listener.comment.CommentListener)
+	 */
+	@Override
+	public void listCommentsByUser(SocializeSession session, long userId, CommentListener listener) {
+		commentApi.getCommentsByUser(session, userId, listener);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.ApiHost#listCommentsByUser(com.socialize.api.SocializeSession, long, int, int, com.socialize.listener.comment.CommentListener)
+	 */
+	@Override
+	public void listCommentsByUser(SocializeSession session, long userId, int startIndex, int endIndex, CommentListener listener) {
+		commentApi.getCommentsByUser(session, userId, startIndex, endIndex, listener);
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.api.ApiHost#addLike(com.socialize.api.SocializeSession, java.lang.String, android.location.Location, com.socialize.listener.like.LikeListener)
 	 */
@@ -201,7 +219,6 @@ public class SocializeApiHost implements ApiHost {
 	public void addLike(SocializeSession session, String key, Location location, LikeListener listener) {
 		likeApi.addLike(session, key, location, listener);
 	}
-	
 	
 	@Override
 	public void listLikesByUser(SocializeSession session, long userId, LikeListener listener) {

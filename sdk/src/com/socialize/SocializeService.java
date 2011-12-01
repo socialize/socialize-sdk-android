@@ -216,7 +216,7 @@ public interface SocializeService {
 	/**
 	 * Lists the likes associated with a single user.
 	 * @param userId The user
-	 * @param likeListListener
+	 * @param likeListListener A listener to handle callbacks from the get.
 	 */
 	public void listLikesByUser(long userId, LikeListListener likeListListener);
 	
@@ -225,7 +225,7 @@ public interface SocializeService {
 	 * @param userId The user
 	 * @param startIndex The starting index of the results for pagination.
 	 * @param endIndex The ending index of the results for pagination.
-	 * @param likeListListener
+	 * @param likeListListener A listener to handle callbacks from the get.
 	 */
 	public void listLikesByUser(long userId, int startIndex, int endIndex, LikeListListener likeListListener);	
 	
@@ -245,6 +245,21 @@ public interface SocializeService {
 	 */
 	public void listCommentsByEntity(String url, int startIndex, int endIndex, CommentListListener commentListListener);
 	
+	/**
+	 * Lists the comments associated with a single user.
+	 * @param userId The user
+	 * @param commentListListener A listener to handle callbacks from the get.
+	 */
+	public void listCommentsByUser(long userId, CommentListListener commentListListener);
+	
+	/**
+	 * Lists the comments associated with a single user.
+	 * @param userId The user
+	 * @param startIndex The starting index of the results for pagination.
+	 * @param endIndex The ending index of the results for pagination.
+	 * @param commentListListener A listener to handle callbacks from the get.
+	 */
+	public void listCommentsByUser(long userId, int startIndex, int endIndex, CommentListListener commentListListener);	
 	
 	/**
 	 * Retrieves a single comment based on its ID.

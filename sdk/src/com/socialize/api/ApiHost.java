@@ -73,7 +73,11 @@ public interface ApiHost {
 	public void listCommentsByEntity(SocializeSession session, String url, int startIndex, int endIndex, CommentListener listener);
 
 	public void listCommentsById(SocializeSession session, CommentListener listener, int... ids);
-
+	
+	public void listCommentsByUser(SocializeSession session, long userId, CommentListener listener);
+	
+	public void listCommentsByUser(SocializeSession session, long userId, int startIndex, int endIndex, CommentListener listener);
+	
 	public void addLike(SocializeSession session, String key, Location location, LikeListener listener);
 
 	public void addView(SocializeSession session, String key, Location location, ViewListener listener);

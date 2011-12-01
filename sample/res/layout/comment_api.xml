@@ -33,4 +33,11 @@
 		android:layout_height="wrap_content"
 		android:layout_width="fill_parent"
 		android:textSize="12dp"/>
+	
+	<Button
+		android:id="@+id/btnListUserComments"
+		android:text="List User Comments" 
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:textSize="12dp"/>	
 </LinearLayout>

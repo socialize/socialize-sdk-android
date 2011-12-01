@@ -21,6 +21,8 @@
  */
 package com.socialize.entity.factory;
 
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -105,6 +107,12 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		object.put(MEDIUM_IMAGE_URI, user.getMediumImageUri());
 		object.put(LARGE_IMAGE_URI, user.getLargeImageUri());
 		object.put(AUTO_POST_FACEBOOK, user.isAutoPostToFacebook());
+
+		List<UserAuthData> authData = user.getAuthData();
+		
+		if(authData != null && authData.size() > 0) {
+			object.put(THIRD_PARTY_AUTH, userAuthDataFactory.toJSON(authData));
+		}
 	}
 
 	public StatsFactory getStatsFactory() {

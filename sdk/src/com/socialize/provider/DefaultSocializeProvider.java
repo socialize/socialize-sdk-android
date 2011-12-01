@@ -186,11 +186,8 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 				}
 			}
 		}
-		
 		return null;
 	}
-	
-	
 	
 	@Override
 	public void clearSession(AuthProviderType type) {

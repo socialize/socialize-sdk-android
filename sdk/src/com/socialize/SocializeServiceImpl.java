@@ -517,6 +517,20 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	}
 
 	@Override
+	public void listCommentsByUser(long userId, CommentListListener commentListListener) {
+		if(assertAuthenticated(commentListListener)) {
+			service.listCommentsByUser(session, userId, commentListListener);
+		}		
+	}
+
+	@Override
+	public void listCommentsByUser(long userId, int startIndex, int endIndex, CommentListListener commentListListener) {
+		if(assertAuthenticated(commentListListener)) {
+			service.listCommentsByUser(session, userId, startIndex, endIndex, commentListListener);
+		}
+	}
+
+	@Override
 	public void share(String url, String text, ShareType shareType, ShareAddListener shareAddListener) {
 		share(url, text, shareType, null, shareAddListener);
 	}

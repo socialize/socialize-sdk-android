@@ -21,6 +21,8 @@
  */
 package com.socialize.test.unit;
 
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,18 +52,29 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 	final String large_image_uri = "mock_large_image_uri";
 	final String picture = "mock_image_data";
 	final String auto_post_fb = "auto_post_fb";
+	final String third_party_auth = "third_party_auth";
 	final boolean is_auto_post_fb = false;
 	
-	private JSONArray array;
+	List<UserAuthData> authData;
+	UserAuthDataFactory userAuthDataFactory;
+	JSONArray array;
 	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({JSONArray.class, List.class})
 	@Override
 	protected void setupToJSONExpectations() throws JSONException {
+		array = AndroidMock.createMock(JSONArray.class);
+		authData = AndroidMock.createNiceMock(List.class);
+		
+		AndroidMock.expect(authData.size()).andReturn(1);
+		AndroidMock.expect(userAuthDataFactory.toJSON(authData)).andReturn(array);
+		
 		AndroidMock.expect(object.getFirstName()).andReturn(first_name);
 		AndroidMock.expect(object.getLastName()).andReturn(last_name);
 		AndroidMock.expect(object.getDescription()).andReturn(description);
 		AndroidMock.expect(object.getLocation()).andReturn(location);
 		AndroidMock.expect(object.getProfilePicData()).andReturn(picture);
-		
+		AndroidMock.expect(object.getAuthData()).andReturn(authData);
 		AndroidMock.expect(object.getSmallImageUri()).andReturn(small_image_uri);
 		AndroidMock.expect(object.getMediumImageUri()).andReturn(medium_image_uri);
 		AndroidMock.expect(object.getLargeImageUri()).andReturn(large_image_uri);
@@ -78,10 +91,18 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		AndroidMock.expect(json.put("small_image_uri", small_image_uri)).andReturn(json);
 		AndroidMock.expect(json.put("medium_image_uri", medium_image_uri)).andReturn(json);
 		AndroidMock.expect(json.put("large_image_uri", large_image_uri)).andReturn(json);
+		
+		AndroidMock.expect(json.put(third_party_auth, array)).andReturn(json);
+		
+		AndroidMock.replay(authData);
+		AndroidMock.replay(userAuthDataFactory);
 	}
 
 	@Override
-	protected void doToJSONVerify() {}
+	protected void doToJSONVerify() {
+		AndroidMock.verify(authData);
+		AndroidMock.verify(userAuthDataFactory);
+	}
 
 	@UsesMocks({Stats.class, UserAuthData.class})
 	@Override
@@ -102,7 +123,7 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		AndroidMock.expect(json.has("medium_image_uri")).andReturn(true);
 		AndroidMock.expect(json.has("large_image_uri")).andReturn(true);
 		AndroidMock.expect(json.has("stats")).andReturn(true);
-		AndroidMock.expect(json.has("third_party_auth")).andReturn(true);
+		AndroidMock.expect(json.has(third_party_auth)).andReturn(true);
 		AndroidMock.expect(json.has("auto_post_fb")).andReturn(true);
 		
 		
@@ -116,7 +137,7 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		AndroidMock.expect(json.isNull("medium_image_uri")).andReturn(false);
 		AndroidMock.expect(json.isNull("large_image_uri")).andReturn(false);
 		AndroidMock.expect(json.isNull("stats")).andReturn(false);
-		AndroidMock.expect(json.isNull("third_party_auth")).andReturn(false);
+		AndroidMock.expect(json.isNull(third_party_auth)).andReturn(false);
 		AndroidMock.expect(json.isNull("auto_post_fb")).andReturn(false);
 		
 		AndroidMock.expect(json.getString("picture")).andReturn(picture);
@@ -131,7 +152,7 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		AndroidMock.expect(json.getJSONObject("stats")).andReturn(json);
 		AndroidMock.expect(json.getBoolean("auto_post_fb")).andReturn(is_auto_post_fb);
 		
-		AndroidMock.expect(json.getJSONArray("third_party_auth")).andReturn(array);
+		AndroidMock.expect(json.getJSONArray(third_party_auth)).andReturn(array);
 		AndroidMock.expect(array.length()).andReturn(1).times(2);
 		AndroidMock.expect(array.getJSONObject(0)).andReturn(json);
 		
@@ -173,7 +194,7 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 	protected UserFactory createFactory() {
 		
 		final StatsFactory statsFactory = AndroidMock.createMock(StatsFactory.class);
-		final UserAuthDataFactory userAuthDataFactory = AndroidMock.createMock(UserAuthDataFactory.class);
+		userAuthDataFactory = AndroidMock.createMock(UserAuthDataFactory.class);
 		
 		UserFactory factory = new UserFactory() {
 			@Override
