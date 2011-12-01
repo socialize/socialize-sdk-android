@@ -12,6 +12,11 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v1.0.4
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] After signing in or out of FB for the first time, the "edit profile" menu option takes you to the wrong user (the old one)
+[bug] Share features should detect when device does not have capability (e.g. SMS)
+
 v1.0.3
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [feature] Add list likes by user (SDK)
