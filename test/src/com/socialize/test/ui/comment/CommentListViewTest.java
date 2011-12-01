@@ -24,12 +24,12 @@ import com.socialize.ui.auth.AuthRequestListener;
 import com.socialize.ui.comment.CommentAdapter;
 import com.socialize.ui.comment.CommentAddButtonListener;
 import com.socialize.ui.comment.CommentContentView;
-import com.socialize.ui.comment.CommentHeader;
 import com.socialize.ui.comment.CommentListView;
 import com.socialize.ui.comment.CommentScrollListener;
 import com.socialize.ui.dialog.DialogFactory;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.facebook.FacebookWallPoster;
+import com.socialize.ui.header.SocializeHeader;
 
 public class CommentListViewTest extends SocializeUIActivityTest {
 	/*
@@ -37,7 +37,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 	@UsesMocks ({
 		ViewFactory.class,
 		View.class,
-		CommentHeader.class,
+		SocializeHeader.class,
 		CommentContentView.class,
 		Drawables.class,
 		KeyboardUtils.class,
@@ -52,7 +52,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		final String entityKey = "foobar";
 		
-		ViewFactory<CommentHeader> commentHeaderFactory = AndroidMock.createMock(ViewFactory.class);
+		ViewFactory<SocializeHeader> commentHeaderFactory = AndroidMock.createMock(ViewFactory.class);
 		ViewFactory<View> commentEditFieldFactory = AndroidMock.createMock(ViewFactory.class);
 		ViewFactory<CommentContentView> commentContentViewFactory = AndroidMock.createMock(ViewFactory.class);
 		
@@ -62,7 +62,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		final CommentAddButtonListener onClickListener = AndroidMock.createMock(CommentAddButtonListener.class, getContext());
 		
 		View field = AndroidMock.createNiceMock(View.class, getContext());
-		CommentHeader header = AndroidMock.createNiceMock(CommentHeader.class, getContext());
+		SocializeHeader header = AndroidMock.createNiceMock(SocializeHeader.class, getContext());
 		CommentContentView content = AndroidMock.createNiceMock(CommentContentView.class, getContext());
 		Drawables drawables = AndroidMock.createMock(Drawables.class);
 //		KeyboardUtils keyboardUtils = AndroidMock.createMock(KeyboardUtils.class);
@@ -126,7 +126,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 			}
 		};
 		
-		view.setCommentHeaderFactory(commentHeaderFactory);
+		view.setSocializeHeaderFactory(commentHeaderFactory);
 		view.setCommentEditFieldFactory(commentEditFieldFactory);
 		view.setCommentContentViewFactory(commentContentViewFactory);
 //		view.setKeyboardUtils(keyboardUtils);
@@ -318,7 +318,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		CommentAdapter.class,
 		List.class,
 		View.class,
-		CommentHeader.class,
+		SocializeHeader.class,
 		CommentContentView.class,
 		FacebookWallPoster.class})
 	public void testPostCommentSuccess() {
@@ -339,7 +339,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
 		final List<Comment> comments = AndroidMock.createMock(List.class);
 		final View field = AndroidMock.createMock(View.class, getContext());
-		final CommentHeader header = AndroidMock.createMock(CommentHeader.class, getContext());
+		final SocializeHeader header = AndroidMock.createMock(SocializeHeader.class, getContext());
 		final CommentContentView content = AndroidMock.createMock(CommentContentView.class, getContext());
 		
 		final FacebookWallPoster facebookWallPoster = AndroidMock.createMock(FacebookWallPoster.class);
@@ -618,7 +618,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 	@UsesMocks ({
 		CommentAdapter.class,
 		List.class,
-		CommentHeader.class,
+		SocializeHeader.class,
 		CommentContentView.class,
 		ListResult.class})
 	public void testDoListCommentsSuccessEmptyCommentsWithoutUpdate() {
@@ -631,7 +631,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		final List<Comment> comments = AndroidMock.createMock(List.class);
 		final List<Comment> listResultComments = AndroidMock.createMock(List.class);
 		
-		final CommentHeader header = AndroidMock.createMock(CommentHeader.class, getContext());
+		final SocializeHeader header = AndroidMock.createMock(SocializeHeader.class, getContext());
 		final CommentContentView content = AndroidMock.createMock(CommentContentView.class, getContext());
 		final ListResult<Comment> entities = AndroidMock.createMock(ListResult.class);
 		
@@ -756,7 +756,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
 		final List<Comment> comments = AndroidMock.createMock(List.class);
 		final CommentContentView content = AndroidMock.createMock(CommentContentView.class, getContext());
-		final CommentHeader header = AndroidMock.createMock(CommentHeader.class, getContext());
+		final SocializeHeader header = AndroidMock.createMock(SocializeHeader.class, getContext());
 		
 		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
 		AndroidMock.expect(comments.size()).andReturn(10); // Populated comments
@@ -895,7 +895,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		}
 
 		@Override
-		public void setHeader(CommentHeader header) {
+		public void setHeader(SocializeHeader header) {
 			super.setHeader(header);
 		}
 

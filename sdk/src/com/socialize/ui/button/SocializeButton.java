@@ -297,12 +297,6 @@ public class SocializeButton extends LinearLayout {
 		this.topColor = topColor;
 	}
 
-	@Deprecated
-	public void setStrokeColor(String strokeColor) {
-		setStrokeTopColor(strokeColor);
-		setStrokeBottomColor(strokeColor);
-	}
-
 	public void setStrokeTopColor(String strokeTopColor) {
 		this.strokeTopColor = strokeTopColor;
 	}

@@ -53,7 +53,7 @@ public class FacebookSessionStoreTest extends SocializeActivityTest {
 	protected void setUp() throws Exception {
 		super.setUp();
 		
-		drawables = AndroidMock.createMock(Drawables.class, getActivity());
+		drawables = AndroidMock.createMock(Drawables.class);
 		facebook = AndroidMock.createMock(Facebook.class, appId, drawables);
 		prefs =  AndroidMock.createMock(SharedPreferences.class);
 		context = AndroidMock.createMock(Activity.class);

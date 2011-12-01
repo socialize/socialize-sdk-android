@@ -137,13 +137,6 @@ public interface SocializeService {
 	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderAppId, SocializeAuthListener authListener);
 	
 	/**
-	 * @deprecated Too ambiguous.
-	 * @use this{@link #authenticateKnownUser(String, String, AuthProviderType, String, String, String, SocializeAuthListener)}
-	 */
-	@Deprecated
-	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty, SocializeAuthListener authListener);
-	
-	/**
 	 * Authenticates the application against the API as a user known to your app from a given 3rd party provider.
 	 * @param consumerKey The consumer key, obtained from registration at http://www.getsocialize.com.
 	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
@@ -298,17 +291,6 @@ public interface SocializeService {
 	 * @param userGetListener A listener to handle callbacks from the get.
 	 */
 	public void getUser(long id, UserGetListener userGetListener);
-	
-	/**
-	 * Saves the profile for the current logged in user.
-	 * @param firstName User first name.
-	 * @param lastName User last name.
-	 * @param encodedImage A Base64 encoded PNG file used for the user's profile picture.
-	 * @param listener A listener to handle callbacks from the post.
-	 * @deprecated
-	 */
-	@Deprecated
-	public void saveCurrentUserProfile(Context context, String firstName, String lastName, String encodedImage, UserSaveListener listener);
 	
 	/**
 	 * Saves the profile for the current logged in user.

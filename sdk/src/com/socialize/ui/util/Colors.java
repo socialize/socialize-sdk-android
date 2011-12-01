@@ -39,11 +39,6 @@ public class Colors {
 	public static final String BUTTON_BOTTOM = "BUTTON_BOTTOM";
 	public static final String SOCIALIZE_BLUE = "SOCIALIZE_BLUE";
 	
-	/**
-	 * @deprecated
-	 */
-	public static final String BUTTON_STROKE = "BUTTON_STROKE";
-	
 	public static final String BUTTON_TOP_STROKE = "BUTTON_TOP_STROKE";
 	public static final String BUTTON_BOTTOM_STROKE = "BUTTON_BOTTOM_STROKE";
 	

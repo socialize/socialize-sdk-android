@@ -23,6 +23,8 @@ package com.socialize.ui.share;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -154,7 +156,13 @@ public abstract class ShareClickListener implements OnClickListener {
 	
 	protected abstract boolean isIncludeSocialize();
 	
+	public abstract boolean isAvailableOnDevice(Activity parent);
+	
 	protected abstract ShareType getShareType();
+	
+	protected boolean isAvailable(Activity parent, Intent intent) {
+		return parent.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null;
+	}
 	
 	protected boolean isGenerateShareMessage() {
 		return true;

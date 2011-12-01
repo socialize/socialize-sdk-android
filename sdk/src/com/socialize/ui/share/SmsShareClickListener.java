@@ -10,7 +10,6 @@ import com.socialize.ui.actionbar.OnActionBarEventListener;
 
 public class SmsShareClickListener extends ShareClickListener {
 	
-	
 	public SmsShareClickListener(ActionBarView actionBarView) {
 		super(actionBarView);
 	}
@@ -23,10 +22,20 @@ public class SmsShareClickListener extends ShareClickListener {
 
 	@Override
 	protected void doShare(Activity parent, String title, String subject, String body, String comment) {
-		Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+		Intent sendIntent = getIntent();
 		sendIntent.putExtra("sms_body", body); 
-		sendIntent.setType("vnd.android-dir/mms-sms");
 		parent.startActivity(sendIntent);
+	}
+	
+	protected Intent getIntent() {
+		Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+		sendIntent.setType("vnd.android-dir/mms-sms");
+		return sendIntent;
+	}
+
+	@Override
+	public boolean isAvailableOnDevice(Activity parent) {
+		return isAvailable(parent, getIntent());
 	}
 
 	@Override

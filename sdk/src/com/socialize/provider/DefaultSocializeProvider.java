@@ -271,18 +271,6 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		return session;
 	}
 
-	@Deprecated
-	@Override
-	public SocializeSession authenticate(String endpoint, String key, String secret, String userId3rdParty, String token3rdParty, String appId3rdParty, AuthProviderType authProviderType, String uuid) throws SocializeException {
-
-		AuthProviderData data = authProviderDataFactory.getBean();
-		data.setAppId3rdParty(appId3rdParty);
-		data.setAuthProviderType(authProviderType);
-		data.setToken3rdParty(token3rdParty);
-		data.setUserId3rdParty(userId3rdParty);
-		
-		return authenticate(endpoint, key, secret, data, uuid);
-	}
 
 	@Override
 	public T get(SocializeSession session, String endpoint, String id) throws SocializeException {
@@ -349,12 +337,12 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		return doListTypeRequest(request);
 	}
 
-	@Override
-	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
-		endpoint = prepareEndpoint(session, endpoint);
-		HttpUriRequest request = requestFactory.getListRequest(session, endpoint, key, ids);
-		return doListTypeRequest(request);
-	}
+//	@Override
+//	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
+//		endpoint = prepareEndpoint(session, endpoint);
+//		HttpUriRequest request = requestFactory.getListRequest(session, endpoint, key, ids);
+//		return doListTypeRequest(request);
+//	}
 	
 	@Override
 	public ListResult<T> put(SocializeSession session, String endpoint, T object) throws SocializeException {

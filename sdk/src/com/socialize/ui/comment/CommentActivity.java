@@ -91,14 +91,12 @@ public class CommentActivity extends SocializeUIActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		
 		if(Socialize.getSocialize().isAuthenticated()) {
-			final String userId = Socialize.getSocialize().getSession().getUser().getId().toString();
-			
 			MenuItem add = menu.add("Edit Profile");
 			add.setIcon(SocializeUI.getInstance().getDrawable("ic_menu_cc.png", DisplayMetrics.DENSITY_DEFAULT, true));
-			
 			add.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 				@Override
 				public boolean onMenuItemClick(MenuItem item) {
+					final String userId = Socialize.getSocialize().getSession().getUser().getId().toString();
 					SocializeUI.getInstance().showUserProfileViewForResult(CommentActivity.this, userId, CommentActivity.PROFILE_UPDATE);
 					return true;
 				}

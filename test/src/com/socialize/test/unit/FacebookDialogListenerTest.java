@@ -62,7 +62,7 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 //		final String encodedProfileImage = "foobar_image";
 		
 		Activity context = AndroidMock.createMock(Activity.class);
-		Drawables drawables = AndroidMock.createMock(Drawables.class, getActivity());
+		Drawables drawables = AndroidMock.createMock(Drawables.class);
 		Facebook facebook = AndroidMock.createMock(Facebook.class, appId, drawables);
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
 //		FacebookImageRetriever facebookImageRetriever = AndroidMock.createMock(FacebookImageRetriever.class);
@@ -140,7 +140,7 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		final String token = "bar";
 		
 		Activity context = AndroidMock.createMock(Activity.class);
-		Drawables drawables = AndroidMock.createMock(Drawables.class, getActivity());
+		Drawables drawables = AndroidMock.createMock(Drawables.class);
 		Facebook facebook = AndroidMock.createMock(Facebook.class, appId, drawables);
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
 		
@@ -210,7 +210,7 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		final String appId = "foobar";
 		
 		Activity context = AndroidMock.createMock(Activity.class);
-		Drawables drawables = AndroidMock.createMock(Drawables.class, getActivity());
+		Drawables drawables = AndroidMock.createMock(Drawables.class);
 		Facebook facebook = AndroidMock.createMock(Facebook.class, appId, drawables);
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
 
@@ -274,7 +274,7 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		final String appId = "foobar";
 		
 		Activity context = AndroidMock.createMock(Activity.class);
-		Drawables drawables = AndroidMock.createMock(Drawables.class, getActivity());
+		Drawables drawables = AndroidMock.createMock(Drawables.class);
 		Facebook facebook = AndroidMock.createMock(Facebook.class, appId, drawables);
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
 

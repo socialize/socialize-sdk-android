@@ -24,10 +24,10 @@ import com.socialize.ui.auth.AuthRequestDialogFactory;
 import com.socialize.ui.auth.AuthRequestListener;
 import com.socialize.ui.dialog.DialogFactory;
 import com.socialize.ui.facebook.FacebookWallPoster;
+import com.socialize.ui.header.SocializeHeader;
 import com.socialize.ui.slider.ActionBarSliderFactory;
 import com.socialize.ui.slider.ActionBarSliderFactory.ZOrder;
 import com.socialize.ui.slider.ActionBarSliderView;
-import com.socialize.ui.view.ViewFactory;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
 
@@ -48,12 +48,12 @@ public class CommentListView extends BaseView {
 	private Drawables drawables;
 	private ProgressDialog dialog = null;
 	
-	private ViewFactory<CommentHeader> commentHeaderFactory;
-	private ViewFactory<View> commentEditFieldFactory;
-	private ViewFactory<CommentContentView> commentContentViewFactory;
+	private IBeanFactory<SocializeHeader> commentHeaderFactory;
+	private IBeanFactory<CommentEditField> commentEditFieldFactory;
+	private IBeanFactory<CommentContentView> commentContentViewFactory;
 	
 	private View field;
-	private CommentHeader header;
+	private SocializeHeader header;
 	private CommentContentView content;
 	private IBeanFactory<AuthRequestDialogFactory> authRequestDialogFactory;
 	
@@ -136,9 +136,9 @@ public class CommentListView extends BaseView {
 		sliderAnchor.setLayoutParams(bottomParams);
 
 
-		header = commentHeaderFactory.make(getContext());
-		field = commentEditFieldFactory.make(getContext());
-		content = commentContentViewFactory.make(getContext());
+		header = commentHeaderFactory.getBean();
+		field = commentEditFieldFactory.getBean();
+		content = commentContentViewFactory.getBean();
 		
 		if(commentEntryFactory != null) {
 			commentEntryPage = commentEntryFactory.getBean(getCommentAddListener());
@@ -504,15 +504,15 @@ public class CommentListView extends BaseView {
 		this.defaultGrabLength = defaultGrabLength;
 	}
 
-	public void setCommentHeaderFactory(ViewFactory<CommentHeader> commentHeaderFactory) {
+	public void setCommentHeaderFactory(IBeanFactory<SocializeHeader> commentHeaderFactory) {
 		this.commentHeaderFactory = commentHeaderFactory;
 	}
 
-	public void setCommentEditFieldFactory(ViewFactory<View> commentEditFieldFactory) {
+	public void setCommentEditFieldFactory(IBeanFactory<CommentEditField> commentEditFieldFactory) {
 		this.commentEditFieldFactory = commentEditFieldFactory;
 	}
 
-	public void setCommentContentViewFactory(ViewFactory<CommentContentView> commentContentViewFactory) {
+	public void setCommentContentViewFactory(IBeanFactory<CommentContentView> commentContentViewFactory) {
 		this.commentContentViewFactory = commentContentViewFactory;
 	}
 
@@ -532,7 +532,7 @@ public class CommentListView extends BaseView {
 		this.field = field;
 	}
 
-	protected void setHeader(CommentHeader header) {
+	protected void setHeader(SocializeHeader header) {
 		this.header = header;
 	}
 

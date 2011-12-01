@@ -22,43 +22,79 @@
 package com.socialize.ui.comment;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.socialize.ui.util.Colors;
+import com.socialize.util.DeviceUtils;
 
 /**
  * @author Jason Polites
- * @deprecated
  */
-@Deprecated
 public class CommentEditField extends LinearLayout {
 	
-//	private ImageButton button;
-//	private TextView editText;
-
+	private DeviceUtils deviceUtils;
+	private Colors colors;
+	
 	public CommentEditField(Context context) {
 		super(context);
 	}
 	
-//	public String getText() {
-//		return editText.getText().toString();
-//	}
+	public void init() {
+
+		final int  four = deviceUtils.getDIP(4);
+		final int eight = deviceUtils.getDIP(8);
+		
+		LayoutParams editPanelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		editPanelLayoutParams.setMargins(eight, eight, eight, eight);
+		this.setLayoutParams(editPanelLayoutParams);
+		this.setOrientation(LinearLayout.HORIZONTAL);
+		this.setPadding(0, 0, 0, 0);
+
+		LinearLayout.LayoutParams editTextLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,  LinearLayout.LayoutParams.WRAP_CONTENT);
+		editTextLayoutParams.gravity = Gravity.CENTER_VERTICAL;
+		editTextLayoutParams.weight = 1.0f;
+		editTextLayoutParams.setMargins(0, 0, 0, 0);
+
+		TextView editText = new TextView(getContext());
+		editText.setMinHeight(deviceUtils.getDIP(36)); 
+		editText.setGravity(Gravity.CENTER_VERTICAL);
+		editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+		editText.setBackgroundDrawable(makeTextViewBackground());
+		editText.setHint(" Write a comment...");
+		editText.setLayoutParams(editTextLayoutParams);
+		editText.setPadding(four, four, four, four);
+
+		
+		this.addView(editText);
+	}
 	
-//	public void clear() {
-//		editText.setText("");
-//	}
+	protected Drawable makeTextViewBackground() {
+		GradientDrawable base = makeGradient(colors.getColor(Colors.SOCIALIZE_BLUE), colors.getColor(Colors.SOCIALIZE_BLUE));
+		base.setCornerRadius(6+deviceUtils.getDIP(1)); // Add 1 pixels to make it look nicer
+		GradientDrawable stroke = makeGradient(colors.getColor(Colors.TEXT_BG), colors.getColor(Colors.TEXT_BG));
+		stroke.setCornerRadius(6);
+		LayerDrawable layers = new LayerDrawable(new Drawable[] {base, stroke});
+		layers.setLayerInset(1, 2, 2, 2, 2);
+		return layers;
+	}
+	
+	protected GradientDrawable makeGradient(int bottom, int top) {
+		return new GradientDrawable(
+				GradientDrawable.Orientation.BOTTOM_TOP,
+				new int[] { bottom, top });
+	}		
+	
+	public void setDeviceUtils(DeviceUtils deviceUtils) {
+		this.deviceUtils = deviceUtils;
+	}
 
-//	public void setButton(ImageButton button) {
-//		this.button = button;
-//	}
-
-//	public void setEditText(TextView editText) {
-//		this.editText = editText;
-//	}
-
-//	public TextView getEditText() {
-//		return editText;
-//	}
-
-//	public ImageButton getButton() {
-//		return button;
-//	}
+	public void setColors(Colors colors) {
+		this.colors = colors;
+	}
 }

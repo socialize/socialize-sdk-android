@@ -450,17 +450,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		authenticate(consumerKey, consumerSecret, authProviderData, authListener, false);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#authenticate(java.lang.String, java.lang.String, com.socialize.auth.AuthProviderType, java.lang.String, java.lang.String, java.lang.String, com.socialize.listener.SocializeAuthListener)
-	 */
-	@Override
-	@Deprecated
-	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty,
-			SocializeAuthListener authListener) {
-		authenticateKnownUser(consumerKey, consumerSecret, authProvider, authProviderId, authUserId3rdParty, authToken3rdParty, authListener);
-	}
-	
 	private void authenticate(
 			String consumerKey, 
 			String consumerSecret, 
@@ -642,17 +631,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	public void saveCurrentUserProfile(Context context, UserProfile profile, UserSaveListener listener) {
 		if(assertAuthenticated(listener)) {
 			service.saveUserProfile(context, session, profile, listener);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#saveCurrentUserProfile(android.content.Context, java.lang.String, java.lang.String, java.lang.String, com.socialize.listener.user.UserSaveListener)
-	 */
-	@Override
-	public void saveCurrentUserProfile(Context context, String firstName, String lastName, String encodedImage, UserSaveListener listener) {
-		if(assertAuthenticated(listener)) {
-			service.saveUserProfile(context, session, firstName, lastName, encodedImage, listener);
 		}
 	}
 

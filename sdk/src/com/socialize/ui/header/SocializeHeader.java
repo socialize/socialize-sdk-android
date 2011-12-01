@@ -22,8 +22,20 @@
 package com.socialize.ui.header;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.socialize.ui.util.Colors;
+import com.socialize.util.DeviceUtils;
+import com.socialize.util.Drawables;
 
 /**
  * @author Jason Polites
@@ -32,6 +44,28 @@ import android.widget.TextView;
 public class SocializeHeader extends LinearLayout {
 	
 	private TextView titleText;
+	
+	private DeviceUtils deviceUtils;
+	private Drawables drawables;
+	private Colors colors;
+	
+	private String headerText;
+
+	public void setHeaderText(String headerText) {
+		this.headerText = headerText;
+	}
+
+	public void setDeviceUtils(DeviceUtils deviceUtils) {
+		this.deviceUtils = deviceUtils;
+	}
+
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
+	}
+
+	public void setColors(Colors colors) {
+		this.colors = colors;
+	}
 
 	public SocializeHeader(Context context) {
 		super(context);
@@ -47,5 +81,61 @@ public class SocializeHeader extends LinearLayout {
 	
 	public void setText(String text) {
 		this.titleText.setText(text);
+	}
+	
+	public void init() {
+		int four = deviceUtils.getDIP(4);
+		int eight = deviceUtils.getDIP(8);
+		int height = deviceUtils.getDIP(57);
+		
+		LayoutParams titlePanelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, height);
+		titlePanelLayoutParams.gravity = Gravity.CENTER_VERTICAL;
+		this.setLayoutParams(titlePanelLayoutParams);
+		this.setOrientation(LinearLayout.HORIZONTAL);
+		this.setPadding(four, four, four, four);
+		
+		GradientDrawable background = new GradientDrawable(
+				GradientDrawable.Orientation.BOTTOM_TOP,
+				new int[] { Color.BLACK, Color.BLACK });
+		
+		Drawable headerBG = drawables.getDrawable("header.png", true, false, true);
+		
+		Drawable[] layers = new Drawable[] {background, headerBG};
+		
+		LayerDrawable bg = newLayerDrawable(layers);
+		bg.setLayerInset(1, 0, 0, 0, 1);
+		
+		this.setBackgroundDrawable(bg);
+		
+		titleText = new TextView(getContext());
+		titleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+		titleText.setTextColor(colors.getColor(Colors.HEADER));
+		titleText.setText(getHeaderText());
+		titleText.setPadding(0, 0, 0, deviceUtils.getDIP(2));
+
+		LayoutParams titleTextLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		titleTextLayoutParams.gravity = Gravity.CENTER_VERTICAL;
+		titleText.setLayoutParams(titleTextLayoutParams);
+
+		ImageView titleImage = new ImageView(getContext());
+		titleImage.setImageDrawable(drawables.getDrawable("socialize_icon_white.png", DisplayMetrics.DENSITY_DEFAULT, true));
+		titleImage.setPadding(0, 0, 0, 0);
+
+		LayoutParams titleImageLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		titleImageLayoutParams.gravity = Gravity.CENTER_VERTICAL;
+		titleImageLayoutParams.setMargins(eight, 0, four, 0);
+		titleImage.setLayoutParams(titleImageLayoutParams);
+
+		this.addView(titleImage);
+		this.addView(titleText);
+	}
+	
+	// So we can mock
+	protected LayerDrawable newLayerDrawable(Drawable[] layers) {
+		return new LayerDrawable(layers);
+	}
+
+	public String getHeaderText() {
+		return headerText;
 	}
 }

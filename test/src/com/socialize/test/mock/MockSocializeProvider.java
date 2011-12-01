@@ -82,11 +82,6 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 	}
 	
 	@Override
-	public SocializeSession authenticate(String endpoint, String key, String secret, String userId3rdParty, String token3rdParty, String appId3rdParty, AuthProviderType authProviderType, String uuid) throws SocializeException {
-		return new MockSocializeSession();
-	}
-	
-	@Override
 	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids, String idKey, int startIndex, int endIndex) throws SocializeException {
 		return makeMockListResult(new String[5]);
 	}
@@ -96,11 +91,6 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 		return makeMockListResult(new String[5]);
 	}
 
-	@Override
-	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
-		return makeMockListResult(ids);
-	}
-	
 	@Override
 	public T get(SocializeSession session, String endpoint, String id) throws SocializeException {
 		return makeObject(id);
