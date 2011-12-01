@@ -3,7 +3,7 @@
 
 	<property file="local.properties" />
 	<property file="build.properties" />
-	<property file="default.properties" />
+	<property file="project.properties" />
 	
 	<path id="mock.classpath">
 		<pathelement path="libs/easymock.jar" />
