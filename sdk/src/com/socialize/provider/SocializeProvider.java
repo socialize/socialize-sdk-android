@@ -68,26 +68,6 @@ public interface SocializeProvider<T> {
 
 	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException;
 
-	/**
-	 * @deprecated
-	 * @use this{@link #authenticate(String, String, String, AuthProviderData, String)}
-	 * @param endpoint
-	 * @param key
-	 * @param secret
-	 * @param userId3rdParty
-	 * @param token3rdParty
-	 * @param appId3rdParty
-	 * @param authProviderType
-	 * @param uuid
-	 * @return
-	 * @throws SocializeException
-	 */
-	@Deprecated
-	public SocializeSession authenticate(String endpoint, String key, String secret, String userId3rdParty, String token3rdParty, String appId3rdParty, AuthProviderType authProviderType, String uuid) throws SocializeException;
-
-	@Deprecated
-	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException;
-	
 	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids, String idKey, int startIndex, int endIndex) throws SocializeException;
 	
 	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex) throws SocializeException;

@@ -22,8 +22,6 @@
 package com.socialize.api;
 
 import com.socialize.auth.AuthProviderData;
-import com.socialize.auth.AuthProviderResponse;
-import com.socialize.auth.AuthProviderType;
 
 /**
  * @author Jason Polites
@@ -33,13 +31,7 @@ public class SocializeAuthRequest extends SocializeRequest {
 	private String consumerKey;
 	private String consumerSecret;
 	private String udid;
-	private String authUserId3rdParty;
-	private String authToken3rdParty;
-	private AuthProviderType authProviderType;
-	private String appId3rdParty;
-
 	private AuthProviderData authProviderData;
-	private AuthProviderResponse providerResponse;
 	
 	public String getUdid() {
 		return udid;
@@ -63,56 +55,6 @@ public class SocializeAuthRequest extends SocializeRequest {
 
 	public void setConsumerSecret(String consumerSecret) {
 		this.consumerSecret = consumerSecret;
-	}
-
-	@Deprecated
-	public String getAuthUserId3rdParty() {
-		return authUserId3rdParty;
-	}
-
-	@Deprecated
-	public void setAuthUserId3rdParty(String authUserId3rdParty) {
-		this.authUserId3rdParty = authUserId3rdParty;
-	}
-
-	@Deprecated
-	public String getAuthToken3rdParty() {
-		return authToken3rdParty;
-	}
-
-	@Deprecated
-	public void setAuthToken3rdParty(String authToken3rdParty) {
-		this.authToken3rdParty = authToken3rdParty;
-	}
-
-	@Deprecated
-	public AuthProviderType getAuthProviderType() {
-		return authProviderType;
-	}
-
-	@Deprecated
-	public void setAuthProviderType(AuthProviderType authProviderType) {
-		this.authProviderType = authProviderType;
-	}
-
-	@Deprecated
-	public String getAppId3rdParty() {
-		return appId3rdParty;
-	}
-
-	@Deprecated
-	public void setAppId3rdParty(String appId3rdParty) {
-		this.appId3rdParty = appId3rdParty;
-	}
-	
-	@Deprecated
-	public AuthProviderResponse getProviderResponse() {
-		return providerResponse;
-	}
-
-	@Deprecated
-	public void setProviderResponse(AuthProviderResponse providerResponse) {
-		this.providerResponse = providerResponse;
 	}
 
 	public AuthProviderData getAuthProviderData() {

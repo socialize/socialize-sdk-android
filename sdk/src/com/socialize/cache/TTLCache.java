@@ -58,47 +58,16 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 	
 	protected Context context;
 	
-	@SuppressWarnings("deprecation")
 	public TTLCache() {
-		this(null, 10, DEFAULT_CACHE_COUNT);
+		this(10, DEFAULT_CACHE_COUNT);
 	}
 	
-	@SuppressWarnings("deprecation")
-	public TTLCache(int initialCapacity, int maxCapacity) {
-		this(null, initialCapacity, maxCapacity);
-	}
-	
-	@SuppressWarnings("deprecation")
 	public TTLCache(int initialCapacity) {
-		this(null, initialCapacity, DEFAULT_CACHE_COUNT);
-	}
-
-	/**
-	 * Constructors should not refer to Context
-	 * @param context
-	 */
-	@Deprecated
-	public TTLCache(Context context) {
-		this(context, 10, DEFAULT_CACHE_COUNT);
+		this(initialCapacity, DEFAULT_CACHE_COUNT);
 	}
 	
-	/**
-	 * Constructors should not refer to Context
-	 * @param context
-	 */
-	@Deprecated
-	public TTLCache(Context context, int initialCapacity) {
-		this(context, initialCapacity, DEFAULT_CACHE_COUNT);
-	}
-	
-	/**
-	 * Constructors should not refer to Context
-	 * @param context
-	 */
-	@Deprecated
-	public TTLCache(Context context, int initialCapacity, int maxCapacity) {
+	public TTLCache(int initialCapacity, int maxCapacity) {
 		super();
-		this.context = context;
 		this.maxCapacity = maxCapacity;	
 		objects = makeMap();
 		keys = new HashMap<K, Key<K>>(initialCapacity);

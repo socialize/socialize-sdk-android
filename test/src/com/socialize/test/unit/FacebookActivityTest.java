@@ -61,7 +61,7 @@ public class FacebookActivityTest extends SocializeActivityTest {
 		final String appId = "foobar";
 		final FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
 		final ListenerHolder listenerHolder = AndroidMock.createMock(ListenerHolder.class);
-		final Drawables drawables = AndroidMock.createMock(Drawables.class, getActivity());
+		final Drawables drawables = AndroidMock.createMock(Drawables.class);
 		final Facebook facebook = AndroidMock.createMock(Facebook.class, appId, drawables);
 		final FacebookActivity context = AndroidMock.createMock(FacebookActivity.class);
 		final Intent intent = AndroidMock.createMock(Intent.class);

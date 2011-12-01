@@ -48,16 +48,6 @@ public class Drawables {
 		super();
 	}
 
-	/**
-	 * @deprecated
-	 * @param context
-	 */
-	@Deprecated
-	public Drawables(Activity context) {
-		super();
-		init(context);
-	}
-	
 	public void init(Activity context) {
 		metrics = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(metrics);

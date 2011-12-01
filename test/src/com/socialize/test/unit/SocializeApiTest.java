@@ -79,14 +79,6 @@ public class SocializeApiTest extends SocializeActivityTest {
 		AndroidMock.verify(provider);
 	}
 	
-	@Deprecated
-	public void testApiCallsAuthenticateOnProvider2() throws Throwable {
-		AndroidMock.expect(provider.authenticate("test_endpoint", "test_key", "test_secret", "test_user_id", "test_token", "test_app_id", AuthProviderType.FACEBOOK,  "test_uuid")).andReturn(mockSession);
-		AndroidMock.replay(provider);
-		api.authenticate("test_endpoint", "test_key", "test_secret", "test_user_id", "test_token", "test_app_id", AuthProviderType.FACEBOOK,  "test_uuid");
-		AndroidMock.verify(provider);
-	}
-	
 	public void testApiCallsAuthenticateOnProviderWithAuthProviderData() throws Throwable {
 		AuthProviderData data = new AuthProviderData();
 		AndroidMock.expect(provider.authenticate("test_endpoint", "test_key", "test_secret", data,  "test_uuid")).andReturn(mockSession);
@@ -99,14 +91,6 @@ public class SocializeApiTest extends SocializeActivityTest {
 		provider.clearSession();
 		AndroidMock.replay(provider);
 		api.clearSession();
-		AndroidMock.verify(provider);
-	}
-	
-	@Deprecated
-	public void testLoadSessionCallsLoadSessionOnProvider() throws Throwable {
-		AndroidMock.expect(provider.loadSession("test_endpoint", "test_key", "test_secret", AuthProviderType.FACEBOOK, "test_appid")).andReturn(mockSession);
-		AndroidMock.replay(provider);
-		api.loadSession("test_endpoint", "test_key", "test_secret", AuthProviderType.FACEBOOK, "test_appid");
 		AndroidMock.verify(provider);
 	}
 	
