@@ -42,11 +42,6 @@ public class CommentActivity extends SocializeUIActivity {
 	
 	public static final int PROFILE_UPDATE = 1347;
 	
-	/**
-	 * Used to locate the list view (to aid in testing)
-	 */
-	public static final int LIST_VIEW_ID = 10001;
-	
 	private CommentView view;
 	
 	@Override

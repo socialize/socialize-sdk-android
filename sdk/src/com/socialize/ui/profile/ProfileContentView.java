@@ -56,6 +56,7 @@ import com.socialize.ui.facebook.FacebookSignOutClickListener;
 import com.socialize.ui.image.ImageLoadListener;
 import com.socialize.ui.image.ImageLoadRequest;
 import com.socialize.ui.image.ImageLoader;
+import com.socialize.ui.profile.activity.UserActivityView;
 import com.socialize.ui.user.UserService;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DeviceUtils;
@@ -91,6 +92,8 @@ public class ProfileContentView extends BaseView {
 	
 	private ProfileLayoutView parent;
 	
+	private UserActivityView userActivityView;
+	
 	// Injected
 	private IBeanFactory<SocializeButton> profileCancelButtonFactory;
 	private IBeanFactory<SocializeButton> profileSaveButtonFactory;
@@ -100,6 +103,8 @@ public class ProfileContentView extends BaseView {
 	private IBeanFactory<ProfileSaveButtonListener> profileSaveButtonListenerFactory;
 	private IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory;
 	private IBeanFactory<ProfileImageContextMenu> profileImageContextMenuFactory;
+	private IBeanFactory<UserActivityView> userActivityViewFactory;
+	
 	private DeviceUtils deviceUtils;
 	private Colors colors;
 	private Drawables drawables;
@@ -321,6 +326,8 @@ public class ProfileContentView extends BaseView {
 			}
 		});
 		
+
+		
 		nameLayout.addView(displayName);
 		nameLayout.addView(displayNameEdit);
 		nameLayout.addView(editButton);
@@ -339,6 +346,11 @@ public class ProfileContentView extends BaseView {
 		this.addView(commentView);
 		this.addView(commentMeta);
 		this.addView(checkBox);
+		
+		if(userActivityViewFactory != null) {
+			userActivityView = userActivityViewFactory.getBean();
+			this.addView(userActivityView);
+		}		
 	}
 	
 	public ImageView getProfilePicture() {
@@ -413,6 +425,10 @@ public class ProfileContentView extends BaseView {
 
 	public void setCancelButton(SocializeButton cancelButton) {
 		this.cancelButton = cancelButton;
+	}
+
+	public void setUserActivityViewFactory(IBeanFactory<UserActivityView> userActivityViewFactory) {
+		this.userActivityViewFactory = userActivityViewFactory;
 	}
 
 	public void revertUserDisplayName() {
@@ -571,8 +587,6 @@ public class ProfileContentView extends BaseView {
 		this.colors = colors;
 	}
 
-	
-	
 	public void setUserDetails(User user) {
 		
 		String profilePicData = user.getMediumImageUri();
@@ -614,6 +628,10 @@ public class ProfileContentView extends BaseView {
 		}
 		
 		getDisplayName().setText(user.getDisplayName());
+		
+		if(userActivityView != null) {
+			userActivityView.loadUserActivity(user.getId());
+		}
 		
 		User currentUser = userService.getCurrentUser();
 		

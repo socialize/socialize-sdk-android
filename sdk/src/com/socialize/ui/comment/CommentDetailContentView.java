@@ -165,7 +165,6 @@ public class CommentDetailContentView extends LinearLayout {
 		InputFilter[] maxLength = new InputFilter[1]; 
 		maxLength[0] = new InputFilter.LengthFilter(128); 
 		
-		
 		this.setProfilePicture(profilePicture);
 		this.setDisplayName(displayName);
 		this.setCommentView(commentView);

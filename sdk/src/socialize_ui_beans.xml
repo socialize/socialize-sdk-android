@@ -184,6 +184,27 @@
 		<property name="textAlign" value="center"/>
 	</bean>
 	
+	<bean 
+		id="loadingView" 
+		class="com.socialize.ui.view.BasicLoadingView"		
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<init-method name="init"/>
+	</bean>
+	
+	<factory id="loadingViewFactory" makes="loadingView"/>
+	
+	<bean 
+		id="loadingListView" 
+		class="com.socialize.ui.view.LoadingListView"		
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="loadingViewFactory" ref="loadingViewFactory"/>
+		<init-method name="init"/>
+	</bean>	
+	
+	<factory id="loadingListViewFactory" makes="loadingListView"/>
+
 <!-- Authenticate Dialog -->
 	<factory id="authRequestDialogFactory" makes="authRequestDialog"/>
 	<factory id="authConfirmDialogFactory" makes="authConfirmDialog"/>
@@ -419,6 +440,7 @@
 		class="com.socialize.ui.comment.CommentContentView"
 		singleton="false">
 		<constructor-arg type="activity"/>
+		<property name="loadingViewFactory" ref="loadingViewFactory"/>
 		<init-method name="init"/>
 	</bean>	
 	
@@ -585,6 +607,7 @@
 		<property name="facebookSignOutClickListenerFactory" ref="facebookSignOutClickListenerFactory"/>
 		<property name="profileSaveButtonListenerFactory" ref="profileSaveButtonListenerFactory"/>	
 		<property name="profileImageContextMenuFactory" ref="profileImageContextMenuFactory"/>
+		<property name="userActivityViewFactory" ref="userActivityViewFactory"/>
 		
 		<property name="userService" ref="userService"/>
 		<property name="imageLoader" ref="imageLoader"/>	
@@ -671,6 +694,49 @@
 	<factory id="profileImageContextMenuFactory" makes="profileImageContextMenu"/>
 	
 <!-- End Profile UI -->
+
+<!-- User Activity UI -->
+
+	<bean 
+		id="userActivityListItem" 
+		singleton="false"
+		class="com.socialize.ui.profile.activity.UserActivityListItem">
+		<constructor-arg type="activity"/>
+		
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="colors" ref="colors"/>
+		
+		<init-method name="init"/>
+	</bean>
+	
+	<factory id="userActivityListItemFactory" makes="userActivityListItem"/>
+
+	<bean 
+		id="userActivityListAdapter" 
+		singleton="false"
+		class="com.socialize.ui.profile.activity.UserActivityListAdapter">
+		<property name="userActivityListItemFactory" ref="userActivityListItemFactory"/>
+		<property name="drawables" ref="drawables"/>
+	</bean>
+	
+	<factory id="userActivityListAdapterFactory" makes="userActivityListAdapter"/>
+
+	<bean 
+		id="userActivityView" 
+		singleton="false"
+		class="com.socialize.ui.profile.activity.UserActivityView">
+		
+		<constructor-arg type="activity"/>
+		
+		<property name="loadingListViewFactory" ref="loadingListViewFactory"/>
+		<property name="userActivityListAdapterFactory" ref="userActivityListAdapterFactory"/>
+		
+		<init-method name="init"/>
+	</bean>
+	
+	<factory id="userActivityViewFactory" makes="userActivityView"/>
+
+<!-- End User Activity UI -->
 
 <!-- Action Bar UI -->
 	

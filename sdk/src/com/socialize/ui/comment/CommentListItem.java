@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
-import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.ImageView;
@@ -25,10 +24,6 @@ public class CommentListItem extends LinearLayout {
 	private ImageView userIcon;
 	private DeviceUtils deviceUtils;
 	private Colors colors;
-
-	public CommentListItem(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
 
 	public CommentListItem(Context context) {
 		super(context);

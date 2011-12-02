@@ -19,19 +19,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.comment;
+package com.socialize.ui.view;
 
 import android.content.Context;
-
-import com.socialize.ui.view.LoadingListView;
+import android.view.Gravity;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
 /**
  * @author Jason Polites
- * @deprecated Use LoadingListView
+ *
  */
-@Deprecated
-public class CommentContentView extends LoadingListView {
-	public CommentContentView(Context context) {
+public class BasicLoadingView extends FrameLayout {
+
+	public BasicLoadingView(Context context) {
 		super(context);
+	}
+	
+	public void init() {
+		FrameLayout.LayoutParams loadingScreenLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT,FrameLayout.LayoutParams.FILL_PARENT);
+		FrameLayout.LayoutParams progressLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,FrameLayout.LayoutParams.WRAP_CONTENT);
+		loadingScreenLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		progressLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		setLayoutParams(loadingScreenLayoutParams);
+		ProgressBar progress = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleSmall);
+		progress.setLayoutParams(progressLayoutParams);
+		addView(progress);	
 	}
 }

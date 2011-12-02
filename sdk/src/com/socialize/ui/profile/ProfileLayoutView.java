@@ -79,7 +79,7 @@ public class ProfileLayoutView extends BaseView {
 	}
 
 	public void doGetUserProfile() {
-		int id = Integer.parseInt(userId);
+		long id = Long.parseLong(userId);
 		dialog = progressDialogFactory.show(getContext(), "Loading", "Please wait...");
 		
 		getSocialize().getUser(id, new UserGetListener() {
