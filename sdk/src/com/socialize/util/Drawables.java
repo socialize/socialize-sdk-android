@@ -58,7 +58,7 @@ public class Drawables {
 	}
 	
 	public Drawable getDrawable(String name) {
-		return getDrawable(name, -1, -1, false);
+		return getDrawable(name, -1, -1, true);
 	}
 	
 	public Drawable getDrawable(String name, boolean eternal) {
