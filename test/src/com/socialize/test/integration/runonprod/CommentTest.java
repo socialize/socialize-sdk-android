@@ -1,5 +1,7 @@
 package com.socialize.test.integration.runonprod;
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.R;
 import android.widget.ListView;
@@ -46,6 +48,30 @@ public class CommentTest extends SocializeRobotiumTest {
 		Integer.parseInt(value);
 		
 	}
+	
+	public void testListUserComments() throws JSONException {
+		
+		// Get the user id for the comments;
+		JSONObject json = getJSON("comments.json");
+		JSONArray jsonArray = json.getJSONArray("items");
+		JSONObject jsonObject = (JSONObject) jsonArray.get(0);
+		
+		JSONObject userObject = jsonObject.getJSONObject("user");
+		String commentUserId = userObject.getString("id");		
+
+		robotium.clickOnButton("List User Comments");
+		robotium.waitForActivity("CommentListSelectActivity", DEFAULT_TIMEOUT_SECONDS);
+		
+		robotium.clearEditText(0);
+		robotium.enterText(0,commentUserId);
+		
+		robotium.clickOnButton("List");
+		robotium.waitForActivity("CommentUserListActivity", DEFAULT_TIMEOUT_SECONDS);
+		robotium.waitForView(ListView.class);
+		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(R.id.list);
+		assertEquals(10 , comments.getCount());
+	}
+	
 	public void testListCommentWithPagination() throws JSONException{
 		robotium.clickOnButton("List Comments");
 		robotium.waitForActivity("CommentListSelectActivity", DEFAULT_TIMEOUT_SECONDS);

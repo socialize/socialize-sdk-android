@@ -22,6 +22,7 @@
 package com.socialize.entity;
 
 import com.socialize.api.action.ActionType;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -89,5 +90,15 @@ public abstract class SocializeAction extends SocializeObject {
 	 * Returns the text to display for this action when rendering on screen (e.g. in a list)
 	 * @return
 	 */
-	public abstract String getDisplayText();
+	public String getDisplayText() {
+		if(entity != null) {
+			String name = entity.getName();
+			String key = entity.getKey();
+			if(!StringUtils.isEmpty(name)) {
+				return name;
+			}
+			return key;
+		}
+		return entityKey;
+	}
 }

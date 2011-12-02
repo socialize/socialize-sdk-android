@@ -28,6 +28,8 @@
         <activity android:name="ViewActivity"/>
 		<activity android:name="EmptyActivity"/>
 		<activity android:name="Error500Activity"/>
+		<activity android:name="UserActivitySelectActivity"/>
+		<activity android:name="UserActivityListActivity"/>
 		
 	    <!-- Required for UI tests -->
 	    <activity android:name="com.socialize.sample.ui.SampleActivity"/>

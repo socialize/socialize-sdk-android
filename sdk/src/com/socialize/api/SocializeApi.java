@@ -240,7 +240,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		poster.execute(request);
 	}
 
-	public void authenticateAsync(String key, String secret, String uuid, final SocializeAuthListener listener, final SocializeSessionConsumer sessionConsumer) {
+	public void authenticateAsync(String key, String secret, String uuid, SocializeAuthListener listener, final SocializeSessionConsumer sessionConsumer) {
 		authenticateAsync(key, secret, uuid, new AuthProviderData(), listener, sessionConsumer, false);
 	}
 	
@@ -256,29 +256,68 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 
 		SocializeActionListener wrapper = null;
 		
-		if(listener != null) {
-			wrapper = new SocializeActionListener() {
-				
-				@Override
-				public void onResult(RequestType type, SocializeResponse response) {
-					SocializeAuthResponse authResponse = (SocializeAuthResponse) response;
-					if(sessionConsumer != null) {
-						sessionConsumer.setSession(authResponse.getSession());
-					}
-					listener.onAuthSuccess(authResponse.getSession());
+		final SocializeAuthListener localListener = new SocializeAuthListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				if(listener != null) {
+					listener.onError(error);
 				}
-				
-				@Override
-				public void onError(SocializeException error) {
-					if(httpUtils != null && httpUtils.isAuthError(error)) {
-						listener.onAuthFail(error);
-					}
-					else {
-						listener.onError(error);
+				else {
+					if(logger != null) {
+						logger.error("Failure during auth", error);
 					}
 				}
-			};
-		}
+			}
+			
+			@Override
+			public void onCancel() {
+				if(listener != null) {
+					listener.onCancel();
+				}
+			}
+			
+			@Override
+			public void onAuthSuccess(SocializeSession session) {
+				if(sessionConsumer != null) {
+					sessionConsumer.setSession(session);
+				}
+				if(listener != null) {
+					listener.onAuthSuccess(session);
+				}				
+			}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				if(listener != null) {
+					listener.onAuthFail(error);
+				}	
+				else {
+					if(logger != null) {
+						logger.error("Failure during auth", error);
+					}
+				}
+			}
+		};		
+		
+		wrapper = new SocializeActionListener() {
+			
+			@Override
+			public void onResult(RequestType type, SocializeResponse response) {
+				SocializeAuthResponse authResponse = (SocializeAuthResponse) response;
+				localListener.onAuthSuccess(authResponse.getSession());
+			}
+			
+			@Override
+			public void onError(SocializeException error) {
+				if(httpUtils != null && httpUtils.isAuthError(error)) {
+					localListener.onAuthFail(error);
+				}
+				else {
+					localListener.onError(error);
+				}
+			}
+		};
 
 		final SocializeAuthRequest request = new SocializeAuthRequest();
 		
@@ -291,7 +330,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		AuthProviderType authProviderType = data.getAuthProviderType();
 		
 		if(do3rdPartyAuth && !authProviderType.equals(AuthProviderType.SOCIALIZE)) {
-			handle3rdPartyAuth(request, wrapper, listener, key, secret);
+			handle3rdPartyAuth(request, wrapper, localListener, key, secret);
 		}
 		else {
 			// Do normal auth

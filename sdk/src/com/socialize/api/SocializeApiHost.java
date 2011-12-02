@@ -66,7 +66,7 @@ public class SocializeApiHost implements ApiHost {
 	private ViewApi viewApi;
 	private UserApi userApi;
 	private ShareApi shareApi;
-	private UserActivityApi activityApi;
+	private UserActivityApi userActivityApi;
 	private RecommendationApi recommendationApi;
 	
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
@@ -303,7 +303,7 @@ public class SocializeApiHost implements ApiHost {
 	 */
 	@Override
 	public void listActivityByUser(SocializeSession session, long id, UserActivityListener listener) {
-		activityApi.getActivityByUser(session, id, listener);
+		userActivityApi.getActivityByUser(session, id, listener);
 	}
 	
 	/* (non-Javadoc)
@@ -311,7 +311,7 @@ public class SocializeApiHost implements ApiHost {
 	 */
 	@Override
 	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, UserActivityListener listener) {
-		activityApi.getActivityByUser(session, id, startIndex, endIndex, listener);
+		userActivityApi.getActivityByUser(session, id, startIndex, endIndex, listener);
 	}
 	
 	/* (non-Javadoc)
@@ -380,12 +380,12 @@ public class SocializeApiHost implements ApiHost {
 		this.shareApi = shareApi;
 	}
 
-	public UserActivityApi getActivityApi() {
-		return activityApi;
+	public UserActivityApi getUserActivityApi() {
+		return userActivityApi;
 	}
 
-	public void setActivityApi(UserActivityApi activityApi) {
-		this.activityApi = activityApi;
+	public void setUserActivityApi(UserActivityApi activityApi) {
+		this.userActivityApi = activityApi;
 	}
 	
 	public RecommendationApi getRecommendationApi() {

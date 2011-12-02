@@ -29,14 +29,8 @@ import com.socialize.api.action.ActionType;
  *
  */
 public class Like extends SocializeAction {
-	
 	@Override
 	public ActionType getActionType() {
 		return ActionType.LIKE;
-	}
-
-	@Override
-	public String getDisplayText() {
-		return null;
 	}
 }

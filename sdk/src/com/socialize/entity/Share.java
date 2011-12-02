@@ -40,11 +40,6 @@ public class Share extends SocializeAction {
 		return ActionType.SHARE;
 	}
 
-	@Override
-	public String getDisplayText() {
-		return null;
-	}
-
 	public String getText() {
 		return text;
 	}
@@ -76,6 +71,4 @@ public class Share extends SocializeAction {
 	public void setMediumName(String mediumName) {
 		this.mediumName = mediumName;
 	}
-	
-	
 }

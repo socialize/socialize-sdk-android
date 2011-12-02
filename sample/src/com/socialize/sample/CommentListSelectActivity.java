@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.socialize.Socialize;
 import com.socialize.util.StringUtils;
 
 public class CommentListSelectActivity extends CommentBaseActivity {
@@ -60,12 +61,11 @@ public class CommentListSelectActivity extends CommentBaseActivity {
 		final boolean user_only = userOnly;
 		
 		if(user_only) {
-			txtCommentKey.setVisibility(View.GONE);
-			labelCommentKey.setVisibility(View.GONE);
+			txtCommentKey.setText(Socialize.getSocialize().getSession().getUser().getId().toString());
+			labelCommentKey.setText("User ID");
 		}
 		else {
-			txtCommentKey.setVisibility(View.VISIBLE);
-			labelCommentKey.setVisibility(View.VISIBLE);
+			labelCommentKey.setText("URL");
 		}
 
 		btnCommentList.setOnClickListener(new OnClickListener() {

@@ -175,8 +175,8 @@ need the ID of the like.  This is returned from the initial call to **like**
 
 	<script src="https://gist.github.com/1132969.js?file=unlike.java"></script>
 
-Listing a 'Likes' for a User
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Listing 'Likes' for a User
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 To obtain a list of all entities 'liked' by a single user, use the **listLikesByUser** method:
 
 .. raw:: html
@@ -220,3 +220,31 @@ The **recommended** approach is to use pagination when listing comments:
 .. raw:: html
 
 	<script src="https://gist.github.com/1132965.js?file=listcomments.java"></script>
+	
+Listing Comments for a User
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+To obtain a list of all comments made by a single user, use the **listCommentsByUser** method:
+
+.. raw:: html
+
+	<script src="https://gist.github.com/1132969.js?file=list_user_comments.java"></script>	
+	
+User Activity
+-------------
+Comments, Shares and Likes made by a single user can all be retrieved in a single call using the SDK.
+
+Listing Activity for a User
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+To obtain a list of all activity conducted by a single user, use the **listActivityByUser** method:
+
+.. raw:: html
+
+	<script src="https://gist.github.com/1132969.js?file=list_user_activity.java"></script>
+	
+Listing Activity for a User with Pagination
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+As with all list operations the user activity list supports pagination:
+
+.. raw:: html
+
+	<script src="https://gist.github.com/1132969.js?file=list_user_activity_paged.java"></script>	

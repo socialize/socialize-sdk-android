@@ -663,7 +663,7 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		service.init(getContext());
 		
-		service.setActivityApi(api);
+		service.setUserActivityApi(api);
 		
 		service.listActivityByUser(session, key, listener);
 		
@@ -690,7 +690,7 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		service.init(getContext());
 		
-		service.setActivityApi(api);
+		service.setUserActivityApi(api);
 		
 		service.listActivityByUser(session, key, start, end, listener);
 		

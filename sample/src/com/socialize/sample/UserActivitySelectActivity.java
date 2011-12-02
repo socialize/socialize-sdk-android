@@ -26,60 +26,41 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 
+import com.socialize.Socialize;
 import com.socialize.ui.SocializeActivity;
 
-public class ApiActivity extends SocializeActivity {
-
+public class UserActivitySelectActivity extends SocializeActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.api);
+		setContentView(R.layout.user_activity);
 		
-		final Button btnComments = (Button) findViewById(R.id.btnComments);
-		final Button btnEntity = (Button) findViewById(R.id.btnEntity);
-		final Button btnLike = (Button) findViewById(R.id.btnLike);
-		final Button btnView = (Button) findViewById(R.id.btnView);
-		final Button btnActivity = (Button) findViewById(R.id.btnActivity);
+		Socialize.init(this);
 		
-		btnComments.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent i = new Intent(ApiActivity.this, CommentActivity.class);
-				startActivity(i);
-			}
-		});
-	
-		btnEntity.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent i = new Intent(ApiActivity.this, EntityActivity.class);
-				startActivity(i);
-			}
-		});
+		final EditText txtKey = (EditText) findViewById(R.id.txtKey);
+		final Button btnListActivity = (Button) findViewById(R.id.btnListActivity);
 		
-		btnLike.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent i = new Intent(ApiActivity.this, LikeActivity.class);
-				startActivity(i);
-			}
-		});
-		
-		btnView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent i = new Intent(ApiActivity.this, ViewActivity.class);
-				startActivity(i);
-			}
-		});
-		
-		btnActivity.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent i = new Intent(ApiActivity.this, UserActivitySelectActivity.class);
-				startActivity(i);
-			}
-		});		
+		if(Socialize.getSocialize().isAuthenticated()) {
+			
+			txtKey.setText(Socialize.getSocialize().getSession().getUser().getId().toString());
+			
+			btnListActivity.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(UserActivitySelectActivity.this, UserActivityListActivity.class);
+					intent.putExtra("user_id", Long.valueOf(txtKey.getText().toString()));
+					startActivity(intent);
+				}
+			});
+		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		Socialize.destroy(this);
+		super.onDestroy();
 	}
 }

@@ -34,9 +34,4 @@ public class View extends SocializeAction {
 	public ActionType getActionType() {
 		return ActionType.VIEW;
 	}
-
-	@Override
-	public String getDisplayText() {
-		return null;
-	}
 }
