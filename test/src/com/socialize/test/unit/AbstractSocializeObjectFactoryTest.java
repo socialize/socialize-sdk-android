@@ -94,7 +94,7 @@ public abstract class AbstractSocializeObjectFactoryTest<T extends SocializeObje
 	}
 	
 	public void testInstantiate() {
-		T instantiateObject = factory.instantiateObject(json);
+		Object instantiateObject = factory.instantiateObject(json);
 		assertTrue(getObjectClass().isAssignableFrom(instantiateObject.getClass()));
 	}
 	

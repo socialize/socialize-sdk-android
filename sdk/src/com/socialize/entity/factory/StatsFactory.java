@@ -38,7 +38,7 @@ public class StatsFactory extends SocializeObjectFactory<Stats> {
 	private static final String VIEWS = "views";
 
 	@Override
-	public Stats instantiateObject(JSONObject object) {
+	public Object instantiateObject(JSONObject object) {
 		return new Stats();
 	}
 

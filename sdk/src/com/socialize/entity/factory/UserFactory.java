@@ -54,7 +54,7 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	public static final String AUTO_POST_FACEBOOK = "auto_post_fb";
 
 	@Override
-	public User instantiateObject(JSONObject object) {
+	public Object instantiateObject(JSONObject object) {
 		return new User();
 	}
 	

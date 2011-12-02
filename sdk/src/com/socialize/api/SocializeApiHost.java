@@ -25,7 +25,7 @@ import android.content.Context;
 import android.location.Location;
 
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.api.action.ActivityApi;
+import com.socialize.api.action.UserActivityApi;
 import com.socialize.api.action.CommentApi;
 import com.socialize.api.action.EntityApi;
 import com.socialize.api.action.LikeApi;
@@ -38,7 +38,7 @@ import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.listener.activity.ActivityListener;
+import com.socialize.listener.activity.UserActivityListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.listener.entity.EntityListener;
 import com.socialize.listener.like.LikeListener;
@@ -66,7 +66,7 @@ public class SocializeApiHost implements ApiHost {
 	private ViewApi viewApi;
 	private UserApi userApi;
 	private ShareApi shareApi;
-	private ActivityApi activityApi;
+	private UserActivityApi activityApi;
 	private RecommendationApi recommendationApi;
 	
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
@@ -302,7 +302,7 @@ public class SocializeApiHost implements ApiHost {
 	 * @see com.socialize.api.ApiHost#listActivityByUser(com.socialize.api.SocializeSession, long, com.socialize.listener.activity.ActivityListener)
 	 */
 	@Override
-	public void listActivityByUser(SocializeSession session, long id, ActivityListener listener) {
+	public void listActivityByUser(SocializeSession session, long id, UserActivityListener listener) {
 		activityApi.getActivityByUser(session, id, listener);
 	}
 	
@@ -310,7 +310,7 @@ public class SocializeApiHost implements ApiHost {
 	 * @see com.socialize.api.ApiHost#listActivityByUser(com.socialize.api.SocializeSession, long, int, int, com.socialize.listener.activity.ActivityListener)
 	 */
 	@Override
-	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, ActivityListener listener) {
+	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, UserActivityListener listener) {
 		activityApi.getActivityByUser(session, id, startIndex, endIndex, listener);
 	}
 	
@@ -380,11 +380,11 @@ public class SocializeApiHost implements ApiHost {
 		this.shareApi = shareApi;
 	}
 
-	public ActivityApi getActivityApi() {
+	public UserActivityApi getActivityApi() {
 		return activityApi;
 	}
 
-	public void setActivityApi(ActivityApi activityApi) {
+	public void setActivityApi(UserActivityApi activityApi) {
 		this.activityApi = activityApi;
 	}
 	

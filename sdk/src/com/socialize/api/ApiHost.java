@@ -28,7 +28,7 @@ import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.listener.activity.ActivityListener;
+import com.socialize.listener.activity.UserActivityListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.listener.entity.EntityListener;
 import com.socialize.listener.like.LikeListener;
@@ -96,9 +96,9 @@ public interface ApiHost {
 
 	public void saveUserProfile(Context context, SocializeSession session, String firstName, String lastName, String encodedImage, UserListener listener);
 
-	public void listActivityByUser(SocializeSession session, long id, ActivityListener listener);
+	public void listActivityByUser(SocializeSession session, long id, UserActivityListener listener);
 
-	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, ActivityListener listener);
+	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, UserActivityListener listener);
 	
 	public void listLikesByUser(SocializeSession session, long userId, LikeListener listener);
 	

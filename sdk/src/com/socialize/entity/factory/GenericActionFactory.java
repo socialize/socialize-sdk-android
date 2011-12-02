@@ -65,7 +65,7 @@ public class GenericActionFactory extends SocializeActionFactory<SocializeAction
 	}
 
 	@Override
-	public SocializeAction instantiateObject(JSONObject from) {
+	public Object instantiateObject(JSONObject from) {
 		if(from.has("activity_type") && !from.isNull("activity_type")) {
 			
 			try {

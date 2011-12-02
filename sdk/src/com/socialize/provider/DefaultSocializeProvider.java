@@ -334,13 +334,6 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		return doListTypeRequest(request);
 	}
 
-//	@Override
-//	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
-//		endpoint = prepareEndpoint(session, endpoint);
-//		HttpUriRequest request = requestFactory.getListRequest(session, endpoint, key, ids);
-//		return doListTypeRequest(request);
-//	}
-	
 	@Override
 	public ListResult<T> put(SocializeSession session, String endpoint, T object) throws SocializeException {
 		endpoint = prepareEndpoint(session, endpoint);
@@ -579,6 +572,4 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	public SocializeSessionPersister getSessionPersister() {
 		return sessionPersister;
 	}
-	
-	
 }

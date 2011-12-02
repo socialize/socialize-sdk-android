@@ -24,7 +24,7 @@ import com.socialize.entity.User;
 import com.socialize.entity.View;
 import com.socialize.error.SocializeApiError;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.listener.activity.ActivityListener;
+import com.socialize.listener.activity.UserActivityListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.listener.entity.EntityListener;
 import com.socialize.listener.like.LikeListener;
@@ -183,13 +183,13 @@ public class MockSocializeApiHost extends SocializeApiHost implements ContainerA
 	}
 
 	@Override
-	public void listActivityByUser(SocializeSession session, long id, ActivityListener listener) {
+	public void listActivityByUser(SocializeSession session, long id, UserActivityListener listener) {
 		if(delegate != null) delegate.listActivityByUser(session, id, listener);
 		listener.onList((ListResult<SocializeAction>) listResult);
 	}
 
 	@Override
-	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, ActivityListener listener) {
+	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, UserActivityListener listener) {
 		if(delegate != null) delegate.listActivityByUser(session, id, startIndex, endIndex, listener);
 		listener.onList((ListResult<SocializeAction>) listResult);
 	}

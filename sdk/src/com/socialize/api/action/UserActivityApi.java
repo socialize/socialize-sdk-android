@@ -19,25 +19,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.listener.activity;
+package com.socialize.api.action;
 
+import com.socialize.api.SocializeApi;
+import com.socialize.api.SocializeSession;
 import com.socialize.entity.SocializeAction;
+import com.socialize.listener.activity.UserActivityListener;
+import com.socialize.provider.SocializeProvider;
 
 /**
- * Used when listing activity for a user.
  * @author Jason Polites
  */
-public abstract class ActivityListListener extends ActivityListener {
+public class UserActivityApi extends SocializeApi<SocializeAction, SocializeProvider<SocializeAction>> {
 
-	@Override
-	public final void onGet(SocializeAction entity) {}
-
-	@Override
-	public final void onUpdate(SocializeAction entity) {}
-
-	@Override
-	public final void onCreate(SocializeAction entity) {}
-
-	@Override
-	public final void onDelete() {}
+	public static final String ENDPOINT = "/user/";
+	public static final String ENDPOINT_SUFFIX = "/activity/";
+	
+	public UserActivityApi(SocializeProvider<SocializeAction> provider) {
+		super(provider);
+	}
+	
+	public void getActivityByUser(SocializeSession session, long id, UserActivityListener listener) {
+		String userId = String.valueOf(id);
+		String endpoint = getEndpoint(userId);
+		listAsync(session, endpoint, listener);
+	}
+	
+	public void getActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, UserActivityListener listener) {
+		String userId = String.valueOf(id);
+		String endpoint = getEndpoint(userId);
+		listAsync(session, endpoint, startIndex, endIndex, listener);
+	}
+	
+	protected String getEndpoint(String id) {
+		return ENDPOINT + id + ENDPOINT_SUFFIX;
+	}
 }

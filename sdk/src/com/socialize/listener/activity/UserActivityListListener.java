@@ -22,10 +22,22 @@
 package com.socialize.listener.activity;
 
 import com.socialize.entity.SocializeAction;
-import com.socialize.listener.AbstractSocializeListener;
 
 /**
+ * Used when listing activity for a user.
  * @author Jason Polites
- *
  */
-public abstract class ActivityListener extends AbstractSocializeListener<SocializeAction> {}
+public abstract class UserActivityListListener extends UserActivityListener {
+
+	@Override
+	public final void onGet(SocializeAction entity) {}
+
+	@Override
+	public final void onUpdate(SocializeAction entity) {}
+
+	@Override
+	public final void onCreate(SocializeAction entity) {}
+
+	@Override
+	public final void onDelete() {}
+}

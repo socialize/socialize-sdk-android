@@ -37,7 +37,7 @@ public class ApplicationFactory extends SocializeObjectFactory<Application> {
 	}
 
 	@Override
-	public Application instantiateObject(JSONObject object) {
+	public Object instantiateObject(JSONObject object) {
 		return new Application();
 	}
 

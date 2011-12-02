@@ -37,7 +37,7 @@ public class MockEntityProvider extends MockSocializeProvider<Entity> {
 
 	@Override
 	protected Entity makeObject(String id) {
-		Entity object = objectFactory.instantiateObject(null);
+		Entity object = (Entity) objectFactory.instantiateObject(null);
 		object.setId(1L);
 		object.setKey(id);
 		object.setComments(2);

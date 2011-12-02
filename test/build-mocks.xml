@@ -6,8 +6,8 @@
 	<property file="project.properties" />
 	
 	<path id="mock.classpath">
-		<pathelement path="libs/easymock.jar" />
-		<pathelement path="libs/javassist-appmakr.jar" />
+		<pathelement path="libs/easymock-3.1.jar" />
+		<pathelement path="libs/javassist.jar" />
 		<pathelement path="libs/socialize-robotium-2.5.jar" />
 		<pathelement path="../test/bin/classes"/>
 		<pathelement path="../sdk/bin/classes"/>

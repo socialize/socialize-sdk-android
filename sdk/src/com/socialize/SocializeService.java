@@ -31,6 +31,7 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
+import com.socialize.listener.activity.UserActivityListListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -362,20 +363,20 @@ public interface SocializeService {
 	 */
 	public void clear3rdPartySession(Context context, AuthProviderType type);
 	
-//	/**
-//	 * Lists a user's activity.
-//	 * @param userId The ID of the user for whom activity will be listed.
-//	 * @param activityListListener A listener to handle callbacks from the get.
-//	 */
-//	public void listActivityByUser(int userId, ActivityListListener activityListListener);
+	/**
+	 * Lists a user's activity.
+	 * @param userId The ID of the user for whom activity will be listed.
+	 * @param activityListListener A listener to handle callbacks from the get.
+	 */
+	public void listActivityByUser(long userId, UserActivityListListener activityListListener);
 	
-//	/**
-//	 * Lists a user's activity with pagination.
-//	 * @param userId The ID of the user for whom activity will be listed.
-//	 * @param startIndex The starting index of the results for pagination.
-//	 * @param endIndex The ending index of the results for pagination.
-//	 * @param activityListListener A listener to handle callbacks from the get.
-//	 */
-//	public void listActivityByUser(int userId, int startIndex, int endIndex, ActivityListListener activityListListener);
+	/**
+	 * Lists a user's activity with pagination.
+	 * @param userId The ID of the user for whom activity will be listed.
+	 * @param startIndex The starting index of the results for pagination.
+	 * @param endIndex The ending index of the results for pagination.
+	 * @param activityListListener A listener to handle callbacks from the get.
+	 */
+	public void listActivityByUser(long userId, int startIndex, int endIndex, UserActivityListListener activityListListener);
 
 }

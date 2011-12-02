@@ -164,7 +164,8 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 	}
 	
 	protected T makeObject(String id) {
-		T object = objectFactory.instantiateObject(null);
+		@SuppressWarnings("unchecked")
+		T object =  (T) objectFactory.instantiateObject(null);
 		if(id != null) {
 			object.setId(Long.parseLong(id));
 		}
