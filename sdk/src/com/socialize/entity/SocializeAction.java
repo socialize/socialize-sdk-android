@@ -73,7 +73,25 @@ public abstract class SocializeAction extends SocializeObject {
 	public void setDate(Long date) {
 		this.date = date;
 	}
+	
+	public String getEntityDisplayName() {
+		if(entity != null) {
+			if(!StringUtils.isEmpty(entity.getName())) {
+				return entity.getName();
+			}
+			return entity.getKey();
+		}
+		return entityKey;
+	}
+	
 	public String getEntityKey() {
+		
+		if(StringUtils.isEmpty(entityKey)) {
+			if(entity != null) {
+				return entity.getKey();
+			}
+		}
+		
 		return entityKey;
 	}
 	public void setEntityKey(String entityKey) {

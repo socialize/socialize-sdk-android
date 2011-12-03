@@ -30,17 +30,17 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.location.Address;
 import android.text.InputFilter;
-import android.text.method.ScrollingMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.socialize.entity.Comment;
+import com.socialize.ui.html.HtmlFormatter;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.util.DateUtils;
 import com.socialize.ui.util.GeoUtils;
@@ -54,12 +54,13 @@ public class CommentDetailContentView extends LinearLayout {
 
 	private ImageView profilePicture;
 	private TextView displayName;
-	private TextView commentView;
+	private WebView commentView;
 	private TextView commentMeta;
 	private GeoUtils geoUtils;
 	private DateUtils dateUtils;
 	private DeviceUtils deviceUtils;
 	private Colors colors;
+	private HtmlFormatter htmlFormatter;
 	
 	private View headerView;
 	
@@ -71,9 +72,9 @@ public class CommentDetailContentView extends LinearLayout {
 		
 		final int imagePadding = deviceUtils.getDIP(4);
 		final int margin = deviceUtils.getDIP(8);
+		final int commentMargin = deviceUtils.getDIP(16);
 		final int imageSize = deviceUtils.getDIP(64);
 		final int editTextStroke = deviceUtils.getDIP(2);
-		final int minTextHeight = deviceUtils.getDIP(50);
 		final float editTextRadius = editTextStroke;
 		final int titleColor = colors.getColor(Colors.TITLE);
 		
@@ -101,12 +102,11 @@ public class CommentDetailContentView extends LinearLayout {
 		
 		LayoutParams imageLayout = new LinearLayout.LayoutParams(imageSize,imageSize);
 		LayoutParams textLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-		LayoutParams commentViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
 		LayoutParams commentMetaLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		
 		final ImageView profilePicture = new ImageView(getContext());
 		final TextView displayName = new TextView(getContext());
-		final TextView commentView = new TextView(getContext());
+		final WebView commentView = new WebView(getContext());
 		final TextView commentMeta = new TextView(getContext());
 		
 		commentMetaLayout.gravity = Gravity.RIGHT;
@@ -123,20 +123,22 @@ public class CommentDetailContentView extends LinearLayout {
 		commentBG.setStroke(2, Color.WHITE);
 		commentBG.setAlpha(64);
 		
-		commentViewLayout.setMargins(0, margin, 0, margin);
+		LayoutParams commentViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+		
+		LayoutParams commentWebViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+		
+		commentViewLayout.setMargins(margin, commentMargin, margin, commentMargin);
+		LinearLayout commentLayoutView = new LinearLayout(getContext());
+		
+		commentLayoutView.setLayoutParams(commentViewLayout);
+		commentLayoutView.setBackgroundDrawable(commentBG);
+		commentLayoutView.setPadding(margin, margin, margin, margin);
 		commentViewLayout.weight = 1.0f;
 		
-		commentView.setBackgroundDrawable(commentBG);
-		commentView.setPadding(margin, margin, margin, margin);
-		commentView.setLayoutParams(commentViewLayout);
-		commentView.setMinHeight(minTextHeight);
-		commentView.setMinimumHeight(minTextHeight);
-		commentView.setTextColor(Color.WHITE);
-		commentView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-		commentView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-		commentView.setScroller(new Scroller(getContext())); 
-		commentView.setScrollbarFadingEnabled(true);
-		commentView.setMovementMethod(new ScrollingMovementMethod());
+		commentView.setLayoutParams(commentWebViewLayout);
+		commentView.setLongClickable(true);
+		
+		commentLayoutView.addView(commentView);
 		
 		textLayout.setMargins(margin, 0, 0, 0);
 		
@@ -177,7 +179,7 @@ public class CommentDetailContentView extends LinearLayout {
 		headerLayout.addView(nameLayout);
 		
 		this.addView(headerLayout);
-		this.addView(commentView);
+		this.addView(commentLayoutView);
 		this.addView(commentMeta);		
 	}
 
@@ -197,11 +199,11 @@ public class CommentDetailContentView extends LinearLayout {
 		this.displayName = displayName;
 	}
 
-	public TextView getCommentView() {
+	public WebView getCommentView() {
 		return commentView;
 	}
 
-	public void setCommentView(TextView commentView) {
+	public void setCommentView(WebView commentView) {
 		this.commentView = commentView;
 	}
 
@@ -245,10 +247,16 @@ public class CommentDetailContentView extends LinearLayout {
 		this.headerView = headerView;
 	}
 
+	public void setHtmlFormatter(HtmlFormatter htmlFormatter) {
+		this.htmlFormatter = htmlFormatter;
+	}
+
 	public void setComment(Comment comment) {
 		if(commentView != null) {
-			commentView.setText(comment.getText());
+			commentView.loadData(htmlFormatter.format(comment.getText()), "text/html", "utf-8");
+//			commentView.setText(comment.getText());
 			commentView.setVisibility(View.VISIBLE);
+			commentView.setBackgroundColor(0x00000000);
 		}
 		
 		if(commentMeta != null) {

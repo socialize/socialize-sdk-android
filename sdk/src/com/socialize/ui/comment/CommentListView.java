@@ -29,6 +29,7 @@ import com.socialize.ui.slider.ActionBarSliderFactory;
 import com.socialize.ui.slider.ActionBarSliderFactory.ZOrder;
 import com.socialize.ui.slider.ActionBarSliderView;
 import com.socialize.util.Drawables;
+import com.socialize.util.StringUtils;
 import com.socialize.view.BaseView;
 
 public class CommentListView extends BaseView {
@@ -193,6 +194,9 @@ public class CommentListView extends BaseView {
 
 			@Override
 			public void onComment(String text, boolean autoPostToFacebook) {
+				
+				text = StringUtils.replaceNewLines(text, 3, 2);
+				
 				if(!getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 					// Check that FB is enabled for this installation
 					if(getSocializeUI().isFacebookSupported()) {

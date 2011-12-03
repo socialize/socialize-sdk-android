@@ -71,4 +71,9 @@ public class Share extends SocializeAction {
 	public void setMediumName(String mediumName) {
 		this.mediumName = mediumName;
 	}
+
+	@Override
+	public String getDisplayText() {
+		return "Shared via " + mediumName;
+	}
 }

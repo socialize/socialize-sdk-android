@@ -105,6 +105,7 @@ public class UserActivityListAdapter extends BaseAdapter {
 			});						
 
 			TextView text = view.getText();
+			TextView title = view.getTitle();
 			ImageView icon = view.getIcon();
 
 			if (text != null) {
@@ -115,12 +116,27 @@ public class UserActivityListAdapter extends BaseAdapter {
 				
 				switch(item.getActionType()) {
 					case COMMENT:
+						
+						if (title != null) {
+							title.setText("Commented on " + item.getEntityDisplayName());
+						}
+						
 						icon.setImageDrawable(drawables.getDrawable("icon_comment.png"));
 						break;
 					case LIKE:
-						icon.setImageDrawable(drawables.getDrawable("icon_like.png"));
+						
+						if (title != null) {
+							title.setText("Likes " + item.getEntityDisplayName());
+						}
+						
+						icon.setImageDrawable(drawables.getDrawable("icon_like_hi.png"));
 						break;
 					case SHARE:
+						
+						if (title != null) {
+							title.setText("Shared " + item.getEntityDisplayName());
+						}
+						
 						icon.setImageDrawable(drawables.getDrawable("icon_share.png"));
 						break;
 				

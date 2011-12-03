@@ -91,7 +91,7 @@ public class CommentListItem extends LinearLayout {
 		comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
 		comment.setTextColor(textColor);
 		comment.setLayoutParams(commentLayoutParams);
-		comment.setMaxLines(5);
+		comment.setMaxLines(3);
 
 		contentHeaderLayout.addView(author);
 		contentHeaderLayout.addView(time);

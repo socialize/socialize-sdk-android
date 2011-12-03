@@ -22,6 +22,8 @@
 package com.socialize.ui.profile.activity;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.ImageView;
@@ -39,6 +41,7 @@ import com.socialize.util.DeviceUtils;
 public class UserActivityListItem extends LinearLayout {
 	
 	private TextView text;
+	private TextView title;
 	private ImageView icon;
 	private DeviceUtils deviceUtils;
 	private Colors colors;	
@@ -62,34 +65,47 @@ public class UserActivityListItem extends LinearLayout {
 		setGravity(Gravity.TOP);
 		setPadding(padding,padding,padding,padding);
 		
+		LinearLayout.LayoutParams contentLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams titleLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		
+		
+		contentLayoutParams.setMargins(margin, 0, 0, 0);
+		
 		LinearLayout contentLayout = new LinearLayout(getContext());
 		contentLayout.setOrientation(LinearLayout.VERTICAL);
 		contentLayout.setGravity(Gravity.LEFT);
 		contentLayout.setPadding(0, 0, 0, 0);
-		
-		LinearLayout.LayoutParams contentLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		contentLayoutParams.setMargins(margin, 0, 0, 0);
 		contentLayout.setLayoutParams(contentLayoutParams);
 		
-		LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		
+		title = new TextView(getContext());
+		title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+		title.setTextColor(textColor);
+		title.setLayoutParams(titleLayoutParams);
+		title.setMaxLines(1);
+		title.setTypeface(Typeface.DEFAULT_BOLD);
 		
 		text = new TextView(getContext());
-		text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+		text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
 		text.setTextColor(textColor);
 		text.setLayoutParams(textLayoutParams);
 		text.setMaxLines(1);
 		
+		contentLayout.addView(title);
 		contentLayout.addView(text);
 		
 		LinearLayout iconLayout = new LinearLayout(getContext());
 		
 		LinearLayout.LayoutParams iconLayoutParams = new LinearLayout.LayoutParams(iconSize, iconSize);
 		iconLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
+		
 		iconLayout.setLayoutParams(iconLayoutParams);
 		iconLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
+		
 		icon = new ImageView(getContext());
 		icon.setLayoutParams(iconLayoutParams);
-		icon.setPadding(padding, padding, padding, padding);	
+		icon.setPadding(padding, 0, padding, 0);	
 		
 		iconLayout.addView(icon);
 		
@@ -99,6 +115,10 @@ public class UserActivityListItem extends LinearLayout {
 
 	public TextView getText() {
 		return text;
+	}
+	
+	public TextView getTitle() {
+		return title;
 	}
 
 	public ImageView getIcon() {

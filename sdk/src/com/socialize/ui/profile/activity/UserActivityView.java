@@ -44,7 +44,7 @@ public class UserActivityView extends BaseView {
 	private LoadingListView listView;
 	
 	// Injected
-	private int numItems = 5;
+	private int numItems = 20;
 	
 	private IBeanFactory<UserActivityListAdapter> userActivityListAdapterFactory;
 	private IBeanFactory<LoadingListView> loadingListViewFactory;

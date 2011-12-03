@@ -86,6 +86,7 @@ public class LoadingListView extends ViewFlipper {
 		listView.setCacheColorHint(0);
 		listView.setDividerHeight(2);
 		listView.setSmoothScrollbarEnabled(true);
+		listView.setVerticalFadingEdgeEnabled(false);
 
 		contentView.addView(listView);
 

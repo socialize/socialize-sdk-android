@@ -205,6 +205,8 @@
 	
 	<factory id="loadingListViewFactory" makes="loadingListView"/>
 
+	<bean id="htmlFormatter" class="com.socialize.ui.html.DefaultHtmlFormatter"/>
+	
 <!-- Authenticate Dialog -->
 	<factory id="authRequestDialogFactory" makes="authRequestDialog"/>
 	<factory id="authConfirmDialogFactory" makes="authConfirmDialog"/>
@@ -473,6 +475,7 @@
 		<property name="colors" ref="colors"/>
 		<property name="geoUtils" ref="geoUtils"/>
 		<property name="dateUtils" ref="dateUtils"/>
+		<property name="htmlFormatter" ref="htmlFormatter"/>
 		
 		<init-method name="init"/>
 		
