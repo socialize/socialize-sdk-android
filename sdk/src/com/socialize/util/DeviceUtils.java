@@ -80,12 +80,30 @@ public class DeviceUtils {
 			
 			packageName = context.getPackageName();
 			
-			Resources appR = context.getResources(); 
-			CharSequence txt = appR.getText(appR.getIdentifier("app_name",  "string", context.getPackageName())); 
-			appName = txt.toString();
-			
+			// Try to get the app name 
+			try {
+				Resources appR = context.getResources(); 
+				CharSequence txt = appR.getText(appR.getIdentifier("app_name",  "string", context.getPackageName())); 
+				appName = txt.toString();
+			} 
+			catch (Exception e) {
+				String msg = "Failed to locate app_name String from resources.  Make sure this is specified in your AndroidManifest.xml";
+				
+				if(logger != null) {
+					logger.error(msg, e);
+				}
+				else {
+					System.err.println(msg);
+					e.printStackTrace();
+				}
+			}
+
 			if(StringUtils.isEmpty(appName)) {
 				appName = packageName;
+			}
+			
+			if(StringUtils.isEmpty(appName)) {
+				appName = "A Socialize enabled app";
 			}
 			
 			hasCamera = isIntentAvailable(context, MediaStore.ACTION_IMAGE_CAPTURE);
@@ -156,6 +174,7 @@ public class DeviceUtils {
 //		}
 		
 		builder.append(packageName);
+		
 		return builder.toString();
 	}
 	
@@ -179,6 +198,10 @@ public class DeviceUtils {
 		return context.getPackageManager().checkPermission(permission, context.getPackageName()) == PackageManager.PERMISSION_GRANTED;
 	}
 
+	public boolean isLocationAvaiable(Context context) {
+		return hasPermission(context, "android.permission.ACCESS_FINE_LOCATION") || hasPermission(context, "android.permission.ACCESS_COARSE_LOCATION");	
+	}
+	
 	public boolean hasCamera() {
 		return hasCamera;
 	}

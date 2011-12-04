@@ -30,5 +30,5 @@ import android.location.Location;
 public interface SocializeLocationProvider {
 
 	public Location getLocation();
-	
+
 }

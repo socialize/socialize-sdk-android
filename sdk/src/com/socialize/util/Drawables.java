@@ -65,6 +65,10 @@ public class Drawables {
 		return getDrawable(name, false, false, -1, -1, eternal);
 	}
 	
+	public Drawable getDrawable(String name, int forceDensity) {
+		return getDrawable(name, forceDensity, true);
+	}
+	
 	public Drawable getDrawable(String name, int forceDensity, boolean eternal) {
 		return getDrawable(name, metrics.densityDpi, false, false, -1, -1, eternal, forceDensity);
 	}	

@@ -22,7 +22,6 @@
 package com.socialize.ui.profile.activity;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -36,7 +35,6 @@ import com.socialize.util.DeviceUtils;
 
 /**
  * @author Jason Polites
- *
  */
 public class UserActivityListItem extends LinearLayout {
 	

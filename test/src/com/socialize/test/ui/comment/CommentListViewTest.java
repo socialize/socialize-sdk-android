@@ -23,13 +23,13 @@ import com.socialize.ui.auth.AuthRequestDialogFactory;
 import com.socialize.ui.auth.AuthRequestListener;
 import com.socialize.ui.comment.CommentAdapter;
 import com.socialize.ui.comment.CommentAddButtonListener;
-import com.socialize.ui.comment.CommentContentView;
 import com.socialize.ui.comment.CommentListView;
 import com.socialize.ui.comment.CommentScrollListener;
 import com.socialize.ui.dialog.DialogFactory;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.facebook.FacebookWallPoster;
 import com.socialize.ui.header.SocializeHeader;
+import com.socialize.ui.view.LoadingListView;
 
 public class CommentListViewTest extends SocializeUIActivityTest {
 	/*
@@ -38,7 +38,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		ViewFactory.class,
 		View.class,
 		SocializeHeader.class,
-		CommentContentView.class,
+		LoadingListView.class,
 		Drawables.class,
 		KeyboardUtils.class,
 		CommentAdapter.class,
@@ -54,7 +54,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		ViewFactory<SocializeHeader> commentHeaderFactory = AndroidMock.createMock(ViewFactory.class);
 		ViewFactory<View> commentEditFieldFactory = AndroidMock.createMock(ViewFactory.class);
-		ViewFactory<CommentContentView> commentContentViewFactory = AndroidMock.createMock(ViewFactory.class);
+		ViewFactory<LoadingListView> commentContentViewFactory = AndroidMock.createMock(ViewFactory.class);
 		
 		CommentScrollCallback commentScrollCallback = AndroidMock.createMock(CommentScrollCallback.class);
 		
@@ -63,7 +63,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		View field = AndroidMock.createNiceMock(View.class, getContext());
 		SocializeHeader header = AndroidMock.createNiceMock(SocializeHeader.class, getContext());
-		CommentContentView content = AndroidMock.createNiceMock(CommentContentView.class, getContext());
+		LoadingListView content = AndroidMock.createNiceMock(LoadingListView.class, getContext());
 		Drawables drawables = AndroidMock.createMock(Drawables.class);
 //		KeyboardUtils keyboardUtils = AndroidMock.createMock(KeyboardUtils.class);
 		CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
@@ -319,7 +319,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		List.class,
 		View.class,
 		SocializeHeader.class,
-		CommentContentView.class,
+		LoadingListView.class,
 		FacebookWallPoster.class})
 	public void testPostCommentSuccess() {
 		
@@ -340,7 +340,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		final List<Comment> comments = AndroidMock.createMock(List.class);
 		final View field = AndroidMock.createMock(View.class, getContext());
 		final SocializeHeader header = AndroidMock.createMock(SocializeHeader.class, getContext());
-		final CommentContentView content = AndroidMock.createMock(CommentContentView.class, getContext());
+		final LoadingListView content = AndroidMock.createMock(LoadingListView.class, getContext());
 		
 		final FacebookWallPoster facebookWallPoster = AndroidMock.createMock(FacebookWallPoster.class);
 
@@ -619,7 +619,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		CommentAdapter.class,
 		List.class,
 		SocializeHeader.class,
-		CommentContentView.class,
+		LoadingListView.class,
 		ListResult.class})
 	public void testDoListCommentsSuccessEmptyCommentsWithoutUpdate() {
 		
@@ -632,7 +632,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		final List<Comment> listResultComments = AndroidMock.createMock(List.class);
 		
 		final SocializeHeader header = AndroidMock.createMock(SocializeHeader.class, getContext());
-		final CommentContentView content = AndroidMock.createMock(CommentContentView.class, getContext());
+		final LoadingListView content = AndroidMock.createMock(LoadingListView.class, getContext());
 		final ListResult<Comment> entities = AndroidMock.createMock(ListResult.class);
 		
 		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
@@ -699,7 +699,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		final SocializeException error = AndroidMock.createMock(SocializeException.class);
 		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
 		final List<Comment> comments = AndroidMock.createMock(List.class);
-		final CommentContentView content = AndroidMock.createMock(CommentContentView.class, getContext());
+		final LoadingListView content = AndroidMock.createMock(LoadingListView.class, getContext());
 		
 		content.showList();
 		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
@@ -750,12 +750,12 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 	@UsesMocks ({
 		CommentAdapter.class,
 		List.class,
-		CommentContentView.class})
+		LoadingListView.class})
 	public void testDoListCommentsSuccessPopulatedCommentsWithoutUpdate() {
 		
 		final CommentAdapter commentAdapter = AndroidMock.createMock(CommentAdapter.class);
 		final List<Comment> comments = AndroidMock.createMock(List.class);
-		final CommentContentView content = AndroidMock.createMock(CommentContentView.class, getContext());
+		final LoadingListView content = AndroidMock.createMock(LoadingListView.class, getContext());
 		final SocializeHeader header = AndroidMock.createMock(SocializeHeader.class, getContext());
 		
 		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
@@ -821,10 +821,10 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 	
 	@UsesMocks ({
 		SocializeService.class,
-		CommentContentView.class})
+		LoadingListView.class})
 	public void testOnViewLoadFail() {
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
-		final CommentContentView content = AndroidMock.createMock(CommentContentView.class, getContext());
+		final LoadingListView content = AndroidMock.createMock(LoadingListView.class, getContext());
 		
 		AndroidMock.expect(socialize.isAuthenticated()).andReturn(false);
 		content.showList();
@@ -900,7 +900,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		}
 
 		@Override
-		public void setContent(CommentContentView content) {
+		public void setContent(LoadingListView content) {
 			super.setContent(content);
 		}
 

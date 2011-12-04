@@ -37,6 +37,7 @@
 	    <activity android:name="com.socialize.sample.ui.SampleSocializeActivity"/>
 	    <activity android:name="com.socialize.sample.ui.ActionBarAutoActivity"/>
 	    <activity android:name="com.socialize.sample.ui.ActionBarManualActivity"/>
+	    <activity android:name="com.socialize.sample.ui.ActionBarPagerActivity"/>
 	    
 	    <!-- Activities Required by Socialize UI -->
 	    <activity android:name="com.socialize.auth.facebook.FacebookActivity"/>

@@ -28,6 +28,7 @@ import com.socialize.ui.header.SocializeHeader;
 import com.socialize.ui.slider.ActionBarSliderFactory;
 import com.socialize.ui.slider.ActionBarSliderFactory.ZOrder;
 import com.socialize.ui.slider.ActionBarSliderView;
+import com.socialize.ui.view.LoadingListView;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 import com.socialize.view.BaseView;
@@ -51,11 +52,11 @@ public class CommentListView extends BaseView {
 	
 	private IBeanFactory<SocializeHeader> commentHeaderFactory;
 	private IBeanFactory<CommentEditField> commentEditFieldFactory;
-	private IBeanFactory<CommentContentView> commentContentViewFactory;
+	private IBeanFactory<LoadingListView> commentContentViewFactory;
 	
 	private View field;
 	private SocializeHeader header;
-	private CommentContentView content;
+	private LoadingListView content;
 	private IBeanFactory<AuthRequestDialogFactory> authRequestDialogFactory;
 	
 	private IBeanFactory<CommentEntrySliderItem> commentEntryFactory;
@@ -516,7 +517,7 @@ public class CommentListView extends BaseView {
 		this.commentEditFieldFactory = commentEditFieldFactory;
 	}
 
-	public void setCommentContentViewFactory(IBeanFactory<CommentContentView> commentContentViewFactory) {
+	public void setCommentContentViewFactory(IBeanFactory<LoadingListView> commentContentViewFactory) {
 		this.commentContentViewFactory = commentContentViewFactory;
 	}
 
@@ -540,7 +541,7 @@ public class CommentListView extends BaseView {
 		this.header = header;
 	}
 
-	protected void setContent(CommentContentView content) {
+	protected void setContent(LoadingListView content) {
 		this.content = content;
 	}
 

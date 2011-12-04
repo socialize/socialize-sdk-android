@@ -31,10 +31,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.socialize.Socialize;
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.button.SocializeButton;
-import com.socialize.ui.profile.AutoPostFacebookOption;
 import com.socialize.ui.util.KeyboardUtils;
+import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.util.DeviceUtils;
 import com.socialize.view.BaseView;
 
@@ -51,7 +52,11 @@ public class CommentEntryView extends BaseView {
 	private DeviceUtils deviceUtils;
 	private KeyboardUtils keyboardUtils;
 	private EditText commentField;
-	private AutoPostFacebookOption checkBox;
+	private CustomCheckbox checkBox;
+	private CustomCheckbox locationBox;
+	private IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory;
+	private IBeanFactory<CustomCheckbox> locationEnabledOptionFactory;
+	
 	
 	public CommentEntryView(Context context, CommentAddButtonListener listener) {
 		super(context);
@@ -69,11 +74,13 @@ public class CommentEntryView extends BaseView {
 		LinearLayout buttonLayout = new LinearLayout(getContext());
 		
 		if(getSocializeUI().isFacebookSupported()) {
-			checkBox = new AutoPostFacebookOption(getContext()); // TODO: make a factory
-			checkBox.init();
-			checkBox.setChecked(Socialize.getSocialize().getSession().getUser().isAutoPostToFacebook());
+			checkBox = autoPostFacebookOptionFactory.getBean();
 		}
-
+		
+		if(deviceUtils.isLocationAvaiable(getContext())) {
+			locationBox = locationEnabledOptionFactory.getBean();
+		}
+		
 		LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		LayoutParams commentFieldParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
@@ -122,25 +129,39 @@ public class CommentEntryView extends BaseView {
 					boolean autoPost = false;
 					
 					if(checkBox != null) {
-						autoPost =checkBox.isChecked(); 
+						autoPost = checkBox.isChecked(); 
 					}
 					
 					listener.onComment(commentField.getText().toString().trim(), autoPost);
-					
 				}
 			});
 			
 			buttonLayout.addView(postCommentButton);
 		}
 		
+		
+		addView(buttonLayout);
 		addView(commentLabel);
 		addView(commentField);
 		
-		if(checkBox != null) {
-			addView(checkBox);
-		}
-		
-		addView(buttonLayout);
+		if(checkBox != null || locationBox != null) {
+			LinearLayout optionsLayout = new LinearLayout(getContext());
+			LayoutParams optionsLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			
+			optionsLayout.setLayoutParams(optionsLayoutParams);
+			optionsLayout.setOrientation(HORIZONTAL);
+			
+			if(checkBox != null) {
+				optionsLayout.addView(checkBox);
+			}
+			
+			if(locationBox != null) {
+				optionsLayout.addView(locationBox);
+			}
+			
+			addView(optionsLayout);
+		}		
+
 	}
 	
 	
@@ -166,6 +187,14 @@ public class CommentEntryView extends BaseView {
 		this.cancelCommentButton = cancelCommentButton;
 	}
 	
+	public void setAutoPostFacebookOptionFactory(IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory) {
+		this.autoPostFacebookOptionFactory = autoPostFacebookOptionFactory;
+	}
+	
+	public void setLocationEnabledOptionFactory(IBeanFactory<CustomCheckbox> locationEnabledOptionFactory) {
+		this.locationEnabledOptionFactory = locationEnabledOptionFactory;
+	}
+
 	protected void reset() {
 		keyboardUtils.hideKeyboard(commentField);
 		commentField.setText("");

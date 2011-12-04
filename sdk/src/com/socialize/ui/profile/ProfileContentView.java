@@ -57,6 +57,7 @@ import com.socialize.ui.image.ImageLoader;
 import com.socialize.ui.profile.activity.UserActivityView;
 import com.socialize.ui.user.UserService;
 import com.socialize.ui.util.Colors;
+import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.SafeBitmapDrawable;
@@ -72,7 +73,8 @@ public class ProfileContentView extends BaseView {
 	private ImageView profilePicture;
 	private TextView displayName;
 	private EditText displayNameEdit;
-	private AutoPostFacebookOption autoPostFacebook;
+	private CustomCheckbox autoPostFacebook;
+	private IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory;
 	private SocializeButton facebookSignOutButton;
 	private SocializeButton facebookSignInButton;
 	private SocializeButton editButton;
@@ -170,9 +172,7 @@ public class ProfileContentView extends BaseView {
 		final TextView displayName = new TextView(getContext());
 		final EditText displayNameEdit = new EditText(getContext());
 		
-		AutoPostFacebookOption checkBox = new AutoPostFacebookOption(getContext());
-		checkBox.init();
-		checkBox.setChecked(Socialize.getSocialize().getSession().getUser().isAutoPostToFacebook()); // TODO: Make a factory
+		CustomCheckbox checkBox = autoPostFacebookOptionFactory.getBean();
 		checkBox.setEnabled(false);
 		
 		final SocializeButton editButton = profileEditButtonFactory.getBean();
@@ -489,7 +489,7 @@ public class ProfileContentView extends BaseView {
 		return autoPostFacebook.isChecked();
 	}
 	
-	public void setAutoPostFacebook(AutoPostFacebookOption autoPostFacebook) {
+	public void setAutoPostFacebook(CustomCheckbox autoPostFacebook) {
 		this.autoPostFacebook = autoPostFacebook;
 	}
 
@@ -514,7 +514,7 @@ public class ProfileContentView extends BaseView {
 		this.contextMenu = contextMenu;
 	}
 	
-	public AutoPostFacebookOption getAutoPostFacebook() {
+	public CustomCheckbox getAutoPostFacebook() {
 		return autoPostFacebook;
 	}
 
@@ -587,6 +587,10 @@ public class ProfileContentView extends BaseView {
 
 	public void setColors(Colors colors) {
 		this.colors = colors;
+	}
+
+	public void setAutoPostFacebookOptionFactory(IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory) {
+		this.autoPostFacebookOptionFactory = autoPostFacebookOptionFactory;
 	}
 
 	public void setUserDetails(User user) {

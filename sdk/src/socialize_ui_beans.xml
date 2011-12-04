@@ -207,6 +207,16 @@
 
 	<bean id="htmlFormatter" class="com.socialize.ui.html.DefaultHtmlFormatter"/>
 	
+	<bean 
+		id="customCheckbox" 
+		class="com.socialize.ui.view.CustomCheckbox"
+		abstract="true">
+		<constructor-arg type="activity"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<init-method name="init"/>
+	</bean>		
+	
 <!-- Authenticate Dialog -->
 	<factory id="authRequestDialogFactory" makes="authRequestDialog"/>
 	<factory id="authConfirmDialogFactory" makes="authConfirmDialog"/>
@@ -349,7 +359,21 @@
 	</bean>
 	
 	<factory id="facebookSignOutTaskFactory" makes="facebookSignOutTask"/>
-
+	
+	<bean 
+		id="autoPostFacebookOption" 
+		extends="customCheckbox"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		
+		<property name="imageOn" value="icon_facebook.png"/>
+		<property name="imageOff" value="icon_facebook_disabled.png"/>
+		<property name="textOn" value="Facebook enabled"/>
+		<property name="textOff" value="Facebook disabled"/>
+	</bean>	
+	
+	<factory id="autoPostFacebookOptionFactory" makes="autoPostFacebookOption"/>
+	
 <!-- Comment UI -->
 	
 	<bean 
@@ -429,24 +453,12 @@
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
 		<property name="commentHeaderFactory" ref="commentHeaderFactory"/>
 		<property name="commentEditFieldFactory" ref="commentEditFieldFactory"/>
-		<property name="commentContentViewFactory" ref="commentContentViewFactory"/>
+		<property name="commentContentViewFactory" ref="loadingListViewFactory"/>
 		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
 		<property name="facebookWallPoster" ref="facebookWallPoster"/>
 		<property name="commentEntryFactory" ref="commentEntrySliderItemFactory"/>
 		<property name="sliderFactory" ref="actionBarSliderFactory"/>
-		
 	</bean>
-	
-	<bean 
-		id="commentContentView" 
-		class="com.socialize.ui.comment.CommentContentView"
-		singleton="false">
-		<constructor-arg type="activity"/>
-		<property name="loadingViewFactory" ref="loadingViewFactory"/>
-		<init-method name="init"/>
-	</bean>	
-	
-	<factory id="commentContentViewFactory" makes="commentContentView"/>	
 	
 	<bean 
 		id="commentEditField" 
@@ -532,6 +544,8 @@
 		<property name="keyboardUtils" ref="keyboardUtils"/>
 		<property name="postCommentButton" ref="postCommentButton"/>
 		<property name="cancelCommentButton" ref="cancelCommentButton"/>
+		<property name="autoPostFacebookOptionFactory" ref="autoPostFacebookOptionFactory"/>
+		<property name="locationEnabledOptionFactory" ref="locationEnabledOptionFactory"/>
 		
 		<init-method name="init"/>
 	</bean>		
@@ -555,6 +569,20 @@
 		<property name="commentDetailContentViewFactory" ref="commentDetailContentViewFactory"/>
 		<property name="imageLoader" ref="imageLoader"/>
 	</bean>
+	
+	<bean 
+		id="locationEnabledOption" 
+		extends="customCheckbox"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		
+		<property name="imageOn" value="icon_location.png"/>
+		<property name="imageOff" value="icon_location_disabled.png"/>
+		<property name="textOn" value="Location enabled"/>
+		<property name="textOff" value="Location disabled"/>
+	</bean>	
+	
+	<factory id="locationEnabledOptionFactory" makes="locationEnabledOption"/>	
 	
 <!--  End Comment UI -->
 	
@@ -611,6 +639,7 @@
 		<property name="profileSaveButtonListenerFactory" ref="profileSaveButtonListenerFactory"/>	
 		<property name="profileImageContextMenuFactory" ref="profileImageContextMenuFactory"/>
 		<property name="userActivityViewFactory" ref="userActivityViewFactory"/>
+		<property name="autoPostFacebookOptionFactory" ref="autoPostFacebookOptionFactory"/>
 		
 		<property name="userService" ref="userService"/>
 		<property name="imageLoader" ref="imageLoader"/>	
