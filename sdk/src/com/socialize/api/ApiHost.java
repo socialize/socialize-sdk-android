@@ -52,7 +52,7 @@ public interface ApiHost {
 
 	public void createEntity(SocializeSession session, String key, String name, EntityListener listener);
 
-	public void addComment(SocializeSession session, String key, String comment, Location location, CommentListener listener);
+	public void addComment(SocializeSession session, String key, String comment, Location location, boolean shareLocation, CommentListener listener);
 
 	public void getComment(SocializeSession session, long id, CommentListener listener);
 

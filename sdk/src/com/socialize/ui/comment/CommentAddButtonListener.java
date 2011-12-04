@@ -68,16 +68,16 @@ public class CommentAddButtonListener {
 		callback.onCancel();
 	}
 
-	public void onComment(String comment, boolean autoPostToFacebook) {
+	public void onComment(String comment, boolean autoPostToFacebook, boolean shareLocation) {
 		if(!StringUtils.isEmpty(comment)) {
 			if(!getSocialize().isAuthenticated()) {
 				getSocialize().authenticate(
 						consumerKey, 
 						consumerSecret,
-						new CommentReAuthListener(context, callback, comment, autoPostToFacebook));
+						new CommentReAuthListener(context, callback, comment, autoPostToFacebook, shareLocation));
 			}
 			else {
-				callback.onComment(comment, autoPostToFacebook);
+				callback.onComment(comment, autoPostToFacebook, shareLocation);
 			}
 		}
 	}

@@ -468,10 +468,19 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#addComment(java.lang.String, java.lang.String, android.location.Location, com.socialize.listener.comment.CommentAddListener)
 	 */
 	@Override
-	public void addComment(String url, String comment, Location location, CommentAddListener commentAddListener) {
+	public void addComment(String url, String comment, Location location, boolean shareLocation, CommentAddListener commentAddListener) {
 		if(assertAuthenticated(commentAddListener)) {
-			service.addComment(session, url, comment, location, commentAddListener);
+			service.addComment(session, url, comment, location, shareLocation, commentAddListener);
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#addComment(java.lang.String, java.lang.String, boolean, com.socialize.listener.comment.CommentAddListener)
+	 */
+	@Override
+	public void addComment(String url, String comment, boolean shareLocation, CommentAddListener commentAddListener) {
+		addComment(url, comment, null, shareLocation, commentAddListener);
 	}
 
 	/*
@@ -480,7 +489,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public void addComment(String url, String comment, CommentAddListener commentAddListener) {
-		addComment(url, comment, null, commentAddListener);
+		addComment(url, comment, null, true, commentAddListener);
 	}
 	
 	/* (non-Javadoc)

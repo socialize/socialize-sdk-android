@@ -130,12 +130,13 @@ public class SocializeApiHost implements ApiHost {
 		entityApi.addEntity(session, key, name, listener);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.api.ApiHost#addComment(com.socialize.api.SocializeSession, java.lang.String, java.lang.String, android.location.Location, com.socialize.listener.comment.CommentListener)
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.ApiHost#addComment(com.socialize.api.SocializeSession, java.lang.String, java.lang.String, android.location.Location, boolean, com.socialize.listener.comment.CommentListener)
 	 */
 	@Override
-	public void addComment(SocializeSession session, String key, String comment, Location location, CommentListener listener) {
-		commentApi.addComment(session, key, comment, location, listener);
+	public void addComment(SocializeSession session, String key, String comment, Location location, boolean shareLocation, CommentListener listener) {
+		commentApi.addComment(session, key, comment, location, shareLocation, listener);
 	}
 	
 	/* (non-Javadoc)

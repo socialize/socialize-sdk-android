@@ -18,7 +18,7 @@ public class CommentReAuthListenerTest extends SocializeUITestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		callback = AndroidMock.createMock(CommentButtonCallback.class);
-		listener = new CommentReAuthListener(getContext(), callback, comment, false);
+		listener = new CommentReAuthListener(getContext(), callback, comment, false, true);
 	}
 
 	@UsesMocks (SocializeException.class)
@@ -39,7 +39,7 @@ public class CommentReAuthListenerTest extends SocializeUITestCase {
 	
 	public void testOnAuthSuccess() {
 		
-		callback.onComment(comment, false);
+		callback.onComment(comment, false, true);
 		
 		AndroidMock.replay(callback);
 		

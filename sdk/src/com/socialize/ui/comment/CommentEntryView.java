@@ -127,12 +127,17 @@ public class CommentEntryView extends BaseView {
 				public void onClick(View v) {
 					keyboardUtils.hideKeyboard(commentField);
 					boolean autoPost = false;
+					boolean shareLocation = false;
 					
 					if(checkBox != null) {
 						autoPost = checkBox.isChecked(); 
 					}
 					
-					listener.onComment(commentField.getText().toString().trim(), autoPost);
+					if(locationBox != null) {
+						shareLocation = locationBox.isChecked(); 
+					}
+					
+					listener.onComment(commentField.getText().toString().trim(), autoPost, shareLocation);
 				}
 			});
 			
@@ -201,6 +206,10 @@ public class CommentEntryView extends BaseView {
 		
 		if(checkBox != null) {
 			checkBox.setChecked(Socialize.getSocialize().getSession().getUser().isAutoPostToFacebook());
+		}
+		
+		if(deviceUtils.isLocationAvaiable(getContext())) {
+			locationBox.setChecked(true);
 		}
 	}
 	

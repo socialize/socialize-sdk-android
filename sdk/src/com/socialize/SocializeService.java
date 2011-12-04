@@ -289,9 +289,10 @@ public interface SocializeService {
 	 * @param url The url to which the comment is associated. MUST be a valid http URL. Defined when first creating a url, or created on the fly with this call.
 	 * @param comment The comment to add.
 	 * @param location The location of the device at the time the call was made.
+	 * @param shareLocation If true this comment will appear with the location when viewed.
 	 * @param commentAddListener A listener to handle callbacks from the post.
 	 */
-	public void addComment(String url, String comment, Location location, CommentAddListener commentAddListener);
+	public void addComment(String url, String comment, Location location, boolean shareLocation, CommentAddListener commentAddListener);
 
 	/**
 	 * Adds a new comment and associates it with the url described.
@@ -300,6 +301,17 @@ public interface SocializeService {
 	 * @param commentAddListener A listener to handle callbacks from the post.
 	 */
 	public void addComment(String url, String comment, CommentAddListener commentAddListener);
+	
+	/**
+	 * Adds a new comment and associates it with the url described.
+	 * @param url The url to which the comment is associated. MUST be a valid http URL. Defined when first creating a url, or created on the fly with this call.
+	 * @param comment The comment to add.	
+	 * @param shareLocation If true this comment will appear with a location when viewed.
+	 * @param commentAddListener A listener to handle callbacks from the post.
+	 */
+	public void addComment(String url, String comment, boolean shareLocation, CommentAddListener commentAddListener);
+	
+	
 
 	/**
 	 * Retrieves a Socialize User based on their Socialize user ID.

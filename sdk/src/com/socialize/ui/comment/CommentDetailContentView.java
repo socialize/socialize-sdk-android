@@ -45,6 +45,7 @@ import com.socialize.ui.util.Colors;
 import com.socialize.ui.util.DateUtils;
 import com.socialize.ui.util.GeoUtils;
 import com.socialize.util.DeviceUtils;
+import com.socialize.util.Drawables;
 
 /**
  * @author Jason Polites
@@ -55,14 +56,17 @@ public class CommentDetailContentView extends LinearLayout {
 	private ImageView profilePicture;
 	private TextView displayName;
 	private WebView commentView;
-	private TextView commentMeta;
+	private TextView commentTimestamp;
+	private TextView commentLocation;
 	private GeoUtils geoUtils;
 	private DateUtils dateUtils;
 	private DeviceUtils deviceUtils;
 	private Colors colors;
+	private Drawables drawables;
 	private HtmlFormatter htmlFormatter;
+	private LinearLayout commentLocationLine;
 	
-	private View headerView;
+	private LinearLayout headerView;
 	
 	public CommentDetailContentView(Context context) {
 		super(context);
@@ -86,12 +90,12 @@ public class CommentDetailContentView extends LinearLayout {
 		this.setPadding(0, 0, 0, 0);
 		this.setGravity(Gravity.TOP);
 		
-		LinearLayout headerLayout = new LinearLayout(getContext());
+		headerView = new LinearLayout(getContext());
 		LayoutParams masterLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		
-		headerLayout.setLayoutParams(masterLayoutParams);
-		headerLayout.setOrientation(LinearLayout.HORIZONTAL);
-		headerLayout.setGravity(Gravity.TOP);
+		headerView.setLayoutParams(masterLayoutParams);
+		headerView.setOrientation(LinearLayout.HORIZONTAL);
+		headerView.setGravity(Gravity.TOP);
 		
 		LinearLayout nameLayout = new LinearLayout(getContext());
 		LayoutParams nameLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -102,21 +106,43 @@ public class CommentDetailContentView extends LinearLayout {
 		
 		LayoutParams imageLayout = new LinearLayout.LayoutParams(imageSize,imageSize);
 		LayoutParams textLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-		LayoutParams commentMetaLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		LayoutParams commentTimestampLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		LayoutParams commentLocationLineLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		LayoutParams commentLocationLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		LayoutParams commentLocationPinLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		
-		final ImageView profilePicture = new ImageView(getContext());
-		final TextView displayName = new TextView(getContext());
-		final WebView commentView = new WebView(getContext());
-		final TextView commentMeta = new TextView(getContext());
+		commentTimestampLayout.gravity = Gravity.RIGHT;
+		commentLocationLayout.gravity = Gravity.LEFT;
+		commentLocationPinLayout.gravity = Gravity.CENTER_VERTICAL;
 		
-		commentMetaLayout.gravity = Gravity.RIGHT;
-		commentMeta.setGravity(Gravity.RIGHT);
-		commentMeta.setLayoutParams(commentMetaLayout);
-		commentMeta.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
-		commentMeta.setTextColor(Color.WHITE);
+		profilePicture = new ImageView(getContext());
+		displayName = new TextView(getContext());
+		commentView = new WebView(getContext());
+		commentTimestamp = new TextView(getContext());
+		commentLocation = new TextView(getContext());
+		ImageView locationPin = new ImageView(getContext());
+		locationPin.setImageDrawable(drawables.getDrawable("icon_location_pin.png"));
+		
+		commentLocationLine = new LinearLayout(getContext());
+		commentLocationLine.setPadding(imagePadding, imagePadding, imagePadding, 0);
+		commentLocationLine.addView(locationPin);
+		commentLocationLine.addView(commentLocation);
+		
+		commentLocationLine.setLayoutParams(commentLocationLineLayout);
+		commentLocation.setLayoutParams(commentLocationLayout);
+		locationPin.setLayoutParams(commentLocationPinLayout);
+
+		commentTimestamp.setGravity(Gravity.RIGHT);
+		commentTimestamp.setLayoutParams(commentTimestampLayout);
+		commentTimestamp.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+		commentTimestamp.setTextColor(Color.WHITE);
+		
+		commentLocation.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+		commentLocation.setTextColor(Color.WHITE);
 		
 		commentView.setVisibility(View.GONE);
-		commentMeta.setVisibility(View.GONE);
+		commentTimestamp.setVisibility(View.GONE);
+		commentLocationLine.setVisibility(View.GONE);
 		
 		GradientDrawable commentBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Color.BLACK, Color.BLACK});
 		commentBG.setCornerRadius(10.0f);
@@ -132,7 +158,7 @@ public class CommentDetailContentView extends LinearLayout {
 		
 		commentLayoutView.setLayoutParams(commentViewLayout);
 		commentLayoutView.setBackgroundDrawable(commentBG);
-		commentLayoutView.setPadding(margin, margin, margin, margin);
+		commentLayoutView.setPadding(margin, 0, margin, margin);
 		commentViewLayout.weight = 1.0f;
 		
 		commentView.setLayoutParams(commentWebViewLayout);
@@ -167,52 +193,31 @@ public class CommentDetailContentView extends LinearLayout {
 		InputFilter[] maxLength = new InputFilter[1]; 
 		maxLength[0] = new InputFilter.LengthFilter(128); 
 		
-		this.setProfilePicture(profilePicture);
-		this.setDisplayName(displayName);
-		this.setCommentView(commentView);
-		this.setCommentMeta(commentMeta);
-		this.setHeaderView(headerLayout);
-		
 		nameLayout.addView(displayName);
 		
-		headerLayout.addView(profilePicture);
-		headerLayout.addView(nameLayout);
+		headerView.addView(profilePicture);
+		headerView.addView(nameLayout);
 		
-		this.addView(headerLayout);
+		this.addView(headerView);
+		this.addView(commentLocationLine);
 		this.addView(commentLayoutView);
-		this.addView(commentMeta);		
+		this.addView(commentTimestamp);
 	}
 
 	public ImageView getProfilePicture() {
 		return profilePicture;
 	}
 
-	public void setProfilePicture(ImageView profilePicture) {
-		this.profilePicture = profilePicture;
-	}
-
 	public TextView getDisplayName() {
 		return displayName;
-	}
-
-	public void setDisplayName(TextView displayName) {
-		this.displayName = displayName;
 	}
 
 	public WebView getCommentView() {
 		return commentView;
 	}
 
-	public void setCommentView(WebView commentView) {
-		this.commentView = commentView;
-	}
-
-	public TextView getCommentMeta() {
-		return commentMeta;
-	}
-
-	public void setCommentMeta(TextView commentMeta) {
-		this.commentMeta = commentMeta;
+	public TextView getCommentTimestamp() {
+		return commentTimestamp;
 	}
 
 	public GeoUtils getGeoUtils() {
@@ -243,24 +248,23 @@ public class CommentDetailContentView extends LinearLayout {
 		return headerView;
 	}
 
-	public void setHeaderView(View headerView) {
-		this.headerView = headerView;
-	}
-
 	public void setHtmlFormatter(HtmlFormatter htmlFormatter) {
 		this.htmlFormatter = htmlFormatter;
+	}
+
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
 	}
 
 	public void setComment(Comment comment) {
 		if(commentView != null) {
 			commentView.loadData(htmlFormatter.format(comment.getText()), "text/html", "utf-8");
-//			commentView.setText(comment.getText());
 			commentView.setVisibility(View.VISIBLE);
 			commentView.setBackgroundColor(0x00000000);
 		}
 		
-		if(commentMeta != null) {
-			commentMeta.setVisibility(View.VISIBLE);
+		if(commentTimestamp != null) {
+			commentTimestamp.setVisibility(View.VISIBLE);
 			
 			String meta = "";
 			if(comment.getDate() != null) {
@@ -268,15 +272,17 @@ public class CommentDetailContentView extends LinearLayout {
 				meta = dateUtils.getSimpleDateString(commentDate);
 			}
 			
-			if(comment.getLat() != null && comment.getLon() != null) {
+			commentTimestamp.setText(meta);
+		}
+		
+		if(commentLocation != null) {
+			if(comment.isLocationShared() && comment.getLat() != null && comment.getLon() != null) {
 				Address address = geoUtils.geoCode(comment.getLat(), comment.getLon());
-				
 				if(address != null) {
-					meta += " from " + geoUtils.getSimpleLocation(address);
+					commentLocationLine.setVisibility(View.VISIBLE);
+					commentLocation.setText(geoUtils.getSimpleLocation(address));
 				}
 			}
-			
-			commentMeta.setText(meta);
 		}
 	}
 }

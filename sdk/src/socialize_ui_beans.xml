@@ -404,6 +404,7 @@
 		<init-method name="init"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="colors" ref="colors"/>
+		<property name="drawables" ref="drawables"/>
 	</bean>
 	
 	<bean 
@@ -487,6 +488,7 @@
 		<property name="colors" ref="colors"/>
 		<property name="geoUtils" ref="geoUtils"/>
 		<property name="dateUtils" ref="dateUtils"/>
+		<property name="drawables" ref="drawables"/>
 		<property name="htmlFormatter" ref="htmlFormatter"/>
 		
 		<init-method name="init"/>

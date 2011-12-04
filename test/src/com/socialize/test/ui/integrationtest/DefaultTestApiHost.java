@@ -59,7 +59,7 @@ public class DefaultTestApiHost implements ApiHost {
 	}
 
 	@Override
-	public void addComment(SocializeSession session, String key, String comment, Location location, CommentListener listener) {
+	public void addComment(SocializeSession session, String key, String comment, Location location, boolean shareLocation, CommentListener listener) {
 		fail(message + "addComment");
 	}
 

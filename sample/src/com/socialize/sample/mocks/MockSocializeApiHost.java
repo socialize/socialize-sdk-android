@@ -72,9 +72,9 @@ public class MockSocializeApiHost extends SocializeApiHost implements ContainerA
 	}
 
 	@Override
-	public void addComment(SocializeSession session, String key, String comment, Location location, CommentListener listener) {
+	public void addComment(SocializeSession session, String key, String comment, Location location, boolean shareLocation, CommentListener listener) {
 		listener.onCreate(new Comment());
-		if(delegate != null) delegate.addComment(session, key, comment, location, listener);
+		if(delegate != null) delegate.addComment(session, key, comment, location, shareLocation, listener);
 	}
 
 	@Override

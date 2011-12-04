@@ -194,7 +194,7 @@ public class CommentListView extends BaseView {
 			}
 
 			@Override
-			public void onComment(String text, boolean autoPostToFacebook) {
+			public void onComment(String text, boolean autoPostToFacebook, boolean shareLocation) {
 				
 				text = StringUtils.replaceNewLines(text, 3, 2);
 				
@@ -202,34 +202,34 @@ public class CommentListView extends BaseView {
 					// Check that FB is enabled for this installation
 					if(getSocializeUI().isFacebookSupported()) {
 						AuthRequestDialogFactory dialog = authRequestDialogFactory.getBean();
-						dialog.show(getContext(), getCommentAuthListener(text, autoPostToFacebook));
+						dialog.show(getContext(), getCommentAuthListener(text, autoPostToFacebook, shareLocation));
 					}
 					else {
 						// Just post as anon
-						doPostComment(text, false);
+						doPostComment(text, false, shareLocation);
 					}
 				}
 				else {
-					doPostComment(text, autoPostToFacebook);
+					doPostComment(text, autoPostToFacebook, shareLocation);
 				}
 			}
 		});
 	}
 	
-	protected AuthRequestListener getCommentAuthListener(final String text, final boolean autoPostToFacebook) {
+	protected AuthRequestListener getCommentAuthListener(final String text, final boolean autoPostToFacebook, final boolean shareLocation) {
 		return new AuthRequestListener() {
 			@Override
 			public void onResult(Dialog dialog) {
-				doPostComment(text, autoPostToFacebook);
+				doPostComment(text, autoPostToFacebook, shareLocation);
 			}
 		};
 	}
 
-	public void doPostComment(String comment, boolean autoPostToFacebook) {
+	public void doPostComment(String comment, boolean autoPostToFacebook, boolean shareLocation) {
 		
 		dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
 
-		getSocialize().addComment(entityKey, comment, new CommentAddListener() {
+		getSocialize().addComment(entityKey, comment, shareLocation, new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {

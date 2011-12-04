@@ -44,10 +44,11 @@ public class CommentApi extends SocializeApi<Comment, SocializeProvider<Comment>
 		super(provider);
 	}
 
-	public void addComment(SocializeSession session, String key, String comment, Location location, CommentListener listener) {
+	public void addComment(SocializeSession session, String key, String comment, Location location, boolean shareLocation, CommentListener listener) {
 		Comment c = new Comment();
 		c.setText(comment);
 		c.setEntityKey(key);
+		c.setLocationShared(shareLocation);
 		
 		setLocation(c, location);
 		

@@ -223,7 +223,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 			}
 
 			@Override
-			public AuthRequestListener getCommentAuthListener(String text, boolean autoPost) {
+			public AuthRequestListener getCommentAuthListener(String text, boolean autoPost, boolean shareLocation) {
 				addResult(1, text);
 				return listener;
 			}
@@ -247,7 +247,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		assertNotNull(commentScrollListener.getCallback());
 		
-		commentScrollListener.getCallback().onComment("foobar", false);
+		commentScrollListener.getCallback().onComment("foobar", false, true);
 		commentScrollListener.getCallback().onError(getContext(), new SocializeException("foobar_error"));
 		
 		AndroidMock.verify(authRequestDialogFactory);
@@ -276,7 +276,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
 			
 			@Override
-			public void doPostComment(String comment, boolean postToFB) {
+			public void doPostComment(String comment, boolean postToFB, boolean shareLocation) {
 				addResult(0, comment);
 			}
 			
@@ -295,7 +295,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		assertNotNull(commentScrollListener.getCallback());
 		
-		commentScrollListener.getCallback().onComment("foobar", false);
+		commentScrollListener.getCallback().onComment("foobar", false, true);
 		commentScrollListener.getCallback().onError(getContext(), new SocializeException("foobar_error"));
 		
 		AndroidMock.verify(socializeService);
@@ -410,7 +410,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		view.setEntityName(entityName);
 		view.setUseLink(true);
 		
-		view.doPostComment(commentString, true);
+		view.doPostComment(commentString, true, true);
 		
 		AndroidMock.verify(progressDialogFactory);
 		AndroidMock.verify(commentAdapter);
@@ -496,7 +496,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		view.setEntityName(entityName);
 		view.setUseLink(true);
 		
-		view.doPostComment(comment, true);
+		view.doPostComment(comment, true, true);
 		
 		AndroidMock.verify(progressDialogFactory);
 		AndroidMock.verify(dialog);
@@ -880,8 +880,8 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		}
 
 		@Override
-		public AuthRequestListener getCommentAuthListener(String text, boolean autoPost) {
-			return super.getCommentAuthListener(text, autoPost);
+		public AuthRequestListener getCommentAuthListener(String text, boolean autoPost, boolean shareLocation) {
+			return super.getCommentAuthListener(text, autoPost, shareLocation);
 		}
 
 		@Override

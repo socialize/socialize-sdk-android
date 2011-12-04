@@ -31,6 +31,7 @@ import com.socialize.api.action.ActionType;
 public class Comment extends SocializeAction {
 
 	private String text;
+	private boolean locationShared;
 
 	public String getText() {
 		return text;
@@ -48,5 +49,13 @@ public class Comment extends SocializeAction {
 	@Override
 	public String getDisplayText() {
 		return text;
+	}
+
+	public boolean isLocationShared() {
+		return locationShared;
+	}
+
+	public void setLocationShared(boolean locationShared) {
+		this.locationShared = locationShared;
 	}
 }
