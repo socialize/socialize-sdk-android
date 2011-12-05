@@ -25,6 +25,7 @@ import com.socialize.ui.comment.CommentAdapter;
 import com.socialize.ui.comment.CommentAddButtonListener;
 import com.socialize.ui.comment.CommentListView;
 import com.socialize.ui.comment.CommentScrollListener;
+import com.socialize.ui.comment.CommentShareOptions;
 import com.socialize.ui.dialog.DialogFactory;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.facebook.FacebookWallPoster;
@@ -346,10 +347,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 
 		facebookWallPoster.postComment(getActivity(), entityKey, entityName, commentString, true, null);
 		
-//		dialog.setTitle(title);
-//		dialog.setMessage(message);
-//		dialog.show();
-		
 		AndroidMock.expect(progressDialogFactory.show(getContext(), title, message)).andReturn(dialog);
 		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
 		AndroidMock.expect(commentAdapter.getTotalCount()).andReturn(totalCount).anyTimes();
@@ -358,7 +355,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		header.setText((totalCount) + " Comments");
 
 		commentAdapter.setTotalCount((totalCount+1));
-//		field.clear();
 		commentAdapter.notifyDataSetChanged();
 		content.scrollToTop();
 		dialog.dismiss();
@@ -372,14 +368,13 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		AndroidMock.replay(dialog);
 		AndroidMock.replay(facebookWallPoster);
 		
-		
 		// Because of the use of an anonymous inner class as the callback
 		// we need to override the SocializeService instance to capture the callback
 		// class and call it directly
 		
 		final SocializeService socialize = new SocializeServiceImpl() {
 			@Override
-			public void addComment(String url, String str, CommentAddListener commentAddListener) {
+			public void addComment(String url, String str, CommentShareOptions shareOptions, CommentAddListener commentAddListener) {
 				// call onCreate manually for the test.
 				assertEquals(commentString, str);
 				commentAddListener.onCreate(comment);

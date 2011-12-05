@@ -164,7 +164,7 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		final String key = "foobar";
 		final String comment = "foobar_comment";
 		
-		commentApi.addComment(session, key, comment, null, true, listener);
+		commentApi.addComment(session, key, comment, null, null, listener);
 		
 		AndroidMock.replay(commentApi);
 		
@@ -173,7 +173,7 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		service.setCommentApi(commentApi);
 		
-		service.addComment(session, key, comment, null, true, listener);
+		service.addComment(session, key, comment, null, null, listener);
 		
 		AndroidMock.verify(commentApi);
 	}

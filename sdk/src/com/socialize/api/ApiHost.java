@@ -35,6 +35,7 @@ import com.socialize.listener.like.LikeListener;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.listener.user.UserListener;
 import com.socialize.listener.view.ViewListener;
+import com.socialize.ui.comment.CommentShareOptions;
 
 /**
  * @author Jason Polites
@@ -52,7 +53,7 @@ public interface ApiHost {
 
 	public void createEntity(SocializeSession session, String key, String name, EntityListener listener);
 
-	public void addComment(SocializeSession session, String key, String comment, Location location, boolean shareLocation, CommentListener listener);
+	public void addComment(SocializeSession session, String key, String comment, Location location, CommentShareOptions shareOptions, CommentListener listener);
 
 	public void getComment(SocializeSession session, long id, CommentListener listener);
 

@@ -59,8 +59,10 @@ public class ActionBarButton extends LinearLayout {
 		if (width > 0) {
 			width = deviceUtils.getDIP(width);
 		}
+		
+		int height = deviceUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT);
 
-		LayoutParams masterParams = new LayoutParams(width, deviceUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT));
+		LayoutParams masterParams = new LayoutParams(width, height);
 		masterParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 		masterParams.weight = weight;
 
@@ -72,13 +74,11 @@ public class ActionBarButton extends LinearLayout {
 		actionBarItem.init();
 
 		GradientDrawable bottomLeft = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Color.BLACK, Color.BLACK });
-
 		LayerDrawable bg = new LayerDrawable(new Drawable[] { bottomLeft, background });
-
 		bg.setLayerInset(1, 1, 0, 0, 1);
 
 		setBackgroundDrawable(bg);
-
+		
 		addView(actionBarItem);
 
 		if (listener != null) {
@@ -138,5 +138,5 @@ public class ActionBarButton extends LinearLayout {
 		if(actionBarItem != null) {
 			actionBarItem.hideLoading();
 		}
-	}	
+	}
 }

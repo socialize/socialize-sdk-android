@@ -21,9 +21,6 @@
  */
 package com.socialize.entity;
 
-import android.util.Log;
-
-
 /**
  * @author Jason Polites
  *
@@ -74,11 +71,6 @@ public class Entity extends SocializeObject {
 		this.name = name;
 	}
 
-	@Override
-	public void setId(Long id) {
-		// Should not be called
-		Log.e("Entity", "setID called on Entity!");
-	}
 	/**
 	 * Convenience method to create a new Entity based on a key only.
 	 * @param key

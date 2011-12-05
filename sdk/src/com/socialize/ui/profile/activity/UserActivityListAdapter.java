@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.api.action.ActionType;
 import com.socialize.entity.SocializeAction;
 import com.socialize.util.Drawables;
 
@@ -78,6 +79,23 @@ public class UserActivityListAdapter extends BaseAdapter {
 	public long getItemId(int position) {
 		return position;
 	}
+	
+	@Override
+	public int getItemViewType(int position) {
+		SocializeAction item = (SocializeAction) getItem(position);
+		
+		if(item.getActionType().equals(ActionType.LIKE)) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
+	}
+
+	@Override
+	public int getViewTypeCount() {
+		return 2;
+	}	
 
 	/* (non-Javadoc)
 	 * @see android.widget.Adapter#getView(int, android.view.View, android.view.ViewGroup)
@@ -86,14 +104,19 @@ public class UserActivityListAdapter extends BaseAdapter {
 	public View getView(int position, View oldView, ViewGroup parent) {
 		UserActivityListItem view = null;
 		
+		final SocializeAction item = (SocializeAction) getItem(position);
+		
 		if(oldView instanceof UserActivityListItem) {
 			view = (UserActivityListItem) oldView;
 		}
 		else {
-			view = userActivityListItemFactory.getBean();
+			if(item.getActionType().equals(ActionType.LIKE)) {
+				view = userActivityListItemFactory.getBean(true);
+			}
+			else {
+				view = userActivityListItemFactory.getBean(false);
+			}
 		}
-		
-		final SocializeAction item = (SocializeAction) getItem(position);
 		
 		if(item != null) {
 			
@@ -122,6 +145,7 @@ public class UserActivityListAdapter extends BaseAdapter {
 						}
 						
 						icon.setImageDrawable(drawables.getDrawable("icon_comment.png"));
+						
 						break;
 					case LIKE:
 						
@@ -130,6 +154,7 @@ public class UserActivityListAdapter extends BaseAdapter {
 						}
 						
 						icon.setImageDrawable(drawables.getDrawable("icon_like_hi.png"));
+						
 						break;
 					case SHARE:
 						
@@ -138,8 +163,8 @@ public class UserActivityListAdapter extends BaseAdapter {
 						}
 						
 						icon.setImageDrawable(drawables.getDrawable("icon_share.png"));
+						
 						break;
-				
 				}
 			}
 		}

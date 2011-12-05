@@ -172,6 +172,4 @@ public class SocializeActivityEntityView extends BaseView {
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
 	}
-	
-	
 }

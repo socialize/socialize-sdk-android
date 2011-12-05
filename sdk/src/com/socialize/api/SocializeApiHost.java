@@ -47,6 +47,7 @@ import com.socialize.listener.user.UserListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewListener;
 import com.socialize.net.HttpClientFactory;
+import com.socialize.ui.comment.CommentShareOptions;
 import com.socialize.ui.profile.UserProfile;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.StringUtils;
@@ -135,8 +136,8 @@ public class SocializeApiHost implements ApiHost {
 	 * @see com.socialize.api.ApiHost#addComment(com.socialize.api.SocializeSession, java.lang.String, java.lang.String, android.location.Location, boolean, com.socialize.listener.comment.CommentListener)
 	 */
 	@Override
-	public void addComment(SocializeSession session, String key, String comment, Location location, boolean shareLocation, CommentListener listener) {
-		commentApi.addComment(session, key, comment, location, shareLocation, listener);
+	public void addComment(SocializeSession session, String key, String comment, Location location, CommentShareOptions shareOptions, CommentListener listener) {
+		commentApi.addComment(session, key, comment, location, shareOptions, listener);
 	}
 	
 	/* (non-Javadoc)

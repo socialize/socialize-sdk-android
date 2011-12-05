@@ -60,6 +60,7 @@ import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.ActivityIOCProvider;
+import com.socialize.ui.comment.CommentShareOptions;
 import com.socialize.ui.profile.UserProfile;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.ResourceLocator;
@@ -468,9 +469,9 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#addComment(java.lang.String, java.lang.String, android.location.Location, com.socialize.listener.comment.CommentAddListener)
 	 */
 	@Override
-	public void addComment(String url, String comment, Location location, boolean shareLocation, CommentAddListener commentAddListener) {
+	public void addComment(String url, String comment, Location location, CommentShareOptions shareOptions, CommentAddListener commentAddListener) {
 		if(assertAuthenticated(commentAddListener)) {
-			service.addComment(session, url, comment, location, shareLocation, commentAddListener);
+			service.addComment(session, url, comment, location, shareOptions, commentAddListener);
 		}
 	}
 
@@ -479,8 +480,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#addComment(java.lang.String, java.lang.String, boolean, com.socialize.listener.comment.CommentAddListener)
 	 */
 	@Override
-	public void addComment(String url, String comment, boolean shareLocation, CommentAddListener commentAddListener) {
-		addComment(url, comment, null, shareLocation, commentAddListener);
+	public void addComment(String url, String comment, CommentShareOptions shareOptions, CommentAddListener commentAddListener) {
+		addComment(url, comment, null, shareOptions, commentAddListener);
 	}
 
 	/*
@@ -489,7 +490,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public void addComment(String url, String comment, CommentAddListener commentAddListener) {
-		addComment(url, comment, null, true, commentAddListener);
+		addComment(url, comment, null, null, commentAddListener);
 	}
 	
 	/* (non-Javadoc)

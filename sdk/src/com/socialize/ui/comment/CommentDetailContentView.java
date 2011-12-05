@@ -124,7 +124,7 @@ public class CommentDetailContentView extends LinearLayout {
 		locationPin.setImageDrawable(drawables.getDrawable("icon_location_pin.png"));
 		
 		commentLocationLine = new LinearLayout(getContext());
-		commentLocationLine.setPadding(imagePadding, imagePadding, imagePadding, 0);
+		commentLocationLine.setPadding(imagePadding, margin, imagePadding, 0);
 		commentLocationLine.addView(locationPin);
 		commentLocationLine.addView(commentLocation);
 		

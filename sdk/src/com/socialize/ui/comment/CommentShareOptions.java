@@ -19,12 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.activity;
+package com.socialize.ui.comment;
 
 /**
  * @author Jason Polites
  *
  */
-public interface SocializeActivityProducer {
+public class CommentShareOptions {
 
+	private boolean shareLocation;
+	private boolean shareFacebook;
+	
+	public boolean isShareLocation() {
+		return shareLocation;
+	}
+	public void setShareLocation(boolean shareLocation) {
+		this.shareLocation = shareLocation;
+	}
+	public boolean isShareFacebook() {
+		return shareFacebook;
+	}
+	public void setShareFacebook(boolean shareFacebook) {
+		this.shareFacebook = shareFacebook;
+	}
 }

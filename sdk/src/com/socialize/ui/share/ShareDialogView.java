@@ -38,6 +38,7 @@ import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 import com.socialize.ui.button.SocializeButton;
 import com.socialize.util.DeviceUtils;
+import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
 
 /**
@@ -58,6 +59,7 @@ public class ShareDialogView extends BaseView {
 	
 	private DeviceUtils deviceUtils;
 	private ActionBarView actionBarView;
+	private Drawables drawables;
 	
 	public ShareDialogView(Context context, ActionBarView actionBarView) {
 		this(context, actionBarView, null);
@@ -85,6 +87,7 @@ public class ShareDialogView extends BaseView {
 		LayoutParams commentFieldParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
 		setOrientation(LinearLayout.VERTICAL);
+		setBackgroundDrawable(drawables.getDrawable("slate.png", true, true, true));
 		
 		TextView otherOptions = null;
 		
@@ -208,6 +211,10 @@ public class ShareDialogView extends BaseView {
 
 	public void setSmsShareClickListenerFactory(IBeanFactory<SmsShareClickListener> smsShareClickListenerFactory) {
 		this.smsShareClickListenerFactory = smsShareClickListenerFactory;
+	}
+	
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
 	}
 
 	protected SocializeUI getSocializeUI() {

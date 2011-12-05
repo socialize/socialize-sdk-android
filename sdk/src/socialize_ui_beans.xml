@@ -210,7 +210,8 @@
 	<bean 
 		id="customCheckbox" 
 		class="com.socialize.ui.view.CustomCheckbox"
-		abstract="true">
+		abstract="true"
+		singleton="false">
 		<constructor-arg type="activity"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
@@ -368,8 +369,8 @@
 		
 		<property name="imageOn" value="icon_facebook.png"/>
 		<property name="imageOff" value="icon_facebook_disabled.png"/>
-		<property name="textOn" value="Facebook enabled"/>
-		<property name="textOff" value="Facebook disabled"/>
+		<property name="textOn" value=""/>
+		<property name="textOff" value=""/>
 	</bean>	
 	
 	<factory id="autoPostFacebookOptionFactory" makes="autoPostFacebookOption"/>
@@ -544,6 +545,7 @@
 		
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="keyboardUtils" ref="keyboardUtils"/>
+		<property name="drawables" ref="drawables"/>
 		<property name="postCommentButton" ref="postCommentButton"/>
 		<property name="cancelCommentButton" ref="cancelCommentButton"/>
 		<property name="autoPostFacebookOptionFactory" ref="autoPostFacebookOptionFactory"/>
@@ -580,8 +582,9 @@
 		
 		<property name="imageOn" value="icon_location.png"/>
 		<property name="imageOff" value="icon_location_disabled.png"/>
-		<property name="textOn" value="Location enabled"/>
-		<property name="textOff" value="Location disabled"/>
+		<property name="textOn" value=""/>
+		<property name="textOff" value=""/>
+		<property name="borderOn" value="true" type="boolean"/>
 	</bean>	
 	
 	<factory id="locationEnabledOptionFactory" makes="locationEnabledOption"/>	
@@ -790,7 +793,6 @@
 		<property name="tickerFactory" ref="actionBarTickerFactory"/>
 		<property name="itemFactory" ref="actionBarItemFactory"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
-		<property name="shareDialogFactory" ref="shareDialogFactory"/>
 		<property name="facebookWallPoster" ref="facebookWallPoster"/>
 	</bean>
 	
@@ -926,6 +928,7 @@
 		singleton="false">
 		<constructor-arg type="activity"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="drawables" ref="drawables"/>
 		<property name="facebookShareButton" ref="facebookShareButton"/>
 		<property name="emailShareButton" ref="emailShareButton"/>
 		<property name="smsShareButton" ref="smsShareButton"/>
@@ -937,12 +940,6 @@
 		
 		<init-method name="init"/>
 	</bean>	
-	
-	<bean id="shareDialogFactory" class="com.socialize.ui.share.ShareDialogFactory">
-		<property name="shareDialogViewFactory" ref="shareDialogViewFactory"/>
-		<property name="drawables" ref="drawables"/>
-		<property name="logger" ref="logger"/>
-	</bean>		
 	
 	<factory id="facebookShareClickListenerFactory" makes="facebookShareClickListener"/>
 	<factory id="emailShareClickListenerFactory" makes="emailShareClickListener"/>

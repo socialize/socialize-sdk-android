@@ -67,7 +67,7 @@ public class CommentApiTest extends SocializeUnitTest {
 			}
 		};
 		
-		api.addComment(session, key, comment, null, true, listener);
+		api.addComment(session, key, comment, null, null, listener);
 		
 		List<Comment> list = getNextResult();
 		assertNotNull(list);

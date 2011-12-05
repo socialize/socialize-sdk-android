@@ -228,8 +228,12 @@ public class CommentListView extends BaseView {
 	public void doPostComment(String comment, boolean autoPostToFacebook, boolean shareLocation) {
 		
 		dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
-
-		getSocialize().addComment(entityKey, comment, shareLocation, new CommentAddListener() {
+		
+		CommentShareOptions options = new CommentShareOptions();
+		options.setShareFacebook(autoPostToFacebook);
+		options.setShareLocation(shareLocation);
+		
+		getSocialize().addComment(entityKey, comment, options, new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -283,6 +287,7 @@ public class CommentListView extends BaseView {
 		
 		if(session != null && session.getUser() != null) {
 			session.getUser().setAutoPostToFacebook(autoPostToFacebook);
+			session.getUser().setShareLocation(shareLocation);
 		}
 		
 		if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) && autoPostToFacebook) {

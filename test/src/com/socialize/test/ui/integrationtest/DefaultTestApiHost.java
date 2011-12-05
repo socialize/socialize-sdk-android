@@ -18,6 +18,7 @@ import com.socialize.listener.like.LikeListener;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.listener.user.UserListener;
 import com.socialize.listener.view.ViewListener;
+import com.socialize.ui.comment.CommentShareOptions;
 
 public class DefaultTestApiHost implements ApiHost {
 	
@@ -59,7 +60,7 @@ public class DefaultTestApiHost implements ApiHost {
 	}
 
 	@Override
-	public void addComment(SocializeSession session, String key, String comment, Location location, boolean shareLocation, CommentListener listener) {
+	public void addComment(SocializeSession session, String key, String comment, Location location, CommentShareOptions shareOptions, CommentListener listener) {
 		fail(message + "addComment");
 	}
 

@@ -1,17 +1,20 @@
 [
     { 
         'entity_key': 'http://www.example.com/interesting-story/',
-        'text': 'this was a great story'
+        'text': 'this was a great story',
+        'share_location':false
     },
     {
         'entity': {
             'key': 'http://www.example.com/another-story/',
             'name': 'Another Interesting Story'
         },
-        'text': 'Another comment'
+        'text': 'Another comment',
+        'share_location':false
     },
     { 
         'entity_key': 'http://www.example.com/interesting-story/',
-        'text': 'I did not think the story was that great'
+        'text': 'I did not think the story was that great',
+        'share_location':false
     }
 ]

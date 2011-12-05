@@ -43,9 +43,20 @@ public class UserActivityListItem extends LinearLayout {
 	private ImageView icon;
 	private DeviceUtils deviceUtils;
 	private Colors colors;	
-
+	
+	private LinearLayout doubleLineLayout;
+	private LinearLayout singleLineLayout;
+	
+	private boolean singleLine = false;
+	
+	
 	public UserActivityListItem(Context context) {
 		super(context);
+	}
+
+	public UserActivityListItem(Context context, boolean singleLine) {
+		super(context);
+		this.singleLine = singleLine;
 	}
 	
 	public void init() {
@@ -63,19 +74,8 @@ public class UserActivityListItem extends LinearLayout {
 		setGravity(Gravity.TOP);
 		setPadding(padding,padding,padding,padding);
 		
-		LinearLayout.LayoutParams contentLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		LinearLayout.LayoutParams titleLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		
-		
-		contentLayoutParams.setMargins(margin, 0, 0, 0);
-		
-		LinearLayout contentLayout = new LinearLayout(getContext());
-		contentLayout.setOrientation(LinearLayout.VERTICAL);
-		contentLayout.setGravity(Gravity.LEFT);
-		contentLayout.setPadding(0, 0, 0, 0);
-		contentLayout.setLayoutParams(contentLayoutParams);
-		
 		
 		title = new TextView(getContext());
 		title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
@@ -84,14 +84,37 @@ public class UserActivityListItem extends LinearLayout {
 		title.setMaxLines(1);
 		title.setTypeface(Typeface.DEFAULT_BOLD);
 		
-		text = new TextView(getContext());
-		text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
-		text.setTextColor(textColor);
-		text.setLayoutParams(textLayoutParams);
-		text.setMaxLines(1);
-		
-		contentLayout.addView(title);
-		contentLayout.addView(text);
+		if(singleLine) {
+			LinearLayout.LayoutParams singleLineLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
+			singleLineLayoutParams.setMargins(margin, 0, 0, 0);
+			
+			singleLineLayout = new LinearLayout(getContext());
+			singleLineLayout.setGravity(Gravity.LEFT);
+			singleLineLayout.setPadding(0, 0, 0, 0);
+			singleLineLayout.setLayoutParams(singleLineLayoutParams);
+			singleLineLayout.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+			singleLineLayout.addView(title);
+		}
+		else {
+			LinearLayout.LayoutParams doubleLineLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
+			doubleLineLayoutParams.setMargins(margin, 0, 0, 0);
+			
+			doubleLineLayout = new LinearLayout(getContext());
+			doubleLineLayout.setOrientation(LinearLayout.VERTICAL);
+			doubleLineLayout.setGravity(Gravity.LEFT);
+			doubleLineLayout.setPadding(0, 0, 0, 0);
+			doubleLineLayout.setLayoutParams(doubleLineLayoutParams);
+			
+			text = new TextView(getContext());
+			text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
+			text.setTextColor(textColor);
+			text.setLayoutParams(textLayoutParams);
+			text.setMaxLines(1);
+			
+			doubleLineLayout.addView(title);
+			doubleLineLayout.addView(text);			
+		}		
+
 		
 		LinearLayout iconLayout = new LinearLayout(getContext());
 		
@@ -108,7 +131,12 @@ public class UserActivityListItem extends LinearLayout {
 		iconLayout.addView(icon);
 		
 		addView(iconLayout);
-		addView(contentLayout);		
+		if(singleLine) {
+			addView(singleLineLayout);
+		}
+		else {
+			addView(doubleLineLayout);	
+		}
 	}
 
 	public TextView getText() {
@@ -130,5 +158,4 @@ public class UserActivityListItem extends LinearLayout {
 	public void setColors(Colors colors) {
 		this.colors = colors;
 	}
-
 }

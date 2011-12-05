@@ -183,7 +183,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		setupDefaultMocks();
 		
-		service.addComment(session, key, comment, null, true, listener);
+		service.addComment(session, key, comment, null, null, listener);
 		
 		replayDefaultMocks();
 		
