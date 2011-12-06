@@ -49,13 +49,14 @@ public class SocializeUI {
 	public static final String SOCIALIZE_LOGO = "socialize_logo.png";
 	public static final String BG_ACCENT = "bg_accent.png";
 	
-	
 	public static final Map<String, SocializeListener> STATIC_LISTENERS = new HashMap<String, SocializeListener>();
 	
 	private IOCContainer container;
 	private Drawables drawables;
 	private final Properties customProperties = new Properties();
 	private String[] beanOverrides;
+	
+	private SocializeEntityLoader entityLoader;
 	
 	public static SocializeUI getInstance() {
 		return instance;
@@ -441,5 +442,13 @@ public class SocializeUI {
 	 */
 	void setBeanOverrides(String...beanOverrides) {
 		this.beanOverrides = beanOverrides;
+	}
+
+	public SocializeEntityLoader getEntityLoader() {
+		return entityLoader;
+	}
+
+	public void setEntityLoader(SocializeEntityLoader entityLoader) {
+		this.entityLoader = entityLoader;
 	}
 }

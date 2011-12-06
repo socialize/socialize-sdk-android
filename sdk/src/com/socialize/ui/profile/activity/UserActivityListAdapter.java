@@ -21,18 +21,21 @@
  */
 package com.socialize.ui.profile.activity;
 
+import java.util.Date;
 import java.util.List;
 
+import android.app.Activity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.action.ActionType;
 import com.socialize.entity.SocializeAction;
+import com.socialize.error.SocializeErrorHandler;
+import com.socialize.ui.SocializeUI;
+import com.socialize.ui.util.DateUtils;
 import com.socialize.util.Drawables;
 
 /**
@@ -43,7 +46,17 @@ public class UserActivityListAdapter extends BaseAdapter {
 	// Injected
 	private IBeanFactory<UserActivityListItem> userActivityListItemFactory;
 	private Drawables drawables;
+	private DateUtils dateUtils;
+	private SocializeErrorHandler errorHandler;
+	private Activity activity;
+	private Date now = null;
 	
+	public UserActivityListAdapter(Activity activity) {
+		super();
+		now = new Date();
+		this.activity = activity;
+	}
+
 	// Local
 	private List<SocializeAction> actions;
 
@@ -123,49 +136,42 @@ public class UserActivityListAdapter extends BaseAdapter {
 			view.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					// TODO: add entity loader
+					if(SocializeUI.getInstance().getEntityLoader() != null) {
+						try {
+							SocializeUI.getInstance().getEntityLoader().loadEntity(activity, item.getEntity());
+						} 
+						catch (Exception e) {
+							errorHandler.handleError(activity, e);
+						}
+					}
 				}
 			});						
 
-			TextView text = view.getText();
-			TextView title = view.getTitle();
-			ImageView icon = view.getIcon();
-
-			if (text != null) {
-				text.setText(item.getDisplayText());
+			view.setText(item.getDisplayText());
+			
+			Long date = item.getDate();
+			
+			if(date != null && date > 0) {
+				long diff = (now.getTime() - date.longValue());
+				view.setDate(dateUtils.getTimeString(diff) + " ");
 			}
+			else {
+				view.setDate(" ");
+			}			
 
-			if (icon != null && drawables != null) {
-				
-				switch(item.getActionType()) {
-					case COMMENT:
-						
-						if (title != null) {
-							title.setText("Commented on " + item.getEntityDisplayName());
-						}
-						
-						icon.setImageDrawable(drawables.getDrawable("icon_comment.png"));
-						
-						break;
-					case LIKE:
-						
-						if (title != null) {
-							title.setText("Likes " + item.getEntityDisplayName());
-						}
-						
-						icon.setImageDrawable(drawables.getDrawable("icon_like_hi.png"));
-						
-						break;
-					case SHARE:
-						
-						if (title != null) {
-							title.setText("Shared " + item.getEntityDisplayName());
-						}
-						
-						icon.setImageDrawable(drawables.getDrawable("icon_share.png"));
-						
-						break;
-				}
+			switch(item.getActionType()) {
+				case COMMENT:
+					view.setTitle("Commented on " + item.getEntityDisplayName());
+					if (drawables != null) if (drawables != null) view.setIcon(drawables.getDrawable("icon_comment.png"));
+					break;
+				case LIKE:
+					view.setTitle("Liked " + item.getEntityDisplayName());
+					if (drawables != null) view.setIcon(drawables.getDrawable("icon_like_hi.png"));
+					break;
+				case SHARE:
+					view.setTitle("Shared " + item.getEntityDisplayName());
+					if (drawables != null) view.setIcon(drawables.getDrawable("icon_share.png"));
+					break;
 			}
 		}
 
@@ -183,4 +189,10 @@ public class UserActivityListAdapter extends BaseAdapter {
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
 	}
+
+	public void setDateUtils(DateUtils dateUtils) {
+		this.dateUtils = dateUtils;
+	}
+	
+	
 }

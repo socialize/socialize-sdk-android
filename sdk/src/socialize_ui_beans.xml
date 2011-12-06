@@ -752,8 +752,12 @@
 		id="userActivityListAdapter" 
 		singleton="false"
 		class="com.socialize.ui.profile.activity.UserActivityListAdapter">
+		
+		<constructor-arg type="activity"/>
+		
 		<property name="userActivityListItemFactory" ref="userActivityListItemFactory"/>
 		<property name="drawables" ref="drawables"/>
+		<property name="dateUtils" ref="dateUtils"/>
 	</bean>
 	
 	<factory id="userActivityListAdapterFactory" makes="userActivityListAdapter"/>

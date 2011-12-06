@@ -107,9 +107,9 @@ public class CommentListItem extends LinearLayout {
 		metaParams.gravity = Gravity.RIGHT | Gravity.TOP;
 		
 		LinearLayout meta = new LinearLayout(getContext());
+		
 		meta.setOrientation(HORIZONTAL);
 		meta.setLayoutParams(metaParams);
-		
 		meta.addView(time);
 		meta.addView(locationIcon);
 		

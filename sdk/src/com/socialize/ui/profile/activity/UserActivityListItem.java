@@ -23,6 +23,7 @@ package com.socialize.ui.profile.activity;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.ImageView;
@@ -39,6 +40,7 @@ import com.socialize.util.DeviceUtils;
 public class UserActivityListItem extends LinearLayout {
 	
 	private TextView text;
+	private TextView date;
 	private TextView title;
 	private ImageView icon;
 	private DeviceUtils deviceUtils;
@@ -48,7 +50,6 @@ public class UserActivityListItem extends LinearLayout {
 	private LinearLayout singleLineLayout;
 	
 	private boolean singleLine = false;
-	
 	
 	public UserActivityListItem(Context context) {
 		super(context);
@@ -61,12 +62,15 @@ public class UserActivityListItem extends LinearLayout {
 	
 	public void init() {
 		
+		
 		final int padding = deviceUtils.getDIP(4);
-		final int margin = deviceUtils.getDIP(4);
+		final int imagePadding = 0;
+		final int margin = deviceUtils.getDIP(8);
 		final int textColor = colors.getColor(Colors.BODY);
+		final int titleColor = colors.getColor(Colors.TITLE);
 		final int iconSize = deviceUtils.getDIP(32);
 		
-		ListView.LayoutParams layout = new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, ListView.LayoutParams.FILL_PARENT);
+		ListView.LayoutParams layout = new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, deviceUtils.getDIP(64));
 		setDrawingCacheEnabled(true);
 		setBackgroundColor(colors.getColor(Colors.LIST_ITEM_BG));
 		setOrientation(LinearLayout.HORIZONTAL);
@@ -76,24 +80,39 @@ public class UserActivityListItem extends LinearLayout {
 		
 		LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		LinearLayout.LayoutParams titleLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams dateLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
 		title = new TextView(getContext());
-		title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+		title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
 		title.setTextColor(textColor);
 		title.setLayoutParams(titleLayoutParams);
 		title.setMaxLines(1);
 		title.setTypeface(Typeface.DEFAULT_BOLD);
+		
+		dateLayoutParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+		dateLayoutParams.weight = 1.0f;
+		
+		date = new TextView(getContext());
+		date.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+		date.setTextColor(textColor);
+		date.setLayoutParams(textLayoutParams);
+		date.setMaxLines(1);
+		date.setLayoutParams(dateLayoutParams);
+		date.setGravity(Gravity.BOTTOM | Gravity.RIGHT);
+		date.setTextColor(titleColor);
 		
 		if(singleLine) {
 			LinearLayout.LayoutParams singleLineLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 			singleLineLayoutParams.setMargins(margin, 0, 0, 0);
 			
 			singleLineLayout = new LinearLayout(getContext());
+			singleLineLayout.setOrientation(LinearLayout.VERTICAL);
 			singleLineLayout.setGravity(Gravity.LEFT);
-			singleLineLayout.setPadding(0, 0, 0, 0);
+			singleLineLayout.setPadding(0, padding, 0, 0);
 			singleLineLayout.setLayoutParams(singleLineLayoutParams);
-			singleLineLayout.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+			singleLineLayout.setGravity(Gravity.TOP | Gravity.LEFT);
 			singleLineLayout.addView(title);
+			singleLineLayout.addView(date);	
 		}
 		else {
 			LinearLayout.LayoutParams doubleLineLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
@@ -101,8 +120,8 @@ public class UserActivityListItem extends LinearLayout {
 			
 			doubleLineLayout = new LinearLayout(getContext());
 			doubleLineLayout.setOrientation(LinearLayout.VERTICAL);
-			doubleLineLayout.setGravity(Gravity.LEFT);
-			doubleLineLayout.setPadding(0, 0, 0, 0);
+			doubleLineLayout.setGravity(Gravity.TOP | Gravity.LEFT);
+			doubleLineLayout.setPadding(0, padding, 0, 0);
 			doubleLineLayout.setLayoutParams(doubleLineLayoutParams);
 			
 			text = new TextView(getContext());
@@ -112,10 +131,11 @@ public class UserActivityListItem extends LinearLayout {
 			text.setMaxLines(1);
 			
 			doubleLineLayout.addView(title);
-			doubleLineLayout.addView(text);			
+			doubleLineLayout.addView(text);	
+			doubleLineLayout.addView(date);	
+			
 		}		
 
-		
 		LinearLayout iconLayout = new LinearLayout(getContext());
 		
 		LinearLayout.LayoutParams iconLayoutParams = new LinearLayout.LayoutParams(iconSize, iconSize);
@@ -126,7 +146,7 @@ public class UserActivityListItem extends LinearLayout {
 		
 		icon = new ImageView(getContext());
 		icon.setLayoutParams(iconLayoutParams);
-		icon.setPadding(padding, 0, padding, 0);	
+		icon.setPadding(imagePadding, 0, imagePadding, 0);	
 		
 		iconLayout.addView(icon);
 		
@@ -139,16 +159,34 @@ public class UserActivityListItem extends LinearLayout {
 		}
 	}
 
-	public TextView getText() {
-		return text;
+	public void setText(String str) {
+		if(this.text != null) {
+			if(str.length() > 50) {
+				str = str.substring(0,50) + "...";
+			}
+			this.text.setText(str);
+		}
 	}
 	
-	public TextView getTitle() {
-		return title;
+	public void setTitle(String str) {
+		if(this.title != null) {
+			if(str.length() > 30) {
+				str = str.substring(0,30) + "...";
+			}
+			this.title.setText(str);
+		}
 	}
-
-	public ImageView getIcon() {
-		return icon;
+	
+	public void setDate(String dateString) {
+		if(date != null) {
+			date.setText(dateString);
+		}
+	}
+	
+	public void setIcon(Drawable image) {
+		if(this.icon != null) {
+			this.icon.setImageDrawable(image);
+		}
 	}
 
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
