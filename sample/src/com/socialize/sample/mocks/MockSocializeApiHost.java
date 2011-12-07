@@ -38,7 +38,8 @@ import com.socialize.ui.comment.CommentShareOptions;
 public class MockSocializeApiHost extends SocializeApiHost implements ContainerAware {
 
 	private ApiHost delegate;
-	public static ListResult<?> listResult;
+	private static ListResult<?> listResult;
+	private static User user = new User();
 	
 	@Override
 	public void onCreate(Container container) {
@@ -53,16 +54,16 @@ public class MockSocializeApiHost extends SocializeApiHost implements ContainerA
 	@Override
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
 		MockSocializeSession mockSocializeSession = new MockSocializeSession();
-		listener.onAuthSuccess(mockSocializeSession);
 		sessionConsumer.setSession(mockSocializeSession);
+		listener.onAuthSuccess(mockSocializeSession);
 		if(delegate != null) delegate.authenticate(consumerKey, consumerSecret, listener, sessionConsumer);
 	}
 
 	@Override
 	public void authenticate(String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
 		MockSocializeSession mockSocializeSession = new MockSocializeSession();
-		listener.onAuthSuccess(mockSocializeSession);
 		sessionConsumer.setSession(mockSocializeSession);
+		listener.onAuthSuccess(mockSocializeSession);
 		if(delegate != null) delegate.authenticate(consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
 	}
 
@@ -179,8 +180,8 @@ public class MockSocializeApiHost extends SocializeApiHost implements ContainerA
 
 	@Override
 	public void getUser(SocializeSession session, long id, UserListener listener) {
-		listener.onGet(new User());
 		if(delegate != null) delegate.getUser(session, id, listener);
+		listener.onGet(user);
 	}
 
 	@Override
@@ -209,4 +210,7 @@ public class MockSocializeApiHost extends SocializeApiHost implements ContainerA
 		listResult = lr;
 	}
 	
+	public static void orchestrateUser(User u) {
+		user = u;
+	}
 }

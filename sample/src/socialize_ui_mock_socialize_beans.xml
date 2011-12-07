@@ -9,7 +9,7 @@
 		<property name="viewApi" ref="viewApi"/>
 		<property name="userApi" ref="userApi"/>
 		<property name="shareApi" ref="shareApi"/>
-		<property name="activityApi" ref="activityApi"/>
+		<property name="userActivityApi" ref="userActivityApi"/>
 		
 		<init-method name="init">
 			<arg type="context"/>

@@ -1,13 +1,19 @@
 package com.socialize.ui.comment;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.MenuItem.OnMenuItemClickListener;
 
+import com.socialize.Socialize;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.listener.ListenerHolder;
 import com.socialize.ui.SocializeUI;
@@ -91,4 +97,33 @@ public class CommentView extends EntityView {
 	public View getLoadingView() {
 		return null;
 	}
+	
+	public boolean onCreateOptionsMenu(final Activity source, Menu menu) {
+		if(Socialize.getSocialize().isAuthenticated()) {
+			MenuItem add = menu.add("Edit Profile");
+			add.setIcon(SocializeUI.getInstance().getDrawable("ic_menu_cc.png", DisplayMetrics.DENSITY_DEFAULT, true));
+			add.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+				@Override
+				public boolean onMenuItemClick(MenuItem item) {
+					final String userId = Socialize.getSocialize().getSession().getUser().getId().toString();
+					SocializeUI.getInstance().showUserProfileViewForResult(source, userId, CommentActivity.PROFILE_UPDATE);
+					return true;
+				}
+			});
+		}
+
+		MenuItem add2 = menu.add("Refresh");
+		
+		add2.setIcon(SocializeUI.getInstance().getDrawable("ic_menu_refresh.png", DisplayMetrics.DENSITY_DEFAULT, true));
+		
+		add2.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				reload();
+				return true;
+			}
+		});
+		
+		return true;
+	}	
 }
