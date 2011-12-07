@@ -105,7 +105,7 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 				synchronized(this) {
 					if(running) {
 						try {
-							wait();
+							doWait();
 						}
 						catch (InterruptedException ignore) {}
 					}
@@ -114,7 +114,7 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 		}
 		return null;
 	}
-
+	
 	protected SafeBitmapDrawable loadImage(String url) throws Exception {
 		return imageUrlLoader.loadImageFromUrl(url);
 	}
@@ -157,14 +157,42 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 				logger.warn("Image load task is not running.  Enqeueu request ignored");
 			}
 		}
-
 	}
 
+	public void init() {
+		requests = makeRequests();
+		requestsInProcess = makePendingRequests();
+	}
+	
 	public void start() {
-		requests = new ConcurrentLinkedQueue<ImageLoadRequest>();
-		requestsInProcess = new ConcurrentHashMap<String, ImageLoadRequest>();
+		init();
 		running = true;
+		doExecute();
+	}
+	
+	// So we can mock
+	protected void doExecute() {
 		execute((Void) null);
+	}
+	
+	// So we can mock
+	protected void doCancel(boolean cancel) {
+		cancel(cancel);
+	}
+	
+	// So we can mock
+	protected Queue<ImageLoadRequest> makeRequests() {
+		return new ConcurrentLinkedQueue<ImageLoadRequest>();
+	}
+	
+	// So we can mock
+	protected Map<String, ImageLoadRequest> makePendingRequests() {
+		return new ConcurrentHashMap<String, ImageLoadRequest>();
+	}
+	
+	// So we can mock
+	protected void doWait() throws InterruptedException {
+		wait();
 	}
 
 	public synchronized void stop() {
@@ -177,7 +205,7 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 		}
 		
 		notifyAll();
-		cancel(true);
+		doCancel(true);
 	}
 
 	public void setLogger(SocializeLogger logger) {

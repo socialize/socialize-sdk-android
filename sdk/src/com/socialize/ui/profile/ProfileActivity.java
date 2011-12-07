@@ -22,6 +22,7 @@
 package com.socialize.ui.profile;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -52,6 +53,8 @@ public class ProfileActivity extends SocializeUIActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 		Bundle extras = getIntent().getExtras();
 

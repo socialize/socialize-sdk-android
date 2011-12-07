@@ -38,7 +38,6 @@ public class ImageLoadRequest {
 	private Long itemId;
 	private ConcurrentLinkedQueue<ImageLoadListener> listeners;
 	private boolean canceled;
-//	private ImageView imageView;
 	
 	public String getUrl() {
 		return url;
@@ -106,14 +105,6 @@ public class ImageLoadRequest {
 		this.itemId = itemId;
 	}
 	
-//	public ImageView getImageView() {
-//		return imageView;
-//	}
-//
-//	public void setImageView(ImageView imageView) {
-//		this.imageView = imageView;
-//	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
