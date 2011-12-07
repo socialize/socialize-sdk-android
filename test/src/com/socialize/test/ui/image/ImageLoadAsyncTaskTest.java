@@ -51,9 +51,17 @@ import com.socialize.util.SafeBitmapDrawable;
 })
 public class ImageLoadAsyncTaskTest extends SocializeUIActivityTest {
 
-	@SuppressWarnings("unchecked")
+
 	public void testImageLoadAsyncTaskImageInCache() {
-		
+		runTest(true);
+	}
+	
+	public void testImageLoadAsyncTaskImageNotInCache() {
+		runTest(false);
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected void runTest(boolean imageInCache) {
 		// Can't mock, so just create a dummy one
 		final Bitmap bmp = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
 		
@@ -110,10 +118,23 @@ public class ImageLoadAsyncTaskTest extends SocializeUIActivityTest {
 		AndroidMock.expect(requests.poll()).andReturn(request).once();
 		AndroidMock.expect(request.isCanceled()).andReturn(false).once();
 		AndroidMock.expect(request.getUrl()).andReturn(url).once();
-		AndroidMock.expect(cache.get(url)).andReturn(drawable).once();
+		
+		if(imageInCache) {
+			AndroidMock.expect(cache.get(url)).andReturn(drawable).once();
+		}
+		else {
+			AndroidMock.expect(cache.get(url)).andReturn(null).once();
+		}
+		
 		
 		AndroidMock.expect(pendingRequests.remove(url)).andReturn(request);
-		request.notifyListeners(drawable);
+		
+		if(imageInCache) {
+			request.notifyListeners(drawable);
+		}
+		else {
+			request.notifyListeners(bitmap);
+		}
 		
 		requests.clear();
 		pendingRequests.clear();
@@ -132,18 +153,18 @@ public class ImageLoadAsyncTaskTest extends SocializeUIActivityTest {
 		AndroidMock.verify(pendingRequests);
 		AndroidMock.verify(cache);
 		
-//		String urlAfter = getResult(0);
+		String urlAfter = getResult(0);
 		String wait_called = getResult(1);
 		
 		String doExecute_called = getResult(2);
 		String doCancel_called = getResult(3);
 		
-//		assertNotNull(urlAfter);
+		if(!imageInCache) assertNotNull(urlAfter);
 		assertNotNull(wait_called);
 		assertNotNull(doExecute_called);
 		assertNotNull(doExecute_called);
 		
-//		assertEquals(url, urlAfter);
+		if(!imageInCache) assertEquals(url, urlAfter);
 		assertEquals("wait_called", wait_called);
 		assertEquals("doExecute_called", doExecute_called);
 		assertEquals("doCancel_called", doCancel_called);
