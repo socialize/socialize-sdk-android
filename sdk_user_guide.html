@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Socialize SDK (Advanced) Guide &mdash; Socialize Android SDK 1.0.4 documentation</title>
+    <title>Socialize SDK (Advanced) Guide &mdash; Socialize Android SDK v1.1 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '1.0.4',
+        VERSION:     'v1.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,8 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK 1.0.4 documentation" href="index.html" />
+    <link rel="top" title="Socialize Android SDK v1.1 documentation" href="index.html" />
+    <link rel="next" title="Change Log" href="change_log.html" />
     <link rel="prev" title="Socialize Comments" href="comment_view.html" /> 
   </head>
   <body>
@@ -34,9 +35,12 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
+          <a href="change_log.html" title="Change Log"
+             accesskey="N">next</a></li>
+        <li class="right" >
           <a href="comment_view.html" title="Socialize Comments"
-             accesskey="P">previous</a></li>
-        <li><a href="index.html">Socialize Android SDK 1.0.4 documentation</a> &raquo;</li> 
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Socialize Android SDK v1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -101,23 +105,14 @@ want anonymous authentication, simply call the <strong>authenticate</strong> met
 <p>Throughout the documentation and the code snippets we refer to an &#8220;entity&#8221;.  This is simply a
 generic term for something that can be view, shared, liked or commented on.  Generally this will
 correspond to a single item of content in your app.</p>
-<p><strong>NOTE: Entities MUST be URLs!</strong></p>
-<p>Entities in Socialize MUST be represented by an HTTP URL.  It is <strong>strongly recommended</strong> that a
-<em>real</em> URL be used (i.e. one that corresponds to an active web page) however if this is not possible
-because your content is not web based you can simply create a URL from key that uniquely identifies
-your entity.</p>
-<p>For example:</p>
-<pre class="literal-block">
-<strong>http://www.getsocialize.com (valid URL preferred)</strong>
-
-<em>http://notarealurl.com (Not a real URL, but will still work)</em>
-</pre>
+<p>Entities in Socialize MUST be associated with s unique key.  It is recommended that where possible an
+HTTP URL be used (i.e. one that corresponds to an active web page).</p>
 <div class="section" id="creating-an-entity">
 <h3>Creating an Entity<a class="headerlink" href="#creating-an-entity" title="Permalink to this headline">¶</a></h3>
-<p>An entity consists of a <strong>key</strong> (URL) and a <strong>name</strong>.  The name should be descriptive and help you identify the
+<p>An entity consists of a <strong>key</strong> and a <strong>name</strong>.  The name should be descriptive and help you identify the
 entity when viewing reports on the Socialize dashboard.</p>
 <p>Creating an entity explicitly in this manner is <strong>optional but recommended</strong>.  If you simply post a
-comment,view,share or like against a URL that does not currently exist, it will be automatically created
+comment,view,share or like against a key that does not currently exist, it will be automatically created
 for you, but will not have a <em>name</em> associated with it.</p>
 <p>To create an entity, simply call the <strong>addEntity</strong> method:</p>
 <script src="https://gist.github.com/1132973.js?file=addentity.java"></script></div>
@@ -151,8 +146,8 @@ in your app are the most popular, and what is of most interest to your users.</p
 <p>Removing a like (i.e. an &#8216;unlike&#8217;) is done via the <strong>unlike</strong> method.  In order to remove a like, you will
 need the ID of the like.  This is returned from the initial call to <strong>like</strong></p>
 <script src="https://gist.github.com/1132969.js?file=unlike.java"></script></div>
-<div class="section" id="listing-a-likes-for-a-user">
-<h3>Listing a &#8216;Likes&#8217; for a User<a class="headerlink" href="#listing-a-likes-for-a-user" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="listing-likes-for-a-user">
+<h3>Listing &#8216;Likes&#8217; for a User<a class="headerlink" href="#listing-likes-for-a-user" title="Permalink to this headline">¶</a></h3>
 <p>To obtain a list of all entities &#8216;liked&#8217; by a single user, use the <strong>listLikesByUser</strong> method:</p>
 <script src="https://gist.github.com/1132969.js?file=list_likes.java"></script></div>
 </div>
@@ -176,6 +171,22 @@ of the comment which was returned from the inital call to <strong>addComment</st
 <h3>Comments with pagination<a class="headerlink" href="#comments-with-pagination" title="Permalink to this headline">¶</a></h3>
 <p>The <strong>recommended</strong> approach is to use pagination when listing comments:</p>
 <script src="https://gist.github.com/1132965.js?file=listcomments.java"></script></div>
+<div class="section" id="listing-comments-for-a-user">
+<h3>Listing Comments for a User<a class="headerlink" href="#listing-comments-for-a-user" title="Permalink to this headline">¶</a></h3>
+<p>To obtain a list of all comments made by a single user, use the <strong>listCommentsByUser</strong> method:</p>
+<script src="https://gist.github.com/1132969.js?file=list_user_comments.java"></script></div>
+</div>
+<div class="section" id="user-activity">
+<h2>User Activity<a class="headerlink" href="#user-activity" title="Permalink to this headline">¶</a></h2>
+<p>Comments, Shares and Likes made by a single user can all be retrieved in a single call using the SDK.</p>
+<div class="section" id="listing-activity-for-a-user">
+<h3>Listing Activity for a User<a class="headerlink" href="#listing-activity-for-a-user" title="Permalink to this headline">¶</a></h3>
+<p>To obtain a list of all activity conducted by a single user, use the <strong>listActivityByUser</strong> method:</p>
+<script src="https://gist.github.com/1132969.js?file=list_user_activity.java"></script></div>
+<div class="section" id="listing-activity-for-a-user-with-pagination">
+<h3>Listing Activity for a User with Pagination<a class="headerlink" href="#listing-activity-for-a-user-with-pagination" title="Permalink to this headline">¶</a></h3>
+<p>As with all list operations the user activity list supports pagination:</p>
+<script src="https://gist.github.com/1132969.js?file=list_user_activity_paged.java"></script></div>
 </div>
 </div>
 
@@ -187,6 +198,7 @@ of the comment which was returned from the inital call to <strong>addComment</st
         <div class="sphinxsidebarwrapper">
 <h3><a href="index.html">Table Of Contents</a></h3>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What&#8217;s New</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="facebook.html">Facebook Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="action_bar.html">Socialize Action Bar</a></li>
@@ -199,8 +211,10 @@ of the comment which was returned from the inital call to <strong>addComment</st
 <li class="toctree-l2"><a class="reference internal" href="#view">View</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#like">Like</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#comment">Comment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#user-activity">User Activity</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log</a></li>
 </ul>
 
         </div>
@@ -211,9 +225,12 @@ of the comment which was returned from the inital call to <strong>addComment</st
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
+          <a href="change_log.html" title="Change Log"
+             >next</a></li>
+        <li class="right" >
           <a href="comment_view.html" title="Socialize Comments"
-             >previous</a></li>
-        <li><a href="index.html">Socialize Android SDK 1.0.4 documentation</a> &raquo;</li> 
+             >previous</a> |</li>
+        <li><a href="index.html">Socialize Android SDK v1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

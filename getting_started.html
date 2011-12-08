@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Getting Started &mdash; Socialize Android SDK 1.0.4 documentation</title>
+    <title>Getting Started &mdash; Socialize Android SDK v1.1 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '1.0.4',
+        VERSION:     'v1.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,9 +26,9 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK 1.0.4 documentation" href="index.html" />
+    <link rel="top" title="Socialize Android SDK v1.1 documentation" href="index.html" />
     <link rel="next" title="Facebook Integration" href="facebook.html" />
-    <link rel="prev" title="Socialize Android SDK" href="index.html" /> 
+    <link rel="prev" title="What’s New" href="whats_new.html" /> 
   </head>
   <body>
     <div class="related">
@@ -38,9 +38,9 @@
           <a href="facebook.html" title="Facebook Integration"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="index.html" title="Socialize Android SDK"
+          <a href="whats_new.html" title="What’s New"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK 1.0.4 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK v1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -69,24 +69,20 @@
   GSFN.feedback_widget.prototype.local_base_url = "http://support.getsocialize.com";
   GSFN.feedback_widget.prototype.local_ssl_base_url = "http://support.getsocialize.com";
   var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
-</script><div class="section" id="what-s-new">
-<h2>What&#8217;s New!<a class="headerlink" href="#what-s-new" title="Permalink to this headline">¶</a></h2>
-<ol class="arabic simple">
-<li>NEW: Socialize Action Bar</li>
-<li>NEW: Share to Facebook</li>
-<li>NEW: Auto-post Comments and Likes to Facebook</li>
-<li>NEW: Updated and improved user experience for commenting</li>
-<li>Fixed a few bugs with the older Comment list view</li>
-</ol>
-</div>
-<div class="section" id="introduction">
+</script><div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>v0.7.0 of the Socialize SDK introduces a completely new control we call the &#8220;Action Bar&#8221;.
 This is a one-stop-shop of social features that can be quickly and easily dropped into your app, and
 provides a central entry point into all the features of the Socialize SDK.</p>
 </div>
+<div class="section" id="what-s-new">
+<h2>What&#8217;s New<a class="headerlink" href="#what-s-new" title="Permalink to this headline">¶</a></h2>
+<p>If you&#8217;re a Socialize veteran, check out our <a class="reference internal" href="whats_new.html#whats-new"><em>What&#8217;s New</em></a> section for latest updates.</p>
+</div>
+<div class="section" id="steps-to-using-socialize">
+<h2>5 Steps to Using Socialize<a class="headerlink" href="#steps-to-using-socialize" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="install-the-sdk">
-<h2>1. Install the SDK<a class="headerlink" href="#install-the-sdk" title="Permalink to this headline">¶</a></h2>
+<h3>1. Install the SDK<a class="headerlink" href="#install-the-sdk" title="Permalink to this headline">¶</a></h3>
 <p>The Socialize SDK is delivered as a single JAR file, simply copy the socialize-x.x.x.jar file
 from the <strong>dist</strong> folder to the <strong>libs</strong> path of your Android project.</p>
 <p>If you&#8217;re using eclipse, you&#8217;ll need to add the socialize-x.x.x.jar as a referenced library:</p>
@@ -95,7 +91,7 @@ from the <strong>dist</strong> folder to the <strong>libs</strong> path of your 
 <p>Socialize does not support Android versions below v2.1-update1</p>
 </div>
 <div class="section" id="set-up-your-socialize-keys">
-<h2>2. Set up your Socialize Keys<a class="headerlink" href="#set-up-your-socialize-keys" title="Permalink to this headline">¶</a></h2>
+<h3>2. Set up your Socialize Keys<a class="headerlink" href="#set-up-your-socialize-keys" title="Permalink to this headline">¶</a></h3>
 <p>Once you have registered on the GetSocialize.com website and created an application, you will have
 been given two &#8220;oAuth&#8221; authentication keys.  A &#8220;consumer key&#8221;, and a &#8220;consumer secret&#8221;.</p>
 <p>The recommended, and simples way to authenticate with Socialize is to create a configuration file in
@@ -105,12 +101,12 @@ the <strong>assets</strong> path of your project called <strong>socialize.proper
 <script src="https://gist.github.com/1132979.js?file=setup_ui.properties"></script><p>(Replace 00000000-0000-0000-000000000000 with your key/secret from your Socialize account)</p>
 </div>
 <div class="section" id="configure-your-androidmanifest-xml">
-<h2>3. Configure your AndroidManifest.xml<a class="headerlink" href="#configure-your-androidmanifest-xml" title="Permalink to this headline">¶</a></h2>
+<h3>3. Configure your AndroidManifest.xml<a class="headerlink" href="#configure-your-androidmanifest-xml" title="Permalink to this headline">¶</a></h3>
 <p>Add the following lines to your AndroidManifest.xml under the <strong>&lt;application...&gt;</strong> element</p>
 <script src="https://gist.github.com/1201498.js?file=ui_manifest_0.6.0.xml"></script><p>Add the following lines to your AndroidManifest.xml under the <strong>&lt;manifest...&gt;</strong> element</p>
 <script src="https://gist.github.com/1201498.js?file=ui_manifest_permissions.xml"></script></div>
 <div class="section" id="configure-facebook-integration">
-<h2>4. Configure Facebook Integration<a class="headerlink" href="#configure-facebook-integration" title="Permalink to this headline">¶</a></h2>
+<h3>4. Configure Facebook Integration<a class="headerlink" href="#configure-facebook-integration" title="Permalink to this headline">¶</a></h3>
 <p>It is strongly recommended that users be able to authenticate with Facebook when using Socialize so as to
 maximize the exposure, and promotion of your app.</p>
 <p>This provides significant benefits to both your application, and your users including:</p>
@@ -125,7 +121,7 @@ maximize the exposure, and promotion of your app.</p>
 <p>Once you have your facebook app ID, you can add it to the <strong>socialize.properties</strong> config file:</p>
 <script src="https://gist.github.com/1132979.js?file=socialize.properties"></script></div>
 <div class="section" id="include-socialize-in-your-app">
-<h2>5. Include Socialize in your App!<a class="headerlink" href="#include-socialize-in-your-app" title="Permalink to this headline">¶</a></h2>
+<h3>5. Include Socialize in your App!<a class="headerlink" href="#include-socialize-in-your-app" title="Permalink to this headline">¶</a></h3>
 <p>Now that you have your environment all setup, it&#8217;s time to include Socialize.</p>
 <p>The core component of the Socialize SDK is the &#8220;Action Bar&#8221;</p>
 <img alt="images/action_bar.png" src="images/action_bar.png" />
@@ -134,6 +130,7 @@ of social features for your users.</p>
 <p>The Action Bar is designed to automatically &#8220;pin&#8221; iteself to the bottom of your view.
 Adding the Action Bar to your app is done with a simple call to <strong>showActionBar</strong> from the SocializeUI instance:</p>
 <script src="https://gist.github.com/1376163.js?file=no_conf.java"></script></div>
+</div>
 </div>
 
 
@@ -144,20 +141,18 @@ Adding the Action Bar to your app is done with a simple call to <strong>showActi
         <div class="sphinxsidebarwrapper">
 <h3><a href="index.html">Table Of Contents</a></h3>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What&#8217;s New</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Getting Started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#what-s-new">What&#8217;s New!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#install-the-sdk">1. Install the SDK</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#set-up-your-socialize-keys">2. Set up your Socialize Keys</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#configure-your-androidmanifest-xml">3. Configure your AndroidManifest.xml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#configure-facebook-integration">4. Configure Facebook Integration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#include-socialize-in-your-app">5. Include Socialize in your App!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-s-new">What&#8217;s New</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#steps-to-using-socialize">5 Steps to Using Socialize</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="facebook.html">Facebook Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="action_bar.html">Socialize Action Bar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="comment_view.html">Socialize Comments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log</a></li>
 </ul>
 
         </div>
@@ -171,9 +166,9 @@ Adding the Action Bar to your app is done with a simple call to <strong>showActi
           <a href="facebook.html" title="Facebook Integration"
              >next</a></li>
         <li class="right" >
-          <a href="index.html" title="Socialize Android SDK"
+          <a href="whats_new.html" title="What’s New"
              >previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK 1.0.4 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK v1.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

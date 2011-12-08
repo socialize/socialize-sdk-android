@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Socialize Comments &mdash; Socialize Android SDK v1.1 documentation</title>
+    <title>What’s New &mdash; Socialize Android SDK v1.1 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -27,18 +27,18 @@
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
     <link rel="top" title="Socialize Android SDK v1.1 documentation" href="index.html" />
-    <link rel="next" title="Socialize SDK (Advanced) Guide" href="sdk_user_guide.html" />
-    <link rel="prev" title="Socialize Action Bar" href="action_bar.html" /> 
+    <link rel="next" title="Getting Started" href="getting_started.html" />
+    <link rel="prev" title="Socialize Android SDK" href="index.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="sdk_user_guide.html" title="Socialize SDK (Advanced) Guide"
+          <a href="getting_started.html" title="Getting Started"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="action_bar.html" title="Socialize Action Bar"
+          <a href="index.html" title="Socialize Android SDK"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">Socialize Android SDK v1.1 documentation</a> &raquo;</li> 
       </ul>
@@ -49,22 +49,19 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <link rel="stylesheet" href="static/css/gist.css" type="text/css" /><div class="section" id="socialize-comments">
-<h1>Socialize Comments<a class="headerlink" href="#socialize-comments" title="Permalink to this headline">¶</a></h1>
-<p>v0.4.0 of the Socialize SDK introduced the &#8220;Comment View&#8221; which provides the creation and viewing
-of comments associated with an entity (URL).</p>
-<img alt="images/comment_view2.png" src="images/comment_view2.png" />
-<img alt="images/comment_view3.png" src="images/comment_view3.png" />
-<img alt="images/comment_view4.png" src="images/comment_view4.png" />
-<div class="section" id="diplaying-the-comment-view">
-<h2>Diplaying the Comment View<a class="headerlink" href="#diplaying-the-comment-view" title="Permalink to this headline">¶</a></h2>
-<p>When you want to launch the comment view, simply call <strong>showCommentView</strong> from the SocializeUI instance:</p>
-<script src="https://gist.github.com/1132979.js?file=show_comment_view.java"></script><p>Here&#8217;s an example of calling it on a button click:</p>
-<script src="https://gist.github.com/1132979.js?file=show_comment_view_onclick.java"></script></div>
-<div class="section" id="a-complete-example">
-<h2>A Complete Example<a class="headerlink" href="#a-complete-example" title="Permalink to this headline">¶</a></h2>
-<p>Here&#8217;s a complete example in an Activity:</p>
-<script src="https://gist.github.com/1132979.js?file=comment_view_activity_fb.java"></script></div>
+  <link rel="stylesheet" href="static/css/gist.css" type="text/css" /><div class="section" id="what-s-new">
+<span id="whats-new"></span><h1>What&#8217;s New<a class="headerlink" href="#what-s-new" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="recent-activity-in-user-profile">
+<h2>Recent Activity in User Profile<a class="headerlink" href="#recent-activity-in-user-profile" title="Permalink to this headline">¶</a></h2>
+<p>In v1.1 we introduced recent activity in the user profile view:</p>
+<img alt="images/profile_activity.png" src="images/profile_activity.png" />
+<p>This can provide a significant boost to in-app engagement, however to maximize its benefit
+developers must implement a Socialize &#8220;Entity Loader&#8221;.  This provides Socialize with the information
+needed to load the original view of the entity the user acted upon.</p>
+<p>With a Socialize Entity Loader specified, users will be able to navigate from the recent activity to
+other parts of your application.</p>
+<p>Refer to the <a class="reference internal" href="action_bar.html#entity-loader"><em>Using the Entity Loader</em></a> section for details on how to implement a Socialize Entity Loader</p>
+</div>
 </div>
 
 
@@ -75,15 +72,14 @@ of comments associated with an entity (URL).</p>
         <div class="sphinxsidebarwrapper">
 <h3><a href="index.html">Table Of Contents</a></h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What&#8217;s New</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">What&#8217;s New</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#recent-activity-in-user-profile">Recent Activity in User Profile</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="facebook.html">Facebook Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="action_bar.html">Socialize Action Bar</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Socialize Comments</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#diplaying-the-comment-view">Diplaying the Comment View</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#a-complete-example">A Complete Example</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="comment_view.html">Socialize Comments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log</a></li>
 </ul>
@@ -96,10 +92,10 @@ of comments associated with an entity (URL).</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="sdk_user_guide.html" title="Socialize SDK (Advanced) Guide"
+          <a href="getting_started.html" title="Getting Started"
              >next</a></li>
         <li class="right" >
-          <a href="action_bar.html" title="Socialize Action Bar"
+          <a href="index.html" title="Socialize Android SDK"
              >previous</a> |</li>
         <li><a href="index.html">Socialize Android SDK v1.1 documentation</a> &raquo;</li> 
       </ul>
