@@ -84,7 +84,7 @@ you can skip this section.</p>
 <blockquote>
 <div><p>Your keystore contains a public key which Facebook needs to identify your Android app.</p>
 <p>On your development machine (where you are building your Android app), run the following command to generate a key hash:</p>
-<div class="highlight-python"><pre>keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore openssl sha1 -binary openssl base64</pre>
+<div class="highlight-python"><pre>keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore | openssl sha1 -binary | openssl base64</pre>
 </div>
 <p><strong>Make sure you use the correct key store to generate the hash</strong>.  The example above (taken from the Facebook documentation)
 indicates use of the <strong>debug.keystore</strong>.  You should use whichever keystore you chose when building the version of your app

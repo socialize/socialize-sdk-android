@@ -42,7 +42,7 @@ If you **do not** already have a Facebook app just follow these simple steps:
 		
 		On your development machine (where you are building your Android app), run the following command to generate a key hash::
 
-			keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore openssl sha1 -binary openssl base64
+			keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore | openssl sha1 -binary | openssl base64
 			
 		**Make sure you use the correct key store to generate the hash**.  The example above (taken from the Facebook documentation)
 		indicates use of the **debug.keystore**.  You should use whichever keystore you chose when building the version of your app 
