@@ -24,20 +24,22 @@ import com.socialize.entity.User;
 import com.socialize.entity.View;
 import com.socialize.error.SocializeApiError;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.listener.activity.ActivityListener;
+import com.socialize.listener.activity.UserActivityListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.listener.entity.EntityListener;
 import com.socialize.listener.like.LikeListener;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.listener.user.UserListener;
 import com.socialize.listener.view.ViewListener;
+import com.socialize.ui.comment.CommentShareOptions;
 
 
 @SuppressWarnings("unchecked")
 public class MockSocializeApiHost extends SocializeApiHost implements ContainerAware {
 
 	private ApiHost delegate;
-	public static ListResult<?> listResult;
+	private static ListResult<?> listResult;
+	private static User user = new User();
 	
 	@Override
 	public void onCreate(Container container) {
@@ -52,16 +54,16 @@ public class MockSocializeApiHost extends SocializeApiHost implements ContainerA
 	@Override
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
 		MockSocializeSession mockSocializeSession = new MockSocializeSession();
-		listener.onAuthSuccess(mockSocializeSession);
 		sessionConsumer.setSession(mockSocializeSession);
+		listener.onAuthSuccess(mockSocializeSession);
 		if(delegate != null) delegate.authenticate(consumerKey, consumerSecret, listener, sessionConsumer);
 	}
 
 	@Override
 	public void authenticate(String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
 		MockSocializeSession mockSocializeSession = new MockSocializeSession();
-		listener.onAuthSuccess(mockSocializeSession);
 		sessionConsumer.setSession(mockSocializeSession);
+		listener.onAuthSuccess(mockSocializeSession);
 		if(delegate != null) delegate.authenticate(consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
 	}
 
@@ -72,9 +74,9 @@ public class MockSocializeApiHost extends SocializeApiHost implements ContainerA
 	}
 
 	@Override
-	public void addComment(SocializeSession session, String key, String comment, Location location, CommentListener listener) {
+	public void addComment(SocializeSession session, String key, String comment, Location location, CommentShareOptions shareOptions, CommentListener listener) {
 		listener.onCreate(new Comment());
-		if(delegate != null) delegate.addComment(session, key, comment, location, listener);
+		if(delegate != null) delegate.addComment(session, key, comment, location, shareOptions, listener);
 	}
 
 	@Override
@@ -178,18 +180,18 @@ public class MockSocializeApiHost extends SocializeApiHost implements ContainerA
 
 	@Override
 	public void getUser(SocializeSession session, long id, UserListener listener) {
-		listener.onGet(new User());
 		if(delegate != null) delegate.getUser(session, id, listener);
+		listener.onGet(user);
 	}
 
 	@Override
-	public void listActivityByUser(SocializeSession session, long id, ActivityListener listener) {
+	public void listActivityByUser(SocializeSession session, long id, UserActivityListener listener) {
 		if(delegate != null) delegate.listActivityByUser(session, id, listener);
 		listener.onList((ListResult<SocializeAction>) listResult);
 	}
 
 	@Override
-	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, ActivityListener listener) {
+	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, UserActivityListener listener) {
 		if(delegate != null) delegate.listActivityByUser(session, id, startIndex, endIndex, listener);
 		listener.onList((ListResult<SocializeAction>) listResult);
 	}
@@ -208,4 +210,7 @@ public class MockSocializeApiHost extends SocializeApiHost implements ContainerA
 		listResult = lr;
 	}
 	
+	public static void orchestrateUser(User u) {
+		user = u;
+	}
 }

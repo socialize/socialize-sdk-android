@@ -45,4 +45,31 @@ public class StringUtils {
 			return str0.equals(str1);
 		}
 	}
+	
+	/**
+	 * Replaces successive new line characters.
+	 * @param src The source String.
+	 * @param from Number of successive new lines (e.g. 3 would be \n\n\n)
+	 * @param to The number of new lines to replace with.
+	 * @return The cleaned string.
+	 */
+	public static String replaceNewLines(String src, int from, int to) {
+		if(from > 0 && to < from) {
+			
+			String strFrom = "";
+			String strTo = "";
+			
+			for (int i = 0; i < from; i++) {
+				strFrom+="\n";
+			}
+			for (int i = 0; i < to; i++) {
+				strTo+="\n";
+			}
+			
+			while (src.contains(strFrom)) {
+				src = src.replaceAll(strFrom, strTo);
+			}
+		}
+		return src;
+	}
 }

@@ -3,6 +3,7 @@ package com.socialize.view;
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -32,6 +33,9 @@ public abstract class BaseView extends LinearLayout {
 	public void showError(Context context, Exception e) {
 		if(errorHandler != null) {
 			errorHandler.handleError(context, e);
+		}
+		else {
+			Log.e("Socialize", "", e);
 		}
 	}
 

@@ -79,7 +79,7 @@ public class ShareFactory extends SocializeActionFactory<Share> {
 	}
 
 	@Override
-	public Share instantiateObject(JSONObject object) {
+	public Object instantiateObject(JSONObject object) {
 		return new Share();
 	}
 }

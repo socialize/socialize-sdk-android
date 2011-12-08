@@ -34,9 +34,10 @@ public class UserProfile {
 	private String lastName;
 	
 	private Bitmap image;
-	private boolean autoPostFacebook;
 	
 	private String encodedImage;
+	
+	private boolean autoPostFacebook;
 	
 	public String getFullName() {
 		if(fullName == null) {
@@ -52,12 +53,6 @@ public class UserProfile {
 	}
 	public void setImage(Bitmap image) {
 		this.image = image;
-	}
-	public boolean isAutoPostFacebook() {
-		return autoPostFacebook;
-	}
-	public void setAutoPostFacebook(boolean autoPostFacebook) {
-		this.autoPostFacebook = autoPostFacebook;
 	}
 	
 	public String getFirstName() {
@@ -86,7 +81,6 @@ public class UserProfile {
 	public void setEncodedImage(String encodedImage) {
 		this.encodedImage = encodedImage;
 	}
-	
 	protected void splitName() {
 		if(fullName != null) {
 			String name = fullName;
@@ -122,5 +116,14 @@ public class UserProfile {
 		
 		return fullName;
 	}
+	
+	public boolean isAutoPostFacebook() {
+		return autoPostFacebook;
+	}
+	public void setAutoPostFacebook(boolean autoPostFacebook) {
+		this.autoPostFacebook = autoPostFacebook;
+	}
+	
+	
 	
 }

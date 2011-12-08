@@ -95,8 +95,6 @@ public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 		AndroidMock.expect(prefs.getString("3rd_party_token", null)).andReturn(mock_3rd_party_token);
 		AndroidMock.expect(prefs.getString("3rd_party_app_id", null)).andReturn(mock_3rd_party_app_id);
 		AndroidMock.expect(prefs.getInt("3rd_party_type", AuthProviderType.SOCIALIZE.getId())).andReturn(AuthProviderType.FACEBOOK.getId());
-		
-		
 		AndroidMock.expect(prefs.getString("user", null)).andReturn(json);
 		AndroidMock.expect(userFactory.fromJSON((JSONObject)AndroidMock.anyObject())).andReturn(user);
 		AndroidMock.expect(socializeSessionFactory.create(key, secret, mock_3rd_party_userid, mock_3rd_party_token, mock_3rd_party_app_id, AuthProviderType.FACEBOOK)).andReturn(session);

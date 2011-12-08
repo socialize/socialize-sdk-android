@@ -25,7 +25,7 @@ import android.content.Context;
 import android.location.Location;
 
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.api.action.ActivityApi;
+import com.socialize.api.action.UserActivityApi;
 import com.socialize.api.action.CommentApi;
 import com.socialize.api.action.EntityApi;
 import com.socialize.api.action.LikeApi;
@@ -38,7 +38,7 @@ import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.listener.activity.ActivityListener;
+import com.socialize.listener.activity.UserActivityListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.listener.entity.EntityListener;
 import com.socialize.listener.like.LikeListener;
@@ -47,6 +47,7 @@ import com.socialize.listener.user.UserListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewListener;
 import com.socialize.net.HttpClientFactory;
+import com.socialize.ui.comment.CommentShareOptions;
 import com.socialize.ui.profile.UserProfile;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.StringUtils;
@@ -66,7 +67,7 @@ public class SocializeApiHost implements ApiHost {
 	private ViewApi viewApi;
 	private UserApi userApi;
 	private ShareApi shareApi;
-	private ActivityApi activityApi;
+	private UserActivityApi userActivityApi;
 	private RecommendationApi recommendationApi;
 	
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
@@ -130,12 +131,13 @@ public class SocializeApiHost implements ApiHost {
 		entityApi.addEntity(session, key, name, listener);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.api.ApiHost#addComment(com.socialize.api.SocializeSession, java.lang.String, java.lang.String, android.location.Location, com.socialize.listener.comment.CommentListener)
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.ApiHost#addComment(com.socialize.api.SocializeSession, java.lang.String, java.lang.String, android.location.Location, boolean, com.socialize.listener.comment.CommentListener)
 	 */
 	@Override
-	public void addComment(SocializeSession session, String key, String comment, Location location, CommentListener listener) {
-		commentApi.addComment(session, key, comment, location, listener);
+	public void addComment(SocializeSession session, String key, String comment, Location location, CommentShareOptions shareOptions, CommentListener listener) {
+		commentApi.addComment(session, key, comment, location, shareOptions, listener);
 	}
 	
 	/* (non-Javadoc)
@@ -194,6 +196,24 @@ public class SocializeApiHost implements ApiHost {
 		commentApi.getCommentsById(session, listener, ids);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.ApiHost#listCommentsByUser(com.socialize.api.SocializeSession, long, com.socialize.listener.comment.CommentListener)
+	 */
+	@Override
+	public void listCommentsByUser(SocializeSession session, long userId, CommentListener listener) {
+		commentApi.getCommentsByUser(session, userId, listener);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.ApiHost#listCommentsByUser(com.socialize.api.SocializeSession, long, int, int, com.socialize.listener.comment.CommentListener)
+	 */
+	@Override
+	public void listCommentsByUser(SocializeSession session, long userId, int startIndex, int endIndex, CommentListener listener) {
+		commentApi.getCommentsByUser(session, userId, startIndex, endIndex, listener);
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.api.ApiHost#addLike(com.socialize.api.SocializeSession, java.lang.String, android.location.Location, com.socialize.listener.like.LikeListener)
 	 */
@@ -201,7 +221,6 @@ public class SocializeApiHost implements ApiHost {
 	public void addLike(SocializeSession session, String key, Location location, LikeListener listener) {
 		likeApi.addLike(session, key, location, listener);
 	}
-	
 	
 	@Override
 	public void listLikesByUser(SocializeSession session, long userId, LikeListener listener) {
@@ -285,16 +304,16 @@ public class SocializeApiHost implements ApiHost {
 	 * @see com.socialize.api.ApiHost#listActivityByUser(com.socialize.api.SocializeSession, long, com.socialize.listener.activity.ActivityListener)
 	 */
 	@Override
-	public void listActivityByUser(SocializeSession session, long id, ActivityListener listener) {
-		activityApi.getActivityByUser(session, id, listener);
+	public void listActivityByUser(SocializeSession session, long id, UserActivityListener listener) {
+		userActivityApi.getActivityByUser(session, id, listener);
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.api.ApiHost#listActivityByUser(com.socialize.api.SocializeSession, long, int, int, com.socialize.listener.activity.ActivityListener)
 	 */
 	@Override
-	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, ActivityListener listener) {
-		activityApi.getActivityByUser(session, id, startIndex, endIndex, listener);
+	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, UserActivityListener listener) {
+		userActivityApi.getActivityByUser(session, id, startIndex, endIndex, listener);
 	}
 	
 	/* (non-Javadoc)
@@ -363,12 +382,12 @@ public class SocializeApiHost implements ApiHost {
 		this.shareApi = shareApi;
 	}
 
-	public ActivityApi getActivityApi() {
-		return activityApi;
+	public UserActivityApi getUserActivityApi() {
+		return userActivityApi;
 	}
 
-	public void setActivityApi(ActivityApi activityApi) {
-		this.activityApi = activityApi;
+	public void setUserActivityApi(UserActivityApi activityApi) {
+		this.userActivityApi = activityApi;
 	}
 	
 	public RecommendationApi getRecommendationApi() {

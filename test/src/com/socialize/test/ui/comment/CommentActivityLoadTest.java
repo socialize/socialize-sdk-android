@@ -94,7 +94,6 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 		
 		MockSocializeApiHost.orchestrateListResult(Comment.class, dummyResults);
 		
-		
 		SocializeUI.getInstance().showCommentView(getActivity(), "http://entity1.com", new OnCommentViewActionListener() {
 			public void onError(SocializeException error) {
 				error.printStackTrace();
@@ -163,6 +162,5 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 		}
 		
 		waitForActivity.finish();
-		
 	}
 }

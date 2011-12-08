@@ -46,6 +46,7 @@ public class User extends SocializeObject {
 	private String profilePicData;
 	
 	private boolean autoPostToFacebook = true;
+	private boolean shareLocation = true;
 	
 	public void merge(User user) {
 		setFirstName(user.getFirstName());
@@ -180,5 +181,23 @@ public class User extends SocializeObject {
 
 	public void setAutoPostToFacebook(boolean autoPostToFacebook) {
 		this.autoPostToFacebook = autoPostToFacebook;
+	}
+
+	public boolean isShareLocation() {
+		return shareLocation;
+	}
+
+	public void setShareLocation(boolean shareLocation) {
+		this.shareLocation = shareLocation;
+	}
+	
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj);
 	}
 }

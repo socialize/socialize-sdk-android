@@ -27,7 +27,7 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeApiHost;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
-import com.socialize.api.action.ActivityApi;
+import com.socialize.api.action.UserActivityApi;
 import com.socialize.api.action.CommentApi;
 import com.socialize.api.action.EntityApi;
 import com.socialize.api.action.LikeApi;
@@ -46,7 +46,7 @@ import com.socialize.entity.User;
 import com.socialize.entity.View;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.listener.activity.ActivityListener;
+import com.socialize.listener.activity.UserActivityListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.listener.entity.EntityListener;
 import com.socialize.listener.like.LikeListener;
@@ -164,7 +164,7 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		final String key = "foobar";
 		final String comment = "foobar_comment";
 		
-		commentApi.addComment(session, key, comment, null, listener);
+		commentApi.addComment(session, key, comment, null, null, listener);
 		
 		AndroidMock.replay(commentApi);
 		
@@ -173,7 +173,7 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		service.setCommentApi(commentApi);
 		
-		service.addComment(session, key, comment, null, listener);
+		service.addComment(session, key, comment, null, null, listener);
 		
 		AndroidMock.verify(commentApi);
 	}
@@ -646,12 +646,12 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 	}	
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks ({ActivityApi.class, ActivityListener.class})
+	@UsesMocks ({UserActivityApi.class, UserActivityListener.class})
 	public void testGetActivity() throws SocializeException {
 		SocializeProvider<SocializeAction> provider = AndroidMock.createMock(SocializeProvider.class);
-		ActivityApi api = AndroidMock.createMock(ActivityApi.class, provider);
+		UserActivityApi api = AndroidMock.createMock(UserActivityApi.class, provider);
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
-		ActivityListener listener = AndroidMock.createMock(ActivityListener.class);
+		UserActivityListener listener = AndroidMock.createMock(UserActivityListener.class);
 		
 		final int key = 69;
 		
@@ -663,7 +663,7 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		service.init(getContext());
 		
-		service.setActivityApi(api);
+		service.setUserActivityApi(api);
 		
 		service.listActivityByUser(session, key, listener);
 		
@@ -671,12 +671,12 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks ({ActivityApi.class, ActivityListener.class})
+	@UsesMocks ({UserActivityApi.class, UserActivityListener.class})
 	public void testGetActivityWithPagination() throws SocializeException {
 		SocializeProvider<SocializeAction> provider = AndroidMock.createMock(SocializeProvider.class);
-		ActivityApi api = AndroidMock.createMock(ActivityApi.class, provider);
+		UserActivityApi api = AndroidMock.createMock(UserActivityApi.class, provider);
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
-		ActivityListener listener = AndroidMock.createMock(ActivityListener.class);
+		UserActivityListener listener = AndroidMock.createMock(UserActivityListener.class);
 		
 		final int key = 69;
 		
@@ -690,7 +690,7 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		service.init(getContext());
 		
-		service.setActivityApi(api);
+		service.setUserActivityApi(api);
 		
 		service.listActivityByUser(session, key, start, end, listener);
 		

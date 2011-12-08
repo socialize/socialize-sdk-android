@@ -19,11 +19,11 @@
             </intent-filter>
         </activity>
         
-        	<!-- Base Activities Required by Socialize UI -->
-        	<activity android:name="com.socialize.ui.comment.CommentActivity"/>
-        	<activity android:name="com.socialize.ui.comment.CommentDetailActivity"/>
-        	<activity android:name="com.socialize.ui.profile.ProfileActivity"/>
-        	<activity android:name="com.socialize.auth.facebook.FacebookActivity"/>            
+       	<!-- Base Activities Required by Socialize UI -->
+       	<activity android:name="com.socialize.ui.comment.CommentActivity"/>
+       	<activity android:name="com.socialize.ui.comment.CommentDetailActivity"/>
+       	<activity android:name="com.socialize.ui.profile.ProfileActivity"/>
+       	<activity android:name="com.socialize.auth.facebook.FacebookActivity"/>            
             
     </application>
     

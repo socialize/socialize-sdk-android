@@ -22,6 +22,7 @@
 package com.socialize.ui.profile;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,6 +33,8 @@ import android.widget.Toast;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
+import com.socialize.api.SocializeSession;
+import com.socialize.entity.User;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.SocializeUIActivity;
 import com.socialize.ui.comment.CommentActivity;
@@ -50,6 +53,8 @@ public class ProfileActivity extends SocializeUIActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 		Bundle extras = getIntent().getExtras();
 
@@ -61,10 +66,17 @@ public class ProfileActivity extends SocializeUIActivity {
 			
 			// If WE are the user being viewed, assume a profile update
 			String userId = extras.getString(SocializeUI.USER_ID);
-			if(!StringUtils.isEmpty(userId) && Integer.parseInt(userId) == getSocialize().getSession().getUser().getId()) {
-				setResult(CommentActivity.PROFILE_UPDATE);
-			}
 			
+			SocializeSession session = getSocialize().getSession();
+			
+			if(session != null) {
+				User user = session.getUser();
+				if(user != null) {
+					if(!StringUtils.isEmpty(userId) && Integer.parseInt(userId) == user.getId().intValue()) {
+						setResult(CommentActivity.PROFILE_UPDATE);
+					}
+				}
+			}
 			view = new ProfileView(this);
 			setContentView(view);
 		}

@@ -199,5 +199,4 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 	protected abstract void postToJSON(T from, JSONObject to) throws JSONException;
 	
 	protected abstract void postFromJSON(JSONObject from, T to) throws JSONException;
-	
 }

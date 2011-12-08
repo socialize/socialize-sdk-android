@@ -203,6 +203,7 @@ public class CommentAdapter extends BaseAdapter {
 					TextView comment = view.getComment();
 					TextView userName = view.getAuthor();
 					TextView time = view.getTime();
+					ImageView locationIcon = view.getLocationIcon();
 					final ImageView userIcon = view.getUserIcon();
 
 					if (comment != null) {
@@ -211,6 +212,15 @@ public class CommentAdapter extends BaseAdapter {
 
 					if (userName != null) {
 						userName.setText(displayName);
+					}
+					
+					if(locationIcon != null) {
+						if(item.hasLocation() && item.isLocationShared()) {
+							locationIcon.setVisibility(View.VISIBLE);
+						}
+						else {
+							locationIcon.setVisibility(View.GONE);
+						}
 					}
 
 					if (time != null) {
@@ -228,7 +238,7 @@ public class CommentAdapter extends BaseAdapter {
 
 						int densitySize = deviceUtils.getDIP(iconSize);
 
-						final Drawable defaultImage = drawables.getDrawable(SocializeUI.DEFAULT_USER_ICON, true);
+						final Drawable defaultImage = drawables.getDrawable(SocializeUI.DEFAULT_USER_ICON);
 
 						if(user != null) {
 							userIcon.getBackground().setAlpha(255);

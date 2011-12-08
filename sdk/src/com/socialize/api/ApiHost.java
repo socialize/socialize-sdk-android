@@ -28,13 +28,14 @@ import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.listener.activity.ActivityListener;
+import com.socialize.listener.activity.UserActivityListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.listener.entity.EntityListener;
 import com.socialize.listener.like.LikeListener;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.listener.user.UserListener;
 import com.socialize.listener.view.ViewListener;
+import com.socialize.ui.comment.CommentShareOptions;
 
 /**
  * @author Jason Polites
@@ -52,7 +53,7 @@ public interface ApiHost {
 
 	public void createEntity(SocializeSession session, String key, String name, EntityListener listener);
 
-	public void addComment(SocializeSession session, String key, String comment, Location location, CommentListener listener);
+	public void addComment(SocializeSession session, String key, String comment, Location location, CommentShareOptions shareOptions, CommentListener listener);
 
 	public void getComment(SocializeSession session, long id, CommentListener listener);
 
@@ -73,7 +74,11 @@ public interface ApiHost {
 	public void listCommentsByEntity(SocializeSession session, String url, int startIndex, int endIndex, CommentListener listener);
 
 	public void listCommentsById(SocializeSession session, CommentListener listener, int... ids);
-
+	
+	public void listCommentsByUser(SocializeSession session, long userId, CommentListener listener);
+	
+	public void listCommentsByUser(SocializeSession session, long userId, int startIndex, int endIndex, CommentListener listener);
+	
 	public void addLike(SocializeSession session, String key, Location location, LikeListener listener);
 
 	public void addView(SocializeSession session, String key, Location location, ViewListener listener);
@@ -92,9 +97,9 @@ public interface ApiHost {
 
 	public void saveUserProfile(Context context, SocializeSession session, String firstName, String lastName, String encodedImage, UserListener listener);
 
-	public void listActivityByUser(SocializeSession session, long id, ActivityListener listener);
+	public void listActivityByUser(SocializeSession session, long id, UserActivityListener listener);
 
-	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, ActivityListener listener);
+	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, UserActivityListener listener);
 	
 	public void listLikesByUser(SocializeSession session, long userId, LikeListener listener);
 	

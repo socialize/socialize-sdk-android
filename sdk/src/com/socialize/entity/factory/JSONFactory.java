@@ -33,7 +33,7 @@ import org.json.JSONObject;
  * @author Jason Polites
  *
  */
-public abstract class JSONFactory<T> {
+public abstract class JSONFactory<T extends Object> {
 	public static final String DATE_FORMAT_STRING = "yyyy-MM-dd HH:mm:ssZZ";
 	
 	protected final DateFormat DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT_STRING);
@@ -56,8 +56,9 @@ public abstract class JSONFactory<T> {
 		return json;
 	}
 
+	@SuppressWarnings("unchecked")
 	public T fromJSON(JSONObject json) throws JSONException {
-		T object = instantiateObject(json);
+		T object = (T) instantiateObject(json);
 		if(object != null) {
 			fromJSON(json, object);
 		}
@@ -72,7 +73,9 @@ public abstract class JSONFactory<T> {
 		return new JSONArray();
 	}
 	
-	public abstract T instantiateObject(JSONObject object);
+	// This SHOULD return the generic type "T" but because javassist (via AndroidMock) doesn't seem to 
+	// want to create methods with generic return types we can't do it :/
+	public abstract Object instantiateObject(JSONObject object);
 	
 	protected abstract void fromJSON(JSONObject from, T to) throws JSONException;
 	protected abstract void toJSON(T from, JSONObject to) throws JSONException;

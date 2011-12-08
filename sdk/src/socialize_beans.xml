@@ -374,7 +374,7 @@
 		<property name="requestFactory" ref="activityRequestFactory"/>
 	</bean>
 	
-	<bean id="activityApi" class="com.socialize.api.action.ActivityApi" extends="socializeApi">
+	<bean id="userActivityApi" class="com.socialize.api.action.UserActivityApi" extends="socializeApi">
 		<constructor-arg ref="activityProvider"/>
 	</bean>
 	
@@ -401,7 +401,7 @@
 		<property name="viewApi" ref="viewApi"/>
 		<property name="userApi" ref="userApi"/>
 		<property name="shareApi" ref="shareApi"/>
-		<property name="activityApi" ref="activityApi"/>
+		<property name="userActivityApi" ref="userActivityApi"/>
 		<property name="recommendationApi" ref="recommendationApi"/>
 		
 		<init-method name="init">

@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
-import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.ImageView;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DeviceUtils;
+import com.socialize.util.Drawables;
 
 public class CommentListItem extends LinearLayout {
 	
@@ -23,12 +23,10 @@ public class CommentListItem extends LinearLayout {
 	private TextView time;
 	private TextView author;
 	private ImageView userIcon;
+	private ImageView locationIcon;
 	private DeviceUtils deviceUtils;
 	private Colors colors;
-
-	public CommentListItem(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
+	private Drawables drawables;
 
 	public CommentListItem(Context context) {
 		super(context);
@@ -68,7 +66,9 @@ public class CommentListItem extends LinearLayout {
 		contentHeaderLayout.setPadding(0, 0, 0, 0);
 		
 		LinearLayout.LayoutParams authorLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-	
+		
+		authorLayoutParams.weight = 1.0f;
+		
 		author = new TextView(getContext());
 		author.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
 		author.setMaxLines(1);
@@ -76,10 +76,16 @@ public class CommentListItem extends LinearLayout {
 		author.setTextColor(titleColor);
 		author.setLayoutParams(authorLayoutParams);
 		author.setSingleLine();
-
-		LinearLayout.LayoutParams timeLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
-		timeLayoutParams.gravity = Gravity.RIGHT;
+		LinearLayout.LayoutParams commentLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		
+		comment = new TextView(getContext());
+		comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+		comment.setTextColor(textColor);
+		comment.setLayoutParams(commentLayoutParams);
+		comment.setMaxLines(3);
+
+		LinearLayout.LayoutParams timeLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
 		time = new TextView(getContext());
 		time.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
@@ -89,17 +95,26 @@ public class CommentListItem extends LinearLayout {
 		time.setLayoutParams(timeLayoutParams);
 		time.setSingleLine();
 		time.setGravity(Gravity.RIGHT);
-		
-		LinearLayout.LayoutParams commentLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		
-		comment = new TextView(getContext());
-		comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-		comment.setTextColor(textColor);
-		comment.setLayoutParams(commentLayoutParams);
-		comment.setMaxLines(5);
 
+		LinearLayout.LayoutParams locationIconParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		locationIconParams.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+		
+		locationIcon = new ImageView(getContext());
+		locationIcon.setImageDrawable(drawables.getDrawable("icon_location_pin.png"));
+		locationIcon.setLayoutParams(locationIconParams);
+		
+		LinearLayout.LayoutParams metaParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		metaParams.gravity = Gravity.RIGHT | Gravity.TOP;
+		
+		LinearLayout meta = new LinearLayout(getContext());
+		
+		meta.setOrientation(HORIZONTAL);
+		meta.setLayoutParams(metaParams);
+		meta.addView(time);
+		meta.addView(locationIcon);
+		
 		contentHeaderLayout.addView(author);
-		contentHeaderLayout.addView(time);
+		contentHeaderLayout.addView(meta);
 		
 		contentLayout.addView(contentHeaderLayout);
 		contentLayout.addView(comment);
@@ -118,7 +133,6 @@ public class CommentListItem extends LinearLayout {
 		imageBG.setStroke(deviceUtils.getDIP(1), Color.BLACK);
 		
 		userIcon.setBackgroundDrawable(imageBG);
-		
 		userIcon.setScaleType(ScaleType.CENTER_CROP);
 		
 		iconLayout.addView(userIcon);
@@ -142,6 +156,10 @@ public class CommentListItem extends LinearLayout {
 	public ImageView getUserIcon() {
 		return userIcon;
 	}
+	
+	public ImageView getLocationIcon() {
+		return locationIcon;
+	}
 
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
 		this.deviceUtils = deviceUtils;
@@ -150,4 +168,9 @@ public class CommentListItem extends LinearLayout {
 	public void setColors(Colors colors) {
 		this.colors = colors;
 	}
+
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
+	}
+	
 }

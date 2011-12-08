@@ -47,25 +47,25 @@ public class GenericActionFactory extends SocializeActionFactory<SocializeAction
 	@Override
 	protected void postFromJSON(JSONObject from, SocializeAction to) throws JSONException {
 		switch(to.getActionType()) {
-			case COMMENT:  commentFactory.postFromJSON(from, (Comment)to);
-			case SHARE:  shareFactory.postFromJSON(from, (Share)to);
-			case VIEW:  viewFactory.postFromJSON(from, (View)to);
-			case LIKE:  likeFactory.postFromJSON(from, (Like)to);
+			case COMMENT:  commentFactory.postFromJSON(from, (Comment)to); break;
+			case SHARE:  shareFactory.postFromJSON(from, (Share)to); break;
+			case VIEW:  viewFactory.postFromJSON(from, (View)to); break;
+			case LIKE:  likeFactory.postFromJSON(from, (Like)to); break;
 		}
 	}
 
 	@Override
 	protected void postToJSON(SocializeAction from, JSONObject to) throws JSONException {
 		switch(from.getActionType()) {
-			case COMMENT:  commentFactory.postToJSON((Comment)from, to);
-			case SHARE:  shareFactory.postToJSON((Share)from, to);
-			case VIEW:  viewFactory.postToJSON((View)from, to);
-			case LIKE:  likeFactory.postToJSON((Like)from, to);
+			case COMMENT:  commentFactory.postToJSON((Comment)from, to); break;
+			case SHARE:  shareFactory.postToJSON((Share)from, to); break;
+			case VIEW:  viewFactory.postToJSON((View)from, to); break;
+			case LIKE:  likeFactory.postToJSON((Like)from, to); break;
 		}
 	}
 
 	@Override
-	public SocializeAction instantiateObject(JSONObject from) {
+	public Object instantiateObject(JSONObject from) {
 		if(from.has("activity_type") && !from.isNull("activity_type")) {
 			
 			try {

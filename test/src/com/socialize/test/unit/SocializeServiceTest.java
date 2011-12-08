@@ -183,7 +183,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		setupDefaultMocks();
 		
-		service.addComment(session, key, comment, null, listener);
+		service.addComment(session, key, comment, null, null, listener);
 		
 		replayDefaultMocks();
 		
@@ -386,6 +386,102 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		verifyDefaultMocks();
 	}
+	
+
+	@UsesMocks ({CommentListListener.class})
+	public void testListCommentsByUser() {
+		CommentListListener listener = AndroidMock.createMock(CommentListListener.class);
+		
+		final long key = 69;
+		
+		setupDefaultMocks();
+		
+		service.listCommentsByUser(session, key, listener);
+		
+		replayDefaultMocks();
+		
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
+		socialize.init(getContext(), container);
+		socialize.setSession(session);
+		
+		assertTrue(socialize.isInitialized());
+		
+		socialize.listCommentsByUser(key,listener);
+		
+		verifyDefaultMocks();
+	}
+	
+	@UsesMocks ({CommentListListener.class})
+	public void testListCommentsByUserPaginated() {
+		CommentListListener listener = AndroidMock.createMock(CommentListListener.class);
+		
+		final long key = 69;
+		final int start = 0, end = 10;
+		
+		setupDefaultMocks();
+
+		service.listCommentsByUser(session, key, start, end, listener);
+		
+		replayDefaultMocks();
+		
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
+		socialize.init(getContext(), container);
+		socialize.setSession(session);
+		
+		assertTrue(socialize.isInitialized());
+		
+		socialize.listCommentsByUser(key, start, end,listener);
+		
+		verifyDefaultMocks();
+	}
+	
+
+	@UsesMocks ({LikeListListener.class})
+	public void testListLikesByUser() {
+		LikeListListener listener = AndroidMock.createMock(LikeListListener.class);
+		
+		final long key = 69;
+		
+		setupDefaultMocks();
+		
+		service.listLikesByUser(session, key, listener);
+		
+		replayDefaultMocks();
+		
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
+		socialize.init(getContext(), container);
+		socialize.setSession(session);
+		
+		assertTrue(socialize.isInitialized());
+		
+		socialize.listLikesByUser(key,listener);
+		
+		verifyDefaultMocks();
+	}
+	
+	@UsesMocks ({LikeListListener.class})
+	public void testListLikesByUserPaginated() {
+		LikeListListener listener = AndroidMock.createMock(LikeListListener.class);
+		
+		final long key = 69;
+		final int start = 0, end = 10;
+		
+		setupDefaultMocks();
+
+		service.listLikesByUser(session, key, start, end, listener);
+		
+		replayDefaultMocks();
+		
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
+		socialize.init(getContext(), container);
+		socialize.setSession(session);
+		
+		assertTrue(socialize.isInitialized());
+		
+		socialize.listLikesByUser(key, start, end,listener);
+		
+		verifyDefaultMocks();
+	}		
 	
 	@UsesMocks ({CommentListListener.class})
 	public void testListCommentsByIds() {

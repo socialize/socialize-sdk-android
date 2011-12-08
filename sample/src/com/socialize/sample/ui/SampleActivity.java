@@ -34,6 +34,7 @@ public class SampleActivity extends Activity {
 		final Button btnClearCache = (Button) findViewById(R.id.btnClearCache);
 		final Button btnActionViewAuto = (Button) findViewById(R.id.btnActionViewAuto);
 		final Button btnActionViewManual = (Button) findViewById(R.id.btnActionViewManual);
+		final Button btnActionViewPager = (Button) findViewById(R.id.btnActionViewPager);
 		
 		btn.setOnClickListener(new OnClickListener() {
 			@Override
@@ -79,7 +80,7 @@ public class SampleActivity extends Activity {
 			public void onClick(View v) {
 				setupOverrides();
 				Intent intent = new Intent(SampleActivity.this, ActionBarAutoActivity.class);
-				SocializeUI.getInstance().setEntityUrl(SampleActivity.this, intent, txtEntity.getText().toString());
+				SocializeUI.getInstance().setEntityKey(SampleActivity.this, intent, txtEntity.getText().toString());
 				SocializeUI.getInstance().setFacebookAppId(txtFB.getText().toString());
 				SocializeUI.getInstance().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				startActivity(intent);
@@ -91,7 +92,19 @@ public class SampleActivity extends Activity {
 			public void onClick(View v) {
 				setupOverrides();
 				Intent intent = new Intent(SampleActivity.this, ActionBarManualActivity.class);
-				SocializeUI.getInstance().setEntityUrl(SampleActivity.this, intent, txtEntity.getText().toString());
+				SocializeUI.getInstance().setEntityKey(SampleActivity.this, intent, txtEntity.getText().toString());
+				SocializeUI.getInstance().setFacebookAppId(txtFB.getText().toString());
+				SocializeUI.getInstance().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
+				startActivity(intent);
+			}
+		});
+		
+		btnActionViewPager.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				setupOverrides();
+				Intent intent = new Intent(SampleActivity.this, ActionBarPagerActivity.class);
+				SocializeUI.getInstance().setEntityKey(SampleActivity.this, intent, txtEntity.getText().toString());
 				SocializeUI.getInstance().setFacebookAppId(txtFB.getText().toString());
 				SocializeUI.getInstance().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				startActivity(intent);

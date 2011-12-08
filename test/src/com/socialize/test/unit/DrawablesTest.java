@@ -287,7 +287,7 @@ public class DrawablesTest extends SocializeActivityTest {
 		drawables.getDrawable(name);
 		
 		// reverse order for asserts
-		assertEquals(false, getNextResult());
+		assertEquals(true, getNextResult());
 		assertEquals(-1, getNextResult());
 		assertEquals(-1, getNextResult());
 		assertEquals(name, getNextResult());

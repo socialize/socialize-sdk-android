@@ -58,11 +58,15 @@ public class Drawables {
 	}
 	
 	public Drawable getDrawable(String name) {
-		return getDrawable(name, -1, -1, false);
+		return getDrawable(name, -1, -1, true);
 	}
 	
 	public Drawable getDrawable(String name, boolean eternal) {
 		return getDrawable(name, false, false, -1, -1, eternal);
+	}
+	
+	public Drawable getDrawable(String name, int forceDensity) {
+		return getDrawable(name, forceDensity, true);
 	}
 	
 	public Drawable getDrawable(String name, int forceDensity, boolean eternal) {
@@ -235,7 +239,7 @@ public class Drawables {
 	protected CacheableDrawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY, int forceDensity) {
 		
 		Bitmap bitmap = bitmapUtils.getScaledBitmap ( in , pixelsX, pixelsY , forceDensity);
-		
+
 		CacheableDrawable drawable = createDrawable(bitmap, name);
 		
 		if(tileX) {

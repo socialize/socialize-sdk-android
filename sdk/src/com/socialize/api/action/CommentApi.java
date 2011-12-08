@@ -32,6 +32,7 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.provider.SocializeProvider;
+import com.socialize.ui.comment.CommentShareOptions;
 
 /**
  * @author Jason Polites
@@ -44,10 +45,14 @@ public class CommentApi extends SocializeApi<Comment, SocializeProvider<Comment>
 		super(provider);
 	}
 
-	public void addComment(SocializeSession session, String key, String comment, Location location, CommentListener listener) {
+	public void addComment(SocializeSession session, String key, String comment, Location location, CommentShareOptions shareOptions, CommentListener listener) {
 		Comment c = new Comment();
 		c.setText(comment);
 		c.setEntityKey(key);
+		
+		boolean shareLocation = (shareOptions == null || shareOptions.isShareLocation());
+		
+		c.setLocationShared(shareLocation);
 		
 		setLocation(c, location);
 		

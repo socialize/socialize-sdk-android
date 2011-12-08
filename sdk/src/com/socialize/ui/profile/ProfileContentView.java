@@ -30,7 +30,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.graphics.drawable.LayerDrawable;
 import android.text.InputFilter;
-import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -39,7 +38,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.socialize.Socialize;
@@ -56,8 +54,10 @@ import com.socialize.ui.facebook.FacebookSignOutClickListener;
 import com.socialize.ui.image.ImageLoadListener;
 import com.socialize.ui.image.ImageLoadRequest;
 import com.socialize.ui.image.ImageLoader;
+import com.socialize.ui.profile.activity.UserActivityView;
 import com.socialize.ui.user.UserService;
 import com.socialize.ui.util.Colors;
+import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.SafeBitmapDrawable;
@@ -73,7 +73,8 @@ public class ProfileContentView extends BaseView {
 	private ImageView profilePicture;
 	private TextView displayName;
 	private EditText displayNameEdit;
-	private AutoPostFacebookOption autoPostFacebook;
+	private CustomCheckbox autoPostFacebook;
+	private IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory;
 	private SocializeButton facebookSignOutButton;
 	private SocializeButton facebookSignInButton;
 	private SocializeButton editButton;
@@ -91,6 +92,8 @@ public class ProfileContentView extends BaseView {
 	
 	private ProfileLayoutView parent;
 	
+	private UserActivityView userActivityView;
+	
 	// Injected
 	private IBeanFactory<SocializeButton> profileCancelButtonFactory;
 	private IBeanFactory<SocializeButton> profileSaveButtonFactory;
@@ -100,6 +103,8 @@ public class ProfileContentView extends BaseView {
 	private IBeanFactory<ProfileSaveButtonListener> profileSaveButtonListenerFactory;
 	private IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory;
 	private IBeanFactory<ProfileImageContextMenu> profileImageContextMenuFactory;
+	private IBeanFactory<UserActivityView> userActivityViewFactory;
+	
 	private DeviceUtils deviceUtils;
 	private Colors colors;
 	private Drawables drawables;
@@ -113,29 +118,26 @@ public class ProfileContentView extends BaseView {
 	}
 
 	public void init() {
-		this.setDrawables(drawables);
-		this.setUserService(userService);
-		this.setImageLoader(imageLoader);
-		this.setDefaultProfilePicture((SafeBitmapDrawable) drawables.getDrawable("large_user_icon.png"));
-		this.setContextMenu(profileImageContextMenuFactory.getBean());
+		setDrawables(drawables);
+		setUserService(userService);
+		setImageLoader(imageLoader);
+		setDefaultProfilePicture((SafeBitmapDrawable) drawables.getDrawable("large_user_icon.png"));
+		setContextMenu(profileImageContextMenuFactory.getBean());
 		
 		final int padding = deviceUtils.getDIP(4);
 		final int imagePadding = deviceUtils.getDIP(4);
 		final int margin = deviceUtils.getDIP(8);
 		final int imageSize = deviceUtils.getDIP(133);
 		final int editTextStroke = deviceUtils.getDIP(2);
-		final int minTextHeight = deviceUtils.getDIP(50);
-		final int maxTextHeight = deviceUtils.getDIP(200);
 		final float editTextRadius = editTextStroke;
 		final int titleColor = colors.getColor(Colors.TITLE);
 		
-		LayoutParams editPanelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		LayoutParams editPanelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
 		
-		editPanelLayoutParams.setMargins(margin, margin, margin, margin);
-		this.setLayoutParams(editPanelLayoutParams);
-		this.setOrientation(LinearLayout.VERTICAL);
-		this.setPadding(0, 0, 0, 0);
-		this.setGravity(Gravity.TOP);
+		setLayoutParams(editPanelLayoutParams);
+		setOrientation(LinearLayout.VERTICAL);
+		setPadding(0, 0, 0, 0);
+		setGravity(Gravity.TOP);
 		
 		LinearLayout masterLayout = new LinearLayout(getContext());
 		LayoutParams masterLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,deviceUtils.getDIP(150));
@@ -150,63 +152,35 @@ public class ProfileContentView extends BaseView {
 		LinearLayout buttonLayout = new LinearLayout(getContext());
 		LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		
+		LinearLayout optionsLayout = new LinearLayout(getContext());
+		LayoutParams optionsLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		
 		buttonLayoutParams.setMargins(margin,margin,margin,margin);
 		
 		nameLayout.setLayoutParams(nameLayoutParams);
 		nameLayout.setOrientation(LinearLayout.VERTICAL);
 		nameLayout.setPadding(padding, padding, padding, padding);
-		nameLayout.setGravity(Gravity.TOP);
+		nameLayout.setGravity(Gravity.TOP | Gravity.RIGHT);
 		
 		buttonLayout.setLayoutParams(buttonLayoutParams);
 		buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
 		buttonLayout.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
 		
+		optionsLayout.setLayoutParams(optionsLayoutParams);
+		optionsLayout.setOrientation(LinearLayout.HORIZONTAL);
+		optionsLayout.setPadding(margin, margin, margin, margin);
+		
 		LayoutParams imageLayout = new LinearLayout.LayoutParams(imageSize,imageSize);
 		LayoutParams textLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		LayoutParams textEditLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-		LayoutParams commentViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-		LayoutParams commentMetaLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-		
 		
 		final ImageView profilePicture = new ImageView(getContext());
 		final TextView displayName = new TextView(getContext());
 		final EditText displayNameEdit = new EditText(getContext());
-		final TextView commentView = new TextView(getContext());
-		final TextView commentMeta = new TextView(getContext());
 		
-		AutoPostFacebookOption checkBox = new AutoPostFacebookOption(getContext());
-		checkBox.init();
-		checkBox.setChecked(Socialize.getSocialize().getSession().getUser().isAutoPostToFacebook()); // TODO: Make a factory
-		
-		commentMetaLayout.gravity = Gravity.RIGHT;
-		commentMeta.setGravity(Gravity.RIGHT);
-		commentMeta.setLayoutParams(commentMetaLayout);
-		commentMeta.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
-		commentMeta.setTextColor(Color.WHITE);
-		
-		commentView.setVisibility(View.GONE);
-		commentMeta.setVisibility(View.GONE);
-		checkBox.setEnabled(false);
-		
-		GradientDrawable commentBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Color.BLACK, Color.BLACK});
-		commentBG.setCornerRadius(10.0f);
-		commentBG.setStroke(2, Color.WHITE);
-		commentBG.setAlpha(64);
-		
-		commentViewLayout.setMargins(0, margin, 0, margin);
-		
-		commentView.setBackgroundDrawable(commentBG);
-		commentView.setPadding(margin, margin, margin, margin);
-		commentView.setLayoutParams(commentViewLayout);
-		commentView.setMinHeight(minTextHeight);
-		commentView.setMinimumHeight(minTextHeight);
-		commentView.setMaxHeight(maxTextHeight);
-		commentView.setTextColor(Color.WHITE);
-		commentView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
-		commentView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-		commentView.setScroller(new Scroller(getContext())); 
-		commentView.setScrollbarFadingEnabled(true);
-		commentView.setMovementMethod(new ScrollingMovementMethod());
+		autoPostFacebook = autoPostFacebookOptionFactory.getBean();
+		autoPostFacebook.setTextOn("Share with my facebook friends (enabled)");
+		autoPostFacebook.setTextOff("Share with my facebook friends (disabled)");
 		
 		final SocializeButton editButton = profileEditButtonFactory.getBean();
 		final SocializeButton saveButton = profileSaveButtonFactory.getBean();
@@ -223,10 +197,11 @@ public class ProfileContentView extends BaseView {
 		editButton.setVisibility(View.GONE);
 		facebookSignOutButton.setVisibility(View.GONE);
 		facebookSignInButton.setVisibility(View.GONE);
-		checkBox.setVisibility(View.GONE);
+		autoPostFacebook.setVisibility(View.GONE);
 		
 		textLayout.setMargins(margin, 0, 0, 0);
 		textEditLayout.setMargins(margin,0,margin,0);
+		imageLayout.setMargins(margin, margin, 0, 0);
 		
 		GradientDrawable imageBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] {Color.WHITE, Color.WHITE});
 		imageBG.setStroke(2, Color.BLACK);
@@ -265,15 +240,14 @@ public class ProfileContentView extends BaseView {
 		
 		displayNameEdit.setFilters(maxLength);
 		
-		this.setProfilePicture(profilePicture);
-		this.setDisplayName(displayName);
-		this.setDisplayNameEdit(displayNameEdit);
-		this.setFacebookSignOutButton(facebookSignOutButton);
-		this.setFacebookSignInButton(facebookSignInButton);
-		this.setSaveButton(saveButton);
-		this.setCancelButton(cancelButton);
-		this.setEditButton(editButton);
-		this.setAutoPostFacebook(checkBox);
+		setProfilePicture(profilePicture);
+		setDisplayName(displayName);
+		setDisplayNameEdit(displayNameEdit);
+		setFacebookSignOutButton(facebookSignOutButton);
+		setFacebookSignInButton(facebookSignInButton);
+		setSaveButton(saveButton);
+		setCancelButton(cancelButton);
+		setEditButton(editButton);
 		
 		editButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -332,13 +306,49 @@ public class ProfileContentView extends BaseView {
 		
 		nameLayout.addView(buttonLayout);
 		
+		optionsLayout.addView(autoPostFacebook);
+		
 		masterLayout.addView(profilePicture);
 		masterLayout.addView(nameLayout);
 		
-		this.addView(masterLayout);
-		this.addView(commentView);
-		this.addView(commentMeta);
-		this.addView(checkBox);
+		addView(masterLayout);
+		addView(optionsLayout);
+		
+		if(userActivityViewFactory != null) {
+			
+			TextView divider = new TextView(getContext());
+			divider.setBackgroundDrawable(drawables.getDrawable("divider.png", true, false, true));
+			
+			LayoutParams dividerLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, deviceUtils.getDIP(30));
+			
+			dividerLayout.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
+			
+			divider.setLayoutParams(dividerLayout);
+			divider.setTextColor(Color.WHITE);
+			divider.setText("Recent Activity");
+			divider.setPadding(margin, 0, 0, 0);
+			divider.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+			divider.setTypeface(Typeface.DEFAULT_BOLD);
+			divider.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+			
+			this.addView(divider);
+			
+			LinearLayout activityHolder = new LinearLayout(getContext());
+			
+			LayoutParams userActivityLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+			LayoutParams activityHolderLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+			activityHolderLayout.weight = 1.0f;
+			
+			activityHolder.setLayoutParams(userActivityLayout);
+			activityHolder.setBackgroundDrawable(drawables.getDrawable("crosshatch.png", true, true, true));	
+			
+			userActivityView = userActivityViewFactory.getBean();
+			userActivityView.setLayoutParams(userActivityLayout);
+			
+			activityHolder.addView(userActivityView);
+			
+			this.addView(activityHolder);
+		}		
 	}
 	
 	public ImageView getProfilePicture() {
@@ -415,6 +425,10 @@ public class ProfileContentView extends BaseView {
 		this.cancelButton = cancelButton;
 	}
 
+	public void setUserActivityViewFactory(IBeanFactory<UserActivityView> userActivityViewFactory) {
+		this.userActivityViewFactory = userActivityViewFactory;
+	}
+
 	public void revertUserDisplayName() {
 		if(!StringUtils.isEmpty(userDisplayName)) {
 			displayNameEdit.setText(userDisplayName);
@@ -441,18 +455,15 @@ public class ProfileContentView extends BaseView {
 			if(Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 				facebookSignOutButton.setVisibility(View.VISIBLE);
 				facebookSignInButton.setVisibility(View.GONE);
-				autoPostFacebook.setVisibility(View.VISIBLE);
 			}
 			else {
 				facebookSignOutButton.setVisibility(View.GONE);
 				facebookSignInButton.setVisibility(View.VISIBLE);
-				autoPostFacebook.setVisibility(View.GONE);
 			}
 		}
 		else {
 			facebookSignOutButton.setVisibility(View.GONE);
 			facebookSignInButton.setVisibility(View.GONE);
-			autoPostFacebook.setVisibility(View.GONE);
 		}
 	}
 	
@@ -467,14 +478,6 @@ public class ProfileContentView extends BaseView {
 		}
 	}
 	
-	public boolean getUpdatedAutoPostFBPreference() {
-		return autoPostFacebook.isChecked();
-	}
-	
-	public void setAutoPostFacebook(AutoPostFacebookOption autoPostFacebook) {
-		this.autoPostFacebook = autoPostFacebook;
-	}
-
 	/**
 	 * Returns the newly updated user profile name.
 	 * @return
@@ -496,10 +499,6 @@ public class ProfileContentView extends BaseView {
 		this.contextMenu = contextMenu;
 	}
 	
-	public AutoPostFacebookOption getAutoPostFacebook() {
-		return autoPostFacebook;
-	}
-
 	@Override
 	protected void onViewLoad() {
 		super.onViewLoad();
@@ -571,8 +570,10 @@ public class ProfileContentView extends BaseView {
 		this.colors = colors;
 	}
 
-	
-	
+	public void setAutoPostFacebookOptionFactory(IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory) {
+		this.autoPostFacebookOptionFactory = autoPostFacebookOptionFactory;
+	}
+
 	public void setUserDetails(User user) {
 		
 		String profilePicData = user.getMediumImageUri();
@@ -615,6 +616,10 @@ public class ProfileContentView extends BaseView {
 		
 		getDisplayName().setText(user.getDisplayName());
 		
+		if(userActivityView != null) {
+			userActivityView.loadUserActivity(user.getId());
+		}
+		
 		User currentUser = userService.getCurrentUser();
 		
 		setCurrentUser(currentUser);
@@ -627,8 +632,7 @@ public class ProfileContentView extends BaseView {
 			if(SocializeUI.getInstance().isFacebookSupported() &&
 					Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 				getFacebookSignOutButton().setVisibility(View.VISIBLE);
-				getAutoPostFacebook().setVisibility(View.VISIBLE);
-				getAutoPostFacebook().setChecked(user.isAutoPostToFacebook());
+				autoPostFacebook.setChecked(user.isAutoPostToFacebook());
 			}
 			
 			onFacebookChanged();
@@ -638,7 +642,6 @@ public class ProfileContentView extends BaseView {
 			getDisplayNameEdit().setVisibility(View.GONE);
 			getEditButton().setVisibility(View.GONE);
 			getFacebookSignOutButton().setVisibility(View.GONE);
-			getAutoPostFacebook().setVisibility(View.GONE);
 		}
 	}	
 
@@ -651,6 +654,10 @@ public class ProfileContentView extends BaseView {
 			editButton.setVisibility(View.GONE);
 			facebookSignOutButton.setVisibility(View.GONE);
 			facebookSignInButton.setVisibility(View.GONE);
+			
+			if(SocializeUI.getInstance().isFacebookSupported() && Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+				autoPostFacebook.setVisibility(View.VISIBLE);
+			}
 			
 			displayNameEdit.setVisibility(View.VISIBLE);
 			saveButton.setVisibility(View.VISIBLE);
@@ -668,8 +675,6 @@ public class ProfileContentView extends BaseView {
 			profilePicture.setImageDrawable(layerDrawable);
 			profilePicture.getBackground().setAlpha(0);
 			
-			autoPostFacebook.setEnabled(true);
-			
 			editMode = true;
 		}
 	}
@@ -679,6 +684,8 @@ public class ProfileContentView extends BaseView {
 		saveButton.setVisibility(View.GONE);
 		cancelButton.setVisibility(View.GONE);
 		displayName.setVisibility(View.VISIBLE);
+		autoPostFacebook.setVisibility(View.GONE);
+		autoPostFacebook.setChecked(currentUser.isAutoPostToFacebook());
 		
 		if(isLoggedOnUser) {
 			editButton.setVisibility(View.VISIBLE);
@@ -699,8 +706,6 @@ public class ProfileContentView extends BaseView {
 		
 		revertUserDisplayName();
 		
-		autoPostFacebook.setEnabled(false);
-		
 		editMode = false;
 	}
 	
@@ -712,6 +717,7 @@ public class ProfileContentView extends BaseView {
 		saveButton.setVisibility(View.GONE);
 		cancelButton.setVisibility(View.GONE);
 		displayName.setVisibility(View.VISIBLE);
+		autoPostFacebook.setVisibility(View.GONE);
 		
 		if(isLoggedOnUser) {
 			editButton.setVisibility(View.VISIBLE);
@@ -734,8 +740,6 @@ public class ProfileContentView extends BaseView {
 		profilePicture.setImageDrawable(getProfileDrawable());
 		profilePicture.getBackground().setAlpha(255);
 		
-		autoPostFacebook.setEnabled(false);
-		
 		editMode = false;
 	}
 	
@@ -743,5 +747,9 @@ public class ProfileContentView extends BaseView {
 		if(editMode) {
 			contextMenu.show();
 		}
+	}
+	
+	public boolean getUpdatedAutoPostFBPreference() {
+		return autoPostFacebook != null && autoPostFacebook.isChecked();
 	}
 }

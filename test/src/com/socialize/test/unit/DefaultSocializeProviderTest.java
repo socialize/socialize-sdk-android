@@ -52,6 +52,7 @@ import com.socialize.entity.User;
 import com.socialize.entity.factory.SocializeObjectFactory;
 import com.socialize.entity.factory.UserFactory;
 import com.socialize.error.SocializeApiError;
+import com.socialize.error.SocializeException;
 import com.socialize.net.HttpClientFactory;
 import com.socialize.provider.DefaultSocializeProvider;
 import com.socialize.test.SocializeActivityTest;
@@ -139,7 +140,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 	private DefaultSocializeProvider<SocializeObject> getNewProvider() {
 		DefaultSocializeProvider<SocializeObject> provider = new DefaultSocializeProvider<SocializeObject>();
 		provider.init(mockContext);
-		
+		provider.setSessionPersister(sessionPersister);
 		provider.setAuthProviderDataFactory(authProviderDataFactory);
 		provider.setObjectFactory(objectFactory);
 		provider.setUserFactory(userFactory);
@@ -153,6 +154,37 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		
 		return provider;
 	}
+	
+	
+	public void testLoadSession() throws SocializeException {
+		
+		DefaultSocializeProvider<SocializeObject> newProvider = getNewProvider();
+		
+		final String key = "foo";
+		final String secret = "bar";
+		final String host = "host";
+		final String appId = "1234567890";
+		
+		AndroidMock.expect(	sessionPersister.load(mockContext)).andReturn(session);
+		
+		AndroidMock.expect(session.getConsumerKey()).andReturn(key);
+		AndroidMock.expect(session.getConsumerSecret()).andReturn(secret);
+		AndroidMock.expect(session.getHost()).andReturn(host);
+		AndroidMock.expect(session.getAuthProviderType()).andReturn(AuthProviderType.FACEBOOK);
+		AndroidMock.expect(session.get3rdPartyAppId()).andReturn(appId);
+		AndroidMock.expect(config.getProperty(SocializeConfig.API_HOST)).andReturn(host);
+		
+		AndroidMock.replay(session);
+		AndroidMock.replay(sessionPersister);
+		AndroidMock.replay(config);
+		
+		assertSame(session, newProvider.loadSession("foobar", key, secret, AuthProviderType.FACEBOOK, appId));
+		
+		AndroidMock.verify(session);
+		AndroidMock.verify(config);
+		AndroidMock.verify(sessionPersister);
+	}
+		
 
 	public void testAuthenticate() throws Exception {
 		
@@ -165,18 +197,9 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		final String oauth_token_secret = "oauth_token_secret";
 		final String url = "https://" + host + "/" + endpoint;
 		
-//		final String firstName = "foo_first";
-//		final String lastName = "bar_last";
-//		final String profilePicData = "foobar_pic";
-		
 		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
-		
 		AndroidMock.expect(authProviderData.getAuthProviderType()).andReturn(null);
 		AndroidMock.expect(authProviderData.getAppId3rdParty()).andReturn(null);
-//		AndroidMock.expect(authProviderData.getUserFirstName()).andReturn(firstName);
-//		AndroidMock.expect(authProviderData.getUserLastName()).andReturn(lastName);
-//		AndroidMock.expect(authProviderData.getUserProfilePicData()).andReturn(profilePicData);
-		
 		AndroidMock.expect(sessionFactory.create(key, secret, authProviderData)).andReturn(session);
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
@@ -191,14 +214,6 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(httpUtils.isHttpError(response)).andReturn(false);
 		AndroidMock.expect(sessionPersister.load(mockContext)).andReturn(null); // No persistence for this one
 		AndroidMock.expect(session.getHost()).andReturn(host);
-		
-//		AndroidMock.expect(user.getFirstName()).andReturn(null);
-//		AndroidMock.expect(user.getLastName()).andReturn(null);
-//		AndroidMock.expect(user.getProfilePicData()).andReturn(null);
-		
-//		user.setFirstName(firstName);
-//		user.setLastName(lastName);
-//		user.setProfilePicData(profilePicData);
 		
 		// Expect save
 		sessionPersister.save(mockContext, session);
@@ -1048,5 +1063,5 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.verify(httpUtils);
 		AndroidMock.verify(ioUtils);
 	}
-	
+
 }

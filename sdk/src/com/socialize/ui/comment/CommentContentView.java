@@ -22,92 +22,16 @@
 package com.socialize.ui.comment;
 
 import android.content.Context;
-import android.view.Gravity;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.ViewFlipper;
+
+import com.socialize.ui.view.LoadingListView;
 
 /**
  * @author Jason Polites
- *
+ * @deprecated Use LoadingListView
  */
-public class CommentContentView extends ViewFlipper {
-
-	private ListView listView;
-	
+@Deprecated
+public class CommentContentView extends LoadingListView {
 	public CommentContentView(Context context) {
 		super(context);
-	}
-
-	public void setListView(ListView listView) {
-		this.listView = listView;
-	}
-	
-	public void setListAdapter(ListAdapter adapter) {
-		this.listView.setAdapter(adapter);
-	}
-	
-	public void setScrollListener(OnScrollListener listener) {
-		this.listView.setOnScrollListener(listener);
-	}
-	
-	public void showLoading() {
-		setDisplayedChild(0);
-	}
-	
-	public void showList() {
-		setDisplayedChild(1);
-	}
-
-	public void scrollToTop() {
-		listView.setSelection(0); // scroll to top
-	}
-	
-	public void init() {
-		LinearLayout contentView = new LinearLayout(getContext());
-
-		LinearLayout.LayoutParams contentViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
-		contentView.setLayoutParams(contentViewLayoutParams);
-		contentView.setOrientation(LinearLayout.VERTICAL);
-
-		LinearLayout.LayoutParams listViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
-
-		ListView listView = new ListView(getContext());
-		listView.setId(CommentActivity.LIST_VIEW_ID);
-		listView.setLayoutParams(listViewLayoutParams);
-		listView.setDrawingCacheEnabled(true);
-		listView.setCacheColorHint(0);
-		listView.setDividerHeight(2);
-		listView.setSmoothScrollbarEnabled(true);
-
-		contentView.addView(listView);
-
-		LinearLayout.LayoutParams flipperLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
-		flipperLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
-		this.setLayoutParams(flipperLayoutParams);
-
-		// create a loading screen
-		FrameLayout loadingScreen = new FrameLayout(getContext());
-		FrameLayout.LayoutParams loadingScreenLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT,FrameLayout.LayoutParams.FILL_PARENT);
-		FrameLayout.LayoutParams progressLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,FrameLayout.LayoutParams.WRAP_CONTENT);
-
-		loadingScreenLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
-		progressLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
-
-		loadingScreen.setLayoutParams(loadingScreenLayoutParams);
-
-		ProgressBar progress = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleSmall);
-		progress.setLayoutParams(progressLayoutParams);
-
-		loadingScreen.addView(progress);
-
-		this.addView(loadingScreen);
-		this.addView(contentView);
-		this.setDisplayedChild(0);
-		this.setListView(listView);		
 	}
 }

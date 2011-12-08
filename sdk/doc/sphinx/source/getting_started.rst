@@ -28,22 +28,21 @@ Getting Started
 	  var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
 	</script>
 
-What's New!
-------------
-1. NEW: Socialize Action Bar
-2. NEW: Share to Facebook
-3. NEW: Auto-post Comments and Likes to Facebook
-4. NEW: Updated and improved user experience for commenting
-5. Fixed a few bugs with the older Comment list view
-
 Introduction
 ------------
 v0.7.0 of the Socialize SDK introduces a completely new control we call the "Action Bar".
 This is a one-stop-shop of social features that can be quickly and easily dropped into your app, and 
 provides a central entry point into all the features of the Socialize SDK.
 
+What's New
+------------
+If you're a Socialize veteran, check out our :ref:`whats_new` section for latest updates.
+
+5 Steps to Using Socialize
+--------------------------
+
 1. Install the SDK 
-------------------
+==================
 The Socialize SDK is delivered as a single JAR file, simply copy the socialize-x.x.x.jar file 
 from the **dist** folder to the **libs** path of your Android project.
 
@@ -56,7 +55,7 @@ If you're using eclipse, you'll need to add the socialize-x.x.x.jar as a referen
 Socialize does not support Android versions below v2.1-update1
 
 2. Set up your Socialize Keys
-------------------------------
+=============================
 Once you have registered on the GetSocialize.com website and created an application, you will have
 been given two "oAuth" authentication keys.  A "consumer key", and a "consumer secret".
 
@@ -74,7 +73,7 @@ Within this file, enter your Socialize consumer key and secret:
 (Replace 00000000-0000-0000-000000000000 with your key/secret from your Socialize account)
 
 3. Configure your AndroidManifest.xml
--------------------------------------
+=====================================
 Add the following lines to your AndroidManifest.xml under the **<application...>** element
 
 .. raw:: html
@@ -88,7 +87,7 @@ Add the following lines to your AndroidManifest.xml under the **<manifest...>** 
 	<script src="https://gist.github.com/1201498.js?file=ui_manifest_permissions.xml"></script>
 	
 4. Configure Facebook Integration
----------------------------------
+=================================
 It is strongly recommended that users be able to authenticate with Facebook when using Socialize so as to 
 maximize the exposure, and promotion of your app.
 
@@ -110,7 +109,7 @@ Once you have your facebook app ID, you can add it to the **socialize.properties
 	<script src="https://gist.github.com/1132979.js?file=socialize.properties"></script>
 	
 5. Include Socialize in your App!
----------------------------------
+=================================
 Now that you have your environment all setup, it's time to include Socialize.  
 
 The core component of the Socialize SDK is the "Action Bar"

@@ -43,6 +43,7 @@ import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.SocializeListener;
+import com.socialize.listener.activity.UserActivityListListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -59,6 +60,7 @@ import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.ActivityIOCProvider;
+import com.socialize.ui.comment.CommentShareOptions;
 import com.socialize.ui.profile.UserProfile;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.ResourceLocator;
@@ -467,10 +469,19 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#addComment(java.lang.String, java.lang.String, android.location.Location, com.socialize.listener.comment.CommentAddListener)
 	 */
 	@Override
-	public void addComment(String url, String comment, Location location, CommentAddListener commentAddListener) {
+	public void addComment(String url, String comment, Location location, CommentShareOptions shareOptions, CommentAddListener commentAddListener) {
 		if(assertAuthenticated(commentAddListener)) {
-			service.addComment(session, url, comment, location, commentAddListener);
+			service.addComment(session, url, comment, location, shareOptions, commentAddListener);
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#addComment(java.lang.String, java.lang.String, boolean, com.socialize.listener.comment.CommentAddListener)
+	 */
+	@Override
+	public void addComment(String url, String comment, CommentShareOptions shareOptions, CommentAddListener commentAddListener) {
+		addComment(url, comment, null, shareOptions, commentAddListener);
 	}
 
 	/*
@@ -479,7 +490,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public void addComment(String url, String comment, CommentAddListener commentAddListener) {
-		addComment(url, comment, null, commentAddListener);
+		addComment(url, comment, null, null, commentAddListener);
 	}
 	
 	/* (non-Javadoc)
@@ -513,6 +524,20 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	public void listLikesByUser(long userId, int startIndex, int endIndex, LikeListListener likeListListener) {
 		if(assertAuthenticated(likeListListener)) {
 			service.listLikesByUser(session, userId, startIndex, endIndex, likeListListener);
+		}
+	}
+
+	@Override
+	public void listCommentsByUser(long userId, CommentListListener commentListListener) {
+		if(assertAuthenticated(commentListListener)) {
+			service.listCommentsByUser(session, userId, commentListListener);
+		}		
+	}
+
+	@Override
+	public void listCommentsByUser(long userId, int startIndex, int endIndex, CommentListListener commentListListener) {
+		if(assertAuthenticated(commentListListener)) {
+			service.listCommentsByUser(session, userId, startIndex, endIndex, commentListListener);
 		}
 	}
 
@@ -667,27 +692,27 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 
-//	/*
-//	 * (non-Javadoc)
-//	 * @see com.socialize.SocializeService#listActivityByUser(int, com.socialize.listener.activity.ActivityListListener)
-//	 */
-//	@Override
-//	public void listActivityByUser(int userId, ActivityListListener activityListListener) {
-//		if(assertAuthenticated(activityListListener)) {
-//			service.listActivityByUser(session, userId, activityListListener);
-//		}
-//	}
-//
-//	/*
-//	 * (non-Javadoc)
-//	 * @see com.socialize.SocializeService#listActivityByUser(int, int, int, com.socialize.listener.activity.ActivityListListener)
-//	 */
-//	@Override
-//	public void listActivityByUser(int userId, int startIndex, int endIndex, ActivityListListener activityListListener) {
-//		if(assertAuthenticated(activityListListener)) {
-//			service.listActivityByUser(session, userId, startIndex, endIndex, activityListListener);
-//		}
-//	}
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#listActivityByUser(int, com.socialize.listener.activity.ActivityListListener)
+	 */
+	@Override
+	public void listActivityByUser(long userId, UserActivityListListener activityListListener) {
+		if(assertAuthenticated(activityListListener)) {
+			service.listActivityByUser(session, userId, activityListListener);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#listActivityByUser(int, int, int, com.socialize.listener.activity.ActivityListListener)
+	 */
+	@Override
+	public void listActivityByUser(long userId, int startIndex, int endIndex, UserActivityListListener activityListListener) {
+		if(assertAuthenticated(activityListListener)) {
+			service.listActivityByUser(session, userId, startIndex, endIndex, activityListListener);
+		}
+	}
 
 	/**
 	 * Lists the comments by comment ID.

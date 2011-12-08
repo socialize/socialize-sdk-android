@@ -36,6 +36,7 @@ public class CommentFactory extends SocializeActionFactory<Comment> {
 	@Override
 	protected void postFromJSON(JSONObject object, Comment comment) throws JSONException {
 		final String attr = "text";
+		final String location_shared = "share_location";
 		if(object.has(attr) && !object.isNull(attr)) {
 			comment.setText(object.getString(attr));
 		}
@@ -48,6 +49,10 @@ public class CommentFactory extends SocializeActionFactory<Comment> {
 						"]");
 			}
 		}
+		
+		if(object.has(location_shared) && !object.isNull(location_shared)) {
+			comment.setLocationShared(object.getBoolean(location_shared));
+		}
 	}
 
 	@Override
@@ -56,10 +61,11 @@ public class CommentFactory extends SocializeActionFactory<Comment> {
 		if(!StringUtils.isEmpty( text )) {
 			object.put("text", text);
 		}
+		object.put("share_location", comment.isLocationShared());
 	}
 
 	@Override
-	public Comment instantiateObject(JSONObject object) {
+	public Object instantiateObject(JSONObject object) {
 		return new Comment();
 	}
 }

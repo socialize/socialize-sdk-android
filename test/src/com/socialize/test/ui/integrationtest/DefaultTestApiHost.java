@@ -11,13 +11,14 @@ import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.listener.activity.ActivityListener;
+import com.socialize.listener.activity.UserActivityListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.listener.entity.EntityListener;
 import com.socialize.listener.like.LikeListener;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.listener.user.UserListener;
 import com.socialize.listener.view.ViewListener;
+import com.socialize.ui.comment.CommentShareOptions;
 
 public class DefaultTestApiHost implements ApiHost {
 	
@@ -59,7 +60,7 @@ public class DefaultTestApiHost implements ApiHost {
 	}
 
 	@Override
-	public void addComment(SocializeSession session, String key, String comment, Location location, CommentListener listener) {
+	public void addComment(SocializeSession session, String key, String comment, Location location, CommentShareOptions shareOptions, CommentListener listener) {
 		fail(message + "addComment");
 	}
 
@@ -91,6 +92,16 @@ public class DefaultTestApiHost implements ApiHost {
 	@Override
 	public void listCommentsByEntity(SocializeSession session, String url, int startIndex, int endIndex, CommentListener listener) {
 		fail(message + "listCommentsByEntity");
+	}
+
+	@Override
+	public void listCommentsByUser(SocializeSession session, long userId, CommentListener listener) {
+		fail(message + "listCommentsByUser");
+	}
+
+	@Override
+	public void listCommentsByUser(SocializeSession session, long userId, int startIndex, int endIndex, CommentListener listener) {
+		fail(message + "listCommentsByUser");
 	}
 
 	@Override
@@ -145,12 +156,12 @@ public class DefaultTestApiHost implements ApiHost {
 	}
 
 	@Override
-	public void listActivityByUser(SocializeSession session, long id, ActivityListener listener) {
+	public void listActivityByUser(SocializeSession session, long id, UserActivityListener listener) {
 		fail(message + "listActivityByUser");
 	}
 
 	@Override
-	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, ActivityListener listener) {
+	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, UserActivityListener listener) {
 		fail(message + "listActivityByUser");
 	}
 

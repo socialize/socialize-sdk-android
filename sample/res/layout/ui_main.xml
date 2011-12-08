@@ -75,6 +75,11 @@
 	    	android:layout_width="wrap_content"
 	    	android:layout_height="wrap_content"/>        
 	    	
+	    <Button 
+	    	android:id="@+id/btnActionViewPager"
+	    	android:text="Show Action Bar (View Pager)"
+	    	android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"/> 	    
 	</LinearLayout>
 
 </ScrollView>

@@ -27,30 +27,63 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.socialize.Socialize;
 import com.socialize.util.StringUtils;
 
 public class CommentListSelectActivity extends CommentBaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.comment_list_select);
-		final EditText txtCommentKey = (EditText) findViewById(R.id.txtCommentKey);
-		final Button btnCommentList = (Button) findViewById(R.id.btnCommentList);
 		
+		super.onCreate(savedInstanceState);
+		
+		setContentView(R.layout.comment_list_select);
+		
+		final EditText txtCommentKey = (EditText) findViewById(R.id.txtCommentKey);
+		final TextView labelCommentKey = (TextView) findViewById(R.id.labelCommentKey);
+		final Button btnCommentList = (Button) findViewById(R.id.btnCommentList);
 		final EditText txtStart = (EditText) findViewById(R.id.txtStart);
 		final EditText txtEnd = (EditText) findViewById(R.id.txtEnd);
+		
+		Intent intent = getIntent();
+		
+		boolean userOnly = false;
+		
+		if(intent != null) {
+			Bundle extras = intent.getExtras();
+			
+			if(extras != null) {
+				userOnly = extras.getBoolean("user_only");
+			}
+		}
+		
+		final boolean user_only = userOnly;
+		
+		if(user_only) {
+			txtCommentKey.setText(Socialize.getSocialize().getSession().getUser().getId().toString());
+			labelCommentKey.setText("User ID");
+		}
+		else {
+			labelCommentKey.setText("URL");
+		}
 
 		btnCommentList.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				String key = txtCommentKey.getText().toString();
 				String start = txtStart.getText().toString();
 				String end = txtEnd.getText().toString();
 				
-				if(!StringUtils.isEmpty(key)) {
+				if(!StringUtils.isEmpty(key) && !user_only) {
 					Intent i = new Intent(CommentListSelectActivity.this, CommentListActivity.class);
+					i.putExtra("key", key);
+					i.putExtra("start", start);
+					i.putExtra("end", end);
+					startActivity(i);
+				}
+				else if(user_only) {
+					Intent i = new Intent(CommentListSelectActivity.this, CommentUserListActivity.class);
 					i.putExtra("key", key);
 					i.putExtra("start", start);
 					i.putExtra("end", end);

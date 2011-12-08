@@ -27,6 +27,7 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.CommentApi;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.comment.CommentListener;
@@ -66,7 +67,7 @@ public class CommentApiTest extends SocializeUnitTest {
 			}
 		};
 		
-		api.addComment(session, key, comment, null, listener);
+		api.addComment(session, key, comment, null, null, listener);
 		
 		List<Comment> list = getNextResult();
 		assertNotNull(list);
@@ -107,6 +108,67 @@ public class CommentApiTest extends SocializeUnitTest {
 		assertEquals(startIndex, afterStartIndex.intValue());
 		assertEquals(endIndex, afterEndIndex.intValue());
 	}
+	
+	public void testGetCommentsByUserPaginated() {
+		
+		final long key = 69L;
+		
+		int startIndex = 0, endIndex = 10;
+		
+		CommentApi api = new CommentApi(provider) {
+			@Override
+			public void listAsync(SocializeSession session, String endpoint, int startIndex, int endIndex, SocializeActionListener listener) {
+				addResult(endpoint);
+				addResult(key);
+				addResult(startIndex);
+				addResult(endIndex);
+			}
+		};
+		
+		api.getCommentsByUser(session, key, startIndex, endIndex, listener);
+		
+		String endPointAfter = getNextResult();
+		Long keyAfter = getNextResult();
+		Integer afterStartIndex = getNextResult();
+		Integer afterEndIndex = getNextResult();
+		
+		assertNotNull(keyAfter);
+		assertEquals(key, keyAfter.longValue());
+		assertEquals("/user/" + key + "/comment/", endPointAfter);
+		assertEquals(startIndex, afterStartIndex.intValue());
+		assertEquals(endIndex, afterEndIndex.intValue());
+	}	
+	
+	public void testGetCommentsByUser() {
+		
+		final long key = 69L;
+		
+		int startIndex = 0, endIndex = SocializeConfig.MAX_LIST_RESULTS;
+		
+		CommentApi api = new CommentApi(provider) {
+			@Override
+			public void listAsync(SocializeSession session, String endpoint, int startIndex, int endIndex, SocializeActionListener listener) {
+				addResult(endpoint);
+				addResult(key);
+				addResult(startIndex);
+				addResult(endIndex);
+			}
+		};
+		
+		api.getCommentsByUser(session, key, listener);
+		
+		String endPointAfter = getNextResult();
+		Long keyAfter = getNextResult();
+		Integer afterStartIndex = getNextResult();
+		Integer afterEndIndex = getNextResult();
+		
+		assertNotNull(keyAfter);
+		assertEquals(key, keyAfter.longValue());
+		assertEquals("/user/" + key + "/comment/", endPointAfter);
+		assertEquals(startIndex, afterStartIndex.intValue());
+		assertEquals(endIndex, afterEndIndex.intValue());
+	}	
+		
 	
 	public void testGetCommentsById() {
 		

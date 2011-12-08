@@ -48,7 +48,7 @@ import com.socialize.util.StringUtils;
  * @author Jason Polites
  *
  */
-public class FacebookShareClickListener extends ShareClickListener {
+public class FacebookShareClickListener extends BaseShareClickListener {
 
 	private DeviceUtils deviceUtils;
 	private SocializeConfig config;

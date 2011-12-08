@@ -38,6 +38,7 @@ import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 import com.socialize.ui.button.SocializeButton;
 import com.socialize.util.DeviceUtils;
+import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
 
 /**
@@ -49,15 +50,16 @@ public class ShareDialogView extends BaseView {
 	private SocializeButton emailShareButton;
 	private SocializeButton smsShareButton;
 	
-	private IBeanFactory<OtherShareClickListener> otherShareClickListenerFactory;
-	private IBeanFactory<EmailShareClickListener> emailShareClickListenerFactory;
-	private IBeanFactory<FacebookShareClickListener> facebookShareClickListenerFactory;
-	private IBeanFactory<SmsShareClickListener> smsShareClickListenerFactory;
+	private IBeanFactory<ShareClickListener> otherShareClickListenerFactory;
+	private IBeanFactory<ShareClickListener> emailShareClickListenerFactory;
+	private IBeanFactory<ShareClickListener> facebookShareClickListenerFactory;
+	private IBeanFactory<ShareClickListener> smsShareClickListenerFactory;
 	
 	private OnActionBarEventListener onActionBarEventListener;
 	
 	private DeviceUtils deviceUtils;
 	private ActionBarView actionBarView;
+	private Drawables drawables;
 	
 	public ShareDialogView(Context context, ActionBarView actionBarView) {
 		this(context, actionBarView, null);
@@ -85,6 +87,7 @@ public class ShareDialogView extends BaseView {
 		LayoutParams commentFieldParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
 		setOrientation(LinearLayout.VERTICAL);
+		setBackgroundDrawable(drawables.getDrawable("slate.png", true, true, true));
 		
 		TextView otherOptions = null;
 		
@@ -140,10 +143,9 @@ public class ShareDialogView extends BaseView {
 		setLayoutParams(fill);
 		setPadding(padding, padding, padding, padding);
 		
-		FacebookShareClickListener facebookShareClickListener = facebookShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
-		EmailShareClickListener emailShareClickListener = emailShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
-		SmsShareClickListener smsShareClickListener = smsShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
-
+		ShareClickListener facebookShareClickListener = facebookShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
+		ShareClickListener emailShareClickListener = emailShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
+		ShareClickListener smsShareClickListener = smsShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
 		
 		if(facebookShareButton != null && facebookShareClickListener.isAvailableOnDevice(getActivity())) {
 			facebookShareButton.setCustomClickListener(facebookShareClickListener);
@@ -194,20 +196,24 @@ public class ShareDialogView extends BaseView {
 		this.smsShareButton = smsShareButton;
 	}
 
-	public void setOtherShareClickListenerFactory(IBeanFactory<OtherShareClickListener> otherShareClickListenerFactory) {
+	public void setOtherShareClickListenerFactory(IBeanFactory<ShareClickListener> otherShareClickListenerFactory) {
 		this.otherShareClickListenerFactory = otherShareClickListenerFactory;
 	}
 
-	public void setEmailShareClickListenerFactory(IBeanFactory<EmailShareClickListener> emailShareClickListenerFactory) {
+	public void setEmailShareClickListenerFactory(IBeanFactory<ShareClickListener> emailShareClickListenerFactory) {
 		this.emailShareClickListenerFactory = emailShareClickListenerFactory;
 	}
 
-	public void setFacebookShareClickListenerFactory(IBeanFactory<FacebookShareClickListener> facebookShareClickListenerFactory) {
+	public void setFacebookShareClickListenerFactory(IBeanFactory<ShareClickListener> facebookShareClickListenerFactory) {
 		this.facebookShareClickListenerFactory = facebookShareClickListenerFactory;
 	}
 
-	public void setSmsShareClickListenerFactory(IBeanFactory<SmsShareClickListener> smsShareClickListenerFactory) {
+	public void setSmsShareClickListenerFactory(IBeanFactory<ShareClickListener> smsShareClickListenerFactory) {
 		this.smsShareClickListenerFactory = smsShareClickListenerFactory;
+	}
+	
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
 	}
 
 	protected SocializeUI getSocializeUI() {

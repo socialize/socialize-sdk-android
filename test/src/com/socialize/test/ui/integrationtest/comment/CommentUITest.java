@@ -6,7 +6,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.socialize.test.ui.integrationtest.SocializeUIRobotiumTest;
-import com.socialize.ui.comment.CommentActivity;
+import com.socialize.ui.view.LoadingListView;
 
 public class CommentUITest extends SocializeUIRobotiumTest {
 	
@@ -130,7 +130,7 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		
 		startWithoutFacebook();
 		
-		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(CommentActivity.LIST_VIEW_ID);
+		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(LoadingListView.LIST_VIEW_ID);
 		
 		assertNotNull(comments);
 		assertTrue("Unexepected number of comments.  Expected >= 10 but found " +

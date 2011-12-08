@@ -23,12 +23,9 @@ package com.socialize.ui.comment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
 
 import com.socialize.Socialize;
 import com.socialize.ui.SocializeUI;
@@ -41,11 +38,6 @@ import com.socialize.util.StringUtils;
 public class CommentActivity extends SocializeUIActivity {
 	
 	public static final int PROFILE_UPDATE = 1347;
-	
-	/**
-	 * Used to locate the list view (to aid in testing)
-	 */
-	public static final int LIST_VIEW_ID = 10001;
 	
 	private CommentView view;
 	
@@ -89,31 +81,9 @@ public class CommentActivity extends SocializeUIActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		
-		if(Socialize.getSocialize().isAuthenticated()) {
-			MenuItem add = menu.add("Edit Profile");
-			add.setIcon(SocializeUI.getInstance().getDrawable("ic_menu_cc.png", DisplayMetrics.DENSITY_DEFAULT, true));
-			add.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-				@Override
-				public boolean onMenuItemClick(MenuItem item) {
-					final String userId = Socialize.getSocialize().getSession().getUser().getId().toString();
-					SocializeUI.getInstance().showUserProfileViewForResult(CommentActivity.this, userId, CommentActivity.PROFILE_UPDATE);
-					return true;
-				}
-			});
+		if(view != null) {
+			return view.onCreateOptionsMenu(this, menu);
 		}
-
-		MenuItem add2 = menu.add("Refresh");
-		add2.setIcon(SocializeUI.getInstance().getDrawable("ic_menu_refresh.png", DisplayMetrics.DENSITY_DEFAULT, true));
-		
-		add2.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				view.reload();
-				return true;
-			}
-		});
-		
-		return true;
+		return false;
 	}
 }

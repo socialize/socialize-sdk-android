@@ -8,7 +8,7 @@ import com.socialize.api.action.ShareType;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 
-public class SmsShareClickListener extends ShareClickListener {
+public class SmsShareClickListener extends BaseShareClickListener {
 	
 	public SmsShareClickListener(ActionBarView actionBarView) {
 		super(actionBarView);

@@ -40,6 +40,7 @@ public class ApiActivity extends SocializeActivity {
 		final Button btnEntity = (Button) findViewById(R.id.btnEntity);
 		final Button btnLike = (Button) findViewById(R.id.btnLike);
 		final Button btnView = (Button) findViewById(R.id.btnView);
+		final Button btnActivity = (Button) findViewById(R.id.btnActivity);
 		
 		btnComments.setOnClickListener(new OnClickListener() {
 			@Override
@@ -72,5 +73,13 @@ public class ApiActivity extends SocializeActivity {
 				startActivity(i);
 			}
 		});
+		
+		btnActivity.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(ApiActivity.this, UserActivitySelectActivity.class);
+				startActivity(i);
+			}
+		});		
 	}
 }

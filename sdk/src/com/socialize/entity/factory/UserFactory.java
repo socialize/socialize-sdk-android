@@ -21,6 +21,8 @@
  */
 package com.socialize.entity.factory;
 
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,9 +52,10 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	public static final String STATS = "stats";
 	public static final String THIRD_PARTY_AUTH = "third_party_auth";
 	public static final String AUTO_POST_FACEBOOK = "auto_post_fb";
-
+	public static final String SHARE_LOCATION = "share_location";
+	
 	@Override
-	public User instantiateObject(JSONObject object) {
+	public Object instantiateObject(JSONObject object) {
 		return new User();
 	}
 	
@@ -69,6 +72,7 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		user.setLargeImageUri(getString(object,LARGE_IMAGE_URI));
 		user.setProfilePicData(getString(object,IMAGE_DATA));
 		user.setAutoPostToFacebook(getBoolean(object,AUTO_POST_FACEBOOK, true));
+		user.setShareLocation(getBoolean(object,SHARE_LOCATION, true));
 		
 		if(object.has(STATS) && !object.isNull(STATS)) {
 			JSONObject statsJson = object.getJSONObject(STATS);
@@ -105,6 +109,13 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		object.put(MEDIUM_IMAGE_URI, user.getMediumImageUri());
 		object.put(LARGE_IMAGE_URI, user.getLargeImageUri());
 		object.put(AUTO_POST_FACEBOOK, user.isAutoPostToFacebook());
+		object.put(SHARE_LOCATION, user.isShareLocation());
+
+		List<UserAuthData> authData = user.getAuthData();
+		
+		if(authData != null && authData.size() > 0) {
+			object.put(THIRD_PARTY_AUTH, userAuthDataFactory.toJSON(authData));
+		}
 	}
 
 	public StatsFactory getStatsFactory() {

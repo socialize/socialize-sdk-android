@@ -32,7 +32,7 @@ public class SafeBitmapDrawable extends BitmapDrawable {
 	public SafeBitmapDrawable(Resources res, Bitmap bitmap) {
 		super(res, bitmap);
 	}
-
+	
 	@Override
 	public void draw(Canvas canvas) {
 		if(!isRecycled()) {

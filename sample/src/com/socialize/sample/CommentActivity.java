@@ -38,8 +38,8 @@ public class CommentActivity extends SocializeActivity {
 		
 		final Button btnCreateComment = (Button) findViewById(R.id.btnCreateComment);
 		final Button btnListComments = (Button) findViewById(R.id.btnListComments);
+		final Button btnListUserComments = (Button) findViewById(R.id.btnListUserComments);
 		final Button btnGetComment = (Button) findViewById(R.id.btnGetComment);
-		
 		
 		btnCreateComment.setOnClickListener(new OnClickListener() {
 			@Override
@@ -61,8 +61,18 @@ public class CommentActivity extends SocializeActivity {
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(CommentActivity.this, CommentListSelectActivity.class);
+				i.putExtra("user_only", false);
 				startActivity(i);
 			}
 		});
+		
+		btnListUserComments.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(CommentActivity.this, CommentListSelectActivity.class);
+				i.putExtra("user_only", true);
+				startActivity(i);
+			}
+		});		
 	}
 }

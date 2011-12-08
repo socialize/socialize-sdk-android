@@ -31,6 +31,7 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
+import com.socialize.listener.activity.UserActivityListListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -44,6 +45,7 @@ import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
+import com.socialize.ui.comment.CommentShareOptions;
 import com.socialize.ui.profile.UserProfile;
 
 /**
@@ -111,7 +113,7 @@ public interface SocializeService {
 
 	/**
 	 * Authenticates the application against the API as an anonymous user.
-	 * @param consumerKey The consumer url, obtained from registration at http://www.getsocialize.com.
+	 * @param consumerKey The consumer key, obtained from registration at http://www.getsocialize.com.
 	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
 	 * @param authListener The callback for authentication outcomes.
 	 * @see this{@link #authenticate(String, String, AuthProviderType, String, SocializeAuthListener)}
@@ -128,7 +130,7 @@ public interface SocializeService {
 	
 	/**
 	 * Authenticates the application against the API.
-	 * @param consumerKey The consumer url, obtained from registration at http://www.getsocialize.com.
+	 * @param consumerKey The consumer key, obtained from registration at http://www.getsocialize.com.
 	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
 	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
 	 * @param authProviderAppId The ID of your app in the 3rd party system used to authenticate. (e.g. YOUR Facebook App ID)
@@ -149,34 +151,34 @@ public interface SocializeService {
 	public void authenticateKnownUser(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty, SocializeAuthListener authListener);
 	
 	/**
-	 * Adds a new like and associates it with the url described.
-	 * @param url The url being liked. MUST be a valid http URL.  Defined when first creating a url, or created on the fly with this call.
+	 * Adds a new like and associates it with the key described.
+	 * @param key The key being liked.  Defined when first creating an entity, or created on the fly with this call.
 	 * @param likeAddListener A listener to handle callbacks from the post.
 	 */
-	public void like(String url, LikeAddListener likeAddListener);
+	public void like(String key, LikeAddListener likeAddListener);
 	
 	/**
-	 * Adds a new like and associates it with the url described.
-	 * @param url The url being liked. MUST be a valid http URL.  Defined when first creating a url, or created on the fly with this call.
+	 * Adds a new like and associates it with the key described.
+	 * @param key The key being liked.  Defined when first creating an entity, or created on the fly with this call.
 	 * @param location The location of the device at the time the call was made.
 	 * @param likeAddListener A listener to handle callbacks from the post.
 	 */
-	public void like(String url, Location location, LikeAddListener likeAddListener);
+	public void like(String key, Location location, LikeAddListener likeAddListener);
 	
 	/**
-	 * Adds a new view and associates it with the url described.
-	 * @param url The url being viewed. MUST be a valid http URL.  Defined when first creating a url, or created on the fly with this call.
+	 * Adds a new view and associates it with the key described.
+	 * @param key The key being viewed.  Defined when first creating an entity, or created on the fly with this call.
 	 * @param viewAddListener A listener to handle callbacks from the post.
 	 */
-	public void view(String url, ViewAddListener viewAddListener);
+	public void view(String key, ViewAddListener viewAddListener);
 	
 	/**
-	 * Adds a new view and associates it with the url described.
-	 * @param url The url being viewed. MUST be a valid http URL.  Defined when first creating a url, or created on the fly with this call.
+	 * Adds a new view and associates it with the key described.
+	 * @param key The key being viewed.  Defined when first creating an entity, or created on the fly with this call.
 	 * @param location The location of the device at the time the call was made.
 	 * @param viewAddListener A listener to handle callbacks from the post.
 	 */
-	public void view(String url, Location location, ViewAddListener viewAddListener);
+	public void view(String key, Location location, ViewAddListener viewAddListener);
 
 	/**
 	 * Removes a specific LIKE based on it's unique ID.  The ID would be returned from the original creation call.
@@ -186,37 +188,37 @@ public interface SocializeService {
 	public void unlike(long id, LikeDeleteListener likeDeleteListener);
 	
 	/**
-	 * Records a share event against the given url.  NOTE: This does NOT perform sharing to any 3rd party social network.  
+	 * Records a share event against the given key.  NOTE: This does NOT perform sharing to any 3rd party social network.  
 	 * It simply records a share event within Socialize.
-	 * @param url The url being viewed. MUST be a valid http URL.  Defined when first creating a url, or created on the fly with this call.
+	 * @param key The key being viewed.  Defined when first creating an entity, or created on the fly with this call.
 	 * @param text The text being shared.
 	 * @param shareType The social network on which the share occurred.
 	 * @param shareAddListener A listener to handle callbacks from the post.
 	 */
-	public void share(String url, String text, ShareType shareType, ShareAddListener shareAddListener);
+	public void share(String key, String text, ShareType shareType, ShareAddListener shareAddListener);
 	
 	/**
-	 * Records a share event against the given url.  NOTE: This does NOT perform sharing to any 3rd party social network.  
+	 * Records a share event against the given key.  NOTE: This does NOT perform sharing to any 3rd party social network.  
 	 * It simply records a share event within Socialize.
-	 * @param url The url being viewed. MUST be a valid http URL.  Defined when first creating a url, or created on the fly with this call.
+	 * @param key The key being viewed.  Defined when first creating an entity, or created on the fly with this call.
 	 * @param text The text being shared.
 	 * @param shareType The social network on which the share occurred. 
 	 * @param location The location of the device at the time the call was made.
 	 * @param shareAddListener A listener to handle callbacks from the post.
 	 */
-	public void share(String url, String text, ShareType shareType, Location location, ShareAddListener shareAddListener);
+	public void share(String key, String text, ShareType shareType, Location location, ShareAddListener shareAddListener);
 	
 	/**
 	 * Retrieves a single like previously associated with an entity.
-	 * @param url The url to which the like was originally associated. MUST be a valid http URL.
+	 * @param key The entity to which the like was originally associated. 
 	 * @param likeGetListener
 	 */
-	public void getLike(String url, LikeGetListener likeGetListener);
+	public void getLike(String key, LikeGetListener likeGetListener);
 	
 	/**
 	 * Lists the likes associated with a single user.
 	 * @param userId The user
-	 * @param likeListListener
+	 * @param likeListListener A listener to handle callbacks from the get.
 	 */
 	public void listLikesByUser(long userId, LikeListListener likeListListener);
 	
@@ -225,26 +227,41 @@ public interface SocializeService {
 	 * @param userId The user
 	 * @param startIndex The starting index of the results for pagination.
 	 * @param endIndex The ending index of the results for pagination.
-	 * @param likeListListener
+	 * @param likeListListener A listener to handle callbacks from the get.
 	 */
 	public void listLikesByUser(long userId, int startIndex, int endIndex, LikeListListener likeListListener);	
 	
 	/**
-	 * Lists the comments associated with a url.
-	 * @param url The url to which the comments are associated. MUST be a valid http URL.
+	 * Lists the comments associated with a key.
+	 * @param key The entity to which the comments are associated. 
 	 * @param commentListListener A listener to handle callbacks from the post.
 	 */
-	public void listCommentsByEntity(String url, CommentListListener commentListListener);
+	public void listCommentsByEntity(String key, CommentListListener commentListListener);
 	
 	/**
-	 * Lists the comments associated with a url.
-	 * @param url The url to which the comments are associated. MUST be a valid http URL.
+	 * Lists the comments associated with a key.
+	 * @param key The entity to which the comments are associated. 
 	 * @param startIndex The starting index of the results for pagination.
 	 * @param endIndex The ending index of the results for pagination.
 	 * @param commentListListener A listener to handle callbacks from the get.
 	 */
-	public void listCommentsByEntity(String url, int startIndex, int endIndex, CommentListListener commentListListener);
+	public void listCommentsByEntity(String key, int startIndex, int endIndex, CommentListListener commentListListener);
 	
+	/**
+	 * Lists the comments associated with a single user.
+	 * @param userId The user
+	 * @param commentListListener A listener to handle callbacks from the get.
+	 */
+	public void listCommentsByUser(long userId, CommentListListener commentListListener);
+	
+	/**
+	 * Lists the comments associated with a single user.
+	 * @param userId The user
+	 * @param startIndex The starting index of the results for pagination.
+	 * @param endIndex The ending index of the results for pagination.
+	 * @param commentListListener A listener to handle callbacks from the get.
+	 */
+	public void listCommentsByUser(long userId, int startIndex, int endIndex, CommentListListener commentListListener);	
 	
 	/**
 	 * Retrieves a single comment based on its ID.
@@ -255,35 +272,45 @@ public interface SocializeService {
 
 	/**
 	 * Retrieves a single entity.
-	 * @param url The unique URL associated with this entity. MUST be a valid http URL.
+	 * @param key The unique key associated with this entity. 
 	 * @param entityGetListener A listener to handle callbacks from the get.
 	 */
-	public void getEntity(String url, EntityGetListener entityGetListener);
+	public void getEntity(String key, EntityGetListener entityGetListener);
 	
 	/**
 	 * Creates a new entity.
-	 * @param url The unique URL associated with this entity.  MUST be a valid HTTP url.
+	 * @param key The unique key associated with this entity.  
 	 * @param name The name of the entity.
 	 * @param entityAddListener A listener to handle callbacks from the post.
 	 */
-	public void addEntity(String url, String name, EntityAddListener entityAddListener);
+	public void addEntity(String key, String name, EntityAddListener entityAddListener);
 	
 	/**
-	 * Adds a new comment and associates it with the url described.
-	 * @param url The url to which the comment is associated. MUST be a valid http URL. Defined when first creating a url, or created on the fly with this call.
+	 * Adds a new comment and associates it with the key described.
+	 * @param key The entity to which the comment is associated. Defined when first creating an entity, or created on the fly with this call.
 	 * @param comment The comment to add.
 	 * @param location The location of the device at the time the call was made.
+	 * @param shareOptions Options for sharing to facebook and sharing location.
 	 * @param commentAddListener A listener to handle callbacks from the post.
 	 */
-	public void addComment(String url, String comment, Location location, CommentAddListener commentAddListener);
+	public void addComment(String key, String comment, Location location, CommentShareOptions shareOptions, CommentAddListener commentAddListener);
 
 	/**
-	 * Adds a new comment and associates it with the url described.
-	 * @param url The url to which the comment is associated. MUST be a valid http URL. Defined when first creating a url, or created on the fly with this call.
+	 * Adds a new comment and associates it with the key described.
+	 * @param key The entity to which the comment is associated. Defined when first creating an entity, or created on the fly with this call.
 	 * @param comment The comment to add.
 	 * @param commentAddListener A listener to handle callbacks from the post.
 	 */
-	public void addComment(String url, String comment, CommentAddListener commentAddListener);
+	public void addComment(String key, String comment, CommentAddListener commentAddListener);
+	
+	/**
+	 * Adds a new comment and associates it with the key described.
+	 * @param key The entity to which the comment is associated. Defined when first creating an entity, or created on the fly with this call.
+	 * @param comment The comment to add.	
+	 * @param shareOptions Options for sharing to facebook and sharing location.
+	 * @param commentAddListener A listener to handle callbacks from the post.
+	 */
+	public void addComment(String key, String comment, CommentShareOptions shareOptions, CommentAddListener commentAddListener);
 
 	/**
 	 * Retrieves a Socialize User based on their Socialize user ID.
@@ -319,7 +346,6 @@ public interface SocializeService {
 	 * @return
 	 */
 	public boolean isAuthenticated(AuthProviderType providerType);
-
 	
 	/**
 	 * Returns a reference to the current session.
@@ -347,20 +373,20 @@ public interface SocializeService {
 	 */
 	public void clear3rdPartySession(Context context, AuthProviderType type);
 	
-//	/**
-//	 * Lists a user's activity.
-//	 * @param userId The ID of the user for whom activity will be listed.
-//	 * @param activityListListener A listener to handle callbacks from the get.
-//	 */
-//	public void listActivityByUser(int userId, ActivityListListener activityListListener);
+	/**
+	 * Lists a user's activity.
+	 * @param userId The ID of the user for whom activity will be listed.
+	 * @param activityListListener A listener to handle callbacks from the get.
+	 */
+	public void listActivityByUser(long userId, UserActivityListListener activityListListener);
 	
-//	/**
-//	 * Lists a user's activity with pagination.
-//	 * @param userId The ID of the user for whom activity will be listed.
-//	 * @param startIndex The starting index of the results for pagination.
-//	 * @param endIndex The ending index of the results for pagination.
-//	 * @param activityListListener A listener to handle callbacks from the get.
-//	 */
-//	public void listActivityByUser(int userId, int startIndex, int endIndex, ActivityListListener activityListListener);
+	/**
+	 * Lists a user's activity with pagination.
+	 * @param userId The ID of the user for whom activity will be listed.
+	 * @param startIndex The starting index of the results for pagination.
+	 * @param endIndex The ending index of the results for pagination.
+	 * @param activityListListener A listener to handle callbacks from the get.
+	 */
+	public void listActivityByUser(long userId, int startIndex, int endIndex, UserActivityListListener activityListListener);
 
 }

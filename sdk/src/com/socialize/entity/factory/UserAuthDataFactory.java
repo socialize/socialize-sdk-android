@@ -40,7 +40,7 @@ public class UserAuthDataFactory extends SocializeObjectFactory<UserAuthData> {
 	private SocializeLogger logger;
 	
 	@Override
-	public UserAuthData instantiateObject(JSONObject object) {
+	public Object instantiateObject(JSONObject object) {
 		return new UserAuthData();
 	}
 

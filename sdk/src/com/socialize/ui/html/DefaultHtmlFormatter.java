@@ -19,12 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.activity;
+package com.socialize.ui.html;
+
+import com.socialize.util.StringUtils;
+
 
 /**
  * @author Jason Polites
  *
  */
-public interface SocializeActivityProducer {
-
+public class DefaultHtmlFormatter implements HtmlFormatter {
+	
+	/* (non-Javadoc)
+	 * @see com.socialize.ui.html.HtmlFormatter#format(java.lang.String)
+	 */
+	@Override
+	public String format(String plainText) {
+		StringBuilder builder = new StringBuilder();
+		plainText = replaceDoubleNewLines(plainText);
+		String html = plainText.replaceAll("\n", "<br/>");
+		builder.append("<html><head><style>body { background:transparent; margin:8px; padding:0; font:15px helvetica,arial,sans-serif;color:#ffffff;}</style></head><body>");
+		builder.append(html);
+		builder.append("</body></html>");
+		return builder.toString();
+	}
+	
+	protected String replaceDoubleNewLines(String plainText) {
+		return StringUtils.replaceNewLines(plainText, 3, 2);
+	}
 }
