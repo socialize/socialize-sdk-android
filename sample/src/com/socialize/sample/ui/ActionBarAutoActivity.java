@@ -20,7 +20,6 @@ public class ActionBarAutoActivity extends ActionBarActivity {
 		options.setEntityKeyUrl(isEntityKeyUrl);
 		options.setAddScrollView(true);
 		SocializeUI.getInstance().setEntityLoader(new SocializeEntityLoader() {
-			
 			@Override
 			public void loadEntity(Activity activity, Entity entity) {
 				Toast.makeText(activity, "Clicked on entity with key: " + entity.getKey(), Toast.LENGTH_SHORT).show();

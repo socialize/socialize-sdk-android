@@ -43,7 +43,7 @@ public class SocializeUI {
 	public static final String COMMENT_ID = "socialize.comment.id";
 	public static final String ENTITY_KEY = "socialize.entity.key";
 	public static final String ENTITY_NAME = "socialize.entity.name";
-	public static final String ENTITY_URL_AS_LINK = "socialize.entity.url.link";
+	public static final String ENTITY_URL_AS_LINK = "socialize.entity.entityKey.link";
 	
 	public static final String DEFAULT_USER_ICON = "default_user_icon.png";
 	public static final String SOCIALIZE_LOGO = "socialize_logo.png";
@@ -214,19 +214,19 @@ public class SocializeUI {
 		return null;
 	}
 	
-	public void showCommentView(Activity context, String url, String entityName, boolean entityKeyIsUrl, OnCommentViewActionListener listener) {
+	public void showCommentView(Activity context, String entityKey, String entityName, boolean entityKeyIsUrl, OnCommentViewActionListener listener) {
 		STATIC_LISTENERS.put(CommentView.COMMENT_LISTENER, listener);
-		showCommentView(context, url, entityName, entityKeyIsUrl);
+		showCommentView(context, entityKey, entityName, entityKeyIsUrl);
 	}
 	
-	public void showCommentView(Activity context, String url, OnCommentViewActionListener listener) {
+	public void showCommentView(Activity context, String entityKey, OnCommentViewActionListener listener) {
 		STATIC_LISTENERS.put(CommentView.COMMENT_LISTENER, listener);
-		showCommentView(context, url);
+		showCommentView(context, entityKey);
 	}
 
-	public void showCommentView(Activity context, String url) {
+	public void showCommentView(Activity context, String entityKey) {
 		Intent i = newIntent(context, CommentActivity.class);
-		i.putExtra(ENTITY_KEY, url);
+		i.putExtra(ENTITY_KEY, entityKey);
 		try {
 			context.startActivity(i);
 		} 
@@ -238,13 +238,13 @@ public class SocializeUI {
 	/**
 	 * 
 	 * @param context
-	 * @param url
+	 * @param entityKey
 	 * @param entityName
 	 * @param entityKeyIsUrl
 	 */
-	public void showCommentView(Activity context, String url, String entityName, boolean entityKeyIsUrl) {
+	public void showCommentView(Activity context, String entityKey, String entityName, boolean entityKeyIsUrl) {
 		Intent i = newIntent(context, CommentActivity.class);
-		i.putExtra(ENTITY_KEY, url);
+		i.putExtra(ENTITY_KEY, entityKey);
 		i.putExtra(ENTITY_NAME, entityName);
 		i.putExtra(ENTITY_URL_AS_LINK, entityKeyIsUrl);
 		
@@ -326,16 +326,42 @@ public class SocializeUI {
 		intent.putExtras(extras);
 	}
 
-	public void setEntityUrl(Activity context, Intent intent, String url) {
+	/**
+	 * 
+	 * @param context
+	 * @param intent
+	 * @param entityKey
+	 * @deprecated Use setEntityKey
+	 */
+	@Deprecated
+	public void setEntityUrl(Activity context, Intent intent, String entityKey) {
 		Bundle extras = getExtras(intent);
-		extras.putString(ENTITY_KEY, url);
+		extras.putString(ENTITY_KEY, entityKey);
 		intent.putExtras(extras);
 	}
 	
-	public void setEntityUrl(Activity context, String url) {
+	/**
+	 * 
+	 * @param context
+	 * @param entityKey
+	 * @deprecated Use setEntityKey
+	 */
+	@Deprecated
+	public void setEntityUrl(Activity context, String entityKey) {
 		Intent intent = context.getIntent();
-		setEntityUrl(context, intent, url);
+		setEntityUrl(context, intent, entityKey);
 	}
+	
+	public void setEntityKey(Activity context, Intent intent, String entityKey) {
+		Bundle extras = getExtras(intent);
+		extras.putString(ENTITY_KEY, entityKey);
+		intent.putExtras(extras);
+	}
+	
+	public void setEntityKey(Activity context, String entityKey) {
+		Intent intent = context.getIntent();
+		setEntityKey(context, intent, entityKey);
+	}	
 	
 	public void setUserId(Activity context, String userId) {
 		Intent intent = context.getIntent();

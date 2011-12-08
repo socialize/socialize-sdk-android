@@ -37,6 +37,21 @@ If you prefer to do things the old fashioned way, you can set all the parameters
 Advanced Features
 ~~~~~~~~~~~~~~~~~
 
+.. _entity_loader:	
+
+Using the Entity Loader
+########################
+
+New in v1.1 of Socialize is the "Recent Activity" view shown in a user's profile.  This displays the recent actions
+performed by the user within the app.  To maximize the benefit of this it is recommended that an "Entity Loader" implementation 
+be provided to Socialize to that it knows how to load the original view for the entity.
+
+Developers should create an implementation of a SocializeEntityLoader and provide this implementation to the SocializeUI instance:
+
+.. raw:: html
+
+	<script src="https://gist.github.com/1376163.js?file=entity_loader.java"></script>
+
 Disabling the ScrollView
 ########################
 
@@ -68,6 +83,16 @@ to capture these:
 .. raw:: html
 
 	<script src="https://gist.github.com/1376163.js?file=event_listener.java"></script>
+
+Reloading the Action Bar (Changing its entity)
+##############################################
+
+If you want to maintain a single action bar instance shared across multiple entities you can simply use the **refresh** method 
+to instruct the ActionBar to reload after you change the entity key:
+
+.. raw:: html
+
+	<script src="https://gist.github.com/1376163.js?file=action_bar_reload.java"></script>
 
 XML Based Layout (Experimental)
 ###############################

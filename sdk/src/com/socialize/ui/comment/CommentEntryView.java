@@ -96,21 +96,23 @@ public class CommentEntryView extends BaseView {
 			}
 		});
 		
-		locationBox.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				String msg = null;
-				if(locationBox.isChecked()) {
-					msg = "Location sharing enabled";
-				}
-				else {
-					msg = "Location sharing disabled";
-				}
+		if(locationBox != null) {
+			locationBox.setOnClickListener(new OnClickListener() {
 				
-				Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-			}
-		});
+				@Override
+				public void onClick(View v) {
+					String msg = null;
+					if(locationBox.isChecked()) {
+						msg = "Location sharing enabled";
+					}
+					else {
+						msg = "Location sharing disabled";
+					}
+					
+					Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+				}
+			});
+		}
 				
 		LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		LayoutParams commentFieldParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -243,7 +245,7 @@ public class CommentEntryView extends BaseView {
 			checkBox.setChecked(Socialize.getSocialize().getSession().getUser().isAutoPostToFacebook());
 		}
 		
-		if(deviceUtils.isLocationAvaiable(getContext())) {
+		if(locationBox != null) {
 			locationBox.setChecked(true);
 		}
 	}

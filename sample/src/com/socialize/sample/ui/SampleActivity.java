@@ -80,7 +80,7 @@ public class SampleActivity extends Activity {
 			public void onClick(View v) {
 				setupOverrides();
 				Intent intent = new Intent(SampleActivity.this, ActionBarAutoActivity.class);
-				SocializeUI.getInstance().setEntityUrl(SampleActivity.this, intent, txtEntity.getText().toString());
+				SocializeUI.getInstance().setEntityKey(SampleActivity.this, intent, txtEntity.getText().toString());
 				SocializeUI.getInstance().setFacebookAppId(txtFB.getText().toString());
 				SocializeUI.getInstance().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				startActivity(intent);
@@ -92,7 +92,7 @@ public class SampleActivity extends Activity {
 			public void onClick(View v) {
 				setupOverrides();
 				Intent intent = new Intent(SampleActivity.this, ActionBarManualActivity.class);
-				SocializeUI.getInstance().setEntityUrl(SampleActivity.this, intent, txtEntity.getText().toString());
+				SocializeUI.getInstance().setEntityKey(SampleActivity.this, intent, txtEntity.getText().toString());
 				SocializeUI.getInstance().setFacebookAppId(txtFB.getText().toString());
 				SocializeUI.getInstance().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				startActivity(intent);
@@ -104,7 +104,7 @@ public class SampleActivity extends Activity {
 			public void onClick(View v) {
 				setupOverrides();
 				Intent intent = new Intent(SampleActivity.this, ActionBarPagerActivity.class);
-				SocializeUI.getInstance().setEntityUrl(SampleActivity.this, intent, txtEntity.getText().toString());
+				SocializeUI.getInstance().setEntityKey(SampleActivity.this, intent, txtEntity.getText().toString());
 				SocializeUI.getInstance().setFacebookAppId(txtFB.getText().toString());
 				SocializeUI.getInstance().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				startActivity(intent);
