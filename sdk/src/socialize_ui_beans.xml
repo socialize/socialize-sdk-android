@@ -980,7 +980,7 @@
 		id="sliderActionBarListener" 
 		class="com.socialize.ui.actionbar.SliderActionBarListener">
 		<property name="shareSliderItemFactory" ref="shareSliderItemFactory"/>
-		<property name="viewSliderItemFactory" ref="viewSliderItemFactory"/>
+		<!-- <property name="viewSliderItemFactory" ref="viewSliderItemFactory"/> -->
 	</bean>		
 	
 	<bean 
@@ -990,14 +990,14 @@
 		<constructor-arg type="activity"/>
 		<property name="viewFactory" ref="shareDialogViewFactory"/>
 	</bean>
-	
+	<!-- 
 	<bean 
 		id="viewSliderItem" 
 		class="com.socialize.ui.actionbar.slider.view.ViewSliderItem" 
 		singleton="false">
 		<constructor-arg type="activity"/>
 	</bean>	
-	
+	 -->
 	<bean 
 		id="sliderAnimationSet" 
 		class="com.socialize.ui.slider.SliderAnimationSet" 
@@ -1007,7 +1007,7 @@
 	
 	<factory id="actionBarSliderViewFactory" makes="actionBarSliderView"/>
 	<factory id="shareSliderItemFactory" makes="shareSliderItem"/>
-	<factory id="viewSliderItemFactory" makes="viewSliderItem"/>
+	<!-- <factory id="viewSliderItemFactory" makes="viewSliderItem"/> -->
 	<factory id="sliderAnimationSetFactory" makes="sliderAnimationSet"/>
 	
 	<!-- 

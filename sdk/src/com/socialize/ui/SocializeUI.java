@@ -443,7 +443,15 @@ public class SocializeUI {
 	void setBeanOverrides(String...beanOverrides) {
 		this.beanOverrides = beanOverrides;
 	}
-
+	
+	/**
+	 * EXPERT ONLY (Not documented)
+	 * @return
+	 */
+	IOCContainer getContainer() {
+		return container;
+	}
+	
 	public SocializeEntityLoader getEntityLoader() {
 		return entityLoader;
 	}

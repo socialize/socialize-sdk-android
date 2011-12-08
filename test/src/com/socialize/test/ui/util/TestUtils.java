@@ -1,5 +1,8 @@
 package com.socialize.test.ui.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.app.Instrumentation.ActivityMonitor;
@@ -8,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.socialize.ui.SocializeUIBeanOverrider;
 import com.socialize.test.ui.ResultHolder;
+import com.socialize.ui.SocializeUIBeanOverrider;
 
 public class TestUtils {
 	
@@ -155,25 +158,57 @@ public class TestUtils {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <V extends View> V findView(ViewGroup view, Class<V> viewClass) {
+	public static <V extends View> V findViewWithText(ViewGroup parent, final Class<V> viewClass, final String text) {
+		return (V)  findView(parent, new ViewMatcher() {
+			@Override
+			public boolean matches(View view) {
+				if(viewClass.isAssignableFrom(view.getClass())) {
+					TextView textView = findView(view, TextView.class);
+					if(textView != null) {
+						return textView.getText().toString().equals(text);
+					}
+				}
+				return false;
+			}
+		});
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <V extends View> V findView(ViewGroup view, ViewMatcher matcher) {
 		int count = view.getChildCount();
 		for (int i = 0; i < count; i++) {
 			View child = view.getChildAt(i);
 			
-			if(viewClass.isAssignableFrom(child.getClass())) {
+			if(matcher.matches(child)) {
 				return (V) child;
 			}
 			
 			if(child instanceof ViewGroup && (child != view)) {
 				
-				View found = findView((ViewGroup)child, viewClass);
-				
+				View found = findView((ViewGroup)child, matcher);
 				if(found != null) {
 					return (V) found;
 				}
 			}
 		}
 		return null;
+	}
+	
+	public static <V extends View> V findView(View view, final Class<V> viewClass) {
+		if(view instanceof ViewGroup) {
+			return findView((ViewGroup)view, viewClass);
+		}
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <V extends View> V findView(ViewGroup view, final Class<V> viewClass) {
+		return (V)  findView(view, new ViewMatcher() {
+			@Override
+			public boolean matches(View view) {
+				return (viewClass.isAssignableFrom(view.getClass()));
+			}
+		});
 	}
 	
 	public static boolean findText(ViewGroup view, String text) {
@@ -200,22 +235,32 @@ public class TestUtils {
 		return false;
 	}
 	
-	
-	
 	public static void setupSocializeOverrides(boolean mockFacebook, boolean mockSocialize) {
+		setupSocializeOverrides(mockFacebook, mockSocialize, (String[])null);
+	}
+	
+	public static void setupSocializeOverrides(boolean mockFacebook, boolean mockSocialize, String...others) {
 		
 		SocializeUIBeanOverrider overrider = new SocializeUIBeanOverrider();
 		
+		List<String> configs = new ArrayList<String>();
+		
 		if(mockFacebook) {
-			if(mockSocialize) {
-				overrider.setBeanOverrides("socialize_ui_mock_beans.xml", "socialize_ui_mock_socialize_beans.xml");
-			}
-			else {
-				overrider.setBeanOverrides("socialize_ui_mock_beans.xml");
+			configs.add("socialize_ui_mock_beans.xml");
+		}
+		
+		if(mockSocialize) {
+			configs.add("socialize_ui_mock_socialize_beans.xml");
+		}
+		
+		if(others != null) {
+			for (int i = 0; i < others.length; i++) {
+				configs.add(others[i]);
 			}
 		}
-		else if(mockSocialize) {
-			overrider.setBeanOverrides("socialize_ui_mock_socialize_beans.xml");
+		
+		if(!configs.isEmpty()) {
+			overrider.setBeanOverrides(configs.toArray(new String[configs.size()]));
 		}
 		else {
 			overrider.setBeanOverrides((String[]) null);

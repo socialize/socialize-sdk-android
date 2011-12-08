@@ -36,7 +36,6 @@ public class SliderActionBarListener implements OnActionBarEventListener {
 	private ActionBarEvent lastEvent;
 
 	private IBeanFactory<ActionBarSliderItem> shareSliderItemFactory;
-	@SuppressWarnings("unused")
 	private IBeanFactory<ActionBarSliderItem> viewSliderItemFactory;
 	
 	/* (non-Javadoc)
@@ -102,11 +101,11 @@ public class SliderActionBarListener implements OnActionBarEventListener {
 						item = shareSliderItemFactory.getBean(actionBar, this);
 					}
 					break;
-//				case VIEW:
-//					if(viewSliderItemFactory != null) {
-//						item = viewSliderItemFactory.getBean(actionBar, this);
-//					}					
-//					break;
+				case VIEW:
+					if(viewSliderItemFactory != null) {
+						item = viewSliderItemFactory.getBean(actionBar, this);
+					}					
+					break;
 			}
 			
 			if(item != null) {

@@ -435,12 +435,8 @@ public class ActionBarLayoutView extends BaseView {
 		return Socialize.getSocialize();
 	}
 
-	public void setCommentButton(ActionBarButton commentButton) {
-		this.commentButton = commentButton;
-	}
-
-	public void setLikeButton(ActionBarButton likeButton) {
-		this.likeButton = likeButton;
+	public ActionBarButton getShareButton() {
+		return shareButton;
 	}
 
 	public ActionBarButton getCommentButton() {
