@@ -99,7 +99,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		AndroidMock.replay(intent);
 
 		SocializeUI socializeUI = new SocializeUI();
-		socializeUI.setEntityUrl(activity, url);
+		socializeUI.setEntityKey(activity, url);
 
 		AndroidMock.verify(activity);
 		AndroidMock.verify(intent);
