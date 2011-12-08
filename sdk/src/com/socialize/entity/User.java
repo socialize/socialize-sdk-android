@@ -190,4 +190,14 @@ public class User extends SocializeObject {
 	public void setShareLocation(boolean shareLocation) {
 		this.shareLocation = shareLocation;
 	}
+	
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj);
+	}
 }

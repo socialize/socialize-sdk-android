@@ -58,4 +58,14 @@ public class Comment extends SocializeAction {
 	public void setLocationShared(boolean locationShared) {
 		this.locationShared = locationShared;
 	}
+	
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj);
+	}
 }

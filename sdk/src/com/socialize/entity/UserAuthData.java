@@ -37,4 +37,13 @@ public class UserAuthData extends SocializeObject {
 	public void setAuthProviderType(AuthProviderType authProviderType) {
 		this.authProviderType = authProviderType;
 	}
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj);
+	}
 }

@@ -21,6 +21,8 @@
  */
 package com.socialize.ui.profile.activity;
 
+import java.util.List;
+
 import android.content.Context;
 
 import com.socialize.Socialize;
@@ -49,6 +51,7 @@ public class UserActivityView extends BaseView {
 	private IBeanFactory<UserActivityListAdapter> userActivityListAdapterFactory;
 	private IBeanFactory<LoadingListView> loadingListViewFactory;
 	
+	
 	public UserActivityView(Context context) {
 		super(context);
 	}
@@ -57,6 +60,7 @@ public class UserActivityView extends BaseView {
 		listView = loadingListViewFactory.getBean();
 		adapter = userActivityListAdapterFactory.getBean();
 		listView.setListAdapter(adapter);
+		listView.setEmptyText("No recent activity");
 		addView(listView);
 	}
 	
@@ -65,22 +69,31 @@ public class UserActivityView extends BaseView {
 		Socialize.getSocialize().listActivityByUser(userId, 0, numItems, new UserActivityListListener() {
 			@Override
 			public void onList(ListResult<SocializeAction> entities) {
-				if(entities != null && entities.getItems() != null) {
-					adapter.setActions(entities.getItems());
+				if(entities != null) {
+					
+					List<SocializeAction> items = entities.getItems();
+					
+					if(items != null && items.size() > 0) {
+						adapter.setActions(entities.getItems());
+						listView.showList();
+					}
+					else {
+						adapter.reset();
+						listView.showEmptyText();
+					}
 				}
 				else {
 					adapter.reset();
+					listView.showEmptyText();
 				}
 				
 				adapter.notifyDataSetChanged();
-				
-				listView.showList();
 			}
 			@Override
 			public void onError(SocializeException error) {
 				adapter.reset();
 				adapter.notifyDataSetChanged();
-				listView.showList();
+				listView.showEmptyText();
 			}
 		});
 	}

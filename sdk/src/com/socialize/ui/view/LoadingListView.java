@@ -27,10 +27,10 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.ui.view.BasicLoadingView;
 
 /**
  * @author Jason Polites
@@ -44,7 +44,9 @@ public class LoadingListView extends ViewFlipper {
 	public static final int LIST_VIEW_ID = 10001;
 
 	private ListView listView;
+	private TextView emptyTextView;
 	private IBeanFactory<BasicLoadingView> loadingViewFactory;
+	private String emptyText = "No data";
 	
 	public LoadingListView(Context context) {
 		super(context);
@@ -65,6 +67,10 @@ public class LoadingListView extends ViewFlipper {
 	public void showList() {
 		setDisplayedChild(1);
 	}
+	
+	public void showEmptyText() {
+		setDisplayedChild(2);
+	}
 
 	public void scrollToTop() {
 		listView.setSelection(0); // scroll to top
@@ -77,6 +83,13 @@ public class LoadingListView extends ViewFlipper {
 		contentView.setLayoutParams(contentViewLayoutParams);
 		contentView.setOrientation(LinearLayout.VERTICAL);
 
+		LinearLayout.LayoutParams emptyContentLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
+		
+		emptyTextView = new TextView(getContext());
+		emptyTextView.setLayoutParams(emptyContentLayoutParams);
+		emptyTextView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+		emptyTextView.setText(emptyText);
+		
 		LinearLayout.LayoutParams listViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 
 		listView = new ListView(getContext());
@@ -99,10 +112,23 @@ public class LoadingListView extends ViewFlipper {
 
 		this.addView(loadingScreen);
 		this.addView(contentView);
+		this.addView(emptyTextView);
 		this.showLoading();
 	}
 
 	public void setLoadingViewFactory(IBeanFactory<BasicLoadingView> loadingViewFactory) {
 		this.loadingViewFactory = loadingViewFactory;
+	}
+
+	public String getEmptyText() {
+		return emptyText;
+	}
+
+	public void setEmptyText(String emptyText) {
+		this.emptyText = emptyText;
+		
+		if(emptyTextView != null) {
+			emptyTextView.setText(emptyText);
+		}
 	}
 }

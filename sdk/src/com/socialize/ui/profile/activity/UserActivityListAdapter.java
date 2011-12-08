@@ -151,7 +151,7 @@ public class UserActivityListAdapter extends BaseAdapter {
 			
 			Long date = item.getDate();
 			
-			if(date != null && date > 0) {
+			if(date != null && date.longValue() > 0) {
 				long diff = (now.getTime() - date.longValue());
 				view.setDate(dateUtils.getTimeString(diff) + " ");
 			}

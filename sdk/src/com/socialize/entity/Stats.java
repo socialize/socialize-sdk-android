@@ -56,5 +56,13 @@ public class Stats extends SocializeObject {
 	public void setShares(Integer shares) {
 		this.shares = shares;
 	}
-	
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj);
+	}
 }
