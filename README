@@ -12,6 +12,19 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v1.1
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] List Comments By User (SDK)
+[bug] Session does not persist user auth data correctly
+[feature] List activity for User
+[feature] Add share location option when posting comments
+[feature] Add location icon to comments with location shared
+[feature] User can select and copy text from a comment
+[feature] User activity in profile view
+[feature] Comment list and entry view renders in landscape
+[feature] SDK user can add entity loader
+[feature] Remove requirement for URL from code and docs
+
 v1.0.4
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [bug] After signing in or out of FB for the first time, the "edit profile" menu option takes you to the wrong user (the old one)
