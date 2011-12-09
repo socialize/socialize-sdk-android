@@ -137,7 +137,6 @@ public class CommentListView extends BaseView {
 		middle.setLayoutParams(middleParams);
 		sliderAnchor.setLayoutParams(bottomParams);
 
-
 		header = commentHeaderFactory.getBean();
 		field = commentEditFieldFactory.getBean();
 		content = commentContentViewFactory.getBean();
@@ -151,6 +150,7 @@ public class CommentListView extends BaseView {
 
 		top.addView(header);
 		middle.addView(content);
+		
 		sliderAnchor.addView(field);		
 		
 		layoutAnchor.addView(top);
