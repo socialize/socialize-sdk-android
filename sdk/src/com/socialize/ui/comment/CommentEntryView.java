@@ -80,22 +80,24 @@ public class CommentEntryView extends BaseView {
 			locationBox = locationEnabledOptionFactory.getBean();
 		}
 		
-		checkBox.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				String msg = null;
-				if(checkBox.isChecked()) {
-					msg = "Facebook sharing enabled";
-				}
-				else {
-					msg = "Facebook sharing disabled";
-				}
+		if(checkBox != null) {
+			checkBox.setOnClickListener(new OnClickListener() {
 				
-				Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-			}
-		});
-		
+				@Override
+				public void onClick(View v) {
+					String msg = null;
+					if(checkBox.isChecked()) {
+						msg = "Facebook sharing enabled";
+					}
+					else {
+						msg = "Facebook sharing disabled";
+					}
+					
+					Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+				}
+			});
+		}
+
 		if(locationBox != null) {
 			locationBox.setOnClickListener(new OnClickListener() {
 				
