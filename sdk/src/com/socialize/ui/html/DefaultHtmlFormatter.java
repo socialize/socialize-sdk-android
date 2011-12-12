@@ -21,6 +21,8 @@
  */
 package com.socialize.ui.html;
 
+import android.text.TextUtils;
+
 import com.socialize.util.StringUtils;
 
 
@@ -38,6 +40,9 @@ public class DefaultHtmlFormatter implements HtmlFormatter {
 		StringBuilder builder = new StringBuilder();
 		plainText = replaceDoubleNewLines(plainText);
 		String html = plainText.replaceAll("\n", "<br/>");
+		
+		html = TextUtils.htmlEncode(html);
+		
 		builder.append("<html><head><style>body { background:transparent; margin:8px; padding:0; font:15px helvetica,arial,sans-serif;color:#ffffff;}</style></head><body>");
 		builder.append(html);
 		builder.append("</body></html>");

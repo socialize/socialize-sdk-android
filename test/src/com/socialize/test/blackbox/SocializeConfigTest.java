@@ -23,6 +23,7 @@ package com.socialize.test.blackbox;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
@@ -149,6 +150,7 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		
 		SocializeConfig config = new SocializeConfig(noFile);
 		config.setProperty("foo", "bar");
+		config.setProperty("remove", "me");
 		
 		assertEquals("bar", config.getProperty("foo"));
 		
@@ -156,11 +158,17 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		merged.put("foo", "bar_changed");
 		merged.put("new", "value");
 		
-		config.merge(merged);
+		Set<String> toBeRemoved = new HashSet<String>();
+		
+		toBeRemoved.add("remove");
+		
+		config.merge(merged, toBeRemoved);
 		
 		assertNotNull(config.getProperty("new"));
 		assertEquals("value", config.getProperty("new"));
 		assertEquals("bar_changed", config.getProperty("foo"));
+		assertNull(config.getProperty("remove"));
+		assertTrue(toBeRemoved.isEmpty());
 	}
 	
 	@UsesMocks({ResourceLocator.class, InputStream.class, Properties.class})
@@ -182,7 +190,7 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		
 		SocializeConfig config = new SocializeConfig(noFile) {
 			@Override
-			public void merge(Properties other) {
+			public void merge(Properties other, Set<String> removed) {
 				addResult(true);
 			}
 		};

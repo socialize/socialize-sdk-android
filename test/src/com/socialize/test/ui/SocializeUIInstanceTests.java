@@ -1,6 +1,7 @@
 package com.socialize.test.ui;
 
 import java.util.Properties;
+import java.util.Set;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -109,16 +110,31 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 
 	}
 
-	@UsesMocks ({SocializeService.class, SocializeConfig.class})
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({SocializeService.class, SocializeConfig.class, Properties.class, Set.class})
 	public void testInitSocialize() {
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+		
+		final Properties customProperties = AndroidMock.createMock(Properties.class);
+		final Set<String> toBeRemoved = AndroidMock.createMock(Set.class);
 
 		MockContext context = new MockContext();
+		
 		SocializeUI socializeUI = new SocializeUI() {
 			@Override
 			public SocializeService getSocialize() {
 				return socialize;
+			}
+
+			@Override
+			protected Set<String> getPropertiesToBeRemoved() {
+				return toBeRemoved;
+			}
+
+			@Override
+			public Properties getCustomProperties() {
+				return customProperties;
 			}
 		};
 
@@ -126,7 +142,8 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 
 		socialize.init(context, paths);
 		AndroidMock.expect(socialize.getConfig()).andReturn(config);
-		config.merge(socializeUI.getCustomProperties());
+		
+		config.merge( customProperties, toBeRemoved);
 
 		AndroidMock.replay(socialize);
 
@@ -271,6 +288,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		assertTrue(didRun);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@UsesMocks ({SocializeInitListener.class, SocializeException.class, SocializeConfig.class, IOCContainer.class})
 	public void test_initSocializeAsync() {
 		
@@ -282,7 +300,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		final String[] mockPaths = {};
 		
 		listener.onError(error);
-		config.merge((Properties)AndroidMock.anyObject());
+		config.merge((Properties)AndroidMock.anyObject(), (Set<String>)AndroidMock.anyObject());
 		
 		listener.onInit(getContext(), container);
 		

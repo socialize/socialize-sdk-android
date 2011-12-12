@@ -258,7 +258,7 @@ public class CommentDetailContentView extends LinearLayout {
 
 	public void setComment(Comment comment) {
 		if(commentView != null) {
-			commentView.loadData(htmlFormatter.format(comment.getText()), "text/html", "utf-8");
+			commentView.loadDataWithBaseURL("", htmlFormatter.format(comment.getText()), "text/html", "utf-8", "");
 			commentView.setVisibility(View.VISIBLE);
 			commentView.setBackgroundColor(0x00000000);
 		}

@@ -131,7 +131,6 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 		clearAuthCache();
 	}
 
-
 	protected void addResult(Object obj) {
 		holder.addResult(obj);
 	}

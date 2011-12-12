@@ -86,8 +86,8 @@ Add the following lines to your AndroidManifest.xml under the **<manifest...>** 
 
 	<script src="https://gist.github.com/1201498.js?file=ui_manifest_permissions.xml"></script>
 	
-4. Configure Facebook Integration
-=================================
+4. Configure Facebook Integration (Optional)
+============================================
 It is strongly recommended that users be able to authenticate with Facebook when using Socialize so as to 
 maximize the exposure, and promotion of your app.
 

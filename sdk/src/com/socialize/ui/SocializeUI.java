@@ -1,8 +1,10 @@
 package com.socialize.ui;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -54,6 +56,7 @@ public class SocializeUI {
 	private IOCContainer container;
 	private Drawables drawables;
 	private final Properties customProperties = new Properties();
+	private final Set<String> toBeRemoved = new HashSet<String>();
 	private String[] beanOverrides;
 	
 	private SocializeEntityLoader entityLoader;
@@ -69,7 +72,7 @@ public class SocializeUI {
 	public void initSocialize(Context context) {
 		String[] config = getConfig();
 		getSocialize().init(context,config);
-		getSocialize().getConfig().merge(customProperties);
+		getSocialize().getConfig().merge(customProperties, getPropertiesToBeRemoved());
 	}
 	
 	public void initSocializeAsync(Context context, final SocializeInitListener listener) {
@@ -85,13 +88,18 @@ public class SocializeUI {
 			
 			@Override
 			public void onInit(Context context, IOCContainer container) {
-				getSocialize().getConfig().merge(customProperties);
+				getSocialize().getConfig().merge(customProperties, getPropertiesToBeRemoved());
 				listener.onInit(context, container);
 			}
 		};
 		
 		getSocialize().initAsync(context, overrideListener, config);
 		
+	}
+	
+	// So we can mock
+	protected Set<String> getPropertiesToBeRemoved() {
+		return toBeRemoved;
 	}
 	
 	protected String[] getConfig() {
@@ -183,6 +191,7 @@ public class SocializeUI {
 		}
 		else {
 			customProperties.remove(key);
+			toBeRemoved.add(key);
 		}
 	}
 	
