@@ -19,26 +19,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.comment;
+package com.socialize.ui.action;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.MenuItem.OnMenuItemClickListener;
 
+import com.socialize.Socialize;
 import com.socialize.ui.SocializeUI;
+import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.view.EntityView;
 
 /**
  * @author Jason Polites
- * @deprecated use ActionDetailView
  */
-@Deprecated
-public class CommentDetailView extends EntityView {
+public class ActionDetailView extends EntityView {
 
-	private CommentDetailLayoutView commentLayoutView;
+	private ActionDetailLayoutView actionLayoutView;
 	
-	public CommentDetailView(Context context) {
+	public ActionDetailView(Context context) {
 		super(context);
 	}
 
@@ -48,10 +53,10 @@ public class CommentDetailView extends EntityView {
 	@Override
 	protected View getView(Bundle bundle, Object... entityKeys) {
 		if (entityKeys != null) {
-			if(commentLayoutView == null) {
-				commentLayoutView = container.getBean("commentDetailLayoutView", entityKeys);
+			if(actionLayoutView == null) {
+				actionLayoutView = container.getBean("actionDetailLayoutView", entityKeys);
 			}
-			return commentLayoutView;
+			return actionLayoutView;
 		}
 		else {
 			Log.e("Socialize", "No user id specified for " + getClass().getSimpleName());
@@ -68,11 +73,29 @@ public class CommentDetailView extends EntityView {
 	}
 
 	public void onProfileUpdate() {
-		commentLayoutView.onProfileUpdate();
+		if(actionLayoutView != null) {
+			actionLayoutView.onProfileUpdate();
+		}
 	}
 
 	@Override
 	public View getLoadingView() {
 		return null;
 	}
+	
+	public boolean onCreateOptionsMenu(final Activity source, Menu menu) {
+		if(Socialize.getSocialize().isAuthenticated()) {
+			MenuItem add = menu.add("Edit My Profile");
+			add.setIcon(SocializeUI.getInstance().getDrawable("ic_menu_cc.png", DisplayMetrics.DENSITY_DEFAULT, true));
+			add.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+				@Override
+				public boolean onMenuItemClick(MenuItem item) {
+					final String userId = Socialize.getSocialize().getSession().getUser().getId().toString();
+					SocializeUI.getInstance().showUserProfileViewForResult(source, userId, CommentActivity.PROFILE_UPDATE);
+					return true;
+				}
+			});
+		}
+		return true;
+	}	
 }

@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.comment;
+package com.socialize.ui.action;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -38,8 +38,8 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.ui.SocializeUI;
+import com.socialize.ui.SocializeUIActivity;
 import com.socialize.ui.dialog.ProgressDialogFactory;
-import com.socialize.ui.header.SocializeHeader;
 import com.socialize.ui.image.ImageLoadListener;
 import com.socialize.ui.image.ImageLoadRequest;
 import com.socialize.ui.image.ImageLoader;
@@ -48,18 +48,14 @@ import com.socialize.util.SafeBitmapDrawable;
 import com.socialize.util.StringUtils;
 import com.socialize.view.BaseView;
 
-
 /**
  * @author Jason Polites
- * @deprecated Use ActionDetailLayoutView
  */
-@Deprecated
-public class CommentDetailLayoutView extends BaseView {
+public class ActionDetailLayoutView extends BaseView {
 
 	private String userId;
 	private String commentId;
-	private SocializeHeader header;
-	private CommentDetailContentView content;
+	private ActionDetailContentView content;
 	private ProgressDialog dialog = null;
 	private Drawable defaultProfilePicture;
 	
@@ -67,13 +63,12 @@ public class CommentDetailLayoutView extends BaseView {
 	
 	// Injected
 	private Drawables drawables;
-	private IBeanFactory<SocializeHeader> commentHeaderFactory;
-	private IBeanFactory<CommentDetailContentView> commentDetailContentViewFactory;
+	private IBeanFactory<ActionDetailContentView> actionDetailContentViewFactory;
 	private ProgressDialogFactory progressDialogFactory;
 	private ImageLoader imageLoader;
 	// End injected
 	
-	public CommentDetailLayoutView(Activity context, String userId) {
+	public ActionDetailLayoutView(Activity context, String userId) {
 		this(context);
 		this.userId = userId;
 		
@@ -82,12 +77,12 @@ public class CommentDetailLayoutView extends BaseView {
 		}
 	}
 	
-	public CommentDetailLayoutView(Activity context, String userId, String commentId) {
+	public ActionDetailLayoutView(Activity context, String userId, String commentId) {
 		this(context, userId);
 		this.commentId = commentId;
 	}
 	
-	public CommentDetailLayoutView(Context context) {
+	public ActionDetailLayoutView(Context context) {
 		super(context);
 	}
 
@@ -101,20 +96,18 @@ public class CommentDetailLayoutView extends BaseView {
 		setPadding(0, 0, 0, 0);
 		setVerticalFadingEdgeEnabled(false);
 
-		header = commentHeaderFactory.getBean();
-		content = commentDetailContentViewFactory.getBean();
+		content = actionDetailContentViewFactory.getBean();
 		defaultProfilePicture = drawables.getDrawable("default_user_icon.png");
 		
 		OnClickListener profileClickListener = new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				SocializeUI.getInstance().showUserProfileViewForResult(getActivity(), userId, CommentActivity.PROFILE_UPDATE);
+				SocializeUI.getInstance().showUserProfileViewForResult(getActivity(), userId, SocializeUIActivity.PROFILE_UPDATE);
 			}
 		};
 		
 		content.getHeaderView().setOnClickListener(profileClickListener);
 
-		addView(header);
 		addView(content);
 	}
 	
@@ -231,7 +224,7 @@ public class CommentDetailLayoutView extends BaseView {
 		}
 		
 		content.getDisplayName().setText(user.getDisplayName());
-//		content.getLocation().setText(user.getLocation());
+		content.loadUserActivity(user);
 	}
 	
 	public void setDrawables(Drawables drawables) {
@@ -246,12 +239,8 @@ public class CommentDetailLayoutView extends BaseView {
 		this.progressDialogFactory = progressDialogFactory;
 	}
 
-	public void setCommentHeaderFactory(IBeanFactory<SocializeHeader> profileHeaderFactory) {
-		this.commentHeaderFactory = profileHeaderFactory;
-	}
-
-	public void setCommentDetailContentViewFactory(IBeanFactory<CommentDetailContentView> commentDetailContentViewFactory) {
-		this.commentDetailContentViewFactory = commentDetailContentViewFactory;
+	public void setActionDetailContentViewFactory(IBeanFactory<ActionDetailContentView> actionDetailContentViewFactory) {
+		this.actionDetailContentViewFactory = actionDetailContentViewFactory;
 	}
 
 	public void setImageLoader(ImageLoader imageLoader) {

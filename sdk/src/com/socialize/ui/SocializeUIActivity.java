@@ -30,6 +30,9 @@ import android.view.Window;
  *
  */
 public class SocializeUIActivity extends Activity {
+	
+	public static final int PROFILE_UPDATE = 1347;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

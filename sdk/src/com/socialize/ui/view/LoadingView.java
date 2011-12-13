@@ -19,38 +19,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.html;
+package com.socialize.ui.view;
 
-import android.text.TextUtils;
-
-import com.socialize.util.StringUtils;
-
+import android.view.View;
 
 /**
  * @author Jason Polites
  *
  */
-public class DefaultHtmlFormatter implements HtmlFormatter {
-	
-	/* (non-Javadoc)
-	 * @see com.socialize.ui.html.HtmlFormatter#format(java.lang.String)
-	 */
-	@Override
-	public String format(String plainText) {
-		StringBuilder builder = new StringBuilder();
-		plainText = replaceDoubleNewLines(plainText);
-		String html = plainText;
-		
-		html = TextUtils.htmlEncode(html);
-		html = plainText.replaceAll("\n", "<br/>");
-		
-		builder.append("<html><head><style>body { background:transparent; margin:8px; padding:0; font:15px helvetica,arial,sans-serif;color:#000000;}</style></head><body>");
-		builder.append(html);
-		builder.append("</body></html>");
-		return builder.toString();
-	}
-	
-	protected String replaceDoubleNewLines(String plainText) {
-		return StringUtils.replaceNewLines(plainText, 3, 2);
-	}
+public interface LoadingView<V extends View> {
+
+	public void showLoading();
+
+	public void showList();
+
+	public void showEmptyText();
+
+	public abstract V getMainView();
+
+	public abstract void setEmptyText(String emptyText);
+
+	public abstract String getEmptyText();
+
 }

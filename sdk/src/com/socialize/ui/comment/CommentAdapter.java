@@ -20,6 +20,7 @@ import com.socialize.entity.Comment;
 import com.socialize.entity.User;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUI;
+import com.socialize.ui.SocializeUIActivity;
 import com.socialize.ui.image.ImageLoadListener;
 import com.socialize.ui.image.ImageLoadRequest;
 import com.socialize.ui.image.ImageLoader;
@@ -186,7 +187,7 @@ public class CommentAdapter extends BaseAdapter {
 							@Override
 							public void onClick(View v) {
 								if(user != null && user.getId() != null) {
-									getSocializeUI().showCommentDetailViewForResult(context, user.getId().toString(), item.getId().toString(), CommentActivity.PROFILE_UPDATE);
+									getSocializeUI().showActionDetailViewForResult(context, user, item, SocializeUIActivity.PROFILE_UPDATE);
 								}
 								else {
 									if(logger != null) {

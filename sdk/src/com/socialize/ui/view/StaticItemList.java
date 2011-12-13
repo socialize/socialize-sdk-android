@@ -19,38 +19,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.html;
+package com.socialize.ui.view;
 
-import android.text.TextUtils;
+import java.util.List;
 
-import com.socialize.util.StringUtils;
+import android.content.Context;
+import android.view.View;
 
+import com.socialize.view.BaseView;
 
 /**
  * @author Jason Polites
  *
  */
-public class DefaultHtmlFormatter implements HtmlFormatter {
+public class StaticItemList<V extends View> extends BaseView {
+
+	private List<V> views;
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.ui.html.HtmlFormatter#format(java.lang.String)
-	 */
-	@Override
-	public String format(String plainText) {
-		StringBuilder builder = new StringBuilder();
-		plainText = replaceDoubleNewLines(plainText);
-		String html = plainText;
-		
-		html = TextUtils.htmlEncode(html);
-		html = plainText.replaceAll("\n", "<br/>");
-		
-		builder.append("<html><head><style>body { background:transparent; margin:8px; padding:0; font:15px helvetica,arial,sans-serif;color:#000000;}</style></head><body>");
-		builder.append(html);
-		builder.append("</body></html>");
-		return builder.toString();
+	public StaticItemList(Context context) {
+		super(context);
 	}
 	
-	protected String replaceDoubleNewLines(String plainText) {
-		return StringUtils.replaceNewLines(plainText, 3, 2);
+	public void setItems(List<V> views) {
+		this.views = views;
+	}
+	
+	public void notifyDataSetChanged() {
+		removeAllViews();
+		if(views != null) {
+			for (V view : views) {
+				addView(view);
+			}
+		}
 	}
 }

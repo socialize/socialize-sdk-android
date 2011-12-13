@@ -21,6 +21,8 @@
  */
 package com.socialize.ui.profile.activity;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -31,7 +33,7 @@ import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.activity.UserActivityListListener;
-import com.socialize.ui.view.LoadingListView;
+import com.socialize.ui.view.LoadingItemView;
 import com.socialize.view.BaseView;
 
 /**
@@ -42,24 +44,20 @@ import com.socialize.view.BaseView;
 public class UserActivityView extends BaseView {
 
 	// Local
-	private UserActivityListAdapter adapter;
-	private LoadingListView listView;
+	private LoadingItemView<UserActivityListItem> listView;
+	private UserActivityListItemBuilder userActivityListItemBuilder;
 	
 	// Injected
 	private int numItems = 20;
 	
-	private IBeanFactory<UserActivityListAdapter> userActivityListAdapterFactory;
-	private IBeanFactory<LoadingListView> loadingListViewFactory;
-	
+	private IBeanFactory<LoadingItemView<UserActivityListItem>> loadingItemViewFactory;
 	
 	public UserActivityView(Context context) {
 		super(context);
 	}
 
 	public void init() {
-		listView = loadingListViewFactory.getBean();
-		adapter = userActivityListAdapterFactory.getBean();
-		listView.setListAdapter(adapter);
+		listView = loadingItemViewFactory.getBean();
 		listView.setEmptyText("No recent activity");
 		addView(listView);
 	}
@@ -71,28 +69,33 @@ public class UserActivityView extends BaseView {
 			public void onList(ListResult<SocializeAction> entities) {
 				if(entities != null) {
 					
+					Date now = new Date();
+					
 					List<SocializeAction> items = entities.getItems();
 					
 					if(items != null && items.size() > 0) {
-						adapter.setActions(entities.getItems());
+						ArrayList<UserActivityListItem> views = new ArrayList<UserActivityListItem>(items.size());
+						
+						for (SocializeAction item : items) {
+							views.add(userActivityListItemBuilder.build(getActivity(), item, now));
+						}
+						
+						listView.setItems(views);
 						listView.showList();
 					}
 					else {
-						adapter.reset();
+						listView.clear();
 						listView.showEmptyText();
 					}
 				}
 				else {
-					adapter.reset();
+					listView.clear();
 					listView.showEmptyText();
 				}
-				
-				adapter.notifyDataSetChanged();
 			}
 			@Override
 			public void onError(SocializeException error) {
-				adapter.reset();
-				adapter.notifyDataSetChanged();
+				listView.clear();
 				listView.showEmptyText();
 			}
 		});
@@ -102,11 +105,11 @@ public class UserActivityView extends BaseView {
 		this.numItems = numItems;
 	}
 
-	public void setUserActivityListAdapterFactory(IBeanFactory<UserActivityListAdapter> userActivityListAdapterFactory) {
-		this.userActivityListAdapterFactory = userActivityListAdapterFactory;
+	public void setLoadingItemViewFactory(IBeanFactory<LoadingItemView<UserActivityListItem>> loadingListViewFactory) {
+		this.loadingItemViewFactory = loadingListViewFactory;
 	}
 
-	public void setLoadingListViewFactory(IBeanFactory<LoadingListView> loadingListViewFactory) {
-		this.loadingListViewFactory = loadingListViewFactory;
+	public void setUserActivityListItemBuilder(UserActivityListItemBuilder userActivityListItemBuilder) {
+		this.userActivityListItemBuilder = userActivityListItemBuilder;
 	}
 }

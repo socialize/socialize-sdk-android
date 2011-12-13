@@ -100,7 +100,7 @@ public class CommentView extends EntityView {
 	
 	public boolean onCreateOptionsMenu(final Activity source, Menu menu) {
 		if(Socialize.getSocialize().isAuthenticated()) {
-			MenuItem add = menu.add("Edit Profile");
+			MenuItem add = menu.add("Edit My Profile");
 			add.setIcon(SocializeUI.getInstance().getDrawable("ic_menu_cc.png", DisplayMetrics.DENSITY_DEFAULT, true));
 			add.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 				@Override

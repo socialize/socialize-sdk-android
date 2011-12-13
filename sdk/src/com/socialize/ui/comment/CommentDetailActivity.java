@@ -21,53 +21,12 @@
  */
 package com.socialize.ui.comment;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.Toast;
-
-import com.socialize.Socialize;
-import com.socialize.SocializeService;
-import com.socialize.ui.SocializeUI;
-import com.socialize.ui.SocializeUIActivity;
-import com.socialize.util.StringUtils;
+import com.socialize.ui.action.ActionDetailActivity;
 
 /**
  * @author Jason Polites
+ * No longer user.  Use ActionDetailActivity.
  */
-public class CommentDetailActivity extends SocializeUIActivity {
+public class CommentDetailActivity extends ActionDetailActivity {
 
-	private CommentDetailView view;
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		Bundle extras = getIntent().getExtras();
-
-		if (extras == null || !extras.containsKey(SocializeUI.USER_ID) || !extras.containsKey(SocializeUI.COMMENT_ID)) {
-			Toast.makeText(this, "No user or comment id provided", Toast.LENGTH_SHORT).show();
-			finish();
-		}
-		else {
-			// If WE are the user being viewed, assume a profile update
-			String userId = extras.getString(SocializeUI.USER_ID);
-			if(!StringUtils.isEmpty(userId) && Integer.parseInt(userId) == getSocialize().getSession().getUser().getId()) {
-				setResult(CommentActivity.PROFILE_UPDATE);
-			}
-			
-			view = new CommentDetailView(this);
-			setContentView(view);
-		}
-	}
-	
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == CommentActivity.PROFILE_UPDATE) {
-			// Profile has updated... need to reload the view
-			view.onProfileUpdate();
-		}
-	}
-	
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
-	}
 }

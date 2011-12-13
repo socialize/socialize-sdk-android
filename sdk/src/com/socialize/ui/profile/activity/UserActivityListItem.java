@@ -62,7 +62,6 @@ public class UserActivityListItem extends LinearLayout {
 	
 	public void init() {
 		
-		
 		final int padding = deviceUtils.getDIP(4);
 		final int imagePadding = 0;
 		final int margin = deviceUtils.getDIP(8);

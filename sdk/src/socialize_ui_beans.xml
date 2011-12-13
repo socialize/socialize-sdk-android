@@ -195,15 +195,34 @@
 	<factory id="loadingViewFactory" makes="loadingView"/>
 	
 	<bean 
-		id="loadingListView" 
-		class="com.socialize.ui.view.LoadingListView"		
-		singleton="false">
+		id="baseLoadingView" 
+		class="com.socialize.ui.view.BaseLoadingView"		
+		singleton="false"
+		abstract="true">
 		<constructor-arg type="activity"/>
 		<property name="loadingViewFactory" ref="loadingViewFactory"/>
 		<init-method name="init"/>
+	</bean>		
+	
+	<bean 
+		id="loadingListView" 
+		class="com.socialize.ui.view.LoadingListView"		
+		singleton="false"
+		extends="baseLoadingView">
+		<constructor-arg type="activity"/>
 	</bean>	
 	
 	<factory id="loadingListViewFactory" makes="loadingListView"/>
+	
+	<bean 
+		id="loadingItemView" 
+		class="com.socialize.ui.view.LoadingItemView"		
+		singleton="false"
+		extends="baseLoadingView">
+		<constructor-arg type="activity"/>
+	</bean>	
+	
+	<factory id="loadingItemViewFactory" makes="loadingItemView"/>	
 
 	<bean id="htmlFormatter" class="com.socialize.ui.html.DefaultHtmlFormatter"/>
 	
@@ -479,8 +498,8 @@
 	<factory id="commentEditFieldFactory" makes="commentEditField"/>	
 	
 	<bean 
-		id="commentDetailContentView" 
-		class="com.socialize.ui.comment.CommentDetailContentView"
+		id="actionDetailContentView" 
+		class="com.socialize.ui.action.ActionDetailContentView"
 		singleton="false">
 		
 		<constructor-arg type="activity"/>
@@ -491,12 +510,13 @@
 		<property name="dateUtils" ref="dateUtils"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="htmlFormatter" ref="htmlFormatter"/>
+		<property name="userActivityViewFactory" ref="userActivityViewFactory"/>
 		
 		<init-method name="init"/>
 		
 	</bean>
 	
-	<factory id="commentDetailContentViewFactory" makes="commentDetailContentView"/>		
+	<factory id="actionDetailContentViewFactory" makes="actionDetailContentView"/>		
 	
 	<!--  Comment items -->
 	<bean 
@@ -558,8 +578,8 @@
 	<factory id="commentEntryViewFactory" makes="commentEntryView"/>	
 	
 	<bean 
-		id="commentDetailLayoutView" 
-		class="com.socialize.ui.comment.CommentDetailLayoutView"
+		id="actionDetailLayoutView" 
+		class="com.socialize.ui.action.ActionDetailLayoutView"
 		singleton="false"
 		extends="socializeView">
 		
@@ -569,10 +589,9 @@
 		
 		<property name="drawables" ref="drawables"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
-		<property name="commentHeaderFactory" ref="commentHeaderFactory"/>
-		<property name="commentDetailContentViewFactory" ref="commentDetailContentViewFactory"/>
+		<property name="actionDetailContentViewFactory" ref="actionDetailContentViewFactory"/>
 		<property name="imageLoader" ref="imageLoader"/>
-	</bean>
+	</bean> 	
 	
 	<bean 
 		id="locationEnabledOption" 
@@ -747,17 +766,24 @@
 	</bean>
 	
 	<factory id="userActivityListItemFactory" makes="userActivityListItem"/>
+	
+	<bean 
+		id="userActivityListItemBuilder" 
+		class="com.socialize.ui.profile.activity.UserActivityListItemBuilder">
+		
+		<property name="userActivityListItemFactory" ref="userActivityListItemFactory"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="dateUtils" ref="dateUtils"/>
+		<property name="logger" ref="logger"/>
+		
+	</bean>	
 
 	<bean 
 		id="userActivityListAdapter" 
 		singleton="false"
 		class="com.socialize.ui.profile.activity.UserActivityListAdapter">
-		
 		<constructor-arg type="activity"/>
-		
-		<property name="userActivityListItemFactory" ref="userActivityListItemFactory"/>
-		<property name="drawables" ref="drawables"/>
-		<property name="dateUtils" ref="dateUtils"/>
+		<property name="userActivityListItemBuilder" ref="userActivityListItemBuilder"/>
 	</bean>
 	
 	<factory id="userActivityListAdapterFactory" makes="userActivityListAdapter"/>
@@ -769,8 +795,8 @@
 		
 		<constructor-arg type="activity"/>
 		
-		<property name="loadingListViewFactory" ref="loadingListViewFactory"/>
-		<property name="userActivityListAdapterFactory" ref="userActivityListAdapterFactory"/>
+		<property name="loadingItemViewFactory" ref="loadingItemViewFactory"/>
+		<property name="userActivityListItemBuilder" ref="userActivityListItemBuilder"/>
 		
 		<init-method name="init"/>
 	</bean>

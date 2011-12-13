@@ -22,77 +22,44 @@
 package com.socialize.ui.view;
 
 import android.content.Context;
-import android.view.Gravity;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.ViewFlipper;
-
-import com.socialize.android.ioc.IBeanFactory;
 
 /**
  * @author Jason Polites
  *
  */
-public class LoadingListView extends ViewFlipper {
+public class LoadingListView extends BaseLoadingView<ListView> {
 	
 	/**
 	 * Used to locate the list view (to aid in testing)
 	 */
 	public static final int LIST_VIEW_ID = 10001;
 
-	private ListView listView;
-	private TextView emptyTextView;
-	private IBeanFactory<BasicLoadingView> loadingViewFactory;
-	private String emptyText = "No data";
 	
 	public LoadingListView(Context context) {
 		super(context);
 	}
 	
 	public void setListAdapter(ListAdapter adapter) {
-		this.listView.setAdapter(adapter);
+		getMainView().setAdapter(adapter);
 	}
 	
 	public void setScrollListener(OnScrollListener listener) {
-		this.listView.setOnScrollListener(listener);
-	}
-	
-	public void showLoading() {
-		setDisplayedChild(0);
-	}
-	
-	public void showList() {
-		setDisplayedChild(1);
-	}
-	
-	public void showEmptyText() {
-		setDisplayedChild(2);
+		getMainView().setOnScrollListener(listener);
 	}
 
 	public void scrollToTop() {
-		listView.setSelection(0); // scroll to top
+		getMainView().setSelection(0); // scroll to top
 	}
-	
-	public void init() {
-		LinearLayout contentView = new LinearLayout(getContext());
 
-		LinearLayout.LayoutParams contentViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
-		contentView.setLayoutParams(contentViewLayoutParams);
-		contentView.setOrientation(LinearLayout.VERTICAL);
-
-		LinearLayout.LayoutParams emptyContentLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
-		
-		emptyTextView = new TextView(getContext());
-		emptyTextView.setLayoutParams(emptyContentLayoutParams);
-		emptyTextView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-		emptyTextView.setText(emptyText);
-		
+	@Override
+	protected ListView createMainView() {
 		LinearLayout.LayoutParams listViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 
-		listView = new ListView(getContext());
+		ListView listView = new ListView(getContext());
 		listView.setId(LIST_VIEW_ID);
 		listView.setLayoutParams(listViewLayoutParams);
 		listView.setDrawingCacheEnabled(true);
@@ -100,35 +67,7 @@ public class LoadingListView extends ViewFlipper {
 		listView.setDividerHeight(2);
 		listView.setSmoothScrollbarEnabled(true);
 		listView.setVerticalFadingEdgeEnabled(false);
-
-		contentView.addView(listView);
-
-		LinearLayout.LayoutParams flipperLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
-		flipperLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
-		this.setLayoutParams(flipperLayoutParams);
-
-		// create a loading screen
-		BasicLoadingView loadingScreen = loadingViewFactory.getBean();
-
-		this.addView(loadingScreen);
-		this.addView(contentView);
-		this.addView(emptyTextView);
-		this.showLoading();
-	}
-
-	public void setLoadingViewFactory(IBeanFactory<BasicLoadingView> loadingViewFactory) {
-		this.loadingViewFactory = loadingViewFactory;
-	}
-
-	public String getEmptyText() {
-		return emptyText;
-	}
-
-	public void setEmptyText(String emptyText) {
-		this.emptyText = emptyText;
 		
-		if(emptyTextView != null) {
-			emptyTextView.setText(emptyText);
-		}
+		return listView;
 	}
 }

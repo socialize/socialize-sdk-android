@@ -41,7 +41,6 @@ import com.socialize.view.BaseView;
 
 /**
  * @author Jason Polites
- *
  */
 public class CommentEntryView extends BaseView {
 	

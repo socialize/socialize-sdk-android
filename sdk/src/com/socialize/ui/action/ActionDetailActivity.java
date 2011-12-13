@@ -19,15 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.comment;
+package com.socialize.ui.action;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.Toast;
+import android.widget.LinearLayout.LayoutParams;
 
 import com.socialize.Socialize;
+import com.socialize.SocializeService;
+import com.socialize.api.SocializeSession;
+import com.socialize.entity.User;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.SocializeUIActivity;
 import com.socialize.util.StringUtils;
@@ -35,53 +40,70 @@ import com.socialize.util.StringUtils;
 /**
  * @author Jason Polites
  */
-public class CommentActivity extends SocializeUIActivity {
-	
-	private CommentView view;
-	
+public class ActionDetailActivity extends SocializeUIActivity {
+
+	private ActionDetailView view;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		
+		SocializeSession session = getSocialize().getSession();
+		
+		if(session == null) {
+			finish();
+		}
+		
+		User user = session.getUser();
+		
+		if(user == null) {
+			finish();
+		}
 		
 		Bundle extras = getIntent().getExtras();
-		
-		if(extras == null || !extras.containsKey(SocializeUI.ENTITY_KEY)) {
-			Log.w("Socialize", "No entity url found for Comment Activity. Aborting");
+
+		if (extras == null || !extras.containsKey(SocializeUI.USER_ID) || !extras.containsKey(SocializeUI.COMMENT_ID)) {
+			Toast.makeText(this, "No user or comment id provided", Toast.LENGTH_SHORT).show();
 			finish();
 		}
 		else {
-			String entityKey = extras.getString(SocializeUI.ENTITY_KEY);
-			if(StringUtils.isEmpty(entityKey)) {
-				Log.w("Socialize", "No entity url found for Comment Activity. Aborting");
-				finish();
+			// If WE are the user being viewed, assume a profile update
+			String userId = extras.getString(SocializeUI.USER_ID);
+			if(!StringUtils.isEmpty(userId) && Integer.parseInt(userId) == user.getId()) {
+				setResult(SocializeUIActivity.PROFILE_UPDATE);
 			}
-			else {
-				view = new CommentView(this);
-				setContentView(view);	
-			}
+			
+			view = new ActionDetailView(this);
+			
+			LayoutParams scrollViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+			LayoutParams childViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+			
+			ScrollView scrollView = new ScrollView(this);
+			scrollView.setFillViewport(true);
+			scrollView.setLayoutParams(scrollViewLayout);
+			scrollView.addView(view, childViewLayout);			
+			
+			setContentView(scrollView);
 		}
-	}
-	
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if(keyCode == KeyEvent.KEYCODE_BACK) {
-			Socialize.getSocialize().destroy();
-		}
-		return super.onKeyDown(keyCode, event);
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == PROFILE_UPDATE) {
+		if (resultCode == SocializeUIActivity.PROFILE_UPDATE) {
 			// Profile has updated... need to reload the view
 			view.onProfileUpdate();
 		}
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if(view != null) {
 			return view.onCreateOptionsMenu(this, menu);
 		}
 		return false;
+	}
+	
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
 	}
 }

@@ -19,38 +19,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.html;
+package com.socialize.ui.view;
 
-import android.text.TextUtils;
+import java.util.List;
 
-import com.socialize.util.StringUtils;
-
+import android.content.Context;
+import android.view.View;
+import android.widget.LinearLayout;
 
 /**
  * @author Jason Polites
- *
  */
-public class DefaultHtmlFormatter implements HtmlFormatter {
-	
-	/* (non-Javadoc)
-	 * @see com.socialize.ui.html.HtmlFormatter#format(java.lang.String)
-	 */
+public class LoadingItemView<V extends View> extends BaseLoadingView<StaticItemList<V>> {
+
+	public LoadingItemView(Context context) {
+		super(context);
+	}
+
 	@Override
-	public String format(String plainText) {
-		StringBuilder builder = new StringBuilder();
-		plainText = replaceDoubleNewLines(plainText);
-		String html = plainText;
-		
-		html = TextUtils.htmlEncode(html);
-		html = plainText.replaceAll("\n", "<br/>");
-		
-		builder.append("<html><head><style>body { background:transparent; margin:8px; padding:0; font:15px helvetica,arial,sans-serif;color:#000000;}</style></head><body>");
-		builder.append(html);
-		builder.append("</body></html>");
-		return builder.toString();
+	protected StaticItemList<V> createMainView() {
+		// TODO: Use factory
+		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		StaticItemList<V> staticItemList = new StaticItemList<V>(getContext());
+		staticItemList.setLayoutParams(params);
+		staticItemList.setOrientation(LinearLayout.VERTICAL);
+		return staticItemList;
 	}
 	
-	protected String replaceDoubleNewLines(String plainText) {
-		return StringUtils.replaceNewLines(plainText, 3, 2);
+	public void clear() {
+		getMainView().setItems(null);
+		getMainView().notifyDataSetChanged();
+	}
+	
+	public void setItems(List<V> items) {
+		getMainView().setItems(items);
+		getMainView().notifyDataSetChanged();
 	}
 }

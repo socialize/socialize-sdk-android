@@ -22,7 +22,6 @@
 package com.socialize.ui.profile;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -54,7 +53,7 @@ public class ProfileActivity extends SocializeUIActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//		setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 		Bundle extras = getIntent().getExtras();
 
@@ -63,7 +62,6 @@ public class ProfileActivity extends SocializeUIActivity {
 			finish();
 		}
 		else {
-			
 			// If WE are the user being viewed, assume a profile update
 			String userId = extras.getString(SocializeUI.USER_ID);
 			
@@ -77,6 +75,7 @@ public class ProfileActivity extends SocializeUIActivity {
 					}
 				}
 			}
+			
 			view = new ProfileView(this);
 			setContentView(view);
 		}

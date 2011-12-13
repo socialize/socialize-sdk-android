@@ -49,8 +49,9 @@ import com.socialize.util.Drawables;
 
 /**
  * @author Jason Polites
- *
+ * @deprecated Use ActionDetailContentView
  */
+@Deprecated
 public class CommentDetailContentView extends LinearLayout {
 
 	private ImageView profilePicture;
