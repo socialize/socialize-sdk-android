@@ -26,6 +26,13 @@ package com.socialize.util;
  */
 public class StringUtils {
 	
+	public static String ellipsis(String text, int max) {
+		if(text != null && text.length() > max) {
+			text = text.substring(0, max-3) + "...";
+		}
+		return text;
+	}
+	
 	public static final boolean isEmpty(String[] str) {
 		return str == null || str.length == 0;
 	}

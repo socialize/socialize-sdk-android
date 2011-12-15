@@ -36,17 +36,16 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.entity.Comment;
+import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.log.SocializeLogger;
-import com.socialize.ui.html.HtmlFormatter;
+import com.socialize.ui.profile.activity.UserActivityListItem;
 import com.socialize.ui.profile.activity.UserActivityView;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.util.DateUtils;
@@ -62,16 +61,19 @@ public class ActionDetailContentView extends BaseView {
 
 	private ImageView profilePicture;
 	private TextView displayName;
-	private WebView actionView;
-	private TextView actionTimestamp;
+	private UserActivityListItem actionView;
 	private TextView actionLocation;
 	private GeoUtils geoUtils;
 	private DateUtils dateUtils;
 	private DeviceUtils deviceUtils;
 	private Colors colors;
 	private Drawables drawables;
-	private HtmlFormatter htmlFormatter;
 	private LinearLayout actionLocationLine;
+	private TextView divider;
+//	private SocializeButton settingsButton;
+	
+//	private IBeanFactory<SocializeButton> settingsButtonFactory;
+	private IBeanFactory<UserActivityListItem> userActivityListItemFactory;
 	
 	private LinearLayout headerView;
 	
@@ -93,7 +95,7 @@ public class ActionDetailContentView extends BaseView {
 		final int editTextStroke = deviceUtils.getDIP(2);
 		final float editTextRadius = editTextStroke;
 		final int titleColor = colors.getColor(Colors.TITLE);
-		
+
 		LayoutParams masterLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
 		
 		this.setLayoutParams(masterLayout);
@@ -116,71 +118,60 @@ public class ActionDetailContentView extends BaseView {
 		nameLayout.setGravity(Gravity.TOP);
 		
 		LayoutParams imageLayout = new LinearLayout.LayoutParams(imageSize,imageSize);
+		
 		LayoutParams displayNameTextLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-		LayoutParams actionTimestampLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		LayoutParams actionLocationLineLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		LayoutParams actionLocationLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		LayoutParams actionLocationPinLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		
-// Margins
+//		LayoutParams settingsButtonLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		
 		masterLayout.setMargins(0, 0, 0, 0);
 		imageLayout.setMargins(margin, margin, margin, margin);
-		actionTimestampLayout.setMargins(0, 0, margin, 0);
 		displayNameTextLayoutParams.setMargins(0, margin, margin, margin);
+//		actionLocationLineLayout.setMargins(0, margin, margin, margin);
+//		settingsButtonLayout.setMargins(margin, margin, margin, margin);
 		
-		actionTimestampLayout.gravity = Gravity.RIGHT;
+		displayNameTextLayoutParams.weight = 1.0f;
+		
 		actionLocationLayout.gravity = Gravity.LEFT;
 		actionLocationPinLayout.gravity = Gravity.CENTER_VERTICAL;
 		
 		profilePicture = new ImageView(getContext());
 		displayName = new TextView(getContext());
-		actionView = new WebView(getContext());
-		actionTimestamp = new TextView(getContext());
+		actionView = userActivityListItemFactory.getBean();
 		actionLocation = new TextView(getContext());
+//		settingsButton = settingsButtonFactory.getBean();
+//		settingsButton.setVisibility(GONE);
 		
 		ImageView locationPin = new ImageView(getContext());
 		locationPin.setImageDrawable(drawables.getDrawable("icon_location_pin.png"));
 		
 		actionLocationLine = new LinearLayout(getContext());
-		actionLocationLine.setPadding(imagePadding, margin, imagePadding, 0);
+//		actionLocationLine.setPadding(imagePadding, margin, imagePadding, 0);
 		actionLocationLine.addView(locationPin);
 		actionLocationLine.addView(actionLocation);
 		
 		actionLocationLine.setLayoutParams(actionLocationLineLayout);
 		actionLocation.setLayoutParams(actionLocationLayout);
 		locationPin.setLayoutParams(actionLocationPinLayout);
+//		settingsButton.setLayoutParams(settingsButtonLayout);
 
-		actionTimestamp.setGravity(Gravity.RIGHT);
-		actionTimestamp.setLayoutParams(actionTimestampLayout);
-		actionTimestamp.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
-		actionTimestamp.setTextColor(Color.WHITE);
-		
 		actionLocation.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
 		actionLocation.setTextColor(Color.WHITE);
 		
-		actionView.setVisibility(View.GONE);
-		actionTimestamp.setVisibility(View.GONE);
-		actionLocationLine.setVisibility(View.GONE);
 		
-		GradientDrawable actionBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Color.WHITE, Color.WHITE});
-		actionBG.setCornerRadius(4.0f);
-		actionBG.setStroke(2, Color.DKGRAY);
+		GradientDrawable actionbg = makeGradient(Color.WHITE, Color.WHITE);
+		actionbg.setAlpha(32);
 		
-		LayoutParams actionViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+//		actionView.setFontColor("#000000");
+		actionView.setBackground(actionbg);
+		actionView.setVisibility(View.INVISIBLE);
+		actionLocationLine.setVisibility(View.INVISIBLE);
 		
 		LayoutParams actionWebViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-		
-		actionViewLayout.setMargins(margin, actionMargin, margin, actionMargin);
-		LinearLayout actionLayoutView = new LinearLayout(getContext());
-		
-		actionLayoutView.setLayoutParams(actionViewLayout);
-		actionLayoutView.setBackgroundDrawable(actionBG);
-//		actionLayoutView.setPadding(margin, 0, margin, 0);
-		
+		actionWebViewLayout.setMargins(margin, actionMargin, margin, actionMargin);
 		actionView.setLayoutParams(actionWebViewLayout);
-		actionView.setLongClickable(true);
-		
-		actionLayoutView.addView(actionView);
 		
 		GradientDrawable imageBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] {Color.WHITE, Color.WHITE});
 		imageBG.setStroke(2, Color.BLACK);
@@ -192,10 +183,9 @@ public class ActionDetailContentView extends BaseView {
 		profilePicture.setScaleType(ScaleType.CENTER_CROP);
 	
 		displayName.setTextColor(titleColor);
-		displayName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+		displayName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24);
 		displayName.setMaxLines(1);
 		displayName.setTypeface(Typeface.DEFAULT);
-		displayName.setTextColor(titleColor);
 		displayName.setSingleLine();
 		displayName.setLayoutParams(displayNameTextLayoutParams);
 		
@@ -208,18 +198,18 @@ public class ActionDetailContentView extends BaseView {
 		maxLength[0] = new InputFilter.LengthFilter(128); 
 		
 		nameLayout.addView(displayName);
+		nameLayout.addView(actionLocationLine);
 		
 		headerView.addView(profilePicture);
 		headerView.addView(nameLayout);
 		
-		this.addView(headerView);
-		this.addView(actionLocationLine);
-		this.addView(actionLayoutView);
-		this.addView(actionTimestamp);
-		
+		addView(headerView);
+		addView(actionView);
+//		addView(actionTimestamp);
+
 		if(userActivityViewFactory != null) {
 			
-			TextView divider = new TextView(getContext());
+			divider = new TextView(getContext());
 			divider.setBackgroundDrawable(drawables.getDrawable("divider.png", true, false, true));
 			
 			LayoutParams dividerLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, deviceUtils.getDIP(30));
@@ -235,23 +225,32 @@ public class ActionDetailContentView extends BaseView {
 			divider.setTypeface(Typeface.DEFAULT_BOLD);
 			divider.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
 			
-			this.addView(divider);
+			addView(divider);
 			
 			LinearLayout activityHolder = new LinearLayout(getContext());
 			
 			LayoutParams userActivityLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
 			LayoutParams activityHolderLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
-			activityHolderLayout.weight = 1.0f;
 			
-			activityHolder.setLayoutParams(userActivityLayout);
-			activityHolder.setBackgroundDrawable(drawables.getDrawable("crosshatch.png", true, true, true));	
+			activityHolderLayout.setMargins(0, 0, 0, 0);
+			
+			userActivityLayout.setMargins(0, 0, 0, 0);
+			
+			activityHolder.setLayoutParams(activityHolderLayout);
+			activityHolder.setPadding(margin, margin, margin, margin);
+			
+			int activityBg = colors.getColor("ACTIVITY_BG");
+			GradientDrawable bg = makeGradient(activityBg, activityBg);
+			bg.setAlpha(144);
+			activityHolder.setBackgroundDrawable(bg);
+			activityHolderLayout.weight = 1.0f;
 			
 			userActivityView = userActivityViewFactory.getBean();
 			userActivityView.setLayoutParams(userActivityLayout);
 			
 			activityHolder.addView(userActivityView);
 			
-			this.addView(activityHolder);
+			addView(activityHolder);
 		}			
 	}
 
@@ -261,18 +260,6 @@ public class ActionDetailContentView extends BaseView {
 
 	public TextView getDisplayName() {
 		return displayName;
-	}
-
-	public WebView getCommentView() {
-		return actionView;
-	}
-
-	public TextView getCommentTimestamp() {
-		return actionTimestamp;
-	}
-
-	public GeoUtils getGeoUtils() {
-		return geoUtils;
 	}
 
 	public void setGeoUtils(GeoUtils geoUtils) {
@@ -295,24 +282,22 @@ public class ActionDetailContentView extends BaseView {
 		this.colors = colors;
 	}
 
-	public View getHeaderView() {
-		return headerView;
-	}
-
-	public void setHtmlFormatter(HtmlFormatter htmlFormatter) {
-		this.htmlFormatter = htmlFormatter;
-	}
-
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
+	}
+	
+	public void setUserActivityListItemFactory(IBeanFactory<UserActivityListItem> userActivityListItemFactory) {
+		this.userActivityListItemFactory = userActivityListItemFactory;
 	}
 
 	public void setUserActivityViewFactory(IBeanFactory<UserActivityView> userActivityViewFactory) {
 		this.userActivityViewFactory = userActivityViewFactory;
 	}
 	
-	
-	
+//	public void setSettingsButtonFactory(IBeanFactory<SocializeButton> settingsButtonFactory) {
+//		this.settingsButtonFactory = settingsButtonFactory;
+//	}
+
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
@@ -322,24 +307,28 @@ public class ActionDetailContentView extends BaseView {
 			userActivityView.loadUserActivity(user.getId());
 		}
 	}
+	
+//	public SocializeButton getSettingsButton() {
+//		return settingsButton;
+//	}
+	
+	protected GradientDrawable makeGradient(int bottom, int top) {
+		return new GradientDrawable(
+				GradientDrawable.Orientation.BOTTOM_TOP,
+				new int[] { bottom, top });
+	}
+	
 
-	public void setComment(final Comment action) {
+	public void setAction(final SocializeAction action) {
 		if(actionView != null) {
-			actionView.loadDataWithBaseURL("", htmlFormatter.format(action.getText()), "text/html", "utf-8", "");
-			actionView.setVisibility(View.VISIBLE);
-			actionView.setBackgroundColor(0x00000000);
+			actionView.setAction(action, new Date());
+			actionView.setVisibility(VISIBLE);
 		}
 		
-		if(actionTimestamp != null) {
-			actionTimestamp.setVisibility(View.VISIBLE);
-			
-			String meta = "";
-			if(action.getDate() != null) {
-				Date actionDate = new Date(action.getDate());
-				meta = dateUtils.getSimpleDateString(actionDate);
-			}
-			
-			actionTimestamp.setText(meta);
+		User user = action.getUser();
+		
+		if(user != null) {
+			divider.setText("Recent Activity for " + user.getDisplayName());
 		}
 		
 		if(actionLocation != null) {

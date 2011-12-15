@@ -25,7 +25,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -37,8 +36,6 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.user.UserGetListener;
-import com.socialize.ui.SocializeUI;
-import com.socialize.ui.SocializeUIActivity;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.image.ImageLoadListener;
 import com.socialize.ui.image.ImageLoadRequest;
@@ -66,6 +63,7 @@ public class ActionDetailLayoutView extends BaseView {
 	private IBeanFactory<ActionDetailContentView> actionDetailContentViewFactory;
 	private ProgressDialogFactory progressDialogFactory;
 	private ImageLoader imageLoader;
+//	private Colors colors;
 	// End injected
 	
 	public ActionDetailLayoutView(Activity context, String userId) {
@@ -92,21 +90,32 @@ public class ActionDetailLayoutView extends BaseView {
 
 		setOrientation(LinearLayout.VERTICAL);
 		setLayoutParams(fill);
-		setBackgroundDrawable(drawables.getDrawable("slate.png", true, true, true));
+//		final int bgColor = colors.getColor(Colors.APP_BG);
+		
+//		setBackgroundDrawable(drawables.getDrawable("slate.png", true, true, true));
+		
+//		setBackgroundColor(bgColor);
 		setPadding(0, 0, 0, 0);
 		setVerticalFadingEdgeEnabled(false);
 
 		content = actionDetailContentViewFactory.getBean();
 		defaultProfilePicture = drawables.getDrawable("default_user_icon.png");
 		
-		OnClickListener profileClickListener = new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				SocializeUI.getInstance().showUserProfileViewForResult(getActivity(), userId, SocializeUIActivity.PROFILE_UPDATE);
-			}
-		};
-		
-		content.getHeaderView().setOnClickListener(profileClickListener);
+//		SocializeSession session = Socialize.getSocialize().getSession();
+//		
+//		if(session != null) {
+//			User user = session.getUser();
+//			if(user != null && user.getId().toString().equals(userId)) {
+//				OnClickListener profileClickListener = new OnClickListener() {
+//					@Override
+//					public void onClick(View v) {
+//						SocializeUI.getInstance().showUserProfileViewForResult(getActivity(), userId, SocializeUIActivity.PROFILE_UPDATE);
+//					}
+//				};
+//				content.getSettingsButton().setVisibility(View.VISIBLE);
+//				content.getSettingsButton().setOnClickListener(profileClickListener);
+//			}
+//		}
 
 		addView(content);
 	}
@@ -158,7 +167,7 @@ public class ActionDetailLayoutView extends BaseView {
 				
 				@Override
 				public void onGet(Comment entity) {
-					content.setComment(entity);
+					content.setAction(entity);
 					countdown();
 				}
 			});
@@ -246,6 +255,10 @@ public class ActionDetailLayoutView extends BaseView {
 	public void setImageLoader(ImageLoader imageLoader) {
 		this.imageLoader = imageLoader;
 	}
+
+//	public void setColors(Colors colors) {
+//		this.colors = colors;
+//	}
 
 	public void onProfileUpdate() {
 		dialog = progressDialogFactory.show(getContext(), "Loading", "Please wait...");

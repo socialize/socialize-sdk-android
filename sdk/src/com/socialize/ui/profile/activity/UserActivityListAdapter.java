@@ -112,7 +112,8 @@ public class UserActivityListAdapter extends BaseAdapter {
 
 		if(item != null) {
 			if(oldView instanceof UserActivityListItem) {
-				view = userActivityListItemBuilder.build(activity, (UserActivityListItem) oldView, item, now);
+				UserActivityListItem listItem = (UserActivityListItem) oldView;
+				listItem.setAction(item, now);
 			}
 			else {
 				view = userActivityListItemBuilder.build(activity, item, now);

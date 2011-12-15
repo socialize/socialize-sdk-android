@@ -89,6 +89,7 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 				to.put("date", DATE_FORMAT.format(date));
 			}
 			
+			to.put("share_location", from.isLocationShared());
 		}
 		catch (Exception e) {
 			
@@ -139,6 +140,10 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			if(from.has("lng") && !from.isNull("lng")) {
 				to.setLon(from.getDouble("lng"));
 			}
+			
+			if(from.has("share_location") && !from.isNull("share_location")) {
+				to.setLocationShared(from.getBoolean("share_location"));
+			}			
 			
 			if(from.has("date") && !from.isNull("date")) {
 				try {

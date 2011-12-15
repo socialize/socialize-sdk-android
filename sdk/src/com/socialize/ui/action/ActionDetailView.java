@@ -28,13 +28,16 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.socialize.Socialize;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.view.EntityView;
+import com.socialize.util.Drawables;
 
 /**
  * @author Jason Polites
@@ -42,6 +45,7 @@ import com.socialize.ui.view.EntityView;
 public class ActionDetailView extends EntityView {
 
 	private ActionDetailLayoutView actionLayoutView;
+	private View view;
 	
 	public ActionDetailView(Context context) {
 		super(context);
@@ -55,8 +59,27 @@ public class ActionDetailView extends EntityView {
 		if (entityKeys != null) {
 			if(actionLayoutView == null) {
 				actionLayoutView = container.getBean("actionDetailLayoutView", entityKeys);
+				
+				LayoutParams scrollViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+				LayoutParams childViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+				
+				ScrollView scrollView = new ScrollView(getContext());
+				scrollView.setFillViewport(true);
+				scrollView.setLayoutParams(scrollViewLayout);
+				scrollView.addView(actionLayoutView, childViewLayout);	
+				
+				LinearLayout layout = new LinearLayout(getContext());
+				LayoutParams masterParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+				
+				layout.setLayoutParams(masterParams);
+				layout.setBackgroundDrawable(((Drawables)container.getBean("drawables")).getDrawable("slate.png", true, true, true));
+				
+				layout.addView(scrollView);
+				
+				view = layout;
 			}
-			return actionLayoutView;
+			
+			return view;
 		}
 		else {
 			Log.e("Socialize", "No user id specified for " + getClass().getSimpleName());

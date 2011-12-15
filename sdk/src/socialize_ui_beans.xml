@@ -97,8 +97,24 @@
 					<value value="#ffffff"/>
 				</entry>
 				<entry>
+					<key value="APP_BG"/>
+					<value value="#353535"/>
+				</entry>
+				<entry>
+					<key value="ACTIVITY_BG"/>
+					<value value="#202020"/>
+				</entry>				
+				<entry>
 					<key value="LIST_ITEM_BG"/>
-					<value value="#454545"/>
+					<value value="#505050"/>
+				</entry>
+				<entry>
+					<key value="LIST_ITEM_TOP"/>
+					<value value="#707070"/>
+				</entry>
+				<entry>
+					<key value="LIST_ITEM_BOTTOM"/>
+					<value value="#404040"/>
 				</entry>
 				<entry>
 					<key value="STANDARD_BACKGROUND_COLOR"/>
@@ -163,7 +179,7 @@
 		<property name="topColor" value="BUTTON_TOP"/>
 		<property name="strokeTopColor" value="BUTTON_TOP_STROKE"/>
 		<property name="strokeBottomColor" value="BUTTON_BOTTOM_STROKE"/>
-		<property name="padding" value="8" type="integer"/>
+		<property name="padding" value="4" type="integer"/>
 		
 		<init-method name="init"/>
 	</bean>
@@ -509,8 +525,9 @@
 		<property name="geoUtils" ref="geoUtils"/>
 		<property name="dateUtils" ref="dateUtils"/>
 		<property name="drawables" ref="drawables"/>
-		<property name="htmlFormatter" ref="htmlFormatter"/>
+		<property name="userActivityListItemFactory" ref="userActivityListItemFactory"/>
 		<property name="userActivityViewFactory" ref="userActivityViewFactory"/>
+		<property name="settingsButtonFactory" ref="settingsButtonFactory"/>
 		
 		<init-method name="init"/>
 		
@@ -694,6 +711,24 @@
 	</bean>
 	
 	<bean 
+		id="settingsButton" 
+		singleton="false"
+		extends="socializeButton">
+		<constructor-arg type="activity"/>
+		<property name="text" value=""/>
+		<property name="imageName" value="icon_gear.png"/>
+		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
+		<property name="topColor" value="GRAY_BTN_TOP"/>
+		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
+		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>		
+		<property name="height" value="36" type="integer"/>
+		<property name="width" value="100" type="integer"/>
+		<property name="textSize" value="9" type="integer"/>
+		<property name="padding" value="6" type="integer"/>
+		<property name="textAlign" value="center"/>
+	</bean>	
+	
+	<bean 
 		id="profileSaveButton" 
 		singleton="false"
 		extends="socializeButton">
@@ -748,10 +783,22 @@
 	<factory id="facebookSignOutClickListenerFactory" makes="facebookSignOutClickListener"/>
 	<factory id="profileSaveButtonListenerFactory" makes="profileSaveButtonListener"/>
 	<factory id="profileImageContextMenuFactory" makes="profileImageContextMenu"/>
+	<factory id="settingsButtonFactory" makes="settingsButton"/>
 	
 <!-- End Profile UI -->
 
 <!-- User Activity UI -->
+
+	<bean 
+		id="userActivityActionText" 
+		singleton="false"
+		class="com.socialize.ui.profile.activity.UserActivityActionText">
+		<constructor-arg type="activity"/>
+		<property name="colors" ref="colors"/>
+		<init-method name="init"/>
+	</bean>
+	
+	<factory id="userActivityActionTextFactory" makes="userActivityActionText"/>
 
 	<bean 
 		id="userActivityListItem" 
@@ -761,6 +808,10 @@
 		
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="colors" ref="colors"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="dateUtils" ref="dateUtils"/>
+		<property name="logger" ref="logger"/>
+		<property name="userActivityActionTextFactory" ref="userActivityActionTextFactory"/>
 		
 		<init-method name="init"/>
 	</bean>
@@ -770,12 +821,7 @@
 	<bean 
 		id="userActivityListItemBuilder" 
 		class="com.socialize.ui.profile.activity.UserActivityListItemBuilder">
-		
 		<property name="userActivityListItemFactory" ref="userActivityListItemFactory"/>
-		<property name="drawables" ref="drawables"/>
-		<property name="dateUtils" ref="dateUtils"/>
-		<property name="logger" ref="logger"/>
-		
 	</bean>	
 
 	<bean 

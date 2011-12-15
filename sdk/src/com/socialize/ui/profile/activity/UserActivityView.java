@@ -44,11 +44,11 @@ import com.socialize.view.BaseView;
 public class UserActivityView extends BaseView {
 
 	// Local
-	private LoadingItemView<UserActivityListItem> listView;
+	private LoadingItemView<UserActivityListItem> itemView;
 	private UserActivityListItemBuilder userActivityListItemBuilder;
 	
 	// Injected
-	private int numItems = 20;
+	private int numItems = 10;
 	
 	private IBeanFactory<LoadingItemView<UserActivityListItem>> loadingItemViewFactory;
 	
@@ -57,13 +57,13 @@ public class UserActivityView extends BaseView {
 	}
 
 	public void init() {
-		listView = loadingItemViewFactory.getBean();
-		listView.setEmptyText("No recent activity");
-		addView(listView);
+		itemView = loadingItemViewFactory.getBean();
+		itemView.setEmptyText("No recent activity");
+		addView(itemView);
 	}
 	
 	public void loadUserActivity(long userId) {
-		listView.showLoading();
+		itemView.showLoading();
 		Socialize.getSocialize().listActivityByUser(userId, 0, numItems, new UserActivityListListener() {
 			@Override
 			public void onList(ListResult<SocializeAction> entities) {
@@ -76,27 +76,32 @@ public class UserActivityView extends BaseView {
 					if(items != null && items.size() > 0) {
 						ArrayList<UserActivityListItem> views = new ArrayList<UserActivityListItem>(items.size());
 						
+						LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+						params.setMargins(0, 8, 0, 0);
+						
 						for (SocializeAction item : items) {
-							views.add(userActivityListItemBuilder.build(getActivity(), item, now));
+							UserActivityListItem view = userActivityListItemBuilder.build(getActivity(), item, now);
+							view.setLayoutParams(params);
+							views.add(view);
 						}
 						
-						listView.setItems(views);
-						listView.showList();
+						itemView.setItems(views);
+						itemView.showList();
 					}
 					else {
-						listView.clear();
-						listView.showEmptyText();
+						itemView.clear();
+						itemView.showEmptyText();
 					}
 				}
 				else {
-					listView.clear();
-					listView.showEmptyText();
+					itemView.clear();
+					itemView.showEmptyText();
 				}
 			}
 			@Override
 			public void onError(SocializeException error) {
-				listView.clear();
-				listView.showEmptyText();
+				itemView.clear();
+				itemView.showEmptyText();
 			}
 		});
 	}

@@ -24,10 +24,7 @@ package com.socialize.ui.action;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Toast;
-import android.widget.LinearLayout.LayoutParams;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
@@ -35,7 +32,6 @@ import com.socialize.api.SocializeSession;
 import com.socialize.entity.User;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.SocializeUIActivity;
-import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -47,47 +43,40 @@ public class ActionDetailActivity extends SocializeUIActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		
 		SocializeSession session = getSocialize().getSession();
 		
 		if(session == null) {
 			finish();
 		}
-		
-		User user = session.getUser();
-		
-		if(user == null) {
-			finish();
-		}
-		
-		Bundle extras = getIntent().getExtras();
-
-		if (extras == null || !extras.containsKey(SocializeUI.USER_ID) || !extras.containsKey(SocializeUI.COMMENT_ID)) {
-			Toast.makeText(this, "No user or comment id provided", Toast.LENGTH_SHORT).show();
-			finish();
-		}
 		else {
-			// If WE are the user being viewed, assume a profile update
-			String userId = extras.getString(SocializeUI.USER_ID);
-			if(!StringUtils.isEmpty(userId) && Integer.parseInt(userId) == user.getId()) {
-				setResult(SocializeUIActivity.PROFILE_UPDATE);
+			User user = session.getUser();
+			
+			if(user == null) {
+				finish();
 			}
-			
-			view = new ActionDetailView(this);
-			
-			LayoutParams scrollViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
-			LayoutParams childViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
-			
-			ScrollView scrollView = new ScrollView(this);
-			scrollView.setFillViewport(true);
-			scrollView.setLayoutParams(scrollViewLayout);
-			scrollView.addView(view, childViewLayout);			
-			
-			setContentView(scrollView);
+			else {
+				Bundle extras = getIntent().getExtras();
+
+				if (extras == null || !extras.containsKey(SocializeUI.USER_ID)) {
+					Toast.makeText(this, "No user id provided", Toast.LENGTH_SHORT).show();
+					finish();
+				}
+				else {
+					// If WE are the user being viewed, assume a profile update
+					String userId = extras.getString(SocializeUI.USER_ID);
+					
+					if(Integer.parseInt(userId) == user.getId()) {
+						setResult(SocializeUIActivity.PROFILE_UPDATE);
+					}
+					
+					view = new ActionDetailView(this);
+					setContentView(view);
+				}
+			}
 		}
 	}
-	
+
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == SocializeUIActivity.PROFILE_UPDATE) {
 			// Profile has updated... need to reload the view

@@ -81,6 +81,8 @@ public class SocializeButton extends LinearLayout {
 	private List<OnClickListener> beforeListeners;
 	private List<OnClickListener> afterListeners;
 	
+	private int textPadding;
+	
 	public SocializeButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
@@ -93,7 +95,8 @@ public class SocializeButton extends LinearLayout {
 		
 		int dipPadding = deviceUtils.getDIP(padding);
 		int radius = deviceUtils.getDIP(4);
-		int textPadding = deviceUtils.getDIP(4);
+		
+		textPadding = deviceUtils.getDIP(4);
 		
 		int bottom = colors.getColor(bottomColor);
 		int top = colors.getColor(topColor);
@@ -197,14 +200,17 @@ public class SocializeButton extends LinearLayout {
 		textView.setLayoutParams(textLayout);
 		
 		if(!StringUtils.isEmpty(imageName)) {
+
 			imageView = makeImageView();
 			imageView.setImageDrawable(drawables.getDrawable(imageName));
 			imageView.setLayoutParams(imageLayout);
 			imageView.setPadding(deviceUtils.getDIP(imagePaddingLeft), 0, deviceUtils.getDIP(imagePaddingRight), 0);
-
+			
 			addView(imageView);
 			
-			textView.setPadding(textPadding, 0, 0, 0);
+			if(!StringUtils.isEmpty(text)) {
+				textView.setPadding(textPadding, 0, 0, 0);
+			}
 		}
 		else {
 			textView.setPadding(0, 0, 0, 0);
@@ -285,6 +291,7 @@ public class SocializeButton extends LinearLayout {
 	public void setText(String text) {
 		if(textView != null) {
 			textView.setText(text);
+			textView.setPadding(textPadding, 0, 0, 0);
 		}
 		this.text = text;
 	}

@@ -19,6 +19,7 @@ public class ActionBarAutoActivity extends ActionBarActivity {
 		options.setEntityName(entityName);
 		options.setEntityKeyUrl(isEntityKeyUrl);
 		options.setAddScrollView(true);
+		
 		SocializeUI.getInstance().setEntityLoader(new SocializeEntityLoader() {
 			@Override
 			public void loadEntity(Activity activity, Entity entity) {
