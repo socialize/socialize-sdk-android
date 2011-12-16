@@ -15,14 +15,11 @@ import com.socialize.listener.user.UserGetListener;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.ui.header.SocializeHeader;
 import com.socialize.util.BitmapUtils;
-import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
 
 public class ProfileLayoutView extends BaseView {
 
 	private String userId;
-	
-	private Drawables drawables;
 	
 	private IBeanFactory<SocializeHeader> profileHeaderFactory;
 	private IBeanFactory<ProfileContentView> profileContentViewFactory;
@@ -52,9 +49,9 @@ public class ProfileLayoutView extends BaseView {
 
 		setOrientation(LinearLayout.VERTICAL);
 		setLayoutParams(fill);
-		setBackgroundDrawable(drawables.getDrawable("slate.png", true, true, true));
+//		setBackgroundDrawable(drawables.getDrawable("slate.png", true, true, true));
 		setPadding(0, 0, 0, 0);
-		setVerticalFadingEdgeEnabled(false);
+//		setVerticalFadingEdgeEnabled(false);
 
 		header = profileHeaderFactory.getBean();
 		content = profileContentViewFactory.getBean(this);
@@ -126,10 +123,6 @@ public class ProfileLayoutView extends BaseView {
 	
 	public void setUserDetails(User user) {
 		content.setUserDetails(user);
-	}
-	
-	public void setDrawables(Drawables drawables) {
-		this.drawables = drawables;
 	}
 	
 	public void setUserId(String entityKey) {

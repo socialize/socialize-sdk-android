@@ -24,11 +24,11 @@ package com.socialize.ui.profile.activity;
 import java.util.Date;
 import java.util.List;
 
-import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.action.ActionType;
 import com.socialize.entity.SocializeAction;
 
@@ -38,14 +38,12 @@ import com.socialize.entity.SocializeAction;
 public class UserActivityListAdapter extends BaseAdapter {
 	
 	// Injected
-	private UserActivityListItemBuilder userActivityListItemBuilder;
-	private Activity activity;
+	private IBeanFactory<UserActivityListItem> userActivityListItemFactory;
 	private Date now = null;
 	
-	public UserActivityListAdapter(Activity activity) {
+	public UserActivityListAdapter() {
 		super();
 		now = new Date();
-		this.activity = activity;
 	}
 
 	// Local
@@ -112,12 +110,13 @@ public class UserActivityListAdapter extends BaseAdapter {
 
 		if(item != null) {
 			if(oldView instanceof UserActivityListItem) {
-				UserActivityListItem listItem = (UserActivityListItem) oldView;
-				listItem.setAction(item, now);
+				view = (UserActivityListItem) oldView;
 			}
 			else {
-				view = userActivityListItemBuilder.build(activity, item, now);
+				view = userActivityListItemFactory.getBean();
 			}
+			
+			view.setAction(item, now);
 		}
 		else {
 			return oldView;
@@ -127,8 +126,8 @@ public class UserActivityListAdapter extends BaseAdapter {
 	}
 
 
-	public void setUserActivityListItemBuilder(UserActivityListItemBuilder userActivityListItemBuilder) {
-		this.userActivityListItemBuilder = userActivityListItemBuilder;
+	public void setUserActivityListItemFactory(IBeanFactory<UserActivityListItem> userActivityListItemFactory) {
+		this.userActivityListItemFactory = userActivityListItemFactory;
 	}
 
 	protected void setActions(List<SocializeAction> actions) {

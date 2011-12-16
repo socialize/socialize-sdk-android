@@ -41,8 +41,7 @@ public class ActionDetailActivity extends SocializeUIActivity {
 	private ActionDetailView view;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public void onCreateSafe(Bundle savedInstanceState) {
 		
 		SocializeSession session = getSocialize().getSession();
 		

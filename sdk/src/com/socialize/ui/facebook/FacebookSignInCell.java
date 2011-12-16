@@ -22,26 +22,21 @@
 package com.socialize.ui.facebook;
 
 import android.content.Context;
-import android.util.AttributeSet;
 
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.ui.view.SocializeButton;
 
 /**
  * @author Jason Polites
  */
-public class FacebookButton extends SocializeButton {
+public class FacebookSignInCell extends FacebookCell {
 	
 	private FacebookAuthClickListener facebookAuthClickListener;
 
-	public FacebookButton(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
-
-	public FacebookButton(Context context) {
+	public FacebookSignInCell(Context context) {
 		super(context);
 	}
-
+	
+	@Override
 	public void init() {
 		super.init();
 		setOnClickListener(facebookAuthClickListener);
@@ -54,4 +49,5 @@ public class FacebookButton extends SocializeButton {
 	public void setFacebookAuthClickListener(FacebookAuthClickListener facebookAuthClickListener) {
 		this.facebookAuthClickListener = facebookAuthClickListener;
 	}
+
 }

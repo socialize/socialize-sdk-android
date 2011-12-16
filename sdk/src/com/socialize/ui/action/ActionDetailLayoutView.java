@@ -32,6 +32,7 @@ import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Comment;
+import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentGetListener;
@@ -55,6 +56,8 @@ public class ActionDetailLayoutView extends BaseView {
 	private ActionDetailContentView content;
 	private ProgressDialog dialog = null;
 	private Drawable defaultProfilePicture;
+	
+	private SocializeAction currentAction;
 	
 	private int count = 0;
 	
@@ -131,9 +134,8 @@ public class ActionDetailLayoutView extends BaseView {
 			
 			dialog = progressDialogFactory.show(getContext(), "Loading", "Please wait...");
 			
-			count = 2;
+			count = 1;
 			
-			doGetUserProfile();
 			doGetComment();
 		}
 		else {
@@ -156,25 +158,23 @@ public class ActionDetailLayoutView extends BaseView {
 		if(!StringUtils.isEmpty(commentId)) {
 			int id = Integer.parseInt(commentId);
 			getSocialize().getCommentById(id, new CommentGetListener() {
-				
 				@Override
 				public void onError(SocializeException error) {
-					// Ignore.. 
-					// TODO: log error
-					error.printStackTrace();
 					countdown();
+					showError(getContext(), error);
 				}
 				
 				@Override
 				public void onGet(Comment entity) {
+					ActionDetailLayoutView.this.currentAction = entity;
 					content.setAction(entity);
-					countdown();
+					doGetUserProfile(entity);
 				}
 			});
 		}
 	}
 	
-	public void doGetUserProfile() {
+	public void doGetUserProfile(final SocializeAction action) {
 		int id = Integer.parseInt(userId);
 		
 		getSocialize().getUser(id, new UserGetListener() {
@@ -182,7 +182,7 @@ public class ActionDetailLayoutView extends BaseView {
 			@Override
 			public void onGet(User user) {
 				// Set the user details into the view elements
-				setUserDetails(user);
+				setUserDetails(user, action);
 				countdown();
 			}
 			
@@ -194,7 +194,7 @@ public class ActionDetailLayoutView extends BaseView {
 		});
 	}
 	
-	public void setUserDetails(User user) {
+	public void setUserDetails(User user, SocializeAction action) {
 		
 		String profilePicData = user.getSmallImageUri();
 		final ImageView userIcon = content.getProfilePicture();
@@ -233,7 +233,7 @@ public class ActionDetailLayoutView extends BaseView {
 		}
 		
 		content.getDisplayName().setText(user.getDisplayName());
-		content.loadUserActivity(user);
+		content.loadUserActivity(user, action);
 	}
 	
 	public void setDrawables(Drawables drawables) {
@@ -263,6 +263,6 @@ public class ActionDetailLayoutView extends BaseView {
 	public void onProfileUpdate() {
 		dialog = progressDialogFactory.show(getContext(), "Loading", "Please wait...");
 		count = 1;
-		doGetUserProfile();
+		doGetUserProfile(currentAction);
 	}
 }

@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.button;
+package com.socialize.ui.view;
 
 import java.util.ArrayList;
 import java.util.List;

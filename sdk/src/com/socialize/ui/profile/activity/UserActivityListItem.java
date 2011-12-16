@@ -23,6 +23,7 @@ package com.socialize.ui.profile.activity;
 
 import java.util.Date;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -39,6 +40,8 @@ import android.widget.TextView;
 
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.SocializeAction;
+import com.socialize.ui.SocializeEntityLoader;
+import com.socialize.ui.SocializeUI;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.util.DateUtils;
 import com.socialize.util.DeviceUtils;
@@ -51,7 +54,8 @@ public class UserActivityListItem extends TableLayout {
 	
 	private TextView date;
 	private ImageView icon;
-	private UserActivityActionText actionText;
+	private ImageView locationIcon;
+	private UserActivityActionHtml actionText;
 	private Drawable background;
 	
 	private DeviceUtils deviceUtils;
@@ -68,7 +72,7 @@ public class UserActivityListItem extends TableLayout {
 	private int contentFontSize = 12;
 	private int titleFontSize = 11;
 	
-	private IBeanFactory<UserActivityActionText> userActivityActionTextFactory;
+	private IBeanFactory<UserActivityActionHtml> userActivityActionHtmlFactory;
 	
 	public UserActivityListItem(Context context) {
 		super(context);
@@ -100,6 +104,7 @@ public class UserActivityListItem extends TableLayout {
 		TableRow firstRow = new TableRow(getContext());
 		TableRow secondRow = new TableRow(getContext());
 		
+		View location = createLocation();
 		View icon = createIcon();
 		View content = createTitle();
 		View date = createDate();
@@ -107,10 +112,11 @@ public class UserActivityListItem extends TableLayout {
 		icon.setPadding(padding, padding, padding, padding);
 		content.setPadding(padding, padding, padding, padding);
 		date.setPadding(padding, padding, padding, padding);
+		location.setPadding(padding, padding, padding, padding);
 		
 		TableRow.LayoutParams iconParams = new TableRow.LayoutParams();
+		TableRow.LayoutParams locationIconParams = new TableRow.LayoutParams();
 		TableRow.LayoutParams contentParams = new TableRow.LayoutParams();
-		TableRow.LayoutParams bodyParams = new TableRow.LayoutParams();
 		TableRow.LayoutParams dateParams = new TableRow.LayoutParams();
 		
 		iconParams.column = 1;
@@ -120,19 +126,21 @@ public class UserActivityListItem extends TableLayout {
 		contentParams.gravity = Gravity.TOP | Gravity.LEFT;
 		contentParams.setMargins(0, contentMargin, 0, 0);
 		
-		bodyParams.column = 2;
-		bodyParams.gravity = Gravity.TOP | Gravity.LEFT;
+		locationIconParams.column = 3; 
+		locationIconParams.gravity = Gravity.TOP | Gravity.RIGHT;
 		
 		dateParams.width = TableRow.LayoutParams.FILL_PARENT;
 		dateParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-		dateParams.span = 3;
+		dateParams.span = 4;
 		
+		location.setLayoutParams(locationIconParams);
 		icon.setLayoutParams(iconParams);
 		content.setLayoutParams(contentParams);
 		date.setLayoutParams(dateParams);
 		
 		firstRow.addView(icon);
 		firstRow.addView(content);
+		firstRow.addView(location);
 		secondRow.addView(date);
 		
 		addView(firstRow);
@@ -140,13 +148,19 @@ public class UserActivityListItem extends TableLayout {
 	}
 	
 	protected View createTitle() {
-		actionText = userActivityActionTextFactory.getBean();
+		actionText = userActivityActionHtmlFactory.getBean();
 		return actionText;
 	}
 	
 	protected View createIcon() {
 		icon = new ImageView(getContext());
 		return icon;
+	}
+	
+	protected View createLocation() {
+		locationIcon = new ImageView(getContext());
+		locationIcon.setImageDrawable(drawables.getDrawable("icon_location_pin.png"));
+		return locationIcon;
 	}
 	
 	protected View createDate() {
@@ -178,7 +192,11 @@ public class UserActivityListItem extends TableLayout {
 		}
 		else {
 			date.setText("");
-		}				
+		}	
+		
+		if(!action.isLocationShared()) {
+			locationIcon.setVisibility(GONE);
+		}
 		
 		switch(action.getActionType()) {
 			case COMMENT:
@@ -191,6 +209,17 @@ public class UserActivityListItem extends TableLayout {
 				icon.setImageDrawable(drawables.getDrawable("icon_share.png"));
 				break;
 		}	
+		
+		final SocializeEntityLoader entityLoader = SocializeUI.getInstance().getEntityLoader();
+		
+		if(entityLoader != null) {
+			setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					entityLoader.loadEntity((Activity) getContext(), action.getEntity());
+				}
+			});
+		}
 	}
 
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
@@ -209,8 +238,8 @@ public class UserActivityListItem extends TableLayout {
 		this.dateUtils = dateUtils;
 	}
 
-	public void setUserActivityActionTextFactory(IBeanFactory<UserActivityActionText> userActivityActionTextFactory) {
-		this.userActivityActionTextFactory = userActivityActionTextFactory;
+	public void setUserActivityActionHtmlFactory(IBeanFactory<UserActivityActionHtml> userActivityActionHtmlFactory) {
+		this.userActivityActionHtmlFactory = userActivityActionHtmlFactory;
 	}
 	
 	public void setBackground(Drawable background) {

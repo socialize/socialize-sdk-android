@@ -11,10 +11,10 @@ import android.widget.TextView;
 import com.socialize.entity.Comment;
 import com.socialize.test.ui.integrationtest.SocializeUIRobotiumTest;
 import com.socialize.test.ui.util.TestUtils;
-import com.socialize.ui.button.SocializeButton;
 import com.socialize.ui.comment.CommentEditField;
 import com.socialize.ui.comment.CommentEntryView;
 import com.socialize.ui.view.LoadingListView;
+import com.socialize.ui.view.SocializeButton;
 
 public class CommentUITest extends SocializeUIRobotiumTest {
 	

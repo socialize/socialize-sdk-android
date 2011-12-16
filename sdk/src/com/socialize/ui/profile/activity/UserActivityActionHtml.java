@@ -38,14 +38,14 @@ import com.socialize.util.StringUtils;
  * @author Jason Polites
  *
  */
-public class UserActivityActionText extends WebView {
+public class UserActivityActionHtml extends WebView {
 	
 	private Colors colors;
 	private String fontColor;
 	private int contentFontSize = 12;
 	private int titleFontSize = 11;
 	
-	public UserActivityActionText(Context context) {
+	public UserActivityActionHtml(Context context) {
 		super(context);
 	}
 
@@ -81,7 +81,22 @@ public class UserActivityActionText extends WebView {
 			}
 		}		
 		
-		builder.append("<html><head><style>body { -webkit-tap-highlight-color: rgba(255, 255, 255, 0); background:transparent; margin:0px; padding:0; font:helvetica,arial,sans-serif;}</style></head><body>");
+		builder.append("<html><head><style>body { -webkit-tap-highlight-color: rgba(255, 255, 255, 0); background:transparent; margin:0px; padding:0; font:helvetica,arial,sans-serif;}</style></head>");
+		
+		if(entityLoader != null) {
+			addJavascriptInterface(new Object() {
+				@SuppressWarnings("unused")
+				public void loadEntity() {
+					entityLoader.loadEntity((Activity)getContext(), action.getEntity());
+				}
+			}, "socialize");
+			
+			builder.append("<body onclick='window.socialize.loadEntity();'>");
+		}
+		else {
+			builder.append("<body>");
+		}
+
 		builder.append("<span style='font:");
 		builder.append(titleFontSize);
 		builder.append("px helvetica,arial,sans-serif;color:");
@@ -118,21 +133,29 @@ public class UserActivityActionText extends WebView {
 		String entityName = StringUtils.ellipsis(action.getEntityDisplayName(), 30);
 		
 		if(entityLoader != null) {
-			builder.append("<a style='font:");
+//			builder.append("<a style='font:");
+//			builder.append(titleFontSize);
+//			builder.append("px helvetica,arial,sans-serif;font-weight:bold;text-decoration:none;color:");
+//			builder.append(colors.getHexColor(Colors.SOCIALIZE_BLUE));
+//			builder.append("' ");
+//			builder.append("href='javascript:void(window.socialize.loadEntity())'>");
+//			builder.append(entityName);
+//			builder.append("</a>");
+			
+//			addJavascriptInterface(new Object() {
+//				@SuppressWarnings("unused")
+//				public void loadEntity() {
+//					entityLoader.loadEntity((Activity)getContext(), action.getEntity());
+//				}
+//			}, "socialize");
+			
+			builder.append("<span style='font:");
 			builder.append(titleFontSize);
 			builder.append("px helvetica,arial,sans-serif;font-weight:bold;text-decoration:none;color:");
 			builder.append(colors.getHexColor(Colors.SOCIALIZE_BLUE));
-			builder.append("' ");
-			builder.append("href='javascript:void(window.socialize.loadEntity())'>");
+			builder.append("'>");
 			builder.append(entityName);
-			builder.append("</a>");
-			
-			addJavascriptInterface(new Object() {
-				@SuppressWarnings("unused")
-				public void loadEntity() {
-					entityLoader.loadEntity((Activity)getContext(), action.getEntity());
-				}
-			}, "socialize");
+			builder.append("</span>");
 		}
 		else {
 			builder.append(entityName);

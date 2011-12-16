@@ -22,36 +22,27 @@
 package com.socialize.ui.facebook;
 
 import android.content.Context;
-import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.widget.ImageView;
 
-import com.socialize.listener.SocializeAuthListener;
-import com.socialize.ui.view.SocializeButton;
+import com.socialize.ui.view.ClickableSectionCell;
 
 /**
  * @author Jason Polites
  */
-public class FacebookButton extends SocializeButton {
+public abstract class FacebookCell extends ClickableSectionCell {
 	
-	private FacebookAuthClickListener facebookAuthClickListener;
-
-	public FacebookButton(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
-
-	public FacebookButton(Context context) {
+	public FacebookCell(Context context) {
 		super(context);
 	}
-
-	public void init() {
-		super.init();
-		setOnClickListener(facebookAuthClickListener);
-	}
 	
-	public void setAuthListener(SocializeAuthListener listener) {
-		facebookAuthClickListener.setListener(listener);
-	}
-
-	public void setFacebookAuthClickListener(FacebookAuthClickListener facebookAuthClickListener) {
-		this.facebookAuthClickListener = facebookAuthClickListener;
+	/* (non-Javadoc)
+	 * @see com.socialize.ui.view.ClickableSectionCell#makeImage()
+	 */
+	@Override
+	protected ImageView makeImage() {
+		ImageView view = new ImageView(getContext());
+		view.setImageDrawable(drawables.getDrawable("icon_facebook.png#no_density", DisplayMetrics.DENSITY_DEFAULT));
+		return view;
 	}
 }

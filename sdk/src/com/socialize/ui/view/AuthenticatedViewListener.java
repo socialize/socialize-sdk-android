@@ -64,14 +64,19 @@ public class AuthenticatedViewListener implements SocializeAuthListener {
 	@Override
 	public void onAuthSuccess(SocializeSession session) {
 		// Render the childView
-		view.onAfterAuthenticate(container); // Dialogs dismissed here
-		View v = view.getView();
-		view.removeAllViews();
-		if(v != null) {
-			view.addView(v);
-		}
-		else {
-			Log.e("Socialize", view.getClass().getSimpleName() + " failed to produce a view");
+		try {
+			view.onAfterAuthenticate(container); // Dialogs dismissed here
+			View v = view.getView();
+			view.removeAllViews();
+			if(v != null) {
+				view.addView(v);
+			}
+			else {
+				Log.e("Socialize", view.getClass().getSimpleName() + " failed to produce a view");
+			}
+		} 
+		catch (Exception e) {
+			Log.e("Socialize", "", e);
 		}
 	}
 	

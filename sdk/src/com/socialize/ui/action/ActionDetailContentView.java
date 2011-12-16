@@ -70,9 +70,7 @@ public class ActionDetailContentView extends BaseView {
 	private Drawables drawables;
 	private LinearLayout actionLocationLine;
 	private TextView divider;
-//	private SocializeButton settingsButton;
 	
-//	private IBeanFactory<SocializeButton> settingsButtonFactory;
 	private IBeanFactory<UserActivityListItem> userActivityListItemFactory;
 	
 	private LinearLayout headerView;
@@ -124,13 +122,9 @@ public class ActionDetailContentView extends BaseView {
 		LayoutParams actionLocationLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		LayoutParams actionLocationPinLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		
-//		LayoutParams settingsButtonLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-		
 		masterLayout.setMargins(0, 0, 0, 0);
 		imageLayout.setMargins(margin, margin, margin, margin);
 		displayNameTextLayoutParams.setMargins(0, margin, margin, margin);
-//		actionLocationLineLayout.setMargins(0, margin, margin, margin);
-//		settingsButtonLayout.setMargins(margin, margin, margin, margin);
 		
 		displayNameTextLayoutParams.weight = 1.0f;
 		
@@ -141,21 +135,17 @@ public class ActionDetailContentView extends BaseView {
 		displayName = new TextView(getContext());
 		actionView = userActivityListItemFactory.getBean();
 		actionLocation = new TextView(getContext());
-//		settingsButton = settingsButtonFactory.getBean();
-//		settingsButton.setVisibility(GONE);
 		
 		ImageView locationPin = new ImageView(getContext());
 		locationPin.setImageDrawable(drawables.getDrawable("icon_location_pin.png"));
 		
 		actionLocationLine = new LinearLayout(getContext());
-//		actionLocationLine.setPadding(imagePadding, margin, imagePadding, 0);
 		actionLocationLine.addView(locationPin);
 		actionLocationLine.addView(actionLocation);
 		
 		actionLocationLine.setLayoutParams(actionLocationLineLayout);
 		actionLocation.setLayoutParams(actionLocationLayout);
 		locationPin.setLayoutParams(actionLocationPinLayout);
-//		settingsButton.setLayoutParams(settingsButtonLayout);
 
 		actionLocation.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
 		actionLocation.setTextColor(Color.WHITE);
@@ -164,7 +154,6 @@ public class ActionDetailContentView extends BaseView {
 		GradientDrawable actionbg = makeGradient(Color.WHITE, Color.WHITE);
 		actionbg.setAlpha(32);
 		
-//		actionView.setFontColor("#000000");
 		actionView.setBackground(actionbg);
 		actionView.setVisibility(View.INVISIBLE);
 		actionLocationLine.setVisibility(View.INVISIBLE);
@@ -205,7 +194,6 @@ public class ActionDetailContentView extends BaseView {
 		
 		addView(headerView);
 		addView(actionView);
-//		addView(actionTimestamp);
 
 		if(userActivityViewFactory != null) {
 			
@@ -239,7 +227,7 @@ public class ActionDetailContentView extends BaseView {
 			activityHolder.setLayoutParams(activityHolderLayout);
 			activityHolder.setPadding(margin, margin, margin, margin);
 			
-			int activityBg = colors.getColor("ACTIVITY_BG");
+			int activityBg = colors.getColor(Colors.ACTIVITY_BG);
 			GradientDrawable bg = makeGradient(activityBg, activityBg);
 			bg.setAlpha(144);
 			activityHolder.setBackgroundDrawable(bg);
@@ -294,23 +282,15 @@ public class ActionDetailContentView extends BaseView {
 		this.userActivityViewFactory = userActivityViewFactory;
 	}
 	
-//	public void setSettingsButtonFactory(IBeanFactory<SocializeButton> settingsButtonFactory) {
-//		this.settingsButtonFactory = settingsButtonFactory;
-//	}
-
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
 
-	public void loadUserActivity(User user) {
+	public void loadUserActivity(User user, SocializeAction current) {
 		if(userActivityView != null) {
-			userActivityView.loadUserActivity(user.getId());
+			userActivityView.loadUserActivity(user.getId(), current);
 		}
 	}
-	
-//	public SocializeButton getSettingsButton() {
-//		return settingsButton;
-//	}
 	
 	protected GradientDrawable makeGradient(int bottom, int top) {
 		return new GradientDrawable(
@@ -337,7 +317,6 @@ public class ActionDetailContentView extends BaseView {
 				if(address != null) {
 					actionLocationLine.setVisibility(View.VISIBLE);
 					actionLocation.setText(geoUtils.getSimpleLocation(address));
-					
 					actionLocation.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {

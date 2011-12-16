@@ -45,10 +45,10 @@ public class UserActivityView extends BaseView {
 
 	// Local
 	private LoadingItemView<UserActivityListItem> itemView;
-	private UserActivityListItemBuilder userActivityListItemBuilder;
 	
 	// Injected
 	private int numItems = 10;
+	private IBeanFactory<UserActivityListItem> userActivityListItemFactory;
 	
 	private IBeanFactory<LoadingItemView<UserActivityListItem>> loadingItemViewFactory;
 	
@@ -58,11 +58,11 @@ public class UserActivityView extends BaseView {
 
 	public void init() {
 		itemView = loadingItemViewFactory.getBean();
-		itemView.setEmptyText("No recent activity");
+		itemView.setEmptyText("No other recent activity");
 		addView(itemView);
 	}
 	
-	public void loadUserActivity(long userId) {
+	public void loadUserActivity(long userId, final SocializeAction current) {
 		itemView.showLoading();
 		Socialize.getSocialize().listActivityByUser(userId, 0, numItems, new UserActivityListListener() {
 			@Override
@@ -73,6 +73,12 @@ public class UserActivityView extends BaseView {
 					
 					List<SocializeAction> items = entities.getItems();
 					
+					if(items != null) {
+						if(current != null) {
+							items.remove(current);
+						}
+					}
+					
 					if(items != null && items.size() > 0) {
 						ArrayList<UserActivityListItem> views = new ArrayList<UserActivityListItem>(items.size());
 						
@@ -80,7 +86,8 @@ public class UserActivityView extends BaseView {
 						params.setMargins(0, 8, 0, 0);
 						
 						for (SocializeAction item : items) {
-							UserActivityListItem view = userActivityListItemBuilder.build(getActivity(), item, now);
+							UserActivityListItem view = userActivityListItemFactory.getBean();
+							view.setAction(item, now);
 							view.setLayoutParams(params);
 							views.add(view);
 						}
@@ -114,7 +121,7 @@ public class UserActivityView extends BaseView {
 		this.loadingItemViewFactory = loadingListViewFactory;
 	}
 
-	public void setUserActivityListItemBuilder(UserActivityListItemBuilder userActivityListItemBuilder) {
-		this.userActivityListItemBuilder = userActivityListItemBuilder;
+	public void setUserActivityListItemFactory(IBeanFactory<UserActivityListItem> userActivityListItemFactory) {
+		this.userActivityListItemFactory = userActivityListItemFactory;
 	}
 }

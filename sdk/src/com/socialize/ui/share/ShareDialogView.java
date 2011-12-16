@@ -36,7 +36,7 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
-import com.socialize.ui.button.SocializeButton;
+import com.socialize.ui.view.SocializeButton;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;

@@ -40,9 +40,8 @@ public class CommentActivity extends SocializeUIActivity {
 	private CommentView view;
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
+	public void onCreateSafe(Bundle savedInstanceState) {
+
 		Bundle extras = getIntent().getExtras();
 		
 		if(extras == null || !extras.containsKey(SocializeUI.ENTITY_KEY)) {

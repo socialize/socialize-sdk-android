@@ -1,24 +1,23 @@
 package com.socialize.ui.profile;
 
-import com.socialize.ui.SocializeUI;
-import com.socialize.ui.view.EntityView;
-
-import android.content.Context;
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+
+import com.socialize.ui.SocializeUI;
+import com.socialize.ui.view.EntityView;
+import com.socialize.util.Drawables;
 
 public class ProfileView extends EntityView {
 	
 	private ProfileLayoutView profileLayoutView = null;
+	private View view;
 	
-	public ProfileView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
-	
-	public ProfileView(Context context) {
+	public ProfileView(Activity context) {
 		super(context);
 	}
 
@@ -27,8 +26,27 @@ public class ProfileView extends EntityView {
 		if (entityKeys != null) {
 			if(profileLayoutView == null) {
 				profileLayoutView = container.getBean("profileLayoutView", entityKeys);
+				
+				LayoutParams scrollViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+				LayoutParams childViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+				
+				ScrollView scrollView = new ScrollView(getContext());
+				scrollView.setFillViewport(true);
+				scrollView.setLayoutParams(scrollViewLayout);
+				scrollView.addView(profileLayoutView, childViewLayout);	
+				
+				LinearLayout layout = new LinearLayout(getContext());
+				LayoutParams masterParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+				
+				layout.setLayoutParams(masterParams);
+				layout.setBackgroundDrawable(((Drawables)container.getBean("drawables")).getDrawable("slate.png", true, true, true));
+				
+				layout.addView(scrollView);
+				
+				view = layout;				
 			}
-			return profileLayoutView;
+			
+			return view;
 		}
 		else {
 			Log.e("Socialize", "No user id specified for " + getClass().getSimpleName());

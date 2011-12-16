@@ -45,9 +45,7 @@ public class UserProfile {
 		}
 		return fullName;
 	}
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
+
 	public Bitmap getImage() {
 		return image;
 	}
@@ -123,7 +121,4 @@ public class UserProfile {
 	public void setAutoPostFacebook(boolean autoPostFacebook) {
 		this.autoPostFacebook = autoPostFacebook;
 	}
-	
-	
-	
 }

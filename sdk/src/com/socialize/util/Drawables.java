@@ -115,7 +115,7 @@ public class Drawables {
 		String densityPath = getPath(name, density);
 		String commonPath = getPath(name);
 		
-		CacheableDrawable drawable = cache.get(densityPath);
+		CacheableDrawable drawable = cache.get(name);
 		
 		if(drawable == null) {
 			// try default
@@ -133,7 +133,7 @@ public class Drawables {
 			ClassLoader loader = null;
 			
 			if(classLoaderProvider != null) {
-				loader =  classLoaderProvider.getClassLoader();
+				loader = classLoaderProvider.getClassLoader();
 			}
 			else {
 				loader = Drawables.class.getClassLoader();
@@ -158,7 +158,7 @@ public class Drawables {
 			
 			if(in != null) {
 				drawable = createDrawable(in, path, tileX, tileY, scaleToWidth, scaleToHeight, forceDensity);
-				addToCache(path, drawable, eternal);
+				addToCache(name, drawable, eternal);
 			}
 			else {
 				if(logger != null && logger.isWarnEnabled()) {

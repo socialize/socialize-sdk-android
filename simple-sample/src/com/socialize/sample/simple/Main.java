@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.Share;
+import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarView;
@@ -23,6 +25,16 @@ public class Main extends Activity {
         
 		// Your entity key.  May be passed as a Bundle parameter to your activity
 		final String entityKey = "http://getsocialize.com";
+		
+		// Set an entity loader to allow Socialize to load content within your app
+		SocializeUI.getInstance().setEntityLoader(new SocializeEntityLoader() {
+			@Override
+			public void loadEntity(Activity activity, Entity entity) {
+				
+				// Load your entity here
+				Toast.makeText(activity, "Clicked on entity with key: " + entity.getKey(), Toast.LENGTH_SHORT).show();
+			}
+		});
 
 		// Wrap your existing view with the action bar.
 		// your_layout refers to the resource ID of your current layout.

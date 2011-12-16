@@ -71,7 +71,4 @@ public class SocializeObject {
 			return false;
 		return true;
 	}
-	
-	
-	
 }

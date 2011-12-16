@@ -21,37 +21,28 @@
  */
 package com.socialize.ui.facebook;
 
-import android.content.Context;
-import android.util.AttributeSet;
+import com.socialize.android.ioc.IBeanFactory;
 
-import com.socialize.listener.SocializeAuthListener;
-import com.socialize.ui.view.SocializeButton;
+import android.content.Context;
 
 /**
  * @author Jason Polites
  */
-public class FacebookButton extends SocializeButton {
+public class FacebookSignOutCell extends FacebookCell {
 	
-	private FacebookAuthClickListener facebookAuthClickListener;
-
-	public FacebookButton(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
-
-	public FacebookButton(Context context) {
+	private IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory;
+	
+	public FacebookSignOutCell(Context context) {
 		super(context);
 	}
-
+	
+	@Override
 	public void init() {
 		super.init();
-		setOnClickListener(facebookAuthClickListener);
-	}
-	
-	public void setAuthListener(SocializeAuthListener listener) {
-		facebookAuthClickListener.setListener(listener);
+		setOnClickListener(facebookSignOutClickListenerFactory.getBean());
 	}
 
-	public void setFacebookAuthClickListener(FacebookAuthClickListener facebookAuthClickListener) {
-		this.facebookAuthClickListener = facebookAuthClickListener;
+	public void setFacebookSignOutClickListenerFactory(IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory) {
+		this.facebookSignOutClickListenerFactory = facebookSignOutClickListenerFactory;
 	}
 }

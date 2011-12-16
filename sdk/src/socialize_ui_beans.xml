@@ -168,7 +168,7 @@
 	
 	<bean 
 		id="socializeButton" 
-		class="com.socialize.ui.button.SocializeButton"		
+		class="com.socialize.ui.view.SocializeButton"		
 		singleton="false"
 		abstract="true">
 		<constructor-arg type="activity"/>
@@ -352,15 +352,30 @@
 	</bean>
 	
 	<bean 
-		id="facebookSignInButtonSmall" 
-		class="com.socialize.ui.facebook.FacebookButton"		
+		id="facebookSignInCell" 
+		class="com.socialize.ui.facebook.FacebookSignInCell" 
 		singleton="false"
-		extends="facebookSignInButton">
-		<constructor-arg type="activity"/>
-		<property name="height" value="36" type="integer"/>
-		<property name="width" value="150" type="integer"/>
-		<property name="textSize" value="11" type="integer"/>
+		extends="clickableSectionCell">
+		<constructor-arg type="activity"/>	
+		<property name="facebookAuthClickListener" ref="facebookAuthClickListener"/>
+		<property name="displayText" value="Sign in to Facebook"/>
 	</bean>	
+	
+	<factory id="facebookSignInCellFactory" makes="facebookSignInCell"/>		
+	
+	<bean 
+		id="facebookSignOutCell" 
+		class="com.socialize.ui.facebook.FacebookSignOutCell" 
+		singleton="false"
+		extends="clickableSectionCell">
+		<constructor-arg type="activity"/>	
+		<property name="facebookSignOutClickListenerFactory" ref="facebookSignOutClickListenerFactory"/>
+		<property name="displayText" value="Sign out of Facebook"/>
+	</bean>		
+	
+	<factory id="facebookSignOutCellFactory" makes="facebookSignOutCell"/>		
+
+	<!-- 
 	
 	<bean 
 		id="facebookSignOutButton" 
@@ -377,6 +392,8 @@
 		<property name="width" value="150" type="integer"/>
 		<property name="textSize" value="11" type="integer"/>
 	</bean>
+	
+	 -->
 	
 	<bean 
 		id="facebookSignOutTask" 
@@ -409,6 +426,7 @@
 	</bean>	
 	
 	<factory id="autoPostFacebookOptionFactory" makes="autoPostFacebookOption"/>
+	
 	
 <!-- Comment UI -->
 	
@@ -527,7 +545,6 @@
 		<property name="drawables" ref="drawables"/>
 		<property name="userActivityListItemFactory" ref="userActivityListItemFactory"/>
 		<property name="userActivityViewFactory" ref="userActivityViewFactory"/>
-		<property name="settingsButtonFactory" ref="settingsButtonFactory"/>
 		
 		<init-method name="init"/>
 		
@@ -637,7 +654,6 @@
 		
 		<constructor-arg type="activity"/>
 
-		<property name="drawables" ref="drawables"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
 		<property name="profileHeaderFactory" ref="profileHeaderFactory"/>
 		<property name="profileContentViewFactory" ref="profileContentViewFactory"/>
@@ -671,28 +687,73 @@
 		
 		<constructor-arg type="activity"/>	
 		
+		<property name="profilePictureEditViewFactory" ref="profilePictureEditViewFactory"/>
+		
+		<property name="socializeEditTextFactory" ref="socializeEditTextFactory"/>
+		
 		<property name="profileCancelButtonFactory" ref="profileCancelButtonFactory"/>
 		<property name="profileSaveButtonFactory" ref="profileSaveButtonFactory"/>
-		<property name="profileEditButtonFactory" ref="profileEditButtonFactory"/>	
-		<property name="facebookSignOutButtonFactory" ref="facebookSignOutButtonFactory"/>
-		<property name="facebookSignInButtonFactory" ref="facebookSignInButtonFactory"/>
-		<property name="facebookSignOutClickListenerFactory" ref="facebookSignOutClickListenerFactory"/>
+		
+		<property name="facebookSignInCellFactory" ref="facebookSignInCellFactory"/>
+		<property name="facebookSignOutCellFactory" ref="facebookSignOutCellFactory"/>
+		
 		<property name="profileSaveButtonListenerFactory" ref="profileSaveButtonListenerFactory"/>	
-		<property name="profileImageContextMenuFactory" ref="profileImageContextMenuFactory"/>
-		<property name="userActivityViewFactory" ref="userActivityViewFactory"/>
 		<property name="autoPostFacebookOptionFactory" ref="autoPostFacebookOptionFactory"/>
 		
 		<property name="userService" ref="userService"/>
-		<property name="imageLoader" ref="imageLoader"/>	
+		
+		<property name="deviceUtils" ref="deviceUtils"/>
+		
+		<init-method name="init"/>
+		
+	</bean>
+		
+	<factory id="profileContentViewFactory" makes="profileContentView"/>
+
+	<bean 
+		id="clickableSectionCell" 
+		class="com.socialize.ui.view.ClickableSectionCell" 
+		singleton="false"
+		abstract="true">
+		
+		<constructor-arg type="activity"/>	
+		
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="colors" ref="colors"/>
 		<property name="drawables" ref="drawables"/>
 		
 		<init-method name="init"/>
 		
-	</bean>
+	</bean>	
+
+	<bean 
+		id="profilePictureEditView" 
+		class="com.socialize.ui.profile.ProfilePictureEditView" 
+		singleton="false"
+		extends="clickableSectionCell">
+		<constructor-arg type="activity"/>	
+		<property name="imageLoader" ref="imageLoader"/>	
+		<property name="profileImageContextMenuFactory" ref="profileImageContextMenuFactory"/>
+		<property name="displayText" value="Edit Profile Picture"/>
+	</bean>	
+	
+	<factory id="profilePictureEditViewFactory" makes="profilePictureEditView"/>
 		
-	<factory id="profileContentViewFactory" makes="profileContentView"/>				
+	<bean 
+		id="socializeEditText" 
+		class="com.socialize.ui.view.SocializeEditText" 
+		singleton="false">
+		
+		<constructor-arg type="activity"/>	
+		
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="colors" ref="colors"/>
+		
+		<init-method name="init"/>
+		
+	</bean>	
+	
+	<factory id="socializeEditTextFactory" makes="socializeEditText"/>		
 		
 	<bean 
 		id="profileEditButton" 
@@ -710,23 +771,8 @@
 		<property name="textAlign" value="center"/>
 	</bean>
 	
-	<bean 
-		id="settingsButton" 
-		singleton="false"
-		extends="socializeButton">
-		<constructor-arg type="activity"/>
-		<property name="text" value=""/>
-		<property name="imageName" value="icon_gear.png"/>
-		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
-		<property name="topColor" value="GRAY_BTN_TOP"/>
-		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
-		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>		
-		<property name="height" value="36" type="integer"/>
-		<property name="width" value="100" type="integer"/>
-		<property name="textSize" value="9" type="integer"/>
-		<property name="padding" value="6" type="integer"/>
-		<property name="textAlign" value="center"/>
-	</bean>	
+	
+
 	
 	<bean 
 		id="profileSaveButton" 
@@ -778,27 +824,24 @@
 	<factory id="profileCancelButtonFactory" makes="profileCancelButton"/>
 	<factory id="profileSaveButtonFactory" makes="profileSaveButton"/>
 	<factory id="profileEditButtonFactory" makes="profileEditButton"/>
-	<factory id="facebookSignOutButtonFactory" makes="facebookSignOutButton"/>
-	<factory id="facebookSignInButtonFactory" makes="facebookSignInButtonSmall"/>
 	<factory id="facebookSignOutClickListenerFactory" makes="facebookSignOutClickListener"/>
 	<factory id="profileSaveButtonListenerFactory" makes="profileSaveButtonListener"/>
 	<factory id="profileImageContextMenuFactory" makes="profileImageContextMenu"/>
-	<factory id="settingsButtonFactory" makes="settingsButton"/>
 	
 <!-- End Profile UI -->
 
 <!-- User Activity UI -->
 
 	<bean 
-		id="userActivityActionText" 
+		id="userActivityActionHtml" 
 		singleton="false"
-		class="com.socialize.ui.profile.activity.UserActivityActionText">
+		class="com.socialize.ui.profile.activity.UserActivityActionHtml">
 		<constructor-arg type="activity"/>
 		<property name="colors" ref="colors"/>
 		<init-method name="init"/>
 	</bean>
 	
-	<factory id="userActivityActionTextFactory" makes="userActivityActionText"/>
+	<factory id="userActivityActionHtmlFactory" makes="userActivityActionHtml"/>
 
 	<bean 
 		id="userActivityListItem" 
@@ -810,8 +853,7 @@
 		<property name="colors" ref="colors"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="dateUtils" ref="dateUtils"/>
-		<property name="logger" ref="logger"/>
-		<property name="userActivityActionTextFactory" ref="userActivityActionTextFactory"/>
+		<property name="userActivityActionHtmlFactory" ref="userActivityActionHtmlFactory"/>
 		
 		<init-method name="init"/>
 	</bean>
@@ -819,17 +861,10 @@
 	<factory id="userActivityListItemFactory" makes="userActivityListItem"/>
 	
 	<bean 
-		id="userActivityListItemBuilder" 
-		class="com.socialize.ui.profile.activity.UserActivityListItemBuilder">
-		<property name="userActivityListItemFactory" ref="userActivityListItemFactory"/>
-	</bean>	
-
-	<bean 
 		id="userActivityListAdapter" 
 		singleton="false"
 		class="com.socialize.ui.profile.activity.UserActivityListAdapter">
-		<constructor-arg type="activity"/>
-		<property name="userActivityListItemBuilder" ref="userActivityListItemBuilder"/>
+		<property name="userActivityListItemFactory" ref="userActivityListItemFactory"/>
 	</bean>
 	
 	<factory id="userActivityListAdapterFactory" makes="userActivityListAdapter"/>
@@ -842,7 +877,7 @@
 		<constructor-arg type="activity"/>
 		
 		<property name="loadingItemViewFactory" ref="loadingItemViewFactory"/>
-		<property name="userActivityListItemBuilder" ref="userActivityListItemBuilder"/>
+		<property name="userActivityListItemFactory" ref="userActivityListItemFactory"/>
 		
 		<init-method name="init"/>
 	</bean>

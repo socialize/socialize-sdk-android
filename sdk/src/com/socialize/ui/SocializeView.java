@@ -21,14 +21,21 @@
  */
 package com.socialize.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 
+import com.socialize.Socialize;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
+import com.socialize.ui.comment.CommentActivity;
 import com.socialize.view.BaseView;
 
 /**
@@ -127,6 +134,21 @@ public abstract class SocializeView extends BaseView {
 	
 	public View getLoadFailView() {
 		return null;
+	}
+	
+	protected void createOptionsMenuItem(final Activity source, Menu menu) {
+		if(Socialize.getSocialize().isAuthenticated()) {
+			MenuItem add = menu.add("Settings");
+			add.setIcon(SocializeUI.getInstance().getDrawable("ic_menu_preferences.png", DisplayMetrics.DENSITY_DEFAULT, true));
+			add.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+				@Override
+				public boolean onMenuItemClick(MenuItem item) {
+					final String userId = Socialize.getSocialize().getSession().getUser().getId().toString();
+					SocializeUI.getInstance().showUserProfileViewForResult(source, userId, CommentActivity.PROFILE_UPDATE);
+					return true;
+				}
+			});
+		}
 	}
 	
 	// Subclasses override
