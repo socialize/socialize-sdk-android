@@ -1,4 +1,4 @@
-package com.socialize;
+package com.socialize.titanium;
 
 import org.appcelerator.titanium.TiContext;
 import org.appcelerator.titanium.proxy.TiViewProxy;

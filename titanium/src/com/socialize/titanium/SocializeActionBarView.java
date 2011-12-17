@@ -1,4 +1,4 @@
-package com.socialize;
+package com.socialize.titanium;
 
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.titanium.proxy.TiViewProxy;

@@ -6,7 +6,7 @@
  * Please see the LICENSE included with this distribution for details.
  *
  */
-package com.socialize;
+package com.socialize.titanium;
 
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
