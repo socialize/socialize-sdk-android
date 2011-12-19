@@ -22,6 +22,7 @@ import android.widget.ScrollView;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
+import com.socialize.api.action.ActionType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
@@ -331,24 +332,20 @@ public class SocializeUI {
 	 */
 	@Deprecated
 	public void showCommentDetailViewForResult(Activity context, String userId, String commentId, int requestCode) {
-		Intent i = newIntent(context, ActionDetailActivity.class);
-		i.putExtra(USER_ID, userId);
-		i.putExtra(COMMENT_ID, commentId);
 		
-		try {
-			context.startActivityForResult(i, requestCode);
-		} 
-		catch (ActivityNotFoundException e) {
-			// Revert to legacy
-			i.setClass(context, CommentDetailActivity.class);
-			try {
-				context.startActivityForResult(i, requestCode);
-				Log.w(LOG_KEY, "Using legacy CommentDetailActivity.  Please update your AndroidManifest.xml to use ActionDetailActivity");
-			} 
-			catch (ActivityNotFoundException e2) {
-				Log.e(LOG_KEY, "Could not find ActionDetailActivity.  Make sure you have added this to your AndroidManifest.xml");
+		User user = new User();
+		user.setId(Long.parseLong(userId));
+		
+		SocializeAction action = new SocializeAction() {
+			
+			@Override
+			public ActionType getActionType() {
+				return ActionType.COMMENT;
 			}
-		}
+		};
+		
+		action.setId(Long.parseLong(commentId));
+		showActionDetailViewForResult(context, user, action, requestCode);
 	}
 	
 	protected Intent newIntent(Activity context, Class<?> cls) {
@@ -394,9 +391,7 @@ public class SocializeUI {
 	 */
 	@Deprecated
 	public void setEntityUrl(Activity context, Intent intent, String entityKey) {
-		Bundle extras = getExtras(intent);
-		extras.putString(ENTITY_KEY, entityKey);
-		intent.putExtras(extras);
+		setEntityKey(context, intent, entityKey);
 	}
 	
 	/**
@@ -407,8 +402,7 @@ public class SocializeUI {
 	 */
 	@Deprecated
 	public void setEntityUrl(Activity context, String entityKey) {
-		Intent intent = context.getIntent();
-		setEntityUrl(context, intent, entityKey);
+		setEntityKey(context, entityKey);
 	}
 	
 	public void setEntityKey(Activity context, Intent intent, String entityKey) {
