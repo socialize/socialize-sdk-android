@@ -61,18 +61,10 @@ public class CommentFactoryTest extends AbstractSocializeActionFactoryTest<Comme
 	@Override
 	protected void setupFromJSONExpectations() throws JSONException {
 		final String text = "Test Comment";
-		final boolean share = true;
-		
 		AndroidMock.expect(json.isNull("text")).andReturn(false);
 		AndroidMock.expect(json.has("text")).andReturn(true);
 		AndroidMock.expect(json.getString("text")).andReturn(text);
-		
-		AndroidMock.expect(json.isNull("share_location")).andReturn(false);
-		AndroidMock.expect(json.has("share_location")).andReturn(true);
-		AndroidMock.expect(json.getBoolean("share_location")).andReturn(share);
-		
 		action.setText(text);
-		action.setLocationShared(share);
 	}
 
 	@Override
@@ -84,13 +76,9 @@ public class CommentFactoryTest extends AbstractSocializeActionFactoryTest<Comme
 	protected void setupToJSONExpectations() throws JSONException {
 		
 		final String text = "Test Comment";
-		final boolean share = true;
 		
 		AndroidMock.expect(action.getText()).andReturn(text);
-		AndroidMock.expect(action.isLocationShared()).andReturn(share);
-		
 		AndroidMock.expect(json.put("text", text)).andReturn(json);
-		AndroidMock.expect(json.put("share_location", share)).andReturn(json);
 	}
 
 	@Override

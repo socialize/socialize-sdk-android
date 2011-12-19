@@ -449,6 +449,13 @@
 			<arg type="activity"/>
 		</init-method>			
 	</bean>
+	
+	<bean 
+		id="commentListItemBackgroundFactory" 
+		class="com.socialize.ui.comment.CommentListItemBackgroundFactory">
+		<init-method name="init"/>
+		<property name="colors" ref="colors"/>
+	</bean>
 
 	<bean 
 		id="commentListItem" 
@@ -459,6 +466,7 @@
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="colors" ref="colors"/>
 		<property name="drawables" ref="drawables"/>
+		<property name="backgroundFactory" ref="commentListItemBackgroundFactory"/>
 	</bean>
 	
 	<bean 

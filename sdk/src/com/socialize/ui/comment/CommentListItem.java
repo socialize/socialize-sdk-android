@@ -27,6 +27,8 @@ public class CommentListItem extends LinearLayout {
 	private DeviceUtils deviceUtils;
 	private Colors colors;
 	private Drawables drawables;
+	
+	private CommentListItemBackgroundFactory backgroundFactory;
 
 	public CommentListItem(Context context) {
 		super(context);
@@ -41,9 +43,16 @@ public class CommentListItem extends LinearLayout {
 		final int titleColor = colors.getColor(Colors.TITLE);
 		final int iconSize = deviceUtils.getDIP(64);
 		
-		ListView.LayoutParams layout = new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, ListView.LayoutParams.FILL_PARENT);
+		ListView.LayoutParams layout = new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, deviceUtils.getDIP(80));
 		setDrawingCacheEnabled(true);
-		setBackgroundColor(colors.getColor(Colors.LIST_ITEM_BG));
+		
+		if(backgroundFactory != null) {
+			setBackgroundDrawable(backgroundFactory.getBackground());
+		}
+		else {
+			setBackgroundColor(colors.getColor(Colors.LIST_ITEM_BG));
+		}
+		
 		setOrientation(LinearLayout.HORIZONTAL);
 		setLayoutParams(layout);
 		setGravity(Gravity.TOP);
@@ -83,7 +92,7 @@ public class CommentListItem extends LinearLayout {
 		comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
 		comment.setTextColor(textColor);
 		comment.setLayoutParams(commentLayoutParams);
-		comment.setMaxLines(3);
+		comment.setMaxLines(2);
 
 		LinearLayout.LayoutParams timeLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
@@ -172,5 +181,8 @@ public class CommentListItem extends LinearLayout {
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
 	}
-	
+
+	public void setBackgroundFactory(CommentListItemBackgroundFactory backgroundFactory) {
+		this.backgroundFactory = backgroundFactory;
+	}
 }

@@ -84,6 +84,8 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		
 		AndroidMock.replay(comments);
 		
+		adapter.notifyDataSetChanged();
+		
 		assertEquals(count+1, adapter.getCount());
 		
 		AndroidMock.verify(comments);
@@ -108,6 +110,8 @@ public class CommentAdapterTest extends SocializeUIActivityTest {
 		adapter.setComments(comments);
 		
 		AndroidMock.replay(comments);
+		
+		adapter.notifyDataSetChanged();
 		
 		assertEquals(count, adapter.getCount());
 		

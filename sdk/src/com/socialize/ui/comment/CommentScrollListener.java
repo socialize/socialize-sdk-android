@@ -26,7 +26,6 @@ import android.widget.AbsListView.OnScrollListener;
 
 /**
  * @author Jason Polites
- *
  */
 public class CommentScrollListener implements OnScrollListener {
 
@@ -47,7 +46,7 @@ public class CommentScrollListener implements OnScrollListener {
 
 		boolean last = (lastInScreen == totalItemCount);
 
-		if(last && !callback.isLoading()) {
+		if(last && callback.hasMoreItems() && !callback.isLoading()) {
 			// Get next set...
 			callback.onGetNextSet();
 		}

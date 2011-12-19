@@ -30,6 +30,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.view.EntityView;
 import com.socialize.util.Drawables;
@@ -77,7 +78,7 @@ public class ActionDetailView extends EntityView {
 			return view;
 		}
 		else {
-			Log.e("Socialize", "No user id specified for " + getClass().getSimpleName());
+			Log.e(SocializeLogger.LOG_TAG, "No user id specified for " + getClass().getSimpleName());
 			return null;
 		}		
 	}

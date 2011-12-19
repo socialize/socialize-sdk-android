@@ -120,6 +120,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		AndroidMock.expect(json.put("lat", lat)).andReturn(json);
 		AndroidMock.expect(json.put("lng", lon)).andReturn(json);
 		AndroidMock.expect(json.put("date",DATE_FORMAT_STRING.format(date))).andReturn(json);
+		AndroidMock.expect(json.put("share_location", true)).andReturn(json);	
 		
 		AndroidMock.expect(action.getId()).andReturn(id);
 		AndroidMock.expect(action.getApplication()).andReturn(application);
@@ -129,6 +130,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		AndroidMock.expect(action.getLat()).andReturn(lat);
 		AndroidMock.expect(action.getLon()).andReturn(lon);
 		AndroidMock.expect(action.getDate()).andReturn(date.getTime());
+		AndroidMock.expect(action.isLocationShared()).andReturn(true);
 
 		AndroidMock.replay(jsonApplication);
 		AndroidMock.replay(jsonUser);
@@ -152,11 +154,15 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 	
 	public void testFromJSON() throws JSONException, ParseException {
 		
-	
 		action.setId(id);
 		action.setLat(lat);
 		action.setLon(lon);
 		action.setDate(date.getTime());
+		action.setLocationShared(true);
+		
+		AndroidMock.expect(json.has("share_location")).andReturn(true);
+		AndroidMock.expect(json.isNull("share_location")).andReturn(false);
+		AndroidMock.expect(json.getBoolean("share_location")).andReturn(true);
 		
 		AndroidMock.expect(json.has("application")).andReturn(true);
 		AndroidMock.expect(json.isNull("application")).andReturn(false);

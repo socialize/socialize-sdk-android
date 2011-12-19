@@ -247,6 +247,7 @@ public class UserActivityListItem extends TableLayout {
 	}
 	
 	protected Drawable makeDefaultBackground() {
+		// TODO: Make a singleton
 		GradientDrawable shadow = makeGradient(bottomColor, bottomColor);
 		GradientDrawable highlight = makeGradient(topColor, topColor);
 		GradientDrawable surface = makeGradient(bgColor, bgColor);

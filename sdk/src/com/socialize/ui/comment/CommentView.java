@@ -15,6 +15,7 @@ import android.view.View;
 
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.listener.ListenerHolder;
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.view.EntityView;
 
@@ -53,7 +54,7 @@ public class CommentView extends EntityView {
 			return commentListView;
 		}
 		else {
-			Log.e("Socialize", "No entity url specified for comment view");
+			Log.e(SocializeLogger.LOG_TAG, "No entity url specified for comment view");
 			return null;
 		}
 	}

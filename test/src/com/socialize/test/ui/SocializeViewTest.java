@@ -8,8 +8,8 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.listener.SocializeInitListener;
+import com.socialize.ui.SocializeBaseView;
 import com.socialize.ui.SocializeUI;
-import com.socialize.ui.SocializeView;
 
 public class SocializeViewTest extends SocializeUIActivityTest {
 
@@ -25,7 +25,7 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 		
 //		ActivityIOCProvider.getInstance().setContainer(container);
 		
-		final SocializeView view = new SocializeView(getActivity()) {
+		final SocializeBaseView view = new SocializeBaseView(getActivity()) {
 			
 //			@Override
 //			protected void onBeforeSocializeInit() {
@@ -255,7 +255,7 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 		AndroidMock.verify(container);
 	}
 	
-	class PublicView extends SocializeView {
+	class PublicView extends SocializeBaseView {
 		
 		public PublicView(Context context) {
 			super(context);
@@ -299,16 +299,6 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 		@Override
 		public void onBeforeSocializeInit() {
 			super.onBeforeSocializeInit();
-		}
-
-		@Override
-		protected void onViewLoad() {
-			super.onViewLoad();
-		}
-
-		@Override
-		protected void onViewUpdate() {
-			super.onViewUpdate();
 		}
 	}
 	

@@ -128,7 +128,7 @@ public class ActionDetailLayoutView extends BaseView {
 	}
 
 	@Override
-	protected void onViewLoad() {
+	public void onViewLoad() {
 		super.onViewLoad();
 		if(getSocialize().isAuthenticated()) {
 			

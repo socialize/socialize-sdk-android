@@ -65,7 +65,7 @@ public class ProfileLayoutView extends BaseView {
 	}
 	
 	@Override
-	protected void onViewLoad() {
+	public void onViewLoad() {
 		super.onViewLoad();
 		if(getSocialize().isAuthenticated()) {
 			doGetUserProfile();

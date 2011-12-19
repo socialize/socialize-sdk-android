@@ -19,18 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.comment;
+package com.socialize.view;
+
+import android.app.Activity;
+import android.content.Context;
 
 /**
  * @author Jason Polites
  *
  */
-public interface CommentScrollCallback {
+public interface SocializeView {
 
-	public void onGetNextSet();
+	public Activity getActivity();
+
+	public void onViewUpdate();
+
+	public void onViewLoad();
+
+	public void onViewRendered(int width, int height);
 	
-	public boolean isLoading();
-	
-	public boolean hasMoreItems();
-	
+	public void showError(Context context, Exception e);
+
 }

@@ -28,6 +28,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 
 import com.socialize.Socialize;
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.SocializeUIActivity;
 import com.socialize.util.StringUtils;
@@ -45,13 +46,13 @@ public class CommentActivity extends SocializeUIActivity {
 		Bundle extras = getIntent().getExtras();
 		
 		if(extras == null || !extras.containsKey(SocializeUI.ENTITY_KEY)) {
-			Log.w("Socialize", "No entity url found for Comment Activity. Aborting");
+			Log.w(SocializeLogger.LOG_TAG, "No entity url found for Comment Activity. Aborting");
 			finish();
 		}
 		else {
 			String entityKey = extras.getString(SocializeUI.ENTITY_KEY);
 			if(StringUtils.isEmpty(entityKey)) {
-				Log.w("Socialize", "No entity url found for Comment Activity. Aborting");
+				Log.w(SocializeLogger.LOG_TAG, "No entity url found for Comment Activity. Aborting");
 				finish();
 			}
 			else {

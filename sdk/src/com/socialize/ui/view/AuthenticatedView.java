@@ -11,9 +11,9 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.ui.SocializeUI;
-import com.socialize.ui.SocializeView;
+import com.socialize.ui.SocializeBaseView;
 
-public abstract class AuthenticatedView extends SocializeView {
+public abstract class AuthenticatedView extends SocializeBaseView {
 
 	private String consumerKey;
 	private String consumerSecret;

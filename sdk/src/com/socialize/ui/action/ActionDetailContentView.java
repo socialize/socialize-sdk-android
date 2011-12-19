@@ -331,7 +331,7 @@ public class ActionDetailContentView extends BaseView {
 									logger.warn("Failed to load map view", e);
 								}
 								else {
-									Log.w("Socialize", "Failed to load map view", e);
+									Log.w(SocializeLogger.LOG_TAG, "Failed to load map view", e);
 								}
 							}
 						}

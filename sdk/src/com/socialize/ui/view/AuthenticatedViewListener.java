@@ -29,6 +29,7 @@ import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.log.SocializeLogger;
 
 /**
  * @author Jason Polites
@@ -72,11 +73,11 @@ public class AuthenticatedViewListener implements SocializeAuthListener {
 				view.addView(v);
 			}
 			else {
-				Log.e("Socialize", view.getClass().getSimpleName() + " failed to produce a view");
+				Log.e(SocializeLogger.LOG_TAG, view.getClass().getSimpleName() + " failed to produce a view");
 			}
 		} 
 		catch (Exception e) {
-			Log.e("Socialize", "", e);
+			Log.e(SocializeLogger.LOG_TAG, "", e);
 		}
 	}
 	

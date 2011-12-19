@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.view.EntityView;
 
@@ -54,7 +55,7 @@ public class CommentDetailView extends EntityView {
 			return commentLayoutView;
 		}
 		else {
-			Log.e("Socialize", "No user id specified for " + getClass().getSimpleName());
+			Log.e(SocializeLogger.LOG_TAG, "No user id specified for " + getClass().getSimpleName());
 			return null;
 		}		
 	}

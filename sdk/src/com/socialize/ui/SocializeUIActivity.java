@@ -21,6 +21,8 @@
  */
 package com.socialize.ui;
 
+import com.socialize.log.SocializeLogger;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,7 +44,7 @@ public abstract class SocializeUIActivity extends Activity {
 			onCreateSafe(savedInstanceState);
 		}
 		catch (Throwable e) {
-			Log.e("Socialize", "", e);
+			Log.e(SocializeLogger.LOG_TAG, "", e);
 			finish();
 		}
 	}

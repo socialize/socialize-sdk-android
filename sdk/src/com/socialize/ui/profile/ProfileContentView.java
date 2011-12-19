@@ -248,7 +248,7 @@ public class ProfileContentView extends BaseView {
 	}
 	
 	@Override
-	protected void onViewLoad() {
+	public void onViewLoad() {
 		super.onViewLoad();
 		onFacebookChanged();
 	}

@@ -59,14 +59,18 @@ public class LoadingListView extends BaseLoadingView<ListView> {
 	protected ListView createMainView() {
 		LinearLayout.LayoutParams listViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 
-		ListView listView = new ListView(getContext());
+		final ListView listView = new ListView(getContext());
 		listView.setId(LIST_VIEW_ID);
 		listView.setLayoutParams(listViewLayoutParams);
 		listView.setDrawingCacheEnabled(true);
 		listView.setCacheColorHint(0);
-		listView.setDividerHeight(2);
+		listView.setDividerHeight(1);
 		listView.setSmoothScrollbarEnabled(true);
 		listView.setVerticalFadingEdgeEnabled(false);
+		listView.setItemsCanFocus(true);
+		listView.setClickable(true);
+		listView.setFocusable(true);
+		listView.setFocusableInTouchMode(true);
 		
 		return listView;
 	}

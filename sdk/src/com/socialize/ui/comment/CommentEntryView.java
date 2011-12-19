@@ -203,9 +203,8 @@ public class CommentEntryView extends BaseView {
 
 	}
 	
-	
 	@Override
-	protected void onViewRendered(int width, int height) {
+	public void onViewRendered(int width, int height) {
 		super.onViewRendered(width, height);
 		commentField.requestFocus();
 	}

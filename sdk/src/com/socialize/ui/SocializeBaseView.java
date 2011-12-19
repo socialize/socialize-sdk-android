@@ -35,26 +35,27 @@ import com.socialize.Socialize;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.comment.CommentActivity;
 import com.socialize.view.BaseView;
 
 /**
  * @author Jason Polites
  */
-public abstract class SocializeView extends BaseView {
+public abstract class SocializeBaseView extends BaseView {
 
 	protected IOCContainer container;
 	
-	public SocializeView(Context context, AttributeSet attrs) {
+	public SocializeBaseView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
 
-	public SocializeView(Context context) {
+	public SocializeBaseView(Context context) {
 		super(context);
 	}
 	
 	@Override
-	protected void onViewLoad() {
+	public void onViewLoad() {
 		super.onViewLoad();
 		View loading = getLoadingView();
 		if(loading != null) {
@@ -64,7 +65,7 @@ public abstract class SocializeView extends BaseView {
 	}
 	
 	@Override
-	protected void onViewUpdate() {
+	public void onViewUpdate() {
 		super.onViewUpdate();
 		doSocializeInit(getInitUpdateListener());
 	}
@@ -74,7 +75,7 @@ public abstract class SocializeView extends BaseView {
 			
 			@Override
 			public void onError(SocializeException error) {
-				Log.e("Socialize", "Error initializing Socialize", error);
+				Log.e(SocializeLogger.LOG_TAG, "Error initializing Socialize", error);
 			}
 			
 			@Override
@@ -90,7 +91,7 @@ public abstract class SocializeView extends BaseView {
 			
 			@Override
 			public void onError(SocializeException error) {
-				Log.e("Socialize", "Error initializing Socialize", error);
+				Log.e(SocializeLogger.LOG_TAG, "Error initializing Socialize", error);
 			}
 			
 			@Override
