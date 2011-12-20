@@ -12,8 +12,9 @@ import android.widget.LinearLayout;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.error.SocializeErrorHandler;
+import com.socialize.log.SocializeLogger;
 
-public abstract class BaseView extends LinearLayout {
+public abstract class BaseView extends LinearLayout implements SocializeView {
 	
 	private SocializeErrorHandler errorHandler;
 	
@@ -35,7 +36,7 @@ public abstract class BaseView extends LinearLayout {
 			errorHandler.handleError(context, e);
 		}
 		else {
-			Log.e("Socialize", "", e);
+			Log.e(SocializeLogger.LOG_TAG, "", e);
 		}
 	}
 
@@ -51,6 +52,10 @@ public abstract class BaseView extends LinearLayout {
 		return Socialize.getSocialize();
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.socialize.view.SocializeView#getActivity()
+	 */
+	@Override
 	public Activity getActivity() {
 		Context context = getContext();
 		if(context instanceof Activity) {
@@ -88,7 +93,6 @@ public abstract class BaseView extends LinearLayout {
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		super.onSizeChanged(w, h, oldw, oldh);
-		
 		if(!rendered) {
 			rendered = true;
 			onViewRendered(w, h);
@@ -114,11 +118,23 @@ public abstract class BaseView extends LinearLayout {
 		setId(getNextViewId(parent));
 	}
 
-	protected void onViewUpdate() {}
+	/* (non-Javadoc)
+	 * @see com.socialize.view.SocializeView#onViewUpdate()
+	 */
+	@Override
+	public void onViewUpdate() {};
 
-	protected void onViewLoad() {}
+	/* (non-Javadoc)
+	 * @see com.socialize.view.SocializeView#onViewLoad()
+	 */
+	@Override
+	public void onViewLoad() {};
 	
-	protected void onViewRendered(int width, int height) {};
+	/* (non-Javadoc)
+	 * @see com.socialize.view.SocializeView#onViewRendered(int, int)
+	 */
+	@Override
+	public void onViewRendered(int width, int height) {};
 	
 	protected View getParentView() {
 		ViewParent parent = getParent();

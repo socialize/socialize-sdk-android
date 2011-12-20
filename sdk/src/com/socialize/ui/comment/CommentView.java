@@ -10,12 +10,12 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.View;
 
-import com.socialize.Socialize;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.listener.ListenerHolder;
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.view.EntityView;
 
@@ -54,7 +54,7 @@ public class CommentView extends EntityView {
 			return commentListView;
 		}
 		else {
-			Log.e("Socialize", "No entity url specified for comment view");
+			Log.e(SocializeLogger.LOG_TAG, "No entity url specified for comment view");
 			return null;
 		}
 	}
@@ -86,11 +86,15 @@ public class CommentView extends EntityView {
 	 * Called when the current logged in user updates their profile.
 	 */
 	public void onProfileUpdate() {
-		commentListView.onProfileUpdate();
+		if(commentListView != null) {
+			commentListView.onProfileUpdate();
+		}
 	}
 	
 	public void reload() {
-		commentListView.reload();
+		if(commentListView != null) {
+			commentListView.reload();
+		}
 	}
 	
 	@Override
@@ -99,18 +103,7 @@ public class CommentView extends EntityView {
 	}
 	
 	public boolean onCreateOptionsMenu(final Activity source, Menu menu) {
-		if(Socialize.getSocialize().isAuthenticated()) {
-			MenuItem add = menu.add("Edit Profile");
-			add.setIcon(SocializeUI.getInstance().getDrawable("ic_menu_cc.png", DisplayMetrics.DENSITY_DEFAULT, true));
-			add.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-				@Override
-				public boolean onMenuItemClick(MenuItem item) {
-					final String userId = Socialize.getSocialize().getSession().getUser().getId().toString();
-					SocializeUI.getInstance().showUserProfileViewForResult(source, userId, CommentActivity.PROFILE_UPDATE);
-					return true;
-				}
-			});
-		}
+		createOptionsMenuItem(source, menu);
 
 		MenuItem add2 = menu.add("Refresh");
 		

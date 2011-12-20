@@ -107,7 +107,7 @@ public class SocializeConfig {
 						properties.load(in);
 						
 						if(old != null) {
-							merge(old);
+							merge(old, null);
 						}
 					}
 				}
@@ -128,7 +128,7 @@ public class SocializeConfig {
 						if(in != null) {
 							Properties overrideProps = createProperties();
 							overrideProps.load(in);
-							merge(overrideProps);
+							merge(overrideProps, null);
 						}
 					}
 					catch (IOException ignore) {
@@ -193,7 +193,7 @@ public class SocializeConfig {
 	 * Merge properties into the config.
 	 * @param other
 	 */
-	public void merge(Properties other) {
+	public void merge(Properties other, Set<String> toBeRemoved) {
 		if(properties == null) {
 			properties = createProperties();
 		}
@@ -201,6 +201,13 @@ public class SocializeConfig {
 		Set<Entry<Object, Object>> entrySet = other.entrySet();
 		for (Entry<Object, Object> entry : entrySet) {
 			properties.put(entry.getKey(), entry.getValue());
+		}
+		
+		if(toBeRemoved != null && toBeRemoved.size() > 0) {
+			for (String key : toBeRemoved) {
+				properties.remove(key);
+			}
+			toBeRemoved.clear();
 		}
 	}
 

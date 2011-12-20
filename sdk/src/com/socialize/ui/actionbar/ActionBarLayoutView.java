@@ -215,7 +215,7 @@ public class ActionBarLayoutView extends BaseView {
 	}
 	
 	@Override
-	protected void onViewLoad() {
+	public void onViewLoad() {
 		super.onViewLoad();
 		
 		final String entityKey = actionBarView.getEntityKey();
@@ -274,7 +274,7 @@ public class ActionBarLayoutView extends BaseView {
 	}
 	
 	@Override
-	protected void onViewUpdate() {
+	public void onViewUpdate() {
 		super.onViewUpdate();
 		reload();
 	}

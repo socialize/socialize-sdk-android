@@ -21,9 +21,8 @@
  */
 package com.socialize.ui.profile;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -43,9 +42,9 @@ public class ProfileSaveButtonListener implements OnClickListener {
 	private ProfileSaver profileSaver;
 	private SocializeErrorHandler errorHandler;
 	private ProgressDialogFactory progressDialogFactory;
-	private Context context;
+	private Activity context;
 	
-	public ProfileSaveButtonListener(Context context, ProfileContentView view) {
+	public ProfileSaveButtonListener(Activity context, ProfileContentView view) {
 		super();
 		this.view = view;
 		this.context = context;
@@ -61,15 +60,11 @@ public class ProfileSaveButtonListener implements OnClickListener {
 		final ProgressDialog progress = progressDialogFactory.show(context, "Saving Profile", "Please wait...");
 		
 		// Get the updated info
-		Bitmap updatedProfileImage = view.getUpdatedProfileImage();
-		String updatedUserDisplayName = view.getUpdatedUserDisplayName();
-		boolean autoPostFB = view.getUpdatedAutoPostFBPreference();
-		
 		UserProfile profile = new UserProfile();
-		
-		profile.setFullName(updatedUserDisplayName);
-		profile.setImage(updatedProfileImage);
-		profile.setAutoPostFacebook(autoPostFB);
+		profile.setFirstName(view.getFirstNameEdit().getText().toString().trim());
+		profile.setLastName(view.getLastNameEdit().getText().toString().trim());
+		profile.setImage(view.getProfilePictureEditView().getImage());
+//		profile.setAutoPostFacebook(view.getAutoPostFacebook().isChecked());
 		
 		profileSaver.save(context, profile, new UserSaveListener() {
 			
@@ -85,7 +80,7 @@ public class ProfileSaveButtonListener implements OnClickListener {
 			@Override
 			public void onUpdate(User entity) {
 				progress.dismiss();
-				view.onSave(entity);
+				context.finish();
 			}
 		});
 	}
@@ -101,6 +96,4 @@ public class ProfileSaveButtonListener implements OnClickListener {
 	public void setProgressDialogFactory(ProgressDialogFactory progressDialogFactory) {
 		this.progressDialogFactory = progressDialogFactory;
 	}
-
-	
 }

@@ -32,16 +32,15 @@ import android.widget.Toast;
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.ui.SocializeUI;
-import com.socialize.ui.button.SocializeButton;
 import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.ui.view.CustomCheckbox;
+import com.socialize.ui.view.SocializeButton;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
 
 /**
  * @author Jason Polites
- *
  */
 public class CommentEntryView extends BaseView {
 	
@@ -204,9 +203,8 @@ public class CommentEntryView extends BaseView {
 
 	}
 	
-	
 	@Override
-	protected void onViewRendered(int width, int height) {
+	public void onViewRendered(int width, int height) {
 		super.onViewRendered(width, height);
 		commentField.requestFocus();
 	}

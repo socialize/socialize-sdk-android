@@ -25,7 +25,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.ui.button.SocializeButton;
+import com.socialize.ui.view.SocializeButton;
 
 /**
  * @author Jason Polites

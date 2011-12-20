@@ -31,4 +31,6 @@ public interface CommentScrollCallback {
 	
 	public boolean isLoading();
 	
+	public boolean hasMoreItems();
+	
 }

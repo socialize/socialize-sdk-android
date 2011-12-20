@@ -46,6 +46,10 @@ public class Colors {
 	public static final String TEXT_BG = "TEXT_BG";
 	public static final String TEXT_STROKE = "TEXT_STROKE";
 	public static final String LIST_ITEM_BG = "LIST_ITEM_BG";
+	public static final String APP_BG = "APP_BG";
+	public static final String ACTIVITY_BG = "ACTIVITY_BG";
+	public static final String LIST_ITEM_TOP = "LIST_ITEM_TOP";
+	public static final String LIST_ITEM_BOTTOM = "LIST_ITEM_BOTTOM";
 	public static final String STANDARD_BACKGROUND_COLOR = "STANDARD_BACKGROUND_COLOR";
 	public static final String LOADING_ITEM_BG = "LOADING_ITEM_BG";
 	
@@ -63,6 +67,7 @@ public class Colors {
 				String hex = entry.getValue().trim().toLowerCase();
 				if(!hex.startsWith("#")) {
 					hex = "#" + hex;
+					colorHexCodes.put(entry.getKey(), hex);
 				}
 				try {
 					int color = Color.parseColor(entry.getValue());
@@ -74,6 +79,10 @@ public class Colors {
 				}
 			}
 		}
+	}
+	
+	public String getHexColor(String name) {
+		return colorHexCodes.get(name);
 	}
 	
 	public int getColor(String name) {

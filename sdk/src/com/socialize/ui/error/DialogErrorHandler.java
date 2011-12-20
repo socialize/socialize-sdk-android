@@ -9,6 +9,7 @@ import android.util.Log;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeErrorHandler;
+import com.socialize.log.SocializeLogger;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 
@@ -20,7 +21,7 @@ public class DialogErrorHandler implements SocializeErrorHandler {
 	
 	@Override
 	public void handleError(Context context, Exception e) {
-		Log.e("Socialize", "", e);
+		Log.e(SocializeLogger.LOG_TAG, "", e);
 		if(config != null && config.getBooleanProperty(SocializeConfig.SOCIALIZE_DEBUG_MODE, false)) {
 			String message = "An unexpected error occurred.  Please try again";
 			if(e instanceof SocializeApiError) {

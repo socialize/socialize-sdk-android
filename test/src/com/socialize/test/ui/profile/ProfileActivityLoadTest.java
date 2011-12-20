@@ -68,7 +68,8 @@ public class ProfileActivityLoadTest extends SocializeUIActivityTest {
 		assertNotNull(waitForActivity);
 		
 		// Check that the user's name is displayed
-		assertTrue(TestUtils.lookForText(waitForActivity, "foo bar", 10000));
+		assertTrue(TestUtils.lookForText(waitForActivity, "foo", 10000));
+		assertTrue(TestUtils.lookForText(waitForActivity, "bar", 10000));
 		
 		waitForActivity.finish();
 	}

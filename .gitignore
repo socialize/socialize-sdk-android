@@ -33,6 +33,7 @@ test/gen
 test/bin
 test/local.properties
 test/private
+titanium/bin
 ui/bin
 ui/gen
 ui-sample/bin/

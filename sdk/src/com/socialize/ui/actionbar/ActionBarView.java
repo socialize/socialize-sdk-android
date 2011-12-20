@@ -27,12 +27,9 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.socialize.android.ioc.IOCContainer;
-import com.socialize.entity.Entity;
-import com.socialize.entity.Like;
-import com.socialize.entity.Share;
 import com.socialize.ui.slider.ActionBarSliderFactory;
-import com.socialize.ui.slider.ActionBarSliderView;
 import com.socialize.ui.slider.ActionBarSliderFactory.ZOrder;
+import com.socialize.ui.slider.ActionBarSliderView;
 import com.socialize.ui.view.EntityView;
 
 /**
@@ -52,7 +49,7 @@ public class ActionBarView extends EntityView {
 	private String entityName;
 	
 	private OnActionBarEventListener onActionBarEventListener;
-	private OnActionBarEventListener systemOnActionBarEventListener;
+	private SliderActionBarListener sliderActionBarEventListener;
 	
 	public ActionBarView(Context context) {
 		super(context);
@@ -78,8 +75,8 @@ public class ActionBarView extends EntityView {
 			actionBarLayoutView = container.getBean("actionBarLayoutView", this);
 		}
 		
-		if(systemOnActionBarEventListener == null) {
-			systemOnActionBarEventListener = container.getBean("sliderActionBarListener");
+		if(sliderActionBarEventListener == null) {
+			sliderActionBarEventListener = container.getBean("sliderActionBarListener");
 		}
 		
 		setListeners();
@@ -100,70 +97,19 @@ public class ActionBarView extends EntityView {
 	protected void setListeners() {
 		if(actionBarLayoutView != null) {
 			if(onActionBarEventListener != null) {
-				if(systemOnActionBarEventListener != null) {
-					
-					actionBarLayoutView.setOnActionBarEventListener(new OnActionBarEventListener() {
-						
-						@Override
-						public void onPostUnlike(ActionBarView actionBar) {
-							systemOnActionBarEventListener.onPostUnlike(actionBar);
-							onActionBarEventListener.onPostUnlike(actionBar);
-						}
-						
-						@Override
-						public void onPostShare(ActionBarView actionBar, Share share) {
-							systemOnActionBarEventListener.onPostShare(actionBar, share);
-							onActionBarEventListener.onPostShare(actionBar, share);
-						}
-						
-						@Override
-						public void onPostLike(ActionBarView actionBar, Like like) {
-							systemOnActionBarEventListener.onPostLike(actionBar, like);
-							onActionBarEventListener.onPostLike(actionBar, like);
-						}
-						
-						@Override
-						public void onGetLike(ActionBarView actionBar, Like like) {
-							systemOnActionBarEventListener.onGetLike(actionBar, like);
-							onActionBarEventListener.onGetLike(actionBar, like);
-						}
-						
-						@Override
-						public void onGetEntity(ActionBarView actionBar, Entity entity) {
-							systemOnActionBarEventListener.onGetEntity(actionBar, entity);
-							onActionBarEventListener.onGetEntity(actionBar, entity);
-						}
-						
-						@Override
-						public void onClick(ActionBarView actionBar, ActionBarEvent evt) {
-							systemOnActionBarEventListener.onClick(actionBar, evt);
-							onActionBarEventListener.onClick(actionBar, evt);
-						}
-
-						@Override
-						public void onUpdate(ActionBarView actionBar) {
-							systemOnActionBarEventListener.onUpdate(actionBar);
-							onActionBarEventListener.onUpdate(actionBar);
-						}
-						
-						@Override
-						public void onLoad(ActionBarView actionBar) {
-							systemOnActionBarEventListener.onLoad(actionBar);
-							onActionBarEventListener.onLoad(actionBar);
-						}
-					});
-					
+				if(sliderActionBarEventListener != null) {
+					sliderActionBarEventListener.setDelegate(onActionBarEventListener);
+					actionBarLayoutView.setOnActionBarEventListener(sliderActionBarEventListener);
 				}
 				else {
 					actionBarLayoutView.setOnActionBarEventListener(onActionBarEventListener);
 				}
 			}
-			else if(systemOnActionBarEventListener != null) {
-				actionBarLayoutView.setOnActionBarEventListener(systemOnActionBarEventListener);
+			else if(sliderActionBarEventListener != null) {
+				actionBarLayoutView.setOnActionBarEventListener(sliderActionBarEventListener);
 			}
 		}
 	}
-	
 	
 	public String getEntityKey() {
 		return entityKey;
@@ -214,10 +160,7 @@ public class ActionBarView extends EntityView {
 	
 	public void setOnActionBarEventListener(OnActionBarEventListener onActionBarEventListener) {
 		this.onActionBarEventListener = onActionBarEventListener;
-		
-		if(actionBarLayoutView != null) {
-			actionBarLayoutView.setOnActionBarEventListener(onActionBarEventListener);
-		}
+		setListeners();
 	}
 
 	public void refresh() {

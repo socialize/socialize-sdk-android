@@ -12,4 +12,5 @@ Contents:
    action_bar
    comment_view
    sdk_user_guide
+   troubleshooting
    change_log

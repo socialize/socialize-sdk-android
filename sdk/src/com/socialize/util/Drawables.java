@@ -133,7 +133,7 @@ public class Drawables {
 			ClassLoader loader = null;
 			
 			if(classLoaderProvider != null) {
-				loader =  classLoaderProvider.getClassLoader();
+				loader = classLoaderProvider.getClassLoader();
 			}
 			else {
 				loader = Drawables.class.getClassLoader();

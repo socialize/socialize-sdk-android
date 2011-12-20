@@ -19,9 +19,9 @@ import com.socialize.ui.actionbar.ActionBarLayoutView;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 import com.socialize.ui.actionbar.OnActionBarEventListener.ActionBarEvent;
-import com.socialize.ui.button.SocializeButton;
 import com.socialize.ui.share.ShareClickListener;
 import com.socialize.ui.share.ShareDialogView;
+import com.socialize.ui.view.SocializeButton;
 
 public class ActionBarShareAutoTest extends ActivityInstrumentationTestCase2<ActionBarAutoActivity> {
 

@@ -1,6 +1,7 @@
 package com.socialize.test.ui;
 
 import java.util.Properties;
+import java.util.Set;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -19,6 +20,8 @@ import com.socialize.SocializeService;
 import com.socialize.SocializeServiceImpl;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.config.SocializeConfig;
+import com.socialize.entity.SocializeAction;
+import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.sample.ui.SampleSocializeActivity;
@@ -28,15 +31,13 @@ import com.socialize.test.mock.MockRelativeLayoutParams;
 import com.socialize.test.mock.TestUIFactory;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.SocializeUIBeanOverrider;
+import com.socialize.ui.action.ActionDetailActivity;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.comment.CommentActivity;
-import com.socialize.ui.comment.CommentDetailActivity;
 import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.util.Drawables;
-
-@UsesMocks ({Intent.class, Activity.class})
 public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 
 	public void testSetSocializeCredentials() {
@@ -109,16 +110,31 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 
 	}
 
-	@UsesMocks ({SocializeService.class, SocializeConfig.class})
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({SocializeService.class, SocializeConfig.class, Properties.class, Set.class})
 	public void testInitSocialize() {
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+		
+		final Properties customProperties = AndroidMock.createMock(Properties.class);
+		final Set<String> toBeRemoved = AndroidMock.createMock(Set.class);
 
 		MockContext context = new MockContext();
+		
 		SocializeUI socializeUI = new SocializeUI() {
 			@Override
 			public SocializeService getSocialize() {
 				return socialize;
+			}
+
+			@Override
+			protected Set<String> getPropertiesToBeRemoved() {
+				return toBeRemoved;
+			}
+
+			@Override
+			public Properties getCustomProperties() {
+				return customProperties;
 			}
 		};
 
@@ -126,7 +142,8 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 
 		socialize.init(context, paths);
 		AndroidMock.expect(socialize.getConfig()).andReturn(config);
-		config.merge(socializeUI.getCustomProperties());
+		
+		config.merge( customProperties, toBeRemoved);
 
 		AndroidMock.replay(socialize);
 
@@ -271,6 +288,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		assertTrue(didRun);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@UsesMocks ({SocializeInitListener.class, SocializeException.class, SocializeConfig.class, IOCContainer.class})
 	public void test_initSocializeAsync() {
 		
@@ -282,7 +300,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		final String[] mockPaths = {};
 		
 		listener.onError(error);
-		config.merge((Properties)AndroidMock.anyObject());
+		config.merge((Properties)AndroidMock.anyObject(), (Set<String>)AndroidMock.anyObject());
 		
 		listener.onInit(getContext(), container);
 		
@@ -513,32 +531,42 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		AndroidMock.verify(context);
 	}	
 	
+	@UsesMocks ({User.class, SocializeAction.class})
 	public void test_showCommentDetailViewForResult() {
 		final Intent intent = AndroidMock.createMock(Intent.class);
 		final Activity context = AndroidMock.createMock(Activity.class);
+		final User user = AndroidMock.createMock(User.class);
+		final SocializeAction action = AndroidMock.createMock(SocializeAction.class);
 		
-		final String userId = "foo";
-		final String commentId = "bar";
+		final Long userId = 1001L;
+		final Long commentId = 1002L;
 		final int requestCode = 69;
 		
-		AndroidMock.expect(intent.putExtra(SocializeUI.USER_ID, userId)).andReturn(intent);
-		AndroidMock.expect(intent.putExtra(SocializeUI.COMMENT_ID, commentId)).andReturn(intent);
+		AndroidMock.expect(user.getId()).andReturn(userId);
+		AndroidMock.expect(action.getId()).andReturn(commentId);
+		
+		AndroidMock.expect(intent.putExtra(SocializeUI.USER_ID, userId.toString())).andReturn(intent);
+		AndroidMock.expect(intent.putExtra(SocializeUI.COMMENT_ID, commentId.toString())).andReturn(intent);
 		
 		context.startActivityForResult(intent, requestCode);
 		
+		AndroidMock.replay(user);
+		AndroidMock.replay(action);
 		AndroidMock.replay(intent);
 		AndroidMock.replay(context);
 		
 		PublicSocializeUI publicSocializeUI = new PublicSocializeUI() {
 			@Override
 			public Intent newIntent(Activity context, Class<?> cls) {
-				assertEquals(cls, CommentDetailActivity.class);
+				assertEquals(cls, ActionDetailActivity.class);
 				return intent;
 			}
 		};	
 		
-		publicSocializeUI.showCommentDetailViewForResult(context, userId, commentId, requestCode);
+		publicSocializeUI.showActionDetailViewForResult(context, user, action, requestCode);
 		
+		AndroidMock.verify(user);
+		AndroidMock.verify(action);
 		AndroidMock.verify(intent);
 		AndroidMock.verify(context);
 	}		

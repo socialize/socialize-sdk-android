@@ -8,6 +8,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.socialize.entity.Comment;
 import com.socialize.entity.User;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUI;
+import com.socialize.ui.SocializeUIActivity;
 import com.socialize.ui.image.ImageLoadListener;
 import com.socialize.ui.image.ImageLoadRequest;
 import com.socialize.ui.image.ImageLoader;
@@ -56,6 +58,8 @@ public class CommentAdapter extends BaseAdapter {
 	private int totalCount = 0;
 	
 	private int iconSize = 100;
+	
+	private int count = 0;
 
 	public void init(Activity context) {
 		this.context = context;
@@ -72,15 +76,12 @@ public class CommentAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		int extra = 1;
-		if(!isDisplayLoading()) {
-			extra = 0;
-		}
-		return (comments == null) ? 0 : comments.size() + extra;
+		return count;
 	}
 
 	public boolean isDisplayLoading() {
-		return !(last || (comments != null && comments.size() == 0));
+		return !last && (comments != null && comments.size() > 0);
+//		return !(last || (comments != null && comments.size() == 0));
 	}
 
 	@Override
@@ -94,8 +95,6 @@ public class CommentAdapter extends BaseAdapter {
 	@Override
 	public long getItemId(int position) {
 		return position;
-		//		Comment item = (Comment) getItem(position);
-		//		return (item == null) ? -1 : item.getId();
 	}
 
 	@Override
@@ -155,6 +154,7 @@ public class CommentAdapter extends BaseAdapter {
 			if(position >= comments.size()) {
 				// Last one, get loading view
 				if(loadingView == null) {
+					Log.e(SocializeLogger.LOG_TAG, "Showing loading view");
 					loadingView = listItemLoadingViewFactory.getBean();
 					loadingView.setTag(null);
 				}
@@ -186,7 +186,7 @@ public class CommentAdapter extends BaseAdapter {
 							@Override
 							public void onClick(View v) {
 								if(user != null && user.getId() != null) {
-									getSocializeUI().showCommentDetailViewForResult(context, user.getId().toString(), item.getId().toString(), CommentActivity.PROFILE_UPDATE);
+									getSocializeUI().showActionDetailViewForResult(context, user, item, SocializeUIActivity.PROFILE_UPDATE);
 								}
 								else {
 									if(logger != null) {
@@ -359,6 +359,14 @@ public class CommentAdapter extends BaseAdapter {
 	@Override
 	public void notifyDataSetChanged() {
 		super.notifyDataSetChanged();
+		
+		int extra = 0;
+		
+		if(isDisplayLoading()) {
+			extra = 1;
+		}
+		
+		count = (comments == null) ? 0 : comments.size() + extra;		
 	}
 
 	public void setCommentItemViewFactory(IBeanFactory<CommentListItem> commentItemViewFactory) {

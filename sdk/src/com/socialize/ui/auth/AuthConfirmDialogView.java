@@ -23,7 +23,7 @@ package com.socialize.ui.auth;
 
 import android.content.Context;
 
-import com.socialize.ui.button.SocializeButton;
+import com.socialize.ui.view.SocializeButton;
 
 /**
  * @author Jason Polites

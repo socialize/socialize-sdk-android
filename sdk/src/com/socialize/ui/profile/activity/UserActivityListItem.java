@@ -21,35 +21,58 @@
  */
 package com.socialize.ui.profile.activity;
 
+import java.util.Date;
+
+import android.app.Activity;
 import android.content.Context;
-import android.graphics.Typeface;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.entity.SocializeAction;
+import com.socialize.ui.SocializeEntityLoader;
+import com.socialize.ui.SocializeUI;
 import com.socialize.ui.util.Colors;
+import com.socialize.ui.util.DateUtils;
 import com.socialize.util.DeviceUtils;
+import com.socialize.util.Drawables;
 
 /**
  * @author Jason Polites
  */
-public class UserActivityListItem extends LinearLayout {
+public class UserActivityListItem extends TableLayout {
 	
-	private TextView text;
 	private TextView date;
-	private TextView title;
 	private ImageView icon;
+	private ImageView locationIcon;
+	private UserActivityActionHtml actionText;
+	private Drawable background;
+	
 	private DeviceUtils deviceUtils;
 	private Colors colors;	
+	private Drawables drawables;
+	private DateUtils dateUtils;
 	
-	private LinearLayout doubleLineLayout;
-	private LinearLayout singleLineLayout;
+	private int padding;
+	private int bgColor;
+	private int topColor;
+	private int bottomColor;
 	
-	private boolean singleLine = false;
+	private String fontColor;
+	private int contentFontSize = 12;
+	private int titleFontSize = 11;
+	
+	private IBeanFactory<UserActivityActionHtml> userActivityActionHtmlFactory;
 	
 	public UserActivityListItem(Context context) {
 		super(context);
@@ -57,135 +80,145 @@ public class UserActivityListItem extends LinearLayout {
 
 	public UserActivityListItem(Context context, boolean singleLine) {
 		super(context);
-		this.singleLine = singleLine;
 	}
 	
 	public void init() {
+		padding = deviceUtils.getDIP(4);
+		bgColor = colors.getColor(Colors.LIST_ITEM_BG);
+		topColor = colors.getColor(Colors.LIST_ITEM_TOP);
+		bottomColor = colors.getColor(Colors.LIST_ITEM_BOTTOM);
+		fontColor = colors.getHexColor(Colors.BODY);
 		
+		int contentMargin = deviceUtils.getDIP(10);
 		
-		final int padding = deviceUtils.getDIP(4);
-		final int imagePadding = 0;
-		final int margin = deviceUtils.getDIP(8);
-		final int textColor = colors.getColor(Colors.BODY);
-		final int titleColor = colors.getColor(Colors.TITLE);
-		final int iconSize = deviceUtils.getDIP(32);
-		
-		ListView.LayoutParams layout = new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, deviceUtils.getDIP(64));
-		setDrawingCacheEnabled(true);
-		setBackgroundColor(colors.getColor(Colors.LIST_ITEM_BG));
 		setOrientation(LinearLayout.HORIZONTAL);
-		setLayoutParams(layout);
 		setGravity(Gravity.TOP);
 		setPadding(padding,padding,padding,padding);
 		
-		LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		LinearLayout.LayoutParams titleLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		LinearLayout.LayoutParams dateLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		// Make the middle column fill the width
+		setColumnStretchable(2, true);
 		
-		title = new TextView(getContext());
-		title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-		title.setTextColor(textColor);
-		title.setLayoutParams(titleLayoutParams);
-		title.setMaxLines(1);
-		title.setTypeface(Typeface.DEFAULT_BOLD);
+		// Make sure we don't overflow
+		setColumnShrinkable(2, true);
 		
-		dateLayoutParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-		dateLayoutParams.weight = 1.0f;
+		TableRow firstRow = new TableRow(getContext());
+		TableRow secondRow = new TableRow(getContext());
 		
+		View location = createLocation();
+		View icon = createIcon();
+		View content = createTitle();
+		View date = createDate();
+		
+		icon.setPadding(padding, padding, padding, padding);
+		content.setPadding(padding, padding, padding, padding);
+		date.setPadding(padding, padding, padding, padding);
+		location.setPadding(padding, padding, padding, padding);
+		
+		TableRow.LayoutParams iconParams = new TableRow.LayoutParams();
+		TableRow.LayoutParams locationIconParams = new TableRow.LayoutParams();
+		TableRow.LayoutParams contentParams = new TableRow.LayoutParams();
+		TableRow.LayoutParams dateParams = new TableRow.LayoutParams();
+		
+		iconParams.column = 1;
+		iconParams.gravity = Gravity.TOP | Gravity.LEFT;
+		
+		contentParams.column = 2;
+		contentParams.gravity = Gravity.TOP | Gravity.LEFT;
+		contentParams.setMargins(0, contentMargin, 0, 0);
+		
+		locationIconParams.column = 3; 
+		locationIconParams.gravity = Gravity.TOP | Gravity.RIGHT;
+		
+		dateParams.width = TableRow.LayoutParams.FILL_PARENT;
+		dateParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+		dateParams.span = 4;
+		
+		location.setLayoutParams(locationIconParams);
+		icon.setLayoutParams(iconParams);
+		content.setLayoutParams(contentParams);
+		date.setLayoutParams(dateParams);
+		
+		firstRow.addView(icon);
+		firstRow.addView(content);
+		firstRow.addView(location);
+		secondRow.addView(date);
+		
+		addView(firstRow);
+		addView(secondRow);
+	}
+	
+	protected View createTitle() {
+		actionText = userActivityActionHtmlFactory.getBean();
+		return actionText;
+	}
+	
+	protected View createIcon() {
+		icon = new ImageView(getContext());
+		return icon;
+	}
+	
+	protected View createLocation() {
+		locationIcon = new ImageView(getContext());
+		locationIcon.setImageDrawable(drawables.getDrawable("icon_location_pin.png"));
+		return locationIcon;
+	}
+	
+	protected View createDate() {
 		date = new TextView(getContext());
 		date.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
-		date.setTextColor(textColor);
-		date.setLayoutParams(textLayoutParams);
-		date.setMaxLines(1);
-		date.setLayoutParams(dateLayoutParams);
+		date.setTextColor(Color.LTGRAY);
 		date.setGravity(Gravity.BOTTOM | Gravity.RIGHT);
-		date.setTextColor(titleColor);
+		return date;
+	}
+	
+	public void setAction(final SocializeAction action, Date now) {
 		
-		if(singleLine) {
-			LinearLayout.LayoutParams singleLineLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
-			singleLineLayoutParams.setMargins(margin, 0, 0, 0);
-			
-			singleLineLayout = new LinearLayout(getContext());
-			singleLineLayout.setOrientation(LinearLayout.VERTICAL);
-			singleLineLayout.setGravity(Gravity.LEFT);
-			singleLineLayout.setPadding(0, padding, 0, 0);
-			singleLineLayout.setLayoutParams(singleLineLayoutParams);
-			singleLineLayout.setGravity(Gravity.TOP | Gravity.LEFT);
-			singleLineLayout.addView(title);
-			singleLineLayout.addView(date);	
+		if(background == null) {
+			background = makeDefaultBackground();
+		}
+		
+		setBackgroundDrawable(background);		
+		
+		actionText.setTitleFontSize(titleFontSize);
+		actionText.setContentFontSize(contentFontSize);
+		actionText.setFontColor(fontColor);
+		actionText.setAction(action);
+		
+		Long actionDate = action.getDate();
+		
+		if(actionDate != null && actionDate.longValue() > 0) {
+			long diff = (now.getTime() - actionDate.longValue());
+			date.setText(dateUtils.getTimeString(diff) + " ");
 		}
 		else {
-			LinearLayout.LayoutParams doubleLineLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
-			doubleLineLayoutParams.setMargins(margin, 0, 0, 0);
-			
-			doubleLineLayout = new LinearLayout(getContext());
-			doubleLineLayout.setOrientation(LinearLayout.VERTICAL);
-			doubleLineLayout.setGravity(Gravity.TOP | Gravity.LEFT);
-			doubleLineLayout.setPadding(0, padding, 0, 0);
-			doubleLineLayout.setLayoutParams(doubleLineLayoutParams);
-			
-			text = new TextView(getContext());
-			text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
-			text.setTextColor(textColor);
-			text.setLayoutParams(textLayoutParams);
-			text.setMaxLines(1);
-			
-			doubleLineLayout.addView(title);
-			doubleLineLayout.addView(text);	
-			doubleLineLayout.addView(date);	
-			
-		}		
-
-		LinearLayout iconLayout = new LinearLayout(getContext());
+			date.setText("");
+		}	
 		
-		LinearLayout.LayoutParams iconLayoutParams = new LinearLayout.LayoutParams(iconSize, iconSize);
-		iconLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
+		if(!action.isLocationShared()) {
+			locationIcon.setVisibility(GONE);
+		}
 		
-		iconLayout.setLayoutParams(iconLayoutParams);
-		iconLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
+		switch(action.getActionType()) {
+			case COMMENT:
+				icon.setImageDrawable(drawables.getDrawable("icon_comment.png"));
+				break;
+			case LIKE:
+				icon.setImageDrawable(drawables.getDrawable("icon_like_hi.png"));
+				break;
+			case SHARE:
+				icon.setImageDrawable(drawables.getDrawable("icon_share.png"));
+				break;
+		}	
 		
-		icon = new ImageView(getContext());
-		icon.setLayoutParams(iconLayoutParams);
-		icon.setPadding(imagePadding, 0, imagePadding, 0);	
+		final SocializeEntityLoader entityLoader = SocializeUI.getInstance().getEntityLoader();
 		
-		iconLayout.addView(icon);
-		
-		addView(iconLayout);
-		if(singleLine) {
-			addView(singleLineLayout);
-		}
-		else {
-			addView(doubleLineLayout);	
-		}
-	}
-
-	public void setText(String str) {
-		if(this.text != null) {
-			if(str.length() > 50) {
-				str = str.substring(0,50) + "...";
-			}
-			this.text.setText(str);
-		}
-	}
-	
-	public void setTitle(String str) {
-		if(this.title != null) {
-			if(str.length() > 30) {
-				str = str.substring(0,30) + "...";
-			}
-			this.title.setText(str);
-		}
-	}
-	
-	public void setDate(String dateString) {
-		if(date != null) {
-			date.setText(dateString);
-		}
-	}
-	
-	public void setIcon(Drawable image) {
-		if(this.icon != null) {
-			this.icon.setImageDrawable(image);
+		if(entityLoader != null) {
+			setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					entityLoader.loadEntity((Activity) getContext(), action.getEntity());
+				}
+			});
 		}
 	}
 
@@ -196,4 +229,53 @@ public class UserActivityListItem extends LinearLayout {
 	public void setColors(Colors colors) {
 		this.colors = colors;
 	}
+	
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
+	}
+	
+	public void setDateUtils(DateUtils dateUtils) {
+		this.dateUtils = dateUtils;
+	}
+
+	public void setUserActivityActionHtmlFactory(IBeanFactory<UserActivityActionHtml> userActivityActionHtmlFactory) {
+		this.userActivityActionHtmlFactory = userActivityActionHtmlFactory;
+	}
+	
+	public void setBackground(Drawable background) {
+		this.background = background;
+	}
+	
+	protected Drawable makeDefaultBackground() {
+		// TODO: Make a singleton
+		GradientDrawable shadow = makeGradient(bottomColor, bottomColor);
+		GradientDrawable highlight = makeGradient(topColor, topColor);
+		GradientDrawable surface = makeGradient(bgColor, bgColor);
+		LayerDrawable layers = new LayerDrawable(new Drawable[] {shadow, highlight, surface});
+		
+		layers.setLayerInset(0, 0, 0, 0, 0);
+		layers.setLayerInset(1, 1, 0, 0, 1);
+		layers.setLayerInset(2, 1, 1, 1, 1);
+		
+		return layers;
+	}
+	
+	public void setFontColor(String fontColor) {
+		this.fontColor = fontColor;
+	}
+
+	public void setContentFontSize(int contentFontSize) {
+		this.contentFontSize = contentFontSize;
+	}
+
+	public void setTitleFontSize(int titleFontSize) {
+		this.titleFontSize = titleFontSize;
+	}
+
+	// So we can mock
+	protected GradientDrawable makeGradient(int bottom, int top) {
+		return new GradientDrawable(
+				GradientDrawable.Orientation.BOTTOM_TOP,
+				new int[] { bottom, top });
+	}	
 }

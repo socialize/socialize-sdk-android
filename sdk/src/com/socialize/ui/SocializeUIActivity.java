@@ -21,18 +21,33 @@
  */
 package com.socialize.ui;
 
+import com.socialize.log.SocializeLogger;
+
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 
 /**
  * @author Jason Polites
  *
  */
-public class SocializeUIActivity extends Activity {
+public abstract class SocializeUIActivity extends Activity {
+	
+	public static final int PROFILE_UPDATE = 1347;
+	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+	public final void onCreate(Bundle savedInstanceState) {
+		try {
+			super.onCreate(savedInstanceState);
+			this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+			onCreateSafe(savedInstanceState);
+		}
+		catch (Throwable e) {
+			Log.e(SocializeLogger.LOG_TAG, "", e);
+			finish();
+		}
 	}
+	
+	public abstract void onCreateSafe(Bundle savedInstanceState);
 }

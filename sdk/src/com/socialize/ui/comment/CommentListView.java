@@ -137,7 +137,6 @@ public class CommentListView extends BaseView {
 		middle.setLayoutParams(middleParams);
 		sliderAnchor.setLayoutParams(bottomParams);
 
-
 		header = commentHeaderFactory.getBean();
 		field = commentEditFieldFactory.getBean();
 		content = commentContentViewFactory.getBean();
@@ -151,7 +150,8 @@ public class CommentListView extends BaseView {
 
 		top.addView(header);
 		middle.addView(content);
-		sliderAnchor.addView(field);		
+		
+		sliderAnchor.addView(field);
 		
 		layoutAnchor.addView(top);
 		layoutAnchor.addView(middle);
@@ -170,6 +170,11 @@ public class CommentListView extends BaseView {
 			@Override
 			public boolean isLoading() {
 				return loading;
+			}
+
+			@Override
+			public boolean hasMoreItems() {
+				return !commentAdapter.isLast();
 			}
 		});
 	}
@@ -445,7 +450,7 @@ public class CommentListView extends BaseView {
 	}
 	
 	@Override
-	protected void onViewLoad() {
+	public void onViewLoad() {
 		super.onViewLoad();
 		if(onCommentViewActionListener != null) {
 			onCommentViewActionListener.onCreate(this);
@@ -453,7 +458,7 @@ public class CommentListView extends BaseView {
 	}
 
 	@Override
-	protected void onViewRendered(int width, int height) {
+	public void onViewRendered(int width, int height) {
 		if(sliderFactory != null && slider == null) {
 			slider = sliderFactory.wrap(getSliderAnchor(), ZOrder.FRONT, height);
 		}
