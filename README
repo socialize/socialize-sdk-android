@@ -12,6 +12,17 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v1.2
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] Comments should be HTML encoded when rendering
+[feature] User activity scrolls entire view
+[feature] New ActionView to replace comment view
+[feature] New edit settings view for users
+[feature] End user edits settings from a separate view
+[bug] Comment list does not stop scrolling after loading new items
+[feature] Style of items in comment list matches activity list
+[bug] postShare event on ActionBar doesn't fire on listener
+
 v1.1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [feature] List Comments By User (SDK)
