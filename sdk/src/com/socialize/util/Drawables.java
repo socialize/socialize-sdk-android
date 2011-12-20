@@ -115,11 +115,11 @@ public class Drawables {
 		String densityPath = getPath(name, density);
 		String commonPath = getPath(name);
 		
-		CacheableDrawable drawable = cache.get(densityPath);
+		CacheableDrawable drawable = cache.get(densityPath + name);
 		
 		if(drawable == null) {
 			// try default
-			drawable = cache.get(commonPath);
+			drawable = cache.get(commonPath + name);
 		}
 		
 		if(drawable != null && !drawable.isRecycled()) {
@@ -157,8 +157,8 @@ public class Drawables {
 			}
 			
 			if(in != null) {
-				drawable = createDrawable(in, path, tileX, tileY, scaleToWidth, scaleToHeight, forceDensity);
-				addToCache(path, drawable, eternal);
+				drawable = createDrawable(in, path + name, tileX, tileY, scaleToWidth, scaleToHeight, forceDensity);
+				addToCache(path + name, drawable, eternal);
 			}
 			else {
 				if(logger != null && logger.isWarnEnabled()) {
@@ -211,6 +211,10 @@ public class Drawables {
 	}
 
 	protected String getPath(String name) {
+		int indexOf = name.indexOf('#');
+		if(indexOf >= 0) {
+			name = name.substring(0, indexOf);
+		}
 		return "res/drawable/" + name;
 	}
 	
