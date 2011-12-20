@@ -1094,6 +1094,7 @@
 	<bean 
 		id="sliderActionBarListener" 
 		class="com.socialize.ui.actionbar.SliderActionBarListener">
+		<property name="logger" ref="logger"/>
 		<property name="shareSliderItemFactory" ref="shareSliderItemFactory"/>
 		<!-- <property name="viewSliderItemFactory" ref="viewSliderItemFactory"/> -->
 	</bean>		

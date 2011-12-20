@@ -21,10 +21,13 @@
  */
 package com.socialize.ui.actionbar;
 
+import android.util.Log;
+
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.Share;
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.slider.ActionBarSliderItem;
 
 /**
@@ -38,23 +41,51 @@ public class SliderActionBarListener implements OnActionBarEventListener {
 	private IBeanFactory<ActionBarSliderItem> shareSliderItemFactory;
 	private IBeanFactory<ActionBarSliderItem> viewSliderItemFactory;
 	
+	private OnActionBarEventListener delegate;
+	
+	private SocializeLogger logger;
+	
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.actionbar.OnActionBarEventListener#onGetLike(com.socialize.ui.actionbar.ActionBarView, com.socialize.entity.Like)
 	 */
 	@Override
-	public void onGetLike(ActionBarView actionBar, Like like) {}
+	public void onGetLike(ActionBarView actionBar, Like like) {
+		if(delegate != null)  {
+			try {
+				delegate.onGetLike(actionBar, like);
+			} catch (Exception e) {
+				handleDelegateError(e);
+			}
+		}			
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.actionbar.OnActionBarEventListener#onPostLike(com.socialize.ui.actionbar.ActionBarView, com.socialize.entity.Like)
 	 */
 	@Override
-	public void onPostLike(ActionBarView actionBar, Like like) {}
+	public void onPostLike(ActionBarView actionBar, Like like) {
+		if(delegate != null)  {
+			try {
+				delegate.onPostLike(actionBar, like);
+			} catch (Exception e) {
+				handleDelegateError(e);
+			}
+		}		
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.actionbar.OnActionBarEventListener#onPostUnlike(com.socialize.ui.actionbar.ActionBarView)
 	 */
 	@Override
-	public void onPostUnlike(ActionBarView actionBar) {}
+	public void onPostUnlike(ActionBarView actionBar) {
+		if(delegate != null)  {
+			try {
+				delegate.onPostUnlike(actionBar);
+			} catch (Exception e) {
+				handleDelegateError(e);
+			}
+		}	
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.actionbar.OnActionBarEventListener#onPostShare(com.socialize.ui.actionbar.ActionBarView, com.socialize.entity.Share)
@@ -62,25 +93,68 @@ public class SliderActionBarListener implements OnActionBarEventListener {
 	@Override
 	public void onPostShare(ActionBarView actionBar, Share share) {
 		actionBar.getSlider().close();
+		
+		if(delegate != null)  {
+			try {
+				delegate.onPostShare(actionBar, share);
+			} catch (Exception e) {
+				handleDelegateError(e);
+			}
+		}		
 	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.actionbar.OnActionBarEventListener#onGetEntity(com.socialize.ui.actionbar.ActionBarView, com.socialize.entity.Entity)
 	 */
 	@Override
-	public void onGetEntity(ActionBarView actionBar, Entity entity) {}
+	public void onGetEntity(ActionBarView actionBar, Entity entity) {
+		if(delegate != null)  {
+			try {
+				delegate.onGetEntity(actionBar, entity);
+			} catch (Exception e) {
+				handleDelegateError(e);
+			}
+		}
+	}
 	
 
 	@Override
 	public void onUpdate(ActionBarView actionBar) {
 		actionBar.getSlider().close();
+		
+		if(delegate != null)  {
+			try {
+				delegate.onUpdate(actionBar);
+			} catch (Exception e) {
+				handleDelegateError(e);
+			}
+		}
 	}
 
 	@Override
 	public void onLoad(ActionBarView actionBar) {
+
 		actionBar.getSlider().close();
+		
+		if(delegate != null)  {
+			try {
+				delegate.onLoad(actionBar);
+			} catch (Exception e) {
+				handleDelegateError(e);
+			}
+		}
 	}
 
+	protected void handleDelegateError(Exception e) {
+		final String msg = "Error in action bar event listener";
+		if(logger != null) {
+			logger.error(msg, e);
+		}
+		else {
+			Log.e(msg, "", e);
+		}
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.actionbar.OnActionBarEventListener#onClick(com.socialize.ui.actionbar.ActionBarView, com.socialize.ui.actionbar.OnActionBarEventListener.ActionBarEvent)
 	 */
@@ -113,6 +187,14 @@ public class SliderActionBarListener implements OnActionBarEventListener {
 				lastEvent = evt;
 			}
 		}
+		
+		if(delegate != null)  {
+			try {
+				delegate.onClick(actionBar, evt);
+			} catch (Exception e) {
+				handleDelegateError(e);
+			}
+		}
 	}
 
 	public void setShareSliderItemFactory(IBeanFactory<ActionBarSliderItem> shareSliderItemFactory) {
@@ -121,5 +203,13 @@ public class SliderActionBarListener implements OnActionBarEventListener {
 
 	public void setViewSliderItemFactory(IBeanFactory<ActionBarSliderItem> viewSliderItemFactory) {
 		this.viewSliderItemFactory = viewSliderItemFactory;
+	}
+
+	public void setDelegate(OnActionBarEventListener delegate) {
+		this.delegate = delegate;
+	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
 	}
 }
