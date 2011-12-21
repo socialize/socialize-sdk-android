@@ -27,7 +27,7 @@ import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.socialize.ui.facebook.FacebookButton;
+import com.socialize.networks.facebook.FacebookButton;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.StringUtils;
 

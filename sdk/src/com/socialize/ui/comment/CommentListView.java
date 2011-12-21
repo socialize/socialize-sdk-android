@@ -14,16 +14,18 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Comment;
+import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.log.SocializeLogger;
+import com.socialize.networks.ShareDestination;
+import com.socialize.networks.ShareOptions;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.auth.AuthRequestDialogFactory;
 import com.socialize.ui.auth.AuthRequestListener;
 import com.socialize.ui.dialog.DialogFactory;
-import com.socialize.ui.facebook.FacebookWallPoster;
 import com.socialize.ui.header.SocializeHeader;
 import com.socialize.ui.slider.ActionBarSliderFactory;
 import com.socialize.ui.slider.ActionBarSliderFactory.ZOrder;
@@ -39,9 +41,12 @@ public class CommentListView extends BaseView {
 	private CommentAdapter commentAdapter;
 	private boolean loading = true; // Default to true
 	
-	private String entityKey;
-	private String entityName;
-	private boolean useLink;
+//	private String entityKey;
+//	private String entityName;
+//	private boolean useLink;
+	
+	private Entity entity;
+	
 	private int startIndex = 0;
 	private int endIndex = defaultGrabLength;
 	
@@ -64,8 +69,6 @@ public class CommentListView extends BaseView {
 	private ActionBarSliderView slider;
 	private ActionBarSliderFactory<ActionBarSliderView> sliderFactory;
 	
-	private FacebookWallPoster facebookWallPoster;
-	
 	private RelativeLayout layoutAnchor;
 	private ViewGroup sliderAnchor;
 	
@@ -73,17 +76,22 @@ public class CommentListView extends BaseView {
 	
 	private OnCommentViewActionListener onCommentViewActionListener;
 	
-	public CommentListView(Context context, String entityKey, String entityName, boolean useLink) {
+	public CommentListView(Context context, Entity entity) {
 		this(context);
-		this.entityKey = entityKey;
-		this.entityName = entityName;
-		this.useLink = useLink;
+		this.entity = entity;
 	}
 	
-	public CommentListView(Context context,String entityKey) {
+	@Deprecated
+	public CommentListView(Context context, String entityKey, String entityName, boolean useLink) {
+		this(context, Entity.newInstance(entityName, null));
+	}
+	
+	@Deprecated
+	public CommentListView(Context context, String entityKey) {
 		this(context, entityKey, null, true);
 	}	
 	
+	@Deprecated
 	public CommentListView(Context context) {
 		super(context);
 	}
@@ -205,7 +213,7 @@ public class CommentListView extends BaseView {
 				
 				if(!getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 					// Check that FB is enabled for this installation
-					if(getSocializeUI().isFacebookSupported()) {
+					if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
 						AuthRequestDialogFactory dialog = authRequestDialogFactory.getBean();
 						dialog.show(getContext(), getCommentAuthListener(text, autoPostToFacebook, shareLocation));
 					}
@@ -234,11 +242,15 @@ public class CommentListView extends BaseView {
 		
 		dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
 		
-		CommentShareOptions options = new CommentShareOptions();
-		options.setShareFacebook(autoPostToFacebook);
+		ShareOptions options = new ShareOptions();
+		
+		if(getSocialize().getSession().getUser().isAutoPostToFacebook()) {
+			options.setShareTo(ShareDestination.FACEBOOK);
+		}		
+		
 		options.setShareLocation(shareLocation);
 		
-		getSocialize().addComment(entityKey, comment, options, new CommentAddListener() {
+		getSocialize().addComment(getActivity(), entity, comment, options, new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -295,9 +307,9 @@ public class CommentListView extends BaseView {
 			session.getUser().setShareLocation(shareLocation);
 		}
 		
-		if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) && autoPostToFacebook) {
-			facebookWallPoster.postComment(getActivity(), entityKey, entityName, comment, useLink, null);
-		}
+//		if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) && autoPostToFacebook) {
+//			facebookWallPoster.postComment(getActivity(), entityKey, entityName, comment, useLink, null);
+//		}
 		
 	}
 	
@@ -326,7 +338,7 @@ public class CommentListView extends BaseView {
 		final List<Comment> comments = commentAdapter.getComments();
 
 		if(update || comments == null || comments.size() == 0) {
-			getSocialize().listCommentsByEntity(entityKey, 
+			getSocialize().listCommentsByEntity(entity.getKey(), 
 					startIndex,
 					endIndex,
 					new CommentListListener() {
@@ -415,7 +427,7 @@ public class CommentListView extends BaseView {
 			}
 		}
 
-		getSocialize().listCommentsByEntity(entityKey, 
+		getSocialize().listCommentsByEntity(entity.getKey(), 
 				startIndex,
 				endIndex,
 				new CommentListListener() {
@@ -531,8 +543,18 @@ public class CommentListView extends BaseView {
 		this.commentContentViewFactory = commentContentViewFactory;
 	}
 
+	@Deprecated
 	public void setEntityKey(String entityKey) {
-		this.entityKey = entityKey;
+		if(entity == null) entity = new Entity();
+		entity.setKey(entityKey);
+	}
+
+	public Entity getEntity() {
+		return entity;
+	}
+
+	public void setEntity(Entity entity) {
+		this.entity = entity;
 	}
 
 	public boolean isLoading() {
@@ -575,10 +597,6 @@ public class CommentListView extends BaseView {
 		this.commentEntryFactory = commentEntryFactory;
 	}
 
-	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
-		this.facebookWallPoster = facebookWallPoster;
-	}
-
 	public int getTotalCount() {
 		return commentAdapter.getTotalCount();
 	}
@@ -587,12 +605,13 @@ public class CommentListView extends BaseView {
 		this.authRequestDialogFactory = authRequestDialogFactory;
 	}
 	
-	public void setUseLink(boolean useLink) {
-		this.useLink = useLink;
-	}
+	@Deprecated
+	public void setUseLink(boolean useLink) {}
 
+	@Deprecated
 	public void setEntityName(String entityName) {
-		this.entityName = entityName;
+		if(entity == null) entity = new Entity();
+		entity.setName(entityName);
 	}
 	
 	/**

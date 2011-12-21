@@ -19,14 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.facebook;
+package com.socialize.api.action;
+
+import android.location.Location;
+
+import com.socialize.api.SocializeSession;
+import com.socialize.entity.Entity;
+import com.socialize.listener.share.ShareListener;
+import com.socialize.util.DelegateOnly;
 
 /**
  * @author Jason Polites
  *
  */
-public interface FacebookSignOutListener {
+public interface ShareSystem {
 
-	public void onSignOut();
-	
+	public void addShare(SocializeSession session, Entity entity, String text, ShareType shareType, Location location, ShareListener listener);
+
+	@DelegateOnly
+	public void getSharesByEntity(SocializeSession session, String key, int startIndex, int endIndex, ShareListener listener);
+
+	@DelegateOnly
+	public void getSharesByUser(SocializeSession session, long userId, ShareListener listener);
+
 }

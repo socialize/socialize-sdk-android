@@ -28,7 +28,7 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionPersister;
-import com.socialize.api.action.UserApi;
+import com.socialize.api.action.SocializeUserSystem;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeActionListener;
@@ -60,7 +60,7 @@ public class UserApiTest extends SocializeUnitTest {
 		
 		final int userId = 69;
 		
-		UserApi api = new UserApi(provider) {
+		SocializeUserSystem api = new SocializeUserSystem(provider) {
 			@Override
 			public void getAsync(SocializeSession session, String endpoint, String id, SocializeActionListener listener) {
 				addResult(id);
@@ -97,7 +97,7 @@ public class UserApiTest extends SocializeUnitTest {
 		user.setLastName(lastName);
 		user.setProfilePicData(encodedImage);
 		
-		UserApi api = new UserApi(provider) {
+		SocializeUserSystem api = new SocializeUserSystem(provider) {
 			@Override
 			public void putAsPostAsync(SocializeSession session, String endpoint, User object, SocializeActionListener listener) {
 				addResult(object);
@@ -147,7 +147,7 @@ public class UserApiTest extends SocializeUnitTest {
 		user.setLastName(lastName);
 		user.setProfilePicData(encodedImage);
 		
-		UserApi api = new UserApi(provider) {
+		SocializeUserSystem api = new SocializeUserSystem(provider) {
 			@Override
 			public void putAsPostAsync(SocializeSession session, String endpoint, User object, SocializeActionListener listener) {
 				addResult(listener);

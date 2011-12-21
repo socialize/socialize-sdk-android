@@ -19,30 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.facebook;
+package com.socialize.networks.facebook;
 
-import com.socialize.android.ioc.IBeanFactory;
-
-import android.content.Context;
+import android.app.Activity;
 
 /**
  * @author Jason Polites
+ * @deprecated use SocialNetworkListener
  */
-public class FacebookSignOutCell extends FacebookCell {
-	
-	private IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory;
-	
-	public FacebookSignOutCell(Context context) {
-		super(context);
-	}
-	
-	@Override
-	public void init() {
-		super.init();
-		setOnClickListener(facebookSignOutClickListenerFactory.getBean());
-	}
+public interface FacebookWallPostListener {
 
-	public void setFacebookSignOutClickListenerFactory(IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory) {
-		this.facebookSignOutClickListenerFactory = facebookSignOutClickListenerFactory;
-	}
+	public void onPost(Activity parent);
+	
+	public void onError(Activity parent, String message, Throwable error);
+	
 }

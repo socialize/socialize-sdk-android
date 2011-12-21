@@ -24,9 +24,13 @@ package com.socialize.api;
 import android.content.Context;
 import android.location.Location;
 
+import com.socialize.api.action.CommentSystem;
+import com.socialize.api.action.LikeSystem;
+import com.socialize.api.action.ShareSystem;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.entity.Entity;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.activity.UserActivityListener;
 import com.socialize.listener.comment.CommentListener;
@@ -35,12 +39,17 @@ import com.socialize.listener.like.LikeListener;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.listener.user.UserListener;
 import com.socialize.listener.view.ViewListener;
+import com.socialize.networks.ShareOptions;
 import com.socialize.ui.comment.CommentShareOptions;
 
 /**
  * @author Jason Polites
- * 
+ * @deprecated Use each system as needed.  e.g. CommentSystem
+ * @see CommentSystem
+ * @see LikeSystem
+ * @see ShareSystem
  */
+@Deprecated
 public interface ApiHost {
 
 	public void clearSessionCache(AuthProviderType authProviderType);
@@ -52,8 +61,6 @@ public interface ApiHost {
 	public void authenticate(String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth);
 
 	public void createEntity(SocializeSession session, String key, String name, EntityListener listener);
-
-	public void addComment(SocializeSession session, String key, String comment, Location location, CommentShareOptions shareOptions, CommentListener listener);
 
 	public void getComment(SocializeSession session, long id, CommentListener listener);
 
@@ -73,21 +80,35 @@ public interface ApiHost {
 
 	public void listCommentsByEntity(SocializeSession session, String url, int startIndex, int endIndex, CommentListener listener);
 
-	public void listCommentsById(SocializeSession session, CommentListener listener, int... ids);
+	public void listCommentsById(SocializeSession session, CommentListener listener, long... ids);
 	
 	public void listCommentsByUser(SocializeSession session, long userId, CommentListener listener);
 	
 	public void listCommentsByUser(SocializeSession session, long userId, int startIndex, int endIndex, CommentListener listener);
 	
-	public void addLike(SocializeSession session, String key, Location location, LikeListener listener);
+	@Deprecated
+	public void addComment(SocializeSession session, String key, String comment, Location location, CommentShareOptions shareOptions, CommentListener listener);
 
+	public void addComment(SocializeSession session, Entity entity, String comment, Location location, ShareOptions shareOptions, CommentListener listener);
+	
+	@Deprecated
+	public void addLike(SocializeSession session, String key, Location location, LikeListener listener);
+	
+	public void addLike(SocializeSession session, Entity entity, Location location, LikeListener listener);
+
+	@Deprecated
 	public void addView(SocializeSession session, String key, Location location, ViewListener listener);
 
+	public void addView(SocializeSession session, Entity entity, Location location, ViewListener listener);
+
+	@Deprecated
 	public void addShare(SocializeSession session, String key, String text, ShareType shareType, Location location, ShareListener listener);
 
+	public void addShare(SocializeSession session, Entity entity, String text, ShareType shareType, Location location, ShareListener listener);
+	
 	public void deleteLike(SocializeSession session, long id, LikeListener listener);
 
-	public void listLikesById(SocializeSession session, LikeListener listener, int... ids);
+	public void listLikesById(SocializeSession session, LikeListener listener, long... ids);
 
 	public void getLike(SocializeSession session, long id, LikeListener listener);
 

@@ -19,37 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.actionbar;
+package com.socialize.networks.facebook;
+
+import com.socialize.android.ioc.IBeanFactory;
+
+import android.content.Context;
 
 /**
  * @author Jason Polites
- *
  */
-public class ActionBarOptions {
-	private String entityName;
-	private boolean isEntityKeyUrl = true;
-	private boolean addScrollView = true;
+public class FacebookSignOutCell extends FacebookCell {
 	
-	@Deprecated
-	public String getEntityName() {
-		return entityName;
+	private IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory;
+	
+	public FacebookSignOutCell(Context context) {
+		super(context);
 	}
-	@Deprecated
-	public void setEntityName(String entityName) {
-		this.entityName = entityName;
+	
+	@Override
+	public void init() {
+		super.init();
+		setOnClickListener(facebookSignOutClickListenerFactory.getBean());
 	}
-	@Deprecated
-	public boolean isEntityKeyUrl() {
-		return isEntityKeyUrl;
-	}
-	@Deprecated
-	public void setEntityKeyUrl(boolean isEntityKeyUrl) {
-		this.isEntityKeyUrl = isEntityKeyUrl;
-	}
-	public boolean isAddScrollView() {
-		return addScrollView;
-	}
-	public void setAddScrollView(boolean addScrollView) {
-		this.addScrollView = addScrollView;
+
+	public void setFacebookSignOutClickListenerFactory(IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory) {
+		this.facebookSignOutClickListenerFactory = facebookSignOutClickListenerFactory;
 	}
 }

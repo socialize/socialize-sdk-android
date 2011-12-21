@@ -19,37 +19,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.actionbar;
+package com.socialize.networks.facebook;
+
+import android.app.Activity;
+
+import com.socialize.entity.Entity;
+import com.socialize.networks.SocialNetworkListener;
 
 /**
  * @author Jason Polites
  *
  */
-public class ActionBarOptions {
-	private String entityName;
-	private boolean isEntityKeyUrl = true;
-	private boolean addScrollView = true;
+public interface FacebookWallPoster {
+
+	public void postLike(final Activity parent, Entity entity, String comment, SocialNetworkListener listener);
+
+	public void postComment(final Activity parent, Entity entity, String comment, SocialNetworkListener listener);	
 	
 	@Deprecated
-	public String getEntityName() {
-		return entityName;
-	}
+	public void postLike(final Activity parent, String entityKey, String entityName, String comment, SocialNetworkListener listener);
+
 	@Deprecated
-	public void setEntityName(String entityName) {
-		this.entityName = entityName;
-	}
-	@Deprecated
-	public boolean isEntityKeyUrl() {
-		return isEntityKeyUrl;
-	}
-	@Deprecated
-	public void setEntityKeyUrl(boolean isEntityKeyUrl) {
-		this.isEntityKeyUrl = isEntityKeyUrl;
-	}
-	public boolean isAddScrollView() {
-		return addScrollView;
-	}
-	public void setAddScrollView(boolean addScrollView) {
-		this.addScrollView = addScrollView;
-	}
+	public void postComment(final Activity parent, String entityKey, String entityName, String comment, SocialNetworkListener listener);
+
+	public void post(final Activity parent, String message, SocialNetworkListener listener);
+
+	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, SocialNetworkListener listener);
+
 }

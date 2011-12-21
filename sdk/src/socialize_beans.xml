@@ -191,6 +191,7 @@
 		</init-method>
 	</bean>
 	
+	<!-- Deprecated 
 	<bean id="socializeApi" class="com.socialize.api.SocializeApi" abstract="true">
 		<property name="responseFactory" ref="responseFactory"/>
 		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
@@ -200,6 +201,7 @@
 		<property name="httpUtils" ref="httpUtils"/>
 		<property name="locationProvider" ref="locationProvider"/>
 	</bean>
+	-->
 	
 	<bean id="socializeActionFactory" class="com.socialize.entity.factory.SocializeActionFactory" abstract="true">
 		<property name="logger" ref="logger"/>
@@ -242,7 +244,7 @@
 		<property name="requestFactory" ref="commentRequestFactory"/>
 	</bean>
 	
-	<bean id="commentApi" class="com.socialize.api.action.CommentApi" extends="socializeApi">
+	<bean id="commentSystem" class="com.socialize.api.action.SocializeCommentSystem" extends="socializeApi">
 		<constructor-arg ref="commentProvider"/>
 	</bean>
 
@@ -264,7 +266,7 @@
 		<property name="requestFactory" ref="entityRequestFactory"/>
 	</bean>
 	
-	<bean id="entityApi" class="com.socialize.api.action.EntityApi" extends="socializeApi">
+	<bean id="entitySystem" class="com.socialize.api.action.SocializeEntitySystem" extends="socializeApi">
 		<constructor-arg ref="entityProvider"/>
 	</bean>
 
@@ -284,7 +286,7 @@
 		<property name="requestFactory" ref="likeRequestFactory"/>
 	</bean>
 	
-	<bean id="likeApi" class="com.socialize.api.action.LikeApi" extends="socializeApi">
+	<bean id="likeSystem" class="com.socialize.api.action.SocializeLikeSystem" extends="socializeApi">
 		<constructor-arg ref="likeProvider"/>
 	</bean>
 	
@@ -304,7 +306,7 @@
 		<property name="requestFactory" ref="viewRequestFactory"/>
 	</bean>
 	
-	<bean id="viewApi" class="com.socialize.api.action.ViewApi" extends="socializeApi">
+	<bean id="viewSystem" class="com.socialize.api.action.SocializeViewSystem" extends="socializeApi">
 		<constructor-arg ref="viewProvider"/>
 	</bean>
 	
@@ -324,7 +326,7 @@
 		<property name="requestFactory" ref="shareRequestFactory"/>
 	</bean>
 	
-	<bean id="shareApi" class="com.socialize.api.action.ShareApi" extends="socializeApi">
+	<bean id="shareSystem" class="com.socialize.api.action.SocializeShareSystem" extends="socializeApi">
 		<constructor-arg ref="shareProvider"/>
 	</bean>
 	
@@ -342,9 +344,11 @@
 		<property name="requestFactory" ref="userRequestFactory"/>
 	</bean>
 	
-	<bean id="userApi" class="com.socialize.api.action.UserApi" extends="socializeApi">
+	<bean id="userSystem" class="com.socialize.api.action.SocializeUserSystem" extends="socializeApi">
 		<constructor-arg ref="userProvider"/>
 		<property name="sessionPersister" ref="sessionPersister"/>
+		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
+		<property name="deviceUtils" ref="deviceUtils"/>		
 	</bean>
 	
 <!-- End User API -->
@@ -374,40 +378,44 @@
 		<property name="requestFactory" ref="activityRequestFactory"/>
 	</bean>
 	
-	<bean id="userActivityApi" class="com.socialize.api.action.UserActivityApi" extends="socializeApi">
+	<bean id="activitySystem" class="com.socialize.api.action.UserActivityApi" extends="socializeApi">
 		<constructor-arg ref="activityProvider"/>
 	</bean>
 	
 
 <!-- End Activity API -->
 
-<!-- Recommendation API -->
+<!-- Recommendation API (Deprecated)
 
 	<bean id="recommendationApi" class="com.socialize.api.action.RecommendationApi" extends="socializeApi">
 		<constructor-arg ref="entityProvider"/>
 	</bean>
+	
+ -->	
 
 <!-- End Recommendation API -->
 
 <!-- Socialize Core -->
 
+	<!-- Deprecated
 	<bean id="socializeApiHost" class="com.socialize.api.SocializeApiHost">
 		<property name="clientFactory" ref="clientFactory"/>
 		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
-		<property name="commentApi" ref="commentApi"/>
-		<property name="entityApi" ref="entityApi"/>
-		<property name="likeApi" ref="likeApi"/>
-		<property name="viewApi" ref="viewApi"/>
-		<property name="userApi" ref="userApi"/>
-		<property name="shareApi" ref="shareApi"/>
-		<property name="userActivityApi" ref="userActivityApi"/>
+		<property name="commentSystem" ref="commentSystem"/>
+		<property name="entitySystem" ref="entitySystem"/>
+		<property name="likeSystem" ref="likeSystem"/>
+		<property name="viewSystem" ref="viewSystem"/>
+		<property name="userSystem" ref="userSystem"/>
+		<property name="shareSystem" ref="shareSystem"/>
+		<property name="activitySystem" ref="activitySystem"/>
 		<property name="recommendationApi" ref="recommendationApi"/>
 		
 		<init-method name="init">
 			<arg type="context"/>
 		</init-method>			
 	</bean>
+	 -->
 	
 <!-- End Socialize Core -->
 

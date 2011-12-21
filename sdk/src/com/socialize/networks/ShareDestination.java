@@ -19,35 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.facebook;
-
-import android.content.Context;
-
-import com.socialize.listener.SocializeAuthListener;
+package com.socialize.networks;
 
 /**
  * @author Jason Polites
+ *
  */
-public class FacebookSignInCell extends FacebookCell {
-	
-	private FacebookAuthClickListener facebookAuthClickListener;
-
-	public FacebookSignInCell(Context context) {
-		super(context);
-	}
-	
-	@Override
-	public void init() {
-		super.init();
-		setOnClickListener(facebookAuthClickListener);
-	}
-	
-	public void setAuthListener(SocializeAuthListener listener) {
-		facebookAuthClickListener.setListener(listener);
-	}
-
-	public void setFacebookAuthClickListener(FacebookAuthClickListener facebookAuthClickListener) {
-		this.facebookAuthClickListener = facebookAuthClickListener;
-	}
-
+public enum ShareDestination {
+	FACEBOOK;
 }

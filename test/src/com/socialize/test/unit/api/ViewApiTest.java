@@ -26,7 +26,7 @@ import java.util.List;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.ViewApi;
+import com.socialize.api.action.SocializeViewSystem;
 import com.socialize.entity.View;
 import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.view.ViewListener;
@@ -58,7 +58,7 @@ public class ViewApiTest extends SocializeUnitTest {
 	public void testAddView() {
 		final String key = "foo";
 		
-		ViewApi api = new ViewApi(provider){
+		SocializeViewSystem api = new SocializeViewSystem(provider){
 			@Override
 			public void postAsync(SocializeSession session, String endpoint, List<View> objects, SocializeActionListener listener) {
 				addResult(objects);

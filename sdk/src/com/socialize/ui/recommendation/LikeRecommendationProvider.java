@@ -32,6 +32,7 @@ import com.socialize.listener.entity.EntityListListener;
 /**
  * @author Jason Polites
  */
+@Deprecated
 public class LikeRecommendationProvider implements RecommendationProvider<Like, Entity> {
 	
 	private SocializeApiHost socializeApiHost;

@@ -19,30 +19,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.facebook;
+package com.socialize.networks.facebook;
 
 import android.content.Context;
-import android.util.DisplayMetrics;
-import android.widget.ImageView;
 
-import com.socialize.ui.view.ClickableSectionCell;
+import com.socialize.listener.SocializeAuthListener;
 
 /**
  * @author Jason Polites
  */
-public abstract class FacebookCell extends ClickableSectionCell {
+public class FacebookSignInCell extends FacebookCell {
 	
-	public FacebookCell(Context context) {
+	private FacebookAuthClickListener facebookAuthClickListener;
+
+	public FacebookSignInCell(Context context) {
 		super(context);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.ui.view.ClickableSectionCell#makeImage()
-	 */
 	@Override
-	protected ImageView makeImage() {
-		ImageView view = new ImageView(getContext());
-		view.setImageDrawable(drawables.getDrawable("icon_facebook.png#no_density", DisplayMetrics.DENSITY_DEFAULT));
-		return view;
+	public void init() {
+		super.init();
+		setOnClickListener(facebookAuthClickListener);
 	}
+	
+	public void setAuthListener(SocializeAuthListener listener) {
+		facebookAuthClickListener.setListener(listener);
+	}
+
+	public void setFacebookAuthClickListener(FacebookAuthClickListener facebookAuthClickListener) {
+		this.facebookAuthClickListener = facebookAuthClickListener;
+	}
+
 }

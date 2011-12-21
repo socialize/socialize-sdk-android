@@ -21,35 +21,95 @@
  */
 package com.socialize.api.action;
 
+import android.app.Activity;
 import android.content.Context;
 
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.api.SocializeSessionPersister;
+import com.socialize.auth.AuthProviderData;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.user.UserListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.ui.profile.UserProfile;
+import com.socialize.util.DeviceUtils;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
  */
-public class UserApi extends SocializeApi<User, SocializeProvider<User>> {
+public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<User>> implements UserSystem {
 
 	public static final String ENDPOINT = "/user/";
 	
+	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	private SocializeSessionPersister sessionPersister;
+	private DeviceUtils deviceUtils;
 	
-	public UserApi(SocializeProvider<User> provider) {
+	private Activity context;
+	
+	public SocializeUserSystem(SocializeProvider<User> provider) {
 		super(provider);
 	}
 	
+	@Deprecated
+	public void init(Activity context) {
+		this.context = context;
+	}
+	
+	@Override
+	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
+		authenticate(context, consumerKey, consumerSecret, listener, sessionConsumer);
+	}
+
+	@Override
+	public void authenticate(String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
+		authenticate(context, consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
+	}
+
+	@Override
+	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
+		AuthProviderData authProviderData = authProviderDataFactory.getBean();
+		authProviderData.setAuthProviderType(AuthProviderType.SOCIALIZE);
+		authenticate(context, consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, false);	
+	}
+
+	@Override
+	public void authenticate(Context ctx, String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
+		if(ctx == null) ctx = context;
+		
+		String udid = deviceUtils.getUDID(ctx);
+		
+		// TODO: create test case for this
+		if(StringUtils.isEmpty(udid)) {
+			if(listener != null) {
+				listener.onError(new SocializeException("No UDID provided"));
+			}
+		}
+		else {
+			// All Api instances have authenticate, so we can just use any old one
+			authenticateAsync(consumerKey, consumerSecret, udid, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
+		}	
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.UserSystem#getUser(com.socialize.api.SocializeSession, long, com.socialize.listener.user.UserListener)
+	 */
+	@Override
 	public void getUser(SocializeSession session, long id, UserListener listener) {
 		getAsync(session, ENDPOINT, String.valueOf(id), listener);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.UserSystem#saveUserProfile(android.content.Context, com.socialize.api.SocializeSession, com.socialize.ui.profile.UserProfile, com.socialize.listener.user.UserListener)
+	 */
+	@Override
 	public void saveUserProfile(final Context context, final SocializeSession session, UserProfile profile, final UserListener listener) {
 		User user = session.getUser();
 		user.setFirstName(profile.getFirstName());
@@ -87,14 +147,10 @@ public class UserApi extends SocializeApi<User, SocializeProvider<User>> {
 		});
 	}
 	
-	/**
-	 * Saves the CURRENT user details.
-	 * @param session
-	 * @param firstName
-	 * @param lastName
-	 * @param encodedImage Base64 encoded PNG image data.
-	 * @param listener
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.UserSystem#saveUserProfile(android.content.Context, com.socialize.api.SocializeSession, java.lang.String, java.lang.String, java.lang.String, com.socialize.listener.user.UserListener)
 	 */
+	@Override
 	public void saveUserProfile(final Context context, final SocializeSession session, String firstName, String lastName, String encodedImage, final UserListener listener) {
 		User user = session.getUser();
 		user.setFirstName(firstName);
@@ -105,5 +161,13 @@ public class UserApi extends SocializeApi<User, SocializeProvider<User>> {
 
 	public void setSessionPersister(SocializeSessionPersister sessionPersister) {
 		this.sessionPersister = sessionPersister;
+	}
+
+	public void setAuthProviderDataFactory(IBeanFactory<AuthProviderData> authProviderDataFactory) {
+		this.authProviderDataFactory = authProviderDataFactory;
+	}
+
+	public void setDeviceUtils(DeviceUtils deviceUtils) {
+		this.deviceUtils = deviceUtils;
 	}
 }

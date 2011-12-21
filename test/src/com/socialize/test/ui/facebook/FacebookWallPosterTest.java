@@ -25,9 +25,9 @@ import android.app.Activity;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.facebook.DefaultFacebookWallPoster;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.ui.facebook.DefaultFacebookWallPoster;
-import com.socialize.ui.facebook.FacebookWallPostListener;
 import com.socialize.util.DeviceUtils;
 
 /**
@@ -35,14 +35,14 @@ import com.socialize.util.DeviceUtils;
  *
  */
 @UsesMocks ({
-	FacebookWallPostListener.class,
+	SocialNetworkListener.class,
 	DeviceUtils.class
 })
 public class FacebookWallPosterTest extends SocializeActivityTest {
 
 	public void testPostLike() {
 		
-		FacebookWallPostListener listener = AndroidMock.createMock(FacebookWallPostListener.class);
+		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
 		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
 		Activity parent = getActivity();
 		
@@ -55,7 +55,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
 
 			@Override
-			public void post(Activity parent, String message, FacebookWallPostListener listener) {
+			public void post(Activity parent, String message, SocialNetworkListener listener) {
 				addResult(parent);
 				addResult(message);
 				addResult(listener);
@@ -67,9 +67,9 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		AndroidMock.replay(deviceUtils);
 		
 		poster.setDeviceUtils(deviceUtils);
-		poster.postLike(parent, entityKey, entityName, null, false, listener);
+		poster.postLike(parent, entityKey, entityName, null, listener);
 		
-		FacebookWallPostListener listenerAfter = getNextResult();
+		SocialNetworkListener listenerAfter = getNextResult();
 		String messageAfter = getNextResult();
 		Activity parentAfter = getNextResult();
 		
@@ -81,7 +81,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 	}
 	
 	public void testPostComment() {
-		FacebookWallPostListener listener = AndroidMock.createMock(FacebookWallPostListener.class);
+		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
 		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
 		Activity parent = getActivity();
 		
@@ -95,7 +95,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
 
 			@Override
-			public void post(Activity parent, String message, FacebookWallPostListener listener) {
+			public void post(Activity parent, String message, SocialNetworkListener listener) {
 				addResult(parent);
 				addResult(message);
 				addResult(listener);
@@ -107,9 +107,9 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		AndroidMock.replay(deviceUtils);
 		
 		poster.setDeviceUtils(deviceUtils);
-		poster.postComment(parent, entityKey, entityName, comment, false, listener);
+		poster.postComment(parent, entityKey, entityName, comment, listener);
 		
-		FacebookWallPostListener listenerAfter = getNextResult();
+		SocialNetworkListener listenerAfter = getNextResult();
 		String messageAfter = getNextResult();
 		Activity parentAfter = getNextResult();
 		

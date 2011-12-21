@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.facebook;
+package com.socialize.networks.facebook;
 
 import android.app.ProgressDialog;
 import android.view.View;
@@ -58,7 +58,7 @@ public class FacebookAuthClickListener implements OnClickListener {
 		
 		AuthProviderType authProvider = AuthProviderType.FACEBOOK;
 		
-		getSocialize().authenticate(consumerKey, consumerSecret, authProvider, authProviderAppId, new SocializeAuthListener() {
+		getSocialize().authenticate(view.getContext(), consumerKey, consumerSecret, authProvider, authProviderAppId, new SocializeAuthListener() {
 			
 			@Override
 			public void onError(SocializeException error) {

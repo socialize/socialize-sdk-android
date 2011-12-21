@@ -19,18 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.facebook;
+package com.socialize.api.action;
 
-import android.app.Activity;
+import android.location.Location;
+
+import com.socialize.api.SocializeSession;
+import com.socialize.entity.Entity;
+import com.socialize.listener.view.ViewListener;
 
 /**
  * @author Jason Polites
  *
  */
-public interface FacebookWallPostListener {
+public interface ViewSystem {
 
-	public void onPost(Activity parent);
-	
-	public void onError(Activity parent, String message, Throwable error);
-	
+	public void addView(SocializeSession session, Entity entity, Location location, ViewListener listener);
+
+	public void getViewsByEntity(SocializeSession session, String entityKey, int startIndex, int endIndex, ViewListener listener);
+
+	public void getViewsByUser(SocializeSession session, long userId, ViewListener listener);
+
 }

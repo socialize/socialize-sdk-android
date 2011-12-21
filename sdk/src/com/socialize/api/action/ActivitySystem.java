@@ -19,39 +19,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.facebook;
+package com.socialize.api.action;
 
-import android.content.Context;
-import android.util.AttributeSet;
-
-import com.socialize.listener.SocializeAuthListener;
-import com.socialize.ui.view.SocializeButton;
+import com.socialize.api.SocializeSession;
+import com.socialize.listener.activity.UserActivityListener;
+import com.socialize.util.DelegateOnly;
 
 /**
  * @author Jason Polites
  */
-public class FacebookButton extends SocializeButton {
-	
-	private FacebookAuthClickListener facebookAuthClickListener;
+public interface ActivitySystem {
 
-	public FacebookButton(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
+	@DelegateOnly
+	public void getActivityByUser(SocializeSession session, long id, UserActivityListener listener);
 
-	public FacebookButton(Context context) {
-		super(context);
-	}
+	@DelegateOnly
+	public void getActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, UserActivityListener listener);
 
-	public void init() {
-		super.init();
-		setOnClickListener(facebookAuthClickListener);
-	}
-	
-	public void setAuthListener(SocializeAuthListener listener) {
-		facebookAuthClickListener.setListener(listener);
-	}
-
-	public void setFacebookAuthClickListener(FacebookAuthClickListener facebookAuthClickListener) {
-		this.facebookAuthClickListener = facebookAuthClickListener;
-	}
 }

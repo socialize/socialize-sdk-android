@@ -19,37 +19,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.actionbar;
+package com.socialize.util;
+
+import java.lang.reflect.Proxy;
+
+import com.socialize.android.ioc.IBeanFactory;
+
 
 /**
  * @author Jason Polites
- *
  */
-public class ActionBarOptions {
-	private String entityName;
-	private boolean isEntityKeyUrl = true;
-	private boolean addScrollView = true;
+public class DelegateWrapperUtils  {
 	
-	@Deprecated
-	public String getEntityName() {
-		return entityName;
+	private IBeanFactory<DelegateWrapper> delgateWrapperFactory;
+	
+	@SuppressWarnings("unchecked")
+	public <T> T wrap(T primary, T secondary) {
+		
+		DelegateWrapper wrapper = null;
+		
+		while(Proxy.isProxyClass(primary.getClass())) {
+			wrapper = (DelegateWrapper) Proxy.getInvocationHandler(primary);
+			primary = (T) wrapper.getPrimary();
+		}
+		
+		while(Proxy.isProxyClass(secondary.getClass())) {
+			wrapper = (DelegateWrapper) Proxy.getInvocationHandler(secondary);
+			secondary = (T) wrapper.getSecondary();
+		}
+		
+		wrapper = delgateWrapperFactory.getBean(primary, secondary);
+		
+		return (T) Proxy.newProxyInstance(
+				primary.getClass().getClassLoader(),
+				primary.getClass().getInterfaces(),
+				wrapper);	
 	}
-	@Deprecated
-	public void setEntityName(String entityName) {
-		this.entityName = entityName;
+	
+	public void setDelgateWrapperFactory(IBeanFactory<DelegateWrapper> delgateWrapperFactory) {
+		this.delgateWrapperFactory = delgateWrapperFactory;
 	}
-	@Deprecated
-	public boolean isEntityKeyUrl() {
-		return isEntityKeyUrl;
-	}
-	@Deprecated
-	public void setEntityKeyUrl(boolean isEntityKeyUrl) {
-		this.isEntityKeyUrl = isEntityKeyUrl;
-	}
-	public boolean isAddScrollView() {
-		return addScrollView;
-	}
-	public void setAddScrollView(boolean addScrollView) {
-		this.addScrollView = addScrollView;
-	}
+	
+	
 }

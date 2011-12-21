@@ -28,6 +28,7 @@ import android.location.Location;
 
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
+import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.provider.SocializeProvider;
@@ -35,17 +36,21 @@ import com.socialize.provider.SocializeProvider;
 /**
  * @author Jason Polites
  */
-public class ShareApi extends SocializeApi<Share, SocializeProvider<Share>> {
+public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<Share>> implements ShareSystem {
 
 	public static final String ENDPOINT = "/share/";
 	
-	public ShareApi(SocializeProvider<Share> provider) {
+	public SocializeShareSystem(SocializeProvider<Share> provider) {
 		super(provider);
 	}
 	
-	public void addShare(SocializeSession session, String key, String text, ShareType shareType, Location location, ShareListener listener) {
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.ShareSystem#addShare(com.socialize.api.SocializeSession, com.socialize.entity.Entity, java.lang.String, com.socialize.api.action.ShareType, android.location.Location, com.socialize.listener.share.ShareListener)
+	 */
+	@Override
+	public void addShare(SocializeSession session, Entity entity, String text, ShareType shareType, Location location, ShareListener listener) {
 		Share c = new Share();
-		c.setEntityKey(key);
+		c.setEntity(entity);
 		c.setText(text);
 		c.setMedium(shareType.getId());
 		c.setMediumName(shareType.getName());
@@ -58,10 +63,23 @@ public class ShareApi extends SocializeApi<Share, SocializeProvider<Share>> {
 		postAsync(session, ENDPOINT, list, listener);
 	}
 	
+	@Deprecated
+	public void addShare(SocializeSession session, String key, String text, ShareType shareType, Location location, ShareListener listener) {
+		addShare(session, Entity.newInstance(key, null), text, shareType, location, listener);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.ShareSystem#getSharesByEntity(com.socialize.api.SocializeSession, java.lang.String, int, int, com.socialize.listener.share.ShareListener)
+	 */
+	@Override
 	public void getSharesByEntity(SocializeSession session, String key, int startIndex, int endIndex, ShareListener listener) {
 		listAsync(session, ENDPOINT, key, null, startIndex, endIndex, listener);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.ShareSystem#getSharesByUser(com.socialize.api.SocializeSession, long, com.socialize.listener.share.ShareListener)
+	 */
+	@Override
 	public void getSharesByUser(SocializeSession session, long userId, ShareListener listener) {
 		String endpoint = "/user/" + userId + ENDPOINT;
 		listAsync(session, endpoint, listener);

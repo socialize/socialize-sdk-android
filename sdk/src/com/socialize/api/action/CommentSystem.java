@@ -19,14 +19,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.comment;
+package com.socialize.api.action;
 
+import android.location.Location;
+
+import com.socialize.api.SocializeSession;
+import com.socialize.entity.Entity;
+import com.socialize.listener.comment.CommentListener;
 import com.socialize.networks.ShareOptions;
+import com.socialize.util.DelegateOnly;
 
 /**
  * @author Jason Polites
- * @deprecated use share options
+ *
  */
-public class CommentShareOptions extends ShareOptions {
+public interface CommentSystem {
+
+	public void addComment(SocializeSession session, Entity entity, String comment, Location location, ShareOptions shareOptions, CommentListener listener);
+
+	@DelegateOnly
+	public void getCommentsByEntity(SocializeSession session, String entityKey, CommentListener listener);
+
+	@DelegateOnly
+	public void getCommentsByEntity(SocializeSession session, String entityKey, int startIndex, int endIndex, CommentListener listener);
+
+	@DelegateOnly
+	public void getCommentsByUser(SocializeSession session, long userId, CommentListener listener);
+
+	@DelegateOnly
+	public void getCommentsByUser(SocializeSession session, long userId, int startIndex, int endIndex, CommentListener listener);
+
+	@DelegateOnly
+	public void getCommentsById(SocializeSession session, CommentListener listener, long...ids);
+
+	@DelegateOnly
+	public void getComment(SocializeSession session, long id, CommentListener listener);
 
 }

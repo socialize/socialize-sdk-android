@@ -27,7 +27,7 @@ import com.socialize.api.DefaultSocializeResponseFactory;
 import com.socialize.api.DefaultSocializeSessionFactory;
 import com.socialize.api.PreferenceSessionPersister;
 import com.socialize.api.SocializeApiHost;
-import com.socialize.api.action.CommentApi;
+import com.socialize.api.action.SocializeCommentSystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.factory.CommentFactory;
 import com.socialize.entity.factory.UserFactory;
@@ -87,7 +87,7 @@ public class SocializeIOCTest extends SocializeActivityTest {
 		checkBeanType(ioc, "commentFactory", CommentFactory.class);
 		checkBeanType(ioc, "commentRequestFactory", DefaultSocializeRequestFactory.class);
 		checkBeanType(ioc, "commentProvider", DefaultSocializeProvider.class);
-		checkBeanType(ioc, "commentApi", CommentApi.class);
+		checkBeanType(ioc, "SocializeCommentSystem", SocializeCommentSystem.class);
 		checkBeanType(ioc, "socializeApiHost", SocializeApiHost.class);
 		checkBeanType(ioc, "responseFactory", DefaultSocializeResponseFactory.class);
 		checkBeanType(ioc, "sessionPersister",PreferenceSessionPersister.class);

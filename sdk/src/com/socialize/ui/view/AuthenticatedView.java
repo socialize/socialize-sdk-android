@@ -44,6 +44,7 @@ public abstract class AuthenticatedView extends SocializeBaseView {
 		onBeforeAuthenticate(container);
 		
 		getSocialize().authenticate(
+				getContext(),
 				consumerKey, 
 				consumerSecret, 
 				listener);
@@ -62,15 +63,15 @@ public abstract class AuthenticatedView extends SocializeBaseView {
 	}
 	
 	protected String getConsumerKey(IOCContainer container) {
-		return getSocializeUI().getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		return getSocialize().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 	}
 	
 	protected String getConsumerSecret(IOCContainer container) {
-		return getSocializeUI().getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+		return getSocialize().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 	}
 	
 	protected String getFacebookAppId(IOCContainer container) {
-		return getSocializeUI().getCustomConfigValue(SocializeConfig.FACEBOOK_APP_ID);
+		return getSocialize().getProperty(SocializeConfig.FACEBOOK_APP_ID);
 	}
 
 	public SocializeUI getSocializeUI() {

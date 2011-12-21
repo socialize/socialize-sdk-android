@@ -19,37 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.actionbar;
+package com.socialize.util;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
+ * Indicates that a wrapped delegate class should ONLY execute the delegate method
  * @author Jason Polites
- *
  */
-public class ActionBarOptions {
-	private String entityName;
-	private boolean isEntityKeyUrl = true;
-	private boolean addScrollView = true;
-	
-	@Deprecated
-	public String getEntityName() {
-		return entityName;
-	}
-	@Deprecated
-	public void setEntityName(String entityName) {
-		this.entityName = entityName;
-	}
-	@Deprecated
-	public boolean isEntityKeyUrl() {
-		return isEntityKeyUrl;
-	}
-	@Deprecated
-	public void setEntityKeyUrl(boolean isEntityKeyUrl) {
-		this.isEntityKeyUrl = isEntityKeyUrl;
-	}
-	public boolean isAddScrollView() {
-		return addScrollView;
-	}
-	public void setAddScrollView(boolean addScrollView) {
-		this.addScrollView = addScrollView;
-	}
+@Retention(RetentionPolicy.RUNTIME) 
+public @interface DelegateOnly {
+
 }

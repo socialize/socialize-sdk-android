@@ -28,6 +28,7 @@ import android.location.Location;
 
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
+import com.socialize.entity.Entity;
 import com.socialize.entity.View;
 import com.socialize.listener.view.ViewListener;
 import com.socialize.provider.SocializeProvider;
@@ -35,17 +36,21 @@ import com.socialize.provider.SocializeProvider;
 /**
  * @author Jason Polites
  */
-public class ViewApi extends SocializeApi<View, SocializeProvider<View>> {
+public class SocializeViewSystem extends SocializeApi<View, SocializeProvider<View>> implements ViewSystem {
 
 	public static final String ENDPOINT = "/view/";
 	
-	public ViewApi(SocializeProvider<View> provider) {
+	public SocializeViewSystem(SocializeProvider<View> provider) {
 		super(provider);
 	}
-
-	public void addView(SocializeSession session, String key, Location location, ViewListener listener) {
+	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.ViewSystem#addView(com.socialize.api.SocializeSession, com.socialize.entity.Entity, android.location.Location, com.socialize.listener.view.ViewListener)
+	 */
+	@Override
+	public void addView(SocializeSession session, Entity entity, Location location, ViewListener listener) {
 		View c = new View();
-		c.setEntityKey(key);
+		c.setEntity(entity);
 		
 		setLocation(c, location);
 		
@@ -54,11 +59,24 @@ public class ViewApi extends SocializeApi<View, SocializeProvider<View>> {
 		
 		postAsync(session, ENDPOINT, list, listener);
 	}
+
+	@Deprecated
+	public void addView(SocializeSession session, String key, Location location, ViewListener listener) {
+		addView(session, Entity.newInstance(key, null), location, listener);
+	}
 	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.ViewSystem#getViewsByEntity(com.socialize.api.SocializeSession, java.lang.String, int, int, com.socialize.listener.view.ViewListener)
+	 */
+	@Override
 	public void getViewsByEntity(SocializeSession session, String key, int startIndex, int endIndex, ViewListener listener) {
 		listAsync(session, ENDPOINT, key, null, startIndex, endIndex, listener);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.ViewSystem#getViewsByUser(com.socialize.api.SocializeSession, long, com.socialize.listener.view.ViewListener)
+	 */
+	@Override
 	public void getViewsByUser(SocializeSession session, long userId, ViewListener listener) {
 		String endpoint = "/user/" + userId + ENDPOINT;
 		listAsync(session, endpoint, listener);

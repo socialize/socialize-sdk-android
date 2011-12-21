@@ -30,6 +30,7 @@ import android.widget.EditText;
 
 import com.socialize.Socialize;
 import com.socialize.api.action.ShareType;
+import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.share.ShareAddListener;
@@ -91,18 +92,18 @@ public abstract class BaseShareClickListener implements ShareClickListener {
 			comment = commentView.getText().toString();
 		}
 		
-		String entityKey = actionBarView.getEntityKey();
+		Entity entityKey = actionBarView.getEntity();
 
 		if(entityKey != null) {
 
 			String text = comment;
 
 			if(StringUtils.isEmpty(text)) {
-				text = entityKey;
+				text = entityKey.getDisplayName();
 			}
 
 			// Record the share in Socialize
-			Socialize.getSocialize().share(entityKey, text, getShareType(),
+			Socialize.getSocialize().addShare(activity, entityKey, text, getShareType(),
 				new ShareAddListener() {
 	
 					@Override

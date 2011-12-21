@@ -40,50 +40,6 @@ import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.util.Drawables;
 public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 
-	public void testSetSocializeCredentials() {
-		SocializeUI socializeUI = new SocializeUI();
-
-		String consumerKey = "foo";
-		String consumerSecret = "bar";
-
-		socializeUI.setSocializeCredentials(consumerKey, consumerSecret);
-
-		assertEquals(consumerKey, socializeUI.getCustomProperties().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY));
-		assertEquals(consumerSecret, socializeUI.getCustomProperties().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET));
-	}
-
-	public void testSetFacebookUserCredentials() {
-		SocializeUI socializeUI = new SocializeUI();
-
-		String userId = "foo";
-		String token = "bar";
-
-		socializeUI.setFacebookUserCredentials(userId, token);
-
-		assertEquals(userId, socializeUI.getCustomProperties().getProperty(SocializeConfig.FACEBOOK_USER_ID));
-		assertEquals(token, socializeUI.getCustomProperties().getProperty(SocializeConfig.FACEBOOK_USER_TOKEN));
-	}
-
-	public void testSetFacebookAppId() {
-		SocializeUI socializeUI = new SocializeUI();
-
-		String appId = "foobar";
-
-		socializeUI.setFacebookAppId(appId);
-
-		assertEquals(appId, socializeUI.getCustomProperties().getProperty(SocializeConfig.FACEBOOK_APP_ID));
-	}
-
-	public void testSetDebugMode() {
-		SocializeUI socializeUI = new SocializeUI();
-
-		boolean debug = true;
-
-		socializeUI.setDebugMode(debug);
-
-		assertEquals(String.valueOf(debug), socializeUI.getCustomProperties().getProperty(SocializeConfig.SOCIALIZE_DEBUG_MODE));
-	}
-
 	@UsesMocks({Intent.class, Activity.class})
 	public void testSetEntityUrl() {
 		Activity activity = AndroidMock.createMock(Activity.class);
@@ -127,15 +83,15 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 				return socialize;
 			}
 
-			@Override
-			protected Set<String> getPropertiesToBeRemoved() {
-				return toBeRemoved;
-			}
-
-			@Override
-			public Properties getCustomProperties() {
-				return customProperties;
-			}
+//			@Override
+//			protected Set<String> getPropertiesToBeRemoved() {
+//				return toBeRemoved;
+//			}
+//
+//			@Override
+//			public Properties getCustomProperties() {
+//				return customProperties;
+//			}
 		};
 
 		final String[] paths = new String[]{"socialize_beans.xml", "socialize_ui_beans.xml"};
@@ -1201,7 +1157,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		public ScrollView newScrollView(Activity parent) {
 			return super.newScrollView(parent);
 		}
-
+		
 		@Override
 		public View showActionBar(Activity parent, int resId, String entityKey, String entityName, boolean isEntityKeyUrl, boolean addScrollView, ActionBarListener listener) {
 			return super.showActionBar(parent, resId, entityKey, entityName, isEntityKeyUrl, addScrollView, listener);

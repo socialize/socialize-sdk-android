@@ -33,10 +33,10 @@ public class DiagnosisSuite extends TestSuite {
 		
 		
 		
-//		suite.addTestSuite(CommentApiTest.class);
-//		suite.addTestSuite(EntityApiTest.class);
-//		suite.addTestSuite(LikeApiTest.class);
-//		suite.addTestSuite(ViewApiTest.class);
+//		suite.addTestSuite(SocializeCommentSystemTest.class);
+//		suite.addTestSuite(SocializeEntitySystemTest.class);
+//		suite.addTestSuite(SocializeLikeSystemTest.class);
+//		suite.addTestSuite(SocializeViewSystemTest.class);
 //		
 //		suite.addTestSuite(ApplicationFactoryTest.class);
 //		suite.addTestSuite(AuthProvidersTest.class);

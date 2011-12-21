@@ -29,6 +29,7 @@ import android.location.Location;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
+import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.User;
@@ -41,17 +42,21 @@ import com.socialize.provider.SocializeProvider;
 /**
  * @author Jason Polites
  */
-public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
+public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Like>> implements LikeSystem {
 
 	public static final String ENDPOINT = "/like/";
 	
-	public LikeApi(SocializeProvider<Like> provider) {
+	public SocializeLikeSystem(SocializeProvider<Like> provider) {
 		super(provider);
 	}
-
-	public void addLike(SocializeSession session, String key, Location location, LikeListener listener) {
+	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.LikeSystem#addLike(com.socialize.api.SocializeSession, com.socialize.entity.Entity, android.location.Location, com.socialize.listener.like.LikeListener)
+	 */
+	@Override
+	public void addLike(SocializeSession session, Entity entity, Location location, LikeListener listener) {
 		Like c = new Like();
-		c.setEntityKey(key);
+		c.setEntity(entity);
 		
 		setLocation(c, location);
 		
@@ -59,12 +64,25 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 		list.add(c);
 		
 		postAsync(session, ENDPOINT, list, listener);
+	}	
+
+	@Deprecated
+	public void addLike(SocializeSession session, String key, Location location, LikeListener listener) {
+		addLike(session, Entity.newInstance(key, null), location, listener);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.LikeSystem#deleteLike(com.socialize.api.SocializeSession, long, com.socialize.listener.like.LikeListener)
+	 */
+	@Override
 	public void deleteLike(SocializeSession session, long id, LikeListener listener) {
 		deleteAsync(session, ENDPOINT, String.valueOf(id), listener);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.LikeSystem#getLikesByEntity(com.socialize.api.SocializeSession, java.lang.String, com.socialize.listener.like.LikeListener)
+	 */
+	@Override
 	public void getLikesByEntity(SocializeSession session, String key, LikeListener listener) {
 		listAsync(session, ENDPOINT, key, null, listener);
 	}	
@@ -79,16 +97,18 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 		listAsync(session, endpoint, startIndex, endIndex, listener);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.LikeSystem#getLikesByEntity(com.socialize.api.SocializeSession, java.lang.String, int, int, com.socialize.listener.like.LikeListener)
+	 */
+	@Override
 	public void getLikesByEntity(SocializeSession session, String key, int startIndex, int endIndex, LikeListener listener) {
 		listAsync(session, ENDPOINT, key, null, startIndex, endIndex, listener);
 	}
 	
-	/**
-	 * Retrieves a like for the current user based on the entity URL provided.
-	 * @param session
-	 * @param entityUrl
-	 * @param listener
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.LikeSystem#getLike(com.socialize.api.SocializeSession, java.lang.String, com.socialize.listener.like.LikeListener)
 	 */
+	@Override
 	public void getLike(SocializeSession session, final String entityUrl, final LikeListener listener) {
 		final User user = session.getUser();
 		if(user != null) {
@@ -140,7 +160,11 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 		}
 	}
 
-	public void getLikesById(SocializeSession session, LikeListener listener, int...ids) {
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.LikeSystem#getLikesById(com.socialize.api.SocializeSession, com.socialize.listener.like.LikeListener, int)
+	 */
+	@Override
+	public void getLikesById(SocializeSession session, LikeListener listener, long...ids) {
 		
 		if(ids != null) {
 			String[] strIds = new String[ids.length];
@@ -158,6 +182,10 @@ public class LikeApi extends SocializeApi<Like, SocializeProvider<Like>> {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.LikeSystem#getLike(com.socialize.api.SocializeSession, long, com.socialize.listener.like.LikeListener)
+	 */
+	@Override
 	public void getLike(SocializeSession session, long id, LikeListener listener) {
 		getAsync(session, ENDPOINT, String.valueOf(id), listener);
 	}

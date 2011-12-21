@@ -45,6 +45,7 @@ public class SocializeConfig {
 	public static final String SOCIALIZE_CONSUMER_KEY = "socialize.consumer.key";
 	public static final String SOCIALIZE_CONSUMER_SECRET = "socialize.consumer.secret";
 	
+	@Deprecated
 	public static final String SOCIALIZE_DEBUG_MODE = "socialize.debug.mode";
 	
 	/**

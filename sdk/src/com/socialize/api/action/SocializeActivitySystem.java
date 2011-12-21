@@ -30,21 +30,29 @@ import com.socialize.provider.SocializeProvider;
 /**
  * @author Jason Polites
  */
-public class UserActivityApi extends SocializeApi<SocializeAction, SocializeProvider<SocializeAction>> {
+public class SocializeActivitySystem extends SocializeApi<SocializeAction, SocializeProvider<SocializeAction>> implements ActivitySystem {
 
 	public static final String ENDPOINT = "/user/";
 	public static final String ENDPOINT_SUFFIX = "/activity/";
 	
-	public UserActivityApi(SocializeProvider<SocializeAction> provider) {
+	public SocializeActivitySystem(SocializeProvider<SocializeAction> provider) {
 		super(provider);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.ActivitySystem#getActivityByUser(com.socialize.api.SocializeSession, long, com.socialize.listener.activity.UserActivityListener)
+	 */
+	@Override
 	public void getActivityByUser(SocializeSession session, long id, UserActivityListener listener) {
 		String userId = String.valueOf(id);
 		String endpoint = getEndpoint(userId);
 		listAsync(session, endpoint, listener);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.ActivitySystem#getActivityByUser(com.socialize.api.SocializeSession, long, int, int, com.socialize.listener.activity.UserActivityListener)
+	 */
+	@Override
 	public void getActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, UserActivityListener listener) {
 		String userId = String.valueOf(id);
 		String endpoint = getEndpoint(userId);

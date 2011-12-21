@@ -19,37 +19,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.actionbar;
+package com.socialize.networks.facebook;
+
+import android.content.Context;
+import android.util.AttributeSet;
+
+import com.socialize.listener.SocializeAuthListener;
+import com.socialize.ui.view.SocializeButton;
 
 /**
  * @author Jason Polites
- *
  */
-public class ActionBarOptions {
-	private String entityName;
-	private boolean isEntityKeyUrl = true;
-	private boolean addScrollView = true;
+public class FacebookButton extends SocializeButton {
 	
-	@Deprecated
-	public String getEntityName() {
-		return entityName;
+	private FacebookAuthClickListener facebookAuthClickListener;
+
+	public FacebookButton(Context context, AttributeSet attrs) {
+		super(context, attrs);
 	}
-	@Deprecated
-	public void setEntityName(String entityName) {
-		this.entityName = entityName;
+
+	public FacebookButton(Context context) {
+		super(context);
 	}
-	@Deprecated
-	public boolean isEntityKeyUrl() {
-		return isEntityKeyUrl;
+
+	public void init() {
+		super.init();
+		setOnClickListener(facebookAuthClickListener);
 	}
-	@Deprecated
-	public void setEntityKeyUrl(boolean isEntityKeyUrl) {
-		this.isEntityKeyUrl = isEntityKeyUrl;
+	
+	public void setAuthListener(SocializeAuthListener listener) {
+		facebookAuthClickListener.setListener(listener);
 	}
-	public boolean isAddScrollView() {
-		return addScrollView;
-	}
-	public void setAddScrollView(boolean addScrollView) {
-		this.addScrollView = addScrollView;
+
+	public void setFacebookAuthClickListener(FacebookAuthClickListener facebookAuthClickListener) {
+		this.facebookAuthClickListener = facebookAuthClickListener;
 	}
 }

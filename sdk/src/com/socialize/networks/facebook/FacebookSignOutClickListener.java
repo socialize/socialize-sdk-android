@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.facebook;
+package com.socialize.networks.facebook;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -69,7 +69,7 @@ public class FacebookSignOutClickListener implements OnClickListener {
 						String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 						
 						// Re-authenticate as anonymous
-						Socialize.getSocialize().authenticate(consumerKey, consumerSecret, new SocializeAuthListener() {
+						Socialize.getSocialize().authenticate(v.getContext(), consumerKey, consumerSecret, new SocializeAuthListener() {
 							
 							@Override
 							public void onError(SocializeException error) {

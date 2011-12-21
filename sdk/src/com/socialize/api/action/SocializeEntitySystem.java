@@ -39,25 +39,43 @@ import com.socialize.provider.SocializeProvider;
  * @author Jason Polites
  *
  */
-public class EntityApi extends SocializeApi<Entity, SocializeProvider<Entity>> {
+public class SocializeEntitySystem extends SocializeApi<Entity, SocializeProvider<Entity>> implements EntitySystem {
 	
 	public static final String ENDPOINT = "/entity/";
 
-	public EntityApi(SocializeProvider<Entity> provider) {
+	public SocializeEntitySystem(SocializeProvider<Entity> provider) {
 		super(provider);
 	}
 	
-	public void addEntity(SocializeSession session, String key, String name, EntityListener listener) {
-		Entity c = new Entity();
-		c.setKey(key);
-		c.setName(name);
-		
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.EntitySystem#addEntity(com.socialize.api.SocializeSession, com.socialize.entity.Entity, com.socialize.listener.entity.EntityListener)
+	 */
+	@Override
+	public void addEntity(SocializeSession session, Entity entity, EntityListener listener) {
 		List<Entity> list = new ArrayList<Entity>(1);
-		list.add(c);
-		
+		list.add(entity);
 		postAsync(session, ENDPOINT, list, listener);
 	}
+
+
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.EnitySystem#addEntity(com.socialize.api.SocializeSession, java.lang.String, java.lang.String, com.socialize.listener.entity.EntityListener)
+	 */
+	@Deprecated
+	@Override
+	public void addEntity(SocializeSession session, String key, String name, EntityListener listener) {
+		Entity entity = new Entity();
+		entity.setKey(key);
+		entity.setName(name);
+		addEntity(session, entity, listener);
+	}
 	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.EnitySystem#getEntity(com.socialize.api.SocializeSession, java.lang.String, com.socialize.listener.entity.EntityListener)
+	 */
+	@Override
 	public void getEntity(SocializeSession session, final String key, final EntityListener listener) {
 		
 		listAsync(session, ENDPOINT, key, null, 0, 1, new EntityListListener() {
@@ -92,6 +110,10 @@ public class EntityApi extends SocializeApi<Entity, SocializeProvider<Entity>> {
 		});
 	}
 
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.EnitySystem#listEntities(com.socialize.api.SocializeSession, com.socialize.listener.entity.EntityListener, java.lang.String)
+	 */
+	@Override
 	public void listEntities(SocializeSession session, EntityListener listener, String...keys) {
 		listAsync(session, ENDPOINT, null, keys, 0, SocializeConfig.MAX_LIST_RESULTS, listener);
 	}

@@ -19,37 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.actionbar;
+package com.socialize.networks.facebook;
+
+import android.content.Context;
+import android.util.DisplayMetrics;
+import android.widget.ImageView;
+
+import com.socialize.ui.view.ClickableSectionCell;
 
 /**
  * @author Jason Polites
- *
  */
-public class ActionBarOptions {
-	private String entityName;
-	private boolean isEntityKeyUrl = true;
-	private boolean addScrollView = true;
+public abstract class FacebookCell extends ClickableSectionCell {
 	
-	@Deprecated
-	public String getEntityName() {
-		return entityName;
+	public FacebookCell(Context context) {
+		super(context);
 	}
-	@Deprecated
-	public void setEntityName(String entityName) {
-		this.entityName = entityName;
-	}
-	@Deprecated
-	public boolean isEntityKeyUrl() {
-		return isEntityKeyUrl;
-	}
-	@Deprecated
-	public void setEntityKeyUrl(boolean isEntityKeyUrl) {
-		this.isEntityKeyUrl = isEntityKeyUrl;
-	}
-	public boolean isAddScrollView() {
-		return addScrollView;
-	}
-	public void setAddScrollView(boolean addScrollView) {
-		this.addScrollView = addScrollView;
+	
+	/* (non-Javadoc)
+	 * @see com.socialize.ui.view.ClickableSectionCell#makeImage()
+	 */
+	@Override
+	protected ImageView makeImage() {
+		ImageView view = new ImageView(getContext());
+		view.setImageDrawable(drawables.getDrawable("icon_facebook.png#no_density", DisplayMetrics.DENSITY_DEFAULT));
+		return view;
 	}
 }

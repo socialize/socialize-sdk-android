@@ -26,7 +26,6 @@ import java.util.List;
 import android.location.Location;
 import android.os.AsyncTask;
 
-import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderResponse;
@@ -57,7 +56,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 
 	private P provider;
 	private SocializeResponseFactory<T> responseFactory;
-	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	private SocializeConfig config;
 	private AuthProviders authProviders;
 	private SocializeLogger logger;
@@ -465,14 +463,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		this.logger = logger;
 	}
 	
-	public IBeanFactory<AuthProviderData> getAuthProviderDataFactory() {
-		return authProviderDataFactory;
-	}
-
-	public void setAuthProviderDataFactory(IBeanFactory<AuthProviderData> authProviderDataFactory) {
-		this.authProviderDataFactory = authProviderDataFactory;
-	}
-
 	public HttpUtils getHttpUtils() {
 		return httpUtils;
 	}

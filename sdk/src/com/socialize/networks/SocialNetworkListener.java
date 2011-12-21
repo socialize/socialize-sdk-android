@@ -19,22 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.facebook;
+package com.socialize.networks;
 
 import android.app.Activity;
 
 /**
+ * Handles callbacks from posts to social networks like facebook.
  * @author Jason Polites
- *
  */
-public interface FacebookWallPoster {
+public interface SocialNetworkListener {
 
-	public void postLike(final Activity parent, String entityKey, String entityName, String comment, boolean isUseLink, final FacebookWallPostListener listener);
-
-	public void postComment(final Activity parent, String entityKey, String entityName, String comment, boolean isUseLink, final FacebookWallPostListener listener);
-
-	public void post(final Activity parent, String message, final FacebookWallPostListener listener);
-
-	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, final FacebookWallPostListener listener);
-
+	public void onPost(Activity parent);
+	
+	public void onError(Activity parent, String message, Throwable error);
+	
 }

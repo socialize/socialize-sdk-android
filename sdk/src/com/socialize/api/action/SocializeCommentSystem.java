@@ -30,25 +30,30 @@ import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
+import com.socialize.entity.Entity;
 import com.socialize.listener.comment.CommentListener;
+import com.socialize.networks.ShareOptions;
 import com.socialize.provider.SocializeProvider;
-import com.socialize.ui.comment.CommentShareOptions;
 
 /**
  * @author Jason Polites
  */
-public class CommentApi extends SocializeApi<Comment, SocializeProvider<Comment>> {
+public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvider<Comment>> implements CommentSystem {
 
 	public static final String ENDPOINT = "/comment/";
 	
-	public CommentApi(SocializeProvider<Comment> provider) {
+	public SocializeCommentSystem(SocializeProvider<Comment> provider) {
 		super(provider);
 	}
-
-	public void addComment(SocializeSession session, String key, String comment, Location location, CommentShareOptions shareOptions, CommentListener listener) {
+	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.CommentSystem#addComment(com.socialize.api.SocializeSession, com.socialize.entity.Entity, java.lang.String, android.location.Location, com.socialize.networks.ShareOptions, com.socialize.listener.comment.CommentListener)
+	 */
+	@Override
+	public void addComment(SocializeSession session, Entity entity, String comment, Location location, ShareOptions shareOptions, CommentListener listener) {
 		Comment c = new Comment();
 		c.setText(comment);
-		c.setEntityKey(key);
+		c.setEntity(entity);
 		
 		boolean shareLocation = (shareOptions == null || shareOptions.isShareLocation());
 		
@@ -61,26 +66,51 @@ public class CommentApi extends SocializeApi<Comment, SocializeProvider<Comment>
 		
 		postAsync(session, ENDPOINT, list, listener);
 	}
+
+	@Deprecated
+	public void addComment(SocializeSession session, String key, String comment, Location location, ShareOptions shareOptions, CommentListener listener) {
+		addComment(session, Entity.newInstance(key, null), comment, location, shareOptions, listener);
+	}
 	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.CommentSystem#getCommentsByEntity(com.socialize.api.SocializeSession, java.lang.String, com.socialize.listener.comment.CommentListener)
+	 */
+	@Override
 	public void getCommentsByEntity(SocializeSession session, String key, CommentListener listener) {
 		listAsync(session, ENDPOINT, key, null, listener);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.CommentSystem#getCommentsByEntity(com.socialize.api.SocializeSession, java.lang.String, int, int, com.socialize.listener.comment.CommentListener)
+	 */
+	@Override
 	public void getCommentsByEntity(SocializeSession session, String key, int startIndex, int endIndex, CommentListener listener) {
 		listAsync(session, ENDPOINT, key, null, startIndex, endIndex, listener);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.CommentSystem#getCommentsByUser(com.socialize.api.SocializeSession, long, com.socialize.listener.comment.CommentListener)
+	 */
+	@Override
 	public void getCommentsByUser(SocializeSession session, long userId, CommentListener listener) {
 		String endpoint = "/user/" + userId + ENDPOINT;
 		listAsync(session, endpoint, listener);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.CommentSystem#getCommentsByUser(com.socialize.api.SocializeSession, long, int, int, com.socialize.listener.comment.CommentListener)
+	 */
+	@Override
 	public void getCommentsByUser(SocializeSession session, long userId, int startIndex, int endIndex, CommentListener listener) {
 		String endpoint = "/user/" + userId + ENDPOINT;
 		listAsync(session, endpoint, startIndex, endIndex, listener);
 	}	
 
-	public void getCommentsById(SocializeSession session, CommentListener listener, int...ids) {
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.CommentSystem#getCommentsById(com.socialize.api.SocializeSession, com.socialize.listener.comment.CommentListener, int)
+	 */
+	@Override
+	public void getCommentsById(SocializeSession session, CommentListener listener, long...ids) {
 		String[] strIds = new String[ids.length];
 		
 		for (int i = 0; i < ids.length; i++) {
@@ -91,6 +121,10 @@ public class CommentApi extends SocializeApi<Comment, SocializeProvider<Comment>
 		listAsync(session, ENDPOINT, null, strIds, 0, SocializeConfig.MAX_LIST_RESULTS, listener);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.CommentSystem#getComment(com.socialize.api.SocializeSession, long, com.socialize.listener.comment.CommentListener)
+	 */
+	@Override
 	public void getComment(SocializeSession session, long id, CommentListener listener) {
 		getAsync(session, ENDPOINT, String.valueOf(id), listener);
 	}

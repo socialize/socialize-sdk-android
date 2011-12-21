@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.ui.view.CustomCheckbox;
@@ -71,7 +72,7 @@ public class CommentEntryView extends BaseView {
 		
 		LinearLayout buttonLayout = new LinearLayout(getContext());
 		
-		if(getSocializeUI().isFacebookSupported()) {
+		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
 			checkBox = autoPostFacebookOptionFactory.getBean();
 		}
 		

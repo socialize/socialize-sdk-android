@@ -21,6 +21,8 @@
  */
 package com.socialize.entity;
 
+import com.socialize.util.StringUtils;
+
 /**
  * @author Jason Polites
  *
@@ -80,12 +82,28 @@ public class Entity extends SocializeObject {
 	public boolean equals(Object obj) {
 		return super.equals(obj);
 	}
+	
+	public String getDisplayName() {
+		if(StringUtils.isEmpty(name)) {
+			return key;
+		}
+		return name;
+	}
+	
+	public static Entity newInstance(String key, String name) {
+		Entity e = new Entity();
+		e.setKey(key);
+		e.setName(name);
+		return e;
+	}
 
 	/**
 	 * Convenience method to create a new Entity based on a key only.
 	 * @param key
 	 * @return
+	 * @deprecated
 	 */
+	@Deprecated
 	public static Entity fromkey(String key) {
 		Entity e = new Entity();
 		e.setKey(key);

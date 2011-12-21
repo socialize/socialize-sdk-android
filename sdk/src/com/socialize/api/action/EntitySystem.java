@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -21,43 +21,26 @@
  */
 package com.socialize.api.action;
 
-import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
-import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.listener.entity.EntityListener;
-import com.socialize.provider.SocializeProvider;
+import com.socialize.util.DelegateOnly;
 
 /**
  * @author Jason Polites
  *
  */
-@Deprecated
-public class RecommendationApi extends SocializeApi<Entity, SocializeProvider<Entity>> {
-	
-	public static final String ENDPOINT = "/recommendation/";
+public interface EntitySystem {
 
-	public RecommendationApi(SocializeProvider<Entity> provider) {
-		super(provider);
-	}
-	
-	public void listRecommendedEntityesForLike(SocializeSession session, EntityListener listener, long id) {
-		
-//		Entity e0 = new Entity();
-//		e0.setName("test");
-//		e0.setKey("http://www.foobar.com");
-//		
-//		Entity e1 = new Entity();
-//		e1.setName("test");
-//		e1.setKey("http://www.foobar.com");
-//		
-//		ListResult<Entity> result = new ListResult<Entity>();
-//		result.add(e0);
-//		result.add(e1);
-//		
-//		listener.onList(result);
-		
-		String[] ids = new String []{String.valueOf(id)};
-		listAsync(session, ENDPOINT + "entity/", null, ids, "like_id", 0, SocializeConfig.MAX_LIST_RESULTS, listener);
-	}
+	public void addEntity(SocializeSession session, Entity entity, EntityListener listener);
+
+	@Deprecated
+	public void addEntity(SocializeSession session, String entityKey, String name, EntityListener listener);
+
+	@DelegateOnly
+	public void getEntity(SocializeSession session, String entityKey, EntityListener listener);
+
+	@DelegateOnly
+	public void listEntities(SocializeSession session, EntityListener listener, String... entityKeys);
+
 }

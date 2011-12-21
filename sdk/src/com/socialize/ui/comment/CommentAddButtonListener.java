@@ -52,8 +52,8 @@ public class CommentAddButtonListener {
 		this(context);
 		
 		this.callback = callback;
-		this.consumerKey = getSocializeUI().getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-		this.consumerSecret = getSocializeUI().getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+		this.consumerKey = getSocialize().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		this.consumerSecret = getSocialize().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 	}
 	
 	protected SocializeUI getSocializeUI() {
@@ -72,6 +72,7 @@ public class CommentAddButtonListener {
 		if(!StringUtils.isEmpty(comment)) {
 			if(!getSocialize().isAuthenticated()) {
 				getSocialize().authenticate(
+						context,
 						consumerKey, 
 						consumerSecret,
 						new CommentReAuthListener(context, callback, comment, autoPostToFacebook, shareLocation));

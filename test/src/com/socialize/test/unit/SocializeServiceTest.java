@@ -58,7 +58,9 @@ import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
+import com.socialize.test.PublicSocialize;
 import com.socialize.test.SocializeUnitTest;
+import com.socialize.ui.SocializeUI;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.ResourceLocator;
 
@@ -487,7 +489,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 	public void testListCommentsByIds() {
 		CommentListListener listener = AndroidMock.createMock(CommentListListener.class);
 		
-		final int[] ids = {1,2,3};
+		final long[] ids = {1,2,3};
 		
 		setupDefaultMocks();
 
@@ -580,7 +582,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 	public void testListLikesById() {
 		LikeListListener listener = AndroidMock.createMock(LikeListListener.class);
 		
-		final int id[] = {1,2,3};
+		final long id[] = {1,2,3};
 		
 		setupDefaultMocks();
 		
@@ -1157,5 +1159,40 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		assertEquals("sort", sort);
 		assertSame(context, foundContext);
 		assertSame(socializeIOC, foundContainer);
+	}
+	
+
+	public void testSetSocializeCredentials() {
+		PublicSocialize socializeUI = new PublicSocialize();
+
+		String consumerKey = "foo";
+		String consumerSecret = "bar";
+
+		socializeUI.setSocializeCredentials(consumerKey, consumerSecret);
+
+		assertEquals(consumerKey, socializeUI.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY));
+		assertEquals(consumerSecret, socializeUI.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET));
+	}
+
+	public void testSetFacebookUserCredentials() {
+		PublicSocialize socializeUI = new PublicSocialize();
+
+		String userId = "foo";
+		String token = "bar";
+
+		socializeUI.setFacebookUserCredentials(userId, token);
+
+		assertEquals(userId, socializeUI.getProperty(SocializeConfig.FACEBOOK_USER_ID));
+		assertEquals(token, socializeUI.getProperty(SocializeConfig.FACEBOOK_USER_TOKEN));
+	}
+
+	public void testSetFacebookAppId() {
+		PublicSocialize socializeUI = new PublicSocialize();
+
+		String appId = "foobar";
+
+		socializeUI.setFacebookAppId(appId);
+
+		assertEquals(appId, socializeUI.getProperty(SocializeConfig.FACEBOOK_APP_ID));
 	}
 }

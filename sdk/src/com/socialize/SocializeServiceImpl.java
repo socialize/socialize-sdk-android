@@ -22,21 +22,32 @@
 package com.socialize;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Properties;
+import java.util.Set;
 
+import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
 
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.android.ioc.IOCContainer;
-import com.socialize.api.SocializeApiHost;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
+import com.socialize.api.action.ActivitySystem;
+import com.socialize.api.action.CommentSystem;
+import com.socialize.api.action.EntitySystem;
+import com.socialize.api.action.LikeSystem;
+import com.socialize.api.action.ShareSystem;
 import com.socialize.api.action.ShareType;
+import com.socialize.api.action.UserSystem;
+import com.socialize.api.action.ViewSystem;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
+import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.init.SocializeInitializationAsserter;
 import com.socialize.ioc.SocializeIOC;
@@ -59,6 +70,9 @@ import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
+import com.socialize.networks.ShareDestination;
+import com.socialize.networks.ShareOptions;
+import com.socialize.networks.facebook.FacebookWallPoster;
 import com.socialize.ui.ActivityIOCProvider;
 import com.socialize.ui.comment.CommentShareOptions;
 import com.socialize.ui.profile.UserProfile;
@@ -71,7 +85,6 @@ import com.socialize.util.StringUtils;
  */
 public class SocializeServiceImpl implements SocializeSessionConsumer, SocializeService {
 	
-	private SocializeApiHost service;
 	private SocializeLogger logger;
 	private IOCContainer container;
 	private SocializeSession session;
@@ -79,8 +92,96 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private SocializeInitializationAsserter asserter;
 	private int initCount = 0;
 	
+	private CommentSystem commentSystem;
+	private ShareSystem shareSystem;
+	private LikeSystem likeSystem;
+	private ViewSystem viewSystem;
+	private UserSystem userSystem;
+	private ActivitySystem activitySystem;
+	private EntitySystem entitySystem;
+	
+	private FacebookWallPoster facebookWallPoster;
+	
+	private final Properties customProperties = new Properties();
+	private final Set<String> toBeRemoved = new HashSet<String>();
+	
 	private String[] initPaths = null;
 	
+	// So we can mock
+	protected Set<String> getPropertiesToBeRemoved() {
+		return toBeRemoved;
+	}
+	
+	@Override
+	public void setProperty(String key, String value) {
+		if(!StringUtils.isEmpty(value)) {
+			customProperties.put(key, value);
+		}
+		else {
+			customProperties.remove(key);
+			toBeRemoved.add(key);
+		}
+	}
+	
+	@Override
+	public String getProperty(String key) {
+		String property = customProperties.getProperty(key);
+		if(StringUtils.isEmpty(property) && isInitialized()) {
+			property = getConfig().getProperty(key);
+		}
+		return property;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#setFacebookAppId(java.lang.String)
+	 */
+	@Override
+	public void setFacebookAppId(String appId) {
+		setProperty(SocializeConfig.FACEBOOK_APP_ID, appId);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#setFacebookSingleSignOnEnabled(boolean)
+	 */
+	@Override
+	public void setFacebookSingleSignOnEnabled(boolean enabled) {
+		setProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, String.valueOf(enabled));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#setFacebookUserCredentials(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void setFacebookUserCredentials(String userId, String token) {
+		setProperty(SocializeConfig.FACEBOOK_USER_ID, userId);
+		setProperty(SocializeConfig.FACEBOOK_USER_TOKEN, token);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#setSocializeCredentials(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void setSocializeCredentials(String consumerKey, String consumerSecret) {
+		setProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY, consumerKey);
+		setProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET, consumerSecret);
+	}
+	
+	@Override
+	public boolean isSupported(AuthProviderType type) {
+		switch(type) {
+			case SOCIALIZE:
+				return true;
+			case FACEBOOK:
+				return !StringUtils.isEmpty(getProperty(SocializeConfig.FACEBOOK_APP_ID));
+			default:
+				return false;
+		}
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#init(android.content.Context)
 	 */
@@ -185,6 +286,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			container.setContext(context);
 		}
 		
+		getConfig().merge(customProperties, toBeRemoved);
+		
 		return container;
 	}
 
@@ -226,10 +329,20 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		if(!isInitialized()) {
 			try {
 				this.container = container;
-				this.service = container.getBean("socializeApiHost");
+				
+				setCommentSystem( (CommentSystem) container.getBean("commentSystem") );
+				setShareSystem( (ShareSystem) container.getBean("shareSystem") );
+				setLikeSystem( (LikeSystem) container.getBean("likeSystem") );
+				setViewSystem( (ViewSystem) container.getBean("viewSystem") );
+				setUserSystem( (UserSystem) container.getBean("userSystem") );
+				setActivitySystem( (ActivitySystem) container.getBean("activitySystem") );
+				
+//				this.apiHost = container.getBean("socializeApiHost");
+				
 				this.logger = container.getBean("logger");
 				this.authProviderDataFactory = container.getBean("authProviderDataFactory");
 				this.asserter = container.getBean("initializationAsserter");
+				this.facebookWallPoster = container.getBean("facebookWallPoster");
 				this.initCount++;
 				
 				ActivityIOCProvider.getInstance().setContainer(container);
@@ -263,8 +376,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			}
 		}
 		finally {
-			if(service != null) {
-				service.clearSessionCache(type);
+			if(userSystem != null) {
+				userSystem.clearSession(type);
 			}
 		}
 	}
@@ -284,8 +397,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			}
 		}
 		finally {
-			if(service != null) {
-				service.clearSessionCache();
+			if(userSystem != null) {
+				userSystem.clearSession();
 			}
 		}
 	}
@@ -316,6 +429,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				container.destroy();
 			}
 			
+			customProperties.clear();
 			initCount = 0;
 			initPaths = null;
 		}
@@ -328,35 +442,60 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#authenticate(java.lang.String, java.lang.String, com.socialize.provider.AuthProvider, com.socialize.listener.SocializeAuthListener)
 	 */
+	@Deprecated
 	@Override
 	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProviderType, String authProviderAppId, SocializeAuthListener authListener) {
+		authenticate(null, consumerKey, consumerSecret, authProviderType, authProviderAppId, authListener);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#authenticate(android.content.Context, java.lang.String, java.lang.String, com.socialize.auth.AuthProviderType, java.lang.String, com.socialize.listener.SocializeAuthListener)
+	 */
+	@Override
+	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderType authProviderType, String authProviderAppId, SocializeAuthListener authListener) {
 		AuthProviderData data = this.authProviderDataFactory.getBean();
 		data.setAuthProviderType(authProviderType);
 		data.setAppId3rdParty(authProviderAppId);
-		authenticate(consumerKey, consumerSecret, data, authListener, true);
+		authenticate(context, consumerKey, consumerSecret, data, authListener, true);
 	}
 	
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#authenticate(com.socialize.listener.SocializeAuthListener)
 	 */
+	@Deprecated
 	@Override
 	public void authenticate(SocializeAuthListener authListener) {
+		authenticate((Context) null, authListener);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#authenticate(android.content.Context, com.socialize.listener.SocializeAuthListener)
+	 */
+	@Override
+	public void authenticate(Context context, SocializeAuthListener authListener) {
 		SocializeConfig config = getConfig();
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-		
 		if(checkKeys(consumerKey, consumerSecret, authListener)) {
-			authenticate(consumerKey, consumerSecret, authListener);
-		}
+			authenticate(context, consumerKey, consumerSecret, authListener);
+		}		
 	}
 	
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#authenticate(com.socialize.auth.AuthProviderType, com.socialize.listener.SocializeAuthListener)
 	 */
+	@Deprecated
 	@Override
 	public void authenticate(AuthProviderType authProviderType, SocializeAuthListener authListener) {
+		authenticate(null, authProviderType, authListener);
+	}
+	
+	@Override
+	public void authenticate(Context context, AuthProviderType authProviderType, SocializeAuthListener authListener) {
 		SocializeConfig config = getConfig();
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
@@ -387,9 +526,62 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 					break;
 
 			default:
-				authenticate(consumerKey, consumerSecret, authListener);
+				authenticate(context, consumerKey, consumerSecret, authListener);
 				break;
 			}
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.SocializeService#authenticate(java.lang.String, java.lang.String, com.socialize.listener.SocializeAuthListener)
+	 */
+	@Deprecated
+	@Override
+	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener authListener)  {
+		authenticate(null, consumerKey, consumerSecret, authListener);
+	}
+	
+	@Override
+	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
+		AuthProviderData data = this.authProviderDataFactory.getBean();
+		data.setAuthProviderType(AuthProviderType.SOCIALIZE);
+		authenticate(context, consumerKey, consumerSecret, data, authListener, false);
+	}
+	
+	@Deprecated
+	@Override
+	public void authenticateKnownUser(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty,
+			SocializeAuthListener authListener) {
+		authenticateKnownUser(null, consumerKey, consumerSecret, authProvider, authProviderId, authUserId3rdParty, authToken3rdParty, authListener);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#authenticateKnownUser(android.content.Context, java.lang.String, java.lang.String, com.socialize.auth.AuthProviderType, java.lang.String, java.lang.String, java.lang.String, com.socialize.listener.SocializeAuthListener)
+	 */
+	@Override
+	public void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty,
+			SocializeAuthListener authListener) {
+		
+		AuthProviderData authProviderData = this.authProviderDataFactory.getBean();
+		authProviderData.setAuthProviderType(authProvider);
+		authProviderData.setAppId3rdParty(authProviderId);
+		authProviderData.setToken3rdParty(authToken3rdParty);
+		authProviderData.setUserId3rdParty(authUserId3rdParty);
+		
+		authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, false);
+	}	
+	
+	protected void authenticate(
+			Context context,
+			String consumerKey, 
+			String consumerSecret, 
+			AuthProviderData authProviderData,
+			SocializeAuthListener authListener, 
+			boolean do3rdPartyAuth) {
+		
+		if(assertInitialized(authListener)) {
+			userSystem.authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, this, do3rdPartyAuth);
 		}
 	}
 
@@ -428,50 +620,37 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		
 		return true;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.socialize.SocializeService#authenticate(java.lang.String, java.lang.String, com.socialize.listener.SocializeAuthListener)
-	 */
-	@Override
-	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener authListener)  {
-		AuthProviderData data = this.authProviderDataFactory.getBean();
-		data.setAuthProviderType(AuthProviderType.SOCIALIZE);
-		authenticate(consumerKey, consumerSecret, data, authListener, false);
-	}
+		
 	
 	@Override
-	public void authenticateKnownUser(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty,
-			SocializeAuthListener authListener) {
-		
-		AuthProviderData authProviderData = this.authProviderDataFactory.getBean();
-		authProviderData.setAuthProviderType(authProvider);
-		authProviderData.setAppId3rdParty(authProviderId);
-		authProviderData.setToken3rdParty(authToken3rdParty);
-		authProviderData.setUserId3rdParty(authUserId3rdParty);
-		
-		authenticate(consumerKey, consumerSecret, authProviderData, authListener, false);
+	public void addComment(Activity activity, Entity entity, String comment, Location location, ShareOptions shareOptions, CommentAddListener commentAddListener) {
+		if(assertAuthenticated(commentAddListener)) {
+			commentSystem.addComment(session, entity, comment, location, shareOptions, commentAddListener);
+			if(isSupported(AuthProviderType.FACEBOOK) && shareOptions != null && shareOptions.isShareTo(ShareDestination.FACEBOOK) && isAuthenticated(AuthProviderType.FACEBOOK)) {
+				facebookWallPoster.postComment(activity, entity, comment, shareOptions.getListener());
+			}
+		}		
 	}
 
-	private void authenticate(
-			String consumerKey, 
-			String consumerSecret, 
-			AuthProviderData authProviderData,
-			SocializeAuthListener authListener, 
-			boolean do3rdPartyAuth) {
-		
-		if(assertInitialized(authListener)) {
-			service.authenticate(consumerKey, consumerSecret, authProviderData, authListener, this, do3rdPartyAuth);
-		}
+	@Override
+	public void addComment(Activity activity, Entity entity, String comment, ShareOptions shareOptions, CommentAddListener commentAddListener) {
+		addComment(activity, entity, comment, null, shareOptions, commentAddListener);
 	}
 	
+	@Override
+	public void addComment(Activity activity, Entity entity, String comment, CommentAddListener commentAddListener) {
+		addComment(activity, entity, comment, null, null, commentAddListener);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#addComment(java.lang.String, java.lang.String, android.location.Location, com.socialize.listener.comment.CommentAddListener)
 	 */
+	@Deprecated
 	@Override
-	public void addComment(String url, String comment, Location location, CommentShareOptions shareOptions, CommentAddListener commentAddListener) {
+	public void addComment(String key, String comment, Location location, CommentShareOptions shareOptions, CommentAddListener commentAddListener) {
 		if(assertAuthenticated(commentAddListener)) {
-			service.addComment(session, url, comment, location, shareOptions, commentAddListener);
+			commentSystem.addComment(session, Entity.newInstance(key, null), comment, location, shareOptions, commentAddListener);
 		}
 	}
 
@@ -479,6 +658,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#addComment(java.lang.String, java.lang.String, boolean, com.socialize.listener.comment.CommentAddListener)
 	 */
+	@Deprecated
 	@Override
 	public void addComment(String url, String comment, CommentShareOptions shareOptions, CommentAddListener commentAddListener) {
 		addComment(url, comment, null, shareOptions, commentAddListener);
@@ -488,6 +668,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#addComment(java.lang.String, java.lang.String, com.socialize.listener.comment.CommentAddListener)
 	 */
+	@Deprecated
 	@Override
 	public void addComment(String url, String comment, CommentAddListener commentAddListener) {
 		addComment(url, comment, null, null, commentAddListener);
@@ -496,6 +677,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#addLike(java.lang.String, com.socialize.listener.like.LikeAddListener)
 	 */
+	@Deprecated
 	@Override
 	public void like(String url, LikeAddListener likeAddListener) {
 		like(url, null, likeAddListener);
@@ -505,58 +687,103 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#like(java.lang.String, android.location.Location, com.socialize.listener.like.LikeAddListener)
 	 */
+	@Deprecated
 	@Override
-	public void like(String url, Location location, LikeAddListener likeAddListener) {
+	public void like(String key, Location location, LikeAddListener likeAddListener) {
 		if(assertAuthenticated(likeAddListener)) {
-			service.addLike(session, url, location, likeAddListener);
+			likeSystem.addLike(session, Entity.newInstance(key, null), location, likeAddListener);
 		}
 	}
 	
-	
+	@Override
+	public void like(Activity activity, Entity entity, LikeAddListener likeAddListener) {
+		like(activity, entity, null, null, likeAddListener);
+	}
+
+	@Override
+	public void like(Activity activity, Entity entity, ShareOptions shareOptions, LikeAddListener likeAddListener) {
+		like(activity, entity, null, shareOptions, likeAddListener);
+	}
+
+	@Override
+	public void like(Activity activity, Entity entity, Location location, ShareOptions shareOptions, LikeAddListener likeAddListener) {
+		if(assertAuthenticated(likeAddListener)) {
+			likeSystem.addLike(session, entity, location, likeAddListener);
+			if(isSupported(AuthProviderType.FACEBOOK) && isAuthenticated(AuthProviderType.FACEBOOK) && shareOptions.isShareTo(ShareDestination.FACEBOOK)) {
+				facebookWallPoster.postLike(activity, entity, null, shareOptions.getListener());
+			}
+		}		
+	}
+
 	@Override
 	public void listLikesByUser(long userId, LikeListListener likeListListener) {
 		if(assertAuthenticated(likeListListener)) {
-			service.listLikesByUser(session, userId, likeListListener);
+			likeSystem.getLikesByUser(session, userId, likeListListener);
 		}
 	}
 
 	@Override
 	public void listLikesByUser(long userId, int startIndex, int endIndex, LikeListListener likeListListener) {
 		if(assertAuthenticated(likeListListener)) {
-			service.listLikesByUser(session, userId, startIndex, endIndex, likeListListener);
+			likeSystem.getLikesByUser(session, userId, startIndex, endIndex, likeListListener);
 		}
 	}
 
 	@Override
 	public void listCommentsByUser(long userId, CommentListListener commentListListener) {
 		if(assertAuthenticated(commentListListener)) {
-			service.listCommentsByUser(session, userId, commentListListener);
+			commentSystem.getCommentsByUser(session, userId, commentListListener);
 		}		
 	}
 
 	@Override
 	public void listCommentsByUser(long userId, int startIndex, int endIndex, CommentListListener commentListListener) {
 		if(assertAuthenticated(commentListListener)) {
-			service.listCommentsByUser(session, userId, startIndex, endIndex, commentListListener);
+			commentSystem.getCommentsByUser(session, userId, startIndex, endIndex, commentListListener);
 		}
 	}
 
+	@Deprecated
 	@Override
 	public void share(String url, String text, ShareType shareType, ShareAddListener shareAddListener) {
 		share(url, text, shareType, null, shareAddListener);
 	}
 	
+	@Deprecated
 	@Override
-	public void share(String url, String text, ShareType shareType, Location location, ShareAddListener shareAddListener) {
+	public void share(String key, String text, ShareType shareType, Location location, ShareAddListener shareAddListener) {
 		if(assertAuthenticated(shareAddListener)) {
-			service.addShare(session, url, text, shareType, location, shareAddListener);
+			shareSystem.addShare(session, Entity.newInstance(key, null), text, shareType, location, shareAddListener);
 		}
+	}
+	
+	@Override
+	public void addShare(Activity activity, Entity entity, String text, ShareType shareType, ShareAddListener shareAddListener) {
+		addShare(activity, entity, text, shareType, null, shareAddListener);
+	}
+
+	@Override
+	public void addShare(Activity activity, Entity entity, String text, ShareType shareType, Location location, ShareAddListener shareAddListener) {
+		if(assertAuthenticated(shareAddListener)) {
+			shareSystem.addShare(session, entity, text, shareType, location, shareAddListener);
+		}
+	}
+
+	@Override
+	public void share(Activity activity, Entity entity, String text, ShareOptions options, ShareAddListener shareAddListener) {
+		// TODO: Implement share
+	}
+
+	@Override
+	public void share(Activity activity, Entity entity, String text, ShareOptions options, Location location, ShareAddListener shareAddListener) {
+		// TODO: Implement share
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#view(java.lang.String, com.socialize.listener.view.ViewAddListener)
 	 */
+	@Deprecated
 	@Override
 	public void view(String url, ViewAddListener viewAddListener) {
 		view(url, null, viewAddListener);
@@ -566,10 +793,27 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#view(java.lang.String, android.location.Location, com.socialize.listener.view.ViewAddListener)
 	 */
+	@Deprecated
 	@Override
-	public void view(String url, Location location, ViewAddListener viewAddListener) {
+	public void view(String key, Location location, ViewAddListener viewAddListener) {
 		if(assertAuthenticated(viewAddListener)) {
-			service.addView(session, url, location, viewAddListener);
+			viewSystem.addView(session, Entity.newInstance(key, null), location, viewAddListener);
+		}
+	}
+	
+	@Override
+	public void view(Activity activity, Entity entity, ViewAddListener viewAddListener) {
+		view(activity, entity, null, viewAddListener);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#view(android.app.Activity, com.socialize.entity.Entity, android.location.Location, com.socialize.listener.view.ViewAddListener)
+	 */
+	@Override
+	public void view(Activity activity, Entity entity, Location location, ViewAddListener viewAddListener) {
+		if(assertAuthenticated(viewAddListener)) {
+			viewSystem.addView(session, entity, location, viewAddListener);
 		}
 	}
 
@@ -579,55 +823,66 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public void unlike(long id, LikeDeleteListener likeDeleteListener) {
 		if(assertAuthenticated(likeDeleteListener)) {
-			service.deleteLike(session, id, likeDeleteListener);
+			likeSystem.deleteLike(session, id, likeDeleteListener);
 		}
 	}
 	
-	/**
-	 * Lists all the likes associated with the given ids.
-	 * @param likeListListener A listener to handle callbacks from the get.
-	 * @param ids
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#listLikesById(com.socialize.listener.like.LikeListListener, int[])
 	 */
-	public void listLikesById(LikeListListener likeListListener, int...ids) {
+	@Override
+	public void listLikesById(LikeListListener likeListListener, long...ids) {
 		if(assertAuthenticated(likeListListener)) {
-			service.listLikesById(session, likeListListener, ids);
+			likeSystem.getLikesById(session, likeListListener, ids);
 		}
 	}
 	
-	/**
-	 * Retrieves a single like.
-	 * @param id The ID of the like
-	 * @param likeGetListener A listener to handle callbacks from the get.
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#getLikeById(long, com.socialize.listener.like.LikeGetListener)
 	 */
+	@Override
 	public void getLikeById(long id, LikeGetListener likeGetListener) {
 		if(assertAuthenticated(likeGetListener)) {
-			service.getLike(session, id, likeGetListener);
+			likeSystem.getLike(session, id, likeGetListener);
 		}
 	}
 	
-	/**
-	 * Retrieves a single like based on the entity liked.
-	 * @param key The entity key corresponding to the like.
-	 * @param likeGetListener A listener to handle callbacks from the get.
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#getLike(java.lang.String, com.socialize.listener.like.LikeGetListener)
 	 */
+	@Override
 	public void getLike(String key, LikeGetListener likeGetListener) {
 		if(assertAuthenticated(likeGetListener)) {
-			service.getLike(session, key, likeGetListener);
+			likeSystem.getLike(session, key, likeGetListener);
 		}
 	}
 	
-	/**
-	 * Creates a new entity.
-	 * @param key The [unique] key for the entity.
-	 * @param name The name for the entity.
-	 * @param entityCreateListener A listener to handle callbacks from the post.
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#addEntity(java.lang.String, java.lang.String, com.socialize.listener.entity.EntityAddListener)
 	 */
+	@Deprecated
 	public void addEntity(String key, String name, EntityAddListener entityCreateListener) {
 		if(assertAuthenticated(entityCreateListener)) {
-			service.createEntity(session, key, name, entityCreateListener);
+			entitySystem.addEntity(session, key, name, entityCreateListener);
 		}
 	}
 	
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#addEntity(com.socialize.entity.Entity, com.socialize.listener.entity.EntityAddListener)
+	 */
+	@Override
+	public void addEntity(Entity entity, EntityAddListener entityAddListener) {
+		if(assertAuthenticated(entityAddListener)) {
+			entitySystem.addEntity(session, entity, entityAddListener);
+		}		
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#getEntity(java.lang.String, com.socialize.listener.entity.EntityGetListener)
@@ -635,7 +890,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public void getEntity(String key, EntityGetListener listener) {
 		if(assertAuthenticated(listener)) {
-			service.getEntity(session, key, listener);
+			entitySystem.getEntity(session, key, listener);
 		}
 	}
 	
@@ -646,27 +901,29 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public void getUser(long id, UserGetListener listener) {
 		if(assertAuthenticated(listener)) {
-			service.getUser(session, id, listener);
+			userSystem.getUser(session, id, listener);
 		}
 	}
 	
-	
-	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#saveCurrentUserProfile(android.content.Context, com.socialize.ui.profile.UserProfile, com.socialize.listener.user.UserSaveListener)
+	 */
 	@Override
 	public void saveCurrentUserProfile(Context context, UserProfile profile, UserSaveListener listener) {
 		if(assertAuthenticated(listener)) {
-			service.saveUserProfile(context, session, profile, listener);
+			userSystem.saveUserProfile(context, session, profile, listener);
 		}
 	}
 
-	/**
-	 * Lists entities matching the given keys.
-	 * @param entityListListener A listener to handle callbacks from the post.
-	 * @param keys Array of keys corresponding to the entities to return, or null to return all.
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#listEntitiesByKey(com.socialize.listener.entity.EntityListListener, java.lang.String[])
 	 */
+	@Override
 	public void listEntitiesByKey(EntityListListener entityListListener, String...keys) {
 		if(assertAuthenticated(entityListListener)) {
-			service.listEntitiesByKey(session, entityListListener, keys);
+			entitySystem.listEntities(session, entityListListener, keys);
 		}
 	}
 
@@ -677,7 +934,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public void listCommentsByEntity(String url, CommentListListener commentListListener) {
 		if(assertAuthenticated(commentListListener)) {
-			service.listCommentsByEntity(session, url, commentListListener);
+			commentSystem.getCommentsByEntity(session, url, commentListListener);
 		}
 	}
 	
@@ -688,7 +945,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public void listCommentsByEntity(String url, int startIndex, int endIndex, CommentListListener commentListListener) {
 		if(assertAuthenticated(commentListListener)) {
-			service.listCommentsByEntity(session, url, startIndex, endIndex, commentListListener);
+			commentSystem.getCommentsByEntity(session, url, startIndex, endIndex, commentListListener);
 		}
 	}
 
@@ -699,7 +956,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public void listActivityByUser(long userId, UserActivityListListener activityListListener) {
 		if(assertAuthenticated(activityListListener)) {
-			service.listActivityByUser(session, userId, activityListListener);
+			activitySystem.getActivityByUser(session, userId, activityListListener);
 		}
 	}
 
@@ -710,19 +967,18 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public void listActivityByUser(long userId, int startIndex, int endIndex, UserActivityListListener activityListListener) {
 		if(assertAuthenticated(activityListListener)) {
-			service.listActivityByUser(session, userId, startIndex, endIndex, activityListListener);
+			activitySystem.getActivityByUser(session, userId, startIndex, endIndex, activityListListener);
 		}
 	}
 
-	/**
-	 * Lists the comments by comment ID.
-	 * @param session The current socialize session.
-	 * @param commentListListener A listener to handle callbacks from the post.
-	 * @param ids Array of IDs corresponding to pre-existing comments.
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#listCommentsById(com.socialize.listener.comment.CommentListListener, int[])
 	 */
-	public void listCommentsById(CommentListListener commentListListener, int...ids) {
+	@Override
+	public void listCommentsById(CommentListListener commentListListener, long...ids) {
 		if(assertAuthenticated(commentListListener)) {
-			service.listCommentsById(session, commentListListener, ids);
+			commentSystem.getCommentsById(session, commentListListener, ids);
 		}
 	}
 	
@@ -733,11 +989,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public void getCommentById(long id, CommentGetListener commentGetListener) {
 		if(assertAuthenticated(commentGetListener)) {
-			service.getComment(session, id, commentGetListener);
+			commentSystem.getComment(session, id, commentGetListener);
 		}
 	}
 
-	
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#isInitialized()
 	 */
@@ -830,6 +1085,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		return session;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.SocializeSessionConsumer#setSession(com.socialize.api.SocializeSession)
+	 */
 	@Override
 	public void setSession(SocializeSession session) {
 		this.session = session;
@@ -837,6 +1096,30 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
+	}
+	
+	public void setCommentSystem(CommentSystem commentSystem) {
+		this.commentSystem = commentSystem;
+	}
+
+	public void setShareSystem(ShareSystem shareSystem) {
+		this.shareSystem = shareSystem;
+	}
+
+	public void setLikeSystem(LikeSystem likeSystem) {
+		this.likeSystem = likeSystem;
+	}
+
+	public void setViewSystem(ViewSystem viewSystem) {
+		this.viewSystem = viewSystem;
+	}
+
+	public void setUserSystem(UserSystem userSystem) {
+		this.userSystem = userSystem;
+	}
+
+	public void setActivitySystem(ActivitySystem activitySystem) {
+		this.activitySystem = activitySystem;
 	}
 
 	/**
@@ -930,6 +1213,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	};
 	
+	protected void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
+		this.facebookWallPoster = facebookWallPoster;
+	}
+
 	/**
 	 * EXPERT ONLY (Not documented)
 	 * @return

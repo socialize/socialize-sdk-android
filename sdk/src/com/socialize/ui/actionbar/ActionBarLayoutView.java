@@ -28,7 +28,6 @@ import android.view.Gravity;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.View;
@@ -40,12 +39,13 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
+import com.socialize.networks.ShareDestination;
+import com.socialize.networks.ShareOptions;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.actionbar.OnActionBarEventListener.ActionBarEvent;
 import com.socialize.ui.cache.CacheableEntity;
 import com.socialize.ui.cache.EntityCache;
 import com.socialize.ui.dialog.ProgressDialogFactory;
-import com.socialize.ui.facebook.FacebookWallPoster;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
@@ -81,7 +81,6 @@ public class ActionBarLayoutView extends BaseView {
 	private CacheableEntity localEntity;
 	private DeviceUtils deviceUtils;
 	
-	private FacebookWallPoster facebookWallPoster;
 	private ActionBarView actionBarView;
 	
 	final String loadingText = "...";
@@ -152,7 +151,7 @@ public class ActionBarLayoutView extends BaseView {
 				if(onActionBarEventListener != null) {
 					onActionBarEventListener.onClick(actionBarView, ActionBarEvent.COMMENT);
 				}
-				SocializeUI.getInstance().showCommentView(getActivity(), actionBarView.getEntityKey(), actionBarView.getEntityName(), actionBarView.isEntityKeyUrl());
+				SocializeUI.getInstance().showCommentView(getActivity(), actionBarView.getEntity());
 			}
 		});
 		
@@ -218,7 +217,7 @@ public class ActionBarLayoutView extends BaseView {
 	public void onViewLoad() {
 		super.onViewLoad();
 		
-		final String entityKey = actionBarView.getEntityKey();
+		final Entity realEntity = actionBarView.getEntity();
 		
 		ticker.startTicker();
 		
@@ -230,29 +229,29 @@ public class ActionBarLayoutView extends BaseView {
 			onActionBarEventListener.onLoad(actionBarView);
 		}				
 		
-		CacheableEntity entity = entityCache.get(entityKey);
+		CacheableEntity entity = entityCache.get(realEntity.getKey());
 		
 		if(entity == null) {
-			getSocialize().view(entityKey, new ViewAddListener() {
+			getSocialize().view(getActivity(), realEntity, new ViewAddListener() {
 				@Override
 				public void onError(SocializeException error) {
 					error.printStackTrace();
-					getEntityData(entityKey);
+					getEntityData(realEntity.getKey());
 				}
 				
 				@Override
 				public void onCreate(View entity) {
-					getEntityData(entityKey);
+					getEntityData(realEntity.getKey());
 				}
 			});
 		}
 		else {
-			getEntityData(entityKey);
+			getEntityData(realEntity.getKey());
 		}
 	}
 	
 	public void reload() {
-		final String entityKey = actionBarView.getEntityKey();
+		final Entity realEntity = actionBarView.getEntity();
 		
 		if(logger != null && logger.isInfoEnabled()) {
 			logger.info("onViewUpdate called on " + getClass().getSimpleName());
@@ -270,7 +269,7 @@ public class ActionBarLayoutView extends BaseView {
 			onActionBarEventListener.onUpdate(actionBarView);
 		}		
 		
-		getEntityData(entityKey);
+		getEntityData(realEntity.getKey());
 	}
 	
 	@Override
@@ -282,7 +281,7 @@ public class ActionBarLayoutView extends BaseView {
 	protected void postLike(final ActionBarButton button) {
 		
 		if(localEntity != null) {
-			String entityKey = actionBarView.getEntityKey();
+			Entity entity = actionBarView.getEntity();
 			
 			button.showLoading();
 			
@@ -310,8 +309,16 @@ public class ActionBarLayoutView extends BaseView {
 				});
 			}
 			else {
-				// Unlike
-				getSocialize().like(entityKey, new LikeAddListener() {
+				// Like
+				ShareOptions options = new ShareOptions();
+				
+				if(getSocialize().getSession().getUser().isAutoPostToFacebook()) {
+					options.setShareTo(ShareDestination.FACEBOOK);
+				}
+				
+//				options.setShareFacebook(getSocialize().getSession().getUser().isAutoPostToFacebook());
+				
+				getSocialize().like(getActivity(), entity, options, new LikeAddListener() {
 					
 					@Override
 					public void onError(SocializeException error) {
@@ -333,9 +340,9 @@ public class ActionBarLayoutView extends BaseView {
 					}
 				});
 				
-				if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) && getSocialize().getSession().getUser().isAutoPostToFacebook()) {
-					facebookWallPoster.postLike(getActivity(), actionBarView.getEntityKey(), actionBarView.getEntityName(), null, actionBarView.isEntityKeyUrl(), null);
-				}
+//				if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) && getSocialize().getSession().getUser().isAutoPostToFacebook()) {
+//					facebookWallPoster.postLike(getActivity(), actionBarView.getEntityKey(), actionBarView.getEntityName(), null, actionBarView.isEntityKeyUrl(), null);
+//				}
 			}
 		}
 	}
@@ -481,10 +488,6 @@ public class ActionBarLayoutView extends BaseView {
 
 	public void setItemFactory(IBeanFactory<ActionBarItem> itemFactory) {
 		this.itemFactory = itemFactory;
-	}
-
-	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
-		this.facebookWallPoster = facebookWallPoster;
 	}
 
 	public void stopTicker() {

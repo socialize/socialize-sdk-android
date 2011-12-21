@@ -260,7 +260,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		authProviderData.setToken3rdParty(token);
 		
 		api.setAuthProviders(authProviders);
-		api.setAuthProviderDataFactory(authProviderDataFactory);
+//		api.setAuthProviderDataFactory(authProviderDataFactory);
 		
 		AndroidMock.replay(authProviderData);
 		AndroidMock.replay(authProviders);
@@ -346,7 +346,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		AndroidMock.expect(request.getAuthProviderData()).andReturn(authProviderData);
 		
 		api.setAuthProviders(authProviders);
-		api.setAuthProviderDataFactory(authProviderDataFactory);
+//		api.setAuthProviderDataFactory(authProviderDataFactory);
 
 		AndroidMock.replay(authProviderData);
 		AndroidMock.replay(authProviders);

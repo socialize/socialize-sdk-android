@@ -34,13 +34,13 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
+import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.facebook.FacebookWallPoster;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 import com.socialize.ui.dialog.AlertDialogFactory;
 import com.socialize.ui.dialog.ProgressDialogFactory;
-import com.socialize.ui.facebook.FacebookWallPostListener;
-import com.socialize.ui.facebook.FacebookWallPoster;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.StringUtils;
 
@@ -68,13 +68,13 @@ public class FacebookShareClickListener extends BaseShareClickListener {
 	
 	@Override
 	public boolean isAvailableOnDevice(Activity parent) {
-		return getSocializeUI().isFacebookSupported();
+		return getSocialize().isSupported(AuthProviderType.FACEBOOK);
 	}	
 
 	@Override
 	protected void doShare(final Activity parent, final String title, final String subject, final String body, final String comment) {
 
-		if(getSocializeUI().isFacebookSupported()) {
+		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
 			
 			if(Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 				doShareFB(parent, title, subject, body, comment);
@@ -87,7 +87,7 @@ public class FacebookShareClickListener extends BaseShareClickListener {
 				
 				AuthProviderType authProvider = AuthProviderType.FACEBOOK;				
 				
-				getSocialize().authenticate(consumerKey, consumerSecret, authProvider, authProviderAppId, new SocializeAuthListener() {
+				getSocialize().authenticate(parent, consumerKey, consumerSecret, authProvider, authProviderAppId, new SocializeAuthListener() {
 
 					@Override
 					public void onError(SocializeException error) {
@@ -136,9 +136,9 @@ public class FacebookShareClickListener extends BaseShareClickListener {
 		
 		final ProgressDialog dialog = progressDialogFactory.show(parent, "Share", "Sharing to Facebook...");
 		
-		String appId = getSocializeUI().getCustomConfigValue(SocializeConfig.FACEBOOK_APP_ID);
+		String appId = getSocialize().getProperty(SocializeConfig.FACEBOOK_APP_ID);
 		
-		facebookWallPoster.post(parent, appId, linkName, body, link, caption, new FacebookWallPostListener() {
+		facebookWallPoster.post(parent, appId, linkName, body, link, caption, new SocialNetworkListener() {
 			@Override
 			public void onPost(Activity parent) {
 				dialog.dismiss();
@@ -153,26 +153,6 @@ public class FacebookShareClickListener extends BaseShareClickListener {
 		});
 		
 	}
-	
-//	protected String getSubject(Activity activity) {
-//		Intent intent = activity.getIntent();
-//		Bundle extras = intent.getExtras();
-//		
-//		String entityKey = null;
-//		String entityName = null;
-//		
-//		if(extras != null) {
-//			entityKey = extras.getString(SocializeUI.ENTITY_KEY);
-//			entityName = extras.getString(SocializeUI.ENTITY_NAME);
-//		}
-//		
-//		if(!StringUtils.isEmpty(entityName)) {
-//			return entityName;
-//		}
-//		else {
-//			return entityKey;
-//		}
-//	}
 	
 	protected String getContent(Activity activity, String comment) {
 		StringBuilder builder = new StringBuilder();

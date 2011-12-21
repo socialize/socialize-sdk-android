@@ -26,7 +26,7 @@ import java.util.List;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.LikeApi;
+import com.socialize.api.action.SocializeLikeSystem;
 import com.socialize.entity.ActionError;
 import com.socialize.entity.Like;
 import com.socialize.entity.ListResult;
@@ -63,7 +63,7 @@ public class LikeApiTest extends SocializeUnitTest {
 	public void testAddLike() {
 		final String key = "foo";
 		
-		LikeApi api = new LikeApi(provider){
+		SocializeLikeSystem api = new SocializeLikeSystem(provider){
 
 			@Override
 			public void postAsync(SocializeSession session, String endpoint, List<Like> objects, SocializeActionListener listener) {
@@ -91,7 +91,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		
 		final String key = "foo";
 		
-		LikeApi api = new LikeApi(provider) {
+		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
 			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeActionListener listener) {
 				addResult(key);
@@ -111,7 +111,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		final String key = "foo";
 		int startIndex = 0, endIndex = 10;
 		
-		LikeApi api = new LikeApi(provider) {
+		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
 			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(key);
@@ -138,7 +138,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		
 		final int key = 69;
 		
-		LikeApi api = new LikeApi(provider) {
+		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			
 			public void listAsync(SocializeSession session, String endpoint, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(key);
@@ -158,7 +158,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		final int key = 69;
 		int startIndex = 0, endIndex = 10;
 		
-		LikeApi api = new LikeApi(provider) {
+		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
 			public void listAsync(SocializeSession session, String endpoint, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(key);
@@ -183,9 +183,9 @@ public class LikeApiTest extends SocializeUnitTest {
 	
 	public void testGetLikesById() {
 		
-		int[] ids = {1,2,3};
+		long[] ids = {1,2,3};
 		
-		LikeApi api = new LikeApi(provider) {
+		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
 			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(ids);
@@ -208,7 +208,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		
 		int id = 69;
 		
-		LikeApi api = new LikeApi(provider) {
+		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 
 			@Override
 			public void getAsync(SocializeSession session, String endpoint, String id, SocializeActionListener listener) {
@@ -238,7 +238,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		User user = AndroidMock.createMock(User.class);
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
 		
-		LikeApi api = new LikeApi(provider) {
+		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
 			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
 				LikeListener ll = (LikeListener) listener;
@@ -304,7 +304,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		final ListResult<Like> listResult = (ListResult<Like>) AndroidMock.createMock(ListResult.class);
 		List<Like> items = (List<Like>) AndroidMock.createMock(List.class);
 		
-		LikeApi api = new LikeApi(provider) {
+		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
 			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
 				LikeListener ll = (LikeListener) listener;
@@ -360,7 +360,7 @@ public class LikeApiTest extends SocializeUnitTest {
 
 		String key = "foobar";
 		
-		LikeApi api = new LikeApi(provider) {
+		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
 			public void getLikesByEntity(SocializeSession session, String key, int startIndex, int endIndex, LikeListener listener) {
 				assertEquals(0, startIndex);
@@ -376,7 +376,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		
 		int id = 69;
 		
-		LikeApi api = new LikeApi(provider) {
+		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
 			public void deleteAsync(SocializeSession session, String endpoint, String id, SocializeActionListener listener) {
 				addResult(id);
@@ -406,7 +406,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		AndroidMock.replay(user);
 		AndroidMock.replay(session);
 		
-		LikeApi api = new LikeApi(provider) {
+		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
 			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(key);

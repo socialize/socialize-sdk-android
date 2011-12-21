@@ -31,10 +31,10 @@ import com.socialize.listener.like.LikeListener;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.listener.user.UserListener;
 import com.socialize.listener.view.ViewListener;
+import com.socialize.networks.ShareOptions;
 import com.socialize.ui.comment.CommentShareOptions;
 
-
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "unchecked", "deprecation" })
 public class MockSocializeApiHost extends SocializeApiHost implements ContainerAware {
 
 	private ApiHost delegate;
@@ -72,13 +72,48 @@ public class MockSocializeApiHost extends SocializeApiHost implements ContainerA
 		listener.onCreate(new Entity());
 		if(delegate != null) delegate.createEntity(session, key, name, listener);
 	}
+	
 
+	@Override
+	public void addComment(SocializeSession session, Entity entity, String comment, Location location, ShareOptions shareOptions, CommentListener listener) {
+		listener.onCreate(new Comment());
+		if(delegate != null) delegate.addComment(session, entity, comment, location, shareOptions, listener);
+	}
+
+	@Override
+	public void addLike(SocializeSession session, Entity entity, Location location, LikeListener listener) {
+		Like like = new Like();
+		like.setId(0L);
+		if(listener != null) listener.onCreate(like);
+		if(delegate != null) delegate.addLike(session, entity, location, listener);
+	}
+
+	@Override
+	public void addView(SocializeSession session, Entity entity, Location location, ViewListener listener) {
+		View view = new View();
+		entity.setId(0L);
+		listener.onCreate(view);
+		
+		if(delegate != null) delegate.addView(session, entity, location, listener);
+		
+	}
+
+	@Override
+	public void addShare(SocializeSession session, Entity entity, String text, ShareType shareType, Location location, ShareListener listener) {
+		Share share = new Share();
+		entity.setId(0L);
+		listener.onCreate(share);
+		if(delegate != null) delegate.addShare(session, entity, text, shareType, location, listener);
+	}
+
+	@Deprecated
 	@Override
 	public void addComment(SocializeSession session, String key, String comment, Location location, CommentShareOptions shareOptions, CommentListener listener) {
 		listener.onCreate(new Comment());
 		if(delegate != null) delegate.addComment(session, key, comment, location, shareOptions, listener);
 	}
 
+	@Deprecated
 	@Override
 	public void addLike(SocializeSession session, String key, Location location, LikeListener listener) {
 		Like like = new Like();
@@ -87,6 +122,7 @@ public class MockSocializeApiHost extends SocializeApiHost implements ContainerA
 		if(delegate != null) delegate.addLike(session, key, location, listener);
 	}
 
+	@Deprecated
 	@Override
 	public void addView(SocializeSession session, String key, Location location, ViewListener listener) {
 		View entity = new View();
@@ -96,6 +132,7 @@ public class MockSocializeApiHost extends SocializeApiHost implements ContainerA
 		if(delegate != null) delegate.addView(session, key, location, listener);
 	}
 
+	@Deprecated
 	@Override
 	public void addShare(SocializeSession session, String key, String text, ShareType shareType, Location location, ShareListener listener) {
 		Share entity = new Share();
@@ -167,13 +204,13 @@ public class MockSocializeApiHost extends SocializeApiHost implements ContainerA
 	}
 
 	@Override
-	public void listCommentsById(SocializeSession session, CommentListener listener, int... ids) {
+	public void listCommentsById(SocializeSession session, CommentListener listener, long... ids) {
 		if(delegate != null) delegate.listCommentsById(session, listener, ids);
 		listener.onList((ListResult<Comment>) listResult);
 	}
 
 	@Override
-	public void listLikesById(SocializeSession session, LikeListener listener, int... ids) {
+	public void listLikesById(SocializeSession session, LikeListener listener, long... ids) {
 		if(delegate != null) delegate.listLikesById(session, listener, ids);
 		listener.onList((ListResult<Like>) listResult);
 	}

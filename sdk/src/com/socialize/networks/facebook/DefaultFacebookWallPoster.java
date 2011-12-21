@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.facebook;
+package com.socialize.networks.facebook;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -32,17 +32,20 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.facebook.FacebookSessionStore;
 import com.socialize.config.SocializeConfig;
+import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.facebook.AsyncFacebookRunner;
 import com.socialize.facebook.AsyncFacebookRunner.RequestListener;
 import com.socialize.facebook.Facebook;
 import com.socialize.facebook.FacebookError;
 import com.socialize.log.SocializeLogger;
+import com.socialize.networks.SocialNetworkListener;
 import com.socialize.ui.SocializeUI;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
@@ -59,7 +62,10 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	private DeviceUtils deviceUtils;
 	
 	@Override
-	public void postLike(final Activity parent, String entityKey, String entityName, String comment, boolean isUseLink, final FacebookWallPostListener listener) {
+	public void postLike(Activity parent, Entity entity, String comment, SocialNetworkListener listener) {
+
+		String entityName = entity.getName();
+		String entityKey = entity.getKey();
 		
 		String linkName = deviceUtils.getAppName();
 		
@@ -67,7 +73,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		
 		builder.append("Likes ");
 			
-		if(isUseLink || StringUtils.isEmpty(entityName)) {
+		if(isLink(entity) || StringUtils.isEmpty(entityName)) {
 			builder.append(entityKey);
 			builder.append("\n\n");
 		}
@@ -80,17 +86,19 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		builder.append(linkName);
 		builder.append(" using Socialize for Android. http://www.getsocialize.com");
 		
-		post(parent, builder.toString(), listener);
+		post(parent, builder.toString(), listener);		
 	}
-	
+
 	@Override
-	public void postComment(final Activity parent, String entityKey, String entityName, String comment, boolean isUseLink, final FacebookWallPostListener listener) {
-		
+	public void postComment(Activity parent, Entity entity, String comment, SocialNetworkListener listener) {
 		String linkName = deviceUtils.getAppName();
 		
 		StringBuilder builder = new StringBuilder();
 			
-		if(isUseLink || StringUtils.isEmpty(entityName)) {
+		String entityName = entity.getName();
+		String entityKey = entity.getKey();
+		
+		if(isLink(entity) || StringUtils.isEmpty(entityName)) {
 			builder.append(entityKey);
 			builder.append("\n\n");
 		}
@@ -105,15 +113,27 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		builder.append(linkName);
 		builder.append(" using Socialize for Android. http://www.getsocialize.com");
 		
-		post(parent, builder.toString(), listener);
+		post(parent, builder.toString(), listener);		
+	}
+
+	@Deprecated
+	@Override
+	public void postLike(final Activity parent, String entityKey, String entityName, String comment, SocialNetworkListener listener) {
+		postLike(parent, Entity.newInstance(entityKey, entityName), comment, listener);
+	}
+	
+	@Override
+	public void postComment(final Activity parent, String entityKey, String entityName, String comment, SocialNetworkListener listener) {
+		postComment(parent, Entity.newInstance(entityKey, entityName), comment, listener);
+
 	}
 
 	@Override
-	public void post(final Activity parent, String message, final FacebookWallPostListener listener) {
+	public void post(final Activity parent, String message, final SocialNetworkListener listener) {
 		String caption = "Download the app now to join the conversation.";
 		String linkName = deviceUtils.getAppName();
 		String link = deviceUtils.getMarketUrl(false);
-		String appId = getSocializeUI().getCustomConfigValue(SocializeConfig.FACEBOOK_APP_ID);
+		String appId = getSocialize().getProperty(SocializeConfig.FACEBOOK_APP_ID);
 		
 		if(!StringUtils.isEmpty(appId)) {
 			post(parent, appId, linkName, message, link, caption, listener);
@@ -125,7 +145,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	}
 	
 	@Override
-	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, final FacebookWallPostListener listener) {
+	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, final SocialNetworkListener listener) {
 		
 		final String defaultErrorMessage = "Facebook Error";
 		
@@ -221,12 +241,22 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
 		this.deviceUtils = deviceUtils;
 	}
+	
+	protected boolean isLink(Entity entity) {
+		return entity.getKey().toLowerCase().trim().startsWith("http://");
+	}
 
+	// So we can mock
 	protected SocializeUI getSocializeUI() {
 		return SocializeUI.getInstance();
 	}
 	
-	protected void onError(final Activity parent, final String msg, final Throwable e, final FacebookWallPostListener listener) {
+	// So we can mock
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
+	}
+	
+	protected void onError(final Activity parent, final String msg, final Throwable e, final SocialNetworkListener listener) {
 		
 		if(logger != null) {
 			if(e != null) {
