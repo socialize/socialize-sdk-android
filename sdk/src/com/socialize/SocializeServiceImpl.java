@@ -22,17 +22,27 @@
 package com.socialize;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
+import android.widget.ScrollView;
 
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.android.ioc.IOCContainer;
+import com.socialize.android.ioc.Logger;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.api.action.ActivitySystem;
@@ -48,6 +58,9 @@ import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
+import com.socialize.entity.EntityFactory;
+import com.socialize.entity.SocializeAction;
+import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.init.SocializeInitializationAsserter;
 import com.socialize.ioc.SocializeIOC;
@@ -74,24 +87,34 @@ import com.socialize.networks.ShareDestination;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.facebook.FacebookWallPoster;
 import com.socialize.ui.ActivityIOCProvider;
+import com.socialize.ui.SocializeEntityLoader;
+import com.socialize.ui.action.ActionDetailActivity;
+import com.socialize.ui.actionbar.ActionBarListener;
+import com.socialize.ui.actionbar.ActionBarOptions;
+import com.socialize.ui.actionbar.ActionBarView;
+import com.socialize.ui.comment.CommentActivity;
+import com.socialize.ui.comment.CommentDetailActivity;
 import com.socialize.ui.comment.CommentShareOptions;
+import com.socialize.ui.comment.CommentView;
+import com.socialize.ui.comment.OnCommentViewActionListener;
+import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.ui.profile.UserProfile;
 import com.socialize.util.ClassLoaderProvider;
+import com.socialize.util.Drawables;
 import com.socialize.util.ResourceLocator;
 import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
  */
-public class SocializeServiceImpl implements SocializeSessionConsumer, SocializeService {
+@SuppressWarnings("deprecation")
+public class SocializeServiceImpl implements SocializeSessionConsumer, SocializeService , SocializeUI {
 	
 	private SocializeLogger logger;
 	private IOCContainer container;
 	private SocializeSession session;
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	private SocializeInitializationAsserter asserter;
-	private int initCount = 0;
-	
 	private CommentSystem commentSystem;
 	private ShareSystem shareSystem;
 	private LikeSystem likeSystem;
@@ -99,76 +122,16 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private UserSystem userSystem;
 	private ActivitySystem activitySystem;
 	private EntitySystem entitySystem;
-	
+	private EntityFactory entityFactory;
+	private Drawables drawables;
 	private FacebookWallPoster facebookWallPoster;
 	
-	private final Properties customProperties = new Properties();
-	private final Set<String> toBeRemoved = new HashSet<String>();
+	private SocializeConfig config = new SocializeConfig();
+	
+	private SocializeEntityLoader entityLoader;
 	
 	private String[] initPaths = null;
-	
-	// So we can mock
-	protected Set<String> getPropertiesToBeRemoved() {
-		return toBeRemoved;
-	}
-	
-	@Override
-	public void setProperty(String key, String value) {
-		if(!StringUtils.isEmpty(value)) {
-			customProperties.put(key, value);
-		}
-		else {
-			customProperties.remove(key);
-			toBeRemoved.add(key);
-		}
-	}
-	
-	@Override
-	public String getProperty(String key) {
-		String property = customProperties.getProperty(key);
-		if(StringUtils.isEmpty(property) && isInitialized()) {
-			property = getConfig().getProperty(key);
-		}
-		return property;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#setFacebookAppId(java.lang.String)
-	 */
-	@Override
-	public void setFacebookAppId(String appId) {
-		setProperty(SocializeConfig.FACEBOOK_APP_ID, appId);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#setFacebookSingleSignOnEnabled(boolean)
-	 */
-	@Override
-	public void setFacebookSingleSignOnEnabled(boolean enabled) {
-		setProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, String.valueOf(enabled));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#setFacebookUserCredentials(java.lang.String, java.lang.String)
-	 */
-	@Override
-	public void setFacebookUserCredentials(String userId, String token) {
-		setProperty(SocializeConfig.FACEBOOK_USER_ID, userId);
-		setProperty(SocializeConfig.FACEBOOK_USER_TOKEN, token);
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#setSocializeCredentials(java.lang.String, java.lang.String)
-	 */
-	@Override
-	public void setSocializeCredentials(String consumerKey, String consumerSecret) {
-		setProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY, consumerKey);
-		setProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET, consumerSecret);
-	}
+	private int initCount = 0;
 	
 	@Override
 	public boolean isSupported(AuthProviderType type) {
@@ -176,7 +139,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			case SOCIALIZE:
 				return true;
 			case FACEBOOK:
-				return !StringUtils.isEmpty(getProperty(SocializeConfig.FACEBOOK_APP_ID));
+				return !StringUtils.isEmpty(getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID));
 			default:
 				return false;
 		}
@@ -256,6 +219,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		
 		if(init) {
 			try {
+				Logger.LOG_KEY = Socialize.LOG_KEY;
+				
 				initPaths = paths;
 				
 				sort(initPaths);
@@ -286,7 +251,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			container.setContext(context);
 		}
 		
-		getConfig().merge(customProperties, toBeRemoved);
+		getConfig().merge();
 		
 		return container;
 	}
@@ -330,12 +295,16 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			try {
 				this.container = container;
 				
-				setCommentSystem( (CommentSystem) container.getBean("commentSystem") );
-				setShareSystem( (ShareSystem) container.getBean("shareSystem") );
-				setLikeSystem( (LikeSystem) container.getBean("likeSystem") );
-				setViewSystem( (ViewSystem) container.getBean("viewSystem") );
-				setUserSystem( (UserSystem) container.getBean("userSystem") );
-				setActivitySystem( (ActivitySystem) container.getBean("activitySystem") );
+				this.commentSystem = container.getBean("commentSystem");
+				this.shareSystem = container.getBean("shareSystem");
+				this.likeSystem = container.getBean("likeSystem");
+				this.viewSystem = container.getBean("viewSystem");
+				this.userSystem = container.getBean("userSystem");
+				this.activitySystem = container.getBean("activitySystem");
+				this.entitySystem = container.getBean("entitySystem");
+				this.entityFactory = container.getBean("entityFactory");
+				
+				this.drawables = container.getBean("drawables");
 				
 //				this.apiHost = container.getBean("socializeApiHost");
 				
@@ -343,8 +312,12 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.authProviderDataFactory = container.getBean("authProviderDataFactory");
 				this.asserter = container.getBean("initializationAsserter");
 				this.facebookWallPoster = container.getBean("facebookWallPoster");
-				this.initCount++;
 				
+				SocializeConfig mainConfig = container.getBean("config");
+				mainConfig.merge(config);
+				this.config = mainConfig;
+				
+				this.initCount++;
 				ActivityIOCProvider.getInstance().setContainer(container);
 			}
 			catch (Exception e) {
@@ -429,7 +402,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				container.destroy();
 			}
 			
-			customProperties.clear();
 			initCount = 0;
 			initPaths = null;
 		}
@@ -1098,41 +1070,19 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		this.logger = logger;
 	}
 	
-	public void setCommentSystem(CommentSystem commentSystem) {
-		this.commentSystem = commentSystem;
-	}
-
-	public void setShareSystem(ShareSystem shareSystem) {
-		this.shareSystem = shareSystem;
-	}
-
-	public void setLikeSystem(LikeSystem likeSystem) {
-		this.likeSystem = likeSystem;
-	}
-
-	public void setViewSystem(ViewSystem viewSystem) {
-		this.viewSystem = viewSystem;
-	}
-
-	public void setUserSystem(UserSystem userSystem) {
-		this.userSystem = userSystem;
-	}
-
-	public void setActivitySystem(ActivitySystem activitySystem) {
-		this.activitySystem = activitySystem;
-	}
-
 	/**
 	 * Returns the configuration for this SocializeService instance.
 	 * @return
 	 */
 	public SocializeConfig getConfig() {
-		if(isInitialized()) {
-			return container.getBean("config");
-		}
+//		if(isInitialized()) {
+//			return container.getBean("config");
+//		}
+//		
+//		if(logger != null) logger.error(SocializeLogger.NOT_INITIALIZED);
+//		return null;
 		
-		if(logger != null) logger.error(SocializeLogger.NOT_INITIALIZED);
-		return null;
+		return config;
 	}
 	
 	public static class InitTask extends AsyncTask<Void, Void, IOCContainer> {
@@ -1223,5 +1173,240 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	IOCContainer getContainer() {
 		return container;
+	}
+
+	@Override
+	public View showActionBar(Activity parent, int resId, Entity entity) {
+		return showActionBar(parent, resId, entity, null, null);
+	}
+
+	@Override
+	public View showActionBar(Activity parent, int resId, Entity entity, ActionBarListener listener) {
+		return showActionBar(parent, resId, entity, null, listener);
+	}
+
+	@Override
+	public View showActionBar(Activity parent, int resId, Entity entity, ActionBarOptions options) {
+		return showActionBar(parent, resId, entity, options, null);
+	}
+
+	@Override
+	public View showActionBar(Activity parent, int resId, Entity entity, ActionBarOptions options, ActionBarListener listener) {
+		return showActionBar(parent, inflateView(parent, resId) , entity, options, listener);
+	}
+
+	@Override
+	public View showActionBar(Activity parent, View original, Entity entity) {
+		return showActionBar(parent, original, entity, null, null);
+	}
+	
+	@Override
+	public View showActionBar(Activity parent, View original, Entity entity, ActionBarOptions options) {
+		return showActionBar(parent, original, entity, options, null);
+	}
+
+	@Override
+	public View showActionBar(Activity parent, View original, Entity entity, ActionBarListener listener) {
+		return showActionBar(parent, original, entity, null, listener);
+	}
+
+	@Override
+	public View showActionBar(Activity parent, View original, Entity entity, ActionBarOptions options, ActionBarListener listener) {
+		RelativeLayout barLayout = newRelativeLayout(parent);
+		RelativeLayout originalLayout = newRelativeLayout(parent);
+		
+		ActionBarView socializeActionBar = newActionBarView(parent);
+		socializeActionBar.assignId(original);
+		socializeActionBar.setEntity(entity);
+		
+		LayoutParams barParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		barParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		
+		LayoutParams originalParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		originalParams.addRule(RelativeLayout.ABOVE, socializeActionBar.getId());
+		
+		socializeActionBar.setLayoutParams(barParams);
+		originalLayout.setLayoutParams(originalParams);
+		
+		if(listener != null) {
+			listener.onCreate(socializeActionBar);
+		}
+		
+		boolean addScrollView = true;
+		
+		if(options != null) {
+			addScrollView = options.isAddScrollView();
+		}
+		
+		if(addScrollView && !(original instanceof ScrollView) ) {
+			LayoutParams scrollViewParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+			ScrollView scrollView = newScrollView(parent);
+			scrollView.setFillViewport(true);
+			scrollView.setLayoutParams(scrollViewParams);
+			scrollView.addView(original);
+			scrollView.setScrollContainer(false);
+			originalLayout.addView(scrollView);
+		}
+		else {
+			originalLayout.addView(original);
+		}
+		
+		barLayout.addView(originalLayout);
+		barLayout.addView(socializeActionBar);
+		
+		return barLayout;
+	}
+
+	protected ActionBarView newActionBarView(Activity parent) {
+		return new ActionBarView(parent);
+	}
+
+	protected Intent newIntent(Activity context, Class<?> cls) {
+		return new Intent(context, cls);
+	}
+
+	protected LayoutParams newLayoutParams(int width, int height) {
+		return new LayoutParams(width, height);
+	}
+
+	protected RelativeLayout newRelativeLayout(Activity parent) {
+		return new RelativeLayout(parent);
+	}
+
+	protected ScrollView newScrollView(Activity parent) {
+		return new ScrollView(parent);
+	}
+
+	protected View inflateView(Activity parent, int resId) {
+		LayoutInflater layoutInflater = (LayoutInflater) parent.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
+		return layoutInflater.inflate(resId, null);
+	}
+
+	/**
+	 * Displays the detail view for a single Socialize action.
+	 * @param context
+	 * @param userId
+	 * @param commentId
+	 * @param requestCode
+	 */
+	@Override
+	public void showActionDetailViewForResult(Activity context, User user, SocializeAction action, int requestCode) {
+		Intent i = newIntent(context, ActionDetailActivity.class);
+		i.putExtra(Socialize.USER_ID, user.getId().toString());
+		i.putExtra(Socialize.COMMENT_ID, action.getId().toString());
+		
+		try {
+			context.startActivityForResult(i, requestCode);
+		} 
+		catch (ActivityNotFoundException e) {
+			// Revert to legacy
+			i.setClass(context, CommentDetailActivity.class);
+			try {
+				context.startActivityForResult(i, requestCode);
+				Log.w(Socialize.LOG_KEY, "Using legacy CommentDetailActivity.  Please update your AndroidManifest.xml to use ActionDetailActivity");
+			} 
+			catch (ActivityNotFoundException e2) {
+				Log.e(Socialize.LOG_KEY, "Could not find ActionDetailActivity.  Make sure you have added this to your AndroidManifest.xml");
+			}
+		}
+	}
+
+	/**
+	 * Shows the comments list for the given entity.
+	 * @param context
+	 * @param entity
+	 */
+	@Override
+	public void showCommentView(Activity context, Entity entity) {
+		showCommentView(context, entity, null);
+	}
+
+	/**
+	 * Shows the comments list for the given entity.
+	 * @param context
+	 * @param entity
+	 * @param listener
+	 */
+	@Override
+	public void showCommentView(Activity context, Entity entity, OnCommentViewActionListener listener) {
+		if(listener != null) {
+			Socialize.STATIC_LISTENERS.put(CommentView.COMMENT_LISTENER, listener);
+		}
+
+		try {
+			JSONObject json = entityFactory.toJSON(entity);
+			
+			Intent i = newIntent(context, CommentActivity.class);
+			i.putExtra(Socialize.ENTITY_OBJECT, json.toString());
+			
+			context.startActivity(i);
+		} 
+		catch (ActivityNotFoundException e) {
+			Log.e(Socialize.LOG_KEY, "Could not find CommentActivity.  Make sure you have added this to your AndroidManifest.xml");
+		} 
+		catch (JSONException e) {
+			Log.e(Socialize.LOG_KEY, "Invalid entity object provided.");
+		}
+	}
+
+	@Override
+	public void showUserProfileView(Activity context, String userId) {
+		Intent i = newIntent(context, ProfileActivity.class);
+		i.putExtra(Socialize.USER_ID, userId);
+		try {
+			context.startActivity(i);
+		} 
+		catch (ActivityNotFoundException e) {
+			Log.e(Socialize.LOG_KEY, "Could not find ProfileActivity.  Make sure you have added this to your AndroidManifest.xml");
+		}
+	}
+
+	@Override
+	public void showUserProfileViewForResult(Activity context, String userId, int requestCode) {
+		Intent i = newIntent(context, ProfileActivity.class);
+		i.putExtra(Socialize.USER_ID, userId);
+		
+		try {
+			context.startActivityForResult(i, requestCode);
+		} 
+		catch (ActivityNotFoundException e) {
+			Log.e(Socialize.LOG_KEY, "Could not find ProfileActivity.  Make sure you have added this to your AndroidManifest.xml");
+		}	
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeUI#getDrawable(java.lang.String, boolean)
+	 */
+	@Override
+	public Drawable getDrawable(String name, boolean eternal) {
+		return drawables.getDrawable(name, eternal);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeUI#getDrawable(java.lang.String, int, boolean)
+	 */
+	@Override
+	public Drawable getDrawable(String name, int density, boolean eternal) {
+		return drawables.getDrawable(name, density, eternal);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#getEntityLoader()
+	 */
+	@Override
+	public SocializeEntityLoader getEntityLoader() {
+		return entityLoader;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#setEntityLoader(com.socialize.ui.SocializeEntityLoader)
+	 */
+	@Override
+	public void setEntityLoader(SocializeEntityLoader entityLoader) {
+		this.entityLoader = entityLoader;
 	}
 }

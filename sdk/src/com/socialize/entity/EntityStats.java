@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,36 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity.factory;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.socialize.entity.ActionError;
+package com.socialize.entity;
 
 /**
  * @author Jason Polites
+ *
  */
-public class ErrorFactory extends JSONFactory<ActionError> {
-	
-	private static final String MESSAGE = "error";
+public interface EntityStats {
 
-	@Override
-	public Object instantiateObject(JSONObject object) {
-		return new ActionError();
-	}
+	public Integer getComments();
 
-	@Override
-	protected void fromJSON(JSONObject from, ActionError to) throws JSONException {
-		if(from.has(MESSAGE) && !from.isNull(MESSAGE)) {
-			to.setMessage(from.getString(MESSAGE));
-		}
-	}
+	public Integer getLikes();
 
-	@Override
-	protected void toJSON(ActionError from, JSONObject to) throws JSONException {
-		if(from.getMessage() != null) {
-			to.put(MESSAGE, from.getMessage());
-		}
-	}
+	public Integer getShares();
+
+	public Integer getViews();
+
 }

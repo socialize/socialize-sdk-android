@@ -19,35 +19,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.android.ioc;
+package com.socialize.entity;
 
-import android.util.Log;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class Logger {
 
-	public static String LOG_KEY = "AndroidIOC";
+/**
+ * @author Jason Polites
+ */
+public class ErrorFactory extends JSONFactory<ActionError> {
 	
-	public static final void d(String tag, String msg) {
-		Log.d(LOG_KEY, tag + ": " + msg);
+	private static final String MESSAGE = "error";
+
+	@Override
+	public Object instantiateObject(JSONObject object) {
+		return new ActionError();
 	}
 
-	public static final void i(String tag, String msg) {
-		Log.i(LOG_KEY, tag + ": " + msg);
-	}
-	
-	public static final void w(String tag, String msg) {
-		Log.w(LOG_KEY, tag + ": " + msg);
-	}
-	
-	public static final void w(String tag, String msg, Throwable e) {
-		Log.w(LOG_KEY, tag + ": " + msg, e);
+	@Override
+	protected void fromJSON(JSONObject from, ActionError to) throws JSONException {
+		if(from.has(MESSAGE) && !from.isNull(MESSAGE)) {
+			to.setMessage(from.getString(MESSAGE));
+		}
 	}
 
-	public static final void e(String tag, String msg) {
-		Log.e(LOG_KEY, tag + ": " + msg);
-	}
-	
-	public static final void e(String tag, String msg, Throwable e) {
-		Log.e(LOG_KEY, tag + ": " + msg, e);
+	@Override
+	protected void toJSON(ActionError from, JSONObject to) throws JSONException {
+		if(from.getMessage() != null) {
+			to.put(MESSAGE, from.getMessage());
+		}
 	}
 }

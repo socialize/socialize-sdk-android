@@ -2,8 +2,8 @@ package com.socialize.test.mock;
 
 import android.app.Activity;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.ScrollView;
 
 import com.socialize.ui.actionbar.ActionBarView;
 

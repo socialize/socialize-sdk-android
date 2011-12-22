@@ -38,10 +38,10 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.SocializeAction;
 import com.socialize.ui.SocializeEntityLoader;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.util.DateUtils;
 import com.socialize.util.DeviceUtils;
@@ -210,7 +210,7 @@ public class UserActivityListItem extends TableLayout {
 				break;
 		}	
 		
-		final SocializeEntityLoader entityLoader = SocializeUI.getInstance().getEntityLoader();
+		final SocializeEntityLoader entityLoader = Socialize.getSocialize().getEntityLoader();
 		
 		if(entityLoader != null) {
 			setOnClickListener(new OnClickListener() {

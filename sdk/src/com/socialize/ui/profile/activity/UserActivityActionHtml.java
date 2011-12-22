@@ -26,11 +26,11 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.webkit.WebView;
 
+import com.socialize.Socialize;
 import com.socialize.api.action.ActionType;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.ui.SocializeEntityLoader;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.StringUtils;
 
@@ -64,7 +64,7 @@ public class UserActivityActionHtml extends WebView {
 		
 		StringBuilder builder = new StringBuilder();
 		
-		final SocializeEntityLoader entityLoader = SocializeUI.getInstance().getEntityLoader();
+		final SocializeEntityLoader entityLoader = Socialize.getSocialize().getEntityLoader();
 		
 		String name = "";
 		

@@ -115,8 +115,8 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 		user.setFirstName(profile.getFirstName());
 		user.setLastName(profile.getLastName());
 		user.setProfilePicData(profile.getEncodedImage());
-		user.setAutoPostToFacebook(profile.isAutoPostFacebook());
-		
+		user.setAutoPostCommentsFacebook(profile.isAutoPostCommentsFacebook());
+		user.setAutoPostLikesFacebook(profile.isAutoPostLikesFacebook());
 		saveUserProfile(context, session, user, listener);
 	}
 	
@@ -150,6 +150,7 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	/* (non-Javadoc)
 	 * @see com.socialize.api.action.UserSystem#saveUserProfile(android.content.Context, com.socialize.api.SocializeSession, java.lang.String, java.lang.String, java.lang.String, com.socialize.listener.user.UserListener)
 	 */
+	@Deprecated
 	@Override
 	public void saveUserProfile(final Context context, final SocializeSession session, String firstName, String lastName, String encodedImage, final UserListener listener) {
 		User user = session.getUser();

@@ -27,7 +27,6 @@ import android.location.Location;
 
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.CommentSystem;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
@@ -50,6 +49,7 @@ import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.networks.ShareOptions;
+import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.ui.comment.CommentShareOptions;
 import com.socialize.ui.profile.UserProfile;
 
@@ -632,47 +632,6 @@ public interface SocializeService {
 	 * @param activityListListener A listener to handle callbacks from the get.
 	 */
 	public void listActivityByUser(long userId, int startIndex, int endIndex, UserActivityListListener activityListListener);
-	
-	/**
-	 * Sets a custom property.  This will override settings in socialize.properties.
-	 * @param key
-	 * @param value
-	 */
-	public void setProperty(String key, String value);
-	
-	/**
-	 * Returns a property from socialize.properties.
-	 * @param key
-	 * @return
-	 */
-	public String getProperty(String key);
-	
-	/**
-	 * Sets the Facebook ID for FB authentication.  
-	 * @param appId Your Facebook App Id, obtained from https://developers.facebook.com/
-	 * @see https://developers.facebook.com/
-	 */
-	public void setFacebookAppId(String appId);
-	
-	/**
-	 * Enables/disables Single Sign On for Facebook.
-	 * @param enabled True if enabled.  Default is true.
-	 */
-	public void setFacebookSingleSignOnEnabled(boolean enabled);
-	
-	/**
-	 * Sets the credentials for your Socialize App.
-	 * @param consumerKey Your consumer key, obtained via registration at http://getsocialize.com
-	 * @param consumerSecret Your consumer secret, obtained via registration at http://getsocialize.com
-	 */
-	public void setSocializeCredentials(String consumerKey, String consumerSecret);
-	
-	/**
-	 * Sets the FB credentials for the current user if available.
-	 * @param userId
-	 * @param token
-	 */
-	public void setFacebookUserCredentials(String userId, String token);
 
 	/**
 	 * Returns true if the given provider type is supported and has been configured correctly.
@@ -681,5 +640,15 @@ public interface SocializeService {
 	 */
 	public boolean isSupported(AuthProviderType type);
 	
-	public void setCommentSystem(CommentSystem commentSystem);
+	/**
+	 * Sets the entity loader object which allows Socialize to open entities when a user clicks on a user activity item.
+	 * @param entityLoader
+	 */
+	public void setEntityLoader(SocializeEntityLoader entityLoader);
+	
+	/**
+	 * Returns the entity loader set in setEntityLoader.
+	 * @return
+	 */
+	public SocializeEntityLoader getEntityLoader();
 }

@@ -317,7 +317,7 @@
 	<!-- Facebook -->
 	<bean 
 		id="facebookAuthClickListener" 
-		class="com.socialize.ui.facebook.FacebookAuthClickListener"		
+		class="com.socialize.networks.facebook.FacebookAuthClickListener"		
 		singleton="false">
 		<property name="config" ref="config"/>
 		<property name="dialogFactory" ref="progressDialogFactory"/>
@@ -325,7 +325,7 @@
 	
 	<bean 
 		id="facebookSignOutClickListener" 
-		class="com.socialize.ui.facebook.FacebookSignOutClickListener"		
+		class="com.socialize.networks.facebook.FacebookSignOutClickListener"		
 		singleton="false">
 		<property name="drawables" ref="drawables"/>
 		<property name="logger" ref="logger"/>
@@ -335,7 +335,7 @@
 	
 	<bean 
 		id="facebookSignInButton" 
-		class="com.socialize.ui.facebook.FacebookButton"		
+		class="com.socialize.networks.facebook.FacebookButton"		
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
@@ -353,7 +353,7 @@
 	
 	<bean 
 		id="facebookSignInCell" 
-		class="com.socialize.ui.facebook.FacebookSignInCell" 
+		class="com.socialize.networks.facebook.FacebookSignInCell" 
 		singleton="false"
 		extends="clickableSectionCell">
 		<constructor-arg type="activity"/>	
@@ -365,7 +365,7 @@
 	
 	<bean 
 		id="facebookSignOutCell" 
-		class="com.socialize.ui.facebook.FacebookSignOutCell" 
+		class="com.socialize.networks.facebook.FacebookSignOutCell" 
 		singleton="false"
 		extends="clickableSectionCell">
 		<constructor-arg type="activity"/>	
@@ -398,18 +398,11 @@
 	<bean 
 		id="facebookSignOutTask" 
 		singleton="false"
-		class="com.socialize.ui.facebook.FacebookSignOutTask">
+		class="com.socialize.networks.facebook.FacebookSignOutTask">
 		<property name="logger" ref="logger"/>
 		<property name="dialogFactory" ref="progressDialogFactory"/>
 	</bean>
-	
-	<bean 
-		id="facebookWallPoster" 
-		class="com.socialize.ui.facebook.DefaultFacebookWallPoster">
-		<property name="logger" ref="logger"/>
-		<property name="drawables" ref="drawables"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
-	</bean>
+
 	
 	<factory id="facebookSignOutTaskFactory" makes="facebookSignOutTask"/>
 	
@@ -683,7 +676,7 @@
 		extends="socializeHeader"
 		singleton="false">
 		<constructor-arg type="activity"/>
-		<property name="headerText" value="Profile"/>
+		<property name="headerText" value="Settings"/>
 	</bean>		
 	
 	<factory id="profileHeaderFactory" makes="profileHeader"/>		

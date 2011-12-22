@@ -19,37 +19,65 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity.factory;
+package com.socialize.entity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.socialize.entity.Application;
+import com.socialize.auth.AuthProviderType;
+import com.socialize.log.SocializeLogger;
 
 /**
  * @author Jason Polites
  *
  */
-public class ApplicationFactory extends SocializeObjectFactory<Application> {
+public class UserAuthDataFactory extends SocializeObjectFactory<UserAuthData> {
 	
-	public ApplicationFactory() {
-		super();
-	}
+	private static final String AUTH_ID = "auth_id";
+	private static final String AUTH_TYPE = "auth_type";
 
+	private SocializeLogger logger;
+	
 	@Override
 	public Object instantiateObject(JSONObject object) {
-		return new Application();
+		return new UserAuthData();
 	}
 
 	@Override
-	protected void postFromJSON(JSONObject object, Application entry) throws JSONException {
-		if(object.has("name")) {
-			entry.setName(object.getString("name"));
+	protected void postFromJSON(JSONObject from, UserAuthData to) throws JSONException {
+
+		if(from.has(AUTH_ID) && !from.isNull(AUTH_ID)) {
+			to.setId(from.getLong(AUTH_ID));
+		}
+		
+		if(from.has(AUTH_TYPE) && !from.isNull(AUTH_TYPE)) {
+			String string = from.getString(AUTH_TYPE).trim().toUpperCase();
+			try {
+				AuthProviderType type = AuthProviderType.valueOf(string);
+				to.setAuthProviderType(type);
+			}
+			catch (Exception e) {
+				if(logger != null) {
+					logger.error("Failed to parse auth type [" +
+							string +
+							"]", e);
+				}
+				else {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
 	@Override
-	protected void postToJSON(Application entry, JSONObject object) throws JSONException {
-		object.put("name", entry.getName());
+	protected void postToJSON(UserAuthData from, JSONObject to) throws JSONException {
+		// Never sent
 	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
+	
+	
+	
 }

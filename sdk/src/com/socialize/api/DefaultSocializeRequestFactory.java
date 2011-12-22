@@ -42,7 +42,7 @@ import org.json.JSONObject;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeObject;
-import com.socialize.entity.factory.SocializeObjectFactory;
+import com.socialize.entity.SocializeObjectFactory;
 import com.socialize.error.SocializeException;
 import com.socialize.oauth.OAuthRequestSigner;
 import com.socialize.util.StringUtils;

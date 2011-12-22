@@ -1,5 +1,8 @@
 package com.socialize.ui.comment;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -13,10 +16,12 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 
+import com.socialize.Socialize;
 import com.socialize.android.ioc.IOCContainer;
+import com.socialize.entity.Entity;
+import com.socialize.entity.EntityFactory;
 import com.socialize.listener.ListenerHolder;
 import com.socialize.log.SocializeLogger;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.view.EntityView;
 
 public class CommentView extends EntityView {
@@ -41,14 +46,22 @@ public class CommentView extends EntityView {
 			
 			// TODO: always create?
 			if(commentListView == null) {
-				commentListView = container.getBean("commentList", entityKey[0]);
-				
-				ListenerHolder holder  = container.getBean("listenerHolder");
-				
-				if(holder != null) {
-					OnCommentViewActionListener onCommentViewActionListener = holder.get(COMMENT_LISTENER);
-					commentListView.setOnCommentViewActionListener(onCommentViewActionListener);
-				}				
+				try {
+					EntityFactory entityFactory = container.getBean("entityFactory");
+					Entity entity = entityFactory.fromJSON(new JSONObject(entityKey[0].toString()));
+					
+					commentListView = container.getBean("commentList", entity);
+					
+					ListenerHolder holder  = container.getBean("listenerHolder");
+					
+					if(holder != null) {
+						OnCommentViewActionListener onCommentViewActionListener = holder.get(COMMENT_LISTENER);
+						commentListView.setOnCommentViewActionListener(onCommentViewActionListener);
+					}	
+				} 
+				catch (JSONException e) {
+					Log.e(SocializeLogger.LOG_TAG, "Invalid entity object", e);
+				}
 			}
 			
 			return commentListView;
@@ -79,7 +92,7 @@ public class CommentView extends EntityView {
 	
 	@Override
 	protected String[] getEntityKeys() {
-		return new String[]{SocializeUI.ENTITY_KEY};
+		return new String[]{Socialize.ENTITY_OBJECT};
 	}
 	
 	/**
@@ -107,7 +120,7 @@ public class CommentView extends EntityView {
 
 		MenuItem add2 = menu.add("Refresh");
 		
-		add2.setIcon(SocializeUI.getInstance().getDrawable("ic_menu_refresh.png", DisplayMetrics.DENSITY_DEFAULT, true));
+		add2.setIcon(Socialize.getSocializeUI().getDrawable("ic_menu_refresh.png", DisplayMetrics.DENSITY_DEFAULT, true));
 		
 		add2.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override

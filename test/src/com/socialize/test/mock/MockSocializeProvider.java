@@ -32,7 +32,7 @@ import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
-import com.socialize.entity.factory.SocializeObjectFactory;
+import com.socialize.entity.SocializeObjectFactory;
 import com.socialize.error.SocializeException;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.sample.mocks.MockSocializeSession;

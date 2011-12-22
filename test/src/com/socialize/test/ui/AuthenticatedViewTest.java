@@ -45,11 +45,6 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 			}
 
 			@Override
-			public SocializeUI getSocializeUI() {
-				return socializeUI;
-			}
-
-			@Override
 			public SocializeService getSocialize() {
 				return socialize;
 			}

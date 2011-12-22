@@ -106,19 +106,19 @@
 	</bean>
 	
 	<bean id="dialogFactory" class="com.socialize.util.DialogFactory"/>
-	<bean id="userAuthDataFactory" class="com.socialize.entity.factory.UserAuthDataFactory"/>
-	<bean id="statsFactory" class="com.socialize.entity.factory.StatsFactory"/>
+	<bean id="userAuthDataFactory" class="com.socialize.entity.UserAuthDataFactory"/>
+	<bean id="statsFactory" class="com.socialize.entity.StatsFactory"/>
 	
-	<bean id="userFactory" class="com.socialize.entity.factory.UserFactory">
+	<bean id="userFactory" class="com.socialize.entity.UserFactory">
 		<property name="statsFactory" ref="statsFactory"/>
 		<property name="userAuthDataFactory" ref="userAuthDataFactory"/>
 	</bean>
 
-	<bean id="applicationFactory" class="com.socialize.entity.factory.ApplicationFactory"/>
+	<bean id="applicationFactory" class="com.socialize.entity.ApplicationFactory"/>
 	
 	<bean id="responseFactory" class="com.socialize.api.DefaultSocializeResponseFactory"/>
 	
-	<bean id="errorFactory" class="com.socialize.entity.factory.ErrorFactory"/>
+	<bean id="errorFactory" class="com.socialize.entity.ErrorFactory"/>
 	
 	<bean id="clientFactory" class="com.socialize.net.DefaultHttpClientFactory">
 		<init-method name="init">
@@ -191,19 +191,16 @@
 		</init-method>
 	</bean>
 	
-	<!-- Deprecated 
 	<bean id="socializeApi" class="com.socialize.api.SocializeApi" abstract="true">
 		<property name="responseFactory" ref="responseFactory"/>
-		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
 		<property name="config" ref="config"/>
 		<property name="logger" ref="logger"/>
 		<property name="authProviders" ref="authProviders"/>
 		<property name="httpUtils" ref="httpUtils"/>
 		<property name="locationProvider" ref="locationProvider"/>
 	</bean>
-	-->
 	
-	<bean id="socializeActionFactory" class="com.socialize.entity.factory.SocializeActionFactory" abstract="true">
+	<bean id="socializeActionFactory" class="com.socialize.entity.SocializeActionFactory" abstract="true">
 		<property name="logger" ref="logger"/>
 		<property name="applicationFactory" ref="applicationFactory"/>
 		<property name="userFactory" ref="userFactory"/>
@@ -216,6 +213,15 @@
 		singleton="false">
 		<constructor-arg ref="drawables"/>
 	</bean>
+	
+	
+	<bean 
+		id="facebookWallPoster" 
+		class="com.socialize.networks.facebook.DefaultFacebookWallPoster">
+		<property name="logger" ref="logger"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+	</bean>	
 	
 	
 <!-- OAUTH -->
@@ -232,7 +238,7 @@
 
 <!-- Comment API -->
 
-	<bean id="commentFactory" class="com.socialize.entity.factory.CommentFactory" extends="socializeActionFactory"/>
+	<bean id="commentFactory" class="com.socialize.entity.CommentFactory" extends="socializeActionFactory"/>
 	
 	<bean id="commentRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
 		<constructor-arg ref="oauthSigner"/>
@@ -254,7 +260,7 @@
 
 <!-- Entity API -->
 
-	<bean id="entityFactory" class="com.socialize.entity.factory.EntityFactory"/>
+	<bean id="entityFactory" class="com.socialize.entity.EntityFactory"/>
 	
 	<bean id="entityRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
 		<constructor-arg ref="oauthSigner"/>
@@ -274,7 +280,7 @@
 
 <!-- Like API -->
 
-	<bean id="likeFactory" class="com.socialize.entity.factory.LikeFactory" extends="socializeActionFactory"/>
+	<bean id="likeFactory" class="com.socialize.entity.LikeFactory" extends="socializeActionFactory"/>
 	
 	<bean id="likeRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
 		<constructor-arg ref="oauthSigner"/>
@@ -294,7 +300,7 @@
 
 <!-- View API -->
 
-	<bean id="viewFactory" class="com.socialize.entity.factory.ViewFactory" extends="socializeActionFactory"/>
+	<bean id="viewFactory" class="com.socialize.entity.ViewFactory" extends="socializeActionFactory"/>
 	
 	<bean id="viewRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
 		<constructor-arg ref="oauthSigner"/>
@@ -314,7 +320,7 @@
 
 <!-- Share API -->
 
-	<bean id="shareFactory" class="com.socialize.entity.factory.ShareFactory" extends="socializeActionFactory"/>
+	<bean id="shareFactory" class="com.socialize.entity.ShareFactory" extends="socializeActionFactory"/>
 	
 	<bean id="shareRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
 		<constructor-arg ref="oauthSigner"/>
@@ -357,7 +363,7 @@
 
 	<bean 
 		id="activityFactory" 
-		class="com.socialize.entity.factory.GenericActionFactory" 
+		class="com.socialize.entity.GenericActionFactory" 
 		extends="socializeActionFactory">
 		
 		<property name="logger" ref="logger"/>
@@ -378,7 +384,7 @@
 		<property name="requestFactory" ref="activityRequestFactory"/>
 	</bean>
 	
-	<bean id="activitySystem" class="com.socialize.api.action.UserActivityApi" extends="socializeApi">
+	<bean id="activitySystem" class="com.socialize.api.action.SocializeActivitySystem" extends="socializeApi">
 		<constructor-arg ref="activityProvider"/>
 	</bean>
 	

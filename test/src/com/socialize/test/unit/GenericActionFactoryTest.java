@@ -27,12 +27,12 @@ import org.json.JSONObject;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.entity.Comment;
-import com.socialize.entity.factory.CommentFactory;
-import com.socialize.entity.factory.GenericActionFactory;
-import com.socialize.entity.factory.LikeFactory;
-import com.socialize.entity.factory.ShareFactory;
-import com.socialize.entity.factory.SocializeActionFactory;
-import com.socialize.entity.factory.ViewFactory;
+import com.socialize.entity.CommentFactory;
+import com.socialize.entity.GenericActionFactory;
+import com.socialize.entity.LikeFactory;
+import com.socialize.entity.ShareFactory;
+import com.socialize.entity.SocializeActionFactory;
+import com.socialize.entity.ViewFactory;
 import com.socialize.test.SocializeUnitTest;
 
 /**

@@ -36,7 +36,6 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookWallPoster;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 import com.socialize.ui.dialog.AlertDialogFactory;
@@ -136,7 +135,7 @@ public class FacebookShareClickListener extends BaseShareClickListener {
 		
 		final ProgressDialog dialog = progressDialogFactory.show(parent, "Share", "Sharing to Facebook...");
 		
-		String appId = getSocialize().getProperty(SocializeConfig.FACEBOOK_APP_ID);
+		String appId = getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
 		
 		facebookWallPoster.post(parent, appId, linkName, body, link, caption, new SocialNetworkListener() {
 			@Override
@@ -181,10 +180,6 @@ public class FacebookShareClickListener extends BaseShareClickListener {
 	@Override
 	protected ShareType getShareType() {
 		return ShareType.FACEBOOK;
-	}
-	
-	protected SocializeUI getSocializeUI() {
-		return SocializeUI.getInstance();
 	}
 	
 	protected SocializeService getSocialize() {

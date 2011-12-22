@@ -226,10 +226,6 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 		
 		PublicView activity = new PublicView(getActivity()) {
 
-			@Override
-			public SocializeUI getSocializeUI() {
-				return socializeUI;
-			}
 		};
 		
 		activity.initSocialize(listener);
@@ -289,11 +285,6 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 		@Override
 		public void doSocializeInit(SocializeInitListener listener) {
 			super.doSocializeInit(listener);
-		}
-
-		@Override
-		public SocializeUI getSocializeUI() {
-			return super.getSocializeUI();
 		}
 
 		@Override

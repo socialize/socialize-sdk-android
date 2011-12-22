@@ -19,63 +19,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test.unit;
+package com.socialize.entity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.entity.Application;
-import com.socialize.entity.ApplicationFactory;
 
 /**
  * @author Jason Polites
  *
  */
-
-public class ApplicationFactoryTest extends AbstractSocializeObjectFactoryTest<Application, ApplicationFactory> {
-
-	final String mockName = "test name";
+public class ApplicationFactory extends SocializeObjectFactory<Application> {
 	
-	@Override
-	protected void setupToJSONExpectations() throws JSONException {
-		AndroidMock.expect(object.getName()).andReturn(mockName);
-		AndroidMock.expect(json.put("name", mockName)).andReturn(json);
+	public ApplicationFactory() {
+		super();
 	}
 
 	@Override
-	protected void doToJSONVerify() {}
-
-	@Override
-	protected void setupFromJSONExpectations() throws Exception {
-		AndroidMock.expect(json.has("name")).andReturn(true);
-		AndroidMock.expect(json.getString("name")).andReturn(mockName);
-		object.setName(mockName);
+	public Object instantiateObject(JSONObject object) {
+		return new Application();
 	}
 
 	@Override
-	protected void doFromJSONVerify() {}
-
-	@UsesMocks(Application.class)
-	@Override
-	protected Class<Application> getObjectClass() {
-		return Application.class;
+	protected void postFromJSON(JSONObject object, Application entry) throws JSONException {
+		if(object.has("name")) {
+			entry.setName(object.getString("name"));
+		}
 	}
 
 	@Override
-	protected ApplicationFactory createFactory() {
-		return new ApplicationFactory() {
-			@Override
-			public Application instantiateObject(JSONObject json) {
-				return object;
-			}
-
-			@Override
-			public JSONObject instantiateJSON() {
-				return json;
-			}
-		};
+	protected void postToJSON(Application entry, JSONObject object) throws JSONException {
+		object.put("name", entry.getName());
 	}
-
 }

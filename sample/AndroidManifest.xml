@@ -33,10 +33,13 @@
 		
 	    <!-- Required for UI tests -->
 	    <activity android:name="com.socialize.sample.ui.SampleActivity"/>
+	    <activity android:name="com.socialize.sample.ui.SampleActivity2"/>
 	    <activity android:name="com.socialize.sample.ui.EmptyActivity"/>
 	    <activity android:name="com.socialize.sample.ui.SampleSocializeActivity"/>
+	    <activity android:name="com.socialize.sample.ui.ActionBarAutoActivity2"/>
 	    <activity android:name="com.socialize.sample.ui.ActionBarAutoActivity"/>
 	    <activity android:name="com.socialize.sample.ui.ActionBarManualActivity"/>
+	    <activity android:name="com.socialize.sample.ui.ActionBarManualActivity2"/>
 	    <activity android:name="com.socialize.sample.ui.ActionBarPagerActivity"/>
 	    
 	    <!-- Activities Required by Socialize UI -->

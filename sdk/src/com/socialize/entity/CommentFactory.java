@@ -19,27 +19,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity.factory;
+package com.socialize.entity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.socialize.entity.Like;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
  *
  */
-public class LikeFactory extends SocializeActionFactory<Like> {
+public class CommentFactory extends SocializeActionFactory<Comment> {
 	
 	@Override
-	protected void postFromJSON(JSONObject object, Like like) throws JSONException {}
+	protected void postFromJSON(JSONObject object, Comment comment) throws JSONException {
+		final String attr = "text";
+		if(object.has(attr) && !object.isNull(attr)) {
+			comment.setText(object.getString(attr));
+		}
+		else {
+			if(logger != null && logger.isWarnEnabled()) {
+				logger.warn("Attribute [" +
+						attr +
+						"] not found in [" +
+						comment.getClass().getSimpleName() +
+						"]");
+			}
+		}
+	}
 
 	@Override
-	protected void postToJSON(Like comment, JSONObject object) throws JSONException {}
+	protected void postToJSON(Comment comment, JSONObject object) throws JSONException {
+		String text = comment.getText();
+		if(!StringUtils.isEmpty( text )) {
+			object.put("text", text);
+		}
+	}
 
 	@Override
 	public Object instantiateObject(JSONObject object) {
-		return new Like();
+		return new Comment();
 	}
 }

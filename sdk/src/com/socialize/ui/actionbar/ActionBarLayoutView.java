@@ -29,6 +29,7 @@ import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Entity;
+import com.socialize.entity.EntityStats;
 import com.socialize.entity.Like;
 import com.socialize.entity.View;
 import com.socialize.error.SocializeApiError;
@@ -41,7 +42,6 @@ import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareDestination;
 import com.socialize.networks.ShareOptions;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.actionbar.OnActionBarEventListener.ActionBarEvent;
 import com.socialize.ui.cache.CacheableEntity;
 import com.socialize.ui.cache.EntityCache;
@@ -83,6 +83,8 @@ public class ActionBarLayoutView extends BaseView {
 	
 	private ActionBarView actionBarView;
 	
+	private int localLikeAdjust = 0;
+	
 	final String loadingText = "...";
 	
 	private OnActionBarEventListener onActionBarEventListener;
@@ -93,6 +95,8 @@ public class ActionBarLayoutView extends BaseView {
 	}
 	
 	public void init() {
+		
+		localLikeAdjust = 0;
 		
 		if(logger != null && logger.isInfoEnabled()) {
 			logger.info("init called on " + getClass().getSimpleName());
@@ -151,7 +155,7 @@ public class ActionBarLayoutView extends BaseView {
 				if(onActionBarEventListener != null) {
 					onActionBarEventListener.onClick(actionBarView, ActionBarEvent.COMMENT);
 				}
-				SocializeUI.getInstance().showCommentView(getActivity(), actionBarView.getEntity());
+				Socialize.getSocializeUI().showCommentView(getActivity(), actionBarView.getEntity());
 			}
 		});
 		
@@ -298,7 +302,8 @@ public class ActionBarLayoutView extends BaseView {
 					@Override
 					public void onDelete() {
 						localEntity.setLiked(false);
-						localEntity.getEntity().setLikes(localEntity.getEntity().getLikes()-1);
+						localLikeAdjust--;
+//						localEntity.getEntity().setLikes(localEntity.getEntity().getLikes()-1);
 						setEntityData(localEntity);
 						button.hideLoading();
 						
@@ -328,7 +333,8 @@ public class ActionBarLayoutView extends BaseView {
 					
 					@Override
 					public void onCreate(Like entity) {
-						localEntity.getEntity().setLikes(localEntity.getEntity().getLikes()+1);
+						localLikeAdjust++;
+//						localEntity.getEntity().setLikes(localEntity.getEntity().getLikes()+1);
 						localEntity.setLiked(true);
 						localEntity.setLikeId(entity.getId());
 						button.hideLoading();
@@ -400,11 +406,14 @@ public class ActionBarLayoutView extends BaseView {
 		this.localEntity = ce;
 		
 		Entity entity = ce.getEntity();
+		EntityStats stats = entity.getEntityStats();
 		
-		viewsItem.setText(getCountText(entity.getViews()));
-		commentsItem.setText(getCountText(entity.getComments()));
-		likesItem.setText(getCountText(entity.getLikes()));
-		sharesItem.setText(getCountText(entity.getShares()));
+		if(stats != null) {
+			viewsItem.setText(getCountText(stats.getViews()));
+			commentsItem.setText(getCountText(stats.getComments()));
+			likesItem.setText(getCountText(stats.getLikes() + localLikeAdjust));
+			sharesItem.setText(getCountText(stats.getShares()));
+		}
 		
 		if(ce.isLiked()) {
 			likeButton.setText("Unlike");

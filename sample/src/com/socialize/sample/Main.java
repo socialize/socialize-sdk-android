@@ -33,7 +33,9 @@ import android.widget.Button;
 
 import com.socialize.Socialize;
 import com.socialize.sample.ui.SampleActivity;
+import com.socialize.sample.ui.SampleActivity2;
 
+@SuppressWarnings("deprecation")
 public class Main extends Activity {
 	
     @Override
@@ -44,6 +46,7 @@ public class Main extends Activity {
         
         Button btn = (Button) findViewById(R.id.btnSample);
         Button btnUI = (Button) findViewById(R.id.btnSampleSocializeUI);
+        Button btnUI2 = (Button) findViewById(R.id.btnSampleSocializeUI2);
         
         btn.setOnClickListener(new OnClickListener() {
 			@Override
@@ -58,14 +61,15 @@ public class Main extends Activity {
 				Intent i = new Intent(Main.this, SampleActivity.class);
 				startActivity(i);
 			}
-		});        
+		}); 
         
-//        btnMock.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				startSocialize(true);
-//			}
-//		});
+        btnUI2.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(Main.this, SampleActivity2.class);
+				startActivity(i);
+			}
+		});          
     }
 
 	public void onBackPressed() {

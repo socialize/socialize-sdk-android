@@ -21,9 +21,9 @@
  */
 package com.socialize.ui.share;
 
+import com.socialize.Socialize;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.User;
-import com.socialize.ui.SocializeUI;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.StringUtils;
 
@@ -42,7 +42,7 @@ public class ShareMessageBuilder {
 	public String buildShareSubject(String entityKey, String entityName) {
 		
 		StringBuilder builder = new StringBuilder();
-		SocializeSession session = getSocializeUI().getSocialize().getSession();
+		SocializeSession session = Socialize.getSocialize().getSession();
 		
 		User currentUser = null;
 		
@@ -143,10 +143,6 @@ public class ShareMessageBuilder {
 
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
 		this.deviceUtils = deviceUtils;
-	}
-	
-	protected SocializeUI getSocializeUI() {
-		return SocializeUI.getInstance();
 	}
 	
 	protected String getNewLine(boolean html) {

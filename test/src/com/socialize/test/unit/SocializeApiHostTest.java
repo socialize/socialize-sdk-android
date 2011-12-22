@@ -27,12 +27,12 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeApiHost;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
+import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeActivitySystem;
 import com.socialize.api.action.SocializeCommentSystem;
 import com.socialize.api.action.SocializeEntitySystem;
 import com.socialize.api.action.SocializeLikeSystem;
 import com.socialize.api.action.SocializeShareSystem;
-import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeUserSystem;
 import com.socialize.api.action.SocializeViewSystem;
 import com.socialize.auth.AuthProviderData;
@@ -62,6 +62,7 @@ import com.socialize.util.DeviceUtils;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class SocializeApiHostTest extends SocializeUnitTest {
 
 	@SuppressWarnings("unchecked")

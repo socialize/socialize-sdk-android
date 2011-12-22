@@ -21,6 +21,11 @@
  */
 package com.socialize;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.socialize.listener.SocializeListener;
+
 import android.content.Context;
 
 /**
@@ -31,8 +36,23 @@ public class Socialize {
 	
 	// This will be set during the build process
 	public static final String VERSION = "1.2.1";
-
+	
+	public static final String ENTITY_OBJECT = "socialize.entity";
+	
+	@Deprecated
+	public static final String ENTITY_KEY = "socialize.entity.key";
+	
+	@Deprecated
+	public static final String ENTITY_NAME = "socialize.entity.name";
+	
+	public static final Map<String, SocializeListener> STATIC_LISTENERS = new HashMap<String, SocializeListener>();
+	public static final String COMMENT_ID = "socialize.comment.id";
+	public static final String LOG_KEY = "Socialize";
+	public static final String USER_ID = "socialize.user.id";
+	public static final String DEFAULT_USER_ICON = "default_user_icon.png";
+	
 	private static final SocializeServiceImpl instance = new SocializeServiceImpl();
+	private static final SocializeSystem system = new SocializeSystem();
 
 	private Socialize() {
 		super();
@@ -54,5 +74,13 @@ public class Socialize {
 
 	public static final SocializeService getSocialize() {
 		return instance;
+	}
+	
+	public static final SocializeUI getSocializeUI() {
+		return instance;
+	}
+	
+	public static final SocializeSystem getSystem() {
+		return system;
 	}
 }

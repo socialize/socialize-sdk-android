@@ -8,8 +8,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import com.socialize.Socialize;
 import com.socialize.log.SocializeLogger;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.view.EntityView;
 import com.socialize.util.Drawables;
 
@@ -57,7 +57,7 @@ public class ProfileView extends EntityView {
 
 	@Override
 	protected String[] getEntityKeys() {
-		return new String[]{SocializeUI.USER_ID};
+		return new String[]{Socialize.USER_ID};
 	}
 	
 	/**

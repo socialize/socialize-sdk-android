@@ -32,7 +32,6 @@ import android.widget.Toast;
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.auth.AuthProviderType;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.SocializeButton;
@@ -254,8 +253,4 @@ public class CommentEntryView extends BaseView {
 	protected EditText getCommentField() {
 		return commentField;
 	}
-
-	protected SocializeUI getSocializeUI() {
-		return SocializeUI.getInstance();
-	}	
 }

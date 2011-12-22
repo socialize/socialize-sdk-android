@@ -30,11 +30,11 @@ import org.json.JSONObject;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.entity.Stats;
+import com.socialize.entity.StatsFactory;
 import com.socialize.entity.User;
 import com.socialize.entity.UserAuthData;
-import com.socialize.entity.factory.StatsFactory;
-import com.socialize.entity.factory.UserAuthDataFactory;
-import com.socialize.entity.factory.UserFactory;
+import com.socialize.entity.UserAuthDataFactory;
+import com.socialize.entity.UserFactory;
 
 /**
  * @author Jason Polites

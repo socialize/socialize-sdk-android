@@ -6,34 +6,36 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.socialize.Socialize;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.Share;
 import com.socialize.sample.R;
 import com.socialize.ui.SocializeEntityLoader;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 
-@Deprecated
-public class ActionBarAutoActivity extends ActionBarActivity {
+public class ActionBarAutoActivity2 extends ActionBarActivity2 {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState, String entityKey, String entityName, boolean isEntityKeyUrl) {
+	protected void onCreate(Bundle savedInstanceState, String entityKey, String entityName) {
 		ActionBarOptions options = new ActionBarOptions();
-		options.setEntityName(entityName);
-		options.setEntityKeyUrl(isEntityKeyUrl);
 		options.setAddScrollView(true);
 		
-		SocializeUI.getInstance().setEntityLoader(new SocializeEntityLoader() {
+		Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
 			@Override
 			public void loadEntity(Activity activity, Entity entity) {
 				Toast.makeText(activity, "Clicked on entity with key: " + entity.getKey(), Toast.LENGTH_SHORT).show();
 			}
 		});
-		View actionBarWrapped = SocializeUI.getInstance().showActionBar(this, R.layout.action_bar_auto, entityKey, options, new ActionBarListener() {
+		
+		Entity entity = new Entity();
+		entity.setKey(entityKey);
+		entity.setName(entityName);
+		
+		View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.action_bar_auto, entity, options, new ActionBarListener() {
 			
 			@Override
 			public void onCreate(ActionBarView view) {

@@ -33,14 +33,14 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Application;
+import com.socialize.entity.ApplicationFactory;
 import com.socialize.entity.Entity;
+import com.socialize.entity.EntityFactory;
 import com.socialize.entity.SocializeAction;
+import com.socialize.entity.SocializeActionFactory;
+import com.socialize.entity.SocializeObjectFactory;
 import com.socialize.entity.User;
-import com.socialize.entity.factory.ApplicationFactory;
-import com.socialize.entity.factory.EntityFactory;
-import com.socialize.entity.factory.SocializeActionFactory;
-import com.socialize.entity.factory.SocializeObjectFactory;
-import com.socialize.entity.factory.UserFactory;
+import com.socialize.entity.UserFactory;
 import com.socialize.test.SocializeActivityTest;
 
 public abstract class AbstractSocializeActionFactoryTest<T extends SocializeAction, F extends SocializeActionFactory<T>> extends SocializeActivityTest {

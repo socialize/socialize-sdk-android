@@ -1,6 +1,5 @@
 package com.socialize.sample.ui;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -14,19 +13,23 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.socialize.Socialize;
+import com.socialize.entity.Entity;
 import com.socialize.sample.R;
-import com.socialize.ui.SocializeUI;
-import com.socialize.ui.SocializeUIBeanOverrider;
 
-@Deprecated
-public class SampleActivity extends Activity {
+@SuppressWarnings("deprecation")
+public class SampleActivity2 extends SampleActivity {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		setContentView(R.layout.ui_main);
+		setContentView(R.layout.ui_main2);
 		
 		final EditText txtEntity = (EditText) findViewById(R.id.txtEntity);
+		final EditText txtEntityName = (EditText) findViewById(R.id.txtEntityName);
+		
+		final Entity entity = new Entity();
+		entity.setKey(txtEntity.getText().toString());
+		entity.setName(txtEntityName.getText().toString());
 		
 		final EditText txtFB = (EditText) findViewById(R.id.txtFBId);
 		final CheckBox chkSSO = (CheckBox) findViewById(R.id.chkFacebook);
@@ -40,11 +43,11 @@ public class SampleActivity extends Activity {
 		btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				SocializeUI.getInstance().destroy(SampleActivity.this, true);
+				Socialize.getSocialize().destroy(true);
 				setupOverrides();
-				SocializeUI.getInstance().setFacebookAppId(txtFB.getText().toString());
-				SocializeUI.getInstance().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
-				SocializeUI.getInstance().showCommentView(SampleActivity.this, txtEntity.getText().toString());
+				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
+				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
+				Socialize.getSocializeUI().showCommentView(SampleActivity2.this, entity);
 			}
 		});
 		
@@ -58,8 +61,8 @@ public class SampleActivity extends Activity {
 					@Override
 					protected Void doInBackground(Void... params) {
 						try {
-							Socialize.getSocialize().init(SampleActivity.this);
-							Socialize.getSocialize().clearSessionCache(SampleActivity.this);
+							Socialize.getSocialize().init(SampleActivity2.this);
+							Socialize.getSocialize().clearSessionCache(SampleActivity2.this);
 						} 
 						finally {
 							Socialize.getSocialize().destroy();
@@ -80,10 +83,13 @@ public class SampleActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				setupOverrides();
-				Intent intent = new Intent(SampleActivity.this, ActionBarAutoActivity.class);
-				SocializeUI.getInstance().setEntityKey(SampleActivity.this, intent, txtEntity.getText().toString());
-				SocializeUI.getInstance().setFacebookAppId(txtFB.getText().toString());
-				SocializeUI.getInstance().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
+				Intent intent = new Intent(SampleActivity2.this, ActionBarAutoActivity2.class);
+				
+				intent.putExtra(ActionBarAutoActivity2.ENTITY_KEY, entity.getKey());
+				intent.putExtra(ActionBarAutoActivity2.ENTITY_NAME, entity.getName());
+				
+				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
+				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				startActivity(intent);
 			}
 		});
@@ -92,10 +98,12 @@ public class SampleActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				setupOverrides();
-				Intent intent = new Intent(SampleActivity.this, ActionBarManualActivity.class);
-				SocializeUI.getInstance().setEntityKey(SampleActivity.this, intent, txtEntity.getText().toString());
-				SocializeUI.getInstance().setFacebookAppId(txtFB.getText().toString());
-				SocializeUI.getInstance().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
+				Intent intent = new Intent(SampleActivity2.this, ActionBarManualActivity2.class);
+				intent.putExtra(ActionBarAutoActivity2.ENTITY_KEY, entity.getKey());
+				intent.putExtra(ActionBarAutoActivity2.ENTITY_NAME, entity.getName());
+				
+				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
+				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				startActivity(intent);
 			}
 		});
@@ -104,10 +112,12 @@ public class SampleActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				setupOverrides();
-				Intent intent = new Intent(SampleActivity.this, ActionBarPagerActivity.class);
-				SocializeUI.getInstance().setEntityKey(SampleActivity.this, intent, txtEntity.getText().toString());
-				SocializeUI.getInstance().setFacebookAppId(txtFB.getText().toString());
-				SocializeUI.getInstance().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
+				Intent intent = new Intent(SampleActivity2.this, ActionBarPagerActivity.class);
+				intent.putExtra(ActionBarAutoActivity2.ENTITY_KEY, entity.getKey());
+				intent.putExtra(ActionBarAutoActivity2.ENTITY_NAME, entity.getName());
+				
+				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
+				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				startActivity(intent);
 			}
 		});
@@ -115,28 +125,5 @@ public class SampleActivity extends Activity {
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow( txtEntity.getWindowToken(), 0);
 		imm.hideSoftInputFromWindow( getWindow().getDecorView().getWindowToken(), 0);
-	}
-	
-	protected void setupOverrides() {
-		
-		final CheckBox chkMockFB = (CheckBox) findViewById(R.id.chkMockFB);
-		final CheckBox chkMockSocialize = (CheckBox) findViewById(R.id.chkMockSocialize);
-		
-		SocializeUIBeanOverrider overrider = new SocializeUIBeanOverrider();
-		
-		if(chkMockFB.isChecked()) {
-			if(chkMockSocialize.isChecked()) {
-				overrider.setBeanOverrides("socialize_ui_mock_beans.xml", "socialize_ui_mock_socialize_beans.xml");
-			}
-			else {
-				overrider.setBeanOverrides("socialize_ui_mock_beans.xml");
-			}
-		}
-		else if(chkMockSocialize.isChecked()) {
-			overrider.setBeanOverrides("socialize_ui_mock_socialize_beans.xml");
-		}
-		else {
-			overrider.setBeanOverrides((String[]) null);
-		}
 	}
 }

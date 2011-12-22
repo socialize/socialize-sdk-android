@@ -19,12 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity.factory;
+package com.socialize.entity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.socialize.entity.Share;
 import com.socialize.util.StringUtils;
 
 /**

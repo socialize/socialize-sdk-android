@@ -46,7 +46,6 @@ import com.socialize.facebook.Facebook;
 import com.socialize.facebook.FacebookError;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetworkListener;
-import com.socialize.ui.SocializeUI;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
@@ -133,7 +132,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		String caption = "Download the app now to join the conversation.";
 		String linkName = deviceUtils.getAppName();
 		String link = deviceUtils.getMarketUrl(false);
-		String appId = getSocialize().getProperty(SocializeConfig.FACEBOOK_APP_ID);
+		String appId = getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
 		
 		if(!StringUtils.isEmpty(appId)) {
 			post(parent, appId, linkName, message, link, caption, listener);
@@ -246,11 +245,6 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		return entity.getKey().toLowerCase().trim().startsWith("http://");
 	}
 
-	// So we can mock
-	protected SocializeUI getSocializeUI() {
-		return SocializeUI.getInstance();
-	}
-	
 	// So we can mock
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();

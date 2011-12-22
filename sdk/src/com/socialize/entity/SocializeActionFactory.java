@@ -19,17 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity.factory;
+package com.socialize.entity;
 
 import java.text.ParseException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.socialize.entity.Application;
-import com.socialize.entity.Entity;
-import com.socialize.entity.SocializeAction;
-import com.socialize.entity.User;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.StringUtils;
 
@@ -60,8 +56,13 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			Long date = from.getDate();
 			
 			if(entityObject != null) {
-				JSONObject entity = entityFactory.toJSON(entityObject);
-				to.put("entity", entity);
+				if(!StringUtils.isEmpty(entityObject.getName()) && !StringUtils.isEmpty(entityObject.getKey())) {
+					JSONObject entity = entityFactory.toJSON(entityObject);
+					to.put("entity", entity);
+				}
+				else if(!StringUtils.isEmpty(entityKey)) {
+					to.put("entity_key", entityKey);
+				}
 			}
 			else if(!StringUtils.isEmpty(entityKey)) {
 				to.put("entity_key", entityKey);

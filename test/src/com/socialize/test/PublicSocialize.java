@@ -21,8 +21,6 @@
  */
 package com.socialize.test;
 
-import java.util.Set;
-
 import android.content.Context;
 
 import com.socialize.SocializeServiceImpl;
@@ -40,11 +38,6 @@ import com.socialize.util.ResourceLocator;
  *
  */
 public class PublicSocialize extends SocializeServiceImpl {
-
-	@Override
-	public Set<String> getPropertiesToBeRemoved() {
-		return super.getPropertiesToBeRemoved();
-	}
 
 	@Override
 	public SocializeIOC newSocializeIOC() {

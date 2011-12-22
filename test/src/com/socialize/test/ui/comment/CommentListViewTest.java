@@ -235,12 +235,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 			protected SocializeService getSocialize() {
 				return socializeService;
 			}
-			
-			@Override
-			protected SocializeUI getSocializeUI() {
-				return socializeUI;
-			}
-			
 		};
 		
 		view.setAuthRequestDialogFactory(authRequestDialogFactory);

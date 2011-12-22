@@ -60,7 +60,6 @@ import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.test.PublicSocialize;
 import com.socialize.test.SocializeUnitTest;
-import com.socialize.ui.SocializeUI;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.ResourceLocator;
 
@@ -68,6 +67,7 @@ import com.socialize.util.ResourceLocator;
  * @author Jason Polites
  *
  */
+@SuppressWarnings("deprecation")
 @UsesMocks({IOCContainer.class, SocializeApiHost.class, SocializeSession.class, SocializeLogger.class, SocializeInitializationAsserter.class})
 public class SocializeServiceTest extends SocializeUnitTest {
 	
@@ -1168,10 +1168,10 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		String consumerKey = "foo";
 		String consumerSecret = "bar";
 
-		socializeUI.setSocializeCredentials(consumerKey, consumerSecret);
+		socializeUI.getConfig().setSocializeCredentials(consumerKey, consumerSecret);
 
-		assertEquals(consumerKey, socializeUI.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY));
-		assertEquals(consumerSecret, socializeUI.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET));
+		assertEquals(consumerKey, socializeUI.getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY));
+		assertEquals(consumerSecret, socializeUI.getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET));
 	}
 
 	public void testSetFacebookUserCredentials() {
@@ -1180,10 +1180,10 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		String userId = "foo";
 		String token = "bar";
 
-		socializeUI.setFacebookUserCredentials(userId, token);
+		socializeUI.getConfig().setFacebookUserCredentials(userId, token);
 
-		assertEquals(userId, socializeUI.getProperty(SocializeConfig.FACEBOOK_USER_ID));
-		assertEquals(token, socializeUI.getProperty(SocializeConfig.FACEBOOK_USER_TOKEN));
+		assertEquals(userId, socializeUI.getConfig().getProperty(SocializeConfig.FACEBOOK_USER_ID));
+		assertEquals(token, socializeUI.getConfig().getProperty(SocializeConfig.FACEBOOK_USER_TOKEN));
 	}
 
 	public void testSetFacebookAppId() {
@@ -1191,8 +1191,8 @@ public class SocializeServiceTest extends SocializeUnitTest {
 
 		String appId = "foobar";
 
-		socializeUI.setFacebookAppId(appId);
+		socializeUI.getConfig().setFacebookAppId(appId);
 
-		assertEquals(appId, socializeUI.getProperty(SocializeConfig.FACEBOOK_APP_ID));
+		assertEquals(appId, socializeUI.getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID));
 	}
 }

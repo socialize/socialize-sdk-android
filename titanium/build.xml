@@ -1,4 +1,4 @@
-<project name="Socialize" default="dist">
+<project name="socialize-titanium" default="dist">
 	<description>
 		Ant build script for Titanium Android module socialize
 	</description>

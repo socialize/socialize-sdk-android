@@ -39,6 +39,7 @@ import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 
+@Deprecated
 public class SocializeUI {
 
 	private static final SocializeUI instance = new SocializeUI();
@@ -49,8 +50,11 @@ public class SocializeUI {
 	public static final String COMMENT_ID = "socialize.comment.id";
 	
 	public static final String ENTITY = "socialize.entity";
+	
+	@Deprecated
 	public static final String ENTITY_KEY = "socialize.entity.key";
 	
+	@Deprecated
 	public static final String ENTITY_NAME = "socialize.entity.name";
 	
 	@Deprecated
@@ -64,8 +68,6 @@ public class SocializeUI {
 	
 	private IOCContainer container;
 	private Drawables drawables;
-//	private final Properties customProperties = new Properties();
-//	private final Set<String> toBeRemoved = new HashSet<String>();
 	private String[] beanOverrides;
 	
 	private SocializeEntityLoader entityLoader;
@@ -78,12 +80,13 @@ public class SocializeUI {
 		return Socialize.getSocialize();
 	}
 	
+	@Deprecated
 	public void initSocialize(Context context) {
 		String[] config = getConfig();
 		getSocialize().init(context,config);
-//		getSocialize().getConfig().merge(customProperties, getPropertiesToBeRemoved());
 	}
 	
+	@Deprecated
 	public void initSocializeAsync(Context context, final SocializeInitListener listener) {
 		
 		String[] config = getConfig();
@@ -97,7 +100,6 @@ public class SocializeUI {
 			
 			@Override
 			public void onInit(Context context, IOCContainer container) {
-//				getSocialize().getConfig().merge(customProperties, getPropertiesToBeRemoved());
 				listener.onInit(context, container);
 			}
 		};
@@ -106,11 +108,7 @@ public class SocializeUI {
 		
 	}
 	
-//	// So we can mock
-//	protected Set<String> getPropertiesToBeRemoved() {
-//		return toBeRemoved;
-//	}
-	
+	@Deprecated
 	protected String[] getConfig() {
 		String[] config = null;
 		
@@ -167,8 +165,8 @@ public class SocializeUI {
 	 */
 	@Deprecated
 	public void setSocializeCredentials(String consumerKey, String consumerSecret) {
-		Socialize.getSocialize().setProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY, consumerKey);
-		Socialize.getSocialize().setProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET, consumerSecret);
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY, consumerKey);
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET, consumerSecret);
 	}
 	
 	/**
@@ -178,13 +176,13 @@ public class SocializeUI {
 	 */
 	@Deprecated
 	public void setFacebookUserCredentials(String userId, String token) {
-		Socialize.getSocialize().setProperty(SocializeConfig.FACEBOOK_USER_ID, userId);
-		Socialize.getSocialize().setProperty(SocializeConfig.FACEBOOK_USER_TOKEN, token);
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_USER_ID, userId);
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_USER_TOKEN, token);
 	}
 	
 	@Deprecated
 	public void setDebugMode(boolean debug) {
-		Socialize.getSocialize().setProperty(SocializeConfig.SOCIALIZE_DEBUG_MODE, String.valueOf(debug));
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_DEBUG_MODE, String.valueOf(debug));
 	}
 	
 	/**
@@ -194,12 +192,12 @@ public class SocializeUI {
 	 */
 	@Deprecated
 	public void setFacebookAppId(String appId) {
-		Socialize.getSocialize().setFacebookAppId(appId);
+		Socialize.getSocialize().getConfig().setFacebookAppId(appId);
 	}
 	
 	@Deprecated
 	protected void setCustomProperty(String key, String value) {
-		Socialize.getSocialize().setProperty(key, value);
+		Socialize.getSocialize().getConfig().setProperty(key, value);
 	}
 	
 	/**
@@ -208,7 +206,7 @@ public class SocializeUI {
 	 */
 	@Deprecated
 	public void setFacebookSingleSignOnEnabled(boolean enabled) {
-		Socialize.getSocialize().setFacebookSingleSignOnEnabled(enabled);
+		Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(enabled);
 		
 //		setCustomProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, String.valueOf(enabled));
 	}
@@ -422,6 +420,7 @@ public class SocializeUI {
 		return new ScrollView(parent);
 	}
 	
+	@Deprecated
 	public void setEntityName(Activity context, String name) {
 		Intent intent = context.getIntent();
 		Bundle extras = getExtras(intent);
@@ -460,24 +459,26 @@ public class SocializeUI {
 		setEntityKey(context, entityKey);
 	}
 	
+	@Deprecated
 	public void setEntityKey(Activity context, Intent intent, String entityKey) {
 		Bundle extras = getExtras(intent);
 		extras.putString(ENTITY_KEY, entityKey);
 		intent.putExtras(extras);
 	}
 	
+	@Deprecated
 	public void setEntityKey(Activity context, String entityKey) {
 		Intent intent = context.getIntent();
 		setEntityKey(context, intent, entityKey);
 	}	
 	
+	@Deprecated
 	public void setUserId(Activity context, String userId) {
 		Intent intent = context.getIntent();
 		Bundle extras = getExtras(intent);
 		extras.putString(USER_ID, userId);
 		intent.putExtras(extras);
 	}
-	
 	
 	@Deprecated
 	public View showActionBar(Activity parent, int resId, String entityKey) {
@@ -529,20 +530,24 @@ public class SocializeUI {
 		return showActionBar(parent, resId, Entity.newInstance(entityKey, entityName), options, listener);
 	}
 
+	@Deprecated
 	public View showActionBar(Activity parent, View original, Entity entity) {
 		return showActionBar(parent, original, entity, true, null);
 	}
 	
+	@Deprecated
 	public View showActionBar(Activity parent, View original, Entity entity, ActionBarListener listener) {
-		return showActionBar(parent, original, entity, true, listener);
+		return Socialize.getSocializeUI().showActionBar(parent, original, entity, listener);
 	}
 	
+	@Deprecated
 	public View showActionBar(Activity parent, View original, Entity entity, ActionBarOptions options, ActionBarListener listener) {
-		return showActionBar(parent, original, entity, options.isAddScrollView(), listener);
+		return Socialize.getSocializeUI().showActionBar(parent, original, entity, options, listener);
 	}
 	
+	@Deprecated
 	public View showActionBar(Activity parent, int resId, Entity entity) {
-		return showActionBar(parent, resId, entity, true, null);
+		return Socialize.getSocializeUI().showActionBar(parent, resId, entity);
 	}
 	
 	public View showActionBar(Activity parent, int resId, Entity entity, ActionBarListener listener) {
@@ -556,9 +561,6 @@ public class SocializeUI {
 	public View showActionBar(Activity parent, int resId, Entity entity, ActionBarOptions options, ActionBarListener listener) {
 		return showActionBar(parent, resId, entity, options.isAddScrollView(), listener);
 	}
-	
-	
-	
 	
 	protected View showActionBar(Activity parent, int resId, Entity entity, boolean addScrollView, ActionBarListener listener) {
 		View original = inflateView(parent, resId);

@@ -26,8 +26,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
+import com.socialize.Socialize;
 import com.socialize.log.SocializeLogger;
-import com.socialize.ui.SocializeUI;
 
 /**
  * Singleton (application scoped) container to retain a reference to a listener between activities.
@@ -40,7 +40,7 @@ public class ListenerHolder {
 	private SocializeLogger logger;
 	
 	public void init() {
-		Map<String, SocializeListener> statics = SocializeUI.STATIC_LISTENERS;
+		Map<String, SocializeListener> statics = Socialize.STATIC_LISTENERS;
 		if(!statics.isEmpty()) {
 			Set<Entry<String, SocializeListener>> entrySet = statics.entrySet();
 			for (Entry<String, SocializeListener> entry : entrySet) {

@@ -23,49 +23,56 @@ package com.socialize.entity;
 
 import com.socialize.util.StringUtils;
 
+
 /**
  * @author Jason Polites
  *
  */
 public class Entity extends SocializeObject {
-
+	
 	private String key;
-	private Integer views;
-	private Integer likes;
-	private Integer comments;
-	private Integer shares;
 	private String name;
+	private EntityStats entityStats;
+	
+	@Deprecated
+	public Integer getViews() {
+		return (entityStats == null) ? 0 : entityStats.getViews();
+	}
+	
+	@Deprecated
+	public void setViews(Integer views) {}
+	
+	@Deprecated
+	public Integer getLikes() {
+		return (entityStats == null) ? 0 : entityStats.getLikes();
+	}
+	
+	@Deprecated
+	public void setLikes(Integer likes) {}
+	
+	@Deprecated
+	public Integer getComments() {
+		return (entityStats == null) ? 0 : entityStats.getComments();
+	}
+	
+	@Deprecated
+	public void setComments(Integer comments) {}
+	
+	@Deprecated
+	public Integer getShares() {
+		return (entityStats == null) ? 0 : entityStats.getShares();
+	}
+	
+	@Deprecated
+	public void setShares(Integer shares) {}
 	
 	public String getKey() {
 		return key;
 	}
 	public void setKey(String key) {
 		this.key = key;
-	}
-	public Integer getViews() {
-		return views;
-	}
-	public void setViews(Integer views) {
-		this.views = views;
-	}
-	public Integer getLikes() {
-		return likes;
-	}
-	public void setLikes(Integer likes) {
-		this.likes = likes;
-	}
-	public Integer getComments() {
-		return comments;
-	}
-	public void setComments(Integer comments) {
-		this.comments = comments;
-	}
-	public Integer getShares() {
-		return shares;
-	}
-	public void setShares(Integer shares) {
-		this.shares = shares;
-	}
+	}	
+	
 	public String getName() {
 		return name;
 	}
@@ -73,6 +80,13 @@ public class Entity extends SocializeObject {
 		this.name = name;
 	}
 	
+	public String getDisplayName() {
+		if(StringUtils.isEmpty(name)) {
+			return key;
+		}
+		return name;
+	}
+
 	@Override
 	public int hashCode() {
 		return super.hashCode();
@@ -82,12 +96,24 @@ public class Entity extends SocializeObject {
 	public boolean equals(Object obj) {
 		return super.equals(obj);
 	}
+
+	public EntityStats getEntityStats() {
+		return entityStats;
+	}
 	
-	public String getDisplayName() {
-		if(StringUtils.isEmpty(name)) {
-			return key;
-		}
-		return name;
+	protected void setEntityStats(EntityStats stats) {
+		this.entityStats = stats;
+	}
+
+	/**
+	 * Convenience method to create a new Entity based on a key only.
+	 * @param key
+	 * @return
+	 * @deprecated use newInstance(String key, String name)
+	 */
+	@Deprecated
+	public static Entity fromkey(String key) {
+		return newInstance(key, null);
 	}
 	
 	public static Entity newInstance(String key, String name) {
@@ -96,18 +122,4 @@ public class Entity extends SocializeObject {
 		e.setName(name);
 		return e;
 	}
-
-	/**
-	 * Convenience method to create a new Entity based on a key only.
-	 * @param key
-	 * @return
-	 * @deprecated
-	 */
-	@Deprecated
-	public static Entity fromkey(String key) {
-		Entity e = new Entity();
-		e.setKey(key);
-		return e;
-	}
-
 }

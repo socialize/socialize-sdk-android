@@ -24,6 +24,7 @@ package com.socialize.config;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map.Entry;
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
@@ -56,7 +57,7 @@ public class SocializeConfig {
 	public static final String FACEBOOK_USER_ID = "facebook.user.id";
 	public static final String FACEBOOK_USER_TOKEN = "facebook.user.token";
 	
-	private Properties properties;
+	private Properties properties = new Properties();
 	private SocializeLogger logger;
 	private ResourceLocator resourceLocator;
 	
@@ -71,6 +72,9 @@ public class SocializeConfig {
 	public static final String HTTP_SOCKET_TIMEOUT = "http.socket.timeout";
 	
 	public static final int MAX_LIST_RESULTS = 100;
+	
+	private final Properties customProperties = new Properties();
+	private final Set<String> toBeRemoved = new HashSet<String>();
 	
 	public SocializeConfig() {
 		super();
@@ -155,20 +159,37 @@ public class SocializeConfig {
 		}
 	}
 	
-	public String getProperty(String key) {
-		return getProperty(key, null);
+
+	/**
+	 * Sets a custom property.  This will override settings in socialize.properties.
+	 * @param key
+	 * @param value
+	 */
+	public void setProperty(String key, String value) {
+		if(!StringUtils.isEmpty(value)) {
+			customProperties.put(key, value);
+		}
+		else {
+			customProperties.remove(key);
+			toBeRemoved.add(key);
+		}
 	}
 	
-	public String getProperty(String key, String defaultValue) {
-		String val = properties.getProperty(key);
-		if(!StringUtils.isEmpty(val)) {
-			return val;
+	/**
+	 * Returns a property from socialize.properties.
+	 * @param key
+	 * @return
+	 */
+	public String getProperty(String key) {
+		String property = customProperties.getProperty(key);
+		if(StringUtils.isEmpty(property)) {
+			property = getLocalProperty(key);
 		}
-		return defaultValue;
-	}
+		return property;
+	}	
 	
 	public int getIntProperty(String key, int defaultValue) {
-		String val = properties.getProperty(key);
+		String val = getProperty(key);
 		if(!StringUtils.isEmpty(val)) {
 			return Integer.parseInt(val);
 		}
@@ -176,18 +197,73 @@ public class SocializeConfig {
 	}
 	
 	public boolean getBooleanProperty(String key, boolean defaultValue) {
-		String val = properties.getProperty(key);
+		String val = getProperty(key);
 		if(!StringUtils.isEmpty(val)) {
 			return Boolean.parseBoolean(val);
 		}
 		return defaultValue;
 	}
 	
-	public void setProperty(String key, String value) {
-		if(properties == null) {
-			properties = createProperties();
+	/**
+	 * Sets the Facebook ID for FB authentication.  
+	 * @param appId Your Facebook App Id, obtained from https://developers.facebook.com/
+	 * @see https://developers.facebook.com/
+	 */
+	public void setFacebookAppId(String appId) {
+		setProperty(SocializeConfig.FACEBOOK_APP_ID, appId);
+	}
+
+	/**
+	 * Enables/disables Single Sign On for Facebook.
+	 * @param enabled True if enabled.  Default is true.
+	 */
+	public void setFacebookSingleSignOnEnabled(boolean enabled) {
+		setProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, String.valueOf(enabled));
+	}
+
+	/**
+	 * Sets the FB credentials for the current user if available.
+	 * @param userId
+	 * @param token
+	 */
+	public void setFacebookUserCredentials(String userId, String token) {
+		setProperty(SocializeConfig.FACEBOOK_USER_ID, userId);
+		setProperty(SocializeConfig.FACEBOOK_USER_TOKEN, token);
+	}
+	
+	/**
+	 * Sets the Socialize credentials for your App.
+	 * @param consumerKey Your consumer key, obtained via registration at http://getsocialize.com
+	 * @param consumerSecret Your consumer secret, obtained via registration at http://getsocialize.com
+	 */
+	public void setSocializeCredentials(String consumerKey, String consumerSecret) {
+		setProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY, consumerKey);
+		setProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET, consumerSecret);
+	}	
+	
+	protected String getLocalProperty(String key) {
+		return getLocalProperty(key, null);
+	}
+	
+	protected String getLocalProperty(String key, String defaultValue) {
+		String val = properties.getProperty(key);
+		if(!StringUtils.isEmpty(val)) {
+			return val;
 		}
-		properties.put(key, value);
+		return defaultValue;
+	}
+	
+	// So we can mock
+	protected Set<String> getPropertiesToBeRemoved() {
+		return toBeRemoved;
+	}
+	
+	public void merge(SocializeConfig config) {
+		merge(config.getProperties(), null);
+	}
+	
+	public void merge() {
+		merge(customProperties, toBeRemoved);
 	}
 	
 	/**

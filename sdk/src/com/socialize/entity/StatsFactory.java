@@ -19,59 +19,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity.factory;
+package com.socialize.entity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.socialize.entity.SocializeObject;
 
 /**
  * @author Jason Polites
  *
- * @param <T>
  */
-public abstract class SocializeObjectFactory<T extends SocializeObject> extends JSONFactory<T> {
+public class StatsFactory extends SocializeObjectFactory<Stats> {
 	
+	private static final String LIKES = "likes";
+	private static final String SHARES = "shares";
+	private static final String COMMENTS = "comments";
+	private static final String VIEWS = "views";
+
 	@Override
-	protected void fromJSON(JSONObject from, T to) throws JSONException {
-		if(from.has("id") && !from.isNull("id")) {
-			to.setId(from.getLong("id"));
-		}
-		postFromJSON(from, to);
+	public Object instantiateObject(JSONObject object) {
+		return new Stats();
 	}
 
 	@Override
-	protected void toJSON(T from, JSONObject to) throws JSONException {
-		Long id = from.getId();
-		if(id != null) {
-			to.put("id", id);
+	protected void postFromJSON(JSONObject from, Stats to) throws JSONException {
+
+		if(from.has(LIKES) && !from.isNull(LIKES)) {
+			to.setLikes(from.getInt(LIKES));
 		}
-		postToJSON(from, to);
+		if(from.has(SHARES) && !from.isNull(SHARES)) {
+			to.setShares(from.getInt(SHARES));
+		}
+		if(from.has(COMMENTS) && !from.isNull(COMMENTS)) {
+			to.setComments(from.getInt(COMMENTS));
+		}
+		if(from.has(VIEWS) && !from.isNull(VIEWS)) {
+			to.setViews(from.getInt(VIEWS));
+		}
+	}
+
+	@Override
+	protected void postToJSON(Stats from, JSONObject to) throws JSONException {
+		// Never sent
 	}
 	
-	protected abstract void postFromJSON(JSONObject from, T to) throws JSONException;
-	
-	protected abstract void postToJSON(T from, JSONObject to) throws JSONException;
-	
-	protected String getString(JSONObject obj, String key) throws JSONException {
-		if(obj.has(key) && !obj.isNull(key)) {
-			return obj.getString(key);
-		}
-		return null;
-	}
-	
-	protected boolean getBoolean(JSONObject obj, String key, boolean defaultValue) throws JSONException {
-		if(obj.has(key) && !obj.isNull(key)) {
-			return obj.getBoolean(key);
-		}
-		return defaultValue;
-	}	
-	
-	protected int getInt(JSONObject obj, String key) throws JSONException {
-		if(obj.has(key) && !obj.isNull(key)) {
-			return obj.getInt(key);
-		}
-		return 0;
-	}
 }

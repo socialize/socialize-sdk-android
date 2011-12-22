@@ -46,6 +46,9 @@ public class User extends SocializeObject {
 	private String profilePicData;
 	
 	private boolean autoPostToFacebook = true;
+	
+	private boolean autoPostLikesFacebook;
+	private boolean autoPostCommentsFacebook;
 	private boolean shareLocation = true;
 	
 	public void merge(User user) {
@@ -175,12 +178,30 @@ public class User extends SocializeObject {
 		this.authData = authData;
 	}
 
+	@Deprecated
 	public boolean isAutoPostToFacebook() {
 		return autoPostToFacebook;
 	}
 
+	@Deprecated
 	public void setAutoPostToFacebook(boolean autoPostToFacebook) {
 		this.autoPostToFacebook = autoPostToFacebook;
+	}
+
+	public boolean isAutoPostLikesFacebook() {
+		return autoPostLikesFacebook;
+	}
+
+	public void setAutoPostLikesFacebook(boolean autoPostLikesFacebook) {
+		this.autoPostLikesFacebook = autoPostLikesFacebook;
+	}
+
+	public boolean isAutoPostCommentsFacebook() {
+		return autoPostCommentsFacebook;
+	}
+
+	public void setAutoPostCommentsFacebook(boolean autoPostCommentsFacebook) {
+		this.autoPostCommentsFacebook = autoPostCommentsFacebook;
 	}
 
 	public boolean isShareLocation() {

@@ -10,7 +10,6 @@ import com.socialize.android.ioc.IOCContainer;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.SocializeBaseView;
 
 public abstract class AuthenticatedView extends SocializeBaseView {
@@ -31,7 +30,7 @@ public abstract class AuthenticatedView extends SocializeBaseView {
 	public final void onViewLoad(IOCContainer container) {
 		super.onViewLoad(container);
 		
-		getSocializeUI().initUI(container);
+//		getSocializeUI().initUI(container);
 		
 		setErrorHandler((SocializeErrorHandler) container.getBean("socializeUIErrorHandler"));
 		
@@ -63,20 +62,21 @@ public abstract class AuthenticatedView extends SocializeBaseView {
 	}
 	
 	protected String getConsumerKey(IOCContainer container) {
-		return getSocialize().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		return getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 	}
 	
 	protected String getConsumerSecret(IOCContainer container) {
-		return getSocialize().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+		return getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 	}
 	
 	protected String getFacebookAppId(IOCContainer container) {
-		return getSocialize().getProperty(SocializeConfig.FACEBOOK_APP_ID);
+		return getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
 	}
 
-	public SocializeUI getSocializeUI() {
-		return SocializeUI.getInstance();
-	}
+//	@Deprecated
+//	public SocializeUI getSocializeUI() {
+//		return SocializeUI.getInstance();
+//	}
 
 	public SocializeService getSocialize() {
 		return Socialize.getSocialize();

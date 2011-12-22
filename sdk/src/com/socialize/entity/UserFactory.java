@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity.factory;
+package com.socialize.entity;
 
 import java.util.List;
 
@@ -27,9 +27,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.socialize.entity.Stats;
-import com.socialize.entity.User;
-import com.socialize.entity.UserAuthData;
 
 /**
  * @author Jason Polites

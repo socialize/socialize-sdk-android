@@ -22,7 +22,6 @@ import com.socialize.listener.comment.CommentListListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareDestination;
 import com.socialize.networks.ShareOptions;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.auth.AuthRequestDialogFactory;
 import com.socialize.ui.auth.AuthRequestListener;
 import com.socialize.ui.dialog.DialogFactory;
@@ -40,10 +39,6 @@ public class CommentListView extends BaseView {
 	private int defaultGrabLength = 20;
 	private CommentAdapter commentAdapter;
 	private boolean loading = true; // Default to true
-	
-//	private String entityKey;
-//	private String entityName;
-//	private boolean useLink;
 	
 	private Entity entity;
 	
@@ -77,13 +72,13 @@ public class CommentListView extends BaseView {
 	private OnCommentViewActionListener onCommentViewActionListener;
 	
 	public CommentListView(Context context, Entity entity) {
-		this(context);
+		super(context);
 		this.entity = entity;
 	}
 	
 	@Deprecated
 	public CommentListView(Context context, String entityKey, String entityName, boolean useLink) {
-		this(context, Entity.newInstance(entityName, null));
+		this(context, Entity.newInstance(entityKey, entityName));
 	}
 	
 	@Deprecated
@@ -625,10 +620,6 @@ public class CommentListView extends BaseView {
 		}
 	}
 	
-	protected SocializeUI getSocializeUI() {
-		return SocializeUI.getInstance();
-	}
-
 	protected RelativeLayout getLayoutAnchor() {
 		return layoutAnchor;
 	}

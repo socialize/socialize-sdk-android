@@ -63,6 +63,7 @@ public interface UserSystem {
 	 * @param encodedImage Base64 encoded PNG image data.
 	 * @param listener
 	 */
+	@Deprecated
 	public void saveUserProfile(Context context, SocializeSession session, String firstName, String lastName, String encodedImage, UserListener listener);
 
 }

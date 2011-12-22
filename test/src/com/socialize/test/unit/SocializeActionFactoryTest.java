@@ -27,7 +27,7 @@ import org.json.JSONObject;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.entity.SocializeAction;
-import com.socialize.entity.factory.SocializeActionFactory;
+import com.socialize.entity.SocializeActionFactory;
 
 public class SocializeActionFactoryTest extends AbstractSocializeActionFactoryTest<SocializeAction, SocializeActionFactory<SocializeAction>> {
 

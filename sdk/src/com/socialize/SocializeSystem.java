@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,47 +19,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity.factory;
+package com.socialize;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.socialize.entity.Comment;
 import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
  *
  */
-public class CommentFactory extends SocializeActionFactory<Comment> {
+public class SocializeSystem {
+	private String[] beanOverrides;
 	
-	@Override
-	protected void postFromJSON(JSONObject object, Comment comment) throws JSONException {
-		final String attr = "text";
-		if(object.has(attr) && !object.isNull(attr)) {
-			comment.setText(object.getString(attr));
-		}
-		else {
-			if(logger != null && logger.isWarnEnabled()) {
-				logger.warn("Attribute [" +
-						attr +
-						"] not found in [" +
-						comment.getClass().getSimpleName() +
-						"]");
+	public String[] getBeanConfig() {
+		String[] config = null;
+		
+		if(!StringUtils.isEmpty(beanOverrides)) {
+			config = new String[beanOverrides.length + 2];
+			config[0] = "socialize_beans.xml";
+			config[1] = "socialize_ui_beans.xml";
+			for (int i = 0; i < beanOverrides.length; i++) {
+				config[i+2] = beanOverrides[i];
 			}
 		}
-	}
-
-	@Override
-	protected void postToJSON(Comment comment, JSONObject object) throws JSONException {
-		String text = comment.getText();
-		if(!StringUtils.isEmpty( text )) {
-			object.put("text", text);
+		else {
+			config = new String[]{"socialize_beans.xml", "socialize_ui_beans.xml"};
 		}
+		
+		return config;
 	}
-
-	@Override
-	public Object instantiateObject(JSONObject object) {
-		return new Comment();
+	
+	/**
+	 * EXPERT ONLY (Not documented)
+	 * @param beanOverride
+	 */
+	void setBeanOverrides(String...beanOverrides) {
+		this.beanOverrides = beanOverrides;
 	}
 }

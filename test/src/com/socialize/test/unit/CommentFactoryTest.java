@@ -27,7 +27,7 @@ import org.json.JSONObject;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.entity.Comment;
-import com.socialize.entity.factory.CommentFactory;
+import com.socialize.entity.CommentFactory;
 
 /**
  * 

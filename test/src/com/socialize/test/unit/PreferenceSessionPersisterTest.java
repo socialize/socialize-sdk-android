@@ -36,7 +36,7 @@ import com.socialize.api.SocializeSessionFactory;
 import com.socialize.api.SocializeSessionImpl;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
-import com.socialize.entity.factory.UserFactory;
+import com.socialize.entity.UserFactory;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.mock.MockEditor;
 
