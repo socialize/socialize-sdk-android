@@ -21,18 +21,57 @@
  */
 package com.socialize.entity;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
  *
  */
-public class EntityFactory extends AbstractEntityFactory<Entity> {
+public abstract class AbstractEntityFactory<T extends Entity> extends SocializeObjectFactory<T> {
 	
+	private static final String LIKES = "likes";
+	private static final String SHARES = "shares";
+	private static final String COMMENTS = "comments";
+	private static final String VIEWS = "views";
+	
+	public AbstractEntityFactory() {
+		super();
+	}
+
 	@Override
-	public Object instantiateObject(JSONObject object) {
-		return new Entity();
+	protected void postFromJSON(JSONObject object, T entry) throws JSONException {
+		entry.setName(getString(object, "name"));
+		entry.setKey(getString(object, "key"));
+		
+		EntityStatsImpl stats = newEntityStatsImpl();
+		
+		stats.setLikes(getInt(object, LIKES));
+		stats.setShares(getInt(object, SHARES));
+		stats.setComments(getInt(object, COMMENTS));
+		stats.setViews(getInt(object, VIEWS));
+		
+		entry.setEntityStats(stats);
+	}
+
+	@Override
+	protected void postToJSON(T entry, JSONObject object) throws JSONException {
+		String name = entry.getName();
+		String key = entry.getKey();
+		
+		if(!StringUtils.isEmpty(name)) {
+			object.put("name", name);
+		}
+		if(!StringUtils.isEmpty(key)) {
+			object.put("key", key);
+		}
+	}
+	
+	// So we can mock.
+	protected EntityStatsImpl newEntityStatsImpl() {
+		return new EntityStatsImpl();
 	}
 	
 }

@@ -26,13 +26,15 @@ import org.json.JSONObject;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.entity.Entity;
-import com.socialize.entity.EntityFactory;
+import com.socialize.entity.AbstractEntityFactory;
+import com.socialize.entity.EntityStatsImpl;
+import com.socialize.sample.mocks.MockEntity;
 
 /**
  * @author Jason Polites
  */
-public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<Entity, EntityFactory> {
+@UsesMocks({EntityStatsImpl.class})
+public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<MockEntity, AbstractEntityFactory<MockEntity>> {
 
 	final String mockName = "test name";
 	final String mockKey = "test key";
@@ -40,6 +42,8 @@ public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<Entity
 	final Integer mockShares = new Integer(2);
 	final Integer mockComments = new Integer(3);
 	final Integer mockViews = new Integer(4);
+	
+	protected EntityStatsImpl stats;
 	
 	@Override
 	protected void setupToJSONExpectations() throws JSONException {
@@ -52,8 +56,11 @@ public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<Entity
 	@Override
 	protected void doToJSONVerify() {}
 
+	
 	@Override
 	protected void setupFromJSONExpectations() throws Exception {
+		
+		stats = AndroidMock.createMock(EntityStatsImpl.class);
 
 		AndroidMock.expect(json.has("name")).andReturn(true);
 		AndroidMock.expect(json.has("key")).andReturn(true);
@@ -78,32 +85,38 @@ public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<Entity
 		
 		object.setName(mockName);
 		object.setKey(mockKey);
-		object.setLikes(mockLikes);
-		object.setShares(mockShares);
-		object.setViews(mockViews);
-		object.setComments(mockComments);
+		
+		stats.setLikes(mockLikes);
+		stats.setShares(mockShares);
+		stats.setViews(mockViews);
+		stats.setComments(mockComments);
 	}
 
 	@Override
 	protected void doFromJSONVerify() {}
 
-	@UsesMocks(Entity.class)
+	@UsesMocks(MockEntity.class)
 	@Override
-	protected Class<Entity> getObjectClass() {
-		return Entity.class;
+	protected Class<MockEntity> getObjectClass() {
+		return MockEntity.class;
 	}
 
 	@Override
-	protected EntityFactory createFactory() {
-		return new EntityFactory() {
+	protected AbstractEntityFactory<MockEntity> createFactory() {
+		return new AbstractEntityFactory<MockEntity>() {
 			@Override
-			public Entity instantiateObject(JSONObject json) {
+			public MockEntity instantiateObject(JSONObject json) {
 				return object;
 			}
 
 			@Override
 			public JSONObject instantiateJSON() {
 				return json;
+			}
+
+			@Override
+			protected EntityStatsImpl newEntityStatsImpl() {
+				return stats;
 			}
 		};
 	}

@@ -63,11 +63,13 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 		this.context = context;
 	}
 	
+	@Deprecated
 	@Override
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
 		authenticate(context, consumerKey, consumerSecret, listener, sessionConsumer);
 	}
 
+	@Deprecated
 	@Override
 	public void authenticate(String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
 		authenticate(context, consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, do3rdPartyAuth);

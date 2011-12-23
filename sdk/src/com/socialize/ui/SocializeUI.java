@@ -82,6 +82,7 @@ public class SocializeUI {
 	
 	@Deprecated
 	public void initSocialize(Context context) {
+		
 		String[] config = getConfig();
 		getSocialize().init(context,config);
 	}

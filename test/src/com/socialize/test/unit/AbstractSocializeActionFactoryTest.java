@@ -66,7 +66,8 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 	protected Double lon = new Double(20);
 	protected Date date = new Date(1311193971000L);
 	protected Long id = new Long(10000);
-	protected String entity_key = "foobar";
+	protected String entity_key = "foo";
+	protected String entity_name = "bar";
 	
 	protected final DateFormat DATE_FORMAT_STRING = new SimpleDateFormat(SocializeObjectFactory.DATE_FORMAT_STRING);
 	
@@ -90,7 +91,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		
 		AndroidMock.replay(application);
 		AndroidMock.replay(user);
-		AndroidMock.replay(entity);
+
 		
 		appFactoryMock = AndroidMock.createMock(ApplicationFactory.class);
 		userFactoryMock = AndroidMock.createMock(UserFactory.class);
@@ -131,7 +132,12 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		AndroidMock.expect(action.getLon()).andReturn(lon);
 		AndroidMock.expect(action.getDate()).andReturn(date.getTime());
 		AndroidMock.expect(action.isLocationShared()).andReturn(true);
+		
+		AndroidMock.expect(entity.getKey()).andReturn(entity_key);
+		AndroidMock.expect(entity.getName()).andReturn(entity_name);
+		
 
+		AndroidMock.replay(entity);
 		AndroidMock.replay(jsonApplication);
 		AndroidMock.replay(jsonUser);
 		AndroidMock.replay(jsonEntity);
@@ -148,6 +154,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		
 		doToJSONVerify();
 		
+		AndroidMock.verify(entity);
 		AndroidMock.verify(json);
 		AndroidMock.verify(action);
 	}

@@ -304,10 +304,12 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.asserter = container.getBean("initializationAsserter");
 				
 				SocializeConfig mainConfig = container.getBean("config");
-				mainConfig.merge(config);
-				this.config = mainConfig;
 				
+				mainConfig.merge(config);
+				
+				this.config = mainConfig;
 				this.initCount++;
+				
 				ActivityIOCProvider.getInstance().setContainer(container);
 			}
 			catch (Exception e) {
@@ -931,7 +933,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Deprecated
 	public void addEntity(String key, String name, EntityAddListener entityCreateListener) {
 		if(assertAuthenticated(entityCreateListener)) {
-			entitySystem.addEntity(session, key, name, entityCreateListener);
+			entitySystem.addEntity(session, Entity.newInstance(key, name), entityCreateListener);
 		}
 	}
 	
