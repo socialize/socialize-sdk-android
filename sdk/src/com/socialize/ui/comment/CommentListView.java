@@ -20,7 +20,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.log.SocializeLogger;
-import com.socialize.networks.ShareDestination;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.ShareOptions;
 import com.socialize.ui.auth.AuthRequestDialogFactory;
 import com.socialize.ui.auth.AuthRequestListener;
@@ -239,8 +239,8 @@ public class CommentListView extends BaseView {
 		
 		ShareOptions options = new ShareOptions();
 		
-		if(getSocialize().getSession().getUser().isAutoPostToFacebook()) {
-			options.setShareTo(ShareDestination.FACEBOOK);
+		if(autoPostToFacebook) {
+			options.setShareTo(SocialNetwork.FACEBOOK);
 		}		
 		
 		options.setShareLocation(shareLocation);
@@ -298,14 +298,9 @@ public class CommentListView extends BaseView {
 		SocializeSession session = getSocialize().getSession();
 		
 		if(session != null && session.getUser() != null) {
-			session.getUser().setAutoPostToFacebook(autoPostToFacebook);
+			session.getUser().setAutoPostCommentsFacebook(autoPostToFacebook);
 			session.getUser().setShareLocation(shareLocation);
 		}
-		
-//		if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) && autoPostToFacebook) {
-//			facebookWallPoster.postComment(getActivity(), entityKey, entityName, comment, useLink, null);
-//		}
-		
 	}
 	
 	public void reload() {

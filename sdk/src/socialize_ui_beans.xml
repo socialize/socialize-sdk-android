@@ -994,13 +994,10 @@
 		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>				
 	</bean>	
 	
-	<bean id="shareMessageBuilder" class="com.socialize.ui.share.ShareMessageBuilder">
-		<property name="deviceUtils" ref="deviceUtils"/>
-	</bean>	
-	
 	<bean id="shareClickListener" abstract="true">
 		<property name="logger" ref="logger"/>
 		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
+		<property name="errorHandler" ref="socializeUIErrorHandler"/>
 	</bean>
 	
 	<bean 
@@ -1008,12 +1005,9 @@
 		class="com.socialize.ui.share.FacebookShareClickListener" 
 		extends="shareClickListener"
 		singleton="false">
-		<property name="deviceUtils" ref="deviceUtils"/>
-		<property name="facebookWallPoster" ref="facebookWallPoster"/>
-		<property name="config" ref="config"/>
+		<property name="facebookSharer" ref="facebookSharer"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
 		<property name="alertDialogFactory" ref="alertDialogFactory"/>
-		<property name="logger" ref="logger"/>
 	</bean>
 		
 	<bean 

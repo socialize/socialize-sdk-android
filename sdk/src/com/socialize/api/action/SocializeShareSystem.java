@@ -23,7 +23,9 @@ package com.socialize.api.action;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import android.app.Activity;
 import android.location.Location;
 
 import com.socialize.api.SocializeApi;
@@ -31,6 +33,10 @@ import com.socialize.api.SocializeSession;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.listener.share.ShareListener;
+import com.socialize.log.SocializeLogger;
+import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.SocialNetworkSharer;
 import com.socialize.provider.SocializeProvider;
 
 /**
@@ -39,6 +45,9 @@ import com.socialize.provider.SocializeProvider;
 public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<Share>> implements ShareSystem {
 
 	public static final String ENDPOINT = "/share/";
+	
+	private Map<String, SocialNetworkSharer> sharers;
+	private SocializeLogger logger;
 	
 	public SocializeShareSystem(SocializeProvider<Share> provider) {
 		super(provider);
@@ -83,5 +92,39 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 	public void getSharesByUser(SocializeSession session, long userId, ShareListener listener) {
 		String endpoint = "/user/" + userId + ENDPOINT;
 		listAsync(session, endpoint, listener);
+	}
+
+	@Override
+	public void shareTo(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, SocialNetworkListener listener) {
+		SocialNetworkSharer sharer = getSharer(destination);
+		if(sharer != null) {
+			sharer.share(context, entity, comment, listener);
+		}
+		else {
+			if(logger != null) {
+				logger.warn("No sharer found for network type [" +
+						destination.name() +
+						"]");
+			}
+		}
+	}
+	
+	protected SocialNetworkSharer getSharer(SocialNetwork destination) {
+		SocialNetworkSharer sharer = null;
+		
+		if(sharers != null) {
+			sharer = sharers.get(destination.name().toLowerCase());
+		}
+		
+		return sharer;
+		
+	}
+
+	public void setSharers(Map<String, SocialNetworkSharer> sharers) {
+		this.sharers = sharers;
+	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
 	}	
 }

@@ -21,11 +21,14 @@
  */
 package com.socialize.api.action;
 
+import android.app.Activity;
 import android.location.Location;
 
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Entity;
 import com.socialize.listener.share.ShareListener;
+import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
 import com.socialize.util.DelegateOnly;
 
 /**
@@ -41,5 +44,16 @@ public interface ShareSystem {
 
 	@DelegateOnly
 	public void getSharesByUser(SocializeSession session, long userId, ShareListener listener);
+	
+	/**
+	 * Shares the given entity to the given social network
+	 * @param context The current context.
+	 * @param entity The entity to be shared.
+	 * @param comment The comment provided by the user.
+	 * @param location The location of the user (may be null)
+	 * @param destination The network on which to post the share.
+	 * @param listener A listener to handle callbacks from the post.
+	 */
+	public void shareTo(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, SocialNetworkListener listener);
 
 }

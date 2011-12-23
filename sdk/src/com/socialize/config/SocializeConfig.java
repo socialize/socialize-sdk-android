@@ -67,6 +67,8 @@ public class SocializeConfig {
 	public static final String LOG_TAG = "log.tag";
 	public static final String LOG_MSG = "log.msg.";
 	public static final String API_HOST = "api.host";
+	public static final String REDIRECT_HOST = "redirect.host";
+	
 	
 	public static final String HTTP_CONNECTION_TIMEOUT = "http.connection.timeout";
 	public static final String HTTP_SOCKET_TIMEOUT = "http.socket.timeout";

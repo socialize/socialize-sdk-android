@@ -22,57 +22,42 @@
 package com.socialize.ui.share;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.text.Html;
 import android.widget.EditText;
 
+import com.socialize.entity.Entity;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 
 /**
  * @author Jason Polites
+ *
  */
-public abstract class SimpleShareClickListener extends InternalShareClickListener {
+public abstract class InternalShareClickListener extends BaseShareClickListener {
 
-	public SimpleShareClickListener(ActionBarView actionBarView) {
-		super(actionBarView);
-	}
-
-	public SimpleShareClickListener(ActionBarView actionBarView, EditText commentView, OnActionBarEventListener onActionBarEventListener) {
+	public InternalShareClickListener(ActionBarView actionBarView, EditText commentView, OnActionBarEventListener onActionBarEventListener) {
 		super(actionBarView, commentView, onActionBarEventListener);
 	}
 
-	@Override
-	protected void doShare(Activity parent, String title, String subject, String body, String comment) {
-		Intent msg = getIntent();
-		msg.putExtra(Intent.EXTRA_TITLE, title);
-		
-		if(isHtml()) {
-			msg.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(body));
-		}
-		else {
-			msg.putExtra(Intent.EXTRA_TEXT, body);
-		}
-		
-		msg.putExtra(Intent.EXTRA_SUBJECT, subject);
-		parent.startActivity(Intent.createChooser(msg, title));
-	}
-	
-	protected Intent getIntent() {
-		Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
-		sendIntent.setType(getMimeType());
-		return sendIntent;
+	public InternalShareClickListener(ActionBarView actionBarView) {
+		super(actionBarView);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.socialize.ui.share.BaseShareClickListener#doShare(android.app.Activity, com.socialize.entity.Entity, java.lang.String)
+	 */
 	@Override
-	public boolean isAvailableOnDevice(Activity parent) {
-		return isAvailable(parent, getIntent());
-	}	
-	
-	@Override
-	protected boolean isIncludeSocialize() {
-		return true;
-	}
+	protected void doShare(Activity context, Entity entity, String comment) {
+		String title = "Share";
+		String subject = null;
+		String body = null;
+		if(isGenerateShareMessage()) {
+			subject = shareMessageBuilder.buildShareSubject(entity);
+			body = shareMessageBuilder.buildShareMessage(entity, comment, isHtml(), isIncludeSocialize());
+		}
 
-	protected abstract String getMimeType();
+		doShare(context, title, subject, body, comment);
+	}
+	
+	protected abstract void doShare(Activity parent, String title, String subject, String body, String comment);
+
 }

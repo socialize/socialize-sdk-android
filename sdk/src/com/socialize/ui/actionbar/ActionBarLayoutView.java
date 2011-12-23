@@ -40,8 +40,8 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
-import com.socialize.networks.ShareDestination;
 import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.actionbar.OnActionBarEventListener.ActionBarEvent;
 import com.socialize.ui.cache.CacheableEntity;
 import com.socialize.ui.cache.EntityCache;
@@ -52,7 +52,6 @@ import com.socialize.view.BaseView;
 
 /**
  * @author Jason Polites
- *
  */
 public class ActionBarLayoutView extends BaseView {
 
@@ -221,7 +220,7 @@ public class ActionBarLayoutView extends BaseView {
 	public void onViewLoad() {
 		super.onViewLoad();
 		
-		final Entity realEntity = actionBarView.getEntity();
+		final Entity userProvidedEntity = actionBarView.getEntity();
 		
 		ticker.startTicker();
 		
@@ -233,24 +232,24 @@ public class ActionBarLayoutView extends BaseView {
 			onActionBarEventListener.onLoad(actionBarView);
 		}				
 		
-		CacheableEntity entity = entityCache.get(realEntity.getKey());
+		CacheableEntity entity = entityCache.get(userProvidedEntity.getKey());
 		
 		if(entity == null) {
-			getSocialize().view(getActivity(), realEntity, new ViewAddListener() {
+			getSocialize().view(getActivity(), userProvidedEntity, new ViewAddListener() {
 				@Override
 				public void onError(SocializeException error) {
 					error.printStackTrace();
-					getEntityData(realEntity.getKey());
+					getEntityData(userProvidedEntity.getKey());
 				}
 				
 				@Override
 				public void onCreate(View entity) {
-					getEntityData(realEntity.getKey());
+					getEntityData(userProvidedEntity.getKey());
 				}
 			});
 		}
 		else {
-			getEntityData(realEntity.getKey());
+			getEntityData(userProvidedEntity.getKey());
 		}
 	}
 	
@@ -303,10 +302,8 @@ public class ActionBarLayoutView extends BaseView {
 					public void onDelete() {
 						localEntity.setLiked(false);
 						localLikeAdjust--;
-//						localEntity.getEntity().setLikes(localEntity.getEntity().getLikes()-1);
 						setEntityData(localEntity);
 						button.hideLoading();
-						
 						if(onActionBarEventListener != null) {
 							onActionBarEventListener.onPostUnlike(actionBarView);
 						}
@@ -317,11 +314,9 @@ public class ActionBarLayoutView extends BaseView {
 				// Like
 				ShareOptions options = new ShareOptions();
 				
-				if(getSocialize().getSession().getUser().isAutoPostToFacebook()) {
-					options.setShareTo(ShareDestination.FACEBOOK);
+				if(getSocialize().getSession().getUser().isAutoPostLikesFacebook()) {
+					options.setShareTo(SocialNetwork.FACEBOOK);
 				}
-				
-//				options.setShareFacebook(getSocialize().getSession().getUser().isAutoPostToFacebook());
 				
 				getSocialize().like(getActivity(), entity, options, new LikeAddListener() {
 					
@@ -334,7 +329,6 @@ public class ActionBarLayoutView extends BaseView {
 					@Override
 					public void onCreate(Like entity) {
 						localLikeAdjust++;
-//						localEntity.getEntity().setLikes(localEntity.getEntity().getLikes()+1);
 						localEntity.setLiked(true);
 						localEntity.setLikeId(entity.getId());
 						button.hideLoading();
@@ -345,10 +339,6 @@ public class ActionBarLayoutView extends BaseView {
 						}
 					}
 				});
-				
-//				if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) && getSocialize().getSession().getUser().isAutoPostToFacebook()) {
-//					facebookWallPoster.postLike(getActivity(), actionBarView.getEntityKey(), actionBarView.getEntityName(), null, actionBarView.isEntityKeyUrl(), null);
-//				}
 			}
 		}
 	}
@@ -406,6 +396,14 @@ public class ActionBarLayoutView extends BaseView {
 		this.localEntity = ce;
 		
 		Entity entity = ce.getEntity();
+		
+		// Set the entity back on the parent action bar
+		if(actionBarView.getEntity() != null) {
+			entity.mergeProperties(actionBarView.getEntity());
+		}
+		
+		actionBarView.setEntity(entity);
+		
 		EntityStats stats = entity.getEntityStats();
 		
 		if(stats != null) {

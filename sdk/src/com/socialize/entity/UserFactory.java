@@ -30,7 +30,6 @@ import org.json.JSONObject;
 
 /**
  * @author Jason Polites
- *
  */
 public class UserFactory extends SocializeObjectFactory<User> {
 	
@@ -48,7 +47,13 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	public static final String LARGE_IMAGE_URI = "large_image_uri";
 	public static final String STATS = "stats";
 	public static final String THIRD_PARTY_AUTH = "third_party_auth";
+	
+	@Deprecated
 	public static final String AUTO_POST_FACEBOOK = "auto_post_fb";
+	
+	public static final String AUTO_POST_LIKES_FACEBOOK = "auto_post_likes_fb";
+	public static final String AUTO_POST_COMMENTS_FACEBOOK = "auto_post_comments_fb";
+	
 	public static final String SHARE_LOCATION = "share_location";
 	
 	@Override
@@ -68,7 +73,8 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		user.setMediumImageUri(getString(object,MEDIUM_IMAGE_URI));
 		user.setLargeImageUri(getString(object,LARGE_IMAGE_URI));
 		user.setProfilePicData(getString(object,IMAGE_DATA));
-		user.setAutoPostToFacebook(getBoolean(object,AUTO_POST_FACEBOOK, true));
+		user.setAutoPostCommentsFacebook(getBoolean(object,AUTO_POST_COMMENTS_FACEBOOK, getBoolean(object,AUTO_POST_FACEBOOK, true)));
+		user.setAutoPostLikesFacebook(getBoolean(object,AUTO_POST_LIKES_FACEBOOK, getBoolean(object,AUTO_POST_FACEBOOK, true)));
 		user.setShareLocation(getBoolean(object,SHARE_LOCATION, true));
 		
 		if(object.has(STATS) && !object.isNull(STATS)) {
@@ -105,7 +111,8 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		object.put(SMALL_IMAGE_URI, user.getSmallImageUri());
 		object.put(MEDIUM_IMAGE_URI, user.getMediumImageUri());
 		object.put(LARGE_IMAGE_URI, user.getLargeImageUri());
-		object.put(AUTO_POST_FACEBOOK, user.isAutoPostToFacebook());
+		object.put(AUTO_POST_COMMENTS_FACEBOOK, user.isAutoPostCommentsFacebook());
+		object.put(AUTO_POST_LIKES_FACEBOOK, user.isAutoPostLikesFacebook());
 		object.put(SHARE_LOCATION, user.isShareLocation());
 
 		List<UserAuthData> authData = user.getAuthData();

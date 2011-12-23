@@ -38,9 +38,9 @@ public abstract class EntityView extends AuthenticatedView {
 			if(bundle != null) {
 				String[] entityKeys = getEntityKeys();
 				if(entityKeys != null && entityKeys.length > 0) {
-					Object[] values = new String[entityKeys.length];
+					Object[] values = new Object[entityKeys.length];
 					for (int i = 0; i < entityKeys.length; i++) {
-						values[i] = bundle.getString(entityKeys[i]);
+						values[i] = bundle.get(entityKeys[i]);
 					}
 					return getView(bundle, values);
 				}

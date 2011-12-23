@@ -1,8 +1,5 @@
 package com.socialize.ui.comment;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -19,7 +16,6 @@ import android.view.View;
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.entity.Entity;
-import com.socialize.entity.EntityFactory;
 import com.socialize.listener.ListenerHolder;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.view.EntityView;
@@ -46,22 +42,13 @@ public class CommentView extends EntityView {
 			
 			// TODO: always create?
 			if(commentListView == null) {
-				try {
-					EntityFactory entityFactory = container.getBean("entityFactory");
-					Entity entity = entityFactory.fromJSON(new JSONObject(entityKey[0].toString()));
-					
-					commentListView = container.getBean("commentList", entity);
-					
-					ListenerHolder holder  = container.getBean("listenerHolder");
-					
-					if(holder != null) {
-						OnCommentViewActionListener onCommentViewActionListener = holder.get(COMMENT_LISTENER);
-						commentListView.setOnCommentViewActionListener(onCommentViewActionListener);
-					}	
-				} 
-				catch (JSONException e) {
-					Log.e(SocializeLogger.LOG_TAG, "Invalid entity object", e);
-				}
+				Entity entity = (Entity) entityKey[0];
+				commentListView = container.getBean("commentList", entity);
+				ListenerHolder holder  = container.getBean("listenerHolder");
+				if(holder != null) {
+					OnCommentViewActionListener onCommentViewActionListener = holder.get(COMMENT_LISTENER);
+					commentListView.setOnCommentViewActionListener(onCommentViewActionListener);
+				}	
 			}
 			
 			return commentListView;

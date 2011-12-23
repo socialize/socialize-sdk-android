@@ -29,7 +29,7 @@ public class ShareOptions {
 	
 	private boolean shareLocation;
 	
-	private ShareDestination[] shareTo;
+	private SocialNetwork[] shareTo;
 	
 	private SocialNetworkListener listener;
 	
@@ -49,11 +49,11 @@ public class ShareOptions {
 		this.shareLocation = shareLocation;
 	}
 	
-	public ShareDestination[] getShareTo() {
+	public SocialNetwork[] getShareTo() {
 		return shareTo;
 	}
 
-	public void setShareTo(ShareDestination...shareTo) {
+	public void setShareTo(SocialNetwork...shareTo) {
 		this.shareTo = shareTo;
 	}
 
@@ -77,12 +77,12 @@ public class ShareOptions {
 	 */
 	@Deprecated
 	public void setShareFacebook(boolean autoPostToFacebook) {
-		setShareTo(ShareDestination.FACEBOOK);
+		setShareTo(SocialNetwork.FACEBOOK);
 	}
 	
-	public boolean isShareTo(ShareDestination destination) {
+	public boolean isShareTo(SocialNetwork destination) {
 		if(shareTo != null) {
-			for (ShareDestination d : shareTo) {
+			for (SocialNetwork d : shareTo) {
 				if(d.equals(destination)) {
 					return true;
 				}
@@ -94,6 +94,6 @@ public class ShareOptions {
 
 	@Deprecated
 	public boolean isShareFacebook() {
-		return isShareTo(ShareDestination.FACEBOOK);
+		return isShareTo(SocialNetwork.FACEBOOK);
 	}	
 }

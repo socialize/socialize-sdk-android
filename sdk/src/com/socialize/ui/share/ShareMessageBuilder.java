@@ -23,6 +23,8 @@ package com.socialize.ui.share;
 
 import com.socialize.Socialize;
 import com.socialize.api.SocializeSession;
+import com.socialize.config.SocializeConfig;
+import com.socialize.entity.Entity;
 import com.socialize.entity.User;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.StringUtils;
@@ -34,13 +36,31 @@ import com.socialize.util.StringUtils;
 public class ShareMessageBuilder {
 	
 	private DeviceUtils deviceUtils;
+	private SocializeConfig config;
 
 	public ShareMessageBuilder() {
 		super();
 	}
-
-	public String buildShareSubject(String entityKey, String entityName) {
+	
+	public String buildShareLink(Entity entity) {
+		if(entity.getId() != null) {
+			if(config != null && !StringUtils.isEmpty(config.getProperty(SocializeConfig.REDIRECT_HOST))) {
+				return config.getProperty(SocializeConfig.REDIRECT_HOST) + entity.getId();
+			}
+			else {
+				return "http://r.getsocialize.com/e/" + entity.getId();
+			}
+		}
+		else {
+			return entity.getKey();
+		}
+	}
+	
+	public String buildShareSubject(Entity entity) {
 		
+		String entityKey = entity.getKey();
+		String entityName = entity.getName();
+
 		StringBuilder builder = new StringBuilder();
 		SocializeSession session = Socialize.getSocialize().getSession();
 		
@@ -73,15 +93,26 @@ public class ShareMessageBuilder {
 		
 		return builder.toString();
 	}
+
+	@Deprecated
+	public String buildShareSubject(String entityKey, String entityName) {
+		return buildShareSubject(Entity.newInstance(entityKey, entityName));
+	}
 	
+	@Deprecated
 	public String buildShareMessage(String entityKey, String entityName, String comment, boolean html, boolean includeSocialize) {
+		return buildShareMessage(Entity.newInstance(entityKey, entityName), comment, html, includeSocialize);
+	}
+	
+	public String buildShareMessage(Entity entity, String comment, boolean html, boolean includeSocialize) {
+		
+		String entityKey = entity.getKey();
+		String entityName = entity.getName();
 		
 		StringBuilder builder = new StringBuilder();
 		
 		String entityDescription = null;
 		
-		boolean isUseLink = false;
-
 		if(!StringUtils.isEmpty(comment)) {
 			builder.append(comment);
 			builder.append(getNewLine(html));
@@ -89,20 +120,23 @@ public class ShareMessageBuilder {
 		}
 		
 		if(!StringUtils.isEmpty(entityKey)) {
-			if(isUseLink && html) {
+			if(html) {
 				builder.append("<a href=\"");
-				builder.append(entityKey);
+				builder.append(buildShareLink(entity));
 				builder.append("\">");
 			}
 			
 			if(!StringUtils.isEmpty(entityName)) {
 				builder.append(entityName);
 			}
-			else {
-				builder.append(entityKey);
+			
+			if(!html) {
+				builder.append(" - ");
 			}
 			
-			if(isUseLink && html) {
+			builder.append(buildShareLink(entity));
+			
+			if(html) {
 				builder.append("</a>");
 			}
 		}
@@ -145,6 +179,10 @@ public class ShareMessageBuilder {
 		this.deviceUtils = deviceUtils;
 	}
 	
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
+	}
+
 	protected String getNewLine(boolean html) {
 		if(html) {
 			return "<br/>";

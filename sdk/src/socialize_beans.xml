@@ -169,18 +169,16 @@
 		</property>
 	</bean>
 	
-<!-- 
-	Facebook 
--->
+<!-- Facebook -->
+	<bean id="shareMessageBuilder" class="com.socialize.ui.share.ShareMessageBuilder">
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="config" ref="config"/>
+	</bean>	
+
 	<bean id="facebookSessionStore" class="com.socialize.auth.facebook.FacebookSessionStore"/>
 	
 	<bean id="facebookUrlBuilder" class="com.socialize.auth.facebook.FacebookUrlBuilder"/>
 	 
-	<bean id="listenerHolder" class="com.socialize.listener.ListenerHolder">
-		<property name="logger" ref="logger"/>
-		<init-method name="init"/>
-	</bean>
-	
 	<bean id="facebookProvider" class="com.socialize.auth.facebook.FacebookAuthProvider">
 		<property name="logger" ref="logger"/>
 		<property name="drawables" ref="drawables"/>
@@ -189,6 +187,38 @@
 			<arg type="context"/>
 			<arg ref="listenerHolder"/>
 		</init-method>
+	</bean>
+	
+	<bean 
+		id="facebook" 
+		class="com.socialize.facebook.Facebook"
+		singleton="false">
+		<constructor-arg ref="drawables"/>
+	</bean>
+	
+	<bean 
+		id="facebookWallPoster" 
+		class="com.socialize.networks.facebook.DefaultFacebookWallPoster">
+		<property name="logger" ref="logger"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+	</bean>	
+	
+	<bean 
+		id="facebookSharer" 
+		class="com.socialize.networks.facebook.FacebookSharer">
+		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
+		<property name="config" ref="config"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="logger" ref="logger"/>
+		<property name="facebookWallPoster" ref="facebookWallPoster"/>
+	</bean>		
+	
+<!-- End Facebook -->
+
+	<bean id="listenerHolder" class="com.socialize.listener.ListenerHolder">
+		<property name="logger" ref="logger"/>
+		<init-method name="init"/>
 	</bean>
 	
 	<bean id="socializeApi" class="com.socialize.api.SocializeApi" abstract="true">
@@ -206,23 +236,7 @@
 		<property name="userFactory" ref="userFactory"/>
 		<property name="entityFactory" ref="entityFactory"/>
 	</bean>
-	
-	<bean 
-		id="facebook" 
-		class="com.socialize.facebook.Facebook"
-		singleton="false">
-		<constructor-arg ref="drawables"/>
-	</bean>
-	
-	
-	<bean 
-		id="facebookWallPoster" 
-		class="com.socialize.networks.facebook.DefaultFacebookWallPoster">
-		<property name="logger" ref="logger"/>
-		<property name="drawables" ref="drawables"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
-	</bean>	
-	
+
 	
 <!-- OAUTH -->
 	
@@ -334,6 +348,15 @@
 	
 	<bean id="shareSystem" class="com.socialize.api.action.SocializeShareSystem" extends="socializeApi">
 		<constructor-arg ref="shareProvider"/>
+		<property name="logger" ref="logger"/>
+		<property name="sharers">
+			<map>
+				<entry>
+					<key value="facebook"/> <!-- MUST be lower case -->
+					<value ref="facebookSharer"/>
+				</entry>
+			</map>
+		</property>		
 	</bean>
 	
 <!-- End Share API -->

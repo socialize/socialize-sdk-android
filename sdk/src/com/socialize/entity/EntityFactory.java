@@ -73,4 +73,5 @@ public class EntityFactory extends SocializeObjectFactory<Entity> {
 			object.put("key", key);
 		}
 	}
+	
 }

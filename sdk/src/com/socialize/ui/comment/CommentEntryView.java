@@ -242,7 +242,7 @@ public class CommentEntryView extends BaseView {
 		commentField.setText("");
 		
 		if(checkBox != null) {
-			checkBox.setChecked(Socialize.getSocialize().getSession().getUser().isAutoPostToFacebook());
+			checkBox.setChecked(Socialize.getSocialize().getSession().getUser().isAutoPostCommentsFacebook());
 		}
 		
 		if(locationBox != null) {

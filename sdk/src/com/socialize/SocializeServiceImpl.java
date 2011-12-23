@@ -23,9 +23,6 @@ package com.socialize;
 
 import java.util.Arrays;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -58,7 +55,7 @@ import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
-import com.socialize.entity.EntityFactory;
+import com.socialize.entity.Share;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
@@ -83,8 +80,8 @@ import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
-import com.socialize.networks.ShareDestination;
 import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.facebook.FacebookWallPoster;
 import com.socialize.ui.ActivityIOCProvider;
 import com.socialize.ui.SocializeEntityLoader;
@@ -122,7 +119,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private UserSystem userSystem;
 	private ActivitySystem activitySystem;
 	private EntitySystem entitySystem;
-	private EntityFactory entityFactory;
 	private Drawables drawables;
 	private FacebookWallPoster facebookWallPoster;
 	
@@ -302,7 +298,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.userSystem = container.getBean("userSystem");
 				this.activitySystem = container.getBean("activitySystem");
 				this.entitySystem = container.getBean("entitySystem");
-				this.entityFactory = container.getBean("entityFactory");
 				
 				this.drawables = container.getBean("drawables");
 				
@@ -598,7 +593,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	public void addComment(Activity activity, Entity entity, String comment, Location location, ShareOptions shareOptions, CommentAddListener commentAddListener) {
 		if(assertAuthenticated(commentAddListener)) {
 			commentSystem.addComment(session, entity, comment, location, shareOptions, commentAddListener);
-			if(isSupported(AuthProviderType.FACEBOOK) && shareOptions != null && shareOptions.isShareTo(ShareDestination.FACEBOOK) && isAuthenticated(AuthProviderType.FACEBOOK)) {
+			if(isSupported(AuthProviderType.FACEBOOK) && shareOptions != null && shareOptions.isShareTo(SocialNetwork.FACEBOOK) && isAuthenticated(AuthProviderType.FACEBOOK)) {
 				facebookWallPoster.postComment(activity, entity, comment, shareOptions.getListener());
 			}
 		}		
@@ -681,7 +676,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	public void like(Activity activity, Entity entity, Location location, ShareOptions shareOptions, LikeAddListener likeAddListener) {
 		if(assertAuthenticated(likeAddListener)) {
 			likeSystem.addLike(session, entity, location, likeAddListener);
-			if(isSupported(AuthProviderType.FACEBOOK) && isAuthenticated(AuthProviderType.FACEBOOK) && shareOptions.isShareTo(ShareDestination.FACEBOOK)) {
+			if(isSupported(AuthProviderType.FACEBOOK) && isAuthenticated(AuthProviderType.FACEBOOK) && shareOptions.isShareTo(SocialNetwork.FACEBOOK)) {
 				facebookWallPoster.postLike(activity, entity, null, shareOptions.getListener());
 			}
 		}		
@@ -743,13 +738,45 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 
 	@Override
 	public void share(Activity activity, Entity entity, String text, ShareOptions options, ShareAddListener shareAddListener) {
-		// TODO: Implement share
+		share(activity, entity, text, options, null, shareAddListener);
 	}
 
 	@Override
-	public void share(Activity activity, Entity entity, String text, ShareOptions options, Location location, ShareAddListener shareAddListener) {
-		// TODO: Implement share
+	public void share(final Activity activity, final Entity entity, final String text, final ShareOptions options, final Location location, final ShareAddListener shareAddListener) {
+		if(assertAuthenticated(shareAddListener)) {
+			if(options != null) {
+				SocialNetwork[] shareTo = options.getShareTo();
+				if(shareTo == null) {
+					addShare(activity, entity, text, ShareType.OTHER, location, shareAddListener);
+				}
+				else  {
+					for (final SocialNetwork socialNetwork : shareTo) {
+						addShare(activity, entity, text, ShareType.valueOf(socialNetwork.name().toLowerCase()), location, new ShareAddListener() {
+							@Override
+							public void onError(SocializeException error) {
+								if(shareAddListener != null) {
+									shareAddListener.onError(error);
+								}
+							}
+							
+							@Override
+							public void onCreate(Share share) {
+								try {
+									shareSystem.shareTo(activity, share.getEntity(), text, location, socialNetwork, options.getListener());
+								}
+								finally {
+									if(shareAddListener != null) {
+										shareAddListener.onCreate(share);
+									}
+								}
+							}
+						});
+					}
+				}
+			}
+		}
 	}
+	
 
 	/*
 	 * (non-Javadoc)
@@ -1334,19 +1361,21 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 
 		try {
-			JSONObject json = entityFactory.toJSON(entity);
+//			JSONObject json = entityFactory.toJSON(entity);
+//			Intent i = newIntent(context, CommentActivity.class);
+//			i.putExtra(Socialize.ENTITY_OBJECT, json.toString());
 			
 			Intent i = newIntent(context, CommentActivity.class);
-			i.putExtra(Socialize.ENTITY_OBJECT, json.toString());
+			i.putExtra(Socialize.ENTITY_OBJECT, entity);
 			
 			context.startActivity(i);
 		} 
 		catch (ActivityNotFoundException e) {
 			Log.e(Socialize.LOG_KEY, "Could not find CommentActivity.  Make sure you have added this to your AndroidManifest.xml");
 		} 
-		catch (JSONException e) {
-			Log.e(Socialize.LOG_KEY, "Invalid entity object provided.");
-		}
+//		catch (JSONException e) {
+//			Log.e(Socialize.LOG_KEY, "Invalid entity object provided.");
+//		}
 	}
 
 	@Override

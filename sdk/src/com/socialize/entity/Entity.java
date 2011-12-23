@@ -21,6 +21,10 @@
  */
 package com.socialize.entity;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.socialize.util.StringUtils;
 
 
@@ -28,11 +32,15 @@ import com.socialize.util.StringUtils;
  * @author Jason Polites
  *
  */
-public class Entity extends SocializeObject {
+public class Entity extends SocializeObject implements Serializable {
+	
+	private static final long serialVersionUID = -6607155597255660851L;
 	
 	private String key;
 	private String name;
 	private EntityStats entityStats;
+	
+	private Map<String, String> metaData;
 	
 	@Deprecated
 	public Integer getViews() {
@@ -101,8 +109,36 @@ public class Entity extends SocializeObject {
 		return entityStats;
 	}
 	
+	/**
+	 * Sets an arbitrary property on the entity.  Used in conjuction with the EntityLoader.
+	 * @param key
+	 * @param value
+	 */
+	public void setProperty(String key, String value) {
+		if(metaData == null) metaData = new HashMap<String, String>();
+		metaData.put(key, value);
+	}
+	
+	public String getProperty(String key) {
+		return (metaData == null) ? null : metaData.get(key);
+	}
+	
+	public String removeProperty(String key) {
+		return (metaData == null) ? null : metaData.remove(key);
+	}
+	
 	protected void setEntityStats(EntityStats stats) {
 		this.entityStats = stats;
+	}
+
+	protected Map<String, String> getMetaData() {
+		return metaData;
+	}
+	
+	public void mergeProperties(Entity entity) {
+		if(entity.metaData != null) {
+			this.metaData.putAll(entity.metaData);
+		}
 	}
 
 	/**

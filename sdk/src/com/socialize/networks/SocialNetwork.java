@@ -19,56 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity;
-
-import java.io.Serializable;
+package com.socialize.networks;
 
 /**
  * @author Jason Polites
  *
  */
-public class EntityStatsImpl implements EntityStats, Serializable{
-
-	private static final long serialVersionUID = -1619296473659187508L;
-	
-	private Integer views;
-	private Integer comments;
-	private Integer shares;
-	private Integer likes;
-	
-	@Override
-	public Integer getViews() {
-		return views;
-	}
-	
-	public void setViews(Integer views) {
-		this.views = views;
-	}
-	
-	@Override
-	public Integer getComments() {
-		return comments;
-	}
-	
-	public void setComments(Integer comments) {
-		this.comments = comments;
-	}
-	
-	@Override
-	public Integer getShares() {
-		return shares;
-	}
-	
-	public void setShares(Integer shares) {
-		this.shares = shares;
-	}
-	
-	@Override
-	public Integer getLikes() {
-		return likes;
-	}
-	
-	public void setLikes(Integer likes) {
-		this.likes = likes;
-	}
+public enum SocialNetwork {
+	FACEBOOK;
 }

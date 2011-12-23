@@ -45,6 +45,7 @@ import com.socialize.facebook.AsyncFacebookRunner.RequestListener;
 import com.socialize.facebook.Facebook;
 import com.socialize.facebook.FacebookError;
 import com.socialize.log.SocializeLogger;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
@@ -221,7 +222,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 					parent.runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
-							listener.onPost(parent);
+							listener.onAfterPost(parent, SocialNetwork.FACEBOOK);
 						}
 					});
 				}
@@ -271,7 +272,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			parent.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					listener.onError(parent, msg, e);
+					listener.onError(parent, SocialNetwork.FACEBOOK, msg, e);
 				}
 			});
 		}

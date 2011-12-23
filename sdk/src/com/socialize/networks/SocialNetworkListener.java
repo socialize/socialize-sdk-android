@@ -28,9 +28,11 @@ import android.app.Activity;
  * @author Jason Polites
  */
 public interface SocialNetworkListener {
-
-	public void onPost(Activity parent);
 	
-	public void onError(Activity parent, String message, Throwable error);
+	public void onBeforePost(Activity parent, SocialNetwork network);
+
+	public void onAfterPost(Activity parent, SocialNetwork network);
+	
+	public void onError(Activity parent, SocialNetwork network, String message, Throwable error);
 	
 }
