@@ -237,7 +237,7 @@ public class CommentListView extends BaseView {
 		
 		dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
 		
-		ShareOptions options = new ShareOptions();
+		ShareOptions options = newShareOptions();
 		
 		if(autoPostToFacebook) {
 			options.setShareTo(SocialNetwork.FACEBOOK);
@@ -613,6 +613,11 @@ public class CommentListView extends BaseView {
 		if(slider != null) {
 			slider.clearContent();
 		}
+	}
+	
+	// So we can mock
+	protected ShareOptions newShareOptions() {
+		return new ShareOptions();
 	}
 	
 	protected RelativeLayout getLayoutAnchor() {

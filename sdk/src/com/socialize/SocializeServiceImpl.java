@@ -1438,4 +1438,32 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	public void setEntityLoader(SocializeEntityLoader entityLoader) {
 		this.entityLoader = entityLoader;
 	}
+
+	protected void setCommentSystem(CommentSystem commentSystem) {
+		this.commentSystem = commentSystem;
+	}
+
+	protected void setShareSystem(ShareSystem shareSystem) {
+		this.shareSystem = shareSystem;
+	}
+
+	protected void setLikeSystem(LikeSystem likeSystem) {
+		this.likeSystem = likeSystem;
+	}
+
+	protected void setViewSystem(ViewSystem viewSystem) {
+		this.viewSystem = viewSystem;
+	}
+
+	protected void setUserSystem(UserSystem userSystem) {
+		this.userSystem = userSystem;
+	}
+
+	protected void setActivitySystem(ActivitySystem activitySystem) {
+		this.activitySystem = activitySystem;
+	}
+
+	protected void setEntitySystem(EntitySystem entitySystem) {
+		this.entitySystem = entitySystem;
+	}
 }

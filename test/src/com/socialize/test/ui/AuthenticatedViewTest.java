@@ -13,22 +13,24 @@ import com.socialize.ui.view.AuthenticatedView;
 
 public class AuthenticatedViewTest extends SocializeUIActivityTest {
 
-	@UsesMocks ({SocializeUI.class, IOCContainer.class, SocializeService.class, SocializeAuthListener.class})
+	@UsesMocks ({SocializeUI.class, IOCContainer.class, SocializeService.class, SocializeAuthListener.class, SocializeConfig.class})
 	public void testOnViewLoad() {
 		
 		final SocializeUI socializeUI = AndroidMock.createMock(SocializeUI.class);
 		final IOCContainer container = AndroidMock.createMock(IOCContainer.class);
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		final SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
+		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
 		
 		final String key = "foo";
 		final String secret = "bar";
 		final String fbId = "foobar";
 		
 		socializeUI.initUI(container);
-		AndroidMock.expect(socializeUI.getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(key);
-		AndroidMock.expect(socializeUI.getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_SECRET)).andReturn(secret);
-		AndroidMock.expect(socializeUI.getCustomConfigValue(SocializeConfig.FACEBOOK_APP_ID)).andReturn(fbId);
+		AndroidMock.expect(socialize.getConfig()).andReturn(config);
+		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(key);
+		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET)).andReturn(secret);
+		AndroidMock.expect(config.getProperty(SocializeConfig.FACEBOOK_APP_ID)).andReturn(fbId);
 		
 		socialize.authenticate(key, secret, listener);
 		
@@ -55,10 +57,14 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 			}
 		};
 		
+		AndroidMock.replay(socialize);
+		AndroidMock.replay(config);
 		AndroidMock.replay(socializeUI);
 		
 		view.onViewLoad(container);
 		
+		AndroidMock.replay(socialize);
+		AndroidMock.replay(config);
 		AndroidMock.verify(socializeUI);
 	}
 	

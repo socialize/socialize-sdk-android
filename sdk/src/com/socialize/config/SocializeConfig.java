@@ -265,7 +265,7 @@ public class SocializeConfig {
 	}
 	
 	public void merge() {
-		merge(customProperties, toBeRemoved);
+		doMerge(customProperties, toBeRemoved);
 	}
 	
 	/**
@@ -273,6 +273,11 @@ public class SocializeConfig {
 	 * @param other
 	 */
 	public void merge(Properties other, Set<String> toBeRemoved) {
+		merge();
+		doMerge(other, toBeRemoved);
+	}
+
+	protected void doMerge(Properties other, Set<String> toBeRemoved) {
 		if(properties == null) {
 			properties = createProperties();
 		}

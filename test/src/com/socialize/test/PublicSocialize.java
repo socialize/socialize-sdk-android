@@ -24,6 +24,13 @@ package com.socialize.test;
 import android.content.Context;
 
 import com.socialize.SocializeServiceImpl;
+import com.socialize.api.action.ActivitySystem;
+import com.socialize.api.action.CommentSystem;
+import com.socialize.api.action.EntitySystem;
+import com.socialize.api.action.LikeSystem;
+import com.socialize.api.action.ShareSystem;
+import com.socialize.api.action.UserSystem;
+import com.socialize.api.action.ViewSystem;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
@@ -94,4 +101,38 @@ public class PublicSocialize extends SocializeServiceImpl {
 		super.setFacebookWallPoster(facebookWallPoster);
 	}
 
+	@Override
+	public void setCommentSystem(CommentSystem commentSystem) {
+		super.setCommentSystem(commentSystem);
+	}
+
+	@Override
+	public void setShareSystem(ShareSystem shareSystem) {
+		super.setShareSystem(shareSystem);
+	}
+
+	@Override
+	public void setLikeSystem(LikeSystem likeSystem) {
+		super.setLikeSystem(likeSystem);
+	}
+
+	@Override
+	public void setViewSystem(ViewSystem viewSystem) {
+		super.setViewSystem(viewSystem);
+	}
+
+	@Override
+	public void setUserSystem(UserSystem userSystem) {
+		super.setUserSystem(userSystem);
+	}
+
+	@Override
+	public void setActivitySystem(ActivitySystem activitySystem) {
+		super.setActivitySystem(activitySystem);
+	}
+
+	@Override
+	public void setEntitySystem(EntitySystem entitySystem) {
+		super.setEntitySystem(entitySystem);
+	}
 }
