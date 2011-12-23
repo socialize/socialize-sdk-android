@@ -54,7 +54,9 @@ import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
+import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
+import com.socialize.entity.Like;
 import com.socialize.entity.Share;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
@@ -82,7 +84,6 @@ import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.facebook.FacebookWallPoster;
 import com.socialize.ui.ActivityIOCProvider;
 import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.ui.action.ActionDetailActivity;
@@ -120,7 +121,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private ActivitySystem activitySystem;
 	private EntitySystem entitySystem;
 	private Drawables drawables;
-	private FacebookWallPoster facebookWallPoster;
 	
 	private SocializeConfig config = new SocializeConfig();
 	
@@ -298,15 +298,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.userSystem = container.getBean("userSystem");
 				this.activitySystem = container.getBean("activitySystem");
 				this.entitySystem = container.getBean("entitySystem");
-				
 				this.drawables = container.getBean("drawables");
-				
-//				this.apiHost = container.getBean("socializeApiHost");
-				
 				this.logger = container.getBean("logger");
 				this.authProviderDataFactory = container.getBean("authProviderDataFactory");
 				this.asserter = container.getBean("initializationAsserter");
-				this.facebookWallPoster = container.getBean("facebookWallPoster");
 				
 				SocializeConfig mainConfig = container.getBean("config");
 				mainConfig.merge(config);
@@ -590,13 +585,48 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		
 	
 	@Override
-	public void addComment(Activity activity, Entity entity, String comment, Location location, ShareOptions shareOptions, CommentAddListener commentAddListener) {
+	public void addComment(final Activity activity, Entity entity, final String comment, final Location location, final ShareOptions shareOptions, final CommentAddListener commentAddListener) {
 		if(assertAuthenticated(commentAddListener)) {
-			commentSystem.addComment(session, entity, comment, location, shareOptions, commentAddListener);
-			if(isSupported(AuthProviderType.FACEBOOK) && shareOptions != null && shareOptions.isShareTo(SocialNetwork.FACEBOOK) && isAuthenticated(AuthProviderType.FACEBOOK)) {
-				facebookWallPoster.postComment(activity, entity, comment, shareOptions.getListener());
-			}
-		}		
+			if(shareOptions != null) {
+				final SocialNetwork[] shareTo = shareOptions.getShareTo();
+				if(shareTo == null || shareTo.length == 0) {
+					commentSystem.addComment(session, entity, comment, location, shareOptions, commentAddListener);
+				}
+				else {
+					commentSystem.addComment(session, entity, comment, location, shareOptions, new CommentAddListener() {
+						@Override
+						public void onError(SocializeException error) {
+							if(commentAddListener != null) {
+								commentAddListener.onError(error);
+							}							
+						}
+						
+						@Override
+						public void onCreate(final Comment commentObject) {
+							try {
+								for (final SocialNetwork socialNetwork : shareTo) {
+									try {
+										shareSystem.shareComment(activity, commentObject.getEntity(), comment, location, socialNetwork, shareOptions.getListener());
+									}
+									catch(Exception e) {
+										if(logger != null) {
+											logger.error("Failed to share comment to [" +
+													socialNetwork +
+													"]", e);
+										}
+									}
+								}
+							}
+							finally {
+								if(commentAddListener != null) {
+									commentAddListener.onCreate(commentObject);
+								}
+							}
+						}
+					});
+				}
+			}			
+		}				
 	}
 
 	@Override
@@ -673,13 +703,48 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	}
 
 	@Override
-	public void like(Activity activity, Entity entity, Location location, ShareOptions shareOptions, LikeAddListener likeAddListener) {
+	public void like(final Activity activity, Entity entity, final Location location, final ShareOptions shareOptions, final LikeAddListener likeAddListener) {
 		if(assertAuthenticated(likeAddListener)) {
-			likeSystem.addLike(session, entity, location, likeAddListener);
-			if(isSupported(AuthProviderType.FACEBOOK) && isAuthenticated(AuthProviderType.FACEBOOK) && shareOptions.isShareTo(SocialNetwork.FACEBOOK)) {
-				facebookWallPoster.postLike(activity, entity, null, shareOptions.getListener());
-			}
-		}		
+			if(shareOptions != null) {
+				final SocialNetwork[] shareTo = shareOptions.getShareTo();
+				if(shareTo == null || shareTo.length == 0) {
+					likeSystem.addLike(session, entity, location, likeAddListener);
+				}
+				else {
+					likeSystem.addLike(session, entity, location, new LikeAddListener() {
+						@Override
+						public void onError(SocializeException error) {
+							if(likeAddListener != null) {
+								likeAddListener.onError(error);
+							}							
+						}
+						
+						@Override
+						public void onCreate(final Like like) {
+							try {
+								for (final SocialNetwork socialNetwork : shareTo) {
+									try {
+										shareSystem.shareLike(activity, like.getEntity(), null, location, socialNetwork, shareOptions.getListener());
+									}
+									catch(Exception e) {
+										if(logger != null) {
+											logger.error("Failed to share comment to [" +
+													socialNetwork +
+													"]", e);
+										}
+									}
+								}
+							}
+							finally {
+								if(likeAddListener != null) {
+									likeAddListener.onCreate(like);
+								}
+							}
+						}
+					});
+				}
+			}			
+		}			
 	}
 
 	@Override
@@ -747,11 +812,11 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			if(options != null) {
 				SocialNetwork[] shareTo = options.getShareTo();
 				if(shareTo == null) {
-					addShare(activity, entity, text, ShareType.OTHER, location, shareAddListener);
+					shareSystem.addShare(session, entity, text, ShareType.OTHER, location, shareAddListener);
 				}
 				else  {
 					for (final SocialNetwork socialNetwork : shareTo) {
-						addShare(activity, entity, text, ShareType.valueOf(socialNetwork.name().toLowerCase()), location, new ShareAddListener() {
+						shareSystem.addShare(session, entity, text, ShareType.valueOf(socialNetwork.name().toLowerCase()), location, new ShareAddListener() {
 							@Override
 							public void onError(SocializeException error) {
 								if(shareAddListener != null) {
@@ -762,7 +827,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 							@Override
 							public void onCreate(Share share) {
 								try {
-									shareSystem.shareTo(activity, share.getEntity(), text, location, socialNetwork, options.getListener());
+									shareSystem.shareEntity(activity, share.getEntity(), text, location, socialNetwork, options.getListener());
 								}
 								finally {
 									if(shareAddListener != null) {
@@ -1189,10 +1254,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			}
 		}
 	};
-	
-	protected void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
-		this.facebookWallPoster = facebookWallPoster;
-	}
 
 	/**
 	 * EXPERT ONLY (Not documented)

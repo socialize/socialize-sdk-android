@@ -63,7 +63,7 @@ public class FacebookShareClickListener extends BaseShareClickListener {
 
 	@Override
 	protected void doShare(Activity context, Entity entity, String comment) {
-		facebookSharer.share(context, entity, comment, new SocialNetworkListener() {
+		facebookSharer.shareEntity(context, entity, comment, new SocialNetworkListener() {
 			ProgressDialog dialog;
 
 			@Override

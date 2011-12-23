@@ -33,13 +33,32 @@ import com.socialize.entity.Entity;
 public interface SocialNetworkSharer {
 	
 	/**
-	 * Shares the given entity to the given social network
+	 * Shares the given entity to the given social network.
 	 * @param context The current context.
 	 * @param entity The entity to be shared.
 	 * @param comment The comment provided by the user.
 	 * @param location The location of the user (may be null)
 	 * @param listener A listener to handle callbacks from the post.
 	 */
-	public void share(Activity context, Entity entity, String comment, SocialNetworkListener listener);
+	public void shareEntity(Activity context, Entity entity, String comment, SocialNetworkListener listener);
 
+	/**
+	 * Shares a comment against the given entity to the given social network.
+	 * @param context The current context.
+	 * @param entity The entity to be shared.
+	 * @param comment The comment provided by the user.
+	 * @param location The location of the user (may be null)
+	 * @param listener A listener to handle callbacks from the post.
+	 */
+	public void shareComment(Activity context, Entity entity, String comment, SocialNetworkListener listener);
+	
+	/**
+	 * Shares a like against the given entity to the given social network.
+	 * @param context The current context.
+	 * @param entity The entity to be shared.
+	 * @param comment The comment provided by the user.
+	 * @param location The location of the user (may be null)
+	 * @param listener A listener to handle callbacks from the post.
+	 */
+	public void shareLike(Activity context, Entity entity, String comment, SocialNetworkListener listener);
 }

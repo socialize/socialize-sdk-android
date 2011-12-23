@@ -97,11 +97,6 @@ public class PublicSocialize extends SocializeServiceImpl {
 	}
 
 	@Override
-	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
-		super.setFacebookWallPoster(facebookWallPoster);
-	}
-
-	@Override
 	public void setCommentSystem(CommentSystem commentSystem) {
 		super.setCommentSystem(commentSystem);
 	}

@@ -95,26 +95,43 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 	}
 
 	@Override
-	public void shareTo(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, SocialNetworkListener listener) {
+	public void shareEntity(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, SocialNetworkListener listener) {
 		SocialNetworkSharer sharer = getSharer(destination);
 		if(sharer != null) {
-			sharer.share(context, entity, comment, listener);
-		}
-		else {
-			if(logger != null) {
-				logger.warn("No sharer found for network type [" +
-						destination.name() +
-						"]");
-			}
+			sharer.shareEntity(context, entity, comment, listener);
 		}
 	}
 	
+	@Override
+	public void shareComment(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, SocialNetworkListener listener) {
+		SocialNetworkSharer sharer = getSharer(destination);
+		if(sharer != null) {
+			sharer.shareComment(context, entity, comment, listener);
+		}
+	}
+
+	@Override
+	public void shareLike(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, SocialNetworkListener listener) {
+		SocialNetworkSharer sharer = getSharer(destination);
+		if(sharer != null) {
+			sharer.shareLike(context, entity, comment, listener);
+		}
+	}
+
 	protected SocialNetworkSharer getSharer(SocialNetwork destination) {
 		SocialNetworkSharer sharer = null;
 		
 		if(sharers != null) {
 			sharer = sharers.get(destination.name().toLowerCase());
 		}
+		
+		if(sharer == null) {
+			if(logger != null) {
+				logger.warn("No sharer found for network type [" +
+						destination.name() +
+						"]");
+			}
+		}	
 		
 		return sharer;
 		

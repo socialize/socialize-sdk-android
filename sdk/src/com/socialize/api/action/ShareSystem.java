@@ -54,6 +54,27 @@ public interface ShareSystem {
 	 * @param destination The network on which to post the share.
 	 * @param listener A listener to handle callbacks from the post.
 	 */
-	public void shareTo(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, SocialNetworkListener listener);
-
+	public void shareEntity(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, SocialNetworkListener listener);
+	
+	/**
+	 * Shares a single comment to a given social network
+	 * @param context
+	 * @param entity
+	 * @param comment
+	 * @param location
+	 * @param destination
+	 * @param listener
+	 */
+	public void shareComment(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, SocialNetworkListener listener);
+	
+	/**
+	 * Shares a like to a given social network.
+	 * @param context
+	 * @param entity
+	 * @param location
+	 * @param destination
+	 * @param listener
+	 */
+	public void shareLike(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, SocialNetworkListener listener);
+	
 }

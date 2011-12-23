@@ -26,6 +26,7 @@ import android.app.Activity;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ActionType;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
@@ -36,7 +37,6 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkSharer;
 import com.socialize.ui.share.ShareMessageBuilder;
-import com.socialize.util.DeviceUtils;
 
 /**
  * @author Jason Polites
@@ -45,7 +45,6 @@ public class FacebookSharer implements SocialNetworkSharer {
 	
 	private ShareMessageBuilder shareMessageBuilder;
 	private SocializeConfig config;
-	private DeviceUtils deviceUtils;
 	private SocializeLogger logger;
 	private FacebookWallPoster facebookWallPoster;
 	
@@ -54,14 +53,26 @@ public class FacebookSharer implements SocialNetworkSharer {
 	 * @see com.socialize.networks.SocialNetworkSharer#share(android.app.Activity, com.socialize.entity.Entity, java.lang.String, android.location.Location, com.socialize.networks.SocialNetworkListener)
 	 */
 	@Override
-	public void share(final Activity context, Entity entity, String comment, final SocialNetworkListener listener) {
-		
+	public void shareEntity(final Activity context, Entity entity, String comment, SocialNetworkListener listener) {
+		share(context, entity, comment, listener, ActionType.SHARE);
+	}
+	
+	@Override
+	public void shareComment(Activity context, Entity entity, String comment, SocialNetworkListener listener) {
+		share(context, entity, comment, listener, ActionType.COMMENT);
+	}
+
+	@Override
+	public void shareLike(Activity context, Entity entity, String comment, SocialNetworkListener listener) {
+		share(context, entity, comment, listener, ActionType.LIKE);
+	}
+
+	protected void share(final Activity context, final Entity entity, final String comment, final SocialNetworkListener listener, final ActionType type) {
+
 		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
 			
-			final String body = shareMessageBuilder.buildShareMessage( entity, comment, false, true);
-			
 			if(Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-				doShare(context, body, listener);
+				doShare(context, entity, comment, listener, type);
 			}
 			else {
 				
@@ -80,7 +91,7 @@ public class FacebookSharer implements SocialNetworkSharer {
 
 					@Override
 					public void onAuthSuccess(SocializeSession session) {
-						doShare(context, body, listener);
+						doShare(context, entity, comment, listener, type);
 					}
 
 					@Override
@@ -94,7 +105,7 @@ public class FacebookSharer implements SocialNetworkSharer {
 					}
 				});
 			}
-		}		
+		}	
 	}
 	
 	protected void doError(SocializeException e, Activity parent, SocialNetworkListener listener) {
@@ -112,18 +123,26 @@ public class FacebookSharer implements SocialNetworkSharer {
 		}
 	}
 	
-	protected void doShare(Activity context, String body, SocialNetworkListener listener) {
-		
+	protected void doShare(final Activity context, Entity entity, String comment, final SocialNetworkListener listener, ActionType type) {
 		if(listener != null) {
 			listener.onBeforePost(context, SocialNetwork.FACEBOOK);
 		}
 		
-		// We're not going to use the default share text
-		String caption = "Download the app now to join the conversation.";
-		String linkName = deviceUtils.getAppName();
-		String link = deviceUtils.getMarketUrl(false);
-		String appId = getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
-		facebookWallPoster.post(context, appId, linkName, body, link, caption, listener);	
+		switch (type) {
+			case COMMENT:
+				facebookWallPoster.postComment(context, entity, comment, listener);
+				break;
+				
+			case SHARE:
+				String body = shareMessageBuilder.buildShareMessage( entity, comment, false, true);
+				facebookWallPoster.post(context, body, listener);
+				break;
+				
+			case LIKE:
+				facebookWallPoster.postLike(context, entity, comment, listener);
+				break;			
+		}
+		
 	}
 
 	public void setShareMessageBuilder(ShareMessageBuilder shareMessageBuilder) {
@@ -134,11 +153,6 @@ public class FacebookSharer implements SocialNetworkSharer {
 		this.config = config;
 	}
 	
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
-	}
-	
-
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}

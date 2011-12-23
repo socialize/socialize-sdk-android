@@ -101,7 +101,6 @@ public class SocializeIOCTest extends SocializeActivityTest {
 		checkBeanType(ioc, "entitySystem", SocializeEntitySystem.class);
 		checkBeanType(ioc, "activitySystem", SocializeActivitySystem.class);
 		checkBeanType(ioc, "commentSystem", SocializeCommentSystem.class);
-		checkBeanType(ioc, "socializeApiHost", SocializeApiHost.class);
 		checkBeanType(ioc, "responseFactory", DefaultSocializeResponseFactory.class);
 		checkBeanType(ioc, "sessionPersister",PreferenceSessionPersister.class);
 		

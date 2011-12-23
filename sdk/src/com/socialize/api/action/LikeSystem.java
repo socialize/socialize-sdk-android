@@ -35,7 +35,7 @@ import com.socialize.util.DelegateOnly;
 public interface LikeSystem {
 
 	public void addLike(SocializeSession session, Entity entity, Location location, LikeListener listener);
-
+	
 	public void deleteLike(SocializeSession session, long id, LikeListener listener);
 
 	@DelegateOnly
