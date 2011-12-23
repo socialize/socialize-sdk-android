@@ -202,6 +202,7 @@
 		<property name="logger" ref="logger"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
 	</bean>	
 	
 	<bean 

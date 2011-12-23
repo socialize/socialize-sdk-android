@@ -47,6 +47,7 @@ import com.socialize.facebook.FacebookError;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
+import com.socialize.ui.share.ShareMessageBuilder;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
@@ -60,28 +61,18 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	private Drawables drawables;
 	private SocializeLogger logger;
 	private DeviceUtils deviceUtils;
+	private ShareMessageBuilder shareMessageBuilder;
 	
 	@Override
 	public void postLike(Activity parent, Entity entity, String comment, SocialNetworkListener listener) {
 
-		String entityName = entity.getName();
-		String entityKey = entity.getKey();
-		
 		String linkName = deviceUtils.getAppName();
 		
 		StringBuilder builder = new StringBuilder();
 		
 		builder.append("Likes ");
-			
-		if(isLink(entity) || StringUtils.isEmpty(entityName)) {
-			builder.append(entityKey);
-			builder.append("\n\n");
-		}
-		else {
-			builder.append(entityName);
-			builder.append("\n\n");
-		}
-		
+		builder.append(shareMessageBuilder.getEntityLink(entity, false));
+		builder.append("\n\n");
 		builder.append("Posted from ");
 		builder.append(linkName);
 		builder.append(" using Socialize for Android. http://www.getsocialize.com");
@@ -95,18 +86,8 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		
 		StringBuilder builder = new StringBuilder();
 			
-		String entityName = entity.getName();
-		String entityKey = entity.getKey();
-		
-		if(isLink(entity) || StringUtils.isEmpty(entityName)) {
-			builder.append(entityKey);
-			builder.append("\n\n");
-		}
-		else {
-			builder.append(entityName);
-			builder.append("\n\n");
-		}
-	
+		builder.append(shareMessageBuilder.getEntityLink(entity, false));
+		builder.append("\n\n");
 		builder.append(comment);
 		builder.append("\n\n");
 		builder.append("Posted from ");
@@ -242,10 +223,14 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		this.deviceUtils = deviceUtils;
 	}
 	
-	protected boolean isLink(Entity entity) {
-		return entity.getKey().toLowerCase().trim().startsWith("http://");
+	public void setShareMessageBuilder(ShareMessageBuilder shareMessageBuilder) {
+		this.shareMessageBuilder = shareMessageBuilder;
 	}
 
+//	protected boolean isLink(Entity entity) {
+//		return entity.getKey().toLowerCase().trim().startsWith("http://");
+//	}
+	
 	// So we can mock
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();

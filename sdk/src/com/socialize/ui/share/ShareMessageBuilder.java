@@ -104,20 +104,11 @@ public class ShareMessageBuilder {
 		return buildShareMessage(Entity.newInstance(entityKey, entityName), comment, html, includeSocialize);
 	}
 	
-	public String buildShareMessage(Entity entity, String comment, boolean html, boolean includeSocialize) {
-		
+	public String getEntityLink(Entity entity, boolean html) {
 		String entityKey = entity.getKey();
 		String entityName = entity.getName();
 		
 		StringBuilder builder = new StringBuilder();
-		
-		String entityDescription = null;
-		
-		if(!StringUtils.isEmpty(comment)) {
-			builder.append(comment);
-			builder.append(getNewLine(html));
-			builder.append(getNewLine(html));
-		}
 		
 		if(!StringUtils.isEmpty(entityKey)) {
 			if(html) {
@@ -140,6 +131,23 @@ public class ShareMessageBuilder {
 				builder.append("</a>");
 			}
 		}
+		
+		return builder.toString();
+	}
+	
+	public String buildShareMessage(Entity entity, String comment, boolean html, boolean includeSocialize) {
+		
+		StringBuilder builder = new StringBuilder();
+		
+		String entityDescription = null;
+		
+		if(!StringUtils.isEmpty(comment)) {
+			builder.append(comment);
+			builder.append(getNewLine(html));
+			builder.append(getNewLine(html));
+		}
+		
+		builder.append(getEntityLink(entity, html));
 		
 		if(!StringUtils.isEmpty(entityDescription)) {
 			builder.append(getNewLine(html));
