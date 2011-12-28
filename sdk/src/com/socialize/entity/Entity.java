@@ -22,8 +22,6 @@
 package com.socialize.entity;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.socialize.util.StringUtils;
 
@@ -40,7 +38,7 @@ public class Entity extends SocializeObject implements Serializable {
 	private String name;
 	private EntityStats entityStats;
 	
-	private Map<String, String> metaData;
+	private String metaData;
 	
 	@Deprecated
 	public Integer getViews() {
@@ -48,7 +46,10 @@ public class Entity extends SocializeObject implements Serializable {
 	}
 	
 	@Deprecated
-	public void setViews(Integer views) {}
+	public void setViews(Integer views) {
+		if(entityStats == null) entityStats = new EntityStatsImpl();
+		((EntityStatsImpl)entityStats).setViews(views);			
+	}
 	
 	@Deprecated
 	public Integer getLikes() {
@@ -56,7 +57,10 @@ public class Entity extends SocializeObject implements Serializable {
 	}
 	
 	@Deprecated
-	public void setLikes(Integer likes) {}
+	public void setLikes(Integer likes) {
+		if(entityStats == null) entityStats = new EntityStatsImpl();
+		((EntityStatsImpl)entityStats).setLikes(likes);				
+	}
 	
 	@Deprecated
 	public Integer getComments() {
@@ -64,7 +68,10 @@ public class Entity extends SocializeObject implements Serializable {
 	}
 	
 	@Deprecated
-	public void setComments(Integer comments) {}
+	public void setComments(Integer comments) {
+		if(entityStats == null) entityStats = new EntityStatsImpl();
+		((EntityStatsImpl)entityStats).setComments(comments);
+	}
 	
 	@Deprecated
 	public Integer getShares() {
@@ -72,7 +79,10 @@ public class Entity extends SocializeObject implements Serializable {
 	}
 	
 	@Deprecated
-	public void setShares(Integer shares) {}
+	public void setShares(Integer shares) {
+		if(entityStats == null) entityStats = new EntityStatsImpl();
+		((EntityStatsImpl)entityStats).setShares(shares);		
+	}
 	
 	public String getKey() {
 		return key;
@@ -109,37 +119,18 @@ public class Entity extends SocializeObject implements Serializable {
 		return entityStats;
 	}
 	
-	/**
-	 * Sets an arbitrary property on the entity.  Used in conjuction with the EntityLoader.
-	 * @param key
-	 * @param value
-	 */
-	public void setProperty(String key, String value) {
-		if(metaData == null) metaData = new HashMap<String, String>();
-		metaData.put(key, value);
+	public String getMetaData() {
+		return metaData;
 	}
-	
-	public String getProperty(String key) {
-		return (metaData == null) ? null : metaData.get(key);
+
+	public void setMetaData(String metaData) {
+		this.metaData = metaData;
 	}
-	
-	public String removeProperty(String key) {
-		return (metaData == null) ? null : metaData.remove(key);
-	}
-	
+
 	protected void setEntityStats(EntityStats stats) {
 		this.entityStats = stats;
 	}
 
-	protected Map<String, String> getMetaData() {
-		return metaData;
-	}
-	
-	public void mergeProperties(Entity entity) {
-		if(entity.metaData != null) {
-			this.metaData.putAll(entity.metaData);
-		}
-	}
 
 	/**
 	 * Convenience method to create a new Entity based on a key only.

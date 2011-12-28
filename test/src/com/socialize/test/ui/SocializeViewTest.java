@@ -5,11 +5,12 @@ import android.view.View;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.SocializeService;
+import com.socialize.SocializeSystem;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.ui.SocializeBaseView;
-import com.socialize.ui.SocializeUI;
 
 public class SocializeViewTest extends SocializeUIActivityTest {
 
@@ -215,22 +216,34 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 	}
 	
 
-	@UsesMocks ({ SocializeInitListener.class, SocializeUI.class})
+	@UsesMocks ({ SocializeInitListener.class, SocializeService.class, SocializeSystem.class})
 	public void testInitSocialize() {
 		final SocializeInitListener listener = AndroidMock.createMock(SocializeInitListener.class);
-		final SocializeUI socializeUI = AndroidMock.createMock(SocializeUI.class);
+		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
+		final SocializeSystem system = AndroidMock.createMock(SocializeSystem.class);
 		
-		socializeUI.initSocializeAsync((Context) AndroidMock.anyObject(), AndroidMock.eq( listener ));
+		final String[] config = {"foo", "bar"};
 		
-		AndroidMock.replay(socializeUI);
+		AndroidMock.expect(socialize.getSystem()).andReturn(system);
+		AndroidMock.expect(system.getBeanConfig()).andReturn(config);
+		AndroidMock.expect(system.getSystemInitListener()).andReturn(null);
+		
+		socialize.initAsync((Context) AndroidMock.anyObject(), AndroidMock.eq( listener ), AndroidMock.eq(config[0]),AndroidMock.eq(config[1]));
+		
+		AndroidMock.replay(system);
+		AndroidMock.replay(socialize);
 		
 		PublicView activity = new PublicView(getActivity()) {
-
+			@Override
+			protected SocializeService getSocialize() {
+				return socialize;
+			}
 		};
 		
 		activity.initSocialize(listener);
 		
-		AndroidMock.verify(socializeUI);
+		AndroidMock.verify(system);
+		AndroidMock.verify(socialize);
 	}
 	
 	@UsesMocks ({IOCContainer.class})

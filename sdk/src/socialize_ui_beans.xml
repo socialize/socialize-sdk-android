@@ -14,7 +14,6 @@
 	
 	<bean id="socializeUIErrorHandler" class="com.socialize.ui.error.DialogErrorHandler">
 		<property name="drawables" ref="drawables"/>
-		<property name="config" ref="config"/>
 	</bean>
 	
 	<bean id="progressDialogFactory" class="com.socialize.ui.dialog.ProgressDialogFactory">
@@ -905,7 +904,6 @@
 		<property name="tickerFactory" ref="actionBarTickerFactory"/>
 		<property name="itemFactory" ref="actionBarItemFactory"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
-		<property name="facebookWallPoster" ref="facebookWallPoster"/>
 	</bean>
 	
 	<bean 

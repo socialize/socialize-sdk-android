@@ -21,6 +21,7 @@
  */
 package com.socialize.api.action;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.socialize.api.SocializeSession;
@@ -36,6 +37,9 @@ import com.socialize.ui.profile.UserProfile;
  *
  */
 public interface UserSystem {
+	
+	@Deprecated
+	public void init(Activity context);
 	
 	@Deprecated
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer);

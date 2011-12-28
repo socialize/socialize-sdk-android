@@ -651,4 +651,10 @@ public interface SocializeService {
 	 * @return
 	 */
 	public SocializeEntityLoader getEntityLoader();
+	
+	/**
+	 * Returns the internal system config for Socialize. (Expert Only)
+	 * @return
+	 */
+	public SocializeSystem getSystem();
 }

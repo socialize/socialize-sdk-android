@@ -22,9 +22,16 @@
 package com.socialize.test.ui.profile;
 
 import android.app.Activity;
+import android.content.Context;
 
+import com.socialize.SocializeAccess;
+import com.socialize.android.ioc.IOCContainer;
+import com.socialize.android.ioc.ProxyObject;
+import com.socialize.api.action.UserSystem;
 import com.socialize.entity.User;
-import com.socialize.sample.mocks.MockSocializeApiHost;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeInitListener;
+import com.socialize.sample.mocks.MockUserSystem;
 import com.socialize.test.ui.SocializeUIActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.SocializeUI;
@@ -47,19 +54,32 @@ public class ProfileActivityLoadTest extends SocializeUIActivityTest {
 		TestUtils.tearDown();
 		super.tearDown();
 	}
-
+	
 	public void testProfileActivityLoadsCorrectData() throws Throwable {
 		
 		TestUtils.setupSocializeOverrides(true, true);
 		TestUtils.setUpActivityMonitor(ProfileActivity.class);
 		
-		User dummy = new User();
+		final User dummy = new User();
 		
 		dummy.setId(69L);
 		dummy.setFirstName("foo");
 		dummy.setLastName("bar");
 		
-		MockSocializeApiHost.orchestrateUser(dummy);
+		SocializeAccess.setInitListener(new SocializeInitListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				fail();
+			}
+			
+			@Override
+			public void onInit(Context context, IOCContainer container) {
+				ProxyObject<UserSystem> proxy = container.getProxy("userSystem");
+				proxy.setDelegate(new MockUserSystem(dummy));
+			}
+		});
+		
 		
 		SocializeUI.getInstance().showUserProfileView(getActivity(), "69");
 		

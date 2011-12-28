@@ -36,7 +36,7 @@ public interface IOCContainer {
 	 * Gets the bean denoted by the given name (id).  
 	 * If this bean is defined as non-singleton, it will be instantiated in this call.
 	 * @param <T>
-	 * @param name
+	 * @param name The name of the bean.
 	 * @return
 	 */
 	public <T extends Object> T getBean(String name);
@@ -46,13 +46,31 @@ public interface IOCContainer {
 	 * If this bean is defined as non-singleton, it will be instantiated in this call using
 	 * the arguments passed as constructor arguments.
 	 * @param <T>
-	 * @param name
+	 * @param name The name of the bean.
 	 * @param args Optional constructor arguments.  If the bean is defined with fixed constructor arguments, 
 	 * the arguments provided here will be appended to the set of arguments used when instantiating the bean.
 	 * Only applies to non-singleton beans!
 	 * @return
 	 */
 	public <T extends Object> T getBean(String name, Object...args);
+	
+	/**
+	 * Returns the proxy for the given bean.  A &lt;proxy&lt; element must exist in the bean configuration.
+	 * will return the proxy.
+	 * @param name The name of the bean.
+	 * @return A proxy with the same type as the original bean, but where all method calls can be delegated.  
+	 * By default methods are delegated to the original bean.
+	 */
+	public <T extends Object> ProxyObject<T> getProxy(String name);
+	
+	/**
+	 * Returns the proxy for the given bean.  A &lt;proxy&lt; element must exist in the bean configuration.
+	 * @param name The name of the bean.
+	 * @param args The args that would be sent to the normal getBean(...) call.
+	 * @return A proxy with the same type as the original bean, but where all method calls can be delegated.  
+	 * By default methods are delegated to the original bean.
+	 */
+	public <T extends Object> ProxyObject<T> getProxy(String name, Object...args);
 
 	/**
 	 * Destroys the container and calls the destroy method of any beans with such a method defined.

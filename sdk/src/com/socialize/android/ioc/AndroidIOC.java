@@ -47,6 +47,24 @@ public class AndroidIOC implements IOCContainer {
 	public int size() {
 		return container.size();
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.android.ioc.IOCContainer#getProxy(java.lang.String)
+	 */
+	@Override
+	public <T> ProxyObject<T> getProxy(String name) {
+		return container.getProxy(name);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.android.ioc.IOCContainer#getProxy(java.lang.String, java.lang.Object[])
+	 */
+	@Override
+	public <T> ProxyObject<T> getProxy(String name, Object... args) {
+		return container.getProxy(name, args);
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.android.ioc.IOCContainer#getBean(java.lang.String)

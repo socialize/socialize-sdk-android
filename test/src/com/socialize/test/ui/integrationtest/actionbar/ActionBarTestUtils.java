@@ -2,13 +2,13 @@ package com.socialize.test.ui.integrationtest.actionbar;
 
 import static junit.framework.Assert.fail;
 
-import com.socialize.SocializeBeanAccess;
+import com.socialize.SocializeAccess;
 import com.socialize.api.ApiHost;
 import com.socialize.sample.mocks.MockSocializeApiHost;
 
 public class ActionBarTestUtils {
 	public static void setApiHostDelegate(ApiHost delegate) {
-		SocializeBeanAccess accessor = new SocializeBeanAccess();
+		SocializeAccess accessor = new SocializeAccess();
 		Object bean = accessor.getBean("socializeApiHost");
 		if(bean instanceof MockSocializeApiHost) {
 			MockSocializeApiHost host = (MockSocializeApiHost) bean;
@@ -20,7 +20,7 @@ public class ActionBarTestUtils {
 	}
 	
 	public static void clearApiHostDelegate() {
-		SocializeBeanAccess accessor = new SocializeBeanAccess();
+		SocializeAccess accessor = new SocializeAccess();
 		Object bean = accessor.getBean("socializeApiHost");
 		if(bean instanceof MockSocializeApiHost) {
 			MockSocializeApiHost host = (MockSocializeApiHost) bean;

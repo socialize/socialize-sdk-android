@@ -38,6 +38,7 @@ public class BeanMappingParserHandler extends DefaultHandler {
 	
 	public static final String PROPERTY = "property";
 	public static final String FACTORY = "factory";
+	public static final String PROXY = "PROXY";
 	
 	public static final String INIT_METHOD = "init-method";
 	public static final String DESTROY_METHOD = "destroy-method";
@@ -259,6 +260,11 @@ public class BeanMappingParserHandler extends DefaultHandler {
 			ref.setName(attributes.getValue("id"));
 			beanMapping.addFactoryRef(ref);
 		}
+		else if(localName.equalsIgnoreCase(PROXY)) {
+			// We have a bean proxy...
+			// We expect a bean ref
+			beanMapping.addProxyRef(attributes.getValue(REF));
+		}		
 	}
 	
 	@Override

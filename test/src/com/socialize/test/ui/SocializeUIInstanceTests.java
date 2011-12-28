@@ -38,6 +38,8 @@ import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.util.Drawables;
+
+@SuppressWarnings("deprecation")
 public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 
 	@UsesMocks({Intent.class, Activity.class})
@@ -82,16 +84,6 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 			public SocializeService getSocialize() {
 				return socialize;
 			}
-
-//			@Override
-//			protected Set<String> getPropertiesToBeRemoved() {
-//				return toBeRemoved;
-//			}
-//
-//			@Override
-//			public Properties getCustomProperties() {
-//				return customProperties;
-//			}
 		};
 
 		final String[] paths = new String[]{"socialize_beans.xml", "socialize_ui_beans.xml"};
@@ -834,11 +826,6 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 				addResult(5,listener);
 				return null;
 			}
-			
-			@Override
-			public View inflateView(Activity parent, int resId) {
-				return originalActual;
-			}
 		};	
 		
 		publicSocializeUI.showActionBar(getActivity(), resId, entityKeyActual);
@@ -890,11 +877,6 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 				addResult(4,addScrollView);
 				addResult(5,listener);
 				return null;
-			}
-			
-			@Override
-			public View inflateView(Activity parent, int resId) {
-				return originalActual;
 			}
 		};	
 		
@@ -960,13 +942,6 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 				addResult(5,listener);
 				return null;
 			}
-
-			@Override
-			public View inflateView(Activity parent, int resId) {
-				return originalActual;
-			}
-			
-			
 		};	
 		
 		publicSocializeUI.showActionBar(getActivity(), resId, entityKeyActual, optionsActual, listenerActual);
@@ -995,21 +970,6 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		assertNotNull(listener);
 		assertSame(listenerActual, listener);
 	}		
-	
-	/**
-272	        
-277	        public View showActionBar(Activity parent, int resId, String entityKey) {
-278	                return showActionBar(parent, resId, entityKey, null, true, true, null);
-279	        }
-280	        
-281	        public View showActionBar(Activity parent, int resId, String entityKey, ActionBarListener listener) {
-282	                return showActionBar(parent, resId, entityKey, null, true, true, listener);
-283	        }
-284	        
-285	        public View showActionBar(Activity parent, int resId, String entityKey, ActionBarOptions options, ActionBarListener listener) {
-286	                return showActionBar(parent, resId, entityKey, options.getEntityName(), options.isEntityKeyUrl(), options.isEntityKeyUrl(), listener);
-287	        }
-	 */
 	
 	@UsesMocks ({RelativeLayout.class, ActionBarView.class, View.class, MockRelativeLayoutParams.class, ScrollView.class, TestUIFactory.class, ActionBarListener.class})
 	public void test_showActionBar() {
@@ -1166,11 +1126,6 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		@Override
 		public View showActionBar(Activity parent, View original, String entityKey, String entityName, boolean isEntityKeyUrl, boolean addScrollView, ActionBarListener listener) {
 			return super.showActionBar(parent, original, entityKey, entityName, isEntityKeyUrl, addScrollView, listener);
-		}
-
-		@Override
-		public View inflateView(Activity parent, int resId) {
-			return super.inflateView(parent, resId);
 		}
 	}
 }

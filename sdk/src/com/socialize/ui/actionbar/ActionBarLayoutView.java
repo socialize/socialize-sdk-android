@@ -399,7 +399,8 @@ public class ActionBarLayoutView extends BaseView {
 		
 		// Set the entity back on the parent action bar
 		if(actionBarView.getEntity() != null) {
-			entity.mergeProperties(actionBarView.getEntity());
+			// TODO: Remove this once meta data is persisted
+			entity.setMetaData(actionBarView.getEntity().getMetaData());
 		}
 		
 		actionBarView.setEntity(entity);

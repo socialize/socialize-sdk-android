@@ -210,7 +210,6 @@
 		class="com.socialize.networks.facebook.FacebookSharer">
 		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
 		<property name="config" ref="config"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="logger" ref="logger"/>
 		<property name="facebookWallPoster" ref="facebookWallPoster"/>
 	</bean>		

@@ -32,6 +32,7 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 
 import com.socialize.Socialize;
+import com.socialize.SocializeSystem;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
@@ -124,29 +125,35 @@ public abstract class SocializeBaseView extends BaseView {
 	}
 
 	protected void initSocialize(final SocializeInitListener listener) {
-		String[] config = Socialize.getSystem().getBeanConfig();
+		SocializeSystem system = getSocialize().getSystem();
+		String[] config = system.getBeanConfig();
 		
-		SocializeInitListener overrideListener = new SocializeInitListener() {
+		final SocializeInitListener systemListener = system.getSystemInitListener();
+		
+		if(systemListener != null) {
 			
-			@Override
-			public void onError(SocializeException error) {
-				listener.onError(error);
-			}
+			SocializeInitListener overrideListener = new SocializeInitListener() {
+				
+				@Override
+				public void onError(SocializeException error) {
+					systemListener.onError(error);
+					listener.onError(error);
+					
+				}
+				
+				@Override
+				public void onInit(Context context, IOCContainer container) {
+					systemListener.onInit(context, container);
+					listener.onInit(context, container);
+				}
+			};
 			
-			@Override
-			public void onInit(Context context, IOCContainer container) {
-				listener.onInit(context, container);
-			}
-		};
-		
-		getSocialize().initAsync(getContext(), overrideListener, config);		
-		
-//		getSocializeUI().initSocializeAsync(this.getContext(), listener);
+			getSocialize().initAsync(getContext(), overrideListener, config);
+		}
+		else {
+			getSocialize().initAsync(getContext(), listener, config);
+		}
 	}
-	
-//	protected SocializeUI getSocializeUI() {
-//		return SocializeUI.getInstance();
-//	}
 	
 	public abstract View getLoadingView();
 	

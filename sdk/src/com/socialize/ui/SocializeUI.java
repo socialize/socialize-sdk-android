@@ -4,13 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -27,15 +24,10 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.SocializeListener;
-import com.socialize.ui.action.ActionDetailActivity;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.actionbar.ActionBarView;
-import com.socialize.ui.comment.CommentActivity;
-import com.socialize.ui.comment.CommentDetailActivity;
-import com.socialize.ui.comment.CommentView;
 import com.socialize.ui.comment.OnCommentViewActionListener;
-import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 
@@ -80,9 +72,12 @@ public class SocializeUI {
 		return Socialize.getSocialize();
 	}
 	
+	public com.socialize.SocializeUI getSocializeUI() {
+		return Socialize.getSocializeUI();
+	}
+	
 	@Deprecated
 	public void initSocialize(Context context) {
-		
 		String[] config = getConfig();
 		getSocialize().init(context,config);
 	}
@@ -238,20 +233,9 @@ public class SocializeUI {
 	 * @param entity
 	 * @param listener
 	 */
+	@Deprecated
 	public void showCommentView(Activity context, Entity entity, OnCommentViewActionListener listener) {
-		if(listener != null) {
-			STATIC_LISTENERS.put(CommentView.COMMENT_LISTENER, listener);
-		}
-	
-		Intent i = newIntent(context, CommentActivity.class);
-		i.putExtra(ENTITY_KEY, entity.getKey());
-		i.putExtra(ENTITY_NAME, entity.getName());
-		try {
-			context.startActivity(i);
-		} 
-		catch (ActivityNotFoundException e) {
-			Log.e(LOG_KEY, "Could not find CommentActivity.  Make sure you have added this to your AndroidManifest.xml");
-		}
+		getSocializeUI().showCommentView(context, entity, listener);
 	}
 	
 	/**
@@ -259,6 +243,7 @@ public class SocializeUI {
 	 * @param context
 	 * @param entity
 	 */
+	@Deprecated
 	public void showCommentView(Activity context, Entity entity) {
 		showCommentView(context, entity, null);
 	}
@@ -273,78 +258,36 @@ public class SocializeUI {
 	 */
 	@Deprecated
 	public void showCommentView(Activity context, String entityKey, String entityName, OnCommentViewActionListener listener) {
-		STATIC_LISTENERS.put(CommentView.COMMENT_LISTENER, listener);
-		Intent i = newIntent(context, CommentActivity.class);
-		i.putExtra(ENTITY_KEY, entityKey);
-		i.putExtra(ENTITY_NAME, entityName);
-		try {
-			context.startActivity(i);
-		} 
-		catch (ActivityNotFoundException e) {
-			Log.e(LOG_KEY, "Could not find CommentActivity.  Make sure you have added this to your AndroidManifest.xml");
-		}
+		getSocializeUI().showCommentView(context, Entity.newInstance(entityKey, entityName), listener);
 	}
 	
 	@Deprecated
 	public void showCommentView(Activity context, String entityKey, String entityName, boolean entityKeyIsUrl, OnCommentViewActionListener listener) {
-		STATIC_LISTENERS.put(CommentView.COMMENT_LISTENER, listener);
-		showCommentView(context, entityKey, entityName, entityKeyIsUrl);
+		getSocializeUI().showCommentView(context, Entity.newInstance(entityKey, entityName), listener);
 	}
 	
 	@Deprecated
 	public void showCommentView(Activity context, String entityKey, OnCommentViewActionListener listener) {
-		STATIC_LISTENERS.put(CommentView.COMMENT_LISTENER, listener);
-		showCommentView(context, entityKey);
+		getSocializeUI().showCommentView(context, Entity.newInstance(entityKey, null), listener);
 	}
 
 	@Deprecated
 	public void showCommentView(Activity context, String entityKey) {
-		Intent i = newIntent(context, CommentActivity.class);
-		i.putExtra(ENTITY_KEY, entityKey);
-		try {
-			context.startActivity(i);
-		} 
-		catch (ActivityNotFoundException e) {
-			Log.e(LOG_KEY, "Could not find CommentActivity.  Make sure you have added this to your AndroidManifest.xml");
-		}	
+		getSocializeUI().showCommentView(context, Entity.newInstance(entityKey, null));
 	}
 	
 	@Deprecated
 	public void showCommentView(Activity context, String entityKey, String entityName, boolean entityKeyIsUrl) {
-		Intent i = newIntent(context, CommentActivity.class);
-		i.putExtra(ENTITY_KEY, entityKey);
-		i.putExtra(ENTITY_NAME, entityName);
-		i.putExtra(ENTITY_URL_AS_LINK, entityKeyIsUrl);
-		
-		try {
-			context.startActivity(i);
-		} 
-		catch (ActivityNotFoundException e) {
-			Log.e(LOG_KEY, "Could not find CommentActivity.  Make sure you have added this to your AndroidManifest.xml");
-		}
+		getSocializeUI().showCommentView(context, Entity.newInstance(entityKey, entityName));
 	}
 	
+	@Deprecated
 	public void showUserProfileView(Activity context, String userId) {
-		Intent i = newIntent(context, ProfileActivity.class);
-		i.putExtra(USER_ID, userId);
-		try {
-			context.startActivity(i);
-		} 
-		catch (ActivityNotFoundException e) {
-			Log.e(LOG_KEY, "Could not find ProfileActivity.  Make sure you have added this to your AndroidManifest.xml");
-		}
+		getSocializeUI().showUserProfileView(context, userId);
 	}
 	
 	public void showUserProfileViewForResult(Activity context, String userId, int requestCode) {
-		Intent i = newIntent(context, ProfileActivity.class);
-		i.putExtra(USER_ID, userId);
-		
-		try {
-			context.startActivityForResult(i, requestCode);
-		} 
-		catch (ActivityNotFoundException e) {
-			Log.e(LOG_KEY, "Could not find ProfileActivity.  Make sure you have added this to your AndroidManifest.xml");
-		}	
+		getSocializeUI().showUserProfileViewForResult(context, userId, requestCode);
 	}
 	
 	/**
@@ -355,24 +298,7 @@ public class SocializeUI {
 	 * @param requestCode
 	 */
 	public void showActionDetailViewForResult(Activity context, User user, SocializeAction action, int requestCode) {
-		Intent i = newIntent(context, ActionDetailActivity.class);
-		i.putExtra(USER_ID, user.getId().toString());
-		i.putExtra(COMMENT_ID, action.getId().toString());
-		
-		try {
-			context.startActivityForResult(i, requestCode);
-		} 
-		catch (ActivityNotFoundException e) {
-			// Revert to legacy
-			i.setClass(context, CommentDetailActivity.class);
-			try {
-				context.startActivityForResult(i, requestCode);
-				Log.w(LOG_KEY, "Using legacy CommentDetailActivity.  Please update your AndroidManifest.xml to use ActionDetailActivity");
-			} 
-			catch (ActivityNotFoundException e2) {
-				Log.e(LOG_KEY, "Could not find ActionDetailActivity.  Make sure you have added this to your AndroidManifest.xml");
-			}
-		}
+		getSocializeUI().showActionDetailViewForResult(context, user, action, requestCode);
 	}	
 	
 	/**
@@ -483,57 +409,57 @@ public class SocializeUI {
 	
 	@Deprecated
 	public View showActionBar(Activity parent, int resId, String entityKey) {
-		return showActionBar(parent, resId, entityKey, null, null);
+		return getSocializeUI().showActionBar(parent, resId, Entity.newInstance(entityKey, null));
 	}
 	
 	@Deprecated
 	public View showActionBar(Activity parent, int resId, String entityKey, ActionBarListener listener) {
-		return showActionBar(parent, resId, entityKey, null, listener);
+		return getSocializeUI().showActionBar(parent, resId, Entity.newInstance(entityKey, null), null, listener);
 	}
 	
 	@Deprecated
 	public View showActionBar(Activity parent, int resId, String entityKey, ActionBarOptions options) {
-		return showActionBar(parent, resId, entityKey, options, null);
+		return getSocializeUI().showActionBar(parent, resId, Entity.newInstance(entityKey, null), options, null);
 	}
 		
 	@Deprecated
 	public View showActionBar(Activity parent, int resId, String entityKey, ActionBarOptions options, ActionBarListener listener) {
-		return showActionBar(parent, resId, Entity.newInstance(entityKey, null), options, listener);
+		return getSocializeUI().showActionBar(parent, resId, Entity.newInstance(entityKey, null), options, listener);
 	}
 		
 	
 	@Deprecated
 	public View showActionBar(Activity parent, View original, String entityKey) {
-		return showActionBar(parent, original, entityKey, null);
+		return getSocializeUI().showActionBar(parent, original, Entity.newInstance(entityKey, null));
 	}
 	
 	@Deprecated
 	public View showActionBar(Activity parent, View original, String entityKey, ActionBarListener listener) {
-		return showActionBar(parent, original, entityKey, null, listener);
+		return getSocializeUI().showActionBar(parent, original, Entity.newInstance(entityKey, null), listener);
 	}
 	
 	@Deprecated
 	public View showActionBar(Activity parent, View original, String entityKey, ActionBarOptions options, ActionBarListener listener) {
-		return showActionBar(parent, original, Entity.newInstance(entityKey, null), options, listener);
+		return getSocializeUI().showActionBar(parent, original, Entity.newInstance(entityKey, null), options, listener);
 	}
 	
 	@Deprecated
 	public View showActionBar(Activity parent, View original, String entityKey, String entityName, boolean isEntityKeyUrl, boolean addScrollView, ActionBarListener listener) {
 		ActionBarOptions options = new ActionBarOptions();
 		options.setAddScrollView(addScrollView);
-		return showActionBar(parent, original, Entity.newInstance(entityKey, entityName), options, listener);
+		return getSocializeUI().showActionBar(parent, original, Entity.newInstance(entityKey, entityName), options, listener);
 	}
 	
 	@Deprecated
 	public View showActionBar(Activity parent, int resId, String entityKey, String entityName, boolean isEntityKeyUrl, boolean addScrollView, ActionBarListener listener) {
 		ActionBarOptions options = new ActionBarOptions();
 		options.setAddScrollView(addScrollView);
-		return showActionBar(parent, resId, Entity.newInstance(entityKey, entityName), options, listener);
+		return getSocializeUI().showActionBar(parent, resId, Entity.newInstance(entityKey, entityName), options, listener);
 	}
 
 	@Deprecated
 	public View showActionBar(Activity parent, View original, Entity entity) {
-		return showActionBar(parent, original, entity, true, null);
+		return getSocializeUI().showActionBar(parent, original, entity);
 	}
 	
 	@Deprecated
@@ -556,61 +482,17 @@ public class SocializeUI {
 	}
 	
 	public View showActionBar(Activity parent, int resId, Entity entity, ActionBarOptions options) {
-		return showActionBar(parent, resId, entity, options.isAddScrollView(), null);
+		return Socialize.getSocializeUI().showActionBar(parent, resId, entity, options);
 	}
 		
 	public View showActionBar(Activity parent, int resId, Entity entity, ActionBarOptions options, ActionBarListener listener) {
-		return showActionBar(parent, resId, entity, options.isAddScrollView(), listener);
+		return Socialize.getSocializeUI().showActionBar(parent, resId, entity, options, listener);
 	}
 	
 	protected View showActionBar(Activity parent, int resId, Entity entity, boolean addScrollView, ActionBarListener listener) {
-		View original = inflateView(parent, resId);
-		return showActionBar(parent, original, entity, addScrollView, listener);
-	}
-
-	protected View showActionBar(Activity parent, View original, Entity entity, boolean addScrollView, ActionBarListener listener) {
-		RelativeLayout barLayout = newRelativeLayout(parent);
-		RelativeLayout originalLayout = newRelativeLayout(parent);
-		
-		ActionBarView socializeActionBar = newActionBarView(parent);
-		socializeActionBar.assignId(original);
-		socializeActionBar.setEntity(entity);
-		
-		LayoutParams barParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		barParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-		
-		LayoutParams originalParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		originalParams.addRule(RelativeLayout.ABOVE, socializeActionBar.getId());
-		
-		socializeActionBar.setLayoutParams(barParams);
-		originalLayout.setLayoutParams(originalParams);
-		
-		if(listener != null) {
-			listener.onCreate(socializeActionBar);
-		}
-		
-		if(addScrollView && !(original instanceof ScrollView) ) {
-			LayoutParams scrollViewParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-			ScrollView scrollView = newScrollView(parent);
-			scrollView.setFillViewport(true);
-			scrollView.setLayoutParams(scrollViewParams);
-			scrollView.addView(original);
-			scrollView.setScrollContainer(false);
-			originalLayout.addView(scrollView);
-		}
-		else {
-			originalLayout.addView(original);
-		}
-		
-		barLayout.addView(originalLayout);
-		barLayout.addView(socializeActionBar);
-		
-		return barLayout;
-	}
-	
-	protected View inflateView(Activity parent, int resId) {
-		LayoutInflater layoutInflater = (LayoutInflater) parent.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
-		return layoutInflater.inflate(resId, null);
+		ActionBarOptions options = new ActionBarOptions();
+		options.setAddScrollView(addScrollView);
+		return Socialize.getSocializeUI().showActionBar(parent, resId, entity, options, listener);
 	}
 	
 	protected Bundle getExtras(Intent intent) {
@@ -621,10 +503,6 @@ public class SocializeUI {
 		return extras;
 	}
 	
-//	public Properties getCustomProperties() {
-//		return customProperties;
-//	}
-
 	/**
 	 * EXPERT ONLY (Not documented)
 	 * @param beanOverride

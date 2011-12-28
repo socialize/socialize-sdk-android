@@ -106,7 +106,6 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	@Override
 	public void postComment(final Activity parent, String entityKey, String entityName, String comment, SocialNetworkListener listener) {
 		postComment(parent, Entity.newInstance(entityKey, entityName), comment, listener);
-
 	}
 
 	@Override

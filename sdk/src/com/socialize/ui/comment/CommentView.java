@@ -2,7 +2,6 @@ package com.socialize.ui.comment;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -18,6 +17,7 @@ import com.socialize.android.ioc.IOCContainer;
 import com.socialize.entity.Entity;
 import com.socialize.listener.ListenerHolder;
 import com.socialize.log.SocializeLogger;
+import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.ui.view.EntityView;
 
 public class CommentView extends EntityView {
@@ -62,7 +62,7 @@ public class CommentView extends EntityView {
 	@Override
 	protected void onBeforeSocializeInit() {
 		try {
-			progress = ProgressDialog.show(getContext(), "Loading Socialize", "Please wait...");
+			progress = SafeProgressDialog.show(getContext(), "Loading Socialize", "Please wait...");
 		}
 		catch (Exception ignore) {}
 	}

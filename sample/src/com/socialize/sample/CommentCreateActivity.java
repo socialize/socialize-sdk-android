@@ -34,6 +34,7 @@ import com.socialize.entity.Comment;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.sample.util.ErrorHandler;
+import com.socialize.ui.dialog.SafeProgressDialog;
 
 public class CommentCreateActivity extends CommentBaseActivity {
 	@Override
@@ -56,8 +57,7 @@ public class CommentCreateActivity extends CommentBaseActivity {
 				@Override
 				public void onClick(View v) {
 					
-					final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Posting Comment", "Please wait...");
-					
+					final ProgressDialog progress = SafeProgressDialog.show(v.getContext(), "Posting Comment", "Please wait...");
 					
 					txtCommentCreateResult.setText("");
 					btnCommentCreate.setEnabled(false);

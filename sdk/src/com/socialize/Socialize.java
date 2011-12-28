@@ -52,7 +52,6 @@ public class Socialize {
 	public static final String DEFAULT_USER_ICON = "default_user_icon.png";
 	
 	private static final SocializeServiceImpl instance = new SocializeServiceImpl();
-	private static final SocializeSystem system = new SocializeSystem();
 
 	private Socialize() {
 		super();
@@ -78,9 +77,5 @@ public class Socialize {
 	
 	public static final SocializeUI getSocializeUI() {
 		return instance;
-	}
-	
-	public static final SocializeSystem getSystem() {
-		return system;
 	}
 }

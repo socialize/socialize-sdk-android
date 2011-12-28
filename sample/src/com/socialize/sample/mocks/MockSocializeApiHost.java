@@ -34,7 +34,7 @@ import com.socialize.listener.view.ViewListener;
 import com.socialize.networks.ShareOptions;
 import com.socialize.ui.comment.CommentShareOptions;
 
-@SuppressWarnings({ "unchecked", "deprecation" })
+@Deprecated
 public class MockSocializeApiHost extends SocializeApiHost implements ContainerAware {
 
 	private ApiHost delegate;

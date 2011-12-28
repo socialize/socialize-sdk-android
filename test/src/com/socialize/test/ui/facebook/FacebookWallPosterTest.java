@@ -25,9 +25,11 @@ import android.app.Activity;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.entity.Entity;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.DefaultFacebookWallPoster;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.ui.share.ShareMessageBuilder;
 import com.socialize.util.DeviceUtils;
 
 /**
@@ -36,7 +38,8 @@ import com.socialize.util.DeviceUtils;
  */
 @UsesMocks ({
 	SocialNetworkListener.class,
-	DeviceUtils.class
+	DeviceUtils.class,
+	ShareMessageBuilder.class
 })
 public class FacebookWallPosterTest extends SocializeActivityTest {
 
@@ -44,13 +47,19 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		
 		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
 		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
+		ShareMessageBuilder builder = AndroidMock.createMock(ShareMessageBuilder.class);
 		Activity parent = getActivity();
 		
 		final String appName = "foobar_appname";
 		final String entityKey = "foobar_key";
 		final String entityName = "foobar_name";
+		final String entityLink = "foobar_link";
+		
+		final Entity entity = Entity.newInstance(entityKey, entityName);
+		
 		
 		AndroidMock.expect(deviceUtils.getAppName()).andReturn(appName);
+		AndroidMock.expect(builder.getEntityLink(entity, false)).andReturn(entityLink);
 		
 		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
 
@@ -62,18 +71,22 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			}
 		};
 		
-		String expectedString = "Likes foobar_name\n\nPosted from foobar_appname using Socialize for Android. http://www.getsocialize.com";
+		String expectedString = "Likes foobar_link\n\nPosted from foobar_appname using Socialize for Android. http://www.getsocialize.com";
 		
 		AndroidMock.replay(deviceUtils);
+		AndroidMock.replay(builder);
+		
 		
 		poster.setDeviceUtils(deviceUtils);
-		poster.postLike(parent, entityKey, entityName, null, listener);
+		poster.setShareMessageBuilder(builder);
+		poster.postLike(parent, entity, null, listener);
 		
 		SocialNetworkListener listenerAfter = getNextResult();
 		String messageAfter = getNextResult();
 		Activity parentAfter = getNextResult();
 		
 		AndroidMock.verify(deviceUtils);
+		AndroidMock.verify(builder);
 		
 		assertSame(listener, listenerAfter);
 		assertEquals(expectedString, messageAfter);
@@ -83,14 +96,19 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 	public void testPostComment() {
 		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
 		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
+		ShareMessageBuilder builder = AndroidMock.createMock(ShareMessageBuilder.class);
 		Activity parent = getActivity();
 		
 		final String appName = "foobar_appname";
 		final String entityKey = "foobar_key";
 		final String entityName = "foobar_name";
 		final String comment = "foobar_comment";
+		final String entityLink = "foobar_link";
+		
+		final Entity entity = Entity.newInstance(entityKey, entityName);
 		
 		AndroidMock.expect(deviceUtils.getAppName()).andReturn(appName);
+		AndroidMock.expect(builder.getEntityLink(entity, false)).andReturn(entityLink);
 		
 		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
 
@@ -102,29 +120,24 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			}
 		};
 		
-		String expectedString = "foobar_name\n\nfoobar_comment\n\nPosted from foobar_appname using Socialize for Android. http://www.getsocialize.com";
+		String expectedString = "foobar_link\n\nfoobar_comment\n\nPosted from foobar_appname using Socialize for Android. http://www.getsocialize.com";
 		
 		AndroidMock.replay(deviceUtils);
+		AndroidMock.replay(builder);
 		
 		poster.setDeviceUtils(deviceUtils);
-		poster.postComment(parent, entityKey, entityName, comment, listener);
+		poster.setShareMessageBuilder(builder);
+		poster.postComment(parent, entity, comment, listener);
 		
 		SocialNetworkListener listenerAfter = getNextResult();
 		String messageAfter = getNextResult();
 		Activity parentAfter = getNextResult();
 		
 		AndroidMock.verify(deviceUtils);
+		AndroidMock.verify(builder);
 		
 		assertSame(listener, listenerAfter);
 		assertEquals(expectedString, messageAfter);
 		assertSame(parent, parentAfter);
 	}
-	
-	public void testPost1() {
-
-	}	
-	
-	public void testPost2() {
-		
-	}		
 }

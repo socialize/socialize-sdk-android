@@ -23,7 +23,9 @@ package com.socialize.android.ioc;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 
@@ -33,12 +35,14 @@ import java.util.Map;
 public class BeanMapping {
 
 	private Map<String, BeanRef> beanRefs;
+	private Set<String> proxyRefs;
 	private Map<String, FactoryRef> factoryRefs;
 	
 	public BeanMapping() {
 		super();
 		this.factoryRefs = new LinkedHashMap<String, FactoryRef>();
 		this.beanRefs = new LinkedHashMap<String, BeanRef>();
+		this.proxyRefs = new LinkedHashSet<String>();
 	}
 
 	public Collection<BeanRef> getBeanRefs() {
@@ -49,6 +53,14 @@ public class BeanMapping {
 		return factoryRefs.values();
 	}
 
+	public Set<String> getProxyRefs() {
+		return proxyRefs;
+	}
+
+	public void addProxyRef(String bean) {
+		proxyRefs.add(bean);
+	}
+	
 	public void addFactoryRef(FactoryRef ref) {
 		factoryRefs.put(ref.getName(), ref);
 	}
@@ -56,13 +68,17 @@ public class BeanMapping {
 	public void addBeanRef(BeanRef ref) {
 		beanRefs.put(ref.getName(), ref);
 	}
-
+	
 	public BeanRef getBeanRef(String name) {
 		return beanRefs.get(name);
 	}
 	
 	public FactoryRef getFactoryRef(String name) {
 		return factoryRefs.get(name);
+	}
+	
+	public boolean hasProxy(String name) {
+		return proxyRefs.contains(name);
 	}
 	
 	/**
@@ -83,6 +99,14 @@ public class BeanMapping {
 		if(otherFs != null) {
 			for (FactoryRef factoryRef : otherFs) {
 				addFactoryRef(factoryRef);
+			}
+		}
+		
+		Set<String> otherProxyRefs = mapping.getProxyRefs();
+		
+		if(otherProxyRefs != null) {
+			for (String bean : otherProxyRefs) {
+				addProxyRef(bean);
 			}
 		}
 	}

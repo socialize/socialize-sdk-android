@@ -122,8 +122,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private EntitySystem entitySystem;
 	private Drawables drawables;
 	
+	private SocializeSystem system = new SocializeSystem();
 	private SocializeConfig config = new SocializeConfig();
-	
 	private SocializeEntityLoader entityLoader;
 	
 	private String[] initPaths = null;
@@ -246,8 +246,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		if(container != null) {
 			container.setContext(context);
 		}
-		
-		getConfig().merge();
 		
 		return container;
 	}
@@ -1424,21 +1422,13 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 
 		try {
-//			JSONObject json = entityFactory.toJSON(entity);
-//			Intent i = newIntent(context, CommentActivity.class);
-//			i.putExtra(Socialize.ENTITY_OBJECT, json.toString());
-			
 			Intent i = newIntent(context, CommentActivity.class);
 			i.putExtra(Socialize.ENTITY_OBJECT, entity);
-			
 			context.startActivity(i);
 		} 
 		catch (ActivityNotFoundException e) {
 			Log.e(Socialize.LOG_KEY, "Could not find CommentActivity.  Make sure you have added this to your AndroidManifest.xml");
 		} 
-//		catch (JSONException e) {
-//			Log.e(Socialize.LOG_KEY, "Invalid entity object provided.");
-//		}
 	}
 
 	@Override
@@ -1491,6 +1481,15 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public SocializeEntityLoader getEntityLoader() {
 		return entityLoader;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#getSystem()
+	 */
+	@Override
+	public SocializeSystem getSystem() {
+		return system;
 	}
 
 	/*

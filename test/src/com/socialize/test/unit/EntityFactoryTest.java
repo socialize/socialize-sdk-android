@@ -90,6 +90,8 @@ public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<MockEn
 		stats.setShares(mockShares);
 		stats.setViews(mockViews);
 		stats.setComments(mockComments);
+		
+		object.setEntityStats(stats);
 	}
 
 	@Override

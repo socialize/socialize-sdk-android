@@ -24,7 +24,6 @@ package com.socialize.config;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map.Entry;
-import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
@@ -57,7 +56,7 @@ public class SocializeConfig {
 	public static final String FACEBOOK_USER_ID = "facebook.user.id";
 	public static final String FACEBOOK_USER_TOKEN = "facebook.user.token";
 	
-	private Properties properties = new Properties();
+	private Properties properties;
 	private SocializeLogger logger;
 	private ResourceLocator resourceLocator;
 	
@@ -75,8 +74,8 @@ public class SocializeConfig {
 	
 	public static final int MAX_LIST_RESULTS = 100;
 	
-	private final Properties customProperties = new Properties();
-	private final Set<String> toBeRemoved = new HashSet<String>();
+//	private final Properties customProperties = new Properties();
+//	private final Set<String> toBeRemoved = new HashSet<String>();
 	
 	public SocializeConfig() {
 		super();
@@ -168,13 +167,20 @@ public class SocializeConfig {
 	 * @param value
 	 */
 	public void setProperty(String key, String value) {
-		if(!StringUtils.isEmpty(value)) {
-			customProperties.put(key, value);
+		
+		if(properties == null) {
+			properties = createProperties();
 		}
-		else {
-			customProperties.remove(key);
-			toBeRemoved.add(key);
-		}
+		
+		properties.put(key, value);
+		
+//		if(!StringUtils.isEmpty(value)) {
+//			customProperties.put(key, value);
+//		}
+//		else {
+//			customProperties.remove(key);
+//			toBeRemoved.add(key);
+//		}
 	}
 	
 	/**
@@ -183,11 +189,12 @@ public class SocializeConfig {
 	 * @return
 	 */
 	public String getProperty(String key) {
-		String property = customProperties.getProperty(key);
-		if(StringUtils.isEmpty(property)) {
-			property = getLocalProperty(key);
-		}
-		return property;
+		return (properties == null) ? null : properties.getProperty(key);
+//		String property = customProperties.getProperty(key);
+//		if(StringUtils.isEmpty(property)) {
+//			property = getLocalProperty(key);
+//		}
+//		return property;
 	}	
 	
 	public int getIntProperty(String key, int defaultValue) {
@@ -256,35 +263,38 @@ public class SocializeConfig {
 	}
 	
 	// So we can mock
-	protected Set<String> getPropertiesToBeRemoved() {
-		return toBeRemoved;
-	}
+//	protected Set<String> getPropertiesToBeRemoved() {
+//		return toBeRemoved;
+//	}
 	
 	public void merge(SocializeConfig config) {
 		merge(config.getProperties(), null);
 	}
 	
-	public void merge() {
-		doMerge(customProperties, toBeRemoved);
-	}
+//	public void merge() {
+//		doMerge(customProperties, toBeRemoved);
+//	}
 	
 	/**
 	 * Merge properties into the config.
 	 * @param other
 	 */
 	public void merge(Properties other, Set<String> toBeRemoved) {
-		merge();
+//		merge();
 		doMerge(other, toBeRemoved);
 	}
 
 	protected void doMerge(Properties other, Set<String> toBeRemoved) {
+
 		if(properties == null) {
 			properties = createProperties();
 		}
 		
-		Set<Entry<Object, Object>> entrySet = other.entrySet();
-		for (Entry<Object, Object> entry : entrySet) {
-			properties.put(entry.getKey(), entry.getValue());
+		if(other != null && other.size() > 0) {
+			Set<Entry<Object, Object>> entrySet = other.entrySet();
+			for (Entry<Object, Object> entry : entrySet) {
+				properties.put(entry.getKey(), entry.getValue());
+			}
 		}
 		
 		if(toBeRemoved != null && toBeRemoved.size() > 0) {

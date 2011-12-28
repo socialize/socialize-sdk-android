@@ -21,6 +21,7 @@
  */
 package com.socialize;
 
+import com.socialize.listener.SocializeInitListener;
 import com.socialize.util.StringUtils;
 
 /**
@@ -29,6 +30,7 @@ import com.socialize.util.StringUtils;
  */
 public class SocializeSystem {
 	private String[] beanOverrides;
+	private SocializeInitListener initListener;
 	
 	public String[] getBeanConfig() {
 		String[] config = null;
@@ -48,6 +50,18 @@ public class SocializeSystem {
 		return config;
 	}
 	
+	public SocializeInitListener getSystemInitListener() {
+		return initListener;
+	}
+
+	/**
+	 * EXPERT ONLY (Not documented)
+	 * @param initListener
+	 */
+	void setSystemInitListener(SocializeInitListener initListener) {
+		this.initListener = initListener;
+	}
+
 	/**
 	 * EXPERT ONLY (Not documented)
 	 * @param beanOverride

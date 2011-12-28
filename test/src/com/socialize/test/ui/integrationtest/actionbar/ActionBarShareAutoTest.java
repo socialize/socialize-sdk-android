@@ -9,6 +9,7 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.BeanFactory;
 import com.socialize.android.ioc.Container;
 import com.socialize.sample.ui.ActionBarAutoActivity;
@@ -97,11 +98,9 @@ public class ActionBarShareAutoTest extends ActivityInstrumentationTestCase2<Act
 		// Override the container in the bean factories for the click handlers
 		Container mockContainer = AndroidMock.createMock(Container.class);
 		
-		SocializeUIBeanOverrider overrider = new SocializeUIBeanOverrider();
-		
-		BeanFactory<ShareClickListener> emailShareClickListenerFactory = overrider.getContainer().getBean("emailShareClickListenerFactory");
-		BeanFactory<ShareClickListener> facebookShareClickListenerFactory = overrider.getContainer().getBean("facebookShareClickListenerFactory");
-		BeanFactory<ShareClickListener> smsShareClickListenerFactory = overrider.getContainer().getBean("smsShareClickListenerFactory");
+		BeanFactory<ShareClickListener> emailShareClickListenerFactory = SocializeAccess.getContainer().getBean("emailShareClickListenerFactory");
+		BeanFactory<ShareClickListener> facebookShareClickListenerFactory = SocializeAccess.getContainer().getBean("facebookShareClickListenerFactory");
+		BeanFactory<ShareClickListener> smsShareClickListenerFactory = SocializeAccess.getContainer().getBean("smsShareClickListenerFactory");
 		
 		emailShareClickListenerFactory.setContainer(mockContainer);
 		facebookShareClickListenerFactory.setContainer(mockContainer);
