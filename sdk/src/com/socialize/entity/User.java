@@ -51,6 +51,8 @@ public class User extends SocializeObject {
 	private boolean autoPostCommentsFacebook;
 	private boolean shareLocation = true;
 	
+	private String metaData;
+	
 	public void merge(User user) {
 		setFirstName(user.getFirstName());
 		setLastName(user.getLastName());
@@ -62,6 +64,7 @@ public class User extends SocializeObject {
 		setStats(user.getStats());
 		setAuthData(user.getAuthData());
 		setProfilePicData(user.getProfilePicData());
+		setMetaData(user.getMetaData());
 		
 		// Set to null to re-create
 		displayName = null;
@@ -212,6 +215,14 @@ public class User extends SocializeObject {
 		this.shareLocation = shareLocation;
 	}
 	
+	public String getMetaData() {
+		return metaData;
+	}
+
+	public void setMetaData(String metaData) {
+		this.metaData = metaData;
+	}
+
 	@Override
 	public int hashCode() {
 		return super.hashCode();

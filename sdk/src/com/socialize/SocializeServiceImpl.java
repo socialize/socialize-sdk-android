@@ -187,69 +187,103 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 
 	public synchronized IOCContainer initWithContainer(Context context, String...paths) throws Exception {
 		boolean init = false;
-
-		if(isInitialized()) {
-			for (String path : paths) {
-				if(binarySearch(initPaths, path) < 0) {
-					
+		
+		String[] locatPaths = getInitPaths();
+		
+		if(paths != null) {
+			
+			if(isInitialized()) {
+				
+				if(locatPaths != null) {
+					for (String path : paths) {
+						if(binarySearch(locatPaths, path) < 0) {
+							
+							if(logger != null) {
+								logger.info("New path found for beans [" +
+										path +
+										"].  Re-initializing Socialize");
+							}
+							
+							this.initCount = 0;
+							
+							// Destroy the container so we don't double up on caches etc.
+							destroy();
+							
+							init = true;
+							
+							break;
+						}
+					}
+				}
+				else {
+					String msg = "Socialize reported as initialize, but no initPaths were found.  This should not happen!";
 					if(logger != null) {
-						logger.info("New path found for beans [" +
-								path +
-								"].  Re-initializing Socialize");
+						logger.error(msg);
+					}
+					else {
+						System.err.println(msg);
 					}
 					
-					this.initCount = 0;
-					
-					// Destroy the container so we don't double up on caches etc.
 					destroy();
-					
 					init = true;
-					
-					break;
 				}
 			}
+			else {
+				init = true;
+			}
+			
+			if(init) {
+				try {
+					Logger.LOG_KEY = Socialize.LOG_KEY;
+					
+					this.initPaths = paths;
+					
+					sort(this.initPaths);
+					
+					SocializeIOC container = newSocializeIOC();
+					ResourceLocator locator = newResourceLocator();
+					
+					locator.setLogger(newLogger());
+					
+					ClassLoaderProvider provider = newClassLoaderProvider();
+					
+					locator.setClassLoaderProvider(provider);
+					
+					container.init(context, locator, paths);
+					
+					init(context, container); // initCount incremented here
+				}
+				catch (Exception e) {
+					throw e;
+				}
+			}
+			else {
+				this.initCount++;
+			}
+			
+			// Always set the context on the container
+			if(container != null) {
+				container.setContext(context);
+			}
 		}
 		else {
-			init = true;
-		}
-		
-		if(init) {
-			try {
-				Logger.LOG_KEY = Socialize.LOG_KEY;
-				
-				initPaths = paths;
-				
-				sort(initPaths);
-				
-				SocializeIOC container = newSocializeIOC();
-				ResourceLocator locator = newResourceLocator();
-				
-				locator.setLogger(newLogger());
-				
-				ClassLoaderProvider provider = newClassLoaderProvider();
-				
-				locator.setClassLoaderProvider(provider);
-				
-				container.init(context, locator, paths);
-				
-				init(context, container); // initCount incremented here
+			String msg = "Attempt to initialize Socialize with null bean config paths";
+			if(logger != null) {
+				logger.error(msg);
 			}
-			catch (Exception e) {
-				throw e;
+			else {
+				System.err.println(msg);
 			}
-		}
-		else {
-			this.initCount++;
-		}
-		
-		// Always set the context on the container
-		if(container != null) {
-			container.setContext(context);
 		}
 		
 		return container;
 	}
 
+	// So we can mock
+	protected String[] getInitPaths() {
+		return initPaths;
+	}
+	
 	// So we can mock
 	protected SocializeIOC newSocializeIOC() {
 		return new SocializeIOC();
@@ -625,7 +659,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 						}
 					});
 				}
-			}			
+			}	
+			else {
+				commentSystem.addComment(session, entity, comment, location, shareOptions, commentAddListener);
+			}
 		}				
 	}
 
@@ -722,15 +759,17 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 						@Override
 						public void onCreate(final Like like) {
 							try {
-								for (final SocialNetwork socialNetwork : shareTo) {
-									try {
-										shareSystem.shareLike(activity, like.getEntity(), null, location, socialNetwork, shareOptions.getListener());
-									}
-									catch(Exception e) {
-										if(logger != null) {
-											logger.error("Failed to share comment to [" +
-													socialNetwork +
-													"]", e);
+								if(like != null && shareSystem != null) {
+									for (final SocialNetwork socialNetwork : shareTo) {
+										try {
+											shareSystem.shareLike(activity, like.getEntity(), null, location, socialNetwork, shareOptions.getListener());
+										}
+										catch(Exception e) {
+											if(logger != null) {
+												logger.error("Failed to share comment to [" +
+														socialNetwork +
+														"]", e);
+											}
 										}
 									}
 								}
@@ -743,7 +782,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 						}
 					});
 				}
-			}			
+			}	
+			else {
+				likeSystem.addLike(session, entity, location, likeAddListener);
+			}
 		}			
 	}
 
@@ -941,7 +983,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#addEntity(com.socialize.entity.Entity, com.socialize.listener.entity.EntityAddListener)
 	 */
 	@Override
-	public void addEntity(Entity entity, EntityAddListener entityAddListener) {
+	public void addEntity(Activity activity, Entity entity, EntityAddListener entityAddListener) {
 		if(assertAuthenticated(entityAddListener)) {
 			entitySystem.addEntity(session, entity, entityAddListener);
 		}		
@@ -1381,7 +1423,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	public void showActionDetailViewForResult(Activity context, User user, SocializeAction action, int requestCode) {
 		Intent i = newIntent(context, ActionDetailActivity.class);
 		i.putExtra(Socialize.USER_ID, user.getId().toString());
-		i.putExtra(Socialize.COMMENT_ID, action.getId().toString());
+		i.putExtra(Socialize.ACTION_ID, action.getId().toString());
 		
 		try {
 			context.startActivityForResult(i, requestCode);
@@ -1432,9 +1474,9 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	}
 
 	@Override
-	public void showUserProfileView(Activity context, String userId) {
+	public void showUserProfileView(Activity context, Long userId) {
 		Intent i = newIntent(context, ProfileActivity.class);
-		i.putExtra(Socialize.USER_ID, userId);
+		i.putExtra(Socialize.USER_ID, userId.toString());
 		try {
 			context.startActivity(i);
 		} 
@@ -1444,9 +1486,9 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	}
 
 	@Override
-	public void showUserProfileViewForResult(Activity context, String userId, int requestCode) {
+	public void showUserProfileViewForResult(Activity context, Long userId, int requestCode) {
 		Intent i = newIntent(context, ProfileActivity.class);
-		i.putExtra(Socialize.USER_ID, userId);
+		i.putExtra(Socialize.USER_ID, userId.toString());
 		
 		try {
 			context.startActivityForResult(i, requestCode);

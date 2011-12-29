@@ -65,9 +65,9 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 
 			@Override
 			public void post(Activity parent, String message, SocialNetworkListener listener) {
-				addResult(parent);
-				addResult(message);
-				addResult(listener);
+				addResult(0, parent);
+				addResult(1, message);
+				addResult(2, listener);
 			}
 		};
 		
@@ -81,9 +81,9 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		poster.setShareMessageBuilder(builder);
 		poster.postLike(parent, entity, null, listener);
 		
-		SocialNetworkListener listenerAfter = getNextResult();
-		String messageAfter = getNextResult();
-		Activity parentAfter = getNextResult();
+		SocialNetworkListener listenerAfter = getResult(2);
+		String messageAfter = getResult(1);
+		Activity parentAfter = getResult(0);
 		
 		AndroidMock.verify(deviceUtils);
 		AndroidMock.verify(builder);
@@ -114,9 +114,9 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 
 			@Override
 			public void post(Activity parent, String message, SocialNetworkListener listener) {
-				addResult(parent);
-				addResult(message);
-				addResult(listener);
+				addResult(0, parent);
+				addResult(1, message);
+				addResult(2, listener);
 			}
 		};
 		
@@ -129,9 +129,9 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		poster.setShareMessageBuilder(builder);
 		poster.postComment(parent, entity, comment, listener);
 		
-		SocialNetworkListener listenerAfter = getNextResult();
-		String messageAfter = getNextResult();
-		Activity parentAfter = getNextResult();
+		SocialNetworkListener listenerAfter = getResult(2);
+		String messageAfter = getResult(1);
+		Activity parentAfter = getResult(0);
 		
 		AndroidMock.verify(deviceUtils);
 		AndroidMock.verify(builder);

@@ -487,10 +487,11 @@ public interface SocializeService {
 	
 	/**
 	 * Creates a new entity.
+	 * @param activity The current activity.
 	 * @param entity The entity to create.
 	 * @param entityAddListener A listener to handle callbacks from the post.
 	 */
-	public void addEntity(Entity entity, EntityAddListener entityAddListener);
+	public void addEntity(Activity activity, Entity entity, EntityAddListener entityAddListener);
 	
 	
 	/**

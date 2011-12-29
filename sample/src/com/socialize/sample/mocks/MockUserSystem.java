@@ -15,11 +15,11 @@ import com.socialize.ui.profile.UserProfile;
 
 public class MockUserSystem implements UserSystem {
 	
-	private User user = new User();
+	private User user;
 	
-	public MockUserSystem(User user) {
+	public MockUserSystem() {
 		super();
-		this.user = user;
+		this.user = new User();
 	}
 	
 	@Override
@@ -76,4 +76,10 @@ public class MockUserSystem implements UserSystem {
 	public void saveUserProfile(Context context, SocializeSession session, String firstName, String lastName, String encodedImage, UserListener listener) {
 		listener.onUpdate(user);
 	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	
 }

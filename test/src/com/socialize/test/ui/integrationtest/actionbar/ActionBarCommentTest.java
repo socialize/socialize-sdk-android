@@ -2,19 +2,19 @@ package com.socialize.test.ui.integrationtest.actionbar;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.socialize.sample.ui.ActionBarManualActivity;
+import com.socialize.Socialize;
+import com.socialize.entity.Entity;
+import com.socialize.sample.ui.ActionBarManualActivity2;
 import com.socialize.test.ui.util.TestUtils;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.actionbar.ActionBarLayoutView;
 import com.socialize.ui.comment.CommentActivity;
 
-public class ActionBarCommentTest extends ActivityInstrumentationTestCase2<ActionBarManualActivity> {
+public class ActionBarCommentTest extends ActivityInstrumentationTestCase2<ActionBarManualActivity2> {
 
 	public ActionBarCommentTest() {
-		super("com.socialize.ui.sample", ActionBarManualActivity.class);
+		super("com.socialize.ui.sample", ActionBarManualActivity2.class);
 	}
 	
 	@Override
@@ -34,10 +34,11 @@ public class ActionBarCommentTest extends ActivityInstrumentationTestCase2<Actio
 		TestUtils.setupSocializeOverrides(true, true);
 		TestUtils.setUpActivityMonitor(CommentActivity.class);
 		
+		Entity entity = Entity.newInstance("http://entity1.com", "no name");
+		
+		
 		Intent intent = new Intent();
-		Bundle extras = new Bundle();
-		extras.putString(SocializeUI.ENTITY_KEY, "http://entity1.com");
-		intent.putExtras(extras);
+		intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 		setActivityIntent(intent);
 		
 		final ActionBarLayoutView actionBar = TestUtils.findView(getActivity(), ActionBarLayoutView.class, 5000);

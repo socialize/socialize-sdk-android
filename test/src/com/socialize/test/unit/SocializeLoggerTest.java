@@ -83,32 +83,32 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 
 			@Override
 			public void debug(String msg) {
-				addResult(msg);
+				addResult(0, msg);
 			}
 
 			@Override
 			public void info(String msg) {
-				addResult(msg);
+				addResult(1, msg);
 			}
 
 			@Override
 			public void warn(String msg) {
-				addResult(msg);
+				addResult(2, msg);
 			}
 
 			@Override
 			public void error(String msg) {
-				addResult(msg);
+				addResult(3, msg);
 			}
 
 			@Override
 			public void warn(String msg, Throwable error) {
-				addResult(msg);
+				addResult(4, msg);
 			}
 
 			@Override
 			public void error(String msg, Throwable error) {
-				addResult(msg);
+				addResult(5, msg);
 			}
 
 			@Override
@@ -127,7 +127,7 @@ public class SocializeLoggerTest extends SocializeActivityTest {
 		String[] results = new String[6];
 		
 		for (int i = results.length-1; i >= 0; i--) {
-			results[i] = getNextResult();
+			results[i] = getResult(i);
 		}
 		
 		for (int i = 0; i < results.length; i++) {

@@ -31,14 +31,13 @@ import android.widget.EditText;
 
 import com.jayway.android.robotium.solo.Solo;
 import com.socialize.Socialize;
-import com.socialize.sample.ui.SampleActivity;
+import com.socialize.sample.ui.SampleActivity2;
 import com.socialize.test.ui.ResultHolder;
-import com.socialize.ui.SocializeUI;
 
 /**
  * @author Jason Polites
  */
-public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTestCase2<SampleActivity> {
+public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTestCase2<SampleActivity2> {
 
 	protected final ResultHolder holder = new ResultHolder();
 	
@@ -51,7 +50,7 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	protected InputMethodManager imm = null;
 
 	public SocializeUIRobotiumTest() {
-		super("com.socialize.ui.sample", SampleActivity.class);
+		super("com.socialize.ui.sample", SampleActivity2.class);
 	}
 
 	public void setUp() throws Exception {
@@ -66,7 +65,7 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	@Override
 	protected void tearDown() throws Exception {
 		
-		SocializeUI.getInstance().destroy(getActivity(), true);
+		Socialize.getSocialize().destroy(true);
 		
 		try {
 			robotium.finish();

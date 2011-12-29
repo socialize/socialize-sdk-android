@@ -6,10 +6,10 @@ import com.socialize.SocializeAccess;
 import com.socialize.api.ApiHost;
 import com.socialize.sample.mocks.MockSocializeApiHost;
 
+@Deprecated
 public class ActionBarTestUtils {
 	public static void setApiHostDelegate(ApiHost delegate) {
-		SocializeAccess accessor = new SocializeAccess();
-		Object bean = accessor.getBean("socializeApiHost");
+		Object bean = SocializeAccess.getBean("socializeApiHost");
 		if(bean instanceof MockSocializeApiHost) {
 			MockSocializeApiHost host = (MockSocializeApiHost) bean;
 			host.setDelegate(delegate);
@@ -20,8 +20,7 @@ public class ActionBarTestUtils {
 	}
 	
 	public static void clearApiHostDelegate() {
-		SocializeAccess accessor = new SocializeAccess();
-		Object bean = accessor.getBean("socializeApiHost");
+		Object bean = SocializeAccess.getBean("socializeApiHost");
 		if(bean instanceof MockSocializeApiHost) {
 			MockSocializeApiHost host = (MockSocializeApiHost) bean;
 			host.setDelegate(null);

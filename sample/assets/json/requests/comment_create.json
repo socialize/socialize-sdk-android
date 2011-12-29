@@ -7,7 +7,8 @@
     {
         'entity': {
             'key': 'http://www.example.com/another-story/',
-            'name': 'Another Interesting Story'
+            'name': 'Another Interesting Story',
+        	'meta' : ''
         },
         'text': 'Another comment',
         'share_location':false

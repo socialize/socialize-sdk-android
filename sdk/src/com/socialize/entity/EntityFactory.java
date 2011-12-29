@@ -29,10 +29,8 @@ import org.json.JSONObject;
  *
  */
 public class EntityFactory extends AbstractEntityFactory<Entity> {
-	
 	@Override
 	public Object instantiateObject(JSONObject object) {
 		return new Entity();
 	}
-	
 }

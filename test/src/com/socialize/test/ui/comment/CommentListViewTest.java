@@ -24,7 +24,6 @@ import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.ShareOptions;
 import com.socialize.test.PublicSocialize;
 import com.socialize.test.ui.SocializeUIActivityTest;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.auth.AuthRequestDialogFactory;
 import com.socialize.ui.auth.AuthRequestListener;
 import com.socialize.ui.comment.CommentAdapter;
@@ -68,7 +67,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		AuthRequestDialogFactory.class, 
 		AuthRequestListener.class,
 		SocializeService.class,
-		SocializeUI.class,
 		ProgressDialogFactory.class,
 		ProgressDialog.class})
 	public void testGetCommentAddListenerNotAuthed() {
@@ -80,7 +78,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		final AuthRequestListener listener = AndroidMock.createMock(AuthRequestListener.class);
 		final SocializeService socializeService = AndroidMock.createMock(SocializeService.class);
-		final SocializeUI socializeUI = AndroidMock.createMock(SocializeUI.class);
 		
 		AndroidMock.expect(authRequestDialogFactory.getBean()).andReturn(authRequestDialog);
 		AndroidMock.expect(socializeService.isAuthenticated(AuthProviderType.FACEBOOK)).andReturn(false);
@@ -94,7 +91,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		AndroidMock.replay(authRequestDialogFactory);
 		AndroidMock.replay(authRequestDialog);
 		AndroidMock.replay(socializeService);
-		AndroidMock.replay(socializeUI);
 		
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
 			
@@ -128,7 +124,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		AndroidMock.verify(authRequestDialogFactory);
 		AndroidMock.verify(authRequestDialog);
 		AndroidMock.verify(socializeService);
-		AndroidMock.verify(socializeUI);
 		
 		Exception message = getResult(0);
 		String text = getResult(1);
@@ -733,15 +728,11 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 	}
 	
 	class PublicCommentListView extends CommentListView {
-		
-		public PublicCommentListView(Context context, String entityKey) {
-			super(context, entityKey);
-		}
 
 		public PublicCommentListView(Context context) {
-			super(context, "foobar");
+			super(context, Entity.newInstance("foobar", null));
 		}
-
+		
 		@Override
 		public CommentScrollListener getCommentScrollListener() {
 			return super.getCommentScrollListener();

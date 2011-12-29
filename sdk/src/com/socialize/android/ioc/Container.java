@@ -73,36 +73,43 @@ public class Container {
 			
 			BeanRef beanRef = mapping.getBeanRef(name);
 			
-			if(beanRef.isAbstractBean()) {
-				Logger.w(getClass().getSimpleName(), "Cannot proxy abstract bean [" +
-						name +
-						"]");
-			}
-			else {
-				T bean = getBeanInternal(name, args);
-				
-				if(bean != null) {
-					
-					ProxyObject<T> proxy = null;
-					
-					proxy = (ProxyObject<T>) proxies.get(name);
-					
-					if(proxy == null) {
-						proxy = new ProxyObject<T>();
-						proxy.setDelegate(bean);
-						
-						if(beanRef.isSingleton()) {
-							proxies.put(name, proxy);
-						}					
-					}
-					
-					return proxy;				
+			if(beanRef != null) {
+				if(beanRef.isAbstractBean()) {
+					Logger.w(getClass().getSimpleName(), "Cannot proxy abstract bean [" +
+							name +
+							"]");
 				}
 				else {
-					Logger.w(getClass().getSimpleName(), "No bean with name [" +
-							name +
-							"] found when attempting to proxy.");
+					T bean = getBeanInternal(name, args);
+					
+					if(bean != null) {
+						
+						ProxyObject<T> proxy = null;
+						
+						proxy = (ProxyObject<T>) proxies.get(name);
+						
+						if(proxy == null) {
+							proxy = new ProxyObject<T>();
+							proxy.setDelegate(bean);
+							
+							if(beanRef.isSingleton()) {
+								proxies.put(name, proxy);
+							}					
+						}
+						
+						return proxy;				
+					}
+					else {
+						Logger.w(getClass().getSimpleName(), "No bean with name [" +
+								name +
+								"] found when attempting to proxy.");
+					}
 				}
+			}
+			else {
+				Logger.w(getClass().getSimpleName(), "Bean [" +
+						name +
+						"] does not exist and therefore cannot be proxied.  Make sure <proxy> elements exist AFTER the definition of this bean.");
 			}
 		}
 		else {
@@ -274,6 +281,11 @@ public class Container {
 			beans.clear();
 			beans = null;
 		}
+		
+		if(proxies != null) {
+			proxies.clear();
+			proxies = null;
+		}		
 		
 		destroyed = true;
 	}

@@ -56,7 +56,7 @@ public class ProfileView extends EntityView {
 	}
 
 	@Override
-	protected String[] getEntityKeys() {
+	protected String[] getBundleKeys() {
 		return new String[]{Socialize.USER_ID};
 	}
 	

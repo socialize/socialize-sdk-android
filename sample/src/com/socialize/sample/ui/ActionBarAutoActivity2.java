@@ -20,7 +20,7 @@ import com.socialize.ui.actionbar.OnActionBarEventListener;
 public class ActionBarAutoActivity2 extends ActionBarActivity2 {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState, String entityKey, String entityName) {
+	protected void onCreate(Bundle savedInstanceState, Entity entity) {
 		ActionBarOptions options = new ActionBarOptions();
 		options.setAddScrollView(true);
 		
@@ -30,10 +30,6 @@ public class ActionBarAutoActivity2 extends ActionBarActivity2 {
 				Toast.makeText(activity, "Clicked on entity with key: " + entity.getKey(), Toast.LENGTH_SHORT).show();
 			}
 		});
-		
-		Entity entity = new Entity();
-		entity.setKey(entityKey);
-		entity.setName(entityName);
 		
 		View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.action_bar_auto, entity, options, new ActionBarListener() {
 			

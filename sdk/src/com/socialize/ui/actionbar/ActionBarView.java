@@ -150,7 +150,7 @@ public class ActionBarView extends EntityView {
 	 * @see com.socialize.ui.view.EntityView#getEntityKeys()
 	 */
 	@Override
-	protected String[] getEntityKeys() {
+	protected String[] getBundleKeys() {
 		return null;
 	}
 	

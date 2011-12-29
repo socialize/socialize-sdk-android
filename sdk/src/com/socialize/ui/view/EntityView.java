@@ -36,11 +36,11 @@ public abstract class EntityView extends AuthenticatedView {
 			}
 			
 			if(bundle != null) {
-				String[] entityKeys = getEntityKeys();
-				if(entityKeys != null && entityKeys.length > 0) {
-					Object[] values = new Object[entityKeys.length];
-					for (int i = 0; i < entityKeys.length; i++) {
-						values[i] = bundle.get(entityKeys[i]);
+				String[] bundleKeys = getBundleKeys();
+				if(bundleKeys != null && bundleKeys.length > 0) {
+					Object[] values = new Object[bundleKeys.length];
+					for (int i = 0; i < bundleKeys.length; i++) {
+						values[i] = bundle.get(bundleKeys[i]);
 					}
 					return getView(bundle, values);
 				}
@@ -73,7 +73,7 @@ public abstract class EntityView extends AuthenticatedView {
 		return view;
 	}
 	
-	protected abstract View getView(Bundle bundle, Object...entityKeys);
+	protected abstract View getView(Bundle bundle, Object...bundleKeys);
 	
-	protected abstract String[] getEntityKeys();
+	protected abstract String[] getBundleKeys();
 }

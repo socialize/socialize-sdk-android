@@ -27,6 +27,7 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.SocializeViewSystem;
+import com.socialize.entity.Entity;
 import com.socialize.entity.View;
 import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.view.ViewListener;
@@ -65,8 +66,7 @@ public class ViewApiTest extends SocializeUnitTest {
 			}
 		};
 		
-		api.addView(session, key, null, listener);
-		
+		api.addView(session, Entity.newInstance(key, null), null, listener);
 		
 		List<View> views = getNextResult();
 		

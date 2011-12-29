@@ -26,7 +26,6 @@ import com.socialize.api.DefaultSocializeRequestFactory;
 import com.socialize.api.DefaultSocializeResponseFactory;
 import com.socialize.api.DefaultSocializeSessionFactory;
 import com.socialize.api.PreferenceSessionPersister;
-import com.socialize.api.SocializeApiHost;
 import com.socialize.api.action.SocializeActivitySystem;
 import com.socialize.api.action.SocializeCommentSystem;
 import com.socialize.api.action.SocializeEntitySystem;

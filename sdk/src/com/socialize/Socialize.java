@@ -46,7 +46,13 @@ public class Socialize {
 	public static final String ENTITY_NAME = "socialize.entity.name";
 	
 	public static final Map<String, SocializeListener> STATIC_LISTENERS = new HashMap<String, SocializeListener>();
-	public static final String COMMENT_ID = "socialize.comment.id";
+	
+	public static final String ACTION_ID = "socialize.action.id";
+	
+	@Deprecated
+	public static final String COMMENT_ID = ACTION_ID;
+
+	
 	public static final String LOG_KEY = "Socialize";
 	public static final String USER_ID = "socialize.user.id";
 	public static final String DEFAULT_USER_ICON = "default_user_icon.png";

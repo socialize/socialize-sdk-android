@@ -3,28 +3,26 @@ package com.socialize.sample.ui;
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.socialize.Socialize;
+import com.socialize.entity.Entity;
+
 public abstract class ActionBarActivity2 extends Activity {
 
-	public static final String ENTITY_KEY = "socialize.entity.key";
-	public static final String ENTITY_NAME = "socialize.entity.name";
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		String entityKey = null;
-		String entityName = null;
+		Entity entity = null;
 		
 		Bundle extras = this.getIntent().getExtras();
 		
 		if(extras != null) {
-			entityKey = extras.getString(ENTITY_KEY);
-			entityName = extras.getString(ENTITY_NAME);
+			entity = (Entity)extras.get(Socialize.ENTITY_OBJECT);
 		}
 		
-		onCreate(savedInstanceState, entityKey, entityName);
+		onCreate(savedInstanceState, entity);
 	}
 
-	protected abstract void onCreate(Bundle savedInstanceState, String entityKey, String entityName);
+	protected abstract void onCreate(Bundle savedInstanceState, Entity entity);
 	
 }

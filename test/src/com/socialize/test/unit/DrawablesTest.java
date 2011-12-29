@@ -246,13 +246,13 @@ public class DrawablesTest extends SocializeActivityTest {
 		PublicDrawables drawables = new PublicDrawables() {
 			@Override
 			public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
-				addResult(name);
-				addResult(density);
-				addResult(tileX);
-				addResult(tileY);
-				addResult(scaleToWidth);
-				addResult(scaleToHeight);
-				addResult(eternal);
+				addResult(0, name);
+				addResult(1, density);
+				addResult(2, tileX);
+				addResult(3, tileY);
+				addResult(4, scaleToWidth);
+				addResult(5, scaleToHeight);
+				addResult(6, eternal);
 				return null;
 			}
 		};
@@ -260,14 +260,13 @@ public class DrawablesTest extends SocializeActivityTest {
 		drawables.setMetrics(metrics);
 		drawables.getDrawable(name, tileX, tileY, eternal);
 		
-		// reverse order for asserts
-		assertEquals(eternal, getNextResult());
-		assertEquals(-1, getNextResult());
-		assertEquals(-1, getNextResult());
-		assertEquals(tileY, getNextResult());
-		assertEquals(tileX, getNextResult());
-		assertEquals(metrics.densityDpi, getNextResult());
-		assertEquals(name, getNextResult());
+		assertEquals(eternal, getResult(6));
+		assertEquals(-1, getResult(5));
+		assertEquals(-1, getResult(4));
+		assertEquals(tileY, getResult(3));
+		assertEquals(tileX, getResult(2));
+		assertEquals(metrics.densityDpi, getResult(1));
+		assertEquals(name, getResult(0));
 	}
 	
 	public void testCallFlow1() {
@@ -277,21 +276,20 @@ public class DrawablesTest extends SocializeActivityTest {
 		PublicDrawables drawables = new PublicDrawables() {
 			@Override
 			public Drawable getDrawable(String name, int scaleToWidth, int scaleToHeight, boolean eternal) {
-				addResult(name);
-				addResult(scaleToWidth);
-				addResult(scaleToHeight);
-				addResult(eternal);
+				addResult(0, name);
+				addResult(1, scaleToWidth);
+				addResult(2, scaleToHeight);
+				addResult(3, eternal);
 				return null;
 			}
 		};
 		
 		drawables.getDrawable(name);
 		
-		// reverse order for asserts
-		assertEquals(true, getNextResult());
-		assertEquals(-1, getNextResult());
-		assertEquals(-1, getNextResult());
-		assertEquals(name, getNextResult());
+		assertEquals(true, getResult(3));
+		assertEquals(-1, getResult(2));
+		assertEquals(-1, getResult(1));
+		assertEquals(name, getResult(0));
 	}
 	
 	public void testCallFlow2() {
@@ -302,12 +300,12 @@ public class DrawablesTest extends SocializeActivityTest {
 		PublicDrawables drawables = new PublicDrawables() {
 			@Override
 			public Drawable getDrawable(String name, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
-				addResult(name);
-				addResult(tileX);
-				addResult(tileY);
-				addResult(scaleToWidth);
-				addResult(scaleToHeight);
-				addResult(eternal);
+				addResult(0,name);
+				addResult(1, tileX);
+				addResult(2, tileY);
+				addResult(3, scaleToWidth);
+				addResult(4, scaleToHeight);
+				addResult(5, eternal);
 				return null;
 			}
 		};
@@ -315,12 +313,12 @@ public class DrawablesTest extends SocializeActivityTest {
 		drawables.getDrawable(name, eternal);
 		
 		// reverse order for asserts
-		assertEquals(eternal, getNextResult());
-		assertEquals(-1, getNextResult());
-		assertEquals(-1, getNextResult());
-		assertEquals(false, getNextResult());
-		assertEquals(false, getNextResult());
-		assertEquals(name, getNextResult());
+		assertEquals(eternal, getResult(5));
+		assertEquals(-1, getResult(4));
+		assertEquals(-1, getResult(3));
+		assertEquals(false, getResult(2));
+		assertEquals(false, getResult(1));
+		assertEquals(name, getResult(0));
 	}
 	
 	
@@ -340,13 +338,13 @@ public class DrawablesTest extends SocializeActivityTest {
 		PublicDrawables drawables = new PublicDrawables() {
 			@Override
 			public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
-				addResult(name);
-				addResult(density);
-				addResult(tileX);
-				addResult(tileY);
-				addResult(scaleToWidth);
-				addResult(scaleToHeight);
-				addResult(eternal);
+				addResult(0, name);
+				addResult(1, density);
+				addResult(2, tileX);
+				addResult(3, tileY);
+				addResult(4, scaleToWidth);
+				addResult(5, scaleToHeight);
+				addResult(6, eternal);
 				return null;
 			}
 		};
@@ -356,13 +354,13 @@ public class DrawablesTest extends SocializeActivityTest {
 		drawables.getDrawable(name, tileX, tileY, scaleToWidth, scaleToHeight, eternal);
 		
 		// reverse order for asserts
-		assertEquals(eternal, getNextResult());
-		assertEquals(scaleToHeight, getNextResult());
-		assertEquals(scaleToWidth, getNextResult());
-		assertEquals(tileY, getNextResult());
-		assertEquals(tileX, getNextResult());
-		assertEquals(metrics.densityDpi, getNextResult());
-		assertEquals(name, getNextResult());
+		assertEquals(eternal, getResult(6));
+		assertEquals(scaleToHeight, getResult(5));
+		assertEquals(scaleToWidth, getResult(4));
+		assertEquals(tileY, getResult(3));
+		assertEquals(tileX, getResult(2));
+		assertEquals(metrics.densityDpi, getResult(1));
+		assertEquals(name, getResult(0));
 	}
 	
 	public void testCallFlow4() {
@@ -376,10 +374,10 @@ public class DrawablesTest extends SocializeActivityTest {
 		PublicDrawables drawables = new PublicDrawables() {
 			@Override
 			public Drawable getDrawable(String name, int scaleToWidth, int scaleToHeight, boolean eternal) {
-				addResult(name);
-				addResult(scaleToWidth);
-				addResult(scaleToHeight);
-				addResult(eternal);
+				addResult(0, name);
+				addResult(1, scaleToWidth);
+				addResult(2, scaleToHeight);
+				addResult(3, eternal);
 				return null;
 			}
 		};
@@ -387,10 +385,10 @@ public class DrawablesTest extends SocializeActivityTest {
 		drawables.getDrawable(name, scaleToWidth, scaleToHeight);
 		
 		// reverse order for asserts
-		assertEquals(eternal, getNextResult());
-		assertEquals(scaleToHeight, getNextResult());
-		assertEquals(scaleToWidth, getNextResult());
-		assertEquals(name, getNextResult());
+		assertEquals(eternal, getResult(3));
+		assertEquals(scaleToHeight, getResult(2));
+		assertEquals(scaleToWidth, getResult(1));
+		assertEquals(name, getResult(0));
 	}	
 	
 	public void testCallFlow5() {
@@ -404,12 +402,12 @@ public class DrawablesTest extends SocializeActivityTest {
 		PublicDrawables drawables = new PublicDrawables() {
 			@Override
 			public Drawable getDrawable(String name, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
-				addResult(name);
-				addResult(tileX);
-				addResult(tileY);
-				addResult(scaleToWidth);
-				addResult(scaleToHeight);
-				addResult(eternal);
+				addResult(0, name);
+				addResult(1, tileX);
+				addResult(2, tileY);
+				addResult(3, scaleToWidth);
+				addResult(4,scaleToHeight);
+				addResult(5, eternal);
 				return null;
 			}
 		};
@@ -417,12 +415,12 @@ public class DrawablesTest extends SocializeActivityTest {
 		drawables.getDrawable(name, scaleToWidth, scaleToHeight, eternal);
 		
 		// reverse order for asserts
-		assertEquals(eternal, getNextResult());
-		assertEquals(scaleToHeight, getNextResult());
-		assertEquals(scaleToWidth, getNextResult());
-		assertEquals(false, getNextResult());
-		assertEquals(false, getNextResult());
-		assertEquals(name, getNextResult());
+		assertEquals(eternal, getResult(5));
+		assertEquals(scaleToHeight, getResult(4));
+		assertEquals(scaleToWidth, getResult(3));
+		assertEquals(false, getResult(2));
+		assertEquals(false, getResult(1));
+		assertEquals(name, getResult(0));
 	}		
 	
 	

@@ -85,8 +85,6 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	private SocializeConfig config;
 	private Context context;
 	
-//	private FacebookSessionStore facebookSessionStore;
-	
 	public DefaultSocializeProvider() {
 		super();
 	}
@@ -201,11 +199,6 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		if(sessionPersister != null) {
 			sessionPersister.delete(context);
 		}
-		
-		// TODO: this should be in the auth provider for FB!
-//		if(facebookSessionStore != null) {
-//			facebookSessionStore.clear(context);
-//		}
 	}
 
 	@Override
@@ -221,49 +214,58 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		
 		endpoint = prepareEndpoint(session, endpoint, true);
 		
-		HttpClient client = clientFactory.getClient();
-		
-		HttpEntity entity = null;
-		
-		try {
-			HttpUriRequest request = requestFactory.getAuthRequest(session, endpoint, uuid);
-			
-			HttpResponse response = client.execute(request);
-			
-			entity = response.getEntity();
-			
-			if(httpUtils.isHttpError(response)) {
-				
-				if(sessionPersister != null && httpUtils.isAuthError(response)) {
-					sessionPersister.delete(context);
-				}
-				
-				String msg = ioUtils.readSafe(entity.getContent());
-				throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
-			}
-			else {
-				JSONObject json = jsonParser.parseObject(entity.getContent());
-				
-				User user = userFactory.fromJSON(json.getJSONObject("user"));
+		if(!clientFactory.isDestroyed()) {
 
-				session.setConsumerToken(json.getString("oauth_token"));
-				session.setConsumerTokenSecret(json.getString("oauth_token_secret"));
-				session.setUser(user);
+			HttpClient client = clientFactory.getClient();
+			
+			HttpEntity entity = null;
+			
+			try {
+				HttpUriRequest request = requestFactory.getAuthRequest(session, endpoint, uuid);
 				
-				if(sessionPersister != null) {
-					sessionPersister.save(context, session);
+				HttpResponse response = client.execute(request);
+				
+				entity = response.getEntity();
+				
+				if(httpUtils.isHttpError(response)) {
+					
+					if(sessionPersister != null && httpUtils.isAuthError(response)) {
+						sessionPersister.delete(context);
+					}
+					
+					String msg = ioUtils.readSafe(entity.getContent());
+					throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
+				}
+				else {
+					JSONObject json = jsonParser.parseObject(entity.getContent());
+					
+					User user = userFactory.fromJSON(json.getJSONObject("user"));
+
+					session.setConsumerToken(json.getString("oauth_token"));
+					session.setConsumerTokenSecret(json.getString("oauth_token_secret"));
+					session.setUser(user);
+					
+					if(sessionPersister != null) {
+						sessionPersister.save(context, session);
+					}
 				}
 			}
-		}
-		catch (Exception e) {
-			if(e instanceof SocializeException) {
-				throw (SocializeException) e;
+			catch (Exception e) {
+				if(e instanceof SocializeException) {
+					throw (SocializeException) e;
+				}
+				throw new SocializeException(e);
 			}
-			throw new SocializeException(e);
+			finally {
+				closeEntity(entity);
+			}
 		}
-		finally {
-			closeEntity(entity);
+		else {
+			if(logger != null) {
+				logger.warn("Attempt to access HttpClientFactory that was already destroyed");
+			}
 		}
+		
 		
 		return session;
 	}
@@ -280,36 +282,43 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	public void delete(SocializeSession session, String endpoint, String id) throws SocializeException {
 		HttpEntity entity = null;
 		
-		try {
-			endpoint = prepareEndpoint(session, endpoint);
-			
-			HttpClient client = clientFactory.getClient();
-			
-			HttpUriRequest del = requestFactory.getDeleteRequest(session, endpoint, id);
-			
-			HttpResponse response = client.execute(del);
-			
-			if(httpUtils.isHttpError(response)) {
+		if(!clientFactory.isDestroyed()) {	
+			try {
+				endpoint = prepareEndpoint(session, endpoint);
 				
-				entity = response.getEntity();
+				HttpClient client = clientFactory.getClient();
 				
-				if(sessionPersister != null && httpUtils.isAuthError(response)) {
-					sessionPersister.delete(context);
+				HttpUriRequest del = requestFactory.getDeleteRequest(session, endpoint, id);
+				
+				HttpResponse response = client.execute(del);
+				
+				if(httpUtils.isHttpError(response)) {
+					
+					entity = response.getEntity();
+					
+					if(sessionPersister != null && httpUtils.isAuthError(response)) {
+						sessionPersister.delete(context);
+					}
+					
+					String msg = ioUtils.readSafe(entity.getContent());
+					throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
+				}
+			}
+			catch (Exception e) {
+				if(e instanceof SocializeException) {
+					throw (SocializeException) e;
 				}
 				
-				String msg = ioUtils.readSafe(entity.getContent());
-				throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
+				throw new SocializeException(e);
+			}
+			finally {
+				closeEntity(entity);
 			}
 		}
-		catch (Exception e) {
-			if(e instanceof SocializeException) {
-				throw (SocializeException) e;
+		else {
+			if(logger != null) {
+				logger.warn("Attempt to access HttpClientFactory that was already destroyed");
 			}
-			
-			throw new SocializeException(e);
-		}
-		finally {
-			closeEntity(entity);
 		}
 	}
 	
@@ -372,39 +381,51 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 	private T doGetTypeRequest(HttpUriRequest request) throws SocializeException {
 		HttpEntity entity = null;
 		
-		try {
+		if(!clientFactory.isDestroyed()) {	
 			
-			HttpClient client = clientFactory.getClient();
-			
-			HttpResponse response = client.execute(request);
-			
-			entity = response.getEntity();
-			
-			if(httpUtils.isHttpError(response)) {
+			try {
 				
-				if(sessionPersister != null && httpUtils.isAuthError(response)) {
-					sessionPersister.delete(context);
+				HttpClient client = clientFactory.getClient();
+				
+				HttpResponse response = client.execute(request);
+				
+				entity = response.getEntity();
+				
+				if(httpUtils.isHttpError(response)) {
+					
+					if(sessionPersister != null && httpUtils.isAuthError(response)) {
+						sessionPersister.delete(context);
+					}
+					
+					String msg = ioUtils.readSafe(entity.getContent());
+					throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
+				}
+				else {
+					JSONObject json = jsonParser.parseObject(entity.getContent());
+					
+					return objectFactory.fromJSON(json);
+				}
+			}
+			catch (Exception e) {
+				if(e instanceof SocializeException) {
+					throw (SocializeException) e;
 				}
 				
-				String msg = ioUtils.readSafe(entity.getContent());
-				throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
+				throw new SocializeException(e);
 			}
-			else {
-				JSONObject json = jsonParser.parseObject(entity.getContent());
-				
-				return objectFactory.fromJSON(json);
+			finally {
+				closeEntity(entity);
 			}
 		}
-		catch (Exception e) {
-			if(e instanceof SocializeException) {
-				throw (SocializeException) e;
+		else {
+			if(logger != null) {
+				logger.warn("Attempt to access HttpClientFactory that was already destroyed");
 			}
 			
-			throw new SocializeException(e);
+			return null;
 		}
-		finally {
-			closeEntity(entity);
-		}
+			
+
 	}
 	
 	private ListResult<T> doListTypeRequest(HttpUriRequest request) throws SocializeException {
@@ -414,82 +435,92 @@ public class DefaultSocializeProvider<T extends SocializeObject> implements Soci
 		
 		ListResult<T> result = null;
 		
-		try {
-			HttpClient client = clientFactory.getClient();
+		if(!clientFactory.isDestroyed()) {	
 
-			HttpResponse response = client.execute(request);
-			
-			entity = response.getEntity();
-			
-			if(httpUtils.isHttpError(response)) {
+			try {
+				HttpClient client = clientFactory.getClient();
+
+				HttpResponse response = client.execute(request);
 				
-				if(sessionPersister != null && httpUtils.isAuthError(response)) {
-					sessionPersister.delete(context);
-				}
+				entity = response.getEntity();
 				
-				String msg = ioUtils.readSafe(entity.getContent());
-				throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
-			}
-			else {
-				
-				result = new ListResult<T>();
-				
-				// Read the json just for logging
-				String json = ioUtils.readSafe(entity.getContent());
-				
-				if(logger != null && logger.isDebugEnabled()) {
-					logger.debug("JSON Response: " + json);
-				}
-				
-				JSONObject object = jsonParser.parseObject(json);
-				
-				if(object.has(JSON_ATTR_ERRORS) && !object.isNull(JSON_ATTR_ERRORS)) {
+				if(httpUtils.isHttpError(response)) {
 					
-					JSONArray errorList = object.getJSONArray(JSON_ATTR_ERRORS);
-					
-					int length = errorList.length();
-					
-					errors = new ArrayList<ActionError>(length);
-					
-					for (int i = 0; i < length; i++) {
-						JSONObject jsonObject = errorList.getJSONObject(i);
-						ActionError error = errorFactory.fromJSON(jsonObject);
-						errors.add(error);
+					if(sessionPersister != null && httpUtils.isAuthError(response)) {
+						sessionPersister.delete(context);
 					}
 					
-					result.setErrors(errors);
+					String msg = ioUtils.readSafe(entity.getContent());
+					throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
 				}
-				
-				if(object.has(JSON_ATTR_ITEMS) && !object.isNull(JSON_ATTR_ITEMS)) {
-					JSONArray list = object.getJSONArray(JSON_ATTR_ITEMS);
+				else {
 					
-					int length = list.length();
+					result = new ListResult<T>();
 					
-					results = new ArrayList<T>(length);
+					// Read the json just for logging
+					String json = ioUtils.readSafe(entity.getContent());
 					
-					for (int i = 0; i < length; i++) {
-						results.add(objectFactory.fromJSON(list.getJSONObject(i)));
+					if(logger != null && logger.isDebugEnabled()) {
+						logger.debug("JSON Response: " + json);
 					}
 					
-					result.setItems(results);
-				}
-				
-				if(object.has(JSON_ATTR_COUNT) && !object.isNull(JSON_ATTR_COUNT)) {
-					result.setTotalCount(object.getInt(JSON_ATTR_COUNT));
+					JSONObject object = jsonParser.parseObject(json);
+					
+					if(object.has(JSON_ATTR_ERRORS) && !object.isNull(JSON_ATTR_ERRORS)) {
+						
+						JSONArray errorList = object.getJSONArray(JSON_ATTR_ERRORS);
+						
+						int length = errorList.length();
+						
+						errors = new ArrayList<ActionError>(length);
+						
+						for (int i = 0; i < length; i++) {
+							JSONObject jsonObject = errorList.getJSONObject(i);
+							ActionError error = errorFactory.fromJSON(jsonObject);
+							errors.add(error);
+						}
+						
+						result.setErrors(errors);
+					}
+					
+					if(object.has(JSON_ATTR_ITEMS) && !object.isNull(JSON_ATTR_ITEMS)) {
+						JSONArray list = object.getJSONArray(JSON_ATTR_ITEMS);
+						
+						int length = list.length();
+						
+						results = new ArrayList<T>(length);
+						
+						for (int i = 0; i < length; i++) {
+							results.add(objectFactory.fromJSON(list.getJSONObject(i)));
+						}
+						
+						result.setItems(results);
+					}
+					
+					if(object.has(JSON_ATTR_COUNT) && !object.isNull(JSON_ATTR_COUNT)) {
+						result.setTotalCount(object.getInt(JSON_ATTR_COUNT));
+					}
 				}
 			}
-		}
-		catch (Throwable e) {
-			if(e instanceof SocializeException) {
-				throw (SocializeException) e;
+			catch (Throwable e) {
+				if(e instanceof SocializeException) {
+					throw (SocializeException) e;
+				}
+				throw new SocializeException(e);
 			}
-			throw new SocializeException(e);
+			finally {
+				closeEntity(entity);
+			}
+			
+			return result;
 		}
-		finally {
-			closeEntity(entity);
-		}
-		
-		return result;
+		else {
+			if(logger != null) {
+				logger.warn("Attempt to access HttpClientFactory that was already destroyed");
+			}
+			
+			return null;
+		}		
 	}
 
 

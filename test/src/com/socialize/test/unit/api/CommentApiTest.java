@@ -29,6 +29,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.action.SocializeCommentSystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
+import com.socialize.entity.Entity;
 import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.provider.SocializeProvider;
@@ -67,7 +68,7 @@ public class CommentApiTest extends SocializeUnitTest {
 			}
 		};
 		
-		api.addComment(session, key, comment, null, null, listener);
+		api.addComment(session, Entity.newInstance(key, null), comment, null, null, listener);
 		
 		List<Comment> list = getNextResult();
 		assertNotNull(list);

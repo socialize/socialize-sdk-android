@@ -24,6 +24,7 @@ package com.socialize.test.ui.profile;
 import android.app.Activity;
 import android.content.Context;
 
+import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
@@ -34,7 +35,6 @@ import com.socialize.listener.SocializeInitListener;
 import com.socialize.sample.mocks.MockUserSystem;
 import com.socialize.test.ui.SocializeUIActivityTest;
 import com.socialize.test.ui.util.TestUtils;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.profile.ProfileActivity;
 
 /**
@@ -70,22 +70,27 @@ public class ProfileActivityLoadTest extends SocializeUIActivityTest {
 			
 			@Override
 			public void onError(SocializeException error) {
-				fail();
+				error.printStackTrace();
+				addResult(error);
 			}
 			
 			@Override
 			public void onInit(Context context, IOCContainer container) {
 				ProxyObject<UserSystem> proxy = container.getProxy("userSystem");
-				proxy.setDelegate(new MockUserSystem(dummy));
+				MockUserSystem mock = new MockUserSystem();
+				mock.setUser(dummy);
+				proxy.setDelegate(mock);
 			}
 		});
 		
-		
-		SocializeUI.getInstance().showUserProfileView(getActivity(), "69");
+		Socialize.getSocializeUI().showUserProfileView(getActivity(), 69L);
 		
 		Activity waitForActivity = TestUtils.waitForActivity(5000);
 		
 		assertNotNull(waitForActivity);
+		
+		SocializeException error = getNextResult();
+		assertNull(error);		
 		
 		// Check that the user's name is displayed
 		assertTrue(TestUtils.lookForText(waitForActivity, "foo", 10000));

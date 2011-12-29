@@ -68,7 +68,7 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.PublicSocialize;
-import com.socialize.test.SocializeUnitTest;
+import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.Drawables;
 import com.socialize.util.ResourceLocator;
@@ -92,7 +92,7 @@ import com.socialize.util.ResourceLocator;
 	Drawables.class,
 	SocializeConfig.class,
 	SocializeProvider.class})
-public class SocializeServiceTest extends SocializeUnitTest {
+public class SocializeServiceTest extends SocializeActivityTest {
 	
 	IOCContainer container;
 	
@@ -271,7 +271,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		assertTrue(socialize.isInitialized());
 		
-		socialize.addComment(key, comment, listener);
+		socialize.addComment(getActivity(), Entity.newInstance(key, null), comment, listener);
 		
 		verifyDefaultMocks();
 	}
@@ -294,7 +294,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		assertTrue(socialize.isInitialized());
 		
-		socialize.like(key, listener);
+		socialize.like(getActivity(), Entity.newInstance(key, null), listener);
 		
 		verifyDefaultMocks();
 	}
@@ -321,7 +321,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		assertTrue(socialize.isInitialized());
 		
-		socialize.share(key, text, ShareType.OTHER, location, listener);
+		socialize.addShare(getActivity(), Entity.newInstance(key, null), text, ShareType.OTHER, location, listener);
 		
 		verifyDefaultMocks();
 	}	
@@ -335,40 +335,16 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		ShareAddListener listener = AndroidMock.createMock(ShareAddListener.class);
 		
 		setupDefaultMocks();
+		
+		shareSystem.addShare(AndroidMock.eq(session), (Entity) AndroidMock.anyObject(), AndroidMock.eq(text), AndroidMock.eq(ShareType.OTHER), (Location) AndroidMock.isNull(), AndroidMock.eq(listener));
+		
 		replayDefaultMocks();
 		
-		SocializeServiceImpl socialize = new SocializeServiceImpl() {
-
-			@Override
-			public void share(String url, String text, ShareType shareType, Location location, ShareAddListener shareAddListener) {
-				addResult(url);
-				addResult(text);
-				addResult(shareType);
-				addResult(shareAddListener);
-			}
-			
-		};
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		socialize.init(getContext(), container);
 		socialize.setSession(session);
 		
-		assertTrue(socialize.isInitialized());
-		
-		socialize.share(key, text, ShareType.OTHER, listener);
-		
-		String urlAfter = getNextResult();
-		String textAfter = getNextResult();
-		ShareType shareTypeAfter = getNextResult();
-		ShareAddListener listenerAfter = getNextResult();
-		
-		assertNotNull(listenerAfter);
-		assertNotNull(shareTypeAfter);
-		assertNotNull(textAfter);
-		assertNotNull(urlAfter);
-		
-		assertSame(listener, listenerAfter);
-		assertEquals(ShareType.OTHER, shareTypeAfter);
-		assertEquals(key, urlAfter);
-		assertEquals(text, textAfter);
+		socialize.addShare(getActivity(), Entity.newInstance(key, null), text, ShareType.OTHER, listener);
 		
 		verifyDefaultMocks();
 	}
@@ -393,7 +369,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		assertTrue(socialize.isInitialized());
 		
-		socialize.view(key, listener);
+		socialize.view(getActivity(), Entity.newInstance(key, null), listener);
 		
 		AndroidMock.verify(container);
 	}
@@ -416,7 +392,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		assertTrue(socialize.isInitialized());
 		
-		socialize.addEntity(key, name, listener);
+		socialize.addEntity(getActivity(), Entity.newInstance(key, name), listener);
 		
 		verifyDefaultMocks();
 	}
@@ -741,7 +717,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		
-		userSystem.authenticate(null, key, secret, authProviderData, listener, socialize, false);
+		userSystem.authenticate(getActivity(), key, secret, authProviderData, listener, socialize, false);
 
 		replayDefaultMocks();
 		
@@ -749,7 +725,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		assertTrue(socialize.isInitialized());
 		
-		socialize.authenticate(key, secret, listener);
+		socialize.authenticate(getActivity(), key, secret, listener);
 		
 		verifyDefaultMocks();
 	}
@@ -771,7 +747,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		
-		userSystem.authenticate(null, key, secret, authProviderData, listener, socialize, true);
+		userSystem.authenticate(getActivity(), key, secret, authProviderData, listener, socialize, true);
 
 		replayDefaultMocks();
 		
@@ -779,7 +755,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		assertTrue(socialize.isInitialized());
 		
-		socialize.authenticate(key, secret, AuthProviderType.FACEBOOK, appId, listener);
+		socialize.authenticate(getActivity(), key, secret, AuthProviderType.FACEBOOK, appId, listener);
 		
 		verifyDefaultMocks();
 	}
@@ -802,7 +778,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		
-		userSystem.authenticate(null, consumerKey, consumerSecret, authProviderData, authListener, socialize, false);
+		userSystem.authenticate(getActivity(), consumerKey, consumerSecret, authProviderData, authListener, socialize, false);
 
 		replayDefaultMocks();
 		
@@ -810,7 +786,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		assertTrue(socialize.isInitialized());
 		
-		socialize.authenticateKnownUser(consumerKey, consumerSecret, AuthProviderType.FACEBOOK, authProviderId, authUserId3rdParty, authToken3rdParty, authListener);
+		socialize.authenticateKnownUser(getActivity(), consumerKey, consumerSecret, AuthProviderType.FACEBOOK, authProviderId, authUserId3rdParty, authToken3rdParty, authListener);
 		
 		verifyDefaultMocks();
 		
@@ -858,7 +834,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		
 		assertFalse(socialize.isInitialized());
 		
-		socialize.addComment(key, comment, listener);
+		socialize.addComment(getActivity(), Entity.newInstance(key, null), comment, listener);
 		
 		Exception error = getNextResult();
 		
@@ -890,7 +866,7 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		assertTrue(socialize.isInitialized());
 		assertFalse(socialize.isAuthenticated());
 		
-		socialize.addComment(key, comment, listener);
+		socialize.addComment(getActivity(), Entity.newInstance(key, null), comment, listener);
 		
 		Exception error = getNextResult();
 		
@@ -1059,13 +1035,14 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		final Context context = new MockContext();
 		
 		final String[] mockPaths = {"foobar"};
+		final String[] initPaths = {};
 		
 		SocializeServiceImpl service = new SocializeServiceImpl() {
 			
 			@Override
 			public void init(Context context, IOCContainer container) {
-				addResult(context);
-				addResult(container);
+				addResult(0, context);
+				addResult(1, container);
 			}
 
 			@Override
@@ -1091,23 +1068,28 @@ public class SocializeServiceTest extends SocializeUnitTest {
 			@Override
 			protected int binarySearch(String[] array, String str) {
 				// Simulate not found
-				addResult("binarySearch_" + str);
+				addResult(2, "binarySearch_" + str);
 				return -1;
 			}
 			
 			@Override
 			public void destroy() {
-				addResult("destroy");
+				addResult(3, "destroy");
 			}
 
 			@Override
 			protected void sort(Object[] array) {
-				addResult("sort");
+				addResult(4, "sort");
 			}
 
 			@Override
 			protected SocializeLogger newLogger() {
 				return logger;
+			}
+
+			@Override
+			protected String[] getInitPaths() {
+				return initPaths;
 			}
 		};
 		
@@ -1125,12 +1107,11 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		AndroidMock.verify(socializeIOC);
 		AndroidMock.verify(resourceLocator);
 		
-		// Reverse order for asserts
-		String binarySearch = getNextResult();
-		String destroy = getNextResult();
-		String sort = getNextResult();
-		Context foundContext = getNextResult();
-		IOCContainer foundContainer = getNextResult();
+		Context foundContext = getResult(0);
+		IOCContainer foundContainer = getResult(1);
+		String binarySearch = getResult(2);
+		String destroy = getResult(3);
+		String sort = getResult(4);
 		
 		assertNotNull(binarySearch);
 		assertNotNull(destroy);

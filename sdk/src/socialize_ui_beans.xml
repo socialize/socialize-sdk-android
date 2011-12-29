@@ -510,7 +510,6 @@
 		<property name="commentEditFieldFactory" ref="commentEditFieldFactory"/>
 		<property name="commentContentViewFactory" ref="loadingListViewFactory"/>
 		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
-		<property name="facebookWallPoster" ref="facebookWallPoster"/>
 		<property name="commentEntryFactory" ref="commentEntrySliderItemFactory"/>
 		<property name="sliderFactory" ref="actionBarSliderFactory"/>
 	</bean>
@@ -894,6 +893,7 @@
 		singleton="false">
 		
 		<constructor-arg type="activity"/>
+		
 		<init-method name="init"/>
 		
 		<property name="drawables" ref="drawables"/>

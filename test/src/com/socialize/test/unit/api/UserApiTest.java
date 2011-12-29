@@ -36,6 +36,7 @@ import com.socialize.listener.user.UserListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeUnitTest;
+import com.socialize.ui.profile.UserProfile;
 
 /**
  * @author Jason Polites
@@ -96,6 +97,8 @@ public class UserApiTest extends SocializeUnitTest {
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setProfilePicData(encodedImage);
+		user.setAutoPostCommentsFacebook(true);
+		user.setAutoPostLikesFacebook(true);
 		
 		SocializeUserSystem api = new SocializeUserSystem(provider) {
 			@Override
@@ -107,7 +110,12 @@ public class UserApiTest extends SocializeUnitTest {
 		AndroidMock.replay(session);
 		AndroidMock.replay(user);
 		
-		api.saveUserProfile(context, session, firstName, lastName, encodedImage, listener);
+		UserProfile profile = new UserProfile();
+		profile.setFirstName(firstName);
+		profile.setLastName(lastName);
+		profile.setEncodedImage(encodedImage);
+		
+		api.saveUserProfile(context, session, profile, listener);
 		
 		AndroidMock.verify(session);
 		AndroidMock.verify(user);
@@ -146,6 +154,8 @@ public class UserApiTest extends SocializeUnitTest {
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setProfilePicData(encodedImage);
+		user.setAutoPostCommentsFacebook(true);
+		user.setAutoPostLikesFacebook(true);
 		
 		SocializeUserSystem api = new SocializeUserSystem(provider) {
 			@Override
@@ -161,7 +171,13 @@ public class UserApiTest extends SocializeUnitTest {
 		AndroidMock.replay(sessionPersister);
 		AndroidMock.replay(user);
 		
-		api.saveUserProfile(context, session, firstName, lastName, encodedImage, listener);
+		UserProfile profile = new UserProfile();
+		profile.setFirstName(firstName);
+		profile.setLastName(lastName);
+		profile.setEncodedImage(encodedImage);
+
+		
+		api.saveUserProfile(context, session, profile, listener);
 		
 		// This will fail if it's the wrong type
 		UserSaveListener listenerFound = getNextResult();

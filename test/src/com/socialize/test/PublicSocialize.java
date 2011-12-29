@@ -36,7 +36,6 @@ import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeListener;
 import com.socialize.log.SocializeLogger;
-import com.socialize.networks.facebook.FacebookWallPoster;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.ResourceLocator;
 

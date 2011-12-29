@@ -54,27 +54,27 @@ public class FacebookSharer implements SocialNetworkSharer {
 	 */
 	@Override
 	public void shareEntity(final Activity context, Entity entity, String comment, SocialNetworkListener listener) {
-		share(context, entity, comment, listener, ActionType.SHARE);
+		share(context, entity, comment, listener, ActionType.SHARE, true);
 	}
 	
 	@Override
 	public void shareComment(Activity context, Entity entity, String comment, SocialNetworkListener listener) {
-		share(context, entity, comment, listener, ActionType.COMMENT);
+		share(context, entity, comment, listener, ActionType.COMMENT, false);
 	}
 
 	@Override
 	public void shareLike(Activity context, Entity entity, String comment, SocialNetworkListener listener) {
-		share(context, entity, comment, listener, ActionType.LIKE);
+		share(context, entity, comment, listener, ActionType.LIKE, false);
 	}
 
-	protected void share(final Activity context, final Entity entity, final String comment, final SocialNetworkListener listener, final ActionType type) {
+	protected void share(final Activity context, final Entity entity, final String comment, final SocialNetworkListener listener, final ActionType type, boolean autoAuth) {
 
 		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
 			
 			if(Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 				doShare(context, entity, comment, listener, type);
 			}
-			else {
+			else if(autoAuth) {
 				
 				String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 				String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);

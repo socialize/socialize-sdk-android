@@ -87,8 +87,8 @@ public class ActionDetailView extends EntityView {
 	 * @see com.socialize.ui.view.EntityView#getEntityKeys()
 	 */
 	@Override
-	protected String[] getEntityKeys() {
-		return new String[]{Socialize.USER_ID, Socialize.COMMENT_ID};
+	protected String[] getBundleKeys() {
+		return new String[]{Socialize.USER_ID, Socialize.ACTION_ID};
 	}
 
 	public void onProfileUpdate() {

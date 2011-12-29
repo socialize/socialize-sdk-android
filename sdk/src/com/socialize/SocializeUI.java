@@ -54,9 +54,9 @@ public interface SocializeUI {
 
 	public View showActionBar(Activity parent, int resId, Entity entity);
 
-	public void showUserProfileViewForResult(Activity context, String userId, int requestCode);
+	public void showUserProfileViewForResult(Activity context, Long userId, int requestCode);
 
-	public void showUserProfileView(Activity context, String userId);
+	public void showUserProfileView(Activity context, Long userId);
 
 	public void showCommentView(Activity context, Entity entity, OnCommentViewActionListener listener);
 

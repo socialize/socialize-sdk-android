@@ -45,6 +45,7 @@ public abstract class AbstractEntityFactory<T extends Entity> extends SocializeO
 	protected void postFromJSON(JSONObject object, T entry) throws JSONException {
 		entry.setName(getString(object, "name"));
 		entry.setKey(getString(object, "key"));
+		entry.setMetaData(getString(object, "meta"));
 		
 		EntityStatsImpl stats = newEntityStatsImpl();
 		
@@ -60,12 +61,21 @@ public abstract class AbstractEntityFactory<T extends Entity> extends SocializeO
 	protected void postToJSON(T entry, JSONObject object) throws JSONException {
 		String name = entry.getName();
 		String key = entry.getKey();
+		String meta = entry.getMetaData();
 		
 		if(!StringUtils.isEmpty(name)) {
 			object.put("name", name);
 		}
+		
 		if(!StringUtils.isEmpty(key)) {
 			object.put("key", key);
+		}
+		
+		if(!StringUtils.isEmpty(meta)) {
+			object.put("meta", meta);
+		}	
+		else {
+			object.put("meta", "");
 		}
 	}
 	

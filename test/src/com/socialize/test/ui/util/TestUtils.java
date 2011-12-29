@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.test.ui.ResultHolder;
 
@@ -40,6 +41,8 @@ public class TestUtils {
 		holder = new ResultHolder();
 		holder.setUp();
 		instrumentation = testCase.getInstrumentation();
+		
+		Socialize.getSocialize().destroy(true);
 	}
 	
 	public static void tearDown() {
@@ -54,6 +57,8 @@ public class TestUtils {
 		}
 		
 		monitor = null;
+		
+		Socialize.getSocialize().destroy(true);
 	}
 	
 	public static void setUpActivityMonitor(Class<?> activityClass) {

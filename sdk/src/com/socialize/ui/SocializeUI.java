@@ -17,11 +17,11 @@ import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.action.ActionType;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
-import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.SocializeListener;
 import com.socialize.ui.actionbar.ActionBarListener;
@@ -84,24 +84,8 @@ public class SocializeUI {
 	
 	@Deprecated
 	public void initSocializeAsync(Context context, final SocializeInitListener listener) {
-		
 		String[] config = getConfig();
-		
-		SocializeInitListener overrideListener = new SocializeInitListener() {
-			
-			@Override
-			public void onError(SocializeException error) {
-				listener.onError(error);
-			}
-			
-			@Override
-			public void onInit(Context context, IOCContainer container) {
-				listener.onInit(context, container);
-			}
-		};
-		
-		getSocialize().initAsync(context, overrideListener, config);
-		
+		getSocialize().initAsync(context, listener, config);
 	}
 	
 	@Deprecated
@@ -161,8 +145,8 @@ public class SocializeUI {
 	 */
 	@Deprecated
 	public void setSocializeCredentials(String consumerKey, String consumerSecret) {
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY, consumerKey);
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET, consumerSecret);
+		getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY, consumerKey);
+		getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET, consumerSecret);
 	}
 	
 	/**
@@ -172,13 +156,13 @@ public class SocializeUI {
 	 */
 	@Deprecated
 	public void setFacebookUserCredentials(String userId, String token) {
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_USER_ID, userId);
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_USER_TOKEN, token);
+		getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_USER_ID, userId);
+		getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_USER_TOKEN, token);
 	}
 	
 	@Deprecated
 	public void setDebugMode(boolean debug) {
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_DEBUG_MODE, String.valueOf(debug));
+		getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_DEBUG_MODE, String.valueOf(debug));
 	}
 	
 	/**
@@ -188,12 +172,12 @@ public class SocializeUI {
 	 */
 	@Deprecated
 	public void setFacebookAppId(String appId) {
-		Socialize.getSocialize().getConfig().setFacebookAppId(appId);
+		getSocialize().getConfig().setFacebookAppId(appId);
 	}
 	
 	@Deprecated
 	protected void setCustomProperty(String key, String value) {
-		Socialize.getSocialize().getConfig().setProperty(key, value);
+		getSocialize().getConfig().setProperty(key, value);
 	}
 	
 	/**
@@ -202,9 +186,7 @@ public class SocializeUI {
 	 */
 	@Deprecated
 	public void setFacebookSingleSignOnEnabled(boolean enabled) {
-		Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(enabled);
-		
-//		setCustomProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, String.valueOf(enabled));
+		getSocialize().getConfig().setFacebookSingleSignOnEnabled(enabled);
 	}
 	
 	/**
@@ -214,17 +196,12 @@ public class SocializeUI {
 	 */
 	@Deprecated
 	public boolean isFacebookSupported() {
-		return !StringUtils.isEmpty(getCustomConfigValue(SocializeConfig.FACEBOOK_APP_ID));
+		return getSocialize().isSupported(AuthProviderType.FACEBOOK);
 	}
 	
 	@Deprecated
 	public String getCustomConfigValue(String key) {
-		SocializeService socialize = getSocialize();
-		SocializeConfig config = socialize.getConfig();
-		if(config != null) {
-			return config.getProperty(key);
-		}
-		return null;
+		return getSocialize().getConfig().getProperty(key);
 	}
 	
 	/**
@@ -283,11 +260,11 @@ public class SocializeUI {
 	
 	@Deprecated
 	public void showUserProfileView(Activity context, String userId) {
-		getSocializeUI().showUserProfileView(context, userId);
+		getSocializeUI().showUserProfileView(context, Long.valueOf(userId));
 	}
 	
 	public void showUserProfileViewForResult(Activity context, String userId, int requestCode) {
-		getSocializeUI().showUserProfileViewForResult(context, userId, requestCode);
+		getSocializeUI().showUserProfileViewForResult(context, Long.valueOf(userId), requestCode);
 	}
 	
 	/**
@@ -414,7 +391,7 @@ public class SocializeUI {
 	
 	@Deprecated
 	public View showActionBar(Activity parent, int resId, String entityKey, ActionBarListener listener) {
-		return getSocializeUI().showActionBar(parent, resId, Entity.newInstance(entityKey, null), null, listener);
+		return getSocializeUI().showActionBar(parent, resId, Entity.newInstance(entityKey, null), listener);
 	}
 	
 	@Deprecated

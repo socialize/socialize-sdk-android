@@ -28,6 +28,7 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.SocializeLikeSystem;
 import com.socialize.entity.ActionError;
+import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.User;
@@ -72,7 +73,7 @@ public class LikeApiTest extends SocializeUnitTest {
 
 		};
 		
-		api.addLike(session, key, null, listener);
+		api.addLike(session, Entity.newInstance(key, null), null, listener);
 		
 		
 		List<Like> likes = getNextResult();

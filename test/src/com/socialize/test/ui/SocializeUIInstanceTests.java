@@ -4,7 +4,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,31 +16,26 @@ import android.widget.ScrollView;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
-import com.socialize.SocializeServiceImpl;
 import com.socialize.android.ioc.IOCContainer;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
+import com.socialize.entity.Comment;
+import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
-import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
-import com.socialize.sample.ui.SampleSocializeActivity;
-import com.socialize.sample.ui.TestActivityCallback;
-import com.socialize.sample.ui.TestActivityCallbackHolder;
-import com.socialize.test.mock.MockRelativeLayoutParams;
-import com.socialize.test.mock.TestUIFactory;
+import com.socialize.sample.mocks.MockSocializeUI;
+import com.socialize.test.PublicSocialize;
 import com.socialize.ui.SocializeUI;
-import com.socialize.ui.SocializeUIBeanOverrider;
-import com.socialize.ui.action.ActionDetailActivity;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.actionbar.ActionBarView;
-import com.socialize.ui.comment.CommentActivity;
-import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.util.Drawables;
 
-@SuppressWarnings("deprecation")
+@Deprecated
 public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 
+	@Deprecated
 	@UsesMocks({Intent.class, Activity.class})
 	public void testSetEntityUrl() {
 		Activity activity = AndroidMock.createMock(Activity.class);
@@ -68,30 +62,29 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 
 	}
 
-	@SuppressWarnings("unchecked")
+	@Deprecated
 	@UsesMocks ({SocializeService.class, SocializeConfig.class, Properties.class, Set.class})
-	public void testInitSocialize() {
+	public void testInitSocializeOld() {
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
-		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-		
-		final Properties customProperties = AndroidMock.createMock(Properties.class);
-		final Set<String> toBeRemoved = AndroidMock.createMock(Set.class);
 
 		MockContext context = new MockContext();
+		
+		final String[] paths = new String[]{"socialize_beans.xml", "socialize_ui_beans.xml"};
+
 		
 		SocializeUI socializeUI = new SocializeUI() {
 			@Override
 			public SocializeService getSocialize() {
 				return socialize;
 			}
+
+			@Override
+			protected String[] getConfig() {
+				return paths;
+			}
 		};
 
-		final String[] paths = new String[]{"socialize_beans.xml", "socialize_ui_beans.xml"};
-
-		socialize.init(context, paths);
-		AndroidMock.expect(socialize.getConfig()).andReturn(config);
-		
-		config.merge( customProperties, toBeRemoved);
+		socialize.init(context, paths[0], paths[1]);
 
 		AndroidMock.replay(socialize);
 
@@ -99,7 +92,8 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 
 		AndroidMock.verify(socialize);
 	}
-
+	
+	@Deprecated
 	@UsesMocks ({IOCContainer.class})
 	public void testInitUI() {
 		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
@@ -114,6 +108,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		AndroidMock.verify(container);
 	}
 
+	@Deprecated
 	@UsesMocks ({SocializeService.class})
 	public void testDestroy() {
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
@@ -135,6 +130,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		AndroidMock.verify(socialize);
 	}
 
+	@Deprecated
 	@UsesMocks ({IOCContainer.class})
 	public void testGetView() {
 		final String name = "foobar";
@@ -152,6 +148,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		AndroidMock.verify(container);	
 	}
 
+	@Deprecated
 	@UsesMocks ({Drawables.class, IOCContainer.class})
 	public void testGetDrawable() {
 		Drawables drawables = AndroidMock.createMock(Drawables.class);
@@ -175,97 +172,46 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		AndroidMock.verify(drawables);	
 	}
 	
-	public void testShowCommentView() {
+	@Deprecated
+	public void testShowCommentViewOld() {
 		
 		final String url = "foobar";
-
-		TestActivityCallback callback = new TestActivityCallback() {
-			
-			Activity activity;
-			
-			@Override
-			public void setActivity(Activity activity) {
-				this.activity = activity;
-			}
+		
+		final com.socialize.SocializeUI socializeUI = new MockSocializeUI() {
 
 			@Override
-			public void onCreate(Bundle savedInstanceState) {
-				SocializeUI socializeUI = new SocializeUI();
-				socializeUI.showCommentView(activity, url);
-				
-				addResult(true);
-			}
-
-			@Override
-			public void startActivity(Intent intent) {
-				ComponentName component = intent.getComponent();
-				assertNotNull(component);
-				assertEquals(CommentActivity.class.getName(), component.getClassName());
-				
-				Bundle extras = intent.getExtras();
-				
-				assertNotNull(extras);
-				
-				String key = extras.getString(SocializeUI.ENTITY_KEY);
-				
-				assertNotNull(key);
-				assertEquals(url, key);
-				
-				addResult(true);
+			public void showCommentView(Activity context, Entity entity) {
+				addResult(entity);
 			}
 		};
 		
-		TestActivityCallbackHolder.callback = callback;
-		Intent i = new Intent(getActivity(), SampleSocializeActivity.class);
+		SocializeUI socializeUIOld = new SocializeUI() {
+
+			@Override
+			public com.socialize.SocializeUI getSocializeUI() {
+				return socializeUI;
+			}
+		};
 		
-		int requestCode = 69;
+		socializeUIOld.showCommentView(getContext(), url);
 		
-		getActivity().startActivityForResult(i, requestCode);
-		
-		sleep(2000);
-		
-		Boolean didStart = getNextResult();
-		Boolean didRun = getNextResult();
-		
-		getActivity().finishActivity(requestCode);
-		
-		assertNotNull(didStart);
-		assertNotNull(didRun);
-		
-		assertTrue(didStart);
-		assertTrue(didRun);
+		Entity entity = getNextResult();
+		assertNotNull(entity);
+		assertEquals(url, entity.getKey());
 	}
 	
-	@SuppressWarnings("unchecked")
-	@UsesMocks ({SocializeInitListener.class, SocializeException.class, SocializeConfig.class, IOCContainer.class})
+	@Deprecated
+	@UsesMocks ({SocializeInitListener.class})
 	public void test_initSocializeAsync() {
 		
 		SocializeInitListener listener = AndroidMock.createMock(SocializeInitListener.class);
-		SocializeException error = AndroidMock.createMock(SocializeException.class);
-		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
+		final String[] mockPaths = {"a", "b"};
 		
-		final String[] mockPaths = {};
-		
-		listener.onError(error);
-		config.merge((Properties)AndroidMock.anyObject(), (Set<String>)AndroidMock.anyObject());
-		
-		listener.onInit(getContext(), container);
-		
-		AndroidMock.replay(listener);
-		AndroidMock.replay(config);
-		
-		final SocializeServiceImpl socialize = new SocializeServiceImpl() {
-
+		final PublicSocialize socialize = new PublicSocialize() {
 			@Override
 			public void initAsync(Context context, SocializeInitListener listener, String... paths) {
-				addResult(1, listener);
-				addResult(2, paths);
-			}
-
-			@Override
-			public SocializeConfig getConfig() {
-				return config;
+				addResult(listener);
+				addResult(paths);
 			}
 		};
 		
@@ -273,7 +219,6 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 
 			@Override
 			protected String[] getConfig() {
-				addResult(0, "getConfig");
 				return mockPaths;
 			}
 
@@ -281,29 +226,18 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 			public SocializeService getSocialize() {
 				return socialize;
 			}
-			
 		};
 		
 		socializeUI.initSocializeAsync(getContext(), listener);
 		
-		// Call the listener to make sure it's doing what it should
-		String getConfig = getResult(0);
-		String[] pathsAfter = getResult(2);
-		SocializeInitListener listenerAfter = getResult(1);
-		
-		assertNotNull(getConfig);
-		assertEquals("getConfig", getConfig);
+		SocializeInitListener listenerAfter = getResult(0);
+		String[] pathsAfter = getResult(1);
 		
 		assertNotNull(pathsAfter);
 		assertSame(mockPaths, pathsAfter);
 		
 		assertNotNull(listenerAfter);
-		
-		listenerAfter.onError(error);
-		listenerAfter.onInit(getContext(), container);
-		
-		AndroidMock.verify(listener);
-		AndroidMock.verify(config);
+		assertSame(listener, listenerAfter);
 	}
 	
 	public void test_getConfigWithoutOverride() {
@@ -313,55 +247,57 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		assertEquals("socialize_beans.xml", config[0]);
 		assertEquals("socialize_ui_beans.xml", config[1]);
 	}
-	
-	public void test_getConfigWithOverride() {
-		PublicSocializeUI publicSocializeUI = new PublicSocializeUI();
-		SocializeUIBeanOverrider overrider = new SocializeUIBeanOverrider();
-		overrider.setBeanOverrides(publicSocializeUI, "foobar");
-		String[] config = publicSocializeUI.getConfig();
-		assertNotNull(config);
-		assertEquals(3, config.length);
-		assertEquals("socialize_beans.xml", config[0]);
-		assertEquals("socialize_ui_beans.xml", config[1]);
-		assertEquals("foobar", config[2]);
-	}
-	
+
+	@Deprecated
+	@UsesMocks ({SocializeService.class, SocializeConfig.class})
 	public void test_setFacebookSingleSignOnEnabled() {
+		final boolean enabled = true;
+		
+		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
+		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+		
+		AndroidMock.expect(socialize.getConfig()).andReturn(config);
+		
+		config.setFacebookSingleSignOnEnabled(enabled);
+		
+		AndroidMock.replay(socialize);
+		AndroidMock.replay(config);
+		
 		PublicSocializeUI publicSocializeUI = new PublicSocializeUI() {
 			@Override
-			public void setCustomProperty(String key, String value) {
-				addResult(key);
-				addResult(value);
+			public SocializeService getSocialize() {
+				return socialize;
 			}
 		};
 		
 		publicSocializeUI.setFacebookSingleSignOnEnabled(true);
 		
-		String key = getNextResult();
-		String value = getNextResult();
-		
-		assertEquals(SocializeConfig.FACEBOOK_SSO_ENABLED, key);
-		assertEquals("true", value);
+		AndroidMock.verify(socialize);
+		AndroidMock.verify(config);
 	}
 	
-	
+	@Deprecated
+	@UsesMocks ({SocializeService.class, SocializeConfig.class})
 	public void test_isFacebookSupported() {
+		
+		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
+		
+		AndroidMock.expect(socialize.isSupported(AuthProviderType.FACEBOOK)).andReturn(true);
+		AndroidMock.replay(socialize);
+		
 		PublicSocializeUI publicSocializeUI = new PublicSocializeUI() {
 			@Override
-			public String getCustomConfigValue(String key) {
-				addResult(key);
-				return key;
+			public SocializeService getSocialize() {
+				return socialize;
 			}
 		};
 		
 		publicSocializeUI.isFacebookSupported();
 		
-		String key = getNextResult();
-		
-		assertEquals(SocializeConfig.FACEBOOK_APP_ID, key);
-		assertTrue(publicSocializeUI.isFacebookSupported());
+		AndroidMock.verify(socialize);
 	}	
 	
+	@Deprecated
 	@UsesMocks ({SocializeService.class, SocializeConfig.class})
 	public void test_getCustomConfigValue() {
 		
@@ -392,133 +328,145 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		assertEquals(value, valueAfter);
 	}
 	
-	
-	public void test_showCommentView0() {
-		final Intent intent = AndroidMock.createMock(Intent.class);
-		final Activity context = AndroidMock.createMock(Activity.class);
+	@Deprecated
+	public void test_showCommentView0Old() {
 		
 		final String url = "foo";
 		final String entityName = "bar";
 		final boolean isEntityUrl = true;
 		
-		AndroidMock.expect(intent.putExtra(SocializeUI.ENTITY_KEY, url)).andReturn(intent);
-		AndroidMock.expect(intent.putExtra(SocializeUI.ENTITY_NAME, entityName)).andReturn(intent);
-		AndroidMock.expect(intent.putExtra(SocializeUI.ENTITY_URL_AS_LINK, isEntityUrl)).andReturn(intent);
-		
-		context.startActivity(intent);
-		
-		AndroidMock.replay(intent);
-		AndroidMock.replay(context);
-		
-		PublicSocializeUI publicSocializeUI = new PublicSocializeUI() {
+		final com.socialize.SocializeUI socializeUI = new MockSocializeUI() {
+
 			@Override
-			public Intent newIntent(Activity context, Class<?> cls) {
-				assertEquals(cls, CommentActivity.class);
-				return intent;
+			public void showCommentView(Activity context, Entity entity) {
+				addResult(entity);
 			}
-		};	
+		};
 		
-		publicSocializeUI.showCommentView(context, url, entityName, isEntityUrl);
+		SocializeUI socializeUIOld = new SocializeUI() {
+
+			@Override
+			public com.socialize.SocializeUI getSocializeUI() {
+				return socializeUI;
+			}
+		};
 		
-		AndroidMock.verify(intent);
-		AndroidMock.verify(context);
+		socializeUIOld.showCommentView(getContext(), url, entityName, isEntityUrl);
+		
+		Entity entity = getNextResult();
+		
+		assertNotNull(entity);
+		
+		assertEquals(url, entity.getKey());
+		assertEquals(entityName, entity.getName());
 	}
 	
-	public void test_showUserProfileView() {
-		final Intent intent = AndroidMock.createMock(Intent.class);
-		final Activity context = AndroidMock.createMock(Activity.class);
+	@Deprecated
+	public void test_showUserProfileViewOld() {
+
+		final String userId = "123";
 		
-		final String userId = "foo";
-		
-		AndroidMock.expect(intent.putExtra(SocializeUI.USER_ID, userId)).andReturn(intent);
-		
-		context.startActivity(intent);
-		
-		AndroidMock.replay(intent);
-		AndroidMock.replay(context);
-		
-		PublicSocializeUI publicSocializeUI = new PublicSocializeUI() {
+		final com.socialize.SocializeUI socializeUI = new MockSocializeUI() {
 			@Override
-			public Intent newIntent(Activity context, Class<?> cls) {
-				assertEquals(cls, ProfileActivity.class);
-				return intent;
+			public void showUserProfileView(Activity context, Long userId) {
+				addResult(userId);
 			}
-		};	
+		};
 		
-		publicSocializeUI.showUserProfileView(context, userId);
+		SocializeUI socializeUIOld = new SocializeUI() {
+
+			@Override
+			public com.socialize.SocializeUI getSocializeUI() {
+				return socializeUI;
+			}
+		};
 		
-		AndroidMock.verify(intent);
-		AndroidMock.verify(context);
+		socializeUIOld.showUserProfileView(getContext(), userId);
+		
+		Long result = getNextResult();
+		
+		assertNotNull(result);
+		
+		assertEquals(result.longValue(), Long.parseLong(userId));
+
 	}	
 	
-	public void test_showUserProfileViewForResult() {
-		final Intent intent = AndroidMock.createMock(Intent.class);
-		final Activity context = AndroidMock.createMock(Activity.class);
+	@Deprecated
+	public void test_showUserProfileViewForResultOld() {
 		
-		final String userId = "foo";
-		final int requestCode = 69;
+		final String userId = "123";
+		final int code = 69;
 		
-		AndroidMock.expect(intent.putExtra(SocializeUI.USER_ID, userId)).andReturn(intent);
-		
-		context.startActivityForResult(intent, requestCode);
-		
-		AndroidMock.replay(intent);
-		AndroidMock.replay(context);
-		
-		PublicSocializeUI publicSocializeUI = new PublicSocializeUI() {
+		final com.socialize.SocializeUI socializeUI = new MockSocializeUI() {
+			
+			
 			@Override
-			public Intent newIntent(Activity context, Class<?> cls) {
-				assertEquals(cls, ProfileActivity.class);
-				return intent;
+			public void showUserProfileViewForResult(Activity context, Long userId, int requestCode) {
+				addResult(userId);
+				addResult(requestCode);
 			}
-		};	
+		};
 		
-		publicSocializeUI.showUserProfileViewForResult(context, userId, requestCode);
+		SocializeUI socializeUIOld = new SocializeUI() {
+
+			@Override
+			public com.socialize.SocializeUI getSocializeUI() {
+				return socializeUI;
+			}
+		};
 		
-		AndroidMock.verify(intent);
-		AndroidMock.verify(context);
+		socializeUIOld.showUserProfileViewForResult(getContext(), userId, code);
+		
+		Integer result2 = getResult(1);
+		Long result = getResult(0);
+
+		assertNotNull(result);
+		assertNotNull(result2);
+		
+		assertEquals(result.longValue(), Long.parseLong(userId));		
+		assertEquals(result2.intValue(), code);
 	}	
 	
-	@UsesMocks ({User.class, SocializeAction.class})
-	public void test_showCommentDetailViewForResult() {
-		final Intent intent = AndroidMock.createMock(Intent.class);
-		final Activity context = AndroidMock.createMock(Activity.class);
-		final User user = AndroidMock.createMock(User.class);
-		final SocializeAction action = AndroidMock.createMock(SocializeAction.class);
+	@Deprecated
+	public void test_showCommentDetailViewForResultOld() {
 		
-		final Long userId = 1001L;
-		final Long commentId = 1002L;
-		final int requestCode = 69;
+		final int code = 69;
+		final User user = new User();
+		final SocializeAction action = new Comment();
 		
-		AndroidMock.expect(user.getId()).andReturn(userId);
-		AndroidMock.expect(action.getId()).andReturn(commentId);
-		
-		AndroidMock.expect(intent.putExtra(SocializeUI.USER_ID, userId.toString())).andReturn(intent);
-		AndroidMock.expect(intent.putExtra(SocializeUI.COMMENT_ID, commentId.toString())).andReturn(intent);
-		
-		context.startActivityForResult(intent, requestCode);
-		
-		AndroidMock.replay(user);
-		AndroidMock.replay(action);
-		AndroidMock.replay(intent);
-		AndroidMock.replay(context);
-		
-		PublicSocializeUI publicSocializeUI = new PublicSocializeUI() {
+		final com.socialize.SocializeUI socializeUI = new MockSocializeUI() {
 			@Override
-			public Intent newIntent(Activity context, Class<?> cls) {
-				assertEquals(cls, ActionDetailActivity.class);
-				return intent;
+			public void showActionDetailViewForResult(Activity context, User user, SocializeAction action, int requestCode) {
+				addResult(user);
+				addResult(action);
+				addResult(requestCode);
 			}
-		};	
+		};
 		
-		publicSocializeUI.showActionDetailViewForResult(context, user, action, requestCode);
+		SocializeUI socializeUIOld = new SocializeUI() {
+
+			@Override
+			public com.socialize.SocializeUI getSocializeUI() {
+				return socializeUI;
+			}
+		};
 		
-		AndroidMock.verify(user);
-		AndroidMock.verify(action);
-		AndroidMock.verify(intent);
-		AndroidMock.verify(context);
+		socializeUIOld.showActionDetailViewForResult(getContext(), user, action, code);
+		
+		Integer requestCode = getResult(2);
+		SocializeAction actionAfter = getResult(1);
+		User userAfter = getResult(0);
+		
+		assertNotNull(requestCode);
+		assertNotNull(actionAfter);
+		assertNotNull(userAfter);
+		
+		assertEquals(code, requestCode.intValue());
+		assertSame(action, actionAfter);
+		assertSame(user, userAfter);
 	}		
 	
+	@Deprecated
 	public void test_setEntityName() {
 		
 		// Can't mock bundle :/
@@ -558,6 +506,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		assertEquals(name, nameAfter);
 	}
 	
+	@Deprecated
 	public void test_setUseEntityUrlAsLink() {
 		
 		// Can't mock bundle :/
@@ -596,6 +545,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		assertEquals(asLink, asLinkAfter);
 	}	
 	
+	@Deprecated
 	public void test_setUserId() {
 		
 		// Can't mock bundle :/
@@ -635,447 +585,249 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		assertEquals(userId, nameAfter);
 	}
 	
-	public void test_showActionBar0() {
+	@Deprecated
+	public void test_showActionBar0Old() {
 		
 		View originalActual = new View(getActivity());
 		String entityKeyActual = "foo";
 		
-		PublicSocializeUI publicSocializeUI = new PublicSocializeUI() {
-			
-			public ActionBarView showActionBar(
-					Activity parent, 
-					View original, 
-					String entityKey, 
-					String entityName,
-					boolean isEntityKeyUrl, 
-					boolean addScrollView, 
-					ActionBarListener listener) {
-				addResult(0,original);
-				addResult(1,entityKey);
-				addResult(2,entityName);
-				addResult(3,isEntityKeyUrl);
-				addResult(4,addScrollView);
-				addResult(5,listener);
+		final com.socialize.SocializeUI socializeUI = new MockSocializeUI() {
+			@Override
+			public View showActionBar(Activity parent, View original, Entity entity) {
+				addResult(original);
+				addResult(entity);
 				return null;
 			}
-		};	
+		};
 		
-		publicSocializeUI.showActionBar(getActivity(), originalActual, entityKeyActual);
+		SocializeUI socializeUIOld = new SocializeUI() {
+
+			@Override
+			public com.socialize.SocializeUI getSocializeUI() {
+				return socializeUI;
+			}
+		};
+		
+		socializeUIOld.showActionBar(getActivity(), originalActual, entityKeyActual);
 		
 		View original = getResult(0);
-		String entityKey = getResult(1);
-		String entityName = getResult(2);
-		Boolean isEntityKeyUrl = getResult(3); 
-		Boolean addScrollView = getResult(4);
-		ActionBarListener listener = getResult(5);
+		Entity entity = getResult(1);
+		assertNotNull(entity);
 		
-		assertNotNull(original);
+		assertEquals(entityKeyActual, entity.getKey());		
 		assertSame(originalActual, original);
-		
-		assertNotNull(entityKey);
-		assertEquals(entityKeyActual, entityKey);
-		
-		assertNull(entityName);
-		
-		assertTrue(isEntityKeyUrl);
-		assertTrue(addScrollView);
-		
-		assertNull(listener);
 	}
 
-	
+	@Deprecated
 	@UsesMocks ({ActionBarListener.class})
-	public void test_showActionBar1() {
+	public void test_showActionBar1Old() {
 		
-		View originalActual = new View(getActivity());
 		ActionBarListener listenerActual = AndroidMock.createMock(ActionBarListener.class);
+		View originalActual = new View(getActivity());
 		String entityKeyActual = "foo";
 		
-		PublicSocializeUI publicSocializeUI = new PublicSocializeUI() {
-			
-			public ActionBarView showActionBar(
-					Activity parent, 
-					View original, 
-					String entityKey, 
-					String entityName,
-					boolean isEntityKeyUrl, 
-					boolean addScrollView, 
-					ActionBarListener listener) {
-				addResult(0,original);
-				addResult(1,entityKey);
-				addResult(2,entityName);
-				addResult(3,isEntityKeyUrl);
-				addResult(4,addScrollView);
-				addResult(5,listener);
+		final com.socialize.SocializeUI socializeUI = new MockSocializeUI() {
+			@Override
+			public View showActionBar(Activity parent, View original, Entity entity, ActionBarListener listener) {
+				addResult(original);
+				addResult(entity);
+				addResult(listener);
 				return null;
 			}
-		};	
+		};
 		
-		publicSocializeUI.showActionBar(getActivity(), originalActual, entityKeyActual, listenerActual);
+		SocializeUI socializeUIOld = new SocializeUI() {
+
+			@Override
+			public com.socialize.SocializeUI getSocializeUI() {
+				return socializeUI;
+			}
+		};
+		
+		socializeUIOld.showActionBar(getActivity(), originalActual, entityKeyActual, listenerActual);
 		
 		View original = getResult(0);
-		String entityKey = getResult(1);
-		String entityName = getResult(2);
-		Boolean isEntityKeyUrl = getResult(3); 
-		Boolean addScrollView = getResult(4);
-		ActionBarListener listener = getResult(5);
+		Entity entity = getResult(1);
+		ActionBarListener listener = getResult(2);
 		
 		assertNotNull(original);
-		assertSame(originalActual, original);
-		
-		assertNotNull(entityKey);
-		assertEquals(entityKeyActual, entityKey);
-		
-		assertNull(entityName);
-		
-		assertTrue(isEntityKeyUrl);
-		assertTrue(addScrollView);
-		
+		assertNotNull(entity);
 		assertNotNull(listener);
-		assertSame(listenerActual, listener);
+		
+		assertEquals(entityKeyActual, entity.getKey());		
+		assertSame(originalActual, original);		
+		assertSame(listenerActual, listener);	
 	}	
 	
-	
+	@Deprecated
 	@UsesMocks ({ActionBarListener.class, ActionBarOptions.class})
-	public void test_showActionBar2() {
+	public void test_showActionBar2Old() {
 		
-		View originalActual = new View(getActivity());
 		ActionBarListener listenerActual = AndroidMock.createMock(ActionBarListener.class);
 		ActionBarOptions optionsActual = AndroidMock.createMock(ActionBarOptions.class);
 		
+		View originalActual = new View(getActivity());
 		String entityKeyActual = "foo";
-		String entityNameActual = "bar";
-		boolean isEntityKeyActual = false;
-		boolean isScroll = true;
-		 
-		AndroidMock.expect(optionsActual.getEntityName()).andReturn(entityNameActual);
-		AndroidMock.expect(optionsActual.isEntityKeyUrl()).andReturn(isEntityKeyActual);
-		AndroidMock.expect(optionsActual.isAddScrollView()).andReturn(isScroll);
 		
-		AndroidMock.replay(optionsActual);
-		
-		PublicSocializeUI publicSocializeUI = new PublicSocializeUI() {
-			
-			public ActionBarView showActionBar(
-					Activity parent, 
-					View original, 
-					String entityKey, 
-					String entityName,
-					boolean isEntityKeyUrl, 
-					boolean addScrollView, 
-					ActionBarListener listener) {
-				addResult(0,original);
-				addResult(1,entityKey);
-				addResult(2,entityName);
-				addResult(3,isEntityKeyUrl);
-				addResult(4,addScrollView);
-				addResult(5,listener);
+		final com.socialize.SocializeUI socializeUI = new MockSocializeUI() {
+			@Override
+			public View showActionBar(Activity parent, View original, Entity entity, ActionBarOptions options, ActionBarListener listener) {
+				addResult(original);
+				addResult(entity);
+				addResult(options);
+				addResult(listener);
 				return null;
 			}
-		};	
+		};
 		
-		publicSocializeUI.showActionBar(getActivity(), originalActual, entityKeyActual, optionsActual, listenerActual);
+		SocializeUI socializeUIOld = new SocializeUI() {
+
+			@Override
+			public com.socialize.SocializeUI getSocializeUI() {
+				return socializeUI;
+			}
+		};
 		
-		AndroidMock.verify(optionsActual);
+		socializeUIOld.showActionBar(getActivity(), originalActual, entityKeyActual, optionsActual, listenerActual);
 		
 		View original = getResult(0);
-		String entityKey = getResult(1);
-		String entityName = getResult(2);
-		Boolean isEntityKeyUrl = getResult(3); 
-		Boolean addScrollView = getResult(4);
-		ActionBarListener listener = getResult(5);
+		Entity entity = getResult(1);
+		ActionBarOptions options = getResult(2);
+		ActionBarListener listener = getResult(3);
 		
 		assertNotNull(original);
-		assertSame(originalActual, original);
-		
-		assertNotNull(entityKey);
-		assertEquals(entityKeyActual, entityKey);
-		
-		assertNotNull(entityName);
-		assertEquals(entityNameActual, entityName);
-		
-		assertEquals(isEntityKeyActual, isEntityKeyUrl.booleanValue());
-		assertEquals(isScroll, addScrollView.booleanValue());
-		
+		assertNotNull(entity);
+		assertNotNull(options);
 		assertNotNull(listener);
-		assertSame(listenerActual, listener);
+		
+		assertEquals(entityKeyActual, entity.getKey());		
+		assertSame(originalActual, original);		
+		assertSame(optionsActual, options);		
+		assertSame(listenerActual, listener);	
 	}
 	
-	
-	public void test_showActionBar3() {
-		
-		final View originalActual = new View(getActivity());
-		int resId = 69;
+	@Deprecated
+	public void test_showActionBar3Old() {
+
 		String entityKeyActual = "foo";
+		int resId = 69;
 		
-		PublicSocializeUI publicSocializeUI = new PublicSocializeUI() {
-			
-			public ActionBarView showActionBar(
-					Activity parent, 
-					View original, 
-					String entityKey, 
-					String entityName,
-					boolean isEntityKeyUrl, 
-					boolean addScrollView, 
-					ActionBarListener listener) {
-				addResult(0,original);
-				addResult(1,entityKey);
-				addResult(2,entityName);
-				addResult(3,isEntityKeyUrl);
-				addResult(4,addScrollView);
-				addResult(5,listener);
+		final com.socialize.SocializeUI socializeUI = new MockSocializeUI() {
+			@Override
+			public View showActionBar(Activity parent, int resId, Entity entity) {
+				addResult(resId);
+				addResult(entity);
 				return null;
 			}
-		};	
+		};
 		
-		publicSocializeUI.showActionBar(getActivity(), resId, entityKeyActual);
+		SocializeUI socializeUIOld = new SocializeUI() {
+
+			@Override
+			public com.socialize.SocializeUI getSocializeUI() {
+				return socializeUI;
+			}
+		};
 		
-		View original = getResult(0);
-		String entityKey = getResult(1);
-		String entityName = getResult(2);
-		Boolean isEntityKeyUrl = getResult(3); 
-		Boolean addScrollView = getResult(4);
-		ActionBarListener listener = getResult(5);
+		socializeUIOld.showActionBar(getActivity(), resId, entityKeyActual);
 		
-		assertNotNull(original);
-		assertSame(originalActual, original);
+		Integer original = getResult(0);
+		Entity entity = getResult(1);
+		assertNotNull(entity);
 		
-		assertNotNull(entityKey);
-		assertEquals(entityKeyActual, entityKey);
-		
-		assertNull(entityName);
-		
-		assertTrue(isEntityKeyUrl);
-		assertTrue(addScrollView);
-		
-		assertNull(listener);
+		assertEquals(entityKeyActual, entity.getKey());		
+		assertSame(resId, original.intValue());		
 	}
 
-	
+	@Deprecated
 	@UsesMocks ({ActionBarListener.class})
-	public void test_showActionBar4() {
+	public void test_showActionBar4Old() {
 		
-		final View originalActual = new View(getActivity());
+		String entityKeyActual = "foo";
 		int resId = 69;
 		ActionBarListener listenerActual = AndroidMock.createMock(ActionBarListener.class);
-		String entityKeyActual = "foo";
 		
-		PublicSocializeUI publicSocializeUI = new PublicSocializeUI() {
-			
-			public ActionBarView showActionBar(
-					Activity parent, 
-					View original, 
-					String entityKey, 
-					String entityName,
-					boolean isEntityKeyUrl, 
-					boolean addScrollView, 
-					ActionBarListener listener) {
-				addResult(0,original);
-				addResult(1,entityKey);
-				addResult(2,entityName);
-				addResult(3,isEntityKeyUrl);
-				addResult(4,addScrollView);
-				addResult(5,listener);
+		final com.socialize.SocializeUI socializeUI = new MockSocializeUI() {
+			@Override
+			public View showActionBar(Activity parent, int resId, Entity entity, ActionBarListener listener) {
+				addResult(resId);
+				addResult(entity);
+				addResult(listener);
 				return null;
 			}
-		};	
+		};
 		
-		publicSocializeUI.showActionBar(getActivity(), resId, entityKeyActual, listenerActual);
+		SocializeUI socializeUIOld = new SocializeUI() {
+
+			@Override
+			public com.socialize.SocializeUI getSocializeUI() {
+				return socializeUI;
+			}
+		};
 		
-		View original = getResult(0);
-		String entityKey = getResult(1);
-		String entityName = getResult(2);
-		Boolean isEntityKeyUrl = getResult(3); 
-		Boolean addScrollView = getResult(4);
-		ActionBarListener listener = getResult(5);
+		socializeUIOld.showActionBar(getActivity(), resId, entityKeyActual, listenerActual);
+		
+		Integer original = getResult(0);
+		Entity entity = getResult(1);
+		ActionBarListener listener = getResult(2);
 		
 		assertNotNull(original);
-		assertSame(originalActual, original);
-		
-		assertNotNull(entityKey);
-		assertEquals(entityKeyActual, entityKey);
-		
-		assertNull(entityName);
-		
-		assertTrue(isEntityKeyUrl);
-		assertTrue(addScrollView);
-		
+		assertNotNull(entity);
 		assertNotNull(listener);
+		
+		assertEquals(entityKeyActual, entity.getKey());		
+		assertSame(resId, original.intValue());		
 		assertSame(listenerActual, listener);
 	}	
 	
-	
+	@Deprecated
 	@UsesMocks ({ActionBarListener.class, ActionBarOptions.class})
-	public void test_showActionBar5() {
+	public void test_showActionBar5Old() {
 		
-		final View originalActual = new View(getActivity());
+		String entityKeyActual = "foo";
 		int resId = 69;
 		ActionBarListener listenerActual = AndroidMock.createMock(ActionBarListener.class);
 		ActionBarOptions optionsActual = AndroidMock.createMock(ActionBarOptions.class);
 		
-		String entityKeyActual = "foo";
-		String entityNameActual = "bar";
-		boolean isEntityKeyActual = false;
-		boolean isScroll = true;
-		 
-		AndroidMock.expect(optionsActual.getEntityName()).andReturn(entityNameActual);
-		AndroidMock.expect(optionsActual.isEntityKeyUrl()).andReturn(isEntityKeyActual);
-		AndroidMock.expect(optionsActual.isAddScrollView()).andReturn(isScroll);
-		
-		AndroidMock.replay(optionsActual);
-		
-		PublicSocializeUI publicSocializeUI = new PublicSocializeUI() {
-			
-			public ActionBarView showActionBar(
-					Activity parent, 
-					View original, 
-					String entityKey, 
-					String entityName,
-					boolean isEntityKeyUrl, 
-					boolean addScrollView, 
-					ActionBarListener listener) {
-				addResult(0,original);
-				addResult(1,entityKey);
-				addResult(2,entityName);
-				addResult(3,isEntityKeyUrl);
-				addResult(4,addScrollView);
-				addResult(5,listener);
+		final com.socialize.SocializeUI socializeUI = new MockSocializeUI() {
+			@Override
+			public View showActionBar(Activity parent, int resId, Entity entity, ActionBarOptions options, ActionBarListener listener) {
+				addResult(resId);
+				addResult(entity);
+				addResult(listener);
+				addResult(options);
 				return null;
 			}
-		};	
+		};
 		
-		publicSocializeUI.showActionBar(getActivity(), resId, entityKeyActual, optionsActual, listenerActual);
+		SocializeUI socializeUIOld = new SocializeUI() {
+
+			@Override
+			public com.socialize.SocializeUI getSocializeUI() {
+				return socializeUI;
+			}
+		};
 		
-		AndroidMock.verify(optionsActual);
+		socializeUIOld.showActionBar(getActivity(), resId, entityKeyActual, optionsActual, listenerActual);
 		
-		View original = getResult(0);
-		String entityKey = getResult(1);
-		String entityName = getResult(2);
-		Boolean isEntityKeyUrl = getResult(3); 
-		Boolean addScrollView = getResult(4);
-		ActionBarListener listener = getResult(5);
+		Integer original = getResult(0);
+		Entity entity = getResult(1);
+		ActionBarListener listener = getResult(2);
+		ActionBarOptions options = getResult(3);
 		
 		assertNotNull(original);
-		assertSame(originalActual, original);
-		
-		assertNotNull(entityKey);
-		assertEquals(entityKeyActual, entityKey);
-		
-		assertNotNull(entityName);
-		assertEquals(entityNameActual, entityName);
-		
-		assertEquals(isEntityKeyActual, isEntityKeyUrl.booleanValue());
-		assertEquals(isScroll, addScrollView.booleanValue());
-		
+		assertNotNull(entity);
 		assertNotNull(listener);
-		assertSame(listenerActual, listener);
+		assertNotNull(options);
+		
+		assertEquals(entityKeyActual, entity.getKey());		
+		assertSame(resId, original.intValue());		
+		assertSame(listenerActual, listener);		
+		assertSame(optionsActual, options);		
 	}		
 	
-	@UsesMocks ({RelativeLayout.class, ActionBarView.class, View.class, MockRelativeLayoutParams.class, ScrollView.class, TestUIFactory.class, ActionBarListener.class})
-	public void test_showActionBar() {
-		
-		final int width = 100, height = 50;
-		
-		final TestUIFactory factory =  AndroidMock.createMock(TestUIFactory.class);
-		
-		final String entityKey = "foo"; 
-		final String entityName = "bar"; 
-		final boolean isEntityKeyUrl = true; 
-		final boolean addScrollView = true;
-		final int actionBarId = 69;
-		
-		final Activity parent = getActivity();
-		View original = AndroidMock.createMock(View.class, parent);
-		
-		ActionBarListener listener = AndroidMock.createMock(ActionBarListener.class);
-		RelativeLayout barLayout = AndroidMock.createMock(RelativeLayout.class, parent);
-		RelativeLayout originalLayout = AndroidMock.createMock(RelativeLayout.class, parent);
-		ScrollView scrollView = AndroidMock.createMock(ScrollView.class, parent);
-		ActionBarView socializeActionBar = AndroidMock.createMock(ActionBarView.class, parent);
-		LayoutParams barParams = AndroidMock.createMock(MockRelativeLayoutParams.class, width, height);
-		LayoutParams originalParams = AndroidMock.createMock(MockRelativeLayoutParams.class, width, height);
-		LayoutParams scrollViewParams = AndroidMock.createMock(MockRelativeLayoutParams.class, width, height);
-		
-		AndroidMock.expect(factory.newRelativeLayout(parent)).andReturn(barLayout).once();
-		AndroidMock.expect(factory.newRelativeLayout(parent)).andReturn(originalLayout).once();
-		
-		AndroidMock.expect(factory.newActionBarView(parent)).andReturn(socializeActionBar);
-		AndroidMock.expect(factory.newScrollView(parent)).andReturn(scrollView);
-		
-		AndroidMock.expect(factory.newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT)).andReturn(barParams);
-		AndroidMock.expect(factory.newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT)).andReturn(originalParams);
-		AndroidMock.expect(factory.newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT)).andReturn(scrollViewParams);
-		
-		AndroidMock.expect(socializeActionBar.getId()).andReturn(actionBarId);
-		
-		socializeActionBar.assignId(original);
-		socializeActionBar.setEntityKey(entityKey);
-		socializeActionBar.setEntityName(entityName);
-		socializeActionBar.setEntityKeyIsUrl(isEntityKeyUrl);
-		
-		barParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-		originalParams.addRule(RelativeLayout.ABOVE, actionBarId);
-		
-		socializeActionBar.setLayoutParams(barParams);
-		originalLayout.setLayoutParams(originalParams);
-		
-		listener.onCreate(socializeActionBar);
-		
-		scrollView.setFillViewport(true);
-		scrollView.setScrollContainer(false);
-		scrollView.setLayoutParams(scrollViewParams);
-		scrollView.addView(original);
-		originalLayout.addView(scrollView);
-		
-		barLayout.addView(originalLayout);
-		barLayout.addView(socializeActionBar);
-		
-		AndroidMock.replay(listener);
-		AndroidMock.replay(barLayout);
-		AndroidMock.replay(originalLayout);
-		AndroidMock.replay(scrollView);
-		AndroidMock.replay(socializeActionBar);
-		AndroidMock.replay(barParams);
-		AndroidMock.replay(originalParams);
-		AndroidMock.replay(scrollViewParams);
-		AndroidMock.replay(factory);
-		
-		PublicSocializeUI publicSocializeUI = new PublicSocializeUI() {
-			@Override
-			public RelativeLayout newRelativeLayout(Activity parent) {
-				return factory.newRelativeLayout(parent);
-			}
-
-			@Override
-			public ActionBarView newActionBarView(Activity parent) {
-				return factory.newActionBarView(parent);
-			}
-
-			@Override
-			public LayoutParams newLayoutParams(int width, int height) {
-				return factory.newLayoutParams(width, height);
-			}
-
-			@Override
-			public ScrollView newScrollView(Activity parent) {
-				return factory.newScrollView(parent);
-			}
-		};	
-		
-		publicSocializeUI.showActionBar(parent, original, entityKey, entityName, isEntityKeyUrl, addScrollView, listener);
-		
-		AndroidMock.verify(listener);
-		AndroidMock.verify(barLayout);
-		AndroidMock.verify(originalLayout);
-		AndroidMock.verify(scrollView);
-		AndroidMock.verify(socializeActionBar);
-		AndroidMock.verify(barParams);
-		AndroidMock.verify(originalParams);
-		AndroidMock.verify(scrollViewParams);
-		AndroidMock.verify(factory);
-	}
 	
-	
+	@Deprecated
 	protected class PublicSocializeUI extends SocializeUI {
 
 		@Override

@@ -131,7 +131,6 @@ public class Entity extends SocializeObject implements Serializable {
 		this.entityStats = stats;
 	}
 
-
 	/**
 	 * Convenience method to create a new Entity based on a key only.
 	 * @param key

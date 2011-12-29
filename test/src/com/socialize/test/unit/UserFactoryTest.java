@@ -42,6 +42,7 @@ import com.socialize.entity.UserFactory;
  */
 public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, UserFactory> {
 
+	final String meta = "mock_meta";
 	final String first_name = "mock_first_name";
 	final String last_name = "mock_last_name";
 	final String description = "mock_description";
@@ -89,16 +90,15 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		AndroidMock.expect(object.getLargeImageUri()).andReturn(large_image_uri);
 		AndroidMock.expect(object.isAutoPostCommentsFacebook()).andReturn(is_auto_post_comments_fb);
 		AndroidMock.expect(object.isAutoPostLikesFacebook()).andReturn(is_auto_post_likes_fb);
-		
+		AndroidMock.expect(object.getMetaData()).andReturn(meta);
 		AndroidMock.expect(object.isShareLocation()).andReturn(is_share_location);
-		
 		
 		AndroidMock.expect(json.put("first_name", first_name)).andReturn(json);
 		AndroidMock.expect(json.put("last_name", last_name)).andReturn(json);
 		AndroidMock.expect(json.put("description", description)).andReturn(json);
 		AndroidMock.expect(json.put("location", location)).andReturn(json);
 		AndroidMock.expect(json.put("picture", picture)).andReturn(json);
-		
+		AndroidMock.expect(json.put("meta", meta)).andReturn(json);
 		
 		AndroidMock.expect(json.put(auto_post_comments_fb, is_auto_post_comments_fb)).andReturn(json);
 		AndroidMock.expect(json.put(auto_post_likes_fb, is_auto_post_likes_fb)).andReturn(json);
@@ -141,6 +141,9 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		AndroidMock.expect(json.has("stats")).andReturn(true);
 		AndroidMock.expect(json.has(third_party_auth)).andReturn(true);
 		
+		AndroidMock.expect(json.has("meta")).andReturn(true);
+		
+		
 		AndroidMock.expect(json.has("auto_post_fb")).andReturn(true);
 		AndroidMock.expect(json.has(auto_post_comments_fb)).andReturn(true);
 		AndroidMock.expect(json.has(auto_post_likes_fb)).andReturn(true);
@@ -165,6 +168,8 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		
 		AndroidMock.expect(json.isNull("share_location")).andReturn(false);
 		
+		AndroidMock.expect(json.isNull("meta")).andReturn(false);
+		
 		AndroidMock.expect(json.getString("picture")).andReturn(picture);
 		AndroidMock.expect(json.getString("first_name")).andReturn(first_name);
 		AndroidMock.expect(json.getString("last_name")).andReturn(last_name);
@@ -174,6 +179,8 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		AndroidMock.expect(json.getString("small_image_uri")).andReturn(small_image_uri);
 		AndroidMock.expect(json.getString("medium_image_uri")).andReturn(medium_image_uri);
 		AndroidMock.expect(json.getString("large_image_uri")).andReturn(large_image_uri);
+		AndroidMock.expect(json.getString("meta")).andReturn(meta);
+		
 		AndroidMock.expect(json.getJSONObject("stats")).andReturn(json);
 		AndroidMock.expect(json.getBoolean("auto_post_fb")).andReturn(is_auto_post_fb);
 		AndroidMock.expect(json.getBoolean(auto_post_comments_fb)).andReturn(is_auto_post_comments_fb);
@@ -197,6 +204,8 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		object.setMediumImageUri(medium_image_uri);
 		object.setLargeImageUri(large_image_uri);
 		object.setProfilePicData(picture);
+		
+		object.setMetaData(meta);
 		
 		object.setAutoPostCommentsFacebook(is_auto_post_comments_fb);
 		object.setAutoPostLikesFacebook(is_auto_post_likes_fb);

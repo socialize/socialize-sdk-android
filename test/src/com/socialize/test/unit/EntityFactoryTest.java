@@ -38,6 +38,7 @@ public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<MockEn
 
 	final String mockName = "test name";
 	final String mockKey = "test key";
+	final String mockMeta = "test meta";
 	final Integer mockLikes = new Integer(1);
 	final Integer mockShares = new Integer(2);
 	final Integer mockComments = new Integer(3);
@@ -49,8 +50,10 @@ public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<MockEn
 	protected void setupToJSONExpectations() throws JSONException {
 		AndroidMock.expect(object.getName()).andReturn(mockName);
 		AndroidMock.expect(object.getKey()).andReturn(mockKey);
+		AndroidMock.expect(object.getMetaData()).andReturn(mockMeta);
 		AndroidMock.expect(json.put("name", mockName)).andReturn(json);
 		AndroidMock.expect(json.put("key", mockKey)).andReturn(json);
+		AndroidMock.expect(json.put("meta", mockMeta)).andReturn(json);
 	}
 
 	@Override
@@ -68,6 +71,8 @@ public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<MockEn
 		AndroidMock.expect(json.has("shares")).andReturn(true);
 		AndroidMock.expect(json.has("comments")).andReturn(true);
 		AndroidMock.expect(json.has("views")).andReturn(true);
+		AndroidMock.expect(json.has("meta")).andReturn(true);
+		
 		
 		AndroidMock.expect(json.isNull("name")).andReturn(false);
 		AndroidMock.expect(json.isNull("key")).andReturn(false);
@@ -75,9 +80,11 @@ public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<MockEn
 		AndroidMock.expect(json.isNull("shares")).andReturn(false);
 		AndroidMock.expect(json.isNull("comments")).andReturn(false);
 		AndroidMock.expect(json.isNull("views")).andReturn(false);
+		AndroidMock.expect(json.isNull("meta")).andReturn(false);
 		
 		AndroidMock.expect(json.getString("name")).andReturn(mockName);
 		AndroidMock.expect(json.getString("key")).andReturn(mockKey);
+		AndroidMock.expect(json.getString("meta")).andReturn(mockMeta);
 		AndroidMock.expect(json.getInt("likes")).andReturn(mockLikes);
 		AndroidMock.expect(json.getInt("shares")).andReturn(mockShares);
 		AndroidMock.expect(json.getInt("views")).andReturn(mockViews);
@@ -85,6 +92,7 @@ public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<MockEn
 		
 		object.setName(mockName);
 		object.setKey(mockKey);
+		object.setMetaData(mockMeta);
 		
 		stats.setLikes(mockLikes);
 		stats.setShares(mockShares);

@@ -319,19 +319,19 @@ import com.socialize.util.Drawables;
 
 			@Override
 			public Builder setPositiveButton(CharSequence text, OnClickListener listener) {
-				addResult(listener);
+				addResult(0, listener);
 				return this;
 			}
 
 			@Override
 			public Builder setNegativeButton(CharSequence text, OnClickListener listener) {
-				addResult(listener);
+				addResult(1, listener);
 				return this;
 			}
 
 			@Override
 			public AlertDialog create() {
-				addResult(true);
+				addResult(2, true);
 				return null;
 			}
 		};
@@ -349,21 +349,20 @@ import com.socialize.util.Drawables;
 			
 			@Override
 			public void authenticate(String[] permissions, boolean sso) {
-				addResult("auth_called");
+				addResult(3, "auth_called");
 			}
 
 			@Override
 			public void finish() {
-				addResult("finish_called");
+				addResult(4, "finish_called");
 			}
 		};
 		
 		service.makeErrorDialog(error, null, false);
 		
-		// Reverse order
-		Boolean created = getNextResult();
-		OnClickListener negative = getNextResult();
-		OnClickListener positive = getNextResult();
+		Boolean created = getResult(2);
+		OnClickListener negative = getResult(1);
+		OnClickListener positive = getResult(0);
 		
 		assertNotNull(positive);
 		assertNotNull(negative);
@@ -372,12 +371,12 @@ import com.socialize.util.Drawables;
 		assertTrue(created);
 		
 		positive.onClick(dialog, -1);
-		String authenticated = getNextResult();
+		String authenticated = getResult(3);
 		assertNotNull(authenticated);
 		assertEquals("auth_called", authenticated);
 		
 		negative.onClick(dialog, -1);
-		String finish = getNextResult();
+		String finish = getResult(4);
 		assertNotNull(finish);
 		assertEquals("finish_called", finish);
 		

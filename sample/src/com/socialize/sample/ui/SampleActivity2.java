@@ -1,5 +1,6 @@
 package com.socialize.sample.ui;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -13,11 +14,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.socialize.Socialize;
+import com.socialize.SocializeAccess;
 import com.socialize.entity.Entity;
 import com.socialize.sample.R;
 
-@SuppressWarnings("deprecation")
-public class SampleActivity2 extends SampleActivity {
+public class SampleActivity2 extends Activity {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -26,10 +27,6 @@ public class SampleActivity2 extends SampleActivity {
 		
 		final EditText txtEntity = (EditText) findViewById(R.id.txtEntity);
 		final EditText txtEntityName = (EditText) findViewById(R.id.txtEntityName);
-		
-		final Entity entity = new Entity();
-		entity.setKey(txtEntity.getText().toString());
-		entity.setName(txtEntityName.getText().toString());
 		
 		final EditText txtFB = (EditText) findViewById(R.id.txtFBId);
 		final CheckBox chkSSO = (CheckBox) findViewById(R.id.chkFacebook);
@@ -45,6 +42,11 @@ public class SampleActivity2 extends SampleActivity {
 			public void onClick(View v) {
 				Socialize.getSocialize().destroy(true);
 				setupOverrides();
+				
+				Entity entity = new Entity();
+				entity.setKey(txtEntity.getText().toString());
+				entity.setName(txtEntityName.getText().toString());				
+				
 				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
 				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				Socialize.getSocializeUI().showCommentView(SampleActivity2.this, entity);
@@ -85,8 +87,11 @@ public class SampleActivity2 extends SampleActivity {
 				setupOverrides();
 				Intent intent = new Intent(SampleActivity2.this, ActionBarAutoActivity2.class);
 				
-				intent.putExtra(ActionBarAutoActivity2.ENTITY_KEY, entity.getKey());
-				intent.putExtra(ActionBarAutoActivity2.ENTITY_NAME, entity.getName());
+				Entity entity = new Entity();
+				entity.setKey(txtEntity.getText().toString());
+				entity.setName(txtEntityName.getText().toString());	
+				
+				intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 				
 				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
 				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
@@ -99,9 +104,12 @@ public class SampleActivity2 extends SampleActivity {
 			public void onClick(View v) {
 				setupOverrides();
 				Intent intent = new Intent(SampleActivity2.this, ActionBarManualActivity2.class);
-				intent.putExtra(ActionBarAutoActivity2.ENTITY_KEY, entity.getKey());
-				intent.putExtra(ActionBarAutoActivity2.ENTITY_NAME, entity.getName());
 				
+				Entity entity = new Entity();
+				entity.setKey(txtEntity.getText().toString());
+				entity.setName(txtEntityName.getText().toString());	
+				
+				intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
 				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				startActivity(intent);
@@ -113,8 +121,12 @@ public class SampleActivity2 extends SampleActivity {
 			public void onClick(View v) {
 				setupOverrides();
 				Intent intent = new Intent(SampleActivity2.this, ActionBarPagerActivity.class);
-				intent.putExtra(ActionBarAutoActivity2.ENTITY_KEY, entity.getKey());
-				intent.putExtra(ActionBarAutoActivity2.ENTITY_NAME, entity.getName());
+				
+				Entity entity = new Entity();
+				entity.setKey(txtEntity.getText().toString());
+				entity.setName(txtEntityName.getText().toString());	
+				
+				intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 				
 				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
 				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
@@ -125,5 +137,26 @@ public class SampleActivity2 extends SampleActivity {
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow( txtEntity.getWindowToken(), 0);
 		imm.hideSoftInputFromWindow( getWindow().getDecorView().getWindowToken(), 0);
+	}
+	
+	protected void setupOverrides() {
+		
+		final CheckBox chkMockFB = (CheckBox) findViewById(R.id.chkMockFB);
+		final CheckBox chkMockSocialize = (CheckBox) findViewById(R.id.chkMockSocialize);
+		
+		if(chkMockFB.isChecked()) {
+			if(chkMockSocialize.isChecked()) {
+				SocializeAccess.setBeanOverrides("socialize_ui_mock_beans.xml", "socialize_ui_mock_socialize_beans.xml");
+			}
+			else {
+				SocializeAccess.setBeanOverrides("socialize_ui_mock_beans.xml");
+			}
+		}
+		else if(chkMockSocialize.isChecked()) {
+			SocializeAccess.setBeanOverrides("socialize_ui_mock_socialize_beans.xml");
+		}
+		else {
+			SocializeAccess.setBeanOverrides((String[]) null);
+		}
 	}
 }

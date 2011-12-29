@@ -27,6 +27,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.socialize.util.StringUtils;
+
 
 /**
  * @author Jason Polites
@@ -36,6 +38,7 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	private StatsFactory statsFactory;
 	private UserAuthDataFactory userAuthDataFactory;
 	
+	public static final String META = "meta";
 	public static final String FIRST_NAME = "first_name";
 	public static final String LAST_NAME = "last_name";
 	public static final String USERNAME = "username";
@@ -66,6 +69,7 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		
 		boolean legacyAutoPost = getBoolean(object,AUTO_POST_FACEBOOK, true);
 		
+		user.setMetaData(getString(object,META));
 		user.setFirstName(getString(object,FIRST_NAME));
 		user.setLastName(getString(object,LAST_NAME));
 		user.setUsername(getString(object,USERNAME));
@@ -105,6 +109,16 @@ public class UserFactory extends SocializeObjectFactory<User> {
 
 	@Override
 	protected void postToJSON(User user, JSONObject object) throws JSONException {
+		
+		String metaData = user.getMetaData();
+		
+		if(!StringUtils.isEmpty(metaData)) {
+			object.put(META, metaData);
+		}
+		else {
+			object.put(META, "");
+		}
+		
 		object.put(FIRST_NAME, user.getFirstName());
 		object.put(LAST_NAME, user.getLastName());
 		object.put(DESCRIPTION, user.getDescription());

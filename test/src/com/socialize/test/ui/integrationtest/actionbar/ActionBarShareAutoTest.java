@@ -15,7 +15,6 @@ import com.socialize.android.ioc.Container;
 import com.socialize.sample.ui.ActionBarAutoActivity;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.SocializeUI;
-import com.socialize.ui.SocializeUIBeanOverrider;
 import com.socialize.ui.actionbar.ActionBarLayoutView;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
@@ -24,6 +23,7 @@ import com.socialize.ui.share.ShareClickListener;
 import com.socialize.ui.share.ShareDialogView;
 import com.socialize.ui.view.SocializeButton;
 
+@Deprecated
 public class ActionBarShareAutoTest extends ActivityInstrumentationTestCase2<ActionBarAutoActivity> {
 
 	public ActionBarShareAutoTest() {

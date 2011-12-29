@@ -168,7 +168,7 @@ public abstract class SocializeBaseView extends BaseView {
 			add.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 				@Override
 				public boolean onMenuItemClick(MenuItem item) {
-					final String userId = Socialize.getSocialize().getSession().getUser().getId().toString();
+					final Long userId = Socialize.getSocialize().getSession().getUser().getId();
 					Socialize.getSocializeUI().showUserProfileViewForResult(source, userId, CommentActivity.PROFILE_UPDATE);
 					return true;
 				}
