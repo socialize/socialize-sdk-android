@@ -17,7 +17,7 @@
 			<fileset dir="libext" includes="**/*.jar"/>
 		</copy>
 		<!-- Set the version -->
-		<replaceregexp file="src/com/socialize/Socialize.java" flags="s" match="public\s+static\s+final\s+String\s+VERSION\s*=\s*&quot;.*&quot;" replace="public static final String VERSION = &quot;${version}&quot;" />
+		<replaceregexp file="src/com/socialize/Socialize.java" match="public\s+static\s+final\s+String\s+VERSION\s*=\s*&quot;.*&quot;" replace="public static final String VERSION = &quot;${version}&quot;" />
 	</target>
 	
 	<!-- version-tag: custom -->

@@ -51,7 +51,6 @@ public class Socialize {
 	
 	@Deprecated
 	public static final String COMMENT_ID = ACTION_ID;
-
 	
 	public static final String LOG_KEY = "Socialize";
 	public static final String USER_ID = "socialize.user.id";
