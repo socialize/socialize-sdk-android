@@ -58,7 +58,7 @@ public class NotificationSystemTest extends SocializeActivityTest {
 		user.setFirstName("John");
 		theAction.setUser(user);
 		
-		PublicSocializeC2DMReceiver receiver = new PublicSocializeC2DMReceiver("blah") {
+		PublicSocializeC2DMReceiver receiver = new PublicSocializeC2DMReceiver() {
 			@Override
 			public Context getContext() {
 				return NotificationSystemTest.this.getContext();
@@ -97,8 +97,8 @@ public class NotificationSystemTest extends SocializeActivityTest {
 	
 	class PublicSocializeC2DMReceiver extends SocializeC2DMReceiver {
 
-		public PublicSocializeC2DMReceiver(String senderId) {
-			super(senderId);
+		public PublicSocializeC2DMReceiver() {
+			super();
 		}
 
 		@Override

@@ -36,34 +36,6 @@
 		</init-method>
 	</bean>
 
-	<bean id="cache" class="com.socialize.util.DrawableCache">
-		<constructor-arg type="integer" value="10"/> <!-- Min size -->
-		<constructor-arg type="integer" value="100"/> <!-- Max size -->
-		<init-method name="init">
-			<arg type="context"/>
-		</init-method>		
-		<destroy-method name="destroy"/>
-	</bean>
-	
-	<bean id="bitmapBuilder" class="com.socialize.util.BitmapBuilder"/>
-	
-	<bean id="bitmapUtils" class="com.socialize.util.BitmapUtils">
-		<property name="bitmapBuilder" ref="bitmapBuilder"/>
-		<property name="base64Utils" ref="base64Utils"/>
-	</bean>
-	
-	<bean id="drawables" class="com.socialize.util.Drawables">
-		<property name="classLoaderProvider" ref="classLoaderProvider"/>
-		<property name="cache" ref="cache"/>
-		<property name="logger" ref="logger"/>
-		<property name="bitmapUtils" ref="bitmapUtils"/>
-		<init-method name="init">
-			<arg type="activity"/>
-		</init-method>		
-	</bean>	
-	
-	<bean id="base64Utils" class="com.socialize.util.Base64Utils"/>
-	
 	<bean id="httpUtils" class="com.socialize.util.HttpUtils">
 		<init-method name="init">
 			<arg type="context"/>
@@ -85,7 +57,7 @@
 		<property name="locationListenerFactory" ref="locationListenerFactory"/>
 		
 		<init-method name="init">
-			<arg type="activity"/>
+			<arg type="context"/>
 		</init-method>
 		
 		<destroy-method name="destroy"/>
@@ -337,11 +309,6 @@
 	
 	<bean id="userSystem" class="com.socialize.api.action.SocializeUserSystem" extends="socializeApi">
 		<constructor-arg ref="userProvider"/>
-		
-		<init-method name="init">
-			<arg type="activity"/>
-		</init-method>		
-		
 		<property name="sessionPersister" ref="sessionPersister"/>
 		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
 		<property name="deviceUtils" ref="deviceUtils"/>		
@@ -472,5 +439,55 @@
 	</bean>		
 	
 <!-- End Facebook -->
+
+
+<!-- Notifications -->
+
+
+	<bean id="notificationIdGenerator" class="com.socialize.notifications.NotificationIdGenerator"/>
+
+	<bean id="notificationAuthenticator" class="com.socialize.notifications.SocializeNotificationAuthenticator">
+		<property name="config" ref="config"/>
+		<property name="userSystem" ref="userSystem"/>
+	</bean>
+
+	<bean id="notificationMessageFactory" class="com.socialize.notifications.NotificationMessageFactory">
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="actionMessageTranslator" class="com.socialize.notifications.SocializeActionMessageTranslator">
+		<property name="activitySystem" ref="activitySystem"/>
+		<property name="notificationAuthenticator" ref="notificationAuthenticator"/>
+	</bean>
+	
+	<bean id="actionNotificationMessageBuilder" class="com.socialize.notifications.SocializeActionNotificationMessageBuilder">
+		<property name="appUtils" ref="appUtils"/>
+		<property name="messageTranslator" ref="actionMessageTranslator"/>
+	</bean>
+	
+	<bean id="notificationSystem" class="com.socialize.notifications.SocializeNotificationSystem">
+		<property name="logger" ref="logger"/>
+		<property name="notificationAuthenticator" ref="notificationAuthenticator"/>
+		<property name="notificationMessageFactory" ref="notificationMessageFactory"/>
+		<property name="deviceRegistrationSystem" ref="deviceRegistrationSystem"/>
+		<property name="notificationIdGenerator" ref="notificationIdGenerator"/>
+		<property name="messageBuilders">
+			<map>
+				<entry>
+					<key value="NEW_COMMENTS"/>
+					<value ref="actionNotificationMessageBuilder"/>
+				</entry>
+			</map>
+		</property>		
+	</bean>
+	
+	<!-- Notifications -->
+	<bean id="notificationRegistrationSystem" class="com.socialize.notifications.SocializeNotificationRegistrationSystem">
+		<property name="config" ref="config"/>
+		<property name="logger" ref="logger"/>
+		<init-method name="register">
+			<arg type="context"/>
+		</init-method>	
+	</bean>
 
 </beans>

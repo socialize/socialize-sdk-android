@@ -49,6 +49,8 @@ public class SocializeConfig {
 	public static final String SOCIALIZE_CONSUMER_KEY = "socialize.consumer.key";
 	public static final String SOCIALIZE_CONSUMER_SECRET = "socialize.consumer.secret";
 	
+	public static final String SOCIALIZE_C2DM_SENDER_ID = "socialize.c2dm.sender.id";
+	
 	@Deprecated
 	public static final String SOCIALIZE_BEANS_PATH = SOCIALIZE_CORE_BEANS_PATH;
 	

@@ -235,7 +235,6 @@ public class ActionBarSliderView extends BaseView {
 	protected void startAnimationForState(Animation animation, DisplayState state) {
 		// Animation doesn't always seem to work.. force an invalidate
 		setVisibility(View.VISIBLE);
-//		invalidate();				
 		clearAnimation();
 		displayState = state;
 		

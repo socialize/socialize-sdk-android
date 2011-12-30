@@ -22,6 +22,7 @@
 package com.socialize.location;
 
 import android.app.Activity;
+import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
 
@@ -36,7 +37,7 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 
 	private DeviceUtils deviceUtils;
 	private Location location;
-	private Activity context;
+	private Context context;
 	private SocializeLocationManager locationManager;
 	private IBeanFactory<SocializeLocationListener> locationListenerFactory;
 	private SocializeLocationListener listener = null;
@@ -45,7 +46,7 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 		super();
 	}
 	
-	public void init(Activity context) {
+	public void init(Context context) {
 		this.context = context;
 		if(locationListenerFactory != null) {
 			listener = locationListenerFactory.getBean();
@@ -74,7 +75,7 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 		return location;
 	}
 
-	private void requestLocation(Activity context, int accuracy) {
+	private void requestLocation(Context context, int accuracy) {
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(accuracy);
 		
@@ -87,7 +88,9 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 				location = mostRecentLocation;
 			}
 			else if(locationManager.isProviderEnabled(provider) && listener != null) {
-				locationManager.requestLocationUpdates(context, provider, 1, 0, listener);
+				if(context instanceof Activity) {
+					locationManager.requestLocationUpdates((Activity) context, provider, 1, 0, listener);
+				}
 			}
 		}
 	}

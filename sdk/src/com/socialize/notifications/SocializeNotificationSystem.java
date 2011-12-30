@@ -60,6 +60,7 @@ public class SocializeNotificationSystem implements NotificationSystem {
 		try {
 			// Record the registration with Socialize
 			DeviceRegistration registration = new DeviceRegistration();
+			registration.setRegistrationId(registrationId);
 			SocializeSession session = notificationAuthenticator.authenticate(context);
 			deviceRegistrationSystem.registerDevice(session, registration);
 		} 

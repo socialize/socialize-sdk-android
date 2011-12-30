@@ -18,6 +18,8 @@ package com.google.android.c2dm;
 
 import java.io.IOException;
 
+import com.socialize.notifications.SocializeC2DMReceiver;
+
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
@@ -58,7 +60,7 @@ public abstract class C2DMBaseReceiver extends IntentService {
 	private static final String WAKELOCK_KEY = "C2DM_LIB";
 
 	private static PowerManager.WakeLock mWakeLock;
-	private final String senderId;
+	private String senderId;
 
 	/**
 	 * The C2DMReceiver class must create a no-arg constructor and pass the
@@ -66,6 +68,9 @@ public abstract class C2DMBaseReceiver extends IntentService {
 	 */
 	public C2DMBaseReceiver(String senderId) {
 		super(senderId);
+	}
+
+	protected void setSenderId(String senderId) {
 		this.senderId = senderId;
 	}
 
@@ -131,11 +136,13 @@ public abstract class C2DMBaseReceiver extends IntentService {
 
 		// Use a naming convention, similar with how permissions and intents are
 		// used. Alternatives are introspection or an ugly use of statics.
-		String receiver = context.getPackageName() + ".C2DMReceiver";
+		// String receiver = context.getPackageName() + ".C2DMReceiver";
+
+		String receiver = SocializeC2DMReceiver.class.getName();
+
 		intent.setClassName(context, receiver);
 
 		context.startService(intent);
-
 	}
 
 	private void handleRegistration(final Context context, Intent intent) {

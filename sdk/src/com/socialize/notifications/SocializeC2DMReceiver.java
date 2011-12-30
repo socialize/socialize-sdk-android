@@ -7,24 +7,31 @@ import android.content.Intent;
 
 import com.google.android.c2dm.C2DMBaseReceiver;
 import com.socialize.android.ioc.IOCContainer;
+import com.socialize.config.SocializeConfig;
 import com.socialize.log.SocializeLogger;
 
 public class SocializeC2DMReceiver extends C2DMBaseReceiver {
 	
 	private SocializeLogger logger;
+	private SocializeConfig config;
 	private NotificationContainer container;
 	private NotificationSystem notificationSystem;
 	
-	private String registrationId;
-
-	public SocializeC2DMReceiver(String senderId) {
-		super(senderId);
+	
+	// Must be parameterless constructor
+	public SocializeC2DMReceiver() {
+		super("SocializeC2DMReceiver");
 		logger = new SocializeLogger();
 		container = newNotificationContainer();
 	}
 
 	@Override
 	public void onMessage(Context context, Intent intent) {
+		
+		if(logger != null && logger.isInfoEnabled()) {
+			logger.info("SocializeC2DMReceiver received message");
+		}		
+		
 		if(notificationSystem != null) {
 			notificationSystem.onMessage(getContext(), intent.getExtras());
 		}
@@ -44,9 +51,9 @@ public class SocializeC2DMReceiver extends C2DMBaseReceiver {
 		if(notificationSystem != null) {
 			notificationSystem.onRegister(context, registrationId);
 		}
-		else {
-			// Just keep this for later
-			this.registrationId = registrationId; 
+		
+		if(logger != null && logger.isInfoEnabled()) {
+			logger.info("SocializeC2DMReceiver successfully registered: " + registrationId);
 		}
 	}
 
@@ -55,6 +62,10 @@ public class SocializeC2DMReceiver extends C2DMBaseReceiver {
 		super.onUnregistered(context);
 		if(notificationSystem != null) {
 			notificationSystem.onUnregister(context);
+		}
+		
+		if(logger != null && logger.isInfoEnabled()) {
+			logger.info("SocializeC2DMReceiver successfully unregistered");
 		}
 	}
 
@@ -65,9 +76,20 @@ public class SocializeC2DMReceiver extends C2DMBaseReceiver {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		
+		if(logger != null && logger.isInfoEnabled()) {
+			logger.info("SocializeC2DMReceiver creating..");
+		}
+		
 		try {
 			container.onCreate(getContext());
 			initBeans();
+			
+			if(logger != null && logger.isInfoEnabled()) {
+				logger.info("SocializeC2DMReceiver created");
+			}			
+			
+			super.setSenderId(config.getProperty(SocializeConfig.SOCIALIZE_C2DM_SENDER_ID));
 		} 
 		catch (Exception e) {
 			if(logger != null) {
@@ -90,11 +112,8 @@ public class SocializeC2DMReceiver extends C2DMBaseReceiver {
 		IOCContainer ioc = container.getContainer();
 		if(ioc != null) {
 			logger = ioc.getBean("logger");
+			config = ioc.getBean("config");
 			notificationSystem = ioc.getBean("notificationSystem");
-			
-			if(registrationId != null) {
-				notificationSystem.onRegister(getContext(), registrationId);
-			}
 		}
 	}
 
@@ -104,7 +123,6 @@ public class SocializeC2DMReceiver extends C2DMBaseReceiver {
 			container.onDestroy(getContext());
 		}		
 		
-		registrationId = null;
 		super.onDestroy();
 	}
 	

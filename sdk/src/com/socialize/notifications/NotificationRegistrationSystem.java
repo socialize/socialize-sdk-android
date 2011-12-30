@@ -19,32 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api;
+package com.socialize.notifications;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.socialize.entity.DeviceRegistration;
-import com.socialize.error.SocializeException;
-import com.socialize.provider.SocializeProvider;
+import android.content.Context;
 
 /**
  * @author Jason Polites
  *
  */
-public class SocializeDeviceRegistrationSystem extends SocializeApi<DeviceRegistration, SocializeProvider<DeviceRegistration>> implements DeviceRegistrationSystem {
+public interface NotificationRegistrationSystem {
 
-	public SocializeDeviceRegistrationSystem(SocializeProvider<DeviceRegistration> provider) {
-		super(provider);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.api.DeviceRegistrationSystem#registerDevice(com.socialize.api.SocializeSession, com.socialize.entity.DeviceRegistration)
-	 */
-	@Override
-	public void registerDevice(SocializeSession session, DeviceRegistration registration) throws SocializeException {
-		List<DeviceRegistration> registrations = new ArrayList<DeviceRegistration>(1);
-		registrations.add(registration);
-		post(session, ENDPOINT, registrations);
-	}
+	public void register(Context context);
+	
+	public void unregister(Context context);
+	
 }
