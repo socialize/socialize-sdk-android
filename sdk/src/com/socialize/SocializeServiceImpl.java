@@ -146,7 +146,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public void init(Context context) {
-		init(context, SocializeConfig.SOCIALIZE_BEANS_PATH);
+		init(context, SocializeConfig.SOCIALIZE_CORE_BEANS_PATH);
 	}
 	
 	/* (non-Javadoc)
@@ -173,7 +173,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public void initAsync(Context context, SocializeInitListener listener) {
-		initAsync(context, listener, SocializeConfig.SOCIALIZE_BEANS_PATH);
+		initAsync(context, listener, SocializeConfig.SOCIALIZE_CORE_BEANS_PATH);
 	}
 
 	/*
@@ -490,6 +490,18 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		authenticate(null, authProviderType, authListener);
 	}
 	
+	public SocializeSession authenticateSynchronous(Context context) throws SocializeException {
+		SocializeConfig config = getConfig();
+		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);		
+		if(checkKeys(consumerKey, consumerSecret)) {
+			return userSystem.authenticateSynchronous(context, consumerKey, consumerSecret, this);
+		}
+		else {
+			throw new SocializeException("Consumer key and/or secret not provided");
+		}
+	}
+
 	@Override
 	public void authenticate(Context context, AuthProviderType authProviderType, SocializeAuthListener authListener) {
 		SocializeConfig config = getConfig();
@@ -581,6 +593,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 
+	protected boolean checkKeys(String consumerKey, String consumerSecret) {
+		return checkKeys(consumerKey, consumerSecret, null);
+	}
+	
 	protected boolean checkKeys(String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
 		if(StringUtils.isEmpty(consumerKey)) {
 			String msg = "No consumer key specified";

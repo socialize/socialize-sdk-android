@@ -9,6 +9,7 @@ import com.socialize.api.action.UserSystem;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.user.UserListener;
 import com.socialize.ui.profile.UserProfile;
@@ -24,6 +25,13 @@ public class MockUserSystem implements UserSystem {
 	
 	@Override
 	public void init(Activity context) {}
+	
+	@Override
+	public SocializeSession authenticateSynchronous(Context context, String consumerKey, String consumerSecret, SocializeSessionConsumer sessionConsumer) throws SocializeException {
+		MockSocializeSession mockSocializeSession = new MockSocializeSession();
+		sessionConsumer.setSession(mockSocializeSession);
+		return mockSocializeSession;
+	}
 
 	@Deprecated
 	@Override

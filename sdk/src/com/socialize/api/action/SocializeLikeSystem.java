@@ -43,8 +43,6 @@ import com.socialize.provider.SocializeProvider;
  * @author Jason Polites
  */
 public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Like>> implements LikeSystem {
-
-	public static final String ENDPOINT = "/like/";
 	
 	public SocializeLikeSystem(SocializeProvider<Like> provider) {
 		super(provider);

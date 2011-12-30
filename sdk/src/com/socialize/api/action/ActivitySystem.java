@@ -22,6 +22,8 @@
 package com.socialize.api.action;
 
 import com.socialize.api.SocializeSession;
+import com.socialize.entity.SocializeAction;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.activity.UserActivityListener;
 import com.socialize.util.DelegateOnly;
 
@@ -30,6 +32,19 @@ import com.socialize.util.DelegateOnly;
  */
 public interface ActivitySystem {
 
+	public static final String ENDPOINT = "/user/";
+	public static final String ENDPOINT_SUFFIX = "/activity/";
+	
+	/**
+	 * Gets a socialize action.  This call is SYNCHRONOUS!
+	 * @param session
+	 * @param id
+	 * @param type
+	 * @throws SocializeException
+	 * @return
+	 */
+	public SocializeAction getAction(SocializeSession session, long id, ActionType type) throws SocializeException;	
+	
 	@DelegateOnly
 	public void getActivityByUser(SocializeSession session, long id, UserActivityListener listener);
 

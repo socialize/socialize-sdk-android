@@ -21,6 +21,7 @@
  */
 package com.socialize;
 
+import com.socialize.config.SocializeConfig;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.util.StringUtils;
 
@@ -32,19 +33,29 @@ public class SocializeSystem {
 	private String[] beanOverrides;
 	private SocializeInitListener initListener;
 	
+	final int numCoreConfigs = 3;
+	
+	static final String[] CORE_CONFIG = {
+		SocializeConfig.SOCIALIZE_CORE_BEANS_PATH,
+		SocializeConfig.SOCIALIZE_UI_BEANS_PATH
+	};
+	
 	public String[] getBeanConfig() {
 		String[] config = null;
 		
 		if(!StringUtils.isEmpty(beanOverrides)) {
-			config = new String[beanOverrides.length + 2];
-			config[0] = "socialize_beans.xml";
-			config[1] = "socialize_ui_beans.xml";
+			config = new String[beanOverrides.length + numCoreConfigs];
+			
+			for (int i = 0; i < CORE_CONFIG.length; i++) {
+				config[i] = CORE_CONFIG[i];
+			}
+			
 			for (int i = 0; i < beanOverrides.length; i++) {
-				config[i+2] = beanOverrides[i];
+				config[i+numCoreConfigs] = beanOverrides[i];
 			}
 		}
 		else {
-			config = new String[]{"socialize_beans.xml", "socialize_ui_beans.xml"};
+			config = CORE_CONFIG;
 		}
 		
 		return config;

@@ -31,6 +31,8 @@ import com.socialize.util.DelegateOnly;
  *
  */
 public interface EntitySystem {
+	
+	public static final String ENDPOINT = "/entity/";
 
 	public void addEntity(SocializeSession session, Entity entity, EntityListener listener);
 

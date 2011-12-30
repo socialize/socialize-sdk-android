@@ -1,0 +1,44 @@
+
+<!-- 
+	Beans used exclusively by the C2DM background service
+ -->
+<beans>
+
+	<bean id="notificationIdGenerator" class="com.socialize.notifications.NotificationIdGenerator"/>
+
+	<bean id="notificationAuthenticator" class="com.socialize.notifications.SocializeNotificationAuthenticator">
+		<property name="config" ref="config"/>
+		<property name="userSystem" ref="userSystem"/>
+	</bean>
+
+	<bean id="notificationMessageFactory" class="com.socialize.notifications.NotificationMessageFactory">
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="actionMessageTranslator" class="com.socialize.notifications.SocializeActionMessageTranslator">
+		<property name="activitySystem" ref="activitySystem"/>
+		<property name="notificationAuthenticator" ref="notificationAuthenticator"/>
+	</bean>
+	
+	<bean id="actionNotificationMessageBuilder" class="com.socialize.notifications.SocializeActionNotificationMessageBuilder">
+		<property name="appUtils" ref="appUtils"/>
+		<property name="messageTranslator" ref="actionMessageTranslator"/>
+	</bean>
+	
+	<bean id="notificationSystem" class="com.socialize.notifications.SocializeNotificationSystem">
+		<property name="logger" ref="logger"/>
+		<property name="notificationAuthenticator" ref="notificationAuthenticator"/>
+		<property name="notificationMessageFactory" ref="notificationMessageFactory"/>
+		<property name="deviceRegistrationSystem" ref="deviceRegistrationSystem"/>
+		<property name="notificationIdGenerator" ref="notificationIdGenerator"/>
+		<property name="messageBuilders">
+			<map>
+				<entry>
+					<key value="NEW_COMMENTS"/>
+					<value ref="actionNotificationMessageBuilder"/>
+				</entry>
+			</map>
+		</property>		
+	</bean>
+	
+</beans>

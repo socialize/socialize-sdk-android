@@ -29,6 +29,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.socialize.Socialize;
+import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ShareType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Share;

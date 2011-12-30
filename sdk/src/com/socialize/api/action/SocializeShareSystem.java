@@ -43,8 +43,6 @@ import com.socialize.provider.SocializeProvider;
  * @author Jason Polites
  */
 public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<Share>> implements ShareSystem {
-
-	public static final String ENDPOINT = "/share/";
 	
 	private Map<String, SocialNetworkSharer> sharers;
 	private SocializeLogger logger;

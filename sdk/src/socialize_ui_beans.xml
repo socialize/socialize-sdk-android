@@ -16,6 +16,8 @@
 		<property name="drawables" ref="drawables"/>
 	</bean>
 	
+	<bean id="dialogFactory" class="com.socialize.util.DialogFactory"/>
+	
 	<bean id="progressDialogFactory" class="com.socialize.ui.dialog.ProgressDialogFactory">
 		<property name="logger" ref="logger"/>
 		<property name="drawables" ref="drawables"/>

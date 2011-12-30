@@ -52,7 +52,7 @@ import com.socialize.view.BaseView;
 public class ActionDetailLayoutView extends BaseView {
 
 	private String userId;
-	private String commentId;
+	private String actionId;
 	private ActionDetailContentView content;
 	private ProgressDialog dialog = null;
 	private Drawable defaultProfilePicture;
@@ -78,9 +78,9 @@ public class ActionDetailLayoutView extends BaseView {
 		}
 	}
 	
-	public ActionDetailLayoutView(Activity context, String userId, String commentId) {
+	public ActionDetailLayoutView(Activity context, String userId, String actionId) {
 		this(context, userId);
-		this.commentId = commentId;
+		this.actionId = actionId;
 	}
 	
 	public ActionDetailLayoutView(Context context) {
@@ -155,8 +155,8 @@ public class ActionDetailLayoutView extends BaseView {
 	}
 	
 	public void doGetComment() {
-		if(!StringUtils.isEmpty(commentId)) {
-			int id = Integer.parseInt(commentId);
+		if(!StringUtils.isEmpty(actionId)) {
+			int id = Integer.parseInt(actionId);
 			getSocialize().getCommentById(id, new CommentGetListener() {
 				@Override
 				public void onError(SocializeException error) {

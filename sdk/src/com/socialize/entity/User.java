@@ -71,6 +71,14 @@ public class User extends SocializeObject {
 		
 //		setAutoPostToFacebook(user.isAutoPostToFacebook()); // Don't merge this!
 	}
+	
+	public String getShortDisplayName() {
+		String fname = getFirstName();
+		if(!StringUtils.isEmpty(fname)) {
+			return fname;
+		}
+		return getUsername();
+	}
 
 	public String getDisplayName() {
 		if(displayName == null) {

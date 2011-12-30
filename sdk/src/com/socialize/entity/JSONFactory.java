@@ -73,6 +73,35 @@ public abstract class JSONFactory<T extends Object> {
 		return new JSONArray();
 	}
 	
+
+	protected String getString(JSONObject obj, String key) throws JSONException {
+		if(obj.has(key) && !obj.isNull(key)) {
+			return obj.getString(key);
+		}
+		return null;
+	}
+	
+	protected boolean getBoolean(JSONObject obj, String key, boolean defaultValue) throws JSONException {
+		if(obj.has(key) && !obj.isNull(key)) {
+			return obj.getBoolean(key);
+		}
+		return defaultValue;
+	}	
+	
+	protected int getInt(JSONObject obj, String key) throws JSONException {
+		if(obj.has(key) && !obj.isNull(key)) {
+			return obj.getInt(key);
+		}
+		return 0;
+	}
+	
+	protected long getLong(JSONObject obj, String key) throws JSONException {
+		if(obj.has(key) && !obj.isNull(key)) {
+			return obj.getLong(key);
+		}
+		return 0;
+	}	
+	
 	// This SHOULD return the generic type "T" but because javassist (via AndroidMock) doesn't seem to 
 	// want to create methods with generic return types we can't do it :/
 	public abstract Object instantiateObject(JSONObject object);

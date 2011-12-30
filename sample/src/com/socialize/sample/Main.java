@@ -87,7 +87,7 @@ public class Main extends Activity {
 			protected Void doInBackground(Void... params) {
 				
 				if(isMock) {
-					Socialize.init(Main.this, "socialize_beans.xml", "socialize_mock_beans.xml");
+					Socialize.init(Main.this, "socialize_core_beans.xml", "socialize_mock_beans.xml");
 				}
 				else {
 					Socialize.init(Main.this);

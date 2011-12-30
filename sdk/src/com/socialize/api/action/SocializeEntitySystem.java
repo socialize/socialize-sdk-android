@@ -40,8 +40,6 @@ import com.socialize.provider.SocializeProvider;
  *
  */
 public class SocializeEntitySystem extends SocializeApi<Entity, SocializeProvider<Entity>> implements EntitySystem {
-	
-	public static final String ENDPOINT = "/entity/";
 
 	public SocializeEntitySystem(SocializeProvider<Entity> provider) {
 		super(provider);

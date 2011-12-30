@@ -37,6 +37,8 @@ import com.socialize.util.DelegateOnly;
  */
 public interface ShareSystem {
 
+	public static final String ENDPOINT = "/share/";
+	
 	public void addShare(SocializeSession session, Entity entity, String text, ShareType shareType, Location location, ShareListener listener);
 
 	@DelegateOnly

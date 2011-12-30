@@ -46,8 +46,6 @@ import com.socialize.util.StringUtils;
  */
 public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<User>> implements UserSystem {
 
-	public static final String ENDPOINT = "/user/";
-	
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	private SocializeSessionPersister sessionPersister;
 	private DeviceUtils deviceUtils;
@@ -73,6 +71,20 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	@Override
 	public void authenticate(String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
 		authenticate(context, consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
+	}
+
+	@Override
+	public SocializeSession authenticateSynchronous(Context ctx, String consumerKey, String consumerSecret, SocializeSessionConsumer sessionConsumer) throws SocializeException {
+		if(ctx == null) ctx = context;
+		String udid = deviceUtils.getUDID(ctx);
+		
+		SocializeSession session = authenticate("/authenticate/",consumerKey, consumerSecret, udid);
+		
+		if(sessionConsumer != null) {
+			sessionConsumer.setSession(session);
+		}
+		
+		return session;
 	}
 
 	@Override

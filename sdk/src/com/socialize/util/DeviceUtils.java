@@ -21,17 +21,13 @@
  */
 package com.socialize.util;
 
-import java.util.List;
 import java.util.Locale;
 
 import android.Manifest.permission;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.provider.MediaStore;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
@@ -47,10 +43,10 @@ import com.socialize.log.SocializeLogger;
 public class DeviceUtils {
 
 	private SocializeLogger logger;
+	private AppUtils appUtils;
+	
 	private String userAgent;
 	private float density = 160.0f;
-	private String packageName;
-	private String appName;
 	private boolean hasCamera;
 	private int orientation;
 	private int displayHeight;
@@ -78,35 +74,7 @@ public class DeviceUtils {
 				}
 			}
 			
-			packageName = context.getPackageName();
-			
-			// Try to get the app name 
-			try {
-				Resources appR = context.getResources(); 
-				CharSequence txt = appR.getText(appR.getIdentifier("app_name",  "string", context.getPackageName())); 
-				appName = txt.toString();
-			} 
-			catch (Exception e) {
-				String msg = "Failed to locate app_name String from resources.  Make sure this is specified in your AndroidManifest.xml";
-				
-				if(logger != null) {
-					logger.error(msg, e);
-				}
-				else {
-					System.err.println(msg);
-					e.printStackTrace();
-				}
-			}
-
-			if(StringUtils.isEmpty(appName)) {
-				appName = packageName;
-			}
-			
-			if(StringUtils.isEmpty(appName)) {
-				appName = "A Socialize enabled app";
-			}
-			
-			hasCamera = isIntentAvailable(context, MediaStore.ACTION_IMAGE_CAPTURE);
+			hasCamera = appUtils.isIntentAvailable(context, MediaStore.ACTION_IMAGE_CAPTURE);
 		}
 		else {
 			String errroMsg = "Unable to determine device screen density.  Socialize must be intialized from an Activity";
@@ -119,11 +87,28 @@ public class DeviceUtils {
 		}
 	}
 
+	/**
+	 * 
+	 * @param context
+	 * @param activity
+	 * @return
+	 * @deprecated use AppUtils
+	 */
+	@Deprecated
+	public boolean isActivityAvailable(Context context, Class<?> activity) {
+		return appUtils.isActivityAvailable(context, activity);
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param action
+	 * @return
+	 * @deprecated use AppUtils
+	 */
+	@Deprecated
 	public boolean isIntentAvailable(Context context, String action) {
-		final PackageManager packageManager = context.getPackageManager();
-		final Intent intent = new Intent(action);
-		List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-		return list.size() > 0;
+		return appUtils.isIntentAvailable(context, action);
 	}
 
 	public int getDIP(int pixels) {
@@ -162,34 +147,35 @@ public class DeviceUtils {
 	 * Returns the Android market url for this app.
 	 * @param http If true an HTTP link is returned, otherwise a market:// link is returned.
 	 * @return
+	 * @deprecated use AppUtils
 	 */
+	@Deprecated
 	public String getMarketUrl(boolean http) {
-		StringBuilder builder = new StringBuilder();
-		
-//		if(http) {
-			builder.append("https://market.android.com/details?id=");
-//		}
-//		else {
-//			builder.append("market://details?id=");
-//		}
-		
-		builder.append(packageName);
-		
-		return builder.toString();
+		return appUtils.getMarketUrl();
 	}
 	
+	/**
+	 * @deprecated use AppUtils
+	 * @return
+	 */
+	@Deprecated
 	public String getPackageName() {
-		return packageName;
+		return appUtils.getPackageName();
 	}
 
+	/**
+	 * @deprecated use AppUtils
+	 * @return
+	 */
+	@Deprecated
 	public String getAppName() {
-		return appName;
+		return appUtils.getAppName();
 	}
 
 	public String getUserAgentString() {
 		if (userAgent == null) {
 			userAgent = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_"
-					+ Locale.getDefault().getCountry() + "; BundleID/" + packageName + ";";
+					+ Locale.getDefault().getCountry() + "; BundleID/" + appUtils.getPackageName() + ";";
 		}
 		return userAgent;
 	}
@@ -224,5 +210,9 @@ public class DeviceUtils {
 
 	public int getOrientation() {
 		return orientation;
+	}
+
+	public void setAppUtils(AppUtils appUtils) {
+		this.appUtils = appUtils;
 	}
 }

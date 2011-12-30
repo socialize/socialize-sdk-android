@@ -39,8 +39,6 @@ import com.socialize.provider.SocializeProvider;
  * @author Jason Polites
  */
 public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvider<Comment>> implements CommentSystem {
-
-	public static final String ENDPOINT = "/comment/";
 	
 	public SocializeCommentSystem(SocializeProvider<Comment> provider) {
 		super(provider);

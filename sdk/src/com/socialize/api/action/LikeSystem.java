@@ -33,6 +33,8 @@ import com.socialize.util.DelegateOnly;
  *
  */
 public interface LikeSystem {
+	
+	public static final String ENDPOINT = "/like/";
 
 	public void addLike(SocializeSession session, Entity entity, Location location, LikeListener listener);
 	

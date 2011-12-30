@@ -51,10 +51,10 @@ public class ActionDetailView extends EntityView {
 	 * @see com.socialize.ui.view.EntityView#getView(android.os.Bundle, java.lang.Object[])
 	 */
 	@Override
-	protected View getView(Bundle bundle, Object... entityKeys) {
-		if (entityKeys != null) {
+	protected View getView(Bundle bundle, Object... bundleKeys) {
+		if (bundleKeys != null) {
 			if(actionLayoutView == null) {
-				actionLayoutView = container.getBean("actionDetailLayoutView", entityKeys);
+				actionLayoutView = container.getBean("actionDetailLayoutView", bundleKeys);
 				
 				LayoutParams scrollViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
 				LayoutParams childViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);

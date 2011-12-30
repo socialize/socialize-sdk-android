@@ -33,6 +33,7 @@ import android.os.Bundle;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
+import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
@@ -47,7 +48,6 @@ import com.socialize.facebook.FacebookError;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
-import com.socialize.ui.share.ShareMessageBuilder;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;

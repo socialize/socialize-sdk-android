@@ -25,11 +25,11 @@ import android.app.Activity;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.api.ShareMessageBuilder;
 import com.socialize.entity.Entity;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.DefaultFacebookWallPoster;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.ui.share.ShareMessageBuilder;
 import com.socialize.util.DeviceUtils;
 
 /**

@@ -25,6 +25,7 @@ import android.app.Activity;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
+import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ActionType;
 import com.socialize.auth.AuthProviderType;
@@ -36,7 +37,6 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkSharer;
-import com.socialize.ui.share.ShareMessageBuilder;
 
 /**
  * @author Jason Polites

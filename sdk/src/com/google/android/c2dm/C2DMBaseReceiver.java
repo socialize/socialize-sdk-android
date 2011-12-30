@@ -65,7 +65,6 @@ public abstract class C2DMBaseReceiver extends IntentService {
 	 * sender id to be used for registration.
 	 */
 	public C2DMBaseReceiver(String senderId) {
-		// senderId is used as base name for threads, etc.
 		super(senderId);
 		this.senderId = senderId;
 	}

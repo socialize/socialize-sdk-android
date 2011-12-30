@@ -38,8 +38,6 @@ import com.socialize.provider.SocializeProvider;
  */
 public class SocializeViewSystem extends SocializeApi<View, SocializeProvider<View>> implements ViewSystem {
 
-	public static final String ENDPOINT = "/view/";
-	
 	public SocializeViewSystem(SocializeProvider<View> provider) {
 		super(provider);
 	}

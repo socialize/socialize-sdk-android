@@ -33,6 +33,8 @@ import com.socialize.listener.view.ViewListener;
  */
 public interface ViewSystem {
 
+	public static final String ENDPOINT = "/view/";
+	
 	public void addView(SocializeSession session, Entity entity, Location location, ViewListener listener);
 
 	public void getViewsByEntity(SocializeSession session, String entityKey, int startIndex, int endIndex, ViewListener listener);

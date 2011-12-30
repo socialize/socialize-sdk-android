@@ -34,6 +34,8 @@ import com.socialize.util.DelegateOnly;
  *
  */
 public interface CommentSystem {
+	
+	public static final String ENDPOINT = "/comment/";
 
 	public void addComment(SocializeSession session, Entity entity, String comment, Location location, ShareOptions shareOptions, CommentListener listener);
 

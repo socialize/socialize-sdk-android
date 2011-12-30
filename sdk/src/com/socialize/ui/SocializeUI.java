@@ -29,7 +29,6 @@ import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.comment.OnCommentViewActionListener;
 import com.socialize.util.Drawables;
-import com.socialize.util.StringUtils;
 
 @Deprecated
 public class SocializeUI {
@@ -90,21 +89,7 @@ public class SocializeUI {
 	
 	@Deprecated
 	protected String[] getConfig() {
-		String[] config = null;
-		
-		if(!StringUtils.isEmpty(beanOverrides)) {
-			config = new String[beanOverrides.length + 2];
-			config[0] = "socialize_beans.xml";
-			config[1] = "socialize_ui_beans.xml";
-			for (int i = 0; i < beanOverrides.length; i++) {
-				config[i+2] = beanOverrides[i];
-			}
-		}
-		else {
-			config = new String[]{"socialize_beans.xml", "socialize_ui_beans.xml"};
-		}
-		
-		return config;
+		return Socialize.getSocialize().getSystem().getBeanConfig();
 	}
 
 	public void initUI(IOCContainer container) {

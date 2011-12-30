@@ -24,6 +24,7 @@ package com.socialize.api.action;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.SocializeAction;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.activity.UserActivityListener;
 import com.socialize.provider.SocializeProvider;
 
@@ -32,13 +33,36 @@ import com.socialize.provider.SocializeProvider;
  */
 public class SocializeActivitySystem extends SocializeApi<SocializeAction, SocializeProvider<SocializeAction>> implements ActivitySystem {
 
-	public static final String ENDPOINT = "/user/";
-	public static final String ENDPOINT_SUFFIX = "/activity/";
-	
 	public SocializeActivitySystem(SocializeProvider<SocializeAction> provider) {
 		super(provider);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.ActivitySystem#getAction(com.socialize.api.SocializeSession, long, com.socialize.api.action.ActionType)
+	 */
+	@Override
+	public SocializeAction getAction(SocializeSession session, long id, ActionType type) throws SocializeException {
+		String endpoint = null;
+		switch(type) {
+		
+			case COMMENT:
+				endpoint = CommentSystem.ENDPOINT;
+				break;
+			case LIKE:
+				endpoint = LikeSystem.ENDPOINT;
+				break;
+			case SHARE:
+				endpoint = ShareSystem.ENDPOINT;
+				break;
+			case VIEW:
+				endpoint = ViewSystem.ENDPOINT;
+				break;			
+		}
+		
+		return get(session, endpoint, String.valueOf(id));
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.api.action.ActivitySystem#getActivityByUser(com.socialize.api.SocializeSession, long, com.socialize.listener.activity.UserActivityListener)
 	 */

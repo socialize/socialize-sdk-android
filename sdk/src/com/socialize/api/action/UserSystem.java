@@ -28,6 +28,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.user.UserListener;
 import com.socialize.ui.profile.UserProfile;
@@ -37,6 +38,8 @@ import com.socialize.ui.profile.UserProfile;
  *
  */
 public interface UserSystem {
+
+	public static final String ENDPOINT = "/user/";
 	
 	@Deprecated
 	public void init(Activity context);
@@ -49,6 +52,8 @@ public interface UserSystem {
 	
 	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer);
 
+	public SocializeSession authenticateSynchronous(Context context, String consumerKey, String consumerSecret, SocializeSessionConsumer sessionConsumer) throws SocializeException;
+	
 	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth);
 	
 	public void clearSession();
