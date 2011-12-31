@@ -108,21 +108,30 @@ public abstract class BaseC2DMReceiver extends IntentService {
 	}
 
 	static void acquireWaitLock(Context context) {
-		if (mWakeLock == null) {
-			// This is called from BroadcastReceiver, there is no init.
-			PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-			mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_KEY);
-		}
-		
-		if(!mWakeLock.isHeld()) {
-			mWakeLock.acquire();
+		try {
+			if (mWakeLock == null) {
+				// This is called from BroadcastReceiver, there is no init.
+				PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+				mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_KEY);
+			}
+			
+			if(!mWakeLock.isHeld()) {
+				mWakeLock.acquire();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
 	static void releaseWaitLock() {
-		if(mWakeLock != null && mWakeLock.isHeld()) {
-			mWakeLock.release();
+		try {
+			if(mWakeLock != null && mWakeLock.isHeld()) {
+				mWakeLock.release();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
 	}
 	
 	/**
