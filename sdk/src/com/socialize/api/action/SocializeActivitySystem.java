@@ -60,7 +60,7 @@ public class SocializeActivitySystem extends SocializeApi<SocializeAction, Socia
 				break;			
 		}
 		
-		return get(session, endpoint, String.valueOf(id));
+		return get(session, endpoint, String.valueOf(id), type);
 	}
 
 	/* (non-Javadoc)

@@ -31,7 +31,6 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.entity.DeviceRegistration;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
-import com.socialize.util.AppUtils;
 import com.socialize.util.StringUtils;
 
 /**
@@ -50,7 +49,6 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 	private DeviceRegistrationSystem deviceRegistrationSystem;
 	private NotificationAuthenticator notificationAuthenticator;
 	private NotificationRegistrationState notificationRegistrationState;
-	private AppUtils appUtils;
 	
 	@Override
 	public boolean isRegisteredC2DM() {
@@ -71,19 +69,9 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 			
 			String senderId = config.getProperty(SocializeConfig.SOCIALIZE_C2DM_SENDER_ID);
 			Intent registrationIntent = new Intent(REQUEST_REGISTRATION_INTENT);
-			
-//			if(appUtils.isIntentAvailable(context, registrationIntent)) {
-				registrationIntent.putExtra(EXTRA_APPLICATION_PENDING_INTENT, PendingIntent.getBroadcast(context, 0, new Intent(), 0));
-				registrationIntent.putExtra(EXTRA_SENDER, senderId);
-				context.startService(registrationIntent);
-//			}
-//			else {
-//				if(logger != null) {
-//					logger.warn("Intent [" +
-//							REQUEST_REGISTRATION_INTENT +
-//							"] is not available.  Make sure the notification system is correctly configured in your AndroidManifest.xml");
-//				}
-//			}
+			registrationIntent.putExtra(EXTRA_APPLICATION_PENDING_INTENT, PendingIntent.getBroadcast(context, 0, new Intent(), 0));
+			registrationIntent.putExtra(EXTRA_SENDER, senderId);
+			context.startService(registrationIntent);
 		}		
 	}
 
@@ -140,9 +128,5 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 
 	public void setNotificationRegistrationState(NotificationRegistrationState notificationRegistrationState) {
 		this.notificationRegistrationState = notificationRegistrationState;
-	}
-
-	public void setAppUtils(AppUtils appUtils) {
-		this.appUtils = appUtils;
 	}
 }

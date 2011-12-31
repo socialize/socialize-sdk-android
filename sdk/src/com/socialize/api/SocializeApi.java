@@ -26,6 +26,7 @@ import java.util.List;
 import android.location.Location;
 import android.os.AsyncTask;
 
+import com.socialize.api.action.ActionType;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderResponse;
@@ -111,6 +112,10 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	
 	public T get(SocializeSession session, String endpoint, String id) throws SocializeException {
 		return provider.get(session, endpoint, id);
+	}
+	
+	public T get(SocializeSession session, String endpoint, String id, ActionType type) throws SocializeException {
+		return provider.get(session, endpoint, id, type);
 	}
 	
 	public void delete(SocializeSession session, String endpoint, String id) throws SocializeException {

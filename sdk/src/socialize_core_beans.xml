@@ -118,7 +118,7 @@
 		<constructor-arg ref="sessionFactory"/>
 	</bean>
 	
-	<bean id="abstractProvider" class="com.socialize.provider.DefaultSocializeProvider" abstract="true">
+	<bean id="defaultProvider" class="com.socialize.provider.DefaultSocializeProvider" abstract="true">
 		
 		<init-method name="init">
 			<arg type="context"/>
@@ -137,6 +137,13 @@
 		<property name="sessionPersister" ref="sessionPersister"/>
 		
 	</bean>
+	
+	<bean id="actionProvider" class="com.socialize.provider.SocializeActionProvider" extends="defaultProvider">
+		<property name="commentFactory" ref="commentFactory"/>
+		<property name="shareFactory" ref="shareFactory"/>
+		<property name="viewFactory" ref="viewFactory"/>
+		<property name="likeFactory" ref="likeFactory"/>
+	</bean>	
 	
 	<bean id="authProviders" class="com.socialize.auth.AuthProviders">
 		<property name="providers">
@@ -193,7 +200,7 @@
 		<constructor-arg ref="commentFactory"/>
 	</bean>
 
-	<bean id="commentProvider" extends="abstractProvider">
+	<bean id="commentProvider" extends="defaultProvider">
 		<property name="objectFactory" ref="commentFactory"/>
 		<property name="requestFactory" ref="commentRequestFactory"/>
 	</bean>
@@ -215,7 +222,7 @@
 		<constructor-arg ref="entityFactory"/>
 	</bean>
 
-	<bean id="entityProvider" extends="abstractProvider">
+	<bean id="entityProvider" extends="defaultProvider">
 		<property name="objectFactory" ref="entityFactory"/>
 		<property name="requestFactory" ref="entityRequestFactory"/>
 	</bean>
@@ -235,7 +242,7 @@
 		<constructor-arg ref="likeFactory"/>
 	</bean>
 
-	<bean id="likeProvider" extends="abstractProvider">
+	<bean id="likeProvider" extends="defaultProvider">
 		<property name="objectFactory" ref="likeFactory"/>
 		<property name="requestFactory" ref="likeRequestFactory"/>
 	</bean>
@@ -255,7 +262,7 @@
 		<constructor-arg ref="viewFactory"/>
 	</bean>
 
-	<bean id="viewProvider" extends="abstractProvider">
+	<bean id="viewProvider" extends="defaultProvider">
 		<property name="objectFactory" ref="viewFactory"/>
 		<property name="requestFactory" ref="viewRequestFactory"/>
 	</bean>
@@ -275,7 +282,7 @@
 		<constructor-arg ref="shareFactory"/>
 	</bean>
 
-	<bean id="shareProvider" extends="abstractProvider">
+	<bean id="shareProvider" extends="defaultProvider">
 		<property name="objectFactory" ref="shareFactory"/>
 		<property name="requestFactory" ref="shareRequestFactory"/>
 	</bean>
@@ -302,7 +309,7 @@
 		<constructor-arg ref="userFactory"/>
 	</bean>
 
-	<bean id="userProvider" extends="abstractProvider">
+	<bean id="userProvider" extends="defaultProvider">
 		<property name="objectFactory" ref="userFactory"/>
 		<property name="requestFactory" ref="userRequestFactory"/>
 	</bean>
@@ -336,7 +343,7 @@
 		<constructor-arg ref="activityFactory"/>
 	</bean>
 
-	<bean id="activityProvider" extends="abstractProvider">
+	<bean id="activityProvider" extends="actionProvider">
 		<property name="objectFactory" ref="activityFactory"/>
 		<property name="requestFactory" ref="activityRequestFactory"/>
 	</bean>
@@ -358,7 +365,7 @@
 		<constructor-arg ref="deviceRegistrationFactory"/>
 	</bean>
 
-	<bean id="deviceRegistrationProvider" extends="abstractProvider">
+	<bean id="deviceRegistrationProvider" extends="defaultProvider">
 		<property name="objectFactory" ref="deviceRegistrationFactory"/>
 		<property name="requestFactory" ref="deviceRegistrationRequestFactory"/>
 	</bean>

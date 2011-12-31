@@ -28,6 +28,7 @@ import java.util.List;
 import android.content.Context;
 
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ActionType;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.ListResult;
@@ -93,6 +94,11 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 
 	@Override
 	public T get(SocializeSession session, String endpoint, String id) throws SocializeException {
+		return makeObject(id);
+	}
+	
+	@Override
+	public T get(SocializeSession session, String endpoint, String id, ActionType type) throws SocializeException {
 		return makeObject(id);
 	}
 	

@@ -83,6 +83,13 @@ public class GenericActionFactory extends SocializeActionFactory<SocializeAction
 				}
 			}
 		}
+		else {
+			if(logger != null) {
+				logger.warn("No attribute [activity_type] found in object [" +
+						from.toString() +
+						"]");
+			}
+		}
 		return null;
 	}
 
