@@ -32,9 +32,6 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.socialize.api.DeviceRegistrationSystem;
-import com.socialize.api.SocializeSession;
-import com.socialize.entity.DeviceRegistration;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.StringUtils;
@@ -42,36 +39,25 @@ import com.socialize.util.StringUtils;
 /**
  * @author Jason Polites
  */
-public class SocializeNotificationSystem implements NotificationSystem {
+public class SocializeC2DMCallback implements C2DMCallback {
 	
 	private int notificationIcon = R.drawable.sym_action_chat;
 	
 	private SocializeLogger logger;
 
 	private NotificationMessageFactory notificationMessageFactory;
-	private DeviceRegistrationSystem deviceRegistrationSystem;
-	private NotificationAuthenticator notificationAuthenticator;
 	private NotificationIdGenerator notificationIdGenerator;
-
 	private Map<String, NotificationMessageBuilder> messageBuilders;
+	private NotificationRegistrationSystem notificationRegistrationSystem;
 
 	@Override
 	public void onRegister(Context context, String registrationId)  {
-		try {
-			// Record the registration with Socialize
-			DeviceRegistration registration = new DeviceRegistration();
-			registration.setRegistrationId(registrationId);
-			SocializeSession session = notificationAuthenticator.authenticate(context);
-			deviceRegistrationSystem.registerDevice(session, registration);
-		} 
-		catch (SocializeException e) {
-			if(logger != null) {
-				logger.error("Error during device registration", e);
-			}
-			else {
-				e.printStackTrace();
-			}
+		
+		if(logger != null && logger.isInfoEnabled()) {
+			logger.info("Registration with C2DM succesful: " + registrationId);
 		}
+		
+		notificationRegistrationSystem.registerSocialize(context, registrationId);
 	}
 
 	@Override
@@ -169,16 +155,12 @@ public class SocializeNotificationSystem implements NotificationSystem {
 		this.notificationMessageFactory = notificationMessageFactory;
 	}
 
-	public void setDeviceRegistrationSystem(DeviceRegistrationSystem deviceRegistrationSystem) {
-		this.deviceRegistrationSystem = deviceRegistrationSystem;
-	}
-
 	public void setMessageBuilders(Map<String, NotificationMessageBuilder> messageBuilders) {
 		this.messageBuilders = messageBuilders;
 	}
 
-	public void setNotificationAuthenticator(NotificationAuthenticator notificationAuthenticator) {
-		this.notificationAuthenticator = notificationAuthenticator;
+	public void setNotificationRegistrationSystem(NotificationRegistrationSystem notificationRegistrationSystem) {
+		this.notificationRegistrationSystem = notificationRegistrationSystem;
 	}
 
 	public void setNotificationIdGenerator(NotificationIdGenerator notificationIdGenerator) {

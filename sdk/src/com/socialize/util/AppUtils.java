@@ -21,15 +21,12 @@
  */
 package com.socialize.util;
 
-import java.util.List;
-
-import com.socialize.log.SocializeLogger;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
+
+import com.socialize.log.SocializeLogger;
 
 /**
  * @author Jason Polites
@@ -78,18 +75,48 @@ public class AppUtils {
 	}
 	
 	public boolean isActivityAvailable(Context context, Class<?> activity) {
-		final PackageManager packageManager = context.getPackageManager();
-		final Intent intent = new Intent(context, activity);
-		List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-		return list.size() > 0;
+		Intent intent = new Intent(context, activity);
+		return isIntentAvailable(context, intent);
 	}
 	
 	public boolean isIntentAvailable(Context context, String action) {
-		final PackageManager packageManager = context.getPackageManager();
-		final Intent intent = new Intent(action);
-		List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-		return list.size() > 0;
+		Intent intent = new Intent(action);
+		return isIntentAvailable(context, intent);
 	}
+	
+	public boolean isIntentAvailable(Context context, Intent intent) {
+		PackageManager packageManager = context.getPackageManager();
+		return packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() > 0;
+	}	
+	
+	public boolean isLocationAvaiable(Context context) {
+		return hasPermission(context, "android.permission.ACCESS_FINE_LOCATION") || hasPermission(context, "android.permission.ACCESS_COARSE_LOCATION");	
+	}
+	
+	public boolean hasPermission(Context context, String permission) {
+		return context.getPackageManager().checkPermission(permission, context.getPackageName()) == PackageManager.PERMISSION_GRANTED;
+	}	
+	
+//	/**
+//	 * Attempts to get the resource if for the app icon.
+//	 * @param context
+//	 * @return
+//	 */
+//	public int getAppIconId(Context context) {
+//		int id = -1;
+//		String className = context.getPackageName() + ".R.drawable";
+//		try {
+//			Class<?> cls = Class.forName(className);
+//			Field field = cls.getField("icon");
+//			if(field != null) {
+//				Integer value = (Integer) field.get(null);
+//				if(value != null) {
+//					id = value;
+//				}
+//			}
+//		} catch (Exception ignore) {}
+//		return id;
+//	}
 	
 	public String getAppName() {
 		return appName;

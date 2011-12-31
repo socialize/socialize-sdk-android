@@ -25,8 +25,9 @@ import java.util.Locale;
 
 import android.Manifest.permission;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.provider.MediaStore;
 import android.provider.Settings.Secure;
@@ -117,6 +118,30 @@ public class DeviceUtils {
 		}
 		return pixels;
 	}
+	
+	/**
+	 * Waits for timeout milliseconds for the service to start.  This call will NOT block.  
+	 * Results will be posted to the listener provided.
+	 * @param context
+	 * @param serviceClass
+	 * @param listener
+	 * @param timeout
+	 */
+	public void waitForServiceStart(Context context, Class<?> serviceClass, ServiceStartListener listener, long timeout) {
+		ServiceStartWaitTask task = new ServiceStartWaitTask(context, serviceClass, this, listener, timeout);
+		task.execute((Void[]) null);
+	}
+	
+	public boolean isServiceRunning(Context context, Class<?> serviceClass) {
+	    ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+	    String className = serviceClass.getName();
+	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+	        if (className.equals(service.service.getClassName())) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
 
 	public String getUDID(Context context) {
 		if (hasPermission(context, permission.READ_PHONE_STATE)) {
@@ -180,12 +205,25 @@ public class DeviceUtils {
 		return userAgent;
 	}
 
+	/**
+	 * @deprecated use AppUtils
+	 * @param context
+	 * @param permission
+	 * @return
+	 */
+	@Deprecated
 	public boolean hasPermission(Context context, String permission) {
-		return context.getPackageManager().checkPermission(permission, context.getPackageName()) == PackageManager.PERMISSION_GRANTED;
+		return appUtils.hasPermission(context, permission);
 	}
 
+	/**
+	 * @deprecated use AppUtils
+	 * @param context
+	 * @return
+	 */
+	@Deprecated
 	public boolean isLocationAvaiable(Context context) {
-		return hasPermission(context, "android.permission.ACCESS_FINE_LOCATION") || hasPermission(context, "android.permission.ACCESS_COARSE_LOCATION");	
+		return appUtils.isLocationAvaiable(context);
 	}
 	
 	public boolean hasCamera() {

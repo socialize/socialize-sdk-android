@@ -19,40 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity;
+package com.socialize.auth;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.content.Context;
+
+import com.socialize.api.SocializeAuthRequest;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.AuthProviderListener;
 
 /**
+ * An empty provider to replace a real one when we don't want the dependency.
  * @author Jason Polites
  *
  */
-public class DeviceRegistrationFactory extends SocializeObjectFactory<DeviceRegistration> {
+public class EmptyAuthProvider implements AuthProvider {
 
 	/* (non-Javadoc)
-	 * @see com.socialize.entity.SocializeObjectFactory#postFromJSON(org.json.JSONObject, com.socialize.entity.SocializeObject)
+	 * @see com.socialize.auth.AuthProvider#authenticate(com.socialize.api.SocializeAuthRequest, java.lang.String, com.socialize.listener.AuthProviderListener)
 	 */
 	@Override
-	protected void postFromJSON(JSONObject from, DeviceRegistration to) throws JSONException {
-		// Never done
+	public void authenticate(SocializeAuthRequest authRequest, String appId, AuthProviderListener listener) {
+		listener.onAuthFail(new SocializeException("Empty auth provider used!"));
 	}
 
 	/* (non-Javadoc)
-	 * @see com.socialize.entity.SocializeObjectFactory#postToJSON(com.socialize.entity.SocializeObject, org.json.JSONObject)
+	 * @see com.socialize.auth.AuthProvider#clearCache(android.content.Context, java.lang.String)
 	 */
 	@Override
-	protected void postToJSON(DeviceRegistration from, JSONObject to) throws JSONException {
-		to.put("c2dm_registration_id", from.getRegistrationId());
-		to.put("device_type", "Android");
-	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.entity.JSONFactory#instantiateObject(org.json.JSONObject)
-	 */
-	@Override
-	public Object instantiateObject(JSONObject object) {
-		return new DeviceRegistration();
-	}
+	public void clearCache(Context context, String appId) {}
 
 }

@@ -21,11 +21,17 @@
  */
 package com.socialize.notifications;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 
-import com.google.android.c2dm.C2DMessaging;
+import com.socialize.api.DeviceRegistrationSystem;
+import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
+import com.socialize.entity.DeviceRegistration;
+import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
+import com.socialize.util.AppUtils;
 import com.socialize.util.StringUtils;
 
 /**
@@ -34,37 +40,86 @@ import com.socialize.util.StringUtils;
  */
 public class SocializeNotificationRegistrationSystem implements NotificationRegistrationSystem {
 	
+	public static final String EXTRA_SENDER = "sender";
+	public static final String EXTRA_APPLICATION_PENDING_INTENT = "app";
+	public static final String REQUEST_UNREGISTRATION_INTENT = "com.google.android.c2dm.intent.UNREGISTER";
+	public static final String REQUEST_REGISTRATION_INTENT = "com.google.android.c2dm.intent.REGISTER";
+	
 	private SocializeConfig config;
 	private SocializeLogger logger;
-
-	/* (non-Javadoc)
-	 * @see com.socialize.notifications.NotificationRegistrationSystem#register()
-	 */
+	private DeviceRegistrationSystem deviceRegistrationSystem;
+	private NotificationAuthenticator notificationAuthenticator;
+	private NotificationRegistrationState notificationRegistrationState;
+	private AppUtils appUtils;
+	
 	@Override
-	public void register(Context context) {
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("Registering with C2DM");
-		}
-		
-		String registrationId = C2DMessaging.getRegistrationId(context);
-		
-		if(StringUtils.isEmpty(registrationId)) {
-			C2DMessaging.register(context, config.getProperty(SocializeConfig.SOCIALIZE_C2DM_SENDER_ID));
-		}
-		else {
-			
-		}
+	public boolean isRegisteredC2DM() {
+		return !StringUtils.isEmpty(notificationRegistrationState.getC2DMRegistrationId());
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.notifications.NotificationRegistrationSystem#unregister()
-	 */
 	@Override
-	public void unregister(Context context) {
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("Unregistering from C2DM");
+	public boolean isRegisteredSocialize() {
+		return notificationRegistrationState.isRegisteredSocialize();
+	}
+
+	@Override
+	public void registerC2DM(final Context context) {
+		if(!isRegisteredC2DM()) {
+			if(logger != null && logger.isInfoEnabled()) {
+				logger.info("Registering with C2DM");
+			}
+			
+			String senderId = config.getProperty(SocializeConfig.SOCIALIZE_C2DM_SENDER_ID);
+			Intent registrationIntent = new Intent(REQUEST_REGISTRATION_INTENT);
+			
+//			if(appUtils.isIntentAvailable(context, registrationIntent)) {
+				registrationIntent.putExtra(EXTRA_APPLICATION_PENDING_INTENT, PendingIntent.getBroadcast(context, 0, new Intent(), 0));
+				registrationIntent.putExtra(EXTRA_SENDER, senderId);
+				context.startService(registrationIntent);
+//			}
+//			else {
+//				if(logger != null) {
+//					logger.warn("Intent [" +
+//							REQUEST_REGISTRATION_INTENT +
+//							"] is not available.  Make sure the notification system is correctly configured in your AndroidManifest.xml");
+//				}
+//			}
+		}		
+	}
+
+	@Override
+	public void registerSocialize(Context context, String registrationId) {
+		
+		String currentValue = notificationRegistrationState.getC2DMRegistrationId();
+		
+		if(currentValue == null || !currentValue.equals(registrationId) || !isRegisteredSocialize()) {
+			
+			notificationRegistrationState.setC2DMRegistrationId(registrationId);
+			
+			try {
+				// Record the registration with Socialize
+				DeviceRegistration registration = new DeviceRegistration();
+				registration.setRegistrationId(registrationId);
+				SocializeSession session = notificationAuthenticator.authenticate(context);
+				deviceRegistrationSystem.registerDevice(session, registration);
+				notificationRegistrationState.setRegisteredSocialize(true);
+				
+				if(logger != null && logger.isInfoEnabled()) {
+					logger.info("Registration with Socialize for C2DM successful.");
+				}
+			} 
+			catch (SocializeException e) {
+				if(logger != null) {
+					logger.error("Error during device registration", e);
+				}
+				else {
+					e.printStackTrace();
+				}
+			}
+			finally {
+				notificationRegistrationState.save(context);
+			}
 		}
-		C2DMessaging.unregister(context);
 	}
 
 	public void setConfig(SocializeConfig config) {
@@ -73,5 +128,21 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
+	}
+
+	public void setDeviceRegistrationSystem(DeviceRegistrationSystem deviceRegistrationSystem) {
+		this.deviceRegistrationSystem = deviceRegistrationSystem;
+	}
+
+	public void setNotificationAuthenticator(NotificationAuthenticator notificationAuthenticator) {
+		this.notificationAuthenticator = notificationAuthenticator;
+	}
+
+	public void setNotificationRegistrationState(NotificationRegistrationState notificationRegistrationState) {
+		this.notificationRegistrationState = notificationRegistrationState;
+	}
+
+	public void setAppUtils(AppUtils appUtils) {
+		this.appUtils = appUtils;
 	}
 }

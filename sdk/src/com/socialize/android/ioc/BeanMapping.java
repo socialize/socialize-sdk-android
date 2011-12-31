@@ -37,20 +37,30 @@ public class BeanMapping {
 	private Map<String, BeanRef> beanRefs;
 	private Set<String> proxyRefs;
 	private Map<String, FactoryRef> factoryRefs;
+	private Map<String, ImportRef> importRefs;
 	
 	public BeanMapping() {
 		super();
 		this.factoryRefs = new LinkedHashMap<String, FactoryRef>();
 		this.beanRefs = new LinkedHashMap<String, BeanRef>();
 		this.proxyRefs = new LinkedHashSet<String>();
+		this.importRefs = new LinkedHashMap<String, ImportRef>();
 	}
 
+	public boolean containsBean(String name) {
+		return beanRefs.containsKey(name) || factoryRefs.containsKey(name);
+	}
+	
 	public Collection<BeanRef> getBeanRefs() {
 		return beanRefs.values();
 	}
 	
 	public Collection<FactoryRef> getFactoryRefs() {
 		return factoryRefs.values();
+	}
+	
+	public Collection<ImportRef> getImportRefs() {
+		return importRefs.values();
 	}
 
 	public Set<String> getProxyRefs() {
@@ -64,13 +74,25 @@ public class BeanMapping {
 	public void addFactoryRef(FactoryRef ref) {
 		factoryRefs.put(ref.getName(), ref);
 	}
+	
+	public void addImportRef(ImportRef ref) {
+		importRefs.put(ref.getName(), ref);
+	}
 
 	public void addBeanRef(BeanRef ref) {
 		beanRefs.put(ref.getName(), ref);
 	}
 	
+	public void removeBeanRef(BeanRef ref) {
+		beanRefs.remove(ref.getName());
+	}
+	
 	public BeanRef getBeanRef(String name) {
 		return beanRefs.get(name);
+	}
+	
+	public ImportRef getImportRef(String name) {
+		return importRefs.get(name);
 	}
 	
 	public FactoryRef getFactoryRef(String name) {
@@ -79,6 +101,10 @@ public class BeanMapping {
 	
 	public boolean hasProxy(String name) {
 		return proxyRefs.contains(name);
+	}
+	
+	public boolean isEmpty() {
+		return beanRefs.isEmpty() && factoryRefs.isEmpty() && proxyRefs.isEmpty();
 	}
 	
 	/**

@@ -138,7 +138,6 @@ public abstract class SocializeBaseView extends BaseView {
 				public void onError(SocializeException error) {
 					systemListener.onError(error);
 					listener.onError(error);
-					
 				}
 				
 				@Override

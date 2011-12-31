@@ -4,12 +4,9 @@
  -->
 <beans>
 
-	<bean id="notificationIdGenerator" class="com.socialize.notifications.NotificationIdGenerator"/>
+	<import-mapping source="socialize_core_beans.xml" dependentOnly="true"/>
 
-	<bean id="notificationAuthenticator" class="com.socialize.notifications.SocializeNotificationAuthenticator">
-		<property name="config" ref="config"/>
-		<property name="userSystem" ref="userSystem"/>
-	</bean>
+	<bean id="notificationIdGenerator" class="com.socialize.notifications.NotificationIdGenerator"/>
 
 	<bean id="notificationMessageFactory" class="com.socialize.notifications.NotificationMessageFactory">
 		<property name="logger" ref="logger"/>
@@ -25,12 +22,11 @@
 		<property name="messageTranslator" ref="actionMessageTranslator"/>
 	</bean>
 	
-	<bean id="notificationSystem" class="com.socialize.notifications.SocializeNotificationSystem">
+	<bean id="notificationCallback" class="com.socialize.notifications.SocializeC2DMCallback">
 		<property name="logger" ref="logger"/>
-		<property name="notificationAuthenticator" ref="notificationAuthenticator"/>
 		<property name="notificationMessageFactory" ref="notificationMessageFactory"/>
-		<property name="deviceRegistrationSystem" ref="deviceRegistrationSystem"/>
 		<property name="notificationIdGenerator" ref="notificationIdGenerator"/>
+		<property name="notificationRegistrationSystem" ref="notificationRegistrationSystem"/>
 		<property name="messageBuilders">
 			<map>
 				<entry>
@@ -40,5 +36,10 @@
 			</map>
 		</property>		
 	</bean>
+	
+	<!--  This facebook bean is NOT required, we are just putting a placeholder here so the notification system
+		  doesn't try to resolve all the dependencies for this bean
+	 -->
+	<bean id="facebookProvider" class="com.socialize.auth.EmptyAuthProvider"/>
 	
 </beans>

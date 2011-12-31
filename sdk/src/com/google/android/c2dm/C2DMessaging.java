@@ -27,6 +27,7 @@ import android.content.SharedPreferences.Editor;
  * 
  * Will keep track of the registration token in a private preference.
  */
+@Deprecated
 public class C2DMessaging {
 	public static final String EXTRA_SENDER = "sender";
 	public static final String EXTRA_APPLICATION_PENDING_INTENT = "app";

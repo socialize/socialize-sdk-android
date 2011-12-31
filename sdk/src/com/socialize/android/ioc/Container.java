@@ -195,9 +195,9 @@ public class Container {
 						}
 					}
 				}
-				else if(beanRef.isLazyInit() && !beanRef.isInitCalled()) {
-					builder.initBean(this, beanRef, bean);
-				}	
+//				else if(beanRef.isLazyInit() && !beanRef.isInitCalled()) {
+//					builder.initBean(this, beanRef, bean);
+//				}	
 			}
 			else if(bean == null) { // might be a factory
 				Logger.w(getClass().getSimpleName(), "No such bean with name " + name);
@@ -339,9 +339,9 @@ public class Container {
 							Object bean = builder.buildBean(this, ref);
 							builder.setBeanProperties(this, ref, bean);
 							
-							if(!ref.isLazyInit()) {
+//							if(!ref.isLazyInit()) {
 								builder.initBean(this, ref, bean);
-							}
+//							}
 							
 							putBean(ref.getName(), bean);
 							
@@ -350,15 +350,15 @@ public class Container {
 						}
 						else if(ref.isContextSensitiveInitMethod()) {
 							
-							if(ref.isLazyInit()) {
-								// Mark for re-init
-								ref.setInitCalled(false);
-							}
-							else {
+//							if(ref.isLazyInit()) {
+//								// Mark for re-init
+//								ref.setInitCalled(false);
+//							}
+//							else {
 								// Re-call init
 								Object bean = getBean(ref.getName());
 								builder.initBean(this, ref, bean);
-							}
+//							}
 						}
 					}
 				}

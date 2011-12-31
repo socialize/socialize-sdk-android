@@ -21,20 +21,21 @@
  */
 package com.socialize.notifications;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.os.Bundle;
+import android.content.Intent;
 
 /**
  * @author Jason Polites
  *
  */
-public interface NotificationSystem {
+public class SocializeBroadcastReceiver extends BroadcastReceiver {
 	
-	public static final String MESSAGE_KEY = "message";
-
-	public void onMessage(Context context, Bundle data);
-	
-	public void onRegister(Context context, String registrationId) ;
-	
-	public void onUnregister(Context context);
+	/* (non-Javadoc)
+	 * @see android.content.BroadcastReceiver#onReceive(android.content.Context, android.content.Intent)
+	 */
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		BaseC2DMReceiver.onBroadcastReceive(context, intent);
+	}
 }

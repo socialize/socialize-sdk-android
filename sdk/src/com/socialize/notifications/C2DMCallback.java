@@ -19,40 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity;
+package com.socialize.notifications;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.content.Context;
+import android.os.Bundle;
 
 /**
  * @author Jason Polites
  *
  */
-public class DeviceRegistrationFactory extends SocializeObjectFactory<DeviceRegistration> {
+public interface C2DMCallback {
+	
+	public static final String MESSAGE_KEY = "message";
 
-	/* (non-Javadoc)
-	 * @see com.socialize.entity.SocializeObjectFactory#postFromJSON(org.json.JSONObject, com.socialize.entity.SocializeObject)
-	 */
-	@Override
-	protected void postFromJSON(JSONObject from, DeviceRegistration to) throws JSONException {
-		// Never done
-	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.entity.SocializeObjectFactory#postToJSON(com.socialize.entity.SocializeObject, org.json.JSONObject)
-	 */
-	@Override
-	protected void postToJSON(DeviceRegistration from, JSONObject to) throws JSONException {
-		to.put("c2dm_registration_id", from.getRegistrationId());
-		to.put("device_type", "Android");
-	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.entity.JSONFactory#instantiateObject(org.json.JSONObject)
-	 */
-	@Override
-	public Object instantiateObject(JSONObject object) {
-		return new DeviceRegistration();
-	}
-
+	public void onMessage(Context context, Bundle data);
+	
+	public void onRegister(Context context, String registrationId) ;
+	
+	public void onUnregister(Context context);
 }

@@ -19,5 +19,4 @@ public interface SocializeInitListener extends SocializeListener {
 	 * @param container
 	 */
 	public void onInit(Context context, IOCContainer container); 
-	
 }

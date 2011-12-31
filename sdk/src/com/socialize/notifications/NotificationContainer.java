@@ -23,7 +23,6 @@ package com.socialize.notifications;
 
 import android.content.Context;
 
-import com.socialize.Socialize;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.config.SocializeConfig;
 import com.socialize.ioc.SocializeIOC;
@@ -34,12 +33,11 @@ import com.socialize.util.ResourceLocator;
 /**
  * Houses beans used by the notification service.
  * @author Jason Polites
- *
  */
 public class NotificationContainer {
 
 	private SocializeIOC container;
-	private String[] configPaths = {SocializeConfig.SOCIALIZE_CORE_BEANS_PATH, SocializeConfig.SOCIALIZE_NOTIFICATION_BEANS_PATH};
+	private String[] configPaths = {SocializeConfig.SOCIALIZE_NOTIFICATION_BEANS_PATH};
 	
 	public void onCreate(Context context) throws Exception {
 		container = newSocializeIOC();

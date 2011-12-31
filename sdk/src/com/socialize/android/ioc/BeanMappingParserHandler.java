@@ -38,7 +38,9 @@ public class BeanMappingParserHandler extends DefaultHandler {
 	
 	public static final String PROPERTY = "property";
 	public static final String FACTORY = "factory";
-	public static final String PROXY = "PROXY";
+	public static final String PROXY = "proxy";
+	public static final String IMPORT_BEAN = "import-bean";
+	public static final String IMPORT_MAPPING = "import-mapping";
 	
 	public static final String INIT_METHOD = "init-method";
 	public static final String DESTROY_METHOD = "destroy-method";
@@ -53,7 +55,6 @@ public class BeanMappingParserHandler extends DefaultHandler {
 	public static final String MAP_KEY = "key";
 	public static final String MAP_VALUE = "value";
 	public static final String MAP_ENTRY = "entry";
-	
 	
 	private BeanMapping beanMapping;
 	
@@ -89,30 +90,14 @@ public class BeanMappingParserHandler extends DefaultHandler {
 			
 			String singleton = attributes.getValue("singleton");
 			
-			if(singleton != null && singleton.trim().length() > 0) {
-				currentBean.setSingleton(Boolean.parseBoolean(singleton));
-			}
-			else {
-				currentBean.setSingleton(true);
-			}
+			currentBean.setSingleton(parseBoolean(singleton, true));
 			
 			String abstractBean = attributes.getValue("abstract");
 			
-			if(abstractBean != null && abstractBean.trim().length() > 0) {
-				currentBean.setAbstractBean(Boolean.parseBoolean(abstractBean));
-			}
-			else {
-				currentBean.setAbstractBean(false);
-			}
+			currentBean.setAbstractBean(parseBoolean(abstractBean, false));
 			
-			String lazy = attributes.getValue("lazy-init");
-			
-			if(lazy != null && lazy.trim().length() > 0) {
-				currentBean.setLazyInit(Boolean.parseBoolean(lazy));
-			}
-			else {
-				currentBean.setLazyInit(false);
-			}
+//			String lazy = attributes.getValue("lazy-init");
+//			currentBean.setLazyInit(parseBoolean(lazy, false));
 			
 			beanMapping.addBeanRef(currentBean);
 		}
@@ -265,6 +250,26 @@ public class BeanMappingParserHandler extends DefaultHandler {
 			// We expect a bean ref
 			beanMapping.addProxyRef(attributes.getValue(REF));
 		}		
+		else if(localName.equalsIgnoreCase(IMPORT_BEAN)) {
+			ImportRef ref = new ImportRef();
+			ref.setSource(attributes.getValue("source"));
+			ref.setName(attributes.getValue("id"));
+			beanMapping.addImportRef(ref);
+		}		
+		else if(localName.equalsIgnoreCase(IMPORT_MAPPING)) {
+			ImportRef ref = new ImportRef();
+			ref.setSource(attributes.getValue("source"));
+			ref.setDependentOnly(parseBoolean( attributes.getValue("dependentOnly"), false ));
+			beanMapping.addImportRef(ref);
+		}
+	}
+	
+	private boolean parseBoolean(String value, boolean defaultValue) {
+		if(value == null || value.trim().length() == 0) {
+			return defaultValue;
+		}
+		
+		return (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("yes") || value.equalsIgnoreCase("on"));
 	}
 	
 	@Override

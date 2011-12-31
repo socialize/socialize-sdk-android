@@ -50,4 +50,8 @@ public class Logger {
 	public static final void e(String tag, String msg, Throwable e) {
 		Log.e(LOG_KEY, tag + ": " + msg, e);
 	}
+	
+	public static boolean isInfoEnabled() {
+		return Log.isLoggable(LOG_KEY, Log.INFO);
+	}
 }

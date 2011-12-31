@@ -14,33 +14,23 @@
  * limitations under the License.
  */
 
-package com.google.android.c2dm;
+package com.socialize.notifications;
 
-import java.io.IOException;
+import com.socialize.util.StringUtils;
 
-import com.socialize.notifications.SocializeC2DMReceiver;
-
-import android.app.AlarmManager;
 import android.app.IntentService;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
-import android.util.Log;
 
 /**
  * Base class for C2D message receiver. Includes constants for the strings used
  * in the protocol.
  */
-@Deprecated
-public abstract class C2DMBaseReceiver extends IntentService {
-	private static final String C2DM_RETRY = "com.google.android.c2dm.intent.RETRY";
-
+public abstract class BaseC2DMReceiver extends IntentService {
+	public static final String C2DM_RETRY = "com.google.android.c2dm.intent.RETRY";
 	public static final String REGISTRATION_CALLBACK_INTENT = "com.google.android.c2dm.intent.REGISTRATION";
-	private static final String C2DM_INTENT = "com.google.android.c2dm.intent.RECEIVE";
-
-	// Logging tag
-	private static final String TAG = "C2DM";
+	public static final String C2DM_INTENT = "com.google.android.c2dm.intent.RECEIVE";
 
 	// Extras in the registration callback intents.
 	public static final String EXTRA_UNREGISTERED = "unregistered";
@@ -61,18 +51,9 @@ public abstract class C2DMBaseReceiver extends IntentService {
 	private static final String WAKELOCK_KEY = "C2DM_LIB";
 
 	private static PowerManager.WakeLock mWakeLock;
-	private String senderId;
 
-	/**
-	 * The C2DMReceiver class must create a no-arg constructor and pass the
-	 * sender id to be used for registration.
-	 */
-	public C2DMBaseReceiver(String senderId) {
-		super(senderId);
-	}
-
-	protected void setSenderId(String senderId) {
-		this.senderId = senderId;
+	public BaseC2DMReceiver(String name) {
+		super(name);
 	}
 
 	/**
@@ -85,34 +66,36 @@ public abstract class C2DMBaseReceiver extends IntentService {
 	 * 
 	 * This is called in the context of a Service - no dialog or UI.
 	 */
-	public abstract void onError(Context context, String errorId);
+	protected abstract void onError(Context context, String errorId);
 
 	/**
 	 * Called when a registration token has been received.
 	 */
-	public void onRegistrered(Context context, String registrationId) throws IOException {
-		// registrationId will also be saved
-	}
+	protected abstract void onRegistrered(Context context, String registrationId);
 
 	/**
 	 * Called when the device has been unregistered.
 	 */
-	public void onUnregistered(Context context) {}
+	protected abstract void onUnregistered(Context context);
 
 	@Override
 	public final void onHandleIntent(Intent intent) {
 		try {
 			Context context = getApplicationContext();
-			if (intent.getAction().equals(REGISTRATION_CALLBACK_INTENT)) {
-				handleRegistration(context, intent);
-			} 
-			else if (intent.getAction().equals(C2DM_INTENT)) {
-				onMessage(context, intent);
-			} 
-			else if (intent.getAction().equals(C2DM_RETRY)) {
-				C2DMessaging.register(context, senderId);
+			String action = intent.getAction();
+			
+			if(!StringUtils.isEmpty(action)) {
+				if (action.equals(REGISTRATION_CALLBACK_INTENT)) {
+					onRegistrationResponse(context, intent);
+				} 
+				else if (action.equals(C2DM_INTENT)) {
+					onMessage(context, intent);
+				} 
 			}
 		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		finally {
 			// Release the power lock, so phone can get back to sleep.
 			// The lock is reference counted by default, so multiple
@@ -120,79 +103,58 @@ public abstract class C2DMBaseReceiver extends IntentService {
 
 			// If the onMessage() needs to spawn a thread or do something else,
 			// it should use it's own lock.
-			mWakeLock.release();
+			releaseWaitLock();
 		}
 	}
 
-	/**
-	 * Called from the broadcast receiver. Will process the received intent,
-	 * call handleMessage(), registered(), etc. in background threads, with a
-	 * wake lock, while keeping the service alive.
-	 */
-	static void runIntentInService(Context context, Intent intent) {
+	static void acquireWaitLock(Context context) {
 		if (mWakeLock == null) {
 			// This is called from BroadcastReceiver, there is no init.
 			PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 			mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_KEY);
 		}
-		mWakeLock.acquire();
-
+		
+		if(!mWakeLock.isHeld()) {
+			mWakeLock.acquire();
+		}
+	}
+	
+	static void releaseWaitLock() {
+		if(mWakeLock != null && mWakeLock.isHeld()) {
+			mWakeLock.release();
+		}
+	}
+	
+	/**
+	 * Called from the broadcast receiver. Will process the received intent,
+	 * call handleMessage(), registered(), etc. in background threads, with a
+	 * wake lock, while keeping the service alive.
+	 */
+	static void onBroadcastReceive(Context context, Intent intent) {
+		acquireWaitLock(context);
 		// Use a naming convention, similar with how permissions and intents are
 		// used. Alternatives are introspection or an ugly use of statics.
 		// String receiver = context.getPackageName() + ".C2DMReceiver";
-
 		String receiver = SocializeC2DMReceiver.class.getName();
-
 		intent.setClassName(context, receiver);
-
 		context.startService(intent);
 	}
-
-	private void handleRegistration(final Context context, Intent intent) {
-		final String registrationId = intent.getStringExtra(EXTRA_REGISTRATION_ID);
+	
+	protected void onRegistrationResponse(final Context context, Intent intent) {
+		String registrationId = intent.getStringExtra(EXTRA_REGISTRATION_ID);
 		String error = intent.getStringExtra(EXTRA_ERROR);
 		String removed = intent.getStringExtra(EXTRA_UNREGISTERED);
-
-		if (Log.isLoggable(TAG, Log.DEBUG)) {
-			Log.d(TAG, "dmControl: registrationId = " + registrationId + ", error = " + error + ", removed = " + removed);
-		}
-
-		if (removed != null) {
-			// Remember we are unregistered
-			C2DMessaging.clearRegistrationId(context);
+		if (!StringUtils.isEmpty(removed)) {
 			onUnregistered(context);
-			return;
-		} 
-		else if (error != null) {
-			// we are not registered, can try again
-			C2DMessaging.clearRegistrationId(context);
-			// Registration failed
-			Log.e(TAG, "Registration error " + error);
+		}
+		else if(!StringUtils.isEmpty(error)) {
 			onError(context, error);
-			
-			if (ERR_SERVICE_NOT_AVAILABLE.equals(error)) {
-				long backoffTimeMs = C2DMessaging.getBackoff(context);
-
-				Log.d(TAG, "Scheduling registration retry, backoff = " + backoffTimeMs);
-				Intent retryIntent = new Intent(C2DM_RETRY);
-				PendingIntent retryPIntent = PendingIntent.getBroadcast(context, 0 /* requestCode */, retryIntent, 0 /* flags */);
-
-				AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-				am.set(AlarmManager.ELAPSED_REALTIME, backoffTimeMs, retryPIntent);
-
-				// Next retry should wait longer.
-				backoffTimeMs *= 2;
-				C2DMessaging.setBackoff(context, backoffTimeMs);
-			}
-		} 
+		}
+		else if(!StringUtils.isEmpty(registrationId)){
+			onRegistrered(context, registrationId);
+		}
 		else {
-			try {
-				onRegistrered(context, registrationId);
-				C2DMessaging.setRegistrationId(context, registrationId);
-			} 
-			catch (IOException ex) {
-				Log.e(TAG, "Registration error " + ex.getMessage());
-			}
+			onError(context, "No registration ID in response from C2DM");
 		}
 	}
 }
