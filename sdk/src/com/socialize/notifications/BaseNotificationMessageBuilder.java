@@ -30,7 +30,7 @@ import android.widget.RemoteViews;
 
 import com.socialize.error.SocializeException;
 import com.socialize.launcher.LaunchAction;
-import com.socialize.launcher.SocializeLaunchActivity;
+import com.socialize.ui.SocializeLaunchActivity;
 import com.socialize.util.AppUtils;
 
 /**

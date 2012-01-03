@@ -23,6 +23,7 @@ package com.socialize.notifications;
 
 import android.content.Context;
 
+import com.socialize.config.SocializeConfig;
 import com.socialize.log.SocializeLogger;
 
 /**
@@ -35,32 +36,39 @@ public class NotificationChecker {
 	private NotificationRegistrationSystem notificationRegistrationSystem;
 	private NotificationRegistrationState notificationRegistrationState;
 	private SocializeLogger logger;
-
+	private SocializeConfig config;
+	
 	/**
 	 * Called at application startup.
 	 * @param context
 	 */
 	public void checkRegistrations(Context context) {
-		
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("Checking C2DM registration state");
-		}
-		
-		if(!notificationRegistrationSystem.isRegisteredC2DM()) {
-			
+		if(config.getBooleanProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION_ON_STARTUP, true)) {
 			if(logger != null && logger.isInfoEnabled()) {
-				logger.info("Not registered with C2DM, sending registration request...");
+				logger.info("Checking C2DM registration state");
 			}
 			
-			notificationRegistrationSystem.registerC2DM(context);
-		}
-		else if(!notificationRegistrationSystem.isRegisteredSocialize()) {
-			
-			if(logger != null && logger.isInfoEnabled()) {
-				logger.info("Not registered with Socialize for C2DM, sending registration request...");
+			if(!notificationRegistrationSystem.isRegisteredC2DM()) {
+				
+				if(logger != null && logger.isInfoEnabled()) {
+					logger.info("Not registered with C2DM, sending registration request...");
+				}
+				
+				notificationRegistrationSystem.registerC2DM(context);
 			}
-			
-			notificationRegistrationSystem.registerSocialize(context, notificationRegistrationState.getC2DMRegistrationId());
+			else if(!notificationRegistrationSystem.isRegisteredSocialize()) {
+				
+				if(logger != null && logger.isInfoEnabled()) {
+					logger.info("Not registered with Socialize for C2DM, sending registration request...");
+				}
+				
+				notificationRegistrationSystem.registerSocialize(context, notificationRegistrationState.getC2DMRegistrationId());
+			}
+		}
+		else {
+			if(logger != null && logger.isInfoEnabled()) {
+				logger.warn("C2DM registration check skipped");
+			}			
 		}
 	}
 
@@ -74,5 +82,9 @@ public class NotificationChecker {
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
+	}
+
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
 	}
 }

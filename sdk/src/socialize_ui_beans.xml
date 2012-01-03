@@ -1202,8 +1202,11 @@
 <!--  Notification Init -->
 	<bean id="notificationChecker" class="com.socialize.notifications.NotificationChecker">
 		<property name="logger" ref="logger"/>
+		<property name="config" ref="config"/>
 		<property name="notificationRegistrationSystem" ref="notificationRegistrationSystem"/>
 		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
+		<init-method name="checkRegistrations">
+			<arg type="context"/>
+		</init-method>			
 	</bean>
-	
 </beans>

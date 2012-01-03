@@ -21,9 +21,14 @@
  */
 package com.socialize.util;
 
+import java.util.List;
+
+import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 
 import com.socialize.log.SocializeLogger;
@@ -96,6 +101,27 @@ public class AppUtils {
 	public boolean hasPermission(Context context, String permission) {
 		return context.getPackageManager().checkPermission(permission, context.getPackageName()) == PackageManager.PERMISSION_GRANTED;
 	}	
+	
+	public static boolean launchMainApp(Activity origin) {
+		
+		PackageManager pm = origin.getPackageManager();
+
+		Intent mainIntent = new Intent(Intent.ACTION_MAIN);
+		mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+		mainIntent.setPackage(origin.getPackageName());
+
+		List<ResolveInfo> appList = pm.queryIntentActivities(mainIntent, 0);
+		
+		if(appList != null && appList.size() > 0) {
+			ResolveInfo resolveInfo = appList.get(0);
+			mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			mainIntent.setComponent(new ComponentName(resolveInfo.activityInfo.applicationInfo.packageName, resolveInfo.activityInfo.name));
+			origin.startActivity(mainIntent);	
+			return true;
+		}
+		
+		return false;
+	}
 	
 //	/**
 //	 * Attempts to get the resource if for the app icon.

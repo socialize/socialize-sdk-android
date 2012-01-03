@@ -47,7 +47,7 @@
 	    <activity android:name="com.socialize.ui.comment.CommentActivity"/>
 	    <activity android:name="com.socialize.ui.action.ActionDetailActivity"/>
 	    <activity android:name="com.socialize.ui.profile.ProfileActivity"/>
-	    <activity android:name="com.socialize.launcher.SocializeLaunchActivity"/>
+	    <activity android:name="com.socialize.ui.SocializeLaunchActivity" android:launchMode="singleTop"/>
 	    
 	    <!-- Notifications -->
 	    

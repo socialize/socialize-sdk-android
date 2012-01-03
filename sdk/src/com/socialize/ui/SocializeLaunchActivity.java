@@ -19,32 +19,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.launcher;
+package com.socialize.ui;
 
+import android.app.Activity;
 import android.os.Bundle;
 
+import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.error.SocializeException;
+import com.socialize.launcher.LaunchManager;
+import com.socialize.launcher.Launcher;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.ui.SocializeActivity;
 
 /**
  * Generic launcher activity.
  * @author Jason Polites
  */
-public class SocializeLaunchActivity extends SocializeActivity {
+public class SocializeLaunchActivity extends Activity {
 
 	public static final String LAUNCH_ACTION = "socialize.launch.action";
 	
+	protected IOCContainer container;
+	
 	@Override
-	protected void onPostSocializeInit(final IOCContainer container) {
-		super.onPostSocializeInit(container);
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		initSocialize();
+		
+		container = ActivityIOCProvider.getInstance().getContainer();
 		
 		// TODO: this should all be asynchronous (including socialize init) and a loading screen shown.
-		
 		final SocializeErrorHandler errorHandler = container.getBean("socializeUIErrorHandler");
 		
 		// Authenticate the user
@@ -52,7 +60,10 @@ public class SocializeLaunchActivity extends SocializeActivity {
 			
 			@Override
 			public void onError(SocializeException error) {
-				errorHandler.handleError(SocializeLaunchActivity.this, error);
+				error.printStackTrace();
+				if(errorHandler != null) {
+					errorHandler.handleError(SocializeLaunchActivity.this, error);
+				}
 			}
 			
 			@Override
@@ -83,7 +94,10 @@ public class SocializeLaunchActivity extends SocializeActivity {
 			
 			@Override
 			public void onAuthFail(SocializeException error) {
-				errorHandler.handleError(SocializeLaunchActivity.this, error);
+				error.printStackTrace();
+				if(errorHandler != null) {
+					errorHandler.handleError(SocializeLaunchActivity.this, error);
+				}
 			}
 		});
 
@@ -102,4 +116,12 @@ public class SocializeLaunchActivity extends SocializeActivity {
 	protected String getFacebookAppId(IOCContainer container) {
 		return getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
 	}
+	
+	protected void initSocialize() {
+		getSocialize().init(this);
+	}
+	
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
+	}	
 }

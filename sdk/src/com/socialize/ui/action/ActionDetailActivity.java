@@ -23,6 +23,7 @@ package com.socialize.ui.action;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.User;
 import com.socialize.ui.SocializeUIActivity;
+import com.socialize.util.AppUtils;
 
 /**
  * @author Jason Polites
@@ -82,6 +84,20 @@ public class ActionDetailActivity extends SocializeUIActivity {
 		}
 	}
 	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK) {
+			// If we were launched directly, re-launch the main app
+			if(isTaskRoot()) {
+				if (AppUtils.launchMainApp(this)) {
+					finish();
+					return true;
+				}
+			}
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if(view != null) {
