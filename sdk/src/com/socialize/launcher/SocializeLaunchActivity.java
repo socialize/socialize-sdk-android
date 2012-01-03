@@ -24,7 +24,11 @@ package com.socialize.launcher;
 import android.os.Bundle;
 
 import com.socialize.android.ioc.IOCContainer;
+import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
+import com.socialize.error.SocializeErrorHandler;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
 import com.socialize.ui.SocializeActivity;
 
 /**
@@ -36,30 +40,54 @@ public class SocializeLaunchActivity extends SocializeActivity {
 	public static final String LAUNCH_ACTION = "socialize.launch.action";
 	
 	@Override
-	protected void onPostSocializeInit(IOCContainer container) {
+	protected void onPostSocializeInit(final IOCContainer container) {
 		super.onPostSocializeInit(container);
 		
-		// Authenticate the user
 		// TODO: this should all be asynchronous (including socialize init) and a loading screen shown.
 		
-		Bundle extras = getIntent().getExtras();
+		final SocializeErrorHandler errorHandler = container.getBean("socializeUIErrorHandler");
 		
-		if(extras != null) {
-			String action = extras.getString(LAUNCH_ACTION);
+		// Authenticate the user
+		getSocialize().authenticate(this, new SocializeAuthListener() {
 			
-			if(action != null) {
-				LaunchManager launchManager = container.getBean("launchManager");
-				
-				if(launchManager != null) {
-					Launcher launcher = launchManager.getLaucher(action);
-					
-					if(launcher != null) {
-						launcher.launch(this, extras);
-					}
-				}
+			@Override
+			public void onError(SocializeException error) {
+				errorHandler.handleError(SocializeLaunchActivity.this, error);
 			}
-		}
-		
+			
+			@Override
+			public void onCancel() {
+				// Do nothing.
+			}
+			
+			@Override
+			public void onAuthSuccess(SocializeSession session) {
+				Bundle extras = getIntent().getExtras();
+				
+				if(extras != null) {
+					String action = extras.getString(LAUNCH_ACTION);
+					
+					if(action != null) {
+						LaunchManager launchManager = container.getBean("launchManager");
+						
+						if(launchManager != null) {
+							Launcher launcher = launchManager.getLaucher(action);
+							
+							if(launcher != null) {
+								launcher.launch(SocializeLaunchActivity.this, extras);
+							}
+						}
+					}
+				}				
+			}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				errorHandler.handleError(SocializeLaunchActivity.this, error);
+			}
+		});
+
+	
 		finish();
 	}
 	

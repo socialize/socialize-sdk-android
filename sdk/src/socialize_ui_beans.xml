@@ -1204,9 +1204,6 @@
 		<property name="logger" ref="logger"/>
 		<property name="notificationRegistrationSystem" ref="notificationRegistrationSystem"/>
 		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
-		<init-method name="checkRegistrations">
-			<arg type="context"/>
-		</init-method>			
 	</bean>
 	
 </beans>
