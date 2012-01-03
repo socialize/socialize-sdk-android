@@ -17,6 +17,7 @@ import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.entity.Entity;
 import com.socialize.sample.R;
+import com.socialize.ui.dialog.SafeProgressDialog;
 
 public class SampleActivity2 extends Activity {
 
@@ -56,7 +57,7 @@ public class SampleActivity2 extends Activity {
 		btnClearCache.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				final ProgressDialog dialog = ProgressDialog.show(v.getContext(), "Clearing cache", "Clearing cache...");
+				final ProgressDialog dialog = SafeProgressDialog.show(v.getContext(), "Clearing cache", "Clearing cache...");
 				
 				new AsyncTask<Void, Void, Void>() {
 

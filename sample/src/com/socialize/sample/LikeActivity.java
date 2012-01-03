@@ -39,6 +39,7 @@ import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.sample.util.ErrorHandler;
 import com.socialize.ui.SocializeActivity;
+import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.util.StringUtils;
 
 public class LikeActivity extends SocializeActivity {
@@ -72,7 +73,7 @@ public class LikeActivity extends SocializeActivity {
 					
 					clearLikeData();
 					
-					final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Posting Like", "Please wait...");
+					final ProgressDialog progress = SafeProgressDialog.show(v.getContext(), "Posting Like", "Please wait...");
 					
 					txtLikeCreateResult.setText("");
 					btnLikeCreate.setEnabled(false);
@@ -127,7 +128,7 @@ public class LikeActivity extends SocializeActivity {
 					
 					clearLikeData();
 					
-					final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Retrieving Like", "Please wait...");
+					final ProgressDialog progress = SafeProgressDialog.show(v.getContext(), "Retrieving Like", "Please wait...");
 					
 					txtLikeCreateResult.setText("");
 					btnLikeCreate.setEnabled(false);
@@ -169,7 +170,7 @@ public class LikeActivity extends SocializeActivity {
 				@Override
 				public void onClick(View v) {
 					
-					final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Deleting Like", "Please wait...");
+					final ProgressDialog progress = SafeProgressDialog.show(v.getContext(), "Deleting Like", "Please wait...");
 					
 					txtLikeCreateResult.setText("");
 					
@@ -206,7 +207,7 @@ public class LikeActivity extends SocializeActivity {
 				
 				@Override
 				public void onClick(View v) {
-					final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Retrieving Likes", "Please wait...");
+					final ProgressDialog progress = SafeProgressDialog.show(v.getContext(), "Retrieving Likes", "Please wait...");
 					
 					txtLikeCreateResult.setText("");
 					

@@ -33,8 +33,6 @@ public class SocializeSystem {
 	private String[] beanOverrides;
 	private SocializeInitListener initListener;
 	
-	final int numCoreConfigs = 3;
-	
 	static final String[] CORE_CONFIG = {
 		SocializeConfig.SOCIALIZE_CORE_BEANS_PATH,
 		SocializeConfig.SOCIALIZE_UI_BEANS_PATH
@@ -44,14 +42,14 @@ public class SocializeSystem {
 		String[] config = null;
 		
 		if(!StringUtils.isEmpty(beanOverrides)) {
-			config = new String[beanOverrides.length + numCoreConfigs];
+			config = new String[beanOverrides.length + CORE_CONFIG.length];
 			
 			for (int i = 0; i < CORE_CONFIG.length; i++) {
 				config[i] = CORE_CONFIG[i];
 			}
 			
 			for (int i = 0; i < beanOverrides.length; i++) {
-				config[i+numCoreConfigs] = beanOverrides[i];
+				config[i+CORE_CONFIG.length] = beanOverrides[i];
 			}
 		}
 		else {

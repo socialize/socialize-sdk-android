@@ -244,7 +244,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 		String[] config = new PublicSocializeUI().getConfig();
 		assertNotNull(config);
 		assertEquals(2, config.length);
-		assertEquals("socialize_beans.xml", config[0]);
+		assertEquals("socialize_core_beans.xml", config[0]);
 		assertEquals("socialize_ui_beans.xml", config[1]);
 	}
 

@@ -316,6 +316,11 @@
 	
 	<bean id="userSystem" class="com.socialize.api.action.SocializeUserSystem" extends="socializeApi">
 		<constructor-arg ref="userProvider"/>
+		
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>
+				
 		<property name="sessionPersister" ref="sessionPersister"/>
 		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
 		<property name="deviceUtils" ref="deviceUtils"/>		
@@ -462,7 +467,6 @@
 	<bean id="notificationRegistrationSystem" class="com.socialize.notifications.SocializeNotificationRegistrationSystem">
 		<property name="config" ref="config"/>
 		<property name="logger" ref="logger"/>
-		<property name="appUtils" ref="appUtils"/>
 		<property name="deviceRegistrationSystem" ref="deviceRegistrationSystem"/>
 		<property name="notificationAuthenticator" ref="notificationAuthenticator"/>
 		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>

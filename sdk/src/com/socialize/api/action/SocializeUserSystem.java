@@ -21,7 +21,6 @@
  */
 package com.socialize.api.action;
 
-import android.app.Activity;
 import android.content.Context;
 
 import com.socialize.android.ioc.IBeanFactory;
@@ -50,14 +49,14 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	private SocializeSessionPersister sessionPersister;
 	private DeviceUtils deviceUtils;
 	
-	private Activity context;
+	private Context context;
 	
 	public SocializeUserSystem(SocializeProvider<User> provider) {
 		super(provider);
 	}
 	
 	@Deprecated
-	public void init(Activity context) {
+	public void init(Context context) {
 		this.context = context;
 	}
 	

@@ -34,6 +34,7 @@ import com.socialize.entity.Comment;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.sample.util.ErrorHandler;
+import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.util.StringUtils;
 
 public class CommentGetActivity extends CommentBaseActivity {
@@ -87,7 +88,7 @@ public class CommentGetActivity extends CommentBaseActivity {
 		
 		if(!StringUtils.isEmpty(id)) {
 			
-			final ProgressDialog progress = ProgressDialog.show(CommentGetActivity.this, "Retrieving", "Please wait...");
+			final ProgressDialog progress = SafeProgressDialog.show(CommentGetActivity.this, "Retrieving", "Please wait...");
 			
 			
 			try {

@@ -75,7 +75,9 @@ public class DeviceUtils {
 				}
 			}
 			
-			hasCamera = appUtils.isIntentAvailable(context, MediaStore.ACTION_IMAGE_CAPTURE);
+			if(appUtils != null) {
+				hasCamera = appUtils.isIntentAvailable(context, MediaStore.ACTION_IMAGE_CAPTURE);
+			}
 		}
 		else {
 			String errroMsg = "Unable to determine device screen density.  Socialize must be intialized from an Activity";

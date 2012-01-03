@@ -1,6 +1,5 @@
 package com.socialize.sample.mocks;
 
-import android.app.Activity;
 import android.content.Context;
 
 import com.socialize.api.SocializeSession;
@@ -24,12 +23,14 @@ public class MockUserSystem implements UserSystem {
 	}
 	
 	@Override
-	public void init(Activity context) {}
+	public void init(Context context) {}
 	
 	@Override
 	public SocializeSession authenticateSynchronous(Context context, String consumerKey, String consumerSecret, SocializeSessionConsumer sessionConsumer) throws SocializeException {
 		MockSocializeSession mockSocializeSession = new MockSocializeSession();
-		sessionConsumer.setSession(mockSocializeSession);
+		
+		if(sessionConsumer != null)	sessionConsumer.setSession(mockSocializeSession);
+	
 		return mockSocializeSession;
 	}
 
@@ -37,7 +38,7 @@ public class MockUserSystem implements UserSystem {
 	@Override
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
 		MockSocializeSession mockSocializeSession = new MockSocializeSession();
-		sessionConsumer.setSession(mockSocializeSession);
+		if(sessionConsumer != null)	sessionConsumer.setSession(mockSocializeSession);
 		listener.onAuthSuccess(mockSocializeSession);
 	}
 
@@ -45,21 +46,21 @@ public class MockUserSystem implements UserSystem {
 	@Override
 	public void authenticate(String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
 		MockSocializeSession mockSocializeSession = new MockSocializeSession();
-		sessionConsumer.setSession(mockSocializeSession);
+		if(sessionConsumer != null)	sessionConsumer.setSession(mockSocializeSession);
 		listener.onAuthSuccess(mockSocializeSession);
 	}
 
 	@Override
 	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
 		MockSocializeSession mockSocializeSession = new MockSocializeSession();
-		sessionConsumer.setSession(mockSocializeSession);
+		if(sessionConsumer != null)	sessionConsumer.setSession(mockSocializeSession);
 		listener.onAuthSuccess(mockSocializeSession);
 	}
 
 	@Override
 	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
 		MockSocializeSession mockSocializeSession = new MockSocializeSession();
-		sessionConsumer.setSession(mockSocializeSession);
+		if(sessionConsumer != null)	sessionConsumer.setSession(mockSocializeSession);
 		listener.onAuthSuccess(mockSocializeSession);
 	}
 

@@ -5,7 +5,8 @@
 	<bean id="likeSystem" class="com.socialize.sample.mocks.MockLikeSystem" />
 	<bean id="entitySystem" class="com.socialize.sample.mocks.MockEntitySystem" />
 	<bean id="viewSystem" class="com.socialize.sample.mocks.MockViewSystem" />
-
+	<bean id="notificationRegistrationSystem" class="com.socialize.sample.mocks.MockNotificationRegistrationSystem" />
+	
 	<proxy ref="userSystem" />
 	<proxy ref="shareSystem" />
 	<proxy ref="commentSystem" />

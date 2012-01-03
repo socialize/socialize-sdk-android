@@ -34,6 +34,7 @@ import android.widget.Button;
 import com.socialize.Socialize;
 import com.socialize.sample.ui.SampleActivity;
 import com.socialize.sample.ui.SampleActivity2;
+import com.socialize.ui.dialog.SafeProgressDialog;
 
 @SuppressWarnings("deprecation")
 public class Main extends Activity {
@@ -79,7 +80,7 @@ public class Main extends Activity {
 	
 	public void startSocialize(final boolean isMock) {
 		
-		final ProgressDialog progress = ProgressDialog.show(Main.this, "Initializing", "Please wait...");
+		final ProgressDialog progress = SafeProgressDialog.show(Main.this, "Initializing", "Please wait...");
 		
 		new AsyncTask<Void, Void, Void>() {
 

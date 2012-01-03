@@ -133,6 +133,7 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 			
 			@Override
 			public void onError(SocializeException error) {
+				error.printStackTrace();
 				fail();
 			}
 			

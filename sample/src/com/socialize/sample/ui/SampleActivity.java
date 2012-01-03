@@ -17,6 +17,7 @@ import com.socialize.Socialize;
 import com.socialize.sample.R;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.SocializeUIBeanOverrider;
+import com.socialize.ui.dialog.SafeProgressDialog;
 
 @Deprecated
 public class SampleActivity extends Activity {
@@ -51,7 +52,7 @@ public class SampleActivity extends Activity {
 		btnClearCache.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				final ProgressDialog dialog = ProgressDialog.show(v.getContext(), "Clearing cache", "Clearing cache...");
+				final ProgressDialog dialog = SafeProgressDialog.show(v.getContext(), "Clearing cache", "Clearing cache...");
 				
 				new AsyncTask<Void, Void, Void>() {
 

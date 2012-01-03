@@ -21,7 +21,6 @@
  */
 package com.socialize.api.action;
 
-import android.app.Activity;
 import android.content.Context;
 
 import com.socialize.api.SocializeSession;
@@ -42,7 +41,7 @@ public interface UserSystem {
 	public static final String ENDPOINT = "/user/";
 	
 	@Deprecated
-	public void init(Activity context);
+	public void init(Context context);
 	
 	@Deprecated
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer);
