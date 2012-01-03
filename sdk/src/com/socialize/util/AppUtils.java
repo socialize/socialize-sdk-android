@@ -103,12 +103,20 @@ public class AppUtils {
 	}	
 	
 	public static boolean launchMainApp(Activity origin) {
-		
-		PackageManager pm = origin.getPackageManager();
+		Intent mainIntent = getMainAppIntent(origin);
+		if(mainIntent != null) {
+			origin.startActivity(mainIntent);	
+			return true;
+		}
+		return false;
+	}
+	
+	public static Intent getMainAppIntent(Context context) {
+		PackageManager pm = context.getPackageManager();
 
 		Intent mainIntent = new Intent(Intent.ACTION_MAIN);
 		mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-		mainIntent.setPackage(origin.getPackageName());
+		mainIntent.setPackage(context.getPackageName());
 
 		List<ResolveInfo> appList = pm.queryIntentActivities(mainIntent, 0);
 		
@@ -116,11 +124,10 @@ public class AppUtils {
 			ResolveInfo resolveInfo = appList.get(0);
 			mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			mainIntent.setComponent(new ComponentName(resolveInfo.activityInfo.applicationInfo.packageName, resolveInfo.activityInfo.name));
-			origin.startActivity(mainIntent);	
-			return true;
+			return mainIntent;
 		}
 		
-		return false;
+		return null;
 	}
 	
 //	/**

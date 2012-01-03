@@ -30,6 +30,7 @@ import android.widget.RemoteViews;
 
 import com.socialize.error.SocializeException;
 import com.socialize.launcher.LaunchAction;
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeLaunchActivity;
 import com.socialize.util.AppUtils;
 
@@ -40,43 +41,48 @@ public abstract class BaseNotificationMessageBuilder<T> implements NotificationM
 
 	private MessageTranslator<T> messageTranslator;
 	private AppUtils appUtils;
+	private SocializeLogger logger;
 	
 	@Override
 	public Notification build(Context context, Bundle bundle, NotificationMessage message, int icon) throws SocializeException {
 		
-		if(appUtils != null && appUtils.isActivityAvailable(context, SocializeLaunchActivity.class)) {
-
-			Notification notification = newNotification(icon, message.getText(), System.currentTimeMillis());
-			
-			Intent notificationIntent = newIntent(context, SocializeLaunchActivity.class);
-			
-			// This will add anything we need to the bundle
-			T data = messageTranslator.translate(context, bundle, message);
-			
+		Notification notification = newNotification(icon, message.getText(), System.currentTimeMillis());
+		
+		Intent notificationIntent = null;
+		
+		if(appUtils.isActivityAvailable(context, SocializeLaunchActivity.class)) {
+			notificationIntent = newIntent(context, SocializeLaunchActivity.class);
 			notificationIntent.putExtra(SocializeLaunchActivity.LAUNCH_ACTION, LaunchAction.ACTION.name());
 			notificationIntent.putExtras(bundle);
-			
-			PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, notification.flags |= Notification.FLAG_AUTO_CANCEL);
-			
-			RemoteViews notificationView = getNotificationView(context, notification, message, data);
-			
-			if(notificationView != null) {
-				notification.contentIntent = contentIntent;
-				notification.contentView = notificationView;
-			}
-			else {
-				// Just set defaults
-				notification.setLatestEventInfo(context, message.getTitle(), message.getText(), contentIntent);
-				notification.tickerText = message.getTitle();
-			}
-			
-			return notification;
 		}
 		else {
-			throw new SocializeException("Unable to locate activity [" +
-					SocializeLaunchActivity.class.getName() +
-					"].  Make sure this is added to your AndroidManifest.xml");
+			if(logger != null) {
+				logger.warn("Could not locate activity [" +
+						SocializeLaunchActivity.class +
+						"].  Make sure you have added this to your AndroidManifest.xml");
+			}
+			
+			notificationIntent = AppUtils.getMainAppIntent(context);
 		}
+
+		// This will add anything we need to the bundle
+		T data = messageTranslator.translate(context, bundle, message);
+
+		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, notification.flags |= Notification.FLAG_AUTO_CANCEL);
+		
+		RemoteViews notificationView = getNotificationView(context, notification, message, data);
+		
+		if(notificationView != null) {
+			notification.contentIntent = contentIntent;
+			notification.contentView = notificationView;
+		}
+		else {
+			// Just set defaults
+			notification.setLatestEventInfo(context, message.getTitle(), message.getText(), contentIntent);
+			notification.tickerText = message.getTitle();
+		}
+		
+		return notification;			
 	}
 
 	public void setMessageTranslator(MessageTranslator<T> messageTranslator) {
