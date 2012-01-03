@@ -17,6 +17,7 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 	public SocializeC2DMReceiver() {
 		super("SocializeC2DMReceiver");
 		logger = new SocializeLogger();
+		container = newNotificationContainer();
 	}
 
 	@Override
@@ -76,11 +77,9 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 
 	@Override
 	public void onCreate() {
-		
 		if(logger != null && logger.isInfoEnabled()) {
 			logger.info("SocializeC2DMReceiver creating..");
 		}
-		
 		super.onCreate();
 	}
 	
@@ -97,8 +96,7 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 	protected boolean assertInitialized() {
 		if(!initialized) {
 			try {
-				doInit();
-				initialized = true;
+				init();
 			} 
 			catch (Exception e) {
 				if(logger != null) {
@@ -110,10 +108,10 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 		return initialized;
 	}
 	
-	protected void doInit() throws Exception {
-		container = newNotificationContainer();
+	public void init() throws Exception {
 		container.onCreate(getContext());
 		initBeans();
+		initialized = true;
 	}
 	
 	protected void initBeans() {

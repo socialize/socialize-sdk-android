@@ -30,6 +30,7 @@ import com.socialize.api.action.ActionType;
 import com.socialize.api.action.ActivitySystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
+import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
@@ -46,13 +47,15 @@ import com.socialize.test.SocializeActivityTest;
  */
 public class NotificationSystemTest extends SocializeActivityTest {
 
-	public void testReceiveNotificationIntegrationTest() {
+	public void testReceiveNotificationIntegrationTest() throws Exception {
 		
 		final Comment theAction = new Comment();
 		final User user = new User();
 		
 		theAction.setId(0L);
 		theAction.setText("Hello World");
+		
+		theAction.setEntity(Entity.newInstance("http://www.getsocialize.com", "Socialize"));
 		
 		user.setId(69L);
 		user.setFirstName("John");
@@ -67,7 +70,7 @@ public class NotificationSystemTest extends SocializeActivityTest {
 		
 		NotificationsAccess.setBeanOverrides(receiver, new String[]{SocializeConfig.SOCIALIZE_NOTIFICATION_BEANS_PATH, "socialize_notification_mock_beans.xml"});
 		
-		receiver.onCreate();
+		receiver.init();
 		
 		ProxyObject<ActivitySystem> proxy = NotificationsAccess.getProxy(receiver, "activitySystem");
 		ProxyObject<NotificationAuthenticator> notificationAuthenticatorProxy = NotificationsAccess.getProxy(receiver, "notificationAuthenticator");

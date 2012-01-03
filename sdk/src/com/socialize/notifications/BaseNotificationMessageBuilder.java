@@ -66,7 +66,8 @@ public abstract class BaseNotificationMessageBuilder<T> implements NotificationM
 			}
 			else {
 				// Just set defaults
-				notification.setLatestEventInfo(context,message.getTitle(), message.getText(), contentIntent);
+				notification.setLatestEventInfo(context, message.getTitle(), message.getText(), contentIntent);
+				notification.tickerText = message.getTitle();
 			}
 			
 			return notification;
