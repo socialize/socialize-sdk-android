@@ -56,15 +56,6 @@ public class SocializeActionMessageTranslator implements MessageTranslator<Socia
 			data.putString( Socialize.ACTION_ID , actionId);
 			
 			User user = action.getUser();
-			String title = "New activity ";
-			
-			switch(message.getActionType()) {
-				case COMMENT: title = "New comments "; break;
-			}
-			
-			title += "on " + action.getEntityDisplayName();
-			
-			message.setTitle(title);
 			
 			if(user != null) {
 				data.putString( Socialize.USER_ID , String.valueOf(user.getId()));

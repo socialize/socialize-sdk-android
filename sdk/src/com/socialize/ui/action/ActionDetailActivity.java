@@ -58,18 +58,13 @@ public class ActionDetailActivity extends SocializeUIActivity {
 			else {
 				Bundle extras = getIntent().getExtras();
 
-				if (extras == null || !extras.containsKey(Socialize.USER_ID)) {
-					Toast.makeText(this, "No user id provided", Toast.LENGTH_SHORT).show();
+				if (extras == null || !extras.containsKey(Socialize.ACTION_ID)) {
+					Toast.makeText(this, "No action id provided", Toast.LENGTH_SHORT).show();
 					finish();
 				}
 				else {
-					// If WE are the user being viewed, assume a profile update
-					String userId = extras.getString(Socialize.USER_ID);
-					
-					if(Integer.parseInt(userId) == user.getId()) {
-						setResult(SocializeUIActivity.PROFILE_UPDATE);
-					}
-					
+					// TODO: do we need this?
+					setResult(SocializeUIActivity.PROFILE_UPDATE);
 					view = new ActionDetailView(this);
 					setContentView(view);
 				}

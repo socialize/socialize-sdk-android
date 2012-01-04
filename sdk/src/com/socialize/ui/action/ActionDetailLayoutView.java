@@ -51,7 +51,7 @@ import com.socialize.view.BaseView;
  */
 public class ActionDetailLayoutView extends BaseView {
 
-	private String userId;
+	private String userId; // may be null
 	private String actionId;
 	private ActionDetailContentView content;
 	private ProgressDialog dialog = null;
@@ -66,8 +66,8 @@ public class ActionDetailLayoutView extends BaseView {
 	private IBeanFactory<ActionDetailContentView> actionDetailContentViewFactory;
 	private ProgressDialogFactory progressDialogFactory;
 	private ImageLoader imageLoader;
-//	private Colors colors;
 	// End injected
+	
 	
 	public ActionDetailLayoutView(Activity context, String userId) {
 		this(context);
@@ -93,32 +93,11 @@ public class ActionDetailLayoutView extends BaseView {
 
 		setOrientation(LinearLayout.VERTICAL);
 		setLayoutParams(fill);
-//		final int bgColor = colors.getColor(Colors.APP_BG);
-		
-//		setBackgroundDrawable(drawables.getDrawable("slate.png", true, true, true));
-		
-//		setBackgroundColor(bgColor);
 		setPadding(0, 0, 0, 0);
 		setVerticalFadingEdgeEnabled(false);
 
 		content = actionDetailContentViewFactory.getBean();
 		defaultProfilePicture = drawables.getDrawable("default_user_icon.png");
-		
-//		SocializeSession session = Socialize.getSocialize().getSession();
-//		
-//		if(session != null) {
-//			User user = session.getUser();
-//			if(user != null && user.getId().toString().equals(userId)) {
-//				OnClickListener profileClickListener = new OnClickListener() {
-//					@Override
-//					public void onClick(View v) {
-//						SocializeUI.getInstance().showUserProfileViewForResult(getActivity(), userId, SocializeUIActivity.PROFILE_UPDATE);
-//					}
-//				};
-//				content.getSettingsButton().setVisibility(View.VISIBLE);
-//				content.getSettingsButton().setOnClickListener(profileClickListener);
-//			}
-//		}
 
 		addView(content);
 	}
@@ -136,7 +115,7 @@ public class ActionDetailLayoutView extends BaseView {
 			
 			count = 1;
 			
-			doGetComment();
+			doGetAction();
 		}
 		else {
 			showError(getContext(), new SocializeException("Socialize not authenticated"));
@@ -154,7 +133,7 @@ public class ActionDetailLayoutView extends BaseView {
 		}
 	}
 	
-	public void doGetComment() {
+	public void doGetAction() {
 		if(!StringUtils.isEmpty(actionId)) {
 			int id = Integer.parseInt(actionId);
 			getSocialize().getCommentById(id, new CommentGetListener() {
@@ -168,16 +147,32 @@ public class ActionDetailLayoutView extends BaseView {
 				public void onGet(Comment entity) {
 					ActionDetailLayoutView.this.currentAction = entity;
 					content.setAction(entity);
-					doGetUserProfile(entity);
+					if(entity.getUser() != null) {
+						doGetUserProfile(entity.getUser().getId(), entity);
+					}
+					else if(!StringUtils.isEmpty(userId)) {
+						doGetUserProfile(Long.parseLong(userId), entity);
+					}
 				}
 			});
 		}
+		else if(!StringUtils.isEmpty(userId)) {
+			doGetUserProfile(Long.parseLong(userId), null);
+		}
 	}
 	
-	public void doGetUserProfile(final SocializeAction action) {
-		int id = Integer.parseInt(userId);
+	protected void doGetUserProfile(SocializeAction action) {
+		if(action.getUser() != null) {
+			doGetUserProfile(action.getUser().getId(), action);
+		}
+		else if(!StringUtils.isEmpty(userId)) {
+			doGetUserProfile(Long.parseLong(userId), action);
+		}
+	}
+	
+	protected void doGetUserProfile(final long userId, final SocializeAction action) {
 		
-		getSocialize().getUser(id, new UserGetListener() {
+		getSocialize().getUser(userId, new UserGetListener() {
 			
 			@Override
 			public void onGet(User user) {

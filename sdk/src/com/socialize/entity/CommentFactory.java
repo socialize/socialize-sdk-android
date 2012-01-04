@@ -35,6 +35,7 @@ public class CommentFactory extends SocializeActionFactory<Comment> {
 	@Override
 	protected void postFromJSON(JSONObject object, Comment comment) throws JSONException {
 		final String attr = "text";
+		final String notificationAttr = "subscribe";
 		if(object.has(attr) && !object.isNull(attr)) {
 			comment.setText(object.getString(attr));
 		}
@@ -47,6 +48,10 @@ public class CommentFactory extends SocializeActionFactory<Comment> {
 						"]");
 			}
 		}
+		
+		if(object.has(notificationAttr) && !object.isNull(notificationAttr)) {
+			comment.setNotificationsEnabled(object.getBoolean(notificationAttr));
+		}
 	}
 
 	@Override
@@ -55,6 +60,7 @@ public class CommentFactory extends SocializeActionFactory<Comment> {
 		if(!StringUtils.isEmpty( text )) {
 			object.put("text", text);
 		}
+		object.put("subscribe", comment.isNotificationsEnabled());
 	}
 
 	@Override

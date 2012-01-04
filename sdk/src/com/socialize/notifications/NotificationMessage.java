@@ -29,7 +29,6 @@ import com.socialize.api.action.ActionType;
  */
 public class NotificationMessage {
 
-	private String title;
 	private String text;
 	private long actionId;
 	private ActionType actionType;
@@ -59,11 +58,4 @@ public class NotificationMessage {
 	public void setNotificationType(NotificationType notificationType) {
 		this.notificationType = notificationType;
 	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	
 }

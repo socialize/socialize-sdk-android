@@ -62,6 +62,11 @@ public class UserActivityView extends BaseView {
 		addView(itemView);
 	}
 	
+	public void clearUserActivity() {
+		itemView.clear();
+		itemView.showEmptyText();
+	}
+	
 	public void loadUserActivity(long userId, final SocializeAction current) {
 		itemView.showLoading();
 		Socialize.getSocialize().listActivityByUser(userId, 0, numItems, new UserActivityListListener() {

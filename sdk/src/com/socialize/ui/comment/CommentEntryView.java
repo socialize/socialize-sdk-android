@@ -22,11 +22,15 @@
 package com.socialize.ui.comment;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.socialize.Socialize;
@@ -119,7 +123,6 @@ public class CommentEntryView extends BaseView {
 		LayoutParams commentFieldParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
 		buttonLayoutParams.setMargins(0, 0, 0, 0);
-		buttonLayoutParams.weight = 1.0f;
 		
 		commentField = new EditText(getContext());
 		commentField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
@@ -197,10 +200,46 @@ public class CommentEntryView extends BaseView {
 		}
 		
 		toolbarLayout.addView(buttonLayout);
+		
+		// Notification layout
+		
+		LinearLayout notificationLayout = new LinearLayout(getContext());
+		
+		notificationLayout.setOrientation(LinearLayout.VERTICAL);
+		
+		LayoutParams notificationLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+				
+		notificationLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		notificationLayoutParams.weight = 1.0f;		
+		notificationLayout.setLayoutParams(notificationLayoutParams);
+		
+		ImageView notificationBannerImage = new ImageView(getContext());
+		
+		LayoutParams notificationBannerParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		notificationBannerParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		
+		notificationBannerImage.setLayoutParams(notificationBannerParams);
+		notificationBannerImage.setImageDrawable(drawables.getDrawable("notification_banner.png", DisplayMetrics.DENSITY_DEFAULT));
+
+		TextView notificationTitleText = new TextView(getContext());
+		TextView notificationSubText = new TextView(getContext());
+		
+		notificationTitleText.setText("Subscribed to this discussion.");
+		notificationSubText.setText("We will notify you when someone replies.");
+		
+		notificationTitleText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+		notificationSubText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+
+		notificationTitleText.setTextColor(Color.WHITE);
+		notificationSubText.setTextColor(Color.GRAY);
+		
+		notificationLayout.addView(notificationBannerImage);
+		notificationLayout.addView(notificationTitleText);
+		notificationLayout.addView(notificationSubText);
 
 		addView(commentField);
 		addView(toolbarLayout);
-
+		addView(notificationLayout);
 	}
 	
 	@Override

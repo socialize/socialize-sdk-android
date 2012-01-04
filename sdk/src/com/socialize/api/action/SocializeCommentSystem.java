@@ -53,6 +53,9 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 		c.setText(comment);
 		c.setEntity(entity);
 		
+		// TODO: make this an option
+		c.setNotificationsEnabled(true);
+		
 		boolean shareLocation = (shareOptions == null || shareOptions.isShareLocation());
 		
 		c.setLocationShared(shareLocation);

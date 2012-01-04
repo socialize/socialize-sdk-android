@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 
+import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;
 import com.socialize.launcher.LaunchAction;
 import com.socialize.log.SocializeLogger;
@@ -37,7 +38,7 @@ import com.socialize.util.AppUtils;
 /**
  * @author Jason Polites
  */
-public abstract class BaseNotificationMessageBuilder<T> implements NotificationMessageBuilder {
+public abstract class BaseNotificationMessageBuilder<T extends SocializeAction> implements NotificationMessageBuilder {
 
 	private MessageTranslator<T> messageTranslator;
 	private AppUtils appUtils;
@@ -53,7 +54,7 @@ public abstract class BaseNotificationMessageBuilder<T> implements NotificationM
 		if(appUtils.isActivityAvailable(context, SocializeLaunchActivity.class)) {
 			notificationIntent = newIntent(context, SocializeLaunchActivity.class);
 			notificationIntent.putExtra(SocializeLaunchActivity.LAUNCH_ACTION, LaunchAction.ACTION.name());
-			notificationIntent.putExtras(bundle);
+			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
 		}
 		else {
 			if(logger != null) {
@@ -61,13 +62,16 @@ public abstract class BaseNotificationMessageBuilder<T> implements NotificationM
 						SocializeLaunchActivity.class +
 						"].  Make sure you have added this to your AndroidManifest.xml");
 			}
-			
 			notificationIntent = AppUtils.getMainAppIntent(context);
 		}
 
 		// This will add anything we need to the bundle
+		// TODO This should not load the entity, just needs to render the message received.
 		T data = messageTranslator.translate(context, bundle, message);
 
+		// Set the bundle AFTER the translation
+		notificationIntent.putExtras(bundle);
+		
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, notification.flags |= Notification.FLAG_AUTO_CANCEL);
 		
 		RemoteViews notificationView = getNotificationView(context, notification, message, data);
@@ -78,8 +82,8 @@ public abstract class BaseNotificationMessageBuilder<T> implements NotificationM
 		}
 		else {
 			// Just set defaults
-			notification.setLatestEventInfo(context, message.getTitle(), message.getText(), contentIntent);
-			notification.tickerText = message.getTitle();
+			notification.setLatestEventInfo(context, message.getText(), data.getDisplayText(), contentIntent);
+			notification.tickerText = message.getText();
 		}
 		
 		return notification;			
