@@ -3,43 +3,6 @@
 	<factory id="commentItemViewFactory" makes="commentListItem"/>
 	<factory id="listItemLoadingViewFactory" makes="listItemLoadingView"/>
 	
-	<bean id="cache" class="com.socialize.util.DrawableCache">
-		<constructor-arg type="integer" value="10"/> <!-- Min size -->
-		<constructor-arg type="integer" value="100"/> <!-- Max size -->
-		<init-method name="init">
-			<arg type="context"/>
-		</init-method>		
-		<destroy-method name="destroy"/>
-	</bean>
-	
-	<bean id="bitmapBuilder" class="com.socialize.util.BitmapBuilder"/>
-	
-	<bean id="bitmapUtils" class="com.socialize.util.BitmapUtils">
-		<property name="bitmapBuilder" ref="bitmapBuilder"/>
-		<property name="base64Utils" ref="base64Utils"/>
-	</bean>
-	
-	<bean id="drawables" class="com.socialize.util.Drawables">
-		<property name="classLoaderProvider" ref="classLoaderProvider"/>
-		<property name="cache" ref="cache"/>
-		<property name="logger" ref="logger"/>
-		<property name="bitmapUtils" ref="bitmapUtils"/>
-		<init-method name="init">
-			<arg type="activity"/>
-		</init-method>		
-	</bean>	
-	
-	<bean id="base64Utils" class="com.socialize.util.Base64Utils"/>	
-	
-	<bean 
-		id="entityCache" 
-		class="com.socialize.ui.cache.EntityCache">
-		<constructor-arg type="integer" value="5"/> <!-- Min size -->
-		<constructor-arg type="integer" value="100"/> <!-- Max size -->
-		<property name="timeToLive" value="600000" type="integer"/> <!--  milliseconds -->
-		<destroy-method name="destroy"/>
-	</bean>
-	
 	<bean id="socializeUIErrorHandler" class="com.socialize.ui.error.DialogErrorHandler">
 		<property name="drawables" ref="drawables"/>
 	</bean>
@@ -67,7 +30,7 @@
 		</init-method>	
 	</bean>
 	
-	<bean id="keyboardUtils" class="com.socialize.ui.util.KeyboardUtils">
+	<bean id="keyboardUtils" class="com.socialize.ui.util.KeyboardUtils" context-aware="false">
 		<init-method name="init">
 			<arg type="context"/>
 		</init-method>	
@@ -621,18 +584,38 @@
 	</bean>	
 	
 	<bean 
+		id="subscribeNotificationButton" 
+		singleton="false"
+		extends="socializeButton">
+		<constructor-arg type="activity"/>
+		<property name="text" value="Unsubscribe"/>
+		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
+		<property name="topColor" value="GRAY_BTN_TOP"/>
+		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
+		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>
+		<property name="height" value="36" type="integer"/>
+		<property name="width" value="160" type="integer"/>
+		<property name="textSize" value="14" type="integer"/>
+		<property name="textAlign" value="center"/>
+		<property name="padding" value="2" type="integer"/>
+	</bean>		
+	
+	<bean 
 		id="commentEntryView" 
 		class="com.socialize.ui.comment.CommentEntryView" 
 		singleton="false">
 		<constructor-arg type="activity"/>
 		
 		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="appUtils" ref="appUtils"/>
 		<property name="keyboardUtils" ref="keyboardUtils"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="postCommentButton" ref="postCommentButton"/>
 		<property name="cancelCommentButton" ref="cancelCommentButton"/>
+		<property name="subscribeNotificationButton" ref="subscribeNotificationButton"/>
 		<property name="autoPostFacebookOptionFactory" ref="autoPostFacebookOptionFactory"/>
 		<property name="locationEnabledOptionFactory" ref="locationEnabledOptionFactory"/>
+		<property name="notificationEnabledOptionFactory" ref="notificationEnabledOptionFactory"/>
 		
 		<init-method name="init"/>
 	</bean>		
@@ -670,6 +653,20 @@
 	</bean>	
 	
 	<factory id="locationEnabledOptionFactory" makes="locationEnabledOption"/>	
+	
+	<bean 
+		id="notificationEnabledOption" 
+		extends="customCheckbox"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="imageOn" value="icon_notify.png"/>
+		<property name="imageOff" value="icon_notify_disabled.png"/>
+		<property name="textOn" value=""/>
+		<property name="textOff" value=""/>
+		<property name="borderOn" value="true" type="boolean"/>
+	</bean>		
+	
+	<factory id="notificationEnabledOptionFactory" makes="notificationEnabledOption"/>	
 	
 <!--  End Comment UI -->
 	
@@ -1199,14 +1196,4 @@
 	</bean>
 <!--  End Image Loader -->
 
-<!--  Notification Init -->
-	<bean id="notificationChecker" class="com.socialize.notifications.NotificationChecker">
-		<property name="logger" ref="logger"/>
-		<property name="config" ref="config"/>
-		<property name="notificationRegistrationSystem" ref="notificationRegistrationSystem"/>
-		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
-		<init-method name="checkRegistrations">
-			<arg type="context"/>
-		</init-method>			
-	</bean>
 </beans>

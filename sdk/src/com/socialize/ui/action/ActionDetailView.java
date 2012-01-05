@@ -96,6 +96,14 @@ public class ActionDetailView extends EntityView {
 			actionLayoutView.onProfileUpdate();
 		}
 	}
+	
+	public void reload(String userId, String actionId) {
+		if(actionLayoutView != null) {
+			actionLayoutView.setUserId(userId);
+			actionLayoutView.setActionId(actionId);
+			actionLayoutView.reload();
+		}
+	}
 
 	@Override
 	public View getLoadingView() {

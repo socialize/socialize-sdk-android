@@ -438,6 +438,10 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 
 			try {
 				HttpClient client = clientFactory.getClient();
+				
+				if(logger != null && logger.isDebugEnabled()) {
+					logger.debug("Request: " + request.getMethod() + " " + request.getRequestLine().getUri());
+				}
 
 				HttpResponse response = client.execute(request);
 				

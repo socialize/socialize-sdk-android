@@ -36,5 +36,7 @@ public interface C2DMCallback {
 	
 	public void onRegister(Context context, String registrationId) ;
 	
+	public void onError(Context context, String errorId);
+	
 	public void onUnregister(Context context);
 }

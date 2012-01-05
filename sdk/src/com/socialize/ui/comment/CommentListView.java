@@ -398,7 +398,7 @@ public class CommentListView extends BaseView {
 	protected void getNextSet() {
 		
 		if(logger != null && logger.isDebugEnabled()) {
-			logger.info("getNextSet called on CommentListView");
+			logger.debug("getNextSet called on CommentListView");
 		}
 		
 		loading = true; // Prevent continuous load

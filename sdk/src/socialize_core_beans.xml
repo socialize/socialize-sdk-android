@@ -7,7 +7,7 @@
 		<property name="logger" ref="logger"/>
 	</bean>
 	
-	<bean id="config" class="com.socialize.config.SocializeConfig">
+	<bean id="config" class="com.socialize.config.SocializeConfig" context-aware="false">
 		<init-method name="init">
 			<arg type="context"/>
 		</init-method>
@@ -21,7 +21,7 @@
 		</init-method>
 	</bean>
 	
-	<bean id="appUtils" class="com.socialize.util.AppUtils">
+	<bean id="appUtils" class="com.socialize.util.AppUtils" context-aware="false">
 		<property name="logger" ref="logger"/>
 		<init-method name="init">
 			<arg type="context"/>
@@ -36,7 +36,7 @@
 		</init-method>
 	</bean>
 
-	<bean id="httpUtils" class="com.socialize.util.HttpUtils">
+	<bean id="httpUtils" class="com.socialize.util.HttpUtils" context-aware="false">
 		<init-method name="init">
 			<arg type="context"/>
 		</init-method>
@@ -80,6 +80,44 @@
 	<bean id="jsonParser" class="com.socialize.util.JSONParser">
 		<property name="ioUtils" ref="ioUtils"/>
 	</bean>
+	
+
+	<bean id="cache" class="com.socialize.util.DrawableCache">
+		<constructor-arg type="integer" value="10"/> <!-- Min size -->
+		<constructor-arg type="integer" value="100"/> <!-- Max size -->
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>		
+		<destroy-method name="destroy"/>
+	</bean>
+	
+	<bean id="bitmapBuilder" class="com.socialize.util.BitmapBuilder"/>
+	
+	<bean id="bitmapUtils" class="com.socialize.util.BitmapUtils">
+		<property name="bitmapBuilder" ref="bitmapBuilder"/>
+		<property name="base64Utils" ref="base64Utils"/>
+	</bean>
+	
+	<bean id="drawables" class="com.socialize.util.Drawables">
+		<property name="classLoaderProvider" ref="classLoaderProvider"/>
+		<property name="cache" ref="cache"/>
+		<property name="logger" ref="logger"/>
+		<property name="bitmapUtils" ref="bitmapUtils"/>
+		<init-method name="init">
+			<arg type="activity"/>
+		</init-method>		
+	</bean>	
+	
+	<bean id="base64Utils" class="com.socialize.util.Base64Utils"/>	
+	
+	<bean 
+		id="entityCache" 
+		class="com.socialize.ui.cache.EntityCache">
+		<constructor-arg type="integer" value="5"/> <!-- Min size -->
+		<constructor-arg type="integer" value="100"/> <!-- Max size -->
+		<property name="timeToLive" value="600000" type="integer"/> <!--  milliseconds -->
+		<destroy-method name="destroy"/>
+	</bean>	
 	
 	<bean id="authProviderData" class="com.socialize.auth.AuthProviderData" singleton="false"/>
 	
@@ -169,6 +207,7 @@
 		<property name="authProviders" ref="authProviders"/>
 		<property name="httpUtils" ref="httpUtils"/>
 		<property name="locationProvider" ref="locationProvider"/>
+		<property name="notificationChecker" ref="notificationChecker"/>
 	</bean>
 	
 	<bean id="socializeActionFactory" class="com.socialize.entity.SocializeActionFactory" abstract="true">
@@ -189,15 +228,24 @@
 		<property name="deviceUtils" ref="deviceUtils"/>
 	</bean>
 	
+	<bean id="signListener" class="oauth.socialize.LoggingOauthSignListener">
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="defaultRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory" abstract="true">
+		<property name="oauthSigner" ref="oauthSigner"/>
+		<property name="signListener" ref="signListener"/>
+	</bean>
+	
+	
 <!-- END OAUTH -->
 
 <!-- Comment API -->
 
 	<bean id="commentFactory" class="com.socialize.entity.CommentFactory" extends="socializeActionFactory"/>
 	
-	<bean id="commentRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
-		<constructor-arg ref="oauthSigner"/>
-		<constructor-arg ref="commentFactory"/>
+	<bean id="commentRequestFactory" extends="defaultRequestFactory">
+		<property name="objectFactory" ref="commentFactory"/>
 	</bean>
 
 	<bean id="commentProvider" extends="defaultProvider">
@@ -208,7 +256,6 @@
 	<bean id="commentSystem" class="com.socialize.api.action.SocializeCommentSystem" extends="socializeApi">
 		<constructor-arg ref="commentProvider"/>
 	</bean>
-
 	
 <!-- End Comment API -->	
 
@@ -217,11 +264,10 @@
 
 	<bean id="entityFactory" class="com.socialize.entity.EntityFactory"/>
 	
-	<bean id="entityRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
-		<constructor-arg ref="oauthSigner"/>
-		<constructor-arg ref="entityFactory"/>
+	<bean id="entityRequestFactory" extends="defaultRequestFactory">
+		<property name="objectFactory" ref="entityFactory"/>
 	</bean>
-
+	
 	<bean id="entityProvider" extends="defaultProvider">
 		<property name="objectFactory" ref="entityFactory"/>
 		<property name="requestFactory" ref="entityRequestFactory"/>
@@ -237,10 +283,9 @@
 
 	<bean id="likeFactory" class="com.socialize.entity.LikeFactory" extends="socializeActionFactory"/>
 	
-	<bean id="likeRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
-		<constructor-arg ref="oauthSigner"/>
-		<constructor-arg ref="likeFactory"/>
-	</bean>
+	<bean id="likeRequestFactory" extends="defaultRequestFactory">
+		<property name="objectFactory" ref="likeFactory"/>
+	</bean>	
 
 	<bean id="likeProvider" extends="defaultProvider">
 		<property name="objectFactory" ref="likeFactory"/>
@@ -257,11 +302,10 @@
 
 	<bean id="viewFactory" class="com.socialize.entity.ViewFactory" extends="socializeActionFactory"/>
 	
-	<bean id="viewRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
-		<constructor-arg ref="oauthSigner"/>
-		<constructor-arg ref="viewFactory"/>
-	</bean>
-
+	<bean id="viewRequestFactory" extends="defaultRequestFactory">
+		<property name="objectFactory" ref="viewFactory"/>
+	</bean>		
+	
 	<bean id="viewProvider" extends="defaultProvider">
 		<property name="objectFactory" ref="viewFactory"/>
 		<property name="requestFactory" ref="viewRequestFactory"/>
@@ -277,11 +321,10 @@
 
 	<bean id="shareFactory" class="com.socialize.entity.ShareFactory" extends="socializeActionFactory"/>
 	
-	<bean id="shareRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
-		<constructor-arg ref="oauthSigner"/>
-		<constructor-arg ref="shareFactory"/>
-	</bean>
-
+	<bean id="shareRequestFactory" extends="defaultRequestFactory">
+		<property name="objectFactory" ref="shareFactory"/>
+	</bean>		
+	
 	<bean id="shareProvider" extends="defaultProvider">
 		<property name="objectFactory" ref="shareFactory"/>
 		<property name="requestFactory" ref="shareRequestFactory"/>
@@ -304,10 +347,9 @@
 
 <!-- User API -->
 
-	<bean id="userRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
-		<constructor-arg ref="oauthSigner"/>
-		<constructor-arg ref="userFactory"/>
-	</bean>
+	<bean id="userRequestFactory" extends="defaultRequestFactory">
+		<property name="objectFactory" ref="userFactory"/>
+	</bean>	
 
 	<bean id="userProvider" extends="defaultProvider">
 		<property name="objectFactory" ref="userFactory"/>
@@ -343,11 +385,10 @@
 		
 	</bean>
 	
-	<bean id="activityRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
-		<constructor-arg ref="oauthSigner"/>
-		<constructor-arg ref="activityFactory"/>
-	</bean>
-
+	<bean id="activityRequestFactory" extends="defaultRequestFactory">
+		<property name="objectFactory" ref="activityFactory"/>
+	</bean>		
+	
 	<bean id="activityProvider" extends="actionProvider">
 		<property name="objectFactory" ref="activityFactory"/>
 		<property name="requestFactory" ref="activityRequestFactory"/>
@@ -365,11 +406,10 @@
 
 	<bean id="deviceRegistrationFactory" class="com.socialize.entity.DeviceRegistrationFactory"/>
 	
-	<bean id="deviceRegistrationRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory">
-		<constructor-arg ref="oauthSigner"/>
-		<constructor-arg ref="deviceRegistrationFactory"/>
-	</bean>
-
+	<bean id="deviceRegistrationRequestFactory" extends="defaultRequestFactory">
+		<property name="objectFactory" ref="deviceRegistrationFactory"/>
+	</bean>		
+	
 	<bean id="deviceRegistrationProvider" extends="defaultProvider">
 		<property name="objectFactory" ref="deviceRegistrationFactory"/>
 		<property name="requestFactory" ref="deviceRegistrationRequestFactory"/>
@@ -458,7 +498,8 @@
 		<property name="userSystem" ref="userSystem"/>
 	</bean>	
 	
-	<bean id="notificationRegistrationState" class="com.socialize.notifications.NotificationRegistrationState">
+	<bean id="notificationRegistrationState" class="com.socialize.notifications.NotificationRegistrationState" context-aware="false">
+		<property name="logger" ref="logger"/>
 		<init-method name="load">
 			<arg type="context"/>
 		</init-method>	
@@ -471,5 +512,12 @@
 		<property name="notificationAuthenticator" ref="notificationAuthenticator"/>
 		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
 	</bean>
+	
+	<bean id="notificationChecker" class="com.socialize.notifications.NotificationChecker" context-aware="false">
+		<property name="logger" ref="logger"/>
+		<property name="config" ref="config"/>
+		<property name="notificationRegistrationSystem" ref="notificationRegistrationSystem"/>
+		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
+	</bean>	
 
 </beans>

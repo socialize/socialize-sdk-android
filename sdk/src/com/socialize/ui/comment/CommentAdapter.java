@@ -249,8 +249,8 @@ public class CommentAdapter extends BaseAdapter {
 									CacheableDrawable cached = drawables.getCache().get(imageUrl);
 
 									if(cached != null && !cached.isRecycled()) {
-										if(logger != null && logger.isInfoEnabled()) {
-											logger.info("CommentAdpater setting image icon to cached image " + cached);
+										if(logger != null && logger.isDebugEnabled()) {
+											logger.debug("CommentAdpater setting image icon to cached image " + cached);
 										}
 										userIcon.setImageDrawable(cached);
 										userIcon.getBackground().setAlpha(255);
@@ -265,8 +265,8 @@ public class CommentAdapter extends BaseAdapter {
 												logError("Error loading image", error);
 												userIcon.post(new Runnable() {
 													public void run() {
-														if(logger != null && logger.isInfoEnabled()) {
-															logger.info("CommentAdpater setting image icon to default image");
+														if(logger != null && logger.isDebugEnabled()) {
+															logger.debug("CommentAdpater setting image icon to default image");
 														}
 														userIcon.setImageDrawable(defaultImage);
 														userIcon.getBackground().setAlpha(255);

@@ -121,8 +121,12 @@ public class CommentEntrySliderItem implements ActionBarSliderItem {
 	}
 
 	@Override
-	public void onCreate(ActionBarSliderView slider) {
+	public void onCreate(ActionBarSliderView slider) {}
+
+	@Override
+	public void onOpen(ActionBarSliderView slider) {
+		if(currentView != null) {
+			currentView.updateUI();
+		}		
 	}
-	
-	
 }

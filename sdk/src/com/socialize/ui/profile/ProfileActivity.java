@@ -49,7 +49,7 @@ public class ProfileActivity extends SocializeUIActivity {
 	private ProfileView view;
 
 	@Override
-	public void onCreateSafe(Bundle savedInstanceState) {
+	protected void onCreateSafe(Bundle savedInstanceState) {
 		
 		Bundle extras = getIntent().getExtras();
 

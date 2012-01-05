@@ -27,31 +27,48 @@ public class Logger {
 
 	public static String LOG_KEY = "AndroidIOC";
 	
+	public static int logLevel = Log.INFO;
+	
+	static {
+		if(Log.isLoggable(LOG_KEY, Log.DEBUG)) {
+			logLevel = Log.DEBUG;
+		}
+		else if(Log.isLoggable(LOG_KEY, Log.INFO)) {
+			logLevel = Log.INFO;
+		}
+		else if(Log.isLoggable(LOG_KEY, Log.WARN)) {
+			logLevel = Log.WARN;
+		}
+		else if(Log.isLoggable(LOG_KEY, Log.ERROR)) {
+			logLevel = Log.ERROR;
+		}
+	}
+	
 	public static final void d(String tag, String msg) {
-		Log.d(LOG_KEY, tag + ": " + msg);
+		if(logLevel <= Log.DEBUG) Log.d(LOG_KEY, tag + ": " + msg);
 	}
 
 	public static final void i(String tag, String msg) {
-		Log.i(LOG_KEY, tag + ": " + msg);
+		if(logLevel <= Log.INFO) Log.i(LOG_KEY, tag + ": " + msg);
 	}
 	
 	public static final void w(String tag, String msg) {
-		Log.w(LOG_KEY, tag + ": " + msg);
+		if(logLevel <= Log.WARN) Log.w(LOG_KEY, tag + ": " + msg);
 	}
 	
 	public static final void w(String tag, String msg, Throwable e) {
-		Log.w(LOG_KEY, tag + ": " + msg, e);
+		if(logLevel <= Log.WARN) Log.w(LOG_KEY, tag + ": " + msg, e);
 	}
 
 	public static final void e(String tag, String msg) {
-		Log.e(LOG_KEY, tag + ": " + msg);
+		if(logLevel <= Log.ERROR) Log.e(LOG_KEY, tag + ": " + msg);
 	}
 	
 	public static final void e(String tag, String msg, Throwable e) {
-		Log.e(LOG_KEY, tag + ": " + msg, e);
+		if(logLevel <= Log.ERROR) Log.e(LOG_KEY, tag + ": " + msg, e);
 	}
 	
 	public static boolean isInfoEnabled() {
-		return Log.isLoggable(LOG_KEY, Log.INFO);
+		return (logLevel <= Log.INFO);
 	}
 }

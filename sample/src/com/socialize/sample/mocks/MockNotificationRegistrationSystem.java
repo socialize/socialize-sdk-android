@@ -2,6 +2,8 @@ package com.socialize.sample.mocks;
 
 import android.content.Context;
 
+import com.socialize.api.SocializeSession;
+import com.socialize.entity.User;
 import com.socialize.notifications.NotificationRegistrationSystem;
 
 public class MockNotificationRegistrationSystem implements NotificationRegistrationSystem {
@@ -12,14 +14,24 @@ public class MockNotificationRegistrationSystem implements NotificationRegistrat
 	}
 
 	@Override
-	public boolean isRegisteredSocialize() {
+	public boolean isRegisteredSocialize(User user) {
 		return true;
 	}
 
 	@Override
 	public void registerC2DM(Context context) {}
+	
+	
+	@Override
+	public boolean isRegisterationPending() {
+		return false;
+		
+	}
 
 	@Override
-	public void registerSocialize(Context context, String registrationId) {}
+	public void registerC2DMFailed(Context context, String cause) {}
+
+	@Override
+	public void registerSocialize(Context context, SocializeSession session, String registrationId) {}
 
 }

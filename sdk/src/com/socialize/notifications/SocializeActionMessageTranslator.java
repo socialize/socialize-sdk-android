@@ -40,8 +40,9 @@ public class SocializeActionMessageTranslator implements MessageTranslator<Socia
 	private ActivitySystem activitySystem;
 	private NotificationAuthenticator notificationAuthenticator;
 
-	/* (non-Javadoc)
-	 * @see com.socialize.notifications.BundleTranslator#translate(android.content.Context, android.os.Bundle, com.socialize.launcher.LaunchAction)
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.notifications.MessageTranslator#translateTo(android.content.Context, android.os.Bundle, com.socialize.notifications.NotificationMessage)
 	 */
 	@Override
 	public SocializeAction translate(Context context, Bundle data, NotificationMessage message) throws SocializeException {
@@ -61,11 +62,7 @@ public class SocializeActionMessageTranslator implements MessageTranslator<Socia
 				data.putString( Socialize.USER_ID , String.valueOf(user.getId()));
 			}
 			else {
-				throw new SocializeException("No user object found in action of type [" +
-						message.getActionType() +
-						"] with id [" +
-						actionId +
-						"]");
+				data.putString( Socialize.USER_ID , "-1");
 			}
 		}
 		else {

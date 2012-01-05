@@ -43,21 +43,37 @@ public class SocializeC2DMCallback implements C2DMCallback {
 	
 	private int notificationIcon = R.drawable.sym_action_chat;
 	
+	public static final int NOTIFICATION_ID = 1337;
+	
 	private SocializeLogger logger;
 
 	private NotificationMessageFactory notificationMessageFactory;
-	private NotificationIdGenerator notificationIdGenerator;
+//	private NotificationIdGenerator notificationIdGenerator;
 	private Map<String, NotificationMessageBuilder> messageBuilders;
-	private NotificationRegistrationSystem notificationRegistrationSystem;
+	private NotificationRegistrationState notificationRegistrationState;
+	
+	
+//	private NotificationRegistrationSystem notificationRegistrationSystem;
 
 	@Override
 	public void onRegister(Context context, String registrationId)  {
 		
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("Registration with C2DM succesful: " + registrationId);
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("Registration with C2DM succesful: " + registrationId);
+		}
+		notificationRegistrationState.setC2DMRegistrationId(registrationId);
+		notificationRegistrationState.save(context);
+		
+//		notificationRegistrationSystem.registerSocialize(context, registrationId);
+	}
+	
+	@Override
+	public void onError(Context context, String errorId) {
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("Registration with C2DM failed: " + errorId);
 		}
 		
-		notificationRegistrationSystem.registerSocialize(context, registrationId);
+//		notificationRegistrationSystem.registerC2DMFailed(context, errorId);
 	}
 
 	@Override
@@ -75,8 +91,8 @@ public class SocializeC2DMCallback implements C2DMCallback {
 		
 		if(!StringUtils.isEmpty(json)) {
 			
-			if(logger != null && logger.isInfoEnabled()) {
-				logger.info("Received notification [" +
+			if(logger != null && logger.isDebugEnabled()) {
+				logger.debug("Received notification [" +
 						json +
 						"]");
 			}
@@ -85,13 +101,12 @@ public class SocializeC2DMCallback implements C2DMCallback {
 				JSONObject message = new JSONObject(json);
 				
 				NotificationMessage notificationMessage = notificationMessageFactory.fromJSON(message);
-				
 				NotificationMessageBuilder builder = messageBuilders.get(notificationMessage.getNotificationType().name());
 				
 				if(builder != null) {
 					Notification notification = builder.build(context, data, notificationMessage, notificationIcon);
 					NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-					mNotificationManager.notify(notificationIdGenerator.getNextId(), notification);		
+					mNotificationManager.notify(String.valueOf(notificationMessage.getActionId()), NOTIFICATION_ID, notification);		
 				}
 				else {
 					String msg = "No message builder defined for notification type [" +
@@ -159,11 +174,11 @@ public class SocializeC2DMCallback implements C2DMCallback {
 		this.messageBuilders = messageBuilders;
 	}
 
-	public void setNotificationRegistrationSystem(NotificationRegistrationSystem notificationRegistrationSystem) {
-		this.notificationRegistrationSystem = notificationRegistrationSystem;
+	public void setNotificationRegistrationState(NotificationRegistrationState notificationRegistrationState) {
+		this.notificationRegistrationState = notificationRegistrationState;
 	}
 
-	public void setNotificationIdGenerator(NotificationIdGenerator notificationIdGenerator) {
-		this.notificationIdGenerator = notificationIdGenerator;
-	}
+//	public void setNotificationIdGenerator(NotificationIdGenerator notificationIdGenerator) {
+//		this.notificationIdGenerator = notificationIdGenerator;
+//	}
 }

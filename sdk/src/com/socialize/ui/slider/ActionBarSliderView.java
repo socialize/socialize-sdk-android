@@ -133,8 +133,8 @@ public class ActionBarSliderView extends BaseView {
 	}
 	
 	public synchronized void loadItem(ActionBarSliderItem item) {
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("Loading slider item for " + item.getId());
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("Loading slider item for " + item.getId());
 		}
 		
 		if(currentItem != item) {
@@ -157,16 +157,16 @@ public class ActionBarSliderView extends BaseView {
 	}
 	
 	public void showSliderItem(ActionBarSliderItem item) {
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("Showing slider item for " + item.getId());
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("Showing slider item for " + item.getId());
 		}
 		if(content != null) {
 			if(item != null) {
 				DisplayState state = item.getStartPosition();
 				
 				if(item != currentItem) {
-					if(logger != null && logger.isInfoEnabled()) {
-						logger.info("Don't have item [" +
+					if(logger != null && logger.isDebugEnabled()) {
+						logger.debug("Don't have item [" +
 								item.getId() +
 								"], current state is " + displayState);
 					}					
@@ -186,8 +186,8 @@ public class ActionBarSliderView extends BaseView {
 					}
 				}
 				else {
-					if(logger != null && logger.isInfoEnabled()) {
-						logger.info("Already have item [" +
+					if(logger != null && logger.isDebugEnabled()) {
+						logger.debug("Already have item [" +
 								item.getId() +
 								"], current state is " + displayState);
 					}						
@@ -218,8 +218,8 @@ public class ActionBarSliderView extends BaseView {
 	}
 	
 	public void maximize() {
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("maximize called in state " + displayState);
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("maximize called in state " + displayState);
 		}			
 		
 		switch (displayState) {
@@ -238,8 +238,8 @@ public class ActionBarSliderView extends BaseView {
 		clearAnimation();
 		displayState = state;
 		
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("starting animation for state " + state);
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("starting animation for state " + state);
 		}	
 		
 		startAnimation(animation);
@@ -247,8 +247,8 @@ public class ActionBarSliderView extends BaseView {
 	
 	public void peek() {
 		
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("peek called in state " + displayState);
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("peek called in state " + displayState);
 		}	
 		
 		switch (displayState) {
@@ -262,8 +262,8 @@ public class ActionBarSliderView extends BaseView {
 	}
 	
 	public void close() {
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("close called in state " + displayState);
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("close called in state " + displayState);
 		}			
 
 		switch (displayState) {
@@ -275,17 +275,26 @@ public class ActionBarSliderView extends BaseView {
 				break;
 		}			
 		
-		if(currentItem != null) {
-			currentItem.onClose(this);
-		}
+
 		
 		displayState = DisplayState.CLOSE;
 	}
 	
+	public void onClose() {
+		if(currentItem != null) {
+			currentItem.onClose(this);
+		}
+	}
+	
+	public void onOpen() {
+		if(currentItem != null) {
+			currentItem.onOpen(this);
+		}
+	}
 	
 	public void slide() {
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("slide called in state " + displayState);
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("slide called in state " + displayState);
 		}				
 		
 		if(!moving) {

@@ -60,6 +60,9 @@ public class SocializeButton extends LinearLayout {
 	private int textSize = 12;
 	private int padding = 0;
 	
+	private int buttonWidth;
+	private int buttonHeight;
+	
 	private int imagePaddingLeft = 0;
 	private int imagePaddingRight = 0;
 	
@@ -123,24 +126,24 @@ public class SocializeButton extends LinearLayout {
 		layers.setLayerInset(1, 1, 1, 1, 1);
 		layers.setLayerInset(2, 2, 2, 2, 2);
 		
-		int pWidth = LinearLayout.LayoutParams.WRAP_CONTENT;
-		int pHeight = LinearLayout.LayoutParams.WRAP_CONTENT;
+		buttonWidth = LinearLayout.LayoutParams.WRAP_CONTENT;
+		buttonHeight = LinearLayout.LayoutParams.WRAP_CONTENT;
 		
 		if(width == null) {
-			pWidth = LinearLayout.LayoutParams.FILL_PARENT;
+			buttonWidth = LinearLayout.LayoutParams.FILL_PARENT;
 		}
 		else if(width > 0) {
-			pWidth = deviceUtils.getDIP(width);
+			buttonWidth = deviceUtils.getDIP(width);
 		}
 		
 		if(height == null) {
-			pHeight = LinearLayout.LayoutParams.FILL_PARENT;
+			buttonHeight = LinearLayout.LayoutParams.FILL_PARENT;
 		}
 		else if(height > 0) {
-			pHeight = deviceUtils.getDIP(height);
+			buttonHeight = deviceUtils.getDIP(height);
 		}
 			
-		LayoutParams fill = makeLayoutParams(pWidth, pHeight);
+		LayoutParams fill = makeLayoutParams(buttonWidth, buttonHeight);
 
 		fill.setMargins(dipPadding, dipPadding, dipPadding, dipPadding);
 		
@@ -338,6 +341,14 @@ public class SocializeButton extends LinearLayout {
 
 	public void setPadding(int padding) {
 		this.padding = padding;
+	}
+
+	public Integer getButtonHeight() {
+		return buttonHeight;
+	}
+
+	public Integer getButtonWidth() {
+		return buttonWidth;
 	}
 
 	public void setCustomClickListener(OnClickListener customClickListener) {

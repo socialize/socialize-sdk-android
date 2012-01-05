@@ -23,8 +23,8 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 	@Override
 	public void onMessage(Context context, Intent intent) {
 		try {
-			if(logger != null && logger.isInfoEnabled()) {
-				logger.info("SocializeC2DMReceiver received message");
+			if(logger != null && logger.isDebugEnabled()) {
+				logger.debug("SocializeC2DMReceiver received message");
 			}		
 			if(assertInitialized()) {
 				notificationCallback.onMessage(getContext(), intent.getExtras());
@@ -44,6 +44,9 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 	public void onError(Context context, String errorId) {
 		if(logger != null) {
 			logger.error("C2DM registration failed with error: " + errorId);
+		}
+		if(assertInitialized()) {
+			notificationCallback.onError(context, errorId);
 		}
 	}
 	
@@ -70,15 +73,15 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 			notificationCallback.onUnregister(context);
 		}
 		
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("SocializeC2DMReceiver successfully unregistered");
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("SocializeC2DMReceiver successfully unregistered");
 		}
 	}
 
 	@Override
 	public void onCreate() {
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("SocializeC2DMReceiver creating..");
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("SocializeC2DMReceiver creating..");
 		}
 		super.onCreate();
 	}

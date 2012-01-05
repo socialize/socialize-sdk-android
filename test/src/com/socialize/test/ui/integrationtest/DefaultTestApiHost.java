@@ -28,6 +28,16 @@ public class DefaultTestApiHost implements ApiHost {
 	static String message = "Unexpected call to ";
 	
 	@Override
+	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
+		fail(message + "authenticate");
+	}
+
+	@Override
+	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
+		fail(message + "authenticate");
+	}
+
+	@Override
 	public void addComment(SocializeSession session, Entity entity, String comment, Location location, ShareOptions shareOptions, CommentListener listener) {
 		fail(message + "addComment");
 	}

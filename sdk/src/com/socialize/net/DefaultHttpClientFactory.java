@@ -62,8 +62,8 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 	public void init(SocializeConfig config) throws SocializeException  {
 		
 		try {
-			if(logger != null && logger.isInfoEnabled()) {
-				logger.info("Initializing " + getClass().getSimpleName());
+			if(logger != null && logger.isDebugEnabled()) {
+				logger.debug("Initializing " + getClass().getSimpleName());
 			}
 			
 	        KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -85,8 +85,8 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 
 	        connectionManager = new ThreadSafeClientConnManager(params, registry);
 	        
-	        if(logger != null && logger.isInfoEnabled()) {
-				logger.info("Initialized " + getClass().getSimpleName());
+	        if(logger != null && logger.isDebugEnabled()) {
+				logger.debug("Initialized " + getClass().getSimpleName());
 			}
 	        
 	        destroyed = false;
@@ -101,14 +101,14 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 	 */
 	@Override
 	public void destroy() {
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("Destroying " + getClass().getSimpleName());
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("Destroying " + getClass().getSimpleName());
 		}
 		if(connectionManager != null) {
 			connectionManager.shutdown();
 		}
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("Destroyed " + getClass().getSimpleName());
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("Destroyed " + getClass().getSimpleName());
 		}
 		
 		destroyed = true;

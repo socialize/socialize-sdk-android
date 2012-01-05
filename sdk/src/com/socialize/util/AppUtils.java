@@ -97,6 +97,11 @@ public class AppUtils {
 	public boolean isLocationAvaiable(Context context) {
 		return hasPermission(context, "android.permission.ACCESS_FINE_LOCATION") || hasPermission(context, "android.permission.ACCESS_COARSE_LOCATION");	
 	}
+
+	public boolean isNotificationsAvaiable(Context context) {
+		// TODO: Implement this!
+		return true;
+	}
 	
 	public boolean hasPermission(Context context, String permission) {
 		return context.getPackageManager().checkPermission(permission, context.getPackageName()) == PackageManager.PERMISSION_GRANTED;

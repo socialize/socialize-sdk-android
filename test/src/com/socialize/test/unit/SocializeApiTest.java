@@ -266,7 +266,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		AndroidMock.replay(request);
 		AndroidMock.replay(response);
 		
-		api.handle3rdPartyAuth(request, actionListener, listener, key, secret);
+		api.handle3rdPartyAuth(getContext(), request, actionListener, listener, key, secret);
 		
 		AuthProviderListener authProviderListener = getResult(1);
 		String loadSession = getResult(0);
@@ -347,7 +347,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		AndroidMock.replay(authProviders);
 		AndroidMock.replay(request);
 		
-		api.handle3rdPartyAuth(request, actionListener, listener, key, secret);
+		api.handle3rdPartyAuth(getContext(),request, actionListener, listener, key, secret);
 		
 		AuthProviderListener authProviderListener = getResult(1);
 		String loadSession = getResult(0);
@@ -376,13 +376,13 @@ public class SocializeApiTest extends SocializeActivityTest {
 		}
 		
 		@Override
-		protected void handleRegularAuth(SocializeAuthRequest request, SocializeActionListener wrapper) {
+		protected void handleRegularAuth(Context context, SocializeAuthRequest request, SocializeActionListener wrapper) {
 			addResult(3, "handleRegularAuth");
 		}
 		
 		@Override
-		public void handle3rdPartyAuth(SocializeAuthRequest request, SocializeActionListener fWrapper, SocializeAuthListener listener, String key, String secret) {
-			super.handle3rdPartyAuth(request, fWrapper, listener, key, secret);
+		public void handle3rdPartyAuth(Context context, SocializeAuthRequest request, SocializeActionListener fWrapper, SocializeAuthListener listener, String key, String secret) {
+			super.handle3rdPartyAuth(context, request, fWrapper, listener, key, secret);
 		}
 
 		@Override

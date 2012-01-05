@@ -31,10 +31,10 @@ import com.socialize.entity.SocializeAction;
  * @author Jason Polites
  *
  */
-public class SocializeActionNotificationMessageBuilder extends BaseNotificationMessageBuilder<SocializeAction> {
+public class SocializeActionNotificationMessageBuilder extends BaseNotificationMessageBuilder<SocializeAction, SimpleNotificationMessage> {
 	@Override
-	public RemoteViews getNotificationView(Context context, Notification notification, NotificationMessage message, SocializeAction data) {
-		// TODO cater for custom notification layout in "enhanced notification pack"
+	public RemoteViews getNotificationView(Context context, Notification notification, NotificationMessage message, SimpleNotificationMessage data) {
+		// TODO: Implement for enhanced notification pack.
 		return null;
 	}
 }

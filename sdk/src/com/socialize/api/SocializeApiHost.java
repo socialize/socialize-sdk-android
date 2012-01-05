@@ -25,13 +25,13 @@ import android.content.Context;
 import android.location.Location;
 
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.api.action.RecommendationApi;
+import com.socialize.api.action.ShareType;
+import com.socialize.api.action.SocializeActivitySystem;
 import com.socialize.api.action.SocializeCommentSystem;
 import com.socialize.api.action.SocializeEntitySystem;
 import com.socialize.api.action.SocializeLikeSystem;
-import com.socialize.api.action.RecommendationApi;
 import com.socialize.api.action.SocializeShareSystem;
-import com.socialize.api.action.ShareType;
-import com.socialize.api.action.SocializeActivitySystem;
 import com.socialize.api.action.SocializeUserSystem;
 import com.socialize.api.action.SocializeViewSystem;
 import com.socialize.auth.AuthProviderData;
@@ -61,7 +61,6 @@ import com.socialize.util.StringUtils;
 @Deprecated
 public class SocializeApiHost implements ApiHost {
 	
-	private Context context;
 	private HttpClientFactory clientFactory;
 	private DeviceUtils deviceUtils;
 	private SocializeCommentSystem socializeCommentSystem;
@@ -79,9 +78,7 @@ public class SocializeApiHost implements ApiHost {
 		super();
 	}
 	
-	public void init(Context context) {
-		this.context = context;
-	}
+	public void init(Context context) {}
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.api.ApiHost#clearSessionCache()
@@ -101,17 +98,22 @@ public class SocializeApiHost implements ApiHost {
 	 * @see com.socialize.api.ApiHost#authenticate(java.lang.String, java.lang.String, com.socialize.listener.SocializeAuthListener, com.socialize.api.SocializeSessionConsumer)
 	 */
 	@Override
+	@Deprecated
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
 		AuthProviderData authProviderData = authProviderDataFactory.getBean();
 		authProviderData.setAuthProviderType(AuthProviderType.SOCIALIZE);
 		authenticate(consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, false);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.api.ApiHost#authenticate(java.lang.String, java.lang.String, com.socialize.auth.AuthProviderData, com.socialize.listener.SocializeAuthListener, com.socialize.api.SocializeSessionConsumer, boolean)
-	 */
 	@Override
-	public void authenticate(String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
+	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
+		AuthProviderData authProviderData = authProviderDataFactory.getBean();
+		authProviderData.setAuthProviderType(AuthProviderType.SOCIALIZE);
+		authenticate(context, consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, false);
+	}
+
+	@Override
+	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
 		String udid = deviceUtils.getUDID(context);
 		
 		// TODO: create test case for this
@@ -122,8 +124,17 @@ public class SocializeApiHost implements ApiHost {
 		}
 		else {
 			// All Api instances have authenticate, so we can just use any old one
-			socializeUserSystem.authenticateAsync(consumerKey, consumerSecret, udid, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
+			socializeUserSystem.authenticateAsync(context, consumerKey, consumerSecret, udid, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.api.ApiHost#authenticate(java.lang.String, java.lang.String, com.socialize.auth.AuthProviderData, com.socialize.listener.SocializeAuthListener, com.socialize.api.SocializeSessionConsumer, boolean)
+	 */
+	@Deprecated
+	@Override
+	public void authenticate(String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
+		throw new UnsupportedOperationException("Method not supported");
 	}
 	
 	/* (non-Javadoc)

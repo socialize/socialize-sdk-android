@@ -77,7 +77,7 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 		if(ctx == null) ctx = context;
 		String udid = deviceUtils.getUDID(ctx);
 		
-		SocializeSession session = authenticate("/authenticate/",consumerKey, consumerSecret, udid);
+		SocializeSession session = authenticate(ctx, "/authenticate/",consumerKey, consumerSecret, udid);
 		
 		if(sessionConsumer != null) {
 			sessionConsumer.setSession(session);
@@ -107,7 +107,7 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 		}
 		else {
 			// All Api instances have authenticate, so we can just use any old one
-			authenticateAsync(consumerKey, consumerSecret, udid, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
+			authenticateAsync(ctx, consumerKey, consumerSecret, udid, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
 		}	
 	}
 

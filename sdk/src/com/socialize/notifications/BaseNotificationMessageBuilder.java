@@ -38,9 +38,9 @@ import com.socialize.util.AppUtils;
 /**
  * @author Jason Polites
  */
-public abstract class BaseNotificationMessageBuilder<T extends SocializeAction> implements NotificationMessageBuilder {
+public abstract class BaseNotificationMessageBuilder<T extends SocializeAction, M extends NotificationMessageData> implements NotificationMessageBuilder {
 
-	private MessageTranslator<T> messageTranslator;
+	private MessageTranslator<M> messageTranslator;
 	private AppUtils appUtils;
 	private SocializeLogger logger;
 	
@@ -54,7 +54,7 @@ public abstract class BaseNotificationMessageBuilder<T extends SocializeAction> 
 		if(appUtils.isActivityAvailable(context, SocializeLaunchActivity.class)) {
 			notificationIntent = newIntent(context, SocializeLaunchActivity.class);
 			notificationIntent.putExtra(SocializeLaunchActivity.LAUNCH_ACTION, LaunchAction.ACTION.name());
-			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
+			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
 		}
 		else {
 			if(logger != null) {
@@ -67,14 +67,16 @@ public abstract class BaseNotificationMessageBuilder<T extends SocializeAction> 
 
 		// This will add anything we need to the bundle
 		// TODO This should not load the entity, just needs to render the message received.
-		T data = messageTranslator.translate(context, bundle, message);
+		M translated = messageTranslator.translate(context, bundle, message);
 
 		// Set the bundle AFTER the translation
 		notificationIntent.putExtras(bundle);
 		
-		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, notification.flags |= Notification.FLAG_AUTO_CANCEL);
+		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		
-		RemoteViews notificationView = getNotificationView(context, notification, message, data);
+		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+		
+		RemoteViews notificationView = getNotificationView(context, notification, message, translated);
 		
 		if(notificationView != null) {
 			notification.contentIntent = contentIntent;
@@ -82,14 +84,14 @@ public abstract class BaseNotificationMessageBuilder<T extends SocializeAction> 
 		}
 		else {
 			// Just set defaults
-			notification.setLatestEventInfo(context, message.getText(), data.getDisplayText(), contentIntent);
-			notification.tickerText = message.getText();
+			notification.setLatestEventInfo(context, translated.getTitle(), translated.getText(), contentIntent);
+			notification.tickerText = translated.getTitle();
 		}
 		
 		return notification;			
 	}
 
-	public void setMessageTranslator(MessageTranslator<T> messageTranslator) {
+	public void setMessageTranslator(MessageTranslator<M> messageTranslator) {
 		this.messageTranslator = messageTranslator;
 	}
 	
@@ -115,5 +117,5 @@ public abstract class BaseNotificationMessageBuilder<T extends SocializeAction> 
 	 * @param data
 	 * @return
 	 */
-	public abstract RemoteViews getNotificationView(Context context, Notification notification, NotificationMessage message, T data);
+	public abstract RemoteViews getNotificationView(Context context, Notification notification, NotificationMessage message, M data);
 }

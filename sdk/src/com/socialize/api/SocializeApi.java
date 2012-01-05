@@ -23,6 +23,7 @@ package com.socialize.api;
 
 import java.util.List;
 
+import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
 
@@ -43,6 +44,7 @@ import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.location.SocializeLocationProvider;
 import com.socialize.log.SocializeLogger;
+import com.socialize.notifications.NotificationChecker;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.util.HttpUtils;
 import com.socialize.util.StringUtils;
@@ -62,6 +64,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	private SocializeLogger logger;
 	private HttpUtils httpUtils;
 	private SocializeLocationProvider locationProvider;
+	private NotificationChecker notificationChecker;
 	
 	public static enum RequestType {AUTH,PUT,POST,PUT_AS_POST,GET,LIST,LIST_WITHOUT_ENTITY,DELETE};
 	
@@ -82,12 +85,32 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return provider.loadSession(endpoint, key, secret, data);
 	}
 	
+	public SocializeSession authenticate(Context context, String endpoint, String key, String secret, String uuid) throws SocializeException {
+		SocializeSession session = provider.authenticate(endpoint, key, secret, uuid);
+		checkNotifications(context, session);
+		return session;
+	}
+	
+	public SocializeSession authenticate(Context context, String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
+		SocializeSession session = provider.authenticate(endpoint, key, secret, data, uuid);
+		checkNotifications(context, session);
+		return session;
+	}
+	
+	@Deprecated
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException {
 		return provider.authenticate(endpoint, key, secret, uuid);
 	}
 	
+	@Deprecated
 	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
 		return provider.authenticate(endpoint, key, secret, data, uuid);
+	}
+	
+	protected void checkNotifications(Context context, SocializeSession session) {
+		if(notificationChecker != null) {
+			notificationChecker.checkRegistrations(context, session);
+		}
 	}
 
 	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
@@ -243,11 +266,12 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		poster.execute(request);
 	}
 
-	public void authenticateAsync(String key, String secret, String uuid, SocializeAuthListener listener, final SocializeSessionConsumer sessionConsumer) {
-		authenticateAsync(key, secret, uuid, new AuthProviderData(), listener, sessionConsumer, false);
+	public void authenticateAsync(Context context, String key, String secret, String uuid, SocializeAuthListener listener, final SocializeSessionConsumer sessionConsumer) {
+		authenticateAsync(context, key, secret, uuid, new AuthProviderData(), listener, sessionConsumer, false);
 	}
 	
 	public void authenticateAsync(
+			Context context,
 			String key, 
 			String secret, 
 			String uuid, 
@@ -255,7 +279,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			final SocializeAuthListener listener, 
 			final SocializeSessionConsumer sessionConsumer, 
 			boolean do3rdPartyAuth) {
-	
 
 		SocializeActionListener wrapper = null;
 		
@@ -333,20 +356,21 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		AuthProviderType authProviderType = data.getAuthProviderType();
 		
 		if(do3rdPartyAuth && !authProviderType.equals(AuthProviderType.SOCIALIZE)) {
-			handle3rdPartyAuth(request, wrapper, localListener, key, secret);
+			handle3rdPartyAuth(context, request, wrapper, localListener, key, secret);
 		}
 		else {
 			// Do normal auth
-			handleRegularAuth(request, wrapper);
+			handleRegularAuth(context, request, wrapper);
 		}
 	}
 	
-	protected void handleRegularAuth(SocializeAuthRequest request, SocializeActionListener wrapper) {
-		AsyncAuthenicator authenicator = new AsyncAuthenicator(RequestType.AUTH, null, wrapper);
+	protected void handleRegularAuth(Context context, SocializeAuthRequest request, SocializeActionListener wrapper) {
+		AsyncAuthenicator authenicator = new AsyncAuthenicator(context, RequestType.AUTH, null, wrapper);
 		authenicator.execute(request);
 	}
 	
 	protected void handle3rdPartyAuth(
+			final Context context,
 			final SocializeAuthRequest request,
 			final SocializeActionListener fWrapper,
 			final SocializeAuthListener listener, 
@@ -401,7 +425,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 						authProviderData.setToken3rdParty(response.getToken());
 						
 						// Do normal auth
-						handleRegularAuth(request, fWrapper);
+						handleRegularAuth(context, request, fWrapper);
 					}
 					
 					@Override
@@ -440,6 +464,10 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		this.responseFactory = responseFactory;
 	}
 	
+	public void setNotificationChecker(NotificationChecker notificationChecker) {
+		this.notificationChecker = notificationChecker;
+	}
+
 	public SocializeResponseFactory<T> getResponseFactory() {
 		return responseFactory;
 	}
@@ -490,6 +518,12 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		SocializeSession session;
 		Exception error = null;
 		SocializeActionListener listener = null;
+		Context context;
+		
+		public AbstractAsyncProcess(Context context, RequestType requestType, SocializeSession session, SocializeActionListener listener) {
+			this(requestType, session, listener);
+			this.context = context;
+		}		
 		
 		public AbstractAsyncProcess(RequestType requestType, SocializeSession session, SocializeActionListener listener) {
 			super();
@@ -534,8 +568,8 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	
 	class AsyncAuthenicator extends AbstractAsyncProcess<SocializeAuthRequest, Void, SocializeAuthResponse> {
 
-		public AsyncAuthenicator(RequestType requestType, SocializeSession session, SocializeActionListener listener) {
-			super(requestType, session, listener);
+		public AsyncAuthenicator(Context context, RequestType requestType, SocializeSession session, SocializeActionListener listener) {
+			super(context, requestType, session, listener);
 		}
 
 		@Override
@@ -555,10 +589,10 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			AuthProviderType authProviderType = authProviderData.getAuthProviderType();
 			
 			if(authProviderType == null || authProviderType.equals(AuthProviderType.SOCIALIZE)) {
-				session = SocializeApi.this.authenticate(request.getEndpoint(), request.getConsumerKey(), request.getConsumerSecret(), request.getUdid());
+				session = SocializeApi.this.authenticate(context, request.getEndpoint(), request.getConsumerKey(), request.getConsumerSecret(), request.getUdid());
 			}
 			else {
-				session = SocializeApi.this.authenticate(request.getEndpoint(), request.getConsumerKey(), request.getConsumerSecret(), authProviderData, request.getUdid());
+				session = SocializeApi.this.authenticate(context, request.getEndpoint(), request.getConsumerKey(), request.getConsumerSecret(), authProviderData, request.getUdid());
 			}
 			
 			response.setSession(session);

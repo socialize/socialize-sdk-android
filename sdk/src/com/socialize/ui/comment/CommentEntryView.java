@@ -22,7 +22,9 @@
 package com.socialize.ui.comment;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -36,9 +38,11 @@ import android.widget.Toast;
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.entity.User;
 import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.SocializeButton;
+import com.socialize.util.AppUtils;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
@@ -51,14 +55,25 @@ public class CommentEntryView extends BaseView {
 	private CommentAddButtonListener listener;
 	private SocializeButton postCommentButton;
 	private SocializeButton cancelCommentButton;
+	private SocializeButton subscribeNotificationButton;
 	private DeviceUtils deviceUtils;
+	private AppUtils appUtils;
 	private Drawables drawables;
 	private KeyboardUtils keyboardUtils;
 	private EditText commentField;
 	private CustomCheckbox checkBox;
 	private CustomCheckbox locationBox;
+	private CustomCheckbox notifyBox;
 	private IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory;
 	private IBeanFactory<CustomCheckbox> locationEnabledOptionFactory;
+	private IBeanFactory<CustomCheckbox> notificationEnabledOptionFactory;
+	
+	private boolean notificationsEnabled = true;
+	
+	private TextView notificationsTitle;
+	private TextView notificationsText;
+	
+	private Toast toaster;
 	
 	public CommentEntryView(Context context, CommentAddButtonListener listener) {
 		super(context);
@@ -68,6 +83,12 @@ public class CommentEntryView extends BaseView {
 	public void init() {
 		
 		int padding = deviceUtils.getDIP(8);
+		
+		User user = Socialize.getSocialize().getSession().getUser();
+		
+		toaster = Toast.makeText(getContext(), "", Toast.LENGTH_SHORT);
+		
+		notificationsEnabled = user.isNotificationsEnabled();
 		
 		LayoutParams fill = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 
@@ -79,11 +100,19 @@ public class CommentEntryView extends BaseView {
 			checkBox = autoPostFacebookOptionFactory.getBean();
 		}
 		
-		if(deviceUtils.isLocationAvaiable(getContext())) {
+		if(appUtils.isLocationAvaiable(getContext())) {
 			locationBox = locationEnabledOptionFactory.getBean();
 		}
 		
+		if(appUtils.isNotificationsAvaiable(getContext())) {
+			notifyBox = notificationEnabledOptionFactory.getBean();
+		}
+		
 		if(checkBox != null) {
+			
+			checkBox.setChecked(user.isAutoPostCommentsFacebook());
+			
+		
 			checkBox.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -96,12 +125,14 @@ public class CommentEntryView extends BaseView {
 						msg = "Facebook sharing disabled";
 					}
 					
-					Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+					toast(msg);
 				}
 			});
 		}
 
 		if(locationBox != null) {
+			
+			locationBox.setChecked(user.isShareLocation());
 			locationBox.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -114,10 +145,30 @@ public class CommentEntryView extends BaseView {
 						msg = "Location sharing disabled";
 					}
 					
-					Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+					toast(msg);
 				}
 			});
 		}
+		
+		if(notifyBox != null) {
+			notifyBox.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					toggleNotifications();
+					String msg = null;
+					if(notifyBox.isChecked()) {
+						msg = "Notifications enabled";
+					}
+					else {
+						msg = "Notifications disabled";
+					}
+					
+					toast(msg);
+				}
+			});
+		}
+		
 				
 		LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		LayoutParams commentFieldParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -127,7 +178,7 @@ public class CommentEntryView extends BaseView {
 		commentField = new EditText(getContext());
 		commentField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
 		commentField.setGravity(Gravity.TOP | Gravity.LEFT);
-		commentField.setLines(8);
+		commentField.setLines(6);
 		commentField.setLayoutParams(commentFieldParams);
 		
 		setOrientation(LinearLayout.VERTICAL);
@@ -146,7 +197,7 @@ public class CommentEntryView extends BaseView {
 		
 		toolbarLayout.setLayoutParams(toolbarLayoutParams);
 		
-		if(checkBox != null || locationBox != null) {
+		if(checkBox != null || locationBox != null || notifyBox != null) {
 			LinearLayout optionsLayout = new LinearLayout(getContext());
 			LayoutParams optionsLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 			
@@ -161,6 +212,10 @@ public class CommentEntryView extends BaseView {
 				optionsLayout.addView(locationBox);
 			}
 			
+			if(notifyBox != null && deviceUtils.getOrientation() != Configuration.ORIENTATION_PORTRAIT) {
+				optionsLayout.addView(notifyBox);
+			}
+						
 			toolbarLayout.addView(optionsLayout);
 		}		
 
@@ -199,47 +254,85 @@ public class CommentEntryView extends BaseView {
 			buttonLayout.addView(postCommentButton);
 		}
 		
+		if(subscribeNotificationButton != null) {
+			subscribeNotificationButton.setCustomClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					toggleNotifications();
+				}
+			});
+		}		
+		
 		toolbarLayout.addView(buttonLayout);
-		
-		// Notification layout
-		
-		LinearLayout notificationLayout = new LinearLayout(getContext());
-		
-		notificationLayout.setOrientation(LinearLayout.VERTICAL);
-		
-		LayoutParams notificationLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-				
-		notificationLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
-		notificationLayoutParams.weight = 1.0f;		
-		notificationLayout.setLayoutParams(notificationLayoutParams);
-		
-		ImageView notificationBannerImage = new ImageView(getContext());
-		
-		LayoutParams notificationBannerParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		notificationBannerParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
-		
-		notificationBannerImage.setLayoutParams(notificationBannerParams);
-		notificationBannerImage.setImageDrawable(drawables.getDrawable("notification_banner.png", DisplayMetrics.DENSITY_DEFAULT));
-
-		TextView notificationTitleText = new TextView(getContext());
-		TextView notificationSubText = new TextView(getContext());
-		
-		notificationTitleText.setText("Subscribed to this discussion.");
-		notificationSubText.setText("We will notify you when someone replies.");
-		
-		notificationTitleText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-		notificationSubText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-
-		notificationTitleText.setTextColor(Color.WHITE);
-		notificationSubText.setTextColor(Color.GRAY);
-		
-		notificationLayout.addView(notificationBannerImage);
-		notificationLayout.addView(notificationTitleText);
-		notificationLayout.addView(notificationSubText);
 
 		addView(commentField);
 		addView(toolbarLayout);
-		addView(notificationLayout);
+
+		if(appUtils.isNotificationsAvaiable(getContext()) && deviceUtils.getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
+
+			// Notification layout
+			LinearLayout notificationMasterLayout = new LinearLayout(getContext());
+			LayoutParams notificationMasterLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+					
+			notificationMasterLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+			notificationMasterLayoutParams.weight = 1.0f;
+			notificationMasterLayoutParams.setMargins(0, -deviceUtils.getDIP(20), 0, 0);
+			notificationMasterLayout.setLayoutParams(notificationMasterLayoutParams);
+			
+			LinearLayout notificationContentLayout = new LinearLayout(getContext());
+			LayoutParams notificationContentLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+					
+			notificationContentLayout.setOrientation(LinearLayout.VERTICAL);
+			notificationContentLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+			notificationContentLayout.setLayoutParams(notificationContentLayoutParams);
+			
+			ImageView notificationBannerImage = new ImageView(getContext());
+			
+			LayoutParams notificationBannerParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			notificationBannerParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+			
+			notificationBannerImage.setLayoutParams(notificationBannerParams);
+			notificationBannerImage.setImageDrawable(drawables.getDrawable("notification_banner.png", DisplayMetrics.DENSITY_DEFAULT));
+
+			notificationsTitle = new TextView(getContext());
+			notificationsText = new TextView(getContext());
+			
+			notificationsTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+			notificationsText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+			
+			notificationsTitle.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+			notificationsText.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+
+			notificationsTitle.setTextColor(Color.WHITE);
+			notificationsTitle.setTypeface(Typeface.DEFAULT_BOLD);
+			notificationsText.setTextColor(Color.GRAY);
+			
+			notificationContentLayout.addView(notificationBannerImage);
+			notificationContentLayout.addView(notificationsTitle);
+			notificationContentLayout.addView(notificationsText);
+			
+			if(subscribeNotificationButton != null) {
+				LayoutParams subscribeNotificationButtonLayoutParams = new LinearLayout.LayoutParams(subscribeNotificationButton.getButtonWidth(), subscribeNotificationButton.getButtonHeight());
+				
+				subscribeNotificationButtonLayoutParams.setMargins(0, deviceUtils.getDIP(20), 0, 0);
+				subscribeNotificationButtonLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+				subscribeNotificationButton.setLayoutParams(subscribeNotificationButtonLayoutParams);			
+				
+				notificationContentLayout.addView(subscribeNotificationButton);
+			}
+
+			notificationMasterLayout.addView(notificationContentLayout);
+			
+			addView(notificationMasterLayout);		
+		}	
+		
+		
+		updateUI();
+
+	}
+	
+	protected void toggleNotifications() {
+		setNotificationsEnabled(!notificationsEnabled);
 	}
 	
 	@Override
@@ -272,21 +365,74 @@ public class CommentEntryView extends BaseView {
 		this.locationEnabledOptionFactory = locationEnabledOptionFactory;
 	}
 	
+	public void setSubscribeNotificationButton(SocializeButton subscribeNotificationButton) {
+		this.subscribeNotificationButton = subscribeNotificationButton;
+	}
+
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
+	}
+	
+	public void setAppUtils(AppUtils appUtils) {
+		this.appUtils = appUtils;
+	}
+
+	public void setNotifyBox(CustomCheckbox notifyBox) {
+		this.notifyBox = notifyBox;
+	}
+
+	public void setNotificationEnabledOptionFactory(IBeanFactory<CustomCheckbox> notificationOptionFactory) {
+		this.notificationEnabledOptionFactory = notificationOptionFactory;
+	}
+	
+	public void setNotificationsEnabled(boolean enabled) {
+		notificationsEnabled = enabled;
+		updateUI();
+	}
+	
+	protected void updateUI() {
+		
+		if(notificationsEnabled) {
+			if(notificationsText != null) {
+				notificationsText.setText("We will notify you when someone replies.");
+			}
+			if(notificationsTitle != null) {
+				notificationsTitle.setText("Subscribed to this discussion.");
+			}
+			if(subscribeNotificationButton != null) {
+				subscribeNotificationButton.setText("Unsubscribe");
+			}
+		}
+		else {
+			if(notificationsText != null) {
+				notificationsText.setText("Click subscribe to receive updates.");
+			}
+			if(notificationsTitle != null) {
+				notificationsTitle.setText("Not subscribed to this discussion.");
+			}
+			if(subscribeNotificationButton != null) {
+				subscribeNotificationButton.setText("Subscribe");
+			}
+		}
+		
+		if(notifyBox != null) {
+			notifyBox.setChecked(notificationsEnabled);
+		}
+		
+	}
+	
+	protected void toast(String text) {
+		if(toaster != null) {
+			toaster.cancel();
+			toaster.setText(text);
+			toaster.show();
+		}
 	}
 
 	protected void reset() {
 		keyboardUtils.hideKeyboard(commentField);
 		commentField.setText("");
-		
-		if(checkBox != null) {
-			checkBox.setChecked(Socialize.getSocialize().getSession().getUser().isAutoPostCommentsFacebook());
-		}
-		
-		if(locationBox != null) {
-			locationBox.setChecked(true);
-		}
+		updateUI();
 	}
 	
 	protected EditText getCommentField() {

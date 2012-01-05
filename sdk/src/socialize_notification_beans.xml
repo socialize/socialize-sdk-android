@@ -12,21 +12,25 @@
 		<property name="logger" ref="logger"/>
 	</bean>
 	
+	<!-- 
 	<bean id="actionMessageTranslator" class="com.socialize.notifications.SocializeActionMessageTranslator">
 		<property name="activitySystem" ref="activitySystem"/>
 		<property name="notificationAuthenticator" ref="notificationAuthenticator"/>
 	</bean>
+	 -->
+	
+	<bean id="simpleMessageTranslator" class="com.socialize.notifications.SimpleNotificationMessageTranslator"/>
 	
 	<bean id="actionNotificationMessageBuilder" class="com.socialize.notifications.SocializeActionNotificationMessageBuilder">
 		<property name="appUtils" ref="appUtils"/>
-		<property name="messageTranslator" ref="actionMessageTranslator"/>
+		<property name="messageTranslator" ref="simpleMessageTranslator"/>
 	</bean>
 	
 	<bean id="notificationCallback" class="com.socialize.notifications.SocializeC2DMCallback">
 		<property name="logger" ref="logger"/>
 		<property name="notificationMessageFactory" ref="notificationMessageFactory"/>
 		<property name="notificationIdGenerator" ref="notificationIdGenerator"/>
-		<property name="notificationRegistrationSystem" ref="notificationRegistrationSystem"/>
+		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
 		<property name="messageBuilders">
 			<map>
 				<entry>

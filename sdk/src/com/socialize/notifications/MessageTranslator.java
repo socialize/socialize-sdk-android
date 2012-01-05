@@ -31,7 +31,5 @@ import android.os.Bundle;
  * @author Jason Polites
  */
 public interface MessageTranslator<T> {
-
 	public T translate(Context context, Bundle data, NotificationMessage message) throws SocializeException;
-	
 }

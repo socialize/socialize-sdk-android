@@ -95,8 +95,8 @@ public class ActionBarLayoutView extends BaseView {
 	
 	public void init() {
 		
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("init called on " + getClass().getSimpleName());
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("init called on " + getClass().getSimpleName());
 		}
 		
 		likeIcon = drawables.getDrawable("icon_like.png");

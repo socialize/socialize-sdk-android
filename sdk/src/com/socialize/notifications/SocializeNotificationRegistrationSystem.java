@@ -29,6 +29,7 @@ import com.socialize.api.DeviceRegistrationSystem;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.DeviceRegistration;
+import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.StringUtils;
@@ -47,50 +48,69 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 	private SocializeConfig config;
 	private SocializeLogger logger;
 	private DeviceRegistrationSystem deviceRegistrationSystem;
-	private NotificationAuthenticator notificationAuthenticator;
+//	private NotificationAuthenticator notificationAuthenticator;
 	private NotificationRegistrationState notificationRegistrationState;
 	
 	@Override
+	public boolean isRegisterationPending() {
+		return notificationRegistrationState.isC2dmPending();
+	}
+
+	@Override
 	public boolean isRegisteredC2DM() {
-		return !StringUtils.isEmpty(notificationRegistrationState.getC2DMRegistrationId());
+		return notificationRegistrationState.isRegisteredC2DM();
 	}
 
 	@Override
-	public boolean isRegisteredSocialize() {
-		return notificationRegistrationState.isRegisteredSocialize();
+	public boolean isRegisteredSocialize(User user) {
+		return notificationRegistrationState.isRegisteredSocialize(user);
+	}
+	
+	@Override
+	public void registerC2DMFailed(Context context, String cause) {
+		notificationRegistrationState.setC2dmPendingRequestTime(0);
+		notificationRegistrationState.save(context);
 	}
 
 	@Override
-	public void registerC2DM(final Context context) {
-		if(!isRegisteredC2DM()) {
-			if(logger != null && logger.isInfoEnabled()) {
-				logger.info("Registering with C2DM");
+	public synchronized void registerC2DM(final Context context) {
+		if(!isRegisteredC2DM() && !notificationRegistrationState.isC2dmPending()) {
+			if(logger != null && logger.isDebugEnabled()) {
+				logger.debug("Registering with C2DM");
 			}
+			
+			notificationRegistrationState.setC2dmPendingRequestTime(System.currentTimeMillis());
+			notificationRegistrationState.save(context);
 			
 			String senderId = config.getProperty(SocializeConfig.SOCIALIZE_C2DM_SENDER_ID);
 			Intent registrationIntent = new Intent(REQUEST_REGISTRATION_INTENT);
 			registrationIntent.putExtra(EXTRA_APPLICATION_PENDING_INTENT, PendingIntent.getBroadcast(context, 0, new Intent(), 0));
 			registrationIntent.putExtra(EXTRA_SENDER, senderId);
 			context.startService(registrationIntent);
-		}		
+		}	
+		else {
+			if(logger != null && logger.isDebugEnabled()) {
+				logger.debug("C2DM registration already in progress or complete");
+			}
+		}
 	}
 
 	@Override
-	public void registerSocialize(Context context, String registrationId) {
+	public void registerSocialize(Context context, SocializeSession session, String registrationId) {
 		
-		String currentValue = notificationRegistrationState.getC2DMRegistrationId();
-		
-		if(currentValue == null || !currentValue.equals(registrationId) || !isRegisteredSocialize()) {
-			
-			notificationRegistrationState.setC2DMRegistrationId(registrationId);
-			
+		if(!StringUtils.isEmpty(registrationId)) {
 			try {
+				
 				// Record the registration with Socialize
 				DeviceRegistration registration = new DeviceRegistration();
 				registration.setRegistrationId(registrationId);
-				SocializeSession session = notificationAuthenticator.authenticate(context);
+				
 				deviceRegistrationSystem.registerDevice(session, registration);
-				notificationRegistrationState.setRegisteredSocialize(true);
+				
+				notificationRegistrationState.setC2DMRegistrationId(registrationId);
+				notificationRegistrationState.setRegisteredSocialize(session.getUser());
+				
+				notificationRegistrationState.save(context);
 				
 				if(logger != null && logger.isInfoEnabled()) {
 					logger.info("Registration with Socialize for C2DM successful.");
@@ -103,9 +123,6 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 				else {
 					e.printStackTrace();
 				}
-			}
-			finally {
-				notificationRegistrationState.save(context);
 			}
 		}
 	}
@@ -122,9 +139,9 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 		this.deviceRegistrationSystem = deviceRegistrationSystem;
 	}
 
-	public void setNotificationAuthenticator(NotificationAuthenticator notificationAuthenticator) {
-		this.notificationAuthenticator = notificationAuthenticator;
-	}
+//	public void setNotificationAuthenticator(NotificationAuthenticator notificationAuthenticator) {
+//		this.notificationAuthenticator = notificationAuthenticator;
+//	}
 
 	public void setNotificationRegistrationState(NotificationRegistrationState notificationRegistrationState) {
 		this.notificationRegistrationState = notificationRegistrationState;

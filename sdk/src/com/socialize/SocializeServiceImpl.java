@@ -198,7 +198,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 					for (String path : paths) {
 						if(binarySearch(locatPaths, path) < 0) {
 							
-							if(logger != null) {
+							if(logger != null && logger.isInfoEnabled()) {
 								logger.info("New path found for beans [" +
 										path +
 										"].  Re-initializing Socialize");
@@ -235,6 +235,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			if(init) {
 				try {
 					Logger.LOG_KEY = Socialize.LOG_KEY;
+					Logger.logLevel = Log.WARN;
 					
 					this.initPaths = paths;
 					
@@ -420,8 +421,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	public void destroy(boolean force) {
 		if(force) {
 			if(container != null) {
-				if(logger != null && logger.isInfoEnabled()) {
-					logger.info("Destroying IOC container");
+				if(logger != null && logger.isDebugEnabled()) {
+					logger.debug("Destroying IOC container");
 				}
 				container.destroy();
 			}
@@ -1442,6 +1443,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		i.putExtra(Socialize.ACTION_ID, action.getId().toString());
 		
 		try {
+			
+			// MUST be FLAG_ACTIVITY_SINGLE_TOP because we only code to onNewIntent
+			i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			
 			context.startActivityForResult(i, requestCode);
 		} 
 		catch (ActivityNotFoundException e) {

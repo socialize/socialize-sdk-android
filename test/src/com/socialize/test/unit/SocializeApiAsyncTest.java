@@ -151,7 +151,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
-				api.authenticateAsync("test_key", "test_secret", "test_uuid", alistener, mockSessionConsumer);
+				api.authenticateAsync(getContext(), "test_key", "test_secret", "test_uuid", alistener, mockSessionConsumer);
 			} 
 		});
 		
@@ -201,7 +201,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
-				api.authenticateAsync("test_key", "test_secret", "test_uuid", alistener, mockSessionConsumer);
+				api.authenticateAsync(getContext(), "test_key", "test_secret", "test_uuid", alistener, mockSessionConsumer);
 			} 
 		});
 

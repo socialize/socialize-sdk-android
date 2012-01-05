@@ -23,6 +23,7 @@ package com.socialize.oauth;
 
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.signature.SigningStrategy;
+import oauth.socialize.OAuthSignListener;
 
 import org.apache.http.client.methods.HttpUriRequest;
 
@@ -41,9 +42,14 @@ public class DefaultOauthRequestSigner implements OAuthRequestSigner {
 		this.strategy = strategy;
 		this.consumerFactory = consumerFactory;
 	}
-
+	
 	@Override
 	public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+		return sign(session, request, null);
+	}
+
+	@Override
+	public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 		try {
 			// Add socialize headers
 			if(deviceUtils != null) {
@@ -53,7 +59,7 @@ public class DefaultOauthRequestSigner implements OAuthRequestSigner {
 			OAuthConsumer consumer = consumerFactory.createConsumer(session.getConsumerKey(), session.getConsumerSecret());
 			consumer.setSigningStrategy(strategy);
 			consumer.setTokenWithSecret(session.getConsumerToken(), session.getConsumerTokenSecret());
-			consumer.sign(request);
+			consumer.sign(request, listener);
 			return request;
 		}
 		catch (Exception e) {

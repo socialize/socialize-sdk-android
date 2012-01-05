@@ -23,6 +23,9 @@ package com.socialize.notifications;
 
 import android.content.Context;
 
+import com.socialize.api.SocializeSession;
+import com.socialize.entity.User;
+
 /**
  * @author Jason Polites
  *
@@ -31,9 +34,13 @@ public interface NotificationRegistrationSystem {
 	
 	public boolean isRegisteredC2DM();
 	
-	public boolean isRegisteredSocialize();
+	public boolean isRegisterationPending();
+	
+	public boolean isRegisteredSocialize(User user);
 
+	public void registerC2DMFailed(Context context, String cause);
+	
 	public void registerC2DM(Context context);
 	
-	public void registerSocialize(Context context, String registrationId);
+	public void registerSocialize(Context context, SocializeSession session, String registrationId);
 }

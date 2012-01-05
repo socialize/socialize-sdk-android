@@ -50,6 +50,7 @@ public class User extends SocializeObject {
 	private boolean autoPostLikesFacebook;
 	private boolean autoPostCommentsFacebook;
 	private boolean shareLocation = true;
+	private boolean notificationsEnabled = true;
 	
 	private String metaData;
 	
@@ -213,6 +214,14 @@ public class User extends SocializeObject {
 
 	public void setAutoPostCommentsFacebook(boolean autoPostCommentsFacebook) {
 		this.autoPostCommentsFacebook = autoPostCommentsFacebook;
+	}
+	
+	public boolean isNotificationsEnabled() {
+		return notificationsEnabled;
+	}
+
+	public void setNotificationsEnabled(boolean notificationsEnabled) {
+		this.notificationsEnabled = notificationsEnabled;
 	}
 
 	public boolean isShareLocation() {

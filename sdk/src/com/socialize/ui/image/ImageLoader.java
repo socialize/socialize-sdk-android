@@ -40,8 +40,8 @@ public class ImageLoader {
 	 * Initializes the loader and starts an AsyncTask thread.
 	 */
 	public void init() {
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("ImageLoader starting image load task");
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("ImageLoader starting image load task");
 		}
 		imageLoadAsyncTask.start();
 	}
@@ -50,8 +50,8 @@ public class ImageLoader {
 	 * Destroys the loader and stops the AsyncTask thread.
 	 */
 	public void destroy() {
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("ImageLoader stopping image load task");
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("ImageLoader stopping image load task");
 		}
 		imageLoadAsyncTask.destroy();
 	}
@@ -80,16 +80,16 @@ public class ImageLoader {
 		CacheableDrawable drawable = drawables.getCache().get(url);
 		
 		if(drawable != null && !drawable.isRecycled()) {
-			if(logger != null && logger.isInfoEnabled()) {
-				logger.info("ImageLoader loading image from cache for " + url);
+			if(logger != null && logger.isDebugEnabled()) {
+				logger.debug("ImageLoader loading image from cache for " + url);
 			}
 			
 			listener.onImageLoad(request, drawable, false);
 		}
 		else {
 			
-			if(logger != null && logger.isInfoEnabled() && drawable != null && drawable.isRecycled()) {
-				logger.info("ImageLoader image was recycled, reloading " + url);
+			if(logger != null && logger.isDebugEnabled() && drawable != null && drawable.isRecycled()) {
+				logger.debug("ImageLoader image was recycled, reloading " + url);
 			}
 
 			request.addListener(new ImageLoadListener() {
@@ -103,8 +103,8 @@ public class ImageLoader {
 				public void onImageLoad(ImageLoadRequest request, SafeBitmapDrawable drawable, boolean async) {
 					if(drawable instanceof CacheableDrawable) {
 						if(!drawables.getCache().exists(url)) {
-							if(logger != null && logger.isInfoEnabled()) {
-								logger.info("ImageLoader adding image [" +
+							if(logger != null && logger.isDebugEnabled()) {
+								logger.debug("ImageLoader adding image [" +
 										url +
 										"] to cache with drawable " + drawable);
 							}

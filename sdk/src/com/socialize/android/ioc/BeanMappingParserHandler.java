@@ -80,6 +80,7 @@ public class BeanMappingParserHandler extends DefaultHandler {
 			currentBean.setClassName(attributes.getValue("class"));
 			currentBean.setName(attributes.getValue("id"));
 			currentBean.setExtendsBean(attributes.getValue("extends"));
+			currentBean.setContextSensitive(parseBoolean(attributes.getValue("context-aware"), true));
 			
 			String initMethod = attributes.getValue("initMethod");
 			if(initMethod != null && initMethod.trim().length() > 0) {
@@ -88,13 +89,8 @@ public class BeanMappingParserHandler extends DefaultHandler {
 				currentBean.setInitMethod(initM);
 			}
 			
-			String singleton = attributes.getValue("singleton");
-			
-			currentBean.setSingleton(parseBoolean(singleton, true));
-			
-			String abstractBean = attributes.getValue("abstract");
-			
-			currentBean.setAbstractBean(parseBoolean(abstractBean, false));
+			currentBean.setSingleton(parseBoolean(attributes.getValue("singleton"), true));
+			currentBean.setAbstractBean(parseBoolean(attributes.getValue("abstract"), false));
 			
 //			String lazy = attributes.getValue("lazy-init");
 //			currentBean.setLazyInit(parseBoolean(lazy, false));

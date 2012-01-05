@@ -21,6 +21,10 @@
  */
 package com.socialize.launcher;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+
 import com.socialize.ui.action.ActionDetailActivity;
 import com.socialize.ui.comment.CommentDetailActivity;
 
@@ -32,5 +36,10 @@ public class SocializeActionLauncher extends ActivityLauncher {
 	@Override
 	public Class<?>[] getActivityClasses() {
 		return new Class<?>[]{ActionDetailActivity.class, CommentDetailActivity.class};
+	}
+
+	@Override
+	protected void handleIntent(Activity context, Intent intent, Bundle data) {
+		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 	}
 }

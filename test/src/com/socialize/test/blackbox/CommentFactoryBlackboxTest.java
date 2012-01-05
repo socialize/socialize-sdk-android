@@ -24,6 +24,8 @@ package com.socialize.test.blackbox;
 import java.util.ArrayList;
 import java.util.List;
 
+import oauth.socialize.OAuthSignListener;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.NameValuePair;
@@ -66,8 +68,14 @@ public class CommentFactoryBlackboxTest extends AbstractFactoryBlackBoxTest {
 		commentFactory.setUserFactory(new UserFactory());
 		
 		requestFactory = new DefaultSocializeRequestFactory<Comment>(new OAuthRequestSigner() {
+			
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+				return request;
+			}
+
+			@Override
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 				return request;
 			}
 		}, commentFactory);

@@ -45,6 +45,8 @@ public class NotificationMessageFactory extends JSONFactory<NotificationMessage>
 	protected void fromJSON(JSONObject from, NotificationMessage to) throws JSONException {
 		
 		to.setText(getString(from, "text"));
+		to.setUser(getString(from, "user"));
+		to.setEntity(getString(from, "entity"));
 		to.setActionId(getLong(from, "activity_id"));
 		
 		String actionType = getString(from, "activity_type");

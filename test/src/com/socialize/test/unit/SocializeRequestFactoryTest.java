@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import oauth.socialize.OAuthSignListener;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -63,14 +65,21 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		final String id = "testid";
 		
 		OAuthRequestSigner signer = new OAuthRequestSigner() {
+			
+			
 			@Override
-			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 				assertTrue(request instanceof HttpPost);
 				HttpPost post = (HttpPost) request;
 				assertEquals(post.getURI().toString(), endpoint);
 				assertNotNull(post.getEntity());
 				addResult(true);
 				return request;
+			}
+
+			@Override
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+				return sign(session, request, null);
 			}
 		};
 		
@@ -122,13 +131,19 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		OAuthRequestSigner signer = new OAuthRequestSigner() {
 			
 			@Override
-			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 				assertTrue(request instanceof HttpGet);
 				HttpGet get = (HttpGet) request;
 				assertEquals(get.getURI().toString(), endpoint + id + "/");
 				
 				addResult(true);
 				return request;
+			}
+
+
+			@Override
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+				return sign(session, request, null);
 			}
 		};
 		
@@ -150,13 +165,19 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		OAuthRequestSigner signer = new OAuthRequestSigner() {
 			
 			@Override
-			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 				assertTrue(request instanceof HttpDelete);
 				HttpDelete get = (HttpDelete) request;
 				assertEquals(get.getURI().toString(), endpoint + id + "/");
 				addResult(true);
 				return request;
 			}
+			
+			@Override
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+				return sign(session, request, null);
+			}			
+			
 		};
 		
 		SocializeRequestFactory<SocializeObject> factory = new DefaultSocializeRequestFactory<SocializeObject>(signer, null);
@@ -178,13 +199,18 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		OAuthRequestSigner signer = new OAuthRequestSigner() {
 			
 			@Override
-			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 				assertTrue(request instanceof HttpGet);
 				HttpGet list = (HttpGet) request;
 				
 				addResult(list.getURI().toString());
 				return request;
 			}
+			
+			@Override
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+				return sign(session, request, null);
+			}			
 		};
 		
 		SocializeRequestFactory<SocializeObject> factory = new DefaultSocializeRequestFactory<SocializeObject>(signer, null);
@@ -221,13 +247,18 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		OAuthRequestSigner signer = new OAuthRequestSigner() {
 			
 			@Override
-			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 				assertTrue(request instanceof HttpGet);
 				HttpGet list = (HttpGet) request;
 				
 				addResult(list.getURI().toString());
 				return request;
 			}
+			
+			@Override
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+				return sign(session, request, null);
+			}			
 		};
 		
 		SocializeRequestFactory<SocializeObject> factory = new DefaultSocializeRequestFactory<SocializeObject>(signer, null);
@@ -280,12 +311,17 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		OAuthRequestSigner signer = new OAuthRequestSigner() {
 			
 			@Override
-			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 				HttpPost.class.isInstance(request);
 				assertEquals(request.getURI().toString(), endpoint);
 				addResult(true);
 				return request;
 			}
+			
+			@Override
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+				return sign(session, request, null);
+			}			
 		};
 		
 		SocializeRequestFactory<SocializeObject> reqFactory = new DefaultSocializeRequestFactory<SocializeObject>(signer, factory);
@@ -351,12 +387,17 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		OAuthRequestSigner signer = new OAuthRequestSigner() {
 			
 			@Override
-			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 				HttpPost.class.isInstance(request);
 				assertEquals(request.getURI().toString(), endpoint);
 				addResult(true);
 				return request;
 			}
+			
+			@Override
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+				return sign(session, request, null);
+			}			
 		};
 		
 		SocializeRequestFactory<SocializeObject> reqFactory = new DefaultSocializeRequestFactory<SocializeObject>(signer, factory);
@@ -421,12 +462,17 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		OAuthRequestSigner signer = new OAuthRequestSigner() {
 			
 			@Override
-			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 				HttpPut.class.isInstance(request);
 				assertEquals(request.getURI().toString(), endpoint);
 				addResult(true);
 				return request;
 			}
+			
+			@Override
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+				return sign(session, request, null);
+			}			
 		};
 		
 		SocializeRequestFactory<SocializeObject> reqFactory = new DefaultSocializeRequestFactory<SocializeObject>(signer, factory);
@@ -484,12 +530,17 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		OAuthRequestSigner signer = new OAuthRequestSigner() {
 			
 			@Override
-			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 				HttpPut.class.isInstance(request);
 				assertEquals(request.getURI().toString(), endpoint);
 				addResult(true);
 				return request;
 			}
+			
+			@Override
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+				return sign(session, request, null);
+			}			
 		};
 		
 		SocializeRequestFactory<SocializeObject> reqFactory = new DefaultSocializeRequestFactory<SocializeObject>(signer, factory);

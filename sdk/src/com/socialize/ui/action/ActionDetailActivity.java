@@ -42,8 +42,35 @@ public class ActionDetailActivity extends SocializeUIActivity {
 	private ActionDetailView view;
 
 	@Override
-	public void onCreateSafe(Bundle savedInstanceState) {
+	protected void onCreateSafe(Bundle savedInstanceState) {
+		Intent intent = getIntent();
+//		ActionIdPersister persister = new ActionIdPersister();
+//		persister.load(this);
+//		if(!StringUtils.isEmpty(persister.getActionId())) {
+//			intent.putExtra(Socialize.ACTION_ID, persister.getActionId());
+//			
+//			if(!StringUtils.isEmpty(persister.getUserId())) {
+//				intent.putExtra(Socialize.USER_ID, persister.getUserId());
+//			}
+//			else {
+//				intent.removeExtra(Socialize.USER_ID);
+//			}
+//			
+//			persister.reset(this);
+//		}
 		
+		doActivityLoad(intent);
+	}
+	
+	@Override
+	protected void onNewIntentSafe(Intent intent) {
+		Bundle extras = intent.getExtras();
+		if(extras != null && view != null) {
+			view.reload(extras.getString(Socialize.USER_ID), extras.getString(Socialize.ACTION_ID));
+		}
+	}
+
+	protected void doActivityLoad(Intent intent) {
 		SocializeSession session = getSocialize().getSession();
 		
 		if(session == null) {
@@ -56,7 +83,7 @@ public class ActionDetailActivity extends SocializeUIActivity {
 				finish();
 			}
 			else {
-				Bundle extras = getIntent().getExtras();
+				Bundle extras = intent.getExtras();
 
 				if (extras == null || !extras.containsKey(Socialize.ACTION_ID)) {
 					Toast.makeText(this, "No action id provided", Toast.LENGTH_SHORT).show();
@@ -69,7 +96,7 @@ public class ActionDetailActivity extends SocializeUIActivity {
 					setContentView(view);
 				}
 			}
-		}
+		}	
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

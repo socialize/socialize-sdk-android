@@ -513,8 +513,8 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 							
 							if(!ok) {
 								
-								if(logger != null && logger.isInfoEnabled()) {
-									logger.info("Removing with key [" +
+								if(logger != null && logger.isDebugEnabled()) {
+									logger.debug("Removing with key [" +
 											key +
 											"] during reap");
 								}								

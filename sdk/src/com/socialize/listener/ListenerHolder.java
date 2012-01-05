@@ -45,8 +45,8 @@ public class ListenerHolder {
 			Set<Entry<String, SocializeListener>> entrySet = statics.entrySet();
 			for (Entry<String, SocializeListener> entry : entrySet) {
 				
-				if(logger != null && logger.isInfoEnabled()) {
-					logger.info("Registering listener [" +
+				if(logger != null && logger.isDebugEnabled()) {
+					logger.debug("Registering listener [" +
 							entry.getKey() +
 							"] from static scope");
 				}

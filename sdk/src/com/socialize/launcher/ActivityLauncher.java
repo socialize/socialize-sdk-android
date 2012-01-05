@@ -54,6 +54,7 @@ public abstract class ActivityLauncher implements Launcher {
 		if(activityClass != null) {
 			Intent intent = new Intent(context, activityClass);
 			intent.putExtras(data);
+			handleIntent(context, intent, data);
 			context.startActivity(intent);
 			return true;
 		}
@@ -64,6 +65,8 @@ public abstract class ActivityLauncher implements Launcher {
 	public void setAppUtils(AppUtils appUtils) {
 		this.appUtils = appUtils;
 	}
+	
+	protected void handleIntent(Activity context, Intent intent, Bundle data) {}
 	
 	public abstract Class<?>[] getActivityClasses();
 }

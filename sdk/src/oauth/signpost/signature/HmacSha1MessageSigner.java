@@ -23,8 +23,9 @@ import javax.crypto.spec.SecretKeySpec;
 
 import oauth.signpost.OAuth;
 import oauth.signpost.exception.OAuthMessageSignerException;
-import oauth.signpost.http.HttpRequest;
 import oauth.signpost.http.HttpParameters;
+import oauth.signpost.http.HttpRequest;
+import oauth.socialize.OAuthSignListener;
 
 @SuppressWarnings("serial")
 public class HmacSha1MessageSigner extends OAuthMessageSigner {
@@ -32,31 +33,39 @@ public class HmacSha1MessageSigner extends OAuthMessageSigner {
 	private static final String MAC_NAME = "HmacSHA1";
 
 	@Override
-    public String getSignatureMethod() {
-        return "HMAC-SHA1";
-    }
+	public String getSignatureMethod() {
+		return "HMAC-SHA1";
+	}
+	
+	@Override
+	public String sign(HttpRequest request, HttpParameters requestParameters) throws OAuthMessageSignerException {
+		return sign(request, requestParameters, null);
+	}
 
-    @Override
-    public String sign(HttpRequest request, HttpParameters requestParams)
-            throws OAuthMessageSignerException {
-        try {
-            String keyString = OAuth.percentEncode(getConsumerSecret()) + '&'
-                    + OAuth.percentEncode(getTokenSecret());
-            byte[] keyBytes = keyString.getBytes(OAuth.ENCODING);
+	@Override
+	public String sign(HttpRequest request, HttpParameters requestParams, OAuthSignListener listener) throws OAuthMessageSignerException {
+		try {
+			String keyString = OAuth.percentEncode(getConsumerSecret()) + '&' + OAuth.percentEncode(getTokenSecret());
+			byte[] keyBytes = keyString.getBytes(OAuth.ENCODING);
 
-            SecretKey key = new SecretKeySpec(keyBytes, MAC_NAME);
-            Mac mac = Mac.getInstance(MAC_NAME);
-            mac.init(key);
+			SecretKey key = new SecretKeySpec(keyBytes, MAC_NAME);
+			Mac mac = Mac.getInstance(MAC_NAME);
+			mac.init(key);
 
-            String sbs = new SignatureBaseString(request, requestParams).generate();
-            OAuth.debugOut("SBS", sbs);
-            byte[] text = sbs.getBytes(OAuth.ENCODING);
+			String sbs = new SignatureBaseString(request, requestParams).generate();
+			OAuth.debugOut("SBS", sbs);
+			
+			if(listener != null) {
+				listener.onSignature(sbs);
+			}
+			
+			byte[] text = sbs.getBytes(OAuth.ENCODING);
 
-            return base64Encode(mac.doFinal(text)).trim();
-        } catch (GeneralSecurityException e) {
-            throw new OAuthMessageSignerException(e);
-        } catch (UnsupportedEncodingException e) {
-            throw new OAuthMessageSignerException(e);
-        }
-    }
+			return base64Encode(mac.doFinal(text)).trim();
+		} catch (GeneralSecurityException e) {
+			throw new OAuthMessageSignerException(e);
+		} catch (UnsupportedEncodingException e) {
+			throw new OAuthMessageSignerException(e);
+		}
+	}
 }

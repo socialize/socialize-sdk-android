@@ -76,7 +76,7 @@ public class AuthenticatedViewListener implements SocializeAuthListener {
 				Log.e(SocializeLogger.LOG_TAG, view.getClass().getSimpleName() + " failed to produce a view");
 			}
 		} 
-		catch (Exception e) {
+		catch (Throwable e) {
 			Log.e(SocializeLogger.LOG_TAG, "", e);
 		}
 	}

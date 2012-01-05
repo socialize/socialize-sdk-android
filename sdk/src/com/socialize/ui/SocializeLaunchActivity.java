@@ -22,6 +22,7 @@
 package com.socialize.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.socialize.Socialize;
@@ -45,6 +46,11 @@ public class SocializeLaunchActivity extends Activity {
 	
 	protected IOCContainer container;
 	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -101,7 +107,6 @@ public class SocializeLaunchActivity extends Activity {
 			}
 		});
 
-	
 		finish();
 	}
 	

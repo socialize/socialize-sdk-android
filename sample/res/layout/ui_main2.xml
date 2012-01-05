@@ -40,7 +40,7 @@
 	    
 	    <EditText 
 	    	android:id="@+id/txtFBId" 
-	    	android:text=""
+	    	android:text="209798315709193"
 	    	android:layout_width="fill_parent"
 	    	android:layout_height="wrap_content"/>
 	    	

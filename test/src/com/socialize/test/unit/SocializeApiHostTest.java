@@ -92,7 +92,7 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
 		AndroidMock.expect(deviceUtils.getUDID(getContext())).andReturn(udid);
 		
-		SocializeUserSystem.authenticateAsync(consumerKey, consumerSecret, udid, authProviderData, listener, mockSessionConsumer, false);
+		SocializeUserSystem.authenticateAsync(getContext(), consumerKey, consumerSecret, udid, authProviderData, listener, mockSessionConsumer, false);
 		
 		AndroidMock.replay(authProviderDataFactory);
 		AndroidMock.replay(deviceUtils);
@@ -137,7 +137,7 @@ public class SocializeApiHostTest extends SocializeUnitTest {
 		
 		AuthProviderData data = new AuthProviderData();
 		
-		SocializeUserSystem.authenticateAsync(consumerKey, consumerSecret, udid, data, listener, mockSessionConsumer, true);
+		SocializeUserSystem.authenticateAsync(getContext(), consumerKey, consumerSecret, udid, data, listener, mockSessionConsumer, true);
 		
 		AndroidMock.replay(deviceUtils);
 		AndroidMock.replay(SocializeUserSystem);

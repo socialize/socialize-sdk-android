@@ -49,9 +49,9 @@ public class NotificationContainer {
 	}
 	
 	public void onDestroy(Context context) {
-		if(container != null) {
-			container.destroy();
-		}
+//		if(container != null) {
+//			container.destroy();
+//		}
 	}
 	
 	public IOCContainer getContainer() {

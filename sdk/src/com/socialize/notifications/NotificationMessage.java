@@ -30,6 +30,8 @@ import com.socialize.api.action.ActionType;
 public class NotificationMessage {
 
 	private String text;
+	private String user;
+	private String entity;
 	private long actionId;
 	private ActionType actionType;
 	private NotificationType notificationType;
@@ -58,4 +60,17 @@ public class NotificationMessage {
 	public void setNotificationType(NotificationType notificationType) {
 		this.notificationType = notificationType;
 	}
+	public String getUser() {
+		return user;
+	}
+	public void setUser(String user) {
+		this.user = user;
+	}
+	public String getEntity() {
+		return entity;
+	}
+	public void setEntity(String entity) {
+		this.entity = entity;
+	}
+	
 }

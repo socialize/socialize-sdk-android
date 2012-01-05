@@ -160,17 +160,11 @@ public class BeanRef {
 		this.resolved = resolved;
 	}
 
-	/**
-	 * @deprecated
-	 * @return
-	 */
-	@Deprecated
 	public boolean isContextSensitive() {
 		return contextSensitive;
 	}
 
-	@Deprecated
-	protected void setContextSensitive(boolean contextSensitive) {
+	public void setContextSensitive(boolean contextSensitive) {
 		this.contextSensitive = contextSensitive;
 	}
 

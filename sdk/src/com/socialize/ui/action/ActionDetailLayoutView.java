@@ -109,6 +109,10 @@ public class ActionDetailLayoutView extends BaseView {
 	@Override
 	public void onViewLoad() {
 		super.onViewLoad();
+		reload();
+	}
+	
+	public void reload() {
 		if(getSocialize().isAuthenticated()) {
 			
 			dialog = progressDialogFactory.show(getContext(), "Loading", "Please wait...");
@@ -172,21 +176,26 @@ public class ActionDetailLayoutView extends BaseView {
 	
 	protected void doGetUserProfile(final long userId, final SocializeAction action) {
 		
-		getSocialize().getUser(userId, new UserGetListener() {
-			
-			@Override
-			public void onGet(User user) {
-				// Set the user details into the view elements
-				setUserDetails(user, action);
-				countdown();
-			}
-			
-			@Override
-			public void onError(SocializeException error) {
-				countdown();
-				showError(getContext(), error);
-			}
-		});
+		if(userId >= 0) {
+			getSocialize().getUser(userId, new UserGetListener() {
+				
+				@Override
+				public void onGet(User user) {
+					// Set the user details into the view elements
+					setUserDetails(user, action);
+					countdown();
+				}
+				
+				@Override
+				public void onError(SocializeException error) {
+					countdown();
+					showError(getContext(), error);
+				}
+			});
+		}
+		else {
+			countdown();
+		}
 	}
 	
 	public void setUserDetails(User user, SocializeAction action) {
@@ -239,6 +248,10 @@ public class ActionDetailLayoutView extends BaseView {
 		this.userId = entityKey;
 	}
 
+	public void setActionId(String actionId) {
+		this.actionId = actionId;
+	}
+
 	public void setProgressDialogFactory(ProgressDialogFactory progressDialogFactory) {
 		this.progressDialogFactory = progressDialogFactory;
 	}
@@ -250,10 +263,6 @@ public class ActionDetailLayoutView extends BaseView {
 	public void setImageLoader(ImageLoader imageLoader) {
 		this.imageLoader = imageLoader;
 	}
-
-//	public void setColors(Colors colors) {
-//		this.colors = colors;
-//	}
 
 	public void onProfileUpdate() {
 		dialog = progressDialogFactory.show(getContext(), "Loading", "Please wait...");

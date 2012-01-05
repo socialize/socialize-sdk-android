@@ -101,7 +101,7 @@ public class ContainerBuilder {
 				
 				if(cargs != null && cargs.length > 0) {
 					
-					if(containsContext(cargs) && beanRef.isSingleton()) {
+					if(beanRef.isContextSensitive() && containsContext(cargs) && beanRef.isSingleton()) {
 						logContextConstructorWarning(beanRef);
 						beanRef.setContextSensitiveConstructor(true);
 					}
@@ -171,9 +171,9 @@ public class ContainerBuilder {
 					if(property.getKey() != null) {
 						Object value = getArgumentValue(container, property, false);
 						if(value == null) {
-							Logger.w(getClass().getSimpleName(), "Failed to locate property value with key [" +
+							Logger.w(getClass().getSimpleName(), "Failed to locate value for property [" +
 									property.getKey() +
-									"] for bean [" +
+									"] of bean [" +
 									ref.getName() +
 									"].  The bean may be incomplete as a result!");
 						}
@@ -540,7 +540,7 @@ public class ContainerBuilder {
 					}
 				}
 				
-				if(!beanRef.isContextSensitiveConstructor()) {
+				if(beanRef.isContextSensitive() && !beanRef.isContextSensitiveConstructor()) {
 					beanRef.setContextSensitiveInitMethod(containsContext(args));
 				}
 				

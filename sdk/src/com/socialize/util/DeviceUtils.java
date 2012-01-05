@@ -47,13 +47,14 @@ public class DeviceUtils {
 	private AppUtils appUtils;
 	
 	private String userAgent;
-	private float density = 160.0f;
+	private float density = 1f;
 	private boolean hasCamera;
 	private int orientation;
 	private int displayHeight;
 	private int displayWidth;
 
 	public void init(Context context) {
+	
 		if (context instanceof Activity) {
 			DisplayMetrics metrics = new DisplayMetrics();
 			Display display = ((Activity) context).getWindowManager().getDefaultDisplay();

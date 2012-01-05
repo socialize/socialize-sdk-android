@@ -25,6 +25,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.socialize.entity.User;
+import com.socialize.log.SocializeLogger;
+import com.socialize.util.StringUtils;
+
 /**
  * @author Jason Polites
  *
@@ -33,15 +37,22 @@ public class NotificationRegistrationState {
 	
 	private static final String PREFERENCES = "SocializeNotificationState";
 	
-	private boolean registeredSocialize;
 	private String c2DMRegistrationId;
+	private long registeredUserId;
+	private long pendingC2DMRequestTime = 0L;
 	
-	public boolean isRegisteredSocialize() {
-		return registeredSocialize;
+	private SocializeLogger logger;
+	
+	public boolean isRegisteredSocialize(User user) {
+		return registeredUserId == user.getId();
 	}
 
-	public void setRegisteredSocialize(boolean registeredSocialize) {
-		this.registeredSocialize = registeredSocialize;
+	public boolean isRegisteredC2DM() {
+		return !StringUtils.isEmpty(c2DMRegistrationId);
+	}
+	
+	public void setRegisteredSocialize(User user) {
+		this.registeredUserId = user.getId();
 	}
 
 	public String getC2DMRegistrationId() {
@@ -52,17 +63,47 @@ public class NotificationRegistrationState {
 		c2DMRegistrationId = c2dmRegistrationId;
 	}
 
+	public boolean isC2dmPending() {
+		return (System.currentTimeMillis() - pendingC2DMRequestTime) < 30000; // Allow 30 seconds
+	}
+
+	public void setC2dmPendingRequestTime(long time) {
+		this.pendingC2DMRequestTime = time;
+	}
+
 	public void load(Context context) {
 		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 		c2DMRegistrationId = prefs.getString("c2DMRegistrationId", null);
-		registeredSocialize = prefs.getBoolean("registeredSocialize", false);
+		registeredUserId = prefs.getLong("registeredUserId", -1L);
+		pendingC2DMRequestTime = prefs.getLong("pendingC2DMRequestTime", 0);
+		
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("Loaded notification state with registration id [" +
+					c2DMRegistrationId +
+					"], user id [" +
+					registeredUserId +
+					"]");
+		}		
 	}
 	
 	public void save(Context context) {
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("Saving notification state with registration id [" +
+					c2DMRegistrationId +
+					"], user id [" +
+					registeredUserId +
+					"]");
+		}
+		
 		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 		Editor editor = prefs.edit();
 		editor.putString("c2DMRegistrationId", c2DMRegistrationId);
-		editor.putBoolean("registeredSocialize", registeredSocialize);
+		editor.putLong("registeredUserId", registeredUserId);
+		editor.putLong("pendingC2DMRequestTime", pendingC2DMRequestTime);
 		editor.commit();
+	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
 	}
 }

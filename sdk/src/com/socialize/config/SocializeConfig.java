@@ -41,7 +41,6 @@ public class SocializeConfig {
 	public static final String SOCIALIZE_PROPERTIES_PATH = "socialize.properties";
 
 	public static final String SOCIALIZE_CORE_BEANS_PATH = "socialize_core_beans.xml";
-//	public static final String SOCIALIZE_SYSTEM_BEANS_PATH = "socialize_system_beans.xml";
 	public static final String SOCIALIZE_UI_BEANS_PATH = "socialize_ui_beans.xml";
 	public static final String SOCIALIZE_NOTIFICATION_BEANS_PATH = "socialize_notification_beans.xml";
 	public static final String SOCIALIZE_ERRORS_PATH = "socialize.errors.properties";
@@ -49,7 +48,7 @@ public class SocializeConfig {
 	public static final String SOCIALIZE_CONSUMER_KEY = "socialize.consumer.key";
 	public static final String SOCIALIZE_CONSUMER_SECRET = "socialize.consumer.secret";
 	
-	public static final String SOCIALIZE_REGISTER_NOTIFICATION_ON_STARTUP = "socialize.register.notification.on.startup";
+	public static final String SOCIALIZE_REGISTER_NOTIFICATION = "socialize.register.notification";
 	
 	public static final String SOCIALIZE_C2DM_SENDER_ID = "socialize.c2dm.sender.id";
 	
@@ -84,9 +83,6 @@ public class SocializeConfig {
 	public static final String HTTP_SOCKET_TIMEOUT = "http.socket.timeout";
 	
 	public static final int MAX_LIST_RESULTS = 100;
-	
-//	private final Properties customProperties = new Properties();
-//	private final Set<String> toBeRemoved = new HashSet<String>();
 	
 	public SocializeConfig() {
 		super();
@@ -178,20 +174,10 @@ public class SocializeConfig {
 	 * @param value
 	 */
 	public void setProperty(String key, String value) {
-		
 		if(properties == null) {
 			properties = createProperties();
 		}
-		
 		properties.put(key, value);
-		
-//		if(!StringUtils.isEmpty(value)) {
-//			customProperties.put(key, value);
-//		}
-//		else {
-//			customProperties.remove(key);
-//			toBeRemoved.add(key);
-//		}
 	}
 	
 	/**
@@ -201,11 +187,6 @@ public class SocializeConfig {
 	 */
 	public String getProperty(String key) {
 		return (properties == null) ? null : properties.getProperty(key);
-//		String property = customProperties.getProperty(key);
-//		if(StringUtils.isEmpty(property)) {
-//			property = getLocalProperty(key);
-//		}
-//		return property;
 	}	
 	
 	public int getIntProperty(String key, int defaultValue) {
@@ -273,30 +254,15 @@ public class SocializeConfig {
 		return defaultValue;
 	}
 	
-	// So we can mock
-//	protected Set<String> getPropertiesToBeRemoved() {
-//		return toBeRemoved;
-//	}
-	
 	public void merge(SocializeConfig config) {
 		merge(config.getProperties(), null);
 	}
-	
-//	public void merge() {
-//		doMerge(customProperties, toBeRemoved);
-//	}
 	
 	/**
 	 * Merge properties into the config.
 	 * @param other
 	 */
 	public void merge(Properties other, Set<String> toBeRemoved) {
-//		merge();
-		doMerge(other, toBeRemoved);
-	}
-
-	protected void doMerge(Properties other, Set<String> toBeRemoved) {
-
 		if(properties == null) {
 			properties = createProperties();
 		}
@@ -304,7 +270,7 @@ public class SocializeConfig {
 		if(other != null && other.size() > 0) {
 			Set<Entry<Object, Object>> entrySet = other.entrySet();
 			for (Entry<Object, Object> entry : entrySet) {
-				properties.put(entry.getKey(), entry.getValue());
+				properties.put(entry.getKey(),  entry.getValue());
 			}
 		}
 		
