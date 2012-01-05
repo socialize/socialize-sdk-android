@@ -44,21 +44,6 @@ public class ActionDetailActivity extends SocializeUIActivity {
 	@Override
 	protected void onCreateSafe(Bundle savedInstanceState) {
 		Intent intent = getIntent();
-//		ActionIdPersister persister = new ActionIdPersister();
-//		persister.load(this);
-//		if(!StringUtils.isEmpty(persister.getActionId())) {
-//			intent.putExtra(Socialize.ACTION_ID, persister.getActionId());
-//			
-//			if(!StringUtils.isEmpty(persister.getUserId())) {
-//				intent.putExtra(Socialize.USER_ID, persister.getUserId());
-//			}
-//			else {
-//				intent.removeExtra(Socialize.USER_ID);
-//			}
-//			
-//			persister.reset(this);
-//		}
-		
 		doActivityLoad(intent);
 	}
 	

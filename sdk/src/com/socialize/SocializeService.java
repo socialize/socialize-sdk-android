@@ -45,10 +45,14 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.share.ShareAddListener;
+import com.socialize.listener.subscription.SubscriptionAddListener;
+import com.socialize.listener.subscription.SubscriptionGetListener;
+import com.socialize.listener.subscription.SubscriptionListListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.networks.ShareOptions;
+import com.socialize.notifications.NotificationType;
 import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.ui.comment.CommentShareOptions;
 import com.socialize.ui.profile.UserProfile;
@@ -633,7 +637,44 @@ public interface SocializeService {
 	 * @param activityListListener A listener to handle callbacks from the get.
 	 */
 	public void listActivityByUser(long userId, int startIndex, int endIndex, UserActivityListListener activityListListener);
+	
+	/**
+	 * Subscribes the currently logged in user to notifications for the given entity.
+	 * @param context
+	 * @param entity
+	 * @param subscriptionAddListener
+	 */
+	public void subscribe(Context context, Entity entity, NotificationType type, SubscriptionAddListener subscriptionAddListener);
+	
+	
+	/**
+	 * Unsubscribes the currently logged in user from notifications for the given entity.
+	 * (The listener is an "add" listener because the subscription object is actually just updated)
+	 * @param context
+	 * @param entity
+	 * @param subscriptionAddListener
+	 */
+	public void unsubscribe(Context context, Entity entity, NotificationType type, SubscriptionAddListener subscriptionAddListener);	
+	
+	/**
+	 * Lists subscriptions for the current user.
+	 * @param subscriptionListListener
+	 */
+	public void listSubscriptions(SubscriptionListListener subscriptionListListener);
+	
+	/**
+	 * Lists subscriptions for the current user with pagination
+	 * @param subscriptionListListener
+	 */
+	public void listSubscriptions(int startIndex, int endIndex, SubscriptionListListener subscriptionListListener);	
 
+	/**
+	 * Retrieves a current subscription for the user if available.
+	 * @param entity
+	 * @param subscriptionGetListener
+	 */
+	public void getSubscription(Entity entity, SubscriptionGetListener subscriptionGetListener);
+	
 	/**
 	 * Returns true if the given provider type is supported and has been configured correctly.
 	 * @param type

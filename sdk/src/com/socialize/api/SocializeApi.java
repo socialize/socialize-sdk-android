@@ -66,7 +66,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	private SocializeLocationProvider locationProvider;
 	private NotificationChecker notificationChecker;
 	
-	public static enum RequestType {AUTH,PUT,POST,PUT_AS_POST,GET,LIST,LIST_WITHOUT_ENTITY,DELETE};
+	public static enum RequestType {AUTH,PUT,POST,PUT_AS_POST,GET,LIST,LIST_AS_GET,LIST_WITHOUT_ENTITY,DELETE};
 	
 	public SocializeApi(P provider) {
 		super();
@@ -198,6 +198,15 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		listAsync(session, endpoint, 0, SocializeConfig.MAX_LIST_RESULTS, listener);
 	}
 
+	public void getByEntityAsync(SocializeSession session, String endpoint, String key, SocializeActionListener listener) {
+		AsyncGetter getter = new AsyncGetter(RequestType.LIST_AS_GET, session, listener);
+		SocializeGetRequest request = new SocializeGetRequest();
+		request.setEndpoint(endpoint);
+		request.setKey(key);
+		getter.execute(request);
+	}	
+	
+	
 	public void getAsync(SocializeSession session, String endpoint, String id, SocializeActionListener listener) {
 		AsyncGetter getter = new AsyncGetter(RequestType.GET, session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
@@ -739,6 +748,11 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				results = SocializeApi.this.list(session, request.getEndpoint(), request.getKey(), request.getIds(), request.getIdKey(), request.getStartIndex(), request.getEndIndex());
 				response.setResults(results);
 				break;
+				
+			case LIST_AS_GET:
+				results = SocializeApi.this.list(session, request.getEndpoint(), request.getKey(), request.getIds(), request.getIdKey(), request.getStartIndex(), request.getEndIndex());
+				response.setResults(results);
+				break;				
 				
 			case LIST_WITHOUT_ENTITY:
 				results = SocializeApi.this.list(session, request.getEndpoint(), request.getStartIndex(), request.getEndIndex());

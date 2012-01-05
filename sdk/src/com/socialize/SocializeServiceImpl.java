@@ -48,6 +48,7 @@ import com.socialize.api.action.EntitySystem;
 import com.socialize.api.action.LikeSystem;
 import com.socialize.api.action.ShareSystem;
 import com.socialize.api.action.ShareType;
+import com.socialize.api.action.SubscriptionSystem;
 import com.socialize.api.action.UserSystem;
 import com.socialize.api.action.ViewSystem;
 import com.socialize.auth.AuthProvider;
@@ -78,12 +79,16 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.share.ShareAddListener;
+import com.socialize.listener.subscription.SubscriptionAddListener;
+import com.socialize.listener.subscription.SubscriptionGetListener;
+import com.socialize.listener.subscription.SubscriptionListListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.notifications.NotificationType;
 import com.socialize.ui.ActivityIOCProvider;
 import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.ui.action.ActionDetailActivity;
@@ -120,6 +125,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private UserSystem userSystem;
 	private ActivitySystem activitySystem;
 	private EntitySystem entitySystem;
+	private SubscriptionSystem subscriptionSystem;
 	private Drawables drawables;
 	
 	private SocializeSystem system = new SocializeSystem();
@@ -324,6 +330,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			try {
 				this.container = container;
 				
+				this.logger = container.getBean("logger");
+				
 				this.commentSystem = container.getBean("commentSystem");
 				this.shareSystem = container.getBean("shareSystem");
 				this.likeSystem = container.getBean("likeSystem");
@@ -331,8 +339,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.userSystem = container.getBean("userSystem");
 				this.activitySystem = container.getBean("activitySystem");
 				this.entitySystem = container.getBean("entitySystem");
+				this.subscriptionSystem = container.getBean("subscriptionSystem");
 				this.drawables = container.getBean("drawables");
-				this.logger = container.getBean("logger");
 				this.authProviderDataFactory = container.getBean("authProviderDataFactory");
 				this.asserter = container.getBean("initializationAsserter");
 				
@@ -1115,6 +1123,43 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			commentSystem.getComment(session, id, commentGetListener);
 		}
 	}
+	
+	
+
+	@Override
+	public void subscribe(Context context, Entity entity, NotificationType type, SubscriptionAddListener subscriptionAddListener) {
+		if(assertAuthenticated(subscriptionAddListener)) {
+			subscriptionSystem.addSubscription(session, entity, type, subscriptionAddListener);
+		}		
+	}
+
+	@Override
+	public void unsubscribe(Context context, Entity entity, NotificationType type, SubscriptionAddListener subscriptionAddListener) {
+		if(assertAuthenticated(subscriptionAddListener)) {
+			subscriptionSystem.removeSubscription(session, entity, type, subscriptionAddListener);
+		}				
+	}
+
+	@Override
+	public void listSubscriptions(SubscriptionListListener subscriptionListListener) {
+		if(assertAuthenticated(subscriptionListListener)) {
+			subscriptionSystem.listSubscriptions(session, subscriptionListListener);
+		}			
+	}
+
+	@Override
+	public void listSubscriptions(int startIndex, int endIndex, SubscriptionListListener subscriptionListListener) {
+		if(assertAuthenticated(subscriptionListListener)) {
+			subscriptionSystem.listSubscriptions(session, startIndex, endIndex, subscriptionListListener);
+		}			
+	}
+
+	@Override
+	public void getSubscription(Entity entity, SubscriptionGetListener subscriptionGetListener) {
+		if(assertAuthenticated(subscriptionGetListener)) {
+			subscriptionSystem.getSubscription(session, entity, subscriptionGetListener);
+		}
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#isInitialized()
@@ -1199,6 +1244,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		
 		return isInitialized();		
 	}
+	
+	
 
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#getSession()
@@ -1226,13 +1273,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @return
 	 */
 	public SocializeConfig getConfig() {
-//		if(isInitialized()) {
-//			return container.getBean("config");
-//		}
-//		
-//		if(logger != null) logger.error(SocializeLogger.NOT_INITIALIZED);
-//		return null;
-		
 		return config;
 	}
 	
@@ -1590,5 +1630,9 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 
 	protected void setEntitySystem(EntitySystem entitySystem) {
 		this.entitySystem = entitySystem;
+	}
+
+	protected void setSubscriptionSystem(SubscriptionSystem subscriptionSystem) {
+		this.subscriptionSystem = subscriptionSystem;
 	}
 }

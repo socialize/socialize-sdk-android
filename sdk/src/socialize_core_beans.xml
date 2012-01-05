@@ -131,6 +131,12 @@
 		<property name="statsFactory" ref="statsFactory"/>
 		<property name="userAuthDataFactory" ref="userAuthDataFactory"/>
 	</bean>
+	
+	<bean id="subscriptionFactory" class="com.socialize.entity.SubscriptionFactory">
+		<property name="userFactory" ref="userFactory"/>
+		<property name="entityFactory" ref="entityFactory"/>
+		<property name="logger" ref="logger"/>
+	</bean>	
 
 	<bean id="applicationFactory" class="com.socialize.entity.ApplicationFactory"/>
 	
@@ -400,6 +406,23 @@
 	
 
 <!-- End Activity API -->
+
+<!-- Subscription API -->
+
+	<bean id="subscriptionRequestFactory" extends="defaultRequestFactory">
+		<property name="objectFactory" ref="subscriptionFactory"/>
+	</bean>	
+
+	<bean id="subscriptionProvider" extends="defaultProvider">
+		<property name="objectFactory" ref="subscriptionFactory"/>
+		<property name="requestFactory" ref="subscriptionRequestFactory"/>
+	</bean>
+	
+	<bean id="subscriptionSystem" class="com.socialize.api.action.SocializeSubscriptionSystem" extends="socializeApi">
+		<constructor-arg ref="subscriptionProvider"/>
+	</bean>
+	
+<!-- End Subscription API -->
 
 
 <!-- Device Registration API -->

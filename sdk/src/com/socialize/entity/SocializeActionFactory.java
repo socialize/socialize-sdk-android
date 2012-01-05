@@ -93,11 +93,6 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			to.put("share_location", from.isLocationShared());
 		}
 		catch (Exception e) {
-			
-			if(e instanceof NullPointerException) {
-				throw new JSONException("NullPointerException at toJSON");
-			}
-			
 			throw new JSONException(e.getMessage());
 		}
 	}

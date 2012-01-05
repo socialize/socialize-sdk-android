@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -16,9 +17,11 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
+import com.socialize.entity.Subscription;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
+import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.ShareOptions;
@@ -367,15 +370,40 @@ public class CommentListView extends BaseView {
 					
 					content.showList();
 
-					if(dialog != null) {
-						dialog.dismiss();
-					}
-
 					loading = false;
 					
 					if(onCommentViewActionListener != null) {
 						onCommentViewActionListener.onCommentList(CommentListView.this, entities.getItems(), startIndex, endIndex);
 					}
+					
+					// Now load the subscription status for the user
+					getSocialize().getSubscription(entity, new SubscriptionGetListener() {
+						
+						@Override
+						public void onGet(Subscription subscription) {
+							
+							if(subscription == null) {
+								Log.e("Socialize", "User not subscribed");
+							}
+							else {
+								Log.e("Socialize", "User subscribed=" + subscription.isSubscribed());
+							}
+							
+							if(dialog != null)  dialog.dismiss();
+						}
+						
+						@Override
+						public void onError(SocializeException error) {
+							if(logger != null) {
+								logger.error("Error retrieving subscription info", error);
+							}
+							else {
+								error.printStackTrace();
+							}
+							
+							if(dialog != null)  dialog.dismiss();
+						}
+					});
 				}
 			});
 		}
