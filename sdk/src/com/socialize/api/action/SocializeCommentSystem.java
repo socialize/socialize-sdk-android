@@ -44,6 +44,24 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 		super(provider);
 	}
 	
+	
+	
+	@Override
+	public void addComment(SocializeSession session, Comment comment, Location location, ShareOptions shareOptions, CommentListener listener) {
+		boolean shareLocation = (shareOptions == null || shareOptions.isShareLocation());
+		
+		comment.setLocationShared(shareLocation);
+		
+		setLocation(comment, location);
+		
+		List<Comment> list = new ArrayList<Comment>(1);
+		list.add(comment);
+		
+		postAsync(session, ENDPOINT, list, listener);
+	}
+
+
+
 	/* (non-Javadoc)
 	 * @see com.socialize.api.action.CommentSystem#addComment(com.socialize.api.SocializeSession, com.socialize.entity.Entity, java.lang.String, android.location.Location, com.socialize.networks.ShareOptions, com.socialize.listener.comment.CommentListener)
 	 */
@@ -52,20 +70,7 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 		Comment c = new Comment();
 		c.setText(comment);
 		c.setEntity(entity);
-		
-		// TODO: make this an option
-		c.setNotificationsEnabled(true);
-		
-		boolean shareLocation = (shareOptions == null || shareOptions.isShareLocation());
-		
-		c.setLocationShared(shareLocation);
-		
-		setLocation(c, location);
-		
-		List<Comment> list = new ArrayList<Comment>(1);
-		list.add(c);
-		
-		postAsync(session, ENDPOINT, list, listener);
+		addComment(session, c, location, shareOptions, listener);
 	}
 
 	@Deprecated

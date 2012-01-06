@@ -24,6 +24,7 @@ package com.socialize.api.action;
 import android.location.Location;
 
 import com.socialize.api.SocializeSession;
+import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.networks.ShareOptions;
@@ -36,6 +37,8 @@ import com.socialize.util.DelegateOnly;
 public interface CommentSystem {
 	
 	public static final String ENDPOINT = "/comment/";
+
+	public void addComment(SocializeSession session, Comment comment, Location location, ShareOptions shareOptions, CommentListener listener);
 
 	public void addComment(SocializeSession session, Entity entity, String comment, Location location, ShareOptions shareOptions, CommentListener listener);
 

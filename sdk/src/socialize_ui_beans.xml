@@ -242,6 +242,7 @@
 		<constructor-arg type="activity"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="loadingViewFactory" ref="loadingViewFactory"/>
 		<init-method name="init"/>
 	</bean>		
 	
@@ -500,6 +501,7 @@
 		<property name="appUtils" ref="appUtils"/>
 		<property name="logger" ref="logger"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
+		<property name="alertDialogFactory" ref="alertDialogFactory"/>
 		<property name="commentHeaderFactory" ref="commentHeaderFactory"/>
 		<property name="commentEditFieldFactory" ref="commentEditFieldFactory"/>
 		<property name="commentContentViewFactory" ref="loadingListViewFactory"/>

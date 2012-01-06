@@ -358,7 +358,7 @@ public class ActionBarSliderView extends BaseView {
 		return content;
 	}
 
-	protected DisplayState getDisplayState() {
+	public DisplayState getDisplayState() {
 		return displayState;
 	}
 

@@ -642,17 +642,24 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		return true;
 	}
 		
-	
 	@Override
 	public void addComment(final Activity activity, Entity entity, final String comment, final Location location, final ShareOptions shareOptions, final CommentAddListener commentAddListener) {
+		Comment c = new Comment();
+		c.setText(comment);
+		c.setEntity(entity);
+		addComment(activity, c, location, shareOptions, commentAddListener);
+	}
+	
+	@Override
+	public void addComment(final Activity activity, final Comment comment, final Location location, final ShareOptions shareOptions, final CommentAddListener commentAddListener) {
 		if(assertAuthenticated(commentAddListener)) {
 			if(shareOptions != null) {
 				final SocialNetwork[] shareTo = shareOptions.getShareTo();
 				if(shareTo == null || shareTo.length == 0) {
-					commentSystem.addComment(session, entity, comment, location, shareOptions, commentAddListener);
+					commentSystem.addComment(session, comment, location, shareOptions, commentAddListener);
 				}
 				else {
-					commentSystem.addComment(session, entity, comment, location, shareOptions, new CommentAddListener() {
+					commentSystem.addComment(session, comment, location, shareOptions, new CommentAddListener() {
 						@Override
 						public void onError(SocializeException error) {
 							if(commentAddListener != null) {
@@ -665,7 +672,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 							try {
 								for (final SocialNetwork socialNetwork : shareTo) {
 									try {
-										shareSystem.shareComment(activity, commentObject.getEntity(), comment, location, socialNetwork, shareOptions.getListener());
+										shareSystem.shareComment(activity, commentObject.getEntity(), commentObject.getText(), location, socialNetwork, shareOptions.getListener());
 									}
 									catch(Exception e) {
 										if(logger != null) {
@@ -686,7 +693,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				}
 			}	
 			else {
-				commentSystem.addComment(session, entity, comment, location, shareOptions, commentAddListener);
+				commentSystem.addComment(session, comment, location, shareOptions, commentAddListener);
 			}
 		}				
 	}

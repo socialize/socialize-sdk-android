@@ -2,10 +2,10 @@ package com.socialize.ui.comment;
 
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -21,10 +21,12 @@ import com.socialize.entity.Subscription;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
+import com.socialize.listener.subscription.SubscriptionAddListener;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.notifications.NotificationType;
 import com.socialize.ui.auth.AuthRequestDialogFactory;
 import com.socialize.ui.auth.AuthRequestListener;
 import com.socialize.ui.dialog.DialogFactory;
@@ -52,6 +54,7 @@ public class CommentListView extends BaseView {
 	
 	private SocializeLogger logger;
 	private DialogFactory<ProgressDialog> progressDialogFactory;
+	private DialogFactory<AlertDialog> alertDialogFactory;
 	private Drawables drawables;
 	private AppUtils appUtils;
 	private ProgressDialog dialog = null;
@@ -158,6 +161,14 @@ public class CommentListView extends BaseView {
 		
 		if(appUtils.isNotificationsAvaiable(getContext())) {
 			notifyBox = notificationEnabledOptionFactory.getBean();
+			notifyBox.setEnabled(false); // Start disabled
+			notifyBox.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					doNotificationStatusSave();
+				}
+			});
+			
 			sliderAnchor.addView(notifyBox);
 		}		
 		
@@ -175,7 +186,7 @@ public class CommentListView extends BaseView {
 		
 		addView(layoutAnchor);
 	}
-
+	
 	protected CommentScrollListener getCommentScrollListener() {
 		return new CommentScrollListener(new CommentScrollCallback() {
 			@Override
@@ -215,7 +226,7 @@ public class CommentListView extends BaseView {
 			}
 
 			@Override
-			public void onComment(String text, boolean autoPostToFacebook, boolean shareLocation) {
+			public void onComment(String text, boolean autoPostToFacebook, boolean shareLocation, boolean subscribe) {
 				
 				text = StringUtils.replaceNewLines(text, 3, 2);
 				
@@ -223,30 +234,30 @@ public class CommentListView extends BaseView {
 					// Check that FB is enabled for this installation
 					if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
 						AuthRequestDialogFactory dialog = authRequestDialogFactory.getBean();
-						dialog.show(getContext(), getCommentAuthListener(text, autoPostToFacebook, shareLocation));
+						dialog.show(getContext(), getCommentAuthListener(text, autoPostToFacebook, shareLocation, subscribe));
 					}
 					else {
 						// Just post as anon
-						doPostComment(text, false, shareLocation);
+						doPostComment(text, false, shareLocation, subscribe);
 					}
 				}
 				else {
-					doPostComment(text, autoPostToFacebook, shareLocation);
+					doPostComment(text, autoPostToFacebook, shareLocation, subscribe);
 				}
 			}
 		});
 	}
 	
-	protected AuthRequestListener getCommentAuthListener(final String text, final boolean autoPostToFacebook, final boolean shareLocation) {
+	protected AuthRequestListener getCommentAuthListener(final String text, final boolean autoPostToFacebook, final boolean shareLocation, final boolean subscribe) {
 		return new AuthRequestListener() {
 			@Override
 			public void onResult(Dialog dialog) {
-				doPostComment(text, autoPostToFacebook, shareLocation);
+				doPostComment(text, autoPostToFacebook, shareLocation, subscribe);
 			}
 		};
 	}
 
-	public void doPostComment(String comment, boolean autoPostToFacebook, boolean shareLocation) {
+	public void doPostComment(String text, boolean autoPostToFacebook, boolean shareLocation, final boolean subscribe) {
 		
 		dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
 		
@@ -258,7 +269,12 @@ public class CommentListView extends BaseView {
 		
 		options.setShareLocation(shareLocation);
 		
-		getSocialize().addComment(getActivity(), entity, comment, options, new CommentAddListener() {
+		Comment comment = new Comment();
+		comment.setText(text);
+		comment.setNotificationsEnabled(subscribe);
+		comment.setEntity(entity);
+		
+		getSocialize().addComment(getActivity(), comment, null, options, new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -299,6 +315,10 @@ public class CommentListView extends BaseView {
 				
 				if(dialog != null) {
 					dialog.dismiss();
+				}
+				
+				if(notifyBox != null) {
+					notifyBox.setChecked(subscribe);
 				}
 				
 				if(onCommentViewActionListener != null) {
@@ -386,40 +406,7 @@ public class CommentListView extends BaseView {
 						onCommentViewActionListener.onCommentList(CommentListView.this, entities.getItems(), startIndex, endIndex);
 					}
 					
-					if(notifyBox != null) {
-
-						// Now load the subscription status for the user
-						getSocialize().getSubscription(entity, new SubscriptionGetListener() {
-							
-							@Override
-							public void onGet(Subscription subscription) {
-								
-								if(subscription == null) {
-									notifyBox.setChecked(false);
-								}
-								else {
-									notifyBox.setChecked(subscription.isSubscribed());
-								}
-								
-								if(dialog != null)  dialog.dismiss();
-							}
-							
-							@Override
-							public void onError(SocializeException error) {
-								notifyBox.setChecked(false);
-								
-								if(logger != null) {
-									logger.error("Error retrieving subscription info", error);
-								}
-								else {
-									error.printStackTrace();
-								}
-								
-								if(dialog != null)  dialog.dismiss();
-							}
-						});
-					}
-					
+					if(dialog != null)  dialog.dismiss();
 				}
 			});
 		}
@@ -438,7 +425,103 @@ public class CommentListView extends BaseView {
 			}			
 		}
 	}
+	
 
+	protected void doNotificationStatusSave() {
+		
+		final ProgressDialog dialog = progressDialogFactory.show(getContext(), "Notifications", "Please wait...");
+		
+		if(notifyBox.isChecked()) {
+			getSocialize().subscribe(getContext(), entity, NotificationType.NEW_COMMENTS, new SubscriptionAddListener() {
+				@Override
+				public void onError(SocializeException error) {
+					if(dialog != null) dialog.dismiss();
+					showError(getContext(), error);
+					notifyBox.setChecked(false);
+				}
+				
+				@Override
+				public void onCreate(Subscription entity) {
+					if(commentEntryPage != null) {
+						commentEntryPage.getCommentEntryView().setNotifySubscribeState(true);
+					}
+					if(dialog != null) dialog.dismiss();
+					alertDialogFactory.show(getContext(), "Subscribe successful", "We will notify you when someone posts a comment to this discussion.");
+				}
+			});
+		}
+		else {
+			getSocialize().unsubscribe(getContext(), entity, NotificationType.NEW_COMMENTS, new SubscriptionAddListener() {
+				@Override
+				public void onError(SocializeException error) {
+					if(dialog != null) dialog.dismiss();
+					showError(getContext(), error);
+					notifyBox.setChecked(true);
+				}
+				
+				@Override
+				public void onCreate(Subscription entity) {
+					if(commentEntryPage != null) {
+						commentEntryPage.getCommentEntryView().setNotifySubscribeState(false);
+					}
+					if(dialog != null) dialog.dismiss();
+					alertDialogFactory.show(getContext(), "Unsubscribe successful", "You will no longer receive notifications for updates to this discussion.");
+				}
+			});
+		}		
+		
+	}
+	
+	
+	protected void doNotificationStatusLoad() {
+		if(notifyBox != null) {
+			notifyBox.showLoading();
+			
+			// Now load the subscription status for the user
+			getSocialize().getSubscription(entity, new SubscriptionGetListener() {
+				
+				@Override
+				public void onGet(Subscription subscription) {
+					
+					if(subscription == null) {
+						notifyBox.setChecked(false);
+						
+						if(commentEntryPage != null) {
+							commentEntryPage.getCommentEntryView().setNotifySubscribeState(true); // Default to true
+						}
+					}
+					else {
+						notifyBox.setChecked(subscription.isSubscribed());
+						
+						if(commentEntryPage != null) {
+							commentEntryPage.getCommentEntryView().setNotifySubscribeState(subscription.isSubscribed());
+						}
+					}
+					
+					notifyBox.hideLoading();
+				}
+				
+				@Override
+				public void onError(SocializeException error) {
+					notifyBox.setChecked(false);
+					
+					if(logger != null) {
+						logger.error("Error retrieving subscription info", error);
+					}
+					else {
+						error.printStackTrace();
+					}
+					
+					if(commentEntryPage != null) {
+						commentEntryPage.getCommentEntryView().setNotifySubscribeState(true); // Default to true
+					}
+					
+					notifyBox.hideLoading();
+				}
+			});
+		}		
+	}
+	
 	protected void getNextSet() {
 		
 		if(logger != null && logger.isDebugEnabled()) {
@@ -527,6 +610,7 @@ public class CommentListView extends BaseView {
 
 		if(getSocialize().isAuthenticated()) {
 			doListComments(false);
+			doNotificationStatusLoad();
 		}
 		else {
 			SocializeException e = new SocializeException("Socialize not authenticated");
@@ -555,6 +639,10 @@ public class CommentListView extends BaseView {
 
 	public void setProgressDialogFactory(DialogFactory<ProgressDialog> progressDialogFactory) {
 		this.progressDialogFactory = progressDialogFactory;
+	}
+
+	public void setAlertDialogFactory(DialogFactory<AlertDialog> alertDialogFactory) {
+		this.alertDialogFactory = alertDialogFactory;
 	}
 
 	public void setDrawables(Drawables drawables) {
@@ -686,5 +774,9 @@ public class CommentListView extends BaseView {
 
 	public void setOnCommentViewActionListener(OnCommentViewActionListener onCommentViewActionListener) {
 		this.onCommentViewActionListener = onCommentViewActionListener;
+	}
+	
+	public ActionBarSliderView getCommentEntryViewSlider() {
+		return slider;
 	}
 }

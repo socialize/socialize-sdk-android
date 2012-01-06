@@ -18,6 +18,7 @@ import com.socialize.entity.Entity;
 import com.socialize.listener.ListenerHolder;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.dialog.SafeProgressDialog;
+import com.socialize.ui.slider.ActionBarSliderView;
 import com.socialize.ui.view.EntityView;
 
 public class CommentView extends EntityView {
@@ -26,7 +27,6 @@ public class CommentView extends EntityView {
 	private CommentListView commentListView;
 	
 	public static final String COMMENT_LISTENER = "socialize.comment.listener";
-
 	
 	public CommentView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -44,7 +44,7 @@ public class CommentView extends EntityView {
 			if(commentListView == null) {
 				Entity entity = (Entity) entityKey[0];
 				commentListView = container.getBean("commentList", entity);
-				ListenerHolder holder  = container.getBean("listenerHolder");
+				ListenerHolder holder = container.getBean("listenerHolder");
 				if(holder != null) {
 					OnCommentViewActionListener onCommentViewActionListener = holder.get(COMMENT_LISTENER);
 					commentListView.setOnCommentViewActionListener(onCommentViewActionListener);
@@ -100,6 +100,10 @@ public class CommentView extends EntityView {
 	@Override
 	public View getLoadingView() {
 		return null;
+	}
+	
+	public ActionBarSliderView getCommentEntryViewSlider() {
+		return (commentListView == null) ? null : commentListView.getCommentEntryViewSlider();
 	}
 	
 	public boolean onCreateOptionsMenu(final Activity source, Menu menu) {

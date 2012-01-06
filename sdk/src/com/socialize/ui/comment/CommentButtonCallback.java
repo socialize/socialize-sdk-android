@@ -33,7 +33,7 @@ public interface CommentButtonCallback {
 
 	public void onError(Context context, SocializeException e);
 	
-	public void onComment(String text, boolean autoPostToFacebook, boolean shareLocation);
+	public void onComment(String text, boolean autoPostToFacebook, boolean shareLocation, boolean subscribe);
 	
 	public void onCancel();
 	

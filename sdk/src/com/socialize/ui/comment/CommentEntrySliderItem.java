@@ -36,7 +36,7 @@ public class CommentEntrySliderItem implements ActionBarSliderItem {
 	
 	private IBeanFactory<CommentEntryView> viewFactory;
 	
-	private CommentEntryView currentView;
+	private CommentEntryView commentEntryView;
 	
 	private CommentAddButtonListener listener;
 
@@ -58,8 +58,8 @@ public class CommentEntrySliderItem implements ActionBarSliderItem {
 	 */
 	@Override
 	public View getView() {
-		currentView = viewFactory.getBean(listener);
-		return currentView;
+		commentEntryView = viewFactory.getBean(listener);
+		return commentEntryView;
 	}
 
 	/* (non-Javadoc)
@@ -108,16 +108,20 @@ public class CommentEntrySliderItem implements ActionBarSliderItem {
 
 	@Override
 	public void onClear(ActionBarSliderView slider) {
-		if(currentView != null) {
-			currentView.reset();
+		if(commentEntryView != null) {
+			commentEntryView.reset();
 		}
 	}
 
 	@Override
 	public void onClose(ActionBarSliderView slider) {
-		if(currentView != null) {
-			currentView.reset();
+		if(commentEntryView != null) {
+			commentEntryView.reset();
 		}
+	}
+
+	protected CommentEntryView getCommentEntryView() {
+		return commentEntryView;
 	}
 
 	@Override
@@ -125,8 +129,8 @@ public class CommentEntrySliderItem implements ActionBarSliderItem {
 
 	@Override
 	public void onOpen(ActionBarSliderView slider) {
-		if(currentView != null) {
-			currentView.updateUI();
+		if(commentEntryView != null) {
+			commentEntryView.updateUI();
 		}		
 	}
 }

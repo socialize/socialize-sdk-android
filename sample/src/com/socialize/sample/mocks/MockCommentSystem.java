@@ -16,6 +16,11 @@ public class MockCommentSystem extends MockSystem<Comment> implements CommentSys
 	}
 
 	@Override
+	public void addComment(SocializeSession session, Comment comment, Location location, ShareOptions shareOptions, CommentListener listener) {
+		if(listener != null) listener.onCreate(comment);
+	}
+
+	@Override
 	public void addComment(SocializeSession session, Entity entity, String text, Location location, ShareOptions shareOptions, CommentListener listener) {
 		if(listener != null) listener.onCreate(action);
 	}

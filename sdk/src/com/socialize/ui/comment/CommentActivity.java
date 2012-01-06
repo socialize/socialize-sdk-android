@@ -30,6 +30,8 @@ import android.view.Menu;
 import com.socialize.Socialize;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUIActivity;
+import com.socialize.ui.slider.ActionBarSliderView;
+import com.socialize.ui.slider.ActionBarSliderView.DisplayState;
 
 /**
  * @author Jason Polites
@@ -63,6 +65,13 @@ public class CommentActivity extends SocializeUIActivity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK) {
+			if(view != null) {
+				ActionBarSliderView slider = view.getCommentEntryViewSlider();
+				if(slider != null && slider.getDisplayState().equals(DisplayState.MAXIMIZE)) {
+					slider.close();
+					return true;
+				}
+			}
 			Socialize.getSocialize().destroy();
 		}
 		return super.onKeyDown(keyCode, event);

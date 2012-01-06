@@ -61,9 +61,9 @@ public class CommentEntryView extends BaseView {
 	private Drawables drawables;
 	private KeyboardUtils keyboardUtils;
 	private EditText commentField;
-	private CustomCheckbox checkBox;
-	private CustomCheckbox locationBox;
-	private CustomCheckbox notifyBox;
+	private CustomCheckbox facebookCheckbox;
+	private CustomCheckbox locationCheckBox;
+	private CustomCheckbox notifyCheckBox;
 	private IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory;
 	private IBeanFactory<CustomCheckbox> locationEnabledOptionFactory;
 	private IBeanFactory<CustomCheckbox> notificationEnabledOptionFactory;
@@ -97,28 +97,28 @@ public class CommentEntryView extends BaseView {
 		LinearLayout buttonLayout = new LinearLayout(getContext());
 		
 		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
-			checkBox = autoPostFacebookOptionFactory.getBean();
+			facebookCheckbox = autoPostFacebookOptionFactory.getBean();
 		}
 		
 		if(appUtils.isLocationAvaiable(getContext())) {
-			locationBox = locationEnabledOptionFactory.getBean();
+			locationCheckBox = locationEnabledOptionFactory.getBean();
 		}
 		
 		if(appUtils.isNotificationsAvaiable(getContext())) {
-			notifyBox = notificationEnabledOptionFactory.getBean();
+			notifyCheckBox = notificationEnabledOptionFactory.getBean();
 		}
 		
-		if(checkBox != null) {
+		if(facebookCheckbox != null) {
 			
-			checkBox.setChecked(user.isAutoPostCommentsFacebook());
+			facebookCheckbox.setChecked(user.isAutoPostCommentsFacebook());
 			
 		
-			checkBox.setOnClickListener(new OnClickListener() {
+			facebookCheckbox.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 					String msg = null;
-					if(checkBox.isChecked()) {
+					if(facebookCheckbox.isChecked()) {
 						msg = "Facebook sharing enabled";
 					}
 					else {
@@ -130,15 +130,15 @@ public class CommentEntryView extends BaseView {
 			});
 		}
 
-		if(locationBox != null) {
+		if(locationCheckBox != null) {
 			
-			locationBox.setChecked(user.isShareLocation());
-			locationBox.setOnClickListener(new OnClickListener() {
+			locationCheckBox.setChecked(user.isShareLocation());
+			locationCheckBox.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 					String msg = null;
-					if(locationBox.isChecked()) {
+					if(locationCheckBox.isChecked()) {
 						msg = "Location sharing enabled";
 					}
 					else {
@@ -150,14 +150,14 @@ public class CommentEntryView extends BaseView {
 			});
 		}
 		
-		if(notifyBox != null) {
-			notifyBox.setOnClickListener(new OnClickListener() {
+		if(notifyCheckBox != null) {
+			notifyCheckBox.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 					toggleNotifications();
 					String msg = null;
-					if(notifyBox.isChecked()) {
+					if(notifyCheckBox.isChecked()) {
 						msg = "Notifications enabled";
 					}
 					else {
@@ -197,23 +197,23 @@ public class CommentEntryView extends BaseView {
 		
 		toolbarLayout.setLayoutParams(toolbarLayoutParams);
 		
-		if(checkBox != null || locationBox != null || notifyBox != null) {
+		if(facebookCheckbox != null || locationCheckBox != null || notifyCheckBox != null) {
 			LinearLayout optionsLayout = new LinearLayout(getContext());
 			LayoutParams optionsLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 			
 			optionsLayout.setLayoutParams(optionsLayoutParams);
 			optionsLayout.setOrientation(HORIZONTAL);
 			
-			if(checkBox != null) {
-				optionsLayout.addView(checkBox);
+			if(facebookCheckbox != null) {
+				optionsLayout.addView(facebookCheckbox);
 			}
 			
-			if(locationBox != null) {
-				optionsLayout.addView(locationBox);
+			if(locationCheckBox != null) {
+				optionsLayout.addView(locationCheckBox);
 			}
 			
-			if(notifyBox != null && deviceUtils.getOrientation() != Configuration.ORIENTATION_PORTRAIT) {
-				optionsLayout.addView(notifyBox);
+			if(notifyCheckBox != null && deviceUtils.getOrientation() != Configuration.ORIENTATION_PORTRAIT) {
+				optionsLayout.addView(notifyCheckBox);
 			}
 						
 			toolbarLayout.addView(optionsLayout);
@@ -239,15 +239,15 @@ public class CommentEntryView extends BaseView {
 					boolean autoPost = false;
 					boolean shareLocation = false;
 					
-					if(checkBox != null) {
-						autoPost = checkBox.isChecked(); 
+					if(facebookCheckbox != null) {
+						autoPost = facebookCheckbox.isChecked(); 
 					}
 					
-					if(locationBox != null) {
-						shareLocation = locationBox.isChecked(); 
+					if(locationCheckBox != null) {
+						shareLocation = locationCheckBox.isChecked(); 
 					}
 					
-					listener.onComment(commentField.getText().toString().trim(), autoPost, shareLocation);
+					listener.onComment(commentField.getText().toString().trim(), autoPost, shareLocation, notificationsEnabled);
 				}
 			});
 			
@@ -377,10 +377,6 @@ public class CommentEntryView extends BaseView {
 		this.appUtils = appUtils;
 	}
 
-	public void setNotifyBox(CustomCheckbox notifyBox) {
-		this.notifyBox = notifyBox;
-	}
-
 	public void setNotificationEnabledOptionFactory(IBeanFactory<CustomCheckbox> notificationOptionFactory) {
 		this.notificationEnabledOptionFactory = notificationOptionFactory;
 	}
@@ -397,7 +393,7 @@ public class CommentEntryView extends BaseView {
 				notificationsText.setText("We will notify you when someone replies.");
 			}
 			if(notificationsTitle != null) {
-				notificationsTitle.setText("Subscribed to this discussion.");
+				notificationsTitle.setText("You will be subscribed.");
 			}
 			if(subscribeNotificationButton != null) {
 				subscribeNotificationButton.setText("Unsubscribe");
@@ -408,15 +404,15 @@ public class CommentEntryView extends BaseView {
 				notificationsText.setText("Click subscribe to receive updates.");
 			}
 			if(notificationsTitle != null) {
-				notificationsTitle.setText("Not subscribed to this discussion.");
+				notificationsTitle.setText("You will not be subscribed.");
 			}
 			if(subscribeNotificationButton != null) {
 				subscribeNotificationButton.setText("Subscribe");
 			}
 		}
 		
-		if(notifyBox != null) {
-			notifyBox.setChecked(notificationsEnabled);
+		if(notifyCheckBox != null) {
+			notifyCheckBox.setChecked(notificationsEnabled);
 		}
 		
 	}
@@ -437,5 +433,25 @@ public class CommentEntryView extends BaseView {
 	
 	protected EditText getCommentField() {
 		return commentField;
+	}
+
+	protected CustomCheckbox getFacebookCheckbox() {
+		return facebookCheckbox;
+	}
+
+	protected CustomCheckbox getLocationCheckBox() {
+		return locationCheckBox;
+	}
+
+	protected CustomCheckbox getNotifyCheckBox() {
+		return notifyCheckBox;
+	}
+	
+	protected void setNotifySubscribeState(boolean subscribed) {
+		notificationsEnabled = subscribed;
+		if(notifyCheckBox != null) {
+			notifyCheckBox.setChecked(notificationsEnabled);
+			updateUI();
+		}
 	}
 }

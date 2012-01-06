@@ -13,7 +13,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
@@ -41,6 +43,9 @@ public class CustomCheckbox extends BaseView {
 	
 	private OnClickListener customClickListener;
 	private OnClickListener defaultClickListener;
+	private IBeanFactory<BasicLoadingView> loadingViewFactory;
+	
+	private ViewFlipper iconFlipper;
 
 	public CustomCheckbox(Context context) {
 		super(context);
@@ -86,15 +91,25 @@ public class CustomCheckbox extends BaseView {
 				if(enabled) {
 					checked = !checked;
 					setDisplay();
-				}
-				
-				if(customClickListener != null) {
-					customClickListener.onClick(v);
+					
+					if(customClickListener != null) {
+						customClickListener.onClick(v);
+					}
 				}
 			}
 		};
 		
-		addView(checkBox);
+		BasicLoadingView loadingScreen = loadingViewFactory.getBean();
+		
+		LayoutParams iconFlipperParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		iconFlipperParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		iconFlipper = new ViewFlipper(getContext());
+		iconFlipper.setLayoutParams(iconFlipperParams);
+		iconFlipper.addView(checkBox, 0);
+		iconFlipper.addView(loadingScreen, 1);
+		iconFlipper.setDisplayedChild(0);		
+		
+		addView(iconFlipper);
 		addView(checkboxLabel);
 		
 		// Must be super.
@@ -215,6 +230,24 @@ public class CustomCheckbox extends BaseView {
 	
 	public void setForceDefaultDensity(boolean forceDefaultDensity) {
 		this.forceDefaultDensity = forceDefaultDensity;
+	}
+	
+	public void showLoading() {
+		if(iconFlipper != null) {
+			setEnabled(false);
+			iconFlipper.setDisplayedChild(1);
+		}
+	}
+	
+	public void hideLoading() {
+		if(iconFlipper != null) {
+			setEnabled(true);
+			iconFlipper.setDisplayedChild(0);
+		}
+	}
+
+	public void setLoadingViewFactory(IBeanFactory<BasicLoadingView> loadingViewFactory) {
+		this.loadingViewFactory = loadingViewFactory;
 	}
 
 	@Override

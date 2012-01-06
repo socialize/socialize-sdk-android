@@ -30,6 +30,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
+import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
@@ -520,7 +521,17 @@ public interface SocializeService {
 	 * @param commentAddListener A listener to handle callbacks from the post.
 	 */
 	public void addComment(Activity activity, Entity entity, String comment, Location location, ShareOptions shareOptions, CommentAddListener commentAddListener);	
-
+	
+	/**
+	 * Adds a new comment and associates it with the key described.
+	 * @param activity The current activity.
+	 * @param comment The comment object.  MUST contain an Entity object.
+	 * @param location The location of the device at the time the call was made.
+	 * @param shareOptions Options for sharing to facebook and sharing location.
+	 * @param commentAddListener A listener to handle callbacks from the post.
+	 */
+	public void addComment(Activity activity, Comment comment, Location location, ShareOptions shareOptions, CommentAddListener commentAddListener);	
+	
 	/**
 	 * Adds a new comment and associates it with the key described.
 	 * @param key The entity to which the comment is associated. Defined when first creating an entity, or created on the fly with this call.
