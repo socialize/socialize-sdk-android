@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.graphics.drawable.LayerDrawable;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -34,6 +35,9 @@ public class CustomCheckbox extends BaseView {
 	private String textOff;
 	
 	private boolean borderOn = true;
+	private boolean forceDefaultDensity = false;
+	
+	private int padding = 8;
 	
 	private OnClickListener customClickListener;
 	private OnClickListener defaultClickListener;
@@ -44,7 +48,7 @@ public class CustomCheckbox extends BaseView {
 	
 	public void init() {
 		
-		int padding = deviceUtils.getDIP(8);
+		int dipPadding = deviceUtils.getDIP(padding);
 		
 		checkboxLabel = new TextView(getContext());
 		checkboxLabel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
@@ -59,8 +63,8 @@ public class CustomCheckbox extends BaseView {
 		
 		checkboxLabel.setLayoutParams(checkboxLabelLayoutParams);
 		checkBox.setLayoutParams(checkboxLayoutParams);
-		checkBox.setPadding(padding, padding, padding, padding);
-		checkboxLabel.setPadding(0, padding, padding, padding);
+		checkBox.setPadding(dipPadding, dipPadding, dipPadding, dipPadding);
+		checkboxLabel.setPadding(0, dipPadding, dipPadding, dipPadding);
 		
 		setLayoutParams(checkboxMasterLayoutParams);
 		
@@ -121,11 +125,23 @@ public class CustomCheckbox extends BaseView {
 	protected void setDisplay() {
 		if(checked) {
 			checkboxLabel.setText(textOn);
-			checkBox.setImageDrawable(drawables.getDrawable(imageOn));
+			if(forceDefaultDensity) {
+				checkBox.setImageDrawable(drawables.getDrawable(imageOn, DisplayMetrics.DENSITY_DEFAULT));
+			}
+			else {
+				checkBox.setImageDrawable(drawables.getDrawable(imageOn));
+			}
+			
 		}
 		else {
 			checkboxLabel.setText(textOff);
-			checkBox.setImageDrawable(drawables.getDrawable(imageOff));
+			if(forceDefaultDensity) {
+				checkBox.setImageDrawable(drawables.getDrawable(imageOff, DisplayMetrics.DENSITY_DEFAULT));
+			}
+			else {
+				checkBox.setImageDrawable(drawables.getDrawable(imageOff));
+			}
+			
 		}		
 	}
 	
@@ -191,6 +207,14 @@ public class CustomCheckbox extends BaseView {
 	@Override
 	public void setOnClickListener(OnClickListener l) {
 		this.customClickListener = l;
+	}
+
+	public void setPadding(int padding) {
+		this.padding = padding;
+	}
+	
+	public void setForceDefaultDensity(boolean forceDefaultDensity) {
+		this.forceDefaultDensity = forceDefaultDensity;
 	}
 
 	@Override

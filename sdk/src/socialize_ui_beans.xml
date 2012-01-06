@@ -497,6 +497,7 @@
 		
 		<property name="commentAdapter" ref="commentAdapter"/>
 		<property name="drawables" ref="drawables"/>
+		<property name="appUtils" ref="appUtils"/>
 		<property name="logger" ref="logger"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
 		<property name="commentHeaderFactory" ref="commentHeaderFactory"/>
@@ -504,6 +505,7 @@
 		<property name="commentContentViewFactory" ref="loadingListViewFactory"/>
 		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
 		<property name="commentEntryFactory" ref="commentEntrySliderItemFactory"/>
+		<property name="notificationEnabledOptionFactory" ref="notificationEnabledOptionNoBorderFactory"/>
 		<property name="sliderFactory" ref="actionBarSliderFactory"/>
 	</bean>
 	
@@ -664,8 +666,21 @@
 		<property name="textOn" value=""/>
 		<property name="textOff" value=""/>
 		<property name="borderOn" value="true" type="boolean"/>
+	</bean>	
+	
+	<bean 
+		id="notificationEnabledOptionNoBorder" 
+		extends="notificationEnabledOption"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="imageOn" value="icon_notify.png#large"/>
+		<property name="imageOff" value="icon_notify_disabled.png#large"/>
+		<property name="padding" value="4" type="integer"/>
+		<property name="forceDefaultDensity" value="true" type="boolean"/>
+		<property name="borderOn" value="false" type="boolean"/>
 	</bean>		
 	
+	<factory id="notificationEnabledOptionNoBorderFactory" makes="notificationEnabledOptionNoBorder"/>	
 	<factory id="notificationEnabledOptionFactory" makes="notificationEnabledOption"/>	
 	
 <!--  End Comment UI -->

@@ -83,7 +83,7 @@ public class SubscriptionFactory extends SocializeObjectFactory<Subscription> {
 			
 			if(from.has("type") && !from.isNull("type")) {
 				try {
-					to.setNotificationType(NotificationType.valueOf(from.getString("type")));
+					to.setNotificationType(NotificationType.valueOf(from.getString("type").toUpperCase()));
 				}
 				catch (Exception e) {
 					if(logger != null && logger.isWarnEnabled()) {

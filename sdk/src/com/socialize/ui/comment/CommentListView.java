@@ -23,8 +23,8 @@ import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.log.SocializeLogger;
-import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.auth.AuthRequestDialogFactory;
 import com.socialize.ui.auth.AuthRequestListener;
 import com.socialize.ui.dialog.DialogFactory;
@@ -32,7 +32,9 @@ import com.socialize.ui.header.SocializeHeader;
 import com.socialize.ui.slider.ActionBarSliderFactory;
 import com.socialize.ui.slider.ActionBarSliderFactory.ZOrder;
 import com.socialize.ui.slider.ActionBarSliderView;
+import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.LoadingListView;
+import com.socialize.util.AppUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 import com.socialize.view.BaseView;
@@ -51,11 +53,13 @@ public class CommentListView extends BaseView {
 	private SocializeLogger logger;
 	private DialogFactory<ProgressDialog> progressDialogFactory;
 	private Drawables drawables;
+	private AppUtils appUtils;
 	private ProgressDialog dialog = null;
 	
 	private IBeanFactory<SocializeHeader> commentHeaderFactory;
 	private IBeanFactory<CommentEditField> commentEditFieldFactory;
 	private IBeanFactory<LoadingListView> commentContentViewFactory;
+	private IBeanFactory<CustomCheckbox> notificationEnabledOptionFactory;
 	
 	private View field;
 	private SocializeHeader header;
@@ -69,6 +73,7 @@ public class CommentListView extends BaseView {
 	
 	private RelativeLayout layoutAnchor;
 	private ViewGroup sliderAnchor;
+	private CustomCheckbox notifyBox;
 	
 	private CommentEntrySliderItem commentEntryPage;
 	
@@ -150,6 +155,11 @@ public class CommentListView extends BaseView {
 		if(commentEntryFactory != null) {
 			commentEntryPage = commentEntryFactory.getBean(getCommentAddListener());
 		}
+		
+		if(appUtils.isNotificationsAvaiable(getContext())) {
+			notifyBox = notificationEnabledOptionFactory.getBean();
+			sliderAnchor.addView(notifyBox);
+		}		
 		
 		content.setListAdapter(commentAdapter);
 		content.setScrollListener(getCommentScrollListener());
@@ -376,34 +386,40 @@ public class CommentListView extends BaseView {
 						onCommentViewActionListener.onCommentList(CommentListView.this, entities.getItems(), startIndex, endIndex);
 					}
 					
-					// Now load the subscription status for the user
-					getSocialize().getSubscription(entity, new SubscriptionGetListener() {
-						
-						@Override
-						public void onGet(Subscription subscription) {
+					if(notifyBox != null) {
+
+						// Now load the subscription status for the user
+						getSocialize().getSubscription(entity, new SubscriptionGetListener() {
 							
-							if(subscription == null) {
-								Log.e("Socialize", "User not subscribed");
-							}
-							else {
-								Log.e("Socialize", "User subscribed=" + subscription.isSubscribed());
-							}
-							
-							if(dialog != null)  dialog.dismiss();
-						}
-						
-						@Override
-						public void onError(SocializeException error) {
-							if(logger != null) {
-								logger.error("Error retrieving subscription info", error);
-							}
-							else {
-								error.printStackTrace();
+							@Override
+							public void onGet(Subscription subscription) {
+								
+								if(subscription == null) {
+									notifyBox.setChecked(false);
+								}
+								else {
+									notifyBox.setChecked(subscription.isSubscribed());
+								}
+								
+								if(dialog != null)  dialog.dismiss();
 							}
 							
-							if(dialog != null)  dialog.dismiss();
-						}
-					});
+							@Override
+							public void onError(SocializeException error) {
+								notifyBox.setChecked(false);
+								
+								if(logger != null) {
+									logger.error("Error retrieving subscription info", error);
+								}
+								else {
+									error.printStackTrace();
+								}
+								
+								if(dialog != null)  dialog.dismiss();
+							}
+						});
+					}
+					
 				}
 			});
 		}
@@ -559,6 +575,14 @@ public class CommentListView extends BaseView {
 
 	public void setCommentContentViewFactory(IBeanFactory<LoadingListView> commentContentViewFactory) {
 		this.commentContentViewFactory = commentContentViewFactory;
+	}
+
+	public void setAppUtils(AppUtils appUtils) {
+		this.appUtils = appUtils;
+	}
+
+	public void setNotificationEnabledOptionFactory(IBeanFactory<CustomCheckbox> notificationEnabledOptionFactory) {
+		this.notificationEnabledOptionFactory = notificationEnabledOptionFactory;
 	}
 
 	@Deprecated
