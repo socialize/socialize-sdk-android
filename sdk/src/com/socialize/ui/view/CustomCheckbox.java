@@ -103,7 +103,7 @@ public class CustomCheckbox extends BaseView {
 		
 		LayoutParams iconFlipperParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		iconFlipperParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
-		iconFlipper = new ViewFlipper(getContext());
+		iconFlipper = new SafeViewFlipper(getContext());
 		iconFlipper.setLayoutParams(iconFlipperParams);
 		iconFlipper.addView(checkBox, 0);
 		iconFlipper.addView(loadingScreen, 1);
