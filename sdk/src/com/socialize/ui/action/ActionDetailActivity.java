@@ -30,9 +30,9 @@ import android.widget.Toast;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
+import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.ui.SocializeUIActivity;
-import com.socialize.util.AppUtils;
 
 /**
  * @author Jason Polites
@@ -95,8 +95,10 @@ public class ActionDetailActivity extends SocializeUIActivity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK) {
 			// If we were launched directly, re-launch the main app
-			if(isTaskRoot()) {
-				if (AppUtils.launchMainApp(this)) {
+			if(isTaskRoot() && view != null) {
+				SocializeAction currentAction = view.getCurrentAction();
+				if(currentAction != null) {
+					Socialize.getSocializeUI().showCommentView(this, currentAction.getEntity());
 					finish();
 					return true;
 				}

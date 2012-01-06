@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.socialize.Socialize;
+import com.socialize.entity.SocializeAction;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.view.EntityView;
 import com.socialize.util.Drawables;
@@ -103,6 +104,10 @@ public class ActionDetailView extends EntityView {
 			actionLayoutView.setActionId(actionId);
 			actionLayoutView.reload();
 		}
+	}
+	
+	public SocializeAction getCurrentAction() {
+		return (actionLayoutView == null) ? null : actionLayoutView.getCurrentAction();
 	}
 
 	@Override

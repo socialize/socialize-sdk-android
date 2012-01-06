@@ -32,6 +32,7 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUIActivity;
 import com.socialize.ui.slider.ActionBarSliderView;
 import com.socialize.ui.slider.ActionBarSliderView.DisplayState;
+import com.socialize.util.AppUtils;
 
 /**
  * @author Jason Polites
@@ -72,8 +73,17 @@ public class CommentActivity extends SocializeUIActivity {
 					return true;
 				}
 			}
+			
 			Socialize.getSocialize().destroy();
+			
+			if(isTaskRoot()) {
+				if (AppUtils.launchMainApp(this)) {
+					finish();
+					return true;
+				}
+			}
 		}
+		
 		return super.onKeyDown(keyCode, event);
 	}
 	

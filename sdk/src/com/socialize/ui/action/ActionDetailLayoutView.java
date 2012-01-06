@@ -58,7 +58,6 @@ public class ActionDetailLayoutView extends BaseView {
 	private Drawable defaultProfilePicture;
 	
 	private SocializeAction currentAction;
-	
 	private int count = 0;
 	
 	// Injected
@@ -67,7 +66,6 @@ public class ActionDetailLayoutView extends BaseView {
 	private ProgressDialogFactory progressDialogFactory;
 	private ImageLoader imageLoader;
 	// End injected
-	
 	
 	public ActionDetailLayoutView(Activity context, String userId) {
 		this(context);
@@ -140,6 +138,8 @@ public class ActionDetailLayoutView extends BaseView {
 	public void doGetAction() {
 		if(!StringUtils.isEmpty(actionId)) {
 			int id = Integer.parseInt(actionId);
+			
+			// TODO: this should be able to process generic actions.
 			getSocialize().getCommentById(id, new CommentGetListener() {
 				@Override
 				public void onError(SocializeException error) {
@@ -262,6 +262,10 @@ public class ActionDetailLayoutView extends BaseView {
 
 	public void setImageLoader(ImageLoader imageLoader) {
 		this.imageLoader = imageLoader;
+	}
+	
+	public SocializeAction getCurrentAction() {
+		return currentAction;
 	}
 
 	public void onProfileUpdate() {
