@@ -644,10 +644,15 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		
 	@Override
 	public void addComment(final Activity activity, Entity entity, final String comment, final Location location, final ShareOptions shareOptions, final CommentAddListener commentAddListener) {
-		Comment c = new Comment();
+		Comment c = newComment();
 		c.setText(comment);
 		c.setEntity(entity);
 		addComment(activity, c, location, shareOptions, commentAddListener);
+	}
+	
+	// So we can mock
+	protected Comment newComment() {
+		return new Comment();
 	}
 	
 	@Override

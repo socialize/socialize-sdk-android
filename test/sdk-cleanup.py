@@ -17,7 +17,7 @@ def create_android_config(key,secret,url,fb_user_id,fb_token):
     text+= '\napi.host='+url
     text+= '\nredirect.host=http://stage.getsocialize.com/e/'
     text+= '\nlog.level=DEBUG'
-    text+= '\nsocialize.register.notification.on.startup=false'
+    text+= '\nsocialize.register.notification=false'
     text+= '\nfacebook.app.id=209798315709193'
     text+= '\nfacebook.user.id='+fb_user_id
     text+= '\nfacebook.token='+fb_token

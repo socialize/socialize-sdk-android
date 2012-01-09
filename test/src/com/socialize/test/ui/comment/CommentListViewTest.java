@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.location.Location;
 import android.view.View;
 
 import com.google.android.testing.mocking.AndroidMock;
@@ -216,6 +217,11 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 
 		AndroidMock.expect(progressDialogFactory.show(getContext(), title, message)).andReturn(dialog);
 		
+		comment.setText(commentString);
+		comment.setNotificationsEnabled(false);
+		comment.setEntity(entity);
+		
+		AndroidMock.expect(comment.getText()).andReturn(commentString);
 		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
 		AndroidMock.expect(commentAdapter.getTotalCount()).andReturn(totalCount).anyTimes();
 
@@ -229,6 +235,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		AndroidMock.replay(progressDialogFactory);
 		AndroidMock.replay(commentAdapter);
+		AndroidMock.replay(comment);
 		AndroidMock.replay(comments);
 		AndroidMock.replay(header);
 		AndroidMock.replay(field);
@@ -242,12 +249,12 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		final PublicSocialize socialize = new PublicSocialize() {
 			
 			@Override
-			public void addComment(Activity activity, Entity entity, String str, ShareOptions shareOptions, CommentAddListener commentAddListener) {
+			public void addComment(Activity activity, Comment comment, Location location, ShareOptions shareOptions, CommentAddListener commentAddListener) {
 				// call onCreate manually for the test.
-				assertEquals(commentString, str);
+				assertEquals(commentString, comment.getText());
 				commentAddListener.onCreate(comment);
 			}
-
+			
 			@Override
 			public boolean isAuthenticated(AuthProviderType providerType) {
 				return providerType.equals(AuthProviderType.FACEBOOK);
@@ -262,12 +269,22 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 			public boolean assertInitialized(SocializeListener listener) {
 				return true;
 			}
+
+			@Override
+			protected Comment newComment() {
+				return comment;
+			}
 		};
 		
 		PublicCommentListView view = new PublicCommentListView(getActivity()) {
 			@Override
 			protected SocializeService getSocialize() {
 				return socialize;
+			}
+
+			@Override
+			protected Comment newComment() {
+				return comment;
 			}
 		};
 		
@@ -286,6 +303,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		AndroidMock.verify(progressDialogFactory);
 		AndroidMock.verify(commentAdapter);
+		AndroidMock.verify(comment);
 		AndroidMock.verify(comments);
 		AndroidMock.verify(header);
 		AndroidMock.verify(field);

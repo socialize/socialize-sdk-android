@@ -23,6 +23,7 @@ package com.socialize.test.unit;
 
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.signature.SigningStrategy;
+import oauth.socialize.OAuthSignListener;
 
 import org.apache.http.client.methods.HttpUriRequest;
 
@@ -48,6 +49,7 @@ import com.socialize.util.DeviceUtils;
 	DeviceUtils.class})
 public class OAuthRequestSignerTest extends SocializeUnitTest {
 
+	@UsesMocks ({OAuthSignListener.class})
 	public void testDefaultOauthRequestSigner() throws Exception {
 		
 		final String key = "foo";
@@ -61,6 +63,7 @@ public class OAuthRequestSignerTest extends SocializeUnitTest {
 		SigningStrategy strategy = AndroidMock.createMock(SigningStrategy.class);
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
 		HttpUriRequest request = AndroidMock.createMock(HttpUriRequest.class);
+		OAuthSignListener listener = AndroidMock.createMock(OAuthSignListener.class);
 		
 		AndroidMock.expect(factory.createConsumer(key, secret)).andReturn(consumer);
 		AndroidMock.expect(session.getConsumerKey()).andReturn(key);
@@ -71,7 +74,7 @@ public class OAuthRequestSignerTest extends SocializeUnitTest {
 		consumer.setSigningStrategy(strategy);
 		consumer.setTokenWithSecret(token, tokensecret);
 		
-		AndroidMock.expect(consumer.sign(request)).andReturn(null);
+		AndroidMock.expect(consumer.sign(request, listener)).andReturn(null);
 		
 		AndroidMock.replay(factory);
 		AndroidMock.replay(consumer);
@@ -80,7 +83,7 @@ public class OAuthRequestSignerTest extends SocializeUnitTest {
 		
 		DefaultOauthRequestSigner signer = new DefaultOauthRequestSigner(factory, strategy);
 		
-		HttpUriRequest signed = signer.sign(session, request);
+		HttpUriRequest signed = signer.sign(session, request, listener);
 		
 		assertSame(request, signed);
 		

@@ -201,6 +201,7 @@ public class SocializeUIInstanceTests2 extends SocializeUIActivityTest {
 		
 		AndroidMock.expect(intent.putExtra(Socialize.USER_ID, userId.toString())).andReturn(intent);
 		AndroidMock.expect(intent.putExtra(Socialize.ACTION_ID, actionId.toString())).andReturn(intent);
+		AndroidMock.expect(intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)).andReturn(intent);
 		
 		user.setId(userId);
 		action.setId(actionId);

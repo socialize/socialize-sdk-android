@@ -29,6 +29,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
@@ -197,11 +198,12 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 			}
 		};
 		
-
+		final Context context = getContext();
+		
 		runTestOnUiThread(new Runnable() { 
 			@Override 
 			public void run() { 
-				api.authenticateAsync(getContext(), "test_key", "test_secret", "test_uuid", alistener, mockSessionConsumer);
+				api.authenticateAsync(context, "test_key", "test_secret", "test_uuid", alistener, mockSessionConsumer);
 			} 
 		});
 

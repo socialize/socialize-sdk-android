@@ -39,6 +39,7 @@ import com.socialize.api.action.SocializeCommentSystem;
 import com.socialize.api.action.SocializeEntitySystem;
 import com.socialize.api.action.SocializeLikeSystem;
 import com.socialize.api.action.SocializeShareSystem;
+import com.socialize.api.action.SocializeSubscriptionSystem;
 import com.socialize.api.action.SocializeUserSystem;
 import com.socialize.api.action.SocializeViewSystem;
 import com.socialize.auth.AuthProvider;
@@ -89,6 +90,7 @@ import com.socialize.util.ResourceLocator;
 	SocializeViewSystem.class,
 	SocializeActivitySystem.class,
 	SocializeUserSystem.class,
+	SocializeSubscriptionSystem.class,
 	Drawables.class,
 	SocializeConfig.class,
 	SocializeProvider.class})
@@ -103,6 +105,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 	SocializeViewSystem viewSystem;
 	SocializeActivitySystem activitySystem;
 	SocializeUserSystem userSystem;
+	SocializeSubscriptionSystem subscriptionSystem;
 	Drawables drawables;
 	SocializeProvider<?> provider;
 	
@@ -130,6 +133,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		viewSystem = AndroidMock.createMock(SocializeViewSystem.class, provider);
 		activitySystem = AndroidMock.createMock(SocializeActivitySystem.class, provider);
 		userSystem = AndroidMock.createMock(SocializeUserSystem.class, provider);
+		subscriptionSystem = AndroidMock.createMock(SocializeSubscriptionSystem.class, provider);
 		drawables = AndroidMock.createMock(Drawables.class);
 		
 		AndroidMock.expect(container.getBean("commentSystem")).andReturn(commentSystem);
@@ -139,6 +143,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		AndroidMock.expect(container.getBean("userSystem")).andReturn(userSystem);
 		AndroidMock.expect(container.getBean("activitySystem")).andReturn(activitySystem);
 		AndroidMock.expect(container.getBean("entitySystem")).andReturn(entitySystem);
+		AndroidMock.expect(container.getBean("subscriptionSystem")).andReturn(subscriptionSystem);
 		AndroidMock.expect(container.getBean("drawables")).andReturn(drawables);
 		AndroidMock.expect(container.getBean("config")).andReturn(config);
 		
@@ -157,6 +162,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		AndroidMock.replay(viewSystem);
 		AndroidMock.replay(activitySystem);
 		AndroidMock.replay(userSystem);
+		AndroidMock.replay(subscriptionSystem);
 		AndroidMock.replay(provider);
 		AndroidMock.replay(drawables);
 		
@@ -177,6 +183,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		AndroidMock.verify(viewSystem);
 		AndroidMock.verify(activitySystem);
 		AndroidMock.verify(userSystem);
+		AndroidMock.verify(subscriptionSystem);
 		AndroidMock.verify(provider);
 		AndroidMock.verify(drawables);		
 		
@@ -253,27 +260,44 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		AndroidMock.verify(logger);
 	}
 	
-	@UsesMocks ({CommentAddListener.class})
+	@UsesMocks ({CommentAddListener.class, Comment.class, Entity.class})
 	public void testAddCommentSuccess() {
 		CommentAddListener listener = AndroidMock.createMock(CommentAddListener.class);
 		
-		final String key = "foo", comment = "bar";
+		final String comment = "bar";
 		
 		setupDefaultMocks();
 		
-		commentSystem.addComment(AndroidMock.eq(session), (Entity) AndroidMock.anyObject(), AndroidMock.eq(comment), (Location) AndroidMock.isNull(), (ShareOptions) AndroidMock.isNull(), AndroidMock.eq(listener));
+		final Comment commentObject = AndroidMock.createMock(Comment.class);
+		Entity entity = AndroidMock.createMock(Entity.class);
+		
+		commentObject.setText(comment);
+		commentObject.setEntity(entity);
+		
+		commentSystem.addComment(AndroidMock.eq(session), AndroidMock.eq(commentObject), (Location) AndroidMock.isNull(), (ShareOptions) AndroidMock.isNull(), AndroidMock.eq(listener));
 		
 		replayDefaultMocks();
 		
-		SocializeServiceImpl socialize = new SocializeServiceImpl();
+		AndroidMock.replay(commentObject);
+		
+		SocializeServiceImpl socialize = new SocializeServiceImpl()  {
+
+			@Override
+			protected Comment newComment() {
+				return commentObject;
+			}
+		};
+		
 		socialize.init(getContext(), container);
 		socialize.setSession(session);
 		
 		assertTrue(socialize.isInitialized());
 		
-		socialize.addComment(getActivity(), Entity.newInstance(key, null), comment, listener);
+		socialize.addComment(getActivity(), entity, comment, listener);
 		
 		verifyDefaultMocks();
+		
+		AndroidMock.verify(commentObject);
 	}
 	
 	@UsesMocks ({LikeAddListener.class})

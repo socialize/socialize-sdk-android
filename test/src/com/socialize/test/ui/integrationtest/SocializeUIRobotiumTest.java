@@ -116,8 +116,8 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	protected void startWithFacebook(boolean sso) {
 		robotium.clearEditText(0);
 		robotium.enterText(0, DEFAULT_GET_ENTITY);
-		robotium.clearEditText(1);
-		robotium.enterText(1, SOCIALIZE_FACEBOOK_ID);
+		robotium.clearEditText(2);
+		robotium.enterText(2, SOCIALIZE_FACEBOOK_ID);
 		toggleFacebookSSO(sso);
 		toggleMockedFacebook(true);
 		clearAuthCache();
@@ -126,7 +126,7 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	protected void startWithoutFacebook() {
 		robotium.clearEditText(0);
 		robotium.enterText(0, DEFAULT_GET_ENTITY);
-		robotium.clearEditText(1);
+		robotium.clearEditText(2);
 		clearAuthCache();
 	}
 

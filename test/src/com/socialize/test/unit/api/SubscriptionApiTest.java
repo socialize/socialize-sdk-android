@@ -140,7 +140,7 @@ public class SubscriptionApiTest extends SocializeUnitTest {
 		
 		SocializeSubscriptionSystem api = new SocializeSubscriptionSystem(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeActionListener listener) {
+			public void getByEntityAsync(SocializeSession session, String endpoint, String key, SocializeActionListener listener) {
 				addResult(key);
 			}
 		};
@@ -152,5 +152,4 @@ public class SubscriptionApiTest extends SocializeUnitTest {
 		assertNotNull(strId);
 		assertEquals(entityKey, strId);
 	}
-	
 }

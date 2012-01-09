@@ -269,7 +269,7 @@ public class CommentListView extends BaseView {
 		
 		options.setShareLocation(shareLocation);
 		
-		Comment comment = new Comment();
+		Comment comment = newComment();
 		comment.setText(text);
 		comment.setNotificationsEnabled(subscribe);
 		comment.setEntity(entity);
@@ -426,6 +426,10 @@ public class CommentListView extends BaseView {
 		}
 	}
 	
+	// SO we can mock
+	protected Comment newComment() {
+		return new Comment();
+	}
 
 	protected void doNotificationStatusSave() {
 		
