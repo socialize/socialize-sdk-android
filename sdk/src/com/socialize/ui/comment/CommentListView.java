@@ -749,7 +749,6 @@ public class CommentListView extends BaseView {
 	 */
 	public void onProfileUpdate() {
 		commentAdapter.notifyDataSetChanged();
-		
 		if(slider != null) {
 			slider.clearContent();
 		}

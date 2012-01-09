@@ -31,7 +31,10 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 
+import com.socialize.Socialize;
 import com.socialize.log.SocializeLogger;
+import com.socialize.notifications.SocializeBroadcastReceiver;
+import com.socialize.notifications.SocializeC2DMReceiver;
 
 /**
  * @author Jason Polites
@@ -41,6 +44,12 @@ public class AppUtils {
 	private String packageName;
 	private String appName;
 	private SocializeLogger logger;
+	
+	private boolean locationAvailable = false;
+	private boolean locationAssessed = false;
+	
+	private boolean notificationsAvailable = false;
+	private boolean notificationsAssessed = false;
 	
 	public void init(Context context) {
 		packageName = context.getPackageName();
@@ -94,14 +103,67 @@ public class AppUtils {
 		return packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() > 0;
 	}	
 	
+	public boolean isServiceAvailable(Context context, Class<?> cls) {
+	    final PackageManager packageManager = context.getPackageManager();
+	    final Intent intent = new Intent(context, cls);
+	    return packageManager.queryIntentServices(intent, PackageManager.MATCH_DEFAULT_ONLY).size() > 0;
+	}
+	
+	public boolean isReceiverAvailable(Context context, Class<?> cls) {
+	    final PackageManager packageManager = context.getPackageManager();
+	    final Intent intent = new Intent(context, cls);
+	    return packageManager.queryBroadcastReceivers(intent, PackageManager.MATCH_DEFAULT_ONLY).size() > 0;
+	}	
+	
 	public boolean isLocationAvaiable(Context context) {
-		return hasPermission(context, "android.permission.ACCESS_FINE_LOCATION") || hasPermission(context, "android.permission.ACCESS_COARSE_LOCATION");	
+		if(!locationAssessed) {
+			locationAvailable = hasPermission(context, "android.permission.ACCESS_FINE_LOCATION") || hasPermission(context, "android.permission.ACCESS_COARSE_LOCATION");
+			locationAssessed = true;
+		}
+		return locationAvailable;
 	}
 
 	public boolean isNotificationsAvaiable(Context context) {
-		// TODO: Implement this!
-		return true;
+		if(!notificationsAssessed) {
+			
+			boolean ok = true;
+			
+			if(!hasPermission(context, "com.socialize.sample.permission.C2D_MESSAGE")) {
+				logger.warn("Notifications not available, permission com.socialize.sample.permission.C2D_MESSAGE not specified in AndroidManifest.xml");
+				ok = false;
+			}
+			
+			if(!hasPermission(context, "com.google.android.c2dm.permission.RECEIVE")) {
+				logger.warn("Notifications not available, permission com.google.android.c2dm.permission.RECEIVE not specified in AndroidManifest.xml");
+				ok = false;
+			}
+			
+			if(!isReceiverAvailable(context, SocializeBroadcastReceiver.class)) {
+				logger.warn("Notifications not available. Receiver [" +
+						SocializeBroadcastReceiver.class +
+						"] not configured in AndroidManifest.xml");
+				ok = false;
+			}
+			
+			if(!isServiceAvailable(context, SocializeC2DMReceiver.class)) {
+				logger.warn("Notifications not available. Service [" +
+						SocializeBroadcastReceiver.class +
+						"] not configured in AndroidManifest.xml");
+				ok = false;
+			}			
+			
+			if(Socialize.getSocialize().getEntityLoader() == null) {
+				logger.warn("Notifications not available. Entity loader not found.");
+				ok = false;
+			}
+			
+			notificationsAvailable = ok;
+			notificationsAssessed = true;
+		}
+
+		return notificationsAvailable;
 	}
+
 	
 	public boolean hasPermission(Context context, String permission) {
 		return context.getPackageManager().checkPermission(permission, context.getPackageName()) == PackageManager.PERMISSION_GRANTED;

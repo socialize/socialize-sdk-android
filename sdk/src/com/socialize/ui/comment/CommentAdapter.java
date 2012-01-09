@@ -8,7 +8,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -154,7 +153,6 @@ public class CommentAdapter extends BaseAdapter {
 			if(position >= comments.size()) {
 				// Last one, get loading view
 				if(loadingView == null) {
-					Log.e(SocializeLogger.LOG_TAG, "Showing loading view");
 					loadingView = listItemLoadingViewFactory.getBean();
 					loadingView.setTag(null);
 				}

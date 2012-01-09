@@ -532,7 +532,6 @@
 		<property name="config" ref="config"/>
 		<property name="logger" ref="logger"/>
 		<property name="deviceRegistrationSystem" ref="deviceRegistrationSystem"/>
-		<property name="notificationAuthenticator" ref="notificationAuthenticator"/>
 		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
 	</bean>
 	
