@@ -142,7 +142,6 @@ public class FacebookSharer implements SocialNetworkSharer {
 				facebookWallPoster.postLike(context, entity, comment, listener);
 				break;			
 		}
-		
 	}
 
 	public void setShareMessageBuilder(ShareMessageBuilder shareMessageBuilder) {

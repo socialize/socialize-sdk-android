@@ -43,8 +43,13 @@ public class FacebookButton extends SocializeButton {
 	}
 
 	public void init() {
-		super.init();
+		callSuperInit();
 		setOnClickListener(facebookAuthClickListener);
+	}
+	
+	// Just so we can eaily test
+	protected void callSuperInit() {
+		super.init();
 	}
 	
 	public void setAuthListener(SocializeAuthListener listener) {

@@ -28,12 +28,13 @@ import android.os.AsyncTask;
 import com.socialize.Socialize;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.ui.dialog.ProgressDialogFactory;
+import com.socialize.util.IAsyncTask;
 
 /**
  * @author Jason Polites
  *
  */
-public class FacebookSignOutTask extends AsyncTask<Void, Void, Void> {
+public class FacebookSignOutTask extends AsyncTask<Void, Void, Void> implements IAsyncTask<Void, Void, Void> {
 
 	private Context context;
 	private ProgressDialogFactory dialogFactory;
@@ -49,6 +50,11 @@ public class FacebookSignOutTask extends AsyncTask<Void, Void, Void> {
 	@Override
 	protected void onPreExecute() {
 		dialog = dialogFactory.show(context, "Signing out", "Please wait...");
+	}
+
+	@Override
+	public void doExecute(Void... params) {
+		execute(params);
 	}
 
 	/* (non-Javadoc)
