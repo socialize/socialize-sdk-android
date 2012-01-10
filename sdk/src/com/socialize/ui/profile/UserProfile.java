@@ -37,6 +37,9 @@ public class UserProfile {
 	
 	private String encodedImage;
 	
+	private boolean autoPostLikesFacebook = true;
+	private boolean autoPostCommentsFacebook = true;
+	
 	private boolean autoPostFacebook;
 	
 	public String getFullName() {
@@ -115,10 +118,28 @@ public class UserProfile {
 		return fullName;
 	}
 	
+	@Deprecated
 	public boolean isAutoPostFacebook() {
 		return autoPostFacebook;
 	}
+	@Deprecated
 	public void setAutoPostFacebook(boolean autoPostFacebook) {
 		this.autoPostFacebook = autoPostFacebook;
+	}
+
+	public boolean isAutoPostLikesFacebook() {
+		return autoPostLikesFacebook;
+	}
+
+	public void setAutoPostLikesFacebook(boolean autoPostLikesFacebook) {
+		this.autoPostLikesFacebook = autoPostLikesFacebook;
+	}
+
+	public boolean isAutoPostCommentsFacebook() {
+		return autoPostCommentsFacebook;
+	}
+
+	public void setAutoPostCommentsFacebook(boolean autoPostCommentsFacebook) {
+		this.autoPostCommentsFacebook = autoPostCommentsFacebook;
 	}
 }

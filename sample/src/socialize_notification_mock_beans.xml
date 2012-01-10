@@ -1,0 +1,8 @@
+<beans>
+	<bean id="activitySystem" class="com.socialize.sample.mocks.MockActivitySystem" />
+	<bean id="deviceRegistrationSystem" class="com.socialize.sample.mocks.MockDeviceRegistrationSystem" />
+	<proxy ref="activitySystem" />
+	<proxy ref="deviceRegistrationSystem" />
+	<proxy ref="notificationAuthenticator" />
+	
+</beans>

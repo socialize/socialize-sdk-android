@@ -8,7 +8,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -16,11 +15,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Comment;
 import com.socialize.entity.User;
 import com.socialize.log.SocializeLogger;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.SocializeUIActivity;
 import com.socialize.ui.image.ImageLoadListener;
 import com.socialize.ui.image.ImageLoadRequest;
@@ -135,7 +134,7 @@ public class CommentAdapter extends BaseAdapter {
 			tmpUser = item.getUser();
 		}
 
-		User currentUser = getSocializeUI().getSocialize().getSession().getUser();
+		User currentUser = Socialize.getSocialize().getSession().getUser();
 
 		if(currentUser != null && tmpUser != null && currentUser.getId().equals(tmpUser.getId())) {
 			// Use this user as we may have been updated
@@ -154,7 +153,6 @@ public class CommentAdapter extends BaseAdapter {
 			if(position >= comments.size()) {
 				// Last one, get loading view
 				if(loadingView == null) {
-					Log.e(SocializeLogger.LOG_TAG, "Showing loading view");
 					loadingView = listItemLoadingViewFactory.getBean();
 					loadingView.setTag(null);
 				}
@@ -186,7 +184,7 @@ public class CommentAdapter extends BaseAdapter {
 							@Override
 							public void onClick(View v) {
 								if(user != null && user.getId() != null) {
-									getSocializeUI().showActionDetailViewForResult(context, user, item, SocializeUIActivity.PROFILE_UPDATE);
+									Socialize.getSocializeUI().showActionDetailViewForResult(context, user, item, SocializeUIActivity.PROFILE_UPDATE);
 								}
 								else {
 									if(logger != null) {
@@ -238,7 +236,7 @@ public class CommentAdapter extends BaseAdapter {
 
 						int densitySize = deviceUtils.getDIP(iconSize);
 
-						final Drawable defaultImage = drawables.getDrawable(SocializeUI.DEFAULT_USER_ICON);
+						final Drawable defaultImage = drawables.getDrawable(Socialize.DEFAULT_USER_ICON);
 
 						if(user != null) {
 							userIcon.getBackground().setAlpha(255);
@@ -249,8 +247,8 @@ public class CommentAdapter extends BaseAdapter {
 									CacheableDrawable cached = drawables.getCache().get(imageUrl);
 
 									if(cached != null && !cached.isRecycled()) {
-										if(logger != null && logger.isInfoEnabled()) {
-											logger.info("CommentAdpater setting image icon to cached image " + cached);
+										if(logger != null && logger.isDebugEnabled()) {
+											logger.debug("CommentAdpater setting image icon to cached image " + cached);
 										}
 										userIcon.setImageDrawable(cached);
 										userIcon.getBackground().setAlpha(255);
@@ -265,8 +263,8 @@ public class CommentAdapter extends BaseAdapter {
 												logError("Error loading image", error);
 												userIcon.post(new Runnable() {
 													public void run() {
-														if(logger != null && logger.isInfoEnabled()) {
-															logger.info("CommentAdpater setting image icon to default image");
+														if(logger != null && logger.isDebugEnabled()) {
+															logger.debug("CommentAdpater setting image icon to default image");
 														}
 														userIcon.setImageDrawable(defaultImage);
 														userIcon.getBackground().setAlpha(255);
@@ -431,10 +429,6 @@ public class CommentAdapter extends BaseAdapter {
 
 	public void setTotalCount(int totalCount) {
 		this.totalCount = totalCount;
-	}
-
-	protected SocializeUI getSocializeUI() {
-		return SocializeUI.getInstance();
 	}
 
 	protected void logError(String msg, Exception e) {

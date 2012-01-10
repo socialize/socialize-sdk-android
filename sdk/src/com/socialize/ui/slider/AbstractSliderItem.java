@@ -56,6 +56,7 @@ public abstract class AbstractSliderItem implements ActionBarSliderItem {
 
 	@Override
 	public void onCreate(ActionBarSliderView slider) {}
-	
-	
+
+	@Override
+	public void onOpen(ActionBarSliderView slider) {}
 }

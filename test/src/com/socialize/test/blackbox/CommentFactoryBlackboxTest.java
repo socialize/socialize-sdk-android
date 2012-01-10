@@ -24,6 +24,8 @@ package com.socialize.test.blackbox;
 import java.util.ArrayList;
 import java.util.List;
 
+import oauth.socialize.OAuthSignListener;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.NameValuePair;
@@ -36,12 +38,12 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.DefaultSocializeRequestFactory;
 import com.socialize.api.SocializeSession;
+import com.socialize.entity.ApplicationFactory;
 import com.socialize.entity.Comment;
+import com.socialize.entity.CommentFactory;
 import com.socialize.entity.Entity;
-import com.socialize.entity.factory.ApplicationFactory;
-import com.socialize.entity.factory.CommentFactory;
-import com.socialize.entity.factory.EntityFactory;
-import com.socialize.entity.factory.UserFactory;
+import com.socialize.entity.EntityFactory;
+import com.socialize.entity.UserFactory;
 import com.socialize.error.SocializeException;
 import com.socialize.oauth.OAuthRequestSigner;
 import com.socialize.test.util.JsonAssert;
@@ -66,8 +68,14 @@ public class CommentFactoryBlackboxTest extends AbstractFactoryBlackBoxTest {
 		commentFactory.setUserFactory(new UserFactory());
 		
 		requestFactory = new DefaultSocializeRequestFactory<Comment>(new OAuthRequestSigner() {
+			
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+				return request;
+			}
+
+			@Override
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 				return request;
 			}
 		}, commentFactory);

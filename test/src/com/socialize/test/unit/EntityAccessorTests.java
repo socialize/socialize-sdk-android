@@ -145,6 +145,7 @@ public class EntityAccessorTests extends SocializeUnitTest {
 		
 	}
 	
+	@Deprecated
 	public void testEntityAccessors() {
 		
 		Entity entity = new Entity();

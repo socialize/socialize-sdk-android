@@ -21,7 +21,6 @@
  */
 package com.socialize.test.blackbox;
 
-import com.socialize.Socialize;
 import com.socialize.test.SocializeActivityTest;
 
 /**
@@ -30,9 +29,9 @@ import com.socialize.test.SocializeActivityTest;
  *
  */
 public class SocializeTest extends SocializeActivityTest {
-	public void testSocialize() {
-		Socialize.init(getActivity());
-		assertNotNull(Socialize.getSocialize());
-		Socialize.destroy(getActivity());
-	}
+//	public void testSocialize() {
+//		Socialize.init(getActivity());
+//		assertNotNull(Socialize.getSocialize());
+//		Socialize.destroy(getActivity());
+//	}
 }

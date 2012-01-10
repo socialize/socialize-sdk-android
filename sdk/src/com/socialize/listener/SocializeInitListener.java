@@ -14,10 +14,9 @@ import com.socialize.android.ioc.IOCContainer;
 public interface SocializeInitListener extends SocializeListener {
 
 	/**
-	 * Called when the socialize instance is successfully initialized.
+	 * Called after the socialize instance is successfully initialized.
 	 * @param context
 	 * @param container
 	 */
 	public void onInit(Context context, IOCContainer container); 
-	
 }

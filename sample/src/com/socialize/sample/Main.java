@@ -33,7 +33,10 @@ import android.widget.Button;
 
 import com.socialize.Socialize;
 import com.socialize.sample.ui.SampleActivity;
+import com.socialize.sample.ui.SampleActivity2;
+import com.socialize.ui.dialog.SafeProgressDialog;
 
+@SuppressWarnings("deprecation")
 public class Main extends Activity {
 	
     @Override
@@ -44,6 +47,7 @@ public class Main extends Activity {
         
         Button btn = (Button) findViewById(R.id.btnSample);
         Button btnUI = (Button) findViewById(R.id.btnSampleSocializeUI);
+        Button btnUI2 = (Button) findViewById(R.id.btnSampleSocializeUI2);
         
         btn.setOnClickListener(new OnClickListener() {
 			@Override
@@ -58,14 +62,15 @@ public class Main extends Activity {
 				Intent i = new Intent(Main.this, SampleActivity.class);
 				startActivity(i);
 			}
-		});        
+		}); 
         
-//        btnMock.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				startSocialize(true);
-//			}
-//		});
+        btnUI2.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(Main.this, SampleActivity2.class);
+				startActivity(i);
+			}
+		});          
     }
 
 	public void onBackPressed() {
@@ -75,7 +80,7 @@ public class Main extends Activity {
 	
 	public void startSocialize(final boolean isMock) {
 		
-		final ProgressDialog progress = ProgressDialog.show(Main.this, "Initializing", "Please wait...");
+		final ProgressDialog progress = SafeProgressDialog.show(Main.this, "Initializing", "Please wait...");
 		
 		new AsyncTask<Void, Void, Void>() {
 
@@ -83,7 +88,7 @@ public class Main extends Activity {
 			protected Void doInBackground(Void... params) {
 				
 				if(isMock) {
-					Socialize.init(Main.this, "socialize_beans.xml", "socialize_mock_beans.xml");
+					Socialize.init(Main.this, "socialize_core_beans.xml", "socialize_mock_beans.xml");
 				}
 				else {
 					Socialize.init(Main.this);

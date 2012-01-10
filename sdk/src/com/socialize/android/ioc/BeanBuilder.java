@@ -67,6 +67,14 @@ public class BeanBuilder {
 		Constructor<T> matched = getConstructorFor(clazz, args);
 
 		if (matched != null) {
+			if(matched.isAnnotationPresent(Deprecated.class)) {
+				Logger.w(clazz.getSimpleName(), "Constructor [" +
+						matched.toGenericString() +
+						"] used for class [" +
+						clazz.getName() +
+						"] is deprecated.  It will be used but should be reviewed for continued use");
+			}
+			
 			object = matched.newInstance(args);
 		}
 		else {

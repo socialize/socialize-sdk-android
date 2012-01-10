@@ -27,6 +27,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.socialize.android.ioc.IOCContainer;
+import com.socialize.entity.Entity;
 import com.socialize.ui.slider.ActionBarSliderFactory;
 import com.socialize.ui.slider.ActionBarSliderFactory.ZOrder;
 import com.socialize.ui.slider.ActionBarSliderView;
@@ -45,8 +46,8 @@ public class ActionBarView extends EntityView {
 	private ActionBarSliderFactory<ActionBarSliderView> sliderFactory;
 	
 	private boolean entityKeyIsUrl = true;
-	private String entityKey;
-	private String entityName;
+	
+	private Entity entity;
 	
 	private OnActionBarEventListener onActionBarEventListener;
 	private SliderActionBarListener sliderActionBarEventListener;
@@ -111,31 +112,45 @@ public class ActionBarView extends EntityView {
 		}
 	}
 	
+	public Entity getEntity() {
+		return entity;
+	}
+
+	public void setEntity(Entity entity) {
+		this.entity = entity;
+	}
+
+	@Deprecated
 	public String getEntityKey() {
-		return entityKey;
+		return (entity == null) ? null : entity.getKey();
 	}
 
+	@Deprecated
 	public void setEntityKey(String entityKey) {
-		this.entityKey = entityKey;
+		if(entity == null) entity = new Entity();
+		this.entity.setKey(entityKey);
 	}
 
+	@Deprecated
 	public String getEntityName() {
-		return entityName;
+		return (entity == null) ? null : entity.getName();
 	}
 
+	@Deprecated
 	public void setEntityName(String entityName) {
-		this.entityName = entityName;
+		if(entity == null) entity = new Entity();
+		this.entity.setName(entityName);
 	}
 	
 	protected ActionBarSliderView getSlider() {
 		return slider;
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.view.EntityView#getEntityKeys()
 	 */
 	@Override
-	protected String[] getEntityKeys() {
+	protected String[] getBundleKeys() {
 		return null;
 	}
 	
@@ -150,10 +165,12 @@ public class ActionBarView extends EntityView {
 		return new ActionBarEditView(getContext());
 	}
 
+	@Deprecated
 	public boolean isEntityKeyUrl() {
 		return entityKeyIsUrl;
 	}
 
+	@Deprecated
 	public void setEntityKeyIsUrl(boolean entityKeyIsUrl) {
 		this.entityKeyIsUrl = entityKeyIsUrl;
 	}

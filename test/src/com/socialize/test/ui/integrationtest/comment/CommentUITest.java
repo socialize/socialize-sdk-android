@@ -87,7 +87,7 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 			}
 		});
 		
-		assertTrue(latch.await(10, TimeUnit.SECONDS));		
+		assertTrue(latch.await(30, TimeUnit.SECONDS));		
 		
 		// Wait for view to refresh
 		Thread.sleep(2000);	

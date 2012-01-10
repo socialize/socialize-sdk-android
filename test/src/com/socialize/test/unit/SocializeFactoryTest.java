@@ -32,7 +32,7 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeObject;
-import com.socialize.entity.factory.SocializeObjectFactory;
+import com.socialize.entity.SocializeObjectFactory;
 import com.socialize.test.SocializeActivityTest;
 
 public class SocializeFactoryTest extends SocializeActivityTest {

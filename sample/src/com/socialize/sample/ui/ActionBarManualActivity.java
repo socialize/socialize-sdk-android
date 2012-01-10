@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.socialize.sample.R;
 import com.socialize.ui.actionbar.ActionBarView;
 
+@Deprecated
 public class ActionBarManualActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState, String entityKey, String entityName, boolean isEntityKeyUrl) {

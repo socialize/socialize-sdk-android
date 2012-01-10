@@ -46,7 +46,13 @@ public class User extends SocializeObject {
 	private String profilePicData;
 	
 	private boolean autoPostToFacebook = true;
+	
+	private boolean autoPostLikesFacebook;
+	private boolean autoPostCommentsFacebook;
 	private boolean shareLocation = true;
+	private boolean notificationsEnabled = true;
+	
+	private String metaData;
 	
 	public void merge(User user) {
 		setFirstName(user.getFirstName());
@@ -59,11 +65,20 @@ public class User extends SocializeObject {
 		setStats(user.getStats());
 		setAuthData(user.getAuthData());
 		setProfilePicData(user.getProfilePicData());
+		setMetaData(user.getMetaData());
 		
 		// Set to null to re-create
 		displayName = null;
 		
 //		setAutoPostToFacebook(user.isAutoPostToFacebook()); // Don't merge this!
+	}
+	
+	public String getShortDisplayName() {
+		String fname = getFirstName();
+		if(!StringUtils.isEmpty(fname)) {
+			return fname;
+		}
+		return getUsername();
 	}
 
 	public String getDisplayName() {
@@ -175,12 +190,38 @@ public class User extends SocializeObject {
 		this.authData = authData;
 	}
 
+	@Deprecated
 	public boolean isAutoPostToFacebook() {
 		return autoPostToFacebook;
 	}
 
+	@Deprecated
 	public void setAutoPostToFacebook(boolean autoPostToFacebook) {
 		this.autoPostToFacebook = autoPostToFacebook;
+	}
+
+	public boolean isAutoPostLikesFacebook() {
+		return autoPostLikesFacebook;
+	}
+
+	public void setAutoPostLikesFacebook(boolean autoPostLikesFacebook) {
+		this.autoPostLikesFacebook = autoPostLikesFacebook;
+	}
+
+	public boolean isAutoPostCommentsFacebook() {
+		return autoPostCommentsFacebook;
+	}
+
+	public void setAutoPostCommentsFacebook(boolean autoPostCommentsFacebook) {
+		this.autoPostCommentsFacebook = autoPostCommentsFacebook;
+	}
+	
+	public boolean isNotificationsEnabled() {
+		return notificationsEnabled;
+	}
+
+	public void setNotificationsEnabled(boolean notificationsEnabled) {
+		this.notificationsEnabled = notificationsEnabled;
 	}
 
 	public boolean isShareLocation() {
@@ -191,6 +232,14 @@ public class User extends SocializeObject {
 		this.shareLocation = shareLocation;
 	}
 	
+	public String getMetaData() {
+		return metaData;
+	}
+
+	public void setMetaData(String metaData) {
+		this.metaData = metaData;
+	}
+
 	@Override
 	public int hashCode() {
 		return super.hashCode();

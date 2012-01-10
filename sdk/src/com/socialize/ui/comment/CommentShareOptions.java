@@ -21,25 +21,12 @@
  */
 package com.socialize.ui.comment;
 
+import com.socialize.networks.ShareOptions;
+
 /**
  * @author Jason Polites
- *
+ * @deprecated use share options
  */
-public class CommentShareOptions {
+public class CommentShareOptions extends ShareOptions {
 
-	private boolean shareLocation;
-	private boolean shareFacebook;
-	
-	public boolean isShareLocation() {
-		return shareLocation;
-	}
-	public void setShareLocation(boolean shareLocation) {
-		this.shareLocation = shareLocation;
-	}
-	public boolean isShareFacebook() {
-		return shareFacebook;
-	}
-	public void setShareFacebook(boolean shareFacebook) {
-		this.shareFacebook = shareFacebook;
-	}
 }

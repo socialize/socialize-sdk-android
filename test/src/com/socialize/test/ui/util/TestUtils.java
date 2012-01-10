@@ -11,8 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.socialize.Socialize;
+import com.socialize.SocializeAccess;
 import com.socialize.test.ui.ResultHolder;
-import com.socialize.ui.SocializeUIBeanOverrider;
 
 public class TestUtils {
 	
@@ -40,6 +41,8 @@ public class TestUtils {
 		holder = new ResultHolder();
 		holder.setUp();
 		instrumentation = testCase.getInstrumentation();
+		
+		Socialize.getSocialize().destroy(true);
 	}
 	
 	public static void tearDown() {
@@ -54,6 +57,8 @@ public class TestUtils {
 		}
 		
 		monitor = null;
+		
+		Socialize.getSocialize().destroy(true);
 	}
 	
 	public static void setUpActivityMonitor(Class<?> activityClass) {
@@ -241,8 +246,6 @@ public class TestUtils {
 	
 	public static void setupSocializeOverrides(boolean mockFacebook, boolean mockSocialize, String...others) {
 		
-		SocializeUIBeanOverrider overrider = new SocializeUIBeanOverrider();
-		
 		List<String> configs = new ArrayList<String>();
 		
 		if(mockFacebook) {
@@ -260,10 +263,10 @@ public class TestUtils {
 		}
 		
 		if(!configs.isEmpty()) {
-			overrider.setBeanOverrides(configs.toArray(new String[configs.size()]));
+			SocializeAccess.setBeanOverrides(configs.toArray(new String[configs.size()]));
 		}
 		else {
-			overrider.setBeanOverrides((String[]) null);
+			SocializeAccess.setBeanOverrides((String[]) null);
 		}
 	}
 	

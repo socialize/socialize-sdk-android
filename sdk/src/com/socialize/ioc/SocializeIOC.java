@@ -58,6 +58,6 @@ public class SocializeIOC extends AndroidIOC {
 	}
 	
 	public void init(Context context, ResourceLocator resourceLocator) throws Exception {
-		init(context, resourceLocator, SocializeConfig.SOCIALIZE_BEANS_PATH);
+		init(context, resourceLocator, SocializeConfig.SOCIALIZE_CORE_BEANS_PATH);
 	}
 }

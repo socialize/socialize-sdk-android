@@ -39,6 +39,7 @@ import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.sample.util.ErrorHandler;
+import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.util.StringUtils;
 
 public abstract class CommentBaseListActivity extends ListActivity {
@@ -68,7 +69,7 @@ public abstract class CommentBaseListActivity extends ListActivity {
 					iEnd = Integer.parseInt(end);
 				}
 				
-				final ProgressDialog progress = ProgressDialog.show(this, "Retrieving", "Please wait...");
+				final ProgressDialog progress = SafeProgressDialog.show(this, "Retrieving", "Please wait...");
 				
 				doList(key, iStart, iEnd, new CommentListListener() {
 

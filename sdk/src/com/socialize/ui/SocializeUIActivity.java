@@ -24,6 +24,7 @@ package com.socialize.ui;
 import com.socialize.log.SocializeLogger;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
@@ -49,5 +50,18 @@ public abstract class SocializeUIActivity extends Activity {
 		}
 	}
 	
-	public abstract void onCreateSafe(Bundle savedInstanceState);
+	protected void onNewIntent(Intent intent) {
+		try {
+			super.onNewIntent(intent);
+			onNewIntentSafe(intent);
+		}
+		catch (Throwable e) {
+			Log.e(SocializeLogger.LOG_TAG, "", e);
+			finish();
+		}
+	}
+	
+	protected void onNewIntentSafe(Intent intent) {}
+	
+	protected abstract void onCreateSafe(Bundle savedInstanceState);
 }

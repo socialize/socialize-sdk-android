@@ -3,19 +3,11 @@
 	<factory id="commentItemViewFactory" makes="commentListItem"/>
 	<factory id="listItemLoadingViewFactory" makes="listItemLoadingView"/>
 	
-	<bean 
-		id="entityCache" 
-		class="com.socialize.ui.cache.EntityCache">
-		<constructor-arg type="integer" value="5"/> <!-- Min size -->
-		<constructor-arg type="integer" value="100"/> <!-- Max size -->
-		<property name="timeToLive" value="600000" type="integer"/> <!--  milliseconds -->
-		<destroy-method name="destroy"/>
-	</bean>
-	
 	<bean id="socializeUIErrorHandler" class="com.socialize.ui.error.DialogErrorHandler">
 		<property name="drawables" ref="drawables"/>
-		<property name="config" ref="config"/>
 	</bean>
+	
+	<bean id="dialogFactory" class="com.socialize.util.DialogFactory"/>
 	
 	<bean id="progressDialogFactory" class="com.socialize.ui.dialog.ProgressDialogFactory">
 		<property name="logger" ref="logger"/>
@@ -38,7 +30,7 @@
 		</init-method>	
 	</bean>
 	
-	<bean id="keyboardUtils" class="com.socialize.ui.util.KeyboardUtils">
+	<bean id="keyboardUtils" class="com.socialize.ui.util.KeyboardUtils" context-aware="false">
 		<init-method name="init">
 			<arg type="context"/>
 		</init-method>	
@@ -250,6 +242,7 @@
 		<constructor-arg type="activity"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="loadingViewFactory" ref="loadingViewFactory"/>
 		<init-method name="init"/>
 	</bean>		
 	
@@ -317,7 +310,7 @@
 	<!-- Facebook -->
 	<bean 
 		id="facebookAuthClickListener" 
-		class="com.socialize.ui.facebook.FacebookAuthClickListener"		
+		class="com.socialize.networks.facebook.FacebookAuthClickListener"		
 		singleton="false">
 		<property name="config" ref="config"/>
 		<property name="dialogFactory" ref="progressDialogFactory"/>
@@ -325,7 +318,7 @@
 	
 	<bean 
 		id="facebookSignOutClickListener" 
-		class="com.socialize.ui.facebook.FacebookSignOutClickListener"		
+		class="com.socialize.networks.facebook.FacebookSignOutClickListener"		
 		singleton="false">
 		<property name="drawables" ref="drawables"/>
 		<property name="logger" ref="logger"/>
@@ -335,7 +328,7 @@
 	
 	<bean 
 		id="facebookSignInButton" 
-		class="com.socialize.ui.facebook.FacebookButton"		
+		class="com.socialize.networks.facebook.FacebookButton"		
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
@@ -353,7 +346,7 @@
 	
 	<bean 
 		id="facebookSignInCell" 
-		class="com.socialize.ui.facebook.FacebookSignInCell" 
+		class="com.socialize.networks.facebook.FacebookSignInCell" 
 		singleton="false"
 		extends="clickableSectionCell">
 		<constructor-arg type="activity"/>	
@@ -365,7 +358,7 @@
 	
 	<bean 
 		id="facebookSignOutCell" 
-		class="com.socialize.ui.facebook.FacebookSignOutCell" 
+		class="com.socialize.networks.facebook.FacebookSignOutCell" 
 		singleton="false"
 		extends="clickableSectionCell">
 		<constructor-arg type="activity"/>	
@@ -398,18 +391,11 @@
 	<bean 
 		id="facebookSignOutTask" 
 		singleton="false"
-		class="com.socialize.ui.facebook.FacebookSignOutTask">
+		class="com.socialize.networks.facebook.FacebookSignOutTask">
 		<property name="logger" ref="logger"/>
 		<property name="dialogFactory" ref="progressDialogFactory"/>
 	</bean>
-	
-	<bean 
-		id="facebookWallPoster" 
-		class="com.socialize.ui.facebook.DefaultFacebookWallPoster">
-		<property name="logger" ref="logger"/>
-		<property name="drawables" ref="drawables"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
-	</bean>
+
 	
 	<factory id="facebookSignOutTaskFactory" makes="facebookSignOutTask"/>
 	
@@ -512,14 +498,16 @@
 		
 		<property name="commentAdapter" ref="commentAdapter"/>
 		<property name="drawables" ref="drawables"/>
+		<property name="appUtils" ref="appUtils"/>
 		<property name="logger" ref="logger"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
+		<property name="alertDialogFactory" ref="alertDialogFactory"/>
 		<property name="commentHeaderFactory" ref="commentHeaderFactory"/>
 		<property name="commentEditFieldFactory" ref="commentEditFieldFactory"/>
 		<property name="commentContentViewFactory" ref="loadingListViewFactory"/>
 		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
-		<property name="facebookWallPoster" ref="facebookWallPoster"/>
 		<property name="commentEntryFactory" ref="commentEntrySliderItemFactory"/>
+		<property name="notificationEnabledOptionFactory" ref="notificationEnabledOptionNoBorderFactory"/>
 		<property name="sliderFactory" ref="actionBarSliderFactory"/>
 	</bean>
 	
@@ -600,18 +588,38 @@
 	</bean>	
 	
 	<bean 
+		id="subscribeNotificationButton" 
+		singleton="false"
+		extends="socializeButton">
+		<constructor-arg type="activity"/>
+		<property name="text" value="Unsubscribe"/>
+		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
+		<property name="topColor" value="GRAY_BTN_TOP"/>
+		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
+		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>
+		<property name="height" value="36" type="integer"/>
+		<property name="width" value="160" type="integer"/>
+		<property name="textSize" value="14" type="integer"/>
+		<property name="textAlign" value="center"/>
+		<property name="padding" value="2" type="integer"/>
+	</bean>		
+	
+	<bean 
 		id="commentEntryView" 
 		class="com.socialize.ui.comment.CommentEntryView" 
 		singleton="false">
 		<constructor-arg type="activity"/>
 		
 		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="appUtils" ref="appUtils"/>
 		<property name="keyboardUtils" ref="keyboardUtils"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="postCommentButton" ref="postCommentButton"/>
 		<property name="cancelCommentButton" ref="cancelCommentButton"/>
+		<property name="subscribeNotificationButton" ref="subscribeNotificationButton"/>
 		<property name="autoPostFacebookOptionFactory" ref="autoPostFacebookOptionFactory"/>
 		<property name="locationEnabledOptionFactory" ref="locationEnabledOptionFactory"/>
+		<property name="notificationEnabledOptionFactory" ref="notificationEnabledOptionFactory"/>
 		
 		<init-method name="init"/>
 	</bean>		
@@ -650,6 +658,33 @@
 	
 	<factory id="locationEnabledOptionFactory" makes="locationEnabledOption"/>	
 	
+	<bean 
+		id="notificationEnabledOption" 
+		extends="customCheckbox"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="imageOn" value="icon_notify.png"/>
+		<property name="imageOff" value="icon_notify_disabled.png"/>
+		<property name="textOn" value=""/>
+		<property name="textOff" value=""/>
+		<property name="borderOn" value="true" type="boolean"/>
+	</bean>	
+	
+	<bean 
+		id="notificationEnabledOptionNoBorder" 
+		extends="notificationEnabledOption"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="imageOn" value="icon_notify.png#large"/>
+		<property name="imageOff" value="icon_notify_disabled.png#large"/>
+		<property name="padding" value="4" type="integer"/>
+		<property name="forceDefaultDensity" value="true" type="boolean"/>
+		<property name="borderOn" value="false" type="boolean"/>
+	</bean>		
+	
+	<factory id="notificationEnabledOptionNoBorderFactory" makes="notificationEnabledOptionNoBorder"/>	
+	<factory id="notificationEnabledOptionFactory" makes="notificationEnabledOption"/>	
+	
 <!--  End Comment UI -->
 	
 <!-- Profile UI -->
@@ -683,7 +718,7 @@
 		extends="socializeHeader"
 		singleton="false">
 		<constructor-arg type="activity"/>
-		<property name="headerText" value="Profile"/>
+		<property name="headerText" value="Settings"/>
 	</bean>		
 	
 	<factory id="profileHeaderFactory" makes="profileHeader"/>		
@@ -902,6 +937,7 @@
 		singleton="false">
 		
 		<constructor-arg type="activity"/>
+		
 		<init-method name="init"/>
 		
 		<property name="drawables" ref="drawables"/>
@@ -912,7 +948,6 @@
 		<property name="tickerFactory" ref="actionBarTickerFactory"/>
 		<property name="itemFactory" ref="actionBarItemFactory"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
-		<property name="facebookWallPoster" ref="facebookWallPoster"/>
 	</bean>
 	
 	<bean 
@@ -1001,13 +1036,10 @@
 		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>				
 	</bean>	
 	
-	<bean id="shareMessageBuilder" class="com.socialize.ui.share.ShareMessageBuilder">
-		<property name="deviceUtils" ref="deviceUtils"/>
-	</bean>	
-	
 	<bean id="shareClickListener" abstract="true">
 		<property name="logger" ref="logger"/>
 		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
+		<property name="errorHandler" ref="socializeUIErrorHandler"/>
 	</bean>
 	
 	<bean 
@@ -1015,12 +1047,9 @@
 		class="com.socialize.ui.share.FacebookShareClickListener" 
 		extends="shareClickListener"
 		singleton="false">
-		<property name="deviceUtils" ref="deviceUtils"/>
-		<property name="facebookWallPoster" ref="facebookWallPoster"/>
-		<property name="config" ref="config"/>
+		<property name="facebookSharer" ref="facebookSharer"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
 		<property name="alertDialogFactory" ref="alertDialogFactory"/>
-		<property name="logger" ref="logger"/>
 	</bean>
 		
 	<bean 
@@ -1183,5 +1212,5 @@
 		<destroy-method name="destroy"/>
 	</bean>
 <!--  End Image Loader -->
-	
+
 </beans>

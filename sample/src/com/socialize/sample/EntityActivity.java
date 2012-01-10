@@ -36,6 +36,7 @@ import com.socialize.listener.entity.EntityAddListener;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.sample.util.ErrorHandler;
 import com.socialize.ui.SocializeActivity;
+import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.util.StringUtils;
 
 public class EntityActivity extends SocializeActivity {
@@ -68,7 +69,7 @@ public class EntityActivity extends SocializeActivity {
 					String key = txtKey.getText().toString();
 					String name = txtName.getText().toString();
 					
-					final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Creating", "Please wait...");
+					final ProgressDialog progress = SafeProgressDialog.show(v.getContext(), "Creating", "Please wait...");
 					
 					Socialize.getSocialize().addEntity(key, name, new EntityAddListener() {
 						
@@ -103,7 +104,7 @@ public class EntityActivity extends SocializeActivity {
 					String key = txtKey.getText().toString();
 					
 					if(!StringUtils.isEmpty(key)) {
-						final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Retrieving", "Please wait...");
+						final ProgressDialog progress = SafeProgressDialog.show(v.getContext(), "Retrieving", "Please wait...");
 						
 						Socialize.getSocialize().getEntity(key, new EntityGetListener() {
 							

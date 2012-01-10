@@ -36,9 +36,8 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.ui.SocializeUI;
-import com.socialize.ui.facebook.FacebookSignInCell;
-import com.socialize.ui.facebook.FacebookSignOutCell;
+import com.socialize.networks.facebook.FacebookSignInCell;
+import com.socialize.networks.facebook.FacebookSignOutCell;
 import com.socialize.ui.user.UserService;
 import com.socialize.ui.view.SocializeButton;
 import com.socialize.ui.view.SocializeEditText;
@@ -122,7 +121,7 @@ public class ProfileContentView extends BaseView {
 		master.addView(firstNameEdit);
 		master.addView(lastNameEdit);
 		
-		if(SocializeUI.getInstance().isFacebookSupported()) {
+		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
 			facebookSignInCell = facebookSignInCellFactory.getBean();
 			facebookSignOutCell = facebookSignOutCellFactory.getBean();
 			
@@ -216,7 +215,7 @@ public class ProfileContentView extends BaseView {
 		
 		setCurrentUser(currentUser);
 			
-		if(SocializeUI.getInstance().isFacebookSupported() &&
+		if(getSocialize().isSupported(AuthProviderType.FACEBOOK) &&
 				Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 			facebookSignOutCell.setVisibility(View.VISIBLE);
 //			autoPostFacebook.setChecked(user.isAutoPostToFacebook());
@@ -227,7 +226,7 @@ public class ProfileContentView extends BaseView {
 	
 	public void onFacebookChanged() {
 		if(facebookSignOutCell != null && facebookSignInCell != null) {
-			if(SocializeUI.getInstance().isFacebookSupported()) {
+			if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
 				if(Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 					facebookSignOutCell.setVisibility(View.VISIBLE);
 					facebookSignInCell.setVisibility(View.GONE);

@@ -48,9 +48,9 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
+import com.socialize.entity.SocializeObjectFactory;
 import com.socialize.entity.User;
-import com.socialize.entity.factory.SocializeObjectFactory;
-import com.socialize.entity.factory.UserFactory;
+import com.socialize.entity.UserFactory;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 import com.socialize.net.HttpClientFactory;
@@ -197,6 +197,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		final String oauth_token_secret = "oauth_token_secret";
 		final String url = "https://" + host + "/" + endpoint;
 		
+		AndroidMock.expect(clientFactory.isDestroyed()).andReturn(false);
 		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
 		AndroidMock.expect(authProviderData.getAuthProviderType()).andReturn(null);
 		AndroidMock.expect(authProviderData.getAppId3rdParty()).andReturn(null);
@@ -308,6 +309,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		final String url = "http://" + host + "/" + endpoint;
 		final SocializeObject object = new SocializeObject();
 		
+		AndroidMock.expect(clientFactory.isDestroyed()).andReturn(false);
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
 		AndroidMock.expect(requestFactory.getGetRequest(session, url, id)).andReturn(request);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
@@ -360,6 +362,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		final String host = "host";
 		final String url = "http://" + host + "/" + endpoint;
 		
+		AndroidMock.expect(clientFactory.isDestroyed()).andReturn(false);
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
 		AndroidMock.expect(requestFactory.getDeleteRequest(session, url, id)).andReturn(request);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
@@ -393,6 +396,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		
 		StatusLine status = AndroidMock.createMock(StatusLine.class);
 		
+		AndroidMock.expect(clientFactory.isDestroyed()).andReturn(false);
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
 		AndroidMock.expect(requestFactory.getGetRequest(session, url, id)).andReturn(request);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
@@ -464,6 +468,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		
 		StatusLine status = AndroidMock.createMock(StatusLine.class);
 		
+		AndroidMock.expect(clientFactory.isDestroyed()).andReturn(false);
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
 		AndroidMock.expect(requestFactory.getDeleteRequest(session, url, id)).andReturn(request);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
@@ -534,6 +539,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		
 		StatusLine status = AndroidMock.createMock(StatusLine.class);
 		
+		AndroidMock.expect(clientFactory.isDestroyed()).andReturn(false);
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
 		AndroidMock.expect(requestFactory.getListRequest(session, url, key, null, 0, 10)).andReturn(request);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
@@ -607,6 +613,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		
 		final int start = 0, end  = 10;
 		
+		AndroidMock.expect(clientFactory.isDestroyed()).andReturn(false);
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
 		AndroidMock.expect(requestFactory.getListRequest(session, url, key, null, start, end)).andReturn(request);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
@@ -680,6 +687,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		
 		final int arrayLength = 3;
 		
+		AndroidMock.expect(clientFactory.isDestroyed()).andReturn(false);
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
 		AndroidMock.expect(requestFactory.getListRequest(session, url, key, ids, start, end)).andReturn(request);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
@@ -757,7 +765,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		
 		final int arrayLength = 3;
 		
-		
+		AndroidMock.expect(clientFactory.isDestroyed()).andReturn(false);
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
 		AndroidMock.expect(requestFactory.getPostRequest(session, url, object)).andReturn(request);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
@@ -839,6 +847,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		
 		final int arrayLength = objects.size();
 		
+		AndroidMock.expect(clientFactory.isDestroyed()).andReturn(false);
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
 		AndroidMock.expect(requestFactory.getPostRequest(session, url, objects)).andReturn(request);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
@@ -916,6 +925,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		
 		final int arrayLength = 3;
 		
+		AndroidMock.expect(clientFactory.isDestroyed()).andReturn(false);
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
 		AndroidMock.expect(requestFactory.getPutRequest(session, url, object)).andReturn(request);
 		AndroidMock.expect(client.execute(request)).andReturn(response);
@@ -996,6 +1006,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		
 		final int arrayLength = objects.size();
 		
+		AndroidMock.expect(clientFactory.isDestroyed()).andReturn(false);
 		AndroidMock.expect(clientFactory.getClient()).andReturn(client);
 		AndroidMock.expect(requestFactory.getPutRequest(session, url, objects)).andReturn(request);
 		AndroidMock.expect(client.execute(request)).andReturn(response);

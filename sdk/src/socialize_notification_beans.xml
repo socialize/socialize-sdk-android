@@ -1,0 +1,49 @@
+
+<!-- 
+	Beans used exclusively by the C2DM background service
+ -->
+<beans>
+
+	<import-mapping source="socialize_core_beans.xml" dependentOnly="true"/>
+
+	<bean id="notificationIdGenerator" class="com.socialize.notifications.NotificationIdGenerator"/>
+
+	<bean id="notificationMessageFactory" class="com.socialize.notifications.NotificationMessageFactory">
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<!-- 
+	<bean id="actionMessageTranslator" class="com.socialize.notifications.SocializeActionMessageTranslator">
+		<property name="activitySystem" ref="activitySystem"/>
+		<property name="notificationAuthenticator" ref="notificationAuthenticator"/>
+	</bean>
+	 -->
+	
+	<bean id="simpleMessageTranslator" class="com.socialize.notifications.SimpleNotificationMessageTranslator"/>
+	
+	<bean id="actionNotificationMessageBuilder" class="com.socialize.notifications.SocializeActionNotificationMessageBuilder">
+		<property name="appUtils" ref="appUtils"/>
+		<property name="messageTranslator" ref="simpleMessageTranslator"/>
+	</bean>
+	
+	<bean id="notificationCallback" class="com.socialize.notifications.SocializeC2DMCallback">
+		<property name="logger" ref="logger"/>
+		<property name="notificationMessageFactory" ref="notificationMessageFactory"/>
+		<property name="notificationIdGenerator" ref="notificationIdGenerator"/>
+		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
+		<property name="messageBuilders">
+			<map>
+				<entry>
+					<key value="NEW_COMMENTS"/>
+					<value ref="actionNotificationMessageBuilder"/>
+				</entry>
+			</map>
+		</property>		
+	</bean>
+	
+	<!--  This facebook bean is NOT required, we are just putting a placeholder here so the notification system
+		  doesn't try to resolve all the dependencies for this bean
+	 -->
+	<bean id="facebookProvider" class="com.socialize.auth.EmptyAuthProvider"/>
+	
+</beans>

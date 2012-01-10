@@ -30,15 +30,19 @@ public class ActionBarOptions {
 	private boolean isEntityKeyUrl = true;
 	private boolean addScrollView = true;
 	
+	@Deprecated
 	public String getEntityName() {
 		return entityName;
 	}
+	@Deprecated
 	public void setEntityName(String entityName) {
 		this.entityName = entityName;
 	}
+	@Deprecated
 	public boolean isEntityKeyUrl() {
 		return isEntityKeyUrl;
 	}
+	@Deprecated
 	public void setEntityKeyUrl(boolean isEntityKeyUrl) {
 		this.isEntityKeyUrl = isEntityKeyUrl;
 	}

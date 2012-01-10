@@ -29,9 +29,10 @@ import android.view.Menu;
 
 import com.socialize.Socialize;
 import com.socialize.log.SocializeLogger;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.SocializeUIActivity;
-import com.socialize.util.StringUtils;
+import com.socialize.ui.slider.ActionBarSliderView;
+import com.socialize.ui.slider.ActionBarSliderView.DisplayState;
+import com.socialize.util.AppUtils;
 
 /**
  * @author Jason Polites
@@ -41,18 +42,18 @@ public class CommentActivity extends SocializeUIActivity {
 	private CommentView view;
 	
 	@Override
-	public void onCreateSafe(Bundle savedInstanceState) {
+	protected void onCreateSafe(Bundle savedInstanceState) {
 
 		Bundle extras = getIntent().getExtras();
 		
-		if(extras == null || !extras.containsKey(SocializeUI.ENTITY_KEY)) {
-			Log.w(SocializeLogger.LOG_TAG, "No entity url found for Comment Activity. Aborting");
+		if(extras == null || !extras.containsKey(Socialize.ENTITY_OBJECT)) {
+			Log.w(SocializeLogger.LOG_TAG, "No entity found for Comment Activity. Aborting");
 			finish();
 		}
 		else {
-			String entityKey = extras.getString(SocializeUI.ENTITY_KEY);
-			if(StringUtils.isEmpty(entityKey)) {
-				Log.w(SocializeLogger.LOG_TAG, "No entity url found for Comment Activity. Aborting");
+			Object entity = extras.get(Socialize.ENTITY_OBJECT);
+			if(entity == null) {
+				Log.w(SocializeLogger.LOG_TAG, "No entity found for Comment Activity. Aborting");
 				finish();
 			}
 			else {
@@ -65,8 +66,24 @@ public class CommentActivity extends SocializeUIActivity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK) {
+			if(view != null) {
+				ActionBarSliderView slider = view.getCommentEntryViewSlider();
+				if(slider != null && slider.getDisplayState().equals(DisplayState.MAXIMIZE)) {
+					slider.close();
+					return true;
+				}
+			}
+			
 			Socialize.getSocialize().destroy();
+			
+			if(isTaskRoot()) {
+				if (AppUtils.launchMainApp(this)) {
+					finish();
+					return true;
+				}
+			}
 		}
+		
 		return super.onKeyDown(keyCode, event);
 	}
 	

@@ -26,7 +26,7 @@ import java.util.List;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.EntityApi;
+import com.socialize.api.action.SocializeEntitySystem;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeApiError;
@@ -60,7 +60,7 @@ public class EntityApiTest extends SocializeUnitTest {
 		final String key = "foo";
 		final String name = "bar";
 		
-		EntityApi api = new EntityApi(provider){
+		SocializeEntitySystem api = new SocializeEntitySystem(provider){
 			
 			@Override
 			public void postAsync(SocializeSession session, String endpoint, List<Entity> objects, SocializeActionListener listener) {
@@ -69,7 +69,7 @@ public class EntityApiTest extends SocializeUnitTest {
 
 		};
 		
-		api.addEntity(session, key, name, listener);
+		api.addEntity(session, Entity.newInstance(key, name), listener);
 		
 		List<Entity> result = getNextResult();
 		
@@ -88,7 +88,7 @@ public class EntityApiTest extends SocializeUnitTest {
 		
 		String key = "foo";
 		
-		EntityApi api = new EntityApi(provider) {
+		SocializeEntitySystem api = new SocializeEntitySystem(provider) {
 			@Override
 			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(key);
@@ -107,7 +107,7 @@ public class EntityApiTest extends SocializeUnitTest {
 		
 		String[] keys = {"A", "B", "C"};
 		
-		EntityApi api = new EntityApi(provider) {
+		SocializeEntitySystem api = new SocializeEntitySystem(provider) {
 			@Override
 			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(ids);
@@ -132,7 +132,7 @@ public class EntityApiTest extends SocializeUnitTest {
 		
 		String key = "foo";
 		
-		EntityApi api = new EntityApi(provider) {
+		SocializeEntitySystem api = new SocializeEntitySystem(provider) {
 			@Override
 			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(listener);
@@ -178,7 +178,7 @@ public class EntityApiTest extends SocializeUnitTest {
 		
 		String key = "foo";
 		
-		EntityApi api = new EntityApi(provider) {
+		SocializeEntitySystem api = new SocializeEntitySystem(provider) {
 			@Override
 			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(listener);

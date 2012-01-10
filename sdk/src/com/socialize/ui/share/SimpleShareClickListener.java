@@ -32,7 +32,7 @@ import com.socialize.ui.actionbar.OnActionBarEventListener;
 /**
  * @author Jason Polites
  */
-public abstract class SimpleShareClickListener extends BaseShareClickListener {
+public abstract class SimpleShareClickListener extends InternalShareClickListener {
 
 	public SimpleShareClickListener(ActionBarView actionBarView) {
 		super(actionBarView);

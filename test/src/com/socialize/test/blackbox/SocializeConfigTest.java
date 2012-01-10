@@ -207,4 +207,32 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		assertNotNull(nextResult);
 		assertTrue(nextResult);
 	}
+	
+	public void test_setFacebookSingleSignOnEnabled() {
+		SocializeConfig config = new SocializeConfig() {
+			@Override
+			public void setProperty(String key, String value) {
+				addResult(0, key);
+				addResult(1, value);
+			}
+		};
+		
+		config.setFacebookSingleSignOnEnabled(true);
+		
+		String value = getResult(1);
+		String key = getResult(0);
+		
+		assertEquals(SocializeConfig.FACEBOOK_SSO_ENABLED, key);
+		assertEquals("true", value);
+	}
+	
+//	public void testBeanOverride() {
+//		SocializeAccess.setBeanOverrides("foobar");
+//		String[] config = Socialize.getSocialize().getSystem().getBeanConfig();
+//		assertNotNull(config);
+//		assertEquals(3, config.length);
+//		assertEquals("socialize_beans.xml", config[0]);
+//		assertEquals("socialize_ui_beans.xml", config[1]);
+//		assertEquals("foobar", config[2]);		
+//	}
 }

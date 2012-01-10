@@ -17,6 +17,7 @@ import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 
+@Deprecated
 public class ActionBarAutoActivity extends ActionBarActivity {
 
 	@Override

@@ -34,6 +34,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.sample.util.ErrorHandler;
 import com.socialize.ui.SocializeActivity;
+import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.util.StringUtils;
 
 public class ViewActivity extends SocializeActivity {
@@ -58,7 +59,7 @@ public class ViewActivity extends SocializeActivity {
 					
 					clearViewData();
 					
-					final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Posting View", "Please wait...");
+					final ProgressDialog progress = SafeProgressDialog.show(v.getContext(), "Posting View", "Please wait...");
 					
 					txtViewCreateResult.setText("");
 					btnViewCreate.setEnabled(false);

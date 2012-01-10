@@ -23,14 +23,15 @@ package com.socialize.ui.action;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.widget.Toast;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
+import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.SocializeUIActivity;
 
 /**
@@ -41,8 +42,20 @@ public class ActionDetailActivity extends SocializeUIActivity {
 	private ActionDetailView view;
 
 	@Override
-	public void onCreateSafe(Bundle savedInstanceState) {
-		
+	protected void onCreateSafe(Bundle savedInstanceState) {
+		Intent intent = getIntent();
+		doActivityLoad(intent);
+	}
+	
+	@Override
+	protected void onNewIntentSafe(Intent intent) {
+		Bundle extras = intent.getExtras();
+		if(extras != null && view != null) {
+			view.reload(extras.getString(Socialize.USER_ID), extras.getString(Socialize.ACTION_ID));
+		}
+	}
+
+	protected void doActivityLoad(Intent intent) {
 		SocializeSession session = getSocialize().getSession();
 		
 		if(session == null) {
@@ -55,25 +68,20 @@ public class ActionDetailActivity extends SocializeUIActivity {
 				finish();
 			}
 			else {
-				Bundle extras = getIntent().getExtras();
+				Bundle extras = intent.getExtras();
 
-				if (extras == null || !extras.containsKey(SocializeUI.USER_ID)) {
-					Toast.makeText(this, "No user id provided", Toast.LENGTH_SHORT).show();
+				if (extras == null || !extras.containsKey(Socialize.ACTION_ID)) {
+					Toast.makeText(this, "No action id provided", Toast.LENGTH_SHORT).show();
 					finish();
 				}
 				else {
-					// If WE are the user being viewed, assume a profile update
-					String userId = extras.getString(SocializeUI.USER_ID);
-					
-					if(Integer.parseInt(userId) == user.getId()) {
-						setResult(SocializeUIActivity.PROFILE_UPDATE);
-					}
-					
+					// TODO: do we need this?
+					setResult(SocializeUIActivity.PROFILE_UPDATE);
 					view = new ActionDetailView(this);
 					setContentView(view);
 				}
 			}
-		}
+		}	
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -83,6 +91,22 @@ public class ActionDetailActivity extends SocializeUIActivity {
 		}
 	}
 	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK) {
+			// If we were launched directly, re-launch the main app
+			if(isTaskRoot() && view != null) {
+				SocializeAction currentAction = view.getCurrentAction();
+				if(currentAction != null) {
+					Socialize.getSocializeUI().showCommentView(this, currentAction.getEntity());
+					finish();
+					return true;
+				}
+			}
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if(view != null) {

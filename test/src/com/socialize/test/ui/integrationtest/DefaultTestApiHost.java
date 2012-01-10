@@ -10,6 +10,7 @@ import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.entity.Entity;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.activity.UserActivityListener;
 import com.socialize.listener.comment.CommentListener;
@@ -18,11 +19,43 @@ import com.socialize.listener.like.LikeListener;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.listener.user.UserListener;
 import com.socialize.listener.view.ViewListener;
+import com.socialize.networks.ShareOptions;
 import com.socialize.ui.comment.CommentShareOptions;
 
+@Deprecated
 public class DefaultTestApiHost implements ApiHost {
 	
 	static String message = "Unexpected call to ";
+	
+	@Override
+	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
+		fail(message + "authenticate");
+	}
+
+	@Override
+	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
+		fail(message + "authenticate");
+	}
+
+	@Override
+	public void addComment(SocializeSession session, Entity entity, String comment, Location location, ShareOptions shareOptions, CommentListener listener) {
+		fail(message + "addComment");
+	}
+
+	@Override
+	public void addLike(SocializeSession session, Entity entity, Location location, LikeListener listener) {
+		fail(message + "addLike");
+	}
+
+	@Override
+	public void addView(SocializeSession session, Entity entity, Location location, ViewListener listener) {
+		fail(message + "addView");
+	}
+
+	@Override
+	public void addShare(SocializeSession session, Entity entity, String text, ShareType shareType, Location location, ShareListener listener) {
+		fail(message + "addShare");
+	}
 
 	@Override
 	public void listLikesByUser(SocializeSession session, long userId, LikeListener listener) {
@@ -105,7 +138,7 @@ public class DefaultTestApiHost implements ApiHost {
 	}
 
 	@Override
-	public void listCommentsById(SocializeSession session, CommentListener listener, int... ids) {
+	public void listCommentsById(SocializeSession session, CommentListener listener, long... ids) {
 		fail(message + "listCommentsById");
 	}
 
@@ -130,7 +163,7 @@ public class DefaultTestApiHost implements ApiHost {
 	}
 
 	@Override
-	public void listLikesById(SocializeSession session, LikeListener listener, int... ids) {
+	public void listLikesById(SocializeSession session, LikeListener listener, long... ids) {
 		fail(message + "listLikesById");
 
 	}

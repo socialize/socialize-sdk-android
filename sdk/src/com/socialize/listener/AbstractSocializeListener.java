@@ -47,6 +47,9 @@ public abstract class AbstractSocializeListener<T extends SocializeObject> imple
 			case GET:
 				onGet(entityResponse.getFirstResult());
 				break;
+			case LIST_AS_GET:
+				onGet(entityResponse.getFirstResult());
+				break;				
 			case LIST:
 				onList(entityResponse.getResults());
 				break;

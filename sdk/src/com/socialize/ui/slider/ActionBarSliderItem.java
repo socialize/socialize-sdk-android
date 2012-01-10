@@ -68,5 +68,7 @@ public interface ActionBarSliderItem {
 	
 	public void onClose(ActionBarSliderView slider);
 	
+	public void onOpen(ActionBarSliderView slider);
+	
 	public void onCreate(ActionBarSliderView slider);
 }

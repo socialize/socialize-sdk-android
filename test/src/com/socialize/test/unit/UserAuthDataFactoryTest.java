@@ -28,7 +28,7 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.UserAuthData;
-import com.socialize.entity.factory.UserAuthDataFactory;
+import com.socialize.entity.UserAuthDataFactory;
 
 /**
  * @author Jason Polites

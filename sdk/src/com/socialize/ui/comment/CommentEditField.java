@@ -51,7 +51,7 @@ public class CommentEditField extends LinearLayout {
 		final int eight = deviceUtils.getDIP(8);
 		
 		LayoutParams editPanelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-		editPanelLayoutParams.setMargins(eight, eight, eight, eight);
+		editPanelLayoutParams.setMargins(four, eight, eight, eight);
 		this.setLayoutParams(editPanelLayoutParams);
 		this.setOrientation(LinearLayout.HORIZONTAL);
 		this.setPadding(0, 0, 0, 0);
@@ -69,7 +69,6 @@ public class CommentEditField extends LinearLayout {
 		editText.setHint(" Write a comment...");
 		editText.setLayoutParams(editTextLayoutParams);
 		editText.setPadding(four, four, four, four);
-
 		
 		this.addView(editText);
 	}

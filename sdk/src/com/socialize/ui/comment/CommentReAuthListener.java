@@ -37,15 +37,17 @@ public class CommentReAuthListener implements SocializeAuthListener {
 	private String comment;
 	private boolean autoPostToFacebook;
 	private boolean shareLocation;
+	private boolean subscribe;
 	private Context context;
 	
-	public CommentReAuthListener(Context context, CommentButtonCallback callback, String comment, boolean autoPostToFacebook, boolean shareLocation) {
+	public CommentReAuthListener(Context context, CommentButtonCallback callback, String comment, boolean autoPostToFacebook, boolean shareLocation, boolean subscribe) {
 		super();
 		this.callback = callback;
 		this.comment = comment;
 		this.context = context;
 		this.autoPostToFacebook = autoPostToFacebook;
 		this.shareLocation = shareLocation;
+		this.subscribe = subscribe;
 	}
 	
 	@Override
@@ -55,7 +57,7 @@ public class CommentReAuthListener implements SocializeAuthListener {
 
 	@Override
 	public void onAuthSuccess(SocializeSession session) {
-		callback.onComment(comment, autoPostToFacebook, shareLocation);
+		callback.onComment(comment, autoPostToFacebook, shareLocation, subscribe);
 	}
 
 	@Override

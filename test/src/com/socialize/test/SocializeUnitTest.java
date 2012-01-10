@@ -21,33 +21,36 @@
  */
 package com.socialize.test;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import android.test.AndroidTestCase;
+
+import com.socialize.test.ui.ResultHolder;
 
 /**
  * @author Jason Polites
  *
  */
 public abstract class SocializeUnitTest extends AndroidTestCase {
-	private List<Object> bucket;
+	protected final ResultHolder holder = new ResultHolder();
 	
 	@Override
 	protected void setUp() throws Exception {
-		bucket = new LinkedList<Object>();
+		holder.setUp();
 		super.setUp();
 	}
 	
 	protected void addResult(Object obj) {
-		bucket.add(obj);
+		holder.addResult(obj);
 	}
 	
-	@SuppressWarnings("unchecked")
+	protected void addResult(int index, Object obj) {
+		holder.addResult(index, obj);
+	}
+	
+	protected <T extends Object> T getResult(int index) {
+		return holder.getResult(index);
+	}
+	
 	protected <T extends Object> T getNextResult() {
-		if(!bucket.isEmpty()) {
-			return (T) bucket.remove(0);
-		}
-		return (T) null;
+		return holder.getNextResult();
 	}
 }

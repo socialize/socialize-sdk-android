@@ -145,8 +145,8 @@ public class Drawables {
 			
 			if(in == null) {
 				
-				if(logger != null && logger.isInfoEnabled()) {
-					logger.info("No drawable found in path [" +
+				if(logger != null && logger.isDebugEnabled()) {
+					logger.debug("No drawable found in path [" +
 							path +
 							"].  Trying common path");
 				}

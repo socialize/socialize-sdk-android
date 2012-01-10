@@ -30,7 +30,7 @@ import android.content.SharedPreferences.Editor;
 
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
-import com.socialize.entity.factory.UserFactory;
+import com.socialize.entity.UserFactory;
 import com.socialize.log.SocializeLogger;
 
 /**

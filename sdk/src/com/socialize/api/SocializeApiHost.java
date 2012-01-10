@@ -25,17 +25,18 @@ import android.content.Context;
 import android.location.Location;
 
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.api.action.UserActivityApi;
-import com.socialize.api.action.CommentApi;
-import com.socialize.api.action.EntityApi;
-import com.socialize.api.action.LikeApi;
 import com.socialize.api.action.RecommendationApi;
-import com.socialize.api.action.ShareApi;
 import com.socialize.api.action.ShareType;
-import com.socialize.api.action.UserApi;
-import com.socialize.api.action.ViewApi;
+import com.socialize.api.action.SocializeActivitySystem;
+import com.socialize.api.action.SocializeCommentSystem;
+import com.socialize.api.action.SocializeEntitySystem;
+import com.socialize.api.action.SocializeLikeSystem;
+import com.socialize.api.action.SocializeShareSystem;
+import com.socialize.api.action.SocializeUserSystem;
+import com.socialize.api.action.SocializeViewSystem;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.activity.UserActivityListener;
@@ -47,6 +48,7 @@ import com.socialize.listener.user.UserListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewListener;
 import com.socialize.net.HttpClientFactory;
+import com.socialize.networks.ShareOptions;
 import com.socialize.ui.comment.CommentShareOptions;
 import com.socialize.ui.profile.UserProfile;
 import com.socialize.util.DeviceUtils;
@@ -56,18 +58,18 @@ import com.socialize.util.StringUtils;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class SocializeApiHost implements ApiHost {
 	
-	private Context context;
 	private HttpClientFactory clientFactory;
 	private DeviceUtils deviceUtils;
-	private CommentApi commentApi;
-	private EntityApi entityApi;
-	private LikeApi likeApi;
-	private ViewApi viewApi;
-	private UserApi userApi;
-	private ShareApi shareApi;
-	private UserActivityApi userActivityApi;
+	private SocializeCommentSystem socializeCommentSystem;
+	private SocializeEntitySystem socializeEntitySystem;
+	private SocializeLikeSystem socializeLikeSystem;
+	private SocializeViewSystem socializeViewSystem;
+	private SocializeUserSystem socializeUserSystem;
+	private SocializeShareSystem socializeShareSystem;
+	private SocializeActivitySystem socializeActivitySystem;
 	private RecommendationApi recommendationApi;
 	
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
@@ -76,39 +78,42 @@ public class SocializeApiHost implements ApiHost {
 		super();
 	}
 	
-	public void init(Context context) {
-		this.context = context;
-	}
+	public void init(Context context) {}
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.api.ApiHost#clearSessionCache()
 	 */
 	@Override
 	public void clearSessionCache() {
-		userApi.clearSession();
+		socializeUserSystem.clearSession();
 	}
 	
 	
 	@Override
 	public void clearSessionCache(AuthProviderType authProviderType) {
-		userApi.clearSession(authProviderType);
+		socializeUserSystem.clearSession(authProviderType);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.api.ApiHost#authenticate(java.lang.String, java.lang.String, com.socialize.listener.SocializeAuthListener, com.socialize.api.SocializeSessionConsumer)
 	 */
 	@Override
+	@Deprecated
 	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
 		AuthProviderData authProviderData = authProviderDataFactory.getBean();
 		authProviderData.setAuthProviderType(AuthProviderType.SOCIALIZE);
 		authenticate(consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, false);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.api.ApiHost#authenticate(java.lang.String, java.lang.String, com.socialize.auth.AuthProviderData, com.socialize.listener.SocializeAuthListener, com.socialize.api.SocializeSessionConsumer, boolean)
-	 */
 	@Override
-	public void authenticate(String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
+	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
+		AuthProviderData authProviderData = authProviderDataFactory.getBean();
+		authProviderData.setAuthProviderType(AuthProviderType.SOCIALIZE);
+		authenticate(context, consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, false);
+	}
+
+	@Override
+	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
 		String udid = deviceUtils.getUDID(context);
 		
 		// TODO: create test case for this
@@ -119,8 +124,17 @@ public class SocializeApiHost implements ApiHost {
 		}
 		else {
 			// All Api instances have authenticate, so we can just use any old one
-			userApi.authenticateAsync(consumerKey, consumerSecret, udid, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
+			socializeUserSystem.authenticateAsync(context, consumerKey, consumerSecret, udid, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.api.ApiHost#authenticate(java.lang.String, java.lang.String, com.socialize.auth.AuthProviderData, com.socialize.listener.SocializeAuthListener, com.socialize.api.SocializeSessionConsumer, boolean)
+	 */
+	@Deprecated
+	@Override
+	public void authenticate(String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
+		throw new UnsupportedOperationException("Method not supported");
 	}
 	
 	/* (non-Javadoc)
@@ -128,7 +142,7 @@ public class SocializeApiHost implements ApiHost {
 	 */
 	@Override
 	public void createEntity(SocializeSession session, String key, String name, EntityListener listener) {
-		entityApi.addEntity(session, key, name, listener);
+		socializeEntitySystem.addEntity(session, key, name, listener);
 	}
 	
 	/*
@@ -136,16 +150,23 @@ public class SocializeApiHost implements ApiHost {
 	 * @see com.socialize.api.ApiHost#addComment(com.socialize.api.SocializeSession, java.lang.String, java.lang.String, android.location.Location, boolean, com.socialize.listener.comment.CommentListener)
 	 */
 	@Override
+	@Deprecated
 	public void addComment(SocializeSession session, String key, String comment, Location location, CommentShareOptions shareOptions, CommentListener listener) {
-		commentApi.addComment(session, key, comment, location, shareOptions, listener);
+		socializeCommentSystem.addComment(session, key, comment, location, shareOptions, listener);
 	}
+
 	
+	@Override
+	public void addComment(SocializeSession session, Entity entity, String comment, Location location, ShareOptions shareOptions, CommentListener listener) {
+		socializeCommentSystem.addComment(session, entity, comment, location, shareOptions, listener);
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.api.ApiHost#getComment(com.socialize.api.SocializeSession, long, com.socialize.listener.comment.CommentListener)
 	 */
 	@Override
 	public void getComment(SocializeSession session, long id, CommentListener listener) {
-		commentApi.getComment(session, id, listener);
+		socializeCommentSystem.getComment(session, id, listener);
 	}
 	
 	/* (non-Javadoc)
@@ -153,7 +174,7 @@ public class SocializeApiHost implements ApiHost {
 	 */
 	@Override
 	public void listEntitiesByKey(SocializeSession session, EntityListener listener, String...keys) {
-		entityApi.listEntities(session, listener, keys);
+		socializeEntitySystem.listEntities(session, listener, keys);
 	}
 	
 	/* (non-Javadoc)
@@ -161,7 +182,7 @@ public class SocializeApiHost implements ApiHost {
 	 */
 	@Override
 	public void getEntity(SocializeSession session, String key, EntityListener listener) {
-		entityApi.getEntity(session, key, listener);
+		socializeEntitySystem.getEntity(session, key, listener);
 	}
 	
 	/* (non-Javadoc)
@@ -177,7 +198,7 @@ public class SocializeApiHost implements ApiHost {
 	 */
 	@Override
 	public void listCommentsByEntity(SocializeSession session, String url, CommentListener listener) {
-		commentApi.getCommentsByEntity(session, url, listener);
+		socializeCommentSystem.getCommentsByEntity(session, url, listener);
 	}
 	
 	/* (non-Javadoc)
@@ -185,15 +206,15 @@ public class SocializeApiHost implements ApiHost {
 	 */
 	@Override
 	public void listCommentsByEntity(SocializeSession session, String url, int startIndex, int endIndex, CommentListener listener) {
-		commentApi.getCommentsByEntity(session, url, startIndex, endIndex, listener);
+		socializeCommentSystem.getCommentsByEntity(session, url, startIndex, endIndex, listener);
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.api.ApiHost#listCommentsById(com.socialize.api.SocializeSession, com.socialize.listener.comment.CommentListener, int)
 	 */
 	@Override
-	public void listCommentsById(SocializeSession session, CommentListener listener, int...ids) {
-		commentApi.getCommentsById(session, listener, ids);
+	public void listCommentsById(SocializeSession session, CommentListener listener, long...ids) {
+		socializeCommentSystem.getCommentsById(session, listener, ids);
 	}
 	
 	/*
@@ -202,7 +223,7 @@ public class SocializeApiHost implements ApiHost {
 	 */
 	@Override
 	public void listCommentsByUser(SocializeSession session, long userId, CommentListener listener) {
-		commentApi.getCommentsByUser(session, userId, listener);
+		socializeCommentSystem.getCommentsByUser(session, userId, listener);
 	}
 
 	/*
@@ -211,57 +232,87 @@ public class SocializeApiHost implements ApiHost {
 	 */
 	@Override
 	public void listCommentsByUser(SocializeSession session, long userId, int startIndex, int endIndex, CommentListener listener) {
-		commentApi.getCommentsByUser(session, userId, startIndex, endIndex, listener);
+		socializeCommentSystem.getCommentsByUser(session, userId, startIndex, endIndex, listener);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.api.ApiHost#addLike(com.socialize.api.SocializeSession, java.lang.String, android.location.Location, com.socialize.listener.like.LikeListener)
 	 */
+	@Deprecated
 	@Override
 	public void addLike(SocializeSession session, String key, Location location, LikeListener listener) {
-		likeApi.addLike(session, key, location, listener);
+		socializeLikeSystem.addLike(session, key, location, listener);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.ApiHost#addLike(com.socialize.api.SocializeSession, com.socialize.entity.Entity, android.location.Location, com.socialize.listener.like.LikeListener)
+	 */
+	@Override
+	public void addLike(SocializeSession session, Entity entity, Location location, LikeListener listener) {
+		socializeLikeSystem.addLike(session, entity, location, listener);
+	}
+
 	@Override
 	public void listLikesByUser(SocializeSession session, long userId, LikeListener listener) {
-		likeApi.getLikesByUser(session, userId, listener);
+		socializeLikeSystem.getLikesByUser(session, userId, listener);
 	}
 
 	@Override
 	public void listLikesByUser(SocializeSession session, long userId, int startIndex, int endIndex, LikeListener listener) {
-		likeApi.getLikesByUser(session, userId, startIndex, endIndex, listener);
+		socializeLikeSystem.getLikesByUser(session, userId, startIndex, endIndex, listener);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.api.ApiHost#addView(com.socialize.api.SocializeSession, java.lang.String, android.location.Location, com.socialize.listener.view.ViewListener)
 	 */
+	@Deprecated
 	@Override
 	public void addView(SocializeSession session, String key, Location location, ViewListener listener) {
-		viewApi.addView(session, key, location, listener);
+		socializeViewSystem.addView(session, key, location, listener);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.ApiHost#addView(com.socialize.api.SocializeSession, com.socialize.entity.Entity, android.location.Location, com.socialize.listener.view.ViewListener)
+	 */
+	@Override
+	public void addView(SocializeSession session, Entity entity, Location location, ViewListener listener) {
+		socializeViewSystem.addView(session, entity, location, listener);
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.api.ApiHost#addShare(com.socialize.api.SocializeSession, java.lang.String, java.lang.String, com.socialize.api.action.ShareType, android.location.Location, com.socialize.listener.share.ShareListener)
 	 */
+	@Deprecated
 	@Override
 	public void addShare(SocializeSession session, String key, String text, ShareType shareType, Location location, ShareListener listener) {
-		shareApi.addShare(session, key, text, shareType, location, listener);
+		socializeShareSystem.addShare(session, key, text, shareType, location, listener);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.ApiHost#addShare(com.socialize.api.SocializeSession, com.socialize.entity.Entity, java.lang.String, com.socialize.api.action.ShareType, android.location.Location, com.socialize.listener.share.ShareListener)
+	 */
+	@Override
+	public void addShare(SocializeSession session, Entity entity, String text, ShareType shareType, Location location, ShareListener listener) {
+		socializeShareSystem.addShare(session, entity, text, shareType, location, listener);
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.api.ApiHost#deleteLike(com.socialize.api.SocializeSession, long, com.socialize.listener.like.LikeListener)
 	 */
 	@Override
 	public void deleteLike(SocializeSession session, long id, LikeListener listener) {
-		likeApi.deleteLike(session, id, listener);
+		socializeLikeSystem.deleteLike(session, id, listener);
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.api.ApiHost#listLikesById(com.socialize.api.SocializeSession, com.socialize.listener.like.LikeListener, int)
 	 */
 	@Override
-	public void listLikesById(SocializeSession session, LikeListener listener, int...ids) {
-		likeApi.getLikesById(session, listener, ids);
+	public void listLikesById(SocializeSession session, LikeListener listener, long...ids) {
+		socializeLikeSystem.getLikesById(session, listener, ids);
 	}
 	
 	/* (non-Javadoc)
@@ -269,7 +320,7 @@ public class SocializeApiHost implements ApiHost {
 	 */
 	@Override
 	public void getLike(SocializeSession session, long id, LikeListener listener) {
-		likeApi.getLike(session, id, listener);
+		socializeLikeSystem.getLike(session, id, listener);
 	}
 	
 	/* (non-Javadoc)
@@ -277,7 +328,7 @@ public class SocializeApiHost implements ApiHost {
 	 */
 	@Override
 	public void getLike(SocializeSession session, String key, LikeListener listener) {
-		likeApi.getLike(session, key, listener);
+		socializeLikeSystem.getLike(session, key, listener);
 	}
 	
 	/* (non-Javadoc)
@@ -285,7 +336,7 @@ public class SocializeApiHost implements ApiHost {
 	 */
 	@Override
 	public void getUser(SocializeSession session, long id, UserListener listener) {
-		userApi.getUser(session, id, listener);
+		socializeUserSystem.getUser(session, id, listener);
 	}
 	
 	/* (non-Javadoc)
@@ -293,11 +344,11 @@ public class SocializeApiHost implements ApiHost {
 	 */
 	@Override
 	public void saveUserProfile(Context context, SocializeSession session, String firstName, String lastName, String encodedImage, UserListener listener) {
-		userApi.saveUserProfile(context, session, firstName, lastName, encodedImage, listener);
+		socializeUserSystem.saveUserProfile(context, session, firstName, lastName, encodedImage, listener);
 	}
 	
 	public void saveUserProfile(Context context, SocializeSession session, UserProfile profile, UserSaveListener listener) {
-		userApi.saveUserProfile(context, session, profile, listener);
+		socializeUserSystem.saveUserProfile(context, session, profile, listener);
 	}
 	
 	/* (non-Javadoc)
@@ -305,7 +356,7 @@ public class SocializeApiHost implements ApiHost {
 	 */
 	@Override
 	public void listActivityByUser(SocializeSession session, long id, UserActivityListener listener) {
-		userActivityApi.getActivityByUser(session, id, listener);
+		socializeActivitySystem.getActivityByUser(session, id, listener);
 	}
 	
 	/* (non-Javadoc)
@@ -313,7 +364,7 @@ public class SocializeApiHost implements ApiHost {
 	 */
 	@Override
 	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, UserActivityListener listener) {
-		userActivityApi.getActivityByUser(session, id, startIndex, endIndex, listener);
+		socializeActivitySystem.getActivityByUser(session, id, startIndex, endIndex, listener);
 	}
 	
 	/* (non-Javadoc)
@@ -334,60 +385,60 @@ public class SocializeApiHost implements ApiHost {
 		this.deviceUtils = deviceUtils;
 	}
 
-	public void setCommentApi(CommentApi commentApi) {
-		this.commentApi = commentApi;
+	public void setSocializeCommentSystem(SocializeCommentSystem commentApi) {
+		this.socializeCommentSystem = commentApi;
 	}
 
-	public void setEntityApi(EntityApi entityApi) {
-		this.entityApi = entityApi;
+	public void setSocializeEntitySystem(SocializeEntitySystem entityApi) {
+		this.socializeEntitySystem = entityApi;
 	}
 
-	public CommentApi getCommentApi() {
-		return commentApi;
+	public SocializeCommentSystem getSocializeCommentSystem() {
+		return socializeCommentSystem;
 	}
 
-	public EntityApi getEntityApi() {
-		return entityApi;
+	public SocializeEntitySystem getSocializeEntitySystem() {
+		return socializeEntitySystem;
 	}
 
-	public LikeApi getLikeApi() {
-		return likeApi;
+	public SocializeLikeSystem getSocializeLikeSystem() {
+		return socializeLikeSystem;
 	}
 
-	public void setLikeApi(LikeApi likeApi) {
-		this.likeApi = likeApi;
+	public void setSocializeLikeSystem(SocializeLikeSystem likeApi) {
+		this.socializeLikeSystem = likeApi;
 	}
 
-	public ViewApi getViewApi() {
-		return viewApi;
+	public SocializeViewSystem getSocializeViewSystem() {
+		return socializeViewSystem;
 	}
 
-	public void setViewApi(ViewApi viewApi) {
-		this.viewApi = viewApi;
+	public void setSocializeViewSystem(SocializeViewSystem viewApi) {
+		this.socializeViewSystem = viewApi;
 	}
 	
-	public UserApi getUserApi() {
-		return userApi;
+	public SocializeUserSystem getSocializeUserSystem() {
+		return socializeUserSystem;
 	}
 
-	public void setUserApi(UserApi userApi) {
-		this.userApi = userApi;
+	public void setSocializeUserSystem(SocializeUserSystem userApi) {
+		this.socializeUserSystem = userApi;
 	}
 	
-	public ShareApi getShareApi() {
-		return shareApi;
+	public SocializeShareSystem getSocializeShareSystem() {
+		return socializeShareSystem;
 	}
 
-	public void setShareApi(ShareApi shareApi) {
-		this.shareApi = shareApi;
+	public void setSocializeShareSystem(SocializeShareSystem shareApi) {
+		this.socializeShareSystem = shareApi;
 	}
 
-	public UserActivityApi getUserActivityApi() {
-		return userActivityApi;
+	public SocializeActivitySystem getSocializeActivitySystem() {
+		return socializeActivitySystem;
 	}
 
-	public void setUserActivityApi(UserActivityApi activityApi) {
-		this.userActivityApi = activityApi;
+	public void setSocializeActivitySystem(SocializeActivitySystem activityApi) {
+		this.socializeActivitySystem = activityApi;
 	}
 	
 	public RecommendationApi getRecommendationApi() {

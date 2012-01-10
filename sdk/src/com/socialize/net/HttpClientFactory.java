@@ -38,4 +38,6 @@ public interface HttpClientFactory {
 
 	public HttpClient getClient();
 	
+	public boolean isDestroyed();
+	
 }

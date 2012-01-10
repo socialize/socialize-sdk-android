@@ -33,6 +33,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.socialize.ui.view.SafeViewFlipper;
 import com.socialize.util.DeviceUtils;
 
 /**
@@ -92,7 +93,7 @@ public class ActionBarItem extends LinearLayout {
 		
 		LayoutParams iconFlipperParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		iconFlipperParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
-		iconFlipper = new ViewFlipper(getContext());
+		iconFlipper = new SafeViewFlipper(getContext());
 		iconFlipper.setLayoutParams(iconFlipperParams);
 		iconFlipper.addView(imageView, 0);
 		iconFlipper.addView(progress, 1);

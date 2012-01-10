@@ -25,5 +25,5 @@ package com.socialize.api.action;
  * @author Jason Polites
  */
 public enum ActionType {
-	COMMENT,SHARE,LIKE,VIEW
+	COMMENT,SHARE,LIKE,VIEW,UNKNOWN
 }

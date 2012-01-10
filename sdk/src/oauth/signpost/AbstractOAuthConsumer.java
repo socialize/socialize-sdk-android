@@ -29,6 +29,7 @@ import oauth.signpost.signature.HmacSha1MessageSigner;
 import oauth.signpost.signature.OAuthMessageSigner;
 import oauth.signpost.signature.QueryStringSigningStrategy;
 import oauth.signpost.signature.SigningStrategy;
+import oauth.socialize.OAuthSignListener;
 
 /**
  * ABC for consumer implementations. If you're developing a custom consumer you
@@ -77,7 +78,12 @@ public abstract class AbstractOAuthConsumer implements OAuthConsumer {
         this.additionalParameters = additionalParameters;
     }
 
-    public HttpRequest sign(HttpRequest request) throws OAuthMessageSignerException,
+    
+    public HttpRequest sign(HttpRequest request) throws OAuthMessageSignerException, OAuthExpectationFailedException, OAuthCommunicationException {
+    	return sign(request, null);
+    }
+    
+    public HttpRequest sign(HttpRequest request, OAuthSignListener listener) throws OAuthMessageSignerException,
             OAuthExpectationFailedException, OAuthCommunicationException {
         if (consumerKey == null) {
             throw new OAuthExpectationFailedException("consumer key not set");
@@ -104,22 +110,36 @@ public abstract class AbstractOAuthConsumer implements OAuthConsumer {
             throw new OAuthCommunicationException(e);
         }
 
-        String signature = messageSigner.sign(request, requestParameters);
+        String signature = messageSigner.sign(request, requestParameters, listener);
         OAuth.debugOut("signature", signature);
 
         signingStrategy.writeSignature(signature, request, requestParameters);
         OAuth.debugOut("Auth header", request.getHeader(OAuth.HTTP_AUTHORIZATION_HEADER));
         OAuth.debugOut("Request URL", request.getRequestUrl());
+        
+        if(listener != null) {
+        	listener.onRequest(requestParameters);
+        }
 
         return request;
     }
 
-    public HttpRequest sign(Object request) throws OAuthMessageSignerException,
+    @Override
+	public HttpRequest sign(Object request) throws OAuthMessageSignerException, OAuthExpectationFailedException, OAuthCommunicationException {
+		return sign(request, null);
+	}
+
+	@Override
+	public String sign(String url) throws OAuthMessageSignerException, OAuthExpectationFailedException, OAuthCommunicationException {
+		return sign(url, null);
+	}
+
+	public HttpRequest sign(Object request, OAuthSignListener listener) throws OAuthMessageSignerException,
             OAuthExpectationFailedException, OAuthCommunicationException {
-        return sign(wrap(request));
+        return sign(wrap(request), listener);
     }
 
-    public String sign(String url) throws OAuthMessageSignerException,
+    public String sign(String url, OAuthSignListener listener) throws OAuthMessageSignerException,
             OAuthExpectationFailedException, OAuthCommunicationException {
         HttpRequest request = new UrlStringRequestAdapter(url);
 

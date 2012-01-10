@@ -21,15 +21,14 @@
  */
 package com.socialize.test;
 
-import java.util.Stack;
-
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.socialize.sample.EmptyActivity;
+import com.socialize.test.ui.ResultHolder;
 
 public abstract class SocializeActivityTest extends ActivityInstrumentationTestCase2<EmptyActivity> {
 	
-	private Stack<Object> bucket;
+	protected final ResultHolder holder = new ResultHolder();
 	
 	public SocializeActivityTest() {
 		super("com.socialize.sample", EmptyActivity.class);
@@ -37,20 +36,24 @@ public abstract class SocializeActivityTest extends ActivityInstrumentationTestC
 
 	@Override
 	protected void setUp() throws Exception {
-		bucket = new Stack<Object>();
+		holder.setUp();
 		super.setUp();
 	}
 	
 	protected void addResult(Object obj) {
-		bucket.push(obj);
+		holder.addResult(obj);
 	}
 	
-	@SuppressWarnings("unchecked")
+	protected void addResult(int index, Object obj) {
+		holder.addResult(index, obj);
+	}
+	
+	protected <T extends Object> T getResult(int index) {
+		return holder.getResult(index);
+	}
+	
 	protected <T extends Object> T getNextResult() {
-		if(!bucket.isEmpty()) {
-			return (T) bucket.pop();
-		}
-		return null;
+		return holder.getNextResult();
 	}
 	
 	protected void sleep(long time) {
@@ -58,5 +61,9 @@ public abstract class SocializeActivityTest extends ActivityInstrumentationTestC
 			Thread.sleep(time);
 		}
 		catch (InterruptedException ignore) {}
+	}
+
+	public EmptyActivity getContext() {
+		return getActivity();
 	}
 }

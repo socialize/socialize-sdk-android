@@ -24,7 +24,7 @@ package com.socialize.test.unit.api;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.UserActivityApi;
+import com.socialize.api.action.SocializeActivitySystem;
 import com.socialize.entity.SocializeAction;
 import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.activity.UserActivityListener;
@@ -54,7 +54,7 @@ public class UserActivityApiTest extends SocializeUnitTest {
 		
 		final int key = 69;
 		
-		UserActivityApi api = new UserActivityApi(provider) {
+		SocializeActivitySystem api = new SocializeActivitySystem(provider) {
 			
 			public void listAsync(SocializeSession session, String endpoint, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(key);
@@ -74,7 +74,7 @@ public class UserActivityApiTest extends SocializeUnitTest {
 		final int key = 69;
 		int startIndex = 0, endIndex = 10;
 		
-		UserActivityApi api = new UserActivityApi(provider) {
+		SocializeActivitySystem api = new SocializeActivitySystem(provider) {
 			@Override
 			public void listAsync(SocializeSession session, String endpoint, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(key);
