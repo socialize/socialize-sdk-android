@@ -58,7 +58,6 @@ public class CommentCreateActivity extends CommentBaseActivity {
 					
 					final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Posting Comment", "Please wait...");
 					
-					
 					txtCommentCreateResult.setText("");
 					btnCommentCreate.setEnabled(false);
 					
