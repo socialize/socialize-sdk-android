@@ -31,11 +31,24 @@ import android.content.Intent;
  */
 public class SocializeBroadcastReceiver extends BroadcastReceiver {
 	
+	static final String receiver = SocializeC2DMReceiver.class.getName();
+	
 	/* (non-Javadoc)
 	 * @see android.content.BroadcastReceiver#onReceive(android.content.Context, android.content.Intent)
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		BaseC2DMReceiver.onBroadcastReceive(context, intent);
+		onBroadcastReceive(context, intent);
+	}
+	
+	public static boolean onBroadcastReceive(Context context, Intent intent) {
+		String action = intent.getAction();
+		if(SocializeC2DMReceiver.C2DM_INTENT.equals(action) || SocializeC2DMReceiver.REGISTRATION_CALLBACK_INTENT.equals(action)) {
+			SocializeC2DMReceiver.acquireWaitLock(context);
+			intent.setClassName(context, receiver);
+			context.startService(intent);
+			return true;
+		}
+		return false;
 	}
 }

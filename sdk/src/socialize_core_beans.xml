@@ -500,7 +500,7 @@
 		class="com.socialize.networks.facebook.DefaultFacebookWallPoster">
 		<property name="logger" ref="logger"/>
 		<property name="drawables" ref="drawables"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="appUtils" ref="appUtils"/>
 		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
 	</bean>	
 	

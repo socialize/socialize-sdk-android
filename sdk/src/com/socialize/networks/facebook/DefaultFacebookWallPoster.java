@@ -42,13 +42,13 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.facebook.AsyncFacebookRunner;
-import com.socialize.facebook.AsyncFacebookRunner.RequestListener;
 import com.socialize.facebook.Facebook;
 import com.socialize.facebook.FacebookError;
+import com.socialize.facebook.RequestListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.AppUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 
@@ -60,13 +60,13 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	
 	private Drawables drawables;
 	private SocializeLogger logger;
-	private DeviceUtils deviceUtils;
+	private AppUtils appUtils;
 	private ShareMessageBuilder shareMessageBuilder;
 	
 	@Override
 	public void postLike(Activity parent, Entity entity, String comment, SocialNetworkListener listener) {
 
-		String linkName = deviceUtils.getAppName();
+		String linkName = appUtils.getAppName();
 		
 		StringBuilder builder = new StringBuilder();
 		
@@ -82,7 +82,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 
 	@Override
 	public void postComment(Activity parent, Entity entity, String comment, SocialNetworkListener listener) {
-		String linkName = deviceUtils.getAppName();
+		String linkName = appUtils.getAppName();
 		
 		StringBuilder builder = new StringBuilder();
 			
@@ -111,8 +111,8 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	@Override
 	public void post(final Activity parent, String message, final SocialNetworkListener listener) {
 		String caption = "Download the app now to join the conversation.";
-		String linkName = deviceUtils.getAppName();
-		String link = deviceUtils.getMarketUrl(false);
+		String linkName = appUtils.getAppName();
+		String link = appUtils.getMarketUrl();
 		String appId = getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
 		
 		if(!StringUtils.isEmpty(appId)) {
@@ -126,23 +126,35 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	
 	@Override
 	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, final SocialNetworkListener listener) {
-		
-		final String defaultErrorMessage = "Facebook Error";
-		
 		Bundle params = new Bundle();
 		params.putString("name", linkName);
 		params.putString("message", message);
 		params.putString("link", link);
 		params.putString("caption", caption);
 		
-		Facebook fb = new Facebook(appId, drawables);
+		Facebook fb = newFacebook(appId, drawables);
 		
-		final FacebookSessionStore store = new FacebookSessionStore();
+		final FacebookSessionStore store = newFacebookSessionStore();
+		
 		store.restore(fb, parent);
 		
-		AsyncFacebookRunner runner = new AsyncFacebookRunner(fb);
+		AsyncFacebookRunner runner = newAsyncFacebookRunner(fb);
 		
-		runner.request("me/feed", params, "POST", new RequestListener() {
+		RequestListener requestListener = newRequestListener(parent, listener);
+		
+		runner.request("me/feed", params, "POST", requestListener, null);	
+	}
+	
+	// So we can mock
+	protected Facebook newFacebook(String appId, Drawables drawables) {
+		return new Facebook(appId, drawables);
+	}
+	
+	// So we can mock
+	protected RequestListener newRequestListener(final Activity parent, final SocialNetworkListener listener) {
+		final String defaultErrorMessage = "Facebook Error";
+		
+		return new RequestListener() {
 			public void onMalformedURLException(MalformedURLException e, Object state) {
 				onError(parent, defaultErrorMessage, e, listener);
 			}
@@ -158,12 +170,12 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			public void onComplete(final String response, Object state) {
 				if(!StringUtils.isEmpty(response)) {
 					try {
-						JSONObject responseObject = new JSONObject(response);
+						JSONObject responseObject = newJSONObject(response);
 						
 						if(responseObject.has("error")) {
 							
 							// Clear the session cache
-							SocializeSession session = Socialize.getSocialize().getSession();
+							SocializeSession session = getSocialize().getSession();
 							AuthProvider authProvider = session.getAuthProvider();
 							AuthProviderType authProviderType = session.getAuthProviderType();
 							String get3rdPartyAppId = session.get3rdPartyAppId();
@@ -207,9 +219,28 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 					});
 				}
 			}
-		}, null);	
+		};
+	}
+	
+	protected JSONObject newJSONObject(String response) throws JSONException {
+		return new JSONObject(response);
+	}
+	
+	// So we can mock
+	protected AsyncFacebookRunner newAsyncFacebookRunner(Facebook fb) {
+		return new AsyncFacebookRunner(fb);
 	}
 
+	// So we can mock
+	protected FacebookSessionStore newFacebookSessionStore() {
+		return new FacebookSessionStore();
+	}
+	
+	// So we can mock
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
+	}
+	
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
 	}
@@ -218,23 +249,14 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		this.logger = logger;
 	}
 
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
-	}
-	
 	public void setShareMessageBuilder(ShareMessageBuilder shareMessageBuilder) {
 		this.shareMessageBuilder = shareMessageBuilder;
 	}
 
-//	protected boolean isLink(Entity entity) {
-//		return entity.getKey().toLowerCase().trim().startsWith("http://");
-//	}
-	
-	// So we can mock
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
+	public void setAppUtils(AppUtils appUtils) {
+		this.appUtils = appUtils;
 	}
-	
+
 	protected void onError(final Activity parent, final String msg, final Throwable e, final SocialNetworkListener listener) {
 		
 		if(logger != null) {

@@ -134,21 +134,6 @@ public abstract class BaseC2DMReceiver extends IntentService {
 
 	}
 	
-	/**
-	 * Called from the broadcast receiver. Will process the received intent,
-	 * call handleMessage(), registered(), etc. in background threads, with a
-	 * wake lock, while keeping the service alive.
-	 */
-	static void onBroadcastReceive(Context context, Intent intent) {
-		acquireWaitLock(context);
-		// Use a naming convention, similar with how permissions and intents are
-		// used. Alternatives are introspection or an ugly use of statics.
-		// String receiver = context.getPackageName() + ".C2DMReceiver";
-		String receiver = SocializeC2DMReceiver.class.getName();
-		intent.setClassName(context, receiver);
-		context.startService(intent);
-	}
-	
 	protected void onRegistrationResponse(final Context context, Intent intent) {
 		String registrationId = intent.getStringExtra(EXTRA_REGISTRATION_ID);
 		String error = intent.getStringExtra(EXTRA_ERROR);

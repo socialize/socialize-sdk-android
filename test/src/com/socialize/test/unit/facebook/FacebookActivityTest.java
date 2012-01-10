@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test.unit;
+package com.socialize.test.unit.facebook;
 
 import android.content.Intent;
 import android.os.Bundle;

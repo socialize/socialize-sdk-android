@@ -32,7 +32,7 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.ui.dialog.ProgressDialogFactory;
+import com.socialize.ui.dialog.DialogFactory;
 
 /**
  * @author Jason Polites
@@ -42,7 +42,7 @@ public class FacebookAuthClickListener implements OnClickListener {
 
 	private SocializeConfig config;
 	private SocializeAuthListener listener;
-	private ProgressDialogFactory dialogFactory;
+	private DialogFactory<ProgressDialog> dialogFactory;
 	private ProgressDialog dialog; 
 
 	@Override
@@ -106,7 +106,7 @@ public class FacebookAuthClickListener implements OnClickListener {
 		this.config = config;
 	}
 
-	public void setDialogFactory(ProgressDialogFactory dialogFactory) {
+	public void setDialogFactory(DialogFactory<ProgressDialog> dialogFactory) {
 		this.dialogFactory = dialogFactory;
 	}
 
