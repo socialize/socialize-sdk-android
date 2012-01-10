@@ -221,6 +221,11 @@ public class SocializeServiceTest extends SocializeUnitTest {
 		verifyDefaultMocks();
 	}
 	
+	
+	
+	public void testCheckKeys() {
+		
+	}
 	@UsesMocks ({ShareAddListener.class, Location.class})
 	public void testAddShareWithLocation() {
 		ShareAddListener listener = AndroidMock.createMock(ShareAddListener.class);

@@ -373,13 +373,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 						if(authListener != null) {
 							authListener.onError(new SocializeException(msg));
 						}
-						
-						if(logger != null) {
-							logger.error(msg);
-						}
-						else {
-							System.err.println(msg);
-						}
+						logMessage(msg);
 					}
 					else {
 						authenticate(consumerKey, consumerSecret, authProviderType, authProviderAppId, authListener);
@@ -394,41 +388,28 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	}
 
 	protected boolean checkKeys(String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
-		if(StringUtils.isEmpty(consumerKey)) {
-			String msg = "No consumer key specified";
-			if(authListener != null) {
-				authListener.onError(new SocializeException(msg));
-			}
-			
-			if(logger != null) {
-				logger.error(msg);
-			}
-			else {
-				System.err.println(msg);
-			}
-			
-			return false;
-		}
-		
-		if(StringUtils.isEmpty(consumerSecret)) {
-			String msg = "No consumer secret specified";
-			if(authListener != null) {
-				authListener.onError(new SocializeException(msg));
-			}
-			
-			if(logger != null) {
-				logger.error(msg);
-			}
-			else {
-				System.err.println(msg);
-			}
-			
-			return false;
-		}	
-		
-		return true;
+		return checkKey("consumer key", consumerKey, authListener) && 
+					checkKey("consumer secret", consumerSecret, authListener);
 	}
-	
+	protected boolean checkKey(String name, String key, SocializeAuthListener authListener) {
+		if(StringUtils.isEmpty(key)) {
+			String msg = "No " + name + " specified";
+			if(authListener != null) {
+				authListener.onError(new SocializeException(msg));
+			}
+			logMessage(msg);	
+			return false;
+		} else {
+			return true;
+		}
+	}
+	protected void logMessage(String message) {
+		if(logger != null) {
+			logger.error(message);
+		} else {
+			System.err.println(message);
+		}
+	}
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#authenticate(java.lang.String, java.lang.String, com.socialize.listener.SocializeAuthListener)
 	 */
