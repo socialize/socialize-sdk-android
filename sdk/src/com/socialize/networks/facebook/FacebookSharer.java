@@ -71,7 +71,7 @@ public class FacebookSharer implements SocialNetworkSharer {
 
 		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
 			
-			if(Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+			if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 				doShare(context, entity, comment, listener, type);
 			}
 			else if(autoAuth) {

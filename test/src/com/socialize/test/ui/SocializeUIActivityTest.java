@@ -45,6 +45,10 @@ public abstract class SocializeUIActivityTest extends ActivityInstrumentationTes
 		Socialize.getSocialize().destroy(true);
 		super.tearDown();
 	}
+	
+	protected void clearResults() {
+		holder.clear();
+	}
 
 	protected void addResult(Object obj) {
 		holder.addResult(obj);

@@ -469,8 +469,8 @@
 
 
 <!-- Facebook -->
-	<bean id="shareMessageBuilder" class="com.socialize.api.ShareMessageBuilder">
-		<property name="deviceUtils" ref="deviceUtils"/>
+	<bean id="shareMessageBuilder" class="com.socialize.api.DefaultShareMessageBuilder">
+		<property name="appUtils" ref="appUtils"/>
 		<property name="config" ref="config"/>
 	</bean>	
 
