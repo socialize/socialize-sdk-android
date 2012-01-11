@@ -181,7 +181,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		AndroidMock.expect(socialize.getConfig()).andReturn(config);
 		AndroidMock.expect(config.getProperty(SocializeConfig.FACEBOOK_APP_ID)).andReturn(fbId);
 		AndroidMock.expect(appUtils.getAppName()).andReturn(linkName);
-		AndroidMock.expect(appUtils.getMarketUrl()).andReturn(link);
+		AndroidMock.expect(appUtils.getAppUrl()).andReturn(link);
 		
 		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
 			@Override
