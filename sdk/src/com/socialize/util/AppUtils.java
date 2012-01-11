@@ -32,6 +32,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 
 import com.socialize.Socialize;
+import com.socialize.config.SocializeConfig;
 import com.socialize.log.SocializeLogger;
 import com.socialize.notifications.SocializeBroadcastReceiver;
 import com.socialize.notifications.SocializeC2DMReceiver;
@@ -44,6 +45,7 @@ public class AppUtils {
 	private String packageName;
 	private String appName;
 	private SocializeLogger logger;
+	private SocializeConfig config;
 	
 	private boolean locationAvailable = false;
 	private boolean locationAssessed = false;
@@ -80,6 +82,22 @@ public class AppUtils {
 			appName = "A Socialize enabled app";
 		}		
 	}
+	
+	public String getAppUrl() {
+		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		if(consumerKey != null) {
+			if(config != null && !StringUtils.isEmpty(config.getProperty(SocializeConfig.REDIRECT_HOST))) {
+				return config.getProperty(SocializeConfig.REDIRECT_HOST) + "/a/" + consumerKey;
+			}
+			else {
+				return "http://r.getsocialize.com/a/" + consumerKey;
+			}
+		}
+		else {
+			return getMarketUrl();
+		}
+	}
+	
 	
 	public String getMarketUrl() {
 		StringBuilder builder = new StringBuilder();
@@ -228,5 +246,9 @@ public class AppUtils {
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
+	}
+
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
 	}
 }

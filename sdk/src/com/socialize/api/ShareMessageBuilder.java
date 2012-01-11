@@ -5,7 +5,7 @@ import com.socialize.entity.Entity;
 public interface ShareMessageBuilder {
 
 	public String buildShareLink(Entity entity);
-
+	
 	public String buildShareSubject(Entity entity);
 
 	public String getEntityLink(Entity entity, boolean html);

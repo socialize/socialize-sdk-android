@@ -3,14 +3,18 @@ package com.socialize.suite;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import com.socialize.test.blackbox.SocializeIOCTest;
-import com.socialize.test.unit.SocializeApiAsyncTest;
+import com.socialize.test.ui.auth.AuthConfirmDialogFactoryTest;
+import com.socialize.test.ui.auth.AuthRequestDialogViewTest;
 
 public class DiagnosisSuite extends TestSuite {
 
 	public static Test suite() {
 		
 		TestSuite suite = new TestSuite(DiagnosisSuite.class.getName());
+		
+		suite.addTestSuite(AuthConfirmDialogFactoryTest.class);
+		suite.addTestSuite(AuthRequestDialogViewTest.class);
+		
 		
 //		suite.addTestSuite(AuthProviderDataTest.class);
 //		suite.addTestSuite(AuthProviderTypeTest.class);
@@ -23,15 +27,11 @@ public class DiagnosisSuite extends TestSuite {
 //		suite.addTestSuite(SocializeConfigTest.class);
 		
 		
-		suite.addTestSuite(SocializeIOCTest.class);
+//		suite.addTestSuite(SocializeIOCTest.class);
 		
 		
 //		suite.addTestSuite(SocializeTest.class);
 //		suite.addTestSuite(UrlBuilderTest.class);
-		
-		
-		
-		
 		
 //		suite.addTestSuite(SocializeCommentSystemTest.class);
 //		suite.addTestSuite(SocializeEntitySystemTest.class);
@@ -62,7 +62,7 @@ public class DiagnosisSuite extends TestSuite {
 //		suite.addTestSuite(PreferenceSessionPersisterTest.class);
 //		suite.addTestSuite(SampleTest.class);
 //		suite.addTestSuite(SocializeActionFactoryTest.class);
-		suite.addTestSuite(SocializeApiAsyncTest.class);
+//		suite.addTestSuite(SocializeApiAsyncTest.class);
 //		suite.addTestSuite(SocializeApiHostTest.class);
 //		suite.addTestSuite(SocializeApiTest.class);
 //		suite.addTestSuite(SocializeErrorTest.class);
