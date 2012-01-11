@@ -84,10 +84,11 @@ public class AppUtils {
 	}
 	
 	public String getAppUrl() {
+		String host = config.getProperty(SocializeConfig.REDIRECT_HOST);
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		if(consumerKey != null) {
-			if(config != null && !StringUtils.isEmpty(config.getProperty(SocializeConfig.REDIRECT_HOST))) {
-				return config.getProperty(SocializeConfig.REDIRECT_HOST) + "/a/" + consumerKey;
+			if(!StringUtils.isEmpty(host)) {
+				return host + "/a/" + consumerKey;
 			}
 			else {
 				return "http://r.getsocialize.com/a/" + consumerKey;
