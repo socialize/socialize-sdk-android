@@ -32,6 +32,7 @@ import com.socialize.api.action.ShareSystem;
 import com.socialize.api.action.UserSystem;
 import com.socialize.api.action.ViewSystem;
 import com.socialize.auth.AuthProviderData;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeListener;
@@ -44,6 +45,36 @@ import com.socialize.util.ResourceLocator;
  *
  */
 public class PublicSocialize extends SocializeServiceImpl {
+
+	
+	@Override
+	public void authenticate(Context context, String consumerKey,
+			String consumerSecret, AuthProviderType authProviderType,
+			String authProviderAppId, SocializeAuthListener authListener) {
+		// TODO Auto-generated method stub
+		super.authenticate(context, consumerKey, consumerSecret, authProviderType,
+				authProviderAppId, authListener);
+	}
+
+	@Override
+	public void authenticate(Context context, SocializeAuthListener authListener) {
+		// TODO Auto-generated method stub
+		super.authenticate(context, authListener);
+	}
+
+	@Override
+	public void authenticate(String consumerKey, String consumerSecret,
+			SocializeAuthListener authListener) {
+		// TODO Auto-generated method stub
+		super.authenticate(consumerKey, consumerSecret, authListener);
+	}
+
+	@Override
+	public void authenticate(Context context, String consumerKey,
+			String consumerSecret, SocializeAuthListener authListener) {
+		// TODO Auto-generated method stub
+		super.authenticate(context, consumerKey, consumerSecret, authListener);
+	}
 
 	@Override
 	public SocializeIOC newSocializeIOC() {
@@ -83,6 +114,18 @@ public class PublicSocialize extends SocializeServiceImpl {
 	@Override
 	public boolean checkKeys(String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
 		return super.checkKeys(consumerKey, consumerSecret, authListener);
+	}
+
+	@Override
+	public void logMessage(String message) {
+		// TODO Auto-generated method stub
+		super.logMessage(message);
+	}
+
+	@Override
+	protected boolean checkKey(String name, String key,
+			SocializeAuthListener authListener) {
+		return super.checkKey(name, key, authListener);
 	}
 
 	@Override

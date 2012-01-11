@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,49 +19,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.image;
+package com.socialize.test.unit;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
+import com.socialize.test.SocializeUnitTest;
+import com.socialize.ui.image.ImageUrlLoader;
 import com.socialize.util.CacheableDrawable;
-import com.socialize.util.SafeBitmapDrawable;
 
 /**
- * @author Jason Polites
- * 
+ * @author Isaac Mosquera
+ *
  */
-public class ImageUrlLoader {
+public class ImageUrlLoaderTest extends SocializeUnitTest {
 
-	public SafeBitmapDrawable loadImageFromUrl(String url) throws IOException {
-		URL imageUrl = 	new URL(url);
-		URLConnection conn = null;
-		InputStream is = null;
+	public void test_loadImageFromUrl() throws IOException {
+		//For this test we have to do more of a black box test
+		//because a URLConnection and Bitmaps are not mockable
+		//the icon.png is placed on the sdcard when the ant task is run
+		final String testUrl = "file:///sdcard/icon.png";
 		
-		try {
-			conn = imageUrl.openConnection();
-			is = conn.getInputStream();
-			Bitmap bitmap = newBitmapDrawable(is);
-			return newCacheableDrawable(bitmap, url);
-		}
-		finally {
-			if (is != null) {
-				is.close();
-			}
-		}
+		ImageUrlLoader loader = new ImageUrlLoader();
+		// Call the method...
+		CacheableDrawable cacheable = (CacheableDrawable)loader.loadImageFromUrl(testUrl);
+		assertEquals(cacheable.key,testUrl); 
 	}
-	
-	protected CacheableDrawable newCacheableDrawable(Bitmap bitmap,String url) {
-		return new CacheableDrawable(bitmap, url); 
-	}
-	protected Bitmap newBitmapDrawable (InputStream is) {
-		return BitmapFactory.decodeStream(is);
-	}
-
 }
