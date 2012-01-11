@@ -167,15 +167,30 @@ public class TestUtils {
 		return (V)  findView(parent, new ViewMatcher() {
 			@Override
 			public boolean matches(View view) {
-				if(viewClass.isAssignableFrom(view.getClass())) {
-					TextView textView = findView(view, TextView.class);
-					if(textView != null) {
-						return textView.getText().toString().equals(text);
-					}
-				}
-				return false;
+				return isViewWithText(view, viewClass, text);
 			}
 		});
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <V extends View> V findSingleViewWithText(View view, final Class<V> viewClass, final String text) {
+		if(view instanceof ViewGroup) {
+			return findViewWithText((ViewGroup) view, viewClass, text);
+		}
+		else if(isViewWithText(view, viewClass, text)) {
+			return (V) view;
+		}
+		return null;
+	}
+	
+	public static boolean isViewWithText(View view, final Class<?> viewClass, final String text) {
+		if(viewClass.isAssignableFrom(view.getClass())) {
+			TextView textView = findView(view, TextView.class);
+			if(textView != null) {
+				return textView.getText().toString().equals(text);
+			}
+		}
+		return false;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -189,7 +204,6 @@ public class TestUtils {
 			}
 			
 			if(child instanceof ViewGroup && (child != view)) {
-				
 				View found = findView((ViewGroup)child, matcher);
 				if(found != null) {
 					return (V) found;

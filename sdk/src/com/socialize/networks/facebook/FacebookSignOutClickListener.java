@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
@@ -47,12 +48,16 @@ public class FacebookSignOutClickListener implements OnClickListener {
 	private IBeanFactory<FacebookSignOutTask> facebookSignOutTaskFactory;
 	private SocializeConfig config;
 	private SocializeLogger logger;
+	
+	private AlertDialog dialog;
+	
+	public FacebookSignOutClickListener() {
+		super();
+	}
 
 	@Override
 	public void onClick(final View v) {
-
-		new AlertDialog.Builder(v.getContext())
-		
+		 dialog = new AlertDialog.Builder(v.getContext())
 		.setIcon(drawables.getDrawable("fb_button.png"))
 		.setTitle("Sign Out of Facebook")
 		.setMessage("Are you sure you want to sign out of Facebook?")
@@ -61,42 +66,8 @@ public class FacebookSignOutClickListener implements OnClickListener {
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.dismiss();
 				FacebookSignOutTask task = facebookSignOutTaskFactory.getBean(v.getContext());
-				task.setFacebookSignOutListener(new FacebookSignOutListener() {
-					@Override
-					public void onSignOut() {
-						
-						String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-						String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-						
-						// Re-authenticate as anonymous
-						Socialize.getSocialize().authenticate(v.getContext(), consumerKey, consumerSecret, new SocializeAuthListener() {
-							
-							@Override
-							public void onError(SocializeException error) {
-								logError("Error during authentication", error);
-								exitProfileActivity(v);
-							}
-							
-							@Override
-							public void onAuthSuccess(SocializeSession session) {
-								exitProfileActivity(v);
-							}
-							
-							@Override
-							public void onAuthFail(SocializeException error) {
-								logError("Error during authentication", error);
-								exitProfileActivity(v);
-							}
-
-							@Override
-							public void onCancel() {
-								exitProfileActivity(v);
-							}
-						});
-					}
-				});
-				
-				task.execute((Void[])null);
+				task.setFacebookSignOutListener(newFacebookSignOutListener(v));
+				task.doExecute((Void[])null);
 			}
 		})
 		.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -104,8 +75,49 @@ public class FacebookSignOutClickListener implements OnClickListener {
 				dialog.dismiss();
 			}
 		})
-		.create()
-		.show();
+		.create();
+		dialog.show();
+	}
+	
+	protected AlertDialog getDialog() {
+		return dialog;
+	}
+
+	protected FacebookSignOutListener newFacebookSignOutListener(final View v) {
+		return new FacebookSignOutListener() {
+			@Override
+			public void onSignOut() {
+				
+				String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+				String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+				
+				// Re-authenticate as anonymous
+				getSocialize().authenticate(v.getContext(), consumerKey, consumerSecret, new SocializeAuthListener() {
+					
+					@Override
+					public void onError(SocializeException error) {
+						logError("Error during authentication", error);
+						exitProfileActivity(v);
+					}
+					
+					@Override
+					public void onAuthSuccess(SocializeSession session) {
+						exitProfileActivity(v);
+					}
+					
+					@Override
+					public void onAuthFail(SocializeException error) {
+						logError("Error during authentication", error);
+						exitProfileActivity(v);
+					}
+
+					@Override
+					public void onCancel() {
+						exitProfileActivity(v);
+					}
+				});
+			}
+		};
 	}
 	
 	protected void exitProfileActivity(final View v) {
@@ -122,6 +134,11 @@ public class FacebookSignOutClickListener implements OnClickListener {
 		else {
 			error.printStackTrace();
 		}
+	}
+	
+	// So we can mock
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
 	}
 
 	public void setDrawables(Drawables drawables) {
