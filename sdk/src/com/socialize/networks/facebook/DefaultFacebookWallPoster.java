@@ -112,7 +112,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	public void post(final Activity parent, String message, final SocialNetworkListener listener) {
 		String caption = "Download the app now to join the conversation.";
 		String linkName = appUtils.getAppName();
-		String link = appUtils.getMarketUrl();
+		String link = appUtils.getAppUrl();
 		String appId = getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
 		
 		if(!StringUtils.isEmpty(appId)) {

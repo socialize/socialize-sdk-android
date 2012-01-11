@@ -34,10 +34,6 @@ public class FacebookButton extends SocializeButton {
 	
 	private FacebookAuthClickListener facebookAuthClickListener;
 
-	public FacebookButton(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
-
 	public FacebookButton(Context context) {
 		super(context);
 	}

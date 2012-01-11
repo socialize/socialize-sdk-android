@@ -32,7 +32,7 @@ import com.socialize.cache.ICacheable;
  */
 public class CacheableDrawable extends SafeBitmapDrawable implements ICacheable<String> {
 
-	public String key;
+	private String key;
 	
 	public CacheableDrawable(Bitmap bitmap, String key) {
 		super(bitmap);

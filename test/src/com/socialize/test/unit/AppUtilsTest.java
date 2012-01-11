@@ -21,27 +21,37 @@
  */
 package com.socialize.test.unit;
 
-import java.io.IOException;
-
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.config.SocializeConfig;
 import com.socialize.test.SocializeUnitTest;
-import com.socialize.ui.image.ImageUrlLoader;
-import com.socialize.util.CacheableDrawable;
+import com.socialize.util.AppUtils;
 
 /**
- * @author Isaac Mosquera
+ * @author Jason Polites
  *
  */
-public class ImageUrlLoaderTest extends SocializeUnitTest {
+public class AppUtilsTest extends SocializeUnitTest {
 
-	public void test_loadImageFromUrl() throws IOException {
-		//For this test we have to do more of a black box test
-		//because a URLConnection and Bitmaps are not mockable
-		//the icon.png is placed on the sdcard when the ant task is run
-		final String testUrl = "file:///sdcard/icon.png";
+	@UsesMocks ({SocializeConfig.class})
+	public void test_getAppUrl() {
+		final String consumerKey = "foobar";
+		final String host = "foo_host_bar";
+		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+
+		AndroidMock.expect(config.getProperty(SocializeConfig.REDIRECT_HOST)).andReturn(host);
+		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(consumerKey);
+
+		AndroidMock.replay(config);
 		
-		ImageUrlLoader loader = new ImageUrlLoader();
-		// Call the method...
-		CacheableDrawable cacheable = (CacheableDrawable)loader.loadImageFromUrl(testUrl);
-		assertEquals(cacheable.getKey(),testUrl); 
+		AppUtils utils = new AppUtils();
+		utils.setConfig(config);
+		
+		String url = utils.getAppUrl();
+		
+		AndroidMock.verify(config);
+		
+		assertEquals(host + "/a/" + consumerKey, url);
 	}
+	
 }

@@ -23,6 +23,7 @@
 	
 	<bean id="appUtils" class="com.socialize.util.AppUtils" context-aware="false">
 		<property name="logger" ref="logger"/>
+		<property name="config" ref="config"/>
 		<init-method name="init">
 			<arg type="context"/>
 		</init-method>

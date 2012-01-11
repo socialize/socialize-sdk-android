@@ -22,6 +22,7 @@
 package com.socialize.ui.auth;
 
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.view.View;
 
@@ -43,11 +44,13 @@ public class AuthConfirmDialogFactory  {
 	public AuthConfirmDialogFactory() {
 		super();
 	}
-
-	public void show(Context context, final AuthRequestListener listener) {
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+	
+	public AlertDialog create(Context context, final AuthRequestListener listener) {
+		
+		AlertDialog.Builder builder = newBuilder(context);
+		
 		AuthConfirmDialogView view = authConfirmDialogViewFactory.getBean();
+		
 		builder.setView(view);
 		
 		final AlertDialog alertDialog = builder.create();
@@ -63,8 +66,16 @@ public class AuthConfirmDialogFactory  {
 			}
 		});
 		
-		
-	    alertDialog.show();
+		return alertDialog;
+	}
+	
+	// So we can mock
+	protected Builder newBuilder(Context context) {
+		return new AlertDialog.Builder(context);
+	}
+
+	public void show(Context context, final AuthRequestListener listener) {
+		create(context, listener).show();
 	}
 	
 	protected void handleError(String msg, SocializeException error) {

@@ -86,10 +86,6 @@ public class SocializeButton extends LinearLayout {
 	
 	private int textPadding;
 	
-	public SocializeButton(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
-
 	public SocializeButton(Context context) {
 		super(context);
 	}

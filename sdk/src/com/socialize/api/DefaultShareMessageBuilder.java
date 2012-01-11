@@ -41,6 +41,7 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 		super();
 	}
 	
+
 	/* (non-Javadoc)
 	 * @see com.socialize.api.ShareMessageBuilder#buildShareLink(com.socialize.entity.Entity)
 	 */
@@ -48,7 +49,7 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 	public String buildShareLink(Entity entity) {
 		if(entity.getId() != null) {
 			if(config != null && !StringUtils.isEmpty(config.getProperty(SocializeConfig.REDIRECT_HOST))) {
-				return config.getProperty(SocializeConfig.REDIRECT_HOST) + entity.getId();
+				return config.getProperty(SocializeConfig.REDIRECT_HOST) + "/e/" + entity.getId();
 			}
 			else {
 				return "http://r.getsocialize.com/e/" + entity.getId();
@@ -176,7 +177,7 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 			
 			if(html) {
 				builder.append("<a href=\"");
-				builder.append(appUtils.getMarketUrl());
+				builder.append(appUtils.getAppUrl());
 				builder.append("\">");
 				builder.append(appUtils.getAppName());
 				builder.append("</a>");
