@@ -42,6 +42,7 @@ import com.socialize.api.action.SocializeShareSystem;
 import com.socialize.api.action.SocializeSubscriptionSystem;
 import com.socialize.api.action.SocializeUserSystem;
 import com.socialize.api.action.SocializeViewSystem;
+import com.socialize.api.action.UserSystem;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
@@ -53,6 +54,7 @@ import com.socialize.init.SocializeInitializationAsserter;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
+import com.socialize.listener.SocializeListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -64,12 +66,14 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.share.ShareAddListener;
+import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.PublicSocialize;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.ui.profile.UserProfile;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.Drawables;
 import com.socialize.util.ResourceLocator;
@@ -323,11 +327,80 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		verifyDefaultMocks();
 	}
 	
-	
-	
-	public void testCheckKeys() {
-		
+	public void authenticateWithTypeAndListener () {
+		//(AuthProviderType authProviderType, SocializeAuthListener authListener) {
+		//authenticate(Context context, AuthProviderType authProviderType, SocializeAuthListener authListener) {
 	}
+	 
+	@UsesMocks({SocializeUserSystem.class, UserProfile.class, UserSaveListener.class})
+	public void testSaveCurrentUserProfile() { 
+		
+		session = AndroidMock.createMock(SocializeSession.class);
+		userSystem = AndroidMock.createMock(SocializeUserSystem.class, AndroidMock.createMock(SocializeProvider.class));
+		
+		UserProfile mockProfile = AndroidMock.createMock(UserProfile.class);
+		final UserSaveListener mockListener = AndroidMock.createMock(UserSaveListener.class);
+		
+		PublicSocialize socializeService = new PublicSocialize() {
+			@Override
+			public boolean assertAuthenticated(SocializeListener listener) {
+				assertEquals(mockListener, listener);
+				return true;
+			}
+		};
+		
+		//we'll use the default mocks already created for sessions/userSystem
+		socializeService.setSession(session);
+		socializeService.setUserSystem(userSystem);
+		userSystem.saveUserProfile(getContext(), session, mockProfile, mockListener);
+		
+		
+		AndroidMock.replay( mockProfile, mockListener );
+		
+		socializeService.saveCurrentUserProfile(getContext(), mockProfile,mockListener);
+		
+		//verify default and newly created mocks
+		AndroidMock.verify( mockProfile, mockListener);
+	}
+	@UsesMocks({SocializeSession.class, UserSystem.class, AuthProvider.class})
+	public void testClear3rdPartySession() {
+		PublicSocialize socializeService = new PublicSocialize();
+	
+		//create session mock and add expect methods
+		String thirdPartyId = "3rdpartyId";
+		AuthProvider mockAuthProvider = AndroidMock.createMock(AuthProvider.class);
+		SocializeSession mockSession = AndroidMock.createMock(SocializeSession.class);
+		AndroidMock.expect(mockSession.getAuthProvider()).andReturn(mockAuthProvider);
+		AndroidMock.expect(mockSession.get3rdPartyAppId()).andReturn(thirdPartyId);
+		
+		mockSession.clear(AuthProviderType.FACEBOOK);
+		socializeService.setSession(mockSession);
+		
+		//create UserSystem mock
+		UserSystem userSystemMock = AndroidMock.createMock(UserSystem.class);
+		userSystemMock.clearSession(AuthProviderType.FACEBOOK);
+		socializeService.setUserSystem(userSystemMock);
+		
+		//add mocks to be replayed
+		AndroidMock.replay(userSystemMock, mockSession);
+		
+		//run the method
+		socializeService.clear3rdPartySession(getContext(), AuthProviderType.FACEBOOK);
+		
+		//verify the mocks
+		AndroidMock.verify(userSystemMock, mockSession);
+	}
+	@UsesMocks({SocializeAuthListener.class})
+	public void testCheckKeys() {
+		PublicSocialize socializeService = new PublicSocialize();
+		SocializeAuthListener mockAuthListener = AndroidMock.createMock(SocializeAuthListener.class);
+		mockAuthListener.onError((SocializeException)AndroidMock.anyObject());
+		AndroidMock.replay( mockAuthListener );
+		//this should test to make sure an error is passed back to the auth listener
+		socializeService.checkKeys("", "", mockAuthListener);
+		AndroidMock.verify(mockAuthListener);
+	}
+	
 	@UsesMocks ({ShareAddListener.class, Location.class})
 	public void testAddShareWithLocation() {
 		ShareAddListener listener = AndroidMock.createMock(ShareAddListener.class);
@@ -731,7 +804,19 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		verifyDefaultMocks();
 	}
 	
-	
+
+	 
+	@UsesMocks ({SocializeAuthListener.class})
+	public void  testAuthenticateWithListener() {
+		final SocializeAuthListener mockListener = AndroidMock.createMock(SocializeAuthListener.class);
+		PublicSocialize socializeService = new PublicSocialize() {
+			@Override
+			public void authenticate(Context context, SocializeAuthListener authListener) {
+				assertEquals(authListener, mockListener);
+			}
+		};
+		socializeService.authenticate( mockListener );
+	}
 	@UsesMocks ({SocializeAuthListener.class, IBeanFactory.class, AuthProviderData.class})
 	public void testAuthenticate() throws SocializeException {
 		SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
