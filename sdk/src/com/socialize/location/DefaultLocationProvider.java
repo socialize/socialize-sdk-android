@@ -27,7 +27,7 @@ import android.location.Criteria;
 import android.location.Location;
 
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.AppUtils;
 import com.socialize.util.StringUtils;
 
 /**
@@ -35,7 +35,7 @@ import com.socialize.util.StringUtils;
  */
 public class DefaultLocationProvider implements SocializeLocationProvider {
 
-	private DeviceUtils deviceUtils;
+	private AppUtils appUtils;
 	private Location location;
 	private Context context;
 	private SocializeLocationManager locationManager;
@@ -64,10 +64,10 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 	public Location getLocation() {
 
 		if(location == null) {
-			if(deviceUtils.hasPermission(context, "android.permission.ACCESS_FINE_LOCATION")) {
+			if(appUtils.hasPermission(context, "android.permission.ACCESS_FINE_LOCATION")) {
 				requestLocation(context, Criteria.ACCURACY_FINE);
 			}
-			else if(deviceUtils.hasPermission(context, "android.permission.ACCESS_COARSE_LOCATION")) {
+			else if(appUtils.hasPermission(context, "android.permission.ACCESS_COARSE_LOCATION")) {
 				requestLocation(context, Criteria.ACCURACY_COARSE);
 			}
 		}
@@ -95,8 +95,8 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 		}
 	}
 
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setAppUtils(AppUtils appUtils) {
+		this.appUtils = appUtils;
 	}
 
 	public void setLocationManager(SocializeLocationManager locationManager) {

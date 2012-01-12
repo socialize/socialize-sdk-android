@@ -1,6 +1,4 @@
-.. raw:: html
-
-	<link rel="stylesheet" href="static/css/gist.css" type="text/css" />
+.. include:: header.inc
 	
 .. _whats_new:	
 	
@@ -8,8 +6,17 @@
 What's New
 ==========
 
-Recent Activity in User Profile
--------------------------------
+v1.3 Push Notifications
+-----------------------
+v1.3 of Socialize includes a full push notification framework designed to bring users back to your app!
+
+.. image:: images/comment.png
+.. image:: images/subscribe.png
+
+Refer to the :ref:`notifications` section for details on how to implement Push Notifications.
+
+v1.1 Recent Activity in User Profile
+-------------------------------------
 
 In v1.1 we introduced recent activity in the user profile view:
 
@@ -23,3 +30,5 @@ With a Socialize Entity Loader specified, users will be able to navigate from th
 other parts of your application.
 
 Refer to the :ref:`entity_loader` section for details on how to implement a Socialize Entity Loader
+
+.. include:: footer.inc	

@@ -1,0 +1,23 @@
+.. raw:: html
+
+	<pre class="brush: java">
+	
+	import com.socialize.Socialize;
+	import com.socialize.entity.Comment;
+	import com.socialize.error.SocializeException;
+	import com.socialize.listener.comment.CommentGetListener;
+
+	if(Socialize.getSocialize().isAuthenticated()) {
+		// Get a single comment based on its numeric ID
+		Socialize.getSocialize().getCommentById(1234, new CommentGetListener() {
+
+			public void onError(SocializeException error) {
+				// Handle error
+			}
+
+			public void onGet(Comment entity) {
+				// Handle success
+			}
+		});
+	}
+	</pre>

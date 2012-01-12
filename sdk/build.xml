@@ -69,7 +69,8 @@
 
 		<copy todir="${out.dir}/classes" verbose="true" >
 			<fileset dir="src">
-				<include name="socialize_beans.xml"/>
+				<include name="socialize_core_beans.xml"/>
+				<include name="socialize_notification_beans.xml"/>
 				<include name="socialize_ui_beans.xml"/>
 				<include name="socialize.errors.properties"/>
 				<include name="socialize.properties"/>
@@ -97,6 +98,8 @@
 		</jar>
 	</target>
 		
+	<target name="doc" description="Uses sphinx to generate SDK documentation" depends="sphinx"/>
+	
 	<!-- Python is required on target system for this to work!-->
 	<target name="sphinx" description="Uses sphinx to generate SDK documentation" if="sphinx.available" depends="check-paths">
 		
@@ -193,7 +196,6 @@
 	
 	<target name="package" depends="javadoc, sphinx">
 		
-	
 		<!-- Copy sample to tmp -->
 		
 		<property name="sample_dir" value="/tmp/sdk-sample"/>
@@ -210,7 +212,7 @@
 		<!-- Clean up sample app for packaging -->
 		<replaceregexp file="${sample_dir}/.classpath" match="&lt;classpathentry kind=&quot;src&quot; path=&quot;socialize-sdk_src&quot;/&gt;" replace="&lt;classpathentry kind=&quot;lib&quot; path=&quot;libs/socialize-${version}.jar&quot;/&gt;" byline="true"/>
 		<replaceregexp file="${sample_dir}/.classpath" match="&lt;classpathentry kind=&quot;src&quot; path=&quot;android-ioc_src&quot;/&gt;" replace=""  byline="true"/>
-		<replaceregexp file="${sample_dir}/default.properties" match="android.library.reference.1=../sdk" replace="" byline="true"/>
+		<replaceregexp file="${sample_dir}/ant.properties" match="android.library.reference.1=../sdk" replace="" byline="true"/>
 		<replaceregexp file="${sample_dir}/.project" flags="s" match="&lt;linkedResources&gt;.*&lt;/linkedResources&gt;" replace="" />
 		 
 		<!-- Create the ZIP file for distribution -->

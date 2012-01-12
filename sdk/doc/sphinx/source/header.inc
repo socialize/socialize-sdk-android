@@ -1,0 +1,23 @@
+.. raw:: html
+
+	<link rel="stylesheet" href="static/css/shCore.css" type="text/css" />
+	<link rel="stylesheet" href="static/css/shCoreEclipse.css" type="text/css" />
+	<link rel="stylesheet" href="static/css/shThemeEclipse.css" type="text/css" />
+	<link rel="stylesheet" href="static/css/gist.css" type="text/css" />
+	<script type="text/javascript" src="static/js/shCore.js"></script>
+	<script type="text/javascript" src="static/js/shBrushXml.js"></script>
+	<script type="text/javascript" src="static/js/shBrushJava.js"></script>
+	<script type="text/javascript" src="static/js/shBrushJavaProperties.js"></script>
+	
+	<script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-9835027-5']);
+        _gaq.push(['_setDomainName', '.getsocialize.com']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>

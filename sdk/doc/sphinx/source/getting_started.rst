@@ -1,6 +1,6 @@
-.. raw:: html
+.. include:: header.inc
 
-	<link rel="stylesheet" href="static/css/gist.css" type="text/css" />
+.. _getting_started:		
 	
 ===============
 Getting Started
@@ -30,9 +30,8 @@ Getting Started
 
 Introduction
 ------------
-v0.7.0 of the Socialize SDK introduces a completely new control we call the "Action Bar".
-This is a one-stop-shop of social features that can be quickly and easily dropped into your app, and 
-provides a central entry point into all the features of the Socialize SDK.
+Socialize is a drop-in social platform for iOS and Android which allows developers to add social 
+features to their app in a matter of minutes.
 
 What's New
 ------------
@@ -66,9 +65,7 @@ the **assets** path of your project called **socialize.properties**
 
 Within this file, enter your Socialize consumer key and secret:
 
-.. raw:: html
-
-	<script src="https://gist.github.com/1132979.js?file=setup_ui.properties"></script>
+.. include:: snippets/props.txt
 
 (Replace 00000000-0000-0000-000000000000 with your key/secret from your Socialize account)
 
@@ -76,15 +73,11 @@ Within this file, enter your Socialize consumer key and secret:
 =====================================
 Add the following lines to your AndroidManifest.xml under the **<application...>** element
 
-.. raw:: html
-
-	<script src="https://gist.github.com/1201498.js?file=ui_manifest_0.6.0.xml"></script>
+.. include:: snippets/manifest.txt
 
 Add the following lines to your AndroidManifest.xml under the **<manifest...>** element
 
-.. raw:: html
-
-	<script src="https://gist.github.com/1201498.js?file=ui_manifest_permissions.xml"></script>
+.. include:: snippets/permissions.txt
 	
 4. Configure Facebook Integration (Optional)
 ============================================
@@ -104,9 +97,7 @@ If you already have a Facebook app, you can skip this section, otherwise refer t
 
 Once you have your facebook app ID, you can add it to the **socialize.properties** config file:
 
-.. raw:: html
-
-	<script src="https://gist.github.com/1132979.js?file=socialize.properties"></script>
+.. include:: snippets/props_fb.txt
 	
 5. Include Socialize in your App!
 =================================
@@ -122,6 +113,6 @@ of social features for your users.
 The Action Bar is designed to automatically "pin" iteself to the bottom of your view.  
 Adding the Action Bar to your app is done with a simple call to **showActionBar** from the SocializeUI instance:
 
-.. raw:: html
-
-	<script src="https://gist.github.com/1376163.js?file=no_conf.java"></script>
+.. include:: snippets/action_bar.txt
+	
+.. include:: footer.inc	

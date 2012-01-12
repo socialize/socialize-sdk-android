@@ -46,14 +46,14 @@
 	</bean>
 	
 	<bean id="locationManager" class="com.socialize.location.SocializeLocationManager">
-		<constructor-arg ref="deviceUtils"/>
+		<constructor-arg ref="appUtils"/>
 		<init-method name="init">
 			<arg type="context"/>
 		</init-method>
 	</bean>
 	
 	<bean id="locationProvider" class="com.socialize.location.DefaultLocationProvider">
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="appUtils" ref="appUtils"/>
 		<property name="locationManager" ref="locationManager"/>
 		<property name="locationListenerFactory" ref="locationListenerFactory"/>
 		
@@ -539,6 +539,7 @@
 	<bean id="notificationChecker" class="com.socialize.notifications.NotificationChecker" context-aware="false">
 		<property name="logger" ref="logger"/>
 		<property name="config" ref="config"/>
+		<property name="appUtils" ref="appUtils"/>
 		<property name="notificationRegistrationSystem" ref="notificationRegistrationSystem"/>
 		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
 	</bean>	

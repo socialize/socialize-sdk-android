@@ -804,8 +804,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		verifyDefaultMocks();
 	}
 	
-
-	 
+	@Deprecated
 	@UsesMocks ({SocializeAuthListener.class})
 	public void  testAuthenticateWithListener() {
 		final SocializeAuthListener mockListener = AndroidMock.createMock(SocializeAuthListener.class);
@@ -817,6 +816,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		};
 		socializeService.authenticate( mockListener );
 	}
+	
 	@UsesMocks ({SocializeAuthListener.class, IBeanFactory.class, AuthProviderData.class})
 	public void testAuthenticate() throws SocializeException {
 		SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);

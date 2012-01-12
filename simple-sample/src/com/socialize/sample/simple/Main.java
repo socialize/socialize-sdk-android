@@ -11,7 +11,6 @@ import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.Share;
 import com.socialize.ui.SocializeEntityLoader;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
@@ -27,8 +26,11 @@ public class Main extends Activity {
 		// Your entity key.  May be passed as a Bundle parameter to your activity
 		final String entityKey = "http://getsocialize.com";
 		
+		// Create an entity object, including a name.
+		final Entity entity = Entity.newInstance(entityKey, "Socialize");
+		
 		// Set an entity loader to allow Socialize to load content within your app
-		SocializeUI.getInstance().setEntityLoader(new SocializeEntityLoader() {
+		Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
 			@Override
 			public void loadEntity(Activity activity, Entity entity) {
 				
@@ -39,7 +41,7 @@ public class Main extends Activity {
 
 		// Wrap your existing view with the action bar.
 		// your_layout refers to the resource ID of your current layout.
-		View actionBarWrapped = SocializeUI.getInstance().showActionBar(this, R.layout.main, entityKey, new ActionBarListener() {
+		View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.main, entity, new ActionBarListener() {
 
 			@Override
 			public void onCreate(ActionBarView actionBar) {

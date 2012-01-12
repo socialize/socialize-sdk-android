@@ -143,36 +143,41 @@ public class AppUtils {
 	}
 
 	public boolean isNotificationsAvaiable(Context context) {
+
 		if(!notificationsAssessed) {
 			
+		    String permissionString = context.getPackageName() + ".permission.C2D_MESSAGE";
+		    
 			boolean ok = true;
 			
-			if(!hasPermission(context, "com.socialize.sample.permission.C2D_MESSAGE")) {
-				logger.warn("Notifications not available, permission com.socialize.sample.permission.C2D_MESSAGE not specified in AndroidManifest.xml");
+			if(!hasPermission(context, permissionString)) {
+				if(logger.isInfoEnabled()) logger.info("Notifications not available, permission [" +
+						permissionString +
+						"] not specified in AndroidManifest.xml");
 				ok = false;
 			}
 			
 			if(!hasPermission(context, "com.google.android.c2dm.permission.RECEIVE")) {
-				logger.warn("Notifications not available, permission com.google.android.c2dm.permission.RECEIVE not specified in AndroidManifest.xml");
+				if(logger.isInfoEnabled()) logger.info("Notifications not available, permission com.google.android.c2dm.permission.RECEIVE not specified in AndroidManifest.xml");
 				ok = false;
 			}
 			
 			if(!isReceiverAvailable(context, SocializeBroadcastReceiver.class)) {
-				logger.warn("Notifications not available. Receiver [" +
+				if(logger.isInfoEnabled()) logger.info("Notifications not available. Receiver [" +
 						SocializeBroadcastReceiver.class +
 						"] not configured in AndroidManifest.xml");
 				ok = false;
 			}
 			
 			if(!isServiceAvailable(context, SocializeC2DMReceiver.class)) {
-				logger.warn("Notifications not available. Service [" +
+				if(logger.isInfoEnabled()) logger.info("Notifications not available. Service [" +
 						SocializeBroadcastReceiver.class +
 						"] not configured in AndroidManifest.xml");
 				ok = false;
 			}			
 			
 			if(Socialize.getSocialize().getEntityLoader() == null) {
-				logger.warn("Notifications not available. Entity loader not found.");
+				if(logger.isInfoEnabled()) logger.info("Notifications not available. Entity loader not found.");
 				ok = false;
 			}
 			

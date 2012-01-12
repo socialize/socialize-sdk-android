@@ -59,7 +59,7 @@ public class SocializeUI {
 	
 	private IOCContainer container;
 	private Drawables drawables;
-	private String[] beanOverrides;
+//	private String[] beanOverrides;
 	
 	private SocializeEntityLoader entityLoader;
 	
@@ -470,7 +470,7 @@ public class SocializeUI {
 	 * @param beanOverride
 	 */
 	void setBeanOverrides(String...beanOverrides) {
-		this.beanOverrides = beanOverrides;
+		throw new UnsupportedOperationException("Not supported");
 	}
 	
 	/**
