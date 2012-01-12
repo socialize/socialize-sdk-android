@@ -480,4 +480,26 @@ public class SocializeActivity extends Activity {
 			});
 		}			
 	}
+	
+	
+	
+	void snippet20() {
+		Entity entity = new Entity();
+		entity.setKey("mykey");
+		entity.setName("The Name");
+		entity.setMetaData("extra_info");
+		
+		Socialize.getSocialize().addEntity(this, entity, new EntityAddListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				// Handle error
+			}
+			
+			@Override
+			public void onCreate(Entity entity) {
+				// Handle success
+			}
+		});
+	}		
 }

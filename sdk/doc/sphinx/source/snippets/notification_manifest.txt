@@ -1,6 +1,6 @@
 .. raw:: html
 
-	<pre class="brush: xml;tab-size: 4;highlight: [18,22,37,39]">
+	<pre class="brush: xml;tab-size: 4;highlight: [20,24,39,41]">
 		&lt;manifest...>
 		
 		&lt;application...>
@@ -10,6 +10,8 @@
 			&lt;activity android:name="com.socialize.ui.comment.CommentDetailActivity"/>
 			&lt;activity android:name="com.socialize.ui.profile.ProfileActivity"/>
 			&lt;activity android:name="com.socialize.auth.facebook.FacebookActivity"/>
+			
+			&lt;!-- Activities Required for Socialize Push Notifications -->			
 			&lt;activity android:name="com.socialize.ui.SocializeLaunchActivity" android:launchMode="singleTop"/>
 	
 			&lt;!-- Socialize Notification Receiver -->

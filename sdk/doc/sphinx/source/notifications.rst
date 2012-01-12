@@ -6,6 +6,9 @@
 Push Notifications
 ==================
 
+.. image:: images/comment.png
+.. image:: images/subscribe.png
+
 Introduction
 ------------
 In v1.3 of Socialize we introduced push notifications.  This provides your app with a simple and effective way to bring users back into the 

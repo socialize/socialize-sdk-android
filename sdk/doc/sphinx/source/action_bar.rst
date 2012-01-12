@@ -31,8 +31,6 @@ If you prefer to do things the old fashioned way, you can set all the parameters
 Advanced Features
 ~~~~~~~~~~~~~~~~~
 
-.. _entity_loader:	
-
 Using the Entity Loader
 ########################
 

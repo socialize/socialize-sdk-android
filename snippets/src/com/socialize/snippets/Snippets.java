@@ -1,6 +1,7 @@
 package com.socialize.snippets;
 
 import android.app.Activity;
+import android.content.Intent;
 
 import com.socialize.Socialize;
 import com.socialize.entity.Entity;
@@ -21,4 +22,16 @@ public class Snippets {
 		});
 	}
 	
+	void snippet1() {
+		Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
+			public void loadEntity(Activity activity, Entity entity) {
+				// Launch an activity from here...
+				Intent intent = new Intent(activity, MyContentActivity.class);
+				intent.putExtra("some_key", entity.getMetaData());
+				activity.startActivity(intent);
+			}
+		});
+	}
+	
+	class MyContentActivity extends Activity {}
 }
