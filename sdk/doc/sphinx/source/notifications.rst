@@ -20,6 +20,8 @@ Enabling push notifications for Socialize requires a few additional setup steps.
 Step 1: Enable Notifications on http://www.getsocialize.com
 -----------------------------------------------------------
 
+.. image:: images/notification_settings.png
+
 Step 2: Add Configuration to AndroidManifest.xml
 ------------------------------------------------
 
