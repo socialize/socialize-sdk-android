@@ -22,7 +22,7 @@
 package com.socialize.test.blackbox;
 
 import com.socialize.test.SocializeUnitTest;
-import com.socialize.util.AppUtils;
+import com.socialize.util.DefaultAppUtils;
 import com.socialize.util.DeviceUtils;
 
 /**
@@ -34,7 +34,7 @@ public class DeviceUtilsBlackboxTest extends SocializeUnitTest {
 	// Can't test behaviour because we can't mock telephonymanager, just black box it.
 	public void testDeviceUtilsGetUDID() {
 		DeviceUtils utils = new DeviceUtils();
-		utils.setAppUtils(new AppUtils());
+		utils.setAppUtils(new DefaultAppUtils());
 		String udid = utils.getUDID(getContext());
 		assertNotNull(udid);
 	}

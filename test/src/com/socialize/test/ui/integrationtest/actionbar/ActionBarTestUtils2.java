@@ -80,8 +80,6 @@ public class ActionBarTestUtils2 {
 				else {
 					System.err.println("Proxy is null!!");
 				}
-				
-				
 			}
 		});
 		

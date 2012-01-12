@@ -25,7 +25,7 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.config.SocializeConfig;
 import com.socialize.test.SocializeUnitTest;
-import com.socialize.util.AppUtils;
+import com.socialize.util.DefaultAppUtils;
 
 /**
  * @author Jason Polites
@@ -44,7 +44,7 @@ public class AppUtilsTest extends SocializeUnitTest {
 
 		AndroidMock.replay(config);
 		
-		AppUtils utils = new AppUtils();
+		DefaultAppUtils utils = new DefaultAppUtils();
 		utils.setConfig(config);
 		
 		String url = utils.getAppUrl();

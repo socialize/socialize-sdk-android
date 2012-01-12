@@ -32,7 +32,7 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeUIActivity;
 import com.socialize.ui.slider.ActionBarSliderView;
 import com.socialize.ui.slider.ActionBarSliderView.DisplayState;
-import com.socialize.util.AppUtils;
+import com.socialize.util.DefaultAppUtils;
 
 /**
  * @author Jason Polites
@@ -77,7 +77,7 @@ public class CommentActivity extends SocializeUIActivity {
 			Socialize.getSocialize().destroy();
 			
 			if(isTaskRoot()) {
-				if (AppUtils.launchMainApp(this)) {
+				if (DefaultAppUtils.launchMainApp(this)) {
 					finish();
 					return true;
 				}

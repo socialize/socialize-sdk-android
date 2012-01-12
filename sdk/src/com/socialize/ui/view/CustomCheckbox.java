@@ -249,6 +249,14 @@ public class CustomCheckbox extends BaseView {
 	public void setLoadingViewFactory(IBeanFactory<BasicLoadingView> loadingViewFactory) {
 		this.loadingViewFactory = loadingViewFactory;
 	}
+	
+	public String getImageOn() {
+		return imageOn;
+	}
+
+	public String getImageOff() {
+		return imageOff;
+	}
 
 	@Override
 	public void setEnabled(boolean enabled) {

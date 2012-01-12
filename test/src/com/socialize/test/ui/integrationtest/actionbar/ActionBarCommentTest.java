@@ -36,7 +36,6 @@ public class ActionBarCommentTest extends ActivityInstrumentationTestCase2<Actio
 		
 		Entity entity = Entity.newInstance("http://entity1.com", "no name");
 		
-		
 		Intent intent = new Intent();
 		intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 		setActivityIntent(intent);

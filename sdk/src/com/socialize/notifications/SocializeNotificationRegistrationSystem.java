@@ -48,7 +48,6 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 	private SocializeConfig config;
 	private SocializeLogger logger;
 	private DeviceRegistrationSystem deviceRegistrationSystem;
-//	private NotificationAuthenticator notificationAuthenticator;
 	private NotificationRegistrationState notificationRegistrationState;
 	
 	@Override
@@ -138,10 +137,6 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 	public void setDeviceRegistrationSystem(DeviceRegistrationSystem deviceRegistrationSystem) {
 		this.deviceRegistrationSystem = deviceRegistrationSystem;
 	}
-
-//	public void setNotificationAuthenticator(NotificationAuthenticator notificationAuthenticator) {
-//		this.notificationAuthenticator = notificationAuthenticator;
-//	}
 
 	public void setNotificationRegistrationState(NotificationRegistrationState notificationRegistrationState) {
 		this.notificationRegistrationState = notificationRegistrationState;

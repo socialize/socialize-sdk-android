@@ -33,6 +33,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.launcher.LaunchAction;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeLaunchActivity;
+import com.socialize.util.DefaultAppUtils;
 import com.socialize.util.AppUtils;
 
 /**
@@ -62,7 +63,7 @@ public abstract class BaseNotificationMessageBuilder<T extends SocializeAction, 
 						SocializeLaunchActivity.class +
 						"].  Make sure you have added this to your AndroidManifest.xml");
 			}
-			notificationIntent = AppUtils.getMainAppIntent(context);
+			notificationIntent = DefaultAppUtils.getMainAppIntent(context);
 		}
 
 		// This will add anything we need to the bundle

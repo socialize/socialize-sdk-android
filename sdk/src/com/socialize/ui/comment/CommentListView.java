@@ -384,25 +384,28 @@ public class CommentListView extends BaseView {
 
 				@Override
 				public void onList(ListResult<Comment> entities) {
-					int totalCount = entities.getTotalCount();
-					header.setText(totalCount + " Comments");
-					commentAdapter.setComments(entities.getItems());
-					commentAdapter.setTotalCount(totalCount);
+					
+					if(entities != null) {
+						int totalCount = entities.getTotalCount();
+						header.setText(totalCount + " Comments");
+						commentAdapter.setComments(entities.getItems());
+						commentAdapter.setTotalCount(totalCount);
 
-					if(totalCount <= endIndex) {
-						commentAdapter.setLast(true);
-					}
+						if(totalCount <= endIndex) {
+							commentAdapter.setLast(true);
+						}
 
-					if(update || comments == null) {
-						commentAdapter.notifyDataSetChanged();
-						content.scrollToTop();
+						if(update || comments == null) {
+							commentAdapter.notifyDataSetChanged();
+							content.scrollToTop();
+						}
 					}
 					
 					content.showList();
 
 					loading = false;
 					
-					if(onCommentViewActionListener != null) {
+					if(onCommentViewActionListener != null && entities != null) {
 						onCommentViewActionListener.onCommentList(CommentListView.this, entities.getItems(), startIndex, endIndex);
 					}
 					
@@ -450,7 +453,7 @@ public class CommentListView extends BaseView {
 						commentEntryPage.getCommentEntryView().setNotifySubscribeState(true);
 					}
 					if(dialog != null) dialog.dismiss();
-					alertDialogFactory.show(getContext(), "Subscribe successful", "We will notify you when someone posts a comment to this discussion.");
+					alertDialogFactory.show(getContext(), "Subscribe Successful", "We will notify you when someone posts a comment to this discussion.");
 				}
 			});
 		}
@@ -469,13 +472,11 @@ public class CommentListView extends BaseView {
 						commentEntryPage.getCommentEntryView().setNotifySubscribeState(false);
 					}
 					if(dialog != null) dialog.dismiss();
-					alertDialogFactory.show(getContext(), "Unsubscribe successful", "You will no longer receive notifications for updates to this discussion.");
+					alertDialogFactory.show(getContext(), "Unsubscribe Successful", "You will no longer receive notifications for updates to this discussion.");
 				}
 			});
 		}		
-		
 	}
-	
 	
 	protected void doNotificationStatusLoad() {
 		if(notifyBox != null) {

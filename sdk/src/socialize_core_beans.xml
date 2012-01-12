@@ -21,7 +21,7 @@
 		</init-method>
 	</bean>
 	
-	<bean id="appUtils" class="com.socialize.util.AppUtils" context-aware="false">
+	<bean id="appUtils" class="com.socialize.util.DefaultAppUtils" context-aware="false">
 		<property name="logger" ref="logger"/>
 		<property name="config" ref="config"/>
 		<init-method name="init">
