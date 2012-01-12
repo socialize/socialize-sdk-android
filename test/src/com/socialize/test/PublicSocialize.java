@@ -114,9 +114,9 @@ public class PublicSocialize extends SocializeServiceImpl {
 	}
 
 	@Override
-	public void logMessage(String message) {
+	public void logErrorMessage(String message) {
 		// TODO Auto-generated method stub
-		super.logMessage(message);
+		super.logErrorMessage(message);
 	}
 
 	@Override
