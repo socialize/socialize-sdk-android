@@ -529,7 +529,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 						if(authListener != null) {
 							authListener.onError(new SocializeException(msg));
 						}
-						logMessage(msg);
+						logErrorMessage(msg);
 					}
 					else {
 						authenticate(consumerKey, consumerSecret, authProviderType, authProviderAppId, authListener);
@@ -609,13 +609,13 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			if(authListener != null) {
 				authListener.onError(new SocializeException(msg));
 			}
-			logMessage(msg);
+			logErrorMessage(msg);
 			return false;
 		} else {
 			return true;	
 		}
 	}
-	public void logMessage(String message) {
+	protected void logErrorMessage(String message) {
 		if(logger != null) {
 			logger.error(message);
 		}
