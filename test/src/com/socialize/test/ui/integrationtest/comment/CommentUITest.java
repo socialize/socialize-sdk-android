@@ -15,14 +15,18 @@ import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.CommentSystem;
 import com.socialize.api.action.SubscriptionSystem;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
+import com.socialize.entity.ListResult;
 import com.socialize.entity.Subscription;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
+import com.socialize.listener.comment.CommentListener;
 import com.socialize.listener.subscription.SubscriptionListener;
 import com.socialize.notifications.NotificationType;
+import com.socialize.sample.mocks.MockCommentSystem;
 import com.socialize.sample.mocks.MockSubscriptionSystem;
 import com.socialize.test.ui.integrationtest.SocializeUIRobotiumTest;
 import com.socialize.test.ui.util.TestUtils;
@@ -176,6 +180,20 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 			}
 		};
 		
+		final CommentSystem commentSystem = new MockCommentSystem() {
+
+			@Override
+			public void getCommentsByEntity(SocializeSession session, String entityKey, CommentListener listener) {
+				listener.onList(new ListResult<Comment>());
+			}
+
+			@Override
+			public void getCommentsByEntity(SocializeSession session, String entityKey, int startIndex, int endIndex, CommentListener listener) {
+				listener.onList(new ListResult<Comment>());
+			}
+			
+		};
+		
 		SocializeAccess.setInitListener(new SocializeInitListener() {
 			
 			@Override
@@ -208,8 +226,17 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 				else {
 					System.err.println("DialogFactory Proxy is null!!");
 				}	
+				
+				ProxyObject<CommentSystem> commentSystemProxy = container.getProxy("commentSystem");
+				if(proxy != null) {
+					commentSystemProxy.setDelegate(commentSystem);
+				}
+				else {
+					System.err.println("commentSystem Proxy is null!!");
+				}					
 			}
 		});		
+		
 		
 		showComments();
 		robotium.waitForActivity("CommentActivity", 5000);
@@ -217,7 +244,7 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		sleep(2000);
 
 		final CountDownLatch latch = new CountDownLatch(1);
-		final CustomCheckbox chk = TestUtils.findCheckboxWithImageName(robotium.getCurrentActivity(), "icon_notify.png#large");
+		final CustomCheckbox chk = TestUtils.findCheckboxWithImageName(robotium.getCurrentActivity(), "icon_notify.png#large", 10000);
 		
 		assertNotNull(chk);
 		

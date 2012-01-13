@@ -44,8 +44,6 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 		super(provider);
 	}
 	
-	
-	
 	@Override
 	public void addComment(SocializeSession session, Comment comment, Location location, ShareOptions shareOptions, CommentListener listener) {
 		boolean shareLocation = (shareOptions == null || shareOptions.isShareLocation());

@@ -124,10 +124,13 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	}
 	
 	protected void startWithoutFacebook() {
+		startWithoutFacebook(true);
+	}
+	protected void startWithoutFacebook(boolean clearCache) {
 		robotium.clearEditText(0);
 		robotium.enterText(0, DEFAULT_GET_ENTITY);
 		robotium.clearEditText(2);
-		clearAuthCache();
+		if(clearCache) clearAuthCache();
 	}
 
 	protected void addResult(Object obj) {

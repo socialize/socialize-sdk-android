@@ -626,7 +626,9 @@ public class CommentListView extends BaseView {
 				onCommentViewActionListener.onError(e);
 			}
 			
-			content.showList();
+			if(content != null) {
+				content.showList();
+			}
 		}	
 		
 		if(onCommentViewActionListener != null) {

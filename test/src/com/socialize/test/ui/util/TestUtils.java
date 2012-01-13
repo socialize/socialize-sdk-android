@@ -228,18 +228,45 @@ public class TestUtils {
 		return null;
 	}
 	
-	public static CustomCheckbox findCheckboxWithImageName(final Activity activity, final String text) {
-		return findCheckboxWithImageName(activity.getWindow().getDecorView(), text);
+	public static CustomCheckbox findCheckboxWithImageName(final Activity activity, final String text, long timeout) {
+		return findCheckboxWithImageName(activity.getWindow().getDecorView(), text, timeout);
 	}
 	
-	public static CustomCheckbox findCheckboxWithImageName(final View parent, final String text) {
+	public static CustomCheckbox findCheckboxWithImageName(final View parent, final String text, long timeoutMs) {
 		if(parent instanceof ViewGroup) {
-			return (CustomCheckbox) findView((ViewGroup) parent, new ViewMatcher() {
-				@Override
-				public boolean matches(View view) {
-					return isCheckboxWithImage(view, text);
+			
+			if(timeoutMs > 0) {
+				long time = System.currentTimeMillis();
+				long current = time;
+				
+				CustomCheckbox chk = null;
+				
+				while(current - time < timeoutMs) {
+					chk = (CustomCheckbox) findView((ViewGroup) parent, new ViewMatcher() {
+						@Override
+						public boolean matches(View view) {
+							return isCheckboxWithImage(view, text);
+						}
+					});	
+					
+					if(chk == null) {
+						sleep((int) (timeoutMs / 10));
+					}
+					else {
+						return chk;
+					}
+					
+					current = System.currentTimeMillis();
 				}
-			});	
+			}
+			else {
+				return  (CustomCheckbox) findView((ViewGroup) parent, new ViewMatcher() {
+					@Override
+					public boolean matches(View view) {
+						return isCheckboxWithImage(view, text);
+					}
+				});	
+			}
 		}
 		else {
 			if( isCheckboxWithImage(parent, text) ) {
