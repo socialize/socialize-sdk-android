@@ -133,7 +133,10 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 		
 		return initialized;
 	}
-	
+
+	protected void setNotificationCallback(C2DMCallback notificationCallback) {
+		this.notificationCallback = notificationCallback;
+	}
 
 	@Override
 	public void onDestroy() {
@@ -141,6 +144,11 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 			container.onDestroy(getContext());
 		}		
 		initialized = false;
+		superOnDestroy();
+	}
+	
+	// So we can mock
+	protected void superOnDestroy() {
 		super.onDestroy();
 	}
 	
