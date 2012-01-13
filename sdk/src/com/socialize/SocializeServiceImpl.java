@@ -876,7 +876,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				}
 				else  {
 					for (final SocialNetwork socialNetwork : shareTo) {
-						shareSystem.addShare(session, entity, text, ShareType.valueOf(socialNetwork.name().toLowerCase()), location, new ShareAddListener() {
+						shareSystem.addShare(session, entity, text, ShareType.valueOf(socialNetwork.name().toUpperCase()), location, new ShareAddListener() {
 							@Override
 							public void onError(SocializeException error) {
 								if(shareAddListener != null) {

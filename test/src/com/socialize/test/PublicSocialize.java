@@ -21,7 +21,9 @@
  */
 package com.socialize.test;
 
+import android.app.Activity;
 import android.content.Context;
+import android.view.View;
 
 import com.socialize.SocializeServiceImpl;
 import com.socialize.api.action.ActivitySystem;
@@ -33,10 +35,13 @@ import com.socialize.api.action.UserSystem;
 import com.socialize.api.action.ViewSystem;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.entity.Entity;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeListener;
 import com.socialize.log.SocializeLogger;
+import com.socialize.ui.actionbar.ActionBarListener;
+import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.ResourceLocator;
 
@@ -71,6 +76,65 @@ public class PublicSocialize extends SocializeServiceImpl {
 	public void authenticate(Context context, String consumerKey,
 			String consumerSecret, SocializeAuthListener authListener) {
 		super.authenticate(context, consumerKey, consumerSecret, authListener);
+	}
+	
+	@Override
+	public View showActionBar(Activity parent, int resId, Entity entity) {
+		// TODO Auto-generated method stub
+		return super.showActionBar(parent, resId, entity);
+	}
+
+
+	@Override
+	public View showActionBar(Activity parent, int resId, Entity entity,
+			ActionBarListener listener) {
+		// TODO Auto-generated method stub
+		return super.showActionBar(parent, resId, entity, listener);
+	}
+
+	
+	@Override
+	public View showActionBar(Activity parent, int resId, Entity entity,
+			ActionBarOptions options) {
+		// TODO Auto-generated method stub
+		return super.showActionBar(parent, resId, entity, options);
+	}
+
+
+	@Override
+	public View showActionBar(Activity parent, int resId, Entity entity,
+			ActionBarOptions options, ActionBarListener listener) {
+		// TODO Auto-generated method stub
+		return super.showActionBar(parent, resId, entity, options, listener);
+	}
+
+
+	@Override
+	public View showActionBar(Activity parent, View original, Entity entity) {
+		// TODO Auto-generated method stub
+		return super.showActionBar(parent, original, entity);
+	}
+
+	@Override
+	public View showActionBar(Activity parent, View original, Entity entity,
+			ActionBarOptions options) {
+		// TODO Auto-generated method stub
+		return super.showActionBar(parent, original, entity, options);
+	}
+
+	
+	@Override
+	public View showActionBar(Activity parent, View original, Entity entity,
+			ActionBarListener listener) {
+		// TODO Auto-generated method stub
+		return super.showActionBar(parent, original, entity, listener);
+	}
+
+	@Override
+	public View showActionBar(Activity parent, View original, Entity entity,
+			ActionBarOptions options, ActionBarListener listener) {
+		// TODO Auto-generated method stub
+		return super.showActionBar(parent, original, entity, options, listener);
 	}
 
 	@Override
