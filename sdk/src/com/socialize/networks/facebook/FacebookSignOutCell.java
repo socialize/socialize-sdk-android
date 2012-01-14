@@ -27,7 +27,9 @@ import android.content.Context;
 
 /**
  * @author Jason Polites
+ * @deprecated
  */
+@Deprecated
 public class FacebookSignOutCell extends FacebookCell {
 	
 	private IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory;

@@ -12,11 +12,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.entity.Entity;
 import com.socialize.sample.R;
+import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.ui.dialog.SafeProgressDialog;
 
 public class SampleActivity2 extends Activity {
@@ -38,6 +40,13 @@ public class SampleActivity2 extends Activity {
 		final Button btnActionViewManual = (Button) findViewById(R.id.btnActionViewManual);
 		final Button btnActionViewPager = (Button) findViewById(R.id.btnActionViewPager);
 		
+		final SocializeEntityLoader loader = new SocializeEntityLoader() {
+			@Override
+			public void loadEntity(Activity activity, Entity entity) {
+				Toast.makeText(activity, "Entity loader triggered", Toast.LENGTH_SHORT).show();
+			}
+		};
+		
 		btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -47,7 +56,7 @@ public class SampleActivity2 extends Activity {
 				Entity entity = new Entity();
 				entity.setKey(txtEntity.getText().toString());
 				entity.setName(txtEntityName.getText().toString());				
-				
+				Socialize.getSocialize().setEntityLoader(loader);
 				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
 				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				Socialize.getSocializeUI().showCommentView(SampleActivity2.this, entity);
@@ -93,7 +102,7 @@ public class SampleActivity2 extends Activity {
 				entity.setName(txtEntityName.getText().toString());	
 				
 				intent.putExtra(Socialize.ENTITY_OBJECT, entity);
-				
+				Socialize.getSocialize().setEntityLoader(loader);
 				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
 				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				startActivity(intent);
@@ -111,6 +120,8 @@ public class SampleActivity2 extends Activity {
 				entity.setName(txtEntityName.getText().toString());	
 				
 				intent.putExtra(Socialize.ENTITY_OBJECT, entity);
+				
+				Socialize.getSocialize().setEntityLoader(loader);
 				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
 				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				startActivity(intent);
@@ -129,6 +140,7 @@ public class SampleActivity2 extends Activity {
 				
 				intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 				
+				Socialize.getSocialize().setEntityLoader(loader);
 				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
 				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				startActivity(intent);

@@ -64,7 +64,9 @@ public class ProfileSaveButtonListener implements OnClickListener {
 		profile.setFirstName(view.getFirstNameEdit().getText().toString().trim());
 		profile.setLastName(view.getLastNameEdit().getText().toString().trim());
 		profile.setImage(view.getProfilePictureEditView().getImage());
-//		profile.setAutoPostFacebook(view.getAutoPostFacebook().isChecked());
+		profile.setAutoPostCommentsFacebook(view.getAutoPostCommentsFacebook().isChecked());
+		profile.setAutoPostLikesFacebook(view.getAutoPostLikesFacebook().isChecked());
+		profile.setNotificationsEnabled(view.getNotificationsEnabledCheckbox().isChecked());
 		
 		profileSaver.save(context, profile, new UserSaveListener() {
 			

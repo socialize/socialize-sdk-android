@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
@@ -18,6 +19,7 @@ import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.Subscription;
+import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -159,7 +161,9 @@ public class CommentListView extends BaseView {
 			commentEntryPage = commentEntryFactory.getBean(getCommentAddListener());
 		}
 		
-		if(appUtils.isNotificationsAvaiable(getContext())) {
+		boolean notificationsAvailable = appUtils.isNotificationsAvaiable(getContext());		
+		
+		if(notificationsAvailable) {
 			notifyBox = notificationEnabledOptionFactory.getBean();
 			notifyBox.setEnabled(false); // Start disabled
 			notifyBox.setOnClickListener(new OnClickListener() {
@@ -168,6 +172,16 @@ public class CommentListView extends BaseView {
 					doNotificationStatusSave();
 				}
 			});
+			
+			User user = Socialize.getSocialize().getSession().getUser();
+			
+			if(user.isNotificationsEnabled()) {
+				notifyBox.setVisibility(View.VISIBLE);
+			}
+			else {
+				notifyBox.setVisibility(View.GONE);
+			}
+			
 			
 			sliderAnchor.addView(notifyBox);
 		}		
@@ -758,6 +772,17 @@ public class CommentListView extends BaseView {
 		commentAdapter.notifyDataSetChanged();
 		if(slider != null) {
 			slider.clearContent();
+		}
+		
+		User user = Socialize.getSocialize().getSession().getUser();
+		
+		if(notifyBox != null) {
+			if(user.isNotificationsEnabled()) {
+				notifyBox.setVisibility(View.VISIBLE);
+			}
+			else {
+				notifyBox.setVisibility(View.GONE);
+			}
 		}
 	}
 	

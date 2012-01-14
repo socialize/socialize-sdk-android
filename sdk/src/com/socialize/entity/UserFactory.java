@@ -57,6 +57,8 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	public static final String AUTO_POST_LIKES_FACEBOOK = "auto_post_likes_fb";
 	public static final String AUTO_POST_COMMENTS_FACEBOOK = "auto_post_comments_fb";
 	
+	public static final String NOTIFICATIONS_ENABLED = "notifications_enabled";
+	
 	public static final String SHARE_LOCATION = "share_location";
 	
 	@Override
@@ -82,6 +84,7 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		user.setAutoPostCommentsFacebook(getBoolean(object,AUTO_POST_COMMENTS_FACEBOOK, legacyAutoPost));
 		user.setAutoPostLikesFacebook(getBoolean(object,AUTO_POST_LIKES_FACEBOOK, legacyAutoPost));
 		user.setShareLocation(getBoolean(object,SHARE_LOCATION, true));
+		user.setNotificationsEnabled(getBoolean(object,NOTIFICATIONS_ENABLED, true));
 		
 		if(object.has(STATS) && !object.isNull(STATS)) {
 			JSONObject statsJson = object.getJSONObject(STATS);
@@ -130,6 +133,7 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		object.put(AUTO_POST_COMMENTS_FACEBOOK, user.isAutoPostCommentsFacebook());
 		object.put(AUTO_POST_LIKES_FACEBOOK, user.isAutoPostLikesFacebook());
 		object.put(SHARE_LOCATION, user.isShareLocation());
+		object.put(NOTIFICATIONS_ENABLED, user.isNotificationsEnabled());
 
 		List<UserAuthData> authData = user.getAuthData();
 		

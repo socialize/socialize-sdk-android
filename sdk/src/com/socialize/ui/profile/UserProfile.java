@@ -39,6 +39,7 @@ public class UserProfile {
 	
 	private boolean autoPostLikesFacebook = true;
 	private boolean autoPostCommentsFacebook = true;
+	private boolean notificationsEnabled = true;
 	
 	private boolean autoPostFacebook;
 	
@@ -141,5 +142,13 @@ public class UserProfile {
 
 	public void setAutoPostCommentsFacebook(boolean autoPostCommentsFacebook) {
 		this.autoPostCommentsFacebook = autoPostCommentsFacebook;
+	}
+
+	public boolean isNotificationsEnabled() {
+		return notificationsEnabled;
+	}
+
+	public void setNotificationsEnabled(boolean notificationsEnabled) {
+		this.notificationsEnabled = notificationsEnabled;
 	}
 }

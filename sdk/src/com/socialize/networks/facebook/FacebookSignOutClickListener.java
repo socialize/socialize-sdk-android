@@ -51,10 +51,12 @@ public class FacebookSignOutClickListener implements OnClickListener {
 	
 	private AlertDialog dialog;
 	
+	private FacebookSignOutListener listener;
+	
 	public FacebookSignOutClickListener() {
 		super();
 	}
-
+	
 	@Override
 	public void onClick(final View v) {
 		 dialog = new AlertDialog.Builder(v.getContext())
@@ -73,6 +75,10 @@ public class FacebookSignOutClickListener implements OnClickListener {
 		.setNegativeButton("No", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.dismiss();
+				
+				if(listener != null) {
+					listener.onCancel();
+				}
 			}
 		})
 		.create();
@@ -85,9 +91,13 @@ public class FacebookSignOutClickListener implements OnClickListener {
 
 	protected FacebookSignOutListener newFacebookSignOutListener(final View v) {
 		return new FacebookSignOutListener() {
+			
+			
+			@Override
+			public void onCancel() {}
+
 			@Override
 			public void onSignOut() {
-				
 				String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 				String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 				
@@ -96,24 +106,32 @@ public class FacebookSignOutClickListener implements OnClickListener {
 					
 					@Override
 					public void onError(SocializeException error) {
-						logError("Error during authentication", error);
-						exitProfileActivity(v);
+						logError("Erorr during authentication", error);
+						if(listener != null) {
+							listener.onSignOut();
+						}
+					}
+					
+					@Override
+					public void onCancel() {
+						if(listener != null) {
+							listener.onSignOut();
+						}
 					}
 					
 					@Override
 					public void onAuthSuccess(SocializeSession session) {
-						exitProfileActivity(v);
+						if(listener != null) {
+							listener.onSignOut();
+						}
 					}
 					
 					@Override
 					public void onAuthFail(SocializeException error) {
-						logError("Error during authentication", error);
-						exitProfileActivity(v);
-					}
-
-					@Override
-					public void onCancel() {
-						exitProfileActivity(v);
+						logError("Erorr during authentication", error);
+						if(listener != null) {
+							listener.onSignOut();
+						}
 					}
 				});
 			}
@@ -156,6 +174,9 @@ public class FacebookSignOutClickListener implements OnClickListener {
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
-	
+
+	public void setListener(FacebookSignOutListener listener) {
+		this.listener = listener;
+	}
 	
 }
