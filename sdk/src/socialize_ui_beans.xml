@@ -232,8 +232,6 @@
 	
 	<factory id="loadingItemViewFactory" makes="loadingItemView"/>	
 
-	<bean id="htmlFormatter" class="com.socialize.ui.html.DefaultHtmlFormatter"/>
-	
 	<bean 
 		id="customCheckbox" 
 		class="com.socialize.ui.view.CustomCheckbox"
@@ -896,15 +894,35 @@
 <!-- User Activity UI -->
 
 	<bean 
+		id="userActivityUtils" 
+		singleton="false"
+		class="com.socialize.ui.profile.activity.UserActivityUtils">
+	</bean>
+
+	<bean 
 		id="userActivityActionHtml" 
 		singleton="false"
 		class="com.socialize.ui.profile.activity.UserActivityActionHtml">
 		<constructor-arg type="activity"/>
 		<property name="colors" ref="colors"/>
+		<property name="userActivityUtils" ref="userActivityUtils"/>
 		<init-method name="init"/>
 	</bean>
 	
 	<factory id="userActivityActionHtmlFactory" makes="userActivityActionHtml"/>
+	
+	<bean 
+		id="userActivityActionText" 
+		singleton="false"
+		class="com.socialize.ui.profile.activity.UserActivityActionText">
+		<constructor-arg type="activity"/>
+		<property name="colors" ref="colors"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="logger" ref="logger"/>
+		<init-method name="init"/>
+	</bean>
+	
+	<factory id="userActivityActionTextFactory" makes="userActivityActionText"/>	
 
 	<bean 
 		id="userActivityListItem" 
@@ -917,6 +935,7 @@
 		<property name="drawables" ref="drawables"/>
 		<property name="dateUtils" ref="dateUtils"/>
 		<property name="userActivityActionHtmlFactory" ref="userActivityActionHtmlFactory"/>
+		<property name="userActivityActionTextFactory" ref="userActivityActionTextFactory"/>
 		
 		<init-method name="init"/>
 	</bean>
@@ -1155,14 +1174,7 @@
 		<constructor-arg type="activity"/>
 		<property name="viewFactory" ref="shareDialogViewFactory"/>
 	</bean>
-	<!-- 
-	<bean 
-		id="viewSliderItem" 
-		class="com.socialize.ui.actionbar.slider.view.ViewSliderItem" 
-		singleton="false">
-		<constructor-arg type="activity"/>
-	</bean>	
-	 -->
+
 	<bean 
 		id="sliderAnimationSet" 
 		class="com.socialize.ui.slider.SliderAnimationSet" 
@@ -1172,47 +1184,8 @@
 	
 	<factory id="actionBarSliderViewFactory" makes="actionBarSliderView"/>
 	<factory id="shareSliderItemFactory" makes="shareSliderItem"/>
-	<!-- <factory id="viewSliderItemFactory" makes="viewSliderItem"/> -->
 	<factory id="sliderAnimationSetFactory" makes="sliderAnimationSet"/>
 	
-	<!-- 
-	
-	<bean 
-		id="socializeActivityProvider" 
-		class="com.socialize.ui.recommendation.LikeRecommendationProvider">
-		<property name="socializeApiHost" ref="socializeApiHost"/>
-	</bean>	
-
-	<bean 
-		id="socializeActivityView" 
-		class="com.socialize.ui.activity.SocializeActivityView"
-		singleton="false">
-		
-		<constructor-arg type="activity"/>
-		<init-method name="init"/>
-		
-		<property name="drawables" ref="drawables"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
-		<property name="logger" ref="logger"/>
-		<property name="socializeActivityEntityViewFactory" ref="socializeActivityEntityViewFactory"/>
-		
-	</bean>
-	
-	<bean 
-		id="socializeActivityEntityView" 
-		class="com.socialize.ui.activity.SocializeActivityEntityView"
-		singleton="false">
-		
-		<constructor-arg type="activity"/>
-		<init-method name="init"/>
-		
-		<property name="drawables" ref="drawables"/>
-		<property name="logger" ref="logger"/>
-	</bean>	
-	
-	<factory id="socializeActivityEntityViewFactory" makes="socializeActivityEntityView"/>
-	 -->
-
 <!-- End Socialize Slider -->
 
 <!--  Image Loader  -->

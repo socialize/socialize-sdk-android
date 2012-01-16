@@ -52,7 +52,7 @@ public abstract class ActivityLauncher implements Launcher {
 		}
 		
 		if(activityClass != null) {
-			Intent intent = new Intent(context, activityClass);
+			Intent intent = newIntent(context, activityClass);
 			intent.putExtras(data);
 			handleIntent(context, intent, data);
 			context.startActivity(intent);
@@ -64,6 +64,11 @@ public abstract class ActivityLauncher implements Launcher {
 
 	public void setAppUtils(AppUtils appUtils) {
 		this.appUtils = appUtils;
+	}
+	
+	// So we can mock
+	protected Intent newIntent(Activity context, Class<?> activityClass) {
+		return  new Intent(context, activityClass);
 	}
 	
 	protected void handleIntent(Activity context, Intent intent, Bundle data) {}

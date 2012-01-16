@@ -40,6 +40,7 @@ import android.widget.TextView;
 
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeAction;
 import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.ui.util.Colors;
@@ -55,7 +56,7 @@ public class UserActivityListItem extends TableLayout {
 	private TextView date;
 	private ImageView icon;
 	private ImageView locationIcon;
-	private UserActivityActionHtml actionText;
+	private UserActivityAction actionText;
 	private Drawable background;
 	
 	private DeviceUtils deviceUtils;
@@ -68,11 +69,12 @@ public class UserActivityListItem extends TableLayout {
 	private int topColor;
 	private int bottomColor;
 	
-	private String fontColor;
 	private int contentFontSize = 12;
 	private int titleFontSize = 11;
 	
-	private IBeanFactory<UserActivityActionHtml> userActivityActionHtmlFactory;
+	private IBeanFactory<UserActivityAction> userActivityActionHtmlFactory;
+	private IBeanFactory<UserActivityAction> userActivityActionTextFactory;
+	
 	
 	public UserActivityListItem(Context context) {
 		super(context);
@@ -87,9 +89,12 @@ public class UserActivityListItem extends TableLayout {
 		bgColor = colors.getColor(Colors.LIST_ITEM_BG);
 		topColor = colors.getColor(Colors.LIST_ITEM_TOP);
 		bottomColor = colors.getColor(Colors.LIST_ITEM_BOTTOM);
-		fontColor = colors.getHexColor(Colors.BODY);
 		
-		int contentMargin = deviceUtils.getDIP(10);
+		int contentMargin = deviceUtils.getDIP(4);
+		
+		if(Socialize.getSocialize().getConfig().getBooleanProperty(SocializeConfig.SOCIALIZE_USE_ACTION_WEBVIEW, false)) {
+			contentMargin = deviceUtils.getDIP(10);
+		}
 		
 		setOrientation(LinearLayout.HORIZONTAL);
 		setGravity(Gravity.TOP);
@@ -148,8 +153,15 @@ public class UserActivityListItem extends TableLayout {
 	}
 	
 	protected View createTitle() {
-		actionText = userActivityActionHtmlFactory.getBean();
-		return actionText;
+		
+		if(Socialize.getSocialize().getConfig().getBooleanProperty(SocializeConfig.SOCIALIZE_USE_ACTION_WEBVIEW, false)) {
+			actionText = userActivityActionHtmlFactory.getBean();
+		}
+		else {
+			actionText = userActivityActionTextFactory.getBean();
+		}
+		
+		return (View) actionText;
 	}
 	
 	protected View createIcon() {
@@ -181,7 +193,6 @@ public class UserActivityListItem extends TableLayout {
 		
 		actionText.setTitleFontSize(titleFontSize);
 		actionText.setContentFontSize(contentFontSize);
-		actionText.setFontColor(fontColor);
 		actionText.setAction(action);
 		
 		Long actionDate = action.getDate();
@@ -238,10 +249,14 @@ public class UserActivityListItem extends TableLayout {
 		this.dateUtils = dateUtils;
 	}
 
-	public void setUserActivityActionHtmlFactory(IBeanFactory<UserActivityActionHtml> userActivityActionHtmlFactory) {
+	public void setUserActivityActionFactory(IBeanFactory<UserActivityAction> userActivityActionHtmlFactory) {
 		this.userActivityActionHtmlFactory = userActivityActionHtmlFactory;
 	}
 	
+	public void setUserActivityActionTextFactory(IBeanFactory<UserActivityAction> userActivityActionTextFactory) {
+		this.userActivityActionTextFactory = userActivityActionTextFactory;
+	}
+
 	public void setBackground(Drawable background) {
 		this.background = background;
 	}
@@ -260,10 +275,6 @@ public class UserActivityListItem extends TableLayout {
 		return layers;
 	}
 	
-	public void setFontColor(String fontColor) {
-		this.fontColor = fontColor;
-	}
-
 	public void setContentFontSize(int contentFontSize) {
 		this.contentFontSize = contentFontSize;
 	}
