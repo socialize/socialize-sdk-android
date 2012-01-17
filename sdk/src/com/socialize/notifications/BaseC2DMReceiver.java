@@ -1,42 +1,44 @@
 /*
- * Copyright 2010 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright (c) 2011 Socialize Inc.
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
-
 package com.socialize.notifications;
-
-import com.socialize.util.StringUtils;
 
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
-import android.os.PowerManager;
+
+import com.socialize.util.StringUtils;
 
 /**
- * Base class for C2D message receiver. Includes constants for the strings used
- * in the protocol.
+ * @author Jason Polites
+ *
  */
 public abstract class BaseC2DMReceiver extends IntentService {
+	
 	public static final String C2DM_RETRY = "com.google.android.c2dm.intent.RETRY";
 	public static final String REGISTRATION_CALLBACK_INTENT = "com.google.android.c2dm.intent.REGISTRATION";
 	public static final String C2DM_INTENT = "com.google.android.c2dm.intent.RECEIVE";
-
-	// Extras in the registration callback intents.
+	
 	public static final String EXTRA_UNREGISTERED = "unregistered";
-
 	public static final String EXTRA_ERROR = "error";
-
 	public static final String EXTRA_REGISTRATION_ID = "registration_id";
 
 	public static final String ERR_SERVICE_NOT_AVAILABLE = "SERVICE_NOT_AVAILABLE";
@@ -46,11 +48,6 @@ public abstract class BaseC2DMReceiver extends IntentService {
 	public static final String ERR_INVALID_PARAMETERS = "INVALID_PARAMETERS";
 	public static final String ERR_INVALID_SENDER = "INVALID_SENDER";
 	public static final String ERR_PHONE_REGISTRATION_ERROR = "PHONE_REGISTRATION_ERROR";
-
-	// wakelock
-	private static final String WAKELOCK_KEY = "C2DM_LIB";
-
-	private static PowerManager.WakeLock mWakeLock;
 
 	public BaseC2DMReceiver(String name) {
 		super(name);
@@ -79,21 +76,21 @@ public abstract class BaseC2DMReceiver extends IntentService {
 	protected abstract void onUnregistered(Context context);
 
 	@Override
-	public final void onHandleIntent(Intent intent) {
+	public void onHandleIntent(Intent intent) {
+		Context context = getApplicationContext();
 		try {
-			Context context = getApplicationContext();
 			String action = intent.getAction();
-			
 			if(!StringUtils.isEmpty(action)) {
-				if (action.equals(REGISTRATION_CALLBACK_INTENT)) {
+				if (isRegistrationAction(action)) {
 					onRegistrationResponse(context, intent);
 				} 
-				else if (action.equals(C2DM_INTENT)) {
+				else if (isMessageAction(action)) {
 					onMessage(context, intent);
 				} 
 			}
 		} 
 		catch (Exception e) {
+			// TODO: Handle error
 			e.printStackTrace();
 		}
 		finally {
@@ -103,36 +100,17 @@ public abstract class BaseC2DMReceiver extends IntentService {
 
 			// If the onMessage() needs to spawn a thread or do something else,
 			// it should use it's own lock.
-			releaseWaitLock();
-		}
-	}
-
-	static void acquireWaitLock(Context context) {
-		try {
-			if (mWakeLock == null) {
-				// This is called from BroadcastReceiver, there is no init.
-				PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-				mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_KEY);
-			}
-			
-			if(!mWakeLock.isHeld()) {
-				mWakeLock.acquire();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			WakeLock.getInstance().release(context);
 		}
 	}
 	
-	static void releaseWaitLock() {
-		try {
-			if(mWakeLock != null && mWakeLock.isHeld()) {
-				mWakeLock.release();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+	protected boolean isRegistrationAction(String action) {
+		return action.equals(REGISTRATION_CALLBACK_INTENT);
 	}
+	
+	protected boolean isMessageAction(String action) {
+		return action.equals(C2DM_INTENT);
+	}	
 	
 	protected void onRegistrationResponse(final Context context, Intent intent) {
 		String registrationId = intent.getStringExtra(EXTRA_REGISTRATION_ID);

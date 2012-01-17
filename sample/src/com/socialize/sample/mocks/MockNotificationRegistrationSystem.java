@@ -23,7 +23,7 @@ public class MockNotificationRegistrationSystem implements NotificationRegistrat
 	
 	
 	@Override
-	public boolean isRegisterationPending() {
+	public boolean isRegistrationPending() {
 		return false;
 		
 	}

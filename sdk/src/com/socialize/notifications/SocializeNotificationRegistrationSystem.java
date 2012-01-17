@@ -25,6 +25,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.DeviceRegistrationSystem;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
@@ -48,10 +49,11 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 	private SocializeConfig config;
 	private SocializeLogger logger;
 	private DeviceRegistrationSystem deviceRegistrationSystem;
+	private IBeanFactory<DeviceRegistration> deviceRegistrationFactory;
 	private NotificationRegistrationState notificationRegistrationState;
 	
 	@Override
-	public boolean isRegisterationPending() {
+	public boolean isRegistrationPending() {
 		return notificationRegistrationState.isC2dmPending();
 	}
 
@@ -82,8 +84,8 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 			notificationRegistrationState.save(context);
 			
 			String senderId = config.getProperty(SocializeConfig.SOCIALIZE_C2DM_SENDER_ID);
-			Intent registrationIntent = new Intent(REQUEST_REGISTRATION_INTENT);
-			registrationIntent.putExtra(EXTRA_APPLICATION_PENDING_INTENT, PendingIntent.getBroadcast(context, 0, new Intent(), 0));
+			Intent registrationIntent = newIntent(REQUEST_REGISTRATION_INTENT);
+			registrationIntent.putExtra(EXTRA_APPLICATION_PENDING_INTENT, newPendingIntent(context));
 			registrationIntent.putExtra(EXTRA_SENDER, senderId);
 			context.startService(registrationIntent);
 		}	
@@ -101,14 +103,13 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 			try {
 				
 				// Record the registration with Socialize
-				DeviceRegistration registration = new DeviceRegistration();
+				DeviceRegistration registration = deviceRegistrationFactory.getBean();
 				registration.setRegistrationId(registrationId);
 				
 				deviceRegistrationSystem.registerDevice(session, registration);
 				
 				notificationRegistrationState.setC2DMRegistrationId(registrationId);
 				notificationRegistrationState.setRegisteredSocialize(session.getUser());
-				
 				notificationRegistrationState.save(context);
 				
 				if(logger != null && logger.isInfoEnabled()) {
@@ -125,6 +126,16 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 			}
 		}
 	}
+	
+	// So we can mock
+	protected Intent newIntent(String action) {
+		return new Intent(action);
+	}
+	
+	// So we can mock
+	protected PendingIntent newPendingIntent(Context context) {
+		return PendingIntent.getBroadcast(context, 0, new Intent(), 0);
+	}
 
 	public void setConfig(SocializeConfig config) {
 		this.config = config;
@@ -140,5 +151,9 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 
 	public void setNotificationRegistrationState(NotificationRegistrationState notificationRegistrationState) {
 		this.notificationRegistrationState = notificationRegistrationState;
+	}
+
+	public void setDeviceRegistrationFactory(IBeanFactory<DeviceRegistration> deviceRegistrationFactory) {
+		this.deviceRegistrationFactory = deviceRegistrationFactory;
 	}
 }

@@ -61,7 +61,7 @@ public class NotificationChecker {
 					
 					if(!notificationRegistrationSystem.isRegisteredC2DM()) {
 						
-						if(notificationRegistrationSystem.isRegisterationPending()) {
+						if(notificationRegistrationSystem.isRegistrationPending()) {
 							if(logger != null && logger.isDebugEnabled()) {
 								logger.debug("C2DM already registration pending.");
 							}

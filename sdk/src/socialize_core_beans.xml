@@ -443,6 +443,10 @@
 		<constructor-arg ref="deviceRegistrationProvider"/>
 	</bean>
 	
+	<bean id="deviceRegistration" class="com.socialize.entity.DeviceRegistration" singleton="false"/>
+	
+	<factory id="deviceRegistrationObjectFactory" makes="deviceRegistration"/>
+	
 <!-- End Device Registration API -->
 
 
@@ -532,6 +536,7 @@
 	<bean id="notificationRegistrationSystem" class="com.socialize.notifications.SocializeNotificationRegistrationSystem">
 		<property name="config" ref="config"/>
 		<property name="logger" ref="logger"/>
+		<property name="deviceRegistrationFactory" ref="deviceRegistrationObjectFactory"/>
 		<property name="deviceRegistrationSystem" ref="deviceRegistrationSystem"/>
 		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
 	</bean>

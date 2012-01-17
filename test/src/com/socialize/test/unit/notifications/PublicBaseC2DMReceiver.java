@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,28 +19,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.notifications;
+package com.socialize.test.unit.notifications;
 
 import android.content.Context;
+import android.content.Intent;
 
-import com.socialize.api.SocializeSession;
-import com.socialize.entity.User;
+import com.socialize.notifications.BaseC2DMReceiver;
 
 /**
  * @author Jason Polites
  *
  */
-public interface NotificationRegistrationSystem {
-	
-	public boolean isRegisteredC2DM();
-	
-	public boolean isRegistrationPending();
-	
-	public boolean isRegisteredSocialize(User user);
+public abstract class PublicBaseC2DMReceiver extends BaseC2DMReceiver {
 
-	public void registerC2DMFailed(Context context, String cause);
-	
-	public void registerC2DM(Context context);
-	
-	public void registerSocialize(Context context, SocializeSession session, String registrationId);
+	public PublicBaseC2DMReceiver() {
+		super("TESTING ONLY");
+	}
+
+	@Override
+	public void onRegistrationResponse(Context context, Intent intent) {
+		super.onRegistrationResponse(context, intent);
+	}
+
+	@Override
+	protected void onMessage(Context context, Intent intent) {
+
+	}
+
+	@Override
+	protected void onError(Context context, String errorId) {
+
+	}
+
+	@Override
+	protected void onRegistrered(Context context, String registrationId) {
+		
+	}
+
+	@Override
+	protected void onUnregistered(Context context) {
+		
+	}
 }
