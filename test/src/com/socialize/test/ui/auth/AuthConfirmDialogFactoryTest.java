@@ -55,7 +55,7 @@ public class AuthConfirmDialogFactoryTest extends SocializeUIActivityTest {
 		MockBuilder.class,
 		MockAlertDialog.class,
 		Drawable.class})
-	public void testAuthConfirmDialogFactory() throws Throwable {
+	public void test_show() throws Throwable {
 		
 		final IBeanFactory<AuthConfirmDialogView> factory = AndroidMock.createMock(IBeanFactory.class);
 		final Drawables drawables = AndroidMock.createMock(Drawables.class);

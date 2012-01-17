@@ -304,21 +304,25 @@ public class ProfileContentView extends BaseView {
 	public void onFacebookChanged() {
 		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
 			
-			facebookEnabledCheckbox.setVisibility(View.VISIBLE);
-			
-			if(Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-				autoPostLikesFacebook.setVisibility(View.VISIBLE);
-				autoPostCommentsFacebook.setVisibility(View.VISIBLE);
+			if(facebookEnabledCheckbox != null) {
+				facebookEnabledCheckbox.setVisibility(View.VISIBLE);
 			}
-			else {
-				autoPostLikesFacebook.setVisibility(View.GONE);
-				autoPostCommentsFacebook.setVisibility(View.GONE);
+			
+			if(autoPostCommentsFacebook != null && autoPostLikesFacebook != null) {
+				if(Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+					autoPostLikesFacebook.setVisibility(View.VISIBLE);
+					autoPostCommentsFacebook.setVisibility(View.VISIBLE);
+				}
+				else {
+					autoPostLikesFacebook.setVisibility(View.GONE);
+					autoPostCommentsFacebook.setVisibility(View.GONE);
+				}	
 			}
 		}
 		else {
-			facebookEnabledCheckbox.setVisibility(View.GONE);
-			autoPostLikesFacebook.setVisibility(View.GONE);
-			autoPostCommentsFacebook.setVisibility(View.GONE);
+			if(facebookEnabledCheckbox != null) facebookEnabledCheckbox.setVisibility(View.GONE);
+			if(autoPostLikesFacebook != null) autoPostLikesFacebook.setVisibility(View.GONE);
+			if(autoPostCommentsFacebook != null) autoPostCommentsFacebook.setVisibility(View.GONE);
 		}
 	}
 	

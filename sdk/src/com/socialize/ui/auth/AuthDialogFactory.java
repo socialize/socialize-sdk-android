@@ -23,51 +23,44 @@ package com.socialize.ui.auth;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.view.View;
 
-import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.error.SocializeException;
+import com.socialize.log.SocializeLogger;
+import com.socialize.util.Drawables;
 
 /**
  * @author Jason Polites
  *
  */
-public class AuthConfirmDialogFactory extends AuthDialogFactory  {
+public abstract class AuthDialogFactory  {
 	
-	private IBeanFactory<AuthConfirmDialogView> authConfirmDialogViewFactory;
+	protected Drawables drawables;
+	protected SocializeLogger logger;
 	
-	public AuthConfirmDialogFactory() {
-		super();
+	public abstract AlertDialog create(final Context context, final AuthRequestListener listener);
+
+	
+	// So we can mock
+	protected AlertDialog.Builder newBuilder(Context context) {
+		return new AlertDialog.Builder(context);
 	}
 	
-	public AlertDialog create(Context context, final AuthRequestListener listener) {
-		
-		AlertDialog.Builder builder = newBuilder(context);
-		
-		AuthConfirmDialogView view = authConfirmDialogViewFactory.getBean();
-		
-		builder.setView(view);
-		
-		final AlertDialog alertDialog = builder.create();
-		
-		alertDialog.setIcon(drawables.getDrawable("socialize_icon_white.png"));
-		alertDialog.setTitle("Post Anonymously");
-		
-		view.getSocializeSkipAuthButton().setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				alertDialog.dismiss();
-				listener.onResult(alertDialog);
-			}
-		});
-		
-		return alertDialog;
-	}
-	
-	public void show(Context context, final AuthRequestListener listener) {
-		create(context, listener).show();
+	protected void handleError(String msg, SocializeException error) {
+		if(logger != null) {
+			logger.error(msg, error);
+		}
+		else {
+			error.printStackTrace();
+		}
 	}
 
-	public void setAuthConfirmDialogViewFactory(IBeanFactory<AuthConfirmDialogView> authConfirmDialogViewFactory) {
-		this.authConfirmDialogViewFactory = authConfirmDialogViewFactory;
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
 	}
+	
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
+	}
+
+
 }
