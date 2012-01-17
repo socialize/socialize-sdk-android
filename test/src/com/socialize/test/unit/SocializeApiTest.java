@@ -69,6 +69,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		
 	}
 	
+	@Deprecated
 	public void testApiCallsAuthenticateOnProvider() throws Throwable {
 
 		AndroidMock.expect(provider.authenticate("test_endpoint", "test_key", "test_secret", "test_uuid")).andReturn(mockSession);
@@ -79,6 +80,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		AndroidMock.verify(provider);
 	}
 	
+	@Deprecated
 	public void testApiCallsAuthenticateOnProviderWithAuthProviderData() throws Throwable {
 		AuthProviderData data = new AuthProviderData();
 		AndroidMock.expect(provider.authenticate("test_endpoint", "test_key", "test_secret", data,  "test_uuid")).andReturn(mockSession);

@@ -129,7 +129,7 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 	}
 
 	public synchronized void enqueue(ImageLoadRequest request) {
-		if(running) {
+		if(isRunning()) {
 			
 			String url = request.getUrl();
 			
@@ -206,6 +206,10 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 		
 		notifyAll();
 		doCancel(true);
+	}
+
+	public boolean isRunning() {
+		return running;
 	}
 
 	public void setLogger(SocializeLogger logger) {

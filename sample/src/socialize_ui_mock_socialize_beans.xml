@@ -6,6 +6,7 @@
 	<bean id="entitySystem" class="com.socialize.sample.mocks.MockEntitySystem" />
 	<bean id="viewSystem" class="com.socialize.sample.mocks.MockViewSystem" />
 	<bean id="notificationRegistrationSystem" class="com.socialize.sample.mocks.MockNotificationRegistrationSystem" />
+	<bean id="subscriptionSystem" class="com.socialize.sample.mocks.MockSubscriptionSystem" />
 	
 	<proxy ref="userSystem" />
 	<proxy ref="shareSystem" />
@@ -13,6 +14,9 @@
 	<proxy ref="likeSystem" />
 	<proxy ref="entitySystem" />
 	<proxy ref="viewSystem" />
+	<proxy ref="subscriptionSystem" />
+	<proxy ref="appUtils" />
+	<proxy ref="alertDialogFactory" />
 
 	<bean id="initializationAsserter" class="com.socialize.sample.mocks.MockInitializationAsserter" />
 </beans>

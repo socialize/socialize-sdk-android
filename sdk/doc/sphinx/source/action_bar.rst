@@ -1,6 +1,4 @@
-.. raw:: html
-
-	<link rel="stylesheet" href="static/css/gist.css" type="text/css" />
+.. include:: header.inc
 
 ====================
 Socialize Action Bar
@@ -9,9 +7,9 @@ Socialize Action Bar
 Brand new in v0.7.0 of the Socialize SDK for Android is the "Action Bar" which provides a single 
 entry point into the entire set of Socialize features.
 
-.. image:: images/ab_view0.png	
-.. image:: images/ab_view1.png
-.. image:: images/ab_view2.png	
+.. image:: images/action_bar.png	
+.. image:: images/share.png
+.. image:: images/add_comment.png	
 
 Displaying the Action Bar
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -21,23 +19,17 @@ Using socialize.properties configuration
 
 Refer to the :doc:`getting_started` section for details on configuring your **socialize.properties** file.
 
-.. raw:: html
-
-	<script src="https://gist.github.com/1376163.js?file=no_conf.java"></script>
+.. include:: snippets/action_bar.txt
 
 Using programmatic configuration
 ################################
 
 If you prefer to do things the old fashioned way, you can set all the parameters programmatically.
 
-.. raw:: html
-
-	<script src="https://gist.github.com/1376163.js?file=action_bar_init.java"></script>
+.. include:: snippets/action_bar_programmatic.txt
 	
 Advanced Features
 ~~~~~~~~~~~~~~~~~
-
-.. _entity_loader:	
 
 Using the Entity Loader
 ########################
@@ -48,9 +40,7 @@ be provided to Socialize to that it knows how to load the original view for the 
 
 Developers should create an implementation of a SocializeEntityLoader and provide this implementation to the SocializeUI instance:
 
-.. raw:: html
-
-	<script src="https://gist.github.com/1376163.js?file=entity_loader.java"></script>
+.. include:: snippets/entity_loader.txt
 
 Disabling the ScrollView
 ########################
@@ -60,9 +50,7 @@ This is typically necessary so that the ActionBar doesn't impede the use of your
 
 If you don't want your content to be scrollable however, you can disable this feature by using **ActionBarOptions**
 
-.. raw:: html
-
-	<script src="https://gist.github.com/1376163.js?file=init_with_options.java"></script>
+.. include:: snippets/action_bar_noscroll.txt
 
 ActionBar Creation Listener
 ###########################
@@ -70,9 +58,7 @@ ActionBar Creation Listener
 If you need or want to obtain a reference to the ActionBar view at runtime, you can use a creation listener to listen 
 for the "onCreate" event of the ActionBar:
 
-.. raw:: html
-
-	<script src="https://gist.github.com/1376163.js?file=init_with_listener.java"></script>
+.. include:: snippets/action_bar_create_listener.txt
 
 ActionBar Event Listener
 ########################
@@ -80,9 +66,7 @@ ActionBar Event Listener
 If you want to attach your own events to user operations on the ActionBar you can bind an **OnActionBarEventListener** 
 to capture these:
 
-.. raw:: html
-
-	<script src="https://gist.github.com/1376163.js?file=event_listener.java"></script>
+.. include:: snippets/action_bar_event_listener.txt
 
 Reloading the Action Bar (Changing its entity)
 ##############################################
@@ -90,12 +74,10 @@ Reloading the Action Bar (Changing its entity)
 If you want to maintain a single action bar instance shared across multiple entities you can simply use the **refresh** method 
 to instruct the ActionBar to reload after you change the entity key:
 
-.. raw:: html
+.. include:: snippets/action_bar_reload.txt
 
-	<script src="https://gist.github.com/1376163.js?file=action_bar_reload.java"></script>
-
-XML Based Layout (Experimental)
-###############################
+XML Based Layout
+################
 
 If the "auto-pin" feature of the Action Bar is not to your liking, or doesn't play well with your existing layout 
 you can always just add the view manually.
@@ -108,6 +90,6 @@ you can always just add the view manually.
 
 Here is the recommended way to include the Action Bar in your XML layout:
 
-.. raw:: html
-
-	<script src="https://gist.github.com/1376163.js?file=manual_layout.xml"></script>
+.. include:: snippets/action_bar_layout_xml.txt
+	
+.. include:: footer.inc	

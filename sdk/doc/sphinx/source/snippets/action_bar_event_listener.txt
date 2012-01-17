@@ -1,0 +1,59 @@
+.. raw:: html
+
+	<pre class="brush: java;">
+	import com.socialize.Socialize;
+	import com.socialize.entity.Entity;
+	import com.socialize.ui.actionbar.ActionBarListener;
+	import com.socialize.ui.actionbar.OnActionBarEventListener;
+
+	Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity, new ActionBarListener() {
+
+		@Override
+		public void onCreate(ActionBarView actionBar) {
+
+			actionBar.setOnActionBarEventListener(new OnActionBarEventListener() {
+
+				@Override
+				public void onUpdate(ActionBarView actionBar) {
+					// Called when the action bar has its data updated
+				}
+
+				@Override
+				public void onPostUnlike(ActionBarView actionBar) {
+					// Called AFTER a user has removed a like
+				}
+
+				@Override
+				public void onPostShare(ActionBarView actionBar, Share share) {
+					// Called AFTER a user has posted a share
+				}
+
+				@Override
+				public void onPostLike(ActionBarView actionBar, Like like) {
+					// Called AFTER a user has posted a like
+				}
+
+				@Override
+				public void onLoad(ActionBarView actionBar) {
+					// Called when the action bar is loaded
+				}
+
+				@Override
+				public void onGetLike(ActionBarView actionBar, Like like) {
+					// Called when the action bar retrieves the like for the
+					// current user
+				}
+
+				@Override
+				public void onGetEntity(ActionBarView actionBar, Entity entity) {
+					// Called when the action bar retrieves the entity data
+				}
+
+				@Override
+				public void onClick(ActionBarView actionBar, ActionBarEvent evt) {
+					// Called when the user clicks on the action bar
+				}
+			});
+		}
+	});
+	</pre>

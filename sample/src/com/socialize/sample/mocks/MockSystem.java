@@ -21,6 +21,9 @@ public abstract class MockSystem<T extends SocializeAction> {
 		entity.setKey("http://entity1.com");
 		entity.setId(0L);
 		action.setEntity(entity);
+		
+		actionList = new ListResult<T>();
+		actionList.add(action);
 	}
 
 	public void setAction(T action) {

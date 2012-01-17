@@ -35,6 +35,8 @@ test/gen
 test/bin
 test/local.properties
 test/private
+snippets/bin
+snippets/gen
 titanium/bin
 ui/bin
 ui/gen

@@ -30,7 +30,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
-import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;

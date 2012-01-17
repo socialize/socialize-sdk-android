@@ -53,7 +53,6 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
-import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
 import com.socialize.init.SocializeInitializationAsserter;
 import com.socialize.ioc.SocializeIOC;
@@ -908,8 +907,8 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		verifyDefaultMocks();
 	}
-
 	
+	@Deprecated
 	@UsesMocks({ SocializeAuthListener.class })
 	public void testAuthenticateWithListener() {
 		final SocializeAuthListener mockListener = AndroidMock

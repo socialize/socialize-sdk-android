@@ -232,8 +232,6 @@
 	
 	<factory id="loadingItemViewFactory" makes="loadingItemView"/>	
 
-	<bean id="htmlFormatter" class="com.socialize.ui.html.DefaultHtmlFormatter"/>
-	
 	<bean 
 		id="customCheckbox" 
 		class="com.socialize.ui.view.CustomCheckbox"
@@ -344,6 +342,8 @@
 		<property name="textSize" value="16" type="integer"/>
 	</bean>
 	
+	<!-- 
+	
 	<bean 
 		id="facebookSignInCell" 
 		class="com.socialize.networks.facebook.FacebookSignInCell" 
@@ -366,36 +366,36 @@
 		<property name="displayText" value="Sign out of Facebook"/>
 	</bean>		
 	
-	<factory id="facebookSignOutCellFactory" makes="facebookSignOutCell"/>		
-
-	<!-- 
-	
-	<bean 
-		id="facebookSignOutButton" 
-		singleton="false"
-		extends="socializeButton">
-		<constructor-arg type="activity"/>
-		<property name="text" value="Sign out of Facebook"/>
-		<property name="imageName" value="fb_button.png"/>
-		<property name="bottomColor" value="FACEBOOK_BOTTOM"/>
-		<property name="topColor" value="FACEBOOK_TOP"/>
-		<property name="strokeTopColor" value="FACEBOOK_TOP_STROKE"/>
-		<property name="strokeBottomColor" value="FACEBOOK_BOTTOM_STROKE"/>
-		<property name="height" value="36" type="integer"/>
-		<property name="width" value="150" type="integer"/>
-		<property name="textSize" value="11" type="integer"/>
-	</bean>
+	<factory id="facebookSignOutCellFactory" makes="facebookSignOutCell"/>	
 	
 	 -->
 	
 	<bean 
+		id="facebookEnabledCheckbox" 
+		extends="customCheckbox" 
+		class="com.socialize.networks.facebook.FacebookCheckbox"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="facebookSignOutClickListenerFactory" ref="facebookSignOutClickListenerFactory"/>
+		<property name="facebookAuthClickListener" ref="facebookAuthClickListener"/>
+		<property name="imageOn" value="icon_facebook.png"/>
+		<property name="imageOff" value="icon_facebook_disabled.png"/>
+		<property name="textOn" value="Sign out of Facebook"/>
+		<property name="textOff" value="Sign in to Facebook"/>
+		<property name="borderOn" value="true" type="boolean"/>
+		<property name="textSize" value="14" type="integer"/>
+		
+		<init-method name="init"/>
+	</bean>	
+	
+	<factory id="facebookEnabledCheckboxFactory" makes="facebookEnabledCheckbox"/>		
+
+	<bean 
 		id="facebookSignOutTask" 
 		singleton="false"
 		class="com.socialize.networks.facebook.FacebookSignOutTask">
-		<property name="logger" ref="logger"/>
 		<property name="dialogFactory" ref="progressDialogFactory"/>
 	</bean>
-
 	
 	<factory id="facebookSignOutTaskFactory" makes="facebookSignOutTask"/>
 	
@@ -671,6 +671,19 @@
 	</bean>	
 	
 	<bean 
+		id="notificationsEnabledCheckbox" 
+		extends="customCheckbox"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="imageOn" value="icon_notify.png"/>
+		<property name="imageOff" value="icon_notify_disabled.png"/>
+		<property name="textOn" value="Push Notifications Enabled"/>
+		<property name="textOff" value="Push Notifications Disabled"/>
+		<property name="borderOn" value="true" type="boolean"/>
+		<property name="textSize" value="14" type="integer"/>
+	</bean>		
+	
+	<bean 
 		id="notificationEnabledOptionNoBorder" 
 		extends="notificationEnabledOption"
 		singleton="false">
@@ -684,6 +697,7 @@
 	
 	<factory id="notificationEnabledOptionNoBorderFactory" makes="notificationEnabledOptionNoBorder"/>	
 	<factory id="notificationEnabledOptionFactory" makes="notificationEnabledOption"/>	
+	<factory id="notificationsEnabledCheckboxFactory" makes="notificationsEnabledCheckbox"/>	
 	
 <!--  End Comment UI -->
 	
@@ -737,15 +751,19 @@
 		<property name="profileCancelButtonFactory" ref="profileCancelButtonFactory"/>
 		<property name="profileSaveButtonFactory" ref="profileSaveButtonFactory"/>
 		
+		<!-- 
 		<property name="facebookSignInCellFactory" ref="facebookSignInCellFactory"/>
 		<property name="facebookSignOutCellFactory" ref="facebookSignOutCellFactory"/>
+		 -->
 		
 		<property name="profileSaveButtonListenerFactory" ref="profileSaveButtonListenerFactory"/>	
-		<property name="autoPostFacebookOptionFactory" ref="autoPostFacebookOptionFactory"/>
+		<property name="notificationsEnabledCheckboxFactory" ref="notificationsEnabledCheckboxFactory"/>
+		<property name="facebookEnabledCheckboxFactory" ref="facebookEnabledCheckboxFactory"/>
 		
 		<property name="userService" ref="userService"/>
 		
 		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="appUtils" ref="appUtils"/>
 		
 		<init-method name="init"/>
 		
@@ -876,15 +894,35 @@
 <!-- User Activity UI -->
 
 	<bean 
+		id="userActivityUtils" 
+		singleton="false"
+		class="com.socialize.ui.profile.activity.UserActivityUtils">
+	</bean>
+
+	<bean 
 		id="userActivityActionHtml" 
 		singleton="false"
 		class="com.socialize.ui.profile.activity.UserActivityActionHtml">
 		<constructor-arg type="activity"/>
 		<property name="colors" ref="colors"/>
+		<property name="userActivityUtils" ref="userActivityUtils"/>
 		<init-method name="init"/>
 	</bean>
 	
 	<factory id="userActivityActionHtmlFactory" makes="userActivityActionHtml"/>
+	
+	<bean 
+		id="userActivityActionText" 
+		singleton="false"
+		class="com.socialize.ui.profile.activity.UserActivityActionText">
+		<constructor-arg type="activity"/>
+		<property name="colors" ref="colors"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="logger" ref="logger"/>
+		<init-method name="init"/>
+	</bean>
+	
+	<factory id="userActivityActionTextFactory" makes="userActivityActionText"/>	
 
 	<bean 
 		id="userActivityListItem" 
@@ -897,6 +935,7 @@
 		<property name="drawables" ref="drawables"/>
 		<property name="dateUtils" ref="dateUtils"/>
 		<property name="userActivityActionHtmlFactory" ref="userActivityActionHtmlFactory"/>
+		<property name="userActivityActionTextFactory" ref="userActivityActionTextFactory"/>
 		
 		<init-method name="init"/>
 	</bean>
@@ -1135,14 +1174,7 @@
 		<constructor-arg type="activity"/>
 		<property name="viewFactory" ref="shareDialogViewFactory"/>
 	</bean>
-	<!-- 
-	<bean 
-		id="viewSliderItem" 
-		class="com.socialize.ui.actionbar.slider.view.ViewSliderItem" 
-		singleton="false">
-		<constructor-arg type="activity"/>
-	</bean>	
-	 -->
+
 	<bean 
 		id="sliderAnimationSet" 
 		class="com.socialize.ui.slider.SliderAnimationSet" 
@@ -1152,47 +1184,8 @@
 	
 	<factory id="actionBarSliderViewFactory" makes="actionBarSliderView"/>
 	<factory id="shareSliderItemFactory" makes="shareSliderItem"/>
-	<!-- <factory id="viewSliderItemFactory" makes="viewSliderItem"/> -->
 	<factory id="sliderAnimationSetFactory" makes="sliderAnimationSet"/>
 	
-	<!-- 
-	
-	<bean 
-		id="socializeActivityProvider" 
-		class="com.socialize.ui.recommendation.LikeRecommendationProvider">
-		<property name="socializeApiHost" ref="socializeApiHost"/>
-	</bean>	
-
-	<bean 
-		id="socializeActivityView" 
-		class="com.socialize.ui.activity.SocializeActivityView"
-		singleton="false">
-		
-		<constructor-arg type="activity"/>
-		<init-method name="init"/>
-		
-		<property name="drawables" ref="drawables"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
-		<property name="logger" ref="logger"/>
-		<property name="socializeActivityEntityViewFactory" ref="socializeActivityEntityViewFactory"/>
-		
-	</bean>
-	
-	<bean 
-		id="socializeActivityEntityView" 
-		class="com.socialize.ui.activity.SocializeActivityEntityView"
-		singleton="false">
-		
-		<constructor-arg type="activity"/>
-		<init-method name="init"/>
-		
-		<property name="drawables" ref="drawables"/>
-		<property name="logger" ref="logger"/>
-	</bean>	
-	
-	<factory id="socializeActivityEntityViewFactory" makes="socializeActivityEntityView"/>
-	 -->
-
 <!-- End Socialize Slider -->
 
 <!--  Image Loader  -->

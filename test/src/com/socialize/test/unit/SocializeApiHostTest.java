@@ -23,10 +23,8 @@ package com.socialize.test.unit;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeApiHost;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeActivitySystem;
 import com.socialize.api.action.SocializeCommentSystem;
@@ -35,17 +33,14 @@ import com.socialize.api.action.SocializeLikeSystem;
 import com.socialize.api.action.SocializeShareSystem;
 import com.socialize.api.action.SocializeUserSystem;
 import com.socialize.api.action.SocializeViewSystem;
-import com.socialize.auth.AuthProviderData;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.Share;
 import com.socialize.entity.SocializeAction;
-import com.socialize.entity.SocializeObject;
 import com.socialize.entity.User;
 import com.socialize.entity.View;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.activity.UserActivityListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.listener.entity.EntityListener;
@@ -56,7 +51,6 @@ import com.socialize.listener.view.ViewListener;
 import com.socialize.net.HttpClientFactory;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeUnitTest;
-import com.socialize.util.DeviceUtils;
 
 /**
  * @author Jason Polites

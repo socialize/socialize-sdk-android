@@ -22,24 +22,18 @@
 package com.socialize.ui.auth;
 
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.view.View;
 
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.error.SocializeException;
-import com.socialize.log.SocializeLogger;
-import com.socialize.util.Drawables;
 
 /**
  * @author Jason Polites
  *
  */
-public class AuthConfirmDialogFactory  {
+public class AuthConfirmDialogFactory extends AuthDialogFactory  {
 	
 	private IBeanFactory<AuthConfirmDialogView> authConfirmDialogViewFactory;
-	private Drawables drawables;
-	private SocializeLogger logger;
 	
 	public AuthConfirmDialogFactory() {
 		super();
@@ -69,33 +63,11 @@ public class AuthConfirmDialogFactory  {
 		return alertDialog;
 	}
 	
-	// So we can mock
-	protected Builder newBuilder(Context context) {
-		return new AlertDialog.Builder(context);
-	}
-
 	public void show(Context context, final AuthRequestListener listener) {
 		create(context, listener).show();
-	}
-	
-	protected void handleError(String msg, SocializeException error) {
-		if(logger != null) {
-			logger.error(msg, error);
-		}
-		else {
-			error.printStackTrace();
-		}
 	}
 
 	public void setAuthConfirmDialogViewFactory(IBeanFactory<AuthConfirmDialogView> authConfirmDialogViewFactory) {
 		this.authConfirmDialogViewFactory = authConfirmDialogViewFactory;
-	}
-
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
-	}
-
-	public void setDrawables(Drawables drawables) {
-		this.drawables = drawables;
 	}
 }

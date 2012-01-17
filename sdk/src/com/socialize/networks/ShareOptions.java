@@ -28,7 +28,6 @@ package com.socialize.networks;
 public class ShareOptions {
 	
 	private boolean shareLocation;
-	private boolean subscribeToUpdates;
 	
 	private SocialNetwork[] shareTo;
 	
@@ -68,14 +67,6 @@ public class ShareOptions {
 	 */
 	public void setListener(SocialNetworkListener listener) {
 		this.listener = listener;
-	}
-	
-	public boolean isSubscribeToUpdates() {
-		return subscribeToUpdates;
-	}
-
-	public void setSubscribeToUpdates(boolean subscribeToUpdates) {
-		this.subscribeToUpdates = subscribeToUpdates;
 	}
 
 	/**

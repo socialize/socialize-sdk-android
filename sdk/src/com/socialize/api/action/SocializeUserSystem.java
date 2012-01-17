@@ -130,6 +130,7 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 		user.setProfilePicData(profile.getEncodedImage());
 		user.setAutoPostCommentsFacebook(profile.isAutoPostCommentsFacebook());
 		user.setAutoPostLikesFacebook(profile.isAutoPostLikesFacebook());
+		user.setNotificationsEnabled(profile.isNotificationsEnabled());
 		saveUserProfile(context, session, user, listener);
 	}
 	

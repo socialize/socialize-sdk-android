@@ -155,9 +155,9 @@ public class ActionBarShareAutoTest extends ActivityInstrumentationTestCase2<Act
 		AndroidMock.resetToDefault(facebookShareClickListener);
 		AndroidMock.resetToDefault(smsShareClickListener);
 		
-		final SocializeButton btnFacebook = TestUtils.findViewWithText(shareView, SocializeButton.class, "facebook");
-		final SocializeButton btnEmail = TestUtils.findViewWithText(shareView, SocializeButton.class, "Email");
-		final SocializeButton btnSMS = TestUtils.findViewWithText(shareView, SocializeButton.class, "SMS");
+		final SocializeButton btnFacebook = TestUtils.findViewWithText(shareView, SocializeButton.class, "facebook", 10000);
+		final SocializeButton btnEmail = TestUtils.findViewWithText(shareView, SocializeButton.class, "Email", 10000);
+		final SocializeButton btnSMS = TestUtils.findViewWithText(shareView, SocializeButton.class, "SMS", 10000);
 		
 		assertNotNull(btnFacebook);
 		assertNotNull(btnEmail);

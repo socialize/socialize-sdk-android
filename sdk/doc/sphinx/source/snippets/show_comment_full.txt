@@ -1,0 +1,44 @@
+.. raw:: html
+
+	<pre class="brush: java">
+	
+	import android.app.Activity;
+	import android.os.Bundle;
+	import android.view.View;
+	import android.view.View.OnClickListener;
+	import android.widget.Button;
+	
+	import com.socialize.Socialize;
+	import com.socialize.entity.Entity;
+	
+	public class CommentViewActivity extends Activity {
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+	
+			setContentView(R.layout.your_layout);
+	
+			// These can be specified in a config file
+			// called socialize.properties and places in your assets path.
+			final String consumerKey = "00000000-0000-0000-000000000000";
+			final String consumerSecret = "00000000-0000-0000-000000000000";
+	
+			// YOUR Facebook App ID
+			final String facebookAppId = "1234567890";
+	
+			// A button in your UI used to launch the Comment View
+			final Button btn = (Button) findViewById(R.id.btnCommentView);
+	
+			btn.setOnClickListener(new OnClickListener() {
+				public void onClick(View v) {
+					
+					// Create or retrieve your entity object
+					Entity entity = Entity.newInstance("http://someurl.com", "My Entity");	
+					
+					Socialize.getSocialize().getConfig().setSocializeCredentials(consumerKey, consumerSecret);
+					Socialize.getSocialize().getConfig().setFacebookAppId(facebookAppId);
+					Socialize.getSocializeUI().showCommentView(CommentViewActivity.this, entity);
+				}
+			});
+		}
+	}	
+	</pre>

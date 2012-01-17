@@ -1,0 +1,24 @@
+.. raw:: html
+
+	<pre class="brush: java">
+	
+	import com.socialize.Socialize;
+	import com.socialize.entity.Comment;
+	import com.socialize.entity.ListResult;
+	import com.socialize.error.SocializeException;
+	import com.socialize.listener.comment.CommentListListener;
+
+	if(Socialize.getSocialize().isAuthenticated()) {
+		// List comments for an entity with pagination (start and end index)
+		Socialize.getSocialize().listCommentsByEntity("http://someurl.com", 0, 100, new CommentListListener() {
+
+			public void onError(SocializeException error) {
+				// Handle error
+			}
+
+			public void onList(ListResult&lt;Comment&gt; result) {
+				// Handle success
+			}
+		});
+	}	
+	</pre>

@@ -94,21 +94,19 @@ public class PublicSocialize extends SocializeServiceImpl {
 
 	@Override
 	public void authenticate(Context context, SocializeAuthListener authListener) {
-		// TODO Auto-generated method stub
 		super.authenticate(context, authListener);
 	}
 
+	@Deprecated
 	@Override
 	public void authenticate(String consumerKey, String consumerSecret,
 			SocializeAuthListener authListener) {
-		// TODO Auto-generated method stub
 		super.authenticate(consumerKey, consumerSecret, authListener);
 	}
 
 	@Override
 	public void authenticate(Context context, String consumerKey,
 			String consumerSecret, SocializeAuthListener authListener) {
-		// TODO Auto-generated method stub
 		super.authenticate(context, consumerKey, consumerSecret, authListener);
 	}
 	

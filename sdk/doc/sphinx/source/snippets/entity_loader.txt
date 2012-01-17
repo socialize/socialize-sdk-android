@@ -1,0 +1,9 @@
+.. raw:: html
+
+	<pre class="brush: java">
+	Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
+		public void loadEntity(Activity activity, Entity entity) {
+			// Load the original view for this entity
+		}
+	});
+	</pre>

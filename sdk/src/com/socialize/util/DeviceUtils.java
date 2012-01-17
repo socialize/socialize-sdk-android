@@ -52,6 +52,9 @@ public class DeviceUtils {
 	private int orientation;
 	private int displayHeight;
 	private int displayWidth;
+	
+	private boolean deviceIdObtained = false;
+	private String deviceId;
 
 	public void init(Context context) {
 	
@@ -147,28 +150,31 @@ public class DeviceUtils {
 	}
 
 	public String getUDID(Context context) {
-		if (hasPermission(context, permission.READ_PHONE_STATE)) {
-			TelephonyManager tManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-
-			String deviceId = tManager.getDeviceId();
-
+		
+		if(!deviceIdObtained) {
+			if (appUtils.hasPermission(context, permission.READ_PHONE_STATE)) {
+				TelephonyManager tManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+				deviceId = tManager.getDeviceId();
+			}
+			
 			if (StringUtils.isEmpty(deviceId)) {
 				if (logger != null) {
 					logger.warn("Unable to determine device UDID, reverting to " + Secure.ANDROID_ID);
 				}
 				deviceId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
 			}
-
-			return deviceId;
-		}
-		else {
-			// this is fatal
-			if (logger != null) {
-				logger.error(SocializeLogger.NO_UDID);
+			
+			if (StringUtils.isEmpty(deviceId)) {
+				// this is fatal
+				if (logger != null) {
+					logger.error(SocializeLogger.NO_UDID);
+				}
 			}
-
-			return null;
+			
+			deviceIdObtained = true;
 		}
+		
+		return deviceId;
 	}
 	
 	/**

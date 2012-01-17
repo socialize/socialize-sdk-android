@@ -29,4 +29,6 @@ public interface FacebookSignOutListener {
 
 	public void onSignOut();
 	
+	public void onCancel();
+	
 }

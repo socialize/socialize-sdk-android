@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
@@ -18,6 +19,7 @@ import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.Subscription;
+import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -159,7 +161,9 @@ public class CommentListView extends BaseView {
 			commentEntryPage = commentEntryFactory.getBean(getCommentAddListener());
 		}
 		
-		if(appUtils.isNotificationsAvaiable(getContext())) {
+		boolean notificationsAvailable = appUtils.isNotificationsAvaiable(getContext());		
+		
+		if(notificationsAvailable) {
 			notifyBox = notificationEnabledOptionFactory.getBean();
 			notifyBox.setEnabled(false); // Start disabled
 			notifyBox.setOnClickListener(new OnClickListener() {
@@ -168,6 +172,16 @@ public class CommentListView extends BaseView {
 					doNotificationStatusSave();
 				}
 			});
+			
+			User user = Socialize.getSocialize().getSession().getUser();
+			
+			if(user.isNotificationsEnabled()) {
+				notifyBox.setVisibility(View.VISIBLE);
+			}
+			else {
+				notifyBox.setVisibility(View.GONE);
+			}
+			
 			
 			sliderAnchor.addView(notifyBox);
 		}		
@@ -234,7 +248,7 @@ public class CommentListView extends BaseView {
 					// Check that FB is enabled for this installation
 					if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
 						AuthRequestDialogFactory dialog = authRequestDialogFactory.getBean();
-						dialog.show(getContext(), getCommentAuthListener(text, autoPostToFacebook, shareLocation, subscribe));
+						dialog.create(getContext(), getCommentAuthListener(text, autoPostToFacebook, shareLocation, subscribe)).show();
 					}
 					else {
 						// Just post as anon
@@ -384,25 +398,28 @@ public class CommentListView extends BaseView {
 
 				@Override
 				public void onList(ListResult<Comment> entities) {
-					int totalCount = entities.getTotalCount();
-					header.setText(totalCount + " Comments");
-					commentAdapter.setComments(entities.getItems());
-					commentAdapter.setTotalCount(totalCount);
+					
+					if(entities != null) {
+						int totalCount = entities.getTotalCount();
+						header.setText(totalCount + " Comments");
+						commentAdapter.setComments(entities.getItems());
+						commentAdapter.setTotalCount(totalCount);
 
-					if(totalCount <= endIndex) {
-						commentAdapter.setLast(true);
-					}
+						if(totalCount <= endIndex) {
+							commentAdapter.setLast(true);
+						}
 
-					if(update || comments == null) {
-						commentAdapter.notifyDataSetChanged();
-						content.scrollToTop();
+						if(update || comments == null) {
+							commentAdapter.notifyDataSetChanged();
+							content.scrollToTop();
+						}
 					}
 					
 					content.showList();
 
 					loading = false;
 					
-					if(onCommentViewActionListener != null) {
+					if(onCommentViewActionListener != null && entities != null) {
 						onCommentViewActionListener.onCommentList(CommentListView.this, entities.getItems(), startIndex, endIndex);
 					}
 					
@@ -450,7 +467,7 @@ public class CommentListView extends BaseView {
 						commentEntryPage.getCommentEntryView().setNotifySubscribeState(true);
 					}
 					if(dialog != null) dialog.dismiss();
-					alertDialogFactory.show(getContext(), "Subscribe successful", "We will notify you when someone posts a comment to this discussion.");
+					alertDialogFactory.show(getContext(), "Subscribe Successful", "We will notify you when someone posts a comment to this discussion.");
 				}
 			});
 		}
@@ -469,13 +486,11 @@ public class CommentListView extends BaseView {
 						commentEntryPage.getCommentEntryView().setNotifySubscribeState(false);
 					}
 					if(dialog != null) dialog.dismiss();
-					alertDialogFactory.show(getContext(), "Unsubscribe successful", "You will no longer receive notifications for updates to this discussion.");
+					alertDialogFactory.show(getContext(), "Unsubscribe Successful", "You will no longer receive notifications for updates to this discussion.");
 				}
 			});
 		}		
-		
 	}
-	
 	
 	protected void doNotificationStatusLoad() {
 		if(notifyBox != null) {
@@ -625,7 +640,9 @@ public class CommentListView extends BaseView {
 				onCommentViewActionListener.onError(e);
 			}
 			
-			content.showList();
+			if(content != null) {
+				content.showList();
+			}
 		}	
 		
 		if(onCommentViewActionListener != null) {
@@ -755,6 +772,17 @@ public class CommentListView extends BaseView {
 		commentAdapter.notifyDataSetChanged();
 		if(slider != null) {
 			slider.clearContent();
+		}
+		
+		User user = Socialize.getSocialize().getSession().getUser();
+		
+		if(notifyBox != null) {
+			if(user.isNotificationsEnabled()) {
+				notifyBox.setVisibility(View.VISIBLE);
+			}
+			else {
+				notifyBox.setVisibility(View.GONE);
+			}
 		}
 	}
 	

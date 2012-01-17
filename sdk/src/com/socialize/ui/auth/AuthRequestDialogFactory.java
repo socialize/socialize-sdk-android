@@ -30,23 +30,19 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.log.SocializeLogger;
-import com.socialize.util.Drawables;
 
 /**
  * @author Jason Polites
  *
  */
-public class AuthRequestDialogFactory  {
+public class AuthRequestDialogFactory extends AuthDialogFactory  {
 	
 	private IBeanFactory<AuthRequestDialogView> authRequestDialogViewFactory;
 	private IBeanFactory<AuthConfirmDialogFactory> authConfirmDialogFactory;
-	private Drawables drawables;
-	private SocializeLogger logger;
 	
-	public void show(final Context context, final AuthRequestListener listener) {
+	public AlertDialog create(final Context context, final AuthRequestListener listener) {
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		AlertDialog.Builder builder = newBuilder(context);
 		
 		AuthRequestDialogView view = authRequestDialogViewFactory.getBean();
 		
@@ -95,31 +91,11 @@ public class AuthRequestDialogFactory  {
 			}
 		});
 		
-		try {
-			  alertDialog.show();
-		}
-		catch (Exception ignore) {}
-	}
-	
-	protected void handleError(String msg, SocializeException error) {
-		if(logger != null) {
-			logger.error(msg, error);
-		}
-		else {
-			error.printStackTrace();
-		}
+		return alertDialog;
 	}
 
 	public void setAuthRequestDialogView(IBeanFactory<AuthRequestDialogView> authRequestDialogViewFactory) {
 		this.authRequestDialogViewFactory = authRequestDialogViewFactory;
-	}
-
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
-	}
-	
-	public void setDrawables(Drawables drawables) {
-		this.drawables = drawables;
 	}
 
 	public void setAuthConfirmDialogFactory(IBeanFactory<AuthConfirmDialogFactory> authConfirmDialogFactory) {
@@ -129,5 +105,4 @@ public class AuthRequestDialogFactory  {
 	public void setAuthRequestDialogViewFactory(IBeanFactory<AuthRequestDialogView> authRequestDialogViewFactory) {
 		this.authRequestDialogViewFactory = authRequestDialogViewFactory;
 	}
-
 }

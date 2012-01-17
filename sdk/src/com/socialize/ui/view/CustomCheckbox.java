@@ -41,6 +41,8 @@ public class CustomCheckbox extends BaseView {
 	
 	private int padding = 8;
 	
+	private int textSize = 12;
+	
 	private OnClickListener customClickListener;
 	private OnClickListener defaultClickListener;
 	private IBeanFactory<BasicLoadingView> loadingViewFactory;
@@ -56,7 +58,7 @@ public class CustomCheckbox extends BaseView {
 		int dipPadding = deviceUtils.getDIP(padding);
 		
 		checkboxLabel = new TextView(getContext());
-		checkboxLabel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+		checkboxLabel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
 		checkboxLabel.setTextColor(Color.WHITE);
 		checkboxLabel.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
 		
@@ -73,7 +75,7 @@ public class CustomCheckbox extends BaseView {
 		
 		setLayoutParams(checkboxMasterLayoutParams);
 		
-		setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+		setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
 		
 		setDisplay();
 		
@@ -248,6 +250,22 @@ public class CustomCheckbox extends BaseView {
 
 	public void setLoadingViewFactory(IBeanFactory<BasicLoadingView> loadingViewFactory) {
 		this.loadingViewFactory = loadingViewFactory;
+	}
+	
+	public String getImageOn() {
+		return imageOn;
+	}
+
+	public String getImageOff() {
+		return imageOff;
+	}
+	
+	public void setTextSize(int textSize) {
+		this.textSize = textSize;
+		
+		if(checkboxLabel != null) {
+			checkboxLabel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
+		}
 	}
 
 	@Override

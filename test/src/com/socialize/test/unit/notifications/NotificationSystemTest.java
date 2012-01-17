@@ -36,7 +36,6 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.notifications.NotificationAuthenticator;
 import com.socialize.notifications.NotificationsAccess;
-import com.socialize.notifications.SocializeC2DMReceiver;
 import com.socialize.sample.mocks.MockActivitySystem;
 import com.socialize.sample.mocks.MockSocializeSession;
 import com.socialize.test.SocializeActivityTest;
@@ -97,22 +96,4 @@ public class NotificationSystemTest extends SocializeActivityTest {
 		
 		receiver.onMessage(getContext(), intent);
 	}
-	
-	class PublicSocializeC2DMReceiver extends SocializeC2DMReceiver {
-
-		public PublicSocializeC2DMReceiver() {
-			super();
-		}
-
-		@Override
-		public Context getContext() {
-			return super.getContext();
-		}
-
-		@Override
-		public void initBeans() {
-			super.initBeans();
-		}
-	}
-	
 }

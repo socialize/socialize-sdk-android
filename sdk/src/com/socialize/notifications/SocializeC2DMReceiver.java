@@ -16,8 +16,22 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 	// Must be parameterless constructor
 	public SocializeC2DMReceiver() {
 		super("SocializeC2DMReceiver");
-		logger = new SocializeLogger();
+		logger = newSocializeLogger();
 		container = newNotificationContainer();
+	}
+	
+	public void init() throws Exception {
+		container.onCreate(getContext());
+		initBeans();
+		initialized = true;
+	}
+	
+	protected void initBeans() {
+		IOCContainer ioc = container.getContainer();
+		if(ioc != null) {
+			logger = ioc.getBean("logger");
+			notificationCallback = ioc.getBean("notificationCallback");
+		}
 	}
 
 	@Override
@@ -86,6 +100,10 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 		super.onCreate();
 	}
 	
+	public boolean isInitialized() {
+		return initialized;
+	}
+
 	// So we can mock.
 	protected Context getContext() {
 		return this;
@@ -94,6 +112,11 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 	// So we can mock.	
 	protected NotificationContainer newNotificationContainer() {
 		return new NotificationContainer();
+	}
+	
+	// So we can mock.	
+	protected SocializeLogger newSocializeLogger() {
+		return new SocializeLogger();
 	}
 	
 	protected boolean assertInitialized() {
@@ -110,19 +133,9 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 		
 		return initialized;
 	}
-	
-	public void init() throws Exception {
-		container.onCreate(getContext());
-		initBeans();
-		initialized = true;
-	}
-	
-	protected void initBeans() {
-		IOCContainer ioc = container.getContainer();
-		if(ioc != null) {
-			logger = ioc.getBean("logger");
-			notificationCallback = ioc.getBean("notificationCallback");
-		}
+
+	protected void setNotificationCallback(C2DMCallback notificationCallback) {
+		this.notificationCallback = notificationCallback;
 	}
 
 	@Override
@@ -131,6 +144,11 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 			container.onDestroy(getContext());
 		}		
 		initialized = false;
+		superOnDestroy();
+	}
+	
+	// So we can mock
+	protected void superOnDestroy() {
 		super.onDestroy();
 	}
 	

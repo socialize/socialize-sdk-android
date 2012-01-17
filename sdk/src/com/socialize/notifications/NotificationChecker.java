@@ -26,6 +26,7 @@ import android.content.Context;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
 import com.socialize.log.SocializeLogger;
+import com.socialize.util.AppUtils;
 
 /**
  * Checks for notification registrations.
@@ -38,57 +39,68 @@ public class NotificationChecker {
 	private NotificationRegistrationState notificationRegistrationState;
 	private SocializeLogger logger;
 	private SocializeConfig config;
+	private AppUtils appUtils;
 	
 	/**
 	 * Called at application startup.
 	 * @param context
 	 */
 	public void checkRegistrations(Context context, SocializeSession session) {
-		if(config.getBooleanProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, true)) {
-			if(logger != null && logger.isDebugEnabled()) {
-				logger.debug("Checking C2DM registration state");
-			}
-			
-			if(!notificationRegistrationSystem.isRegisteredC2DM() || !notificationRegistrationSystem.isRegisteredSocialize(session.getUser())) {
+		
+		if(appUtils.isNotificationsAvaiable(context)) {
+
+			if(config.getBooleanProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, true)) {
+				if(logger != null && logger.isDebugEnabled()) {
+					logger.debug("Checking C2DM registration state");
+				}
 				
-				// Reload
-				notificationRegistrationState.load(context);
-				
-				if(!notificationRegistrationSystem.isRegisteredC2DM()) {
+				if(!notificationRegistrationSystem.isRegisteredC2DM() || !notificationRegistrationSystem.isRegisteredSocialize(session.getUser())) {
 					
-					if(notificationRegistrationSystem.isRegisterationPending()) {
-						if(logger != null && logger.isDebugEnabled()) {
-							logger.debug("C2DM already registration pending.");
+					// Reload
+					notificationRegistrationState.load(context);
+					
+					if(!notificationRegistrationSystem.isRegisteredC2DM()) {
+						
+						if(notificationRegistrationSystem.isRegistrationPending()) {
+							if(logger != null && logger.isDebugEnabled()) {
+								logger.debug("C2DM already registration pending.");
+							}
+						}
+						else {
+							if(logger != null && logger.isInfoEnabled()) {
+								logger.info("Not registered with C2DM, sending registration request...");
+							}
+							
+							notificationRegistrationSystem.registerC2DM(context);
 						}
 					}
-					else {
+					else if(!notificationRegistrationSystem.isRegisteredSocialize(session.getUser())) {
+						
 						if(logger != null && logger.isInfoEnabled()) {
-							logger.info("Not registered with C2DM, sending registration request...");
+							logger.info("Not registered with Socialize for C2DM, registering...");
 						}
 						
-						notificationRegistrationSystem.registerC2DM(context);
+						notificationRegistrationSystem.registerSocialize(context, session, notificationRegistrationState.getC2DMRegistrationId());
+					}				
+				}
+				else {
+					if(logger != null && logger.isDebugEnabled()) {
+						logger.debug("C2DM registration OK");
 					}
 				}
-				else if(!notificationRegistrationSystem.isRegisteredSocialize(session.getUser())) {
-					
-					if(logger != null && logger.isInfoEnabled()) {
-						logger.info("Not registered with Socialize for C2DM, registering...");
-					}
-					
-					notificationRegistrationSystem.registerSocialize(context, session, notificationRegistrationState.getC2DMRegistrationId());
-				}				
 			}
 			else {
-				if(logger != null && logger.isDebugEnabled()) {
-					logger.debug("C2DM registration OK");
-				}
+				if(logger != null && logger.isWarnEnabled()) {
+					logger.warn("C2DM registration check skipped");
+				}			
 			}
 		}
 		else {
 			if(logger != null && logger.isInfoEnabled()) {
-				logger.warn("C2DM registration check skipped");
-			}			
+				logger.info("Notifications not enabled.  Check the AndroidManifest.xml for correct configuration.");
+			}	
 		}
+		
 	}
 
 	public void setNotificationRegistrationSystem(NotificationRegistrationSystem notificationRegistrationSystem) {
@@ -106,4 +118,10 @@ public class NotificationChecker {
 	public void setConfig(SocializeConfig config) {
 		this.config = config;
 	}
+
+	public void setAppUtils(AppUtils appUtils) {
+		this.appUtils = appUtils;
+	}
+	
+	
 }

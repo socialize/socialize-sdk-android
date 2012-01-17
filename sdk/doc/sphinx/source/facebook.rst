@@ -1,13 +1,11 @@
-.. raw:: html
+.. include:: header.inc
 
-	<link rel="stylesheet" href="static/css/gist.css" type="text/css" />
-	
 ====================
 Facebook Integration
 ====================
 
-Adding Facebook Authentication
-------------------------------
+Introduction
+------------
 
 It is strongly recommended that users be able to authenticate with Facebook when using Socialize so as to 
 maximize the exposure, and promotion of your app.
@@ -23,7 +21,7 @@ To add Facebook authentication, you'll need a Facebook App ID.  If you already h
 you can skip this section.
 
 Creating a Facebook Application
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------
 If you **do not** already have a Facebook app just follow these simple steps:
 
 	1. First create a Facebook app.  Go to https://developers.facebook.com/apps and create a new app:
@@ -58,14 +56,27 @@ If you **do not** already have a Facebook app just follow these simple steps:
 	
 You should now be ready to authenticate user's of your app with Facebook when they are using Socialize, jump to the :ref:`fb_snippet` to find out how.  	
 
-Enabling/Disabling Facebook Single Sign On (SSO)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. _propagate_fb:
+
+Propagating Socialize Actions to Facebook
+-----------------------------------------
+
+Social actions like Comment and Like can optionally be propagated to social networks like Facebook via the SDK.
+
+**NOTE: Propagation is automatic when using the Socialize Action Bar.  The following is only required for developers
+electing to use the SDK manually**
+
+The following example shows posting a comment and simultaneously sharing the comment to the user's facebook wall.
+
+.. include:: snippets/create_comment_fb.txt
+
+Facebook Single Sign On (SSO)
+-----------------------------
 
 Some users have reported having problems with the Single Sign On implementation in the Facebook SDK.
 
 If you have experienced problems with this (e.g. the "invalid_key" error), you can easily disable this feature:
 
-.. raw:: html
+.. include:: snippets/no_sso.txt
 
-	<script src="https://gist.github.com/1376163.js?file=no_fb.java"></script>
-
+.. include:: footer.inc	

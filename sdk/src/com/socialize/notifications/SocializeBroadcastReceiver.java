@@ -38,17 +38,16 @@ public class SocializeBroadcastReceiver extends BroadcastReceiver {
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		onBroadcastReceive(context, intent);
-	}
-	
-	public static boolean onBroadcastReceive(Context context, Intent intent) {
 		String action = intent.getAction();
 		if(SocializeC2DMReceiver.C2DM_INTENT.equals(action) || SocializeC2DMReceiver.REGISTRATION_CALLBACK_INTENT.equals(action)) {
-			SocializeC2DMReceiver.acquireWaitLock(context);
+			getWakeLock().acquire(context);
 			intent.setClassName(context, receiver);
 			context.startService(intent);
-			return true;
 		}
-		return false;
+	}
+	
+	// So we can mock
+	protected WakeLock getWakeLock() {
+		return WakeLock.getInstance();
 	}
 }

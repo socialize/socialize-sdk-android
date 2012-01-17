@@ -1,0 +1,29 @@
+.. raw:: html
+
+	<pre class="brush: java">
+	
+	import com.socialize.Socialize;
+	import com.socialize.api.SocializeSession;
+	import com.socialize.error.SocializeException;
+	import com.socialize.listener.SocializeAuthListener;
+
+	// The "this" reference below refers to a Context object
+	Socialize.getSocialize().authenticate(
+		this,
+		consumerKey, // From your account at getsocialize.com
+		consumerSecret, // From your account at getsocialize.com
+		new SocializeAuthListener() {
+			public void onAuthSuccess(SocializeSession session) {
+				// Success!
+			}
+			public void onAuthFail(SocializeException error) {
+				// Handle auth fail
+			}
+			public void onError(SocializeException error) {
+				// Handle error
+			}
+			public void onCancel() {
+				// Handle cancel
+			}
+		});	
+	</pre>

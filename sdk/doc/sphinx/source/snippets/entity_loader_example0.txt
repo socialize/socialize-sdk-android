@@ -1,0 +1,14 @@
+.. raw:: html
+
+	<pre class="brush: java">
+	Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
+		public void loadEntity(Activity activity, Entity entity) {
+			// Launch an activity from here...
+			Intent intent = new Intent(activity, MyContentActivity.class);
+			
+			// Add the key from the entity
+			intent.putExtra("some_key", entity.getKey());
+			activity.startActivity(intent);
+		}
+	});
+	</pre>

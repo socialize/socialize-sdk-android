@@ -52,6 +52,8 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_C2DM_SENDER_ID = "socialize.c2dm.sender.id";
 	
+	public static final String SOCIALIZE_USE_ACTION_WEBVIEW = "socialize.use.action.webview";
+	
 	@Deprecated
 	public static final String SOCIALIZE_BEANS_PATH = SOCIALIZE_CORE_BEANS_PATH;
 	

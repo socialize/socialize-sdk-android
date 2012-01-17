@@ -27,7 +27,9 @@ import com.socialize.listener.SocializeAuthListener;
 
 /**
  * @author Jason Polites
+ * @deprecated
  */
+@Deprecated
 public class FacebookSignInCell extends FacebookCell {
 	
 	private FacebookAuthClickListener facebookAuthClickListener;

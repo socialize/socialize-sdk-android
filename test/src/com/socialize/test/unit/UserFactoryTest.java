@@ -54,6 +54,7 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 	final String picture = "mock_image_data";
 	final String auto_post_comments_fb = "auto_post_comments_fb";
 	final String auto_post_likes_fb = "auto_post_likes_fb";
+	final String notifications_enabled = "notifications_enabled";
 	
 	final String auto_post_fb = "auto_post_fb";
 	
@@ -64,6 +65,7 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 	final boolean is_auto_post_comments_fb = false;
 	final boolean is_auto_post_likes_fb = false;
 	final boolean is_share_location = true;
+	final boolean is_notifications_enabled = false;
 	
 	List<UserAuthData> authData;
 	UserAuthDataFactory userAuthDataFactory;
@@ -92,6 +94,7 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		AndroidMock.expect(object.isAutoPostLikesFacebook()).andReturn(is_auto_post_likes_fb);
 		AndroidMock.expect(object.getMetaData()).andReturn(meta);
 		AndroidMock.expect(object.isShareLocation()).andReturn(is_share_location);
+		AndroidMock.expect(object.isNotificationsEnabled()).andReturn(is_notifications_enabled);
 		
 		AndroidMock.expect(json.put("first_name", first_name)).andReturn(json);
 		AndroidMock.expect(json.put("last_name", last_name)).andReturn(json);
@@ -99,15 +102,13 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		AndroidMock.expect(json.put("location", location)).andReturn(json);
 		AndroidMock.expect(json.put("picture", picture)).andReturn(json);
 		AndroidMock.expect(json.put("meta", meta)).andReturn(json);
-		
 		AndroidMock.expect(json.put(auto_post_comments_fb, is_auto_post_comments_fb)).andReturn(json);
 		AndroidMock.expect(json.put(auto_post_likes_fb, is_auto_post_likes_fb)).andReturn(json);
 		AndroidMock.expect(json.put(share_location, is_share_location)).andReturn(json);
-		
+		AndroidMock.expect(json.put(notifications_enabled, is_notifications_enabled)).andReturn(json);
 		AndroidMock.expect(json.put("small_image_uri", small_image_uri)).andReturn(json);
 		AndroidMock.expect(json.put("medium_image_uri", medium_image_uri)).andReturn(json);
 		AndroidMock.expect(json.put("large_image_uri", large_image_uri)).andReturn(json);
-		
 		AndroidMock.expect(json.put(third_party_auth, array)).andReturn(json);
 		
 		AndroidMock.replay(authData);
@@ -143,11 +144,10 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		
 		AndroidMock.expect(json.has("meta")).andReturn(true);
 		
-		
 		AndroidMock.expect(json.has("auto_post_fb")).andReturn(true);
 		AndroidMock.expect(json.has(auto_post_comments_fb)).andReturn(true);
 		AndroidMock.expect(json.has(auto_post_likes_fb)).andReturn(true);
-		
+		AndroidMock.expect(json.has(notifications_enabled)).andReturn(true);
 		AndroidMock.expect(json.has("share_location")).andReturn(true);
 		
 		AndroidMock.expect(json.isNull("picture")).andReturn(false);
@@ -165,6 +165,7 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		
 		AndroidMock.expect(json.isNull(auto_post_comments_fb)).andReturn(false);
 		AndroidMock.expect(json.isNull(auto_post_likes_fb)).andReturn(false);
+		AndroidMock.expect(json.isNull(notifications_enabled)).andReturn(false);
 		
 		AndroidMock.expect(json.isNull("share_location")).andReturn(false);
 		
@@ -185,6 +186,7 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		AndroidMock.expect(json.getBoolean("auto_post_fb")).andReturn(is_auto_post_fb);
 		AndroidMock.expect(json.getBoolean(auto_post_comments_fb)).andReturn(is_auto_post_comments_fb);
 		AndroidMock.expect(json.getBoolean(auto_post_likes_fb)).andReturn(is_auto_post_comments_fb);
+		AndroidMock.expect(json.getBoolean(notifications_enabled)).andReturn(is_notifications_enabled);
 		
 		AndroidMock.expect(json.getBoolean("share_location")).andReturn(is_share_location);
 		
@@ -209,6 +211,7 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 		
 		object.setAutoPostCommentsFacebook(is_auto_post_comments_fb);
 		object.setAutoPostLikesFacebook(is_auto_post_likes_fb);
+		object.setNotificationsEnabled(is_notifications_enabled);
 		
 		object.setShareLocation(is_share_location);
 		object.setStats(stats);

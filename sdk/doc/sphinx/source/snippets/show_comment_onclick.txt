@@ -1,0 +1,15 @@
+.. raw:: html
+
+	<pre class="brush: java">
+	
+	// btnCommentView would be the name of your button in your UI
+	Button btn = (Button) findViewById(R.id.btnCommentView);
+
+	btn.setOnClickListener(new OnClickListener() {
+		public void onClick(View v) {
+			// Create or retrieve your entity object
+			Entity entity = Entity.newInstance("http://someurl.com", "My Entity");					
+			Socialize.getSocializeUI().showCommentView(SocializeActivity.this, entity);		
+		}
+	});	
+	</pre>

@@ -34,7 +34,7 @@ public interface NotificationRegistrationSystem {
 	
 	public boolean isRegisteredC2DM();
 	
-	public boolean isRegisterationPending();
+	public boolean isRegistrationPending();
 	
 	public boolean isRegisteredSocialize(User user);
 

@@ -4,15 +4,27 @@ import android.location.Location;
 
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.CommentSystem;
+import com.socialize.entity.Application;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
+import com.socialize.entity.User;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.networks.ShareOptions;
 
 public class MockCommentSystem extends MockSystem<Comment> implements CommentSystem {
 	
+	static Comment comment;
+	static {
+		comment = new Comment();
+		Application application = new Application();
+		comment.setApplication(application);
+		comment.setText("Mock comment");
+		comment.setDate(0L);
+		comment.setUser(new User());
+	}
+	
 	public MockCommentSystem() {
-		super(new Comment());
+		super(comment);
 	}
 
 	@Override

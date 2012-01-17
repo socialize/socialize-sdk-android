@@ -3,6 +3,7 @@ package com.socialize.test.ui.comment;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.location.Location;
@@ -24,6 +25,7 @@ import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.ShareOptions;
 import com.socialize.test.PublicSocialize;
+import com.socialize.test.mock.MockAlertDialog;
 import com.socialize.test.ui.SocializeUIActivityTest;
 import com.socialize.ui.auth.AuthRequestDialogFactory;
 import com.socialize.ui.auth.AuthRequestListener;
@@ -69,13 +71,15 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		AuthRequestListener.class,
 		SocializeService.class,
 		ProgressDialogFactory.class,
-		ProgressDialog.class})
+		ProgressDialog.class,
+		MockAlertDialog.class})
 	public void testGetCommentAddListenerNotAuthed() {
 		
 		IBeanFactory<AuthRequestDialogFactory> authRequestDialogFactory = AndroidMock.createMock(IBeanFactory.class);
 		AuthRequestDialogFactory authRequestDialog = AndroidMock.createMock(AuthRequestDialogFactory.class);
 		ProgressDialogFactory progressDialogFactory = AndroidMock.createMock(ProgressDialogFactory.class);
 		ProgressDialog dialog = AndroidMock.createMock(ProgressDialog.class, getContext());
+		AlertDialog alertDialog = AndroidMock.createMock(MockAlertDialog.class, getContext());
 		
 		final AuthRequestListener listener = AndroidMock.createMock(AuthRequestListener.class);
 		final SocializeService socializeService = AndroidMock.createMock(SocializeService.class);
@@ -85,13 +89,15 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		AndroidMock.expect(progressDialogFactory.show(getContext(), "Posting comment", "Please wait...")).andReturn(dialog);
 		AndroidMock.expect(socializeService.isSupported(AuthProviderType.FACEBOOK)).andReturn(true);
 		
+		AndroidMock.expect(authRequestDialog.create(getContext(), listener)).andReturn(alertDialog);
 		
 		dialog.dismiss();
-		authRequestDialog.show(getContext(), listener);
+		alertDialog.show();
 		
 		AndroidMock.replay(authRequestDialogFactory);
 		AndroidMock.replay(authRequestDialog);
 		AndroidMock.replay(socializeService);
+		AndroidMock.replay(alertDialog);
 		
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
 			
@@ -125,6 +131,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		AndroidMock.verify(authRequestDialogFactory);
 		AndroidMock.verify(authRequestDialog);
 		AndroidMock.verify(socializeService);
+		AndroidMock.verify(alertDialog);
 		
 		Exception message = getResult(0);
 		String text = getResult(1);

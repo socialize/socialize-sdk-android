@@ -69,6 +69,7 @@ public class CommentEntryView extends BaseView {
 	private IBeanFactory<CustomCheckbox> notificationEnabledOptionFactory;
 	
 	private boolean notificationsEnabled = true;
+	private boolean notificationsAvailable = true;
 	
 	private TextView notificationsTitle;
 	private TextView notificationsText;
@@ -88,7 +89,8 @@ public class CommentEntryView extends BaseView {
 		
 		toaster = Toast.makeText(getContext(), "", Toast.LENGTH_SHORT);
 		
-		notificationsEnabled = user.isNotificationsEnabled();
+		notificationsEnabled = true;
+		notificationsAvailable = user.isNotificationsEnabled() && appUtils.isNotificationsAvaiable(getContext());
 		
 		LayoutParams fill = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 
@@ -104,15 +106,13 @@ public class CommentEntryView extends BaseView {
 			locationCheckBox = locationEnabledOptionFactory.getBean();
 		}
 		
-		if(appUtils.isNotificationsAvaiable(getContext())) {
+		if(notificationsAvailable) {
 			notifyCheckBox = notificationEnabledOptionFactory.getBean();
 		}
 		
 		if(facebookCheckbox != null) {
 			
 			facebookCheckbox.setChecked(user.isAutoPostCommentsFacebook());
-			
-		
 			facebookCheckbox.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -268,7 +268,7 @@ public class CommentEntryView extends BaseView {
 		addView(commentField);
 		addView(toolbarLayout);
 
-		if(appUtils.isNotificationsAvaiable(getContext()) && deviceUtils.getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
+		if(notificationsAvailable && deviceUtils.getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
 
 			// Notification layout
 			LinearLayout notificationMasterLayout = new LinearLayout(getContext());
@@ -415,6 +415,10 @@ public class CommentEntryView extends BaseView {
 			notifyCheckBox.setChecked(notificationsEnabled);
 		}
 		
+		if(facebookCheckbox != null) {
+			User user = Socialize.getSocialize().getSession().getUser();
+			facebookCheckbox.setChecked(user.isAutoPostCommentsFacebook());
+		}
 	}
 	
 	protected void toast(String text) {

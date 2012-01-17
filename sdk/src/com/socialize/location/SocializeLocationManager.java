@@ -28,7 +28,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.AppUtils;
 
 /**
  * Just provides a wrapper around LocationManager because LocationManager cannot be mocked :/
@@ -37,15 +37,15 @@ import com.socialize.util.DeviceUtils;
 public class SocializeLocationManager {
 	LocationManager lm = null;
 	
-	private DeviceUtils deviceUtils;
+	private AppUtils appUtils;
 	
-	public SocializeLocationManager(DeviceUtils deviceUtils) {
+	public SocializeLocationManager(AppUtils deviceUtils) {
 		super();
-		this.deviceUtils = deviceUtils;
+		this.appUtils = deviceUtils;
 	}
 	
 	public void init(Context context) {
-		if(deviceUtils.hasPermission(context, "android.permission.ACCESS_FINE_LOCATION") || deviceUtils.hasPermission(context, "android.permission.ACCESS_COARSE_LOCATION")) {
+		if(appUtils.hasPermission(context, "android.permission.ACCESS_FINE_LOCATION") || appUtils.hasPermission(context, "android.permission.ACCESS_COARSE_LOCATION")) {
 			lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		}
 	}

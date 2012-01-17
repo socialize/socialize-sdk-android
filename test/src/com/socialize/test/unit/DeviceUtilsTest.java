@@ -33,6 +33,7 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.Socialize;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.AppUtils;
+import com.socialize.util.DefaultAppUtils;
 import com.socialize.util.DeviceUtils;
 
 
@@ -58,7 +59,7 @@ public class DeviceUtilsTest extends SocializeActivityTest {
 		AndroidMock.replay(mockContext);
 		AndroidMock.replay(mockManager);
 		
-		AppUtils utils = new AppUtils();
+		AppUtils utils = new DefaultAppUtils();
 		
 		utils.hasPermission(mockContext, permission);
 		
@@ -68,7 +69,7 @@ public class DeviceUtilsTest extends SocializeActivityTest {
 	
 	public void testDeviceUtilsUserAgentString() {
 		DeviceUtils utils = new DeviceUtils();
-		AppUtils appUtils = new AppUtils();
+		DefaultAppUtils appUtils = new DefaultAppUtils();
 		appUtils.init(getActivity());
 		utils.setAppUtils(appUtils);
 		utils.init(getActivity());

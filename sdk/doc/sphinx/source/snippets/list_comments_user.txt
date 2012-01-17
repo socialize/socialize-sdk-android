@@ -1,0 +1,24 @@
+.. raw:: html
+
+	<pre class="brush: java">
+	
+	import com.socialize.Socialize;
+	import com.socialize.entity.Comment;
+	import com.socialize.entity.ListResult;
+	import com.socialize.error.SocializeException;
+	import com.socialize.listener.comment.CommentListListener;
+
+	if(Socialize.getSocialize().isAuthenticated()) {
+		// List comments for a single user
+		Socialize.getSocialize().listCommentsByUser(1234, new CommentListListener() {
+
+			public void onError(SocializeException error) {
+				// Handle error
+			}
+
+			public void onList(ListResult&lt;Comment&gt; result) {
+				// Handle success
+			}
+		});
+	}	
+	</pre>

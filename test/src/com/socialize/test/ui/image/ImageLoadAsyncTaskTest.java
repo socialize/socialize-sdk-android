@@ -170,6 +170,123 @@ public class ImageLoadAsyncTaskTest extends SocializeUIActivityTest {
 		assertEquals("doCancel_called", doCancel_called);
 	}
 	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({ImageLoadRequest.class, Map.class, Queue.class})
+	public void test_enqueue_withCurrentUnCanceledRequest() {
+		
+		final String url = "foobar";
+		
+		final Map<String, ImageLoadRequest> requestsInProcess = AndroidMock.createMock(Map.class);
+		final Queue<ImageLoadRequest> requests =  AndroidMock.createMock(Queue.class);
+		final ImageLoadRequest request = AndroidMock.createMock(ImageLoadRequest.class);
+		final ImageLoadRequest current = AndroidMock.createMock(ImageLoadRequest.class);
+		
+		AndroidMock.expect(request.getUrl()).andReturn(url);
+		AndroidMock.expect(requestsInProcess.get(url)).andReturn(current);
+		AndroidMock.expect(current.isCanceled()).andReturn(false);
+		
+		current.merge(request);
+		
+		AndroidMock.replay(requestsInProcess, request, current);
+		
+		ImageLoadAsyncTask task = new ImageLoadAsyncTask() {
+			@Override
+			protected Queue<ImageLoadRequest> makeRequests() {
+				return requests;
+			}
+			@Override
+			protected Map<String, ImageLoadRequest> makePendingRequests() {
+				return requestsInProcess;
+			}
+			@Override
+			public boolean isRunning() {
+				return true;
+			}
+		};
+		
+		task.init(); 
+		task.enqueue(request);
+		
+		AndroidMock.verify(requestsInProcess, request, current);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({ImageLoadRequest.class, Map.class, Queue.class})
+	public void test_enqueue_withCurrentCanceledRequest() {
+		final String url = "foobar";
+		
+		final Map<String, ImageLoadRequest> requestsInProcess = AndroidMock.createMock(Map.class);
+		final Queue<ImageLoadRequest> requests =  AndroidMock.createMock(Queue.class);
+		final ImageLoadRequest request = AndroidMock.createMock(ImageLoadRequest.class);
+		final ImageLoadRequest current = AndroidMock.createMock(ImageLoadRequest.class);
+		
+		AndroidMock.expect(request.getUrl()).andReturn(url);
+		AndroidMock.expect(requestsInProcess.get(url)).andReturn(current);
+		AndroidMock.expect(current.isCanceled()).andReturn(true);
+		
+		AndroidMock.expect(requests.add(request)).andReturn(true);
+		AndroidMock.expect(requestsInProcess.put(url, request)).andReturn(request);
+		
+		AndroidMock.replay(requestsInProcess, request, current);
+		
+		ImageLoadAsyncTask task = new ImageLoadAsyncTask() {
+			@Override
+			protected Queue<ImageLoadRequest> makeRequests() {
+				return requests;
+			}
+			@Override
+			protected Map<String, ImageLoadRequest> makePendingRequests() {
+				return requestsInProcess;
+			}
+			@Override
+			public boolean isRunning() {
+				return true;
+			}
+		};
+		
+		task.init(); 
+		task.enqueue(request);
+		
+		AndroidMock.verify(requestsInProcess, request, current);
+	}	
+	
+
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({ImageLoadRequest.class, Map.class, Queue.class})
+	public void test_cancel() {
+		final String url = "foobar";
+		
+		final Map<String, ImageLoadRequest> requestsInProcess = AndroidMock.createMock(Map.class);
+		final Queue<ImageLoadRequest> requests =  AndroidMock.createMock(Queue.class);
+		final ImageLoadRequest request = AndroidMock.createMock(ImageLoadRequest.class);
+		
+		AndroidMock.expect(requestsInProcess.get(url)).andReturn(request);
+		request.setCanceled(true);
+		
+		AndroidMock.replay(requestsInProcess, request);
+		
+		ImageLoadAsyncTask task = new ImageLoadAsyncTask() {
+			@Override
+			protected Queue<ImageLoadRequest> makeRequests() {
+				return requests;
+			}
+			@Override
+			protected Map<String, ImageLoadRequest> makePendingRequests() {
+				return requestsInProcess;
+			}
+			@Override
+			public boolean isRunning() {
+				return true;
+			}
+		};
+		
+		task.init(); 
+		task.cancel(url);
+		
+		AndroidMock.verify(requestsInProcess, request);
+	}	
+	
+	
 	public class PublicImageLoadAsyncTask extends ImageLoadAsyncTask {
 		@Override
 		public Void doInBackground(Void... args) {

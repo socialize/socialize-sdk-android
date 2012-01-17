@@ -3,18 +3,42 @@ package com.socialize.test.ui.integrationtest.comment;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.socialize.SocializeAccess;
+import com.socialize.android.ioc.IOCContainer;
+import com.socialize.android.ioc.ProxyObject;
+import com.socialize.api.SocializeSession;
+import com.socialize.api.action.CommentSystem;
+import com.socialize.api.action.SubscriptionSystem;
 import com.socialize.entity.Comment;
+import com.socialize.entity.Entity;
+import com.socialize.entity.ListResult;
+import com.socialize.entity.Subscription;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeInitListener;
+import com.socialize.listener.comment.CommentListener;
+import com.socialize.listener.subscription.SubscriptionListener;
+import com.socialize.notifications.NotificationType;
+import com.socialize.sample.mocks.MockCommentSystem;
+import com.socialize.sample.mocks.MockSubscriptionSystem;
 import com.socialize.test.ui.integrationtest.SocializeUIRobotiumTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.comment.CommentEditField;
 import com.socialize.ui.comment.CommentEntryView;
+import com.socialize.ui.dialog.AlertDialogFactory;
+import com.socialize.ui.dialog.DialogFactory;
+import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.LoadingListView;
 import com.socialize.ui.view.SocializeButton;
+import com.socialize.util.AppUtils;
+import com.socialize.util.DefaultAppUtils;
 
 public class CommentUITest extends SocializeUIRobotiumTest {
 	
@@ -35,7 +59,6 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		robotium.waitForView(ListView.class, 1, 5000);
 		sleep(2000);
 	}
-	
 	
 	public void testCommentAddWithoutFacebook() throws Throwable {
 		
@@ -72,7 +95,7 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		
 		CommentEntryView commentEntryView = TestUtils.findView(robotium.getCurrentActivity(), CommentEntryView.class, 10000);	
 		
-		final SocializeButton btnPost = TestUtils.findViewWithText(commentEntryView, SocializeButton.class, "Post Comment");
+		final SocializeButton btnPost = TestUtils.findViewWithText(commentEntryView, SocializeButton.class, "Post Comment", 10000);
 		
 		robotium.enterText(0, txtComment);
 		
@@ -103,77 +126,149 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		assertEquals(txtComment, comment);
 		
 	}
-//	
-//	public void testAddAnonCommentWithFacebookAndSSO() {
-//		
-//		final String txtComment = "UI Integration Test Comment";
-//
-//		startWithFacebook(true);
-//		
-//		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(LoadingListView.LIST_VIEW_ID);
-//		
-//		int count =  comments.getCount();
-//		
-//		robotium.enterText(0, txtComment);
-//		robotium.clickOnImageButton(0);
-//		
-//		assertTrue(robotium.waitForView(AuthRequestDialogView.class, 1,  1000));
-//		robotium.goBack();
-//		assertTrue(robotium.waitForView(AuthConfirmDialogView.class, 1,  1000));
-//		
-//		AuthConfirmDialogView confirm = findView(AuthConfirmDialogView.class);
-//
-//		assertNotNull(confirm);
-//		
-//		robotium.clickOnView(confirm.getSocializeSkipAuthButton());
-//		robotium.waitForDialogToClose(5000);
-//		
-//		assertNotNull(comments);
-//		assertEquals( count+1, comments.getCount());
-//		
-//		Comment item = (Comment) comments.getItemAtPosition(0);
-//		
-//		assertNotNull(item);
-//		
-//		String comment = item.getText();
-//		assertEquals(txtComment, comment);
-//	}
-//	
-//	public void testAddCommentWithFacebookAndSSO() {
-//		
-//		final String txtComment = "UI Integration Test Comment FB Auth";
-//
-//		startWithFacebook(true);
-//		
-//		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(LoadingListView.LIST_VIEW_ID);
-//		
-//		int count =  comments.getCount();
-//		
-//		robotium.enterText(0, txtComment);
-//		robotium.clickOnImageButton(0);
-//		
-//		robotium.waitForView(AuthRequestDialogView.class, 1, 5000);
-//		
-//		AuthRequestDialogView confirm = findView(AuthRequestDialogView.class);
-//
-//		assertNotNull(confirm);
-//		
-//		robotium.clickOnView(confirm.getFacebookSignInButton());
-//		robotium.waitForDialogToClose(5000);
-//		
-//		assertNotNull(comments);
-//		
-//		sleep(2000);
-//		
-//		assertEquals( count+1, comments.getCount());
-//		
-//		Comment item = (Comment) comments.getItemAtPosition(0);
-//		
-//		assertNotNull(item);
-//		
-//		String comment = item.getText();
-//		assertEquals(txtComment, comment);
-//	}
+	
+	public void testNotificationSubscribe() throws Throwable {
+		doSubscribeUnsubscribeTest(false, "Subscribe Successful", "We will notify you when someone posts a comment to this discussion.");
+	}
+	
+	public void testNotificationUnSubscribe() throws Throwable {
+		doSubscribeUnsubscribeTest(true, "Unsubscribe Successful", "You will no longer receive notifications for updates to this discussion.");
+	}
+	
+	protected void doSubscribeUnsubscribeTest(final boolean isSubscribed, String dialogTitle, String dialogBody) throws Throwable {
+		
+		toggleMockedFacebook(true);
+		toggleMockedSocialize(true);		
+		super.startWithoutFacebook();
+	
+		final MockSubscriptionSystem mockSystem = new MockSubscriptionSystem() {
+			@Override
+			public void getSubscription(SocializeSession session, Entity entity, SubscriptionListener listener) {
+				Subscription sub = new Subscription();
+				sub.setSubscribed(isSubscribed);
+				listener.onGet(sub);
+			}
+			
+			@Override
+			public void removeSubscription(SocializeSession session, Entity entity, NotificationType type, SubscriptionListener listener) {
+				Subscription sub = new Subscription();
+				sub.setSubscribed(false);
+				listener.onCreate(sub);
+			}
+
+			@Override
+			public void addSubscription(SocializeSession session, Entity entity, NotificationType type, SubscriptionListener listener) {
+				Subscription sub = new Subscription();
+				sub.setSubscribed(true);
+				listener.onCreate(sub);
+			}
+		};
+		
+		final AppUtils appUtils = new DefaultAppUtils() {
+			@Override
+			public boolean isNotificationsAvaiable(Context context) {
+				return true;
+			}
+		};
+		
+		final DialogFactory<AlertDialog> dialogFactory = new AlertDialogFactory() {
+			@Override
+			public AlertDialog show(Context context, String title, String message) {
+				addResult(0, title);
+				addResult(1, message);
+				return null;
+			}
+		};
+		
+		final CommentSystem commentSystem = new MockCommentSystem() {
+
+			@Override
+			public void getCommentsByEntity(SocializeSession session, String entityKey, CommentListener listener) {
+				listener.onList(new ListResult<Comment>());
+			}
+
+			@Override
+			public void getCommentsByEntity(SocializeSession session, String entityKey, int startIndex, int endIndex, CommentListener listener) {
+				listener.onList(new ListResult<Comment>());
+			}
+			
+		};
+		
+		SocializeAccess.setInitListener(new SocializeInitListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				ActivityInstrumentationTestCase2.fail();
+			}
+			
+			@Override
+			public void onInit(Context context, IOCContainer container) {
+				ProxyObject<SubscriptionSystem> proxy = container.getProxy("subscriptionSystem");
+				if(proxy != null) {
+					proxy.setDelegate(mockSystem);
+				}
+				else {
+					System.err.println("SubscriptionSystem Proxy is null!!");
+				}
+				
+				ProxyObject<AppUtils> appUtilsProxy = container.getProxy("appUtils");
+				if(proxy != null) {
+					appUtilsProxy.setDelegate(appUtils);
+				}
+				else {
+					System.err.println("AppUtils Proxy is null!!");
+				}	
+				
+				ProxyObject<DialogFactory<AlertDialog>> alertDialogFactoryProxy = container.getProxy("alertDialogFactory");
+				if(proxy != null) {
+					alertDialogFactoryProxy.setDelegate(dialogFactory);
+				}
+				else {
+					System.err.println("DialogFactory Proxy is null!!");
+				}	
+				
+				ProxyObject<CommentSystem> commentSystemProxy = container.getProxy("commentSystem");
+				if(proxy != null) {
+					commentSystemProxy.setDelegate(commentSystem);
+				}
+				else {
+					System.err.println("commentSystem Proxy is null!!");
+				}					
+			}
+		});		
+		
+		
+		showComments();
+		robotium.waitForActivity("CommentActivity", 5000);
+		robotium.waitForView(ListView.class, 1, 5000);
+		sleep(2000);
+
+		final CountDownLatch latch = new CountDownLatch(1);
+		final CustomCheckbox chk = TestUtils.findCheckboxWithImageName(robotium.getCurrentActivity(), "icon_notify.png#large", 10000);
+		
+		assertNotNull(chk);
+		
+		runTestOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				assertTrue(chk.performClick());
+				sleep(1000);
+				latch.countDown();
+			}
+		});
+
+		latch.await(10, TimeUnit.SECONDS);
+		
+		String titleAfter = getResult(0);
+		String bodyAfter = getResult(1);
+		
+		assertNotNull(titleAfter);
+		assertNotNull(bodyAfter);
+		
+		assertEquals(dialogTitle, titleAfter);
+		assertEquals(dialogBody, bodyAfter);
+	}	
 	
 	public void testCommentListAndView() {
 		

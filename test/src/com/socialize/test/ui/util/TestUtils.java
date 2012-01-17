@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.test.ui.ResultHolder;
+import com.socialize.ui.view.CustomCheckbox;
 
 public class TestUtils {
 	
@@ -162,25 +163,125 @@ public class TestUtils {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	public static <V extends View> V findViewWithText(ViewGroup parent, final Class<V> viewClass, final String text) {
-		return (V)  findView(parent, new ViewMatcher() {
-			@Override
-			public boolean matches(View view) {
-				return isViewWithText(view, viewClass, text);
-			}
-		});
+	public static <V extends View> V findViewWithText(Activity activity, final Class<V> viewClass, final String text, final long timeoutMs) {
+		return findViewWithText(activity.getWindow().getDecorView(), viewClass, text, timeoutMs);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <V extends View> V findSingleViewWithText(View view, final Class<V> viewClass, final String text) {
+	public static <V extends View> V findViewWithText(View parent, final Class<V> viewClass, final String text, final long timeoutMs) {
+		if(parent instanceof ViewGroup) {
+			return findViewWithText((ViewGroup) parent, viewClass, text, timeoutMs);
+		}
+		else {
+			if(isViewWithText(parent, viewClass, text)) {
+				return (V) parent;
+			}
+		}
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <V extends View> V findViewWithText(ViewGroup parent, final Class<V> viewClass, final String text, final long timeoutMs) {
+
+		if(timeoutMs > 0) {
+			long start = System.currentTimeMillis();
+			long time = start;
+			
+			while(time - start < timeoutMs) {
+				V view = (V)  findView(parent, new ViewMatcher() {
+						@Override
+						public boolean matches(View view) {
+							return isViewWithText(view, viewClass, text);
+						}
+					});
+				
+				if(view == null) {
+					sleep((int) (timeoutMs / 10));
+				}
+				else {
+					return view;
+				}
+				
+				time = System.currentTimeMillis();
+			}
+		}
+		else {
+			return (V)  findView(parent, new ViewMatcher() {
+				@Override
+				public boolean matches(View view) {
+					return isViewWithText(view, viewClass, text);
+				}
+			});
+		}
+		
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <V extends View> V findSingleViewWithText(View view, final Class<V> viewClass, final String text, long timeout) {
 		if(view instanceof ViewGroup) {
-			return findViewWithText((ViewGroup) view, viewClass, text);
+			return findViewWithText((ViewGroup) view, viewClass, text, timeout);
 		}
 		else if(isViewWithText(view, viewClass, text)) {
 			return (V) view;
 		}
 		return null;
+	}
+	
+	public static CustomCheckbox findCheckboxWithImageName(final Activity activity, final String text, long timeout) {
+		return findCheckboxWithImageName(activity.getWindow().getDecorView(), text, timeout);
+	}
+	
+	public static CustomCheckbox findCheckboxWithImageName(final View parent, final String text, long timeoutMs) {
+		if(parent instanceof ViewGroup) {
+			
+			if(timeoutMs > 0) {
+				long time = System.currentTimeMillis();
+				long current = time;
+				
+				CustomCheckbox chk = null;
+				
+				while(current - time < timeoutMs) {
+					chk = (CustomCheckbox) findView((ViewGroup) parent, new ViewMatcher() {
+						@Override
+						public boolean matches(View view) {
+							return isCheckboxWithImage(view, text);
+						}
+					});	
+					
+					if(chk == null) {
+						sleep((int) (timeoutMs / 10));
+					}
+					else {
+						return chk;
+					}
+					
+					current = System.currentTimeMillis();
+				}
+			}
+			else {
+				return  (CustomCheckbox) findView((ViewGroup) parent, new ViewMatcher() {
+					@Override
+					public boolean matches(View view) {
+						return isCheckboxWithImage(view, text);
+					}
+				});	
+			}
+		}
+		else {
+			if( isCheckboxWithImage(parent, text) ) {
+				return (CustomCheckbox) parent;
+			}
+		}
+		return null;
+	}
+	
+	public static boolean isCheckboxWithImage(View view, String text) {
+		if(view instanceof CustomCheckbox) {
+			CustomCheckbox cbx = (CustomCheckbox) view;
+			return cbx.getImageOn().equals(text) || cbx.getImageOff().equals(text);
+		}
+		return false;
 	}
 	
 	public static boolean isViewWithText(View view, final Class<?> viewClass, final String text) {

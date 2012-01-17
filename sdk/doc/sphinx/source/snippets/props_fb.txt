@@ -1,0 +1,10 @@
+.. raw:: html
+
+	<pre class="brush: java-properties">
+	# Socialize App Key and Secret
+	socialize.consumer.key=00000000-0000-0000-000000000000
+	socialize.consumer.secret=00000000-0000-0000-000000000000
+	
+	# Facebook App ID
+	facebook.app.id=1234567890
+	</pre>
