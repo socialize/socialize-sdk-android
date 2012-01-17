@@ -34,6 +34,11 @@ public class CacheableDrawable extends SafeBitmapDrawable implements ICacheable<
 
 	private String key;
 	
+	// So we can easily mock
+	protected CacheableDrawable() {
+		super();
+	}
+
 	public CacheableDrawable(Bitmap bitmap, String key) {
 		super(bitmap);
 		this.key = key;
