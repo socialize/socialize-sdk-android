@@ -89,6 +89,8 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.notifications.NotificationType;
+import com.socialize.notifications.SocializeC2DMReceiver;
+import com.socialize.notifications.WakeLock;
 import com.socialize.ui.ActivityIOCProvider;
 import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.ui.action.ActionDetailActivity;
@@ -113,6 +115,8 @@ import com.socialize.util.StringUtils;
 @SuppressWarnings("deprecation")
 public class SocializeServiceImpl implements SocializeSessionConsumer, SocializeService , SocializeUI {
 	
+	static final String receiver = SocializeC2DMReceiver.class.getName();
+	
 	private SocializeLogger logger;
 	private IOCContainer container;
 	private SocializeSession session;
@@ -135,6 +139,24 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private String[] initPaths = null;
 	private int initCount = 0;
 	
+	
+	@Override
+	public boolean handleBroadcastIntent(Context context, Intent intent) {
+		String action = intent.getAction();
+		if(SocializeC2DMReceiver.C2DM_INTENT.equals(action) || SocializeC2DMReceiver.REGISTRATION_CALLBACK_INTENT.equals(action)) {
+			getWakeLock().acquire(context);
+			intent.setClassName(context, receiver);
+			context.startService(intent);
+			return true;
+		}
+		return false;
+	}
+	
+	// So we can mock
+	protected WakeLock getWakeLock() {
+		return WakeLock.getInstance();
+	}
+
 	@Override
 	public boolean isSupported(AuthProviderType type) {
 		switch(type) {

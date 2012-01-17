@@ -8,12 +8,12 @@
 	import com.socialize.listener.like.LikeAddListener;
 	import com.socialize.entity.Like;
 
-	// The "this" reference below refers to a Context object
 	if(Socialize.getSocialize().isAuthenticated()) {
 		// Create or retrieve your entity object
 		Entity entity = Entity.newInstance("http://someurl.com", "My Entity");			
 
 		// Add a like to an entity defined by its URL
+		// The "this" reference below refers to a Context object		
 		Socialize.getSocialize().like(this, entity, new LikeAddListener() {
 
 			public void onError(SocializeException error) {

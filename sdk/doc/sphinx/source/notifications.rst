@@ -23,7 +23,9 @@ Enabling push notifications for Socialize requires a few additional setup steps.
 Step 1: Enable Notifications on http://www.getsocialize.com
 -----------------------------------------------------------
 
-.. image:: images/notification_settings.png
+For Push Notifications to work they must be enabled on a compatible plan at http://getsocialize.com
+
+.. image:: images/notification_enable.png
 
 Step 2: Add Configuration to AndroidManifest.xml
 ------------------------------------------------
@@ -33,6 +35,16 @@ The default configuration for Socialize needs to be augemented slightly for push
 NOTE:  Make sure you replace every occurrance of **your_package_name** with the package name of your app!
 
 .. include:: snippets/notification_manifest.txt
+
+I already have a BroadcastReceiver defined!
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you already have a BroadcastReceiver defined in your application, you can simply call the Socialize handler
+in your existing broadcast receiver's **onReceive()** method:
+
+.. include:: snippets/broadcast_handle.txt
+
+Make sure however, that you add the intent filters and permissions required by Socialize to your existing receiver definition.
 
 Step 3: Create an Entity Loader
 -------------------------------

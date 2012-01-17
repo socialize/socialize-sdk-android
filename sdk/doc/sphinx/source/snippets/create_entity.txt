@@ -7,12 +7,12 @@
 	import com.socialize.error.SocializeException;
 	import com.socialize.listener.entity.EntityAddListener;
 
-	// The "this" reference below refers to a Context object
 	if(Socialize.getSocialize().isAuthenticated()) {
 		
 		// Create a new entity with a name
 		Entity entity = Entity.newInstance("http://someurl.com", "My Entity");
 
+		// The "this" reference below refers to a Context object
 		Socialize.getSocialize().addEntity(this, entity, new EntityAddListener() {
 
 			public void onError(SocializeException error) {

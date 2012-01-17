@@ -42,6 +42,8 @@ Developers should create an implementation of a SocializeEntityLoader and provid
 
 .. include:: snippets/entity_loader.txt
 
+Refer to the :doc:`entity_loader` section for more details.
+
 Disabling the ScrollView
 ########################
 

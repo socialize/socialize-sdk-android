@@ -10,7 +10,6 @@
 	import com.socialize.error.SocializeException;
 	import com.socialize.listener.share.ShareAddListener;
 
-	// The "this" reference below refers to a Context object
 	if(Socialize.getSocialize().isAuthenticated()) {
 
 		// Create or retrieve your entity object
@@ -25,6 +24,7 @@
 		shareOptions.setShareTo(SocialNetwork.FACEBOOK);
 		
 		// Share to facebook
+		// The "this" reference below refers to a Context object		
 		Socialize.getSocialize().share(this, entity, comment, shareOptions, new ShareAddListener() {
 
 			public void onError(SocializeException error) {

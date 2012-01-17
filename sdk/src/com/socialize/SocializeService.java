@@ -23,6 +23,7 @@ package com.socialize;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 
 import com.socialize.android.ioc.IOCContainer;
@@ -698,6 +699,14 @@ public interface SocializeService {
 	 * @param entityLoader
 	 */
 	public void setEntityLoader(SocializeEntityLoader entityLoader);
+	
+	/**
+	 * Handles broadcast messages.  Used for push notifications.
+	 * @param context
+	 * @param intent
+	 * @return True if the broadcast message was handled by Socialize.  False otherwise.
+	 */
+	public boolean handleBroadcastIntent(Context context, Intent intent);
 	
 	/**
 	 * Returns the entity loader set in setEntityLoader.

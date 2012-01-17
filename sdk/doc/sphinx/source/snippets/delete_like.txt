@@ -7,7 +7,6 @@
 	import com.socialize.error.SocializeException;
 	import com.socialize.listener.like.LikeDeleteListener;
 
-	// The "this" reference below refers to a Context object
 	if(Socialize.getSocialize().isAuthenticated()) {
 		// Remove an existing like based on its numeric ID
 		Socialize.getSocialize().unlike(1234, new LikeDeleteListener() {

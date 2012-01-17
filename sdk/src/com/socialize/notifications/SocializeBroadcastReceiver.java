@@ -21,6 +21,9 @@
  */
 package com.socialize.notifications;
 
+import com.socialize.Socialize;
+import com.socialize.SocializeService;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -31,23 +34,16 @@ import android.content.Intent;
  */
 public class SocializeBroadcastReceiver extends BroadcastReceiver {
 	
-	static final String receiver = SocializeC2DMReceiver.class.getName();
-	
 	/* (non-Javadoc)
 	 * @see android.content.BroadcastReceiver#onReceive(android.content.Context, android.content.Intent)
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		String action = intent.getAction();
-		if(SocializeC2DMReceiver.C2DM_INTENT.equals(action) || SocializeC2DMReceiver.REGISTRATION_CALLBACK_INTENT.equals(action)) {
-			getWakeLock().acquire(context);
-			intent.setClassName(context, receiver);
-			context.startService(intent);
-		}
+		getSocialize().handleBroadcastIntent(context, intent);
 	}
 	
 	// So we can mock
-	protected WakeLock getWakeLock() {
-		return WakeLock.getInstance();
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
 	}
 }

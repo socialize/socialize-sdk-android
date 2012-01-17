@@ -6,6 +6,8 @@
 		&lt;application.../>
 		
 		&lt;uses-permission android:name="android.permission.INTERNET"/>
+		
+		&lt;!-- Optional but recommended -->
 		&lt;uses-permission android:name="android.permission.READ_PHONE_STATE" />
 		
 		&lt;!-- Optionally add ONE of the following to include location data in comments -->

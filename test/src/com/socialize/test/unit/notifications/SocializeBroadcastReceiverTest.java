@@ -26,9 +26,9 @@ import android.test.mock.MockContext;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.notifications.SocializeBroadcastReceiver;
 import com.socialize.notifications.SocializeC2DMReceiver;
 import com.socialize.notifications.WakeLock;
+import com.socialize.test.PublicSocialize;
 import com.socialize.test.SocializeUnitTest;
 
 /**
@@ -50,14 +50,14 @@ public class SocializeBroadcastReceiverTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(wakeLock, intent, context);
 		
-		SocializeBroadcastReceiver receiver = new SocializeBroadcastReceiver() {
+		PublicSocialize receiver = new PublicSocialize() {
 			@Override
 			protected WakeLock getWakeLock() {
 				return wakeLock;
 			}
 		};
 		
-		receiver.onReceive(context, intent);
+		receiver.handleBroadcastIntent(context, intent);
 		
 		AndroidMock.verify(wakeLock, intent, context);
 	}

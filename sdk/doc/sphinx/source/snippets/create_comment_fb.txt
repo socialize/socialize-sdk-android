@@ -11,7 +11,6 @@
 	import com.socialize.networks.SocialNetwork;
 	import com.socialize.networks.SocialNetworkListener;
 
-	// The "this" reference below refers to a Context object
 	if(Socialize.getSocialize().isAuthenticated()) {
 
 		// Create or retrieve your entity object
@@ -44,6 +43,7 @@
 		});
 
 		// Add a comment to an entity
+		// The "this" reference below refers to a Context object		
 		Socialize.getSocialize().addComment(this, entity, comment, options, new CommentAddListener() {
 
 			public void onError(SocializeException error) {

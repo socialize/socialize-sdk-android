@@ -249,10 +249,10 @@ public class UserActivityListItem extends TableLayout {
 		this.dateUtils = dateUtils;
 	}
 
-	public void setUserActivityActionFactory(IBeanFactory<UserActivityAction> userActivityActionHtmlFactory) {
+	public void setUserActivityActionHtmlFactory(IBeanFactory<UserActivityAction> userActivityActionHtmlFactory) {
 		this.userActivityActionHtmlFactory = userActivityActionHtmlFactory;
 	}
-	
+
 	public void setUserActivityActionTextFactory(IBeanFactory<UserActivityAction> userActivityActionTextFactory) {
 		this.userActivityActionTextFactory = userActivityActionTextFactory;
 	}

@@ -10,12 +10,12 @@ Troubleshooting & Support
 
 .. _debug_logs:	
 
-Displaying Debug logs in LogCat
+Displaying debug logs in LogCat
 -------------------------------
 If you're having problems with loading the Action Bar, or errors at runtime the simplest way to diagnose these problems is via the 
 debug logs in the Android LogCat display.
 
-By default Socialize will only render logs of level WARN to logcat.  To override this, simply add an entry to your socialize.properties file:
+By default Socialize will only render logs of level WARN to logcat.  To override this, simply add an entry to your **socialize.properties** file:
 
 .. include:: snippets/props_log.txt
 
@@ -29,11 +29,11 @@ Common Problems
 
 Action Bar is does not display
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-This is most often a result of mis-configuration in either the AndroidManifest.xml, or in your socialize.properties file.
+This is most often a result of mis-configuration in either the **AndroidManifest.xml**, or in your **socialize.properties** file.
 In most cases the debug logs should give you an indication of the problem.  Refer to the above :ref:`debug_logs` section for details on displaying 
 debug logs.
 
-Action Bar is pushed up by Keyboard
+Action Bar is pushed up by keyboard
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you are already using a ScrollView in your layout you may have noticed that when entering text the 
@@ -57,6 +57,35 @@ You can correct this by setting **android:isScrollContainer="false"** in the dec
 	&lt;/ScrollView>
 	
 	</pre>
+	
+Action Bar doesn't fit (appears unusually large)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. image:: images/action_bar_large.png
+
+If your action bar appears too large for the display the most likelt culprit is a rogue **anyDensity** setting in your **AndroidManifest.xml**
+
+If you have the following setting in your manifest:
+
+.. raw:: html
+
+	<pre class="brush: xml;">
+
+	&lt;supports-screens android:anyDensity="false"/>
+	
+	</pre>
+
+This will need to be changed to:
+
+.. raw:: html
+
+	<pre class="brush: xml;">
+
+	&lt;supports-screens android:anyDensity="true"/>
+	
+	</pre>
+	
+Or just removed completely as **false** is the default value for newer (1.6+) Android versions.
 	
 Support and Feedback
 --------------------

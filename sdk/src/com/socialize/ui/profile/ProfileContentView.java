@@ -136,8 +136,6 @@ public class ProfileContentView extends BaseView {
 		
 		if(appUtils.isNotificationsAvaiable(getContext())) {
 			notificationsEnabledCheckbox = notificationsEnabledCheckboxFactory.getBean();
-			
-//			LayoutParams notificationsEnabledCheckboxParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 			notificationsEnabledCheckbox.setLayoutParams(commonParams);
 			
 			master.addView(notificationsEnabledCheckbox);
@@ -146,8 +144,6 @@ public class ProfileContentView extends BaseView {
 		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
 			
 			facebookEnabledCheckbox = facebookEnabledCheckboxFactory.getBean();
-			
-//			LayoutParams facebookEnabledCheckboxParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 			
 			facebookEnabledCheckbox.setLayoutParams(commonParams);
 			
@@ -269,7 +265,6 @@ public class ProfileContentView extends BaseView {
 		buttons.setGravity(Gravity.BOTTOM | Gravity.RIGHT);
 		return buttons;
 	}
-	
 
 	public void setUserDetails(User user) {
 		

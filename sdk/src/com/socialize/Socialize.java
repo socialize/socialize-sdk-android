@@ -24,9 +24,9 @@ package com.socialize;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.socialize.listener.SocializeListener;
-
 import android.content.Context;
+
+import com.socialize.listener.SocializeListener;
 
 /**
  * Singleton helper class to make accessing the socialize service easier.
