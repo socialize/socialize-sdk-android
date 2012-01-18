@@ -134,7 +134,7 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 			}
 			
 			if(!html) {
-				builder.append(" - ");
+				builder.append(": ");
 			}
 			
 			builder.append(buildShareLink(entity));

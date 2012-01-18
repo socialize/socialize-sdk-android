@@ -6,8 +6,6 @@
 
 	<import-mapping source="socialize_core_beans.xml" dependentOnly="true"/>
 
-	<bean id="notificationIdGenerator" class="com.socialize.notifications.NotificationIdGenerator"/>
-
 	<bean id="notificationMessageFactory" class="com.socialize.notifications.NotificationMessageFactory">
 		<property name="logger" ref="logger"/>
 	</bean>
@@ -29,7 +27,6 @@
 	<bean id="notificationCallback" class="com.socialize.notifications.SocializeC2DMCallback">
 		<property name="logger" ref="logger"/>
 		<property name="notificationMessageFactory" ref="notificationMessageFactory"/>
-		<property name="notificationIdGenerator" ref="notificationIdGenerator"/>
 		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
 		<property name="messageBuilders">
 			<map>

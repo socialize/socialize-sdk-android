@@ -48,32 +48,30 @@ public class SocializeC2DMCallback implements C2DMCallback {
 	private SocializeLogger logger;
 
 	private NotificationMessageFactory notificationMessageFactory;
-//	private NotificationIdGenerator notificationIdGenerator;
 	private Map<String, NotificationMessageBuilder> messageBuilders;
 	private NotificationRegistrationState notificationRegistrationState;
-	
-	
-//	private NotificationRegistrationSystem notificationRegistrationSystem;
 
 	@Override
 	public void onRegister(Context context, String registrationId)  {
 		
-		if(logger != null && logger.isDebugEnabled()) {
-			logger.debug("Registration with C2DM succesful: " + registrationId);
+		if(logger != null && logger.isInfoEnabled()) {
+			logger.info("Registration with C2DM successful: " + registrationId);
+			
+			if(logger.isDebugEnabled()) {
+				logger.debug("C2DM ID [" +
+						registrationId +
+						"]");
+			}
 		}
 		notificationRegistrationState.setC2DMRegistrationId(registrationId);
 		notificationRegistrationState.save(context);
-		
-//		notificationRegistrationSystem.registerSocialize(context, registrationId);
 	}
 	
 	@Override
 	public void onError(Context context, String errorId) {
-		if(logger != null && logger.isDebugEnabled()) {
-			logger.debug("Registration with C2DM failed: " + errorId);
+		if(logger != null && logger.isWarnEnabled()) {
+			logger.warn("Registration with C2DM failed: " + errorId);
 		}
-		
-//		notificationRegistrationSystem.registerC2DMFailed(context, errorId);
 	}
 
 	@Override
@@ -177,8 +175,4 @@ public class SocializeC2DMCallback implements C2DMCallback {
 	public void setNotificationRegistrationState(NotificationRegistrationState notificationRegistrationState) {
 		this.notificationRegistrationState = notificationRegistrationState;
 	}
-
-//	public void setNotificationIdGenerator(NotificationIdGenerator notificationIdGenerator) {
-//		this.notificationIdGenerator = notificationIdGenerator;
-//	}
 }
