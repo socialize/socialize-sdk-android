@@ -18,6 +18,8 @@ import com.socialize.ui.actionbar.OnActionBarEventListener;
 public class Main extends Activity {
 	static final String LOG_KEY = "Socialize";
 	
+	private Toast toast;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,8 +36,17 @@ public class Main extends Activity {
 			@Override
 			public void loadEntity(Activity activity, Entity entity) {
 				
-				// Load your entity here
-				Toast.makeText(activity, "Clicked on entity with key: " + entity.getKey(), Toast.LENGTH_SHORT).show();
+				// Demo only.. you would usually load your entity here.
+				String msg = "Clicked on entity with key: " + entity.getKey();
+				if(toast != null) {
+					toast.cancel();
+					toast.setText(msg);
+				}
+				else {
+					toast = Toast.makeText(activity, msg, Toast.LENGTH_SHORT);
+				}
+				
+				toast.show();
 			}
 		});
 

@@ -33,8 +33,8 @@ public class NotificationMessage {
 	private String user;
 	private String entity;
 	private long actionId;
-	private ActionType actionType;
-	private NotificationType notificationType;
+	private ActionType actionType = ActionType.UNKNOWN;
+	private NotificationType notificationType = NotificationType.NEW_COMMENTS;
 	
 	public String getText() {
 		return text;

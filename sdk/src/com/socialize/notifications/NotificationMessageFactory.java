@@ -60,6 +60,8 @@ public class NotificationMessageFactory extends JSONFactory<NotificationMessage>
 						actionType +
 						"]";
 				handleError(msg, e);
+				
+				to.setActionType(ActionType.UNKNOWN);
 			}
 		}
 		
@@ -71,6 +73,9 @@ public class NotificationMessageFactory extends JSONFactory<NotificationMessage>
 						notificationType +
 						"]";
 				handleError(msg, e);
+				
+				// TODO: verify this default.
+				to.setNotificationType(NotificationType.NEW_COMMENTS);
 			}
 		}
 	}
