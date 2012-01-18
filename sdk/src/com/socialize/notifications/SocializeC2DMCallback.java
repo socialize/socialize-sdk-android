@@ -32,7 +32,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.socialize.error.SocializeException;
+import com.socialize.entity.JSONFactory;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.StringUtils;
 
@@ -47,7 +47,7 @@ public class SocializeC2DMCallback implements C2DMCallback {
 	
 	private SocializeLogger logger;
 
-	private NotificationMessageFactory notificationMessageFactory;
+	private Map<String, JSONFactory<NotificationMessage>> messageFactories;
 	private Map<String, NotificationMessageBuilder> messageBuilders;
 	private NotificationRegistrationState notificationRegistrationState;
 
@@ -97,59 +97,89 @@ public class SocializeC2DMCallback implements C2DMCallback {
 			
 			try {
 				JSONObject message = new JSONObject(json);
+				String notification_type = "notification_type";
 				
-				NotificationMessage notificationMessage = notificationMessageFactory.fromJSON(message);
-				NotificationMessageBuilder builder = messageBuilders.get(notificationMessage.getNotificationType().name());
-				
-				if(builder != null) {
-					Notification notification = builder.build(context, data, notificationMessage, notificationIcon);
-					NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-					mNotificationManager.notify(String.valueOf(notificationMessage.getActionId()), NOTIFICATION_ID, notification);		
+				if(message.has(notification_type) && !message.isNull(notification_type)) {
+					String type = message.getString(notification_type).trim().toUpperCase();
+					NotificationType notificationType = null;
+					try {
+						notificationType = NotificationType.valueOf(type);
+						
+					} 
+					catch (Exception e) {
+						handleError("Invalid notification_type [" +
+								type +
+								"] defined in notification message [" +
+								json +
+								"]", e);
+					}		
+					
+					if(notificationType != null) {
+						
+						JSONFactory<NotificationMessage> factory = messageFactories.get(notificationType.name());
+						
+						if(factory != null) {
+							NotificationMessage notificationMessage = factory.fromJSON(message);
+							NotificationMessageBuilder builder = messageBuilders.get(notificationType.name());
+							
+							if(builder != null) {
+								Notification notification = builder.build(context, data, notificationMessage, notificationIcon);
+								NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+								mNotificationManager.notify(String.valueOf(notificationMessage.getActionId()), NOTIFICATION_ID, notification);		
+							}
+							else {
+								handleError("No message builder defined for notification type [" +
+										notificationType +
+										"]");
+							}	
+						}
+						else {
+							handleError("No message factory defined for notification type [" +
+									notificationType +
+									"]");
+							
+						}
+					}
 				}
 				else {
-					String msg = "No message builder defined for notification type [" +
-							notificationMessage.getNotificationType() +
-							"]";
-					
-					if(logger != null) {
-						logger.error(msg);
-					}
-					else {
-						System.err.println(msg);
-					}	
+					handleError("No notification_type defined in notification message [" +
+							json +
+							"]");
 				}
 			} 
 			catch (JSONException e) {
-				if(logger != null) {
-					logger.error("Notification system received an invalid JSON message [" +
-							json +
-							"]", e);
-				}
-				else {
-					e.printStackTrace();
-				}
+				handleError("Notification system received an invalid JSON message [" +
+						json +
+						"]", e);
 			} 
-			catch (SocializeException e) {
-				if(logger != null) {
-					logger.error("Error building notification message", e);
-				}
-				else {
-					e.printStackTrace();
-				}
+			catch (Exception e) {
+				handleError("Error building notification message", e);
 			}
 		}
 		else {
-			String msg = "No data found in message bundle under key [" +
+			handleError("No data found in message bundle under key [" +
 					MESSAGE_KEY +
-					"]";
-			
-			if(logger != null) {
-				logger.error(msg);
-			}
-			else {
-				System.err.println(msg);
-			}			
+					"]");
 		}
+	}
+	
+	protected void handleError(String msg) {
+		if(logger != null) {
+			logger.error(msg);
+		}
+		else {
+			System.err.println(msg);
+		}	
+	}
+	
+	protected void handleError(String msg, Exception e) {
+		if(logger != null) {
+			logger.error(msg, e);
+		}
+		else {
+			System.err.println(msg);
+			e.printStackTrace();
+		}	
 	}
 
 	public void setLogger(SocializeLogger logger) {
@@ -163,9 +193,9 @@ public class SocializeC2DMCallback implements C2DMCallback {
 	public void setNotificationIcon(int notificationIcon) {
 		this.notificationIcon = notificationIcon;
 	}
-
-	public void setNotificationMessageFactory(NotificationMessageFactory notificationMessageFactory) {
-		this.notificationMessageFactory = notificationMessageFactory;
+	
+	public void setMessageFactories(Map<String, JSONFactory<NotificationMessage>> messageFactories) {
+		this.messageFactories = messageFactories;
 	}
 
 	public void setMessageBuilders(Map<String, NotificationMessageBuilder> messageBuilders) {

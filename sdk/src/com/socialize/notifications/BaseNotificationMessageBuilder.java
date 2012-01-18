@@ -28,18 +28,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 
-import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;
 import com.socialize.launcher.LaunchAction;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeLaunchActivity;
-import com.socialize.util.DefaultAppUtils;
 import com.socialize.util.AppUtils;
+import com.socialize.util.DefaultAppUtils;
 
 /**
  * @author Jason Polites
  */
-public abstract class BaseNotificationMessageBuilder<T extends SocializeAction, M extends NotificationMessageData> implements NotificationMessageBuilder {
+public abstract class BaseNotificationMessageBuilder<M extends NotificationMessageData> implements NotificationMessageBuilder {
 
 	private MessageTranslator<M> messageTranslator;
 	private AppUtils appUtils;
@@ -100,6 +99,10 @@ public abstract class BaseNotificationMessageBuilder<T extends SocializeAction, 
 		this.appUtils = appUtils;
 	}
 	
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
+
 	// So we can mock
 	protected Notification newNotification(int icon, String text, long time) {
 		return new Notification(icon, text, time);

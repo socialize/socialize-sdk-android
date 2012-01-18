@@ -21,11 +21,32 @@
  */
 package com.socialize.notifications;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.socialize.util.StringUtils;
+
 /**
  * @author Jason Polites
- *
  */
-public enum NotificationType {
-	NEW_COMMENTS,
-	DEVELOPER_NOTIFICATION
+public class DeveloperNotificationMessageFactory extends BaseNotificationMessageFactory {
+	
+	@Override
+	protected void fromJSON(JSONObject from, NotificationMessage to) throws JSONException {
+		
+		to.setText(getString(from, "message"));
+		String notificationType = getString(from, "notification_type");
+		
+		if(!StringUtils.isEmpty(notificationType)) {
+			try {
+				to.setNotificationType(NotificationType.valueOf(notificationType.trim().toUpperCase()));
+			} catch (Exception e) {
+				String msg = "Invalid notification type [" +
+						notificationType +
+						"]";
+				handleError(msg, e);
+				to.setNotificationType(NotificationType.DEVELOPER_NOTIFICATION);
+			}
+		}
+	}
 }

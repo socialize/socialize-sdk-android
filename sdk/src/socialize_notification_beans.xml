@@ -6,27 +6,31 @@
 
 	<import-mapping source="socialize_core_beans.xml" dependentOnly="true"/>
 
-	<bean id="notificationMessageFactory" class="com.socialize.notifications.NotificationMessageFactory">
+	<bean id="actionNotificationMessageFactory" class="com.socialize.notifications.ActionNotificationMessageFactory">
 		<property name="logger" ref="logger"/>
 	</bean>
 	
-	<!-- 
-	<bean id="actionMessageTranslator" class="com.socialize.notifications.SocializeActionMessageTranslator">
-		<property name="activitySystem" ref="activitySystem"/>
-		<property name="notificationAuthenticator" ref="notificationAuthenticator"/>
-	</bean>
-	 -->
+	<bean id="developerNotificationMessageFactory" class="com.socialize.notifications.DeveloperNotificationMessageFactory">
+		<property name="logger" ref="logger"/>
+	</bean>	
 	
 	<bean id="simpleMessageTranslator" class="com.socialize.notifications.SimpleNotificationMessageTranslator"/>
+	<bean id="developerMessageTranslator" class="com.socialize.notifications.DeveloperNotificationMessageTranslator"/>
 	
 	<bean id="actionNotificationMessageBuilder" class="com.socialize.notifications.SocializeActionNotificationMessageBuilder">
 		<property name="appUtils" ref="appUtils"/>
+		<property name="logger" ref="logger"/>
 		<property name="messageTranslator" ref="simpleMessageTranslator"/>
 	</bean>
 	
+	<bean id="developerNotificationMessageBuilder" class="com.socialize.notifications.SimpleNotificationMessageBuilder">
+		<property name="appUtils" ref="appUtils"/>
+		<property name="logger" ref="logger"/>
+		<property name="messageTranslator" ref="developerMessageTranslator"/>
+	</bean>	
+	
 	<bean id="notificationCallback" class="com.socialize.notifications.SocializeC2DMCallback">
 		<property name="logger" ref="logger"/>
-		<property name="notificationMessageFactory" ref="notificationMessageFactory"/>
 		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
 		<property name="messageBuilders">
 			<map>
@@ -34,8 +38,25 @@
 					<key value="NEW_COMMENTS"/>
 					<value ref="actionNotificationMessageBuilder"/>
 				</entry>
+				<entry>
+					<key value="DEVELOPER_NOTIFICATION"/>
+					<value ref="developerNotificationMessageBuilder"/>
+				</entry>				
 			</map>
-		</property>		
+		</property>	
+		
+		<property name="messageFactories">
+			<map>
+				<entry>
+					<key value="NEW_COMMENTS"/>
+					<value ref="actionNotificationMessageFactory"/>
+				</entry>
+				<entry>
+					<key value="DEVELOPER_NOTIFICATION"/>
+					<value ref="developerNotificationMessageFactory"/>
+				</entry>				
+			</map>
+		</property>				
 	</bean>
 	
 	<!--  This facebook bean is NOT required, we are just putting a placeholder here so the notification system

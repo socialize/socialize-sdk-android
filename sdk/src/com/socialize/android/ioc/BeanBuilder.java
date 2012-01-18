@@ -28,6 +28,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -331,64 +332,75 @@ public class BeanBuilder {
 	}
 	
 	private boolean isListMatch(Type[] genericParams, int index, Object arg, boolean strict) {
-
-		
 		if(List.class.isAssignableFrom(arg.getClass())) {
-			List<?> asColl = (List<?>) arg;
-
-			if(asColl.size() > 0) {
-				ParameterizedType parType = (ParameterizedType) genericParams[index];
+			return isCollectionMatch(genericParams, index, arg, strict);
+		}
+		return false;
+	}
+	
+	private boolean isCollectionMatch(Type[] genericParams, int index, Object arg, boolean strict) {
+		Collection<?> asColl = (Collection<?>) arg;
+		
+		if(asColl.size() > 0) {
+			
+			Type type = genericParams[index];
+			
+			if(type instanceof ParameterizedType) {
+				ParameterizedType parType = (ParameterizedType) type;
 				
 				Class<?> actualClass = getGenericParameterClass(parType);
+				Class<?> componentType = asColl.iterator().next().getClass();
 
 				if(strict) {
-					return actualClass.equals(asColl.get(0).getClass());
+					return actualClass.equals(componentType);
 				}
 				else {
-					return actualClass.isAssignableFrom(asColl.get(0).getClass());
+					return actualClass.isAssignableFrom(componentType);
 				}
-				
 			}
 			else {
+				// Assume we're ok
 				return true;
 			}
 		}
-		
-		return false;
+		else {
+			return true;
+		}
 	}
 	
 	private boolean isSetMatch(Type[] genericParams, int index, Object arg, boolean strict) {
 		
 		if(Set.class.isAssignableFrom(arg.getClass())) {
-			Set<?> asColl = (Set<?>) arg;
-
-			if(asColl.size() > 0) {
-				
-				Type type = genericParams[index];
-				
-				if(type instanceof ParameterizedType) {
-					ParameterizedType parType = (ParameterizedType) genericParams[index];
-					
-					Type actualType = parType.getActualTypeArguments()[0];
-					Class<?> componentType = asColl.iterator().next().getClass();
-					
-					Class<?> actualClass = getGenericParameterClass(actualType);
-
-					if(strict) {
-						return actualClass.equals(componentType);
-					}
-					else {
-						return actualClass.isAssignableFrom(componentType);
-					}
-				}
-				else{
-					// Assume we're ok
-					return true;
-				}
-			}
-			else {
-				return true;
-			}
+			return isCollectionMatch(genericParams, index, arg, strict);
+//			Set<?> asColl = (Set<?>) arg;
+//
+//			if(asColl.size() > 0) {
+//				
+//				Type type = genericParams[index];
+//				
+//				if(type instanceof ParameterizedType) {
+//					ParameterizedType parType = (ParameterizedType) genericParams[index];
+//					
+//					Type actualType = parType.getActualTypeArguments()[0];
+//					Class<?> componentType = asColl.iterator().next().getClass();
+//					
+//					Class<?> actualClass = getTypeClass(actualType);
+//
+//					if(strict) {
+//						return actualClass.equals(componentType);
+//					}
+//					else {
+//						return actualClass.isAssignableFrom(componentType);
+//					}
+//				}
+//				else{
+//					// Assume we're ok
+//					return true;
+//				}
+//			}
+//			else {
+//				return true;
+//			}
 		}
 		
 		return false;
@@ -400,8 +412,6 @@ public class BeanBuilder {
 			Map<?,?> asMap = (Map<?,?>) arg;
 			
 			if(asMap.size() > 0) {
-				
-				
 				Type type = genericParams[index];
 				
 				if(type instanceof ParameterizedType) {
@@ -410,8 +420,8 @@ public class BeanBuilder {
 					Type keyType = parType.getActualTypeArguments()[0];
 					Type valType = parType.getActualTypeArguments()[1];
 					
-					Class<?> keyClass = getGenericParameterClass(keyType);
-					Class<?> valClass = getGenericParameterClass(valType);
+					Class<?> keyClass = getTypeClass(keyType);
+					Class<?> valClass = getTypeClass(valType);
 					
 					Object key = asMap.keySet().iterator().next();
 					Object value = asMap.get(key);
@@ -444,12 +454,21 @@ public class BeanBuilder {
 
 	}
 	
-	private Class<?> getGenericParameterClass(Type type) {
+	private Class<?> getTypeClass(Type type) {
 		if(type instanceof Class) {
 			return (Class<?>) type;
 		}
 		else if(type instanceof ParameterizedType) {
-			return getGenericParameterClass(((ParameterizedType)type).getActualTypeArguments()[0]);
+			ParameterizedType pType = (ParameterizedType) type;
+			
+			Type owner = pType.getOwnerType();
+			
+			if(owner != null) {
+				return getTypeClass(owner);
+			}
+			else {
+				return getTypeClass(pType.getRawType());
+			}
 		}
 		else if(type instanceof WildcardType) {
 			// Use upper bound
@@ -458,9 +477,56 @@ public class BeanBuilder {
 			Type[] upperBounds = wType.getUpperBounds();
 			
 			for (Type bound : upperBounds) {
-				Class<?> cls = getGenericParameterClass(bound);
+				Class<?> cls = getTypeClass(bound);
 				if(cls != null) {
 					return cls;
+				}
+			}
+		}
+		return null;
+	}
+	
+	private Class<?> getGenericParameterClass(Type type) {
+		return getGenericParameterClass(type, 1);
+	}
+	
+	private Class<?> getGenericParameterClass(Type type, int depth) {
+		return getGenericParameterClass(type, depth, 0);
+	}
+	
+	private Class<?> getGenericParameterClass(Type type, int targetDepth, int currentDepth) {
+		if(type instanceof Class) {
+			return (Class<?>) type;
+		}
+		else if(type instanceof ParameterizedType) {
+			if(currentDepth < targetDepth) {
+				return getGenericParameterClass(((ParameterizedType)type).getActualTypeArguments()[0], targetDepth, ++currentDepth);
+			}
+			else {
+				return getTypeClass(type);
+			}
+		}
+		else if(type instanceof WildcardType) {
+			// Use upper bound
+			WildcardType wType = (WildcardType) type;
+			
+			Type[] upperBounds = wType.getUpperBounds();
+			
+			if(currentDepth < targetDepth) {
+				currentDepth++;
+				for (Type bound : upperBounds) {
+					Class<?> cls = getGenericParameterClass(bound, targetDepth, currentDepth);
+					if(cls != null) {
+						return cls;
+					}
+				}
+			}
+			else {
+				for (Type bound : upperBounds) {
+					Class<?> cls = getTypeClass(bound);
+					if(cls != null) {
+						return cls;
+					}
 				}
 			}
 		}

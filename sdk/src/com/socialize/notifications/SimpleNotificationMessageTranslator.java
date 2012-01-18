@@ -37,8 +37,9 @@ public class SimpleNotificationMessageTranslator extends BaseMessageTranslator<S
 	@Override
 	public SimpleNotificationMessage translate(Context context, NotificationMessage message) throws SocializeException {
 		
-		SimpleNotificationMessage msg = new SimpleNotificationMessage();
-		StringBuilder titleBuilder = new StringBuilder();
+		SimpleNotificationMessage msg = newSimpleNotificationMessage();
+		StringBuilder titleBuilder = newStringBuilder();
+		
 		titleBuilder.append(message.getUser());
 		
 		switch (message.getActionType()) {
@@ -62,6 +63,14 @@ public class SimpleNotificationMessageTranslator extends BaseMessageTranslator<S
 		msg.setText(message.getText());
 		
 		return msg;
+	}
+	
+	protected SimpleNotificationMessage newSimpleNotificationMessage() {
+		return new SimpleNotificationMessage();
+	}
+	
+	protected StringBuilder newStringBuilder() {
+		return new StringBuilder();
 	}
 
 }

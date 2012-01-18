@@ -25,22 +25,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.socialize.api.action.ActionType;
-import com.socialize.entity.JSONFactory;
-import com.socialize.log.SocializeLogger;
 import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
  */
-public class NotificationMessageFactory extends JSONFactory<NotificationMessage> {
+public class ActionNotificationMessageFactory extends BaseNotificationMessageFactory {
 	
-	private SocializeLogger logger;
-
-	@Override
-	public Object instantiateObject(JSONObject object) {
-		return new NotificationMessage();
-	}
-
 	@Override
 	protected void fromJSON(JSONObject from, NotificationMessage to) throws JSONException {
 		
@@ -77,25 +68,6 @@ public class NotificationMessageFactory extends JSONFactory<NotificationMessage>
 				// TODO: verify this default.
 				to.setNotificationType(NotificationType.NEW_COMMENTS);
 			}
-		}
-	}
-
-	@Override
-	protected void toJSON(NotificationMessage from, JSONObject to) throws JSONException {
-		// Never done.
-	}
-
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
-	}
-	
-	protected void handleError(String msg, Exception e) {
-		if(logger != null) {
-			logger.error(msg, e);
-		}
-		else {
-			System.err.println(msg);
-			e.printStackTrace();
 		}
 	}
 }

@@ -21,11 +21,17 @@
  */
 package com.socialize.notifications;
 
+import android.app.Notification;
+import android.content.Context;
+import android.widget.RemoteViews;
+
 /**
  * @author Jason Polites
  *
  */
-public enum NotificationType {
-	NEW_COMMENTS,
-	DEVELOPER_NOTIFICATION
+public class SimpleNotificationMessageBuilder extends BaseNotificationMessageBuilder<SimpleNotificationMessage> {
+	@Override
+	public RemoteViews getNotificationView(Context context, Notification notification, NotificationMessage message, SimpleNotificationMessage data) {
+		return null;
+	}
 }

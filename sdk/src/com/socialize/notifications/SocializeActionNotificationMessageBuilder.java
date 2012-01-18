@@ -25,13 +25,11 @@ import android.app.Notification;
 import android.content.Context;
 import android.widget.RemoteViews;
 
-import com.socialize.entity.SocializeAction;
-
 /**
  * @author Jason Polites
  *
  */
-public class SocializeActionNotificationMessageBuilder extends BaseNotificationMessageBuilder<SocializeAction, SimpleNotificationMessage> {
+public class SocializeActionNotificationMessageBuilder extends SimpleNotificationMessageBuilder {
 	@Override
 	public RemoteViews getNotificationView(Context context, Notification notification, NotificationMessage message, SimpleNotificationMessage data) {
 		// TODO: Implement for enhanced notification pack.

@@ -21,11 +21,40 @@
  */
 package com.socialize.notifications;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.socialize.entity.JSONFactory;
+import com.socialize.log.SocializeLogger;
+
 /**
  * @author Jason Polites
- *
  */
-public enum NotificationType {
-	NEW_COMMENTS,
-	DEVELOPER_NOTIFICATION
+public abstract class BaseNotificationMessageFactory extends JSONFactory<NotificationMessage> {
+	
+	protected SocializeLogger logger;
+
+	@Override
+	public Object instantiateObject(JSONObject object) {
+		return new NotificationMessage();
+	}
+
+	@Override
+	protected void toJSON(NotificationMessage from, JSONObject to) throws JSONException {
+		// Never done.
+	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
+	
+	protected void handleError(String msg, Exception e) {
+		if(logger != null) {
+			logger.error(msg, e);
+		}
+		else {
+			System.err.println(msg);
+			e.printStackTrace();
+		}
+	}
 }

@@ -37,9 +37,11 @@ public class SimpleNotificationMessage implements NotificationMessageData {
 	public String getTitle() {
 		return title;
 	}
+	
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
 	/* (non-Javadoc)
 	 * @see com.socialize.notifications.NotificationMessageData#getText()
 	 */
@@ -47,6 +49,7 @@ public class SimpleNotificationMessage implements NotificationMessageData {
 	public String getText() {
 		return text;
 	}
+	
 	public void setText(String text) {
 		this.text = text;
 	}

@@ -60,7 +60,13 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="Use Mocked Socialize" 
-	        android:checked="false"/>        
+	        android:checked="false"/>    
+	        
+		<CheckBox android:id="@+id/chkNotifications"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Notifications Enabled" 
+	        android:checked="false"/>  		
 	        
 	    <Button 
 	    	android:id="@+id/btnClearCache"

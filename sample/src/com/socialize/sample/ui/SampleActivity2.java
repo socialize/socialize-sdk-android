@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.sample.R;
 import com.socialize.ui.SocializeEntityLoader;
@@ -33,6 +34,8 @@ public class SampleActivity2 extends Activity {
 		
 		final EditText txtFB = (EditText) findViewById(R.id.txtFBId);
 		final CheckBox chkSSO = (CheckBox) findViewById(R.id.chkFacebook);
+		final CheckBox chkNotifications = (CheckBox) findViewById(R.id.chkNotifications);
+		
 
 		final Button btn = (Button) findViewById(R.id.btnCommentView);
 		final Button btnClearCache = (Button) findViewById(R.id.btnClearCache);
@@ -57,6 +60,7 @@ public class SampleActivity2 extends Activity {
 				entity.setKey(txtEntity.getText().toString());
 				entity.setName(txtEntityName.getText().toString());				
 				Socialize.getSocialize().setEntityLoader(loader);
+				Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
 				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
 				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				Socialize.getSocializeUI().showCommentView(SampleActivity2.this, entity);
@@ -103,6 +107,7 @@ public class SampleActivity2 extends Activity {
 				
 				intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 				Socialize.getSocialize().setEntityLoader(loader);
+				Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
 				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
 				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				startActivity(intent);
@@ -122,6 +127,7 @@ public class SampleActivity2 extends Activity {
 				intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 				
 				Socialize.getSocialize().setEntityLoader(loader);
+				Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
 				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
 				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				startActivity(intent);
@@ -141,6 +147,7 @@ public class SampleActivity2 extends Activity {
 				intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 				
 				Socialize.getSocialize().setEntityLoader(loader);
+				Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
 				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
 				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				startActivity(intent);
