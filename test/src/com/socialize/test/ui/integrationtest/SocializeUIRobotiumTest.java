@@ -45,6 +45,16 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	public static final String DEFAULT_ENTITY_URL = "http://socialize.integration.tests.com?somekey=somevalue&anotherkey=anothervalue";
 	public static final String DEFAULT_GET_ENTITY = "http://entity1.com";
 	public static final String SOCIALIZE_FACEBOOK_ID = "209798315709193";
+	
+	
+	public static final int BTN_FACEBOOK_SSO = 0;
+	public static final int BTN_MOCK_FACEBOOK = 1;
+	public static final int BTN_MOCK_SOCIALIZE = 2;
+	public static final int BTN_NOTIFICATIONS_ENABLED = 3;
+	public static final int BTN_CLEAR_CACHE = 4;
+	public static final int BTN_SHOW_COMMENTS = 5;
+	public static final int BTN_SHOW_ACTION_BAR_AUTO = 6;
+	public static final int BTN_SHOW_ACTION_BAR_MANUAL = 7;
 		
 	protected Solo robotium;
 	protected InputMethodManager imm = null;
@@ -79,38 +89,44 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	
 	protected void toggleFacebookSSO(boolean on) {
 		if(!on) {
-			robotium.clickOnButton(0);
+			robotium.clickOnButton(BTN_FACEBOOK_SSO);
 		}
 	}
 	
 	protected void toggleMockedFacebook(boolean on) {
 		if(on) {
-			robotium.clickOnButton(1);
+			robotium.clickOnButton(BTN_MOCK_FACEBOOK);
 		}
 	}
 	
 	protected void toggleMockedSocialize(boolean on) {
 		if(on) {
-			robotium.clickOnButton(2);
+			robotium.clickOnButton(BTN_MOCK_SOCIALIZE);
 		}
-	}	
+	}
+	
+	protected void toggleNotificationsEnabled(boolean on) {
+		if(on) {
+			robotium.clickOnButton(BTN_NOTIFICATIONS_ENABLED);
+		}
+	}		
 	
 	protected void clearAuthCache() {
-		robotium.clickOnButton(3);
+		robotium.clickOnButton(BTN_CLEAR_CACHE);
 		robotium.waitForDialogToClose(5000);
 		assertNull(Socialize.getSocialize().getSession());
 	}
 	
 	protected void showComments() {
-		robotium.clickOnButton(4);
+		robotium.clickOnButton(BTN_SHOW_COMMENTS);
 	}
 	
 	protected void showActionBarAuto() {
-		robotium.clickOnButton(5);
+		robotium.clickOnButton(BTN_SHOW_ACTION_BAR_AUTO);
 	}
 	
 	protected void showActionBarManual() {
-		robotium.clickOnButton(6);
+		robotium.clickOnButton(BTN_SHOW_ACTION_BAR_MANUAL);
 	}
 	
 	protected void startWithFacebook(boolean sso) {

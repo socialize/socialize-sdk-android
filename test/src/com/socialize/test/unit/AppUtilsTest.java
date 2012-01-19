@@ -24,6 +24,7 @@ package com.socialize.test.unit;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.config.SocializeConfig;
+import com.socialize.sample.R;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.util.DefaultAppUtils;
 
@@ -52,6 +53,14 @@ public class AppUtilsTest extends SocializeUnitTest {
 		AndroidMock.verify(config);
 		
 		assertEquals(host + "/a/" + consumerKey, url);
+		
+	
+	}
+	
+	public void testGetAppIconId() {
+		DefaultAppUtils utils = new DefaultAppUtils();
+		int appIconId = utils.getAppIconId(getContext());
+		assertEquals(R.drawable.icon, appIconId);
 	}
 	
 }

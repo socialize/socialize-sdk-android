@@ -32,8 +32,10 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.JSONFactory;
 import com.socialize.log.SocializeLogger;
+import com.socialize.util.AppUtils;
 import com.socialize.util.StringUtils;
 
 /**
@@ -46,7 +48,9 @@ public class SocializeC2DMCallback implements C2DMCallback {
 	public static final int NOTIFICATION_ID = 1337;
 	
 	private SocializeLogger logger;
-
+	private SocializeConfig config;
+	private AppUtils appUtils;
+	
 	private Map<String, JSONFactory<NotificationMessage>> messageFactories;
 	private Map<String, NotificationMessageBuilder> messageBuilders;
 	private NotificationRegistrationState notificationRegistrationState;
@@ -123,7 +127,19 @@ public class SocializeC2DMCallback implements C2DMCallback {
 							NotificationMessageBuilder builder = messageBuilders.get(notificationType.name());
 							
 							if(builder != null) {
-								Notification notification = builder.build(context, data, notificationMessage, notificationIcon);
+								int icon = notificationIcon;
+								
+								if(config.getBooleanProperty(SocializeConfig.SOCIALIZE_NOTIFICATION_APP_ICON, true)) {
+									icon = appUtils.getAppIconId(context);
+									
+									if(icon <= 0) {
+										if(logger != null && logger.isDebugEnabled()) {
+											logger.debug("Could not locate ID for application icon.  Using default icon for notification");
+											icon = notificationIcon;
+										}
+									}
+								}
+								Notification notification = builder.build(context, data, notificationMessage, icon);
 								NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 								mNotificationManager.notify(String.valueOf(notificationMessage.getActionId()), NOTIFICATION_ID, notification);		
 							}
@@ -184,6 +200,14 @@ public class SocializeC2DMCallback implements C2DMCallback {
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
+	}
+	
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
+	}
+
+	public void setAppUtils(AppUtils appUtils) {
+		this.appUtils = appUtils;
 	}
 
 	public int getNotificationIcon() {

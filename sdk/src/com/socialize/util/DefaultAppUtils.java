@@ -261,26 +261,26 @@ public class DefaultAppUtils implements AppUtils {
 		return null;
 	}
 	
-//	/**
-//	 * Attempts to get the resource if for the app icon.
-//	 * @param context
-//	 * @return
-//	 */
-//	public int getAppIconId(Context context) {
-//		int id = -1;
-//		String className = context.getPackageName() + ".R.drawable";
-//		try {
-//			Class<?> cls = Class.forName(className);
-//			Field field = cls.getField("icon");
-//			if(field != null) {
-//				Integer value = (Integer) field.get(null);
-//				if(value != null) {
-//					id = value;
-//				}
-//			}
-//		} catch (Exception ignore) {}
-//		return id;
-//	}
+	/**
+	 * Attempts to get the resource if for the app icon.
+	 * @param context
+	 * @return
+	 */
+	public int getAppIconId(Context context) {
+		int id = -1;
+		try {
+			id = context.getResources().getIdentifier("icon", "drawable", context.getPackageName());
+		} 
+		catch (Exception ignore) {
+			if(logger != null && logger.isWarnEnabled()) {
+				logger.warn("Failed to retrieve app icon id", ignore);
+			}
+			else {
+				ignore.printStackTrace();
+			}
+		}
+		return id;
+	}
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.util.IAppUtils#getAppName()

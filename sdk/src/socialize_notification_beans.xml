@@ -31,6 +31,8 @@
 	
 	<bean id="notificationCallback" class="com.socialize.notifications.SocializeC2DMCallback">
 		<property name="logger" ref="logger"/>
+		<property name="config" ref="config"/>
+		<property name="appUtils" ref="appUtils"/>
 		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
 		<property name="messageBuilders">
 			<map>

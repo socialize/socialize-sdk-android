@@ -49,6 +49,7 @@ public class SocializeConfig {
 	public static final String SOCIALIZE_CONSUMER_SECRET = "socialize.consumer.secret";
 	
 	public static final String SOCIALIZE_REGISTER_NOTIFICATION = "socialize.register.notification";
+	public static final String SOCIALIZE_NOTIFICATION_APP_ICON = "socialize.notification.app.icon";
 	
 	public static final String SOCIALIZE_C2DM_SENDER_ID = "socialize.c2dm.sender.id";
 	

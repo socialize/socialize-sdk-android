@@ -51,6 +51,8 @@ public interface AppUtils {
 	public boolean hasPermission(Context context, String permission);
 
 	public String getAppName();
+	
+	public int getAppIconId(Context context);
 
 	public String getPackageName();
 

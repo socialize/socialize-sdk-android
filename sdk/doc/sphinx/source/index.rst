@@ -14,5 +14,6 @@ Contents:
    notifications
    entity_loader
    sdk_user_guide
+   config
    troubleshooting
    change_log

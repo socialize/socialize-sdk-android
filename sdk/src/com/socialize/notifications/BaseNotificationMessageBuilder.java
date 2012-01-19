@@ -34,6 +34,7 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeLaunchActivity;
 import com.socialize.util.AppUtils;
 import com.socialize.util.DefaultAppUtils;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -66,7 +67,6 @@ public abstract class BaseNotificationMessageBuilder<M extends NotificationMessa
 		}
 
 		// This will add anything we need to the bundle
-		// TODO This should not load the entity, just needs to render the message received.
 		M translated = messageTranslator.translate(context, bundle, message);
 
 		// Set the bundle AFTER the translation
@@ -84,8 +84,18 @@ public abstract class BaseNotificationMessageBuilder<M extends NotificationMessa
 		}
 		else {
 			// Just set defaults
-			notification.setLatestEventInfo(context, translated.getTitle(), translated.getText(), contentIntent);
-			notification.tickerText = translated.getTitle();
+			String title = translated.getTitle();
+			String text = translated.getText();
+			
+			if(!StringUtils.isEmpty(title)) {
+				
+				if(text == null) text = "";
+				notification.setLatestEventInfo(context, title, text, contentIntent);
+				notification.tickerText = title;
+			}
+			else {
+				throw new SocializeException("Notification message has empty title");
+			}
 		}
 		
 		return notification;			
