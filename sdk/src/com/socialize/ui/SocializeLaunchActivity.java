@@ -53,16 +53,24 @@ public class SocializeLaunchActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		superOnCreate(savedInstanceState);
+		
 		initSocialize();
 		
-		container = ActivityIOCProvider.getInstance().getContainer();
+		container = getContainer();
 		
 		// TODO: this should all be asynchronous (including socialize init) and a loading screen shown.
+		// Authenticate the user
+		getSocialize().authenticate(this, getAuthListener(container));
+
+		finish();
+	}
+	
+	protected SocializeAuthListener getAuthListener(final IOCContainer container) {
+		
 		final SocializeErrorHandler errorHandler = container.getBean("socializeUIErrorHandler");
 		
-		// Authenticate the user
-		getSocialize().authenticate(this, new SocializeAuthListener() {
+		return new SocializeAuthListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -105,9 +113,15 @@ public class SocializeLaunchActivity extends Activity {
 					errorHandler.handleError(SocializeLaunchActivity.this, error);
 				}
 			}
-		});
-
-		finish();
+		};
+	}
+	
+	protected void superOnCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
+	
+	protected IOCContainer getContainer() {
+		return ActivityIOCProvider.getInstance().getContainer();
 	}
 	
 	protected String getConsumerKey(IOCContainer container) {
