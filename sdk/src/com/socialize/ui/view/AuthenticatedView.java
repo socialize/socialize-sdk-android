@@ -30,8 +30,6 @@ public abstract class AuthenticatedView extends SocializeBaseView {
 	public final void onViewLoad(IOCContainer container) {
 		super.onViewLoad(container);
 		
-//		getSocializeUI().initUI(container);
-		
 		setErrorHandler((SocializeErrorHandler) container.getBean("socializeUIErrorHandler"));
 		
 		consumerKey = getConsumerKey(container);
