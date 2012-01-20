@@ -114,7 +114,6 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		config.init(getActivity());
 		Assert.assertNotNull(config.getProperties());
 		Assert.assertNotNull(config.getProperties().getProperty("test_value"));
-		
 		Assert.assertEquals("sample", config.getProperties().getProperty("test_value"));
 	}
 	
@@ -225,6 +224,23 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		assertEquals(SocializeConfig.FACEBOOK_SSO_ENABLED, key);
 		assertEquals("true", value);
 	}
+	
+	public void testConfigValueTrimOnInit() {
+		config.init(getActivity());
+		Assert.assertNotNull(config.getProperties());
+		Assert.assertNotNull(config.getProperties().getProperty("untrimmed"));
+		Assert.assertEquals("value", config.getProperties().getProperty("untrimmed"));
+	}
+	
+	public void testConfigValueTrimOnSet() {
+		String value = "untrimmed ";
+		SocializeConfig config = new SocializeConfig();
+		config.setProperty("key", value);
+		
+		
+		Assert.assertNotNull(config.getProperty("key"));
+		Assert.assertEquals("untrimmed", config.getProperty("key"));
+	}	
 	
 //	public void testBeanOverride() {
 //		SocializeAccess.setBeanOverrides("foobar");

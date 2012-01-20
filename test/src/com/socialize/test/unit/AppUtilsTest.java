@@ -53,14 +53,12 @@ public class AppUtilsTest extends SocializeUnitTest {
 		AndroidMock.verify(config);
 		
 		assertEquals(host + "/a/" + consumerKey, url);
-		
-	
 	}
 	
 	public void testGetAppIconId() {
 		DefaultAppUtils utils = new DefaultAppUtils();
 		int appIconId = utils.getAppIconId(getContext());
-		assertEquals(R.drawable.icon, appIconId);
+		assertEquals(R.drawable.ic_icon, appIconId);
 	}
 	
 }

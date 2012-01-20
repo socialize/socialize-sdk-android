@@ -251,26 +251,36 @@ public class ActionBarLayoutView extends BaseView {
 			}	
 		}
 		
+		updateEntity(userProvidedEntity, reload);
+	}
+	
+	protected void updateEntity(final Entity entity, boolean reload) {
+
 		CacheableEntity localEntity = getLocalEntity();
 		
 		if(localEntity == null) {
-			getSocialize().view(getActivity(), userProvidedEntity, new ViewAddListener() {
+			getSocialize().view(getActivity(), entity, new ViewAddListener() {
 				@Override
 				public void onError(SocializeException error) {
 					error.printStackTrace();
-					getLike(userProvidedEntity.getKey());
+					getLike(entity.getKey());
 				}
 				
 				@Override
-				public void onCreate(View entity) {
+				public void onCreate(View view) {
 					// Entity will be set in like
-					getLike(userProvidedEntity.getKey());
+					getLike(entity.getKey());
 				}
 			});
 		}
 		else {
-			// Just set everything from the cached version
-			setEntityData(localEntity);
+			if(reload) {
+				getEntity(entity.getKey());
+			}
+			else {
+				// Just set everything from the cached version
+				setEntityData(localEntity);
+			}
 		}
 	}
 	

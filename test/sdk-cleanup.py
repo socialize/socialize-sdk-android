@@ -22,6 +22,7 @@ def create_android_config(key,secret,url,fb_user_id,fb_token):
     text+= '\nfacebook.user.id='+fb_user_id
     text+= '\nfacebook.token='+fb_token
     text+= '\ntest_value=sample'
+    text+= '\nuntrimmed=value '
     text+= '\n'
     f.write(text)
     print text

@@ -27,6 +27,7 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
@@ -267,19 +268,8 @@ public class DefaultAppUtils implements AppUtils {
 	 * @return
 	 */
 	public int getAppIconId(Context context) {
-		int id = -1;
-		try {
-			id = context.getResources().getIdentifier("icon", "drawable", context.getPackageName());
-		} 
-		catch (Exception ignore) {
-			if(logger != null && logger.isWarnEnabled()) {
-				logger.warn("Failed to retrieve app icon id", ignore);
-			}
-			else {
-				ignore.printStackTrace();
-			}
-		}
-		return id;
+		ApplicationInfo applicationInfo = context.getApplicationInfo();
+		return applicationInfo.icon;
 	}
 	
 	/* (non-Javadoc)

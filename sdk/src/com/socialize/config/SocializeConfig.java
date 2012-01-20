@@ -122,6 +122,8 @@ public class SocializeConfig {
 						properties = createProperties();
 						properties.load(in);
 						
+						trimValues(properties);
+						
 						if(old != null) {
 							merge(old, null);
 						}
@@ -144,6 +146,7 @@ public class SocializeConfig {
 						if(in != null) {
 							Properties overrideProps = createProperties();
 							overrideProps.load(in);
+							trimValues(overrideProps);
 							merge(overrideProps, null);
 						}
 					}
@@ -170,6 +173,22 @@ public class SocializeConfig {
 		}
 	}
 	
+	protected void trimValues(Properties properties) {
+		if(properties != null) {
+			Set<Object> keys = properties.keySet();
+			if(keys != null) {
+				String value = null;
+				for (Object key : keys) {
+					value = properties.getProperty(key.toString());
+					if(value != null) {
+						value = value.trim();
+						properties.put(key, value);
+					}
+				}
+			}
+		}
+	}
+	
 
 	/**
 	 * Sets a custom property.  This will override settings in socialize.properties.
@@ -180,6 +199,9 @@ public class SocializeConfig {
 		if(properties == null) {
 			properties = createProperties();
 		}
+		
+		if(value != null) value = value.trim();
+		
 		properties.put(key, value);
 	}
 	
