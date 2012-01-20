@@ -83,6 +83,9 @@ public class ProfileActivityLoadTest extends SocializeUIActivityTest {
 			}
 		});
 		
+		// Ensure facebook is enabled
+		Socialize.getSocialize().getConfig().setFacebookAppId("1234567890");
+		
 		Socialize.getSocializeUI().showUserProfileView(getActivity(), 69L);
 		
 		Activity waitForActivity = TestUtils.waitForActivity(5000);

@@ -19,6 +19,7 @@ import com.socialize.sample.R;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.actionbar.ActionBarOptions;
 
+@Deprecated
 public class ActionBarPagerActivity extends FragmentActivity {
 	
 	static final int NUM_ITEMS = 10;

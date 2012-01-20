@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import com.socialize.Socialize;
 import com.socialize.entity.Comment;
+import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.sample.util.ErrorHandler;
@@ -65,7 +66,9 @@ public class CommentCreateActivity extends CommentBaseActivity {
 					String key = txtKey.getText().toString();
 					String name = txtName.getText().toString();
 					
-					Socialize.getSocialize().addComment(key, name, new CommentAddListener() {
+					Entity entity = Entity.newInstance(key, "Test Entity");
+					
+					Socialize.getSocialize().addComment(CommentCreateActivity.this, entity, name, new CommentAddListener() {
 						@Override
 						public void onError(SocializeException error) {
 							btnCommentCreate.setEnabled(true);

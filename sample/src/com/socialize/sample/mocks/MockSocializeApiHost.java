@@ -185,30 +185,35 @@ public class MockSocializeApiHost extends SocializeApiHost implements ContainerA
 		if(delegate != null) delegate.getEntity(session, key, listener);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void listEntitiesByKey(SocializeSession session, EntityListener listener, String... keys) {
 		if(delegate != null) delegate.listEntitiesByKey(session, listener, keys);
 		listener.onList((ListResult<Entity>) listResult);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void listCommentsByEntity(SocializeSession session, String url, CommentListener listener) {
 		if(delegate != null) delegate.listCommentsByEntity(session, url, listener);
 		listener.onList((ListResult<Comment>) listResult);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void listCommentsByEntity(SocializeSession session, String url, int startIndex, int endIndex, CommentListener listener) {
 		if(delegate != null) delegate.listCommentsByEntity(session, url, startIndex, endIndex, listener);
 		listener.onList((ListResult<Comment>) listResult);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void listCommentsById(SocializeSession session, CommentListener listener, long... ids) {
 		if(delegate != null) delegate.listCommentsById(session, listener, ids);
 		listener.onList((ListResult<Comment>) listResult);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void listLikesById(SocializeSession session, LikeListener listener, long... ids) {
 		if(delegate != null) delegate.listLikesById(session, listener, ids);
@@ -221,12 +226,14 @@ public class MockSocializeApiHost extends SocializeApiHost implements ContainerA
 		listener.onGet(user);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void listActivityByUser(SocializeSession session, long id, UserActivityListener listener) {
 		if(delegate != null) delegate.listActivityByUser(session, id, listener);
 		listener.onList((ListResult<SocializeAction>) listResult);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void listActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, UserActivityListener listener) {
 		if(delegate != null) delegate.listActivityByUser(session, id, startIndex, endIndex, listener);

@@ -30,6 +30,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.socialize.Socialize;
+import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
@@ -45,7 +46,9 @@ import com.socialize.util.StringUtils;
 public class LikeActivity extends SocializeActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.like);
 		
 		Socialize.init(this);
@@ -80,8 +83,10 @@ public class LikeActivity extends SocializeActivity {
 					
 					String key = txtKey.getText().toString();
 					
+					Entity entity = Entity.newInstance(key, "test entity");
+					
 					if(!StringUtils.isEmpty(key)) {
-						Socialize.getSocialize().like(key, new LikeAddListener() {
+						Socialize.getSocialize().like(LikeActivity.this, entity, new LikeAddListener() {
 							
 							@Override
 							public void onError(SocializeException error) {
@@ -93,7 +98,6 @@ public class LikeActivity extends SocializeActivity {
 								catch (Exception e) {
 									e.printStackTrace();
 								}
-								
 							}
 							
 							@Override

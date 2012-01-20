@@ -259,10 +259,10 @@ public class AuthenticateActivity extends SocializeActivity {
 			final ProgressDialog authProgress = SafeProgressDialog.show(v.getContext(), "Authenticating", "Please wait...");
 
 			if(fb) {
-				Socialize.getSocialize().authenticate(consumerKey, consumerSecret, AuthProviderType.FACEBOOK, facebookAppId, new AuthListener(v, authProgress));
+				Socialize.getSocialize().authenticate(AuthenticateActivity.this, consumerKey, consumerSecret, AuthProviderType.FACEBOOK, facebookAppId, new AuthListener(v, authProgress));
 			}
 			else {
-				Socialize.getSocialize().authenticate(consumerKey, consumerSecret, new AuthListener(v, authProgress));
+				Socialize.getSocialize().authenticate(AuthenticateActivity.this, consumerKey, consumerSecret, new AuthListener(v, authProgress));
 			}
 		}
 

@@ -42,7 +42,6 @@ public class TestUtils {
 		holder = new ResultHolder();
 		holder.setUp();
 		instrumentation = testCase.getInstrumentation();
-		
 		Socialize.getSocialize().destroy(true);
 	}
 	

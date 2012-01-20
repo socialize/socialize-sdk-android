@@ -1006,6 +1006,8 @@ public class SocializeServiceTest extends SocializeActivityTest {
 			}
 		};
 	}
+	
+	@Deprecated
 	public void testAuthenticateWithProviderTypeAndListener () {
 		//setup mocks and default mocks
 		setupDefaultMocks();

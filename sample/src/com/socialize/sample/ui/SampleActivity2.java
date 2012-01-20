@@ -133,8 +133,9 @@ public class SampleActivity2 extends Activity {
 				startActivity(intent);
 			}
 		});
-		
+
 		btnActionViewPager.setOnClickListener(new OnClickListener() {
+			@SuppressWarnings("deprecation")
 			@Override
 			public void onClick(View v) {
 				setupOverrides();
