@@ -11,7 +11,7 @@ Contents:
    facebook
    action_bar
    comment_view
-   notifications
+   push_notifications
    entity_loader
    sdk_user_guide
    config
