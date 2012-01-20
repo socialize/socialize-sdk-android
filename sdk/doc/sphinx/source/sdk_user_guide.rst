@@ -77,6 +77,8 @@ If you have specified your Socialize consumer key, secret in **assets/socialize.
 
 .. include:: snippets/auth_anon_from_props.txt
 
+.. _entities:
+
 Entities
 --------
 An entity is a single item of content in your app
@@ -95,7 +97,7 @@ entity when viewing reports on the Socialize dashboard.
 
 Creating an entity explicitly in this manner is **optional but recommended**.  If you simply post a 
 comment,view,share or like against a key that does not currently exist, it will be automatically created 
-for you, but will not have a *name* associated with it.
+for you.
 
 To create an entity, simply call the **addEntity** method:
 

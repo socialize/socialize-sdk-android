@@ -63,8 +63,10 @@ Propagating Socialize Actions to Facebook
 
 Social actions like Comment and Like can optionally be propagated to social networks like Facebook via the SDK.
 
-**NOTE: Propagation is automatic when using the Socialize Action Bar.  The following is only required for developers
-electing to use the SDK manually**
+.. note:: 
+
+	Propagation is automatic when using the Socialize Action Bar.  The following is only required for developers
+	electing to use the SDK manually**
 
 The following example shows posting a comment and simultaneously sharing the comment to the user's facebook wall.
 

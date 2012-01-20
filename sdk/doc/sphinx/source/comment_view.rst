@@ -7,7 +7,7 @@ Socialize Comments
 v0.4.0 of the Socialize SDK introduced the "Comment View" which provides the creation and viewing 
 of comments associated with an entity (URL).  
 
-**NOTE** If you are using the Socialize Action Bar you do not need to use the Comment View directly, it is included in the Action Bar
+.. note:: If you are using the Socialize Action Bar you do not need to use the Comment View directly, it is included in the Action Bar
 
 .. image:: images/comment_list.png	
 .. image:: images/activity.png

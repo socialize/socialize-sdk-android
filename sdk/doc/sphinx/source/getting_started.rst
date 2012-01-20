@@ -49,7 +49,7 @@ If you're using eclipse, you'll need to add the socialize-x.x.x.jar as a referen
 
 .. image:: images/library_refs.png
 
-**NOTE: Applications targeting older versions of Android (1.6 and below)**
+.. note:: Applications targeting older versions of Android (1.6 and below)**
 
 Socialize does not support Android versions below v2.1-update1
 
@@ -110,9 +110,26 @@ The core component of the Socialize SDK is the "Action Bar"
 This is a general purpose toolbar that sits at the bottom of your app and provides a central "one-stop-shop" 
 of social features for your users.
 
+Each Action Bar instance in your app is bound to an *Entity*.  An Entity is simply an item of content in your app.
+Each Socialize action (comment, share, like etc.) is associated with an Entity.  
+
+An entity can be any item of content like a website, photo or person but MUST be given a unique key within your app.
+
+It is not necessary to explicitly create an Entity object when rendering the Action bar as this will be done for you, 
+however entities *can* be created manually.  
+
+.. note:: Refer to the :ref:`entities` section for details on creating entities directly using the SDK.
+
 The Action Bar is designed to automatically "pin" iteself to the bottom of your view.  
 Adding the Action Bar to your app is done with a simple call to **showActionBar** from the SocializeUI instance:
 
 .. include:: snippets/action_bar.txt
-	
+
+Next Steps...
+=============
+
+Visit your App dashboard on the Socialize website to enable additional features like Push Notifications.
+
+http://www.getsocialize.com/apps/
+
 .. include:: footer.inc	

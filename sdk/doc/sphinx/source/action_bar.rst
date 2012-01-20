@@ -84,7 +84,7 @@ XML Based Layout
 If the "auto-pin" feature of the Action Bar is not to your liking, or doesn't play well with your existing layout 
 you can always just add the view manually.
 
-**NOTE:** There are some fairly important things the Action Bar expects that you should be aware of:
+.. note:: There are some fairly important things the Action Bar expects that you should be aware of:
 
 1. It MUST be included inside a RelativeLayout.  This is because several of the UI features need to be able to slide "over" your existing content.
 2. It MUST be positioned at the bottom of your view. 

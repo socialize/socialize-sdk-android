@@ -29,4 +29,8 @@ For example you may want to start an activity in the entity loader:
 
 .. include:: snippets/entity_loader_example0.txt
 
+The entity loader would usually be specified when you instantiate the ActionBar, for example:
+
+.. include:: snippets/entity_loader_example1.txt
+
 .. include:: footer.inc

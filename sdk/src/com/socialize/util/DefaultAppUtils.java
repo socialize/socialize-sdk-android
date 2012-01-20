@@ -195,7 +195,7 @@ public class DefaultAppUtils implements AppUtils {
 			}
 			
 			if(!hasPermission(context, "com.google.android.c2dm.permission.RECEIVE")) {
-				if(logger.isInfoEnabled()) logger.info("Notifications not available, permission com.google.android.c2dm.permission.RECEIVE not specified in AndroidManifest.xml");
+				if(logger.isInfoEnabled()) logger.info("Notifications not available, permission com.google.android.c2dm.permission.RECEIVE not specified in AndroidManifest.xml, or device does not include Google APIs");
 				ok = false;
 			}
 			
