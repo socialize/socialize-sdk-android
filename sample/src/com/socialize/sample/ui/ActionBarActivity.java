@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.socialize.ui.SocializeUI;
 
+@Deprecated
 public abstract class ActionBarActivity extends Activity {
 
 	@Override

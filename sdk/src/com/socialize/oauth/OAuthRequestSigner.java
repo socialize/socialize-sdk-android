@@ -21,6 +21,8 @@
  */
 package com.socialize.oauth;
 
+import oauth.socialize.OAuthSignListener;
+
 import org.apache.http.client.methods.HttpUriRequest;
 
 import com.socialize.api.SocializeSession;
@@ -28,6 +30,8 @@ import com.socialize.error.SocializeException;
 
 public interface OAuthRequestSigner {
 
+	public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException;
+	
 	public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException;
 	
 }

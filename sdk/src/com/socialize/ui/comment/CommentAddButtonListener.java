@@ -26,7 +26,6 @@ import android.content.Context;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.config.SocializeConfig;
-import com.socialize.ui.SocializeUI;
 import com.socialize.util.StringUtils;
 
 /**
@@ -52,14 +51,10 @@ public class CommentAddButtonListener {
 		this(context);
 		
 		this.callback = callback;
-		this.consumerKey = getSocializeUI().getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-		this.consumerSecret = getSocializeUI().getCustomConfigValue(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+		this.consumerKey = getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		this.consumerSecret = getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 	}
 	
-	protected SocializeUI getSocializeUI() {
-		return SocializeUI.getInstance();
-	}
-
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();
 	}
@@ -68,16 +63,17 @@ public class CommentAddButtonListener {
 		callback.onCancel();
 	}
 
-	public void onComment(String comment, boolean autoPostToFacebook, boolean shareLocation) {
+	public void onComment(String comment, boolean autoPostToFacebook, boolean shareLocation, boolean subscribe) {
 		if(!StringUtils.isEmpty(comment)) {
 			if(!getSocialize().isAuthenticated()) {
 				getSocialize().authenticate(
+						context,
 						consumerKey, 
 						consumerSecret,
-						new CommentReAuthListener(context, callback, comment, autoPostToFacebook, shareLocation));
+						new CommentReAuthListener(context, callback, comment, autoPostToFacebook, shareLocation, subscribe));
 			}
 			else {
-				callback.onComment(comment, autoPostToFacebook, shareLocation);
+				callback.onComment(comment, autoPostToFacebook, shareLocation, subscribe);
 			}
 		}
 	}

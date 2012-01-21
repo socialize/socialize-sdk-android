@@ -1,20 +1,22 @@
 <beans>
-	<bean id="socializeApiHost" class="com.socialize.sample.mocks.MockSocializeApiHost">
-		<property name="clientFactory" ref="clientFactory"/>
-		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
-		<property name="commentApi" ref="commentApi"/>
-		<property name="entityApi" ref="entityApi"/>
-		<property name="likeApi" ref="likeApi"/>
-		<property name="viewApi" ref="viewApi"/>
-		<property name="userApi" ref="userApi"/>
-		<property name="shareApi" ref="shareApi"/>
-		<property name="userActivityApi" ref="userActivityApi"/>
-		
-		<init-method name="init">
-			<arg type="context"/>
-		</init-method>			
-	</bean>	
+	<bean id="userSystem" class="com.socialize.sample.mocks.MockUserSystem" />
+	<bean id="shareSystem" class="com.socialize.sample.mocks.MockShareSystem" />
+	<bean id="commentSystem" class="com.socialize.sample.mocks.MockCommentSystem" />
+	<bean id="likeSystem" class="com.socialize.sample.mocks.MockLikeSystem" />
+	<bean id="entitySystem" class="com.socialize.sample.mocks.MockEntitySystem" />
+	<bean id="viewSystem" class="com.socialize.sample.mocks.MockViewSystem" />
+	<bean id="notificationRegistrationSystem" class="com.socialize.sample.mocks.MockNotificationRegistrationSystem" />
+	<bean id="subscriptionSystem" class="com.socialize.sample.mocks.MockSubscriptionSystem" />
 	
-	<bean id="initializationAsserter" class="com.socialize.sample.mocks.MockInitializationAsserter"/>
+	<proxy ref="userSystem" />
+	<proxy ref="shareSystem" />
+	<proxy ref="commentSystem" />
+	<proxy ref="likeSystem" />
+	<proxy ref="entitySystem" />
+	<proxy ref="viewSystem" />
+	<proxy ref="subscriptionSystem" />
+	<proxy ref="appUtils" />
+	<proxy ref="alertDialogFactory" />
+
+	<bean id="initializationAsserter" class="com.socialize.sample.mocks.MockInitializationAsserter" />
 </beans>

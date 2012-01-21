@@ -31,9 +31,9 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 
+import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.User;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.image.ImageLoadListener;
 import com.socialize.ui.image.ImageLoadRequest;
 import com.socialize.ui.image.ImageLoader;
@@ -66,7 +66,7 @@ public class ProfilePictureEditView extends ClickableSectionCell {
 	
 	@Override
 	protected ImageView makeImage() {
-		defaultProfilePicture = drawables.getDrawable(SocializeUI.DEFAULT_USER_ICON);
+		defaultProfilePicture = drawables.getDrawable(Socialize.DEFAULT_USER_ICON);
 		profilePicture = new ImageView(getContext());
 		
 		int imageSize = deviceUtils.getDIP(64);

@@ -30,10 +30,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.socialize.Socialize;
+import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.sample.util.ErrorHandler;
 import com.socialize.ui.SocializeActivity;
+import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.util.StringUtils;
 
 public class ViewActivity extends SocializeActivity {
@@ -58,15 +60,17 @@ public class ViewActivity extends SocializeActivity {
 					
 					clearViewData();
 					
-					final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Posting View", "Please wait...");
+					final ProgressDialog progress = SafeProgressDialog.show(v.getContext(), "Posting View", "Please wait...");
 					
 					txtViewCreateResult.setText("");
 					btnViewCreate.setEnabled(false);
 					
 					String key = txtKey.getText().toString();
 					
+					Entity entity = Entity.newInstance(key, "test entity");
+					
 					if(!StringUtils.isEmpty(key)) {
-						Socialize.getSocialize().view(key, new ViewAddListener() {
+						Socialize.getSocialize().view(ViewActivity.this, entity, new ViewAddListener() {
 							
 							@Override
 							public void onError(SocializeException error) {

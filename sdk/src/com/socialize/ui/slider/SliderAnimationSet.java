@@ -121,6 +121,7 @@ public class SliderAnimationSet {
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				slider.setMoving(false);
+				slider.onOpen();
 			}
 		};
 		
@@ -136,6 +137,7 @@ public class SliderAnimationSet {
 				slider.setVisibility(View.GONE);
 				slider.setMoving(false);
 				slider.clearAnimation();
+				slider.onClose();
 			}
 		};
 				

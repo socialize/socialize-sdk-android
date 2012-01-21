@@ -27,7 +27,7 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeObject;
-import com.socialize.entity.factory.SocializeObjectFactory;
+import com.socialize.entity.SocializeObjectFactory;
 import com.socialize.test.SocializeUnitTest;
 
 /**

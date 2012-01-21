@@ -26,28 +26,25 @@ import android.content.Context;
 import android.view.View;
 
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.error.SocializeException;
-import com.socialize.log.SocializeLogger;
-import com.socialize.util.Drawables;
 
 /**
  * @author Jason Polites
  *
  */
-public class AuthConfirmDialogFactory  {
+public class AuthConfirmDialogFactory extends AuthDialogFactory  {
 	
 	private IBeanFactory<AuthConfirmDialogView> authConfirmDialogViewFactory;
-	private Drawables drawables;
-	private SocializeLogger logger;
 	
 	public AuthConfirmDialogFactory() {
 		super();
 	}
-
-	public void show(Context context, final AuthRequestListener listener) {
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+	
+	public AlertDialog create(Context context, final AuthRequestListener listener) {
+		
+		AlertDialog.Builder builder = newBuilder(context);
+		
 		AuthConfirmDialogView view = authConfirmDialogViewFactory.getBean();
+		
 		builder.setView(view);
 		
 		final AlertDialog alertDialog = builder.create();
@@ -63,28 +60,14 @@ public class AuthConfirmDialogFactory  {
 			}
 		});
 		
-		
-	    alertDialog.show();
+		return alertDialog;
 	}
 	
-	protected void handleError(String msg, SocializeException error) {
-		if(logger != null) {
-			logger.error(msg, error);
-		}
-		else {
-			error.printStackTrace();
-		}
+	public void show(Context context, final AuthRequestListener listener) {
+		create(context, listener).show();
 	}
 
 	public void setAuthConfirmDialogViewFactory(IBeanFactory<AuthConfirmDialogView> authConfirmDialogViewFactory) {
 		this.authConfirmDialogViewFactory = authConfirmDialogViewFactory;
-	}
-
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
-	}
-
-	public void setDrawables(Drawables drawables) {
-		this.drawables = drawables;
 	}
 }

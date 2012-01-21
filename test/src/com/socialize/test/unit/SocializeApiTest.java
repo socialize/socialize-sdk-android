@@ -69,6 +69,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		
 	}
 	
+	@Deprecated
 	public void testApiCallsAuthenticateOnProvider() throws Throwable {
 
 		AndroidMock.expect(provider.authenticate("test_endpoint", "test_key", "test_secret", "test_uuid")).andReturn(mockSession);
@@ -79,6 +80,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		AndroidMock.verify(provider);
 	}
 	
+	@Deprecated
 	public void testApiCallsAuthenticateOnProviderWithAuthProviderData() throws Throwable {
 		AuthProviderData data = new AuthProviderData();
 		AndroidMock.expect(provider.authenticate("test_endpoint", "test_key", "test_secret", data,  "test_uuid")).andReturn(mockSession);
@@ -231,7 +233,6 @@ public class SocializeApiTest extends SocializeActivityTest {
 		SocializeActionListener actionListener = AndroidMock.createMock(SocializeActionListener.class);
 		AuthProviderResponse response = AndroidMock.createMock(AuthProviderResponse.class);
 		
-		IBeanFactory<AuthProviderData> authProviderDataFactory = AndroidMock.createMock(IBeanFactory.class);
 		AuthProviderData authProviderData = AndroidMock.createMock(AuthProviderData.class);
 		
 		MockSocializeApi api = new MockSocializeApi(provider);
@@ -239,7 +240,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		AuthProvider authProvider = new AuthProvider() {
 			@Override
 			public void authenticate(SocializeAuthRequest authRequest, String appId, AuthProviderListener listener) {
-				addResult(listener);
+				addResult(1, listener);
 			}
 
 			@Override
@@ -260,17 +261,17 @@ public class SocializeApiTest extends SocializeActivityTest {
 		authProviderData.setToken3rdParty(token);
 		
 		api.setAuthProviders(authProviders);
-		api.setAuthProviderDataFactory(authProviderDataFactory);
+//		api.setAuthProviderDataFactory(authProviderDataFactory);
 		
 		AndroidMock.replay(authProviderData);
 		AndroidMock.replay(authProviders);
 		AndroidMock.replay(request);
 		AndroidMock.replay(response);
 		
-		api.handle3rdPartyAuth(request, actionListener, listener, key, secret);
+		api.handle3rdPartyAuth(getContext(), request, actionListener, listener, key, secret);
 		
-		AuthProviderListener authProviderListener = getNextResult();
-		String loadSession = getNextResult();
+		AuthProviderListener authProviderListener = getResult(1);
+		String loadSession = getResult(0);
 		
 		assertNotNull(loadSession);
 		assertNotNull(authProviderListener);
@@ -280,7 +281,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		// Call success on the listener
 		authProviderListener.onAuthSuccess(response);
 		
-		String handleRegularAuth = getNextResult();
+		String handleRegularAuth = getResult(3);
 		assertNotNull(handleRegularAuth);
 		
 		assertEquals("handleRegularAuth", handleRegularAuth);
@@ -304,8 +305,6 @@ public class SocializeApiTest extends SocializeActivityTest {
 	@SuppressWarnings("unchecked")
 	public void testHandle3rdPartyAuthFail() {
 		
-//		String authUserId3rdParty = "foobar_authUserId3rdParty";
-//		String authToken3rdParty = "foobar_authToken3rdParty";
 		String appId3rdParty = "foobar_appId3rdParty";
 		String key = "foobar_key";
 		String secret = "foobar_secret";
@@ -320,7 +319,6 @@ public class SocializeApiTest extends SocializeActivityTest {
 		SocializeActionListener actionListener = AndroidMock.createMock(SocializeActionListener.class);
 		SocializeException error = AndroidMock.createMock(SocializeException.class);
 		
-		IBeanFactory<AuthProviderData> authProviderDataFactory = AndroidMock.createMock(IBeanFactory.class);
 		AuthProviderData authProviderData = AndroidMock.createMock(AuthProviderData.class);
 		
 		MockSocializeApi api = new MockSocializeApi(provider);
@@ -328,7 +326,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		AuthProvider authProvider = new AuthProvider() {
 			@Override
 			public void authenticate(SocializeAuthRequest authRequest, String appId, AuthProviderListener listener) {
-				addResult(listener);
+				addResult(1, listener);
 			}
 			@Override
 			public void clearCache(Context context, String appId) {
@@ -346,16 +344,15 @@ public class SocializeApiTest extends SocializeActivityTest {
 		AndroidMock.expect(request.getAuthProviderData()).andReturn(authProviderData);
 		
 		api.setAuthProviders(authProviders);
-		api.setAuthProviderDataFactory(authProviderDataFactory);
 
 		AndroidMock.replay(authProviderData);
 		AndroidMock.replay(authProviders);
 		AndroidMock.replay(request);
 		
-		api.handle3rdPartyAuth(request, actionListener, listener, key, secret);
+		api.handle3rdPartyAuth(getContext(),request, actionListener, listener, key, secret);
 		
-		AuthProviderListener authProviderListener = getNextResult();
-		String loadSession = getNextResult();
+		AuthProviderListener authProviderListener = getResult(1);
+		String loadSession = getResult(0);
 		
 		assertNotNull(loadSession);
 		assertNotNull(authProviderListener);
@@ -366,7 +363,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		authProviderListener.onAuthFail(error);
 		authProviderListener.onError(error);
 		
-		String handleRegularAuth = getNextResult();
+		String handleRegularAuth = getResult(3);
 		assertNull(handleRegularAuth);
 		
 		AndroidMock.verify(authProviderData);
@@ -381,18 +378,18 @@ public class SocializeApiTest extends SocializeActivityTest {
 		}
 		
 		@Override
-		protected void handleRegularAuth(SocializeAuthRequest request, SocializeActionListener wrapper) {
-			addResult("handleRegularAuth");
+		protected void handleRegularAuth(Context context, SocializeAuthRequest request, SocializeActionListener wrapper) {
+			addResult(3, "handleRegularAuth");
 		}
 		
 		@Override
-		public void handle3rdPartyAuth(SocializeAuthRequest request, SocializeActionListener fWrapper, SocializeAuthListener listener, String key, String secret) {
-			super.handle3rdPartyAuth(request, fWrapper, listener, key, secret);
+		public void handle3rdPartyAuth(Context context, SocializeAuthRequest request, SocializeActionListener fWrapper, SocializeAuthListener listener, String key, String secret) {
+			super.handle3rdPartyAuth(context, request, fWrapper, listener, key, secret);
 		}
 
 		@Override
 		public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderData data) throws SocializeException {
-			addResult("loadSession");
+			addResult(0, "loadSession");
 			return null;
 		}
 	}

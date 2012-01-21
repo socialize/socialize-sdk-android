@@ -37,6 +37,7 @@ public abstract class SocializeAction extends SocializeObject {
 	private Double lat;
 	private Long date;
 	private boolean locationShared;
+	private boolean notificationsEnabled;
 	
 	public Application getApplication() {
 		return application;
@@ -109,6 +110,14 @@ public abstract class SocializeAction extends SocializeObject {
 
 	public void setLocationShared(boolean locationShared) {
 		this.locationShared = locationShared;
+	}
+	
+	public boolean isNotificationsEnabled() {
+		return notificationsEnabled;
+	}
+	
+	public void setNotificationsEnabled(boolean notificationsEnabled) {
+		this.notificationsEnabled = notificationsEnabled;
 	}
 	
 	public abstract ActionType getActionType();

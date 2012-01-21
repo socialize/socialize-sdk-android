@@ -24,10 +24,13 @@ package com.socialize.ui.profile;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.text.InputFilter;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
@@ -36,12 +39,13 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.ui.SocializeUI;
-import com.socialize.ui.facebook.FacebookSignInCell;
-import com.socialize.ui.facebook.FacebookSignOutCell;
+import com.socialize.networks.facebook.FacebookCheckbox;
+import com.socialize.networks.facebook.FacebookSignOutListener;
 import com.socialize.ui.user.UserService;
+import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.SocializeButton;
 import com.socialize.ui.view.SocializeEditText;
+import com.socialize.util.AppUtils;
 import com.socialize.util.DeviceUtils;
 import com.socialize.view.BaseView;
 
@@ -52,32 +56,38 @@ import com.socialize.view.BaseView;
 public class ProfileContentView extends BaseView {
 
 	private DeviceUtils deviceUtils;
+	private AppUtils appUtils;
 	
 	private ProfilePictureEditView profilePictureEditView;
 	
 	private SocializeEditText firstNameEdit;
 	private SocializeEditText lastNameEdit;
 	
-	private FacebookSignInCell facebookSignInCell;
-	private FacebookSignOutCell facebookSignOutCell;
-	
 	private SocializeButton saveButton;
 	private SocializeButton cancelButton;
 	
 	private User currentUser;
 	private ProfileLayoutView parent;
+	private Toast toaster;
 	
 	// Injected
 	private IBeanFactory<SocializeEditText> socializeEditTextFactory;
 	private IBeanFactory<ProfilePictureEditView> profilePictureEditViewFactory;
 	private IBeanFactory<SocializeButton> profileCancelButtonFactory;
 	private IBeanFactory<SocializeButton> profileSaveButtonFactory;
-	private IBeanFactory<FacebookSignInCell> facebookSignInCellFactory;
-	private IBeanFactory<FacebookSignOutCell> facebookSignOutCellFactory;
 	private IBeanFactory<ProfileSaveButtonListener> profileSaveButtonListenerFactory;
 	private UserService userService;
 	
 	private Activity context;
+	
+	private CheckBox autoPostLikesFacebook;
+	private CheckBox autoPostCommentsFacebook;
+	
+	private CustomCheckbox notificationsEnabledCheckbox;
+	private FacebookCheckbox facebookEnabledCheckbox;
+	
+	private IBeanFactory<CustomCheckbox> notificationsEnabledCheckboxFactory;
+	private IBeanFactory<FacebookCheckbox> facebookEnabledCheckboxFactory;
 
 	public ProfileContentView(Activity context, ProfileLayoutView parent) {
 		super(context);
@@ -102,11 +112,13 @@ public class ProfileContentView extends BaseView {
 		firstNameEdit = socializeEditTextFactory.getBean();
 		lastNameEdit = socializeEditTextFactory.getBean();
 		
-		firstNameEdit.setLabel("First name");
-		lastNameEdit.setLabel("Last name");
+		firstNameEdit.setLabel("First Name");
+		lastNameEdit.setLabel("Last Name");
 		
 		saveButton = profileSaveButtonFactory.getBean();
 		cancelButton = profileCancelButtonFactory.getBean();
+		
+		toaster = Toast.makeText(getContext(), "", Toast.LENGTH_SHORT);
 
 		InputFilter[] maxLength = new InputFilter[1]; 
 		maxLength[0] = new InputFilter.LengthFilter(128); 
@@ -122,18 +134,45 @@ public class ProfileContentView extends BaseView {
 		master.addView(firstNameEdit);
 		master.addView(lastNameEdit);
 		
-		if(SocializeUI.getInstance().isFacebookSupported()) {
-			facebookSignInCell = facebookSignInCellFactory.getBean();
-			facebookSignOutCell = facebookSignOutCellFactory.getBean();
+		if(appUtils.isNotificationsAvaiable(getContext())) {
+			notificationsEnabledCheckbox = notificationsEnabledCheckboxFactory.getBean();
+			notificationsEnabledCheckbox.setLayoutParams(commonParams);
 			
-			facebookSignInCell.setLayoutParams(commonParams);
-			facebookSignOutCell.setLayoutParams(commonParams);
+			master.addView(notificationsEnabledCheckbox);
+		}
+		
+		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
 			
-			facebookSignInCell.setVisibility(View.INVISIBLE);
-			facebookSignOutCell.setVisibility(View.INVISIBLE);
+			facebookEnabledCheckbox = facebookEnabledCheckboxFactory.getBean();
 			
-			master.addView(facebookSignInCell);
-			master.addView(facebookSignOutCell);
+			facebookEnabledCheckbox.setLayoutParams(commonParams);
+			
+			autoPostLikesFacebook = new CheckBox(getContext());
+			autoPostCommentsFacebook = new CheckBox(getContext());		
+			
+			autoPostLikesFacebook.setText("Post Likes to my Facebook Wall");
+			autoPostLikesFacebook.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+			
+			autoPostCommentsFacebook.setText("Post Comments to my Facebook Wall");
+			autoPostCommentsFacebook.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+			
+			LayoutParams optionsParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			
+			autoPostLikesFacebook.setLayoutParams(optionsParams);
+			autoPostCommentsFacebook.setLayoutParams(optionsParams);
+			
+			facebookEnabledCheckbox.setVisibility(View.INVISIBLE);
+			autoPostLikesFacebook.setVisibility(View.INVISIBLE);
+			autoPostCommentsFacebook.setVisibility(View.INVISIBLE);
+			
+			master.addView(facebookEnabledCheckbox);
+			
+			ViewGroup fbLayout = makeFacebookOptionsLayout();
+			
+			fbLayout.addView(autoPostLikesFacebook);
+			fbLayout.addView(autoPostCommentsFacebook);
+			
+			master.addView(fbLayout);
 		}
 		
 		buttons.addView(cancelButton);
@@ -155,8 +194,8 @@ public class ProfileContentView extends BaseView {
 		
 		saveButton.setOnClickListener(profileSaveButtonListenerFactory.getBean(getContext(), this));
 		
-		if(facebookSignInCell != null) {
-			facebookSignInCell.setAuthListener(new SocializeAuthListener() {
+		if(facebookEnabledCheckbox != null) {
+			facebookEnabledCheckbox.setSignInListener(new SocializeAuthListener() {
 				
 				@Override
 				public void onError(SocializeException error) {
@@ -178,6 +217,18 @@ public class ProfileContentView extends BaseView {
 					ProfileContentView.this.showError(ProfileContentView.this.getContext(), error);
 				}
 			});
+			
+			facebookEnabledCheckbox.setSignOutListener(new FacebookSignOutListener() {
+				@Override
+				public void onSignOut() {
+					parent.setUserId(Socialize.getSocialize().getSession().getUser().getId().toString());
+					parent.doGetUserProfile();
+				}
+
+				@Override
+				public void onCancel() {}
+				
+			});
 		}
 	}
 
@@ -193,6 +244,17 @@ public class ProfileContentView extends BaseView {
 		return master;
 	}
 	
+	protected ViewGroup makeFacebookOptionsLayout() {
+		LinearLayout master = new LinearLayout(getContext());
+		int padding = deviceUtils.getDIP(8);
+		LayoutParams masterParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		masterParams.setMargins(padding, 0, 0, 0);
+		master.setLayoutParams(masterParams);
+		master.setOrientation(LinearLayout.VERTICAL);
+		master.setGravity(Gravity.TOP);
+		return master;
+	}
+	
 	protected ViewGroup makeButtonLayout() {
 		LinearLayout buttons = new LinearLayout(getContext());
 		int padding = deviceUtils.getDIP(8);
@@ -203,7 +265,6 @@ public class ProfileContentView extends BaseView {
 		buttons.setGravity(Gravity.BOTTOM | Gravity.RIGHT);
 		return buttons;
 	}
-	
 
 	public void setUserDetails(User user) {
 		
@@ -216,34 +277,47 @@ public class ProfileContentView extends BaseView {
 		
 		setCurrentUser(currentUser);
 			
-		if(SocializeUI.getInstance().isFacebookSupported() &&
-				Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-			facebookSignOutCell.setVisibility(View.VISIBLE);
-//			autoPostFacebook.setChecked(user.isAutoPostToFacebook());
+		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
+			
+			if(Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+				facebookEnabledCheckbox.setChecked(true);
+				autoPostLikesFacebook.setChecked(user.isAutoPostLikesFacebook());
+				autoPostCommentsFacebook.setChecked(user.isAutoPostCommentsFacebook());
+			}
+			else {
+				facebookEnabledCheckbox.setChecked(false);
+			}
+		}
+		
+		if(notificationsEnabledCheckbox != null) {
+			notificationsEnabledCheckbox.setChecked(user.isNotificationsEnabled());
 		}
 		
 		onFacebookChanged();
 	}	
 	
 	public void onFacebookChanged() {
-		if(facebookSignOutCell != null && facebookSignInCell != null) {
-			if(SocializeUI.getInstance().isFacebookSupported()) {
+		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
+			
+			if(facebookEnabledCheckbox != null) {
+				facebookEnabledCheckbox.setVisibility(View.VISIBLE);
+			}
+			
+			if(autoPostCommentsFacebook != null && autoPostLikesFacebook != null) {
 				if(Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-					facebookSignOutCell.setVisibility(View.VISIBLE);
-					facebookSignInCell.setVisibility(View.GONE);
-//					autoPostFacebook.setVisibility(View.VISIBLE);
+					autoPostLikesFacebook.setVisibility(View.VISIBLE);
+					autoPostCommentsFacebook.setVisibility(View.VISIBLE);
 				}
 				else {
-					facebookSignOutCell.setVisibility(View.GONE);
-					facebookSignInCell.setVisibility(View.VISIBLE);
-//					autoPostFacebook.setVisibility(View.GONE);
-				}
+					autoPostLikesFacebook.setVisibility(View.GONE);
+					autoPostCommentsFacebook.setVisibility(View.GONE);
+				}	
 			}
-			else {
-				facebookSignOutCell.setVisibility(View.GONE);
-				facebookSignInCell.setVisibility(View.GONE);
-//				autoPostFacebook.setVisibility(View.GONE);
-			}
+		}
+		else {
+			if(facebookEnabledCheckbox != null) facebookEnabledCheckbox.setVisibility(View.GONE);
+			if(autoPostLikesFacebook != null) autoPostLikesFacebook.setVisibility(View.GONE);
+			if(autoPostCommentsFacebook != null) autoPostCommentsFacebook.setVisibility(View.GONE);
 		}
 	}
 	
@@ -277,21 +351,9 @@ public class ProfileContentView extends BaseView {
 		this.profileSaveButtonFactory = profileSaveButtonFactory;
 	}
 
-	public void setFacebookSignOutButtonFactory(IBeanFactory<FacebookSignOutCell> facebookSignOutCellFactory) {
-		this.facebookSignOutCellFactory = facebookSignOutCellFactory;
-	}
-
-	public void setFacebookSignInButtonFactory(IBeanFactory<FacebookSignInCell> facebookSignInCellFactory) {
-		this.facebookSignInCellFactory = facebookSignInCellFactory;
-	}
-
 	public void setProfileSaveButtonListenerFactory(IBeanFactory<ProfileSaveButtonListener> profileSaveButtonListenerFactory) {
 		this.profileSaveButtonListenerFactory = profileSaveButtonListenerFactory;
 	}
-
-//	public void setAutoPostFacebookOptionFactory(IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory) {
-//		this.autoPostFacebookOptionFactory = autoPostFacebookOptionFactory;
-//	}
 
 	public void setProfilePictureEditViewFactory(IBeanFactory<ProfilePictureEditView> profilePictureEditViewFactory) {
 		this.profilePictureEditViewFactory = profilePictureEditViewFactory;
@@ -301,16 +363,16 @@ public class ProfileContentView extends BaseView {
 		this.socializeEditTextFactory = socializeEditTextFactory;
 	}
 	
-	public void setFacebookSignInCellFactory(IBeanFactory<FacebookSignInCell> facebookSignInCellFactory) {
-		this.facebookSignInCellFactory = facebookSignInCellFactory;
-	}
-
-	public void setFacebookSignOutCellFactory(IBeanFactory<FacebookSignOutCell> facebookSignOutCellFactory) {
-		this.facebookSignOutCellFactory = facebookSignOutCellFactory;
-	}
-
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
 		this.deviceUtils = deviceUtils;
+	}
+
+	public void setNotificationsEnabledCheckboxFactory(IBeanFactory<CustomCheckbox> notificationsEnabledCheckboxFactory) {
+		this.notificationsEnabledCheckboxFactory = notificationsEnabledCheckboxFactory;
+	}
+
+	public void setAppUtils(AppUtils appUtils) {
+		this.appUtils = appUtils;
 	}
 
 	protected ProfilePictureEditView getProfilePictureEditView() {
@@ -325,7 +387,31 @@ public class ProfileContentView extends BaseView {
 		return lastNameEdit;
 	}
 
-//	protected CustomCheckbox getAutoPostFacebook() {
-//		return autoPostFacebook;
-//	}
+	protected CheckBox getAutoPostLikesFacebook() {
+		return autoPostLikesFacebook;
+	}
+
+	protected CheckBox getAutoPostCommentsFacebook() {
+		return autoPostCommentsFacebook;
+	}
+
+	protected CustomCheckbox getNotificationsEnabledCheckbox() {
+		return notificationsEnabledCheckbox;
+	}
+	
+	protected FacebookCheckbox getFacebookEnabledCheckbox() {
+		return facebookEnabledCheckbox;
+	}
+
+	public void setFacebookEnabledCheckboxFactory(IBeanFactory<FacebookCheckbox> facebookEnabledCheckboxFactory) {
+		this.facebookEnabledCheckboxFactory = facebookEnabledCheckboxFactory;
+	}
+
+	protected void toast(String text) {
+		if(toaster != null) {
+			toaster.cancel();
+			toaster.setText(text);
+			toaster.show();
+		}
+	}	
 }

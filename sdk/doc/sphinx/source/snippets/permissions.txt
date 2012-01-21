@@ -1,0 +1,18 @@
+.. raw:: html
+
+	<pre class="brush: xml">
+		&lt;manifest...>
+		
+		&lt;application.../>
+		
+		&lt;uses-permission android:name="android.permission.INTERNET"/>
+		
+		&lt;!-- Optional but recommended -->
+		&lt;uses-permission android:name="android.permission.READ_PHONE_STATE" />
+		
+		&lt;!-- Optionally add ONE of the following to include location data in comments -->
+		&lt;uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+		&lt;uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+		
+		&lt;/manifest>
+	</pre>

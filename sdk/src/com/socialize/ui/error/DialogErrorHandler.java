@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
 
-import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.log.SocializeLogger;
@@ -17,12 +16,12 @@ public class DialogErrorHandler implements SocializeErrorHandler {
 
 	private Drawables drawables;
 	private String message;
-	private SocializeConfig config;
+//	private SocializeConfig config;
 	
 	@Override
 	public void handleError(Context context, Exception e) {
 		Log.e(SocializeLogger.LOG_TAG, "", e);
-		if(config != null && config.getBooleanProperty(SocializeConfig.SOCIALIZE_DEBUG_MODE, false)) {
+//		if(config != null){// && config.getBooleanProperty(SocializeConfig.SOCIALIZE_DEBUG_MODE, false)) {
 			String message = "An unexpected error occurred.  Please try again";
 			if(e instanceof SocializeApiError) {
 				int code = ((SocializeApiError)e).getResultCode();
@@ -35,7 +34,7 @@ public class DialogErrorHandler implements SocializeErrorHandler {
 			}
 			
 			handleError(context, message);
-		}
+//		}
 	}
 
 	protected void handleError(Context context, String message) {
@@ -83,7 +82,7 @@ public class DialogErrorHandler implements SocializeErrorHandler {
 		this.message = message;
 	}
 
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
-	}
+//	public void setConfig(SocializeConfig config) {
+//		this.config = config;
+//	}
 }

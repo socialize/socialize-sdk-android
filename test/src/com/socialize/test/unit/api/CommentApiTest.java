@@ -26,9 +26,10 @@ import java.util.List;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.CommentApi;
+import com.socialize.api.action.SocializeCommentSystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
+import com.socialize.entity.Entity;
 import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.provider.SocializeProvider;
@@ -60,14 +61,14 @@ public class CommentApiTest extends SocializeUnitTest {
 		final String key = "foo";
 		final String comment = "bar";
 		
-		CommentApi api = new CommentApi(provider){
+		SocializeCommentSystem api = new SocializeCommentSystem(provider){
 			@Override
 			public void postAsync(SocializeSession session, String endpoint, List<Comment> object, SocializeActionListener listener) {
 				addResult(object);
 			}
 		};
 		
-		api.addComment(session, key, comment, null, null, listener);
+		api.addComment(session, Entity.newInstance(key, null), comment, null, null, listener);
 		
 		List<Comment> list = getNextResult();
 		assertNotNull(list);
@@ -86,7 +87,7 @@ public class CommentApiTest extends SocializeUnitTest {
 		
 		int startIndex = 0, endIndex = 10;
 		
-		CommentApi api = new CommentApi(provider) {
+		SocializeCommentSystem api = new SocializeCommentSystem(provider) {
 			@Override
 			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(key);
@@ -115,7 +116,7 @@ public class CommentApiTest extends SocializeUnitTest {
 		
 		int startIndex = 0, endIndex = 10;
 		
-		CommentApi api = new CommentApi(provider) {
+		SocializeCommentSystem api = new SocializeCommentSystem(provider) {
 			@Override
 			public void listAsync(SocializeSession session, String endpoint, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(endpoint);
@@ -145,7 +146,7 @@ public class CommentApiTest extends SocializeUnitTest {
 		
 		int startIndex = 0, endIndex = SocializeConfig.MAX_LIST_RESULTS;
 		
-		CommentApi api = new CommentApi(provider) {
+		SocializeCommentSystem api = new SocializeCommentSystem(provider) {
 			@Override
 			public void listAsync(SocializeSession session, String endpoint, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(endpoint);
@@ -172,9 +173,9 @@ public class CommentApiTest extends SocializeUnitTest {
 	
 	public void testGetCommentsById() {
 		
-		int[] ids = {1,2,3};
+		long[] ids = {1,2,3};
 		
-		CommentApi api = new CommentApi(provider) {
+		SocializeCommentSystem api = new SocializeCommentSystem(provider) {
 			@Override
 			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
 				addResult(ids);
@@ -197,7 +198,7 @@ public class CommentApiTest extends SocializeUnitTest {
 		
 		int id = 69;
 		
-		CommentApi api = new CommentApi(provider) {
+		SocializeCommentSystem api = new SocializeCommentSystem(provider) {
 
 			@Override
 			public void getAsync(SocializeSession session, String endpoint, String id, SocializeActionListener listener) {

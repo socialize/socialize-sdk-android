@@ -1,0 +1,47 @@
+.. raw:: html
+
+	<pre class="brush: java">
+	import android.app.Activity;
+	import android.os.Bundle;
+	import android.view.View;
+	
+	import com.socialize.Socialize;
+	import com.socialize.entity.Entity;
+	
+	public class SampleActionBarProgrammaticActivity extends Activity {
+	
+		public void onCreate(Bundle savedInstanceState) {
+			
+			super.onCreate(savedInstanceState);
+			
+			// These can be specified in a config file
+			// called socialize.properties and places in your assets path.
+			String consumerKey = "00000000-0000-0000-000000000000";
+			String consumerSecret = "00000000-0000-0000-000000000000";
+			
+			// YOUR Facebook App ID
+			String facebookAppId = "1234567890";
+			                
+			// Your entity key. May be passed as a Bundle parameter to your activity
+			String entityKey = "http://www.getsocialize.com";
+			
+			// Create an entity object including a name
+			// The Entity object is Serializable, so you could also store the whole object in the Intent
+			Entity entity = Entity.newInstance(entityKey, "Socialize");
+			
+			// Setup the credentials for Socialize
+			Socialize.getSocialize().getConfig().setSocializeCredentials(consumerKey, consumerSecret);
+			Socialize.getSocialize().getConfig().setFacebookAppId(facebookAppId);
+			
+			// Disable ONLY if you experience problems
+			Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(true);
+			        
+			// Wrap your existing view with the action bar.
+			// your_layout refers to the resource ID of your current layout.
+			View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity);
+			
+			// Now set the view for your activity to be the wrapped view.
+			setContentView(actionBarWrapped);
+		}
+	}
+	</pre>

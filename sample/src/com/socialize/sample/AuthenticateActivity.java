@@ -44,6 +44,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.sample.util.ErrorHandler;
 import com.socialize.ui.SocializeActivity;
+import com.socialize.ui.dialog.SafeProgressDialog;
 
 public class AuthenticateActivity extends SocializeActivity {
 
@@ -150,7 +151,7 @@ public class AuthenticateActivity extends SocializeActivity {
 				@Override
 				public void onClick(final View v) {
 					
-					final ProgressDialog progress = ProgressDialog.show(AuthenticateActivity.this, "Clearing Cache", "Please wait...");
+					final ProgressDialog progress = SafeProgressDialog.show(AuthenticateActivity.this, "Clearing Cache", "Please wait...");
 					txtAuthResult.setText("");
 					
 					new AsyncTask<Void, Void, Void>() {
@@ -255,13 +256,13 @@ public class AuthenticateActivity extends SocializeActivity {
 			// Override the location for the API
 			config.setProperty(SocializeConfig.API_HOST, host);
 
-			final ProgressDialog authProgress = ProgressDialog.show(v.getContext(), "Authenticating", "Please wait...");
+			final ProgressDialog authProgress = SafeProgressDialog.show(v.getContext(), "Authenticating", "Please wait...");
 
 			if(fb) {
-				Socialize.getSocialize().authenticate(consumerKey, consumerSecret, AuthProviderType.FACEBOOK, facebookAppId, new AuthListener(v, authProgress));
+				Socialize.getSocialize().authenticate(AuthenticateActivity.this, consumerKey, consumerSecret, AuthProviderType.FACEBOOK, facebookAppId, new AuthListener(v, authProgress));
 			}
 			else {
-				Socialize.getSocialize().authenticate(consumerKey, consumerSecret, new AuthListener(v, authProgress));
+				Socialize.getSocialize().authenticate(AuthenticateActivity.this, consumerKey, consumerSecret, new AuthListener(v, authProgress));
 			}
 		}
 

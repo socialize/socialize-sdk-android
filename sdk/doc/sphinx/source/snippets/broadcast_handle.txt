@@ -1,0 +1,16 @@
+
+.. raw:: html
+
+	<pre class="brush: java">
+
+	/* (non-Javadoc)
+	 * @see android.content.BroadcastReceiver#onReceive(android.content.Context, android.content.Intent)
+	 */
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		if(!Socialize.getSocialize().handleBroadcastIntent(context, intent)) {
+			// Message was NOT handled by Socialize.
+		}
+	}
+	
+	</pre>	

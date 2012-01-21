@@ -28,8 +28,8 @@ import android.view.Gravity;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Entity;
+import com.socialize.entity.EntityStats;
 import com.socialize.entity.Like;
 import com.socialize.entity.View;
 import com.socialize.error.SocializeApiError;
@@ -40,19 +40,18 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
-import com.socialize.ui.SocializeUI;
+import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.actionbar.OnActionBarEventListener.ActionBarEvent;
 import com.socialize.ui.cache.CacheableEntity;
 import com.socialize.ui.cache.EntityCache;
 import com.socialize.ui.dialog.ProgressDialogFactory;
-import com.socialize.ui.facebook.FacebookWallPoster;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
 
 /**
  * @author Jason Polites
- *
  */
 public class ActionBarLayoutView extends BaseView {
 
@@ -78,10 +77,11 @@ public class ActionBarLayoutView extends BaseView {
 	private IBeanFactory<ActionBarItem> itemFactory;
 	
 	private ProgressDialogFactory progressDialogFactory;
-	private CacheableEntity localEntity;
+	
+	private String entityKey;
+	
 	private DeviceUtils deviceUtils;
 	
-	private FacebookWallPoster facebookWallPoster;
 	private ActionBarView actionBarView;
 	
 	final String loadingText = "...";
@@ -95,8 +95,8 @@ public class ActionBarLayoutView extends BaseView {
 	
 	public void init() {
 		
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("init called on " + getClass().getSimpleName());
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("init called on " + getClass().getSimpleName());
 		}
 		
 		likeIcon = drawables.getDrawable("icon_like.png");
@@ -152,7 +152,7 @@ public class ActionBarLayoutView extends BaseView {
 				if(onActionBarEventListener != null) {
 					onActionBarEventListener.onClick(actionBarView, ActionBarEvent.COMMENT);
 				}
-				SocializeUI.getInstance().showCommentView(getActivity(), actionBarView.getEntityKey(), actionBarView.getEntityName(), actionBarView.isEntityKeyUrl());
+				Socialize.getSocializeUI().showCommentView(getActivity(), actionBarView.getEntity());
 			}
 		});
 		
@@ -217,72 +217,84 @@ public class ActionBarLayoutView extends BaseView {
 	@Override
 	public void onViewLoad() {
 		super.onViewLoad();
-		
-		final String entityKey = actionBarView.getEntityKey();
-		
-		ticker.startTicker();
-		
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("onViewLoad called on " + getClass().getSimpleName());
-		}
-		
-		if(onActionBarEventListener != null) {
-			onActionBarEventListener.onLoad(actionBarView);
-		}				
-		
-		CacheableEntity entity = entityCache.get(entityKey);
-		
-		if(entity == null) {
-			getSocialize().view(entityKey, new ViewAddListener() {
-				@Override
-				public void onError(SocializeException error) {
-					error.printStackTrace();
-					getEntityData(entityKey);
-				}
-				
-				@Override
-				public void onCreate(View entity) {
-					getEntityData(entityKey);
-				}
-			});
-		}
-		else {
-			getEntityData(entityKey);
-		}
-	}
-	
-	public void reload() {
-		final String entityKey = actionBarView.getEntityKey();
-		
-		if(logger != null && logger.isInfoEnabled()) {
-			logger.info("onViewUpdate called on " + getClass().getSimpleName());
-		}
-		
-		ticker.resetTicker();
-		
-		viewsItem.setText(loadingText);
-		commentsItem.setText(loadingText);
-		likesItem.setText(loadingText);
-		sharesItem.setText(loadingText);
-		likeButton.setText(loadingText);
-		
-		if(onActionBarEventListener != null) {
-			onActionBarEventListener.onUpdate(actionBarView);
-		}		
-		
-		getEntityData(entityKey);
+		doLoadSequence(false);
 	}
 	
 	@Override
 	public void onViewUpdate() {
 		super.onViewUpdate();
-		reload();
+		doLoadSequence(true);
+	}
+	
+	protected void doLoadSequence(boolean reload) {
+		final Entity userProvidedEntity = actionBarView.getEntity();
+		this.entityKey = userProvidedEntity.getKey();
+		
+		if(reload) {
+			ticker.resetTicker();
+			
+			viewsItem.setText(loadingText);
+			commentsItem.setText(loadingText);
+			likesItem.setText(loadingText);
+			sharesItem.setText(loadingText);
+			likeButton.setText(loadingText);
+			
+			if(onActionBarEventListener != null) {
+				onActionBarEventListener.onUpdate(actionBarView);
+			}	
+		}
+		else {
+			ticker.startTicker();
+			
+			if(onActionBarEventListener != null) {
+				onActionBarEventListener.onLoad(actionBarView);
+			}	
+		}
+		
+		updateEntity(userProvidedEntity, reload);
+	}
+	
+	protected void updateEntity(final Entity entity, boolean reload) {
+
+		CacheableEntity localEntity = getLocalEntity();
+		
+		if(localEntity == null) {
+			getSocialize().view(getActivity(), entity, new ViewAddListener() {
+				@Override
+				public void onError(SocializeException error) {
+					error.printStackTrace();
+					getLike(entity.getKey());
+				}
+				
+				@Override
+				public void onCreate(View view) {
+					// Entity will be set in like
+					getLike(entity.getKey());
+				}
+			});
+		}
+		else {
+			if(reload) {
+				getEntity(entity.getKey());
+			}
+			else {
+				// Just set everything from the cached version
+				setEntityData(localEntity);
+			}
+		}
+	}
+	
+	public void reload() {
+		final Entity realEntity = actionBarView.getEntity();
+		entityCache.remove(realEntity.getKey());
+		doLoadSequence(true);
+		getLike(realEntity.getKey());
 	}
 
 	protected void postLike(final ActionBarButton button) {
+		final CacheableEntity localEntity = getLocalEntity();
 		
 		if(localEntity != null) {
-			String entityKey = actionBarView.getEntityKey();
 			
 			button.showLoading();
 			
@@ -293,16 +305,16 @@ public class ActionBarLayoutView extends BaseView {
 					@Override
 					public void onError(SocializeException error) {
 						logError("Error deleting like", error);
+						localEntity.setLiked(false);
+						setEntityData(localEntity);
 						button.hideLoading();
 					}
 					
 					@Override
 					public void onDelete() {
 						localEntity.setLiked(false);
-						localEntity.getEntity().setLikes(localEntity.getEntity().getLikes()-1);
 						setEntityData(localEntity);
 						button.hideLoading();
-						
 						if(onActionBarEventListener != null) {
 							onActionBarEventListener.onPostUnlike(actionBarView);
 						}
@@ -310,8 +322,14 @@ public class ActionBarLayoutView extends BaseView {
 				});
 			}
 			else {
-				// Unlike
-				getSocialize().like(entityKey, new LikeAddListener() {
+				// Like
+				ShareOptions options = new ShareOptions();
+				
+				if(getSocialize().getSession().getUser().isAutoPostLikesFacebook()) {
+					options.setShareTo(SocialNetwork.FACEBOOK);
+				}
+				
+				getSocialize().like(getActivity(), localEntity.getEntity(), options, new LikeAddListener() {
 					
 					@Override
 					public void onError(SocializeException error) {
@@ -321,7 +339,6 @@ public class ActionBarLayoutView extends BaseView {
 					
 					@Override
 					public void onCreate(Like entity) {
-						localEntity.getEntity().setLikes(localEntity.getEntity().getLikes()+1);
 						localEntity.setLiked(true);
 						localEntity.setLikeId(entity.getId());
 						button.hideLoading();
@@ -332,33 +349,42 @@ public class ActionBarLayoutView extends BaseView {
 						}
 					}
 				});
-				
-				if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) && getSocialize().getSession().getUser().isAutoPostToFacebook()) {
-					facebookWallPoster.postLike(getActivity(), actionBarView.getEntityKey(), actionBarView.getEntityName(), null, actionBarView.isEntityKeyUrl(), null);
-				}
 			}
 		}
 	}
 	
-	protected void getEntityData(final String entityKey) {
+	protected CacheableEntity getLocalEntity() {
+		return entityCache.get(this.entityKey);
+	}
+	
+	protected CacheableEntity setLocalEntity(Entity entity) {
+		return entityCache.putEntity(entity);
+	}
+	
+	protected void getLike(final String entityKey) {
 		
 		// Get the like
 		getSocialize().getLike(entityKey, new LikeGetListener() {
 			
 			@Override
 			public void onGet(Like like) {
-				CacheableEntity putEntity = entityCache.putEntity(like.getEntity());
-				putEntity.setLiked(true);
-				putEntity.setLikeId(like.getId());
-				setEntityData(putEntity);
-				
-				if(onActionBarEventListener != null) {
-					onActionBarEventListener.onGetLike(actionBarView, like);
+				if(like != null) {
+					CacheableEntity putEntity = entityCache.putEntity(like.getEntity());
+					putEntity.setLiked(true);
+					putEntity.setLikeId(like.getId());
+					setEntityData(putEntity);
+					
+					if(onActionBarEventListener != null) {
+						onActionBarEventListener.onGetLike(actionBarView, like);
+					}
+					
+					if(onActionBarEventListener != null) {
+						onActionBarEventListener.onGetEntity(actionBarView, like.getEntity());
+					}	
 				}
-				
-				if(onActionBarEventListener != null) {
-					onActionBarEventListener.onGetEntity(actionBarView, like.getEntity());
-				}				
+				else {
+					getEntity(entityKey);
+				}
 			}
 			
 			@Override
@@ -366,19 +392,7 @@ public class ActionBarLayoutView extends BaseView {
 				if(error instanceof SocializeApiError) {
 					if(((SocializeApiError)error).getResultCode() == 404) {
 						// no like
-						getSocialize().getEntity(entityKey, new EntityGetListener() {
-							@Override
-							public void onGet(Entity entity) {
-								CacheableEntity putEntity = entityCache.putEntity(entity);
-								setEntityData(putEntity);
-							}
-							
-							@Override
-							public void onError(SocializeException error) {
-								logError("Error retrieving entity data", error);
-							}
-						});
-						
+						getEntity(entityKey);
 						// Don't log error
 						return;
 					}
@@ -389,15 +403,40 @@ public class ActionBarLayoutView extends BaseView {
 		});
 	}
 	
+	protected void getEntity(String entityKey) {
+		getSocialize().getEntity(entityKey, new EntityGetListener() {
+			@Override
+			public void onGet(Entity entity) {
+				CacheableEntity putEntity = setLocalEntity(entity);
+				setEntityData(putEntity);
+			}
+			
+			@Override
+			public void onError(SocializeException error) {
+				logError("Error retrieving entity data", error);
+			}
+		});
+	}
+	
 	protected void setEntityData(CacheableEntity ce) {
-		this.localEntity = ce;
-		
 		Entity entity = ce.getEntity();
 		
-		viewsItem.setText(getCountText(entity.getViews()));
-		commentsItem.setText(getCountText(entity.getComments()));
-		likesItem.setText(getCountText(entity.getLikes()));
-		sharesItem.setText(getCountText(entity.getShares()));
+		// Set the entity back on the parent action bar
+		if(actionBarView.getEntity() != null) {
+			// TODO: Remove this once meta data is persisted
+			entity.setMetaData(actionBarView.getEntity().getMetaData());
+		}
+		
+		actionBarView.setEntity(entity);
+		
+		EntityStats stats = entity.getEntityStats();
+		
+		if(stats != null) {
+			viewsItem.setText(getCountText(stats.getViews()));
+			commentsItem.setText(getCountText(stats.getComments()));
+			likesItem.setText(getCountText(stats.getLikes() + ((ce.isLiked()) ? 1 : 0)));
+			sharesItem.setText(getCountText(stats.getShares()));
+		}
 		
 		if(ce.isLiked()) {
 			likeButton.setText("Unlike");
@@ -481,10 +520,6 @@ public class ActionBarLayoutView extends BaseView {
 
 	public void setItemFactory(IBeanFactory<ActionBarItem> itemFactory) {
 		this.itemFactory = itemFactory;
-	}
-
-	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
-		this.facebookWallPoster = facebookWallPoster;
 	}
 
 	public void stopTicker() {

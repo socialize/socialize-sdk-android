@@ -114,7 +114,6 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		config.init(getActivity());
 		Assert.assertNotNull(config.getProperties());
 		Assert.assertNotNull(config.getProperties().getProperty("test_value"));
-		
 		Assert.assertEquals("sample", config.getProperties().getProperty("test_value"));
 	}
 	
@@ -207,4 +206,49 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		assertNotNull(nextResult);
 		assertTrue(nextResult);
 	}
+	
+	public void test_setFacebookSingleSignOnEnabled() {
+		SocializeConfig config = new SocializeConfig() {
+			@Override
+			public void setProperty(String key, String value) {
+				addResult(0, key);
+				addResult(1, value);
+			}
+		};
+		
+		config.setFacebookSingleSignOnEnabled(true);
+		
+		String value = getResult(1);
+		String key = getResult(0);
+		
+		assertEquals(SocializeConfig.FACEBOOK_SSO_ENABLED, key);
+		assertEquals("true", value);
+	}
+	
+	public void testConfigValueTrimOnInit() {
+		config.init(getActivity());
+		Assert.assertNotNull(config.getProperties());
+		Assert.assertNotNull(config.getProperties().getProperty("untrimmed"));
+		Assert.assertEquals("value", config.getProperties().getProperty("untrimmed"));
+	}
+	
+	public void testConfigValueTrimOnSet() {
+		String value = "untrimmed ";
+		SocializeConfig config = new SocializeConfig();
+		config.setProperty("key", value);
+		
+		
+		Assert.assertNotNull(config.getProperty("key"));
+		Assert.assertEquals("untrimmed", config.getProperty("key"));
+	}	
+	
+//	public void testBeanOverride() {
+//		SocializeAccess.setBeanOverrides("foobar");
+//		String[] config = Socialize.getSocialize().getSystem().getBeanConfig();
+//		assertNotNull(config);
+//		assertEquals(3, config.length);
+//		assertEquals("socialize_beans.xml", config[0]);
+//		assertEquals("socialize_ui_beans.xml", config[1]);
+//		assertEquals("foobar", config[2]);		
+//	}
 }

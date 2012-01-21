@@ -32,6 +32,7 @@ import com.socialize.provider.SocializeProvider;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class RecommendationApi extends SocializeApi<Entity, SocializeProvider<Entity>> {
 	
 	public static final String ENDPOINT = "/recommendation/";

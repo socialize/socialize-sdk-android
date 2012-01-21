@@ -1,0 +1,28 @@
+.. raw:: html
+
+	<pre class="brush: java">
+	
+	import com.socialize.Socialize;
+	import com.socialize.entity.Entity;
+	import com.socialize.error.SocializeException;
+	import com.socialize.listener.view.ViewAddListener;
+
+	if(Socialize.getSocialize().isAuthenticated()) {
+		
+		// Create or retrieve your entity object
+		Entity entity = Entity.newInstance("http://someurl.com", "My Entity");			
+		
+		// Record a view
+		// The "this" reference below refers to a Context object		
+		Socialize.getSocialize().view(this, entity, new ViewAddListener() {
+
+			public void onError(SocializeException error) {
+				// Handle error
+			}
+
+			public void onCreate(com.socialize.entity.View view) {
+				// Handle success
+			}
+		});
+	}
+	</pre>

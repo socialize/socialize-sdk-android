@@ -26,7 +26,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
 
 import com.socialize.android.ioc.IBeanFactory;
 
@@ -34,7 +33,7 @@ import com.socialize.android.ioc.IBeanFactory;
  * @author Jason Polites
  *
  */
-public abstract class BaseLoadingView<V extends View> extends ViewFlipper implements LoadingView<V> {
+public abstract class BaseLoadingView<V extends View> extends SafeViewFlipper implements LoadingView<V> {
 
 	private V mainView;
 	private TextView emptyTextView;

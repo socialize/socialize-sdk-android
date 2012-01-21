@@ -6,13 +6,16 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.graphics.drawable.LayerDrawable;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
@@ -34,9 +37,17 @@ public class CustomCheckbox extends BaseView {
 	private String textOff;
 	
 	private boolean borderOn = true;
+	private boolean forceDefaultDensity = false;
+	
+	private int padding = 8;
+	
+	private int textSize = 12;
 	
 	private OnClickListener customClickListener;
 	private OnClickListener defaultClickListener;
+	private IBeanFactory<BasicLoadingView> loadingViewFactory;
+	
+	private ViewFlipper iconFlipper;
 
 	public CustomCheckbox(Context context) {
 		super(context);
@@ -44,10 +55,10 @@ public class CustomCheckbox extends BaseView {
 	
 	public void init() {
 		
-		int padding = deviceUtils.getDIP(8);
+		int dipPadding = deviceUtils.getDIP(padding);
 		
 		checkboxLabel = new TextView(getContext());
-		checkboxLabel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+		checkboxLabel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
 		checkboxLabel.setTextColor(Color.WHITE);
 		checkboxLabel.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
 		
@@ -59,12 +70,12 @@ public class CustomCheckbox extends BaseView {
 		
 		checkboxLabel.setLayoutParams(checkboxLabelLayoutParams);
 		checkBox.setLayoutParams(checkboxLayoutParams);
-		checkBox.setPadding(padding, padding, padding, padding);
-		checkboxLabel.setPadding(0, padding, padding, padding);
+		checkBox.setPadding(dipPadding, dipPadding, dipPadding, dipPadding);
+		checkboxLabel.setPadding(0, dipPadding, dipPadding, dipPadding);
 		
 		setLayoutParams(checkboxMasterLayoutParams);
 		
-		setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+		setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
 		
 		setDisplay();
 		
@@ -82,15 +93,25 @@ public class CustomCheckbox extends BaseView {
 				if(enabled) {
 					checked = !checked;
 					setDisplay();
-				}
-				
-				if(customClickListener != null) {
-					customClickListener.onClick(v);
+					
+					if(customClickListener != null) {
+						customClickListener.onClick(v);
+					}
 				}
 			}
 		};
 		
-		addView(checkBox);
+		BasicLoadingView loadingScreen = loadingViewFactory.getBean();
+		
+		LayoutParams iconFlipperParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		iconFlipperParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		iconFlipper = new SafeViewFlipper(getContext());
+		iconFlipper.setLayoutParams(iconFlipperParams);
+		iconFlipper.addView(checkBox, 0);
+		iconFlipper.addView(loadingScreen, 1);
+		iconFlipper.setDisplayedChild(0);		
+		
+		addView(iconFlipper);
 		addView(checkboxLabel);
 		
 		// Must be super.
@@ -121,11 +142,23 @@ public class CustomCheckbox extends BaseView {
 	protected void setDisplay() {
 		if(checked) {
 			checkboxLabel.setText(textOn);
-			checkBox.setImageDrawable(drawables.getDrawable(imageOn));
+			if(forceDefaultDensity) {
+				checkBox.setImageDrawable(drawables.getDrawable(imageOn, DisplayMetrics.DENSITY_DEFAULT));
+			}
+			else {
+				checkBox.setImageDrawable(drawables.getDrawable(imageOn));
+			}
+			
 		}
 		else {
 			checkboxLabel.setText(textOff);
-			checkBox.setImageDrawable(drawables.getDrawable(imageOff));
+			if(forceDefaultDensity) {
+				checkBox.setImageDrawable(drawables.getDrawable(imageOff, DisplayMetrics.DENSITY_DEFAULT));
+			}
+			else {
+				checkBox.setImageDrawable(drawables.getDrawable(imageOff));
+			}
+			
 		}		
 	}
 	
@@ -191,6 +224,48 @@ public class CustomCheckbox extends BaseView {
 	@Override
 	public void setOnClickListener(OnClickListener l) {
 		this.customClickListener = l;
+	}
+
+	public void setPadding(int padding) {
+		this.padding = padding;
+	}
+	
+	public void setForceDefaultDensity(boolean forceDefaultDensity) {
+		this.forceDefaultDensity = forceDefaultDensity;
+	}
+	
+	public void showLoading() {
+		if(iconFlipper != null) {
+			setEnabled(false);
+			iconFlipper.setDisplayedChild(1);
+		}
+	}
+	
+	public void hideLoading() {
+		if(iconFlipper != null) {
+			setEnabled(true);
+			iconFlipper.setDisplayedChild(0);
+		}
+	}
+
+	public void setLoadingViewFactory(IBeanFactory<BasicLoadingView> loadingViewFactory) {
+		this.loadingViewFactory = loadingViewFactory;
+	}
+	
+	public String getImageOn() {
+		return imageOn;
+	}
+
+	public String getImageOff() {
+		return imageOff;
+	}
+	
+	public void setTextSize(int textSize) {
+		this.textSize = textSize;
+		
+		if(checkboxLabel != null) {
+			checkboxLabel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
+		}
 	}
 
 	@Override

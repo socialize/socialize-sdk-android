@@ -1,0 +1,19 @@
+.. raw:: html
+
+	<pre class="brush: java">
+	import com.socialize.Socialize;
+
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		Socialize.init(this);
+
+		// Your code goes here
+	}
+
+	protected void onDestroy() {
+		// Destroy Socialize before calling superclass
+		Socialize.destroy(this);
+		super.onDestroy();
+	}
+	</pre>

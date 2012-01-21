@@ -39,12 +39,26 @@ import com.socialize.util.StringUtils;
 public class SocializeConfig {
 	
 	public static final String SOCIALIZE_PROPERTIES_PATH = "socialize.properties";
-	public static final String SOCIALIZE_BEANS_PATH = "socialize_beans.xml";
+
+	public static final String SOCIALIZE_CORE_BEANS_PATH = "socialize_core_beans.xml";
+	public static final String SOCIALIZE_UI_BEANS_PATH = "socialize_ui_beans.xml";
+	public static final String SOCIALIZE_NOTIFICATION_BEANS_PATH = "socialize_notification_beans.xml";
 	public static final String SOCIALIZE_ERRORS_PATH = "socialize.errors.properties";
 	
 	public static final String SOCIALIZE_CONSUMER_KEY = "socialize.consumer.key";
 	public static final String SOCIALIZE_CONSUMER_SECRET = "socialize.consumer.secret";
 	
+	public static final String SOCIALIZE_REGISTER_NOTIFICATION = "socialize.register.notification";
+	public static final String SOCIALIZE_NOTIFICATION_APP_ICON = "socialize.notification.app.icon";
+	
+	public static final String SOCIALIZE_C2DM_SENDER_ID = "socialize.c2dm.sender.id";
+	
+	public static final String SOCIALIZE_USE_ACTION_WEBVIEW = "socialize.use.action.webview";
+	
+	@Deprecated
+	public static final String SOCIALIZE_BEANS_PATH = SOCIALIZE_CORE_BEANS_PATH;
+	
+	@Deprecated
 	public static final String SOCIALIZE_DEBUG_MODE = "socialize.debug.mode";
 	
 	/**
@@ -65,6 +79,8 @@ public class SocializeConfig {
 	public static final String LOG_TAG = "log.tag";
 	public static final String LOG_MSG = "log.msg.";
 	public static final String API_HOST = "api.host";
+	public static final String REDIRECT_HOST = "redirect.host";
+	
 	
 	public static final String HTTP_CONNECTION_TIMEOUT = "http.connection.timeout";
 	public static final String HTTP_SOCKET_TIMEOUT = "http.socket.timeout";
@@ -106,6 +122,8 @@ public class SocializeConfig {
 						properties = createProperties();
 						properties.load(in);
 						
+						trimValues(properties);
+						
 						if(old != null) {
 							merge(old, null);
 						}
@@ -128,6 +146,7 @@ public class SocializeConfig {
 						if(in != null) {
 							Properties overrideProps = createProperties();
 							overrideProps.load(in);
+							trimValues(overrideProps);
 							merge(overrideProps, null);
 						}
 					}
@@ -154,20 +173,49 @@ public class SocializeConfig {
 		}
 	}
 	
-	public String getProperty(String key) {
-		return getProperty(key, null);
+	protected void trimValues(Properties properties) {
+		if(properties != null) {
+			Set<Object> keys = properties.keySet();
+			if(keys != null) {
+				String value = null;
+				for (Object key : keys) {
+					value = properties.getProperty(key.toString());
+					if(value != null) {
+						value = value.trim();
+						properties.put(key, value);
+					}
+				}
+			}
+		}
 	}
 	
-	public String getProperty(String key, String defaultValue) {
-		String val = properties.getProperty(key);
-		if(!StringUtils.isEmpty(val)) {
-			return val;
+
+	/**
+	 * Sets a custom property.  This will override settings in socialize.properties.
+	 * @param key
+	 * @param value
+	 */
+	public void setProperty(String key, String value) {
+		if(properties == null) {
+			properties = createProperties();
 		}
-		return defaultValue;
+		
+		if(value != null) value = value.trim();
+		
+		properties.put(key, value);
 	}
+	
+	/**
+	 * Returns a property from socialize.properties.
+	 * @param key
+	 * @return
+	 */
+	public String getProperty(String key) {
+		return (properties == null) ? null : properties.getProperty(key);
+	}	
 	
 	public int getIntProperty(String key, int defaultValue) {
-		String val = properties.getProperty(key);
+		String val = getProperty(key);
 		if(!StringUtils.isEmpty(val)) {
 			return Integer.parseInt(val);
 		}
@@ -175,18 +223,64 @@ public class SocializeConfig {
 	}
 	
 	public boolean getBooleanProperty(String key, boolean defaultValue) {
-		String val = properties.getProperty(key);
+		String val = getProperty(key);
 		if(!StringUtils.isEmpty(val)) {
 			return Boolean.parseBoolean(val);
 		}
 		return defaultValue;
 	}
 	
-	public void setProperty(String key, String value) {
-		if(properties == null) {
-			properties = createProperties();
+	/**
+	 * Sets the Facebook ID for FB authentication.  
+	 * @param appId Your Facebook App Id, obtained from https://developers.facebook.com/
+	 * @see "https://developers.facebook.com/"
+	 */
+	public void setFacebookAppId(String appId) {
+		setProperty(SocializeConfig.FACEBOOK_APP_ID, appId);
+	}
+
+	/**
+	 * Enables/disables Single Sign On for Facebook.
+	 * @param enabled True if enabled.  Default is true.
+	 */
+	public void setFacebookSingleSignOnEnabled(boolean enabled) {
+		setProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, String.valueOf(enabled));
+	}
+
+	/**
+	 * Sets the FB credentials for the current user if available.
+	 * @param userId
+	 * @param token
+	 */
+	public void setFacebookUserCredentials(String userId, String token) {
+		setProperty(SocializeConfig.FACEBOOK_USER_ID, userId);
+		setProperty(SocializeConfig.FACEBOOK_USER_TOKEN, token);
+	}
+	
+	/**
+	 * Sets the Socialize credentials for your App.
+	 * @param consumerKey Your consumer key, obtained via registration at http://getsocialize.com
+	 * @param consumerSecret Your consumer secret, obtained via registration at http://getsocialize.com
+	 */
+	public void setSocializeCredentials(String consumerKey, String consumerSecret) {
+		setProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY, consumerKey);
+		setProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET, consumerSecret);
+	}	
+	
+	protected String getLocalProperty(String key) {
+		return getLocalProperty(key, null);
+	}
+	
+	protected String getLocalProperty(String key, String defaultValue) {
+		String val = properties.getProperty(key);
+		if(!StringUtils.isEmpty(val)) {
+			return val;
 		}
-		properties.put(key, value);
+		return defaultValue;
+	}
+	
+	public void merge(SocializeConfig config) {
+		merge(config.getProperties(), null);
 	}
 	
 	/**
@@ -198,9 +292,11 @@ public class SocializeConfig {
 			properties = createProperties();
 		}
 		
-		Set<Entry<Object, Object>> entrySet = other.entrySet();
-		for (Entry<Object, Object> entry : entrySet) {
-			properties.put(entry.getKey(), entry.getValue());
+		if(other != null && other.size() > 0) {
+			Set<Entry<Object, Object>> entrySet = other.entrySet();
+			for (Entry<Object, Object> entry : entrySet) {
+				properties.put(entry.getKey(),  entry.getValue());
+			}
 		}
 		
 		if(toBeRemoved != null && toBeRemoved.size() > 0) {

@@ -1,0 +1,24 @@
+.. raw:: html
+
+	<pre class="brush: java">
+	
+	import com.socialize.Socialize;
+	import com.socialize.error.SocializeException;
+	import com.socialize.listener.like.LikeListListener;
+	import com.socialize.entity.Like;
+	import com.socialize.entity.ListResult;
+
+	if(Socialize.getSocialize().isAuthenticated()) {
+		// List likes for a single user
+		Socialize.getSocialize().listLikesByUser(1234, new LikeListListener() {
+
+			public void onError(SocializeException error) {
+				// Handle error
+			}
+
+			public void onList(ListResult&lt;Like&gt; likes) {
+				// Handle success
+			}
+		});
+	}
+	</pre>

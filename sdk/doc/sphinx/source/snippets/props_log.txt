@@ -1,0 +1,6 @@
+.. raw:: html
+
+	<pre class="brush: java-properties">
+	# Set to INFO or DEBUG to enable extended logging to logcat
+	log.level=DEBUG
+	</pre>

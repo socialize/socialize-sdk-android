@@ -34,7 +34,7 @@
 		<link>
 			<name>sdk_src</name>
 			<type>2</type>
-			<location>/Users/jasonpolites/dev/workspace/socialize-sdk-android/sdk/src</location>
+			<locationURI>WORKSPACE_LOC/socialize-sdk-android/sdk/src</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

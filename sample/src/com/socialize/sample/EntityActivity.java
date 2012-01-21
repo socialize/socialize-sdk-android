@@ -31,11 +31,13 @@ import android.widget.TextView;
 
 import com.socialize.Socialize;
 import com.socialize.entity.Entity;
+import com.socialize.entity.EntityStats;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.entity.EntityAddListener;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.sample.util.ErrorHandler;
 import com.socialize.ui.SocializeActivity;
+import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.util.StringUtils;
 
 public class EntityActivity extends SocializeActivity {
@@ -68,9 +70,9 @@ public class EntityActivity extends SocializeActivity {
 					String key = txtKey.getText().toString();
 					String name = txtName.getText().toString();
 					
-					final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Creating", "Please wait...");
+					final ProgressDialog progress = SafeProgressDialog.show(v.getContext(), "Creating", "Please wait...");
 					
-					Socialize.getSocialize().addEntity(key, name, new EntityAddListener() {
+					Socialize.getSocialize().addEntity(EntityActivity.this, Entity.newInstance(key, name), new EntityAddListener() {
 						
 						@Override
 						public void onError(SocializeException error) {
@@ -103,7 +105,7 @@ public class EntityActivity extends SocializeActivity {
 					String key = txtKey.getText().toString();
 					
 					if(!StringUtils.isEmpty(key)) {
-						final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Retrieving", "Please wait...");
+						final ProgressDialog progress = SafeProgressDialog.show(v.getContext(), "Retrieving", "Please wait...");
 						
 						Socialize.getSocialize().getEntity(key, new EntityGetListener() {
 							
@@ -183,20 +185,24 @@ public class EntityActivity extends SocializeActivity {
 			txtEntityKeyCreated.setText(entity.getKey());
 		}
 		
-		if(entity.getShares() != null) {
-			txtEntityShares.setText(entity.getShares().toString());
-		}
+		EntityStats entityStats = entity.getEntityStats();
 		
-		if(entity.getLikes() != null) {
-			txtEntityLikes.setText(entity.getLikes().toString());
-		}
-		
-		if(entity.getViews() != null) {
-			txtEntityViews.setText(entity.getViews().toString());
-		}
-		
-		if(entity.getComments() != null) {
-			txtEntityComments.setText(entity.getComments().toString());
+		if(entityStats != null) {
+			if(entityStats.getShares() != null) {
+				txtEntityShares.setText(entityStats.getShares().toString());
+			}
+			
+			if(entityStats.getLikes() != null) {
+				txtEntityLikes.setText(entityStats.getLikes().toString());
+			}
+			
+			if(entityStats.getViews() != null) {
+				txtEntityViews.setText(entityStats.getViews().toString());
+			}
+			
+			if(entityStats.getComments() != null) {
+				txtEntityComments.setText(entityStats.getComments().toString());
+			}
 		}
 	}
 

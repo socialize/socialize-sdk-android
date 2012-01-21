@@ -1,0 +1,14 @@
+.. raw:: html
+
+	<pre class="brush: xml;tab-size: 4;highlight: [5,7]">
+		&lt;manifest...>
+		
+			&lt;!-- Permissions required for Push Notifications -->
+			&lt;!-- Replace your_package_name with your app package name -->
+			&lt;permission android:name="your_package_name.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+			
+			&lt;uses-permission android:name="your_package_name.permission.C2D_MESSAGE" />
+			&lt;uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />			
+		
+		&lt;/manifest>
+	</pre>

@@ -31,14 +31,13 @@ import android.widget.EditText;
 
 import com.jayway.android.robotium.solo.Solo;
 import com.socialize.Socialize;
-import com.socialize.sample.ui.SampleActivity;
+import com.socialize.sample.ui.SampleActivity2;
 import com.socialize.test.ui.ResultHolder;
-import com.socialize.ui.SocializeUI;
 
 /**
  * @author Jason Polites
  */
-public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTestCase2<SampleActivity> {
+public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTestCase2<SampleActivity2> {
 
 	protected final ResultHolder holder = new ResultHolder();
 	
@@ -46,12 +45,22 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	public static final String DEFAULT_ENTITY_URL = "http://socialize.integration.tests.com?somekey=somevalue&anotherkey=anothervalue";
 	public static final String DEFAULT_GET_ENTITY = "http://entity1.com";
 	public static final String SOCIALIZE_FACEBOOK_ID = "209798315709193";
+	
+	
+	public static final int BTN_FACEBOOK_SSO = 0;
+	public static final int BTN_MOCK_FACEBOOK = 1;
+	public static final int BTN_MOCK_SOCIALIZE = 2;
+	public static final int BTN_NOTIFICATIONS_ENABLED = 3;
+	public static final int BTN_CLEAR_CACHE = 4;
+	public static final int BTN_SHOW_COMMENTS = 5;
+	public static final int BTN_SHOW_ACTION_BAR_AUTO = 6;
+	public static final int BTN_SHOW_ACTION_BAR_MANUAL = 7;
 		
 	protected Solo robotium;
 	protected InputMethodManager imm = null;
 
 	public SocializeUIRobotiumTest() {
-		super("com.socialize.ui.sample", SampleActivity.class);
+		super("com.socialize.ui.sample", SampleActivity2.class);
 	}
 
 	public void setUp() throws Exception {
@@ -66,7 +75,7 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	@Override
 	protected void tearDown() throws Exception {
 		
-		SocializeUI.getInstance().destroy(getActivity(), true);
+		Socialize.getSocialize().destroy(true);
 		
 		try {
 			robotium.finish();
@@ -80,55 +89,64 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	
 	protected void toggleFacebookSSO(boolean on) {
 		if(!on) {
-			robotium.clickOnButton(0);
+			robotium.clickOnButton(BTN_FACEBOOK_SSO);
 		}
 	}
 	
 	protected void toggleMockedFacebook(boolean on) {
 		if(on) {
-			robotium.clickOnButton(1);
+			robotium.clickOnButton(BTN_MOCK_FACEBOOK);
 		}
 	}
 	
 	protected void toggleMockedSocialize(boolean on) {
 		if(on) {
-			robotium.clickOnButton(2);
+			robotium.clickOnButton(BTN_MOCK_SOCIALIZE);
 		}
-	}	
+	}
+	
+	protected void toggleNotificationsEnabled(boolean on) {
+		if(on) {
+			robotium.clickOnButton(BTN_NOTIFICATIONS_ENABLED);
+		}
+	}		
 	
 	protected void clearAuthCache() {
-		robotium.clickOnButton(3);
+		robotium.clickOnButton(BTN_CLEAR_CACHE);
 		robotium.waitForDialogToClose(5000);
 		assertNull(Socialize.getSocialize().getSession());
 	}
 	
 	protected void showComments() {
-		robotium.clickOnButton(4);
+		robotium.clickOnButton(BTN_SHOW_COMMENTS);
 	}
 	
 	protected void showActionBarAuto() {
-		robotium.clickOnButton(5);
+		robotium.clickOnButton(BTN_SHOW_ACTION_BAR_AUTO);
 	}
 	
 	protected void showActionBarManual() {
-		robotium.clickOnButton(6);
+		robotium.clickOnButton(BTN_SHOW_ACTION_BAR_MANUAL);
 	}
 	
 	protected void startWithFacebook(boolean sso) {
 		robotium.clearEditText(0);
 		robotium.enterText(0, DEFAULT_GET_ENTITY);
-		robotium.clearEditText(1);
-		robotium.enterText(1, SOCIALIZE_FACEBOOK_ID);
+		robotium.clearEditText(2);
+		robotium.enterText(2, SOCIALIZE_FACEBOOK_ID);
 		toggleFacebookSSO(sso);
 		toggleMockedFacebook(true);
 		clearAuthCache();
 	}
 	
 	protected void startWithoutFacebook() {
+		startWithoutFacebook(true);
+	}
+	protected void startWithoutFacebook(boolean clearCache) {
 		robotium.clearEditText(0);
 		robotium.enterText(0, DEFAULT_GET_ENTITY);
-		robotium.clearEditText(1);
-		clearAuthCache();
+		robotium.clearEditText(2);
+		if(clearCache) clearAuthCache();
 	}
 
 	protected void addResult(Object obj) {

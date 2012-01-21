@@ -24,6 +24,7 @@ package com.socialize.provider;
 import java.util.Collection;
 
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ActionType;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.ListResult;
@@ -75,6 +76,8 @@ public interface SocializeProvider<T> {
 	public ListResult<T> list(SocializeSession session, String endpoint, int startIndex, int endIndex) throws SocializeException;
 	
 	public T get(SocializeSession session, String endpoint, String id) throws SocializeException;
+	
+	public T get(SocializeSession session, String endpoint, String id, ActionType type) throws SocializeException;
 	
 	public ListResult<T> put(SocializeSession session, String endpoint, T object) throws SocializeException;
 

@@ -28,7 +28,7 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionPersister;
-import com.socialize.api.action.UserApi;
+import com.socialize.api.action.SocializeUserSystem;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeActionListener;
@@ -36,6 +36,7 @@ import com.socialize.listener.user.UserListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeUnitTest;
+import com.socialize.ui.profile.UserProfile;
 
 /**
  * @author Jason Polites
@@ -60,7 +61,7 @@ public class UserApiTest extends SocializeUnitTest {
 		
 		final int userId = 69;
 		
-		UserApi api = new UserApi(provider) {
+		SocializeUserSystem api = new SocializeUserSystem(provider) {
 			@Override
 			public void getAsync(SocializeSession session, String endpoint, String id, SocializeActionListener listener) {
 				addResult(id);
@@ -96,8 +97,11 @@ public class UserApiTest extends SocializeUnitTest {
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setProfilePicData(encodedImage);
+		user.setAutoPostCommentsFacebook(true);
+		user.setAutoPostLikesFacebook(true);
+		user.setNotificationsEnabled(true);
 		
-		UserApi api = new UserApi(provider) {
+		SocializeUserSystem api = new SocializeUserSystem(provider) {
 			@Override
 			public void putAsPostAsync(SocializeSession session, String endpoint, User object, SocializeActionListener listener) {
 				addResult(object);
@@ -107,7 +111,16 @@ public class UserApiTest extends SocializeUnitTest {
 		AndroidMock.replay(session);
 		AndroidMock.replay(user);
 		
-		api.saveUserProfile(context, session, firstName, lastName, encodedImage, listener);
+		UserProfile profile = new UserProfile();
+		profile.setFirstName(firstName);
+		profile.setLastName(lastName);
+		profile.setEncodedImage(encodedImage);
+		profile.setAutoPostCommentsFacebook(true);
+		profile.setAutoPostLikesFacebook(true);
+		profile.setNotificationsEnabled(true);
+		
+		
+		api.saveUserProfile(context, session, profile, listener);
 		
 		AndroidMock.verify(session);
 		AndroidMock.verify(user);
@@ -146,8 +159,11 @@ public class UserApiTest extends SocializeUnitTest {
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setProfilePicData(encodedImage);
+		user.setAutoPostCommentsFacebook(true);
+		user.setAutoPostLikesFacebook(true);
+		user.setNotificationsEnabled(true);
 		
-		UserApi api = new UserApi(provider) {
+		SocializeUserSystem api = new SocializeUserSystem(provider) {
 			@Override
 			public void putAsPostAsync(SocializeSession session, String endpoint, User object, SocializeActionListener listener) {
 				addResult(listener);
@@ -161,7 +177,15 @@ public class UserApiTest extends SocializeUnitTest {
 		AndroidMock.replay(sessionPersister);
 		AndroidMock.replay(user);
 		
-		api.saveUserProfile(context, session, firstName, lastName, encodedImage, listener);
+		UserProfile profile = new UserProfile();
+		profile.setFirstName(firstName);
+		profile.setLastName(lastName);
+		profile.setEncodedImage(encodedImage);
+		profile.setAutoPostCommentsFacebook(true);
+		profile.setAutoPostLikesFacebook(true);
+		profile.setNotificationsEnabled(true);
+		
+		api.saveUserProfile(context, session, profile, listener);
 		
 		// This will fail if it's the wrong type
 		UserSaveListener listenerFound = getNextResult();

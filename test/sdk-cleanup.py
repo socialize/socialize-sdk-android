@@ -15,11 +15,14 @@ def create_android_config(key,secret,url,fb_user_id,fb_token):
     text = 'socialize.consumer.key='+key
     text+= '\nsocialize.consumer.secret='+secret
     text+= '\napi.host='+url
-    text+= '\nlog.level=INFO'
+    text+= '\nredirect.host=http://stage.getsocialize.com'
+    text+= '\nlog.level=DEBUG'
+    text+= '\nsocialize.register.notification=false'
     text+= '\nfacebook.app.id=209798315709193'
     text+= '\nfacebook.user.id='+fb_user_id
     text+= '\nfacebook.token='+fb_token
     text+= '\ntest_value=sample'
+    text+= '\nuntrimmed=value '
     text+= '\n'
     f.write(text)
     print text

@@ -1,0 +1,35 @@
+.. raw:: html
+
+	<pre class="brush: java;">
+	// Create a class to capture the action bar reference
+	public class MyActionBarListener implements ActionBarListener {
+		private ActionBarView actionBarView;
+
+		@Override
+		public void onCreate(ActionBarView actionBar) {
+			// Store a reference to the actionBar view
+			this.actionBarView = actionBar;
+		}
+
+		public ActionBarView getActionBarView() {
+			return actionBarView;
+		}
+	}
+	
+	// The in the Activity which renders the ActionBar
+	
+	// Setup a listener to retain a reference
+	MyActionBarListener listener = new MyActionBarListener();
+
+	// Use the listener when you show the action bar
+	Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity, listener);
+
+	// Later (After the action bar has loaded!), you can reference the view to refresh
+	ActionBarView view = listener.getActionBarView();
+
+	if (view != null) {
+		Entity newEntity = new Entity(); // This would be your new entity
+		view.setEntity(newEntity);
+		view.refresh();
+	}	
+	</pre>

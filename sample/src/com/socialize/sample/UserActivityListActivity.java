@@ -13,6 +13,7 @@ import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.activity.UserActivityListListener;
 import com.socialize.sample.util.ErrorHandler;
+import com.socialize.ui.dialog.SafeProgressDialog;
 
 public class UserActivityListActivity extends ListActivity {
 
@@ -29,7 +30,7 @@ public class UserActivityListActivity extends ListActivity {
 			if(getIntent().getExtras() != null) {
 				Long key = getIntent().getExtras().getLong("user_id");
 				
-				final ProgressDialog progress = ProgressDialog.show(this, "Retrieving", "Please wait...");
+				final ProgressDialog progress = SafeProgressDialog.show(this, "Retrieving", "Please wait...");
 				
 				Socialize.getSocialize().listActivityByUser(key, new UserActivityListListener() {
 

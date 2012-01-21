@@ -26,34 +26,44 @@ import org.json.JSONObject;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.entity.Entity;
-import com.socialize.entity.factory.EntityFactory;
+import com.socialize.entity.AbstractEntityFactory;
+import com.socialize.entity.EntityStatsImpl;
+import com.socialize.sample.mocks.MockEntity;
 
 /**
  * @author Jason Polites
  */
-public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<Entity, EntityFactory> {
+@UsesMocks({EntityStatsImpl.class})
+public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<MockEntity, AbstractEntityFactory<MockEntity>> {
 
 	final String mockName = "test name";
 	final String mockKey = "test key";
+	final String mockMeta = "test meta";
 	final Integer mockLikes = new Integer(1);
 	final Integer mockShares = new Integer(2);
 	final Integer mockComments = new Integer(3);
 	final Integer mockViews = new Integer(4);
 	
+	protected EntityStatsImpl stats;
+	
 	@Override
 	protected void setupToJSONExpectations() throws JSONException {
 		AndroidMock.expect(object.getName()).andReturn(mockName);
 		AndroidMock.expect(object.getKey()).andReturn(mockKey);
+		AndroidMock.expect(object.getMetaData()).andReturn(mockMeta);
 		AndroidMock.expect(json.put("name", mockName)).andReturn(json);
 		AndroidMock.expect(json.put("key", mockKey)).andReturn(json);
+		AndroidMock.expect(json.put("meta", mockMeta)).andReturn(json);
 	}
 
 	@Override
 	protected void doToJSONVerify() {}
 
+	
 	@Override
 	protected void setupFromJSONExpectations() throws Exception {
+		
+		stats = AndroidMock.createMock(EntityStatsImpl.class);
 
 		AndroidMock.expect(json.has("name")).andReturn(true);
 		AndroidMock.expect(json.has("key")).andReturn(true);
@@ -61,6 +71,8 @@ public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<Entity
 		AndroidMock.expect(json.has("shares")).andReturn(true);
 		AndroidMock.expect(json.has("comments")).andReturn(true);
 		AndroidMock.expect(json.has("views")).andReturn(true);
+		AndroidMock.expect(json.has("meta")).andReturn(true);
+		
 		
 		AndroidMock.expect(json.isNull("name")).andReturn(false);
 		AndroidMock.expect(json.isNull("key")).andReturn(false);
@@ -68,9 +80,11 @@ public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<Entity
 		AndroidMock.expect(json.isNull("shares")).andReturn(false);
 		AndroidMock.expect(json.isNull("comments")).andReturn(false);
 		AndroidMock.expect(json.isNull("views")).andReturn(false);
+		AndroidMock.expect(json.isNull("meta")).andReturn(false);
 		
 		AndroidMock.expect(json.getString("name")).andReturn(mockName);
 		AndroidMock.expect(json.getString("key")).andReturn(mockKey);
+		AndroidMock.expect(json.getString("meta")).andReturn(mockMeta);
 		AndroidMock.expect(json.getInt("likes")).andReturn(mockLikes);
 		AndroidMock.expect(json.getInt("shares")).andReturn(mockShares);
 		AndroidMock.expect(json.getInt("views")).andReturn(mockViews);
@@ -78,32 +92,41 @@ public class EntityFactoryTest extends AbstractSocializeObjectFactoryTest<Entity
 		
 		object.setName(mockName);
 		object.setKey(mockKey);
-		object.setLikes(mockLikes);
-		object.setShares(mockShares);
-		object.setViews(mockViews);
-		object.setComments(mockComments);
+		object.setMetaData(mockMeta);
+		
+		stats.setLikes(mockLikes);
+		stats.setShares(mockShares);
+		stats.setViews(mockViews);
+		stats.setComments(mockComments);
+		
+		object.setEntityStats(stats);
 	}
 
 	@Override
 	protected void doFromJSONVerify() {}
 
-	@UsesMocks(Entity.class)
+	@UsesMocks(MockEntity.class)
 	@Override
-	protected Class<Entity> getObjectClass() {
-		return Entity.class;
+	protected Class<MockEntity> getObjectClass() {
+		return MockEntity.class;
 	}
 
 	@Override
-	protected EntityFactory createFactory() {
-		return new EntityFactory() {
+	protected AbstractEntityFactory<MockEntity> createFactory() {
+		return new AbstractEntityFactory<MockEntity>() {
 			@Override
-			public Entity instantiateObject(JSONObject json) {
+			public MockEntity instantiateObject(JSONObject json) {
 				return object;
 			}
 
 			@Override
 			public JSONObject instantiateJSON() {
 				return json;
+			}
+
+			@Override
+			protected EntityStatsImpl newEntityStatsImpl() {
+				return stats;
 			}
 		};
 	}

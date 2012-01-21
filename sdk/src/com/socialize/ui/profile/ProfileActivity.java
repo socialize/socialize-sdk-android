@@ -34,7 +34,6 @@ import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.User;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.SocializeUIActivity;
 import com.socialize.ui.comment.CommentActivity;
 import com.socialize.util.StringUtils;
@@ -50,17 +49,17 @@ public class ProfileActivity extends SocializeUIActivity {
 	private ProfileView view;
 
 	@Override
-	public void onCreateSafe(Bundle savedInstanceState) {
+	protected void onCreateSafe(Bundle savedInstanceState) {
 		
 		Bundle extras = getIntent().getExtras();
 
-		if (extras == null || !extras.containsKey(SocializeUI.USER_ID)) {
+		if (extras == null || !extras.containsKey(Socialize.USER_ID)) {
 			Toast.makeText(this, "No user id provided", Toast.LENGTH_SHORT).show();
 			finish();
 		}
 		else {
 			// If WE are the user being viewed, assume a profile update
-			String userId = extras.getString(SocializeUI.USER_ID);
+			String userId = extras.getString(Socialize.USER_ID);
 			
 			SocializeSession session = getSocialize().getSession();
 			

@@ -58,8 +58,8 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 
 				while (!requests.isEmpty() && running) {
 
-					if(logger != null && logger.isInfoEnabled()) {
-						logger.info("ImageLoadAsyncTask has [" +
+					if(logger != null && logger.isDebugEnabled()) {
+						logger.debug("ImageLoadAsyncTask has [" +
 								requests.size() +
 						"] images to load");
 					}
@@ -70,8 +70,8 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 
 						String url = request.getUrl();
 
-						if(logger != null && logger.isInfoEnabled()) {
-							logger.info("ImageLoadAsyncTask found image to load at: " + url);
+						if(logger != null && logger.isDebugEnabled()) {
+							logger.debug("ImageLoadAsyncTask found image to load at: " + url);
 						}
 
 						try {
@@ -83,8 +83,8 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 
 							if(drawable == null) {
 								drawable = loadImage(url);
-								if(logger != null && logger.isInfoEnabled()) {
-									logger.info("ImageLoadAsyncTask image loaded from: " + url);
+								if(logger != null && logger.isDebugEnabled()) {
+									logger.debug("ImageLoadAsyncTask image loaded from: " + url);
 								}
 							}
 							
@@ -96,8 +96,8 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 						}
 					}
 					else {
-						if(logger != null && logger.isInfoEnabled()) {
-							logger.info("ImageLoadAsyncTask request canceled for " + request.getUrl());
+						if(logger != null && logger.isDebugEnabled()) {
+							logger.debug("ImageLoadAsyncTask request canceled for " + request.getUrl());
 						}
 					}
 				}
@@ -129,15 +129,15 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 	}
 
 	public synchronized void enqueue(ImageLoadRequest request) {
-		if(running) {
+		if(isRunning()) {
 			
 			String url = request.getUrl();
 			
 			ImageLoadRequest current = requestsInProcess.get(url);
 			
 			if(current != null && !current.isCanceled()) {
-				if(logger != null && logger.isInfoEnabled()) {
-					logger.info("Image with url [" +
+				if(logger != null && logger.isDebugEnabled()) {
+					logger.debug("Image with url [" +
 							url +
 					"] already being loaded. Adding listener to queue on current request [" +
 					current.getUrl() +
@@ -206,6 +206,10 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 		
 		notifyAll();
 		doCancel(true);
+	}
+
+	public boolean isRunning() {
+		return running;
 	}
 
 	public void setLogger(SocializeLogger logger) {

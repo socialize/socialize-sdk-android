@@ -24,6 +24,8 @@ package com.socialize.test.mock;
 import android.content.Context;
 
 import com.socialize.entity.Entity;
+import com.socialize.entity.EntityStatsImpl;
+import com.socialize.sample.mocks.MockEntity;
 
 public class MockEntityProvider extends MockSocializeProvider<Entity> {
 
@@ -37,13 +39,19 @@ public class MockEntityProvider extends MockSocializeProvider<Entity> {
 
 	@Override
 	protected Entity makeObject(String id) {
-		Entity object = (Entity) objectFactory.instantiateObject(null);
+		MockEntity object = new MockEntity();
 		object.setId(1L);
 		object.setKey(id);
-		object.setComments(2);
-		object.setLikes(4);
-		object.setShares(6);
-		object.setViews(8);
+		
+		EntityStatsImpl stats = new EntityStatsImpl();
+		
+		stats.setComments(2);
+		stats.setLikes(4);
+		stats.setShares(6);
+		stats.setViews(8);
+		
+		object.setEntityStats(stats);
+		
 		object.setName("Mock entity");
 		return object;
 	}

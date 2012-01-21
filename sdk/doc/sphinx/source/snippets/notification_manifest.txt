@@ -1,0 +1,50 @@
+.. raw:: html
+
+	<pre class="brush: xml;tab-size: 4;highlight: [20,24,41,43]">
+		&lt;manifest...>
+		
+			&lt;application...>
+			
+				&lt;!-- Base Activities Required by Socialize -->
+				&lt;activity android:name="com.socialize.ui.comment.CommentActivity"/>
+				&lt;activity android:name="com.socialize.ui.action.ActionDetailActivity"/>
+				&lt;activity android:name="com.socialize.ui.profile.ProfileActivity"/>
+				&lt;activity android:name="com.socialize.auth.facebook.FacebookActivity"/>
+				
+				&lt;!-- Activities Required for Socialize Push Notifications -->			
+				&lt;activity android:name="com.socialize.ui.SocializeLaunchActivity" android:launchMode="singleTop"/>
+		
+				&lt;!-- Socialize Notification Receiver -->
+				&lt;!-- Replace your_package_name with your app package name -->
+				&lt;service android:name="com.socialize.notifications.SocializeC2DMReceiver"/>
+				&lt;receiver android:name="com.socialize.notifications.SocializeBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+					&lt;intent-filter>
+						&lt;action android:name="com.google.android.c2dm.intent.RECEIVE" />
+						&lt;category android:name="your_package_name" />
+					&lt;/intent-filter>
+					&lt;intent-filter>
+						&lt;action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+						&lt;category android:name="your_package_name" />
+					&lt;/intent-filter>
+				&lt;/receiver>
+	
+			&lt;/application>
+		
+			&lt;uses-permission android:name="android.permission.INTERNET"/>
+			
+			&lt;!-- Optional but recommended -->
+			&lt;uses-permission android:name="android.permission.READ_PHONE_STATE" />
+			
+			&lt;!-- Optionally add ONE of the following to include location data in comments -->
+			&lt;uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+			&lt;uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+			
+			&lt;!-- Permissions required for Push Notifications -->
+			&lt;!-- Replace your_package_name with your app package name -->
+			&lt;permission android:name="your_package_name.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+			
+			&lt;uses-permission android:name="your_package_name.permission.C2D_MESSAGE" />
+			&lt;uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />			
+		
+		&lt;/manifest>
+	</pre>

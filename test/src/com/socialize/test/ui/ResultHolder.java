@@ -27,7 +27,9 @@ public class ResultHolder {
 	@SuppressWarnings("unchecked")
 	public <T extends Object> T getResult(int index) {
 		if(!bucket.isEmpty()) {
-			return (T) bucket.get(index);
+			if(index < bucket.size()) {
+				return (T) bucket.get(index);
+			}
 		}
 		return (T) null;
 	}

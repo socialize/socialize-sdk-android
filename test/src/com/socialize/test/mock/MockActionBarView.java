@@ -54,8 +54,8 @@ public class MockActionBarView extends ActionBarView {
 	}
 
 	@Override
-	public String[] getEntityKeys() {
-		return super.getEntityKeys();
+	public String[] getBundleKeys() {
+		return super.getBundleKeys();
 	}
 
 	@Override

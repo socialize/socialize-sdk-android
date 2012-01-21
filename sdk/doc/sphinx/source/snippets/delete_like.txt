@@ -1,0 +1,23 @@
+.. raw:: html
+
+	<pre class="brush: java">
+	
+	import com.socialize.Socialize;
+	import com.socialize.entity.Entity;
+	import com.socialize.error.SocializeException;
+	import com.socialize.listener.like.LikeDeleteListener;
+
+	if(Socialize.getSocialize().isAuthenticated()) {
+		// Remove an existing like based on its numeric ID
+		Socialize.getSocialize().unlike(1234, new LikeDeleteListener() {
+
+			public void onError(SocializeException error) {
+				// Handle error
+			}
+
+			public void onDelete() {
+				// Handle success
+			}
+		});
+	}		
+	</pre>

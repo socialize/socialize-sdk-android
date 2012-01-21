@@ -5,6 +5,8 @@ sdk/doc/html
 sdk/local.properties
 sample/src_ext
 gh-pages
+*.pyc
+*.DS_Store
 sample/.settings
 sample/gen
 sample/bin
@@ -33,6 +35,8 @@ test/gen
 test/bin
 test/local.properties
 test/private
+snippets/bin
+snippets/gen
 titanium/bin
 ui/bin
 ui/gen

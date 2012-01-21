@@ -1,0 +1,12 @@
+.. raw:: html
+
+	<pre class="brush: java">
+	
+	import com.socialize.Socialize;
+	import com.socialize.entity.Entity;
+
+	// The "this" reference below refers to a Context object
+	// Create or retrieve your entity object
+	Entity entity = Entity.newInstance("http://someurl.com", "My Entity");	
+	Socialize.getSocializeUI().showCommentView(this, entity);		
+	</pre>

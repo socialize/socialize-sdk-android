@@ -2,6 +2,7 @@ package com.socialize.ui.comment;
 
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -10,25 +11,34 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Comment;
+import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
+import com.socialize.entity.Subscription;
+import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
+import com.socialize.listener.subscription.SubscriptionAddListener;
+import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.log.SocializeLogger;
-import com.socialize.ui.SocializeUI;
+import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
+import com.socialize.notifications.NotificationType;
 import com.socialize.ui.auth.AuthRequestDialogFactory;
 import com.socialize.ui.auth.AuthRequestListener;
 import com.socialize.ui.dialog.DialogFactory;
-import com.socialize.ui.facebook.FacebookWallPoster;
 import com.socialize.ui.header.SocializeHeader;
 import com.socialize.ui.slider.ActionBarSliderFactory;
 import com.socialize.ui.slider.ActionBarSliderFactory.ZOrder;
 import com.socialize.ui.slider.ActionBarSliderView;
+import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.LoadingListView;
+import com.socialize.util.AppUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 import com.socialize.view.BaseView;
@@ -39,20 +49,22 @@ public class CommentListView extends BaseView {
 	private CommentAdapter commentAdapter;
 	private boolean loading = true; // Default to true
 	
-	private String entityKey;
-	private String entityName;
-	private boolean useLink;
+	private Entity entity;
+	
 	private int startIndex = 0;
 	private int endIndex = defaultGrabLength;
 	
 	private SocializeLogger logger;
 	private DialogFactory<ProgressDialog> progressDialogFactory;
+	private DialogFactory<AlertDialog> alertDialogFactory;
 	private Drawables drawables;
+	private AppUtils appUtils;
 	private ProgressDialog dialog = null;
 	
 	private IBeanFactory<SocializeHeader> commentHeaderFactory;
 	private IBeanFactory<CommentEditField> commentEditFieldFactory;
 	private IBeanFactory<LoadingListView> commentContentViewFactory;
+	private IBeanFactory<CustomCheckbox> notificationEnabledOptionFactory;
 	
 	private View field;
 	private SocializeHeader header;
@@ -64,26 +76,30 @@ public class CommentListView extends BaseView {
 	private ActionBarSliderView slider;
 	private ActionBarSliderFactory<ActionBarSliderView> sliderFactory;
 	
-	private FacebookWallPoster facebookWallPoster;
-	
 	private RelativeLayout layoutAnchor;
 	private ViewGroup sliderAnchor;
+	private CustomCheckbox notifyBox;
 	
 	private CommentEntrySliderItem commentEntryPage;
 	
 	private OnCommentViewActionListener onCommentViewActionListener;
 	
-	public CommentListView(Context context, String entityKey, String entityName, boolean useLink) {
-		this(context);
-		this.entityKey = entityKey;
-		this.entityName = entityName;
-		this.useLink = useLink;
+	public CommentListView(Context context, Entity entity) {
+		super(context);
+		this.entity = entity;
 	}
 	
-	public CommentListView(Context context,String entityKey) {
+	@Deprecated
+	public CommentListView(Context context, String entityKey, String entityName, boolean useLink) {
+		this(context, Entity.newInstance(entityKey, entityName));
+	}
+	
+	@Deprecated
+	public CommentListView(Context context, String entityKey) {
 		this(context, entityKey, null, true);
 	}	
 	
+	@Deprecated
 	public CommentListView(Context context) {
 		super(context);
 	}
@@ -145,6 +161,31 @@ public class CommentListView extends BaseView {
 			commentEntryPage = commentEntryFactory.getBean(getCommentAddListener());
 		}
 		
+		boolean notificationsAvailable = appUtils.isNotificationsAvaiable(getContext());		
+		
+		if(notificationsAvailable) {
+			notifyBox = notificationEnabledOptionFactory.getBean();
+			notifyBox.setEnabled(false); // Start disabled
+			notifyBox.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					doNotificationStatusSave();
+				}
+			});
+			
+			User user = Socialize.getSocialize().getSession().getUser();
+			
+			if(user.isNotificationsEnabled()) {
+				notifyBox.setVisibility(View.VISIBLE);
+			}
+			else {
+				notifyBox.setVisibility(View.GONE);
+			}
+			
+			
+			sliderAnchor.addView(notifyBox);
+		}		
+		
 		content.setListAdapter(commentAdapter);
 		content.setScrollListener(getCommentScrollListener());
 
@@ -159,7 +200,7 @@ public class CommentListView extends BaseView {
 		
 		addView(layoutAnchor);
 	}
-
+	
 	protected CommentScrollListener getCommentScrollListener() {
 		return new CommentScrollListener(new CommentScrollCallback() {
 			@Override
@@ -199,46 +240,55 @@ public class CommentListView extends BaseView {
 			}
 
 			@Override
-			public void onComment(String text, boolean autoPostToFacebook, boolean shareLocation) {
+			public void onComment(String text, boolean autoPostToFacebook, boolean shareLocation, boolean subscribe) {
 				
 				text = StringUtils.replaceNewLines(text, 3, 2);
 				
 				if(!getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 					// Check that FB is enabled for this installation
-					if(getSocializeUI().isFacebookSupported()) {
+					if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
 						AuthRequestDialogFactory dialog = authRequestDialogFactory.getBean();
-						dialog.show(getContext(), getCommentAuthListener(text, autoPostToFacebook, shareLocation));
+						dialog.create(getContext(), getCommentAuthListener(text, autoPostToFacebook, shareLocation, subscribe)).show();
 					}
 					else {
 						// Just post as anon
-						doPostComment(text, false, shareLocation);
+						doPostComment(text, false, shareLocation, subscribe);
 					}
 				}
 				else {
-					doPostComment(text, autoPostToFacebook, shareLocation);
+					doPostComment(text, autoPostToFacebook, shareLocation, subscribe);
 				}
 			}
 		});
 	}
 	
-	protected AuthRequestListener getCommentAuthListener(final String text, final boolean autoPostToFacebook, final boolean shareLocation) {
+	protected AuthRequestListener getCommentAuthListener(final String text, final boolean autoPostToFacebook, final boolean shareLocation, final boolean subscribe) {
 		return new AuthRequestListener() {
 			@Override
 			public void onResult(Dialog dialog) {
-				doPostComment(text, autoPostToFacebook, shareLocation);
+				doPostComment(text, autoPostToFacebook, shareLocation, subscribe);
 			}
 		};
 	}
 
-	public void doPostComment(String comment, boolean autoPostToFacebook, boolean shareLocation) {
+	public void doPostComment(String text, boolean autoPostToFacebook, boolean shareLocation, final boolean subscribe) {
 		
 		dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
 		
-		CommentShareOptions options = new CommentShareOptions();
-		options.setShareFacebook(autoPostToFacebook);
+		ShareOptions options = newShareOptions();
+		
+		if(autoPostToFacebook) {
+			options.setShareTo(SocialNetwork.FACEBOOK);
+		}		
+		
 		options.setShareLocation(shareLocation);
 		
-		getSocialize().addComment(entityKey, comment, options, new CommentAddListener() {
+		Comment comment = newComment();
+		comment.setText(text);
+		comment.setNotificationsEnabled(subscribe);
+		comment.setEntity(entity);
+		
+		getSocialize().addComment(getActivity(), comment, null, options, new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -281,6 +331,10 @@ public class CommentListView extends BaseView {
 					dialog.dismiss();
 				}
 				
+				if(notifyBox != null) {
+					notifyBox.setChecked(subscribe);
+				}
+				
 				if(onCommentViewActionListener != null) {
 					onCommentViewActionListener.onPostComment(entity);
 				}
@@ -291,14 +345,9 @@ public class CommentListView extends BaseView {
 		SocializeSession session = getSocialize().getSession();
 		
 		if(session != null && session.getUser() != null) {
-			session.getUser().setAutoPostToFacebook(autoPostToFacebook);
+			session.getUser().setAutoPostCommentsFacebook(autoPostToFacebook);
 			session.getUser().setShareLocation(shareLocation);
 		}
-		
-		if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) && autoPostToFacebook) {
-			facebookWallPoster.postComment(getActivity(), entityKey, entityName, comment, useLink, null);
-		}
-		
 	}
 	
 	public void reload() {
@@ -326,7 +375,7 @@ public class CommentListView extends BaseView {
 		final List<Comment> comments = commentAdapter.getComments();
 
 		if(update || comments == null || comments.size() == 0) {
-			getSocialize().listCommentsByEntity(entityKey, 
+			getSocialize().listCommentsByEntity(entity.getKey(), 
 					startIndex,
 					endIndex,
 					new CommentListListener() {
@@ -349,31 +398,32 @@ public class CommentListView extends BaseView {
 
 				@Override
 				public void onList(ListResult<Comment> entities) {
-					int totalCount = entities.getTotalCount();
-					header.setText(totalCount + " Comments");
-					commentAdapter.setComments(entities.getItems());
-					commentAdapter.setTotalCount(totalCount);
+					
+					if(entities != null) {
+						int totalCount = entities.getTotalCount();
+						header.setText(totalCount + " Comments");
+						commentAdapter.setComments(entities.getItems());
+						commentAdapter.setTotalCount(totalCount);
 
-					if(totalCount <= endIndex) {
-						commentAdapter.setLast(true);
-					}
+						if(totalCount <= endIndex) {
+							commentAdapter.setLast(true);
+						}
 
-					if(update || comments == null) {
-						commentAdapter.notifyDataSetChanged();
-						content.scrollToTop();
+						if(update || comments == null) {
+							commentAdapter.notifyDataSetChanged();
+							content.scrollToTop();
+						}
 					}
 					
 					content.showList();
 
-					if(dialog != null) {
-						dialog.dismiss();
-					}
-
 					loading = false;
 					
-					if(onCommentViewActionListener != null) {
+					if(onCommentViewActionListener != null && entities != null) {
 						onCommentViewActionListener.onCommentList(CommentListView.this, entities.getItems(), startIndex, endIndex);
 					}
+					
+					if(dialog != null)  dialog.dismiss();
 				}
 			});
 		}
@@ -392,11 +442,109 @@ public class CommentListView extends BaseView {
 			}			
 		}
 	}
+	
+	// SO we can mock
+	protected Comment newComment() {
+		return new Comment();
+	}
 
+	protected void doNotificationStatusSave() {
+		
+		final ProgressDialog dialog = progressDialogFactory.show(getContext(), "Notifications", "Please wait...");
+		
+		if(notifyBox.isChecked()) {
+			getSocialize().subscribe(getContext(), entity, NotificationType.NEW_COMMENTS, new SubscriptionAddListener() {
+				@Override
+				public void onError(SocializeException error) {
+					if(dialog != null) dialog.dismiss();
+					showError(getContext(), error);
+					notifyBox.setChecked(false);
+				}
+				
+				@Override
+				public void onCreate(Subscription entity) {
+					if(commentEntryPage != null) {
+						commentEntryPage.getCommentEntryView().setNotifySubscribeState(true);
+					}
+					if(dialog != null) dialog.dismiss();
+					alertDialogFactory.show(getContext(), "Subscribe Successful", "We will notify you when someone posts a comment to this discussion.");
+				}
+			});
+		}
+		else {
+			getSocialize().unsubscribe(getContext(), entity, NotificationType.NEW_COMMENTS, new SubscriptionAddListener() {
+				@Override
+				public void onError(SocializeException error) {
+					if(dialog != null) dialog.dismiss();
+					showError(getContext(), error);
+					notifyBox.setChecked(true);
+				}
+				
+				@Override
+				public void onCreate(Subscription entity) {
+					if(commentEntryPage != null) {
+						commentEntryPage.getCommentEntryView().setNotifySubscribeState(false);
+					}
+					if(dialog != null) dialog.dismiss();
+					alertDialogFactory.show(getContext(), "Unsubscribe Successful", "You will no longer receive notifications for updates to this discussion.");
+				}
+			});
+		}		
+	}
+	
+	protected void doNotificationStatusLoad() {
+		if(notifyBox != null) {
+			notifyBox.showLoading();
+			
+			// Now load the subscription status for the user
+			getSocialize().getSubscription(entity, new SubscriptionGetListener() {
+				
+				@Override
+				public void onGet(Subscription subscription) {
+					
+					if(subscription == null) {
+						notifyBox.setChecked(false);
+						
+						if(commentEntryPage != null) {
+							commentEntryPage.getCommentEntryView().setNotifySubscribeState(true); // Default to true
+						}
+					}
+					else {
+						notifyBox.setChecked(subscription.isSubscribed());
+						
+						if(commentEntryPage != null) {
+							commentEntryPage.getCommentEntryView().setNotifySubscribeState(subscription.isSubscribed());
+						}
+					}
+					
+					notifyBox.hideLoading();
+				}
+				
+				@Override
+				public void onError(SocializeException error) {
+					notifyBox.setChecked(false);
+					
+					if(logger != null) {
+						logger.error("Error retrieving subscription info", error);
+					}
+					else {
+						error.printStackTrace();
+					}
+					
+					if(commentEntryPage != null) {
+						commentEntryPage.getCommentEntryView().setNotifySubscribeState(true); // Default to true
+					}
+					
+					notifyBox.hideLoading();
+				}
+			});
+		}		
+	}
+	
 	protected void getNextSet() {
 		
 		if(logger != null && logger.isDebugEnabled()) {
-			logger.info("getNextSet called on CommentListView");
+			logger.debug("getNextSet called on CommentListView");
 		}
 		
 		loading = true; // Prevent continuous load
@@ -415,7 +563,7 @@ public class CommentListView extends BaseView {
 			}
 		}
 
-		getSocialize().listCommentsByEntity(entityKey, 
+		getSocialize().listCommentsByEntity(entity.getKey(), 
 				startIndex,
 				endIndex,
 				new CommentListListener() {
@@ -481,6 +629,7 @@ public class CommentListView extends BaseView {
 
 		if(getSocialize().isAuthenticated()) {
 			doListComments(false);
+			doNotificationStatusLoad();
 		}
 		else {
 			SocializeException e = new SocializeException("Socialize not authenticated");
@@ -491,7 +640,9 @@ public class CommentListView extends BaseView {
 				onCommentViewActionListener.onError(e);
 			}
 			
-			content.showList();
+			if(content != null) {
+				content.showList();
+			}
 		}	
 		
 		if(onCommentViewActionListener != null) {
@@ -509,6 +660,10 @@ public class CommentListView extends BaseView {
 
 	public void setProgressDialogFactory(DialogFactory<ProgressDialog> progressDialogFactory) {
 		this.progressDialogFactory = progressDialogFactory;
+	}
+
+	public void setAlertDialogFactory(DialogFactory<AlertDialog> alertDialogFactory) {
+		this.alertDialogFactory = alertDialogFactory;
 	}
 
 	public void setDrawables(Drawables drawables) {
@@ -531,8 +686,26 @@ public class CommentListView extends BaseView {
 		this.commentContentViewFactory = commentContentViewFactory;
 	}
 
+	public void setAppUtils(AppUtils appUtils) {
+		this.appUtils = appUtils;
+	}
+
+	public void setNotificationEnabledOptionFactory(IBeanFactory<CustomCheckbox> notificationEnabledOptionFactory) {
+		this.notificationEnabledOptionFactory = notificationEnabledOptionFactory;
+	}
+
+	@Deprecated
 	public void setEntityKey(String entityKey) {
-		this.entityKey = entityKey;
+		if(entity == null) entity = new Entity();
+		entity.setKey(entityKey);
+	}
+
+	public Entity getEntity() {
+		return entity;
+	}
+
+	public void setEntity(Entity entity) {
+		this.entity = entity;
 	}
 
 	public boolean isLoading() {
@@ -575,10 +748,6 @@ public class CommentListView extends BaseView {
 		this.commentEntryFactory = commentEntryFactory;
 	}
 
-	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
-		this.facebookWallPoster = facebookWallPoster;
-	}
-
 	public int getTotalCount() {
 		return commentAdapter.getTotalCount();
 	}
@@ -587,12 +756,13 @@ public class CommentListView extends BaseView {
 		this.authRequestDialogFactory = authRequestDialogFactory;
 	}
 	
-	public void setUseLink(boolean useLink) {
-		this.useLink = useLink;
-	}
+	@Deprecated
+	public void setUseLink(boolean useLink) {}
 
+	@Deprecated
 	public void setEntityName(String entityName) {
-		this.entityName = entityName;
+		if(entity == null) entity = new Entity();
+		entity.setName(entityName);
 	}
 	
 	/**
@@ -600,16 +770,27 @@ public class CommentListView extends BaseView {
 	 */
 	public void onProfileUpdate() {
 		commentAdapter.notifyDataSetChanged();
-		
 		if(slider != null) {
 			slider.clearContent();
 		}
+		
+		User user = Socialize.getSocialize().getSession().getUser();
+		
+		if(notifyBox != null) {
+			if(user.isNotificationsEnabled()) {
+				notifyBox.setVisibility(View.VISIBLE);
+			}
+			else {
+				notifyBox.setVisibility(View.GONE);
+			}
+		}
 	}
 	
-	protected SocializeUI getSocializeUI() {
-		return SocializeUI.getInstance();
+	// So we can mock
+	protected ShareOptions newShareOptions() {
+		return new ShareOptions();
 	}
-
+	
 	protected RelativeLayout getLayoutAnchor() {
 		return layoutAnchor;
 	}
@@ -624,5 +805,9 @@ public class CommentListView extends BaseView {
 
 	public void setOnCommentViewActionListener(OnCommentViewActionListener onCommentViewActionListener) {
 		this.onCommentViewActionListener = onCommentViewActionListener;
+	}
+	
+	public ActionBarSliderView getCommentEntryViewSlider() {
+		return slider;
 	}
 }

@@ -62,7 +62,8 @@ public class DefaultInitializationAsserter implements SocializeInitializationAss
 
 	@Override
 	public boolean assertInitialized(SocializeService service, SocializeListener listener) {
-		if(!service.isInitialized()) {
+		boolean initialized = service.isInitialized();
+		if(!initialized) {
 			if(listener != null) {
 				if(logger != null) {
 					listener.onError(new SocializeException(logger.getMessage(SocializeLogger.NOT_INITIALIZED)));
@@ -73,7 +74,7 @@ public class DefaultInitializationAsserter implements SocializeInitializationAss
 			}
 			if(logger != null) logger.error(SocializeLogger.NOT_INITIALIZED);
 		}
-		return service.isInitialized();
+		return initialized;
 	}
 
 	public void setLogger(SocializeLogger logger) {

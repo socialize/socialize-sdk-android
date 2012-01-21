@@ -33,7 +33,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 import com.socialize.ui.view.SocializeButton;
@@ -215,9 +214,4 @@ public class ShareDialogView extends BaseView {
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
 	}
-
-	protected SocializeUI getSocializeUI() {
-		return SocializeUI.getInstance();
-	}
-	
 }

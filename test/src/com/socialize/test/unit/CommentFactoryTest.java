@@ -27,7 +27,7 @@ import org.json.JSONObject;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.entity.Comment;
-import com.socialize.entity.factory.CommentFactory;
+import com.socialize.entity.CommentFactory;
 
 /**
  * 
@@ -61,10 +61,18 @@ public class CommentFactoryTest extends AbstractSocializeActionFactoryTest<Comme
 	@Override
 	protected void setupFromJSONExpectations() throws JSONException {
 		final String text = "Test Comment";
+		final boolean subscribe = false;
+		
 		AndroidMock.expect(json.isNull("text")).andReturn(false);
 		AndroidMock.expect(json.has("text")).andReturn(true);
 		AndroidMock.expect(json.getString("text")).andReturn(text);
 		action.setText(text);
+		
+		AndroidMock.expect(json.isNull("subscribe")).andReturn(false);
+		AndroidMock.expect(json.has("subscribe")).andReturn(true);
+		AndroidMock.expect(json.getBoolean("subscribe")).andReturn(subscribe);
+		action.setNotificationsEnabled(subscribe);
+		
 	}
 
 	@Override
@@ -76,9 +84,15 @@ public class CommentFactoryTest extends AbstractSocializeActionFactoryTest<Comme
 	protected void setupToJSONExpectations() throws JSONException {
 		
 		final String text = "Test Comment";
+		final boolean subscribe = false;
 		
 		AndroidMock.expect(action.getText()).andReturn(text);
 		AndroidMock.expect(json.put("text", text)).andReturn(json);
+		
+		
+		AndroidMock.expect(action.isNotificationsEnabled()).andReturn(subscribe);
+		AndroidMock.expect(json.put("subscribe", subscribe)).andReturn(json);
+		
 	}
 
 	@Override

@@ -17,4 +17,6 @@ public class FactoryRef {
 	public void setMakes(String beanName) {
 		this.makes = beanName;
 	}
+	
+	
 }

@@ -77,6 +77,13 @@
 			<property name="build.target" value="instrument" />  
 			<property name="emma.enabled" value="true" />
 			<antcall target="instrument" inheritall="true" inheritrefs="true"/>
+			
+			<echo>Pushing required assets to device's card</echo>
+			<exec executable="${adb}" failonerror="true">
+				<arg line="push" />
+				<arg value="res/drawable-ldpi/icon.png" />
+				<arg value="/mnt/sdcard/" />
+			</exec>
 		</target>
 	
 		<target name="clean-all">

@@ -20,6 +20,7 @@ import java.io.Serializable;
 import oauth.signpost.exception.OAuthMessageSignerException;
 import oauth.signpost.http.HttpRequest;
 import oauth.signpost.http.HttpParameters;
+import oauth.socialize.OAuthSignListener;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -37,9 +38,10 @@ public abstract class OAuthMessageSigner implements Serializable {
         this.base64 = new Base64();
     }
 
-    public abstract String sign(HttpRequest request, HttpParameters requestParameters)
-            throws OAuthMessageSignerException;
-
+    public abstract String sign(HttpRequest request, HttpParameters requestParameters) throws OAuthMessageSignerException;
+    
+    public abstract String sign(HttpRequest request, HttpParameters requestParameters, OAuthSignListener listener) throws OAuthMessageSignerException;
+    
     public abstract String getSignatureMethod();
 
     public String getConsumerSecret() {

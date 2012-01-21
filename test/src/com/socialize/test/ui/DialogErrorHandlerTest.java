@@ -40,7 +40,7 @@ public class DialogErrorHandlerTest extends SocializeUIActivityTest {
 		AndroidMock.expect(builder.create()).andReturn(dialog);
 		AndroidMock.expect(drawables.getDrawable("socialize_icon_white.png")).andReturn(drawable);
 		AndroidMock.expect(builder.setIcon(drawable)).andReturn(builder);
-		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.SOCIALIZE_DEBUG_MODE, false)).andReturn(true);
+//		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.SOCIALIZE_DEBUG_MODE, false)).andReturn(true);
 		
 		dialog.show();
 		
@@ -50,8 +50,6 @@ public class DialogErrorHandlerTest extends SocializeUIActivityTest {
 				return builder;
 			}
 		};
-		
-		handler.setConfig(config);
 		
 		AndroidMock.replay(builder);
 		AndroidMock.replay(dialog);

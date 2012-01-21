@@ -1,0 +1,552 @@
+<beans>
+	
+	<bean id="classLoaderProvider" class="com.socialize.util.ClassLoaderProvider"/>
+
+	<bean id="resourceLocator" class="com.socialize.util.ResourceLocator">
+		<property name="classLoaderProvider" ref="classLoaderProvider"/>
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="config" class="com.socialize.config.SocializeConfig" context-aware="false">
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>
+		<property name="logger" ref="logger"/>
+		<property name="resourceLocator" ref="resourceLocator"/>
+	</bean>
+	
+	<bean id="logger" class="com.socialize.log.SocializeLogger">
+		<init-method name="init">
+			<arg ref="config"/>
+		</init-method>
+	</bean>
+	
+	<bean id="appUtils" class="com.socialize.util.DefaultAppUtils" context-aware="false">
+		<property name="logger" ref="logger"/>
+		<property name="config" ref="config"/>
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>
+	</bean>	
+	
+	<bean id="deviceUtils" class="com.socialize.util.DeviceUtils">
+		<property name="logger" ref="logger"/>
+		<property name="appUtils" ref="appUtils"/>
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>
+	</bean>
+
+	<bean id="httpUtils" class="com.socialize.util.HttpUtils" context-aware="false">
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>
+		<property name="resourceLocator" ref="resourceLocator"/>
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="locationManager" class="com.socialize.location.SocializeLocationManager">
+		<constructor-arg ref="appUtils"/>
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>
+	</bean>
+	
+	<bean id="locationProvider" class="com.socialize.location.DefaultLocationProvider">
+		<property name="appUtils" ref="appUtils"/>
+		<property name="locationManager" ref="locationManager"/>
+		<property name="locationListenerFactory" ref="locationListenerFactory"/>
+		
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>
+		
+		<destroy-method name="destroy"/>
+	</bean>
+	
+	<bean id="locationListener" class="com.socialize.location.SocializeLocationListener" singleton="false">
+		<property name="locationProvider" ref="locationProvider"/>
+	</bean>
+	
+	<bean id="initializationAsserter" class="com.socialize.init.DefaultInitializationAsserter">
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<factory id="locationListenerFactory" makes="locationListener"/>
+	
+	<bean id="ioUtils" class="com.socialize.util.IOUtils">
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="jsonParser" class="com.socialize.util.JSONParser">
+		<property name="ioUtils" ref="ioUtils"/>
+	</bean>
+	
+
+	<bean id="cache" class="com.socialize.util.DrawableCache">
+		<constructor-arg type="integer" value="10"/> <!-- Min size -->
+		<constructor-arg type="integer" value="100"/> <!-- Max size -->
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>		
+		<destroy-method name="destroy"/>
+	</bean>
+	
+	<bean id="bitmapBuilder" class="com.socialize.util.BitmapBuilder"/>
+	
+	<bean id="bitmapUtils" class="com.socialize.util.BitmapUtils">
+		<property name="bitmapBuilder" ref="bitmapBuilder"/>
+		<property name="base64Utils" ref="base64Utils"/>
+	</bean>
+	
+	<bean id="drawables" class="com.socialize.util.Drawables">
+		<property name="classLoaderProvider" ref="classLoaderProvider"/>
+		<property name="cache" ref="cache"/>
+		<property name="logger" ref="logger"/>
+		<property name="bitmapUtils" ref="bitmapUtils"/>
+		<init-method name="init">
+			<arg type="activity"/>
+		</init-method>		
+	</bean>	
+	
+	<bean id="base64Utils" class="com.socialize.util.Base64Utils"/>	
+	
+	<bean 
+		id="entityCache" 
+		class="com.socialize.ui.cache.EntityCache">
+		<constructor-arg type="integer" value="5"/> <!-- Min size -->
+		<constructor-arg type="integer" value="100"/> <!-- Max size -->
+		<property name="timeToLive" value="600000" type="integer"/> <!--  milliseconds -->
+		<destroy-method name="destroy"/>
+	</bean>	
+	
+	<bean id="authProviderData" class="com.socialize.auth.AuthProviderData" singleton="false"/>
+	
+	<factory id="authProviderDataFactory" makes="authProviderData"/>	
+	
+	<bean id="userAuthDataFactory" class="com.socialize.entity.UserAuthDataFactory"/>
+	
+	<bean id="statsFactory" class="com.socialize.entity.StatsFactory"/>
+	
+	<bean id="userFactory" class="com.socialize.entity.UserFactory">
+		<property name="statsFactory" ref="statsFactory"/>
+		<property name="userAuthDataFactory" ref="userAuthDataFactory"/>
+	</bean>
+	
+	<bean id="subscriptionFactory" class="com.socialize.entity.SubscriptionFactory">
+		<property name="userFactory" ref="userFactory"/>
+		<property name="entityFactory" ref="entityFactory"/>
+		<property name="logger" ref="logger"/>
+	</bean>	
+
+	<bean id="applicationFactory" class="com.socialize.entity.ApplicationFactory"/>
+	
+	<bean id="responseFactory" class="com.socialize.api.DefaultSocializeResponseFactory"/>
+	
+	<bean id="errorFactory" class="com.socialize.entity.ErrorFactory"/>
+	
+	<bean id="clientFactory" class="com.socialize.net.DefaultHttpClientFactory">
+		<init-method name="init">
+			<arg ref="config"/>
+		</init-method>
+		<destroy-method name="destroy"/>
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="sessionFactory" class="com.socialize.api.DefaultSocializeSessionFactory">
+		<constructor-arg ref="config"/>
+		<constructor-arg ref="authProviders"/>
+	</bean>
+	
+	<bean id="sessionPersister" class="com.socialize.api.PreferenceSessionPersister">
+		<constructor-arg ref="userFactory"/>
+		<constructor-arg ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="defaultProvider" class="com.socialize.provider.DefaultSocializeProvider" abstract="true">
+		
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>	
+		
+		<property name="logger" ref="logger"/>
+		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
+		<property name="userFactory" ref="userFactory"/>
+		<property name="clientFactory" ref="clientFactory"/>
+		<property name="sessionFactory" ref="sessionFactory"/>
+		<property name="errorFactory" ref="errorFactory"/>
+		<property name="config" ref="config"/>
+		<property name="jsonParser" ref="jsonParser"/>
+		<property name="httpUtils" ref="httpUtils"/>
+		<property name="ioUtils" ref="ioUtils"/>
+		<property name="sessionPersister" ref="sessionPersister"/>
+		
+	</bean>
+	
+	<bean id="actionProvider" class="com.socialize.provider.SocializeActionProvider" extends="defaultProvider">
+		<property name="commentFactory" ref="commentFactory"/>
+		<property name="shareFactory" ref="shareFactory"/>
+		<property name="viewFactory" ref="viewFactory"/>
+		<property name="likeFactory" ref="likeFactory"/>
+	</bean>	
+	
+	<bean id="authProviders" class="com.socialize.auth.AuthProviders">
+		<property name="providers">
+			<map>
+				<entry>
+					<key value="1" type="integer"/>
+					<value ref="facebookProvider"/>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+
+	<bean id="listenerHolder" class="com.socialize.listener.ListenerHolder">
+		<property name="logger" ref="logger"/>
+		<init-method name="init"/>
+	</bean>
+	
+	<bean id="socializeApi" class="com.socialize.api.SocializeApi" abstract="true">
+		<property name="responseFactory" ref="responseFactory"/>
+		<property name="config" ref="config"/>
+		<property name="logger" ref="logger"/>
+		<property name="authProviders" ref="authProviders"/>
+		<property name="httpUtils" ref="httpUtils"/>
+		<property name="locationProvider" ref="locationProvider"/>
+		<property name="notificationChecker" ref="notificationChecker"/>
+	</bean>
+	
+	<bean id="socializeActionFactory" class="com.socialize.entity.SocializeActionFactory" abstract="true">
+		<property name="logger" ref="logger"/>
+		<property name="applicationFactory" ref="applicationFactory"/>
+		<property name="userFactory" ref="userFactory"/>
+		<property name="entityFactory" ref="entityFactory"/>
+	</bean>
+
+	
+<!-- OAUTH -->
+	
+	<bean id="oauthConsumerFactory" class="com.socialize.oauth.CommonsHttpOAuthConsumerFactory"/>
+	<bean id="oauthSigningStrategy" class="oauth.signpost.signature.AuthorizationHeaderSigningStrategy"/>
+	<bean id="oauthSigner" class="com.socialize.oauth.DefaultOauthRequestSigner">
+		<constructor-arg ref="oauthConsumerFactory"/>
+		<constructor-arg ref="oauthSigningStrategy"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+	</bean>
+	
+	<bean id="signListener" class="oauth.socialize.LoggingOauthSignListener">
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="defaultRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory" abstract="true">
+		<property name="oauthSigner" ref="oauthSigner"/>
+		<property name="signListener" ref="signListener"/>
+	</bean>
+	
+	
+<!-- END OAUTH -->
+
+<!-- Comment API -->
+
+	<bean id="commentFactory" class="com.socialize.entity.CommentFactory" extends="socializeActionFactory"/>
+	
+	<bean id="commentRequestFactory" extends="defaultRequestFactory">
+		<property name="objectFactory" ref="commentFactory"/>
+	</bean>
+
+	<bean id="commentProvider" extends="defaultProvider">
+		<property name="objectFactory" ref="commentFactory"/>
+		<property name="requestFactory" ref="commentRequestFactory"/>
+	</bean>
+	
+	<bean id="commentSystem" class="com.socialize.api.action.SocializeCommentSystem" extends="socializeApi">
+		<constructor-arg ref="commentProvider"/>
+	</bean>
+	
+<!-- End Comment API -->	
+
+
+<!-- Entity API -->
+
+	<bean id="entityFactory" class="com.socialize.entity.EntityFactory"/>
+	
+	<bean id="entityRequestFactory" extends="defaultRequestFactory">
+		<property name="objectFactory" ref="entityFactory"/>
+	</bean>
+	
+	<bean id="entityProvider" extends="defaultProvider">
+		<property name="objectFactory" ref="entityFactory"/>
+		<property name="requestFactory" ref="entityRequestFactory"/>
+	</bean>
+	
+	<bean id="entitySystem" class="com.socialize.api.action.SocializeEntitySystem" extends="socializeApi">
+		<constructor-arg ref="entityProvider"/>
+	</bean>
+
+<!-- End Entity API -->
+
+<!-- Like API -->
+
+	<bean id="likeFactory" class="com.socialize.entity.LikeFactory" extends="socializeActionFactory"/>
+	
+	<bean id="likeRequestFactory" extends="defaultRequestFactory">
+		<property name="objectFactory" ref="likeFactory"/>
+	</bean>	
+
+	<bean id="likeProvider" extends="defaultProvider">
+		<property name="objectFactory" ref="likeFactory"/>
+		<property name="requestFactory" ref="likeRequestFactory"/>
+	</bean>
+	
+	<bean id="likeSystem" class="com.socialize.api.action.SocializeLikeSystem" extends="socializeApi">
+		<constructor-arg ref="likeProvider"/>
+	</bean>
+	
+<!-- End Like API -->	
+
+<!-- View API -->
+
+	<bean id="viewFactory" class="com.socialize.entity.ViewFactory" extends="socializeActionFactory"/>
+	
+	<bean id="viewRequestFactory" extends="defaultRequestFactory">
+		<property name="objectFactory" ref="viewFactory"/>
+	</bean>		
+	
+	<bean id="viewProvider" extends="defaultProvider">
+		<property name="objectFactory" ref="viewFactory"/>
+		<property name="requestFactory" ref="viewRequestFactory"/>
+	</bean>
+	
+	<bean id="viewSystem" class="com.socialize.api.action.SocializeViewSystem" extends="socializeApi">
+		<constructor-arg ref="viewProvider"/>
+	</bean>
+	
+<!-- End View API -->
+
+<!-- Share API -->
+
+	<bean id="shareFactory" class="com.socialize.entity.ShareFactory" extends="socializeActionFactory"/>
+	
+	<bean id="shareRequestFactory" extends="defaultRequestFactory">
+		<property name="objectFactory" ref="shareFactory"/>
+	</bean>		
+	
+	<bean id="shareProvider" extends="defaultProvider">
+		<property name="objectFactory" ref="shareFactory"/>
+		<property name="requestFactory" ref="shareRequestFactory"/>
+	</bean>
+	
+	<bean id="shareSystem" class="com.socialize.api.action.SocializeShareSystem" extends="socializeApi">
+		<constructor-arg ref="shareProvider"/>
+		<property name="logger" ref="logger"/>
+		<property name="sharers">
+			<map>
+				<entry>
+					<key value="facebook"/> <!-- MUST be lower case -->
+					<value ref="facebookSharer"/>
+				</entry>
+			</map>
+		</property>		
+	</bean>
+	
+<!-- End Share API -->
+
+<!-- User API -->
+
+	<bean id="userRequestFactory" extends="defaultRequestFactory">
+		<property name="objectFactory" ref="userFactory"/>
+	</bean>	
+
+	<bean id="userProvider" extends="defaultProvider">
+		<property name="objectFactory" ref="userFactory"/>
+		<property name="requestFactory" ref="userRequestFactory"/>
+	</bean>
+	
+	<bean id="userSystem" class="com.socialize.api.action.SocializeUserSystem" extends="socializeApi">
+		<constructor-arg ref="userProvider"/>
+		
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>
+				
+		<property name="sessionPersister" ref="sessionPersister"/>
+		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
+		<property name="deviceUtils" ref="deviceUtils"/>		
+	</bean>
+	
+<!-- End User API -->
+
+<!-- Activity API -->
+
+	<bean 
+		id="activityFactory" 
+		class="com.socialize.entity.GenericActionFactory" 
+		extends="socializeActionFactory">
+		
+		<property name="logger" ref="logger"/>
+		<property name="commentFactory" ref="commentFactory"/>
+		<property name="likeFactory" ref="likeFactory"/>
+		<property name="viewFactory" ref="viewFactory"/>
+		<property name="shareFactory" ref="shareFactory"/>
+		
+	</bean>
+	
+	<bean id="activityRequestFactory" extends="defaultRequestFactory">
+		<property name="objectFactory" ref="activityFactory"/>
+	</bean>		
+	
+	<bean id="activityProvider" extends="actionProvider">
+		<property name="objectFactory" ref="activityFactory"/>
+		<property name="requestFactory" ref="activityRequestFactory"/>
+	</bean>
+	
+	<bean id="activitySystem" class="com.socialize.api.action.SocializeActivitySystem" extends="socializeApi">
+		<constructor-arg ref="activityProvider"/>
+	</bean>
+	
+
+<!-- End Activity API -->
+
+<!-- Subscription API -->
+
+	<bean id="subscriptionRequestFactory" extends="defaultRequestFactory">
+		<property name="objectFactory" ref="subscriptionFactory"/>
+	</bean>	
+
+	<bean id="subscriptionProvider" extends="defaultProvider">
+		<property name="objectFactory" ref="subscriptionFactory"/>
+		<property name="requestFactory" ref="subscriptionRequestFactory"/>
+	</bean>
+	
+	<bean id="subscriptionSystem" class="com.socialize.api.action.SocializeSubscriptionSystem" extends="socializeApi">
+		<constructor-arg ref="subscriptionProvider"/>
+	</bean>
+	
+<!-- End Subscription API -->
+
+
+<!-- Device Registration API -->
+
+	<bean id="deviceRegistrationFactory" class="com.socialize.entity.DeviceRegistrationFactory"/>
+	
+	<bean id="deviceRegistrationRequestFactory" extends="defaultRequestFactory">
+		<property name="objectFactory" ref="deviceRegistrationFactory"/>
+	</bean>		
+	
+	<bean id="deviceRegistrationProvider" extends="defaultProvider">
+		<property name="objectFactory" ref="deviceRegistrationFactory"/>
+		<property name="requestFactory" ref="deviceRegistrationRequestFactory"/>
+	</bean>
+	
+	<bean id="deviceRegistrationSystem" class="com.socialize.api.SocializeDeviceRegistrationSystem" extends="socializeApi">
+		<constructor-arg ref="deviceRegistrationProvider"/>
+	</bean>
+	
+	<bean id="deviceRegistration" class="com.socialize.entity.DeviceRegistration" singleton="false"/>
+	
+	<factory id="deviceRegistrationObjectFactory" makes="deviceRegistration"/>
+	
+<!-- End Device Registration API -->
+
+
+<!--  Launcher -->
+
+	<bean id="activityLauncher" abstract="true">
+		<property name="appUtils" ref="appUtils"/>
+	</bean>
+
+	<bean id="actionLauncher" class="com.socialize.launcher.SocializeActionLauncher" extends="activityLauncher"/>
+
+	<bean id="launchManager" class="com.socialize.launcher.SocializeLaunchManager">
+		<property name="logger" ref="logger"/>
+		<property name="launchers">
+			<map>
+				<entry>
+					<key value="ACTION"/>
+					<value ref="actionLauncher"/>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+<!-- End Launcher -->
+
+
+<!-- Facebook -->
+	<bean id="shareMessageBuilder" class="com.socialize.api.DefaultShareMessageBuilder">
+		<property name="appUtils" ref="appUtils"/>
+		<property name="config" ref="config"/>
+	</bean>	
+
+	<bean id="facebookSessionStore" class="com.socialize.auth.facebook.FacebookSessionStore"/>
+	
+	<bean id="facebookUrlBuilder" class="com.socialize.auth.facebook.FacebookUrlBuilder"/>
+	 
+	<bean id="facebookProvider" class="com.socialize.auth.facebook.FacebookAuthProvider">
+		<property name="logger" ref="logger"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="facebookSessionStore" ref="facebookSessionStore"/>
+		<init-method name="init">
+			<arg type="context"/>
+			<arg ref="listenerHolder"/>
+		</init-method>
+	</bean>
+	
+	<bean 
+		id="facebook" 
+		class="com.socialize.facebook.Facebook"
+		singleton="false">
+		<constructor-arg ref="drawables"/>
+	</bean>
+	
+	<bean 
+		id="facebookWallPoster" 
+		class="com.socialize.networks.facebook.DefaultFacebookWallPoster">
+		<property name="logger" ref="logger"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="appUtils" ref="appUtils"/>
+		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
+	</bean>	
+	
+	<bean 
+		id="facebookSharer" 
+		class="com.socialize.networks.facebook.FacebookSharer">
+		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
+		<property name="config" ref="config"/>
+		<property name="logger" ref="logger"/>
+		<property name="facebookWallPoster" ref="facebookWallPoster"/>
+	</bean>		
+	
+	<!-- End Facebook -->
+
+	<!-- Notifications -->
+	<bean id="notificationAuthenticator" class="com.socialize.notifications.SocializeNotificationAuthenticator">
+		<property name="config" ref="config"/>
+		<property name="userSystem" ref="userSystem"/>
+	</bean>	
+	
+	<bean id="notificationRegistrationState" class="com.socialize.notifications.NotificationRegistrationState" context-aware="false">
+		<property name="logger" ref="logger"/>
+		<init-method name="load">
+			<arg type="context"/>
+		</init-method>	
+	</bean>		
+	
+	<bean id="notificationRegistrationSystem" class="com.socialize.notifications.SocializeNotificationRegistrationSystem">
+		<property name="config" ref="config"/>
+		<property name="logger" ref="logger"/>
+		<property name="deviceRegistrationFactory" ref="deviceRegistrationObjectFactory"/>
+		<property name="deviceRegistrationSystem" ref="deviceRegistrationSystem"/>
+		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
+	</bean>
+	
+	<bean id="notificationChecker" class="com.socialize.notifications.NotificationChecker" context-aware="false">
+		<property name="logger" ref="logger"/>
+		<property name="config" ref="config"/>
+		<property name="appUtils" ref="appUtils"/>
+		<property name="notificationRegistrationSystem" ref="notificationRegistrationSystem"/>
+		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
+	</bean>	
+
+</beans>

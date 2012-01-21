@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import oauth.socialize.OAuthSignListener;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
@@ -42,7 +44,7 @@ import org.json.JSONObject;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeObject;
-import com.socialize.entity.factory.SocializeObjectFactory;
+import com.socialize.entity.SocializeObjectFactory;
 import com.socialize.error.SocializeException;
 import com.socialize.oauth.OAuthRequestSigner;
 import com.socialize.util.StringUtils;
@@ -54,13 +56,30 @@ import com.socialize.util.UrlBuilder;
  */
 public class DefaultSocializeRequestFactory<T extends SocializeObject> implements SocializeRequestFactory<T> {
 
-	private OAuthRequestSigner signer;
+	private OAuthRequestSigner oauthSigner;
 	private SocializeObjectFactory<T> objectFactory;
+	private OAuthSignListener signListener;
 	
 	public DefaultSocializeRequestFactory(OAuthRequestSigner signer, SocializeObjectFactory<T> objectFactory) {
 		super();
-		this.signer = signer;
+		this.oauthSigner = signer;
 		this.objectFactory = objectFactory;
+	}
+	
+	public DefaultSocializeRequestFactory() {
+		super();
+	}
+	
+	public void setOauthSigner(OAuthRequestSigner signer) {
+		this.oauthSigner = signer;
+	}
+
+	public void setObjectFactory(SocializeObjectFactory<T> objectFactory) {
+		this.objectFactory = objectFactory;
+	}
+
+	public void setSignListener(OAuthSignListener signListener) {
+		this.signListener = signListener;
 	}
 	
 	@Override
@@ -82,7 +101,7 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(data);
 			post.setEntity(entity);
 			
-			signer.sign(session,post);
+			sign(session,post);
 		}
 		catch (UnsupportedEncodingException e) {
 			throw new SocializeException(e);
@@ -105,14 +124,14 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 	}
 	
 	public HttpUriRequest getGetRequest(SocializeSession session, String endpoint) throws SocializeException {
-		HttpGet get = signer.sign(session, new HttpGet(endpoint));
+		HttpGet get = sign(session, new HttpGet(endpoint));
 		return get;
 	}
 
 	@Override
 	public HttpUriRequest getDeleteRequest(SocializeSession session, String endpoint, String id) throws SocializeException {
 		endpoint += URLEncoder.encode(id) + "/";
-		HttpDelete del = signer.sign(session, new HttpDelete(endpoint));
+		HttpDelete del = sign(session, new HttpDelete(endpoint));
 		return del;
 	}
 
@@ -158,13 +177,13 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 		
 		HttpGet get = new HttpGet(builder.toString());
 
-		signer.sign(session, get);
+		sign(session, get);
 	
 		return get;
 	}
 
 	/**
-	 * @see this{@link #getListRequest(SocializeSession, String, String, String[], int, int)}
+	 * @see #getListRequest(SocializeSession, String, String, String[], int, int)
 	 */
 	@Override
 	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
@@ -230,11 +249,15 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 			data.add(new BasicNameValuePair("payload", payload));
 			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(data, "UTF-8");
 			request.setEntity(entity);
-			signer.sign(session, request);
+			sign(session, request);
 		}
 		catch (UnsupportedEncodingException e) {
 			throw new SocializeException(e);
 		}
+	}
+
+	protected <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+		return oauthSigner.sign(session, request, signListener);
 	}
 
 }

@@ -30,8 +30,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import com.socialize.Socialize;
+import com.socialize.entity.SocializeAction;
 import com.socialize.log.SocializeLogger;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.view.EntityView;
 import com.socialize.util.Drawables;
 
@@ -51,10 +52,10 @@ public class ActionDetailView extends EntityView {
 	 * @see com.socialize.ui.view.EntityView#getView(android.os.Bundle, java.lang.Object[])
 	 */
 	@Override
-	protected View getView(Bundle bundle, Object... entityKeys) {
-		if (entityKeys != null) {
+	protected View getView(Bundle bundle, Object... bundleKeys) {
+		if (bundleKeys != null) {
 			if(actionLayoutView == null) {
-				actionLayoutView = container.getBean("actionDetailLayoutView", entityKeys);
+				actionLayoutView = container.getBean("actionDetailLayoutView", bundleKeys);
 				
 				LayoutParams scrollViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
 				LayoutParams childViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
@@ -87,14 +88,26 @@ public class ActionDetailView extends EntityView {
 	 * @see com.socialize.ui.view.EntityView#getEntityKeys()
 	 */
 	@Override
-	protected String[] getEntityKeys() {
-		return new String[]{SocializeUI.USER_ID, SocializeUI.COMMENT_ID};
+	protected String[] getBundleKeys() {
+		return new String[]{Socialize.USER_ID, Socialize.ACTION_ID};
 	}
 
 	public void onProfileUpdate() {
 		if(actionLayoutView != null) {
 			actionLayoutView.onProfileUpdate();
 		}
+	}
+	
+	public void reload(String userId, String actionId) {
+		if(actionLayoutView != null) {
+			actionLayoutView.setUserId(userId);
+			actionLayoutView.setActionId(actionId);
+			actionLayoutView.reload();
+		}
+	}
+	
+	public SocializeAction getCurrentAction() {
+		return (actionLayoutView == null) ? null : actionLayoutView.getCurrentAction();
 	}
 
 	@Override

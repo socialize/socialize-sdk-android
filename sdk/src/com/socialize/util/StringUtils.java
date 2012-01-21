@@ -21,6 +21,8 @@
  */
 package com.socialize.util;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * @author Jason Polites
  */
@@ -50,6 +52,15 @@ public class StringUtils {
 		}
 		else {
 			return str0.equals(str1);
+		}
+	}
+	
+	public static String encodeUtf8(String text) {
+		try {
+			return new String(text.getBytes(), "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return text;
 		}
 	}
 	

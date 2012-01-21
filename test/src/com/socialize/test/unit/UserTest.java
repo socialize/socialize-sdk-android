@@ -72,6 +72,7 @@ public class UserTest extends SocializeUnitTest {
 		Stats stats = AndroidMock.createMock(Stats.class);
 		List<UserAuthData> authData = AndroidMock.createMock(List.class);
 		
+		final String meta = "foobar_meta";
 		final String firstName = "foobar_firstName";
 		final String lastName = "foobar_lastName";
 		final String userName = "foobar_userName";
@@ -81,6 +82,7 @@ public class UserTest extends SocializeUnitTest {
 		final String large_url = "foobar_large_url";
 		final String picture = "foobar_picture";
 		
+		AndroidMock.expect(mockUser.getMetaData()).andReturn(meta);
 		AndroidMock.expect(mockUser.getFirstName()).andReturn(firstName);
 		AndroidMock.expect(mockUser.getLastName()).andReturn(lastName);
 		AndroidMock.expect(mockUser.getUsername()).andReturn(userName);
@@ -99,6 +101,7 @@ public class UserTest extends SocializeUnitTest {
 		
 		AndroidMock.verify(mockUser);
 		
+		assertEquals(meta, realUser.getMetaData());
 		assertEquals(firstName, realUser.getFirstName());
 		assertEquals(lastName, realUser.getLastName());
 		assertEquals(userName, realUser.getUsername());

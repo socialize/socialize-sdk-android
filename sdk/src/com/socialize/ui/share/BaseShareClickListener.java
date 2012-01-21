@@ -29,8 +29,11 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.socialize.Socialize;
+import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ShareType;
+import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
+import com.socialize.error.SocializeErrorHandler;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.log.SocializeLogger;
@@ -49,6 +52,7 @@ public abstract class BaseShareClickListener implements ShareClickListener {
 	private ActionBarView actionBarView;
 	private OnActionBarEventListener onActionBarEventListener;
 	private EditText commentView;
+	private SocializeErrorHandler errorHandler;
 	
 	public BaseShareClickListener(ActionBarView actionBarView) {
 		this(actionBarView, null, null);
@@ -83,60 +87,62 @@ public abstract class BaseShareClickListener implements ShareClickListener {
 
 	@Override
 	public final void onClick(View v) {
-		Activity activity = getActivity(v);
-
-		String comment = null;
 		
-		if(commentView != null) {
-			comment = commentView.getText().toString();
-		}
+		try {
+
+			Activity activity = getActivity(v);
+
+			String comment = null;
+			
+			if(commentView != null) {
+				comment = commentView.getText().toString();
+			}
+			
+			Entity entity = actionBarView.getEntity();
+
+			if(entity != null) {
+
+				String text = comment;
+
+				if(StringUtils.isEmpty(text)) {
+					text = entity.getDisplayName();
+				}
+
+				// Record the share in Socialize
+				Socialize.getSocialize().addShare(activity, entity, text, getShareType(),
+					new ShareAddListener() {
 		
-		String entityKey = actionBarView.getEntityKey();
+						@Override
+						public void onError(SocializeException error) {
+							if(logger != null) {
+								logger.error("Error creating share", error);
+							}
+							else {
+								error.printStackTrace();
+							}
+						}
+		
+						@Override
+						public void onCreate(Share share) {
+							// TOOD: Update UI?
+							if(onActionBarEventListener != null) {
+								onActionBarEventListener.onPostShare(actionBarView, share);
+							}
+						}
+					});			
 
-		if(entityKey != null) {
 
-			String text = comment;
-
-			if(StringUtils.isEmpty(text)) {
-				text = entityKey;
+				doShare(activity, entity, comment);				
 			}
-
-			// Record the share in Socialize
-			Socialize.getSocialize().share(entityKey, text, getShareType(),
-				new ShareAddListener() {
-	
-					@Override
-					public void onError(SocializeException error) {
-						if(logger != null) {
-							logger.error("Error creating share", error);
-						}
-						else {
-							error.printStackTrace();
-						}
-					}
-	
-					@Override
-					public void onCreate(Share share) {
-						// TOOD: Update UI?
-						if(onActionBarEventListener != null) {
-							onActionBarEventListener.onPostShare(actionBarView, share);
-						}
-					}
-				});			
-
-			String title = "Share";
-			String subject = null;
-			String body = null;
-			if(isGenerateShareMessage()) {
-				subject = shareMessageBuilder.buildShareSubject(actionBarView.getEntityKey(), actionBarView.getEntityName());
-				body = shareMessageBuilder.buildShareMessage(actionBarView.getEntityKey(), actionBarView.getEntityName(), comment, isHtml(), isIncludeSocialize());
+			else {
+				if(logger != null) {
+					logger.error("Unable to complete share.  Entity key was not found in actionBarView.");
+				}
 			}
-
-			doShare(activity, title, subject, body, comment);				
-		}
-		else {
-			if(logger != null) {
-				logger.error("Unable to complete share.  Entity key was not found in actionBarView.");
+		} 
+		catch (Exception e) {
+			if(errorHandler != null) {
+				errorHandler.handleError(v.getContext(), e);
 			}
 		}
 	}
@@ -149,7 +155,9 @@ public abstract class BaseShareClickListener implements ShareClickListener {
 		this.shareMessageBuilder = shareMessageBuilder;
 	}
 	
-	protected abstract void doShare(Activity parent, String title, String subject, String body, String comment);
+	
+	protected abstract void doShare(Activity context, Entity entity, String comment);
+
 	
 	protected abstract boolean isHtml();
 	
@@ -173,6 +181,10 @@ public abstract class BaseShareClickListener implements ShareClickListener {
 
 	public void setOnActionBarEventListener(OnActionBarEventListener onActionBarEventListener) {
 		this.onActionBarEventListener = onActionBarEventListener;
+	}
+
+	public void setErrorHandler(SocializeErrorHandler errorHandler) {
+		this.errorHandler = errorHandler;
 	}
 	
 	

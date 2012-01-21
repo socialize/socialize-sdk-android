@@ -26,11 +26,16 @@ import com.socialize.api.DefaultSocializeRequestFactory;
 import com.socialize.api.DefaultSocializeResponseFactory;
 import com.socialize.api.DefaultSocializeSessionFactory;
 import com.socialize.api.PreferenceSessionPersister;
-import com.socialize.api.SocializeApiHost;
-import com.socialize.api.action.CommentApi;
+import com.socialize.api.action.SocializeActivitySystem;
+import com.socialize.api.action.SocializeCommentSystem;
+import com.socialize.api.action.SocializeEntitySystem;
+import com.socialize.api.action.SocializeLikeSystem;
+import com.socialize.api.action.SocializeShareSystem;
+import com.socialize.api.action.SocializeUserSystem;
+import com.socialize.api.action.SocializeViewSystem;
 import com.socialize.config.SocializeConfig;
-import com.socialize.entity.factory.CommentFactory;
-import com.socialize.entity.factory.UserFactory;
+import com.socialize.entity.CommentFactory;
+import com.socialize.entity.UserFactory;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.log.SocializeLogger;
 import com.socialize.net.DefaultHttpClientFactory;
@@ -52,8 +57,6 @@ import com.socialize.util.ResourceLocator;
  */
 public class SocializeIOCTest extends SocializeActivityTest {
 	
-	
-
 
 	public void testSocializeBeans() throws Exception {
 
@@ -64,12 +67,6 @@ public class SocializeIOCTest extends SocializeActivityTest {
 		locator.setLogger(new SocializeLogger());
 		locator.setClassLoaderProvider(new ClassLoaderProvider());
 		ioc.init(getActivity(), locator);
-
-		// First just make sure all the beans are there...
-
-		// Put a count assert to make sure this test fails when new beans are
-		// added so that developers are reminded to update this test.
-		assertEquals(65, ioc.size());
 
 		// Now make sure all our beans are there
 		checkBeanType(ioc, "deviceUtils", DeviceUtils.class);
@@ -87,8 +84,14 @@ public class SocializeIOCTest extends SocializeActivityTest {
 		checkBeanType(ioc, "commentFactory", CommentFactory.class);
 		checkBeanType(ioc, "commentRequestFactory", DefaultSocializeRequestFactory.class);
 		checkBeanType(ioc, "commentProvider", DefaultSocializeProvider.class);
-		checkBeanType(ioc, "commentApi", CommentApi.class);
-		checkBeanType(ioc, "socializeApiHost", SocializeApiHost.class);
+		checkBeanType(ioc, "commentSystem", SocializeCommentSystem.class);
+		checkBeanType(ioc, "shareSystem", SocializeShareSystem.class);
+		checkBeanType(ioc, "likeSystem", SocializeLikeSystem.class);
+		checkBeanType(ioc, "viewSystem", SocializeViewSystem.class);
+		checkBeanType(ioc, "userSystem", SocializeUserSystem.class);
+		checkBeanType(ioc, "entitySystem", SocializeEntitySystem.class);
+		checkBeanType(ioc, "activitySystem", SocializeActivitySystem.class);
+		checkBeanType(ioc, "commentSystem", SocializeCommentSystem.class);
 		checkBeanType(ioc, "responseFactory", DefaultSocializeResponseFactory.class);
 		checkBeanType(ioc, "sessionPersister",PreferenceSessionPersister.class);
 		

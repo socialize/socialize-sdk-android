@@ -31,9 +31,11 @@ import android.widget.TextView;
 
 import com.socialize.Socialize;
 import com.socialize.entity.Comment;
+import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.sample.util.ErrorHandler;
+import com.socialize.ui.dialog.SafeProgressDialog;
 
 public class CommentCreateActivity extends CommentBaseActivity {
 	@Override
@@ -56,8 +58,7 @@ public class CommentCreateActivity extends CommentBaseActivity {
 				@Override
 				public void onClick(View v) {
 					
-					final ProgressDialog progress = ProgressDialog.show(v.getContext(), "Posting Comment", "Please wait...");
-					
+					final ProgressDialog progress = SafeProgressDialog.show(v.getContext(), "Posting Comment", "Please wait...");
 					
 					txtCommentCreateResult.setText("");
 					btnCommentCreate.setEnabled(false);
@@ -65,7 +66,9 @@ public class CommentCreateActivity extends CommentBaseActivity {
 					String key = txtKey.getText().toString();
 					String name = txtName.getText().toString();
 					
-					Socialize.getSocialize().addComment(key, name, new CommentAddListener() {
+					Entity entity = Entity.newInstance(key, "Test Entity");
+					
+					Socialize.getSocialize().addComment(CommentCreateActivity.this, entity, name, new CommentAddListener() {
 						@Override
 						public void onError(SocializeException error) {
 							btnCommentCreate.setEnabled(true);

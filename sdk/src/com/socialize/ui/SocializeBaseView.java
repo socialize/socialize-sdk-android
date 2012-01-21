@@ -32,6 +32,7 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 
 import com.socialize.Socialize;
+import com.socialize.SocializeSystem;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
@@ -123,12 +124,34 @@ public abstract class SocializeBaseView extends BaseView {
 		this.container = container;
 	}
 
-	protected void initSocialize(SocializeInitListener listener) {
-		getSocializeUI().initSocializeAsync(this.getContext(), listener);
-	}
-	
-	protected SocializeUI getSocializeUI() {
-		return SocializeUI.getInstance();
+	protected void initSocialize(final SocializeInitListener listener) {
+		SocializeSystem system = getSocialize().getSystem();
+		String[] config = system.getBeanConfig();
+		
+		final SocializeInitListener systemListener = system.getSystemInitListener();
+		
+		if(systemListener != null) {
+			
+			SocializeInitListener overrideListener = new SocializeInitListener() {
+				
+				@Override
+				public void onError(SocializeException error) {
+					systemListener.onError(error);
+					listener.onError(error);
+				}
+				
+				@Override
+				public void onInit(Context context, IOCContainer container) {
+					systemListener.onInit(context, container);
+					listener.onInit(context, container);
+				}
+			};
+			
+			getSocialize().initAsync(getContext(), overrideListener, config);
+		}
+		else {
+			getSocialize().initAsync(getContext(), listener, config);
+		}
 	}
 	
 	public abstract View getLoadingView();
@@ -140,12 +163,12 @@ public abstract class SocializeBaseView extends BaseView {
 	protected void createOptionsMenuItem(final Activity source, Menu menu) {
 		if(Socialize.getSocialize().isAuthenticated()) {
 			MenuItem add = menu.add("Settings");
-			add.setIcon(SocializeUI.getInstance().getDrawable("ic_menu_preferences.png", DisplayMetrics.DENSITY_DEFAULT, true));
+			add.setIcon(Socialize.getSocializeUI().getDrawable("ic_menu_preferences.png", DisplayMetrics.DENSITY_DEFAULT, true));
 			add.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 				@Override
 				public boolean onMenuItemClick(MenuItem item) {
-					final String userId = Socialize.getSocialize().getSession().getUser().getId().toString();
-					SocializeUI.getInstance().showUserProfileViewForResult(source, userId, CommentActivity.PROFILE_UPDATE);
+					final Long userId = Socialize.getSocialize().getSession().getUser().getId();
+					Socialize.getSocializeUI().showUserProfileViewForResult(source, userId, CommentActivity.PROFILE_UPDATE);
 					return true;
 				}
 			});

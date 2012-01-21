@@ -155,8 +155,6 @@ public class Facebook {
 	 * @param activity
 	 *            The Android activity in which we want to display the
 	 *            authorization dialog.
-	 * @param applicationId
-	 *            The Facebook application identifier e.g. "350685531728"
 	 * @param permissions
 	 *            A list of permissions required for this application: e.g.
 	 *            "read_stream", "publish_stream", "offline_access", etc. see

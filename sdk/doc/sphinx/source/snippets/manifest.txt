@@ -1,0 +1,17 @@
+.. raw:: html
+
+	<pre class="brush: xml;">
+		&lt;manifest...>
+		
+		&lt;application...>
+		
+		         &lt;!-- Base Activities Required by Socialize -->
+		         &lt;activity android:name="com.socialize.ui.comment.CommentActivity"/>
+		         &lt;activity android:name="com.socialize.ui.action.ActionDetailActivity"/>
+		         &lt;activity android:name="com.socialize.ui.profile.ProfileActivity"/>
+		         &lt;activity android:name="com.socialize.auth.facebook.FacebookActivity"/>
+		
+		&lt;/application>
+		
+		&lt;/manifest>
+	</pre>

@@ -28,8 +28,9 @@ import android.location.Location;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.ShareApi;
+import com.socialize.api.action.SocializeShareSystem;
 import com.socialize.api.action.ShareType;
+import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.entity.SocializeAction;
 import com.socialize.listener.SocializeActionListener;
@@ -66,7 +67,7 @@ public class ShareApiTest extends SocializeUnitTest {
 		Location location = AndroidMock.createMock(Location.class, "foobar");
 		ShareType type = ShareType.OTHER;
 		
-		ShareApi api = new ShareApi(provider){
+		SocializeShareSystem api = new SocializeShareSystem(provider){
 
 			@Override
 			public void postAsync(SocializeSession session, String endpoint, List<Share> objects, SocializeActionListener listener) {
@@ -79,7 +80,7 @@ public class ShareApiTest extends SocializeUnitTest {
 			}
 		};
 		
-		api.addShare(session, key, shareText, type, location, listener);
+		api.addShare(session, Entity.newInstance(key, null), shareText, type, location, listener);
 		
 		Location loc = getNextResult();
 		List<Share> shares = getNextResult();

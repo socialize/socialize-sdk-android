@@ -23,7 +23,9 @@ package com.socialize.android.ioc;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 
@@ -33,14 +35,22 @@ import java.util.Map;
 public class BeanMapping {
 
 	private Map<String, BeanRef> beanRefs;
+	private Set<String> proxyRefs;
 	private Map<String, FactoryRef> factoryRefs;
+	private Map<String, ImportRef> importRefs;
 	
 	public BeanMapping() {
 		super();
 		this.factoryRefs = new LinkedHashMap<String, FactoryRef>();
 		this.beanRefs = new LinkedHashMap<String, BeanRef>();
+		this.proxyRefs = new LinkedHashSet<String>();
+		this.importRefs = new LinkedHashMap<String, ImportRef>();
 	}
 
+	public boolean containsBean(String name) {
+		return beanRefs.containsKey(name) || factoryRefs.containsKey(name);
+	}
+	
 	public Collection<BeanRef> getBeanRefs() {
 		return beanRefs.values();
 	}
@@ -48,21 +58,53 @@ public class BeanMapping {
 	public Collection<FactoryRef> getFactoryRefs() {
 		return factoryRefs.values();
 	}
+	
+	public Collection<ImportRef> getImportRefs() {
+		return importRefs.values();
+	}
 
+	public Set<String> getProxyRefs() {
+		return proxyRefs;
+	}
+
+	public void addProxyRef(String bean) {
+		proxyRefs.add(bean);
+	}
+	
 	public void addFactoryRef(FactoryRef ref) {
 		factoryRefs.put(ref.getName(), ref);
+	}
+	
+	public void addImportRef(ImportRef ref) {
+		importRefs.put(ref.getName(), ref);
 	}
 
 	public void addBeanRef(BeanRef ref) {
 		beanRefs.put(ref.getName(), ref);
 	}
-
+	
+	public void removeBeanRef(BeanRef ref) {
+		beanRefs.remove(ref.getName());
+	}
+	
 	public BeanRef getBeanRef(String name) {
 		return beanRefs.get(name);
 	}
 	
+	public ImportRef getImportRef(String name) {
+		return importRefs.get(name);
+	}
+	
 	public FactoryRef getFactoryRef(String name) {
 		return factoryRefs.get(name);
+	}
+	
+	public boolean hasProxy(String name) {
+		return proxyRefs.contains(name);
+	}
+	
+	public boolean isEmpty() {
+		return beanRefs.isEmpty() && factoryRefs.isEmpty() && proxyRefs.isEmpty();
 	}
 	
 	/**
@@ -83,6 +125,14 @@ public class BeanMapping {
 		if(otherFs != null) {
 			for (FactoryRef factoryRef : otherFs) {
 				addFactoryRef(factoryRef);
+			}
+		}
+		
+		Set<String> otherProxyRefs = mapping.getProxyRefs();
+		
+		if(otherProxyRefs != null) {
+			for (String bean : otherProxyRefs) {
+				addProxyRef(bean);
 			}
 		}
 	}

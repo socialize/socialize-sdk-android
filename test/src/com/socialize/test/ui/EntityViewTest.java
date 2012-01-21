@@ -11,6 +11,7 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.ui.SocializeUI;
 import com.socialize.ui.view.EntityView;
 
+@Deprecated
 public class EntityViewTest extends SocializeUIActivityTest {
 
 	@UsesMocks ({Activity.class, Intent.class})
@@ -42,7 +43,7 @@ public class EntityViewTest extends SocializeUIActivityTest {
 			}
 
 			@Override
-			protected String[] getEntityKeys() {
+			protected String[] getBundleKeys() {
 				return new String[]{SocializeUI.ENTITY_KEY};
 			}
 
@@ -93,7 +94,7 @@ public class EntityViewTest extends SocializeUIActivityTest {
 			}
 
 			@Override
-			protected String[] getEntityKeys() {
+			protected String[] getBundleKeys() {
 				return new String[]{SocializeUI.ENTITY_KEY};
 			}
 			
@@ -150,7 +151,7 @@ public class EntityViewTest extends SocializeUIActivityTest {
 		}
 
 		@Override
-		protected String[] getEntityKeys() {
+		protected String[] getBundleKeys() {
 			return null;
 		}
 

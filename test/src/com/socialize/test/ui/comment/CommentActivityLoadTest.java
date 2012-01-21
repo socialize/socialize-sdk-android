@@ -27,14 +27,22 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.KeyEvent;
 
+import com.socialize.Socialize;
+import com.socialize.SocializeAccess;
+import com.socialize.android.ioc.IOCContainer;
+import com.socialize.android.ioc.ProxyObject;
+import com.socialize.api.action.CommentSystem;
 import com.socialize.entity.Comment;
+import com.socialize.entity.Entity;
+import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
-import com.socialize.sample.mocks.MockSocializeApiHost;
+import com.socialize.listener.SocializeInitListener;
+import com.socialize.sample.mocks.MockCommentSystem;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
-import com.socialize.ui.SocializeUI;
 import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.comment.CommentListView;
 import com.socialize.ui.comment.OnCommentViewActionListener;
@@ -62,11 +70,17 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 		TestUtils.setupSocializeOverrides(true, true);
 		TestUtils.setUpActivityMonitor(CommentActivity.class);
 		
+		Entity entity1 = Entity.newInstance("http://entity1.com", null);
+		Entity entity2 = Entity.newInstance("http://entity2.com", null);
+		
 		final List<Comment> results = new ArrayList<Comment>();
 		final CountDownLatch lock = new CountDownLatch(1);
 		
 		List<Comment> dummyResults = new ArrayList<Comment>();
 		List<Comment> dummyResults2 = new ArrayList<Comment>();
+		
+		Comment c = new Comment();
+		c.setId(0L);
 		
 		Comment c0 = new Comment();
 		Comment c1 = new Comment();
@@ -92,9 +106,14 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 		dummyResults2.add(c21);
 		dummyResults2.add(c22);		
 		
-		MockSocializeApiHost.orchestrateListResult(Comment.class, dummyResults);
+		ListResult<Comment> lr = new ListResult<Comment>();
+		lr.setItems(dummyResults);
 		
-		SocializeUI.getInstance().showCommentView(getActivity(), "http://entity1.com", new OnCommentViewActionListener() {
+		final MockCommentSystem mockCommentSystem = new MockCommentSystem();
+		mockCommentSystem.setAction(c);
+		mockCommentSystem.setActionList(lr);
+		
+		Socialize.getSocializeUI().showCommentView(getActivity(), entity1, new OnCommentViewActionListener() {
 			public void onError(SocializeException error) {
 				error.printStackTrace();
 				lock.countDown();
@@ -110,6 +129,26 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 		});
 		
 		
+		SocializeAccess.setInitListener(new SocializeInitListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				fail();
+			}
+			
+			@Override
+			public void onInit(Context context, IOCContainer container) {
+				ProxyObject<CommentSystem> proxy = container.getProxy("commentSystem");
+				if(proxy != null) {
+					proxy.setDelegate(mockCommentSystem);
+				}
+				else {
+					System.err.println("Proxy is null!!");
+				}
+			}
+		});
+				
 		Activity waitForActivity = TestUtils.waitForActivity(5000);
 		
 		assertNotNull(waitForActivity);
@@ -124,9 +163,9 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 		
 		final CountDownLatch lock2 = new CountDownLatch(1);
 		
-		MockSocializeApiHost.orchestrateListResult(Comment.class, dummyResults2);
+		lr.setItems(dummyResults2);
 		
-		SocializeUI.getInstance().showCommentView(getActivity(), "http://entity2.com", new OnCommentViewActionListener() {
+		Socialize.getSocializeUI().showCommentView(getActivity(), entity2, new OnCommentViewActionListener() {
 			public void onError(SocializeException error) {
 				error.printStackTrace();
 				lock2.countDown();

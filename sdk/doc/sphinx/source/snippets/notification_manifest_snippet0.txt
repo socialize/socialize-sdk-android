@@ -1,0 +1,28 @@
+.. raw:: html
+
+	<pre class="brush: xml;tab-size: 4;highlight: [14,18]">
+		&lt;manifest...>
+		
+			&lt;application...>
+			
+				&lt;!-- Activities Required for Socialize Push Notifications -->			
+				&lt;activity android:name="com.socialize.ui.SocializeLaunchActivity" android:launchMode="singleTop"/>
+		
+				&lt;!-- Socialize Notification Receiver -->
+				&lt;!-- Replace your_package_name with your app package name -->
+				&lt;service android:name="com.socialize.notifications.SocializeC2DMReceiver"/>
+				&lt;receiver android:name="com.socialize.notifications.SocializeBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+					&lt;intent-filter>
+						&lt;action android:name="com.google.android.c2dm.intent.RECEIVE" />
+						&lt;category android:name="your_package_name" />
+					&lt;/intent-filter>
+					&lt;intent-filter>
+						&lt;action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+						&lt;category android:name="your_package_name" />
+					&lt;/intent-filter>
+				&lt;/receiver>
+	
+			&lt;/application>
+		
+		&lt;/manifest>
+	</pre>

@@ -39,15 +39,15 @@ import com.socialize.util.SafeBitmapDrawable;
 public class ImageUrlLoader {
 
 	public SafeBitmapDrawable loadImageFromUrl(String url) throws IOException {
-		URL imageUrl = new URL(url);
+		URL imageUrl = 	new URL(url);
 		URLConnection conn = null;
 		InputStream is = null;
 		
 		try {
 			conn = imageUrl.openConnection();
 			is = conn.getInputStream();
-			Bitmap bitmap = BitmapFactory.decodeStream(is);
-			return new CacheableDrawable(bitmap, url);
+			Bitmap bitmap = newBitmapDrawable(is);
+			return newCacheableDrawable(bitmap, url);
 		}
 		finally {
 			if (is != null) {
@@ -55,4 +55,12 @@ public class ImageUrlLoader {
 			}
 		}
 	}
+	
+	protected CacheableDrawable newCacheableDrawable(Bitmap bitmap,String url) {
+		return new CacheableDrawable(bitmap, url); 
+	}
+	protected Bitmap newBitmapDrawable (InputStream is) {
+		return BitmapFactory.decodeStream(is);
+	}
+
 }
