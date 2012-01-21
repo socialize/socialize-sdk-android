@@ -233,7 +233,7 @@ public class SocializeConfig {
 	/**
 	 * Sets the Facebook ID for FB authentication.  
 	 * @param appId Your Facebook App Id, obtained from https://developers.facebook.com/
-	 * @see https://developers.facebook.com/
+	 * @see "https://developers.facebook.com/"
 	 */
 	public void setFacebookAppId(String appId) {
 		setProperty(SocializeConfig.FACEBOOK_APP_ID, appId);

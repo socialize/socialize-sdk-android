@@ -183,7 +183,7 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 	}
 
 	/**
-	 * @see this{@link #getListRequest(SocializeSession, String, String, String[], int, int)}
+	 * @see #getListRequest(SocializeSession, String, String, String[], int, int)
 	 */
 	@Override
 	public HttpUriRequest getListRequest(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {

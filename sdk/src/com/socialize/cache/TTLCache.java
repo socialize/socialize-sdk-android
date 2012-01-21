@@ -177,9 +177,10 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 	
 	/**
 	 * Adds an object to cache with the given Time To Live in milliseconds
-	 * @param key
+	 * @param k
 	 * @param object
 	 * @param ttl milliseconds
+	 * @param eternal
 	 */
 	protected synchronized boolean put(K k, E object, long ttl, boolean eternal) {
 		
@@ -337,8 +338,8 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 	
 	/**
 	 * Returns true if the object with the given key resides in the cache.
-	 * @param key
-	 * @return
+	 * @param k
+	 * @return true if the object with the given key resides in the cache.
 	 */
 	public boolean exists(K k) {
 		Key<K> key = keys.get(k);
@@ -391,7 +392,7 @@ public class TTLCache<K extends Comparable<K>, E extends ICacheable<K>> {
 	
 	/**
 	 * Extends the ttl of the object with the given key with the current system time.
-	 * @param key
+	 * @param strKey
 	 */
 	public synchronized void extendTTL(K strKey) {
 		TTLObject<K, E> object = getTTLObject(strKey);

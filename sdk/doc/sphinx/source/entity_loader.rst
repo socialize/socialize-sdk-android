@@ -18,7 +18,7 @@ This is particularly important for push notifications and as such an entity load
 Creating the Entity Loader
 --------------------------
 
-There is only one Entity Loader per application and it can be set on the singleton Socialize instance:
+There is only one Entity Loader per application and it can be set on the Socialize instance:
 
 .. include:: snippets/entity_loader.txt
 

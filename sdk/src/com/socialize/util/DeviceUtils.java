@@ -180,7 +180,7 @@ public class DeviceUtils {
 	/**
 	 * Returns the Android market url for this app.
 	 * @param http If true an HTTP link is returned, otherwise a market:// link is returned.
-	 * @return
+	 * @return The HTTP url for the app on the Android Market
 	 * @deprecated use AppUtils
 	 */
 	@Deprecated
@@ -190,7 +190,7 @@ public class DeviceUtils {
 	
 	/**
 	 * @deprecated use AppUtils
-	 * @return
+	 * @return The package name of the app.
 	 */
 	@Deprecated
 	public String getPackageName() {
@@ -199,7 +199,7 @@ public class DeviceUtils {
 
 	/**
 	 * @deprecated use AppUtils
-	 * @return
+	 * @return The name of the app, as defined in the AndroidManifest.xml
 	 */
 	@Deprecated
 	public String getAppName() {
@@ -218,7 +218,7 @@ public class DeviceUtils {
 	 * @deprecated use AppUtils
 	 * @param context
 	 * @param permission
-	 * @return
+	 * @return true if the application has the given permission
 	 */
 	@Deprecated
 	public boolean hasPermission(Context context, String permission) {
@@ -228,7 +228,7 @@ public class DeviceUtils {
 	/**
 	 * @deprecated use AppUtils
 	 * @param context
-	 * @return
+	 * @return true if location is available.
 	 */
 	@Deprecated
 	public boolean isLocationAvaiable(Context context) {

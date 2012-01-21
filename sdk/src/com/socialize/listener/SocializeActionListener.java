@@ -26,8 +26,6 @@ import com.socialize.api.SocializeResponse;
 
 /**
  * @author Jason Polites
- *
- * @param <T>
  */
 public interface SocializeActionListener extends SocializeListener {
 

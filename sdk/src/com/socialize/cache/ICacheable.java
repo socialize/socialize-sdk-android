@@ -36,7 +36,6 @@ public interface ICacheable<K extends Comparable<K>> {
 	/**
 	 * Called when the object is retrieved to cache.
 	 * @param context 
-	 * @param key
 	 */
 	public boolean onGet(Context context);
 	

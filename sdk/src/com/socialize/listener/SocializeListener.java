@@ -25,8 +25,6 @@ import com.socialize.error.SocializeException;
 
 /**
  * @author Jason Polites
- *
- * @param <T>
  */
 public interface SocializeListener {
 

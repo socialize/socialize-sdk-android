@@ -38,7 +38,7 @@ public interface NotificationMessageBuilder {
 	 * @param context
 	 * @param bundle
 	 * @param message
-	 * @param data
+	 * @param icon
 	 * @return
 	 */
 	public Notification build(Context context, Bundle bundle, NotificationMessage message, int icon) throws SocializeException;

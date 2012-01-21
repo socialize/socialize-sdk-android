@@ -153,7 +153,7 @@ public class SocializeUI {
 	/**
 	 * Sets the Facebook ID for FB authentication.  
 	 * @param appId Your Facebook App Id, obtained from https://developers.facebook.com/
-	 * @see https://developers.facebook.com/
+	 * @see "https://developers.facebook.com/"
 	 */
 	@Deprecated
 	public void setFacebookAppId(String appId) {
@@ -176,7 +176,7 @@ public class SocializeUI {
 	
 	/**
 	 * Returns true if a Facebook ID has been set.
-	 * @return
+	 * @return true if a Facebook ID has been set.
 	 * @deprecated use Socialize instance.
 	 */
 	@Deprecated
@@ -255,8 +255,8 @@ public class SocializeUI {
 	/**
 	 * Displays the detail view for a single Socialize action.
 	 * @param context
-	 * @param userId
-	 * @param commentId
+	 * @param user
+	 * @param action
 	 * @param requestCode
 	 */
 	public void showActionDetailViewForResult(Activity context, User user, SocializeAction action, int requestCode) {

@@ -1484,12 +1484,9 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		return layoutInflater.inflate(resId, null);
 	}
 
-	/**
-	 * Displays the detail view for a single Socialize action.
-	 * @param context
-	 * @param userId
-	 * @param commentId
-	 * @param requestCode
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeUI#showActionDetailViewForResult(android.app.Activity, com.socialize.entity.User, com.socialize.entity.SocializeAction, int)
 	 */
 	@Override
 	public void showActionDetailViewForResult(Activity context, User user, SocializeAction action, int requestCode) {
