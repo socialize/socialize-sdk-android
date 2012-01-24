@@ -44,6 +44,7 @@ public class ActionBarView extends EntityView {
 	private ActionBarLayoutView actionBarLayoutView;
 	private ActionBarSliderView slider;
 	private ActionBarSliderFactory<ActionBarSliderView> sliderFactory;
+	private ActionBarListener actionBarListener;
 	
 	private boolean entityKeyIsUrl = true;
 	
@@ -82,6 +83,10 @@ public class ActionBarView extends EntityView {
 		
 		setListeners();
 		
+		if(actionBarListener != null) {
+			actionBarListener.onCreate(this);
+		}
+		
 		return actionBarLayoutView;
 	}
 	
@@ -112,6 +117,11 @@ public class ActionBarView extends EntityView {
 		}
 	}
 	
+	@Override
+	public void onViewRendered(int width, int height) {
+		super.onViewRendered(width, height);
+	}
+
 	public Entity getEntity() {
 		return entity;
 	}
@@ -196,5 +206,9 @@ public class ActionBarView extends EntityView {
 		if(actionBarLayoutView != null) {
 			actionBarLayoutView.startTicker();
 		}
+	}
+
+	public void setActionBarListener(ActionBarListener actionBarListener) {
+		this.actionBarListener = actionBarListener;
 	}
 }

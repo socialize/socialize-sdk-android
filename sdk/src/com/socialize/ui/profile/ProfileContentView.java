@@ -23,6 +23,8 @@ package com.socialize.ui.profile;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.text.InputFilter;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -30,6 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.socialize.Socialize;
@@ -47,6 +50,7 @@ import com.socialize.ui.view.SocializeButton;
 import com.socialize.ui.view.SocializeEditText;
 import com.socialize.util.AppUtils;
 import com.socialize.util.DeviceUtils;
+import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
 
 /**
@@ -57,6 +61,7 @@ public class ProfileContentView extends BaseView {
 
 	private DeviceUtils deviceUtils;
 	private AppUtils appUtils;
+	private Drawables drawables;
 	
 	private ProfilePictureEditView profilePictureEditView;
 	
@@ -88,6 +93,8 @@ public class ProfileContentView extends BaseView {
 	
 	private IBeanFactory<CustomCheckbox> notificationsEnabledCheckboxFactory;
 	private IBeanFactory<FacebookCheckbox> facebookEnabledCheckboxFactory;
+	
+	private int buttonLayoutViewId = 0;
 
 	public ProfileContentView(Activity context, ProfileLayoutView parent) {
 		super(context);
@@ -98,11 +105,17 @@ public class ProfileContentView extends BaseView {
 	public void init() {
 		
 		setOrientation(VERTICAL);
+		setBackgroundDrawable(drawables.getDrawable("slate.png", true, true, true));
+		
+		LayoutParams viewParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		
+		setLayoutParams(viewParams);
 		
 		ViewGroup master = makeMasterLayout();
 		ViewGroup buttons = makeButtonLayout();
 		
 		int margin = deviceUtils.getDIP(8);
+		buttonLayoutViewId = getNextViewId(this);
 		
 		LayoutParams commonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		commonParams.setMargins(0, margin, 0, margin);
@@ -180,8 +193,19 @@ public class ProfileContentView extends BaseView {
 		
 		setupListeners();
 		
-		addView(master);
+//		ViewGroup container = makeContainerLayout();
+		ViewGroup scrollView = makeScrollLayout();
+		
+		LinearLayout.LayoutParams childViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
+		scrollView.addView(master, childViewLayout);	
+		
+		addView(scrollView);
 		addView(buttons);
+		
+//		addView(container);		
+		
+//		addView(master);
+//		addView(buttons);
 	}
 	
 	protected void setupListeners() {
@@ -232,22 +256,19 @@ public class ProfileContentView extends BaseView {
 		}
 	}
 
-	protected ViewGroup makeMasterLayout() {
-		LinearLayout master = new LinearLayout(getContext());
-		int padding = deviceUtils.getDIP(8);
-		LayoutParams masterParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-		master.setLayoutParams(masterParams);
-		master.setOrientation(LinearLayout.VERTICAL);
-		master.setPadding(padding, padding, padding, padding);
-		master.setGravity(Gravity.TOP);
-		masterParams.weight = 1.0f;
-		return master;
+	protected ViewGroup makeScrollLayout() {
+		LinearLayout.LayoutParams scrollViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		scrollViewLayout.weight = 1.0f;
+		ScrollView scrollView = new ScrollView(getContext());
+		scrollView.setFillViewport(true);
+		scrollView.setLayoutParams(scrollViewLayout);
+		return scrollView;
 	}
-	
+
 	protected ViewGroup makeFacebookOptionsLayout() {
 		LinearLayout master = new LinearLayout(getContext());
 		int padding = deviceUtils.getDIP(8);
-		LayoutParams masterParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams masterParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		masterParams.setMargins(padding, 0, 0, 0);
 		master.setLayoutParams(masterParams);
 		master.setOrientation(LinearLayout.VERTICAL);
@@ -255,14 +276,33 @@ public class ProfileContentView extends BaseView {
 		return master;
 	}
 	
+	protected ViewGroup makeMasterLayout() {
+		LinearLayout master = new LinearLayout(getContext());
+		int padding = deviceUtils.getDIP(8);
+		LinearLayout.LayoutParams masterParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		masterParams.weight = 1.0f;
+		master.setLayoutParams(masterParams);
+		master.setOrientation(LinearLayout.VERTICAL);
+		master.setPadding(padding, padding, padding, padding);
+		master.setGravity(Gravity.TOP);
+		return master;
+	}
+	
 	protected ViewGroup makeButtonLayout() {
 		LinearLayout buttons = new LinearLayout(getContext());
 		int padding = deviceUtils.getDIP(8);
-		LayoutParams buttonParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+		buttons.setId(buttonLayoutViewId);
 		buttons.setLayoutParams(buttonParams);
 		buttons.setOrientation(LinearLayout.HORIZONTAL);
 		buttons.setPadding(padding, padding, padding, padding);
 		buttons.setGravity(Gravity.BOTTOM | Gravity.RIGHT);
+		
+		ColorDrawable background = new ColorDrawable(Color.BLACK);
+		background.setAlpha(64);
+		
+		buttons.setBackgroundDrawable(background);		
+		
 		return buttons;
 	}
 
@@ -405,6 +445,10 @@ public class ProfileContentView extends BaseView {
 
 	public void setFacebookEnabledCheckboxFactory(IBeanFactory<FacebookCheckbox> facebookEnabledCheckboxFactory) {
 		this.facebookEnabledCheckboxFactory = facebookEnabledCheckboxFactory;
+	}
+	
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
 	}
 
 	protected void toast(String text) {

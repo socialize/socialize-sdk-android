@@ -9,7 +9,6 @@ public class EntityTest extends SocializeRobotiumTest {
 	public void setUp() throws Exception {
 		super.setUp();
 		authenticateSocialize();
-		
 		robotium.clickOnButton("Entity");
 		robotium.waitForActivity("EntityActivity", DEFAULT_TIMEOUT_SECONDS);
 	}

@@ -409,11 +409,17 @@ public class ActionBarLayoutView extends BaseView {
 			public void onGet(Entity entity) {
 				CacheableEntity putEntity = setLocalEntity(entity);
 				setEntityData(putEntity);
+				
+				if(onActionBarEventListener != null) {
+					onActionBarEventListener.onGetEntity(actionBarView, entity);
+				}	
 			}
 			
 			@Override
 			public void onError(SocializeException error) {
-				logError("Error retrieving entity data", error);
+				if(logger != null && logger.isDebugEnabled()) {
+					logger.debug("Error retrieving entity data.  This may be ok if the entity is new", error);
+				}
 			}
 		});
 	}
@@ -422,10 +428,10 @@ public class ActionBarLayoutView extends BaseView {
 		Entity entity = ce.getEntity();
 		
 		// Set the entity back on the parent action bar
-		if(actionBarView.getEntity() != null) {
-			// TODO: Remove this once meta data is persisted
-			entity.setMetaData(actionBarView.getEntity().getMetaData());
-		}
+//		if(actionBarView.getEntity() != null) {
+//			// TODO: Remove this once meta data is persisted
+//			entity.setMetaData(actionBarView.getEntity().getMetaData());
+//		}
 		
 		actionBarView.setEntity(entity);
 		

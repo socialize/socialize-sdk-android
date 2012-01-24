@@ -26,7 +26,7 @@ public class Main extends Activity {
         super.onCreate(savedInstanceState);
         
 		// Your entity key.  May be passed as a Bundle parameter to your activity
-		final String entityKey = "http://getsocialize.com";
+		final String entityKey = "http://thisdoesnotexist.com";
 		
 		// Create an entity object, including a name.
 		final Entity entity = Entity.newInstance(entityKey, "Socialize");

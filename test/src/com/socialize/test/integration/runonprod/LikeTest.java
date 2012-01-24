@@ -32,8 +32,6 @@ public class LikeTest extends SocializeRobotiumTest {
 		assertTrue(value.trim().length() > 0);
 	}
 	
-
-	
 	private int getLikeId() {
 		
 		sleep(2000); // Wait for text field to be updated

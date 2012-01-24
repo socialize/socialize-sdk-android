@@ -2,6 +2,7 @@ package com.socialize.ui.view;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
@@ -125,8 +126,8 @@ public class CustomCheckbox extends BaseView {
 		
 		if(borderOn) {
 			GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Color.parseColor("#3f3f3f"), Color.parseColor("#5c5c5c") });
-			GradientDrawable topRight = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Color.BLACK, Color.BLACK });
-			GradientDrawable bottomLeft = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Color.GRAY, Color.GRAY });
+			ColorDrawable topRight = new ColorDrawable(Color.BLACK);
+			ColorDrawable bottomLeft = new ColorDrawable(Color.GRAY);
 			LayerDrawable bg = new LayerDrawable(new Drawable[] { bottomLeft, topRight, background });
 			
 			bg.setLayerInset(0, 1, 0, 0, 1);

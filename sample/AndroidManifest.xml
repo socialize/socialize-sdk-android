@@ -41,6 +41,7 @@
 	    <activity android:name="com.socialize.sample.ui.ActionBarManualActivity"/>
 	    <activity android:name="com.socialize.sample.ui.ActionBarManualActivity2"/>
 	    <activity android:name="com.socialize.sample.ui.ActionBarPagerActivity"/>
+	    <activity android:name="com.socialize.sample.ui.ActionBarListenerActivity"/>
 	    
 	    <!-- Activities Required by Socialize UI -->
 	    <activity android:name="com.socialize.auth.facebook.FacebookActivity"/>

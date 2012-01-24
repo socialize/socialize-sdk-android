@@ -762,6 +762,7 @@
 		
 		<property name="userService" ref="userService"/>
 		
+		<property name="drawables" ref="drawables"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="appUtils" ref="appUtils"/>
 		

@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.location.Address;
@@ -151,7 +152,7 @@ public class ActionDetailContentView extends BaseView {
 		actionLocation.setTextColor(Color.WHITE);
 		
 		
-		GradientDrawable actionbg = makeGradient(Color.WHITE, Color.WHITE);
+		ColorDrawable actionbg = new ColorDrawable(Color.WHITE);
 		actionbg.setAlpha(32);
 		
 		actionView.setBackground(actionbg);

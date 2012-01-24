@@ -103,7 +103,6 @@ public class CommentTest extends SocializeRobotiumTest {
 		assertEquals(userId, Integer.parseInt(value));
 	}
 	
-	
 	public void testGetComment() throws JSONException{
 		robotium.clickOnButton("Get Comment");
 		robotium.waitForActivity("CommentGetActivity", DEFAULT_TIMEOUT_SECONDS);
@@ -155,6 +154,5 @@ public class CommentTest extends SocializeRobotiumTest {
 		value = txt.getText().toString();
 		
 		assertEquals(commentUserId, value);
-		
 	}
 }

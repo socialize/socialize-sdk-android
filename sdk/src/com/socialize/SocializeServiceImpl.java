@@ -1418,6 +1418,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		RelativeLayout originalLayout = newRelativeLayout(parent);
 		
 		ActionBarView socializeActionBar = newActionBarView(parent);
+		socializeActionBar.setActionBarListener(listener);
 		socializeActionBar.assignId(original);
 		socializeActionBar.setEntity(entity);
 		
@@ -1429,10 +1430,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		
 		socializeActionBar.setLayoutParams(barParams);
 		originalLayout.setLayoutParams(originalParams);
-		
-		if(listener != null) {
-			listener.onCreate(socializeActionBar);
-		}
 		
 		boolean addScrollView = true;
 		
