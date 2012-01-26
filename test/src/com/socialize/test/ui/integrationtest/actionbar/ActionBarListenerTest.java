@@ -78,8 +78,8 @@ public class ActionBarListenerTest extends ActivityInstrumentationTestCase2<Empt
 		Intent intent = new Intent(getActivity(), ActionBarListenerActivity.class);
 		
 		Entity entity = new Entity();
-		entity.setKey("foobar");
-		entity.setName("foobar_name");
+		entity.setKey("foobar_testActionBarReload");
+		entity.setName("foobar_name_testActionBarReload");
 		
 		intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, "false");
@@ -124,8 +124,8 @@ public class ActionBarListenerTest extends ActivityInstrumentationTestCase2<Empt
 		});
 		
 		final Entity new_entity = new Entity();
-		new_entity.setKey("foobar2");
-		new_entity.setName("foobar_name2");
+		new_entity.setKey("foobar2_testActionBarReload");
+		new_entity.setName("foobar_name2_testActionBarReload");
 		
 		runTestOnUiThread(new Runnable() {
 			
@@ -142,7 +142,7 @@ public class ActionBarListenerTest extends ActivityInstrumentationTestCase2<Empt
 		Entity found = holder.get(0);
 		assertNotNull(found);
 		
-		assertEquals("foobar2", found.getKey());
+		assertEquals("foobar2_testActionBarReload", found.getKey());
 	}	
 	
 	protected ActionBarView waitForActionBar(long timeout)  {

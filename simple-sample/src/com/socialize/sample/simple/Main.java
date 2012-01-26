@@ -52,7 +52,7 @@ public class Main extends Activity {
 
 		// Wrap your existing view with the action bar.
 		// your_layout refers to the resource ID of your current layout.
-		View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.main, entity, new ActionBarListener() {
+		View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.order_completed, entity, new ActionBarListener() {
 
 			@Override
 			public void onCreate(ActionBarView actionBar) {

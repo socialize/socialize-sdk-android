@@ -113,22 +113,6 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 		mockCommentSystem.setAction(c);
 		mockCommentSystem.setActionList(lr);
 		
-		Socialize.getSocializeUI().showCommentView(getActivity(), entity1, new OnCommentViewActionListener() {
-			public void onError(SocializeException error) {
-				error.printStackTrace();
-				lock.countDown();
-			}
-			public void onReload(CommentListView view) {}
-			public void onPostComment(Comment comment) {}
-			public void onCreate(CommentListView view) {}
-			public void onCommentList(CommentListView view, List<Comment> comments, int start, int end) {}
-			public void onRender(CommentListView view) {
-				results.addAll(view.getCommentAdapter().getComments());
-				lock.countDown();
-			}
-		});
-		
-		
 		SocializeAccess.setInitListener(new SocializeInitListener() {
 			
 			@Override
@@ -147,7 +131,23 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 					System.err.println("Proxy is null!!");
 				}
 			}
+		});		
+		
+		Socialize.getSocializeUI().showCommentView(getActivity(), entity1, new OnCommentViewActionListener() {
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				lock.countDown();
+			}
+			public void onReload(CommentListView view) {}
+			public void onPostComment(Comment comment) {}
+			public void onCreate(CommentListView view) {}
+			public void onCommentList(CommentListView view, List<Comment> comments, int start, int end) {}
+			public void onRender(CommentListView view) {
+				results.addAll(view.getCommentAdapter().getComments());
+				lock.countDown();
+			}
 		});
+		
 				
 		Activity waitForActivity = TestUtils.waitForActivity(5000);
 		
@@ -161,9 +161,31 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 		sendKeys(KeyEvent.KEYCODE_BACK);
 		results.clear();
 		
+		TestUtils.setupSocializeOverrides(true, true);
+		
 		final CountDownLatch lock2 = new CountDownLatch(1);
 		
 		lr.setItems(dummyResults2);
+
+		SocializeAccess.setInitListener(new SocializeInitListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				fail();
+			}
+			
+			@Override
+			public void onInit(Context context, IOCContainer container) {
+				ProxyObject<CommentSystem> proxy = container.getProxy("commentSystem");
+				if(proxy != null) {
+					proxy.setDelegate(mockCommentSystem);
+				}
+				else {
+					System.err.println("Proxy is null!!");
+				}
+			}
+		});		
 		
 		Socialize.getSocializeUI().showCommentView(getActivity(), entity2, new OnCommentViewActionListener() {
 			public void onError(SocializeException error) {

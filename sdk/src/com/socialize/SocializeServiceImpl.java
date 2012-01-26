@@ -458,6 +458,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				container.destroy();
 			}
 			
+			system.destroy();
+			
 			initCount = 0;
 			initPaths = null;
 		}
@@ -628,7 +630,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	}
 	protected boolean checkKey(String name, String key, SocializeAuthListener authListener) {
 		if(StringUtils.isEmpty(key)) {
-			String msg = "No " + key + " specified";
+			String msg = "No key specified in authenticate";
 			if(authListener != null) {
 				authListener.onError(new SocializeException(msg));
 			}
@@ -1458,11 +1460,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				updatedOriginalParams = newLayoutParams(originalParams);
 			}
 			else {
-				updatedOriginalParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+				updatedOriginalParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 			}
 			
 			updatedOriginalParams.addRule(RelativeLayout.ABOVE, socializeActionBar.getId());
-			
 			
 			original.setLayoutParams(updatedOriginalParams);
 			
