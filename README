@@ -12,6 +12,15 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v1.3.1
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] re-added meta data to entity
+[feature] Save/cancel buttons in settings are fixed at screen bottom (don't scroll)
+[bug] ActionBar reload fails if entity does not exist
+[bug] scroll view does not fill width when action bar is inserted
+[bug] NPE on profile save when notifications not enabled
+[bug] Images on Galaxy Nexus do not render correctly
+
 v1.3
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [bug] Comment, Share and Like from SDK should post to FB without ActionBar
