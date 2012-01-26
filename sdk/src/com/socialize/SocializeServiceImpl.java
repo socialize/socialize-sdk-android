@@ -33,6 +33,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ScrollView;
@@ -1414,22 +1415,19 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 
 	@Override
 	public View showActionBar(Activity parent, View original, Entity entity, ActionBarOptions options, ActionBarListener listener) {
-		RelativeLayout barLayout = newRelativeLayout(parent);
-		RelativeLayout originalLayout = newRelativeLayout(parent);
+		RelativeLayout parentRelLyout = newRelativeLayout(parent);
+		RelativeLayout.LayoutParams barLayoutParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		parentRelLyout.setLayoutParams(barLayoutParams);
 		
 		ActionBarView socializeActionBar = newActionBarView(parent);
 		socializeActionBar.setActionBarListener(listener);
 		socializeActionBar.assignId(original);
 		socializeActionBar.setEntity(entity);
 		
-		LayoutParams barParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		barParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		LayoutParams socializeActionBarParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		socializeActionBarParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		
-		LayoutParams originalParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		originalParams.addRule(RelativeLayout.ABOVE, socializeActionBar.getId());
-		
-		socializeActionBar.setLayoutParams(barParams);
-		originalLayout.setLayoutParams(originalParams);
+		socializeActionBar.setLayoutParams(socializeActionBarParams);
 		
 		boolean addScrollView = true;
 		
@@ -1437,23 +1435,44 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			addScrollView = options.isAddScrollView();
 		}
 		
+		View contentView = null;
+		
 		if(addScrollView && !(original instanceof ScrollView) ) {
-			LayoutParams scrollViewParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+			RelativeLayout.LayoutParams scrollViewParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+			
+			scrollViewParams.addRule(RelativeLayout.ABOVE, socializeActionBar.getId());
+			
 			ScrollView scrollView = newScrollView(parent);
 			scrollView.setFillViewport(true);
+			scrollView.setScrollContainer(false);
 			scrollView.setLayoutParams(scrollViewParams);
 			scrollView.addView(original);
-			scrollView.setScrollContainer(false);
-			originalLayout.addView(scrollView);
+			
+			contentView = scrollView;
 		}
 		else {
-			originalLayout.addView(original);
-		}
+			ViewGroup.LayoutParams originalParams = original.getLayoutParams();
+			LayoutParams updatedOriginalParams = null;
+			
+			if(originalParams != null) {
+				updatedOriginalParams = newLayoutParams(originalParams);
+			}
+			else {
+				updatedOriginalParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			}
+			
+			updatedOriginalParams.addRule(RelativeLayout.ABOVE, socializeActionBar.getId());
+			
+			
+			original.setLayoutParams(updatedOriginalParams);
+			
+			contentView = original;
+		}		
+
+		parentRelLyout.addView(contentView);
+		parentRelLyout.addView(socializeActionBar);
 		
-		barLayout.addView(originalLayout);
-		barLayout.addView(socializeActionBar);
-		
-		return barLayout;
+		return parentRelLyout;
 	}
 
 	protected ActionBarView newActionBarView(Activity parent) {
@@ -1466,6 +1485,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 
 	protected LayoutParams newLayoutParams(int width, int height) {
 		return new LayoutParams(width, height);
+	}
+	
+	protected RelativeLayout.LayoutParams newLayoutParams(android.view.ViewGroup.LayoutParams source) {
+		return new RelativeLayout.LayoutParams(source);
 	}
 
 	protected RelativeLayout newRelativeLayout(Activity parent) {

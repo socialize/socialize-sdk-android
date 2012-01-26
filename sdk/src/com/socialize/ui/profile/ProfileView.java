@@ -64,7 +64,9 @@ public class ProfileView extends EntityView {
 	 * @param bitmap
 	 */
 	public void onImageChange(Bitmap bitmap) {
-		profileLayoutView.onImageChange(bitmap);
+		if(profileLayoutView != null) {
+			profileLayoutView.onImageChange(bitmap);
+		}
 	}
 	
 	@Override
