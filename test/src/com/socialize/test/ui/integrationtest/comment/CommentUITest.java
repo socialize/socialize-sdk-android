@@ -137,10 +137,6 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 	
 	protected void doSubscribeUnsubscribeTest(final boolean isSubscribed, String dialogTitle, String dialogBody) throws Throwable {
 		
-		toggleMockedFacebook(true);
-		toggleMockedSocialize(true);		
-		super.startWithoutFacebook();
-	
 		final MockSubscriptionSystem mockSystem = new MockSubscriptionSystem() {
 			@Override
 			public void getSubscription(SocializeSession session, Entity entity, SubscriptionListener listener) {
@@ -237,6 +233,9 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 			}
 		});		
 		
+		toggleMockedFacebook(true);
+		toggleMockedSocialize(true);		
+		super.startWithoutFacebook();
 		
 		showComments();
 		robotium.waitForActivity("CommentActivity", 5000);

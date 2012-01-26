@@ -26,7 +26,7 @@ public class Main extends Activity {
         super.onCreate(savedInstanceState);
         
 		// Your entity key.  May be passed as a Bundle parameter to your activity
-		final String entityKey = "http://getsocialize.com";
+		final String entityKey = "http://thisdoesnotexist.com";
 		
 		// Create an entity object, including a name.
 		final Entity entity = Entity.newInstance(entityKey, "Socialize");
@@ -52,7 +52,7 @@ public class Main extends Activity {
 
 		// Wrap your existing view with the action bar.
 		// your_layout refers to the resource ID of your current layout.
-		View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.main, entity, new ActionBarListener() {
+		View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.order_completed, entity, new ActionBarListener() {
 
 			@Override
 			public void onCreate(ActionBarView actionBar) {

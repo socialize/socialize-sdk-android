@@ -26,8 +26,8 @@ import java.util.Date;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -263,9 +263,9 @@ public class UserActivityListItem extends TableLayout {
 	
 	protected Drawable makeDefaultBackground() {
 		// TODO: Make a singleton
-		GradientDrawable shadow = makeGradient(bottomColor, bottomColor);
-		GradientDrawable highlight = makeGradient(topColor, topColor);
-		GradientDrawable surface = makeGradient(bgColor, bgColor);
+		ColorDrawable shadow = makeColorDrawable(bottomColor);
+		ColorDrawable highlight = makeColorDrawable(topColor);
+		ColorDrawable surface = makeColorDrawable(bgColor);
 		LayerDrawable layers = new LayerDrawable(new Drawable[] {shadow, highlight, surface});
 		
 		layers.setLayerInset(0, 0, 0, 0, 0);
@@ -282,11 +282,8 @@ public class UserActivityListItem extends TableLayout {
 	public void setTitleFontSize(int titleFontSize) {
 		this.titleFontSize = titleFontSize;
 	}
-
-	// So we can mock
-	protected GradientDrawable makeGradient(int bottom, int top) {
-		return new GradientDrawable(
-				GradientDrawable.Orientation.BOTTOM_TOP,
-				new int[] { bottom, top });
+	
+	protected ColorDrawable makeColorDrawable(int color) {
+		return new ColorDrawable(color);
 	}	
 }

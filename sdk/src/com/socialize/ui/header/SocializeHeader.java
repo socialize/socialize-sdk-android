@@ -23,8 +23,8 @@ package com.socialize.ui.header;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -94,9 +94,8 @@ public class SocializeHeader extends LinearLayout {
 		this.setOrientation(LinearLayout.HORIZONTAL);
 		this.setPadding(four, four, four, four);
 		
-		GradientDrawable background = new GradientDrawable(
-				GradientDrawable.Orientation.BOTTOM_TOP,
-				new int[] { Color.BLACK, Color.BLACK });
+		
+		ColorDrawable background = new ColorDrawable(Color.BLACK);
 		
 		Drawable headerBG = drawables.getDrawable("header.png", true, false, true);
 		

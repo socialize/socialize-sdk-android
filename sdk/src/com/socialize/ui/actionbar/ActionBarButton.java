@@ -23,9 +23,8 @@ package com.socialize.ui.actionbar;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.GradientDrawable.Orientation;
 import android.graphics.drawable.LayerDrawable;
 import android.view.Gravity;
 import android.view.View;
@@ -73,7 +72,7 @@ public class ActionBarButton extends LinearLayout {
 		actionBarItem.setText(text);
 		actionBarItem.init();
 
-		GradientDrawable bottomLeft = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Color.BLACK, Color.BLACK });
+		ColorDrawable bottomLeft = new ColorDrawable(Color.BLACK);
 		LayerDrawable bg = new LayerDrawable(new Drawable[] { bottomLeft, background });
 		bg.setLayerInset(1, 1, 0, 0, 1);
 

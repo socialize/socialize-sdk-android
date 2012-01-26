@@ -3,8 +3,10 @@ package com.socialize.suite;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import com.socialize.test.ui.auth.AuthConfirmDialogFactoryTest;
-import com.socialize.test.ui.auth.AuthRequestDialogViewTest;
+import com.socialize.test.ui.integrationtest.actionbar.ActionBarCommentTest;
+import com.socialize.test.ui.integrationtest.actionbar.ActionBarLikeAutoTest;
+import com.socialize.test.ui.integrationtest.actionbar.ActionBarLikeManualTest;
+import com.socialize.test.ui.integrationtest.actionbar.ActionBarListenerTest;
 
 public class DiagnosisSuite extends TestSuite {
 
@@ -12,9 +14,13 @@ public class DiagnosisSuite extends TestSuite {
 		
 		TestSuite suite = new TestSuite(DiagnosisSuite.class.getName());
 		
-		suite.addTestSuite(AuthConfirmDialogFactoryTest.class);
-		suite.addTestSuite(AuthRequestDialogViewTest.class);
+//		suite.addTestSuite(AuthConfirmDialogFactoryTest.class);
+//		suite.addTestSuite(AuthRequestDialogViewTest.class);
 		
+		suite.addTestSuite(ActionBarCommentTest.class);
+		suite.addTestSuite(ActionBarLikeAutoTest.class);
+		suite.addTestSuite(ActionBarLikeManualTest.class);
+		suite.addTestSuite(ActionBarListenerTest.class);
 		
 //		suite.addTestSuite(AuthProviderDataTest.class);
 //		suite.addTestSuite(AuthProviderTypeTest.class);

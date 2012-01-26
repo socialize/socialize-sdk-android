@@ -50,6 +50,7 @@ public class EntityActivity extends SocializeActivity {
 		
 		final EditText txtKey = (EditText) findViewById(R.id.txtKey);
 		final EditText txtName = (EditText) findViewById(R.id.txtName);
+		final EditText txtMeta = (EditText) findViewById(R.id.txtMeta);
 		final TextView txtEntityCreateResult = (TextView) findViewById(R.id.txtEntityCreateResult);
 		
 		final Button btnEntityCreate = (Button) findViewById(R.id.btnEntityCreate);
@@ -72,7 +73,10 @@ public class EntityActivity extends SocializeActivity {
 					
 					final ProgressDialog progress = SafeProgressDialog.show(v.getContext(), "Creating", "Please wait...");
 					
-					Socialize.getSocialize().addEntity(EntityActivity.this, Entity.newInstance(key, name), new EntityAddListener() {
+					Entity entity = Entity.newInstance(key, name);
+					entity.setMetaData(txtMeta.getText().toString());
+					
+					Socialize.getSocialize().addEntity(EntityActivity.this, entity, new EntityAddListener() {
 						
 						@Override
 						public void onError(SocializeException error) {
@@ -172,6 +176,7 @@ public class EntityActivity extends SocializeActivity {
 		final TextView txtEntityLikes = (TextView) findViewById(R.id.txtEntityLikes);
 		final TextView txtEntityViews = (TextView) findViewById(R.id.txtEntityViews);
 		final TextView txtEntityComments = (TextView) findViewById(R.id.txtEntityComments);
+		final TextView txtEntityMeta = (TextView) findViewById(R.id.txtEntityMetaCreated);
 		
 		if(entity.getId() != null) {
 			txtEntityIdCreated.setText(entity.getId().toString());
@@ -183,6 +188,10 @@ public class EntityActivity extends SocializeActivity {
 		
 		if(entity.getKey() != null) {
 			txtEntityKeyCreated.setText(entity.getKey());
+		}
+		
+		if(entity.getMetaData() != null) {
+			txtEntityMeta.setText(entity.getMetaData());
 		}
 		
 		EntityStats entityStats = entity.getEntityStats();

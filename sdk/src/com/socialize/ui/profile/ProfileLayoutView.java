@@ -49,9 +49,7 @@ public class ProfileLayoutView extends BaseView {
 
 		setOrientation(LinearLayout.VERTICAL);
 		setLayoutParams(fill);
-//		setBackgroundDrawable(drawables.getDrawable("slate.png", true, true, true));
 		setPadding(0, 0, 0, 0);
-//		setVerticalFadingEdgeEnabled(false);
 
 		header = profileHeaderFactory.getBean();
 		content = profileContentViewFactory.getBean(this);

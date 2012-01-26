@@ -26,7 +26,10 @@ package com.socialize.ui.actionbar;
  *
  */
 public interface ActionBarListener {
-
-	public void onCreate(ActionBarView view);
 	
+	/**
+	 * Called after the aciton bar has been created AND rendered.
+	 * @param view
+	 */
+	public void onCreate(ActionBarView view);
 }

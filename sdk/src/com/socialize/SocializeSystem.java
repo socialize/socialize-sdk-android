@@ -59,6 +59,11 @@ public class SocializeSystem {
 		return config;
 	}
 	
+	public void destroy() {
+		initListener = null;
+		beanOverrides = null;
+	}
+	
 	public SocializeInitListener getSystemInitListener() {
 		return initListener;
 	}

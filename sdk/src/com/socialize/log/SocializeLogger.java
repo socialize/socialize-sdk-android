@@ -90,6 +90,10 @@ public class SocializeLogger {
 		Log.d(LOG_TAG, msg);
 	}
 	
+	public void debug(String msg, Throwable error) {
+		Log.d(LOG_TAG, msg, error);
+	}
+	
 	public void info(String msg) {
 		Log.i(LOG_TAG, msg);
 	}

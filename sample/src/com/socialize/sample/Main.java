@@ -105,5 +105,4 @@ public class Main extends Activity {
 			}
 		}.execute((Void)null);
 	}
-    
 }

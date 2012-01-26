@@ -53,9 +53,7 @@ public class SampleActivity2 extends Activity {
 		btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Socialize.getSocialize().destroy(true);
 				setupOverrides();
-				
 				Entity entity = new Entity();
 				entity.setKey(txtEntity.getText().toString());
 				entity.setName(txtEntityName.getText().toString());				
@@ -76,13 +74,13 @@ public class SampleActivity2 extends Activity {
 
 					@Override
 					protected Void doInBackground(Void... params) {
-						try {
+//						try {
 							Socialize.getSocialize().init(SampleActivity2.this);
 							Socialize.getSocialize().clearSessionCache(SampleActivity2.this);
-						} 
-						finally {
-							Socialize.getSocialize().destroy();
-						}
+//						} 
+//						finally {
+//							Socialize.getSocialize().destroy();
+//						}
 						
 						return null;
 					}

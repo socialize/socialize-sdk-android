@@ -73,6 +73,12 @@ public class TestUtils {
 		return null;
 	}
 	
+	public static void destroyActivity() {
+		if(monitor != null) {
+			monitor.getLastActivity().finish();
+		}
+	}
+	
 	public static final void sleep(int milliseconds) {
 		try {
 			Thread.sleep(milliseconds);

@@ -5,13 +5,10 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 import com.socialize.Socialize;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.view.EntityView;
-import com.socialize.util.Drawables;
 
 public class ProfileView extends EntityView {
 	
@@ -28,23 +25,25 @@ public class ProfileView extends EntityView {
 			if(profileLayoutView == null) {
 				profileLayoutView = container.getBean("profileLayoutView", entityKeys);
 				
-				LayoutParams scrollViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
-				LayoutParams childViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+//				LayoutParams scrollViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+//				LayoutParams childViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+//				
+//				ScrollView scrollView = new ScrollView(getContext());
+//				scrollView.setFillViewport(true);
+//				scrollView.setLayoutParams(scrollViewLayout);
+//				scrollView.addView(profileLayoutView, childViewLayout);	
+//				
+//				LinearLayout layout = new LinearLayout(getContext());
+//				LayoutParams masterParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+//				
+//				layout.setLayoutParams(masterParams);
+//				layout.setBackgroundDrawable(((Drawables)container.getBean("drawables")).getDrawable("slate.png", true, true, true));
+//				
+//				layout.addView(scrollView);
+//				
+//				view = layout;	
 				
-				ScrollView scrollView = new ScrollView(getContext());
-				scrollView.setFillViewport(true);
-				scrollView.setLayoutParams(scrollViewLayout);
-				scrollView.addView(profileLayoutView, childViewLayout);	
-				
-				LinearLayout layout = new LinearLayout(getContext());
-				LayoutParams masterParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
-				
-				layout.setLayoutParams(masterParams);
-				layout.setBackgroundDrawable(((Drawables)container.getBean("drawables")).getDrawable("slate.png", true, true, true));
-				
-				layout.addView(scrollView);
-				
-				view = layout;				
+				view = profileLayoutView;
 			}
 			
 			return view;
@@ -65,7 +64,9 @@ public class ProfileView extends EntityView {
 	 * @param bitmap
 	 */
 	public void onImageChange(Bitmap bitmap) {
-		profileLayoutView.onImageChange(bitmap);
+		if(profileLayoutView != null) {
+			profileLayoutView.onImageChange(bitmap);
+		}
 	}
 	
 	@Override
