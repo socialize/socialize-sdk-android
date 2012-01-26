@@ -130,89 +130,54 @@ v0.6.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 [feature] Prompt for auth on comment
-
 [bug] Location is sending lon instead of lng
-
 [feature] Package name included in user agent string
-
 [bug] can't see access api button after auth , display issue
-
 [bug] User should see Lat/Long if it exists in Sample App when get comment.
-
 [feature] Update docs to add instructions for using FB auth
-
 [feature] Add profile images to comments
-
 [feature] Add user display name to comments
-
 [feature] User profile view
-
 [feature] User profile edit
-
 [bug] canceling FB auth auto-posts as anonymous
-
 [feature] Add comment view as distinct from profile view
-
 [feature] Access profile from comment view
-
 [bug] Posting comments doesn't work if FB id not provided
-
 [feature] Add support for disabling SSO in FB auth
-
 [bug] Edit profile buttons should not appear for anon. user
-
 [feature] Add approved text to auth dialog popups
-
 [feature] Update doco for new UI features
-
 [feature] Rename getting started guide to "read_me_first"
-
 [feature] Add GetSatisfaction widget to documentation
-
 [feature] Developer can Get a Socialize User (Profile)
 
 v0.3.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 [feature] Create entity
-
 [feature] Add country and/or language to User Agent
-
 [feature] Developer can Create a "view"
-
 [feature] Developer can Authenticate their socialize users using Facebook Auth
 
 v0.2.1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 [feature] User can read a quick start Installation guide in the readme.txt file in the repo
-
 [feature] User can access/read the repo's readme.txt file in GitHub
-
 [bug] SDK throws NPE when no results returned from POST
-
 
 v0.2.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 [bug] Making multiple 'like' requests to the same entity results in new entity objects being created
-
 [bug] Getting Started Guide missing ');' 
-
 [feature] Get entity
-
 [feature] Developer gets paginated results
-
 [bug] Multiple operations as anonymous user creates a new user each time
-
 [feature] List comments for entity
-
 [feature] Get like for entity
-
 [feature] Get comment
-
 [feature] Create comment on entity 
-
 [feature] List likes for entity
 
 v0.1.0.1
@@ -222,9 +187,6 @@ v0.1.0.1
 v0.1.0
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [feature] Like an entity
-
 [feature] Unlike an entity
-
 [feature] Authenticate user 
-
 [feature] Device will send agent in request 
