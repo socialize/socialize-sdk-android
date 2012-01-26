@@ -1,22 +1,24 @@
 .. include:: header.inc
 
+.. _SmartAlerts: http://blog.getsocialize.com/smartalerts
+
 .. _notifications:	
 	
-=============================
-Enabling Push Notifications
-=============================
+================================
+SmartAlerts (Push Notifications)
+================================
 
 Introduction
 ------------
-In v1.3 of Socialize we introduced push notifications.  This provides your app with a simple and effective way to bring users back into the 
+In v1.3 of Socialize we introduced SmartAlerts_.  This provides your app with a simple and effective way to bring users back into the 
 "viral loop" of the app.
 
 .. image:: images/comment.png
 .. image:: images/subscribe.png
 
 
-LiveAlerts in Comment Threads
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+SmartAlerts in Comment Threads
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When a user posts a comment they can elect to subscribe to updates for that topic.  
 
@@ -25,7 +27,7 @@ When another user then posts a comment, the original user will receive a push no
 Step 1: Enable Notifications on http://www.getsocialize.com
 -----------------------------------------------------------
 
-For Push Notifications to work they must be enabled on a compatible plan at http://getsocialize.com/apps
+For SmartAlerts to work they must be enabled on a compatible plan at http://getsocialize.com/apps
 
 Select your app and click "Notification Settings"
 

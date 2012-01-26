@@ -128,7 +128,7 @@ Adding the Action Bar to your app is done with a simple call to **showActionBar*
 Next Steps...
 =============
 
-Visit your App dashboard on the Socialize website to enable additional features like Push Notifications.
+Visit your App dashboard on the Socialize website to enable additional features like SmartAlerts.
 
 http://www.getsocialize.com/apps/
 

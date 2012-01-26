@@ -13,7 +13,7 @@ The "entity loader" is a class provided by the developer (you) that gives Social
 When a user views a social action (e.g. a comment) the Entity Loader allows the user to navigate to the entity (content) to 
 which the social action pertains.
 
-This is particularly important for push notifications and as such an entity loader is required for push notifications.
+This is particularly important for SmartAlerts (push notifications) and as such an entity loader is required for SmartAlerts.
 
 Creating the Entity Loader
 --------------------------

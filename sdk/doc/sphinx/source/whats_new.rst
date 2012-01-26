@@ -6,14 +6,14 @@
 What's New
 ==========
 
-v1.3 Push Notifications
+v1.3 SmartAlerts
 -----------------------
 v1.3 of Socialize includes a full push notification framework designed to bring users back to your app!
 
 .. image:: images/comment.png
 .. image:: images/subscribe.png
 
-Refer to the :ref:`notifications` section for details on how to implement Push Notifications.
+Refer to the :ref:`notifications` section for details on how to implement SmartAlerts.
 
 v1.1 Recent Activity in User Profile
 -------------------------------------
