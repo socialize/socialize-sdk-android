@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>What’s New &mdash; Socialize Android SDK v1.3.1 documentation</title>
+    <title>Configuration Settings &mdash; Socialize Android SDK v1.3.1 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -27,18 +27,18 @@
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
     <link rel="top" title="Socialize Android SDK v1.3.1 documentation" href="index.html" />
-    <link rel="next" title="Getting Started" href="getting_started.html" />
-    <link rel="prev" title="Socialize Android SDK" href="index.html" /> 
+    <link rel="next" title="Troubleshooting &amp; Support" href="troubleshooting.html" />
+    <link rel="prev" title="Socialize SDK (Advanced) Guide" href="sdk_user_guide.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="getting_started.html" title="Getting Started"
+          <a href="troubleshooting.html" title="Troubleshooting &amp; Support"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="index.html" title="Socialize Android SDK"
+          <a href="sdk_user_guide.html" title="Socialize SDK (Advanced) Guide"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">Socialize Android SDK v1.3.1 documentation</a> &raquo;</li> 
       </ul>
@@ -69,30 +69,86 @@
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
-</script><div class="section" id="what-s-new">
-<span id="whats-new"></span><h1>What&#8217;s New<a class="headerlink" href="#what-s-new" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="v1-3-smartalerts">
-<h2>v1.3 SmartAlerts<a class="headerlink" href="#v1-3-smartalerts" title="Permalink to this headline">¶</a></h2>
-<p>v1.3 of Socialize includes a full push notification framework designed to bring users back to your app!</p>
-<img alt="images/comment.png" src="images/comment.png" />
-<img alt="images/subscribe.png" src="images/subscribe.png" />
-<p>Refer to the <a class="reference internal" href="push_notifications.html#notifications"><em>SmartAlerts (Push Notifications)</em></a> section for details on how to implement SmartAlerts.</p>
-</div>
-<div class="section" id="v1-1-recent-activity-in-user-profile">
-<h2>v1.1 Recent Activity in User Profile<a class="headerlink" href="#v1-1-recent-activity-in-user-profile" title="Permalink to this headline">¶</a></h2>
-<p>In v1.1 we introduced recent activity in the user profile view:</p>
-<img alt="images/profile_activity.png" src="images/profile_activity.png" />
-<p>This can provide a significant boost to in-app engagement, however to maximize its benefit
-developers must implement a Socialize &#8220;Entity Loader&#8221;.  This provides Socialize with the information
-needed to load the original view of the entity the user acted upon.</p>
-<p>With a Socialize Entity Loader specified, users will be able to navigate from the recent activity to
-other parts of your application.</p>
-<p>Refer to the <a class="reference internal" href="entity_loader.html#entity-loader"><em>Entity Loaders</em></a> section for details on how to implement a Socialize Entity Loader</p>
+</script><div class="section" id="configuration-settings">
+<span id="config"></span><h1>Configuration Settings<a class="headerlink" href="#configuration-settings" title="Permalink to this headline">¶</a></h1>
+<p>The following table lists the configuration options that can be specified in your <strong>socialize.properties</strong> file.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="6%" />
+<col width="6%" />
+<col width="25%" />
+<col width="42%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Property</th>
+<th class="head">Type</th>
+<th class="head">Default</th>
+<th class="head">Example</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>socialize.consumer.key</td>
+<td>String</td>
+<td>None</td>
+<td>12a05e3e-e522-4c81-b4bb-89d3be94d122</td>
+<td>Your Socialize consumer key</td>
+</tr>
+<tr class="row-odd"><td>socialize.consumer.secret</td>
+<td>String</td>
+<td>None</td>
+<td>9c313d12-f34c-4172-9909-180384c724fd</td>
+<td>Your Socialize consumer secret</td>
+</tr>
+<tr class="row-even"><td>socialize.notification.app.icon</td>
+<td>Boolean</td>
+<td>true</td>
+<td>&nbsp;</td>
+<td>If true the app&#8217;s icon will be used for notifications.</td>
+</tr>
+<tr class="row-odd"><td>socialize.use.action.webview</td>
+<td>Boolean</td>
+<td>false</td>
+<td>&nbsp;</td>
+<td>If true activity views will use a WebView rather than a TextView</td>
+</tr>
+<tr class="row-even"><td>facebook.app.id</td>
+<td>Integer</td>
+<td>None</td>
+<td>1234567890</td>
+<td>Your facebook app ID</td>
+</tr>
+<tr class="row-odd"><td>facebook.sso.enabled</td>
+<td>Boolean</td>
+<td>true</td>
+<td>&nbsp;</td>
+<td>Enable/Disable Single Sign on for Facebook</td>
+</tr>
+<tr class="row-even"><td>http.connection.timeout</td>
+<td>Long</td>
+<td>30000</td>
+<td>30000</td>
+<td>Time in ms for an http connection to be established</td>
+</tr>
+<tr class="row-odd"><td>http.socket.timeout</td>
+<td>Long</td>
+<td>30000</td>
+<td>30000</td>
+<td>Time in ms for an http request to return</td>
+</tr>
+<tr class="row-even"><td>log.level</td>
+<td>String</td>
+<td>WARN</td>
+<td>DEBUG or INFO or WARN or ERROR</td>
+<td>Application log level</td>
+</tr>
+</tbody>
+</table>
 <script type="text/javascript">
         SyntaxHighlighter.defaults['toolbar'] = false;
         SyntaxHighlighter.all();
 </script></div>
-</div>
 
 
           </div>
@@ -102,11 +158,7 @@ other parts of your application.</p>
         <div class="sphinxsidebarwrapper">
 <h3><a href="index.html">Table Of Contents</a></h3>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="">What&#8217;s New</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#v1-3-smartalerts">v1.3 SmartAlerts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#v1-1-recent-activity-in-user-profile">v1.1 Recent Activity in User Profile</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What&#8217;s New</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="facebook.html">Facebook Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="action_bar.html">Socialize Action Bar</a></li>
@@ -114,7 +166,7 @@ other parts of your application.</p>
 <li class="toctree-l1"><a class="reference internal" href="push_notifications.html">SmartAlerts (Push Notifications)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="entity_loader.html">Entity Loaders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Settings</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Configuration Settings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting &amp; Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log</a></li>
 </ul>
@@ -127,10 +179,10 @@ other parts of your application.</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="getting_started.html" title="Getting Started"
+          <a href="troubleshooting.html" title="Troubleshooting &amp; Support"
              >next</a></li>
         <li class="right" >
-          <a href="index.html" title="Socialize Android SDK"
+          <a href="sdk_user_guide.html" title="Socialize SDK (Advanced) Guide"
              >previous</a> |</li>
         <li><a href="index.html">Socialize Android SDK v1.3.1 documentation</a> &raquo;</li> 
       </ul>

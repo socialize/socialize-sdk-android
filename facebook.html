@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Facebook Integration &mdash; Socialize Android SDK v1.1 documentation</title>
+    <title>Facebook Integration &mdash; Socialize Android SDK v1.3.1 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'v1.1',
+        VERSION:     'v1.3.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v1.1 documentation" href="index.html" />
+    <link rel="top" title="Socialize Android SDK v1.3.1 documentation" href="index.html" />
     <link rel="next" title="Socialize Action Bar" href="action_bar.html" />
     <link rel="prev" title="Getting Started" href="getting_started.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="getting_started.html" title="Getting Started"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK v1.3.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -49,10 +49,30 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <link rel="stylesheet" href="static/css/gist.css" type="text/css" /><div class="section" id="facebook-integration">
+      <link rel="stylesheet" href="static/css/shCore.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/shCoreEclipse.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/shThemeEclipse.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/gist.css" type="text/css" />
+    <script type="text/javascript" src="static/js/shCore.js"></script>
+    <script type="text/javascript" src="static/js/shBrushXml.js"></script>
+    <script type="text/javascript" src="static/js/shBrushJava.js"></script>
+    <script type="text/javascript" src="static/js/shBrushJavaProperties.js"></script>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-9835027-5']);
+    _gaq.push(['_setDomainName', '.getsocialize.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script><div class="section" id="facebook-integration">
 <h1>Facebook Integration<a class="headerlink" href="#facebook-integration" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="adding-facebook-authentication">
-<h2>Adding Facebook Authentication<a class="headerlink" href="#adding-facebook-authentication" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>It is strongly recommended that users be able to authenticate with Facebook when using Socialize so as to
 maximize the exposure, and promotion of your app.</p>
 <p>This provides significant benefits to both your application, and your users including:</p>
@@ -64,8 +84,9 @@ maximize the exposure, and promotion of your app.</p>
 </ol>
 <p>To add Facebook authentication, you&#8217;ll need a Facebook App ID.  If you already have a Facebook app,
 you can skip this section.</p>
+</div>
 <div class="section" id="creating-a-facebook-application">
-<h3>Creating a Facebook Application<a class="headerlink" href="#creating-a-facebook-application" title="Permalink to this headline">¶</a></h3>
+<h2>Creating a Facebook Application<a class="headerlink" href="#creating-a-facebook-application" title="Permalink to this headline">¶</a></h2>
 <p>If you <strong>do not</strong> already have a Facebook app just follow these simple steps:</p>
 <blockquote>
 <div><ol class="arabic">
@@ -102,12 +123,82 @@ you are going to publish.</p>
 </div></blockquote>
 <p>You should now be ready to authenticate user&#8217;s of your app with Facebook when they are using Socialize, jump to the <a class="reference internal" href="sdk_user_guide.html#fb-snippet"><em>Facebook Authentication Code Snippet</em></a> to find out how.</p>
 </div>
-<div class="section" id="enabling-disabling-facebook-single-sign-on-sso">
-<h3>Enabling/Disabling Facebook Single Sign On (SSO)<a class="headerlink" href="#enabling-disabling-facebook-single-sign-on-sso" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="propagating-socialize-actions-to-facebook">
+<span id="propagate-fb"></span><h2>Propagating Socialize Actions to Facebook<a class="headerlink" href="#propagating-socialize-actions-to-facebook" title="Permalink to this headline">¶</a></h2>
+<p>Social actions like Comment and Like can optionally be propagated to social networks like Facebook via the SDK.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Propagation is automatic when using the Socialize Action Bar.  The following is only required for developers
+electing to use the SDK manually**</p>
+</div>
+<p>The following example shows posting a comment and simultaneously sharing the comment to the user&#8217;s facebook wall.</p>
+<pre class="brush: java">
+
+import com.socialize.Socialize;
+import com.socialize.entity.Entity;
+import com.socialize.entity.Comment;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.comment.CommentAddListener;
+import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
+
+if(Socialize.getSocialize().isAuthenticated()) {
+
+        // Create or retrieve your entity object
+        Entity entity = Entity.newInstance("http://someurl.com", "My Entity");
+
+        String comment = "The comment to be added";
+
+        ShareOptions options = new ShareOptions();
+
+        // Allow display of the user's location in comments
+        options.setShareLocation(true);
+
+        // Enable sharing to facebook.
+        options.setShareTo(SocialNetwork.FACEBOOK);
+
+        // Listen for the outcome of the facebook post
+        options.setListener(new SocialNetworkListener() {
+
+                public void onError(Activity activity, SocialNetwork network, String message, Throwable e) {
+                        // Handle error
+                }
+
+                public void onBeforePost(Activity activity, SocialNetwork network) {
+                        // Handle before post
+                }
+
+                public void onAfterPost(Activity activity, SocialNetwork network) {
+                        // Handle after post
+                }
+        });
+
+        // Add a comment to an entity
+        // The "this" reference below refers to a Context object
+        Socialize.getSocialize().addComment(this, entity, comment, options, new CommentAddListener() {
+
+                public void onError(SocializeException error) {
+                        // Handle error
+                }
+
+                public void onCreate(Comment comment) {
+                        // Handle success
+                }
+        });
+}
+</pre></div>
+<div class="section" id="facebook-single-sign-on-sso">
+<h2>Facebook Single Sign On (SSO)<a class="headerlink" href="#facebook-single-sign-on-sso" title="Permalink to this headline">¶</a></h2>
 <p>Some users have reported having problems with the Single Sign On implementation in the Facebook SDK.</p>
 <p>If you have experienced problems with this (e.g. the &#8220;invalid_key&#8221; error), you can easily disable this feature:</p>
-<script src="https://gist.github.com/1376163.js?file=no_fb.java"></script></div>
-</div>
+<pre class="brush: java">
+// Disable ONLY if you experience problems
+Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(false);
+</pre><script type="text/javascript">
+        SyntaxHighlighter.defaults['toolbar'] = false;
+        SyntaxHighlighter.all();
+</script></div>
 </div>
 
 
@@ -121,12 +212,19 @@ you are going to publish.</p>
 <li class="toctree-l1"><a class="reference internal" href="whats_new.html">What&#8217;s New</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Facebook Integration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#adding-facebook-authentication">Adding Facebook Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-facebook-application">Creating a Facebook Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#propagating-socialize-actions-to-facebook">Propagating Socialize Actions to Facebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#facebook-single-sign-on-sso">Facebook Single Sign On (SSO)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="action_bar.html">Socialize Action Bar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="comment_view.html">Socialize Comments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html">Entity Loaders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting &amp; Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log</a></li>
 </ul>
 
@@ -143,11 +241,11 @@ you are going to publish.</p>
         <li class="right" >
           <a href="getting_started.html" title="Getting Started"
              >previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK v1.3.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Socialize Inc.
+        &copy; Copyright 2012, Socialize Inc.
     </div>
   </body>
 </html>

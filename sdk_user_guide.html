@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Socialize SDK (Advanced) Guide &mdash; Socialize Android SDK v1.1 documentation</title>
+    <title>Socialize SDK (Advanced) Guide &mdash; Socialize Android SDK v1.3.1 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'v1.1',
+        VERSION:     'v1.3.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,21 +26,21 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v1.1 documentation" href="index.html" />
-    <link rel="next" title="Change Log" href="change_log.html" />
-    <link rel="prev" title="Socialize Comments" href="comment_view.html" /> 
+    <link rel="top" title="Socialize Android SDK v1.3.1 documentation" href="index.html" />
+    <link rel="next" title="Configuration Settings" href="config.html" />
+    <link rel="prev" title="Entity Loaders" href="entity_loader.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="change_log.html" title="Change Log"
+          <a href="config.html" title="Configuration Settings"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="comment_view.html" title="Socialize Comments"
+          <a href="entity_loader.html" title="Entity Loaders"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK v1.3.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -49,7 +49,27 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <link rel="stylesheet" href="static/css/gist.css" type="text/css" /><div class="section" id="socialize-sdk-advanced-guide">
+      <link rel="stylesheet" href="static/css/shCore.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/shCoreEclipse.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/shThemeEclipse.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/gist.css" type="text/css" />
+    <script type="text/javascript" src="static/js/shCore.js"></script>
+    <script type="text/javascript" src="static/js/shBrushXml.js"></script>
+    <script type="text/javascript" src="static/js/shBrushJava.js"></script>
+    <script type="text/javascript" src="static/js/shBrushJavaProperties.js"></script>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-9835027-5']);
+    _gaq.push(['_setDomainName', '.getsocialize.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script><div class="section" id="socialize-sdk-advanced-guide">
 <h1>Socialize SDK (Advanced) Guide<a class="headerlink" href="#socialize-sdk-advanced-guide" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
@@ -65,7 +85,23 @@ passed into each call to the Socialize SDK.</p>
 <h2>Initializing Socialize<a class="headerlink" href="#initializing-socialize" title="Permalink to this headline">¶</a></h2>
 <p>The Socialize SDK should be initialized in the <strong>onCreate()</strong> method of your Activity,
 and destroyed in the <strong>onDestroy()</strong> method</p>
-<script src="https://gist.github.com/1132979.js?file=setup.java"></script></div>
+<pre class="brush: java">
+import com.socialize.Socialize;
+
+protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Socialize.init(this);
+
+        // Your code goes here
+}
+
+protected void onDestroy() {
+        // Destroy Socialize before calling superclass
+        Socialize.destroy(this);
+        super.onDestroy();
+}
+</pre></div>
 <div class="section" id="authentication">
 <h2>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h2>
 <p>Every call against the Socialize SDK MUST be authenticated.</p>
@@ -83,8 +119,65 @@ a Facebook account and is required to &#8220;authorize&#8221; your Android app t
 to authenticate:</p>
 <div class="section" id="facebook-authentication-code-snippet">
 <span id="fb-snippet"></span><h4>Facebook Authentication Code Snippet<a class="headerlink" href="#facebook-authentication-code-snippet" title="Permalink to this headline">¶</a></h4>
-<script src="https://gist.github.com/1132956.js?file=authenticate_fb.java"></script><p>If you have specified your Socialize consumer key, secret AND your Facebook App ID in <strong>assets/socialize.properties</strong></p>
-<script src="https://gist.github.com/1132956.js?file=auth_fb_with_props.java"></script><p>If you <strong>do not</strong> already have a Facebook app refer to <a class="reference internal" href="facebook.html"><em>Facebook Integration</em></a> for more information.</p>
+<pre class="brush: java">
+
+import com.socialize.Socialize;
+import com.socialize.api.SocializeSession;
+import com.socialize.auth.AuthProviderType;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
+
+// The "this" reference below refers to a Context object
+Socialize.getSocialize().authenticate(
+        this,
+        consumerKey, // From your account at getsocialize.com
+        consumerSecret, // From your account at getsocialize.com
+        AuthProviderType.FACEBOOK,
+        facebookAppId, // Your facebook app ID
+        new SocializeAuthListener() {
+                public void onAuthSuccess(SocializeSession session) {
+                        // Success!
+                }
+                public void onAuthFail(SocializeException error) {
+                        // Handle auth fail
+                }
+                public void onError(SocializeException error) {
+                        // Handle error
+                }
+                public void onCancel() {
+                        // Handle cancel
+                }
+
+        });
+</pre><p>If you have specified your Socialize consumer key, secret AND your Facebook App ID in <strong>assets/socialize.properties</strong></p>
+<pre class="brush: java">
+
+import com.socialize.Socialize;
+import com.socialize.api.SocializeSession;
+import com.socialize.auth.AuthProviderType;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
+
+// The "this" reference below refers to a Context object
+Socialize.getSocialize().authenticate(
+        this,
+        AuthProviderType.FACEBOOK,
+        new SocializeAuthListener() {
+                public void onAuthSuccess(SocializeSession session) {
+                        // Success!
+                }
+                public void onAuthFail(SocializeException error) {
+                        // Handle auth fail
+                }
+                public void onError(SocializeException error) {
+                        // Handle error
+                }
+                public void onCancel() {
+                        // Handle cancel
+                }
+
+        });
+</pre><p>If you <strong>do not</strong> already have a Facebook app refer to <a class="reference internal" href="facebook.html"><em>Facebook Integration</em></a> for more information.</p>
 </div>
 </div>
 <div class="section" id="authenticating-with-twitter">
@@ -96,11 +189,61 @@ to authenticate:</p>
 <p>We recommend authenticating with 3rd parties (e.g. Facebook) as this provides a better user experience
 and ensures that user profiles and IDs are retained across app sessions and installs, however if you just
 want anonymous authentication, simply call the <strong>authenticate</strong> method:</p>
-<script src="https://gist.github.com/1132956.js?file=authenticate.java"></script><p>If you have specified your Socialize consumer key, secret in <strong>assets/socialize.properties</strong></p>
-<script src="https://gist.github.com/1132956.js?file=auth_with_props.java"></script></div>
+<pre class="brush: java">
+
+import com.socialize.Socialize;
+import com.socialize.api.SocializeSession;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
+
+// The "this" reference below refers to a Context object
+Socialize.getSocialize().authenticate(
+        this,
+        consumerKey, // From your account at getsocialize.com
+        consumerSecret, // From your account at getsocialize.com
+        new SocializeAuthListener() {
+                public void onAuthSuccess(SocializeSession session) {
+                        // Success!
+                }
+                public void onAuthFail(SocializeException error) {
+                        // Handle auth fail
+                }
+                public void onError(SocializeException error) {
+                        // Handle error
+                }
+                public void onCancel() {
+                        // Handle cancel
+                }
+        });
+</pre><p>If you have specified your Socialize consumer key, secret in <strong>assets/socialize.properties</strong></p>
+<pre class="brush: java">
+
+import com.socialize.Socialize;
+import com.socialize.api.SocializeSession;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
+
+// The "this" reference below refers to a Context object
+Socialize.getSocialize().authenticate(
+        this,
+        new SocializeAuthListener() {
+                public void onAuthSuccess(SocializeSession session) {
+                        // Success!
+                }
+                public void onAuthFail(SocializeException error) {
+                        // Handle auth fail
+                }
+                public void onError(SocializeException error) {
+                        // Handle error
+                }
+                public void onCancel() {
+                        // Handle cancel
+                }
+        });
+</pre></div>
 </div>
 <div class="section" id="entities">
-<h2>Entities<a class="headerlink" href="#entities" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>Entities<a class="headerlink" href="#entities" title="Permalink to this headline">¶</a></h2>
 <p>An entity is a single item of content in your app</p>
 <p>Throughout the documentation and the code snippets we refer to an &#8220;entity&#8221;.  This is simply a
 generic term for something that can be view, shared, liked or commented on.  Generally this will
@@ -113,15 +256,58 @@ HTTP URL be used (i.e. one that corresponds to an active web page).</p>
 entity when viewing reports on the Socialize dashboard.</p>
 <p>Creating an entity explicitly in this manner is <strong>optional but recommended</strong>.  If you simply post a
 comment,view,share or like against a key that does not currently exist, it will be automatically created
-for you, but will not have a <em>name</em> associated with it.</p>
+for you.</p>
 <p>To create an entity, simply call the <strong>addEntity</strong> method:</p>
-<script src="https://gist.github.com/1132973.js?file=addentity.java"></script></div>
+<pre class="brush: java">
+
+import com.socialize.Socialize;
+import com.socialize.entity.Entity;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.entity.EntityAddListener;
+
+if(Socialize.getSocialize().isAuthenticated()) {
+
+        // Create a new entity with a name
+        Entity entity = Entity.newInstance("http://someurl.com", "My Entity");
+
+        // The "this" reference below refers to a Context object
+        Socialize.getSocialize().addEntity(this, entity, new EntityAddListener() {
+
+                public void onError(SocializeException error) {
+                        // Handle error
+                }
+
+                public void onCreate(Entity entity) {
+                        // Handle success
+                }
+        });
+}
+</pre></div>
 <div class="section" id="retrieving-entity-data">
 <h3>Retrieving Entity data<a class="headerlink" href="#retrieving-entity-data" title="Permalink to this headline">¶</a></h3>
 <p>An existing entity can be retrieved via the <strong>getEntity</strong> method.  Entities obtained in this way will also
 provide aggregate data on comments, likes, shares and views.  Refer to the <a class="reference external" href="http://www.getsocialize.com/docs/v1/#entity-object">Entity object structure in the API Docs</a>.
 for more detail on these aggregate values.</p>
-<script src="https://gist.github.com/1132973.js?file=getentity.java"></script></div>
+<pre class="brush: java">
+
+import com.socialize.Socialize;
+import com.socialize.entity.Entity;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.entity.EntityAddListener;
+
+if(Socialize.getSocialize().isAuthenticated()) {
+        Socialize.getSocialize().getEntity("http://someurl.com", new EntityGetListener() {
+
+                public void onError(SocializeException error) {
+                        // Handle error
+                }
+
+                public void onGet(Entity entity) {
+                        // Handle success
+                }
+        });
+}
+</pre></div>
 </div>
 <div class="section" id="view">
 <h2>View<a class="headerlink" href="#view" title="Permalink to this headline">¶</a></h2>
@@ -131,7 +317,32 @@ most interest.</p>
 <div class="section" id="creating-a-view">
 <h3>Creating a &#8216;View&#8217;<a class="headerlink" href="#creating-a-view" title="Permalink to this headline">¶</a></h3>
 <p>To create a view, simply call the <strong>view</strong> method:</p>
-<script src="https://gist.github.com/1132987.js?file=addview.java"></script></div>
+<pre class="brush: java">
+
+import com.socialize.Socialize;
+import com.socialize.entity.Entity;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.view.ViewAddListener;
+
+if(Socialize.getSocialize().isAuthenticated()) {
+
+        // Create or retrieve your entity object
+        Entity entity = Entity.newInstance("http://someurl.com", "My Entity");
+
+        // Record a view
+        // The "this" reference below refers to a Context object
+        Socialize.getSocialize().view(this, entity, new ViewAddListener() {
+
+                public void onError(SocializeException error) {
+                        // Handle error
+                }
+
+                public void onCreate(com.socialize.entity.View view) {
+                        // Handle success
+                }
+        });
+}
+</pre></div>
 </div>
 <div class="section" id="like">
 <h2>Like<a class="headerlink" href="#like" title="Permalink to this headline">¶</a></h2>
@@ -140,16 +351,82 @@ in your app are the most popular, and what is of most interest to your users.</p
 <div class="section" id="creating-a-like">
 <h3>Creating a &#8216;Like&#8217;<a class="headerlink" href="#creating-a-like" title="Permalink to this headline">¶</a></h3>
 <p>To create a view, simply call the <strong>like</strong> method:</p>
-<script src="https://gist.github.com/1132969.js?file=addlike.java"></script></div>
+<pre class="brush: java">
+
+import com.socialize.Socialize;
+import com.socialize.entity.Entity;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.like.LikeAddListener;
+import com.socialize.entity.Like;
+
+if(Socialize.getSocialize().isAuthenticated()) {
+        // Create or retrieve your entity object
+        Entity entity = Entity.newInstance("http://someurl.com", "My Entity");
+
+        // Add a like to an entity defined by its URL
+        // The "this" reference below refers to a Context object
+        Socialize.getSocialize().like(this, entity, new LikeAddListener() {
+
+                public void onError(SocializeException error) {
+                        // Handle error
+                }
+
+                public void onCreate(Like like) {
+                        // Handle success
+                }
+        });
+}
+</pre></div>
 <div class="section" id="removing-a-like">
 <h3>Removing a &#8216;Like&#8217;<a class="headerlink" href="#removing-a-like" title="Permalink to this headline">¶</a></h3>
 <p>Removing a like (i.e. an &#8216;unlike&#8217;) is done via the <strong>unlike</strong> method.  In order to remove a like, you will
 need the ID of the like.  This is returned from the initial call to <strong>like</strong></p>
-<script src="https://gist.github.com/1132969.js?file=unlike.java"></script></div>
+<pre class="brush: java">
+
+import com.socialize.Socialize;
+import com.socialize.entity.Entity;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.like.LikeDeleteListener;
+
+if(Socialize.getSocialize().isAuthenticated()) {
+        // Remove an existing like based on its numeric ID
+        Socialize.getSocialize().unlike(1234, new LikeDeleteListener() {
+
+                public void onError(SocializeException error) {
+                        // Handle error
+                }
+
+                public void onDelete() {
+                        // Handle success
+                }
+        });
+}
+</pre></div>
 <div class="section" id="listing-likes-for-a-user">
 <h3>Listing &#8216;Likes&#8217; for a User<a class="headerlink" href="#listing-likes-for-a-user" title="Permalink to this headline">¶</a></h3>
 <p>To obtain a list of all entities &#8216;liked&#8217; by a single user, use the <strong>listLikesByUser</strong> method:</p>
-<script src="https://gist.github.com/1132969.js?file=list_likes.java"></script></div>
+<pre class="brush: java">
+
+import com.socialize.Socialize;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.like.LikeListListener;
+import com.socialize.entity.Like;
+import com.socialize.entity.ListResult;
+
+if(Socialize.getSocialize().isAuthenticated()) {
+        // List likes for a single user
+        Socialize.getSocialize().listLikesByUser(1234, new LikeListListener() {
+
+                public void onError(SocializeException error) {
+                        // Handle error
+                }
+
+                public void onList(ListResult&lt;Like&gt; likes) {
+                        // Handle success
+                }
+        });
+}
+</pre></div>
 </div>
 <div class="section" id="comment">
 <h2>Comment<a class="headerlink" href="#comment" title="Permalink to this headline">¶</a></h2>
@@ -157,24 +434,182 @@ need the ID of the like.  This is returned from the initial call to <strong>like
 <div class="section" id="creating-a-comment">
 <h3>Creating a Comment<a class="headerlink" href="#creating-a-comment" title="Permalink to this headline">¶</a></h3>
 <p>To create a comment on an entity, use the <strong>addComment</strong> method:</p>
-<script src="https://gist.github.com/1132965.js?file=addcomment.java"></script></div>
+<pre class="brush: java">
+
+import com.socialize.Socialize;
+import com.socialize.entity.Entity;
+import com.socialize.entity.Comment;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.comment.CommentAddListener;
+
+if(Socialize.getSocialize().isAuthenticated()) {
+
+        // Create or retrieve your entity object
+        Entity entity = Entity.newInstance("http://someurl.com", "My Entity");
+
+        String comment = "The comment to be added";
+
+        // Add a comment to an entity
+        // The "this" reference below refers to a Context object
+        Socialize.getSocialize().addComment(this, entity, comment, new CommentAddListener() {
+
+                public void onError(SocializeException error) {
+                        // Handle error
+                }
+
+                public void onCreate(Comment comment) {
+                        // Handle success
+                }
+        });
+}
+</pre></div>
 <div class="section" id="retrieving-a-single-comment">
 <h3>Retrieving a single Comment<a class="headerlink" href="#retrieving-a-single-comment" title="Permalink to this headline">¶</a></h3>
 <p>If you want to retrieve a single comment you can use the <strong>getCommentById</strong> method.  You will need the ID
 of the comment which was returned from the inital call to <strong>addComment</strong>:</p>
-<script src="https://gist.github.com/1132965.js?file=getcommentbyid.java"></script></div>
+<pre class="brush: java">
+
+import com.socialize.Socialize;
+import com.socialize.entity.Comment;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.comment.CommentGetListener;
+
+if(Socialize.getSocialize().isAuthenticated()) {
+        // Get a single comment based on its numeric ID
+        Socialize.getSocialize().getCommentById(1234, new CommentGetListener() {
+
+                public void onError(SocializeException error) {
+                        // Handle error
+                }
+
+                public void onGet(Comment entity) {
+                        // Handle success
+                }
+        });
+}
+</pre></div>
 <div class="section" id="listing-comments">
 <h3>Listing Comments<a class="headerlink" href="#listing-comments" title="Permalink to this headline">¶</a></h3>
 <p>To list all comments for an entity use the <strong>listCommentsByEntity</strong> method.  This will return a <strong>maximum of 100 comments</strong></p>
-<script src="https://gist.github.com/1132965.js?file=listcomments_np.java"></script></div>
+<pre class="brush: java">
+
+import com.socialize.Socialize;
+import com.socialize.entity.Comment;
+import com.socialize.entity.ListResult;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.comment.CommentListListener;
+
+if(Socialize.getSocialize().isAuthenticated()) {
+        // List comments for an entity without pagination (maximum 100 will be returned)
+        Socialize.getSocialize().listCommentsByEntity("http://someurl.com", new CommentListListener() {
+
+                public void onError(SocializeException error) {
+                        // Handle error
+                }
+
+                public void onList(ListResult&lt;Comment&gt; result) {
+                        // Handle success
+                }
+        });
+}
+</pre></div>
 <div class="section" id="comments-with-pagination">
 <h3>Comments with pagination<a class="headerlink" href="#comments-with-pagination" title="Permalink to this headline">¶</a></h3>
 <p>The <strong>recommended</strong> approach is to use pagination when listing comments:</p>
-<script src="https://gist.github.com/1132965.js?file=listcomments.java"></script></div>
+<pre class="brush: java">
+
+import com.socialize.Socialize;
+import com.socialize.entity.Comment;
+import com.socialize.entity.ListResult;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.comment.CommentListListener;
+
+if(Socialize.getSocialize().isAuthenticated()) {
+        // List comments for an entity with pagination (start and end index)
+        Socialize.getSocialize().listCommentsByEntity("http://someurl.com", 0, 100, new CommentListListener() {
+
+                public void onError(SocializeException error) {
+                        // Handle error
+                }
+
+                public void onList(ListResult&lt;Comment&gt; result) {
+                        // Handle success
+                }
+        });
+}
+</pre></div>
 <div class="section" id="listing-comments-for-a-user">
 <h3>Listing Comments for a User<a class="headerlink" href="#listing-comments-for-a-user" title="Permalink to this headline">¶</a></h3>
 <p>To obtain a list of all comments made by a single user, use the <strong>listCommentsByUser</strong> method:</p>
-<script src="https://gist.github.com/1132969.js?file=list_user_comments.java"></script></div>
+<pre class="brush: java">
+
+import com.socialize.Socialize;
+import com.socialize.entity.Comment;
+import com.socialize.entity.ListResult;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.comment.CommentListListener;
+
+if(Socialize.getSocialize().isAuthenticated()) {
+        // List comments for a single user
+        Socialize.getSocialize().listCommentsByUser(1234, new CommentListListener() {
+
+                public void onError(SocializeException error) {
+                        // Handle error
+                }
+
+                public void onList(ListResult&lt;Comment&gt; result) {
+                        // Handle success
+                }
+        });
+}
+</pre></div>
+</div>
+<div class="section" id="share">
+<h2>Share<a class="headerlink" href="#share" title="Permalink to this headline">¶</a></h2>
+<p>Users love to share content, especially to their favorite social network.  Socialize makes sharing easy with a set
+of very simple SDK calls.</p>
+<div class="section" id="sharing-to-facebook">
+<h3>Sharing to Facebook<a class="headerlink" href="#sharing-to-facebook" title="Permalink to this headline">¶</a></h3>
+<p>The example below shows sharing an entity to Facebook.</p>
+<pre class="brush: java">
+
+import com.socialize.Socialize;
+import com.socialize.entity.Entity;
+import com.socialize.entity.Share;
+import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.share.ShareAddListener;
+
+if(Socialize.getSocialize().isAuthenticated()) {
+
+        // Create or retrieve your entity object
+        Entity entity = Entity.newInstance("http://someurl.com", "My Entity");
+
+        String comment = "The comment to be added";
+
+        // Create a share options instance to nomimate the sharing preferences.
+        ShareOptions shareOptions = new ShareOptions();
+
+        // Set to share on Facebook.
+        shareOptions.setShareTo(SocialNetwork.FACEBOOK);
+
+        // Share to facebook
+        // The "this" reference below refers to a Context object
+        Socialize.getSocialize().share(this, entity, comment, shareOptions, new ShareAddListener() {
+
+                public void onError(SocializeException error) {
+                        // Handle error
+                }
+
+                public void onCreate(Share comment) {
+                        // Handle success
+                }
+        });
+}
+</pre><p>Actually almost any social action performed with Socialize can be shared to facebook.
+Check out the <a class="reference internal" href="facebook.html#propagate-fb"><em>Propagating Socialize Actions to Facebook</em></a> section for more examples</p>
+</div>
 </div>
 <div class="section" id="user-activity">
 <h2>User Activity<a class="headerlink" href="#user-activity" title="Permalink to this headline">¶</a></h2>
@@ -182,11 +617,72 @@ of the comment which was returned from the inital call to <strong>addComment</st
 <div class="section" id="listing-activity-for-a-user">
 <h3>Listing Activity for a User<a class="headerlink" href="#listing-activity-for-a-user" title="Permalink to this headline">¶</a></h3>
 <p>To obtain a list of all activity conducted by a single user, use the <strong>listActivityByUser</strong> method:</p>
-<script src="https://gist.github.com/1132969.js?file=list_user_activity.java"></script></div>
+<pre class="brush: java">
+
+import com.socialize.Socialize;
+import com.socialize.entity.ListResult;
+import com.socialize.entity.SocializeAction;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.activity.UserActivityListListener;
+
+if(Socialize.getSocialize().isAuthenticated()) {
+
+        // You can provide any user id you like, but here's how to use the current logged in user
+        Long userId = Socialize.getSocialize().getSession().getUser().getId();
+
+        // List all activity for a single user
+        Socialize.getSocialize().listActivityByUser(userId, new UserActivityListListener() {
+
+                public void onError(SocializeException error) {
+                        // Handle error
+                }
+
+                public void onList(ListResult&lt;SocializeAction&gt; activity) {
+                        // Handle success
+                }
+        });
+}
+</pre></div>
 <div class="section" id="listing-activity-for-a-user-with-pagination">
 <h3>Listing Activity for a User with Pagination<a class="headerlink" href="#listing-activity-for-a-user-with-pagination" title="Permalink to this headline">¶</a></h3>
 <p>As with all list operations the user activity list supports pagination:</p>
-<script src="https://gist.github.com/1132969.js?file=list_user_activity_paged.java"></script></div>
+<pre class="brush: java">
+
+import com.socialize.Socialize;
+import com.socialize.entity.ListResult;
+import com.socialize.entity.SocializeAction;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.activity.UserActivityListListener;
+
+if(Socialize.getSocialize().isAuthenticated()) {
+
+        // You can provide any user id you like, but here's how to use the current logged in user
+        Long userId = Socialize.getSocialize().getSession().getUser().getId();
+
+        // Set the start/end index for pagination
+        int startIndex = 0;
+        int endIndex = 10;
+
+        // List all activity for a single user
+        Socialize.getSocialize().listActivityByUser(
+                userId,
+                startIndex,
+                endIndex,
+                new UserActivityListListener() {
+
+                        public void onError(SocializeException error) {
+                                // Handle error
+                        }
+
+                        public void onList(ListResult&lt;SocializeAction&gt; activity) {
+                                // Handle success
+                        }
+                });
+}
+</pre><script type="text/javascript">
+        SyntaxHighlighter.defaults['toolbar'] = false;
+        SyntaxHighlighter.all();
+</script></div>
 </div>
 </div>
 
@@ -203,17 +699,53 @@ of the comment which was returned from the inital call to <strong>addComment</st
 <li class="toctree-l1"><a class="reference internal" href="facebook.html">Facebook Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="action_bar.html">Socialize Action Bar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="comment_view.html">Socialize Comments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html">Entity Loaders</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Socialize SDK (Advanced) Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#initializing-socialize">Initializing Socialize</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#authentication">Authentication</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#entities">Entities</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#view">View</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#like">Like</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#comment">Comment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#user-activity">User Activity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#authentication">Authentication</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#authenticating-with-facebook">Authenticating with Facebook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#authenticating-with-twitter">Authenticating with Twitter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#anonymous-authentication">Anonymous Authentication</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#entities">Entities</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creating-an-entity">Creating an Entity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#retrieving-entity-data">Retrieving Entity data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#view">View</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creating-a-view">Creating a &#8216;View&#8217;</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#like">Like</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creating-a-like">Creating a &#8216;Like&#8217;</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#removing-a-like">Removing a &#8216;Like&#8217;</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#listing-likes-for-a-user">Listing &#8216;Likes&#8217; for a User</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#comment">Comment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creating-a-comment">Creating a Comment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#retrieving-a-single-comment">Retrieving a single Comment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#listing-comments">Listing Comments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#comments-with-pagination">Comments with pagination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#listing-comments-for-a-user">Listing Comments for a User</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#share">Share</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sharing-to-facebook">Sharing to Facebook</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#user-activity">User Activity</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#listing-activity-for-a-user">Listing Activity for a User</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#listing-activity-for-a-user-with-pagination">Listing Activity for a User with Pagination</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting &amp; Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log</a></li>
 </ul>
 
@@ -225,16 +757,16 @@ of the comment which was returned from the inital call to <strong>addComment</st
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="change_log.html" title="Change Log"
+          <a href="config.html" title="Configuration Settings"
              >next</a></li>
         <li class="right" >
-          <a href="comment_view.html" title="Socialize Comments"
+          <a href="entity_loader.html" title="Entity Loaders"
              >previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK v1.3.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Socialize Inc.
+        &copy; Copyright 2012, Socialize Inc.
     </div>
   </body>
 </html>

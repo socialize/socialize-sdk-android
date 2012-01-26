@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Socialize Action Bar &mdash; Socialize Android SDK v1.1 documentation</title>
+    <title>Socialize Action Bar &mdash; Socialize Android SDK v1.3.1 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'v1.1',
+        VERSION:     'v1.3.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v1.1 documentation" href="index.html" />
+    <link rel="top" title="Socialize Android SDK v1.3.1 documentation" href="index.html" />
     <link rel="next" title="Socialize Comments" href="comment_view.html" />
     <link rel="prev" title="Facebook Integration" href="facebook.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="facebook.html" title="Facebook Integration"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK v1.3.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -49,66 +49,336 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <link rel="stylesheet" href="static/css/gist.css" type="text/css" /><div class="section" id="socialize-action-bar">
+      <link rel="stylesheet" href="static/css/shCore.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/shCoreEclipse.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/shThemeEclipse.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/gist.css" type="text/css" />
+    <script type="text/javascript" src="static/js/shCore.js"></script>
+    <script type="text/javascript" src="static/js/shBrushXml.js"></script>
+    <script type="text/javascript" src="static/js/shBrushJava.js"></script>
+    <script type="text/javascript" src="static/js/shBrushJavaProperties.js"></script>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-9835027-5']);
+    _gaq.push(['_setDomainName', '.getsocialize.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script><div class="section" id="socialize-action-bar">
 <h1>Socialize Action Bar<a class="headerlink" href="#socialize-action-bar" title="Permalink to this headline">¶</a></h1>
 <p>Brand new in v0.7.0 of the Socialize SDK for Android is the &#8220;Action Bar&#8221; which provides a single
 entry point into the entire set of Socialize features.</p>
-<img alt="images/ab_view0.png" src="images/ab_view0.png" />
-<img alt="images/ab_view1.png" src="images/ab_view1.png" />
-<img alt="images/ab_view2.png" src="images/ab_view2.png" />
+<img alt="images/action_bar.png" src="images/action_bar.png" />
+<img alt="images/share.png" src="images/share.png" />
+<img alt="images/add_comment.png" src="images/add_comment.png" />
 <div class="section" id="displaying-the-action-bar">
 <h2>Displaying the Action Bar<a class="headerlink" href="#displaying-the-action-bar" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="using-socialize-properties-configuration">
 <h3>Using socialize.properties configuration<a class="headerlink" href="#using-socialize-properties-configuration" title="Permalink to this headline">¶</a></h3>
 <p>Refer to the <a class="reference internal" href="getting_started.html"><em>Getting Started</em></a> section for details on configuring your <strong>socialize.properties</strong> file.</p>
-<script src="https://gist.github.com/1376163.js?file=no_conf.java"></script></div>
+<pre class="brush: java;">
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import com.socialize.Socialize;
+import com.socialize.entity.Entity;
+
+public class SampleActionBarActivity extends Activity {
+
+        public void onCreate(Bundle savedInstanceState) {
+
+                super.onCreate(savedInstanceState);
+
+                // Your entity key. May be passed as a Bundle parameter to your activity
+                String entityKey = "http://www.getsocialize.com";
+
+                // Create an entity object including a name
+                // The Entity object is Serializable, so you could also store the whole object in the Intent
+                Entity entity = Entity.newInstance(entityKey, "Socialize");
+
+                // Wrap your existing view with the action bar.
+                // your_layout refers to the resource ID of your current layout.
+                View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity);
+
+                // Now set the view for your activity to be the wrapped view.
+                setContentView(actionBarWrapped);
+        }
+}
+</pre></div>
 <div class="section" id="using-programmatic-configuration">
 <h3>Using programmatic configuration<a class="headerlink" href="#using-programmatic-configuration" title="Permalink to this headline">¶</a></h3>
 <p>If you prefer to do things the old fashioned way, you can set all the parameters programmatically.</p>
-<script src="https://gist.github.com/1376163.js?file=action_bar_init.java"></script></div>
+<pre class="brush: java">
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+
+import com.socialize.Socialize;
+import com.socialize.entity.Entity;
+
+public class SampleActionBarProgrammaticActivity extends Activity {
+
+        public void onCreate(Bundle savedInstanceState) {
+
+                super.onCreate(savedInstanceState);
+
+                // These can be specified in a config file
+                // called socialize.properties and places in your assets path.
+                String consumerKey = "00000000-0000-0000-000000000000";
+                String consumerSecret = "00000000-0000-0000-000000000000";
+
+                // YOUR Facebook App ID
+                String facebookAppId = "1234567890";
+
+                // Your entity key. May be passed as a Bundle parameter to your activity
+                String entityKey = "http://www.getsocialize.com";
+
+                // Create an entity object including a name
+                // The Entity object is Serializable, so you could also store the whole object in the Intent
+                Entity entity = Entity.newInstance(entityKey, "Socialize");
+
+                // Setup the credentials for Socialize
+                Socialize.getSocialize().getConfig().setSocializeCredentials(consumerKey, consumerSecret);
+                Socialize.getSocialize().getConfig().setFacebookAppId(facebookAppId);
+
+                // Disable ONLY if you experience problems
+                Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(true);
+
+                // Wrap your existing view with the action bar.
+                // your_layout refers to the resource ID of your current layout.
+                View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity);
+
+                // Now set the view for your activity to be the wrapped view.
+                setContentView(actionBarWrapped);
+        }
+}
+</pre></div>
 </div>
 <div class="section" id="advanced-features">
 <h2>Advanced Features<a class="headerlink" href="#advanced-features" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="using-the-entity-loader">
-<span id="entity-loader"></span><h3>Using the Entity Loader<a class="headerlink" href="#using-the-entity-loader" title="Permalink to this headline">¶</a></h3>
+<h3>Using the Entity Loader<a class="headerlink" href="#using-the-entity-loader" title="Permalink to this headline">¶</a></h3>
 <p>New in v1.1 of Socialize is the &#8220;Recent Activity&#8221; view shown in a user&#8217;s profile.  This displays the recent actions
 performed by the user within the app.  To maximize the benefit of this it is recommended that an &#8220;Entity Loader&#8221; implementation
 be provided to Socialize to that it knows how to load the original view for the entity.</p>
 <p>Developers should create an implementation of a SocializeEntityLoader and provide this implementation to the SocializeUI instance:</p>
-<script src="https://gist.github.com/1376163.js?file=entity_loader.java"></script></div>
+<pre class="brush: java">
+Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
+        public void loadEntity(Activity activity, Entity entity) {
+                // Load the original view for this entity
+        }
+});
+</pre><p>Refer to the <a class="reference internal" href="entity_loader.html"><em>Entity Loaders</em></a> section for more details.</p>
+</div>
 <div class="section" id="disabling-the-scrollview">
 <h3>Disabling the ScrollView<a class="headerlink" href="#disabling-the-scrollview" title="Permalink to this headline">¶</a></h3>
 <p>By default the ActionBar will create a ScrollView to house your existing content.
 This is typically necessary so that the ActionBar doesn&#8217;t impede the use of your existing content.</p>
 <p>If you don&#8217;t want your content to be scrollable however, you can disable this feature by using <strong>ActionBarOptions</strong></p>
-<script src="https://gist.github.com/1376163.js?file=init_with_options.java"></script></div>
+<pre class="brush: java">
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import com.socialize.Socialize;
+import com.socialize.entity.Entity;
+import com.socialize.ui.actionbar.ActionBarOptions;
+
+public class SampleActionBarActivityNoScrollView extends Activity {
+
+        public void onCreate(Bundle savedInstanceState) {
+
+                super.onCreate(savedInstanceState);
+
+                // Your entity key. May be passed as a Bundle parameter to your activity
+                String entityKey = "http://www.getsocialize.com";
+
+                // Create an entity object including a name
+                // The Entity object is Serializable, so you could also store the whole object in the Intent
+                Entity entity = Entity.newInstance(entityKey, "Socialize");
+
+                // Add more options
+                ActionBarOptions options = new ActionBarOptions();
+                options.setAddScrollView(false); // Disable scroll view
+
+                // Wrap your existing view with the action bar.
+                // your_layout refers to the resource ID of your current layout.
+                View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity, options);
+
+                // Now set the view for your activity to be the wrapped view.
+                setContentView(actionBarWrapped);
+        }
+}
+</pre></div>
 <div class="section" id="actionbar-creation-listener">
 <h3>ActionBar Creation Listener<a class="headerlink" href="#actionbar-creation-listener" title="Permalink to this headline">¶</a></h3>
 <p>If you need or want to obtain a reference to the ActionBar view at runtime, you can use a creation listener to listen
 for the &#8220;onCreate&#8221; event of the ActionBar:</p>
-<script src="https://gist.github.com/1376163.js?file=init_with_listener.java"></script></div>
+<pre class="brush: java;">
+import com.socialize.Socialize;
+import com.socialize.entity.Entity;
+import com.socialize.ui.actionbar.ActionBarListener;
+
+Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity, new ActionBarListener() {
+        public void onCreate(ActionBarView actionBar) {
+                // The ActionBar is really just a fancy LinearLayout
+        }
+});
+</pre></div>
 <div class="section" id="actionbar-event-listener">
 <h3>ActionBar Event Listener<a class="headerlink" href="#actionbar-event-listener" title="Permalink to this headline">¶</a></h3>
 <p>If you want to attach your own events to user operations on the ActionBar you can bind an <strong>OnActionBarEventListener</strong>
 to capture these:</p>
-<script src="https://gist.github.com/1376163.js?file=event_listener.java"></script></div>
+<pre class="brush: java;">
+import com.socialize.Socialize;
+import com.socialize.entity.Entity;
+import com.socialize.ui.actionbar.ActionBarListener;
+import com.socialize.ui.actionbar.OnActionBarEventListener;
+
+Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity, new ActionBarListener() {
+
+        @Override
+        public void onCreate(ActionBarView actionBar) {
+
+                actionBar.setOnActionBarEventListener(new OnActionBarEventListener() {
+
+                        @Override
+                        public void onUpdate(ActionBarView actionBar) {
+                                // Called when the action bar has its data updated
+                        }
+
+                        @Override
+                        public void onPostUnlike(ActionBarView actionBar) {
+                                // Called AFTER a user has removed a like
+                        }
+
+                        @Override
+                        public void onPostShare(ActionBarView actionBar, Share share) {
+                                // Called AFTER a user has posted a share
+                        }
+
+                        @Override
+                        public void onPostLike(ActionBarView actionBar, Like like) {
+                                // Called AFTER a user has posted a like
+                        }
+
+                        @Override
+                        public void onLoad(ActionBarView actionBar) {
+                                // Called when the action bar is loaded
+                        }
+
+                        @Override
+                        public void onGetLike(ActionBarView actionBar, Like like) {
+                                // Called when the action bar retrieves the like for the
+                                // current user
+                        }
+
+                        @Override
+                        public void onGetEntity(ActionBarView actionBar, Entity entity) {
+                                // Called when the action bar retrieves the entity data
+                        }
+
+                        @Override
+                        public void onClick(ActionBarView actionBar, ActionBarEvent evt) {
+                                // Called when the user clicks on the action bar
+                        }
+                });
+        }
+});
+</pre></div>
 <div class="section" id="reloading-the-action-bar-changing-its-entity">
 <h3>Reloading the Action Bar (Changing its entity)<a class="headerlink" href="#reloading-the-action-bar-changing-its-entity" title="Permalink to this headline">¶</a></h3>
 <p>If you want to maintain a single action bar instance shared across multiple entities you can simply use the <strong>refresh</strong> method
 to instruct the ActionBar to reload after you change the entity key:</p>
-<script src="https://gist.github.com/1376163.js?file=action_bar_reload.java"></script></div>
-<div class="section" id="xml-based-layout-experimental">
-<h3>XML Based Layout (Experimental)<a class="headerlink" href="#xml-based-layout-experimental" title="Permalink to this headline">¶</a></h3>
+<pre class="brush: java;">
+// Create a class to capture the action bar reference
+public class MyActionBarListener implements ActionBarListener {
+        private ActionBarView actionBarView;
+
+        @Override
+        public void onCreate(ActionBarView actionBar) {
+                // Store a reference to the actionBar view
+                this.actionBarView = actionBar;
+        }
+
+        public ActionBarView getActionBarView() {
+                return actionBarView;
+        }
+}
+
+// The in the Activity which renders the ActionBar
+
+// Setup a listener to retain a reference
+MyActionBarListener listener = new MyActionBarListener();
+
+// Use the listener when you show the action bar
+Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity, listener);
+
+// Later (After the action bar has loaded!), you can reference the view to refresh
+ActionBarView view = listener.getActionBarView();
+
+if (view != null) {
+        Entity newEntity = new Entity(); // This would be your new entity
+        view.setEntity(newEntity);
+        view.refresh();
+}
+</pre></div>
+<div class="section" id="xml-based-layout">
+<h3>XML Based Layout<a class="headerlink" href="#xml-based-layout" title="Permalink to this headline">¶</a></h3>
 <p>If the &#8220;auto-pin&#8221; feature of the Action Bar is not to your liking, or doesn&#8217;t play well with your existing layout
 you can always just add the view manually.</p>
-<p><strong>NOTE:</strong> There are some fairly important things the Action Bar expects that you should be aware of:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There are some fairly important things the Action Bar expects that you should be aware of:</p>
+</div>
 <ol class="arabic simple">
 <li>It MUST be included inside a RelativeLayout.  This is because several of the UI features need to be able to slide &#8220;over&#8221; your existing content.</li>
 <li>It MUST be positioned at the bottom of your view.</li>
 <li>It MUST be included as the LAST element in your XML layout, otherwise you may get some strange behaviour with layers sliding over/under content.</li>
 </ol>
 <p>Here is the recommended way to include the Action Bar in your XML layout:</p>
-<script src="https://gist.github.com/1376163.js?file=manual_layout.xml"></script></div>
+<pre class="brush: xml;">
+&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        &lt;ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_above="@+id/socializeActionBar"
+                android:fillViewport="true"
+                android:isScrollContainer="false">
+
+                &lt;LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+
+                &lt;!-- Your existing content goes here -->
+
+                &lt;/LinearLayout>
+
+        &lt;/ScrollView>
+
+        &lt;!-- The ActionBar MUST appear AFTER your content in your layout -->
+        &lt;com.socialize.ui.actionbar.ActionBarView
+                android:id="@id/socializeActionBar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"/>
+
+&lt;/RelativeLayout>
+</pre><script type="text/javascript">
+        SyntaxHighlighter.defaults['toolbar'] = false;
+        SyntaxHighlighter.all();
+</script></div>
 </div>
 </div>
 
@@ -124,12 +394,28 @@ you can always just add the view manually.</p>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="facebook.html">Facebook Integration</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Socialize Action Bar</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#displaying-the-action-bar">Displaying the Action Bar</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#advanced-features">Advanced Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#displaying-the-action-bar">Displaying the Action Bar</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-socialize-properties-configuration">Using socialize.properties configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-programmatic-configuration">Using programmatic configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-features">Advanced Features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-the-entity-loader">Using the Entity Loader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#disabling-the-scrollview">Disabling the ScrollView</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#actionbar-creation-listener">ActionBar Creation Listener</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#actionbar-event-listener">ActionBar Event Listener</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reloading-the-action-bar-changing-its-entity">Reloading the Action Bar (Changing its entity)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#xml-based-layout">XML Based Layout</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="comment_view.html">Socialize Comments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html">Entity Loaders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting &amp; Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log</a></li>
 </ul>
 
@@ -146,11 +432,11 @@ you can always just add the view manually.</p>
         <li class="right" >
           <a href="facebook.html" title="Facebook Integration"
              >previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK v1.3.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Socialize Inc.
+        &copy; Copyright 2012, Socialize Inc.
     </div>
   </body>
 </html>

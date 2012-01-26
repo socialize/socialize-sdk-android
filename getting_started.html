@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Getting Started &mdash; Socialize Android SDK v1.1 documentation</title>
+    <title>Getting Started &mdash; Socialize Android SDK v1.3.1 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'v1.1',
+        VERSION:     'v1.3.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v1.1 documentation" href="index.html" />
+    <link rel="top" title="Socialize Android SDK v1.3.1 documentation" href="index.html" />
     <link rel="next" title="Facebook Integration" href="facebook.html" />
     <link rel="prev" title="What’s New" href="whats_new.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="whats_new.html" title="What’s New"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK v1.3.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -49,8 +49,28 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <link rel="stylesheet" href="static/css/gist.css" type="text/css" /><div class="section" id="getting-started">
-<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+      <link rel="stylesheet" href="static/css/shCore.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/shCoreEclipse.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/shThemeEclipse.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/gist.css" type="text/css" />
+    <script type="text/javascript" src="static/js/shCore.js"></script>
+    <script type="text/javascript" src="static/js/shBrushXml.js"></script>
+    <script type="text/javascript" src="static/js/shBrushJava.js"></script>
+    <script type="text/javascript" src="static/js/shBrushJavaProperties.js"></script>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-9835027-5']);
+    _gaq.push(['_setDomainName', '.getsocialize.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script><div class="section" id="getting-started">
+<span id="id1"></span><h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
 <script type="text/javascript" charset="utf-8">
   var is_ssl = ("https:" == document.location.protocol);
   var asset_host = is_ssl ? "https://s3.amazonaws.com/getsatisfaction.com/" : "http://s3.amazonaws.com/getsatisfaction.com/";
@@ -71,9 +91,8 @@
   var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
 </script><div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>v0.7.0 of the Socialize SDK introduces a completely new control we call the &#8220;Action Bar&#8221;.
-This is a one-stop-shop of social features that can be quickly and easily dropped into your app, and
-provides a central entry point into all the features of the Socialize SDK.</p>
+<p>Socialize is a drop-in social platform for iOS and Android which allows developers to add social
+features to their app in a matter of minutes.</p>
 </div>
 <div class="section" id="what-s-new">
 <h2>What&#8217;s New<a class="headerlink" href="#what-s-new" title="Permalink to this headline">¶</a></h2>
@@ -87,7 +106,10 @@ provides a central entry point into all the features of the Socialize SDK.</p>
 from the <strong>dist</strong> folder to the <strong>libs</strong> path of your Android project.</p>
 <p>If you&#8217;re using eclipse, you&#8217;ll need to add the socialize-x.x.x.jar as a referenced library:</p>
 <img alt="images/library_refs.png" src="images/library_refs.png" />
-<p><strong>NOTE: Applications targeting older versions of Android (1.6 and below)</strong></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Applications targeting older versions of Android (1.6 and below)**</p>
+</div>
 <p>Socialize does not support Android versions below v2.1-update1</p>
 </div>
 <div class="section" id="set-up-your-socialize-keys">
@@ -98,15 +120,48 @@ been given two &#8220;oAuth&#8221; authentication keys.  A &#8220;consumer key&#
 the <strong>assets</strong> path of your project called <strong>socialize.properties</strong></p>
 <img alt="images/socialize.properties.png" src="images/socialize.properties.png" />
 <p>Within this file, enter your Socialize consumer key and secret:</p>
-<script src="https://gist.github.com/1132979.js?file=setup_ui.properties"></script><p>(Replace 00000000-0000-0000-000000000000 with your key/secret from your Socialize account)</p>
+<pre class="brush: java-properties">
+# Socialize App Key and Secret
+socialize.consumer.key=00000000-0000-0000-000000000000
+socialize.consumer.secret=00000000-0000-0000-000000000000
+</pre><p>(Replace 00000000-0000-0000-000000000000 with your key/secret from your Socialize account)</p>
 </div>
 <div class="section" id="configure-your-androidmanifest-xml">
 <h3>3. Configure your AndroidManifest.xml<a class="headerlink" href="#configure-your-androidmanifest-xml" title="Permalink to this headline">¶</a></h3>
 <p>Add the following lines to your AndroidManifest.xml under the <strong>&lt;application...&gt;</strong> element</p>
-<script src="https://gist.github.com/1201498.js?file=ui_manifest_0.6.0.xml"></script><p>Add the following lines to your AndroidManifest.xml under the <strong>&lt;manifest...&gt;</strong> element</p>
-<script src="https://gist.github.com/1201498.js?file=ui_manifest_permissions.xml"></script></div>
-<div class="section" id="configure-facebook-integration">
-<h3>4. Configure Facebook Integration<a class="headerlink" href="#configure-facebook-integration" title="Permalink to this headline">¶</a></h3>
+<pre class="brush: xml;">
+        &lt;manifest...>
+
+        &lt;application...>
+
+                 &lt;!-- Base Activities Required by Socialize -->
+                 &lt;activity android:name="com.socialize.ui.comment.CommentActivity"/>
+                 &lt;activity android:name="com.socialize.ui.action.ActionDetailActivity"/>
+                 &lt;activity android:name="com.socialize.ui.profile.ProfileActivity"/>
+                 &lt;activity android:name="com.socialize.auth.facebook.FacebookActivity"/>
+
+        &lt;/application>
+
+        &lt;/manifest>
+</pre><p>Add the following lines to your AndroidManifest.xml under the <strong>&lt;manifest...&gt;</strong> element</p>
+<pre class="brush: xml">
+        &lt;manifest...>
+
+        &lt;application.../>
+
+        &lt;uses-permission android:name="android.permission.INTERNET"/>
+
+        &lt;!-- Optional but recommended -->
+        &lt;uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+        &lt;!-- Optionally add ONE of the following to include location data in comments -->
+        &lt;uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+        &lt;uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+        &lt;/manifest>
+</pre></div>
+<div class="section" id="configure-facebook-integration-optional">
+<h3>4. Configure Facebook Integration (Optional)<a class="headerlink" href="#configure-facebook-integration-optional" title="Permalink to this headline">¶</a></h3>
 <p>It is strongly recommended that users be able to authenticate with Facebook when using Socialize so as to
 maximize the exposure, and promotion of your app.</p>
 <p>This provides significant benefits to both your application, and your users including:</p>
@@ -119,7 +174,14 @@ maximize the exposure, and promotion of your app.</p>
 <p>To add Facebook authentication, you&#8217;ll need a Facebook App ID.</p>
 <p>If you already have a Facebook app, you can skip this section, otherwise refer to <a class="reference internal" href="facebook.html"><em>Facebook Integration</em></a> for more information.</p>
 <p>Once you have your facebook app ID, you can add it to the <strong>socialize.properties</strong> config file:</p>
-<script src="https://gist.github.com/1132979.js?file=socialize.properties"></script></div>
+<pre class="brush: java-properties">
+# Socialize App Key and Secret
+socialize.consumer.key=00000000-0000-0000-000000000000
+socialize.consumer.secret=00000000-0000-0000-000000000000
+
+# Facebook App ID
+facebook.app.id=1234567890
+</pre></div>
 <div class="section" id="include-socialize-in-your-app">
 <h3>5. Include Socialize in your App!<a class="headerlink" href="#include-socialize-in-your-app" title="Permalink to this headline">¶</a></h3>
 <p>Now that you have your environment all setup, it&#8217;s time to include Socialize.</p>
@@ -127,9 +189,54 @@ maximize the exposure, and promotion of your app.</p>
 <img alt="images/action_bar.png" src="images/action_bar.png" />
 <p>This is a general purpose toolbar that sits at the bottom of your app and provides a central &#8220;one-stop-shop&#8221;
 of social features for your users.</p>
+<p>Each Action Bar instance in your app is bound to an <em>Entity</em>.  An Entity is simply an item of content in your app.
+Each Socialize action (comment, share, like etc.) is associated with an Entity.</p>
+<p>An entity can be any item of content like a website, photo or person but MUST be given a unique key within your app.</p>
+<p>It is not necessary to explicitly create an Entity object when rendering the Action bar as this will be done for you,
+however entities <em>can</em> be created manually.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Refer to the <a class="reference internal" href="sdk_user_guide.html#entities"><em>Entities</em></a> section for details on creating entities directly using the SDK.</p>
+</div>
 <p>The Action Bar is designed to automatically &#8220;pin&#8221; iteself to the bottom of your view.
 Adding the Action Bar to your app is done with a simple call to <strong>showActionBar</strong> from the SocializeUI instance:</p>
-<script src="https://gist.github.com/1376163.js?file=no_conf.java"></script></div>
+<pre class="brush: java;">
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import com.socialize.Socialize;
+import com.socialize.entity.Entity;
+
+public class SampleActionBarActivity extends Activity {
+
+        public void onCreate(Bundle savedInstanceState) {
+
+                super.onCreate(savedInstanceState);
+
+                // Your entity key. May be passed as a Bundle parameter to your activity
+                String entityKey = "http://www.getsocialize.com";
+
+                // Create an entity object including a name
+                // The Entity object is Serializable, so you could also store the whole object in the Intent
+                Entity entity = Entity.newInstance(entityKey, "Socialize");
+
+                // Wrap your existing view with the action bar.
+                // your_layout refers to the resource ID of your current layout.
+                View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity);
+
+                // Now set the view for your activity to be the wrapped view.
+                setContentView(actionBarWrapped);
+        }
+}
+</pre></div>
+<div class="section" id="next-steps">
+<h3>Next Steps...<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h3>
+<p>Visit your App dashboard on the Socialize website to enable additional features like SmartAlerts.</p>
+<p><a class="reference external" href="http://www.getsocialize.com/apps/">http://www.getsocialize.com/apps/</a></p>
+<script type="text/javascript">
+        SyntaxHighlighter.defaults['toolbar'] = false;
+        SyntaxHighlighter.all();
+</script></div>
 </div>
 </div>
 
@@ -145,13 +252,25 @@ Adding the Action Bar to your app is done with a simple call to <strong>showActi
 <li class="toctree-l1 current"><a class="current reference internal" href="">Getting Started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#what-s-new">What&#8217;s New</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#steps-to-using-socialize">5 Steps to Using Socialize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#steps-to-using-socialize">5 Steps to Using Socialize</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#install-the-sdk">1. Install the SDK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-up-your-socialize-keys">2. Set up your Socialize Keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configure-your-androidmanifest-xml">3. Configure your AndroidManifest.xml</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configure-facebook-integration-optional">4. Configure Facebook Integration (Optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#include-socialize-in-your-app">5. Include Socialize in your App!</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#next-steps">Next Steps...</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="facebook.html">Facebook Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="action_bar.html">Socialize Action Bar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="comment_view.html">Socialize Comments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html">Entity Loaders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting &amp; Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log</a></li>
 </ul>
 
@@ -168,11 +287,11 @@ Adding the Action Bar to your app is done with a simple call to <strong>showActi
         <li class="right" >
           <a href="whats_new.html" title="What’s New"
              >previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK v1.3.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Socialize Inc.
+        &copy; Copyright 2012, Socialize Inc.
     </div>
   </body>
 </html>

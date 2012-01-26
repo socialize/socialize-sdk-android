@@ -1,0 +1,199 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Entity Loaders &mdash; Socialize Android SDK v1.3.1 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     'v1.3.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="shortcut icon" href="static/favicon.ico"/>
+    <link rel="top" title="Socialize Android SDK v1.3.1 documentation" href="index.html" />
+    <link rel="next" title="Socialize SDK (Advanced) Guide" href="sdk_user_guide.html" />
+    <link rel="prev" title="SmartAlerts (Push Notifications)" href="push_notifications.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="sdk_user_guide.html" title="Socialize SDK (Advanced) Guide"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="push_notifications.html" title="SmartAlerts (Push Notifications)"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Socialize Android SDK v1.3.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+      <link rel="stylesheet" href="static/css/shCore.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/shCoreEclipse.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/shThemeEclipse.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/gist.css" type="text/css" />
+    <script type="text/javascript" src="static/js/shCore.js"></script>
+    <script type="text/javascript" src="static/js/shBrushXml.js"></script>
+    <script type="text/javascript" src="static/js/shBrushJava.js"></script>
+    <script type="text/javascript" src="static/js/shBrushJavaProperties.js"></script>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-9835027-5']);
+    _gaq.push(['_setDomainName', '.getsocialize.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script><div class="section" id="entity-loaders">
+<span id="entity-loader"></span><h1>Entity Loaders<a class="headerlink" href="#entity-loaders" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The &#8220;entity loader&#8221; is a class provided by the developer (you) that gives Socialize a way to navigate your application.</p>
+<p>When a user views a social action (e.g. a comment) the Entity Loader allows the user to navigate to the entity (content) to
+which the social action pertains.</p>
+<p>This is particularly important for SmartAlerts (push notifications) and as such an entity loader is required for SmartAlerts.</p>
+</div>
+<div class="section" id="creating-the-entity-loader">
+<h2>Creating the Entity Loader<a class="headerlink" href="#creating-the-entity-loader" title="Permalink to this headline">¶</a></h2>
+<p>There is only one Entity Loader per application and it can be set on the Socialize instance:</p>
+<pre class="brush: java">
+Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
+        public void loadEntity(Activity activity, Entity entity) {
+                // Load the original view for this entity
+        }
+});
+</pre><p>The <strong>loadEntity</strong> method will be called by Socialize when the user selects an item rendered by Socialize which corresponds directly to
+content in your app.</p>
+<p>For example you may want to start an activity in the entity loader:</p>
+<pre class="brush: java">
+Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
+        public void loadEntity(Activity activity, Entity entity) {
+                // Launch an activity from here...
+                Intent intent = new Intent(activity, MyContentActivity.class);
+
+                // Add the key from the entity
+                intent.putExtra("some_key", entity.getKey());
+                activity.startActivity(intent);
+        }
+});
+</pre><p>The entity loader would usually be specified when you instantiate the ActionBar, for example:</p>
+<pre class="brush: java;">
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+
+import com.socialize.Socialize;
+import com.socialize.entity.Entity;
+import com.socialize.ui.SocializeEntityLoader;
+
+public class SampleActionBarActivity extends Activity {
+
+        public void onCreate(Bundle savedInstanceState) {
+
+                super.onCreate(savedInstanceState);
+
+                // Your entity key. May be passed as a Bundle parameter to your activity
+                String entityKey = "http://www.getsocialize.com";
+
+                // Create an entity object including a name
+                // The Entity object is Serializable, so you could also store the whole object in the Intent
+                Entity entity = Entity.newInstance(entityKey, "Socialize");
+
+                // Set up the entity loader
+                Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
+                        public void loadEntity(Activity activity, Entity entity) {
+                                // Launch an activity from here...
+                                Intent intent = new Intent(activity, MyContentActivity.class);
+
+                                // Add the key from the entity
+                                intent.putExtra("some_key", entity.getKey());
+                                activity.startActivity(intent);
+                        }
+                });
+
+                // Wrap your existing view with the action bar.
+                // your_layout refers to the resource ID of your current layout.
+                View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity);
+
+                // Now set the view for your activity to be the wrapped view.
+                setContentView(actionBarWrapped);
+        }
+}
+</pre><script type="text/javascript">
+        SyntaxHighlighter.defaults['toolbar'] = false;
+        SyntaxHighlighter.all();
+</script></div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comment_view.html">Socialize Comments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Entity Loaders</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-the-entity-loader">Creating the Entity Loader</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log</a></li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="sdk_user_guide.html" title="Socialize SDK (Advanced) Guide"
+             >next</a></li>
+        <li class="right" >
+          <a href="push_notifications.html" title="SmartAlerts (Push Notifications)"
+             >previous</a> |</li>
+        <li><a href="index.html">Socialize Android SDK v1.3.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Socialize Inc.
+    </div>
+  </body>
+</html>

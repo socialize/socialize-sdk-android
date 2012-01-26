@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SmartAlerts (Push Notifications) &mdash; Socialize Android SDK v1.3.1 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     'v1.3.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="shortcut icon" href="static/favicon.ico"/>
+    <link rel="top" title="Socialize Android SDK v1.3.1 documentation" href="index.html" />
+    <link rel="next" title="Entity Loaders" href="entity_loader.html" />
+    <link rel="prev" title="Socialize Comments" href="comment_view.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="entity_loader.html" title="Entity Loaders"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="comment_view.html" title="Socialize Comments"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Socialize Android SDK v1.3.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+      <link rel="stylesheet" href="static/css/shCore.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/shCoreEclipse.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/shThemeEclipse.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/gist.css" type="text/css" />
+    <script type="text/javascript" src="static/js/shCore.js"></script>
+    <script type="text/javascript" src="static/js/shBrushXml.js"></script>
+    <script type="text/javascript" src="static/js/shBrushJava.js"></script>
+    <script type="text/javascript" src="static/js/shBrushJavaProperties.js"></script>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-9835027-5']);
+    _gaq.push(['_setDomainName', '.getsocialize.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script><div class="section" id="smartalerts-push-notifications">
+<span id="notifications"></span><h1>SmartAlerts (Push Notifications)<a class="headerlink" href="#smartalerts-push-notifications" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>In v1.3 of Socialize we introduced <a class="reference external" href="http://blog.getsocialize.com/smartalerts">SmartAlerts</a>.  This provides your app with a simple and effective way to bring users back into the
+&#8220;viral loop&#8221; of the app.</p>
+<img alt="images/comment.png" src="images/comment.png" />
+<img alt="images/subscribe.png" src="images/subscribe.png" />
+<div class="section" id="smartalerts-in-comment-threads">
+<h3>SmartAlerts in Comment Threads<a class="headerlink" href="#smartalerts-in-comment-threads" title="Permalink to this headline">¶</a></h3>
+<p>When a user posts a comment they can elect to subscribe to updates for that topic.</p>
+<p>When another user then posts a comment, the original user will receive a push notification to their device bringing them back into the app.</p>
+</div>
+</div>
+<div class="section" id="step-1-enable-notifications-on-http-www-getsocialize-com">
+<h2>Step 1: Enable Notifications on <a class="reference external" href="http://www.getsocialize.com">http://www.getsocialize.com</a><a class="headerlink" href="#step-1-enable-notifications-on-http-www-getsocialize-com" title="Permalink to this headline">¶</a></h2>
+<p>For SmartAlerts to work they must be enabled on a compatible plan at <a class="reference external" href="http://getsocialize.com/apps">http://getsocialize.com/apps</a></p>
+<p>Select your app and click &#8220;Notification Settings&#8221;</p>
+<img alt="images/notification_settings.png" src="images/notification_settings.png" />
+<p>Then select &#8220;enabled&#8221;</p>
+<img alt="images/notification_enable.png" src="images/notification_enable.png" />
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You must enter your Android package name into the <a class="reference external" href="http://getsocialize.com/apps">Socialize website</a> to enable notifications</p>
+</div>
+</div>
+<div class="section" id="step-2-add-configuration-to-androidmanifest-xml">
+<h2>Step 2: Add Configuration to AndroidManifest.xml<a class="headerlink" href="#step-2-add-configuration-to-androidmanifest-xml" title="Permalink to this headline">¶</a></h2>
+<p>The default configuration for Socialize needs to be augmented slightly for push notifications.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Make sure you replace every occurrance of <strong>your_package_name</strong> with the package name of your app!</p>
+</div>
+<p>Add the following additional configurations to the <strong>&lt;application.../&gt;</strong> element of your <strong>AndroidManifest.xml</strong></p>
+<pre class="brush: xml;tab-size: 4;highlight: [14,18]">
+        &lt;manifest...>
+
+                &lt;application...>
+
+                        &lt;!-- Activities Required for Socialize Push Notifications -->
+                        &lt;activity android:name="com.socialize.ui.SocializeLaunchActivity" android:launchMode="singleTop"/>
+
+                        &lt;!-- Socialize Notification Receiver -->
+                        &lt;!-- Replace your_package_name with your app package name -->
+                        &lt;service android:name="com.socialize.notifications.SocializeC2DMReceiver"/>
+                        &lt;receiver android:name="com.socialize.notifications.SocializeBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+                                &lt;intent-filter>
+                                        &lt;action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                                        &lt;category android:name="your_package_name" />
+                                &lt;/intent-filter>
+                                &lt;intent-filter>
+                                        &lt;action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                                        &lt;category android:name="your_package_name" />
+                                &lt;/intent-filter>
+                        &lt;/receiver>
+
+                &lt;/application>
+
+        &lt;/manifest>
+</pre><p>Add the following additional configurations to the <strong>&lt;manifest.../&gt;</strong> element of your <strong>AndroidManifest.xml</strong></p>
+<pre class="brush: xml;tab-size: 4;highlight: [5,7]">
+        &lt;manifest...>
+
+                &lt;!-- Permissions required for Push Notifications -->
+                &lt;!-- Replace your_package_name with your app package name -->
+                &lt;permission android:name="your_package_name.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+
+                &lt;uses-permission android:name="your_package_name.permission.C2D_MESSAGE" />
+                &lt;uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+        &lt;/manifest>
+</pre><p>The full <strong>AndroidManifest.xml</strong> should look something like this</p>
+<pre class="brush: xml;tab-size: 4;highlight: [20,24,41,43]">
+        &lt;manifest...>
+
+                &lt;application...>
+
+                        &lt;!-- Base Activities Required by Socialize -->
+                        &lt;activity android:name="com.socialize.ui.comment.CommentActivity"/>
+                        &lt;activity android:name="com.socialize.ui.action.ActionDetailActivity"/>
+                        &lt;activity android:name="com.socialize.ui.profile.ProfileActivity"/>
+                        &lt;activity android:name="com.socialize.auth.facebook.FacebookActivity"/>
+
+                        &lt;!-- Activities Required for Socialize Push Notifications -->
+                        &lt;activity android:name="com.socialize.ui.SocializeLaunchActivity" android:launchMode="singleTop"/>
+
+                        &lt;!-- Socialize Notification Receiver -->
+                        &lt;!-- Replace your_package_name with your app package name -->
+                        &lt;service android:name="com.socialize.notifications.SocializeC2DMReceiver"/>
+                        &lt;receiver android:name="com.socialize.notifications.SocializeBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+                                &lt;intent-filter>
+                                        &lt;action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                                        &lt;category android:name="your_package_name" />
+                                &lt;/intent-filter>
+                                &lt;intent-filter>
+                                        &lt;action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                                        &lt;category android:name="your_package_name" />
+                                &lt;/intent-filter>
+                        &lt;/receiver>
+
+                &lt;/application>
+
+                &lt;uses-permission android:name="android.permission.INTERNET"/>
+
+                &lt;!-- Optional but recommended -->
+                &lt;uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+                &lt;!-- Optionally add ONE of the following to include location data in comments -->
+                &lt;uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+                &lt;uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+                &lt;!-- Permissions required for Push Notifications -->
+                &lt;!-- Replace your_package_name with your app package name -->
+                &lt;permission android:name="your_package_name.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+
+                &lt;uses-permission android:name="your_package_name.permission.C2D_MESSAGE" />
+                &lt;uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+        &lt;/manifest>
+</pre><div class="section" id="i-already-have-a-broadcastreceiver-defined">
+<h3>I already have a BroadcastReceiver defined!<a class="headerlink" href="#i-already-have-a-broadcastreceiver-defined" title="Permalink to this headline">¶</a></h3>
+<p>If you already have a BroadcastReceiver defined in your application, you can simply call the Socialize handler
+in your existing broadcast receiver&#8217;s <strong>onReceive()</strong> method:</p>
+<pre class="brush: java">
+
+/* (non-Javadoc)
+ * @see android.content.BroadcastReceiver#onReceive(android.content.Context, android.content.Intent)
+ */
+@Override
+public void onReceive(Context context, Intent intent) {
+        if(!Socialize.getSocialize().handleBroadcastIntent(context, intent)) {
+                // Message was NOT handled by Socialize.
+        }
+}
+
+</pre><p>Make sure however, that you add the intent filters and permissions required by Socialize to your existing receiver definition.</p>
+</div>
+</div>
+<div class="section" id="step-3-create-an-entity-loader">
+<h2>Step 3: Create an Entity Loader<a class="headerlink" href="#step-3-create-an-entity-loader" title="Permalink to this headline">¶</a></h2>
+<p>In order for Socialize to know how to handle a notification it needs an &#8220;Entity Loader&#8221;.  This is a class
+provided by you which tells Socialize how to load content in your app.</p>
+<p>Refer to the <a class="reference internal" href="entity_loader.html#entity-loader"><em>Entity Loaders</em></a> section for details on how to implement a Socialize Entity Loader.</p>
+<script type="text/javascript">
+        SyntaxHighlighter.defaults['toolbar'] = false;
+        SyntaxHighlighter.all();
+</script></div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comment_view.html">Socialize Comments</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">SmartAlerts (Push Notifications)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smartalerts-in-comment-threads">SmartAlerts in Comment Threads</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-enable-notifications-on-http-www-getsocialize-com">Step 1: Enable Notifications on http://www.getsocialize.com</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-add-configuration-to-androidmanifest-xml">Step 2: Add Configuration to AndroidManifest.xml</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#i-already-have-a-broadcastreceiver-defined">I already have a BroadcastReceiver defined!</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-create-an-entity-loader">Step 3: Create an Entity Loader</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html">Entity Loaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log</a></li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="entity_loader.html" title="Entity Loaders"
+             >next</a></li>
+        <li class="right" >
+          <a href="comment_view.html" title="Socialize Comments"
+             >previous</a> |</li>
+        <li><a href="index.html">Socialize Android SDK v1.3.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Socialize Inc.
+    </div>
+  </body>
+</html>
