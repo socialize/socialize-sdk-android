@@ -10,5 +10,9 @@
 			intent.putExtra("some_key", entity.getKey());
 			activity.startActivity(intent);
 		}
+		
+		public boolean canLoad(Context context, Entity entity) {
+			return true; // always load in this case	
+		}
 	});
 	</pre>
