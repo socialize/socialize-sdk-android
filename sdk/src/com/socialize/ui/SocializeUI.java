@@ -52,7 +52,7 @@ public class SocializeUI {
 	public static final String ENTITY_URL_AS_LINK = "socialize.entity.entityKey.link";
 	
 	public static final String DEFAULT_USER_ICON = "default_user_icon.png";
-	public static final String SOCIALIZE_LOGO = "socialize_logo.png";
+//	public static final String SOCIALIZE_LOGO = "socialize_logo.png";
 	public static final String BG_ACCENT = "bg_accent.png";
 	
 	public static final Map<String, SocializeListener> STATIC_LISTENERS = new HashMap<String, SocializeListener>();

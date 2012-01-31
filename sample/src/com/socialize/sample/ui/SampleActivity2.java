@@ -45,6 +45,11 @@ public class SampleActivity2 extends Activity {
 		
 		final SocializeEntityLoader loader = new SocializeEntityLoader() {
 			@Override
+			public boolean canLoad(Context context, Entity entity) {
+				return true;
+			}
+			
+			@Override
 			public void loadEntity(Activity activity, Entity entity) {
 				Toast.makeText(activity, "Entity loader triggered", Toast.LENGTH_SHORT).show();
 			}

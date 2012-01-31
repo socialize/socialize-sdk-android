@@ -116,7 +116,7 @@ public class UserActivityListAdapter extends BaseAdapter {
 				view = userActivityListItemFactory.getBean();
 			}
 			
-			view.setAction(item, now);
+			view.setAction(oldView.getContext(), item, now);
 		}
 		else {
 			return oldView;

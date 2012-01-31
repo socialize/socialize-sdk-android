@@ -307,7 +307,7 @@ public class ActionDetailContentView extends BaseView {
 
 	public void setAction(final SocializeAction action) {
 		if(actionView != null) {
-			actionView.setAction(action, new Date());
+			actionView.setAction(getActivity(), action, new Date());
 			actionView.setVisibility(VISIBLE);
 		}
 		

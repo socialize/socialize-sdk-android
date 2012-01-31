@@ -92,7 +92,7 @@ public class UserActivityView extends BaseView {
 						
 						for (SocializeAction item : items) {
 							UserActivityListItem view = userActivityListItemFactory.getBean();
-							view.setAction(item, now);
+							view.setAction(getContext(), item, now);
 							view.setLayoutParams(params);
 							views.add(view);
 						}

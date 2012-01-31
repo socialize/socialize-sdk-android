@@ -32,8 +32,9 @@ import com.socialize.ui.util.Colors;
 
 /**
  * @author Jason Polites
- *
+ * @deprecated
  */
+@Deprecated
 public class UserActivityActionHtml extends WebView implements UserActivityAction {
 	
 	private Colors colors;
@@ -62,12 +63,12 @@ public class UserActivityActionHtml extends WebView implements UserActivityActio
 	 * @see com.socialize.ui.profile.activity.UserActivityAction#setAction(com.socialize.entity.SocializeAction)
 	 */
 	@Override
-	public void setAction(SocializeAction action) {
-		String html = makeActionText(action);
+	public void setAction(Context context, SocializeAction action) {
+		String html = makeActionText(context, action);
 		loadDataWithBaseURL("", html, "text/html", "utf-8", null);
 	}
 	
-	protected String makeActionText(final SocializeAction action) {
+	protected String makeActionText(Context context, final SocializeAction action) {
 		
 		StringBuilder builder = new StringBuilder();
 		
@@ -75,21 +76,31 @@ public class UserActivityActionHtml extends WebView implements UserActivityActio
 		
 		builder.append("<html><head><style>body { -webkit-tap-highlight-color: rgba(255, 255, 255, 0); background:transparent; margin:0px; padding:0; font:helvetica,arial,sans-serif;}</style></head>");
 		
+		boolean canLoad = false;
+		
 		if(entityLoader != null) {
-			addJavascriptInterface(new Object() {
-				@SuppressWarnings("unused")
-				public void loadEntity() {
-					entityLoader.loadEntity((Activity)getContext(), action.getEntity());
-				}
-			}, "socialize");
 			
-			builder.append("<body onclick='window.socialize.loadEntity();'>");
+			canLoad = entityLoader.canLoad(getContext(), action.getEntity());
+			
+			if(canLoad) {
+				addJavascriptInterface(new Object() {
+					@SuppressWarnings("unused")
+					public void loadEntity() {
+						entityLoader.loadEntity((Activity)getContext(), action.getEntity());
+					}
+				}, "socialize");
+				
+				builder.append("<body onclick='window.socialize.loadEntity();'>");
+			}
+			else {
+				builder.append("<body>");
+			}
 		}
 		else {
 			builder.append("<body>");
 		}
 
-		builder.append(userActivityUtils.makeActionHtml(action, titleFontSize, contentFontSize, fontColor, linkColor));
+		builder.append(userActivityUtils.makeActionHtml(context, action, titleFontSize, contentFontSize, fontColor, linkColor));
 		builder.append("</body></html>");
 		
 		return builder.toString();
