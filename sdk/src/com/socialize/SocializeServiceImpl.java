@@ -557,7 +557,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 						logErrorMessage(msg);
 					}
 					else {
-						authenticate(consumerKey, consumerSecret, authProviderType, authProviderAppId, authListener);
+						authenticate(context, consumerKey, consumerSecret, authProviderType, authProviderAppId, authListener);
 					}
 					break;
 			default:

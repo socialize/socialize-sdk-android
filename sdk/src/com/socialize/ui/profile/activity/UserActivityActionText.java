@@ -71,7 +71,7 @@ public class UserActivityActionText extends TextView implements UserActivityActi
 	 * @see com.socialize.ui.profile.activity.UserActivityAction#setAction(com.socialize.entity.SocializeAction)
 	 */
 	@Override
-	public void setAction(final SocializeAction action) {
+	public void setAction(Context context, final SocializeAction action) {
 		try {
 			doSetAction(action);
 		} 
@@ -93,14 +93,21 @@ public class UserActivityActionText extends TextView implements UserActivityActi
 		
 		StringBuilder builder = new StringBuilder();
 		
+		boolean canLoad = false;
+	
 		final SocializeEntityLoader entityLoader = Socialize.getSocialize().getEntityLoader();
 		if(entityLoader != null) {
-			setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					entityLoader.loadEntity((Activity)getContext(), action.getEntity());
-				}
-			});
+			
+			canLoad = entityLoader.canLoad(getContext(), action.getEntity());
+			
+			if(canLoad) {
+				setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						entityLoader.loadEntity((Activity)getContext(), action.getEntity());
+					}
+				});
+			}
 		}
 		
 		setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleFontSize);
@@ -174,7 +181,7 @@ public class UserActivityActionText extends TextView implements UserActivityActi
 
 		Spannable spannable = new SpannableString(builder.toString()); 
 
-		if(entityLoader != null) {
+		if(canLoad) {
 			
 			ColorStateList linkColor = new ColorStateList(
 		            new int[][] {

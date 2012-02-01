@@ -75,7 +75,6 @@ public class UserActivityListItem extends TableLayout {
 	private IBeanFactory<UserActivityAction> userActivityActionHtmlFactory;
 	private IBeanFactory<UserActivityAction> userActivityActionTextFactory;
 	
-	
 	public UserActivityListItem(Context context) {
 		super(context);
 	}
@@ -183,7 +182,7 @@ public class UserActivityListItem extends TableLayout {
 		return date;
 	}
 	
-	public void setAction(final SocializeAction action, Date now) {
+	public void setAction(Context context, final SocializeAction action, Date now) {
 		
 		if(background == null) {
 			background = makeDefaultBackground();
@@ -193,7 +192,7 @@ public class UserActivityListItem extends TableLayout {
 		
 		actionText.setTitleFontSize(titleFontSize);
 		actionText.setContentFontSize(contentFontSize);
-		actionText.setAction(action);
+		actionText.setAction(context, action);
 		
 		Long actionDate = action.getDate();
 		
@@ -223,7 +222,7 @@ public class UserActivityListItem extends TableLayout {
 		
 		final SocializeEntityLoader entityLoader = Socialize.getSocialize().getEntityLoader();
 		
-		if(entityLoader != null) {
+		if(entityLoader != null && entityLoader.canLoad(getContext(), action.getEntity())) {
 			setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {

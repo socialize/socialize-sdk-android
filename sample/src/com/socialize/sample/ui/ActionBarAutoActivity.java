@@ -1,6 +1,7 @@
 package com.socialize.sample.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,6 +29,12 @@ public class ActionBarAutoActivity extends ActionBarActivity {
 		options.setAddScrollView(true);
 		
 		SocializeUI.getInstance().setEntityLoader(new SocializeEntityLoader() {
+			
+			@Override
+			public boolean canLoad(Context context, Entity entity) {
+				return true;
+			}
+
 			@Override
 			public void loadEntity(Activity activity, Entity entity) {
 				Toast.makeText(activity, "Clicked on entity with key: " + entity.getKey(), Toast.LENGTH_SHORT).show();

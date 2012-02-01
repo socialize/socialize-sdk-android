@@ -22,6 +22,7 @@
 package com.socialize.ui;
 
 import android.app.Activity;
+import android.content.Context;
 
 import com.socialize.entity.Entity;
 
@@ -38,4 +39,10 @@ public interface SocializeEntityLoader {
 	 */
 	public void loadEntity(Activity activity, Entity entity);
 	
+	/**
+	 * Returns true if this entity can be loaded.
+	 * @param entity
+	 * @return
+	 */
+	public boolean canLoad(Context context, Entity entity);
 }

@@ -95,7 +95,7 @@ public class ActionDetailLayoutView extends BaseView {
 		setVerticalFadingEdgeEnabled(false);
 
 		content = actionDetailContentViewFactory.getBean();
-		defaultProfilePicture = drawables.getDrawable("default_user_icon.png");
+		defaultProfilePicture = drawables.getDrawable(Socialize.DEFAULT_USER_ICON);
 
 		addView(content);
 	}

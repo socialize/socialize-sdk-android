@@ -1,5 +1,6 @@
 package com.socialize.ui.profile.activity;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.socialize.Socialize;
@@ -11,7 +12,7 @@ import com.socialize.util.StringUtils;
 
 public class UserActivityUtils {
 
-	public String makeActionHtml(final SocializeAction action, int titleFontSize, int contentFontSize, String fontColorHex, String linkColorHex) {
+	public String makeActionHtml(Context context, final SocializeAction action, int titleFontSize, int contentFontSize, String fontColorHex, String linkColorHex) {
 		
 		StringBuilder builder = new StringBuilder();
 		
@@ -67,7 +68,7 @@ public class UserActivityUtils {
 		
 		String entityName = StringUtils.ellipsis(action.getEntityDisplayName(), 30);
 		
-		if(entityLoader != null) {
+		if(entityLoader != null && entityLoader.canLoad(context, action.getEntity())) {
 			builder.append("<span style='font:");
 			builder.append(titleFontSize);
 			builder.append("px helvetica,arial,sans-serif;font-weight:bold;text-decoration:none;color:");
