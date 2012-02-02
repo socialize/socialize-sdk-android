@@ -53,18 +53,18 @@ public class FacebookSharer implements SocialNetworkSharer {
 	 * @see com.socialize.networks.SocialNetworkSharer#share(android.app.Activity, com.socialize.entity.Entity, java.lang.String, android.location.Location, com.socialize.networks.SocialNetworkListener)
 	 */
 	@Override
-	public void shareEntity(final Activity context, Entity entity, String comment, SocialNetworkListener listener) {
-		share(context, entity, comment, listener, ActionType.SHARE, true);
+	public void shareEntity(final Activity context, Entity entity, String comment, boolean autoAuth, SocialNetworkListener listener) {
+		share(context, entity, comment, listener, ActionType.SHARE, autoAuth);
 	}
 	
 	@Override
-	public void shareComment(Activity context, Entity entity, String comment, SocialNetworkListener listener) {
-		share(context, entity, comment, listener, ActionType.COMMENT, false);
+	public void shareComment(Activity context, Entity entity, String comment, boolean autoAuth, SocialNetworkListener listener) {
+		share(context, entity, comment, listener, ActionType.COMMENT, autoAuth);
 	}
 
 	@Override
-	public void shareLike(Activity context, Entity entity, String comment, SocialNetworkListener listener) {
-		share(context, entity, comment, listener, ActionType.LIKE, false);
+	public void shareLike(Activity context, Entity entity, String comment, boolean autoAuth, SocialNetworkListener listener) {
+		share(context, entity, comment, listener, ActionType.LIKE, autoAuth);
 	}
 
 	protected void share(final Activity context, final Entity entity, final String comment, final SocialNetworkListener listener, final ActionType type, boolean autoAuth) {

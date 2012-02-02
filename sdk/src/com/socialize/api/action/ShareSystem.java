@@ -54,9 +54,10 @@ public interface ShareSystem {
 	 * @param comment The comment provided by the user.
 	 * @param location The location of the user (may be null)
 	 * @param destination The network on which to post the share.
+	 * @param autoAuth If true authentication will be attempted automatically.
 	 * @param listener A listener to handle callbacks from the post.
 	 */
-	public void shareEntity(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, SocialNetworkListener listener);
+	public void shareEntity(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, boolean autoAuth, SocialNetworkListener listener);
 	
 	/**
 	 * Shares a single comment to a given social network
@@ -65,9 +66,10 @@ public interface ShareSystem {
 	 * @param comment
 	 * @param location
 	 * @param destination
+	 * @param autoAuth If true authentication will be attempted automatically.
 	 * @param listener
 	 */
-	public void shareComment(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, SocialNetworkListener listener);
+	public void shareComment(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, boolean autoAuth, SocialNetworkListener listener);
 	
 	/**
 	 * Shares a like to a given social network.
@@ -75,8 +77,9 @@ public interface ShareSystem {
 	 * @param entity
 	 * @param location
 	 * @param destination
+	 * @param autoAuth If true authentication will be attempted automatically.
 	 * @param listener
 	 */
-	public void shareLike(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, SocialNetworkListener listener);
+	public void shareLike(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, boolean autoAuth, SocialNetworkListener listener);
 	
 }

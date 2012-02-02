@@ -42,6 +42,7 @@ public class SampleActivity2 extends Activity {
 		final Button btnActionViewAuto = (Button) findViewById(R.id.btnActionViewAuto);
 		final Button btnActionViewManual = (Button) findViewById(R.id.btnActionViewManual);
 		final Button btnActionViewPager = (Button) findViewById(R.id.btnActionViewPager);
+		final Button btnActionButton = (Button) findViewById(R.id.btnActionButton);
 		
 		final SocializeEntityLoader loader = new SocializeEntityLoader() {
 			@Override
@@ -79,14 +80,8 @@ public class SampleActivity2 extends Activity {
 
 					@Override
 					protected Void doInBackground(Void... params) {
-//						try {
-							Socialize.getSocialize().init(SampleActivity2.this);
-							Socialize.getSocialize().clearSessionCache(SampleActivity2.this);
-//						} 
-//						finally {
-//							Socialize.getSocialize().destroy();
-//						}
-						
+						Socialize.getSocialize().init(SampleActivity2.this);
+						Socialize.getSocialize().clearSessionCache(SampleActivity2.this);
 						return null;
 					}
 
@@ -157,6 +152,15 @@ public class SampleActivity2 extends Activity {
 				startActivity(intent);
 			}
 		});
+		
+		btnActionButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(SampleActivity2.this, ActionButtonActivity.class);
+				startActivity(i);
+			}
+		}); 
+				
 		
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow( txtEntity.getWindowToken(), 0);

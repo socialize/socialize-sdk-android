@@ -90,7 +90,13 @@
 	    	android:id="@+id/btnActionViewManual"
 	    	android:text="Show Action Bar (manual)"
 	    	android:layout_width="wrap_content"
-	    	android:layout_height="wrap_content"/>        
+	    	android:layout_height="wrap_content"/>      
+	    	
+	    <Button 
+	    	android:id="@+id/btnActionButton"
+	    	android:text="Show Action Button"
+	    	android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"/> 	  	    
 	    	
 	    <Button 
 	    	android:id="@+id/btnActionViewPager"

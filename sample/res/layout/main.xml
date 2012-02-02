@@ -19,6 +19,7 @@
 		android:layout_width="fill_parent"
 		android:textSize="12pt"
 		android:layout_margin="10dip"/>
+	<!-- 
 	<Button
 		android:id="@+id/btnSampleSocializeUI"
 		android:text="Launch UI Sample" 
@@ -26,9 +27,10 @@
 		android:layout_height="wrap_content"
 		android:layout_width="fill_parent"
 		android:layout_margin="10dip"/>
+	 -->
 	<Button
 		android:id="@+id/btnSampleSocializeUI2"
-		android:text="Launch UI Sample v2.0" 
+		android:text="Launch UI Sample" 
 		android:layout_gravity="center_vertical|center_horizontal"
 		android:layout_height="wrap_content"
 		android:layout_width="fill_parent"

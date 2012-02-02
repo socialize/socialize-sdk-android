@@ -1207,4 +1207,39 @@
 	</bean>
 <!--  End Image Loader -->
 
+
+<!--  ActionButton  -->
+
+	<bean id="baseActionButtonHandler" abstract="true">
+		<property name="logger" ref="logger"/>
+	</bean>
+
+	<bean id="likeActionButtonHandler" class="com.socialize.ui.actionbutton.LikeActionButtonHandler" extends="baseActionButtonHandler"/>
+
+	<bean id="actionButtonHandlers" class="com.socialize.ui.actionbutton.ActionButtonHandlers">
+		<property name="handlers">
+			<map>
+				<entry>
+					<key value="like"/>
+					<value ref="likeActionButtonHandler"/>
+				</entry>
+			</map>
+		</property>	
+	</bean>
+	
+	<bean id="actionButtonView" class="com.socialize.ui.actionbutton.ActionButtonLayoutView" singleton="false">
+	
+		<constructor-arg type="activity"/>
+	
+		<property name="drawables" ref="drawables"/>
+		<property name="actionBarItemFactory" ref="actionBarItemFactory"/>
+		<property name="actionButtonHandlers" ref="actionButtonHandlers"/>
+		
+		<init-method name="init"/>
+	</bean>	
+
+<!--  End ActionButton  -->
+
+
+
 </beans>

@@ -15,5 +15,6 @@ Contents:
    entity_loader
    sdk_user_guide
    config
+   proguard
    troubleshooting
    change_log
