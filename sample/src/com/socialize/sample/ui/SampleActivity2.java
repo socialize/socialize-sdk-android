@@ -43,6 +43,7 @@ public class SampleActivity2 extends Activity {
 		final Button btnActionViewManual = (Button) findViewById(R.id.btnActionViewManual);
 		final Button btnActionViewPager = (Button) findViewById(R.id.btnActionViewPager);
 		final Button btnActionButton = (Button) findViewById(R.id.btnActionButton);
+		final Button btnActionButtonManual = (Button) findViewById(R.id.btnActionButtonManual);
 		
 		final SocializeEntityLoader loader = new SocializeEntityLoader() {
 			@Override
@@ -153,10 +154,20 @@ public class SampleActivity2 extends Activity {
 			}
 		});
 		
+		btnActionButtonManual.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(SampleActivity2.this, ActionButtonActivity.class);
+				i.putExtra("manual", true);
+				startActivity(i);
+			}
+		}); 
+		
 		btnActionButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(SampleActivity2.this, ActionButtonActivity.class);
+				i.putExtra("manual", false);
 				startActivity(i);
 			}
 		}); 

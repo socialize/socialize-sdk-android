@@ -23,6 +23,7 @@ package com.socialize.ui.actionbutton;
 
 import android.app.Activity;
 
+import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;
 
 /**
@@ -34,5 +35,7 @@ public interface ActionButtonHandler<A extends SocializeAction> {
 	public void handleLoad(Activity context, ActionButton<A> button);
 	
 	public void handleAction(Activity context, ActionButton<A> button);
+	
+	public int getCountForAction(Entity entity);
 	
 }

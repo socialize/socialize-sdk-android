@@ -26,9 +26,11 @@ import android.app.Activity;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.entity.Entity;
+import com.socialize.entity.EntityStats;
 import com.socialize.entity.Like;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
@@ -44,7 +46,7 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 	private long likeId;
 	
 	@Override
-	protected void handleLoad(final Activity context, Entity entity, final OnActionButtonEventListener<Like> listener) {
+	protected void handleLoad(final Activity context, final Entity entity, final OnActionButtonEventListener<Like> listener) {
 		getSocialize().getLike(entity.getKey(), new LikeGetListener() {
 			
 			@Override
@@ -57,9 +59,7 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 					liked = false;
 				}
 				
-				if(listener != null) {
-					listener.onLoad(context, like);
-				}
+				handleLoadEvent(context, entity, like, listener);
 			}
 			
 			@Override
@@ -69,9 +69,7 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 						// no like
 						liked = false;
 						
-						if(listener != null) {
-							listener.onLoad(context, null);
-						}
+						handleLoadEvent(context, entity, null, listener);
 						
 						// Don't log error
 						return;
@@ -85,6 +83,29 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 		});
 	}
 
+	protected void handleLoadEvent(final Activity context, Entity entity, Like like, final OnActionButtonEventListener<Like> listener) {
+		if(listener != null) {
+			if(like == null) {
+				// Get entity
+				getSocialize().getEntity(entity.getKey(), new EntityGetListener() {
+					@Override
+					public void onGet(Entity entity) {
+						listener.onLoad(context, null, entity);
+					}
+					
+					@Override
+					public void onError(SocializeException error) {
+						listener.onError(context, error);
+					}
+				});
+			}
+			else {
+				listener.onLoad(context, like, like.getEntity());
+			}
+		}
+	}
+	
+	
 	@Override
 	protected void handleAfterLoad(Activity context, ActionButton<Like> button, Like action) {
 		if(liked) {
@@ -106,7 +127,7 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 	}
 
 	@Override
-	protected void handleAction(final Activity context, Entity entity, ShareOptions shareOptions, final OnActionButtonEventListener<Like> listener) {
+	protected void handleAction(final Activity context, final Entity entity, ShareOptions shareOptions, final OnActionButtonEventListener<Like> listener) {
 		
 		if(liked) {
 			getSocialize().unlike(likeId, new LikeDeleteListener() {
@@ -121,8 +142,18 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 				public void onDelete() {
 					liked = false;
 					if(listener != null) {
-						listener.onAfterAction(context, null);
-					}					
+						getSocialize().getEntity(entity.getKey(), new EntityGetListener() {
+							@Override
+							public void onGet(Entity entity) {
+								listener.onAfterAction(context, null, entity);
+							}
+							
+							@Override
+							public void onError(SocializeException error) {
+								listener.onError(context, error);
+							}
+						});						
+					}
 				}
 			});	
 		}
@@ -141,11 +172,20 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 					liked = true;
 					likeId = like.getId();
 					if(listener != null) {
-						listener.onAfterAction(context, like);
+						listener.onAfterAction(context, like, like.getEntity());
 					}
 				}
 			});	
 		}
+	}
+
+	@Override
+	public int getCountForAction(Entity entity) {
+		EntityStats entityStats = entity.getEntityStats();
+		if(entityStats != null) {
+			return entityStats.getLikes();
+		}
+		return 0;
 	}
 
 	protected SocializeService getSocialize() {

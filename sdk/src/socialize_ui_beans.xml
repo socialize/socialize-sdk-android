@@ -1232,6 +1232,7 @@
 		<constructor-arg type="activity"/>
 	
 		<property name="drawables" ref="drawables"/>
+		<property name="logger" ref="logger"/>
 		<property name="actionBarItemFactory" ref="actionBarItemFactory"/>
 		<property name="actionButtonHandlers" ref="actionButtonHandlers"/>
 		

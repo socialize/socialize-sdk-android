@@ -53,6 +53,10 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 	private ClientConnectionManager connectionManager;
 	private SocializeLogger logger;
 	
+	private DefaultHttpClient client; // This should be thread safe
+	
+	private IdleConnectionMonitorThread monitor;
+	
 	private boolean destroyed = false;
 	
 	/* (non-Javadoc)
@@ -85,6 +89,10 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 
 	        connectionManager = new ThreadSafeClientConnManager(params, registry);
 	        
+	        monitor = new IdleConnectionMonitorThread(connectionManager);
+	        monitor.setDaemon(true);
+	        monitor.start();
+	        
 	        if(logger != null && logger.isDebugEnabled()) {
 				logger.debug("Initialized " + getClass().getSimpleName());
 			}
@@ -104,9 +112,14 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 		if(logger != null && logger.isDebugEnabled()) {
 			logger.debug("Destroying " + getClass().getSimpleName());
 		}
+		if(monitor != null) {
+			monitor.shutdown();
+		}
+		
 		if(connectionManager != null) {
 			connectionManager.shutdown();
 		}
+		
 		if(logger != null && logger.isDebugEnabled()) {
 			logger.debug("Destroyed " + getClass().getSimpleName());
 		}
@@ -118,8 +131,14 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 	 * @see com.socialize.net.HttpClientFactory#getClient()
 	 */
 	@Override
-	public HttpClient getClient() {
-	   return new DefaultHttpClient(connectionManager, params);
+	public synchronized HttpClient getClient() {
+		if(client == null) {
+			client = new DefaultHttpClient(connectionManager, params);
+		}
+		else {
+			monitor.trigger();
+		}
+		return client;
 	}
 
 	public void setLogger(SocializeLogger logger) {

@@ -52,20 +52,22 @@ public abstract class BaseActionButtonHandler<A extends SocializeAction> impleme
 			handleLoad(context, entity, new OnActionButtonEventListener<A>() {
 
 				@Override
-				public void onLoad(Activity context, A action) {
+				public void onLoad(Activity context, A action, Entity entity) {
+					
+					button.setEntity(entity);
 					handleAfterLoad(context, button, action);
 					if(listener != null) {
-						listener.onLoad(context, action);
+						listener.onLoad(context, action, entity);
 					}
 				}
 
 				@Override
 				public boolean onBeforeAction(Activity context) {
-					return false;
+					return true;
 				}
 
 				@Override
-				public void onAfterAction(Activity context, SocializeAction action) {}
+				public void onAfterAction(Activity context, SocializeAction action, Entity entity) {}
 
 				@Override
 				public void onError(Activity context, Exception e) {
@@ -91,7 +93,6 @@ public abstract class BaseActionButtonHandler<A extends SocializeAction> impleme
 			Entity entity = button.getEntity();
 			if(entity != null) {
 				
-				
 				ActionButtonConfig config = button.getConfig();
 				
 				ShareOptions shareOptions = new ShareOptions();
@@ -108,18 +109,19 @@ public abstract class BaseActionButtonHandler<A extends SocializeAction> impleme
 				handleAction(context, entity, shareOptions, new OnActionButtonEventListener<A>() {
 
 					@Override
-					public void onLoad(Activity context, A action) {}
+					public void onLoad(Activity context, A action, Entity entity) {}
 
 					@Override
 					public boolean onBeforeAction(Activity context) {
-						return false;
+						return true;
 					}
 
 					@Override
-					public void onAfterAction(Activity context, A action) {
+					public void onAfterAction(Activity context, A action, Entity entity) {
+						button.setEntity(entity);
 						handleAfterAction(context, button, action);
 						if(listener != null) {
-							listener.onAfterAction(context, action);
+							listener.onAfterAction(context, action, entity);
 						}
 					}
 

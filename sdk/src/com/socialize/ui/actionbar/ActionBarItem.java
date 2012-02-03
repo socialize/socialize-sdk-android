@@ -47,6 +47,9 @@ public class ActionBarItem extends LinearLayout {
 	private Drawable icon;
 	private String text;
 	
+	private float textSize = -1;
+	private int textColor = Color.WHITE;
+	
 	private ImageView imageView;
 	private TextView textView;
 	private DeviceUtils deviceUtils;
@@ -63,10 +66,6 @@ public class ActionBarItem extends LinearLayout {
 		
 		int leftPadding = deviceUtils.getDIP(3);
 		int rightPadding = deviceUtils.getDIP(1);
-		
-//		int leftFlipperPadding = deviceUtils.getDIP(9);
-//		int rightFlipperPadding = deviceUtils.getDIP(1);
-//		int topFlipperPadding = deviceUtils.getDIP(6);
 		
 		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		masterParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
@@ -117,9 +116,16 @@ public class ActionBarItem extends LinearLayout {
 		
 		textView.setLayoutParams(textParams);
 		textView.setPadding(0, 0, 0, 0);
-		textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
+		
+		if(textSize > 0) {
+			textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+		}
+		else {
+			textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
+		}
+		
 		textView.setTypeface(Typeface.DEFAULT_BOLD);
-		textView.setTextColor(Color.WHITE);
+		textView.setTextColor(textColor);
 
 		if(this.text != null) {
 			textView.setText(text);
@@ -138,6 +144,20 @@ public class ActionBarItem extends LinearLayout {
 		
 		if(this.imageView != null) {
 			imageView.setImageDrawable(icon);
+		}
+	}
+	
+	public void setTextSize(float size) {
+		this.textSize = size;
+		if(this.textView != null) {
+			this.textView.setTextSize(size);
+		}
+	}
+	
+	public void setTextColor(int color) {
+		this.textColor = color;
+		if(this.textView != null) {
+			this.textView.setTextColor(color);
 		}
 	}
 	

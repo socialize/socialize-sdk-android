@@ -21,22 +21,32 @@
  */
 package com.socialize.ui.actionbutton;
 
-import android.app.Activity;
+import android.content.Context;
+import android.util.AttributeSet;
 
-import com.socialize.entity.Entity;
-import com.socialize.entity.SocializeAction;
+import com.socialize.entity.Like;
 
 /**
  * @author Jason Polites
  */
-public interface OnActionButtonEventListener<A extends SocializeAction> {
+public class SocializeLikeButton extends SocializeActionButton<Like> {
 
-	public void onLoad(Activity context, A action, Entity entity);
-	
-	public boolean onBeforeAction(Activity context);
-	
-	public void onAfterAction(Activity context, A action, Entity entity);
-	
-	public void onError(Activity context, Exception e);
-	
+	public SocializeLikeButton(Context context, ActionButtonConfig config) {
+		super(context, config);
+	}
+
+	public SocializeLikeButton(Context context, AttributeSet attrs) {
+		super(context, attrs);
+	}
+
+	public SocializeLikeButton(Context context) {
+		super(context);
+	}
+
+	@Override
+	protected void onAfterBuild(ActionButtonConfig config) {
+		super.onAfterBuild(config);
+		// Manually configure for like
+		config.setActionType("like");
+	}
 }

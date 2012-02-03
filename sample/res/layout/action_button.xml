@@ -7,9 +7,10 @@
     
     <com.socialize.ui.actionbutton.SocializeActionButton
         xmlns:socialize="http://getsocialize.com"
-        android:layout_width="100dp"
+        android:layout_width="150dp"
     	android:layout_height="wrap_content"
     	android:background="#266400" 
+    	android:textSize="14dp"
     	socialize:entity_key="foo"
     	socialize:entity_name="bar"
     	socialize:src_active="@drawable/action_button_on"
@@ -20,13 +21,15 @@
     	socialize:share_location="true"
     	socialize:auto_auth="false"
     	socialize:share_to="facebook" 
+    	socialize:show_count="false" 
     	socialize:action_type="like"/>
   
-    <com.socialize.ui.actionbutton.SocializeActionButton
+    <com.socialize.ui.actionbutton.SocializeLikeButton
         xmlns:socialize="http://getsocialize.com"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
     	android:layout_height="45px"
     	android:background="@drawable/superman_bg" 
+    	android:textColor="#9dd2ff"
     	socialize:entity_key="superman"
     	socialize:entity_name="superman"
     	socialize:src_active="@drawable/superman_on"
@@ -36,7 +39,6 @@
     	socialize:text_inactive="Bizzaro"
     	socialize:share_location="true"
     	socialize:auto_auth="false"
-    	socialize:share_to="facebook" 
-    	socialize:action_type="like"/>    
+    	socialize:share_to="facebook"/>    
 
 </LinearLayout>

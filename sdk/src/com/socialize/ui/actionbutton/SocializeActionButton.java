@@ -38,6 +38,7 @@ public class SocializeActionButton<A extends SocializeAction> extends Authentica
 	private ActionButtonConfig config;
 	private ActionButtonLayoutView<A> view;
 	private OnActionButtonEventListener<A> onActionButtonEventListener;
+	private Entity entity;
 
 	public SocializeActionButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -45,26 +46,35 @@ public class SocializeActionButton<A extends SocializeAction> extends Authentica
 		// Must be done in constructor
 		config = newActionButtonConfig();
 		config.build(context, attrs);
+		onAfterBuild(config);
 	}
 
 	public SocializeActionButton(Context context, ActionButtonConfig config) {
 		super(context);
 		this.config = config;
+		onAfterBuild(config);
 	}
 	
+	public SocializeActionButton(Context context) {
+		super(context);
+		this.config = getDefault();
+		onAfterBuild(config);
+	}
+
 	@Override
 	public View getView() {
-
-		view = container.getBean("actionButtonView", config, this); 
-		
-		if(!StringUtils.isEmpty(config.getEntityKey())) {
-			Entity entity = Entity.newInstance(config.getEntityKey(), config.getEntityName());
-			view.setEntity(entity);
+		if(config != null) {
+			view = container.getBean("actionButtonView", config, this); 
+			if(!StringUtils.isEmpty(config.getEntityKey())) {
+				Entity entity = Entity.newInstance(config.getEntityKey(), config.getEntityName());
+				view.setEntity(entity);
+			}
+			else {
+				view.setEntity(entity);
+			}
 		}
-		
 		return view;
 	}
-	
 
 	@Override
 	public void setOnClickListener(OnClickListener l) {
@@ -85,6 +95,7 @@ public class SocializeActionButton<A extends SocializeAction> extends Authentica
 	}
 
 	public void setEntity(Entity entity) {
+		this.entity = entity;
 		if(view != null) {
 			view.setEntity(entity);
 		}
@@ -96,7 +107,7 @@ public class SocializeActionButton<A extends SocializeAction> extends Authentica
 		}
 	}
 	
-	protected void setConfig(ActionButtonConfig config) {
+	public void setConfig(ActionButtonConfig config) {
 		this.config = config;
 	}
 
@@ -114,5 +125,16 @@ public class SocializeActionButton<A extends SocializeAction> extends Authentica
 
 	public void setOnActionButtonEventListener(OnActionButtonEventListener<A> onActionButtonEventListener) {
 		this.onActionButtonEventListener = onActionButtonEventListener;
+	}
+	
+	/**
+	 * Called after the initial build of the config.
+	 * @param config
+	 */
+	protected void onAfterBuild(ActionButtonConfig config) {}
+	
+	// So we can mock
+	protected ActionButtonConfig getDefault() {
+		return ActionButtonConfig.getDefault();
 	}
 }

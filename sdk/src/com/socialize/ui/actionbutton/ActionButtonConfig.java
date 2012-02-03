@@ -24,10 +24,15 @@ package com.socialize.ui.actionbutton;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 
 import com.socialize.networks.SocialNetwork;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -35,8 +40,8 @@ import com.socialize.networks.SocialNetwork;
  */
 public class ActionButtonConfig {
 	
-	public static final String androidns="http://schemas.android.com/apk/res/android";
-	public static final String socializens="http://getsocialize.com";
+	private static final String androidns="http://schemas.android.com/apk/res/android";
+	private static final String socializens="http://getsocialize.com";
 	
 	private int imageResIdOn;
 	private int imageResIdOff;
@@ -44,8 +49,17 @@ public class ActionButtonConfig {
 	private int backgroundResId;
 	private int backgroundColor;
 	
+	private int textColor = Color.WHITE;
+	private float textSize = -1;
+	
+	private Drawable imageOn;
+	private Drawable imageOff;
+	private Drawable imageDisabled;
+	private Drawable background;
+	
 	private String textOn;
 	private String textOff;
+	private String textLoading = "...";
 	
 	private String actionType;
 	private String entityKey;
@@ -54,16 +68,14 @@ public class ActionButtonConfig {
 	private String shareTo;
 	
 	private boolean shareLocation;
+	private boolean showCount = true;
 	private boolean autoAuth;
 	
 	private SocialNetwork[] shareToNetworks;
 	
-//	public int getLayoutWidth() {
-//		return layoutWidth;
-//	}
-//	public void setLayoutWidth(int layoutWidth) {
-//		this.layoutWidth = layoutWidth;
-//	}
+	public ActionButtonConfig() {
+		super();
+	}
 	
 	public String getActionType() {
 		return actionType;
@@ -163,6 +175,70 @@ public class ActionButtonConfig {
 		this.backgroundColor = backgroundColor;
 	}
 	
+	public Drawable getImageOn() {
+		return imageOn;
+	}
+	
+	public void setImageOn(Drawable imageOn) {
+		this.imageOn = imageOn;
+	}
+	
+	public Drawable getImageOff() {
+		return imageOff;
+	}
+	
+	public void setImageOff(Drawable imageOff) {
+		this.imageOff = imageOff;
+	}
+	
+	public Drawable getImageDisabled() {
+		return imageDisabled;
+	}
+	
+	public void setImageDisabled(Drawable imageDisabled) {
+		this.imageDisabled = imageDisabled;
+	}
+	
+	public Drawable getBackground() {
+		return background;
+	}
+	
+	public void setBackground(Drawable background) {
+		this.background = background;
+	}
+	
+	public String getTextLoading() {
+		return textLoading;
+	}
+	
+	public void setTextLoading(String textLoading) {
+		this.textLoading = textLoading;
+	}
+	
+	public int getTextColor() {
+		return textColor;
+	}
+
+	public void setTextColor(int textColor) {
+		this.textColor = textColor;
+	}
+
+	public float getTextSize() {
+		return textSize;
+	}
+
+	public void setTextSize(float textSize) {
+		this.textSize = textSize;
+	}
+	
+	public boolean isShowCount() {
+		return showCount;
+	}
+
+	public void setShowCount(boolean showCount) {
+		this.showCount = showCount;
+	}
+
 	public void build(Context context, AttributeSet attrs) {
 		buttonId = attrs.getAttributeValue(androidns, "id");
 		actionType = attrs.getAttributeValue(socializens, "action_type");
@@ -171,14 +247,62 @@ public class ActionButtonConfig {
 		shareTo = attrs.getAttributeValue(socializens, "share_to");
 		shareLocation = attrs.getAttributeBooleanValue(socializens, "share_location", true);
 		autoAuth = attrs.getAttributeBooleanValue(socializens, "auto_auth", false);
+		showCount = attrs.getAttributeBooleanValue(socializens, "show_count", true);
+		
+		String strTextSize = attrs.getAttributeValue(androidns, "textSize");
+		
+		if(!StringUtils.isEmpty(strTextSize)) {
+			
+			Resources r = context.getResources();
+			DisplayMetrics displayMetrics = r.getDisplayMetrics();
+			
+			if(strTextSize.endsWith("sp")) {
+				float val = Float.parseFloat(strTextSize.substring(0, strTextSize.length() - 2));
+				textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, val, displayMetrics);
+			}
+			else if(strTextSize.endsWith("pt")) {
+				float val = Float.parseFloat(strTextSize.substring(0, strTextSize.length() - 2));
+				textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PT, val, displayMetrics);
+			}
+			else if(strTextSize.endsWith("px")) {
+				float val = Float.parseFloat(strTextSize.substring(0, strTextSize.length() - 2));
+				textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, val, displayMetrics);
+			}
+			else if(strTextSize.endsWith("dp")) {
+				float val = Float.parseFloat(strTextSize.substring(0, strTextSize.length() - 2));
+				textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, val, displayMetrics);
+			}
+			else if(strTextSize.endsWith("dip")) {
+				float val = Float.parseFloat(strTextSize.substring(0, strTextSize.length() - 3));
+				textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, val, displayMetrics);
+			}			
+		}
 		
 		imageResIdOn = attrs.getAttributeResourceValue(socializens, "src_active", 0);
 		imageResIdOff = attrs.getAttributeResourceValue(socializens, "src_inactive", 0);
 		imageResIdDisabled = attrs.getAttributeResourceValue(socializens, "src_disabled", 0);
 		backgroundResId = attrs.getAttributeResourceValue(androidns, "background", 0);
 		
+		int textColorResId = attrs.getAttributeResourceValue(androidns, "textColor", 0);
 		int textOnResId = attrs.getAttributeResourceValue(socializens, "text_active", 0);
 		int textOffResId = attrs.getAttributeResourceValue(socializens, "text_active", 0);
+		int textLoadingResId = attrs.getAttributeResourceValue(socializens, "text_loading", 0);
+		
+		if(textColorResId > 0) {
+			try {
+				textColor = context.getResources().getColor(textOnResId);
+			} 
+			catch (Exception e) {
+				// No such resource
+				e.printStackTrace();
+			}
+		}
+		else {
+			String strColor = attrs.getAttributeValue(androidns, "textColor");
+			if(!StringUtils.isEmpty(strColor)) {
+				textColor = Color.parseColor(strColor);
+			}
+		}
 		
 		if(textOnResId > 0) {
 			try {
@@ -193,6 +317,16 @@ public class ActionButtonConfig {
 		if(textOffResId > 0) {
 			try {
 				textOff = context.getResources().getString(textOffResId);
+			} 
+			catch (Exception e) {
+				// No such resource
+				e.printStackTrace();
+			}
+		}
+		
+		if(textLoadingResId > 0) {
+			try {
+				textLoading = context.getResources().getString(textLoadingResId);
 			} 
 			catch (Exception e) {
 				// No such resource
@@ -235,5 +369,15 @@ public class ActionButtonConfig {
 				shareToNetworks = networks.toArray(new SocialNetwork[networks.size()]);
 			}
 		}
+	}
+	
+	public static ActionButtonConfig getDefault() {
+		ActionButtonConfig config = new ActionButtonConfig();
+		config.setActionType("like");
+		config.setAutoAuth(false);
+		config.setShareLocation(false);
+		config.setTextOn("Unlike");
+		config.setTextOff("Like");
+		return config;
 	}
 }

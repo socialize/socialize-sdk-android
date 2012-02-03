@@ -28,6 +28,7 @@ import android.view.View;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.actionbar.ActionBarItem;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
@@ -47,6 +48,7 @@ public class ActionButtonLayoutView<A extends SocializeAction> extends BaseView 
 	private ActionButtonHandler<A> actionButtonHandler;
 	
 	private Drawables drawables;
+	private SocializeLogger logger;
 	
 	private Drawable imageOn;
 	private Drawable imageOff;
@@ -56,6 +58,8 @@ public class ActionButtonLayoutView<A extends SocializeAction> extends BaseView 
 	private SocializeActionButton<A> button;
 	
 	private ActionButtonState state;
+	
+	private boolean enabled = true;
 	
 	public ActionButtonLayoutView(Context context, ActionButtonConfig config, SocializeActionButton<A> button) {
 		super(context);
@@ -71,43 +75,64 @@ public class ActionButtonLayoutView<A extends SocializeAction> extends BaseView 
 			setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					actionButtonHandler.handleAction(getActivity(), ActionButtonLayoutView.this);
+					if(enabled) {
+						actionButtonHandler.handleAction(getActivity(), ActionButtonLayoutView.this);
+					}
 				}
 			});			
 		}
 		
-		if(config.getImageResIdOn() > 0) {
+		imageOn = config.getImageOn();
+		imageOff = config.getImageOff();
+		imageDisabled = config.getImageDisabled();
+		
+		Drawable background = config.getBackground();
+		
+		int resOn = config.getImageResIdOn();
+		int resOff = config.getImageResIdOff();
+		int resDisabled = config.getImageResIdDisabled();
+		
+		if(imageOn == null && resOn > 0) {
 			try {
-				imageOn = getResources().getDrawable(config.getImageResIdOn());
-			} catch (Exception e) {
-				// TODO: Log it baby!
-				// TODO: Set default image
+				imageOn = getResources().getDrawable(resOn);
+			} 
+			catch (Exception e) {
+				handleNoResourceError(resOn, e);
 			}
 		}
 		
-		if(config.getImageResIdOff() > 0) {
+		if(imageOff == null && resOff > 0) {
 			try {
-				imageOff = getResources().getDrawable(config.getImageResIdOff());
-			} catch (Exception e) {
-				// TODO: Log it baby!
-				// TODO: Set default image
+				imageOff = getResources().getDrawable(resOff);
+			} 
+			catch (Exception e) {
+				handleNoResourceError(resOff, e);
 			}
 		}
 		
-		if(config.getImageResIdOff() > 0) {
+		if(imageDisabled == null && resDisabled > 0) {
 			try {
-				imageDisabled = getResources().getDrawable(config.getImageResIdDisabled());
-			} catch (Exception e) {
-				// TODO: Log it baby!
-				// TODO: Set default image
+				imageDisabled = getResources().getDrawable(resDisabled);
+			} 
+			catch (Exception e) {
+				handleNoResourceError(resDisabled, e);
 			}
-		}		
-		
-		if(config.getBackgroundResId() > 0) {
-			setBackgroundResource(config.getBackgroundResId());
 		}
-		else{
-			setBackgroundColor(config.getBackgroundColor());
+		
+		if(imageOn == null) imageOn = drawables.getDrawable("icon_like_hi.png");
+		if(imageOff == null) imageOff = drawables.getDrawable("icon_like.png");
+		if(imageDisabled == null) imageDisabled = drawables.getDrawable("icon_like.png");
+		
+		if(background != null) {
+			setBackgroundDrawable(background);
+		}
+		else {
+			if(config.getBackgroundResId() > 0) {
+				setBackgroundResource(config.getBackgroundResId());
+			}
+			else if (config.getBackgroundColor() >= 0){
+				setBackgroundColor(config.getBackgroundColor());
+			}
 		}
 		
 		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
@@ -115,9 +140,17 @@ public class ActionButtonLayoutView<A extends SocializeAction> extends BaseView 
 		
 		if(imageDisabled != null) {
 			actionBarItem.setIcon(imageDisabled);
-			actionBarItem.setText("...");
 		}
 		
+		actionBarItem.setTextColor(config.getTextColor());
+		
+		float size = config.getTextSize();
+		
+		if(size >= 0) {
+			actionBarItem.setTextSize(size);
+		}
+		
+		actionBarItem.setText(config.getTextLoading());
 		actionBarItem.init();
 		
 		addView(actionBarItem);
@@ -136,39 +169,61 @@ public class ActionButtonLayoutView<A extends SocializeAction> extends BaseView 
 	}
 
 	public void setState(ActionButtonState state) {
-		if(!state.equals(this.state)) {
-			handleStateChange(state);
-		}
 		this.state = state;
+		handleStateChange(state);
 	}
 
+	protected void handleNoResourceError(int id, Exception e) {
+		if(logger != null) {
+			logger.error("No such resource found with id [" +
+					id +
+					"]", e);
+		}
+		else {
+			e.printStackTrace();
+		}
+	}
+	
 	protected void handleStateChange(ActionButtonState state) {
 		switch (state) {
 			case ACTIVE:
-				actionBarItem.setText(config.getTextOn());
+				actionBarItem.setText(getDisplayText(config.getTextOn()));
 				actionBarItem.setIcon(imageOn);
+				enabled = true;
 				actionBarItem.hideLoading();
 				break;
 				
 			case INACTIVE:
-				actionBarItem.setText(config.getTextOff());
+				actionBarItem.setText(getDisplayText(config.getTextOff()));
 				actionBarItem.setIcon(imageOff);
+				enabled = true;
 				actionBarItem.hideLoading();
 				break;
 				
 			case DISABLED:
-				actionBarItem.setText(config.getTextOff());
+				actionBarItem.setText(getDisplayText(config.getTextOff()));
 				actionBarItem.setIcon(imageDisabled);
+				enabled = false;
 				actionBarItem.hideLoading();
 				break;
 				
 			case LOADING:
-				actionBarItem.setText("...");
+				actionBarItem.setText(config.getTextLoading());
+				enabled = false;
 				actionBarItem.showLoading();
 				break;			
 		}
 	}
 
+	protected String getDisplayText(String text) {
+		if(config.isShowCount()) {
+			int count = actionButtonHandler.getCountForAction(entity);
+			if(count > 0) {
+				text += " (" + count + ")";
+			}
+		}
+		return text;
+	}
 	
 	@Override
 	public void onViewRendered(int width, int height) {
@@ -223,6 +278,8 @@ public class ActionButtonLayoutView<A extends SocializeAction> extends BaseView 
 	public void setActionButtonHandlers(ActionButtonHandlers actionButtonHandlers) {
 		this.actionButtonHandlers = actionButtonHandlers;
 	}
-	
-	
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
 }
