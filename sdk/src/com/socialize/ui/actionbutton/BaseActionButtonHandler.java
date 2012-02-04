@@ -53,7 +53,6 @@ public abstract class BaseActionButtonHandler<A extends SocializeAction> impleme
 
 				@Override
 				public void onLoad(Activity context, A action, Entity entity) {
-					
 					button.setEntity(entity);
 					handleAfterLoad(context, button, action);
 					if(listener != null) {

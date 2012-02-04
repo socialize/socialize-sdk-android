@@ -44,9 +44,7 @@ public class SocializeActionButton<A extends SocializeAction> extends Authentica
 		super(context, attrs);
 		
 		// Must be done in constructor
-		config = newActionButtonConfig();
-		config.build(context, attrs);
-		onAfterBuild(config);
+		doConfigBuild(context, attrs);
 	}
 
 	public SocializeActionButton(Context context, ActionButtonConfig config) {
@@ -125,6 +123,12 @@ public class SocializeActionButton<A extends SocializeAction> extends Authentica
 
 	public void setOnActionButtonEventListener(OnActionButtonEventListener<A> onActionButtonEventListener) {
 		this.onActionButtonEventListener = onActionButtonEventListener;
+	}
+	
+	protected void doConfigBuild(Context context, AttributeSet attrs) {
+		config = newActionButtonConfig();
+		config.build(context, attrs);
+		onAfterBuild(config);
 	}
 	
 	/**
