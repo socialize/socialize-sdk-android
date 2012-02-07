@@ -21,15 +21,31 @@
  */
 package com.socialize.ui.actionbutton;
 
+import java.util.Map;
+
 import com.socialize.entity.SocializeAction;
 
 /**
  * @author Jason Polites
  *
  */
-public interface ActionButtonHandlers {
+public class DefaultActionButtonHandlers implements ActionButtonHandlers {
+	private Map<String, ActionButtonHandler<?>> handlers;
 
+	public Map<String, ActionButtonHandler<?>> getHandlers() {
+		return handlers;
+	}
+
+	public void setHandlers(Map<String, ActionButtonHandler<?>> handlers) {
+		this.handlers = handlers;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.socialize.ui.actionbutton.ActionButtonHandlers#getHandler(java.lang.String)
+	 */
+	@Override
 	@SuppressWarnings("unchecked")
-	public <A extends SocializeAction> ActionButtonHandler<A> getHandler(String key);
-
+	public <A extends SocializeAction> ActionButtonHandler<A> getHandler(String key) {
+		return (ActionButtonHandler<A>) handlers.get(key);
+	}
 }

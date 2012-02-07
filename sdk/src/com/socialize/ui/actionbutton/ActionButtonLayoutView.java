@@ -60,7 +60,11 @@ public class ActionButtonLayoutView<A extends SocializeAction> extends BaseView 
 	private ActionButtonState state;
 	
 	private boolean enabled = true;
-	
+
+	public ActionButtonLayoutView(Context context) {
+		super(context);
+	}
+
 	public ActionButtonLayoutView(Context context, ActionButtonConfig config, SocializeActionButton<A> button) {
 		super(context);
 		this.config = config;

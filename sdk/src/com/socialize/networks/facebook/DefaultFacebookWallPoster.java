@@ -181,7 +181,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 							String get3rdPartyAppId = session.get3rdPartyAppId();
 							
 							if(authProvider != null && authProviderType.equals(AuthProviderType.FACEBOOK) && !StringUtils.isEmpty(get3rdPartyAppId)) {
-								Socialize.getSocialize().clear3rdPartySession(parent, AuthProviderType.FACEBOOK);
+								getSocialize().clear3rdPartySession(parent, AuthProviderType.FACEBOOK);
 							}
 							
 							JSONObject error = responseObject.getJSONObject("error");

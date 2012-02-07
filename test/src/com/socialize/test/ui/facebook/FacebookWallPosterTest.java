@@ -329,15 +329,13 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		AndroidMock.expect(session.getAuthProviderType()).andReturn(authProviderType);
 		AndroidMock.expect(session.get3rdPartyAppId()).andReturn(get3rdPartyAppId);
 		
-		authProvider.clearCache(getActivity(), get3rdPartyAppId);
+		socialize.clear3rdPartySession(getActivity(), AuthProviderType.FACEBOOK);
 		
 		AndroidMock.expect(json.getJSONObject("error")).andReturn(error);
 		
 		AndroidMock.expect(error.has("message")).andReturn(true);
 		AndroidMock.expect(error.isNull("message")).andReturn(false);
 		AndroidMock.expect(error.getString("message")).andReturn(errorMessage);
-		
-//		listener.onAfterPost(getActivity(), SocialNetwork.FACEBOOK);
 		
 		PublicFacebookWallPoster poster = new PublicFacebookWallPoster() {
 			@Override

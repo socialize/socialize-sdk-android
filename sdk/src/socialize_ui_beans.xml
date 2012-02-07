@@ -1216,7 +1216,7 @@
 
 	<bean id="likeActionButtonHandler" class="com.socialize.ui.actionbutton.LikeActionButtonHandler" extends="baseActionButtonHandler"/>
 
-	<bean id="actionButtonHandlers" class="com.socialize.ui.actionbutton.ActionButtonHandlers">
+	<bean id="actionButtonHandlers" class="com.socialize.ui.actionbutton.DefaultActionButtonHandlers">
 		<property name="handlers">
 			<map>
 				<entry>

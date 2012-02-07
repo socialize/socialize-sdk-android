@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-    
+    <!-- 
     <com.socialize.ui.actionbutton.SocializeActionButton
         xmlns:socialize="http://getsocialize.com"
         android:layout_width="150dp"
@@ -23,15 +23,15 @@
     	socialize:share_to="facebook" 
     	socialize:show_count="false" 
     	socialize:action_type="like"/>
-  
+   -->
     <com.socialize.ui.actionbutton.SocializeLikeButton
         xmlns:socialize="http://getsocialize.com"
         android:layout_width="150dp"
     	android:layout_height="45px"
     	android:background="@drawable/superman_bg" 
     	android:textColor="#9dd2ff"
-    	socialize:entity_key="superman"
-    	socialize:entity_name="superman"
+    	socialize:entity_key="http://getsocialize.com"
+    	socialize:entity_name="Socialize"
     	socialize:src_active="@drawable/superman_on"
     	socialize:src_inactive="@drawable/superman_off"
     	socialize:src_disabled="@drawable/superman_off"
@@ -40,5 +40,4 @@
     	socialize:share_location="true"
     	socialize:auto_auth="false"
     	socialize:share_to="facebook"/>    
-
 </LinearLayout>

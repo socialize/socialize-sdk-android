@@ -63,8 +63,9 @@ public class SocializeActionButton<A extends SocializeAction> extends Authentica
 	public View getView() {
 		if(config != null) {
 			view = container.getBean("actionButtonView", config, this); 
-			if(!StringUtils.isEmpty(config.getEntityKey())) {
-				Entity entity = Entity.newInstance(config.getEntityKey(), config.getEntityName());
+			String entityKey = config.getEntityKey();
+			if(!StringUtils.isEmpty(entityKey)) {
+				Entity entity = createEntity(entityKey, config.getEntityName());
 				view.setEntity(entity);
 			}
 			else {
@@ -72,6 +73,11 @@ public class SocializeActionButton<A extends SocializeAction> extends Authentica
 			}
 		}
 		return view;
+	}
+	
+	// So we can mock
+	protected Entity createEntity(String key, String name) {
+		return Entity.newInstance(key, name);
 	}
 
 	@Override
@@ -129,6 +135,10 @@ public class SocializeActionButton<A extends SocializeAction> extends Authentica
 		config = newActionButtonConfig();
 		config.build(context, attrs);
 		onAfterBuild(config);
+	}
+	
+	protected ActionButtonLayoutView<A> getLayoutView() {
+		return view;
 	}
 	
 	/**

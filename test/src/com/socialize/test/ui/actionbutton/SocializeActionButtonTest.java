@@ -25,12 +25,16 @@ import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.test.mock.MockContext;
 import android.util.AttributeSet;
+import android.view.View;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.android.ioc.IOCContainer;
+import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;
 import com.socialize.test.ui.SocializeUITestCase;
 import com.socialize.ui.actionbutton.ActionButtonConfig;
+import com.socialize.ui.actionbutton.ActionButtonLayoutView;
 import com.socialize.ui.actionbutton.SocializeActionButton;
 
 /**
@@ -80,4 +84,42 @@ public class SocializeActionButtonTest extends SocializeUITestCase {
 		assertNotNull(after);
 		assertSame(config, after);
 	}	
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({IOCContainer.class, ActionButtonConfig.class, ActionButtonLayoutView.class, Entity.class})
+	public void testGetView() {
+		
+		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
+		ActionButtonConfig config = AndroidMock.createMock(ActionButtonConfig.class);
+		ActionButtonLayoutView<SocializeAction> view = AndroidMock.createMock(ActionButtonLayoutView.class, getContext());
+		final Entity entity = AndroidMock.createMock(Entity.class);
+		
+		final String key = "foo";
+		final String name = "bar";
+		
+		PublicActionButton<SocializeAction> socializeActionButton = new PublicActionButton<SocializeAction>(getContext(), config) {
+			@Override
+			protected Entity createEntity(String key, String name) {
+				return entity;
+			}
+		};
+		
+		AndroidMock.expect(container.getBean("actionButtonView", config, socializeActionButton)).andReturn(view);
+		AndroidMock.expect(config.getEntityKey()).andReturn(key);
+		AndroidMock.expect(config.getEntityName()).andReturn(name);
+		
+		view.setEntity(entity);
+		
+		AndroidMock.replay(container, config, view);
+		
+		socializeActionButton.setContainer(container);
+		socializeActionButton.setConfig(config);
+		
+		View viewAfter = socializeActionButton.getView();
+		
+		AndroidMock.verify(container, config, view);
+		
+		assertNotNull(viewAfter);
+		assertSame(view, viewAfter);
+	}
 }

@@ -8,7 +8,7 @@ import com.socialize.test.ui.util.TestUtils;
 public class ActionBarLikeManualTest extends ActivityInstrumentationTestCase2<ActionBarManualActivity2> {
 
 	public ActionBarLikeManualTest() {
-		super("com.socialize.ui.sample", ActionBarManualActivity2.class);
+		super("com.socialize.sample.ui", ActionBarManualActivity2.class);
 	}
 	
 	@Override

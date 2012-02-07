@@ -94,13 +94,13 @@
 	    	
 	    <Button 
 	    	android:id="@+id/btnActionButton"
-	    	android:text="Show Action Button"
+	    	android:text="Show Action Button (auto)"
 	    	android:layout_width="wrap_content"
 	    	android:layout_height="wrap_content"/> 	
 	    	
 	    <Button 
 	    	android:id="@+id/btnActionButtonManual"
-	    	android:text="Show Action Button (Manual)"
+	    	android:text="Show Action Button (manual)"
 	    	android:layout_width="wrap_content"
 	    	android:layout_height="wrap_content"/> 		    
 	    

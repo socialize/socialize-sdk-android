@@ -17,6 +17,7 @@
 	<proxy ref="subscriptionSystem" />
 	<proxy ref="appUtils" />
 	<proxy ref="alertDialogFactory" />
+	<proxy ref="actionButtonHandlers" />
 
 	<bean id="initializationAsserter" class="com.socialize.sample.mocks.MockInitializationAsserter" />
 </beans>

@@ -60,7 +60,7 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	protected InputMethodManager imm = null;
 
 	public SocializeUIRobotiumTest() {
-		super("com.socialize.ui.sample", SampleActivity2.class);
+		super("com.socialize.sample.ui", SampleActivity2.class);
 	}
 
 	public void setUp() throws Exception {
