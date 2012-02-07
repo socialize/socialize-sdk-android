@@ -61,62 +61,88 @@ public class ActionBarItem extends LinearLayout {
 	}
 	
 	public void init() {
-		imageView = new ImageView(getContext());
-		textView = new TextView(getContext());
 		
-		int leftPadding = deviceUtils.getDIP(3);
-		int rightPadding = deviceUtils.getDIP(1);
+		int leftMargin = deviceUtils.getDIP(3);
 		
 		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		masterParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 				
 		setLayoutParams(masterParams);
 		
-		LayoutParams iconParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		iconParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
+/******************************************
+ * Progress Bar
+ ******************************************/
+		
+		ProgressBar progress = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleSmall);
+		
+		RelativeLayout progressLayout = new RelativeLayout(getContext());
+		
+		int minWidth = deviceUtils.getDIP(24);
+		
+		if(icon != null) {
+			int intrinsicWidth = icon.getMinimumWidth();
+			int intrinsicHeight= icon.getMinimumHeight();
+			if(intrinsicWidth > minWidth) {
+				minWidth = intrinsicWidth;
+			}
+			progressLayout.setMinimumHeight(intrinsicHeight);
+		}
+		
+		minWidth+=leftMargin;
+		
+		progressLayout.setMinimumWidth(minWidth);
+		
+		LayoutParams progressLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		progressLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		progressLayoutParams.setMargins(leftMargin, 0, 0, 0);
+		
+		RelativeLayout.LayoutParams progressParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		progressParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+		progressParams.addRule(RelativeLayout.CENTER_VERTICAL);
+		
+		progressLayout.setLayoutParams(progressLayoutParams);
+		progress.setLayoutParams(progressParams);
+		
+		progressLayout.addView(progress);
+		
+/******************************************
+ * Icon
+ ******************************************/	
+		
+		RelativeLayout imageLayout = new RelativeLayout(getContext());
+		
+		LayoutParams imageLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+		imageLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		imageLayoutParams.setMargins(leftMargin, 0, 0, 0);
+		
+		imageLayout.setLayoutParams(imageLayoutParams);
+		
+		imageView = new ImageView(getContext());
+		
+		RelativeLayout.LayoutParams iconParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		iconParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+		
+		if(this.icon != null) {
+			imageView.setImageDrawable(icon);
+		}
+		
+		imageView.setLayoutParams(iconParams);
+		
+		imageLayout.addView(imageView);
+		
+/******************************************
+ * Text
+ ******************************************/	
+
+		textView = new TextView(getContext());
 		
 		LayoutParams textParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		textParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
 		
-		if(icon != null) {
-			imageView.setImageDrawable(icon);
+		if(this.text != null) {
+			textView.setText(text);
 		}
 	
-		imageView.setLayoutParams(iconParams);
-		imageView.setPadding(leftPadding, 0, rightPadding, 0);
-		
-		RelativeLayout progressLayout = new RelativeLayout(getContext());
-		LayoutParams progressLayoutParams = null;
-		
-		if(icon != null) {
-			progressLayoutParams = new LayoutParams(icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
-		}
-		else {
-			progressLayoutParams = new LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
-		}
-		
-		progressLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
-		
-		progressLayout.setLayoutParams(progressLayoutParams);
-		
-		ProgressBar progress = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleSmall);
-		RelativeLayout.LayoutParams progressParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		progressParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-		progress.setLayoutParams(progressParams);
-		progress.setPadding(leftPadding, 0, 0, 0);
-		progressLayout.addView(progress);
-		
-		LayoutParams iconFlipperParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		iconFlipperParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
-		iconFlipper = new SafeViewFlipper(getContext());
-		iconFlipper.setLayoutParams(iconFlipperParams);
-		iconFlipper.addView(imageView, 0);
-		iconFlipper.addView(progressLayout, 1);
-		iconFlipper.setDisplayedChild(0);	
-		
-		textView.setLayoutParams(textParams);
-		textView.setPadding(0, 0, 0, 0);
-		
 		if(textSize > 0) {
 			textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
 		}
@@ -126,11 +152,28 @@ public class ActionBarItem extends LinearLayout {
 		
 		textView.setTypeface(Typeface.DEFAULT_BOLD);
 		textView.setTextColor(textColor);
+		
+		textView.setLayoutParams(textParams);
+		
+		
+/******************************************
+ * Flipper
+ ******************************************/		
+		
+		// Flipper layout
+		LayoutParams flipperParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		flipperParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		
+		iconFlipper = new SafeViewFlipper(getContext());
+		iconFlipper.setLayoutParams(flipperParams);
+		iconFlipper.addView(imageLayout, 0);
+		iconFlipper.addView(progressLayout, 1);
+		iconFlipper.setDisplayedChild(0);	
 
-		if(this.text != null) {
-			textView.setText(text);
-		}
-				
+		
+/******************************************
+ * Assembly
+ ******************************************/		
 		addView(iconFlipper);
 		addView(textView);
 	}
