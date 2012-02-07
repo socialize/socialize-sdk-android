@@ -73,7 +73,7 @@ public class ActionButtonConfig {
 	
 	private SocialNetwork[] shareToNetworks;
 	
-	public ActionButtonConfig() {
+	ActionButtonConfig() {
 		super();
 	}
 	
@@ -104,9 +104,7 @@ public class ActionButtonConfig {
 	public String getShareTo() {
 		return shareTo;
 	}
-	public void setShareTo(String shareTo) {
-		this.shareTo = shareTo;
-	}
+
 	public boolean isShareLocation() {
 		return shareLocation;
 	}

@@ -232,7 +232,6 @@ public class ActionBarLayoutView extends BaseView {
 		
 		if(reload) {
 			ticker.resetTicker();
-			
 			viewsItem.setText(loadingText);
 			commentsItem.setText(loadingText);
 			likesItem.setText(loadingText);
@@ -275,7 +274,12 @@ public class ActionBarLayoutView extends BaseView {
 		}
 		else {
 			if(reload) {
-				getEntity(entity.getKey());
+				if(localEntity.isLiked()) {
+					getLike(entity.getKey());
+				}
+				else {
+					getEntity(entity.getKey());
+				}
 			}
 			else {
 				// Just set everything from the cached version
@@ -369,7 +373,7 @@ public class ActionBarLayoutView extends BaseView {
 			@Override
 			public void onGet(Like like) {
 				if(like != null) {
-					CacheableEntity putEntity = entityCache.putEntity(like.getEntity());
+					CacheableEntity putEntity = setLocalEntity(like.getEntity());
 					putEntity.setLiked(true);
 					putEntity.setLikeId(like.getId());
 					setEntityData(putEntity);

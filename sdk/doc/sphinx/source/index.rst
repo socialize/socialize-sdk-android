@@ -10,6 +10,7 @@ Contents:
    getting_started
    facebook
    action_bar
+   like_button
    comment_view
    push_notifications
    entity_loader

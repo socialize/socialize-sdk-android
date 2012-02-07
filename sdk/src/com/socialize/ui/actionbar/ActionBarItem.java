@@ -168,6 +168,14 @@ public class ActionBarItem extends LinearLayout {
 			this.textView.setText(text);
 		}
 	}
+	
+	public Drawable getIcon() {
+		return icon;
+	}
+
+	public String getText() {
+		return text;
+	}
 
 	public void showLoading() {
 		if(iconFlipper != null) {

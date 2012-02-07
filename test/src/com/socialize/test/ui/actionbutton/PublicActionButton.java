@@ -65,4 +65,9 @@ public class PublicActionButton<A extends SocializeAction> extends SocializeActi
 	public ActionButtonConfig getDefault() {
 		return super.getDefault();
 	}
+
+	@Override
+	public void setConfig(ActionButtonConfig config) {
+		super.setConfig(config);
+	}
 }

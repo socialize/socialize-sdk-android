@@ -117,8 +117,8 @@ public class ActionBarButton extends LinearLayout {
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
 		this.deviceUtils = deviceUtils;
 	}
-
-	public View getActionBarItem() {
+ 
+	public ActionBarItem getActionBarItem() {
 		return actionBarItem;
 	}
 

@@ -26,6 +26,7 @@
    -->
     <com.socialize.ui.actionbutton.SocializeLikeButton
         xmlns:socialize="http://getsocialize.com"
+        android:id="@+id/socializeLikeButton"
         android:layout_width="150dp"
     	android:layout_height="45px"
     	android:background="@drawable/superman_bg" 

@@ -374,6 +374,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.config = mainConfig;
 				this.initCount++;
 				
+				verify3rdPartyAuthConfigured();
+				
 				ActivityIOCProvider.getInstance().setContainer(container);
 			}
 			catch (Exception e) {
@@ -387,6 +389,14 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 		else {
 			this.initCount++;
+		}
+	}
+	
+	protected void verify3rdPartyAuthConfigured() {
+		if(logger != null && logger.isDebugEnabled()) {
+			if(!isSupported(AuthProviderType.FACEBOOK)) {
+				logger.debug("No facebook app id found in socialize.properties.  Facebook not enabled");
+			}
 		}
 	}
 	

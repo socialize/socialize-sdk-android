@@ -1,0 +1,19 @@
+.. raw:: html
+
+	<pre class="brush: java;">
+	import android.os.Bundle;
+	import android.app.Activity;
+	
+	import com.socialize.entity.Entity;
+	import com.socialize.ui.actionbar.ActionBarView;
+	
+	public class ActionBarSampleActivity extends Activity {
+		@Override
+		protected void onCreate(Bundle savedInstanceState) {
+			setContentView(R.layout.main);
+			ActionBarView socializeActionBarView = (ActionBarView) findViewById(R.id.socializeActionBar);
+			socializeActionBarView.setEntity(Entity.newInstance("foo", "bar"));
+			socializeActionBarView.refresh(); // Optional.. only if changing entity key.
+		}
+	}
+	</pre>

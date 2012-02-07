@@ -111,7 +111,7 @@ public class SocializeActionButton<A extends SocializeAction> extends Authentica
 		}
 	}
 	
-	public void setConfig(ActionButtonConfig config) {
+	protected void setConfig(ActionButtonConfig config) {
 		this.config = config;
 	}
 

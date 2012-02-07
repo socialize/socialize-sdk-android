@@ -1,0 +1,7 @@
+.. raw:: html
+
+	<pre class="brush: java">
+		// Retrieve a reference to your like button based on it's ID
+		SocializeLikeButton button = (SocializeLikeButton) findViewById(R.id.socializeLikeButton);
+		button.setEntity(Entity.newInstance("foo", "bar"));
+	</pre>

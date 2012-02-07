@@ -85,5 +85,4 @@ public class CacheableEntity implements ICacheable<String> {
 	public void setLikeId(long likeId) {
 		this.likeId = likeId;
 	}
-	
 }
