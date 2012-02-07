@@ -28,8 +28,5 @@ import com.socialize.entity.SocializeAction;
  *
  */
 public interface ActionButtonHandlers {
-
-	@SuppressWarnings("unchecked")
 	public <A extends SocializeAction> ActionButtonHandler<A> getHandler(String key);
-
 }
