@@ -55,6 +55,8 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_USE_ACTION_WEBVIEW = "socialize.use.action.webview";
 	
+	public static final String SOCIALIZE_BRANDING_ENABLED = "socialize.branding.enabled";
+	
 	@Deprecated
 	public static final String SOCIALIZE_BEANS_PATH = SOCIALIZE_CORE_BEANS_PATH;
 	
@@ -228,6 +230,10 @@ public class SocializeConfig {
 			return Boolean.parseBoolean(val);
 		}
 		return defaultValue;
+	}
+	
+	public boolean isBrandingEnabled() {
+		return getBooleanProperty(SOCIALIZE_BRANDING_ENABLED, true);
 	}
 	
 	/**
