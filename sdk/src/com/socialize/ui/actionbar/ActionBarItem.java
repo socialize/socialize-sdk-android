@@ -78,19 +78,24 @@ public class ActionBarItem extends LinearLayout {
 		RelativeLayout progressLayout = new RelativeLayout(getContext());
 		
 		int minWidth = deviceUtils.getDIP(24);
+		int minHeight = deviceUtils.getDIP(24);
 		
 		if(icon != null) {
 			int intrinsicWidth = icon.getMinimumWidth();
-			int intrinsicHeight= icon.getMinimumHeight();
+			int intrinsicHeight = icon.getMinimumHeight();
 			if(intrinsicWidth > minWidth) {
 				minWidth = intrinsicWidth;
 			}
-			progressLayout.setMinimumHeight(intrinsicHeight);
+			if(intrinsicHeight > minHeight) {
+				minHeight = intrinsicHeight;
+			}
+			
 		}
 		
 		minWidth+=leftMargin;
 		
 		progressLayout.setMinimumWidth(minWidth);
+		progressLayout.setMinimumHeight(minHeight);
 		
 		LayoutParams progressLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		progressLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
@@ -110,6 +115,9 @@ public class ActionBarItem extends LinearLayout {
  ******************************************/	
 		
 		RelativeLayout imageLayout = new RelativeLayout(getContext());
+		
+		imageLayout.setMinimumWidth(minWidth);
+		imageLayout.setMinimumHeight(minHeight);
 		
 		LayoutParams imageLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
 		imageLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;

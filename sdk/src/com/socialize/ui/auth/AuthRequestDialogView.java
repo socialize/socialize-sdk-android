@@ -52,15 +52,19 @@ public class AuthRequestDialogView extends LinearLayout {
 		
 		LayoutParams fill = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 
-		fill.setMargins(0,0,0,0);
+		fill.setMargins(padding, padding, padding, padding);
 		
 		setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
 		setOrientation(LinearLayout.VERTICAL);
 		setLayoutParams(fill);
-		setPadding(padding, padding, padding, padding);
 		
 		if(!StringUtils.isEmpty(text)) {
 			textView = new TextView(getContext());
+			
+			LayoutParams textParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			textParams.setMargins(padding, padding, padding, padding);
+			
+			textView.setLayoutParams(textParams);
 			textView.setTextColor(Color.WHITE);
 			textView.setText(text);
 			textView.setGravity(Gravity.TOP | Gravity.LEFT);
