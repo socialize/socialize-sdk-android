@@ -18,7 +18,6 @@ v1.4
 [feature] Add like button which can be easily customized with image and name
 [bug] Failed FB auth does not clear session correctly
 [bug] Oauth class fails to load (proguard conf)
-[feature] Allow for removal of the word “Socialize” from share posts
 [feature] Add documentation for like button
 [feature] Add documentation for how to use the manual XML layout option (i.e. what does the source code look like)
 [bug] ActionBar does not refresh when loaded using manual XML
