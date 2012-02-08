@@ -69,6 +69,7 @@ public class ActionButtonConfig {
 	
 	private boolean shareLocation;
 	private boolean showCount = true;
+	private boolean invertProgressStyle = false;
 	private boolean autoAuth;
 	
 	private SocialNetwork[] shareToNetworks;
@@ -236,6 +237,14 @@ public class ActionButtonConfig {
 	public void setShowCount(boolean showCount) {
 		this.showCount = showCount;
 	}
+	
+	public boolean isInvertProgressStyle() {
+		return invertProgressStyle;
+	}
+
+	public void setInvertProgressStyle(boolean invertProgressStyle) {
+		this.invertProgressStyle = invertProgressStyle;
+	}
 
 	public void build(Context context, AttributeSet attrs) {
 		buttonId = attrs.getAttributeValue(androidns, "id");
@@ -246,6 +255,7 @@ public class ActionButtonConfig {
 		shareLocation = attrs.getAttributeBooleanValue(socializens, "share_location", true);
 		autoAuth = attrs.getAttributeBooleanValue(socializens, "auto_auth", false);
 		showCount = attrs.getAttributeBooleanValue(socializens, "show_count", true);
+		invertProgressStyle = attrs.getAttributeBooleanValue(socializens, "invert_progress_style", false);
 		
 		String strTextSize = attrs.getAttributeValue(androidns, "textSize");
 		
@@ -334,10 +344,12 @@ public class ActionButtonConfig {
 		
 		if(backgroundResId <= 0) {
 			String color = attrs.getAttributeValue(androidns, "background");
-			try {
-				backgroundColor = Color.parseColor(color);
-			} catch (Exception e) {
-				e.printStackTrace();
+			if(!StringUtils.isEmpty(color)) {
+				try {
+					backgroundColor = Color.parseColor(color);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		

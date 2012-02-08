@@ -71,6 +71,11 @@ public abstract class BaseActionButtonHandler<A extends SocializeAction> impleme
 				@Override
 				public void onError(Activity context, Exception e) {
 					button.setState(ActionButtonState.DISABLED);
+					
+					if(logger != null) {
+						logger.error("Failed to load action button", e);
+					}
+					
 					if(listener != null) {
 						listener.onError(context, e);
 					}	
@@ -126,6 +131,10 @@ public abstract class BaseActionButtonHandler<A extends SocializeAction> impleme
 
 					@Override
 					public void onError(Activity context, Exception e) {
+						if(logger != null) {
+							logger.error("Failed to handle button action", e);
+						}						
+						
 						if(listener != null) {
 							listener.onError(context, e);
 						}

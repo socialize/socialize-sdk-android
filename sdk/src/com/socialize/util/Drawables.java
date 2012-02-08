@@ -228,7 +228,7 @@ public class Drawables {
 			densityPath = "ldpi";
 		}
 		else if (density > DisplayMetrics.DENSITY_HIGH) {
-			densityPath = "xdpi";
+			densityPath = "xhdpi";
 		}
 		
 		int indexOf = name.indexOf('#');

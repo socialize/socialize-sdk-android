@@ -96,12 +96,6 @@ public abstract class BaseView extends LinearLayout implements SocializeView {
 		onRender(w, h);
 	}
 
-//	@Override
-//	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-//		super.onLayout(changed, l, t, r, b);
-//		onRender(r-l, b-t);
-//	}
-	
 	protected void onRender(int w, int h) {
 		if(!rendered) {
 			rendered = true;

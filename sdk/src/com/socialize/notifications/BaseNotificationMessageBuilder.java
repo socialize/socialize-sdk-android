@@ -34,6 +34,7 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeLaunchActivity;
 import com.socialize.util.AppUtils;
 import com.socialize.util.DefaultAppUtils;
+import com.socialize.util.NumberUtils;
 import com.socialize.util.StringUtils;
 
 /**
@@ -43,6 +44,7 @@ public abstract class BaseNotificationMessageBuilder<M extends NotificationMessa
 
 	private MessageTranslator<M> messageTranslator;
 	private AppUtils appUtils;
+	private NumberUtils numberUtils;
 	private SocializeLogger logger;
 	
 	@Override
@@ -74,7 +76,7 @@ public abstract class BaseNotificationMessageBuilder<M extends NotificationMessa
 		
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		
-		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+		PendingIntent contentIntent = PendingIntent.getActivity(context, getNotificationId(message), notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 		
 		RemoteViews notificationView = getNotificationView(context, notification, message, translated);
 		
@@ -121,6 +123,14 @@ public abstract class BaseNotificationMessageBuilder<M extends NotificationMessa
 	// So we can mock
 	protected Intent newIntent(Context context, Class<?> cls) {
 		 return new Intent(context, cls);
+	}
+	
+	protected int getNotificationId(NotificationMessage message) {
+		return numberUtils.longToIntLossy(message.getEntityId());
+	}
+
+	public void setNumberUtils(NumberUtils numberUtils) {
+		this.numberUtils = numberUtils;
 	}
 
 	/**

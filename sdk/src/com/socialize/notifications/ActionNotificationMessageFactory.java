@@ -39,6 +39,7 @@ public class ActionNotificationMessageFactory extends BaseNotificationMessageFac
 		to.setUser(getString(from, "user"));
 		to.setEntity(getString(from, "entity"));
 		to.setActionId(getLong(from, "activity_id"));
+		to.setEntityId(getLong(from, "entity_id", to.getActionId()));
 		
 		String actionType = getString(from, "activity_type");
 		String notificationType = getString(from, "notification_type");

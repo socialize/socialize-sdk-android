@@ -30,6 +30,7 @@ import com.socialize.entity.EntityStats;
 import com.socialize.entity.Like;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.entity.EntityAddListener;
 import com.socialize.listener.entity.EntityGetListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
@@ -83,7 +84,7 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 		});
 	}
 
-	protected void handleLoadEvent(final Activity context, Entity entity, Like like, final OnActionButtonEventListener<Like> listener) {
+	protected void handleLoadEvent(final Activity context, final Entity entity, Like like, final OnActionButtonEventListener<Like> listener) {
 		if(listener != null) {
 			if(like == null) {
 				// Get entity
@@ -95,6 +96,26 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 					
 					@Override
 					public void onError(SocializeException error) {
+						
+						if(error instanceof SocializeApiError) {
+							if(((SocializeApiError)error).getResultCode() == 404) {
+								// no entity
+								getSocialize().addEntity(context, entity, new EntityAddListener() {
+									@Override
+									public void onError(SocializeException error) {
+										listener.onError(context, error);
+									}
+									@Override
+									public void onCreate(Entity entity) {
+										listener.onLoad(context, null, entity);
+									}
+								});
+								
+								// Don't log error
+								return;
+							}
+						}						
+						
 						listener.onError(context, error);
 					}
 				});
@@ -181,9 +202,11 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 
 	@Override
 	public int getCountForAction(Entity entity) {
-		EntityStats entityStats = entity.getEntityStats();
-		if(entityStats != null) {
-			return entityStats.getLikes();
+		if(entity != null) {
+			EntityStats entityStats = entity.getEntityStats();
+			if(entityStats != null) {
+				return entityStats.getLikes();
+			}
 		}
 		return 0;
 	}

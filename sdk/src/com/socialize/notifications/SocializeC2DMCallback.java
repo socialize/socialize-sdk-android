@@ -36,6 +36,7 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.entity.JSONFactory;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.AppUtils;
+import com.socialize.util.NumberUtils;
 import com.socialize.util.StringUtils;
 
 /**
@@ -45,11 +46,10 @@ public class SocializeC2DMCallback implements C2DMCallback {
 	
 	private int notificationIcon = R.drawable.sym_action_chat;
 	
-	public static final int NOTIFICATION_ID = 1337;
-	
 	private SocializeLogger logger;
 	private SocializeConfig config;
 	private AppUtils appUtils;
+	private NumberUtils numberUtils;
 	
 	private Map<String, JSONFactory<NotificationMessage>> messageFactories;
 	private Map<String, NotificationMessageBuilder> messageBuilders;
@@ -141,7 +141,7 @@ public class SocializeC2DMCallback implements C2DMCallback {
 								}
 								Notification notification = builder.build(context, data, notificationMessage, icon);
 								NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-								mNotificationManager.notify(String.valueOf(notificationMessage.getActionId()), NOTIFICATION_ID, notification);		
+								mNotificationManager.notify(String.valueOf(notificationMessage.getEntityId()), getNotificationId(notificationMessage), notification);		
 							}
 							else {
 								handleError("No message builder defined for notification type [" +
@@ -177,6 +177,10 @@ public class SocializeC2DMCallback implements C2DMCallback {
 					MESSAGE_KEY +
 					"]");
 		}
+	}
+	
+	protected int getNotificationId(NotificationMessage message) {
+		return numberUtils.longToIntLossy(message.getEntityId());
 	}
 	
 	protected void handleError(String msg) {
@@ -229,4 +233,10 @@ public class SocializeC2DMCallback implements C2DMCallback {
 	public void setNotificationRegistrationState(NotificationRegistrationState notificationRegistrationState) {
 		this.notificationRegistrationState = notificationRegistrationState;
 	}
+
+	public void setNumberUtils(NumberUtils numberUtils) {
+		this.numberUtils = numberUtils;
+	}
+	
+	
 }
