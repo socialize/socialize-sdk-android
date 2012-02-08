@@ -54,6 +54,8 @@ public class ActionBarItem extends LinearLayout {
 	private TextView textView;
 	private DeviceUtils deviceUtils;
 	
+	private boolean invertProgressStyle = false;
+	
 	private ViewFlipper iconFlipper;
 	
 	public ActionBarItem(Context context) {
@@ -73,7 +75,13 @@ public class ActionBarItem extends LinearLayout {
  * Progress Bar
  ******************************************/
 		
-		ProgressBar progress = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleSmall);
+		int style = android.R.attr.progressBarStyleSmall;
+		
+		if(invertProgressStyle) {
+			style = android.R.attr.progressBarStyleSmallInverse;
+		}
+		
+		ProgressBar progress = new ProgressBar(getContext(), null, style);
 		
 		RelativeLayout progressLayout = new RelativeLayout(getContext());
 		
@@ -141,8 +149,16 @@ public class ActionBarItem extends LinearLayout {
 /******************************************
  * Text
  ******************************************/	
+		
+		LinearLayout textLayout = new LinearLayout(getContext());
+		
+		LayoutParams textLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+		textLayoutParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
+		
+		textLayout.setLayoutParams(textLayoutParams);
 
 		textView = new TextView(getContext());
+		textView.setSingleLine(true);
 		
 		LayoutParams textParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		textParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
@@ -160,8 +176,9 @@ public class ActionBarItem extends LinearLayout {
 		
 		textView.setTypeface(Typeface.DEFAULT_BOLD);
 		textView.setTextColor(textColor);
-		
 		textView.setLayoutParams(textParams);
+		
+		textLayout.addView(textView);
 		
 		
 /******************************************
@@ -183,7 +200,7 @@ public class ActionBarItem extends LinearLayout {
  * Assembly
  ******************************************/		
 		addView(iconFlipper);
-		addView(textView);
+		addView(textLayout);
 	}
 
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
@@ -228,6 +245,10 @@ public class ActionBarItem extends LinearLayout {
 		return text;
 	}
 
+	public void setInvertProgressStyle(boolean invertProgressStyle) {
+		this.invertProgressStyle = invertProgressStyle;
+	}
+
 	public void showLoading() {
 		if(iconFlipper != null) {
 			iconFlipper.setDisplayedChild(1);
@@ -238,6 +259,14 @@ public class ActionBarItem extends LinearLayout {
 		if(iconFlipper != null) {
 			iconFlipper.setDisplayedChild(0);
 		}
+	}
+
+	public ImageView getImageView() {
+		return imageView;
+	}
+
+	public TextView getTextView() {
+		return textView;
 	}
 	
 }

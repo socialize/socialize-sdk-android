@@ -96,10 +96,14 @@ public abstract class JSONFactory<T extends Object> {
 	}
 	
 	protected long getLong(JSONObject obj, String key) throws JSONException {
+		return getLong(obj, key, 0);
+	}	
+	
+	protected long getLong(JSONObject obj, String key, long defaultValue) throws JSONException {
 		if(obj.has(key) && !obj.isNull(key)) {
 			return obj.getLong(key);
 		}
-		return 0;
+		return defaultValue;
 	}	
 	
 	// This SHOULD return the generic type "T" but because javassist (via AndroidMock) doesn't seem to 

@@ -33,6 +33,7 @@ public class NotificationMessage {
 	private String user;
 	private String entity;
 	private long actionId;
+	private long entityId;
 	private ActionType actionType = ActionType.UNKNOWN;
 	private NotificationType notificationType = NotificationType.NEW_COMMENTS;
 	
@@ -72,5 +73,10 @@ public class NotificationMessage {
 	public void setEntity(String entity) {
 		this.entity = entity;
 	}
-	
+	public long getEntityId() {
+		return entityId;
+	}
+	public void setEntityId(long entityId) {
+		this.entityId = entityId;
+	}
 }

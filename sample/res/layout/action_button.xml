@@ -1,34 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
-	xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    <!-- 
-    <com.socialize.ui.actionbutton.SocializeActionButton
-        xmlns:socialize="http://getsocialize.com"
-        android:layout_width="150dp"
-    	android:layout_height="wrap_content"
-    	android:background="#266400" 
-    	android:textSize="14dp"
-    	socialize:entity_key="foo"
-    	socialize:entity_name="bar"
-    	socialize:src_active="@drawable/action_button_on"
-    	socialize:src_inactive="@drawable/action_button_off"
-    	socialize:src_disabled="@drawable/action_button_disabled"
-    	socialize:text_active="Lucky!"
-    	socialize:text_inactive="Unlucky :("
-    	socialize:share_location="true"
-    	socialize:auto_auth="false"
-    	socialize:share_to="facebook" 
-    	socialize:show_count="false" 
-    	socialize:action_type="like"/>
-   -->
+    android:layout_height="fill_parent"
+    android:background="#000000">
+   
     <com.socialize.ui.actionbutton.SocializeLikeButton
         xmlns:socialize="http://getsocialize.com"
         android:id="@+id/socializeLikeButton"
         android:layout_width="150dp"
-    	android:layout_height="45px"
+    	android:layout_height="45px" 
+    	android:layout_centerInParent="true"
     	android:background="@drawable/superman_bg" 
     	android:textColor="#9dd2ff"
     	socialize:entity_key="http://getsocialize.com"
@@ -41,4 +23,5 @@
     	socialize:share_location="true"
     	socialize:auto_auth="false"
     	socialize:share_to="facebook"/>    
-</LinearLayout>
+    	
+</RelativeLayout>

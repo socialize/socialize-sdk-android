@@ -23,7 +23,10 @@ package com.socialize.ui.actionbutton;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Entity;
@@ -72,6 +75,11 @@ public class ActionButtonLayoutView<A extends SocializeAction> extends BaseView 
 	}
 
 	public void init() {
+		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		params.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
+		
+		setLayoutParams(params);		
+		
 		actionBarItem = actionBarItemFactory.getBean();
 		actionButtonHandler = actionButtonHandlers.getHandler(config.getActionType());
 		
@@ -139,8 +147,7 @@ public class ActionButtonLayoutView<A extends SocializeAction> extends BaseView 
 			}
 		}
 		
-		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		setLayoutParams(params);
+
 		
 		if(imageDisabled != null) {
 			actionBarItem.setIcon(imageDisabled);
@@ -155,6 +162,7 @@ public class ActionButtonLayoutView<A extends SocializeAction> extends BaseView 
 		}
 		
 		actionBarItem.setText(config.getTextLoading());
+		actionBarItem.setInvertProgressStyle(config.isInvertProgressStyle());
 		actionBarItem.init();
 		
 		addView(actionBarItem);
@@ -285,5 +293,13 @@ public class ActionButtonLayoutView<A extends SocializeAction> extends BaseView 
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
+	}
+	
+	public ImageView getImageView() {
+		return (actionBarItem == null) ? null : actionBarItem.getImageView();
+	}
+
+	public TextView getTextView() {
+		return (actionBarItem == null) ? null : actionBarItem.getTextView();
 	}
 }

@@ -24,6 +24,8 @@ package com.socialize.ui.actionbutton;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;
@@ -42,7 +44,6 @@ public class SocializeActionButton<A extends SocializeAction> extends Authentica
 
 	public SocializeActionButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		
 		// Must be done in constructor
 		doConfigBuild(context, attrs);
 	}
@@ -61,17 +62,24 @@ public class SocializeActionButton<A extends SocializeAction> extends Authentica
 
 	@Override
 	public View getView() {
-		if(config != null) {
-			view = container.getBean("actionButtonView", config, this); 
-			String entityKey = config.getEntityKey();
-			if(!StringUtils.isEmpty(entityKey)) {
-				Entity entity = createEntity(entityKey, config.getEntityName());
-				view.setEntity(entity);
+		try {
+			if(config != null) {
+				view = container.getBean("actionButtonView", config, this); 
+				String entityKey = config.getEntityKey();
+				if(!StringUtils.isEmpty(entityKey)) {
+					Entity entity = createEntity(entityKey, config.getEntityName());
+					view.setEntity(entity);
+				}
+				else {
+					view.setEntity(entity);
+				}
 			}
-			else {
-				view.setEntity(entity);
-			}
+			
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
 		}
+		
 		return view;
 	}
 	
@@ -139,6 +147,14 @@ public class SocializeActionButton<A extends SocializeAction> extends Authentica
 	
 	protected ActionButtonLayoutView<A> getLayoutView() {
 		return view;
+	}
+	
+	public ImageView getImageView() {
+		return (view == null) ? null : view.getImageView();
+	}
+
+	public TextView getTextView() {
+		return (view == null) ? null : view.getTextView();
 	}
 	
 	/**
