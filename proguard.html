@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Socialize Comments &mdash; Socialize Android SDK v1.4 documentation</title>
+    <title>ProGuard Configuration &mdash; Socialize Android SDK v1.4 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -27,18 +27,18 @@
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
     <link rel="top" title="Socialize Android SDK v1.4 documentation" href="index.html" />
-    <link rel="next" title="SmartAlerts (Push Notifications)" href="push_notifications.html" />
-    <link rel="prev" title="Socialize Like Button" href="like_button.html" /> 
+    <link rel="next" title="Troubleshooting &amp; Support" href="troubleshooting.html" />
+    <link rel="prev" title="Configuration Settings" href="config.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="push_notifications.html" title="SmartAlerts (Push Notifications)"
+          <a href="troubleshooting.html" title="Troubleshooting &amp; Support"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="like_button.html" title="Socialize Like Button"
+          <a href="config.html" title="Configuration Settings"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">Socialize Android SDK v1.4 documentation</a> &raquo;</li> 
       </ul>
@@ -69,92 +69,26 @@
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
-</script><div class="section" id="socialize-comments">
-<h1>Socialize Comments<a class="headerlink" href="#socialize-comments" title="Permalink to this headline">¶</a></h1>
-<p>v0.4.0 of the Socialize SDK introduced the &#8220;Comment View&#8221; which provides the creation and viewing
-of comments associated with an entity (URL).</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">If you are using the Socialize Action Bar you do not need to use the Comment View directly, it is included in the Action Bar</p>
-</div>
-<img alt="images/comment_list.png" src="images/comment_list.png" />
-<img alt="images/activity.png" src="images/activity.png" />
-<img alt="images/profile.png" src="images/profile.png" />
-<div class="section" id="diplaying-the-comment-view">
-<h2>Diplaying the Comment View<a class="headerlink" href="#diplaying-the-comment-view" title="Permalink to this headline">¶</a></h2>
-<p>When you want to launch the comment view, simply call <strong>showCommentView</strong> from the SocializeUI instance:</p>
-<pre class="brush: java">
+</script><div class="section" id="proguard-configuration">
+<span id="proguard-conf"></span><h1>ProGuard Configuration<a class="headerlink" href="#proguard-configuration" title="Permalink to this headline">¶</a></h1>
+<p>If you are using <a class="reference external" href="http://developer.android.com/guide/developing/tools/proguard.html">ProGuard</a> when building your app with Socialize you will need to add some lines to your <strong>proguard.cfg</strong> file
+to preserve class the class names used by Socialize.</p>
+<pre class="brush: java-properties">
+# Add the Socalize JAR file as a library jar
+-libraryjars libs/socialize-xxx.jar
 
-import com.socialize.Socialize;
-import com.socialize.entity.Entity;
+# Ignore Socialize warnings
+-dontwarn com.socialize.**
 
-// The "this" reference below refers to a Context object
-// Create or retrieve your entity object
-Entity entity = Entity.newInstance("http://someurl.com", "My Entity");
-Socialize.getSocializeUI().showCommentView(this, entity);
-</pre><p>Here&#8217;s an example of calling it on a button click:</p>
-<pre class="brush: java">
-
-// btnCommentView would be the name of your button in your UI
-Button btn = (Button) findViewById(R.id.btnCommentView);
-
-btn.setOnClickListener(new OnClickListener() {
-        public void onClick(View v) {
-                // Create or retrieve your entity object
-                Entity entity = Entity.newInstance("http://someurl.com", "My Entity");
-                Socialize.getSocializeUI().showCommentView(SocializeActivity.this, entity);
-        }
-});
-</pre></div>
-<div class="section" id="a-complete-example">
-<h2>A Complete Example<a class="headerlink" href="#a-complete-example" title="Permalink to this headline">¶</a></h2>
-<p>Here&#8217;s a complete example in an Activity:</p>
-<pre class="brush: java">
-
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-
-import com.socialize.Socialize;
-import com.socialize.entity.Entity;
-
-public class CommentViewActivity extends Activity {
-        public void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-
-                setContentView(R.layout.your_layout);
-
-                // These can be specified in a config file
-                // called socialize.properties and places in your assets path.
-                final String consumerKey = "00000000-0000-0000-000000000000";
-                final String consumerSecret = "00000000-0000-0000-000000000000";
-
-                // YOUR Facebook App ID
-                final String facebookAppId = "1234567890";
-
-                // A button in your UI used to launch the Comment View
-                final Button btn = (Button) findViewById(R.id.btnCommentView);
-
-                btn.setOnClickListener(new OnClickListener() {
-                        public void onClick(View v) {
-
-                                // Create or retrieve your entity object
-                                Entity entity = Entity.newInstance("http://someurl.com", "My Entity");
-
-                                Socialize.getSocialize().getConfig().setSocializeCredentials(consumerKey, consumerSecret);
-                                Socialize.getSocialize().getConfig().setFacebookAppId(facebookAppId);
-                                Socialize.getSocializeUI().showCommentView(CommentViewActivity.this, entity);
-                        }
-                });
-        }
-}
+# Keep Socialize classes
+-keep public class com.socialize.** { *; }
+-keep public class oauth.signpost.** {  *; }
+-keep public class oauth.socialize.** {  *; }
+-keep public class com.google.** { *; }
 </pre><script type="text/javascript">
         SyntaxHighlighter.defaults['toolbar'] = false;
         SyntaxHighlighter.all();
 </script></div>
-</div>
 
 
           </div>
@@ -182,16 +116,12 @@ public class CommentViewActivity extends Activity {
 <li class="toctree-l1"><a class="reference internal" href="facebook.html">Facebook Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="action_bar.html">Socialize Action Bar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="like_button.html">Socialize Like Button</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Socialize Comments</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#diplaying-the-comment-view">Diplaying the Comment View</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#a-complete-example">A Complete Example</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="comment_view.html">Socialize Comments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="push_notifications.html">SmartAlerts (Push Notifications)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="entity_loader.html">Entity Loaders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Settings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proguard.html">ProGuard Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">ProGuard Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting &amp; Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log</a></li>
 </ul>
@@ -204,10 +134,10 @@ public class CommentViewActivity extends Activity {
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="push_notifications.html" title="SmartAlerts (Push Notifications)"
+          <a href="troubleshooting.html" title="Troubleshooting &amp; Support"
              >next</a></li>
         <li class="right" >
-          <a href="like_button.html" title="Socialize Like Button"
+          <a href="config.html" title="Configuration Settings"
              >previous</a> |</li>
         <li><a href="index.html">Socialize Android SDK v1.4 documentation</a> &raquo;</li> 
       </ul>

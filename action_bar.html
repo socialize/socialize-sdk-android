@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Socialize Action Bar &mdash; Socialize Android SDK v1.3.1 documentation</title>
+    <title>Socialize Action Bar &mdash; Socialize Android SDK v1.4 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'v1.3.1',
+        VERSION:     'v1.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,8 +26,8 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v1.3.1 documentation" href="index.html" />
-    <link rel="next" title="Socialize Comments" href="comment_view.html" />
+    <link rel="top" title="Socialize Android SDK v1.4 documentation" href="index.html" />
+    <link rel="next" title="Socialize Like Button" href="like_button.html" />
     <link rel="prev" title="Facebook Integration" href="facebook.html" /> 
   </head>
   <body>
@@ -35,12 +35,12 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="comment_view.html" title="Socialize Comments"
+          <a href="like_button.html" title="Socialize Like Button"
              accesskey="N">next</a></li>
         <li class="right" >
           <a href="facebook.html" title="Facebook Integration"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.3.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK v1.4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -169,8 +169,13 @@ be provided to Socialize to that it knows how to load the original view for the 
 <p>Developers should create an implementation of a SocializeEntityLoader and provide this implementation to the SocializeUI instance:</p>
 <pre class="brush: java">
 Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
+
         public void loadEntity(Activity activity, Entity entity) {
                 // Load the original view for this entity
+        }
+
+        public boolean canLoad(Context context, Entity entity) {
+                // Return true if this entity can be loaded
         }
 });
 </pre><p>Refer to the <a class="reference internal" href="entity_loader.html"><em>Entity Loaders</em></a> section for more details.</p>
@@ -375,6 +380,23 @@ you can always just add the view manually.</p>
                 android:layout_alignParentBottom="true"/>
 
 &lt;/RelativeLayout>
+</pre><p>In this case you will still need to set the entity in code:</p>
+<pre class="brush: java;">
+import android.os.Bundle;
+import android.app.Activity;
+
+import com.socialize.entity.Entity;
+import com.socialize.ui.actionbar.ActionBarView;
+
+public class ActionBarSampleActivity extends Activity {
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+                setContentView(R.layout.main);
+                ActionBarView socializeActionBarView = (ActionBarView) findViewById(R.id.socializeActionBar);
+                socializeActionBarView.setEntity(Entity.newInstance("foo", "bar"));
+                socializeActionBarView.refresh(); // Optional.. only if changing entity key.
+        }
+}
 </pre><script type="text/javascript">
         SyntaxHighlighter.defaults['toolbar'] = false;
         SyntaxHighlighter.all();
@@ -388,6 +410,19 @@ you can always just add the view manually.</p>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="index.html">Table Of Contents</a></h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="whats_new.html">What&#8217;s New</a></li>
@@ -410,11 +445,13 @@ you can always just add the view manually.</p>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="like_button.html">Socialize Like Button</a></li>
 <li class="toctree-l1"><a class="reference internal" href="comment_view.html">Socialize Comments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="push_notifications.html">SmartAlerts (Push Notifications)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="entity_loader.html">Entity Loaders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html">ProGuard Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting &amp; Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log</a></li>
 </ul>
@@ -427,12 +464,12 @@ you can always just add the view manually.</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="comment_view.html" title="Socialize Comments"
+          <a href="like_button.html" title="Socialize Like Button"
              >next</a></li>
         <li class="right" >
           <a href="facebook.html" title="Facebook Integration"
              >previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.3.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK v1.4 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

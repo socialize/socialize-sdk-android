@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>What’s New &mdash; Socialize Android SDK v1.3.1 documentation</title>
+    <title>What’s New &mdash; Socialize Android SDK v1.4 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'v1.3.1',
+        VERSION:     'v1.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v1.3.1 documentation" href="index.html" />
+    <link rel="top" title="Socialize Android SDK v1.4 documentation" href="index.html" />
     <link rel="next" title="Getting Started" href="getting_started.html" />
     <link rel="prev" title="Socialize Android SDK" href="index.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="index.html" title="Socialize Android SDK"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.3.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK v1.4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -71,6 +71,49 @@
     })();
 </script><div class="section" id="what-s-new">
 <span id="whats-new"></span><h1>What&#8217;s New<a class="headerlink" href="#what-s-new" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="v1-4-socialize-like-button">
+<h2>v1.4 Socialize Like Button<a class="headerlink" href="#v1-4-socialize-like-button" title="Permalink to this headline">¶</a></h2>
+<p>Introduced in v1.4 is a stand-alone &#8220;like&#8221; button which can be added to any view and which automatically handles all authentication
+with 3rd party social networks like Facebook.</p>
+<p>Refer to the <a class="reference internal" href="like_button.html#like-button"><em>Socialize Like Button</em></a> section for details on how to implement the Socialize Like button.</p>
+</div>
+<div class="section" id="v1-3-2-entity-loader-change">
+<h2>v1.3.2 Entity Loader Change<a class="headerlink" href="#v1-3-2-entity-loader-change" title="Permalink to this headline">¶</a></h2>
+<p><strong>Existing users please read</strong></p>
+<p>As of 1.3.2 a small change was made to the SocializeEntityLoader class which <strong>may</strong> cause a compilation error in your app.</p>
+<p>If you are using the Entity Loader system, you will notice a new method has been added to this interface:</p>
+<pre class="brush: java">
+/**
+ * Returns true if this entity can be loaded.
+ * @param entity
+ * @return
+ */
+public boolean canLoad(Context context, Entity entity);
+</pre><p>This new method allows you to inform Socialize whether it should attempt to load your entity or not.</p>
+</div>
+<div class="section" id="v1-3-1-meta-data-is-here">
+<h2>v1.3.1 Meta data is here!<a class="headerlink" href="#v1-3-1-meta-data-is-here" title="Permalink to this headline">¶</a></h2>
+<p>In v1.3.1 we have added support for meta data on an entity.  This means you can add arbitrary meta data to an entity when it is created
+and you will be given this data back when the entity is loaded from Socialize.</p>
+<pre class="brush: java">
+Entity entity = new Entity();
+entity.setKey("mykey");
+entity.setName("The Name");
+entity.setMetaData("extra_info");
+
+Socialize.getSocialize().addEntity(this, entity, new EntityAddListener() {
+
+        @Override
+        public void onError(SocializeException error) {
+                // Handle error
+        }
+
+        @Override
+        public void onCreate(Entity entity) {
+                // Handle success
+        }
+});
+</pre></div>
 <div class="section" id="v1-3-smartalerts">
 <h2>v1.3 SmartAlerts<a class="headerlink" href="#v1-3-smartalerts" title="Permalink to this headline">¶</a></h2>
 <p>v1.3 of Socialize includes a full push notification framework designed to bring users back to your app!</p>
@@ -100,9 +143,25 @@ other parts of your application.</p>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="index.html">Table Of Contents</a></h3>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="">What&#8217;s New</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#v1-4-socialize-like-button">v1.4 Socialize Like Button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v1-3-2-entity-loader-change">v1.3.2 Entity Loader Change</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v1-3-1-meta-data-is-here">v1.3.1 Meta data is here!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v1-3-smartalerts">v1.3 SmartAlerts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v1-1-recent-activity-in-user-profile">v1.1 Recent Activity in User Profile</a></li>
 </ul>
@@ -110,11 +169,13 @@ other parts of your application.</p>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="facebook.html">Facebook Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="action_bar.html">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="like_button.html">Socialize Like Button</a></li>
 <li class="toctree-l1"><a class="reference internal" href="comment_view.html">Socialize Comments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="push_notifications.html">SmartAlerts (Push Notifications)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="entity_loader.html">Entity Loaders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html">ProGuard Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting &amp; Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log</a></li>
 </ul>
@@ -132,7 +193,7 @@ other parts of your application.</p>
         <li class="right" >
           <a href="index.html" title="Socialize Android SDK"
              >previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.3.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK v1.4 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

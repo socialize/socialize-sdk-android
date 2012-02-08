@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Entity Loaders &mdash; Socialize Android SDK v1.3.1 documentation</title>
+    <title>Entity Loaders &mdash; Socialize Android SDK v1.4 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'v1.3.1',
+        VERSION:     'v1.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v1.3.1 documentation" href="index.html" />
+    <link rel="top" title="Socialize Android SDK v1.4 documentation" href="index.html" />
     <link rel="next" title="Socialize SDK (Advanced) Guide" href="sdk_user_guide.html" />
     <link rel="prev" title="SmartAlerts (Push Notifications)" href="push_notifications.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="push_notifications.html" title="SmartAlerts (Push Notifications)"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.3.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK v1.4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -83,8 +83,13 @@ which the social action pertains.</p>
 <p>There is only one Entity Loader per application and it can be set on the Socialize instance:</p>
 <pre class="brush: java">
 Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
+
         public void loadEntity(Activity activity, Entity entity) {
                 // Load the original view for this entity
+        }
+
+        public boolean canLoad(Context context, Entity entity) {
+                // Return true if this entity can be loaded
         }
 });
 </pre><p>The <strong>loadEntity</strong> method will be called by Socialize when the user selects an item rendered by Socialize which corresponds directly to
@@ -99,6 +104,10 @@ Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
                 // Add the key from the entity
                 intent.putExtra("some_key", entity.getKey());
                 activity.startActivity(intent);
+        }
+
+        public boolean canLoad(Context context, Entity entity) {
+                return true; // always load in this case
         }
 });
 </pre><p>The entity loader would usually be specified when you instantiate the ActionBar, for example:</p>
@@ -135,6 +144,10 @@ public class SampleActionBarActivity extends Activity {
                                 intent.putExtra("some_key", entity.getKey());
                                 activity.startActivity(intent);
                         }
+
+                        public boolean canLoad(Context context, Entity entity) {
+                                return true; // always load in this case
+                        }
                 });
 
                 // Wrap your existing view with the action bar.
@@ -157,12 +170,26 @@ public class SampleActionBarActivity extends Activity {
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="index.html">Table Of Contents</a></h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="whats_new.html">What&#8217;s New</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="facebook.html">Facebook Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="action_bar.html">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="like_button.html">Socialize Like Button</a></li>
 <li class="toctree-l1"><a class="reference internal" href="comment_view.html">Socialize Comments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="push_notifications.html">SmartAlerts (Push Notifications)</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Entity Loaders</a><ul>
@@ -172,6 +199,7 @@ public class SampleActionBarActivity extends Activity {
 </li>
 <li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html">ProGuard Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting &amp; Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log</a></li>
 </ul>
@@ -189,7 +217,7 @@ public class SampleActionBarActivity extends Activity {
         <li class="right" >
           <a href="push_notifications.html" title="SmartAlerts (Push Notifications)"
              >previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.3.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK v1.4 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

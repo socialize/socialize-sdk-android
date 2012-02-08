@@ -1,0 +1,341 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Socialize Like Button &mdash; Socialize Android SDK v1.4 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     'v1.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="shortcut icon" href="static/favicon.ico"/>
+    <link rel="top" title="Socialize Android SDK v1.4 documentation" href="index.html" />
+    <link rel="next" title="Socialize Comments" href="comment_view.html" />
+    <link rel="prev" title="Socialize Action Bar" href="action_bar.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="comment_view.html" title="Socialize Comments"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="action_bar.html" title="Socialize Action Bar"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Socialize Android SDK v1.4 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+      <link rel="stylesheet" href="static/css/shCore.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/shCoreEclipse.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/shThemeEclipse.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/gist.css" type="text/css" />
+    <script type="text/javascript" src="static/js/shCore.js"></script>
+    <script type="text/javascript" src="static/js/shBrushXml.js"></script>
+    <script type="text/javascript" src="static/js/shBrushJava.js"></script>
+    <script type="text/javascript" src="static/js/shBrushJavaProperties.js"></script>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-9835027-5']);
+    _gaq.push(['_setDomainName', '.getsocialize.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script><div class="section" id="socialize-like-button">
+<span id="like-button"></span><h1>Socialize Like Button<a class="headerlink" href="#socialize-like-button" title="Permalink to this headline">¶</a></h1>
+<p>In v1.4 of the Socialize SDK for Android is a new stand-alone Like Button.  This is simply the &#8220;like&#8221; capablity of Socialize
+contained in a self-standing UI element which can be easily customized to suit your app.</p>
+<div class="section" id="displaying-the-like-button">
+<h2>Displaying the Like Button<a class="headerlink" href="#displaying-the-like-button" title="Permalink to this headline">¶</a></h2>
+<p>The Like Button can either be included via standard Android XML Layout files, or programmatically in your Activity code.</p>
+<div class="section" id="using-xml-layout">
+<h3>Using XML layout<a class="headerlink" href="#using-xml-layout" title="Permalink to this headline">¶</a></h3>
+<pre class="brush: xml;">
+
+&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        &lt;com.socialize.ui.actionbutton.SocializeLikeButton
+                xmlns:socialize="http://getsocialize.com"
+                android:id="@+id/socializeLikeButton"
+                android:layout_width="150dp"
+                android:layout_height="45px"
+                android:background="#555555"
+                android:textColor="#ffffff"
+                socialize:entity_key="your_entity_key"
+                socialize:entity_name="your_entity_name"
+                socialize:src_active="@drawable/like_image_on"
+                socialize:src_inactive="@drawable/like_image_off"
+                socialize:src_disabled="@drawable/like_image_disabled"
+                socialize:text_active="Unlike"
+                socialize:text_inactive="Like"
+                socialize:share_location="true"
+                socialize:auto_auth="true"
+                socialize:show_count="true"
+                socialize:share_to="facebook"/>
+
+&lt;/LinearLayout>
+
+</pre><p>If you don&#8217;t want to (or can&#8217;t) set the entity key as a fixed value in XML, you can set it at runtime in code:</p>
+<pre class="brush: java">
+        // Retrieve a reference to your like button based on it's ID
+        SocializeLikeButton button = (SocializeLikeButton) findViewById(R.id.socializeLikeButton);
+        button.setEntity(Entity.newInstance("foo", "bar"));
+</pre><div class="section" id="customization-options">
+<h4>Customization Options<a class="headerlink" href="#customization-options" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="9%" />
+<col width="6%" />
+<col width="24%" />
+<col width="40%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Property</th>
+<th class="head">Type</th>
+<th class="head">Default</th>
+<th class="head">Example</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>android:layout_width</td>
+<td>N/A</td>
+<td>None</td>
+<td colspan="2"><a class="reference external" href="http://developer.android.com/reference/android/view/ViewGroup.LayoutParams.html#attr_android:layout_width">http://developer.android.com/reference/android/view/ViewGroup.LayoutParams.html#attr_android:layout_width</a></td>
+</tr>
+<tr class="row-odd"><td>android:layout_height</td>
+<td>N/A</td>
+<td>None</td>
+<td colspan="2"><a class="reference external" href="http://developer.android.com/reference/android/view/ViewGroup.LayoutParams.html#attr_android:layout_height">http://developer.android.com/reference/android/view/ViewGroup.LayoutParams.html#attr_android:layout_height</a></td>
+</tr>
+<tr class="row-even"><td>android:background</td>
+<td>N/A</td>
+<td>None</td>
+<td colspan="2"><a class="reference external" href="http://developer.android.com/reference/android/view/View.html#attr_android:background">http://developer.android.com/reference/android/view/View.html#attr_android:background</a></td>
+</tr>
+<tr class="row-odd"><td>android:textColor</td>
+<td>N/A</td>
+<td>None</td>
+<td colspan="2"><a class="reference external" href="http://developer.android.com/reference/android/widget/TextView.html#attr_android:textColor">http://developer.android.com/reference/android/widget/TextView.html#attr_android:textColor</a></td>
+</tr>
+<tr class="row-even"><td>socialize:entity_key</td>
+<td>String</td>
+<td>None</td>
+<td>1234</td>
+<td>Your entity key.  Optional.  May be set in code.</td>
+</tr>
+<tr class="row-odd"><td>socialize:entity_name</td>
+<td>String</td>
+<td>None</td>
+<td>ABCD</td>
+<td>Your entity name.  Optional.  May be set in code.</td>
+</tr>
+<tr class="row-even"><td>socialize:src_active</td>
+<td>Resource ID</td>
+<td>None</td>
+<td>&nbsp;</td>
+<td>An image resource in your res/drawable/xxxx folder</td>
+</tr>
+<tr class="row-odd"><td>socialize:src_inactive</td>
+<td>Resource ID</td>
+<td>None</td>
+<td>&nbsp;</td>
+<td>An image resource in your res/drawable/xxxx folder</td>
+</tr>
+<tr class="row-even"><td>socialize:src_disabled</td>
+<td>Resource ID</td>
+<td>None</td>
+<td>&nbsp;</td>
+<td>An image resource in your res/drawable/xxxx folder</td>
+</tr>
+<tr class="row-odd"><td>socialize:text_active</td>
+<td>String</td>
+<td>None</td>
+<td>Like</td>
+<td>Text to display when entity is liked</td>
+</tr>
+<tr class="row-even"><td>socialize:text_inactive</td>
+<td>String</td>
+<td>None</td>
+<td>Unlike</td>
+<td>Text to display when entity is NOT liked</td>
+</tr>
+<tr class="row-odd"><td>socialize:share_location</td>
+<td>Boolean</td>
+<td>true</td>
+<td>true/false</td>
+<td>If true the user&#8217;s geo location will be shared in the like</td>
+</tr>
+<tr class="row-even"><td>socialize:auto_auth</td>
+<td>Boolean</td>
+<td>true</td>
+<td>true/false</td>
+<td>If true the user will be auto-authed to the chosen social network</td>
+</tr>
+<tr class="row-odd"><td>socialize:share_to</td>
+<td>String</td>
+<td>None</td>
+<td>facebook</td>
+<td>Comma seperated list of social networks (e.g. facebook)</td>
+</tr>
+<tr class="row-even"><td>socialize:show_count</td>
+<td>Boolean</td>
+<td>true</td>
+<td>true/false</td>
+<td>If true the count of current likes will be displayed</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="using-programmatic-configuration">
+<h3>Using programmatic configuration<a class="headerlink" href="#using-programmatic-configuration" title="Permalink to this headline">¶</a></h3>
+<p>If you prefer to do things the old-fashioned way, you can set all the parameters programmatically.</p>
+<pre class="brush: java">
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.ViewGroup;
+
+import com.socialize.entity.Entity;
+import com.socialize.networks.SocialNetwork;
+import com.socialize.ui.actionbutton.ActionButtonConfig;
+import com.socialize.ui.actionbutton.SocializeLikeButton;
+
+public class SampleActivity extends Activity {
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+
+                // Set your content view as you would do normally
+                setContentView(R.layout.empty);
+
+                // Create a like button
+                SocializeLikeButton button = new SocializeLikeButton(this);
+
+                // Set the entity on the button
+                button.setEntity(Entity.newInstance("foo", "bar"));
+
+                // Get the config object to set the configuration options
+                ActionButtonConfig config = button.getConfig();
+                config.setBackgroundColor(Color.parseColor("#555555"));
+                config.setImageResIdOn(R.drawable.action_button_on);
+                config.setImageResIdOff(R.drawable.action_button_off);
+                config.setImageResIdDisabled(R.drawable.action_button_disabled);
+                config.setShareToNetworks(SocialNetwork.FACEBOOK);
+                config.setAutoAuth(true);
+                config.setTextColor(Color.WHITE);
+                config.setShowCount(true);
+                config.setTextOff("Like");
+                config.setTextOn("Unlike");
+
+                // We are going to add this to our main view, but it can be added to any view group
+                ViewGroup main = (ViewGroup) findViewById(R.id.main);
+                main.addView(button);
+        }
+}
+</pre><script type="text/javascript">
+        SyntaxHighlighter.defaults['toolbar'] = false;
+        SyntaxHighlighter.all();
+</script></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html">Socialize Action Bar</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Socialize Like Button</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#displaying-the-like-button">Displaying the Like Button</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-xml-layout">Using XML layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-programmatic-configuration">Using programmatic configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="comment_view.html">Socialize Comments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html">Entity Loaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html">ProGuard Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log</a></li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="comment_view.html" title="Socialize Comments"
+             >next</a></li>
+        <li class="right" >
+          <a href="action_bar.html" title="Socialize Action Bar"
+             >previous</a> |</li>
+        <li><a href="index.html">Socialize Android SDK v1.4 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Socialize Inc.
+    </div>
+  </body>
+</html>
