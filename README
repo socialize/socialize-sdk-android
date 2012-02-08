@@ -12,6 +12,20 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v1.4
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] Images on Galaxy Nexus do not render correctly
+[feature] Add like button which can be easily customized with image and name
+[bug] Failed FB auth does not clear session correctly
+[bug] Oauth class fails to load (proguard conf)
+[feature] Allow for removal of the word “Socialize” from share posts
+[feature] Add documentation for like button
+[feature] Add documentation for how to use the manual XML layout option (i.e. what does the source code look like)
+[bug] ActionBar does not refresh when loaded using manual XML
+[feature] add debug level warning that FB isn't configured.
+[bug] Loading spinner on XDPI looks distorted
+[bug] Dialog for comment auth does not render correctly on galaxy nexus
+
 v1.3.2
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [feature] Entity Loader should know whether an entity can be loaded
