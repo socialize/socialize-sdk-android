@@ -54,11 +54,11 @@ public class SocializeActionButtonTest extends SocializeUITestCase {
 		assertTrue(after);
 	}
 	
-	@UsesMocks ({MockContext.class, XmlResourceParser.class, ActionButtonConfig.class})
+	@UsesMocks ({MockContext.class, XmlResourceParser.class, PublicActionButtonConfig.class})
 	public void testConfigBuild() {
 		MockContext context = AndroidMock.createNiceMock(MockContext.class);
 		XmlResourceParser attrs = AndroidMock.createNiceMock(XmlResourceParser.class);
-		final ActionButtonConfig config = AndroidMock.createMock(ActionButtonConfig.class);
+		final PublicActionButtonConfig config = AndroidMock.createMock(PublicActionButtonConfig.class);
 		
 		config.build(context, attrs);
 		
@@ -80,17 +80,17 @@ public class SocializeActionButtonTest extends SocializeUITestCase {
 		
 		AndroidMock.verify(attrs, config);
 		
-		ActionButtonConfig after = getNextResult();
+		PublicActionButtonConfig after = getNextResult();
 		assertNotNull(after);
 		assertSame(config, after);
 	}	
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks ({IOCContainer.class, ActionButtonConfig.class, ActionButtonLayoutView.class, Entity.class})
+	@UsesMocks ({IOCContainer.class, PublicActionButtonConfig.class, ActionButtonLayoutView.class, Entity.class})
 	public void testGetView() {
 		
 		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
-		ActionButtonConfig config = AndroidMock.createMock(ActionButtonConfig.class);
+		PublicActionButtonConfig config = AndroidMock.createMock(PublicActionButtonConfig.class);
 		ActionButtonLayoutView<SocializeAction> view = AndroidMock.createMock(ActionButtonLayoutView.class, getContext());
 		final Entity entity = AndroidMock.createMock(Entity.class);
 		

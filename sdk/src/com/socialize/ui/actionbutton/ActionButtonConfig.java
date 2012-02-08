@@ -73,7 +73,7 @@ public class ActionButtonConfig {
 	
 	private SocialNetwork[] shareToNetworks;
 	
-	ActionButtonConfig() {
+	protected ActionButtonConfig() {
 		super();
 	}
 	
