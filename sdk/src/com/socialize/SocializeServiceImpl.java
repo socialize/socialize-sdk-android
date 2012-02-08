@@ -374,6 +374,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.config = mainConfig;
 				this.initCount++;
 				
+				verify3rdPartyAuthConfigured();
+				
 				ActivityIOCProvider.getInstance().setContainer(container);
 			}
 			catch (Exception e) {
@@ -387,6 +389,14 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 		else {
 			this.initCount++;
+		}
+	}
+	
+	protected void verify3rdPartyAuthConfigured() {
+		if(logger != null && logger.isDebugEnabled()) {
+			if(!isSupported(AuthProviderType.FACEBOOK)) {
+				logger.debug("No facebook app id found in socialize.properties.  Facebook not enabled");
+			}
 		}
 	}
 	
@@ -666,6 +676,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		if(assertAuthenticated(commentAddListener)) {
 			if(shareOptions != null) {
 				final SocialNetwork[] shareTo = shareOptions.getShareTo();
+				final boolean autoAuth = shareOptions.isAutoAuth();
 				if(shareTo == null || shareTo.length == 0) {
 					commentSystem.addComment(session, comment, location, shareOptions, commentAddListener);
 				}
@@ -683,7 +694,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 							try {
 								for (final SocialNetwork socialNetwork : shareTo) {
 									try {
-										shareSystem.shareComment(activity, commentObject.getEntity(), commentObject.getText(), location, socialNetwork, shareOptions.getListener());
+										shareSystem.shareComment(activity, commentObject.getEntity(), commentObject.getText(), location, socialNetwork, autoAuth, shareOptions.getListener());
 									}
 									catch(Exception e) {
 										if(logger != null) {
@@ -787,6 +798,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		if(assertAuthenticated(likeAddListener)) {
 			if(shareOptions != null) {
 				final SocialNetwork[] shareTo = shareOptions.getShareTo();
+				final boolean autoAuth = shareOptions.isAutoAuth();
 				if(shareTo == null || shareTo.length == 0) {
 					likeSystem.addLike(session, entity, location, likeAddListener);
 				}
@@ -805,7 +817,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 								if(like != null && shareSystem != null) {
 									for (final SocialNetwork socialNetwork : shareTo) {
 										try {
-											shareSystem.shareLike(activity, like.getEntity(), null, location, socialNetwork, shareOptions.getListener());
+											shareSystem.shareLike(activity, like.getEntity(), null, location, socialNetwork, autoAuth, shareOptions.getListener());
 										}
 										catch(Exception e) {
 											if(logger != null) {
@@ -896,6 +908,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		if(assertAuthenticated(shareAddListener)) {
 			if(options != null) {
 				SocialNetwork[] shareTo = options.getShareTo();
+				final boolean autoAuth = options.isAutoAuth();
 				if(shareTo == null) {
 					shareSystem.addShare(session, entity, text, ShareType.OTHER, location, shareAddListener);
 				}
@@ -912,7 +925,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 							@Override
 							public void onCreate(Share share) {
 								try {
-									shareSystem.shareEntity(activity, share.getEntity(), text, location, socialNetwork, options.getListener());
+									shareSystem.shareEntity(activity, share.getEntity(), text, location, socialNetwork, autoAuth, options.getListener());
 								}
 								finally {
 									if(shareAddListener != null) {

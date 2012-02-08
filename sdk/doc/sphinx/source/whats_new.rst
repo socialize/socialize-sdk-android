@@ -6,6 +6,14 @@
 What's New
 ==========
 
+v1.4 Socialize Like Button
+--------------------------
+
+Introduced in v1.4 is a stand-alone "like" button which can be added to any view and which automatically handles all authentication
+with 3rd party social networks like Facebook.
+
+Refer to the :ref:`like_button` section for details on how to implement the Socialize Like button.
+
 v1.3.2 Entity Loader Change
 ---------------------------
 

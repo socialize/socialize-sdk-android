@@ -34,17 +34,17 @@ public class MockShareSystem extends MockSystem<Share> implements ShareSystem {
 	}
 
 	@Override
-	public void shareEntity(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, SocialNetworkListener listener) {
+	public void shareEntity(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, boolean autoAuth, SocialNetworkListener listener) {
 		if(listener != null) listener.onAfterPost(context, destination);
 	}
 
 	@Override
-	public void shareComment(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, SocialNetworkListener listener) {
+	public void shareComment(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, boolean autoAuth, SocialNetworkListener listener) {
 		if(listener != null) listener.onAfterPost(context, destination);
 	}
 
 	@Override
-	public void shareLike(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, SocialNetworkListener listener) {
+	public void shareLike(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, boolean autoAuth, SocialNetworkListener listener) {
 		if(listener != null) listener.onAfterPost(context, destination);
 	}
 }

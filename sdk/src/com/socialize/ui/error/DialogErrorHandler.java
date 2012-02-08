@@ -21,7 +21,6 @@ public class DialogErrorHandler implements SocializeErrorHandler {
 	@Override
 	public void handleError(Context context, Exception e) {
 		Log.e(SocializeLogger.LOG_TAG, "", e);
-//		if(config != null){// && config.getBooleanProperty(SocializeConfig.SOCIALIZE_DEBUG_MODE, false)) {
 			String message = "An unexpected error occurred.  Please try again";
 			if(e instanceof SocializeApiError) {
 				int code = ((SocializeApiError)e).getResultCode();
@@ -34,7 +33,6 @@ public class DialogErrorHandler implements SocializeErrorHandler {
 			}
 			
 			handleError(context, message);
-//		}
 	}
 
 	protected void handleError(Context context, String message) {

@@ -84,9 +84,12 @@ public class ProfileActivity extends SocializeUIActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == CAMERA_PIC_REQUEST) {
 			if (data != null) {
-				Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-				if (thumbnail != null) {
-					view.onImageChange(thumbnail);
+				Bundle extras = data.getExtras();
+				if(extras != null) {
+					Bitmap thumbnail = (Bitmap) extras.get("data");
+					if (thumbnail != null) {
+						view.onImageChange(thumbnail);
+					}
 				}
 			}
 		}
@@ -94,25 +97,31 @@ public class ProfileActivity extends SocializeUIActivity {
 			if (data != null) {
 				Uri selectedImageUri = data.getData();
 				
-				String[] projection = { MediaStore.Images.Media.DATA };
-				
-				Cursor cursor = managedQuery(selectedImageUri, projection, null, null, null);
-				
-				int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-				
-				cursor.moveToFirst();
-				
-				String path = cursor.getString(column_index);
-				
-				cursor.close();
-				
-				BitmapFactory.Options bfo = new BitmapFactory.Options();
-				bfo.inDither = true;
-				bfo.inSampleSize = 2;
-				
-				Bitmap bm = BitmapFactory.decodeFile(path, bfo);
-				if (bm != null) {
-					view.onImageChange(bm);
+				if(selectedImageUri != null) {
+
+					String[] projection = { MediaStore.Images.Media.DATA };
+					
+					Cursor cursor = managedQuery(selectedImageUri, projection, null, null, null);
+					
+					if(cursor != null) {
+						int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+						
+						cursor.moveToFirst();
+						
+						String path = cursor.getString(column_index);
+						
+						cursor.close();
+						
+						BitmapFactory.Options bfo = new BitmapFactory.Options();
+						bfo.inDither = true;
+						bfo.inSampleSize = 2;
+						
+						Bitmap bm = BitmapFactory.decodeFile(path, bfo);
+						
+						if (bm != null) {
+							view.onImageChange(bm);
+						}
+					}
 				}
 			}
 		}

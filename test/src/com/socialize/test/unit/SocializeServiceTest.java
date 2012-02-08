@@ -1047,9 +1047,9 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		
 		//mock and expect options to return null for the networks
 		ShareOptions mockOptions = AndroidMock.createMock(ShareOptions.class);
-		AndroidMock.expect( mockOptions.getShareTo() ).andReturn(null);
-	
 		
+		AndroidMock.expect( mockOptions.isAutoAuth() ).andReturn(false);
+		AndroidMock.expect( mockOptions.getShareTo() ).andReturn(null);
 		
 		//replay all the mocks
 		AndroidMock.replay(mockActivity, mockEntity, mockOptions );
@@ -1084,6 +1084,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		SocialNetwork[] networks = {SocialNetwork.FACEBOOK};
 		
 		AndroidMock.expect( mockOptions.getShareTo() ).andReturn(networks);
+		AndroidMock.expect( mockOptions.isAutoAuth() ).andReturn(true);
 	
 		//replay all the mocks
 		AndroidMock.replay(mockActivity, mockEntity, mockOptions, shareSystem );

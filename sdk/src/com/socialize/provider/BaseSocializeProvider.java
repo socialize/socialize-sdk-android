@@ -293,9 +293,9 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 				
 				HttpResponse response = client.execute(del);
 				
+				entity = response.getEntity();
+				
 				if(httpUtils.isHttpError(response)) {
-					
-					entity = response.getEntity();
 					
 					if(sessionPersister != null && httpUtils.isAuthError(response)) {
 						sessionPersister.delete(context);
@@ -444,6 +444,10 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 				}
 
 				HttpResponse response = client.execute(request);
+				
+				if(logger != null && logger.isDebugEnabled()) {
+					logger.debug("Response: " + response.getStatusLine().getStatusCode());
+				}
 				
 				entity = response.getEntity();
 				

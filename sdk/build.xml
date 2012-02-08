@@ -130,28 +130,13 @@
 		<move file="build/docs/user_guide/_static" tofile="build/docs/user_guide/static" verbose="true"/>
 		<move file="build/docs/user_guide/_images" tofile="build/docs/user_guide/images" verbose="true"/>
 		<move file="build/docs/user_guide/_sources" tofile="build/docs/user_guide/sources" verbose="true"/>
-		<!--
-		<copy 
-			file="doc/sphinx/source/_static/nature.css" 
-			todir="build/docs/user_guide/static" 
-			verbose="true" 
-			failonerror="true" 
-			overwrite="true"/>
-		-->
+
 		<copy 
 			file="doc/read_me_first.html" 
 			todir="build" 
 			verbose="true" 
 			failonerror="true" 
 			overwrite="true"/>
-		
-		<copy 
-			todir="build/docs/user_guide/static" 
-			verbose="true" 
-			failonerror="true" 
-			overwrite="true">
-			<fileset dir="doc/static"/>
-		</copy>
 	</target>
 
 	<target name="javadoc" depends="-setup">

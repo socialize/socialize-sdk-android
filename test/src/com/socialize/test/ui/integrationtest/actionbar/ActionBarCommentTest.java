@@ -14,7 +14,7 @@ import com.socialize.ui.comment.CommentActivity;
 public class ActionBarCommentTest extends ActivityInstrumentationTestCase2<ActionBarManualActivity2> {
 
 	public ActionBarCommentTest() {
-		super("com.socialize.ui.sample", ActionBarManualActivity2.class);
+		super("com.socialize.sample.ui", ActionBarManualActivity2.class);
 	}
 	
 	@Override

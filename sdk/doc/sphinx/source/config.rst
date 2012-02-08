@@ -23,9 +23,9 @@ The following table lists the configuration options that can be specified in you
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | facebook.sso.enabled            | Boolean | true     |                                        | Enable/Disable Single Sign on for Facebook                       |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
-| http.connection.timeout         | Long    | 30000    | 30000                                  | Time in ms for an http connection to be established              |
+| http.connection.timeout         | Long    | 10000    | 10000                                  | Time in ms for an http connection to be established              |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
-| http.socket.timeout             | Long    | 30000    | 30000                                  | Time in ms for an http request to return                         |
+| http.socket.timeout             | Long    | 10000    | 10000                                  | Time in ms for an http request to return                         |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | log.level                       | String  | WARN     | DEBUG or INFO or WARN or ERROR         | Application log level                                            |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+

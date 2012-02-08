@@ -28,6 +28,7 @@ package com.socialize.networks;
 public class ShareOptions {
 	
 	private boolean shareLocation;
+	private boolean autoAuth = false;
 	
 	private SocialNetwork[] shareTo;
 	
@@ -88,6 +89,19 @@ public class ShareOptions {
 		}
 		
 		return false;
+	}
+	
+
+	public boolean isAutoAuth() {
+		return autoAuth;
+	}
+
+	/**
+	 * If set to true any actions which can propagate will automatically attempt authentication on the target social network
+	 * @param autoAuth
+	 */
+	public void setAutoAuth(boolean autoAuth) {
+		this.autoAuth = autoAuth;
 	}
 
 	@Deprecated

@@ -27,7 +27,7 @@ import com.socialize.ui.view.SocializeButton;
 public class ActionBarShareAutoTest extends ActivityInstrumentationTestCase2<ActionBarAutoActivity> {
 
 	public ActionBarShareAutoTest() {
-		super("com.socialize.ui.sample", ActionBarAutoActivity.class);
+		super("com.socialize.sample.ui", ActionBarAutoActivity.class);
 	}
 	
 	@Override

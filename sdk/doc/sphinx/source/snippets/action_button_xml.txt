@@ -1,0 +1,33 @@
+.. raw:: html
+
+	<pre class="brush: xml;">
+		
+	&lt;?xml version="1.0" encoding="utf-8"?>
+	&lt;LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">	
+		
+		&lt;com.socialize.ui.actionbutton.SocializeLikeButton
+			xmlns:socialize="http://getsocialize.com"
+			android:id="@+id/socializeLikeButton"
+			android:layout_width="150dp"
+			android:layout_height="45px"
+			android:background="#555555" 
+			android:textColor="#ffffff"
+			socialize:entity_key="your_entity_key"
+			socialize:entity_name="your_entity_name"
+			socialize:src_active="@drawable/like_image_on"
+			socialize:src_inactive="@drawable/like_image_off"
+			socialize:src_disabled="@drawable/like_image_disabled"
+			socialize:text_active="Unlike"
+			socialize:text_inactive="Like"
+			socialize:share_location="true"
+			socialize:auto_auth="true"
+			socialize:show_count="true"
+			socialize:share_to="facebook"/>  
+
+	&lt;/LinearLayout>	
+	
+	</pre>

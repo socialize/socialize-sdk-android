@@ -71,11 +71,6 @@ public abstract class AuthenticatedView extends SocializeBaseView {
 		return getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
 	}
 
-//	@Deprecated
-//	public SocializeUI getSocializeUI() {
-//		return SocializeUI.getInstance();
-//	}
-
 	public SocializeService getSocialize() {
 		return Socialize.getSocialize();
 	}

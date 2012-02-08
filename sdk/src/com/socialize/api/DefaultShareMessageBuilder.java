@@ -22,6 +22,7 @@
 package com.socialize.api;
 
 import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.User;
@@ -47,13 +48,15 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 	 */
 	@Override
 	public String buildShareLink(Entity entity) {
-		if(entity.getId() != null) {
-			if(config != null && !StringUtils.isEmpty(config.getProperty(SocializeConfig.REDIRECT_HOST))) {
-				return config.getProperty(SocializeConfig.REDIRECT_HOST) + "/e/" + entity.getId();
+		Long id = entity.getId();
+		if(id != null) {
+			if(config != null) {
+				String host = config.getProperty(SocializeConfig.REDIRECT_HOST);
+				if(!StringUtils.isEmpty(host)) {
+					return host + "/e/" + id;
+				}
 			}
-			else {
-				return "http://r.getsocialize.com/e/" + entity.getId();
-			}
+			return "http://r.getsocialize.com/e/" + id;
 		}
 		else {
 			return entity.getKey();
@@ -70,7 +73,7 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 		String entityName = entity.getName();
 
 		StringBuilder builder = new StringBuilder();
-		SocializeSession session = Socialize.getSocialize().getSession();
+		SocializeSession session = getSocialize().getSession();
 		
 		User currentUser = null;
 		
@@ -100,6 +103,11 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 		}
 		
 		return builder.toString();
+	}
+	
+	// So we can mock.
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
 	}
 
 	@Deprecated
@@ -136,6 +144,9 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 			if(!html) {
 				builder.append(": ");
 			}
+			else {
+				builder.append(" ");
+			}
 			
 			builder.append(buildShareLink(entity));
 			
@@ -155,8 +166,6 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 		
 		StringBuilder builder = new StringBuilder();
 		
-		String entityDescription = null;
-		
 		if(!StringUtils.isEmpty(comment)) {
 			builder.append(comment);
 			builder.append(getNewLine(html));
@@ -164,11 +173,6 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 		}
 		
 		builder.append(getEntityLink(entity, html));
-		
-		if(!StringUtils.isEmpty(entityDescription)) {
-			builder.append(getNewLine(html));
-			builder.append(entityDescription);
-		}
 		
 		if(includeSocialize) {
 			builder.append(getNewLine(html));
@@ -186,13 +190,15 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 				builder.append(appUtils.getAppName());
 			}
 			
-			builder.append(" using ");
-			
-			if(html) {
-				builder.append("<a href=\"http://www.getsocialize.com\">Socialize for Android</a>.  ");
-			}
-			else {
-				builder.append("Socialize for Android. http://www.getsocialize.com");
+			if(config.isBrandingEnabled()) {
+				builder.append(" using ");
+				
+				if(html) {
+					builder.append("<a href=\"http://www.getsocialize.com\">Socialize for Android</a>.");
+				}
+				else {
+					builder.append("Socialize for Android. http://www.getsocialize.com");
+				}
 			}
 		}
 		

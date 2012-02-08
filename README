@@ -12,6 +12,11 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v1.3.2
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Entity Loader should know whether an entity can be loaded
+[feature] Update entity loader documentation
+
 v1.3.1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [feature] re-added meta data to entity

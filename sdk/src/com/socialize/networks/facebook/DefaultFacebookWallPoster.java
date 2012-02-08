@@ -62,6 +62,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	private SocializeLogger logger;
 	private AppUtils appUtils;
 	private ShareMessageBuilder shareMessageBuilder;
+	private SocializeConfig config;
 	
 	@Override
 	public void postLike(Activity parent, Entity entity, String comment, SocialNetworkListener listener) {
@@ -75,7 +76,11 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		builder.append("\n\n");
 		builder.append("Posted from ");
 		builder.append(linkName);
-		builder.append(" using Socialize for Android. http://www.getsocialize.com");
+		
+		if(config.isBrandingEnabled()) {
+			builder.append(" using Socialize for Android. http://www.getsocialize.com");
+		}
+		
 		
 		post(parent, builder.toString(), listener);		
 	}
@@ -92,7 +97,10 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		builder.append("\n\n");
 		builder.append("Posted from ");
 		builder.append(linkName);
-		builder.append(" using Socialize for Android. http://www.getsocialize.com");
+		
+		if(config.isBrandingEnabled()) {
+			builder.append(" using Socialize for Android. http://www.getsocialize.com");
+		}
 		
 		post(parent, builder.toString(), listener);		
 	}
@@ -181,7 +189,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 							String get3rdPartyAppId = session.get3rdPartyAppId();
 							
 							if(authProvider != null && authProviderType.equals(AuthProviderType.FACEBOOK) && !StringUtils.isEmpty(get3rdPartyAppId)) {
-								authProvider.clearCache(parent, get3rdPartyAppId);
+								getSocialize().clear3rdPartySession(parent, AuthProviderType.FACEBOOK);
 							}
 							
 							JSONObject error = responseObject.getJSONObject("error");
@@ -255,6 +263,10 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 
 	public void setAppUtils(AppUtils appUtils) {
 		this.appUtils = appUtils;
+	}
+
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
 	}
 
 	protected void onError(final Activity parent, final String msg, final Throwable e, final SocialNetworkListener listener) {

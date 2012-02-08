@@ -93,5 +93,9 @@ you can always just add the view manually.
 Here is the recommended way to include the Action Bar in your XML layout:
 
 .. include:: snippets/action_bar_layout_xml.txt
+
+In this case you will still need to set the entity in code:
+
+.. include:: snippets/action_bar_layout_xml_code.txt
 	
 .. include:: footer.inc	

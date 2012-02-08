@@ -1,6 +1,7 @@
 package com.socialize.sample.simple;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -48,11 +49,16 @@ public class Main extends Activity {
 				
 				toast.show();
 			}
+
+			@Override
+			public boolean canLoad(Context arg0, Entity arg1) {
+				return true;
+			}
 		});
 
 		// Wrap your existing view with the action bar.
 		// your_layout refers to the resource ID of your current layout.
-		View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.order_completed, entity, new ActionBarListener() {
+		View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.main, entity, new ActionBarListener() {
 
 			@Override
 			public void onCreate(ActionBarView actionBar) {

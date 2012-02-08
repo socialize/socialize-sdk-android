@@ -93,26 +93,26 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 	}
 
 	@Override
-	public void shareEntity(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, SocialNetworkListener listener) {
+	public void shareEntity(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, boolean autoAuth, SocialNetworkListener listener) {
 		SocialNetworkSharer sharer = getSharer(destination);
 		if(sharer != null) {
-			sharer.shareEntity(context, entity, comment, listener);
+			sharer.shareEntity(context, entity, comment, autoAuth, listener);
 		}
 	}
 	
 	@Override
-	public void shareComment(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, SocialNetworkListener listener) {
+	public void shareComment(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, boolean autoAuth, SocialNetworkListener listener) {
 		SocialNetworkSharer sharer = getSharer(destination);
 		if(sharer != null) {
-			sharer.shareComment(context, entity, comment, listener);
+			sharer.shareComment(context, entity, comment, autoAuth, listener);
 		}
 	}
 
 	@Override
-	public void shareLike(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, SocialNetworkListener listener) {
+	public void shareLike(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, boolean autoAuth, SocialNetworkListener listener) {
 		SocialNetworkSharer sharer = getSharer(destination);
 		if(sharer != null) {
-			sharer.shareLike(context, entity, comment, listener);
+			sharer.shareLike(context, entity, comment, autoAuth, listener);
 		}
 	}
 
