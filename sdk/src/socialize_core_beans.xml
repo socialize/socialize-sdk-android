@@ -29,6 +29,8 @@
 		</init-method>
 	</bean>	
 	
+	<bean id="numberUtils" class="com.socialize.util.NumberUtils"/>
+	
 	<bean id="deviceUtils" class="com.socialize.util.DeviceUtils">
 		<property name="logger" ref="logger"/>
 		<property name="appUtils" ref="appUtils"/>

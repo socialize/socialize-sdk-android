@@ -54,6 +54,8 @@ public class DefaultAppUtils implements AppUtils {
 	private boolean notificationsAvailable = false;
 	private boolean notificationsAssessed = false;
 	
+	private String lastNotificationWarning = null;
+	
 	public void init(Context context) {
 		packageName = context.getPackageName();
 		
@@ -188,38 +190,52 @@ public class DefaultAppUtils implements AppUtils {
 			boolean ok = true;
 			
 			if(!hasPermission(context, permissionString)) {
-				if(logger.isInfoEnabled()) logger.info("Notifications not available, permission [" +
+				lastNotificationWarning = "Notifications not available, permission [" +
 						permissionString +
-						"] not specified in AndroidManifest.xml");
+						"] not specified in AndroidManifest.xml";
+				if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
 				ok = false;
 			}
 			
 			if(!hasPermission(context, "com.google.android.c2dm.permission.RECEIVE")) {
-				if(logger.isInfoEnabled()) logger.info("Notifications not available, permission com.google.android.c2dm.permission.RECEIVE not specified in AndroidManifest.xml, or device does not include Google APIs");
+				lastNotificationWarning = "Notifications not available, permission com.google.android.c2dm.permission.RECEIVE not specified in AndroidManifest.xml, or device does not include Google APIs";
+				if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
 				ok = false;
 			}
 			
 			if(!isReceiverAvailable(context, SocializeBroadcastReceiver.class)) {
-				if(logger.isInfoEnabled()) logger.info("Notifications not available. Receiver [" +
+				
+				lastNotificationWarning = "Notifications not available. Receiver [" +
 						SocializeBroadcastReceiver.class +
-						"] not configured in AndroidManifest.xml");
+						"] not configured in AndroidManifest.xml";
+				
+				if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
 				ok = false;
 			}
 			
 			if(!isServiceAvailable(context, SocializeC2DMReceiver.class)) {
-				if(logger.isInfoEnabled()) logger.info("Notifications not available. Service [" +
+				
+				lastNotificationWarning = "Notifications not available. Service [" +
 						SocializeBroadcastReceiver.class +
-						"] not configured in AndroidManifest.xml");
+						"] not configured in AndroidManifest.xml";
+				
+				if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
 				ok = false;
 			}			
 			
 			if(Socialize.getSocialize().getEntityLoader() == null) {
-				if(logger.isInfoEnabled()) logger.info("Notifications not available. Entity loader not found.");
+				lastNotificationWarning = "Notifications not available. Entity loader not found.";
+				if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
 				ok = false;
 			}
 			
 			notificationsAvailable = ok;
 			notificationsAssessed = true;
+		}
+		else if(!notificationsAvailable) {
+			if(lastNotificationWarning != null && logger.isInfoEnabled()) {
+				logger.info(lastNotificationWarning);
+			}
 		}
 
 		return notificationsAvailable;
