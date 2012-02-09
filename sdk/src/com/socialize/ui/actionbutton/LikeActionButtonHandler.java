@@ -36,6 +36,7 @@ import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.networks.ShareOptions;
+import com.socialize.ui.cache.EntityCache;
 
 /**
  * @author Jason Polites
@@ -45,6 +46,8 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 
 	private boolean liked = false;
 	private long likeId;
+	
+	private EntityCache entityCache;
 	
 	@Override
 	protected void handleLoad(final Activity context, final Entity entity, final OnActionButtonEventListener<Like> listener) {
@@ -151,6 +154,7 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 	protected void handleAction(final Activity context, final Entity entity, ShareOptions shareOptions, final OnActionButtonEventListener<Like> listener) {
 		
 		if(liked) {
+			liked = false;
 			getSocialize().unlike(likeId, new LikeDeleteListener() {
 				@Override
 				public void onError(SocializeException error) {
@@ -161,7 +165,7 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 				
 				@Override
 				public void onDelete() {
-					liked = false;
+					entityCache.remove(entity.getKey());
 					if(listener != null) {
 						getSocialize().getEntity(entity.getKey(), new EntityGetListener() {
 							@Override
@@ -180,7 +184,6 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 		}
 		else {
 			getSocialize().like(context, entity, shareOptions, new LikeAddListener() {
-				
 				@Override
 				public void onError(SocializeException error) {
 					if(listener != null) {
@@ -190,6 +193,7 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 				
 				@Override
 				public void onCreate(Like like) {
+					entityCache.remove(entity.getKey());
 					liked = true;
 					likeId = like.getId();
 					if(listener != null) {
@@ -198,6 +202,10 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 				}
 			});	
 		}
+	}
+
+	public void setEntityCache(EntityCache entityCache) {
+		this.entityCache = entityCache;
 	}
 
 	@Override

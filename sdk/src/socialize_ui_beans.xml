@@ -1214,7 +1214,9 @@
 		<property name="logger" ref="logger"/>
 	</bean>
 
-	<bean id="likeActionButtonHandler" class="com.socialize.ui.actionbutton.LikeActionButtonHandler" extends="baseActionButtonHandler"/>
+	<bean id="likeActionButtonHandler" class="com.socialize.ui.actionbutton.LikeActionButtonHandler" extends="baseActionButtonHandler">
+		<property name="entityCache" ref="entityCache"/>
+	</bean>
 
 	<bean id="actionButtonHandlers" class="com.socialize.ui.actionbutton.DefaultActionButtonHandlers">
 		<property name="handlers">

@@ -26,5 +26,5 @@ package com.socialize.ui.actionbutton;
  *
  */
 public enum ActionButtonState {
-	ACTIVE,INACTIVE,LOADING,DISABLED
+	ACTIVE,INACTIVE,LOADING,DISABLED,FAILED
 }

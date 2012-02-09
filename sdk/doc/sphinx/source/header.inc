@@ -1,5 +1,8 @@
 .. raw:: html
 
+	<META HTTP-EQUIV="Pragma" CONTENT="no-cache"/>
+	<META HTTP-EQUIV="Expires" CONTENT="-1"/>
+
 	<link rel="stylesheet" href="static/css/shCore.css" type="text/css" />
 	<link rel="stylesheet" href="static/css/shCoreEclipse.css" type="text/css" />
 	<link rel="stylesheet" href="static/css/shThemeEclipse.css" type="text/css" />

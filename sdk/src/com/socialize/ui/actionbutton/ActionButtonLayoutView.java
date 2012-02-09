@@ -223,7 +223,14 @@ public class ActionButtonLayoutView<A extends SocializeAction> extends BaseView 
 				actionBarItem.setText(config.getTextLoading());
 				enabled = false;
 				actionBarItem.showLoading();
-				break;			
+				break;	
+				
+			case FAILED:
+				actionBarItem.setText(getDisplayText(config.getTextOff()));
+				actionBarItem.setIcon(imageDisabled);
+				enabled = false;
+				setVisibility(View.GONE);
+				break;						
 		}
 	}
 
