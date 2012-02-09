@@ -76,7 +76,7 @@ public class LikeButtonManualTest extends ActivityInstrumentationTestCase2<Empty
 	
 	@SuppressWarnings("unchecked")
 	@UsesMocks ({Entity.class, EntityStats.class, ActionButtonHandlers.class, ActionButtonHandler.class})
-	public void testListButtonRenderAndClick() throws Throwable {
+	public void testLikeButtonRenderAndClick() throws Throwable {
 		TestUtils.setupSocializeOverrides(true, true);
 		TestUtils.setUpActivityMonitor(ActionButtonActivity.class);
 		
@@ -88,7 +88,7 @@ public class LikeButtonManualTest extends ActivityInstrumentationTestCase2<Empty
 		final Entity entity = AndroidMock.createMock(Entity.class);
 		final EntityStats stats = AndroidMock.createMock(EntityStats.class);
 		
-		AndroidMock.expect(entity.getKey()).andReturn("foobar");
+		AndroidMock.expect(entity.getKey()).andReturn("foobar").times(2);
 		AndroidMock.expect(entity.getEntityStats()).andReturn(stats).times(2);
 		AndroidMock.expect(stats.getLikes()).andReturn(likes).times(2);
 		
