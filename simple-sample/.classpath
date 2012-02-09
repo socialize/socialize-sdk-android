@@ -4,6 +4,6 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="lib" path="libs/socialize-1.4.1.jar"/>
+	<classpathentry kind="lib" path="libs/socialize-1.4.2.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
