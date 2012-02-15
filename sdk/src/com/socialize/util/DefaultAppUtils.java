@@ -34,6 +34,7 @@ import android.content.res.Resources;
 
 import com.socialize.Socialize;
 import com.socialize.config.SocializeConfig;
+import com.socialize.entity.Entity;
 import com.socialize.log.SocializeLogger;
 import com.socialize.notifications.SocializeBroadcastReceiver;
 import com.socialize.notifications.SocializeC2DMReceiver;
@@ -86,6 +87,23 @@ public class DefaultAppUtils implements AppUtils {
 		}		
 	}
 	
+	@Override
+	public String getEntityUrl(Entity entity) {
+		Long id = entity.getId();
+		if(id != null) {
+			if(config != null) {
+				String host = config.getProperty(SocializeConfig.REDIRECT_HOST);
+				if(!StringUtils.isEmpty(host)) {
+					return appendAppStore(host + "/e/" + id);
+				}
+			}
+			return appendAppStore("http://r.getsocialize.com/e/" + id);
+		}
+		else {
+			return entity.getKey();
+		}
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.util.IAppUtils#getAppUrl()
 	 */
@@ -95,10 +113,10 @@ public class DefaultAppUtils implements AppUtils {
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		if(consumerKey != null) {
 			if(!StringUtils.isEmpty(host)) {
-				return host + "/a/" + consumerKey;
+				return appendAppStore(host + "/a/" + consumerKey);
 			}
 			else {
-				return "http://r.getsocialize.com/a/" + consumerKey;
+				return appendAppStore("http://r.getsocialize.com/a/" + consumerKey);
 			}
 		}
 		else {
@@ -106,6 +124,23 @@ public class DefaultAppUtils implements AppUtils {
 		}
 	}
 	
+	protected String appendAppStore(String url) {
+		String appStore = config.getProperty(SocializeConfig.REDIRECT_APP_STORE);
+		if(!StringUtils.isEmpty(appStore)) {
+			appStore = getAppStoreAbbreviation(appStore.trim());
+			if(appStore != null) {
+				url += "/?f=" + appStore;
+			}
+		}
+		return url;
+	}
+	
+	protected String getAppStoreAbbreviation(String appStore) {
+		if(appStore != null && appStore.equalsIgnoreCase("amazon")) {
+			return "amz";
+		}
+		return null;
+	}
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.util.IAppUtils#getMarketUrl()
