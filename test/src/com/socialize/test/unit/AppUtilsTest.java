@@ -41,6 +41,7 @@ public class AppUtilsTest extends SocializeUnitTest {
 		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
 
 		AndroidMock.expect(config.getProperty(SocializeConfig.REDIRECT_HOST)).andReturn(host);
+		AndroidMock.expect(config.getProperty(SocializeConfig.REDIRECT_APP_STORE)).andReturn(null);
 		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(consumerKey);
 
 		AndroidMock.replay(config);
@@ -54,6 +55,29 @@ public class AppUtilsTest extends SocializeUnitTest {
 		
 		assertEquals(host + "/a/" + consumerKey, url);
 	}
+	
+	@UsesMocks ({SocializeConfig.class})
+	public void test_getAppUrlWithAmazon() {
+		final String consumerKey = "foobar";
+		final String host = "foo_host_bar";
+		final String appStore = "amazon";
+		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+
+		AndroidMock.expect(config.getProperty(SocializeConfig.REDIRECT_HOST)).andReturn(host);
+		AndroidMock.expect(config.getProperty(SocializeConfig.REDIRECT_APP_STORE)).andReturn(appStore);
+		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(consumerKey);
+
+		AndroidMock.replay(config);
+		
+		DefaultAppUtils utils = new DefaultAppUtils();
+		utils.setConfig(config);
+		
+		String url = utils.getAppUrl();
+		
+		AndroidMock.verify(config);
+		
+		assertEquals(host + "/a/" + consumerKey + "/?f=amz", url);
+	}	
 	
 	public void testGetAppIconId() {
 		DefaultAppUtils utils = new DefaultAppUtils();
