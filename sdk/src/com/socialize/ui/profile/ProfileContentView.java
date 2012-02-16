@@ -131,8 +131,6 @@ public class ProfileContentView extends BaseView {
 		saveButton = profileSaveButtonFactory.getBean();
 		cancelButton = profileCancelButtonFactory.getBean();
 		
-		toaster = Toast.makeText(getContext(), "", Toast.LENGTH_SHORT);
-
 		InputFilter[] maxLength = new InputFilter[1]; 
 		maxLength[0] = new InputFilter.LengthFilter(128); 
 		
@@ -193,7 +191,6 @@ public class ProfileContentView extends BaseView {
 		
 		setupListeners();
 		
-//		ViewGroup container = makeContainerLayout();
 		ViewGroup scrollView = makeScrollLayout();
 		
 		LinearLayout.LayoutParams childViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
@@ -201,11 +198,6 @@ public class ProfileContentView extends BaseView {
 		
 		addView(scrollView);
 		addView(buttons);
-		
-//		addView(container);		
-		
-//		addView(master);
-//		addView(buttons);
 	}
 	
 	protected void setupListeners() {
@@ -454,8 +446,9 @@ public class ProfileContentView extends BaseView {
 	protected void toast(String text) {
 		if(toaster != null) {
 			toaster.cancel();
-			toaster.setText(text);
-			toaster.show();
 		}
+		
+		toaster = Toast.makeText(getContext(), text, Toast.LENGTH_SHORT);
+		toaster.show();
 	}	
 }

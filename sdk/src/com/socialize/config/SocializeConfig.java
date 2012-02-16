@@ -89,6 +89,11 @@ public class SocializeConfig {
 	
 	public static final int MAX_LIST_RESULTS = 100;
 	
+	public static final String SOCIALIZE_SHARE_COMMENT = "socialize.share.comment";
+	public static final String SOCIALIZE_SHARE_IS_HTML = "socialize.share.html";
+	public static final String SOCIALIZE_SHARE_MIME_TYPE = "socialize.share.mime";
+	public static final String SOCIALIZE_SHARE_LISTENER_KEY = "socialize.share.listener.key";
+	
 	public SocializeConfig() {
 		super();
 	}

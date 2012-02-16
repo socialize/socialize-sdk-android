@@ -23,7 +23,12 @@ package com.socialize.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.RelativeLayout.LayoutParams;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
@@ -45,9 +50,13 @@ public class SocializeLaunchActivity extends Activity {
 	public static final String LAUNCH_ACTION = "socialize.launch.action";
 	
 	protected IOCContainer container;
+	protected Launcher launcher;
+	protected SocializeErrorHandler errorHandler;
+	protected Intent originalIntent;
 	
 	@Override
 	protected void onNewIntent(Intent intent) {
+		originalIntent = intent;
 		super.onNewIntent(intent);
 	}
 
@@ -55,67 +64,103 @@ public class SocializeLaunchActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		superOnCreate(savedInstanceState);
 		
+		originalIntent = getIntent();
+		
+		RelativeLayout layout = new RelativeLayout(this);
+		
+		layout.setBackgroundColor(Color.BLACK);
+		
+		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
+		
+		TextView text = new TextView(this);
+		text.setText("Loading...");
+		text.setTextColor(Color.WHITE);
+		
+		LayoutParams text_params = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+		text_params.addRule(RelativeLayout.CENTER_IN_PARENT);
+		
+		text.setLayoutParams(text_params);
+		
+		layout.addView(text);
+		
+		layout.setLayoutParams(params);
+		
+		setContentView(layout);
+		
+		new Initializer().execute((Void[])null);
+	}
+	
+	protected void doInit() {
 		initSocialize();
-		
 		container = getContainer();
-		
-		// TODO: this should all be asynchronous (including socialize init) and a loading screen shown.
+		errorHandler = container.getBean("socializeUIErrorHandler");
+	}
+	
+	protected void doAuthenticate() {
 		// Authenticate the user
 		getSocialize().authenticate(this, getAuthListener(container));
-
-		finish();
 	}
 	
 	protected SocializeAuthListener getAuthListener(final IOCContainer container) {
-		
-		final SocializeErrorHandler errorHandler = container.getBean("socializeUIErrorHandler");
 		
 		return new SocializeAuthListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
-				error.printStackTrace();
-				if(errorHandler != null) {
-					errorHandler.handleError(SocializeLaunchActivity.this, error);
-				}
+				handleError(error);
 			}
 			
 			@Override
+			public void onAuthFail(SocializeException error) {
+				handleError(error);
+			}			
+			
+			@Override
 			public void onCancel() {
-				// Do nothing.
+				finish();
 			}
 			
 			@Override
 			public void onAuthSuccess(SocializeSession session) {
 				Bundle extras = getIntent().getExtras();
-				
 				if(extras != null) {
 					String action = extras.getString(LAUNCH_ACTION);
-					
 					if(action != null) {
 						LaunchManager launchManager = container.getBean("launchManager");
-						
 						if(launchManager != null) {
-							Launcher launcher = launchManager.getLaucher(action);
-							
+							launcher = launchManager.getLaucher(action);
 							if(launcher != null) {
-								launcher.launch(SocializeLaunchActivity.this, extras);
+								if(launcher.launch(SocializeLaunchActivity.this, extras)) {
+									if(!launcher.shouldFinish()) {
+										return; // Don't finish
+									}
+								}
 							}
 						}
 					}
-				}				
-			}
-			
-			@Override
-			public void onAuthFail(SocializeException error) {
-				error.printStackTrace();
-				if(errorHandler != null) {
-					errorHandler.handleError(SocializeLaunchActivity.this, error);
-				}
+				}	
+				
+				finish();
 			}
 		};
 	}
 	
+	protected void handleError(SocializeException error) {
+		error.printStackTrace();
+		if(errorHandler != null) {
+			errorHandler.handleError(SocializeLaunchActivity.this, error);
+		}		
+		finish();
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if(launcher != null) {
+			launcher.onResult(this, requestCode, resultCode, data, originalIntent);
+		}
+		finish();
+	}
+
 	protected void superOnCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	}
@@ -142,5 +187,19 @@ public class SocializeLaunchActivity extends Activity {
 	
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();
-	}	
+	}
+	
+	protected class Initializer extends AsyncTask<Void, Void, Void>  {
+
+		@Override
+		protected Void doInBackground(Void... arg0) {
+			doInit();
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			doAuthenticate();
+		}
+	}
 }

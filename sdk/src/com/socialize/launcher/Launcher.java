@@ -22,6 +22,7 @@
 package com.socialize.launcher;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 /**
@@ -37,5 +38,21 @@ public interface Launcher {
 	 * @return True if the launch was successful.
 	 */
 	public boolean launch(Activity context, Bundle data);
+
+	/**
+	 * Handles the result from the launch in the activity callback
+	 * @param context
+	 * @param requestCode
+	 * @param resultCode
+	 * @param returnedIntent The intent returned from the activity.
+	 * @param originalIntent The original intent that launched the activity.
+	 */
+	public void onResult(Activity context, int requestCode, int resultCode, Intent returnedIntent, Intent originalIntent);
+
+	/**
+	 * Returns true if the launching activity should call finish after launch.
+	 * @return
+	 */
+	public boolean shouldFinish();
 	
 }

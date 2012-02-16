@@ -14,10 +14,7 @@ public class FacebookCheckbox extends CustomCheckbox {
 	private FacebookAuthClickListener facebookAuthClickListener;
 	private FacebookSignOutClickListener facebookSignOutClickListener;
 	private IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory;
-	
 	private OnClickListener localListener = null;
-	
-	
 	private SocializeAuthListener localAuthListener = null;
 	private FacebookSignOutListener localSignOutListener = null;
 	
@@ -40,7 +37,6 @@ public class FacebookCheckbox extends CustomCheckbox {
 			@Override
 			public void onCancel() {
 				setChecked(true);
-				
 				if(localSignOutListener != null) {
 					localSignOutListener.onCancel();
 				}
@@ -48,11 +44,9 @@ public class FacebookCheckbox extends CustomCheckbox {
 		});
 		
 		facebookAuthClickListener.setListener(new SocializeAuthListener() {
-			
 			@Override
 			public void onError(SocializeException error) {
 				setChecked(false);
-				
 				if(localAuthListener != null) {
 					localAuthListener.onError(error);
 				}

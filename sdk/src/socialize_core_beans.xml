@@ -457,8 +457,13 @@
 	<bean id="activityLauncher" abstract="true">
 		<property name="appUtils" ref="appUtils"/>
 	</bean>
-
+	
 	<bean id="actionLauncher" class="com.socialize.launcher.SocializeActionLauncher" extends="activityLauncher"/>
+
+	<bean id="shareLauncher" class="com.socialize.launcher.ShareLauncher">
+		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
+		<property name="listenerHolder" ref="listenerHolder"/>
+	</bean>
 
 	<bean id="launchManager" class="com.socialize.launcher.SocializeLaunchManager">
 		<property name="logger" ref="logger"/>
@@ -468,6 +473,10 @@
 					<key value="ACTION"/>
 					<value ref="actionLauncher"/>
 				</entry>
+				<entry>
+					<key value="LOCAL_SHARE"/>
+					<value ref="shareLauncher"/>
+				</entry>				
 			</map>
 		</property>
 	</bean>

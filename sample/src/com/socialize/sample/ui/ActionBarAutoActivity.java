@@ -53,7 +53,7 @@ public class ActionBarAutoActivity extends ActionBarActivity {
 					@Override
 					public void onPostUnlike(ActionBarView actionBar) {
 					}
-					
+
 					@Override
 					public void onPostShare(ActionBarView actionBar, Share share) {
 						Log.i("Socialize", "onPostShare called");

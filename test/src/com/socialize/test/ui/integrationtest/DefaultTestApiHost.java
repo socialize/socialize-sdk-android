@@ -113,11 +113,6 @@ public class DefaultTestApiHost implements ApiHost {
 	}
 
 	@Override
-	public void listRecommendedEntitiesByLike(SocializeSession session, EntityListener listener, long id) {
-		fail(message + "listRecommendedEntitiesByLike");
-	}
-
-	@Override
 	public void listCommentsByEntity(SocializeSession session, String url, CommentListener listener) {
 		fail(message + "listCommentsByEntity");
 	}

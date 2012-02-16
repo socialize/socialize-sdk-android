@@ -22,9 +22,15 @@
 package com.socialize.ui.share;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.widget.EditText;
 
+import com.socialize.Socialize;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
+import com.socialize.launcher.LaunchAction;
+import com.socialize.listener.ListenerHolder;
+import com.socialize.ui.SocializeLaunchActivity;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 
@@ -33,6 +39,8 @@ import com.socialize.ui.actionbar.OnActionBarEventListener;
  *
  */
 public abstract class InternalShareClickListener extends BaseShareClickListener {
+	
+	private ListenerHolder listenerHolder;
 
 	public InternalShareClickListener(ActionBarView actionBarView, EditText commentView, OnActionBarEventListener onActionBarEventListener) {
 		super(actionBarView, commentView, onActionBarEventListener);
@@ -41,22 +49,48 @@ public abstract class InternalShareClickListener extends BaseShareClickListener 
 	public InternalShareClickListener(ActionBarView actionBarView) {
 		super(actionBarView);
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.share.BaseShareClickListener#doShare(android.app.Activity, com.socialize.entity.Entity, java.lang.String)
 	 */
 	@Override
 	protected void doShare(Activity context, Entity entity, String comment) {
-		String title = "Share";
-		String subject = null;
-		String body = null;
-		if(isGenerateShareMessage()) {
-			subject = shareMessageBuilder.buildShareSubject(entity);
-			body = shareMessageBuilder.buildShareMessage(entity, comment, isHtml(), isIncludeSocialize());
+		
+		if(isDoShareInline()) {
+			String title = "Share";
+			String subject = null;
+			String body = null;
+			if(isGenerateShareMessage()) {
+				subject = shareMessageBuilder.buildShareSubject(entity);
+				body = shareMessageBuilder.buildShareMessage(entity, comment, isHtml(), isIncludeSocialize());
+			}
+			doShare(context, title, subject, body, comment);
 		}
+		else {
+			Intent intent = new Intent(context, SocializeLaunchActivity.class);
+			
+			intent.putExtra(SocializeLaunchActivity.LAUNCH_ACTION, LaunchAction.LOCAL_SHARE.name());
+			
+			intent.putExtra(Socialize.ENTITY_OBJECT, entity);
+			
+			intent.putExtra(SocializeConfig.SOCIALIZE_SHARE_IS_HTML, isHtml());
+			intent.putExtra(SocializeConfig.SOCIALIZE_SHARE_COMMENT, comment);
+			intent.putExtra(SocializeConfig.SOCIALIZE_SHARE_MIME_TYPE, getMimeType());
+			intent.putExtra(SocializeConfig.SOCIALIZE_SHARE_LISTENER_KEY, entity.getKey());
+			
+			if(listenerHolder != null) {
+				listenerHolder.put(entity.getKey(), getShareAddListener());
+			}
 
-		doShare(context, title, subject, body, comment);
+			context.startActivity(intent);
+		}
 	}
+	
+	public void setListenerHolder(ListenerHolder listenerHolder) {
+		this.listenerHolder = listenerHolder;
+	}
+
+	protected abstract String getMimeType();
 	
 	protected abstract void doShare(Activity parent, String title, String subject, String body, String comment);
 

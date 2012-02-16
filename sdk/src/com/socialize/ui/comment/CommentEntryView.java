@@ -87,8 +87,6 @@ public class CommentEntryView extends BaseView {
 		
 		User user = Socialize.getSocialize().getSession().getUser();
 		
-		toaster = Toast.makeText(getContext(), "", Toast.LENGTH_SHORT);
-		
 		notificationsEnabled = true;
 		notificationsAvailable = user.isNotificationsEnabled() && appUtils.isNotificationsAvaiable(getContext());
 		
@@ -415,23 +413,38 @@ public class CommentEntryView extends BaseView {
 			notifyCheckBox.setChecked(notificationsEnabled);
 		}
 		
-		if(facebookCheckbox != null) {
-			User user = Socialize.getSocialize().getSession().getUser();
+		User user = Socialize.getSocialize().getSession().getUser();
+		
+		if(facebookCheckbox != null && !facebookCheckbox.isChanged()) {
 			facebookCheckbox.setChecked(user.isAutoPostCommentsFacebook());
+		}
+		
+		if(locationCheckBox != null && !locationCheckBox.isChanged()) {
+			locationCheckBox.setChecked(user.isShareLocation());
 		}
 	}
 	
 	protected void toast(String text) {
 		if(toaster != null) {
 			toaster.cancel();
-			toaster.setText(text);
-			toaster.show();
 		}
+		
+		toaster = Toast.makeText(getContext(), text, Toast.LENGTH_SHORT);
+		toaster.show();
 	}
 
 	protected void reset() {
 		keyboardUtils.hideKeyboard(commentField);
 		commentField.setText("");
+		
+		if(facebookCheckbox != null) {
+			facebookCheckbox.setChanged(false);
+		}
+		
+		if(locationCheckBox != null) {
+			locationCheckBox.setChanged(false);
+		}
+		
 		updateUI();
 	}
 	

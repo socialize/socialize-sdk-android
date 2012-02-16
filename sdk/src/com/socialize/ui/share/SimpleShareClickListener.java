@@ -33,6 +33,8 @@ import com.socialize.ui.actionbar.OnActionBarEventListener;
  * @author Jason Polites
  */
 public abstract class SimpleShareClickListener extends InternalShareClickListener {
+	
+	private Intent sendIntent = null;
 
 	public SimpleShareClickListener(ActionBarView actionBarView) {
 		super(actionBarView);
@@ -41,7 +43,7 @@ public abstract class SimpleShareClickListener extends InternalShareClickListene
 	public SimpleShareClickListener(ActionBarView actionBarView, EditText commentView, OnActionBarEventListener onActionBarEventListener) {
 		super(actionBarView, commentView, onActionBarEventListener);
 	}
-
+	
 	@Override
 	protected void doShare(Activity parent, String title, String subject, String body, String comment) {
 		Intent msg = getIntent();
@@ -59,8 +61,10 @@ public abstract class SimpleShareClickListener extends InternalShareClickListene
 	}
 	
 	protected Intent getIntent() {
-		Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
-		sendIntent.setType(getMimeType());
+		if(sendIntent == null) {
+			sendIntent = new Intent(android.content.Intent.ACTION_SEND);
+			sendIntent.setType(getMimeType());
+		}
 		return sendIntent;
 	}
 
@@ -73,6 +77,4 @@ public abstract class SimpleShareClickListener extends InternalShareClickListene
 	protected boolean isIncludeSocialize() {
 		return true;
 	}
-
-	protected abstract String getMimeType();
 }

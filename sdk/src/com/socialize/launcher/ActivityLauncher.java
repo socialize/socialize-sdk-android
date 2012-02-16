@@ -68,8 +68,17 @@ public abstract class ActivityLauncher implements Launcher {
 	
 	// So we can mock
 	protected Intent newIntent(Activity context, Class<?> activityClass) {
-		return  new Intent(context, activityClass);
+		return new Intent(context, activityClass);
 	}
+	
+	@Override
+	public boolean shouldFinish() {
+		return true;
+	}
+	
+	// Subclasses override
+	@Override
+	public void onResult(Activity context, int requestCode, int resultCode, Intent data, Intent originalIntent) {}
 	
 	protected void handleIntent(Activity context, Intent intent, Bundle data) {}
 	

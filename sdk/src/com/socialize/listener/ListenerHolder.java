@@ -65,8 +65,9 @@ public class ListenerHolder {
 		return (L) listeners.get(key);
 	}
 	
-	public void remove(String key) {
-		listeners.remove(key);
+	@SuppressWarnings("unchecked")
+	public <L extends SocializeListener> L remove(String key) {
+		return (L) listeners.remove(key);
 	}
 
 	public void setLogger(SocializeLogger logger) {

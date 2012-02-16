@@ -48,11 +48,12 @@ import com.socialize.util.StringUtils;
 public abstract class BaseShareClickListener implements ShareClickListener {
 
 	private SocializeLogger logger;
-	protected ShareMessageBuilder shareMessageBuilder;
 	private ActionBarView actionBarView;
-	private OnActionBarEventListener onActionBarEventListener;
 	private EditText commentView;
 	private SocializeErrorHandler errorHandler;
+	
+	protected ShareMessageBuilder shareMessageBuilder;
+	protected OnActionBarEventListener onActionBarEventListener;
 	
 	public BaseShareClickListener(ActionBarView actionBarView) {
 		this(actionBarView, null, null);
@@ -109,28 +110,9 @@ public abstract class BaseShareClickListener implements ShareClickListener {
 				}
 
 				// Record the share in Socialize
-				Socialize.getSocialize().addShare(activity, entity, text, getShareType(),
-					new ShareAddListener() {
-		
-						@Override
-						public void onError(SocializeException error) {
-							if(logger != null) {
-								logger.error("Error creating share", error);
-							}
-							else {
-								error.printStackTrace();
-							}
-						}
-		
-						@Override
-						public void onCreate(Share share) {
-							// TOOD: Update UI?
-							if(onActionBarEventListener != null) {
-								onActionBarEventListener.onPostShare(actionBarView, share);
-							}
-						}
-					});			
-
+				if(isDoShareInline()) {
+					Socialize.getSocialize().addShare(activity, entity, text, getShareType(), getShareAddListener());	
+				}
 
 				doShare(activity, entity, comment);				
 			}
@@ -155,9 +137,30 @@ public abstract class BaseShareClickListener implements ShareClickListener {
 		this.shareMessageBuilder = shareMessageBuilder;
 	}
 	
+	protected ShareAddListener getShareAddListener() {
+		return new ShareAddListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				if(logger != null) {
+					logger.error("Error creating share", error);
+				}
+				else {
+					error.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onCreate(Share share) {
+				// TOOD: Update UI?
+				if(onActionBarEventListener != null) {
+					onActionBarEventListener.onPostShare(actionBarView, share);
+				}
+			}
+		};
+	}
 	
 	protected abstract void doShare(Activity context, Entity entity, String comment);
-
 	
 	protected abstract boolean isHtml();
 	
@@ -168,6 +171,15 @@ public abstract class BaseShareClickListener implements ShareClickListener {
 	 */
 	@Override
 	public abstract boolean isAvailableOnDevice(Activity parent);
+	
+	/**
+	 * Returns true if this listener should do a share to Socialize.
+	 * Subclasses override.
+	 * @return
+	 */
+	protected boolean isDoShareInline() {
+		return true;
+	}
 	
 	protected abstract ShareType getShareType();
 	
