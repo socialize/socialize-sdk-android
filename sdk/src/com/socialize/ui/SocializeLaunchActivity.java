@@ -139,7 +139,6 @@ public class SocializeLaunchActivity extends Activity {
 						}
 					}
 				}	
-				
 				finish();
 			}
 		};
