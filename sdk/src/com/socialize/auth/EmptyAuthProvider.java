@@ -32,13 +32,19 @@ import com.socialize.listener.AuthProviderListener;
  * @author Jason Polites
  *
  */
-public class EmptyAuthProvider implements AuthProvider {
+public class EmptyAuthProvider implements AuthProvider<AuthProviderInfo> {
 
 	/* (non-Javadoc)
 	 * @see com.socialize.auth.AuthProvider#authenticate(com.socialize.api.SocializeAuthRequest, java.lang.String, com.socialize.listener.AuthProviderListener)
 	 */
 	@Override
 	public void authenticate(SocializeAuthRequest authRequest, String appId, AuthProviderListener listener) {
+		listener.onAuthFail(new SocializeException("Empty auth provider used!"));
+	}
+	
+
+	@Override
+	public void authenticate(SocializeAuthRequest authRequest, AuthProviderInfo info, AuthProviderListener listener) {
 		listener.onAuthFail(new SocializeException("Empty auth provider used!"));
 	}
 
@@ -48,4 +54,7 @@ public class EmptyAuthProvider implements AuthProvider {
 	@Override
 	public void clearCache(Context context, String appId) {}
 
+
+	@Override
+	public void clearCache(Context context, AuthProviderInfo info) {}
 }

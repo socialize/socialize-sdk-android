@@ -21,15 +21,19 @@
  */
 package com.socialize.api;
 
+import java.io.Serializable;
+import java.util.Map;
+
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.UserAuthData;
 import com.socialize.entity.User;
 
 /**
  * @author Jason Polites
  *
  */
-public interface SocializeSession {
+public interface SocializeSession extends Serializable {
 
 	public User getUser();
 
@@ -43,15 +47,26 @@ public interface SocializeSession {
 	
 	public String getHost();
 	
+	/**
+	 * Returns the set of session data for any 3rd party providers.
+	 * @return
+	 */
+	public Map<AuthProviderType, UserAuthData> getUserAuthData();
+	
+	@Deprecated
 	public String get3rdPartyUserId();
 	
+	@Deprecated
 	public String get3rdPartyToken();
 	
+	@Deprecated
 	public String get3rdPartyAppId();
 
+	@Deprecated
 	public AuthProviderType getAuthProviderType();
 	
-	public AuthProvider getAuthProvider();
+	@Deprecated
+	public AuthProvider<?> getAuthProvider();
 	
 	public void clear(AuthProviderType type);
 

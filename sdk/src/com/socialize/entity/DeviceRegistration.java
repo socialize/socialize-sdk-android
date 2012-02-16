@@ -27,6 +27,8 @@ package com.socialize.entity;
  */
 public class DeviceRegistration extends SocializeObject {
 
+	private static final long serialVersionUID = -6494976201929812968L;
+	
 	private String registrationId;
 
 	public String getRegistrationId() {

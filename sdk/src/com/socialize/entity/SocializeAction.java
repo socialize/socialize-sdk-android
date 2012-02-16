@@ -29,6 +29,8 @@ import com.socialize.util.StringUtils;
  */
 public abstract class SocializeAction extends SocializeObject {
 
+	private static final long serialVersionUID = -1988365314114134147L;
+	
 	private Application application;
 	private Entity entity;
 	private String entityKey; // Used when only the key is supplied.

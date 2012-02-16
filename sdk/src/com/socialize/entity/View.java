@@ -30,6 +30,8 @@ import com.socialize.api.action.ActionType;
  */
 public class View extends SocializeAction {
 	
+	private static final long serialVersionUID = 809957336999860700L;
+
 	@Override
 	public ActionType getActionType() {
 		return ActionType.VIEW;

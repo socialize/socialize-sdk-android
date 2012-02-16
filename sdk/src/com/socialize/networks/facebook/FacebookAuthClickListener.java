@@ -28,7 +28,7 @@ import android.view.View.OnClickListener;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
-import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
@@ -56,9 +56,10 @@ public class FacebookAuthClickListener implements OnClickListener {
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 		String authProviderAppId = config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
 		
-		AuthProviderType authProvider = AuthProviderType.FACEBOOK;
+		FacebookAuthProviderInfo fbInfo = new FacebookAuthProviderInfo();
+		fbInfo.setAppId(authProviderAppId);
 		
-		getSocialize().authenticate(view.getContext(), consumerKey, consumerSecret, authProvider, authProviderAppId, new SocializeAuthListener() {
+		getSocialize().authenticate(view.getContext(), consumerKey, consumerSecret, fbInfo, new SocializeAuthListener() {
 			
 			@Override
 			public void onError(SocializeException error) {

@@ -29,7 +29,9 @@ import android.location.Location;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
+import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.UserAuthData;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
@@ -153,7 +155,6 @@ public interface SocializeService {
 	 */
 	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener authListener);
 
-
 	/**
 	 * Authenticates the application against the API.
 	 * NOTE:  This assumes the consumer key/secret have been specified in assets/socialize.properties
@@ -171,8 +172,20 @@ public interface SocializeService {
 	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
 	 * @param authProviderAppId The ID of your app in the 3rd party system used to authenticate. (e.g. YOUR Facebook App ID)
 	 * @param authListener The callback for authentication outcomes.
+	 * @deprecated Use {@link #authenticate(Context, String, String, AuthProviderInfo, SocializeAuthListener)}
 	 */
+	@Deprecated
 	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderAppId, SocializeAuthListener authListener);
+	
+	/**
+	 * Authenticates the application against the API.
+	 * @param context The current context.
+	 * @param consumerKey The consumer key, obtained from registration at http://www.getsocialize.com.
+	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
+	 * @param authProviderInfo Information about the auth provider to be used.  May be null.
+	 * @param authListener The callback for authentication outcomes.
+	 */
+	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, SocializeAuthListener authListener);
 	
 	/**
 	 * Authenticates the application against the API as a user known to your app from a given 3rd party provider.
@@ -184,8 +197,21 @@ public interface SocializeService {
 	 * @param authUserId3rdParty The userId from the 3rd party provider (if available).
 	 * @param authToken3rdParty The auth token from the 3rd party (if available).
 	 * @param authListener The callback for authentication outcomes.
+	 * @deprecated Use {@link #authenticateKnownUser(Context, String, String, AuthProviderInfo, UserAuthData, SocializeAuthListener)}
 	 */
+	@Deprecated
 	public void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty, SocializeAuthListener authListener);
+	
+	/**
+	 * Authenticates the application against the API as a user known to your app from a given 3rd party provider.
+	 * @param context The current context.
+	 * @param consumerKey The consumer key, obtained from registration at http://www.getsocialize.com.
+	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
+	 * @param authProviderInfo Information about the auth provider to be used. 
+	 * @param userAuthData Information about the user being authed.
+	 * @param authListener The callback for authentication outcomes.
+	 */
+	public void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, UserAuthData userAuthData, SocializeAuthListener authListener);
 	
 	/**
 	 * Authenticates the application against the API.

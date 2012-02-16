@@ -37,7 +37,6 @@ import com.socialize.error.SocializeException;
  */
 public interface SocializeProvider<T> {
 	
-	
 	/**
 	 * Loads a user's authentication session.
 	 * @param endpoint
@@ -58,7 +57,9 @@ public interface SocializeProvider<T> {
 	 * @param appId3rdParty
 	 * @return
 	 * @throws SocializeException
+	 * @deprecated use {@link #loadSession(String, String, String, AuthProviderData)}
 	 */
+	@Deprecated
 	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderType authProviderType, String appId3rdParty) throws SocializeException;
 	
 	public void clearSession();
@@ -67,7 +68,7 @@ public interface SocializeProvider<T> {
 	
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException;
 
-	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException;
+	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String udid) throws SocializeException;
 
 	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids, String idKey, int startIndex, int endIndex) throws SocializeException;
 	

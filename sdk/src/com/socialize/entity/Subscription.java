@@ -29,6 +29,8 @@ import com.socialize.notifications.NotificationType;
  */
 public class Subscription extends SocializeObject {
 
+	private static final long serialVersionUID = -8105862361181074776L;
+	
 	private Entity entity;
 	private User user;
 	private Long date;

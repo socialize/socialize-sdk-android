@@ -26,6 +26,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import oauth.socialize.OAuthSignListener;
 
@@ -41,7 +42,11 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.socialize.auth.AuthProviderData;
+import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.DefaultUserAuthData;
+import com.socialize.auth.UserAuthData;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeObject;
 import com.socialize.entity.SocializeObjectFactory;
@@ -83,7 +88,7 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 	}
 	
 	@Override
-	public HttpUriRequest getAuthRequestWith3rdParty(SocializeSession session, String endpoint, String udid, AuthProviderType provider, String providerId, String providerToken) throws SocializeException {
+	public HttpUriRequest getAuthRequestWith3rdParty(SocializeSession session, String endpoint, String udid, UserAuthData userAuthData) throws SocializeException {
 		HttpPost post = new HttpPost(endpoint);
 		try {
 			List<NameValuePair> data = new ArrayList<NameValuePair>(1);
@@ -91,10 +96,14 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 			JSONObject json = new JSONObject();
 			json.put("udid", udid);
 			
-			if(provider != null && !StringUtils.isEmpty(providerId) && !StringUtils.isEmpty(providerToken)) {
-				json.put("auth_type", provider.getId());
-				json.put("auth_token", providerToken);
-				json.put("auth_id", providerId);
+			AuthProviderInfo authProviderInfo = userAuthData.getAuthProviderInfo();
+
+			if(authProviderInfo != null) {
+				if(!StringUtils.isEmpty(userAuthData.getUserId()) && !StringUtils.isEmpty(userAuthData.getAccessToken())) {
+					json.put("auth_type", authProviderInfo.getType().getId());
+					json.put("auth_token", userAuthData.getAccessToken());
+					json.put("auth_id", userAuthData.getUserId());
+				}
 			}
 
 			data.add(new BasicNameValuePair("payload", json.toString()));
@@ -112,9 +121,49 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 		return post;
 	}
 
+	@Deprecated
 	@Override
-	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String uuid) throws SocializeException {
-		return getAuthRequestWith3rdParty(session, endpoint, uuid, session.getAuthProviderType(), session.get3rdPartyUserId(), session.get3rdPartyToken());
+	public HttpUriRequest getAuthRequestWith3rdParty(SocializeSession session, String endpoint, String udid, final AuthProviderType provider, String providerId, String providerToken) throws SocializeException {
+		DefaultUserAuthData userAuthData = new DefaultUserAuthData();
+		userAuthData.setAccessToken(providerToken);
+		userAuthData.setUserId(providerId);
+		userAuthData.setAuthProviderInfo(new AuthProviderInfo() {
+			
+			@Override
+			public void validate() throws SocializeException {}
+			
+			@Override
+			public AuthProviderType getType() {
+				return provider;
+			}
+		});
+		
+		return getAuthRequestWith3rdParty(session, endpoint, udid, userAuthData);
+	}
+
+	@Deprecated
+	@Override
+	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String udid) throws SocializeException {
+		return getAuthRequestWith3rdParty(session, endpoint, udid, session.getAuthProviderType(), session.get3rdPartyUserId(), session.get3rdPartyToken());
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String udid, AuthProviderData data) throws SocializeException {
+		
+		Map<AuthProviderType, UserAuthData> userAuthDataMap = session.getUserAuthData();
+		
+		if(userAuthDataMap != null) {
+			AuthProviderInfo authProviderInfo = data.getAuthProviderInfo();
+			
+			if(authProviderInfo != null) {
+				UserAuthData userAuthData = userAuthDataMap.get(authProviderInfo.getType());
+				return getAuthRequestWith3rdParty(session, endpoint, udid, userAuthData);
+			}
+		}
+		
+		// Legacy
+		return getAuthRequest(session, endpoint, udid);
 	}
 
 	@Override

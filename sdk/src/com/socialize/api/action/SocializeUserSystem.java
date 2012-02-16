@@ -29,7 +29,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.api.SocializeSessionPersister;
 import com.socialize.auth.AuthProviderData;
-import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.SocializeAuthProviderInfo;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
@@ -89,8 +89,13 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	@Override
 	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
 		AuthProviderData authProviderData = authProviderDataFactory.getBean();
-		authProviderData.setAuthProviderType(AuthProviderType.SOCIALIZE);
+		authProviderData.setAuthProviderInfo(newSocializeAuthProviderInfo());
 		authenticate(context, consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, false);	
+	}
+	
+	// For mocking
+	protected SocializeAuthProviderInfo newSocializeAuthProviderInfo() {
+		return new SocializeAuthProviderInfo();
 	}
 
 	@Override

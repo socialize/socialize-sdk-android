@@ -25,7 +25,9 @@ import java.util.Collection;
 
 import org.apache.http.client.methods.HttpUriRequest;
 
+import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.UserAuthData;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
 
@@ -35,9 +37,15 @@ import com.socialize.error.SocializeException;
  */
 public interface SocializeRequestFactory<T extends SocializeObject> {
 	
-	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String uuid) throws SocializeException;
+	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String udid, AuthProviderData data) throws SocializeException;
 	
-	public HttpUriRequest getAuthRequestWith3rdParty(SocializeSession session, String endpoint, String uuid, AuthProviderType provider, String providerId, String providerToken) throws SocializeException;
+	@Deprecated
+	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String udid) throws SocializeException;
+	
+	public HttpUriRequest getAuthRequestWith3rdParty(SocializeSession session, String endpoint, String udid, UserAuthData userAuthData) throws SocializeException;
+	
+	@Deprecated
+	public HttpUriRequest getAuthRequestWith3rdParty(SocializeSession session, String endpoint, String udid, AuthProviderType provider, String providerId, String providerToken) throws SocializeException;
 
 	public HttpUriRequest getGetRequest(SocializeSession session, String endpoint,String id) throws SocializeException;
 

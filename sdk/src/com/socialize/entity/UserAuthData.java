@@ -29,6 +29,8 @@ import com.socialize.auth.AuthProviderType;
  */
 public class UserAuthData extends SocializeObject {
 
+	private static final long serialVersionUID = 1771134818619831658L;
+	
 	private AuthProviderType authProviderType;
 	
 	public AuthProviderType getAuthProviderType() {

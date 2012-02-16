@@ -38,7 +38,7 @@ import com.socialize.util.Drawables;
  * @author Jason Polites
  *
  */
-public class FacebookAuthProvider implements AuthProvider {
+public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderInfo> {
 	
 	private Context context;
 	private ListenerHolder holder; // This is a singleton
@@ -55,12 +55,9 @@ public class FacebookAuthProvider implements AuthProvider {
 		this.holder = holder;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.auth.AuthProvider#authenticate()
-	 */
 	@Override
-	public void authenticate(SocializeAuthRequest authRequest, String appId, final AuthProviderListener listener) {
-		
+	public void authenticate(SocializeAuthRequest authRequest, FacebookAuthProviderInfo info, final AuthProviderListener listener) {
+
 		final String listenerKey = "auth";
 		
 		holder.put(listenerKey, new AuthProviderListener() {
@@ -91,13 +88,25 @@ public class FacebookAuthProvider implements AuthProvider {
 		});
 		
 		Intent i = new Intent(context, FacebookActivity.class);
-		i.putExtra("appId", appId);
-		context.startActivity(i);
+		i.putExtra("appId", info.getAppId());
+		context.startActivity(i);		
+	}
+
+
+	/* (non-Javadoc)
+	 * @see com.socialize.auth.AuthProvider#authenticate()
+	 */
+	@Deprecated
+	@Override
+	public void authenticate(SocializeAuthRequest authRequest, String appId, final AuthProviderListener listener) {
+		FacebookAuthProviderInfo info = new FacebookAuthProviderInfo();
+		info.setAppId(appId);
+		authenticate(authRequest, info, listener);
 	}
 
 	@Override
-	public void clearCache(Context context, String appId) {
-		Facebook mFacebook = getFacebook(appId);
+	public void clearCache(Context context, FacebookAuthProviderInfo info) {
+		Facebook mFacebook = getFacebook(info.getAppId());
 		
 		try {
 			mFacebook.logout(context);
@@ -115,6 +124,14 @@ public class FacebookAuthProvider implements AuthProvider {
 				facebookSessionStore.clear(context);
 			}
 		}
+	}
+
+	@Deprecated
+	@Override
+	public void clearCache(Context context, String appId) {
+		FacebookAuthProviderInfo info = new FacebookAuthProviderInfo();
+		info.setAppId(appId);
+		clearCache(context, info);
 	}
 	
 	protected Facebook getFacebook(String appId) {
@@ -136,6 +153,4 @@ public class FacebookAuthProvider implements AuthProvider {
 	public void setFacebookSessionStore(FacebookSessionStore facebookSessionStore) {
 		this.facebookSessionStore = facebookSessionStore;
 	}
-	
-	
 }

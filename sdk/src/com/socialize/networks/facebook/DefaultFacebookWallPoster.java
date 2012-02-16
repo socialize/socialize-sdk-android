@@ -34,8 +34,6 @@ import android.os.Bundle;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.ShareMessageBuilder;
-import com.socialize.api.SocializeSession;
-import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.facebook.FacebookSessionStore;
 import com.socialize.config.SocializeConfig;
@@ -183,14 +181,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 						if(responseObject.has("error")) {
 							
 							// Clear the session cache
-							SocializeSession session = getSocialize().getSession();
-							AuthProvider authProvider = session.getAuthProvider();
-							AuthProviderType authProviderType = session.getAuthProviderType();
-							String get3rdPartyAppId = session.get3rdPartyAppId();
-							
-							if(authProvider != null && authProviderType.equals(AuthProviderType.FACEBOOK) && !StringUtils.isEmpty(get3rdPartyAppId)) {
-								getSocialize().clear3rdPartySession(parent, AuthProviderType.FACEBOOK);
-							}
+							getSocialize().clear3rdPartySession(parent, AuthProviderType.FACEBOOK);
 							
 							JSONObject error = responseObject.getJSONObject("error");
 							

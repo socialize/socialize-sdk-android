@@ -23,6 +23,7 @@ package com.socialize.api;
 
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.UserAuthData;
 
 /**
  * @author Jason Polites
@@ -36,8 +37,19 @@ public interface SocializeSessionFactory {
 	 * @param secret
 	 * @param authProviderType
 	 * @return
+	 * @deprecated
 	 */
+	@Deprecated
 	public WritableSession create(String key, String secret, String userId3rdParty, String token3rdParty, String appId3rdParty, AuthProviderType authProviderType);
+	
+	/**
+	 * Creates a new session.
+	 * @param key
+	 * @param secret
+	 * @param userAuthData
+	 * @return
+	 */
+	public WritableSession create(String key, String secret, UserAuthData userAuthData);
 	
 	/**
 	 * Creates a new session.

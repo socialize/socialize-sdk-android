@@ -27,6 +27,8 @@ package com.socialize.entity;
  */
 public class Application extends SocializeObject {
 
+	private static final long serialVersionUID = 6727282526027465399L;
+	
 	private String name;
 
 	public String getName() {

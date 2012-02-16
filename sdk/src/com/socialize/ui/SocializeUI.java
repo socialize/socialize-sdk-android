@@ -277,6 +277,8 @@ public class SocializeUI {
 		
 		SocializeAction action = new SocializeAction() {
 			
+			private static final long serialVersionUID = 4117561505244633323L;
+
 			@Override
 			public ActionType getActionType() {
 				return ActionType.COMMENT;

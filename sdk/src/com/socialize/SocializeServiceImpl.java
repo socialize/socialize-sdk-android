@@ -22,6 +22,8 @@
 package com.socialize;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -54,7 +56,10 @@ import com.socialize.api.action.UserSystem;
 import com.socialize.api.action.ViewSystem;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
+import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.AuthProviders;
+import com.socialize.auth.UserAuthData;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
@@ -132,9 +137,11 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private EntitySystem entitySystem;
 	private SubscriptionSystem subscriptionSystem;
 	private Drawables drawables;
+	private AuthProviders authProviders;
 	
 	private SocializeSystem system = new SocializeSystem();
 	private SocializeConfig config = new SocializeConfig();
+	
 	private SocializeEntityLoader entityLoader;
 	
 	private String[] initPaths = null;
@@ -366,6 +373,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.drawables = container.getBean("drawables");
 				this.authProviderDataFactory = container.getBean("authProviderDataFactory");
 				this.asserter = container.getBean("initializationAsserter");
+				this.authProviders = container.getBean("authProviders");
 				
 				SocializeConfig mainConfig = container.getBean("config");
 				
@@ -402,13 +410,33 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	
 	@Override
 	public void clear3rdPartySession(Context context, AuthProviderType type) {
-		// TODO: implement for specific/multiple provider types.
 		try {
 			if(session != null) {
-				AuthProvider authProvider = session.getAuthProvider();
-				String get3rdPartyAppId = session.get3rdPartyAppId();
-				if(authProvider != null && !StringUtils.isEmpty(get3rdPartyAppId)) {
-					authProvider.clearCache(context, get3rdPartyAppId);
+				AuthProvider<AuthProviderInfo> provider = authProviders.getProvider(type);
+				
+				if(provider != null) {
+					boolean cleared = false;
+					
+					Map<AuthProviderType, UserAuthData> userAuthDataMap = session.getUserAuthData();
+					if(userAuthDataMap != null) {
+						UserAuthData userAuthData = userAuthDataMap.get(type);
+						if(userAuthData != null) {
+							AuthProviderInfo authProviderInfo = userAuthData.getAuthProviderInfo();
+							if(authProviderInfo != null) {
+								provider.clearCache(context, authProviderInfo);
+								cleared = true;
+							}
+						}
+					}
+					
+					if(!cleared) {
+						// Legacy
+						AuthProvider<?> authProvider = session.getAuthProvider();
+						String get3rdPartyAppId = session.get3rdPartyAppId();
+						if(authProvider != null && !StringUtils.isEmpty(get3rdPartyAppId)) {
+							authProvider.clearCache(context, get3rdPartyAppId);
+						}
+					}
 				}
 				
 				session.clear(type);
@@ -425,11 +453,30 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	public void clearSessionCache(Context context) {
 		try {
 			if(session != null) {
-				AuthProvider authProvider = session.getAuthProvider();
-				String get3rdPartyAppId = session.get3rdPartyAppId();
 				
-				if(authProvider != null && !StringUtils.isEmpty(get3rdPartyAppId)) {
-					authProvider.clearCache(context, get3rdPartyAppId);
+				Map<AuthProviderType, UserAuthData> userAuthDataMap = session.getUserAuthData();
+				
+				boolean cleared = false;
+				
+				if(userAuthDataMap != null) {
+					Collection<UserAuthData> values = userAuthDataMap.values();
+					for (UserAuthData userAuthData : values) {
+						AuthProviderInfo authProviderInfo = userAuthData.getAuthProviderInfo();
+						if(authProviderInfo != null) {
+							cleared = true;
+							clear3rdPartySession(context, authProviderInfo.getType());
+						}
+					}
+				}
+				
+				if(!cleared) {
+					// Legacy
+					AuthProvider<?> authProvider = session.getAuthProvider();
+					String get3rdPartyAppId = session.get3rdPartyAppId();
+					
+					if(authProvider != null && !StringUtils.isEmpty(get3rdPartyAppId)) {
+						authProvider.clearCache(context, get3rdPartyAppId);
+					}
 				}
 				
 				session = null;
@@ -492,6 +539,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#authenticate(android.content.Context, java.lang.String, java.lang.String, com.socialize.auth.AuthProviderType, java.lang.String, com.socialize.listener.SocializeAuthListener)
 	 */
+	@Deprecated
 	@Override
 	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderType authProviderType, String authProviderAppId, SocializeAuthListener authListener) {
 		AuthProviderData data = this.authProviderDataFactory.getBean();
@@ -500,6 +548,13 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		authenticate(context, consumerKey, consumerSecret, data, authListener, true);
 	}
 	
+	@Override
+	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, SocializeAuthListener authListener) {
+		AuthProviderData data = this.authProviderDataFactory.getBean();
+		data.setAuthProviderInfo(authProviderInfo);
+		authenticate(context, consumerKey, consumerSecret, data, authListener, true);	
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#authenticate(com.socialize.listener.SocializeAuthListener)
@@ -604,6 +659,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#authenticateKnownUser(android.content.Context, java.lang.String, java.lang.String, com.socialize.auth.AuthProviderType, java.lang.String, java.lang.String, java.lang.String, com.socialize.listener.SocializeAuthListener)
 	 */
+	@Deprecated
 	@Override
 	public void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty,
 			SocializeAuthListener authListener) {
@@ -617,6 +673,15 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, false);
 	}	
 	
+	@Override
+	public void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, UserAuthData userAuthData, SocializeAuthListener authListener) {
+		AuthProviderData authProviderData = this.authProviderDataFactory.getBean();
+		authProviderData.setAuthProviderInfo(authProviderInfo);
+		authProviderData.setToken3rdParty(userAuthData.getAccessToken());
+		authProviderData.setUserId3rdParty(userAuthData.getUserId());
+		authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, false);	
+	}
+
 	protected void authenticate(
 			Context context,
 			String consumerKey, 

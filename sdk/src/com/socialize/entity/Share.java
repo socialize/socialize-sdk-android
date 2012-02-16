@@ -30,6 +30,8 @@ import com.socialize.api.action.ActionType;
  */
 public class Share extends SocializeAction {
 	
+	private static final long serialVersionUID = -7747516178154031316L;
+	
 	private String text;
 	private String mediumName;
 	private int medium;

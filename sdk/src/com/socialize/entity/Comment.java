@@ -30,6 +30,8 @@ import com.socialize.api.action.ActionType;
  */
 public class Comment extends SocializeAction {
 
+	private static final long serialVersionUID = -320434977392750548L;
+	
 	private String text;
 
 	public String getText() {

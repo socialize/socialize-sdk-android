@@ -27,6 +27,8 @@ package com.socialize.entity;
  */
 public class Stats extends SocializeObject {
 
+	private static final long serialVersionUID = 1276943832489224622L;
+	
 	private Integer views;
 	private Integer likes;
 	private Integer comments;

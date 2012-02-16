@@ -23,27 +23,28 @@ package com.socialize.auth;
 
 import java.util.Map;
 
+
 /**
  * @author Jason Polites
  *
  */
 public class AuthProviders {
 
-	private Map<Integer, AuthProvider> providers;
+	private Map<Integer, AuthProvider<?>> providers;
 
-	public Map<Integer, AuthProvider> getProviders() {
+	public Map<Integer, AuthProvider<?>> getProviders() {
 		return providers;
 	}
 
-	public void setProviders(Map<Integer, AuthProvider> providers) {
+	public void setProviders(Map<Integer, AuthProvider<?>> providers) {
 		this.providers = providers;
 	}
 	
-	public AuthProvider getProvider(AuthProviderType type) {
+	@SuppressWarnings("unchecked")
+	public <I extends AuthProviderInfo> AuthProvider<I> getProvider(AuthProviderType type) {
 		if(providers != null) {
-			return providers.get(type.getId());
+			return (AuthProvider<I>) providers.get(type.getId());
 		}
 		return null;
 	}
-	
 }

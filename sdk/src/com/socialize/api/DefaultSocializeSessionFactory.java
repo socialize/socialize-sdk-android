@@ -24,6 +24,8 @@ package com.socialize.api;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
+import com.socialize.auth.DefaultUserAuthData;
+import com.socialize.auth.UserAuthData;
 import com.socialize.config.SocializeConfig;
 
 /**
@@ -42,9 +44,26 @@ public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 	
 	@Override
 	public WritableSession create(String key, String secret, AuthProviderData data) {
-		return create(key, secret, data.getUserId3rdParty(), data.getToken3rdParty(), data.getAppId3rdParty(), data.getAuthProviderType());
+		
+		DefaultUserAuthData userAuthData = new DefaultUserAuthData();
+		userAuthData.setAccessToken(data.getToken3rdParty());
+		userAuthData.setUserId(data.getUserId3rdParty());
+		userAuthData.setAuthProviderInfo(data.getAuthProviderInfo());
+		
+		return create(key, secret, userAuthData);
 	}
 
+	@Override
+	public WritableSession create(String key, String secret, UserAuthData userAuthData) {
+		SocializeSessionImpl session = new SocializeSessionImpl();
+		session.setConsumerKey(key);
+		session.setConsumerSecret(secret);
+		session.setUserAuthData(userAuthData.getAuthProviderInfo().getType(), userAuthData);
+		session.setHost(config.getProperty(SocializeConfig.API_HOST).trim());
+		return session;
+	}
+
+	@Deprecated
 	@Override
 	public WritableSession create(String key, String secret, String userId3rdParty, String token3rdParty, String appId3rdParty, AuthProviderType authProviderType) {
 		SocializeSessionImpl session = new SocializeSessionImpl();

@@ -29,6 +29,9 @@ import com.socialize.api.action.ActionType;
  *
  */
 public class Like extends SocializeAction {
+
+	private static final long serialVersionUID = -4345947884859208725L;
+
 	@Override
 	public ActionType getActionType() {
 		return ActionType.LIKE;

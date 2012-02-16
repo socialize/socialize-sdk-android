@@ -21,9 +21,12 @@
  */
 package com.socialize.sample.mocks;
 
+import java.util.Map;
+
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.UserAuthData;
 import com.socialize.entity.User;
 
 /**
@@ -93,43 +96,38 @@ public class MockSocializeSession implements SocializeSession {
 		return host;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.api.SocializeSession#get3rdPartyUserId()
-	 */
+	@Deprecated
 	@Override
 	public String get3rdPartyUserId() {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.api.SocializeSession#get3rdPartyToken()
-	 */
+	@Deprecated
 	@Override
 	public String get3rdPartyToken() {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.api.SocializeSession#get3rdPartyAppId()
-	 */
+	@Deprecated
 	@Override
 	public String get3rdPartyAppId() {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.api.SocializeSession#getAuthProviderType()
-	 */
+	@Deprecated
 	@Override
 	public AuthProviderType getAuthProviderType() {
 		return AuthProviderType.SOCIALIZE;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.api.SocializeSession#getAuthProvider()
-	 */
+	@Deprecated
 	@Override
-	public AuthProvider getAuthProvider() {
+	public AuthProvider<?> getAuthProvider() {
+		return null;
+	}
+
+	@Override
+	public Map<AuthProviderType, UserAuthData> getUserAuthData() {
 		return null;
 	}
 
