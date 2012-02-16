@@ -53,6 +53,8 @@ public interface SocializeSession extends Serializable {
 	 */
 	public Map<AuthProviderType, UserAuthData> getUserAuthData();
 	
+	public UserAuthData getUserAuthData(AuthProviderType type);
+	
 	@Deprecated
 	public String get3rdPartyUserId();
 	

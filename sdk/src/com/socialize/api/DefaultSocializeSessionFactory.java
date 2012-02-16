@@ -22,6 +22,7 @@
 package com.socialize.api;
 
 import com.socialize.auth.AuthProviderData;
+import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
 import com.socialize.auth.DefaultUserAuthData;
@@ -58,8 +59,15 @@ public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 		SocializeSessionImpl session = new SocializeSessionImpl();
 		session.setConsumerKey(key);
 		session.setConsumerSecret(secret);
-		session.setUserAuthData(userAuthData.getAuthProviderInfo().getType(), userAuthData);
+		
+		AuthProviderInfo authProviderInfo = userAuthData.getAuthProviderInfo();
+		
+		if(authProviderInfo != null) {
+			session.setUserAuthData(authProviderInfo.getType(), userAuthData);
+		}
+		
 		session.setHost(config.getProperty(SocializeConfig.API_HOST).trim());
+		
 		return session;
 	}
 

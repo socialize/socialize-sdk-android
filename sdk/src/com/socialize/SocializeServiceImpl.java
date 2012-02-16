@@ -118,7 +118,6 @@ import com.socialize.util.StringUtils;
 /**
  * @author Jason Polites
  */
-@SuppressWarnings("deprecation")
 public class SocializeServiceImpl implements SocializeSessionConsumer, SocializeService , SocializeUI {
 	
 	static final String receiver = SocializeC2DMReceiver.class.getName();
@@ -417,15 +416,13 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				if(provider != null) {
 					boolean cleared = false;
 					
-					Map<AuthProviderType, UserAuthData> userAuthDataMap = session.getUserAuthData();
-					if(userAuthDataMap != null) {
-						UserAuthData userAuthData = userAuthDataMap.get(type);
-						if(userAuthData != null) {
-							AuthProviderInfo authProviderInfo = userAuthData.getAuthProviderInfo();
-							if(authProviderInfo != null) {
-								provider.clearCache(context, authProviderInfo);
-								cleared = true;
-							}
+					UserAuthData userAuthData = session.getUserAuthData(type);
+					
+					if(userAuthData != null) {
+						AuthProviderInfo authProviderInfo = userAuthData.getAuthProviderInfo();
+						if(authProviderInfo != null) {
+							provider.clearCache(context, authProviderInfo);
+							cleared = true;
 						}
 					}
 					
@@ -1285,13 +1282,20 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				return true;
 			}
 			
-			AuthProviderType authProviderType = session.getAuthProviderType();
+			UserAuthData userAuthData = session.getUserAuthData(providerType);
 			
-			if(authProviderType == null) {
-				return false;
+			if(userAuthData == null) {
+				// Legacy
+				AuthProviderType authProviderType = session.getAuthProviderType();
+				if(authProviderType == null) {
+					return false;
+				}
+				else {
+					return (authProviderType.equals(providerType));
+				}
 			}
 			else {
-				return (authProviderType.equals(providerType));
+				return true;
 			}
 		}
 		return false;

@@ -35,6 +35,7 @@ import com.socialize.api.SocializeAuthRequest;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
+import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
@@ -237,11 +238,24 @@ public class SocializeApiTest extends SocializeActivityTest {
 		
 		MockSocializeApi api = new MockSocializeApi(provider);
 		
-		AuthProvider authProvider = new AuthProvider() {
+		AuthProvider<AuthProviderInfo> authProvider = new AuthProvider<AuthProviderInfo>() {
 			@Override
 			public void authenticate(SocializeAuthRequest authRequest, String appId, AuthProviderListener listener) {
+				fail();
+			}
+
+			@Override
+			public void authenticate(SocializeAuthRequest authRequest, AuthProviderInfo info, AuthProviderListener listener) {
 				addResult(1, listener);
 			}
+
+
+			@Override
+			public void clearCache(Context context, AuthProviderInfo info) {
+				fail();
+			}
+
+
 
 			@Override
 			public void clearCache(Context context, String appId) {
@@ -323,13 +337,22 @@ public class SocializeApiTest extends SocializeActivityTest {
 		
 		MockSocializeApi api = new MockSocializeApi(provider);
 		
-		AuthProvider authProvider = new AuthProvider() {
+		AuthProvider<AuthProviderInfo> authProvider = new AuthProvider<AuthProviderInfo>() {
 			@Override
 			public void authenticate(SocializeAuthRequest authRequest, String appId, AuthProviderListener listener) {
-				addResult(1, listener);
+				
+				fail();
 			}
 			@Override
 			public void clearCache(Context context, String appId) {
+				fail();
+			}
+			@Override
+			public void authenticate(SocializeAuthRequest authRequest, AuthProviderInfo info, AuthProviderListener listener) {
+				addResult(1, listener);
+			}
+			@Override
+			public void clearCache(Context context, AuthProviderInfo info) {
 				fail();
 			}
 		};

@@ -131,6 +131,11 @@ public class MockSocializeSession implements SocializeSession {
 		return null;
 	}
 
+	@Override
+	public UserAuthData getUserAuthData(AuthProviderType type) {
+		return null;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.api.SocializeSession#clear(com.socialize.auth.AuthProviderType)
 	 */

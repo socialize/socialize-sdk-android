@@ -231,6 +231,10 @@ public class SocializeSessionImpl implements WritableSession {
 	public void setUserAuthData(AuthProviderType type, UserAuthData data) {
 		userAuthData.put(type, data);
 	}
-	
+
+	@Override
+	public UserAuthData getUserAuthData(AuthProviderType type) {
+		return userAuthData.get(type);
+	}
 	
 }
