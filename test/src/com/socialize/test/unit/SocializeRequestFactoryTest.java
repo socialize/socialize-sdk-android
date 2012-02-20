@@ -56,17 +56,16 @@ import com.socialize.util.UrlBuilder;
 /**
  * @author Jason Polites
  */
-@UsesMocks({SocializeSession.class, OAuthRequestSigner.class})
+@UsesMocks({ SocializeSession.class, OAuthRequestSigner.class })
 public class SocializeRequestFactoryTest extends SocializeActivityTest {
-	
+
 	public void testAuthRequestCreate() throws Exception {
-		
+
 		final String endpoint = "foobar/";
 		final String id = "testid";
-		
+
 		OAuthRequestSigner signer = new OAuthRequestSigner() {
-			
-			
+
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 				assertTrue(request instanceof HttpPost);
@@ -82,88 +81,87 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 				return sign(session, request, null);
 			}
 		};
-		
+
 		SocializeRequestFactory<SocializeObject> factory = new DefaultSocializeRequestFactory<SocializeObject>(signer, null);
-		
+
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
-		
+
 		AndroidMock.expect(session.getAuthProviderType()).andReturn(null);
 		AndroidMock.expect(session.get3rdPartyUserId()).andReturn(null);
 		AndroidMock.expect(session.get3rdPartyToken()).andReturn(null);
-		
+
 		AndroidMock.replay(session);
 
 		HttpUriRequest req = factory.getAuthRequest(session, endpoint, id);
-		
+
 		assertTrue(req instanceof HttpPost);
-		
+
 		HttpPost post = (HttpPost) req;
-		
+
 		HttpEntity entity = post.getEntity();
-		
+
 		assertNotNull(entity);
-		
+
 		assertTrue(entity instanceof UrlEncodedFormEntity);
-		
+
 		List<NameValuePair> parsed = URLEncodedUtils.parse(entity);
-		
+
 		assertEquals(1, parsed.size());
-		
+
 		NameValuePair nvp = parsed.get(0);
-		
+
 		assertEquals("payload", nvp.getName());
 
 		JSONObject jsonExpected = new JSONObject();
 		jsonExpected.put("udid", id);
-		
-		assertEquals( jsonExpected.toString(), nvp.getValue() );
-		
-		assertTrue((Boolean)getNextResult());
-		
+
+		assertEquals(jsonExpected.toString(), nvp.getValue());
+
+		assertTrue((Boolean) getNextResult());
+
 		AndroidMock.verify(session);
 	}
-	
+
 	public void testGetRequestCreate() throws Exception {
-		
+
 		final String endpoint = "foobar/";
 		final String id = "testid";
-		
+
 		OAuthRequestSigner signer = new OAuthRequestSigner() {
-			
+
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 				assertTrue(request instanceof HttpGet);
 				HttpGet get = (HttpGet) request;
 				assertEquals(get.getURI().toString(), endpoint + id + "/");
-				
+
 				addResult(true);
 				return request;
 			}
-
 
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
 				return sign(session, request, null);
 			}
 		};
-		
+
 		SocializeRequestFactory<SocializeObject> factory = new DefaultSocializeRequestFactory<SocializeObject>(signer, null);
-		
+
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
 
 		HttpUriRequest getRequest = factory.getGetRequest(session, endpoint, id);
-		
-		assertTrue((Boolean)getNextResult());
+
+		assertTrue((Boolean) getNextResult());
 		assertTrue(getRequest instanceof HttpGet);
 	}
-	
+
 	public void testDeleteRequestCreate() throws Exception {
-		
+
 		final String endpoint = "foobar/";
 		final String id = "testid";
-		
+
 		OAuthRequestSigner signer = new OAuthRequestSigner() {
-			
+
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 				assertTrue(request instanceof HttpDelete);
@@ -172,132 +170,133 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 				addResult(true);
 				return request;
 			}
-			
+
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
 				return sign(session, request, null);
-			}			
-			
+			}
+
 		};
-		
+
 		SocializeRequestFactory<SocializeObject> factory = new DefaultSocializeRequestFactory<SocializeObject>(signer, null);
-		
+
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
 
 		HttpUriRequest getRequest = factory.getDeleteRequest(session, endpoint, id);
-		
-		assertTrue((Boolean)getNextResult());
+
+		assertTrue((Boolean) getNextResult());
 		assertTrue(getRequest instanceof HttpDelete);
 	}
-	
+
 	public void testListRequestCreate() throws Exception {
-		
+
 		final String endpoint = "foobar/";
 		final String key = "testid";
-		final String[] ids = {"foo", "bar"};
-		
+		final String[] ids = { "foo", "bar" };
+
 		OAuthRequestSigner signer = new OAuthRequestSigner() {
-			
+
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 				assertTrue(request instanceof HttpGet);
 				HttpGet list = (HttpGet) request;
-				
+
 				addResult(list.getURI().toString());
 				return request;
 			}
-			
+
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
 				return sign(session, request, null);
-			}			
+			}
 		};
-		
+
 		SocializeRequestFactory<SocializeObject> factory = new DefaultSocializeRequestFactory<SocializeObject>(signer, null);
-		
+
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
 
 		HttpUriRequest req = factory.getListRequest(session, endpoint, key, ids);
-		
+
 		assertTrue(req instanceof HttpGet);
-		
+
 		String actual = getNextResult();
-		
+
 		UrlBuilder builder = new UrlBuilder();
 		builder.start(endpoint);
 		builder.addParam("entity_key", key);
 		builder.addParams("id", ids);
-		
+
 		builder.addParam("first", "0");
 		builder.addParam("last", String.valueOf(SocializeConfig.MAX_LIST_RESULTS));
-		
+
 		String expected = builder.toString();
-		
+
 		assertEquals(expected, actual);
 	}
-	
+
 	public void testListRequestCreatePaginated() throws Exception {
-		
+
 		final String endpoint = "foobar/";
 		final String key = "testid";
-		final String[] ids = {"foo", "bar"};
-		
+		final String[] ids = { "foo", "bar" };
+
 		int start = 0, end = 10;
-		
+
 		OAuthRequestSigner signer = new OAuthRequestSigner() {
-			
+
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 				assertTrue(request instanceof HttpGet);
 				HttpGet list = (HttpGet) request;
-				
+
 				addResult(list.getURI().toString());
 				return request;
 			}
-			
+
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
 				return sign(session, request, null);
-			}			
+			}
 		};
-		
+
 		SocializeRequestFactory<SocializeObject> factory = new DefaultSocializeRequestFactory<SocializeObject>(signer, null);
-		
+
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
 
 		HttpUriRequest req = factory.getListRequest(session, endpoint, key, ids, start, end);
-		
+
 		assertTrue(req instanceof HttpGet);
-		
+
 		String actual = getNextResult();
-		
+
 		UrlBuilder builder = new UrlBuilder();
 		builder.start(endpoint);
 		builder.addParam("entity_key", key);
 		builder.addParams("id", ids);
-		
+
 		builder.addParam("first", String.valueOf(start));
 		builder.addParam("last", String.valueOf(end));
-		
+
 		String expected = builder.toString();
-		
+
 		assertEquals(expected, actual);
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	@UsesMocks({SocializeObjectFactory.class, JSONObject.class, SocializeSession.class})
+	@UsesMocks({ SocializeObjectFactory.class, JSONObject.class, SocializeSession.class })
 	public void testPostRequestCreate() throws Exception {
-		
+
 		SocializeObjectFactory<SocializeObject> factory = AndroidMock.createMock(SocializeObjectFactory.class);
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
-		
+
 		SocializeObject object = new SocializeObject();
 		final String jsonData = "{ 'entity': 'http://www.example.com/interesting-story/', 'text': 'this was a great story' }";
 		final String endpoint = "foobar/";
-		
+
 		/**
-		 * The toString() method can't be mocked by EasyMock (no idea why!)
-		 * so we can't use a mock for the JSON object.  We'll have to do it manually.
+		 * The toString() method can't be mocked by EasyMock (no idea why!) so
+		 * we can't use a mock for the JSON object. We'll have to do it
+		 * manually.
 		 */
 		JSONObject json = new JSONObject() {
 			@Override
@@ -305,11 +304,11 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 				return jsonData;
 			}
 		};
-		
+
 		AndroidMock.expect(factory.toJSON(object)).andReturn(json);
-		
+
 		OAuthRequestSigner signer = new OAuthRequestSigner() {
-			
+
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 				HttpPost.class.isInstance(request);
@@ -317,218 +316,151 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 				addResult(true);
 				return request;
 			}
-			
+
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
 				return sign(session, request, null);
-			}			
+			}
 		};
-		
+
 		SocializeRequestFactory<SocializeObject> reqFactory = new DefaultSocializeRequestFactory<SocializeObject>(signer, factory);
-		
+
 		AndroidMock.replay(factory);
-		
+
 		HttpUriRequest req = reqFactory.getPostRequest(session, endpoint, object);
-		
-		assertTrue((Boolean)getNextResult());
+
+		assertTrue((Boolean) getNextResult());
 		assertTrue(HttpPost.class.isInstance(req));
 		assertTrue(HttpEntityEnclosingRequestBase.class.isAssignableFrom(req.getClass()));
-		
+
 		HttpEntityEnclosingRequestBase post = (HttpEntityEnclosingRequestBase) req;
-		
+
 		HttpEntity entity = post.getEntity();
-		
+
 		assertNotNull(entity);
-		
+
 		assertTrue(entity instanceof UrlEncodedFormEntity);
-		
+
 		List<NameValuePair> parsed = URLEncodedUtils.parse(entity);
-		
+
 		assertEquals(1, parsed.size());
-		
+
 		NameValuePair nvp = parsed.get(0);
-		
+
 		assertEquals("payload", nvp.getName());
-		assertEquals( jsonData, nvp.getValue());
-		
-		AndroidMock.verify(factory);
-	}
-	
-	@SuppressWarnings("unchecked")
-	@UsesMocks({SocializeObjectFactory.class, SocializeSession.class})
-	public void testPostRequestCreateCollection() throws Exception {
-		
-		SocializeObjectFactory<SocializeObject> factory = AndroidMock.createMock(SocializeObjectFactory.class);
-		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
-		
-		SocializeObject object0 = new SocializeObject();
-		SocializeObject object1 = new SocializeObject();
-		final String jsonData = "foo";
-		final String endpoint = "foobar/";
-		
-		/**
-		 * The toString() method can't be mocked by EasyMock (no idea why!)
-		 * so we can't use a mock for the JSON object.  We'll have to do it manually.
-		 */
-		JSONArray jsonArray = new JSONArray() {
-			@Override
-			public String toString() {
-				return jsonData;
-			}
-		};
-		
-		Collection<SocializeObject> objects = new ArrayList<SocializeObject>(1);
-		objects.add(object0);
-		objects.add(object1);
-		
-		AndroidMock.expect(factory.toJSON(objects)).andReturn(jsonArray);
-		AndroidMock.replay(factory);
-		
-		OAuthRequestSigner signer = new OAuthRequestSigner() {
-			
-			@Override
-			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
-				HttpPost.class.isInstance(request);
-				assertEquals(request.getURI().toString(), endpoint);
-				addResult(true);
-				return request;
-			}
-			
-			@Override
-			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
-				return sign(session, request, null);
-			}			
-		};
-		
-		SocializeRequestFactory<SocializeObject> reqFactory = new DefaultSocializeRequestFactory<SocializeObject>(signer, factory);
-		
-		HttpUriRequest req = reqFactory.getPostRequest(session, endpoint, objects);
-		
-		assertTrue((Boolean)getNextResult());
-		assertTrue(HttpPost.class.isInstance(req));
-		assertTrue(HttpEntityEnclosingRequestBase.class.isAssignableFrom(req.getClass()));
-		
-		HttpEntityEnclosingRequestBase post = (HttpEntityEnclosingRequestBase) req;
-		
-		HttpEntity entity = post.getEntity();
-		
-		assertNotNull(entity);
-		
-		assertTrue(entity instanceof UrlEncodedFormEntity);
-		
-		List<NameValuePair> parsed = URLEncodedUtils.parse(entity);
-		
-		assertEquals(1, parsed.size());
-		
-		NameValuePair nvp = parsed.get(0);
-		
-		assertEquals("payload", nvp.getName());
-		assertEquals( jsonData, nvp.getValue());
-		
-		AndroidMock.verify(factory);
-	}
-	
-	
-	@SuppressWarnings("unchecked")
-	@UsesMocks({SocializeObjectFactory.class, SocializeSession.class})
-	public void testPutRequestCreateCollection() throws Exception {
-		
-		SocializeObjectFactory<SocializeObject> factory = AndroidMock.createMock(SocializeObjectFactory.class);
-		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
-		
-		SocializeObject object0 = new SocializeObject();
-		SocializeObject object1 = new SocializeObject();
-		final String jsonData = "foo";
-		final String endpoint = "foobar/";
-		
-		/**
-		 * The toString() method can't be mocked by EasyMock (no idea why!)
-		 * so we can't use a mock for the JSON object.  We'll have to do it manually.
-		 */
-		JSONArray jsonArray = new JSONArray() {
-			@Override
-			public String toString() {
-				return jsonData;
-			}
-		};
-		
-		Collection<SocializeObject> objects = new ArrayList<SocializeObject>(1);
-		objects.add(object0);
-		objects.add(object1);
-		
-		AndroidMock.expect(factory.toJSON(objects)).andReturn(jsonArray);
-		AndroidMock.replay(factory);
-		
-		OAuthRequestSigner signer = new OAuthRequestSigner() {
-			
-			@Override
-			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
-				HttpPut.class.isInstance(request);
-				assertEquals(request.getURI().toString(), endpoint);
-				addResult(true);
-				return request;
-			}
-			
-			@Override
-			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
-				return sign(session, request, null);
-			}			
-		};
-		
-		SocializeRequestFactory<SocializeObject> reqFactory = new DefaultSocializeRequestFactory<SocializeObject>(signer, factory);
-		
-		HttpUriRequest req = reqFactory.getPutRequest(session, endpoint, objects);
-		
-		assertTrue((Boolean)getNextResult());
-		assertTrue(HttpPut.class.isInstance(req));
-		assertTrue(HttpEntityEnclosingRequestBase.class.isAssignableFrom(req.getClass()));
-		
-		HttpEntityEnclosingRequestBase post = (HttpEntityEnclosingRequestBase) req;
-		
-		HttpEntity entity = post.getEntity();
-		
-		assertNotNull(entity);
-		
-		assertTrue(entity instanceof UrlEncodedFormEntity);
-		
-		List<NameValuePair> parsed = URLEncodedUtils.parse(entity);
-		
-		assertEquals(1, parsed.size());
-		
-		NameValuePair nvp = parsed.get(0);
-		
-		assertEquals("payload", nvp.getName());
-		assertEquals( jsonData, nvp.getValue());
-		
+		assertEquals(jsonData, nvp.getValue());
+
 		AndroidMock.verify(factory);
 	}
 
 	@SuppressWarnings("unchecked")
-	@UsesMocks({SocializeObjectFactory.class, JSONObject.class, SocializeSession.class})
-	public void testPutRequestCreate() throws Exception {
-		
+	@UsesMocks({ SocializeObjectFactory.class, SocializeSession.class })
+	public void testPostRequestCreateCollection() throws Exception {
+
 		SocializeObjectFactory<SocializeObject> factory = AndroidMock.createMock(SocializeObjectFactory.class);
 		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
-		
-		SocializeObject object = new SocializeObject();
-		final String jsonData = "foobar";
+
+		SocializeObject object0 = new SocializeObject();
+		SocializeObject object1 = new SocializeObject();
+		final String jsonData = "foo";
 		final String endpoint = "foobar/";
-		
+
 		/**
-		 * The toString() method can't be mocked by EasyMock (no idea why!)
-		 * so we can't use a mock for the JSON object.  We'll have to do it manually.
+		 * The toString() method can't be mocked by EasyMock (no idea why!) so
+		 * we can't use a mock for the JSON object. We'll have to do it
+		 * manually.
 		 */
-		JSONObject json = new JSONObject() {
+		JSONArray jsonArray = new JSONArray() {
 			@Override
 			public String toString() {
 				return jsonData;
 			}
 		};
-		
-		AndroidMock.expect(factory.toJSON(object)).andReturn(json);
-		
+
+		Collection<SocializeObject> objects = new ArrayList<SocializeObject>(1);
+		objects.add(object0);
+		objects.add(object1);
+
+		AndroidMock.expect(factory.toJSON(objects)).andReturn(jsonArray);
+		AndroidMock.replay(factory);
+
 		OAuthRequestSigner signer = new OAuthRequestSigner() {
-			
+
+			@Override
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
+				HttpPost.class.isInstance(request);
+				assertEquals(request.getURI().toString(), endpoint);
+				addResult(true);
+				return request;
+			}
+
+			@Override
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+				return sign(session, request, null);
+			}
+		};
+
+		SocializeRequestFactory<SocializeObject> reqFactory = new DefaultSocializeRequestFactory<SocializeObject>(signer, factory);
+
+		HttpUriRequest req = reqFactory.getPostRequest(session, endpoint, objects);
+
+		assertTrue((Boolean) getNextResult());
+		assertTrue(HttpPost.class.isInstance(req));
+		assertTrue(HttpEntityEnclosingRequestBase.class.isAssignableFrom(req.getClass()));
+
+		HttpEntityEnclosingRequestBase post = (HttpEntityEnclosingRequestBase) req;
+
+		HttpEntity entity = post.getEntity();
+
+		assertNotNull(entity);
+
+		assertTrue(entity instanceof UrlEncodedFormEntity);
+
+		List<NameValuePair> parsed = URLEncodedUtils.parse(entity);
+
+		assertEquals(1, parsed.size());
+
+		NameValuePair nvp = parsed.get(0);
+
+		assertEquals("payload", nvp.getName());
+		assertEquals(jsonData, nvp.getValue());
+
+		AndroidMock.verify(factory);
+	}
+
+	@SuppressWarnings("unchecked")
+	@UsesMocks({ SocializeObjectFactory.class, SocializeSession.class })
+	public void testPutRequestCreateCollection() throws Exception {
+
+		SocializeObjectFactory<SocializeObject> factory = AndroidMock.createMock(SocializeObjectFactory.class);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+
+		SocializeObject object0 = new SocializeObject();
+		SocializeObject object1 = new SocializeObject();
+		final String jsonData = "foo";
+		final String endpoint = "foobar/";
+
+		/**
+		 * The toString() method can't be mocked by EasyMock (no idea why!) so
+		 * we can't use a mock for the JSON object. We'll have to do it
+		 * manually.
+		 */
+		JSONArray jsonArray = new JSONArray() {
+			@Override
+			public String toString() {
+				return jsonData;
+			}
+		};
+
+		Collection<SocializeObject> objects = new ArrayList<SocializeObject>(1);
+		objects.add(object0);
+		objects.add(object1);
+
+		AndroidMock.expect(factory.toJSON(objects)).andReturn(jsonArray);
+		AndroidMock.replay(factory);
+
+		OAuthRequestSigner signer = new OAuthRequestSigner() {
+
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 				HttpPut.class.isInstance(request);
@@ -536,40 +468,109 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 				addResult(true);
 				return request;
 			}
-			
+
 			@Override
 			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
 				return sign(session, request, null);
-			}			
+			}
 		};
-		
+
 		SocializeRequestFactory<SocializeObject> reqFactory = new DefaultSocializeRequestFactory<SocializeObject>(signer, factory);
-		
-		AndroidMock.replay(factory);
-		
-		HttpUriRequest req = reqFactory.getPutRequest(session, endpoint, object);
-		
-		assertTrue((Boolean)getNextResult());
+
+		HttpUriRequest req = reqFactory.getPutRequest(session, endpoint, objects);
+
+		assertTrue((Boolean) getNextResult());
 		assertTrue(HttpPut.class.isInstance(req));
 		assertTrue(HttpEntityEnclosingRequestBase.class.isAssignableFrom(req.getClass()));
-		
+
 		HttpEntityEnclosingRequestBase post = (HttpEntityEnclosingRequestBase) req;
-		
+
 		HttpEntity entity = post.getEntity();
-		
+
 		assertNotNull(entity);
-		
+
 		assertTrue(entity instanceof UrlEncodedFormEntity);
-		
+
 		List<NameValuePair> parsed = URLEncodedUtils.parse(entity);
-		
+
 		assertEquals(1, parsed.size());
-		
+
 		NameValuePair nvp = parsed.get(0);
-		
-		assertEquals( "payload", nvp.getName() );
-		assertEquals( jsonData, nvp.getValue() );
-		
+
+		assertEquals("payload", nvp.getName());
+		assertEquals(jsonData, nvp.getValue());
+
+		AndroidMock.verify(factory);
+	}
+
+	@SuppressWarnings("unchecked")
+	@UsesMocks({ SocializeObjectFactory.class, JSONObject.class, SocializeSession.class })
+	public void testPutRequestCreate() throws Exception {
+
+		SocializeObjectFactory<SocializeObject> factory = AndroidMock.createMock(SocializeObjectFactory.class);
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+
+		SocializeObject object = new SocializeObject();
+		final String jsonData = "foobar";
+		final String endpoint = "foobar/";
+
+		/**
+		 * The toString() method can't be mocked by EasyMock (no idea why!) so
+		 * we can't use a mock for the JSON object. We'll have to do it
+		 * manually.
+		 */
+		JSONObject json = new JSONObject() {
+			@Override
+			public String toString() {
+				return jsonData;
+			}
+		};
+
+		AndroidMock.expect(factory.toJSON(object)).andReturn(json);
+
+		OAuthRequestSigner signer = new OAuthRequestSigner() {
+
+			@Override
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
+				HttpPut.class.isInstance(request);
+				assertEquals(request.getURI().toString(), endpoint);
+				addResult(true);
+				return request;
+			}
+
+			@Override
+			public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+				return sign(session, request, null);
+			}
+		};
+
+		SocializeRequestFactory<SocializeObject> reqFactory = new DefaultSocializeRequestFactory<SocializeObject>(signer, factory);
+
+		AndroidMock.replay(factory);
+
+		HttpUriRequest req = reqFactory.getPutRequest(session, endpoint, object);
+
+		assertTrue((Boolean) getNextResult());
+		assertTrue(HttpPut.class.isInstance(req));
+		assertTrue(HttpEntityEnclosingRequestBase.class.isAssignableFrom(req.getClass()));
+
+		HttpEntityEnclosingRequestBase post = (HttpEntityEnclosingRequestBase) req;
+
+		HttpEntity entity = post.getEntity();
+
+		assertNotNull(entity);
+
+		assertTrue(entity instanceof UrlEncodedFormEntity);
+
+		List<NameValuePair> parsed = URLEncodedUtils.parse(entity);
+
+		assertEquals(1, parsed.size());
+
+		NameValuePair nvp = parsed.get(0);
+
+		assertEquals("payload", nvp.getName());
+		assertEquals(jsonData, nvp.getValue());
+
 		AndroidMock.verify(factory);
 	}
 }

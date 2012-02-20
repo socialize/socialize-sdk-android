@@ -66,6 +66,13 @@ public class SocializeLaunchActivity extends Activity {
 		
 		originalIntent = getIntent();
 		
+		setupLayout();
+		
+		new Initializer().execute((Void[])null);
+	}
+	
+	protected void setupLayout() {
+
 		RelativeLayout layout = new RelativeLayout(this);
 		
 		layout.setBackgroundColor(Color.BLACK);
@@ -86,8 +93,6 @@ public class SocializeLaunchActivity extends Activity {
 		layout.setLayoutParams(params);
 		
 		setContentView(layout);
-		
-		new Initializer().execute((Void[])null);
 	}
 	
 	protected void doInit() {

@@ -34,22 +34,24 @@ public class SocializeActionFactoryTest extends AbstractSocializeActionFactoryTe
 	@Override
 	protected SocializeActionFactory<SocializeAction> createFactory() {
 		return new SocializeActionFactory<SocializeAction>() {
-			
+
 			@Override
 			public SocializeAction instantiateObject(JSONObject json) {
 				return action;
 			}
-			
+
 			@Override
 			public JSONObject instantiateJSON() {
 				return json;
 			}
 
 			@Override
-			protected void postToJSON(SocializeAction from, JSONObject to) throws JSONException {}
-			
+			protected void postToJSON(SocializeAction from, JSONObject to) throws JSONException {
+			}
+
 			@Override
-			protected void postFromJSON(JSONObject from, SocializeAction to) throws JSONException {}
+			protected void postFromJSON(JSONObject from, SocializeAction to) throws JSONException {
+			}
 		};
 	}
 

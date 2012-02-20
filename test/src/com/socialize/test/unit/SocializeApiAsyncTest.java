@@ -55,50 +55,43 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 	private SocializeProvider<SocializeObject> provider;
 	private SocializeResponseFactory<SocializeObject> responseFactory;
 	private SocializeEntityResponse<SocializeObject> mockEntityResponse;
-	
+
 	private CountDownLatch signal;
 	private SocializeSession mockSession;
 	private SocializeSessionConsumer mockSessionConsumer;
 	private SocializeActionListener listener;
 	private SocializeConfig config;
-	
+
 	private final int timeout = 20;
 
 	@SuppressWarnings("unchecked")
-	@UsesMocks({
-			SocializeProvider.class, 
-			SocializeSession.class, 
-			SocializeResponseFactory.class, 
-			SocializeEntityResponse.class,
-			SocializeConfig.class,
-			Properties.class,
-			SocializeSessionConsumer.class})
+	@UsesMocks({ SocializeProvider.class, SocializeSession.class, SocializeResponseFactory.class, SocializeEntityResponse.class, SocializeConfig.class, Properties.class, SocializeSessionConsumer.class })
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		signal = new CountDownLatch(1); 
+		signal = new CountDownLatch(1);
 		provider = AndroidMock.createMock(SocializeProvider.class);
 		responseFactory = AndroidMock.createMock(SocializeResponseFactory.class);
 		mockEntityResponse = AndroidMock.createMock(SocializeEntityResponse.class);
-		
+
 		mockSessionConsumer = AndroidMock.createMock(SocializeSessionConsumer.class);
-		
+
 		config = AndroidMock.createMock(SocializeConfig.class);
-		
+
 		api = new SocializeApi<SocializeObject, SocializeProvider<SocializeObject>>(provider);
-		
+
 		api.setConfig(config);
-		
+
 		mockSession = AndroidMock.createMock(SocializeSession.class);
-		
+
 		AndroidMock.replay(mockSession);
-		
+
 		listener = new SocializeActionListener() {
 
 			@Override
 			public void onResult(RequestType type, SocializeResponse response) {
 				System.out.println("Api listener onResult fired");
-				signal.countDown(); 
+				signal.countDown();
 			}
 
 			@Override
@@ -108,23 +101,22 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 			}
 		};
 	}
-	
+
 	public void testDialogDismissWorksOnError() throws Throwable {
 		AndroidMock.expect(provider.authenticate("/authenticate/", "test_key", "test_secret", "test_uuid")).andThrow(new SocializeException("TEST ERROR IGNORE ME!"));
 		AndroidMock.replay(provider);
-		
+
 		final ProgressDialog authProgress = ProgressDialog.show(getActivity(), "Authenticating", "Please wait...");
-		
 
 		final SocializeAuthListener alistener = new SocializeAuthListener() {
-			
+
 			@Override
 			public void onAuthSuccess(SocializeSession session) {
 				authProgress.dismiss();
-				signal.countDown(); 
+				signal.countDown();
 				fail();
 			}
-			
+
 			@Override
 			public void onAuthFail(SocializeException error) {
 				authProgress.dismiss();
@@ -132,332 +124,327 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 				fail();
 			}
 
-
 			@Override
 			public void onError(SocializeException error) {
 				authProgress.dismiss();
 				signal.countDown();
 			}
-			
+
 			@Override
 			public void onCancel() {
 				authProgress.dismiss();
-				signal.countDown(); 
+				signal.countDown();
 				fail();
 			}
-			
-		};
-		
 
-		runTestOnUiThread(new Runnable() { 
-			@Override 
-			public void run() { 
+		};
+
+		runTestOnUiThread(new Runnable() {
+			@Override
+			public void run() {
 				api.authenticateAsync(getContext(), "test_key", "test_secret", "test_uuid", alistener, mockSessionConsumer);
-			} 
+			}
 		});
-		
-		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS));  
+
+		assertTrue("Timeout waiting for countdown latch", signal.await(timeout, TimeUnit.SECONDS));
 	}
-	
+
 	public void testApiAsyncCallsAuthenticateOnProvider() throws Throwable {
-		
+
 		AndroidMock.expect(provider.authenticate("/authenticate/", "test_key", "test_secret", "test_uuid")).andReturn(mockSession);
-		
+
 		mockSessionConsumer.setSession(mockSession);
-		
+
 		AndroidMock.replay(provider);
 		AndroidMock.replay(mockSessionConsumer);
-		
+
 		final SocializeAuthListener alistener = new SocializeAuthListener() {
-			
+
 			@Override
 			public void onAuthSuccess(SocializeSession session) {
 				System.out.println("Api listener onResult fired");
-				signal.countDown(); 
-				
+				signal.countDown();
+
 			}
-			
+
 			@Override
 			public void onAuthFail(SocializeException error) {
 				System.out.println("Api listener onAuthFail fired");
 				signal.countDown();
 			}
 
-
 			@Override
 			public void onError(SocializeException error) {
 				System.out.println("Api listener onError fired");
 				signal.countDown();
 			}
-			
+
 			@Override
 			public void onCancel() {
 				System.out.println("Api listener onCancel fired");
-				signal.countDown(); 
+				signal.countDown();
 				fail();
 			}
 		};
-		
+
 		final Context context = getContext();
-		
-		runTestOnUiThread(new Runnable() { 
-			@Override 
-			public void run() { 
+
+		runTestOnUiThread(new Runnable() {
+			@Override
+			public void run() {
 				api.authenticateAsync(context, "test_key", "test_secret", "test_uuid", alistener, mockSessionConsumer);
-			} 
+			}
 		});
 
-		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS)); 
-		
+		assertTrue("Timeout waiting for countdown latch", signal.await(timeout, TimeUnit.SECONDS));
+
 		AndroidMock.verify(provider);
 		AndroidMock.verify(mockSessionConsumer);
 	}
-	
+
 	public void testApiAsyncCallsGetOnProvider() throws Throwable {
 
 		final String endpoint = "foobar";
 		final String id = null;
-		
+
 		AndroidMock.expect(provider.get(mockSession, endpoint, id)).andReturn(new SocializeObject());
 		AndroidMock.replay(provider);
 
-		runTestOnUiThread(new Runnable() { 
-			@Override 
-			public void run() { 
+		runTestOnUiThread(new Runnable() {
+			@Override
+			public void run() {
 				api.getAsync(mockSession, endpoint, id, listener);
-			} 
+			}
 		});
 
-		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS)); 
-		
+		assertTrue("Timeout waiting for countdown latch", signal.await(timeout, TimeUnit.SECONDS));
+
 		AndroidMock.verify(provider);
 	}
-	
+
 	public void testApiAsyncGetCallsAddOnResponse() throws Throwable {
 
 		final String endpoint = "foobar";
 		final String id = null;
-		
+
 		SocializeObject obj = new SocializeObject();
 
 		api.setResponseFactory(responseFactory);
-		
+
 		AndroidMock.expect(responseFactory.newEntityResponse()).andReturn(mockEntityResponse);
 		AndroidMock.expect(provider.get(mockSession, endpoint, id)).andReturn(obj);
-		
+
 		mockEntityResponse.addResult(obj);
-		
+
 		AndroidMock.replay(responseFactory);
 		AndroidMock.replay(provider);
 		AndroidMock.replay(mockEntityResponse);
 
-		runTestOnUiThread(new Runnable() { 
-			@Override 
-			public void run() { 
+		runTestOnUiThread(new Runnable() {
+			@Override
+			public void run() {
 				api.getAsync(mockSession, endpoint, id, listener);
-			} 
+			}
 		});
 
-		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS));  
-		
+		assertTrue("Timeout waiting for countdown latch", signal.await(timeout, TimeUnit.SECONDS));
+
 		AndroidMock.verify(responseFactory);
 		AndroidMock.verify(provider);
 		AndroidMock.verify(mockEntityResponse);
 	}
-	
+
 	public void testApiAsyncListCallsSetResultsOnResponse() throws Throwable {
 
 		final String endpoint = "foobar";
 		final String key = "foobar_key";
 		final String[] ids = null;
-		
-		final ListResult<SocializeObject> returned = new ListResult<SocializeObject>( new LinkedList<SocializeObject>() );
-		
+
+		final ListResult<SocializeObject> returned = new ListResult<SocializeObject>(new LinkedList<SocializeObject>());
+
 		api.setResponseFactory(responseFactory);
-		
+
 		AndroidMock.expect(responseFactory.newEntityResponse()).andReturn(mockEntityResponse);
 		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, "id", 0, SocializeConfig.MAX_LIST_RESULTS)).andReturn(returned);
 		mockEntityResponse.setResults(returned);
-		
+
 		AndroidMock.replay(responseFactory);
 		AndroidMock.replay(provider);
 		AndroidMock.replay(mockEntityResponse);
 
-		runTestOnUiThread(new Runnable() { 
-			@Override 
-			public void run() { 
+		runTestOnUiThread(new Runnable() {
+			@Override
+			public void run() {
 				api.listAsync(mockSession, endpoint, key, ids, listener);
-			} 
+			}
 		});
 
-		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS));  
-		
+		assertTrue("Timeout waiting for countdown latch", signal.await(timeout, TimeUnit.SECONDS));
+
 		AndroidMock.verify(responseFactory);
 		AndroidMock.verify(provider);
 		AndroidMock.verify(mockEntityResponse);
 	}
-	
+
 	public void testApiAsyncListCallsSetResultsOnResponsePaginated() throws Throwable {
 
 		final String endpoint = "foobar";
 		final String key = "foobar_key";
 		final String[] ids = null;
-		
+
 		final int start = 0, end = 10;
-		
-		final ListResult<SocializeObject> returned = new ListResult<SocializeObject>( new LinkedList<SocializeObject>() );
-		
+
+		final ListResult<SocializeObject> returned = new ListResult<SocializeObject>(new LinkedList<SocializeObject>());
+
 		api.setResponseFactory(responseFactory);
-		
+
 		AndroidMock.expect(responseFactory.newEntityResponse()).andReturn(mockEntityResponse);
 		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, "id", start, end)).andReturn(returned);
 		mockEntityResponse.setResults(returned);
-		
+
 		AndroidMock.replay(responseFactory);
 		AndroidMock.replay(provider);
 		AndroidMock.replay(mockEntityResponse);
 
-		runTestOnUiThread(new Runnable() { 
-			@Override 
-			public void run() { 
+		runTestOnUiThread(new Runnable() {
+			@Override
+			public void run() {
 				api.listAsync(mockSession, endpoint, key, ids, start, end, listener);
-			} 
+			}
 		});
 
-		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS));  
-		
+		assertTrue("Timeout waiting for countdown latch", signal.await(timeout, TimeUnit.SECONDS));
+
 		AndroidMock.verify(responseFactory);
 		AndroidMock.verify(provider);
 		AndroidMock.verify(mockEntityResponse);
 	}
-	
+
 	public void testApiAsyncCallsListOnProvider() throws Throwable {
 
 		final String endpoint = "foobar";
 		final String key = "foobar_key";
 		final String ids[] = null;
-		
-		final ListResult<SocializeObject> returned = new ListResult<SocializeObject>( new LinkedList<SocializeObject>() );
-		
+
+		final ListResult<SocializeObject> returned = new ListResult<SocializeObject>(new LinkedList<SocializeObject>());
+
 		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, "id", 0, SocializeConfig.MAX_LIST_RESULTS)).andReturn(returned);
 		AndroidMock.replay(provider);
 
-		runTestOnUiThread(new Runnable() { 
-			@Override 
-			public void run() { 
+		runTestOnUiThread(new Runnable() {
+			@Override
+			public void run() {
 				api.listAsync(mockSession, endpoint, key, ids, listener);
-			} 
+			}
 		});
 
-		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS));  
-		
+		assertTrue("Timeout waiting for countdown latch", signal.await(timeout, TimeUnit.SECONDS));
+
 		AndroidMock.verify(provider);
 	}
-	
-	
+
 	public void testApiAsyncCallsListOnProviderPaginated() throws Throwable {
 
 		final String endpoint = "foobar";
 		final String key = "foobar_key";
 		final String ids[] = null;
-		
+
 		final int start = 0, end = 10;
-		
-		final ListResult<SocializeObject> returned = new ListResult<SocializeObject>( new LinkedList<SocializeObject>() );
-		
+
+		final ListResult<SocializeObject> returned = new ListResult<SocializeObject>(new LinkedList<SocializeObject>());
+
 		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, "id", start, end)).andReturn(returned);
 		AndroidMock.replay(provider);
 
-		runTestOnUiThread(new Runnable() { 
-			@Override 
-			public void run() { 
+		runTestOnUiThread(new Runnable() {
+			@Override
+			public void run() {
 				api.listAsync(mockSession, endpoint, key, ids, start, end, listener);
-			} 
+			}
 		});
 
-		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS));  
-		
+		assertTrue("Timeout waiting for countdown latch", signal.await(timeout, TimeUnit.SECONDS));
+
 		AndroidMock.verify(provider);
 	}
-	
+
 	public void testApiAsyncCallsPutOnProvider() throws Throwable {
 
 		final String endpoint = "foobar";
 		final SocializeObject object = new SocializeObject();
-		
+
 		AndroidMock.expect(provider.put(mockSession, endpoint, object)).andReturn(null);
 		AndroidMock.replay(provider);
 
-		runTestOnUiThread(new Runnable() { 
-			@Override 
-			public void run() { 
+		runTestOnUiThread(new Runnable() {
+			@Override
+			public void run() {
 				api.putAsync(mockSession, endpoint, object, listener);
-			} 
+			}
 		});
 
-		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS));  
-		
+		assertTrue("Timeout waiting for countdown latch", signal.await(timeout, TimeUnit.SECONDS));
+
 		AndroidMock.verify(provider);
 	}
-	
+
 	public void testApiAsyncCallsPostOnProvider() throws Throwable {
 
 		final String endpoint = "foobar";
 		final SocializeObject object = new SocializeObject();
-		
+
 		AndroidMock.expect(provider.post(mockSession, endpoint, object)).andReturn(null);
 		AndroidMock.replay(provider);
 
-		runTestOnUiThread(new Runnable() { 
-			@Override 
-			public void run() { 
+		runTestOnUiThread(new Runnable() {
+			@Override
+			public void run() {
 				api.postAsync(mockSession, endpoint, object, listener);
-			} 
+			}
 		});
 
-		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS));  
-		
+		assertTrue("Timeout waiting for countdown latch", signal.await(timeout, TimeUnit.SECONDS));
+
 		AndroidMock.verify(provider);
 	}
-	
-	
+
 	public void testApiAsyncCallsPostOnProviderWithList() throws Throwable {
 
 		final String endpoint = "foobar";
 		final List<SocializeObject> objects = new ArrayList<SocializeObject>();
-		
+
 		AndroidMock.expect(provider.post(mockSession, endpoint, objects)).andReturn(null);
 		AndroidMock.replay(provider);
 
-		runTestOnUiThread(new Runnable() { 
-			@Override 
-			public void run() { 
+		runTestOnUiThread(new Runnable() {
+			@Override
+			public void run() {
 				api.postAsync(mockSession, endpoint, objects, listener);
-			} 
+			}
 		});
 
-		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS));  
-		
+		assertTrue("Timeout waiting for countdown latch", signal.await(timeout, TimeUnit.SECONDS));
+
 		AndroidMock.verify(provider);
 	}
-	
+
 	public void testApiAsyncCallsPutOnProviderWithList() throws Throwable {
 
 		final String endpoint = "foobar";
 		final List<SocializeObject> objects = new ArrayList<SocializeObject>();
-		
+
 		AndroidMock.expect(provider.put(mockSession, endpoint, objects)).andReturn(null);
 		AndroidMock.replay(provider);
 
-		runTestOnUiThread(new Runnable() { 
-			@Override 
-			public void run() { 
+		runTestOnUiThread(new Runnable() {
+			@Override
+			public void run() {
 				api.putAsync(mockSession, endpoint, objects, listener);
-			} 
+			}
 		});
 
-		assertTrue("Timeout waiting for countdown latch",  signal.await(timeout,TimeUnit.SECONDS));  
-		
+		assertTrue("Timeout waiting for countdown latch", signal.await(timeout, TimeUnit.SECONDS));
+
 		AndroidMock.verify(provider);
 	}
 }

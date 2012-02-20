@@ -58,14 +58,12 @@ import com.socialize.listener.view.ViewAddListener;
 import com.socialize.networks.ShareOptions;
 import com.socialize.notifications.NotificationType;
 import com.socialize.ui.SocializeEntityLoader;
-import com.socialize.ui.comment.CommentShareOptions;
 import com.socialize.ui.profile.UserProfile;
 
 /**
  * The main Socialize Service.  This is the simplest entry point into the Socialize API.
  * @author Jason Polites
  */
-@SuppressWarnings("deprecation")
 public interface SocializeService {
 
 	/**
@@ -539,19 +537,6 @@ public interface SocializeService {
 	
 	/**
 	 * Adds a new comment and associates it with the key described.
-	 * @param key The entity to which the comment is associated. Defined when first creating an entity, or created on the fly with this call.
-	 * @param comment The comment to add.
-	 * @param location The location of the device at the time the call was made.
-	 * @param shareOptions Options for sharing to facebook and sharing location.
-	 * @param commentAddListener A listener to handle callbacks from the post.
-	 * @deprecated 
-	 * @see #addComment(Activity, Comment, Location, ShareOptions, CommentAddListener)
-	 */
-	@Deprecated
-	public void addComment(String key, String comment, Location location, CommentShareOptions shareOptions, CommentAddListener commentAddListener);
-	
-	/**
-	 * Adds a new comment and associates it with the key described.
 	 * @param activity The current activity.
 	 * @param entity The entity to which the comment is associated. Defined when first creating an entity.
 	 * @param comment The comment to add.
@@ -590,18 +575,6 @@ public interface SocializeService {
 	 * @param commentAddListener A listener to handle callbacks from the post.
 	 */
 	public void addComment(Activity activity, Entity entity, String comment, CommentAddListener commentAddListener);
-	
-	/**
-	 * Adds a new comment and associates it with the key described.
-	 * @param key The entity to which the comment is associated. Defined when first creating an entity, or created on the fly with this call.
-	 * @param comment The comment to add.	
-	 * @param shareOptions Options for sharing to facebook and sharing location.
-	 * @param commentAddListener A listener to handle callbacks from the post.
-	 * @deprecated 
-	 * @see #addComment(Activity, Entity, String, ShareOptions, CommentAddListener)
-	 */
-	@Deprecated
-	public void addComment(String key, String comment, CommentShareOptions shareOptions, CommentAddListener commentAddListener);
 	
 	/**
 	 * Adds a new comment and associates it with the key described.

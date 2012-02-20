@@ -29,91 +29,90 @@ import com.socialize.util.DelegateWrapperUtils;
 
 /**
  * @author Jason Polites
- *
+ * 
  */
 public class DelegateWrapperTest extends SocializeUnitTest {
 
-	
 	public void testDelegateWrapperCallsFreeMethodOnBothInstances() {
-		
+
 		String primaryKey = "primary";
 		String secondaryKey = "secondary";
-		
+
 		TestInterface primary = new TestClass(primaryKey);
 		TestInterface secondary = new TestClass(secondaryKey);
-		
+
 		DelegateWrapperUtils utils = getUtils();
-		
+
 		TestInterface wrapped = utils.wrap(primary, secondary);
-		
+
 		wrapped.both();
-		
+
 		String primaryKeyAfter = getNextResult();
 		String secondaryKeyAfter = getNextResult();
-		
+
 		assertNotNull(primaryKeyAfter);
 		assertNotNull(secondaryKeyAfter);
-		
+
 		assertEquals(primaryKey, primaryKeyAfter);
 		assertEquals(secondaryKey, secondaryKeyAfter);
 	}
-	
+
 	public void testDelegateWrapperCallsDelegateMethodOnlyOnDelegateInstances() {
 		String primaryKey = "primary";
 		String secondaryKey = "secondary";
-		
+
 		TestInterface primary = new TestClass(primaryKey);
 		TestInterface secondary = new TestClass(secondaryKey);
-		
+
 		DelegateWrapperUtils utils = getUtils();
-		
+
 		TestInterface wrapped = utils.wrap(primary, secondary);
-		
+
 		wrapped.onlyDelegate();
-		
+
 		String primaryKeyAfter = getNextResult();
 		String secondaryKeyAfter = getNextResult();
-		
+
 		assertNotNull(primaryKeyAfter);
 		assertNull(secondaryKeyAfter);
-		
+
 		assertEquals(secondaryKey, primaryKeyAfter);
 	}
-	
+
 	public void testMultipleWrapReusesInvocationHandler() {
 		String primaryKey = "primary";
 		String secondaryKey = "secondary";
-		
+
 		DelegateWrapperUtils utils = getUtils();
-		
+
 		TestInterface primary = new TestClass(primaryKey);
 		TestInterface secondary = new TestClass(secondaryKey);
-		
+
 		TestInterface wrapped = utils.wrap(primary, secondary);
-		
+
 		// Double wrap
 		TestInterface doubleWrap = utils.wrap(wrapped, secondary);
-		
+
 		// Triple wrap
 		TestInterface tripleWrap = utils.wrap(wrapped, doubleWrap);
-		
+
 		tripleWrap.both();
-		
+
 		String primaryKeyAfter = getNextResult();
 		String secondaryKeyAfter = getNextResult();
 		String third = getNextResult();
 		String fourth = getNextResult();
-		
+
 		assertNotNull(primaryKeyAfter);
 		assertNotNull(secondaryKeyAfter);
-		
+
 		assertNull(third);
 		assertNull(fourth);
-		
+
 		assertEquals(primaryKey, primaryKeyAfter);
 		assertEquals(secondaryKey, secondaryKeyAfter);
 	}
-	
+
 	protected DelegateWrapperUtils getUtils() {
 		DelegateWrapperUtils utils = new DelegateWrapperUtils();
 		utils.setDelgateWrapperFactory(new IBeanFactory<DelegateWrapper>() {
@@ -130,18 +129,18 @@ public class DelegateWrapperTest extends SocializeUnitTest {
 		});
 		return utils;
 	}
-	
+
 	public interface TestInterface {
 		public void both();
-		
+
 		@DelegateOnly
 		public void onlyDelegate();
 	}
-	
+
 	public class TestClass implements TestInterface {
 
 		private String key;
-		
+
 		public TestClass(String key) {
 			super();
 			this.key = key;

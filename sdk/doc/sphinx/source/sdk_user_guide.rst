@@ -19,10 +19,16 @@ passed into each call to the Socialize SDK.
 
 Initializing Socialize
 ----------------------
-The Socialize SDK should be initialized in the **onCreate()** method of your Activity, 
-and destroyed in the **onDestroy()** method
+The Socialize SDK should be initialized in the **onCreate()** method of your Activity.
 
 .. include:: snippets/socialize_init.txt
+
+The standard init method is *synchronous*, meaning that the main thread will block until Socialize is initialized.
+If you want an *asynchronous* initialization, this can be done using the **initAsync()** method:
+
+.. include:: snippets/socialize_init_async.txt
+
+.. note:: If using asynchronous init ensure that there are no operations on the Socialize instance before or while it is initializing!
 
 Authentication
 --------------

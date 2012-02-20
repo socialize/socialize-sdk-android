@@ -33,47 +33,46 @@ import com.socialize.test.SocializeUnitTest;
 
 /**
  * @author Jason Polites
- *
+ * 
  */
 public class DefaultSocializeSessionFactoryTest extends SocializeUnitTest {
 
-	@UsesMocks ({SocializeConfig.class, AuthProviders.class, AuthProvider.class})
+	@UsesMocks({ SocializeConfig.class, AuthProviders.class, AuthProvider.class })
 	public void testSessionFactory() {
-		
+
 		final AuthProviderType authProviderType = AuthProviderType.SOCIALIZE;
-		
+
 		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
 		AuthProviders providers = AndroidMock.createMock(AuthProviders.class);
 		AuthProvider provider = AndroidMock.createMock(AuthProvider.class);
-		
+
 		AndroidMock.expect(config.getProperty(SocializeConfig.API_HOST)).andReturn("foobar");
 		AndroidMock.expect(providers.getProvider(authProviderType)).andReturn(provider);
-		
+
 		AndroidMock.replay(config);
 		AndroidMock.replay(providers);
-		
+
 		DefaultSocializeSessionFactory factory = new DefaultSocializeSessionFactory(config, providers);
-		String key= "foo", secret="bar";
+		String key = "foo", secret = "bar";
 		String userId3rdParty = "foobar_userId3rdParty";
 		String token3rdParty = "foobar_token3rdParty";
 		String appId3rdParty = "foobar_appId3rdParty";
-		
-		
+
 		WritableSession session = factory.create(key, secret, userId3rdParty, token3rdParty, appId3rdParty, authProviderType);
-		
+
 		assertNotNull(session);
-		
+
 		assertEquals(key, session.getConsumerKey());
 		assertEquals(secret, session.getConsumerSecret());
 		assertEquals(userId3rdParty, session.get3rdPartyUserId());
 		assertEquals(token3rdParty, session.get3rdPartyToken());
 		assertEquals(appId3rdParty, session.get3rdPartyAppId());
 		assertEquals(authProviderType, session.getAuthProviderType());
-		
+
 		assertEquals("foobar", session.getHost());
-		
+
 		AndroidMock.verify(config);
 		AndroidMock.verify(providers);
 	}
-	
+
 }

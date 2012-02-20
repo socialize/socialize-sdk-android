@@ -30,11 +30,11 @@ import com.socialize.util.DefaultAppUtils;
 
 /**
  * @author Jason Polites
- *
+ * 
  */
 public class AppUtilsTest extends SocializeUnitTest {
 
-	@UsesMocks ({SocializeConfig.class})
+	@UsesMocks({ SocializeConfig.class })
 	public void test_getAppUrl() {
 		final String consumerKey = "foobar";
 		final String host = "foo_host_bar";
@@ -45,18 +45,18 @@ public class AppUtilsTest extends SocializeUnitTest {
 		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(consumerKey);
 
 		AndroidMock.replay(config);
-		
+
 		DefaultAppUtils utils = new DefaultAppUtils();
 		utils.setConfig(config);
-		
+
 		String url = utils.getAppUrl();
-		
+
 		AndroidMock.verify(config);
-		
+
 		assertEquals(host + "/a/" + consumerKey, url);
 	}
-	
-	@UsesMocks ({SocializeConfig.class})
+
+	@UsesMocks({ SocializeConfig.class })
 	public void test_getAppUrlWithAmazon() {
 		final String consumerKey = "foobar";
 		final String host = "foo_host_bar";
@@ -68,21 +68,21 @@ public class AppUtilsTest extends SocializeUnitTest {
 		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(consumerKey);
 
 		AndroidMock.replay(config);
-		
+
 		DefaultAppUtils utils = new DefaultAppUtils();
 		utils.setConfig(config);
-		
+
 		String url = utils.getAppUrl();
-		
+
 		AndroidMock.verify(config);
-		
+
 		assertEquals(host + "/a/" + consumerKey + "/?f=amz", url);
-	}	
-	
+	}
+
 	public void testGetAppIconId() {
 		DefaultAppUtils utils = new DefaultAppUtils();
 		int appIconId = utils.getAppIconId(getContext());
 		assertEquals(R.drawable.ic_icon, appIconId);
 	}
-	
+
 }

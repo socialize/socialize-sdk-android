@@ -29,7 +29,9 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
+import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
@@ -89,12 +91,10 @@ public class FacebookAuthClickListenerTest extends SocializeUnitTest {
 		final PublicSocialize socialize = new PublicSocialize() {
 			
 			@Override
-			public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderAppId, SocializeAuthListener listener) {
-				
+			public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, SocializeAuthListener listener) {
 				addResult(0, consumerKey);
 				addResult(1, consumerSecret);
-				addResult(2, authProvider);
-				addResult(3, authProviderAppId);
+				addResult(2, authProviderInfo);
 				
 				// Call each method of the listener for the test
 				switch (response) {
@@ -168,13 +168,17 @@ public class FacebookAuthClickListenerTest extends SocializeUnitTest {
 		
 		final String consumerKeyAfter = getResult(0);
 		final String consumerSecretAfter = getResult(1);
-		final AuthProviderType authProvider = getResult(2);
-		final String fbIdAfter = getResult(3);
+		final AuthProviderInfo authProviderInfo = getResult(2);
 		
 		assertEquals(consumerKey, consumerKeyAfter);
 		assertEquals(consumerSecret, consumerSecretAfter);
-		assertEquals(AuthProviderType.FACEBOOK, authProvider);
-		assertEquals(fbId, fbIdAfter);
+		
+		assertTrue((authProviderInfo instanceof FacebookAuthProviderInfo));
+		
+		FacebookAuthProviderInfo fba = (FacebookAuthProviderInfo) authProviderInfo;
+		
+		assertEquals(AuthProviderType.FACEBOOK, fba.getType());
+		assertEquals(fbId, fba.getAppId());
 	}
 	
 }

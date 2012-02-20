@@ -210,8 +210,8 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	@Override
 	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderType authProviderType, String appId3rdParty) throws SocializeException {
 		if(authProviderType.equals(AuthProviderType.FACEBOOK)) {
-			AuthProviderData data = new AuthProviderData();
-			FacebookAuthProviderInfo info = new FacebookAuthProviderInfo();
+			AuthProviderData data = newAuthProviderData();
+			FacebookAuthProviderInfo info = newFacebookAuthProviderInfo();
 			info.setAppId(appId3rdParty);
 			data.setAuthProviderInfo(info);
 			return loadSession(endpoint, key, secret, data);
@@ -221,6 +221,16 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 					authProviderType +
 					"].");
 		}
+	}
+	
+	@Deprecated
+	protected FacebookAuthProviderInfo newFacebookAuthProviderInfo() {
+		return new FacebookAuthProviderInfo();
+	}
+	
+	// Mockable
+	protected AuthProviderData newAuthProviderData() {
+		return new AuthProviderData();
 	}
 	
 	@Override

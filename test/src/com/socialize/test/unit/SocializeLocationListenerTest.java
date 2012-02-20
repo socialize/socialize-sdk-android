@@ -36,36 +36,32 @@ import com.socialize.util.AppUtils;
  */
 public class SocializeLocationListenerTest extends SocializeActivityTest {
 
-	@UsesMocks ({
-		MockDefaultLocationProvider.class, 
-		Location.class, 
-		SocializeLocationManager.class, 
-		AppUtils.class})
+	@UsesMocks({ MockDefaultLocationProvider.class, Location.class, SocializeLocationManager.class, AppUtils.class })
 	public void testLocationChangeSetsLocation() {
-		
+
 		String providerStr = "foobar";
-		
+
 		MockDefaultLocationProvider provider = AndroidMock.createMock(MockDefaultLocationProvider.class);
 		Location location = AndroidMock.createMock(Location.class, providerStr);
 		AppUtils utils = AndroidMock.createMock(AppUtils.class);
 		SocializeLocationManager manager = AndroidMock.createMock(SocializeLocationManager.class, utils);
-		
+
 		SocializeLocationListener listener = new SocializeLocationListener();
 		listener.setLocationProvider(provider);
 
 		AndroidMock.expect(provider.getLocationManager()).andReturn(manager);
 		manager.removeUpdates(listener);
 		provider.setLocation(location);
-		
+
 		AndroidMock.replay(provider);
 		AndroidMock.replay(manager);
-		
+
 		listener.onLocationChanged(location);
-		
+
 		AndroidMock.verify(provider);
 		AndroidMock.verify(manager);
 	}
-	
+
 	// Just test that other methods don't fail
 	public void testLocationListenerMethods() {
 		SocializeLocationListener listener = new SocializeLocationListener();

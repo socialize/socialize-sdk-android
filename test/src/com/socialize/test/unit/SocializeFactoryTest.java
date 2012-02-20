@@ -37,51 +37,54 @@ import com.socialize.test.SocializeActivityTest;
 
 public class SocializeFactoryTest extends SocializeActivityTest {
 
-//	@UsesMocks({SocializeConfig.class})
-//	public void testDefaultFactoriesIntializedWithNoExternalConfig() {
-//
-//		SocializeConfig conf = AndroidMock.createMock(SocializeConfig.class);
-//
-//		AndroidMock.expect(conf.getProperties()).andReturn(null);
-//
-//		AndroidMock.replay(conf);
-//
-//		FactoryService service = new FactoryService();
-//
-//		Assert.assertNotNull(service.getFactoryFor(Application.class));
-//		Assert.assertEquals(ApplicationFactory.class, service.getFactoryFor(Application.class).getClass());
-//		Assert.assertNotNull(service.getFactoryFor(Comment.class));
-//		Assert.assertEquals(CommentFactory.class, service.getFactoryFor(Comment.class).getClass());
-//	}
-	
-//	/**
-//	 * Tests factory creation with manually configured props
-//	 */
-//	@UsesMocks({SocializeConfig.class})
-//	public void testDefaultFactoriesIntializedWithManualConfig() {
-//
-//		SocializeConfig conf = AndroidMock.createMock(SocializeConfig.class);
-//		Properties props = new Properties();
-//		props.put("factory.com.socialize.entity.Comment", "com.socialize.entity.factory.CommentFactory");
-//
-//		AndroidMock.expect(conf.getProperties()).andReturn(props);
-//
-//		AndroidMock.replay(conf);
-//
-//		FactoryService service = new FactoryService();
-//
-//		Assert.assertNotNull(service.getFactoryFor(Comment.class));
-//		Assert.assertEquals(CommentFactory.class, service.getFactoryFor(Comment.class).getClass());
-//	}
+	// @UsesMocks({SocializeConfig.class})
+	// public void testDefaultFactoriesIntializedWithNoExternalConfig() {
+	//
+	// SocializeConfig conf = AndroidMock.createMock(SocializeConfig.class);
+	//
+	// AndroidMock.expect(conf.getProperties()).andReturn(null);
+	//
+	// AndroidMock.replay(conf);
+	//
+	// FactoryService service = new FactoryService();
+	//
+	// Assert.assertNotNull(service.getFactoryFor(Application.class));
+	// Assert.assertEquals(ApplicationFactory.class,
+	// service.getFactoryFor(Application.class).getClass());
+	// Assert.assertNotNull(service.getFactoryFor(Comment.class));
+	// Assert.assertEquals(CommentFactory.class,
+	// service.getFactoryFor(Comment.class).getClass());
+	// }
 
+	// /**
+	// * Tests factory creation with manually configured props
+	// */
+	// @UsesMocks({SocializeConfig.class})
+	// public void testDefaultFactoriesIntializedWithManualConfig() {
+	//
+	// SocializeConfig conf = AndroidMock.createMock(SocializeConfig.class);
+	// Properties props = new Properties();
+	// props.put("factory.com.socialize.entity.Comment",
+	// "com.socialize.entity.factory.CommentFactory");
+	//
+	// AndroidMock.expect(conf.getProperties()).andReturn(props);
+	//
+	// AndroidMock.replay(conf);
+	//
+	// FactoryService service = new FactoryService();
+	//
+	// Assert.assertNotNull(service.getFactoryFor(Comment.class));
+	// Assert.assertEquals(CommentFactory.class,
+	// service.getFactoryFor(Comment.class).getClass());
+	// }
 
-	@UsesMocks({SocializeObjectFactory.class, JSONObject.class, SocializeObject.class})
+	@UsesMocks({ SocializeObjectFactory.class, JSONObject.class, SocializeObject.class })
 	public void testSocializeObjectFactoryFromJSONMethod() throws JSONException {
-		
+
 		final SocializeObject entry = AndroidMock.createMock(SocializeObject.class);
 		final JSONObject json = AndroidMock.createNiceMock(JSONObject.class);
 		final long id = 1;
-		
+
 		SocializeObjectFactory<SocializeObject> factory = new SocializeObjectFactory<SocializeObject>() {
 			@Override
 			public SocializeObject instantiateObject(JSONObject json) {
@@ -90,39 +93,40 @@ public class SocializeFactoryTest extends SocializeActivityTest {
 
 			@Override
 			protected void postFromJSON(JSONObject from, SocializeObject to) throws JSONException {
-				// Just a dummy to make it easier to assert that create() was called
+				// Just a dummy to make it easier to assert that create() was
+				// called
 				from.put("foo", "bar");
 			}
 
 			@Override
-			protected void postToJSON(SocializeObject from, JSONObject to) throws JSONException {}
+			protected void postToJSON(SocializeObject from, JSONObject to) throws JSONException {
+			}
 
 		};
-		
+
 		entry.setId(id);
-		
+
 		AndroidMock.expect(json.has("id")).andReturn(true);
 		AndroidMock.expect(json.getLong("id")).andReturn(id);
 		AndroidMock.expect(json.put("foo", "bar")).andReturn(json);
-		
+
 		AndroidMock.replay(entry);
 		AndroidMock.replay(json);
-		
+
 		factory.fromJSON(json);
-		
+
 		AndroidMock.verify(entry);
 		AndroidMock.verify(json);
-		
+
 	}
-	
-	
-	@UsesMocks({SocializeObjectFactory.class, JSONObject.class, Entity.class})
+
+	@UsesMocks({ SocializeObjectFactory.class, JSONObject.class, Entity.class })
 	public void testSocializeObjectFactoryToJSONMethod() throws JSONException {
-		
+
 		final Entity entry = AndroidMock.createMock(Entity.class);
 		final JSONObject json = AndroidMock.createNiceMock(JSONObject.class);
 		final Long id = new Long(1);
-		
+
 		SocializeObjectFactory<Entity> factory = new SocializeObjectFactory<Entity>() {
 			@Override
 			public Entity instantiateObject(JSONObject json) {
@@ -136,45 +140,45 @@ public class SocializeFactoryTest extends SocializeActivityTest {
 
 			@Override
 			protected void postFromJSON(JSONObject from, Entity to) throws JSONException {
-			
+
 			}
 
 			@Override
 			protected void postToJSON(Entity from, JSONObject to) throws JSONException {
-				// Just a dummy to make it easier to assert that create() was called
+				// Just a dummy to make it easier to assert that create() was
+				// called
 				from.setKey("foobar");
 			}
 
 		};
-		
-		
+
 		entry.setKey("foobar");
-		
+
 		AndroidMock.expect(json.put("id", id)).andReturn(json);
 		AndroidMock.expect(entry.getId()).andReturn(id);
-		
+
 		AndroidMock.replay(entry);
 		AndroidMock.replay(json);
-		
+
 		factory.toJSON(entry);
-		
+
 		AndroidMock.verify(entry);
 		AndroidMock.verify(json);
-		
+
 	}
 
-	@UsesMocks({SocializeObjectFactory.class, JSONArray.class, JSONObject.class, Entity.class})
+	@UsesMocks({ SocializeObjectFactory.class, JSONArray.class, JSONObject.class, Entity.class })
 	public void testSocializeObjectFactoryToJSONMethodWithCollection() throws JSONException {
-		
+
 		final Entity entry = AndroidMock.createMock(Entity.class);
 		final JSONArray jsonArray = AndroidMock.createNiceMock(JSONArray.class);
 		final JSONObject json = AndroidMock.createNiceMock(JSONObject.class);
 		final long id = 1;
-		
+
 		List<Entity> entries = new ArrayList<Entity>();
 		entries.add(entry);
 		entries.add(entry);
-		
+
 		SocializeObjectFactory<Entity> factory = new SocializeObjectFactory<Entity>() {
 			@Override
 			public Entity instantiateObject(JSONObject json) {
@@ -193,33 +197,34 @@ public class SocializeFactoryTest extends SocializeActivityTest {
 
 			@Override
 			protected void postFromJSON(JSONObject from, Entity to) throws JSONException {
-			
+
 			}
 
 			@Override
 			protected void postToJSON(Entity from, JSONObject to) throws JSONException {
-				// Just a dummy to make it easier to assert that create() was called
+				// Just a dummy to make it easier to assert that create() was
+				// called
 				from.setKey("foobar");
 			}
 		};
-		
+
 		entry.setKey("foobar");
 		entry.setKey("foobar");
-		
+
 		AndroidMock.expect(json.has("id")).andReturn(true).times(2);
 		AndroidMock.expect(json.put("id", id)).andReturn(json).times(2);
 		AndroidMock.expect(jsonArray.put(json)).andReturn(jsonArray).times(2);
 		AndroidMock.expect(entry.getId()).andReturn(id).times(2);
-		
+
 		AndroidMock.replay(entry);
 		AndroidMock.replay(json);
 		AndroidMock.replay(jsonArray);
-		
+
 		factory.toJSON(entries);
-		
+
 		AndroidMock.verify(entry);
 		AndroidMock.verify(jsonArray);
-		
+
 	}
-	
+
 }

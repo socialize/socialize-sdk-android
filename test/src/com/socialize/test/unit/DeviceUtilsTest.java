@@ -36,37 +36,36 @@ import com.socialize.util.AppUtils;
 import com.socialize.util.DefaultAppUtils;
 import com.socialize.util.DeviceUtils;
 
-
 /**
  * @author jasonpolites
- *
+ * 
  */
 public class DeviceUtilsTest extends SocializeActivityTest {
 
-	@UsesMocks({MockContext.class, MockPackageManager.class})
+	@UsesMocks({ MockContext.class, MockPackageManager.class })
 	public void testDeviceUtilsHasPermission() {
 
-		Context mockContext = AndroidMock.createMock(MockContext.class);		
-		PackageManager mockManager = AndroidMock.createMock(MockPackageManager.class);	
-		
+		Context mockContext = AndroidMock.createMock(MockContext.class);
+		PackageManager mockManager = AndroidMock.createMock(MockPackageManager.class);
+
 		final String permission = "foo";
 		final String packageName = "bar";
-		
+
 		AndroidMock.expect(mockContext.getPackageName()).andReturn(packageName);
 		AndroidMock.expect(mockContext.getPackageManager()).andReturn(mockManager);
 		AndroidMock.expect(mockManager.checkPermission(permission, packageName)).andReturn(PackageManager.PERMISSION_GRANTED);
-		
+
 		AndroidMock.replay(mockContext);
 		AndroidMock.replay(mockManager);
-		
+
 		AppUtils utils = new DefaultAppUtils();
-		
+
 		utils.hasPermission(mockContext, permission);
-		
+
 		AndroidMock.verify(mockContext);
 		AndroidMock.verify(mockManager);
 	}
-	
+
 	public void testDeviceUtilsUserAgentString() {
 		DeviceUtils utils = new DeviceUtils();
 		DefaultAppUtils appUtils = new DefaultAppUtils();
@@ -76,7 +75,7 @@ public class DeviceUtilsTest extends SocializeActivityTest {
 		String userAgentString = utils.getUserAgentString();
 		assertEquals("Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_" + Locale.getDefault().getCountry() + "; BundleID/com.socialize.sample;", userAgentString);
 	}
-	
-	// Can't extend TelephonyManager.. so don't bother trying to test.  urgh!
-	
+
+	// Can't extend TelephonyManager.. so don't bother trying to test. urgh!
+
 }

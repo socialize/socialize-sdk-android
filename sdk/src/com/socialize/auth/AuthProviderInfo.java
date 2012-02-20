@@ -39,4 +39,5 @@ public interface AuthProviderInfo {
 	 * @throws SocializeException If the info is not valid;
 	 */
 	public void validate() throws SocializeException;
+	
 }

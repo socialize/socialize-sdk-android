@@ -128,7 +128,6 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 		userAuthData.setAccessToken(providerToken);
 		userAuthData.setUserId(providerId);
 		userAuthData.setAuthProviderInfo(new AuthProviderInfo() {
-			
 			@Override
 			public void validate() throws SocializeException {}
 			

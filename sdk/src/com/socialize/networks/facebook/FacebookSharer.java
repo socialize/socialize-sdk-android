@@ -81,7 +81,7 @@ public class FacebookSharer implements SocialNetworkSharer {
 				String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 				String authProviderAppId = config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
 				
-				FacebookAuthProviderInfo info = new FacebookAuthProviderInfo();
+				FacebookAuthProviderInfo info = newFacebookAuthProviderInfo();
 				info.setAppId(authProviderAppId);
 				
 				getSocialize().authenticate(context, consumerKey, consumerSecret, info, new SocializeAuthListener() {
@@ -108,6 +108,11 @@ public class FacebookSharer implements SocialNetworkSharer {
 				});
 			}
 		}	
+	}
+	
+	// Mockable
+	protected FacebookAuthProviderInfo newFacebookAuthProviderInfo() {
+		return new FacebookAuthProviderInfo();
 	}
 	
 	protected void doError(SocializeException e, Activity parent, SocialNetworkListener listener) {

@@ -34,7 +34,7 @@
 		<link>
 			<name>README</name>
 			<type>1</type>
-			<location>/Users/jasonpolites/dev/workspace/socialize-sdk-android/README</location>
+			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/README</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

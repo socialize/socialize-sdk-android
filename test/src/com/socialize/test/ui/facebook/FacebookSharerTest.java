@@ -29,7 +29,9 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ActionType;
+import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
@@ -48,10 +50,11 @@ import com.socialize.test.ui.SocializeActivityTestCase;
  */
 public class FacebookSharerTest extends SocializeActivityTestCase {
 
-	@UsesMocks ({SocializeService.class, SocializeConfig.class})
+	@UsesMocks ({SocializeService.class, SocializeConfig.class, FacebookAuthProviderInfo.class})
 	public void testShareNotAuthenticated() {
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+		final FacebookAuthProviderInfo facebookAuthProviderInfo = AndroidMock.createMock(FacebookAuthProviderInfo.class);
 		
 		final String consumerKey = "foo";
 		final String consumerSecret = "bar";
@@ -65,20 +68,22 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET)).andReturn(consumerSecret);
 		AndroidMock.expect(config.getProperty(SocializeConfig.FACEBOOK_APP_ID)).andReturn(fbId);
 		
-		
 		socialize.authenticate(
 				AndroidMock.eq ( getContext() ), 
 				AndroidMock.eq (consumerKey), 
 				AndroidMock.eq (consumerSecret),
-				AndroidMock.eq (AuthProviderType.FACEBOOK),
-				AndroidMock.eq (fbId),
+				AndroidMock.eq (facebookAuthProviderInfo),
 				(SocializeAuthListener) AndroidMock.anyObject());
 		
 		PublicFacebookSharer sharer = new PublicFacebookSharer() {
-
 			@Override
 			public SocializeService getSocialize() {
 				return socialize;
+			}
+
+			@Override
+			protected FacebookAuthProviderInfo newFacebookAuthProviderInfo() {
+				return facebookAuthProviderInfo;
 			}
 		};
 		
@@ -99,6 +104,11 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		final PublicSocialize socialize = new PublicSocialize() {
 			@Override
 			public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderType authProviderType, String authProviderAppId, SocializeAuthListener authListener) {
+				fail();
+			}
+			
+			@Override
+			public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, SocializeAuthListener authListener) {
 				addResult(authListener);
 			}
 

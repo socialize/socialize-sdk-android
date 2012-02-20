@@ -32,57 +32,58 @@ import com.socialize.entity.UserAuthDataFactory;
 
 /**
  * @author Jason Polites
- *
+ * 
  */
-@UsesMocks (UserAuthData.class)
+@UsesMocks(UserAuthData.class)
 public class UserAuthDataFactoryTest extends AbstractSocializeObjectFactoryTest<UserAuthData, UserAuthDataFactory> {
 
 	private Long id = 69L;
 	private String type = "facebook";
 	private String type_error = "no_such_provider";
-	
+
 	@Override
 	protected void setupToJSONExpectations() throws JSONException {
 		// nothing
 	}
 
 	@Override
-	protected void doToJSONVerify() {}
+	protected void doToJSONVerify() {
+	}
 
 	@Override
 	protected void setupFromJSONExpectations() throws Exception {
-		
+
 		AndroidMock.expect(json.has("auth_id")).andReturn(true);
 		AndroidMock.expect(json.has("auth_type")).andReturn(true);
-		
+
 		AndroidMock.expect(json.isNull("auth_id")).andReturn(false);
 		AndroidMock.expect(json.isNull("auth_type")).andReturn(false);
-		
+
 		AndroidMock.expect(json.getLong("auth_id")).andReturn(id);
 		AndroidMock.expect(json.getString("auth_type")).andReturn(type);
-		
+
 		object.setAuthProviderType(AuthProviderType.FACEBOOK);
 		object.setId(id);
 	}
-	
+
 	public void testFromJSONFail() throws JSONException {
-		
+
 		AndroidMock.expect(json.has("id")).andReturn(false);
 		AndroidMock.expect(json.has("auth_id")).andReturn(true);
 		AndroidMock.expect(json.has("auth_type")).andReturn(true);
-		
+
 		AndroidMock.expect(json.isNull("auth_id")).andReturn(false);
 		AndroidMock.expect(json.isNull("auth_type")).andReturn(false);
-		
+
 		AndroidMock.expect(json.getLong("auth_id")).andReturn(id);
 		AndroidMock.expect(json.getString("auth_type")).andReturn(type_error);
-		
+
 		AndroidMock.replay(json);
-		
+
 		object = factory.fromJSON(json);
-		
+
 		AndroidMock.verify(json);
-		
+
 		assertNull(object.getAuthProviderType());
 	}
 
@@ -98,7 +99,7 @@ public class UserAuthDataFactoryTest extends AbstractSocializeObjectFactoryTest<
 
 	@Override
 	protected UserAuthDataFactory createFactory() {
-		
+
 		UserAuthDataFactory factory = new UserAuthDataFactory() {
 			@Override
 			public UserAuthData instantiateObject(JSONObject json) {
@@ -110,7 +111,7 @@ public class UserAuthDataFactoryTest extends AbstractSocializeObjectFactoryTest<
 				return json;
 			}
 		};
-		
+
 		return factory;
 	}
 

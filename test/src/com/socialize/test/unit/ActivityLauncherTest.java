@@ -33,9 +33,9 @@ import com.socialize.util.AppUtils;
 
 /**
  * @author Jason Polites
- *
+ * 
  */
-@UsesMocks ({AppUtils.class, Intent.class, Activity.class})
+@UsesMocks({ AppUtils.class, Intent.class, Activity.class })
 public class ActivityLauncherTest extends SocializeUnitTest {
 
 	public void testActivityLauncher() {
@@ -44,18 +44,18 @@ public class ActivityLauncherTest extends SocializeUnitTest {
 		final Intent intent = AndroidMock.createMock(Intent.class);
 		final Class<?> activityClass = String.class;
 		final Bundle extras = new Bundle(); // can't mock
-		
+
 		AndroidMock.expect(appUtils.isActivityAvailable(activity, activityClass)).andReturn(true);
 		AndroidMock.expect(intent.putExtras(extras)).andReturn(intent);
 		activity.startActivity(intent);
-		
+
 		AndroidMock.replay(appUtils, intent, activity);
-		
+
 		ActivityLauncher launcher = new ActivityLauncher() {
-			
+
 			@Override
 			public Class<?>[] getActivityClasses() {
-				return new Class<?>[] {activityClass};
+				return new Class<?>[] { activityClass };
 			}
 
 			@Override
@@ -70,12 +70,12 @@ public class ActivityLauncherTest extends SocializeUnitTest {
 				addResult(2, data);
 			}
 		};
-		
+
 		launcher.setAppUtils(appUtils);
-		
+
 		assertTrue(launcher.launch(activity, extras));
-		
+
 		AndroidMock.verify(appUtils, intent, activity);
 	}
-	
+
 }

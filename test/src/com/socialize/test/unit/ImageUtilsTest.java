@@ -27,40 +27,40 @@ import com.socialize.test.SocializeActivityTest;
 
 /**
  * @author Jason Polites
- *
+ * 
  */
 public class ImageUtilsTest extends SocializeActivityTest {
 
 	public void testImageUtilsEncoding() throws IOException {
-//		Bitmap real = null;
-//		Bitmap decoded = null;
-//		try {
-//			real = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.android);
-//			
-//			ImageUtils utils = new ImageUtils();
-//			String encoded = utils.encode(real);
-//			
-//			decoded = utils.decode(encoded);
-//			
-//			assertEquals(real.getWidth(), decoded.getWidth());	
-//			assertEquals(real.getHeight(), decoded.getHeight());
-//			
-//			int width = real.getWidth();
-//			int height = real.getHeight();
-//			
-//			for (int x = 0; x < width; x++) {
-//				for (int y = 0; y < height; y++) {
-//					assertEquals(real.getPixel(x, y), decoded.getPixel(x, y));
-//				}
-//			}
-//		}
-//		finally {
-//			if(real != null) real.recycle();
-//			if(decoded != null) decoded.recycle();
-//		}
-//		
+		// Bitmap real = null;
+		// Bitmap decoded = null;
+		// try {
+		// real = BitmapFactory.decodeResource(getActivity().getResources(),
+		// R.drawable.android);
+		//
+		// ImageUtils utils = new ImageUtils();
+		// String encoded = utils.encode(real);
+		//
+		// decoded = utils.decode(encoded);
+		//
+		// assertEquals(real.getWidth(), decoded.getWidth());
+		// assertEquals(real.getHeight(), decoded.getHeight());
+		//
+		// int width = real.getWidth();
+		// int height = real.getHeight();
+		//
+		// for (int x = 0; x < width; x++) {
+		// for (int y = 0; y < height; y++) {
+		// assertEquals(real.getPixel(x, y), decoded.getPixel(x, y));
+		// }
+		// }
+		// }
+		// finally {
+		// if(real != null) real.recycle();
+		// if(decoded != null) decoded.recycle();
+		// }
+		//
 
-		
 	}
-	
+
 }

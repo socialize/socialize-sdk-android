@@ -2,14 +2,14 @@ package com.socialize.test.ui.comment;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.test.ui.SocializeUIActivityTest;
+import com.socialize.test.SocializeUnitTest;
 import com.socialize.ui.comment.CommentListItem;
 import com.socialize.ui.comment.CommentListItemBackgroundFactory;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 
-public class CommentListItemTest extends SocializeUIActivityTest {
+public class CommentListItemTest extends SocializeUnitTest {
 	
 	@UsesMocks ({
 		DeviceUtils.class,

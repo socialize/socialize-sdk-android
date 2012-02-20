@@ -35,6 +35,8 @@ import com.socialize.entity.User;
  */
 public class MockSocializeSession implements SocializeSession {
 
+	private static final long serialVersionUID = 2821519529554271142L;
+	
 	User user;
 	String key = "all";
 	String sec = "my";

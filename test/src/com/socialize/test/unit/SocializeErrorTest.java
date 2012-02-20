@@ -34,43 +34,42 @@ import com.socialize.util.HttpUtils;
 
 /**
  * @author jasonpolites
- *
+ * 
  */
 public class SocializeErrorTest extends SocializeActivityTest {
 
-	@UsesMocks ({ContainerBuilder.class, Container.class, HttpUtils.class})
+	@UsesMocks({ ContainerBuilder.class, Container.class, HttpUtils.class })
 	public void testSocializeApiError() throws Exception {
 		final int resultCode = 404;
 		final String message = "foobar";
-	
-		
+
 		HttpUtils utils = AndroidMock.createMock(HttpUtils.class);
 		Container container = AndroidMock.createMock(Container.class);
 		ContainerBuilder builder = AndroidMock.createMock(ContainerBuilder.class, getActivity());
-		
+
 		SocializeApiError error = new SocializeApiError(utils, resultCode, message);
-		
+
 		AndroidMock.expect(utils.getMessageFor(AndroidMock.anyInt())).andReturn("foobar").anyTimes();
-		AndroidMock.expect(builder.build((InputStream[])null)).andReturn(container);
+		AndroidMock.expect(builder.build((InputStream[]) null)).andReturn(container);
 		AndroidMock.expect(container.getBean("httputils")).andReturn(utils).anyTimes();
-		
+
 		AndroidMock.replay(utils);
 		AndroidMock.replay(builder);
 		AndroidMock.replay(container);
-		
+
 		SocializeIOC ioc = new SocializeIOC();
 		ioc.init(getActivity(), builder, (InputStream[]) null);
 
 		// Get the result we expect:
 		String expected = utils.getMessageFor(resultCode) + " (" + resultCode + "), " + message;
-		
+
 		assertEquals(expected, error.getMessage());
 		assertEquals(expected, error.getLocalizedMessage());
 		assertEquals(resultCode, error.getResultCode());
-		
+
 		AndroidMock.verify(utils);
 		AndroidMock.verify(builder);
 		AndroidMock.verify(container);
 	}
-	
+
 }

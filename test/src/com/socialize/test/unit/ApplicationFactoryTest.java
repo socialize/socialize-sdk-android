@@ -31,13 +31,13 @@ import com.socialize.entity.ApplicationFactory;
 
 /**
  * @author Jason Polites
- *
+ * 
  */
 
 public class ApplicationFactoryTest extends AbstractSocializeObjectFactoryTest<Application, ApplicationFactory> {
 
 	final String mockName = "test name";
-	
+
 	@Override
 	protected void setupToJSONExpectations() throws JSONException {
 		AndroidMock.expect(object.getName()).andReturn(mockName);
@@ -45,7 +45,8 @@ public class ApplicationFactoryTest extends AbstractSocializeObjectFactoryTest<A
 	}
 
 	@Override
-	protected void doToJSONVerify() {}
+	protected void doToJSONVerify() {
+	}
 
 	@Override
 	protected void setupFromJSONExpectations() throws Exception {
@@ -55,7 +56,8 @@ public class ApplicationFactoryTest extends AbstractSocializeObjectFactoryTest<A
 	}
 
 	@Override
-	protected void doFromJSONVerify() {}
+	protected void doFromJSONVerify() {
+	}
 
 	@UsesMocks(Application.class)
 	@Override
