@@ -19,29 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.auth;
-
-import com.socialize.error.SocializeException;
+package com.socialize.util;
 
 /**
  * @author Jason Polites
  *
  */
-public class SocializeAuthProviderInfo implements AuthProviderInfo {
+public interface JSONUtils {
 
-	private static final long serialVersionUID = -4872585341934348491L;
-
-	/* (non-Javadoc)
-	 * @see com.socialize.api.AuthProviderInfo#getType()
-	 */
-	@Override
-	public AuthProviderType getType() {
-		return AuthProviderType.SOCIALIZE;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.api.AuthProviderInfo#validate()
-	 */
-	@Override
-	public void validate() throws SocializeException {}
+	public String toJSON(Object object);
+	
+	public <T> T fromJSON(String json, Class<T> cls);
 }

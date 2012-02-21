@@ -21,27 +21,47 @@
  */
 package com.socialize.auth;
 
-import com.socialize.error.SocializeException;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author Jason Polites
  *
  */
-public class SocializeAuthProviderInfo implements AuthProviderInfo {
+public class DefaultUserAuthDataMap implements UserAuthDataMap {
+	
+	private Map<AuthProviderType, UserAuthData> map;
 
-	private static final long serialVersionUID = -4872585341934348491L;
+	public DefaultUserAuthDataMap() {
+		super();
+		map = new LinkedHashMap<AuthProviderType, UserAuthData>(5);
+	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.api.AuthProviderInfo#getType()
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.auth.UserAuthDataMap#get(com.socialize.auth.AuthProviderType)
 	 */
 	@Override
-	public AuthProviderType getType() {
-		return AuthProviderType.SOCIALIZE;
+	public UserAuthData get(AuthProviderType type) {
+		return map.get(type);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.auth.UserAuthDataMap#put(com.socialize.auth.AuthProviderType, com.socialize.auth.UserAuthData)
+	 */
+	@Override
+	public void put(AuthProviderType type, UserAuthData data) {
+		map.put(type, data);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.socialize.api.AuthProviderInfo#validate()
+	 * @see com.socialize.auth.UserAuthDataMap#values()
 	 */
 	@Override
-	public void validate() throws SocializeException {}
+	public Collection<UserAuthData> values() {
+		return map.values();
+	}
+
 }

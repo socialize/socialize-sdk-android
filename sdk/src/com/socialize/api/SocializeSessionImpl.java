@@ -21,12 +21,11 @@
  */
 package com.socialize.api;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.DefaultUserAuthDataMap;
 import com.socialize.auth.UserAuthData;
+import com.socialize.auth.UserAuthDataMap;
 import com.socialize.entity.User;
 
 /**
@@ -44,7 +43,7 @@ public class SocializeSessionImpl implements WritableSession {
 	private String consumerTokenSecret;
 	private String host;
 	
-	private Map<AuthProviderType, UserAuthData> userAuthData;
+	private UserAuthDataMap userAuthData;
 	
 	@Deprecated
 	private String appId3rdParty;
@@ -65,7 +64,7 @@ public class SocializeSessionImpl implements WritableSession {
 	public SocializeSessionImpl() {
 		super();
 		
-		userAuthData = new HashMap<AuthProviderType, UserAuthData>(4);
+		userAuthData = new DefaultUserAuthDataMap();
 	}
 	
 	@Override
@@ -219,11 +218,11 @@ public class SocializeSessionImpl implements WritableSession {
 		this.authProvider = authProvider;
 	}
 
-	public Map<AuthProviderType, UserAuthData> getUserAuthData() {
+	public UserAuthDataMap getUserAuthData() {
 		return userAuthData;
 	}
 
-	public void setUserAuthData(Map<AuthProviderType, UserAuthData> userAuthData) {
+	public void setUserAuthData(UserAuthDataMap userAuthData) {
 		this.userAuthData = userAuthData;
 	}
 

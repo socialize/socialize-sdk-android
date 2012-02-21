@@ -27,6 +27,7 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
 import com.socialize.auth.DefaultUserAuthData;
 import com.socialize.auth.UserAuthData;
+import com.socialize.auth.UserAuthDataMap;
 import com.socialize.config.SocializeConfig;
 
 /**
@@ -68,6 +69,16 @@ public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 		
 		session.setHost(config.getProperty(SocializeConfig.API_HOST).trim());
 		
+		return session;
+	}
+	
+	@Override
+	public WritableSession create(String key, String secret, UserAuthDataMap userAuthDataMap) {
+		SocializeSessionImpl session = new SocializeSessionImpl();
+		session.setConsumerKey(key);
+		session.setConsumerSecret(secret);
+		session.setUserAuthData(userAuthDataMap);
+		session.setHost(config.getProperty(SocializeConfig.API_HOST).trim());
 		return session;
 	}
 

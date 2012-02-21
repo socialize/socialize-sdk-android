@@ -19,29 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.auth;
+package com.socialize.gson;
 
-import com.socialize.error.SocializeException;
+import java.lang.reflect.Type;
+
+import com.google.gson.InstanceCreator;
+import com.socialize.auth.DefaultUserAuthData;
+import com.socialize.auth.UserAuthData;
 
 /**
  * @author Jason Polites
  *
  */
-public class SocializeAuthProviderInfo implements AuthProviderInfo {
-
-	private static final long serialVersionUID = -4872585341934348491L;
-
+public class UserAuthDataInstanceCreator implements InstanceCreator<UserAuthData> {
 	/* (non-Javadoc)
-	 * @see com.socialize.api.AuthProviderInfo#getType()
+	 * @see com.google.gson.InstanceCreator#createInstance(java.lang.reflect.Type)
 	 */
 	@Override
-	public AuthProviderType getType() {
-		return AuthProviderType.SOCIALIZE;
+	public UserAuthData createInstance(Type type) {
+		return new DefaultUserAuthData();
 	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.api.AuthProviderInfo#validate()
-	 */
-	@Override
-	public void validate() throws SocializeException {}
 }

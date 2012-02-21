@@ -21,27 +21,17 @@
  */
 package com.socialize.auth;
 
-import com.socialize.error.SocializeException;
+import java.util.Collection;
 
 /**
  * @author Jason Polites
- *
  */
-public class SocializeAuthProviderInfo implements AuthProviderInfo {
-
-	private static final long serialVersionUID = -4872585341934348491L;
-
-	/* (non-Javadoc)
-	 * @see com.socialize.api.AuthProviderInfo#getType()
-	 */
-	@Override
-	public AuthProviderType getType() {
-		return AuthProviderType.SOCIALIZE;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.api.AuthProviderInfo#validate()
-	 */
-	@Override
-	public void validate() throws SocializeException {}
+public interface UserAuthDataMap {
+	
+	public UserAuthData get(AuthProviderType type);
+	
+	public void put(AuthProviderType type, UserAuthData data);
+	
+	public Collection<UserAuthData> values();
+	
 }

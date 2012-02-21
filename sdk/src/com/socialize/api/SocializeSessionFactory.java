@@ -24,6 +24,7 @@ package com.socialize.api;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserAuthData;
+import com.socialize.auth.UserAuthDataMap;
 
 /**
  * @author Jason Polites
@@ -50,6 +51,8 @@ public interface SocializeSessionFactory {
 	 * @return
 	 */
 	public WritableSession create(String key, String secret, UserAuthData userAuthData);
+	
+	public WritableSession create(String key, String secret, UserAuthDataMap userAuthDataMap);
 	
 	/**
 	 * Creates a new session.

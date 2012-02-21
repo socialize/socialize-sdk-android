@@ -177,10 +177,12 @@ public class User extends SocializeObject {
 		this.displayName = displayName;
 	}
 
+	@Deprecated
 	public List<UserAuthData> getAuthData() {
 		return authData;
 	}
 	
+	@Deprecated
 	public synchronized void addUserAuthData(UserAuthData authData) {
 		if(this.authData == null) {
 			this.authData = new ArrayList<UserAuthData>(5);
@@ -188,6 +190,7 @@ public class User extends SocializeObject {
 		this.authData.add(authData);
 	}
 
+	@Deprecated
 	public void setAuthData(List<UserAuthData> authData) {
 		this.authData = authData;
 	}

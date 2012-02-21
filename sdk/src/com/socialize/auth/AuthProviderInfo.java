@@ -21,13 +21,15 @@
  */
 package com.socialize.auth;
 
+import java.io.Serializable;
+
 import com.socialize.error.SocializeException;
 
 /**
  * @author Jason Polites
  *
  */
-public interface AuthProviderInfo {
+public interface AuthProviderInfo extends Serializable {
 	/**
 	 * Returns the type of this provider.
 	 * @return

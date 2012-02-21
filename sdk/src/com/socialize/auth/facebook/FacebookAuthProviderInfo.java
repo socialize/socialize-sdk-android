@@ -31,6 +31,8 @@ import com.socialize.util.StringUtils;
  */
 public class FacebookAuthProviderInfo implements AuthProviderInfo {
 	
+	private static final long serialVersionUID = -6472972851879738516L;
+	
 	private String appId;
 
 	/* (non-Javadoc)

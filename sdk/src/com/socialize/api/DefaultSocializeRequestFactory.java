@@ -26,7 +26,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import oauth.socialize.OAuthSignListener;
 
@@ -47,6 +46,7 @@ import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.DefaultUserAuthData;
 import com.socialize.auth.UserAuthData;
+import com.socialize.auth.UserAuthDataMap;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeObject;
 import com.socialize.entity.SocializeObjectFactory;
@@ -128,6 +128,8 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 		userAuthData.setAccessToken(providerToken);
 		userAuthData.setUserId(providerId);
 		userAuthData.setAuthProviderInfo(new AuthProviderInfo() {
+			private static final long serialVersionUID = -6225147199137181190L;
+
 			@Override
 			public void validate() throws SocializeException {}
 			
@@ -150,7 +152,7 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 	@Override
 	public HttpUriRequest getAuthRequest(SocializeSession session, String endpoint, String udid, AuthProviderData data) throws SocializeException {
 		
-		Map<AuthProviderType, UserAuthData> userAuthDataMap = session.getUserAuthData();
+		UserAuthDataMap userAuthDataMap = session.getUserAuthData();
 		
 		if(userAuthDataMap != null) {
 			AuthProviderInfo authProviderInfo = data.getAuthProviderInfo();

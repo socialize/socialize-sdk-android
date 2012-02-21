@@ -22,11 +22,11 @@
 package com.socialize.api;
 
 import java.io.Serializable;
-import java.util.Map;
 
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserAuthData;
+import com.socialize.auth.UserAuthDataMap;
 import com.socialize.entity.User;
 
 /**
@@ -51,7 +51,7 @@ public interface SocializeSession extends Serializable {
 	 * Returns the set of session data for any 3rd party providers.
 	 * @return
 	 */
-	public Map<AuthProviderType, UserAuthData> getUserAuthData();
+	public UserAuthDataMap getUserAuthData();
 	
 	public UserAuthData getUserAuthData(AuthProviderType type);
 	

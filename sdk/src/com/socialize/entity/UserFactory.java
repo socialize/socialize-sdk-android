@@ -36,6 +36,8 @@ import com.socialize.util.StringUtils;
 public class UserFactory extends SocializeObjectFactory<User> {
 	
 	private StatsFactory statsFactory;
+	
+	@Deprecated
 	private UserAuthDataFactory userAuthDataFactory;
 	
 	public static final String META = "meta";

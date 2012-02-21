@@ -23,7 +23,6 @@ package com.socialize;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -61,6 +60,7 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
 import com.socialize.auth.SocializeAuthProviderInfo;
 import com.socialize.auth.UserAuthData;
+import com.socialize.auth.UserAuthDataMap;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
@@ -456,7 +456,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		try {
 			if(session != null) {
 				
-				Map<AuthProviderType, UserAuthData> userAuthDataMap = session.getUserAuthData();
+				UserAuthDataMap userAuthDataMap = session.getUserAuthData();
 				
 				boolean cleared = false;
 				

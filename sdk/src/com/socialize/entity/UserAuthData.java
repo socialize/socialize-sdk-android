@@ -25,7 +25,7 @@ import com.socialize.auth.AuthProviderType;
 
 /**
  * @author Jason Polites
- *
+ * @deprecated
  */
 public class UserAuthData extends SocializeObject {
 

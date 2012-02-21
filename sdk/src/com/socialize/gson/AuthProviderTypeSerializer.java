@@ -19,29 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.auth;
+package com.socialize.gson;
 
-import com.socialize.error.SocializeException;
+import java.lang.reflect.Type;
+
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.socialize.auth.AuthProviderType;
 
 /**
  * @author Jason Polites
  *
  */
-public class SocializeAuthProviderInfo implements AuthProviderInfo {
-
-	private static final long serialVersionUID = -4872585341934348491L;
-
-	/* (non-Javadoc)
-	 * @see com.socialize.api.AuthProviderInfo#getType()
-	 */
+public class AuthProviderTypeSerializer implements JsonDeserializer<AuthProviderType> {
 	@Override
-	public AuthProviderType getType() {
-		return AuthProviderType.SOCIALIZE;
+	public AuthProviderType deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+		String type = json.getAsString();
+        return AuthProviderType.valueOf(type.toUpperCase());
 	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.api.AuthProviderInfo#validate()
-	 */
-	@Override
-	public void validate() throws SocializeException {}
 }

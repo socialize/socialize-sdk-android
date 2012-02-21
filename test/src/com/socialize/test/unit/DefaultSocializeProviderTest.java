@@ -24,7 +24,6 @@ package com.socialize.test.unit;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -48,6 +47,7 @@ import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserAuthData;
+import com.socialize.auth.UserAuthDataMap;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
@@ -225,7 +225,6 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.verify(sessionPersister);
 	}
 
-	@SuppressWarnings("unchecked")
 	@UsesMocks({ AuthProviderInfo.class, UserAuthData.class })
 	public void testLoadCachedCredentialsOnAuthenticate() throws Exception {
 
@@ -237,7 +236,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 
 		AuthProviderInfo info = AndroidMock.createMock(AuthProviderInfo.class);
 		UserAuthData userAuthData = AndroidMock.createMock(UserAuthData.class);
-		Map<AuthProviderType, UserAuthData> userAuthDataMap = AndroidMock.createMock(Map.class);
+		UserAuthDataMap userAuthDataMap = AndroidMock.createMock(UserAuthDataMap.class);
 
 		AndroidMock.expect(sessionPersister.load(mockContext)).andReturn(session);
 		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);

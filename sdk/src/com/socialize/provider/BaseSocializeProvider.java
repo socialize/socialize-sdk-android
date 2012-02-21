@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -48,6 +47,7 @@ import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserAuthData;
+import com.socialize.auth.UserAuthDataMap;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.ActionError;
@@ -176,7 +176,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	}
 	
 	protected SocializeSession validateSessionAuthData(SocializeSession loaded, AuthProviderInfo info) {
-		Map<AuthProviderType, UserAuthData> userAuthDataMap = loaded.getUserAuthData();
+		UserAuthDataMap userAuthDataMap = loaded.getUserAuthData();
 
 		if(userAuthDataMap != null) {
 			UserAuthData userAuthData = userAuthDataMap.get(info.getType());

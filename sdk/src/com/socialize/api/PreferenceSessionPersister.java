@@ -28,10 +28,20 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.socialize.Socialize;
+import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.DefaultUserAuthData;
+import com.socialize.auth.DefaultUserAuthDataMap;
+import com.socialize.auth.SocializeAuthProviderInfo;
+import com.socialize.auth.UserAuthData;
+import com.socialize.auth.UserAuthDataMap;
+import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.entity.User;
 import com.socialize.entity.UserFactory;
 import com.socialize.log.SocializeLogger;
+import com.socialize.util.JSONUtils;
+import com.socialize.util.StringUtils;
 
 /**
  * Persists session data to private preferences.
@@ -41,10 +51,14 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 
 	private static final String PREFERENCES = "SocializeSession";
 	
+	private static final String SOCIALIZE_VERSION = "socialize_version";
+	private static final String USER_AUTH_DATA = "user_auth_data";
+	
 	private UserFactory userFactory;
 	private SocializeSessionFactory sessionFactory;
 	
 	private SocializeLogger logger = null;
+	private JSONUtils jsonUtils;
 	
 	public PreferenceSessionPersister(UserFactory userFactory, SocializeSessionFactory sessionFactory) {
 		super();
@@ -83,14 +97,19 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 	 */
 	@Override
 	public void delete(Context context, AuthProviderType type) {
-		// TODO: this should be by type
 		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 		Editor editor = prefs.edit();
-		editor.remove("3rd_party_userid");
-		editor.remove("3rd_party_token");
-		editor.putInt("3rd_party_type", AuthProviderType.SOCIALIZE.getId());
+		editor.putString(USER_AUTH_DATA, jsonUtils.toJSON(makeDefaultUserAuthData()));
 		editor.commit();
 	}
+	
+	protected UserAuthData makeDefaultUserAuthData() {
+		DefaultUserAuthData userAuthData = newDefaultUserAuthData();
+		SocializeAuthProviderInfo info = new SocializeAuthProviderInfo();
+		userAuthData.setAuthProviderInfo(info);
+		return userAuthData;
+	}
+	
 
 	/* (non-Javadoc)
 	 * @see com.socialize.api.SocializeSessionPersister#save(android.content.Context, com.socialize.api.SocializeSession)
@@ -101,20 +120,17 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 		
 		Editor editor = prefs.edit();
 		
+		editor.clear();
+		
 		editor.putString("consumer_key", session.getConsumerKey());
 		editor.putString("consumer_secret", session.getConsumerSecret());
 		editor.putString("consumer_token", session.getConsumerToken());
 		editor.putString("consumer_token_secret", session.getConsumerTokenSecret());
 		
-		editor.putString("3rd_party_userid", session.get3rdPartyUserId());
-		editor.putString("3rd_party_token", session.get3rdPartyToken());
-		editor.putString("3rd_party_app_id", session.get3rdPartyAppId());
+		String userAuthData = jsonUtils.toJSON(session.getUserAuthData());
 		
-		AuthProviderType authProviderType = session.getAuthProviderType();
-		
-		if(authProviderType != null) {
-			editor.putInt("3rd_party_type", authProviderType.getId());
-		}
+		editor.putString(USER_AUTH_DATA, userAuthData);
+		editor.putString(SOCIALIZE_VERSION, Socialize.VERSION);
 		
 		User user = session.getUser();
 		
@@ -135,6 +151,77 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 		
 		editor.commit();
 	}
+	
+	protected UserAuthDataMap loadUserAuthData(SharedPreferences prefs) {
+		String authData = prefs.getString(USER_AUTH_DATA, null);
+		
+		UserAuthDataMap map = null;
+		
+		if(StringUtils.isEmpty(authData)) {
+			AuthProviderInfo authProviderInfo = null;
+			
+			// Legacy, must only be FB
+			DefaultUserAuthData data = newDefaultUserAuthData();
+			
+			String userId3rdParty = prefs.getString("3rd_party_userid", null);
+			String token3rdParty = prefs.getString("3rd_party_token", null);
+			
+			int iProviderType = prefs.getInt("3rd_party_type", AuthProviderType.SOCIALIZE.getId());
+			
+			AuthProviderType type = AuthProviderType.valueOf(iProviderType);
+			
+			if(type.equals(AuthProviderType.FACEBOOK)) {
+				String appId3rdParty = prefs.getString("3rd_party_app_id", null);
+				
+				data.setAccessToken(token3rdParty);
+				data.setUserId(userId3rdParty);
+				
+				FacebookAuthProviderInfo info = new FacebookAuthProviderInfo();
+				info.setAppId(appId3rdParty);
+				
+				authProviderInfo = info;
+			}
+			else {
+				// Assume Socialize
+				if(!type.equals(AuthProviderType.SOCIALIZE)) {
+					if(logger != null) {
+						logger.error("Unexpected auth type [" +
+								type +
+								"].  Legacy session loading only supports [" +
+								AuthProviderType.FACEBOOK +
+								"] or [" +
+								AuthProviderType.SOCIALIZE +
+								"].  Assuming [" +
+								AuthProviderType.SOCIALIZE +
+								"]");
+					}
+					
+					type = AuthProviderType.SOCIALIZE;
+				}
+				
+				SocializeAuthProviderInfo info = new SocializeAuthProviderInfo();
+				
+				authProviderInfo = info;
+			}
+			
+			data.setAuthProviderInfo(authProviderInfo);
+			map = newDefaultUserAuthDataMap();
+			map.put(type, data);
+		}
+		else {
+			map = jsonUtils.fromJSON(authData, UserAuthDataMap.class);
+		}
+		
+		return map;
+	}
+	
+	protected DefaultUserAuthData newDefaultUserAuthData() {
+		return new DefaultUserAuthData();
+	}
+	
+	protected DefaultUserAuthDataMap newDefaultUserAuthDataMap() {
+		return new DefaultUserAuthDataMap();
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.api.SocializeSessionPersister#load(android.content.Context)
@@ -147,15 +234,9 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 		String key = prefs.getString("consumer_key", null);
 		String secret = prefs.getString("consumer_secret", null);
 		
-		String userId3rdParty = prefs.getString("3rd_party_userid", null);
-		String token3rdParty = prefs.getString("3rd_party_token", null);
-		String appId3rdParty = prefs.getString("3rd_party_app_id", null);
+		UserAuthDataMap userAuthData = loadUserAuthData(prefs);
 		
-		int iProviderType = prefs.getInt("3rd_party_type", AuthProviderType.SOCIALIZE.getId());
-		
-		AuthProviderType authProviderType = AuthProviderType.valueOf(iProviderType);
-		
-		WritableSession session = sessionFactory.create(key, secret, userId3rdParty, token3rdParty, appId3rdParty, authProviderType);
+		WritableSession session = sessionFactory.create(key, secret, userAuthData);
 			
 		session.setConsumerToken(prefs.getString("consumer_token", null));
 		session.setConsumerTokenSecret(prefs.getString("consumer_token_secret", null));
@@ -192,5 +273,9 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
+	}
+
+	public void setJsonUtils(JSONUtils jsonUtils) {
+		this.jsonUtils = jsonUtils;
 	}
 }

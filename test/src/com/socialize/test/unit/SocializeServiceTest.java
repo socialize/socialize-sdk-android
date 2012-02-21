@@ -23,7 +23,6 @@ package com.socialize.test.unit;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
@@ -58,6 +57,7 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
 import com.socialize.auth.SocializeAuthProviderInfo;
 import com.socialize.auth.UserAuthData;
+import com.socialize.auth.UserAuthDataMap;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
@@ -1339,12 +1339,11 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		assertSame(config, gotten);
 	}
 
-	@SuppressWarnings("unchecked")
 	@UsesMocks({AuthProvider.class, UserAuthData.class, AuthProviderInfo.class})
 	public void testClearSessionCache() {
 		setupDefaultMocks();
 		
-		Map<AuthProviderType, UserAuthData> userAuthDataMap = AndroidMock.createMock(Map.class);
+		UserAuthDataMap userAuthDataMap = AndroidMock.createMock(UserAuthDataMap.class);
 		UserAuthData userAuthData = AndroidMock.createMock(UserAuthData.class);
 		AuthProviderInfo authProviderInfo = AndroidMock.createMock(AuthProviderInfo.class);
 		

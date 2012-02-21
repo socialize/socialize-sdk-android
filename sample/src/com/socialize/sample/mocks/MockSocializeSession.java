@@ -21,12 +21,11 @@
  */
 package com.socialize.sample.mocks;
 
-import java.util.Map;
-
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserAuthData;
+import com.socialize.auth.UserAuthDataMap;
 import com.socialize.entity.User;
 
 /**
@@ -129,7 +128,7 @@ public class MockSocializeSession implements SocializeSession {
 	}
 
 	@Override
-	public Map<AuthProviderType, UserAuthData> getUserAuthData() {
+	public UserAuthDataMap getUserAuthData() {
 		return null;
 	}
 
