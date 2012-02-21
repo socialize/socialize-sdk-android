@@ -178,6 +178,11 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	public boolean validateSession(SocializeSession session, AuthProviderData data) {
 		AuthProviderInfo info = data.getAuthProviderInfo();
 		if(info != null) {
+			
+			if(info.getType().equals(AuthProviderType.SOCIALIZE)) {
+				return true;
+			}
+			
 			return validateSessionAuthData(session, info);
 		}
 		else {	
@@ -187,19 +192,21 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 
 	public boolean validateSessionAuthData(SocializeSession loaded, AuthProviderInfo info) {
 		UserProviderCredentialsMap userProviderCredentialsMap = loaded.getUserProviderCredentials();
-
 		if(userProviderCredentialsMap != null) {
 			UserProviderCredentials userProviderCredentials = userProviderCredentialsMap.get(info.getType());
 			if(userProviderCredentials != null && userProviderCredentials.getAuthProviderInfo().matches(info)) {
 				return true;
 			}
 		}
-		
 		return false;
 	}
 	
 	@SuppressWarnings("deprecation")
 	public boolean validateSessionAuthDataLegacy(SocializeSession loaded, AuthProviderData data) {
+		
+		if(data.getAuthProviderType().equals(AuthProviderType.SOCIALIZE)) {
+			return true;
+		}
 		
 		if(data.getAuthProviderType() != null && !StringUtils.isEmpty(data.getAppId3rdParty())) {
 			AuthProviderType loadedAuthProviderType = loaded.getAuthProviderType();

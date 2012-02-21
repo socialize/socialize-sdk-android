@@ -29,7 +29,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 import com.socialize.Socialize;
-import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.DefaultUserProviderCredentials;
 import com.socialize.auth.DefaultUserProviderCredentialsMap;
@@ -156,10 +155,6 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 		UserProviderCredentialsMap map = null;
 		
 		if(StringUtils.isEmpty(authData)) {
-			AuthProviderInfo authProviderInfo = null;
-			
-			// Legacy, must only be FB
-			DefaultUserProviderCredentials data = newDefaultUserProviderCredentials();
 			
 			String userId3rdParty = prefs.getString("3rd_party_userid", null);
 			String token3rdParty = prefs.getString("3rd_party_token", null);
@@ -168,7 +163,13 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 			
 			AuthProviderType type = AuthProviderType.valueOf(iProviderType);
 			
+			map = newDefaultUserProviderCredentialsMap();
+			
 			if(type.equals(AuthProviderType.FACEBOOK)) {
+				
+				// Legacy, must only be FB
+				DefaultUserProviderCredentials data = newDefaultUserProviderCredentials();
+				
 				String appId3rdParty = prefs.getString("3rd_party_app_id", null);
 				
 				data.setAccessToken(token3rdParty);
@@ -177,34 +178,30 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 				FacebookAuthProviderInfo info = new FacebookAuthProviderInfo();
 				info.setAppId(appId3rdParty);
 				
-				authProviderInfo = info;
+				data.setAuthProviderInfo(info);
+				
+				map.put(type, data);
 			}
 			else {
-				// Assume Socialize
 				if(!type.equals(AuthProviderType.SOCIALIZE)) {
 					if(logger != null) {
-						logger.error("Unexpected auth type [" +
+						logger.warn("Unexpected auth type [" +
 								type +
 								"].  Legacy session loading only supports [" +
 								AuthProviderType.FACEBOOK +
 								"] or [" +
 								AuthProviderType.SOCIALIZE +
-								"].  Assuming [" +
-								AuthProviderType.SOCIALIZE +
-								"]");
+								"].");
 					}
-					
 					type = AuthProviderType.SOCIALIZE;
 				}
-				
-				SocializeAuthProviderInfo info = new SocializeAuthProviderInfo();
-				
-				authProviderInfo = info;
 			}
 			
-			data.setAuthProviderInfo(authProviderInfo);
-			map = newDefaultUserProviderCredentialsMap();
-			map.put(type, data);
+			// Always add Socialize
+			SocializeAuthProviderInfo info = new SocializeAuthProviderInfo();
+			DefaultUserProviderCredentials data = newDefaultUserProviderCredentials();
+			data.setAuthProviderInfo(info);
+			map.put(AuthProviderType.SOCIALIZE, data);
 		}
 		else {
 			map = jsonUtils.fromJSON(authData, UserProviderCredentialsMap.class);
