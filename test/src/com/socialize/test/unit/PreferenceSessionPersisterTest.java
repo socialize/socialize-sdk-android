@@ -30,21 +30,23 @@ import android.test.mock.MockContext;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.Socialize;
 import com.socialize.api.PreferenceSessionPersister;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionFactory;
 import com.socialize.api.SocializeSessionImpl;
-import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.entity.User;
 import com.socialize.entity.UserFactory;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.mock.MockEditor;
+import com.socialize.util.JSONUtils;
 
 /**
  * @author Jason Polites
  * 
  */
-@UsesMocks({ MockContext.class, SharedPreferences.class, MockEditor.class, SocializeSession.class, User.class, UserFactory.class, SocializeSessionFactory.class, SocializeSessionImpl.class })
+@UsesMocks({ MockContext.class, SharedPreferences.class, MockEditor.class, SocializeSession.class, User.class, UserFactory.class, SocializeSessionFactory.class, SocializeSessionImpl.class, JSONUtils.class })
 public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 
 	MockContext context;
@@ -55,6 +57,7 @@ public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 	UserFactory userFactory;
 	JSONObject jsonObject;
 	SocializeSessionFactory socializeSessionFactory;
+	JSONUtils jsonUtils;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -66,30 +69,27 @@ public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 		session = AndroidMock.createMock(SocializeSessionImpl.class);
 		user = AndroidMock.createMock(User.class);
 		userFactory = AndroidMock.createMock(UserFactory.class);
+		jsonUtils = AndroidMock.createMock(JSONUtils.class);
 		socializeSessionFactory = AndroidMock.createMock(SocializeSessionFactory.class);
 	}
 
+	@UsesMocks ({UserProviderCredentialsMap.class})
 	public void testPreferencePersistLoad() throws JSONException {
 
+		final UserProviderCredentialsMap userProviderCredentialsMap = AndroidMock.createMock(UserProviderCredentialsMap.class);
+		
 		final String key = "foo", secret = "bar", token = "sna", tokenSecret = "fu", json = "{foo:bar}";
-
-		String mock_3rd_party_userid = "foobar_3rd_party_userid";
-		String mock_3rd_party_token = "foobar_3rd_party_token";
-		String mock_3rd_party_app_id = "foobar_3rd_party_app_id";
-
+		
 		AndroidMock.expect(context.getSharedPreferences("SocializeSession", Context.MODE_PRIVATE)).andReturn(prefs);
 		AndroidMock.expect(prefs.getString("consumer_key", null)).andReturn(key);
 		AndroidMock.expect(prefs.getString("consumer_secret", null)).andReturn(secret);
 		AndroidMock.expect(prefs.getString("consumer_token", null)).andReturn(token);
 		AndroidMock.expect(prefs.getString("consumer_token_secret", null)).andReturn(tokenSecret);
-
-		AndroidMock.expect(prefs.getString("3rd_party_userid", null)).andReturn(mock_3rd_party_userid);
-		AndroidMock.expect(prefs.getString("3rd_party_token", null)).andReturn(mock_3rd_party_token);
-		AndroidMock.expect(prefs.getString("3rd_party_app_id", null)).andReturn(mock_3rd_party_app_id);
-		AndroidMock.expect(prefs.getInt("3rd_party_type", AuthProviderType.SOCIALIZE.getId())).andReturn(AuthProviderType.FACEBOOK.getId());
 		AndroidMock.expect(prefs.getString("user", null)).andReturn(json);
+		
 		AndroidMock.expect(userFactory.fromJSON((JSONObject) AndroidMock.anyObject())).andReturn(user);
-		AndroidMock.expect(socializeSessionFactory.create(key, secret, mock_3rd_party_userid, mock_3rd_party_token, mock_3rd_party_app_id, AuthProviderType.FACEBOOK)).andReturn(session);
+		
+		AndroidMock.expect(socializeSessionFactory.create(key, secret, userProviderCredentialsMap)).andReturn(session);
 
 		session.setConsumerToken(token);
 		session.setConsumerTokenSecret(tokenSecret);
@@ -101,7 +101,15 @@ public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 		AndroidMock.replay(userFactory);
 		AndroidMock.replay(socializeSessionFactory);
 
-		PreferenceSessionPersister persister = new PreferenceSessionPersister(userFactory, socializeSessionFactory);
+		PreferenceSessionPersister persister = new PreferenceSessionPersister(userFactory, socializeSessionFactory) {
+
+			@Override
+			protected UserProviderCredentialsMap loadUserProviderCredentials(SharedPreferences prefs) {
+				return userProviderCredentialsMap;
+			}
+			
+			
+		};
 
 		SocializeSession loaded = persister.load(context);
 
@@ -114,20 +122,16 @@ public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 		AndroidMock.verify(socializeSessionFactory);
 	}
 
+	@UsesMocks ({UserProviderCredentialsMap.class})
 	public void testPreferencePersistSave() throws JSONException {
-
-		final String key = "foo", secret = "bar", token = "sna", tokenSecret = "fu", json = "{foo:bar}";
-
-		String mock_3rd_party_userid = "foobar_3rd_party_userid";
-		String mock_3rd_party_token = "foobar_3rd_party_token";
-		String mock_3rd_party_app_id = "foobar_3rd_party_app_id";
+		final UserProviderCredentialsMap userProviderCredentialsMap = AndroidMock.createMock(UserProviderCredentialsMap.class);
+		final String key = "foo", secret = "bar", token = "sna", tokenSecret = "fu", json = "{foo:bar}", credsJson = "{creds:foobar}";
 
 		JSONObject jsonObject = new JSONObject() {
 			@Override
 			public String toString() {
 				return json;
 			}
-
 		};
 
 		AndroidMock.expect(context.getSharedPreferences("SocializeSession", Context.MODE_PRIVATE)).andReturn(prefs);
@@ -136,22 +140,18 @@ public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 		AndroidMock.expect(session.getConsumerSecret()).andReturn(secret);
 		AndroidMock.expect(session.getConsumerToken()).andReturn(token);
 		AndroidMock.expect(session.getConsumerTokenSecret()).andReturn(tokenSecret);
-		AndroidMock.expect(session.get3rdPartyAppId()).andReturn(mock_3rd_party_app_id);
-		AndroidMock.expect(session.get3rdPartyToken()).andReturn(mock_3rd_party_token);
-		AndroidMock.expect(session.get3rdPartyUserId()).andReturn(mock_3rd_party_userid);
-		AndroidMock.expect(session.getAuthProviderType()).andReturn(AuthProviderType.FACEBOOK);
-
+		AndroidMock.expect(session.getUserProviderCredentials()).andReturn(userProviderCredentialsMap);
+		AndroidMock.expect(jsonUtils.toJSON(userProviderCredentialsMap)).andReturn(credsJson);
+		
+		AndroidMock.expect(editor.putString("user_auth_data", credsJson)).andReturn(editor);
+		AndroidMock.expect(editor.putString("socialize_version", Socialize.VERSION)).andReturn(editor);
+		
 		AndroidMock.expect(session.getUser()).andReturn(user);
 		AndroidMock.expect(userFactory.toJSON(user)).andReturn(jsonObject);
 		AndroidMock.expect(editor.putString("consumer_key", key)).andReturn(editor);
 		AndroidMock.expect(editor.putString("consumer_secret", secret)).andReturn(editor);
 		AndroidMock.expect(editor.putString("consumer_token", token)).andReturn(editor);
 		AndroidMock.expect(editor.putString("consumer_token_secret", tokenSecret)).andReturn(editor);
-		AndroidMock.expect(editor.putString("3rd_party_userid", mock_3rd_party_userid)).andReturn(editor);
-		AndroidMock.expect(editor.putString("3rd_party_token", mock_3rd_party_token)).andReturn(editor);
-		AndroidMock.expect(editor.putString("3rd_party_app_id", mock_3rd_party_app_id)).andReturn(editor);
-		AndroidMock.expect(editor.putInt("3rd_party_type", AuthProviderType.FACEBOOK.getId())).andReturn(editor);
-
 		AndroidMock.expect(editor.putString("user", json)).andReturn(editor);
 		AndroidMock.expect(editor.commit()).andReturn(true);
 
@@ -160,8 +160,10 @@ public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 		AndroidMock.replay(session);
 		AndroidMock.replay(userFactory);
 		AndroidMock.replay(editor);
+		AndroidMock.replay(jsonUtils);
 
 		PreferenceSessionPersister persister = new PreferenceSessionPersister(userFactory, socializeSessionFactory);
+		persister.setJsonUtils(jsonUtils);
 
 		persister.save(context, session);
 
@@ -170,6 +172,7 @@ public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 		AndroidMock.verify(session);
 		AndroidMock.verify(userFactory);
 		AndroidMock.verify(editor);
+		AndroidMock.verify(jsonUtils);
 	}
 
 	public void testPreferencePersistDelete() throws JSONException {

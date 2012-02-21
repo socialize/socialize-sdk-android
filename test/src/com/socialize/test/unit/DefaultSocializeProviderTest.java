@@ -45,6 +45,8 @@ import com.socialize.api.SocializeSessionPersister;
 import com.socialize.api.WritableSession;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderInfo;
+import com.socialize.auth.AuthProviderInfoBuilder;
+import com.socialize.auth.AuthProviderInfoFactory;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
@@ -65,13 +67,36 @@ import com.socialize.util.JSONParser;
 /**
  * @author Jason Polites
  */
-@UsesMocks({ SocializeObjectFactory.class, IBeanFactory.class, AuthProviderData.class, UserFactory.class, SocializeSessionPersister.class, HttpClientFactory.class, SocializeSessionFactory.class, WritableSession.class, HttpClient.class, JSONParser.class, JSONObject.class, JSONArray.class, SocializeRequestFactory.class, HttpUriRequest.class, HttpResponse.class, User.class, HttpEntity.class, HttpUtils.class, IOUtils.class })
+@UsesMocks({ 
+	SocializeObjectFactory.class, 
+	IBeanFactory.class, 
+	AuthProviderData.class, 
+	UserFactory.class, 
+	SocializeSessionPersister.class, 
+	HttpClientFactory.class, 
+	SocializeSessionFactory.class, 
+	WritableSession.class, 
+	HttpClient.class, 
+	JSONParser.class, 
+	JSONObject.class, 
+	JSONArray.class, 
+	SocializeRequestFactory.class, 
+	HttpUriRequest.class, 
+	HttpResponse.class, 
+	User.class, 
+	HttpEntity.class, 
+	HttpUtils.class, 
+	IOUtils.class,
+	AuthProviderInfoBuilder.class,
+	AuthProviderInfoFactory.class,
+	AuthProviderInfo.class})
 public class DefaultSocializeProviderTest extends SocializeActivityTest {
 
 	SocializeSessionPersister sessionPersister;
 	SocializeObjectFactory<SocializeObject> objectFactory;
 	SocializeRequestFactory<SocializeObject> requestFactory;
 	IBeanFactory<AuthProviderData> authProviderDataFactory;
+	AuthProviderInfoBuilder authProviderInfoBuilder;
 	UserFactory userFactory;
 	SocializeSessionFactory sessionFactory;
 	HttpClientFactory clientFactory;
@@ -89,6 +114,8 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 	Context mockContext;
 	SocializeConfig config;
 	AuthProviderData authProviderData;
+	AuthProviderInfoFactory<AuthProviderInfo> authProviderInfoFactory;
+	AuthProviderInfo authProviderInfo;
 
 	final String jsonString = "{foobar}";
 
@@ -118,6 +145,9 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		jsonArray = AndroidMock.createMock(JSONArray.class);
 		mockContext = new MockContext();
 		config = AndroidMock.createMock(SocializeConfig.class);
+		authProviderInfoBuilder = AndroidMock.createMock(AuthProviderInfoBuilder.class);
+		authProviderInfoFactory = AndroidMock.createMock(AuthProviderInfoFactory.class);
+		authProviderInfo = AndroidMock.createMock(AuthProviderInfo.class);
 	}
 
 	private DefaultSocializeProvider<SocializeObject> getNewProvider() {
@@ -139,6 +169,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		provider.setJsonParser(jsonParser);
 		provider.setHttpUtils(httpUtils);
 		provider.setIoUtils(ioUtils);
+		provider.setAuthProviderInfoBuilder(authProviderInfoBuilder);
 
 		return provider;
 	}
@@ -170,11 +201,12 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(json.getString("oauth_token_secret")).andReturn(oauth_token_secret);
 		AndroidMock.expect(userFactory.fromJSON(json)).andReturn(user);
 		AndroidMock.expect(httpUtils.isHttpError(response)).andReturn(false);
-		AndroidMock.expect(sessionPersister.load(mockContext)).andReturn(null); // No
-																				// persistence
-																				// for
-																				// this
-																				// one
+		AndroidMock.expect(sessionPersister.load(mockContext)).andReturn(null); 
+		
+		AndroidMock.expect(authProviderInfoBuilder.getFactory(AuthProviderType.SOCIALIZE)).andReturn(authProviderInfoFactory); 
+		AndroidMock.expect(authProviderInfoFactory.newInstance()).andReturn(authProviderInfo); 
+		authProviderData.setAuthProviderInfo(authProviderInfo);
+
 		AndroidMock.expect(session.getHost()).andReturn(host);
 
 		// Expect save
@@ -188,41 +220,13 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 
 		DefaultSocializeProvider<SocializeObject> provider = getNewProvider();
 
-		AndroidMock.replay(authProviderDataFactory);
-		AndroidMock.replay(authProviderData);
-		AndroidMock.replay(user);
-		AndroidMock.replay(session);
-		AndroidMock.replay(sessionFactory);
-		AndroidMock.replay(clientFactory);
-		AndroidMock.replay(requestFactory);
-		AndroidMock.replay(jsonParser);
-		AndroidMock.replay(client);
-		AndroidMock.replay(json);
-		AndroidMock.replay(userFactory);
-		AndroidMock.replay(entity);
-		AndroidMock.replay(response);
-		AndroidMock.replay(httpUtils);
-		AndroidMock.replay(sessionPersister);
-
+		AndroidMock.replay(authProviderData, authProviderDataFactory, user, session, sessionFactory, clientFactory, requestFactory, jsonParser, client, json, userFactory, entity, response, httpUtils, sessionPersister, authProviderInfoBuilder, authProviderInfoFactory, authProviderInfo);
+		
 		provider.setSessionPersister(sessionPersister);
 
 		provider.authenticate(endpoint, key, secret, uuid);
 
-		AndroidMock.verify(authProviderData);
-		AndroidMock.verify(authProviderDataFactory);
-		AndroidMock.verify(user);
-		AndroidMock.verify(session);
-		AndroidMock.verify(sessionFactory);
-		AndroidMock.verify(clientFactory);
-		AndroidMock.verify(requestFactory);
-		AndroidMock.verify(jsonParser);
-		AndroidMock.verify(client);
-		AndroidMock.verify(json);
-		AndroidMock.verify(userFactory);
-		AndroidMock.verify(entity);
-		AndroidMock.verify(response);
-		AndroidMock.verify(httpUtils);
-		AndroidMock.verify(sessionPersister);
+		AndroidMock.verify(authProviderData, authProviderDataFactory, user, session, sessionFactory, clientFactory, requestFactory, jsonParser, client, json, userFactory, entity, response, httpUtils, sessionPersister, authProviderInfoBuilder, authProviderInfoFactory, authProviderInfo);
 	}
 
 	@UsesMocks({ AuthProviderInfo.class, UserProviderCredentials.class })
@@ -245,14 +249,20 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 
 		AndroidMock.expect(session.getUserProviderCredentials()).andReturn(userAuthDataMap);
 		AndroidMock.expect(userAuthDataMap.get(AuthProviderType.SOCIALIZE)).andReturn(userAuthData);
-		AndroidMock.expect(userAuthData.getAuthProviderInfo()).andReturn(info).anyTimes();
+		AndroidMock.expect(userAuthData.getAuthProviderInfo()).andReturn(authProviderInfo).anyTimes();
 
 		AndroidMock.expect(session.getConsumerKey()).andReturn(key);
 		AndroidMock.expect(session.getConsumerSecret()).andReturn(secret);
 		AndroidMock.expect(session.getHost()).andReturn(host);
 		AndroidMock.expect(config.getProperty(SocializeConfig.API_HOST)).andReturn(host);
+		
+		AndroidMock.expect(authProviderInfoBuilder.getFactory(AuthProviderType.SOCIALIZE)).andReturn(authProviderInfoFactory); 
+		AndroidMock.expect(authProviderInfoFactory.newInstance()).andReturn(authProviderInfo); 
+		authProviderData.setAuthProviderInfo(authProviderInfo);
+		
+		AndroidMock.expect(authProviderInfo.matches(info)).andReturn(true); 
 
-		AndroidMock.replay(info, config, session, sessionPersister, authProviderDataFactory, authProviderData, userAuthDataMap, userAuthData);
+		AndroidMock.replay(info, config, session, sessionPersister, authProviderDataFactory, authProviderData, authProviderInfoBuilder, authProviderInfoFactory, authProviderInfo, userAuthDataMap, userAuthData);
 
 		DefaultSocializeProvider<SocializeObject> provider = getNewProvider();
 
@@ -260,7 +270,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 
 		provider.authenticate(endpoint, key, secret, uuid);
 
-		AndroidMock.verify(info, config, session, sessionPersister, authProviderDataFactory, authProviderData, userAuthDataMap, userAuthData);
+		AndroidMock.verify(info, config, session, sessionPersister, authProviderDataFactory, authProviderData, authProviderInfoBuilder, authProviderInfoFactory, authProviderInfo, userAuthDataMap, userAuthData);
 	}
 
 	public void testGet() throws Exception {
