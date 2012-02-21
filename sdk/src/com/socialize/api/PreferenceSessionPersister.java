@@ -31,11 +31,11 @@ import android.content.SharedPreferences.Editor;
 import com.socialize.Socialize;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.DefaultUserAuthData;
-import com.socialize.auth.DefaultUserAuthDataMap;
+import com.socialize.auth.DefaultUserProviderCredentials;
+import com.socialize.auth.DefaultUserProviderCredentialsMap;
 import com.socialize.auth.SocializeAuthProviderInfo;
-import com.socialize.auth.UserAuthData;
-import com.socialize.auth.UserAuthDataMap;
+import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.entity.User;
 import com.socialize.entity.UserFactory;
@@ -99,15 +99,15 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 	public void delete(Context context, AuthProviderType type) {
 		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 		Editor editor = prefs.edit();
-		editor.putString(USER_AUTH_DATA, jsonUtils.toJSON(makeDefaultUserAuthData()));
+		editor.putString(USER_AUTH_DATA, jsonUtils.toJSON(makeDefaultUserProviderCredentials()));
 		editor.commit();
 	}
 	
-	protected UserAuthData makeDefaultUserAuthData() {
-		DefaultUserAuthData userAuthData = newDefaultUserAuthData();
+	protected UserProviderCredentials makeDefaultUserProviderCredentials() {
+		DefaultUserProviderCredentials userProviderCredentials = newDefaultUserProviderCredentials();
 		SocializeAuthProviderInfo info = new SocializeAuthProviderInfo();
-		userAuthData.setAuthProviderInfo(info);
-		return userAuthData;
+		userProviderCredentials.setAuthProviderInfo(info);
+		return userProviderCredentials;
 	}
 	
 
@@ -120,16 +120,14 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 		
 		Editor editor = prefs.edit();
 		
-		editor.clear();
-		
 		editor.putString("consumer_key", session.getConsumerKey());
 		editor.putString("consumer_secret", session.getConsumerSecret());
 		editor.putString("consumer_token", session.getConsumerToken());
 		editor.putString("consumer_token_secret", session.getConsumerTokenSecret());
 		
-		String userAuthData = jsonUtils.toJSON(session.getUserAuthData());
+		String userProviderCredentials = jsonUtils.toJSON(session.getUserProviderCredentials());
 		
-		editor.putString(USER_AUTH_DATA, userAuthData);
+		editor.putString(USER_AUTH_DATA, userProviderCredentials);
 		editor.putString(SOCIALIZE_VERSION, Socialize.VERSION);
 		
 		User user = session.getUser();
@@ -152,16 +150,16 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 		editor.commit();
 	}
 	
-	protected UserAuthDataMap loadUserAuthData(SharedPreferences prefs) {
+	protected UserProviderCredentialsMap loadUserProviderCredentials(SharedPreferences prefs) {
 		String authData = prefs.getString(USER_AUTH_DATA, null);
 		
-		UserAuthDataMap map = null;
+		UserProviderCredentialsMap map = null;
 		
 		if(StringUtils.isEmpty(authData)) {
 			AuthProviderInfo authProviderInfo = null;
 			
 			// Legacy, must only be FB
-			DefaultUserAuthData data = newDefaultUserAuthData();
+			DefaultUserProviderCredentials data = newDefaultUserProviderCredentials();
 			
 			String userId3rdParty = prefs.getString("3rd_party_userid", null);
 			String token3rdParty = prefs.getString("3rd_party_token", null);
@@ -205,38 +203,38 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 			}
 			
 			data.setAuthProviderInfo(authProviderInfo);
-			map = newDefaultUserAuthDataMap();
+			map = newDefaultUserProviderCredentialsMap();
 			map.put(type, data);
 		}
 		else {
-			map = jsonUtils.fromJSON(authData, UserAuthDataMap.class);
+			map = jsonUtils.fromJSON(authData, UserProviderCredentialsMap.class);
 		}
 		
 		return map;
 	}
 	
-	protected DefaultUserAuthData newDefaultUserAuthData() {
-		return new DefaultUserAuthData();
+	protected DefaultUserProviderCredentials newDefaultUserProviderCredentials() {
+		return new DefaultUserProviderCredentials();
 	}
 	
-	protected DefaultUserAuthDataMap newDefaultUserAuthDataMap() {
-		return new DefaultUserAuthDataMap();
+	protected DefaultUserProviderCredentialsMap newDefaultUserProviderCredentialsMap() {
+		return new DefaultUserProviderCredentialsMap();
 	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.api.SocializeSessionPersister#load(android.content.Context)
 	 */
 	@Override
-	public SocializeSession load(Context context) {
+	public WritableSession load(Context context) {
 		
 		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 		
 		String key = prefs.getString("consumer_key", null);
 		String secret = prefs.getString("consumer_secret", null);
 		
-		UserAuthDataMap userAuthData = loadUserAuthData(prefs);
+		UserProviderCredentialsMap userProviderCredentials = loadUserProviderCredentials(prefs);
 		
-		WritableSession session = sessionFactory.create(key, secret, userAuthData);
+		WritableSession session = sessionFactory.create(key, secret, userProviderCredentials);
 			
 		session.setConsumerToken(prefs.getString("consumer_token", null));
 		session.setConsumerTokenSecret(prefs.getString("consumer_token_secret", null));

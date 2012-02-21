@@ -60,7 +60,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 
 	private P provider;
 	private SocializeResponseFactory<T> responseFactory;
-	private SocializeConfig config;
 	private AuthProviders authProviders;
 	private SocializeLogger logger;
 	private HttpUtils httpUtils;
@@ -82,8 +81,8 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		provider.clearSession(type);
 	}
 	
-	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderData data) throws SocializeException {
-		return provider.loadSession(endpoint, key, secret, data);
+	public SocializeSession loadSession(String endpoint, String key, String secret) throws SocializeException {
+		return provider.loadSession(endpoint, key, secret);
 	}
 	
 	public SocializeSession authenticate(Context context, String endpoint, String key, String secret, String uuid) throws SocializeException {
@@ -276,10 +275,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		poster.execute(request);
 	}
 
-	public void authenticateAsync(Context context, String key, String secret, String uuid, SocializeAuthListener listener, final SocializeSessionConsumer sessionConsumer) {
-		authenticateAsync(context, key, secret, uuid, new AuthProviderData(), listener, sessionConsumer, false);
-	}
-	
 	public void authenticateAsync(
 			Context context,
 			String key, 
@@ -375,6 +370,10 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}
 	
 	protected AuthProviderType getAuthProviderType(AuthProviderData data) {
+		if(data == null) {
+			return AuthProviderType.SOCIALIZE;
+		}
+		
 		@SuppressWarnings("deprecation")
 		AuthProviderType authProviderType = data.getAuthProviderType();
 		
@@ -438,14 +437,14 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		}
 		
 		try {
-			session = loadSession(request.getEndpoint(), key, secret, authProviderData);
+			session = loadSession(request.getEndpoint(), key, secret);
 		}
 		catch (SocializeException e) {
 			// No need to throw this, just log it
 			logger.warn("Failed to load saved session data", e);
 		}
 					
-		if(session == null) {
+		if(session == null || !provider.validateSession(session, authProviderData)) {
 			// Get the provider for the type
 			AuthProvider<AuthProviderInfo> authProvider = authProviders.getProvider(authProviderType);
 			
@@ -523,45 +522,17 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	public void setNotificationChecker(NotificationChecker notificationChecker) {
 		this.notificationChecker = notificationChecker;
 	}
-
-	public SocializeResponseFactory<T> getResponseFactory() {
-		return responseFactory;
-	}
 	
-	public SocializeConfig getConfig() {
-		return config;
-	}
-
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
-	}
-	
-	public AuthProviders getAuthProviders() {
-		return authProviders;
-	}
-
 	public void setAuthProviders(AuthProviders authProviders) {
 		this.authProviders = authProviders;
 	}
 	
-	public SocializeLogger getLogger() {
-		return logger;
-	}
-
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
 	
-	public HttpUtils getHttpUtils() {
-		return httpUtils;
-	}
-
 	public void setHttpUtils(HttpUtils httpUtils) {
 		this.httpUtils = httpUtils;
-	}
-	
-	public SocializeLocationProvider getLocationProvider() {
-		return locationProvider;
 	}
 
 	public void setLocationProvider(SocializeLocationProvider locationProvider) {
@@ -652,6 +623,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			}
 			
 			response.setSession(session);
+			
 			return response;
 		}
 	}

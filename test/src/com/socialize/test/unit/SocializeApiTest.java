@@ -33,6 +33,7 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeAuthRequest;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.WritableSession;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderInfo;
@@ -54,17 +55,17 @@ public class SocializeApiTest extends SocializeActivityTest {
 	private SocializeApi<SocializeObject, SocializeProvider<SocializeObject>> api;
 	private SocializeProvider<SocializeObject> provider;
 
-	private SocializeSession mockSession;
+	private WritableSession mockSession;
 
 	@SuppressWarnings("unchecked")
-	@UsesMocks({ SocializeProvider.class, SocializeSession.class })
+	@UsesMocks({ SocializeProvider.class, WritableSession.class })
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		provider = AndroidMock.createMock(SocializeProvider.class);
 		api = new SocializeApi<SocializeObject, SocializeProvider<SocializeObject>>(provider);
 
-		mockSession = AndroidMock.createMock(SocializeSession.class);
+		mockSession = AndroidMock.createMock(WritableSession.class);
 
 		AndroidMock.replay(mockSession);
 
@@ -98,10 +99,9 @@ public class SocializeApiTest extends SocializeActivityTest {
 	}
 
 	public void testLoadSessionCallsLoadSessionOnProviderWithAuthProviderData() throws Throwable {
-		AuthProviderData data = new AuthProviderData();
-		AndroidMock.expect(provider.loadSession("test_endpoint", "test_key", "test_secret", data)).andReturn(mockSession);
+		AndroidMock.expect(provider.loadSession("test_endpoint", "test_key", "test_secret")).andReturn(mockSession);
 		AndroidMock.replay(provider);
-		api.loadSession("test_endpoint", "test_key", "test_secret", data);
+		api.loadSession("test_endpoint", "test_key", "test_secret");
 		AndroidMock.verify(provider);
 	}
 
@@ -416,7 +416,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		}
 
 		@Override
-		public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderData data) throws SocializeException {
+		public SocializeSession loadSession(String endpoint, String key, String secret) throws SocializeException {
 			addResult(0, "loadSession");
 			return null;
 		}

@@ -23,7 +23,7 @@ package com.socialize.api;
 
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.UserAuthData;
+import com.socialize.auth.UserProviderCredentials;
 import com.socialize.entity.User;
 
 public interface WritableSession extends SocializeSession {
@@ -36,7 +36,7 @@ public interface WritableSession extends SocializeSession {
 	
 	public void setHost(String host);
 	
-	public void setUserAuthData(AuthProviderType type, UserAuthData data);
+	public void setUserProviderCredentials(AuthProviderType type, UserProviderCredentials data);
 	
 	@Deprecated
 	public void set3rdPartyUserId(String userId);

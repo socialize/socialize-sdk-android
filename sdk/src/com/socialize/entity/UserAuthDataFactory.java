@@ -29,9 +29,7 @@ import com.socialize.log.SocializeLogger;
 
 /**
  * @author Jason Polites
- * @deprecated
  */
-@Deprecated
 public class UserAuthDataFactory extends SocializeObjectFactory<UserAuthData> {
 	
 	private static final String AUTH_ID = "auth_id";

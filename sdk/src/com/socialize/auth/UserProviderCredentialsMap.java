@@ -19,24 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.gson;
+package com.socialize.auth;
 
-import java.lang.reflect.Type;
-
-import com.google.gson.InstanceCreator;
-import com.socialize.auth.DefaultUserAuthData;
-import com.socialize.auth.UserAuthData;
+import java.util.Collection;
 
 /**
  * @author Jason Polites
- *
  */
-public class UserAuthDataInstanceCreator implements InstanceCreator<UserAuthData> {
-	/* (non-Javadoc)
-	 * @see com.google.gson.InstanceCreator#createInstance(java.lang.reflect.Type)
-	 */
-	@Override
-	public UserAuthData createInstance(Type type) {
-		return new DefaultUserAuthData();
-	}
+public interface UserProviderCredentialsMap {
+	
+	public UserProviderCredentials get(AuthProviderType type);
+	
+	public void put(AuthProviderType type, UserProviderCredentials data);
+	
+	public Collection<UserProviderCredentials> values();
+	
 }

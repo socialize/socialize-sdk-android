@@ -19,32 +19,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity;
+package com.socialize.auth;
 
-import com.socialize.auth.AuthProviderType;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author Jason Polites
+ *
  */
-public class UserAuthData extends SocializeObject {
+public class DefaultUserProviderCredentialsMap implements UserProviderCredentialsMap {
+	
+	private Map<AuthProviderType, UserProviderCredentials> map;
 
-	private static final long serialVersionUID = 1771134818619831658L;
-	
-	private AuthProviderType authProviderType;
-	
-	public AuthProviderType getAuthProviderType() {
-		return authProviderType;
-	}
-	public void setAuthProviderType(AuthProviderType authProviderType) {
-		this.authProviderType = authProviderType;
-	}
-	@Override
-	public int hashCode() {
-		return super.hashCode();
+	public DefaultUserProviderCredentialsMap() {
+		super();
+		map = new LinkedHashMap<AuthProviderType, UserProviderCredentials>(5);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.auth.UserProviderCredentialsMap#get(com.socialize.auth.AuthProviderType)
+	 */
 	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj);
+	public UserProviderCredentials get(AuthProviderType type) {
+		return map.get(type);
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.auth.UserProviderCredentialsMap#put(com.socialize.auth.AuthProviderType, com.socialize.auth.UserProviderCredentials)
+	 */
+	@Override
+	public void put(AuthProviderType type, UserProviderCredentials data) {
+		map.put(type, data);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.auth.UserProviderCredentialsMap#values()
+	 */
+	@Override
+	public Collection<UserProviderCredentials> values() {
+		return map.values();
+	}
+
 }

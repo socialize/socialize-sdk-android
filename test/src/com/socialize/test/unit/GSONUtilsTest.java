@@ -22,9 +22,10 @@
 package com.socialize.test.unit;
 
 import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.DefaultUserAuthData;
-import com.socialize.auth.DefaultUserAuthDataMap;
-import com.socialize.auth.UserAuthData;
+import com.socialize.auth.DefaultUserProviderCredentials;
+import com.socialize.auth.DefaultUserProviderCredentialsMap;
+import com.socialize.auth.SocializeAuthProviderInfo;
+import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.util.GSONUtils;
@@ -34,8 +35,8 @@ import com.socialize.util.GSONUtils;
  */
 public class GSONUtilsTest extends SocializeUnitTest {
 
-	public void testSerializeDeserializeUserUserAuthData() {
-		DefaultUserAuthData data = new DefaultUserAuthData();
+	public void testSerializeDeserializeUserUserProviderCredentials() {
+		DefaultUserProviderCredentials data = new DefaultUserProviderCredentials();
 		data.setAccessToken("foobar_token");
 		data.setUserId("foobar_user_id");
 		
@@ -44,7 +45,7 @@ public class GSONUtilsTest extends SocializeUnitTest {
 		
 		String json = gsonUtils.toJSON(data);
 		
-		UserAuthData userAuthData = gsonUtils.fromJSON(json, UserAuthData.class);
+		UserProviderCredentials userAuthData = gsonUtils.fromJSON(json, UserProviderCredentials.class);
 		
 		assertNotNull(userAuthData);
 		
@@ -52,12 +53,12 @@ public class GSONUtilsTest extends SocializeUnitTest {
 		assertEquals("foobar_user_id", userAuthData.getUserId());
 	}
 	
-	public void testSerializeDeserializeUserAuthDataMapSingleValue() {
+	public void testSerializeDeserializeUserProviderCredentialsMapSingleValue() {
 		GSONUtils gsonUtils = new GSONUtils();
 		gsonUtils.init();
 		
-		DefaultUserAuthDataMap map = new DefaultUserAuthDataMap();
-		DefaultUserAuthData data = new DefaultUserAuthData();
+		DefaultUserProviderCredentialsMap map = new DefaultUserProviderCredentialsMap();
+		DefaultUserProviderCredentials data = new DefaultUserProviderCredentials();
 		data.setAccessToken("foobar_token");
 		data.setUserId("foobar_user_id");
 		
@@ -70,9 +71,9 @@ public class GSONUtilsTest extends SocializeUnitTest {
 		
 		String json = gsonUtils.toJSON(map);
 		
-		DefaultUserAuthDataMap map2 = gsonUtils.fromJSON(json, DefaultUserAuthDataMap.class);
+		DefaultUserProviderCredentialsMap map2 = gsonUtils.fromJSON(json, DefaultUserProviderCredentialsMap.class);
 		
-		UserAuthData userAuthData = map2.get(AuthProviderType.FACEBOOK);
+		UserProviderCredentials userAuthData = map2.get(AuthProviderType.FACEBOOK);
 		
 		assertNotNull(userAuthData);
 		
@@ -84,5 +85,53 @@ public class GSONUtilsTest extends SocializeUnitTest {
 		assertNotNull(info2);
 		assertEquals("foobar_appId", info2.getAppId());
 	}
+	
+	public void testSerializeDeserializeUserProviderCredentialsMapMultiValue() {
+		GSONUtils gsonUtils = new GSONUtils();
+		gsonUtils.init();
+		
+		DefaultUserProviderCredentialsMap map = new DefaultUserProviderCredentialsMap();
+		
+		DefaultUserProviderCredentials data = new DefaultUserProviderCredentials();
+		data.setAccessToken("foobar_token");
+		data.setUserId("foobar_user_id");
+		FacebookAuthProviderInfo info = new FacebookAuthProviderInfo();
+		info.setAppId("foobar_appId");
+		data.setAuthProviderInfo(info);
+		
+		DefaultUserProviderCredentials data2 = new DefaultUserProviderCredentials();
+		data2.setAccessToken("foobar_token2");
+		data2.setUserId("foobar_user_id2");
+		SocializeAuthProviderInfo info2 = new SocializeAuthProviderInfo();
+		data2.setAuthProviderInfo(info2);		
+		
+		map.put(AuthProviderType.FACEBOOK, data);
+		map.put(AuthProviderType.SOCIALIZE, data2);
+		
+		String json = gsonUtils.toJSON(map);
+		
+		DefaultUserProviderCredentialsMap map2 = gsonUtils.fromJSON(json, DefaultUserProviderCredentialsMap.class);
+		
+		UserProviderCredentials data2After = map2.get(AuthProviderType.SOCIALIZE);
+		UserProviderCredentials dataAfter = map2.get(AuthProviderType.FACEBOOK);
+		
+		assertNotNull(dataAfter);
+		assertNotNull(data2After);
+		
+		assertEquals("foobar_token", dataAfter.getAccessToken());
+		assertEquals("foobar_user_id", dataAfter.getUserId());
+		
+		assertEquals("foobar_token2", data2After.getAccessToken());
+		assertEquals("foobar_user_id2", data2After.getUserId());		
+		
+		FacebookAuthProviderInfo infoAfter = (FacebookAuthProviderInfo) dataAfter.getAuthProviderInfo();
+		SocializeAuthProviderInfo info2After = (SocializeAuthProviderInfo) data2After.getAuthProviderInfo();
+		
+		assertNotNull(infoAfter);
+		assertNotNull(info2After);
+		
+		assertEquals("foobar_appId", infoAfter.getAppId());
+	}
+		
 	
 }

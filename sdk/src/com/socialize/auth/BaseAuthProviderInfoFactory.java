@@ -21,49 +21,17 @@
  */
 package com.socialize.auth;
 
+import com.socialize.config.SocializeConfig;
+
 /**
  * @author Jason Polites
  *
  */
-public class DefaultUserAuthData implements UserAuthData {
+public abstract class BaseAuthProviderInfoFactory<I extends AuthProviderInfo> implements AuthProviderInfoFactory<I> {
 
-	private String userId;
-	private String accessToken;
-	private AuthProviderInfo authProviderInfo;
-	
-	/* (non-Javadoc)
-	 * @see com.socialize.auth.UserAuthData#getUserId()
-	 */
-	@Override
-	public String getUserId() {
-		return userId;
-	}
+	protected SocializeConfig config;
 
-	/* (non-Javadoc)
-	 * @see com.socialize.auth.UserAuthData#getAccessToken()
-	 */
-	@Override
-	public String getAccessToken() {
-		return accessToken;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.auth.UserAuthData#getAuthProviderInfo()
-	 */
-	@Override
-	public AuthProviderInfo getAuthProviderInfo() {
-		return authProviderInfo;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public void setAccessToken(String accessToken) {
-		this.accessToken = accessToken;
-	}
-
-	public void setAuthProviderInfo(AuthProviderInfo authProviderInfo) {
-		this.authProviderInfo = authProviderInfo;
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
 	}
 }

@@ -25,9 +25,9 @@ import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
-import com.socialize.auth.DefaultUserAuthData;
-import com.socialize.auth.UserAuthData;
-import com.socialize.auth.UserAuthDataMap;
+import com.socialize.auth.DefaultUserProviderCredentials;
+import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.config.SocializeConfig;
 
 /**
@@ -47,24 +47,24 @@ public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 	@Override
 	public WritableSession create(String key, String secret, AuthProviderData data) {
 		
-		DefaultUserAuthData userAuthData = new DefaultUserAuthData();
-		userAuthData.setAccessToken(data.getToken3rdParty());
-		userAuthData.setUserId(data.getUserId3rdParty());
-		userAuthData.setAuthProviderInfo(data.getAuthProviderInfo());
+		DefaultUserProviderCredentials userProviderCredentials = new DefaultUserProviderCredentials();
+		userProviderCredentials.setAccessToken(data.getToken3rdParty());
+		userProviderCredentials.setUserId(data.getUserId3rdParty());
+		userProviderCredentials.setAuthProviderInfo(data.getAuthProviderInfo());
 		
-		return create(key, secret, userAuthData);
+		return create(key, secret, userProviderCredentials);
 	}
 
 	@Override
-	public WritableSession create(String key, String secret, UserAuthData userAuthData) {
+	public WritableSession create(String key, String secret, UserProviderCredentials userProviderCredentials) {
 		SocializeSessionImpl session = new SocializeSessionImpl();
 		session.setConsumerKey(key);
 		session.setConsumerSecret(secret);
 		
-		AuthProviderInfo authProviderInfo = userAuthData.getAuthProviderInfo();
+		AuthProviderInfo authProviderInfo = userProviderCredentials.getAuthProviderInfo();
 		
 		if(authProviderInfo != null) {
-			session.setUserAuthData(authProviderInfo.getType(), userAuthData);
+			session.setUserProviderCredentials(authProviderInfo.getType(), userProviderCredentials);
 		}
 		
 		session.setHost(config.getProperty(SocializeConfig.API_HOST).trim());
@@ -73,11 +73,11 @@ public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 	}
 	
 	@Override
-	public WritableSession create(String key, String secret, UserAuthDataMap userAuthDataMap) {
+	public WritableSession create(String key, String secret, UserProviderCredentialsMap userProviderCredentialsMap) {
 		SocializeSessionImpl session = new SocializeSessionImpl();
 		session.setConsumerKey(key);
 		session.setConsumerSecret(secret);
-		session.setUserAuthData(userAuthDataMap);
+		session.setUserProviderCredentials(userProviderCredentialsMap);
 		session.setHost(config.getProperty(SocializeConfig.API_HOST).trim());
 		return session;
 	}

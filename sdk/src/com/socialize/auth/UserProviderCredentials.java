@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,25 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api;
+package com.socialize.auth;
 
-import android.content.Context;
-
-import com.socialize.auth.AuthProviderType;
-import com.socialize.entity.User;
 
 /**
+ * Represents the data for a user's authenticated session with a 3rd party auth provider (e.g. Facebook, twitter etc)
  * @author Jason Polites
  */
-public interface SocializeSessionPersister {
-
-	public void save(Context context, SocializeSession session);
+public interface UserProviderCredentials {
 	
-	public WritableSession load(Context context);
+	public String getUserId();
 	
-	public void delete(Context context);
+	public String getAccessToken();
 	
-	public void delete(Context context, AuthProviderType type);
+	public AuthProviderInfo getAuthProviderInfo();
 	
-	public void saveUser(Context context, User user);
 }

@@ -19,49 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.auth;
+package com.socialize.auth.facebook;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import com.socialize.auth.BaseAuthProviderInfoFactory;
+import com.socialize.config.SocializeConfig;
 
 /**
  * @author Jason Polites
  *
  */
-public class DefaultUserAuthDataMap implements UserAuthDataMap {
-	
-	private Map<AuthProviderType, UserAuthData> map;
-
-	public DefaultUserAuthDataMap() {
-		super();
-		map = new LinkedHashMap<AuthProviderType, UserAuthData>(5);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.auth.UserAuthDataMap#get(com.socialize.auth.AuthProviderType)
-	 */
-	@Override
-	public UserAuthData get(AuthProviderType type) {
-		return map.get(type);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.auth.UserAuthDataMap#put(com.socialize.auth.AuthProviderType, com.socialize.auth.UserAuthData)
-	 */
-	@Override
-	public void put(AuthProviderType type, UserAuthData data) {
-		map.put(type, data);
-	}
+public class FacebookAuthProviderInfoFactory extends BaseAuthProviderInfoFactory<FacebookAuthProviderInfo> {
 
 	/* (non-Javadoc)
-	 * @see com.socialize.auth.UserAuthDataMap#values()
+	 * @see com.socialize.auth.AuthProviderInfoFactory#newInstance(android.content.Context)
 	 */
 	@Override
-	public Collection<UserAuthData> values() {
-		return map.values();
+	public FacebookAuthProviderInfo newInstance() {
+		FacebookAuthProviderInfo info = new FacebookAuthProviderInfo();
+		info.setAppId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
+		return info;
 	}
-
 }

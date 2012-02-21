@@ -46,8 +46,8 @@ import com.socialize.api.WritableSession;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.UserAuthData;
-import com.socialize.auth.UserAuthDataMap;
+import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
@@ -225,7 +225,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		AndroidMock.verify(sessionPersister);
 	}
 
-	@UsesMocks({ AuthProviderInfo.class, UserAuthData.class })
+	@UsesMocks({ AuthProviderInfo.class, UserProviderCredentials.class })
 	public void testLoadCachedCredentialsOnAuthenticate() throws Exception {
 
 		final String key = "foo";
@@ -235,15 +235,15 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		final String endpoint = "foobar/";
 
 		AuthProviderInfo info = AndroidMock.createMock(AuthProviderInfo.class);
-		UserAuthData userAuthData = AndroidMock.createMock(UserAuthData.class);
-		UserAuthDataMap userAuthDataMap = AndroidMock.createMock(UserAuthDataMap.class);
+		UserProviderCredentials userAuthData = AndroidMock.createMock(UserProviderCredentials.class);
+		UserProviderCredentialsMap userAuthDataMap = AndroidMock.createMock(UserProviderCredentialsMap.class);
 
 		AndroidMock.expect(sessionPersister.load(mockContext)).andReturn(session);
 		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
 		AndroidMock.expect(authProviderData.getAuthProviderInfo()).andReturn(info).anyTimes();
 		AndroidMock.expect(info.getType()).andReturn(AuthProviderType.SOCIALIZE).anyTimes();
 
-		AndroidMock.expect(session.getUserAuthData()).andReturn(userAuthDataMap);
+		AndroidMock.expect(session.getUserProviderCredentials()).andReturn(userAuthDataMap);
 		AndroidMock.expect(userAuthDataMap.get(AuthProviderType.SOCIALIZE)).andReturn(userAuthData);
 		AndroidMock.expect(userAuthData.getAuthProviderInfo()).andReturn(info).anyTimes();
 

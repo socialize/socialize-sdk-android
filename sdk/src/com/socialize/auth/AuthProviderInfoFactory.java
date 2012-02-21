@@ -21,17 +21,13 @@
  */
 package com.socialize.auth;
 
-import java.util.Collection;
 
 /**
  * @author Jason Polites
+ *
  */
-public interface UserAuthDataMap {
-	
-	public UserAuthData get(AuthProviderType type);
-	
-	public void put(AuthProviderType type, UserAuthData data);
-	
-	public Collection<UserAuthData> values();
+public interface AuthProviderInfoFactory<I extends AuthProviderInfo> {
+
+	public I newInstance();
 	
 }

@@ -19,32 +19,51 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.entity;
-
-import com.socialize.auth.AuthProviderType;
+package com.socialize.auth;
 
 /**
  * @author Jason Polites
+ *
  */
-public class UserAuthData extends SocializeObject {
+public class DefaultUserProviderCredentials implements UserProviderCredentials {
 
-	private static final long serialVersionUID = 1771134818619831658L;
+	private String userId;
+	private String accessToken;
+	private AuthProviderInfo authProviderInfo;
 	
-	private AuthProviderType authProviderType;
-	
-	public AuthProviderType getAuthProviderType() {
-		return authProviderType;
-	}
-	public void setAuthProviderType(AuthProviderType authProviderType) {
-		this.authProviderType = authProviderType;
-	}
+	/* (non-Javadoc)
+	 * @see com.socialize.auth.UserProviderCredentials#getUserId()
+	 */
 	@Override
-	public int hashCode() {
-		return super.hashCode();
+	public String getUserId() {
+		return userId;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.socialize.auth.UserProviderCredentials#getAccessToken()
+	 */
 	@Override
-	public boolean equals(Object obj) {
-		return super.equals(obj);
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.auth.UserProviderCredentials#getAuthProviderInfo()
+	 */
+	@Override
+	public AuthProviderInfo getAuthProviderInfo() {
+		return authProviderInfo;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
+
+	public void setAuthProviderInfo(AuthProviderInfo authProviderInfo) {
+		this.authProviderInfo = authProviderInfo;
 	}
 }

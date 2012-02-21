@@ -59,8 +59,8 @@ import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
 import com.socialize.auth.SocializeAuthProviderInfo;
-import com.socialize.auth.UserAuthData;
-import com.socialize.auth.UserAuthDataMap;
+import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
@@ -416,10 +416,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				if(provider != null) {
 					boolean cleared = false;
 					
-					UserAuthData userAuthData = session.getUserAuthData(type);
+					UserProviderCredentials userProviderCredentials = session.getUserProviderCredentials(type);
 					
-					if(userAuthData != null) {
-						AuthProviderInfo authProviderInfo = userAuthData.getAuthProviderInfo();
+					if(userProviderCredentials != null) {
+						AuthProviderInfo authProviderInfo = userProviderCredentials.getAuthProviderInfo();
 						if(authProviderInfo != null) {
 							provider.clearCache(context, authProviderInfo);
 							cleared = true;
@@ -456,14 +456,14 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		try {
 			if(session != null) {
 				
-				UserAuthDataMap userAuthDataMap = session.getUserAuthData();
+				UserProviderCredentialsMap userProviderCredentialsMap = session.getUserProviderCredentials();
 				
 				boolean cleared = false;
 				
-				if(userAuthDataMap != null) {
-					Collection<UserAuthData> values = userAuthDataMap.values();
-					for (UserAuthData userAuthData : values) {
-						AuthProviderInfo authProviderInfo = userAuthData.getAuthProviderInfo();
+				if(userProviderCredentialsMap != null) {
+					Collection<UserProviderCredentials> values = userProviderCredentialsMap.values();
+					for (UserProviderCredentials userProviderCredentials : values) {
+						AuthProviderInfo authProviderInfo = userProviderCredentials.getAuthProviderInfo();
 						if(authProviderInfo != null) {
 							cleared = true;
 							clear3rdPartySession(context, authProviderInfo.getType());
@@ -677,11 +677,11 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	}	
 	
 	@Override
-	public void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, UserAuthData userAuthData, SocializeAuthListener authListener) {
+	public void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, UserProviderCredentials userProviderCredentials, SocializeAuthListener authListener) {
 		AuthProviderData authProviderData = this.authProviderDataFactory.getBean();
 		authProviderData.setAuthProviderInfo(authProviderInfo);
-		authProviderData.setToken3rdParty(userAuthData.getAccessToken());
-		authProviderData.setUserId3rdParty(userAuthData.getUserId());
+		authProviderData.setToken3rdParty(userProviderCredentials.getAccessToken());
+		authProviderData.setUserId3rdParty(userProviderCredentials.getUserId());
 		authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, false);	
 	}
 
@@ -1267,9 +1267,9 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				return true;
 			}
 			
-			UserAuthData userAuthData = session.getUserAuthData(providerType);
+			UserProviderCredentials userProviderCredentials = session.getUserProviderCredentials(providerType);
 			
-			if(userAuthData == null) {
+			if(userProviderCredentials == null) {
 				// Legacy
 				return isAuthenticatedLegacy(providerType);
 			}

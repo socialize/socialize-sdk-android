@@ -47,6 +47,10 @@
 		<property name="logger" ref="logger"/>
 	</bean>
 	
+	<bean id="jsonUtils" class="com.socialize.util.GSONUtils">
+		<init-method name="init"/>
+	</bean>		
+	
 	<bean id="locationManager" class="com.socialize.location.SocializeLocationManager">
 		<constructor-arg ref="appUtils"/>
 		<init-method name="init">
@@ -163,6 +167,9 @@
 	<bean id="sessionPersister" class="com.socialize.api.PreferenceSessionPersister">
 		<constructor-arg ref="userFactory"/>
 		<constructor-arg ref="sessionFactory"/>
+		
+		<property name="logger" ref="logger"/>
+		<property name="jsonUtils" ref="jsonUtils"/>
 	</bean>
 	
 	<bean id="defaultProvider" class="com.socialize.provider.DefaultSocializeProvider" abstract="true">
@@ -182,7 +189,7 @@
 		<property name="httpUtils" ref="httpUtils"/>
 		<property name="ioUtils" ref="ioUtils"/>
 		<property name="sessionPersister" ref="sessionPersister"/>
-		
+		<property name="authProviderInfoBuilder" ref="authProviderInfoBuilder"/>
 	</bean>
 	
 	<bean id="actionProvider" class="com.socialize.provider.SocializeActionProvider" extends="defaultProvider">
@@ -211,7 +218,6 @@
 	
 	<bean id="socializeApi" class="com.socialize.api.SocializeApi" abstract="true">
 		<property name="responseFactory" ref="responseFactory"/>
-		<property name="config" ref="config"/>
 		<property name="logger" ref="logger"/>
 		<property name="authProviders" ref="authProviders"/>
 		<property name="httpUtils" ref="httpUtils"/>
@@ -374,7 +380,9 @@
 				
 		<property name="sessionPersister" ref="sessionPersister"/>
 		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
-		<property name="deviceUtils" ref="deviceUtils"/>		
+		<property name="deviceUtils" ref="deviceUtils"/>	
+		<property name="socializeAuthProviderInfoFactory" ref="socializeAuthProviderInfoFactory"/>
+			
 	</bean>
 	
 <!-- End User API -->
@@ -531,7 +539,47 @@
 	</bean>		
 	
 	<!-- End Facebook -->
-
+	
+	<!--  Auth providers -->
+	
+	<bean 
+		id="baseAuthProviderInfoFactory" 
+		class="com.socialize.auth.BaseAuthProviderInfoFactory"
+		abstract="true">
+		<property name="config" ref="config"/>
+	</bean>		
+	
+	<bean 
+		id="facebookAuthProviderInfoFactory" 
+		class="com.socialize.auth.facebook.FacebookAuthProviderInfoFactory"
+		extends="baseAuthProviderInfoFactory">
+	</bean>		
+	
+	<bean 
+		id="socializeAuthProviderInfoFactory" 
+		class="com.socialize.auth.SocializeAuthProviderInfoFactory"
+		extends="baseAuthProviderInfoFactory">
+	</bean>		
+	
+	<bean 
+		id="authProviderInfoBuilder" 
+		class="com.socialize.auth.AuthProviderInfoBuilder">
+		
+		<property name="factories">
+			<map>
+				<entry>
+					<key value="SOCIALIZE"/>
+					<value ref="socializeAuthProviderInfoFactory"/>
+				</entry>			
+				<entry>
+					<key value="FACEBOOK"/>
+					<value ref="facebookAuthProviderInfoFactory"/>
+				</entry>
+			</map>
+		</property>		
+		
+	</bean>		
+	
 	<!-- Notifications -->
 	<bean id="notificationAuthenticator" class="com.socialize.notifications.SocializeNotificationAuthenticator">
 		<property name="config" ref="config"/>

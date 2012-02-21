@@ -21,18 +21,16 @@
  */
 package com.socialize.util;
 
-import java.lang.reflect.Type;
-import java.util.Map;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.UserAuthData;
+import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.gson.AuthProviderInfoSerializer;
 import com.socialize.gson.AuthProviderTypeSerializer;
-import com.socialize.gson.UserAuthDataDeserializer;
+import com.socialize.gson.UserProviderCredentialsMapSerializer;
+import com.socialize.gson.UserProviderCredentialsSerializer;
 
 /**
  * @author Jason Polites
@@ -42,14 +40,14 @@ public class GSONUtils implements JSONUtils {
 	
 	private Gson gson;
 	
-	
 	public void init() {
 		 gson = newGson();
 	}
 	
 	protected Gson newGson() {
 		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(UserAuthData.class, new UserAuthDataDeserializer());
+		builder.registerTypeAdapter(UserProviderCredentials.class, new UserProviderCredentialsSerializer());
+		builder.registerTypeAdapter(UserProviderCredentialsMap.class, new UserProviderCredentialsMapSerializer());
 		builder.registerTypeAdapter(AuthProviderType.class, new AuthProviderTypeSerializer() );
 		builder.registerTypeAdapter(AuthProviderInfo.class, new AuthProviderInfoSerializer() );
 		builder.enableComplexMapKeySerialization();
@@ -61,13 +59,7 @@ public class GSONUtils implements JSONUtils {
 	 */
 	@Override
 	public synchronized String toJSON(Object object) {
-		if(object instanceof Map) {
-			 TypeToken<?> typeOfMap = TypeToken.get((Type)object.getClass());
-			 return gson.toJson(object, typeOfMap.getType());
-		}
-		else {
-			return gson.toJson(object);
-		}
+		return gson.toJson(object);
 	}
 
 	/* (non-Javadoc)
@@ -77,5 +69,4 @@ public class GSONUtils implements JSONUtils {
 	public synchronized <T> T fromJSON(String json, Class<T> cls) {
 		return gson.fromJson(json, cls);
 	}
-
 }

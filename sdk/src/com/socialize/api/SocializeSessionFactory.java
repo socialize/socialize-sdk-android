@@ -23,8 +23,8 @@ package com.socialize.api;
 
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.UserAuthData;
-import com.socialize.auth.UserAuthDataMap;
+import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.UserProviderCredentialsMap;
 
 /**
  * @author Jason Polites
@@ -47,12 +47,12 @@ public interface SocializeSessionFactory {
 	 * Creates a new session.
 	 * @param key
 	 * @param secret
-	 * @param userAuthData
+	 * @param userProviderCredentials
 	 * @return
 	 */
-	public WritableSession create(String key, String secret, UserAuthData userAuthData);
+	public WritableSession create(String key, String secret, UserProviderCredentials userProviderCredentials);
 	
-	public WritableSession create(String key, String secret, UserAuthDataMap userAuthDataMap);
+	public WritableSession create(String key, String secret, UserProviderCredentialsMap userProviderCredentialsMap);
 	
 	/**
 	 * Creates a new session.

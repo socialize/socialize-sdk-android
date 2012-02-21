@@ -31,7 +31,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.UserAuthData;
+import com.socialize.auth.UserProviderCredentials;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
@@ -195,7 +195,7 @@ public interface SocializeService {
 	 * @param authUserId3rdParty The userId from the 3rd party provider (if available).
 	 * @param authToken3rdParty The auth token from the 3rd party (if available).
 	 * @param authListener The callback for authentication outcomes.
-	 * @deprecated Use {@link #authenticateKnownUser(Context, String, String, AuthProviderInfo, UserAuthData, SocializeAuthListener)}
+	 * @deprecated Use {@link #authenticateKnownUser(Context, String, String, AuthProviderInfo, UserProviderCredentials, SocializeAuthListener)}
 	 */
 	@Deprecated
 	public void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty, SocializeAuthListener authListener);
@@ -206,10 +206,10 @@ public interface SocializeService {
 	 * @param consumerKey The consumer key, obtained from registration at http://www.getsocialize.com.
 	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
 	 * @param authProviderInfo Information about the auth provider to be used. 
-	 * @param userAuthData Information about the user being authed.
+	 * @param userProviderCredentials Information about the user being authed.
 	 * @param authListener The callback for authentication outcomes.
 	 */
-	public void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, UserAuthData userAuthData, SocializeAuthListener authListener);
+	public void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, UserProviderCredentials userProviderCredentials, SocializeAuthListener authListener);
 	
 	/**
 	 * Authenticates the application against the API.

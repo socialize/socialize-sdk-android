@@ -25,8 +25,8 @@ import java.io.Serializable;
 
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.UserAuthData;
-import com.socialize.auth.UserAuthDataMap;
+import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.entity.User;
 
 /**
@@ -51,9 +51,9 @@ public interface SocializeSession extends Serializable {
 	 * Returns the set of session data for any 3rd party providers.
 	 * @return
 	 */
-	public UserAuthDataMap getUserAuthData();
+	public UserProviderCredentialsMap getUserProviderCredentials();
 	
-	public UserAuthData getUserAuthData(AuthProviderType type);
+	public UserProviderCredentials getUserProviderCredentials(AuthProviderType type);
 	
 	@Deprecated
 	public String get3rdPartyUserId();

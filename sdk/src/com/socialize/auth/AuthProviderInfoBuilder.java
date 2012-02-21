@@ -21,17 +21,21 @@
  */
 package com.socialize.auth;
 
+import java.util.Map;
 
 /**
- * Represents the data for a user's authenticated session with a 3rd party auth provider (e.g. Facebook, twitter etc)
  * @author Jason Polites
  */
-public interface UserAuthData {
+public class AuthProviderInfoBuilder {
+
+	private Map<String, AuthProviderInfoFactory<?>> factories;
+
+	public void setFactories(Map<String, AuthProviderInfoFactory<?>> factories) {
+		this.factories = factories;
+	}
 	
-	public String getUserId();
-	
-	public String getAccessToken();
-	
-	public AuthProviderInfo getAuthProviderInfo();
-	
+	@SuppressWarnings("unchecked")
+	public <I extends AuthProviderInfo> AuthProviderInfoFactory<I> getFactory(AuthProviderType type) {
+		return (AuthProviderInfoFactory<I>) factories.get(type.name());
+	}
 }

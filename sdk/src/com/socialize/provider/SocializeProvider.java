@@ -24,6 +24,7 @@ package com.socialize.provider;
 import java.util.Collection;
 
 import com.socialize.api.SocializeSession;
+import com.socialize.api.WritableSession;
 import com.socialize.api.action.ActionType;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
@@ -46,7 +47,10 @@ public interface SocializeProvider<T> {
 	 * @return
 	 * @throws SocializeException
 	 */
-	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderData data) throws SocializeException;
+	public WritableSession loadSession(String endpoint, String key, String secret) throws SocializeException;
+	
+	
+	public boolean validateSession(SocializeSession loaded, AuthProviderData data);
 	
 	/**
 	 * Loads a user's authentication session.
@@ -61,6 +65,7 @@ public interface SocializeProvider<T> {
 	 */
 	@Deprecated
 	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderType authProviderType, String appId3rdParty) throws SocializeException;
+
 	
 	public void clearSession();
 	

@@ -56,8 +56,8 @@ import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
 import com.socialize.auth.SocializeAuthProviderInfo;
-import com.socialize.auth.UserAuthData;
-import com.socialize.auth.UserAuthDataMap;
+import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
@@ -429,18 +429,18 @@ public class SocializeServiceTest extends SocializeActivityTest {
 	
 	
 	@SuppressWarnings("unchecked")
-	@UsesMocks({ SocializeSession.class, UserSystem.class, AuthProvider.class, UserAuthData.class, AuthProviderInfo.class })
+	@UsesMocks({ SocializeSession.class, UserSystem.class, AuthProvider.class, UserProviderCredentials.class, AuthProviderInfo.class })
 	public void testClear3rdPartySession() {
 		PublicSocialize socializeService = new PublicSocialize();
 		
 		AuthProvider<AuthProviderInfo> mockAuthProvider = AndroidMock.createMock(AuthProvider.class);
-		UserAuthData userAuthData = AndroidMock.createMock(UserAuthData.class);
+		UserProviderCredentials userAuthData = AndroidMock.createMock(UserProviderCredentials.class);
 		AuthProviderInfo authProviderInfo = AndroidMock.createMock(AuthProviderInfo.class);
 		
 		setupMinimalMocks();
 		
 		AndroidMock.expect(authProviders.getProvider(AuthProviderType.FACEBOOK)).andReturn(mockAuthProvider);
-		AndroidMock.expect(session.getUserAuthData(AuthProviderType.FACEBOOK)).andReturn(userAuthData);
+		AndroidMock.expect(session.getUserProviderCredentials(AuthProviderType.FACEBOOK)).andReturn(userAuthData);
 		AndroidMock.expect(userAuthData.getAuthProviderInfo()).andReturn(authProviderInfo);
 
 		mockAuthProvider.clearCache(getContext(), authProviderInfo);
@@ -1193,7 +1193,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		session = AndroidMock.createMock(SocializeSession.class);
 
-		AndroidMock.expect(session.getUserAuthData(AuthProviderType.FACEBOOK)).andReturn(null);
+		AndroidMock.expect(session.getUserProviderCredentials(AuthProviderType.FACEBOOK)).andReturn(null);
 		AndroidMock.expect(session.getAuthProviderType()).andReturn(AuthProviderType.FACEBOOK);
 
 		AndroidMock.replay(session);
@@ -1212,13 +1212,13 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		AndroidMock.verify(session);
 	}
 	
-	@UsesMocks ({UserAuthData.class})
+	@UsesMocks ({UserProviderCredentials.class})
 	public void testIsAuthenticatedWithProvider() {
 
-		UserAuthData data = AndroidMock.createMock(UserAuthData.class);
+		UserProviderCredentials data = AndroidMock.createMock(UserProviderCredentials.class);
 		session = AndroidMock.createMock(SocializeSession.class);
 
-		AndroidMock.expect(session.getUserAuthData(AuthProviderType.FACEBOOK)).andReturn(data);
+		AndroidMock.expect(session.getUserProviderCredentials(AuthProviderType.FACEBOOK)).andReturn(data);
 
 		AndroidMock.replay(session);
 
@@ -1339,20 +1339,20 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		assertSame(config, gotten);
 	}
 
-	@UsesMocks({AuthProvider.class, UserAuthData.class, AuthProviderInfo.class})
+	@UsesMocks({AuthProvider.class, UserProviderCredentials.class, AuthProviderInfo.class})
 	public void testClearSessionCache() {
 		setupDefaultMocks();
 		
-		UserAuthDataMap userAuthDataMap = AndroidMock.createMock(UserAuthDataMap.class);
-		UserAuthData userAuthData = AndroidMock.createMock(UserAuthData.class);
+		UserProviderCredentialsMap userAuthDataMap = AndroidMock.createMock(UserProviderCredentialsMap.class);
+		UserProviderCredentials userAuthData = AndroidMock.createMock(UserProviderCredentials.class);
 		AuthProviderInfo authProviderInfo = AndroidMock.createMock(AuthProviderInfo.class);
 		
-		Collection<UserAuthData> values = new ArrayList<UserAuthData>();
+		Collection<UserProviderCredentials> values = new ArrayList<UserProviderCredentials>();
 		values.add(userAuthData);
 		
 		AuthProviderType type = AuthProviderType.FACEBOOK;
 		
-		AndroidMock.expect(session.getUserAuthData()).andReturn(userAuthDataMap);
+		AndroidMock.expect(session.getUserProviderCredentials()).andReturn(userAuthDataMap);
 		AndroidMock.expect(userAuthDataMap.values()).andReturn(values);
 		AndroidMock.expect(userAuthData.getAuthProviderInfo()).andReturn(authProviderInfo);
 		AndroidMock.expect(authProviderInfo.getType()).andReturn(type);

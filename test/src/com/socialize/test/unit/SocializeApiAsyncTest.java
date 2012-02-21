@@ -60,7 +60,6 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 	private SocializeSession mockSession;
 	private SocializeSessionConsumer mockSessionConsumer;
 	private SocializeActionListener listener;
-	private SocializeConfig config;
 
 	private final int timeout = 20;
 
@@ -76,11 +75,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 
 		mockSessionConsumer = AndroidMock.createMock(SocializeSessionConsumer.class);
 
-		config = AndroidMock.createMock(SocializeConfig.class);
-
 		api = new SocializeApi<SocializeObject, SocializeProvider<SocializeObject>>(provider);
-
-		api.setConfig(config);
 
 		mockSession = AndroidMock.createMock(SocializeSession.class);
 
@@ -142,7 +137,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				api.authenticateAsync(getContext(), "test_key", "test_secret", "test_uuid", alistener, mockSessionConsumer);
+				api.authenticateAsync(getContext(), "test_key", "test_secret", "test_uuid", null, alistener, mockSessionConsumer, false);
 			}
 		});
 
@@ -192,7 +187,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				api.authenticateAsync(context, "test_key", "test_secret", "test_uuid", alistener, mockSessionConsumer);
+				api.authenticateAsync(context, "test_key", "test_secret", "test_uuid", null, alistener, mockSessionConsumer, false);
 			}
 		});
 

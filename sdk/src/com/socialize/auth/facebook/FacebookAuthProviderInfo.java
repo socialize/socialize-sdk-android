@@ -85,4 +85,9 @@ public class FacebookAuthProviderInfo implements AuthProviderInfo {
 			return false;
 		return true;
 	}
+
+	@Override
+	public boolean matches(AuthProviderInfo info) {
+		return this.equals(info);
+	}
 }

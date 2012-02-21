@@ -23,9 +23,9 @@ package com.socialize.api;
 
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.DefaultUserAuthDataMap;
-import com.socialize.auth.UserAuthData;
-import com.socialize.auth.UserAuthDataMap;
+import com.socialize.auth.DefaultUserProviderCredentialsMap;
+import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.entity.User;
 
 /**
@@ -43,7 +43,7 @@ public class SocializeSessionImpl implements WritableSession {
 	private String consumerTokenSecret;
 	private String host;
 	
-	private UserAuthDataMap userAuthData;
+	private UserProviderCredentialsMap userProviderCredentials;
 	
 	@Deprecated
 	private String appId3rdParty;
@@ -64,7 +64,7 @@ public class SocializeSessionImpl implements WritableSession {
 	public SocializeSessionImpl() {
 		super();
 		
-		userAuthData = new DefaultUserAuthDataMap();
+		userProviderCredentials = new DefaultUserProviderCredentialsMap();
 	}
 	
 	@Override
@@ -218,22 +218,22 @@ public class SocializeSessionImpl implements WritableSession {
 		this.authProvider = authProvider;
 	}
 
-	public UserAuthDataMap getUserAuthData() {
-		return userAuthData;
+	public UserProviderCredentialsMap getUserProviderCredentials() {
+		return userProviderCredentials;
 	}
 
-	public void setUserAuthData(UserAuthDataMap userAuthData) {
-		this.userAuthData = userAuthData;
-	}
-
-	@Override
-	public void setUserAuthData(AuthProviderType type, UserAuthData data) {
-		userAuthData.put(type, data);
+	public void setUserProviderCredentials(UserProviderCredentialsMap userProviderCredentials) {
+		this.userProviderCredentials = userProviderCredentials;
 	}
 
 	@Override
-	public UserAuthData getUserAuthData(AuthProviderType type) {
-		return userAuthData.get(type);
+	public void setUserProviderCredentials(AuthProviderType type, UserProviderCredentials data) {
+		userProviderCredentials.put(type, data);
+	}
+
+	@Override
+	public UserProviderCredentials getUserProviderCredentials(AuthProviderType type) {
+		return userProviderCredentials.get(type);
 	}
 	
 }

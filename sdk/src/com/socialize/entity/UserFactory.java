@@ -37,7 +37,6 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	
 	private StatsFactory statsFactory;
 	
-	@Deprecated
 	private UserAuthDataFactory userAuthDataFactory;
 	
 	public static final String META = "meta";
@@ -99,11 +98,8 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		
 		if(object.has(THIRD_PARTY_AUTH) && !object.isNull(THIRD_PARTY_AUTH)) {
 			JSONArray authJson = object.getJSONArray(THIRD_PARTY_AUTH);
-			
 			if(authJson != null && authJson.length() > 0 && userAuthDataFactory != null) {
-				
 				int length = authJson.length();
-				
 				for (int i = 0; i < length; i++) {
 					UserAuthData authData = userAuthDataFactory.fromJSON(authJson.getJSONObject(i));
 					user.addUserAuthData(authData);
