@@ -59,6 +59,10 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 	private SocializeLogger logger = null;
 	private JSONUtils jsonUtils;
 	
+	public PreferenceSessionPersister() {
+		super();
+	}
+
 	public PreferenceSessionPersister(UserFactory userFactory, SocializeSessionFactory sessionFactory) {
 		super();
 		this.userFactory = userFactory;
@@ -264,6 +268,14 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 	public void delete(Context context) {
 		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 		prefs.edit().clear().commit();
+	}
+
+	public void setUserFactory(UserFactory userFactory) {
+		this.userFactory = userFactory;
+	}
+
+	public void setSessionFactory(SocializeSessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
 	}
 
 	public void setLogger(SocializeLogger logger) {

@@ -35,9 +35,15 @@ import com.socialize.api.PreferenceSessionPersister;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionFactory;
 import com.socialize.api.SocializeSessionImpl;
+import com.socialize.auth.AuthProviderInfo;
+import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.SocializeAuthProviderInfo;
+import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
+import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.entity.User;
 import com.socialize.entity.UserFactory;
+import com.socialize.test.PublicPreferenceSessionPersister;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.mock.MockEditor;
 import com.socialize.util.JSONUtils;
@@ -102,13 +108,10 @@ public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 		AndroidMock.replay(socializeSessionFactory);
 
 		PreferenceSessionPersister persister = new PreferenceSessionPersister(userFactory, socializeSessionFactory) {
-
 			@Override
 			protected UserProviderCredentialsMap loadUserProviderCredentials(SharedPreferences prefs) {
 				return userProviderCredentialsMap;
 			}
-			
-			
 		};
 
 		SocializeSession loaded = persister.load(context);
@@ -193,5 +196,84 @@ public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 		AndroidMock.verify(context);
 		AndroidMock.verify(prefs);
 		AndroidMock.verify(editor);
+	}
+	
+	@UsesMocks ({SharedPreferences.class})
+	public void testLegacySessionMigrateWithoutFB() {
+		SharedPreferences prefs = AndroidMock.createMock(SharedPreferences.class);
+		
+		AndroidMock.expect(prefs.getString("user_auth_data", null)).andReturn(null);
+		AndroidMock.expect(prefs.getString("3rd_party_userid", null)).andReturn(null);
+		AndroidMock.expect(prefs.getString("3rd_party_token", null)).andReturn(null);
+		AndroidMock.expect(prefs.getInt("3rd_party_type", AuthProviderType.SOCIALIZE.getId())).andReturn(AuthProviderType.SOCIALIZE.getId());
+		
+		AndroidMock.replay(prefs);
+		
+		PublicPreferenceSessionPersister persister = new PublicPreferenceSessionPersister();
+		UserProviderCredentialsMap map = persister.loadUserProviderCredentials(prefs);
+		
+		AndroidMock.verify(prefs);
+		
+		assertNotNull(map);
+		
+		UserProviderCredentials credsFB = map.get(AuthProviderType.FACEBOOK);
+		
+		assertNull(credsFB);
+		
+		UserProviderCredentials credsS = map.get(AuthProviderType.SOCIALIZE);
+		
+		assertNotNull(credsS);
+		
+		AuthProviderInfo authProviderInfoS = credsS.getAuthProviderInfo();
+		
+		assertNotNull(authProviderInfoS);
+		assertTrue((authProviderInfoS instanceof SocializeAuthProviderInfo));
+	}
+	
+	@UsesMocks ({SharedPreferences.class})
+	public void testLegacySessionMigrateWithFB() {
+		
+		String userId3rdParty = "fb_user_id";
+		String token3rdParty = "fb_token";
+		String appId3rdParty = "fb_appid";
+		
+		SharedPreferences prefs = AndroidMock.createMock(SharedPreferences.class);
+		
+		AndroidMock.expect(prefs.getString("user_auth_data", null)).andReturn(null);
+		AndroidMock.expect(prefs.getString("3rd_party_userid", null)).andReturn(userId3rdParty);
+		AndroidMock.expect(prefs.getString("3rd_party_token", null)).andReturn(token3rdParty);
+		AndroidMock.expect(prefs.getString("3rd_party_app_id", null)).andReturn(appId3rdParty);
+		AndroidMock.expect(prefs.getInt("3rd_party_type", AuthProviderType.SOCIALIZE.getId())).andReturn(AuthProviderType.FACEBOOK.getId());
+		
+		AndroidMock.replay(prefs);
+		
+		PublicPreferenceSessionPersister persister = new PublicPreferenceSessionPersister();
+		UserProviderCredentialsMap map = persister.loadUserProviderCredentials(prefs);
+		
+		AndroidMock.verify(prefs);
+		
+		assertNotNull(map);
+		
+		UserProviderCredentials credsFB = map.get(AuthProviderType.FACEBOOK);
+		
+		assertNotNull(credsFB);
+		assertEquals(token3rdParty, credsFB.getAccessToken());
+		assertEquals(userId3rdParty, credsFB.getUserId());
+		
+		AuthProviderInfo authProviderInfo = credsFB.getAuthProviderInfo();
+		
+		assertNotNull(authProviderInfo);
+		assertTrue((authProviderInfo instanceof FacebookAuthProviderInfo));
+		assertEquals(appId3rdParty, ((FacebookAuthProviderInfo)authProviderInfo).getAppId());
+		
+		UserProviderCredentials credsS = map.get(AuthProviderType.SOCIALIZE);
+		
+		assertNotNull(credsS);
+		
+		AuthProviderInfo authProviderInfoS = credsS.getAuthProviderInfo();
+		
+		assertNotNull(authProviderInfoS);
+		assertTrue((authProviderInfoS instanceof SocializeAuthProviderInfo));
+		
 	}
 }
