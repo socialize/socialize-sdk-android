@@ -50,7 +50,7 @@ public interface AppUtils {
 
 	public boolean isLocationAvaiable(Context context);
 
-	public boolean isNotificationsAvaiable(Context context);
+	public boolean isNotificationsAvailable(Context context);
 
 	public boolean hasPermission(Context context, String permission);
 

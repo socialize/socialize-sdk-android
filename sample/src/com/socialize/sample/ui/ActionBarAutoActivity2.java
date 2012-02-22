@@ -1,18 +1,14 @@
 package com.socialize.sample.ui;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.socialize.Socialize;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.Share;
 import com.socialize.sample.R;
-import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.actionbar.ActionBarView;
@@ -25,18 +21,7 @@ public class ActionBarAutoActivity2 extends ActionBarActivity2 {
 		ActionBarOptions options = new ActionBarOptions();
 		options.setAddScrollView(true);
 		
-		Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
-			
-			@Override
-			public boolean canLoad(Context context, Entity entity) {
-				return true;
-			}
-
-			@Override
-			public void loadEntity(Activity activity, Entity entity) {
-				Toast.makeText(activity, "Clicked on entity with key: " + entity.getKey(), Toast.LENGTH_SHORT).show();
-			}
-		});
+		Socialize.getSocialize().setEntityLoader(new EntityLoader());
 		
 		View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.action_bar_auto, entity, options, new ActionBarListener() {
 			

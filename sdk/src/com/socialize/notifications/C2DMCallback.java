@@ -32,7 +32,7 @@ public interface C2DMCallback {
 	
 	public static final String MESSAGE_KEY = "message";
 
-	public void onMessage(Context context, Bundle data);
+	public void onMessage(Context context, Bundle messageData);
 	
 	public void onRegister(Context context, String registrationId) ;
 	

@@ -92,6 +92,7 @@ import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.profile.UserProfile;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.Drawables;
+import com.socialize.util.EntityLoaderUtils;
 import com.socialize.util.ResourceLocator;
 
 /**
@@ -114,7 +115,8 @@ import com.socialize.util.ResourceLocator;
 	Drawables.class, 
 	SocializeConfig.class, 
 	SocializeProvider.class,
-	AuthProviders.class})
+	AuthProviders.class,
+	EntityLoaderUtils.class})
 public class SocializeServiceTest extends SocializeActivityTest {
 
 	IOCContainer container;
@@ -136,6 +138,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 	AuthProviderData authProviderData;
 	SocializeSession session;
 	SocializeAuthProviderInfo info;
+	EntityLoaderUtils entityLoaderUtils;
 
 
 	SocializeConfig config;
@@ -160,7 +163,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		subscriptionSystem = AndroidMock.createMock(SocializeSubscriptionSystem.class, provider);
 		drawables = AndroidMock.createMock(Drawables.class);
 		authProviders = AndroidMock.createMock(AuthProviders.class);
-
+		entityLoaderUtils = AndroidMock.createMock(EntityLoaderUtils.class);
 	}
 
 	private void setupDefaultMocks() {
@@ -180,6 +183,9 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		AndroidMock.expect(container.getBean("authProviderDataFactory")).andReturn(authProviderDataFactory);
 		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
 		AndroidMock.expect(container.getBean("initializationAsserter")).andReturn(null);
+		AndroidMock.expect(container.getBean("entityLoaderUtils")).andReturn(entityLoaderUtils);
+		
+		entityLoaderUtils.initEntityLoader();
 	}
 
 	private void replayDefaultMocks() {
@@ -202,6 +208,9 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		AndroidMock.replay(authProviderData);
 		AndroidMock.replay(authProviders);
 		AndroidMock.replay(session);
+		
+		AndroidMock.replay(entityLoaderUtils);
+		
 	}
 
 	private void verifyDefaultMocks() {
@@ -224,6 +233,8 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		AndroidMock.verify(authProviderData);
 		AndroidMock.verify(authProviders);
 		AndroidMock.verify(session);
+		
+		AndroidMock.verify(entityLoaderUtils);
 	}
 
 	public void testSocializeInitDestroy() {

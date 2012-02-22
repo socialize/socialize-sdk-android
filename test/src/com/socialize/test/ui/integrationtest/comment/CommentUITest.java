@@ -162,7 +162,7 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		
 		final AppUtils appUtils = new DefaultAppUtils() {
 			@Override
-			public boolean isNotificationsAvaiable(Context context) {
+			public boolean isNotificationsAvailable(Context context) {
 				return true;
 			}
 		};

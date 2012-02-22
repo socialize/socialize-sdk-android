@@ -48,7 +48,7 @@ public abstract class BaseNotificationMessageBuilder<M extends NotificationMessa
 	private SocializeLogger logger;
 	
 	@Override
-	public Notification build(Context context, Bundle bundle, NotificationMessage message, int icon) throws SocializeException {
+	public Notification build(Context context, Bundle messageData, NotificationMessage message, int icon) throws SocializeException {
 		
 		Notification notification = newNotification(icon, message.getText(), System.currentTimeMillis());
 		
@@ -57,6 +57,7 @@ public abstract class BaseNotificationMessageBuilder<M extends NotificationMessa
 		if(appUtils.isActivityAvailable(context, SocializeLaunchActivity.class)) {
 			notificationIntent = newIntent(context, SocializeLaunchActivity.class);
 			notificationIntent.putExtra(SocializeLaunchActivity.LAUNCH_ACTION, LaunchAction.ACTION.name());
+			notificationIntent.putExtra(SocializeLaunchActivity.LAUNCH_TASK, "notificationLaunchTask"); // bean name
 			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
 		}
 		else {
@@ -69,10 +70,10 @@ public abstract class BaseNotificationMessageBuilder<M extends NotificationMessa
 		}
 
 		// This will add anything we need to the bundle
-		M translated = messageTranslator.translate(context, bundle, message);
+		M translated = messageTranslator.translate(context, messageData, message);
 
 		// Set the bundle AFTER the translation
-		notificationIntent.putExtras(bundle);
+		notificationIntent.putExtras(messageData);
 		
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		

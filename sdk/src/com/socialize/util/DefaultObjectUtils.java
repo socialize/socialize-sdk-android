@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -21,16 +21,31 @@
  */
 package com.socialize.util;
 
-/**
- * Abstracts the provision of classloaded instances.  
- * Used to decouple classloader dependencies for test cases.
- * 
- * @author Jason Polites
- */
-public class ClassLoaderProvider {
+import com.socialize.android.ioc.BeanBuilder;
+import com.socialize.error.SocializeException;
 
-	public ClassLoader getClassLoader() {
-		return ClassLoaderProvider.class.getClassLoader();
-	}
+/**
+ * @author Jason Polites
+ *
+ */
+public class DefaultObjectUtils implements ObjectUtils {
+
+	private BeanBuilder builder;
 	
+	/* (non-Javadoc)
+	 * @see com.socialize.util.ObjectUtils#construct(java.lang.String)
+	 */
+	@Override
+	public <T> T construct(String className) throws SocializeException {
+		try {
+			return builder.construct(className);
+		} 
+		catch (Exception e) {
+			throw new SocializeException(e);
+		} 
+	}
+
+	public void setBuilder(BeanBuilder builder) {
+		this.builder = builder;
+	}
 }

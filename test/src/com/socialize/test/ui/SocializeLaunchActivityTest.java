@@ -46,17 +46,17 @@ import com.socialize.ui.SocializeLaunchActivity;
 public class SocializeLaunchActivityTest extends SocializeUIActivityTest {
 
 	@UsesMocks ({IOCContainer.class, SocializeErrorHandler.class, SocializeService.class, SocializeAuthListener.class})
-	public void testOnCreate() throws InterruptedException {
+	public void testOnCreate() throws Throwable {
 		
 		final IOCContainer mockContainer = AndroidMock.createMock(IOCContainer.class);
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		final SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
 		
-		Bundle bundle = new Bundle();
+		final Bundle bundle = new Bundle();
 		
 		final CountDownLatch latch = new CountDownLatch(2);
 		
-		PublicSocializeLaunchActivity activity = new PublicSocializeLaunchActivity() {
+		final PublicSocializeLaunchActivity activity = new PublicSocializeLaunchActivity() {
 
 			@Override
 			public IOCContainer getContainer() {
@@ -97,14 +97,22 @@ public class SocializeLaunchActivityTest extends SocializeUIActivityTest {
 		};
 		
 		AndroidMock.expect(mockContainer.getBean("socializeUIErrorHandler")).andReturn(null).anyTimes();
+		AndroidMock.expect(mockContainer.getBean("logger")).andReturn(null).anyTimes();
 		
 		socialize.authenticate(activity, listener);
 		
 		AndroidMock.replay(mockContainer, socialize);
 		
-		activity.onCreate(bundle);
+		runTestOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				activity.onCreate(bundle);
+			}
+			
+		});
 		
-		latch.await(5000, TimeUnit.SECONDS);
+		latch.await(20, TimeUnit.SECONDS);
 		
 		AndroidMock.verify(mockContainer, socialize);
 		

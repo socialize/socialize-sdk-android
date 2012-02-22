@@ -13,7 +13,7 @@ public class EntityTest extends SocializeRobotiumTest {
 		authenticateSocialize();
 		
 		robotium.clickOnButton("Entity");
-		robotium.waitForActivity("EntityActivity", DEFAULT_TIMEOUT_SECONDS);
+		robotium.waitForActivity("EntityActivity", DEFAULT_TIMEOUT_MILLISECONDS);
 	}
 
 	public void testCreateEntity() {

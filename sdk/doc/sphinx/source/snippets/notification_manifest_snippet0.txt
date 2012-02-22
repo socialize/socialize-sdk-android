@@ -1,6 +1,6 @@
 .. raw:: html
 
-	<pre class="brush: xml;tab-size: 4;highlight: [14,18]">
+	<pre class="brush: xml;tab-size: 4;highlight: [15,19]">
 		&lt;manifest...>
 		
 			&lt;application...>
@@ -9,8 +9,9 @@
 				&lt;activity android:name="com.socialize.ui.SocializeLaunchActivity" android:launchMode="singleTop"/>
 		
 				&lt;!-- Socialize Notification Receiver -->
-				&lt;!-- Replace your_package_name with your app package name -->
 				&lt;service android:name="com.socialize.notifications.SocializeC2DMReceiver"/>
+				
+				&lt;!-- Replace your_package_name with your app package name -->
 				&lt;receiver android:name="com.socialize.notifications.SocializeBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
 					&lt;intent-filter>
 						&lt;action android:name="com.google.android.c2dm.intent.RECEIVE" />

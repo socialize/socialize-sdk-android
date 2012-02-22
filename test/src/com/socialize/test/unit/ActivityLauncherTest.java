@@ -30,17 +30,19 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.launcher.ActivityLauncher;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.util.AppUtils;
+import com.socialize.util.EntityLoaderUtils;
 
 /**
  * @author Jason Polites
  * 
  */
-@UsesMocks({ AppUtils.class, Intent.class, Activity.class })
+@UsesMocks({ AppUtils.class, Intent.class, Activity.class, EntityLoaderUtils.class })
 public class ActivityLauncherTest extends SocializeUnitTest {
 
 	public void testActivityLauncher() {
 		AppUtils appUtils = AndroidMock.createMock(AppUtils.class);
 		Activity activity = AndroidMock.createMock(Activity.class);
+		EntityLoaderUtils utils = AndroidMock.createMock(EntityLoaderUtils.class);
 		final Intent intent = AndroidMock.createMock(Intent.class);
 		final Class<?> activityClass = String.class;
 		final Bundle extras = new Bundle(); // can't mock
@@ -48,8 +50,9 @@ public class ActivityLauncherTest extends SocializeUnitTest {
 		AndroidMock.expect(appUtils.isActivityAvailable(activity, activityClass)).andReturn(true);
 		AndroidMock.expect(intent.putExtras(extras)).andReturn(intent);
 		activity.startActivity(intent);
+		utils.initEntityLoader();
 
-		AndroidMock.replay(appUtils, intent, activity);
+		AndroidMock.replay(appUtils, utils, intent, activity);
 
 		ActivityLauncher launcher = new ActivityLauncher() {
 
@@ -71,11 +74,12 @@ public class ActivityLauncherTest extends SocializeUnitTest {
 			}
 		};
 
+		launcher.setEntityLoaderUtils(utils);
 		launcher.setAppUtils(appUtils);
 
 		assertTrue(launcher.launch(activity, extras));
 
-		AndroidMock.verify(appUtils, intent, activity);
+		AndroidMock.verify(appUtils, utils, intent, activity);
 	}
 
 }

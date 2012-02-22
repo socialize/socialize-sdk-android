@@ -51,6 +51,18 @@
 		<init-method name="init"/>
 	</bean>		
 	
+	<bean id="beanBuilder" class="com.socialize.android.ioc.BeanBuilder"/>
+	
+	<bean id="objectUtils" class="com.socialize.util.DefaultObjectUtils">
+		<property name="builder" ref="beanBuilder"/>
+	</bean>
+	
+	<bean id="entityLoaderUtils" class="com.socialize.util.EntityLoaderUtils">
+		<property name="objectUtils" ref="objectUtils"/>
+		<property name="logger" ref="logger"/>
+		<property name="config" ref="config"/>
+	</bean>
+	
 	<bean id="locationManager" class="com.socialize.location.SocializeLocationManager">
 		<constructor-arg ref="appUtils"/>
 		<init-method name="init">
@@ -88,6 +100,9 @@
 		<property name="ioUtils" ref="ioUtils"/>
 	</bean>
 	
+	<bean id="socializeUIErrorHandler" class="com.socialize.ui.error.DialogErrorHandler">
+		<property name="drawables" ref="drawables"/>
+	</bean>
 
 	<bean id="cache" class="com.socialize.util.DrawableCache">
 		<constructor-arg type="integer" value="10"/> <!-- Min size -->
@@ -459,11 +474,11 @@
 	
 <!-- End Device Registration API -->
 
-
 <!--  Launcher -->
 
 	<bean id="activityLauncher" abstract="true">
 		<property name="appUtils" ref="appUtils"/>
+		<property name="entityLoaderUtils" ref="entityLoaderUtils"/>
 	</bean>
 	
 	<bean id="actionLauncher" class="com.socialize.launcher.SocializeActionLauncher" extends="activityLauncher"/>
@@ -557,8 +572,7 @@
 	
 	<bean 
 		id="socializeAuthProviderInfoFactory" 
-		class="com.socialize.auth.SocializeAuthProviderInfoFactory"
-		extends="baseAuthProviderInfoFactory">
+		class="com.socialize.auth.SocializeAuthProviderInfoFactory">
 	</bean>		
 	
 	<bean 
@@ -608,5 +622,8 @@
 		<property name="notificationRegistrationSystem" ref="notificationRegistrationSystem"/>
 		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
 	</bean>	
-
+	
+	<bean id="notificationLaunchTask" class="com.socialize.config.NotificationsConfigLaunchTask">
+		<property name="config" ref="config"/>
+	</bean>	
 </beans>

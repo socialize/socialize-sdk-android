@@ -1,0 +1,6 @@
+.. raw:: html
+
+	<pre class="brush: java-properties">
+	# Entity Loader Class Name
+	socialize.entity.loader=com.mypackage.MyEntityLoader
+	</pre>

@@ -16,17 +16,17 @@ public class CommentTest extends SocializeRobotiumTest {
 		super.setUp();
 		authenticateSocialize();
 		robotium.clickOnButton("Comment");
-		robotium.waitForActivity("CommentActivity", DEFAULT_TIMEOUT_SECONDS);
+		robotium.waitForActivity("CommentActivity", DEFAULT_TIMEOUT_MILLISECONDS);
 	}
 	public void testListComment() throws JSONException{
 		robotium.clickOnButton("List Comments");
-		robotium.waitForActivity("CommentListSelectActivity", DEFAULT_TIMEOUT_SECONDS);
+		robotium.waitForActivity("CommentListSelectActivity", DEFAULT_TIMEOUT_MILLISECONDS);
 		
 		// get the comment based on ID from the JSON file
 		robotium.enterText(0,DEFAULT_GET_ENTITY);
 		robotium.clickOnButton("List");
 		
-		robotium.waitForActivity("CommentListActivity", DEFAULT_TIMEOUT_SECONDS);
+		robotium.waitForActivity("CommentListActivity", DEFAULT_TIMEOUT_MILLISECONDS);
 		robotium.waitForView(ListView.class);
 		
 		// Check number of comments
@@ -60,13 +60,13 @@ public class CommentTest extends SocializeRobotiumTest {
 		String commentUserId = userObject.getString("id");		
 
 		robotium.clickOnButton("List User Comments");
-		robotium.waitForActivity("CommentListSelectActivity", DEFAULT_TIMEOUT_SECONDS);
+		robotium.waitForActivity("CommentListSelectActivity", DEFAULT_TIMEOUT_MILLISECONDS);
 		
 		robotium.clearEditText(0);
 		robotium.enterText(0,commentUserId);
 		
 		robotium.clickOnButton("List");
-		robotium.waitForActivity("CommentUserListActivity", DEFAULT_TIMEOUT_SECONDS);
+		robotium.waitForActivity("CommentUserListActivity", DEFAULT_TIMEOUT_MILLISECONDS);
 		robotium.waitForView(ListView.class);
 		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(R.id.list);
 		assertEquals(10 , comments.getCount());
@@ -74,7 +74,7 @@ public class CommentTest extends SocializeRobotiumTest {
 	
 	public void testListCommentWithPagination() throws JSONException{
 		robotium.clickOnButton("List Comments");
-		robotium.waitForActivity("CommentListSelectActivity", DEFAULT_TIMEOUT_SECONDS);
+		robotium.waitForActivity("CommentListSelectActivity", DEFAULT_TIMEOUT_MILLISECONDS);
 		robotium.enterText(0,DEFAULT_GET_ENTITY);
 		robotium.clearEditText(1);
 		robotium.enterText(1, "0");
@@ -83,7 +83,7 @@ public class CommentTest extends SocializeRobotiumTest {
 
 		robotium.clickOnButton("List");
 		
-		robotium.waitForActivity("CommentListActivity", DEFAULT_TIMEOUT_SECONDS);
+		robotium.waitForActivity("CommentListActivity", DEFAULT_TIMEOUT_MILLISECONDS);
 		robotium.waitForView(ListView.class);
 		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(R.id.list);
 		assertEquals(3 , comments.getCount());

@@ -56,6 +56,7 @@ public class ActionDetailActivity extends SocializeUIActivity {
 	}
 
 	protected void doActivityLoad(Intent intent) {
+		
 		SocializeSession session = getSocialize().getSession();
 		
 		if(session == null) {

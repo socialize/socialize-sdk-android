@@ -1,0 +1,10 @@
+.. raw:: html
+
+	<pre class="brush: xml;tab-size: 4;highlight: [14,18]">
+		&lt;!-- Add your entity loader class to the service -->
+		&lt;service android:name="com.socialize.notifications.SocializeC2DMReceiver">
+			&lt;meta-data 
+				android:name="socialize.entity.loader"
+				android:value="com.mypackage.MyEntityLoader" />
+		&lt;/service>
+	</pre>

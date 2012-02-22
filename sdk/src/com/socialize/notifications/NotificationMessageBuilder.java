@@ -36,10 +36,10 @@ public interface NotificationMessageBuilder {
 	/**
 	 * Builds a notification based on the bundle and object data provided.
 	 * @param context
-	 * @param bundle
+	 * @param messageData
 	 * @param message
 	 * @param icon
 	 * @return
 	 */
-	public Notification build(Context context, Bundle bundle, NotificationMessage message, int icon) throws SocializeException;
+	public Notification build(Context context, Bundle messageData, NotificationMessage message, int icon) throws SocializeException;
 }

@@ -141,7 +141,6 @@ public class SocializeC2DMReceiverTest extends SocializeUnitTest {
 		Intent intent = AndroidMock.createMock(Intent.class);
 		C2DMCallback notificationCallback = AndroidMock.createMock(C2DMCallback.class);
 		
-		
 		Bundle bundle = new Bundle();
 		
 		AndroidMock.expect(intent.getExtras()).andReturn(bundle);

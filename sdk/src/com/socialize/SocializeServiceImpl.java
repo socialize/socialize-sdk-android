@@ -112,6 +112,7 @@ import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.ui.profile.UserProfile;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.Drawables;
+import com.socialize.util.EntityLoaderUtils;
 import com.socialize.util.ResourceLocator;
 import com.socialize.util.StringUtils;
 
@@ -383,6 +384,9 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				
 				verify3rdPartyAuthConfigured();
 				
+				// Create the entity loader if we have one
+				initEntityLoader();
+				
 				ActivityIOCProvider.getInstance().setContainer(container);
 			}
 			catch (Exception e) {
@@ -399,8 +403,14 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 	
+	protected void initEntityLoader() {
+		EntityLoaderUtils entityLoaderUtils = container.getBean("entityLoaderUtils");
+		entityLoaderUtils.initEntityLoader();
+	}
+	
 	protected void verify3rdPartyAuthConfigured() {
 		if(logger != null && logger.isDebugEnabled()) {
+			// TODO: Make generic
 			if(!isSupported(AuthProviderType.FACEBOOK)) {
 				logger.debug("No facebook app id found in socialize.properties.  Facebook not enabled");
 			}
@@ -516,6 +526,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			
 			initCount = 0;
 			initPaths = null;
+			entityLoader = null;
 		}
 		else {
 			destroy();

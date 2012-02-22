@@ -145,7 +145,7 @@ public class ProfileContentView extends BaseView {
 		master.addView(firstNameEdit);
 		master.addView(lastNameEdit);
 		
-		if(appUtils.isNotificationsAvaiable(getContext())) {
+		if(appUtils.isNotificationsAvailable(getContext())) {
 			notificationsEnabledCheckbox = notificationsEnabledCheckboxFactory.getBean();
 			notificationsEnabledCheckbox.setLayoutParams(commonParams);
 			

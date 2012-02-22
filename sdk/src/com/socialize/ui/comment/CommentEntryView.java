@@ -88,7 +88,7 @@ public class CommentEntryView extends BaseView {
 		User user = Socialize.getSocialize().getSession().getUser();
 		
 		notificationsEnabled = true;
-		notificationsAvailable = user.isNotificationsEnabled() && appUtils.isNotificationsAvaiable(getContext());
+		notificationsAvailable = user.isNotificationsEnabled() && appUtils.isNotificationsAvailable(getContext());
 		
 		LayoutParams fill = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 

@@ -57,6 +57,8 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_BRANDING_ENABLED = "socialize.branding.enabled";
 	
+	public static final String SOCIALIZE_ENTITY_LOADER = "socialize.entity.loader";
+	
 	@Deprecated
 	public static final String SOCIALIZE_BEANS_PATH = SOCIALIZE_CORE_BEANS_PATH;
 	
@@ -93,6 +95,8 @@ public class SocializeConfig {
 	public static final String SOCIALIZE_SHARE_IS_HTML = "socialize.share.html";
 	public static final String SOCIALIZE_SHARE_MIME_TYPE = "socialize.share.mime";
 	public static final String SOCIALIZE_SHARE_LISTENER_KEY = "socialize.share.listener.key";
+	
+	private static boolean ENTITY_LOADER_CHECK_ENABLED = true;
 	
 	public SocializeConfig() {
 		super();
@@ -345,5 +349,13 @@ public class SocializeConfig {
 	
 	protected Properties createProperties() {
 		return new Properties();
+	}
+
+	public boolean isENTITY_LOADER_CHECK_ENABLED() {
+		return ENTITY_LOADER_CHECK_ENABLED;
+	}
+
+	protected void setENTITY_LOADER_CHECK_ENABLED(boolean entityLoaderCheckEnabled) {
+		ENTITY_LOADER_CHECK_ENABLED = entityLoaderCheckEnabled;
 	}
 }

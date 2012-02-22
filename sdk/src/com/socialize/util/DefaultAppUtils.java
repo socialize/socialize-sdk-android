@@ -216,7 +216,9 @@ public class DefaultAppUtils implements AppUtils {
 	 * @see com.socialize.util.IAppUtils#isNotificationsAvaiable(android.content.Context)
 	 */
 	@Override
-	public boolean isNotificationsAvaiable(Context context) {
+	public boolean isNotificationsAvailable(Context context) {
+		
+		
 
 		if(!notificationsAssessed) {
 			
@@ -258,7 +260,7 @@ public class DefaultAppUtils implements AppUtils {
 				ok = false;
 			}			
 			
-			if(Socialize.getSocialize().getEntityLoader() == null) {
+			if(config.isENTITY_LOADER_CHECK_ENABLED() && Socialize.getSocialize().getEntityLoader() == null) {
 				lastNotificationWarning = "Notifications not available. Entity loader not found.";
 				if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
 				ok = false;

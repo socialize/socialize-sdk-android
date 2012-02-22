@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,18 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.util;
+package com.socialize.config;
+
+import android.content.Context;
+
+import com.socialize.error.SocializeException;
+import com.socialize.launcher.LaunchTask;
 
 /**
- * Abstracts the provision of classloaded instances.  
- * Used to decouple classloader dependencies for test cases.
- * 
  * @author Jason Polites
+ *
  */
-public class ClassLoaderProvider {
+public class NotificationsConfigLaunchTask implements LaunchTask {
 
-	public ClassLoader getClassLoader() {
-		return ClassLoaderProvider.class.getClassLoader();
-	}
+	private SocializeConfig config;
 	
+	/* (non-Javadoc)
+	 * @see com.socialize.launcher.SocializeLaunchTask#execute(android.content.Context)
+	 */
+	@Override
+	public void execute(Context context) throws SocializeException {
+		config.setENTITY_LOADER_CHECK_ENABLED(false);
+	}
+
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
+	}
 }

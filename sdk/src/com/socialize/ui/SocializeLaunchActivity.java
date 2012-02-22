@@ -38,8 +38,11 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.error.SocializeException;
 import com.socialize.launcher.LaunchManager;
+import com.socialize.launcher.LaunchTask;
 import com.socialize.launcher.Launcher;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.log.SocializeLogger;
+import com.socialize.util.StringUtils;
 
 /**
  * Generic launcher activity.
@@ -48,9 +51,11 @@ import com.socialize.listener.SocializeAuthListener;
 public class SocializeLaunchActivity extends Activity {
 
 	public static final String LAUNCH_ACTION = "socialize.launch.action";
+	public static final String LAUNCH_TASK = "socialize.launch.task";
 	
 	protected IOCContainer container;
 	protected Launcher launcher;
+	protected SocializeLogger logger;
 	protected SocializeErrorHandler errorHandler;
 	protected Intent originalIntent;
 	
@@ -98,6 +103,7 @@ public class SocializeLaunchActivity extends Activity {
 	protected void doInit() {
 		initSocialize();
 		container = getContainer();
+		logger = container.getBean("logger");
 		errorHandler = container.getBean("socializeUIErrorHandler");
 	}
 	
@@ -130,7 +136,50 @@ public class SocializeLaunchActivity extends Activity {
 				Bundle extras = getIntent().getExtras();
 				if(extras != null) {
 					String action = extras.getString(LAUNCH_ACTION);
-					if(action != null) {
+					String task = extras.getString(LAUNCH_TASK);
+					
+					if(!StringUtils.isEmpty(task)) {
+						
+						if(logger != null && logger.isDebugEnabled()) {
+							logger.debug("Looking for launch task [" +
+									task +
+									"]");
+						}
+						
+						LaunchTask launchTask = container.getBean(task);
+						
+						if(launchTask != null) {
+							try {
+								
+								if(logger != null && logger.isDebugEnabled()) {
+									logger.debug("Executing launch task [" +
+											launchTask.getClass() +
+											"]");
+								}								
+								
+								launchTask.execute(SocializeLaunchActivity.this);
+							} 
+							catch (Throwable e) {
+								if(logger != null) {
+									logger.warn("Failed to execute launch task [" +
+											launchTask.getClass().getName() +
+											"]", e);
+								}
+								else {
+									e.printStackTrace();
+								}
+							}
+						}
+						else {
+							if(logger != null) {
+								logger.error("Launch task [" +
+										launchTask +
+										"] specified by no corresponding bean found in the container.");
+							}
+						}
+					}
+					
+					if(!StringUtils.isEmpty(action)) {
 						LaunchManager launchManager = container.getBean("launchManager");
 						if(launchManager != null) {
 							launcher = launchManager.getLaucher(action);
