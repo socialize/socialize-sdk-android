@@ -12,6 +12,29 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v1.4.4
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Add app store type to redirect URLS (e.g. Amazon App Store)
+[bug] XHDPI missing location pin image
+[bug] Share options (location and FB) are not enabled on first load of share slider
+[feature] Facebook error should present a dialog
+[bug] EntityLoader does not work from notification
+
+v1.4.3
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Add proguard conf to docs
+[bug] Notifications broken in SDK (NPE)
+
+v1.4.2
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] Like button does not gracefully handle sign out of fb after like
+[bug] Like button does not update local cache for entity leading to stale data in the action bar
+
+v1.4.1
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] Multiple notifications do not always open the app correctly
+[bug] Like button does not load if entity does not exist
+
 v1.4
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [bug] Images on Galaxy Nexus do not render correctly
