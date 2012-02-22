@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Entity Loaders &mdash; Socialize Android SDK v1.4.2 documentation</title>
+    <title>Entity Loaders &mdash; Socialize Android SDK 1.4.4 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'v1.4.2',
+        VERSION:     '1.4.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v1.4.2 documentation" href="index.html" />
+    <link rel="top" title="Socialize Android SDK 1.4.4 documentation" href="index.html" />
     <link rel="next" title="Socialize SDK (Advanced) Guide" href="sdk_user_guide.html" />
     <link rel="prev" title="SmartAlerts (Push Notifications)" href="push_notifications.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="push_notifications.html" title="SmartAlerts (Push Notifications)"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.4.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK 1.4.4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -80,12 +80,24 @@
 <p>When a user views a social action (e.g. a comment) the Entity Loader allows the user to navigate to the entity (content) to
 which the social action pertains.</p>
 <p>This is particularly important for SmartAlerts (push notifications) and as such an entity loader is required for SmartAlerts.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There are NEW configurations required for entity loaders as of v1.4.4</p>
+</div>
 </div>
 <div class="section" id="creating-the-entity-loader">
 <h2>Creating the Entity Loader<a class="headerlink" href="#creating-the-entity-loader" title="Permalink to this headline">¶</a></h2>
+<p><strong>IMPORTANT</strong>: An entity loader <strong>MUST define a parameterless constructor!</strong></p>
 <p>There is only one Entity Loader per application and it can be set on the Socialize instance:</p>
 <pre class="brush: java">
-Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
+
+// Defined in your app
+public class MyEntityLoader implements SocializeEntityLoader {
+
+        // MUST define a parameterless constructor
+        public MyEntityLoader() {
+                super();
+        }
 
         public void loadEntity(Activity activity, Entity entity) {
                 // Load the original view for this entity
@@ -94,12 +106,21 @@ Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
         public boolean canLoad(Context context, Entity entity) {
                 // Return true if this entity can be loaded
         }
-});
+}
+
 </pre><p>The <strong>loadEntity</strong> method will be called by Socialize when the user selects an item rendered by Socialize which corresponds directly to
 content in your app.</p>
 <p>For example you may want to start an activity in the entity loader:</p>
 <pre class="brush: java">
-Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
+
+// Defined in your app
+public class MyEntityLoader implements SocializeEntityLoader {
+
+        // MUST define a parameterless constructor
+        public MyEntityLoader() {
+                super();
+        }
+
         public void loadEntity(Activity activity, Entity entity) {
                 // Launch an activity from here...
                 Intent intent = new Intent(activity, MyContentActivity.class);
@@ -112,7 +133,13 @@ Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
         public boolean canLoad(Context context, Entity entity) {
                 return true; // always load in this case
         }
-});
+}
+
+</pre><p>Once you have an entity loader, simply set it on the Socialize instance</p>
+<pre class="brush: java">
+
+Socialize.getSocialize().setEntityLoader(new MyEntityLoader());
+
 </pre><p>The entity loader would usually be specified when you instantiate the ActionBar, for example:</p>
 <pre class="brush: java;">
 import android.app.Activity;
@@ -138,20 +165,7 @@ public class SampleActionBarActivity extends Activity {
                 Entity entity = Entity.newInstance(entityKey, "Socialize");
 
                 // Set up the entity loader
-                Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
-                        public void loadEntity(Activity activity, Entity entity) {
-                                // Launch an activity from here...
-                                Intent intent = new Intent(activity, MyContentActivity.class);
-
-                                // Add the key from the entity
-                                intent.putExtra("some_key", entity.getKey());
-                                activity.startActivity(intent);
-                        }
-
-                        public boolean canLoad(Context context, Entity entity) {
-                                return true; // always load in this case
-                        }
-                });
+                Socialize.getSocialize().setEntityLoader(new MyEntityLoader());
 
                 // Wrap your existing view with the action bar.
                 // your_layout refers to the resource ID of your current layout.
@@ -161,7 +175,21 @@ public class SampleActionBarActivity extends Activity {
                 setContentView(actionBarWrapped);
         }
 }
-</pre><script type="text/javascript">
+</pre></div>
+<div class="section" id="configuring-the-entity-loader-for-smartalerts">
+<h2>Configuring the Entity Loader for SmartAlerts<a class="headerlink" href="#configuring-the-entity-loader-for-smartalerts" title="Permalink to this headline">¶</a></h2>
+<p>When your app receives a SmartAlert, Socialize needs to know how to access your entity loader.  This is done via the
+<strong>socialize.entity.loader</strong> property in your <strong>socialize.properties</strong> configuration file:</p>
+<pre class="brush: java-properties">
+# Entity Loader Class Name
+socialize.entity.loader=com.mypackage.MyEntityLoader
+</pre><p>Replace <strong>com.mypackage.MyEntityLoader</strong> with the fully qualified class name of your entity loader.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">An entity loader <strong>MUST</strong> define a parameterless constructor!</p>
+</div>
+<p>Refer to the <a class="reference internal" href="push_notifications.html#notifications"><em>SmartAlerts (Push Notifications)</em></a> section for detailed information on configuring SmartAlerts</p>
+<script type="text/javascript">
         SyntaxHighlighter.defaults['toolbar'] = false;
         SyntaxHighlighter.all();
 </script></div>
@@ -198,10 +226,12 @@ public class SampleActionBarActivity extends Activity {
 <li class="toctree-l1 current"><a class="current reference internal" href="">Entity Loaders</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-the-entity-loader">Creating the Entity Loader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuring-the-entity-loader-for-smartalerts">Configuring the Entity Loader for SmartAlerts</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html">Amazon AppStore URLs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="proguard.html">ProGuard Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting &amp; Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log</a></li>
@@ -220,7 +250,7 @@ public class SampleActionBarActivity extends Activity {
         <li class="right" >
           <a href="push_notifications.html" title="SmartAlerts (Push Notifications)"
              >previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.4.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK 1.4.4 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

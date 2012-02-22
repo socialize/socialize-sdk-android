@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Socialize SDK (Advanced) Guide &mdash; Socialize Android SDK v1.4.2 documentation</title>
+    <title>Socialize SDK (Advanced) Guide &mdash; Socialize Android SDK 1.4.4 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'v1.4.2',
+        VERSION:     '1.4.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v1.4.2 documentation" href="index.html" />
+    <link rel="top" title="Socialize Android SDK 1.4.4 documentation" href="index.html" />
     <link rel="next" title="Configuration Settings" href="config.html" />
     <link rel="prev" title="Entity Loaders" href="entity_loader.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="entity_loader.html" title="Entity Loaders"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.4.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK 1.4.4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -86,8 +86,7 @@ passed into each call to the Socialize SDK.</p>
 </div>
 <div class="section" id="initializing-socialize">
 <h2>Initializing Socialize<a class="headerlink" href="#initializing-socialize" title="Permalink to this headline">¶</a></h2>
-<p>The Socialize SDK should be initialized in the <strong>onCreate()</strong> method of your Activity,
-and destroyed in the <strong>onDestroy()</strong> method</p>
+<p>The Socialize SDK should be initialized in the <strong>onCreate()</strong> method of your Activity.</p>
 <pre class="brush: java">
 import com.socialize.Socialize;
 
@@ -99,12 +98,35 @@ protected void onCreate(Bundle savedInstanceState) {
         // Your code goes here
 }
 
-protected void onDestroy() {
-        // Destroy Socialize before calling superclass
-        Socialize.destroy(this);
-        super.onDestroy();
+</pre><p>The standard init method is <em>synchronous</em>, meaning that the main thread will block until Socialize is initialized.
+If you want an <em>asynchronous</em> initialization, this can be done using the <strong>initAsync()</strong> method:</p>
+<pre class="brush: java">
+import com.socialize.Socialize;
+import com.socialize.listener.SocializeInitListener;
+import com.socialize.error.SocializeException;
+import com.socialize.android.ioc.IOCContainer;
+
+protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Socialize.getSocialize().initAsync(null, new SocializeInitListener() {
+                @Override
+                public void onError(SocializeException error) {
+                        // Handle error
+                }
+
+                @Override
+                public void onInit(Context context, IOCContainer container) {
+                        // Socialize can be used ONLY after onInit
+                        // Your code goes here
+                }
+        });
 }
-</pre></div>
+
+</pre><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If using asynchronous init ensure that there are no operations on the Socialize instance before or while it is initializing!</p>
+</div>
+</div>
 <div class="section" id="authentication">
 <h2>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h2>
 <p>Every call against the Socialize SDK MUST be authenticated.</p>
@@ -762,6 +784,7 @@ if(Socialize.getSocialize().isAuthenticated()) {
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html">Amazon AppStore URLs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="proguard.html">ProGuard Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting &amp; Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log</a></li>
@@ -780,7 +803,7 @@ if(Socialize.getSocialize().isAuthenticated()) {
         <li class="right" >
           <a href="entity_loader.html" title="Entity Loaders"
              >previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.4.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK 1.4.4 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

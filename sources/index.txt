@@ -16,6 +16,7 @@ Contents:
    entity_loader
    sdk_user_guide
    config
+   amazon
    proguard
    troubleshooting
    change_log

@@ -46,6 +46,7 @@ The default configuration for Socialize needs to be augmented slightly for push 
 
 .. note:: Make sure you replace every occurrance of **your_package_name** with the package name of your app!
 
+.. note:: Make sure to add your **Entity Loader Class Name** to the service meta data!
 
 Add the following additional configurations to the **<application.../>** element of your **AndroidManifest.xml**
 

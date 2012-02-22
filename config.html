@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Configuration Settings &mdash; Socialize Android SDK v1.4.2 documentation</title>
+    <title>Configuration Settings &mdash; Socialize Android SDK 1.4.4 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'v1.4.2',
+        VERSION:     '1.4.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,8 +26,8 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v1.4.2 documentation" href="index.html" />
-    <link rel="next" title="ProGuard Configuration" href="proguard.html" />
+    <link rel="top" title="Socialize Android SDK 1.4.4 documentation" href="index.html" />
+    <link rel="next" title="Amazon AppStore URLs" href="amazon.html" />
     <link rel="prev" title="Socialize SDK (Advanced) Guide" href="sdk_user_guide.html" /> 
   </head>
   <body>
@@ -35,12 +35,12 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="proguard.html" title="ProGuard Configuration"
+          <a href="amazon.html" title="Amazon AppStore URLs"
              accesskey="N">next</a></li>
         <li class="right" >
           <a href="sdk_user_guide.html" title="Socialize SDK (Advanced) Guide"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.4.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK 1.4.4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -116,35 +116,47 @@
 <td>&nbsp;</td>
 <td>If true activity views will use a WebView rather than a TextView</td>
 </tr>
-<tr class="row-even"><td>facebook.app.id</td>
+<tr class="row-even"><td>socialize.entity.loader</td>
+<td>String</td>
+<td>None</td>
+<td>com.mypackage.MyEntityLoader</td>
+<td>Fully qualified class name of your entity loader implementation</td>
+</tr>
+<tr class="row-odd"><td>facebook.app.id</td>
 <td>Integer</td>
 <td>None</td>
 <td>1234567890</td>
 <td>Your facebook app ID</td>
 </tr>
-<tr class="row-odd"><td>facebook.sso.enabled</td>
+<tr class="row-even"><td>facebook.sso.enabled</td>
 <td>Boolean</td>
 <td>true</td>
 <td>&nbsp;</td>
 <td>Enable/Disable Single Sign on for Facebook</td>
 </tr>
-<tr class="row-even"><td>http.connection.timeout</td>
+<tr class="row-odd"><td>http.connection.timeout</td>
 <td>Long</td>
 <td>10000</td>
 <td>10000</td>
 <td>Time in ms for an http connection to be established</td>
 </tr>
-<tr class="row-odd"><td>http.socket.timeout</td>
+<tr class="row-even"><td>http.socket.timeout</td>
 <td>Long</td>
 <td>10000</td>
 <td>10000</td>
 <td>Time in ms for an http request to return</td>
 </tr>
-<tr class="row-even"><td>log.level</td>
+<tr class="row-odd"><td>log.level</td>
 <td>String</td>
 <td>WARN</td>
 <td>DEBUG or INFO or WARN or ERROR</td>
 <td>Application log level</td>
+</tr>
+<tr class="row-even"><td>redirect.app.store</td>
+<td>String</td>
+<td>android</td>
+<td>Only &#8216;amazon&#8217; currently supported</td>
+<td>Provides for creation of non Android Market urls.</td>
 </tr>
 </tbody>
 </table>
@@ -184,6 +196,7 @@
 <li class="toctree-l1"><a class="reference internal" href="entity_loader.html">Entity Loaders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html">Amazon AppStore URLs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="proguard.html">ProGuard Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting &amp; Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log</a></li>
@@ -197,12 +210,12 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="proguard.html" title="ProGuard Configuration"
+          <a href="amazon.html" title="Amazon AppStore URLs"
              >next</a></li>
         <li class="right" >
           <a href="sdk_user_guide.html" title="Socialize SDK (Advanced) Guide"
              >previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.4.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK 1.4.4 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

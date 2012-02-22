@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ProGuard Configuration &mdash; Socialize Android SDK 1.4.4 documentation</title>
+    <title>Amazon AppStore URLs &mdash; Socialize Android SDK 1.4.4 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -27,18 +27,18 @@
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
     <link rel="top" title="Socialize Android SDK 1.4.4 documentation" href="index.html" />
-    <link rel="next" title="Troubleshooting &amp; Support" href="troubleshooting.html" />
-    <link rel="prev" title="Amazon AppStore URLs" href="amazon.html" /> 
+    <link rel="next" title="ProGuard Configuration" href="proguard.html" />
+    <link rel="prev" title="Configuration Settings" href="config.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="troubleshooting.html" title="Troubleshooting &amp; Support"
+          <a href="proguard.html" title="ProGuard Configuration"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="amazon.html" title="Amazon AppStore URLs"
+          <a href="config.html" title="Configuration Settings"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">Socialize Android SDK 1.4.4 documentation</a> &raquo;</li> 
       </ul>
@@ -72,23 +72,16 @@
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
-</script><div class="section" id="proguard-configuration">
-<span id="proguard-conf"></span><h1>ProGuard Configuration<a class="headerlink" href="#proguard-configuration" title="Permalink to this headline">¶</a></h1>
-<p>If you are using <a class="reference external" href="http://developer.android.com/guide/developing/tools/proguard.html">ProGuard</a> when building your app with Socialize you will need to add some lines to your <strong>proguard.cfg</strong> file
-to preserve class the class names used by Socialize.</p>
+</script><div class="section" id="amazon-appstore-urls">
+<span id="amazon"></span><h1>Amazon AppStore URLs<a class="headerlink" href="#amazon-appstore-urls" title="Permalink to this headline">¶</a></h1>
+<p>If you are publishing your Android app on the Amazon AppStore you may need to ensure any links generated from social actions (e.g. share) refer to
+your Amazon App listing rather than the default Android Market url.</p>
+<p>To do this, simply add a configuration entry to your <strong>socialize.properties</strong> file</p>
 <pre class="brush: java-properties">
-# Add the Socalize JAR file as a library jar
--libraryjars libs/socialize-xxx.jar
-
-# Ignore Socialize warnings
--dontwarn com.socialize.**
-
-# Keep Socialize classes
--keep public class com.socialize.** { *; }
--keep public class oauth.signpost.** {  *; }
--keep public class oauth.socialize.** {  *; }
--keep public class com.google.** { *; }
-</pre><script type="text/javascript">
+# Configure links to go to Amazon AppStore
+redirect.app.store=amazon
+</pre><p>The value for the Amazon AppStore is &#8220;amazon&#8221; (lowercase)</p>
+<script type="text/javascript">
         SyntaxHighlighter.defaults['toolbar'] = false;
         SyntaxHighlighter.all();
 </script></div>
@@ -124,8 +117,8 @@ to preserve class the class names used by Socialize.</p>
 <li class="toctree-l1"><a class="reference internal" href="entity_loader.html">Entity Loaders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Settings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="amazon.html">Amazon AppStore URLs</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">ProGuard Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Amazon AppStore URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html">ProGuard Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting &amp; Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log</a></li>
 </ul>
@@ -138,10 +131,10 @@ to preserve class the class names used by Socialize.</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="troubleshooting.html" title="Troubleshooting &amp; Support"
+          <a href="proguard.html" title="ProGuard Configuration"
              >next</a></li>
         <li class="right" >
-          <a href="amazon.html" title="Amazon AppStore URLs"
+          <a href="config.html" title="Configuration Settings"
              >previous</a> |</li>
         <li><a href="index.html">Socialize Android SDK 1.4.4 documentation</a> &raquo;</li> 
       </ul>

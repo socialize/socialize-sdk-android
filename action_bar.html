@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Socialize Action Bar &mdash; Socialize Android SDK v1.4.2 documentation</title>
+    <title>Socialize Action Bar &mdash; Socialize Android SDK 1.4.4 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'v1.4.2',
+        VERSION:     '1.4.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v1.4.2 documentation" href="index.html" />
+    <link rel="top" title="Socialize Android SDK 1.4.4 documentation" href="index.html" />
     <link rel="next" title="Socialize Like Button" href="like_button.html" />
     <link rel="prev" title="Facebook Integration" href="facebook.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="facebook.html" title="Facebook Integration"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.4.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK 1.4.4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -171,7 +171,14 @@ performed by the user within the app.  To maximize the benefit of this it is rec
 be provided to Socialize to that it knows how to load the original view for the entity.</p>
 <p>Developers should create an implementation of a SocializeEntityLoader and provide this implementation to the SocializeUI instance:</p>
 <pre class="brush: java">
-Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
+
+// Defined in your app
+public class MyEntityLoader implements SocializeEntityLoader {
+
+        // MUST define a parameterless constructor
+        public MyEntityLoader() {
+                super();
+        }
 
         public void loadEntity(Activity activity, Entity entity) {
                 // Load the original view for this entity
@@ -180,7 +187,8 @@ Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
         public boolean canLoad(Context context, Entity entity) {
                 // Return true if this entity can be loaded
         }
-});
+}
+
 </pre><p>Refer to the <a class="reference internal" href="entity_loader.html"><em>Entity Loaders</em></a> section for more details.</p>
 </div>
 <div class="section" id="disabling-the-scrollview">
@@ -454,6 +462,7 @@ public class ActionBarSampleActivity extends Activity {
 <li class="toctree-l1"><a class="reference internal" href="entity_loader.html">Entity Loaders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html">Socialize SDK (Advanced) Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html">Amazon AppStore URLs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="proguard.html">ProGuard Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting &amp; Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log</a></li>
@@ -472,7 +481,7 @@ public class ActionBarSampleActivity extends Activity {
         <li class="right" >
           <a href="facebook.html" title="Facebook Integration"
              >previous</a> |</li>
-        <li><a href="index.html">Socialize Android SDK v1.4.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Socialize Android SDK 1.4.4 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
