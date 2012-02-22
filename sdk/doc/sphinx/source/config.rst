@@ -31,5 +31,7 @@ The following table lists the configuration options that can be specified in you
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | log.level                       | String  | WARN     | DEBUG or INFO or WARN or ERROR         | Application log level                                            |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
+| redirect.app.store              | String  | android  | Only 'amazon' currently supported      | Provides for creation of non Android Market urls.                |
++---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 
 .. include:: footer.inc
