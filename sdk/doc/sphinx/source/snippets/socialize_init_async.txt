@@ -1,0 +1,25 @@
+.. raw:: html
+
+	<pre class="brush: java">
+	import com.socialize.Socialize;
+	import com.socialize.listener.SocializeInitListener;
+	import com.socialize.error.SocializeException;
+	import com.socialize.android.ioc.IOCContainer;
+
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Socialize.getSocialize().initAsync(null, new SocializeInitListener() {
+			@Override
+			public void onError(SocializeException error) {
+				// Handle error
+			}
+			
+			@Override
+			public void onInit(Context context, IOCContainer container) {
+				// Socialize can be used ONLY after onInit
+				// Your code goes here
+			}
+		});
+	}
+
+	</pre>

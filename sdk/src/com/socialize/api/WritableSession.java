@@ -23,17 +23,34 @@ package com.socialize.api;
 
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.UserProviderCredentials;
 import com.socialize.entity.User;
 
 public interface WritableSession extends SocializeSession {
+	
 	public void setConsumerToken(String token);
+	
 	public void setConsumerTokenSecret(String secret);
+	
 	public void setUser(User user);
+	
 	public void setHost(String host);
+	
+	public void setUserProviderCredentials(AuthProviderType type, UserProviderCredentials data);
+	
+	@Deprecated
 	public void set3rdPartyUserId(String userId);
+	
+	@Deprecated
 	public void set3rdPartyToken(String token);
+	
+	@Deprecated
 	public void set3rdAppId(String appId);
+	
+	@Deprecated
 	public void setAuthProviderType(AuthProviderType authProviderType);
-	public void setAuthProvider(AuthProvider authProvider);
+	
+	@Deprecated
+	public void setAuthProvider(AuthProvider<?> authProvider);
 
 }

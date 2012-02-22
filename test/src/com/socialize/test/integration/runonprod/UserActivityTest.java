@@ -16,7 +16,7 @@ public class UserActivityTest extends SocializeRobotiumTest {
 		super.setUp();
 		authenticateSocialize();
 		robotium.clickOnButton("User Activity");
-		robotium.waitForActivity("UserActivitySelectActivity", DEFAULT_TIMEOUT_SECONDS);
+		robotium.waitForActivity("UserActivitySelectActivity", DEFAULT_TIMEOUT_MILLISECONDS);
 	}
 	
 	public void testListUserActivity() throws JSONException {
@@ -33,7 +33,7 @@ public class UserActivityTest extends SocializeRobotiumTest {
 		robotium.enterText(0,commentUserId);
 		
 		robotium.clickOnButton("List Activity");
-		robotium.waitForActivity("UserActivityListActivity", DEFAULT_TIMEOUT_SECONDS);
+		robotium.waitForActivity("UserActivityListActivity", DEFAULT_TIMEOUT_MILLISECONDS);
 		robotium.waitForView(ListView.class);
 		ListView activity = (ListView) robotium.getCurrentActivity().findViewById(R.id.list);
 		assertEquals(14 ,activity.getCount());

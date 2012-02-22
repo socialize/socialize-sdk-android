@@ -32,38 +32,38 @@ import com.socialize.test.SocializeUnitTest;
 
 /**
  * @author Jason Polites
- *
+ * 
  */
 public class EntityAccessorTests extends SocializeUnitTest {
 
 	public void testStatsEntityAccessors() {
-		
+
 		Stats stats = new Stats();
-		
+
 		Integer comments = 1;
 		Long id = 2L;
 		Integer likes = 3;
 		Integer shares = 4;
 		Integer views = 5;
-		
+
 		stats.setComments(comments);
 		stats.setId(id);
 		stats.setLikes(likes);
 		stats.setShares(shares);
 		stats.setViews(views);
-		
+
 		assertEquals(comments, stats.getComments());
 		assertEquals(id, stats.getId());
 		assertEquals(likes, stats.getLikes());
 		assertEquals(shares, stats.getShares());
 		assertEquals(views, stats.getViews());
 	}
-	
+
 	public void testUserEntityAccessors() {
-		
+
 		User user = new User();
 		Stats stats = new Stats();
-		
+
 		String description = "description";
 		String firstName = "firstName";
 		String largeImageUri = "largeImageUri";
@@ -71,8 +71,8 @@ public class EntityAccessorTests extends SocializeUnitTest {
 		String mediumImageUri = "mediumImageUri";
 		String smallImageUri = "smallImageUri";
 		String username = "username";
-		
-		user.setDescription(description );
+
+		user.setDescription(description);
 		user.setFirstName(firstName);
 		user.setLargeImageUri(largeImageUri);
 		user.setLocation(location);
@@ -80,7 +80,7 @@ public class EntityAccessorTests extends SocializeUnitTest {
 		user.setSmallImageUri(smallImageUri);
 		user.setStats(stats);
 		user.setUsername(username);
-		
+
 		assertEquals(description, user.getDescription());
 		assertEquals(firstName, user.getFirstName());
 		assertEquals(largeImageUri, user.getLargeImageUri());
@@ -90,21 +90,21 @@ public class EntityAccessorTests extends SocializeUnitTest {
 		assertEquals(username, user.getUsername());
 		assertEquals(stats, user.getStats());
 	}
-	
+
 	public void testApplicationEntityAccessors() {
 		Application application = new Application();
 		String name = "name";
-		application.setName(name );
+		application.setName(name);
 		assertEquals(name, application.getName());
 	}
-	
+
 	public void testCommentEntityAccessors() {
 		Comment comment = new Comment();
 		String text = "text";
-		comment.setText(text );
+		comment.setText(text);
 		assertEquals(text, comment.getText());
 	}
-	
+
 	public void testSocializeActionAccessors() {
 		SocializeAction action = new SocializeAction() {
 
@@ -118,15 +118,15 @@ public class EntityAccessorTests extends SocializeUnitTest {
 				return null;
 			}
 		};
-		
+
 		Application app = new Application();
 		Entity entity = new Entity();
 		User user = new User();
-		
+
 		Long date = 123456l;
 		Long id = 69L;
 		Double lat = 1.2d, lon = 3.4d;
-		
+
 		action.setApplication(app);
 		action.setDate(date);
 		action.setEntity(entity);
@@ -134,7 +134,7 @@ public class EntityAccessorTests extends SocializeUnitTest {
 		action.setLat(lat);
 		action.setLon(lon);
 		action.setUser(user);
-		
+
 		assertSame(app, action.getApplication());
 		assertSame(entity, action.getEntity());
 		assertSame(user, action.getUser());
@@ -142,34 +142,34 @@ public class EntityAccessorTests extends SocializeUnitTest {
 		assertEquals(id, action.getId());
 		assertEquals(lat, action.getLat());
 		assertEquals(lon, action.getLon());
-		
+
 	}
-	
+
 	@Deprecated
 	public void testEntityAccessors() {
-		
+
 		Entity entity = new Entity();
-		
+
 		String name = "foo";
 		String key = "bar";
-		
+
 		Integer comments = 1;
 		Integer likes = 2;
-//		Integer id = 3;
+		// Integer id = 3;
 		Integer shares = 4;
 		Integer views = 5;
-		
-		entity.setComments(comments );
-//		entity.setId(id);
+
+		entity.setComments(comments);
+		// entity.setId(id);
 		entity.setKey(key);
 		entity.setLikes(likes);
 		entity.setName(name);
 		entity.setShares(shares);
 		entity.setViews(views);
-		
+
 		assertEquals(comments, entity.getComments());
 		assertEquals(likes, entity.getLikes());
-//		assertEquals(id, entity.getId());
+		// assertEquals(id, entity.getId());
 		assertEquals(shares, entity.getShares());
 		assertEquals(views, entity.getViews());
 		assertEquals(name, entity.getName());

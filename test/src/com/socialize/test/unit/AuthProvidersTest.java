@@ -28,30 +28,32 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
+import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.test.SocializeUnitTest;
 
 /**
  * @author Jason Polites
- *
+ * 
  */
 public class AuthProvidersTest extends SocializeUnitTest {
 
 	@SuppressWarnings("unchecked")
-	@UsesMocks ({Map.class, AuthProvider.class})
+	@UsesMocks({ Map.class, AuthProvider.class })
 	public void testGetProvider() {
 		final AuthProviderType type = AuthProviderType.FACEBOOK;
-		Map<Integer, AuthProvider> providerMap = AndroidMock.createMock(Map.class);
-		AuthProvider provider = AndroidMock.createMock(AuthProvider.class);
-		
-		AndroidMock.expect(providerMap.get(type.getId())).andReturn(provider);
+		Map<Integer, AuthProvider<?>> providerMap = AndroidMock.createMock(Map.class);
+		AuthProvider<FacebookAuthProviderInfo> provider = AndroidMock.createMock(AuthProvider.class);
+
+		AndroidMock.expect((AuthProvider<FacebookAuthProviderInfo>) providerMap.get(type.getId())).andReturn(provider);
+
 		AndroidMock.replay(providerMap);
-		
+
 		AuthProviders providers = new AuthProviders();
 		providers.setProviders(providerMap);
-		
+
 		assertSame(provider, providers.getProvider(type));
-		
+
 		AndroidMock.verify(providerMap);
 	}
-	
+
 }

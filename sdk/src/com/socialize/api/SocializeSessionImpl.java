@@ -23,6 +23,9 @@ package com.socialize.api;
 
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.DefaultUserProviderCredentialsMap;
+import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.entity.User;
 
 /**
@@ -31,21 +34,37 @@ import com.socialize.entity.User;
  */
 public class SocializeSessionImpl implements WritableSession {
 
+	private static final long serialVersionUID = -6937693636536504716L;
+	
 	private User user;
 	private String consumerKey;
 	private String consumerSecret;
 	private String consumerToken;
 	private String consumerTokenSecret;
 	private String host;
-	private String appId3rdParty;
-	private String userId3rdParty;
-	private String token3rdParty;
-	private AuthProviderType authProviderType;
-	private AuthProvider authProvider;
 	
+	private UserProviderCredentialsMap userProviderCredentials;
+	
+	@Deprecated
+	private String appId3rdParty;
+	
+	@Deprecated
+	private String userId3rdParty;
+	
+	@Deprecated
+	private String token3rdParty;
+	
+	@Deprecated
+	private AuthProviderType authProviderType;
+	
+	@SuppressWarnings("rawtypes")
+	@Deprecated
+	private AuthProvider authProvider;
 	
 	public SocializeSessionImpl() {
 		super();
+		
+		userProviderCredentials = new DefaultUserProviderCredentialsMap();
 	}
 	
 	@Override
@@ -56,22 +75,26 @@ public class SocializeSessionImpl implements WritableSession {
 		authProvider = null;
 	}
 
+	@Deprecated
 	@Override
 	public String get3rdPartyUserId() {
 		return userId3rdParty;
 	}
 	
+	@Deprecated
 	@Override
 	public String get3rdPartyToken() {
 		return token3rdParty;
 	}
 	
+	@Deprecated
 	@Override
 	public void set3rdPartyUserId(String userId) {
 		this.userId3rdParty = userId;
 		
 	}
 	
+	@Deprecated
 	@Override
 	public void set3rdPartyToken(String token) {
 		this.token3rdParty = token;
@@ -157,32 +180,60 @@ public class SocializeSessionImpl implements WritableSession {
 		this.host = host;
 	}
 
+	@Deprecated
 	@Override
 	public AuthProviderType getAuthProviderType() {
 		return authProviderType;
 	}
 
+	@Deprecated
 	@Override
 	public void setAuthProviderType(AuthProviderType authProviderType) {
 		this.authProviderType = authProviderType;
 	}
 
+	@Deprecated
 	@Override
 	public String get3rdPartyAppId() {
 		return appId3rdParty;
 	}
 
+	@Deprecated
 	@Override
 	public void set3rdAppId(String appId) {
 		this.appId3rdParty = appId;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Deprecated
 	@Override
 	public AuthProvider getAuthProvider() {
 		return authProvider;
 	}
+	
+	@SuppressWarnings("rawtypes")
+	@Deprecated
 	@Override
 	public void setAuthProvider(AuthProvider authProvider) {
 		this.authProvider = authProvider;
 	}
+
+	public UserProviderCredentialsMap getUserProviderCredentials() {
+		return userProviderCredentials;
+	}
+
+	public void setUserProviderCredentials(UserProviderCredentialsMap userProviderCredentials) {
+		this.userProviderCredentials = userProviderCredentials;
+	}
+
+	@Override
+	public void setUserProviderCredentials(AuthProviderType type, UserProviderCredentials data) {
+		userProviderCredentials.put(type, data);
+	}
+
+	@Override
+	public UserProviderCredentials getUserProviderCredentials(AuthProviderType type) {
+		return userProviderCredentials.get(type);
+	}
+	
 }

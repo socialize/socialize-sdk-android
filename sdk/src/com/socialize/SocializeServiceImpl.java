@@ -22,6 +22,7 @@
 package com.socialize;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -54,7 +55,12 @@ import com.socialize.api.action.UserSystem;
 import com.socialize.api.action.ViewSystem;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
+import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.AuthProviders;
+import com.socialize.auth.SocializeAuthProviderInfo;
+import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
@@ -100,20 +106,19 @@ import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.comment.CommentDetailActivity;
-import com.socialize.ui.comment.CommentShareOptions;
 import com.socialize.ui.comment.CommentView;
 import com.socialize.ui.comment.OnCommentViewActionListener;
 import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.ui.profile.UserProfile;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.Drawables;
+import com.socialize.util.EntityLoaderUtils;
 import com.socialize.util.ResourceLocator;
 import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
  */
-@SuppressWarnings("deprecation")
 public class SocializeServiceImpl implements SocializeSessionConsumer, SocializeService , SocializeUI {
 	
 	static final String receiver = SocializeC2DMReceiver.class.getName();
@@ -132,9 +137,11 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private EntitySystem entitySystem;
 	private SubscriptionSystem subscriptionSystem;
 	private Drawables drawables;
+	private AuthProviders authProviders;
 	
 	private SocializeSystem system = new SocializeSystem();
 	private SocializeConfig config = new SocializeConfig();
+	
 	private SocializeEntityLoader entityLoader;
 	
 	private String[] initPaths = null;
@@ -366,6 +373,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.drawables = container.getBean("drawables");
 				this.authProviderDataFactory = container.getBean("authProviderDataFactory");
 				this.asserter = container.getBean("initializationAsserter");
+				this.authProviders = container.getBean("authProviders");
 				
 				SocializeConfig mainConfig = container.getBean("config");
 				
@@ -375,6 +383,9 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.initCount++;
 				
 				verify3rdPartyAuthConfigured();
+				
+				// Create the entity loader if we have one
+				initEntityLoader();
 				
 				ActivityIOCProvider.getInstance().setContainer(container);
 			}
@@ -392,8 +403,14 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 	
+	protected void initEntityLoader() {
+		EntityLoaderUtils entityLoaderUtils = container.getBean("entityLoaderUtils");
+		entityLoaderUtils.initEntityLoader();
+	}
+	
 	protected void verify3rdPartyAuthConfigured() {
 		if(logger != null && logger.isDebugEnabled()) {
+			// TODO: Make generic
 			if(!isSupported(AuthProviderType.FACEBOOK)) {
 				logger.debug("No facebook app id found in socialize.properties.  Facebook not enabled");
 			}
@@ -402,13 +419,27 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	
 	@Override
 	public void clear3rdPartySession(Context context, AuthProviderType type) {
-		// TODO: implement for specific/multiple provider types.
 		try {
 			if(session != null) {
-				AuthProvider authProvider = session.getAuthProvider();
-				String get3rdPartyAppId = session.get3rdPartyAppId();
-				if(authProvider != null && !StringUtils.isEmpty(get3rdPartyAppId)) {
-					authProvider.clearCache(context, get3rdPartyAppId);
+				AuthProvider<AuthProviderInfo> provider = authProviders.getProvider(type);
+				
+				if(provider != null) {
+					boolean cleared = false;
+					
+					UserProviderCredentials userProviderCredentials = session.getUserProviderCredentials(type);
+					
+					if(userProviderCredentials != null) {
+						AuthProviderInfo authProviderInfo = userProviderCredentials.getAuthProviderInfo();
+						if(authProviderInfo != null) {
+							provider.clearCache(context, authProviderInfo);
+							cleared = true;
+						}
+					}
+					
+					if(!cleared) {
+						// Legacy
+						clear3rdPartySessionLegacy(context);
+					}
 				}
 				
 				session.clear(type);
@@ -420,16 +451,39 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			}
 		}
 	}
+	
+	@SuppressWarnings("deprecation")
+	protected void clear3rdPartySessionLegacy(Context context) {
+		AuthProvider<?> authProvider = session.getAuthProvider();
+		String get3rdPartyAppId = session.get3rdPartyAppId();
+		if(authProvider != null && !StringUtils.isEmpty(get3rdPartyAppId)) {
+			authProvider.clearCache(context, get3rdPartyAppId);
+		}
+	}
 
 	@Override
 	public void clearSessionCache(Context context) {
 		try {
 			if(session != null) {
-				AuthProvider authProvider = session.getAuthProvider();
-				String get3rdPartyAppId = session.get3rdPartyAppId();
 				
-				if(authProvider != null && !StringUtils.isEmpty(get3rdPartyAppId)) {
-					authProvider.clearCache(context, get3rdPartyAppId);
+				UserProviderCredentialsMap userProviderCredentialsMap = session.getUserProviderCredentials();
+				
+				boolean cleared = false;
+				
+				if(userProviderCredentialsMap != null) {
+					Collection<UserProviderCredentials> values = userProviderCredentialsMap.values();
+					for (UserProviderCredentials userProviderCredentials : values) {
+						AuthProviderInfo authProviderInfo = userProviderCredentials.getAuthProviderInfo();
+						if(authProviderInfo != null) {
+							cleared = true;
+							clear3rdPartySession(context, authProviderInfo.getType());
+						}
+					}
+				}
+				
+				if(!cleared) {
+					// Legacy
+					clear3rdPartySessionLegacy(context);
 				}
 				
 				session = null;
@@ -472,6 +526,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			
 			initCount = 0;
 			initPaths = null;
+			entityLoader = null;
 		}
 		else {
 			destroy();
@@ -492,6 +547,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#authenticate(android.content.Context, java.lang.String, java.lang.String, com.socialize.auth.AuthProviderType, java.lang.String, com.socialize.listener.SocializeAuthListener)
 	 */
+	@Deprecated
 	@Override
 	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderType authProviderType, String authProviderAppId, SocializeAuthListener authListener) {
 		AuthProviderData data = this.authProviderDataFactory.getBean();
@@ -500,6 +556,13 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		authenticate(context, consumerKey, consumerSecret, data, authListener, true);
 	}
 	
+	@Override
+	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, SocializeAuthListener authListener) {
+		AuthProviderData data = this.authProviderDataFactory.getBean();
+		data.setAuthProviderInfo(authProviderInfo);
+		authenticate(context, consumerKey, consumerSecret, data, authListener, true);	
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#authenticate(com.socialize.listener.SocializeAuthListener)
@@ -589,8 +652,14 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
 		AuthProviderData data = this.authProviderDataFactory.getBean();
-		data.setAuthProviderType(AuthProviderType.SOCIALIZE);
+		SocializeAuthProviderInfo info = newSocializeAuthProviderInfo();
+		data.setAuthProviderInfo(info);
 		authenticate(context, consumerKey, consumerSecret, data, authListener, false);
+	}
+	
+	// So we can mock
+	protected SocializeAuthProviderInfo newSocializeAuthProviderInfo() {
+		return new SocializeAuthProviderInfo();
 	}
 	
 	@Deprecated
@@ -604,6 +673,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#authenticateKnownUser(android.content.Context, java.lang.String, java.lang.String, com.socialize.auth.AuthProviderType, java.lang.String, java.lang.String, java.lang.String, com.socialize.listener.SocializeAuthListener)
 	 */
+	@Deprecated
 	@Override
 	public void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty,
 			SocializeAuthListener authListener) {
@@ -617,6 +687,15 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, false);
 	}	
 	
+	@Override
+	public void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, UserProviderCredentials userProviderCredentials, SocializeAuthListener authListener) {
+		AuthProviderData authProviderData = this.authProviderDataFactory.getBean();
+		authProviderData.setAuthProviderInfo(authProviderInfo);
+		authProviderData.setToken3rdParty(userProviderCredentials.getAccessToken());
+		authProviderData.setUserId3rdParty(userProviderCredentials.getUserId());
+		authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, false);	
+	}
+
 	protected void authenticate(
 			Context context,
 			String consumerKey, 
@@ -732,34 +811,13 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#addComment(java.lang.String, java.lang.String, android.location.Location, com.socialize.listener.comment.CommentAddListener)
-	 */
-	@Deprecated
-	@Override
-	public void addComment(String key, String comment, Location location, CommentShareOptions shareOptions, CommentAddListener commentAddListener) {
-		if(assertAuthenticated(commentAddListener)) {
-			commentSystem.addComment(session, Entity.newInstance(key, null), comment, location, shareOptions, commentAddListener);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#addComment(java.lang.String, java.lang.String, boolean, com.socialize.listener.comment.CommentAddListener)
-	 */
-	@Deprecated
-	@Override
-	public void addComment(String url, String comment, CommentShareOptions shareOptions, CommentAddListener commentAddListener) {
-		addComment(url, comment, null, shareOptions, commentAddListener);
-	}
-
-	/*
-	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#addComment(java.lang.String, java.lang.String, com.socialize.listener.comment.CommentAddListener)
 	 */
 	@Deprecated
 	@Override
 	public void addComment(String url, String comment, CommentAddListener commentAddListener) {
-		addComment(url, comment, null, null, commentAddListener);
+		Entity e = Entity.newInstance(url, null);
+		addComment(null, e, comment, commentAddListener);
 	}
 	
 	/* (non-Javadoc)
@@ -1220,16 +1278,28 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				return true;
 			}
 			
-			AuthProviderType authProviderType = session.getAuthProviderType();
+			UserProviderCredentials userProviderCredentials = session.getUserProviderCredentials(providerType);
 			
-			if(authProviderType == null) {
-				return false;
+			if(userProviderCredentials == null) {
+				// Legacy
+				return isAuthenticatedLegacy(providerType);
 			}
 			else {
-				return (authProviderType.equals(providerType));
+				return true;
 			}
 		}
 		return false;
+	}
+	
+	@SuppressWarnings("deprecation")
+	protected boolean isAuthenticatedLegacy(AuthProviderType providerType) {
+		AuthProviderType authProviderType = session.getAuthProviderType();
+		if(authProviderType == null) {
+			return false;
+		}
+		else {
+			return (authProviderType.equals(providerType));
+		}
 	}
 
 	protected boolean assertAuthenticated(SocializeListener listener) {
@@ -1668,6 +1738,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 
 	protected void setUserSystem(UserSystem userSystem) {
 		this.userSystem = userSystem;
+	}
+
+	protected void setAuthProviders(AuthProviders authProviders) {
+		this.authProviders = authProviders;
 	}
 
 	protected void setActivitySystem(ActivitySystem activitySystem) {

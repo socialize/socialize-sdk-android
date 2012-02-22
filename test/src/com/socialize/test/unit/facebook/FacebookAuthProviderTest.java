@@ -61,8 +61,9 @@ public class FacebookAuthProviderTest extends SocializeUnitTest {
 			}
 
 			@Override
-			public void remove(String key) {
+			public <L extends SocializeListener> L remove(String key) {
 				addResult(key);
+				return null;
 			}
 		};
 		

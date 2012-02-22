@@ -8,7 +8,7 @@ public class ViewTest extends SocializeRobotiumTest {
 		super.setUp();
 		authenticateSocialize();
 		robotium.clickOnButton("View");
-		robotium.waitForActivity("ViewActivity", DEFAULT_TIMEOUT_SECONDS);
+		robotium.waitForActivity("ViewActivity", DEFAULT_TIMEOUT_MILLISECONDS);
 	}
 	public void testCreateView() {
 		robotium.enterText(0, DEFAULT_ENTITY_URL);

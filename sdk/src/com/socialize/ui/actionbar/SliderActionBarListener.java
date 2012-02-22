@@ -39,7 +39,6 @@ public class SliderActionBarListener implements OnActionBarEventListener {
 	private ActionBarEvent lastEvent;
 
 	private IBeanFactory<ActionBarSliderItem> shareSliderItemFactory;
-	private IBeanFactory<ActionBarSliderItem> viewSliderItemFactory;
 	
 	private OnActionBarEventListener delegate;
 	
@@ -117,7 +116,6 @@ public class SliderActionBarListener implements OnActionBarEventListener {
 		}
 	}
 	
-
 	@Override
 	public void onUpdate(ActionBarView actionBar) {
 		actionBar.getSlider().close();
@@ -175,11 +173,6 @@ public class SliderActionBarListener implements OnActionBarEventListener {
 						item = shareSliderItemFactory.getBean(actionBar, this);
 					}
 					break;
-				case VIEW:
-					if(viewSliderItemFactory != null) {
-						item = viewSliderItemFactory.getBean(actionBar, this);
-					}					
-					break;
 			}
 			
 			if(item != null) {
@@ -199,10 +192,6 @@ public class SliderActionBarListener implements OnActionBarEventListener {
 
 	public void setShareSliderItemFactory(IBeanFactory<ActionBarSliderItem> shareSliderItemFactory) {
 		this.shareSliderItemFactory = shareSliderItemFactory;
-	}
-
-	public void setViewSliderItemFactory(IBeanFactory<ActionBarSliderItem> viewSliderItemFactory) {
-		this.viewSliderItemFactory = viewSliderItemFactory;
 	}
 
 	public void setDelegate(OnActionBarEventListener delegate) {

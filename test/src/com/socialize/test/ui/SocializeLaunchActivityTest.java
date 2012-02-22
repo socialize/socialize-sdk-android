@@ -21,6 +21,9 @@
  */
 package com.socialize.test.ui;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -43,15 +46,17 @@ import com.socialize.ui.SocializeLaunchActivity;
 public class SocializeLaunchActivityTest extends SocializeUIActivityTest {
 
 	@UsesMocks ({IOCContainer.class, SocializeErrorHandler.class, SocializeService.class, SocializeAuthListener.class})
-	public void testOnCreate() {
+	public void testOnCreate() throws Throwable {
 		
 		final IOCContainer mockContainer = AndroidMock.createMock(IOCContainer.class);
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		final SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
 		
-		Bundle bundle = new Bundle();
+		final Bundle bundle = new Bundle();
 		
-		PublicSocializeLaunchActivity activity = new PublicSocializeLaunchActivity() {
+		final CountDownLatch latch = new CountDownLatch(2);
+		
+		final PublicSocializeLaunchActivity activity = new PublicSocializeLaunchActivity() {
 
 			@Override
 			public IOCContainer getContainer() {
@@ -61,6 +66,13 @@ public class SocializeLaunchActivityTest extends SocializeUIActivityTest {
 			@Override
 			public void initSocialize() {
 				addResult(1, "initSocialize");
+				latch.countDown();
+			}
+			
+			@Override
+			protected void doAuthenticate() {
+				super.doAuthenticate();
+				latch.countDown();
 			}
 
 			@Override
@@ -77,22 +89,42 @@ public class SocializeLaunchActivityTest extends SocializeUIActivityTest {
 			public SocializeAuthListener getAuthListener(IOCContainer container) {
 				return listener;
 			}
+
+			@Override
+			protected void setupLayout() {
+				addResult(2, "setupLayout");
+			}
 		};
+		
+		AndroidMock.expect(mockContainer.getBean("socializeUIErrorHandler")).andReturn(null).anyTimes();
+		AndroidMock.expect(mockContainer.getBean("logger")).andReturn(null).anyTimes();
 		
 		socialize.authenticate(activity, listener);
 		
 		AndroidMock.replay(mockContainer, socialize);
 		
-		activity.onCreate(bundle);
+		runTestOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				activity.onCreate(bundle);
+			}
+			
+		});
+		
+		latch.await(20, TimeUnit.SECONDS);
 		
 		AndroidMock.verify(mockContainer, socialize);
 		
 		Bundle savedInstanceState = getResult(0);
 		String initSocialize = getResult(1);
+		String setupLayout = getResult(2);
 		
 		assertNotNull(initSocialize);
+		assertNotNull(setupLayout);
 		assertNotNull(savedInstanceState);
 		
+		assertEquals("setupLayout", setupLayout);
 		assertEquals("initSocialize", initSocialize);
 		assertSame(bundle, savedInstanceState);
 	}
@@ -101,7 +133,6 @@ public class SocializeLaunchActivityTest extends SocializeUIActivityTest {
 	public void testAuthListenerSuccess() {
 		
 		final IOCContainer mockContainer = AndroidMock.createMock(IOCContainer.class);
-		final SocializeErrorHandler errorHandler = AndroidMock.createMock(SocializeErrorHandler.class);
 		final LaunchManager launchManager = AndroidMock.createMock(LaunchManager.class);
 		final Launcher launcher = AndroidMock.createMock(Launcher.class);
 		final Intent intent = AndroidMock.createMock(Intent.class);
@@ -120,10 +151,10 @@ public class SocializeLaunchActivityTest extends SocializeUIActivityTest {
 		};
 		
 		AndroidMock.expect(intent.getExtras()).andReturn(extras);
-		AndroidMock.expect(mockContainer.getBean("socializeUIErrorHandler")).andReturn(errorHandler);
 		AndroidMock.expect(mockContainer.getBean("launchManager")).andReturn(launchManager);
 		AndroidMock.expect(launchManager.getLaucher(action)).andReturn(launcher);
 		AndroidMock.expect(launcher.launch(activity, extras)).andReturn(true);
+		AndroidMock.expect(launcher.shouldFinish()).andReturn(true);
 		
 		AndroidMock.replay(intent, mockContainer, launchManager, launcher);
 		
@@ -136,42 +167,36 @@ public class SocializeLaunchActivityTest extends SocializeUIActivityTest {
 	@UsesMocks ({IOCContainer.class, SocializeErrorHandler.class, SocializeException.class})
 	public void testAuthListenerAuthFail() {
 		final IOCContainer mockContainer = AndroidMock.createMock(IOCContainer.class);
-		final SocializeErrorHandler errorHandler = AndroidMock.createMock(SocializeErrorHandler.class);
-		final SocializeException error = AndroidMock.createMock(SocializeException.class);
+		final SocializeException error = AndroidMock.createNiceMock(SocializeException.class);
 		
-		PublicSocializeLaunchActivity activity = new PublicSocializeLaunchActivity();
-		
-		AndroidMock.expect(mockContainer.getBean("socializeUIErrorHandler")).andReturn(errorHandler);
-		
-		error.printStackTrace();
-		errorHandler.handleError(activity, error);
-		
-		AndroidMock.replay(mockContainer, errorHandler, error);
+		PublicSocializeLaunchActivity activity = new PublicSocializeLaunchActivity() {
+			@Override
+			protected void handleError(SocializeException error) {
+				addResult(0, error);
+			}
+		};
 		
 		SocializeAuthListener authListener = activity.getAuthListener(mockContainer);
 		authListener.onAuthFail(error);
-
-		AndroidMock.verify(mockContainer, errorHandler, error);
+		
+		assertSame(error, getResult(0));
 	}
 	
 	@UsesMocks ({IOCContainer.class, SocializeErrorHandler.class, SocializeException.class})
 	public void testAuthListenerError() {
 		final IOCContainer mockContainer = AndroidMock.createMock(IOCContainer.class);
-		final SocializeErrorHandler errorHandler = AndroidMock.createMock(SocializeErrorHandler.class);
-		final SocializeException error = AndroidMock.createMock(SocializeException.class);
+		final SocializeException error = AndroidMock.createNiceMock(SocializeException.class);
 		
-		PublicSocializeLaunchActivity activity = new PublicSocializeLaunchActivity();
-		
-		AndroidMock.expect(mockContainer.getBean("socializeUIErrorHandler")).andReturn(errorHandler);
-		
-		error.printStackTrace();
-		errorHandler.handleError(activity, error);
-		
-		AndroidMock.replay(mockContainer, errorHandler, error);
+		PublicSocializeLaunchActivity activity = new PublicSocializeLaunchActivity() {
+			@Override
+			protected void handleError(SocializeException error) {
+				addResult(0, error);
+			}
+		};
 		
 		SocializeAuthListener authListener = activity.getAuthListener(mockContainer);
 		authListener.onError(error);
-
-		AndroidMock.verify(mockContainer, errorHandler, error);
+		
+		assertSame(error, getResult(0));
 	}	
 }

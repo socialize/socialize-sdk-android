@@ -24,20 +24,7 @@
 			Entity entity = Entity.newInstance(entityKey, "Socialize");
 			
 			// Set up the entity loader
-			Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
-				public void loadEntity(Activity activity, Entity entity) {
-					// Launch an activity from here...
-					Intent intent = new Intent(activity, MyContentActivity.class);
-					
-					// Add the key from the entity
-					intent.putExtra("some_key", entity.getKey());
-					activity.startActivity(intent);
-				}
-				
-				public boolean canLoad(Context context, Entity entity) {
-					return true; // always load in this case	
-				}
-			});			
+			Socialize.getSocialize().setEntityLoader(new MyEntityLoader());			
 			
 			// Wrap your existing view with the action bar.
 			// your_layout refers to the resource ID of your current layout.

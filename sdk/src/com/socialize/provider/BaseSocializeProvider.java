@@ -44,7 +44,14 @@ import com.socialize.api.SocializeSessionPersister;
 import com.socialize.api.WritableSession;
 import com.socialize.api.action.ActionType;
 import com.socialize.auth.AuthProviderData;
+import com.socialize.auth.AuthProviderInfo;
+import com.socialize.auth.AuthProviderInfoBuilder;
+import com.socialize.auth.AuthProviderInfoFactory;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.DefaultUserProviderCredentials;
+import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.UserProviderCredentialsMap;
+import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.ActionError;
 import com.socialize.entity.ErrorFactory;
@@ -74,6 +81,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	
 	private SocializeObjectFactory<User> userFactory;
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
+	private AuthProviderInfoBuilder authProviderInfoBuilder;
 	private ErrorFactory errorFactory;
 	private HttpClientFactory clientFactory;
 	private SocializeSessionFactory sessionFactory;
@@ -132,18 +140,16 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	
 	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException {
-		return authenticate(endpoint, key, secret, authProviderDataFactory.getBean(), uuid);
-	}
-	
-	@Override
-	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderData data) throws SocializeException {
-		return loadSession(endpoint, key, secret, data.getAuthProviderType(), data.getAppId3rdParty());
+		AuthProviderData data = authProviderDataFactory.getBean();
+		data.setAuthProviderInfo(authProviderInfoBuilder.getFactory(AuthProviderType.SOCIALIZE).newInstance());
+		return authenticate(endpoint, key, secret, data, uuid);
 	}
 
 	@Override
-	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderType authProviderType, String appId3rdParty) throws SocializeException {
+	public WritableSession loadSession(String endpoint, String key, String secret) throws SocializeException {
+		
 		if(sessionPersister != null) {
-			SocializeSession loaded = sessionPersister.load(context);
+			WritableSession loaded = sessionPersister.load(context);
 			
 			// Verify that the key/secret matches
 			if(loaded != null) {
@@ -161,27 +167,93 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 						loadedHost != null && 
 						loadedHost.equals(host)) {
 					
-					
-					if(authProviderType != null && !StringUtils.isEmpty(appId3rdParty)) {
-						AuthProviderType loadedAuthProviderType = loaded.getAuthProviderType();
-						String loadedAppId3rdParty = loaded.get3rdPartyAppId();
-						
-						if(loadedAuthProviderType != null && 
-								!StringUtils.isEmpty(loadedAppId3rdParty) && 
-								loadedAuthProviderType.equals(authProviderType) && 
-								loadedAppId3rdParty.equals(appId3rdParty)) {
-							return loaded;
-						}
-						else {
-							return null;
-						}
-					}
-					
 					return loaded;
 				}
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public boolean validateSession(SocializeSession session, AuthProviderData data) {
+		AuthProviderInfo info = data.getAuthProviderInfo();
+		if(info != null) {
+			if(info.getType().equals(AuthProviderType.SOCIALIZE)) {
+				return true;
+			}
+			return validateSessionAuthData(session, info);
+		}
+		else {	
+			return validateSessionAuthDataLegacy(session, data);
+		}		
+	}
+
+	public boolean validateSessionAuthData(SocializeSession loaded, AuthProviderInfo info) {
+		UserProviderCredentialsMap userProviderCredentialsMap = loaded.getUserProviderCredentials();
+		if(userProviderCredentialsMap != null) {
+			UserProviderCredentials userProviderCredentials = userProviderCredentialsMap.get(info.getType());
+			if(userProviderCredentials != null && userProviderCredentials.getAuthProviderInfo().matches(info)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public boolean validateSessionAuthDataLegacy(SocializeSession loaded, AuthProviderData data) {
+		
+		if(data.getAuthProviderType().equals(AuthProviderType.SOCIALIZE)) {
+			return true;
+		}
+		
+		if(data.getAuthProviderType() != null && !StringUtils.isEmpty(data.getAppId3rdParty())) {
+			AuthProviderType loadedAuthProviderType = loaded.getAuthProviderType();
+			String loadedAppId3rdParty = loaded.get3rdPartyAppId();
+			
+			if(loadedAuthProviderType != null && 
+					!StringUtils.isEmpty(loadedAppId3rdParty) && 
+					loadedAuthProviderType.equals(data.getAuthProviderType()) && 
+					loadedAppId3rdParty.equals(data.getAppId3rdParty())) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	@Deprecated
+	@Override
+	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderType authProviderType, String appId3rdParty) throws SocializeException {
+		if(authProviderType.equals(AuthProviderType.FACEBOOK)) {
+			AuthProviderData data = newAuthProviderData();
+			AuthProviderInfoFactory<FacebookAuthProviderInfo> factory = authProviderInfoBuilder.getFactory(authProviderType);
+			FacebookAuthProviderInfo info = factory.newInstance();
+			info.setAppId(appId3rdParty);
+			data.setAuthProviderInfo(info);
+			
+			WritableSession session = loadSession(endpoint, key, secret);
+			
+			if(validateSession(session, data)) {
+				return session;
+			}
+		}
+		else {
+			throw new UnsupportedOperationException("Method not supported for auth provider [" +
+					authProviderType +
+					"].");
+		}
+		
+		return null;
+	}
+	
+	@Deprecated
+	protected FacebookAuthProviderInfo newFacebookAuthProviderInfo() {
+		return new FacebookAuthProviderInfo();
+	}
+	
+	// Mockable
+	protected AuthProviderData newAuthProviderData() {
+		return new AuthProviderData();
 	}
 	
 	@Override
@@ -201,13 +273,34 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
 		
-		SocializeSession loaded = loadSession(endpoint, key, secret, data);
+		WritableSession session = loadSession(endpoint, key, secret);
 		
-		if(loaded != null) {
-			return loaded;
+		if(session != null) {
+			
+			if(validateSession(session, data)) {
+				return session;
+			}
+			else {
+				AuthProviderInfo info = data.getAuthProviderInfo();
+				
+				if(info != null) {
+					DefaultUserProviderCredentials userProviderCredentials = new DefaultUserProviderCredentials();
+					userProviderCredentials.setAccessToken(data.getToken3rdParty());
+					userProviderCredentials.setUserId(data.getUserId3rdParty());
+					userProviderCredentials.setAuthProviderInfo(data.getAuthProviderInfo());
+					
+					session.getUserProviderCredentials().put(info.getType(), userProviderCredentials);
+				}
+				else {
+					// Legacy
+					session = null;
+				}
+			}
 		}
-
-		WritableSession session = sessionFactory.create(key, secret, data);
+		
+		if(session == null) {
+			session = sessionFactory.create(key, secret, data);
+		}
 		
 		endpoint = prepareEndpoint(session, endpoint, true);
 		
@@ -218,7 +311,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 			HttpEntity entity = null;
 			
 			try {
-				HttpUriRequest request = requestFactory.getAuthRequest(session, endpoint, uuid);
+				HttpUriRequest request = requestFactory.getAuthRequest(session, endpoint, uuid, data);
 				
 				HttpResponse response = client.execute(request);
 				
@@ -231,9 +324,11 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 					}
 					
 					String msg = ioUtils.readSafe(entity.getContent());
+					
 					throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
 				}
 				else {
+					
 					JSONObject json = jsonParser.parseObject(entity.getContent());
 					
 					User user = userFactory.fromJSON(json.getJSONObject("user"));
@@ -543,6 +638,10 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 		this.authProviderDataFactory = authProviderDataFactory;
 	}
 
+	public void setAuthProviderInfoBuilder(AuthProviderInfoBuilder authProviderInfoBuilder) {
+		this.authProviderInfoBuilder = authProviderInfoBuilder;
+	}
+
 	private final String prepareEndpoint(SocializeSession session, String endpoint) {
 		return prepareEndpoint(session, endpoint, false);
 	}
@@ -610,6 +709,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	public SocializeSessionPersister getSessionPersister() {
 		return sessionPersister;
 	}
+	
 	
 	public abstract T fromJSON(JSONObject json, ActionType type) throws JSONException;
 }

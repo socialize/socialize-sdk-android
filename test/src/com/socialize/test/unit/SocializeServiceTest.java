@@ -21,6 +21,9 @@
  */
 package com.socialize.test.unit;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
@@ -49,7 +52,12 @@ import com.socialize.api.action.SocializeViewSystem;
 import com.socialize.api.action.UserSystem;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
+import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.AuthProviders;
+import com.socialize.auth.SocializeAuthProviderInfo;
+import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
@@ -84,19 +92,31 @@ import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.profile.UserProfile;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.Drawables;
+import com.socialize.util.EntityLoaderUtils;
 import com.socialize.util.ResourceLocator;
 
 /**
  * @author Jason Polites
  * 
  */
-@UsesMocks({ IOCContainer.class, SocializeSession.class, SocializeLogger.class,
-		SocializeInitializationAsserter.class, SocializeCommentSystem.class,
-		SocializeShareSystem.class, SocializeLikeSystem.class,
-		SocializeEntitySystem.class, SocializeViewSystem.class,
-		SocializeActivitySystem.class, SocializeUserSystem.class,
-		SocializeSubscriptionSystem.class, Drawables.class,
-		SocializeConfig.class, SocializeProvider.class })
+@UsesMocks({ 
+	IOCContainer.class, 
+	SocializeSession.class, 
+	SocializeLogger.class, 
+	SocializeInitializationAsserter.class, 
+	SocializeCommentSystem.class, 
+	SocializeShareSystem.class, 
+	SocializeLikeSystem.class, 
+	SocializeEntitySystem.class, 
+	SocializeViewSystem.class, 
+	SocializeActivitySystem.class, 
+	SocializeUserSystem.class, 
+	SocializeSubscriptionSystem.class, 
+	Drawables.class, 
+	SocializeConfig.class, 
+	SocializeProvider.class,
+	AuthProviders.class,
+	EntityLoaderUtils.class})
 public class SocializeServiceTest extends SocializeActivityTest {
 
 	IOCContainer container;
@@ -111,67 +131,61 @@ public class SocializeServiceTest extends SocializeActivityTest {
 	SocializeSubscriptionSystem subscriptionSystem;
 	Drawables drawables;
 	SocializeProvider<?> provider;
+	AuthProviders authProviders;
 
 	SocializeLogger logger;
 	IBeanFactory<AuthProviderData> authProviderDataFactory;
 	AuthProviderData authProviderData;
 	SocializeSession session;
+	SocializeAuthProviderInfo info;
+	EntityLoaderUtils entityLoaderUtils;
+
 
 	SocializeConfig config;
-
+	
 	@SuppressWarnings("unchecked")
-	private void setupDefaultMocks() {
+	private void setupMinimalMocks() {
 		container = AndroidMock.createMock(IOCContainer.class);
 		logger = AndroidMock.createNiceMock(SocializeLogger.class);
-		authProviderDataFactory = (IBeanFactory<AuthProviderData>) AndroidMock
-				.createMock(IBeanFactory.class);
+		authProviderDataFactory = (IBeanFactory<AuthProviderData>) AndroidMock.createMock(IBeanFactory.class);
 		authProviderData = AndroidMock.createMock(AuthProviderData.class);
 		session = AndroidMock.createMock(SocializeSession.class);
 		provider = AndroidMock.createMock(SocializeProvider.class);
-
+		info = AndroidMock.createMock(SocializeAuthProviderInfo.class);
 		config = AndroidMock.createNiceMock(SocializeConfig.class);
-		commentSystem = AndroidMock.createMock(SocializeCommentSystem.class,
-				provider);
-		shareSystem = AndroidMock.createMock(SocializeShareSystem.class,
-				provider);
-		likeSystem = AndroidMock
-				.createMock(SocializeLikeSystem.class, provider);
-		entitySystem = AndroidMock.createMock(SocializeEntitySystem.class,
-				provider);
-		viewSystem = AndroidMock
-				.createMock(SocializeViewSystem.class, provider);
-		activitySystem = AndroidMock.createMock(SocializeActivitySystem.class,
-				provider);
-		userSystem = AndroidMock
-				.createMock(SocializeUserSystem.class, provider);
-		subscriptionSystem = AndroidMock.createMock(
-				SocializeSubscriptionSystem.class, provider);
+		commentSystem = AndroidMock.createMock(SocializeCommentSystem.class, provider);
+		shareSystem = AndroidMock.createMock(SocializeShareSystem.class, provider);
+		likeSystem = AndroidMock.createMock(SocializeLikeSystem.class, provider);
+		entitySystem = AndroidMock.createMock(SocializeEntitySystem.class, provider);
+		viewSystem = AndroidMock.createMock(SocializeViewSystem.class, provider);
+		activitySystem = AndroidMock.createMock(SocializeActivitySystem.class, provider);
+		userSystem = AndroidMock.createMock(SocializeUserSystem.class, provider);
+		subscriptionSystem = AndroidMock.createMock(SocializeSubscriptionSystem.class, provider);
 		drawables = AndroidMock.createMock(Drawables.class);
+		authProviders = AndroidMock.createMock(AuthProviders.class);
+		entityLoaderUtils = AndroidMock.createMock(EntityLoaderUtils.class);
+	}
 
-		AndroidMock.expect(container.getBean("commentSystem")).andReturn(
-				commentSystem);
-		AndroidMock.expect(container.getBean("shareSystem")).andReturn(
-				shareSystem);
-		AndroidMock.expect(container.getBean("likeSystem")).andReturn(
-				likeSystem);
-		AndroidMock.expect(container.getBean("viewSystem")).andReturn(
-				viewSystem);
-		AndroidMock.expect(container.getBean("userSystem")).andReturn(
-				userSystem);
-		AndroidMock.expect(container.getBean("activitySystem")).andReturn(
-				activitySystem);
-		AndroidMock.expect(container.getBean("entitySystem")).andReturn(
-				entitySystem);
-		AndroidMock.expect(container.getBean("subscriptionSystem")).andReturn(
-				subscriptionSystem);
+	private void setupDefaultMocks() {
+		setupMinimalMocks();
+
+		AndroidMock.expect(container.getBean("commentSystem")).andReturn(commentSystem);
+		AndroidMock.expect(container.getBean("shareSystem")).andReturn(shareSystem);
+		AndroidMock.expect(container.getBean("likeSystem")).andReturn(likeSystem);
+		AndroidMock.expect(container.getBean("viewSystem")).andReturn(viewSystem);
+		AndroidMock.expect(container.getBean("userSystem")).andReturn(userSystem);
+		AndroidMock.expect(container.getBean("activitySystem")).andReturn(activitySystem);
+		AndroidMock.expect(container.getBean("entitySystem")).andReturn(entitySystem);
+		AndroidMock.expect(container.getBean("subscriptionSystem")).andReturn(subscriptionSystem);
 		AndroidMock.expect(container.getBean("drawables")).andReturn(drawables);
 		AndroidMock.expect(container.getBean("config")).andReturn(config);
-
-		AndroidMock.expect(container.getBean("authProviderDataFactory"))
-				.andReturn(authProviderDataFactory);
+		AndroidMock.expect(container.getBean("authProviders")).andReturn(authProviders);
+		AndroidMock.expect(container.getBean("authProviderDataFactory")).andReturn(authProviderDataFactory);
 		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
-		AndroidMock.expect(container.getBean("initializationAsserter"))
-				.andReturn(null);
+		AndroidMock.expect(container.getBean("initializationAsserter")).andReturn(null);
+		AndroidMock.expect(container.getBean("entityLoaderUtils")).andReturn(entityLoaderUtils);
+		
+		entityLoaderUtils.initEntityLoader();
 	}
 
 	private void replayDefaultMocks() {
@@ -192,7 +206,11 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		AndroidMock.replay(logger);
 		AndroidMock.replay(authProviderDataFactory);
 		AndroidMock.replay(authProviderData);
+		AndroidMock.replay(authProviders);
 		AndroidMock.replay(session);
+		
+		AndroidMock.replay(entityLoaderUtils);
+		
 	}
 
 	private void verifyDefaultMocks() {
@@ -213,7 +231,10 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		AndroidMock.verify(logger);
 		AndroidMock.verify(authProviderDataFactory);
 		AndroidMock.verify(authProviderData);
+		AndroidMock.verify(authProviders);
 		AndroidMock.verify(session);
+		
+		AndroidMock.verify(entityLoaderUtils);
 	}
 
 	public void testSocializeInitDestroy() {
@@ -268,10 +289,8 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		container = AndroidMock.createMock(IOCContainer.class);
 		logger = AndroidMock.createNiceMock(SocializeLogger.class);
 
-		AndroidMock.expect(container.getBean((String) AndroidMock.anyObject()))
-				.andThrow(new RuntimeException("TEST ERROR. IGNORE ME!"));
-		logger.error(AndroidMock.eq(SocializeLogger.INITIALIZE_FAILED),
-				(Exception) AndroidMock.anyObject());
+		AndroidMock.expect(container.getBean((String) AndroidMock.anyObject())).andThrow(new RuntimeException("TEST ERROR. IGNORE ME!"));
+		logger.error(AndroidMock.eq(SocializeLogger.INITIALIZE_FAILED), (Exception) AndroidMock.anyObject());
 
 		AndroidMock.replay(container);
 		AndroidMock.replay(logger);
@@ -286,18 +305,17 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	@UsesMocks({ Activity.class, CommentAddListener.class, ShareOptions.class, Entity.class })
 	public void testAddCommentWithNoLocation() {
-		
+
 		Activity activity = AndroidMock.createMock(Activity.class);
 		Entity entity = AndroidMock.createMock(Entity.class);
 		ShareOptions shareOptions = AndroidMock.createMock(ShareOptions.class);
 		CommentAddListener addListener = AndroidMock.createMock(CommentAddListener.class);
 		String comment = "test comment";
-		
+
 		PublicSocialize socializeService = new PublicSocialize() {
 			@Override
-			public void addComment(final Activity activity, Entity entity, final String comment,
-					final Location location, final ShareOptions shareOptions, final CommentAddListener commentAddListener) {
-				
+			public void addComment(final Activity activity, Entity entity, final String comment, final Location location, final ShareOptions shareOptions, final CommentAddListener commentAddListener) {
+
 				addResult(0, activity);
 				addResult(1, entity);
 				addResult(2, comment);
@@ -306,9 +324,9 @@ public class SocializeServiceTest extends SocializeActivityTest {
 				addResult(5, commentAddListener);
 			}
 		};
-		
-		socializeService.addComment(activity, entity,comment, shareOptions, addListener);
-		
+
+		socializeService.addComment(activity, entity, comment, shareOptions, addListener);
+
 		assertSame(activity, getResult(0));
 		assertSame(entity, getResult(1));
 		assertSame(comment, getResult(2));
@@ -316,14 +334,10 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		assertSame(shareOptions, getResult(4));
 		assertSame(addListener, getResult(5));
 	}
-	
-	
-		
-		
+
 	@UsesMocks({ CommentAddListener.class, Comment.class, Entity.class })
 	public void testAddCommentSuccess() {
-		CommentAddListener listener = AndroidMock
-				.createMock(CommentAddListener.class);
+		CommentAddListener listener = AndroidMock.createMock(CommentAddListener.class);
 
 		final String comment = "bar";
 
@@ -335,9 +349,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		commentObject.setText(comment);
 		commentObject.setEntity(entity);
 
-		commentSystem.addComment(AndroidMock.eq(session),
-				AndroidMock.eq(commentObject), (Location) AndroidMock.isNull(),
-				(ShareOptions) AndroidMock.isNull(), AndroidMock.eq(listener));
+		commentSystem.addComment(AndroidMock.eq(session), AndroidMock.eq(commentObject), (Location) AndroidMock.isNull(), (ShareOptions) AndroidMock.isNull(), AndroidMock.eq(listener));
 
 		replayDefaultMocks();
 
@@ -365,16 +377,13 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	@UsesMocks({ LikeAddListener.class })
 	public void testAddLike() {
-		LikeAddListener listener = AndroidMock
-				.createMock(LikeAddListener.class);
+		LikeAddListener listener = AndroidMock.createMock(LikeAddListener.class);
 
 		setupDefaultMocks();
 
 		final String key = "foo";
 
-		likeSystem.addLike(AndroidMock.eq(session),
-				(Entity) AndroidMock.anyObject(),
-				(Location) AndroidMock.isNull(), AndroidMock.eq(listener));
+		likeSystem.addLike(AndroidMock.eq(session), (Entity) AndroidMock.anyObject(), (Location) AndroidMock.isNull(), AndroidMock.eq(listener));
 
 		replayDefaultMocks();
 
@@ -396,17 +405,13 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		// SocializeAuthListener authListener) {
 	}
 
-	@UsesMocks({ SocializeUserSystem.class, UserProfile.class,
-			UserSaveListener.class })
+	@UsesMocks({ SocializeUserSystem.class, UserProfile.class, UserSaveListener.class })
 	public void testSaveCurrentUserProfile() {
-
-		session = AndroidMock.createMock(SocializeSession.class);
-		userSystem = AndroidMock.createMock(SocializeUserSystem.class,
-				AndroidMock.createMock(SocializeProvider.class));
+		
+		setupMinimalMocks();
 
 		UserProfile mockProfile = AndroidMock.createMock(UserProfile.class);
-		final UserSaveListener mockListener = AndroidMock
-				.createMock(UserSaveListener.class);
+		final UserSaveListener mockListener = AndroidMock.createMock(UserSaveListener.class);
 
 		PublicSocialize socializeService = new PublicSocialize() {
 			@Override
@@ -419,57 +424,60 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		// we'll use the default mocks already created for sessions/userSystem
 		socializeService.setSession(session);
 		socializeService.setUserSystem(userSystem);
-		userSystem.saveUserProfile(getContext(), session, mockProfile,
-				mockListener);
+		userSystem.saveUserProfile(getContext(), session, mockProfile, mockListener);
 
+		replayDefaultMocks();
+		
 		AndroidMock.replay(mockProfile, mockListener);
 
-		socializeService.saveCurrentUserProfile(getContext(), mockProfile,
-				mockListener);
+		socializeService.saveCurrentUserProfile(getContext(), mockProfile, mockListener);
 
 		// verify default and newly created mocks
 		AndroidMock.verify(mockProfile, mockListener);
+		
+		verifyDefaultMocks();
 	}
-
-	@UsesMocks({ SocializeSession.class, UserSystem.class, AuthProvider.class })
+	
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks({ SocializeSession.class, UserSystem.class, AuthProvider.class, UserProviderCredentials.class, AuthProviderInfo.class })
 	public void testClear3rdPartySession() {
 		PublicSocialize socializeService = new PublicSocialize();
+		
+		AuthProvider<AuthProviderInfo> mockAuthProvider = AndroidMock.createMock(AuthProvider.class);
+		UserProviderCredentials userAuthData = AndroidMock.createMock(UserProviderCredentials.class);
+		AuthProviderInfo authProviderInfo = AndroidMock.createMock(AuthProviderInfo.class);
+		
+		setupMinimalMocks();
+		
+		AndroidMock.expect(authProviders.getProvider(AuthProviderType.FACEBOOK)).andReturn(mockAuthProvider);
+		AndroidMock.expect(session.getUserProviderCredentials(AuthProviderType.FACEBOOK)).andReturn(userAuthData);
+		AndroidMock.expect(userAuthData.getAuthProviderInfo()).andReturn(authProviderInfo);
 
-		// create session mock and add expect methods
-		String thirdPartyId = "3rdpartyId";
-		AuthProvider mockAuthProvider = AndroidMock
-				.createMock(AuthProvider.class);
-		SocializeSession mockSession = AndroidMock
-				.createMock(SocializeSession.class);
-		AndroidMock.expect(mockSession.getAuthProvider()).andReturn(
-				mockAuthProvider);
-		AndroidMock.expect(mockSession.get3rdPartyAppId()).andReturn(
-				thirdPartyId);
-
-		mockSession.clear(AuthProviderType.FACEBOOK);
-		socializeService.setSession(mockSession);
-
-		// create UserSystem mock
-		UserSystem userSystemMock = AndroidMock.createMock(UserSystem.class);
-		userSystemMock.clearSession(AuthProviderType.FACEBOOK);
-		socializeService.setUserSystem(userSystemMock);
-
-		// add mocks to be replayed
-		AndroidMock.replay(userSystemMock, mockSession);
-
-		// run the method
-		socializeService.clear3rdPartySession(getContext(),
-				AuthProviderType.FACEBOOK);
-
-		// verify the mocks
-		AndroidMock.verify(userSystemMock, mockSession);
+		mockAuthProvider.clearCache(getContext(), authProviderInfo);
+		session.clear(AuthProviderType.FACEBOOK);
+		userSystem.clearSession(AuthProviderType.FACEBOOK);
+		
+		replayDefaultMocks();
+		
+		AndroidMock.replay(mockAuthProvider, userAuthData, authProviderInfo);
+		
+		socializeService.setSession(session);
+		socializeService.setAuthProviders(authProviders);
+		socializeService.setUserSystem(userSystem);
+		
+		socializeService.clear3rdPartySession(getContext(), AuthProviderType.FACEBOOK);
+		
+		AndroidMock.verify(mockAuthProvider, userAuthData, authProviderInfo);
+		
+		verifyDefaultMocks();
 	}
+	
 
 	@UsesMocks({ SocializeAuthListener.class })
 	public void testCheckKeys() {
 		PublicSocialize socializeService = new PublicSocialize();
-		SocializeAuthListener mockAuthListener = AndroidMock
-				.createMock(SocializeAuthListener.class);
+		SocializeAuthListener mockAuthListener = AndroidMock.createMock(SocializeAuthListener.class);
 		mockAuthListener.onError((SocializeException) AndroidMock.anyObject());
 		AndroidMock.replay(mockAuthListener);
 		// this should test to make sure an error is passed back to the auth
@@ -480,8 +488,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	@UsesMocks({ ShareAddListener.class, Location.class })
 	public void testAddShareWithLocation() {
-		ShareAddListener listener = AndroidMock
-				.createMock(ShareAddListener.class);
+		ShareAddListener listener = AndroidMock.createMock(ShareAddListener.class);
 		Location location = AndroidMock.createMock(Location.class, "foobar");
 
 		setupDefaultMocks();
@@ -489,10 +496,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		final String key = "foo";
 		final String text = "bar";
 
-		shareSystem.addShare(AndroidMock.eq(session),
-				(Entity) AndroidMock.anyObject(), AndroidMock.eq(text),
-				AndroidMock.eq(ShareType.OTHER), AndroidMock.eq(location),
-				AndroidMock.eq(listener));
+		shareSystem.addShare(AndroidMock.eq(session), (Entity) AndroidMock.anyObject(), AndroidMock.eq(text), AndroidMock.eq(ShareType.OTHER), AndroidMock.eq(location), AndroidMock.eq(listener));
 
 		// shareSystem.addShare(session, key, text, ShareType.OTHER, location,
 		// listener);
@@ -505,8 +509,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertTrue(socialize.isInitialized());
 
-		socialize.addShare(getActivity(), Entity.newInstance(key, null), text,
-				ShareType.OTHER, location, listener);
+		socialize.addShare(getActivity(), Entity.newInstance(key, null), text, ShareType.OTHER, location, listener);
 
 		verifyDefaultMocks();
 	}
@@ -517,15 +520,11 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		final String key = "foo";
 		final String text = "bar";
 
-		ShareAddListener listener = AndroidMock
-				.createMock(ShareAddListener.class);
+		ShareAddListener listener = AndroidMock.createMock(ShareAddListener.class);
 
 		setupDefaultMocks();
 
-		shareSystem.addShare(AndroidMock.eq(session),
-				(Entity) AndroidMock.anyObject(), AndroidMock.eq(text),
-				AndroidMock.eq(ShareType.OTHER),
-				(Location) AndroidMock.isNull(), AndroidMock.eq(listener));
+		shareSystem.addShare(AndroidMock.eq(session), (Entity) AndroidMock.anyObject(), AndroidMock.eq(text), AndroidMock.eq(ShareType.OTHER), (Location) AndroidMock.isNull(), AndroidMock.eq(listener));
 
 		replayDefaultMocks();
 
@@ -533,24 +532,20 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		socialize.init(getContext(), container);
 		socialize.setSession(session);
 
-		socialize.addShare(getActivity(), Entity.newInstance(key, null), text,
-				ShareType.OTHER, listener);
+		socialize.addShare(getActivity(), Entity.newInstance(key, null), text, ShareType.OTHER, listener);
 
 		verifyDefaultMocks();
 	}
 
 	@UsesMocks({ ViewAddListener.class })
 	public void testAddView() {
-		ViewAddListener listener = AndroidMock
-				.createMock(ViewAddListener.class);
+		ViewAddListener listener = AndroidMock.createMock(ViewAddListener.class);
 
 		final String key = "foo";
 
 		setupDefaultMocks();
 
-		viewSystem.addView(AndroidMock.eq(session),
-				(Entity) AndroidMock.anyObject(),
-				(Location) AndroidMock.isNull(), AndroidMock.eq(listener));
+		viewSystem.addView(AndroidMock.eq(session), (Entity) AndroidMock.anyObject(), (Location) AndroidMock.isNull(), AndroidMock.eq(listener));
 
 		// viewSystem.addView(session, key, null, listener);
 
@@ -569,15 +564,13 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	@UsesMocks({ EntityAddListener.class })
 	public void testCreateEntitySuccess() {
-		EntityAddListener listener = AndroidMock
-				.createMock(EntityAddListener.class);
+		EntityAddListener listener = AndroidMock.createMock(EntityAddListener.class);
 
 		setupDefaultMocks();
 
 		final String key = "foo", name = "bar";
 
-		entitySystem.addEntity(AndroidMock.eq(session),
-				(Entity) AndroidMock.anyObject(), AndroidMock.eq(listener));
+		entitySystem.addEntity(AndroidMock.eq(session), (Entity) AndroidMock.anyObject(), AndroidMock.eq(listener));
 
 		replayDefaultMocks();
 
@@ -587,16 +580,14 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertTrue(socialize.isInitialized());
 
-		socialize.addEntity(getActivity(), Entity.newInstance(key, name),
-				listener);
+		socialize.addEntity(getActivity(), Entity.newInstance(key, name), listener);
 
 		verifyDefaultMocks();
 	}
 
 	@UsesMocks({ CommentListListener.class })
 	public void testListCommentsByEntity() {
-		CommentListListener listener = AndroidMock
-				.createMock(CommentListListener.class);
+		CommentListListener listener = AndroidMock.createMock(CommentListListener.class);
 
 		final String key = "foo";
 
@@ -619,8 +610,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	@UsesMocks({ CommentListListener.class })
 	public void testListCommentsByEntityPaginated() {
-		CommentListListener listener = AndroidMock
-				.createMock(CommentListListener.class);
+		CommentListListener listener = AndroidMock.createMock(CommentListListener.class);
 
 		final String key = "foo";
 		final int start = 0, end = 10;
@@ -644,8 +634,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	@UsesMocks({ CommentListListener.class })
 	public void testListCommentsByUser() {
-		CommentListListener listener = AndroidMock
-				.createMock(CommentListListener.class);
+		CommentListListener listener = AndroidMock.createMock(CommentListListener.class);
 
 		final long key = 69;
 
@@ -668,8 +657,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	@UsesMocks({ CommentListListener.class })
 	public void testListCommentsByUserPaginated() {
-		CommentListListener listener = AndroidMock
-				.createMock(CommentListListener.class);
+		CommentListListener listener = AndroidMock.createMock(CommentListListener.class);
 
 		final long key = 69;
 		final int start = 0, end = 10;
@@ -693,8 +681,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	@UsesMocks({ LikeListListener.class })
 	public void testListLikesByUser() {
-		LikeListListener listener = AndroidMock
-				.createMock(LikeListListener.class);
+		LikeListListener listener = AndroidMock.createMock(LikeListListener.class);
 
 		final long key = 69;
 
@@ -717,8 +704,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	@UsesMocks({ LikeListListener.class })
 	public void testListLikesByUserPaginated() {
-		LikeListListener listener = AndroidMock
-				.createMock(LikeListListener.class);
+		LikeListListener listener = AndroidMock.createMock(LikeListListener.class);
 
 		final long key = 69;
 		final int start = 0, end = 10;
@@ -742,8 +728,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	@UsesMocks({ CommentListListener.class })
 	public void testListCommentsByIds() {
-		CommentListListener listener = AndroidMock
-				.createMock(CommentListListener.class);
+		CommentListListener listener = AndroidMock.createMock(CommentListListener.class);
 
 		final long[] ids = { 1, 2, 3 };
 
@@ -766,8 +751,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	@UsesMocks({ CommentGetListener.class })
 	public void testGetCommentById() {
-		CommentGetListener listener = AndroidMock
-				.createMock(CommentGetListener.class);
+		CommentGetListener listener = AndroidMock.createMock(CommentGetListener.class);
 
 		final int id = 1;
 
@@ -790,8 +774,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	@UsesMocks({ EntityGetListener.class })
 	public void testGetEntity() {
-		EntityGetListener listener = AndroidMock
-				.createMock(EntityGetListener.class);
+		EntityGetListener listener = AndroidMock.createMock(EntityGetListener.class);
 
 		final String key = "foo";
 
@@ -814,8 +797,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	@UsesMocks({ LikeGetListener.class })
 	public void testGetLikeById() {
-		LikeGetListener listener = AndroidMock
-				.createMock(LikeGetListener.class);
+		LikeGetListener listener = AndroidMock.createMock(LikeGetListener.class);
 
 		final int id = 1;
 
@@ -838,8 +820,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	@UsesMocks({ LikeListListener.class })
 	public void testListLikesById() {
-		LikeListListener listener = AndroidMock
-				.createMock(LikeListListener.class);
+		LikeListListener listener = AndroidMock.createMock(LikeListListener.class);
 
 		final long id[] = { 1, 2, 3 };
 
@@ -862,8 +843,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	@UsesMocks({ LikeGetListener.class })
 	public void testGetLikeByKey() {
-		LikeGetListener listener = AndroidMock
-				.createMock(LikeGetListener.class);
+		LikeGetListener listener = AndroidMock.createMock(LikeGetListener.class);
 
 		final String key = "foobar";
 
@@ -886,8 +866,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	@UsesMocks({ LikeDeleteListener.class })
 	public void testDeleteLike() {
-		LikeDeleteListener listener = AndroidMock
-				.createMock(LikeDeleteListener.class);
+		LikeDeleteListener listener = AndroidMock.createMock(LikeDeleteListener.class);
 
 		final int id = 1;
 
@@ -907,41 +886,40 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		verifyDefaultMocks();
 	}
-	
+
 	@Deprecated
 	@UsesMocks({ SocializeAuthListener.class })
 	public void testAuthenticateWithListener() {
-		final SocializeAuthListener mockListener = AndroidMock
-				.createMock(SocializeAuthListener.class);
+		final SocializeAuthListener mockListener = AndroidMock.createMock(SocializeAuthListener.class);
 		PublicSocialize socializeService = new PublicSocialize() {
 			@Override
-			public void authenticate(Context context,
-					SocializeAuthListener authListener) {
+			public void authenticate(Context context, SocializeAuthListener authListener) {
 				assertEquals(authListener, mockListener);
 			}
 		};
 		socializeService.authenticate(mockListener);
 	}
 
-	@UsesMocks({ SocializeAuthListener.class, IBeanFactory.class,
-			AuthProviderData.class })
+	@UsesMocks({ SocializeAuthListener.class, IBeanFactory.class, AuthProviderData.class, SocializeAuthProviderInfo.class })
 	public void testAuthenticate() throws SocializeException {
-		SocializeAuthListener listener = AndroidMock
-				.createMock(SocializeAuthListener.class);
+		SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
 
 		final String key = "foo", secret = "bar";
 
 		setupDefaultMocks();
 
-		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(
-				authProviderData);
+		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
 
-		authProviderData.setAuthProviderType(AuthProviderType.SOCIALIZE);
+		authProviderData.setAuthProviderInfo(info);
 
-		SocializeServiceImpl socialize = new SocializeServiceImpl();
+		SocializeServiceImpl socialize = new SocializeServiceImpl() {
+			@Override
+			protected SocializeAuthProviderInfo newSocializeAuthProviderInfo() {
+				return info;
+			}
+		};
 
-		userSystem.authenticate(getActivity(), key, secret, authProviderData,
-				listener, socialize, false);
+		userSystem.authenticate(getActivity(), key, secret, authProviderData, listener, socialize, false);
 
 		replayDefaultMocks();
 
@@ -958,11 +936,9 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		return new PublicSocialize() {
 			// authenticate(consumerKey, consumerSecret, authProviderType,
 			// authProviderAppId, authListener);
-			
+
 			@Override
-			public void authenticate( Context context, String consumerKey, String consumerSecret, AuthProviderData authProviderData, 
-					SocializeAuthListener authListener, 
-					boolean do3rdPartyAuth) {
+			public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener authListener, boolean do3rdPartyAuth) {
 				addResult(0, context);
 				addResult(1, consumerKey);
 				addResult(2, consumerSecret);
@@ -970,9 +946,9 @@ public class SocializeServiceTest extends SocializeActivityTest {
 				addResult(4, authListener);
 				addResult(5, do3rdPartyAuth);
 			}
+
 			@Override
-			public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderType authProviderType,
-					String authProviderAppId, SocializeAuthListener authListener) {
+			public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderType authProviderType, String authProviderAppId, SocializeAuthListener authListener) {
 				addResult(0, authProviderType);
 				addResult(1, authListener);
 				addResult(2, context);
@@ -981,13 +957,18 @@ public class SocializeServiceTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public boolean checkKeys(String consumerKey, String consumerSecret,
-					SocializeAuthListener authListener) {
+			public boolean checkKeys(String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
 				return true;
 			}
+
 			@Override
 			public void logErrorMessage(String msg) {
 				addResult(3, msg);
+			}
+
+			@Override
+			protected SocializeAuthProviderInfo newSocializeAuthProviderInfo() {
+				return info;
 			}
 		};
 	}
@@ -995,10 +976,10 @@ public class SocializeServiceTest extends SocializeActivityTest {
 	public PublicSocialize newSocializeServiceForShare() {
 		return new PublicSocialize() {
 			@Override
-			public boolean checkKeys(String consumerKey, String consumerSecret,
-					SocializeAuthListener authListener) {
+			public boolean checkKeys(String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
 				return true;
 			}
+
 			@Override
 			public boolean assertAuthenticated(SocializeListener listener) {
 				addResult(0, listener);
@@ -1006,186 +987,176 @@ public class SocializeServiceTest extends SocializeActivityTest {
 			}
 		};
 	}
-	
+
 	@Deprecated
-	public void testAuthenticateWithProviderTypeAndListener () {
-		//setup mocks and default mocks
+	public void testAuthenticateWithProviderTypeAndListener() {
+		// setup mocks and default mocks
 		setupDefaultMocks();
-		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(
-				authProviderData);
-		authProviderData.setAuthProviderType(AuthProviderType.SOCIALIZE);
-		
+		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
+		authProviderData.setAuthProviderInfo(info);
+
 		SocializeAuthListener mockListener = AndroidMock.createMock(SocializeAuthListener.class);
-		
-		//replay mocks
+
+		// replay mocks
 		replayDefaultMocks();
-		AndroidMock.replay( mockListener);
-		
-		//call method to be tested and setup service obj
+		AndroidMock.replay(mockListener);
+
+		// call method to be tested and setup service obj
 		PublicSocialize socializeService = newSocializeServiceForAuth();
 		socializeService.init(getContext(), container);
 		socializeService.authenticate(AuthProviderType.SOCIALIZE, mockListener);
-		
-		//verify everything got called correctly
-		assertEquals( mockListener, getResult(4));
+
+		// verify everything got called correctly
+		assertEquals(mockListener, getResult(4));
 		verifyDefaultMocks();
 		AndroidMock.verify(mockListener);
 	}
-	@UsesMocks({android.location.Location.class, Activity.class, Entity.class, ShareOptions.class, ShareAddListener.class})
-	public void testShareWithNullSocialNetworks(){
-		//test to make sure that share gets called with null social networks
+
+	@UsesMocks({ android.location.Location.class, Activity.class, Entity.class, ShareOptions.class, ShareAddListener.class })
+	public void testShareWithNullSocialNetworks() {
+		// test to make sure that share gets called with null social networks
 		PublicSocialize socializeService = newSocializeServiceForShare();
 		Activity mockActivity = AndroidMock.createMock(Activity.class);
 		Entity mockEntity = AndroidMock.createMock(Entity.class);
 		String testString = "test string";
 		ShareAddListener shareListener = AndroidMock.createMock(ShareAddListener.class);
-		
-		//mock share system, set it on the service obj and expect it gets called
+
+		// mock share system, set it on the service obj and expect it gets
+		// called
 		ShareSystem shareSystem = AndroidMock.createMock(ShareSystem.class);
 		shareSystem.addShare(socializeService.getSession(), mockEntity, testString, ShareType.OTHER, null, shareListener);
 		socializeService.setShareSystem(shareSystem);
-		
-		//mock and expect options to return null for the networks
+
+		// mock and expect options to return null for the networks
 		ShareOptions mockOptions = AndroidMock.createMock(ShareOptions.class);
-		
-		AndroidMock.expect( mockOptions.isAutoAuth() ).andReturn(false);
-		AndroidMock.expect( mockOptions.getShareTo() ).andReturn(null);
-		
-		//replay all the mocks
-		AndroidMock.replay(mockActivity, mockEntity, mockOptions );
-		
-		//call actual method
-		socializeService.share( mockActivity , mockEntity , testString ,mockOptions, null, shareListener);
-		
-		//verify all the mocks got called as expected and assert values
-		AndroidMock.verify(mockActivity, mockEntity, mockOptions );
+
+		AndroidMock.expect(mockOptions.isAutoAuth()).andReturn(false);
+		AndroidMock.expect(mockOptions.getShareTo()).andReturn(null);
+
+		// replay all the mocks
+		AndroidMock.replay(mockActivity, mockEntity, mockOptions);
+
+		// call actual method
+		socializeService.share(mockActivity, mockEntity, testString, mockOptions, null, shareListener);
+
+		// verify all the mocks got called as expected and assert values
+		AndroidMock.verify(mockActivity, mockEntity, mockOptions);
 		assertEquals(shareListener, getResult(0));
 	}
-	
-	@UsesMocks({android.location.Location.class, Activity.class, Entity.class, ShareOptions.class, ShareAddListener.class})
-	public void testShareWithSocialNetworks(){
-		//test to make sure that share gets called with null social networks
+
+	@UsesMocks({ android.location.Location.class, Activity.class, Entity.class, ShareOptions.class, ShareAddListener.class })
+	public void testShareWithSocialNetworks() {
+		// test to make sure that share gets called with null social networks
 		PublicSocialize socializeService = newSocializeServiceForShare();
 		Activity mockActivity = AndroidMock.createMock(Activity.class);
 		Entity mockEntity = AndroidMock.createMock(Entity.class);
 		String testString = "test string";
 		ShareAddListener shareListener = AndroidMock.createMock(ShareAddListener.class);
-		
-		//mock share system, set it on the service obj and expect it gets called
+
+		// mock share system, set it on the service obj and expect it gets
+		// called
 		ShareSystem shareSystem = AndroidMock.createMock(ShareSystem.class);
-		//TODO: the following signature should change
-		shareSystem.addShare(AndroidMock.eq(socializeService.getSession()),AndroidMock.eq(mockEntity), 
-				AndroidMock.eq(testString), AndroidMock.eq(ShareType.FACEBOOK),(Location)AndroidMock.isNull(),(ShareListener) AndroidMock.anyObject());
-		
+		// TODO: the following signature should change
+		shareSystem.addShare(AndroidMock.eq(socializeService.getSession()), AndroidMock.eq(mockEntity), AndroidMock.eq(testString), AndroidMock.eq(ShareType.FACEBOOK), (Location) AndroidMock.isNull(), (ShareListener) AndroidMock.anyObject());
+
 		socializeService.setShareSystem(shareSystem);
-		
-		//mock and expect options to return FB for social networks array.
+
+		// mock and expect options to return FB for social networks array.
 		ShareOptions mockOptions = AndroidMock.createMock(ShareOptions.class);
-		SocialNetwork[] networks = {SocialNetwork.FACEBOOK};
-		
-		AndroidMock.expect( mockOptions.getShareTo() ).andReturn(networks);
-		AndroidMock.expect( mockOptions.isAutoAuth() ).andReturn(true);
-	
-		//replay all the mocks
-		AndroidMock.replay(mockActivity, mockEntity, mockOptions, shareSystem );
-		
-		//call actual method
-		socializeService.share( mockActivity , mockEntity , testString ,mockOptions, null, shareListener);
-		
-		//verify all the mocks got called as expected and assert values
-		AndroidMock.verify(mockActivity, mockEntity, mockOptions, shareSystem );
+		SocialNetwork[] networks = { SocialNetwork.FACEBOOK };
+
+		AndroidMock.expect(mockOptions.getShareTo()).andReturn(networks);
+		AndroidMock.expect(mockOptions.isAutoAuth()).andReturn(true);
+
+		// replay all the mocks
+		AndroidMock.replay(mockActivity, mockEntity, mockOptions, shareSystem);
+
+		// call actual method
+		socializeService.share(mockActivity, mockEntity, testString, mockOptions, null, shareListener);
+
+		// verify all the mocks got called as expected and assert values
+		AndroidMock.verify(mockActivity, mockEntity, mockOptions, shareSystem);
 		assertEquals(shareListener, getResult(0));
 	}
-	
-	@UsesMocks({UserSystem.class, SocializeSession.class})
+
+	@UsesMocks({ UserSystem.class, SocializeSession.class })
 	public void testAuthenticateSynchronous() throws Exception {
 		PublicSocialize publicSocialize = newSocializeServiceForAuth();
-		
+
 		SocializeSession mockSession = AndroidMock.createMock(SocializeSession.class);
 		UserSystem mockUserSystem = AndroidMock.createMock(UserSystem.class);
-		AndroidMock.expect(mockUserSystem.authenticateSynchronous((Context)AndroidMock.anyObject(),(String)AndroidMock.anyObject(),
-				(String)AndroidMock.anyObject(),(SocializeSessionConsumer)AndroidMock.anyObject()))
-				.andReturn(mockSession);		
-		
-		publicSocialize.setUserSystem( mockUserSystem);
+		AndroidMock.expect(mockUserSystem.authenticateSynchronous((Context) AndroidMock.anyObject(), (String) AndroidMock.anyObject(), (String) AndroidMock.anyObject(), (SocializeSessionConsumer) AndroidMock.anyObject())).andReturn(mockSession);
+
+		publicSocialize.setUserSystem(mockUserSystem);
 		AndroidMock.replay(mockUserSystem, mockSession);
 		publicSocialize.authenticateSynchronous(getContext());
 		AndroidMock.verify(mockUserSystem, mockSession);
 	}
-	
-	
-	
-	@UsesMocks({SocializeAuthListener.class})
-	public void testAuthenticateWithContextAndListener () {
+
+	@UsesMocks({ SocializeAuthListener.class })
+	public void testAuthenticateWithContextAndListener() {
 		setupDefaultMocks();
-		
-		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(
-				authProviderData);
-		authProviderData.setAuthProviderType(AuthProviderType.SOCIALIZE);
-		
+
+		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
+		authProviderData.setAuthProviderInfo(info);
+
 		SocializeAuthListener mockListener = AndroidMock.createMock(SocializeAuthListener.class);
-		
+
 		replayDefaultMocks();
-		AndroidMock.replay( mockListener );
-		
+		AndroidMock.replay(mockListener);
+
 		PublicSocialize socializeService = newSocializeServiceForAuth();
-		//we have to call this method to initialize the service object
+		// we have to call this method to initialize the service object
 		socializeService.init(getContext(), container);
 		socializeService.authenticate(getContext(), mockListener);
-		
+
 		verifyDefaultMocks();
-		assertEquals(getContext(), getResult(0) );
-		assertEquals(mockListener, getResult(4) );
+		assertEquals(getContext(), getResult(0));
+		assertEquals(mockListener, getResult(4));
 	}
-	
-	
+
 	public void testAuthenticateWithContextNoFBAppId() {
 
 		PublicSocialize socializeService = newSocializeServiceForAuth();
 
 		SocializeAuthListener mockListener = AndroidMock.createMock(SocializeAuthListener.class);
-		mockListener.onError((SocializeException)AndroidMock.anyObject());
+		mockListener.onError((SocializeException) AndroidMock.anyObject());
 		AndroidMock.replay(mockListener);
 		socializeService.authenticate(getContext(), AuthProviderType.FACEBOOK, mockListener);
-		AndroidMock.verify(mockListener);//verify that an error was called on the auth
-		assertNotNull(getResult(3));//make sure that the logErrorMessage method was called
+		AndroidMock.verify(mockListener);// verify that an error was called on
+											// the auth
+		assertNotNull(getResult(3));// make sure that the logErrorMessage method
+									// was called
 	}
 
 	public void testAuthenticateWithContextAndFacebookType() {
 		PublicSocialize socializeService = newSocializeServiceForAuth();
 
-		SocializeAuthListener mockListener = AndroidMock
-				.createMock(SocializeAuthListener.class);
-		socializeService.getConfig().setProperty(
-				SocializeConfig.FACEBOOK_APP_ID, "mockvalue");
-		socializeService.authenticate(getContext(), AuthProviderType.FACEBOOK,
-				mockListener);
+		SocializeAuthListener mockListener = AndroidMock.createMock(SocializeAuthListener.class);
+		socializeService.getConfig().setProperty(SocializeConfig.FACEBOOK_APP_ID, "mockvalue");
+		socializeService.authenticate(getContext(), AuthProviderType.FACEBOOK, mockListener);
 
 		assertEquals(AuthProviderType.FACEBOOK, getResult(0));
 		assertEquals(mockListener, getResult(1));
 	}
 
-	public void testAuthenticateWithExtraParamsCallAuthenticate()
-			throws SocializeException {
+	public void testAuthenticateWithExtraParamsCallAuthenticate() throws SocializeException {
 
-		SocializeAuthListener listener = AndroidMock
-				.createMock(SocializeAuthListener.class);
+		SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
 
 		final String key = "foo", secret = "bar";
 		final String appId = "foobar";
 
 		setupDefaultMocks();
 
-		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(
-				authProviderData);
+		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
 
 		authProviderData.setAuthProviderType(AuthProviderType.FACEBOOK);
 		authProviderData.setAppId3rdParty(appId);
 
 		SocializeServiceImpl socialize = new SocializeServiceImpl();
 
-		userSystem.authenticate(getActivity(), key, secret, authProviderData,
-				listener, socialize, true);
+		userSystem.authenticate(getActivity(), key, secret, authProviderData, listener, socialize, true);
 
 		replayDefaultMocks();
 
@@ -1193,23 +1164,20 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertTrue(socialize.isInitialized());
 
-		socialize.authenticate(getActivity(), key, secret,
-				AuthProviderType.FACEBOOK, appId, listener);
+		socialize.authenticate(getActivity(), key, secret, AuthProviderType.FACEBOOK, appId, listener);
 
 		verifyDefaultMocks();
 	}
 
 	public void testAuthenticateKnownUser() throws SocializeException {
-		SocializeAuthListener authListener = AndroidMock
-				.createMock(SocializeAuthListener.class);
+		SocializeAuthListener authListener = AndroidMock.createMock(SocializeAuthListener.class);
 
 		final String consumerKey = "foo", consumerSecret = "bar";
 		final String authProviderId = "foobar", authUserId3rdParty = "foobar_user", authToken3rdParty = "foobar_token";
 
 		setupDefaultMocks();
 
-		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(
-				authProviderData);
+		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
 
 		authProviderData.setAuthProviderType(AuthProviderType.FACEBOOK);
 		authProviderData.setAppId3rdParty(authProviderId);
@@ -1218,8 +1186,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		SocializeServiceImpl socialize = new SocializeServiceImpl();
 
-		userSystem.authenticate(getActivity(), consumerKey, consumerSecret,
-				authProviderData, authListener, socialize, false);
+		userSystem.authenticate(getActivity(), consumerKey, consumerSecret, authProviderData, authListener, socialize, false);
 
 		replayDefaultMocks();
 
@@ -1227,20 +1194,18 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertTrue(socialize.isInitialized());
 
-		socialize.authenticateKnownUser(getActivity(), consumerKey,
-				consumerSecret, AuthProviderType.FACEBOOK, authProviderId,
-				authUserId3rdParty, authToken3rdParty, authListener);
+		socialize.authenticateKnownUser(getActivity(), consumerKey, consumerSecret, AuthProviderType.FACEBOOK, authProviderId, authUserId3rdParty, authToken3rdParty, authListener);
 
 		verifyDefaultMocks();
 
 	}
 
-	public void testIsAuthenticatedWithProvider() {
+	public void testIsAuthenticatedWithProviderLegacy() {
 
 		session = AndroidMock.createMock(SocializeSession.class);
 
-		AndroidMock.expect(session.getAuthProviderType()).andReturn(
-				AuthProviderType.FACEBOOK);
+		AndroidMock.expect(session.getUserProviderCredentials(AuthProviderType.FACEBOOK)).andReturn(null);
+		AndroidMock.expect(session.getAuthProviderType()).andReturn(AuthProviderType.FACEBOOK);
 
 		AndroidMock.replay(session);
 
@@ -1257,6 +1222,30 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		AndroidMock.verify(session);
 	}
+	
+	@UsesMocks ({UserProviderCredentials.class})
+	public void testIsAuthenticatedWithProvider() {
+
+		UserProviderCredentials data = AndroidMock.createMock(UserProviderCredentials.class);
+		session = AndroidMock.createMock(SocializeSession.class);
+
+		AndroidMock.expect(session.getUserProviderCredentials(AuthProviderType.FACEBOOK)).andReturn(data);
+
+		AndroidMock.replay(session);
+
+		SocializeServiceImpl socialize = new SocializeServiceImpl() {
+			@Override
+			public boolean isAuthenticated() {
+				return true;
+			}
+		};
+
+		socialize.setSession(session);
+
+		assertTrue(socialize.isAuthenticated(AuthProviderType.FACEBOOK));
+
+		AndroidMock.verify(session);
+	}	
 
 	public void testAddCommentFail() {
 
@@ -1278,8 +1267,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertFalse(socialize.isInitialized());
 
-		socialize.addComment(getActivity(), Entity.newInstance(key, null),
-				comment, listener);
+		socialize.addComment(getActivity(), Entity.newInstance(key, null), comment, listener);
 
 		Exception error = getNextResult();
 
@@ -1312,8 +1300,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		assertTrue(socialize.isInitialized());
 		assertFalse(socialize.isAuthenticated());
 
-		socialize.addComment(getActivity(), Entity.newInstance(key, null),
-				comment, listener);
+		socialize.addComment(getActivity(), Entity.newInstance(key, null), comment, listener);
 
 		Exception error = getNextResult();
 
@@ -1325,8 +1312,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	@UsesMocks({ EntityListListener.class })
 	public void testListEntities() {
-		EntityListListener listener = AndroidMock
-				.createMock(EntityListListener.class);
+		EntityListListener listener = AndroidMock.createMock(EntityListListener.class);
 
 		final String[] ids = { "A", "B", "C" };
 
@@ -1364,54 +1350,65 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		assertSame(config, gotten);
 	}
 
-	@UsesMocks(AuthProvider.class)
+	@UsesMocks({AuthProvider.class, UserProviderCredentials.class, AuthProviderInfo.class})
 	public void testClearSessionCache() {
 		setupDefaultMocks();
-
-		AuthProvider authProvider = AndroidMock.createMock(AuthProvider.class);
-
-		final String get3rdPartyAppId = "foobar";
-
-		AndroidMock.expect(session.getAuthProvider()).andReturn(authProvider);
-		AndroidMock.expect(session.get3rdPartyAppId()).andReturn(
-				get3rdPartyAppId);
-
-		authProvider.clearCache(getContext(), get3rdPartyAppId);
+		
+		UserProviderCredentialsMap userAuthDataMap = AndroidMock.createMock(UserProviderCredentialsMap.class);
+		UserProviderCredentials userAuthData = AndroidMock.createMock(UserProviderCredentials.class);
+		AuthProviderInfo authProviderInfo = AndroidMock.createMock(AuthProviderInfo.class);
+		
+		Collection<UserProviderCredentials> values = new ArrayList<UserProviderCredentials>();
+		values.add(userAuthData);
+		
+		AuthProviderType type = AuthProviderType.FACEBOOK;
+		
+		AndroidMock.expect(session.getUserProviderCredentials()).andReturn(userAuthDataMap);
+		AndroidMock.expect(userAuthDataMap.values()).andReturn(values);
+		AndroidMock.expect(userAuthData.getAuthProviderInfo()).andReturn(authProviderInfo);
+		AndroidMock.expect(authProviderInfo.getType()).andReturn(type);
 		userSystem.clearSession();
-
+		
 		replayDefaultMocks();
-
-		AndroidMock.replay(authProvider);
-
-		SocializeServiceImpl socialize = new SocializeServiceImpl();
+		
+		AndroidMock.replay(userAuthDataMap, userAuthData, authProviderInfo);
+		
+		SocializeServiceImpl socialize = new SocializeServiceImpl() {
+			@Override
+			public void clear3rdPartySession(Context context, AuthProviderType type) {
+				addResult(0, type);
+			}
+		};
+		
 		socialize.setSession(session);
 		socialize.init(getContext(), container);
-
+		
 		socialize.clearSessionCache(getContext());
 
-		AndroidMock.verify(authProvider);
-
 		verifyDefaultMocks();
+		
+		AndroidMock.verify(userAuthDataMap, userAuthData, authProviderInfo);
+		
+		AuthProviderType typeAfter = getResult(0);
+		
+		assertNotNull(typeAfter);
+		assertSame(type, typeAfter);
+		
 	}
 
-	@UsesMocks({ MockContext.class, SocializeInitListener.class,
-			SocializeServiceImpl.class })
+	@UsesMocks({ MockContext.class, SocializeInitListener.class, SocializeServiceImpl.class })
 	public void testInitTaskDoInBackground() throws Exception {
 
 		MockContext context = AndroidMock.createMock(MockContext.class);
-		SocializeInitListener listener = AndroidMock
-				.createMock(SocializeInitListener.class);
-		SocializeServiceImpl socialize = AndroidMock
-				.createMock(SocializeServiceImpl.class);
+		SocializeInitListener listener = AndroidMock.createMock(SocializeInitListener.class);
+		SocializeServiceImpl socialize = AndroidMock.createMock(SocializeServiceImpl.class);
 		String[] paths = { "foo", "bar" };
 
-		AndroidMock.expect(socialize.initWithContainer(context, paths))
-				.andReturn(null);
+		AndroidMock.expect(socialize.initWithContainer(context, paths)).andReturn(null);
 
 		AndroidMock.replay(socialize);
 
-		InitTask task = new InitTask(socialize, context, paths, listener,
-				logger);
+		InitTask task = new InitTask(socialize, context, paths, listener, logger);
 
 		assertTrue(AsyncTask.class.isAssignableFrom(task.getClass()));
 
@@ -1421,15 +1418,12 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	}
 
-	@UsesMocks({ MockContext.class, SocializeInitListener.class,
-			SocializeServiceImpl.class, IOCContainer.class })
+	@UsesMocks({ MockContext.class, SocializeInitListener.class, SocializeServiceImpl.class, IOCContainer.class })
 	public void testInitTaskOnPostExecute() throws Exception {
 
 		MockContext context = AndroidMock.createMock(MockContext.class);
-		SocializeInitListener listener = AndroidMock
-				.createMock(SocializeInitListener.class);
-		SocializeServiceImpl socialize = AndroidMock
-				.createMock(SocializeServiceImpl.class);
+		SocializeInitListener listener = AndroidMock.createMock(SocializeInitListener.class);
+		SocializeServiceImpl socialize = AndroidMock.createMock(SocializeServiceImpl.class);
 		IOCContainer container = AndroidMock.createMock(IOCContainer.class);
 		String[] paths = { "foo", "bar" };
 
@@ -1437,8 +1431,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		AndroidMock.replay(listener);
 
-		InitTask task = new InitTask(socialize, context, paths, listener,
-				logger);
+		InitTask task = new InitTask(socialize, context, paths, listener, logger);
 
 		task.onPostExecute(container);
 
@@ -1446,28 +1439,23 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	}
 
-	@UsesMocks({ MockContext.class, SocializeInitListener.class,
-			SocializeServiceImpl.class, IOCContainer.class })
+	@UsesMocks({ MockContext.class, SocializeInitListener.class, SocializeServiceImpl.class, IOCContainer.class })
 	public void testInitTaskOnPostExecuteWithError() throws Exception {
 
 		MockContext context = AndroidMock.createMock(MockContext.class);
-		SocializeInitListener listener = AndroidMock
-				.createMock(SocializeInitListener.class);
-		SocializeServiceImpl socialize = AndroidMock
-				.createMock(SocializeServiceImpl.class);
+		SocializeInitListener listener = AndroidMock.createMock(SocializeInitListener.class);
+		SocializeServiceImpl socialize = AndroidMock.createMock(SocializeServiceImpl.class);
 		SocializeException error = new SocializeException();
 		String[] paths = { "foo", "bar" };
 
-		AndroidMock.expect(socialize.initWithContainer(context, paths))
-				.andThrow(error);
+		AndroidMock.expect(socialize.initWithContainer(context, paths)).andThrow(error);
 
 		listener.onError(error);
 
 		AndroidMock.replay(socialize);
 		AndroidMock.replay(listener);
 
-		InitTask task = new InitTask(socialize, context, paths, listener,
-				logger);
+		InitTask task = new InitTask(socialize, context, paths, listener, logger);
 
 		task.doInBackground((Void[]) null);
 
@@ -1477,18 +1465,13 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		AndroidMock.verify(listener);
 	}
 
-	@UsesMocks({ SocializeIOC.class, ResourceLocator.class,
-			ClassLoaderProvider.class, SocializeLogger.class })
+	@UsesMocks({ SocializeIOC.class, ResourceLocator.class, ClassLoaderProvider.class, SocializeLogger.class })
 	public void testInitWithContainer() throws Exception {
 
-		final SocializeIOC socializeIOC = AndroidMock
-				.createMock(SocializeIOC.class);
-		final ClassLoaderProvider classLoaderProvider = AndroidMock
-				.createMock(ClassLoaderProvider.class);
-		final ResourceLocator resourceLocator = AndroidMock
-				.createMock(ResourceLocator.class);
-		final SocializeLogger logger = AndroidMock
-				.createMock(SocializeLogger.class);
+		final SocializeIOC socializeIOC = AndroidMock.createMock(SocializeIOC.class);
+		final ClassLoaderProvider classLoaderProvider = AndroidMock.createMock(ClassLoaderProvider.class);
+		final ResourceLocator resourceLocator = AndroidMock.createMock(ResourceLocator.class);
+		final SocializeLogger logger = AndroidMock.createMock(SocializeLogger.class);
 
 		final Context context = new MockContext();
 
@@ -1589,25 +1572,16 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		String consumerKey = "foo";
 		String consumerSecret = "bar";
 
-		socializeUI.getConfig().setSocializeCredentials(consumerKey,
-				consumerSecret);
+		socializeUI.getConfig().setSocializeCredentials(consumerKey, consumerSecret);
 
-		assertEquals(
-				consumerKey,
-				socializeUI.getConfig().getProperty(
-						SocializeConfig.SOCIALIZE_CONSUMER_KEY));
-		assertEquals(
-				consumerSecret,
-				socializeUI.getConfig().getProperty(
-						SocializeConfig.SOCIALIZE_CONSUMER_SECRET));
+		assertEquals(consumerKey, socializeUI.getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY));
+		assertEquals(consumerSecret, socializeUI.getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET));
 	}
 
 	public PublicSocialize newSocializeServiceForActionBarTests() {
 		PublicSocialize publicSocialize = new PublicSocialize() {
 			@Override
-			public View showActionBar(Activity parent, View original,
-					Entity entity, ActionBarOptions options,
-					ActionBarListener listener) {
+			public View showActionBar(Activity parent, View original, Entity entity, ActionBarOptions options, ActionBarListener listener) {
 				addResult(0, parent);
 				addResult(1, original);
 				addResult(2, entity);
@@ -1617,9 +1591,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public View showActionBar(Activity parent, int resId,
-					Entity entity, ActionBarOptions options,
-					ActionBarListener listener) {
+			public View showActionBar(Activity parent, int resId, Entity entity, ActionBarOptions options, ActionBarListener listener) {
 				addResult(0, parent);
 				addResult(1, resId);
 				addResult(2, entity);
@@ -1635,8 +1607,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 	public void testShowActionBarWithParentResourceEntityOptions() {
 		Activity mockParent = AndroidMock.createMock(Activity.class);
 		Entity mockEntity = AndroidMock.createMock(Entity.class);
-		ActionBarOptions options = AndroidMock
-				.createMock(ActionBarOptions.class);
+		ActionBarOptions options = AndroidMock.createMock(ActionBarOptions.class);
 		PublicSocialize publicSocialize = newSocializeServiceForActionBarTests();
 		publicSocialize.showActionBar(mockParent, 1, mockEntity, options);
 
@@ -1652,10 +1623,10 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		Activity mockParent = AndroidMock.createMock(Activity.class);
 		Entity mockEntity = AndroidMock.createMock(Entity.class);
 		int mockViewId = 3;
-		
+
 		PublicSocialize publicSocialize = newSocializeServiceForActionBarTests();
-		
-		publicSocialize.showActionBar(mockParent, mockViewId , mockEntity);
+
+		publicSocialize.showActionBar(mockParent, mockViewId, mockEntity);
 
 		assertEquals(mockParent, getResult(0));
 		assertEquals(mockViewId, getResult(1));
@@ -1668,12 +1639,10 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		Activity mockParent = AndroidMock.createMock(Activity.class);
 		View mockView = AndroidMock.createMock(View.class, getContext());
 		Entity mockEntity = AndroidMock.createMock(Entity.class);
-		ActionBarOptions mockOptions = AndroidMock
-				.createMock(ActionBarOptions.class);
+		ActionBarOptions mockOptions = AndroidMock.createMock(ActionBarOptions.class);
 
 		PublicSocialize publicSocialize = newSocializeServiceForActionBarTests();
-		publicSocialize.showActionBar(mockParent, mockView, mockEntity,
-				mockOptions);
+		publicSocialize.showActionBar(mockParent, mockView, mockEntity, mockOptions);
 
 		assertEquals(mockParent, getResult(0));
 		assertEquals(mockView, getResult(1));
@@ -1703,8 +1672,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		Activity mockParent = AndroidMock.createMock(Activity.class);
 		Entity mockEntity = AndroidMock.createMock(Entity.class);
-		ActionBarListener mockListener = AndroidMock
-				.createMock(ActionBarListener.class);
+		ActionBarListener mockListener = AndroidMock.createMock(ActionBarListener.class);
 		PublicSocialize publicSocialize = newSocializeServiceForActionBarTests();
 
 		publicSocialize.showActionBar(mockParent, 1, mockEntity, mockListener);
@@ -1723,14 +1691,8 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		socializeUI.getConfig().setFacebookUserCredentials(userId, token);
 
-		assertEquals(
-				userId,
-				socializeUI.getConfig().getProperty(
-						SocializeConfig.FACEBOOK_USER_ID));
-		assertEquals(
-				token,
-				socializeUI.getConfig().getProperty(
-						SocializeConfig.FACEBOOK_USER_TOKEN));
+		assertEquals(userId, socializeUI.getConfig().getProperty(SocializeConfig.FACEBOOK_USER_ID));
+		assertEquals(token, socializeUI.getConfig().getProperty(SocializeConfig.FACEBOOK_USER_TOKEN));
 	}
 
 	public void testSetFacebookAppId() {
@@ -1740,9 +1702,6 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		socializeUI.getConfig().setFacebookAppId(appId);
 
-		assertEquals(
-				appId,
-				socializeUI.getConfig().getProperty(
-						SocializeConfig.FACEBOOK_APP_ID));
+		assertEquals(appId, socializeUI.getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID));
 	}
 };

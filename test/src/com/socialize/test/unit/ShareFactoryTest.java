@@ -32,12 +32,12 @@ import com.socialize.entity.ShareFactory;
 /**
  * 
  * @author Jason Polites
- *
+ * 
  */
 public class ShareFactoryTest extends AbstractSocializeActionFactoryTest<Share, ShareFactory> {
-	
+
 	JSONObject mediumObj;
-	
+
 	@UsesMocks(Share.class)
 	@Override
 	protected Class<Share> getActionClass() {
@@ -51,7 +51,7 @@ public class ShareFactoryTest extends AbstractSocializeActionFactoryTest<Share, 
 			public Share instantiateObject(JSONObject json) {
 				return action;
 			}
-			
+
 			@Override
 			public JSONObject instantiateJSON() {
 				return json;
@@ -59,22 +59,22 @@ public class ShareFactoryTest extends AbstractSocializeActionFactoryTest<Share, 
 		};
 	}
 
-	@UsesMocks ({JSONObject.class})
+	@UsesMocks({ JSONObject.class })
 	@Override
 	protected void setupFromJSONExpectations() throws JSONException {
 		final String text = "text";
 		final String medium = "medium";
 		final String medId = "id";
-		
+
 		String shareText = "share text";
 		int shareMedium = 69;
 		String mediumName = "medium name";
-		
+
 		mediumObj = AndroidMock.createMock(JSONObject.class);
-		
+
 		AndroidMock.expect(json.isNull(text)).andReturn(false);
 		AndroidMock.expect(json.has(text)).andReturn(true);
-		
+
 		AndroidMock.expect(json.isNull(medium)).andReturn(false);
 		AndroidMock.expect(json.has(medium)).andReturn(true);
 		AndroidMock.expect(json.getString(text)).andReturn(shareText);
@@ -85,11 +85,11 @@ public class ShareFactoryTest extends AbstractSocializeActionFactoryTest<Share, 
 		AndroidMock.expect(mediumObj.isNull(medium)).andReturn(false);
 		AndroidMock.expect(mediumObj.has(medium)).andReturn(true);
 		AndroidMock.expect(mediumObj.getString(medium)).andReturn(mediumName);
-		
+
 		action.setText(shareText);
 		action.setMedium(shareMedium);
 		action.setMediumName(mediumName);
-		
+
 		AndroidMock.replay(mediumObj);
 	}
 
@@ -100,21 +100,21 @@ public class ShareFactoryTest extends AbstractSocializeActionFactoryTest<Share, 
 
 	@Override
 	protected void setupToJSONExpectations() throws JSONException {
-		
+
 		final String text = "Test Share";
 		final String medium_name = "medium_name";
 		int medium = 69;
 		boolean propagate = false;
-		
+
 		AndroidMock.expect(action.getText()).andReturn(text);
 		AndroidMock.expect(json.put("text", text)).andReturn(json);
-		
+
 		AndroidMock.expect(action.getMediumName()).andReturn(medium_name);
 		AndroidMock.expect(json.put("medium_name", medium_name)).andReturn(json);
-		
+
 		AndroidMock.expect(action.getMedium()).andReturn(medium);
 		AndroidMock.expect(json.put("medium", medium)).andReturn(json);
-		
+
 		AndroidMock.expect(action.isPropagate()).andReturn(propagate);
 		AndroidMock.expect(json.put("propagate", 0)).andReturn(json);
 	}

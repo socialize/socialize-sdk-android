@@ -21,15 +21,21 @@
  */
 package com.socialize.auth;
 
+
 /**
  * @author Jason Polites
- *
  */
 public class AuthProviderData {
 	
 	private String userId3rdParty; 
 	private String token3rdParty; 
+	
+	private AuthProviderInfo authProviderInfo;
+	
+	@Deprecated
 	private String appId3rdParty;
+	
+	@Deprecated
 	private AuthProviderType authProviderType = AuthProviderType.SOCIALIZE;
 	
 	public AuthProviderData() {
@@ -48,16 +54,32 @@ public class AuthProviderData {
 	public void setToken3rdParty(String token3rdParty) {
 		this.token3rdParty = token3rdParty;
 	}
+	
+	@Deprecated
 	public String getAppId3rdParty() {
 		return appId3rdParty;
 	}
+	
+	@Deprecated
 	public void setAppId3rdParty(String appId3rdParty) {
 		this.appId3rdParty = appId3rdParty;
 	}
+	
+	@Deprecated
 	public AuthProviderType getAuthProviderType() {
 		return authProviderType;
 	}
+	
+	@Deprecated
 	public void setAuthProviderType(AuthProviderType authProviderType) {
 		this.authProviderType = authProviderType;
+	}
+
+	public AuthProviderInfo getAuthProviderInfo() {
+		return authProviderInfo;
+	}
+
+	public void setAuthProviderInfo(AuthProviderInfo authProviderInfo) {
+		this.authProviderInfo = authProviderInfo;
 	}
 }

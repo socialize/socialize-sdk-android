@@ -47,7 +47,7 @@ public class NotificationChecker {
 	 */
 	public void checkRegistrations(Context context, SocializeSession session) {
 		
-		if(appUtils.isNotificationsAvaiable(context)) {
+		if(appUtils.isNotificationsAvailable(context)) {
 
 			if(config.getBooleanProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, true)) {
 				if(logger != null && logger.isDebugEnabled()) {

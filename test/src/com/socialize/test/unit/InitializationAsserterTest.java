@@ -31,43 +31,42 @@ import com.socialize.test.SocializeUnitTest;
 
 /**
  * @author Jason Polites
- *
+ * 
  */
-@UsesMocks ({SocializeService.class, SocializeListener.class})
+@UsesMocks({ SocializeService.class, SocializeListener.class })
 public class InitializationAsserterTest extends SocializeUnitTest {
 
 	public void test_assertInitialized() {
 		SocializeListener listener = AndroidMock.createMock(SocializeListener.class);
 		SocializeService service = AndroidMock.createMock(SocializeService.class);
-		
+
 		AndroidMock.expect(service.isInitialized()).andReturn(false);
 		listener.onError((SocializeException) AndroidMock.anyObject());
-		
+
 		AndroidMock.replay(service, listener);
-		
+
 		DefaultInitializationAsserter asserter = new DefaultInitializationAsserter();
 		asserter.assertInitialized(service, listener);
-		
+
 		AndroidMock.verify(service, listener);
 	}
-	
-	
+
 	public void test_assertAuthenticated() {
 		SocializeListener listener = AndroidMock.createMock(SocializeListener.class);
-		
+
 		listener.onError((SocializeException) AndroidMock.anyObject());
-		
+
 		AndroidMock.replay(listener);
-		
+
 		DefaultInitializationAsserter asserter = new DefaultInitializationAsserter() {
 			@Override
 			public boolean assertInitialized(SocializeService service, SocializeListener listener) {
 				return true;
 			}
 		};
-		
+
 		asserter.assertAuthenticated(null, null, listener);
-		
+
 		AndroidMock.verify(listener);
 	}
 }

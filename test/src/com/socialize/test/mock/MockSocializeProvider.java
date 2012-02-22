@@ -28,6 +28,7 @@ import java.util.List;
 import android.content.Context;
 
 import com.socialize.api.SocializeSession;
+import com.socialize.api.WritableSession;
 import com.socialize.api.action.ActionType;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
@@ -57,7 +58,7 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 	}
 	
 	@Override
-	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderData data) throws SocializeException {
+	public WritableSession loadSession(String endpoint, String key, String secret) throws SocializeException {
 		return new MockSocializeSession();
 	}
 
@@ -69,6 +70,11 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 	@Override
 	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderType authProviderType, String appId3rdParty) throws SocializeException {
 		return new MockSocializeSession();
+	}
+
+	@Override
+	public boolean validateSession(SocializeSession loaded, AuthProviderData data) {
+		return true;
 	}
 
 	@Override

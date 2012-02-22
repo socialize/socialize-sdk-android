@@ -32,7 +32,7 @@ import com.socialize.test.SocializeUnitTest;
 
 /**
  * @author Jason Polites
- *
+ * 
  */
 public abstract class AbstractSocializeObjectFactoryTest<T extends SocializeObject, F extends SocializeObjectFactory<T>> extends SocializeUnitTest {
 
@@ -40,73 +40,71 @@ public abstract class AbstractSocializeObjectFactoryTest<T extends SocializeObje
 	protected JSONObject json;
 	protected Long id = new Long(9999);
 	protected T object;
-	
-	@UsesMocks({SocializeConfig.class, JSONObject.class})
+
+	@UsesMocks({ SocializeConfig.class, JSONObject.class })
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		
+
 		json = AndroidMock.createMock(JSONObject.class);
 		object = AndroidMock.createMock(getObjectClass());
-		
+
 		factory = createFactory();
 	}
-	
-	
+
 	public void testToJSON() throws Exception {
-		
+
 		AndroidMock.expect(object.getId()).andReturn(id);
 		AndroidMock.expect(json.put("id", id)).andReturn(json);
-		
+
 		setupToJSONExpectations();
-		
+
 		AndroidMock.replay(json);
 		AndroidMock.replay(object);
-		
+
 		factory.toJSON(object);
-		
+
 		AndroidMock.verify(json);
 		AndroidMock.verify(object);
-		
+
 		doToJSONVerify();
 	}
-	
 
 	public void testFromJSON() throws Exception {
-		
+
 		AndroidMock.expect(json.has("id")).andReturn(true);
 		AndroidMock.expect(json.isNull("id")).andReturn(false);
 		AndroidMock.expect(json.getLong("id")).andReturn(id);
 		object.setId(id);
-		
+
 		setupFromJSONExpectations();
-		
+
 		AndroidMock.replay(json);
 		AndroidMock.replay(object);
-		
+
 		factory.fromJSON(json);
-		
+
 		AndroidMock.verify(json);
 		AndroidMock.verify(object);
-		
+
 		doFromJSONVerify();
-		
+
 	}
-	
+
 	public void testInstantiate() {
 		Object instantiateObject = factory.instantiateObject(json);
 		assertTrue(getObjectClass().isAssignableFrom(instantiateObject.getClass()));
 	}
-	
+
 	protected abstract void setupToJSONExpectations() throws Exception;
-	
+
 	protected abstract void doToJSONVerify();
-	
+
 	protected abstract void setupFromJSONExpectations() throws Exception;
-	
+
 	protected abstract void doFromJSONVerify();
-	
+
 	protected abstract Class<T> getObjectClass();
-	
+
 	protected abstract F createFactory();
 }

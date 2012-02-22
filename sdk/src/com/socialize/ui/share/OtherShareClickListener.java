@@ -41,6 +41,11 @@ public class OtherShareClickListener extends SimpleShareClickListener {
 	public OtherShareClickListener(ActionBarView actionBarView, EditText commentView, OnActionBarEventListener onActionBarEventListener) {
 		super(actionBarView, commentView, onActionBarEventListener);
 	}
+	
+	@Override
+	protected boolean isDoShareInline() {
+		return false;
+	}
 
 	@Override
 	protected String getMimeType() {

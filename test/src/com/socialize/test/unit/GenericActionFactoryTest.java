@@ -39,54 +39,54 @@ import com.socialize.test.SocializeUnitTest;
  * @author Jason Polites
  */
 public class GenericActionFactoryTest extends SocializeUnitTest {
-	
-	@UsesMocks ({CommentFactory.class, Comment.class})
+
+	@UsesMocks({ CommentFactory.class, Comment.class })
 	public void testInstantiateObjectComment() throws JSONException {
 		CommentFactory commentFactory = AndroidMock.createMock(CommentFactory.class);
 		GenericActionFactory factory = new GenericActionFactory();
-		factory.setCommentFactory(commentFactory);		
+		factory.setCommentFactory(commentFactory);
 		doIt("comment", factory, commentFactory);
 	}
-	
-	@UsesMocks ({ViewFactory.class})
+
+	@UsesMocks({ ViewFactory.class })
 	public void testInstantiateObjectView() throws JSONException {
 		ViewFactory objectFactory = AndroidMock.createMock(ViewFactory.class);
 		GenericActionFactory factory = new GenericActionFactory();
 		factory.setViewFactory(objectFactory);
 		doIt("view", factory, objectFactory);
 	}
-	
-	@UsesMocks ({LikeFactory.class})
+
+	@UsesMocks({ LikeFactory.class })
 	public void testInstantiateObjectLike() throws JSONException {
 		LikeFactory objectFactory = AndroidMock.createMock(LikeFactory.class);
 		GenericActionFactory factory = new GenericActionFactory();
 		factory.setLikeFactory(objectFactory);
 		doIt("like", factory, objectFactory);
 	}
-	
-	@UsesMocks ({ShareFactory.class})
+
+	@UsesMocks({ ShareFactory.class })
 	public void testInstantiateObjectShare() throws JSONException {
 		ShareFactory objectFactory = AndroidMock.createMock(ShareFactory.class);
 		GenericActionFactory factory = new GenericActionFactory();
 		factory.setShareFactory(objectFactory);
 		doIt("share", factory, objectFactory);
 	}
-	
+
 	private void doIt(String type, GenericActionFactory factory, SocializeActionFactory<?> objectFactory) throws JSONException {
 		JSONObject json = AndroidMock.createMock(JSONObject.class);
-		
+
 		String key = "activity_type";
-		
-		AndroidMock.expect(objectFactory.instantiateObject((JSONObject)AndroidMock.anyObject())).andReturn(null);
+
+		AndroidMock.expect(objectFactory.instantiateObject((JSONObject) AndroidMock.anyObject())).andReturn(null);
 		AndroidMock.expect(json.has(key)).andReturn(true);
 		AndroidMock.expect(json.isNull(key)).andReturn(false);
 		AndroidMock.expect(json.getString(key)).andReturn(type);
-		
+
 		AndroidMock.replay(json);
 		AndroidMock.replay(objectFactory);
-		
+
 		factory.instantiateObject(json);
-		
+
 		AndroidMock.verify(json);
 		AndroidMock.verify(objectFactory);
 	}

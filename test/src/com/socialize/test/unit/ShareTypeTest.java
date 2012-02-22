@@ -26,7 +26,7 @@ import com.socialize.test.SocializeUnitTest;
 
 /**
  * @author Jason Polites
- *
+ * 
  */
 public class ShareTypeTest extends SocializeUnitTest {
 
@@ -36,12 +36,12 @@ public class ShareTypeTest extends SocializeUnitTest {
 		assertEquals(ShareType.EMAIL, ShareType.valueOf(3));
 		assertEquals(ShareType.SMS, ShareType.valueOf(4));
 		assertEquals(ShareType.OTHER, ShareType.valueOf(5));
-		
+
 		assertEquals("facebook", ShareType.FACEBOOK.getName());
 		assertEquals("twitter", ShareType.TWITTER.getName());
 		assertEquals("email", ShareType.EMAIL.getName());
 		assertEquals("sms", ShareType.SMS.getName());
 		assertEquals("other", ShareType.OTHER.getName());
 	}
-	
+
 }

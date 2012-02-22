@@ -36,6 +36,7 @@ import com.socialize.api.action.UserSystem;
 import com.socialize.api.action.ViewSystem;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.AuthProviders;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.ioc.SocializeIOC;
@@ -256,6 +257,11 @@ public class PublicSocialize extends SocializeServiceImpl {
 		super.setUserSystem(userSystem);
 	}
 
+	@Override
+	public void setAuthProviders(AuthProviders authProviders) {
+		super.setAuthProviders(authProviders);
+	}
+	
 	@Override
 	public void setActivitySystem(ActivitySystem activitySystem) {
 		super.setActivitySystem(activitySystem);

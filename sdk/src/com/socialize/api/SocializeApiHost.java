@@ -25,7 +25,6 @@ import android.content.Context;
 import android.location.Location;
 
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.api.action.RecommendationApi;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeActivitySystem;
 import com.socialize.api.action.SocializeCommentSystem;
@@ -70,7 +69,6 @@ public class SocializeApiHost implements ApiHost {
 	private SocializeUserSystem socializeUserSystem;
 	private SocializeShareSystem socializeShareSystem;
 	private SocializeActivitySystem socializeActivitySystem;
-	private RecommendationApi recommendationApi;
 	
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	
@@ -183,14 +181,6 @@ public class SocializeApiHost implements ApiHost {
 	@Override
 	public void getEntity(SocializeSession session, String key, EntityListener listener) {
 		socializeEntitySystem.getEntity(session, key, listener);
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.socialize.api.ApiHost#listRecommendedEntitiesByLike(com.socialize.api.SocializeSession, com.socialize.listener.entity.EntityListener, long)
-	 */
-	@Override
-	public void listRecommendedEntitiesByLike(SocializeSession session, EntityListener listener, long id) {
-		recommendationApi.listRecommendedEntityesForLike(session, listener, id);
 	}
 	
 	/* (non-Javadoc)
@@ -441,14 +431,6 @@ public class SocializeApiHost implements ApiHost {
 		this.socializeActivitySystem = activityApi;
 	}
 	
-	public RecommendationApi getRecommendationApi() {
-		return recommendationApi;
-	}
-
-	public void setRecommendationApi(RecommendationApi recommendationApi) {
-		this.recommendationApi = recommendationApi;
-	}
-
 	public IBeanFactory<AuthProviderData> getAuthProviderDataFactory() {
 		return authProviderDataFactory;
 	}

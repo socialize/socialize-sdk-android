@@ -345,19 +345,11 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		final JSONObject json = AndroidMock.createMock(JSONObject.class);
 		final JSONObject error = AndroidMock.createMock(JSONObject.class);
 		final SocializeSession session = AndroidMock.createMock(SocializeSession.class);
-		final AuthProvider authProvider = AndroidMock.createMock(AuthProvider.class);
-		final AuthProviderType authProviderType = AuthProviderType.FACEBOOK;
 		final SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
-		final String get3rdPartyAppId = "foobar";
 		final String errorMessage = "foobar_error";
 		final String responseData = "foobar_repsonse";
 		
 		AndroidMock.expect(json.has("error")).andReturn(true);
-		
-		AndroidMock.expect(socialize.getSession()).andReturn(session);
-		AndroidMock.expect(session.getAuthProvider()).andReturn(authProvider);
-		AndroidMock.expect(session.getAuthProviderType()).andReturn(authProviderType);
-		AndroidMock.expect(session.get3rdPartyAppId()).andReturn(get3rdPartyAppId);
 		
 		socialize.clear3rdPartySession(getActivity(), AuthProviderType.FACEBOOK);
 		
@@ -389,7 +381,6 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		
 		AndroidMock.replay(socialize);
 		AndroidMock.replay(session);
-		AndroidMock.replay(authProvider);
 		AndroidMock.replay(json);
 		AndroidMock.replay(error);
 		AndroidMock.replay(listener);
@@ -400,7 +391,6 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		
 		AndroidMock.verify(socialize);
 		AndroidMock.verify(session);
-		AndroidMock.verify(authProvider);
 		AndroidMock.verify(json);
 		AndroidMock.verify(error);
 		AndroidMock.verify(listener);

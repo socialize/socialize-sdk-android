@@ -20,7 +20,7 @@ public class CommentTest extends SocializeRobotiumTest {
 		userId = authenticateSocialize();
 		
 		robotium.clickOnButton("Comment");
-		robotium.waitForActivity("CommentActivity", DEFAULT_TIMEOUT_SECONDS);
+		robotium.waitForActivity("CommentActivity", DEFAULT_TIMEOUT_MILLISECONDS);
 	}
 	
 	public void testCreateComment() {
@@ -28,7 +28,7 @@ public class CommentTest extends SocializeRobotiumTest {
 		String comment = "Test Comment";
 		
 		robotium.clickOnButton("Create Comment");
-		robotium.waitForActivity("CommentCreateActivity", DEFAULT_TIMEOUT_SECONDS);
+		robotium.waitForActivity("CommentCreateActivity", DEFAULT_TIMEOUT_MILLISECONDS);
 		robotium.enterText(0, DEFAULT_ENTITY_URL);
 		robotium.enterText(1, comment);
 		robotium.clickOnButton("Create");
@@ -71,7 +71,7 @@ public class CommentTest extends SocializeRobotiumTest {
 		open.close();
 		
 		robotium.clickOnButton("Create Comment");
-		robotium.waitForActivity("CommentCreateActivity", DEFAULT_TIMEOUT_SECONDS);
+		robotium.waitForActivity("CommentCreateActivity", DEFAULT_TIMEOUT_MILLISECONDS);
 		robotium.enterText(0, DEFAULT_ENTITY_URL);
 		robotium.enterText(1, comment);
 		robotium.clickOnButton("Create");
@@ -105,7 +105,7 @@ public class CommentTest extends SocializeRobotiumTest {
 	
 	public void testGetComment() throws JSONException{
 		robotium.clickOnButton("Get Comment");
-		robotium.waitForActivity("CommentGetActivity", DEFAULT_TIMEOUT_SECONDS);
+		robotium.waitForActivity("CommentGetActivity", DEFAULT_TIMEOUT_MILLISECONDS);
 		
 		// get the comment based on ID from the JSON file
 		JSONObject json = getJSON("comments.json");

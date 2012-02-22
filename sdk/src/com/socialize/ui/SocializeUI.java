@@ -52,14 +52,12 @@ public class SocializeUI {
 	public static final String ENTITY_URL_AS_LINK = "socialize.entity.entityKey.link";
 	
 	public static final String DEFAULT_USER_ICON = "default_user_icon.png";
-//	public static final String SOCIALIZE_LOGO = "socialize_logo.png";
 	public static final String BG_ACCENT = "bg_accent.png";
 	
 	public static final Map<String, SocializeListener> STATIC_LISTENERS = new HashMap<String, SocializeListener>();
 	
 	private IOCContainer container;
 	private Drawables drawables;
-//	private String[] beanOverrides;
 	
 	private SocializeEntityLoader entityLoader;
 	
@@ -279,6 +277,8 @@ public class SocializeUI {
 		
 		SocializeAction action = new SocializeAction() {
 			
+			private static final long serialVersionUID = 4117561505244633323L;
+
 			@Override
 			public ActionType getActionType() {
 				return ActionType.COMMENT;

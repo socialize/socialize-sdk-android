@@ -46,7 +46,7 @@ import com.socialize.sample.Main;
  */
 public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestCase2<Main> {
 
-	public static final int DEFAULT_TIMEOUT_SECONDS = 100;
+	public static final int DEFAULT_TIMEOUT_MILLISECONDS = 5000;
 	public static final String DEFAULT_ENTITY_URL = "http://socialize.integration.tests.com?somekey=somevalue&anotherkey=anothervalue";
 	public static final String DEFAULT_GET_ENTITY = "http://entity1.com";
 		
@@ -102,7 +102,7 @@ public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestC
 
 		// go to API
 		robotium.clickOnButton("Access API");
-		robotium.waitForActivity("ApiActivity", DEFAULT_TIMEOUT_SECONDS);
+		robotium.waitForActivity("ApiActivity", DEFAULT_TIMEOUT_MILLISECONDS);
 
 		return userId;
 	}
@@ -139,7 +139,7 @@ public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestC
 		// which causes a test failure.
 		// Add a sleep to hack it
 		sleep(4000);
-		assertTrue(robotium.waitForText("SUCCESS", 1, DEFAULT_TIMEOUT_SECONDS));
+		assertTrue(robotium.waitForText("SUCCESS", 1, DEFAULT_TIMEOUT_MILLISECONDS));
 	}
 
 	/**

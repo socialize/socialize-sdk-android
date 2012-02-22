@@ -22,8 +22,12 @@
 package com.socialize.api;
 
 import com.socialize.auth.AuthProviderData;
+import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
+import com.socialize.auth.DefaultUserProviderCredentials;
+import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.config.SocializeConfig;
 
 /**
@@ -42,9 +46,43 @@ public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 	
 	@Override
 	public WritableSession create(String key, String secret, AuthProviderData data) {
-		return create(key, secret, data.getUserId3rdParty(), data.getToken3rdParty(), data.getAppId3rdParty(), data.getAuthProviderType());
+		
+		DefaultUserProviderCredentials userProviderCredentials = new DefaultUserProviderCredentials();
+		userProviderCredentials.setAccessToken(data.getToken3rdParty());
+		userProviderCredentials.setUserId(data.getUserId3rdParty());
+		userProviderCredentials.setAuthProviderInfo(data.getAuthProviderInfo());
+		
+		return create(key, secret, userProviderCredentials);
 	}
 
+	@Override
+	public WritableSession create(String key, String secret, UserProviderCredentials userProviderCredentials) {
+		SocializeSessionImpl session = new SocializeSessionImpl();
+		session.setConsumerKey(key);
+		session.setConsumerSecret(secret);
+		
+		AuthProviderInfo authProviderInfo = userProviderCredentials.getAuthProviderInfo();
+		
+		if(authProviderInfo != null) {
+			session.setUserProviderCredentials(authProviderInfo.getType(), userProviderCredentials);
+		}
+		
+		session.setHost(config.getProperty(SocializeConfig.API_HOST).trim());
+		
+		return session;
+	}
+	
+	@Override
+	public WritableSession create(String key, String secret, UserProviderCredentialsMap userProviderCredentialsMap) {
+		SocializeSessionImpl session = new SocializeSessionImpl();
+		session.setConsumerKey(key);
+		session.setConsumerSecret(secret);
+		session.setUserProviderCredentials(userProviderCredentialsMap);
+		session.setHost(config.getProperty(SocializeConfig.API_HOST).trim());
+		return session;
+	}
+
+	@Deprecated
 	@Override
 	public WritableSession create(String key, String secret, String userId3rdParty, String token3rdParty, String appId3rdParty, AuthProviderType authProviderType) {
 		SocializeSessionImpl session = new SocializeSessionImpl();

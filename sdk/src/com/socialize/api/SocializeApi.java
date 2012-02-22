@@ -30,6 +30,7 @@ import android.os.AsyncTask;
 import com.socialize.api.action.ActionType;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
+import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
@@ -59,7 +60,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 
 	private P provider;
 	private SocializeResponseFactory<T> responseFactory;
-	private SocializeConfig config;
 	private AuthProviders authProviders;
 	private SocializeLogger logger;
 	private HttpUtils httpUtils;
@@ -81,8 +81,8 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		provider.clearSession(type);
 	}
 	
-	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderData data) throws SocializeException {
-		return provider.loadSession(endpoint, key, secret, data);
+	public SocializeSession loadSession(String endpoint, String key, String secret) throws SocializeException {
+		return provider.loadSession(endpoint, key, secret);
 	}
 	
 	public SocializeSession authenticate(Context context, String endpoint, String key, String secret, String uuid) throws SocializeException {
@@ -91,8 +91,8 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return session;
 	}
 	
-	public SocializeSession authenticate(Context context, String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
-		SocializeSession session = provider.authenticate(endpoint, key, secret, data, uuid);
+	public SocializeSession authenticate(Context context, String endpoint, String key, String secret, AuthProviderData data, String udid) throws SocializeException {
+		SocializeSession session = provider.authenticate(endpoint, key, secret, data, udid);
 		checkNotifications(context, session);
 		return session;
 	}
@@ -275,10 +275,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		poster.execute(request);
 	}
 
-	public void authenticateAsync(Context context, String key, String secret, String uuid, SocializeAuthListener listener, final SocializeSessionConsumer sessionConsumer) {
-		authenticateAsync(context, key, secret, uuid, new AuthProviderData(), listener, sessionConsumer, false);
-	}
-	
 	public void authenticateAsync(
 			Context context,
 			String key, 
@@ -362,7 +358,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		request.setUdid(uuid);
 		request.setAuthProviderData(data);
 		
-		AuthProviderType authProviderType = data.getAuthProviderType();
+		AuthProviderType authProviderType = getAuthProviderType(data);
 		
 		if(do3rdPartyAuth && !authProviderType.equals(AuthProviderType.SOCIALIZE)) {
 			handle3rdPartyAuth(context, request, wrapper, localListener, key, secret);
@@ -370,6 +366,42 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		else {
 			// Do normal auth
 			handleRegularAuth(context, request, wrapper);
+		}
+	}
+	
+	protected AuthProviderType getAuthProviderType(AuthProviderData data) {
+		if(data == null) {
+			return AuthProviderType.SOCIALIZE;
+		}
+		
+		@SuppressWarnings("deprecation")
+		AuthProviderType authProviderType = data.getAuthProviderType();
+		
+		AuthProviderInfo authProviderInfo = data.getAuthProviderInfo();
+		
+		if(authProviderInfo != null) {
+			authProviderType = authProviderInfo.getType();
+		}
+		
+		return authProviderType;
+	}
+	
+	protected void validate(AuthProviderData data) throws SocializeException{
+		AuthProviderInfo authProviderInfo = data.getAuthProviderInfo();
+		
+		if(authProviderInfo != null) {
+			authProviderInfo.validate();
+		}
+		else {
+			// Legacy
+			AuthProviderType authProviderType = getAuthProviderType(data);
+			@SuppressWarnings("deprecation")
+			String appId3rdParty = data.getAppId3rdParty();
+			if(authProviderType != null && 
+					authProviderType.equals(AuthProviderType.FACEBOOK) && 
+					StringUtils.isEmpty(appId3rdParty)) {
+				throw new SocializeException("No app ID found for auth type FACEBOOK");
+			}
 		}
 	}
 	
@@ -390,35 +422,35 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		// Try loading the session first
 		SocializeSession session = null;
 		
-		AuthProviderType authProviderType = authProviderData.getAuthProviderType();
-		String appId3rdParty = authProviderData.getAppId3rdParty();
+		AuthProviderType authProviderType = getAuthProviderType(authProviderData);
 		
-		// TODO: externalize this into a validator
-		if(authProviderType != null && 
-				authProviderType.equals(AuthProviderType.FACEBOOK) && 
-				StringUtils.isEmpty(appId3rdParty)) {
-			
+		try {
+			validate(authProviderData);
+		} 
+		catch (SocializeException error) {
 			if(listener != null) {
-				listener.onError(new SocializeException("No app ID found for auth type FACEBOOK"));
+				listener.onError(error);
 			}
-			
-			return;
+			else if(logger != null) {
+				logger.error("Error validating auth provider data", error);
+			}
 		}
 		
 		try {
-			session = loadSession(request.getEndpoint(), key, secret, authProviderData);
+			session = loadSession(request.getEndpoint(), key, secret);
 		}
 		catch (SocializeException e) {
 			// No need to throw this, just log it
 			logger.warn("Failed to load saved session data", e);
 		}
 					
-		if(session == null) {
+		if(session == null || !provider.validateSession(session, authProviderData)) {
 			// Get the provider for the type
-			AuthProvider authProvider = authProviders.getProvider(authProviderType);
+			AuthProvider<AuthProviderInfo> authProvider = authProviders.getProvider(authProviderType);
 			
 			if(authProvider != null) {
-				authProvider.authenticate(request, appId3rdParty, new AuthProviderListener() {
+				
+				AuthProviderListener authProviderListener = new AuthProviderListener() {
 					
 					@Override
 					public void onError(SocializeException error) {
@@ -450,9 +482,17 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 							listener.onCancel();
 						}
 					}
-					
-					
-				});
+				};				
+				
+				AuthProviderInfo authProviderInfo = authProviderData.getAuthProviderInfo();
+				
+				if(authProviderInfo != null) {
+					authProvider.authenticate(request, authProviderInfo, authProviderListener);
+				}
+				else {
+					// Legacy
+					authenticateLegacy(authProviderData, authProvider, request, authProviderListener);
+				}
 			}
 			else {
 				logger.error("No provider found for auth type [" +
@@ -469,6 +509,12 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
+	protected void authenticateLegacy(AuthProviderData authProviderData, AuthProvider<AuthProviderInfo> authProvider, SocializeAuthRequest request, AuthProviderListener authProviderListener) {
+		String appId3rdParty = authProviderData.getAppId3rdParty();
+		authProvider.authenticate(request, appId3rdParty, authProviderListener);
+	}
+	
 	public void setResponseFactory(SocializeResponseFactory<T> responseFactory) {
 		this.responseFactory = responseFactory;
 	}
@@ -476,45 +522,17 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	public void setNotificationChecker(NotificationChecker notificationChecker) {
 		this.notificationChecker = notificationChecker;
 	}
-
-	public SocializeResponseFactory<T> getResponseFactory() {
-		return responseFactory;
-	}
 	
-	public SocializeConfig getConfig() {
-		return config;
-	}
-
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
-	}
-	
-	public AuthProviders getAuthProviders() {
-		return authProviders;
-	}
-
 	public void setAuthProviders(AuthProviders authProviders) {
 		this.authProviders = authProviders;
 	}
 	
-	public SocializeLogger getLogger() {
-		return logger;
-	}
-
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
 	
-	public HttpUtils getHttpUtils() {
-		return httpUtils;
-	}
-
 	public void setHttpUtils(HttpUtils httpUtils) {
 		this.httpUtils = httpUtils;
-	}
-	
-	public SocializeLocationProvider getLocationProvider() {
-		return locationProvider;
 	}
 
 	public void setLocationProvider(SocializeLocationProvider locationProvider) {
@@ -595,7 +613,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			SocializeSession session = null;
 			
 			AuthProviderData authProviderData = request.getAuthProviderData();
-			AuthProviderType authProviderType = authProviderData.getAuthProviderType();
+			AuthProviderType authProviderType = getAuthProviderType(authProviderData);
 			
 			if(authProviderType == null || authProviderType.equals(AuthProviderType.SOCIALIZE)) {
 				session = SocializeApi.this.authenticate(context, request.getEndpoint(), request.getConsumerKey(), request.getConsumerSecret(), request.getUdid());
@@ -605,6 +623,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			}
 			
 			response.setSession(session);
+			
 			return response;
 		}
 	}

@@ -33,7 +33,7 @@ public interface SocializeSessionPersister {
 
 	public void save(Context context, SocializeSession session);
 	
-	public SocializeSession load(Context context);
+	public WritableSession load(Context context);
 	
 	public void delete(Context context);
 	

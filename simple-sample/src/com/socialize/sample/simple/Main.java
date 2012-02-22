@@ -1,17 +1,14 @@
 package com.socialize.sample.simple;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.socialize.Socialize;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.Share;
-import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
@@ -19,7 +16,6 @@ import com.socialize.ui.actionbar.OnActionBarEventListener;
 public class Main extends Activity {
 	static final String LOG_KEY = "Socialize";
 	
-	private Toast toast;
 	
     /** Called when the activity is first created. */
     @Override
@@ -33,28 +29,7 @@ public class Main extends Activity {
 		final Entity entity = Entity.newInstance(entityKey, "Socialize");
 		
 		// Set an entity loader to allow Socialize to load content within your app
-		Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
-			@Override
-			public void loadEntity(Activity activity, Entity entity) {
-				
-				// Demo only.. you would usually load your entity here.
-				String msg = "Clicked on entity with key: " + entity.getKey();
-				if(toast != null) {
-					toast.cancel();
-					toast.setText(msg);
-				}
-				else {
-					toast = Toast.makeText(activity, msg, Toast.LENGTH_SHORT);
-				}
-				
-				toast.show();
-			}
-
-			@Override
-			public boolean canLoad(Context arg0, Entity arg1) {
-				return true;
-			}
-		});
+		Socialize.getSocialize().setEntityLoader(new SampleEntityLoader());
 
 		// Wrap your existing view with the action bar.
 		// your_layout refers to the resource ID of your current layout.

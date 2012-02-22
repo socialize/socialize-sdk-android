@@ -31,7 +31,6 @@ public class ClassLoaderProvider {
 
 	public ClassLoader getClassLoader() {
 		return ClassLoaderProvider.class.getClassLoader();
-//		return Thread.currentThread().getContextClassLoader();
 	}
 	
 }

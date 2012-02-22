@@ -30,48 +30,47 @@ import com.socialize.util.BitmapUtils;
 
 /**
  * @author Jason Polites
- *
+ * 
  */
 public class BitmapUtilsTest extends SocializeUnitTest {
 
 	// We can't mock bitmaps.. so can only do integration tests! :(
 	public void testGetScaledBitmapVerticalCropOnReduce() {
-	
+
 		int width = 100;
 		int height = 200;
-		
+
 		int scaledWidth = 50;
 		int scaledHeight = 50;
-		
+
 		// Create a new bitmap
 		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-		
+
 		// Set the top and bottom of the bmp to black, and the center to white
 		// This way we'll know that it was cropped/scaled correctly
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				if(y < 50 || y >= 150) {
+				if (y < 50 || y >= 150) {
 					bitmap.setPixel(x, y, Color.GREEN);
-				}
-				else {
+				} else {
 					bitmap.setPixel(x, y, Color.WHITE);
 				}
 			}
 		}
-		
+
 		BitmapBuilder builder = new BitmapBuilder();
 		BitmapUtils utils = new BitmapUtils();
 		utils.setBitmapBuilder(builder);
-		
+
 		// We expect the lowest value to scale, and the highest to crop
 		Bitmap scaled = utils.getScaledBitmap(bitmap, scaledWidth, scaledHeight);
-		
+
 		assertFalse(scaled.isRecycled());
 		assertTrue(bitmap.isRecycled());
-		
+
 		assertEquals(scaledWidth, scaled.getWidth());
 		assertEquals(scaledHeight, scaled.getHeight());
-		
+
 		// All pixels should be white
 		for (int x = 0; x < scaledWidth; x++) {
 			for (int y = 0; y < scaledHeight; y++) {
@@ -79,48 +78,47 @@ public class BitmapUtilsTest extends SocializeUnitTest {
 				assertEquals(Color.WHITE, pixel);
 			}
 		}
-		
+
 		scaled.recycle();
 	}
 
 	// We can't mock bitmaps.. so can only do integration tests! :(
 	public void testGetScaledBitmapHorizontalCropOnReduce() {
-	
+
 		int width = 200;
 		int height = 100;
-		
+
 		int scaledWidth = 50;
 		int scaledHeight = 50;
-		
+
 		// Create a new bitmap
 		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-		
+
 		// Set the top and bottom of the bmp to black, and the center to white
 		// This way we'll know that it was cropped/scaled correctly
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				if(x < 50 || x >= 150) {
+				if (x < 50 || x >= 150) {
 					bitmap.setPixel(x, y, Color.GREEN);
-				}
-				else {
+				} else {
 					bitmap.setPixel(x, y, Color.WHITE);
 				}
 			}
 		}
-		
+
 		BitmapBuilder builder = new BitmapBuilder();
 		BitmapUtils utils = new BitmapUtils();
 		utils.setBitmapBuilder(builder);
-		
+
 		// We expect the lowest value to scale, and the highest to crop
 		Bitmap scaled = utils.getScaledBitmap(bitmap, scaledWidth, scaledHeight);
-		
+
 		assertFalse(scaled.isRecycled());
 		assertTrue(bitmap.isRecycled());
-		
+
 		assertEquals(scaledWidth, scaled.getWidth());
 		assertEquals(scaledHeight, scaled.getHeight());
-		
+
 		// All pixels should be white
 		for (int x = 0; x < scaledWidth; x++) {
 			for (int y = 0; y < scaledHeight; y++) {
@@ -128,7 +126,7 @@ public class BitmapUtilsTest extends SocializeUnitTest {
 				assertEquals(Color.WHITE, pixel);
 			}
 		}
-		
+
 		scaled.recycle();
 	}
 

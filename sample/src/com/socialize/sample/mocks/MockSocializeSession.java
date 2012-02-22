@@ -21,17 +21,21 @@
  */
 package com.socialize.sample.mocks;
 
-import com.socialize.api.SocializeSession;
+import com.socialize.api.WritableSession;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.entity.User;
 
 /**
  * @author Jason Polites
  *
  */
-public class MockSocializeSession implements SocializeSession {
+public class MockSocializeSession implements WritableSession {
 
+	private static final long serialVersionUID = 2821519529554271142L;
+	
 	User user;
 	String key = "all";
 	String sec = "my";
@@ -93,43 +97,43 @@ public class MockSocializeSession implements SocializeSession {
 		return host;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.api.SocializeSession#get3rdPartyUserId()
-	 */
+	@Deprecated
 	@Override
 	public String get3rdPartyUserId() {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.api.SocializeSession#get3rdPartyToken()
-	 */
+	@Deprecated
 	@Override
 	public String get3rdPartyToken() {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.api.SocializeSession#get3rdPartyAppId()
-	 */
+	@Deprecated
 	@Override
 	public String get3rdPartyAppId() {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.api.SocializeSession#getAuthProviderType()
-	 */
+	@Deprecated
 	@Override
 	public AuthProviderType getAuthProviderType() {
 		return AuthProviderType.SOCIALIZE;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.api.SocializeSession#getAuthProvider()
-	 */
+	@Deprecated
 	@Override
-	public AuthProvider getAuthProvider() {
+	public AuthProvider<?> getAuthProvider() {
+		return null;
+	}
+
+	@Override
+	public UserProviderCredentialsMap getUserProviderCredentials() {
+		return null;
+	}
+
+	@Override
+	public UserProviderCredentials getUserProviderCredentials(AuthProviderType type) {
 		return null;
 	}
 
@@ -138,5 +142,47 @@ public class MockSocializeSession implements SocializeSession {
 	 */
 	@Override
 	public void clear(AuthProviderType type) {}
+
+	@Override
+	public void setConsumerToken(String token) {
+	}
+
+	@Override
+	public void setConsumerTokenSecret(String secret) {
+	}
+
+	@Override
+	public void setUser(User user) {
+	}
+
+	@Override
+	public void setHost(String host) {
+	}
+
+	@Override
+	public void setUserProviderCredentials(AuthProviderType type, UserProviderCredentials data) {
+	}
+
+	@Override
+	public void set3rdPartyUserId(String userId) {
+	}
+
+	@Override
+	public void set3rdPartyToken(String token) {
+	}
+
+	@Override
+	public void set3rdAppId(String appId) {
+	}
+
+	@Override
+	public void setAuthProviderType(AuthProviderType authProviderType) {
+	}
+
+	@Override
+	public void setAuthProvider(AuthProvider<?> authProvider) {
+	}
+	
+	
 
 }

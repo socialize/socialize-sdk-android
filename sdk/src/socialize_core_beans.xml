@@ -47,6 +47,22 @@
 		<property name="logger" ref="logger"/>
 	</bean>
 	
+	<bean id="jsonUtils" class="com.socialize.util.GSONUtils">
+		<init-method name="init"/>
+	</bean>		
+	
+	<bean id="beanBuilder" class="com.socialize.android.ioc.BeanBuilder"/>
+	
+	<bean id="objectUtils" class="com.socialize.util.DefaultObjectUtils">
+		<property name="builder" ref="beanBuilder"/>
+	</bean>
+	
+	<bean id="entityLoaderUtils" class="com.socialize.util.EntityLoaderUtils">
+		<property name="objectUtils" ref="objectUtils"/>
+		<property name="logger" ref="logger"/>
+		<property name="config" ref="config"/>
+	</bean>
+	
 	<bean id="locationManager" class="com.socialize.location.SocializeLocationManager">
 		<constructor-arg ref="appUtils"/>
 		<init-method name="init">
@@ -84,6 +100,9 @@
 		<property name="ioUtils" ref="ioUtils"/>
 	</bean>
 	
+	<bean id="socializeUIErrorHandler" class="com.socialize.ui.error.DialogErrorHandler">
+		<property name="drawables" ref="drawables"/>
+	</bean>
 
 	<bean id="cache" class="com.socialize.util.DrawableCache">
 		<constructor-arg type="integer" value="10"/> <!-- Min size -->
@@ -163,6 +182,9 @@
 	<bean id="sessionPersister" class="com.socialize.api.PreferenceSessionPersister">
 		<constructor-arg ref="userFactory"/>
 		<constructor-arg ref="sessionFactory"/>
+		
+		<property name="logger" ref="logger"/>
+		<property name="jsonUtils" ref="jsonUtils"/>
 	</bean>
 	
 	<bean id="defaultProvider" class="com.socialize.provider.DefaultSocializeProvider" abstract="true">
@@ -182,7 +204,7 @@
 		<property name="httpUtils" ref="httpUtils"/>
 		<property name="ioUtils" ref="ioUtils"/>
 		<property name="sessionPersister" ref="sessionPersister"/>
-		
+		<property name="authProviderInfoBuilder" ref="authProviderInfoBuilder"/>
 	</bean>
 	
 	<bean id="actionProvider" class="com.socialize.provider.SocializeActionProvider" extends="defaultProvider">
@@ -211,7 +233,6 @@
 	
 	<bean id="socializeApi" class="com.socialize.api.SocializeApi" abstract="true">
 		<property name="responseFactory" ref="responseFactory"/>
-		<property name="config" ref="config"/>
 		<property name="logger" ref="logger"/>
 		<property name="authProviders" ref="authProviders"/>
 		<property name="httpUtils" ref="httpUtils"/>
@@ -374,7 +395,9 @@
 				
 		<property name="sessionPersister" ref="sessionPersister"/>
 		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
-		<property name="deviceUtils" ref="deviceUtils"/>		
+		<property name="deviceUtils" ref="deviceUtils"/>	
+		<property name="socializeAuthProviderInfoFactory" ref="socializeAuthProviderInfoFactory"/>
+			
 	</bean>
 	
 <!-- End User API -->
@@ -451,14 +474,19 @@
 	
 <!-- End Device Registration API -->
 
-
 <!--  Launcher -->
 
 	<bean id="activityLauncher" abstract="true">
 		<property name="appUtils" ref="appUtils"/>
+		<property name="entityLoaderUtils" ref="entityLoaderUtils"/>
 	</bean>
-
+	
 	<bean id="actionLauncher" class="com.socialize.launcher.SocializeActionLauncher" extends="activityLauncher"/>
+
+	<bean id="shareLauncher" class="com.socialize.launcher.ShareLauncher">
+		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
+		<property name="listenerHolder" ref="listenerHolder"/>
+	</bean>
 
 	<bean id="launchManager" class="com.socialize.launcher.SocializeLaunchManager">
 		<property name="logger" ref="logger"/>
@@ -468,6 +496,10 @@
 					<key value="ACTION"/>
 					<value ref="actionLauncher"/>
 				</entry>
+				<entry>
+					<key value="LOCAL_SHARE"/>
+					<value ref="shareLauncher"/>
+				</entry>				
 			</map>
 		</property>
 	</bean>
@@ -522,7 +554,46 @@
 	</bean>		
 	
 	<!-- End Facebook -->
-
+	
+	<!--  Auth providers -->
+	
+	<bean 
+		id="baseAuthProviderInfoFactory" 
+		class="com.socialize.auth.BaseAuthProviderInfoFactory"
+		abstract="true">
+		<property name="config" ref="config"/>
+	</bean>		
+	
+	<bean 
+		id="facebookAuthProviderInfoFactory" 
+		class="com.socialize.auth.facebook.FacebookAuthProviderInfoFactory"
+		extends="baseAuthProviderInfoFactory">
+	</bean>		
+	
+	<bean 
+		id="socializeAuthProviderInfoFactory" 
+		class="com.socialize.auth.SocializeAuthProviderInfoFactory">
+	</bean>		
+	
+	<bean 
+		id="authProviderInfoBuilder" 
+		class="com.socialize.auth.AuthProviderInfoBuilder">
+		
+		<property name="factories">
+			<map>
+				<entry>
+					<key value="SOCIALIZE"/>
+					<value ref="socializeAuthProviderInfoFactory"/>
+				</entry>			
+				<entry>
+					<key value="FACEBOOK"/>
+					<value ref="facebookAuthProviderInfoFactory"/>
+				</entry>
+			</map>
+		</property>		
+		
+	</bean>		
+	
 	<!-- Notifications -->
 	<bean id="notificationAuthenticator" class="com.socialize.notifications.SocializeNotificationAuthenticator">
 		<property name="config" ref="config"/>
@@ -551,5 +622,8 @@
 		<property name="notificationRegistrationSystem" ref="notificationRegistrationSystem"/>
 		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
 	</bean>	
-
+	
+	<bean id="notificationLaunchTask" class="com.socialize.config.NotificationsConfigLaunchTask">
+		<property name="config" ref="config"/>
+	</bean>	
 </beans>

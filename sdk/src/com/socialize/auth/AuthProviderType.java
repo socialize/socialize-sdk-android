@@ -29,6 +29,7 @@ public enum AuthProviderType {
 	
 	SOCIALIZE ("socialize", 0),
 	FACEBOOK ("facebook", 1);
+	
 	// TODO: Add more auth providers
 	
 	private final String name;   

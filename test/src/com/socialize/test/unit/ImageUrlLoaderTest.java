@@ -29,19 +29,19 @@ import com.socialize.util.CacheableDrawable;
 
 /**
  * @author Isaac Mosquera
- *
+ * 
  */
 public class ImageUrlLoaderTest extends SocializeUnitTest {
 
 	public void test_loadImageFromUrl() throws IOException {
-		//For this test we have to do more of a black box test
-		//because a URLConnection and Bitmaps are not mockable
-		//the icon.png is placed on the sdcard when the ant task is run
+		// For this test we have to do more of a black box test
+		// because a URLConnection and Bitmaps are not mockable
+		// the icon.png is placed on the sdcard when the ant task is run
 		final String testUrl = "file:///sdcard/icon.png";
-		
+
 		ImageUrlLoader loader = new ImageUrlLoader();
 		// Call the method...
-		CacheableDrawable cacheable = (CacheableDrawable)loader.loadImageFromUrl(testUrl);
-		assertEquals(cacheable.getKey(),testUrl); 
+		CacheableDrawable cacheable = (CacheableDrawable) loader.loadImageFromUrl(testUrl);
+		assertEquals(cacheable.getKey(), testUrl);
 	}
 }

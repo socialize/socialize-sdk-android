@@ -12,7 +12,7 @@ public class LikeTest extends SocializeRobotiumTest {
 		authenticateSocialize();
 		
 		robotium.clickOnButton("Like");
-		robotium.waitForActivity("LikeActivity", DEFAULT_TIMEOUT_SECONDS);
+		robotium.waitForActivity("LikeActivity", DEFAULT_TIMEOUT_MILLISECONDS);
 	}
 
 	public void testCreateLike() {

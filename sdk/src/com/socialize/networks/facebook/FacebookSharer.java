@@ -29,6 +29,7 @@ import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ActionType;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
@@ -80,9 +81,10 @@ public class FacebookSharer implements SocialNetworkSharer {
 				String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 				String authProviderAppId = config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
 				
-				AuthProviderType authProvider = AuthProviderType.FACEBOOK;				
+				FacebookAuthProviderInfo info = newFacebookAuthProviderInfo();
+				info.setAppId(authProviderAppId);
 				
-				getSocialize().authenticate(context, consumerKey, consumerSecret, authProvider, authProviderAppId, new SocializeAuthListener() {
+				getSocialize().authenticate(context, consumerKey, consumerSecret, info, new SocializeAuthListener() {
 
 					@Override
 					public void onError(SocializeException error) {
@@ -106,6 +108,11 @@ public class FacebookSharer implements SocialNetworkSharer {
 				});
 			}
 		}	
+	}
+	
+	// Mockable
+	protected FacebookAuthProviderInfo newFacebookAuthProviderInfo() {
+		return new FacebookAuthProviderInfo();
 	}
 	
 	protected void doError(SocializeException e, Activity parent, SocialNetworkListener listener) {

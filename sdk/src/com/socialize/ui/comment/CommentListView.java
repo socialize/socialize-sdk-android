@@ -161,7 +161,7 @@ public class CommentListView extends BaseView {
 			commentEntryPage = commentEntryFactory.getBean(getCommentAddListener());
 		}
 		
-		boolean notificationsAvailable = appUtils.isNotificationsAvaiable(getContext());		
+		boolean notificationsAvailable = appUtils.isNotificationsAvailable(getContext());		
 		
 		if(notificationsAvailable) {
 			notifyBox = notificationEnabledOptionFactory.getBean();

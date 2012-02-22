@@ -24,12 +24,16 @@ package com.socialize.util;
 import android.content.Context;
 import android.content.Intent;
 
+import com.socialize.entity.Entity;
+
 /**
  * @author Jason Polites
  *
  */
 public interface AppUtils {
 
+	public String getEntityUrl(Entity entity);
+	
 	public String getAppUrl();
 
 	public String getMarketUrl();
@@ -46,7 +50,7 @@ public interface AppUtils {
 
 	public boolean isLocationAvaiable(Context context);
 
-	public boolean isNotificationsAvaiable(Context context);
+	public boolean isNotificationsAvailable(Context context);
 
 	public boolean hasPermission(Context context, String permission);
 

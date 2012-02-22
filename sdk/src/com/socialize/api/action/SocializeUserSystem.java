@@ -29,7 +29,8 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.api.SocializeSessionPersister;
 import com.socialize.auth.AuthProviderData;
-import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.SocializeAuthProviderInfo;
+import com.socialize.auth.SocializeAuthProviderInfoFactory;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
@@ -48,7 +49,7 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	private SocializeSessionPersister sessionPersister;
 	private DeviceUtils deviceUtils;
-	
+	private SocializeAuthProviderInfoFactory socializeAuthProviderInfoFactory;
 	private Context context;
 	
 	public SocializeUserSystem(SocializeProvider<User> provider) {
@@ -89,8 +90,13 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	@Override
 	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
 		AuthProviderData authProviderData = authProviderDataFactory.getBean();
-		authProviderData.setAuthProviderType(AuthProviderType.SOCIALIZE);
+		authProviderData.setAuthProviderInfo(socializeAuthProviderInfoFactory.newInstance());
 		authenticate(context, consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, false);	
+	}
+	
+	// For mocking
+	protected SocializeAuthProviderInfo newSocializeAuthProviderInfo() {
+		return new SocializeAuthProviderInfo();
 	}
 
 	@Override
@@ -184,5 +190,9 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
 		this.deviceUtils = deviceUtils;
+	}
+
+	public void setSocializeAuthProviderInfoFactory(SocializeAuthProviderInfoFactory socializeAuthProviderInfoFactory) {
+		this.socializeAuthProviderInfoFactory = socializeAuthProviderInfoFactory;
 	}
 }

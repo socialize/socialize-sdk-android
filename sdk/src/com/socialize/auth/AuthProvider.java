@@ -24,25 +24,43 @@ package com.socialize.auth;
 import android.content.Context;
 
 import com.socialize.api.SocializeAuthRequest;
-import com.socialize.error.SocializeException;
 import com.socialize.listener.AuthProviderListener;
 
 /**
  * @author Jason Polites
  *
  */
-public interface AuthProvider {
+public interface AuthProvider<I extends AuthProviderInfo> {
 
 	/**
 	 * Authenticates using a 3rd party provider.
 	 * @param authRequest
 	 * @param appId The id of the account/app to be authenticated.
-	 * @throws SocializeException
+	 * @param listener A listener to handle the outcome.
+	 * @deprecated use {@link #authenticate(SocializeAuthRequest, AuthProviderInfo, AuthProviderListener)}
 	 */
+	@Deprecated
 	public void authenticate(SocializeAuthRequest authRequest, String appId, AuthProviderListener listener);
 	
 	/**
-	 * Clears any cached data for this provider.
+	 * Authenticates using a 3rd party provider.
+	 * @param authRequest
+	 * @param info The info for the account/app to be authenticated.
+	 * @param listener A listener to handle the outcome.
 	 */
+	public void authenticate(SocializeAuthRequest authRequest, I info, AuthProviderListener listener);
+	
+	/**
+	 * Clears any cached data for this provider.
+	 * @deprecated use {@link #clearCache(Context, AuthProviderInfo)}
+	 */
+	@Deprecated
 	public void clearCache(Context context, String appId);
+	
+	/**
+	 * Clears any cached data for this provider.
+	 * @param context
+	 * @param info
+	 */
+	public void clearCache(Context context, I info);
 }

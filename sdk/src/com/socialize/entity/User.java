@@ -32,6 +32,8 @@ import com.socialize.util.StringUtils;
  */
 public class User extends SocializeObject {
 
+	private static final long serialVersionUID = 235116049047552159L;
+	
 	private String firstName;
 	private String lastName;
 	private String username;

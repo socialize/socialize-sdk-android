@@ -29,7 +29,6 @@ import com.socialize.log.SocializeLogger;
 
 /**
  * @author Jason Polites
- *
  */
 public class UserAuthDataFactory extends SocializeObjectFactory<UserAuthData> {
 	

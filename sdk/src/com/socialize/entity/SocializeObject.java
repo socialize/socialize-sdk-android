@@ -21,12 +21,16 @@
  */
 package com.socialize.entity;
 
+import java.io.Serializable;
+
 /**
  * @author Jason Polites
  *
  */
-public class SocializeObject {
+public class SocializeObject implements Serializable {
 
+	private static final long serialVersionUID = 2605845697714902995L;
+	
 	private Long id;
 
 	public SocializeObject() {

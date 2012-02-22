@@ -19,7 +19,6 @@ public class SmsShareClickListener extends InternalShareClickListener {
 		super(actionBarView, commentView, onActionBarEventListener);
 	}
 
-
 	@Override
 	protected void doShare(Activity parent, String title, String subject, String body, String comment) {
 		Intent sendIntent = getIntent();
@@ -29,8 +28,13 @@ public class SmsShareClickListener extends InternalShareClickListener {
 	
 	protected Intent getIntent() {
 		Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-		sendIntent.setType("vnd.android-dir/mms-sms");
+		sendIntent.setType(getMimeType());
 		return sendIntent;
+	}
+	
+
+	protected String getMimeType() {
+		return "vnd.android-dir/mms-sms";
 	}
 
 	@Override

@@ -14,6 +14,7 @@ def create_android_config(key,secret,url,fb_user_id,fb_token):
     f = open(config_file_path,'w')
     text = 'socialize.consumer.key='+key
     text+= '\nsocialize.consumer.secret='+secret
+    text+= '\nsocialize.entity.loader=com.socialize.sample.ui.EntityLoader'
     text+= '\napi.host='+url
     text+= '\nredirect.host=http://stage.getsocialize.com'
     text+= '\nlog.level=DEBUG'

@@ -28,6 +28,7 @@ public class CustomCheckbox extends BaseView {
 	private TextView checkboxLabel;
 	private boolean checked = false;
 	private boolean enabled = true;
+	private boolean changed = false;
 	private Drawables drawables;
 	private DeviceUtils deviceUtils;
 	
@@ -92,9 +93,9 @@ public class CustomCheckbox extends BaseView {
 			@Override
 			public void onClick(View v) {
 				if(enabled) {
+					changed = true;
 					checked = !checked;
 					setDisplay();
-					
 					if(customClickListener != null) {
 						customClickListener.onClick(v);
 					}
@@ -149,7 +150,6 @@ public class CustomCheckbox extends BaseView {
 			else {
 				checkBox.setImageDrawable(drawables.getDrawable(imageOn));
 			}
-			
 		}
 		else {
 			checkboxLabel.setText(textOff);
@@ -159,7 +159,6 @@ public class CustomCheckbox extends BaseView {
 			else {
 				checkBox.setImageDrawable(drawables.getDrawable(imageOff));
 			}
-			
 		}		
 	}
 	
@@ -261,6 +260,18 @@ public class CustomCheckbox extends BaseView {
 		return imageOff;
 	}
 	
+	/**
+	 * Returns true if the user has clicked this control
+	 * @return
+	 */
+	public boolean isChanged() {
+		return changed;
+	}
+	
+	public void setChanged(boolean changed) {
+		this.changed = changed;
+	}
+
 	public void setTextSize(int textSize) {
 		this.textSize = textSize;
 		

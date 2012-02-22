@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.socialize.util.AppUtils;
+import com.socialize.util.EntityLoaderUtils;
 
 /**
  * @author Jason Polites
@@ -34,12 +35,17 @@ import com.socialize.util.AppUtils;
 public abstract class ActivityLauncher implements Launcher {
 	
 	private AppUtils appUtils;
+	private EntityLoaderUtils entityLoaderUtils;
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.launcher.Launcher#launch(android.app.Activity, android.os.Bundle)
 	 */
 	@Override
 	public boolean launch(Activity context, Bundle data) {
+		
+		if(entityLoaderUtils != null) {
+			entityLoaderUtils.initEntityLoader();
+		}
 			
 		Class<?>[] activityClasses = getActivityClasses();
 		Class<?> activityClass = null;
@@ -52,10 +58,14 @@ public abstract class ActivityLauncher implements Launcher {
 		}
 		
 		if(activityClass != null) {
+			
+			onBeforeLaunch(context, data, activityClass);
+			
 			Intent intent = newIntent(context, activityClass);
 			intent.putExtras(data);
 			handleIntent(context, intent, data);
 			context.startActivity(intent);
+			
 			return true;
 		}
 		
@@ -66,12 +76,28 @@ public abstract class ActivityLauncher implements Launcher {
 		this.appUtils = appUtils;
 	}
 	
+	public void setEntityLoaderUtils(EntityLoaderUtils entityLoaderUtils) {
+		this.entityLoaderUtils = entityLoaderUtils;
+	}
+
 	// So we can mock
 	protected Intent newIntent(Activity context, Class<?> activityClass) {
-		return  new Intent(context, activityClass);
+		return new Intent(context, activityClass);
 	}
+	
+	@Override
+	public boolean shouldFinish() {
+		return true;
+	}
+	
+	// Subclasses override
+	@Override
+	public void onResult(Activity context, int requestCode, int resultCode, Intent data, Intent originalIntent) {}
 	
 	protected void handleIntent(Activity context, Intent intent, Bundle data) {}
 	
 	public abstract Class<?>[] getActivityClasses();
+	
+	// Subclasses override
+	public void onBeforeLaunch(Activity context, Bundle data, Class<?> activityClass) {};
 }

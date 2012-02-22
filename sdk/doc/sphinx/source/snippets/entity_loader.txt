@@ -1,8 +1,15 @@
 .. raw:: html
 
 	<pre class="brush: java">
-	Socialize.getSocialize().setEntityLoader(new SocializeEntityLoader() {
 	
+	// Defined in your app
+	public class MyEntityLoader implements SocializeEntityLoader {
+	
+		// MUST define a parameterless constructor
+		public MyEntityLoader() {
+			super();
+		}
+		
 		public void loadEntity(Activity activity, Entity entity) {
 			// Load the original view for this entity
 		}
@@ -10,5 +17,6 @@
 		public boolean canLoad(Context context, Entity entity) {
 			// Return true if this entity can be loaded
 		}
-	});
+	}
+
 	</pre>

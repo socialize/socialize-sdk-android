@@ -19,6 +19,8 @@ The following table lists the configuration options that can be specified in you
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | socialize.use.action.webview    | Boolean | false    |                                        | If true activity views will use a WebView rather than a TextView |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
+| socialize.entity.loader         | String  | None     | com.mypackage.MyEntityLoader           | Fully qualified class name of your entity loader implementation  |
++---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | facebook.app.id                 | Integer | None     | 1234567890                             | Your facebook app ID                                             |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | facebook.sso.enabled            | Boolean | true     |                                        | Enable/Disable Single Sign on for Facebook                       |
@@ -28,6 +30,8 @@ The following table lists the configuration options that can be specified in you
 | http.socket.timeout             | Long    | 10000    | 10000                                  | Time in ms for an http request to return                         |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | log.level                       | String  | WARN     | DEBUG or INFO or WARN or ERROR         | Application log level                                            |
++---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
+| redirect.app.store              | String  | android  | Only 'amazon' currently supported      | Provides for creation of non Android Market urls.                |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 
 .. include:: footer.inc

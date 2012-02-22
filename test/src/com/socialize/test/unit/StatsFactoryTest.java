@@ -31,42 +31,43 @@ import com.socialize.entity.StatsFactory;
 
 /**
  * @author Jason Polites
- *
+ * 
  */
-@UsesMocks (Stats.class)
+@UsesMocks(Stats.class)
 public class StatsFactoryTest extends AbstractSocializeObjectFactoryTest<Stats, StatsFactory> {
 
 	private Integer comments = 11;
 	private Integer likes = 22;
 	private Integer share = 33;
 	private Integer views = 44;
-	
+
 	@Override
 	protected void setupToJSONExpectations() throws JSONException {
 		// nothing
 	}
 
 	@Override
-	protected void doToJSONVerify() {}
+	protected void doToJSONVerify() {
+	}
 
 	@Override
 	protected void setupFromJSONExpectations() throws Exception {
-		
+
 		AndroidMock.expect(json.has("comments")).andReturn(true);
 		AndroidMock.expect(json.has("likes")).andReturn(true);
 		AndroidMock.expect(json.has("shares")).andReturn(true);
 		AndroidMock.expect(json.has("views")).andReturn(true);
-		
+
 		AndroidMock.expect(json.isNull("comments")).andReturn(false);
 		AndroidMock.expect(json.isNull("likes")).andReturn(false);
 		AndroidMock.expect(json.isNull("shares")).andReturn(false);
 		AndroidMock.expect(json.isNull("views")).andReturn(false);
-		
+
 		AndroidMock.expect(json.getInt("comments")).andReturn(comments);
 		AndroidMock.expect(json.getInt("likes")).andReturn(likes);
 		AndroidMock.expect(json.getInt("shares")).andReturn(share);
 		AndroidMock.expect(json.getInt("views")).andReturn(views);
-		
+
 		object.setComments(comments);
 		object.setLikes(likes);
 		object.setShares(share);
@@ -85,7 +86,7 @@ public class StatsFactoryTest extends AbstractSocializeObjectFactoryTest<Stats, 
 
 	@Override
 	protected StatsFactory createFactory() {
-		
+
 		StatsFactory factory = new StatsFactory() {
 			@Override
 			public Stats instantiateObject(JSONObject json) {
@@ -97,7 +98,7 @@ public class StatsFactoryTest extends AbstractSocializeObjectFactoryTest<Stats, 
 				return json;
 			}
 		};
-		
+
 		return factory;
 	}
 

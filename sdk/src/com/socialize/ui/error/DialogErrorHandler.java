@@ -16,7 +16,6 @@ public class DialogErrorHandler implements SocializeErrorHandler {
 
 	private Drawables drawables;
 	private String message;
-//	private SocializeConfig config;
 	
 	@Override
 	public void handleError(Context context, Exception e) {
@@ -79,8 +78,4 @@ public class DialogErrorHandler implements SocializeErrorHandler {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-
-//	public void setConfig(SocializeConfig config) {
-//		this.config = config;
-//	}
 }

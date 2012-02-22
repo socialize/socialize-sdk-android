@@ -19,24 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.notifications;
+package com.socialize.auth;
 
-import android.app.Activity;
-import android.os.Bundle;
-
-import com.socialize.launcher.Launcher;
+import com.socialize.config.SocializeConfig;
 
 /**
  * @author Jason Polites
  *
  */
-public class NotificationLauncher implements Launcher {
+public abstract class BaseAuthProviderInfoFactory<I extends AuthProviderInfo> implements AuthProviderInfoFactory<I> {
 
-	/* (non-Javadoc)
-	 * @see com.socialize.launcher.Launcher#launch(android.app.Activity, android.os.Bundle)
-	 */
-	@Override
-	public boolean launch(Activity context, Bundle data) {
-		return false;
+	protected SocializeConfig config;
+
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
 	}
 }

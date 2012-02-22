@@ -13,7 +13,6 @@ import com.socialize.ui.view.EntityView;
 public class ProfileView extends EntityView {
 	
 	private ProfileLayoutView profileLayoutView = null;
-	private View view;
 	
 	public ProfileView(Activity context) {
 		super(context);
@@ -24,29 +23,8 @@ public class ProfileView extends EntityView {
 		if (entityKeys != null) {
 			if(profileLayoutView == null) {
 				profileLayoutView = container.getBean("profileLayoutView", entityKeys);
-				
-//				LayoutParams scrollViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
-//				LayoutParams childViewLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
-//				
-//				ScrollView scrollView = new ScrollView(getContext());
-//				scrollView.setFillViewport(true);
-//				scrollView.setLayoutParams(scrollViewLayout);
-//				scrollView.addView(profileLayoutView, childViewLayout);	
-//				
-//				LinearLayout layout = new LinearLayout(getContext());
-//				LayoutParams masterParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
-//				
-//				layout.setLayoutParams(masterParams);
-//				layout.setBackgroundDrawable(((Drawables)container.getBean("drawables")).getDrawable("slate.png", true, true, true));
-//				
-//				layout.addView(scrollView);
-//				
-//				view = layout;	
-				
-				view = profileLayoutView;
 			}
-			
-			return view;
+			return profileLayoutView;
 		}
 		else {
 			Log.e(SocializeLogger.LOG_TAG, "No user id specified for " + getClass().getSimpleName());

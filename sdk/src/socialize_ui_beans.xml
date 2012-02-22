@@ -3,10 +3,6 @@
 	<factory id="commentItemViewFactory" makes="commentListItem"/>
 	<factory id="listItemLoadingViewFactory" makes="listItemLoadingView"/>
 	
-	<bean id="socializeUIErrorHandler" class="com.socialize.ui.error.DialogErrorHandler">
-		<property name="drawables" ref="drawables"/>
-	</bean>
-	
 	<bean id="dialogFactory" class="com.socialize.util.DialogFactory"/>
 	
 	<bean id="progressDialogFactory" class="com.socialize.ui.dialog.ProgressDialogFactory">
@@ -744,17 +740,14 @@
 		
 		<constructor-arg type="activity"/>	
 		
+		<property name="errorHandler" ref="socializeUIErrorHandler"/>
+		
 		<property name="profilePictureEditViewFactory" ref="profilePictureEditViewFactory"/>
 		
 		<property name="socializeEditTextFactory" ref="socializeEditTextFactory"/>
 		
 		<property name="profileCancelButtonFactory" ref="profileCancelButtonFactory"/>
 		<property name="profileSaveButtonFactory" ref="profileSaveButtonFactory"/>
-		
-		<!-- 
-		<property name="facebookSignInCellFactory" ref="facebookSignInCellFactory"/>
-		<property name="facebookSignOutCellFactory" ref="facebookSignOutCellFactory"/>
-		 -->
 		
 		<property name="profileSaveButtonListenerFactory" ref="profileSaveButtonListenerFactory"/>	
 		<property name="notificationsEnabledCheckboxFactory" ref="notificationsEnabledCheckboxFactory"/>
@@ -1108,7 +1101,9 @@
 		id="otherShareClickListener" 
 		class="com.socialize.ui.share.OtherShareClickListener" 
 		extends="shareClickListener"
-		singleton="false"/>
+		singleton="false">
+		<property name="listenerHolder" ref="listenerHolder"/>
+	</bean>
 	
 	<bean 
 		id="shareDialogView" 
@@ -1165,7 +1160,6 @@
 		class="com.socialize.ui.actionbar.SliderActionBarListener">
 		<property name="logger" ref="logger"/>
 		<property name="shareSliderItemFactory" ref="shareSliderItemFactory"/>
-		<!-- <property name="viewSliderItemFactory" ref="viewSliderItemFactory"/> -->
 	</bean>		
 	
 	<bean 
