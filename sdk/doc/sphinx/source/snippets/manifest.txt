@@ -10,7 +10,7 @@
 		         &lt;activity android:name="com.socialize.ui.action.ActionDetailActivity"/>
 		         &lt;activity android:name="com.socialize.ui.profile.ProfileActivity"/>
 		         &lt;activity android:name="com.socialize.auth.facebook.FacebookActivity"/>
-		
+		         &lt;activity android:name="com.socialize.ui.SocializeLaunchActivity" android:launchMode="singleTop"/>
 		&lt;/application>
 		
 		&lt;/manifest>

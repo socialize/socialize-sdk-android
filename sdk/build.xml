@@ -76,7 +76,6 @@
 				<include name="socialize.errors.properties"/>
 				<include name="socialize.properties"/>
 			</fileset>
-			
 		</copy>
 		
 		<copy todir="${out.dir}/classes/res/" verbose="true" >
@@ -105,7 +104,10 @@
 	<target name="sphinx" description="Uses sphinx to generate SDK documentation" if="sphinx.available" depends="check-paths">
 		
 		<echo>Setting version in docs to ${version}</echo>
-		<replaceregexp file="doc/sphinx/source/conf.py" match="\@socialize.version" replace="${version}" />
+		
+		<copy file="doc/sphinx/source/conf_template.py" tofile="doc/sphinx/source/conf.py" overwrite="true"/>
+		
+		<replaceregexp file="doc/sphinx/source/conf.py" match="\@socialize.version" replace="v${version}" flags="g" />
 		
 		<delete dir="build/docs/static"/>
 		<delete dir="build/docs/user_guide" verbose="true"/>
@@ -141,6 +143,8 @@
 			verbose="true" 
 			failonerror="true" 
 			overwrite="true"/>
+		
+		<delete file="doc/sphinx/source/conf.py"/>
 	</target>
 
 	<target name="javadoc" depends="-setup">
