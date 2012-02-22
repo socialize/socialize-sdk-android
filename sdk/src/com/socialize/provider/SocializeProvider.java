@@ -65,7 +65,6 @@ public interface SocializeProvider<T> {
 	 */
 	@Deprecated
 	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderType authProviderType, String appId3rdParty) throws SocializeException;
-
 	
 	public void clearSession();
 	

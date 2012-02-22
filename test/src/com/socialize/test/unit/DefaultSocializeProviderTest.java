@@ -230,7 +230,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 	}
 
 	@UsesMocks({ AuthProviderInfo.class, UserProviderCredentials.class })
-	public void testLoadCachedCredentialsOnAuthenticate() throws Exception {
+	public void testLoadCachedCredentialsOnAuthenticateFB() throws Exception {
 
 		final String key = "foo";
 		final String secret = "bar";
@@ -241,25 +241,20 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		AuthProviderInfo info = AndroidMock.createMock(AuthProviderInfo.class);
 		UserProviderCredentials userAuthData = AndroidMock.createMock(UserProviderCredentials.class);
 		UserProviderCredentialsMap userAuthDataMap = AndroidMock.createMock(UserProviderCredentialsMap.class);
-
+		
 		AndroidMock.expect(sessionPersister.load(mockContext)).andReturn(session);
-		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
-		AndroidMock.expect(authProviderData.getAuthProviderInfo()).andReturn(info).anyTimes();
-		AndroidMock.expect(info.getType()).andReturn(AuthProviderType.SOCIALIZE).anyTimes();
-
-		AndroidMock.expect(session.getUserProviderCredentials()).andReturn(userAuthDataMap);
-		AndroidMock.expect(userAuthDataMap.get(AuthProviderType.SOCIALIZE)).andReturn(userAuthData);
-		AndroidMock.expect(userAuthData.getAuthProviderInfo()).andReturn(authProviderInfo).anyTimes();
-
+		
 		AndroidMock.expect(session.getConsumerKey()).andReturn(key);
 		AndroidMock.expect(session.getConsumerSecret()).andReturn(secret);
 		AndroidMock.expect(session.getHost()).andReturn(host);
-		AndroidMock.expect(config.getProperty(SocializeConfig.API_HOST)).andReturn(host);
+		AndroidMock.expect(config.getProperty(SocializeConfig.API_HOST)).andReturn(host);	
 		
-		AndroidMock.expect(authProviderInfoBuilder.getFactory(AuthProviderType.SOCIALIZE)).andReturn(authProviderInfoFactory); 
-		AndroidMock.expect(authProviderInfoFactory.newInstance()).andReturn(authProviderInfo); 
-		authProviderData.setAuthProviderInfo(authProviderInfo);
+		AndroidMock.expect(authProviderData.getAuthProviderInfo()).andReturn(info).anyTimes();
+		AndroidMock.expect(info.getType()).andReturn(AuthProviderType.FACEBOOK).anyTimes();
 		
+		AndroidMock.expect(session.getUserProviderCredentials()).andReturn(userAuthDataMap);
+		AndroidMock.expect(userAuthDataMap.get(AuthProviderType.FACEBOOK)).andReturn(userAuthData);
+		AndroidMock.expect(userAuthData.getAuthProviderInfo()).andReturn(authProviderInfo).anyTimes();
 		AndroidMock.expect(authProviderInfo.matches(info)).andReturn(true); 
 
 		AndroidMock.replay(info, config, session, sessionPersister, authProviderDataFactory, authProviderData, authProviderInfoBuilder, authProviderInfoFactory, authProviderInfo, userAuthDataMap, userAuthData);
@@ -268,10 +263,48 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 
 		provider.setSessionPersister(sessionPersister);
 
-		provider.authenticate(endpoint, key, secret, uuid);
+		provider.authenticate(endpoint, key, secret, authProviderData, uuid);
 
 		AndroidMock.verify(info, config, session, sessionPersister, authProviderDataFactory, authProviderData, authProviderInfoBuilder, authProviderInfoFactory, authProviderInfo, userAuthDataMap, userAuthData);
 	}
+	
+	@UsesMocks({ AuthProviderInfo.class, UserProviderCredentials.class })
+	public void testLoadCachedCredentialsOnAuthenticateSocialize() throws Exception {
+
+		final String key = "foo";
+		final String secret = "bar";
+		final String uuid = "uuid";
+		final String host = "snafu";
+		final String endpoint = "foobar/";
+
+		UserProviderCredentials userAuthData = AndroidMock.createMock(UserProviderCredentials.class);
+		UserProviderCredentialsMap userAuthDataMap = AndroidMock.createMock(UserProviderCredentialsMap.class);
+		
+		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
+		AndroidMock.expect(authProviderInfoBuilder.getFactory(AuthProviderType.SOCIALIZE)).andReturn(authProviderInfoFactory); 
+		AndroidMock.expect(authProviderInfoFactory.newInstance()).andReturn(authProviderInfo); 
+		AndroidMock.expect(sessionPersister.load(mockContext)).andReturn(session);
+	
+		AndroidMock.expect(authProviderData.getAuthProviderInfo()).andReturn(authProviderInfo).anyTimes();
+		AndroidMock.expect(authProviderInfo.getType()).andReturn(AuthProviderType.SOCIALIZE).anyTimes();
+		
+		AndroidMock.expect(session.getConsumerKey()).andReturn(key);
+		AndroidMock.expect(session.getConsumerSecret()).andReturn(secret);
+		AndroidMock.expect(session.getHost()).andReturn(host);
+		AndroidMock.expect(config.getProperty(SocializeConfig.API_HOST)).andReturn(host);
+		
+		authProviderData.setAuthProviderInfo(authProviderInfo);
+		
+		AndroidMock.replay(config, session, sessionPersister, authProviderDataFactory, authProviderData, authProviderInfoBuilder, authProviderInfoFactory, authProviderInfo, userAuthDataMap, userAuthData);
+
+		DefaultSocializeProvider<SocializeObject> provider = getNewProvider();
+
+		provider.setSessionPersister(sessionPersister);
+
+		provider.authenticate(endpoint, key, secret, uuid);
+
+		AndroidMock.verify(config, session, sessionPersister, authProviderDataFactory, authProviderData, authProviderInfoBuilder, authProviderInfoFactory, authProviderInfo, userAuthDataMap, userAuthData);
+	}	
 
 	public void testGet() throws Exception {
 

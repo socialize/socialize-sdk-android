@@ -178,11 +178,9 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	public boolean validateSession(SocializeSession session, AuthProviderData data) {
 		AuthProviderInfo info = data.getAuthProviderInfo();
 		if(info != null) {
-			
 			if(info.getType().equals(AuthProviderType.SOCIALIZE)) {
 				return true;
 			}
-			
 			return validateSessionAuthData(session, info);
 		}
 		else {	
