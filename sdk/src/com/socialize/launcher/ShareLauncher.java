@@ -99,6 +99,11 @@ public class ShareLauncher implements Launcher {
 			if(obj instanceof Entity) {
 				Entity entity = (Entity) obj;
 				String text = extras.getString(SocializeConfig.SOCIALIZE_SHARE_COMMENT);
+				
+				if(StringUtils.isEmpty(text)) {
+					text = entity.getDisplayName();
+				}
+				
 				String key = extras.getString(SocializeConfig.SOCIALIZE_SHARE_LISTENER_KEY);
 				ShareAddListener listener = listenerHolder.remove(key);
 				Socialize.getSocialize().addShare(context, entity, text, ShareType.OTHER, listener);				
