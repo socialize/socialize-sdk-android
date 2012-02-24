@@ -33,6 +33,7 @@ public class TwitterOAuthProvider extends CommonsHttpOAuthProvider {
 	
 	private static final long serialVersionUID = 3804709921717607933L;
 	
+	public static final String OAUTH_CALLBACK_URL = "socializeoauth://sign-in-with-twitter";
 	public static final String REQUEST_TOKEN_ENDPOINT = "https://api.twitter.com/oauth/request_token";
 	public static final String ACCESS_TOKEN_ENDPOINT = "https://api.twitter.com/oauth/access_token";
 	public static final String AUTHORIZE_ENDPOINT = "https://api.twitter.com/oauth/authorize";

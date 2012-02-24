@@ -28,12 +28,13 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.entity.User;
+import com.socialize.oauth.OAuthAuthorizer;
 
 /**
  * @author Jason Polites
  *
  */
-public interface SocializeSession extends Serializable {
+public interface SocializeSession extends Serializable, OAuthAuthorizer {
 
 	public User getUser();
 

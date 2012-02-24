@@ -19,35 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.auth;
+package com.socialize.oauth;
 
 /**
  * @author Jason Polites
  *
  */
-public class AuthProviderResponse {
+public interface OAuthAuthorizer {
 
-	private String userId;
-	private String token;
-	private String secret;
+	public String getConsumerToken();
 	
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	public String getToken() {
-		return token;
-	}
-	public void setToken(String token) {
-		this.token = token;
-	}
-	public String getSecret() {
-		return secret;
-	}
-	public void setSecret(String secret) {
-		this.secret = secret;
-	}
+	public String getConsumerTokenSecret();
 	
 }

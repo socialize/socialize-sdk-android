@@ -44,7 +44,7 @@ public class EmptyAuthProvider implements AuthProvider<AuthProviderInfo> {
 	
 
 	@Override
-	public void authenticate(SocializeAuthRequest authRequest, AuthProviderInfo info, AuthProviderListener listener) {
+	public void authenticate(AuthProviderInfo info, AuthProviderListener listener) {
 		listener.onAuthFail(new SocializeException("Empty auth provider used!"));
 	}
 

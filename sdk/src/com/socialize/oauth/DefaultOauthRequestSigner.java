@@ -29,13 +29,11 @@ import org.apache.http.client.methods.HttpUriRequest;
 
 import com.socialize.api.SocializeSession;
 import com.socialize.error.SocializeException;
-import com.socialize.util.DeviceUtils;
 
 public class DefaultOauthRequestSigner implements OAuthRequestSigner {
 
 	private OAuthConsumerFactory consumerFactory;
 	private SigningStrategy strategy;
-	private DeviceUtils deviceUtils;
 	
 	public DefaultOauthRequestSigner(OAuthConsumerFactory consumerFactory, SigningStrategy strategy) {
 		super();
@@ -51,23 +49,23 @@ public class DefaultOauthRequestSigner implements OAuthRequestSigner {
 	@Override
 	public <R extends HttpUriRequest> R sign(SocializeSession session, R request, OAuthSignListener listener) throws SocializeException {
 		try {
-			// Add socialize headers
-			if(deviceUtils != null) {
-				request.addHeader("User-Agent", deviceUtils.getUserAgentString());
-			}
-			
 			OAuthConsumer consumer = consumerFactory.createConsumer(session.getConsumerKey(), session.getConsumerSecret());
-			consumer.setSigningStrategy(strategy);
-			consumer.setTokenWithSecret(session.getConsumerToken(), session.getConsumerTokenSecret());
-			consumer.sign(request, listener);
-			return request;
+			return sign(consumer, session, request, listener);
 		}
 		catch (Exception e) {
 			throw new SocializeException(e.getMessage(), e);
 		}
 	}
 
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public <R extends HttpUriRequest> R sign(OAuthConsumer consumer, OAuthAuthorizer authorizer, R request, OAuthSignListener listener) throws SocializeException {
+		try {
+			consumer.setSigningStrategy(strategy);
+			consumer.setTokenWithSecret(authorizer.getConsumerToken(), authorizer.getConsumerTokenSecret());
+			consumer.sign(request, listener);
+			return request;
+		}
+		catch (Exception e) {
+			throw new SocializeException(e.getMessage(), e);
+		}
 	}
 }

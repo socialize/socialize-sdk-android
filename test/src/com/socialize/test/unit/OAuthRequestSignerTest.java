@@ -29,10 +29,13 @@ import org.apache.http.client.methods.HttpUriRequest;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.api.DefaultSocializeRequestFactory;
 import com.socialize.api.SocializeSession;
+import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
 import com.socialize.oauth.DefaultOauthRequestSigner;
 import com.socialize.oauth.OAuthConsumerFactory;
+import com.socialize.oauth.OAuthRequestSigner;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.util.DeviceUtils;
 
@@ -87,39 +90,42 @@ public class OAuthRequestSignerTest extends SocializeUnitTest {
 		AndroidMock.verify(session);
 	}
 
+	@UsesMocks ({DefaultSocializeRequestFactory.class, OAuthRequestSigner.class, OAuthSignListener.class})
 	public void testUserAgentHeaderInsertedOnSign() throws SocializeException {
-		OAuthConsumerFactory factory = AndroidMock.createMock(OAuthConsumerFactory.class);
-		OAuthConsumer consumer = AndroidMock.createNiceMock(OAuthConsumer.class);
 		HttpUriRequest request = AndroidMock.createMock(HttpUriRequest.class);
 		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
-		SigningStrategy strategy = AndroidMock.createMock(SigningStrategy.class);
+		OAuthRequestSigner signer = AndroidMock.createMock(OAuthRequestSigner.class);
+		OAuthSignListener listener = AndroidMock.createMock(OAuthSignListener.class);
 		SocializeSession session = AndroidMock.createNiceMock(SocializeSession.class);
-
+		
 		String header = "foobar";
 
-		final String key = "foo";
-		final String secret = "bar";
-
-		AndroidMock.expect(factory.createConsumer(key, secret)).andReturn(consumer);
-		AndroidMock.expect(session.getConsumerKey()).andReturn(key);
-		AndroidMock.expect(session.getConsumerSecret()).andReturn(secret);
-
+		AndroidMock.expect(signer.sign(session, request, listener)).andReturn(request);
 		AndroidMock.expect(deviceUtils.getUserAgentString()).andReturn(header);
 		request.addHeader("User-Agent", header);
 
 		AndroidMock.replay(request);
-		AndroidMock.replay(factory);
-		AndroidMock.replay(consumer);
-		AndroidMock.replay(strategy);
-		AndroidMock.replay(session);
+		AndroidMock.replay(signer);
 		AndroidMock.replay(deviceUtils);
 
-		DefaultOauthRequestSigner signer = new DefaultOauthRequestSigner(factory, strategy);
-		signer.setDeviceUtils(deviceUtils);
+		PublicDefaultSocializeRequestFactory requestFactory = new PublicDefaultSocializeRequestFactory();
+		requestFactory.setDeviceUtils(deviceUtils);
+		requestFactory.setSignListener(listener);
+		requestFactory.setOauthSigner(signer);
+		requestFactory.sign(session, request);
 
-		signer.sign(session, request);
-
-		AndroidMock.verify(deviceUtils);
 		AndroidMock.verify(request);
+		AndroidMock.verify(signer);
+		AndroidMock.verify(deviceUtils);
+
+	}
+	
+	public class PublicDefaultSocializeRequestFactory extends DefaultSocializeRequestFactory<SocializeObject> {
+
+		@Override
+		public <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+			return super.sign(session, request);
+		}
+		
 	}
 }

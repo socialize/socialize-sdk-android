@@ -19,35 +19,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.auth;
+package com.socialize.auth.twitter;
+
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 /**
  * @author Jason Polites
  *
  */
-public class AuthProviderResponse {
+public class TwitterWebViewClient extends WebViewClient {
+	
+	private OAuthRequestListener oAuthRequestListener;
+	private boolean called = false;
+	
+	public TwitterWebViewClient() {
+		super();
+	}
 
-	private String userId;
-	private String token;
-	private String secret;
-	
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	public String getToken() {
-		return token;
-	}
-	public void setToken(String token) {
-		this.token = token;
-	}
-	public String getSecret() {
-		return secret;
-	}
-	public void setSecret(String secret) {
-		this.secret = secret;
+	public void setOauthRequestListener(OAuthRequestListener oAuthRequestListener) {
+		this.oAuthRequestListener = oAuthRequestListener;
 	}
 	
+	@Override
+	public void onPageStarted(WebView view, String url, Bitmap favicon) {
+		if(url.trim().toLowerCase().startsWith(TwitterOAuthProvider.OAUTH_CALLBACK_URL.toLowerCase())) {
+			
+			if(!called) {
+				called = true;
+				
+				// This is the callback, get the token
+				Uri uri = Uri.parse(url);
+				String token = uri.getQueryParameter("oauth_token");
+				String verifier = uri.getQueryParameter("oauth_verifier");
+				view.stopLoading();
+				if(oAuthRequestListener != null) {
+					oAuthRequestListener.onRequestToken(token, verifier);
+				}				
+			}
+			else {
+				view.stopLoading();
+			}
+		}
+		else {
+			super.onPageStarted(view, url, favicon);
+		}
+	}
 }

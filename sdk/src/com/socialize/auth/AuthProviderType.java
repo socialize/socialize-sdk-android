@@ -28,9 +28,8 @@ package com.socialize.auth;
 public enum AuthProviderType {
 	
 	SOCIALIZE ("socialize", 0),
-	FACEBOOK ("facebook", 1);
-	
-	// TODO: Add more auth providers
+	FACEBOOK ("facebook", 1),
+	TWITTER ("twitter", 1);
 	
 	private final String name;   
     private final int id; 

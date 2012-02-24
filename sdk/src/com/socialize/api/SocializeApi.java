@@ -487,7 +487,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				AuthProviderInfo authProviderInfo = authProviderData.getAuthProviderInfo();
 				
 				if(authProviderInfo != null) {
-					authProvider.authenticate(request, authProviderInfo, authProviderListener);
+					authProvider.authenticate(authProviderInfo, authProviderListener);
 				}
 				else {
 					// Legacy

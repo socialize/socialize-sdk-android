@@ -52,6 +52,7 @@ import com.socialize.entity.SocializeObject;
 import com.socialize.entity.SocializeObjectFactory;
 import com.socialize.error.SocializeException;
 import com.socialize.oauth.OAuthRequestSigner;
+import com.socialize.util.DeviceUtils;
 import com.socialize.util.StringUtils;
 import com.socialize.util.UrlBuilder;
 
@@ -64,6 +65,7 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 	private OAuthRequestSigner oauthSigner;
 	private SocializeObjectFactory<T> objectFactory;
 	private OAuthSignListener signListener;
+	private DeviceUtils deviceUtils;
 	
 	public DefaultSocializeRequestFactory(OAuthRequestSigner signer, SocializeObjectFactory<T> objectFactory) {
 		super();
@@ -87,6 +89,10 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 		this.signListener = signListener;
 	}
 	
+	public void setDeviceUtils(DeviceUtils deviceUtils) {
+		this.deviceUtils = deviceUtils;
+	}
+
 	@Override
 	public HttpUriRequest getAuthRequestWith3rdParty(SocializeSession session, String endpoint, String udid, UserProviderCredentials userProviderCredentials) throws SocializeException {
 		HttpPost post = new HttpPost(endpoint);
@@ -312,6 +318,12 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 	}
 
 	protected <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
+		
+		// Add socialize headers
+		if(deviceUtils != null) {
+			request.addHeader("User-Agent", deviceUtils.getUserAgentString());
+		}
+		
 		return oauthSigner.sign(session, request, signListener);
 	}
 

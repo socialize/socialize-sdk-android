@@ -255,7 +255,6 @@
 	<bean id="oauthSigner" class="com.socialize.oauth.DefaultOauthRequestSigner">
 		<constructor-arg ref="oauthConsumerFactory"/>
 		<constructor-arg ref="oauthSigningStrategy"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
 	</bean>
 	
 	<bean id="signListener" class="oauth.socialize.LoggingOauthSignListener">
@@ -265,6 +264,7 @@
 	<bean id="defaultRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory" abstract="true">
 		<property name="oauthSigner" ref="oauthSigner"/>
 		<property name="signListener" ref="signListener"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
 	</bean>
 	
 	
