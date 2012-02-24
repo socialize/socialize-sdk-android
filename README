@@ -12,6 +12,18 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v1.4.6
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] Error when selecting "other options" from share view
+[bug] UI Lockup when error occurs during FB auth
+[bug] Amazon app store url suffix missing from entity urls
+
+v1.4.5
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Remove transparency on Action Bar loading view
+[bug] Error when sharing (text not included) 
+[bug] LaunchActivity missing from docs 
+
 v1.4.4
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [feature] Add app store type to redirect URLS (e.g. Amazon App Store)
