@@ -49,7 +49,6 @@ public interface SocializeProvider<T> {
 	 */
 	public WritableSession loadSession(String endpoint, String key, String secret) throws SocializeException;
 	
-	
 	public boolean validateSession(SocializeSession loaded, AuthProviderData data);
 	
 	/**
@@ -95,5 +94,4 @@ public interface SocializeProvider<T> {
 	public ListResult<T> post(SocializeSession session, String endpoint, Collection<T> object) throws SocializeException;
 	
 	public void delete(SocializeSession session, String endpoint, String id) throws SocializeException;
-	
 }

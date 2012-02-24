@@ -48,7 +48,7 @@ public interface AuthProvider<I extends AuthProviderInfo> {
 	 * @param info The info for the account/app to be authenticated.
 	 * @param listener A listener to handle the outcome.
 	 */
-	public void authenticate(SocializeAuthRequest authRequest, I info, AuthProviderListener listener);
+	public void authenticate(I info, AuthProviderListener listener);
 	
 	/**
 	 * Clears any cached data for this provider.

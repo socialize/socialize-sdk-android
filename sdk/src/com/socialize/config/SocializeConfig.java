@@ -73,6 +73,9 @@ public class SocializeConfig {
 	public static final String FACEBOOK_USER_ID = "facebook.user.id";
 	public static final String FACEBOOK_USER_TOKEN = "facebook.user.token";
 	
+	public static final String TWITTER_CONSUMER_KEY = "twitter.consumer.key";
+	public static final String TWITTER_CONSUMER_SECRET = "twitter.consumer.secret";
+	
 	private Properties properties;
 	private SocializeLogger logger;
 	private ResourceLocator resourceLocator;

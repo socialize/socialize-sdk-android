@@ -158,7 +158,7 @@ public interface OAuthProvider extends Serializable {
      * @throws OAuthCommunicationException
      *         if server communication failed
      */
-    public void retrieveAccessToken(OAuthConsumer consumer, String oauthVerifier)
+    public void retrieveAccessToken(OAuthConsumer consumer, String oauthVerifier, OAuthTokenListener listener)
             throws OAuthMessageSignerException, OAuthNotAuthorizedException,
             OAuthExpectationFailedException, OAuthCommunicationException;
 

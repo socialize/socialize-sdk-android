@@ -36,7 +36,7 @@ public class MockFacebookAuthProvider implements AuthProvider<FacebookAuthProvid
 	
 
 	@Override
-	public void authenticate(SocializeAuthRequest authRequest, FacebookAuthProviderInfo info, AuthProviderListener listener) {
+	public void authenticate(FacebookAuthProviderInfo info, AuthProviderListener listener) {
 		AuthProviderResponse mockResponse = new AuthProviderResponse();
 		mockResponse.setUserId(userId);
 		mockResponse.setToken(token);

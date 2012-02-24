@@ -54,7 +54,7 @@ public class ActionBarLoadingView extends LinearLayout {
 		
 		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, getDIP(ActionBarView.ACTION_BAR_HEIGHT, metrics.density));
 		
-		setBackgroundColor(Color.parseColor("#55000000"));
+		setBackgroundColor(Color.parseColor("#000000"));
 		
 		setLayoutParams(masterParams);
 		setOrientation(HORIZONTAL);

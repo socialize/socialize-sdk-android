@@ -39,23 +39,25 @@ import com.socialize.util.AppUtils;
 @UsesMocks({ SocializeConfig.class, Entity.class })
 public class DefaultShareMessageBuilderTest extends SocializeUnitTest {
 
+	@UsesMocks ({AppUtils.class})
 	public void test_buildShareLink() {
-		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+		
+		AppUtils appUtils = AndroidMock.createMock(AppUtils.class);
 		Entity entity = AndroidMock.createMock(Entity.class);
+		
+		AndroidMock.expect(appUtils.getEntityUrl(entity)).andReturn("foobar");
 
-		AndroidMock.expect(config.getProperty(SocializeConfig.REDIRECT_HOST)).andReturn("foobar");
-		AndroidMock.expect(entity.getId()).andReturn(69L);
-
-		AndroidMock.replay(config, entity);
+		AndroidMock.replay(appUtils);
 
 		DefaultShareMessageBuilder builder = new DefaultShareMessageBuilder();
 
-		builder.setConfig(config);
+		builder.setAppUtils(appUtils);
+		
 		String link = builder.buildShareLink(entity);
 
-		AndroidMock.verify(config, entity);
+		AndroidMock.verify(appUtils);
 
-		assertEquals("foobar/e/69", link);
+		assertEquals("foobar", link);
 	}
 
 	@UsesMocks({ User.class, SocializeSession.class, SocializeService.class })

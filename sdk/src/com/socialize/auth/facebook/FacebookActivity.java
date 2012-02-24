@@ -47,6 +47,14 @@ public class FacebookActivity extends SocializeActivity {
 		return (E) super.getBean(name);
 	}
 	
+	
+	
+	@Override
+	public void finish() {
+		super.finish();
+		
+	}
+
 	@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -56,7 +56,7 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 	}
 	
 	@Override
-	public void authenticate(SocializeAuthRequest authRequest, FacebookAuthProviderInfo info, final AuthProviderListener listener) {
+	public void authenticate(FacebookAuthProviderInfo info, final AuthProviderListener listener) {
 
 		final String listenerKey = "auth";
 		
@@ -101,7 +101,7 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 	public void authenticate(SocializeAuthRequest authRequest, String appId, final AuthProviderListener listener) {
 		FacebookAuthProviderInfo info = new FacebookAuthProviderInfo();
 		info.setAppId(appId);
-		authenticate(authRequest, info, listener);
+		authenticate(info, listener);
 	}
 
 	@Override

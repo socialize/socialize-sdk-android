@@ -63,7 +63,7 @@ public class DefaultAppUtils implements AppUtils {
 		// Try to get the app name 
 		try {
 			Resources appR = context.getResources(); 
-			CharSequence txt = appR.getText(appR.getIdentifier("app_name",  "string", context.getPackageName())); 
+			CharSequence txt = appR.getText(appR.getIdentifier("app_name",  "string", packageName)); 
 			appName = txt.toString();
 		} 
 		catch (Exception e) {
@@ -148,8 +148,16 @@ public class DefaultAppUtils implements AppUtils {
 	@Override
 	public String getMarketUrl() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("https://market.android.com/details?id=");
-		builder.append(getAppName());
+		
+		String appStore = config.getProperty(SocializeConfig.REDIRECT_APP_STORE);
+		
+		if(!StringUtils.isEmpty(appStore) && appStore.equalsIgnoreCase("amazon")) {
+			builder.append("http://www.amazon.com/gp/mas/dl/android?p=");
+		}
+		else {
+			builder.append("https://market.android.com/details?id=");
+		}
+		builder.append(getPackageName());
 		return builder.toString();
 	}
 	

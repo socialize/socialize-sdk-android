@@ -24,6 +24,7 @@ package com.socialize.test.unit;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.config.SocializeConfig;
+import com.socialize.entity.Entity;
 import com.socialize.sample.R;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.util.DefaultAppUtils;
@@ -78,6 +79,58 @@ public class AppUtilsTest extends SocializeUnitTest {
 
 		assertEquals(host + "/a/" + consumerKey + "/?f=amz", url);
 	}
+	
+	
+	@UsesMocks({ SocializeConfig.class, Entity.class })
+	public void test_getEntityUrl() {
+		final String host = "foo_host_bar";
+		
+		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+		Entity entity = AndroidMock.createMock(Entity.class);
+		
+		AndroidMock.expect(config.getProperty(SocializeConfig.REDIRECT_HOST)).andReturn(host);
+		AndroidMock.expect(config.getProperty(SocializeConfig.REDIRECT_APP_STORE)).andReturn(null);
+		AndroidMock.expect(entity.getId()).andReturn(69L);
+
+		AndroidMock.replay(config, entity);
+
+		DefaultAppUtils utils = new DefaultAppUtils();
+		utils.setConfig(config);
+
+		String url = utils.getEntityUrl(entity);
+
+		AndroidMock.verify(config, entity);
+
+		assertEquals(host + "/e/69", url);
+	}
+
+	@UsesMocks({ SocializeConfig.class, Entity.class })
+	public void test_getEntityUrlWithAmazon() {
+		final String host = "foo_host_bar";
+		final String appStore = "amazon";
+		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+		Entity entity = AndroidMock.createMock(Entity.class);
+
+		AndroidMock.expect(config.getProperty(SocializeConfig.REDIRECT_HOST)).andReturn(host);
+		AndroidMock.expect(config.getProperty(SocializeConfig.REDIRECT_APP_STORE)).andReturn(appStore);
+		AndroidMock.expect(entity.getId()).andReturn(69L);
+
+		
+		AndroidMock.replay(config, entity);
+
+		DefaultAppUtils utils = new DefaultAppUtils();
+		utils.setConfig(config);
+
+		String url = utils.getEntityUrl(entity);
+
+		AndroidMock.verify(config, entity);
+
+		assertEquals(host + "/e/69/?f=amz", url);
+	}	
+	
+	
+	
+	
 
 	public void testGetAppIconId() {
 		DefaultAppUtils utils = new DefaultAppUtils();
