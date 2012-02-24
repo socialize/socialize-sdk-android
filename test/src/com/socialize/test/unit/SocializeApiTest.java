@@ -246,7 +246,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public void authenticate(SocializeAuthRequest authRequest, AuthProviderInfo info, AuthProviderListener listener) {
+			public void authenticate(AuthProviderInfo info, AuthProviderListener listener) {
 				addResult(1, listener);
 			}
 
@@ -351,7 +351,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public void authenticate(SocializeAuthRequest authRequest, AuthProviderInfo info, AuthProviderListener listener) {
+			public void authenticate(AuthProviderInfo info, AuthProviderListener listener) {
 				addResult(1, listener);
 			}
 

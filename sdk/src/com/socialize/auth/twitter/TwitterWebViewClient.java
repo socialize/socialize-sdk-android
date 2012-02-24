@@ -55,6 +55,7 @@ public class TwitterWebViewClient extends WebViewClient {
 				String token = uri.getQueryParameter("oauth_token");
 				String verifier = uri.getQueryParameter("oauth_verifier");
 				view.stopLoading();
+				
 				if(oAuthRequestListener != null) {
 					oAuthRequestListener.onRequestToken(token, verifier);
 				}				

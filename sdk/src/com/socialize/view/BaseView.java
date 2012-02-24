@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
@@ -23,12 +24,20 @@ public abstract class BaseView extends LinearLayout implements SocializeView {
 	
 	private boolean rendered = false;
 	
+	private Toast toast;
+	
 	public BaseView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
 
 	public BaseView(Context context) {
 		super(context);
+	}
+	
+	public void showErrorToast(Context context, Exception e) {
+		if(toast != null) toast.cancel();
+		toast = Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_LONG);
+		toast.show();
 	}
 	
 	public void showError(Context context, Exception e) {

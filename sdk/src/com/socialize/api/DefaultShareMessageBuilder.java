@@ -41,26 +41,13 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 	public DefaultShareMessageBuilder() {
 		super();
 	}
-	
 
 	/* (non-Javadoc)
 	 * @see com.socialize.api.ShareMessageBuilder#buildShareLink(com.socialize.entity.Entity)
 	 */
 	@Override
 	public String buildShareLink(Entity entity) {
-		Long id = entity.getId();
-		if(id != null) {
-			if(config != null) {
-				String host = config.getProperty(SocializeConfig.REDIRECT_HOST);
-				if(!StringUtils.isEmpty(host)) {
-					return host + "/e/" + id;
-				}
-			}
-			return "http://r.getsocialize.com/e/" + id;
-		}
-		else {
-			return entity.getKey();
-		}
+		return appUtils.getEntityUrl(entity);
 	}
 	
 	/* (non-Javadoc)

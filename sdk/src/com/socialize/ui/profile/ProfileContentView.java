@@ -215,7 +215,7 @@ public class ProfileContentView extends BaseView {
 				
 				@Override
 				public void onError(SocializeException error) {
-					ProfileContentView.this.showError(ProfileContentView.this.getContext(), error);
+					ProfileContentView.this.showErrorToast(ProfileContentView.this.getContext(), error);
 				}
 				
 				@Override
@@ -230,7 +230,7 @@ public class ProfileContentView extends BaseView {
 				
 				@Override
 				public void onAuthFail(SocializeException error) {
-					ProfileContentView.this.showError(ProfileContentView.this.getContext(), error);
+					ProfileContentView.this.showErrorToast(ProfileContentView.this.getContext(), error);
 				}
 			});
 			
