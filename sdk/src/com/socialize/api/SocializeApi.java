@@ -577,12 +577,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		protected void onPostExecute(Result result) {
 			if(listener != null) {
 				if(error != null) {
-					if(error instanceof SocializeException) {
-						listener.onError((SocializeException)error);
-					}
-					else {
-						listener.onError(new SocializeException(error));
-					}
+					listener.onError(SocializeException.wrap(error));
 				}
 				else {
 					listener.onResult(requestType, result);
@@ -701,12 +696,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		protected void onPostExecute(SocializeEntityResponse<T> result) {
 			if(listener != null) {
 				if(error != null) {
-					if(error instanceof SocializeException) {
-						listener.onError((SocializeException)error);
-					}
-					else {
-						listener.onError(new SocializeException(error));
-					}
+					listener.onError(SocializeException.wrap(error));
 				}
 				else {
 					ListResult<T> results = result.getResults();

@@ -21,19 +21,27 @@
  */
 package com.socialize.auth.twitter;
 
+import com.socialize.config.SocializeConfig;
+import com.socialize.error.SocializeException;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 
 /**
  * @author Jason Polites
  *
  */
 public class TwitterUtils {
-	public AlertDialog showAuthDialog(Context context, TwitterAuthProviderInfo info, final TwitterAuthListener listener) {
+	
+	private SocializeConfig config;
+	private TwitterAuthProviderInfo info;
+	
+	public AlertDialog showAuthDialog(final Context context, TwitterAuthProviderInfo info, final TwitterAuthListener listener) {
 		AlertDialog.Builder builder = newAlertDialogBuilder(context);
 		
 		builder.setTitle("Twitter Authentication").setCancelable(true).setOnCancelListener(new OnCancelListener() {
@@ -51,7 +59,6 @@ public class TwitterUtils {
 	
 		view.init();
 
-		
 		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		
 		view.setLayoutParams(params);
@@ -60,12 +67,11 @@ public class TwitterUtils {
 		AlertDialog dialog = builder.create();
 		
 		view.setTwitterAuthListener(new TwitterAuthDialogListener(dialog) {
-			
 			@Override
 			public void onError(Dialog dialog, Exception e) {
 				dialog.dismiss();
 				if(listener != null) {
-					listener.onError(e);
+					listener.onError(SocializeException.wrap(e));
 				}
 			}
 			
@@ -87,11 +93,32 @@ public class TwitterUtils {
 		
 		view.authenticate();
 		
+		WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+	    lp.copyFrom(dialog.getWindow().getAttributes());
+	    lp.width = WindowManager.LayoutParams.FILL_PARENT;
+	    lp.height = WindowManager.LayoutParams.FILL_PARENT;
+		
 		dialog.show();
 		
 		return dialog;
 	}
 	
+	public TwitterAuthProviderInfo getAuthProviderInfo() {
+		if(info == null) {
+			info = new TwitterAuthProviderInfo();
+			info.setConsumerKey(config.getProperty(SocializeConfig.TWITTER_CONSUMER_KEY));
+			info.setConsumerSecret(config.getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET));
+		}
+		return info;
+	}
+	
+	
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
+	}
+
+
+
 	protected AlertDialog.Builder newAlertDialogBuilder(Context context) {
 		return new AlertDialog.Builder(context);
 	}

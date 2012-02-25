@@ -30,6 +30,7 @@ import com.socialize.ui.view.ClickableSectionCell;
 /**
  * @author Jason Polites
  */
+@Deprecated
 public abstract class FacebookCell extends ClickableSectionCell {
 	
 	public FacebookCell(Context context) {

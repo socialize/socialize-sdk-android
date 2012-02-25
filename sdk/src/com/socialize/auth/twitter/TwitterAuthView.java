@@ -21,6 +21,8 @@
  */
 package com.socialize.auth.twitter;
 
+import com.socialize.error.SocializeException;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
@@ -65,8 +67,9 @@ public class TwitterAuthView extends RelativeLayout {
 	public void authenticate() {
 		if(webView != null) {
 			webView.authenticate(consumerKey, consumerSecret, new TwitterAuthListener() {
+				
 				@Override
-				public void onError(Exception e) {
+				public void onError(SocializeException e) {
 					if(twitterAuthListener != null) {
 						twitterAuthListener.onError(e);
 					}

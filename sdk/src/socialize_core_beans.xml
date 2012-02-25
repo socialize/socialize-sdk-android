@@ -221,6 +221,10 @@
 					<key value="1" type="integer"/>
 					<value ref="facebookProvider"/>
 				</entry>
+				<entry>
+					<key value="2" type="integer"/>
+					<value ref="twitterProvider"/>
+				</entry>
 			</map>
 		</property>
 	</bean>
@@ -553,9 +557,24 @@
 		<property name="facebookWallPoster" ref="facebookWallPoster"/>
 	</bean>		
 	
-	<!-- End Facebook -->
+<!-- End Facebook -->
+
+<!-- Twitter -->
+
+	<bean id="twitterUtils" class="com.socialize.auth.twitter.TwitterUtils">
+		<property name="config" ref="config"/>
+	</bean>
+
+	<bean id="twitterProvider" class="com.socialize.auth.twitter.TwitterAuthProvider">
+		<property name="twitterUtils" ref="twitterUtils"/>
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>
+	</bean>
+
+<!-- End Twitter -->
 	
-	<!--  Auth providers -->
+<!--  Auth providers -->
 	
 	<bean 
 		id="baseAuthProviderInfoFactory" 
@@ -568,8 +587,14 @@
 		id="facebookAuthProviderInfoFactory" 
 		class="com.socialize.auth.facebook.FacebookAuthProviderInfoFactory"
 		extends="baseAuthProviderInfoFactory">
-	</bean>		
+	</bean>	
 	
+	<bean 
+		id="twitterAuthProviderInfoFactory" 
+		class="com.socialize.auth.twitter.TwitterAuthProviderInfoFactory"
+		extends="baseAuthProviderInfoFactory">
+	</bean>		
+			
 	<bean 
 		id="socializeAuthProviderInfoFactory" 
 		class="com.socialize.auth.SocializeAuthProviderInfoFactory">
@@ -589,6 +614,10 @@
 					<key value="FACEBOOK"/>
 					<value ref="facebookAuthProviderInfoFactory"/>
 				</entry>
+				<entry>
+					<key value="TWITTER"/>
+					<value ref="twitterAuthProviderInfoFactory"/>
+				</entry>				
 			</map>
 		</property>		
 		

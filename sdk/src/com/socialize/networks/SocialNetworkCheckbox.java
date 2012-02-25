@@ -1,4 +1,4 @@
-package com.socialize.networks.facebook;
+package com.socialize.networks;
 
 import android.content.Context;
 import android.view.View;
@@ -7,25 +7,26 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.networks.SocialNetworkSignOutListener;
 import com.socialize.ui.view.CustomCheckbox;
 
-public class FacebookCheckbox extends CustomCheckbox {
+public class SocialNetworkCheckbox extends CustomCheckbox {
 
-	private FacebookAuthClickListener facebookAuthClickListener;
-	private FacebookSignOutClickListener facebookSignOutClickListener;
-	private IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory;
+	private SocialNetworkAuthClickListener socialNetworkAuthClickListener;
+	private SocialNetworkSignOutClickListener socialNetworkSignOutClickListener;
+	private IBeanFactory<SocialNetworkSignOutClickListener> socialNetworkSignOutClickListenerFactory;
 	private OnClickListener localListener = null;
 	private SocializeAuthListener localAuthListener = null;
-	private FacebookSignOutListener localSignOutListener = null;
+	private SocialNetworkSignOutListener localSignOutListener = null;
 	
-	public FacebookCheckbox(Context context) {
+	public SocialNetworkCheckbox(Context context) {
 		super(context);
 	}
 	
 	public void init() {
 		super.init();
-		facebookSignOutClickListener = facebookSignOutClickListenerFactory.getBean();
-		facebookSignOutClickListener.setListener(new FacebookSignOutListener() {
+		socialNetworkSignOutClickListener = socialNetworkSignOutClickListenerFactory.getBean();
+		socialNetworkSignOutClickListener.setListener(new SocialNetworkSignOutListener() {
 			@Override
 			public void onSignOut() {
 				setChecked(false);
@@ -43,7 +44,7 @@ public class FacebookCheckbox extends CustomCheckbox {
 			}
 		});
 		
-		facebookAuthClickListener.setListener(new SocializeAuthListener() {
+		socialNetworkAuthClickListener.setListener(new SocializeAuthListener() {
 			@Override
 			public void onError(SocializeException error) {
 				setChecked(false);
@@ -85,10 +86,10 @@ public class FacebookCheckbox extends CustomCheckbox {
 			@Override
 			public void onClick(View v) {
 				if(isChecked()) {
-					facebookAuthClickListener.onClick(v);
+					socialNetworkAuthClickListener.onClick(v);
 				}
 				else {
-					facebookSignOutClickListener.onClick(v);
+					socialNetworkSignOutClickListener.onClick(v);
 				}
 				
 				if(localListener != null) {
@@ -102,7 +103,7 @@ public class FacebookCheckbox extends CustomCheckbox {
 		this.localAuthListener = listener;
 	}
 
-	public void setSignOutListener(FacebookSignOutListener localSignOutListener) {
+	public void setSignOutListener(SocialNetworkSignOutListener localSignOutListener) {
 		this.localSignOutListener = localSignOutListener;
 	}
 
@@ -111,11 +112,11 @@ public class FacebookCheckbox extends CustomCheckbox {
 		this.localListener = l;
 	}
 
-	public void setFacebookAuthClickListener(FacebookAuthClickListener facebookAuthClickListener) {
-		this.facebookAuthClickListener = facebookAuthClickListener;
+	public void setSocialNetworkAuthClickListener(SocialNetworkAuthClickListener socialNetworkAuthClickListener) {
+		this.socialNetworkAuthClickListener = socialNetworkAuthClickListener;
 	}
 
-	public void setFacebookSignOutClickListenerFactory(IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory) {
-		this.facebookSignOutClickListenerFactory = facebookSignOutClickListenerFactory;
+	public void setSocialNetworkSignOutClickListenerFactory(IBeanFactory<SocialNetworkSignOutClickListener> socialNetworkSignOutClickListenerFactory) {
+		this.socialNetworkSignOutClickListenerFactory = socialNetworkSignOutClickListenerFactory;
 	}
 }

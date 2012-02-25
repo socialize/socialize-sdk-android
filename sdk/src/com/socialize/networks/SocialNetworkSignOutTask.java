@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks.facebook;
+package com.socialize.networks;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -34,15 +34,17 @@ import com.socialize.util.IAsyncTask;
  * @author Jason Polites
  *
  */
-public class FacebookSignOutTask extends AsyncTask<Void, Void, Void> implements IAsyncTask<Void, Void, Void> {
+public class SocialNetworkSignOutTask extends AsyncTask<Void, Void, Void> implements IAsyncTask<Void, Void, Void> {
 
 	private Context context;
 	private ProgressDialogFactory dialogFactory;
-	private FacebookSignOutListener facebookSignOutListener;
+	private SocialNetworkSignOutListener signOutListener;
 	
 	private Dialog dialog;
 	
-	public FacebookSignOutTask(Context context) {
+	private AuthProviderType type;
+	
+	public SocialNetworkSignOutTask(Context context) {
 		super();
 		this.context = context;
 	}
@@ -62,7 +64,7 @@ public class FacebookSignOutTask extends AsyncTask<Void, Void, Void> implements 
 	 */
 	@Override
 	protected Void doInBackground(Void... args) {
-		Socialize.getSocialize().clear3rdPartySession(context, AuthProviderType.FACEBOOK);
+		Socialize.getSocialize().clear3rdPartySession(context, type);
 		return null;
 	}
 
@@ -70,8 +72,8 @@ public class FacebookSignOutTask extends AsyncTask<Void, Void, Void> implements 
 	protected void onPostExecute(Void result) {
 		dialog.dismiss();
 		
-		if(facebookSignOutListener != null) {
-			facebookSignOutListener.onSignOut();
+		if(signOutListener != null) {
+			signOutListener.onSignOut();
 		}
 	}
 
@@ -79,8 +81,15 @@ public class FacebookSignOutTask extends AsyncTask<Void, Void, Void> implements 
 		this.dialogFactory = dialogFactory;
 	}
 
-	public void setFacebookSignOutListener(FacebookSignOutListener facebookSignOutListener) {
-		this.facebookSignOutListener = facebookSignOutListener;
+	public void setSignOutListener(SocialNetworkSignOutListener facebookSignOutListener) {
+		this.signOutListener = facebookSignOutListener;
+	}
+
+	public void setType(AuthProviderType type) {
+		this.type = type;
 	}
 	
+	public void setType(String type) {
+		this.type = AuthProviderType.valueOf(type.toUpperCase().trim());
+	}
 }

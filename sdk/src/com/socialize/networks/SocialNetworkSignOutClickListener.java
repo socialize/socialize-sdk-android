@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks.facebook;
+package com.socialize.networks;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,10 +31,6 @@ import android.view.View.OnClickListener;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.api.SocializeSession;
-import com.socialize.config.SocializeConfig;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.Drawables;
 
@@ -42,40 +38,42 @@ import com.socialize.util.Drawables;
  * @author Jason Polites
  * 
  */
-public class FacebookSignOutClickListener implements OnClickListener {
+public class SocialNetworkSignOutClickListener implements OnClickListener {
 
 	private Drawables drawables;
-	private IBeanFactory<FacebookSignOutTask> facebookSignOutTaskFactory;
-	private SocializeConfig config;
+	private IBeanFactory<SocialNetworkSignOutTask> signOutTaskFactory;
 	private SocializeLogger logger;
 	
 	private AlertDialog dialog;
 	
-	private FacebookSignOutListener listener;
+	private SocialNetworkSignOutListener listener;
 	
-	public FacebookSignOutClickListener() {
+	private String networkName;
+	private String iconImage;
+	
+	public SocialNetworkSignOutClickListener() {
 		super();
 	}
 	
 	@Override
 	public void onClick(final View v) {
+		
 		 dialog = new AlertDialog.Builder(v.getContext())
-		.setIcon(drawables.getDrawable("fb_button.png"))
-		.setTitle("Sign Out of Facebook")
-		.setMessage("Are you sure you want to sign out of Facebook?")
+		.setIcon(drawables.getDrawable(iconImage))
+		.setTitle("Sign Out of " + networkName)
+		.setMessage("Are you sure you want to sign out of " + networkName + "?")
 		.setCancelable(true)
 		.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.dismiss();
-				FacebookSignOutTask task = facebookSignOutTaskFactory.getBean(v.getContext());
-				task.setFacebookSignOutListener(newFacebookSignOutListener(v));
+				SocialNetworkSignOutTask task = signOutTaskFactory.getBean(v.getContext());
+				task.setSignOutListener(listener);
 				task.doExecute((Void[])null);
 			}
 		})
 		.setNegativeButton("No", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.dismiss();
-				
 				if(listener != null) {
 					listener.onCancel();
 				}
@@ -89,51 +87,53 @@ public class FacebookSignOutClickListener implements OnClickListener {
 		return dialog;
 	}
 
-	protected FacebookSignOutListener newFacebookSignOutListener(final View v) {
-		return new FacebookSignOutListener() {
-			
-			
+	protected SocialNetworkSignOutListener newSocialNetworkSignOutListener(final View v) {
+		return new SocialNetworkSignOutListener() {
 			@Override
 			public void onCancel() {}
 
 			@Override
 			public void onSignOut() {
-				String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-				String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 				
-				// Re-authenticate as anonymous
-				getSocialize().authenticate(v.getContext(), consumerKey, consumerSecret, new SocializeAuthListener() {
-					
-					@Override
-					public void onError(SocializeException error) {
-						logError("Erorr during authentication", error);
-						if(listener != null) {
-							listener.onSignOut();
-						}
-					}
-					
-					@Override
-					public void onCancel() {
-						if(listener != null) {
-							listener.onSignOut();
-						}
-					}
-					
-					@Override
-					public void onAuthSuccess(SocializeSession session) {
-						if(listener != null) {
-							listener.onSignOut();
-						}
-					}
-					
-					@Override
-					public void onAuthFail(SocializeException error) {
-						logError("Erorr during authentication", error);
-						if(listener != null) {
-							listener.onSignOut();
-						}
-					}
-				});
+				getSocialize().saveSession(v.getContext());
+				
+//				String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+//				String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+//				
+//				// Re-authenticate as anonymous
+//				// TODO: don't know why this is here :/
+//				getSocialize().authenticate(v.getContext(), consumerKey, consumerSecret, new SocializeAuthListener() {
+//					
+//					@Override
+//					public void onError(SocializeException error) {
+//						logError("Erorr during authentication", error);
+//						if(listener != null) {
+//							listener.onSignOut();
+//						}
+//					}
+//					
+//					@Override
+//					public void onCancel() {
+//						if(listener != null) {
+//							listener.onSignOut();
+//						}
+//					}
+//					
+//					@Override
+//					public void onAuthSuccess(SocializeSession session) {
+//						if(listener != null) {
+//							listener.onSignOut();
+//						}
+//					}
+//					
+//					@Override
+//					public void onAuthFail(SocializeException error) {
+//						logError("Erorr during authentication", error);
+//						if(listener != null) {
+//							listener.onSignOut();
+//						}
+//					}
+//				});
 			}
 		};
 	}
@@ -163,20 +163,23 @@ public class FacebookSignOutClickListener implements OnClickListener {
 		this.drawables = drawables;
 	}
 
-	public void setFacebookSignOutTaskFactory(IBeanFactory<FacebookSignOutTask> facebookSignOutTaskFactory) {
-		this.facebookSignOutTaskFactory = facebookSignOutTaskFactory;
-	}
-
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
+	public void setSignOutTaskFactory(IBeanFactory<SocialNetworkSignOutTask> signOutTaskFactory) {
+		this.signOutTaskFactory = signOutTaskFactory;
 	}
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
 
-	public void setListener(FacebookSignOutListener listener) {
+	public void setListener(SocialNetworkSignOutListener listener) {
 		this.listener = listener;
 	}
-	
+
+	public void setNetworkName(String networkName) {
+		this.networkName = networkName;
+	}
+
+	public void setIconImage(String iconImage) {
+		this.iconImage = iconImage;
+	}
 }

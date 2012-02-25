@@ -46,4 +46,10 @@ public class SocializeException extends Exception {
 		super(detailMessage);
 	}
 	
+	public static SocializeException wrap(Throwable e) {
+		if(e instanceof SocializeException) {
+			return (SocializeException)e;
+		}
+		return new SocializeException(e);
+	}
 }

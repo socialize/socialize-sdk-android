@@ -42,8 +42,8 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.networks.facebook.FacebookCheckbox;
-import com.socialize.networks.facebook.FacebookSignOutListener;
+import com.socialize.networks.SocialNetworkCheckbox;
+import com.socialize.networks.SocialNetworkSignOutListener;
 import com.socialize.ui.user.UserService;
 import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.SocializeButton;
@@ -89,10 +89,10 @@ public class ProfileContentView extends BaseView {
 	private CheckBox autoPostCommentsFacebook;
 	
 	private CustomCheckbox notificationsEnabledCheckbox;
-	private FacebookCheckbox facebookEnabledCheckbox;
+	private SocialNetworkCheckbox facebookEnabledCheckbox;
 	
 	private IBeanFactory<CustomCheckbox> notificationsEnabledCheckboxFactory;
-	private IBeanFactory<FacebookCheckbox> facebookEnabledCheckboxFactory;
+	private IBeanFactory<SocialNetworkCheckbox> facebookEnabledCheckboxFactory;
 	
 	private int buttonLayoutViewId = 0;
 
@@ -234,7 +234,7 @@ public class ProfileContentView extends BaseView {
 				}
 			});
 			
-			facebookEnabledCheckbox.setSignOutListener(new FacebookSignOutListener() {
+			facebookEnabledCheckbox.setSignOutListener(new SocialNetworkSignOutListener() {
 				@Override
 				public void onSignOut() {
 					parent.setUserId(Socialize.getSocialize().getSession().getUser().getId().toString());
@@ -431,11 +431,11 @@ public class ProfileContentView extends BaseView {
 		return notificationsEnabledCheckbox;
 	}
 	
-	protected FacebookCheckbox getFacebookEnabledCheckbox() {
+	protected SocialNetworkCheckbox getFacebookEnabledCheckbox() {
 		return facebookEnabledCheckbox;
 	}
 
-	public void setFacebookEnabledCheckboxFactory(IBeanFactory<FacebookCheckbox> facebookEnabledCheckboxFactory) {
+	public void setFacebookEnabledCheckboxFactory(IBeanFactory<SocialNetworkCheckbox> facebookEnabledCheckboxFactory) {
 		this.facebookEnabledCheckboxFactory = facebookEnabledCheckboxFactory;
 	}
 	

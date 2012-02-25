@@ -58,16 +58,11 @@ public class TwitterAuthProvider implements AuthProvider<TwitterAuthProviderInfo
 	public void authenticate(TwitterAuthProviderInfo info, final AuthProviderListener listener) {
 		
 		 twitterUtils.showAuthDialog(context, info, new TwitterAuthListener() {
-			
+			 
 			@Override
-			public void onError(Exception e) {
+			public void onError(SocializeException e) {
 				if(listener != null) {
-					if(e instanceof SocializeException) {
-						listener.onError((SocializeException) e);
-					}
-					else {
-						listener.onError(new SocializeException(e));
-					}
+					listener.onError(SocializeException.wrap(e));
 				}
 			}
 			

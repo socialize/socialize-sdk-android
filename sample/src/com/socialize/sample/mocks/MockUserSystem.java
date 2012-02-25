@@ -80,6 +80,9 @@ public class MockUserSystem implements UserSystem {
 		listener.onUpdate(user);
 	}
 
+	@Override
+	public void saveSession(Context context, SocializeSession session) {}
+
 	@Deprecated
 	@Override
 	public void saveUserProfile(Context context, SocializeSession session, String firstName, String lastName, String encodedImage, UserListener listener) {

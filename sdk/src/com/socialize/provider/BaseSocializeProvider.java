@@ -271,6 +271,13 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	}
 
 	@Override
+	public void saveSession(SocializeSession session) {
+		if(sessionPersister != null) {
+			sessionPersister.save(context, session);
+		}
+	}
+
+	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
 		
 		WritableSession session = loadSession(endpoint, key, secret);
@@ -337,16 +344,11 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 					session.setConsumerTokenSecret(json.getString("oauth_token_secret"));
 					session.setUser(user);
 					
-					if(sessionPersister != null) {
-						sessionPersister.save(context, session);
-					}
+					saveSession(session);
 				}
 			}
 			catch (Exception e) {
-				if(e instanceof SocializeException) {
-					throw (SocializeException) e;
-				}
-				throw new SocializeException(e);
+				throw SocializeException.wrap(e);
 			}
 			finally {
 				closeEntity(entity);
@@ -401,11 +403,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 				}
 			}
 			catch (Exception e) {
-				if(e instanceof SocializeException) {
-					throw (SocializeException) e;
-				}
-				
-				throw new SocializeException(e);
+				throw SocializeException.wrap(e);
 			}
 			finally {
 				closeEntity(entity);
@@ -503,11 +501,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 				}
 			}
 			catch (Exception e) {
-				if(e instanceof SocializeException) {
-					throw (SocializeException) e;
-				}
-				
-				throw new SocializeException(e);
+				throw SocializeException.wrap(e);
 			}
 			finally {
 				closeEntity(entity);
@@ -605,10 +599,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 				}
 			}
 			catch (Throwable e) {
-				if(e instanceof SocializeException) {
-					throw (SocializeException) e;
-				}
-				throw new SocializeException(e);
+				throw SocializeException.wrap(e);
 			}
 			finally {
 				closeEntity(entity);

@@ -46,6 +46,11 @@ public class SocializeAuthProviderInfo implements AuthProviderInfo {
 	public void validate() throws SocializeException {}
 
 	@Override
+	public boolean isValid() {
+		return true;
+	}
+
+	@Override
 	public boolean matches(AuthProviderInfo info) {
 		return (info instanceof SocializeAuthProviderInfo);
 	}

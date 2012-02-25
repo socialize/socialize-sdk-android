@@ -57,6 +57,11 @@ public class TwitterAuthProviderInfo implements AuthProviderInfo {
 			throw new SocializeException("No twitter consumer secret found.");
 		}
 	}
+	
+	@Override
+	public boolean isValid() {
+		return !StringUtils.isEmpty(consumerKey) && !StringUtils.isEmpty(consumerSecret);
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.auth.AuthProviderInfo#matches(com.socialize.auth.AuthProviderInfo)

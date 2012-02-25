@@ -42,6 +42,8 @@ public interface AuthProviderInfo extends Serializable {
 	 */
 	public void validate() throws SocializeException;
 	
+	public boolean isValid();
+	
 	/**
 	 * Used to compare saved session data with a call to authenticate.
 	 * @param info

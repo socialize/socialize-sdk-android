@@ -19,37 +19,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks.facebook;
+package com.socialize.networks.twitter;
 
-import android.content.Context;
-
-import com.socialize.listener.SocializeAuthListener;
+import com.socialize.auth.AuthProviderInfo;
+import com.socialize.auth.twitter.TwitterUtils;
+import com.socialize.networks.SocialNetworkAuthClickListener;
 
 /**
  * @author Jason Polites
- * @deprecated
+ *
  */
-@Deprecated
-public class FacebookSignInCell extends FacebookCell {
-	
-	private FacebookAuthClickListener facebookAuthClickListener;
+public class TwitterAuthClickListener extends SocialNetworkAuthClickListener {
 
-	public FacebookSignInCell(Context context) {
-		super(context);
-	}
+	private TwitterUtils twitterUtils;
 	
 	@Override
-	public void init() {
-		super.init();
-		setOnClickListener(facebookAuthClickListener);
-	}
-	
-	public void setAuthListener(SocializeAuthListener listener) {
-		facebookAuthClickListener.setListener(listener);
+	protected AuthProviderInfo getAuthProviderInfo() {
+		return twitterUtils.getAuthProviderInfo();
 	}
 
-	public void setFacebookAuthClickListener(FacebookAuthClickListener facebookAuthClickListener) {
-		this.facebookAuthClickListener = facebookAuthClickListener;
+	public void setTwitterUtils(TwitterUtils twitterUtils) {
+		this.twitterUtils = twitterUtils;
 	}
-
 }

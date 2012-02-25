@@ -19,23 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks.facebook;
+package com.socialize.auth.twitter;
 
-import com.socialize.auth.AuthProviderInfo;
-import com.socialize.auth.facebook.FacebookAuthProviderInfo;
+import com.socialize.auth.BaseAuthProviderInfoFactory;
 import com.socialize.config.SocializeConfig;
-import com.socialize.networks.SocialNetworkAuthClickListener;
 
 /**
  * @author Jason Polites
  *
  */
-public class FacebookAuthClickListener extends SocialNetworkAuthClickListener {
+public class TwitterAuthProviderInfoFactory extends BaseAuthProviderInfoFactory<TwitterAuthProviderInfo> {
+
+	/* (non-Javadoc)
+	 * @see com.socialize.auth.AuthProviderInfoFactory#newInstance(android.content.Context)
+	 */
 	@Override
-	protected AuthProviderInfo getAuthProviderInfo() {
-		String authProviderAppId = config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
-		FacebookAuthProviderInfo fbInfo = new FacebookAuthProviderInfo();
-		fbInfo.setAppId(authProviderAppId);
-		return fbInfo;
+	public TwitterAuthProviderInfo newInstance() {
+		TwitterAuthProviderInfo info = new TwitterAuthProviderInfo();
+		info.setConsumerKey(config.getProperty(SocializeConfig.TWITTER_CONSUMER_KEY));
+		info.setConsumerSecret(config.getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET));
+		return info;
 	}
 }

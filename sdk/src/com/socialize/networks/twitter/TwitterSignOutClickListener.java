@@ -19,32 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks.facebook;
+package com.socialize.networks.twitter;
 
-import com.socialize.android.ioc.IBeanFactory;
-
-import android.content.Context;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 /**
  * @author Jason Polites
- * @deprecated
+ *
  */
-@Deprecated
-public class FacebookSignOutCell extends FacebookCell {
-	
-	private IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory;
-	
-	public FacebookSignOutCell(Context context) {
-		super(context);
-	}
-	
+public class TwitterSignOutClickListener implements OnClickListener {
+
+	/* (non-Javadoc)
+	 * @see android.view.View.OnClickListener#onClick(android.view.View)
+	 */
 	@Override
-	public void init() {
-		super.init();
-		setOnClickListener(facebookSignOutClickListenerFactory.getBean());
+	public void onClick(View v) {
 	}
 
-	public void setFacebookSignOutClickListenerFactory(IBeanFactory<FacebookSignOutClickListener> facebookSignOutClickListenerFactory) {
-		this.facebookSignOutClickListenerFactory = facebookSignOutClickListenerFactory;
-	}
 }

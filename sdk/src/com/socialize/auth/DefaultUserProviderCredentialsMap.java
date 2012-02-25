@@ -64,4 +64,8 @@ public class DefaultUserProviderCredentialsMap implements UserProviderCredential
 		return map.values();
 	}
 
+	@Override
+	public void remove(AuthProviderType type) {
+		map.remove(type);
+	}
 }

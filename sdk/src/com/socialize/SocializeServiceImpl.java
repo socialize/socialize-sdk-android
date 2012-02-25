@@ -418,6 +418,11 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	}
 	
 	@Override
+	public void saveSession(Context context) {
+		userSystem.saveSession(context, session);
+	}
+
+	@Override
 	public void clear3rdPartySession(Context context, AuthProviderType type) {
 		try {
 			if(session != null) {
@@ -1417,12 +1422,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				
 				if(listener != null) {
 					if(error != null) {
-						if(error instanceof SocializeException) {
-							listener.onError((SocializeException) error);
-						}
-						else {
-							listener.onError(new SocializeException(error));
-						}
+						listener.onError(SocializeException.wrap(error));
 					}
 					else {
 						listener.onError(new SocializeException(errorMessage));

@@ -94,6 +94,13 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 		authenticate(context, consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, false);	
 	}
 	
+	@Override
+	public void saveSession(Context context, SocializeSession session) {
+		if(sessionPersister != null) {
+			sessionPersister.save(context, session);
+		}
+	}
+
 	// For mocking
 	protected SocializeAuthProviderInfo newSocializeAuthProviderInfo() {
 		return new SocializeAuthProviderInfo();

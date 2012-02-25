@@ -21,6 +21,8 @@
  */
 package com.socialize.auth.twitter;
 
+import com.socialize.error.SocializeException;
+
 import oauth.signpost.OAuth;
 import oauth.signpost.OAuthTokenListener;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
@@ -80,7 +82,7 @@ public class TwitterAuthWebView extends WebView {
 				} 
 				catch (Exception e) {
 					if(listener != null) {
-						listener.onError(e);
+						listener.onError(SocializeException.wrap(e));
 					}
 				}
 			}
@@ -92,7 +94,7 @@ public class TwitterAuthWebView extends WebView {
 		} 
 		catch (Exception e) {
 			if(listener != null) {
-				listener.onError(e);
+				listener.onError(SocializeException.wrap(e));
 			}
 		}
 	}

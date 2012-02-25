@@ -1,5 +1,7 @@
 package com.socialize.auth.twitter;
 
+import com.socialize.error.SocializeException;
+
 import android.app.Dialog;
 
 public abstract class TwitterAuthDialogListener implements TwitterAuthListener {
@@ -17,7 +19,7 @@ public abstract class TwitterAuthDialogListener implements TwitterAuthListener {
 	}
 
 	@Override
-	public void onError(Exception e) {
+	public void onError(SocializeException e) {
 		onError(dialog, e);
 	}
 

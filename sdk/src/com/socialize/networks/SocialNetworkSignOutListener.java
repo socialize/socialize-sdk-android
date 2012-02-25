@@ -19,13 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks.facebook;
+package com.socialize.networks;
 
 /**
  * @author Jason Polites
  *
  */
-public interface FacebookSignOutListener {
+public interface SocialNetworkSignOutListener {
 
 	public void onSignOut();
 	

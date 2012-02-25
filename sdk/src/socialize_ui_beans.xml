@@ -132,6 +132,28 @@
 					<key value="FACEBOOK_BOTTOM_STROKE"/>
 					<value value="#355389"/>
 				</entry>
+				
+				<entry>
+					<key value="TWITTER_BOTTOM"/>
+					<value value="#00b4f0"/>
+				</entry>
+				<entry>
+					<key value="TWITTER_TOP"/>
+					<value value="#46c8f5"/>
+				</entry>	
+				<entry>
+					<key value="TWITTER_STROKE"/>
+					<value value="#00a5de"/>
+				</entry>
+				<entry>
+					<key value="TWITTER_TOP_STROKE"/>
+					<value value="#00a5de"/>
+				</entry>
+				<entry>
+					<key value="TWITTER_BOTTOM_STROKE"/>
+					<value value="#018fc0"/>
+				</entry>
+								
 				<entry>
 					<key value="GRAY_BTN_BOTTOM"/>
 					<value value="#555555"/>
@@ -301,23 +323,66 @@
 		<init-method name="init"/>
 	</bean>
 	
-	<!-- Facebook -->
+<!-- Social Network Base Classes -->	
+	
 	<bean 
-		id="facebookAuthClickListener" 
-		class="com.socialize.networks.facebook.FacebookAuthClickListener"		
-		singleton="false">
+		id="socialNetworkAuthClickListener" 
+		abstract="true">
 		<property name="config" ref="config"/>
 		<property name="dialogFactory" ref="progressDialogFactory"/>
 	</bean>
 	
 	<bean 
-		id="facebookSignOutClickListener" 
-		class="com.socialize.networks.facebook.FacebookSignOutClickListener"		
-		singleton="false">
+		id="socialNetworkSignOutClickListener" 
+		class="com.socialize.networks.SocialNetworkSignOutClickListener"		
+		abstract="true">
 		<property name="drawables" ref="drawables"/>
 		<property name="logger" ref="logger"/>
-		<property name="config" ref="config"/>
-		<property name="facebookSignOutTaskFactory" ref="facebookSignOutTaskFactory"/>
+	</bean>	
+	
+	<bean 
+		id="socialNetworkSignOutTask"
+		class="com.socialize.networks.SocialNetworkSignOutTask" 
+		abstract="true">
+		<property name="dialogFactory" ref="progressDialogFactory"/>
+	</bean>	
+	
+<!-- End Social Network Base Classes -->		
+	
+<!-- Twitter -->
+
+	<bean 
+		id="twitterSignOutTask" 
+		singleton="false"
+		extends="socialNetworkSignOutTask">
+		<property name="type" value="TWITTER"/>
+	</bean>
+	
+	<factory id="twitterSignOutTaskFactory" makes="twitterSignOutTask"/>
+	
+	<bean 
+		id="twitterSignOutClickListener" 
+		singleton="false"
+		extends="socialNetworkSignOutClickListener">
+		<property name="signOutTaskFactory" ref="twitterSignOutTaskFactory"/>
+	</bean>	
+
+<!-- End Twitter -->
+		
+<!-- Facebook -->
+	<bean 
+		id="facebookAuthClickListener" 
+		class="com.socialize.networks.facebook.FacebookAuthClickListener"		
+		singleton="false"
+		extends="socialNetworkAuthClickListener"/>
+	
+	<bean 
+		id="facebookSignOutClickListener" 
+		singleton="false"
+		extends="socialNetworkSignOutClickListener">
+		<property name="signOutTaskFactory" ref="facebookSignOutTaskFactory"/>
+		<property name="networkName" value="Facebook"/>
+		<property name="iconImage" value="fb_button.png"/>
 	</bean>
 	
 	<bean 
@@ -337,43 +402,15 @@
 		<property name="height" value="42" type="integer"/>
 		<property name="textSize" value="16" type="integer"/>
 	</bean>
-	
-	<!-- 
-	
-	<bean 
-		id="facebookSignInCell" 
-		class="com.socialize.networks.facebook.FacebookSignInCell" 
-		singleton="false"
-		extends="clickableSectionCell">
-		<constructor-arg type="activity"/>	
-		<property name="facebookAuthClickListener" ref="facebookAuthClickListener"/>
-		<property name="displayText" value="Sign in to Facebook"/>
-	</bean>	
-	
-	<factory id="facebookSignInCellFactory" makes="facebookSignInCell"/>		
-	
-	<bean 
-		id="facebookSignOutCell" 
-		class="com.socialize.networks.facebook.FacebookSignOutCell" 
-		singleton="false"
-		extends="clickableSectionCell">
-		<constructor-arg type="activity"/>	
-		<property name="facebookSignOutClickListenerFactory" ref="facebookSignOutClickListenerFactory"/>
-		<property name="displayText" value="Sign out of Facebook"/>
-	</bean>		
-	
-	<factory id="facebookSignOutCellFactory" makes="facebookSignOutCell"/>	
-	
-	 -->
-	
+
 	<bean 
 		id="facebookEnabledCheckbox" 
 		extends="customCheckbox" 
-		class="com.socialize.networks.facebook.FacebookCheckbox"
+		class="com.socialize.networks.SocialNetworkCheckbox"
 		singleton="false">
 		<constructor-arg type="activity"/>
-		<property name="facebookSignOutClickListenerFactory" ref="facebookSignOutClickListenerFactory"/>
-		<property name="facebookAuthClickListener" ref="facebookAuthClickListener"/>
+		<property name="socialNetworkSignOutClickListenerFactory" ref="facebookSignOutClickListenerFactory"/>
+		<property name="socialNetworkAuthClickListener" ref="facebookAuthClickListener"/>
 		<property name="imageOn" value="icon_facebook.png"/>
 		<property name="imageOff" value="icon_facebook_disabled.png"/>
 		<property name="textOn" value="Sign out of Facebook"/>
@@ -389,8 +426,8 @@
 	<bean 
 		id="facebookSignOutTask" 
 		singleton="false"
-		class="com.socialize.networks.facebook.FacebookSignOutTask">
-		<property name="dialogFactory" ref="progressDialogFactory"/>
+		extends="socialNetworkSignOutTask">
+		<property name="type" value="FACEBOOK"/>
 	</bean>
 	
 	<factory id="facebookSignOutTaskFactory" makes="facebookSignOutTask"/>
@@ -409,6 +446,7 @@
 	
 	<factory id="autoPostFacebookOptionFactory" makes="autoPostFacebookOption"/>
 	
+<!-- End Facebook -->
 	
 <!-- Comment UI -->
 	

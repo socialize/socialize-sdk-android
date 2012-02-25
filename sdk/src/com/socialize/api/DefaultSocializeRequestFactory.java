@@ -140,6 +140,11 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 			public void validate() throws SocializeException {}
 			
 			@Override
+			public boolean isValid() {
+				return true;
+			}
+
+			@Override
 			public AuthProviderType getType() {
 				return provider;
 			}

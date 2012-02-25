@@ -648,6 +648,12 @@ public interface SocializeService {
 	public void clear3rdPartySession(Context context, AuthProviderType type);
 	
 	/**
+	 * Saves the current session to disk.
+	 * @param context
+	 */
+	public void saveSession(Context context);
+	
+	/**
 	 * Lists a user's activity.
 	 * @param userId The ID of the user for whom activity will be listed.
 	 * @param activityListListener A listener to handle callbacks from the get.
