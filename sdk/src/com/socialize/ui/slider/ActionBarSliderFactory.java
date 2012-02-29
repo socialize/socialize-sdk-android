@@ -31,6 +31,12 @@ public interface ActionBarSliderFactory<V extends View> {
 
 	public enum ZOrder {FRONT, BEHIND};
 	
+	public V wrap(View parent, ZOrder order, int peekHeight, int zOffset);
+	
 	public V wrap(View parent, ZOrder order, int peekHeight);
+	
+	public V wrap(View parent, ZOrder order, int peekHeight, int left, int top, int zOffset);
+	
+	public V wrap(View parent, ZOrder order, int peekHeight, int left, int top);
 	
 }

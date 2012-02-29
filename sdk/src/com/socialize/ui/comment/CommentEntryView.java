@@ -21,6 +21,7 @@
  */
 package com.socialize.ui.comment;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -37,8 +38,12 @@ import android.widget.Toast;
 
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
+import com.socialize.ui.auth.AuthRequestDialogFactory;
 import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.SocializeButton;
@@ -61,12 +66,18 @@ public class CommentEntryView extends BaseView {
 	private Drawables drawables;
 	private KeyboardUtils keyboardUtils;
 	private EditText commentField;
-	private CustomCheckbox facebookCheckbox;
-	private CustomCheckbox locationCheckBox;
-	private CustomCheckbox notifyCheckBox;
+	
 	private IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory;
+	private IBeanFactory<CustomCheckbox> autoPostTwitterOptionFactory;
 	private IBeanFactory<CustomCheckbox> locationEnabledOptionFactory;
 	private IBeanFactory<CustomCheckbox> notificationEnabledOptionFactory;
+	private AuthRequestDialogFactory authRequestDialogFactory;
+	
+	private CustomCheckbox facebookCheckbox;
+	private CustomCheckbox twitterCheckbox;
+	private CustomCheckbox locationCheckBox;
+	private CustomCheckbox notifyCheckBox;
+	private AlertDialog authDialog;
 	
 	private boolean notificationsEnabled = true;
 	private boolean notificationsAvailable = true;
@@ -96,8 +107,14 @@ public class CommentEntryView extends BaseView {
 		
 		LinearLayout buttonLayout = new LinearLayout(getContext());
 		
+		authDialog = authRequestDialogFactory.create(getContext());
+		
 		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
 			facebookCheckbox = autoPostFacebookOptionFactory.getBean();
+		}
+		
+		if(getSocialize().isSupported(AuthProviderType.TWITTER)) {
+			twitterCheckbox = autoPostTwitterOptionFactory.getBean();
 		}
 		
 		if(appUtils.isLocationAvaiable(getContext())) {
@@ -108,25 +125,30 @@ public class CommentEntryView extends BaseView {
 			notifyCheckBox = notificationEnabledOptionFactory.getBean();
 		}
 		
+		final boolean fbOK = Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK);
+		final boolean twOK = Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER);
+		
 		if(facebookCheckbox != null) {
 			
-			facebookCheckbox.setChecked(user.isAutoPostCommentsFacebook());
-			facebookCheckbox.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					String msg = null;
-					if(facebookCheckbox.isChecked()) {
-						msg = "Facebook sharing enabled";
-					}
-					else {
-						msg = "Facebook sharing disabled";
-					}
-					
-					toast(msg);
-				}
-			});
+			if(fbOK) {
+				facebookCheckbox.setChecked(user.isAutoPostToFacebook());
+			}
+			else {
+				facebookCheckbox.setChecked(false);
+			}
+			
+			facebookCheckbox.setOnClickListener(getSocialNetworkClickListener(facebookCheckbox, AuthProviderType.FACEBOOK, "Facebook sharing enabled", "Facebook sharing disabled"));
 		}
+		
+		if(twitterCheckbox != null) {
+			if(twOK) {
+				twitterCheckbox.setChecked(user.isAutoPostToTwitter());
+			}
+			else {
+				twitterCheckbox.setChecked(false);
+			}
+			twitterCheckbox.setOnClickListener(getSocialNetworkClickListener(twitterCheckbox, AuthProviderType.TWITTER, "Twitter sharing enabled", "Twitter sharing disabled"));
+		}		
 
 		if(locationCheckBox != null) {
 			
@@ -195,7 +217,7 @@ public class CommentEntryView extends BaseView {
 		
 		toolbarLayout.setLayoutParams(toolbarLayoutParams);
 		
-		if(facebookCheckbox != null || locationCheckBox != null || notifyCheckBox != null) {
+		if(facebookCheckbox != null || twitterCheckbox != null || locationCheckBox != null || notifyCheckBox != null) {
 			LinearLayout optionsLayout = new LinearLayout(getContext());
 			LayoutParams optionsLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 			
@@ -205,6 +227,10 @@ public class CommentEntryView extends BaseView {
 			if(facebookCheckbox != null) {
 				optionsLayout.addView(facebookCheckbox);
 			}
+			
+			if(twitterCheckbox != null) {
+				optionsLayout.addView(twitterCheckbox);
+			}			
 			
 			if(locationCheckBox != null) {
 				optionsLayout.addView(locationCheckBox);
@@ -324,13 +350,61 @@ public class CommentEntryView extends BaseView {
 			addView(notificationMasterLayout);		
 		}	
 		
-		
-		updateUI();
+//		updateUI();
+	}
+	
+	protected OnClickListener getSocialNetworkClickListener(final CustomCheckbox chkbox, final AuthProviderType authProviderType, final String checkedMsg, final String uncheckedMsg) {
+		return new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				if(chkbox.isChecked()) {
+					if(Socialize.getSocialize().isAuthenticated(authProviderType)) {
+						toast(checkedMsg);
+					}
+					else {
+						// Show auth
+						getSocialize().authenticate(getContext(), authProviderType, new SocializeAuthListener() {
 
+							@Override
+							public void onError(SocializeException error) {
+								chkbox.setChecked(false);
+								showError(getContext(), error);
+							}
+
+							@Override
+							public void onAuthSuccess(SocializeSession session) {
+								chkbox.setChecked(true);
+								toast(checkedMsg);
+							}
+
+							@Override
+							public void onAuthFail(SocializeException error) {
+								chkbox.setChecked(false);
+								showError(getContext(), error);
+							}
+
+							@Override
+							public void onCancel() {
+								chkbox.setChecked(false);
+							}
+						});
+					}	
+				}
+				else {
+					toast(uncheckedMsg);
+				}
+			}
+		};	
 	}
 	
 	protected void toggleNotifications() {
 		setNotificationsEnabled(!notificationsEnabled);
+	}
+	
+	protected void showAuthDialog() {
+		authDialog.show();
 	}
 	
 	@Override
@@ -379,11 +453,19 @@ public class CommentEntryView extends BaseView {
 		this.notificationEnabledOptionFactory = notificationOptionFactory;
 	}
 	
+	public void setAutoPostTwitterOptionFactory(IBeanFactory<CustomCheckbox> autoPostTwitterOptionFactory) {
+		this.autoPostTwitterOptionFactory = autoPostTwitterOptionFactory;
+	}
+
 	public void setNotificationsEnabled(boolean enabled) {
 		notificationsEnabled = enabled;
 		updateUI();
 	}
-	
+
+	public void setAuthRequestDialogFactory(AuthRequestDialogFactory authRequestDialogFactory) {
+		this.authRequestDialogFactory = authRequestDialogFactory;
+	}
+
 	protected void updateUI() {
 		
 		if(notificationsEnabled) {
@@ -415,8 +497,12 @@ public class CommentEntryView extends BaseView {
 		
 		User user = Socialize.getSocialize().getSession().getUser();
 		
-		if(facebookCheckbox != null && !facebookCheckbox.isChanged()) {
-			facebookCheckbox.setChecked(user.isAutoPostCommentsFacebook());
+		if(facebookCheckbox != null && !facebookCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+			facebookCheckbox.setChecked(user.isAutoPostToFacebook());
+		}
+		
+		if(twitterCheckbox != null && !twitterCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
+			twitterCheckbox.setChecked(user.isAutoPostToTwitter());
 		}
 		
 		if(locationCheckBox != null && !locationCheckBox.isChanged()) {

@@ -113,7 +113,7 @@ public class AuthRequestDialogFactoryTest extends SocializeUIActivityTest {
 		};
 		
 		dialogFactory.setDrawables(drawables);
-		dialogFactory.setAuthRequestDialogViewFactory(authRequestDialogViewFactory);
+//		dialogFactory.setAuthRequestDialogViewFactory(authRequestDialogViewFactory);
 		
 		dialogFactory.create(getContext(), listener);
 		
@@ -195,8 +195,8 @@ public class AuthRequestDialogFactoryTest extends SocializeUIActivityTest {
 		};
 		
 		dialogFactory.setDrawables(drawables);
-		dialogFactory.setAuthRequestDialogViewFactory(authRequestDialogViewFactory);
-		dialogFactory.setAuthConfirmDialogFactory(authConfirmDialogFactoryFactory);
+//		dialogFactory.setAuthRequestDialogViewFactory(authRequestDialogViewFactory);
+//		dialogFactory.setAuthConfirmDialogFactory(authConfirmDialogFactoryFactory);
 		
 		AlertDialog dialog = dialogFactory.create(getContext(), listener);
 		

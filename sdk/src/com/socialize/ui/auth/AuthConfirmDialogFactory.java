@@ -31,6 +31,7 @@ import com.socialize.android.ioc.IBeanFactory;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class AuthConfirmDialogFactory extends AuthDialogFactory  {
 	
 	private IBeanFactory<AuthConfirmDialogView> authConfirmDialogViewFactory;

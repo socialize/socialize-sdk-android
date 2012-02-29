@@ -26,6 +26,7 @@ import android.content.Context;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.config.SocializeConfig;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.util.StringUtils;
 
 /**
@@ -63,17 +64,27 @@ public class CommentAddButtonListener {
 		callback.onCancel();
 	}
 
+	@Deprecated
 	public void onComment(String comment, boolean autoPostToFacebook, boolean shareLocation, boolean subscribe) {
+		if(autoPostToFacebook) {
+			onComment(comment, shareLocation, subscribe, SocialNetwork.FACEBOOK);
+		}
+		else {
+			onComment(comment, shareLocation, subscribe, SocialNetwork.NONE);
+		}
+	}
+	
+	public void onComment(String comment, boolean shareLocation, boolean subscribe, SocialNetwork...networks) {
 		if(!StringUtils.isEmpty(comment)) {
 			if(!getSocialize().isAuthenticated()) {
 				getSocialize().authenticate(
 						context,
 						consumerKey, 
 						consumerSecret,
-						new CommentReAuthListener(context, callback, comment, autoPostToFacebook, shareLocation, subscribe));
+						new CommentReAuthListener(context, callback, comment, shareLocation, subscribe, networks));
 			}
 			else {
-				callback.onComment(comment, autoPostToFacebook, shareLocation, subscribe);
+				callback.onComment(comment, shareLocation, subscribe, networks);
 			}
 		}
 	}

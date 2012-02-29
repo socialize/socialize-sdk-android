@@ -42,6 +42,10 @@ public interface AuthProviderInfo extends Serializable {
 	 */
 	public void validate() throws SocializeException;
 	
+	/**
+	 * Returns true if this info config is valid
+	 * @return
+	 */
 	public boolean isValid();
 	
 	/**

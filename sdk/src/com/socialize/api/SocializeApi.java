@@ -386,6 +386,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return authProviderType;
 	}
 	
+	@SuppressWarnings("deprecation")
 	protected void validate(AuthProviderData data) throws SocializeException{
 		AuthProviderInfo authProviderInfo = data.getAuthProviderInfo();
 		
@@ -394,14 +395,19 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		}
 		else {
 			// Legacy
-			AuthProviderType authProviderType = getAuthProviderType(data);
-			@SuppressWarnings("deprecation")
-			String appId3rdParty = data.getAppId3rdParty();
-			if(authProviderType != null && 
-					authProviderType.equals(AuthProviderType.FACEBOOK) && 
-					StringUtils.isEmpty(appId3rdParty)) {
-				throw new SocializeException("No app ID found for auth type FACEBOOK");
-			}
+			validateLegacy(data);
+		}
+	}
+	
+	@Deprecated
+	protected void validateLegacy(AuthProviderData data) throws SocializeException {
+		AuthProviderType authProviderType = getAuthProviderType(data);
+		
+		String appId3rdParty = data.getAppId3rdParty();
+		if(authProviderType != null && 
+				authProviderType.equals(AuthProviderType.FACEBOOK) && 
+				StringUtils.isEmpty(appId3rdParty)) {
+			throw new SocializeException("No app ID found for auth type FACEBOOK");
 		}
 	}
 	
@@ -464,6 +470,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 						
 						authProviderData.setUserId3rdParty(response.getUserId());
 						authProviderData.setToken3rdParty(response.getToken());
+						authProviderData.setSecret3rdParty(response.getSecret());
 						
 						// Do normal auth
 						handleRegularAuth(context, request, fWrapper);

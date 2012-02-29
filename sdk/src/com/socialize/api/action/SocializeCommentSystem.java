@@ -58,8 +58,6 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 		postAsync(session, ENDPOINT, list, listener);
 	}
 
-
-
 	/* (non-Javadoc)
 	 * @see com.socialize.api.action.CommentSystem#addComment(com.socialize.api.SocializeSession, com.socialize.entity.Entity, java.lang.String, android.location.Location, com.socialize.networks.ShareOptions, com.socialize.listener.comment.CommentListener)
 	 */
@@ -132,5 +130,4 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 	public void getComment(SocializeSession session, long id, CommentListener listener) {
 		getAsync(session, ENDPOINT, String.valueOf(id), listener);
 	}
-
 }

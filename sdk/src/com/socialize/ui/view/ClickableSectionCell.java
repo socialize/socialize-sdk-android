@@ -50,12 +50,37 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	
 	private Bitmap image;
 	
+	private float topLeftRadius = 8.0f;
+	private float topRightRadius = 8.0f;
+	private float bottomLeftRadius = 8.0f;
+	private float bottomRightRadius = 8.0f;
+	
+	private float[] radii;
+	
+	private GradientDrawable background;
+	
 	public ClickableSectionCell(Context context) {
 		super(context);
 	}
 	
 	public void init() {
 		setBackground();
+		
+		topLeftRadius= deviceUtils.getDIP(topLeftRadius);
+		topRightRadius= deviceUtils.getDIP(topRightRadius);
+		bottomRightRadius= deviceUtils.getDIP(bottomRightRadius);
+		bottomLeftRadius= deviceUtils.getDIP(bottomLeftRadius);
+		
+		radii = new float[]{
+			topLeftRadius,
+			topLeftRadius,
+			topRightRadius,
+			topRightRadius,
+			bottomRightRadius,
+			bottomRightRadius,
+			bottomLeftRadius,
+			bottomLeftRadius
+		};
 		
 		LinearLayout master = new LinearLayout(getContext());
 		
@@ -107,9 +132,10 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	
 	protected void setBackground() {
 		int bgColor = colors.getColor(Colors.ACTIVITY_BG);
-		GradientDrawable background = makeGradient(bgColor, bgColor);
-		background.setCornerRadius(deviceUtils.getDIP(8));
+		background = makeGradient(bgColor, bgColor);
+		background.setCornerRadii(radii);
 		background.setAlpha(128);
+		
 		setBackgroundDrawable(background);
 		
 		int padding = deviceUtils.getDIP(4);
@@ -157,6 +183,14 @@ public abstract class ClickableSectionCell extends LinearLayout {
 
 	public Bitmap getImage() {
 		return image;
+	}
+	
+	public void setBackgroundRadii(float [] radii) {
+		this.radii = radii;
+		if(background != null) {
+			background.setCornerRadii(radii);
+			setBackgroundDrawable(background);
+		}
 	}
 
 	// So we can mock

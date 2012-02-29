@@ -603,7 +603,7 @@
 	<bean 
 		id="authProviderInfoBuilder" 
 		class="com.socialize.auth.AuthProviderInfoBuilder">
-		
+		<property name="logger" ref="logger"/>
 		<property name="factories">
 			<map>
 				<entry>

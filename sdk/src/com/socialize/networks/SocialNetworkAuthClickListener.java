@@ -50,7 +50,7 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 		
 		view.setEnabled(false);
 		
-		dialog = dialogFactory.show(view.getContext(), "Facebook", "Authenticating...");
+		dialog = dialogFactory.show(view.getContext(), "Authentication", "Authenticating...");
 		
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);

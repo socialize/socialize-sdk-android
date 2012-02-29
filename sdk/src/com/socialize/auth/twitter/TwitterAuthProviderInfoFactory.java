@@ -30,11 +30,8 @@ import com.socialize.config.SocializeConfig;
  */
 public class TwitterAuthProviderInfoFactory extends BaseAuthProviderInfoFactory<TwitterAuthProviderInfo> {
 
-	/* (non-Javadoc)
-	 * @see com.socialize.auth.AuthProviderInfoFactory#newInstance(android.content.Context)
-	 */
 	@Override
-	public TwitterAuthProviderInfo newInstance() {
+	protected TwitterAuthProviderInfo initInstance() {
 		TwitterAuthProviderInfo info = new TwitterAuthProviderInfo();
 		info.setConsumerKey(config.getProperty(SocializeConfig.TWITTER_CONSUMER_KEY));
 		info.setConsumerSecret(config.getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET));

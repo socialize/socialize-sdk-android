@@ -119,27 +119,31 @@ public class UserProfile {
 		return fullName;
 	}
 	
-	@Deprecated
+
 	public boolean isAutoPostFacebook() {
 		return autoPostFacebook;
 	}
-	@Deprecated
+	
 	public void setAutoPostFacebook(boolean autoPostFacebook) {
 		this.autoPostFacebook = autoPostFacebook;
 	}
 
+	@Deprecated
 	public boolean isAutoPostLikesFacebook() {
 		return autoPostLikesFacebook;
 	}
 
+	@Deprecated
 	public void setAutoPostLikesFacebook(boolean autoPostLikesFacebook) {
 		this.autoPostLikesFacebook = autoPostLikesFacebook;
 	}
 
+	@Deprecated
 	public boolean isAutoPostCommentsFacebook() {
 		return autoPostCommentsFacebook;
 	}
 
+	@Deprecated
 	public void setAutoPostCommentsFacebook(boolean autoPostCommentsFacebook) {
 		this.autoPostCommentsFacebook = autoPostCommentsFacebook;
 	}

@@ -85,14 +85,18 @@ public class ProfileContentView extends BaseView {
 	
 	private Activity context;
 	
-	private CheckBox autoPostLikesFacebook;
-	private CheckBox autoPostCommentsFacebook;
+	private CheckBox autoPostFacebook;
+	private CheckBox autoPostTwitter;
 	
 	private CustomCheckbox notificationsEnabledCheckbox;
+	
 	private SocialNetworkCheckbox facebookEnabledCheckbox;
+	private SocialNetworkCheckbox twitterEnabledCheckbox;
 	
 	private IBeanFactory<CustomCheckbox> notificationsEnabledCheckboxFactory;
+	
 	private IBeanFactory<SocialNetworkCheckbox> facebookEnabledCheckboxFactory;
+	private IBeanFactory<SocialNetworkCheckbox> twitterEnabledCheckboxFactory;
 	
 	private int buttonLayoutViewId = 0;
 
@@ -158,30 +162,49 @@ public class ProfileContentView extends BaseView {
 			
 			facebookEnabledCheckbox.setLayoutParams(commonParams);
 			
-			autoPostLikesFacebook = new CheckBox(getContext());
-			autoPostCommentsFacebook = new CheckBox(getContext());		
+			autoPostFacebook = new CheckBox(getContext());
 			
-			autoPostLikesFacebook.setText("Post Likes to my Facebook Wall");
-			autoPostLikesFacebook.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-			
-			autoPostCommentsFacebook.setText("Post Comments to my Facebook Wall");
-			autoPostCommentsFacebook.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+			autoPostFacebook.setText("Post to Facebook");
+			autoPostFacebook.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
 			
 			LayoutParams optionsParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 			
-			autoPostLikesFacebook.setLayoutParams(optionsParams);
-			autoPostCommentsFacebook.setLayoutParams(optionsParams);
+			autoPostFacebook.setLayoutParams(optionsParams);
 			
 			facebookEnabledCheckbox.setVisibility(View.INVISIBLE);
-			autoPostLikesFacebook.setVisibility(View.INVISIBLE);
-			autoPostCommentsFacebook.setVisibility(View.INVISIBLE);
+			autoPostFacebook.setVisibility(View.INVISIBLE);
 			
 			master.addView(facebookEnabledCheckbox);
 			
-			ViewGroup fbLayout = makeFacebookOptionsLayout();
+			ViewGroup fbLayout = makeSocialNetworkOptionsLayout();
 			
-			fbLayout.addView(autoPostLikesFacebook);
-			fbLayout.addView(autoPostCommentsFacebook);
+			fbLayout.addView(autoPostFacebook);
+			
+			master.addView(fbLayout);
+		}
+		
+		if(getSocialize().isSupported(AuthProviderType.TWITTER)) {
+			twitterEnabledCheckbox = twitterEnabledCheckboxFactory.getBean();
+			
+			twitterEnabledCheckbox.setLayoutParams(commonParams);
+			
+			autoPostTwitter = new CheckBox(getContext());
+			
+			autoPostTwitter.setText("Post to Twitter");
+			autoPostTwitter.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+			
+			LayoutParams optionsParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			
+			autoPostTwitter.setLayoutParams(optionsParams);
+			
+			twitterEnabledCheckbox.setVisibility(View.INVISIBLE);
+			autoPostTwitter.setVisibility(View.INVISIBLE);
+			
+			master.addView(twitterEnabledCheckbox);
+			
+			ViewGroup fbLayout = makeSocialNetworkOptionsLayout();
+			
+			fbLayout.addView(autoPostTwitter);
 			
 			master.addView(fbLayout);
 		}
@@ -245,6 +268,41 @@ public class ProfileContentView extends BaseView {
 				public void onCancel() {}
 				
 			});
+			
+			twitterEnabledCheckbox.setSignInListener(new SocializeAuthListener() {
+				
+				@Override
+				public void onError(SocializeException error) {
+					ProfileContentView.this.showErrorToast(ProfileContentView.this.getContext(), error);
+				}
+				
+				@Override
+				public void onCancel() { }
+				
+				@Override
+				public void onAuthSuccess(SocializeSession session) {
+					// Reload profile view
+					parent.setUserId(session.getUser().getId().toString());
+					parent.doGetUserProfile();
+				}
+				
+				@Override
+				public void onAuthFail(SocializeException error) {
+					ProfileContentView.this.showErrorToast(ProfileContentView.this.getContext(), error);
+				}
+			});			
+			
+			twitterEnabledCheckbox.setSignOutListener(new SocialNetworkSignOutListener() {
+				@Override
+				public void onSignOut() {
+					parent.setUserId(Socialize.getSocialize().getSession().getUser().getId().toString());
+					parent.doGetUserProfile();
+				}
+
+				@Override
+				public void onCancel() {}
+				
+			});			
 		}
 	}
 
@@ -257,7 +315,7 @@ public class ProfileContentView extends BaseView {
 		return scrollView;
 	}
 
-	protected ViewGroup makeFacebookOptionsLayout() {
+	protected ViewGroup makeSocialNetworkOptionsLayout() {
 		LinearLayout master = new LinearLayout(getContext());
 		int padding = deviceUtils.getDIP(8);
 		LinearLayout.LayoutParams masterParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -310,53 +368,78 @@ public class ProfileContentView extends BaseView {
 		setCurrentUser(currentUser);
 			
 		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
-			
 			if(Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 				facebookEnabledCheckbox.setChecked(true);
-				autoPostLikesFacebook.setChecked(user.isAutoPostLikesFacebook());
-				autoPostCommentsFacebook.setChecked(user.isAutoPostCommentsFacebook());
+				autoPostFacebook.setChecked(user.isAutoPostToFacebook());
 			}
 			else {
 				facebookEnabledCheckbox.setChecked(false);
 			}
 		}
 		
+		if(getSocialize().isSupported(AuthProviderType.TWITTER)) {
+			if(Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
+				twitterEnabledCheckbox.setChecked(true);
+				autoPostTwitter.setChecked(user.isAutoPostToTwitter());
+			}
+			else {
+				twitterEnabledCheckbox.setChecked(false);
+			}
+		}		
+		
 		if(notificationsEnabledCheckbox != null) {
 			notificationsEnabledCheckbox.setChecked(user.isNotificationsEnabled());
 		}
 		
-		onFacebookChanged();
+		onNetworksChanged();
 	}	
 	
-	public void onFacebookChanged() {
+	public void onNetworksChanged() {
 		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
 			
 			if(facebookEnabledCheckbox != null) {
 				facebookEnabledCheckbox.setVisibility(View.VISIBLE);
 			}
 			
-			if(autoPostCommentsFacebook != null && autoPostLikesFacebook != null) {
+			if(autoPostFacebook != null) {
 				if(Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-					autoPostLikesFacebook.setVisibility(View.VISIBLE);
-					autoPostCommentsFacebook.setVisibility(View.VISIBLE);
+					autoPostFacebook.setVisibility(View.VISIBLE);
 				}
 				else {
-					autoPostLikesFacebook.setVisibility(View.GONE);
-					autoPostCommentsFacebook.setVisibility(View.GONE);
+					autoPostFacebook.setVisibility(View.GONE);
 				}	
 			}
 		}
 		else {
 			if(facebookEnabledCheckbox != null) facebookEnabledCheckbox.setVisibility(View.GONE);
-			if(autoPostLikesFacebook != null) autoPostLikesFacebook.setVisibility(View.GONE);
-			if(autoPostCommentsFacebook != null) autoPostCommentsFacebook.setVisibility(View.GONE);
+			if(autoPostFacebook != null) autoPostFacebook.setVisibility(View.GONE);
 		}
+		
+		if(getSocialize().isSupported(AuthProviderType.TWITTER)) {
+			
+			if(twitterEnabledCheckbox != null) {
+				twitterEnabledCheckbox.setVisibility(View.VISIBLE);
+			}
+			
+			if(autoPostTwitter != null) {
+				if(Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
+					autoPostTwitter.setVisibility(View.VISIBLE);
+				}
+				else {
+					autoPostTwitter.setVisibility(View.GONE);
+				}	
+			}
+		}
+		else {
+			if(twitterEnabledCheckbox != null) twitterEnabledCheckbox.setVisibility(View.GONE);
+			if(autoPostTwitter != null) autoPostTwitter.setVisibility(View.GONE);
+		}		
 	}
 	
 	@Override
 	public void onViewLoad() {
 		super.onViewLoad();
-		onFacebookChanged();
+		onNetworksChanged();
 	}
 
 	public void onProfilePictureChange(Bitmap image) {
@@ -419,12 +502,8 @@ public class ProfileContentView extends BaseView {
 		return lastNameEdit;
 	}
 
-	protected CheckBox getAutoPostLikesFacebook() {
-		return autoPostLikesFacebook;
-	}
-
-	protected CheckBox getAutoPostCommentsFacebook() {
-		return autoPostCommentsFacebook;
+	protected CheckBox getAutoPostFacebook() {
+		return autoPostFacebook;
 	}
 
 	protected CustomCheckbox getNotificationsEnabledCheckbox() {
@@ -439,6 +518,10 @@ public class ProfileContentView extends BaseView {
 		this.facebookEnabledCheckboxFactory = facebookEnabledCheckboxFactory;
 	}
 	
+	public void setTwitterEnabledCheckboxFactory(IBeanFactory<SocialNetworkCheckbox> twitterEnabledCheckboxFactory) {
+		this.twitterEnabledCheckboxFactory = twitterEnabledCheckboxFactory;
+	}
+
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
 	}

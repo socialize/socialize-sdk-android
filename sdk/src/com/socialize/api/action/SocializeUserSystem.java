@@ -90,7 +90,7 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	@Override
 	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
 		AuthProviderData authProviderData = authProviderDataFactory.getBean();
-		authProviderData.setAuthProviderInfo(socializeAuthProviderInfoFactory.newInstance());
+		authProviderData.setAuthProviderInfo(socializeAuthProviderInfoFactory.getInstance());
 		authenticate(context, consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, false);	
 	}
 	

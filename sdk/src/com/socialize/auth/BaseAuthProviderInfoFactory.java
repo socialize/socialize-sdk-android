@@ -30,8 +30,19 @@ import com.socialize.config.SocializeConfig;
 public abstract class BaseAuthProviderInfoFactory<I extends AuthProviderInfo> implements AuthProviderInfoFactory<I> {
 
 	protected SocializeConfig config;
+	protected I instance;
 
 	public void setConfig(SocializeConfig config) {
 		this.config = config;
 	}
+
+	@Override
+	public I getInstance() {
+		if(instance == null) {
+			instance = initInstance();
+		}
+		return instance;
+	}
+	
+	protected abstract I initInstance();
 }

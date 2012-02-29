@@ -19,12 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks;
+package com.socialize.networks.twitter;
+
+import android.content.Context;
+import android.util.DisplayMetrics;
+import android.widget.ImageView;
+
+import com.socialize.ui.view.ClickableSectionCell;
 
 /**
  * @author Jason Polites
- *
  */
-public enum SocialNetwork {
-	NONE, FACEBOOK, TWITTER;
+public abstract class TwitterCell extends ClickableSectionCell {
+	
+	public TwitterCell(Context context) {
+		super(context);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.socialize.ui.view.ClickableSectionCell#makeImage()
+	 */
+	@Override
+	protected ImageView makeImage() {
+		ImageView view = new ImageView(getContext());
+		view.setImageDrawable(drawables.getDrawable("icon_twitter.png#no_density", DisplayMetrics.DENSITY_DEFAULT));
+		return view;
+	}
 }

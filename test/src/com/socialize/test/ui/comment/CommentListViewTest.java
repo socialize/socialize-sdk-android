@@ -118,7 +118,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 			}
 		};
 		
-		view.setAuthRequestDialogFactory(authRequestDialogFactory);
+//		view.setAuthRequestDialogFactory(authRequestDialogFactory);
 		view.setProgressDialogFactory(progressDialogFactory);
 		
 		CommentAddButtonListener commentScrollListener = view.getCommentAddListener();

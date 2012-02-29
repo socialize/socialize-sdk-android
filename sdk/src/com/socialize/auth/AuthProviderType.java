@@ -29,7 +29,7 @@ public enum AuthProviderType {
 	
 	SOCIALIZE ("socialize", 0),
 	FACEBOOK ("facebook", 1),
-	TWITTER ("twitter", 1);
+	TWITTER ("twitter", 2);
 	
 	private final String name;   
     private final int id; 

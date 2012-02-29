@@ -32,6 +32,8 @@ public interface UserProviderCredentials {
 	
 	public String getAccessToken();
 	
+	public String getTokenSecret();
+	
 	public AuthProviderInfo getAuthProviderInfo();
 	
 }

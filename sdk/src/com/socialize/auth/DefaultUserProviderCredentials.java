@@ -29,6 +29,8 @@ public class DefaultUserProviderCredentials implements UserProviderCredentials {
 
 	private String userId;
 	private String accessToken;
+	private String tokenSecret;
+	
 	private AuthProviderInfo authProviderInfo;
 	
 	/* (non-Javadoc)
@@ -53,6 +55,19 @@ public class DefaultUserProviderCredentials implements UserProviderCredentials {
 	@Override
 	public AuthProviderInfo getAuthProviderInfo() {
 		return authProviderInfo;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.auth.UserProviderCredentials#getTokenSecret()
+	 */
+	@Override
+	public String getTokenSecret() {
+		return tokenSecret;
+	}
+	
+	public void setTokenSecret(String tokenSecret) {
+		this.tokenSecret = tokenSecret;
 	}
 
 	public void setUserId(String userId) {

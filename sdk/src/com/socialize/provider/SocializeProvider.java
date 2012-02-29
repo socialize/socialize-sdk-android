@@ -49,8 +49,6 @@ public interface SocializeProvider<T> {
 	 */
 	public WritableSession loadSession(String endpoint, String key, String secret) throws SocializeException;
 	
-	public void saveSession(SocializeSession session);
-	
 	public boolean validateSession(SocializeSession loaded, AuthProviderData data);
 	
 	/**

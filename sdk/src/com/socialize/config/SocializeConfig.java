@@ -59,6 +59,8 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_ENTITY_LOADER = "socialize.entity.loader";
 	
+	public static final String SOCIALIZE_FORCE_AUTH = "socialize.force.auth";
+	
 	@Deprecated
 	public static final String SOCIALIZE_BEANS_PATH = SOCIALIZE_CORE_BEANS_PATH;
 	
@@ -273,6 +275,10 @@ public class SocializeConfig {
 	public void setFacebookUserCredentials(String userId, String token) {
 		setProperty(SocializeConfig.FACEBOOK_USER_ID, userId);
 		setProperty(SocializeConfig.FACEBOOK_USER_TOKEN, token);
+	}
+	
+	public boolean isForcedAuth() {
+		return getBooleanProperty(SOCIALIZE_FORCE_AUTH, false);
 	}
 	
 	/**

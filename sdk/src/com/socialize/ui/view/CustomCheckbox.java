@@ -50,7 +50,7 @@ public class CustomCheckbox extends BaseView {
 	private IBeanFactory<BasicLoadingView> loadingViewFactory;
 	
 	private ViewFlipper iconFlipper;
-
+	
 	public CustomCheckbox(Context context) {
 		super(context);
 	}
@@ -95,10 +95,12 @@ public class CustomCheckbox extends BaseView {
 				if(enabled) {
 					changed = true;
 					checked = !checked;
-					setDisplay();
+					
 					if(customClickListener != null) {
 						customClickListener.onClick(v);
 					}
+						
+					setDisplay();
 				}
 			}
 		};
@@ -167,8 +169,10 @@ public class CustomCheckbox extends BaseView {
 	}
 	
 	public void setChecked(boolean checked) {
-		this.checked = checked;
-		setDisplay();
+		if(checked != this.checked) {
+			this.checked = checked;
+			setDisplay();
+		}
 	}
 
 	public void setDrawables(Drawables drawables) {
@@ -221,9 +225,12 @@ public class CustomCheckbox extends BaseView {
 		this.borderOn = borderOn;
 	}
 	
+	
+	
 	@Override
 	public void setOnClickListener(OnClickListener l) {
 		this.customClickListener = l;
+		
 	}
 
 	public void setPadding(int padding) {

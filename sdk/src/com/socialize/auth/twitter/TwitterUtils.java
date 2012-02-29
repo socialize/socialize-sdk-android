@@ -21,9 +21,7 @@
  */
 package com.socialize.auth.twitter;
 
-import com.socialize.config.SocializeConfig;
-import com.socialize.error.SocializeException;
-
+import android.R;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -31,6 +29,9 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
+
+import com.socialize.config.SocializeConfig;
+import com.socialize.error.SocializeException;
 
 /**
  * @author Jason Polites
@@ -41,10 +42,14 @@ public class TwitterUtils {
 	private SocializeConfig config;
 	private TwitterAuthProviderInfo info;
 	
-	public AlertDialog showAuthDialog(final Context context, TwitterAuthProviderInfo info, final TwitterAuthListener listener) {
-		AlertDialog.Builder builder = newAlertDialogBuilder(context);
+	public Dialog showAuthDialog(final Context context, TwitterAuthProviderInfo info, final TwitterAuthListener listener) {
+//		AlertDialog.Builder builder = newAlertDialogBuilder(context);
 		
-		builder.setTitle("Twitter Authentication").setCancelable(true).setOnCancelListener(new OnCancelListener() {
+		Dialog dialog = new Dialog(context, R.style.Theme_Dialog);
+		
+		dialog.setTitle("Twitter Authentication");
+		dialog.setCancelable(true);
+		dialog.setOnCancelListener(new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
 				if(listener != null) {
@@ -62,9 +67,9 @@ public class TwitterUtils {
 		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		
 		view.setLayoutParams(params);
-		builder.setView(view);
+		dialog.setContentView(view);
 		
-		AlertDialog dialog = builder.create();
+//		AlertDialog dialog = builder.create();
 		
 		view.setTwitterAuthListener(new TwitterAuthDialogListener(dialog) {
 			@Override

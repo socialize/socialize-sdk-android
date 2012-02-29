@@ -23,13 +23,14 @@ package com.socialize.ui.auth;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
+import android.view.WindowManager;
 
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.networks.facebook.FacebookSignInCell;
+import com.socialize.networks.twitter.TwitterSignInCell;
 
 /**
  * @author Jason Polites
@@ -37,72 +38,94 @@ import com.socialize.listener.SocializeAuthListener;
  */
 public class AuthRequestDialogFactory extends AuthDialogFactory  {
 	
-	private IBeanFactory<AuthRequestDialogView> authRequestDialogViewFactory;
-	private IBeanFactory<AuthConfirmDialogFactory> authConfirmDialogFactory;
+	private IBeanFactory<AuthPanelView> authPanelViewFactory;
+//	private IBeanFactory<AuthConfirmDialogFactory> authConfirmDialogFactory;
+	
+	public AlertDialog create(final Context context) {
+		return create(context, null);
+	}
 	
 	public AlertDialog create(final Context context, final AuthRequestListener listener) {
 
 		AlertDialog.Builder builder = newBuilder(context);
 		
-		AuthRequestDialogView view = authRequestDialogViewFactory.getBean();
+		AuthPanelView view = authPanelViewFactory.getBean();
 		
 		builder.setView(view);
 		
 		final AlertDialog alertDialog = builder.create();
 		
 		alertDialog.setIcon(drawables.getDrawable("socialize_icon_white.png"));
-		alertDialog.setTitle("Sign in to post comments");
+		alertDialog.setTitle("Authentication");
 		
-		alertDialog.setOnCancelListener(new OnCancelListener() {
-			@Override
-			public void onCancel(DialogInterface dialog) {
-				// Render the confirm dialog
-				AuthConfirmDialogFactory dialogFactory = authConfirmDialogFactory.getBean();
-				dialogFactory.show(context, listener);
-			}
-		});
+		SocializeAuthListener authListener = getAuthClickListener(alertDialog, listener);
 		
-		view.getFacebookSignInButton().setAuthListener(new SocializeAuthListener() {
+		FacebookSignInCell facebookSignInCell = view.getFacebookSignInCell();
+		TwitterSignInCell twitterSignInCell = view.getTwitterSignInCell();
+		
+		if(facebookSignInCell != null) {
+			facebookSignInCell.setAuthListener(authListener);
+		}
+		
+		if(twitterSignInCell != null) {
+			twitterSignInCell.setAuthListener(authListener);
+		}
+		
+		WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+	    lp.copyFrom(alertDialog.getWindow().getAttributes());
+	    lp.width = WindowManager.LayoutParams.FILL_PARENT;
+	    lp.height = WindowManager.LayoutParams.FILL_PARENT;		
+		
+//		alertDialog.setOnCancelListener(new OnCancelListener() {
+//			@Override
+//			public void onCancel(DialogInterface dialog) {
+//				// Render the confirm dialog
+//				AuthConfirmDialogFactory dialogFactory = authConfirmDialogFactory.getBean();
+//				dialogFactory.show(context, listener);
+//			}
+//		});
+//		
+		
+		return alertDialog;
+	}
+	
+	protected SocializeAuthListener getAuthClickListener(final AlertDialog alertDialog, final AuthRequestListener listener) {
+		return new SocializeAuthListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
 				handleError("Error during auth", error);
 				alertDialog.dismiss();
-				listener.onResult(alertDialog);
+				if(listener != null) {
+					listener.onResult(alertDialog);
+				}
 			}
 			
 			@Override
 			public void onAuthSuccess(SocializeSession session) {
-				// TODO: Launch profile view
 				alertDialog.dismiss();
-				listener.onResult(alertDialog);
+				if(listener != null) {
+					listener.onResult(alertDialog);
+				}
 			}
 			
 			@Override
 			public void onAuthFail(SocializeException error) {
 				handleError("Error during auth", error);
 				alertDialog.dismiss();
-				listener.onResult(alertDialog);
+				if(listener != null) {
+					listener.onResult(alertDialog);
+				}
 			}
 
 			@Override
 			public void onCancel() {
 				// Do nothing
 			}
-		});
-		
-		return alertDialog;
+		};
 	}
 
-	public void setAuthRequestDialogView(IBeanFactory<AuthRequestDialogView> authRequestDialogViewFactory) {
-		this.authRequestDialogViewFactory = authRequestDialogViewFactory;
-	}
-
-	public void setAuthConfirmDialogFactory(IBeanFactory<AuthConfirmDialogFactory> authConfirmDialogFactory) {
-		this.authConfirmDialogFactory = authConfirmDialogFactory;
-	}
-
-	public void setAuthRequestDialogViewFactory(IBeanFactory<AuthRequestDialogView> authRequestDialogViewFactory) {
-		this.authRequestDialogViewFactory = authRequestDialogViewFactory;
+	public void setAuthPanelViewFactory(IBeanFactory<AuthPanelView> authPanelViewFactory) {
+		this.authPanelViewFactory = authPanelViewFactory;
 	}
 }

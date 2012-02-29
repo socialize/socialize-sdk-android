@@ -57,7 +57,6 @@ public class SocialNetworkSignOutClickListener implements OnClickListener {
 	
 	@Override
 	public void onClick(final View v) {
-		
 		 dialog = new AlertDialog.Builder(v.getContext())
 		.setIcon(drawables.getDrawable(iconImage))
 		.setTitle("Sign Out of " + networkName)

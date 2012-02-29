@@ -56,6 +56,7 @@ import com.socialize.api.action.ViewSystem;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderInfo;
+import com.socialize.auth.AuthProviderInfoBuilder;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
 import com.socialize.auth.SocializeAuthProviderInfo;
@@ -127,6 +128,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private IOCContainer container;
 	private SocializeSession session;
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
+	private AuthProviderInfoBuilder authProviderInfoBuilder;
 	private SocializeInitializationAsserter asserter;
 	private CommentSystem commentSystem;
 	private ShareSystem shareSystem;
@@ -167,14 +169,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 
 	@Override
 	public boolean isSupported(AuthProviderType type) {
-		switch(type) {
-			case SOCIALIZE:
-				return true;
-			case FACEBOOK:
-				return !StringUtils.isEmpty(getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID));
-			default:
-				return false;
-		}
+		return authProviderInfoBuilder.isSupported(type);
 	}
 
 	/* (non-Javadoc)
@@ -374,6 +369,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.authProviderDataFactory = container.getBean("authProviderDataFactory");
 				this.asserter = container.getBean("initializationAsserter");
 				this.authProviders = container.getBean("authProviders");
+				this.authProviderInfoBuilder = container.getBean("authProviderInfoBuilder");
 				
 				SocializeConfig mainConfig = container.getBean("config");
 				
@@ -409,12 +405,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	}
 	
 	protected void verify3rdPartyAuthConfigured() {
-		if(logger != null && logger.isDebugEnabled()) {
-			// TODO: Make generic
-			if(!isSupported(AuthProviderType.FACEBOOK)) {
-				logger.debug("No facebook app id found in socialize.properties.  Facebook not enabled");
-			}
-		}
+		authProviderInfoBuilder.validateAll();
 	}
 	
 	@Override
@@ -619,30 +610,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		SocializeConfig config = getConfig();
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-		
-		if(checkKeys(consumerKey, consumerSecret, authListener)) {
-			// TODO: Add aother auth providers
-			switch (authProviderType) {
-			
-			case FACEBOOK:
-					String authProviderAppId = config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
-					
-					if(StringUtils.isEmpty(authProviderAppId)) {
-						String msg = "No facebook app id specified";
-						if(authListener != null) {
-							authListener.onError(new SocializeException(msg));
-						}
-						logErrorMessage(msg);
-					}
-					else {
-						authenticate(context, consumerKey, consumerSecret, authProviderType, authProviderAppId, authListener);
-					}
-					break;
-			default:
-				authenticate(context, consumerKey, consumerSecret, authListener);
-				break;
-			}
-		}
+		AuthProviderInfo authProviderInfo = authProviderInfoBuilder.getFactory(authProviderType).getInstance();
+		authenticate(context, consumerKey, consumerSecret, authProviderInfo, authListener);
 	}
 
 	/* (non-Javadoc)
@@ -697,6 +666,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		AuthProviderData authProviderData = this.authProviderDataFactory.getBean();
 		authProviderData.setAuthProviderInfo(authProviderInfo);
 		authProviderData.setToken3rdParty(userProviderCredentials.getAccessToken());
+		authProviderData.setSecret3rdParty(userProviderCredentials.getTokenSecret());
 		authProviderData.setUserId3rdParty(userProviderCredentials.getUserId());
 		authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, false);	
 	}
@@ -709,8 +679,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			SocializeAuthListener authListener, 
 			boolean do3rdPartyAuth) {
 		
-		if(assertInitialized(authListener)) {
-			userSystem.authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, this, do3rdPartyAuth);
+		if(checkKeys(consumerKey, consumerSecret, authListener)) {
+			if(assertInitialized(authListener)) {
+				userSystem.authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, this, do3rdPartyAuth);
+			}
 		}
 	}
 

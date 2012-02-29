@@ -28,6 +28,7 @@ import com.socialize.ui.view.SocializeButton;
 /**
  * @author Jason Polites
  */
+@Deprecated
 public class AuthConfirmDialogView extends AuthRequestDialogView {
 
 	private SocializeButton socializeSkipAuthButton;
