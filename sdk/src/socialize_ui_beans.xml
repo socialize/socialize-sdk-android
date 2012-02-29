@@ -291,6 +291,7 @@
 		<property name="logger" ref="logger"/>
 		<property name="authPanelViewFactory" ref="authPanelViewFactory"/>
 		<property name="drawables" ref="drawables"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
 	</bean>
 	
 	<!-- 

@@ -25,6 +25,7 @@ import android.content.Context;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.auth.AuthProviderType;
@@ -56,28 +57,33 @@ public class AuthPanelView extends BaseView {
 		
 		int padding = deviceUtils.getDIP(12);
 		
+		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		LayoutParams wrapParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		RelativeLayout.LayoutParams badgeParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		LayoutParams fillParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		LayoutParams fillParamsCenter = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		
-		setLayoutParams(params);
+		params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
+		fillParamsCenter.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		masterParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+//		wrapParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		masterParams.setMargins(padding, padding, padding, padding);
+		badgeParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+		
+		setLayoutParams(masterParams);
 		setPadding(padding, padding, padding, padding);
 		
 		LinearLayout layout = new LinearLayout(getContext());
-		LinearLayout badgeLayout = new LinearLayout(getContext());
+		RelativeLayout badgeLayout = new RelativeLayout(getContext());
 		
 		badgeLayout.setLayoutParams(fillParamsCenter);
 		layout.setOrientation(VERTICAL);
-	
-		params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
-		fillParamsCenter.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 		
 		layout.setLayoutParams(params);
 		
 		ImageView authBadge = new ImageView(getContext());
 		authBadge.setImageDrawable(drawables.getDrawable("auth_badge.png"));
-		authBadge.setLayoutParams(wrapParams);
+		authBadge.setLayoutParams(badgeParams);
 		
 		boolean fbOK = getSocialize().isSupported(AuthProviderType.FACEBOOK);
 		boolean twOK = getSocialize().isSupported(AuthProviderType.TWITTER);

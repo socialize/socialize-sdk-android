@@ -89,7 +89,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		AndroidMock.expect(progressDialogFactory.show(getContext(), "Posting comment", "Please wait...")).andReturn(dialog);
 		AndroidMock.expect(socializeService.isSupported(AuthProviderType.FACEBOOK)).andReturn(true);
 		
-		AndroidMock.expect(authRequestDialog.create(getContext(), listener)).andReturn(alertDialog);
+		AndroidMock.expect(authRequestDialog.create(getActivity().getWindow().getDecorView(), listener)).andReturn(alertDialog);
 		
 		dialog.dismiss();
 		alertDialog.show();

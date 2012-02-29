@@ -22,12 +22,12 @@
 package com.socialize.ui.dialog;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
-import android.view.ViewGroup.LayoutParams;
-import android.view.WindowManager;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.LinearLayout.LayoutParams;
 
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
@@ -37,6 +37,7 @@ import com.socialize.networks.facebook.FacebookSignInCell;
 import com.socialize.networks.twitter.TwitterSignInCell;
 import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.auth.AuthRequestListener;
+import com.socialize.util.DeviceUtils;
 
 /**
  * @author Jason Polites
@@ -45,14 +46,15 @@ import com.socialize.ui.auth.AuthRequestListener;
 public class AuthRequestDialogFactory extends AuthDialogFactory  {
 	
 	private IBeanFactory<AuthPanelView> authPanelViewFactory;
+	private DeviceUtils deviceUtils;
 	
-	public Dialog create(final Context context) {
-		return create(context, null);
+	public Dialog create(View parent) {
+		return create(parent, null);
 	}
 	
-	public Dialog create(final Context context, final AuthRequestListener listener) {
+	public Dialog create(final View parent, final AuthRequestListener listener) {
 
-		Dialog dialog = newDialog(context);
+		Dialog dialog = newDialog(parent.getContext());
 		
 		AuthPanelView view = authPanelViewFactory.getBean();
 		
@@ -61,6 +63,7 @@ public class AuthRequestDialogFactory extends AuthDialogFactory  {
 		view.setBackgroundDrawable(background);
 		
 		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 		
 		dialog.setContentView(view, params);
 		
@@ -77,12 +80,12 @@ public class AuthRequestDialogFactory extends AuthDialogFactory  {
 			twitterSignInCell.setAuthListener(authListener);
 		}
 		
-		WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-	    lp.copyFrom(dialog.getWindow().getAttributes());
-	    lp.width = WindowManager.LayoutParams.FILL_PARENT;
-	    lp.height = WindowManager.LayoutParams.FILL_PARENT;
-	    
-	    dialog.getWindow().setAttributes(lp);
+//		WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+//	    lp.copyFrom(dialog.getWindow().getAttributes());
+//	    lp.width = WindowManager.LayoutParams.FILL_PARENT;
+//	    lp.height = WindowManager.LayoutParams.FILL_PARENT;
+//	    
+//	    dialog.getWindow().setAttributes(lp);
 		
 		return dialog;
 	}
@@ -125,5 +128,9 @@ public class AuthRequestDialogFactory extends AuthDialogFactory  {
 
 	public void setAuthPanelViewFactory(IBeanFactory<AuthPanelView> authPanelViewFactory) {
 		this.authPanelViewFactory = authPanelViewFactory;
+	}
+
+	public void setDeviceUtils(DeviceUtils deviceUtils) {
+		this.deviceUtils = deviceUtils;
 	}
 }
