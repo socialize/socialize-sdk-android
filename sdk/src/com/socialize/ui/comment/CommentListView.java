@@ -29,8 +29,8 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.notifications.NotificationType;
-import com.socialize.ui.auth.AuthRequestDialogFactory;
 import com.socialize.ui.auth.AuthRequestListener;
+import com.socialize.ui.dialog.AuthRequestDialogFactory;
 import com.socialize.ui.dialog.DialogFactory;
 import com.socialize.ui.header.SocializeHeader;
 import com.socialize.ui.slider.ActionBarSliderFactory;
@@ -226,7 +226,6 @@ public class CommentListView extends BaseView {
 			@Override
 			public void onError(Context context, SocializeException e) {
 				showError(getContext(), e);
-				
 				if(onCommentViewActionListener != null) {
 					onCommentViewActionListener.onError(e);
 				}				
@@ -243,19 +242,30 @@ public class CommentListView extends BaseView {
 			public void onComment(String text, boolean shareLocation, boolean subscribe, SocialNetwork... networks) {
 				text = StringUtils.replaceNewLines(text, 3, 2);
 				
-				if(!getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-					// Check that FB is enabled for this installation
-					if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
+				if(networks == null || networks.length == 0) {
+					// No networks requested, ensure we are authed with at least one
+					boolean showAuth = true;
+					
+					if(getSocialize().isSupported(AuthProviderType.FACEBOOK) || getSocialize().isSupported(AuthProviderType.TWITTER)) {
+						if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) || getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
+							showAuth = false;
+						}
+					}
+					else {
+						showAuth = false;
+					}
+					
+					if(showAuth) {
 						authRequestDialogFactory.create(getContext(), getCommentAuthListener(text, shareLocation, subscribe, networks)).show();
 					}
 					else {
-						// Just post as anon
-						doPostComment(text, false, shareLocation, subscribe);
+						// Post as anon
+						doPostComment(text, shareLocation, subscribe);
 					}
 				}
 				else {
 					doPostComment(text, shareLocation, subscribe, networks);
-				}				
+				}
 			}
 
 			@Deprecated

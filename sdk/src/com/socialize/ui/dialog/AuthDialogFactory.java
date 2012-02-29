@@ -19,13 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.auth;
+package com.socialize.ui.dialog;
 
+import android.R;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.view.Window;
 
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
+import com.socialize.ui.auth.AuthRequestListener;
 import com.socialize.util.Drawables;
 
 /**
@@ -37,12 +41,25 @@ public abstract class AuthDialogFactory  {
 	protected Drawables drawables;
 	protected SocializeLogger logger;
 	
-	public abstract AlertDialog create(final Context context, final AuthRequestListener listener);
+	public abstract Dialog create(final Context context, final AuthRequestListener listener);
 
 	
 	// So we can mock
+	@Deprecated
 	protected AlertDialog.Builder newBuilder(Context context) {
 		return new AlertDialog.Builder(context);
+	}
+	
+	// So we can mock
+	protected Dialog newDialog(Context context) {
+//		Dialog dialog = new Dialog(context, R.style.Theme_Translucent_NoTitleBar);
+		Dialog dialog = new Dialog(context, R.style.Theme_Dialog);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
+		// Register to prevent window leakage
+		DialogRegistration.register(context, dialog);
+		
+		return dialog;
 	}
 	
 	protected void handleError(String msg, SocializeException error) {

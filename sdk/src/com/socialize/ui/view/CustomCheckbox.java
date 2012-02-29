@@ -39,9 +39,11 @@ public class CustomCheckbox extends BaseView {
 	private String textOff;
 	
 	private boolean borderOn = true;
-	private boolean forceDefaultDensity = false;
+	private boolean forceDefaultDensity = true;
 	
-	private int padding = 8;
+	private int padding = 4;
+	private int textPadding = 4;
+	private int imageMargin = 4;
 	
 	private int textSize = 12;
 	
@@ -58,6 +60,8 @@ public class CustomCheckbox extends BaseView {
 	public void init() {
 		
 		int dipPadding = deviceUtils.getDIP(padding);
+		int leftPadding = deviceUtils.getDIP(textPadding);
+		int margin = deviceUtils.getDIP(imageMargin);
 		
 		checkboxLabel = new TextView(getContext());
 		checkboxLabel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
@@ -70,10 +74,12 @@ public class CustomCheckbox extends BaseView {
 		LayoutParams checkboxLabelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		LayoutParams checkboxLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
+		checkboxLayoutParams.setMargins(margin, margin, margin, margin);
+		
 		checkboxLabel.setLayoutParams(checkboxLabelLayoutParams);
 		checkBox.setLayoutParams(checkboxLayoutParams);
 		checkBox.setPadding(dipPadding, dipPadding, dipPadding, dipPadding);
-		checkboxLabel.setPadding(0, dipPadding, dipPadding, dipPadding);
+		checkboxLabel.setPadding(leftPadding, dipPadding, dipPadding, dipPadding);
 		
 		setLayoutParams(checkboxMasterLayoutParams);
 		
@@ -277,6 +283,14 @@ public class CustomCheckbox extends BaseView {
 	
 	public void setChanged(boolean changed) {
 		this.changed = changed;
+	}
+	
+	public void setTextPadding(int textPadding) {
+		this.textPadding = textPadding;
+	}
+
+	public void setImageMargin(int imageMargin) {
+		this.imageMargin = imageMargin;
 	}
 
 	public void setTextSize(int textSize) {

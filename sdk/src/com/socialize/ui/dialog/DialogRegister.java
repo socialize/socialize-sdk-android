@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,56 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.auth;
+package com.socialize.ui.dialog;
 
-import com.socialize.networks.SocialNetwork;
+import android.app.Dialog;
 
 /**
+ * Allows activities to dismiss dialogs on destroy to prevent window leaking.
  * @author Jason Polites
  *
  */
-public enum AuthProviderType {
-	
-	SOCIALIZE ("socialize", 0),
-	FACEBOOK ("facebook", 1),
-	TWITTER ("twitter", 2);
-	
-	private final String name;   
-    private final int id; 
-	
-	AuthProviderType(String name, int id) {
-		this.name = name;
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	@Override
-	public String toString() {
-		return name;
-	}
-	
-	public static AuthProviderType valueOf(SocialNetwork socialNetwork) {
-		if(socialNetwork.equals(SocialNetwork.NONE)) {
-			return SOCIALIZE;
-		}
-		return valueOf(socialNetwork.name().toUpperCase());
-	}
-	
-	public static AuthProviderType valueOf(int id) {
-		switch(id) {
-		case 1 : 
-			return FACEBOOK;
-		case 2 : 
-			return TWITTER;			
-		default :
-			return SOCIALIZE;
-		}
-	}
+public interface DialogRegister {
+	public void register(Dialog dialog);
 }

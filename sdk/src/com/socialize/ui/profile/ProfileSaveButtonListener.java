@@ -69,6 +69,10 @@ public class ProfileSaveButtonListener implements OnClickListener {
 			profile.setAutoPostFacebook(view.getAutoPostFacebook().isChecked());
 		}
 		
+		if(view.getAutoPostTwitter() != null) {
+			profile.setAutoPostTwitter(view.getAutoPostTwitter().isChecked());
+		}
+		
 		if(view.getNotificationsEnabledCheckbox() != null) {
 			profile.setNotificationsEnabled(view.getNotificationsEnabledCheckbox().isChecked());
 		}

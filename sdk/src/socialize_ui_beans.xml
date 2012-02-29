@@ -286,13 +286,14 @@
 	 
 	<bean 
 		id="authRequestDialogFactory" 
-		class="com.socialize.ui.auth.AuthRequestDialogFactory"		
+		class="com.socialize.ui.dialog.AuthRequestDialogFactory"		
 		singleton="false">
 		<property name="logger" ref="logger"/>
 		<property name="authPanelViewFactory" ref="authPanelViewFactory"/>
 		<property name="drawables" ref="drawables"/>
 	</bean>
 	
+	<!-- 
 	<bean 
 		id="authConfirmDialog" 
 		class="com.socialize.ui.auth.AuthConfirmDialogFactory"		
@@ -301,7 +302,7 @@
 		<property name="authConfirmDialogViewFactory" ref="authConfirmDialogViewFactory"/>
 		<property name="drawables" ref="drawables"/>
 	</bean>
-	
+	 -->
 	<!-- 
 	<bean 
 		id="authRequestDialogView" 
@@ -417,6 +418,7 @@
 		<property name="imageOff" value="icon_twitter_disabled.png"/>
 		<property name="textOn" value=""/>
 		<property name="textOff" value=""/>
+		<property name="borderOn" value="false" type="boolean"/>
 	</bean>	
 	
 	<factory id="autoPostTwitterOptionFactory" makes="autoPostTwitterOption"/>
@@ -518,6 +520,7 @@
 		<property name="imageOff" value="icon_facebook_disabled.png"/>
 		<property name="textOn" value=""/>
 		<property name="textOff" value=""/>
+		<property name="borderOn" value="false" type="boolean"/>
 	</bean>	
 	
 	<factory id="autoPostFacebookOptionFactory" makes="autoPostFacebookOption"/>
@@ -684,7 +687,7 @@
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
 		<property name="text" value="Post Comment"/>
-		<property name="height" value="36" type="integer"/>
+		<property name="height" value="34" type="integer"/>
 		<property name="width" value="100" type="integer"/>
 		<property name="textSize" value="11" type="integer"/>
 		<property name="textAlign" value="center"/>
@@ -702,13 +705,13 @@
 		<property name="topColor" value="GRAY_BTN_TOP"/>
 		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
 		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>
-		<property name="height" value="36" type="integer"/>
-		<property name="width" value="70" type="integer"/>
+		<property name="height" value="34" type="integer"/>
+		<property name="width" value="100" type="integer"/>
 		<property name="textSize" value="11" type="integer"/>
 		<property name="textAlign" value="center"/>
 		<property name="padding" value="2" type="integer"/>
 	</bean>	
-	
+
 	<bean 
 		id="subscribeNotificationButton" 
 		singleton="false"
@@ -744,7 +747,6 @@
 		
 		<property name="locationEnabledOptionFactory" ref="locationEnabledOptionFactory"/>
 		<property name="notificationEnabledOptionFactory" ref="notificationEnabledOptionFactory"/>
-		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
 		
 		<init-method name="init"/>
 	</bean>		
@@ -773,12 +775,11 @@
 		extends="customCheckbox"
 		singleton="false">
 		<constructor-arg type="activity"/>
-		
 		<property name="imageOn" value="icon_location.png"/>
 		<property name="imageOff" value="icon_location_disabled.png"/>
-		<property name="textOn" value=""/>
-		<property name="textOff" value=""/>
-		<property name="borderOn" value="true" type="boolean"/>
+		<property name="textOn" value="Location will be shared"/>
+		<property name="textOff" value="Location will not be shared"/>
+		<property name="borderOn" value="false" type="boolean"/>
 	</bean>	
 	
 	<factory id="locationEnabledOptionFactory" makes="locationEnabledOption"/>	
@@ -792,7 +793,7 @@
 		<property name="imageOff" value="icon_notify_disabled.png"/>
 		<property name="textOn" value=""/>
 		<property name="textOff" value=""/>
-		<property name="borderOn" value="true" type="boolean"/>
+		<property name="borderOn" value="false" type="boolean"/>
 	</bean>	
 	
 	<bean 

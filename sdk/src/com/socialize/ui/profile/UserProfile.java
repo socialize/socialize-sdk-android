@@ -42,6 +42,7 @@ public class UserProfile {
 	private boolean notificationsEnabled = true;
 	
 	private boolean autoPostFacebook;
+	private boolean autoPostTwitter;
 	
 	public String getFullName() {
 		if(fullName == null) {
@@ -126,6 +127,14 @@ public class UserProfile {
 	
 	public void setAutoPostFacebook(boolean autoPostFacebook) {
 		this.autoPostFacebook = autoPostFacebook;
+	}
+
+	public boolean isAutoPostTwitter() {
+		return autoPostTwitter;
+	}
+
+	public void setAutoPostTwitter(boolean autoPostTwitter) {
+		this.autoPostTwitter = autoPostTwitter;
 	}
 
 	@Deprecated

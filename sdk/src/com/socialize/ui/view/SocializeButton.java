@@ -84,6 +84,7 @@ public class SocializeButton extends LinearLayout {
 	private List<OnClickListener> afterListeners;
 	
 	private int textPadding;
+	private int cornerRadius = 2;
 	
 	public SocializeButton(Context context) {
 		super(context);
@@ -92,7 +93,7 @@ public class SocializeButton extends LinearLayout {
 	public void init() {
 		
 		int dipPadding = deviceUtils.getDIP(padding);
-		int radius = deviceUtils.getDIP(4);
+		int radius = deviceUtils.getDIP(cornerRadius);
 		
 		textPadding = deviceUtils.getDIP(4);
 		

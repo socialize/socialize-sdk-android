@@ -26,6 +26,7 @@ import android.content.Context;
 import android.view.View;
 
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.ui.dialog.AuthDialogFactory;
 
 /**
  * @author Jason Polites

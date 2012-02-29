@@ -52,10 +52,13 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	public static final String STATS = "stats";
 	public static final String THIRD_PARTY_AUTH = "third_party_auth";
 	
-	@Deprecated
 	public static final String AUTO_POST_FACEBOOK = "auto_post_fb";
+	public static final String AUTO_POST_TWITTER = "auto_post_tw";
 	
+	@Deprecated
 	public static final String AUTO_POST_LIKES_FACEBOOK = "auto_post_likes_fb";
+	
+	@Deprecated
 	public static final String AUTO_POST_COMMENTS_FACEBOOK = "auto_post_comments_fb";
 	
 	public static final String NOTIFICATIONS_ENABLED = "notifications_enabled";
@@ -70,7 +73,7 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	@Override
 	protected void postFromJSON(JSONObject object, User user) throws JSONException {
 		
-		boolean legacyAutoPost = getBoolean(object,AUTO_POST_FACEBOOK, true);
+		boolean legacyAutoPost = getBoolean(object,AUTO_POST_COMMENTS_FACEBOOK, true) || getBoolean(object,AUTO_POST_LIKES_FACEBOOK, true);
 		
 		user.setMetaData(getString(object,META));
 		user.setFirstName(getString(object,FIRST_NAME));
@@ -82,8 +85,8 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		user.setMediumImageUri(getString(object,MEDIUM_IMAGE_URI));
 		user.setLargeImageUri(getString(object,LARGE_IMAGE_URI));
 		user.setProfilePicData(getString(object,IMAGE_DATA));
-		user.setAutoPostCommentsFacebook(getBoolean(object,AUTO_POST_COMMENTS_FACEBOOK, legacyAutoPost));
-		user.setAutoPostLikesFacebook(getBoolean(object,AUTO_POST_LIKES_FACEBOOK, legacyAutoPost));
+		user.setAutoPostToFacebook(getBoolean(object,AUTO_POST_FACEBOOK, legacyAutoPost));
+		user.setAutoPostToTwitter(getBoolean(object,AUTO_POST_TWITTER, true));
 		user.setShareLocation(getBoolean(object,SHARE_LOCATION, true));
 		user.setNotificationsEnabled(getBoolean(object,NOTIFICATIONS_ENABLED, true));
 		
@@ -128,8 +131,8 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		object.put(SMALL_IMAGE_URI, user.getSmallImageUri());
 		object.put(MEDIUM_IMAGE_URI, user.getMediumImageUri());
 		object.put(LARGE_IMAGE_URI, user.getLargeImageUri());
-		object.put(AUTO_POST_COMMENTS_FACEBOOK, user.isAutoPostCommentsFacebook());
-		object.put(AUTO_POST_LIKES_FACEBOOK, user.isAutoPostLikesFacebook());
+		object.put(AUTO_POST_FACEBOOK, user.isAutoPostToFacebook());
+		object.put(AUTO_POST_TWITTER, user.isAutoPostToTwitter());
 		object.put(SHARE_LOCATION, user.isShareLocation());
 		object.put(NOTIFICATIONS_ENABLED, user.isNotificationsEnabled());
 

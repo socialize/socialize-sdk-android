@@ -21,58 +21,17 @@
  */
 package com.socialize.ui.dialog;
 
-import com.socialize.util.Drawables;
-import com.socialize.util.StringUtils;
-
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 
 /**
  * @author Jason Polites
  *
  */
-public class AlertDialogFactory implements DialogFactory<AlertDialog> {
-
-	private Drawables drawables;
-	
-	@Override
-	public AlertDialog show(Context context, String title, String message) {
-		AlertDialog.Builder builder = makeBuilder(context);
-		builder.setTitle(title);
-		
-		if(drawables != null) {
-			builder.setIcon(drawables.getDrawable("socialize_icon_white.png"));
+public class DialogRegistration {
+	public static void register(Context context, Dialog dialog) {
+		if(context instanceof DialogRegister) {
+			((DialogRegister)context).register(dialog);
 		}
-		
-		if(!StringUtils.isEmpty(message)) {
-			builder.setMessage(message);
-		}
-		
-		builder.setCancelable(true)
-		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				dialog.dismiss();
-			}
-		});
-		
-		AlertDialog alert = builder.create();
-		
-		// Register to prevent window leakage
-		DialogRegistration.register(context, alert);
-		
-		alert.show();
-		
-		return alert;
 	}
-	
-	protected Builder makeBuilder(Context context) {
-		return new AlertDialog.Builder(context);
-	}
-
-	public void setDrawables(Drawables drawables) {
-		this.drawables = drawables;
-	}
-
 }

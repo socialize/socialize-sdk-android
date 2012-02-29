@@ -37,9 +37,6 @@ public class CommentReAuthListener implements SocializeAuthListener {
 	private CommentButtonCallback callback;
 	private String comment;
 	
-	@Deprecated
-	private boolean autoPostToFacebook;
-	
 	private boolean shareLocation;
 	private boolean subscribe;
 	private Context context;

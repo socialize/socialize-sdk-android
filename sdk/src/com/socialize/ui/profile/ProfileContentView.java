@@ -98,7 +98,12 @@ public class ProfileContentView extends BaseView {
 	private IBeanFactory<SocialNetworkCheckbox> facebookEnabledCheckboxFactory;
 	private IBeanFactory<SocialNetworkCheckbox> twitterEnabledCheckboxFactory;
 	
+	private LayoutParams commonParams;
+	
 	private int buttonLayoutViewId = 0;
+	
+	private SocializeAuthListener socialSignInListener;
+	private SocialNetworkSignOutListener socialSignOutListener;
 
 	public ProfileContentView(Activity context, ProfileLayoutView parent) {
 		super(context);
@@ -121,7 +126,7 @@ public class ProfileContentView extends BaseView {
 		int margin = deviceUtils.getDIP(8);
 		buttonLayoutViewId = getNextViewId(this);
 		
-		LayoutParams commonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		commonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		commonParams.setMargins(0, margin, 0, margin);
 		
 		profilePictureEditView = profilePictureEditViewFactory.getBean();
@@ -156,63 +161,11 @@ public class ProfileContentView extends BaseView {
 			master.addView(notificationsEnabledCheckbox);
 		}
 		
-		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
-			
-			facebookEnabledCheckbox = facebookEnabledCheckboxFactory.getBean();
-			
-			facebookEnabledCheckbox.setLayoutParams(commonParams);
-			
-			autoPostFacebook = new CheckBox(getContext());
-			
-			autoPostFacebook.setText("Post to Facebook");
-			autoPostFacebook.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-			
-			LayoutParams optionsParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-			
-			autoPostFacebook.setLayoutParams(optionsParams);
-			
-			facebookEnabledCheckbox.setVisibility(View.INVISIBLE);
-			autoPostFacebook.setVisibility(View.INVISIBLE);
-			
-			master.addView(facebookEnabledCheckbox);
-			
-			ViewGroup fbLayout = makeSocialNetworkOptionsLayout();
-			
-			fbLayout.addView(autoPostFacebook);
-			
-			master.addView(fbLayout);
-		}
-		
-		if(getSocialize().isSupported(AuthProviderType.TWITTER)) {
-			twitterEnabledCheckbox = twitterEnabledCheckboxFactory.getBean();
-			
-			twitterEnabledCheckbox.setLayoutParams(commonParams);
-			
-			autoPostTwitter = new CheckBox(getContext());
-			
-			autoPostTwitter.setText("Post to Twitter");
-			autoPostTwitter.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-			
-			LayoutParams optionsParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-			
-			autoPostTwitter.setLayoutParams(optionsParams);
-			
-			twitterEnabledCheckbox.setVisibility(View.INVISIBLE);
-			autoPostTwitter.setVisibility(View.INVISIBLE);
-			
-			master.addView(twitterEnabledCheckbox);
-			
-			ViewGroup fbLayout = makeSocialNetworkOptionsLayout();
-			
-			fbLayout.addView(autoPostTwitter);
-			
-			master.addView(fbLayout);
-		}
+		setupSocialButtons(master);
+		setupListeners();
 		
 		buttons.addView(cancelButton);
 		buttons.addView(saveButton);
-		
-		setupListeners();
 		
 		ViewGroup scrollView = makeScrollLayout();
 		
@@ -223,7 +176,87 @@ public class ProfileContentView extends BaseView {
 		addView(buttons);
 	}
 	
+	protected void setupSocialButtons(ViewGroup group) {
+		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
+			facebookEnabledCheckbox = facebookEnabledCheckboxFactory.getBean();
+			autoPostFacebook = new CheckBox(getContext());
+			setupSocialButton(group, facebookEnabledCheckbox, autoPostFacebook, "Post to Facebook by default");
+		}
+		if(getSocialize().isSupported(AuthProviderType.TWITTER)) {
+			twitterEnabledCheckbox = twitterEnabledCheckboxFactory.getBean();
+			autoPostTwitter = new CheckBox(getContext());
+			setupSocialButton(group, twitterEnabledCheckbox, autoPostTwitter, "Post to Twitter by default");
+		}		
+	}
+	
+	protected void setupSocialButton(ViewGroup group, SocialNetworkCheckbox checkbox, CheckBox shareOption, String shareText) {
+		
+		checkbox.setLayoutParams(commonParams);
+		
+		shareOption.setText(shareText);
+		shareOption.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+		
+		LayoutParams optionsParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		
+		shareOption.setLayoutParams(optionsParams);
+		
+		checkbox.setVisibility(View.INVISIBLE);
+		
+		shareOption.setVisibility(View.INVISIBLE);
+		
+		group.addView(checkbox);
+		
+		ViewGroup fbLayout = makeSocialNetworkOptionsLayout();
+		
+		fbLayout.addView(shareOption);
+		
+		group.addView(fbLayout);
+	}
+	
+	protected SocializeAuthListener getSignInListener() {
+		return new SocializeAuthListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				ProfileContentView.this.showErrorToast(ProfileContentView.this.getContext(), error);
+			}
+			
+			@Override
+			public void onCancel() {}
+			
+			@Override
+			public void onAuthSuccess(SocializeSession session) {
+				// Reload profile view
+				parent.setUserId(session.getUser().getId().toString());
+				parent.doGetUserProfile();
+			}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				ProfileContentView.this.showErrorToast(ProfileContentView.this.getContext(), error);
+			}
+		};
+	}
+	
+	protected SocialNetworkSignOutListener getSignOutListener() {
+		return new SocialNetworkSignOutListener() {
+			@Override
+			public void onSignOut() {
+				parent.setUserId(Socialize.getSocialize().getSession().getUser().getId().toString());
+				parent.doGetUserProfile();
+			}
+
+			@Override
+			public void onCancel() {}
+			
+		};
+	}
+	
 	protected void setupListeners() {
+		
+		socialSignInListener = getSignInListener();
+		socialSignOutListener = getSignOutListener();
+		
 		cancelButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -234,75 +267,10 @@ public class ProfileContentView extends BaseView {
 		saveButton.setOnClickListener(profileSaveButtonListenerFactory.getBean(getContext(), this));
 		
 		if(facebookEnabledCheckbox != null) {
-			facebookEnabledCheckbox.setSignInListener(new SocializeAuthListener() {
-				
-				@Override
-				public void onError(SocializeException error) {
-					ProfileContentView.this.showErrorToast(ProfileContentView.this.getContext(), error);
-				}
-				
-				@Override
-				public void onCancel() { }
-				
-				@Override
-				public void onAuthSuccess(SocializeSession session) {
-					// Reload profile view
-					parent.setUserId(session.getUser().getId().toString());
-					parent.doGetUserProfile();
-				}
-				
-				@Override
-				public void onAuthFail(SocializeException error) {
-					ProfileContentView.this.showErrorToast(ProfileContentView.this.getContext(), error);
-				}
-			});
-			
-			facebookEnabledCheckbox.setSignOutListener(new SocialNetworkSignOutListener() {
-				@Override
-				public void onSignOut() {
-					parent.setUserId(Socialize.getSocialize().getSession().getUser().getId().toString());
-					parent.doGetUserProfile();
-				}
-
-				@Override
-				public void onCancel() {}
-				
-			});
-			
-			twitterEnabledCheckbox.setSignInListener(new SocializeAuthListener() {
-				
-				@Override
-				public void onError(SocializeException error) {
-					ProfileContentView.this.showErrorToast(ProfileContentView.this.getContext(), error);
-				}
-				
-				@Override
-				public void onCancel() { }
-				
-				@Override
-				public void onAuthSuccess(SocializeSession session) {
-					// Reload profile view
-					parent.setUserId(session.getUser().getId().toString());
-					parent.doGetUserProfile();
-				}
-				
-				@Override
-				public void onAuthFail(SocializeException error) {
-					ProfileContentView.this.showErrorToast(ProfileContentView.this.getContext(), error);
-				}
-			});			
-			
-			twitterEnabledCheckbox.setSignOutListener(new SocialNetworkSignOutListener() {
-				@Override
-				public void onSignOut() {
-					parent.setUserId(Socialize.getSocialize().getSession().getUser().getId().toString());
-					parent.doGetUserProfile();
-				}
-
-				@Override
-				public void onCancel() {}
-				
-			});			
+			facebookEnabledCheckbox.setSignInListener(socialSignInListener);
+			facebookEnabledCheckbox.setSignOutListener(socialSignOutListener);
+			twitterEnabledCheckbox.setSignInListener(socialSignInListener);			
+			twitterEnabledCheckbox.setSignOutListener(socialSignOutListener);			
 		}
 	}
 
@@ -504,6 +472,10 @@ public class ProfileContentView extends BaseView {
 
 	protected CheckBox getAutoPostFacebook() {
 		return autoPostFacebook;
+	}
+	
+	protected CheckBox getAutoPostTwitter() {
+		return autoPostTwitter;
 	}
 
 	protected CustomCheckbox getNotificationsEnabledCheckbox() {

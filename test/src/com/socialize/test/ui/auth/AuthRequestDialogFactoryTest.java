@@ -23,6 +23,7 @@ package com.socialize.test.ui.auth;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface.OnCancelListener;
 import android.graphics.drawable.Drawable;
@@ -37,9 +38,9 @@ import com.socialize.test.mock.MockAlertDialog;
 import com.socialize.test.mock.MockBuilder;
 import com.socialize.test.ui.SocializeUIActivityTest;
 import com.socialize.ui.auth.AuthConfirmDialogFactory;
-import com.socialize.ui.auth.AuthRequestDialogFactory;
 import com.socialize.ui.auth.AuthRequestDialogView;
 import com.socialize.ui.auth.AuthRequestListener;
+import com.socialize.ui.dialog.AuthRequestDialogFactory;
 import com.socialize.util.Drawables;
 
 /**
@@ -198,7 +199,7 @@ public class AuthRequestDialogFactoryTest extends SocializeUIActivityTest {
 //		dialogFactory.setAuthRequestDialogViewFactory(authRequestDialogViewFactory);
 //		dialogFactory.setAuthConfirmDialogFactory(authConfirmDialogFactoryFactory);
 		
-		AlertDialog dialog = dialogFactory.create(getContext(), listener);
+		Dialog dialog = dialogFactory.create(getContext(), listener);
 		
 		OnCancelListener nested = getResult(0);
 		

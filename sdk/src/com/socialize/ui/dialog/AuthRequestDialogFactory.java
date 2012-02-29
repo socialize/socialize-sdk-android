@@ -19,10 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.auth;
+package com.socialize.ui.dialog;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.GradientDrawable.Orientation;
+import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 
 import com.socialize.android.ioc.IBeanFactory;
@@ -31,6 +35,8 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.facebook.FacebookSignInCell;
 import com.socialize.networks.twitter.TwitterSignInCell;
+import com.socialize.ui.auth.AuthPanelView;
+import com.socialize.ui.auth.AuthRequestListener;
 
 /**
  * @author Jason Polites
@@ -39,26 +45,26 @@ import com.socialize.networks.twitter.TwitterSignInCell;
 public class AuthRequestDialogFactory extends AuthDialogFactory  {
 	
 	private IBeanFactory<AuthPanelView> authPanelViewFactory;
-//	private IBeanFactory<AuthConfirmDialogFactory> authConfirmDialogFactory;
 	
-	public AlertDialog create(final Context context) {
+	public Dialog create(final Context context) {
 		return create(context, null);
 	}
 	
-	public AlertDialog create(final Context context, final AuthRequestListener listener) {
+	public Dialog create(final Context context, final AuthRequestListener listener) {
 
-		AlertDialog.Builder builder = newBuilder(context);
+		Dialog dialog = newDialog(context);
 		
 		AuthPanelView view = authPanelViewFactory.getBean();
 		
-		builder.setView(view);
+		GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Color.parseColor("#323a43"), Color.parseColor("#1d2227") });
 		
-		final AlertDialog alertDialog = builder.create();
+		view.setBackgroundDrawable(background);
 		
-		alertDialog.setIcon(drawables.getDrawable("socialize_icon_white.png"));
-		alertDialog.setTitle("Authentication");
+		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		
-		SocializeAuthListener authListener = getAuthClickListener(alertDialog, listener);
+		dialog.setContentView(view, params);
+		
+		SocializeAuthListener authListener = getAuthClickListener(dialog, listener);
 		
 		FacebookSignInCell facebookSignInCell = view.getFacebookSignInCell();
 		TwitterSignInCell twitterSignInCell = view.getTwitterSignInCell();
@@ -72,24 +78,16 @@ public class AuthRequestDialogFactory extends AuthDialogFactory  {
 		}
 		
 		WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-	    lp.copyFrom(alertDialog.getWindow().getAttributes());
+	    lp.copyFrom(dialog.getWindow().getAttributes());
 	    lp.width = WindowManager.LayoutParams.FILL_PARENT;
-	    lp.height = WindowManager.LayoutParams.FILL_PARENT;		
+	    lp.height = WindowManager.LayoutParams.FILL_PARENT;
+	    
+	    dialog.getWindow().setAttributes(lp);
 		
-//		alertDialog.setOnCancelListener(new OnCancelListener() {
-//			@Override
-//			public void onCancel(DialogInterface dialog) {
-//				// Render the confirm dialog
-//				AuthConfirmDialogFactory dialogFactory = authConfirmDialogFactory.getBean();
-//				dialogFactory.show(context, listener);
-//			}
-//		});
-//		
-		
-		return alertDialog;
+		return dialog;
 	}
 	
-	protected SocializeAuthListener getAuthClickListener(final AlertDialog alertDialog, final AuthRequestListener listener) {
+	protected SocializeAuthListener getAuthClickListener(final Dialog alertDialog, final AuthRequestListener listener) {
 		return new SocializeAuthListener() {
 			
 			@Override
