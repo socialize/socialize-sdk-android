@@ -22,21 +22,23 @@
 package com.socialize.ui.dialog;
 
 import android.app.Dialog;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout.LayoutParams;
 
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.facebook.FacebookSignInCell;
 import com.socialize.networks.twitter.TwitterSignInCell;
 import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.auth.AuthRequestListener;
+import com.socialize.ui.util.Colors;
 import com.socialize.util.DeviceUtils;
 
 /**
@@ -56,9 +58,11 @@ public class AuthRequestDialogFactory extends AuthDialogFactory  {
 
 		Dialog dialog = newDialog(parent.getContext());
 		
-		AuthPanelView view = authPanelViewFactory.getBean();
+		AuthPanelView view = authPanelViewFactory.getBean(listener, dialog);
 		
-		GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Color.parseColor("#323a43"), Color.parseColor("#1d2227") });
+		GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Colors.parseColor("#323a43"), Colors.parseColor("#1d2227") });
+		
+		background.setCornerRadius(deviceUtils.getDIP(4));
 		
 		view.setBackgroundDrawable(background);
 		
@@ -67,30 +71,28 @@ public class AuthRequestDialogFactory extends AuthDialogFactory  {
 		
 		dialog.setContentView(view, params);
 		
-		SocializeAuthListener authListener = getAuthClickListener(dialog, listener);
-		
 		FacebookSignInCell facebookSignInCell = view.getFacebookSignInCell();
 		TwitterSignInCell twitterSignInCell = view.getTwitterSignInCell();
 		
 		if(facebookSignInCell != null) {
-			facebookSignInCell.setAuthListener(authListener);
+			facebookSignInCell.setAuthListener(getAuthClickListener(dialog, listener, SocialNetwork.FACEBOOK));
 		}
 		
 		if(twitterSignInCell != null) {
-			twitterSignInCell.setAuthListener(authListener);
+			twitterSignInCell.setAuthListener(getAuthClickListener(dialog, listener, SocialNetwork.TWITTER));
 		}
 		
-//		WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-//	    lp.copyFrom(dialog.getWindow().getAttributes());
-//	    lp.width = WindowManager.LayoutParams.FILL_PARENT;
-//	    lp.height = WindowManager.LayoutParams.FILL_PARENT;
-//	    
-//	    dialog.getWindow().setAttributes(lp);
+		WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+	    lp.copyFrom(dialog.getWindow().getAttributes());
+	    lp.width = WindowManager.LayoutParams.FILL_PARENT;
+	    lp.height = WindowManager.LayoutParams.FILL_PARENT;
+	    
+	    dialog.getWindow().setAttributes(lp);
 		
 		return dialog;
 	}
 	
-	protected SocializeAuthListener getAuthClickListener(final Dialog alertDialog, final AuthRequestListener listener) {
+	protected SocializeAuthListener getAuthClickListener(final Dialog alertDialog, final AuthRequestListener listener, final SocialNetwork network) {
 		return new SocializeAuthListener() {
 			
 			@Override
@@ -106,7 +108,7 @@ public class AuthRequestDialogFactory extends AuthDialogFactory  {
 			public void onAuthSuccess(SocializeSession session) {
 				alertDialog.dismiss();
 				if(listener != null) {
-					listener.onResult(alertDialog);
+					listener.onResult(alertDialog, network);
 				}
 			}
 			

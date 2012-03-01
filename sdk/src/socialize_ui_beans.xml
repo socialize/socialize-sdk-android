@@ -327,6 +327,19 @@
 		<init-method name="init"/>
 	</bean>
 	 -->
+	 
+	<bean 
+		id="anonCell" 
+		class="com.socialize.ui.auth.AnonymousCell" 
+		singleton="false"
+		extends="clickableSectionCell">
+		<constructor-arg type="activity"/>	
+		<property name="backgroundColor" value="#293036"/>
+		<property name="bgAlpha" value="255" type="integer"/>
+	</bean>	
+	
+	<factory id="anonCellFactory" makes="anonCell"/>	
+	 
 	<bean 
 		id="authPanelView" 
 		class="com.socialize.ui.auth.AuthPanelView"		
@@ -336,6 +349,7 @@
 		<property name="drawables" ref="drawables"/>
 		<property name="facebookSignInCellFactory" ref="facebookSignInCellFactory"/>
 		<property name="twitterSignInCellFactory" ref="twitterSignInCellFactory"/>
+		<property name="anonCellFactory" ref="anonCellFactory"/>
 		<init-method name="init"/>
 	</bean>
 	
@@ -405,10 +419,12 @@
 		<constructor-arg type="activity"/>	
 		<property name="twitterAuthClickListener" ref="twitterAuthClickListener"/>
 		<property name="displayText" value="Twitter"/>
+		<property name="backgroundColor" value="#3d464c"/>
+		<property name="bgAlpha" value="255" type="integer"/>
 	</bean>	
 	
 	<factory id="twitterSignInCellFactory" makes="twitterSignInCell"/>	
-
+	
 	<bean 
 		id="autoPostTwitterOption" 
 		extends="customCheckbox"
@@ -534,6 +550,8 @@
 		<constructor-arg type="activity"/>	
 		<property name="facebookAuthClickListener" ref="facebookAuthClickListener"/>
 		<property name="displayText" value="Facebook"/>
+		<property name="backgroundColor" value="#3d464c"/>
+		<property name="bgAlpha" value="255" type="integer"/>
 	</bean>	
 	
 	<factory id="facebookSignInCellFactory" makes="facebookSignInCell"/>	

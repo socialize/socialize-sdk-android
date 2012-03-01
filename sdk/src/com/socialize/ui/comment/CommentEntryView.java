@@ -45,6 +45,7 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.ui.util.Colors;
 import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.SocializeButton;
@@ -136,7 +137,7 @@ public class CommentEntryView extends BaseView {
 		buttonLayoutLeft.setLayoutParams(buttonLayoutLeftParams);
 		buttonLayoutRight.setLayoutParams(buttonLayoutRightParams);
 		
-		GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Color.parseColor("#44000000"), Color.parseColor("#88000000") });
+		GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Colors.parseColor("#44000000"), Colors.parseColor("#88000000") });
 		toolbarLayout.setBackgroundDrawable(background);
 		toolbarLayout.setPadding(padding, padding, padding, padding);
 		
@@ -380,7 +381,7 @@ public class CommentEntryView extends BaseView {
 							@Override
 							public void onError(SocializeException error) {
 								chkbox.setChecked(false);
-								showError(getContext(), error);
+								showErrorToast(getContext(), error);
 							}
 
 							@Override
@@ -392,7 +393,7 @@ public class CommentEntryView extends BaseView {
 							@Override
 							public void onAuthFail(SocializeException error) {
 								chkbox.setChecked(false);
-								showError(getContext(), error);
+								showErrorToast(getContext(), error);
 							}
 
 							@Override

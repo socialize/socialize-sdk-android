@@ -23,9 +23,12 @@ package com.socialize.ui.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,6 +36,7 @@ import android.widget.TextView;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -47,6 +51,13 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	private String displayText;
 	private TextView textView;
 	private ImageView imageView;
+	private String backgroundColor;
+	private String textColor;
+	
+	private int bgColor;
+	private int txtColor;
+	private int strokeColor = -1;
+	private int bgAlpha = 128;
 	
 	private Bitmap image;
 	
@@ -55,16 +66,31 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	private float bottomLeftRadius = 8.0f;
 	private float bottomRightRadius = 8.0f;
 	
+	private boolean canClick = true;
+	
+	private int topStroke = 1;
+	private int rightStroke = 1;
+	private int bottomStroke = 1;
+	private int leftStroke = 1;
+	
+	private int strokeCornerOffset = 2;
+	
 	private float[] radii;
+	private float[] strokeRadii;
 	
 	private GradientDrawable background;
+	private GradientDrawable stroke;
+	private LayerDrawable bgLayer;
 	
 	public ClickableSectionCell(Context context) {
 		super(context);
 	}
 	
 	public void init() {
-		setBackground();
+		
+		if(strokeColor < 0) {
+			strokeColor = Colors.parseColor("#191f25");
+		}
 		
 		topLeftRadius= deviceUtils.getDIP(topLeftRadius);
 		topRightRadius= deviceUtils.getDIP(topRightRadius);
@@ -82,6 +108,20 @@ public abstract class ClickableSectionCell extends LinearLayout {
 			bottomLeftRadius
 		};
 		
+		if(!StringUtils.isEmpty(backgroundColor)) {
+			bgColor = Colors.parseColor(backgroundColor);
+		}
+		else {
+			bgColor = colors.getColor(Colors.ACTIVITY_BG);
+		}
+		
+		if(!StringUtils.isEmpty(textColor)) {
+			txtColor = Colors.parseColor(textColor);
+		}
+		else {
+			txtColor = colors.getColor(Colors.BODY);
+		}
+		
 		LinearLayout master = new LinearLayout(getContext());
 		
 		LinearLayout.LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
@@ -98,49 +138,81 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		textParams.setMargins(margin*2, 0, margin, 0);
 		iconParams.setMargins(margin, 0, margin, 0);
 		
-		textView = makeDisplayText();
-		textView.setLayoutParams(textParams);
+		View text = makeDisplayText();
+		text.setLayoutParams(textParams);
 		
 		imageView = makeImage();
 		
 		master.setLayoutParams(masterParams);
 		
-		ImageView arrowIcon = new ImageView(getContext());
-		arrowIcon.setImageDrawable(drawables.getDrawable("arrow.png"));
-		arrowIcon.setLayoutParams(iconParams);
+		setBackground();
 		
 		if(imageView != null) {
 			master.addView(imageView);
 		}
 		
-		master.addView(textView);
-		master.addView(arrowIcon);
+		master.addView(text);
+		
+		if(canClick) {
+			ImageView arrowIcon = new ImageView(getContext());
+			arrowIcon.setImageDrawable(drawables.getDrawable("arrow.png"));
+			arrowIcon.setLayoutParams(iconParams);			
+			master.addView(arrowIcon);
+		}
 		
 		addView(master);
 	}
 	
-	protected TextView makeDisplayText() {
-		int textColor = colors.getColor(Colors.BODY);
-		TextView textView = new TextView(getContext());
+	protected View makeDisplayText() {
+		textView = new TextView(getContext());
 		textView.setText(displayText);
-		textView.setTextColor(textColor);
-		textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+		textView.setTextColor(txtColor);
+		textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
 		return textView;
 	}
 	
 	protected abstract ImageView makeImage();
 	
 	protected void setBackground() {
-		int bgColor = colors.getColor(Colors.ACTIVITY_BG);
-		background = makeGradient(bgColor, bgColor);
-		background.setCornerRadii(radii);
-		background.setAlpha(128);
+		if(background == null) background = makeGradient(bgColor, bgColor);
+		if(stroke == null) stroke = makeGradient(strokeColor, strokeColor);
+		if(bgLayer == null) bgLayer = new LayerDrawable(new Drawable[]{stroke, background});
 		
-		setBackgroundDrawable(background);
+		strokeRadii = new float[8];
 		
-		int padding = deviceUtils.getDIP(4);
+		initBackground();
+	}
+	
+	protected void initBackground() {
+		if(background != null) {
+			background.setCornerRadii(radii);
+			background.setAlpha(bgAlpha);
+		}		
 		
-		setPadding(padding, padding, padding, padding);
+		if(bgLayer != null) {
+			bgLayer.setLayerInset(1, leftStroke, topStroke, rightStroke, bottomStroke);
+		}
+		
+		if(stroke != null) {
+			int pixel = deviceUtils.getDIP(strokeCornerOffset);
+			
+			for (int i = 0; i < strokeRadii.length; i++) {
+				if(radii[i] > 0) {
+					strokeRadii[i] = radii[i] + pixel;
+				}
+				else {
+					strokeRadii[i] = 0.0f;
+				}
+			}		
+			
+			stroke.setCornerRadii(strokeRadii);
+			stroke.setAlpha(bgAlpha);
+		}
+		
+		setBackgroundDrawable(bgLayer);
+		
+		int padding = deviceUtils.getDIP(8);
+		setPadding(padding, padding, padding, padding);				
 	}
 
 	public void setDrawables(Drawables drawables) {
@@ -169,28 +241,38 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		}
 	}	
 
-	protected String getDisplayText() {
-		return displayText;
-	}
-
-	protected TextView getTextView() {
-		return textView;
-	}
-
-	protected ImageView getImageView() {
-		return imageView;
-	}
-
 	public Bitmap getImage() {
 		return image;
 	}
 	
-	public void setBackgroundRadii(float [] radii) {
+	public void setBackgroundData(float [] radii, int[] strokes, int strokeColor) {
+		this.strokeColor = strokeColor;
+		topStroke = strokes[0];
+		rightStroke = strokes[1];
+		bottomStroke = strokes[2];
+		leftStroke = strokes[3];
 		this.radii = radii;
-		if(background != null) {
-			background.setCornerRadii(radii);
-			setBackgroundDrawable(background);
-		}
+		initBackground();
+	}
+	
+	public void setBackgroundColor(String backgroundColor) {
+		this.backgroundColor = backgroundColor;
+	}
+	
+	public void setBgAlpha(int bgAlpha) {
+		this.bgAlpha = bgAlpha;
+	}
+
+	public void setCanClick(boolean clickable) {
+		this.canClick = clickable;
+	}
+	
+	public void setStrokeCornerOffset(int strokeCornerOffset) {
+		this.strokeCornerOffset = strokeCornerOffset;
+	}
+	
+	public void setStrokeColor(int strokeColor) {
+		this.strokeColor = strokeColor;
 	}
 
 	// So we can mock

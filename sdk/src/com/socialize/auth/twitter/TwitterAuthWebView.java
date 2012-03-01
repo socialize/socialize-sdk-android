@@ -61,6 +61,14 @@ public class TwitterAuthWebView extends WebView {
 		final CommonsHttpOAuthConsumer consumer = new CommonsHttpOAuthConsumer(consumerKey, consumerSecret);
 		
 		twitterWebViewClient.setOauthRequestListener(new OAuthRequestListener() {
+			
+			@Override
+			public void onCancel(String cancelToken) {
+				if(listener != null) {
+					listener.onCancel();
+				}
+			}
+
 			@Override
 			public void onRequestToken(String token, String verifier) {
 				try {

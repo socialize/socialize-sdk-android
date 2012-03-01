@@ -70,6 +70,7 @@ public class TwitterAuthView extends RelativeLayout {
 				
 				@Override
 				public void onError(SocializeException e) {
+					webView.setVisibility(View.GONE);
 					if(twitterAuthListener != null) {
 						twitterAuthListener.onError(e);
 					}
@@ -77,6 +78,7 @@ public class TwitterAuthView extends RelativeLayout {
 				
 				@Override
 				public void onCancel() {
+					webView.setVisibility(View.GONE);
 					if(twitterAuthListener != null) {
 						twitterAuthListener.onCancel();
 					}

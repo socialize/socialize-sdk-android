@@ -21,10 +21,10 @@
  */
 package com.socialize.ui.comment;
 
+import android.content.Context;
+
 import com.socialize.error.SocializeException;
 import com.socialize.networks.SocialNetwork;
-
-import android.content.Context;
 
 /**
  * @author Jason Polites

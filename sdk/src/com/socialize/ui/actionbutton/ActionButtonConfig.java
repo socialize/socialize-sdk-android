@@ -32,6 +32,7 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
 import com.socialize.networks.SocialNetwork;
+import com.socialize.ui.util.Colors;
 import com.socialize.util.StringUtils;
 
 /**
@@ -308,7 +309,7 @@ public class ActionButtonConfig {
 		else {
 			String strColor = attrs.getAttributeValue(androidns, "textColor");
 			if(!StringUtils.isEmpty(strColor)) {
-				textColor = Color.parseColor(strColor);
+				textColor = Colors.parseColor(strColor);
 			}
 		}
 		
@@ -346,7 +347,7 @@ public class ActionButtonConfig {
 			String color = attrs.getAttributeValue(androidns, "background");
 			if(!StringUtils.isEmpty(color)) {
 				try {
-					backgroundColor = Color.parseColor(color);
+					backgroundColor = Colors.parseColor(color);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

@@ -26,6 +26,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
+import android.view.Window;
 
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
@@ -52,8 +53,8 @@ public abstract class AuthDialogFactory  {
 	
 	// So we can mock
 	protected Dialog newDialog(Context context) {
-		Dialog dialog = new Dialog(context, R.style.Theme_Translucent_NoTitleBar);
-//		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		Dialog dialog = new Dialog(context, R.style.Theme_Dialog);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		// Register to prevent window leakage
 		DialogRegistration.register(context, dialog);

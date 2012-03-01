@@ -67,6 +67,9 @@ public class SafeProgressDialog extends ProgressDialog {
 		dialog.setTitle(title);
 		dialog.setMessage(message);
 		dialog.show();
+		
+		DialogRegistration.register(context, dialog);
+		
 		return dialog;
 	}
 	

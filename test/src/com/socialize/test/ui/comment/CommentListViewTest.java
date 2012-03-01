@@ -8,6 +8,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.location.Location;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
@@ -24,6 +26,7 @@ import com.socialize.listener.SocializeListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.test.PublicSocialize;
 import com.socialize.test.mock.MockAlertDialog;
 import com.socialize.test.ui.SocializeUIActivityTest;
@@ -107,7 +110,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 			}
 
 			@Override
-			public AuthRequestListener getCommentAuthListener(String text, boolean autoPost, boolean shareLocation, boolean subscribe) {
+			public AuthRequestListener getCommentAuthListener(String text, boolean shareLocation, boolean subscribe, SocialNetwork... networks) {
 				addResult(1, text);
 				return listener;
 			}
@@ -154,8 +157,8 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
 			
 			@Override
-			public void doPostComment(String comment, boolean postToFB, boolean shareLocation, boolean subscribe) {
-				addResult(0, comment);
+			public void doPostComment(String text, boolean shareLocation, boolean subscribe, SocialNetwork... networks) {
+				addResult(0, text);
 			}
 			
 			@Override
@@ -290,7 +293,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 			}
 
 			@Override
-			protected Comment newComment() {
+			public Comment newComment() {
 				return comment;
 			}
 		};
@@ -306,7 +309,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		view.setEndIndex(endIndex);
 		view.setEntity(entity);
 		
-		view.doPostComment(commentString, postFb, shareLocation, false);
+		view.doPostComment(commentString, shareLocation, false, SocialNetwork.FACEBOOK);
 		
 		AndroidMock.verify(progressDialogFactory);
 		AndroidMock.verify(commentAdapter);
@@ -386,7 +389,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		view.setProgressDialogFactory(progressDialogFactory);
 		view.setEntity(entity);
 		
-		view.doPostComment(comment, true, true, false);
+		view.doPostComment(comment, true, false, SocialNetwork.FACEBOOK);
 		
 		AndroidMock.verify(progressDialogFactory);
 		AndroidMock.verify(dialog);
@@ -769,11 +772,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		}
 
 		@Override
-		public AuthRequestListener getCommentAuthListener(String text, boolean autoPost, boolean shareLocation, boolean subscribe) {
-			return super.getCommentAuthListener(text, autoPost, shareLocation, subscribe);
-		}
-
-		@Override
 		public void setLoading(boolean loading) {
 			super.setLoading(loading);
 		}
@@ -831,6 +829,36 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		@Override
 		public ShareOptions newShareOptions() {
 			return super.newShareOptions();
+		}
+
+		@Override
+		public AuthRequestListener getCommentAuthListener(String text, boolean shareLocation, boolean subscribe, SocialNetwork... networks) {
+			return super.getCommentAuthListener(text, shareLocation, subscribe, networks);
+		}
+
+		@Override
+		public Comment newComment() {
+			return super.newComment();
+		}
+
+		@Override
+		public void doNotificationStatusSave() {
+			super.doNotificationStatusSave();
+		}
+
+		@Override
+		public void doNotificationStatusLoad() {
+			super.doNotificationStatusLoad();
+		}
+
+		@Override
+		public RelativeLayout getLayoutAnchor() {
+			return super.getLayoutAnchor();
+		}
+
+		@Override
+		public ViewGroup getSliderAnchor() {
+			return super.getSliderAnchor();
 		}
 	}
 }

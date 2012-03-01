@@ -19,13 +19,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.auth.twitter;
+package com.socialize.entity;
+
+import java.io.Serializable;
+
+import com.socialize.networks.SocialNetwork;
 
 /**
  * @author Jason Polites
  *
  */
-public interface OAuthRequestListener {
-	public void onRequestToken(String token, String verifier);
-	public void onCancel(String cancelToken);
+public class Propagator implements Serializable {
+	
+	private static final long serialVersionUID = 8785024423132900646L;
+	
+	private String text;
+	private SocialNetwork[] networks;
+
+	public SocialNetwork[] getNetworks() {
+		return networks;
+	}
+
+	public void setNetworks(SocialNetwork...networks) {
+		this.networks = networks;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
 }

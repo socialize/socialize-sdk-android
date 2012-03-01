@@ -21,16 +21,24 @@
  */
 package com.socialize.ui.auth;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.GradientDrawable.Orientation;
+import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.networks.facebook.FacebookSignInCell;
 import com.socialize.networks.twitter.TwitterSignInCell;
+import com.socialize.ui.util.Colors;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
@@ -41,12 +49,23 @@ import com.socialize.view.BaseView;
  */
 public class AuthPanelView extends BaseView {
 
+	private AuthRequestListener listener;
+	private Dialog dialog;
+	
+	public AuthPanelView(Context context, AuthRequestListener listener, Dialog dialog) {
+		this(context);
+		this.listener = listener;
+		this.dialog = dialog;
+	}
+
 	public AuthPanelView(Context context) {
 		super(context);
 	}
 	
 	private IBeanFactory<FacebookSignInCell> facebookSignInCellFactory;
 	private IBeanFactory<TwitterSignInCell> twitterSignInCellFactory;
+	private IBeanFactory<AnonymousCell> anonCellFactory; 
+	
 	private Drawables drawables;
 	private DeviceUtils deviceUtils;
 	
@@ -58,32 +77,49 @@ public class AuthPanelView extends BaseView {
 		int padding = deviceUtils.getDIP(12);
 		
 		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		LayoutParams contentParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		LayoutParams anonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		LayoutParams headerParams = new LayoutParams(LayoutParams.FILL_PARENT, deviceUtils.getDIP(45));
 		RelativeLayout.LayoutParams badgeParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		LayoutParams fillParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		LayoutParams fillParamsCenter = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		LayoutParams cellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		LayoutParams badgeLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		
-		params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
-		fillParamsCenter.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		badgeLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 		masterParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
-//		wrapParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
-		masterParams.setMargins(padding, padding, padding, padding);
 		badgeParams.addRule(RelativeLayout.CENTER_IN_PARENT);
 		
 		setLayoutParams(masterParams);
-		setPadding(padding, padding, padding, padding);
+		setOrientation(VERTICAL);
 		
-		LinearLayout layout = new LinearLayout(getContext());
+		contentParams.setMargins(padding, padding, padding, padding);
+		contentParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
+		contentParams.weight = 1.0f;
+		
+		TextView header = new TextView(getContext());
+	
+		float headerRadius = deviceUtils.getDIP(3);
+		
+		GradientDrawable headerBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[]{Colors.parseColor("#057498"), Colors.parseColor("#08ade4")});
+		headerBG.setCornerRadii(new float[]{headerRadius, headerRadius, headerRadius, headerRadius, 0.0f, 0.0f, 0.0f, 0.0f});
+		header.setBackgroundDrawable(headerBG);
+		header.setText("Authenticate");
+		header.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+		header.setTextColor(Color.WHITE);
+		header.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+		header.setLayoutParams(headerParams);
+		
+		LinearLayout contentLayout = new LinearLayout(getContext());
+		contentLayout.setPadding(padding, padding, padding, padding);
+		contentLayout.setOrientation(VERTICAL);
+		contentLayout.setLayoutParams(contentParams);
+		
 		RelativeLayout badgeLayout = new RelativeLayout(getContext());
-		
-		badgeLayout.setLayoutParams(fillParamsCenter);
-		layout.setOrientation(VERTICAL);
-		
-		layout.setLayoutParams(params);
-		
+		badgeLayout.setLayoutParams(badgeLayoutParams);
+
 		ImageView authBadge = new ImageView(getContext());
 		authBadge.setImageDrawable(drawables.getDrawable("auth_badge.png"));
 		authBadge.setLayoutParams(badgeParams);
+		authBadge.setPadding(0, 0, 0, padding);
 		
 		boolean fbOK = getSocialize().isSupported(AuthProviderType.FACEBOOK);
 		boolean twOK = getSocialize().isSupported(AuthProviderType.TWITTER);
@@ -92,32 +128,80 @@ public class AuthPanelView extends BaseView {
 		
 		if(fbOK) {
 			facebookSignInCell = facebookSignInCellFactory.getBean();
-			facebookSignInCell.setLayoutParams(fillParams);
+			facebookSignInCell.setLayoutParams(cellParams);
 			facebookSignInCell.setPadding(padding, padding, padding, padding);
 			
 			if(twOK) {
 				twitterSignInCell = twitterSignInCellFactory.getBean();
 				twitterSignInCell.setPadding(padding, padding, padding, padding);
-				twitterSignInCell.setLayoutParams(fillParams);
-				facebookSignInCell.setBackgroundRadii(new float[]{radii, radii, radii, radii, 0.0f, 0.0f, 0.0f, 0.0f});
-				twitterSignInCell.setBackgroundRadii(new float[]{0.0f, 0.0f, 0.0f, 0.0f, radii, radii, radii, radii});
+				twitterSignInCell.setLayoutParams(cellParams);
+				
+				float[] fbRadii = new float[]{radii, radii, radii, radii, 0.0f, 0.0f, 0.0f, 0.0f};
+				int[] fbStroke = new int[]{1, 1, 0, 1};
+				
+				float[] twRadii = new float[]{0.0f, 0.0f, 0.0f, 0.0f, radii, radii, radii, radii};
+				int[] twStroke = new int[]{1, 1, 1, 1};
+				
+				facebookSignInCell.setBackgroundData(fbRadii, fbStroke, Color.BLACK);
+				twitterSignInCell.setBackgroundData(twRadii, twStroke, Color.BLACK);
 			}
 		}
 		else if(twOK) {
 			twitterSignInCell = twitterSignInCellFactory.getBean();
-			twitterSignInCell.setLayoutParams(fillParams);
+			twitterSignInCell.setLayoutParams(cellParams);
 			twitterSignInCell.setPadding(padding, padding, padding, padding);
 		}
 		
-	
 		badgeLayout.addView(authBadge);
+		contentLayout.addView(badgeLayout);
 		
-		layout.addView(badgeLayout);
+		if(fbOK) contentLayout.addView(facebookSignInCell);
+		if(twOK) contentLayout.addView(twitterSignInCell);
 		
-		if(fbOK) layout.addView(facebookSignInCell);
-		if(twOK) layout.addView(twitterSignInCell);
+		LinearLayout anonLayout = new LinearLayout(getContext());
+		anonLayout.setPadding(0, padding, 0, padding);
+		anonLayout.setOrientation(VERTICAL);
+		anonLayout.setLayoutParams(anonParams);		
 		
-		addView(layout);
+		AnonymousCell anonCell = anonCellFactory.getBean();
+		
+		anonLayout.addView(anonCell);
+		
+		contentLayout.addView(anonLayout);
+		
+		LayoutParams cancelParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		cancelParams.setMargins(0, padding * 2, 0, 0);
+		
+		RelativeLayout cancelLayout = new RelativeLayout(getContext());
+		
+		cancelLayout.setLayoutParams(cancelParams);
+		
+		TextView cancelText = new TextView(getContext());
+		cancelText.setTextColor(Colors.parseColor("#97a6b1"));
+		cancelText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+		cancelText.setText("I'd rather not...");
+		
+		RelativeLayout.LayoutParams cancelTextParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		cancelTextParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+		
+		cancelText.setLayoutParams(cancelTextParams);
+		
+		cancelLayout.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+				if(listener != null) {
+					listener.onResult(dialog);
+				}
+			}
+		});
+		
+		cancelLayout.addView(cancelText);
+		
+		contentLayout.addView(cancelLayout);
+		
+		addView(header);
+		addView(contentLayout);
 	}
 
 	public void setFacebookSignInCellFactory(IBeanFactory<FacebookSignInCell> facebookSignInCellFactory) {
@@ -143,4 +227,10 @@ public class AuthPanelView extends BaseView {
 	public TwitterSignInCell getTwitterSignInCell() {
 		return twitterSignInCell;
 	}
+
+	public void setAnonCellFactory(IBeanFactory<AnonymousCell> anonCellFactory) {
+		this.anonCellFactory = anonCellFactory;
+	}
+	
+	
 }

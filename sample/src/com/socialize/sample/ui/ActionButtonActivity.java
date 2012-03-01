@@ -10,6 +10,7 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.sample.R;
 import com.socialize.ui.actionbutton.ActionButtonConfig;
 import com.socialize.ui.actionbutton.SocializeLikeButton;
+import com.socialize.ui.util.Colors;
 
 /**
  * @author jasonpolites
@@ -35,7 +36,7 @@ public class ActionButtonActivity extends Activity {
 				button.setEntity(Entity.newInstance("foo", "bar"));
 				
 				ActionButtonConfig config = button.getConfig();
-				config.setBackgroundColor(Color.parseColor("#555555"));
+				config.setBackgroundColor(Colors.parseColor("#555555"));
 				config.setImageResIdOn(R.drawable.action_button_on);
 				config.setImageResIdOff(R.drawable.action_button_off);
 				config.setImageResIdDisabled(R.drawable.action_button_disabled);

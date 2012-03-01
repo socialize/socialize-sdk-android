@@ -32,6 +32,7 @@ import android.view.WindowManager;
 
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
+import com.socialize.ui.dialog.DialogRegistration;
 
 /**
  * @author Jason Polites
@@ -43,8 +44,6 @@ public class TwitterUtils {
 	private TwitterAuthProviderInfo info;
 	
 	public Dialog showAuthDialog(final Context context, TwitterAuthProviderInfo info, final TwitterAuthListener listener) {
-//		AlertDialog.Builder builder = newAlertDialogBuilder(context);
-		
 		Dialog dialog = new Dialog(context, R.style.Theme_Dialog);
 		
 		dialog.setTitle("Twitter Authentication");
@@ -69,8 +68,6 @@ public class TwitterUtils {
 		view.setLayoutParams(params);
 		dialog.setContentView(view);
 		
-//		AlertDialog dialog = builder.create();
-		
 		view.setTwitterAuthListener(new TwitterAuthDialogListener(dialog) {
 			@Override
 			public void onError(Dialog dialog, Exception e) {
@@ -82,6 +79,7 @@ public class TwitterUtils {
 			
 			@Override
 			public void onCancel(Dialog dialog) {
+				dialog.dismiss();
 				if(listener != null) {
 					listener.onCancel();
 				}
@@ -102,6 +100,8 @@ public class TwitterUtils {
 	    lp.copyFrom(dialog.getWindow().getAttributes());
 	    lp.width = WindowManager.LayoutParams.FILL_PARENT;
 	    lp.height = WindowManager.LayoutParams.FILL_PARENT;
+	    
+	    DialogRegistration.register(context, dialog);
 		
 		dialog.show();
 		
@@ -117,12 +117,9 @@ public class TwitterUtils {
 		return info;
 	}
 	
-	
 	public void setConfig(SocializeConfig config) {
 		this.config = config;
 	}
-
-
 
 	protected AlertDialog.Builder newAlertDialogBuilder(Context context) {
 		return new AlertDialog.Builder(context);

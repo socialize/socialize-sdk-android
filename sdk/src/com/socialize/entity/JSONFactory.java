@@ -73,23 +73,26 @@ public abstract class JSONFactory<T extends Object> {
 		return new JSONArray();
 	}
 	
+	protected boolean exists(JSONObject obj, String key) throws JSONException {
+		return (obj.has(key) && !obj.isNull(key));
+	}
 
 	protected String getString(JSONObject obj, String key) throws JSONException {
-		if(obj.has(key) && !obj.isNull(key)) {
+		if(exists(obj, key)) {
 			return obj.getString(key);
 		}
 		return null;
 	}
 	
 	protected boolean getBoolean(JSONObject obj, String key, boolean defaultValue) throws JSONException {
-		if(obj.has(key) && !obj.isNull(key)) {
+		if(exists(obj, key)) {
 			return obj.getBoolean(key);
 		}
 		return defaultValue;
 	}	
 	
 	protected int getInt(JSONObject obj, String key) throws JSONException {
-		if(obj.has(key) && !obj.isNull(key)) {
+		if(exists(obj, key)) {
 			return obj.getInt(key);
 		}
 		return 0;
@@ -100,7 +103,7 @@ public abstract class JSONFactory<T extends Object> {
 	}	
 	
 	protected long getLong(JSONObject obj, String key, long defaultValue) throws JSONException {
-		if(obj.has(key) && !obj.isNull(key)) {
+		if(exists(obj, key)) {
 			return obj.getLong(key);
 		}
 		return defaultValue;

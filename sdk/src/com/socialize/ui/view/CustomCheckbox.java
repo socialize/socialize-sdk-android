@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.ui.util.Colors;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
@@ -134,7 +135,7 @@ public class CustomCheckbox extends BaseView {
 		checkboxLabel.setTextColor(checkboxLabel.getTextColors().withAlpha(255));
 		
 		if(borderOn) {
-			GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Color.parseColor("#3f3f3f"), Color.parseColor("#5c5c5c") });
+			GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Colors.parseColor("#3f3f3f"), Colors.parseColor("#5c5c5c") });
 			ColorDrawable topRight = new ColorDrawable(Color.BLACK);
 			ColorDrawable bottomLeft = new ColorDrawable(Color.GRAY);
 			LayerDrawable bg = new LayerDrawable(new Drawable[] { bottomLeft, topRight, background });

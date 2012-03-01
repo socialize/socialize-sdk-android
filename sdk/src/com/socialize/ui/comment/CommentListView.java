@@ -279,25 +279,10 @@ public class CommentListView extends BaseView {
 	protected AuthRequestListener getCommentAuthListener(final String text, final boolean shareLocation, final boolean subscribe, final SocialNetwork...networks) {
 		return new AuthRequestListener() {
 			@Override
-			public void onResult(Dialog dialog) {
-				doPostComment(text, shareLocation, subscribe, networks);
+			public void onResult(Dialog dialog, SocialNetwork... n) {
+				doPostComment(text, shareLocation, subscribe, n);
 			}
 		};
-	}
-	
-	@Deprecated
-	protected AuthRequestListener getCommentAuthListener(final String text, final boolean autoPostToFacebook, final boolean shareLocation, final boolean subscribe) {
-		return new AuthRequestListener() {
-			@Override
-			public void onResult(Dialog dialog) {
-				doPostComment(text, autoPostToFacebook, shareLocation, subscribe);
-			}
-		};
-	}
-
-	@Deprecated
-	public void doPostComment(String text, boolean autoPostToFacebook, boolean shareLocation, final boolean subscribe) {
-		doPostComment(text, shareLocation, subscribe, ((autoPostToFacebook) ? SocialNetwork.FACEBOOK : SocialNetwork.NONE));
 	}
 	
 	public void doPostComment(String text, boolean shareLocation, final boolean subscribe, SocialNetwork...networks) {

@@ -21,13 +21,13 @@
  */
 package com.socialize.ui.dialog;
 
-import com.socialize.util.Drawables;
-import com.socialize.util.StringUtils;
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
+
+import com.socialize.util.Drawables;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites

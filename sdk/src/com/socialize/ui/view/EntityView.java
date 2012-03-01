@@ -1,7 +1,5 @@
 package com.socialize.ui.view;
 
-import com.socialize.log.SocializeLogger;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -11,6 +9,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
+import com.socialize.log.SocializeLogger;
 
 public abstract class EntityView extends AuthenticatedView {
 
