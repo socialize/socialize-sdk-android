@@ -788,8 +788,9 @@ public class CommentListView extends BaseView {
 	 */
 	public void onProfileUpdate() {
 		commentAdapter.notifyDataSetChanged();
+		
 		if(commentEntrySlider != null) {
-			commentEntrySlider.clearContent();
+			commentEntrySlider.updateContent();
 		}
 		
 		User user = Socialize.getSocialize().getSession().getUser();

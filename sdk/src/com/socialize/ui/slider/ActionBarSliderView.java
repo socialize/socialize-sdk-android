@@ -123,6 +123,12 @@ public class ActionBarSliderView extends BaseView {
 			currentItem.onClear(this);
 		}
 	}
+	
+	public void updateContent() {
+		if(currentItem != null) {
+			currentItem.onUpdate(this);
+		}
+	}	
 
 	public boolean showLastItem() {
 		if(currentItem != null) {

@@ -500,13 +500,23 @@ public class CommentEntryView extends BaseView {
 		
 		User user = Socialize.getSocialize().getSession().getUser();
 		
-		if(facebookCheckbox != null && !facebookCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-			facebookCheckbox.setChecked(user.isAutoPostToFacebook());
+		if(facebookCheckbox != null) {
+			if(!facebookCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+				facebookCheckbox.setChecked(user.isAutoPostToFacebook());
+			}
+			else {
+				facebookCheckbox.setChecked(false);
+			}
 		}
 		
-		if(twitterCheckbox != null && !twitterCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
-			twitterCheckbox.setChecked(user.isAutoPostToTwitter());
-		}
+		if(twitterCheckbox != null) {
+			if(!twitterCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
+				twitterCheckbox.setChecked(user.isAutoPostToTwitter());
+			}
+			else {
+				twitterCheckbox.setChecked(false);
+			}
+		}		
 		
 		if(locationCheckBox != null && !locationCheckBox.isChanged()) {
 			locationCheckBox.setChecked(user.isShareLocation());
@@ -528,7 +538,10 @@ public class CommentEntryView extends BaseView {
 	protected void reset() {
 		keyboardUtils.hideKeyboard(commentField);
 		commentField.setText("");
-		
+		update();
+	}
+	
+	public void update() {
 		if(facebookCheckbox != null) {
 			facebookCheckbox.setChanged(false);
 		}

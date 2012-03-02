@@ -114,6 +114,13 @@ public class CommentEntrySliderItem implements ActionBarSliderItem {
 	}
 
 	@Override
+	public void onUpdate(ActionBarSliderView slider) {
+		if(commentEntryView != null) {
+			commentEntryView.update();
+		}		
+	}
+
+	@Override
 	public void onClose(ActionBarSliderView slider) {
 		if(commentEntryView != null) {
 			commentEntryView.reset();

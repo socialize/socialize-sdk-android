@@ -47,6 +47,9 @@ public abstract class AbstractSliderItem implements ActionBarSliderItem {
 		this.actionBarView = actionBarView;
 		this.onActionBarEventListener = onActionBarEventListener;
 	}
+	
+	@Override
+	public void onUpdate(ActionBarSliderView slider) {}
 
 	@Override
 	public void onClear(ActionBarSliderView slider) {}
