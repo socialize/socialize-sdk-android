@@ -98,8 +98,6 @@ public class CommentEntryView extends BaseView {
 		int textPadding = deviceUtils.getDIP(2);
 		
 		User user = Socialize.getSocialize().getSession().getUser();
-		final boolean fbOK = Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK);
-		final boolean twOK = Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER);
 		
 		notificationsEnabled = true;
 		notificationsAvailable = user.isNotificationsEnabled() && appUtils.isNotificationsAvailable(getContext());
@@ -117,17 +115,13 @@ public class CommentEntryView extends BaseView {
 		LinearLayout buttonLayout = new LinearLayout(getContext());
 		
 		LinearLayout commentLayout = new LinearLayout(getContext());
-		LinearLayout toolbarLayout = new LinearLayout(getContext());
-		LinearLayout toolbarLayoutLeft = new LinearLayout(getContext());
-		LinearLayout toolbarLayoutRight = new LinearLayout(getContext());
 		
 		LayoutParams buttonLayoutLeftParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		LayoutParams buttonLayoutRightParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		LayoutParams commentFieldParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		LayoutParams toolbarLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		LayoutParams toolbarLayoutLeftParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		LayoutParams toolbarLayoutRightParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+		buttonLayoutLeftParams.weight = 1.0f;
 		
 		buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
 		buttonLayout.setGravity( Gravity.RIGHT );
@@ -137,68 +131,13 @@ public class CommentEntryView extends BaseView {
 		buttonLayoutLeft.setLayoutParams(buttonLayoutLeftParams);
 		buttonLayoutRight.setLayoutParams(buttonLayoutRightParams);
 		
-		GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Colors.parseColor("#44000000"), Colors.parseColor("#88000000") });
-		toolbarLayout.setBackgroundDrawable(background);
-		toolbarLayout.setPadding(padding, padding, padding, padding);
-		
 		commentLayout.setPadding(textPadding, textPadding, textPadding, 0);
-		
-		toolbarLayoutLeftParams.weight = 1.0f;
-		buttonLayoutLeftParams.weight = 1.0f;
-		
-		toolbarLayout.setLayoutParams(toolbarLayoutParams);
-		toolbarLayoutLeft.setLayoutParams(toolbarLayoutLeftParams);
-		toolbarLayoutRight.setLayoutParams(toolbarLayoutRightParams);
-		
-		toolbarLayoutRight.setOrientation(HORIZONTAL);
-		toolbarLayoutLeft.setOrientation(HORIZONTAL);
-		
-		toolbarLayout.addView(toolbarLayoutLeft);
-		toolbarLayout.addView(toolbarLayoutRight);
 		
 		buttonLayout.addView(buttonLayoutLeft);
 		buttonLayout.addView(buttonLayoutRight);
 		
-		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
-			facebookCheckbox = autoPostFacebookOptionFactory.getBean();
-		}
-		
-		if(getSocialize().isSupported(AuthProviderType.TWITTER)) {
-			twitterCheckbox = autoPostTwitterOptionFactory.getBean();
-		}
-		
-		if(appUtils.isLocationAvaiable(getContext())) {
-			locationCheckBox = locationEnabledOptionFactory.getBean();
-		}
-		
 		if(notificationsAvailable) {
 			notifyCheckBox = notificationEnabledOptionFactory.getBean();
-		}
-		
-		if(facebookCheckbox != null) {
-			
-			if(fbOK) {
-				facebookCheckbox.setChecked(user.isAutoPostToFacebook());
-			}
-			else {
-				facebookCheckbox.setChecked(false);
-			}
-			
-			facebookCheckbox.setOnClickListener(getSocialNetworkClickListener(facebookCheckbox, AuthProviderType.FACEBOOK, "Facebook sharing enabled", "Facebook sharing disabled"));
-		}
-		
-		if(twitterCheckbox != null) {
-			if(twOK) {
-				twitterCheckbox.setChecked(user.isAutoPostToTwitter());
-			}
-			else {
-				twitterCheckbox.setChecked(false);
-			}
-			twitterCheckbox.setOnClickListener(getSocialNetworkClickListener(twitterCheckbox, AuthProviderType.TWITTER, "Twitter sharing enabled", "Twitter sharing disabled"));
-		}		
-
-		if(locationCheckBox != null) {
-			locationCheckBox.setChecked(user.isShareLocation());
 		}
 		
 		if(notifyCheckBox != null) {
@@ -226,28 +165,7 @@ public class CommentEntryView extends BaseView {
 		commentField.setLines(5);
 		commentField.setLayoutParams(commentFieldParams);
 		
-//		commentField.setBackgroundColor(Color.WHITE);
-		
 		commentLayout.addView(commentField);
-		
-		if(facebookCheckbox != null || twitterCheckbox != null || notifyCheckBox != null) {
-			
-			if(facebookCheckbox != null) {
-				toolbarLayoutRight.addView(facebookCheckbox);
-			}
-			
-			if(twitterCheckbox != null) {
-				toolbarLayoutRight.addView(twitterCheckbox);
-			}			
-			
-			if(notifyCheckBox != null && deviceUtils.getOrientation() != Configuration.ORIENTATION_PORTRAIT) {
-				toolbarLayoutRight.addView(notifyCheckBox);
-			}
-		}	
-		
-		if(locationCheckBox != null) {
-			toolbarLayoutLeft.addView(locationCheckBox);
-		}
 
 		if(cancelCommentButton != null) {
 			cancelCommentButton.setCustomClickListener(new OnClickListener() {
@@ -303,7 +221,8 @@ public class CommentEntryView extends BaseView {
 		
 		addView(commentLayout);
 		addView(buttonLayout);
-		addView(toolbarLayout);
+		
+		initShareToolbar();
 		
 		if(notificationsAvailable && deviceUtils.getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
 
@@ -362,6 +281,107 @@ public class CommentEntryView extends BaseView {
 			
 			addView(notificationMasterLayout);		
 		}	
+	}
+	
+	protected void initShareToolbar() {
+		
+
+		
+		final boolean fbSupported = Socialize.getSocialize().isSupported(AuthProviderType.FACEBOOK);
+		final boolean twSupported = Socialize.getSocialize().isSupported(AuthProviderType.TWITTER);
+		final boolean locationSupported = appUtils.isLocationAvaiable(getContext());
+		
+		if(fbSupported || twSupported || locationSupported) {
+			
+			User user = Socialize.getSocialize().getSession().getUser();
+			final boolean fbOK = Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK);
+			final boolean twOK = Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER);
+			
+			int padding = deviceUtils.getDIP(4);
+			
+			LinearLayout toolbarLayout = new LinearLayout(getContext());
+			LinearLayout toolbarLayoutLeft = new LinearLayout(getContext());
+			LinearLayout toolbarLayoutRight = new LinearLayout(getContext());		
+			
+			LayoutParams toolbarLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			LayoutParams toolbarLayoutLeftParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			LayoutParams toolbarLayoutRightParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			
+			GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Colors.parseColor("#44000000"), Colors.parseColor("#88000000") });
+			toolbarLayout.setBackgroundDrawable(background);
+			toolbarLayout.setPadding(padding, padding, padding, padding);		
+			
+			toolbarLayoutLeftParams.weight = 1.0f;
+			
+			toolbarLayout.setLayoutParams(toolbarLayoutParams);
+			toolbarLayoutLeft.setLayoutParams(toolbarLayoutLeftParams);
+			toolbarLayoutRight.setLayoutParams(toolbarLayoutRightParams);
+			
+			toolbarLayoutRight.setOrientation(HORIZONTAL);
+			toolbarLayoutLeft.setOrientation(HORIZONTAL);
+			
+			toolbarLayout.addView(toolbarLayoutLeft);
+			toolbarLayout.addView(toolbarLayoutRight);		
+			
+			if(fbSupported) {
+				facebookCheckbox = autoPostFacebookOptionFactory.getBean();
+			}
+			
+			if(twSupported) {
+				twitterCheckbox = autoPostTwitterOptionFactory.getBean();
+			}
+			
+			if(locationSupported) {
+				locationCheckBox = locationEnabledOptionFactory.getBean();
+			}		
+			
+			if(facebookCheckbox != null) {
+				
+				if(fbOK) {
+					facebookCheckbox.setChecked(user.isAutoPostToFacebook());
+				}
+				else {
+					facebookCheckbox.setChecked(false);
+				}
+				
+				facebookCheckbox.setOnClickListener(getSocialNetworkClickListener(facebookCheckbox, AuthProviderType.FACEBOOK, "Facebook sharing enabled", "Facebook sharing disabled"));
+			}
+			
+			if(twitterCheckbox != null) {
+				if(twOK) {
+					twitterCheckbox.setChecked(user.isAutoPostToTwitter());
+				}
+				else {
+					twitterCheckbox.setChecked(false);
+				}
+				twitterCheckbox.setOnClickListener(getSocialNetworkClickListener(twitterCheckbox, AuthProviderType.TWITTER, "Twitter sharing enabled", "Twitter sharing disabled"));
+			}		
+
+			if(locationCheckBox != null) {
+				locationCheckBox.setChecked(user.isShareLocation());
+			}		
+			
+			if(facebookCheckbox != null || twitterCheckbox != null || notifyCheckBox != null) {
+				
+				if(facebookCheckbox != null) {
+					toolbarLayoutRight.addView(facebookCheckbox);
+				}
+				
+				if(twitterCheckbox != null) {
+					toolbarLayoutRight.addView(twitterCheckbox);
+				}			
+				
+				if(notifyCheckBox != null && deviceUtils.getOrientation() != Configuration.ORIENTATION_PORTRAIT) {
+					toolbarLayoutRight.addView(notifyCheckBox);
+				}
+			}	
+			
+			if(locationCheckBox != null) {
+				toolbarLayoutLeft.addView(locationCheckBox);
+			}		
+			
+			addView(toolbarLayout);
+		}
 	}
 	
 	protected OnClickListener getSocialNetworkClickListener(final CustomCheckbox chkbox, final AuthProviderType authProviderType, final String checkedMsg, final String uncheckedMsg) {
