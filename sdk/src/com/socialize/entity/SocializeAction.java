@@ -21,6 +21,8 @@
  */
 package com.socialize.entity;
 
+import java.util.List;
+
 import com.socialize.api.action.ActionType;
 import com.socialize.util.StringUtils;
 
@@ -32,6 +34,7 @@ public abstract class SocializeAction extends SocializeObject {
 	private static final long serialVersionUID = -1988365314114134147L;
 	
 	private Application application;
+	private List<Propagator> propagators;
 	private Entity entity;
 	private String entityKey; // Used when only the key is supplied.
 	private User user;
@@ -46,6 +49,13 @@ public abstract class SocializeAction extends SocializeObject {
 	}
 	public void setApplication(Application application) {
 		this.application = application;
+	}
+	
+	public List<Propagator> getPropagators() {
+		return propagators;
+	}
+	public void setPropagators(List<Propagator> propagators) {
+		this.propagators = propagators;
 	}
 	public Entity getEntity() {
 		return entity;

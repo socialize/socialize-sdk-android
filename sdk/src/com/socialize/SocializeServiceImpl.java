@@ -814,7 +814,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public void like(String key, Location location, LikeAddListener likeAddListener) {
 		if(assertAuthenticated(likeAddListener)) {
-			likeSystem.addLike(session, Entity.newInstance(key, null), location, likeAddListener);
+			likeSystem.addLike(session, Entity.newInstance(key, null), location, null, likeAddListener);
 		}
 	}
 	
@@ -835,10 +835,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				final SocialNetwork[] shareTo = shareOptions.getShareTo();
 				final boolean autoAuth = shareOptions.isAutoAuth();
 				if(shareTo == null || shareTo.length == 0) {
-					likeSystem.addLike(session, entity, location, likeAddListener);
+					likeSystem.addLike(session, entity, location, shareOptions, likeAddListener);
 				}
 				else {
-					likeSystem.addLike(session, entity, location, new LikeAddListener() {
+					likeSystem.addLike(session, entity, location, shareOptions, new LikeAddListener() {
 						@Override
 						public void onError(SocializeException error) {
 							if(likeAddListener != null) {
@@ -874,7 +874,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				}
 			}	
 			else {
-				likeSystem.addLike(session, entity, location, likeAddListener);
+				likeSystem.addLike(session, entity, location, shareOptions, likeAddListener);
 			}
 		}			
 	}

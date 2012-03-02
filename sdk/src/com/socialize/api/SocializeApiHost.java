@@ -240,7 +240,7 @@ public class SocializeApiHost implements ApiHost {
 	 */
 	@Override
 	public void addLike(SocializeSession session, Entity entity, Location location, LikeListener listener) {
-		socializeLikeSystem.addLike(session, entity, location, listener);
+		socializeLikeSystem.addLike(session, entity, location, null, listener);
 	}
 
 	@Override

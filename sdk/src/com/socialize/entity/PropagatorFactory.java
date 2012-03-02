@@ -21,10 +21,6 @@
  */
 package com.socialize.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,31 +45,31 @@ public class PropagatorFactory extends JSONFactory<Propagator> {
 	 */
 	@Override
 	protected void fromJSON(JSONObject from, Propagator to) throws JSONException {
-		
-		to.setText(getString(from, "text"));
-		
-		if(exists(from, "third_party")) {
-			JSONArray array = from.getJSONArray("third_party");
-			int length = array.length();
-			
-			if(length > 0) {
-				List<SocialNetwork> networks = new ArrayList<SocialNetwork>(length);
-				for (int i = 0; i < length; i++) {
-					String value = array.getString(i);
-					try {
-						networks.add(SocialNetwork.valueOf(value));
-					} 
-					catch (Exception e) {
-						// TODO: handle exception
-						e.printStackTrace();
-					}
-				}
-				
-				if(networks.size() > 0) {
-					to.setNetworks(networks.toArray(new SocialNetwork[networks.size()]));
-				}
-			}
-		}
+//		
+//		to.setText(getString(from, "text"));
+//		
+//		if(exists(from, "third_party")) {
+//			JSONArray array = from.getJSONArray("third_party");
+//			int length = array.length();
+//			
+//			if(length > 0) {
+//				List<SocialNetwork> networks = new ArrayList<SocialNetwork>(length);
+//				for (int i = 0; i < length; i++) {
+//					String value = array.getString(i);
+//					try {
+//						networks.add(SocialNetwork.valueOf(value));
+//					} 
+//					catch (Exception e) {
+//						// TODO: handle exception
+//						e.printStackTrace();
+//					}
+//				}
+//				
+//				if(networks.size() > 0) {
+//					to.setNetworks(networks.toArray(new SocialNetwork[networks.size()]));
+//				}
+//			}
+//		}
 	}
 
 	/* (non-Javadoc)
@@ -85,13 +81,26 @@ public class PropagatorFactory extends JSONFactory<Propagator> {
 			to.put("text", from.getText());
 		}
 		
-		SocialNetwork[] networks = from.getNetworks();
+		SocialNetwork network = from.getNetwork();
 		
-		if(networks != null && networks.length > 0) {
-			JSONArray array = new JSONArray();
-			for (SocialNetwork socialNetwork : networks) {
-				array.put(socialNetwork.name().toLowerCase());
-			}
+		// TODO: Don't hard code this
+		if(!network.equals(SocialNetwork.FACEBOOK)) {
+			to.put("third_party", network.name().toLowerCase());
 		}
+	
+//		if(networks != null && networks.length > 0) {
+//			JSONArray array = new JSONArray();
+//			for (SocialNetwork socialNetwork : networks) {
+//				
+//				// TODO: Don't hard code this
+//				if(!socialNetwork.equals(SocialNetwork.FACEBOOK)) {
+//					array.put(socialNetwork.name().toLowerCase());
+//				}
+//			}
+//			
+//			if(array.length() > 0) {
+//				to.put("third_party", array);
+//			}
+//		}
 	}
 }

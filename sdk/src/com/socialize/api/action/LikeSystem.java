@@ -26,6 +26,7 @@ import android.location.Location;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Entity;
 import com.socialize.listener.like.LikeListener;
+import com.socialize.networks.ShareOptions;
 import com.socialize.util.DelegateOnly;
 
 /**
@@ -36,7 +37,7 @@ public interface LikeSystem {
 	
 	public static final String ENDPOINT = "/like/";
 
-	public void addLike(SocializeSession session, Entity entity, Location location, LikeListener listener);
+	public void addLike(SocializeSession session, Entity entity, Location location, ShareOptions shareOptions, LikeListener listener);
 	
 	public void deleteLike(SocializeSession session, long id, LikeListener listener);
 

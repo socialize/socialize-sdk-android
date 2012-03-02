@@ -21,34 +21,26 @@
  */
 package com.socialize.entity;
 
-import java.io.Serializable;
-
 import com.socialize.networks.SocialNetwork;
 
 /**
  * @author Jason Polites
  *
  */
-public class Propagator implements Serializable {
+public abstract class PropagatorBuilder<A extends SocializeAction> {
+
+	public Propagator create(A action, SocialNetwork network) {
+		Propagator propagator = newPropagator();
+		propagator.setNetwork(network);
+		propagator.setText(getPropagateText(action));
+		return propagator;
+	}
 	
-	private static final long serialVersionUID = 8785024423132900646L;
+	// So we can mock
+	protected Propagator newPropagator() {
+		return new Propagator();
+	}
 	
-	private String text;
-	private SocialNetwork network;
-
-	public SocialNetwork getNetwork() {
-		return network;
-	}
-
-	public void setNetwork(SocialNetwork network) {
-		this.network = network;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
+	protected abstract String getPropagateText(A action);
+	
 }

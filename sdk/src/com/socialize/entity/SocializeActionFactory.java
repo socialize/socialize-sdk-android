@@ -22,7 +22,9 @@
 package com.socialize.entity;
 
 import java.text.ParseException;
+import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,6 +43,7 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 	private ApplicationFactory applicationFactory;
 	private UserFactory userFactory;
 	private EntityFactory entityFactory;
+	private PropagatorFactory propagatorFactory;
 	
 	@Override
 	protected void toJSON(T from, JSONObject to) throws JSONException {
@@ -50,6 +53,9 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			Entity entityObject = from.getEntity();
 			String entityKey = from.getEntityKey();
 			Application appObject = from.getApplication();
+			
+			List<Propagator> propagators = from.getPropagators();
+			
 			User userObject = from.getUser();
 			Double lat = from.getLat();
 			Double lon = from.getLon();
@@ -71,6 +77,19 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			if(appObject != null) {
 				JSONObject application = applicationFactory.toJSON(appObject);
 				to.put("application", application);
+			}
+			
+			if(propagators != null) {
+				
+				JSONArray list = new JSONArray();
+				
+				for (Propagator p : propagators) {
+					JSONObject propagatorJson = propagatorFactory.toJSON(p);
+					list.put(propagatorJson);
+				}
+				
+				// TODO: This will change
+				to.put("propagation", list);
 			}
 			
 			if(userObject != null) {
@@ -110,7 +129,7 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 					to.setApplication(applicationFactory.fromJSON(application));
 				}
 			}
-
+			
 			if(from.has("user") && !from.isNull("user")) {
 				JSONObject user = from.getJSONObject("user");
 				if(user != null) {
@@ -173,28 +192,20 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 		this.logger = logger;
 	}
 
-	public ApplicationFactory getApplicationFactory() {
-		return applicationFactory;
-	}
-
 	public void setApplicationFactory(ApplicationFactory applicationFactory) {
 		this.applicationFactory = applicationFactory;
-	}
-
-	public UserFactory getUserFactory() {
-		return userFactory;
 	}
 
 	public void setUserFactory(UserFactory userFactory) {
 		this.userFactory = userFactory;
 	}
 
-	public EntityFactory getEntityFactory() {
-		return entityFactory;
-	}
-
 	public void setEntityFactory(EntityFactory entityFactory) {
 		this.entityFactory = entityFactory;
+	}
+	
+	public void setPropagatorFactory(PropagatorFactory propagatorFactory) {
+		this.propagatorFactory = propagatorFactory;
 	}
 
 	protected abstract void postToJSON(T from, JSONObject to) throws JSONException;

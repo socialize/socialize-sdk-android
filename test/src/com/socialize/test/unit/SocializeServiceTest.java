@@ -383,7 +383,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		final String key = "foo";
 
-		likeSystem.addLike(AndroidMock.eq(session), (Entity) AndroidMock.anyObject(), (Location) AndroidMock.isNull(), AndroidMock.eq(listener));
+		likeSystem.addLike(AndroidMock.eq(session), (Entity) AndroidMock.anyObject(), (Location) AndroidMock.isNull(), (ShareOptions) AndroidMock.anyObject(), AndroidMock.eq(listener));
 
 		replayDefaultMocks();
 
