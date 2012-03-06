@@ -251,13 +251,23 @@ public class SocializeConfig {
 	}
 	
 	/**
-	 * Sets the Facebook ID for FB authentication.  
+	 * Sets the Facebook App ID for Facebook authentication.  
 	 * @param appId Your Facebook App Id, obtained from https://developers.facebook.com/
 	 * @see "https://developers.facebook.com/"
 	 */
 	public void setFacebookAppId(String appId) {
 		setProperty(SocializeConfig.FACEBOOK_APP_ID, appId);
 	}
+	
+	/**
+	 * Sets the Twitter App consumer key/secret pair for Twitter authentication.  
+	 * @param consumerKey Your Twitter App consumer key, obtained from https://dev.twitter.com/
+	 * @param consumerSecret Your Twitter App consumer secret, obtained from https://dev.twitter.com/
+	 */
+	public void setTwitterKeySecret(String consumerKey, String consumerSecret) {
+		setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, consumerKey);
+		setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, consumerSecret);
+	}	
 
 	/**
 	 * Enables/disables Single Sign On for Facebook.

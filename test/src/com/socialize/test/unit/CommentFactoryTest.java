@@ -21,6 +21,7 @@
  */
 package com.socialize.test.unit;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -53,6 +54,11 @@ public class CommentFactoryTest extends AbstractSocializeActionFactoryTest<Comme
 			@Override
 			public JSONObject instantiateJSON() {
 				return json;
+			}
+
+			@Override
+			protected JSONArray newJSONArray() {
+				return jsonArray;
 			}
 		};
 	}

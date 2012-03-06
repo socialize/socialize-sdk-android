@@ -1,7 +1,11 @@
 package com.socialize.test.ui.util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -9,6 +13,7 @@ import android.app.Instrumentation.ActivityMonitor;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.socialize.Socialize;
@@ -21,6 +26,8 @@ public class TestUtils {
 	static ResultHolder holder;
 	static ActivityMonitor monitor;
 	static Instrumentation instrumentation;
+	static ActivityInstrumentationTestCase2<?> testCase;
+//	static Activity testActivity;
 	
 	public static void addResult(Object obj) {
 		holder.addResult(obj);
@@ -38,7 +45,8 @@ public class TestUtils {
 		return holder.getNextResult();
 	}	
 	
-	public static void setUp(ActivityInstrumentationTestCase2<?> testCase)  {
+	public static void setUp(ActivityInstrumentationTestCase2<?> test)  {
+		testCase = test;
 		holder = new ResultHolder();
 		holder.setUp();
 		instrumentation = testCase.getInstrumentation();
@@ -185,6 +193,35 @@ public class TestUtils {
 		return null;
 	}
 	
+	public static boolean clickOnButton(String text) {
+		return clickOnButton(testCase.getActivity(), text, 10000);
+	}
+	
+	public static boolean clickOnButton(Activity activity, String text, long timeout) {
+		final Button btn = TestUtils.findViewWithText(activity.getWindow().getDecorView(), Button.class, text, timeout);
+		
+		final Set<Boolean> holder = new HashSet<Boolean>();
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		if(btn != null) {
+			activity.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					holder.add(btn.performClick());
+					latch.countDown();
+				}
+			});
+			
+			try {
+				latch.await(timeout, TimeUnit.MILLISECONDS);
+			} catch (InterruptedException ignore) {}
+			
+			return (holder.size() > 0 && holder.iterator().next());
+		}
+		
+		return false;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static <V extends View> V findViewWithText(ViewGroup parent, final Class<V> viewClass, final String text, final long timeoutMs) {
 
@@ -319,9 +356,13 @@ public class TestUtils {
 		return null;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static <V extends View> V findView(View view, final Class<V> viewClass) {
 		if(view instanceof ViewGroup) {
 			return findView((ViewGroup)view, viewClass);
+		}
+		else if(viewClass.isAssignableFrom(view.getClass())) {
+			return (V) view;
 		}
 		return null;
 	}

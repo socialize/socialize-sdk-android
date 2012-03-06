@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -63,6 +64,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 	protected JSONObject jsonPropagator;
 	protected JSONObject jsonUser;
 	protected JSONObject jsonEntity;
+	protected JSONArray jsonArray;
 
 	protected ApplicationFactory appFactoryMock;
 	protected UserFactory userFactoryMock;
@@ -88,7 +90,9 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		ApplicationFactory.class, 
 		UserFactory.class, 
 		EntityFactory.class, 
-		PropagatorFactory.class })
+		PropagatorFactory.class,
+		JSONArray.class,
+		JSONObject.class})
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -107,9 +111,13 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		jsonApplication = AndroidMock.createNiceMock(JSONObject.class);
 		jsonUser = AndroidMock.createNiceMock(JSONObject.class);
 		jsonEntity = AndroidMock.createNiceMock(JSONObject.class);
+		jsonArray = AndroidMock.createNiceMock(JSONArray.class);
+		
+		AndroidMock.expect(jsonArray.length()).andReturn(1).anyTimes();
 
 		AndroidMock.expect(config.getProperty((String) AndroidMock.anyObject())).andReturn(null);
 		AndroidMock.replay(config);
+		AndroidMock.replay(jsonArray);
 
 		AndroidMock.replay(application);
 		AndroidMock.replay(user);
@@ -140,6 +148,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		AndroidMock.expect(json.put("application", jsonApplication)).andReturn(json);
 		AndroidMock.expect(json.put("user", jsonUser)).andReturn(json);
 		AndroidMock.expect(json.put("entity", jsonEntity)).andReturn(json);
+		AndroidMock.expect(json.put("propagation", jsonArray)).andReturn(json);
 
 		AndroidMock.expect(json.put("id", id)).andReturn(json);
 		AndroidMock.expect(json.put("lat", lat)).andReturn(json);
@@ -179,6 +188,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 
 		doToJSONVerify();
 
+		AndroidMock.verify(jsonArray);
 		AndroidMock.verify(entity);
 		AndroidMock.verify(json);
 		AndroidMock.verify(action);

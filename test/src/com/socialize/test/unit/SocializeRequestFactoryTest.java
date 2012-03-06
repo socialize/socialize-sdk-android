@@ -45,6 +45,11 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.DefaultSocializeRequestFactory;
 import com.socialize.api.SocializeRequestFactory;
 import com.socialize.api.SocializeSession;
+import com.socialize.auth.AuthProviderData;
+import com.socialize.auth.AuthProviderInfo;
+import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeObject;
 import com.socialize.entity.SocializeObjectFactory;
@@ -59,11 +64,24 @@ import com.socialize.util.UrlBuilder;
 @UsesMocks({ SocializeSession.class, OAuthRequestSigner.class })
 public class SocializeRequestFactoryTest extends SocializeActivityTest {
 
+	@UsesMocks ({UserProviderCredentialsMap.class, AuthProviderData.class, AuthProviderInfo.class, UserProviderCredentials.class})
 	public void testAuthRequestCreate() throws Exception {
+		
+		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		UserProviderCredentialsMap userProviderCredentialsMap = AndroidMock.createMock(UserProviderCredentialsMap.class);
+		AuthProviderData data = AndroidMock.createMock(AuthProviderData.class);
+		AuthProviderInfo authProviderInfo = AndroidMock.createMock(AuthProviderInfo.class);
+		UserProviderCredentials userProviderCredentials = AndroidMock.createMock(UserProviderCredentials.class);
+		
+		AuthProviderType type = AuthProviderType.SOCIALIZE;
 
 		final String endpoint = "foobar/";
-		final String id = "testid";
-
+		final String udid = "testid";
+		
+		final String accessToken = "foobar_accessToken";
+		final String tokenSecret = "foobar_tokenSecret";
+		final String userId = "foobar_userId";
+		
 		OAuthRequestSigner signer = new OAuthRequestSigner() {
 
 			@Override
@@ -81,18 +99,22 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 				return sign(session, request, null);
 			}
 		};
+		
 
 		SocializeRequestFactory<SocializeObject> factory = new DefaultSocializeRequestFactory<SocializeObject>(signer, null);
 
-		SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		AndroidMock.expect(session.getUserProviderCredentials()).andReturn(userProviderCredentialsMap);
+		AndroidMock.expect(data.getAuthProviderInfo()).andReturn(authProviderInfo);
+		AndroidMock.expect(authProviderInfo.getType()).andReturn(type).anyTimes();
+		AndroidMock.expect(userProviderCredentialsMap.get(type)).andReturn(userProviderCredentials);
+		AndroidMock.expect(userProviderCredentials.getAuthProviderInfo()).andReturn(authProviderInfo).anyTimes();
+		AndroidMock.expect(userProviderCredentials.getAccessToken()).andReturn(accessToken).anyTimes();
+		AndroidMock.expect(userProviderCredentials.getTokenSecret()).andReturn(tokenSecret).anyTimes();
+		AndroidMock.expect(userProviderCredentials.getUserId()).andReturn(userId).anyTimes();
+		
+		AndroidMock.replay(session, data, authProviderInfo, userProviderCredentialsMap, userProviderCredentials);
 
-		AndroidMock.expect(session.getAuthProviderType()).andReturn(null);
-		AndroidMock.expect(session.get3rdPartyUserId()).andReturn(null);
-		AndroidMock.expect(session.get3rdPartyToken()).andReturn(null);
-
-		AndroidMock.replay(session);
-
-		HttpUriRequest req = factory.getAuthRequest(session, endpoint, id);
+		HttpUriRequest req = factory.getAuthRequest(session, endpoint, udid, data);
 
 		assertTrue(req instanceof HttpPost);
 
@@ -113,7 +135,11 @@ public class SocializeRequestFactoryTest extends SocializeActivityTest {
 		assertEquals("payload", nvp.getName());
 
 		JSONObject jsonExpected = new JSONObject();
-		jsonExpected.put("udid", id);
+		jsonExpected.put("udid", udid);
+		jsonExpected.put("auth_type", type.getId());
+		jsonExpected.put("auth_token", accessToken);
+		jsonExpected.put("auth_token_secret", tokenSecret);
+		jsonExpected.put("auth_id", userId);
 
 		assertEquals(jsonExpected.toString(), nvp.getValue());
 

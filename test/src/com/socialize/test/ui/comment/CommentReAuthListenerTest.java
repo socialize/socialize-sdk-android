@@ -3,6 +3,7 @@ package com.socialize.test.ui.comment;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.error.SocializeException;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.test.ui.SocializeUITestCase;
 import com.socialize.ui.comment.CommentButtonCallback;
 import com.socialize.ui.comment.CommentReAuthListener;
@@ -39,7 +40,7 @@ public class CommentReAuthListenerTest extends SocializeUITestCase {
 	
 	public void testOnAuthSuccess() {
 		
-		callback.onComment(comment, false, true, false);
+		callback.onComment(comment, true, false, (SocialNetwork[]) null);
 		
 		AndroidMock.replay(callback);
 		

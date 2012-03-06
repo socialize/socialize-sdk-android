@@ -32,15 +32,13 @@ import android.widget.EditText;
 import com.jayway.android.robotium.solo.Solo;
 import com.socialize.Socialize;
 import com.socialize.sample.ui.SampleActivity2;
-import com.socialize.test.ui.ResultHolder;
+import com.socialize.test.ui.util.TestUtils;
 
 /**
  * @author Jason Polites
  */
 public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTestCase2<SampleActivity2> {
 
-	protected final ResultHolder holder = new ResultHolder();
-	
 	public static final int DEFAULT_TIMEOUT_SECONDS = 100;
 	public static final String DEFAULT_ENTITY_URL = "http://socialize.integration.tests.com?somekey=somevalue&anotherkey=anothervalue";
 	public static final String DEFAULT_GET_ENTITY = "http://entity1.com";
@@ -51,10 +49,19 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	public static final int BTN_MOCK_FACEBOOK = 1;
 	public static final int BTN_MOCK_SOCIALIZE = 2;
 	public static final int BTN_NOTIFICATIONS_ENABLED = 3;
-	public static final int BTN_CLEAR_CACHE = 4;
-	public static final int BTN_SHOW_COMMENTS = 5;
-	public static final int BTN_SHOW_ACTION_BAR_AUTO = 6;
-	public static final int BTN_SHOW_ACTION_BAR_MANUAL = 7;
+	
+	
+	public static final String BTN_CLEAR_CACHE = "Clear Auth Cache";
+	public static final String BTN_SHOW_COMMENTS = "Show Comments";
+	public static final String BTN_SHOW_ACTION_BAR_AUTO = "Show Action Bar (auto)";
+	public static final String BTN_SHOW_ACTION_BAR_MANUAL = "Show Action Bar (manual)";
+	
+	
+	public static final int TXT_ENTITY_KEY = 0;
+	public static final int TXT_ENTITY_NAME = 1;
+	public static final int TXT_FACEBOOK_ID = 2;
+	public static final int TXT_TWITTER_KEY = 3;
+	public static final int TXT_TWITTER_SECRET = 4;
 		
 	protected Solo robotium;
 	protected InputMethodManager imm = null;
@@ -64,10 +71,10 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	}
 
 	public void setUp() throws Exception {
-		holder.setUp();
 		imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 		robotium = new Solo(getInstrumentation(), getActivity());
 		robotium.waitForActivity("SampleActivity", 5000);
+		TestUtils.setUp(this);
 		hideKeyboard();
 	}
 	
@@ -112,28 +119,34 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	}		
 	
 	protected void clearAuthCache() {
-		robotium.clickOnButton(BTN_CLEAR_CACHE);
+		TestUtils.clickOnButton(BTN_CLEAR_CACHE);
 		robotium.waitForDialogToClose(5000);
 		assertNull(Socialize.getSocialize().getSession());
 	}
 	
 	protected void showComments() {
-		robotium.clickOnButton(BTN_SHOW_COMMENTS);
+		TestUtils.clickOnButton(BTN_SHOW_COMMENTS);
 	}
 	
 	protected void showActionBarAuto() {
-		robotium.clickOnButton(BTN_SHOW_ACTION_BAR_AUTO);
+		TestUtils.clickOnButton(BTN_SHOW_ACTION_BAR_AUTO);
 	}
 	
 	protected void showActionBarManual() {
-		robotium.clickOnButton(BTN_SHOW_ACTION_BAR_MANUAL);
+		TestUtils.clickOnButton(BTN_SHOW_ACTION_BAR_MANUAL);
+	}
+	
+	protected void clearSocialNetworks() {
+		robotium.clearEditText(TXT_FACEBOOK_ID);
+		robotium.clearEditText(TXT_TWITTER_KEY);
+		robotium.clearEditText(TXT_TWITTER_SECRET);
 	}
 	
 	protected void startWithFacebook(boolean sso) {
-		robotium.clearEditText(0);
-		robotium.enterText(0, DEFAULT_GET_ENTITY);
-		robotium.clearEditText(2);
-		robotium.enterText(2, SOCIALIZE_FACEBOOK_ID);
+		clearSocialNetworks();
+		robotium.clearEditText(TXT_ENTITY_KEY);
+		robotium.enterText(TXT_ENTITY_KEY, DEFAULT_GET_ENTITY);
+		robotium.enterText(TXT_FACEBOOK_ID, SOCIALIZE_FACEBOOK_ID);
 		toggleFacebookSSO(sso);
 		toggleMockedFacebook(true);
 		clearAuthCache();
@@ -143,28 +156,27 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 		startWithoutFacebook(true);
 	}
 	protected void startWithoutFacebook(boolean clearCache) {
-		robotium.clearEditText(0);
-		robotium.enterText(0, DEFAULT_GET_ENTITY);
-		robotium.clearEditText(2);
+		clearSocialNetworks();
+		robotium.clearEditText(TXT_ENTITY_KEY);
+		robotium.enterText(TXT_ENTITY_KEY, DEFAULT_GET_ENTITY);
 		if(clearCache) clearAuthCache();
 	}
 
 	protected void addResult(Object obj) {
-		holder.addResult(obj);
+		TestUtils.addResult(obj);
 	}
 	
 	protected void addResult(int index, Object obj) {
-		holder.addResult(index, obj);
+		TestUtils.addResult(index, obj);
 	}
 	
 	protected <T extends Object> T getResult(int index) {
-		return holder.getResult(index);
+		return TestUtils.getResult(index);
 	}
 	
 	protected <T extends Object> T getNextResult() {
-		return holder.getNextResult();
+		return TestUtils.getNextResult();
 	}
-	
 
 	protected final void sleep(int milliseconds) {
 		synchronized (this) {

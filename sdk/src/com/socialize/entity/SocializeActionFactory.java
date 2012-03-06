@@ -88,8 +88,10 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 					list.put(propagatorJson);
 				}
 				
-				// TODO: This will change
-				to.put("propagation", list);
+				if(list.length() > 0) {
+					// TODO: This will change
+					to.put("propagation", list);
+				}
 			}
 			
 			if(userObject != null) {

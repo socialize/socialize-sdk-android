@@ -180,7 +180,6 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 		
 		if(userProviderCredentialsMap != null) {
 			AuthProviderInfo authProviderInfo = data.getAuthProviderInfo();
-			
 			if(authProviderInfo != null) {
 				UserProviderCredentials userProviderCredentials = userProviderCredentialsMap.get(authProviderInfo.getType());
 				return getAuthRequestWith3rdParty(session, endpoint, udid, userProviderCredentials);

@@ -43,6 +43,28 @@
 	    	android:text="209798315709193"
 	    	android:layout_width="fill_parent"
 	    	android:layout_height="wrap_content"/>
+	    
+		<TextView 
+			android:text="Twitter Consumer Key"
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"/>		    
+	    
+	    <EditText 
+	    	android:id="@+id/txtTW_Key" 
+	    	android:text=""
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"/>
+	    
+		<TextView 
+			android:text="Twitter Consumer Secret"
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"/>		    
+	    
+	    <EditText 
+	    	android:id="@+id/txtTW_Sec" 
+	    	android:text=""
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"/>	    	    
 	    	
 		<CheckBox android:id="@+id/chkFacebook"
 	        android:layout_width="wrap_content"
