@@ -35,6 +35,7 @@ import com.socialize.api.action.ShareSystem;
 import com.socialize.api.action.UserSystem;
 import com.socialize.api.action.ViewSystem;
 import com.socialize.auth.AuthProviderData;
+import com.socialize.auth.AuthProviderInfoBuilder;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
 import com.socialize.entity.Comment;
@@ -57,6 +58,7 @@ import com.socialize.util.ResourceLocator;
 public class PublicSocialize extends SocializeServiceImpl {
 
 	
+	@Deprecated
 	@Override
 	public void authenticate(Context context, String consumerKey,
 			String consumerSecret, AuthProviderType authProviderType,
@@ -89,7 +91,7 @@ public class PublicSocialize extends SocializeServiceImpl {
 	@Override
 	public void addComment(Activity activity, Entity entity, String comment,
 			CommentAddListener commentAddListener) {
-		// TODO Auto-generated method stub
+
 		super.addComment(activity, entity, comment, commentAddListener);
 	}
 
@@ -113,7 +115,7 @@ public class PublicSocialize extends SocializeServiceImpl {
 	
 	@Override
 	public View showActionBar(Activity parent, int resId, Entity entity) {
-		// TODO Auto-generated method stub
+
 		return super.showActionBar(parent, resId, entity);
 	}
 
@@ -121,7 +123,7 @@ public class PublicSocialize extends SocializeServiceImpl {
 	@Override
 	public View showActionBar(Activity parent, int resId, Entity entity,
 			ActionBarListener listener) {
-		// TODO Auto-generated method stub
+
 		return super.showActionBar(parent, resId, entity, listener);
 	}
 
@@ -129,7 +131,7 @@ public class PublicSocialize extends SocializeServiceImpl {
 	@Override
 	public View showActionBar(Activity parent, int resId, Entity entity,
 			ActionBarOptions options) {
-		// TODO Auto-generated method stub
+
 		return super.showActionBar(parent, resId, entity, options);
 	}
 
@@ -137,21 +139,21 @@ public class PublicSocialize extends SocializeServiceImpl {
 	@Override
 	public View showActionBar(Activity parent, int resId, Entity entity,
 			ActionBarOptions options, ActionBarListener listener) {
-		// TODO Auto-generated method stub
+
 		return super.showActionBar(parent, resId, entity, options, listener);
 	}
 
 
 	@Override
 	public View showActionBar(Activity parent, View original, Entity entity) {
-		// TODO Auto-generated method stub
+
 		return super.showActionBar(parent, original, entity);
 	}
 
 	@Override
 	public View showActionBar(Activity parent, View original, Entity entity,
 			ActionBarOptions options) {
-		// TODO Auto-generated method stub
+
 		return super.showActionBar(parent, original, entity, options);
 	}
 
@@ -159,14 +161,14 @@ public class PublicSocialize extends SocializeServiceImpl {
 	@Override
 	public View showActionBar(Activity parent, View original, Entity entity,
 			ActionBarListener listener) {
-		// TODO Auto-generated method stub
+
 		return super.showActionBar(parent, original, entity, listener);
 	}
 
 	@Override
 	public View showActionBar(Activity parent, View original, Entity entity,
 			ActionBarOptions options, ActionBarListener listener) {
-		// TODO Auto-generated method stub
+
 		return super.showActionBar(parent, original, entity, options, listener);
 	}
 
@@ -212,7 +214,6 @@ public class PublicSocialize extends SocializeServiceImpl {
 
 	@Override
 	public void logErrorMessage(String message) {
-		// TODO Auto-generated method stub
 		super.logErrorMessage(message);
 	}
 
@@ -271,4 +272,11 @@ public class PublicSocialize extends SocializeServiceImpl {
 	public void setEntitySystem(EntitySystem entitySystem) {
 		super.setEntitySystem(entitySystem);
 	}
+	
+	@Override
+	public void setAuthProviderInfoBuilder(AuthProviderInfoBuilder authProviderInfoBuilder) {
+		super.setAuthProviderInfoBuilder(authProviderInfoBuilder);
+	}
+	
+	
 }

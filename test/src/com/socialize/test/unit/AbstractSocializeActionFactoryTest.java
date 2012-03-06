@@ -24,7 +24,9 @@ package com.socialize.test.unit;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +38,8 @@ import com.socialize.entity.Application;
 import com.socialize.entity.ApplicationFactory;
 import com.socialize.entity.Entity;
 import com.socialize.entity.EntityFactory;
+import com.socialize.entity.Propagator;
+import com.socialize.entity.PropagatorFactory;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.SocializeActionFactory;
 import com.socialize.entity.SocializeObjectFactory;
@@ -52,15 +56,20 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 	protected Application application;
 	protected User user;
 	protected Entity entity;
+	protected Propagator propagator;
 
 	protected JSONObject json;
 	protected JSONObject jsonApplication;
+	protected JSONObject jsonPropagator;
 	protected JSONObject jsonUser;
 	protected JSONObject jsonEntity;
 
 	protected ApplicationFactory appFactoryMock;
 	protected UserFactory userFactoryMock;
 	protected EntityFactory entityFactoryMock;
+	protected PropagatorFactory propagatorFactoryMock;
+	
+	protected List<Propagator> propagators;
 
 	protected Double lat = new Double(10);
 	protected Double lon = new Double(20);
@@ -71,7 +80,15 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 
 	protected final DateFormat DATE_FORMAT_STRING = new SimpleDateFormat(SocializeObjectFactory.DATE_FORMAT_STRING);
 
-	@UsesMocks({ Application.class, User.class, Entity.class, ApplicationFactory.class, UserFactory.class, EntityFactory.class })
+	@UsesMocks({ 
+		Application.class, 
+		User.class, 
+		Entity.class, 
+		Propagator.class, 
+		ApplicationFactory.class, 
+		UserFactory.class, 
+		EntityFactory.class, 
+		PropagatorFactory.class })
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -81,7 +98,12 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		application = AndroidMock.createMock(Application.class);
 		user = AndroidMock.createMock(User.class);
 		entity = AndroidMock.createMock(Entity.class);
+		propagator = AndroidMock.createMock(Propagator.class);
+		propagators = new ArrayList<Propagator>();
+		
+		propagators.add(propagator);
 
+		jsonPropagator = AndroidMock.createNiceMock(JSONObject.class);
 		jsonApplication = AndroidMock.createNiceMock(JSONObject.class);
 		jsonUser = AndroidMock.createNiceMock(JSONObject.class);
 		jsonEntity = AndroidMock.createNiceMock(JSONObject.class);
@@ -95,6 +117,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		appFactoryMock = AndroidMock.createMock(ApplicationFactory.class);
 		userFactoryMock = AndroidMock.createMock(UserFactory.class);
 		entityFactoryMock = AndroidMock.createMock(EntityFactory.class);
+		propagatorFactoryMock = AndroidMock.createMock(PropagatorFactory.class);
 
 		json = AndroidMock.createMock(JSONObject.class);
 		action = AndroidMock.createMock(getActionClass());
@@ -103,6 +126,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		factory.setApplicationFactory(appFactoryMock);
 		factory.setEntityFactory(entityFactoryMock);
 		factory.setUserFactory(userFactoryMock);
+		factory.setPropagatorFactory(propagatorFactoryMock);
 	}
 
 	@UsesMocks({ SocializeObjectFactory.class, JSONObject.class })
@@ -111,6 +135,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		AndroidMock.expect(appFactoryMock.toJSON(this.application)).andReturn(jsonApplication);
 		AndroidMock.expect(userFactoryMock.toJSON(this.user)).andReturn(jsonUser);
 		AndroidMock.expect(entityFactoryMock.toJSON(this.entity)).andReturn(jsonEntity);
+		AndroidMock.expect(propagatorFactoryMock.toJSON(this.propagator)).andReturn(jsonPropagator);
 
 		AndroidMock.expect(json.put("application", jsonApplication)).andReturn(json);
 		AndroidMock.expect(json.put("user", jsonUser)).andReturn(json);
@@ -124,6 +149,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 
 		AndroidMock.expect(action.getId()).andReturn(id);
 		AndroidMock.expect(action.getApplication()).andReturn(application);
+		AndroidMock.expect(action.getPropagators()).andReturn(propagators);
 		AndroidMock.expect(action.getUser()).andReturn(user);
 		AndroidMock.expect(action.getEntity()).andReturn(entity);
 		AndroidMock.expect(action.getEntityKey()).andReturn(entity_key);
@@ -142,6 +168,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		AndroidMock.replay(appFactoryMock);
 		AndroidMock.replay(userFactoryMock);
 		AndroidMock.replay(entityFactoryMock);
+		AndroidMock.replay(propagatorFactoryMock);
 
 		setupToJSONExpectations();
 

@@ -55,20 +55,19 @@ public enum AuthProviderType {
 	}
 	
 	public static AuthProviderType valueOf(SocialNetwork socialNetwork) {
-		if(socialNetwork.equals(SocialNetwork.NONE)) {
+		if(socialNetwork == null) {
 			return SOCIALIZE;
 		}
 		return valueOf(socialNetwork.name().toUpperCase());
 	}
 	
 	public static AuthProviderType valueOf(int id) {
-		switch(id) {
-		case 1 : 
-			return FACEBOOK;
-		case 2 : 
-			return TWITTER;			
-		default :
-			return SOCIALIZE;
+		AuthProviderType[] values = AuthProviderType.values();
+		for (AuthProviderType authProviderType : values) {
+			if(authProviderType.id == id) {
+				return authProviderType;
+			}
 		}
+		return SOCIALIZE;
 	}
 }

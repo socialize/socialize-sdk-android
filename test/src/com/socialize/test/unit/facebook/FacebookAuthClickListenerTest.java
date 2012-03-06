@@ -120,7 +120,7 @@ public class FacebookAuthClickListenerTest extends SocializeUnitTest {
 		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(consumerKey);
 		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET)).andReturn(consumerSecret);
 		AndroidMock.expect(config.getProperty(SocializeConfig.FACEBOOK_APP_ID)).andReturn(fbId);
-		AndroidMock.expect(dialogFactory.show(getContext(), "Facebook", "Authenticating...")).andReturn(dialog);
+		AndroidMock.expect(dialogFactory.show(getContext(), "Authentication", "Authenticating...")).andReturn(dialog);
 		
 		dialog.dismiss();
 		view.setEnabled(true);

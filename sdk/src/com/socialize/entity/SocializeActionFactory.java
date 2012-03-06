@@ -81,7 +81,7 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			
 			if(propagators != null) {
 				
-				JSONArray list = new JSONArray();
+				JSONArray list = newJSONArray();
 				
 				for (Propagator p : propagators) {
 					JSONObject propagatorJson = propagatorFactory.toJSON(p);
@@ -115,6 +115,10 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			throw new JSONException(e.getMessage());
 		}
 	}
+	
+	protected JSONArray newJSONArray() {
+		return new JSONArray();
+	}
 
 	@Override
 	protected void fromJSON(JSONObject from, T to) throws JSONException {
@@ -125,7 +129,6 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			if(from.has("application") && !from.isNull("application")) {
 				JSONObject application = from.getJSONObject("application");
 				if(application != null) {
-					
 					to.setApplication(applicationFactory.fromJSON(application));
 				}
 			}

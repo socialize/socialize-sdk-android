@@ -21,6 +21,7 @@
  */
 package com.socialize.auth;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -61,7 +62,7 @@ public class DefaultUserProviderCredentialsMap implements UserProviderCredential
 	 */
 	@Override
 	public Collection<UserProviderCredentials> values() {
-		return map.values();
+		return new ArrayList<UserProviderCredentials>(map.values());
 	}
 
 	@Override

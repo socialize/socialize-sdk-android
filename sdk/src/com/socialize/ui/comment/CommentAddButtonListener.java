@@ -70,7 +70,7 @@ public class CommentAddButtonListener {
 			onComment(comment, shareLocation, subscribe, SocialNetwork.FACEBOOK);
 		}
 		else {
-			onComment(comment, shareLocation, subscribe, SocialNetwork.NONE);
+			onComment(comment, shareLocation, subscribe);
 		}
 	}
 	

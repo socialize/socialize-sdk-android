@@ -22,6 +22,7 @@
 package com.socialize.sample;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 public class EmptyActivity extends Activity {
@@ -43,6 +44,9 @@ public class EmptyActivity extends Activity {
 		this.savedInstanceState = outState;
 		super.onSaveInstanceState(outState);
 	}
-	
-	
+
+	@Override
+	public void onBackPressed() {
+		startActivity(new Intent(EmptyActivity.this, Main.class));
+	}
 }

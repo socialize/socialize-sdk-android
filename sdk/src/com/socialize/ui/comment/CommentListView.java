@@ -245,17 +245,22 @@ public class CommentListView extends BaseView {
 				if(networks == null || networks.length == 0) {
 					// No networks requested, ensure we are authed with at least one
 					boolean showAuth = true;
+					boolean authSupported = false;
 					
-					if(getSocialize().isSupported(AuthProviderType.FACEBOOK) || getSocialize().isSupported(AuthProviderType.TWITTER)) {
-						if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) || getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
-							showAuth = false;
+					SocialNetwork[] all = SocialNetwork.values();
+					
+					for (SocialNetwork socialNetwork : all) {
+						AuthProviderType type = AuthProviderType.valueOf(socialNetwork);
+						if(getSocialize().isSupported(type)) {
+							authSupported = true;
+							if(getSocialize().isAuthenticated(type)) {
+								showAuth = false;
+								break;
+							}
 						}
 					}
-					else {
-						showAuth = false;
-					}
 					
-					if(showAuth) {
+					if(showAuth && authSupported) {
 						authRequestDialogFactory.create(CommentListView.this, getCommentAuthListener(text, shareLocation, subscribe, networks)).show();
 					}
 					else {
@@ -271,7 +276,7 @@ public class CommentListView extends BaseView {
 			@Deprecated
 			@Override
 			public void onComment(String text, boolean autoPostToFacebook, boolean shareLocation, boolean subscribe) {
-				onComment(text, shareLocation, subscribe, (autoPostToFacebook) ? SocialNetwork.FACEBOOK : SocialNetwork.NONE);
+				onComment(text, shareLocation, subscribe, (autoPostToFacebook) ? SocialNetwork.FACEBOOK : null);
 			}
 		});
 	}

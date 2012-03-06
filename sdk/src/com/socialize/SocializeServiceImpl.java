@@ -1727,4 +1727,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	protected void setSubscriptionSystem(SubscriptionSystem subscriptionSystem) {
 		this.subscriptionSystem = subscriptionSystem;
 	}
+
+	protected void setAuthProviderInfoBuilder(AuthProviderInfoBuilder authProviderInfoBuilder) {
+		this.authProviderInfoBuilder = authProviderInfoBuilder;
+	}
+	
+	
 }
