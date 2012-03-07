@@ -269,8 +269,11 @@ public class ProfileContentView extends BaseView {
 		if(facebookEnabledCheckbox != null) {
 			facebookEnabledCheckbox.setSignInListener(socialSignInListener);
 			facebookEnabledCheckbox.setSignOutListener(socialSignOutListener);
+		}
+		
+		if(twitterEnabledCheckbox != null) {
 			twitterEnabledCheckbox.setSignInListener(socialSignInListener);			
-			twitterEnabledCheckbox.setSignOutListener(socialSignOutListener);			
+			twitterEnabledCheckbox.setSignOutListener(socialSignOutListener);
 		}
 	}
 
