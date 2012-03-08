@@ -71,6 +71,10 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 		
 		Socialize.getSocialize().init(getContext(), config);
 		
+		// For some reason, this test fails when run in a suite because
+		// the twitter button is not shown.  Forcing twitter config here
+		Socialize.getSocialize().getConfig().setTwitterKeySecret("foo", "bar");
+		
 		final AuthPanelView view = SocializeAccess.getBean("authPanelView");
 		
 		final CountDownLatch latch0 = new CountDownLatch(1);
