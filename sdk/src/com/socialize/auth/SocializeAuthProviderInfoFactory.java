@@ -28,6 +28,10 @@ public class SocializeAuthProviderInfoFactory extends BaseAuthProviderInfoFactor
 	@Override
 	protected SocializeAuthProviderInfo initInstance() {
 		return new SocializeAuthProviderInfo();
-		
 	}
+
+	@Override
+	protected void update(SocializeAuthProviderInfo instance) {}
+	
+	
 }

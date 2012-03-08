@@ -41,8 +41,11 @@ public abstract class BaseAuthProviderInfoFactory<I extends AuthProviderInfo> im
 		if(instance == null) {
 			instance = initInstance();
 		}
+		update(instance);
 		return instance;
 	}
 	
 	protected abstract I initInstance();
+	
+	protected abstract void update(I instance);
 }

@@ -33,7 +33,11 @@ public class FacebookAuthProviderInfoFactory extends BaseAuthProviderInfoFactory
 	@Override
 	protected FacebookAuthProviderInfo initInstance() {
 		FacebookAuthProviderInfo info = new FacebookAuthProviderInfo();
-		info.setAppId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
 		return info;
+	}
+
+	@Override
+	protected void update(FacebookAuthProviderInfo info) {
+		info.setAppId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
 	}
 }

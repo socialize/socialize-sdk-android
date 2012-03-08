@@ -33,8 +33,12 @@ public class TwitterAuthProviderInfoFactory extends BaseAuthProviderInfoFactory<
 	@Override
 	protected TwitterAuthProviderInfo initInstance() {
 		TwitterAuthProviderInfo info = new TwitterAuthProviderInfo();
+		return info;
+	}
+
+	@Override
+	protected void update(TwitterAuthProviderInfo info) {
 		info.setConsumerKey(config.getProperty(SocializeConfig.TWITTER_CONSUMER_KEY));
 		info.setConsumerSecret(config.getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET));
-		return info;
 	}
 }
