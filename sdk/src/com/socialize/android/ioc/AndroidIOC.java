@@ -30,6 +30,22 @@ public class AndroidIOC implements IOCContainer {
 	private Container container;
 	private boolean initialized = false;
 	
+	public static void registerProxy(String name, Object proxy) {
+		Container.registerProxy(name, proxy);
+	}
+	
+	public static void unregisterProxy(String name) {
+		Container.unregisterProxy(name);
+	}	
+	
+	public static void registerStub(String name, Object proxy) {
+		Container.registerStub(name, proxy);
+	}
+	
+	public static void unregisterStub(String name) {
+		Container.unregisterStub(name);
+	}			
+	
 	@Override
 	public void init(Context context, InputStream...in) throws Exception {
 		init(context, new ContainerBuilder(context), in);
@@ -65,6 +81,11 @@ public class AndroidIOC implements IOCContainer {
 	public <T> ProxyObject<T> getProxy(String name, Object... args) {
 		return container.getProxy(name, args);
 	}
+	
+	@Override
+	public void setRuntimeProxy(String name, Object proxy) {
+		container.setRuntimeProxy(name, proxy);
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.android.ioc.IOCContainer#getBean(java.lang.String)
@@ -83,6 +104,16 @@ public class AndroidIOC implements IOCContainer {
 	@SuppressWarnings("unchecked")
 	public <T> T getBean(String name, Object... args) {
 		return (T) container.getBean(name, args);
+	}
+
+	@Override
+	public <T> void getBeanAsync(String name, BeanCreationListener<T> listener) {
+		container.getBeanAsync(name, listener);
+	}
+
+	@Override
+	public <T> void getBeanAsync(String name, BeanCreationListener<T> listener, Object... args) {
+		container.getBeanAsync(name, listener, args);
 	}
 
 	/* (non-Javadoc)

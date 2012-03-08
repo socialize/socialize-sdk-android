@@ -261,7 +261,7 @@ public class CommentListView extends BaseView {
 					}
 					
 					if(showAuth && authSupported) {
-						authRequestDialogFactory.create(CommentListView.this, getCommentAuthListener(text, shareLocation, subscribe, networks)).show();
+						authRequestDialogFactory.create(CommentListView.this, getCommentAuthListener(text, shareLocation, subscribe, networks));
 					}
 					else {
 						// Post as anon

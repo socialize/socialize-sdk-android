@@ -172,6 +172,7 @@ public class BeanMappingParser {
 		catch (Exception e) {
 			Logger.e("BeanMappingParser", "IOC Parse error", e);
 		}
+		
 		return mapping;
 	}
 	

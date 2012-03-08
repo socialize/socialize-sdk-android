@@ -458,8 +458,8 @@
 		<init-method name="init"/>
 	</bean>	
 	
-	<factory id="twitterEnabledCheckboxFactory" makes="twitterEnabledCheckbox"/>			
-
+	<factory id="twitterEnabledCheckboxFactory" makes="twitterEnabledCheckbox"/>	
+	
 <!-- End Twitter -->
 		
 <!-- Facebook -->

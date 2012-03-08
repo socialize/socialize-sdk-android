@@ -24,6 +24,16 @@ public class BeanFactory<T> implements IBeanFactory<T> {
 	public void setContainer(Container container) {
 		this.container = container;
 	}
+	
+	@Override
+	public void getBeanAsync(BeanCreationListener<T> listener) {
+		container.getBeanAsync(beanName, listener);
+	}
+
+	@Override
+	public void getBeanAsync(BeanCreationListener<T> listener, Object... args) {
+		container.getBeanAsync(beanName, listener, args);
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override

@@ -21,12 +21,12 @@
  */
 package com.socialize.auth.twitter;
 
-import com.socialize.error.SocializeException;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.RelativeLayout;
+
+import com.socialize.error.SocializeException;
 
 /**
  * @author Jason Polites
@@ -34,7 +34,7 @@ import android.widget.RelativeLayout;
  */
 public class TwitterAuthView extends RelativeLayout {
 	
-	private TwitterAuthWebView webView;
+	private ITwitterAuthWebView webView;
 	private String consumerKey; 
 	private String consumerSecret;
 	private TwitterAuthListener twitterAuthListener;
@@ -43,13 +43,29 @@ public class TwitterAuthView extends RelativeLayout {
 		super(context);
 	}
 	
+	public TwitterAuthView(Context context, String consumerKey, String consumerSecret) {
+		super(context);
+		this.consumerKey = consumerKey;
+		this.consumerSecret = consumerSecret;
+	}
+	
 	public void init() {
 		setBackgroundColor(Color.BLACK);
-		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		webView = new TwitterAuthWebView(getContext());
+		LayoutParams params = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		webView = newTwitterAuthWebView(getContext());
 		webView.init();
 		webView.setLayoutParams(params);
-		addView(webView);
+		addView(webView.getView());
+	}
+	
+	// So we can mock
+	protected LayoutParams newLayoutParams(int width, int height) {
+		return new LayoutParams(width, height);
+	}
+	
+	// So we can mock	
+	protected ITwitterAuthWebView newTwitterAuthWebView(Context context) {
+		return new TwitterAuthWebView(context);
 	}
 	
 	public void setConsumerKey(String consumerKey) {
@@ -66,33 +82,37 @@ public class TwitterAuthView extends RelativeLayout {
 
 	public void authenticate() {
 		if(webView != null) {
-			webView.authenticate(consumerKey, consumerSecret, new TwitterAuthListener() {
-				
-				@Override
-				public void onError(SocializeException e) {
-					webView.setVisibility(View.GONE);
-					if(twitterAuthListener != null) {
-						twitterAuthListener.onError(e);
-					}
-				}
-				
-				@Override
-				public void onCancel() {
-					webView.setVisibility(View.GONE);
-					if(twitterAuthListener != null) {
-						twitterAuthListener.onCancel();
-					}
-				}
-
-				@Override
-				public void onAuthSuccess(String token, String secret, String screenName, String userId) {
-					webView.setVisibility(View.GONE);
-					if(twitterAuthListener != null) {
-						twitterAuthListener.onAuthSuccess(token, secret, screenName, userId);
-					}
-				}
-			});
+			webView.authenticate(consumerKey, consumerSecret, newTwitterAuthListener());
 		}
+	}
+	
+	protected TwitterAuthListener newTwitterAuthListener() {
+		return new TwitterAuthListener() {
+			
+			@Override
+			public void onError(SocializeException e) {
+				webView.setVisibility(View.GONE);
+				if(twitterAuthListener != null) {
+					twitterAuthListener.onError(e);
+				}
+			}
+			
+			@Override
+			public void onCancel() {
+				webView.setVisibility(View.GONE);
+				if(twitterAuthListener != null) {
+					twitterAuthListener.onCancel();
+				}
+			}
+
+			@Override
+			public void onAuthSuccess(String token, String secret, String screenName, String userId) {
+				webView.setVisibility(View.GONE);
+				if(twitterAuthListener != null) {
+					twitterAuthListener.onAuthSuccess(token, secret, screenName, userId);
+				}
+			}
+		};
 	}
 
 }

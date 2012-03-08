@@ -424,6 +424,14 @@ public class ContainerBuilder {
 		resolveImports(mapping);
 		
 		Container container = new Container(mapping, this);
+		
+		// Setup static proxies
+		if(Container.staticProxies.size() > 0) {
+			Set<Entry<String, Object>> entries = Container.staticProxies.entrySet();
+			for (Entry<String, Object> entry : entries) {
+				container.setRuntimeProxyInternal(entry.getKey(), entry.getValue(), true);
+			}
+		}
 
 		// Build factories
 		buildFactories(container, mapping.getFactoryRefs());

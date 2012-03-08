@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2011 Socialize Inc. 
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -21,18 +21,10 @@
  */
 package com.socialize.android.ioc;
 
-/**
- * A bean factory allows beans to create new non-singleton beans without needing to know about the container.
- * @author Jason Polites
- *
- */
-public interface IBeanFactory<T> {
-	
-	public void getBeanAsync(BeanCreationListener<T> listener);
-	
-	public void getBeanAsync(BeanCreationListener<T> listener, Object...args);
+public interface BeanCreationListener<T> {
 
-	public T getBean();
+	public void onCreate(T bean);
 	
-	public T getBean(Object...args);
+	public void onError(String name, Exception e);
+	
 }

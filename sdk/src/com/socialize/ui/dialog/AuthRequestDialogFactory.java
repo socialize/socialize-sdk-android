@@ -22,6 +22,7 @@
 package com.socialize.ui.dialog;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.view.Gravity;
@@ -29,6 +30,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout.LayoutParams;
 
+import com.socialize.android.ioc.BeanCreationListener;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.error.SocializeException;
@@ -56,38 +58,55 @@ public class AuthRequestDialogFactory extends AuthDialogFactory  {
 	
 	public Dialog create(final View parent, final AuthRequestListener listener) {
 
-		Dialog dialog = newDialog(parent.getContext());
+		final Dialog dialog = newDialog(parent.getContext());
+		final ProgressDialog progress = SafeProgressDialog.show(parent.getContext(), "", "Please wait...");
 		
-		AuthPanelView view = authPanelViewFactory.getBean(listener, dialog);
+		authPanelViewFactory.getBeanAsync(new BeanCreationListener<AuthPanelView>() {
+			
+			@Override
+			public void onError(String name, Exception e) {
+				dialog.dismiss();
+				progress.dismiss();
+				e.printStackTrace();
+			}
+			
+			@Override
+			public void onCreate(AuthPanelView view) {
+				LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+				params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+				
+				GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Colors.parseColor("#323a43"), Colors.parseColor("#1d2227") });
+				
+				background.setCornerRadius(deviceUtils.getDIP(4));
+				
+				view.setBackgroundDrawable(background);				
+				dialog.setContentView(view, params);
+				
+				FacebookSignInCell facebookSignInCell = view.getFacebookSignInCell();
+				TwitterSignInCell twitterSignInCell = view.getTwitterSignInCell();
+				
+				if(facebookSignInCell != null) {
+					facebookSignInCell.setAuthListener(getAuthClickListener(dialog, listener, SocialNetwork.FACEBOOK));
+				}
+				
+				if(twitterSignInCell != null) {
+					twitterSignInCell.setAuthListener(getAuthClickListener(dialog, listener, SocialNetwork.TWITTER));
+				}	
+				
+				WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+			    lp.copyFrom(dialog.getWindow().getAttributes());
+			    lp.width = WindowManager.LayoutParams.FILL_PARENT;
+			    lp.height = WindowManager.LayoutParams.FILL_PARENT;
+			    
+			    dialog.getWindow().setAttributes(lp);				
+				
+			    dialog.show();
+			    
+				progress.dismiss();
+			}
+		}, listener, dialog);
 		
-		GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Colors.parseColor("#323a43"), Colors.parseColor("#1d2227") });
-		
-		background.setCornerRadius(deviceUtils.getDIP(4));
-		
-		view.setBackgroundDrawable(background);
-		
-		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
-		
-		dialog.setContentView(view, params);
-		
-		FacebookSignInCell facebookSignInCell = view.getFacebookSignInCell();
-		TwitterSignInCell twitterSignInCell = view.getTwitterSignInCell();
-		
-		if(facebookSignInCell != null) {
-			facebookSignInCell.setAuthListener(getAuthClickListener(dialog, listener, SocialNetwork.FACEBOOK));
-		}
-		
-		if(twitterSignInCell != null) {
-			twitterSignInCell.setAuthListener(getAuthClickListener(dialog, listener, SocialNetwork.TWITTER));
-		}
-		
-		WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-	    lp.copyFrom(dialog.getWindow().getAttributes());
-	    lp.width = WindowManager.LayoutParams.FILL_PARENT;
-	    lp.height = WindowManager.LayoutParams.FILL_PARENT;
-	    
-	    dialog.getWindow().setAttributes(lp);
+//		AuthPanelView view = authPanelViewFactory.getBean(listener, dialog);
 		
 		return dialog;
 	}

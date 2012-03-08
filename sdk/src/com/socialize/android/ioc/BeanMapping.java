@@ -87,6 +87,10 @@ public class BeanMapping {
 		beanRefs.remove(ref.getName());
 	}
 	
+	public void removeProxyRef(String name) {
+		proxyRefs.remove(name);
+	}
+	
 	public BeanRef getBeanRef(String name) {
 		return beanRefs.get(name);
 	}

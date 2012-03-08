@@ -92,9 +92,6 @@ public class BeanMappingParserHandler extends DefaultHandler {
 			currentBean.setSingleton(parseBoolean(attributes.getValue("singleton"), true));
 			currentBean.setAbstractBean(parseBoolean(attributes.getValue("abstract"), false));
 			
-//			String lazy = attributes.getValue("lazy-init");
-//			currentBean.setLazyInit(parseBoolean(lazy, false));
-			
 			beanMapping.addBeanRef(currentBean);
 		}
 		else if(localName.equalsIgnoreCase(CONSTRUCTOR_ARG)) {

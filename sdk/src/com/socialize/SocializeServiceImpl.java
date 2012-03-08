@@ -35,6 +35,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ScrollView;
@@ -1494,7 +1495,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		
 		View contentView = null;
 		
-		if(addScrollView && !(original instanceof ScrollView) ) {
+		if(addScrollView && !(original instanceof ScrollView) && !(original instanceof ListView) ) {
 			RelativeLayout.LayoutParams scrollViewParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 			
 			scrollViewParams.addRule(RelativeLayout.ABOVE, socializeActionBar.getId());

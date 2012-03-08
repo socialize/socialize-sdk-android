@@ -19,20 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.android.ioc;
+package com.socialize.auth.twitter;
+
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 
 /**
- * A bean factory allows beans to create new non-singleton beans without needing to know about the container.
+ * Simply here so we can mock out the webview for tests.
  * @author Jason Polites
- *
  */
-public interface IBeanFactory<T> {
-	
-	public void getBeanAsync(BeanCreationListener<T> listener);
-	
-	public void getBeanAsync(BeanCreationListener<T> listener, Object...args);
+public interface ITwitterAuthWebView {
 
-	public T getBean();
+	public void authenticate(String consumerKey, String consumerSecret, TwitterAuthListener twitterAuthListener);
+
+	public void setVisibility(int gone);
+
+	public void init();
+
+	public void setLayoutParams(LayoutParams params);
 	
-	public T getBean(Object...args);
+	public View getView();
+
 }

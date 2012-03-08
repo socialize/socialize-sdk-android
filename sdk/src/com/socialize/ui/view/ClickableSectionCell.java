@@ -211,8 +211,10 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		
 		setBackgroundDrawable(bgLayer);
 		
-		int padding = deviceUtils.getDIP(8);
-		setPadding(padding, padding, padding, padding);				
+		if(deviceUtils != null) {
+			int padding = deviceUtils.getDIP(8);
+			setPadding(padding, padding, padding, padding);		
+		}
 	}
 
 	public void setDrawables(Drawables drawables) {

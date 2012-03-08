@@ -285,8 +285,6 @@ public class CommentEntryView extends BaseView {
 	
 	protected void initShareToolbar() {
 		
-
-		
 		final boolean fbSupported = Socialize.getSocialize().isSupported(AuthProviderType.FACEBOOK);
 		final boolean twSupported = Socialize.getSocialize().isSupported(AuthProviderType.TWITTER);
 		final boolean locationSupported = appUtils.isLocationAvaiable(getContext());

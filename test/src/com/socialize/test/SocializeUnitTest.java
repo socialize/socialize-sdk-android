@@ -38,6 +38,10 @@ public abstract class SocializeUnitTest extends AndroidTestCase {
 		super.setUp();
 	}
 	
+	protected int getNextIndex() {
+		return holder.getNextIndex();
+	}
+	
 	protected void addResult(Object obj) {
 		holder.addResult(obj);
 	}
