@@ -6,6 +6,15 @@
 What's New
 ==========
 
+
+v1.5 Twitter! 
+-------------
+.. image:: images/twitter_sm.png
+
+v1.5 of Socialize includes support for sharing to twitter as well auto-posting comments and likes (if using the :doc:`action_bar`)
+
+Refer to the :doc:`twitter` section for details on how to integrate Twitter into Socialize.
+
 v1.4 Socialize Like Button
 --------------------------
 

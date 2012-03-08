@@ -1,6 +1,6 @@
 .. raw:: html
 
-	<pre class="brush: xml;tab-size: 4;highlight: [21,26,42,44]">
+	<pre class="brush: xml;tab-size: 4;highlight: [21,25,42,44]">
 		&lt;manifest...>
 		
 			&lt;application...>

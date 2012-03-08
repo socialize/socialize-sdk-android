@@ -26,16 +26,17 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
-import com.socialize.ui.view.SocializeButton;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
@@ -45,9 +46,13 @@ import com.socialize.view.BaseView;
  */
 public class ShareDialogView extends BaseView {
 
-	private SocializeButton facebookShareButton;
-	private SocializeButton emailShareButton;
-	private SocializeButton smsShareButton;
+//	private SocializeButton facebookShareButton;
+//	private SocializeButton emailShareButton;
+//	private SocializeButton smsShareButton;
+//	
+	private ImageButton facebookShareButton;
+	private ImageButton emailShareButton;
+	private ImageButton smsShareButton;	
 	
 	private IBeanFactory<ShareClickListener> otherShareClickListenerFactory;
 	private IBeanFactory<ShareClickListener> emailShareClickListenerFactory;
@@ -73,6 +78,7 @@ public class ShareDialogView extends BaseView {
 	public void init() {
 		
 		int padding = deviceUtils.getDIP(8);
+		int buttonPadding = deviceUtils.getDIP(2);
 		
 		LayoutParams fill = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 
@@ -146,18 +152,36 @@ public class ShareDialogView extends BaseView {
 		ShareClickListener emailShareClickListener = emailShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
 		ShareClickListener smsShareClickListener = smsShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
 		
-		if(facebookShareButton != null && facebookShareClickListener.isAvailableOnDevice(getActivity())) {
-			facebookShareButton.setCustomClickListener(facebookShareClickListener);
+		if(facebookShareClickListener.isAvailableOnDevice(getActivity())) {
+			
+			facebookShareButton = new ImageButton(getContext());
+			facebookShareButton.setBackgroundColor(Color.TRANSPARENT);
+			facebookShareButton.setImageDrawable(drawables.getDrawable("icon_facebook.png#nodip", DisplayMetrics.DENSITY_DEFAULT));
+			facebookShareButton.setOnClickListener(facebookShareClickListener);
+			facebookShareButton.setPadding(buttonPadding, buttonPadding, buttonPadding, buttonPadding);
+//			facebookShareButton.setCustomClickListener(facebookShareClickListener);
 			buttonLayout.addView(facebookShareButton);
 		}
 		
-		if(emailShareButton != null && emailShareClickListener.isAvailableOnDevice(getActivity())) {
-			emailShareButton.setCustomClickListener(emailShareClickListener);
+		if(emailShareClickListener.isAvailableOnDevice(getActivity())) {
+			
+			emailShareButton = new ImageButton(getContext());
+			emailShareButton.setBackgroundColor(Color.TRANSPARENT);
+			emailShareButton.setImageDrawable(drawables.getDrawable("icon_email.png#nodip", DisplayMetrics.DENSITY_DEFAULT));
+			emailShareButton.setOnClickListener(emailShareClickListener);
+			emailShareButton.setPadding(buttonPadding, buttonPadding, buttonPadding, buttonPadding);
+//			emailShareButton.setCustomClickListener(emailShareClickListener);
 			buttonLayout.addView(emailShareButton);
 		}
 		
-		if(smsShareButton != null && smsShareClickListener.isAvailableOnDevice(getActivity())) {
-			smsShareButton.setCustomClickListener(smsShareClickListener);
+		if(smsShareClickListener.isAvailableOnDevice(getActivity())) {
+			
+			smsShareButton = new ImageButton(getContext());
+			smsShareButton.setBackgroundColor(Color.TRANSPARENT);
+			smsShareButton.setImageDrawable(drawables.getDrawable("icon_sms.png#nodip", DisplayMetrics.DENSITY_DEFAULT));
+			smsShareButton.setOnClickListener(smsShareClickListener);
+			smsShareButton.setPadding(buttonPadding, buttonPadding, buttonPadding, buttonPadding);
+//			smsShareButton.setCustomClickListener(smsShareClickListener);
 			buttonLayout.addView(smsShareButton);
 		}
 		
@@ -183,17 +207,17 @@ public class ShareDialogView extends BaseView {
 		this.deviceUtils = deviceUtils;
 	}
 
-	public void setFacebookShareButton(SocializeButton facebookShareButton) {
-		this.facebookShareButton = facebookShareButton;
-	}
-
-	public void setEmailShareButton(SocializeButton emailShareButton) {
-		this.emailShareButton = emailShareButton;
-	}
-
-	public void setSmsShareButton(SocializeButton smsShareButton) {
-		this.smsShareButton = smsShareButton;
-	}
+//	public void setFacebookShareButton(SocializeButton facebookShareButton) {
+//		this.facebookShareButton = facebookShareButton;
+//	}
+//
+//	public void setEmailShareButton(SocializeButton emailShareButton) {
+//		this.emailShareButton = emailShareButton;
+//	}
+//
+//	public void setSmsShareButton(SocializeButton smsShareButton) {
+//		this.smsShareButton = smsShareButton;
+//	}
 
 	public void setOtherShareClickListenerFactory(IBeanFactory<ShareClickListener> otherShareClickListenerFactory) {
 		this.otherShareClickListenerFactory = otherShareClickListenerFactory;

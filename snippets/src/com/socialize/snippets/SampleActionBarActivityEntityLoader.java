@@ -1,6 +1,7 @@
 package com.socialize.snippets;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -32,6 +33,10 @@ public class SampleActionBarActivityEntityLoader extends Activity {
 				// Add the key from the entity
 				intent.putExtra("some_key", entity.getKey());
 				activity.startActivity(intent);
+			}
+			@Override
+			public boolean canLoad(Context arg0, Entity arg1) {
+				return true;
 			}
 		});
 

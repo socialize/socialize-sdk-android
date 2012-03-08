@@ -1,0 +1,7 @@
+.. raw:: html
+
+	<pre class="brush: java-properties">
+	# Set your consumer key/secret for Twitter integration
+	twitter.consumer.key=U18LUnVjULkkpGoJ6AAAAA
+	twitter.consumer.secret=RiIljnFq4RWV9LEaCM1ZLsAHf053vX2KyhJhmAAAAA
+	</pre>

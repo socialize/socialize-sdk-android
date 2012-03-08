@@ -7,15 +7,15 @@ Facebook Integration
 Introduction
 ------------
 
-It is strongly recommended that users be able to authenticate with Facebook and/or Twitter when using Socialize so as to 
+It is strongly recommended that users be able to authenticate with Facebook when using Socialize so as to 
 maximize the exposure, and promotion of your app.
 
 This provides significant benefits to both your application, and your users including:
 
 1. Improved user experience through personalized comments
 2. Automatic profile creation (user name and profile picture)
-3. Ability to automatically post user comments and likes to Facebook and/or Twitter
-4. Promotes your app on Facebook and/or Twitter by associating your app with comments/tweets
+3. Ability to automatically post user comments and likes to Facebook
+4. Promotes your app on Facebook by associating your app with comments
 
 To add Facebook authentication, you'll need a Facebook App ID.  If you already have a Facebook app, 
 you can skip this section.
@@ -54,19 +54,24 @@ If you **do not** already have a Facebook app just follow these simple steps:
 		
 		Generally it makes sense to add BOTH your **debug** and your **release** keys to Facebook to avoid problems during development and testing.
 	
-You should now be ready to authenticate user's of your app with Facebook when they are using Socialize, jump to the :ref:`fb_snippet` to find out how.  	
+Configuring Facebook in Socialize
+---------------------------------
+Once you have a facebook application, simply add your Facebook app Id your **socialize.properties** file:
+
+.. include:: snippets/props_facebook.txt
+
 
 .. _propagate_fb:
 
 Propagating Socialize Actions to Facebook
 -----------------------------------------
 
-Social actions like Comment and Like can optionally be propagated to social networks like Facebook via the SDK.
+Social actions such as Comment and Like can optionally be propagated to Facebook via the SDK.
 
 .. note:: 
 
 	Propagation is automatic when using the Socialize Action Bar.  The following is only required for developers
-	electing to use the SDK manually**
+	electing to use the SDK manually
 
 The following example shows posting a comment and simultaneously sharing the comment to the user's facebook wall.
 

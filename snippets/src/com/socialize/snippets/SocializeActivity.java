@@ -9,6 +9,8 @@ import android.widget.Button;
 import com.socialize.Socialize;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.facebook.FacebookAuthProviderInfo;
+import com.socialize.auth.twitter.TwitterAuthProviderInfo;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
@@ -37,6 +39,8 @@ public class SocializeActivity extends Activity {
 	String consumerKey;
 	String consumerSecret;
 	String facebookAppId;
+	private String twitterConsumerKey;
+	private String twitterConsumerSecret;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -53,14 +57,16 @@ public class SocializeActivity extends Activity {
 	}
 
 
-	void snippet0() {
+	void facebookAuth() {
+		
+		FacebookAuthProviderInfo info = new FacebookAuthProviderInfo();
+		info.setAppId(facebookAppId); // Your facebook app ID
 
 		Socialize.getSocialize().authenticate(
 				this,
 				consumerKey, // From your account at getsocialize.com
 				consumerSecret, // From your account at getsocialize.com
-				AuthProviderType.FACEBOOK,
-				facebookAppId, // Your facebook app ID
+				info, 
 				new SocializeAuthListener() {
 					public void onAuthSuccess(SocializeSession session) {
 						// Success!
@@ -77,6 +83,34 @@ public class SocializeActivity extends Activity {
 
 				});		
 	}
+	
+	void twitterAuth() {
+		
+		TwitterAuthProviderInfo info = new TwitterAuthProviderInfo();
+		info.setConsumerKey(twitterConsumerKey); // Your twitter consumer key
+		info.setConsumerSecret(twitterConsumerSecret); // Your twitter consumer secret
+		
+		Socialize.getSocialize().authenticate(
+				this,
+				consumerKey, // From your account at getsocialize.com
+				consumerSecret, // From your account at getsocialize.com
+				info, 
+				new SocializeAuthListener() {
+					public void onAuthSuccess(SocializeSession session) {
+						// Success!
+					}
+					public void onAuthFail(SocializeException error) {
+						// Handle auth fail
+					}
+					public void onError(SocializeException error) {
+						// Handle error
+					}
+					public void onCancel() {
+						// Handle cancel
+					}
+
+				});		
+	}	
 
 	void snippet1() {
 
