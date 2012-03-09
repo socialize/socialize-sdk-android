@@ -1,7 +1,6 @@
 package com.socialize.ui.auth;
 
 import android.content.Context;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,7 +25,7 @@ public class AnonymousCell extends ClickableSectionCell {
 	@Override
 	protected ImageView makeImage() {
 		ImageView view = new ImageView(getContext());
-		view.setImageDrawable(drawables.getDrawable("user_icon.png#no_density", DisplayMetrics.DENSITY_DEFAULT));
+		view.setImageDrawable(drawables.getDrawable("user_icon.png"));
 		return view;
 	}
 

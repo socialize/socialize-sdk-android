@@ -1659,8 +1659,18 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 
 	/*
 	 * (non-Javadoc)
+	 * @see com.socialize.SocializeUI#getDrawable(java.lang.String)
+	 */
+	@Override
+	public Drawable getDrawable(String name) {
+		return drawables.getDrawable(name);
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * @see com.socialize.SocializeUI#getDrawable(java.lang.String, int, boolean)
 	 */
+	@Deprecated
 	@Override
 	public Drawable getDrawable(String name, int density, boolean eternal) {
 		return drawables.getDrawable(name, density, eternal);

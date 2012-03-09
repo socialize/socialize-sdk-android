@@ -26,7 +26,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.ImageView;
@@ -117,7 +116,7 @@ public class SocializeHeader extends LinearLayout {
 		titleText.setLayoutParams(titleTextLayoutParams);
 
 		ImageView titleImage = new ImageView(getContext());
-		titleImage.setImageDrawable(drawables.getDrawable("socialize_icon_white.png", DisplayMetrics.DENSITY_DEFAULT, true));
+		titleImage.setImageDrawable(drawables.getDrawable("socialize_icon_white.png"));
 		titleImage.setPadding(0, 0, 0, 0);
 
 		LayoutParams titleImageLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);

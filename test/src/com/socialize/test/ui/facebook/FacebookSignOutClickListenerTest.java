@@ -21,25 +21,7 @@
  */
 package com.socialize.test.ui.facebook;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.SocializeService;
-import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.networks.SocialNetworkSignOutListener;
-import com.socialize.networks.SocialNetworkSignOutTask;
 import com.socialize.test.ui.SocializeUIActivityTest;
-import com.socialize.util.Drawables;
 
 /**
  * @author Jason Polites

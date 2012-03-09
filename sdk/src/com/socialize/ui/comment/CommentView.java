@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -111,7 +110,7 @@ public class CommentView extends EntityView {
 
 		MenuItem add2 = menu.add("Refresh");
 		
-		add2.setIcon(Socialize.getSocializeUI().getDrawable("ic_menu_refresh.png", DisplayMetrics.DENSITY_DEFAULT, true));
+		add2.setIcon(Socialize.getSocializeUI().getDrawable("ic_menu_refresh.png"));
 		
 		add2.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override

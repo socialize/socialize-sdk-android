@@ -27,7 +27,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -248,7 +247,7 @@ public class CommentEntryView extends BaseView {
 			notificationBannerParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 			
 			notificationBannerImage.setLayoutParams(notificationBannerParams);
-			notificationBannerImage.setImageDrawable(drawables.getDrawable("notification_banner.png", DisplayMetrics.DENSITY_DEFAULT));
+			notificationBannerImage.setImageDrawable(drawables.getDrawable("notification_banner.png"));
 
 			notificationsTitle = new TextView(getContext());
 			notificationsText = new TextView(getContext());

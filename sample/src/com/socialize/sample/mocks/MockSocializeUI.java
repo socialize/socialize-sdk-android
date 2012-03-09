@@ -79,4 +79,8 @@ public class MockSocializeUI implements SocializeUI {
 		return null;
 	}
 
+	@Override
+	public Drawable getDrawable(String name) {
+		return null;
+	}
 }

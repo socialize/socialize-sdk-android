@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.graphics.drawable.LayerDrawable;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -40,7 +39,6 @@ public class CustomCheckbox extends BaseView {
 	private String textOff;
 	
 	private boolean borderOn = true;
-	private boolean forceDefaultDensity = true;
 	
 	private int padding = 4;
 	private int textPadding = 4;
@@ -153,21 +151,11 @@ public class CustomCheckbox extends BaseView {
 	protected void setDisplay() {
 		if(checked) {
 			checkboxLabel.setText(textOn);
-			if(forceDefaultDensity) {
-				checkBox.setImageDrawable(drawables.getDrawable(imageOn, DisplayMetrics.DENSITY_DEFAULT));
-			}
-			else {
-				checkBox.setImageDrawable(drawables.getDrawable(imageOn));
-			}
+			checkBox.setImageDrawable(drawables.getDrawable(imageOn));
 		}
 		else {
 			checkboxLabel.setText(textOff);
-			if(forceDefaultDensity) {
-				checkBox.setImageDrawable(drawables.getDrawable(imageOff, DisplayMetrics.DENSITY_DEFAULT));
-			}
-			else {
-				checkBox.setImageDrawable(drawables.getDrawable(imageOff));
-			}
+			checkBox.setImageDrawable(drawables.getDrawable(imageOff));
 		}		
 	}
 	
@@ -244,8 +232,9 @@ public class CustomCheckbox extends BaseView {
 		this.padding = padding;
 	}
 	
+	@Deprecated
 	public void setForceDefaultDensity(boolean forceDefaultDensity) {
-		this.forceDefaultDensity = forceDefaultDensity;
+		
 	}
 	
 	public void showLoading() {

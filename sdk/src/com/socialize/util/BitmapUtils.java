@@ -25,6 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 import android.graphics.Bitmap;
+import android.util.DisplayMetrics;
 
 /**
  * @author Jason Polites
@@ -33,6 +34,8 @@ public class BitmapUtils {
 	
 	private BitmapBuilder bitmapBuilder;
 	private Base64Utils base64Utils;
+//	private int defaultDensity = Bitmap.DENSITY_NONE;
+	private int defaultDensity = DisplayMetrics.DENSITY_DEFAULT;
 	
 	public BitmapUtils(BitmapBuilder bitmapBuilder) {
 		super();
@@ -44,15 +47,15 @@ public class BitmapUtils {
 	}
 	
 	public Bitmap getScaledBitmap(byte[] data, int scaleToWidth, int scaleToHeight) {
-		return getScaledBitmap(bitmapBuilder.decode(data), scaleToWidth, scaleToHeight, Bitmap.DENSITY_NONE);
+		return getScaledBitmap(bitmapBuilder.decode(data), scaleToWidth, scaleToHeight, defaultDensity);
 	}
 	
 	public Bitmap getScaledBitmap(InputStream in, int scaleToWidth, int scaleToHeight) {
-		return getScaledBitmap(bitmapBuilder.decode(in), scaleToWidth, scaleToHeight, Bitmap.DENSITY_NONE);
+		return getScaledBitmap(bitmapBuilder.decode(in), scaleToWidth, scaleToHeight, defaultDensity);
 	}
 	
 	public Bitmap getScaledBitmap(Bitmap bitmap, int scaleToWidth, int scaleToHeight) {
-		return getScaledBitmap(bitmap, scaleToWidth, scaleToHeight, true, Bitmap.DENSITY_NONE);
+		return getScaledBitmap(bitmap, scaleToWidth, scaleToHeight, true, defaultDensity);
 	}	
 
 	public Bitmap getScaledBitmap(byte[] data, int scaleToWidth, int scaleToHeight, int density) {
