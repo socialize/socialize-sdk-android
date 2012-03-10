@@ -19,13 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks.facebook;
+package com.socialize.networks.twitter;
 
 import android.app.Activity;
 
-import com.socialize.Socialize;
-import com.socialize.SocializeService;
-import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ActionType;
 import com.socialize.entity.Entity;
 import com.socialize.networks.AbstractSocialNetworkSharer;
@@ -34,44 +31,27 @@ import com.socialize.networks.SocialNetworkListener;
 
 /**
  * @author Jason Polites
+ *
  */
-public class FacebookSharer extends AbstractSocialNetworkSharer {
+public class TwitterSharer extends AbstractSocialNetworkSharer {
 	
-	private ShareMessageBuilder shareMessageBuilder;
-	private FacebookWallPoster facebookWallPoster;
-	
+	/* (non-Javadoc)
+	 * @see com.socialize.networks.AbstractSocialNetworkSharer#getNetwork()
+	 */
 	@Override
 	protected SocialNetwork getNetwork() {
-		return SocialNetwork.FACEBOOK;
+		return SocialNetwork.TWITTER;
 	}
 
-	protected void doShare(final Activity context, Entity entity, String comment, final SocialNetworkListener listener, ActionType type) {
-		switch (type) {
-			case COMMENT:
-				facebookWallPoster.postComment(context, entity, comment, listener);
-				break;
-				
-			case SHARE:
-				String body = shareMessageBuilder.buildShareMessage( entity, comment, false, true);
-				facebookWallPoster.post(context, body, listener);
-				break;
-				
-			case LIKE:
-				facebookWallPoster.postLike(context, entity, comment, listener);
-				break;			
+	/* (non-Javadoc)
+	 * @see com.socialize.networks.AbstractSocialNetworkSharer#doShare(android.app.Activity, com.socialize.entity.Entity, java.lang.String, com.socialize.networks.SocialNetworkListener, com.socialize.api.action.ActionType)
+	 */
+	@Override
+	protected void doShare(Activity context, Entity entity, String comment, SocialNetworkListener listener, ActionType type) {
+		// Sharing done on server
+		if(listener != null) {
+			listener.onAfterPost(context, getNetwork());
 		}
 	}
 
-	public void setShareMessageBuilder(ShareMessageBuilder shareMessageBuilder) {
-		this.shareMessageBuilder = shareMessageBuilder;
-	}
-
-	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
-		this.facebookWallPoster = facebookWallPoster;
-	}
-
-	// So we can mock
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
-	}
 }

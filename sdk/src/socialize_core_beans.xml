@@ -382,6 +382,10 @@
 					<key value="facebook"/> <!-- MUST be lower case -->
 					<value ref="facebookSharer"/>
 				</entry>
+				<entry>
+					<key value="twitter"/> <!-- MUST be lower case -->
+					<value ref="twitterSharer"/>
+				</entry>				
 			</map>
 		</property>		
 	</bean>
@@ -558,17 +562,31 @@
 	</bean>	
 	
 	<bean 
-		id="facebookSharer" 
-		class="com.socialize.networks.facebook.FacebookSharer">
-		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
+		id="socialNetworkSharer" 
+		abstract="true">
 		<property name="config" ref="config"/>
 		<property name="logger" ref="logger"/>
+	</bean>			
+	
+	<bean 
+		id="facebookSharer" 
+		class="com.socialize.networks.facebook.FacebookSharer"
+		extends="socialNetworkSharer">
+		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
 		<property name="facebookWallPoster" ref="facebookWallPoster"/>
+		<property name="authProviderInfoFactory" ref="facebookAuthProviderInfoFactory"/>
 	</bean>		
 	
 <!-- End Facebook -->
 
 <!-- Twitter -->
+
+	<bean 
+		id="twitterSharer" 
+		class="com.socialize.networks.twitter.TwitterSharer"
+		extends="socialNetworkSharer">
+		<property name="authProviderInfoFactory" ref="twitterAuthProviderInfoFactory"/>
+	</bean>		
 	
 	<bean 
 		id="twitterAuthView" 
