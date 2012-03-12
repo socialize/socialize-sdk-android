@@ -32,14 +32,12 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.ListResult;
-import com.socialize.entity.Propagator;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.like.LikeListener;
 import com.socialize.networks.ShareOptions;
-import com.socialize.networks.SocialNetwork;
 import com.socialize.provider.SocializeProvider;
 
 /**
@@ -60,22 +58,8 @@ public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Li
 		Like c = new Like();
 		c.setEntity(entity);
 		
+		addPropagationData(c, shareOptions);
 		setLocation(c, location);
-		
-		if(shareOptions != null) {
-			SocialNetwork[] shareTo = shareOptions.getShareTo();
-			
-			List<Propagator> propagators = new ArrayList<Propagator>(shareTo.length);
-			for (SocialNetwork socialNetwork : shareTo) {
-				if(!socialNetwork.equals(SocialNetwork.FACEBOOK)) {
-					Propagator propagator = newPropagator();
-					propagator.setNetwork(socialNetwork);
-					propagator.setText(entity.getDisplayName());
-					propagators.add(propagator);
-				}
-			}
-			c.setPropagators(propagators);
-		}
 		
 		List<Like> list = new ArrayList<Like>(1);
 		list.add(c);
@@ -83,11 +67,6 @@ public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Li
 		postAsync(session, ENDPOINT, list, listener);
 	}	
 	
-	protected Propagator newPropagator() {
-		return new Propagator();
-	}
-
-
 	@Deprecated
 	public void addLike(SocializeSession session, String key, Location location, LikeListener listener) {
 		addLike(session, Entity.newInstance(key, null), location, null, listener);

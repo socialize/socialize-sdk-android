@@ -60,4 +60,6 @@ public interface AppUtils {
 
 	public String getPackageName();
 
+	public abstract String getAppStoreAbbreviation(String appStore);
+
 }

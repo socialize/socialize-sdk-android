@@ -21,26 +21,52 @@
  */
 package com.socialize.entity;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import com.socialize.networks.SocialNetwork;
 
 /**
  * @author Jason Polites
+ *
  */
-@Deprecated
-public abstract class PropagatorBuilder<A extends SocializeAction> {
+public class Propagation implements Serializable {
 
-	public Propagator create(A action, SocialNetwork network) {
-		Propagator propagator = newPropagator();
-		propagator.setNetwork(network);
-		propagator.setText(getPropagateText(action));
-		return propagator;
+	private static final long serialVersionUID = 7516996181091226449L;
+
+	private Map<String, String> extraParams;
+	private List<SocialNetwork> thirdParties;
+	
+	public Propagation() {
+		super();
+		extraParams = new HashMap<String, String>();
+		thirdParties = new LinkedList<SocialNetwork>();
+	}
+
+	public Map<String, String> getExtraParams() {
+		return extraParams;
+	}
+
+	public void setExtraParams(Map<String, String> extraParams) {
+		this.extraParams = extraParams;
+	}
+
+	public List<SocialNetwork> getThirdParties() {
+		return thirdParties;
+	}
+
+	public void setThirdParties(List<SocialNetwork> thirdParties) {
+		this.thirdParties = thirdParties;
 	}
 	
-	// So we can mock
-	protected Propagator newPropagator() {
-		return new Propagator();
+	public void addExtraParam(String key, String value) {
+		extraParams.put(key, value);
 	}
 	
-	protected abstract String getPropagateText(A action);
-	
+	public void addThirdParty(SocialNetwork network) {
+		thirdParties.add(network);
+	}
 }

@@ -21,87 +21,77 @@
  */
 package com.socialize.entity;
 
+import java.net.URLEncoder;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.socialize.networks.SocialNetwork;
-import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
+ *
  */
-@Deprecated
-public class PropagatorFactory extends JSONFactory<Propagator> {
+public class PropagationFactory extends JSONFactory<Propagation> {
 
 	/* (non-Javadoc)
 	 * @see com.socialize.entity.JSONFactory#instantiateObject(org.json.JSONObject)
 	 */
 	@Override
 	public Object instantiateObject(JSONObject object) {
-		return new Propagator();
+		return new Propagation();
 	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.entity.JSONFactory#fromJSON(org.json.JSONObject, java.lang.Object)
 	 */
 	@Override
-	protected void fromJSON(JSONObject from, Propagator to) throws JSONException {
-//		
-//		to.setText(getString(from, "text"));
-//		
-//		if(exists(from, "third_party")) {
-//			JSONArray array = from.getJSONArray("third_party");
-//			int length = array.length();
-//			
-//			if(length > 0) {
-//				List<SocialNetwork> networks = new ArrayList<SocialNetwork>(length);
-//				for (int i = 0; i < length; i++) {
-//					String value = array.getString(i);
-//					try {
-//						networks.add(SocialNetwork.valueOf(value));
-//					} 
-//					catch (Exception e) {
-//						// TODO: handle exception
-//						e.printStackTrace();
-//					}
-//				}
-//				
-//				if(networks.size() > 0) {
-//					to.setNetworks(networks.toArray(new SocialNetwork[networks.size()]));
-//				}
-//			}
-//		}
+	protected void fromJSON(JSONObject from, Propagation to) throws JSONException {
+		// Not needed
 	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.entity.JSONFactory#toJSON(java.lang.Object, org.json.JSONObject)
 	 */
 	@Override
-	protected void toJSON(Propagator from, JSONObject to) throws JSONException {
-		if(!StringUtils.isEmpty(from.getText())) {
-			to.put("text", from.getText());
+	protected void toJSON(Propagation from, JSONObject to) throws JSONException {
+		
+		// Make params
+		Set<Entry<String, String>> entrySet = from.getExtraParams().entrySet();
+		
+		StringBuilder builder = new StringBuilder();
+		
+		int count = 0;
+		
+		for (Entry<String, String> entry : entrySet) {
+			if(count > 0) {
+				builder.append("&");
+			}			
+			
+			builder.append(URLEncoder.encode(entry.getKey()));
+			builder.append("=");
+			builder.append(URLEncoder.encode(entry.getValue()));
+			
+			count++;
 		}
 		
-		SocialNetwork network = from.getNetwork();
+		to.put("extra_params", builder.toString());
 		
-		// TODO: Don't hard code this
-		if(!network.equals(SocialNetwork.FACEBOOK)) {
-			to.put("third_party", network.name().toLowerCase());
+		JSONArray networks = new JSONArray();
+		
+		List<SocialNetwork> thirdParties = from.getThirdParties();
+		for (SocialNetwork socialNetwork : thirdParties) {
+			// TODO: Remove this condition once facebook is supported.
+			if(!socialNetwork.equals(SocialNetwork.FACEBOOK)) {
+				networks.put(socialNetwork.name().toLowerCase());
+			}
 		}
-	
-//		if(networks != null && networks.length > 0) {
-//			JSONArray array = new JSONArray();
-//			for (SocialNetwork socialNetwork : networks) {
-//				
-//				// TODO: Don't hard code this
-//				if(!socialNetwork.equals(SocialNetwork.FACEBOOK)) {
-//					array.put(socialNetwork.name().toLowerCase());
-//				}
-//			}
-//			
-//			if(array.length() > 0) {
-//				to.put("third_party", array);
-//			}
-//		}
+		
+		to.put("third_parties", networks);
 	}
+
 }

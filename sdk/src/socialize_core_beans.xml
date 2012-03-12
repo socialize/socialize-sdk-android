@@ -242,6 +242,7 @@
 		<property name="httpUtils" ref="httpUtils"/>
 		<property name="locationProvider" ref="locationProvider"/>
 		<property name="notificationChecker" ref="notificationChecker"/>
+		<property name="appUtils" ref="appUtils"/>
 	</bean>
 	
 	<bean id="socializeActionFactory" class="com.socialize.entity.SocializeActionFactory" abstract="true">
@@ -249,7 +250,7 @@
 		<property name="applicationFactory" ref="applicationFactory"/>
 		<property name="userFactory" ref="userFactory"/>
 		<property name="entityFactory" ref="entityFactory"/>
-		<property name="propagatorFactory" ref="propagatorFactory"/>
+		<property name="propagationFactory" ref="propagationFactory"/>
 	</bean>
 
 	
@@ -277,7 +278,7 @@
 
 <!--  Propagator -->
 
-	<bean id="propagatorFactory" class="com.socialize.entity.PropagatorFactory"/>
+	<bean id="propagationFactory" class="com.socialize.entity.PropagationFactory"/>
 
 <!--  End Propagator -->
 

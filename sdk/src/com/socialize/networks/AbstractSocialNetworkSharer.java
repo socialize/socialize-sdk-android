@@ -30,7 +30,6 @@ import com.socialize.api.action.ActionType;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderInfoFactory;
 import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
@@ -110,11 +109,6 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 				});
 			}
 		}	
-	}
-	
-	// Mockable
-	protected FacebookAuthProviderInfo newFacebookAuthProviderInfo() {
-		return new FacebookAuthProviderInfo();
 	}
 	
 	protected void doError(SocializeException e, Activity parent, SocialNetworkListener listener) {

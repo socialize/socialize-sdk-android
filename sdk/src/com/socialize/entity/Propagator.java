@@ -29,6 +29,7 @@ import com.socialize.networks.SocialNetwork;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class Propagator implements Serializable {
 	
 	private static final long serialVersionUID = 8785024423132900646L;

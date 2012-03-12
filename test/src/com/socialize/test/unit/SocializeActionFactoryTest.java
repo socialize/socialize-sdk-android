@@ -21,7 +21,6 @@
  */
 package com.socialize.test.unit;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,11 +45,6 @@ public class SocializeActionFactoryTest extends AbstractSocializeActionFactoryTe
 				return json;
 			}
 			
-			@Override
-			protected JSONArray newJSONArray() {
-				return jsonArray;
-			}
-
 			@Override
 			protected void postToJSON(SocializeAction from, JSONObject to) throws JSONException {
 			}

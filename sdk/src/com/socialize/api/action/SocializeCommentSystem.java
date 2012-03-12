@@ -31,10 +31,8 @@ import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
-import com.socialize.entity.Propagator;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.networks.ShareOptions;
-import com.socialize.networks.SocialNetwork;
 import com.socialize.provider.SocializeProvider;
 
 /**
@@ -52,24 +50,7 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 		
 		comment.setLocationShared(shareLocation);
 		
-		if(shareOptions != null) {
-			SocialNetwork[] shareTo = shareOptions.getShareTo();
-			
-			if(shareTo != null) {
-				List<Propagator> propagators = new ArrayList<Propagator>(shareTo.length);
-				for (SocialNetwork socialNetwork : shareTo) {
-					if(!socialNetwork.equals(SocialNetwork.FACEBOOK)) {
-						Propagator propagator = newPropagator();
-						propagator.setNetwork(socialNetwork);
-						propagator.setText(comment.getText());
-						propagators.add(propagator);
-					}
-				}
-				
-				comment.setPropagators(propagators);
-			}
-		}
-
+		addPropagationData(comment, shareOptions);
 		setLocation(comment, location);
 		
 		List<Comment> list = new ArrayList<Comment>(1);
@@ -78,9 +59,7 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 		postAsync(session, ENDPOINT, list, listener);
 	}
 	
-	protected Propagator newPropagator() {
-		return new Propagator();
-	}
+
 
 	/* (non-Javadoc)
 	 * @see com.socialize.api.action.CommentSystem#addComment(com.socialize.api.SocializeSession, com.socialize.entity.Entity, java.lang.String, android.location.Location, com.socialize.networks.ShareOptions, com.socialize.listener.comment.CommentListener)

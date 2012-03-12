@@ -135,7 +135,8 @@ public class DefaultAppUtils implements AppUtils {
 		return url;
 	}
 	
-	protected String getAppStoreAbbreviation(String appStore) {
+	@Override
+	public String getAppStoreAbbreviation(String appStore) {
 		if(appStore != null && appStore.equalsIgnoreCase("amazon")) {
 			return "amz";
 		}

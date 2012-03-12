@@ -22,7 +22,6 @@
 package com.socialize.entity;
 
 import java.text.ParseException;
-import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +42,7 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 	private ApplicationFactory applicationFactory;
 	private UserFactory userFactory;
 	private EntityFactory entityFactory;
-	private PropagatorFactory propagatorFactory;
+	private PropagationFactory propagationFactory;
 	
 	@Override
 	protected void toJSON(T from, JSONObject to) throws JSONException {
@@ -53,8 +52,7 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			Entity entityObject = from.getEntity();
 			String entityKey = from.getEntityKey();
 			Application appObject = from.getApplication();
-			
-			List<Propagator> propagators = from.getPropagators();
+			Propagation propagation = from.getPropagation();
 			
 			User userObject = from.getUser();
 			Double lat = from.getLat();
@@ -79,19 +77,8 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 				to.put("application", application);
 			}
 			
-			if(propagators != null) {
-				
-				JSONArray list = newJSONArray();
-				
-				for (Propagator p : propagators) {
-					JSONObject propagatorJson = propagatorFactory.toJSON(p);
-					list.put(propagatorJson);
-				}
-				
-				if(list.length() > 0) {
-					// TODO: This will change
-					to.put("propagation", list);
-				}
+			if(propagation != null) {
+				to.put("propagation", propagationFactory.toJSON(propagation));
 			}
 			
 			if(userObject != null) {
@@ -208,9 +195,9 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 	public void setEntityFactory(EntityFactory entityFactory) {
 		this.entityFactory = entityFactory;
 	}
-	
-	public void setPropagatorFactory(PropagatorFactory propagatorFactory) {
-		this.propagatorFactory = propagatorFactory;
+
+	public void setPropagationFactory(PropagationFactory propagationFactory) {
+		this.propagationFactory = propagationFactory;
 	}
 
 	protected abstract void postToJSON(T from, JSONObject to) throws JSONException;

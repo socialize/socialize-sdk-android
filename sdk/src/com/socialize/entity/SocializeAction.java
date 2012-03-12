@@ -34,7 +34,12 @@ public abstract class SocializeAction extends SocializeObject {
 	private static final long serialVersionUID = -1988365314114134147L;
 	
 	private Application application;
+	
+	@Deprecated
 	private List<Propagator> propagators;
+	
+	private Propagation propagation;
+	
 	private Entity entity;
 	private String entityKey; // Used when only the key is supplied.
 	private User user;
@@ -51,12 +56,16 @@ public abstract class SocializeAction extends SocializeObject {
 		this.application = application;
 	}
 	
+	@Deprecated
 	public List<Propagator> getPropagators() {
 		return propagators;
 	}
+	
+	@Deprecated
 	public void setPropagators(List<Propagator> propagators) {
 		this.propagators = propagators;
 	}
+	
 	public Entity getEntity() {
 		return entity;
 	}
@@ -130,6 +139,14 @@ public abstract class SocializeAction extends SocializeObject {
 	
 	public void setNotificationsEnabled(boolean notificationsEnabled) {
 		this.notificationsEnabled = notificationsEnabled;
+	}
+	
+	public Propagation getPropagation() {
+		return propagation;
+	}
+	
+	public void setPropagation(Propagation propagation) {
+		this.propagation = propagation;
 	}
 	
 	public abstract ActionType getActionType();
