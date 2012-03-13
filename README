@@ -12,6 +12,19 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v1.5
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Developer can authenticate user with twitter in SDK
+[feature] Share behavior for comment/like should match propagation spec
+[feature] Developer can elect to share via twitter in SDK
+[feature] User can sign in/out of Twitter in settings
+[feature] User can enable/disable auto-tweeting of comments in settings
+[feature] User can enable/disable auto-tweeting of likes in settings
+[feature] User can share via twitter on comment window
+[feature] Developer can learn about twitter integration in the docs
+[bug] Scroll View should not be added if parent view is a ListView
+[feature] User can share via twitter on share window
+
 v1.4.6
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [bug] Error when selecting "other options" from share view
