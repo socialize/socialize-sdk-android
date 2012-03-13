@@ -5,6 +5,19 @@
     android:versionName="1.0" >
 
     <uses-sdk android:minSdkVersion="7" />
+    
+	<uses-permission android:name="android.permission.INTERNET"/>
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+	<!-- Optionally add ONE of the following to include location data in comments -->
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+	
+	<!-- Permissions required for Push Notifications -->
+	<permission android:name="com.socialize.sample.simple.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+	 
+	<uses-permission android:name="com.socialize.sample.simple.permission.C2D_MESSAGE" />
+	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />    
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -40,18 +53,6 @@
         </receiver>
             
     </application>
-    
-	<uses-permission android:name="android.permission.INTERNET"/>
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
-	<!-- Optionally add ONE of the following to include location data in comments -->
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-	
-	<!-- Permissions required for Push Notifications -->
-	<permission android:name="com.socialize.sample.simple.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-	 
-	<uses-permission android:name="com.socialize.sample.simple.permission.C2D_MESSAGE" />
-	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />	
+    	
 
 </manifest>

@@ -84,6 +84,8 @@ public class CommentEntryView extends BaseView {
 	private TextView notificationsTitle;
 	private TextView notificationsText;
 	
+	private ImageView notificationBannerImage;
+	
 	private Toast toaster;
 	
 	public CommentEntryView(Context context, CommentAddButtonListener listener) {
@@ -96,10 +98,8 @@ public class CommentEntryView extends BaseView {
 		int padding = deviceUtils.getDIP(4);
 		int textPadding = deviceUtils.getDIP(2);
 		
-		User user = Socialize.getSocialize().getSession().getUser();
-		
 		notificationsEnabled = true;
-		notificationsAvailable = user.isNotificationsEnabled() && appUtils.isNotificationsAvailable(getContext());
+		notificationsAvailable = appUtils.isNotificationsAvailable(getContext());
 		
 		LayoutParams fill = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 		fill.setMargins(0,0,0,0);
@@ -241,7 +241,7 @@ public class CommentEntryView extends BaseView {
 			notificationContentLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 			notificationContentLayout.setLayoutParams(notificationContentLayoutParams);
 			
-			ImageView notificationBannerImage = new ImageView(getContext());
+			notificationBannerImage = new ImageView(getContext());
 			
 			LayoutParams notificationBannerParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 			notificationBannerParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
@@ -488,28 +488,42 @@ public class CommentEntryView extends BaseView {
 
 	protected void updateUI() {
 		
-		if(notificationsEnabled) {
-			if(notificationsText != null) {
-				notificationsText.setText("We will notify you when someone replies.");
+		if(notificationsAvailable) {
+			if(notificationsText != null) notificationsText.setVisibility(View.VISIBLE);
+			if(notificationsTitle != null) notificationsTitle.setVisibility(View.VISIBLE);
+			if(subscribeNotificationButton != null) subscribeNotificationButton.setVisibility(View.VISIBLE);
+			if(notificationBannerImage != null) notificationBannerImage.setVisibility(View.VISIBLE);
+	
+			if(notificationsEnabled) {
+				if(notificationsText != null) {
+					notificationsText.setText("We will notify you when someone replies.");
+				}
+				if(notificationsTitle != null) {
+					notificationsTitle.setText("You will be subscribed.");
+				}
+				if(subscribeNotificationButton != null) {
+					subscribeNotificationButton.setText("Unsubscribe");
+				}
 			}
-			if(notificationsTitle != null) {
-				notificationsTitle.setText("You will be subscribed.");
-			}
-			if(subscribeNotificationButton != null) {
-				subscribeNotificationButton.setText("Unsubscribe");
+			else {
+				if(notificationsText != null) {
+					notificationsText.setText("Click subscribe to receive updates.");
+				}
+				if(notificationsTitle != null) {
+					notificationsTitle.setText("You will not be subscribed.");
+				}
+				if(subscribeNotificationButton != null) {
+					subscribeNotificationButton.setText("Subscribe");
+				}
 			}
 		}
 		else {
-			if(notificationsText != null) {
-				notificationsText.setText("Click subscribe to receive updates.");
-			}
-			if(notificationsTitle != null) {
-				notificationsTitle.setText("You will not be subscribed.");
-			}
-			if(subscribeNotificationButton != null) {
-				subscribeNotificationButton.setText("Subscribe");
-			}
+			if(notificationsText != null) notificationsText.setVisibility(View.GONE);
+			if(notificationsTitle != null) notificationsTitle.setVisibility(View.GONE);
+			if(subscribeNotificationButton != null) subscribeNotificationButton.setVisibility(View.GONE);
+			if(notificationBannerImage != null) notificationBannerImage.setVisibility(View.GONE);
 		}
+
 		
 		if(notifyCheckBox != null) {
 			notifyCheckBox.setChecked(notificationsEnabled);
@@ -569,6 +583,12 @@ public class CommentEntryView extends BaseView {
 		
 		if(locationCheckBox != null) {
 			locationCheckBox.setChanged(false);
+		}
+		
+		User user = Socialize.getSocialize().getSession().getUser();
+		
+		if(user != null) {
+			notificationsAvailable = user.isNotificationsEnabled() && appUtils.isNotificationsAvailable(getContext());
 		}
 		
 		updateUI();

@@ -226,8 +226,6 @@ public class DefaultAppUtils implements AppUtils {
 	 */
 	@Override
 	public boolean isNotificationsAvailable(Context context) {
-		
-		
 
 		if(!notificationsAssessed) {
 			
