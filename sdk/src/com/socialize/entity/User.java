@@ -77,7 +77,9 @@ public class User extends SocializeObject {
 		// Set to null to re-create
 		displayName = null;
 		
-//		setAutoPostToFacebook(user.isAutoPostToFacebook()); // Don't merge this!
+		// These are local store only.. don't merge otherwise they will be overwritten on save.
+		// setNotificationsEnabled(user.isNotificationsEnabled());		
+		// setAutoPostToFacebook(user.isAutoPostToFacebook());
 	}
 	
 	public String getShortDisplayName() {
