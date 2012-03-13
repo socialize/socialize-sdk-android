@@ -50,7 +50,7 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 		
 		comment.setLocationShared(shareLocation);
 		
-		addPropagationData(comment, shareOptions);
+		setPropagationData(comment, shareOptions);
 		setLocation(comment, location);
 		
 		List<Comment> list = new ArrayList<Comment>(1);

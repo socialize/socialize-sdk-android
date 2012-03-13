@@ -58,7 +58,7 @@ public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Li
 		Like c = new Like();
 		c.setEntity(entity);
 		
-		addPropagationData(c, shareOptions);
+		setPropagationData(c, shareOptions);
 		setLocation(c, location);
 		
 		List<Like> list = new ArrayList<Like>(1);

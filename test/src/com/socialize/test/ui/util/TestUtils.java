@@ -2,6 +2,7 @@ package com.socialize.test.ui.util;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
@@ -230,7 +231,7 @@ public class TestUtils {
 			long time = start;
 			
 			while(time - start < timeoutMs) {
-				V view = (V)  findView(parent, new ViewMatcher() {
+				V view = (V) findView(parent, new ViewMatcher() {
 						@Override
 						public boolean matches(View view) {
 							return isViewWithText(view, viewClass, text);
@@ -248,7 +249,7 @@ public class TestUtils {
 			}
 		}
 		else {
-			return (V)  findView(parent, new ViewMatcher() {
+			return (V) findView(parent, new ViewMatcher() {
 				@Override
 				public boolean matches(View view) {
 					return isViewWithText(view, viewClass, text);
@@ -258,6 +259,17 @@ public class TestUtils {
 		
 		return null;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static <V extends View> V findViewAtIndex(ViewGroup view, final Class<V> viewClass, final int index, final long timeoutMs) {
+		List<View> allViews = findViews(view, viewClass);
+			
+		if(allViews != null && allViews.size() > index) {
+			return (V) allViews.get(index);
+		}
+		
+		return null;
+	}	
 	
 	@SuppressWarnings("unchecked")
 	public static <V extends View> V findSingleViewWithText(View view, final Class<V> viewClass, final String text, long timeout) {
@@ -355,6 +367,39 @@ public class TestUtils {
 		}
 		return null;
 	}
+	
+	public static <V extends View> List<V> findViews(ViewGroup view,final Class<?> viewClass) {
+		return findViews(view, new ViewMatcher() {
+			@Override
+			public boolean matches(View view) {
+				return (viewClass.isAssignableFrom(view.getClass()));
+			}
+		});
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <V extends View> List<V> findViews(ViewGroup view, ViewMatcher matcher) {
+		
+		final List<V> items = new LinkedList<V>();
+		
+		int count = view.getChildCount();
+		for (int i = 0; i < count; i++) {
+			View child = view.getChildAt(i);
+			
+			if(matcher.matches(child)) {
+				items.add((V) child);
+			}
+			
+			if(child instanceof ViewGroup && (child != view)) {
+				List<V> toBeadded = findViews((ViewGroup)child, matcher);
+				if(toBeadded != null) {
+					items.addAll(toBeadded);
+				}
+			}
+		}
+		
+		return items;
+	}	
 	
 	@SuppressWarnings("unchecked")
 	public static <V extends View> V findView(View view, final Class<V> viewClass) {

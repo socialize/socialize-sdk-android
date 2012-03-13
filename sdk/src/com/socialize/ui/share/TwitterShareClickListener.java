@@ -30,9 +30,11 @@ import com.socialize.SocializeService;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Entity;
+import com.socialize.entity.Share;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.share.ShareAddListener;
+import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
-import com.socialize.networks.twitter.TwitterSharer;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 import com.socialize.ui.dialog.AlertDialogFactory;
@@ -46,7 +48,6 @@ public class TwitterShareClickListener extends BaseShareClickListener {
 
 	private ProgressDialogFactory progressDialogFactory;
 	private AlertDialogFactory alertDialogFactory;
-	private TwitterSharer twitterSharer;
 
 	public TwitterShareClickListener(ActionBarView actionBarView) {
 		super(actionBarView);
@@ -60,27 +61,41 @@ public class TwitterShareClickListener extends BaseShareClickListener {
 	public boolean isAvailableOnDevice(Activity parent) {
 		return getSocialize().isSupported(AuthProviderType.TWITTER);
 	}	
+	
+	@Override
+	protected boolean isDoShareInline() {
+		return false;
+	}
 
 	@Override
-	protected void doShare(Activity context, Entity entity, String comment) {
-		twitterSharer.shareEntity(context, entity, comment, true, new SocialNetworkListener() {
-			ProgressDialog dialog;
-
+	protected void doShare(final Activity context, Entity entity, String comment, final ShareAddListener listener) {
+		final ProgressDialog dialog = progressDialogFactory.show(context, "Share", "Sharing to Twitter...");
+		ShareOptions options = new ShareOptions();
+		options.setShareTo(SocialNetwork.TWITTER);
+		options.setShareLocation(true);
+		Socialize.getSocialize().share(context, entity, comment, options, new ShareAddListener() {
+			
 			@Override
-			public void onBeforePost(Activity parent, SocialNetwork network) {
-				dialog = progressDialogFactory.show(parent, "Share", "Sharing to Twitter...");
-			}
-
-			@Override
-			public void onAfterPost(Activity parent, SocialNetwork network) {
+			public void onError(SocializeException error) {
+				error.printStackTrace();
 				if(dialog != null) dialog.dismiss();
-				alertDialogFactory.show(parent, "Success", "Share successful!");
+				
+				if(listener != null) {
+					listener.onError(error);
+				}
+				
+				alertDialogFactory.show(context, "Error", "Share failed.  Please try again");				
 			}
-
+			
 			@Override
-			public void onError(Activity parent, SocialNetwork network, String message, Throwable error) {
+			public void onCreate(Share entity) {
 				if(dialog != null) dialog.dismiss();
-				alertDialogFactory.show(parent, "Error", "Share failed.  Please try again");
+				
+				if(listener != null) {
+					listener.onCreate(entity);
+				}
+				
+				alertDialogFactory.show(context, "Success", "Share successful!");				
 			}
 		});
 	}
@@ -110,9 +125,5 @@ public class TwitterShareClickListener extends BaseShareClickListener {
 
 	public void setAlertDialogFactory(AlertDialogFactory alertDialogFactory) {
 		this.alertDialogFactory = alertDialogFactory;
-	}
-
-	public void setTwitterSharer(TwitterSharer twitterSharer) {
-		this.twitterSharer = twitterSharer;
 	}
 }

@@ -1,6 +1,7 @@
 package com.socialize.sample.mocks;
 
 import android.app.Activity;
+import android.content.Context;
 import android.location.Location;
 
 import com.socialize.api.SocializeSession;
@@ -19,7 +20,12 @@ public class MockShareSystem extends MockSystem<Share> implements ShareSystem {
 	}
 	
 	@Override
-	public void addShare(SocializeSession session, Entity entity, String text, ShareType shareType, Location location, ShareListener listener) {
+	public void addShare(Context context, SocializeSession session, Entity entity, String text, SocialNetwork network, Location location, ShareListener listener) {
+		if(listener != null) listener.onCreate(action);
+	}
+	
+	@Override
+	public void addShare(Context context, SocializeSession session, Entity entity, String text, ShareType shareType, Location location, ShareListener listener) {
 		if(listener != null) listener.onCreate(action);
 	}
 
@@ -47,4 +53,6 @@ public class MockShareSystem extends MockSystem<Share> implements ShareSystem {
 	public void shareLike(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, boolean autoAuth, SocialNetworkListener listener) {
 		if(listener != null) listener.onAfterPost(context, destination);
 	}
+
+	
 }

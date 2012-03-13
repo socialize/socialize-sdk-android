@@ -344,19 +344,6 @@ public interface SocializeService {
 	public void unlike(long id, LikeDeleteListener likeDeleteListener);
 	
 	/**
-	 * Records a share event against the given key.  NOTE: This does NOT perform sharing to any 3rd party social network.  
-	 * It simply records a share event within Socialize.
-	 * @param key The key being viewed.  Defined when first creating an entity, or created on the fly with this call.
-	 * @param text The text being shared.
-	 * @param shareType The social network on which the share occurred.
-	 * @param shareAddListener A listener to handle callbacks from the post.
-	 * @deprecated
-	 * @see #addShare(Activity, Entity, String, ShareType, ShareAddListener)
-	 */
-	@Deprecated
-	public void share(String key, String text, ShareType shareType, ShareAddListener shareAddListener);
-	
-	/**
 	 * Records a share event against the given key. 
 	 * @param activity The current Activity.
 	 * @param entity The entity being shared.
@@ -365,21 +352,6 @@ public interface SocializeService {
 	 * @param shareAddListener A listener to handle callbacks from the post.
 	 */
 	public void share(Activity activity, Entity entity, String text, ShareOptions options, ShareAddListener shareAddListener);	
-	
-	/**
-	 * Records a share event against the given key.  NOTE: This does NOT perform sharing to any 3rd party social network.  
-	 * It simply records a share event within Socialize.
-	 * @param key The key being shared.  Defined when first creating an entity, or created on the fly with this call.
-	 * @param text The text being shared.
-	 * @param shareType The social network on which the share occurred. 
-	 * @param location The location of the device at the time the call was made.
-	 * @param shareAddListener A listener to handle callbacks from the post.
-	 * @deprecated
-	 * @see #addShare(Activity, Entity, String, ShareType, Location, ShareAddListener)
-	 */
-	@Deprecated
-	public void share(String key, String text, ShareType shareType, Location location, ShareAddListener shareAddListener);
-	
 	
 	/**
 	 * Shares the entity.

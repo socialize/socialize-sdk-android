@@ -114,44 +114,44 @@
 				</entry>
 				<entry>
 					<key value="FACEBOOK_BOTTOM"/>
-					<value value="#2f4a7b"/>
+					<value value="#1f356a"/>
 				</entry>
 				<entry>
 					<key value="FACEBOOK_TOP"/>
-					<value value="#516b9d"/>
+					<value value="#365eab"/>
 				</entry>	
 				<entry>
 					<key value="FACEBOOK_STROKE"/>
-					<value value="#1a3360"/>
+					<value value="#4d69a1"/>
 				</entry>
 				<entry>
 					<key value="FACEBOOK_TOP_STROKE"/>
-					<value value="#6787b6"/>
+					<value value="#6382bf"/>
 				</entry>
 				<entry>
 					<key value="FACEBOOK_BOTTOM_STROKE"/>
-					<value value="#355389"/>
+					<value value="#455884"/>
 				</entry>
 				
 				<entry>
 					<key value="TWITTER_BOTTOM"/>
-					<value value="#1981a3"/>
+					<value value="#0866a7"/>
 				</entry>
 				<entry>
 					<key value="TWITTER_TOP"/>
-					<value value="#20a0ca"/>
+					<value value="#26aaef"/>
 				</entry>	
 				<entry>
 					<key value="TWITTER_STROKE"/>
-					<value value="#33cefc"/>
+					<value value="#3d9fd8"/>
 				</entry>
 				<entry>
 					<key value="TWITTER_TOP_STROKE"/>
-					<value value="#33cefc"/>
+					<value value="#56bdf3"/>
 				</entry>
 				<entry>
 					<key value="TWITTER_BOTTOM_STROKE"/>
-					<value value="#00acdf"/>
+					<value value="#2677af"/>
 				</entry>
 								
 				<entry>
@@ -1169,13 +1169,13 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="facebook"/>
-		<property name="imageName" value="icon_facebook.png"/>
+		<property name="textAlign" value="center"/>
+		<property name="imageName" value="fb_button.png"/>
 		<property name="bottomColor" value="FACEBOOK_BOTTOM"/>
 		<property name="topColor" value="FACEBOOK_TOP"/>
 		<property name="strokeTopColor" value="FACEBOOK_TOP_STROKE"/>
 		<property name="strokeBottomColor" value="FACEBOOK_BOTTOM_STROKE"/>
-		<property name="width" value="180" type="integer"/>
+		<property name="width" value="68" type="integer"/>
 		<property name="height" value="36" type="integer"/>
 		<property name="textSize" value="14" type="integer"/>
 		<property name="padding" value="4" type="integer"/>
@@ -1186,13 +1186,13 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="twitter"/>
-		<property name="imageName" value="icon_twitter.png"/>
+		<property name="textAlign" value="center"/>
+		<property name="imageName" value="tw_button.png"/>
 		<property name="bottomColor" value="TWITTER_BOTTOM"/>
 		<property name="topColor" value="TWITTER_TOP"/>
 		<property name="strokeTopColor" value="TWITTER_TOP_STROKE"/>
 		<property name="strokeBottomColor" value="TWITTER_BOTTOM_STROKE"/>
-		<property name="width" value="180" type="integer"/>
+		<property name="width" value="68" type="integer"/>
 		<property name="height" value="36" type="integer"/>
 		<property name="textSize" value="14" type="integer"/>
 		<property name="padding" value="4" type="integer"/>
@@ -1203,9 +1203,9 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="Email"/>
-		<property name="imageName" value="icon_email.png"/>
-		<property name="width" value="180" type="integer"/>
+		<property name="textAlign" value="center"/>
+		<property name="imageName" value="email_button.png"/>
+		<property name="width" value="68" type="integer"/>
 		<property name="height" value="36" type="integer"/>
 		<property name="textSize" value="12" type="integer"/>
 		<property name="padding" value="4" type="integer"/>
@@ -1220,9 +1220,9 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="SMS"/>
-		<property name="imageName" value="icon_sms.png"/>
-		<property name="width" value="180" type="integer"/>
+		<property name="textAlign" value="center"/>
+		<property name="imageName" value="sms_button.png"/>
+		<property name="width" value="68" type="integer"/>
 		<property name="height" value="36" type="integer"/>
 		<property name="textSize" value="12" type="integer"/>
 		<property name="padding" value="4" type="integer"/>
@@ -1253,12 +1253,9 @@
 		class="com.socialize.ui.share.TwitterShareClickListener" 
 		extends="shareClickListener"
 		singleton="false">
-		<property name="twitterSharer" ref="twitterSharer"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
 		<property name="alertDialogFactory" ref="alertDialogFactory"/>
 	</bean>	
-	
-	
 		
 	<bean 
 		id="emailShareClickListener" 

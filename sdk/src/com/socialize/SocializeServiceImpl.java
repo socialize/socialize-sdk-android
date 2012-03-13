@@ -908,20 +908,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 
-	@Deprecated
-	@Override
-	public void share(String url, String text, ShareType shareType, ShareAddListener shareAddListener) {
-		share(url, text, shareType, null, shareAddListener);
-	}
-	
-	@Deprecated
-	@Override
-	public void share(String key, String text, ShareType shareType, Location location, ShareAddListener shareAddListener) {
-		if(assertAuthenticated(shareAddListener)) {
-			shareSystem.addShare(session, Entity.newInstance(key, null), text, shareType, location, shareAddListener);
-		}
-	}
-	
 	@Override
 	public void addShare(Activity activity, Entity entity, String text, ShareType shareType, ShareAddListener shareAddListener) {
 		addShare(activity, entity, text, shareType, null, shareAddListener);
@@ -930,7 +916,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public void addShare(Activity activity, Entity entity, String text, ShareType shareType, Location location, ShareAddListener shareAddListener) {
 		if(assertAuthenticated(shareAddListener)) {
-			shareSystem.addShare(session, entity, text, shareType, location, shareAddListener);
+			shareSystem.addShare(activity, session, entity, text, shareType, location, shareAddListener);
 		}
 	}
 
@@ -946,11 +932,11 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				SocialNetwork[] shareTo = options.getShareTo();
 				final boolean autoAuth = options.isAutoAuth();
 				if(shareTo == null) {
-					shareSystem.addShare(session, entity, text, ShareType.OTHER, location, shareAddListener);
+					shareSystem.addShare(activity, session, entity, text, ShareType.OTHER, location, shareAddListener);
 				}
 				else  {
 					for (final SocialNetwork socialNetwork : shareTo) {
-						shareSystem.addShare(session, entity, text, ShareType.valueOf(socialNetwork.name().toUpperCase()), location, new ShareAddListener() {
+						shareSystem.addShare(activity, session, entity, text, socialNetwork, location, new ShareAddListener() {
 							@Override
 							public void onError(SocializeException error) {
 								if(shareAddListener != null) {

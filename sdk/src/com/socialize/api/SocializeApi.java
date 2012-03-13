@@ -119,7 +119,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		}
 	}
 	
-	protected void addPropagationData(SocializeAction action, ShareOptions shareOptions) {
+	protected void setPropagationData(SocializeAction action, ShareOptions shareOptions) {
 		if(shareOptions != null) {
 			SocialNetwork[] shareTo = shareOptions.getShareTo();
 			if(shareTo != null) {

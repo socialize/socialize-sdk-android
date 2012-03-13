@@ -30,6 +30,7 @@ import com.socialize.SocializeService;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Entity;
+import com.socialize.listener.share.ShareAddListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookSharer;
@@ -62,7 +63,7 @@ public class FacebookShareClickListener extends BaseShareClickListener {
 	}	
 
 	@Override
-	protected void doShare(Activity context, Entity entity, String comment) {
+	protected void doShare(Activity context, Entity entity, String comment, ShareAddListener listener) {
 		facebookSharer.shareEntity(context, entity, comment, true, new SocialNetworkListener() {
 			ProgressDialog dialog;
 

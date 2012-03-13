@@ -114,7 +114,7 @@ public abstract class BaseShareClickListener implements ShareClickListener {
 					Socialize.getSocialize().addShare(activity, entity, text, getShareType(), getShareAddListener());	
 				}
 
-				doShare(activity, entity, comment);				
+				doShare(activity, entity, text, getShareAddListener());				
 			}
 			else {
 				if(logger != null) {
@@ -160,7 +160,7 @@ public abstract class BaseShareClickListener implements ShareClickListener {
 		};
 	}
 	
-	protected abstract void doShare(Activity context, Entity entity, String comment);
+	protected abstract void doShare(Activity context, Entity entity, String comment, ShareAddListener listener);
 	
 	protected abstract boolean isHtml();
 	

@@ -26,18 +26,25 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.content.Context;
 import android.location.Location;
 
+import com.socialize.Socialize;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.log.SocializeLogger;
+import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkSharer;
 import com.socialize.provider.SocializeProvider;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -51,28 +58,106 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		super(provider);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.api.action.ShareSystem#addShare(com.socialize.api.SocializeSession, com.socialize.entity.Entity, java.lang.String, com.socialize.api.action.ShareType, android.location.Location, com.socialize.listener.share.ShareListener)
+	@Override
+	public void addShare(Context context, SocializeSession session, Entity entity, String text, SocialNetwork network, Location location, ShareListener listener) {
+		addShare(context, session, entity, text, null, network, location, listener);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.ShareSystem#addShare(android.content.Context, com.socialize.api.SocializeSession, com.socialize.entity.Entity, java.lang.String, com.socialize.api.action.ShareType, android.location.Location, com.socialize.listener.share.ShareListener)
 	 */
 	@Override
-	public void addShare(SocializeSession session, Entity entity, String text, ShareType shareType, Location location, ShareListener listener) {
+	public void addShare(Context context, SocializeSession session, Entity entity, String text, ShareType shareType, Location location, ShareListener listener) {
+		addShare(context, session, entity, text, shareType, null, location, listener);
+	}
+	
+	protected void addShare(
+			final Context context, 
+			final SocializeSession session, 
+			final Entity entity, 
+			final String text, 
+			ShareType shareType, 
+			final SocialNetwork network, 
+			final Location location, 
+			final ShareListener listener) {
+		
+		if(shareType == null) {
+			if(network != null) {
+				shareType = ShareType.valueOf(network.name().toUpperCase());
+			}
+			else {
+				shareType = ShareType.OTHER;
+			}
+		}
+		
+		final ShareType fshareType = shareType; 
+		
+		if(network != null) {
+			AuthProviderType authType = AuthProviderType.valueOf(network);
+			if(Socialize.getSocialize().isAuthenticated(authType)) {
+				doShare(session, entity, text, shareType, network, location, listener);
+			}
+			else {
+				Socialize.getSocialize().authenticate(context, authType, new SocializeAuthListener() {
+					@Override
+					public void onError(SocializeException error) {
+						if(listener != null) {
+							listener.onError(error);
+						}
+					}
+					
+					@Override
+					public void onCancel() {
+						// no network
+						doShare(session, entity, text, fshareType, null, location, listener);
+					}
+					
+					@Override
+					public void onAuthSuccess(SocializeSession session) {
+						doShare(session, entity, text, fshareType, network, location, listener);
+					}
+					
+					@Override
+					public void onAuthFail(SocializeException error) {
+						if(listener != null) {
+							listener.onError(error);
+						}
+					}
+				});
+			}
+		}
+		else {
+			// no network
+			doShare(session, entity, text, fshareType, null, location, listener);	
+		}
+	}
+	
+	protected void doShare(SocializeSession session, Entity entity, String text, ShareType shareType, SocialNetwork network, Location location, ShareListener listener) {
+		
+		if(StringUtils.isEmpty(text)) {
+			text = entity.getDisplayName();
+		}
+		
 		Share c = new Share();
 		c.setEntity(entity);
 		c.setText(text);
 		c.setMedium(shareType.getId());
 		c.setMediumName(shareType.getName());
 		
+		if(network != null) {
+			ShareOptions shareOptions = new ShareOptions();
+			shareOptions.setShareTo(network);
+			shareOptions.setShareLocation(true);
+			setPropagationData(c, shareOptions);
+		}
+	
 		setLocation(c, location);
 		
 		List<Share> list = new ArrayList<Share>(1);
 		list.add(c);
 		
 		postAsync(session, ENDPOINT, list, listener);
-	}
-	
-	@Deprecated
-	public void addShare(SocializeSession session, String key, String text, ShareType shareType, Location location, ShareListener listener) {
-		addShare(session, Entity.newInstance(key, null), text, shareType, location, listener);
 	}
 	
 	/* (non-Javadoc)

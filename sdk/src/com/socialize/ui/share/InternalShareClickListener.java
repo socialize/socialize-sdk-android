@@ -30,6 +30,7 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.launcher.LaunchAction;
 import com.socialize.listener.ListenerHolder;
+import com.socialize.listener.share.ShareAddListener;
 import com.socialize.ui.SocializeLaunchActivity;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
@@ -54,7 +55,7 @@ public abstract class InternalShareClickListener extends BaseShareClickListener 
 	 * @see com.socialize.ui.share.BaseShareClickListener#doShare(android.app.Activity, com.socialize.entity.Entity, java.lang.String)
 	 */
 	@Override
-	protected void doShare(Activity context, Entity entity, String comment) {
+	protected void doShare(Activity context, Entity entity, String comment, ShareAddListener listener) {
 		
 		if(isDoShareInline()) {
 			String title = "Share";
@@ -79,7 +80,7 @@ public abstract class InternalShareClickListener extends BaseShareClickListener 
 			intent.putExtra(SocializeConfig.SOCIALIZE_SHARE_LISTENER_KEY, entity.getKey());
 			
 			if(listenerHolder != null) {
-				listenerHolder.put(entity.getKey(), getShareAddListener());
+				listenerHolder.put(entity.getKey(), listener);
 			}
 
 			context.startActivity(intent);

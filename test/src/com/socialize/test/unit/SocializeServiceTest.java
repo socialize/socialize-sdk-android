@@ -509,7 +509,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		final String key = "foo";
 		final String text = "bar";
 
-		shareSystem.addShare(AndroidMock.eq(session), (Entity) AndroidMock.anyObject(), AndroidMock.eq(text), AndroidMock.eq(ShareType.OTHER), AndroidMock.eq(location), AndroidMock.eq(listener));
+		shareSystem.addShare(AndroidMock.eq(getContext()), AndroidMock.eq(session), (Entity) AndroidMock.anyObject(), AndroidMock.eq(text), AndroidMock.eq(ShareType.OTHER), AndroidMock.eq(location), AndroidMock.eq(listener));
 
 		// shareSystem.addShare(session, key, text, ShareType.OTHER, location,
 		// listener);
@@ -537,7 +537,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		setupDefaultMocks();
 
-		shareSystem.addShare(AndroidMock.eq(session), (Entity) AndroidMock.anyObject(), AndroidMock.eq(text), AndroidMock.eq(ShareType.OTHER), (Location) AndroidMock.isNull(), AndroidMock.eq(listener));
+		shareSystem.addShare(AndroidMock.eq(getContext()), AndroidMock.eq(session), (Entity) AndroidMock.anyObject(), AndroidMock.eq(text), AndroidMock.eq(ShareType.OTHER), (Location) AndroidMock.isNull(), AndroidMock.eq(listener));
 
 		replayDefaultMocks();
 
@@ -1011,7 +1011,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		// mock share system, set it on the service obj and expect it gets
 		// called
 		ShareSystem shareSystem = AndroidMock.createMock(ShareSystem.class);
-		shareSystem.addShare(socializeService.getSession(), mockEntity, testString, ShareType.OTHER, null, shareListener);
+		shareSystem.addShare(getContext(), socializeService.getSession(), mockEntity, testString, ShareType.OTHER, null, shareListener);
 		socializeService.setShareSystem(shareSystem);
 
 		// mock and expect options to return null for the networks
@@ -1043,8 +1043,8 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		// mock share system, set it on the service obj and expect it gets
 		// called
 		ShareSystem shareSystem = AndroidMock.createMock(ShareSystem.class);
-		// TODO: the following signature should change
-		shareSystem.addShare(AndroidMock.eq(socializeService.getSession()), AndroidMock.eq(mockEntity), AndroidMock.eq(testString), AndroidMock.eq(ShareType.FACEBOOK), (Location) AndroidMock.isNull(), (ShareListener) AndroidMock.anyObject());
+		
+		shareSystem.addShare(AndroidMock.eq(mockActivity), AndroidMock.eq(socializeService.getSession()), AndroidMock.eq(mockEntity), AndroidMock.eq(testString), AndroidMock.eq(SocialNetwork.FACEBOOK), (Location) AndroidMock.isNull(), (ShareListener) AndroidMock.anyObject());
 
 		socializeService.setShareSystem(shareSystem);
 
