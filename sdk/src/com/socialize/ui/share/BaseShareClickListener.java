@@ -39,7 +39,6 @@ import com.socialize.listener.share.ShareAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
-import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -104,10 +103,6 @@ public abstract class BaseShareClickListener implements ShareClickListener {
 			if(entity != null) {
 
 				String text = comment;
-
-				if(StringUtils.isEmpty(text)) {
-					text = entity.getDisplayName();
-				}
 
 				// Record the share in Socialize
 				if(isDoShareInline()) {
