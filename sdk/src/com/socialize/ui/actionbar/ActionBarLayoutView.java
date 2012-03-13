@@ -329,8 +329,17 @@ public class ActionBarLayoutView extends BaseView {
 				// Like
 				ShareOptions options = new ShareOptions();
 				
-				if(getSocialize().getSession().getUser().isAutoPostLikesFacebook()) {
-					options.setShareTo(SocialNetwork.FACEBOOK);
+				if(getSocialize().getSession().getUser().isAutoPostToFacebook()) {
+					if(getSocialize().getSession().getUser().isAutoPostToTwitter()) {
+						options.setShareTo(SocialNetwork.FACEBOOK, SocialNetwork.TWITTER);
+					}
+					else {
+						options.setShareTo(SocialNetwork.FACEBOOK);
+					}
+					
+				}
+				else if(getSocialize().getSession().getUser().isAutoPostToTwitter()) {
+					options.setShareTo(SocialNetwork.TWITTER);
 				}
 				
 				getSocialize().like(getActivity(), localEntity.getEntity(), options, new LikeAddListener() {

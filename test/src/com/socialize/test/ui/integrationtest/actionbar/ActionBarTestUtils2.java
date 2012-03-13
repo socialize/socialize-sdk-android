@@ -36,6 +36,7 @@ import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.like.LikeListener;
+import com.socialize.networks.ShareOptions;
 import com.socialize.sample.mocks.MockLikeSystem;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarLayoutView;
@@ -54,7 +55,7 @@ public class ActionBarTestUtils2 {
 		
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
 			@Override
-			public void addLike(SocializeSession session, Entity entity, Location location, LikeListener listener) {
+			public void addLike(SocializeSession session, Entity entity, Location location, ShareOptions options, LikeListener listener) {
 				TestUtils.addResult("success");
 			}
 

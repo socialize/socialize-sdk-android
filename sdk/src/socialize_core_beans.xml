@@ -221,6 +221,10 @@
 					<key value="1" type="integer"/>
 					<value ref="facebookProvider"/>
 				</entry>
+				<entry>
+					<key value="2" type="integer"/>
+					<value ref="twitterProvider"/>
+				</entry>
 			</map>
 		</property>
 	</bean>
@@ -238,6 +242,7 @@
 		<property name="httpUtils" ref="httpUtils"/>
 		<property name="locationProvider" ref="locationProvider"/>
 		<property name="notificationChecker" ref="notificationChecker"/>
+		<property name="appUtils" ref="appUtils"/>
 	</bean>
 	
 	<bean id="socializeActionFactory" class="com.socialize.entity.SocializeActionFactory" abstract="true">
@@ -245,6 +250,7 @@
 		<property name="applicationFactory" ref="applicationFactory"/>
 		<property name="userFactory" ref="userFactory"/>
 		<property name="entityFactory" ref="entityFactory"/>
+		<property name="propagationFactory" ref="propagationFactory"/>
 	</bean>
 
 	
@@ -269,6 +275,12 @@
 	
 	
 <!-- END OAUTH -->
+
+<!--  Propagator -->
+
+	<bean id="propagationFactory" class="com.socialize.entity.PropagationFactory"/>
+
+<!--  End Propagator -->
 
 <!-- Comment API -->
 
@@ -308,6 +320,8 @@
 	</bean>
 
 <!-- End Entity API -->
+
+
 
 <!-- Like API -->
 
@@ -369,6 +383,10 @@
 					<key value="facebook"/> <!-- MUST be lower case -->
 					<value ref="facebookSharer"/>
 				</entry>
+				<entry>
+					<key value="twitter"/> <!-- MUST be lower case -->
+					<value ref="twitterSharer"/>
+				</entry>				
 			</map>
 		</property>		
 	</bean>
@@ -545,17 +563,57 @@
 	</bean>	
 	
 	<bean 
-		id="facebookSharer" 
-		class="com.socialize.networks.facebook.FacebookSharer">
-		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
+		id="socialNetworkSharer" 
+		abstract="true">
 		<property name="config" ref="config"/>
 		<property name="logger" ref="logger"/>
+	</bean>			
+	
+	<bean 
+		id="facebookSharer" 
+		class="com.socialize.networks.facebook.FacebookSharer"
+		extends="socialNetworkSharer">
+		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
 		<property name="facebookWallPoster" ref="facebookWallPoster"/>
+		<property name="authProviderInfoFactory" ref="facebookAuthProviderInfoFactory"/>
 	</bean>		
 	
-	<!-- End Facebook -->
+<!-- End Facebook -->
+
+<!-- Twitter -->
+
+	<bean 
+		id="twitterSharer" 
+		class="com.socialize.networks.twitter.TwitterSharer"
+		extends="socialNetworkSharer">
+		<property name="authProviderInfoFactory" ref="twitterAuthProviderInfoFactory"/>
+	</bean>		
 	
-	<!--  Auth providers -->
+	<bean 
+		id="twitterAuthView" 
+		class="com.socialize.auth.twitter.TwitterAuthView"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<init-method name="init"/>
+	</bean>	
+	
+	<factory id="twitterAuthViewFactory" makes="twitterAuthView"/>	
+
+	<bean id="twitterUtils" class="com.socialize.auth.twitter.TwitterUtils">
+		<property name="config" ref="config"/>
+		<property name="twitterAuthViewFactory" ref="twitterAuthViewFactory"/>
+	</bean>
+
+	<bean id="twitterProvider" class="com.socialize.auth.twitter.TwitterAuthProvider">
+		<property name="twitterUtils" ref="twitterUtils"/>
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>
+	</bean>
+
+<!-- End Twitter -->
+	
+<!--  Auth providers -->
 	
 	<bean 
 		id="baseAuthProviderInfoFactory" 
@@ -568,8 +626,14 @@
 		id="facebookAuthProviderInfoFactory" 
 		class="com.socialize.auth.facebook.FacebookAuthProviderInfoFactory"
 		extends="baseAuthProviderInfoFactory">
-	</bean>		
+	</bean>	
 	
+	<bean 
+		id="twitterAuthProviderInfoFactory" 
+		class="com.socialize.auth.twitter.TwitterAuthProviderInfoFactory"
+		extends="baseAuthProviderInfoFactory">
+	</bean>		
+			
 	<bean 
 		id="socializeAuthProviderInfoFactory" 
 		class="com.socialize.auth.SocializeAuthProviderInfoFactory">
@@ -578,7 +642,7 @@
 	<bean 
 		id="authProviderInfoBuilder" 
 		class="com.socialize.auth.AuthProviderInfoBuilder">
-		
+		<property name="logger" ref="logger"/>
 		<property name="factories">
 			<map>
 				<entry>
@@ -589,6 +653,10 @@
 					<key value="FACEBOOK"/>
 					<value ref="facebookAuthProviderInfoFactory"/>
 				</entry>
+				<entry>
+					<key value="TWITTER"/>
+					<value ref="twitterAuthProviderInfoFactory"/>
+				</entry>				
 			</map>
 		</property>		
 		

@@ -141,7 +141,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException {
 		AuthProviderData data = authProviderDataFactory.getBean();
-		data.setAuthProviderInfo(authProviderInfoBuilder.getFactory(AuthProviderType.SOCIALIZE).newInstance());
+		data.setAuthProviderInfo(authProviderInfoBuilder.getFactory(AuthProviderType.SOCIALIZE).getInstance());
 		return authenticate(endpoint, key, secret, data, uuid);
 	}
 
@@ -227,7 +227,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 		if(authProviderType.equals(AuthProviderType.FACEBOOK)) {
 			AuthProviderData data = newAuthProviderData();
 			AuthProviderInfoFactory<FacebookAuthProviderInfo> factory = authProviderInfoBuilder.getFactory(authProviderType);
-			FacebookAuthProviderInfo info = factory.newInstance();
+			FacebookAuthProviderInfo info = factory.getInstance();
 			info.setAppId(appId3rdParty);
 			data.setAuthProviderInfo(info);
 			
@@ -270,6 +270,12 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 		}
 	}
 
+	public void saveSession(SocializeSession session) {
+		if(sessionPersister != null) {
+			sessionPersister.save(context, session);
+		}
+	}
+
 	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
 		
@@ -286,6 +292,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 				if(info != null) {
 					DefaultUserProviderCredentials userProviderCredentials = new DefaultUserProviderCredentials();
 					userProviderCredentials.setAccessToken(data.getToken3rdParty());
+					userProviderCredentials.setTokenSecret(data.getSecret3rdParty());
 					userProviderCredentials.setUserId(data.getUserId3rdParty());
 					userProviderCredentials.setAuthProviderInfo(data.getAuthProviderInfo());
 					
@@ -337,16 +344,11 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 					session.setConsumerTokenSecret(json.getString("oauth_token_secret"));
 					session.setUser(user);
 					
-					if(sessionPersister != null) {
-						sessionPersister.save(context, session);
-					}
+					saveSession(session);
 				}
 			}
 			catch (Exception e) {
-				if(e instanceof SocializeException) {
-					throw (SocializeException) e;
-				}
-				throw new SocializeException(e);
+				throw SocializeException.wrap(e);
 			}
 			finally {
 				closeEntity(entity);
@@ -401,11 +403,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 				}
 			}
 			catch (Exception e) {
-				if(e instanceof SocializeException) {
-					throw (SocializeException) e;
-				}
-				
-				throw new SocializeException(e);
+				throw SocializeException.wrap(e);
 			}
 			finally {
 				closeEntity(entity);
@@ -503,11 +501,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 				}
 			}
 			catch (Exception e) {
-				if(e instanceof SocializeException) {
-					throw (SocializeException) e;
-				}
-				
-				throw new SocializeException(e);
+				throw SocializeException.wrap(e);
 			}
 			finally {
 				closeEntity(entity);
@@ -605,10 +599,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 				}
 			}
 			catch (Throwable e) {
-				if(e instanceof SocializeException) {
-					throw (SocializeException) e;
-				}
-				throw new SocializeException(e);
+				throw SocializeException.wrap(e);
 			}
 			finally {
 				closeEntity(entity);

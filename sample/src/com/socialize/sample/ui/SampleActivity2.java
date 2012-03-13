@@ -33,11 +33,18 @@ public class SampleActivity2 extends Activity {
 		final EditText txtEntityName = (EditText) findViewById(R.id.txtEntityName);
 		
 		final EditText txtFB = (EditText) findViewById(R.id.txtFBId);
+		
+		final EditText txtTW_Key = (EditText) findViewById(R.id.txtTW_Key);
+		final EditText txtTW_Sec = (EditText) findViewById(R.id.txtTW_Sec);
+		
 		final CheckBox chkSSO = (CheckBox) findViewById(R.id.chkFacebook);
 		final CheckBox chkNotifications = (CheckBox) findViewById(R.id.chkNotifications);
 		
 		Socialize.getSocialize().init(this);
 		txtFB.setText(Socialize.getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID));
+		
+		txtTW_Key.setText(Socialize.getSocialize().getConfig().getProperty(SocializeConfig.TWITTER_CONSUMER_KEY));
+		txtTW_Sec.setText(Socialize.getSocialize().getConfig().getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET));
 
 		final Button btn = (Button) findViewById(R.id.btnCommentView);
 		final Button btnClearCache = (Button) findViewById(R.id.btnClearCache);
@@ -70,6 +77,7 @@ public class SampleActivity2 extends Activity {
 				Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
 				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
 				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
+				Socialize.getSocialize().getConfig().setTwitterKeySecret(txtTW_Key.getText().toString(), txtTW_Sec.getText().toString());
 				Socialize.getSocializeUI().showCommentView(SampleActivity2.this, entity);
 			}
 		});
@@ -111,6 +119,7 @@ public class SampleActivity2 extends Activity {
 				Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
 				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
 				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
+				Socialize.getSocialize().getConfig().setTwitterKeySecret(txtTW_Key.getText().toString(), txtTW_Sec.getText().toString());
 				startActivity(intent);
 			}
 		});
@@ -131,6 +140,7 @@ public class SampleActivity2 extends Activity {
 				Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
 				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
 				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
+				Socialize.getSocialize().getConfig().setTwitterKeySecret(txtTW_Key.getText().toString(), txtTW_Sec.getText().toString());
 				startActivity(intent);
 			}
 		});
@@ -152,6 +162,7 @@ public class SampleActivity2 extends Activity {
 				Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
 				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
 				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
+				Socialize.getSocialize().getConfig().setTwitterKeySecret(txtTW_Key.getText().toString(), txtTW_Sec.getText().toString());
 				startActivity(intent);
 			}
 		});

@@ -67,7 +67,31 @@ If you **do not** already have a Facebook app refer to :doc:`facebook` for more 
 
 Authenticating with Twitter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*Coming Soon!*
+Although not required, we stongly recommend authenticating with 3rd parties (e.g. Twitter) as this provides a better user experience 
+and ensures that user profiles and IDs are retained across app sessions and installs. 
+
+If you don't want to use Twitter for authentication, you can always just use :ref:`auth_anon`. 
+
+**You must already have a Twitter application** to enable Twitter authentication in Socialize.
+
+A Twitter application is nothing more than an account on Twitter which links your Android application to 
+a Twitter account and is required to "authorize" your Android app to access a user's Twitter feed.
+
+If you already have a Twitter app, simply specify the consumer key and secret of your Twitter app in the call 
+to authenticate:
+
+.. _tw_snippet:
+
+Twitter Authentication Code Snippet
+====================================
+
+.. include:: snippets/auth_tw.txt
+
+If you have specified your Socialize consumer key, secret AND your Twitter consumer key and secret in **assets/socialize.properties**
+
+.. include:: snippets/auth_tw_from_props.txt
+
+If you **do not** already have a Twitter app refer to :doc:`twitter` for more information.
 	
 .. _auth_anon:
 

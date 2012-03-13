@@ -62,6 +62,12 @@ public interface ActionBarSliderItem {
 	public String getTitle();
 	
 	/**
+	 * Informs the slider that an update may be required
+	 * @param slider
+	 */
+	public void onUpdate(ActionBarSliderView slider);
+	
+	/**
 	 * Clears the content of the item.
 	 */
 	public void onClear(ActionBarSliderView slider);

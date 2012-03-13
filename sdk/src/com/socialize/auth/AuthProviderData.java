@@ -29,6 +29,7 @@ public class AuthProviderData {
 	
 	private String userId3rdParty; 
 	private String token3rdParty; 
+	private String secret3rdParty;
 	
 	private AuthProviderInfo authProviderInfo;
 	
@@ -54,7 +55,14 @@ public class AuthProviderData {
 	public void setToken3rdParty(String token3rdParty) {
 		this.token3rdParty = token3rdParty;
 	}
-	
+	public String getSecret3rdParty() {
+		return secret3rdParty;
+	}
+
+	public void setSecret3rdParty(String secret3rdParty) {
+		this.secret3rdParty = secret3rdParty;
+	}
+
 	@Deprecated
 	public String getAppId3rdParty() {
 		return appId3rdParty;

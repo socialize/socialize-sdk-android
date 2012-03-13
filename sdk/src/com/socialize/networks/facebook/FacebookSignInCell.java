@@ -27,23 +27,22 @@ import com.socialize.listener.SocializeAuthListener;
 
 /**
  * @author Jason Polites
- * @deprecated
+ *
  */
-@Deprecated
 public class FacebookSignInCell extends FacebookCell {
-	
+
 	private FacebookAuthClickListener facebookAuthClickListener;
 
 	public FacebookSignInCell(Context context) {
 		super(context);
 	}
-	
+
 	@Override
 	public void init() {
 		super.init();
 		setOnClickListener(facebookAuthClickListener);
 	}
-	
+
 	public void setAuthListener(SocializeAuthListener listener) {
 		facebookAuthClickListener.setListener(listener);
 	}

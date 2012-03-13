@@ -26,12 +26,15 @@ import oauth.signpost.OAuthTokenListener;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.http.HttpParameters;
 import android.content.Context;
+import android.view.View;
 import android.webkit.WebView;
+
+import com.socialize.error.SocializeException;
 
 /**
  * @author Jason Polites
  */
-public class TwitterAuthWebView extends WebView {
+public class TwitterAuthWebView extends WebView implements ITwitterAuthWebView {
 	
 	private TwitterWebViewClient twitterWebViewClient;
 	
@@ -44,47 +47,18 @@ public class TwitterAuthWebView extends WebView {
 		setWebViewClient(twitterWebViewClient);
 	}
 	
-	protected TwitterWebViewClient newTwitterWebViewClient() {
-		return new TwitterWebViewClient();
-	}
-
 	/**
 	 * Starts the authentication process using the given twitter key/secret.
 	 * @param consumerKey
 	 * @param consumerSecret
 	 */
-	public synchronized void authenticate(String consumerKey, String consumerSecret, final TwitterAuthListener listener)  {
+	public synchronized void authenticate(final String consumerKey, final String consumerSecret, final TwitterAuthListener listener)  {
 		
-		final TwitterOAuthProvider provider = new TwitterOAuthProvider();
-		final CommonsHttpOAuthConsumer consumer = new CommonsHttpOAuthConsumer(consumerKey, consumerSecret);
+		TwitterOAuthProvider provider = newTwitterOAuthProvider();
+		CommonsHttpOAuthConsumer consumer = newCommonsHttpOAuthConsumer(consumerKey, consumerSecret);
+		OAuthRequestListener oAuthRequestListener = newOAuthRequestListener(listener, provider, consumer);
 		
-		twitterWebViewClient.setOauthRequestListener(new OAuthRequestListener() {
-			@Override
-			public void onRequestToken(String token, String verifier) {
-				try {
-					provider.retrieveAccessToken(consumer, verifier, new OAuthTokenListener() {
-						@Override
-						public void onResponse(HttpParameters parameters) {
-							String token = parameters.getFirst(OAuth.OAUTH_TOKEN);
-							String secret = parameters.getFirst(OAuth.OAUTH_TOKEN_SECRET);
-							
-							// See https://dev.twitter.com/docs/auth/implementing-sign-twitter
-							String userId = parameters.getFirst("user_id");
-							String screenName = parameters.getFirst("screen_name");
-							
-							if(listener != null) {
-								listener.onAuthSuccess(token, secret, screenName, userId);
-							}
-						}
-					});
-				} 
-				catch (Exception e) {
-					if(listener != null) {
-						listener.onError(e);
-					}
-				}
-			}
-		});
+		twitterWebViewClient.setOauthRequestListener(oAuthRequestListener);
 		
 		try {
 			String retrieveRequestToken = provider.retrieveRequestToken(consumer, TwitterOAuthProvider.OAUTH_CALLBACK_URL);
@@ -92,8 +66,67 @@ public class TwitterAuthWebView extends WebView {
 		} 
 		catch (Exception e) {
 			if(listener != null) {
-				listener.onError(e);
+				listener.onError(SocializeException.wrap(e));
 			}
-		}
+		}		
+	}
+	
+	protected OAuthRequestListener newOAuthRequestListener(final TwitterAuthListener listener, final TwitterOAuthProvider provider, final CommonsHttpOAuthConsumer consumer) {
+		return new OAuthRequestListener() {
+			
+			@Override
+			public void onCancel(String cancelToken) {
+				if(listener != null) {
+					listener.onCancel();
+				}
+			}
+
+			@Override
+			public void onRequestToken(String token, String verifier) {
+				try {
+					provider.retrieveAccessToken(consumer, verifier, newOAuthTokenListener(listener));
+				} 
+				catch (Exception e) {
+					if(listener != null) {
+						listener.onError(SocializeException.wrap(e));
+					}
+				}
+			}
+		};
+	}
+	
+	protected OAuthTokenListener newOAuthTokenListener(final TwitterAuthListener listener) {
+		return new OAuthTokenListener() {
+			@Override
+			public void onResponse(HttpParameters parameters) {
+				String token = parameters.getFirst(OAuth.OAUTH_TOKEN);
+				String secret = parameters.getFirst(OAuth.OAUTH_TOKEN_SECRET);
+				
+				// See https://dev.twitter.com/docs/auth/implementing-sign-twitter
+				String userId = parameters.getFirst("user_id");
+				String screenName = parameters.getFirst("screen_name");
+				
+				if(listener != null) {
+					listener.onAuthSuccess(token, secret, screenName, userId);
+				}
+			}
+		};
+	}
+	
+	protected TwitterWebViewClient newTwitterWebViewClient() {
+		return new TwitterWebViewClient();
+	}
+	
+	protected TwitterOAuthProvider newTwitterOAuthProvider() {
+		return new TwitterOAuthProvider();
+	}
+	
+	protected CommonsHttpOAuthConsumer newCommonsHttpOAuthConsumer(String consumerKey, String consumerSecret) {
+		return new CommonsHttpOAuthConsumer(consumerKey, consumerSecret);
+	}
+
+	@Override
+	public View getView() {
+		return this;
 	}
 }

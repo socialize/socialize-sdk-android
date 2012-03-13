@@ -37,7 +37,7 @@ public interface IOCContainer {
 	 * If this bean is defined as non-singleton, it will be instantiated in this call.
 	 * @param <T>
 	 * @param name The name of the bean.
-	 * @return
+	 * @return The bean.
 	 */
 	public <T extends Object> T getBean(String name);
 	
@@ -50,9 +50,30 @@ public interface IOCContainer {
 	 * @param args Optional constructor arguments.  If the bean is defined with fixed constructor arguments, 
 	 * the arguments provided here will be appended to the set of arguments used when instantiating the bean.
 	 * Only applies to non-singleton beans!
-	 * @return
+	 * @return The bean.
 	 */
 	public <T extends Object> T getBean(String name, Object...args);
+	
+	/**
+	 * Gets the bean denoted by the given name (id).  
+	 * If this bean is defined as non-singleton, it will be instantiated in this call.
+	 * @param <T>
+	 * @param name The name of the bean.
+	 * @param listener A listener called after the bean was created/retrieved.
+	 */
+	public <T extends Object> void getBeanAsync(String name, BeanCreationListener<T> listener);
+	
+	/**
+	 * If this bean is defined as non-singleton, it will be instantiated in this call using
+	 * the arguments passed as constructor arguments.
+	 * @param <T>
+	 * @param name The name of the bean.
+	 * @param listener A listener called after the bean was created/retrieved.
+	 * @param args Optional constructor arguments.  If the bean is defined with fixed constructor arguments, 
+	 * the arguments provided here will be appended to the set of arguments used when instantiating the bean.
+	 * Only applies to non-singleton beans!
+	 */
+	public <T extends Object> void getBeanAsync(String name, BeanCreationListener<T> listener, Object...args);
 	
 	/**
 	 * Returns the proxy for the given bean.  A &lt;proxy&lt; element must exist in the bean configuration.
@@ -71,6 +92,14 @@ public interface IOCContainer {
 	 * By default methods are delegated to the original bean.
 	 */
 	public <T extends Object> ProxyObject<T> getProxy(String name, Object...args);
+	
+	/**
+	 * Sets a proxy object for the bean of the given type.
+	 * NOTE: This will NOT work for singleton beans which must be defined with a &lt;proxy&gt; element in the bean config XML.
+	 * @param name
+	 * @param proxy
+	 */
+	public void setRuntimeProxy(String name, Object proxy);
 
 	/**
 	 * Destroys the container and calls the destroy method of any beans with such a method defined.

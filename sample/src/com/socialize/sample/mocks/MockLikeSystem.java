@@ -7,6 +7,7 @@ import com.socialize.api.action.LikeSystem;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.listener.like.LikeListener;
+import com.socialize.networks.ShareOptions;
 
 public class MockLikeSystem extends MockSystem<Like> implements LikeSystem {
 
@@ -15,7 +16,7 @@ public class MockLikeSystem extends MockSystem<Like> implements LikeSystem {
 	}
 
 	@Override
-	public void addLike(SocializeSession session, Entity entity, Location location, LikeListener listener) {
+	public void addLike(SocializeSession session, Entity entity, Location location, ShareOptions shareOptions, LikeListener listener) {
 		if(listener != null) listener.onCreate(action);
 	}
 

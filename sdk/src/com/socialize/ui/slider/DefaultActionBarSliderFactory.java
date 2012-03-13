@@ -22,6 +22,7 @@
 package com.socialize.ui.slider;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
@@ -39,23 +40,91 @@ public class DefaultActionBarSliderFactory implements ActionBarSliderFactory<Act
 	private SocializeLogger logger;
 	
 	@Override
-	public ActionBarSliderView wrap(View view, ZOrder order, int peekHeight) {
+	public ActionBarSliderView wrap(View parent, ZOrder order, int peekHeight) {
+		return wrap(parent, order, peekHeight, 0);
+	}
+
+	@Override
+	public ActionBarSliderView wrap(View parent, ZOrder order, int peekHeight, int top, int left) {
+		return wrap(parent, order, peekHeight, left, top, 0);
+	}
+	
+	@Override
+	public ActionBarSliderView wrap(View parent, ZOrder order, int peekHeight, int zOffset) {
+		return wrap(parent, order, peekHeight, parent.getLeft(), parent.getTop(), zOffset);
+	}
+
+	@Override
+	public ActionBarSliderView wrap(View view, ZOrder order, int peekHeight, int left, int top, int zOffset) {
 		
 		ActionBarSliderView actionBarSlider = null;
 		ViewParent parent = view.getParent();
+		RelativeLayout frame = null;
 		
-		if(parent instanceof RelativeLayout) {
-			
-			RelativeLayout frame = (RelativeLayout) parent;
-			
-			int[] location = new int[]{view.getLeft(), view.getTop()};
-			
-			actionBarSlider = actionBarSliderViewFactory.getBean(location, peekHeight);
+		final String errorMsg = "Unable to wrap view with a slider.  The view being wrapped is not contained in a RelativeLayout and no ancestor layout could be shimmed";
+		
+		int[] location = new int[]{left, top};
+		
+		actionBarSlider = actionBarSliderViewFactory.getBean(location, peekHeight);
 
-			RelativeLayout.LayoutParams barParams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);;
+		RelativeLayout.LayoutParams barParams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		
+		actionBarSlider.setLayoutParams(barParams);
+		actionBarSlider.setVisibility(View.GONE);
+		
+		if(!(parent instanceof RelativeLayout)) {
+			ViewParent ancestor = parent.getParent();
 			
-			actionBarSlider.setLayoutParams(barParams);
-			actionBarSlider.setVisibility(View.GONE);
+			if(ancestor != null) {
+				if(ancestor instanceof ViewGroup) {
+					ViewGroup ancestorGroup = (ViewGroup) ancestor;
+					
+					if(parent instanceof View) {
+						View parentView = (View) parent;
+						int index = 0;
+					
+						if(ancestorGroup.getChildCount() > 1) {
+							for (int i = 0; i < ancestorGroup.getChildCount(); i++) {
+								if(ancestorGroup.getChildAt(i) == parentView) {
+									index = i;
+									break;
+								}
+							}
+						}
+						
+						ancestorGroup.removeView(parentView);
+						
+						frame = new RelativeLayout(view.getContext());
+						RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
+						frame.setLayoutParams(params);
+						
+						if(order.equals(ZOrder.BEHIND)) {
+							frame.addView(actionBarSlider);
+							frame.addView(parentView);
+						}
+						else {
+							frame.addView(parentView);
+							frame.addView(actionBarSlider);
+						}						
+		
+						ancestorGroup.addView(frame, index);
+					}
+				}
+				else {
+					if(logger != null) {
+						logger.warn(errorMsg);
+					}
+				}
+			}
+			else {
+				// No ancestor
+				if(logger != null) {
+					logger.warn(errorMsg);
+				}
+			}
+		}
+		else {
+			frame = (RelativeLayout) parent;
 			
 			int childCount = frame.getChildCount();
 			
@@ -64,20 +133,15 @@ public class DefaultActionBarSliderFactory implements ActionBarSliderFactory<Act
 				if(child == view) {
 					if(order.equals(ZOrder.BEHIND)) {
 						// Position in front of original, but behind view
-						frame.addView(actionBarSlider, i);
+						frame.addView(actionBarSlider, i + zOffset);
 					}
 					else {
 						// Position in front of original and view
-						frame.addView(actionBarSlider, i+1);
+						frame.addView(actionBarSlider, i + 1 + zOffset);
 					}
 					break;
 				}
-			}
-		}	
-		else {
-			if(logger != null) {
-				logger.warn("Unable to wrap view with a slider.  The view being wrapped is not contained in a RelativeLayout!");
-			}
+			}			
 		}
 		
 		return actionBarSlider;

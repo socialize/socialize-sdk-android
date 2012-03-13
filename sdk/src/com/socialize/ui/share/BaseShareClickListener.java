@@ -39,7 +39,6 @@ import com.socialize.listener.share.ShareAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
-import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -105,16 +104,12 @@ public abstract class BaseShareClickListener implements ShareClickListener {
 
 				String text = comment;
 
-				if(StringUtils.isEmpty(text)) {
-					text = entity.getDisplayName();
-				}
-
 				// Record the share in Socialize
 				if(isDoShareInline()) {
 					Socialize.getSocialize().addShare(activity, entity, text, getShareType(), getShareAddListener());	
 				}
 
-				doShare(activity, entity, comment);				
+				doShare(activity, entity, text, getShareAddListener());				
 			}
 			else {
 				if(logger != null) {
@@ -160,7 +155,7 @@ public abstract class BaseShareClickListener implements ShareClickListener {
 		};
 	}
 	
-	protected abstract void doShare(Activity context, Entity entity, String comment);
+	protected abstract void doShare(Activity context, Entity entity, String comment, ShareAddListener listener);
 	
 	protected abstract boolean isHtml();
 	

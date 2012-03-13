@@ -70,6 +70,7 @@ public class SocializeButton extends LinearLayout {
 	
 	private boolean bold = false;
 	private boolean italic = false;
+	private boolean backgroundVisible = true;
 	
 	private String bottomColor = Colors.BUTTON_BOTTOM;
 	private String topColor = Colors.BUTTON_TOP;
@@ -84,6 +85,7 @@ public class SocializeButton extends LinearLayout {
 	private List<OnClickListener> afterListeners;
 	
 	private int textPadding;
+	private int cornerRadius = 2;
 	
 	public SocializeButton(Context context) {
 		super(context);
@@ -92,34 +94,41 @@ public class SocializeButton extends LinearLayout {
 	public void init() {
 		
 		int dipPadding = deviceUtils.getDIP(padding);
-		int radius = deviceUtils.getDIP(4);
+		int radius = deviceUtils.getDIP(cornerRadius);
 		
 		textPadding = deviceUtils.getDIP(4);
+	
+		OnClickListener onClickListener = getOnClickListener();
 		
-		int bottom = colors.getColor(bottomColor);
-		int top = colors.getColor(topColor);
-		int strokeTop = colors.getColor(strokeTopColor);
-		int strokeBottom = colors.getColor(strokeBottomColor);
-		int bgColor = Color.BLACK;
-		
-		if(!StringUtils.isEmpty(backgroundColor)) {
-			bgColor = colors.getColor(backgroundColor);
+		if(backgroundVisible) {
+			
+			int bottom = colors.getColor(bottomColor);
+			int top = colors.getColor(topColor);
+			int strokeTop = colors.getColor(strokeTopColor);
+			int strokeBottom = colors.getColor(strokeBottomColor);
+			int bgColor = Color.BLACK;
+			
+			if(!StringUtils.isEmpty(backgroundColor)) {
+				bgColor = colors.getColor(backgroundColor);
+			}
+			
+			GradientDrawable base = makeGradient(bgColor, bgColor);
+			base.setCornerRadius(radius+deviceUtils.getDIP(2)); // Add 2 pixels to make it look nicer
+			
+			GradientDrawable stroke = makeGradient(strokeBottom, strokeTop);
+			stroke.setCornerRadius(radius+deviceUtils.getDIP(1)); // Add 1 pixel to make it look nicer
+			
+			GradientDrawable background = makeGradient(bottom, top);
+			
+			background.setCornerRadius(radius);
+			
+			LayerDrawable layers = new LayerDrawable(new Drawable[] {base, stroke, background});
+			
+			layers.setLayerInset(1, 1, 1, 1, 1);
+			layers.setLayerInset(2, 2, 2, 2, 2);			
+			
+			setBackgroundDrawable(layers);
 		}
-		
-		GradientDrawable base = makeGradient(bgColor, bgColor);
-		base.setCornerRadius(radius+deviceUtils.getDIP(2)); // Add 2 pixels to make it look nicer
-		
-		GradientDrawable stroke = makeGradient(strokeBottom, strokeTop);
-		stroke.setCornerRadius(radius+deviceUtils.getDIP(1)); // Add 1 pixel to make it look nicer
-		
-		GradientDrawable background = makeGradient(bottom, top);
-		
-		background.setCornerRadius(radius);
-		
-		LayerDrawable layers = new LayerDrawable(new Drawable[] {base, stroke, background});
-		
-		layers.setLayerInset(1, 1, 1, 1, 1);
-		layers.setLayerInset(2, 2, 2, 2, 2);
 		
 		buttonWidth = LinearLayout.LayoutParams.WRAP_CONTENT;
 		buttonHeight = LinearLayout.LayoutParams.WRAP_CONTENT;
@@ -144,7 +153,7 @@ public class SocializeButton extends LinearLayout {
 		
 		setOrientation(LinearLayout.HORIZONTAL);
 		setLayoutParams(fill);
-		setBackgroundDrawable(layers);
+		
 		setPadding(dipPadding, dipPadding, dipPadding, dipPadding);
 		setClickable(true);
 		
@@ -204,6 +213,10 @@ public class SocializeButton extends LinearLayout {
 			imageView.setLayoutParams(imageLayout);
 			imageView.setPadding(deviceUtils.getDIP(imagePaddingLeft), 0, deviceUtils.getDIP(imagePaddingRight), 0);
 			
+			if(!backgroundVisible) {
+				imageView.setOnClickListener(onClickListener);
+			}
+			
 			addView(imageView);
 			
 			if(!StringUtils.isEmpty(text)) {
@@ -216,7 +229,11 @@ public class SocializeButton extends LinearLayout {
 		
 		addView(textView);
 			
-		setOnClickListener(new OnClickListener() {
+		setOnClickListener(onClickListener);
+	}
+	
+	protected OnClickListener getOnClickListener() {
+		return new OnClickListener() {
 			@Override
 			public void onClick(final View v) {
 				
@@ -236,7 +253,7 @@ public class SocializeButton extends LinearLayout {
 					}
 				}
 			}
-		});
+		};
 	}
 	
 	// use a method so we can mock
@@ -358,6 +375,10 @@ public class SocializeButton extends LinearLayout {
 		this.imagePaddingRight = imagePaddingRight;
 	}
 	
+	public void setBackgroundVisible(boolean backgroundVisible) {
+		this.backgroundVisible = backgroundVisible;
+	}
+
 	public void addOnClickListenerAfter(OnClickListener listener) {
 		if(afterListeners == null) {
 			afterListeners = new ArrayList<View.OnClickListener>(3);

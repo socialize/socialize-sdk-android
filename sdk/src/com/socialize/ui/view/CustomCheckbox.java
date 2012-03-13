@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.graphics.drawable.LayerDrawable;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -17,6 +16,7 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.ui.util.Colors;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
@@ -39,9 +39,10 @@ public class CustomCheckbox extends BaseView {
 	private String textOff;
 	
 	private boolean borderOn = true;
-	private boolean forceDefaultDensity = false;
 	
-	private int padding = 8;
+	private int padding = 4;
+	private int textPadding = 4;
+	private int imageMargin = 4;
 	
 	private int textSize = 12;
 	
@@ -50,7 +51,7 @@ public class CustomCheckbox extends BaseView {
 	private IBeanFactory<BasicLoadingView> loadingViewFactory;
 	
 	private ViewFlipper iconFlipper;
-
+	
 	public CustomCheckbox(Context context) {
 		super(context);
 	}
@@ -58,6 +59,8 @@ public class CustomCheckbox extends BaseView {
 	public void init() {
 		
 		int dipPadding = deviceUtils.getDIP(padding);
+		int leftPadding = deviceUtils.getDIP(textPadding);
+		int margin = deviceUtils.getDIP(imageMargin);
 		
 		checkboxLabel = new TextView(getContext());
 		checkboxLabel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
@@ -70,10 +73,12 @@ public class CustomCheckbox extends BaseView {
 		LayoutParams checkboxLabelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		LayoutParams checkboxLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
+		checkboxLayoutParams.setMargins(margin, margin, margin, margin);
+		
 		checkboxLabel.setLayoutParams(checkboxLabelLayoutParams);
 		checkBox.setLayoutParams(checkboxLayoutParams);
 		checkBox.setPadding(dipPadding, dipPadding, dipPadding, dipPadding);
-		checkboxLabel.setPadding(0, dipPadding, dipPadding, dipPadding);
+		checkboxLabel.setPadding(leftPadding, dipPadding, dipPadding, dipPadding);
 		
 		setLayoutParams(checkboxMasterLayoutParams);
 		
@@ -95,10 +100,12 @@ public class CustomCheckbox extends BaseView {
 				if(enabled) {
 					changed = true;
 					checked = !checked;
-					setDisplay();
+					
 					if(customClickListener != null) {
 						customClickListener.onClick(v);
 					}
+						
+					setDisplay();
 				}
 			}
 		};
@@ -126,7 +133,7 @@ public class CustomCheckbox extends BaseView {
 		checkboxLabel.setTextColor(checkboxLabel.getTextColors().withAlpha(255));
 		
 		if(borderOn) {
-			GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Color.parseColor("#3f3f3f"), Color.parseColor("#5c5c5c") });
+			GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Colors.parseColor("#3f3f3f"), Colors.parseColor("#5c5c5c") });
 			ColorDrawable topRight = new ColorDrawable(Color.BLACK);
 			ColorDrawable bottomLeft = new ColorDrawable(Color.GRAY);
 			LayerDrawable bg = new LayerDrawable(new Drawable[] { bottomLeft, topRight, background });
@@ -144,21 +151,11 @@ public class CustomCheckbox extends BaseView {
 	protected void setDisplay() {
 		if(checked) {
 			checkboxLabel.setText(textOn);
-			if(forceDefaultDensity) {
-				checkBox.setImageDrawable(drawables.getDrawable(imageOn, DisplayMetrics.DENSITY_DEFAULT));
-			}
-			else {
-				checkBox.setImageDrawable(drawables.getDrawable(imageOn));
-			}
+			checkBox.setImageDrawable(drawables.getDrawable(imageOn));
 		}
 		else {
 			checkboxLabel.setText(textOff);
-			if(forceDefaultDensity) {
-				checkBox.setImageDrawable(drawables.getDrawable(imageOff, DisplayMetrics.DENSITY_DEFAULT));
-			}
-			else {
-				checkBox.setImageDrawable(drawables.getDrawable(imageOff));
-			}
+			checkBox.setImageDrawable(drawables.getDrawable(imageOff));
 		}		
 	}
 	
@@ -167,8 +164,10 @@ public class CustomCheckbox extends BaseView {
 	}
 	
 	public void setChecked(boolean checked) {
-		this.checked = checked;
-		setDisplay();
+		if(checked != this.checked) {
+			this.checked = checked;
+			setDisplay();
+		}
 	}
 
 	public void setDrawables(Drawables drawables) {
@@ -221,17 +220,21 @@ public class CustomCheckbox extends BaseView {
 		this.borderOn = borderOn;
 	}
 	
+	
+	
 	@Override
 	public void setOnClickListener(OnClickListener l) {
 		this.customClickListener = l;
+		
 	}
 
 	public void setPadding(int padding) {
 		this.padding = padding;
 	}
 	
+	@Deprecated
 	public void setForceDefaultDensity(boolean forceDefaultDensity) {
-		this.forceDefaultDensity = forceDefaultDensity;
+		
 	}
 	
 	public void showLoading() {
@@ -270,6 +273,14 @@ public class CustomCheckbox extends BaseView {
 	
 	public void setChanged(boolean changed) {
 		this.changed = changed;
+	}
+	
+	public void setTextPadding(int textPadding) {
+		this.textPadding = textPadding;
+	}
+
+	public void setImageMargin(int imageMargin) {
+		this.imageMargin = imageMargin;
 	}
 
 	public void setTextSize(int textSize) {

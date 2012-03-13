@@ -21,26 +21,33 @@
  */
 package com.socialize.ui;
 
-import com.socialize.log.SocializeLogger;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 
+import com.socialize.log.SocializeLogger;
+import com.socialize.ui.dialog.DialogRegister;
+
 /**
  * @author Jason Polites
  *
  */
-public abstract class SocializeUIActivity extends Activity {
+public abstract class SocializeUIActivity extends Activity implements DialogRegister {
 	
 	public static final int PROFILE_UPDATE = 1347;
+	private Set<Dialog> dialogs;
 	
 	@Override
 	public final void onCreate(Bundle savedInstanceState) {
 		try {
 			super.onCreate(savedInstanceState);
+			dialogs = new LinkedHashSet<Dialog>();
 			this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 			onCreateSafe(savedInstanceState);
 		}
@@ -61,6 +68,22 @@ public abstract class SocializeUIActivity extends Activity {
 		}
 	}
 	
+	@Override
+	public void register(Dialog dialog) {
+		dialogs.add(dialog);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		if(dialogs != null) {
+			for (Dialog dialog : dialogs) {
+				dialog.dismiss();
+			}
+			dialogs.clear();
+		}
+		super.onDestroy();
+	}
+
 	protected void onNewIntentSafe(Intent intent) {}
 	
 	protected abstract void onCreateSafe(Bundle savedInstanceState);

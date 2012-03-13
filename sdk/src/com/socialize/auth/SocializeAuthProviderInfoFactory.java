@@ -21,17 +21,17 @@
  */
 package com.socialize.auth;
 
-
 /**
  * @author Jason Polites
  */
-public class SocializeAuthProviderInfoFactory implements AuthProviderInfoFactory<SocializeAuthProviderInfo> {
-
-	/* (non-Javadoc)
-	 * @see com.socialize.auth.AuthProviderInfoFactory#newInstance(android.content.Context)
-	 */
+public class SocializeAuthProviderInfoFactory extends BaseAuthProviderInfoFactory<SocializeAuthProviderInfo> {
 	@Override
-	public SocializeAuthProviderInfo newInstance() {
+	protected SocializeAuthProviderInfo initInstance() {
 		return new SocializeAuthProviderInfo();
 	}
+
+	@Override
+	protected void update(SocializeAuthProviderInfo instance) {}
+	
+	
 }

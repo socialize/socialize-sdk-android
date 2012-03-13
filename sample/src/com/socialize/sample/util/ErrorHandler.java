@@ -36,7 +36,9 @@ public final class ErrorHandler {
 			SocializeApiError serror = (SocializeApiError) error;
 			if(serror.getResultCode() >= 400) {
 				if(writeError(context, serror)) {
-					return serror.getResultCode() + " Error, file written to device";
+					return serror.getResultCode() + " Error, file written to device [" +
+							context.getFileStreamPath("error.html").getAbsolutePath() +
+							"]";
 				}
 				else {
 					return serror.getResultCode() + " Error, no additional info";

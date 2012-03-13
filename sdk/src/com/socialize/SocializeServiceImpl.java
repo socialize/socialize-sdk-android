@@ -35,6 +35,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ScrollView;
@@ -56,6 +57,7 @@ import com.socialize.api.action.ViewSystem;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderInfo;
+import com.socialize.auth.AuthProviderInfoBuilder;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
 import com.socialize.auth.SocializeAuthProviderInfo;
@@ -127,6 +129,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private IOCContainer container;
 	private SocializeSession session;
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
+	private AuthProviderInfoBuilder authProviderInfoBuilder;
 	private SocializeInitializationAsserter asserter;
 	private CommentSystem commentSystem;
 	private ShareSystem shareSystem;
@@ -167,14 +170,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 
 	@Override
 	public boolean isSupported(AuthProviderType type) {
-		switch(type) {
-			case SOCIALIZE:
-				return true;
-			case FACEBOOK:
-				return !StringUtils.isEmpty(getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID));
-			default:
-				return false;
-		}
+		return authProviderInfoBuilder.isSupported(type);
 	}
 
 	/* (non-Javadoc)
@@ -374,6 +370,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.authProviderDataFactory = container.getBean("authProviderDataFactory");
 				this.asserter = container.getBean("initializationAsserter");
 				this.authProviders = container.getBean("authProviders");
+				this.authProviderInfoBuilder = container.getBean("authProviderInfoBuilder");
 				
 				SocializeConfig mainConfig = container.getBean("config");
 				
@@ -409,14 +406,14 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	}
 	
 	protected void verify3rdPartyAuthConfigured() {
-		if(logger != null && logger.isDebugEnabled()) {
-			// TODO: Make generic
-			if(!isSupported(AuthProviderType.FACEBOOK)) {
-				logger.debug("No facebook app id found in socialize.properties.  Facebook not enabled");
-			}
-		}
+		authProviderInfoBuilder.validateAll();
 	}
 	
+	@Override
+	public void saveSession(Context context) {
+		userSystem.saveSession(context, session);
+	}
+
 	@Override
 	public void clear3rdPartySession(Context context, AuthProviderType type) {
 		try {
@@ -614,30 +611,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		SocializeConfig config = getConfig();
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-		
-		if(checkKeys(consumerKey, consumerSecret, authListener)) {
-			// TODO: Add aother auth providers
-			switch (authProviderType) {
-			
-			case FACEBOOK:
-					String authProviderAppId = config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
-					
-					if(StringUtils.isEmpty(authProviderAppId)) {
-						String msg = "No facebook app id specified";
-						if(authListener != null) {
-							authListener.onError(new SocializeException(msg));
-						}
-						logErrorMessage(msg);
-					}
-					else {
-						authenticate(context, consumerKey, consumerSecret, authProviderType, authProviderAppId, authListener);
-					}
-					break;
-			default:
-				authenticate(context, consumerKey, consumerSecret, authListener);
-				break;
-			}
-		}
+		AuthProviderInfo authProviderInfo = authProviderInfoBuilder.getFactory(authProviderType).getInstance();
+		authenticate(context, consumerKey, consumerSecret, authProviderInfo, authListener);
 	}
 
 	/* (non-Javadoc)
@@ -692,6 +667,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		AuthProviderData authProviderData = this.authProviderDataFactory.getBean();
 		authProviderData.setAuthProviderInfo(authProviderInfo);
 		authProviderData.setToken3rdParty(userProviderCredentials.getAccessToken());
+		authProviderData.setSecret3rdParty(userProviderCredentials.getTokenSecret());
 		authProviderData.setUserId3rdParty(userProviderCredentials.getUserId());
 		authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, false);	
 	}
@@ -704,8 +680,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			SocializeAuthListener authListener, 
 			boolean do3rdPartyAuth) {
 		
-		if(assertInitialized(authListener)) {
-			userSystem.authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, this, do3rdPartyAuth);
+		if(checkKeys(consumerKey, consumerSecret, authListener)) {
+			if(assertInitialized(authListener)) {
+				userSystem.authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, this, do3rdPartyAuth);
+			}
 		}
 	}
 
@@ -837,7 +815,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public void like(String key, Location location, LikeAddListener likeAddListener) {
 		if(assertAuthenticated(likeAddListener)) {
-			likeSystem.addLike(session, Entity.newInstance(key, null), location, likeAddListener);
+			likeSystem.addLike(session, Entity.newInstance(key, null), location, null, likeAddListener);
 		}
 	}
 	
@@ -858,10 +836,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				final SocialNetwork[] shareTo = shareOptions.getShareTo();
 				final boolean autoAuth = shareOptions.isAutoAuth();
 				if(shareTo == null || shareTo.length == 0) {
-					likeSystem.addLike(session, entity, location, likeAddListener);
+					likeSystem.addLike(session, entity, location, shareOptions, likeAddListener);
 				}
 				else {
-					likeSystem.addLike(session, entity, location, new LikeAddListener() {
+					likeSystem.addLike(session, entity, location, shareOptions, new LikeAddListener() {
 						@Override
 						public void onError(SocializeException error) {
 							if(likeAddListener != null) {
@@ -897,7 +875,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				}
 			}	
 			else {
-				likeSystem.addLike(session, entity, location, likeAddListener);
+				likeSystem.addLike(session, entity, location, shareOptions, likeAddListener);
 			}
 		}			
 	}
@@ -930,20 +908,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 
-	@Deprecated
-	@Override
-	public void share(String url, String text, ShareType shareType, ShareAddListener shareAddListener) {
-		share(url, text, shareType, null, shareAddListener);
-	}
-	
-	@Deprecated
-	@Override
-	public void share(String key, String text, ShareType shareType, Location location, ShareAddListener shareAddListener) {
-		if(assertAuthenticated(shareAddListener)) {
-			shareSystem.addShare(session, Entity.newInstance(key, null), text, shareType, location, shareAddListener);
-		}
-	}
-	
 	@Override
 	public void addShare(Activity activity, Entity entity, String text, ShareType shareType, ShareAddListener shareAddListener) {
 		addShare(activity, entity, text, shareType, null, shareAddListener);
@@ -952,7 +916,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public void addShare(Activity activity, Entity entity, String text, ShareType shareType, Location location, ShareAddListener shareAddListener) {
 		if(assertAuthenticated(shareAddListener)) {
-			shareSystem.addShare(session, entity, text, shareType, location, shareAddListener);
+			shareSystem.addShare(activity, session, entity, text, shareType, location, shareAddListener);
 		}
 	}
 
@@ -968,11 +932,11 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				SocialNetwork[] shareTo = options.getShareTo();
 				final boolean autoAuth = options.isAutoAuth();
 				if(shareTo == null) {
-					shareSystem.addShare(session, entity, text, ShareType.OTHER, location, shareAddListener);
+					shareSystem.addShare(activity, session, entity, text, ShareType.OTHER, location, shareAddListener);
 				}
 				else  {
 					for (final SocialNetwork socialNetwork : shareTo) {
-						shareSystem.addShare(session, entity, text, ShareType.valueOf(socialNetwork.name().toUpperCase()), location, new ShareAddListener() {
+						shareSystem.addShare(activity, session, entity, text, socialNetwork, location, new ShareAddListener() {
 							@Override
 							public void onError(SocializeException error) {
 								if(shareAddListener != null) {
@@ -1417,12 +1381,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				
 				if(listener != null) {
 					if(error != null) {
-						if(error instanceof SocializeException) {
-							listener.onError((SocializeException) error);
-						}
-						else {
-							listener.onError(new SocializeException(error));
-						}
+						listener.onError(SocializeException.wrap(error));
 					}
 					else {
 						listener.onError(new SocializeException(errorMessage));
@@ -1522,7 +1481,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		
 		View contentView = null;
 		
-		if(addScrollView && !(original instanceof ScrollView) ) {
+		if(addScrollView && !(original instanceof ScrollView) && !(original instanceof ListView) ) {
 			RelativeLayout.LayoutParams scrollViewParams = newLayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 			
 			scrollViewParams.addRule(RelativeLayout.ABOVE, socializeActionBar.getId());
@@ -1686,8 +1645,18 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 
 	/*
 	 * (non-Javadoc)
+	 * @see com.socialize.SocializeUI#getDrawable(java.lang.String)
+	 */
+	@Override
+	public Drawable getDrawable(String name) {
+		return drawables.getDrawable(name);
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * @see com.socialize.SocializeUI#getDrawable(java.lang.String, int, boolean)
 	 */
+	@Deprecated
 	@Override
 	public Drawable getDrawable(String name, int density, boolean eternal) {
 		return drawables.getDrawable(name, density, eternal);
@@ -1755,4 +1724,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	protected void setSubscriptionSystem(SubscriptionSystem subscriptionSystem) {
 		this.subscriptionSystem = subscriptionSystem;
 	}
+
+	protected void setAuthProviderInfoBuilder(AuthProviderInfoBuilder authProviderInfoBuilder) {
+		this.authProviderInfoBuilder = authProviderInfoBuilder;
+	}
+	
+	
 }

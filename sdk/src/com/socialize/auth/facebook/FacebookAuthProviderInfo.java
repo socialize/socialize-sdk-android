@@ -48,9 +48,14 @@ public class FacebookAuthProviderInfo implements AuthProviderInfo {
 	 */
 	@Override
 	public void validate() throws SocializeException {
-		if(StringUtils.isEmpty(appId)) {
+		if(!isValid()) {
 			throw new SocializeException("No facebook app ID found.");
 		}
+	}
+
+	@Override
+	public boolean isValid() {
+		return !StringUtils.isEmpty(appId);
 	}
 
 	public String getAppId() {

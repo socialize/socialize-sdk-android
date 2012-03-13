@@ -114,24 +114,46 @@
 				</entry>
 				<entry>
 					<key value="FACEBOOK_BOTTOM"/>
-					<value value="#2f4a7b"/>
+					<value value="#1f356a"/>
 				</entry>
 				<entry>
 					<key value="FACEBOOK_TOP"/>
-					<value value="#516b9d"/>
+					<value value="#365eab"/>
 				</entry>	
 				<entry>
 					<key value="FACEBOOK_STROKE"/>
-					<value value="#1a3360"/>
+					<value value="#4d69a1"/>
 				</entry>
 				<entry>
 					<key value="FACEBOOK_TOP_STROKE"/>
-					<value value="#6787b6"/>
+					<value value="#6382bf"/>
 				</entry>
 				<entry>
 					<key value="FACEBOOK_BOTTOM_STROKE"/>
-					<value value="#355389"/>
+					<value value="#455884"/>
 				</entry>
+				
+				<entry>
+					<key value="TWITTER_BOTTOM"/>
+					<value value="#0866a7"/>
+				</entry>
+				<entry>
+					<key value="TWITTER_TOP"/>
+					<value value="#26aaef"/>
+				</entry>	
+				<entry>
+					<key value="TWITTER_STROKE"/>
+					<value value="#3d9fd8"/>
+				</entry>
+				<entry>
+					<key value="TWITTER_TOP_STROKE"/>
+					<value value="#56bdf3"/>
+				</entry>
+				<entry>
+					<key value="TWITTER_BOTTOM_STROKE"/>
+					<value value="#2677af"/>
+				</entry>
+								
 				<entry>
 					<key value="GRAY_BTN_BOTTOM"/>
 					<value value="#555555"/>
@@ -240,12 +262,14 @@
 		<init-method name="init"/>
 	</bean>		
 	
-<!-- Authenticate Dialog -->
+<!-- Authenticate -->
+
+<!--
 	<factory id="authRequestDialogFactory" makes="authRequestDialog"/>
 	<factory id="authConfirmDialogFactory" makes="authConfirmDialog"/>
 	<factory id="authRequestDialogViewFactory" makes="authRequestDialogView"/>
 	<factory id="authConfirmDialogViewFactory" makes="authConfirmDialogView"/>
-	
+	-->
 	<!-- 
 		<factory id="authConfirmDialogHeaderFactory" makes="authConfirmDialogHeader"/>
 	
@@ -261,15 +285,16 @@
 	 -->
 	 
 	<bean 
-		id="authRequestDialog" 
-		class="com.socialize.ui.auth.AuthRequestDialogFactory"		
+		id="authRequestDialogFactory" 
+		class="com.socialize.ui.dialog.AuthRequestDialogFactory"		
 		singleton="false">
 		<property name="logger" ref="logger"/>
-		<property name="authConfirmDialogFactory" ref="authConfirmDialogFactory"/>
-		<property name="authRequestDialogViewFactory" ref="authRequestDialogViewFactory"/>
+		<property name="authPanelViewFactory" ref="authPanelViewFactory"/>
 		<property name="drawables" ref="drawables"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
 	</bean>
 	
+	<!-- 
 	<bean 
 		id="authConfirmDialog" 
 		class="com.socialize.ui.auth.AuthConfirmDialogFactory"		
@@ -278,7 +303,8 @@
 		<property name="authConfirmDialogViewFactory" ref="authConfirmDialogViewFactory"/>
 		<property name="drawables" ref="drawables"/>
 	</bean>
-	
+	 -->
+	<!-- 
 	<bean 
 		id="authRequestDialogView" 
 		class="com.socialize.ui.auth.AuthRequestDialogView"		
@@ -300,25 +326,159 @@
 		<property name="text" value="Your data is safe with us, but you can still post anonymously if you're shy."/>
 		<init-method name="init"/>
 	</bean>
-	
-	<!-- Facebook -->
+	 -->
+	 
 	<bean 
-		id="facebookAuthClickListener" 
-		class="com.socialize.networks.facebook.FacebookAuthClickListener"		
+		id="anonCell" 
+		class="com.socialize.ui.auth.AnonymousCell" 
+		singleton="false"
+		extends="clickableSectionCell">
+		<constructor-arg type="activity"/>	
+		<property name="backgroundColor" value="#293036"/>
+		<property name="bgAlpha" value="255" type="integer"/>
+	</bean>	
+	
+	<factory id="anonCellFactory" makes="anonCell"/>	
+	 
+	<bean 
+		id="authPanelView" 
+		class="com.socialize.ui.auth.AuthPanelView"		
 		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="facebookSignInCellFactory" ref="facebookSignInCellFactory"/>
+		<property name="twitterSignInCellFactory" ref="twitterSignInCellFactory"/>
+		<property name="anonCellFactory" ref="anonCellFactory"/>
+		<init-method name="init"/>
+	</bean>
+	
+	<factory id="authPanelViewFactory" makes="authPanelView"/>	
+	
+<!-- Social Network Base Classes -->	
+	
+	<bean 
+		id="socialNetworkAuthClickListener" 
+		abstract="true">
 		<property name="config" ref="config"/>
 		<property name="dialogFactory" ref="progressDialogFactory"/>
 	</bean>
 	
 	<bean 
-		id="facebookSignOutClickListener" 
-		class="com.socialize.networks.facebook.FacebookSignOutClickListener"		
-		singleton="false">
+		id="socialNetworkSignOutClickListener" 
+		class="com.socialize.networks.SocialNetworkSignOutClickListener"		
+		abstract="true">
 		<property name="drawables" ref="drawables"/>
 		<property name="logger" ref="logger"/>
-		<property name="config" ref="config"/>
-		<property name="facebookSignOutTaskFactory" ref="facebookSignOutTaskFactory"/>
+	</bean>	
+	
+	<bean 
+		id="socialNetworkSignOutTask"
+		class="com.socialize.networks.SocialNetworkSignOutTask" 
+		abstract="true">
+		<property name="dialogFactory" ref="progressDialogFactory"/>
+	</bean>	
+	
+<!-- End Social Network Base Classes -->		
+	
+<!-- Twitter -->
+
+	<bean 
+		id="twitterSignOutTask" 
+		singleton="false"
+		extends="socialNetworkSignOutTask">
+		<property name="type" value="TWITTER"/>
 	</bean>
+	
+	<factory id="twitterSignOutTaskFactory" makes="twitterSignOutTask"/>
+	
+	<bean 
+		id="twitterSignOutClickListener" 
+		singleton="false"
+		extends="socialNetworkSignOutClickListener">
+		<property name="signOutTaskFactory" ref="twitterSignOutTaskFactory"/>
+		<property name="networkName" value="Twitter"/>
+		<property name="iconImage" value="icon_twitter.png"/>		
+	</bean>	
+	
+	<factory id="twitterSignOutClickListenerFactory" makes="twitterSignOutClickListener"/>
+	
+	<bean 
+		id="twitterAuthClickListener" 
+		class="com.socialize.networks.twitter.TwitterAuthClickListener"		
+		singleton="false"
+		extends="socialNetworkAuthClickListener">
+		<property name="twitterUtils" ref="twitterUtils"/>
+	</bean>	
+	
+	<bean 
+		id="twitterSignInCell" 
+		class="com.socialize.networks.twitter.TwitterSignInCell" 
+		singleton="false"
+		extends="clickableSectionCell">
+		<constructor-arg type="activity"/>	
+		<property name="twitterAuthClickListener" ref="twitterAuthClickListener"/>
+		<property name="displayText" value="Twitter"/>
+		<property name="backgroundColor" value="#3d464c"/>
+		<property name="bgAlpha" value="255" type="integer"/>
+	</bean>	
+	
+	<factory id="twitterSignInCellFactory" makes="twitterSignInCell"/>	
+	
+	<bean 
+		id="autoPostTwitterOption" 
+		extends="customCheckbox"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		
+		<property name="imageOn" value="icon_twitter.png"/>
+		<property name="imageOff" value="icon_twitter_disabled.png"/>
+		<property name="textOn" value=""/>
+		<property name="textOff" value=""/>
+		<property name="borderOn" value="false" type="boolean"/>
+	</bean>	
+	
+	<factory id="autoPostTwitterOptionFactory" makes="autoPostTwitterOption"/>
+	
+	<bean 
+		id="twitterEnabledCheckbox" 
+		extends="customCheckbox" 
+		class="com.socialize.networks.SocialNetworkCheckbox"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="socialNetworkSignOutClickListenerFactory" ref="twitterSignOutClickListenerFactory"/>
+		<property name="socialNetworkAuthClickListener" ref="twitterAuthClickListener"/>
+		<property name="imageOn" value="icon_twitter.png"/>
+		<property name="imageOff" value="icon_twitter_disabled.png"/>
+		<property name="textOn" value="Sign out of Twitter"/>
+		<property name="textOff" value="Sign in to Twitter"/>
+		<property name="borderOn" value="true" type="boolean"/>
+		<property name="textSize" value="14" type="integer"/>
+		
+		<init-method name="init"/>
+	</bean>	
+	
+	<factory id="twitterEnabledCheckboxFactory" makes="twitterEnabledCheckbox"/>	
+	
+<!-- End Twitter -->
+		
+<!-- Facebook -->
+	<bean 
+		id="facebookAuthClickListener" 
+		class="com.socialize.networks.facebook.FacebookAuthClickListener"		
+		singleton="false"
+		extends="socialNetworkAuthClickListener"/>
+	
+	<bean 
+		id="facebookSignOutClickListener" 
+		singleton="false"
+		extends="socialNetworkSignOutClickListener">
+		<property name="signOutTaskFactory" ref="facebookSignOutTaskFactory"/>
+		<property name="networkName" value="Facebook"/>
+		<property name="iconImage" value="icon_facebook.png"/>
+	</bean>
+
+	<factory id="facebookSignOutClickListenerFactory" makes="facebookSignOutClickListener"/>
 	
 	<bean 
 		id="facebookSignInButton" 
@@ -337,43 +497,15 @@
 		<property name="height" value="42" type="integer"/>
 		<property name="textSize" value="16" type="integer"/>
 	</bean>
-	
-	<!-- 
-	
-	<bean 
-		id="facebookSignInCell" 
-		class="com.socialize.networks.facebook.FacebookSignInCell" 
-		singleton="false"
-		extends="clickableSectionCell">
-		<constructor-arg type="activity"/>	
-		<property name="facebookAuthClickListener" ref="facebookAuthClickListener"/>
-		<property name="displayText" value="Sign in to Facebook"/>
-	</bean>	
-	
-	<factory id="facebookSignInCellFactory" makes="facebookSignInCell"/>		
-	
-	<bean 
-		id="facebookSignOutCell" 
-		class="com.socialize.networks.facebook.FacebookSignOutCell" 
-		singleton="false"
-		extends="clickableSectionCell">
-		<constructor-arg type="activity"/>	
-		<property name="facebookSignOutClickListenerFactory" ref="facebookSignOutClickListenerFactory"/>
-		<property name="displayText" value="Sign out of Facebook"/>
-	</bean>		
-	
-	<factory id="facebookSignOutCellFactory" makes="facebookSignOutCell"/>	
-	
-	 -->
-	
+
 	<bean 
 		id="facebookEnabledCheckbox" 
 		extends="customCheckbox" 
-		class="com.socialize.networks.facebook.FacebookCheckbox"
+		class="com.socialize.networks.SocialNetworkCheckbox"
 		singleton="false">
 		<constructor-arg type="activity"/>
-		<property name="facebookSignOutClickListenerFactory" ref="facebookSignOutClickListenerFactory"/>
-		<property name="facebookAuthClickListener" ref="facebookAuthClickListener"/>
+		<property name="socialNetworkSignOutClickListenerFactory" ref="facebookSignOutClickListenerFactory"/>
+		<property name="socialNetworkAuthClickListener" ref="facebookAuthClickListener"/>
 		<property name="imageOn" value="icon_facebook.png"/>
 		<property name="imageOff" value="icon_facebook_disabled.png"/>
 		<property name="textOn" value="Sign out of Facebook"/>
@@ -389,8 +521,8 @@
 	<bean 
 		id="facebookSignOutTask" 
 		singleton="false"
-		class="com.socialize.networks.facebook.FacebookSignOutTask">
-		<property name="dialogFactory" ref="progressDialogFactory"/>
+		extends="socialNetworkSignOutTask">
+		<property name="type" value="FACEBOOK"/>
 	</bean>
 	
 	<factory id="facebookSignOutTaskFactory" makes="facebookSignOutTask"/>
@@ -405,10 +537,26 @@
 		<property name="imageOff" value="icon_facebook_disabled.png"/>
 		<property name="textOn" value=""/>
 		<property name="textOff" value=""/>
+		<property name="borderOn" value="false" type="boolean"/>
 	</bean>	
 	
 	<factory id="autoPostFacebookOptionFactory" makes="autoPostFacebookOption"/>
 	
+	<bean 
+		id="facebookSignInCell" 
+		class="com.socialize.networks.facebook.FacebookSignInCell" 
+		singleton="false"
+		extends="clickableSectionCell">
+		<constructor-arg type="activity"/>	
+		<property name="facebookAuthClickListener" ref="facebookAuthClickListener"/>
+		<property name="displayText" value="Facebook"/>
+		<property name="backgroundColor" value="#3d464c"/>
+		<property name="bgAlpha" value="255" type="integer"/>
+	</bean>	
+	
+	<factory id="facebookSignInCellFactory" makes="facebookSignInCell"/>	
+	
+<!-- End Facebook -->
 	
 <!-- Comment UI -->
 	
@@ -558,7 +706,7 @@
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
 		<property name="text" value="Post Comment"/>
-		<property name="height" value="36" type="integer"/>
+		<property name="height" value="34" type="integer"/>
 		<property name="width" value="100" type="integer"/>
 		<property name="textSize" value="11" type="integer"/>
 		<property name="textAlign" value="center"/>
@@ -576,13 +724,13 @@
 		<property name="topColor" value="GRAY_BTN_TOP"/>
 		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
 		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>
-		<property name="height" value="36" type="integer"/>
-		<property name="width" value="70" type="integer"/>
+		<property name="height" value="34" type="integer"/>
+		<property name="width" value="100" type="integer"/>
 		<property name="textSize" value="11" type="integer"/>
 		<property name="textAlign" value="center"/>
 		<property name="padding" value="2" type="integer"/>
 	</bean>	
-	
+
 	<bean 
 		id="subscribeNotificationButton" 
 		singleton="false"
@@ -614,6 +762,8 @@
 		<property name="cancelCommentButton" ref="cancelCommentButton"/>
 		<property name="subscribeNotificationButton" ref="subscribeNotificationButton"/>
 		<property name="autoPostFacebookOptionFactory" ref="autoPostFacebookOptionFactory"/>
+		<property name="autoPostTwitterOptionFactory" ref="autoPostTwitterOptionFactory"/>
+		
 		<property name="locationEnabledOptionFactory" ref="locationEnabledOptionFactory"/>
 		<property name="notificationEnabledOptionFactory" ref="notificationEnabledOptionFactory"/>
 		
@@ -644,12 +794,11 @@
 		extends="customCheckbox"
 		singleton="false">
 		<constructor-arg type="activity"/>
-		
 		<property name="imageOn" value="icon_location.png"/>
 		<property name="imageOff" value="icon_location_disabled.png"/>
-		<property name="textOn" value=""/>
-		<property name="textOff" value=""/>
-		<property name="borderOn" value="true" type="boolean"/>
+		<property name="textOn" value="Location will be shared"/>
+		<property name="textOff" value="Location will not be shared"/>
+		<property name="borderOn" value="false" type="boolean"/>
 	</bean>	
 	
 	<factory id="locationEnabledOptionFactory" makes="locationEnabledOption"/>	
@@ -663,7 +812,7 @@
 		<property name="imageOff" value="icon_notify_disabled.png"/>
 		<property name="textOn" value=""/>
 		<property name="textOff" value=""/>
-		<property name="borderOn" value="true" type="boolean"/>
+		<property name="borderOn" value="false" type="boolean"/>
 	</bean>	
 	
 	<bean 
@@ -751,7 +900,9 @@
 		
 		<property name="profileSaveButtonListenerFactory" ref="profileSaveButtonListenerFactory"/>	
 		<property name="notificationsEnabledCheckboxFactory" ref="notificationsEnabledCheckboxFactory"/>
+		
 		<property name="facebookEnabledCheckboxFactory" ref="facebookEnabledCheckboxFactory"/>
+		<property name="twitterEnabledCheckboxFactory" ref="twitterEnabledCheckboxFactory"/>
 		
 		<property name="userService" ref="userService"/>
 		
@@ -826,9 +977,6 @@
 		<property name="textAlign" value="center"/>
 	</bean>
 	
-	
-
-	
 	<bean 
 		id="profileSaveButton" 
 		singleton="false"
@@ -879,7 +1027,6 @@
 	<factory id="profileCancelButtonFactory" makes="profileCancelButton"/>
 	<factory id="profileSaveButtonFactory" makes="profileSaveButton"/>
 	<factory id="profileEditButtonFactory" makes="profileEditButton"/>
-	<factory id="facebookSignOutClickListenerFactory" makes="facebookSignOutClickListener"/>
 	<factory id="profileSaveButtonListenerFactory" makes="profileSaveButtonListener"/>
 	<factory id="profileImageContextMenuFactory" makes="profileImageContextMenu"/>
 	
@@ -1022,27 +1169,43 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="facebook"/>
+		<property name="textAlign" value="center"/>
 		<property name="imageName" value="fb_button.png"/>
 		<property name="bottomColor" value="FACEBOOK_BOTTOM"/>
 		<property name="topColor" value="FACEBOOK_TOP"/>
 		<property name="strokeTopColor" value="FACEBOOK_TOP_STROKE"/>
 		<property name="strokeBottomColor" value="FACEBOOK_BOTTOM_STROKE"/>
-		<property name="width" value="100" type="integer"/>
+		<property name="width" value="68" type="integer"/>
 		<property name="height" value="36" type="integer"/>
 		<property name="textSize" value="14" type="integer"/>
 		<property name="padding" value="4" type="integer"/>
-		<property name="imagePaddingLeft" value="4" type="integer"/>
 	</bean>	
+	
+	<bean 
+		id="twitterShareButton" 
+		singleton="false"
+		extends="socializeButton">
+		<constructor-arg type="activity"/>
+		<property name="textAlign" value="center"/>
+		<property name="imageName" value="tw_button.png"/>
+		<property name="bottomColor" value="TWITTER_BOTTOM"/>
+		<property name="topColor" value="TWITTER_TOP"/>
+		<property name="strokeTopColor" value="TWITTER_TOP_STROKE"/>
+		<property name="strokeBottomColor" value="TWITTER_BOTTOM_STROKE"/>
+		<property name="width" value="68" type="integer"/>
+		<property name="height" value="36" type="integer"/>
+		<property name="textSize" value="14" type="integer"/>
+		<property name="padding" value="4" type="integer"/>
+	</bean>		
 	
 	<bean 
 		id="emailShareButton" 
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="Email"/>
+		<property name="textAlign" value="center"/>
 		<property name="imageName" value="email_button.png"/>
-		<property name="width" value="90" type="integer"/>
+		<property name="width" value="68" type="integer"/>
 		<property name="height" value="36" type="integer"/>
 		<property name="textSize" value="12" type="integer"/>
 		<property name="padding" value="4" type="integer"/>
@@ -1057,9 +1220,9 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="SMS"/>
+		<property name="textAlign" value="center"/>
 		<property name="imageName" value="sms_button.png"/>
-		<property name="width" value="90" type="integer"/>
+		<property name="width" value="68" type="integer"/>
 		<property name="height" value="36" type="integer"/>
 		<property name="textSize" value="12" type="integer"/>
 		<property name="padding" value="4" type="integer"/>
@@ -1084,6 +1247,15 @@
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
 		<property name="alertDialogFactory" ref="alertDialogFactory"/>
 	</bean>
+	
+	<bean 
+		id="twitterShareClickListener" 
+		class="com.socialize.ui.share.TwitterShareClickListener" 
+		extends="shareClickListener"
+		singleton="false">
+		<property name="progressDialogFactory" ref="progressDialogFactory"/>
+		<property name="alertDialogFactory" ref="alertDialogFactory"/>
+	</bean>	
 		
 	<bean 
 		id="emailShareClickListener" 
@@ -1113,10 +1285,12 @@
 		<property name="deviceUtils" ref="deviceUtils"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="facebookShareButton" ref="facebookShareButton"/>
+		<property name="twitterShareButton" ref="twitterShareButton"/>
 		<property name="emailShareButton" ref="emailShareButton"/>
 		<property name="smsShareButton" ref="smsShareButton"/>
 		
 		<property name="facebookShareClickListenerFactory" ref="facebookShareClickListenerFactory"/>
+		<property name="twitterShareClickListenerFactory" ref="twitterShareClickListenerFactory"/>
 		<property name="emailShareClickListenerFactory" ref="emailShareClickListenerFactory"/>
 		<property name="smsShareClickListenerFactory" ref="smsShareClickListenerFactory"/>
 		<property name="otherShareClickListenerFactory" ref="otherShareClickListenerFactory"/>
@@ -1125,6 +1299,7 @@
 	</bean>	
 	
 	<factory id="facebookShareClickListenerFactory" makes="facebookShareClickListener"/>
+	<factory id="twitterShareClickListenerFactory" makes="twitterShareClickListener"/>
 	<factory id="emailShareClickListenerFactory" makes="emailShareClickListener"/>
 	<factory id="smsShareClickListenerFactory" makes="smsShareClickListener"/>
 	<factory id="otherShareClickListenerFactory" makes="otherShareClickListener"/>		

@@ -80,7 +80,7 @@ public class ShareApiTest extends SocializeUnitTest {
 			}
 		};
 		
-		api.addShare(session, Entity.newInstance(key, null), shareText, type, location, listener);
+		api.addShare(getContext(), session, Entity.newInstance(key, null), shareText, type, location, listener);
 		
 		Location loc = getNextResult();
 		List<Share> shares = getNextResult();

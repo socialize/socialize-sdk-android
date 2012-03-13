@@ -29,9 +29,7 @@ public class ShareOptions {
 	
 	private boolean shareLocation;
 	private boolean autoAuth = false;
-	
 	private SocialNetwork[] shareTo;
-	
 	private SocialNetworkListener listener;
 	
 	/**

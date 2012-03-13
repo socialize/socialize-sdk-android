@@ -21,6 +21,7 @@
  */
 package com.socialize.test.mock;
 
+import com.socialize.android.ioc.BeanCreationListener;
 import com.socialize.android.ioc.IBeanFactory;
 
 /**
@@ -43,5 +44,15 @@ public class MockingBeanFactory<T> implements IBeanFactory<T> {
 	@Override
 	public T getBean(Object... args) {
 		return bean;
+	}
+
+	@Override
+	public void getBeanAsync(BeanCreationListener<T> listener) {
+		listener.onCreate(bean);
+	}
+
+	@Override
+	public void getBeanAsync(BeanCreationListener<T> listener, Object... args) {
+		listener.onCreate(bean);
 	}
 }

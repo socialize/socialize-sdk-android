@@ -46,12 +46,14 @@ import com.socialize.view.BaseView;
 public class ShareDialogView extends BaseView {
 
 	private SocializeButton facebookShareButton;
+	private SocializeButton twitterShareButton;
 	private SocializeButton emailShareButton;
 	private SocializeButton smsShareButton;
 	
 	private IBeanFactory<ShareClickListener> otherShareClickListenerFactory;
 	private IBeanFactory<ShareClickListener> emailShareClickListenerFactory;
 	private IBeanFactory<ShareClickListener> facebookShareClickListenerFactory;
+	private IBeanFactory<ShareClickListener> twitterShareClickListenerFactory;
 	private IBeanFactory<ShareClickListener> smsShareClickListenerFactory;
 	
 	private OnActionBarEventListener onActionBarEventListener;
@@ -97,19 +99,24 @@ public class ShareDialogView extends BaseView {
 		commentLabel.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
 		commentLabel.setPadding(0, padding, 0, 0);
 		
+		LinearLayout shareLabelLayout = new LinearLayout(getContext());
+		shareLabelLayout.setPadding(0, padding, 0, padding);
+		shareLabelLayout.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
 		
 		TextView shareLabel = new TextView(getContext());
 		shareLabel.setText("Share to:");
 		shareLabel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
 		shareLabel.setTextColor(Color.WHITE);
 		shareLabel.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-		shareLabel.setPadding(0, padding, 0, 0);		
+//		shareLabel.setPadding(0, padding, 0, padding);
+		
+		shareLabelLayout.addView(shareLabel);
 		
 		buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
 		
 		commentField.setGravity(Gravity.TOP | Gravity.LEFT);
 		
-		boolean landscape = false;
+//		boolean landscape = false;
 		
 		if(deviceUtils.getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
 			setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
@@ -119,21 +126,23 @@ public class ShareDialogView extends BaseView {
 			SpannableString content = new SpannableString("More options...");
 			content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
 			otherOptions.setText(content);
-			otherOptions.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+			otherOptions.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
 			otherOptions.setTextColor(Color.WHITE);
 			otherOptions.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
-			otherOptions.setPadding(0, deviceUtils.getDIP(24), 0, 0);
+//			otherOptions.setPadding(0, deviceUtils.getDIP(24), 0, 0);
 			
 			LayoutParams otherOptionsLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 			otherOptionsLayout.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
 			
 			otherOptions.setLayoutParams(otherOptionsLayout);
 			otherOptions.setOnClickListener(otherShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener));
+			
+			shareLabelLayout.addView(otherOptions);
 		}
 		else {
 			setGravity(Gravity.TOP | Gravity.LEFT);
 			commentField.setLines(1);
-			landscape = true;
+//			landscape = true;
 		}
 		
 		commentField.setLayoutParams(commentFieldParams);
@@ -143,6 +152,8 @@ public class ShareDialogView extends BaseView {
 		setPadding(padding, padding, padding, padding);
 		
 		ShareClickListener facebookShareClickListener = facebookShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
+		ShareClickListener twitterShareClickListener = twitterShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
+		
 		ShareClickListener emailShareClickListener = emailShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
 		ShareClickListener smsShareClickListener = smsShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
 		
@@ -150,6 +161,11 @@ public class ShareDialogView extends BaseView {
 			facebookShareButton.setCustomClickListener(facebookShareClickListener);
 			buttonLayout.addView(facebookShareButton);
 		}
+		
+		if(twitterShareButton != null && twitterShareClickListener.isAvailableOnDevice(getActivity())) {
+			twitterShareButton.setCustomClickListener(twitterShareClickListener);
+			buttonLayout.addView(twitterShareButton);
+		}		
 		
 		if(emailShareButton != null && emailShareClickListener.isAvailableOnDevice(getActivity())) {
 			emailShareButton.setCustomClickListener(emailShareClickListener);
@@ -161,22 +177,18 @@ public class ShareDialogView extends BaseView {
 			buttonLayout.addView(smsShareButton);
 		}
 		
-		if(landscape) {
-			addView(shareLabel);
-			addView(buttonLayout);			
+//		if(landscape) {
+//			addView(shareLabelLayout);
+//			addView(buttonLayout);			
+//			addView(commentLabel);
+//			addView(commentField);
+//		}
+//		else {
 			addView(commentLabel);
 			addView(commentField);
-		}
-		else {
-			addView(commentLabel);
-			addView(commentField);
-			addView(shareLabel);
+			addView(shareLabelLayout);
 			addView(buttonLayout);
-			
-			if(otherOptions != null) {
-				addView(otherOptions);
-			}				
-		}
+//		}
 	}
 
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
@@ -193,6 +205,14 @@ public class ShareDialogView extends BaseView {
 
 	public void setSmsShareButton(SocializeButton smsShareButton) {
 		this.smsShareButton = smsShareButton;
+	}
+	
+	public void setTwitterShareButton(SocializeButton twitterShareButton) {
+		this.twitterShareButton = twitterShareButton;
+	}
+
+	public void setTwitterShareClickListenerFactory(IBeanFactory<ShareClickListener> twitterShareClickListenerFactory) {
+		this.twitterShareClickListenerFactory = twitterShareClickListenerFactory;
 	}
 
 	public void setOtherShareClickListenerFactory(IBeanFactory<ShareClickListener> otherShareClickListenerFactory) {

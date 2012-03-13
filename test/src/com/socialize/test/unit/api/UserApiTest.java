@@ -97,8 +97,8 @@ public class UserApiTest extends SocializeUnitTest {
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setProfilePicData(encodedImage);
-		user.setAutoPostCommentsFacebook(true);
-		user.setAutoPostLikesFacebook(true);
+		user.setAutoPostToFacebook(true);
+		user.setAutoPostToTwitter(true);
 		user.setNotificationsEnabled(true);
 		
 		SocializeUserSystem api = new SocializeUserSystem(provider) {
@@ -115,8 +115,8 @@ public class UserApiTest extends SocializeUnitTest {
 		profile.setFirstName(firstName);
 		profile.setLastName(lastName);
 		profile.setEncodedImage(encodedImage);
-		profile.setAutoPostCommentsFacebook(true);
-		profile.setAutoPostLikesFacebook(true);
+		profile.setAutoPostFacebook(true);
+		profile.setAutoPostTwitter(true);
 		profile.setNotificationsEnabled(true);
 		
 		
@@ -159,8 +159,8 @@ public class UserApiTest extends SocializeUnitTest {
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setProfilePicData(encodedImage);
-		user.setAutoPostCommentsFacebook(true);
-		user.setAutoPostLikesFacebook(true);
+		user.setAutoPostToFacebook(true);
+		user.setAutoPostToTwitter(true);
 		user.setNotificationsEnabled(true);
 		
 		SocializeUserSystem api = new SocializeUserSystem(provider) {
@@ -181,8 +181,8 @@ public class UserApiTest extends SocializeUnitTest {
 		profile.setFirstName(firstName);
 		profile.setLastName(lastName);
 		profile.setEncodedImage(encodedImage);
-		profile.setAutoPostCommentsFacebook(true);
-		profile.setAutoPostLikesFacebook(true);
+		profile.setAutoPostFacebook(true);
+		profile.setAutoPostTwitter(true);
 		profile.setNotificationsEnabled(true);
 		
 		api.saveUserProfile(context, session, profile, listener);

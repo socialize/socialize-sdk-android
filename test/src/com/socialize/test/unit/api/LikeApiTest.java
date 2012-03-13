@@ -73,7 +73,7 @@ public class LikeApiTest extends SocializeUnitTest {
 
 		};
 		
-		api.addLike(session, Entity.newInstance(key, null), null, listener);
+		api.addLike(session, Entity.newInstance(key, null), null, null, listener);
 		
 		
 		List<Like> likes = getNextResult();

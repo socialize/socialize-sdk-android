@@ -34,4 +34,6 @@ public interface UserProviderCredentialsMap {
 	
 	public Collection<UserProviderCredentials> values();
 	
+	public void remove(AuthProviderType type);
+	
 }

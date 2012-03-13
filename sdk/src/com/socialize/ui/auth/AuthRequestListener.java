@@ -21,6 +21,8 @@
  */
 package com.socialize.ui.auth;
 
+import com.socialize.networks.SocialNetwork;
+
 import android.app.Dialog;
 
 /**
@@ -28,5 +30,5 @@ import android.app.Dialog;
  *
  */
 public interface AuthRequestListener {
-	public void onResult(Dialog dialog);
+	public void onResult(Dialog dialog, SocialNetwork...networks);
 }

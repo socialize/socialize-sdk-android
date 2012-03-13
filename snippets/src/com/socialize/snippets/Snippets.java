@@ -1,10 +1,15 @@
 package com.socialize.snippets;
 
+import java.util.List;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
 import com.socialize.Socialize;
+import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
+import com.socialize.entity.ListResult;
 import com.socialize.ui.SocializeEntityLoader;
 
 /**
@@ -19,6 +24,12 @@ public class Snippets {
 			public void loadEntity(Activity activity, Entity entity) {
 				// Load the original view for this entity
 			}
+
+			@Override
+			public boolean canLoad(Context arg0, Entity arg1) {
+				return true;
+			}
+			
 		});
 	}
 	
@@ -29,6 +40,10 @@ public class Snippets {
 				Intent intent = new Intent(activity, MyContentActivity.class);
 				intent.putExtra("some_key", entity.getMetaData());
 				activity.startActivity(intent);
+			}
+			@Override
+			public boolean canLoad(Context arg0, Entity arg1) {
+				return true;
 			}
 		});
 	}

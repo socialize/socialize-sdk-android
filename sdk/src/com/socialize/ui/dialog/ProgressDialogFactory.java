@@ -46,6 +46,9 @@ public class ProgressDialogFactory implements DialogFactory<ProgressDialog> {
 				dialog.setIcon(drawables.getDrawable("socialize_icon_white.png"));
 			}
 			
+			// Register to prevent window leakage
+			DialogRegistration.register(context, dialog);
+			
 			dialog.show();
 			
 			return dialog;

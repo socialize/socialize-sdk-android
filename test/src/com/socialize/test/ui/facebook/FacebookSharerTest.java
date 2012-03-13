@@ -30,8 +30,8 @@ import com.socialize.SocializeService;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ActionType;
 import com.socialize.auth.AuthProviderInfo;
+import com.socialize.auth.AuthProviderInfoFactory;
 import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
@@ -50,15 +50,16 @@ import com.socialize.test.ui.SocializeActivityTestCase;
  */
 public class FacebookSharerTest extends SocializeActivityTestCase {
 
-	@UsesMocks ({SocializeService.class, SocializeConfig.class, FacebookAuthProviderInfo.class})
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({SocializeService.class, SocializeConfig.class, AuthProviderInfoFactory.class, AuthProviderInfo.class})
 	public void testShareNotAuthenticated() {
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-		final FacebookAuthProviderInfo facebookAuthProviderInfo = AndroidMock.createMock(FacebookAuthProviderInfo.class);
+		final AuthProviderInfoFactory<AuthProviderInfo> authProviderInfoFactory = AndroidMock.createMock(AuthProviderInfoFactory.class);
+		final AuthProviderInfo authProviderInfo = AndroidMock.createMock(AuthProviderInfo.class);
 		
 		final String consumerKey = "foo";
 		final String consumerSecret = "bar";
-		final String fbId = "foobar_id";
 		final boolean autoAuth = true;
 
 		AndroidMock.expect(socialize.isSupported(AuthProviderType.FACEBOOK)).andReturn(true);
@@ -66,13 +67,13 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		
 		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(consumerKey);
 		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET)).andReturn(consumerSecret);
-		AndroidMock.expect(config.getProperty(SocializeConfig.FACEBOOK_APP_ID)).andReturn(fbId);
+		AndroidMock.expect(authProviderInfoFactory.getInstance()).andReturn(authProviderInfo);
 		
 		socialize.authenticate(
 				AndroidMock.eq ( getContext() ), 
 				AndroidMock.eq (consumerKey), 
 				AndroidMock.eq (consumerSecret),
-				AndroidMock.eq (facebookAuthProviderInfo),
+				AndroidMock.eq (authProviderInfo),
 				(SocializeAuthListener) AndroidMock.anyObject());
 		
 		PublicFacebookSharer sharer = new PublicFacebookSharer() {
@@ -80,15 +81,12 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 			public SocializeService getSocialize() {
 				return socialize;
 			}
-
-			@Override
-			protected FacebookAuthProviderInfo newFacebookAuthProviderInfo() {
-				return facebookAuthProviderInfo;
-			}
 		};
 		
 		sharer.setConfig(config);
+		sharer.setAuthProviderInfoFactory(authProviderInfoFactory);
 		
+		AndroidMock.replay(authProviderInfoFactory);
 		AndroidMock.replay(socialize);
 		AndroidMock.replay(config);
 		
@@ -97,8 +95,11 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		
 		AndroidMock.verify(socialize);
 		AndroidMock.verify(config);
+		AndroidMock.verify(authProviderInfoFactory);
 	}
-	@UsesMocks ({SocializeConfig.class})
+	
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({SocializeConfig.class, AuthProviderInfoFactory.class, AuthProviderInfo.class})
 	public void testShareAuthListener() {
 		
 		final PublicSocialize socialize = new PublicSocialize() {
@@ -124,15 +125,16 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		};
 		
 		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+		final AuthProviderInfoFactory<AuthProviderInfo> authProviderInfoFactory = AndroidMock.createMock(AuthProviderInfoFactory.class);
+		final AuthProviderInfo authProviderInfo = AndroidMock.createMock(AuthProviderInfo.class);
 		
 		final String consumerKey = "foo";
 		final String consumerSecret = "bar";
-		final String fbId = "foobar_id";
 		final boolean autoAuth = true;
 		
 		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(consumerKey);
 		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET)).andReturn(consumerSecret);
-		AndroidMock.expect(config.getProperty(SocializeConfig.FACEBOOK_APP_ID)).andReturn(fbId);
+		AndroidMock.expect(authProviderInfoFactory.getInstance()).andReturn(authProviderInfo);
 		
 		PublicFacebookSharer sharer = new PublicFacebookSharer() {
 
@@ -153,13 +155,16 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		};
 		
 		sharer.setConfig(config);
+		sharer.setAuthProviderInfoFactory(authProviderInfoFactory);
 		
 		AndroidMock.replay(config);
+		AndroidMock.replay(authProviderInfoFactory);
 		
 		// Params can be null.. not in the path to test
 		sharer.share(getContext(), null, null, null, ActionType.COMMENT, autoAuth);
 		
 		AndroidMock.verify(config);		
+		AndroidMock.verify(authProviderInfoFactory);
 
 		// Get the listener
 		SocializeAuthListener listener = getResult(0);
@@ -188,7 +193,7 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 	@UsesMocks ({SocialNetworkListener.class, SocializeLogger.class})
 	public void testDoError() {
 		
-		final String msg = "Error sharing to Facebook";
+		final String msg = "Error sharing to FACEBOOK";
 		
 		SocializeLogger logger = AndroidMock.createMock(SocializeLogger.class);
 		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);

@@ -21,6 +21,7 @@
  */
 package com.socialize.ui.util;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -53,9 +54,10 @@ public class Colors {
 	public static final String STANDARD_BACKGROUND_COLOR = "STANDARD_BACKGROUND_COLOR";
 	public static final String LOADING_ITEM_BG = "LOADING_ITEM_BG";
 	
-	
 	private Map<String, String> colorHexCodes;
 	private Map<String, Integer> colors;
+	
+	private static Map<String, Integer> parsedColors = new HashMap<String, Integer>();
 	
 	public void init() {
 		colors = new TreeMap<String, Integer>();
@@ -95,5 +97,19 @@ public class Colors {
 
 	public void setColorHexCodes(Map<String, String> colorHexCodes) {
 		this.colorHexCodes = colorHexCodes;
+	}
+	
+	public static int parseColor(String colorHex) {
+		Integer color = parsedColors.get(colorHex);
+		if(color != null) {
+			return color;
+		}
+		else {
+			int icolor = Color.parseColor(colorHex);
+			
+			parsedColors.put(colorHex, icolor);
+			
+			return icolor;
+		}
 	}
 }

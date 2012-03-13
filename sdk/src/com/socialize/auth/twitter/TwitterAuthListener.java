@@ -21,6 +21,8 @@
  */
 package com.socialize.auth.twitter;
 
+import com.socialize.error.SocializeException;
+
 /**
  * @author Jason Polites
  *
@@ -29,7 +31,7 @@ public interface TwitterAuthListener {
 	
 	public void onAuthSuccess(String token, String secret, String screenName, String userId);
 	
-	public void onError(Exception e);
+	public void onError(SocializeException e);
 	
 	public void onCancel();
 }

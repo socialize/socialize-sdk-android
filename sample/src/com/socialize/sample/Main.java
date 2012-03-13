@@ -35,7 +35,6 @@ import com.socialize.Socialize;
 import com.socialize.sample.ui.SampleActivity2;
 import com.socialize.ui.dialog.SafeProgressDialog;
 
-//@SuppressWarnings("deprecation")
 public class Main extends Activity {
 	
     @Override
@@ -45,7 +44,6 @@ public class Main extends Activity {
         setContentView(R.layout.main);
         
         Button btn = (Button) findViewById(R.id.btnSample);
-//        Button btnUI = (Button) findViewById(R.id.btnSampleSocializeUI);
         Button btnUI2 = (Button) findViewById(R.id.btnSampleSocializeUI2);
         
         btn.setOnClickListener(new OnClickListener() {
@@ -54,14 +52,6 @@ public class Main extends Activity {
 				startSocialize(false);
 			}
 		});
-        
-//        btnUI.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				Intent i = new Intent(Main.this, SampleActivity.class);
-//				startActivity(i);
-//			}
-//		}); 
         
         btnUI2.setOnClickListener(new OnClickListener() {
 			@Override

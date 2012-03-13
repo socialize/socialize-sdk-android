@@ -9,6 +9,7 @@ Contents:
    whats_new
    getting_started
    facebook
+   twitter
    action_bar
    like_button
    comment_view

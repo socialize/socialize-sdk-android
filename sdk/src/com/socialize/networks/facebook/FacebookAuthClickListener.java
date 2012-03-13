@@ -21,97 +21,21 @@
  */
 package com.socialize.networks.facebook;
 
-import android.app.ProgressDialog;
-import android.view.View;
-import android.view.View.OnClickListener;
-
-import com.socialize.Socialize;
-import com.socialize.SocializeService;
-import com.socialize.api.SocializeSession;
+import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
-import com.socialize.ui.dialog.DialogFactory;
+import com.socialize.networks.SocialNetworkAuthClickListener;
 
 /**
  * @author Jason Polites
  *
  */
-public class FacebookAuthClickListener implements OnClickListener {
-
-	private SocializeConfig config;
-	private SocializeAuthListener listener;
-	private DialogFactory<ProgressDialog> dialogFactory;
-	private ProgressDialog dialog; 
-
+public class FacebookAuthClickListener extends SocialNetworkAuthClickListener {
 	@Override
-	public void onClick(final View view) {
-		
-		view.setEnabled(false);
-		
-		dialog = dialogFactory.show(view.getContext(), "Facebook", "Authenticating...");
-		
-		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+	protected AuthProviderInfo getAuthProviderInfo() {
 		String authProviderAppId = config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
-		
 		FacebookAuthProviderInfo fbInfo = new FacebookAuthProviderInfo();
 		fbInfo.setAppId(authProviderAppId);
-		
-		getSocialize().authenticate(view.getContext(), consumerKey, consumerSecret, fbInfo, new SocializeAuthListener() {
-			
-			@Override
-			public void onError(SocializeException error) {
-				dialog.dismiss();
-				if(listener != null) {
-					listener.onError(error);
-				}
-				view.setEnabled(true);
-			}
-			
-			@Override
-			public void onAuthSuccess(SocializeSession session) {
-				dialog.dismiss();
-				if(listener != null) {
-					listener.onAuthSuccess(session);
-				}
-				view.setEnabled(true);
-			}
-			
-			@Override
-			public void onAuthFail(SocializeException error) {
-				dialog.dismiss();
-				if(listener != null) {
-					listener.onAuthFail(error);
-				}
-				view.setEnabled(true);
-			}
-
-			@Override
-			public void onCancel() {
-				dialog.dismiss();
-				if(listener != null) {
-					listener.onCancel();
-				}
-				view.setEnabled(true);
-			}
-		});
-	}
-
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
-	}
-
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
-	}
-
-	public void setDialogFactory(DialogFactory<ProgressDialog> dialogFactory) {
-		this.dialogFactory = dialogFactory;
-	}
-
-	public void setListener(SocializeAuthListener listener) {
-		this.listener = listener;
+		return fbInfo;
 	}
 }

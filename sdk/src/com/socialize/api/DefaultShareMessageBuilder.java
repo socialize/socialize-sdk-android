@@ -128,17 +128,12 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 				builder.append(entityName);
 			}
 			
-			if(!html) {
-				builder.append(": ");
-			}
-			else {
-				builder.append(" ");
-			}
-			
-			builder.append(buildShareLink(entity));
-			
 			if(html) {
 				builder.append("</a>");
+			}
+			else {
+				builder.append(": ");
+				builder.append(buildShareLink(entity));
 			}
 		}
 		

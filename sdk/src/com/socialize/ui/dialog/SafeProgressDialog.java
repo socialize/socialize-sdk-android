@@ -61,12 +61,18 @@ public class SafeProgressDialog extends ProgressDialog {
 		}
 	}
 	
+	public static ProgressDialog show(Context context) {
+		return show(context, "", "Loading...");
+	}
 	
 	public static ProgressDialog show(Context context, String title, String message) {
 		ProgressDialog dialog = makeDialog(context);
 		dialog.setTitle(title);
 		dialog.setMessage(message);
 		dialog.show();
+		
+		DialogRegistration.register(context, dialog);
+		
 		return dialog;
 	}
 	

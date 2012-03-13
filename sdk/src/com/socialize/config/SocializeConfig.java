@@ -59,6 +59,8 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_ENTITY_LOADER = "socialize.entity.loader";
 	
+	public static final String SOCIALIZE_FORCE_AUTH = "socialize.force.auth";
+	
 	@Deprecated
 	public static final String SOCIALIZE_BEANS_PATH = SOCIALIZE_CORE_BEANS_PATH;
 	
@@ -249,13 +251,23 @@ public class SocializeConfig {
 	}
 	
 	/**
-	 * Sets the Facebook ID for FB authentication.  
+	 * Sets the Facebook App ID for Facebook authentication.  
 	 * @param appId Your Facebook App Id, obtained from https://developers.facebook.com/
 	 * @see "https://developers.facebook.com/"
 	 */
 	public void setFacebookAppId(String appId) {
 		setProperty(SocializeConfig.FACEBOOK_APP_ID, appId);
 	}
+	
+	/**
+	 * Sets the Twitter App consumer key/secret pair for Twitter authentication.  
+	 * @param consumerKey Your Twitter App consumer key, obtained from https://dev.twitter.com/
+	 * @param consumerSecret Your Twitter App consumer secret, obtained from https://dev.twitter.com/
+	 */
+	public void setTwitterKeySecret(String consumerKey, String consumerSecret) {
+		setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, consumerKey);
+		setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, consumerSecret);
+	}	
 
 	/**
 	 * Enables/disables Single Sign On for Facebook.
@@ -273,6 +285,10 @@ public class SocializeConfig {
 	public void setFacebookUserCredentials(String userId, String token) {
 		setProperty(SocializeConfig.FACEBOOK_USER_ID, userId);
 		setProperty(SocializeConfig.FACEBOOK_USER_TOKEN, token);
+	}
+	
+	public boolean isForcedAuth() {
+		return getBooleanProperty(SOCIALIZE_FORCE_AUTH, false);
 	}
 	
 	/**

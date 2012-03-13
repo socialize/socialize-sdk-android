@@ -68,8 +68,11 @@ public abstract class BaseLoadingView<V extends View> extends SafeViewFlipper im
 
 		// create a loading screen
 		BasicLoadingView loadingScreen = loadingViewFactory.getBean();
-
-		this.addView(loadingScreen);
+		
+		if(loadingScreen != null) {
+			this.addView(loadingScreen);
+		}
+		
 		this.addView(contentView);
 		this.addView(emptyTextView);
 		this.showLoading();

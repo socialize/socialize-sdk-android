@@ -21,23 +21,30 @@
  */
 package com.socialize.ui;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import android.app.Activity;
+import android.app.Dialog;
 import android.os.Bundle;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
+import com.socialize.ui.dialog.DialogRegister;
 
 /**
  * @author Jason Polites
  */
-public abstract class SocializeActivity extends Activity {
+public abstract class SocializeActivity extends Activity implements DialogRegister {
 
 	protected IOCContainer container;
+	private Set<Dialog> dialogs;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		dialogs = new LinkedHashSet<Dialog>();
 		initSocialize();
 		container = ActivityIOCProvider.getInstance().getContainer();
 		onPostSocializeInit(container);
@@ -52,8 +59,19 @@ public abstract class SocializeActivity extends Activity {
 	}
 
 	@Override
+	public void register(Dialog dialog) {
+		dialogs.add(dialog);
+	}
+	
+	@Override
 	protected void onDestroy() {
 		destroySocialize();
+		if(dialogs != null) {
+			for (Dialog dialog : dialogs) {
+				dialog.dismiss();
+			}
+			dialogs.clear();
+		}		
 		super.onDestroy();
 	}
 	

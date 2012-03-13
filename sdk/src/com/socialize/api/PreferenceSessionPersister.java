@@ -169,6 +169,7 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 			
 			map = newDefaultUserProviderCredentialsMap();
 			
+			// Legacy
 			if(type.equals(AuthProviderType.FACEBOOK)) {
 				
 				// Legacy, must only be FB

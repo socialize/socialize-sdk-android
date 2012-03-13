@@ -2,12 +2,19 @@ package com.socialize.test.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ResultHolder {
 	private List<Object> bucket;
+	private AtomicInteger index;
 	
 	public void setUp() {
 		bucket = new ArrayList<Object>();
+		index = new AtomicInteger(0);
+	}
+	
+	public int getNextIndex() {
+		return index.getAndIncrement();
 	}
 	
 	public void addResult(Object obj) {

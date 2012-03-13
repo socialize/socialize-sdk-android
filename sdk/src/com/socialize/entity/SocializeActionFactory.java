@@ -23,6 +23,7 @@ package com.socialize.entity;
 
 import java.text.ParseException;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,6 +42,7 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 	private ApplicationFactory applicationFactory;
 	private UserFactory userFactory;
 	private EntityFactory entityFactory;
+	private PropagationFactory propagationFactory;
 	
 	@Override
 	protected void toJSON(T from, JSONObject to) throws JSONException {
@@ -50,6 +52,8 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			Entity entityObject = from.getEntity();
 			String entityKey = from.getEntityKey();
 			Application appObject = from.getApplication();
+			Propagation propagation = from.getPropagation();
+			
 			User userObject = from.getUser();
 			Double lat = from.getLat();
 			Double lon = from.getLon();
@@ -71,6 +75,10 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			if(appObject != null) {
 				JSONObject application = applicationFactory.toJSON(appObject);
 				to.put("application", application);
+			}
+			
+			if(propagation != null) {
+				to.put("propagation", propagationFactory.toJSON(propagation));
 			}
 			
 			if(userObject != null) {
@@ -96,6 +104,10 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			throw new JSONException(e.getMessage());
 		}
 	}
+	
+	protected JSONArray newJSONArray() {
+		return new JSONArray();
+	}
 
 	@Override
 	protected void fromJSON(JSONObject from, T to) throws JSONException {
@@ -106,11 +118,10 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			if(from.has("application") && !from.isNull("application")) {
 				JSONObject application = from.getJSONObject("application");
 				if(application != null) {
-					
 					to.setApplication(applicationFactory.fromJSON(application));
 				}
 			}
-
+			
 			if(from.has("user") && !from.isNull("user")) {
 				JSONObject user = from.getJSONObject("user");
 				if(user != null) {
@@ -173,28 +184,20 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 		this.logger = logger;
 	}
 
-	public ApplicationFactory getApplicationFactory() {
-		return applicationFactory;
-	}
-
 	public void setApplicationFactory(ApplicationFactory applicationFactory) {
 		this.applicationFactory = applicationFactory;
-	}
-
-	public UserFactory getUserFactory() {
-		return userFactory;
 	}
 
 	public void setUserFactory(UserFactory userFactory) {
 		this.userFactory = userFactory;
 	}
 
-	public EntityFactory getEntityFactory() {
-		return entityFactory;
-	}
-
 	public void setEntityFactory(EntityFactory entityFactory) {
 		this.entityFactory = entityFactory;
+	}
+
+	public void setPropagationFactory(PropagationFactory propagationFactory) {
+		this.propagationFactory = propagationFactory;
 	}
 
 	protected abstract void postToJSON(T from, JSONObject to) throws JSONException;

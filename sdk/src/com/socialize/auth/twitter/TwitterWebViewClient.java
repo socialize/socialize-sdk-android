@@ -21,6 +21,8 @@
  */
 package com.socialize.auth.twitter;
 
+import com.socialize.util.StringUtils;
+
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.webkit.WebView;
@@ -52,17 +54,25 @@ public class TwitterWebViewClient extends WebViewClient {
 				
 				// This is the callback, get the token
 				Uri uri = Uri.parse(url);
-				String token = uri.getQueryParameter("oauth_token");
-				String verifier = uri.getQueryParameter("oauth_verifier");
-				view.stopLoading();
 				
-				if(oAuthRequestListener != null) {
-					oAuthRequestListener.onRequestToken(token, verifier);
-				}				
+				String cancelToken = uri.getQueryParameter("denied");
+				
+				if(!StringUtils.isEmpty(cancelToken)) {
+					if(oAuthRequestListener != null) {
+						oAuthRequestListener.onCancel(cancelToken);
+					}
+				}
+				else {
+					String token = uri.getQueryParameter("oauth_token");
+					String verifier = uri.getQueryParameter("oauth_verifier");
+
+					if(oAuthRequestListener != null) {
+						oAuthRequestListener.onRequestToken(token, verifier);
+					}
+				}
 			}
-			else {
-				view.stopLoading();
-			}
+			
+			view.stopLoading();
 		}
 		else {
 			super.onPageStarted(view, url, favicon);

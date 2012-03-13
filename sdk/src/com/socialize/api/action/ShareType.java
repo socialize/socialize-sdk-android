@@ -26,11 +26,11 @@ package com.socialize.api.action;
  * @author Jason Polites
  */
 public enum ShareType {
-	FACEBOOK ("facebook", 2),
 	TWITTER ("twitter", 1),
+	FACEBOOK ("facebook", 2),
 	EMAIL ("email", 3),
-	SMS ("sms", 3),
-	OTHER ("other", 3);
+	SMS ("sms", 4),
+	OTHER ("other", 101);
 	
 	private final String name;   
     private final int id; 

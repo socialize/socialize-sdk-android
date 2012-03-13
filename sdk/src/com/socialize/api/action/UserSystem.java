@@ -57,6 +57,8 @@ public interface UserSystem {
 	
 	public void clearSession();
 	
+	public void saveSession(Context context, SocializeSession session);
+	
 	public void clearSession(AuthProviderType type);
 
 	public void getUser(SocializeSession session, long id, UserListener listener);

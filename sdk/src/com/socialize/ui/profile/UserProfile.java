@@ -42,6 +42,7 @@ public class UserProfile {
 	private boolean notificationsEnabled = true;
 	
 	private boolean autoPostFacebook;
+	private boolean autoPostTwitter;
 	
 	public String getFullName() {
 		if(fullName == null) {
@@ -119,27 +120,39 @@ public class UserProfile {
 		return fullName;
 	}
 	
-	@Deprecated
+
 	public boolean isAutoPostFacebook() {
 		return autoPostFacebook;
 	}
-	@Deprecated
+	
 	public void setAutoPostFacebook(boolean autoPostFacebook) {
 		this.autoPostFacebook = autoPostFacebook;
 	}
 
+	public boolean isAutoPostTwitter() {
+		return autoPostTwitter;
+	}
+
+	public void setAutoPostTwitter(boolean autoPostTwitter) {
+		this.autoPostTwitter = autoPostTwitter;
+	}
+
+	@Deprecated
 	public boolean isAutoPostLikesFacebook() {
 		return autoPostLikesFacebook;
 	}
 
+	@Deprecated
 	public void setAutoPostLikesFacebook(boolean autoPostLikesFacebook) {
 		this.autoPostLikesFacebook = autoPostLikesFacebook;
 	}
 
+	@Deprecated
 	public boolean isAutoPostCommentsFacebook() {
 		return autoPostCommentsFacebook;
 	}
 
+	@Deprecated
 	public void setAutoPostCommentsFacebook(boolean autoPostCommentsFacebook) {
 		this.autoPostCommentsFacebook = autoPostCommentsFacebook;
 	}

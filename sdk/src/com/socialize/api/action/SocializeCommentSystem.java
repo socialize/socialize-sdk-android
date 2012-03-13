@@ -50,6 +50,7 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 		
 		comment.setLocationShared(shareLocation);
 		
+		setPropagationData(comment, shareOptions);
 		setLocation(comment, location);
 		
 		List<Comment> list = new ArrayList<Comment>(1);
@@ -57,7 +58,7 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 		
 		postAsync(session, ENDPOINT, list, listener);
 	}
-
+	
 
 
 	/* (non-Javadoc)
@@ -132,5 +133,4 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 	public void getComment(SocializeSession session, long id, CommentListener listener) {
 		getAsync(session, ENDPOINT, String.valueOf(id), listener);
 	}
-
 }

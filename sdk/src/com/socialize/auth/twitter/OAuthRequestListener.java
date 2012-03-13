@@ -27,4 +27,5 @@ package com.socialize.auth.twitter;
  */
 public interface OAuthRequestListener {
 	public void onRequestToken(String token, String verifier);
+	public void onCancel(String cancelToken);
 }

@@ -7,14 +7,18 @@
 	import com.socialize.auth.AuthProviderType;
 	import com.socialize.error.SocializeException;
 	import com.socialize.listener.SocializeAuthListener;
+	import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 
 	// The "this" reference below refers to a Context object
+
+	FacebookAuthProviderInfo info = new FacebookAuthProviderInfo();
+	info.setAppId(facebookAppId); // Your facebook app ID
+
 	Socialize.getSocialize().authenticate(
 		this,
 		consumerKey, // From your account at getsocialize.com
 		consumerSecret, // From your account at getsocialize.com
-		AuthProviderType.FACEBOOK,
-		facebookAppId, // Your facebook app ID
+		info, 
 		new SocializeAuthListener() {
 			public void onAuthSuccess(SocializeSession session) {
 				// Success!
@@ -28,6 +32,6 @@
 			public void onCancel() {
 				// Handle cancel
 			}
-			
-		});	
+
+		});		
 	</pre>

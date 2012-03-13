@@ -25,7 +25,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -73,7 +72,7 @@ public class ActionBarSliderHandle extends ActionBarSliderViewChild {
 		
 		closeButton = new LinearLayout(getContext());
 		closeButton.setPadding(0, 0, 0, 0);
-		closeButton.setBackgroundDrawable(drawables.getDrawable("toolbar_close.png", DisplayMetrics.DENSITY_DEFAULT, true));
+		closeButton.setBackgroundDrawable(drawables.getDrawable("toolbar_close.png"));
 		
 		icon = new ImageView(getContext());
 		

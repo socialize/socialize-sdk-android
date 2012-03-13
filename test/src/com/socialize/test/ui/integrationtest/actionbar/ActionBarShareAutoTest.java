@@ -1,5 +1,6 @@
 package com.socialize.test.ui.integrationtest.actionbar;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -100,26 +101,32 @@ public class ActionBarShareAutoTest extends ActivityInstrumentationTestCase2<Act
 		
 		BeanFactory<ShareClickListener> emailShareClickListenerFactory = SocializeAccess.getContainer().getBean("emailShareClickListenerFactory");
 		BeanFactory<ShareClickListener> facebookShareClickListenerFactory = SocializeAccess.getContainer().getBean("facebookShareClickListenerFactory");
+		BeanFactory<ShareClickListener> twitterShareClickListenerFactory = SocializeAccess.getContainer().getBean("twitterShareClickListenerFactory");
 		BeanFactory<ShareClickListener> smsShareClickListenerFactory = SocializeAccess.getContainer().getBean("smsShareClickListenerFactory");
 		
 		emailShareClickListenerFactory.setContainer(mockContainer);
 		facebookShareClickListenerFactory.setContainer(mockContainer);
+		twitterShareClickListenerFactory.setContainer(mockContainer);
 		smsShareClickListenerFactory.setContainer(mockContainer);
 		
 		ShareClickListener emailShareClickListener = AndroidMock.createMock(ShareClickListener.class);
 		ShareClickListener facebookShareClickListener = AndroidMock.createMock(ShareClickListener.class);
+		ShareClickListener twitterShareClickListener = AndroidMock.createMock(ShareClickListener.class);
 		ShareClickListener smsShareClickListener = AndroidMock.createMock(ShareClickListener.class);
 		
 		AndroidMock.expect(mockContainer.getBean(AndroidMock.eq("emailShareClickListener"), AndroidMock.anyObject())).andReturn(emailShareClickListener);
 		AndroidMock.expect(mockContainer.getBean(AndroidMock.eq("facebookShareClickListener"), AndroidMock.anyObject())).andReturn(facebookShareClickListener);
+		AndroidMock.expect(mockContainer.getBean(AndroidMock.eq("twitterShareClickListener"), AndroidMock.anyObject())).andReturn(twitterShareClickListener);
 		AndroidMock.expect(mockContainer.getBean(AndroidMock.eq("smsShareClickListener"), AndroidMock.anyObject())).andReturn(smsShareClickListener);
 		
 		AndroidMock.expect(emailShareClickListener.isAvailableOnDevice(getActivity())).andReturn(true);
 		AndroidMock.expect(facebookShareClickListener.isAvailableOnDevice(getActivity())).andReturn(true);
+		AndroidMock.expect(twitterShareClickListener.isAvailableOnDevice(getActivity())).andReturn(true);
 		AndroidMock.expect(smsShareClickListener.isAvailableOnDevice(getActivity())).andReturn(true);
 		
 		AndroidMock.replay(emailShareClickListener);
 		AndroidMock.replay(facebookShareClickListener);
+		AndroidMock.replay(twitterShareClickListener);
 		AndroidMock.replay(smsShareClickListener);			
 		
 		AndroidMock.replay(mockContainer);
@@ -144,6 +151,7 @@ public class ActionBarShareAutoTest extends ActivityInstrumentationTestCase2<Act
 		AndroidMock.verify(mockContainer);
 		AndroidMock.verify(emailShareClickListener);
 		AndroidMock.verify(facebookShareClickListener);
+		AndroidMock.verify(twitterShareClickListener);
 		AndroidMock.verify(smsShareClickListener);		
 		
 		ShareDialogView shareView = TestUtils.findView(getActivity(), ShareDialogView.class, 10000);	
@@ -153,22 +161,32 @@ public class ActionBarShareAutoTest extends ActivityInstrumentationTestCase2<Act
 		
 		AndroidMock.resetToDefault(emailShareClickListener);
 		AndroidMock.resetToDefault(facebookShareClickListener);
+		AndroidMock.resetToDefault(twitterShareClickListener);
 		AndroidMock.resetToDefault(smsShareClickListener);
 		
-		final SocializeButton btnFacebook = TestUtils.findViewWithText(shareView, SocializeButton.class, "facebook", 10000);
-		final SocializeButton btnEmail = TestUtils.findViewWithText(shareView, SocializeButton.class, "Email", 10000);
-		final SocializeButton btnSMS = TestUtils.findViewWithText(shareView, SocializeButton.class, "SMS", 10000);
+		List<SocializeButton> findViews = TestUtils.findViews(shareView, SocializeButton.class);
+		
+		assertNotNull(findViews);
+		assertEquals(4, findViews.size());
+		
+		final SocializeButton btnFacebook = findViews.get(0);
+		final SocializeButton btnTwitter = findViews.get(1);
+		final SocializeButton btnEmail = findViews.get(2);
+		final SocializeButton btnSMS =findViews.get(3);
 		
 		assertNotNull(btnFacebook);
+		assertNotNull(btnTwitter);
 		assertNotNull(btnEmail);
 		assertNotNull(btnSMS);
 		
 		emailShareClickListener.onClick(btnEmail);
 		facebookShareClickListener.onClick(btnFacebook);
+		twitterShareClickListener.onClick(btnTwitter);
 		smsShareClickListener.onClick(btnSMS);
 		
 		AndroidMock.replay(emailShareClickListener);
 		AndroidMock.replay(facebookShareClickListener);
+		AndroidMock.replay(twitterShareClickListener);
 		AndroidMock.replay(smsShareClickListener);				
 		
 		final CountDownLatch latch2 = new CountDownLatch(1);
@@ -178,6 +196,7 @@ public class ActionBarShareAutoTest extends ActivityInstrumentationTestCase2<Act
 			@Override
 			public void run() {
 				assertTrue(btnFacebook.performClick());
+				assertTrue(btnTwitter.performClick());
 				assertTrue(btnEmail.performClick());
 				assertTrue(btnSMS.performClick());
 				latch2.countDown();
@@ -188,6 +207,7 @@ public class ActionBarShareAutoTest extends ActivityInstrumentationTestCase2<Act
 		
 		AndroidMock.verify(emailShareClickListener);
 		AndroidMock.verify(facebookShareClickListener);
+		AndroidMock.verify(twitterShareClickListener);
 		AndroidMock.verify(smsShareClickListener);		
 	}	
 

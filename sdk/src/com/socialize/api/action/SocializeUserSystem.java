@@ -90,10 +90,17 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	@Override
 	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
 		AuthProviderData authProviderData = authProviderDataFactory.getBean();
-		authProviderData.setAuthProviderInfo(socializeAuthProviderInfoFactory.newInstance());
+		authProviderData.setAuthProviderInfo(socializeAuthProviderInfoFactory.getInstance());
 		authenticate(context, consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, false);	
 	}
 	
+	@Override
+	public void saveSession(Context context, SocializeSession session) {
+		if(sessionPersister != null) {
+			sessionPersister.save(context, session);
+		}
+	}
+
 	// For mocking
 	protected SocializeAuthProviderInfo newSocializeAuthProviderInfo() {
 		return new SocializeAuthProviderInfo();
@@ -134,8 +141,8 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 		user.setFirstName(profile.getFirstName());
 		user.setLastName(profile.getLastName());
 		user.setProfilePicData(profile.getEncodedImage());
-		user.setAutoPostCommentsFacebook(profile.isAutoPostCommentsFacebook());
-		user.setAutoPostLikesFacebook(profile.isAutoPostLikesFacebook());
+		user.setAutoPostToFacebook(profile.isAutoPostFacebook());
+		user.setAutoPostToTwitter(profile.isAutoPostTwitter());
 		user.setNotificationsEnabled(profile.isNotificationsEnabled());
 		saveUserProfile(context, session, user, listener);
 	}

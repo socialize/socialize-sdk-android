@@ -21,56 +21,87 @@
  */
 package com.socialize.auth.twitter;
 
+import android.R;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
+
+import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.config.SocializeConfig;
+import com.socialize.error.SocializeException;
+import com.socialize.ui.dialog.DialogRegistration;
 
 /**
  * @author Jason Polites
  *
  */
 public class TwitterUtils {
-	public AlertDialog showAuthDialog(Context context, TwitterAuthProviderInfo info, final TwitterAuthListener listener) {
-		AlertDialog.Builder builder = newAlertDialogBuilder(context);
+	
+	private SocializeConfig config;
+	private TwitterAuthProviderInfo info;
+	private IBeanFactory<TwitterAuthView> twitterAuthViewFactory;
+	
+	public Dialog showAuthDialog(final Context context, TwitterAuthProviderInfo info, final TwitterAuthListener listener) {
+		Dialog dialog = newDialog(context);
+		dialog.setTitle("Twitter Authentication");
+		dialog.setCancelable(true);
+		dialog.setOnCancelListener(newOnCancelListener(listener));
 		
-		builder.setTitle("Twitter Authentication").setCancelable(true).setOnCancelListener(new OnCancelListener() {
+		TwitterAuthView view = twitterAuthViewFactory.getBean(info.getConsumerKey(), info.getConsumerSecret());
+
+		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		
+		view.setLayoutParams(params);
+		
+		dialog.setContentView(view);
+		
+		view.setTwitterAuthListener(newTwitterAuthDialogListener(dialog, listener));
+		view.authenticate();
+		
+		WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+	    lp.copyFrom(dialog.getWindow().getAttributes());
+	    lp.width = WindowManager.LayoutParams.FILL_PARENT;
+	    lp.height = WindowManager.LayoutParams.FILL_PARENT;
+	    
+	    DialogRegistration.register(context, dialog);
+		
+		dialog.show();
+		
+		return dialog;
+	}
+	
+	protected OnCancelListener newOnCancelListener(final TwitterAuthListener listener) {
+		return new OnCancelListener() {
 			@Override
 			public void onCancel(DialogInterface dialog) {
 				if(listener != null) {
 					listener.onCancel();
 				}
 			}
-		});
-		
-		TwitterAuthView view = new TwitterAuthView(context);
-		view.setConsumerKey(info.getConsumerKey());
-		view.setConsumerSecret(info.getConsumerSecret());
+		};
+	}
 	
-		view.init();
-
-		
-		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		
-		view.setLayoutParams(params);
-		builder.setView(view);
-		
-		AlertDialog dialog = builder.create();
-		
-		view.setTwitterAuthListener(new TwitterAuthDialogListener(dialog) {
-			
+	protected Dialog newDialog(Context context) {
+		return new Dialog(context, R.style.Theme_Dialog);
+	}
+	
+	protected TwitterAuthDialogListener newTwitterAuthDialogListener(Dialog dialog, final TwitterAuthListener listener) {
+		return new TwitterAuthDialogListener(dialog) {
 			@Override
 			public void onError(Dialog dialog, Exception e) {
 				dialog.dismiss();
 				if(listener != null) {
-					listener.onError(e);
+					listener.onError(SocializeException.wrap(e));
 				}
 			}
 			
 			@Override
 			public void onCancel(Dialog dialog) {
+				dialog.dismiss();
 				if(listener != null) {
 					listener.onCancel();
 				}
@@ -83,15 +114,26 @@ public class TwitterUtils {
 					listener.onAuthSuccess(token, secret, screenName, userId);
 				}
 			}
-		});
-		
-		view.authenticate();
-		
-		dialog.show();
-		
-		return dialog;
+		};
 	}
 	
+	public TwitterAuthProviderInfo getAuthProviderInfo() {
+		if(info == null) {
+			info = new TwitterAuthProviderInfo();
+			info.setConsumerKey(config.getProperty(SocializeConfig.TWITTER_CONSUMER_KEY));
+			info.setConsumerSecret(config.getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET));
+		}
+		return info;
+	}
+	
+	public void setTwitterAuthViewFactory(IBeanFactory<TwitterAuthView> twitterAuthViewFactory) {
+		this.twitterAuthViewFactory = twitterAuthViewFactory;
+	}
+
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
+	}
+
 	protected AlertDialog.Builder newAlertDialogBuilder(Context context) {
 		return new AlertDialog.Builder(context);
 	}

@@ -24,7 +24,6 @@ package com.socialize.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -163,7 +162,7 @@ public abstract class SocializeBaseView extends BaseView {
 	protected void createOptionsMenuItem(final Activity source, Menu menu) {
 		if(Socialize.getSocialize().isAuthenticated()) {
 			MenuItem add = menu.add("Settings");
-			add.setIcon(Socialize.getSocializeUI().getDrawable("ic_menu_preferences.png", DisplayMetrics.DENSITY_DEFAULT, true));
+			add.setIcon(Socialize.getSocializeUI().getDrawable("ic_menu_preferences.png"));
 			add.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 				@Override
 				public boolean onMenuItemClick(MenuItem item) {

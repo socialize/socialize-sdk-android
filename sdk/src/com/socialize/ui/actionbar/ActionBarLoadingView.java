@@ -32,6 +32,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.socialize.ui.util.Colors;
+
 /**
  * Used exclusively while the action bar is loading.
  * CANNOT use the IOC container because by deifnition we haven't loaded yet
@@ -54,7 +56,7 @@ public class ActionBarLoadingView extends LinearLayout {
 		
 		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, getDIP(ActionBarView.ACTION_BAR_HEIGHT, metrics.density));
 		
-		setBackgroundColor(Color.parseColor("#000000"));
+		setBackgroundColor(Colors.parseColor("#000000"));
 		
 		setLayoutParams(masterParams);
 		setOrientation(HORIZONTAL);

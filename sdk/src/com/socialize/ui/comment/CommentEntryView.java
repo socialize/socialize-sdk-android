@@ -25,7 +25,8 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.util.DisplayMetrics;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.GradientDrawable.Orientation;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -37,8 +38,13 @@ import android.widget.Toast;
 
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
+import com.socialize.networks.SocialNetwork;
+import com.socialize.ui.util.Colors;
 import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.SocializeButton;
@@ -61,12 +67,16 @@ public class CommentEntryView extends BaseView {
 	private Drawables drawables;
 	private KeyboardUtils keyboardUtils;
 	private EditText commentField;
-	private CustomCheckbox facebookCheckbox;
-	private CustomCheckbox locationCheckBox;
-	private CustomCheckbox notifyCheckBox;
+	
 	private IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory;
+	private IBeanFactory<CustomCheckbox> autoPostTwitterOptionFactory;
 	private IBeanFactory<CustomCheckbox> locationEnabledOptionFactory;
 	private IBeanFactory<CustomCheckbox> notificationEnabledOptionFactory;
+	
+	private CustomCheckbox facebookCheckbox;
+	private CustomCheckbox twitterCheckbox;
+	private CustomCheckbox locationCheckBox;
+	private CustomCheckbox notifyCheckBox;
 	
 	private boolean notificationsEnabled = true;
 	private boolean notificationsAvailable = true;
@@ -83,7 +93,8 @@ public class CommentEntryView extends BaseView {
 
 	public void init() {
 		
-		int padding = deviceUtils.getDIP(8);
+		int padding = deviceUtils.getDIP(4);
+		int textPadding = deviceUtils.getDIP(2);
 		
 		User user = Socialize.getSocialize().getSession().getUser();
 		
@@ -91,61 +102,41 @@ public class CommentEntryView extends BaseView {
 		notificationsAvailable = user.isNotificationsEnabled() && appUtils.isNotificationsAvailable(getContext());
 		
 		LayoutParams fill = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
-
 		fill.setMargins(0,0,0,0);
 		
+		setOrientation(LinearLayout.VERTICAL);
+		setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+		setBackgroundDrawable(drawables.getDrawable("slate.png", true, true, true));
+		setLayoutParams(fill);
+		
+		LinearLayout buttonLayoutLeft = new LinearLayout(getContext());
+		LinearLayout buttonLayoutRight = new LinearLayout(getContext());
 		LinearLayout buttonLayout = new LinearLayout(getContext());
 		
-		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
-			facebookCheckbox = autoPostFacebookOptionFactory.getBean();
-		}
+		LinearLayout commentLayout = new LinearLayout(getContext());
 		
-		if(appUtils.isLocationAvaiable(getContext())) {
-			locationCheckBox = locationEnabledOptionFactory.getBean();
-		}
+		LayoutParams buttonLayoutLeftParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		LayoutParams buttonLayoutRightParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		LayoutParams commentFieldParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+		buttonLayoutLeftParams.weight = 1.0f;
+		
+		buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
+		buttonLayout.setGravity( Gravity.RIGHT );
+		buttonLayout.setPadding(padding, padding, padding, padding);
+		
+		buttonLayout.setLayoutParams(buttonLayoutParams);
+		buttonLayoutLeft.setLayoutParams(buttonLayoutLeftParams);
+		buttonLayoutRight.setLayoutParams(buttonLayoutRightParams);
+		
+		commentLayout.setPadding(textPadding, textPadding, textPadding, 0);
+		
+		buttonLayout.addView(buttonLayoutLeft);
+		buttonLayout.addView(buttonLayoutRight);
 		
 		if(notificationsAvailable) {
 			notifyCheckBox = notificationEnabledOptionFactory.getBean();
-		}
-		
-		if(facebookCheckbox != null) {
-			
-			facebookCheckbox.setChecked(user.isAutoPostCommentsFacebook());
-			facebookCheckbox.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					String msg = null;
-					if(facebookCheckbox.isChecked()) {
-						msg = "Facebook sharing enabled";
-					}
-					else {
-						msg = "Facebook sharing disabled";
-					}
-					
-					toast(msg);
-				}
-			});
-		}
-
-		if(locationCheckBox != null) {
-			
-			locationCheckBox.setChecked(user.isShareLocation());
-			locationCheckBox.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					String msg = null;
-					if(locationCheckBox.isChecked()) {
-						msg = "Location sharing enabled";
-					}
-					else {
-						msg = "Location sharing disabled";
-					}
-					
-					toast(msg);
-				}
-			});
 		}
 		
 		if(notifyCheckBox != null) {
@@ -167,55 +158,13 @@ public class CommentEntryView extends BaseView {
 			});
 		}
 		
-				
-		LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		LayoutParams commentFieldParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		
-		buttonLayoutParams.setMargins(0, 0, 0, 0);
-		
 		commentField = new EditText(getContext());
 		commentField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
 		commentField.setGravity(Gravity.TOP | Gravity.LEFT);
-		commentField.setLines(6);
+		commentField.setLines(5);
 		commentField.setLayoutParams(commentFieldParams);
 		
-		setOrientation(LinearLayout.VERTICAL);
-		setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
-		setBackgroundDrawable(drawables.getDrawable("slate.png", true, true, true));
-		
-		buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
-		buttonLayout.setLayoutParams(buttonLayoutParams);
-		buttonLayout.setGravity( Gravity.RIGHT );
-
-		setLayoutParams(fill);
-		setPadding(padding, padding, padding, padding);
-		
-		LinearLayout toolbarLayout = new LinearLayout(getContext());
-		LayoutParams toolbarLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		
-		toolbarLayout.setLayoutParams(toolbarLayoutParams);
-		
-		if(facebookCheckbox != null || locationCheckBox != null || notifyCheckBox != null) {
-			LinearLayout optionsLayout = new LinearLayout(getContext());
-			LayoutParams optionsLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-			
-			optionsLayout.setLayoutParams(optionsLayoutParams);
-			optionsLayout.setOrientation(HORIZONTAL);
-			
-			if(facebookCheckbox != null) {
-				optionsLayout.addView(facebookCheckbox);
-			}
-			
-			if(locationCheckBox != null) {
-				optionsLayout.addView(locationCheckBox);
-			}
-			
-			if(notifyCheckBox != null && deviceUtils.getOrientation() != Configuration.ORIENTATION_PORTRAIT) {
-				optionsLayout.addView(notifyCheckBox);
-			}
-						
-			toolbarLayout.addView(optionsLayout);
-		}		
+		commentLayout.addView(commentField);
 
 		if(cancelCommentButton != null) {
 			cancelCommentButton.setCustomClickListener(new OnClickListener() {
@@ -226,7 +175,7 @@ public class CommentEntryView extends BaseView {
 				}
 			});
 			
-			buttonLayout.addView(cancelCommentButton);
+			buttonLayoutLeft.addView(cancelCommentButton);
 		}	
 		
 		if(postCommentButton != null) {
@@ -234,22 +183,30 @@ public class CommentEntryView extends BaseView {
 				@Override
 				public void onClick(View v) {
 					keyboardUtils.hideKeyboard(commentField);
-					boolean autoPost = false;
 					boolean shareLocation = false;
+					SocialNetwork[] shareTo = null;
 					
-					if(facebookCheckbox != null) {
-						autoPost = facebookCheckbox.isChecked(); 
+					if(facebookCheckbox != null && facebookCheckbox.isChecked()) {
+						if(twitterCheckbox != null && twitterCheckbox.isChecked()) {
+							shareTo = new SocialNetwork[] {SocialNetwork.FACEBOOK, SocialNetwork.TWITTER};
+						}
+						else {
+							shareTo = new SocialNetwork[] {SocialNetwork.FACEBOOK};
+						}
+					}
+					else if(twitterCheckbox != null && twitterCheckbox.isChecked()) {
+						shareTo = new SocialNetwork[] {SocialNetwork.TWITTER};
 					}
 					
 					if(locationCheckBox != null) {
 						shareLocation = locationCheckBox.isChecked(); 
 					}
 					
-					listener.onComment(commentField.getText().toString().trim(), autoPost, shareLocation, notificationsEnabled);
+					listener.onComment(commentField.getText().toString().trim(), shareLocation, notificationsEnabled, shareTo);
 				}
 			});
 			
-			buttonLayout.addView(postCommentButton);
+			buttonLayoutRight.addView(postCommentButton);
 		}
 		
 		if(subscribeNotificationButton != null) {
@@ -261,11 +218,11 @@ public class CommentEntryView extends BaseView {
 			});
 		}		
 		
-		toolbarLayout.addView(buttonLayout);
-
-		addView(commentField);
-		addView(toolbarLayout);
-
+		addView(commentLayout);
+		addView(buttonLayout);
+		
+		initShareToolbar();
+		
 		if(notificationsAvailable && deviceUtils.getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
 
 			// Notification layout
@@ -290,7 +247,7 @@ public class CommentEntryView extends BaseView {
 			notificationBannerParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 			
 			notificationBannerImage.setLayoutParams(notificationBannerParams);
-			notificationBannerImage.setImageDrawable(drawables.getDrawable("notification_banner.png", DisplayMetrics.DENSITY_DEFAULT));
+			notificationBannerImage.setImageDrawable(drawables.getDrawable("notification_banner.png"));
 
 			notificationsTitle = new TextView(getContext());
 			notificationsText = new TextView(getContext());
@@ -323,10 +280,151 @@ public class CommentEntryView extends BaseView {
 			
 			addView(notificationMasterLayout);		
 		}	
+	}
+	
+	protected void initShareToolbar() {
 		
+		final boolean fbSupported = Socialize.getSocialize().isSupported(AuthProviderType.FACEBOOK);
+		final boolean twSupported = Socialize.getSocialize().isSupported(AuthProviderType.TWITTER);
+		final boolean locationSupported = appUtils.isLocationAvaiable(getContext());
 		
-		updateUI();
+		if(fbSupported || twSupported || locationSupported) {
+			
+			User user = Socialize.getSocialize().getSession().getUser();
+			final boolean fbOK = Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK);
+			final boolean twOK = Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER);
+			
+			int padding = deviceUtils.getDIP(4);
+			
+			LinearLayout toolbarLayout = new LinearLayout(getContext());
+			LinearLayout toolbarLayoutLeft = new LinearLayout(getContext());
+			LinearLayout toolbarLayoutRight = new LinearLayout(getContext());		
+			
+			LayoutParams toolbarLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			LayoutParams toolbarLayoutLeftParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			LayoutParams toolbarLayoutRightParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			
+			GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Colors.parseColor("#44000000"), Colors.parseColor("#88000000") });
+			toolbarLayout.setBackgroundDrawable(background);
+			toolbarLayout.setPadding(padding, padding, padding, padding);		
+			
+			toolbarLayoutLeftParams.weight = 1.0f;
+			
+			toolbarLayout.setLayoutParams(toolbarLayoutParams);
+			toolbarLayoutLeft.setLayoutParams(toolbarLayoutLeftParams);
+			toolbarLayoutRight.setLayoutParams(toolbarLayoutRightParams);
+			
+			toolbarLayoutRight.setOrientation(HORIZONTAL);
+			toolbarLayoutLeft.setOrientation(HORIZONTAL);
+			
+			toolbarLayout.addView(toolbarLayoutLeft);
+			toolbarLayout.addView(toolbarLayoutRight);		
+			
+			if(fbSupported) {
+				facebookCheckbox = autoPostFacebookOptionFactory.getBean();
+			}
+			
+			if(twSupported) {
+				twitterCheckbox = autoPostTwitterOptionFactory.getBean();
+			}
+			
+			if(locationSupported) {
+				locationCheckBox = locationEnabledOptionFactory.getBean();
+			}		
+			
+			if(facebookCheckbox != null) {
+				
+				if(fbOK) {
+					facebookCheckbox.setChecked(user.isAutoPostToFacebook());
+				}
+				else {
+					facebookCheckbox.setChecked(false);
+				}
+				
+				facebookCheckbox.setOnClickListener(getSocialNetworkClickListener(facebookCheckbox, AuthProviderType.FACEBOOK, "Facebook sharing enabled", "Facebook sharing disabled"));
+			}
+			
+			if(twitterCheckbox != null) {
+				if(twOK) {
+					twitterCheckbox.setChecked(user.isAutoPostToTwitter());
+				}
+				else {
+					twitterCheckbox.setChecked(false);
+				}
+				twitterCheckbox.setOnClickListener(getSocialNetworkClickListener(twitterCheckbox, AuthProviderType.TWITTER, "Twitter sharing enabled", "Twitter sharing disabled"));
+			}		
 
+			if(locationCheckBox != null) {
+				locationCheckBox.setChecked(user.isShareLocation());
+			}		
+			
+			if(facebookCheckbox != null || twitterCheckbox != null || notifyCheckBox != null) {
+				
+				if(facebookCheckbox != null) {
+					toolbarLayoutRight.addView(facebookCheckbox);
+				}
+				
+				if(twitterCheckbox != null) {
+					toolbarLayoutRight.addView(twitterCheckbox);
+				}			
+				
+				if(notifyCheckBox != null && deviceUtils.getOrientation() != Configuration.ORIENTATION_PORTRAIT) {
+					toolbarLayoutRight.addView(notifyCheckBox);
+				}
+			}	
+			
+			if(locationCheckBox != null) {
+				toolbarLayoutLeft.addView(locationCheckBox);
+			}		
+			
+			addView(toolbarLayout);
+		}
+	}
+	
+	protected OnClickListener getSocialNetworkClickListener(final CustomCheckbox chkbox, final AuthProviderType authProviderType, final String checkedMsg, final String uncheckedMsg) {
+		return new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				if(chkbox.isChecked()) {
+					if(Socialize.getSocialize().isAuthenticated(authProviderType)) {
+						toast(checkedMsg);
+					}
+					else {
+						// Show auth
+						getSocialize().authenticate(getContext(), authProviderType, new SocializeAuthListener() {
+
+							@Override
+							public void onError(SocializeException error) {
+								chkbox.setChecked(false);
+								showErrorToast(getContext(), error);
+							}
+
+							@Override
+							public void onAuthSuccess(SocializeSession session) {
+								chkbox.setChecked(true);
+								toast(checkedMsg);
+							}
+
+							@Override
+							public void onAuthFail(SocializeException error) {
+								chkbox.setChecked(false);
+								showErrorToast(getContext(), error);
+							}
+
+							@Override
+							public void onCancel() {
+								chkbox.setChecked(false);
+							}
+						});
+					}	
+				}
+				else {
+					toast(uncheckedMsg);
+				}
+			}
+		};	
 	}
 	
 	protected void toggleNotifications() {
@@ -379,11 +477,15 @@ public class CommentEntryView extends BaseView {
 		this.notificationEnabledOptionFactory = notificationOptionFactory;
 	}
 	
+	public void setAutoPostTwitterOptionFactory(IBeanFactory<CustomCheckbox> autoPostTwitterOptionFactory) {
+		this.autoPostTwitterOptionFactory = autoPostTwitterOptionFactory;
+	}
+
 	public void setNotificationsEnabled(boolean enabled) {
 		notificationsEnabled = enabled;
 		updateUI();
 	}
-	
+
 	protected void updateUI() {
 		
 		if(notificationsEnabled) {
@@ -415,9 +517,23 @@ public class CommentEntryView extends BaseView {
 		
 		User user = Socialize.getSocialize().getSession().getUser();
 		
-		if(facebookCheckbox != null && !facebookCheckbox.isChanged()) {
-			facebookCheckbox.setChecked(user.isAutoPostCommentsFacebook());
+		if(facebookCheckbox != null) {
+			if(!facebookCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+				facebookCheckbox.setChecked(user.isAutoPostToFacebook());
+			}
+			else {
+				facebookCheckbox.setChecked(false);
+			}
 		}
+		
+		if(twitterCheckbox != null) {
+			if(!twitterCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
+				twitterCheckbox.setChecked(user.isAutoPostToTwitter());
+			}
+			else {
+				twitterCheckbox.setChecked(false);
+			}
+		}		
 		
 		if(locationCheckBox != null && !locationCheckBox.isChanged()) {
 			locationCheckBox.setChecked(user.isShareLocation());
@@ -427,18 +543,28 @@ public class CommentEntryView extends BaseView {
 	protected void toast(String text) {
 		if(toaster != null) {
 			toaster.cancel();
+			toaster.setText(text);
+		}
+		else {
+			toaster = Toast.makeText(getContext(), text, Toast.LENGTH_SHORT);
 		}
 		
-		toaster = Toast.makeText(getContext(), text, Toast.LENGTH_SHORT);
 		toaster.show();
 	}
 
 	protected void reset() {
 		keyboardUtils.hideKeyboard(commentField);
 		commentField.setText("");
-		
+		update();
+	}
+	
+	public void update() {
 		if(facebookCheckbox != null) {
 			facebookCheckbox.setChanged(false);
+		}
+		
+		if(twitterCheckbox != null) {
+			twitterCheckbox.setChanged(false);
 		}
 		
 		if(locationCheckBox != null) {

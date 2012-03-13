@@ -21,6 +21,7 @@
  */
 package com.socialize.test.unit;
 
+import com.socialize.android.ioc.BeanCreationListener;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.util.DelegateOnly;
@@ -126,6 +127,16 @@ public class DelegateWrapperTest extends SocializeUnitTest {
 			public DelegateWrapper getBean(Object... args) {
 				return new DelegateWrapper(args[0], args[1]);
 			}
+
+			@Override
+			public void getBeanAsync(BeanCreationListener<DelegateWrapper> listener) {}
+
+			@Override
+			public void getBeanAsync(BeanCreationListener<DelegateWrapper> listener, Object... args) {
+				listener.onCreate(new DelegateWrapper(args[0], args[1]));
+			}
+			
+			
 		});
 		return utils;
 	}

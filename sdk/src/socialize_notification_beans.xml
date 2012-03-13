@@ -68,5 +68,6 @@
 		  doesn't try to resolve all the dependencies for this bean
 	 -->
 	<bean id="facebookProvider" class="com.socialize.auth.EmptyAuthProvider"/>
+	<bean id="twitterProvider" class="com.socialize.auth.EmptyAuthProvider"/>
 	
 </beans>

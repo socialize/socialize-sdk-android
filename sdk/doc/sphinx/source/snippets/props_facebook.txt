@@ -1,0 +1,6 @@
+.. raw:: html
+
+	<pre class="brush: java-properties">
+	# Configure links to go to Amazon AppStore
+	redirect.app.store=amazon
+	</pre>

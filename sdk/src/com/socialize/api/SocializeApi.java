@@ -27,6 +27,7 @@ import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
 
+import com.socialize.Socialize;
 import com.socialize.api.action.ActionType;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
@@ -37,6 +38,7 @@ import com.socialize.auth.AuthProviders;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.ActionError;
 import com.socialize.entity.ListResult;
+import com.socialize.entity.Propagation;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.SocializeObject;
 import com.socialize.error.SocializeException;
@@ -45,8 +47,11 @@ import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.location.SocializeLocationProvider;
 import com.socialize.log.SocializeLogger;
+import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.notifications.NotificationChecker;
 import com.socialize.provider.SocializeProvider;
+import com.socialize.util.AppUtils;
 import com.socialize.util.HttpUtils;
 import com.socialize.util.StringUtils;
 
@@ -65,6 +70,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	private HttpUtils httpUtils;
 	private SocializeLocationProvider locationProvider;
 	private NotificationChecker notificationChecker;
+	private AppUtils appUtils;
 	
 	public static enum RequestType {AUTH,PUT,POST,PUT_AS_POST,GET,LIST,LIST_AS_GET,LIST_WITHOUT_ENTITY,DELETE};
 	
@@ -111,6 +117,32 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		if(notificationChecker != null) {
 			notificationChecker.checkRegistrations(context, session);
 		}
+	}
+	
+	protected void setPropagationData(SocializeAction action, ShareOptions shareOptions) {
+		if(shareOptions != null) {
+			SocialNetwork[] shareTo = shareOptions.getShareTo();
+			if(shareTo != null) {
+				Propagation propagation = newPropagation();
+				
+				for (SocialNetwork socialNetwork : shareTo) {
+					propagation.addThirdParty(socialNetwork);
+				}
+				
+				SocializeConfig config = Socialize.getSocialize().getConfig();
+				String appStore = config.getProperty(SocializeConfig.REDIRECT_APP_STORE);
+				if(!StringUtils.isEmpty(appStore)) {
+					propagation.addExtraParam("f", appUtils.getAppStoreAbbreviation(appStore));
+				}				
+				
+				action.setPropagation(propagation);
+			}
+		}
+	}
+	
+	// Mockable
+	protected Propagation newPropagation() {
+		return new Propagation();
 	}
 
 	public ListResult<T> list(SocializeSession session, String endpoint, String key, String[] ids) throws SocializeException {
@@ -386,6 +418,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return authProviderType;
 	}
 	
+	@SuppressWarnings("deprecation")
 	protected void validate(AuthProviderData data) throws SocializeException{
 		AuthProviderInfo authProviderInfo = data.getAuthProviderInfo();
 		
@@ -394,14 +427,19 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		}
 		else {
 			// Legacy
-			AuthProviderType authProviderType = getAuthProviderType(data);
-			@SuppressWarnings("deprecation")
-			String appId3rdParty = data.getAppId3rdParty();
-			if(authProviderType != null && 
-					authProviderType.equals(AuthProviderType.FACEBOOK) && 
-					StringUtils.isEmpty(appId3rdParty)) {
-				throw new SocializeException("No app ID found for auth type FACEBOOK");
-			}
+			validateLegacy(data);
+		}
+	}
+	
+	@Deprecated
+	protected void validateLegacy(AuthProviderData data) throws SocializeException {
+		AuthProviderType authProviderType = getAuthProviderType(data);
+		
+		String appId3rdParty = data.getAppId3rdParty();
+		if(authProviderType != null && 
+				authProviderType.equals(AuthProviderType.FACEBOOK) && 
+				StringUtils.isEmpty(appId3rdParty)) {
+			throw new SocializeException("No app ID found for auth type FACEBOOK");
 		}
 	}
 	
@@ -464,6 +502,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 						
 						authProviderData.setUserId3rdParty(response.getUserId());
 						authProviderData.setToken3rdParty(response.getToken());
+						authProviderData.setSecret3rdParty(response.getSecret());
 						
 						// Do normal auth
 						handleRegularAuth(context, request, fWrapper);
@@ -519,6 +558,10 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		this.responseFactory = responseFactory;
 	}
 	
+	public void setAppUtils(AppUtils appUtils) {
+		this.appUtils = appUtils;
+	}
+
 	public void setNotificationChecker(NotificationChecker notificationChecker) {
 		this.notificationChecker = notificationChecker;
 	}
@@ -577,12 +620,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		protected void onPostExecute(Result result) {
 			if(listener != null) {
 				if(error != null) {
-					if(error instanceof SocializeException) {
-						listener.onError((SocializeException)error);
-					}
-					else {
-						listener.onError(new SocializeException(error));
-					}
+					listener.onError(SocializeException.wrap(error));
 				}
 				else {
 					listener.onResult(requestType, result);
@@ -701,12 +739,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		protected void onPostExecute(SocializeEntityResponse<T> result) {
 			if(listener != null) {
 				if(error != null) {
-					if(error instanceof SocializeException) {
-						listener.onError((SocializeException)error);
-					}
-					else {
-						listener.onError(new SocializeException(error));
-					}
+					listener.onError(SocializeException.wrap(error));
 				}
 				else {
 					ListResult<T> results = result.getResults();
@@ -724,10 +757,19 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 							}
 						}
 						else {
+							if(errors != null && errors.size() > 0) {
+								for (ActionError actionError : errors) {
+									if(logger != null) {
+										if(!StringUtils.isEmpty(actionError.getMessage())) {
+											logger.warn(actionError.getMessage());
+										}
+									}
+								}
+							}
+							
 							listener.onResult(requestType, result);
 						}
 					}
-					
 					else {
 						listener.onError(new SocializeException("No results found in response"));
 					}

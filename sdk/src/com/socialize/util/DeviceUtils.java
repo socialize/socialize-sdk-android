@@ -118,6 +118,10 @@ public class DeviceUtils {
 		return appUtils.isIntentAvailable(context, action);
 	}
 
+	public int getDIP(float pixels) {
+		return getDIP(Math.round(pixels));
+	}
+	
 	public int getDIP(int pixels) {
 		if (pixels != 0) {
 			return (int) ((float) pixels * density);

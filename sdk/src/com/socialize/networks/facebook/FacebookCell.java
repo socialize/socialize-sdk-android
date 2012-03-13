@@ -22,7 +22,6 @@
 package com.socialize.networks.facebook;
 
 import android.content.Context;
-import android.util.DisplayMetrics;
 import android.widget.ImageView;
 
 import com.socialize.ui.view.ClickableSectionCell;
@@ -42,7 +41,7 @@ public abstract class FacebookCell extends ClickableSectionCell {
 	@Override
 	protected ImageView makeImage() {
 		ImageView view = new ImageView(getContext());
-		view.setImageDrawable(drawables.getDrawable("icon_facebook.png#no_density", DisplayMetrics.DENSITY_DEFAULT));
+		view.setImageDrawable(drawables.getDrawable("icon_facebook.png"));
 		return view;
 	}
 }

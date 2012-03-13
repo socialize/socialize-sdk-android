@@ -26,5 +26,5 @@ package com.socialize.networks;
  *
  */
 public enum SocialNetwork {
-	FACEBOOK;
+	FACEBOOK, TWITTER;
 }

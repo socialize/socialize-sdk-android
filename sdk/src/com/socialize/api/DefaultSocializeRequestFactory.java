@@ -105,9 +105,17 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 			AuthProviderInfo authProviderInfo = userProviderCredentials.getAuthProviderInfo();
 
 			if(authProviderInfo != null) {
-				if(!StringUtils.isEmpty(userProviderCredentials.getUserId()) && !StringUtils.isEmpty(userProviderCredentials.getAccessToken())) {
-					json.put("auth_type", authProviderInfo.getType().getId());
+				json.put("auth_type", authProviderInfo.getType().getId());
+				
+				if(!StringUtils.isEmpty(userProviderCredentials.getAccessToken())) {
 					json.put("auth_token", userProviderCredentials.getAccessToken());
+				}
+				
+				if(!StringUtils.isEmpty(userProviderCredentials.getTokenSecret())) {
+					json.put("auth_token_secret", userProviderCredentials.getTokenSecret());
+				}
+				
+				if(!StringUtils.isEmpty(userProviderCredentials.getUserId())) {
 					json.put("auth_id", userProviderCredentials.getUserId());
 				}
 			}
@@ -140,6 +148,11 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 			public void validate() throws SocializeException {}
 			
 			@Override
+			public boolean isValid() {
+				return true;
+			}
+
+			@Override
 			public AuthProviderType getType() {
 				return provider;
 			}
@@ -167,7 +180,6 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 		
 		if(userProviderCredentialsMap != null) {
 			AuthProviderInfo authProviderInfo = data.getAuthProviderInfo();
-			
 			if(authProviderInfo != null) {
 				UserProviderCredentials userProviderCredentials = userProviderCredentialsMap.get(authProviderInfo.getType());
 				return getAuthRequestWith3rdParty(session, endpoint, udid, userProviderCredentials);

@@ -44,7 +44,7 @@ public class SocializeActionFactoryTest extends AbstractSocializeActionFactoryTe
 			public JSONObject instantiateJSON() {
 				return json;
 			}
-
+			
 			@Override
 			protected void postToJSON(SocializeAction from, JSONObject to) throws JSONException {
 			}

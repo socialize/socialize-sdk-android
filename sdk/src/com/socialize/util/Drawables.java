@@ -65,10 +65,12 @@ public class Drawables {
 		return getDrawable(name, false, false, -1, -1, eternal);
 	}
 	
+	@Deprecated
 	public Drawable getDrawable(String name, int forceDensity) {
 		return getDrawable(name, forceDensity, true);
 	}
 	
+	@Deprecated
 	public Drawable getDrawable(String name, int forceDensity, boolean eternal) {
 		return getDrawable(name, metrics.densityDpi, false, false, -1, -1, eternal, forceDensity);
 	}	
@@ -106,11 +108,12 @@ public class Drawables {
 		return getDrawable(name, density, tileX, tileY, -1, -1, eternal);
 	}
 	
-	public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
-		return getDrawable(name, density, tileX, tileY, scaleToWidth, scaleToHeight, eternal, density);
+	@Deprecated
+	public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal, int forceDensity) {
+		return getDrawable(name, forceDensity, tileX, tileY, scaleToWidth, scaleToHeight, eternal);
 	}
 	
-	public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal, int forceDensity) {
+	public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
 		
 		String densityPath = getPath(name, density);
 		String commonPath = getPath(name);
@@ -157,7 +160,7 @@ public class Drawables {
 			}
 			
 			if(in != null) {
-				drawable = createDrawable(in, path + name, tileX, tileY, scaleToWidth, scaleToHeight, forceDensity);
+				drawable = createDrawable(in, path + name, tileX, tileY, scaleToWidth, scaleToHeight);
 				addToCache(path + name, drawable, eternal);
 			}
 			else {
@@ -240,9 +243,9 @@ public class Drawables {
 		return "res/drawable/" + densityPath + "/" + name;
 	}
 	
-	protected CacheableDrawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY, int forceDensity) {
+	protected CacheableDrawable createDrawable(InputStream in, String name, boolean tileX, boolean tileY, int pixelsX, int pixelsY) {
 		
-		Bitmap bitmap = bitmapUtils.getScaledBitmap ( in , pixelsX, pixelsY , forceDensity);
+		Bitmap bitmap = bitmapUtils.getScaledBitmap ( in , pixelsX, pixelsY , DisplayMetrics.DENSITY_DEFAULT);
 
 		CacheableDrawable drawable = createDrawable(bitmap, name);
 		

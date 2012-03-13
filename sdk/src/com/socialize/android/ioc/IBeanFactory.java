@@ -27,6 +27,10 @@ package com.socialize.android.ioc;
  *
  */
 public interface IBeanFactory<T> {
+	
+	public void getBeanAsync(BeanCreationListener<T> listener);
+	
+	public void getBeanAsync(BeanCreationListener<T> listener, Object...args);
 
 	public T getBean();
 	

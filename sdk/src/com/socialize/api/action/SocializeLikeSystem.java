@@ -37,6 +37,7 @@ import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.like.LikeListener;
+import com.socialize.networks.ShareOptions;
 import com.socialize.provider.SocializeProvider;
 
 /**
@@ -48,14 +49,16 @@ public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Li
 		super(provider);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.api.action.LikeSystem#addLike(com.socialize.api.SocializeSession, com.socialize.entity.Entity, android.location.Location, com.socialize.listener.like.LikeListener)
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.LikeSystem#addLike(com.socialize.api.SocializeSession, com.socialize.entity.Entity, android.location.Location, com.socialize.networks.ShareOptions, com.socialize.listener.like.LikeListener)
 	 */
 	@Override
-	public void addLike(SocializeSession session, Entity entity, Location location, LikeListener listener) {
+	public void addLike(SocializeSession session, Entity entity, Location location, ShareOptions shareOptions, LikeListener listener) {
 		Like c = new Like();
 		c.setEntity(entity);
 		
+		setPropagationData(c, shareOptions);
 		setLocation(c, location);
 		
 		List<Like> list = new ArrayList<Like>(1);
@@ -63,10 +66,10 @@ public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Li
 		
 		postAsync(session, ENDPOINT, list, listener);
 	}	
-
+	
 	@Deprecated
 	public void addLike(SocializeSession session, String key, Location location, LikeListener listener) {
-		addLike(session, Entity.newInstance(key, null), location, listener);
+		addLike(session, Entity.newInstance(key, null), location, null, listener);
 	}
 	
 	/* (non-Javadoc)

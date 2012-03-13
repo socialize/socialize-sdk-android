@@ -59,6 +59,6 @@ public class OtherShareClickListener extends SimpleShareClickListener {
 	
 	@Override
 	protected ShareType getShareType() {
-		return ShareType.EMAIL;
+		return ShareType.OTHER;
 	}
 }

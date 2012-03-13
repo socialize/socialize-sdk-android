@@ -21,6 +21,8 @@
  */
 package com.socialize.auth;
 
+import com.socialize.networks.SocialNetwork;
+
 /**
  * @author Jason Polites
  *
@@ -29,7 +31,7 @@ public enum AuthProviderType {
 	
 	SOCIALIZE ("socialize", 0),
 	FACEBOOK ("facebook", 1),
-	TWITTER ("twitter", 1);
+	TWITTER ("twitter", 2);
 	
 	private final String name;   
     private final int id; 
@@ -52,12 +54,20 @@ public enum AuthProviderType {
 		return name;
 	}
 	
-	public static AuthProviderType valueOf(int id) {
-		switch(id) {
-		case 1 : 
-			return FACEBOOK;
-		default :
+	public static AuthProviderType valueOf(SocialNetwork socialNetwork) {
+		if(socialNetwork == null) {
 			return SOCIALIZE;
 		}
+		return valueOf(socialNetwork.name().toUpperCase());
+	}
+	
+	public static AuthProviderType valueOf(int id) {
+		AuthProviderType[] values = AuthProviderType.values();
+		for (AuthProviderType authProviderType : values) {
+			if(authProviderType.id == id) {
+				return authProviderType;
+			}
+		}
+		return SOCIALIZE;
 	}
 }

@@ -30,13 +30,14 @@ import com.socialize.config.SocializeConfig;
  */
 public class FacebookAuthProviderInfoFactory extends BaseAuthProviderInfoFactory<FacebookAuthProviderInfo> {
 
-	/* (non-Javadoc)
-	 * @see com.socialize.auth.AuthProviderInfoFactory#newInstance(android.content.Context)
-	 */
 	@Override
-	public FacebookAuthProviderInfo newInstance() {
+	protected FacebookAuthProviderInfo initInstance() {
 		FacebookAuthProviderInfo info = new FacebookAuthProviderInfo();
-		info.setAppId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
 		return info;
+	}
+
+	@Override
+	protected void update(FacebookAuthProviderInfo info) {
+		info.setAppId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
 	}
 }

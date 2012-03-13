@@ -21,9 +21,10 @@
  */
 package com.socialize.ui.comment;
 
-import com.socialize.error.SocializeException;
-
 import android.content.Context;
+
+import com.socialize.error.SocializeException;
+import com.socialize.networks.SocialNetwork;
 
 /**
  * @author Jason Polites
@@ -33,7 +34,11 @@ public interface CommentButtonCallback {
 
 	public void onError(Context context, SocializeException e);
 	
+	@Deprecated
 	public void onComment(String text, boolean autoPostToFacebook, boolean shareLocation, boolean subscribe);
+	
+	public void onComment(String text, boolean shareLocation, boolean subscribe, SocialNetwork...networks);
+	
 	
 	public void onCancel();
 	

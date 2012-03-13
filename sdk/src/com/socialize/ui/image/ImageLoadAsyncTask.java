@@ -65,11 +65,10 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 					}
 
 					ImageLoadRequest request = requests.poll();
+					String url = request.getUrl();
 
 					if(!request.isCanceled()) {
-
-						String url = request.getUrl();
-
+				
 						if(logger != null && logger.isDebugEnabled()) {
 							logger.debug("ImageLoadAsyncTask found image to load at: " + url);
 						}
@@ -81,21 +80,24 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 								drawable = cache.get(url);
 							}
 
-							if(drawable == null) {
+							if(drawable == null || drawable.isRecycled()) {
 								drawable = loadImage(url);
 								if(logger != null && logger.isDebugEnabled()) {
 									logger.debug("ImageLoadAsyncTask image loaded from: " + url);
 								}
 							}
 							
-							requestsInProcess.remove(url);
 							request.notifyListeners(drawable);
 						}
 						catch (Exception e) {
 							request.notifyListeners(e);
 						}
+						finally {
+							requestsInProcess.remove(url);
+						}
 					}
 					else {
+						requestsInProcess.remove(url);
 						if(logger != null && logger.isDebugEnabled()) {
 							logger.debug("ImageLoadAsyncTask request canceled for " + request.getUrl());
 						}
@@ -145,6 +147,7 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 				}
 				
 				current.merge(request);
+				notifyAll();
 			}
 			else {
 				requests.add(request);

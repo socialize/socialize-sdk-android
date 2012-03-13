@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
+import com.socialize.ui.dialog.DialogRegistration;
 import com.socialize.util.Drawables;
 
 import android.Manifest;
@@ -596,7 +597,9 @@ public class Facebook {
 			Util.showAlert(context, "Error", "Application requires permission to access the Internet");
 		}
 		else {
-			new FbDialog(context, url, listener, drawables).show();
+			FbDialog fbDialog = new FbDialog(context, url, listener, drawables);
+			DialogRegistration.register(context, fbDialog);
+			fbDialog.show();
 		}
 	}
 

@@ -22,6 +22,7 @@
 package com.socialize.api.action;
 
 import android.app.Activity;
+import android.content.Context;
 import android.location.Location;
 
 import com.socialize.api.SocializeSession;
@@ -39,8 +40,10 @@ public interface ShareSystem {
 
 	public static final String ENDPOINT = "/share/";
 	
-	public void addShare(SocializeSession session, Entity entity, String text, ShareType shareType, Location location, ShareListener listener);
-
+	public void addShare(Context context, SocializeSession session, Entity entity, String text, ShareType shareType, Location location, ShareListener listener);
+	
+	public void addShare(Context context, SocializeSession session, Entity entity, String text, SocialNetwork network, Location location, ShareListener listener);
+	
 	@DelegateOnly
 	public void getSharesByEntity(SocializeSession session, String key, int startIndex, int endIndex, ShareListener listener);
 

@@ -26,115 +26,26 @@ import android.app.Activity;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.ShareMessageBuilder;
-import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ActionType;
-import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.facebook.FacebookAuthProviderInfo;
-import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
-import com.socialize.log.SocializeLogger;
+import com.socialize.networks.AbstractSocialNetworkSharer;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
-import com.socialize.networks.SocialNetworkSharer;
 
 /**
  * @author Jason Polites
  */
-public class FacebookSharer implements SocialNetworkSharer {
+public class FacebookSharer extends AbstractSocialNetworkSharer {
 	
 	private ShareMessageBuilder shareMessageBuilder;
-	private SocializeConfig config;
-	private SocializeLogger logger;
 	private FacebookWallPoster facebookWallPoster;
 	
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.networks.SocialNetworkSharer#share(android.app.Activity, com.socialize.entity.Entity, java.lang.String, android.location.Location, com.socialize.networks.SocialNetworkListener)
-	 */
 	@Override
-	public void shareEntity(final Activity context, Entity entity, String comment, boolean autoAuth, SocialNetworkListener listener) {
-		share(context, entity, comment, listener, ActionType.SHARE, autoAuth);
-	}
-	
-	@Override
-	public void shareComment(Activity context, Entity entity, String comment, boolean autoAuth, SocialNetworkListener listener) {
-		share(context, entity, comment, listener, ActionType.COMMENT, autoAuth);
+	protected SocialNetwork getNetwork() {
+		return SocialNetwork.FACEBOOK;
 	}
 
-	@Override
-	public void shareLike(Activity context, Entity entity, String comment, boolean autoAuth, SocialNetworkListener listener) {
-		share(context, entity, comment, listener, ActionType.LIKE, autoAuth);
-	}
-
-	protected void share(final Activity context, final Entity entity, final String comment, final SocialNetworkListener listener, final ActionType type, boolean autoAuth) {
-
-		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
-			
-			if(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-				doShare(context, entity, comment, listener, type);
-			}
-			else if(autoAuth) {
-				
-				String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-				String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-				String authProviderAppId = config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
-				
-				FacebookAuthProviderInfo info = newFacebookAuthProviderInfo();
-				info.setAppId(authProviderAppId);
-				
-				getSocialize().authenticate(context, consumerKey, consumerSecret, info, new SocializeAuthListener() {
-
-					@Override
-					public void onError(SocializeException error) {
-						doError(error, context, listener);
-					}
-
-					@Override
-					public void onAuthSuccess(SocializeSession session) {
-						doShare(context, entity, comment, listener, type);
-					}
-
-					@Override
-					public void onAuthFail(SocializeException error) {
-						doError(error, context, listener);
-					}
-
-					@Override
-					public void onCancel() {
-						// Do nothing
-					}
-				});
-			}
-		}	
-	}
-	
-	// Mockable
-	protected FacebookAuthProviderInfo newFacebookAuthProviderInfo() {
-		return new FacebookAuthProviderInfo();
-	}
-	
-	protected void doError(SocializeException e, Activity parent, SocialNetworkListener listener) {
-		String msg = "Error sharing to Facebook";
-		
-		if(logger != null) {
-			logger.error(msg, e);
-		}
-		else {
-			e.printStackTrace();
-		}
-		
-		if(listener != null) {
-			listener.onError(parent, SocialNetwork.FACEBOOK, msg, e);
-		}
-	}
-	
 	protected void doShare(final Activity context, Entity entity, String comment, final SocialNetworkListener listener, ActionType type) {
-		if(listener != null) {
-			listener.onBeforePost(context, SocialNetwork.FACEBOOK);
-		}
-		
 		switch (type) {
 			case COMMENT:
 				facebookWallPoster.postComment(context, entity, comment, listener);
@@ -155,14 +66,6 @@ public class FacebookSharer implements SocialNetworkSharer {
 		this.shareMessageBuilder = shareMessageBuilder;
 	}
 
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
-	}
-	
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
-	}
-
 	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
 		this.facebookWallPoster = facebookWallPoster;
 	}
@@ -171,5 +74,4 @@ public class FacebookSharer implements SocialNetworkSharer {
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();
 	}
-
 }
