@@ -40,7 +40,7 @@ import com.socialize.util.ResourceLocator;
 public class NotificationContainer {
 
 	private SocializeIOC container;
-	private String[] configPaths = {SocializeConfig.SOCIALIZE_NOTIFICATION_BEANS_PATH};
+	private String[] configPaths = {SocializeConfig.SOCIALIZE_CORE_BEANS_PATH, SocializeConfig.SOCIALIZE_NOTIFICATION_BEANS_PATH};
 	
 	public void onCreate(Context context) throws Exception {
 		

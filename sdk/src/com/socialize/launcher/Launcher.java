@@ -50,7 +50,7 @@ public interface Launcher {
 	public void onResult(Activity context, int requestCode, int resultCode, Intent returnedIntent, Intent originalIntent);
 
 	/**
-	 * Returns true if the launching activity should call finish after launch.
+	 * Returns true if the launcher activity should call finish after launch.
 	 * @return
 	 */
 	public boolean shouldFinish();

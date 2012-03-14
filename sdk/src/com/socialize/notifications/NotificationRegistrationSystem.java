@@ -31,10 +31,12 @@ import com.socialize.entity.User;
  *
  */
 public interface NotificationRegistrationSystem {
-	
+	 
 	public boolean isRegisteredC2DM();
 	
 	public boolean isRegistrationPending();
+	
+	public boolean isSocializeRegistrationPending();
 	
 	public boolean isRegisteredSocialize(User user);
 
@@ -42,5 +44,8 @@ public interface NotificationRegistrationSystem {
 	
 	public void registerC2DM(Context context);
 	
+	public void registerSocialize(Context context, String registrationId);
+	
+	@Deprecated
 	public void registerSocialize(Context context, SocializeSession session, String registrationId);
 }

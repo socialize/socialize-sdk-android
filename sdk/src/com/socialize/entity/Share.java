@@ -35,7 +35,6 @@ public class Share extends SocializeAction {
 	private String text;
 	private String mediumName;
 	private int medium;
-	private boolean propagate;
 	
 	@Override
 	public ActionType getActionType() {
@@ -56,14 +55,6 @@ public class Share extends SocializeAction {
 
 	public void setMedium(int medium) {
 		this.medium = medium;
-	}
-
-	public boolean isPropagate() {
-		return propagate;
-	}
-
-	public void setPropagate(boolean propagate) {
-		this.propagate = propagate;
 	}
 
 	public String getMediumName() {

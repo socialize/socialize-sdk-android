@@ -37,7 +37,6 @@ import com.socialize.facebook.Facebook;
 import com.socialize.facebook.FacebookError;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.util.Drawables;
 
 /**
  * @author Jason Polites
@@ -47,9 +46,7 @@ import com.socialize.util.Drawables;
 	Activity.class, 
 	Facebook.class, 
 	FacebookSessionStore.class, 
-//	FacebookImageRetriever.class,
-	AuthProviderListener.class,
-	Drawables.class})
+	AuthProviderListener.class})
 public class FacebookDialogListenerTest extends SocializeActivityTest {
 
 	
@@ -59,13 +56,10 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		final String id = "foo";
 		final String token = "bar";
 		final String json = "{id:'" + id + "'}";
-//		final String encodedProfileImage = "foobar_image";
 		
 		Activity context = AndroidMock.createMock(Activity.class);
-		Drawables drawables = AndroidMock.createMock(Drawables.class);
-		Facebook facebook = AndroidMock.createMock(Facebook.class, appId, drawables);
+		Facebook facebook = AndroidMock.createMock(Facebook.class, appId);
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
-//		FacebookImageRetriever facebookImageRetriever = AndroidMock.createMock(FacebookImageRetriever.class);
 		
 		// Can't mock bundle, so create one with the data we expect.
 		Bundle bundle = new Bundle();
@@ -140,8 +134,7 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		final String token = "bar";
 		
 		Activity context = AndroidMock.createMock(Activity.class);
-		Drawables drawables = AndroidMock.createMock(Drawables.class);
-		Facebook facebook = AndroidMock.createMock(Facebook.class, appId, drawables);
+		Facebook facebook = AndroidMock.createMock(Facebook.class, appId);
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
 		
 		// Can't mock bundle, so create one with the data we expect.
@@ -210,8 +203,7 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		final String appId = "foobar";
 		
 		Activity context = AndroidMock.createMock(Activity.class);
-		Drawables drawables = AndroidMock.createMock(Drawables.class);
-		Facebook facebook = AndroidMock.createMock(Facebook.class, appId, drawables);
+		Facebook facebook = AndroidMock.createMock(Facebook.class, appId);
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
 
 		final String errorMessage = "foobar";
@@ -274,8 +266,7 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		final String appId = "foobar";
 		
 		Activity context = AndroidMock.createMock(Activity.class);
-		Drawables drawables = AndroidMock.createMock(Drawables.class);
-		Facebook facebook = AndroidMock.createMock(Facebook.class, appId, drawables);
+		Facebook facebook = AndroidMock.createMock(Facebook.class, appId);
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
 
 		final String errorMessage = "foobar";

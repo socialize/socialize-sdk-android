@@ -19,26 +19,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.notifications;
+package com.socialize.launcher;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+
+import com.socialize.util.DefaultAppUtils;
 
 /**
  * @author Jason Polites
  *
  */
-public interface C2DMCallback {
+public class HomeLauncher implements Launcher {
 	
-	public static final String MESSAGE_KEY = "message";
-	public static final String SOURCE_KEY = "source";
-	public static final String SOURCE_SOCIALIZE = "socialize";
+	@Override
+	public boolean launch(Activity context, Bundle data) {
+		return DefaultAppUtils.launchMainApp(context);
+	}
 
-	public void onMessage(Context context, Bundle messageData);
-	
-	public void onRegister(Context context, String registrationId) ;
-	
-	public void onError(Context context, String errorId);
-	
-	public void onUnregister(Context context);
+	@Override
+	public void onResult(Activity context, int requestCode, int resultCode, Intent returnedIntent, Intent originalIntent) {}
+
+	@Override
+	public boolean shouldFinish() {
+		return true;
+	}
+
 }

@@ -44,7 +44,6 @@ public class FacebookSessionStoreTest extends SocializeActivityTest {
 	private Activity context;
 	private MockEditor editor;
 	private SharedPreferences prefs;
-	private Drawables drawables;
 	
 	private final String appId = "foobar";
 	
@@ -53,8 +52,7 @@ public class FacebookSessionStoreTest extends SocializeActivityTest {
 	protected void setUp() throws Exception {
 		super.setUp();
 		
-		drawables = AndroidMock.createMock(Drawables.class);
-		facebook = AndroidMock.createMock(Facebook.class, appId, drawables);
+		facebook = AndroidMock.createMock(Facebook.class, appId);
 		prefs =  AndroidMock.createMock(SharedPreferences.class);
 		context = AndroidMock.createMock(Activity.class);
 		editor = AndroidMock.createMock(MockEditor.class);

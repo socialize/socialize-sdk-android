@@ -74,13 +74,13 @@ public class SocializeNotificationRegistrationSystemTest extends SocializeUnitTe
 		
 		AndroidMock.replay(deviceRegistrationFactory, registration, deviceRegistrationSystem, notificationRegistrationState, session);
 		
-		SocializeNotificationRegistrationSystem system = new SocializeNotificationRegistrationSystem();
+		PublicSocializeNotificationRegistrationSystem system = new PublicSocializeNotificationRegistrationSystem();
 		
 		system.setDeviceRegistrationFactory(deviceRegistrationFactory);
 		system.setDeviceRegistrationSystem(deviceRegistrationSystem);
 		system.setNotificationRegistrationState(notificationRegistrationState);
 		
-		system.registerSocialize(getContext(), session, registrationId);
+		system.doRegistrationSocialize(getContext(), session, registrationId);
 		
 		AndroidMock.verify(deviceRegistrationFactory, registration, deviceRegistrationSystem, notificationRegistrationState, session);
 	}
@@ -194,5 +194,14 @@ public class SocializeNotificationRegistrationSystemTest extends SocializeUnitTe
 		assertTrue(system.isRegistrationPending());
 		
 		AndroidMock.verify(notificationRegistrationState);
+	}
+	
+	class PublicSocializeNotificationRegistrationSystem extends SocializeNotificationRegistrationSystem {
+
+		@Override
+		public void doRegistrationSocialize(Context context, SocializeSession session, String registrationId) {
+			super.doRegistrationSocialize(context, session, registrationId);
+		}
+		
 	}
 }

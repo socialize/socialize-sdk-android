@@ -50,7 +50,6 @@ import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.DefaultFacebookWallPoster;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.AppUtils;
-import com.socialize.util.Drawables;
 
 /**
  * @author Jason Polites
@@ -294,7 +293,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
 
 			@Override
-			protected Facebook newFacebook(String appId, Drawables drawables) {
+			protected Facebook newFacebook(String appId) {
 				return fb;
 			}
 

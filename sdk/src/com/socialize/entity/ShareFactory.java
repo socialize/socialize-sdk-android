@@ -74,7 +74,6 @@ public class ShareFactory extends SocializeActionFactory<Share> {
 		}
 		
 		object.put("medium", share.getMedium());
-		object.put("propagate", (share.isPropagate()) ? 1 : 0);
 	}
 
 	@Override

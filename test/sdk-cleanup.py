@@ -167,7 +167,7 @@ def main(key,secret,url):
     print '## CREATE COMMENT ##'
     print '#'*20
                 
-    comments = [ gen_comment('http://entity1.com', i) for i in range(10)]
+    comments = [ gen_comment('http://entity1.com', i) for i in range(30)]
     req_url = url+comment_url
     make_request(client, req_url,method='POST', data=comments, outfile='comments.json')
 

@@ -8,7 +8,6 @@ import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.ListenerHolder;
 import com.socialize.util.DialogFactory;
-import com.socialize.util.Drawables;
 
 public class FacebookActivityService {
 
@@ -16,7 +15,6 @@ public class FacebookActivityService {
 	private FacebookSessionStore facebookSessionStore;
 	private ListenerHolder listenerHolder;
 	private FacebookActivity activity;
-	private Drawables drawables;
 	private DialogFactory dialogFactory;
 	private SocializeConfig config;
 	
@@ -37,12 +35,11 @@ public class FacebookActivityService {
 			if(extras != null) {
 				String appId = extras.getString("appId");
 				
-				drawables = activity.getBean("drawables");
 				facebookSessionStore = activity.getBean("facebookSessionStore");
 				listenerHolder = activity.getBean("listenerHolder");
 				dialogFactory = activity.getBean("dialogFactory");
 				config = activity.getBean("config");
-				facebook = new Facebook(appId, drawables);
+				facebook = new Facebook(appId);
 				service = getFacebookService();
 				
 				boolean sso = config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true);

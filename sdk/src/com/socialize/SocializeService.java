@@ -695,7 +695,7 @@ public interface SocializeService {
 	 * Handles broadcast messages.  Used for push notifications.
 	 * @param context
 	 * @param intent
-	 * @return True if the broadcast message was handled by Socialize.  False otherwise.
+	 * @return True if the broadcast message was handled by Socialize.  False if it is a simple registration request or it's not a message for Socialize.
 	 */
 	public boolean handleBroadcastIntent(Context context, Intent intent);
 	

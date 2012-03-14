@@ -98,6 +98,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 	}
 
 	public void testDialogDismissWorksOnError() throws Throwable {
+		AndroidMock.expect(provider.loadSession("/authenticate/", "test_key", "test_secret")).andReturn(null);
 		AndroidMock.expect(provider.authenticate("/authenticate/", "test_key", "test_secret", "test_uuid")).andThrow(new SocializeException("TEST ERROR IGNORE ME!"));
 		AndroidMock.replay(provider);
 
@@ -146,8 +147,9 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 
 	public void testApiAsyncCallsAuthenticateOnProvider() throws Throwable {
 
+		AndroidMock.expect(provider.loadSession("/authenticate/", "test_key", "test_secret")).andReturn(null);
 		AndroidMock.expect(provider.authenticate("/authenticate/", "test_key", "test_secret", "test_uuid")).andReturn(mockSession);
-
+		
 		mockSessionConsumer.setSession(mockSession);
 
 		AndroidMock.replay(provider);

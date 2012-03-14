@@ -20,9 +20,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-import com.socialize.ui.dialog.DialogRegistration;
-import com.socialize.util.Drawables;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -37,6 +34,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.CookieSyncManager;
+
+import com.socialize.ui.dialog.DialogRegistration;
 
 /**
  * Main Facebook object for interacting with the Facebook developer API.
@@ -76,7 +75,6 @@ public class Facebook {
 	private String[] mAuthPermissions;
 	private int mAuthActivityCode;
 	private DialogListener mAuthDialogListener;
-	private Drawables drawables;
 	
 	public Facebook() {
 		super();
@@ -89,12 +87,11 @@ public class Facebook {
 	 *            Your Facebook application ID. Found at
 	 *            www.facebook.com/developers/apps.php.
 	 */
-	public Facebook(String appId, Drawables drawables) {
+	public Facebook(String appId) {
 		if (appId == null) {
 			throw new IllegalArgumentException("You must specify your application ID when instantiating " + "a Facebook object. See README for details.");
 		}
 		mAppId = appId;
-		this.drawables = drawables;
 	}
 
 	/**
@@ -597,7 +594,7 @@ public class Facebook {
 			Util.showAlert(context, "Error", "Application requires permission to access the Internet");
 		}
 		else {
-			FbDialog fbDialog = new FbDialog(context, url, listener, drawables);
+			FbDialog fbDialog = new FbDialog(context, url, listener);
 			DialogRegistration.register(context, fbDialog);
 			fbDialog.show();
 		}
@@ -671,10 +668,6 @@ public class Facebook {
 		mAppId = appId;
 	}
 	
-	public void setDrawables(Drawables drawables) {
-		this.drawables = drawables;
-	}
-
 	/**
 	 * Callback interface for dialog requests.
 	 * 

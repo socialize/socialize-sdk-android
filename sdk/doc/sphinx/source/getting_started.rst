@@ -82,9 +82,9 @@ Add the following lines to your AndroidManifest.xml under the **<manifest...>** 
 4. Configure Facebook Integration (Optional)
 ============================================
 It is strongly recommended that users be able to authenticate with Facebook when using Socialize so as to 
-maximize the exposure, and promotion of your app.
+maximize the exposure and promotion of your app.
 
-This provides significant benefits to both your application, and your users including:
+This provides significant benefits to both your application and your users including:
 
 1. Improved user experience through personalized comments
 2. Automatic profile creation (user name and profile picture)

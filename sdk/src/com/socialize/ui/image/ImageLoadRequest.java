@@ -38,6 +38,7 @@ public class ImageLoadRequest {
 	private Long itemId;
 	private ConcurrentLinkedQueue<ImageLoadListener> listeners;
 	private boolean canceled;
+	private boolean listenersNotified = false;
 	
 	public String getUrl() {
 		return url;
@@ -51,11 +52,16 @@ public class ImageLoadRequest {
 		return canceled;
 	}
 
+	public boolean isListenersNotified() {
+		return listenersNotified;
+	}
+
 	public void setCanceled(boolean canceled) {
 		this.canceled = canceled;
 	}
 	
 	public void notifyListeners(SafeBitmapDrawable drawable) {
+		listenersNotified = true;
 		while(!listeners.isEmpty()) {
 			if(isCanceled()) {
 				listeners.clear();
@@ -67,6 +73,7 @@ public class ImageLoadRequest {
 	}
 	
 	public void notifyListeners(Exception error) {
+		listenersNotified = true;
 		while(!listeners.isEmpty()) {
 			if(isCanceled()) {
 				listeners.clear();

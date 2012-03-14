@@ -25,6 +25,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.DeviceRegistrationSystem;
 import com.socialize.api.SocializeSession;
@@ -32,6 +33,7 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.entity.DeviceRegistration;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.StringUtils;
 
@@ -60,6 +62,11 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 	@Override
 	public boolean isRegisteredC2DM() {
 		return notificationRegistrationState.isRegisteredC2DM();
+	}
+	
+	@Override
+	public boolean isSocializeRegistrationPending() {
+		return notificationRegistrationState.isSocializeRegistrationPending();
 	}
 
 	@Override
@@ -95,35 +102,75 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 			}
 		}
 	}
-
+	
+	@Deprecated
 	@Override
 	public void registerSocialize(Context context, SocializeSession session, String registrationId) {
+		registerSocialize(context, registrationId);
+	}
+
+	@Override
+	public void registerSocialize(final Context context, final String registrationId) {
+		
+		notificationRegistrationState.setPendingSocializeRequestTime(System.currentTimeMillis());
+		notificationRegistrationState.save(context);
 		
 		if(!StringUtils.isEmpty(registrationId)) {
-			try {
+			
+			Socialize.getSocialize().authenticate(context, new SocializeAuthListener() {
 				
-				// Record the registration with Socialize
-				DeviceRegistration registration = deviceRegistrationFactory.getBean();
-				registration.setRegistrationId(registrationId);
-				
-				deviceRegistrationSystem.registerDevice(session, registration);
-				
-				notificationRegistrationState.setC2DMRegistrationId(registrationId);
-				notificationRegistrationState.setRegisteredSocialize(session.getUser());
-				notificationRegistrationState.save(context);
-				
-				if(logger != null && logger.isInfoEnabled()) {
-					logger.info("Registration with Socialize for C2DM successful.");
+				@Override
+				public void onError(SocializeException error) {
+					logError(error);
 				}
-			} 
-			catch (SocializeException e) {
-				if(logger != null) {
-					logger.error("Error during device registration", e);
+				
+				@Override
+				public void onCancel() {
+					if(logger != null) {
+						logger.error("Authentication was cancelled during notification registration.  This should not happen!");
+					}
 				}
-				else {
-					e.printStackTrace();
+				
+				@Override
+				public void onAuthSuccess(SocializeSession session) {
+					doRegistrationSocialize(context, session, registrationId);			
 				}
+				
+				@Override
+				public void onAuthFail(SocializeException error) {
+					logError(error);
+				}
+			});
+		}
+	}
+	
+	protected void doRegistrationSocialize(Context context, SocializeSession session, String registrationId) {
+		try {
+			// Record the registration with Socialize
+			DeviceRegistration registration = deviceRegistrationFactory.getBean();
+			registration.setRegistrationId(registrationId);
+			
+			deviceRegistrationSystem.registerDevice(session, registration);
+			
+			notificationRegistrationState.setC2DMRegistrationId(registrationId);
+			notificationRegistrationState.setRegisteredSocialize(session.getUser());
+			notificationRegistrationState.save(context);
+			
+			if(logger != null && logger.isInfoEnabled()) {
+				logger.info("Registration with Socialize for C2DM successful.");
 			}
+		} 
+		catch (SocializeException e) {
+			logError(e);
+		}
+	}
+	
+	protected void logError(Exception e) {
+		if(logger != null) {
+			logger.error("Error during device registration", e);
+		}
+		else {
+			e.printStackTrace();
 		}
 	}
 	

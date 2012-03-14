@@ -53,7 +53,6 @@ public class FacebookActivityTest extends SocializeActivityTest {
 		ListenerHolder.class, 
 		AuthProviderListener.class,
 		Facebook.class,
-		Drawables.class,
 		DialogFactory.class,
 		SocializeConfig.class})
 	public void testOnCreate() {
@@ -61,8 +60,7 @@ public class FacebookActivityTest extends SocializeActivityTest {
 		final String appId = "foobar";
 		final FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
 		final ListenerHolder listenerHolder = AndroidMock.createMock(ListenerHolder.class);
-		final Drawables drawables = AndroidMock.createMock(Drawables.class);
-		final Facebook facebook = AndroidMock.createMock(Facebook.class, appId, drawables);
+		final Facebook facebook = AndroidMock.createMock(Facebook.class, appId);
 		final FacebookActivity context = AndroidMock.createMock(FacebookActivity.class);
 		final Intent intent = AndroidMock.createMock(Intent.class);
 		final AuthProviderListener listener = AndroidMock.createMock(AuthProviderListener.class);
@@ -86,7 +84,6 @@ public class FacebookActivityTest extends SocializeActivityTest {
 		AndroidMock.expect(intent.getExtras()).andReturn(extras);
 		AndroidMock.expect(context.getBean("facebookSessionStore")).andReturn(facebookSessionStore);
 		AndroidMock.expect(context.getBean("listenerHolder")).andReturn(listenerHolder);
-		AndroidMock.expect(context.getBean("drawables")).andReturn(drawables);
 		AndroidMock.expect(context.getBean("dialogFactory")).andReturn(dialogFactory);
 		AndroidMock.expect(context.getBean("config")).andReturn(config);
 		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true)).andReturn(true);

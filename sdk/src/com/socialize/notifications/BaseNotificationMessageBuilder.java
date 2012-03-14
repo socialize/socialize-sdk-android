@@ -56,7 +56,16 @@ public abstract class BaseNotificationMessageBuilder<M extends NotificationMessa
 		
 		if(appUtils.isActivityAvailable(context, SocializeLaunchActivity.class)) {
 			notificationIntent = newIntent(context, SocializeLaunchActivity.class);
-			notificationIntent.putExtra(SocializeLaunchActivity.LAUNCH_ACTION, LaunchAction.ACTION.name());
+			
+			switch (message.getNotificationType()) {
+				case NEW_COMMENTS:
+					notificationIntent.putExtra(SocializeLaunchActivity.LAUNCH_ACTION, LaunchAction.ACTION.name());
+					break;
+				case DEVELOPER_NOTIFICATION:
+					notificationIntent.putExtra(SocializeLaunchActivity.LAUNCH_ACTION, LaunchAction.HOME.name());
+					break;
+			}
+
 			notificationIntent.putExtra(SocializeLaunchActivity.LAUNCH_TASK, "notificationLaunchTask"); // bean name
 			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
 		}

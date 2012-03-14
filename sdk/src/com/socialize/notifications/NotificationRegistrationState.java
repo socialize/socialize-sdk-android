@@ -40,11 +40,14 @@ public class NotificationRegistrationState {
 	private String c2DMRegistrationId;
 	private long registeredUserId;
 	private long pendingC2DMRequestTime = 0L;
+	private long pendingSocializeRequestTime = 0L;
+	private long lastSocializeRegistrationTime = 0L;
 	
 	private SocializeLogger logger;
 	
 	public boolean isRegisteredSocialize(User user) {
-		return registeredUserId == user.getId();
+		// TODO: configure timeout.
+		return registeredUserId == user.getId() && (System.currentTimeMillis() - lastSocializeRegistrationTime) < 60000;
 	}
 
 	public boolean isRegisteredC2DM() {
@@ -53,6 +56,8 @@ public class NotificationRegistrationState {
 	
 	public void setRegisteredSocialize(User user) {
 		this.registeredUserId = user.getId();
+		this.lastSocializeRegistrationTime = System.currentTimeMillis();
+		this.pendingSocializeRequestTime = 0;
 	}
 
 	public String getC2DMRegistrationId() {
@@ -60,7 +65,12 @@ public class NotificationRegistrationState {
 	}
 
 	public void setC2DMRegistrationId(String c2dmRegistrationId) {
-		c2DMRegistrationId = c2dmRegistrationId;
+		this.c2DMRegistrationId = c2dmRegistrationId;
+		this.pendingC2DMRequestTime = 0;
+	}
+	
+	public boolean isSocializeRegistrationPending() {
+		return (System.currentTimeMillis() - pendingSocializeRequestTime) < 30000; // Allow 30 seconds
 	}
 
 	public boolean isC2dmPending() {
@@ -70,12 +80,18 @@ public class NotificationRegistrationState {
 	public void setC2dmPendingRequestTime(long time) {
 		this.pendingC2DMRequestTime = time;
 	}
+	
+	public void setPendingSocializeRequestTime(long pendingSocializeRequestTime) {
+		this.pendingSocializeRequestTime = pendingSocializeRequestTime;
+	}
 
 	public void load(Context context) {
 		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 		c2DMRegistrationId = prefs.getString("c2DMRegistrationId", null);
 		registeredUserId = prefs.getLong("registeredUserId", -1L);
 		pendingC2DMRequestTime = prefs.getLong("pendingC2DMRequestTime", 0);
+		pendingSocializeRequestTime = prefs.getLong("pendingSocializeRequestTime", 0);
+		lastSocializeRegistrationTime = prefs.getLong("lastSocializeRequestTime", 0);
 		
 		if(logger != null && logger.isDebugEnabled()) {
 			logger.debug("Loaded notification state with registration id [" +
@@ -100,6 +116,8 @@ public class NotificationRegistrationState {
 		editor.putString("c2DMRegistrationId", c2DMRegistrationId);
 		editor.putLong("registeredUserId", registeredUserId);
 		editor.putLong("pendingC2DMRequestTime", pendingC2DMRequestTime);
+		editor.putLong("pendingSocializeRequestTime", pendingSocializeRequestTime);
+		editor.putLong("lastSocializeRequestTime", lastSocializeRegistrationTime);
 		editor.commit();
 	}
 

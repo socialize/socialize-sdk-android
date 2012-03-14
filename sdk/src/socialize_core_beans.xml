@@ -100,36 +100,6 @@
 		<property name="ioUtils" ref="ioUtils"/>
 	</bean>
 	
-	<bean id="socializeUIErrorHandler" class="com.socialize.ui.error.DialogErrorHandler">
-		<property name="drawables" ref="drawables"/>
-	</bean>
-
-	<bean id="cache" class="com.socialize.util.DrawableCache">
-		<constructor-arg type="integer" value="10"/> <!-- Min size -->
-		<constructor-arg type="integer" value="100"/> <!-- Max size -->
-		<init-method name="init">
-			<arg type="context"/>
-		</init-method>		
-		<destroy-method name="destroy"/>
-	</bean>
-	
-	<bean id="bitmapBuilder" class="com.socialize.util.BitmapBuilder"/>
-	
-	<bean id="bitmapUtils" class="com.socialize.util.BitmapUtils">
-		<property name="bitmapBuilder" ref="bitmapBuilder"/>
-		<property name="base64Utils" ref="base64Utils"/>
-	</bean>
-	
-	<bean id="drawables" class="com.socialize.util.Drawables">
-		<property name="classLoaderProvider" ref="classLoaderProvider"/>
-		<property name="cache" ref="cache"/>
-		<property name="logger" ref="logger"/>
-		<property name="bitmapUtils" ref="bitmapUtils"/>
-		<init-method name="init">
-			<arg type="activity"/>
-		</init-method>		
-	</bean>	
-	
 	<bean id="base64Utils" class="com.socialize.util.Base64Utils"/>	
 	
 	<bean 
@@ -500,7 +470,8 @@
 	</bean>
 	
 	<bean id="actionLauncher" class="com.socialize.launcher.SocializeActionLauncher" extends="activityLauncher"/>
-
+	<bean id="homeLauncher" class="com.socialize.launcher.HomeLauncher"/>
+	
 	<bean id="shareLauncher" class="com.socialize.launcher.ShareLauncher">
 		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
 		<property name="listenerHolder" ref="listenerHolder"/>
@@ -514,6 +485,10 @@
 					<key value="ACTION"/>
 					<value ref="actionLauncher"/>
 				</entry>
+				<entry>
+					<key value="HOME"/>
+					<value ref="homeLauncher"/>
+				</entry>				
 				<entry>
 					<key value="LOCAL_SHARE"/>
 					<value ref="shareLauncher"/>
@@ -537,7 +512,6 @@
 	 
 	<bean id="facebookProvider" class="com.socialize.auth.facebook.FacebookAuthProvider">
 		<property name="logger" ref="logger"/>
-		<property name="drawables" ref="drawables"/>
 		<property name="facebookSessionStore" ref="facebookSessionStore"/>
 		<init-method name="init">
 			<arg type="context"/>
@@ -549,7 +523,6 @@
 		id="facebook" 
 		class="com.socialize.facebook.Facebook"
 		singleton="false">
-		<constructor-arg ref="drawables"/>
 	</bean>
 	
 	<bean 
@@ -557,7 +530,6 @@
 		class="com.socialize.networks.facebook.DefaultFacebookWallPoster">
 		<property name="logger" ref="logger"/>
 		<property name="config" ref="config"/>
-		<property name="drawables" ref="drawables"/>
 		<property name="appUtils" ref="appUtils"/>
 		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
 	</bean>	
