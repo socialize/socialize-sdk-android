@@ -62,7 +62,7 @@ public class UserActivityTest extends SocializeRobotiumTest {
 			}
 		}
 		
-		assertEquals(10, comments);
+		assertEquals(30, comments);
 		assertEquals(2, shares);
 		assertEquals(2, likes);
 	}
