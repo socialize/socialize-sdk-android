@@ -13,8 +13,8 @@ of comments associated with an entity (URL).
 .. image:: images/activity.png
 .. image:: images/profile.png		
 
-Diplaying the Comment View
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Displaying the Comment View
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When you want to launch the comment view, simply call **showCommentView** from the SocializeUI instance:
 
