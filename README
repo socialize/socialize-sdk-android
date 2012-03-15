@@ -12,6 +12,11 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v1.5.2
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Developer notification title should say "A message from..."
+[bug] Auth credentials not saved
+
 v1.5.1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [bug] SmartAlerts should not conflict with existing C2DM handling
