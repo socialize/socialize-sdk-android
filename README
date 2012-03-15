@@ -12,6 +12,13 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v1.5.1
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] SmartAlerts should not conflict with existing C2DM handling
+[bug] device should be re-registered with Socialize if CD2M id changes
+[bug] Developer notifications should not result in "action id not found"
+[bug] Disabling notification in user settings does not disable notifications
+
 v1.5
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [feature] Developer can authenticate user with twitter in SDK
