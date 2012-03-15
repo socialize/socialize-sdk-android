@@ -32,7 +32,6 @@ import com.socialize.facebook.Facebook;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.ListenerHolder;
 import com.socialize.log.SocializeLogger;
-import com.socialize.util.Drawables;
 
 /**
  * @author Jason Polites
@@ -43,7 +42,6 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 	private Context context;
 	private ListenerHolder holder; // This is a singleton
 	private SocializeLogger logger;
-	private Drawables drawables;
 	private FacebookSessionStore facebookSessionStore;
 	
 	public FacebookAuthProvider() {
@@ -135,7 +133,7 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 	}
 	
 	protected Facebook getFacebook(String appId) {
-		return new Facebook(appId, drawables);
+		return new Facebook(appId);
 	}
 
 	public SocializeLogger getLogger() {
@@ -144,10 +142,6 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
-	}
-
-	public void setDrawables(Drawables drawables) {
-		this.drawables = drawables;
 	}
 
 	public void setFacebookSessionStore(FacebookSessionStore facebookSessionStore) {

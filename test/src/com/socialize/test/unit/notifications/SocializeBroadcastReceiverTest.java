@@ -22,10 +22,12 @@
 package com.socialize.test.unit.notifications;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.test.mock.MockContext;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.notifications.C2DMCallback;
 import com.socialize.notifications.SocializeC2DMReceiver;
 import com.socialize.notifications.WakeLock;
 import com.socialize.test.PublicSocialize;
@@ -42,11 +44,16 @@ public class SocializeBroadcastReceiverTest extends SocializeUnitTest {
 		final WakeLock wakeLock = AndroidMock.createMock(WakeLock.class);
 		final Intent intent = AndroidMock.createMock(Intent.class);
 		final MockContext context = AndroidMock.createMock(MockContext.class);
+		final Bundle extras = new Bundle();
+		
+		extras.putString(C2DMCallback.SOURCE_KEY, "socialize");
 		
 		AndroidMock.expect(wakeLock.acquire(context)).andReturn(true);
 		AndroidMock.expect(intent.getAction()).andReturn(SocializeC2DMReceiver.C2DM_INTENT);
+		AndroidMock.expect(intent.getExtras()).andReturn(extras);
 		AndroidMock.expect(intent.setClassName(context, SocializeC2DMReceiver.class.getName())).andReturn(intent);
 		AndroidMock.expect(context.startService(intent)).andReturn(null);
+		
 		
 		AndroidMock.replay(wakeLock, intent, context);
 		

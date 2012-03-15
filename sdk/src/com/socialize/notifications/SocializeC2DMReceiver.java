@@ -15,7 +15,7 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 	
 	// Must be parameterless constructor
 	public SocializeC2DMReceiver() {
-		super("SocializeC2DMReceiver");
+		super();
 		logger = newSocializeLogger();
 		container = newNotificationContainer();
 	}

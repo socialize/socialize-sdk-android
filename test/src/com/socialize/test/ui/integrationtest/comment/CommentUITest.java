@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
@@ -271,14 +272,20 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 	
 	public void testCommentListAndView() {
 		
+		int pageSize = 20;
+		
+		Socialize.getSocialize().getConfig().setProperty("comment.page.size", String.valueOf(pageSize));
+		
 		startWithoutFacebook();
 		
 		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(LoadingListView.LIST_VIEW_ID);
 		
 		assertNotNull(comments);
-		assertTrue("Unexepected number of comments.  Expected >= 10 but found " +
+		assertTrue("Unexepected number of comments.  Expected >= " +
+				pageSize +
+				" but found " +
 				comments.getCount() +
-				"", comments.getCount() >= 10);
+				"", comments.getCount() >= pageSize);
 		
 		// Click on the first comment in list. 
 		robotium.clickInList(0);

@@ -33,6 +33,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.socialize.Socialize;
@@ -85,6 +86,8 @@ public class ProfileContentView extends BaseView {
 	
 	private Activity context;
 	
+	private TextView userId;
+	
 	private CheckBox autoPostFacebook;
 	private CheckBox autoPostTwitter;
 	
@@ -130,6 +133,16 @@ public class ProfileContentView extends BaseView {
 		commonParams.setMargins(0, margin, 0, margin);
 		
 		profilePictureEditView = profilePictureEditViewFactory.getBean();
+		
+		userId = new TextView(getContext());
+		userId.setTextColor(Color.WHITE);
+		userId.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+		userId.setGravity(Gravity.RIGHT);
+		
+		LayoutParams userIdParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		userIdParams.gravity = Gravity.RIGHT;
+		
+		userId.setLayoutParams(userIdParams);
 
 		firstNameEdit = socializeEditTextFactory.getBean();
 		lastNameEdit = socializeEditTextFactory.getBean();
@@ -150,6 +163,7 @@ public class ProfileContentView extends BaseView {
 		firstNameEdit.setLayoutParams(commonParams);
 		lastNameEdit.setLayoutParams(commonParams);
 		
+		master.addView(userId);
 		master.addView(profilePictureEditView);
 		master.addView(firstNameEdit);
 		master.addView(lastNameEdit);
@@ -330,7 +344,7 @@ public class ProfileContentView extends BaseView {
 	public void setUserDetails(User user) {
 		
 		profilePictureEditView.setUserDetails(user);
-		
+		userId.setText("ID: "  + String.valueOf(user.getId()));
 		firstNameEdit.setText(user.getFirstName());
 		lastNameEdit.setText(user.getLastName());
 		

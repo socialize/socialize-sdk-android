@@ -31,6 +31,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,6 +98,8 @@ import com.socialize.listener.view.ViewAddListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.notifications.C2DMCallback;
+import com.socialize.notifications.NotificationChecker;
 import com.socialize.notifications.NotificationType;
 import com.socialize.notifications.SocializeC2DMReceiver;
 import com.socialize.notifications.WakeLock;
@@ -141,6 +144,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private SubscriptionSystem subscriptionSystem;
 	private Drawables drawables;
 	private AuthProviders authProviders;
+	private NotificationChecker notificationChecker;
 	
 	private SocializeSystem system = new SocializeSystem();
 	private SocializeConfig config = new SocializeConfig();
@@ -150,17 +154,41 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private String[] initPaths = null;
 	private int initCount = 0;
 	
-	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#handleBroadcastIntent(android.content.Context, android.content.Intent)
+	 */
 	@Override
 	public boolean handleBroadcastIntent(Context context, Intent intent) {
+		
 		String action = intent.getAction();
-		if(SocializeC2DMReceiver.C2DM_INTENT.equals(action) || SocializeC2DMReceiver.REGISTRATION_CALLBACK_INTENT.equals(action)) {
-			getWakeLock().acquire(context);
-			intent.setClassName(context, receiver);
-			context.startService(intent);
-			return true;
+		
+		if(action != null && (SocializeC2DMReceiver.C2DM_INTENT.equals(action) || SocializeC2DMReceiver.REGISTRATION_CALLBACK_INTENT.equals(action))) {
+			
+			if(SocializeC2DMReceiver.C2DM_INTENT.equals(action)) {
+				// Check the bundle data for source
+				Bundle extras = intent.getExtras();
+				if(extras != null) {
+					String source = extras.getString(C2DMCallback.SOURCE_KEY);
+					if(source != null && source.trim().equalsIgnoreCase(C2DMCallback.SOURCE_SOCIALIZE)) {
+						handleIntent(context, intent);
+						return true;
+					}
+				}
+			}
+			else {
+				// Handle registration, but don't return true.
+				handleIntent(context, intent);
+			}
 		}
+		
 		return false;
+	}
+	
+	protected void handleIntent(Context context, Intent intent) {
+		getWakeLock().acquire(context);
+		intent.setClassName(context, receiver);
+		context.startService(intent);
 	}
 	
 	// So we can mock
@@ -371,6 +399,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.asserter = container.getBean("initializationAsserter");
 				this.authProviders = container.getBean("authProviders");
 				this.authProviderInfoBuilder = container.getBean("authProviderInfoBuilder");
+				this.notificationChecker = container.getBean("notificationChecker");
 				
 				SocializeConfig mainConfig = container.getBean("config");
 				
@@ -383,6 +412,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				
 				// Create the entity loader if we have one
 				initEntityLoader();
+				
+				initNotifications(context);
 				
 				ActivityIOCProvider.getInstance().setContainer(container);
 			}
@@ -400,6 +431,15 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 	
+	/**
+	 * @param context
+	 */
+	protected void initNotifications(Context context) {
+		if(notificationChecker != null) {
+			notificationChecker.checkRegistrations(context);
+		}
+	}
+
 	protected void initEntityLoader() {
 		EntityLoaderUtils entityLoaderUtils = container.getBean("entityLoaderUtils");
 		entityLoaderUtils.initEntityLoader();
@@ -1640,7 +1680,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public Drawable getDrawable(String name, boolean eternal) {
-		return drawables.getDrawable(name, eternal);
+		return (drawables != null) ? drawables.getDrawable(name, eternal) : null;
 	}
 
 	/*
@@ -1649,7 +1689,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public Drawable getDrawable(String name) {
-		return drawables.getDrawable(name);
+		return (drawables != null) ? drawables.getDrawable(name) : null; 
 	}
 
 	/*
@@ -1659,7 +1699,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Deprecated
 	@Override
 	public Drawable getDrawable(String name, int density, boolean eternal) {
-		return drawables.getDrawable(name, density, eternal);
+		return (drawables != null) ? drawables.getDrawable(name, density, eternal) : null;
 	}
 	
 	/*

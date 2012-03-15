@@ -199,6 +199,8 @@ public class CommentListView extends BaseView {
 		layoutAnchor.addView(sliderAnchor);
 		
 		addView(layoutAnchor);
+		
+		setDefaultGrabLength(Socialize.getSocialize().getConfig().getIntProperty("comment.page.size", 20));
 	}
 	
 	protected CommentScrollListener getCommentScrollListener() {

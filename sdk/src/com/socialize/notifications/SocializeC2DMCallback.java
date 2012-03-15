@@ -32,8 +32,12 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.socialize.Socialize;
+import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.JSONFactory;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.AppUtils;
 import com.socialize.util.NumberUtils;
@@ -54,6 +58,7 @@ public class SocializeC2DMCallback implements C2DMCallback {
 	private Map<String, JSONFactory<NotificationMessage>> messageFactories;
 	private Map<String, NotificationMessageBuilder> messageBuilders;
 	private NotificationRegistrationState notificationRegistrationState;
+	private NotificationRegistrationSystem notificationRegistrationSystem;
 
 	@Override
 	public void onRegister(Context context, String registrationId)  {
@@ -69,6 +74,9 @@ public class SocializeC2DMCallback implements C2DMCallback {
 		}
 		notificationRegistrationState.setC2DMRegistrationId(registrationId);
 		notificationRegistrationState.save(context);
+		
+		// Trigger socialize registration
+		notificationRegistrationSystem.registerSocialize(context, registrationId);
 	}
 	
 	@Override
@@ -87,96 +95,128 @@ public class SocializeC2DMCallback implements C2DMCallback {
 	 * @see com.socialize.notifications.NotificationSystem#sendNotification(android.os.Bundle)
 	 */
 	@Override
-	public void onMessage(Context context, Bundle data) {
+	public void onMessage(final Context context, final Bundle data) {
 		
-		String json = data.getString(MESSAGE_KEY);
-		
-		if(!StringUtils.isEmpty(json)) {
+		Socialize.getSocialize().authenticate(context, new SocializeAuthListener() {
 			
-			if(logger != null && logger.isDebugEnabled()) {
-				logger.debug("Received notification [" +
-						json +
-						"]");
+			@Override
+			public void onError(SocializeException error) {
+				handleError("Failed to authenticate user for notification receipt", error);
 			}
 			
-			try {
-				JSONObject message = new JSONObject(json);
-				String notification_type = "notification_type";
+			@Override
+			public void onCancel() {
+				// Ignore
+			}
+			
+			@Override
+			public void onAuthSuccess(SocializeSession session) {
 				
-				if(message.has(notification_type) && !message.isNull(notification_type)) {
-					String type = message.getString(notification_type).trim().toUpperCase();
-					NotificationType notificationType = null;
-					try {
-						notificationType = NotificationType.valueOf(type);
-						
-					} 
-					catch (Exception e) {
-						handleError("Invalid notification_type [" +
-								type +
-								"] defined in notification message [" +
-								json +
-								"]", e);
-					}		
+				if(session.getUser().isNotificationsEnabled()) {
+
+					String json = data.getString(MESSAGE_KEY);
 					
-					if(notificationType != null) {
+					if(!StringUtils.isEmpty(json)) {
 						
-						JSONFactory<NotificationMessage> factory = messageFactories.get(notificationType.name());
+						if(logger != null && logger.isDebugEnabled()) {
+							logger.debug("Received notification [" +
+									json +
+									"]");
+						}
 						
-						if(factory != null) {
-							NotificationMessage notificationMessage = factory.fromJSON(message);
-							NotificationMessageBuilder builder = messageBuilders.get(notificationType.name());
+						try {
+							JSONObject message = new JSONObject(json);
+							String notification_type = "notification_type";
 							
-							if(builder != null) {
-								int icon = notificationIcon;
+							if(message.has(notification_type) && !message.isNull(notification_type)) {
+								String type = message.getString(notification_type).trim().toUpperCase();
+								NotificationType notificationType = null;
+								try {
+									notificationType = NotificationType.valueOf(type);
+								} 
+								catch (Exception e) {
+									handleError("Invalid notification_type [" +
+											type +
+											"] defined in notification message [" +
+											json +
+											"]", e);
+								}		
 								
-								if(config.getBooleanProperty(SocializeConfig.SOCIALIZE_NOTIFICATION_APP_ICON, true)) {
-									icon = appUtils.getAppIconId(context);
+								if(notificationType != null) {
 									
-									if(icon <= 0) {
-										if(logger != null && logger.isDebugEnabled()) {
-											logger.debug("Could not locate ID for application icon.  Using default icon for notification");
-											icon = notificationIcon;
+									JSONFactory<NotificationMessage> factory = messageFactories.get(notificationType.name());
+									
+									if(factory != null) {
+										NotificationMessage notificationMessage = factory.fromJSON(message);
+										NotificationMessageBuilder builder = messageBuilders.get(notificationType.name());
+										
+										if(builder != null) {
+											int icon = notificationIcon;
+											
+											if(config.getBooleanProperty(SocializeConfig.SOCIALIZE_NOTIFICATION_APP_ICON, true)) {
+												icon = appUtils.getAppIconId(context);
+												
+												if(icon <= 0) {
+													if(logger != null && logger.isDebugEnabled()) {
+														logger.debug("Could not locate ID for application icon.  Using default icon for notification");
+														icon = notificationIcon;
+													}
+												}
+											}
+											Notification notification = builder.build(context, data, notificationMessage, icon);
+											NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+											mNotificationManager.notify(String.valueOf(notificationMessage.getEntityId()), getNotificationId(notificationMessage), notification);		
 										}
+										else {
+											handleError("No message builder defined for notification type [" +
+													notificationType +
+													"]");
+										}	
+									}
+									else {
+										handleError("No message factory defined for notification type [" +
+												notificationType +
+												"]");
+										
 									}
 								}
-								Notification notification = builder.build(context, data, notificationMessage, icon);
-								NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-								mNotificationManager.notify(String.valueOf(notificationMessage.getEntityId()), getNotificationId(notificationMessage), notification);		
 							}
 							else {
-								handleError("No message builder defined for notification type [" +
-										notificationType +
+								handleError("No notification_type defined in notification message [" +
+										json +
 										"]");
-							}	
-						}
-						else {
-							handleError("No message factory defined for notification type [" +
-									notificationType +
-									"]");
-							
+							}
+						} 
+						catch (JSONException e) {
+							handleError("Notification system received an invalid JSON message [" +
+									json +
+									"]", e);
+						} 
+						catch (Exception e) {
+							handleError("Error building notification message", e);
 						}
 					}
+					else {
+						handleError("No data found in message bundle under key [" +
+								MESSAGE_KEY +
+								"]");
+					}	
 				}
 				else {
-					handleError("No notification_type defined in notification message [" +
-							json +
-							"]");
+					if(logger != null && logger.isDebugEnabled()) {
+						logger.debug("Notification for user [" +
+								session.getUser().getId() +
+								"] ignored.  Notifications are disabled for this user");
+					}
 				}
-			} 
-			catch (JSONException e) {
-				handleError("Notification system received an invalid JSON message [" +
-						json +
-						"]", e);
-			} 
-			catch (Exception e) {
-				handleError("Error building notification message", e);
 			}
-		}
-		else {
-			handleError("No data found in message bundle under key [" +
-					MESSAGE_KEY +
-					"]");
-		}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				handleError("Failed to authenticate user for notification receipt", error);
+			}
+		});
+		
 	}
 	
 	protected int getNotificationId(NotificationMessage message) {
@@ -234,9 +274,11 @@ public class SocializeC2DMCallback implements C2DMCallback {
 		this.notificationRegistrationState = notificationRegistrationState;
 	}
 
+	public void setNotificationRegistrationSystem(NotificationRegistrationSystem notificationRegistrationSystem) {
+		this.notificationRegistrationSystem = notificationRegistrationSystem;
+	}
+
 	public void setNumberUtils(NumberUtils numberUtils) {
 		this.numberUtils = numberUtils;
 	}
-	
-	
 }

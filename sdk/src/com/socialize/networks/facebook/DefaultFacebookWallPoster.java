@@ -47,7 +47,6 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.util.AppUtils;
-import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 
 /**
@@ -56,7 +55,6 @@ import com.socialize.util.StringUtils;
  */
 public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	
-	private Drawables drawables;
 	private SocializeLogger logger;
 	private AppUtils appUtils;
 	private ShareMessageBuilder shareMessageBuilder;
@@ -138,7 +136,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		params.putString("link", link);
 		params.putString("caption", caption);
 		
-		Facebook fb = newFacebook(appId, drawables);
+		Facebook fb = newFacebook(appId);
 		
 		final FacebookSessionStore store = newFacebookSessionStore();
 		
@@ -152,8 +150,8 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	}
 	
 	// So we can mock
-	protected Facebook newFacebook(String appId, Drawables drawables) {
-		return new Facebook(appId, drawables);
+	protected Facebook newFacebook(String appId) {
+		return new Facebook(appId);
 	}
 	
 	// So we can mock
@@ -238,10 +236,6 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	// So we can mock
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();
-	}
-	
-	public void setDrawables(Drawables drawables) {
-		this.drawables = drawables;
 	}
 	
 	public void setLogger(SocializeLogger logger) {

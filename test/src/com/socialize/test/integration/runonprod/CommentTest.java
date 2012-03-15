@@ -32,7 +32,7 @@ public class CommentTest extends SocializeRobotiumTest {
 		// Check number of comments
 		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(R.id.list);
 		
-		assertEquals( 10, comments.getCount());
+		assertEquals( 30, comments.getCount());
 		
 		// Click on the first comment in list. 
 		robotium.clickInList(0);
@@ -69,7 +69,7 @@ public class CommentTest extends SocializeRobotiumTest {
 		robotium.waitForActivity("CommentUserListActivity", DEFAULT_TIMEOUT_MILLISECONDS);
 		robotium.waitForView(ListView.class);
 		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(R.id.list);
-		assertEquals(10 , comments.getCount());
+		assertEquals(30 , comments.getCount());
 	}
 	
 	public void testListCommentWithPagination() throws JSONException{

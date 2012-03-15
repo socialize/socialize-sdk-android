@@ -12,6 +12,11 @@ public class MockNotificationRegistrationSystem implements NotificationRegistrat
 	public boolean isRegisteredC2DM() {
 		return true;
 	}
+	
+	@Override
+	public boolean isSocializeRegistrationPending() {
+		return false;
+	}
 
 	@Override
 	public boolean isRegisteredSocialize(User user) {
@@ -25,7 +30,10 @@ public class MockNotificationRegistrationSystem implements NotificationRegistrat
 	@Override
 	public boolean isRegistrationPending() {
 		return false;
-		
+	}
+	
+	@Override
+	public void registerSocialize(Context context, String registrationId) {
 	}
 
 	@Override

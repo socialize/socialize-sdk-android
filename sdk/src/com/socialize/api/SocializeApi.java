@@ -115,7 +115,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	
 	protected void checkNotifications(Context context, SocializeSession session) {
 		if(notificationChecker != null) {
-			notificationChecker.checkRegistrations(context, session);
+			notificationChecker.checkRegistrations(context, session, true);
 		}
 	}
 	
@@ -397,7 +397,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		}
 		else {
 			// Do normal auth
-			handleRegularAuth(context, request, wrapper);
+			handleRegularAuth(context, request, wrapper, localListener, key, secret, false);
 		}
 	}
 	
@@ -443,17 +443,45 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		}
 	}
 	
-	protected void handleRegularAuth(Context context, SocializeAuthRequest request, SocializeActionListener wrapper) {
-		AsyncAuthenicator authenicator = new AsyncAuthenicator(context, RequestType.AUTH, null, wrapper);
-		authenicator.execute(request);
+	protected void handleRegularAuth(Context context, SocializeAuthRequest request, SocializeActionListener wrapper, SocializeAuthListener listener, String key, String secret, boolean force) {
+		SocializeSession session = null;
+		
+		if(!force) {
+			// Try loading the session first
+			
+			try {
+				session = loadSession(request.getEndpoint(), key, secret);
+			}
+			catch (SocializeException e) {
+				// No need to throw this, just log it
+				logger.warn("Failed to load saved session data", e);
+			}
+		}
+		
+		if(session != null) {
+			if(logger != null && logger.isDebugEnabled()) {
+				logger.debug("Loaded saved session for user [" +
+						session.getUser().getId() +
+						"]");
+			}
+			
+			if(listener != null) {
+				listener.onAuthSuccess(session);
+			}
+		}
+		else {
+			AsyncAuthenicator authenicator = new AsyncAuthenicator(context, RequestType.AUTH, null, wrapper);
+			authenicator.execute(request);
+		}
 	}
 	
 	protected void handle3rdPartyAuth(
 			final Context context,
 			final SocializeAuthRequest request,
-			final SocializeActionListener fWrapper,
+			final SocializeActionListener wrapper,
 			final SocializeAuthListener listener, 
-			String key, String secret)  {
+			final String key,
+			final String secret)  {
 
 		final AuthProviderData authProviderData = request.getAuthProviderData();
 		
@@ -504,8 +532,8 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 						authProviderData.setToken3rdParty(response.getToken());
 						authProviderData.setSecret3rdParty(response.getSecret());
 						
-						// Do normal auth
-						handleRegularAuth(context, request, fWrapper);
+						// Do normal auth (forced)
+						handleRegularAuth(context, request, wrapper, listener, key, secret, true);
 					}
 					
 					@Override
@@ -561,7 +589,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	public void setAppUtils(AppUtils appUtils) {
 		this.appUtils = appUtils;
 	}
-
+	
 	public void setNotificationChecker(NotificationChecker notificationChecker) {
 		this.notificationChecker = notificationChecker;
 	}

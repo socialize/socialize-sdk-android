@@ -36,7 +36,7 @@ public class UserActivityTest extends SocializeRobotiumTest {
 		robotium.waitForActivity("UserActivityListActivity", DEFAULT_TIMEOUT_MILLISECONDS);
 		robotium.waitForView(ListView.class);
 		ListView activity = (ListView) robotium.getCurrentActivity().findViewById(R.id.list);
-		assertEquals(14 ,activity.getCount());
+		assertEquals(34 ,activity.getCount());
 		
 		int comments = 0;
 		int shares = 0;
@@ -62,7 +62,7 @@ public class UserActivityTest extends SocializeRobotiumTest {
 			}
 		}
 		
-		assertEquals(10, comments);
+		assertEquals(30, comments);
 		assertEquals(2, shares);
 		assertEquals(2, likes);
 	}

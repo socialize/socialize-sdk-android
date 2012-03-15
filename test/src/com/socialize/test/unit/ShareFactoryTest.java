@@ -104,7 +104,6 @@ public class ShareFactoryTest extends AbstractSocializeActionFactoryTest<Share, 
 		final String text = "Test Share";
 		final String medium_name = "medium_name";
 		int medium = 69;
-		boolean propagate = false;
 
 		AndroidMock.expect(action.getText()).andReturn(text);
 		AndroidMock.expect(json.put("text", text)).andReturn(json);
@@ -115,8 +114,6 @@ public class ShareFactoryTest extends AbstractSocializeActionFactoryTest<Share, 
 		AndroidMock.expect(action.getMedium()).andReturn(medium);
 		AndroidMock.expect(json.put("medium", medium)).andReturn(json);
 
-		AndroidMock.expect(action.isPropagate()).andReturn(propagate);
-		AndroidMock.expect(json.put("propagate", 0)).andReturn(json);
 	}
 
 	@Override

@@ -184,6 +184,7 @@ public class ImageLoadAsyncTaskTest extends SocializeUIActivityTest {
 		AndroidMock.expect(request.getUrl()).andReturn(url);
 		AndroidMock.expect(requestsInProcess.get(url)).andReturn(current);
 		AndroidMock.expect(current.isCanceled()).andReturn(false);
+		AndroidMock.expect(current.isListenersNotified()).andReturn(false);
 		
 		current.merge(request);
 		

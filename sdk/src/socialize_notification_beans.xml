@@ -15,7 +15,10 @@
 	</bean>	
 	
 	<bean id="simpleMessageTranslator" class="com.socialize.notifications.SimpleNotificationMessageTranslator"/>
-	<bean id="developerMessageTranslator" class="com.socialize.notifications.DeveloperNotificationMessageTranslator"/>
+	
+	<bean id="developerMessageTranslator" class="com.socialize.notifications.DeveloperNotificationMessageTranslator">
+		<property name="appUtils" ref="appUtils"/>
+	</bean>
 	
 	<bean id="actionNotificationMessageBuilder" class="com.socialize.notifications.SocializeActionNotificationMessageBuilder">
 		<property name="appUtils" ref="appUtils"/>
@@ -37,6 +40,7 @@
 		<property name="appUtils" ref="appUtils"/>
 		<property name="numberUtils" ref="numberUtils"/>
 		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
+		<property name="notificationRegistrationSystem" ref="notificationRegistrationSystem"/>
 		<property name="messageBuilders">
 			<map>
 				<entry>

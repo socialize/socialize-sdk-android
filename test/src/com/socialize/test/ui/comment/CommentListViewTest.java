@@ -661,7 +661,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 	
 
 	@UsesMocks ({SocializeService.class})
-	public void testtestOnViewLoadSuccess() {
+	public void testOnViewLoadSuccess() {
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		
 		AndroidMock.expect(socialize.isAuthenticated()).andReturn(true);

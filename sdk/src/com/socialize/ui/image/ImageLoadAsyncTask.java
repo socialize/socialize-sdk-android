@@ -137,7 +137,7 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 			
 			ImageLoadRequest current = requestsInProcess.get(url);
 			
-			if(current != null && !current.isCanceled()) {
+			if(current != null && !current.isCanceled() && !current.isListenersNotified()) {
 				if(logger != null && logger.isDebugEnabled()) {
 					logger.debug("Image with url [" +
 							url +
