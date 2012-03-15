@@ -21,7 +21,9 @@ def create_android_config(key,secret,url,fb_user_id,fb_token):
     text+= '\nsocialize.register.notification=false'
     text+= '\nfacebook.app.id=209798315709193'
     text+= '\nfacebook.user.id='+fb_user_id
-    text+= '\nfacebook.token='+fb_token
+    text+= '\nfacebook.token='+fb_token 
+    text+= '\ntwitter.consumer.key=U18LUnVjULkkpGoJ6CoP3A' 
+    text+= '\ntwitter.consumer.secret=RiIljnFq4RWV9LEaCM1ZLsAHf053vX2KyhJhmCOlBE' 
     text+= '\ntest_value=sample'
     text+= '\nuntrimmed=value '
     text+= '\n'
