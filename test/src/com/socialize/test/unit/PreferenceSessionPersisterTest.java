@@ -37,6 +37,8 @@ import com.socialize.api.SocializeSessionFactory;
 import com.socialize.api.SocializeSessionImpl;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.DefaultUserProviderCredentials;
+import com.socialize.auth.DefaultUserProviderCredentialsMap;
 import com.socialize.auth.SocializeAuthProviderInfo;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
@@ -196,6 +198,50 @@ public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 		AndroidMock.verify(context);
 		AndroidMock.verify(prefs);
 		AndroidMock.verify(editor);
+	}
+	
+	@UsesMocks ({SharedPreferences.class, MockContext.class, MockEditor.class, JSONUtils.class})
+	public void testPreferencePersistDeleteByType() throws JSONException {
+		
+		MockContext context = AndroidMock.createMock(MockContext.class);
+		SharedPreferences prefs = AndroidMock.createMock(SharedPreferences.class);
+		JSONUtils jsonUtils = AndroidMock.createMock(JSONUtils.class);
+		MockEditor editor = AndroidMock.createMock(MockEditor.class);
+		String authData = "foobar";
+		String authData_after = "foobar_after";
+		
+		// Use a real UserProviderCredentialsMap to make the test behavioral
+		DefaultUserProviderCredentialsMap map = new DefaultUserProviderCredentialsMap();
+		DefaultUserProviderCredentials facebook = new DefaultUserProviderCredentials();
+		DefaultUserProviderCredentials twitter = new DefaultUserProviderCredentials();
+		
+		map.put(AuthProviderType.FACEBOOK, facebook);
+		map.put(AuthProviderType.TWITTER, twitter);
+		
+		assertNotNull(map.get(AuthProviderType.FACEBOOK));
+		assertNotNull(map.get(AuthProviderType.TWITTER));
+		
+		AndroidMock.expect(context.getSharedPreferences("SocializeSession", Context.MODE_PRIVATE)).andReturn(prefs);
+		AndroidMock.expect(prefs.getString("user_auth_data", null)).andReturn(authData);
+		
+		AndroidMock.expect(jsonUtils.fromJSON(authData, UserProviderCredentialsMap.class)).andReturn(map);
+		AndroidMock.expect(jsonUtils.toJSON(map)).andReturn(authData_after);
+		AndroidMock.expect(prefs.edit()).andReturn(editor);
+		AndroidMock.expect(editor.putString("user_auth_data", authData_after)).andReturn(editor);
+		AndroidMock.expect(editor.commit()).andReturn(true);
+		
+		AndroidMock.replay(context, jsonUtils, prefs, editor);
+		
+		PreferenceSessionPersister perister = new PreferenceSessionPersister();
+		perister.setJsonUtils(jsonUtils);
+		
+		perister.delete(context, AuthProviderType.FACEBOOK);
+		
+		AndroidMock.verify(context, jsonUtils, prefs, editor);
+		
+		assertNull(map.get(AuthProviderType.FACEBOOK));
+		assertNotNull(map.get(AuthProviderType.TWITTER));
+		
 	}
 	
 	@UsesMocks ({SharedPreferences.class})

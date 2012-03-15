@@ -100,9 +100,24 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 	 */
 	@Override
 	public void delete(Context context, AuthProviderType type) {
+		
 		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+		
+		String authData = prefs.getString(USER_AUTH_DATA, null);
+		
 		Editor editor = prefs.edit();
-		editor.putString(USER_AUTH_DATA, jsonUtils.toJSON(makeDefaultUserProviderCredentials()));
+		
+		if(!StringUtils.isEmpty(authData)) {
+			 UserProviderCredentialsMap map = jsonUtils.fromJSON(authData, UserProviderCredentialsMap.class);
+			 
+			 map.remove(type);
+			 
+			 editor.putString(USER_AUTH_DATA, jsonUtils.toJSON(map));
+		}
+		else {
+			editor.putString(USER_AUTH_DATA, jsonUtils.toJSON(makeDefaultUserProviderCredentials()));
+		}
+		
 		editor.commit();
 	}
 	
