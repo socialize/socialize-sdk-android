@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Facebook Integration &mdash; Socialize Android SDK v1.5.1 documentation</title>
+    <title>Twitter Integration &mdash; Socialize Android SDK v1.5.1 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -27,18 +27,18 @@
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
     <link rel="top" title="Socialize Android SDK v1.5.1 documentation" href="index.html?v=v1.5.1" />
-    <link rel="next" title="Twitter Integration" href="twitter.html?v=v1.5.1" />
-    <link rel="prev" title="Getting Started" href="getting_started.html?v=v1.5.1" /> 
+    <link rel="next" title="Socialize Action Bar" href="action_bar.html?v=v1.5.1" />
+    <link rel="prev" title="Facebook Integration" href="facebook.html?v=v1.5.1" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="twitter.html?v=v1.5.1" title="Twitter Integration"
+          <a href="action_bar.html?v=v1.5.1" title="Socialize Action Bar"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="getting_started.html?v=v1.5.1" title="Getting Started"
+          <a href="facebook.html?v=v1.5.1" title="Facebook Integration"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html?v=v1.5.1">Socialize Android SDK v1.5.1 documentation</a> &raquo;</li> 
       </ul>
@@ -72,75 +72,72 @@
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
-</script><div class="section" id="facebook-integration">
-<h1>Facebook Integration<a class="headerlink" href="#facebook-integration" title="Permalink to this headline">¶</a></h1>
+</script><div class="section" id="twitter-integration">
+<h1>Twitter Integration<a class="headerlink" href="#twitter-integration" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>It is strongly recommended that users be able to authenticate with Facebook when using Socialize so as to
-maximize the exposure and promotion of your app.</p>
-<p>This provides significant benefits to both your application and your users including:</p>
+<p>It is strongly recommended that users be able to authenticate with Twitter when using Socialize so as to
+maximize the exposure, and promotion of your app.</p>
+<p>This provides significant benefits to both your application, and your users including:</p>
 <ol class="arabic simple">
 <li>Improved user experience through personalized comments</li>
 <li>Automatic profile creation (user name and profile picture)</li>
-<li>Ability to automatically post user comments and likes to Facebook</li>
-<li>Promotes your app on Facebook by associating your app with comments</li>
+<li>Ability to automatically post user comments and likes to Twitter</li>
+<li>Promotes your app on Twitter by associating your app with a users&#8217; tweets</li>
 </ol>
-<p>To add Facebook authentication, you&#8217;ll need a Facebook App ID.  If you already have a Facebook app,
-you can skip this section.</p>
+<p>To add Twitter authentication, you&#8217;ll need a Twitter Application and the consumer key/consumer secret for the Twitter app.
+If you already have a Twitter app, you can skip this section.</p>
 </div>
-<div class="section" id="creating-a-facebook-application">
-<h2>Creating a Facebook Application<a class="headerlink" href="#creating-a-facebook-application" title="Permalink to this headline">¶</a></h2>
-<p>If you <strong>do not</strong> already have a Facebook app just follow these simple steps:</p>
+<div class="section" id="creating-a-twitter-application">
+<h2>Creating a Twitter Application<a class="headerlink" href="#creating-a-twitter-application" title="Permalink to this headline">¶</a></h2>
+<p>If you <strong>do not</strong> already have a Twitter app just follow these simple steps:</p>
 <blockquote>
 <div><ol class="arabic">
-<li><p class="first">First create a Facebook app.  Go to <a class="reference external" href="https://developers.facebook.com/apps">https://developers.facebook.com/apps</a> and create a new app:</p>
+<li><p class="first">First create a Twitter app.  Go to <a class="reference external" href="https://dev.twitter.com/">https://dev.twitter.com/</a> and create a new app:</p>
 <blockquote>
-<div><img alt="images/fb_add.png" src="images/fb_add.png" />
+<div><img alt="images/tw_create_app.png" src="images/tw_create_app.png" />
 </div></blockquote>
 </li>
-<li><p class="first">Your newly created Facebook app will have an ID, which is the ID used in Socialize and can be found on your Facebook Developer page:</p>
+<li><p class="first">When creating the app, make sure you specify a callback URL.
+This can be any value, and is not actually called during authentication but Twitter requires a
+valid URL for callback otherwise authentication will fail.</p>
 <blockquote>
-<div><p>For example, this is the Facebook App page for Socialize:</p>
-<img alt="images/fb_id.png" src="images/fb_id.png" />
-</div></blockquote>
-</li>
-<li><p class="first">Export the hash key from your Android keystore.  All Android apps are required to be signed prior to running on a device and you will already have created a keystore while building your Android app.</p>
-<blockquote>
-<div><p>Your keystore contains a public key which Facebook needs to identify your Android app.</p>
-<p>On your development machine (where you are building your Android app), run the following command to generate a key hash:</p>
-<div class="highlight-python"><pre>keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore | openssl sha1 -binary | openssl base64</pre>
+<div><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Make sure you specify a callback URL</p>
 </div>
-<p><strong>Make sure you use the correct key store to generate the hash</strong>.  The example above (taken from the Facebook documentation)
-indicates use of the <strong>debug.keystore</strong>.  You should use whichever keystore you chose when building the version of your app
-you are going to publish.</p>
+<img alt="images/tw_app_details.png" src="images/tw_app_details.png" />
 </div></blockquote>
 </li>
-<li><p class="first">Next add your key hash to your Facebook app.</p>
+<li><p class="first">Change the permissions on the app to Read/Write</p>
 <blockquote>
-<div><p>Paste your key into the &#8220;key hash&#8221; section of your Facebook app.</p>
-<img alt="images/fb_hash.png" src="images/fb_hash.png" />
-<p>Generally it makes sense to add BOTH your <strong>debug</strong> and your <strong>release</strong> keys to Facebook to avoid problems during development and testing.</p>
+<div><p>The default permissions for new Twitter Apps is Read Only, this must be changed to Read/Write.</p>
+<p>Your Twitter Consumer Key and Consumer Secret is also displayed on this page</p>
+<img alt="images/tw_app_info.png" src="images/tw_app_info.png" />
+<p>These settings can be altered from the Settings tab on your Twitter App page</p>
+<img alt="images/tw_app_permissions.png" src="images/tw_app_permissions.png" />
 </div></blockquote>
 </li>
 </ol>
 </div></blockquote>
 </div>
-<div class="section" id="configuring-facebook-in-socialize">
-<h2>Configuring Facebook in Socialize<a class="headerlink" href="#configuring-facebook-in-socialize" title="Permalink to this headline">¶</a></h2>
-<p>Once you have a facebook application, simply add your Facebook app Id your <strong>socialize.properties</strong> file:</p>
+<div class="section" id="configuring-twitter-in-socialize">
+<span id="propagate-tw"></span><h2>Configuring Twitter in Socialize<a class="headerlink" href="#configuring-twitter-in-socialize" title="Permalink to this headline">¶</a></h2>
+<p>Once you have a twitter application, simply add your Twitter consumer key and secret to your <strong>socialize.properties</strong> file:</p>
 <pre class="brush: java-properties">
-# Configure links to go to Amazon AppStore
-redirect.app.store=amazon
+# Set your consumer key/secret for Twitter integration
+twitter.consumer.key=U18LUnVjULkkpGoJ6AAAAA
+twitter.consumer.secret=RiIljnFq4RWV9LEaCM1ZLsAHf053vX2KyhJhmAAAAA
 </pre></div>
-<div class="section" id="propagating-socialize-actions-to-facebook">
-<span id="propagate-fb"></span><h2>Propagating Socialize Actions to Facebook<a class="headerlink" href="#propagating-socialize-actions-to-facebook" title="Permalink to this headline">¶</a></h2>
-<p>Social actions such as Comment and Like can optionally be propagated to Facebook via the SDK.</p>
+<div class="section" id="propagating-socialize-actions-to-twitter">
+<h2>Propagating Socialize Actions to Twitter<a class="headerlink" href="#propagating-socialize-actions-to-twitter" title="Permalink to this headline">¶</a></h2>
+<p>Social actions such as Comment and Like can optionally be propagated to Twitter via the SDK.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Propagation is automatic when using the Socialize Action Bar.  The following is only required for developers
 electing to use the SDK manually</p>
 </div>
-<p>The following example shows posting a comment and simultaneously sharing the comment to the user&#8217;s facebook wall.</p>
+<p>The following example shows posting a comment and simultaneously tweeting the comment on the user&#8217;s twitter feed.</p>
 <pre class="brush: java">
 
 import com.socialize.Socialize;
@@ -164,10 +161,10 @@ if(Socialize.getSocialize().isAuthenticated()) {
         // Allow display of the user's location in comments
         options.setShareLocation(true);
 
-        // Enable sharing to facebook.
-        options.setShareTo(SocialNetwork.FACEBOOK);
+        // Enable sharing to twitter.
+        options.setShareTo(SocialNetwork.TWITTER);
 
-        // Listen for the outcome of the facebook post
+        // Listen for the outcome of the twitter post
         options.setListener(new SocialNetworkListener() {
 
                 public void onError(Activity activity, SocialNetwork network, String message, Throwable e) {
@@ -196,14 +193,6 @@ if(Socialize.getSocialize().isAuthenticated()) {
                 }
         });
 }
-</pre></div>
-<div class="section" id="facebook-single-sign-on-sso">
-<h2>Facebook Single Sign On (SSO)<a class="headerlink" href="#facebook-single-sign-on-sso" title="Permalink to this headline">¶</a></h2>
-<p>Some users have reported having problems with the Single Sign On implementation in the Facebook SDK.</p>
-<p>If you have experienced problems with this (e.g. the &#8220;invalid_key&#8221; error), you can easily disable this feature:</p>
-<pre class="brush: java">
-// Disable ONLY if you experience problems
-Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(false);
 </pre><script type="text/javascript">
         SyntaxHighlighter.defaults['toolbar'] = false;
         SyntaxHighlighter.all();
@@ -233,15 +222,14 @@ Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(false);
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v1.5.1">What&#8217;s New</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v1.5.1">Getting Started</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Facebook Integration</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v1.5.1">Facebook Integration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Twitter Integration</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#creating-a-facebook-application">Creating a Facebook Application</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#configuring-facebook-in-socialize">Configuring Facebook in Socialize</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#propagating-socialize-actions-to-facebook">Propagating Socialize Actions to Facebook</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#facebook-single-sign-on-sso">Facebook Single Sign On (SSO)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-twitter-application">Creating a Twitter Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuring-twitter-in-socialize">Configuring Twitter in Socialize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#propagating-socialize-actions-to-twitter">Propagating Socialize Actions to Twitter</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v1.5.1">Twitter Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v1.5.1">Socialize Action Bar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v1.5.1">Socialize Like Button</a></li>
 <li class="toctree-l1"><a class="reference internal" href="comment_view.html?v=v1.5.1">Socialize Comments</a></li>
@@ -263,10 +251,10 @@ Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(false);
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="twitter.html?v=v1.5.1" title="Twitter Integration"
+          <a href="action_bar.html?v=v1.5.1" title="Socialize Action Bar"
              >next</a></li>
         <li class="right" >
-          <a href="getting_started.html?v=v1.5.1" title="Getting Started"
+          <a href="facebook.html?v=v1.5.1" title="Facebook Integration"
              >previous</a> |</li>
         <li><a href="index.html?v=v1.5.1">Socialize Android SDK v1.5.1 documentation</a> &raquo;</li> 
       </ul>

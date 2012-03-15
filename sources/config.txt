@@ -25,6 +25,10 @@ The following table lists the configuration options that can be specified in you
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | facebook.sso.enabled            | Boolean | true     |                                        | Enable/Disable Single Sign on for Facebook                       |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
+| twitter.consumer.key            | String  | None     | U18LUnVjULkkpGoJ6                      | Your Twitter consumer key                                        |
++---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
+| twitter.consumer.secret         | String  | None     | RiIljnFq4RWV9LEaCM1ZLsAHf053vX2K       | Your Twitter consumer secret                                     |
++---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | http.connection.timeout         | Long    | 10000    | 10000                                  | Time in ms for an http connection to be established              |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | http.socket.timeout             | Long    | 10000    | 10000                                  | Time in ms for an http request to return                         |
