@@ -19,15 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package oauth.signpost;
-
-import oauth.signpost.http.HttpParameters;
+package com.socialize.auth.twitter;
 
 /**
- * Custom listener to get access to token responses.
  * @author Jason Polites
+ *
  */
-public interface OAuthTokenListener {
-	public void onResponse(HttpParameters parameters);
+public interface OAuthRequestTokenUrlListener {
+	public void onRequestUrl(String url);
 	public void onError(Exception e);
 }

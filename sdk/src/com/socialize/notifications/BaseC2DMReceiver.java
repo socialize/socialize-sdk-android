@@ -85,29 +85,32 @@ public abstract class BaseC2DMReceiver extends Service {
 	
 	public void onHandleIntent(Intent intent) {
 		Context context = getApplicationContext();
-		try {
-			String action = intent.getAction();
-			if(!StringUtils.isEmpty(action)) {
-				if (isRegistrationAction(action)) {
-					onRegistrationResponse(context, intent);
-				} 
-				else if (isMessageAction(action)) {
-					onMessage(context, intent);
-				} 
+		
+		if(intent != null) {
+			try {
+				String action = intent.getAction();
+				if(!StringUtils.isEmpty(action)) {
+					if (isRegistrationAction(action)) {
+						onRegistrationResponse(context, intent);
+					} 
+					else if (isMessageAction(action)) {
+						onMessage(context, intent);
+					} 
+				}
+			} 
+			catch (Exception e) {
+				// TODO: Handle error
+				e.printStackTrace();
 			}
-		} 
-		catch (Exception e) {
-			// TODO: Handle error
-			e.printStackTrace();
-		}
-		finally {
-			// Release the power lock, so phone can get back to sleep.
-			// The lock is reference counted by default, so multiple
-			// messages are ok.
+			finally {
+				// Release the power lock, so phone can get back to sleep.
+				// The lock is reference counted by default, so multiple
+				// messages are ok.
 
-			// If the onMessage() needs to spawn a thread or do something else,
-			// it should use it's own lock.
-			WakeLock.getInstance().release(context);
+				// If the onMessage() needs to spawn a thread or do something else,
+				// it should use it's own lock.
+				WakeLock.getInstance().release(context);
+			}
 		}
 	}
 	

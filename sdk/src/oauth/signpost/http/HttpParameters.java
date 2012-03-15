@@ -46,6 +46,10 @@ public class HttpParameters implements Map<String, SortedSet<String>>, Serializa
         return wrappedMap.put(key, value);
     }
 
+    public void merge(HttpParameters other) {
+    	wrappedMap.putAll(other.wrappedMap);
+    }
+    
     public SortedSet<String> put(String key, SortedSet<String> values, boolean percentEncode) {
         if (percentEncode) {
             remove(key);

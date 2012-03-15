@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,15 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package oauth.signpost;
+package com.socialize.sample.util;
 
-import oauth.signpost.http.HttpParameters;
+import java.lang.reflect.Method;
 
 /**
- * Custom listener to get access to token responses.
  * @author Jason Polites
+ *
  */
-public interface OAuthTokenListener {
-	public void onResponse(HttpParameters parameters);
-	public void onError(Exception e);
+public class StictModeUtils {
+
+	public static final void enableDefaults() {
+		try {
+			Class<?> strictMode = Class.forName("android.os.StrictMode");
+			Method m = strictMode.getDeclaredMethod("enableDefaults");
+			m.invoke(null);
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -139,7 +139,7 @@ public class DeviceUtils {
 	 */
 	public void waitForServiceStart(Context context, Class<?> serviceClass, ServiceStartListener listener, long timeout) {
 		ServiceStartWaitTask task = new ServiceStartWaitTask(context, serviceClass, this, listener, timeout);
-		task.execute((Void[]) null);
+		task.execute();
 	}
 	
 	public boolean isServiceRunning(Context context, Class<?> serviceClass) {
