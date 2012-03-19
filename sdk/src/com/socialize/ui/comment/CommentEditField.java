@@ -29,16 +29,15 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.socialize.ui.util.Colors;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 
 /**
  * @author Jason Polites
  */
 public class CommentEditField extends LinearLayout {
 	
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	private Colors colors;
 	
 	public CommentEditField(Context context) {
@@ -47,8 +46,8 @@ public class CommentEditField extends LinearLayout {
 	
 	public void init() {
 
-		final int  four = deviceUtils.getDIP(4);
-		final int eight = deviceUtils.getDIP(8);
+		final int  four = displayUtils.getDIP(4);
+		final int eight = displayUtils.getDIP(8);
 		
 		LayoutParams editPanelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		editPanelLayoutParams.setMargins(four, eight, eight, eight);
@@ -62,7 +61,7 @@ public class CommentEditField extends LinearLayout {
 		editTextLayoutParams.setMargins(0, 0, 0, 0);
 
 		TextView editText = new TextView(getContext());
-		editText.setMinHeight(deviceUtils.getDIP(36)); 
+		editText.setMinHeight(displayUtils.getDIP(36)); 
 		editText.setGravity(Gravity.CENTER_VERTICAL);
 		editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
 		editText.setBackgroundDrawable(makeTextViewBackground());
@@ -75,7 +74,7 @@ public class CommentEditField extends LinearLayout {
 	
 	protected Drawable makeTextViewBackground() {
 		GradientDrawable base = makeGradient(colors.getColor(Colors.SOCIALIZE_BLUE), colors.getColor(Colors.SOCIALIZE_BLUE));
-		base.setCornerRadius(6+deviceUtils.getDIP(1)); // Add 1 pixels to make it look nicer
+		base.setCornerRadius(6+displayUtils.getDIP(1)); // Add 1 pixels to make it look nicer
 		GradientDrawable stroke = makeGradient(colors.getColor(Colors.TEXT_BG), colors.getColor(Colors.TEXT_BG));
 		stroke.setCornerRadius(6);
 		LayerDrawable layers = new LayerDrawable(new Drawable[] {base, stroke});
@@ -89,8 +88,8 @@ public class CommentEditField extends LinearLayout {
 				new int[] { bottom, top });
 	}		
 	
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 
 	public void setColors(Colors colors) {

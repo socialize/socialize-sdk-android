@@ -21,6 +21,7 @@
  */
 package com.socialize.test;
 
+import java.util.List;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.socialize.sample.EmptyActivity;
@@ -50,6 +51,10 @@ public abstract class SocializeActivityTest extends ActivityInstrumentationTestC
 	
 	protected <T extends Object> T getResult(int index) {
 		return holder.getResult(index);
+	}
+	
+	protected List<Object> getAllResults() {
+		return holder.getAllResults();
 	}
 	
 	protected <T extends Object> T getNextResult() {

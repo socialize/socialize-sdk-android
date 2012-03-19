@@ -33,6 +33,7 @@ import android.widget.Button;
 
 import com.socialize.Socialize;
 import com.socialize.sample.ui.SampleActivity2;
+import com.socialize.sample.util.StictModeUtils;
 import com.socialize.ui.dialog.SafeProgressDialog;
 
 public class Main extends Activity {
@@ -40,6 +41,8 @@ public class Main extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+//        StictModeUtils.enableDefaults();
         
         setContentView(R.layout.main);
         

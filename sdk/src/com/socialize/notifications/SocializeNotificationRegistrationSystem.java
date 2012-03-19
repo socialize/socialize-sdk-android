@@ -24,6 +24,7 @@ package com.socialize.notifications;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
@@ -39,7 +40,6 @@ import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
- *
  */
 public class SocializeNotificationRegistrationSystem implements NotificationRegistrationSystem {
 	
@@ -78,6 +78,19 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 	public void registerC2DMFailed(Context context, String cause) {
 		notificationRegistrationState.setC2dmPendingRequestTime(0);
 		notificationRegistrationState.save(context);
+	}
+	
+	
+
+	@Override
+	public void registerC2DMAsync(final Context context) {
+		new AsyncTask<Void, Void, Void>() {
+			@Override
+			protected Void doInBackground(Void... params) {
+				registerC2DM(context);
+				return null;
+			}
+		}.execute();
 	}
 
 	@Override

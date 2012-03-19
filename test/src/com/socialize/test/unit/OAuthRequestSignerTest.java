@@ -37,6 +37,7 @@ import com.socialize.oauth.DefaultOauthRequestSigner;
 import com.socialize.oauth.OAuthConsumerFactory;
 import com.socialize.oauth.OAuthRequestSigner;
 import com.socialize.test.SocializeUnitTest;
+import com.socialize.util.AppUtils;
 import com.socialize.util.DeviceUtils;
 
 /**
@@ -93,7 +94,7 @@ public class OAuthRequestSignerTest extends SocializeUnitTest {
 	@UsesMocks ({DefaultSocializeRequestFactory.class, OAuthRequestSigner.class, OAuthSignListener.class})
 	public void testUserAgentHeaderInsertedOnSign() throws SocializeException {
 		HttpUriRequest request = AndroidMock.createMock(HttpUriRequest.class);
-		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
+		AppUtils deviceUtils = AndroidMock.createMock(AppUtils.class);
 		OAuthRequestSigner signer = AndroidMock.createMock(OAuthRequestSigner.class);
 		OAuthSignListener listener = AndroidMock.createMock(OAuthSignListener.class);
 		SocializeSession session = AndroidMock.createNiceMock(SocializeSession.class);
@@ -109,7 +110,7 @@ public class OAuthRequestSignerTest extends SocializeUnitTest {
 		AndroidMock.replay(deviceUtils);
 
 		PublicDefaultSocializeRequestFactory requestFactory = new PublicDefaultSocializeRequestFactory();
-		requestFactory.setDeviceUtils(deviceUtils);
+		requestFactory.setAppUtils(deviceUtils);
 		requestFactory.setSignListener(listener);
 		requestFactory.setOauthSigner(signer);
 		requestFactory.sign(session, request);

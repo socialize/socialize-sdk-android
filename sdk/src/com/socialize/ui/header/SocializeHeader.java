@@ -31,9 +31,8 @@ import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.socialize.ui.util.Colors;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 
 /**
@@ -44,7 +43,7 @@ public class SocializeHeader extends LinearLayout {
 	
 	private TextView titleText;
 	
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	private Drawables drawables;
 	private Colors colors;
 	
@@ -54,8 +53,8 @@ public class SocializeHeader extends LinearLayout {
 		this.headerText = headerText;
 	}
 
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 
 	public void setDrawables(Drawables drawables) {
@@ -83,9 +82,9 @@ public class SocializeHeader extends LinearLayout {
 	}
 	
 	public void init() {
-		int four = deviceUtils.getDIP(4);
-		int eight = deviceUtils.getDIP(8);
-		int height = deviceUtils.getDIP(57);
+		int four = displayUtils.getDIP(4);
+		int eight = displayUtils.getDIP(8);
+		int height = displayUtils.getDIP(57);
 		
 		LayoutParams titlePanelLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, height);
 		titlePanelLayoutParams.gravity = Gravity.CENTER_VERTICAL;
@@ -109,7 +108,7 @@ public class SocializeHeader extends LinearLayout {
 		titleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
 		titleText.setTextColor(colors.getColor(Colors.HEADER));
 		titleText.setText(getHeaderText());
-		titleText.setPadding(0, 0, 0, deviceUtils.getDIP(2));
+		titleText.setPadding(0, 0, 0, displayUtils.getDIP(2));
 
 		LayoutParams titleTextLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		titleTextLayoutParams.gravity = Gravity.CENTER_VERTICAL;

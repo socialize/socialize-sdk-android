@@ -29,9 +29,8 @@ import android.graphics.drawable.LayerDrawable;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
-
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 
 /**
  * @author Jason Polites
@@ -44,7 +43,7 @@ public class ActionBarButton extends LinearLayout {
 
 	private ActionBarButtonListener listener;
 	private Drawable background;
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	private ActionBarItem actionBarItem;
 
 	private IBeanFactory<ActionBarItem> actionBarItemFactory;
@@ -56,10 +55,10 @@ public class ActionBarButton extends LinearLayout {
 	public void init(int width, float weight) {
 
 		if (width > 0) {
-			width = deviceUtils.getDIP(width);
+			width = displayUtils.getDIP(width);
 		}
 		
-		int height = deviceUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT);
+		int height = displayUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT);
 
 		LayoutParams masterParams = new LayoutParams(width, height);
 		masterParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
@@ -114,8 +113,8 @@ public class ActionBarButton extends LinearLayout {
 		}
 	}
 
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
  
 	public ActionBarItem getActionBarItem() {

@@ -22,7 +22,6 @@
 package com.socialize.ui.profile.activity;
 
 import java.util.Date;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -37,7 +36,6 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.config.SocializeConfig;
@@ -45,7 +43,7 @@ import com.socialize.entity.SocializeAction;
 import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.util.DateUtils;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 
 /**
@@ -59,7 +57,7 @@ public class UserActivityListItem extends TableLayout {
 	private UserActivityAction actionText;
 	private Drawable background;
 	
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	private Colors colors;	
 	private Drawables drawables;
 	private DateUtils dateUtils;
@@ -84,15 +82,15 @@ public class UserActivityListItem extends TableLayout {
 	}
 	
 	public void init() {
-		padding = deviceUtils.getDIP(4);
+		padding = displayUtils.getDIP(4);
 		bgColor = colors.getColor(Colors.LIST_ITEM_BG);
 		topColor = colors.getColor(Colors.LIST_ITEM_TOP);
 		bottomColor = colors.getColor(Colors.LIST_ITEM_BOTTOM);
 		
-		int contentMargin = deviceUtils.getDIP(4);
+		int contentMargin = displayUtils.getDIP(4);
 		
 		if(Socialize.getSocialize().getConfig().getBooleanProperty(SocializeConfig.SOCIALIZE_USE_ACTION_WEBVIEW, false)) {
-			contentMargin = deviceUtils.getDIP(10);
+			contentMargin = displayUtils.getDIP(10);
 		}
 		
 		setOrientation(LinearLayout.HORIZONTAL);
@@ -232,8 +230,8 @@ public class UserActivityListItem extends TableLayout {
 		}
 	}
 
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 
 	public void setColors(Colors colors) {

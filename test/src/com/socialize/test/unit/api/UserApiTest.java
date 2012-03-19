@@ -34,6 +34,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.user.UserListener;
 import com.socialize.listener.user.UserSaveListener;
+import com.socialize.notifications.NotificationRegistrationSystem;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.ui.profile.UserProfile;
@@ -93,13 +94,14 @@ public class UserApiTest extends SocializeUnitTest {
 		
 		AndroidMock.expect(session.getUser()).andReturn(user);
 		AndroidMock.expect(user.getId()).andReturn(id);
+		AndroidMock.expect(user.isNotificationsEnabled()).andReturn(true);
 		
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setProfilePicData(encodedImage);
 		user.setAutoPostToFacebook(true);
 		user.setAutoPostToTwitter(true);
-		user.setNotificationsEnabled(true);
+		user.setNotificationsEnabled(false);
 		
 		SocializeUserSystem api = new SocializeUserSystem(provider) {
 			@Override
@@ -117,8 +119,7 @@ public class UserApiTest extends SocializeUnitTest {
 		profile.setEncodedImage(encodedImage);
 		profile.setAutoPostFacebook(true);
 		profile.setAutoPostTwitter(true);
-		profile.setNotificationsEnabled(true);
-		
+		profile.setNotificationsEnabled(false);
 		
 		api.saveUserProfile(context, session, profile, listener);
 		
@@ -132,7 +133,7 @@ public class UserApiTest extends SocializeUnitTest {
 	/**
 	 * Tests that the listener created in saveUserProfile behaves correctly.
 	 */
-	@UsesMocks ({SocializeException.class, SocializeSessionPersister.class})
+	@UsesMocks ({SocializeException.class, SocializeSessionPersister.class, NotificationRegistrationSystem.class})
 	public void testSaveUserProfileListener() {
 		
 		final long id = 69;
@@ -145,9 +146,13 @@ public class UserApiTest extends SocializeUnitTest {
 		User user = AndroidMock.createMock(User.class);
 		SocializeSessionPersister sessionPersister = AndroidMock.createMock(SocializeSessionPersister.class);
 		SocializeException exception = AndroidMock.createMock(SocializeException.class);
+		NotificationRegistrationSystem notificationRegistrationSystem = AndroidMock.createMock(NotificationRegistrationSystem.class);
 		
 		AndroidMock.expect(session.getUser()).andReturn(user).times(2);
 		AndroidMock.expect(user.getId()).andReturn(id);
+		AndroidMock.expect(user.isNotificationsEnabled()).andReturn(true);
+		
+		notificationRegistrationSystem.registerC2DMAsync(context);
 		
 		user.merge(user);
 		
@@ -161,7 +166,7 @@ public class UserApiTest extends SocializeUnitTest {
 		user.setProfilePicData(encodedImage);
 		user.setAutoPostToFacebook(true);
 		user.setAutoPostToTwitter(true);
-		user.setNotificationsEnabled(true);
+		user.setNotificationsEnabled(false);
 		
 		SocializeUserSystem api = new SocializeUserSystem(provider) {
 			@Override
@@ -172,10 +177,7 @@ public class UserApiTest extends SocializeUnitTest {
 		
 		api.setSessionPersister(sessionPersister);
 		
-		AndroidMock.replay(session);
-		AndroidMock.replay(listener);
-		AndroidMock.replay(sessionPersister);
-		AndroidMock.replay(user);
+		AndroidMock.replay(session, listener, sessionPersister, user, notificationRegistrationSystem);
 		
 		UserProfile profile = new UserProfile();
 		profile.setFirstName(firstName);
@@ -183,8 +185,9 @@ public class UserApiTest extends SocializeUnitTest {
 		profile.setEncodedImage(encodedImage);
 		profile.setAutoPostFacebook(true);
 		profile.setAutoPostTwitter(true);
-		profile.setNotificationsEnabled(true);
+		profile.setNotificationsEnabled(false);
 		
+		api.setNotificationRegistrationSystem(notificationRegistrationSystem);
 		api.saveUserProfile(context, session, profile, listener);
 		
 		// This will fail if it's the wrong type
@@ -196,10 +199,7 @@ public class UserApiTest extends SocializeUnitTest {
 		listenerFound.onUpdate(user);
 		listenerFound.onError(exception);
 		
-		AndroidMock.verify(session);
-		AndroidMock.verify(listener);
-		AndroidMock.verify(sessionPersister);
-		AndroidMock.verify(user);
+		AndroidMock.verify(session, listener, sessionPersister, user, notificationRegistrationSystem);
 		
 	}
 }

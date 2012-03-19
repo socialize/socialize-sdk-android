@@ -29,4 +29,5 @@ import oauth.signpost.http.HttpParameters;
  */
 public interface OAuthTokenListener {
 	public void onResponse(HttpParameters parameters);
+	public void onError(Exception e);
 }

@@ -69,7 +69,7 @@ public class NotificationSystemTest extends SocializeActivityTest {
 		
 		NotificationsAccess.setBeanOverrides(receiver, new String[]{SocializeConfig.SOCIALIZE_NOTIFICATION_BEANS_PATH, "socialize_notification_mock_beans.xml"});
 		
-		receiver.init();
+		receiver.onCreate();
 		
 		ProxyObject<ActivitySystem> proxy = NotificationsAccess.getProxy(receiver, "activitySystem");
 		ProxyObject<NotificationAuthenticator> notificationAuthenticatorProxy = NotificationsAccess.getProxy(receiver, "notificationAuthenticator");

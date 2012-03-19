@@ -35,7 +35,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
@@ -49,7 +48,7 @@ import com.socialize.ui.util.KeyboardUtils;
 import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.SocializeButton;
 import com.socialize.util.AppUtils;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
 
@@ -62,7 +61,7 @@ public class CommentEntryView extends BaseView {
 	private SocializeButton postCommentButton;
 	private SocializeButton cancelCommentButton;
 	private SocializeButton subscribeNotificationButton;
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	private AppUtils appUtils;
 	private Drawables drawables;
 	private KeyboardUtils keyboardUtils;
@@ -95,8 +94,8 @@ public class CommentEntryView extends BaseView {
 
 	public void init() {
 		
-		int padding = deviceUtils.getDIP(4);
-		int textPadding = deviceUtils.getDIP(2);
+		int padding = displayUtils.getDIP(4);
+		int textPadding = displayUtils.getDIP(2);
 		
 		notificationsEnabled = true;
 		notificationsAvailable = appUtils.isNotificationsAvailable(getContext());
@@ -223,7 +222,7 @@ public class CommentEntryView extends BaseView {
 		
 		initShareToolbar();
 		
-		if(notificationsAvailable && deviceUtils.getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
+		if(notificationsAvailable && displayUtils.getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
 
 			// Notification layout
 			LinearLayout notificationMasterLayout = new LinearLayout(getContext());
@@ -231,7 +230,7 @@ public class CommentEntryView extends BaseView {
 					
 			notificationMasterLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 			notificationMasterLayoutParams.weight = 1.0f;
-			notificationMasterLayoutParams.setMargins(0, -deviceUtils.getDIP(20), 0, 0);
+			notificationMasterLayoutParams.setMargins(0, -displayUtils.getDIP(20), 0, 0);
 			notificationMasterLayout.setLayoutParams(notificationMasterLayoutParams);
 			
 			LinearLayout notificationContentLayout = new LinearLayout(getContext());
@@ -269,7 +268,7 @@ public class CommentEntryView extends BaseView {
 			if(subscribeNotificationButton != null) {
 				LayoutParams subscribeNotificationButtonLayoutParams = new LinearLayout.LayoutParams(subscribeNotificationButton.getButtonWidth(), subscribeNotificationButton.getButtonHeight());
 				
-				subscribeNotificationButtonLayoutParams.setMargins(0, deviceUtils.getDIP(20), 0, 0);
+				subscribeNotificationButtonLayoutParams.setMargins(0, displayUtils.getDIP(20), 0, 0);
 				subscribeNotificationButtonLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 				subscribeNotificationButton.setLayoutParams(subscribeNotificationButtonLayoutParams);			
 				
@@ -294,7 +293,7 @@ public class CommentEntryView extends BaseView {
 			final boolean fbOK = Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK);
 			final boolean twOK = Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER);
 			
-			int padding = deviceUtils.getDIP(4);
+			int padding = displayUtils.getDIP(4);
 			
 			LinearLayout toolbarLayout = new LinearLayout(getContext());
 			LinearLayout toolbarLayoutLeft = new LinearLayout(getContext());
@@ -368,7 +367,7 @@ public class CommentEntryView extends BaseView {
 					toolbarLayoutRight.addView(twitterCheckbox);
 				}			
 				
-				if(notifyCheckBox != null && deviceUtils.getOrientation() != Configuration.ORIENTATION_PORTRAIT) {
+				if(notifyCheckBox != null && displayUtils.getOrientation() != Configuration.ORIENTATION_PORTRAIT) {
 					toolbarLayoutRight.addView(notifyCheckBox);
 				}
 			}	
@@ -437,8 +436,8 @@ public class CommentEntryView extends BaseView {
 		commentField.requestFocus();
 	}
 
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 
 	public void setKeyboardUtils(KeyboardUtils keyboardUtils) {

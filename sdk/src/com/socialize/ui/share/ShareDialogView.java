@@ -31,12 +31,11 @@ import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 import com.socialize.ui.view.SocializeButton;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
 
@@ -58,7 +57,7 @@ public class ShareDialogView extends BaseView {
 	
 	private OnActionBarEventListener onActionBarEventListener;
 	
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	private ActionBarView actionBarView;
 	private Drawables drawables;
 	
@@ -74,7 +73,7 @@ public class ShareDialogView extends BaseView {
 	
 	public void init() {
 		
-		int padding = deviceUtils.getDIP(8);
+		int padding = displayUtils.getDIP(8);
 		
 		LayoutParams fill = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 
@@ -118,7 +117,7 @@ public class ShareDialogView extends BaseView {
 		
 //		boolean landscape = false;
 		
-		if(deviceUtils.getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
+		if(displayUtils.getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
 			setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
 			commentField.setLines(4);
 			
@@ -191,8 +190,8 @@ public class ShareDialogView extends BaseView {
 //		}
 	}
 
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 
 	public void setFacebookShareButton(SocializeButton facebookShareButton) {

@@ -22,6 +22,7 @@
 package com.socialize.util;
 
 import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -46,6 +47,7 @@ public class DefaultAppUtils implements AppUtils {
 	
 	private String packageName;
 	private String appName;
+	private String userAgent;
 	private SocializeLogger logger;
 	private SocializeConfig config;
 	
@@ -233,44 +235,52 @@ public class DefaultAppUtils implements AppUtils {
 		    
 			boolean ok = true;
 			
-			if(!hasPermission(context, permissionString)) {
-				lastNotificationWarning = "Notifications not available, permission [" +
-						permissionString +
-						"] not specified in AndroidManifest.xml";
-				if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
-				ok = false;
+			if(config.getBooleanProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_ENABLED, true)) {
+				if(!hasPermission(context, permissionString)) {
+					lastNotificationWarning = "Notifications not available, permission [" +
+							permissionString +
+							"] not specified in AndroidManifest.xml";
+					if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
+					ok = false;
+				}
+				
+				if(!hasPermission(context, "com.google.android.c2dm.permission.RECEIVE")) {
+					lastNotificationWarning = "Notifications not available, permission com.google.android.c2dm.permission.RECEIVE not specified in AndroidManifest.xml, or device does not include Google APIs";
+					if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
+					ok = false;
+				}
+				
+				if(!isReceiverAvailable(context, SocializeBroadcastReceiver.class)) {
+					
+					lastNotificationWarning = "Notifications not available. Receiver [" +
+							SocializeBroadcastReceiver.class +
+							"] not configured in AndroidManifest.xml";
+					
+					if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
+					ok = false;
+				}
+				
+				if(!isServiceAvailable(context, SocializeC2DMReceiver.class)) {
+					
+					lastNotificationWarning = "Notifications not available. Service [" +
+							SocializeBroadcastReceiver.class +
+							"] not configured in AndroidManifest.xml";
+					
+					if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
+					ok = false;
+				}			
+				
+				if(config.isENTITY_LOADER_CHECK_ENABLED() && Socialize.getSocialize().getEntityLoader() == null) {
+					lastNotificationWarning = "Notifications not available. Entity loader not found.";
+					if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
+					ok = false;
+				}
 			}
-			
-			if(!hasPermission(context, "com.google.android.c2dm.permission.RECEIVE")) {
-				lastNotificationWarning = "Notifications not available, permission com.google.android.c2dm.permission.RECEIVE not specified in AndroidManifest.xml, or device does not include Google APIs";
-				if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
+			else {
 				ok = false;
-			}
-			
-			if(!isReceiverAvailable(context, SocializeBroadcastReceiver.class)) {
-				
-				lastNotificationWarning = "Notifications not available. Receiver [" +
-						SocializeBroadcastReceiver.class +
-						"] not configured in AndroidManifest.xml";
-				
-				if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
-				ok = false;
-			}
-			
-			if(!isServiceAvailable(context, SocializeC2DMReceiver.class)) {
-				
-				lastNotificationWarning = "Notifications not available. Service [" +
-						SocializeBroadcastReceiver.class +
-						"] not configured in AndroidManifest.xml";
-				
-				if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
-				ok = false;
-			}			
-			
-			if(config.isENTITY_LOADER_CHECK_ENABLED() && Socialize.getSocialize().getEntityLoader() == null) {
-				lastNotificationWarning = "Notifications not available. Entity loader not found.";
-				if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
-				ok = false;
+				if(logger.isDebugEnabled()) {
+					logger.debug("SmartAlerts disabled in config");
+				}
 			}
 			
 			notificationsAvailable = ok;
@@ -332,6 +342,14 @@ public class DefaultAppUtils implements AppUtils {
 		return applicationInfo.icon;
 	}
 	
+	public String getUserAgentString() {
+		if (userAgent == null) {
+			userAgent = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_"
+					+ Locale.getDefault().getCountry() + "; BundleID/" + getPackageName() + ";";
+		}
+		return userAgent;
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.socialize.util.IAppUtils#getAppName()
 	 */
@@ -339,6 +357,8 @@ public class DefaultAppUtils implements AppUtils {
 	public String getAppName() {
 		return appName;
 	}
+	
+	
 
 	/* (non-Javadoc)
 	 * @see com.socialize.util.IAppUtils#getPackageName()

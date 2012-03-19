@@ -19,49 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.util;
+package com.socialize.sample.util;
 
-import android.content.Context;
-import android.content.Intent;
-
-import com.socialize.entity.Entity;
+import java.lang.reflect.Method;
 
 /**
  * @author Jason Polites
  *
  */
-public interface AppUtils {
+public class StictModeUtils {
 
-	public String getEntityUrl(Entity entity);
-	
-	public String getAppUrl();
-
-	public String getMarketUrl();
-
-	public boolean isActivityAvailable(Context context, Class<?> activity);
-
-	public boolean isIntentAvailable(Context context, String action);
-
-	public boolean isIntentAvailable(Context context, Intent intent);
-
-	public boolean isServiceAvailable(Context context, Class<?> cls);
-
-	public boolean isReceiverAvailable(Context context, Class<?> cls);
-
-	public boolean isLocationAvaiable(Context context);
-
-	public boolean isNotificationsAvailable(Context context);
-
-	public boolean hasPermission(Context context, String permission);
-
-	public String getAppName();
-	
-	public int getAppIconId(Context context);
-
-	public String getPackageName();
-
-	public String getAppStoreAbbreviation(String appStore);
-	
-	public String getUserAgentString();
-
+	public static final void enableDefaults() {
+		try {
+			Class<?> strictMode = Class.forName("android.os.StrictMode");
+			Method m = strictMode.getDeclaredMethod("enableDefaults");
+			m.invoke(null);
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

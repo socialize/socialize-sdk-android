@@ -64,11 +64,11 @@ public class SocializeC2DMReceiverTest extends SocializeUnitTest {
 			}
 		};
 		
-		receiver.init();
+		receiver.onCreate();
 		
 		AndroidMock.verify(container, ioc);
 		
-		assertTrue(receiver.isInitialized());
+//		assertTrue(receiver.isInitialized());
 		
 	}
 	
@@ -100,7 +100,7 @@ public class SocializeC2DMReceiverTest extends SocializeUnitTest {
 		
 		AndroidMock.verify(container);
 		
-		assertFalse(receiver.isInitialized());
+//		assertFalse(receiver.isInitialized());
 		
 		Object nextResult = getNextResult();
 		
@@ -121,11 +121,6 @@ public class SocializeC2DMReceiverTest extends SocializeUnitTest {
 			@Override
 			public Context getContext() {
 				return SocializeC2DMReceiverTest.this.getContext();
-			}
-
-			@Override
-			public boolean assertInitialized() {
-				return true;
 			}
 		};
 		
@@ -154,11 +149,6 @@ public class SocializeC2DMReceiverTest extends SocializeUnitTest {
 			public Context getContext() {
 				return SocializeC2DMReceiverTest.this.getContext();
 			}
-
-			@Override
-			public boolean assertInitialized() {
-				return true;
-			}
 		};
 		
 		receiver.setNotificationCallback(notificationCallback);
@@ -181,11 +171,6 @@ public class SocializeC2DMReceiverTest extends SocializeUnitTest {
 			public Context getContext() {
 				return SocializeC2DMReceiverTest.this.getContext();
 			}
-
-			@Override
-			public boolean assertInitialized() {
-				return true;
-			}
 		};
 		
 		receiver.setNotificationCallback(notificationCallback);
@@ -206,11 +191,6 @@ public class SocializeC2DMReceiverTest extends SocializeUnitTest {
 			@Override
 			public Context getContext() {
 				return SocializeC2DMReceiverTest.this.getContext();
-			}
-
-			@Override
-			public boolean assertInitialized() {
-				return true;
 			}
 		};
 		

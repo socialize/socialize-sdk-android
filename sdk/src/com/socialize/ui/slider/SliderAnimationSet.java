@@ -25,8 +25,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.TranslateAnimation;
-
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 
 /**
  * @author Jason Polites
@@ -34,7 +33,7 @@ import com.socialize.util.DeviceUtils;
  */
 public class SliderAnimationSet {
 	
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	
 	private TranslateAnimation maximizeFromClose;
 	private TranslateAnimation maximizeFromPeek;
@@ -105,7 +104,7 @@ public class SliderAnimationSet {
 		int h = slider.getDeviceHeight();
 		
 		if(slideHeight > 0) {
-			h = deviceUtils.getDIP(slideHeight) + (slider.getDeviceHeight() - slider.getActionBarTop()) + slider.getHandleHeight();
+			h = displayUtils.getDIP(slideHeight) + (slider.getDeviceHeight() - slider.getActionBarTop()) + slider.getHandleHeight();
 		}
 		
 		final int height = h;
@@ -193,7 +192,7 @@ public class SliderAnimationSet {
 		anim.setDuration(duration);
 	}
 	
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 }

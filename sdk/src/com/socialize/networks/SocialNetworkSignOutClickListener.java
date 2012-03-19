@@ -67,7 +67,7 @@ public class SocialNetworkSignOutClickListener implements OnClickListener {
 				dialog.dismiss();
 				SocialNetworkSignOutTask task = signOutTaskFactory.getBean(v.getContext());
 				task.setSignOutListener(listener);
-				task.doExecute((Void[])null);
+				task.doExecute();
 			}
 		})
 		.setNegativeButton("No", new DialogInterface.OnClickListener() {

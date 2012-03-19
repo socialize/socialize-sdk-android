@@ -60,15 +60,32 @@ public class TwitterAuthWebView extends WebView implements ITwitterAuthWebView {
 		
 		twitterWebViewClient.setOauthRequestListener(oAuthRequestListener);
 		
-		try {
-			String retrieveRequestToken = provider.retrieveRequestToken(consumer, TwitterOAuthProvider.OAUTH_CALLBACK_URL);
-			loadUrl(retrieveRequestToken);
-		} 
-		catch (Exception e) {
-			if(listener != null) {
-				listener.onError(SocializeException.wrap(e));
+		provider.retrieveRequestTokenAsync(consumer, TwitterOAuthProvider.OAUTH_CALLBACK_URL, newOAuthRequestTokenUrlListener(listener));
+		
+//		try {
+//			String retrieveRequestToken = provider.retrieveRequestToken(consumer, TwitterOAuthProvider.OAUTH_CALLBACK_URL);
+//		} 
+//		catch (Exception e) {
+//			if(listener != null) {
+//				listener.onError(SocializeException.wrap(e));
+//			}
+//		}		
+	}
+	
+	protected OAuthRequestTokenUrlListener newOAuthRequestTokenUrlListener(final TwitterAuthListener listener) {
+		return new OAuthRequestTokenUrlListener() {
+			@Override
+			public void onRequestUrl(String url) {
+				loadUrl(url);
 			}
-		}		
+			
+			@Override
+			public void onError(Exception e) {
+				if(listener != null) {
+					listener.onError(SocializeException.wrap(e));
+				}					
+			}
+		};
 	}
 	
 	protected OAuthRequestListener newOAuthRequestListener(final TwitterAuthListener listener, final TwitterOAuthProvider provider, final CommonsHttpOAuthConsumer consumer) {
@@ -109,6 +126,13 @@ public class TwitterAuthWebView extends WebView implements ITwitterAuthWebView {
 				if(listener != null) {
 					listener.onAuthSuccess(token, secret, screenName, userId);
 				}
+			}
+
+			@Override
+			public void onError(Exception e) {
+				if(listener != null) {
+					listener.onError(SocializeException.wrap(e));
+				}				
 			}
 		};
 	}

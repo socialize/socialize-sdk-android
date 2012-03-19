@@ -33,13 +33,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.networks.facebook.FacebookSignInCell;
 import com.socialize.networks.twitter.TwitterSignInCell;
 import com.socialize.ui.util.Colors;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
 
@@ -67,19 +66,19 @@ public class AuthPanelView extends BaseView {
 	private IBeanFactory<AnonymousCell> anonCellFactory; 
 	
 	private Drawables drawables;
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	
 	private FacebookSignInCell facebookSignInCell;
 	private TwitterSignInCell twitterSignInCell;
 
 	public void init() {
 		
-		int padding = deviceUtils.getDIP(12);
+		int padding = displayUtils.getDIP(12);
 		
 		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		LayoutParams contentParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		LayoutParams anonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		LayoutParams headerParams = new LayoutParams(LayoutParams.FILL_PARENT, deviceUtils.getDIP(45));
+		LayoutParams headerParams = new LayoutParams(LayoutParams.FILL_PARENT, displayUtils.getDIP(45));
 		RelativeLayout.LayoutParams badgeParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		LayoutParams cellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		LayoutParams badgeLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
@@ -97,7 +96,7 @@ public class AuthPanelView extends BaseView {
 		
 		TextView header = new TextView(getContext());
 	
-		float headerRadius = deviceUtils.getDIP(3);
+		float headerRadius = displayUtils.getDIP(3);
 		
 		GradientDrawable headerBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[]{Colors.parseColor("#057498"), Colors.parseColor("#08ade4")});
 		headerBG.setCornerRadii(new float[]{headerRadius, headerRadius, headerRadius, headerRadius, 0.0f, 0.0f, 0.0f, 0.0f});
@@ -124,7 +123,7 @@ public class AuthPanelView extends BaseView {
 		boolean fbOK = getSocialize().isSupported(AuthProviderType.FACEBOOK);
 		boolean twOK = getSocialize().isSupported(AuthProviderType.TWITTER);
 		
-		float radii = deviceUtils.getDIP(8);
+		float radii = displayUtils.getDIP(8);
 		
 		if(fbOK) {
 			facebookSignInCell = facebookSignInCellFactory.getBean();
@@ -216,8 +215,8 @@ public class AuthPanelView extends BaseView {
 		this.drawables = drawables;
 	}
 
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 
 	public FacebookSignInCell getFacebookSignInCell() {

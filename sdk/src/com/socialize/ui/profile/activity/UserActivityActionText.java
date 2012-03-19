@@ -32,7 +32,6 @@ import android.text.style.TextAppearanceSpan;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
-
 import com.socialize.Socialize;
 import com.socialize.api.action.ActionType;
 import com.socialize.entity.SocializeAction;
@@ -40,7 +39,7 @@ import com.socialize.entity.User;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.ui.util.Colors;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 import com.socialize.util.StringUtils;
 
 /**
@@ -52,7 +51,7 @@ public class UserActivityActionText extends TextView implements UserActivityActi
 	private Colors colors;
 	private int contentFontSize = 12;
 	private int titleFontSize = 11;
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	private SocializeLogger logger;
 	
 	public UserActivityActionText(Context context) {
@@ -89,7 +88,7 @@ public class UserActivityActionText extends TextView implements UserActivityActi
 	
 	protected void doSetAction(final SocializeAction action) {
 
-		int contentFontSizeDip = deviceUtils.getDIP(contentFontSize);
+		int contentFontSizeDip = displayUtils.getDIP(contentFontSize);
 		
 		StringBuilder builder = new StringBuilder();
 		
@@ -234,8 +233,8 @@ public class UserActivityActionText extends TextView implements UserActivityActi
 		this.colors = colors;
 	}
 
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 
 	public void setLogger(SocializeLogger logger) {

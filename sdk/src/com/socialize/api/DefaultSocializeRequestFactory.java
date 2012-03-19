@@ -26,9 +26,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import oauth.socialize.OAuthSignListener;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
@@ -40,7 +38,6 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
@@ -52,7 +49,7 @@ import com.socialize.entity.SocializeObject;
 import com.socialize.entity.SocializeObjectFactory;
 import com.socialize.error.SocializeException;
 import com.socialize.oauth.OAuthRequestSigner;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.AppUtils;
 import com.socialize.util.StringUtils;
 import com.socialize.util.UrlBuilder;
 
@@ -65,7 +62,7 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 	private OAuthRequestSigner oauthSigner;
 	private SocializeObjectFactory<T> objectFactory;
 	private OAuthSignListener signListener;
-	private DeviceUtils deviceUtils;
+	private AppUtils appUtils;
 	
 	public DefaultSocializeRequestFactory(OAuthRequestSigner signer, SocializeObjectFactory<T> objectFactory) {
 		super();
@@ -89,8 +86,8 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 		this.signListener = signListener;
 	}
 	
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setAppUtils(AppUtils appUtils) {
+		this.appUtils = appUtils;
 	}
 
 	@Override
@@ -332,8 +329,8 @@ public class DefaultSocializeRequestFactory<T extends SocializeObject> implement
 	protected <R extends HttpUriRequest> R sign(SocializeSession session, R request) throws SocializeException {
 		
 		// Add socialize headers
-		if(deviceUtils != null) {
-			request.addHeader("User-Agent", deviceUtils.getUserAgentString());
+		if(appUtils != null) {
+			request.addHeader("User-Agent", appUtils.getUserAgentString());
 		}
 		
 		return oauthSigner.sign(session, request, signListener);

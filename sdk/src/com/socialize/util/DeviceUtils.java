@@ -21,12 +21,8 @@
  */
 package com.socialize.util;
 
-import java.util.Locale;
-
 import android.Manifest.permission;
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.provider.MediaStore;
@@ -34,8 +30,6 @@ import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.view.Display;
-
-import com.socialize.Socialize;
 import com.socialize.log.SocializeLogger;
 
 /**
@@ -44,9 +38,9 @@ import com.socialize.log.SocializeLogger;
 public class DeviceUtils {
 
 	private SocializeLogger logger;
+	
 	private AppUtils appUtils;
 	
-	private String userAgent;
 	private float density = 1f;
 	private boolean hasCamera;
 	private int orientation;
@@ -78,19 +72,10 @@ public class DeviceUtils {
 					orientation = Configuration.ORIENTATION_LANDSCAPE;
 				}
 			}
-			
-			if(appUtils != null) {
-				hasCamera = appUtils.isIntentAvailable(context, MediaStore.ACTION_IMAGE_CAPTURE);
-			}
 		}
-		else {
-			String errroMsg = "Unable to determine device screen density.  Socialize must be intialized from an Activity";
-			if (logger != null) {
-				logger.warn(errroMsg);
-			}
-			else {
-				System.err.println(errroMsg);
-			}
+		
+		if(appUtils != null) {
+			hasCamera = appUtils.isIntentAvailable(context, MediaStore.ACTION_IMAGE_CAPTURE);
 		}
 	}
 
@@ -118,10 +103,12 @@ public class DeviceUtils {
 		return appUtils.isIntentAvailable(context, action);
 	}
 
+	@Deprecated
 	public int getDIP(float pixels) {
 		return getDIP(Math.round(pixels));
 	}
 	
+	@Deprecated
 	public int getDIP(int pixels) {
 		if (pixels != 0) {
 			return (int) ((float) pixels * density);
@@ -129,30 +116,6 @@ public class DeviceUtils {
 		return pixels;
 	}
 	
-	/**
-	 * Waits for timeout milliseconds for the service to start.  This call will NOT block.  
-	 * Results will be posted to the listener provided.
-	 * @param context
-	 * @param serviceClass
-	 * @param listener
-	 * @param timeout
-	 */
-	public void waitForServiceStart(Context context, Class<?> serviceClass, ServiceStartListener listener, long timeout) {
-		ServiceStartWaitTask task = new ServiceStartWaitTask(context, serviceClass, this, listener, timeout);
-		task.execute((Void[]) null);
-	}
-	
-	public boolean isServiceRunning(Context context, Class<?> serviceClass) {
-	    ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-	    String className = serviceClass.getName();
-	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-	        if (className.equals(service.service.getClassName())) {
-	            return true;
-	        }
-	    }
-	    return false;
-	}
-
 	public String getUDID(Context context) {
 		
 		if(!deviceIdObtained) {
@@ -210,12 +173,13 @@ public class DeviceUtils {
 		return appUtils.getAppName();
 	}
 
+	/**
+	 * @deprecated use AppUtils
+	 * @return
+	 */
+	@Deprecated
 	public String getUserAgentString() {
-		if (userAgent == null) {
-			userAgent = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_"
-					+ Locale.getDefault().getCountry() + "; BundleID/" + appUtils.getPackageName() + ";";
-		}
-		return userAgent;
+		return appUtils.getUserAgentString();
 	}
 
 	/**
@@ -243,22 +207,21 @@ public class DeviceUtils {
 		return hasCamera;
 	}
 
-	public SocializeLogger getLogger() {
-		return logger;
-	}
-
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
 
+	@Deprecated
 	public int getDisplayHeight() {
 		return displayHeight;
 	}
 
+	@Deprecated
 	public int getDisplayWidth() {
 		return displayWidth;
 	}
 
+	@Deprecated
 	public int getOrientation() {
 		return orientation;
 	}

@@ -21,12 +21,12 @@
  */
 package com.socialize.auth.twitter;
 
-import com.socialize.util.StringUtils;
-
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites

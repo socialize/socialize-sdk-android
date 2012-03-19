@@ -35,7 +35,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
@@ -50,7 +49,7 @@ import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.SocializeButton;
 import com.socialize.ui.view.SocializeEditText;
 import com.socialize.util.AppUtils;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
 
@@ -60,7 +59,7 @@ import com.socialize.view.BaseView;
  */
 public class ProfileContentView extends BaseView {
 
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	private AppUtils appUtils;
 	private Drawables drawables;
 	
@@ -126,7 +125,7 @@ public class ProfileContentView extends BaseView {
 		ViewGroup master = makeMasterLayout();
 		ViewGroup buttons = makeButtonLayout();
 		
-		int margin = deviceUtils.getDIP(8);
+		int margin = displayUtils.getDIP(8);
 		buttonLayoutViewId = getNextViewId(this);
 		
 		commonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
@@ -302,7 +301,7 @@ public class ProfileContentView extends BaseView {
 
 	protected ViewGroup makeSocialNetworkOptionsLayout() {
 		LinearLayout master = new LinearLayout(getContext());
-		int padding = deviceUtils.getDIP(8);
+		int padding = displayUtils.getDIP(8);
 		LinearLayout.LayoutParams masterParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		masterParams.setMargins(padding, 0, 0, 0);
 		master.setLayoutParams(masterParams);
@@ -313,7 +312,7 @@ public class ProfileContentView extends BaseView {
 	
 	protected ViewGroup makeMasterLayout() {
 		LinearLayout master = new LinearLayout(getContext());
-		int padding = deviceUtils.getDIP(8);
+		int padding = displayUtils.getDIP(8);
 		LinearLayout.LayoutParams masterParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		masterParams.weight = 1.0f;
 		master.setLayoutParams(masterParams);
@@ -325,7 +324,7 @@ public class ProfileContentView extends BaseView {
 	
 	protected ViewGroup makeButtonLayout() {
 		LinearLayout buttons = new LinearLayout(getContext());
-		int padding = deviceUtils.getDIP(8);
+		int padding = displayUtils.getDIP(8);
 		LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 		buttons.setId(buttonLayoutViewId);
 		buttons.setLayoutParams(buttonParams);
@@ -463,8 +462,8 @@ public class ProfileContentView extends BaseView {
 		this.socializeEditTextFactory = socializeEditTextFactory;
 	}
 	
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 
 	public void setNotificationsEnabledCheckboxFactory(IBeanFactory<CustomCheckbox> notificationsEnabledCheckboxFactory) {

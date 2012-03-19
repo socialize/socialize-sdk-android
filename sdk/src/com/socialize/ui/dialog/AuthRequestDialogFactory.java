@@ -29,7 +29,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout.LayoutParams;
-
 import com.socialize.android.ioc.BeanCreationListener;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
@@ -41,7 +40,7 @@ import com.socialize.networks.twitter.TwitterSignInCell;
 import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.auth.AuthRequestListener;
 import com.socialize.ui.util.Colors;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 
 /**
  * @author Jason Polites
@@ -50,7 +49,7 @@ import com.socialize.util.DeviceUtils;
 public class AuthRequestDialogFactory extends AuthDialogFactory  {
 	
 	private IBeanFactory<AuthPanelView> authPanelViewFactory;
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	
 	public Dialog create(View parent) {
 		return create(parent, null);
@@ -77,7 +76,7 @@ public class AuthRequestDialogFactory extends AuthDialogFactory  {
 				
 				GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Colors.parseColor("#323a43"), Colors.parseColor("#1d2227") });
 				
-				background.setCornerRadius(deviceUtils.getDIP(4));
+				background.setCornerRadius(displayUtils.getDIP(4));
 				
 				view.setBackgroundDrawable(background);				
 				dialog.setContentView(view, params);
@@ -151,7 +150,7 @@ public class AuthRequestDialogFactory extends AuthDialogFactory  {
 		this.authPanelViewFactory = authPanelViewFactory;
 	}
 
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 }

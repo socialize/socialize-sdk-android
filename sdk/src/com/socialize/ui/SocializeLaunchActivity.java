@@ -73,7 +73,7 @@ public class SocializeLaunchActivity extends Activity {
 		
 		setupLayout();
 		
-		new Initializer().execute((Void[])null);
+		new Initializer().execute();
 	}
 	
 	protected void setupLayout() {

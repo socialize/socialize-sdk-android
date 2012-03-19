@@ -24,6 +24,10 @@ public class MockNotificationRegistrationSystem implements NotificationRegistrat
 	}
 
 	@Override
+	public void registerC2DMAsync(Context context) {
+	}
+
+	@Override
 	public void registerC2DM(Context context) {}
 	
 	

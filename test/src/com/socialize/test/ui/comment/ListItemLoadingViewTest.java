@@ -5,18 +5,18 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.test.ui.SocializeUITestCase;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.view.ListItemLoadingView;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 
 public class ListItemLoadingViewTest extends SocializeUITestCase {
 	@UsesMocks ({
-		DeviceUtils.class,
+		DisplayUtils.class,
 		Colors.class
 	})
 	public void testMake() {
 		
 		// Just tests for runtime failures
 		
-		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
+		DisplayUtils deviceUtils = AndroidMock.createMock(DisplayUtils.class);
 		Colors colors = AndroidMock.createMock(Colors.class);
 		
 		AndroidMock.expect(deviceUtils.getDIP(AndroidMock.anyInt())).andReturn(0).anyTimes();
@@ -28,7 +28,7 @@ public class ListItemLoadingViewTest extends SocializeUITestCase {
 		ListItemLoadingView view = new ListItemLoadingView(getContext());
 		
 		view.setColors(colors);
-		view.setDeviceUtils(deviceUtils);
+		view.setDisplayUtils(deviceUtils);
 		view.init();
 		
 		AndroidMock.verify(deviceUtils);

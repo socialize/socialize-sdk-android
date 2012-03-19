@@ -22,7 +22,6 @@
 package com.socialize.ui.action;
 
 import java.util.Date;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -41,7 +40,6 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
@@ -51,7 +49,7 @@ import com.socialize.ui.profile.activity.UserActivityView;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.util.DateUtils;
 import com.socialize.ui.util.GeoUtils;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
 
@@ -66,7 +64,7 @@ public class ActionDetailContentView extends BaseView {
 	private TextView actionLocation;
 	private GeoUtils geoUtils;
 	private DateUtils dateUtils;
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	private Colors colors;
 	private Drawables drawables;
 	private LinearLayout actionLocationLine;
@@ -87,11 +85,11 @@ public class ActionDetailContentView extends BaseView {
 	
 	public void init() {
 		
-		final int imagePadding = deviceUtils.getDIP(4);
-		final int margin = deviceUtils.getDIP(8);
-		final int actionMargin = deviceUtils.getDIP(4);
-		final int imageSize = deviceUtils.getDIP(64);
-		final int editTextStroke = deviceUtils.getDIP(2);
+		final int imagePadding = displayUtils.getDIP(4);
+		final int margin = displayUtils.getDIP(8);
+		final int actionMargin = displayUtils.getDIP(4);
+		final int imageSize = displayUtils.getDIP(64);
+		final int editTextStroke = displayUtils.getDIP(2);
 		final float editTextRadius = editTextStroke;
 		final int titleColor = colors.getColor(Colors.TITLE);
 
@@ -201,7 +199,7 @@ public class ActionDetailContentView extends BaseView {
 			divider = new TextView(getContext());
 			divider.setBackgroundDrawable(drawables.getDrawable("divider.png", true, false, true));
 			
-			LayoutParams dividerLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, deviceUtils.getDIP(30));
+			LayoutParams dividerLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, displayUtils.getDIP(30));
 			
 			dividerLayout.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
 			dividerLayout.setMargins(0, margin, 0, 0);
@@ -263,8 +261,8 @@ public class ActionDetailContentView extends BaseView {
 		this.dateUtils = dateUtils;
 	}
 	
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 
 	public void setColors(Colors colors) {

@@ -11,19 +11,12 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 	private SocializeLogger logger;
 	private NotificationContainer container;
 	private C2DMCallback notificationCallback;
-	private boolean initialized = false;
 	
 	// Must be parameterless constructor
 	public SocializeC2DMReceiver() {
-		super();
+		super("SocializeC2DMReceiver");
 		logger = newSocializeLogger();
 		container = newNotificationContainer();
-	}
-	
-	public void init() throws Exception {
-		container.onCreate(getContext());
-		initBeans();
-		initialized = true;
 	}
 	
 	protected void initBeans() {
@@ -37,20 +30,19 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 	@Override
 	public void onMessage(Context context, Intent intent) {
 		try {
-			if(logger != null && logger.isDebugEnabled()) {
-				logger.debug("SocializeC2DMReceiver received message");
-			}		
-			if(assertInitialized()) {
+			if(notificationCallback != null) {
+				
+				if(logger != null && logger.isDebugEnabled()) {
+					logger.debug("SocializeC2DMReceiver received message");
+				}					
 				notificationCallback.onMessage(getContext(), intent.getExtras());
+			}
+			else {
+				logWarn("No notificationCallback foind in C2DM receiver.  Initialization may have failed.");
 			}
 		} 
 		catch (Exception e) {
-			if(logger != null) {
-				logger.error("Error processing C2DM message", e);
-			}
-			else {
-				e.printStackTrace();
-			}
+			logError("Error processing C2DM message", e);
 		}
 	}
 
@@ -59,37 +51,44 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 		if(logger != null) {
 			logger.error("C2DM registration failed with error: " + errorId);
 		}
-		if(assertInitialized()) {
-			notificationCallback.onError(context, errorId);
-		}
+//		if(assertInitialized()) {
+			
+			if(notificationCallback != null) {
+				notificationCallback.onError(context, errorId);
+			}
+			else {
+				logWarn("No notificationCallback found in C2DM receiver.  Initialization may have failed.");
+			}			
+//		}
 	}
 	
 	@Override
 	public void onRegistrered(Context context, String registrationId)  {
 		try {
-			if(assertInitialized()) {
+			if(notificationCallback != null) {
 				notificationCallback.onRegister(context, registrationId);
 			}
+			else {
+				logWarn("No notificationCallback found in C2DM receiver.  Initialization may have failed.");
+			}	
 		} 
 		catch (Exception e) {
-			if(logger != null) {
-				logger.error("C2DM registration failed", e);
-			}
-			else {
-				e.printStackTrace();
-			}
+			logError("C2DM registration failed", e);
 		}
 	}
 
 	@Override
 	public void onUnregistered(Context context) {
-		if(assertInitialized()) {
+		if(notificationCallback != null) {
 			notificationCallback.onUnregister(context);
+			
+			if(logger != null && logger.isDebugEnabled()) {
+				logger.debug("SocializeC2DMReceiver successfully unregistered");
+			}
 		}
-		
-		if(logger != null && logger.isDebugEnabled()) {
-			logger.debug("SocializeC2DMReceiver successfully unregistered");
-		}
+		else {
+			logWarn("No notificationCallback found in C2DM receiver.  Initialization may have failed.");
+		}	
 	}
 
 	@Override
@@ -97,13 +96,36 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 		if(logger != null && logger.isDebugEnabled()) {
 			logger.debug("SocializeC2DMReceiver creating..");
 		}
+		
+		try {
+			container.onCreate(getContext());
+			initBeans();
+		}
+		catch (Exception e) {
+			logError("Error initializing C2DM receiver!", e);
+		}
+		
 		super.onCreate();
 	}
 	
-	public boolean isInitialized() {
-		return initialized;
+	protected void logError(String msg, Exception e) {
+		if(logger != null) {
+			logger.error(msg, e);
+		}
+		else {
+			e.printStackTrace();
+		}
 	}
-
+	
+	protected void logWarn(String msg) {
+		if(logger != null) {
+			logger.warn(msg);
+		}
+		else {
+			System.err.println(msg);
+		}
+	}	
+	
 	// So we can mock.
 	protected Context getContext() {
 		return this;
@@ -119,21 +141,6 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 		return new SocializeLogger();
 	}
 	
-	protected boolean assertInitialized() {
-		if(!initialized) {
-			try {
-				init();
-			} 
-			catch (Exception e) {
-				if(logger != null) {
-					logger.error("Failed to initialize container",e);
-				}
-			}
-		}
-		
-		return initialized;
-	}
-
 	protected void setNotificationCallback(C2DMCallback notificationCallback) {
 		this.notificationCallback = notificationCallback;
 	}
@@ -143,7 +150,6 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 		if(container != null) {
 			container.onDestroy(getContext());
 		}		
-		initialized = false;
 		superOnDestroy();
 	}
 	

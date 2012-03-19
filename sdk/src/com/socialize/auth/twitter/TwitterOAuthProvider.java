@@ -21,9 +21,12 @@
  */
 package com.socialize.auth.twitter;
 
+import oauth.signpost.OAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 
 import org.apache.http.client.HttpClient;
+
+import android.os.AsyncTask;
 
 /**
  * @author Jason Polites
@@ -44,5 +47,38 @@ public class TwitterOAuthProvider extends CommonsHttpOAuthProvider {
 
 	public TwitterOAuthProvider() {
 		super(REQUEST_TOKEN_ENDPOINT, ACCESS_TOKEN_ENDPOINT, AUTHORIZE_ENDPOINT);
+	}
+
+	public void retrieveRequestTokenAsync(final OAuthConsumer consumer, final String callbackUrl, final OAuthRequestTokenUrlListener listener) {
+		
+		new AsyncTask<Void, Void, Void>() {
+			
+			String url;
+			Exception error;
+
+			@Override
+			protected Void doInBackground(Void... params) {
+				try {
+					url = retrieveRequestToken(consumer, callbackUrl);
+				} 
+				catch (Exception e) {
+					error = e;
+				}
+			
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(Void result) {
+				if(listener != null) {
+					if(error != null)  {
+						listener.onError(error);
+					}
+					else {
+						listener.onRequestUrl(url);
+					}
+				}
+			}
+		}.execute();
 	}
 }

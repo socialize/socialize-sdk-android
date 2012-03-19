@@ -30,7 +30,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.User;
@@ -38,7 +37,6 @@ import com.socialize.ui.image.ImageLoadListener;
 import com.socialize.ui.image.ImageLoadRequest;
 import com.socialize.ui.image.ImageLoader;
 import com.socialize.ui.view.ClickableSectionCell;
-import com.socialize.util.DeviceUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.SafeBitmapDrawable;
 import com.socialize.util.StringUtils;
@@ -69,8 +67,8 @@ public class ProfilePictureEditView extends ClickableSectionCell {
 		defaultProfilePicture = drawables.getDrawable(Socialize.DEFAULT_USER_ICON);
 		profilePicture = new ImageView(getContext());
 		
-		int imageSize = deviceUtils.getDIP(64);
-		int imagePadding = deviceUtils.getDIP(4);
+		int imageSize = displayUtils.getDIP(64);
+		int imagePadding = displayUtils.getDIP(4);
 		
 		LayoutParams imageLayout = new LinearLayout.LayoutParams(imageSize,imageSize);
 		
@@ -98,10 +96,6 @@ public class ProfilePictureEditView extends ClickableSectionCell {
 
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
-	}
-	
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
 	}
 	
 	public void setProfileImageContextMenuFactory(IBeanFactory<ProfileImageContextMenu> profileImageContextMenuFactory) {

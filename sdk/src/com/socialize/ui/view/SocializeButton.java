@@ -23,7 +23,6 @@ package com.socialize.ui.view;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -35,9 +34,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.socialize.ui.util.Colors;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 
@@ -50,7 +48,7 @@ public class SocializeButton extends LinearLayout {
 	
 	private Drawables drawables;
 	private Colors colors;
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	private ImageView imageView = null;
 	private TextView textView = null;
 	
@@ -93,10 +91,10 @@ public class SocializeButton extends LinearLayout {
 
 	public void init() {
 		
-		int dipPadding = deviceUtils.getDIP(padding);
-		int radius = deviceUtils.getDIP(cornerRadius);
+		int dipPadding = displayUtils.getDIP(padding);
+		int radius = displayUtils.getDIP(cornerRadius);
 		
-		textPadding = deviceUtils.getDIP(4);
+		textPadding = displayUtils.getDIP(4);
 	
 		OnClickListener onClickListener = getOnClickListener();
 		
@@ -113,10 +111,10 @@ public class SocializeButton extends LinearLayout {
 			}
 			
 			GradientDrawable base = makeGradient(bgColor, bgColor);
-			base.setCornerRadius(radius+deviceUtils.getDIP(2)); // Add 2 pixels to make it look nicer
+			base.setCornerRadius(radius+displayUtils.getDIP(2)); // Add 2 pixels to make it look nicer
 			
 			GradientDrawable stroke = makeGradient(strokeBottom, strokeTop);
-			stroke.setCornerRadius(radius+deviceUtils.getDIP(1)); // Add 1 pixel to make it look nicer
+			stroke.setCornerRadius(radius+displayUtils.getDIP(1)); // Add 1 pixel to make it look nicer
 			
 			GradientDrawable background = makeGradient(bottom, top);
 			
@@ -137,14 +135,14 @@ public class SocializeButton extends LinearLayout {
 			buttonWidth = LinearLayout.LayoutParams.FILL_PARENT;
 		}
 		else if(width > 0) {
-			buttonWidth = deviceUtils.getDIP(width);
+			buttonWidth = displayUtils.getDIP(width);
 		}
 		
 		if(height == null) {
 			buttonHeight = LinearLayout.LayoutParams.FILL_PARENT;
 		}
 		else if(height > 0) {
-			buttonHeight = deviceUtils.getDIP(height);
+			buttonHeight = displayUtils.getDIP(height);
 		}
 			
 		LayoutParams fill = makeLayoutParams(buttonWidth, buttonHeight);
@@ -211,7 +209,7 @@ public class SocializeButton extends LinearLayout {
 			imageView = makeImageView();
 			imageView.setImageDrawable(drawables.getDrawable(imageName));
 			imageView.setLayoutParams(imageLayout);
-			imageView.setPadding(deviceUtils.getDIP(imagePaddingLeft), 0, deviceUtils.getDIP(imagePaddingRight), 0);
+			imageView.setPadding(displayUtils.getDIP(imagePaddingLeft), 0, displayUtils.getDIP(imagePaddingRight), 0);
 			
 			if(!backgroundVisible) {
 				imageView.setOnClickListener(onClickListener);
@@ -283,8 +281,8 @@ public class SocializeButton extends LinearLayout {
 		this.colors = colors;
 	}
 
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 
 	public void setHeight(Integer height) {

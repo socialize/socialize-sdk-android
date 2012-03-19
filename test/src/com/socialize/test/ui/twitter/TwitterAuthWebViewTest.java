@@ -35,6 +35,7 @@ import android.webkit.WebViewClient;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.twitter.OAuthRequestListener;
+import com.socialize.auth.twitter.OAuthRequestTokenUrlListener;
 import com.socialize.auth.twitter.TwitterAuthListener;
 import com.socialize.auth.twitter.TwitterAuthWebView;
 import com.socialize.auth.twitter.TwitterOAuthProvider;
@@ -47,22 +48,28 @@ import com.socialize.test.SocializeUnitTest;
  */
 public class TwitterAuthWebViewTest extends SocializeUnitTest {
 
-	@UsesMocks ({CommonsHttpOAuthConsumer.class, TwitterOAuthProvider.class, TwitterWebViewClient.class, OAuthRequestListener.class, TwitterAuthListener.class })
+	@UsesMocks ({
+		CommonsHttpOAuthConsumer.class, 
+		TwitterOAuthProvider.class, 
+		TwitterWebViewClient.class, 
+		OAuthRequestListener.class, 
+		TwitterAuthListener.class,
+		OAuthRequestTokenUrlListener.class})
 	public void testAuthenticate() throws OAuthMessageSignerException, OAuthNotAuthorizedException, OAuthExpectationFailedException, OAuthCommunicationException {
 		
 		final String consumerKey = "foo";
 		final String consumerSecret = "bar";
-		final String requestToken = "foobar_token";
 		
 		final CommonsHttpOAuthConsumer commonsHttpOAuthConsumer = AndroidMock.createMock(CommonsHttpOAuthConsumer.class, consumerKey, consumerSecret);
 		final TwitterOAuthProvider twitterOAuthProvider = AndroidMock.createMock(TwitterOAuthProvider.class);
 		final TwitterWebViewClient twitterWebViewClient = AndroidMock.createMock(TwitterWebViewClient.class);
 		final TwitterAuthListener listener = AndroidMock.createMock(TwitterAuthListener.class);
 		final OAuthRequestListener oAuthRequestListener = AndroidMock.createMock(OAuthRequestListener.class, listener, twitterOAuthProvider, commonsHttpOAuthConsumer);
+		final OAuthRequestTokenUrlListener oAuthRequestTokenUrlListener = AndroidMock.createMock(OAuthRequestTokenUrlListener.class);
 		
 		// Expect
 		twitterWebViewClient.setOauthRequestListener(oAuthRequestListener);
-		AndroidMock.expect(twitterOAuthProvider.retrieveRequestToken(commonsHttpOAuthConsumer, TwitterOAuthProvider.OAUTH_CALLBACK_URL)).andReturn(requestToken);
+		twitterOAuthProvider.retrieveRequestTokenAsync(commonsHttpOAuthConsumer, TwitterOAuthProvider.OAUTH_CALLBACK_URL, oAuthRequestTokenUrlListener);
 		
 		AndroidMock.replay(twitterWebViewClient, twitterOAuthProvider);
 		
@@ -87,15 +94,15 @@ public class TwitterAuthWebViewTest extends SocializeUnitTest {
 			protected OAuthRequestListener newOAuthRequestListener(TwitterAuthListener listener, TwitterOAuthProvider provider, CommonsHttpOAuthConsumer consumer) {
 				return oAuthRequestListener;
 			}
+			
+			@Override
+			protected OAuthRequestTokenUrlListener newOAuthRequestTokenUrlListener(TwitterAuthListener listener) {
+				return oAuthRequestTokenUrlListener;
+			}
 
 			@Override
 			public void setWebViewClient(WebViewClient client) {
 				addResult(0, client);
-			}
-
-			@Override
-			public void loadUrl(String url) {
-				addResult(1, url);
 			}
 		};
 		
@@ -105,7 +112,6 @@ public class TwitterAuthWebViewTest extends SocializeUnitTest {
 		AndroidMock.verify(twitterWebViewClient, twitterOAuthProvider);
 		
 		assertSame(twitterWebViewClient, getResult(0));
-		assertEquals(requestToken, getResult(1));
 	}
 	
 	@UsesMocks ({
