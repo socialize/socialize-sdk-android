@@ -12,6 +12,11 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v1.5.3
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] Twitter auth failure (Communication with the service provider failed: null)
+[bug] SmartAlerts failing when not authenticated
+
 v1.5.2
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [feature] Developer notification title should say "A message from..."
