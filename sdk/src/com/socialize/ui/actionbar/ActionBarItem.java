@@ -33,9 +33,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
-
 import com.socialize.ui.view.SafeViewFlipper;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 
 /**
  * An action bar item item is a single item on an action bar button or ticker.
@@ -52,7 +51,7 @@ public class ActionBarItem extends LinearLayout {
 	
 	private ImageView imageView;
 	private TextView textView;
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	
 	private boolean invertProgressStyle = false;
 	
@@ -64,7 +63,7 @@ public class ActionBarItem extends LinearLayout {
 	
 	public void init() {
 		
-		int leftMargin = deviceUtils.getDIP(3);
+		int leftMargin = displayUtils.getDIP(3);
 		
 		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		masterParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
@@ -85,8 +84,8 @@ public class ActionBarItem extends LinearLayout {
 		
 		RelativeLayout progressLayout = new RelativeLayout(getContext());
 		
-		int minWidth = deviceUtils.getDIP(24);
-		int minHeight = deviceUtils.getDIP(24);
+		int minWidth = displayUtils.getDIP(24);
+		int minHeight = displayUtils.getDIP(24);
 		
 		if(icon != null) {
 			int intrinsicWidth = icon.getMinimumWidth();
@@ -203,8 +202,8 @@ public class ActionBarItem extends LinearLayout {
 		addView(textLayout);
 	}
 
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 
 	public void setIcon(Drawable icon) {

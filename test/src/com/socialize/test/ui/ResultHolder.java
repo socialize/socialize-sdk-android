@@ -21,6 +21,10 @@ public class ResultHolder {
 		bucket.add(obj);
 	}
 	
+	public List<Object> getAllResults() {
+		return bucket;
+	}
+	
 	public void addResult(int index, Object obj) {
 		int size = bucket.size();
 		if(size <= index) {

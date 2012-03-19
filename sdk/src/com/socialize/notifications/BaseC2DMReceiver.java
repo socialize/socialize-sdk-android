@@ -21,18 +21,16 @@
  */
 package com.socialize.notifications;
 
-import android.app.Service;
+import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
-import android.os.IBinder;
-
 import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class BaseC2DMReceiver extends Service {
+public abstract class BaseC2DMReceiver extends IntentService {
 	
 	public static final String C2DM_RETRY = "com.google.android.c2dm.intent.RETRY";
 	public static final String REGISTRATION_CALLBACK_INTENT = "com.google.android.c2dm.intent.REGISTRATION";
@@ -49,6 +47,10 @@ public abstract class BaseC2DMReceiver extends Service {
 	public static final String ERR_INVALID_PARAMETERS = "INVALID_PARAMETERS";
 	public static final String ERR_INVALID_SENDER = "INVALID_SENDER";
 	public static final String ERR_PHONE_REGISTRATION_ERROR = "PHONE_REGISTRATION_ERROR";
+	
+	public BaseC2DMReceiver(String name) {
+		super(name);
+	}
 
 	/**
 	 * Called when a cloud message has been received.
@@ -71,17 +73,6 @@ public abstract class BaseC2DMReceiver extends Service {
 	 * Called when the device has been unregistered.
 	 */
 	protected abstract void onUnregistered(Context context);
-
-	@Override
-	public IBinder onBind(Intent intent) {
-		return null;
-	}
-
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		onHandleIntent(intent);
-		return START_STICKY;
-	}
 	
 	public void onHandleIntent(Intent intent) {
 		Context context = getApplicationContext();

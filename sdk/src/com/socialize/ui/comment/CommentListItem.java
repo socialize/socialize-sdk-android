@@ -12,9 +12,8 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.socialize.ui.util.Colors;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 
 public class CommentListItem extends LinearLayout {
@@ -24,7 +23,7 @@ public class CommentListItem extends LinearLayout {
 	private TextView author;
 	private ImageView userIcon;
 	private ImageView locationIcon;
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	private Colors colors;
 	private Drawables drawables;
 	
@@ -36,14 +35,14 @@ public class CommentListItem extends LinearLayout {
 
 	public void init() {
 		
-		final int eight = deviceUtils.getDIP(8);
-		final int four = deviceUtils.getDIP(4);
-		final int imagePadding = deviceUtils.getDIP(4);
+		final int eight = displayUtils.getDIP(8);
+		final int four = displayUtils.getDIP(4);
+		final int imagePadding = displayUtils.getDIP(4);
 		final int textColor = colors.getColor(Colors.BODY);
 		final int titleColor = colors.getColor(Colors.TITLE);
-		final int iconSize = deviceUtils.getDIP(64);
+		final int iconSize = displayUtils.getDIP(64);
 		
-		ListView.LayoutParams layout = new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, deviceUtils.getDIP(80));
+		ListView.LayoutParams layout = new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, displayUtils.getDIP(80));
 		setDrawingCacheEnabled(true);
 		
 		if(backgroundFactory != null) {
@@ -139,7 +138,7 @@ public class CommentListItem extends LinearLayout {
 		userIcon.setPadding(imagePadding, imagePadding, imagePadding, imagePadding);
 		
 		GradientDrawable imageBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] {Color.WHITE, Color.WHITE});
-		imageBG.setStroke(deviceUtils.getDIP(1), Color.BLACK);
+		imageBG.setStroke(displayUtils.getDIP(1), Color.BLACK);
 		
 		userIcon.setBackgroundDrawable(imageBG);
 		userIcon.setScaleType(ScaleType.CENTER_CROP);
@@ -170,8 +169,8 @@ public class CommentListItem extends LinearLayout {
 		return locationIcon;
 	}
 
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 
 	public void setColors(Colors colors) {

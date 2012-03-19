@@ -23,15 +23,13 @@ package com.socialize.ui.actionbar;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
-
 import com.socialize.ui.animation.RotatingFadeViewAnimator;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 
 /**
@@ -43,7 +41,7 @@ public class ActionBarTicker extends LinearLayout {
 
 	private List<View> views;
 	private RotatingFadeViewAnimator rotator;
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	private Drawables drawables;
 	private boolean initialized = false;
 	
@@ -55,10 +53,10 @@ public class ActionBarTicker extends LinearLayout {
 		if(!initialized) {
 			
 			if(width > 0) {
-				width = deviceUtils.getDIP(width);
+				width = displayUtils.getDIP(width);
 			}
 			
-			LayoutParams masterParams = new LayoutParams(width,deviceUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT));
+			LayoutParams masterParams = new LayoutParams(width,displayUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT));
 			masterParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 			masterParams.weight = weight;
 			
@@ -117,8 +115,8 @@ public class ActionBarTicker extends LinearLayout {
 		views.add(view);
 	}
 
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 
 	public void setDrawables(Drawables drawables) {

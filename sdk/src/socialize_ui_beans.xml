@@ -12,6 +12,13 @@
 		<destroy-method name="destroy"/>
 	</bean>
 	
+	<bean id="displayUtils" class="com.socialize.util.DisplayUtils">
+		<property name="logger" ref="logger"/>
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>
+	</bean>	
+	
 	<bean id="bitmapBuilder" class="com.socialize.util.BitmapBuilder"/>
 	
 	<bean id="bitmapUtils" class="com.socialize.util.BitmapUtils">
@@ -214,7 +221,7 @@
 		abstract="true">
 		<constructor-arg type="activity"/>
 		<property name="drawables" ref="drawables"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
 		<property name="bottomColor" value="BUTTON_BOTTOM"/>
 		<property name="topColor" value="BUTTON_TOP"/>
@@ -288,7 +295,7 @@
 		singleton="false">
 		<constructor-arg type="activity"/>
 		<property name="drawables" ref="drawables"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="loadingViewFactory" ref="loadingViewFactory"/>
 		<init-method name="init"/>
 	</bean>		
@@ -309,7 +316,7 @@
 			class="com.socialize.ui.auth.AuthConfirmDialogHeader"		
 			singleton="false">
 			<constructor-arg type="activity"/>
-			<property name="deviceUtils" ref="deviceUtils"/>
+			<property name="displayUtils" ref="displayUtils"/>
 			<property name="drawables" ref="drawables"/>
 			<init-method name="init"/>
 		</bean>
@@ -322,7 +329,7 @@
 		<property name="logger" ref="logger"/>
 		<property name="authPanelViewFactory" ref="authPanelViewFactory"/>
 		<property name="drawables" ref="drawables"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 	</bean>
 	
 	<!-- 
@@ -341,7 +348,7 @@
 		class="com.socialize.ui.auth.AuthRequestDialogView"		
 		singleton="false">
 		<constructor-arg type="activity"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="facebookSignInButton" ref="facebookSignInButton"/>
 		<property name="text" value="Sign in with Facebook to ensure your comment is saved."/>
 		<init-method name="init"/>
@@ -352,7 +359,7 @@
 		class="com.socialize.ui.auth.AuthConfirmDialogView"		
 		singleton="false">
 		<constructor-arg type="activity"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="socializeSkipAuthButton" ref="socializeSkipAuthButton"/>
 		<property name="text" value="Your data is safe with us, but you can still post anonymously if you're shy."/>
 		<init-method name="init"/>
@@ -376,7 +383,7 @@
 		class="com.socialize.ui.auth.AuthPanelView"		
 		singleton="false">
 		<constructor-arg type="activity"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="facebookSignInCellFactory" ref="facebookSignInCellFactory"/>
 		<property name="twitterSignInCellFactory" ref="twitterSignInCellFactory"/>
@@ -600,7 +607,7 @@
 		<property name="listItemLoadingViewFactory" ref="listItemLoadingViewFactory"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="logger" ref="logger"/>
-		<property name="deviceUtils" ref="deviceUtils"/><!-- Defined in socialize_beans.xml -->
+		<property name="displayUtils" ref="displayUtils"/><!-- Defined in socialize_beans.xml -->
 		<property name="dateUtils" ref="dateUtils"/>
 		<property name="base64Utils" ref="base64Utils"/><!-- Defined in socialize_beans.xml -->
 		<property name="imageLoader" ref="imageLoader"/><!-- Defined in socialize_beans.xml -->
@@ -624,7 +631,7 @@
 		singleton="false">
 		<constructor-arg type="activity"/>
 		<init-method name="init"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="backgroundFactory" ref="commentListItemBackgroundFactory"/>
@@ -637,7 +644,7 @@
 		extends="socializeView">
 		<constructor-arg type="activity"/>
 		<init-method name="init"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
 	</bean>
 	
@@ -646,7 +653,7 @@
 		class="com.socialize.ui.header.SocializeHeader"
 		singleton="false">
 		<constructor-arg type="activity"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
 		<property name="drawables" ref="drawables"/>
 		<init-method name="init"/>
@@ -693,7 +700,7 @@
 		
 		<constructor-arg type="activity"/>
 
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
 		
 		<init-method name="init"/>
@@ -709,7 +716,7 @@
 		
 		<constructor-arg type="activity"/>
 
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
 		<property name="geoUtils" ref="geoUtils"/>
 		<property name="dateUtils" ref="dateUtils"/>
@@ -785,7 +792,7 @@
 		singleton="false">
 		<constructor-arg type="activity"/>
 		
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="appUtils" ref="appUtils"/>
 		<property name="keyboardUtils" ref="keyboardUtils"/>
 		<property name="drawables" ref="drawables"/>
@@ -938,7 +945,7 @@
 		<property name="userService" ref="userService"/>
 		
 		<property name="drawables" ref="drawables"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="appUtils" ref="appUtils"/>
 		
 		<init-method name="init"/>
@@ -955,7 +962,7 @@
 		
 		<constructor-arg type="activity"/>	
 		
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
 		<property name="drawables" ref="drawables"/>
 		
@@ -983,7 +990,7 @@
 		
 		<constructor-arg type="activity"/>	
 		
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
 		
 		<init-method name="init"/>
@@ -1089,7 +1096,7 @@
 		class="com.socialize.ui.profile.activity.UserActivityActionText">
 		<constructor-arg type="activity"/>
 		<property name="colors" ref="colors"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="logger" ref="logger"/>
 		<init-method name="init"/>
 	</bean>
@@ -1102,7 +1109,7 @@
 		class="com.socialize.ui.profile.activity.UserActivityListItem">
 		<constructor-arg type="activity"/>
 		
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="dateUtils" ref="dateUtils"/>
@@ -1152,7 +1159,7 @@
 		<init-method name="init"/>
 		
 		<property name="drawables" ref="drawables"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="entityCache" ref="entityCache"/>
 		<property name="logger" ref="logger"/>
 		<property name="buttonFactory" ref="actionBarButtonFactory"/>
@@ -1166,7 +1173,7 @@
 		class="com.socialize.ui.actionbar.ActionBarButton"
 		singleton="false">
 		<constructor-arg type="activity"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="actionBarItemFactory" ref="actionBarItemFactory"/>
 	</bean>
 	
@@ -1175,7 +1182,7 @@
 		class="com.socialize.ui.actionbar.ActionBarItem"
 		singleton="false">
 		<constructor-arg type="activity"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 	</bean>
 	
 	<bean 
@@ -1183,7 +1190,7 @@
 		class="com.socialize.ui.actionbar.ActionBarTicker"
 		singleton="false">
 		<constructor-arg type="activity"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="drawables" ref="drawables"/>
 	</bean>
 	
@@ -1313,7 +1320,7 @@
 		class="com.socialize.ui.share.ShareDialogView" 
 		singleton="false">
 		<constructor-arg type="activity"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="facebookShareButton" ref="facebookShareButton"/>
 		<property name="twitterShareButton" ref="twitterShareButton"/>
@@ -1354,7 +1361,7 @@
 		<constructor-arg type="activity"/>
 		
 		<property name="drawables" ref="drawables"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="logger" ref="logger"/>
 		<property name="sliderAnimationSetFactory" ref="sliderAnimationSetFactory"/>
 		
@@ -1380,7 +1387,7 @@
 		id="sliderAnimationSet" 
 		class="com.socialize.ui.slider.SliderAnimationSet" 
 		singleton="false">
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 	</bean>		
 	
 	<factory id="actionBarSliderViewFactory" makes="actionBarSliderView"/>

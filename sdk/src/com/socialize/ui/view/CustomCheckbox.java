@@ -14,10 +14,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
-
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.ui.util.Colors;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 import com.socialize.view.BaseView;
@@ -30,7 +29,7 @@ public class CustomCheckbox extends BaseView {
 	private boolean enabled = true;
 	private boolean changed = false;
 	private Drawables drawables;
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	
 	private String imageOn;
 	private String imageOff;
@@ -58,9 +57,9 @@ public class CustomCheckbox extends BaseView {
 	
 	public void init() {
 		
-		int dipPadding = deviceUtils.getDIP(padding);
-		int leftPadding = deviceUtils.getDIP(textPadding);
-		int margin = deviceUtils.getDIP(imageMargin);
+		int dipPadding = displayUtils.getDIP(padding);
+		int leftPadding = displayUtils.getDIP(textPadding);
+		int margin = displayUtils.getDIP(imageMargin);
 		
 		checkboxLabel = new TextView(getContext());
 		checkboxLabel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
@@ -174,8 +173,8 @@ public class CustomCheckbox extends BaseView {
 		this.drawables = drawables;
 	}
 	
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 	
 	public void setImageOn(String imageOn) {
@@ -220,12 +219,9 @@ public class CustomCheckbox extends BaseView {
 		this.borderOn = borderOn;
 	}
 	
-	
-	
 	@Override
 	public void setOnClickListener(OnClickListener l) {
 		this.customClickListener = l;
-		
 	}
 
 	public void setPadding(int padding) {

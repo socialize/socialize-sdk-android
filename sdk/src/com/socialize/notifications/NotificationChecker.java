@@ -43,30 +43,32 @@ public class NotificationChecker {
 	private SocializeLogger logger;
 	private SocializeConfig config;
 	private AppUtils appUtils;
-	private long lastCheckTime = 0;
+	private boolean checked = false;
 	
 	public void checkRegistrations(final Context context) {
-		Socialize.getSocialize().authenticate(context, new SocializeAuthListener() {
-			@Override
-			public void onError(SocializeException error) {
-				logError(error);
-			}
-			
-			@Override
-			public void onCancel() {
-				// Ignore
-			}
-			
-			@Override
-			public void onAuthSuccess(SocializeSession session) {
-				checkRegistrations(context, session, false);
-			}
-			
-			@Override
-			public void onAuthFail(SocializeException error) {
-				logError(error);
-			}
-		});
+		if(!checked) {
+			Socialize.getSocialize().authenticate(context, new SocializeAuthListener() {
+				@Override
+				public void onError(SocializeException error) {
+					logError(error);
+				}
+				
+				@Override
+				public void onCancel() {
+					// Ignore
+				}
+				
+				@Override
+				public void onAuthSuccess(SocializeSession session) {
+					checked = checkRegistrations(context, session);
+				}
+				
+				@Override
+				public void onAuthFail(SocializeException error) {
+					logError(error);
+				}
+			});
+		}
 	}
 	
 	protected void logError(Exception e) {
@@ -82,75 +84,77 @@ public class NotificationChecker {
 	 * Called at application startup.
 	 * @param context
 	 */
-	public void checkRegistrations(Context context, SocializeSession session, boolean force) {
+	public boolean checkRegistrations(Context context, SocializeSession session) {
 		
-		long currentTime = System.currentTimeMillis();
+		boolean checked = false;
 		
-		if(System.currentTimeMillis() - lastCheckTime > 60000 || force) { // Only check every minute
+		if(appUtils.isNotificationsAvailable(context)) {
 
-			if(appUtils.isNotificationsAvailable(context)) {
-
-				if(config.getBooleanProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, true)) {
-					if(logger != null && logger.isDebugEnabled()) {
-						logger.debug("Checking C2DM registration state");
-					}
+			if(config.getBooleanProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, true)) {
+				if(logger != null && logger.isDebugEnabled()) {
+					logger.debug("Checking C2DM registration state");
+				}
+				
+				if(!notificationRegistrationSystem.isRegisteredC2DM() || !notificationRegistrationSystem.isRegisteredSocialize(session.getUser())) {
 					
-					if(!notificationRegistrationSystem.isRegisteredC2DM() || !notificationRegistrationSystem.isRegisteredSocialize(session.getUser())) {
+					// Reload
+					notificationRegistrationState.load(context);
+					
+					if(!notificationRegistrationSystem.isRegisteredC2DM()) {
 						
-						// Reload
-						notificationRegistrationState.load(context);
-						
-						if(!notificationRegistrationSystem.isRegisteredC2DM()) {
-							
-							if(notificationRegistrationSystem.isRegistrationPending()) {
-								if(logger != null && logger.isDebugEnabled()) {
-									logger.debug("C2DM Registration already pending");
-								}
-							}
-							else {
-								if(logger != null && logger.isInfoEnabled()) {
-									logger.info("Not registered with C2DM, sending registration request...");
-								}
-								
-								notificationRegistrationSystem.registerC2DM(context);
+						if(notificationRegistrationSystem.isRegistrationPending()) {
+							if(logger != null && logger.isDebugEnabled()) {
+								logger.debug("C2DM Registration already pending");
 							}
 						}
-						else if(!notificationRegistrationSystem.isRegisteredSocialize(session.getUser())) {
+						else {
+							if(logger != null && logger.isInfoEnabled()) {
+								logger.info("Not registered with C2DM, sending registration request...");
+							}
 							
-							if(notificationRegistrationSystem.isSocializeRegistrationPending()) {
-								if(logger != null && logger.isDebugEnabled()) {
-									logger.debug("Registration already pending with Socialize for C2DM");
-								}
-							}
-							else {
-								if(logger != null && logger.isInfoEnabled()) {
-									logger.info("Not registered with Socialize for C2DM, registering...");
-								}
-								
-								notificationRegistrationSystem.registerSocialize(context, notificationRegistrationState.getC2DMRegistrationId());
-							}
-						}				
-					}
-					else {
-						if(logger != null && logger.isDebugEnabled()) {
-							logger.debug("C2DM registration OK");
+							notificationRegistrationSystem.registerC2DMAsync(context);
 						}
 					}
+					else if(!notificationRegistrationSystem.isRegisteredSocialize(session.getUser())) {
+						
+						if(notificationRegistrationSystem.isSocializeRegistrationPending()) {
+							if(logger != null && logger.isDebugEnabled()) {
+								logger.debug("Registration already pending with Socialize for C2DM");
+							}
+						}
+						else {
+							if(logger != null && logger.isInfoEnabled()) {
+								logger.info("Not registered with Socialize for C2DM, registering...");
+							}
+							
+							notificationRegistrationSystem.registerSocialize(context, notificationRegistrationState.getC2DMRegistrationId());
+						}
+					}				
 				}
 				else {
-					if(logger != null && logger.isWarnEnabled()) {
-						logger.warn("C2DM registration check skipped");
-					}			
+					if(logger != null && logger.isDebugEnabled()) {
+						logger.debug("C2DM registration OK");
+					}
 				}
+				
+				checked = true;
 			}
 			else {
-				if(logger != null && logger.isInfoEnabled()) {
-					logger.info("Notifications not enabled.  Check the AndroidManifest.xml for correct configuration.");
+				if(logger != null && logger.isWarnEnabled()) {
+					logger.warn("C2DM registration check skipped");
 				}	
 			}
-			
-			lastCheckTime = currentTime;
 		}
+		else {
+			if(logger != null && logger.isInfoEnabled()) {
+				logger.info("Notifications not enabled.  Check the AndroidManifest.xml for correct configuration.");
+			}	
+			
+			
+			checked = true;
+		}
+		
+		return checked;
 	}
 
 	public void setNotificationRegistrationSystem(NotificationRegistrationSystem notificationRegistrationSystem) {

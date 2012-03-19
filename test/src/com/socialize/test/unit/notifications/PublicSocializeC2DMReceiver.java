@@ -59,11 +59,6 @@ public class PublicSocializeC2DMReceiver extends SocializeC2DMReceiver {
 	}
 
 	@Override
-	public boolean assertInitialized() {
-		return super.assertInitialized();
-	}
-
-	@Override
 	public void setNotificationCallback(C2DMCallback notificationCallback) {
 		super.setNotificationCallback(notificationCallback);
 	}

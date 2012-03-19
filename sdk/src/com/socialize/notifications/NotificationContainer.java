@@ -23,7 +23,6 @@ package com.socialize.notifications;
 
 import android.content.Context;
 import android.util.Log;
-
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.Logger;
@@ -43,10 +42,8 @@ public class NotificationContainer {
 	private String[] configPaths = {SocializeConfig.SOCIALIZE_CORE_BEANS_PATH, SocializeConfig.SOCIALIZE_NOTIFICATION_BEANS_PATH};
 	
 	public void onCreate(Context context) throws Exception {
-		
 		Logger.LOG_KEY = Socialize.LOG_KEY;
 		Logger.logLevel = Log.WARN;
-		
 		container = newSocializeIOC();
 		ResourceLocator locator = newResourceLocator();
 		locator.setLogger(newLogger());

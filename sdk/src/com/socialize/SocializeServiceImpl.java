@@ -205,17 +205,17 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#init(android.content.Context)
 	 */
 	@Override
-	public void init(Context context) {
-		init(context, SocializeConfig.SOCIALIZE_CORE_BEANS_PATH);
+	public IOCContainer init(Context context) {
+		return init(context, SocializeConfig.SOCIALIZE_CORE_BEANS_PATH);
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#init(android.content.Context, java.lang.String)
 	 */
 	@Override
-	public void init(Context context, String...paths) {
+	public IOCContainer init(Context context, String...paths) {
 		try {
-			initWithContainer(context, paths);
+			return initWithContainer(context, paths);
 		}
 		catch (Exception e) {
 			if(logger != null) {
@@ -225,6 +225,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				e.printStackTrace();
 			}
 		}
+		
+		return null;
 	}
 	
 	/*
@@ -619,9 +621,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		SocializeConfig config = getConfig();
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-		if(checkKeys(consumerKey, consumerSecret, authListener)) {
-			authenticate(context, consumerKey, consumerSecret, authListener);
-		}		
+		authenticate(context, consumerKey, consumerSecret, authListener);
 	}
 	
 	/*

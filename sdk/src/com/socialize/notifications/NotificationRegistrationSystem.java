@@ -44,6 +44,8 @@ public interface NotificationRegistrationSystem {
 	
 	public void registerC2DM(Context context);
 	
+	public void registerC2DMAsync(Context context);
+	
 	public void registerSocialize(Context context, String registrationId);
 	
 	@Deprecated

@@ -115,7 +115,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	
 	protected void checkNotifications(Context context, SocializeSession session) {
 		if(notificationChecker != null) {
-			notificationChecker.checkRegistrations(context, session, true);
+			notificationChecker.checkRegistrations(context, session);
 		}
 	}
 	

@@ -42,7 +42,7 @@ public class Main extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        StictModeUtils.enableDefaults();
+//        StictModeUtils.enableDefaults();
         
         setContentView(R.layout.main);
         

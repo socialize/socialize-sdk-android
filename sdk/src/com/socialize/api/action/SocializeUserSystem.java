@@ -36,6 +36,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.user.UserListener;
 import com.socialize.listener.user.UserSaveListener;
+import com.socialize.notifications.NotificationRegistrationSystem;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.ui.profile.UserProfile;
 import com.socialize.util.DeviceUtils;
@@ -50,6 +51,9 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	private SocializeSessionPersister sessionPersister;
 	private DeviceUtils deviceUtils;
 	private SocializeAuthProviderInfoFactory socializeAuthProviderInfoFactory;
+	private NotificationRegistrationSystem notificationRegistrationSystem;
+	
+	@Deprecated
 	private Context context;
 	
 	public SocializeUserSystem(SocializeProvider<User> provider) {
@@ -143,11 +147,18 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 		user.setProfilePicData(profile.getEncodedImage());
 		user.setAutoPostToFacebook(profile.isAutoPostFacebook());
 		user.setAutoPostToTwitter(profile.isAutoPostTwitter());
-		user.setNotificationsEnabled(profile.isNotificationsEnabled());
-		saveUserProfile(context, session, user, listener);
+		
+		boolean resetC2DM = false;
+		
+		if(user.isNotificationsEnabled() != profile.isNotificationsEnabled()) {
+			user.setNotificationsEnabled(profile.isNotificationsEnabled());
+			resetC2DM = true;
+		}
+		
+		saveUserProfile(context, session, user, resetC2DM, listener);
 	}
 	
-	protected void saveUserProfile(final Context context, final SocializeSession session, User user, final UserListener listener) {
+	protected void saveUserProfile(final Context context, final SocializeSession session, User user, final boolean resetC2DM, final UserListener listener) {
 
 		String endpoint = ENDPOINT + user.getId() + "/";
 		
@@ -160,18 +171,30 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 
 			@Override
 			public void onUpdate(User savedUser) {
-				// Update local in-memory user
-				User sessionUser = session.getUser();
-				sessionUser.merge(savedUser);
 				
-				// Save this user to the local session for next load
-				if(sessionPersister != null) {
-					sessionPersister.saveUser(context, sessionUser);
+				if(resetC2DM) {
+					// Recreate c2dm registration
+					if(notificationRegistrationSystem != null) {
+						notificationRegistrationSystem.registerC2DMAsync(context);
+					}
 				}
 				
-				listener.onUpdate(sessionUser);
+				handleUserUpdate(context, session, savedUser, listener);
 			}
 		});
+	}
+	
+	protected void handleUserUpdate(final Context context, final SocializeSession session, User savedUser, final UserListener listener) {
+		// Update local in-memory user
+		User sessionUser = session.getUser();
+		sessionUser.merge(savedUser);
+		
+		// Save this user to the local session for next load
+		if(sessionPersister != null) {
+			sessionPersister.saveUser(context, sessionUser);
+		}
+		
+		listener.onUpdate(sessionUser);
 	}
 	
 	/* (non-Javadoc)
@@ -184,7 +207,7 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setProfilePicData(encodedImage);
-		saveUserProfile(context, session, user, listener);
+		saveUserProfile(context, session, user, false, listener);
 	}
 
 	public void setSessionPersister(SocializeSessionPersister sessionPersister) {
@@ -201,5 +224,9 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 
 	public void setSocializeAuthProviderInfoFactory(SocializeAuthProviderInfoFactory socializeAuthProviderInfoFactory) {
 		this.socializeAuthProviderInfoFactory = socializeAuthProviderInfoFactory;
+	}
+	
+	public void setNotificationRegistrationSystem(NotificationRegistrationSystem notificationRegistrationSystem) {
+		this.notificationRegistrationSystem = notificationRegistrationSystem;
 	}
 }

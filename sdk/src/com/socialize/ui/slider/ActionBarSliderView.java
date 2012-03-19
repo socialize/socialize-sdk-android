@@ -23,15 +23,13 @@ package com.socialize.ui.slider;
 
 import java.util.Map;
 import java.util.TreeMap;
-
 import android.content.Context;
 import android.view.View;
 import android.view.animation.Animation;
-
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.actionbar.ActionBarView;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
 
@@ -43,7 +41,7 @@ public class ActionBarSliderView extends BaseView {
 	
 	public enum DisplayState {CLOSE, MAXIMIZE, PEEK};
 	
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	private Drawables drawables;
 	private IBeanFactory<SliderAnimationSet> sliderAnimationSetFactory;
 	
@@ -81,8 +79,8 @@ public class ActionBarSliderView extends BaseView {
 
 	public void init() {
 		
-		deviceHeight = deviceUtils.getDisplayHeight();
-		actionBarHeight = deviceUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT);
+		deviceHeight = displayUtils.getDisplayHeight();
+		actionBarHeight = displayUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT);
 		
 		animations = new TreeMap<String, SliderAnimationSet>();
 		
@@ -104,7 +102,7 @@ public class ActionBarSliderView extends BaseView {
 		setLayoutParams(params);
 		setOrientation(VERTICAL);
 		
-		handleHeight = deviceUtils.getDIP(handleHeight);
+		handleHeight = displayUtils.getDIP(handleHeight);
 		
 		handle = new ActionBarSliderHandle(getContext(), this, handleHeight);
 		content = new ActionBarSliderContent(getContext(), this, deviceHeight-handleHeight);
@@ -324,8 +322,8 @@ public class ActionBarSliderView extends BaseView {
 		}
 	}
 	
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 
 	public void setDrawables(Drawables drawables) {

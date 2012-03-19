@@ -33,8 +33,7 @@ import com.socialize.notifications.BaseC2DMReceiver;
 public abstract class PublicBaseC2DMReceiver extends BaseC2DMReceiver {
 
 	public PublicBaseC2DMReceiver() {
-//		super("TESTING ONLY");
-		super();
+		super("TESTING ONLY");
 	}
 
 	@Override

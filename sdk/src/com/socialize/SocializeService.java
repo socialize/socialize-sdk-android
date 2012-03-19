@@ -25,7 +25,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
@@ -70,7 +69,7 @@ public interface SocializeService {
 	 * Initializes a SocializeService instance with default settings.  Should be called during the onCreate() method of your Activity.
 	 * @param context The current Android context (or Activity)
 	 */
-	public void init(Context context);
+	public IOCContainer init(Context context);
 
 	/**
 	 * Initializes a SocializeService instance with custom bean configurations (Expert use Only)
@@ -78,7 +77,7 @@ public interface SocializeService {
 	 * @param paths List of paths to config files.  Beans in paths to the right overwrite beans in paths to the left.
 	 * @see "https://github.com/socialize/android-ioc"
 	 */
-	public void init(Context context, String... paths);
+	public IOCContainer init(Context context, String... paths);
 	
 	/**
 	 * Initializes a SocializeService instance asynchronously with default settings.  Should be called during the onCreate() method of your Activity.

@@ -24,7 +24,6 @@ package com.socialize.ui.actionbar;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
@@ -46,7 +45,7 @@ import com.socialize.ui.actionbar.OnActionBarEventListener.ActionBarEvent;
 import com.socialize.ui.cache.CacheableEntity;
 import com.socialize.ui.cache.EntityCache;
 import com.socialize.ui.dialog.ProgressDialogFactory;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
 
@@ -80,7 +79,7 @@ public class ActionBarLayoutView extends BaseView {
 	
 	private String entityKey;
 	
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	
 	private ActionBarView actionBarView;
 	
@@ -185,7 +184,7 @@ public class ActionBarLayoutView extends BaseView {
 			}
 		});
 		
-		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, deviceUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT));
+		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, displayUtils.getDIP(ActionBarView.ACTION_BAR_HEIGHT));
 		masterParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
 		setLayoutParams(masterParams);
 		
@@ -289,10 +288,10 @@ public class ActionBarLayoutView extends BaseView {
 	}
 	
 	public void reload() {
-		final Entity realEntity = actionBarView.getEntity();
-		entityCache.remove(realEntity.getKey());
+		if(this.entityKey != null) {
+			entityCache.remove(this.entityKey);
+		}
 		doLoadSequence(true);
-		getLike(realEntity.getKey());
 	}
 
 	protected void postLike(final ActionBarButton button) {
@@ -529,8 +528,8 @@ public class ActionBarLayoutView extends BaseView {
 		this.progressDialogFactory = progressDialogFactory;
 	}
 
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 
 	public void setTickerFactory(IBeanFactory<ActionBarTicker> tickerFactory) {

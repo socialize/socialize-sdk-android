@@ -5,7 +5,6 @@ package com.socialize.ui.comment;
 
 import java.util.Date;
 import java.util.List;
-
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Comment;
@@ -29,7 +27,7 @@ import com.socialize.ui.view.ListItemLoadingView;
 import com.socialize.util.Base64DecoderException;
 import com.socialize.util.Base64Utils;
 import com.socialize.util.CacheableDrawable;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.SafeBitmapDrawable;
 import com.socialize.util.StringUtils;
@@ -46,7 +44,7 @@ public class CommentAdapter extends BaseAdapter {
 	private SocializeLogger logger;
 	private Drawables drawables;
 	private View loadingView;
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	private DateUtils dateUtils;
 	private boolean last = false;
 	private Base64Utils base64Utils;
@@ -234,7 +232,7 @@ public class CommentAdapter extends BaseAdapter {
 
 					if (userIcon != null && drawables != null) {
 
-						int densitySize = deviceUtils.getDIP(iconSize);
+						int densitySize = displayUtils.getDIP(iconSize);
 
 						final Drawable defaultImage = drawables.getDrawable(Socialize.DEFAULT_USER_ICON);
 
@@ -403,8 +401,8 @@ public class CommentAdapter extends BaseAdapter {
 		this.drawables = drawables;
 	}
 
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 
 	public void setDateUtils(DateUtils dateUtils) {

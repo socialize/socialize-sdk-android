@@ -84,7 +84,7 @@ public class SocializeUIInstanceTests extends SocializeUIActivityTest {
 			}
 		};
 
-		socialize.init(context, paths[0], paths[1]);
+		AndroidMock.expect(socialize.init(context, paths[0], paths[1])).andReturn(null);
 
 		AndroidMock.replay(socialize);
 

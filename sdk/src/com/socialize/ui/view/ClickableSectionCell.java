@@ -32,9 +32,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.socialize.ui.util.Colors;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 
@@ -46,7 +45,7 @@ public abstract class ClickableSectionCell extends LinearLayout {
 
 	protected Drawables drawables;
 	protected Colors colors;
-	protected DeviceUtils deviceUtils;
+	protected DisplayUtils displayUtils;
 	
 	private String displayText;
 	private TextView textView;
@@ -92,10 +91,10 @@ public abstract class ClickableSectionCell extends LinearLayout {
 			strokeColor = Colors.parseColor("#191f25");
 		}
 		
-		topLeftRadius= deviceUtils.getDIP(topLeftRadius);
-		topRightRadius= deviceUtils.getDIP(topRightRadius);
-		bottomRightRadius= deviceUtils.getDIP(bottomRightRadius);
-		bottomLeftRadius= deviceUtils.getDIP(bottomLeftRadius);
+		topLeftRadius= displayUtils.getDIP(topLeftRadius);
+		topRightRadius= displayUtils.getDIP(topRightRadius);
+		bottomRightRadius= displayUtils.getDIP(bottomRightRadius);
+		bottomLeftRadius= displayUtils.getDIP(bottomLeftRadius);
 		
 		radii = new float[]{
 			topLeftRadius,
@@ -133,7 +132,7 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		textParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
 		iconParams.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
 		
-		int margin = deviceUtils.getDIP(4);
+		int margin = displayUtils.getDIP(4);
 		
 		textParams.setMargins(margin*2, 0, margin, 0);
 		iconParams.setMargins(margin, 0, margin, 0);
@@ -194,7 +193,7 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		}
 		
 		if(stroke != null) {
-			int pixel = deviceUtils.getDIP(strokeCornerOffset);
+			int pixel = displayUtils.getDIP(strokeCornerOffset);
 			
 			for (int i = 0; i < strokeRadii.length; i++) {
 				if(radii[i] > 0) {
@@ -211,8 +210,8 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		
 		setBackgroundDrawable(bgLayer);
 		
-		if(deviceUtils != null) {
-			int padding = deviceUtils.getDIP(8);
+		if(displayUtils != null) {
+			int padding = displayUtils.getDIP(8);
 			setPadding(padding, padding, padding, padding);		
 		}
 	}
@@ -224,11 +223,11 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	public void setColors(Colors colors) {
 		this.colors = colors;
 	}
-
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
-	}
 	
+	public void setDisplayUtils(DisplayUtils displayUtils) {
+		this.displayUtils = displayUtils;
+	}
+
 	public void setDisplayText(String displayText) {
 		this.displayText = displayText;
 		if(textView != null) {

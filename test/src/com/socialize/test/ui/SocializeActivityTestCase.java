@@ -54,7 +54,7 @@ public class SocializeActivityTestCase extends SocializeUIActivityTest {
 	public void testInitSocialize() {
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		
-		socialize.init((Context) AndroidMock.anyObject());
+		AndroidMock.expect(socialize.init((Context) AndroidMock.anyObject())).andReturn(null);
 		
 		AndroidMock.replay(socialize);
 		

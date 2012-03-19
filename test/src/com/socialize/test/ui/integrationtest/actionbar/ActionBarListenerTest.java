@@ -1,12 +1,8 @@
 package com.socialize.test.ui.integrationtest.actionbar;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
 import android.content.Intent;
-
 import com.socialize.Socialize;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
@@ -73,7 +69,7 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 		Intent intent = new Intent(getActivity(), ActionBarListenerActivity.class);
 		
 		Entity entity = new Entity();
-		entity.setKey("foobar_testActionBarReload");
+		entity.setKey("1");
 		entity.setName("foobar_name_testActionBarReload");
 		
 		intent.putExtra(Socialize.ENTITY_OBJECT, entity);
@@ -86,14 +82,15 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 		
 		assertNotNull(actionBar);
 		
-		final CountDownLatch reloadLatch = new CountDownLatch(1);
-		
-		final List<Entity> holder = new ArrayList<Entity>();
+		final CountDownLatch reloadLatch = new CountDownLatch(2);
 		
 		actionBar.setOnActionBarEventListener(new OnActionBarEventListener() {
 			
 			@Override
-			public void onUpdate(ActionBarView actionBar) {}
+			public void onUpdate(ActionBarView actionBar) {
+				addResult(1, "onUpdate");
+				reloadLatch.countDown();
+			}
 			
 			@Override
 			public void onPostUnlike(ActionBarView actionBar) {}
@@ -112,22 +109,19 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 			
 			@Override
 			public void onGetEntity(ActionBarView actionBar, Entity entity) {
-				holder.add(entity);
+				addResult(0, entity);
 				reloadLatch.countDown();
 			}
 			
 			@Override
 			public void onClick(ActionBarView actionBar, ActionBarEvent evt) {}
 		});
-		
-		sleep(2000);
-		
+
 		final Entity new_entity = new Entity();
-		new_entity.setKey("foobar2_testActionBarReload");
+		new_entity.setKey("2");
 		new_entity.setName("foobar_name2_testActionBarReload");
 		
 		runTestOnUiThread(new Runnable() {
-			
 			@Override
 			public void run() {
 				actionBar.setEntity(new_entity);
@@ -137,11 +131,14 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 		
 		assertTrue(reloadLatch.await(20000, TimeUnit.MILLISECONDS));
 		
-		assertTrue(holder.size() == 1);
-		Entity found = holder.get(0);
-		assertNotNull(found);
+		Entity found = getResult(0);
+		String update = getResult(1);
 		
-		assertEquals("foobar2_testActionBarReload", found.getKey());
+		assertNotNull(found);
+		assertNotNull(update);
+		
+		assertEquals("onUpdate", update);
+		assertEquals("2", found.getKey());
 	}	
 	
 	protected ActionBarView waitForActionBar(long timeout)  {

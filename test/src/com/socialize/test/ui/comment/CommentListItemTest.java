@@ -6,19 +6,19 @@ import com.socialize.test.SocializeUnitTest;
 import com.socialize.ui.comment.CommentListItem;
 import com.socialize.ui.comment.CommentListItemBackgroundFactory;
 import com.socialize.ui.util.Colors;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 
 public class CommentListItemTest extends SocializeUnitTest {
 	
 	@UsesMocks ({
-		DeviceUtils.class,
+		DisplayUtils.class,
 		Colors.class,
 		Drawables.class,
 		CommentListItemBackgroundFactory.class
 	})
 	public void testInit() {
-		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
+		DisplayUtils deviceUtils = AndroidMock.createMock(DisplayUtils.class);
 		Colors colors = AndroidMock.createMock(Colors.class);
 		Drawables drawables = AndroidMock.createMock(Drawables.class);
 		CommentListItemBackgroundFactory backgroundFactory = AndroidMock.createMock(CommentListItemBackgroundFactory.class);
@@ -36,7 +36,7 @@ public class CommentListItemTest extends SocializeUnitTest {
 		AndroidMock.replay(drawables);
 		
 		CommentListItem item = new CommentListItem(getContext());
-		item.setDeviceUtils(deviceUtils);
+		item.setDisplayUtils(deviceUtils);
 		item.setColors(colors);
 		item.setDrawables(drawables);
 		item.setBackgroundFactory(backgroundFactory);

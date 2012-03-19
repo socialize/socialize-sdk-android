@@ -21,6 +21,14 @@
 		</init-method>
 	</bean>
 	
+	<bean id="deviceUtils" class="com.socialize.util.DeviceUtils">
+		<property name="logger" ref="logger"/>
+		<property name="appUtils" ref="appUtils"/>
+		<init-method name="init">
+			<arg type="context"/>
+		</init-method>
+	</bean>		
+	
 	<bean id="appUtils" class="com.socialize.util.DefaultAppUtils" context-aware="false">
 		<property name="logger" ref="logger"/>
 		<property name="config" ref="config"/>
@@ -31,14 +39,6 @@
 	
 	<bean id="numberUtils" class="com.socialize.util.NumberUtils"/>
 	
-	<bean id="deviceUtils" class="com.socialize.util.DeviceUtils">
-		<property name="logger" ref="logger"/>
-		<property name="appUtils" ref="appUtils"/>
-		<init-method name="init">
-			<arg type="context"/>
-		</init-method>
-	</bean>
-
 	<bean id="httpUtils" class="com.socialize.util.HttpUtils" context-aware="false">
 		<init-method name="init">
 			<arg type="context"/>
@@ -240,7 +240,7 @@
 	<bean id="defaultRequestFactory" class="com.socialize.api.DefaultSocializeRequestFactory" abstract="true">
 		<property name="oauthSigner" ref="oauthSigner"/>
 		<property name="signListener" ref="signListener"/>
-		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="appUtils" ref="appUtils"/>
 	</bean>
 	
 	
@@ -385,7 +385,7 @@
 		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
 		<property name="deviceUtils" ref="deviceUtils"/>	
 		<property name="socializeAuthProviderInfoFactory" ref="socializeAuthProviderInfoFactory"/>
-			
+		<property name="notificationRegistrationSystem" ref="notificationRegistrationSystem"/>	
 	</bean>
 	
 <!-- End User API -->

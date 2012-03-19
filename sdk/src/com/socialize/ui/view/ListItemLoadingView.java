@@ -6,9 +6,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.socialize.ui.util.Colors;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 import com.socialize.view.BaseView;
 
 /**
@@ -18,7 +17,7 @@ import com.socialize.view.BaseView;
  */
 public class ListItemLoadingView extends BaseView {
 
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	private Colors colors;
 	
 	public ListItemLoadingView(Context context) {
@@ -26,7 +25,7 @@ public class ListItemLoadingView extends BaseView {
 	}
 	
 	public void init() {
-		final int eight = deviceUtils.getDIP(8);
+		final int eight = displayUtils.getDIP(8);
 		
 		ProgressBar progress = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleSmall);
 		TextView text = new TextView(getContext());
@@ -49,12 +48,12 @@ public class ListItemLoadingView extends BaseView {
 		addView(text);
 	}
 
-	public DeviceUtils getDeviceUtils() {
-		return deviceUtils;
+	public DisplayUtils getDisplayUtils() {
+		return displayUtils;
 	}
 
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 
 	public Colors getColors() {

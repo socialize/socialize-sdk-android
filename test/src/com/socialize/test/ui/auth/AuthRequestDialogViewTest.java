@@ -23,14 +23,13 @@ package com.socialize.test.ui.auth;
 
 import android.view.View;
 import android.widget.TextView;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.networks.facebook.FacebookButton;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.ui.auth.AuthConfirmDialogView;
 import com.socialize.ui.auth.AuthRequestDialogView;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 
 /**
  * @author Jason Polites
@@ -40,11 +39,12 @@ public class AuthRequestDialogViewTest extends SocializeUnitTest {
 
 	
 	// Just test that the view renders ok
-	@UsesMocks ({DeviceUtils.class, FacebookButton.class})
+	@Deprecated
+	@UsesMocks ({DisplayUtils.class, FacebookButton.class})
 	public void testAuthRequestDialogViewInit() {
 		
 		String text = "foobar";
-		DeviceUtils deviceUtils = AndroidMock.createMock(DeviceUtils.class);
+		DisplayUtils deviceUtils = AndroidMock.createMock(DisplayUtils.class);
 		FacebookButton button = AndroidMock.createMock(FacebookButton.class, getContext());
 		AndroidMock.expect(deviceUtils.getDIP(AndroidMock.anyInt())).andReturn(1).anyTimes();
 		
@@ -57,7 +57,7 @@ public class AuthRequestDialogViewTest extends SocializeUnitTest {
 			}
 		};
 		
-		view.setDeviceUtils(deviceUtils);
+		view.setDisplayUtils(deviceUtils);
 		view.setFacebookSignInButton(button);
 		view.setText(text);
 		view.init();

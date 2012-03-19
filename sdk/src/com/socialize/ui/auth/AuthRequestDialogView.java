@@ -26,19 +26,19 @@ import android.graphics.Color;
 import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.socialize.networks.facebook.FacebookButton;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
  *
  */
+@Deprecated
 public class AuthRequestDialogView extends LinearLayout {
 
 	private FacebookButton facebookSignInButton;
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	private TextView textView;
 	private String text;
 	
@@ -48,7 +48,7 @@ public class AuthRequestDialogView extends LinearLayout {
 	
 	public void init() {
 		
-		int padding = deviceUtils.getDIP(8);
+		int padding = displayUtils.getDIP(8);
 		
 		LayoutParams fill = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 
@@ -81,8 +81,8 @@ public class AuthRequestDialogView extends LinearLayout {
 		this.facebookSignInButton = facebookSignInButton;
 	}
 
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 
 	public FacebookButton getFacebookSignInButton() {

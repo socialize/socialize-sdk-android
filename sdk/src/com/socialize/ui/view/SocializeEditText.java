@@ -30,9 +30,8 @@ import android.util.TypedValue;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.socialize.ui.util.Colors;
-import com.socialize.util.DeviceUtils;
+import com.socialize.util.DisplayUtils;
 
 /**
  * @author Jason Polites
@@ -40,7 +39,7 @@ import com.socialize.util.DeviceUtils;
  */
 public class SocializeEditText extends LinearLayout {
 	
-	private DeviceUtils deviceUtils;
+	private DisplayUtils displayUtils;
 	private Colors colors;
 
 	private String label;
@@ -56,8 +55,8 @@ public class SocializeEditText extends LinearLayout {
 	}
 
 	public void init() {
-		final int padding = deviceUtils.getDIP(8);
-		final int editTextStroke = deviceUtils.getDIP(2);
+		final int padding = displayUtils.getDIP(8);
+		final int editTextStroke = displayUtils.getDIP(2);
 		final float editTextRadius = editTextStroke;
 		
 		setOrientation(VERTICAL);
@@ -99,8 +98,8 @@ public class SocializeEditText extends LinearLayout {
 		addView(objEdit);
 	}
 
-	public void setDeviceUtils(DeviceUtils deviceUtils) {
-		this.deviceUtils = deviceUtils;
+	public void setDisplayUtils(DisplayUtils deviceUtils) {
+		this.displayUtils = deviceUtils;
 	}
 
 	public void setColors(Colors colors) {

@@ -45,6 +45,6 @@ public class SocializeDeviceRegistrationSystem extends SocializeApi<DeviceRegist
 	public void registerDevice(SocializeSession session, DeviceRegistration registration) throws SocializeException {
 		List<DeviceRegistration> registrations = new ArrayList<DeviceRegistration>(1);
 		registrations.add(registration);
-		post(session, ENDPOINT, registrations);
+		postAsync(session, ENDPOINT, registrations, null);
 	}
 }
