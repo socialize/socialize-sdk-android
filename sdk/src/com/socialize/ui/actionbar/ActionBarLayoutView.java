@@ -267,7 +267,7 @@ public class ActionBarLayoutView extends BaseView {
 				@Override
 				public void onCreate(View view) {
 					// Entity will be set in like
-					getLike(entity.getKey());
+					getLike(view.getEntity().getKey());
 				}
 			});
 		}

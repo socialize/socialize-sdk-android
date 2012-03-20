@@ -276,6 +276,6 @@ public abstract class AbstractOAuthConsumer implements OAuthConsumer {
     }
 
     protected String generateNonce() {
-        return Long.toString(new Random().nextLong());
+        return Long.toString(new Random().nextLong()) + System.currentTimeMillis();
     }
 }

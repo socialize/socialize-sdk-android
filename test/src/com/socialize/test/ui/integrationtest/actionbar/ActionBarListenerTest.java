@@ -4,10 +4,16 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import android.content.Intent;
 import com.socialize.Socialize;
+import com.socialize.SocializeAccess;
+import com.socialize.android.ioc.ProxyObject;
+import com.socialize.api.action.LikeSystem;
+import com.socialize.api.action.ViewSystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.Share;
+import com.socialize.sample.mocks.MockLikeSystem;
+import com.socialize.sample.mocks.MockViewSystem;
 import com.socialize.sample.ui.ActionBarListenerActivity;
 import com.socialize.sample.ui.ActionBarListenerHolder;
 import com.socialize.test.SocializeActivityTest;
@@ -63,7 +69,6 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 		assertNotNull(waitForActionBar(10000));
 	}
 	
-	
 	public void testActionBarReload() throws Throwable {
 		
 		Intent intent = new Intent(getActivity(), ActionBarListenerActivity.class);
@@ -74,6 +79,8 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 		
 		intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 		
+		SocializeAccess.setBeanOverrides("socialize_ui_mock_beans.xml", "socialize_ui_mock_socialize_beans.xml");
+		
 		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, "false");
 		
 		getActivity().startActivity(intent);		
@@ -81,6 +88,16 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 		final ActionBarView actionBar = waitForActionBar(20000);
 		
 		assertNotNull(actionBar);
+		
+		// Override default behaviour so we don't actually go to the server
+		MockLikeSystem mockLikeSystem = new MockLikeSystem();
+		MockViewSystem mockViewSystem = new MockViewSystem();
+		
+		ProxyObject<LikeSystem> likeSystemProxy = SocializeAccess.getProxy("likeSystem");
+		ProxyObject<ViewSystem> viewSystemProxy = SocializeAccess.getProxy("viewSystem");
+		
+		likeSystemProxy.setDelegate(mockLikeSystem);
+		viewSystemProxy.setDelegate(mockViewSystem);		
 		
 		final CountDownLatch reloadLatch = new CountDownLatch(2);
 		
@@ -116,10 +133,16 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 			@Override
 			public void onClick(ActionBarView actionBar, ActionBarEvent evt) {}
 		});
+		
+		// Wait for initial load to complete
+		sleep(2000);
 
 		final Entity new_entity = new Entity();
 		new_entity.setKey("2");
 		new_entity.setName("foobar_name2_testActionBarReload");
+		
+		// Orchestrate the mocks
+		mockLikeSystem.setEntity(new_entity);
 		
 		runTestOnUiThread(new Runnable() {
 			@Override
@@ -129,7 +152,7 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 			}
 		});
 		
-		assertTrue(reloadLatch.await(20000, TimeUnit.MILLISECONDS));
+		assertTrue(reloadLatch.await(10000, TimeUnit.MILLISECONDS));
 		
 		Entity found = getResult(0);
 		String update = getResult(1);

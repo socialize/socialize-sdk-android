@@ -22,9 +22,9 @@
 package com.socialize.ui.share;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.widget.EditText;
-
 import com.socialize.Socialize;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
@@ -83,15 +83,22 @@ public abstract class InternalShareClickListener extends BaseShareClickListener 
 				listenerHolder.put(entity.getKey(), listener);
 			}
 
-			context.startActivity(intent);
+			startActivity(context, intent);
 		}
+	}
+	
+	// So we can mock
+	protected void startActivity(Context context, Intent intent) {
+		context.startActivity(intent);
 	}
 	
 	public void setListenerHolder(ListenerHolder listenerHolder) {
 		this.listenerHolder = listenerHolder;
 	}
 
-	protected abstract String getMimeType();
+	protected String getMimeType() {
+		return "text/plain";
+	}
 	
 	protected abstract void doShare(Activity parent, String title, String subject, String body, String comment);
 
