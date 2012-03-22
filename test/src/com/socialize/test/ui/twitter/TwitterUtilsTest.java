@@ -21,13 +21,139 @@
  */
 package com.socialize.test.ui.twitter;
 
-import com.socialize.test.SocializeUnitTest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import android.app.Dialog;
+import android.content.Context;
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.auth.twitter.TwitterAuthDialogListener;
+import com.socialize.auth.twitter.TwitterAuthListener;
+import com.socialize.auth.twitter.TwitterAuthProviderInfo;
+import com.socialize.auth.twitter.TwitterAuthView;
+import com.socialize.auth.twitter.TwitterUtils;
+import com.socialize.error.SocializeException;
+import com.socialize.test.SocializeActivityTest;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class TwitterUtilsTest extends SocializeUnitTest {
+public class TwitterUtilsTest extends SocializeActivityTest {
 
+	@SuppressWarnings("unchecked")
+	@UsesMocks ({IBeanFactory.class, TwitterAuthListener.class, TwitterAuthProviderInfo.class})
+	public void testShowAuthDialogCancel() throws Throwable {
+		
+		final Context context = getContext();
+		final String key = "foo";
+		final String secret = "bar";
+		
+		TwitterAuthView view = new TwitterAuthView(context) {
+			@Override
+			public void authenticate() {
+				addResult(0, "authenticate");
+			}
+		};
+		
+		final IBeanFactory<TwitterAuthView> twitterAuthViewFactory = AndroidMock.createMock(IBeanFactory.class);
+		final TwitterAuthProviderInfo info = AndroidMock.createMock(TwitterAuthProviderInfo.class);
+		final TwitterAuthListener listener = AndroidMock.createMock(TwitterAuthListener.class);
+		
+		AndroidMock.expect(info.getConsumerKey()).andReturn(key);
+		AndroidMock.expect(info.getConsumerSecret()).andReturn(secret);
+		AndroidMock.expect(twitterAuthViewFactory.getBean(key, secret)).andReturn(view);
+
+		listener.onCancel();
+		
+		AndroidMock.replay(info, twitterAuthViewFactory, listener);
+		
+		final TwitterUtils utils = new TwitterUtils();
+		
+		utils.setTwitterAuthViewFactory(twitterAuthViewFactory);
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		final List<Dialog> holder = new ArrayList<Dialog>(1);
+		
+		runTestOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Dialog dialog = utils.showAuthDialog(context, info, listener);
+				holder.add(dialog);
+				latch.countDown();
+			}
+		});
+		
+		latch.await();
+		
+		final Dialog dialog = holder.get(0);
+		
+		// Wait for show;
+		sleep(500);
+		
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		
+		runTestOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				dialog.cancel();
+				latch1.countDown();
+			}
+		});		
+		
+		latch1.await();
+		
+		// Wait for hide;
+		sleep(500);
+		
+		AndroidMock.verify(info, twitterAuthViewFactory, listener);
+	}
+	
+	@UsesMocks ({Dialog.class, TwitterAuthListener.class})
+	public void test_newTwitterAuthDialogListener() {
+		
+		PublicTwitterUtils utils = new PublicTwitterUtils();
+		
+		final String token = "foobar_token";
+		final String secret = "foobar_secret";
+		final String screenName = "foobar_screenName";
+		final String userId = "foobar_userId";
+		final SocializeException e = new SocializeException();
+		
+		Dialog dialog = AndroidMock.createMock(Dialog.class, getContext());
+		TwitterAuthListener listener = AndroidMock.createMock(TwitterAuthListener.class);
+		
+		listener.onAuthSuccess(token, secret, screenName, userId);
+		listener.onAuthSuccess(token, secret, screenName, userId);
+		listener.onCancel();
+		listener.onCancel();
+		listener.onError(e);
+		listener.onError(e);
+		
+		dialog.dismiss();
+		dialog.dismiss();
+		dialog.dismiss();
+		dialog.dismiss();
+		dialog.dismiss();
+		dialog.dismiss();
+		
+		AndroidMock.replay(dialog, listener);
+		
+		TwitterAuthDialogListener newTwitterAuthDialogListener = utils.newTwitterAuthDialogListener(dialog, listener);
+	
+		newTwitterAuthDialogListener.onAuthSuccess(token, secret, screenName, userId);
+		newTwitterAuthDialogListener.onAuthSuccess(dialog, token, secret, screenName, userId);
+		newTwitterAuthDialogListener.onCancel();
+		newTwitterAuthDialogListener.onCancel(dialog);
+		newTwitterAuthDialogListener.onError(e);
+		newTwitterAuthDialogListener.onError(dialog, e);
+		
+		AndroidMock.verify(dialog, listener);
+	}
+	
 }
