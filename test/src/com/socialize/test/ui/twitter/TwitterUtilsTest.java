@@ -24,6 +24,7 @@ package com.socialize.test.ui.twitter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import android.app.Dialog;
 import android.content.Context;
 import com.google.android.testing.mocking.AndroidMock;
@@ -89,7 +90,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 			}
 		});
 		
-		latch.await();
+		latch.await(10, TimeUnit.SECONDS);
 		
 		final Dialog dialog = holder.get(0);
 		
@@ -106,7 +107,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 			}
 		});		
 		
-		latch1.await();
+		latch.await(10, TimeUnit.SECONDS);
 		
 		// Wait for hide;
 		sleep(500);

@@ -23,6 +23,7 @@ package com.socialize.test.unit.facebook;
 
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -256,7 +257,7 @@ import com.socialize.util.DialogFactory;
 			} 
 		});
 
-		lock.await();
+		lock.await(10, TimeUnit.SECONDS);
 
 		String msg = getNextResult();
 
