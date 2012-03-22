@@ -16,6 +16,9 @@ public class CachedImageView extends View {
 	private boolean changed = false;
 	
 	private Drawable drawable;
+	
+	private int width;
+	private int height;
 
 	private Handler mRedrawHandler = new Handler()  {
 		@Override
@@ -37,11 +40,19 @@ public class CachedImageView extends View {
 	}
 
 	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		MeasureSpec.getSize(widthMeasureSpec);
+		MeasureSpec.getSize(heightMeasureSpec);
+		measure(widthMeasureSpec, heightMeasureSpec);
+	}
+
+	@Override
 	protected void onDraw(Canvas canvas) {
 		if(drawable == null || changed) {
 			changed = false;
 			if(imageName != null) {
 				drawable = drawables.getDrawable(imageName);
+				drawable.setBounds(0,  0, width, height);
 			}
 		}
 		

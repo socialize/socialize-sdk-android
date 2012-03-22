@@ -84,13 +84,10 @@ public class SocialNetworkSignOutClickListenerTest extends SocializeActivityTest
 //		getInstrumentation().waitForIdleSync();
 		
 //		assertNotNull(getNextResult());
+		
+		dialog.dismiss();
 	}
 	
-	
-	public void testOnClickNo() {
-		
-	}
-		
 	class PublicSocialNetworkSignOutClickListener extends SocialNetworkSignOutClickListener {
 		@Override
 		public AlertDialog makeDialog(Context context) {

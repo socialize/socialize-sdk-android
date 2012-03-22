@@ -143,6 +143,8 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		});
 
 		assertTrue("Timeout waiting for countdown latch", signal.await(timeout, TimeUnit.SECONDS));
+		
+		authProgress.dismiss();
 	}
 
 	public void testApiAsyncCallsAuthenticateOnProvider() throws Throwable {
