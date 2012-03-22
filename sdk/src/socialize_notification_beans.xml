@@ -22,14 +22,12 @@
 	
 	<bean id="actionNotificationMessageBuilder" class="com.socialize.notifications.SocializeActionNotificationMessageBuilder">
 		<property name="appUtils" ref="appUtils"/>
-		<property name="numberUtils" ref="numberUtils"/>
 		<property name="logger" ref="logger"/>
 		<property name="messageTranslator" ref="simpleMessageTranslator"/>
 	</bean>
 	
 	<bean id="developerNotificationMessageBuilder" class="com.socialize.notifications.SimpleNotificationMessageBuilder">
 		<property name="appUtils" ref="appUtils"/>
-		<property name="numberUtils" ref="numberUtils"/>
 		<property name="logger" ref="logger"/>
 		<property name="messageTranslator" ref="developerMessageTranslator"/>
 	</bean>	
@@ -38,7 +36,6 @@
 		<property name="logger" ref="logger"/>
 		<property name="config" ref="config"/>
 		<property name="appUtils" ref="appUtils"/>
-		<property name="numberUtils" ref="numberUtils"/>
 		<property name="userSystem" ref="userSystem"/>
 		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
 		<property name="notificationRegistrationSystem" ref="notificationRegistrationSystem"/>

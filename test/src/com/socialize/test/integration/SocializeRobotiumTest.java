@@ -138,7 +138,7 @@ public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestC
 		// progress dialog is closed, resulting in an abnormal abort
 		// which causes a test failure.
 		// Add a sleep to hack it
-		sleep(4000);
+		robotium.waitForDialogToClose(4000);
 		assertTrue(robotium.waitForText("SUCCESS", 1, DEFAULT_TIMEOUT_MILLISECONDS));
 	}
 

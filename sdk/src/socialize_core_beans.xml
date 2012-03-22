@@ -37,8 +37,6 @@
 		</init-method>
 	</bean>	
 	
-	<bean id="numberUtils" class="com.socialize.util.NumberUtils"/>
-	
 	<bean id="httpUtils" class="com.socialize.util.HttpUtils" context-aware="false">
 		<init-method name="init">
 			<arg type="context"/>

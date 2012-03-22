@@ -24,10 +24,11 @@ package com.socialize.test.unit.notifications;
 import android.content.Intent;
 import android.os.Bundle;
 import android.test.mock.MockContext;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.SocializeService;
 import com.socialize.notifications.C2DMCallback;
+import com.socialize.notifications.SocializeBroadcastReceiver;
 import com.socialize.notifications.SocializeC2DMReceiver;
 import com.socialize.notifications.WakeLock;
 import com.socialize.test.PublicSocialize;
@@ -67,6 +68,28 @@ public class SocializeBroadcastReceiverTest extends SocializeUnitTest {
 		receiver.handleBroadcastIntent(context, intent);
 		
 		AndroidMock.verify(wakeLock, intent, context);
+	}
+	
+	@UsesMocks({SocializeService.class})
+	public void testOnRecieveOnBroadcastReceiver() {
+		
+		final SocializeService service = AndroidMock.createMock(SocializeService.class);
+		Intent intent = new Intent();
+		
+		SocializeBroadcastReceiver receiver = new SocializeBroadcastReceiver() {
+			@Override
+			protected SocializeService getSocialize() {
+				return service;
+			}
+		};
+		
+		AndroidMock.expect(service.handleBroadcastIntent(getContext(), intent)).andReturn(true);
+		
+		AndroidMock.replay(service);
+		
+		receiver.onReceive(getContext(), intent);
+		
+		AndroidMock.verify(service);
 	}
 	
 }

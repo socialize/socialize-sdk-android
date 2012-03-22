@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,27 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.util;
+package com.socialize.test.ui.twitter;
+
+import com.socialize.test.SocializeUnitTest;
+
 
 /**
  * @author Jason Polites
  *
  */
-public class NumberUtils {
+public class TwitterUtilsTest extends SocializeUnitTest {
 
-	/**
-	 * Safely converts a long to an int, but does NOT preserve the original value.
-	 * This is used in situations where we need an int, but have a long and we don't care 
-	 * about the original value, but we care that the value is consistent.
-	 * @param lng
-	 * @return
-	 */
-	public int longToIntLossy(long lng) {
-		if(lng > Integer.MAX_VALUE || lng < Integer.MIN_VALUE) {
-			return (int)(lng >> 32);
-		}
-		else {
-			return (int) lng;
-		}
-	}
 }

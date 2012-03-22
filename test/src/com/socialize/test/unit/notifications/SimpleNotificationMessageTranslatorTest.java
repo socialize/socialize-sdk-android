@@ -19,34 +19,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.notifications;
+package com.socialize.test.unit.notifications;
 
-import android.content.Context;
-import android.os.Bundle;
-
-import com.socialize.Socialize;
+import com.socialize.api.action.ActionType;
 import com.socialize.error.SocializeException;
+import com.socialize.notifications.NotificationMessage;
+import com.socialize.notifications.SimpleNotificationMessage;
+import com.socialize.notifications.SimpleNotificationMessageTranslator;
+import com.socialize.test.SocializeUnitTest;
+
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class BaseMessageTranslator<T> implements MessageTranslator<T> {
+public class SimpleNotificationMessageTranslatorTest extends SocializeUnitTest {
 
-	/* (non-Javadoc)
-	 * @see com.socialize.notifications.MessageTranslator#translate(android.content.Context, android.os.Bundle, com.socialize.notifications.NotificationMessage)
-	 */
-	@Override
-	public T translate(Context context, Bundle data, NotificationMessage message) throws SocializeException {
+	public void testTranslate() throws SocializeException {
 		
-		data.putString( Socialize.ACTION_ID , String.valueOf( message.getActionId() ));
+		NotificationMessage message = new NotificationMessage();
 		
-		// The action detail view expects this, but will handle the -1 case.
-		data.putString( Socialize.USER_ID , "-1");
+		final String text = "foo";
+		final String user = "foo_user";
+		final String entity = "foo_entity";
+		final ActionType actionType = ActionType.COMMENT;
 		
-		return translate(context, message);
+		message.setUser(user);
+		message.setActionType(actionType);
+		message.setEntity(entity);
+		message.setText(text);
+		
+		SimpleNotificationMessageTranslator translator = new SimpleNotificationMessageTranslator();
+		
+		SimpleNotificationMessage translated = translator.translate(getContext(), message);
+		
+		assertNotNull(translated.getText());
+		assertNotNull(translated.getTitle());
+		
+		assertEquals("foo_user commented on foo_entity", translated.getTitle());
+		assertEquals("foo", translated.getText());
 	}
 	
-	public abstract T translate(Context context, NotificationMessage message) throws SocializeException;
-
 }

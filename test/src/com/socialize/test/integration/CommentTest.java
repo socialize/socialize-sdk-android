@@ -35,8 +35,6 @@ public class CommentTest extends SocializeRobotiumTest {
 		
 		waitForSuccess();
 
-		sleep(2000);
-		
 		TextView txt = (TextView) robotium.getCurrentActivity().findViewById(com.socialize.sample.R.id.txtCommentIdCreated);
 		
 		// This is ID, it should be integer
@@ -78,7 +76,6 @@ public class CommentTest extends SocializeRobotiumTest {
 		
 		waitForSuccess();
 
-		sleep(2000);
 		TextView txt = (TextView) robotium.getCurrentActivity().findViewById(com.socialize.sample.R.id.txtCommentIdCreated);
 		
 		// This is ID, it should be integer
@@ -120,8 +117,6 @@ public class CommentTest extends SocializeRobotiumTest {
 		robotium.clickOnButton("Get");
 		
 		waitForSuccess();
-		
-		sleep(1000);
 		
 		// Check Comment ID
 		TextView txt = (TextView) robotium.getCurrentActivity().findViewById(com.socialize.sample.R.id.txtCommentId);
