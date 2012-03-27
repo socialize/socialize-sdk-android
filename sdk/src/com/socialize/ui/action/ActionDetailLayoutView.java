@@ -206,7 +206,7 @@ public class ActionDetailLayoutView extends BaseView {
 		if(!StringUtils.isEmpty(profilePicData)) {
 			userIcon.getBackground().setAlpha(64);
 			
-			imageLoader.loadImage(user.getId(), profilePicData, new ImageLoadListener() {
+			imageLoader.loadImageByUrl(profilePicData, new ImageLoadListener() {
 				@Override
 				public void onImageLoadFail(ImageLoadRequest request, Exception error) {
 					error.printStackTrace();
@@ -219,7 +219,7 @@ public class ActionDetailLayoutView extends BaseView {
 				}
 				
 				@Override
-				public void onImageLoad(ImageLoadRequest request, final SafeBitmapDrawable drawable, boolean async) {
+				public void onImageLoad(ImageLoadRequest request, final SafeBitmapDrawable drawable) {
 					// Must be run on UI thread
 					userIcon.post(new Runnable() {
 						public void run() {

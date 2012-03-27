@@ -466,6 +466,11 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 			protected SocializeService getSocialize() {
 				return socialize;
 			}
+			
+			@Override
+			protected void preLoadImages(List<Comment> comments) {
+				// Do nothing.
+			}
 		};
 		
 		view.setCommentAdapter(commentAdapter);
@@ -537,6 +542,11 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 			@Override
 			protected SocializeService getSocialize() {
 				return socialize;
+			}
+
+			@Override
+			protected void preLoadImages(List<Comment> comments) {
+				// Do nothing.
 			}
 		};
 		

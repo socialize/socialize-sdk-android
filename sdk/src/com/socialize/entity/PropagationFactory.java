@@ -23,6 +23,7 @@ package com.socialize.entity;
 
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -31,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.socialize.networks.SocialNetwork;
+import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
@@ -61,37 +63,50 @@ public class PropagationFactory extends JSONFactory<Propagation> {
 	protected void toJSON(Propagation from, JSONObject to) throws JSONException {
 		
 		// Make params
-		Set<Entry<String, String>> entrySet = from.getExtraParams().entrySet();
+		Map<String, String> extraParams = from.getExtraParams();
 		
-		StringBuilder builder = new StringBuilder();
-		
-		int count = 0;
-		
-		for (Entry<String, String> entry : entrySet) {
-			if(count > 0) {
-				builder.append("&");
-			}			
+		if(extraParams != null && extraParams.size() > 0) {
 			
-			builder.append(URLEncoder.encode(entry.getKey()));
-			builder.append("=");
-			builder.append(URLEncoder.encode(entry.getValue()));
+			Set<Entry<String, String>> entrySet = extraParams.entrySet();
 			
-			count++;
+			if(entrySet != null && entrySet.size() > 0) {
+				
+				int count = 0;
+
+				StringBuilder builder = new StringBuilder();
+				
+				for (Entry<String, String> entry : entrySet) {
+					
+					if(!StringUtils.isEmpty(entry.getKey())) {
+						if(count > 0) {
+							builder.append("&");
+						}			
+						
+						builder.append(URLEncoder.encode(entry.getKey()));
+						builder.append("=");
+						builder.append(URLEncoder.encode(entry.getValue()));
+						
+						count++;
+					}
+				}
+				
+				to.put("extra_params", builder.toString());
+			}
 		}
-		
-		to.put("extra_params", builder.toString());
 		
 		JSONArray networks = new JSONArray();
 		
 		List<SocialNetwork> thirdParties = from.getThirdParties();
-		for (SocialNetwork socialNetwork : thirdParties) {
-			// TODO: Remove this condition once facebook is supported.
-			if(!socialNetwork.equals(SocialNetwork.FACEBOOK)) {
-				networks.put(socialNetwork.name().toLowerCase());
-			}
-		}
 		
-		to.put("third_parties", networks);
+		if(thirdParties != null && thirdParties.size() > 0) {
+			for (SocialNetwork socialNetwork : thirdParties) {
+				// TODO: Remove this condition once facebook is supported.
+				if(!socialNetwork.equals(SocialNetwork.FACEBOOK)) {
+					networks.put(socialNetwork.name().toLowerCase());
+				}
+			}
+			
+			to.put("third_parties", networks);
+		}
 	}
-
 }

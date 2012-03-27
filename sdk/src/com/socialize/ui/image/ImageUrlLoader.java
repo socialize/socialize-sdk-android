@@ -25,12 +25,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-
 import com.socialize.util.CacheableDrawable;
-import com.socialize.util.SafeBitmapDrawable;
 
 /**
  * @author Jason Polites
@@ -38,7 +35,7 @@ import com.socialize.util.SafeBitmapDrawable;
  */
 public class ImageUrlLoader {
 
-	public SafeBitmapDrawable loadImageFromUrl(String url) throws IOException {
+	public CacheableDrawable loadImageFromUrl(String url) throws IOException {
 		URL imageUrl = 	new URL(url);
 		URLConnection conn = null;
 		InputStream is = null;

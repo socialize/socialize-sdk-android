@@ -87,6 +87,7 @@ public class SocializeConfig {
 	
 	public static final String LOG_LEVEL = "log.level";
 	public static final String LOG_TAG = "log.tag";
+	public static final String LOG_THREAD = "log.thread";
 	public static final String LOG_MSG = "log.msg.";
 	public static final String API_HOST = "api.host";
 	public static final String REDIRECT_HOST = "redirect.host";

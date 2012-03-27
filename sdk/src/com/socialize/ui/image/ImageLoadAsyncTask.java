@@ -25,18 +25,18 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
-import android.os.AsyncTask;
-
 import com.socialize.log.SocializeLogger;
+import com.socialize.util.Base64Utils;
+import com.socialize.util.CacheableDrawable;
 import com.socialize.util.DrawableCache;
+import com.socialize.util.Drawables;
 import com.socialize.util.SafeBitmapDrawable;
 
 /**
  * @author Jason Polites
  *
  */
-public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
+public class ImageLoadAsyncTask extends Thread {
 
 	private Queue<ImageLoadRequest> requests;
 	private Map<String, ImageLoadRequest> requestsInProcess;
@@ -45,13 +45,15 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 	private SocializeLogger logger;
 	private ImageUrlLoader imageUrlLoader;
 	private DrawableCache cache;
+	private Drawables drawables;
+	private Base64Utils base64Utils;
 
 	public ImageLoadAsyncTask() {
-		super();
+		super("ImageLoadAsyncTask");
 	}
 
 	@Override
-	protected Void doInBackground(Void... args) {
+	public void run() {
 		if(requests != null) {
 
 			while(running) {
@@ -81,9 +83,28 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 							}
 
 							if(drawable == null || drawable.isRecycled()) {
-								drawable = loadImage(url);
-								if(logger != null && logger.isDebugEnabled()) {
-									logger.debug("ImageLoadAsyncTask image loaded from: " + url);
+								
+								switch (request.getType()) {
+									case ENCODED:
+										
+										if(logger != null && logger.isDebugEnabled()) {
+											logger.debug("ImageLoadAsyncTask image loading from encoded data for: " + url);
+										}
+										
+										drawable = (SafeBitmapDrawable) drawables.getDrawable(url, base64Utils.decode(request.getEncodedImageData()), request.getScaleWidth(), request.getScaleHeight());
+										break;
+	
+									default:
+										if(logger != null && logger.isDebugEnabled()) {
+											logger.debug("ImageLoadAsyncTask image loading from remote url for: " + url);
+										}
+										
+										drawable = loadImageFromUrl(url);
+										break;
+								}
+								
+								if(drawable != null) {
+									cache.put(url, (CacheableDrawable) drawable, false);
 								}
 							}
 							
@@ -114,10 +135,9 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 				}
 			}
 		}
-		return null;
 	}
 	
-	protected SafeBitmapDrawable loadImage(String url) throws Exception {
+	protected CacheableDrawable loadImageFromUrl(String url) throws Exception {
 		return imageUrlLoader.loadImageFromUrl(url);
 	}
 
@@ -167,20 +187,15 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 		requestsInProcess = makePendingRequests();
 	}
 	
-	public void start() {
+	protected void onStart() {
 		init();
 		running = true;
-		doExecute();
+		setDaemon(true);
 	}
 	
-	// So we can mock
-	protected void doExecute() {
-		execute((Void) null);
-	}
-	
-	// So we can mock
-	protected void doCancel(boolean cancel) {
-		cancel(cancel);
+	public void start() {
+		onStart();
+		super.start();
 	}
 	
 	// So we can mock
@@ -198,7 +213,7 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 		wait();
 	}
 
-	public synchronized void stop() {
+	public synchronized void finish() {
 		running = false;
 		if(requests != null) {
 			requests.clear();
@@ -208,9 +223,8 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 		}
 		
 		notifyAll();
-		doCancel(true);
 	}
-
+	
 	public boolean isRunning() {
 		return running;
 	}
@@ -227,8 +241,12 @@ public class ImageLoadAsyncTask extends AsyncTask<Void, Void, Void> {
 		this.cache = cache;
 	}
 	
-	public void destroy() {
-		stop();
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
+	}
+	
+	public void setBase64Utils(Base64Utils base64Utils) {
+		this.base64Utils = base64Utils;
 	}
 
 	public boolean isEmpty() {

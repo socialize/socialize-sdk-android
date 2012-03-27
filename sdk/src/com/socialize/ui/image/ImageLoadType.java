@@ -21,16 +21,11 @@
  */
 package com.socialize.ui.image;
 
-import com.socialize.util.SafeBitmapDrawable;
 
 /**
- * @author Jason Polites
+ * @author jasonpolites
  *
  */
-public interface ImageLoadListener {
-
-	public void onImageLoad(ImageLoadRequest request, SafeBitmapDrawable drawable);
-	
-	public void onImageLoadFail(ImageLoadRequest request, Exception error);
-	
+public enum ImageLoadType {
+	URL, ENCODED
 }

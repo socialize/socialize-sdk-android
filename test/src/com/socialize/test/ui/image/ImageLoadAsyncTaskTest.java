@@ -31,6 +31,7 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.test.ui.SocializeUIActivityTest;
 import com.socialize.ui.image.ImageLoadAsyncTask;
 import com.socialize.ui.image.ImageLoadRequest;
+import com.socialize.ui.image.ImageLoadType;
 import com.socialize.ui.image.ImageUrlLoader;
 import com.socialize.util.CacheableDrawable;
 import com.socialize.util.DrawableCache;
@@ -70,7 +71,6 @@ public class ImageLoadAsyncTaskTest extends SocializeUIActivityTest {
 		final ImageLoadRequest request = AndroidMock.createMock(ImageLoadRequest.class);
 		final DrawableCache cache = AndroidMock.createMock(DrawableCache.class);
 		final CacheableDrawable drawable = AndroidMock.createMock(CacheableDrawable.class, bmp, "foo");
-		final SafeBitmapDrawable bitmap = AndroidMock.createMock(SafeBitmapDrawable.class);
 		final String url = "foobar";
 		
 		PublicImageLoadAsyncTask task = new PublicImageLoadAsyncTask() {
@@ -86,29 +86,16 @@ public class ImageLoadAsyncTaskTest extends SocializeUIActivityTest {
 			}
 
 			@Override
-			public void doExecute() {
-				// Do nothing for this test, we will call doInBackground manually
-				addResult(2, "doExecute_called");
-			}
-
-			@Override
-			public void doCancel(boolean cancel) {
-				// Do nothing for this test
-				addResult(3, "doCancel_called");
-			}
-
-			@Override
-			public SafeBitmapDrawable loadImage(String url) throws Exception {
+			public CacheableDrawable loadImageFromUrl(String url) throws Exception {
 				addResult(0, url); // to verify we were called.
-				return bitmap;
+				return drawable;
 			}
 
 			@Override
 			public void doWait() throws InterruptedException {
 				addResult(1, "wait_called"); // To verify we were called
-				
 				// Force stop
-				stop();
+				finish();
 			}
 		};
 		
@@ -123,18 +110,14 @@ public class ImageLoadAsyncTaskTest extends SocializeUIActivityTest {
 			AndroidMock.expect(cache.get(url)).andReturn(drawable).once();
 		}
 		else {
+			AndroidMock.expect(request.getType()).andReturn(ImageLoadType.URL).once();
 			AndroidMock.expect(cache.get(url)).andReturn(null).once();
+			AndroidMock.expect(cache.put(url, drawable, false)).andReturn(true).once();
 		}
-		
 		
 		AndroidMock.expect(pendingRequests.remove(url)).andReturn(request);
 		
-		if(imageInCache) {
-			request.notifyListeners(drawable);
-		}
-		else {
-			request.notifyListeners(bitmap);
-		}
+		request.notifyListeners(drawable);
 		
 		requests.clear();
 		pendingRequests.clear();
@@ -145,8 +128,8 @@ public class ImageLoadAsyncTaskTest extends SocializeUIActivityTest {
 		AndroidMock.replay(cache);
 		
 		task.setCache(cache);
-		task.start();
-		task.doInBackground((Void[])null);
+		task.onStart();
+		task.run();
 		
 		AndroidMock.verify(request);
 		AndroidMock.verify(requests);
@@ -156,18 +139,11 @@ public class ImageLoadAsyncTaskTest extends SocializeUIActivityTest {
 		String urlAfter = getResult(0);
 		String wait_called = getResult(1);
 		
-		String doExecute_called = getResult(2);
-		String doCancel_called = getResult(3);
-		
 		if(!imageInCache) assertNotNull(urlAfter);
 		assertNotNull(wait_called);
-		assertNotNull(doExecute_called);
-		assertNotNull(doExecute_called);
 		
 		if(!imageInCache) assertEquals(url, urlAfter);
 		assertEquals("wait_called", wait_called);
-		assertEquals("doExecute_called", doExecute_called);
-		assertEquals("doCancel_called", doCancel_called);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -289,16 +265,7 @@ public class ImageLoadAsyncTaskTest extends SocializeUIActivityTest {
 	
 	
 	public class PublicImageLoadAsyncTask extends ImageLoadAsyncTask {
-		@Override
-		public Void doInBackground(Void... args) {
-			return super.doInBackground(args);
-		}
-
-		@Override
-		public SafeBitmapDrawable loadImage(String url) throws Exception {
-			return super.loadImage(url);
-		}
-
+		
 		@Override
 		public Queue<ImageLoadRequest> makeRequests() {
 			return super.makeRequests();
@@ -309,19 +276,22 @@ public class ImageLoadAsyncTaskTest extends SocializeUIActivityTest {
 			return super.makePendingRequests();
 		}
 
-		@Override
-		public void doExecute() {
-			super.doExecute();
-		}
-
-		@Override
-		public void doCancel(boolean cancel) {
-			super.doCancel(cancel);
-		}
-
+	
 		@Override
 		public void doWait() throws InterruptedException {
 			super.doWait();
 		}
+
+		@Override
+		public CacheableDrawable loadImageFromUrl(String url) throws Exception {
+			return super.loadImageFromUrl(url);
+		}
+
+		@Override
+		public void onStart() {
+			super.onStart();
+		}
+		
+		
 	}
 }
