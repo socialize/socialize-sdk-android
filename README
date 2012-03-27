@@ -12,6 +12,13 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v1.5.4
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] Posting to FB and Twitter fails
+[bug] Comment list view crash on Galaxy Nexus
+[bug] Image loading that is unresolved doesn't dequeue
+[bug] Spinner on comment list is distorted on XHDPI
+
 v1.5.3
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [bug] Twitter auth failure (Communication with the service provider failed: null)
