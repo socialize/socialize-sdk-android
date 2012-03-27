@@ -77,14 +77,17 @@ public class PropagationFactory extends JSONFactory<Propagation> {
 				
 				for (Entry<String, String> entry : entrySet) {
 					
-					if(!StringUtils.isEmpty(entry.getKey())) {
+					String key = entry.getKey();
+					String value = entry.getValue();
+					
+					if(!StringUtils.isEmpty(key) && !StringUtils.isEmpty(value)) {
 						if(count > 0) {
 							builder.append("&");
 						}			
 						
-						builder.append(URLEncoder.encode(entry.getKey()));
+						builder.append(URLEncoder.encode(key));
 						builder.append("=");
-						builder.append(URLEncoder.encode(entry.getValue()));
+						builder.append(URLEncoder.encode(value));
 						
 						count++;
 					}
