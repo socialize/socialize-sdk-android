@@ -84,9 +84,9 @@ public class ImageLoadAsyncTaskTest extends SocializeUIActivityTest {
 			public Map<String, ImageLoadRequest> makePendingRequests() {
 				return pendingRequests;
 			}
-
+			
 			@Override
-			public CacheableDrawable loadImageFromUrl(String url) throws Exception {
+			public CacheableDrawable loadImageFromUrl(String url, int width, int height) throws Exception {
 				addResult(0, url); // to verify we were called.
 				return drawable;
 			}
@@ -283,8 +283,8 @@ public class ImageLoadAsyncTaskTest extends SocializeUIActivityTest {
 		}
 
 		@Override
-		public CacheableDrawable loadImageFromUrl(String url) throws Exception {
-			return super.loadImageFromUrl(url);
+		public CacheableDrawable loadImageFromUrl(String url, int width, int height) throws Exception {
+			return super.loadImageFromUrl(url, width, height);
 		}
 
 		@Override

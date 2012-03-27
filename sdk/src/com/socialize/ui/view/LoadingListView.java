@@ -59,7 +59,7 @@ public class LoadingListView extends BaseLoadingView<ListView> {
 	protected ListView createMainView() {
 		LinearLayout.LayoutParams listViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 
-		final ListView listView = new ListView(getContext());
+		final ListView listView = new SafeListView(getContext());
 		listView.setId(LIST_VIEW_ID);
 		listView.setLayoutParams(listViewLayoutParams);
 		listView.setDrawingCacheEnabled(true);

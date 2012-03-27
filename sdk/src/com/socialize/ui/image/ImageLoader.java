@@ -80,18 +80,22 @@ public class ImageLoader {
 		loadImage(request, listener);
 	}
 	
+	public void loadImageByUrl(final String url, final ImageLoadListener listener) {
+		loadImageByUrl(url, -1, -1, listener);
+	}
+	
 	/**
 	 * Asynchrnously loads the image at the given url and calls the listener when it is loaded.
 	 * @param id The id to give the request
 	 * @param url The url to be loaded
 	 * @param listener A listener to handle the callback.
 	 */
-	public void loadImageByUrl(final String url, final ImageLoadListener listener) {
-//	public void loadImageByUrl(final long id, final String url, final ImageLoadListener listener) {
+	public void loadImageByUrl(final String url, int width, int height, final ImageLoadListener listener) {
 		ImageLoadRequest request = makeRequest();
 		request.setUrl(url);
-//		request.setItemId(id);
 		request.setType(ImageLoadType.URL);
+		request.setScaleWidth(width);
+		request.setScaleHeight(height);
 		loadImage(request, listener);
 	}
 	

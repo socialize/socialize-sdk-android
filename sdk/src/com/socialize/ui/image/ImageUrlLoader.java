@@ -35,7 +35,7 @@ import com.socialize.util.CacheableDrawable;
  */
 public class ImageUrlLoader {
 
-	public CacheableDrawable loadImageFromUrl(String url) throws IOException {
+	public CacheableDrawable loadImageFromUrl(String url, int width, int height) throws IOException {
 		URL imageUrl = 	new URL(url);
 		URLConnection conn = null;
 		InputStream is = null;
@@ -44,7 +44,15 @@ public class ImageUrlLoader {
 			conn = imageUrl.openConnection();
 			is = conn.getInputStream();
 			Bitmap bitmap = newBitmapDrawable(is);
-			return newCacheableDrawable(bitmap, url);
+			
+			if(width > 0 && height > 0) {
+				Bitmap scaled = Bitmap.createScaledBitmap(bitmap, width, height, true);
+				bitmap.recycle();
+				return newCacheableDrawable(scaled, url);
+			}
+			else {
+				return newCacheableDrawable(bitmap, url);
+			}
 		}
 		finally {
 			if (is != null) {

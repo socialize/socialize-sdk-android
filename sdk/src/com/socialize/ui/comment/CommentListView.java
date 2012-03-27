@@ -41,6 +41,7 @@ import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.LoadingListView;
 import com.socialize.util.AppUtils;
 import com.socialize.util.CacheableDrawable;
+import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 import com.socialize.view.BaseView;
@@ -48,6 +49,8 @@ import com.socialize.view.BaseView;
 public class CommentListView extends BaseView {
 
 	private int defaultGrabLength = 30;
+	// TODO: config this
+	private int iconSize = 100;
 	private CommentAdapter commentAdapter;
 	private boolean loading = true; // Default to true
 	
@@ -61,6 +64,7 @@ public class CommentListView extends BaseView {
 	private DialogFactory<AlertDialog> alertDialogFactory;
 	private Drawables drawables;
 	private AppUtils appUtils;
+	private DisplayUtils displayUtils;
 	private ProgressDialog dialog = null;
 	
 	private IBeanFactory<SocializeHeader> commentHeaderFactory;
@@ -116,6 +120,8 @@ public class CommentListView extends BaseView {
 		setLayoutParams(fill);
 		setBackgroundDrawable(drawables.getDrawable("crosshatch.png", true, true, true));
 		setPadding(0, 0, 0, 0);
+		
+		iconSize = displayUtils.getDIP(iconSize);
 		
 		layoutAnchor = new RelativeLayout(getContext());
 		
@@ -631,7 +637,7 @@ public class CommentListView extends BaseView {
 					if(!StringUtils.isEmpty(imageUrl)) {
 						CacheableDrawable cached = drawables.getCache().get(imageUrl);
 						if(cached == null || cached.isRecycled()) {
-							imageLoader.loadImageByUrl(imageUrl, null);
+							imageLoader.loadImageByUrl(imageUrl, iconSize, iconSize, null);
 						}
 					}
 				}
@@ -861,5 +867,9 @@ public class CommentListView extends BaseView {
 	}
 	public void setImageLoader(ImageLoader imageLoader) {
 		this.imageLoader = imageLoader;
+	}
+
+	public void setDisplayUtils(DisplayUtils displayUtils) {
+		this.displayUtils = displayUtils;
 	}
 }

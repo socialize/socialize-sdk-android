@@ -44,7 +44,6 @@ public class CommentAdapter extends BaseAdapter {
 	private DisplayUtils displayUtils;
 	private DateUtils dateUtils;
 	private boolean last = false;
-//	private Base64Utils base64Utils;
 	private ImageLoader imageLoader;
 	private Activity context;
 	private Date now;
@@ -75,7 +74,6 @@ public class CommentAdapter extends BaseAdapter {
 
 	public boolean isDisplayLoading() {
 		return !last && (comments != null && comments.size() > 0);
-//		return !(last || (comments != null && comments.size() == 0));
 	}
 
 	@Override
@@ -231,8 +229,6 @@ public class CommentAdapter extends BaseAdapter {
 
 						int densitySize = displayUtils.getDIP(iconSize);
 
-//						final Drawable defaultImage = drawables.getDrawable(Socialize.DEFAULT_USER_ICON);
-
 						if(user != null) {
 							userIcon.getBackground().setAlpha(255);
 
@@ -248,107 +244,24 @@ public class CommentAdapter extends BaseAdapter {
 										}
 										
 										userIcon.setImageName(imageUrl);
-										
-//										userIcon.setImageDrawable(cached);
-//										userIcon.getBackground().setAlpha(255);
 									}
 									else {
-//										userIcon.setImageDrawable(null);
-										
 										userIcon.setDefaultImage();
-										
-//										userIcon.getBackground().setAlpha(64);
-										
-										imageLoader.loadImageByUrl(imageUrl, userIcon);										
-
-//										imageLoader.loadImageByUrl(position, imageUrl, new ImageLoadListener() {
-//											@Override
-//											public void onImageLoadFail(final ImageLoadRequest request, Exception error) {
-//												logError("Error loading image", error);
-//												userIcon.setDefaultImage();
-//												userIcon.getBackground().setAlpha(255);
-//												
-////												userIcon.post(new Runnable() {
-////													public void run() {
-////														if(logger != null && logger.isDebugEnabled()) {
-////															logger.debug("CommentAdpater setting image icon to default image");
-////														}
-////														userIcon.setImageDrawable(defaultImage);
-////														userIcon.getBackground().setAlpha(255);
-////													}
-////												});
-//											}
-//
-//											@Override
-//											public void onImageLoad(final ImageLoadRequest request, final SafeBitmapDrawable drawable, boolean async) {
-//												if(request == null || !request.isCanceled()) {
-//													
-//													userIcon.setImageName(request.getUrl());
-//													userIcon.getBackground().setAlpha(255);
-//													
-////													if(async) {
-////														// Must be run on UI thread
-////														userIcon.post(new Runnable() {
-////															public void run() {
-////																setImageIcon(user, position, userIcon, drawable, defaultImage);
-////															}
-////														});
-////													}
-////													else {
-////														setImageIcon(user, position, userIcon, drawable, defaultImage);
-////													}
-//												}
-//											}
-//										});
+										imageLoader.loadImageByUrl(imageUrl, densitySize, densitySize, userIcon);										
 									}
 								}
 								catch (Exception e) {
 									String errorMsg = "Not a valid image uri [" + imageUrl + "]";
 									logError(errorMsg, e);
 									userIcon.setDefaultImage();
-//									userIcon.setImageDrawable(defaultImage);
 								}
 							}
 							else if(!StringUtils.isEmpty(user.getProfilePicData())) {
-								
-								// Decode should be async!
-								
-//								try {
-//									Drawable drawable = drawables.getDrawable(user.getId().toString(), base64Utils.decode(user.getProfilePicData()), densitySize, densitySize);
-//									userIcon.setImageDrawable(drawable);
-//								}
-//								catch (Base64DecoderException e) {
-//
-//									logError("Invalid image data", e);
-//
-//									userIcon.setImageDrawable(defaultImage);
-//								}
-								
 								userIcon.setDefaultImage();
-//								userIcon.getBackground().setAlpha(64);
-
 								imageLoader.loadImageByData("user_" + user.getId(), user.getProfilePicData(),  densitySize, densitySize, userIcon);		
-								
-//								imageLoader.loadImageByData(position, "user_" + user.getId(), user.getProfilePicData(),  densitySize, densitySize, new ImageLoadListener() {
-//									@Override
-//									public void onImageLoadFail(final ImageLoadRequest request, Exception error) {
-//										logError("Error loading image", error);
-//										userIcon.setDefaultImage();
-//										userIcon.getBackground().setAlpha(255);
-//									}
-//
-//									@Override
-//									public void onImageLoad(final ImageLoadRequest request, final SafeBitmapDrawable drawable, boolean async) {
-//										if(request == null || !request.isCanceled()) {
-//											userIcon.setDefaultImage();
-//											userIcon.getBackground().setAlpha(255);
-//										}
-//									}
-//								});									
 							}
 							else {
 								userIcon.setDefaultImage();
-//								userIcon.setImageDrawable(defaultImage);
 							}
 						}
 					}
@@ -447,10 +360,6 @@ public class CommentAdapter extends BaseAdapter {
 	public void setDateUtils(DateUtils dateUtils) {
 		this.dateUtils = dateUtils;
 	}
-
-//	public void setBase64Utils(Base64Utils base64Utils) {
-//		this.base64Utils = base64Utils;
-//	}
 
 	public void setIconSize(int iconSize) {
 		this.iconSize = iconSize;

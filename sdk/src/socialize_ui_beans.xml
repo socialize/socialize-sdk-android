@@ -682,6 +682,7 @@
 		<property name="commentAdapter" ref="commentAdapter"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="appUtils" ref="appUtils"/>
+		<property name="displayUtils" ref="displayUtils"/>
 		<property name="logger" ref="logger"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
 		<property name="alertDialogFactory" ref="alertDialogFactory"/>
