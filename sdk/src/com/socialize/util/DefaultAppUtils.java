@@ -32,6 +32,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
+import android.telephony.TelephonyManager;
 
 import com.socialize.Socialize;
 import com.socialize.config.SocializeConfig;
@@ -48,6 +49,7 @@ public class DefaultAppUtils implements AppUtils {
 	private String packageName;
 	private String appName;
 	private String userAgent;
+	private String country;
 	private SocializeLogger logger;
 	private SocializeConfig config;
 	
@@ -87,6 +89,18 @@ public class DefaultAppUtils implements AppUtils {
 		if(StringUtils.isEmpty(appName)) {
 			appName = "A Socialize enabled app";
 		}		
+		
+		try {
+			TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+			if(manager.getPhoneType() == TelephonyManager.PHONE_TYPE_GSM) {
+				country = manager.getNetworkCountryIso();
+			}
+		}
+		catch (Exception ignore) {}
+		
+		if(country == null) {
+			country = Locale.getDefault().getCountry();
+		}
 	}
 	
 	@Override
@@ -345,7 +359,7 @@ public class DefaultAppUtils implements AppUtils {
 	public String getUserAgentString() {
 		if (userAgent == null) {
 			userAgent = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_"
-					+ Locale.getDefault().getCountry() + "; BundleID/" + getPackageName() + ";";
+					+ getCountry() + "; BundleID/" + getPackageName() + ";";
 		}
 		return userAgent;
 	}
@@ -358,7 +372,10 @@ public class DefaultAppUtils implements AppUtils {
 		return appName;
 	}
 	
-	
+	@Override
+	public String getCountry() {
+		return country;
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.util.IAppUtils#getPackageName()

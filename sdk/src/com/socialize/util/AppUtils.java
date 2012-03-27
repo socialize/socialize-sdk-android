@@ -56,6 +56,8 @@ public interface AppUtils {
 
 	public String getAppName();
 	
+	public String getCountry();
+	
 	public int getAppIconId(Context context);
 
 	public String getPackageName();
