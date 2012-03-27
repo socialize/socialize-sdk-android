@@ -26,6 +26,12 @@ public abstract class MockSystem<T extends SocializeAction> {
 		actionList.add(action);
 	}
 
+	public void setEntity(Entity entity) {
+		if(action != null) {
+			action.setEntity(entity);
+		}
+	}
+	
 	public void setAction(T action) {
 		this.action = action;
 	}

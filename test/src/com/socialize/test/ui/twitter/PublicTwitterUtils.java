@@ -19,34 +19,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.notifications;
+package com.socialize.test.ui.twitter;
 
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.content.Context;
-import android.os.Bundle;
+import android.content.DialogInterface.OnCancelListener;
+import com.socialize.auth.twitter.TwitterAuthDialogListener;
+import com.socialize.auth.twitter.TwitterAuthListener;
+import com.socialize.auth.twitter.TwitterAuthView;
+import com.socialize.auth.twitter.TwitterUtils;
 
-import com.socialize.Socialize;
-import com.socialize.error.SocializeException;
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class BaseMessageTranslator<T> implements MessageTranslator<T> {
+public class PublicTwitterUtils extends TwitterUtils {
 
-	/* (non-Javadoc)
-	 * @see com.socialize.notifications.MessageTranslator#translate(android.content.Context, android.os.Bundle, com.socialize.notifications.NotificationMessage)
-	 */
 	@Override
-	public T translate(Context context, Bundle data, NotificationMessage message) throws SocializeException {
-		
-		data.putString( Socialize.ACTION_ID , String.valueOf( message.getActionId() ));
-		
-		// The action detail view expects this, but will handle the -1 case.
-		data.putString( Socialize.USER_ID , "-1");
-		
-		return translate(context, message);
+	public OnCancelListener newOnCancelListener(TwitterAuthListener listener) {
+		return super.newOnCancelListener(listener);
 	}
-	
-	public abstract T translate(Context context, NotificationMessage message) throws SocializeException;
+
+	@Override
+	public Dialog newDialog(Context context) {
+		return super.newDialog(context);
+	}
+
+	@Override
+	public TwitterAuthDialogListener newTwitterAuthDialogListener(Dialog dialog, TwitterAuthListener listener) {
+		return super.newTwitterAuthDialogListener(dialog, listener);
+	}
+
+	@Override
+	public Builder newAlertDialogBuilder(Context context) {
+		return super.newAlertDialogBuilder(context);
+	}
+
+	@Override
+	public TwitterAuthView newTwitterAuthView(Context context) {
+		return super.newTwitterAuthView(context);
+	}
 
 }

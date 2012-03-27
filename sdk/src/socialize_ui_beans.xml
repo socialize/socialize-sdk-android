@@ -609,7 +609,7 @@
 		<property name="logger" ref="logger"/>
 		<property name="displayUtils" ref="displayUtils"/><!-- Defined in socialize_beans.xml -->
 		<property name="dateUtils" ref="dateUtils"/>
-		<property name="base64Utils" ref="base64Utils"/><!-- Defined in socialize_beans.xml -->
+		<!-- <property name="base64Utils" ref="base64Utils"/>Defined in socialize_beans.xml -->
 		<property name="imageLoader" ref="imageLoader"/><!-- Defined in socialize_beans.xml -->
 		<property name="iconSize" value="64" type="integer"/>
 		
@@ -634,6 +634,7 @@
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
 		<property name="drawables" ref="drawables"/>
+		<property name="logger" ref="logger"/>
 		<property name="backgroundFactory" ref="commentListItemBackgroundFactory"/>
 	</bean>
 	
@@ -691,6 +692,7 @@
 		<property name="commentEntryFactory" ref="commentEntrySliderItemFactory"/>
 		<property name="notificationEnabledOptionFactory" ref="notificationEnabledOptionNoBorderFactory"/>
 		<property name="sliderFactory" ref="actionBarSliderFactory"/>
+		<property name="imageLoader" ref="imageLoader"/>
 	</bean>
 	
 	<bean 
@@ -1403,6 +1405,8 @@
 		<property name="imageUrlLoader" ref="imageUrlLoader"/>
 		<property name="logger" ref="logger"/>
 		<property name="cache" ref="cache"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="base64Utils" ref="base64Utils"/>
 	</bean>
 
 	<bean id="imageLoader" class="com.socialize.ui.image.ImageLoader">

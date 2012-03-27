@@ -19,34 +19,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.notifications;
+package com.socialize.test.ui.twitter;
 
-import android.content.Context;
-import android.os.Bundle;
+import com.socialize.auth.twitter.TwitterAuthProviderInfo;
+import com.socialize.test.SocializeUnitTest;
 
-import com.socialize.Socialize;
-import com.socialize.error.SocializeException;
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class BaseMessageTranslator<T> implements MessageTranslator<T> {
+public class TwitterAuthProviderInfoTest extends SocializeUnitTest {
 
-	/* (non-Javadoc)
-	 * @see com.socialize.notifications.MessageTranslator#translate(android.content.Context, android.os.Bundle, com.socialize.notifications.NotificationMessage)
-	 */
-	@Override
-	public T translate(Context context, Bundle data, NotificationMessage message) throws SocializeException {
+	
+	public void testEquals() {
 		
-		data.putString( Socialize.ACTION_ID , String.valueOf( message.getActionId() ));
+		TwitterAuthProviderInfo a = new TwitterAuthProviderInfo();
+		TwitterAuthProviderInfo b = new TwitterAuthProviderInfo();
+		TwitterAuthProviderInfo c = new TwitterAuthProviderInfo();
+		TwitterAuthProviderInfo d = new TwitterAuthProviderInfo();
+		TwitterAuthProviderInfo e = new TwitterAuthProviderInfo();
 		
-		// The action detail view expects this, but will handle the -1 case.
-		data.putString( Socialize.USER_ID , "-1");
+		String c0 = "a";
+		String c1 = "aa";
 		
-		return translate(context, message);
+		String s0 = "b";
+		String s1 = "bb";
+		
+		a.setConsumerKey(c0);
+		a.setConsumerSecret(s0);
+		
+		b.setConsumerKey(c1);
+		b.setConsumerSecret(s0);
+		
+		c.setConsumerKey(c0);
+		c.setConsumerSecret(s1);
+		
+		d.setConsumerKey(c1);
+		d.setConsumerSecret(s1);
+		
+		e.setConsumerKey(c0);
+		e.setConsumerSecret(s0);
+		
+		assertFalse(a.equals(b));
+		assertFalse(a.equals(c));
+		assertFalse(a.equals(d));
+		assertTrue(a.equals(e));
+		assertTrue(b.equals(b));
 	}
 	
-	public abstract T translate(Context context, NotificationMessage message) throws SocializeException;
-
 }

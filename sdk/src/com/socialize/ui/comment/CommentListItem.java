@@ -8,11 +8,13 @@ import android.graphics.drawable.GradientDrawable.Orientation;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import com.socialize.Socialize;
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.util.Colors;
+import com.socialize.ui.view.CachedImageView;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 
@@ -21,11 +23,12 @@ public class CommentListItem extends LinearLayout {
 	private TextView comment;
 	private TextView time;
 	private TextView author;
-	private ImageView userIcon;
+	private CachedImageView userIcon;
 	private ImageView locationIcon;
 	private DisplayUtils displayUtils;
 	private Colors colors;
 	private Drawables drawables;
+	private SocializeLogger logger;
 	
 	private CommentListItemBackgroundFactory backgroundFactory;
 
@@ -37,7 +40,7 @@ public class CommentListItem extends LinearLayout {
 		
 		final int eight = displayUtils.getDIP(8);
 		final int four = displayUtils.getDIP(4);
-		final int imagePadding = displayUtils.getDIP(4);
+		final int imagePadding = displayUtils.getDIP(2);
 		final int textColor = colors.getColor(Colors.BODY);
 		final int titleColor = colors.getColor(Colors.TITLE);
 		final int iconSize = displayUtils.getDIP(64);
@@ -133,7 +136,11 @@ public class CommentListItem extends LinearLayout {
 		iconLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
 		iconLayout.setLayoutParams(iconLayoutParams);
 		iconLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
-		userIcon = new ImageView(getContext());
+		
+		userIcon = new CachedImageView(getContext());
+		userIcon.setDrawables(drawables);
+		userIcon.setLogger(logger);
+		userIcon.setImageName(Socialize.DEFAULT_USER_ICON);
 		userIcon.setLayoutParams(iconLayoutParams);
 		userIcon.setPadding(imagePadding, imagePadding, imagePadding, imagePadding);
 		
@@ -141,7 +148,6 @@ public class CommentListItem extends LinearLayout {
 		imageBG.setStroke(displayUtils.getDIP(1), Color.BLACK);
 		
 		userIcon.setBackgroundDrawable(imageBG);
-		userIcon.setScaleType(ScaleType.CENTER_CROP);
 		
 		iconLayout.addView(userIcon);
 		
@@ -161,7 +167,7 @@ public class CommentListItem extends LinearLayout {
 		return author;
 	}
 
-	public ImageView getUserIcon() {
+	public CachedImageView getUserIcon() {
 		return userIcon;
 	}
 	
@@ -183,5 +189,9 @@ public class CommentListItem extends LinearLayout {
 
 	public void setBackgroundFactory(CommentListItemBackgroundFactory backgroundFactory) {
 		this.backgroundFactory = backgroundFactory;
+	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
 	}
 }

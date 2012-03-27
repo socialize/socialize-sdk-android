@@ -56,8 +56,11 @@ public class TwitterAuthProvider implements AuthProvider<TwitterAuthProviderInfo
 	 */
 	@Override
 	public void authenticate(TwitterAuthProviderInfo info, final AuthProviderListener listener) {
-		
-		 twitterUtils.showAuthDialog(context, info, new TwitterAuthListener() {
+		 twitterUtils.showAuthDialog(context, info, newTwitterAuthListener(listener));
+	}
+	
+	protected TwitterAuthListener newTwitterAuthListener(final AuthProviderListener listener) {
+		return new TwitterAuthListener() {
 			 
 			@Override
 			public void onError(SocializeException e) {
@@ -81,7 +84,7 @@ public class TwitterAuthProvider implements AuthProvider<TwitterAuthProviderInfo
 					listener.onAuthSuccess(response);
 				}
 			}
-		});
+		};
 	}
 	
 	protected AuthProviderResponse newAuthProviderResponse() {

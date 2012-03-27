@@ -30,10 +30,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-
 import com.socialize.Socialize;
 import com.socialize.sample.ui.SampleActivity2;
-import com.socialize.sample.util.StictModeUtils;
 import com.socialize.ui.dialog.SafeProgressDialog;
 
 public class Main extends Activity {

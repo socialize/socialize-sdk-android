@@ -19,34 +19,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.notifications;
+package com.socialize.test.unit.notifications;
 
-import android.content.Context;
-import android.os.Bundle;
+import org.json.JSONException;
+import org.json.JSONObject;
+import com.socialize.notifications.DeveloperNotificationMessageFactory;
+import com.socialize.notifications.NotificationMessage;
+import com.socialize.notifications.NotificationType;
+import com.socialize.test.SocializeUnitTest;
 
-import com.socialize.Socialize;
-import com.socialize.error.SocializeException;
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class BaseMessageTranslator<T> implements MessageTranslator<T> {
+public class DeveloperNotificationMessageFactoryTest extends SocializeUnitTest {
 
-	/* (non-Javadoc)
-	 * @see com.socialize.notifications.MessageTranslator#translate(android.content.Context, android.os.Bundle, com.socialize.notifications.NotificationMessage)
-	 */
-	@Override
-	public T translate(Context context, Bundle data, NotificationMessage message) throws SocializeException {
+	public void testFromJSON() throws JSONException {
 		
-		data.putString( Socialize.ACTION_ID , String.valueOf( message.getActionId() ));
+		JSONObject from = new JSONObject();
 		
-		// The action detail view expects this, but will handle the -1 case.
-		data.putString( Socialize.USER_ID , "-1");
+		final String message = "foo";
+		final String notification_type = NotificationType.DEVELOPER_NOTIFICATION.name();
 		
-		return translate(context, message);
+		from.put("message", message);
+		from.put("notification_type", notification_type);
+		
+		DeveloperNotificationMessageFactory factory = new DeveloperNotificationMessageFactory();
+		
+		NotificationMessage to = factory.fromJSON(from);
+		
+		assertNotNull(to);
+		assertNotNull(to.getText());
+		assertNotNull(to.getNotificationType());
+		
+		assertEquals(message, to.getText());
+		assertEquals(NotificationType.DEVELOPER_NOTIFICATION, to.getNotificationType());
 	}
-	
-	public abstract T translate(Context context, NotificationMessage message) throws SocializeException;
-
 }

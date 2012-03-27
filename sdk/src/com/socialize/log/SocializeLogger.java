@@ -45,9 +45,11 @@ public class SocializeLogger {
 	
 	private LogLevel logLevel = LogLevel.INFO;
 	private SocializeConfig config;
+	private boolean logThread = true;
 	
 	public void init(SocializeConfig config) {
 		String ll = config.getProperty(SocializeConfig.LOG_LEVEL);
+		logThread = config.getBooleanProperty(SocializeConfig.LOG_THREAD, true);
 		
 		if(!StringUtils.isEmpty(ll)) {
 			logLevel = LogLevel.valueOf(ll);
@@ -87,31 +89,31 @@ public class SocializeLogger {
 	}
 	
 	public void debug(String msg) {
-		Log.d(LOG_TAG, msg);
+		Log.d(LOG_TAG, getMessage(msg));
 	}
 	
 	public void debug(String msg, Throwable error) {
-		Log.d(LOG_TAG, msg, error);
+		Log.d(LOG_TAG, getMessage(msg), error);
 	}
 	
 	public void info(String msg) {
-		Log.i(LOG_TAG, msg);
+		Log.i(LOG_TAG, getMessage(msg));
 	}
 	
 	public void warn(String msg) {
-		Log.w(LOG_TAG, msg);
+		Log.w(LOG_TAG, getMessage(msg));
 	}
 	
 	public void error(String msg) {
-		Log.e(LOG_TAG, msg);
+		Log.e(LOG_TAG, getMessage(msg));
 	}
 	
 	public void warn(String msg, Throwable error) {
-		Log.w(LOG_TAG, msg, error);
+		Log.w(LOG_TAG, getMessage(msg), error);
 	}
 	
 	public void error(String msg, Throwable error) {
-		Log.e(LOG_TAG, msg, error);
+		Log.e(LOG_TAG, getMessage(msg), error);
 	}
 	
 	public boolean isVerboseEnabled() {
@@ -130,16 +132,28 @@ public class SocializeLogger {
 		return logLevel.ordinal() <= LogLevel.WARN.ordinal();
 	}
 	
+	protected String getMessage(String message) {
+		if(logThread) {
+			return "Thread[" +
+					Thread.currentThread().getName() +
+					"]: " + message;
+		}
+		else {
+			return message;
+		}
+	}
+	
+	
 	public String getMessage(int id) {
 		if(this.config != null) {
 			String msg =  this.config.getProperty(SocializeConfig.LOG_MSG + id);
 			if(msg == null) {
 				msg = "";
 			}
-			return msg;
+			return getMessage(msg);
 		}
 		else {
-			return "Log System Error!  The log system has not been initialized correctly.  No config found.";
+			return getMessage("Log System Error!  The log system has not been initialized correctly.  No config found.");
 		}
 	}
 	

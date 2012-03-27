@@ -16,6 +16,7 @@ public class MockViewSystem  extends MockSystem<View> implements ViewSystem {
 
 	@Override
 	public void addView(SocializeSession session, Entity entity, Location location, ViewListener listener) {
+		action.setEntity(entity);
 		if(listener != null) listener.onCreate(action);
 	}
 

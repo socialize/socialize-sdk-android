@@ -40,6 +40,7 @@ import com.socialize.auth.twitter.TwitterAuthListener;
 import com.socialize.auth.twitter.TwitterAuthWebView;
 import com.socialize.auth.twitter.TwitterOAuthProvider;
 import com.socialize.auth.twitter.TwitterWebViewClient;
+import com.socialize.error.SocializeException;
 import com.socialize.test.SocializeUnitTest;
 
 /**
@@ -185,6 +186,33 @@ public class TwitterAuthWebViewTest extends SocializeUnitTest {
 		
 	}
 	
+	@UsesMocks ({TwitterAuthListener.class})
+	public void testOAuthRequestTokenUrlListener() {
+		final TwitterAuthListener listener = AndroidMock.createMock(TwitterAuthListener.class);
+		final SocializeException e = new SocializeException();
+		final String url = "foobar";
+		
+		listener.onError(e);
+		
+		AndroidMock.replay(listener);
+		
+		PublicTwitterAuthWebView authWebView = new PublicTwitterAuthWebView(getContext()) {
+			@Override
+			public void loadUrl(String url) {
+				addResult(0, url);
+			}
+		};
+		
+		OAuthRequestTokenUrlListener newOAuthRequestTokenUrlListener = authWebView.newOAuthRequestTokenUrlListener(listener);
+		
+		newOAuthRequestTokenUrlListener.onError(e);
+		newOAuthRequestTokenUrlListener.onRequestUrl(url);
+		
+		AndroidMock.verify(listener);
+		
+		assertEquals(url, getNextResult());
+	}
+	
 	class PublicTwitterAuthWebView extends TwitterAuthWebView {
 
 		public PublicTwitterAuthWebView(Context context) {
@@ -215,6 +243,13 @@ public class TwitterAuthWebViewTest extends SocializeUnitTest {
 		public CommonsHttpOAuthConsumer newCommonsHttpOAuthConsumer(String consumerKey, String consumerSecret) {
 			return super.newCommonsHttpOAuthConsumer(consumerKey, consumerSecret);
 		}
+
+		@Override
+		public OAuthRequestTokenUrlListener newOAuthRequestTokenUrlListener(TwitterAuthListener listener) {
+			return super.newOAuthRequestTokenUrlListener(listener);
+		}
 	}
+	
+
 	
 }

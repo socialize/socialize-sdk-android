@@ -71,8 +71,8 @@ public class ImageLoadRequestTest extends SocializeUnitTest {
 			}
 		};
 		
-		listener0.onImageLoad(request, drawable, true);
-		listener1.onImageLoad(request, drawable, true);
+		listener0.onImageLoad(request, drawable);
+		listener1.onImageLoad(request, drawable);
 		
 		AndroidMock.replay(listener0, listener1);
 		

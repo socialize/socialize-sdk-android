@@ -29,7 +29,7 @@ import com.socialize.util.SafeBitmapDrawable;
  */
 public interface ImageLoadListener {
 
-	public void onImageLoad(ImageLoadRequest request, SafeBitmapDrawable drawable, boolean async);
+	public void onImageLoad(ImageLoadRequest request, SafeBitmapDrawable drawable);
 	
 	public void onImageLoadFail(ImageLoadRequest request, Exception error);
 	

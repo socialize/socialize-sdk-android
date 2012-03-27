@@ -1,6 +1,8 @@
 package com.socialize.ui.view;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -25,27 +27,62 @@ public class ListItemLoadingView extends BaseView {
 	}
 	
 	public void init() {
-		final int eight = displayUtils.getDIP(8);
+//		final int eight = displayUtils.getDIP(8);
 		
-		ProgressBar progress = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleSmall);
-		TextView text = new TextView(getContext());
+//		ProgressBar progress = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleSmall);
+//		TextView text = new TextView(getContext());
+//		
+//		progress.setPadding(eight, eight, 0, eight);
+//		
+//		text.setTextColor(colors.getColor(Colors.BODY));
+//		text.setText("Loading...");
+//		text.setPadding(eight, eight, eight, eight);
+//		
+//		ListView.LayoutParams layout = new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, ListView.LayoutParams.WRAP_CONTENT);
+//		
+//		setBackgroundColor();
+//		setOrientation(LinearLayout.HORIZONTAL);
+//		setLayoutParams(layout);
+//		setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+//		setPadding(eight,eight,eight,eight);
+//		
+//		addView(progress);
+//		addView(text);
 		
-		progress.setPadding(eight, eight, 0, eight);
+		int padding = displayUtils.getDIP(4);
 		
-		text.setTextColor(colors.getColor(Colors.BODY));
-		text.setText("Loading...");
-		text.setPadding(eight, eight, eight, eight);
-		
-		ListView.LayoutParams layout = new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, ListView.LayoutParams.WRAP_CONTENT);
+		ListView.LayoutParams masterParams = new ListView.LayoutParams(ListView.LayoutParams.FILL_PARENT, displayUtils.getDIP(48));
 		
 		setBackgroundColor(colors.getColor(Colors.LOADING_ITEM_BG));
-		setOrientation(LinearLayout.HORIZONTAL);
-		setLayoutParams(layout);
-		setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-		setPadding(eight,eight,eight,eight);
+		
+		setLayoutParams(masterParams);
+		setOrientation(HORIZONTAL);
+		
+		ProgressBar progress = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleSmall);
+		progress.setPadding(padding, padding, padding, padding);
+		
+		TextView text = new TextView(getContext());
+		text.setTextColor(Color.GRAY);
+		text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+		text.setText("Loading...");
+		text.setPadding(0, padding, padding, padding);
+		
+		LayoutParams progressLayoutParams = new LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		progressLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		progressLayoutParams.weight = 0.0f;
+		
+		LayoutParams textParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		textParams.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
+		textParams.weight = 1.0f;
+		textParams.setMargins(0, 0, 0, 0);
+		
+		setLayoutParams(masterParams);
+		progress.setLayoutParams(progressLayoutParams);
+		text.setLayoutParams(textParams);
+		text.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
 		
 		addView(progress);
-		addView(text);
+		addView(text);		
 	}
 
 	public DisplayUtils getDisplayUtils() {

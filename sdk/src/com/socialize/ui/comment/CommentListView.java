@@ -33,19 +33,21 @@ import com.socialize.ui.auth.AuthRequestListener;
 import com.socialize.ui.dialog.AuthRequestDialogFactory;
 import com.socialize.ui.dialog.DialogFactory;
 import com.socialize.ui.header.SocializeHeader;
+import com.socialize.ui.image.ImageLoader;
 import com.socialize.ui.slider.ActionBarSliderFactory;
 import com.socialize.ui.slider.ActionBarSliderFactory.ZOrder;
 import com.socialize.ui.slider.ActionBarSliderView;
 import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.LoadingListView;
 import com.socialize.util.AppUtils;
+import com.socialize.util.CacheableDrawable;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 import com.socialize.view.BaseView;
 
 public class CommentListView extends BaseView {
 
-	private int defaultGrabLength = 20;
+	private int defaultGrabLength = 30;
 	private CommentAdapter commentAdapter;
 	private boolean loading = true; // Default to true
 	
@@ -80,6 +82,7 @@ public class CommentListView extends BaseView {
 	private RelativeLayout layoutAnchor;
 	private ViewGroup sliderAnchor;
 	private CustomCheckbox notifyBox;
+	private ImageLoader imageLoader;
 	
 	private CommentEntrySliderItem commentEntrySliderItem;
 	
@@ -421,7 +424,9 @@ public class CommentListView extends BaseView {
 					if(entities != null) {
 						int totalCount = entities.getTotalCount();
 						header.setText(totalCount + " Comments");
-						commentAdapter.setComments(entities.getItems());
+						List<Comment> items = entities.getItems();
+						preLoadImages(items);
+						commentAdapter.setComments(items);
 						commentAdapter.setTotalCount(totalCount);
 
 						if(totalCount <= endIndex) {
@@ -609,11 +614,29 @@ public class CommentListView extends BaseView {
 			public void onList(ListResult<Comment> entities) {
 				List<Comment> comments = commentAdapter.getComments();
 				comments.addAll(entities.getItems());
+				preLoadImages(comments);
 				commentAdapter.setComments(comments);
 				commentAdapter.notifyDataSetChanged();
 				loading = false;
 			}
 		});
+	}
+	
+	protected void preLoadImages(List<Comment> comments) {
+		if(comments != null) {
+			for (Comment comment : comments) {
+				User user = comment.getUser();
+				if(user != null) {
+					String imageUrl = user.getSmallImageUri();
+					if(!StringUtils.isEmpty(imageUrl)) {
+						CacheableDrawable cached = drawables.getCache().get(imageUrl);
+						if(cached == null || cached.isRecycled()) {
+							imageLoader.loadImageByUrl(imageUrl, null);
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -835,5 +858,8 @@ public class CommentListView extends BaseView {
 	
 	public ActionBarSliderView getCommentEntryViewSlider() {
 		return commentEntrySlider;
+	}
+	public void setImageLoader(ImageLoader imageLoader) {
+		this.imageLoader = imageLoader;
 	}
 }

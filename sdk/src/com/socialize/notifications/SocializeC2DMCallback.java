@@ -38,7 +38,6 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.AppUtils;
-import com.socialize.util.NumberUtils;
 import com.socialize.util.StringUtils;
 
 /**
@@ -51,7 +50,6 @@ public class SocializeC2DMCallback implements C2DMCallback {
 	private SocializeLogger logger;
 	private SocializeConfig config;
 	private AppUtils appUtils;
-	private NumberUtils numberUtils;
 	private UserSystem userSystem;
 	
 	private Map<String, JSONFactory<NotificationMessage>> messageFactories;
@@ -116,7 +114,6 @@ public class SocializeC2DMCallback implements C2DMCallback {
 					@Override
 					public void onAuthSuccess(SocializeSession session) {
 						handleNotification(context, data, session.getUser());
-
 					}
 					
 					@Override
@@ -141,12 +138,15 @@ public class SocializeC2DMCallback implements C2DMCallback {
 				}
 				
 				try {
-					JSONObject message = new JSONObject(json);
+					JSONObject message = newJSONObject(json);
 					String notification_type = "notification_type";
 					
 					if(message.has(notification_type) && !message.isNull(notification_type)) {
+						
 						String type = message.getString(notification_type).trim().toUpperCase();
+						
 						NotificationType notificationType = null;
+						
 						try {
 							notificationType = NotificationType.valueOf(type);
 						} 
@@ -167,21 +167,9 @@ public class SocializeC2DMCallback implements C2DMCallback {
 								NotificationMessageBuilder builder = messageBuilders.get(notificationType.name());
 								
 								if(builder != null) {
-									int icon = notificationIcon;
-									
-									if(config.getBooleanProperty(SocializeConfig.SOCIALIZE_NOTIFICATION_APP_ICON, true)) {
-										icon = appUtils.getAppIconId(context);
-										
-										if(icon <= 0) {
-											if(logger != null && logger.isDebugEnabled()) {
-												logger.debug("Could not locate ID for application icon.  Using default icon for notification");
-												icon = notificationIcon;
-											}
-										}
-									}
+									int icon = getNotificationIcon(context);
 									Notification notification = builder.build(context, data, notificationMessage, icon);
-									NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-									mNotificationManager.notify(String.valueOf(notificationMessage.getEntityId()), getNotificationId(notificationMessage), notification);		
+									doNotify(context, getNotificationTag(notificationMessage),  getNotificationId(notificationMessage), notification);
 								}
 								else {
 									handleError("No message builder defined for notification type [" +
@@ -227,8 +215,38 @@ public class SocializeC2DMCallback implements C2DMCallback {
 		}
 	}
 	
+	protected void doNotify(Context context, String tag, int id, Notification notification) {
+		NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		mNotificationManager.notify(tag, id, notification);
+	}
+	
+	protected String getNotificationTag(NotificationMessage notificationMessage) {
+		return String.valueOf(notificationMessage.getEntityId());
+	}
+	
 	protected int getNotificationId(NotificationMessage message) {
-		return numberUtils.longToIntLossy(message.getEntityId());
+		return (int) message.getEntityId();
+	}
+	
+	protected JSONObject newJSONObject(String json) throws JSONException {
+		return new JSONObject(json);
+	}
+
+	protected int getNotificationIcon(Context context) {
+		int icon = notificationIcon;
+		
+		if(config.getBooleanProperty(SocializeConfig.SOCIALIZE_NOTIFICATION_APP_ICON, true)) {
+			icon = appUtils.getAppIconId(context);
+			
+			if(icon <= 0) {
+				if(logger != null && logger.isDebugEnabled()) {
+					logger.debug("Could not locate ID for application icon.  Using default icon for notification");
+					icon = notificationIcon;
+				}
+			}
+		}
+		
+		return icon;
 	}
 	
 	protected void handleError(String msg) {
@@ -286,10 +304,6 @@ public class SocializeC2DMCallback implements C2DMCallback {
 		this.notificationRegistrationSystem = notificationRegistrationSystem;
 	}
 
-	public void setNumberUtils(NumberUtils numberUtils) {
-		this.numberUtils = numberUtils;
-	}
-	
 	public void setUserSystem(UserSystem userSystem) {
 		this.userSystem = userSystem;
 	}

@@ -19,47 +19,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test.unit;
+package com.socialize.test.unit.notifications;
 
-import com.socialize.test.SocializeUnitTest;
-import com.socialize.util.NumberUtils;
+import android.content.Context;
+import android.os.Bundle;
+import com.socialize.entity.User;
+import com.socialize.notifications.NotificationMessage;
+import com.socialize.notifications.SocializeC2DMCallback;
+
 
 /**
  * @author Jason Polites
- * 
+ *
  */
-public class NumberUtilsTest extends SocializeUnitTest {
+public class PublicSocializeC2DMCallback extends SocializeC2DMCallback {
 
-	public void test_longToIntLossy() {
+	@Override
+	public void handleNotification(Context context, Bundle data, User user) {
+		super.handleNotification(context, data, user);
+	}
 
-		NumberUtils utils = new NumberUtils();
+	@Override
+	public int getNotificationIcon(Context context) {
+		return super.getNotificationIcon(context);
+	}
 
-		long val0 = Long.MAX_VALUE;
-		int iVal0 = utils.longToIntLossy(val0);
+	@Override
+	public int getNotificationId(NotificationMessage message) {
+		return super.getNotificationId(message);
+	}
 
-		assertEquals(Integer.MAX_VALUE, iVal0);
+	@Override
+	public void handleError(String msg) {
+		super.handleError(msg);
+	}
 
-		long val1 = Integer.MAX_VALUE;
-		int iVal1 = utils.longToIntLossy(val1);
-
-		assertEquals(Integer.MAX_VALUE, iVal1);
-
-		long val2 = 23;
-		int iVal2 = utils.longToIntLossy(val2);
-
-		assertEquals(val2, iVal2);
-
-		long val3 = 8223372036854775807L;
-		int iVal3 = utils.longToIntLossy(val3);
-
-		assertTrue(iVal3 < Integer.MAX_VALUE && iVal3 > Integer.MIN_VALUE);
-
-		long val4 = -val3;
-		int iVal4 = utils.longToIntLossy(val4);
-
-		assertTrue(iVal4 < Integer.MAX_VALUE && iVal4 > Integer.MIN_VALUE);
-
-		assertEquals(iVal4, -iVal3 - 1); // -1 to account for zero
+	@Override
+	public void handleError(String msg, Exception e) {
+		super.handleError(msg, e);
 	}
 
 }

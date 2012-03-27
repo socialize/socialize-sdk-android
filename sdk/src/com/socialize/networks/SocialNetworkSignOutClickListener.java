@@ -27,7 +27,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.View;
 import android.view.View.OnClickListener;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
@@ -57,17 +56,20 @@ public class SocialNetworkSignOutClickListener implements OnClickListener {
 	
 	@Override
 	public void onClick(final View v) {
-		 dialog = new AlertDialog.Builder(v.getContext())
-		.setIcon(drawables.getDrawable(iconImage))
+		dialog = makeDialog(v.getContext());
+		dialog.show();
+	}
+	
+	protected AlertDialog makeDialog(final Context context) {
+		return new AlertDialog.Builder(context)
+		.setIcon((drawables == null) ? null : drawables.getDrawable(iconImage))
 		.setTitle("Sign Out of " + networkName)
 		.setMessage("Are you sure you want to sign out of " + networkName + "?")
-		.setCancelable(true)
+		.setCancelable(false)
 		.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.dismiss();
-				SocialNetworkSignOutTask task = signOutTaskFactory.getBean(v.getContext());
-				task.setSignOutListener(listener);
-				task.doExecute();
+				doSignOut(context);
 			}
 		})
 		.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -77,9 +79,13 @@ public class SocialNetworkSignOutClickListener implements OnClickListener {
 					listener.onCancel();
 				}
 			}
-		})
-		.create();
-		dialog.show();
+		}).create();
+	}
+	
+	protected void doSignOut(Context context) {
+		SocialNetworkSignOutTask task = signOutTaskFactory.getBean(context);
+		task.setSignOutListener(listener);
+		task.doExecute();
 	}
 	
 	protected AlertDialog getDialog() {
@@ -93,46 +99,7 @@ public class SocialNetworkSignOutClickListener implements OnClickListener {
 
 			@Override
 			public void onSignOut() {
-				
 				getSocialize().saveSession(v.getContext());
-				
-//				String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-//				String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-//				
-//				// Re-authenticate as anonymous
-//				// TODO: don't know why this is here :/
-//				getSocialize().authenticate(v.getContext(), consumerKey, consumerSecret, new SocializeAuthListener() {
-//					
-//					@Override
-//					public void onError(SocializeException error) {
-//						logError("Erorr during authentication", error);
-//						if(listener != null) {
-//							listener.onSignOut();
-//						}
-//					}
-//					
-//					@Override
-//					public void onCancel() {
-//						if(listener != null) {
-//							listener.onSignOut();
-//						}
-//					}
-//					
-//					@Override
-//					public void onAuthSuccess(SocializeSession session) {
-//						if(listener != null) {
-//							listener.onSignOut();
-//						}
-//					}
-//					
-//					@Override
-//					public void onAuthFail(SocializeException error) {
-//						logError("Erorr during authentication", error);
-//						if(listener != null) {
-//							listener.onSignOut();
-//						}
-//					}
-//				});
 			}
 		};
 	}

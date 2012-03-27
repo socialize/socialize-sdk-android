@@ -28,6 +28,7 @@ import com.socialize.test.ui.PublicCacheableDrawable;
 import com.socialize.ui.image.ImageLoadAsyncTask;
 import com.socialize.ui.image.ImageLoadListener;
 import com.socialize.ui.image.ImageLoadRequest;
+import com.socialize.ui.image.ImageLoadType;
 import com.socialize.ui.image.ImageLoader;
 import com.socialize.util.CacheableDrawable;
 import com.socialize.util.DrawableCache;
@@ -48,7 +49,6 @@ public class ImageLoaderTest extends SocializeUnitTest {
 
 	public void test_loadImageInCache() {
 		
-		final long id = 69L;
 		final String url = "foobar";
 		
 		final Drawables drawables = AndroidMock.createMock(Drawables.class);
@@ -60,11 +60,12 @@ public class ImageLoaderTest extends SocializeUnitTest {
 		AndroidMock.expect(drawables.getCache()).andReturn(cache);
 		AndroidMock.expect(cache.get(url)).andReturn(drawable);
 		AndroidMock.expect(drawable.isRecycled()).andReturn(false);
+		AndroidMock.expect(request.getUrl()).andReturn(url);
 		
-		listener.onImageLoad(request, drawable, false);
+		listener.onImageLoad(request, drawable);
 		
         request.setUrl(url);
-        request.setItemId(id);
+        request.setType(ImageLoadType.URL);
         
         AndroidMock.replay(drawables, cache, drawable, listener, request);
 		
@@ -76,7 +77,7 @@ public class ImageLoaderTest extends SocializeUnitTest {
 		};
 		
 		loader.setDrawables(drawables);
-		loader.loadImage(id, url, listener);
+		loader.loadImageByUrl(url, listener);
 		
 		AndroidMock.verify(drawables, cache, drawable, listener, request);
 		
@@ -85,7 +86,6 @@ public class ImageLoaderTest extends SocializeUnitTest {
 	@UsesMocks ({ImageLoadAsyncTask.class})
 	public void test_loadImageNotInCache() {
 		
-		final long id = 69L;
 		final String url = "foobar";
 		
 		final Drawables drawables = AndroidMock.createMock(Drawables.class);
@@ -103,12 +103,12 @@ public class ImageLoaderTest extends SocializeUnitTest {
 				
 		AndroidMock.expect(drawables.getCache()).andReturn(cache).anyTimes();
 		AndroidMock.expect(cache.get(url)).andReturn(null);
-		AndroidMock.expect(cache.exists(url)).andReturn(false);
-		AndroidMock.expect(cache.put(url, drawable, false)).andReturn(true);
+//		AndroidMock.expect(cache.exists(url)).andReturn(false);
+//		AndroidMock.expect(cache.put(url, drawable, false)).andReturn(true);
 		
 		imageLoadAsyncTask.enqueue(request);
 
-		listener.onImageLoad(request, drawable, true);
+		listener.onImageLoad(request, drawable);
 		
         AndroidMock.replay(drawables, cache, drawable, listener);
 		
@@ -122,14 +122,14 @@ public class ImageLoaderTest extends SocializeUnitTest {
 		loader.setDrawables(drawables);
 		loader.setImageLoadAsyncTask(imageLoadAsyncTask);
 		
-		loader.loadImage(id, url, listener);
+		loader.loadImageByUrl(url, listener);
 		
 		ImageLoadListener nested = getResult(0);
 		
 		assertNotNull(nested);
 		
 		// Call the nested listener
-		nested.onImageLoad(request, drawable, false);
+		nested.onImageLoad(request, drawable);
 		
 		AndroidMock.verify(drawables, cache, drawable, listener);
 	}	

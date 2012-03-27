@@ -59,7 +59,7 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			Double lon = from.getLon();
 			Long date = from.getDate();
 			
-			if(entityObject != null) {
+			if(entityObject != null && entityFactory != null) {
 				if(!StringUtils.isEmpty(entityObject.getName()) && !StringUtils.isEmpty(entityObject.getKey())) {
 					JSONObject entity = entityFactory.toJSON(entityObject);
 					to.put("entity", entity);
@@ -72,12 +72,12 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 				to.put("entity_key", entityKey);
 			}
 
-			if(appObject != null) {
+			if(appObject != null && applicationFactory != null) {
 				JSONObject application = applicationFactory.toJSON(appObject);
 				to.put("application", application);
 			}
 			
-			if(propagation != null) {
+			if(propagation != null && propagationFactory != null) {
 				to.put("propagation", propagationFactory.toJSON(propagation));
 			}
 			

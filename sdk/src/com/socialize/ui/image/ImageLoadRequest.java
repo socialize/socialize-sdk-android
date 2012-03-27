@@ -34,11 +34,16 @@ import com.socialize.util.SafeBitmapDrawable;
  */
 public class ImageLoadRequest {
 
+	private String encodedImageData;
 	private String url;
-	private Long itemId;
+//	private Long itemId;
 	private ConcurrentLinkedQueue<ImageLoadListener> listeners;
 	private boolean canceled;
 	private boolean listenersNotified = false;
+	private ImageLoadType type = ImageLoadType.URL;
+	
+	private int scaleWidth = -1;
+	private int scaleHeight = -1;
 	
 	public String getUrl() {
 		return url;
@@ -62,25 +67,30 @@ public class ImageLoadRequest {
 	
 	public void notifyListeners(SafeBitmapDrawable drawable) {
 		listenersNotified = true;
-		while(!listeners.isEmpty()) {
-			if(isCanceled()) {
-				listeners.clear();
-				break;
+		if(listeners != null) {
+			while(!listeners.isEmpty()) {
+				if(isCanceled()) {
+					listeners.clear();
+					break;
+				}
+				ImageLoadListener listener = listeners.poll();
+				listener.onImageLoad(this, drawable);
 			}
-			ImageLoadListener listener = listeners.poll();
-			listener.onImageLoad(this, drawable, true);
 		}
+
 	}
 	
 	public void notifyListeners(Exception error) {
 		listenersNotified = true;
-		while(!listeners.isEmpty()) {
-			if(isCanceled()) {
-				listeners.clear();
-				break;
+		if(listeners != null) {
+			while(!listeners.isEmpty()) {
+				if(isCanceled()) {
+					listeners.clear();
+					break;
+				}
+				ImageLoadListener listener = listeners.poll();
+				listener.onImageLoadFail(this, error);
 			}
-			ImageLoadListener listener = listeners.poll();
-			listener.onImageLoadFail(this, error);
 		}
 	}
 	
@@ -89,11 +99,13 @@ public class ImageLoadRequest {
 	}
 	
 	public synchronized void addListeners(Collection<ImageLoadListener> listener) {
-		if(listeners == null) {
-			listeners = new ConcurrentLinkedQueue<ImageLoadListener>();
+		if(listener != null) {
+			if(listeners == null) {
+				listeners = new ConcurrentLinkedQueue<ImageLoadListener>();
+			}
+			
+			listeners.addAll(listener);
 		}
-		
-		listeners.addAll(listener);
 	}
 	
 	public synchronized void addListener(ImageLoadListener listener) {
@@ -104,14 +116,47 @@ public class ImageLoadRequest {
 		listeners.add(listener);
 	}
 
-	public Long getItemId() {
-		return itemId;
-	}
-
-	public void setItemId(Long itemId) {
-		this.itemId = itemId;
+//	public Long getItemId() {
+//		return itemId;
+//	}
+//
+//	public void setItemId(Long itemId) {
+//		this.itemId = itemId;
+//	}
+	
+	public String getEncodedImageData() {
+		return encodedImageData;
 	}
 	
+	public void setEncodedImageData(String encodedImageData) {
+		this.encodedImageData = encodedImageData;
+	}
+	
+	public ImageLoadType getType() {
+		return type;
+	}
+	
+	public void setType(ImageLoadType type) {
+		this.type = type;
+	}
+	
+	public int getScaleWidth() {
+		return scaleWidth;
+	}
+	
+	public void setScaleWidth(int scaleWidth) {
+		this.scaleWidth = scaleWidth;
+	}
+	
+	public int getScaleHeight() {
+		return scaleHeight;
+	}
+
+	
+	public void setScaleHeight(int scaleHeight) {
+		this.scaleHeight = scaleHeight;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

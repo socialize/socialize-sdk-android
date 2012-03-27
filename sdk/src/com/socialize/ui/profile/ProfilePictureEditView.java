@@ -113,7 +113,7 @@ public class ProfilePictureEditView extends ClickableSectionCell {
 		if(!StringUtils.isEmpty(profilePicData)) {
 			profilePicture.getBackground().setAlpha(64);
 			
-			imageLoader.loadImage(user.getId(), profilePicData, new ImageLoadListener() {
+			imageLoader.loadImageByUrl(profilePicData, new ImageLoadListener() {
 				@Override
 				public void onImageLoadFail(ImageLoadRequest request, Exception error) {
 					error.printStackTrace();
@@ -126,7 +126,7 @@ public class ProfilePictureEditView extends ClickableSectionCell {
 				}
 				
 				@Override
-				public void onImageLoad(ImageLoadRequest request, final SafeBitmapDrawable drawable, boolean async) {
+				public void onImageLoad(ImageLoadRequest request, final SafeBitmapDrawable drawable) {
 					// Must be run on UI thread
 					profilePicture.post(new Runnable() {
 						public void run() {

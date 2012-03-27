@@ -27,14 +27,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RemoteViews;
-
 import com.socialize.error.SocializeException;
 import com.socialize.launcher.LaunchAction;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeLaunchActivity;
 import com.socialize.util.AppUtils;
 import com.socialize.util.DefaultAppUtils;
-import com.socialize.util.NumberUtils;
 import com.socialize.util.StringUtils;
 
 /**
@@ -44,7 +42,6 @@ public abstract class BaseNotificationMessageBuilder<M extends NotificationMessa
 
 	private MessageTranslator<M> messageTranslator;
 	private AppUtils appUtils;
-	private NumberUtils numberUtils;
 	private SocializeLogger logger;
 	
 	@Override
@@ -81,12 +78,12 @@ public abstract class BaseNotificationMessageBuilder<M extends NotificationMessa
 		// This will add anything we need to the bundle
 		M translated = messageTranslator.translate(context, messageData, message);
 
-		// Set the bundle AFTER the translation
+		// Set the bundle AFTER the translation (messageData is changed)
 		notificationIntent.putExtras(messageData);
 		
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		
-		PendingIntent contentIntent = PendingIntent.getActivity(context, getNotificationId(message), notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+		PendingIntent contentIntent = getPendingIntent(context, message, notificationIntent);
 		
 		RemoteViews notificationView = getNotificationView(context, notification, message, translated);
 		
@@ -100,7 +97,6 @@ public abstract class BaseNotificationMessageBuilder<M extends NotificationMessa
 			String text = translated.getText();
 			
 			if(!StringUtils.isEmpty(title)) {
-				
 				if(text == null) text = "";
 				notification.setLatestEventInfo(context, title, text, contentIntent);
 				notification.tickerText = title;
@@ -110,7 +106,12 @@ public abstract class BaseNotificationMessageBuilder<M extends NotificationMessa
 			}
 		}
 		
-		return notification;			
+		return notification;
+	}
+	
+	// So we can mock
+	protected PendingIntent getPendingIntent(Context context, NotificationMessage message, Intent notificationIntent) {
+		return PendingIntent.getActivity(context, getNotificationId(message), notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 	}
 
 	public void setMessageTranslator(MessageTranslator<M> messageTranslator) {
@@ -136,11 +137,7 @@ public abstract class BaseNotificationMessageBuilder<M extends NotificationMessa
 	}
 	
 	protected int getNotificationId(NotificationMessage message) {
-		return numberUtils.longToIntLossy(message.getEntityId());
-	}
-
-	public void setNumberUtils(NumberUtils numberUtils) {
-		this.numberUtils = numberUtils;
+		return (int) message.getEntityId();
 	}
 
 	/**

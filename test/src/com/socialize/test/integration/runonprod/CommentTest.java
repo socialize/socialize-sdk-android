@@ -36,8 +36,8 @@ public class CommentTest extends SocializeRobotiumTest {
 		
 		// Click on the first comment in list. 
 		robotium.clickInList(0);
+		
 		waitForSuccess();
-		sleep(2000);
 		
 		// Check Comment ID
 		TextView txt = (TextView) robotium.getCurrentActivity().findViewById(com.socialize.sample.R.id.txtCommentId);

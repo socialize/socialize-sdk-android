@@ -83,7 +83,7 @@ public class TestUtils {
 	}
 	
 	public static void destroyActivity() {
-		if(monitor != null) {
+		if(monitor != null && monitor.getLastActivity() != null) {
 			monitor.getLastActivity().finish();
 		}
 	}
