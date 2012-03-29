@@ -27,7 +27,5 @@ package com.socialize.ui.share;
  *
  */
 public interface ShareInfoProvider {
-
 	public String getShareText();
-	
 }

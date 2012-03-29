@@ -67,7 +67,8 @@ public class DeviceUtilsTest extends SocializeActivityTest {
 		DefaultAppUtils appUtils = new DefaultAppUtils();
 		appUtils.init(getActivity());
 		String userAgentString = appUtils.getUserAgentString();
-		assertEquals("Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_" + Locale.getDefault().getCountry() + "; BundleID/com.socialize.sample;", userAgentString);
+		String expected = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_" + Locale.getDefault().getCountry() + "; BundleID/com.socialize.sample;";
+		assertEquals(expected, userAgentString);
 	}
 
 	// Can't extend TelephonyManager.. so don't bother trying to test. urgh!

@@ -1003,6 +1003,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		AndroidMock.expect(mockOptions.isAutoAuth()).andReturn(false);
 		AndroidMock.expect(mockOptions.getShareTo()).andReturn(null);
+		AndroidMock.expect(mockOptions.getLocation()).andReturn(null);
 
 		// replay all the mocks
 		AndroidMock.replay(mockActivity, mockEntity, mockOptions);
@@ -1038,6 +1039,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		AndroidMock.expect(mockOptions.getShareTo()).andReturn(networks);
 		AndroidMock.expect(mockOptions.isAutoAuth()).andReturn(true);
+		AndroidMock.expect(mockOptions.getLocation()).andReturn(null);
 
 		// replay all the mocks
 		AndroidMock.replay(mockActivity, mockEntity, mockOptions, shareSystem);
@@ -1144,11 +1146,13 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		final String appId = "foobar";
 
 		setupDefaultMocks();
+		
+		FacebookAuthProviderInfo fb = new FacebookAuthProviderInfo();
+		fb.setAppId(appId);
 
 		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
 
-		authProviderData.setAuthProviderType(AuthProviderType.FACEBOOK);
-		authProviderData.setAppId3rdParty(appId);
+		authProviderData.setAuthProviderInfo(fb);
 
 		SocializeServiceImpl socialize = new SocializeServiceImpl();
 
@@ -1160,8 +1164,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertTrue(socialize.isInitialized());
 		
-		FacebookAuthProviderInfo fb = new FacebookAuthProviderInfo();
-		fb.setAppId(appId);
+
 
 		socialize.authenticate(getActivity(), key, secret, fb, listener);
 
@@ -1172,16 +1175,19 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		SocializeAuthListener authListener = AndroidMock.createMock(SocializeAuthListener.class);
 
 		final String consumerKey = "foo", consumerSecret = "bar";
-		final String authProviderId = "foobar", authUserId3rdParty = "foobar_user", authToken3rdParty = "foobar_token";
+		final String authProviderId = "foobar", authUserId3rdParty = "foobar_user", authToken3rdParty = "foobar_token", secret3rdParty = "foobar_secret";
 
 		setupDefaultMocks();
 
 		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
+		
+		FacebookAuthProviderInfo fb = new FacebookAuthProviderInfo();
+		fb.setAppId(authProviderId);
 
-		authProviderData.setAuthProviderType(AuthProviderType.FACEBOOK);
-		authProviderData.setAppId3rdParty(authProviderId);
 		authProviderData.setToken3rdParty(authToken3rdParty);
 		authProviderData.setUserId3rdParty(authUserId3rdParty);
+		authProviderData.setSecret3rdParty(secret3rdParty);
+		authProviderData.setAuthProviderInfo(fb);
 
 		SocializeServiceImpl socialize = new SocializeServiceImpl();
 
@@ -1193,12 +1199,11 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertTrue(socialize.isInitialized());
 
-		FacebookAuthProviderInfo fb = new FacebookAuthProviderInfo();
-		fb.setAppId(authProviderId);
-		
+
 		DefaultUserProviderCredentials creds = new DefaultUserProviderCredentials();
 		creds.setAccessToken(authToken3rdParty);
 		creds.setUserId(authUserId3rdParty);
+		creds.setTokenSecret(secret3rdParty);
 		
 		socialize.authenticateKnownUser(getActivity(), consumerKey, consumerSecret, fb, creds, authListener);
 
@@ -1610,6 +1615,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		return publicSocialize;
 	}
 
+	@UsesMocks ({ActionBarOptions.class})
 	public void testShowActionBarWithParentResourceEntityOptions() {
 		Activity mockParent = AndroidMock.createMock(Activity.class);
 		Entity mockEntity = AndroidMock.createMock(Entity.class);
@@ -1641,6 +1647,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		assertNull(getResult(4));
 	}
 
+	@UsesMocks ({ActionBarOptions.class})
 	public void testShowActionBarWithOptions() {
 		Activity mockParent = AndroidMock.createMock(Activity.class);
 		View mockView = AndroidMock.createMock(View.class, getContext());

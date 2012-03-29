@@ -589,10 +589,12 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 
 	@Override
 	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
-		AuthProviderData data = this.authProviderDataFactory.getBean();
-		SocializeAuthProviderInfo info = newSocializeAuthProviderInfo();
-		data.setAuthProviderInfo(info);
-		authenticate(context, consumerKey, consumerSecret, data, authListener, false);
+		if(assertInitialized(authListener)) {
+			AuthProviderData data = this.authProviderDataFactory.getBean();
+			SocializeAuthProviderInfo info = newSocializeAuthProviderInfo();
+			data.setAuthProviderInfo(info);
+			authenticate(context, consumerKey, consumerSecret, data, authListener, false);
+		}
 	}
 	
 	// So we can mock
@@ -602,12 +604,14 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	
 	@Override
 	public void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, UserProviderCredentials userProviderCredentials, SocializeAuthListener authListener) {
-		AuthProviderData authProviderData = this.authProviderDataFactory.getBean();
-		authProviderData.setAuthProviderInfo(authProviderInfo);
-		authProviderData.setToken3rdParty(userProviderCredentials.getAccessToken());
-		authProviderData.setSecret3rdParty(userProviderCredentials.getTokenSecret());
-		authProviderData.setUserId3rdParty(userProviderCredentials.getUserId());
-		authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, false);	
+		if(assertInitialized(authListener)) {
+			AuthProviderData authProviderData = this.authProviderDataFactory.getBean();
+			authProviderData.setAuthProviderInfo(authProviderInfo);
+			authProviderData.setToken3rdParty(userProviderCredentials.getAccessToken());
+			authProviderData.setSecret3rdParty(userProviderCredentials.getTokenSecret());
+			authProviderData.setUserId3rdParty(userProviderCredentials.getUserId());
+			authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, false);	
+		}
 	}
 
 	protected void authenticate(
@@ -759,17 +763,17 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	}
 	
 	@Override
-	public void share(final Activity activity, final Entity entity, final String text, final ShareOptions options, final ShareAddListener shareAddListener) {
+	public void share(final Activity activity, final Entity entity, final String text, final ShareOptions shareOptions, final ShareAddListener shareAddListener) {
 		if(assertAuthenticated(shareAddListener)) {
-			if(options != null) {
-				SocialNetwork[] shareTo = options.getShareTo();
-				final boolean autoAuth = options.isAutoAuth();
+			if(shareOptions != null) {
+				SocialNetwork[] shareTo = shareOptions.getShareTo();
+				final boolean autoAuth = shareOptions.isAutoAuth();
 				if(shareTo == null) {
-					shareSystem.addShare(activity, session, entity, text, ShareType.OTHER, options.getLocation(), shareAddListener);
+					shareSystem.addShare(activity, session, entity, text, ShareType.OTHER, shareOptions.getLocation(), shareAddListener);
 				}
 				else  {
 					for (final SocialNetwork socialNetwork : shareTo) {
-						shareSystem.addShare(activity, session, entity, text, socialNetwork, options.getLocation(), new ShareAddListener() {
+						shareSystem.addShare(activity, session, entity, text, socialNetwork, shareOptions.getLocation(), new ShareAddListener() {
 							@Override
 							public void onError(SocializeException error) {
 								if(shareAddListener != null) {
@@ -781,7 +785,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 							public void onCreate(Share share) {
 								try {
 									if(share != null && shareSystem != null) {
-										handleActionShare(activity, socialNetwork, share, text, options.getLocation(), autoAuth, options.getListener());
+										handleActionShare(activity, socialNetwork, share, text, shareOptions.getLocation(), autoAuth, shareOptions.getListener());
 									}
 								}
 								finally {

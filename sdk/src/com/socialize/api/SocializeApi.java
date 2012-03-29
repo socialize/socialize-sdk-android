@@ -725,6 +725,17 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			action.setLat(location.getLatitude());
 		}
 	}
+	
+	protected void setLocation(SocializeAction action, ShareOptions shareOptions) {
+		
+		Location location = null;
+		
+		if(shareOptions != null) {
+			location = shareOptions.getLocation();
+		}
+		
+		setLocation(action, location);
+	}	
 
 	class AsyncPutter extends AbstractAsyncProcess<SocializePutRequest<T>, Void, SocializeEntityResponse<T>> {
 

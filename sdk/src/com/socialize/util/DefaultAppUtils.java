@@ -95,7 +95,7 @@ public class DefaultAppUtils implements AppUtils {
 		}
 		catch (Exception ignore) {}
 		
-		if(country == null) {
+		if(StringUtils.isEmpty(country)) {
 			country = Locale.getDefault().getCountry();
 		}
 	}

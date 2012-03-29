@@ -71,9 +71,9 @@ public enum ShareType {
 	public static ShareType valueOf(int id) {
 		switch(id) {
 		case 1 : 
-			return FACEBOOK;
+			return TWITTER;
 		case 2 : 
-			return TWITTER;	
+			return FACEBOOK;	
 		case 3 : 
 			return EMAIL;	
 		case 4 : 

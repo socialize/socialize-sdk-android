@@ -21,6 +21,8 @@
  */
 package com.socialize.networks;
 
+import com.socialize.api.action.ShareType;
+
 /**
  * @author Jason Polites
  *
@@ -38,5 +40,13 @@ public enum SocialNetwork {
 	
 	public boolean isLocalPropagation() {
 		return localPropagation;
+	}
+	
+	public static SocialNetwork valueOf(ShareType shareType) {
+		switch (shareType) {
+			case FACEBOOK: return FACEBOOK;
+			case TWITTER: return TWITTER;
+			default:return null;
+		}
 	}
 }

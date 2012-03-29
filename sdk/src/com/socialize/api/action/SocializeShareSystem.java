@@ -87,7 +87,7 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 			final Entity entity, 
 			final String text, 
 			ShareType shareType, 
-			final SocialNetwork network, 
+			SocialNetwork network, 
 			final Location location, 
 			final ShareListener listener) {
 		
@@ -99,7 +99,11 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 				shareType = ShareType.OTHER;
 			}
 		}
+		else if(network == null) {
+			network = SocialNetwork.valueOf(shareType);
+		}
 		
+		final SocialNetwork fnetwork = network;
 		final ShareType fshareType = shareType; 
 		
 		if(network != null) {
@@ -124,7 +128,7 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 					
 					@Override
 					public void onAuthSuccess(SocializeSession session) {
-						doShare(session, entity, text, fshareType, network, location, listener);
+						doShare(session, entity, text, fshareType, fnetwork, location, listener);
 					}
 					
 					@Override

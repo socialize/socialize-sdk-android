@@ -16,5 +16,4 @@ public class MockInitializationAsserter implements SocializeInitializationAssert
 	public boolean assertInitialized(SocializeService service, SocializeListener listener) {
 		return true;
 	}
-
 }

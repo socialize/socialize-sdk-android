@@ -31,6 +31,8 @@ import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.share.ShareAddListener;
+import com.socialize.ui.actionbar.ActionBarView;
+import com.socialize.ui.actionbar.OnActionBarEventListener;
 import com.socialize.ui.dialog.AlertDialogFactory;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 
@@ -47,29 +49,24 @@ public class ShareClickListener implements OnClickListener {
 	private ShareInfoProvider provider;
 	private ProgressDialogFactory progressDialogFactory;
 	private AlertDialogFactory alertDialogFactory;
-	private boolean showSuccessDialog = true;
+	private OnActionBarEventListener onActionBarEventListener;
+	private ActionBarView actionBarView;
 
 	public ShareClickListener(
 			Activity context, 
 			Entity entity, 
 			ShareType shareType, 
-			ShareInfoProvider provider) {
-		this(context, entity, shareType, provider, true);
-	}
-	
-	public ShareClickListener(
-			Activity context, 
-			Entity entity, 
-			ShareType shareType, 
 			ShareInfoProvider provider,
-			boolean showSuccessDialog) {
+			OnActionBarEventListener onActionBarEventListener,
+			ActionBarView actionBarView) {
 		super();
 		
 		this.context = context;
 		this.shareType = shareType;
 		this.entity = entity;
 		this.provider = provider;
-		this.showSuccessDialog = showSuccessDialog;
+		this.onActionBarEventListener = onActionBarEventListener;
+		this.actionBarView = actionBarView;
 	}
 	
 	/* (non-Javadoc)
@@ -86,11 +83,13 @@ public class ShareClickListener implements OnClickListener {
 			}
 			
 			@Override
-			public void onCreate(Share entity) {
+			public void onCreate(Share share) {
 				dialog.dismiss();
-//				if(showSuccessDialog) {
-//					alertDialogFactory.showToast(context, "Share successful!");
-//				}
+				alertDialogFactory.showToast(context, "Share successful!");
+				
+				if(onActionBarEventListener != null) {
+					onActionBarEventListener.onPostShare(actionBarView, share);
+				}
 			}
 		});
 	}

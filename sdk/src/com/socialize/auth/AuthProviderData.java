@@ -65,6 +65,7 @@ public class AuthProviderData {
 		return appId3rdParty;
 	}
 	
+	@Deprecated
 	public void setAppId3rdParty(String appId3rdParty) {
 		this.appId3rdParty = appId3rdParty;
 	}
@@ -73,6 +74,7 @@ public class AuthProviderData {
 		return authProviderType;
 	}
 	
+	@Deprecated
 	public void setAuthProviderType(AuthProviderType authProviderType) {
 		this.authProviderType = authProviderType;
 	}

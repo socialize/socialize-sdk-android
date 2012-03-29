@@ -1,12 +1,12 @@
 <beans>
-	<bean id="userSystem" class="com.socialize.sample.mocks.MockUserSystem" />
-	<bean id="shareSystem" class="com.socialize.sample.mocks.MockShareSystem" />
-	<bean id="commentSystem" class="com.socialize.sample.mocks.MockCommentSystem" />
-	<bean id="likeSystem" class="com.socialize.sample.mocks.MockLikeSystem" />
-	<bean id="entitySystem" class="com.socialize.sample.mocks.MockEntitySystem" />
-	<bean id="viewSystem" class="com.socialize.sample.mocks.MockViewSystem" />
-	<bean id="notificationRegistrationSystem" class="com.socialize.sample.mocks.MockNotificationRegistrationSystem" />
-	<bean id="subscriptionSystem" class="com.socialize.sample.mocks.MockSubscriptionSystem" />
+	<bean id="userSystem" class="com.socialize.test.mock.MockUserSystem" />
+	<bean id="shareSystem" class="com.socialize.test.mock.MockShareSystem" />
+	<bean id="commentSystem" class="com.socialize.test.mock.MockCommentSystem" />
+	<bean id="likeSystem" class="com.socialize.test.mock.MockLikeSystem" />
+	<bean id="entitySystem" class="com.socialize.test.mock.MockEntitySystem" />
+	<bean id="viewSystem" class="com.socialize.test.mock.MockViewSystem" />
+	<bean id="notificationRegistrationSystem" class="com.socialize.test.mock.MockNotificationRegistrationSystem" />
+	<bean id="subscriptionSystem" class="com.socialize.test.mock.MockSubscriptionSystem" />
 	
 	<proxy ref="userSystem" />
 	<proxy ref="shareSystem" />
@@ -19,5 +19,5 @@
 	<proxy ref="alertDialogFactory" />
 	<proxy ref="actionButtonHandlers" />
 
-	<bean id="initializationAsserter" class="com.socialize.sample.mocks.MockInitializationAsserter" />
+	<bean id="initializationAsserter" class="com.socialize.test.mock.MockInitializationAsserter" />
 </beans>

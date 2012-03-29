@@ -81,9 +81,6 @@ public class ShareFactoryTest extends AbstractSocializeActionFactoryTest<Share, 
 		AndroidMock.expect(mediumObj.isNull(medId)).andReturn(false);
 		AndroidMock.expect(mediumObj.has(medId)).andReturn(true);
 		AndroidMock.expect(mediumObj.getInt(medId)).andReturn(ShareType.FACEBOOK.getId());
-		AndroidMock.expect(mediumObj.isNull(medium)).andReturn(false);
-		AndroidMock.expect(mediumObj.has(medium)).andReturn(true);
-		AndroidMock.expect(mediumObj.getString(medium)).andReturn(ShareType.FACEBOOK.getName());
 
 		action.setText(shareText);
 		action.setShareType(ShareType.FACEBOOK);
