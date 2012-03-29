@@ -271,8 +271,7 @@
                     destdir="${out.classes.absolute.dir}"
                     bootclasspathref="android.target.classpath"
                     verbose="${verbose}"
-                    classpath="${extensible.classpath}"
-                    classpathref="jar.libs.ref">
+                    classpath="${extensible.classpath};${jar.libs.dir}">
                 <src path="${source.absolute.dir}" />
                 <src path="${gen.absolute.dir}" />
                 <classpath>
