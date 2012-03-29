@@ -144,7 +144,6 @@
 	
 	<bean id="sessionFactory" class="com.socialize.api.DefaultSocializeSessionFactory">
 		<constructor-arg ref="config"/>
-		<constructor-arg ref="authProviders"/>
 	</bean>
 	
 	<bean id="sessionPersister" class="com.socialize.api.PreferenceSessionPersister">
@@ -521,10 +520,12 @@
 	<bean id="actionLauncher" class="com.socialize.launcher.SocializeActionLauncher" extends="activityLauncher"/>
 	<bean id="homeLauncher" class="com.socialize.launcher.HomeLauncher"/>
 	
+	<!-- 
 	<bean id="shareLauncher" class="com.socialize.launcher.ShareLauncher">
 		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
 		<property name="listenerHolder" ref="listenerHolder"/>
 	</bean>
+	 -->
 
 	<bean id="launchManager" class="com.socialize.launcher.SocializeLaunchManager">
 		<property name="logger" ref="logger"/>
@@ -537,11 +538,13 @@
 				<entry>
 					<key value="HOME"/>
 					<value ref="homeLauncher"/>
-				</entry>				
+				</entry>
+				<!-- 			
 				<entry>
 					<key value="LOCAL_SHARE"/>
 					<value ref="shareLauncher"/>
-				</entry>				
+				</entry>
+				 -->					
 			</map>
 		</property>
 	</bean>

@@ -56,7 +56,7 @@ public class ShareLauncher implements Launcher {
 			
 			String text = data.getString(SocializeConfig.SOCIALIZE_SHARE_COMMENT);
 			String mimeType = data.getString(SocializeConfig.SOCIALIZE_SHARE_MIME_TYPE);
-			boolean isHtml = data.getBoolean(SocializeConfig.SOCIALIZE_SHARE_IS_HTML, false);
+//			boolean isHtml = data.getBoolean(SocializeConfig.SOCIALIZE_SHARE_IS_HTML, false);
 			
 			if(StringUtils.isEmpty(text)) {
 				text = entity.getDisplayName();
