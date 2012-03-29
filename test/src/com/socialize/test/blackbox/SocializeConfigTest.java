@@ -98,18 +98,6 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		}
 	}
 	
-	/**
-	 * tests that the config loads correctly when no override props is specified.
-	 * @throws IOException
-	 */
-	@SuppressWarnings("deprecation")
-	public void testConfigLoadWithoutOverride() throws IOException {
-		config.setPropertiesFileName("does.not.exist");
-		config.init(getActivity());
-		Assert.assertNotNull(config.getProperties());
-		Assert.assertNull(config.getProperties().getProperty("test_value"));
-	}
-	
 	public void testConfigLoadWithOverride() throws IOException {
 		config.init(getActivity());
 		Assert.assertNotNull(config.getProperties());

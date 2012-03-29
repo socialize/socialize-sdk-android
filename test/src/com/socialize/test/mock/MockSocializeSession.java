@@ -162,27 +162,4 @@ public class MockSocializeSession implements WritableSession {
 	@Override
 	public void setUserProviderCredentials(AuthProviderType type, UserProviderCredentials data) {
 	}
-
-	@Override
-	public void set3rdPartyUserId(String userId) {
-	}
-
-	@Override
-	public void set3rdPartyToken(String token) {
-	}
-
-	@Override
-	public void set3rdAppId(String appId) {
-	}
-
-	@Override
-	public void setAuthProviderType(AuthProviderType authProviderType) {
-	}
-
-	@Override
-	public void setAuthProvider(AuthProvider<?> authProvider) {
-	}
-	
-	
-
 }

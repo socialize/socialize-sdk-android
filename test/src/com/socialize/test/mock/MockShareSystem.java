@@ -20,6 +20,11 @@ public class MockShareSystem extends MockSystem<Share> implements ShareSystem {
 	}
 	
 	@Override
+	public boolean canShare(Context context, ShareType shareType) {
+		return true;
+	}
+
+	@Override
 	public void addShare(Context context, SocializeSession session, Entity entity, String text, SocialNetwork network, Location location, ShareListener listener) {
 		if(listener != null) listener.onCreate(action);
 	}

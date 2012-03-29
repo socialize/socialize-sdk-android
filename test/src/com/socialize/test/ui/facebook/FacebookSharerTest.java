@@ -104,11 +104,6 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		
 		final PublicSocialize socialize = new PublicSocialize() {
 			@Override
-			public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderType authProviderType, String authProviderAppId, SocializeAuthListener authListener) {
-				fail();
-			}
-			
-			@Override
 			public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, SocializeAuthListener authListener) {
 				addResult(authListener);
 			}

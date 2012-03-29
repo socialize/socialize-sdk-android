@@ -23,31 +23,39 @@ package com.socialize.test;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.view.View;
-
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
+import android.widget.ScrollView;
 import com.socialize.SocializeServiceImpl;
 import com.socialize.api.action.ActivitySystem;
 import com.socialize.api.action.CommentSystem;
 import com.socialize.api.action.EntitySystem;
 import com.socialize.api.action.LikeSystem;
 import com.socialize.api.action.ShareSystem;
+import com.socialize.api.action.ShareType;
+import com.socialize.api.action.SubscriptionSystem;
 import com.socialize.api.action.UserSystem;
 import com.socialize.api.action.ViewSystem;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderInfoBuilder;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
+import com.socialize.auth.SocializeAuthProviderInfo;
 import com.socialize.entity.Comment;
-import com.socialize.entity.Entity;
+import com.socialize.entity.Share;
+import com.socialize.entity.SocializeAction;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeListener;
-import com.socialize.listener.comment.CommentAddListener;
+import com.socialize.listener.share.ShareAddListener;
 import com.socialize.log.SocializeLogger;
-import com.socialize.networks.ShareOptions;
-import com.socialize.ui.actionbar.ActionBarListener;
-import com.socialize.ui.actionbar.ActionBarOptions;
+import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
+import com.socialize.notifications.WakeLock;
+import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.ResourceLocator;
 
@@ -57,226 +65,238 @@ import com.socialize.util.ResourceLocator;
  */
 public class PublicSocialize extends SocializeServiceImpl {
 
-	
-	@Deprecated
 	@Override
-	public void authenticate(Context context, String consumerKey,
-			String consumerSecret, AuthProviderType authProviderType,
-			String authProviderAppId, SocializeAuthListener authListener) {
-		super.authenticate(context, consumerKey, consumerSecret, authProviderType,
-				authProviderAppId, authListener);
-	}
-	@Override
-	public void addComment(Activity activity, Entity entity, String comment,
-			Location location, ShareOptions shareOptions,
-			CommentAddListener commentAddListener) {
-		super.addComment(activity, entity, comment, location, shareOptions,
-				commentAddListener);
+	public void handleIntent(Context context, Intent intent) {
+
+		super.handleIntent(context, intent);
 	}
 
 	@Override
-	public void addComment(Activity activity, Comment comment,
-			Location location, ShareOptions shareOptions,
-			CommentAddListener commentAddListener) {
-		super.addComment(activity, comment, location, shareOptions, commentAddListener);
+	public WakeLock getWakeLock() {
+
+		return super.getWakeLock();
 	}
 
 	@Override
-	public void addComment(Activity activity, Entity entity, String comment,
-			ShareOptions shareOptions, CommentAddListener commentAddListener) {
+	public String[] getInitPaths() {
 
-		super.addComment(activity, entity, comment, shareOptions, commentAddListener);
-	}
-
-	@Override
-	public void addComment(Activity activity, Entity entity, String comment,
-			CommentAddListener commentAddListener) {
-
-		super.addComment(activity, entity, comment, commentAddListener);
-	}
-
-	@Override
-	public void authenticate(Context context, SocializeAuthListener authListener) {
-		super.authenticate(context, authListener);
-	}
-
-	@Deprecated
-	@Override
-	public void authenticate(String consumerKey, String consumerSecret,
-			SocializeAuthListener authListener) {
-		super.authenticate(consumerKey, consumerSecret, authListener);
-	}
-
-	@Override
-	public void authenticate(Context context, String consumerKey,
-			String consumerSecret, SocializeAuthListener authListener) {
-		super.authenticate(context, consumerKey, consumerSecret, authListener);
-	}
-	
-	@Override
-	public View showActionBar(Activity parent, int resId, Entity entity) {
-
-		return super.showActionBar(parent, resId, entity);
-	}
-
-
-	@Override
-	public View showActionBar(Activity parent, int resId, Entity entity,
-			ActionBarListener listener) {
-
-		return super.showActionBar(parent, resId, entity, listener);
-	}
-
-	
-	@Override
-	public View showActionBar(Activity parent, int resId, Entity entity,
-			ActionBarOptions options) {
-
-		return super.showActionBar(parent, resId, entity, options);
-	}
-
-
-	@Override
-	public View showActionBar(Activity parent, int resId, Entity entity,
-			ActionBarOptions options, ActionBarListener listener) {
-
-		return super.showActionBar(parent, resId, entity, options, listener);
-	}
-
-
-	@Override
-	public View showActionBar(Activity parent, View original, Entity entity) {
-
-		return super.showActionBar(parent, original, entity);
-	}
-
-	@Override
-	public View showActionBar(Activity parent, View original, Entity entity,
-			ActionBarOptions options) {
-
-		return super.showActionBar(parent, original, entity, options);
-	}
-
-	
-	@Override
-	public View showActionBar(Activity parent, View original, Entity entity,
-			ActionBarListener listener) {
-
-		return super.showActionBar(parent, original, entity, listener);
-	}
-
-	@Override
-	public View showActionBar(Activity parent, View original, Entity entity,
-			ActionBarOptions options, ActionBarListener listener) {
-
-		return super.showActionBar(parent, original, entity, options, listener);
+		return super.getInitPaths();
 	}
 
 	@Override
 	public SocializeIOC newSocializeIOC() {
+
 		return super.newSocializeIOC();
 	}
 
 	@Override
 	public ResourceLocator newResourceLocator() {
+
 		return super.newResourceLocator();
 	}
 
 	@Override
 	public SocializeLogger newLogger() {
+
 		return super.newLogger();
 	}
 
 	@Override
 	public ClassLoaderProvider newClassLoaderProvider() {
+
 		return super.newClassLoaderProvider();
 	}
 
 	@Override
 	public int binarySearch(String[] array, String str) {
+
 		return super.binarySearch(array, str);
 	}
 
 	@Override
 	public void sort(Object[] array) {
+
 		super.sort(array);
 	}
 
 	@Override
+	public void verify3rdPartyAuthConfigured() {
+
+		super.verify3rdPartyAuthConfigured();
+	}
+
+	@Override
+	public SocializeAuthProviderInfo newSocializeAuthProviderInfo() {
+
+		return super.newSocializeAuthProviderInfo();
+	}
+
+	@Override
 	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener authListener, boolean do3rdPartyAuth) {
+
 		super.authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, do3rdPartyAuth);
 	}
 
 	@Override
+	public boolean checkKeys(String consumerKey, String consumerSecret) {
+
+		return super.checkKeys(consumerKey, consumerSecret);
+	}
+
+	@Override
 	public boolean checkKeys(String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
+
 		return super.checkKeys(consumerKey, consumerSecret, authListener);
 	}
 
 	@Override
-	public void logErrorMessage(String message) {
-		super.logErrorMessage(message);
-	}
+	public boolean checkKey(String name, String key, SocializeAuthListener authListener) {
 
-	@Override
-	protected boolean checkKey(String name, String key,
-			SocializeAuthListener authListener) {
 		return super.checkKey(name, key, authListener);
 	}
 
 	@Override
+	public void logErrorMessage(String message) {
+
+		super.logErrorMessage(message);
+	}
+
+	@Override
+	public Comment newComment() {
+
+		return super.newComment();
+	}
+
+	@Override
+	public void handleActionShare(Activity activity, ShareType shareType, Share share, String shareText, Location location, boolean autoAuth, ShareAddListener shareAddListener) {
+
+		super.handleActionShare(activity, shareType, share, shareText, location, autoAuth, shareAddListener);
+	}
+
+	@Override
+	public void handleActionShare(Activity activity, SocialNetwork socialNetwork, SocializeAction action, String shareText, Location location, boolean autoAuth, SocialNetworkListener listener) {
+
+		super.handleActionShare(activity, socialNetwork, action, shareText, location, autoAuth, listener);
+	}
+
+	@Override
+	public boolean isAuthenticatedLegacy(AuthProviderType providerType) {
+
+		return super.isAuthenticatedLegacy(providerType);
+	}
+
+	@Override
 	public boolean assertAuthenticated(SocializeListener listener) {
+
 		return super.assertAuthenticated(listener);
 	}
 
 	@Override
 	public boolean assertInitialized(SocializeListener listener) {
+
 		return super.assertInitialized(listener);
 	}
 
 	@Override
+	public ActionBarView newActionBarView(Activity parent) {
+
+		return super.newActionBarView(parent);
+	}
+
+	@Override
+	public Intent newIntent(Activity context, Class<?> cls) {
+
+		return super.newIntent(context, cls);
+	}
+
+	@Override
+	public LayoutParams newLayoutParams(int width, int height) {
+
+		return super.newLayoutParams(width, height);
+	}
+
+	@Override
+	public LayoutParams newLayoutParams(android.view.ViewGroup.LayoutParams source) {
+
+		return super.newLayoutParams(source);
+	}
+
+	@Override
+	public RelativeLayout newRelativeLayout(Activity parent) {
+
+		return super.newRelativeLayout(parent);
+	}
+
+	@Override
+	public ScrollView newScrollView(Activity parent) {
+
+		return super.newScrollView(parent);
+	}
+
+	@Override
+	public View inflateView(Activity parent, int resId) {
+
+		return super.inflateView(parent, resId);
+	}
+
+	@Override
 	public void setCommentSystem(CommentSystem commentSystem) {
+
 		super.setCommentSystem(commentSystem);
 	}
 
 	@Override
 	public void setShareSystem(ShareSystem shareSystem) {
+
 		super.setShareSystem(shareSystem);
 	}
 
 	@Override
 	public void setLikeSystem(LikeSystem likeSystem) {
+
 		super.setLikeSystem(likeSystem);
 	}
 
 	@Override
 	public void setViewSystem(ViewSystem viewSystem) {
+
 		super.setViewSystem(viewSystem);
 	}
 
 	@Override
 	public void setUserSystem(UserSystem userSystem) {
+
 		super.setUserSystem(userSystem);
 	}
 
 	@Override
 	public void setAuthProviders(AuthProviders authProviders) {
+
 		super.setAuthProviders(authProviders);
 	}
-	
+
 	@Override
 	public void setActivitySystem(ActivitySystem activitySystem) {
+
 		super.setActivitySystem(activitySystem);
 	}
 
 	@Override
 	public void setEntitySystem(EntitySystem entitySystem) {
+
 		super.setEntitySystem(entitySystem);
 	}
-	
+
+	@Override
+	public void setSubscriptionSystem(SubscriptionSystem subscriptionSystem) {
+
+		super.setSubscriptionSystem(subscriptionSystem);
+	}
+
 	@Override
 	public void setAuthProviderInfoBuilder(AuthProviderInfoBuilder authProviderInfoBuilder) {
+
 		super.setAuthProviderInfoBuilder(authProviderInfoBuilder);
 	}
-	
 	
 }

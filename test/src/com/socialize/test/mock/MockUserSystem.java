@@ -23,31 +23,12 @@ public class MockUserSystem implements UserSystem {
 	}
 	
 	@Override
-	public void init(Context context) {}
-	
-	@Override
 	public SocializeSession authenticateSynchronous(Context context, String consumerKey, String consumerSecret, SocializeSessionConsumer sessionConsumer) throws SocializeException {
 		MockSocializeSession mockSocializeSession = new MockSocializeSession();
 		
 		if(sessionConsumer != null)	sessionConsumer.setSession(mockSocializeSession);
 	
 		return mockSocializeSession;
-	}
-
-	@Deprecated
-	@Override
-	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
-		MockSocializeSession mockSocializeSession = new MockSocializeSession();
-		if(sessionConsumer != null)	sessionConsumer.setSession(mockSocializeSession);
-		listener.onAuthSuccess(mockSocializeSession);
-	}
-
-	@Deprecated
-	@Override
-	public void authenticate(String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
-		MockSocializeSession mockSocializeSession = new MockSocializeSession();
-		if(sessionConsumer != null)	sessionConsumer.setSession(mockSocializeSession);
-		listener.onAuthSuccess(mockSocializeSession);
 	}
 
 	@Override
@@ -83,15 +64,7 @@ public class MockUserSystem implements UserSystem {
 	@Override
 	public void saveSession(Context context, SocializeSession session) {}
 
-	@Deprecated
-	@Override
-	public void saveUserProfile(Context context, SocializeSession session, String firstName, String lastName, String encodedImage, UserListener listener) {
-		listener.onUpdate(user);
-	}
-
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	
 }

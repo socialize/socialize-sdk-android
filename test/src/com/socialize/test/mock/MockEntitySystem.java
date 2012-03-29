@@ -22,12 +22,7 @@ public class MockEntitySystem implements EntitySystem {
 	public void addEntity(SocializeSession session, Entity entity, EntityListener listener) {
 		if(listener != null) listener.onCreate(entity);
 	}
-
-	@Override
-	public void addEntity(SocializeSession session, String entityKey, String name, EntityListener listener) {
-		if(listener != null) listener.onCreate(Entity.newInstance(entityKey, name));
-	}
-
+	
 	@Override
 	public void getEntity(SocializeSession session, String entityKey, EntityListener listener) {
 		if(listener != null) listener.onGet(entity);

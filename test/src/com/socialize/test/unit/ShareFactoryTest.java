@@ -26,6 +26,7 @@ import org.json.JSONObject;
 
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.api.action.ShareType;
 import com.socialize.entity.Share;
 import com.socialize.entity.ShareFactory;
 
@@ -67,8 +68,6 @@ public class ShareFactoryTest extends AbstractSocializeActionFactoryTest<Share, 
 		final String medId = "id";
 
 		String shareText = "share text";
-		int shareMedium = 69;
-		String mediumName = "medium name";
 
 		mediumObj = AndroidMock.createMock(JSONObject.class);
 
@@ -81,14 +80,13 @@ public class ShareFactoryTest extends AbstractSocializeActionFactoryTest<Share, 
 		AndroidMock.expect(json.getJSONObject(medium)).andReturn(mediumObj);
 		AndroidMock.expect(mediumObj.isNull(medId)).andReturn(false);
 		AndroidMock.expect(mediumObj.has(medId)).andReturn(true);
-		AndroidMock.expect(mediumObj.getInt(medId)).andReturn(shareMedium);
+		AndroidMock.expect(mediumObj.getInt(medId)).andReturn(ShareType.FACEBOOK.getId());
 		AndroidMock.expect(mediumObj.isNull(medium)).andReturn(false);
 		AndroidMock.expect(mediumObj.has(medium)).andReturn(true);
-		AndroidMock.expect(mediumObj.getString(medium)).andReturn(mediumName);
+		AndroidMock.expect(mediumObj.getString(medium)).andReturn(ShareType.FACEBOOK.getName());
 
 		action.setText(shareText);
-		action.setMedium(shareMedium);
-		action.setMediumName(mediumName);
+		action.setShareType(ShareType.FACEBOOK);
 
 		AndroidMock.replay(mediumObj);
 	}
@@ -101,19 +99,15 @@ public class ShareFactoryTest extends AbstractSocializeActionFactoryTest<Share, 
 	@Override
 	protected void setupToJSONExpectations() throws JSONException {
 
+		ShareType type = ShareType.FACEBOOK;
 		final String text = "Test Share";
-		final String medium_name = "medium_name";
-		int medium = 69;
 
 		AndroidMock.expect(action.getText()).andReturn(text);
 		AndroidMock.expect(json.put("text", text)).andReturn(json);
 
-		AndroidMock.expect(action.getMediumName()).andReturn(medium_name);
-		AndroidMock.expect(json.put("medium_name", medium_name)).andReturn(json);
-
-		AndroidMock.expect(action.getMedium()).andReturn(medium);
-		AndroidMock.expect(json.put("medium", medium)).andReturn(json);
-
+		AndroidMock.expect(action.getShareType()).andReturn(type);
+		AndroidMock.expect(json.put("medium_name", type.getName())).andReturn(json);
+		AndroidMock.expect(json.put("medium", type.getId())).andReturn(json);
 	}
 
 	@Override

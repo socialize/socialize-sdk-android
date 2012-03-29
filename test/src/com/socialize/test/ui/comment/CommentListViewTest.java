@@ -1,16 +1,13 @@
 package com.socialize.test.ui.comment;
 
 import java.util.List;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.location.Location;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
@@ -237,8 +234,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		final PublicSocialize socialize = new PublicSocialize() {
 			
 			@Override
-			public void addComment(Activity activity, Comment comment, Location location, ShareOptions shareOptions, CommentAddListener commentAddListener) {
-				// call onCreate manually for the test.
+			public void addComment(Activity activity, Comment comment, ShareOptions shareOptions, CommentAddListener commentAddListener) {
 				assertEquals(commentString, comment.getText());
 				commentAddListener.onCreate(comment);
 			}
@@ -259,7 +255,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 			}
 
 			@Override
-			protected Comment newComment() {
+			public Comment newComment() {
 				return comment;
 			}
 		};

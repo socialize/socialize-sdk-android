@@ -83,7 +83,7 @@ public class SocializeUIInstanceTests2 extends SocializeUIActivityTest {
 		PublicSocialize socialize = new PublicSocialize() {
 
 			@Override
-			protected Intent newIntent(Activity context, Class<?> cls) {
+			public Intent newIntent(Activity context, Class<?> cls) {
 				addResult(cls);
 				return intent;
 			}
@@ -126,7 +126,7 @@ public class SocializeUIInstanceTests2 extends SocializeUIActivityTest {
 		PublicSocialize socialize = new PublicSocialize() {
 
 			@Override
-			protected Intent newIntent(Activity context, Class<?> cls) {
+			public Intent newIntent(Activity context, Class<?> cls) {
 				addResult(cls);
 				return intent;
 			}
@@ -166,7 +166,7 @@ public class SocializeUIInstanceTests2 extends SocializeUIActivityTest {
 		PublicSocialize socialize = new PublicSocialize() {
 
 			@Override
-			protected Intent newIntent(Activity context, Class<?> cls) {
+			public Intent newIntent(Activity context, Class<?> cls) {
 				addResult(cls);
 				return intent;
 			}
@@ -218,7 +218,7 @@ public class SocializeUIInstanceTests2 extends SocializeUIActivityTest {
 		PublicSocialize socialize = new PublicSocialize() {
 
 			@Override
-			protected Intent newIntent(Activity context, Class<?> cls) {
+			public Intent newIntent(Activity context, Class<?> cls) {
 				addResult(cls);
 				return intent;
 			}

@@ -1,7 +1,5 @@
 package com.socialize.test.mock;
 
-import android.location.Location;
-
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.CommentSystem;
 import com.socialize.entity.Application;

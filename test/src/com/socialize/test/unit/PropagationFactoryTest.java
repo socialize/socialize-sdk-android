@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.socialize.api.action.ShareType;
 import com.socialize.entity.Propagation;
 import com.socialize.entity.PropagationFactory;
 import com.socialize.networks.SocialNetwork;
@@ -40,8 +41,8 @@ public class PropagationFactoryTest extends SocializeUnitTest {
 	public void testToJSONNoParams() throws JSONException {
 		
 		Propagation prop = new Propagation();
-		List<SocialNetwork> networks = new ArrayList<SocialNetwork>(1);
-		networks.add(SocialNetwork.TWITTER);
+		List<ShareType> networks = new ArrayList<ShareType>(1);
+		networks.add(ShareType.TWITTER);
 		prop.setThirdParties(networks);
 		
 		PropagationFactory factory = new PropagationFactory();

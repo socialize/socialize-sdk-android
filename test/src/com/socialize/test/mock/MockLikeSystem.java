@@ -1,7 +1,5 @@
 package com.socialize.test.mock;
 
-import android.location.Location;
-
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.LikeSystem;
 import com.socialize.entity.Entity;
@@ -15,9 +13,9 @@ public class MockLikeSystem extends MockSystem<Like> implements LikeSystem {
 		super(new Like());
 	}
 
+
 	@Override
-	public void addLike(SocializeSession session, Entity entity, Location location, ShareOptions shareOptions, LikeListener listener) {
-//		action.setEntity(entity);
+	public void addLike(SocializeSession session, Entity entity, ShareOptions shareOptions, LikeListener listener) {
 		if(listener != null) listener.onCreate(action);
 	}
 

@@ -22,19 +22,16 @@
 package com.socialize.test.unit;
 
 import java.util.Locale;
-
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.test.mock.MockContext;
 import android.test.mock.MockPackageManager;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.Socialize;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.AppUtils;
 import com.socialize.util.DefaultAppUtils;
-import com.socialize.util.DeviceUtils;
 
 /**
  * @author jasonpolites
@@ -67,12 +64,9 @@ public class DeviceUtilsTest extends SocializeActivityTest {
 	}
 
 	public void testDeviceUtilsUserAgentString() {
-		DeviceUtils utils = new DeviceUtils();
 		DefaultAppUtils appUtils = new DefaultAppUtils();
 		appUtils.init(getActivity());
-		utils.setAppUtils(appUtils);
-		utils.init(getActivity());
-		String userAgentString = utils.getUserAgentString();
+		String userAgentString = appUtils.getUserAgentString();
 		assertEquals("Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_" + Locale.getDefault().getCountry() + "; BundleID/com.socialize.sample;", userAgentString);
 	}
 

@@ -70,11 +70,6 @@ public class MockSocializeUI implements SocializeUI {
 	public void showActionDetailViewForResult(Activity context, User user, SocializeAction action, int requestCode) {}
 
 	@Override
-	public Drawable getDrawable(String name, int density, boolean eternal) {
-		return null;
-	}
-
-	@Override
 	public Drawable getDrawable(String name, boolean eternal) {
 		return null;
 	}

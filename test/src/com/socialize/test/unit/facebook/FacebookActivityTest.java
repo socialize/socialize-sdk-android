@@ -23,7 +23,6 @@ package com.socialize.test.unit.facebook;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.facebook.FacebookActivity;
@@ -36,7 +35,6 @@ import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.ListenerHolder;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.DialogFactory;
-import com.socialize.util.Drawables;
 
 /**
  * @author Jason Polites

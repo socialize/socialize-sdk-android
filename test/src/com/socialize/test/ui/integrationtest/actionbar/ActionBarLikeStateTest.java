@@ -2,13 +2,10 @@ package com.socialize.test.ui.integrationtest.actionbar;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.test.ActivityInstrumentationTestCase2;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
@@ -63,8 +60,8 @@ public class ActionBarLikeStateTest extends ActivityInstrumentationTestCase2<Act
 			int callCount = 0;
 
 			@Override
-			public void addLike(SocializeSession session, Entity entity, Location location, ShareOptions options, LikeListener listener) {
-				super.addLike(session, entity, location, options, listener);
+			public void addLike(SocializeSession session, Entity entity, ShareOptions options, LikeListener listener) {
+				super.addLike(session, entity, options, listener);
 			}
 
 			@Override

@@ -60,7 +60,7 @@ public class SocializeBroadcastReceiverTest extends SocializeUnitTest {
 		
 		PublicSocialize receiver = new PublicSocialize() {
 			@Override
-			protected WakeLock getWakeLock() {
+			public WakeLock getWakeLock() {
 				return wakeLock;
 			}
 		};

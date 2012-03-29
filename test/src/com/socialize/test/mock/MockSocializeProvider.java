@@ -67,11 +67,6 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 	}
 
 	@Override
-	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderType authProviderType, String appId3rdParty) throws SocializeException {
-		return new MockSocializeSession();
-	}
-
-	@Override
 	public boolean validateSession(SocializeSession loaded, AuthProviderData data) {
 		return true;
 	}

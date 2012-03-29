@@ -2,7 +2,6 @@ package com.socialize.suite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-
 import com.socialize.test.blackbox.AuthProviderDataTest;
 import com.socialize.test.blackbox.CommentFactoryBlackboxTest;
 import com.socialize.test.blackbox.DeviceUtilsBlackboxTest;
@@ -28,12 +27,10 @@ import com.socialize.test.ui.BaseViewTest;
 import com.socialize.test.ui.CommentAdapterTest;
 import com.socialize.test.ui.DateUtilsTest;
 import com.socialize.test.ui.DialogErrorHandlerTest;
-import com.socialize.test.ui.EntityViewTest;
 import com.socialize.test.ui.ProgressDialogFactoryTest;
 import com.socialize.test.ui.SocializeActivityTestCase;
 import com.socialize.test.ui.SocializeButtonTest;
 import com.socialize.test.ui.SocializeLaunchActivityTest;
-import com.socialize.test.ui.SocializeUIInstanceTests;
 import com.socialize.test.ui.SocializeUIInstanceTests2;
 import com.socialize.test.ui.SocializeViewTest;
 import com.socialize.test.ui.actionbar.SliderActionBarListenerTest;
@@ -75,12 +72,10 @@ public class DiagnosisSuite extends TestSuite {
 		suite.addTestSuite(CommentAdapterTest.class);
 		suite.addTestSuite(DateUtilsTest.class);
 		suite.addTestSuite(DialogErrorHandlerTest.class);
-		suite.addTestSuite(EntityViewTest.class);
 		suite.addTestSuite(ProgressDialogFactoryTest.class);
 		suite.addTestSuite(SocializeActivityTestCase.class);
 		suite.addTestSuite(SocializeButtonTest.class);
 		suite.addTestSuite(SocializeLaunchActivityTest.class);
-		suite.addTestSuite(SocializeUIInstanceTests.class);
 		suite.addTestSuite(SocializeUIInstanceTests2.class);
 		suite.addTestSuite(SocializeViewTest.class);
 		suite.addTestSuite(SliderActionBarListenerTest.class);
