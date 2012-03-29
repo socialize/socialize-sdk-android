@@ -28,7 +28,7 @@ import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.entity.AbstractEntityFactory;
 import com.socialize.entity.EntityStatsImpl;
-import com.socialize.sample.mocks.MockEntity;
+import com.socialize.test.mock.MockEntity;
 
 /**
  * @author Jason Polites

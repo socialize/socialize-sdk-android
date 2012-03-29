@@ -39,6 +39,8 @@ import com.socialize.entity.Entity;
 import com.socialize.entity.EntityFactory;
 import com.socialize.entity.Propagation;
 import com.socialize.entity.PropagationFactory;
+import com.socialize.entity.PropagationInfoResponse;
+import com.socialize.entity.PropagationInfoResponseFactory;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.SocializeActionFactory;
 import com.socialize.entity.SocializeObjectFactory;
@@ -56,17 +58,20 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 	protected User user;
 	protected Entity entity;
 	protected Propagation propagation;
+	protected PropagationInfoResponse propagationInfoResponse;
 
 	protected JSONObject json;
 	protected JSONObject jsonApplication;
 	protected JSONObject jsonPropagation;
 	protected JSONObject jsonUser;
 	protected JSONObject jsonEntity;
+	protected JSONObject jsonPropagationResponse;
 
 	protected ApplicationFactory appFactoryMock;
 	protected UserFactory userFactoryMock;
 	protected EntityFactory entityFactoryMock;
 	protected PropagationFactory propagatorFactoryMock;
+	protected PropagationInfoResponseFactory propagationInfoResponseFactory;
 
 	protected Double lat = new Double(10);
 	protected Double lon = new Double(20);
@@ -82,10 +87,12 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		User.class, 
 		Entity.class, 
 		Propagation.class, 
+		PropagationInfoResponse.class,
 		ApplicationFactory.class, 
 		UserFactory.class, 
 		EntityFactory.class, 
 		PropagationFactory.class,
+		PropagationInfoResponseFactory.class,
 		JSONArray.class,
 		JSONObject.class})
 	@Override
@@ -98,7 +105,9 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		user = AndroidMock.createMock(User.class);
 		entity = AndroidMock.createMock(Entity.class);
 		propagation = AndroidMock.createMock(Propagation.class);
+		propagationInfoResponse = AndroidMock.createMock(PropagationInfoResponse.class);
 		jsonPropagation = AndroidMock.createNiceMock(JSONObject.class);
+		jsonPropagationResponse = AndroidMock.createNiceMock(JSONObject.class);
 		jsonApplication = AndroidMock.createNiceMock(JSONObject.class);
 		jsonUser = AndroidMock.createNiceMock(JSONObject.class);
 		jsonEntity = AndroidMock.createNiceMock(JSONObject.class);
@@ -113,6 +122,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		userFactoryMock = AndroidMock.createMock(UserFactory.class);
 		entityFactoryMock = AndroidMock.createMock(EntityFactory.class);
 		propagatorFactoryMock = AndroidMock.createMock(PropagationFactory.class);
+		propagationInfoResponseFactory = AndroidMock.createMock(PropagationInfoResponseFactory.class);
 
 		json = AndroidMock.createMock(JSONObject.class);
 		action = AndroidMock.createMock(getActionClass());
@@ -122,6 +132,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		factory.setEntityFactory(entityFactoryMock);
 		factory.setUserFactory(userFactoryMock);
 		factory.setPropagationFactory(propagatorFactoryMock);
+		factory.setPropagationInfoResponseFactory(propagationInfoResponseFactory);
 	}
 
 	@UsesMocks({ SocializeObjectFactory.class, JSONObject.class })
@@ -130,12 +141,13 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		AndroidMock.expect(appFactoryMock.toJSON(this.application)).andReturn(jsonApplication);
 		AndroidMock.expect(userFactoryMock.toJSON(this.user)).andReturn(jsonUser);
 		AndroidMock.expect(entityFactoryMock.toJSON(this.entity)).andReturn(jsonEntity);
-		AndroidMock.expect(propagatorFactoryMock.toJSON(this.propagation)).andReturn(jsonPropagation);
+		AndroidMock.expect(propagatorFactoryMock.toJSON(this.propagation)).andReturn(jsonPropagation).times(2);
 
 		AndroidMock.expect(json.put("application", jsonApplication)).andReturn(json);
 		AndroidMock.expect(json.put("user", jsonUser)).andReturn(json);
 		AndroidMock.expect(json.put("entity", jsonEntity)).andReturn(json);
 		AndroidMock.expect(json.put("propagation", jsonPropagation)).andReturn(json);
+		AndroidMock.expect(json.put("propagation_info_request", jsonPropagation)).andReturn(json);
 
 		AndroidMock.expect(json.put("id", id)).andReturn(json);
 		AndroidMock.expect(json.put("lat", lat)).andReturn(json);
@@ -153,18 +165,12 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		AndroidMock.expect(action.getLon()).andReturn(lon);
 		AndroidMock.expect(action.getDate()).andReturn(date.getTime());
 		AndroidMock.expect(action.isLocationShared()).andReturn(true);
+		AndroidMock.expect(action.getPropagationInfoRequest()).andReturn(propagation);
 
 		AndroidMock.expect(entity.getKey()).andReturn(entity_key);
 		AndroidMock.expect(entity.getName()).andReturn(entity_name);
 
-		AndroidMock.replay(entity);
-		AndroidMock.replay(jsonApplication);
-		AndroidMock.replay(jsonUser);
-		AndroidMock.replay(jsonEntity);
-		AndroidMock.replay(appFactoryMock);
-		AndroidMock.replay(userFactoryMock);
-		AndroidMock.replay(entityFactoryMock);
-		AndroidMock.replay(propagatorFactoryMock);
+		AndroidMock.replay(entity,jsonApplication,jsonUser,jsonEntity,appFactoryMock,userFactoryMock,entityFactoryMock,propagatorFactoryMock);
 
 		setupToJSONExpectations();
 
@@ -172,10 +178,11 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		AndroidMock.replay(action);
 
 		factory.toJSON(action);
+		
+		AndroidMock.verify(entity,jsonApplication,jsonUser,jsonEntity,appFactoryMock,userFactoryMock,entityFactoryMock,propagatorFactoryMock);
 
 		doToJSONVerify();
 
-		AndroidMock.verify(entity);
 		AndroidMock.verify(json);
 		AndroidMock.verify(action);
 	}
@@ -194,6 +201,9 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 
 		AndroidMock.expect(json.has("application")).andReturn(true);
 		AndroidMock.expect(json.isNull("application")).andReturn(false);
+		
+		AndroidMock.expect(json.has("propagation_info_response")).andReturn(true);
+		AndroidMock.expect(json.isNull("propagation_info_response")).andReturn(false);
 
 		AndroidMock.expect(json.has("user")).andReturn(true);
 		AndroidMock.expect(json.isNull("user")).andReturn(false);
@@ -210,14 +220,18 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		AndroidMock.expect(json.getJSONObject("application")).andReturn(jsonApplication);
 		AndroidMock.expect(json.getJSONObject("user")).andReturn(jsonUser);
 		AndroidMock.expect(json.getJSONObject("entity")).andReturn(jsonEntity);
+		AndroidMock.expect(json.getJSONObject("propagation_info_response")).andReturn(jsonPropagationResponse);
 
 		AndroidMock.expect(appFactoryMock.fromJSON(jsonApplication)).andReturn(application);
 		AndroidMock.expect(userFactoryMock.fromJSON(jsonUser)).andReturn(user);
 		AndroidMock.expect(entityFactoryMock.fromJSON(jsonEntity)).andReturn(entity);
+		AndroidMock.expect(propagationInfoResponseFactory.fromJSON(jsonPropagationResponse)).andReturn(propagationInfoResponse);
 
 		action.setApplication(application);
 		action.setUser(user);
 		action.setEntity(entity);
+		action.setEntityKey(null);
+		action.setPropagationInfoResponse(propagationInfoResponse);
 
 		AndroidMock.expect(json.has("lat")).andReturn(true);
 		AndroidMock.expect(json.has("lng")).andReturn(true);
@@ -231,9 +245,7 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		AndroidMock.expect((Double) json.getDouble("lng")).andReturn(lon);
 		AndroidMock.expect(json.getString("date")).andReturn(DATE_FORMAT_STRING.format(date));
 
-		AndroidMock.replay(appFactoryMock);
-		AndroidMock.replay(userFactoryMock);
-		AndroidMock.replay(entityFactoryMock);
+		AndroidMock.replay(appFactoryMock, userFactoryMock, entityFactoryMock, propagatorFactoryMock, propagationInfoResponseFactory);
 
 		setupFromJSONExpectations();
 
@@ -243,6 +255,8 @@ public abstract class AbstractSocializeActionFactoryTest<T extends SocializeActi
 		factory.fromJSON(json);
 
 		doFromJSONVerify();
+		
+		AndroidMock.verify(appFactoryMock, userFactoryMock, entityFactoryMock, propagatorFactoryMock, propagationInfoResponseFactory);
 
 		AndroidMock.verify(json);
 		AndroidMock.verify(action);

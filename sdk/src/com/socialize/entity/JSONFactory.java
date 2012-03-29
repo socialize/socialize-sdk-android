@@ -84,11 +84,25 @@ public abstract class JSONFactory<T extends Object> {
 		return null;
 	}
 	
+	protected Double getDouble(JSONObject obj, String key) throws JSONException {
+		if(exists(obj, key)) {
+			return obj.getDouble(key);
+		}
+		return null;
+	}
+	
 	protected boolean getBoolean(JSONObject obj, String key, boolean defaultValue) throws JSONException {
 		if(exists(obj, key)) {
 			return obj.getBoolean(key);
 		}
 		return defaultValue;
+	}
+	
+	protected JSONObject getJSONObject(JSONObject obj, String key) throws JSONException {
+		if(exists(obj, key)) {
+			return obj.getJSONObject(key);
+		}
+		return null;
 	}	
 	
 	protected int getInt(JSONObject obj, String key) throws JSONException {

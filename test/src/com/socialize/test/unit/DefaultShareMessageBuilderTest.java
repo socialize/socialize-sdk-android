@@ -28,6 +28,7 @@ import com.socialize.api.DefaultShareMessageBuilder;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
+import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.User;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.util.AppUtils;
@@ -105,24 +106,25 @@ public class DefaultShareMessageBuilderTest extends SocializeUnitTest {
 		AndroidMock.verify(config);
 	}
 
-	@UsesMocks({ AppUtils.class })
+	@UsesMocks({ AppUtils.class, PropagationInfo.class })
 	private void doTestBuildShareMessage(SocializeConfig config, String expected) {
 
 		AppUtils appUtils = AndroidMock.createMock(AppUtils.class);
+		PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
 
 		final String entityLink = "foobar_entity_link";
 		final String comment = "foobar_comment";
 		final String url = "foo_url";
 		final String name = "bar_name";
 
-		AndroidMock.expect(appUtils.getAppUrl()).andReturn(url);
-		AndroidMock.expect(appUtils.getAppName()).andReturn(name);
+		AndroidMock.expect(info.getAppUrl()).andReturn(url);
+		AndroidMock.expect(appUtils.getAppName()).andReturn(name).anyTimes();
 
-		AndroidMock.replay(appUtils);
+		AndroidMock.replay(appUtils, info);
 
 		DefaultShareMessageBuilder builder = new DefaultShareMessageBuilder() {
 			@Override
-			public String getEntityLink(Entity entity, boolean html) {
+			public String getEntityLink(Entity entity, PropagationInfo urlSet, boolean html) {
 				return entityLink;
 			}
 		};
@@ -130,12 +132,10 @@ public class DefaultShareMessageBuilderTest extends SocializeUnitTest {
 		builder.setAppUtils(appUtils);
 		builder.setConfig(config);
 
-		String actual = builder.buildShareMessage(null, comment, true, true);
+		String actual = builder.buildShareMessage(null, info, comment, true, true);
 
-		AndroidMock.verify(appUtils);
+		AndroidMock.verify(appUtils, info);
 
 		assertEquals(expected, actual);
-
 	}
-
 }

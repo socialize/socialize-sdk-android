@@ -55,10 +55,8 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	public static final String AUTO_POST_FACEBOOK = "auto_post_fb";
 	public static final String AUTO_POST_TWITTER = "auto_post_tw";
 	
-	@Deprecated
 	public static final String AUTO_POST_LIKES_FACEBOOK = "auto_post_likes_fb";
 	
-	@Deprecated
 	public static final String AUTO_POST_COMMENTS_FACEBOOK = "auto_post_comments_fb";
 	
 	public static final String NOTIFICATIONS_ENABLED = "notifications_enabled";

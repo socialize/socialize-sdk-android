@@ -97,21 +97,6 @@ public class CommentListView extends BaseView {
 		this.entity = entity;
 	}
 	
-	@Deprecated
-	public CommentListView(Context context, String entityKey, String entityName, boolean useLink) {
-		this(context, Entity.newInstance(entityKey, entityName));
-	}
-	
-	@Deprecated
-	public CommentListView(Context context, String entityKey) {
-		this(context, entityKey, null, true);
-	}	
-	
-	@Deprecated
-	public CommentListView(Context context) {
-		super(context);
-	}
-
 	public void init() {
 
 		LayoutParams fill = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
@@ -283,12 +268,6 @@ public class CommentListView extends BaseView {
 					doPostComment(text, shareLocation, subscribe, networks);
 				}
 			}
-
-			@Deprecated
-			@Override
-			public void onComment(String text, boolean autoPostToFacebook, boolean shareLocation, boolean subscribe) {
-				onComment(text, shareLocation, subscribe, (autoPostToFacebook) ? SocialNetwork.FACEBOOK : null);
-			}
 		});
 	}
 	
@@ -315,7 +294,7 @@ public class CommentListView extends BaseView {
 		comment.setNotificationsEnabled(subscribe);
 		comment.setEntity(entity);
 		
-		getSocialize().addComment(getActivity(), comment, null, options, new CommentAddListener() {
+		getSocialize().addComment(getActivity(), comment, options, new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -748,12 +727,6 @@ public class CommentListView extends BaseView {
 		this.notificationEnabledOptionFactory = notificationEnabledOptionFactory;
 	}
 
-	@Deprecated
-	public void setEntityKey(String entityKey) {
-		if(entity == null) entity = new Entity();
-		entity.setKey(entityKey);
-	}
-
 	public Entity getEntity() {
 		return entity;
 	}
@@ -808,15 +781,6 @@ public class CommentListView extends BaseView {
 
 	public void setAuthRequestDialogFactory(AuthRequestDialogFactory authRequestDialogFactory) {
 		this.authRequestDialogFactory = authRequestDialogFactory;
-	}
-	
-	@Deprecated
-	public void setUseLink(boolean useLink) {}
-
-	@Deprecated
-	public void setEntityName(String entityName) {
-		if(entity == null) entity = new Entity();
-		entity.setName(entityName);
 	}
 	
 	/**

@@ -24,13 +24,10 @@ package com.socialize.networks.facebook;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.app.Activity;
 import android.os.Bundle;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.ShareMessageBuilder;
@@ -38,6 +35,7 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.facebook.FacebookSessionStore;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
+import com.socialize.entity.PropagationInfo;
 import com.socialize.error.SocializeException;
 import com.socialize.facebook.AsyncFacebookRunner;
 import com.socialize.facebook.Facebook;
@@ -60,15 +58,15 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	private ShareMessageBuilder shareMessageBuilder;
 	private SocializeConfig config;
 	
-	@Override
-	public void postLike(Activity parent, Entity entity, String comment, SocialNetworkListener listener) {
 
+	@Override
+	public void postLike(Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkListener listener) {
 		String linkName = appUtils.getAppName();
 		
 		StringBuilder builder = new StringBuilder();
 		
 		builder.append("Likes ");
-		builder.append(shareMessageBuilder.getEntityLink(entity, false));
+		builder.append(shareMessageBuilder.getEntityLink(entity, propInfo, false));
 		builder.append("\n\n");
 		builder.append("Posted from ");
 		builder.append(linkName);
@@ -77,17 +75,16 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			builder.append(" using Socialize for Android. http://www.getsocialize.com");
 		}
 		
-		
-		post(parent, builder.toString(), listener);		
+		post(parent, builder.toString(), propInfo, listener);		
 	}
 
 	@Override
-	public void postComment(Activity parent, Entity entity, String comment, SocialNetworkListener listener) {
+	public void postComment(Activity parent, Entity entity, String comment, PropagationInfo propInfo, SocialNetworkListener listener) {
 		String linkName = appUtils.getAppName();
 		
 		StringBuilder builder = new StringBuilder();
 			
-		builder.append(shareMessageBuilder.getEntityLink(entity, false));
+		builder.append(shareMessageBuilder.getEntityLink(entity, propInfo, false));
 		builder.append("\n\n");
 		builder.append(comment);
 		builder.append("\n\n");
@@ -98,25 +95,15 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			builder.append(" using Socialize for Android. http://www.getsocialize.com");
 		}
 		
-		post(parent, builder.toString(), listener);		
-	}
-
-	@Deprecated
-	@Override
-	public void postLike(final Activity parent, String entityKey, String entityName, String comment, SocialNetworkListener listener) {
-		postLike(parent, Entity.newInstance(entityKey, entityName), comment, listener);
-	}
-	
-	@Override
-	public void postComment(final Activity parent, String entityKey, String entityName, String comment, SocialNetworkListener listener) {
-		postComment(parent, Entity.newInstance(entityKey, entityName), comment, listener);
+		post(parent, builder.toString(), propInfo, listener);		
 	}
 
 	@Override
-	public void post(final Activity parent, String message, final SocialNetworkListener listener) {
+	public void post(Activity parent, String message, PropagationInfo propInfo, SocialNetworkListener listener) {
+		
 		String caption = "Download the app now to join the conversation.";
 		String linkName = appUtils.getAppName();
-		String link = appUtils.getAppUrl();
+		String link = propInfo.getAppUrl();
 		String appId = getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
 		
 		if(!StringUtils.isEmpty(appId)) {
@@ -125,9 +112,9 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		else {
 			String msg = "Cannot post message to Facebook.  No app id found.  Make sure you specify facebook.app.id in socialize.properties";
 			onError(parent, msg, new SocializeException(msg), listener);
-		}
+		}		
 	}
-	
+
 	@Override
 	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, final SocialNetworkListener listener) {
 		Bundle params = new Bundle();

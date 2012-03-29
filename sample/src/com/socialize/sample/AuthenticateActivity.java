@@ -22,7 +22,6 @@
 package com.socialize.sample;
 
 import java.util.List;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -33,10 +32,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.socialize.Socialize;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.User;
 import com.socialize.entity.UserAuthData;
@@ -259,7 +258,9 @@ public class AuthenticateActivity extends SocializeActivity {
 			final ProgressDialog authProgress = SafeProgressDialog.show(v.getContext(), "Authenticating", "Please wait...");
 
 			if(fb) {
-				Socialize.getSocialize().authenticate(AuthenticateActivity.this, consumerKey, consumerSecret, AuthProviderType.FACEBOOK, facebookAppId, new AuthListener(v, authProgress));
+				FacebookAuthProviderInfo fbInfo = new FacebookAuthProviderInfo();
+				fbInfo.setAppId(facebookAppId);
+				Socialize.getSocialize().authenticate(AuthenticateActivity.this, consumerKey, consumerSecret, fbInfo, new AuthListener(v, authProgress));
 			}
 			else {
 				Socialize.getSocialize().authenticate(AuthenticateActivity.this, consumerKey, consumerSecret, new AuthListener(v, authProgress));

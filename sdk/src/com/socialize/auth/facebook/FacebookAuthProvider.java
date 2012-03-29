@@ -23,8 +23,6 @@ package com.socialize.auth.facebook;
 
 import android.content.Context;
 import android.content.Intent;
-
-import com.socialize.api.SocializeAuthRequest;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.error.SocializeException;
@@ -90,18 +88,6 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 		context.startActivity(i);		
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.socialize.auth.AuthProvider#authenticate()
-	 */
-	@Deprecated
-	@Override
-	public void authenticate(SocializeAuthRequest authRequest, String appId, final AuthProviderListener listener) {
-		FacebookAuthProviderInfo info = new FacebookAuthProviderInfo();
-		info.setAppId(appId);
-		authenticate(info, listener);
-	}
-
 	@Override
 	public void clearCache(Context context, FacebookAuthProviderInfo info) {
 		Facebook mFacebook = getFacebook(info.getAppId());
@@ -122,14 +108,6 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 				facebookSessionStore.clear(context);
 			}
 		}
-	}
-
-	@Deprecated
-	@Override
-	public void clearCache(Context context, String appId) {
-		FacebookAuthProviderInfo info = new FacebookAuthProviderInfo();
-		info.setAppId(appId);
-		clearCache(context, info);
 	}
 	
 	protected Facebook getFacebook(String appId) {

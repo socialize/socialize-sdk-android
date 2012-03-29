@@ -24,12 +24,12 @@ package com.socialize.api.action;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
-
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Entity;
+import com.socialize.entity.SocializeAction;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
+import com.socialize.share.ShareHandlerListener;
 import com.socialize.util.DelegateOnly;
 
 /**
@@ -51,38 +51,24 @@ public interface ShareSystem {
 	public void getSharesByUser(SocializeSession session, long userId, ShareListener listener);
 	
 	/**
-	 * Shares the given entity to the given social network
+	 * Returns true if sharing to the given share type is supported on this device.
+	 * @param shareType
+	 * @return
+	 */
+	public boolean canShare(Context context, ShareType shareType);
+	
+	/**
+	 * Shares the given action to the given social network.
 	 * @param context The current context.
+	 * @param session The current user session.
 	 * @param entity The entity to be shared.
+	 * @param urlSet The set of urls to be used in the share.
 	 * @param comment The comment provided by the user.
-	 * @param location The location of the user (may be null)
+	 * @param location The location of the user (may be null).
 	 * @param destination The network on which to post the share.
 	 * @param autoAuth If true authentication will be attempted automatically.
+	 * @param actionType The type of action being shared.
 	 * @param listener A listener to handle callbacks from the post.
 	 */
-	public void shareEntity(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, boolean autoAuth, SocialNetworkListener listener);
-	
-	/**
-	 * Shares a single comment to a given social network
-	 * @param context
-	 * @param entity
-	 * @param comment
-	 * @param location
-	 * @param destination
-	 * @param autoAuth If true authentication will be attempted automatically.
-	 * @param listener
-	 */
-	public void shareComment(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, boolean autoAuth, SocialNetworkListener listener);
-	
-	/**
-	 * Shares a like to a given social network.
-	 * @param context
-	 * @param entity
-	 * @param location
-	 * @param destination
-	 * @param autoAuth If true authentication will be attempted automatically.
-	 * @param listener
-	 */
-	public void shareLike(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, boolean autoAuth, SocialNetworkListener listener);
-	
+	public void share(Activity context, SocializeSession session, SocializeAction action, String comment, Location location, ShareType destination, boolean autoAuth, ShareHandlerListener listener);
 }

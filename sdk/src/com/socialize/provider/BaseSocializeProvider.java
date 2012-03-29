@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -33,9 +32,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.content.Context;
-
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeRequestFactory;
 import com.socialize.api.SocializeSession;
@@ -46,12 +43,10 @@ import com.socialize.api.action.ActionType;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderInfoBuilder;
-import com.socialize.auth.AuthProviderInfoFactory;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.DefaultUserProviderCredentials;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
-import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.ActionError;
 import com.socialize.entity.ErrorFactory;
@@ -199,7 +194,6 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 		return false;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public boolean validateSessionAuthDataLegacy(SocializeSession loaded, AuthProviderData data) {
 		
 		if(data.getAuthProviderType().equals(AuthProviderType.SOCIALIZE)) {
@@ -219,36 +213,6 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 		}
 		
 		return false;
-	}
-
-	@Deprecated
-	@Override
-	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderType authProviderType, String appId3rdParty) throws SocializeException {
-		if(authProviderType.equals(AuthProviderType.FACEBOOK)) {
-			AuthProviderData data = newAuthProviderData();
-			AuthProviderInfoFactory<FacebookAuthProviderInfo> factory = authProviderInfoBuilder.getFactory(authProviderType);
-			FacebookAuthProviderInfo info = factory.getInstance();
-			info.setAppId(appId3rdParty);
-			data.setAuthProviderInfo(info);
-			
-			WritableSession session = loadSession(endpoint, key, secret);
-			
-			if(validateSession(session, data)) {
-				return session;
-			}
-		}
-		else {
-			throw new UnsupportedOperationException("Method not supported for auth provider [" +
-					authProviderType +
-					"].");
-		}
-		
-		return null;
-	}
-	
-	@Deprecated
-	protected FacebookAuthProviderInfo newFacebookAuthProviderInfo() {
-		return new FacebookAuthProviderInfo();
 	}
 	
 	// Mockable

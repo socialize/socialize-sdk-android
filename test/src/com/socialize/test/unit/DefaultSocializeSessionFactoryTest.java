@@ -37,6 +37,7 @@ import com.socialize.test.SocializeUnitTest;
  */
 public class DefaultSocializeSessionFactoryTest extends SocializeUnitTest {
 
+	@Deprecated
 	@UsesMocks({ SocializeConfig.class, AuthProviders.class, AuthProvider.class })
 	public void testSessionFactory() {
 

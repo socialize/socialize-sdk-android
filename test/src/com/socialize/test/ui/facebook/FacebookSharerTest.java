@@ -23,7 +23,6 @@ package com.socialize.test.ui.facebook;
 
 import android.app.Activity;
 import android.content.Context;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
@@ -34,6 +33,7 @@ import com.socialize.auth.AuthProviderInfoFactory;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
+import com.socialize.entity.PropagationInfo;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
@@ -91,7 +91,7 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		AndroidMock.replay(config);
 		
 		// Params can be null.. not in the path to test
-		sharer.share(getContext(), null, null, null, ActionType.COMMENT, autoAuth);
+		sharer.share(getContext(), null, null, null, autoAuth, ActionType.COMMENT, null);
 		
 		AndroidMock.verify(socialize);
 		AndroidMock.verify(config);
@@ -149,7 +149,7 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 			}
 
 			@Override
-			public void doShare(Activity context, Entity entity, String comment, SocialNetworkListener listener, ActionType type) {
+			public void doShare(Activity context, Entity entity, PropagationInfo urlSet, String comment, SocialNetworkListener listener, ActionType type) {
 				addResult("doShare");
 			}
 		};
@@ -161,7 +161,7 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		AndroidMock.replay(authProviderInfoFactory);
 		
 		// Params can be null.. not in the path to test
-		sharer.share(getContext(), null, null, null, ActionType.COMMENT, autoAuth);
+		sharer.share(getContext(), null, null, null, autoAuth, ActionType.COMMENT, null);
 		
 		AndroidMock.verify(config);		
 		AndroidMock.verify(authProviderInfoFactory);
@@ -214,10 +214,11 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		AndroidMock.verify(listener);
 	}
 	
-	@UsesMocks({SocialNetworkListener.class, FacebookWallPoster.class}) 
+	@UsesMocks({SocialNetworkListener.class, FacebookWallPoster.class, PropagationInfo.class}) 
 	public void testDoShareComment() {
 		FacebookWallPoster facebookWallPoster = AndroidMock.createMock(FacebookWallPoster.class);
 		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
+		PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
 		
 		PublicFacebookSharer sharer = new PublicFacebookSharer();
 		sharer.setFacebookWallPoster(facebookWallPoster);
@@ -225,32 +226,45 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		final String comment = "foobar";
 		final Entity entity = Entity.newInstance("blah", null);
 		
-		listener.onBeforePost(getActivity(), SocialNetwork.FACEBOOK);
-		facebookWallPoster.postComment(getActivity(), entity, comment, listener);
+		facebookWallPoster.postComment(getActivity(), entity, comment, info, listener);
+		
+		AndroidMock.replay(facebookWallPoster, listener, info);
+		
+		sharer.doShare(getActivity(), entity, info, comment, listener, ActionType.COMMENT);
+		
+		AndroidMock.verify(facebookWallPoster, listener, info);
 	}
 	
-	@UsesMocks({SocialNetworkListener.class, FacebookWallPoster.class, ShareMessageBuilder.class}) 
+	@UsesMocks({SocialNetworkListener.class, FacebookWallPoster.class, ShareMessageBuilder.class, PropagationInfo.class}) 
 	public void testDoShareShare() {
 		FacebookWallPoster facebookWallPoster = AndroidMock.createMock(FacebookWallPoster.class);
 		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
 		ShareMessageBuilder shareMessageBuilder = AndroidMock.createMock(ShareMessageBuilder.class);
+		PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
 		
 		PublicFacebookSharer sharer = new PublicFacebookSharer();
 		sharer.setFacebookWallPoster(facebookWallPoster);
+		sharer.setShareMessageBuilder(shareMessageBuilder);
 		
 		final String comment = "foobar";
 		final String body = "foobar_body";
 		final Entity entity = Entity.newInstance("blah", null);
 		
-		listener.onBeforePost(getActivity(), SocialNetwork.FACEBOOK);
-		AndroidMock.expect(shareMessageBuilder.buildShareMessage( entity, comment, false, true)).andReturn(body);
-		facebookWallPoster.post(getActivity(), body, listener);
+		AndroidMock.expect(shareMessageBuilder.buildShareMessage( entity, info, comment, false, true)).andReturn(body);
+		facebookWallPoster.post(getActivity(), body, info, listener);
+		
+		AndroidMock.replay(facebookWallPoster, shareMessageBuilder, listener, info);
+
+		sharer.doShare(getActivity(), entity, info, comment, listener, ActionType.SHARE);
+		
+		AndroidMock.verify(facebookWallPoster, shareMessageBuilder, listener, info);
 	}
 	
-	@UsesMocks({SocialNetworkListener.class, FacebookWallPoster.class}) 
+	@UsesMocks({SocialNetworkListener.class, FacebookWallPoster.class, PropagationInfo.class}) 
 	public void testDoShareLike() {
 		FacebookWallPoster facebookWallPoster = AndroidMock.createMock(FacebookWallPoster.class);
 		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
+		PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
 		
 		PublicFacebookSharer sharer = new PublicFacebookSharer();
 		sharer.setFacebookWallPoster(facebookWallPoster);
@@ -258,27 +272,27 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		final String comment = "foobar";
 		final Entity entity = Entity.newInstance("blah", null);
 		
-		listener.onBeforePost(getActivity(), SocialNetwork.FACEBOOK);
-		facebookWallPoster.postLike(getActivity(), entity, comment, listener);
+		facebookWallPoster.postLike(getActivity(), entity, info, listener);
+		
+		AndroidMock.replay(facebookWallPoster, listener, info);
+		
+		sharer.doShare(getActivity(), entity, info, comment, listener, ActionType.LIKE);
+		
+		AndroidMock.verify(facebookWallPoster, listener, info);
 	}	
 	
 	public class PublicFacebookSharer extends FacebookSharer {
 
 		@Override
-		public void share(Activity context, Entity entity, String comment, SocialNetworkListener listener, ActionType type, boolean autoAuth) {
-			super.share(context, entity, comment, listener, type, autoAuth);
+		public void doShare(Activity context, Entity entity, PropagationInfo urlSet, String comment, SocialNetworkListener listener, ActionType type) {
+			super.doShare(context, entity, urlSet, comment, listener, type);
 		}
 
 		@Override
 		public void doError(SocializeException e, Activity parent, SocialNetworkListener listener) {
 			super.doError(e, parent, listener);
 		}
-
-		@Override
-		public void doShare(Activity context, Entity entity, String comment, SocialNetworkListener listener, ActionType type) {
-			super.doShare(context, entity, comment, listener, type);
-		}
-
+		
 		@Override
 		public SocializeService getSocialize() {
 			return super.getSocialize();

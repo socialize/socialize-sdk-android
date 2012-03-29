@@ -40,50 +40,6 @@ public class Entity extends SocializeObject implements Serializable {
 	
 	private String metaData;
 	
-	@Deprecated
-	public Integer getViews() {
-		return (entityStats == null) ? 0 : entityStats.getViews();
-	}
-	
-	@Deprecated
-	public void setViews(Integer views) {
-		if(entityStats == null) entityStats = new EntityStatsImpl();
-		((EntityStatsImpl)entityStats).setViews(views);			
-	}
-	
-	@Deprecated
-	public Integer getLikes() {
-		return (entityStats == null) ? 0 : entityStats.getLikes();
-	}
-	
-	@Deprecated
-	public void setLikes(Integer likes) {
-		if(entityStats == null) entityStats = new EntityStatsImpl();
-		((EntityStatsImpl)entityStats).setLikes(likes);				
-	}
-	
-	@Deprecated
-	public Integer getComments() {
-		return (entityStats == null) ? 0 : entityStats.getComments();
-	}
-	
-	@Deprecated
-	public void setComments(Integer comments) {
-		if(entityStats == null) entityStats = new EntityStatsImpl();
-		((EntityStatsImpl)entityStats).setComments(comments);
-	}
-	
-	@Deprecated
-	public Integer getShares() {
-		return (entityStats == null) ? 0 : entityStats.getShares();
-	}
-	
-	@Deprecated
-	public void setShares(Integer shares) {
-		if(entityStats == null) entityStats = new EntityStatsImpl();
-		((EntityStatsImpl)entityStats).setShares(shares);		
-	}
-	
 	public String getKey() {
 		return key;
 	}
@@ -131,17 +87,6 @@ public class Entity extends SocializeObject implements Serializable {
 		this.entityStats = stats;
 	}
 
-	/**
-	 * Convenience method to create a new Entity based on a key only.
-	 * @param key
-	 * @return
-	 * @deprecated use newInstance(String key, String name)
-	 */
-	@Deprecated
-	public static Entity fromkey(String key) {
-		return newInstance(key, null);
-	}
-	
 	public static Entity newInstance(String key, String name) {
 		Entity e = new Entity();
 		e.setKey(key);

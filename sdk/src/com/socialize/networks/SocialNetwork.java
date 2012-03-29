@@ -26,5 +26,17 @@ package com.socialize.networks;
  *
  */
 public enum SocialNetwork {
-	FACEBOOK, TWITTER;
+	
+	FACEBOOK (true),
+	TWITTER (false);
+	
+	private final boolean localPropagation;   
+	
+    SocialNetwork(boolean localPropagation) {
+		this.localPropagation = localPropagation;
+	}
+	
+	public boolean isLocalPropagation() {
+		return localPropagation;
+	}
 }

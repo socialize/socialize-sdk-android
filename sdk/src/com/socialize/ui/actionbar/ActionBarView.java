@@ -46,8 +46,6 @@ public class ActionBarView extends EntityView {
 	private ActionBarSliderFactory<ActionBarSliderView> sliderFactory;
 	private ActionBarListener actionBarListener;
 	
-	private boolean entityKeyIsUrl = true;
-	
 	private Entity entity;
 	
 	private OnActionBarEventListener onActionBarEventListener;
@@ -130,28 +128,6 @@ public class ActionBarView extends EntityView {
 		this.entity = entity;
 	}
 
-	@Deprecated
-	public String getEntityKey() {
-		return (entity == null) ? null : entity.getKey();
-	}
-
-	@Deprecated
-	public void setEntityKey(String entityKey) {
-		if(entity == null) entity = new Entity();
-		this.entity.setKey(entityKey);
-	}
-
-	@Deprecated
-	public String getEntityName() {
-		return (entity == null) ? null : entity.getName();
-	}
-
-	@Deprecated
-	public void setEntityName(String entityName) {
-		if(entity == null) entity = new Entity();
-		this.entity.setName(entityName);
-	}
-	
 	protected ActionBarSliderView getSlider() {
 		return slider;
 	}
@@ -175,16 +151,6 @@ public class ActionBarView extends EntityView {
 		return new ActionBarEditView(getContext());
 	}
 
-	@Deprecated
-	public boolean isEntityKeyUrl() {
-		return entityKeyIsUrl;
-	}
-
-	@Deprecated
-	public void setEntityKeyIsUrl(boolean entityKeyIsUrl) {
-		this.entityKeyIsUrl = entityKeyIsUrl;
-	}
-	
 	public void setOnActionBarEventListener(OnActionBarEventListener onActionBarEventListener) {
 		this.onActionBarEventListener = onActionBarEventListener;
 		setListeners();

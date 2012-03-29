@@ -50,12 +50,6 @@ public class User extends SocializeObject {
 	private boolean autoPostToFacebook = true;
 	private boolean autoPostToTwitter = true;
 	
-	@Deprecated
-	private boolean autoPostLikesFacebook;
-	
-	@Deprecated
-	private boolean autoPostCommentsFacebook;
-	
 	private boolean shareLocation = true;
 	private boolean notificationsEnabled = true;
 	
@@ -208,26 +202,6 @@ public class User extends SocializeObject {
 		this.autoPostToFacebook = autoPostToFacebook;
 	}
 
-	@Deprecated
-	public boolean isAutoPostLikesFacebook() {
-		return autoPostLikesFacebook;
-	}
-
-	@Deprecated
-	public void setAutoPostLikesFacebook(boolean autoPostLikesFacebook) {
-		this.autoPostLikesFacebook = autoPostLikesFacebook;
-	}
-
-	@Deprecated
-	public boolean isAutoPostCommentsFacebook() {
-		return autoPostCommentsFacebook;
-	}
-
-	@Deprecated
-	public void setAutoPostCommentsFacebook(boolean autoPostCommentsFacebook) {
-		this.autoPostCommentsFacebook = autoPostCommentsFacebook;
-	}
-	
 	public boolean isAutoPostToTwitter() {
 		return autoPostToTwitter;
 	}

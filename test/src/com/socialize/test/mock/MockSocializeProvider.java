@@ -37,7 +37,6 @@ import com.socialize.entity.SocializeObject;
 import com.socialize.entity.SocializeObjectFactory;
 import com.socialize.error.SocializeException;
 import com.socialize.provider.SocializeProvider;
-import com.socialize.sample.mocks.MockSocializeSession;
 
 /**
  * Mock provider used to test sample app UI interaction without access the real API.

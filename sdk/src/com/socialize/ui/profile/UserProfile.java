@@ -37,8 +37,6 @@ public class UserProfile {
 	
 	private String encodedImage;
 	
-	private boolean autoPostLikesFacebook = true;
-	private boolean autoPostCommentsFacebook = true;
 	private boolean notificationsEnabled = true;
 	
 	private boolean autoPostFacebook;
@@ -135,26 +133,6 @@ public class UserProfile {
 
 	public void setAutoPostTwitter(boolean autoPostTwitter) {
 		this.autoPostTwitter = autoPostTwitter;
-	}
-
-	@Deprecated
-	public boolean isAutoPostLikesFacebook() {
-		return autoPostLikesFacebook;
-	}
-
-	@Deprecated
-	public void setAutoPostLikesFacebook(boolean autoPostLikesFacebook) {
-		this.autoPostLikesFacebook = autoPostLikesFacebook;
-	}
-
-	@Deprecated
-	public boolean isAutoPostCommentsFacebook() {
-		return autoPostCommentsFacebook;
-	}
-
-	@Deprecated
-	public void setAutoPostCommentsFacebook(boolean autoPostCommentsFacebook) {
-		this.autoPostCommentsFacebook = autoPostCommentsFacebook;
 	}
 
 	public boolean isNotificationsEnabled() {

@@ -28,6 +28,7 @@ import com.socialize.SocializeService;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ActionType;
 import com.socialize.entity.Entity;
+import com.socialize.entity.PropagationInfo;
 import com.socialize.networks.AbstractSocialNetworkSharer;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
@@ -44,22 +45,23 @@ public class FacebookSharer extends AbstractSocialNetworkSharer {
 	protected SocialNetwork getNetwork() {
 		return SocialNetwork.FACEBOOK;
 	}
-
-	protected void doShare(final Activity context, Entity entity, String comment, final SocialNetworkListener listener, ActionType type) {
+	
+	@Override
+	protected void doShare(Activity context, Entity entity, PropagationInfo urlSet, String comment, SocialNetworkListener listener, ActionType type) {
 		switch (type) {
 			case COMMENT:
-				facebookWallPoster.postComment(context, entity, comment, listener);
+				facebookWallPoster.postComment(context, entity, comment, urlSet, listener);
 				break;
 				
 			case SHARE:
-				String body = shareMessageBuilder.buildShareMessage( entity, comment, false, true);
-				facebookWallPoster.post(context, body, listener);
+				String body = shareMessageBuilder.buildShareMessage( entity, urlSet, comment, false, true);
+				facebookWallPoster.post(context, body, urlSet, listener);
 				break;
 				
 			case LIKE:
-				facebookWallPoster.postLike(context, entity, comment, listener);
+				facebookWallPoster.postLike(context, entity, urlSet, listener);
 				break;			
-		}
+		}		
 	}
 
 	public void setShareMessageBuilder(ShareMessageBuilder shareMessageBuilder) {

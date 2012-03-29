@@ -65,16 +65,6 @@ public class Drawables {
 		return getDrawable(name, false, false, -1, -1, eternal);
 	}
 	
-	@Deprecated
-	public Drawable getDrawable(String name, int forceDensity) {
-		return getDrawable(name, forceDensity, true);
-	}
-	
-	@Deprecated
-	public Drawable getDrawable(String name, int forceDensity, boolean eternal) {
-		return getDrawable(name, metrics.densityDpi, false, false, -1, -1, eternal, forceDensity);
-	}	
-	
 	public Drawable getDrawable(String name, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {
 		return getDrawable(name, metrics.densityDpi, tileX, tileY, scaleToWidth, scaleToHeight, eternal);
 	}
@@ -106,11 +96,6 @@ public class Drawables {
 
 	public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, boolean eternal) {
 		return getDrawable(name, density, tileX, tileY, -1, -1, eternal);
-	}
-	
-	@Deprecated
-	public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal, int forceDensity) {
-		return getDrawable(name, forceDensity, tileX, tileY, scaleToWidth, scaleToHeight, eternal);
 	}
 	
 	public Drawable getDrawable(String name, int density, boolean tileX, boolean tileY, int scaleToWidth, int scaleToHeight, boolean eternal) {

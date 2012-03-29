@@ -1273,6 +1273,8 @@
 		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>				
 	</bean>	
 	
+	<!-- 
+	
 	<bean id="shareClickListener" abstract="true">
 		<property name="logger" ref="logger"/>
 		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
@@ -1318,6 +1320,19 @@
 		<property name="listenerHolder" ref="listenerHolder"/>
 	</bean>
 	
+	 -->
+	 
+	<bean 
+		id="shareClickListener" 
+		class="com.socialize.ui.share.ShareClickListener" 
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="progressDialogFactory" ref="progressDialogFactory"/>
+		<property name="alertDialogFactory" ref="alertDialogFactory"/>
+	</bean>	
+	
+	<factory id="shareClickListenerFactory" makes="shareClickListener"/> 
+	
 	<bean 
 		id="shareDialogView" 
 		class="com.socialize.ui.share.ShareDialogView" 
@@ -1329,21 +1344,27 @@
 		<property name="twitterShareButton" ref="twitterShareButton"/>
 		<property name="emailShareButton" ref="emailShareButton"/>
 		<property name="smsShareButton" ref="smsShareButton"/>
+		<property name="shareClickListenerFactory" ref="shareClickListenerFactory"/>
 		
+		<!-- 
 		<property name="facebookShareClickListenerFactory" ref="facebookShareClickListenerFactory"/>
 		<property name="twitterShareClickListenerFactory" ref="twitterShareClickListenerFactory"/>
 		<property name="emailShareClickListenerFactory" ref="emailShareClickListenerFactory"/>
 		<property name="smsShareClickListenerFactory" ref="smsShareClickListenerFactory"/>
 		<property name="otherShareClickListenerFactory" ref="otherShareClickListenerFactory"/>
 		
+		-->
+		
 		<init-method name="init"/>
 	</bean>	
 	
+	<!-- 
 	<factory id="facebookShareClickListenerFactory" makes="facebookShareClickListener"/>
 	<factory id="twitterShareClickListenerFactory" makes="twitterShareClickListener"/>
 	<factory id="emailShareClickListenerFactory" makes="emailShareClickListener"/>
 	<factory id="smsShareClickListenerFactory" makes="smsShareClickListener"/>
-	<factory id="otherShareClickListenerFactory" makes="otherShareClickListener"/>		
+	<factory id="otherShareClickListenerFactory" makes="otherShareClickListener"/>	
+	 -->	
 	<factory id="shareDialogViewFactory" makes="shareDialogView"/>
 	
 <!-- End Share UI -->	

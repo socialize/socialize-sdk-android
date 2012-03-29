@@ -32,7 +32,7 @@ import com.socialize.api.action.UserSystem;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
-import com.socialize.sample.mocks.MockUserSystem;
+import com.socialize.test.mock.MockUserSystem;
 import com.socialize.test.ui.SocializeUIActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.profile.ProfileActivity;

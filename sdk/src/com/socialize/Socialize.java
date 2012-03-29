@@ -39,18 +39,9 @@ public class Socialize {
 	
 	public static final String ENTITY_OBJECT = "socialize.entity";
 	
-	@Deprecated
-	public static final String ENTITY_KEY = "socialize.entity.key";
-	
-	@Deprecated
-	public static final String ENTITY_NAME = "socialize.entity.name";
-	
 	public static final Map<String, SocializeListener> STATIC_LISTENERS = new HashMap<String, SocializeListener>();
 	
 	public static final String ACTION_ID = "socialize.action.id";
-	
-	@Deprecated
-	public static final String COMMENT_ID = ACTION_ID;
 	
 	public static final String LOG_KEY = "Socialize";
 	public static final String USER_ID = "socialize.user.id";

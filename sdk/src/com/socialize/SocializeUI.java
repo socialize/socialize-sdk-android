@@ -64,9 +64,6 @@ public interface SocializeUI {
 
 	public void showActionDetailViewForResult(Activity context, User user, SocializeAction action, int requestCode);
 
-	@Deprecated
-	public Drawable getDrawable(String name, int density, boolean eternal);
-
 	public Drawable getDrawable(String name);
 	
 	public Drawable getDrawable(String name, boolean eternal);

@@ -31,7 +31,10 @@ import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.api.action.ShareType;
+import com.socialize.entity.Entity;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 import com.socialize.ui.view.SocializeButton;
@@ -42,24 +45,20 @@ import com.socialize.view.BaseView;
 /**
  * @author Jason Polites
  */
-public class ShareDialogView extends BaseView {
+public class ShareDialogView extends BaseView implements ShareInfoProvider {
 
 	private SocializeButton facebookShareButton;
 	private SocializeButton twitterShareButton;
 	private SocializeButton emailShareButton;
 	private SocializeButton smsShareButton;
 	
-	private IBeanFactory<ShareClickListener> otherShareClickListenerFactory;
-	private IBeanFactory<ShareClickListener> emailShareClickListenerFactory;
-	private IBeanFactory<ShareClickListener> facebookShareClickListenerFactory;
-	private IBeanFactory<ShareClickListener> twitterShareClickListenerFactory;
-	private IBeanFactory<ShareClickListener> smsShareClickListenerFactory;
-	
 	private OnActionBarEventListener onActionBarEventListener;
+	private IBeanFactory<ShareClickListener> shareClickListenerFactory;
 	
 	private DisplayUtils displayUtils;
 	private ActionBarView actionBarView;
 	private Drawables drawables;
+	private EditText commentField;
 	
 	public ShareDialogView(Context context, ActionBarView actionBarView) {
 		this(context, actionBarView, null);
@@ -71,6 +70,11 @@ public class ShareDialogView extends BaseView {
 		this.onActionBarEventListener = onActionBarEventListener;
 	}
 	
+	@Override
+	public String getShareText() {
+		return (commentField == null ? "" : commentField.getText().toString());
+	}
+
 	public void init() {
 		
 		int padding = displayUtils.getDIP(8);
@@ -83,7 +87,7 @@ public class ShareDialogView extends BaseView {
 		
 		LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
-		EditText commentField = new EditText(getContext());
+		commentField = new EditText(getContext());
 		LayoutParams commentFieldParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
 		setOrientation(LinearLayout.VERTICAL);
@@ -117,7 +121,9 @@ public class ShareDialogView extends BaseView {
 		
 //		boolean landscape = false;
 		
-		if(displayUtils.getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
+		final Entity entity = actionBarView.getEntity();
+		
+		if(displayUtils.getOrientation() == Configuration.ORIENTATION_PORTRAIT && Socialize.getSocialize().canShare(getActivity(), ShareType.OTHER)) {
 			setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
 			commentField.setLines(4);
 			
@@ -134,7 +140,17 @@ public class ShareDialogView extends BaseView {
 			otherOptionsLayout.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
 			
 			otherOptions.setLayoutParams(otherOptionsLayout);
-			otherOptions.setOnClickListener(otherShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener));
+			
+//			ShareClickListener(
+//					Activity context, 
+//					Entity entity, 
+//					ShareType shareType, 
+//					ShareInfoProvider provider)
+			
+			 
+			
+//			otherOptions.setOnClickListener(otherShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener));
+			otherOptions.setOnClickListener(shareClickListenerFactory.getBean(entity, ShareType.OTHER, this));
 			
 			shareLabelLayout.addView(otherOptions);
 		}
@@ -150,28 +166,31 @@ public class ShareDialogView extends BaseView {
 		setLayoutParams(fill);
 		setPadding(padding, padding, padding, padding);
 		
-		ShareClickListener facebookShareClickListener = facebookShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
-		ShareClickListener twitterShareClickListener = twitterShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
+//		ShareClickListener facebookShareClickListener = facebookShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
+//		ShareClickListener twitterShareClickListener = twitterShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
+//		ShareClickListener emailShareClickListener = emailShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
+//		ShareClickListener smsShareClickListener = smsShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
 		
-		ShareClickListener emailShareClickListener = emailShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
-		ShareClickListener smsShareClickListener = smsShareClickListenerFactory.getBean(actionBarView, commentField, onActionBarEventListener);
-		
-		if(facebookShareButton != null && facebookShareClickListener.isAvailableOnDevice(getActivity())) {
+		if(facebookShareButton != null && Socialize.getSocialize().canShare(getActivity(), ShareType.FACEBOOK)) {
+			ShareClickListener facebookShareClickListener = shareClickListenerFactory.getBean(entity, ShareType.FACEBOOK, this, true);
 			facebookShareButton.setCustomClickListener(facebookShareClickListener);
 			buttonLayout.addView(facebookShareButton);
 		}
 		
-		if(twitterShareButton != null && twitterShareClickListener.isAvailableOnDevice(getActivity())) {
+		if(twitterShareButton != null && Socialize.getSocialize().canShare(getActivity(), ShareType.TWITTER)) {
+			ShareClickListener twitterShareClickListener = shareClickListenerFactory.getBean(entity, ShareType.TWITTER, this, true);
 			twitterShareButton.setCustomClickListener(twitterShareClickListener);
 			buttonLayout.addView(twitterShareButton);
 		}		
 		
-		if(emailShareButton != null && emailShareClickListener.isAvailableOnDevice(getActivity())) {
+		if(emailShareButton != null && Socialize.getSocialize().canShare(getActivity(), ShareType.EMAIL)) {
+			ShareClickListener emailShareClickListener = shareClickListenerFactory.getBean(entity, ShareType.EMAIL, this, false);
 			emailShareButton.setCustomClickListener(emailShareClickListener);
 			buttonLayout.addView(emailShareButton);
 		}
 		
-		if(smsShareButton != null && smsShareClickListener.isAvailableOnDevice(getActivity())) {
+		if(smsShareButton != null && Socialize.getSocialize().canShare(getActivity(), ShareType.SMS)) {
+			ShareClickListener smsShareClickListener = shareClickListenerFactory.getBean(entity, ShareType.SMS, this, false);
 			smsShareButton.setCustomClickListener(smsShareClickListener);
 			buttonLayout.addView(smsShareButton);
 		}
@@ -209,28 +228,12 @@ public class ShareDialogView extends BaseView {
 	public void setTwitterShareButton(SocializeButton twitterShareButton) {
 		this.twitterShareButton = twitterShareButton;
 	}
-
-	public void setTwitterShareClickListenerFactory(IBeanFactory<ShareClickListener> twitterShareClickListenerFactory) {
-		this.twitterShareClickListenerFactory = twitterShareClickListenerFactory;
-	}
-
-	public void setOtherShareClickListenerFactory(IBeanFactory<ShareClickListener> otherShareClickListenerFactory) {
-		this.otherShareClickListenerFactory = otherShareClickListenerFactory;
-	}
-
-	public void setEmailShareClickListenerFactory(IBeanFactory<ShareClickListener> emailShareClickListenerFactory) {
-		this.emailShareClickListenerFactory = emailShareClickListenerFactory;
-	}
-
-	public void setFacebookShareClickListenerFactory(IBeanFactory<ShareClickListener> facebookShareClickListenerFactory) {
-		this.facebookShareClickListenerFactory = facebookShareClickListenerFactory;
-	}
-
-	public void setSmsShareClickListenerFactory(IBeanFactory<ShareClickListener> smsShareClickListenerFactory) {
-		this.smsShareClickListenerFactory = smsShareClickListenerFactory;
-	}
 	
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
+	}
+	
+	public void setShareClickListenerFactory(IBeanFactory<ShareClickListener> shareClickListenerFactory) {
+		this.shareClickListenerFactory = shareClickListenerFactory;
 	}
 }

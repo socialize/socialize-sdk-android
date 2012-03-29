@@ -37,7 +37,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.like.LikeListener;
 import com.socialize.networks.ShareOptions;
-import com.socialize.sample.mocks.MockLikeSystem;
+import com.socialize.test.mock.MockLikeSystem;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarLayoutView;
 

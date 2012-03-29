@@ -25,7 +25,7 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
-
+import android.widget.Toast;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 
@@ -36,6 +36,7 @@ import com.socialize.util.StringUtils;
 public class AlertDialogFactory implements DialogFactory<AlertDialog> {
 
 	private Drawables drawables;
+	private Toast toast;
 	
 	@Override
 	public AlertDialog show(Context context, String title, String message) {
@@ -65,6 +66,14 @@ public class AlertDialogFactory implements DialogFactory<AlertDialog> {
 		alert.show();
 		
 		return alert;
+	}
+	
+	public void showToast(Context context, String message) {
+		if(toast != null) {
+			toast.cancel();
+		}
+		toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+		toast.show();
 	}
 	
 	protected Builder makeBuilder(Context context) {

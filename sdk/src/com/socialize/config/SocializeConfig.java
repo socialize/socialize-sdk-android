@@ -62,12 +62,6 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_FORCE_AUTH = "socialize.force.auth";
 	
-	@Deprecated
-	public static final String SOCIALIZE_BEANS_PATH = SOCIALIZE_CORE_BEANS_PATH;
-	
-	@Deprecated
-	public static final String SOCIALIZE_DEBUG_MODE = "socialize.debug.mode";
-	
 	/**
 	 * true if Single Sign On is enabled.  Default is true.
 	 */
@@ -90,7 +84,7 @@ public class SocializeConfig {
 	public static final String LOG_THREAD = "log.thread";
 	public static final String LOG_MSG = "log.msg.";
 	public static final String API_HOST = "api.host";
-	public static final String REDIRECT_HOST = "redirect.host";
+	
 	public static final String REDIRECT_APP_STORE = "redirect.app.store";
 	
 	public static final String HTTP_CONNECTION_TIMEOUT = "http.connection.timeout";
@@ -359,15 +353,6 @@ public class SocializeConfig {
 		this.resourceLocator = resourceLocator;
 	}
 
-	/**
-	 * @deprecated Filename does not need to be changed.  Just use assets to override with socialize.properties.
-	 * @param propertiesFileName
-	 */
-	@Deprecated
-	public void setPropertiesFileName(String propertiesFileName) {
-		this.propertiesFileName = propertiesFileName;
-	}
-	
 	protected Properties createProperties() {
 		return new Properties();
 	}

@@ -22,8 +22,6 @@
 package com.socialize.auth.twitter;
 
 import android.content.Context;
-
-import com.socialize.api.SocializeAuthRequest;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.error.SocializeException;
@@ -40,15 +38,6 @@ public class TwitterAuthProvider implements AuthProvider<TwitterAuthProviderInfo
 	
 	public void init(Context context) {
 		this.context = context;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.auth.AuthProvider#authenticate(com.socialize.api.SocializeAuthRequest, java.lang.String, com.socialize.listener.AuthProviderListener)
-	 */
-	@Deprecated
-	@Override
-	public void authenticate(SocializeAuthRequest authRequest, String appId, AuthProviderListener listener) {
-		throw new UnsupportedOperationException("Legacy authenticate method not supported for twitter");
 	}
 
 	/* (non-Javadoc)
@@ -90,13 +79,6 @@ public class TwitterAuthProvider implements AuthProvider<TwitterAuthProviderInfo
 	protected AuthProviderResponse newAuthProviderResponse() {
 		return new AuthProviderResponse();
 	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.auth.AuthProvider#clearCache(android.content.Context, java.lang.String)
-	 */
-	@Deprecated
-	@Override
-	public void clearCache(Context context, String appId) {}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.auth.AuthProvider#clearCache(android.content.Context, com.socialize.auth.AuthProviderInfo)

@@ -21,6 +21,8 @@
  */
 package com.socialize.networks;
 
+import android.location.Location;
+
 /**
  * Allows for the specification of options for sharing.
  * @author Jason Polites
@@ -31,6 +33,7 @@ public class ShareOptions {
 	private boolean autoAuth = false;
 	private SocialNetwork[] shareTo;
 	private SocialNetworkListener listener;
+	private Location location;
 	
 	/**
 	 * If true and if available, the user's location is shared.
@@ -68,15 +71,6 @@ public class ShareOptions {
 		this.listener = listener;
 	}
 
-	/**
-	 * @param autoPostToFacebook
-	 * @deprecated
-	 */
-	@Deprecated
-	public void setShareFacebook(boolean autoPostToFacebook) {
-		setShareTo(SocialNetwork.FACEBOOK);
-	}
-	
 	public boolean isShareTo(SocialNetwork destination) {
 		if(shareTo != null) {
 			for (SocialNetwork d : shareTo) {
@@ -89,6 +83,13 @@ public class ShareOptions {
 		return false;
 	}
 	
+	public Location getLocation() {
+		return location;
+	}
+	
+	public void setLocation(Location location) {
+		this.location = location;
+	}
 
 	public boolean isAutoAuth() {
 		return autoAuth;
@@ -101,9 +102,4 @@ public class ShareOptions {
 	public void setAutoAuth(boolean autoAuth) {
 		this.autoAuth = autoAuth;
 	}
-
-	@Deprecated
-	public boolean isShareFacebook() {
-		return isShareTo(SocialNetwork.FACEBOOK);
-	}	
 }

@@ -116,12 +116,6 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 		}
 	}
 	
-	@Deprecated
-	@Override
-	public void registerSocialize(Context context, SocializeSession session, String registrationId) {
-		registerSocialize(context, registrationId);
-	}
-
 	@Override
 	public void registerSocialize(final Context context, final String registrationId) {
 		

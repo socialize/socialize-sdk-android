@@ -2,7 +2,6 @@ package com.socialize.sample.simple;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import com.socialize.Socialize;
@@ -21,12 +20,12 @@ public class Main extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-        .detectNetwork()
-        .detectDiskWrites()
-        .permitDiskReads()
-        .penaltyLog()
-        .build());
+//        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+//        .detectNetwork()
+//        .detectDiskWrites()
+//        .permitDiskReads()
+//        .penaltyLog()
+//        .build());
         
 		// Your entity key.  May be passed as a Bundle parameter to your activity
 		final String entityKey = "http://getsocialize.com";

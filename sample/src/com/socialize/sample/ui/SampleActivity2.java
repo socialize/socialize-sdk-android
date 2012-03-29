@@ -50,7 +50,6 @@ public class SampleActivity2 extends Activity {
 		final Button btnClearCache = (Button) findViewById(R.id.btnClearCache);
 		final Button btnActionViewAuto = (Button) findViewById(R.id.btnActionViewAuto);
 		final Button btnActionViewManual = (Button) findViewById(R.id.btnActionViewManual);
-		final Button btnActionViewPager = (Button) findViewById(R.id.btnActionViewPager);
 		final Button btnActionButton = (Button) findViewById(R.id.btnActionButton);
 		final Button btnActionButtonManual = (Button) findViewById(R.id.btnActionButtonManual);
 		
@@ -145,27 +144,6 @@ public class SampleActivity2 extends Activity {
 			}
 		});
 
-		btnActionViewPager.setOnClickListener(new OnClickListener() {
-			@SuppressWarnings("deprecation")
-			@Override
-			public void onClick(View v) {
-				setupOverrides();
-				Intent intent = new Intent(SampleActivity2.this, ActionBarPagerActivity.class);
-				
-				Entity entity = new Entity();
-				entity.setKey(txtEntity.getText().toString());
-				entity.setName(txtEntityName.getText().toString());	
-				
-				intent.putExtra(Socialize.ENTITY_OBJECT, entity);
-				
-				Socialize.getSocialize().setEntityLoader(loader);
-				Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REGISTER_NOTIFICATION, String.valueOf(chkNotifications.isChecked()));
-				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
-				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
-				Socialize.getSocialize().getConfig().setTwitterKeySecret(txtTW_Key.getText().toString(), txtTW_Sec.getText().toString());
-				startActivity(intent);
-			}
-		});
 		
 		btnActionButtonManual.setOnClickListener(new OnClickListener() {
 			@Override

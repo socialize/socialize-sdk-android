@@ -40,15 +40,6 @@ public interface UserSystem {
 
 	public static final String ENDPOINT = "/user/";
 	
-	@Deprecated
-	public void init(Context context);
-	
-	@Deprecated
-	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer);
-
-	@Deprecated
-	public void authenticate(String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth);
-	
 	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer);
 
 	public SocializeSession authenticateSynchronous(Context context, String consumerKey, String consumerSecret, SocializeSessionConsumer sessionConsumer) throws SocializeException;
@@ -64,16 +55,5 @@ public interface UserSystem {
 	public void getUser(SocializeSession session, long id, UserListener listener);
 
 	public void saveUserProfile(Context context, SocializeSession session, UserProfile profile, UserListener listener);
-
-	/**
-	 * Saves the CURRENT user details.
-	 * @param session
-	 * @param firstName
-	 * @param lastName
-	 * @param encodedImage Base64 encoded PNG image data.
-	 * @param listener
-	 */
-	@Deprecated
-	public void saveUserProfile(Context context, SocializeSession session, String firstName, String lastName, String encodedImage, UserListener listener);
 
 }

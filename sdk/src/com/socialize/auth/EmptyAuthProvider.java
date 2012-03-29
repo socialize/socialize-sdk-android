@@ -22,8 +22,6 @@
 package com.socialize.auth;
 
 import android.content.Context;
-
-import com.socialize.api.SocializeAuthRequest;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.AuthProviderListener;
 
@@ -34,26 +32,11 @@ import com.socialize.listener.AuthProviderListener;
  */
 public class EmptyAuthProvider implements AuthProvider<AuthProviderInfo> {
 
-	/* (non-Javadoc)
-	 * @see com.socialize.auth.AuthProvider#authenticate(com.socialize.api.SocializeAuthRequest, java.lang.String, com.socialize.listener.AuthProviderListener)
-	 */
-	@Override
-	public void authenticate(SocializeAuthRequest authRequest, String appId, AuthProviderListener listener) {
-		listener.onAuthFail(new SocializeException("Empty auth provider used!"));
-	}
-	
 
 	@Override
 	public void authenticate(AuthProviderInfo info, AuthProviderListener listener) {
 		listener.onAuthFail(new SocializeException("Empty auth provider used!"));
 	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.auth.AuthProvider#clearCache(android.content.Context, java.lang.String)
-	 */
-	@Override
-	public void clearCache(Context context, String appId) {}
-
 
 	@Override
 	public void clearCache(Context context, AuthProviderInfo info) {}

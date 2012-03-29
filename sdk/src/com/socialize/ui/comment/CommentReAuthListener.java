@@ -42,12 +42,7 @@ public class CommentReAuthListener implements SocializeAuthListener {
 	private Context context;
 	
 	private SocialNetwork[] networks;
-	
-	@Deprecated
-	public CommentReAuthListener(Context context, CommentButtonCallback callback, String comment, boolean autoPostToFacebook, boolean shareLocation, boolean subscribe) {
-		this(context, callback, comment, shareLocation, subscribe, (autoPostToFacebook) ? SocialNetwork.FACEBOOK : null);
-	}
-	
+
 	public CommentReAuthListener(Context context, CommentButtonCallback callback, String comment, boolean shareLocation, boolean subscribe, SocialNetwork...networks) {
 		super();
 		this.callback = callback;

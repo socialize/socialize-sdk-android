@@ -23,27 +23,26 @@ package com.socialize.api.action;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
-
 import com.socialize.Socialize;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
+import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
-import com.socialize.networks.SocialNetworkSharer;
 import com.socialize.provider.SocializeProvider;
+import com.socialize.share.ShareHandler;
+import com.socialize.share.ShareHandlerListener;
+import com.socialize.share.ShareHandlers;
 import com.socialize.util.StringUtils;
 
 /**
@@ -51,13 +50,23 @@ import com.socialize.util.StringUtils;
  */
 public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<Share>> implements ShareSystem {
 	
-	private Map<String, SocialNetworkSharer> sharers;
+	private ShareHandlers shareHandlers;
+	
 	private SocializeLogger logger;
 	
 	public SocializeShareSystem(SocializeProvider<Share> provider) {
 		super(provider);
 	}
 	
+	@Override
+	public boolean canShare(Context context, ShareType shareType) {
+		ShareHandler shareHandler = shareHandlers.getShareHandler(shareType);
+		if(shareHandler != null) {
+			return shareHandler.isAvailableOnDevice(context);
+		}
+		return false;
+	}
+
 	@Override
 	public void addShare(Context context, SocializeSession session, Entity entity, String text, SocialNetwork network, Location location, ShareListener listener) {
 		addShare(context, session, entity, text, null, network, location, listener);
@@ -142,14 +151,17 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		Share c = new Share();
 		c.setEntity(entity);
 		c.setText(text);
-		c.setMedium(shareType.getId());
-		c.setMediumName(shareType.getName());
+		c.setShareType(shareType);
 		
 		if(network != null) {
 			ShareOptions shareOptions = new ShareOptions();
 			shareOptions.setShareTo(network);
 			shareOptions.setShareLocation(true);
 			setPropagationData(c, shareOptions);
+		}
+		else if(shareType != null) {
+			// Set propagation data for non-network share types
+			setPropagationData(c, shareType);
 		}
 	
 		setLocation(c, location);
@@ -176,36 +188,33 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		String endpoint = "/user/" + userId + ENDPOINT;
 		listAsync(session, endpoint, listener);
 	}
-
-	@Override
-	public void shareEntity(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, boolean autoAuth, SocialNetworkListener listener) {
-		SocialNetworkSharer sharer = getSharer(destination);
-		if(sharer != null) {
-			sharer.shareEntity(context, entity, comment, autoAuth, listener);
-		}
-	}
 	
 	@Override
-	public void shareComment(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, boolean autoAuth, SocialNetworkListener listener) {
-		SocialNetworkSharer sharer = getSharer(destination);
+	public void share(Activity context, SocializeSession session, SocializeAction action, String comment, Location location, ShareType destination, boolean autoAuth, ShareHandlerListener listener) {
+		ShareHandler sharer = getSharer(destination);
 		if(sharer != null) {
-			sharer.shareComment(context, entity, comment, autoAuth, listener);
+			sharer.handle(context, action, location, comment, listener);
+		}
+		else {
+			if(listener != null) {
+				listener.onError(context, action, "Unable to share to [" +
+						destination.getDisplayName() +
+						"]", new SocializeException("No sharer defined for type"));
+			}
+			 
+			if(logger != null) {
+				logger.warn("Unable to share to [" +
+						destination.getDisplayName() +
+						"].  No sharer defined for this type.");
+			}
 		}
 	}
 
-	@Override
-	public void shareLike(Activity context, Entity entity, String comment, Location location, SocialNetwork destination, boolean autoAuth, SocialNetworkListener listener) {
-		SocialNetworkSharer sharer = getSharer(destination);
-		if(sharer != null) {
-			sharer.shareLike(context, entity, comment, autoAuth, listener);
-		}
-	}
-
-	protected SocialNetworkSharer getSharer(SocialNetwork destination) {
-		SocialNetworkSharer sharer = null;
+	protected ShareHandler getSharer(ShareType destination) {
+		ShareHandler sharer = null;
 		
-		if(sharers != null) {
-			sharer = sharers.get(destination.name().toLowerCase());
+		if(shareHandlers != null) {
+			sharer = shareHandlers.getShareHandler(destination);
 		}
 		
 		if(sharer == null) {
@@ -215,13 +224,12 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 						"]");
 			}
 		}	
-		
 		return sharer;
-		
 	}
 
-	public void setSharers(Map<String, SocialNetworkSharer> sharers) {
-		this.sharers = sharers;
+	
+	public void setShareHandlers(ShareHandlers shareHandlers) {
+		this.shareHandlers = shareHandlers;
 	}
 
 	public void setLogger(SocializeLogger logger) {

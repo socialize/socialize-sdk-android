@@ -36,9 +36,6 @@ public interface EntitySystem {
 
 	public void addEntity(SocializeSession session, Entity entity, EntityListener listener);
 
-	@Deprecated
-	public void addEntity(SocializeSession session, String entityKey, String name, EntityListener listener);
-
 	@DelegateOnly
 	public void getEntity(SocializeSession session, String entityKey, EntityListener listener);
 

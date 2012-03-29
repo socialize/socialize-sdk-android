@@ -21,6 +21,7 @@
  */
 package com.socialize.auth;
 
+import com.socialize.api.action.ShareType;
 import com.socialize.networks.SocialNetwork;
 
 /**
@@ -60,6 +61,23 @@ public enum AuthProviderType {
 		}
 		return valueOf(socialNetwork.name().toUpperCase());
 	}
+	
+	public static AuthProviderType valueOf(ShareType shareType) {
+		if(shareType == null) {
+			return SOCIALIZE;
+		}
+		
+		switch (shareType) {
+			case EMAIL:
+				return SOCIALIZE;
+			case SMS:
+				return SOCIALIZE;
+			case OTHER:
+				return SOCIALIZE;				
+			default:
+				return valueOf(shareType.getName().toUpperCase());
+		}
+	}	
 	
 	public static AuthProviderType valueOf(int id) {
 		AuthProviderType[] values = AuthProviderType.values();

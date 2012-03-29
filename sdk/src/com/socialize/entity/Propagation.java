@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.socialize.api.action.ShareType;
 import com.socialize.networks.SocialNetwork;
 
 /**
@@ -38,12 +39,12 @@ public class Propagation implements Serializable {
 	private static final long serialVersionUID = 7516996181091226449L;
 
 	private Map<String, String> extraParams;
-	private List<SocialNetwork> thirdParties;
+	private List<ShareType> thirdParties;
 	
 	public Propagation() {
 		super();
 		extraParams = new HashMap<String, String>();
-		thirdParties = new LinkedList<SocialNetwork>();
+		thirdParties = new LinkedList<ShareType>();
 	}
 
 	public Map<String, String> getExtraParams() {
@@ -54,11 +55,11 @@ public class Propagation implements Serializable {
 		this.extraParams = extraParams;
 	}
 
-	public List<SocialNetwork> getThirdParties() {
+	public List<ShareType> getThirdParties() {
 		return thirdParties;
 	}
 
-	public void setThirdParties(List<SocialNetwork> thirdParties) {
+	public void setThirdParties(List<ShareType> thirdParties) {
 		this.thirdParties = thirdParties;
 	}
 	
@@ -67,6 +68,10 @@ public class Propagation implements Serializable {
 	}
 	
 	public void addThirdParty(SocialNetwork network) {
+		thirdParties.add(ShareType.valueOf(network));
+	}
+	
+	public void addThirdParty(ShareType network) {
 		thirdParties.add(network);
 	}
 }

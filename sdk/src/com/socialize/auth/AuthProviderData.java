@@ -33,10 +33,8 @@ public class AuthProviderData {
 	
 	private AuthProviderInfo authProviderInfo;
 	
-	@Deprecated
 	private String appId3rdParty;
 	
-	@Deprecated
 	private AuthProviderType authProviderType = AuthProviderType.SOCIALIZE;
 	
 	public AuthProviderData() {
@@ -63,22 +61,18 @@ public class AuthProviderData {
 		this.secret3rdParty = secret3rdParty;
 	}
 
-	@Deprecated
 	public String getAppId3rdParty() {
 		return appId3rdParty;
 	}
 	
-	@Deprecated
 	public void setAppId3rdParty(String appId3rdParty) {
 		this.appId3rdParty = appId3rdParty;
 	}
 	
-	@Deprecated
 	public AuthProviderType getAuthProviderType() {
 		return authProviderType;
 	}
 	
-	@Deprecated
 	public void setAuthProviderType(AuthProviderType authProviderType) {
 		this.authProviderType = authProviderType;
 	}

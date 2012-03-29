@@ -22,14 +22,10 @@
 package com.socialize.util;
 
 import android.Manifest.permission;
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.provider.MediaStore;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import com.socialize.log.SocializeLogger;
 
 /**
@@ -41,79 +37,38 @@ public class DeviceUtils {
 	
 	private AppUtils appUtils;
 	
-	private float density = 1f;
 	private boolean hasCamera;
-	private int orientation;
-	private int displayHeight;
-	private int displayWidth;
 	
 	private boolean deviceIdObtained = false;
 	private String deviceId;
 
 	public void init(Context context) {
 	
-		if (context instanceof Activity) {
-			DisplayMetrics metrics = new DisplayMetrics();
-			Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
-			display.getMetrics(metrics);
-			density = metrics.density;
-			
-			displayHeight = display.getHeight();
-			displayWidth = display.getWidth();
-			
-			if (displayWidth == displayHeight) {
-				orientation = Configuration.ORIENTATION_SQUARE;
-			} 
-			else { 
-				if (displayWidth < displayHeight) {
-					orientation = Configuration.ORIENTATION_PORTRAIT;
-				} 
-				else { 
-					orientation = Configuration.ORIENTATION_LANDSCAPE;
-				}
-			}
-		}
-		
+//		if (context instanceof Activity) {
+//			DisplayMetrics metrics = new DisplayMetrics();
+//			Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
+//			display.getMetrics(metrics);
+////			density = metrics.density;
+//			
+//			displayHeight = display.getHeight();
+//			displayWidth = display.getWidth();
+//			
+//			if (displayWidth == displayHeight) {
+//				orientation = Configuration.ORIENTATION_SQUARE;
+//			} 
+//			else { 
+//				if (displayWidth < displayHeight) {
+//					orientation = Configuration.ORIENTATION_PORTRAIT;
+//				} 
+//				else { 
+//					orientation = Configuration.ORIENTATION_LANDSCAPE;
+//				}
+//			}
+//		}
+//		
 		if(appUtils != null) {
 			hasCamera = appUtils.isIntentAvailable(context, MediaStore.ACTION_IMAGE_CAPTURE);
 		}
-	}
-
-	/**
-	 * 
-	 * @param context
-	 * @param activity
-	 * @return
-	 * @deprecated use AppUtils
-	 */
-	@Deprecated
-	public boolean isActivityAvailable(Context context, Class<?> activity) {
-		return appUtils.isActivityAvailable(context, activity);
-	}
-	
-	/**
-	 * 
-	 * @param context
-	 * @param action
-	 * @return
-	 * @deprecated use AppUtils
-	 */
-	@Deprecated
-	public boolean isIntentAvailable(Context context, String action) {
-		return appUtils.isIntentAvailable(context, action);
-	}
-
-	@Deprecated
-	public int getDIP(float pixels) {
-		return getDIP(Math.round(pixels));
-	}
-	
-	@Deprecated
-	public int getDIP(int pixels) {
-		if (pixels != 0) {
-			return (int) ((float) pixels * density);
-		}
-		return pixels;
 	}
 	
 	public String getUDID(Context context) {
@@ -144,64 +99,6 @@ public class DeviceUtils {
 		return deviceId;
 	}
 	
-	/**
-	 * Returns the Android market url for this app.
-	 * @param http If true an HTTP link is returned, otherwise a market:// link is returned.
-	 * @return The HTTP url for the app on the Android Market
-	 * @deprecated use AppUtils
-	 */
-	@Deprecated
-	public String getMarketUrl(boolean http) {
-		return appUtils.getMarketUrl();
-	}
-	
-	/**
-	 * @deprecated use AppUtils
-	 * @return The package name of the app.
-	 */
-	@Deprecated
-	public String getPackageName() {
-		return appUtils.getPackageName();
-	}
-
-	/**
-	 * @deprecated use AppUtils
-	 * @return The name of the app, as defined in the AndroidManifest.xml
-	 */
-	@Deprecated
-	public String getAppName() {
-		return appUtils.getAppName();
-	}
-
-	/**
-	 * @deprecated use AppUtils
-	 * @return
-	 */
-	@Deprecated
-	public String getUserAgentString() {
-		return appUtils.getUserAgentString();
-	}
-
-	/**
-	 * @deprecated use AppUtils
-	 * @param context
-	 * @param permission
-	 * @return true if the application has the given permission
-	 */
-	@Deprecated
-	public boolean hasPermission(Context context, String permission) {
-		return appUtils.hasPermission(context, permission);
-	}
-
-	/**
-	 * @deprecated use AppUtils
-	 * @param context
-	 * @return true if location is available.
-	 */
-	@Deprecated
-	public boolean isLocationAvaiable(Context context) {
-		return appUtils.isLocationAvaiable(context);
-	}
 	
 	public boolean hasCamera() {
 		return hasCamera;
@@ -209,21 +106,6 @@ public class DeviceUtils {
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
-	}
-
-	@Deprecated
-	public int getDisplayHeight() {
-		return displayHeight;
-	}
-
-	@Deprecated
-	public int getDisplayWidth() {
-		return displayWidth;
-	}
-
-	@Deprecated
-	public int getOrientation() {
-		return orientation;
 	}
 
 	public void setAppUtils(AppUtils appUtils) {
