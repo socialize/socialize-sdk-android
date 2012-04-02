@@ -1,0 +1,238 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Configuration Settings &mdash; Socialize Android SDK v1.5.6 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     'v1.5.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="shortcut icon" href="static/favicon.ico"/>
+    <link rel="top" title="Socialize Android SDK v1.5.6 documentation" href="index.html?v=v1.5.6" />
+    <link rel="next" title="Amazon AppStore URLs" href="amazon.html?v=v1.5.6" />
+    <link rel="prev" title="Socialize SDK (Advanced) Guide" href="sdk_user_guide.html?v=v1.5.6" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="amazon.html?v=v1.5.6" title="Amazon AppStore URLs"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="sdk_user_guide.html?v=v1.5.6" title="Socialize SDK (Advanced) Guide"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html?v=v1.5.6">Socialize Android SDK v1.5.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+      <META HTTP-EQUIV="Pragma" CONTENT="no-cache"/>
+    <META HTTP-EQUIV="Expires" CONTENT="-1"/>
+
+    <link rel="stylesheet" href="static/css/shCore.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/shCoreEclipse.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/shThemeEclipse.css" type="text/css" />
+    <link rel="stylesheet" href="static/css/gist.css" type="text/css" />
+    <script type="text/javascript" src="static/js/shCore.js"></script>
+    <script type="text/javascript" src="static/js/shBrushXml.js"></script>
+    <script type="text/javascript" src="static/js/shBrushJava.js"></script>
+    <script type="text/javascript" src="static/js/shBrushJavaProperties.js"></script>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-9835027-5']);
+    _gaq.push(['_setDomainName', '.getsocialize.com']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script><div class="section" id="configuration-settings">
+<span id="config"></span><h1>Configuration Settings<a class="headerlink" href="#configuration-settings" title="Permalink to this headline">¶</a></h1>
+<p>The following table lists the configuration options that can be specified in your <strong>socialize.properties</strong> file.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="6%" />
+<col width="6%" />
+<col width="25%" />
+<col width="42%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Property</th>
+<th class="head">Type</th>
+<th class="head">Default</th>
+<th class="head">Example</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>socialize.consumer.key</td>
+<td>String</td>
+<td>None</td>
+<td>12a05e3e-e522-4c81-b4bb-89d3be94d122</td>
+<td>Your Socialize consumer key</td>
+</tr>
+<tr class="row-odd"><td>socialize.consumer.secret</td>
+<td>String</td>
+<td>None</td>
+<td>9c313d12-f34c-4172-9909-180384c724fd</td>
+<td>Your Socialize consumer secret</td>
+</tr>
+<tr class="row-even"><td>socialize.notification.app.icon</td>
+<td>Boolean</td>
+<td>true</td>
+<td>&nbsp;</td>
+<td>If true the app&#8217;s icon will be used for notifications.</td>
+</tr>
+<tr class="row-odd"><td>socialize.use.action.webview</td>
+<td>Boolean</td>
+<td>false</td>
+<td>&nbsp;</td>
+<td>If true activity views will use a WebView rather than a TextView</td>
+</tr>
+<tr class="row-even"><td>socialize.entity.loader</td>
+<td>String</td>
+<td>None</td>
+<td>com.mypackage.MyEntityLoader</td>
+<td>Fully qualified class name of your entity loader implementation</td>
+</tr>
+<tr class="row-odd"><td>facebook.app.id</td>
+<td>Integer</td>
+<td>None</td>
+<td>1234567890</td>
+<td>Your facebook app ID</td>
+</tr>
+<tr class="row-even"><td>facebook.sso.enabled</td>
+<td>Boolean</td>
+<td>true</td>
+<td>&nbsp;</td>
+<td>Enable/Disable Single Sign on for Facebook</td>
+</tr>
+<tr class="row-odd"><td>twitter.consumer.key</td>
+<td>String</td>
+<td>None</td>
+<td>U18LUnVjULkkpGoJ6</td>
+<td>Your Twitter consumer key</td>
+</tr>
+<tr class="row-even"><td>twitter.consumer.secret</td>
+<td>String</td>
+<td>None</td>
+<td>RiIljnFq4RWV9LEaCM1ZLsAHf053vX2K</td>
+<td>Your Twitter consumer secret</td>
+</tr>
+<tr class="row-odd"><td>http.connection.timeout</td>
+<td>Long</td>
+<td>10000</td>
+<td>10000</td>
+<td>Time in ms for an http connection to be established</td>
+</tr>
+<tr class="row-even"><td>http.socket.timeout</td>
+<td>Long</td>
+<td>10000</td>
+<td>10000</td>
+<td>Time in ms for an http request to return</td>
+</tr>
+<tr class="row-odd"><td>log.level</td>
+<td>String</td>
+<td>WARN</td>
+<td>DEBUG or INFO or WARN or ERROR</td>
+<td>Application log level</td>
+</tr>
+<tr class="row-even"><td>redirect.app.store</td>
+<td>String</td>
+<td>android</td>
+<td>Only &#8216;amazon&#8217; currently supported</td>
+<td>Provides for creation of non Android Market urls.</td>
+</tr>
+</tbody>
+</table>
+<script type="text/javascript">
+        SyntaxHighlighter.defaults['toolbar'] = false;
+        SyntaxHighlighter.all();
+</script></div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html?v=v1.5.6" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html?v=v1.5.6">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v1.5.6">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v1.5.6">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v1.5.6">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v1.5.6">Twitter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v1.5.6">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v1.5.6">Socialize Like Button</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comment_view.html?v=v1.5.6">Socialize Comments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="push_notifications.html?v=v1.5.6">SmartAlerts (Push Notifications)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v1.5.6">Entity Loaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v1.5.6">Socialize SDK (Advanced) Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v1.5.6">Amazon AppStore URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v1.5.6">ProGuard Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v1.5.6">Troubleshooting &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v1.5.6">Change Log</a></li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="amazon.html?v=v1.5.6" title="Amazon AppStore URLs"
+             >next</a></li>
+        <li class="right" >
+          <a href="sdk_user_guide.html?v=v1.5.6" title="Socialize SDK (Advanced) Guide"
+             >previous</a> |</li>
+        <li><a href="index.html?v=v1.5.6">Socialize Android SDK v1.5.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Socialize Inc.
+    </div>
+  </body>
+</html>
