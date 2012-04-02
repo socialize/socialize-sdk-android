@@ -37,7 +37,6 @@ import com.socialize.entity.SocializeObject;
 import com.socialize.entity.SocializeObjectFactory;
 import com.socialize.error.SocializeException;
 import com.socialize.provider.SocializeProvider;
-import com.socialize.sample.mocks.MockSocializeSession;
 
 /**
  * Mock provider used to test sample app UI interaction without access the real API.
@@ -64,11 +63,6 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 
 	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
-		return new MockSocializeSession();
-	}
-
-	@Override
-	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderType authProviderType, String appId3rdParty) throws SocializeException {
 		return new MockSocializeSession();
 	}
 

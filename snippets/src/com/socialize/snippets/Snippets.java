@@ -1,15 +1,10 @@
 package com.socialize.snippets;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-
 import com.socialize.Socialize;
-import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
-import com.socialize.entity.ListResult;
 import com.socialize.ui.SocializeEntityLoader;
 
 /**

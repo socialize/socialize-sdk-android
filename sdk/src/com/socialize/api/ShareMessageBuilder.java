@@ -1,15 +1,13 @@
 package com.socialize.api;
 
 import com.socialize.entity.Entity;
+import com.socialize.entity.PropagationInfo;
 
 public interface ShareMessageBuilder {
 
-	public String buildShareLink(Entity entity);
-	
 	public String buildShareSubject(Entity entity);
+	
+	public String getEntityLink(Entity entity, PropagationInfo urlSet, boolean html);
 
-	public String getEntityLink(Entity entity, boolean html);
-
-	public String buildShareMessage(Entity entity, String comment, boolean html, boolean includeSocialize);
-
+	public String buildShareMessage(Entity entity, PropagationInfo urlSet, String comment, boolean html, boolean includeSocialize);
 }

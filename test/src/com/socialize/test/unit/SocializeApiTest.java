@@ -71,26 +71,6 @@ public class SocializeApiTest extends SocializeActivityTest {
 
 	}
 
-	@Deprecated
-	public void testApiCallsAuthenticateOnProvider() throws Throwable {
-
-		AndroidMock.expect(provider.authenticate("test_endpoint", "test_key", "test_secret", "test_uuid")).andReturn(mockSession);
-		AndroidMock.replay(provider);
-
-		api.authenticate("test_endpoint", "test_key", "test_secret", "test_uuid");
-
-		AndroidMock.verify(provider);
-	}
-
-	@Deprecated
-	public void testApiCallsAuthenticateOnProviderWithAuthProviderData() throws Throwable {
-		AuthProviderData data = new AuthProviderData();
-		AndroidMock.expect(provider.authenticate("test_endpoint", "test_key", "test_secret", data, "test_uuid")).andReturn(mockSession);
-		AndroidMock.replay(provider);
-		api.authenticate("test_endpoint", "test_key", "test_secret", data, "test_uuid");
-		AndroidMock.verify(provider);
-	}
-
 	public void testClearSessionCallsClearSessionOnProvider() throws Throwable {
 		provider.clearSession();
 		AndroidMock.replay(provider);
@@ -241,11 +221,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		MockSocializeApi api = new MockSocializeApi(provider);
 
 		AuthProvider<AuthProviderInfo> authProvider = new AuthProvider<AuthProviderInfo>() {
-			@Override
-			public void authenticate(SocializeAuthRequest authRequest, String appId, AuthProviderListener listener) {
-				fail();
-			}
-
+			
 			@Override
 			public void authenticate(AuthProviderInfo info, AuthProviderListener listener) {
 				addResult(1, listener);
@@ -256,10 +232,6 @@ public class SocializeApiTest extends SocializeActivityTest {
 				fail();
 			}
 
-			@Override
-			public void clearCache(Context context, String appId) {
-				fail();
-			}
 		};
 
 		
@@ -341,17 +313,6 @@ public class SocializeApiTest extends SocializeActivityTest {
 		MockSocializeApi api = new MockSocializeApi(provider);
 
 		AuthProvider<AuthProviderInfo> authProvider = new AuthProvider<AuthProviderInfo>() {
-			@Override
-			public void authenticate(SocializeAuthRequest authRequest, String appId, AuthProviderListener listener) {
-
-				fail();
-			}
-
-			@Override
-			public void clearCache(Context context, String appId) {
-				fail();
-			}
-
 			@Override
 			public void authenticate(AuthProviderInfo info, AuthProviderListener listener) {
 				addResult(1, listener);

@@ -24,8 +24,6 @@ package com.socialize.launcher;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
-
 import com.socialize.Socialize;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ShareType;
@@ -38,6 +36,7 @@ import com.socialize.util.StringUtils;
 /**
  * @author Jason Polites
  */
+@Deprecated
 public class ShareLauncher implements Launcher {
 	
 	private ShareMessageBuilder shareMessageBuilder;
@@ -57,7 +56,7 @@ public class ShareLauncher implements Launcher {
 			
 			String text = data.getString(SocializeConfig.SOCIALIZE_SHARE_COMMENT);
 			String mimeType = data.getString(SocializeConfig.SOCIALIZE_SHARE_MIME_TYPE);
-			boolean isHtml = data.getBoolean(SocializeConfig.SOCIALIZE_SHARE_IS_HTML, false);
+//			boolean isHtml = data.getBoolean(SocializeConfig.SOCIALIZE_SHARE_IS_HTML, false);
 			
 			if(StringUtils.isEmpty(text)) {
 				text = entity.getDisplayName();
@@ -65,7 +64,7 @@ public class ShareLauncher implements Launcher {
 			
 			String title = "Share";
 			String subject = shareMessageBuilder.buildShareSubject(entity);
-			String body = shareMessageBuilder.buildShareMessage(entity, text, isHtml, true);
+//			String body = shareMessageBuilder.buildShareMessage(entity, text, isHtml, true);
 			
 			// Start the intent
 			Intent msg = new Intent(android.content.Intent.ACTION_SEND);
@@ -74,12 +73,12 @@ public class ShareLauncher implements Launcher {
 			
 			msg.putExtra(Intent.EXTRA_TITLE, title);
 			
-			if(isHtml) {
-				msg.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(body));
-			}
-			else {
-				msg.putExtra(Intent.EXTRA_TEXT, body);
-			}
+//			if(isHtml) {
+//				msg.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(body));
+//			}
+//			else {
+//				msg.putExtra(Intent.EXTRA_TEXT, body);
+//			}
 			
 			msg.putExtra(Intent.EXTRA_SUBJECT, subject);
 			

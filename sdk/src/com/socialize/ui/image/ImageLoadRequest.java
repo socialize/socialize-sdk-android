@@ -36,7 +36,6 @@ public class ImageLoadRequest {
 
 	private String encodedImageData;
 	private String url;
-//	private Long itemId;
 	private ConcurrentLinkedQueue<ImageLoadListener> listeners;
 	private boolean canceled;
 	private boolean listenersNotified = false;
@@ -99,7 +98,7 @@ public class ImageLoadRequest {
 	}
 	
 	public synchronized void addListeners(Collection<ImageLoadListener> listener) {
-		if(listener != null) {
+		if(listener != null && listener.size() > 0) {
 			if(listeners == null) {
 				listeners = new ConcurrentLinkedQueue<ImageLoadListener>();
 			}
@@ -116,14 +115,6 @@ public class ImageLoadRequest {
 		listeners.add(listener);
 	}
 
-//	public Long getItemId() {
-//		return itemId;
-//	}
-//
-//	public void setItemId(Long itemId) {
-//		this.itemId = itemId;
-//	}
-	
 	public String getEncodedImageData() {
 		return encodedImageData;
 	}

@@ -23,7 +23,6 @@ package com.socialize.util;
 
 import java.util.List;
 import java.util.Locale;
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -32,10 +31,9 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
-
+import android.telephony.TelephonyManager;
 import com.socialize.Socialize;
 import com.socialize.config.SocializeConfig;
-import com.socialize.entity.Entity;
 import com.socialize.log.SocializeLogger;
 import com.socialize.notifications.SocializeBroadcastReceiver;
 import com.socialize.notifications.SocializeC2DMReceiver;
@@ -48,6 +46,7 @@ public class DefaultAppUtils implements AppUtils {
 	private String packageName;
 	private String appName;
 	private String userAgent;
+	private String country;
 	private SocializeLogger logger;
 	private SocializeConfig config;
 	
@@ -87,42 +86,17 @@ public class DefaultAppUtils implements AppUtils {
 		if(StringUtils.isEmpty(appName)) {
 			appName = "A Socialize enabled app";
 		}		
-	}
-	
-	@Override
-	public String getEntityUrl(Entity entity) {
-		Long id = entity.getId();
-		if(id != null) {
-			if(config != null) {
-				String host = config.getProperty(SocializeConfig.REDIRECT_HOST);
-				if(!StringUtils.isEmpty(host)) {
-					return appendAppStore(host + "/e/" + id);
-				}
-			}
-			return appendAppStore("http://r.getsocialize.com/e/" + id);
-		}
-		else {
-			return entity.getKey();
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.util.IAppUtils#getAppUrl()
-	 */
-	@Override
-	public String getAppUrl() {
-		String host = config.getProperty(SocializeConfig.REDIRECT_HOST);
-		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-		if(consumerKey != null) {
-			if(!StringUtils.isEmpty(host)) {
-				return appendAppStore(host + "/a/" + consumerKey);
-			}
-			else {
-				return appendAppStore("http://r.getsocialize.com/a/" + consumerKey);
+		
+		try {
+			TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+			if(manager.getPhoneType() == TelephonyManager.PHONE_TYPE_GSM) {
+				country = manager.getNetworkCountryIso();
 			}
 		}
-		else {
-			return getMarketUrl();
+		catch (Exception ignore) {}
+		
+		if(StringUtils.isEmpty(country)) {
+			country = Locale.getDefault().getCountry();
 		}
 	}
 	
@@ -143,25 +117,6 @@ public class DefaultAppUtils implements AppUtils {
 			return "amz";
 		}
 		return null;
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.socialize.util.IAppUtils#getMarketUrl()
-	 */
-	@Override
-	public String getMarketUrl() {
-		StringBuilder builder = new StringBuilder();
-		
-		String appStore = config.getProperty(SocializeConfig.REDIRECT_APP_STORE);
-		
-		if(!StringUtils.isEmpty(appStore) && appStore.equalsIgnoreCase("amazon")) {
-			builder.append("http://www.amazon.com/gp/mas/dl/android?p=");
-		}
-		else {
-			builder.append("https://market.android.com/details?id=");
-		}
-		builder.append(getPackageName());
-		return builder.toString();
 	}
 	
 	/* (non-Javadoc)
@@ -345,7 +300,7 @@ public class DefaultAppUtils implements AppUtils {
 	public String getUserAgentString() {
 		if (userAgent == null) {
 			userAgent = "Android-" + android.os.Build.VERSION.SDK_INT + "/" + android.os.Build.MODEL + " SocializeSDK/v" + Socialize.VERSION + "; " + Locale.getDefault().getLanguage() + "_"
-					+ Locale.getDefault().getCountry() + "; BundleID/" + getPackageName() + ";";
+					+ getCountry() + "; BundleID/" + getPackageName() + ";";
 		}
 		return userAgent;
 	}
@@ -358,7 +313,10 @@ public class DefaultAppUtils implements AppUtils {
 		return appName;
 	}
 	
-	
+	@Override
+	public String getCountry() {
+		return country;
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.util.IAppUtils#getPackageName()

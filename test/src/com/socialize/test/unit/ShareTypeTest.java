@@ -31,8 +31,8 @@ import com.socialize.test.SocializeUnitTest;
 public class ShareTypeTest extends SocializeUnitTest {
 
 	public void testShareType() {
-		assertEquals(ShareType.FACEBOOK, ShareType.valueOf(1));
-		assertEquals(ShareType.TWITTER, ShareType.valueOf(2));
+		assertEquals(ShareType.FACEBOOK, ShareType.valueOf(2));
+		assertEquals(ShareType.TWITTER, ShareType.valueOf(1));
 		assertEquals(ShareType.EMAIL, ShareType.valueOf(3));
 		assertEquals(ShareType.SMS, ShareType.valueOf(4));
 		assertEquals(ShareType.OTHER, ShareType.valueOf(5));

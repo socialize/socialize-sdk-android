@@ -53,33 +53,12 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	private SocializeAuthProviderInfoFactory socializeAuthProviderInfoFactory;
 	private NotificationRegistrationSystem notificationRegistrationSystem;
 	
-	@Deprecated
-	private Context context;
-	
 	public SocializeUserSystem(SocializeProvider<User> provider) {
 		super(provider);
 	}
 	
-	@Deprecated
-	public void init(Context context) {
-		this.context = context;
-	}
-	
-	@Deprecated
-	@Override
-	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
-		authenticate(context, consumerKey, consumerSecret, listener, sessionConsumer);
-	}
-
-	@Deprecated
-	@Override
-	public void authenticate(String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
-		authenticate(context, consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
-	}
-
 	@Override
 	public SocializeSession authenticateSynchronous(Context ctx, String consumerKey, String consumerSecret, SocializeSessionConsumer sessionConsumer) throws SocializeException {
-		if(ctx == null) ctx = context;
 		String udid = deviceUtils.getUDID(ctx);
 		
 		SocializeSession session = authenticate(ctx, "/authenticate/",consumerKey, consumerSecret, udid);
@@ -112,8 +91,6 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 
 	@Override
 	public void authenticate(Context ctx, String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
-		if(ctx == null) ctx = context;
-		
 		String udid = deviceUtils.getUDID(ctx);
 		
 		// TODO: create test case for this
@@ -197,19 +174,6 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 		listener.onUpdate(sessionUser);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.api.action.UserSystem#saveUserProfile(android.content.Context, com.socialize.api.SocializeSession, java.lang.String, java.lang.String, java.lang.String, com.socialize.listener.user.UserListener)
-	 */
-	@Deprecated
-	@Override
-	public void saveUserProfile(final Context context, final SocializeSession session, String firstName, String lastName, String encodedImage, final UserListener listener) {
-		User user = session.getUser();
-		user.setFirstName(firstName);
-		user.setLastName(lastName);
-		user.setProfilePicData(encodedImage);
-		saveUserProfile(context, session, user, false, listener);
-	}
-
 	public void setSessionPersister(SocializeSessionPersister sessionPersister) {
 		this.sessionPersister = sessionPersister;
 	}

@@ -25,6 +25,7 @@ import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
+import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.User;
 import com.socialize.util.AppUtils;
 import com.socialize.util.StringUtils;
@@ -42,14 +43,6 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 		super();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.api.ShareMessageBuilder#buildShareLink(com.socialize.entity.Entity)
-	 */
-	@Override
-	public String buildShareLink(Entity entity) {
-		return appUtils.getEntityUrl(entity);
-	}
-	
 	/* (non-Javadoc)
 	 * @see com.socialize.api.ShareMessageBuilder#buildShareSubject(com.socialize.entity.Entity)
 	 */
@@ -97,55 +90,36 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 		return Socialize.getSocialize();
 	}
 
-	@Deprecated
-	public String buildShareSubject(String entityKey, String entityName) {
-		return buildShareSubject(Entity.newInstance(entityKey, entityName));
-	}
-	
-	@Deprecated
-	public String buildShareMessage(String entityKey, String entityName, String comment, boolean html, boolean includeSocialize) {
-		return buildShareMessage(Entity.newInstance(entityKey, entityName), comment, html, includeSocialize);
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.socialize.api.ShareMessageBuilder#getEntityLink(com.socialize.entity.Entity, boolean)
-	 */
 	@Override
-	public String getEntityLink(Entity entity, boolean html) {
-		String entityKey = entity.getKey();
+	public String getEntityLink(Entity entity, PropagationInfo urlSet, boolean html) {
 		String entityName = entity.getName();
 		
 		StringBuilder builder = new StringBuilder();
 		
-		if(!StringUtils.isEmpty(entityKey)) {
-			if(html) {
-				builder.append("<a href=\"");
-				builder.append(buildShareLink(entity));
-				builder.append("\">");
-			}
-			
-			if(!StringUtils.isEmpty(entityName)) {
-				builder.append(entityName);
-			}
-			
-			if(html) {
-				builder.append("</a>");
-			}
-			else {
-				builder.append(": ");
-				builder.append(buildShareLink(entity));
-			}
+		if(html) {
+			builder.append("<a href=\"");
+			builder.append(urlSet.getEntityUrl());
+			builder.append("\">");
+		}
+		
+		if(!StringUtils.isEmpty(entityName)) {
+			builder.append(entityName);
+		}
+		
+		if(html) {
+			builder.append("</a>");
+		}
+		else {
+			builder.append(": ");
+			builder.append(urlSet.getEntityUrl());
 		}
 		
 		return builder.toString();
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.api.ShareMessageBuilder#buildShareMessage(com.socialize.entity.Entity, java.lang.String, boolean, boolean)
-	 */
 	@Override
-	public String buildShareMessage(Entity entity, String comment, boolean html, boolean includeSocialize) {
-		
+	public String buildShareMessage(Entity entity, PropagationInfo urlSet, String comment, boolean html, boolean includeSocialize) {
+	
 		StringBuilder builder = new StringBuilder();
 		
 		if(!StringUtils.isEmpty(comment)) {
@@ -154,22 +128,25 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 			builder.append(getNewLine(html));
 		}
 		
-		builder.append(getEntityLink(entity, html));
+		builder.append(getEntityLink(entity, urlSet, html));
 		
 		if(includeSocialize) {
 			builder.append(getNewLine(html));
 			builder.append(getNewLine(html));
-			builder.append("Shared from ");
+			builder.append("Sent from ");
 			
 			if(html) {
 				builder.append("<a href=\"");
-				builder.append(appUtils.getAppUrl());
+				builder.append(urlSet.getAppUrl());
 				builder.append("\">");
 				builder.append(appUtils.getAppName());
 				builder.append("</a>");
 			}
 			else {
 				builder.append(appUtils.getAppName());
+				builder.append(" (");
+				builder.append(urlSet.getAppUrl());
+				builder.append(")");
 			}
 			
 			if(config.isBrandingEnabled()) {
@@ -186,7 +163,7 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 		
 		return builder.toString();
 	}
-	
+
 	public void setAppUtils(AppUtils appUtils) {
 		this.appUtils = appUtils;
 	}

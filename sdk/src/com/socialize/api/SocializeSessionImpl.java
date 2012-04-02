@@ -45,20 +45,15 @@ public class SocializeSessionImpl implements WritableSession {
 	
 	private UserProviderCredentialsMap userProviderCredentials;
 	
-	@Deprecated
 	private String appId3rdParty;
 	
-	@Deprecated
 	private String userId3rdParty;
 	
-	@Deprecated
 	private String token3rdParty;
 	
-	@Deprecated
 	private AuthProviderType authProviderType;
 	
 	@SuppressWarnings("rawtypes")
-	@Deprecated
 	private AuthProvider authProvider;
 	
 	public SocializeSessionImpl() {
@@ -78,29 +73,14 @@ public class SocializeSessionImpl implements WritableSession {
 		authProvider = null;
 	}
 
-	@Deprecated
 	@Override
 	public String get3rdPartyUserId() {
 		return userId3rdParty;
 	}
 	
-	@Deprecated
 	@Override
 	public String get3rdPartyToken() {
 		return token3rdParty;
-	}
-	
-	@Deprecated
-	@Override
-	public void set3rdPartyUserId(String userId) {
-		this.userId3rdParty = userId;
-		
-	}
-	
-	@Deprecated
-	@Override
-	public void set3rdPartyToken(String token) {
-		this.token3rdParty = token;
 	}
 
 	/* (non-Javadoc)
@@ -183,42 +163,20 @@ public class SocializeSessionImpl implements WritableSession {
 		this.host = host;
 	}
 
-	@Deprecated
 	@Override
 	public AuthProviderType getAuthProviderType() {
 		return authProviderType;
 	}
 
-	@Deprecated
-	@Override
-	public void setAuthProviderType(AuthProviderType authProviderType) {
-		this.authProviderType = authProviderType;
-	}
-
-	@Deprecated
 	@Override
 	public String get3rdPartyAppId() {
 		return appId3rdParty;
 	}
 
-	@Deprecated
-	@Override
-	public void set3rdAppId(String appId) {
-		this.appId3rdParty = appId;
-	}
-
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Deprecated
 	@Override
 	public AuthProvider getAuthProvider() {
 		return authProvider;
-	}
-	
-	@SuppressWarnings("rawtypes")
-	@Deprecated
-	@Override
-	public void setAuthProvider(AuthProvider authProvider) {
-		this.authProvider = authProvider;
 	}
 
 	public UserProviderCredentialsMap getUserProviderCredentials() {

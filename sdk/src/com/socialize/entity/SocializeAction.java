@@ -21,8 +21,6 @@
  */
 package com.socialize.entity;
 
-import java.util.List;
-
 import com.socialize.api.action.ActionType;
 import com.socialize.util.StringUtils;
 
@@ -35,10 +33,9 @@ public abstract class SocializeAction extends SocializeObject {
 	
 	private Application application;
 	
-	@Deprecated
-	private List<Propagator> propagators;
-	
 	private Propagation propagation;
+	private Propagation propagationInfoRequest;
+	private PropagationInfoResponse propagationInfoResponse;
 	
 	private Entity entity;
 	private String entityKey; // Used when only the key is supplied.
@@ -54,16 +51,6 @@ public abstract class SocializeAction extends SocializeObject {
 	}
 	public void setApplication(Application application) {
 		this.application = application;
-	}
-	
-	@Deprecated
-	public List<Propagator> getPropagators() {
-		return propagators;
-	}
-	
-	@Deprecated
-	public void setPropagators(List<Propagator> propagators) {
-		this.propagators = propagators;
 	}
 	
 	public Entity getEntity() {
@@ -108,7 +95,6 @@ public abstract class SocializeAction extends SocializeObject {
 	}
 	
 	public String getEntityKey() {
-		
 		if(StringUtils.isEmpty(entityKey)) {
 			if(entity != null) {
 				return entity.getKey();
@@ -149,6 +135,21 @@ public abstract class SocializeAction extends SocializeObject {
 		this.propagation = propagation;
 	}
 	
+	public Propagation getPropagationInfoRequest() {
+		return propagationInfoRequest;
+	}
+	
+	public void setPropagationInfoRequest(Propagation propagationRequest) {
+		this.propagationInfoRequest = propagationRequest;
+	}
+	
+	public PropagationInfoResponse getPropagationInfoResponse() {
+		return propagationInfoResponse;
+	}
+	
+	public void setPropagationInfoResponse(PropagationInfoResponse propagationInfoResponse) {
+		this.propagationInfoResponse = propagationInfoResponse;
+	}
 	public abstract ActionType getActionType();
 	
 	/**

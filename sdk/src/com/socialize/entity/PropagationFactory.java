@@ -26,12 +26,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.socialize.networks.SocialNetwork;
+import com.socialize.api.action.ShareType;
 import com.socialize.util.StringUtils;
 
 /**
@@ -99,16 +97,12 @@ public class PropagationFactory extends JSONFactory<Propagation> {
 		
 		JSONArray networks = new JSONArray();
 		
-		List<SocialNetwork> thirdParties = from.getThirdParties();
+		List<ShareType> thirdParties = from.getThirdParties();
 		
 		if(thirdParties != null && thirdParties.size() > 0) {
-			for (SocialNetwork socialNetwork : thirdParties) {
-				// TODO: Remove this condition once facebook is supported.
-				if(!socialNetwork.equals(SocialNetwork.FACEBOOK)) {
-					networks.put(socialNetwork.name().toLowerCase());
-				}
+			for (ShareType socialNetwork : thirdParties) {
+				networks.put(socialNetwork.name().toLowerCase());
 			}
-			
 			to.put("third_parties", networks);
 		}
 	}

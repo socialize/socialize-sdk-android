@@ -22,11 +22,9 @@
 package com.socialize.entity;
 
 import java.text.ParseException;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.socialize.log.SocializeLogger;
 import com.socialize.util.StringUtils;
 
@@ -43,6 +41,7 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 	private UserFactory userFactory;
 	private EntityFactory entityFactory;
 	private PropagationFactory propagationFactory;
+	private PropagationInfoResponseFactory propagationInfoResponseFactory;
 	
 	@Override
 	protected void toJSON(T from, JSONObject to) throws JSONException {
@@ -53,6 +52,7 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 			String entityKey = from.getEntityKey();
 			Application appObject = from.getApplication();
 			Propagation propagation = from.getPropagation();
+			Propagation propagationInfoRequest = from.getPropagationInfoRequest();
 			
 			User userObject = from.getUser();
 			Double lat = from.getLat();
@@ -77,10 +77,15 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 				to.put("application", application);
 			}
 			
-			if(propagation != null && propagationFactory != null) {
-				to.put("propagation", propagationFactory.toJSON(propagation));
+			if(propagationFactory != null) {
+				if(propagation != null) {
+					to.put("propagation", propagationFactory.toJSON(propagation));
+				}
+				if(propagationInfoRequest != null) {
+					to.put("propagation_info_request", propagationFactory.toJSON(propagationInfoRequest));
+				}
 			}
-			
+
 			if(userObject != null) {
 				JSONObject user = userFactory.toJSON(userObject);
 				to.put("user", user);
@@ -115,44 +120,33 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 		
 		try {
 			
-			if(from.has("application") && !from.isNull("application")) {
-				JSONObject application = from.getJSONObject("application");
-				if(application != null) {
-					to.setApplication(applicationFactory.fromJSON(application));
-				}
+			JSONObject application = getJSONObject(from, "application");
+			JSONObject user = getJSONObject(from, "user");
+			JSONObject entity = getJSONObject(from, "entity");
+			JSONObject propagationInfoResponse = getJSONObject(from, "propagation_info_response");
+			
+			if(application != null) {
+				to.setApplication(applicationFactory.fromJSON(application));
 			}
 			
-			if(from.has("user") && !from.isNull("user")) {
-				JSONObject user = from.getJSONObject("user");
-				if(user != null) {
-					to.setUser(userFactory.fromJSON(user));
-				}
+			if(user != null) {
+				to.setUser(userFactory.fromJSON(user));
 			}
 			
-			if(from.has("entity") && !from.isNull("entity")) {
-				JSONObject entity = from.getJSONObject("entity");
-				if(entity != null) {
-					to.setEntity(entityFactory.fromJSON(entity));
-				}
+			if(entity != null) {
+				to.setEntity(entityFactory.fromJSON(entity));
 			}
 			
-			if(from.has("entity_key") && !from.isNull("entity_key")) {
-				to.setEntityKey(from.getString("entity_key"));
-			}
-
-			if(from.has("lat") && !from.isNull("lat")) {
-				to.setLat(from.getDouble("lat"));
+			if(propagationInfoResponse != null) {
+				to.setPropagationInfoResponse(propagationInfoResponseFactory.fromJSON(propagationInfoResponse));
 			}
 			
-			if(from.has("lng") && !from.isNull("lng")) {
-				to.setLon(from.getDouble("lng"));
-			}
+			to.setEntityKey(getString(from, "entity_key"));
+			to.setLat(getDouble(from, "lat"));
+			to.setLon(getDouble(from, "lng"));
+			to.setLocationShared(getBoolean(from, "share_location", false));
 			
-			if(from.has("share_location") && !from.isNull("share_location")) {
-				to.setLocationShared(from.getBoolean("share_location"));
-			}			
-			
-			if(from.has("date") && !from.isNull("date")) {
+			if(exists(from,  "date")) {
 				try {
 					to.setDate(DATE_FORMAT.parse(from.getString("date")).getTime());
 				}
@@ -198,6 +192,10 @@ public abstract class SocializeActionFactory<T extends SocializeAction> extends 
 
 	public void setPropagationFactory(PropagationFactory propagationFactory) {
 		this.propagationFactory = propagationFactory;
+	}
+	
+	public void setPropagationInfoResponseFactory(PropagationInfoResponseFactory propagationInfoResponseFactory) {
+		this.propagationInfoResponseFactory = propagationInfoResponseFactory;
 	}
 
 	protected abstract void postToJSON(T from, JSONObject to) throws JSONException;

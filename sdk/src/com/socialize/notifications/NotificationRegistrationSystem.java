@@ -22,8 +22,6 @@
 package com.socialize.notifications;
 
 import android.content.Context;
-
-import com.socialize.api.SocializeSession;
 import com.socialize.entity.User;
 
 /**
@@ -48,6 +46,4 @@ public interface NotificationRegistrationSystem {
 	
 	public void registerSocialize(Context context, String registrationId);
 	
-	@Deprecated
-	public void registerSocialize(Context context, SocializeSession session, String registrationId);
 }

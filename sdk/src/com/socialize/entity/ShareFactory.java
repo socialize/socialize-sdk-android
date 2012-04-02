@@ -24,6 +24,7 @@ package com.socialize.entity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.socialize.api.action.ShareType;
 import com.socialize.util.StringUtils;
 
 /**
@@ -48,16 +49,13 @@ public class ShareFactory extends SocializeActionFactory<Share> {
 						share.getClass().getSimpleName() +
 						"]");
 			}
-		}		
+		}
 		
-		if(object.has(medium) && !object.isNull(medium)) {
-			JSONObject mediumObject = object.getJSONObject(medium);
-			if(mediumObject.has("id") && !mediumObject.isNull("id")) {
-				share.setMedium(mediumObject.getInt("id"));
-			}
-			if(mediumObject.has(medium) && !mediumObject.isNull(medium)) {
-				share.setMediumName(mediumObject.getString(medium));
-			}
+		JSONObject mediumObject = getJSONObject(object, medium);
+		
+		if(mediumObject != null) {
+			int id = getInt(mediumObject, "id");
+			share.setShareType(ShareType.valueOf(id));
 		}
 	}
 
@@ -68,12 +66,12 @@ public class ShareFactory extends SocializeActionFactory<Share> {
 			object.put("text", text);
 		}
 		
-		String medium_name = share.getMediumName();
-		if(!StringUtils.isEmpty( medium_name )) {
-			object.put("medium_name", medium_name);
-		}
+		ShareType shareType = share.getShareType();
 		
-		object.put("medium", share.getMedium());
+		if(shareType != null) {
+			object.put("medium_name", shareType.getName());
+			object.put("medium", shareType.getId());
+		}
 	}
 
 	@Override

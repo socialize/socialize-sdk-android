@@ -80,7 +80,7 @@ public class FacebookActivityServiceTest extends SocializeActivityTest {
 	public void testAuthorizeCallbackCalledInActivityOnActivityResult() {
 		
 		Intent intent = AndroidMock.createMock(Intent.class);
-		Facebook facebook = AndroidMock.createMock(Facebook.class);
+		Facebook facebook = AndroidMock.createMock(Facebook.class, "foobar");
 		
 		FacebookActivity activity = AndroidMock.createMock(FacebookActivity.class);
 

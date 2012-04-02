@@ -61,10 +61,14 @@ public class ImageLoaderTest extends SocializeUnitTest {
 		AndroidMock.expect(cache.get(url)).andReturn(drawable);
 		AndroidMock.expect(drawable.isRecycled()).andReturn(false);
 		AndroidMock.expect(request.getUrl()).andReturn(url);
+//		AndroidMock.expect(request.getScaleWidth()).andReturn(-1).once();
+//		AndroidMock.expect(request.getScaleHeight()).andReturn(-1).once();
 		
 		listener.onImageLoad(request, drawable);
 		
         request.setUrl(url);
+        request.setScaleHeight(-1);
+        request.setScaleWidth(-1);
         request.setType(ImageLoadType.URL);
         
         AndroidMock.replay(drawables, cache, drawable, listener, request);

@@ -32,6 +32,7 @@ import com.socialize.auth.AuthProviderInfoFactory;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
+import com.socialize.entity.PropagationInfo;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
@@ -44,34 +45,16 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 	private SocializeConfig config;
 	private SocializeLogger logger;
 	private AuthProviderInfoFactory<AuthProviderInfo> authProviderInfoFactory;
-	
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.networks.SocialNetworkSharer#share(android.app.Activity, com.socialize.entity.Entity, java.lang.String, android.location.Location, com.socialize.networks.SocialNetworkListener)
-	 */
+		
 	@Override
-	public void shareEntity(final Activity context, Entity entity, String comment, boolean autoAuth, SocialNetworkListener listener) {
-		share(context, entity, comment, listener, ActionType.SHARE, autoAuth);
-	}
-	
-	@Override
-	public void shareComment(Activity context, Entity entity, String comment, boolean autoAuth, SocialNetworkListener listener) {
-		share(context, entity, comment, listener, ActionType.COMMENT, autoAuth);
-	}
-
-	@Override
-	public void shareLike(Activity context, Entity entity, String comment, boolean autoAuth, SocialNetworkListener listener) {
-		share(context, entity, comment, listener, ActionType.LIKE, autoAuth);
-	}
-
-	protected void share(final Activity context, final Entity entity, final String comment, final SocialNetworkListener listener, final ActionType type, boolean autoAuth) {
+	public void share(final Activity context, final Entity entity, final PropagationInfo urlSet, final String comment, boolean autoAuth, final ActionType type, final SocialNetworkListener listener) {
 
 		AuthProviderType authProviderType = AuthProviderType.valueOf(getNetwork());
 		
 		if(getSocialize().isSupported(authProviderType)) {
 			
 			if(getSocialize().isAuthenticated(authProviderType)) {
-				doShare(context, entity, comment, listener, type);
+				doShare(context, entity, urlSet, comment, listener, type);
 			}
 			else if(autoAuth) {
 				
@@ -94,7 +77,7 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 							listener.onBeforePost(context, getNetwork());
 						}
 						
-						doShare(context, entity, comment, listener, type);
+						doShare(context, entity, urlSet, comment, listener, type);
 					}
 
 					@Override
@@ -128,8 +111,8 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 	
 	protected abstract SocialNetwork getNetwork();
 	
-	protected abstract void doShare(final Activity context, Entity entity, String comment, final SocialNetworkListener listener, ActionType type);
-
+	protected abstract void doShare(final Activity context, Entity entity, PropagationInfo urlSet, String comment, final SocialNetworkListener listener, ActionType type);
+	
 	public void setConfig(SocializeConfig config) {
 		this.config = config;
 	}

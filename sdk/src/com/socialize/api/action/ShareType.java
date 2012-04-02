@@ -21,27 +21,35 @@
  */
 package com.socialize.api.action;
 
+import com.socialize.networks.SocialNetwork;
+
 
 /**
  * @author Jason Polites
  */
 public enum ShareType {
-	TWITTER ("twitter", 1),
-	FACEBOOK ("facebook", 2),
-	EMAIL ("email", 3),
-	SMS ("sms", 4),
-	OTHER ("other", 101);
+	TWITTER ("twitter", "Twitter", 1),
+	FACEBOOK ("facebook", "Facebook", 2),
+	EMAIL ("email", "Email", 3),
+	SMS ("sms", "SMS", 4),
+	OTHER ("other", "Other",  101);
 	
-	private final String name;   
+	private final String name; 
+	private final String displayName;
     private final int id; 
 	
-	ShareType(String name, int id) {
+	ShareType(String name, String displayName, int id) {
 		this.name = name;
+		this.displayName = displayName;
 		this.id = id;
 	}
 
 	public String getName() {
 		return name;
+	}
+	
+	public String getDisplayName() {
+		return displayName;
 	}
 
 	public int getId() {
@@ -53,12 +61,19 @@ public enum ShareType {
 		return name;
 	}
 	
+	public static ShareType valueOf(SocialNetwork socialNetwork) {
+		if(socialNetwork == null) {
+			return OTHER;
+		}
+		return valueOf(socialNetwork.name().toUpperCase());
+	}
+	
 	public static ShareType valueOf(int id) {
 		switch(id) {
 		case 1 : 
-			return FACEBOOK;
+			return TWITTER;
 		case 2 : 
-			return TWITTER;	
+			return FACEBOOK;	
 		case 3 : 
 			return EMAIL;	
 		case 4 : 

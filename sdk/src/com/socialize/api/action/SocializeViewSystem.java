@@ -57,11 +57,6 @@ public class SocializeViewSystem extends SocializeApi<View, SocializeProvider<Vi
 		
 		postAsync(session, ENDPOINT, list, listener);
 	}
-
-	@Deprecated
-	public void addView(SocializeSession session, String key, Location location, ViewListener listener) {
-		addView(session, Entity.newInstance(key, null), location, listener);
-	}
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.api.action.ViewSystem#getViewsByEntity(com.socialize.api.SocializeSession, java.lang.String, int, int, com.socialize.listener.view.ViewListener)

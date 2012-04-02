@@ -23,9 +23,6 @@ package com.socialize.api.action;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import android.location.Location;
-
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
@@ -54,23 +51,18 @@ public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Li
 	 * @see com.socialize.api.action.LikeSystem#addLike(com.socialize.api.SocializeSession, com.socialize.entity.Entity, android.location.Location, com.socialize.networks.ShareOptions, com.socialize.listener.like.LikeListener)
 	 */
 	@Override
-	public void addLike(SocializeSession session, Entity entity, Location location, ShareOptions shareOptions, LikeListener listener) {
+	public void addLike(SocializeSession session, Entity entity, ShareOptions shareOptions, LikeListener listener) {
 		Like c = new Like();
 		c.setEntity(entity);
 		
 		setPropagationData(c, shareOptions);
-		setLocation(c, location);
+		setLocation(c, shareOptions);
 		
 		List<Like> list = new ArrayList<Like>(1);
 		list.add(c);
 		
 		postAsync(session, ENDPOINT, list, listener);
 	}	
-	
-	@Deprecated
-	public void addLike(SocializeSession session, String key, Location location, LikeListener listener) {
-		addLike(session, Entity.newInstance(key, null), location, null, listener);
-	}
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.api.action.LikeSystem#deleteLike(com.socialize.api.SocializeSession, long, com.socialize.listener.like.LikeListener)

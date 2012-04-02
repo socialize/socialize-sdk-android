@@ -108,6 +108,8 @@ public class EntityAccessorTests extends SocializeUnitTest {
 	public void testSocializeActionAccessors() {
 		SocializeAction action = new SocializeAction() {
 
+			private static final long serialVersionUID = -1558546438113025652L;
+
 			@Override
 			public ActionType getActionType() {
 				return null;
@@ -143,36 +145,5 @@ public class EntityAccessorTests extends SocializeUnitTest {
 		assertEquals(lat, action.getLat());
 		assertEquals(lon, action.getLon());
 
-	}
-
-	@Deprecated
-	public void testEntityAccessors() {
-
-		Entity entity = new Entity();
-
-		String name = "foo";
-		String key = "bar";
-
-		Integer comments = 1;
-		Integer likes = 2;
-		// Integer id = 3;
-		Integer shares = 4;
-		Integer views = 5;
-
-		entity.setComments(comments);
-		// entity.setId(id);
-		entity.setKey(key);
-		entity.setLikes(likes);
-		entity.setName(name);
-		entity.setShares(shares);
-		entity.setViews(views);
-
-		assertEquals(comments, entity.getComments());
-		assertEquals(likes, entity.getLikes());
-		// assertEquals(id, entity.getId());
-		assertEquals(shares, entity.getShares());
-		assertEquals(views, entity.getViews());
-		assertEquals(name, entity.getName());
-		assertEquals(key, entity.getKey());
 	}
 }

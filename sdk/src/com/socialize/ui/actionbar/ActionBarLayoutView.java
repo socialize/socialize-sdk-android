@@ -27,6 +27,7 @@ import android.view.Gravity;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.EntityStats;
 import com.socialize.entity.Like;
@@ -328,8 +329,8 @@ public class ActionBarLayoutView extends BaseView {
 				// Like
 				ShareOptions options = new ShareOptions();
 				
-				if(getSocialize().getSession().getUser().isAutoPostToFacebook()) {
-					if(getSocialize().getSession().getUser().isAutoPostToTwitter()) {
+				if(getSocialize().getSession().getUser().isAutoPostToFacebook() && getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+					if(getSocialize().getSession().getUser().isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
 						options.setShareTo(SocialNetwork.FACEBOOK, SocialNetwork.TWITTER);
 					}
 					else {
@@ -337,7 +338,7 @@ public class ActionBarLayoutView extends BaseView {
 					}
 					
 				}
-				else if(getSocialize().getSession().getUser().isAutoPostToTwitter()) {
+				else if(getSocialize().getSession().getUser().isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
 					options.setShareTo(SocialNetwork.TWITTER);
 				}
 				

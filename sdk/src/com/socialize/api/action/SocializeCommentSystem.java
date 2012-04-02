@@ -23,9 +23,6 @@ package com.socialize.api.action;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import android.location.Location;
-
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
@@ -45,13 +42,13 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 	}
 	
 	@Override
-	public void addComment(SocializeSession session, Comment comment, Location location, ShareOptions shareOptions, CommentListener listener) {
+	public void addComment(SocializeSession session, Comment comment, ShareOptions shareOptions, CommentListener listener) {
 		boolean shareLocation = (shareOptions == null || shareOptions.isShareLocation());
 		
 		comment.setLocationShared(shareLocation);
 		
 		setPropagationData(comment, shareOptions);
-		setLocation(comment, location);
+		setLocation(comment, shareOptions);
 		
 		List<Comment> list = new ArrayList<Comment>(1);
 		list.add(comment);
@@ -65,18 +62,13 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 	 * @see com.socialize.api.action.CommentSystem#addComment(com.socialize.api.SocializeSession, com.socialize.entity.Entity, java.lang.String, android.location.Location, com.socialize.networks.ShareOptions, com.socialize.listener.comment.CommentListener)
 	 */
 	@Override
-	public void addComment(SocializeSession session, Entity entity, String comment, Location location, ShareOptions shareOptions, CommentListener listener) {
+	public void addComment(SocializeSession session, Entity entity, String comment, ShareOptions shareOptions, CommentListener listener) {
 		Comment c = new Comment();
 		c.setText(comment);
 		c.setEntity(entity);
-		addComment(session, c, location, shareOptions, listener);
+		addComment(session, c, shareOptions, listener);
 	}
 
-	@Deprecated
-	public void addComment(SocializeSession session, String key, String comment, Location location, ShareOptions shareOptions, CommentListener listener) {
-		addComment(session, Entity.newInstance(key, null), comment, location, shareOptions, listener);
-	}
-	
 	/* (non-Javadoc)
 	 * @see com.socialize.api.action.CommentSystem#getCommentsByEntity(com.socialize.api.SocializeSession, java.lang.String, com.socialize.listener.comment.CommentListener)
 	 */

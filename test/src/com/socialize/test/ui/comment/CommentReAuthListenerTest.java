@@ -3,7 +3,6 @@ package com.socialize.test.ui.comment;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.error.SocializeException;
-import com.socialize.networks.SocialNetwork;
 import com.socialize.test.ui.SocializeUITestCase;
 import com.socialize.ui.comment.CommentButtonCallback;
 import com.socialize.ui.comment.CommentReAuthListener;
@@ -15,16 +14,18 @@ public class CommentReAuthListenerTest extends SocializeUITestCase {
 	CommentReAuthListener listener;
 	String comment = "foobar";
 	
+	final boolean shareLocation = false;
+	final boolean subscribe = true;
+	
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		callback = AndroidMock.createMock(CommentButtonCallback.class);
-		listener = new CommentReAuthListener(getContext(), callback, comment, false, true, false);
+		listener = new CommentReAuthListener(getContext(), callback, comment, shareLocation, subscribe);
 	}
 
 	@UsesMocks (SocializeException.class)
 	public void testOnError() {
-//		String errorMessage = "foobar_message";
 		SocializeException error = AndroidMock.createMock(SocializeException.class);
 		
 		callback.onError(getContext(), error);
@@ -40,7 +41,7 @@ public class CommentReAuthListenerTest extends SocializeUITestCase {
 	
 	public void testOnAuthSuccess() {
 		
-		callback.onComment(comment, true, false, (SocialNetwork[]) null);
+		callback.onComment(comment, shareLocation, subscribe);
 		
 		AndroidMock.replay(callback);
 		

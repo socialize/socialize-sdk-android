@@ -22,12 +22,10 @@
 package com.socialize.ui.dialog;
 
 import android.R;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
 import android.view.Window;
-
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.auth.AuthRequestListener;
@@ -44,12 +42,6 @@ public abstract class AuthDialogFactory  {
 	
 	public abstract Dialog create(View parent, AuthRequestListener listener);
 
-	
-	// So we can mock
-	@Deprecated
-	protected AlertDialog.Builder newBuilder(Context context) {
-		return new AlertDialog.Builder(context);
-	}
 	
 	// So we can mock
 	protected Dialog newDialog(Context context) {

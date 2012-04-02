@@ -23,7 +23,6 @@ package com.socialize.test.unit.facebook;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.facebook.FacebookActivity;
@@ -36,7 +35,6 @@ import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.ListenerHolder;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.DialogFactory;
-import com.socialize.util.Drawables;
 
 /**
  * @author Jason Polites
@@ -87,8 +85,10 @@ public class FacebookActivityTest extends SocializeActivityTest {
 		AndroidMock.expect(context.getBean("dialogFactory")).andReturn(dialogFactory);
 		AndroidMock.expect(context.getBean("config")).andReturn(config);
 		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true)).andReturn(true);
+		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.FACEBOOK_PHOTOS_ENABLED, false)).andReturn(false);
 		
-		service.authenticate(true);
+		
+		service.authenticate(true, false);
 		
 		AndroidMock.replay(config);
 		AndroidMock.replay(context);

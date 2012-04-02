@@ -1,10 +1,102 @@
+/*
+ * Copyright (c) 2011 Socialize Inc.
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package com.socialize.ui.share;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.view.View;
 import android.view.View.OnClickListener;
+import com.socialize.Socialize;
+import com.socialize.api.action.ShareType;
+import com.socialize.entity.Entity;
+import com.socialize.entity.Share;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.share.ShareAddListener;
+import com.socialize.ui.actionbar.ActionBarView;
+import com.socialize.ui.actionbar.OnActionBarEventListener;
+import com.socialize.ui.dialog.AlertDialogFactory;
+import com.socialize.ui.dialog.ProgressDialogFactory;
 
-public interface ShareClickListener extends OnClickListener {
 
-	public boolean isAvailableOnDevice(Activity parent);
+/**
+ * @author Jason Polites
+ *
+ */
+public class ShareClickListener implements OnClickListener {
+	
+	private ShareType shareType;
+	private Activity context;
+	private Entity entity;
+	private ShareInfoProvider provider;
+	private ProgressDialogFactory progressDialogFactory;
+	private AlertDialogFactory alertDialogFactory;
+	private OnActionBarEventListener onActionBarEventListener;
+	private ActionBarView actionBarView;
 
+	public ShareClickListener(
+			Activity context, 
+			Entity entity, 
+			ShareType shareType, 
+			ShareInfoProvider provider,
+			OnActionBarEventListener onActionBarEventListener,
+			ActionBarView actionBarView) {
+		super();
+		
+		this.context = context;
+		this.shareType = shareType;
+		this.entity = entity;
+		this.provider = provider;
+		this.onActionBarEventListener = onActionBarEventListener;
+		this.actionBarView = actionBarView;
+	}
+	
+	/* (non-Javadoc)
+	 * @see android.view.View.OnClickListener#onClick(android.view.View)
+	 */
+	@Override
+	public void onClick(View view) {
+		final ProgressDialog dialog = progressDialogFactory.show(context, "Share", "Sharing via " + shareType.getDisplayName() + "...");
+		Socialize.getSocialize().share(context, entity, provider.getShareText(), shareType, new ShareAddListener() {
+			@Override
+			public void onError(SocializeException error) {
+				dialog.dismiss();
+				alertDialogFactory.showToast(context, "Share failed.  Please try again");
+			}
+			
+			@Override
+			public void onCreate(Share share) {
+				dialog.dismiss();
+				if(onActionBarEventListener != null) {
+					onActionBarEventListener.onPostShare(actionBarView, share);
+				}
+			}
+		});
+	}
+	
+	public void setProgressDialogFactory(ProgressDialogFactory progressDialogFactory) {
+		this.progressDialogFactory = progressDialogFactory;
+	}
+
+	public void setAlertDialogFactory(AlertDialogFactory alertDialogFactory) {
+		this.alertDialogFactory = alertDialogFactory;
+	}
 }

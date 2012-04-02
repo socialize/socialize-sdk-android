@@ -64,16 +64,6 @@ public class CommentAddButtonListener {
 		callback.onCancel();
 	}
 
-	@Deprecated
-	public void onComment(String comment, boolean autoPostToFacebook, boolean shareLocation, boolean subscribe) {
-		if(autoPostToFacebook) {
-			onComment(comment, shareLocation, subscribe, SocialNetwork.FACEBOOK);
-		}
-		else {
-			onComment(comment, shareLocation, subscribe);
-		}
-	}
-	
 	public void onComment(String comment, boolean shareLocation, boolean subscribe, SocialNetwork...networks) {
 		if(!StringUtils.isEmpty(comment)) {
 			if(!getSocialize().isAuthenticated()) {

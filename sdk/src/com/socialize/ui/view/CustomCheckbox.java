@@ -228,11 +228,6 @@ public class CustomCheckbox extends BaseView {
 		this.padding = padding;
 	}
 	
-	@Deprecated
-	public void setForceDefaultDensity(boolean forceDefaultDensity) {
-		
-	}
-	
 	public void showLoading() {
 		if(iconFlipper != null) {
 			setEnabled(false);

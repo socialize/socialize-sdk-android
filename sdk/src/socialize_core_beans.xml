@@ -144,7 +144,6 @@
 	
 	<bean id="sessionFactory" class="com.socialize.api.DefaultSocializeSessionFactory">
 		<constructor-arg ref="config"/>
-		<constructor-arg ref="authProviders"/>
 	</bean>
 	
 	<bean id="sessionPersister" class="com.socialize.api.PreferenceSessionPersister">
@@ -219,6 +218,7 @@
 		<property name="userFactory" ref="userFactory"/>
 		<property name="entityFactory" ref="entityFactory"/>
 		<property name="propagationFactory" ref="propagationFactory"/>
+		<property name="propagationInfoResponseFactory" ref="propagationInfoResponseFactory"/>
 	</bean>
 
 	
@@ -247,6 +247,9 @@
 <!--  Propagator -->
 
 	<bean id="propagationFactory" class="com.socialize.entity.PropagationFactory"/>
+	<bean id="propagationInfoResponseFactory" class="com.socialize.entity.PropagationInfoResponseFactory">
+		<property name="logger" ref="logger"/>
+	</bean>
 
 <!--  End Propagator -->
 
@@ -345,18 +348,70 @@
 	<bean id="shareSystem" class="com.socialize.api.action.SocializeShareSystem" extends="socializeApi">
 		<constructor-arg ref="shareProvider"/>
 		<property name="logger" ref="logger"/>
+		<property name="shareHandlers" ref="shareHandlers"/>
+		
+		<!-- 
 		<property name="sharers">
 			<map>
 				<entry>
-					<key value="facebook"/> <!-- MUST be lower case -->
+					<key value="facebook"/>
 					<value ref="facebookSharer"/>
 				</entry>
 				<entry>
-					<key value="twitter"/> <!-- MUST be lower case -->
+					<key value="twitter"/>
 					<value ref="twitterSharer"/>
 				</entry>				
 			</map>
-		</property>		
+		</property>	
+		 -->	
+	</bean>
+	
+	<bean id="emailShareHandler" class="com.socialize.share.EmailShareHandler">
+		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
+		<property name="config" ref="config"/>
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="smsShareHandler" class="com.socialize.share.SmsShareHandler">
+		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
+		<property name="config" ref="config"/>
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="facebookShareHandler" class="com.socialize.share.FacebookShareHandler">
+		<property name="facebookSharer" ref="facebookSharer"/>
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="twitterShareHandler" class="com.socialize.share.TwitterShareHandler"/>
+	
+	<bean id="otherShareHandler" class="com.socialize.share.OtherShareHandler" extends="emailShareHandler"/>
+	
+	<bean id="shareHandlers" class="com.socialize.share.ShareHandlers">
+		<property name="handlers">
+			<map>
+				<entry>
+					<key value="EMAIL"/>
+					<value ref="emailShareHandler"/>
+				</entry>
+				<entry>
+					<key value="SMS"/>
+					<value ref="smsShareHandler"/>
+				</entry>				
+				<entry>
+					<key value="FACEBOOK"/>
+					<value ref="facebookShareHandler"/>
+				</entry>
+				<entry>
+					<key value="TWITTER"/>
+					<value ref="twitterShareHandler"/>
+				</entry>
+				<entry>
+					<key value="OTHER"/>
+					<value ref="otherShareHandler"/>
+				</entry>
+			</map>
+		</property>	
 	</bean>
 	
 <!-- End Share API -->
@@ -374,11 +429,6 @@
 	
 	<bean id="userSystem" class="com.socialize.api.action.SocializeUserSystem" extends="socializeApi">
 		<constructor-arg ref="userProvider"/>
-		
-		<init-method name="init">
-			<arg type="context"/>
-		</init-method>
-				
 		<property name="sessionPersister" ref="sessionPersister"/>
 		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
 		<property name="deviceUtils" ref="deviceUtils"/>	
@@ -470,10 +520,12 @@
 	<bean id="actionLauncher" class="com.socialize.launcher.SocializeActionLauncher" extends="activityLauncher"/>
 	<bean id="homeLauncher" class="com.socialize.launcher.HomeLauncher"/>
 	
+	<!-- 
 	<bean id="shareLauncher" class="com.socialize.launcher.ShareLauncher">
 		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
 		<property name="listenerHolder" ref="listenerHolder"/>
 	</bean>
+	 -->
 
 	<bean id="launchManager" class="com.socialize.launcher.SocializeLaunchManager">
 		<property name="logger" ref="logger"/>
@@ -486,11 +538,13 @@
 				<entry>
 					<key value="HOME"/>
 					<value ref="homeLauncher"/>
-				</entry>				
+				</entry>
+				<!-- 			
 				<entry>
 					<key value="LOCAL_SHARE"/>
 					<value ref="shareLauncher"/>
-				</entry>				
+				</entry>
+				 -->					
 			</map>
 		</property>
 	</bean>
@@ -524,12 +578,18 @@
 	</bean>
 	
 	<bean 
+		id="facebookImageUtils" 
+		class="com.socialize.networks.facebook.FacebookImageUtils">
+	</bean>	
+	
+	<bean 
 		id="facebookWallPoster" 
 		class="com.socialize.networks.facebook.DefaultFacebookWallPoster">
 		<property name="logger" ref="logger"/>
 		<property name="config" ref="config"/>
 		<property name="appUtils" ref="appUtils"/>
 		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
+		<property name="facebookImageUtils" ref="facebookImageUtils"/>
 	</bean>	
 	
 	<bean 

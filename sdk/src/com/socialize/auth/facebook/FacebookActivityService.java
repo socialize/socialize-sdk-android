@@ -42,9 +42,10 @@ public class FacebookActivityService {
 				facebook = new Facebook(appId);
 				service = getFacebookService();
 				
+				boolean photos = config.getBooleanProperty(SocializeConfig.FACEBOOK_PHOTOS_ENABLED, false);
 				boolean sso = config.getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true);
 				
-				service.authenticate(sso);
+				service.authenticate(sso, photos);
 			}
 			else {
 				activity.finish();

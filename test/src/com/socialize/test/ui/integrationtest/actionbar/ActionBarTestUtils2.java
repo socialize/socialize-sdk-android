@@ -23,9 +23,7 @@ package com.socialize.test.ui.integrationtest.actionbar;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.test.ActivityInstrumentationTestCase2;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
@@ -37,7 +35,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.like.LikeListener;
 import com.socialize.networks.ShareOptions;
-import com.socialize.sample.mocks.MockLikeSystem;
+import com.socialize.test.mock.MockLikeSystem;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarLayoutView;
 
@@ -55,7 +53,7 @@ public class ActionBarTestUtils2 {
 		
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
 			@Override
-			public void addLike(SocializeSession session, Entity entity, Location location, ShareOptions options, LikeListener listener) {
+			public void addLike(SocializeSession session, Entity entity, ShareOptions options, LikeListener listener) {
 				TestUtils.addResult("success");
 			}
 

@@ -22,6 +22,7 @@
 package com.socialize.entity;
 
 import com.socialize.api.action.ActionType;
+import com.socialize.api.action.ShareType;
 
 
 /**
@@ -33,8 +34,7 @@ public class Share extends SocializeAction {
 	private static final long serialVersionUID = -7747516178154031316L;
 	
 	private String text;
-	private String mediumName;
-	private int medium;
+	private ShareType shareType;
 	
 	@Override
 	public ActionType getActionType() {
@@ -49,27 +49,19 @@ public class Share extends SocializeAction {
 		this.text = text;
 	}
 
-	public int getMedium() {
-		return medium;
-	}
-
-	public void setMedium(int medium) {
-		this.medium = medium;
-	}
-
-	public String getMediumName() {
-		return mediumName;
-	}
-
-	public void setMediumName(String mediumName) {
-		this.mediumName = mediumName;
-	}
-
 	@Override
 	public String getDisplayText() {
-		return "Shared via " + mediumName;
+		return "Shared via " + shareType.getName();
 	}
 	
+	public ShareType getShareType() {
+		return shareType;
+	}
+
+	public void setShareType(ShareType shareType) {
+		this.shareType = shareType;
+	}
+
 	@Override
 	public int hashCode() {
 		return super.hashCode();

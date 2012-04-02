@@ -36,9 +36,9 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.notifications.NotificationAuthenticator;
 import com.socialize.notifications.NotificationsAccess;
-import com.socialize.sample.mocks.MockActivitySystem;
-import com.socialize.sample.mocks.MockSocializeSession;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.mock.MockActivitySystem;
+import com.socialize.test.mock.MockSocializeSession;
 
 /**
  * @author Jason Polites

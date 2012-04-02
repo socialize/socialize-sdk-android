@@ -51,20 +51,6 @@ public interface SocializeProvider<T> {
 	
 	public boolean validateSession(SocializeSession loaded, AuthProviderData data);
 	
-	/**
-	 * Loads a user's authentication session.
-	 * @param endpoint
-	 * @param key
-	 * @param secret
-	 * @param authProviderType
-	 * @param appId3rdParty
-	 * @return
-	 * @throws SocializeException
-	 * @deprecated use {@link #loadSession(String, String, String, AuthProviderData)}
-	 */
-	@Deprecated
-	public SocializeSession loadSession(String endpoint, String key, String secret, AuthProviderType authProviderType, String appId3rdParty) throws SocializeException;
-	
 	public void clearSession();
 	
 	public void clearSession(AuthProviderType type);

@@ -25,7 +25,6 @@ import android.content.Context;
 
 import com.socialize.entity.Entity;
 import com.socialize.entity.EntityStatsImpl;
-import com.socialize.sample.mocks.MockEntity;
 
 public class MockEntityProvider extends MockSocializeProvider<Entity> {
 

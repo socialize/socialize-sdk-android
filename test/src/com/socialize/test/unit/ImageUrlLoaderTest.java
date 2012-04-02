@@ -41,7 +41,7 @@ public class ImageUrlLoaderTest extends SocializeUnitTest {
 
 		ImageUrlLoader loader = new ImageUrlLoader();
 		// Call the method...
-		CacheableDrawable cacheable = (CacheableDrawable) loader.loadImageFromUrl(testUrl);
+		CacheableDrawable cacheable = (CacheableDrawable) loader.loadImageFromUrl(testUrl, -1, -1);
 		assertEquals(cacheable.getKey(), testUrl);
 	}
 }

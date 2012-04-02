@@ -117,31 +117,10 @@ public interface SocializeService {
 	/**
 	 * Authenticates the application against the API as an anonymous user.
 	 * NOTE:  This assumes the consumer key/secret have been specified in assets/socialize.properties
-	 * @param authListener
-	 * @deprecated 
-	 * @see #authenticate(Context, SocializeAuthListener)
-	 */
-	@Deprecated
-	public void authenticate(SocializeAuthListener authListener);
-
-	/**
-	 * Authenticates the application against the API as an anonymous user.
-	 * NOTE:  This assumes the consumer key/secret have been specified in assets/socialize.properties
 	 * @param context The current context.
 	 * @param authListener The callback for authentication outcomes.
 	 */
 	public void authenticate(Context context, SocializeAuthListener authListener);
-	
-	/**
-	 * Authenticates the application against the API as an anonymous user.
-	 * @param consumerKey The consumer key, obtained from registration at http://www.getsocialize.com.
-	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
-	 * @param authListener The callback for authentication outcomes.
-	 * @deprecated 
-	 * @see #authenticate(Context, String, String, SocializeAuthListener)
-	 */
-	@Deprecated
-	public void authenticate(String consumerKey, String consumerSecret, SocializeAuthListener authListener);
 	
 	/**
 	 * Authenticates the application against the API as an anonymous user.
@@ -166,38 +145,10 @@ public interface SocializeService {
 	 * @param context The current context.
 	 * @param consumerKey The consumer key, obtained from registration at http://www.getsocialize.com.
 	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
-	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
-	 * @param authProviderAppId The ID of your app in the 3rd party system used to authenticate. (e.g. YOUR Facebook App ID)
-	 * @param authListener The callback for authentication outcomes.
-	 * @deprecated Use {@link #authenticate(Context, String, String, AuthProviderInfo, SocializeAuthListener)}
-	 */
-	@Deprecated
-	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderAppId, SocializeAuthListener authListener);
-	
-	/**
-	 * Authenticates the application against the API.
-	 * @param context The current context.
-	 * @param consumerKey The consumer key, obtained from registration at http://www.getsocialize.com.
-	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
 	 * @param authProviderInfo Information about the auth provider to be used.  May be null.
 	 * @param authListener The callback for authentication outcomes.
 	 */
 	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, SocializeAuthListener authListener);
-	
-	/**
-	 * Authenticates the application against the API as a user known to your app from a given 3rd party provider.
-	 * @param context The current context.
-	 * @param consumerKey The consumer key, obtained from registration at http://www.getsocialize.com.
-	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
-	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
-	 * @param authProviderId The ID of your app in the 3rd party system used to authenticate. (e.g. YOUR Facebook App ID).
-	 * @param authUserId3rdParty The userId from the 3rd party provider (if available).
-	 * @param authToken3rdParty The auth token from the 3rd party (if available).
-	 * @param authListener The callback for authentication outcomes.
-	 * @deprecated Use {@link #authenticateKnownUser(Context, String, String, AuthProviderInfo, UserProviderCredentials, SocializeAuthListener)}
-	 */
-	@Deprecated
-	public void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty, SocializeAuthListener authListener);
 	
 	/**
 	 * Authenticates the application against the API as a user known to your app from a given 3rd party provider.
@@ -209,56 +160,7 @@ public interface SocializeService {
 	 * @param authListener The callback for authentication outcomes.
 	 */
 	public void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, UserProviderCredentials userProviderCredentials, SocializeAuthListener authListener);
-	
-	/**
-	 * Authenticates the application against the API.
-	 * NOTE:  This assumes the consumer key/secret have been specified in assets/socialize.properties
-	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
-	 * @param authListener The callback for authentication outcomes.
-	 * @deprecated
-	 * @see #authenticate(Context, AuthProviderType, SocializeAuthListener)
-	 */
-	@Deprecated
-	public void authenticate(AuthProviderType authProvider, SocializeAuthListener authListener);
-	
-	/**
-	 * Authenticates the application against the API.
-	 * @param consumerKey The consumer key, obtained from registration at http://www.getsocialize.com.
-	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
-	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
-	 * @param authProviderAppId The ID of your app in the 3rd party system used to authenticate. (e.g. YOUR Facebook App ID)
-	 * @param authListener The callback for authentication outcomes.
-	 * @deprecated
-	 * @see #authenticate(Context, String, String, AuthProviderType, String, SocializeAuthListener)
-	 */
-	@Deprecated
-	public void authenticate(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderAppId, SocializeAuthListener authListener);
-	
-	/**
-	 * Authenticates the application against the API as a user known to your app from a given 3rd party provider.
-	 * @param consumerKey The consumer key, obtained from registration at http://www.getsocialize.com.
-	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
-	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
-	 * @param authProviderId The ID of your app in the 3rd party system used to authenticate. (e.g. YOUR Facebook App ID).
-	 * @param authUserId3rdParty The userId from the 3rd party provider (if available).
-	 * @param authToken3rdParty The auth token from the 3rd party (if available).
-	 * @param authListener The callback for authentication outcomes.
-	 * @deprecated
-	 * @see #authenticateKnownUser(Context, String, String, AuthProviderType, String, String, String, SocializeAuthListener)
-	 */
-	@Deprecated
-	public void authenticateKnownUser(String consumerKey, String consumerSecret, AuthProviderType authProvider, String authProviderId, String authUserId3rdParty, String authToken3rdParty, SocializeAuthListener authListener);
-	
-	/**
-	 * Adds a new like and associates it with the entity described.
-	 * @param key The entity being liked.  Defined when first creating an entity, or created on the fly with this call.
-	 * @param likeAddListener A listener to handle callbacks from the post.
-	 * @deprecated 
-	 * @see #like(Activity, Entity, LikeAddListener)
-	 */
-	@Deprecated
-	public void like(String key, LikeAddListener likeAddListener);
-	
+
 	/**
 	 * Adds a new like and associates it with the entity described.
 	 * @param activity The current Activity.
@@ -277,54 +179,12 @@ public interface SocializeService {
 	public void like(Activity activity, Entity entity, ShareOptions shareOptions, LikeAddListener likeAddListener);
 	
 	/**
-	 * Adds a new like and associates it with the key described.
-	 * @param activity The current Activity.
-	 * @param entity The entity being liked.
-	 * @param location The location of the device at the time the call was made.
-	 * @param shareOptions Options for posting to external networks.
-	 * @param likeAddListener A listener to handle callbacks from the post.
-	 */
-	public void like(Activity activity, Entity entity, Location location, ShareOptions shareOptions, LikeAddListener likeAddListener);
-	
-	/**
-	 * Adds a new like and associates it with the key described.
-	 * @param key The key being liked.  Defined when first creating an entity, or created on the fly with this call.
-	 * @param location The location of the device at the time the call was made.
-	 * @param likeAddListener A listener to handle callbacks from the post.
-	 * @deprecated 
-	 * @see #like(Activity, Entity, Location, ShareOptions, LikeAddListener)
-	 */
-	@Deprecated
-	public void like(String key, Location location, LikeAddListener likeAddListener);
-	
-	/**
-	 * Adds a new view and associates it with the key described.
-	 * @param key The key being viewed.  Defined when first creating an entity, or created on the fly with this call.
-	 * @param viewAddListener A listener to handle callbacks from the post.
-	 * @deprecated
-	 * @see #view(Activity, Entity, ViewAddListener)
-	 */
-	@Deprecated
-	public void view(String key, ViewAddListener viewAddListener);
-	
-	/**
 	 * Adds a new view and associates it with the key described.
 	 * @param activity The current Activity.
 	 * @param entity The entity being viewed.
 	 * @param viewAddListener A listener to handle callbacks from the post.
 	 */
 	public void view(Activity activity, Entity entity, ViewAddListener viewAddListener);	
-	
-	/**
-	 * Adds a new view and associates it with the key described.
-	 * @param key The key being viewed.  Defined when first creating an entity, or created on the fly with this call.
-	 * @param location The location of the device at the time the call was made.
-	 * @param viewAddListener A listener to handle callbacks from the post.
-	 * @deprecated 
-	 * @see #view(Activity, Entity, Location, ViewAddListener)
-	 */
-	@Deprecated
-	public void view(String key, Location location, ViewAddListener viewAddListener);	
 	
 	/**
 	 * Adds a new view and associates it with the key described.
@@ -350,18 +210,28 @@ public interface SocializeService {
 	 * @param options Options for the share
 	 * @param shareAddListener A listener to handle callbacks from the post.
 	 */
-	public void share(Activity activity, Entity entity, String text, ShareOptions options, ShareAddListener shareAddListener);	
+	public void share(Activity activity, Entity entity, String text, ShareOptions options, ShareAddListener shareAddListener);
 	
 	/**
-	 * Shares the entity.
+	 * Records a share event against the given key. 
 	 * @param activity The current Activity.
 	 * @param entity The entity being shared.
 	 * @param text The text being shared.
-	 * @param options Options for the share
-	 * @param location The location of the device at the time the call was made.
+	 * @param shareType The type of the share.
+	 * @param location The location (may be null)
 	 * @param shareAddListener A listener to handle callbacks from the post.
 	 */
-	public void share(Activity activity, Entity entity, String text, ShareOptions options, Location location, ShareAddListener shareAddListener);
+	public void share(Activity activity, Entity entity, String text, ShareType shareType, Location location, ShareAddListener shareAddListener);
+	
+	/**
+	 * Records a share event against the given key. 
+	 * @param activity The current Activity.
+	 * @param entity The entity being shared.
+	 * @param text The text being shared.
+	 * @param shareType The type of the share.
+	 * @param shareAddListener A listener to handle callbacks from the post.
+	 */
+	public void share(Activity activity, Entity entity, String text, ShareType shareType, ShareAddListener shareAddListener);
 	
 	
 	/**
@@ -488,34 +358,11 @@ public interface SocializeService {
 	
 	/**
 	 * Creates a new entity.
-	 * @param key The unique key associated with this entity.  
-	 * @param name The name of the entity.
-	 * @param entityAddListener A listener to handle callbacks from the post.
-	 * @deprecated
-	 * @see #addEntity(Activity, Entity, EntityAddListener)
-	 */
-	@Deprecated
-	public void addEntity(String key, String name, EntityAddListener entityAddListener);
-	
-	/**
-	 * Creates a new entity.
 	 * @param activity The current activity.
 	 * @param entity The entity to create.
 	 * @param entityAddListener A listener to handle callbacks from the post.
 	 */
 	public void addEntity(Activity activity, Entity entity, EntityAddListener entityAddListener);
-	
-	
-	/**
-	 * Adds a new comment and associates it with the key described.
-	 * @param activity The current activity.
-	 * @param entity The entity to which the comment is associated. Defined when first creating an entity.
-	 * @param comment The comment to add.
-	 * @param location The location of the device at the time the call was made.
-	 * @param shareOptions Options for sharing to facebook and sharing location.
-	 * @param commentAddListener A listener to handle callbacks from the post.
-	 */
-	public void addComment(Activity activity, Entity entity, String comment, Location location, ShareOptions shareOptions, CommentAddListener commentAddListener);	
 	
 	/**
 	 * Adds a new comment and associates it with the key described.
@@ -525,18 +372,7 @@ public interface SocializeService {
 	 * @param shareOptions Options for sharing to facebook and sharing location.
 	 * @param commentAddListener A listener to handle callbacks from the post.
 	 */
-	public void addComment(Activity activity, Comment comment, Location location, ShareOptions shareOptions, CommentAddListener commentAddListener);	
-	
-	/**
-	 * Adds a new comment and associates it with the key described.
-	 * @param key The entity to which the comment is associated. Defined when first creating an entity, or created on the fly with this call.
-	 * @param comment The comment to add.
-	 * @param commentAddListener A listener to handle callbacks from the post.
-	 * @deprecated 
-	 * @see #addComment(Activity, Entity, String, CommentAddListener)
-	 */
-	@Deprecated
-	public void addComment(String key, String comment, CommentAddListener commentAddListener);
+	public void addComment(Activity activity, Comment comment, ShareOptions shareOptions, CommentAddListener commentAddListener);	
 	
 	/**
 	 * Adds a new comment and associates it with the key described.
@@ -697,6 +533,13 @@ public interface SocializeService {
 	 * @return True if the broadcast message was handled by Socialize.  False if it is a simple registration request or it's not a message for Socialize.
 	 */
 	public boolean handleBroadcastIntent(Context context, Intent intent);
+	
+	/**
+	 * Returns true if sharing to the given share type is supported on this device.
+	 * @param shareType
+	 * @return
+	 */
+	public boolean canShare(Context context, ShareType shareType);
 	
 	/**
 	 * Returns the entity loader set in setEntityLoader.

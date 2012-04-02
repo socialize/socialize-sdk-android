@@ -56,19 +56,6 @@ public class SocializeEntitySystem extends SocializeApi<Entity, SocializeProvide
 		list.add(entity);
 		postAsync(session, ENDPOINT, list, listener);
 	}
-
-
-	/* (non-Javadoc)
-	 * @see com.socialize.api.action.EnitySystem#addEntity(com.socialize.api.SocializeSession, java.lang.String, java.lang.String, com.socialize.listener.entity.EntityListener)
-	 */
-	@Deprecated
-	@Override
-	public void addEntity(SocializeSession session, String key, String name, EntityListener listener) {
-		Entity entity = new Entity();
-		entity.setKey(key);
-		entity.setName(name);
-		addEntity(session, entity, listener);
-	}
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.api.action.EnitySystem#getEntity(com.socialize.api.SocializeSession, java.lang.String, com.socialize.listener.entity.EntityListener)

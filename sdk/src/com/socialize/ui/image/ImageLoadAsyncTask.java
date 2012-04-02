@@ -99,7 +99,7 @@ public class ImageLoadAsyncTask extends Thread {
 											logger.debug("ImageLoadAsyncTask image loading from remote url for: " + url);
 										}
 										
-										drawable = loadImageFromUrl(url);
+										drawable = loadImageFromUrl(url, request.getScaleWidth(), request.getScaleHeight());
 										break;
 								}
 								
@@ -137,8 +137,8 @@ public class ImageLoadAsyncTask extends Thread {
 		}
 	}
 	
-	protected CacheableDrawable loadImageFromUrl(String url) throws Exception {
-		return imageUrlLoader.loadImageFromUrl(url);
+	protected CacheableDrawable loadImageFromUrl(String url, int width, int height) throws Exception {
+		return imageUrlLoader.loadImageFromUrl(url, width, height);
 	}
 
 	public void cancel(String url) {

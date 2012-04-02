@@ -140,7 +140,7 @@ public class CommentListItem extends LinearLayout {
 		userIcon = new CachedImageView(getContext());
 		userIcon.setDrawables(drawables);
 		userIcon.setLogger(logger);
-		userIcon.setImageName(Socialize.DEFAULT_USER_ICON);
+		userIcon.setImageName(Socialize.DEFAULT_USER_ICON, true);
 		userIcon.setLayoutParams(iconLayoutParams);
 		userIcon.setPadding(imagePadding, imagePadding, imagePadding, imagePadding);
 		

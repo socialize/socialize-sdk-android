@@ -22,13 +22,12 @@
 package com.socialize.api;
 
 import java.util.List;
-
 import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
-
 import com.socialize.Socialize;
 import com.socialize.api.action.ActionType;
+import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderInfo;
@@ -103,16 +102,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return session;
 	}
 	
-	@Deprecated
-	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException {
-		return provider.authenticate(endpoint, key, secret, uuid);
-	}
-	
-	@Deprecated
-	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
-		return provider.authenticate(endpoint, key, secret, data, uuid);
-	}
-	
 	protected void checkNotifications(Context context, SocializeSession session) {
 		if(notificationChecker != null) {
 			notificationChecker.checkRegistrations(context, session);
@@ -123,22 +112,61 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		if(shareOptions != null) {
 			SocialNetwork[] shareTo = shareOptions.getShareTo();
 			if(shareTo != null) {
-				Propagation propagation = newPropagation();
+				Propagation propagation = null;
+				Propagation localPropagation = null;
 				
 				for (SocialNetwork socialNetwork : shareTo) {
-					propagation.addThirdParty(socialNetwork);
+					if(socialNetwork.isLocalPropagation() || shareOptions.isSelfManaged()) {
+						if(localPropagation == null) {
+							localPropagation = newPropagation();
+						}
+						localPropagation.addThirdParty(socialNetwork);
+					}
+					else {
+						if(propagation == null) {
+							propagation = newPropagation();
+						}
+						propagation.addThirdParty(socialNetwork);
+					}
 				}
 				
 				SocializeConfig config = Socialize.getSocialize().getConfig();
 				String appStore = config.getProperty(SocializeConfig.REDIRECT_APP_STORE);
+				
 				if(!StringUtils.isEmpty(appStore)) {
-					propagation.addExtraParam("f", appUtils.getAppStoreAbbreviation(appStore));
-				}				
+					
+					String abbrev = appUtils.getAppStoreAbbreviation(appStore);
+					
+					if(localPropagation != null) {
+						localPropagation.addExtraParam("f", abbrev);
+					}
+					
+					if(propagation != null) {
+						propagation.addExtraParam("f", abbrev);
+					}
+				}		
 				
 				action.setPropagation(propagation);
+				action.setPropagationInfoRequest(localPropagation);
 			}
 		}
 	}
+	
+	protected void setPropagationData(SocializeAction action, ShareType shareType) {
+		if(shareType != null) {
+			Propagation localPropagation = newPropagation();
+			localPropagation.addThirdParty(shareType);
+			
+			SocializeConfig config = Socialize.getSocialize().getConfig();
+			String appStore = config.getProperty(SocializeConfig.REDIRECT_APP_STORE);
+			
+			if(!StringUtils.isEmpty(appStore)) {
+				String abbrev = appUtils.getAppStoreAbbreviation(appStore);
+				localPropagation.addExtraParam("f", abbrev);
+			}		
+			action.setPropagationInfoRequest(localPropagation);
+		}
+	}	
 	
 	// Mockable
 	protected Propagation newPropagation() {
@@ -406,7 +434,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			return AuthProviderType.SOCIALIZE;
 		}
 		
-		@SuppressWarnings("deprecation")
 		AuthProviderType authProviderType = data.getAuthProviderType();
 		
 		AuthProviderInfo authProviderInfo = data.getAuthProviderInfo();
@@ -418,7 +445,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return authProviderType;
 	}
 	
-	@SuppressWarnings("deprecation")
 	protected void validate(AuthProviderData data) throws SocializeException{
 		AuthProviderInfo authProviderInfo = data.getAuthProviderInfo();
 		
@@ -431,7 +457,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		}
 	}
 	
-	@Deprecated
 	protected void validateLegacy(AuthProviderData data) throws SocializeException {
 		AuthProviderType authProviderType = getAuthProviderType(data);
 		
@@ -557,8 +582,11 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 					authProvider.authenticate(authProviderInfo, authProviderListener);
 				}
 				else {
-					// Legacy
-					authenticateLegacy(authProviderData, authProvider, request, authProviderListener);
+					if(listener != null) {
+						listener.onError(new SocializeException("Authentication failed.  No AuthProviderInfo found"));
+					}
+					
+					logger.error("No AuthProviderInfo found during auth");
 				}
 			}
 			else {
@@ -574,12 +602,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				listener.onAuthSuccess(session);
 			}
 		}
-	}
-	
-	@SuppressWarnings("deprecation")
-	protected void authenticateLegacy(AuthProviderData authProviderData, AuthProvider<AuthProviderInfo> authProvider, SocializeAuthRequest request, AuthProviderListener authProviderListener) {
-		String appId3rdParty = authProviderData.getAppId3rdParty();
-		authProvider.authenticate(request, appId3rdParty, authProviderListener);
 	}
 	
 	public void setResponseFactory(SocializeResponseFactory<T> responseFactory) {
@@ -703,6 +725,17 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			action.setLat(location.getLatitude());
 		}
 	}
+	
+	protected void setLocation(SocializeAction action, ShareOptions shareOptions) {
+		
+		Location location = null;
+		
+		if(shareOptions != null) {
+			location = shareOptions.getLocation();
+		}
+		
+		setLocation(action, location);
+	}	
 
 	class AsyncPutter extends AbstractAsyncProcess<SocializePutRequest<T>, Void, SocializeEntityResponse<T>> {
 

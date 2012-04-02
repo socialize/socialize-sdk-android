@@ -96,7 +96,7 @@ public class ActionDetailLayoutView extends BaseView {
 
 		content = actionDetailContentViewFactory.getBean();
 		defaultProfilePicture = drawables.getDrawable(Socialize.DEFAULT_USER_ICON);
-
+		
 		addView(content);
 	}
 	
