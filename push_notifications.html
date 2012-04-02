@@ -198,7 +198,7 @@
 
         &lt;/manifest>
 </pre><div class="section" id="i-already-have-a-broadcastreceiver-defined">
-<h3>I already have a BroadcastReceiver defined!<a class="headerlink" href="#i-already-have-a-broadcastreceiver-defined" title="Permalink to this headline">¶</a></h3>
+<h3>I already have a BroadcastReceiver defined<a class="headerlink" href="#i-already-have-a-broadcastreceiver-defined" title="Permalink to this headline">¶</a></h3>
 <p>If you already have a BroadcastReceiver defined in your application, you can simply call the Socialize handler
 in your existing broadcast receiver&#8217;s <strong>onReceive()</strong> method:</p>
 <pre class="brush: java">
@@ -215,16 +215,47 @@ public void onReceive(Context context, Intent intent) {
 
 </pre><p>Make sure however, that you add the intent filters and permissions required by Socialize to your existing receiver definition.</p>
 </div>
+<div class="section" id="i-am-already-using-google-c2dm-for-push-notifications">
+<h3>I am already using Google C2DM for Push Notifications<a class="headerlink" href="#i-am-already-using-google-c2dm-for-push-notifications" title="Permalink to this headline">¶</a></h3>
+<p>If you are already using Google&#8217;s C2DM for push notifications you will need to enter your C2DM sender credentials into the
+Socialize website.  This is due to a limitation of Google&#8217;s C2DM service which does not allow multiple senders for the same
+app.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You will still need to configure SmartAlerts for Socialize in your app (follow the instructions in the BroadcastReceiver section above)</p>
+</div>
+<img alt="images/c2dm.png" src="images/c2dm.png" />
+</div>
 </div>
 <div class="section" id="step-3-create-an-entity-loader">
 <h2>Step 3: Create an Entity Loader<a class="headerlink" href="#step-3-create-an-entity-loader" title="Permalink to this headline">¶</a></h2>
 <p>In order for Socialize to know how to handle a notification it needs an &#8220;Entity Loader&#8221;.  This is a class
 provided by you which tells Socialize how to load content in your app.</p>
 <p>Refer to the <a class="reference internal" href="entity_loader.html?v=v1.5.6#entity-loader"><em>Entity Loaders</em></a> section for details on how to implement a Socialize Entity Loader.</p>
+</div>
+<div class="section" id="testing-smartalerts">
+<h2>Testing SmartAlerts<a class="headerlink" href="#testing-smartalerts" title="Permalink to this headline">¶</a></h2>
+<p>When implementing SmartAlerts it is useful to know whether all the setup steps have been completed successfully and that messages
+are indeed being sent.</p>
+<p>The simplest way to verify that SmartAlerts are working for your app is to send a test message from the Socialize website.</p>
+<p>This can be found in the dashboard for your app:</p>
+<img alt="images/smart_alert.png" src="images/smart_alert.png" />
+<div class="section" id="locating-your-device-token">
+<h3>Locating your Device Token<a class="headerlink" href="#locating-your-device-token" title="Permalink to this headline">¶</a></h3>
+<p>If you are still experiencing problems and want to post a question to our support forum, it is useful to include your device token
+when posting any question.  To determine your device token you will first need to enable the <strong>INFO</strong> level logging in Socialize.</p>
+<p>Refer to the <a class="reference internal" href="troubleshooting.html?v=v1.5.6#debug-logs"><em>Displaying debug logs in LogCat</em></a> section for more information on enabling logs.</p>
+<p>Once info logging is enabled, a <strong>new</strong> instance of your app should produce log entries that look something like this:</p>
+<div class="highlight-python"><pre>INFO/Socialize(15860): Not registered with C2DM, sending registration request...
+INFO/Socialize(15860): Registration with C2DM successful: APA91bHd0aL-d75F6_7NcDf_nil8...OBg5-Ixk_8c9rg9b14fsVwvMXTy4
+INFO/Socialize(15860): Registration with Socialize for C2DM successful.</pre>
+</div>
+<p>The &#8220;Registration with C2DM successful&#8221; log entry shows the device token used for SmartAlerts</p>
 <script type="text/javascript">
         SyntaxHighlighter.defaults['toolbar'] = false;
         SyntaxHighlighter.all();
 </script></div>
+</div>
 </div>
 
 
@@ -262,10 +293,15 @@ provided by you which tells Socialize how to load content in your app.</p>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#step-1-enable-notifications-on-http-www-getsocialize-com">Step 1: Enable Notifications on http://www.getsocialize.com</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#step-2-add-configuration-to-androidmanifest-xml">Step 2: Add Configuration to AndroidManifest.xml</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#i-already-have-a-broadcastreceiver-defined">I already have a BroadcastReceiver defined!</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#i-already-have-a-broadcastreceiver-defined">I already have a BroadcastReceiver defined</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#i-am-already-using-google-c2dm-for-push-notifications">I am already using Google C2DM for Push Notifications</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#step-3-create-an-entity-loader">Step 3: Create an Entity Loader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-smartalerts">Testing SmartAlerts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#locating-your-device-token">Locating your Device Token</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v1.5.6">Entity Loaders</a></li>
