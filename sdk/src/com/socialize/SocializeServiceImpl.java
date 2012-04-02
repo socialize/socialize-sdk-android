@@ -784,7 +784,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 							@Override
 							public void onCreate(Share share) {
 								try {
-									if(share != null && shareSystem != null) {
+									if(share != null && shareSystem != null && !shareOptions.isSelfManaged()) {
 										handleActionShare(activity, socialNetwork, share, text, shareOptions.getLocation(), autoAuth, shareOptions.getListener());
 									}
 								}

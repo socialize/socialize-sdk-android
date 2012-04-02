@@ -26,6 +26,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -35,6 +36,7 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 import com.socialize.facebook.Facebook.DialogListener;
 
 public class FbDialog extends Dialog {
@@ -97,15 +99,17 @@ public class FbDialog extends Dialog {
 		mCrossImage = new ImageView(getContext());
 		// Dismiss the dialog when user click on the 'x'
 		mCrossImage.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				mListener.onCancel();
 				FbDialog.this.dismiss();
 			}
 		});
-//		Drawable crossDrawable = getContext().getResources().getDrawable(R.drawable.close);
+		
+		
+		
 		Drawable crossDrawable = getContext().getResources().getDrawable(R.drawable.btn_dialog);
+//		Drawable crossDrawable = drawables.getDrawable("fb_cross.png");
 		mCrossImage.setImageDrawable(crossDrawable);
 		/*
 		 * 'x' should not be visible while webview is loading make it visible
@@ -134,7 +138,7 @@ public class FbDialog extends Dialog {
 
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
-			Util.logd("Facebook-WebView", "Redirect URL: " + url);
+			Log.d("Facebook-WebView", "Redirect URL: " + url);
 			if (url.startsWith(Facebook.REDIRECT_URI)) {
 				Bundle values = Util.parseUrl(url);
 
@@ -178,7 +182,7 @@ public class FbDialog extends Dialog {
 
 		@Override
 		public void onPageStarted(WebView view, String url, Bitmap favicon) {
-			Util.logd("Facebook-WebView", "Webview loading URL: " + url);
+			Log.d("Facebook-WebView", "Webview loading URL: " + url);
 			super.onPageStarted(view, url, favicon);
 			mSpinner.show();
 		}

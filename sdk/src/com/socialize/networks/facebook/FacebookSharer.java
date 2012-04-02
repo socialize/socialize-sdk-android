@@ -55,7 +55,7 @@ public class FacebookSharer extends AbstractSocialNetworkSharer {
 				
 			case SHARE:
 				String body = shareMessageBuilder.buildShareMessage( entity, urlSet, comment, false, true);
-				facebookWallPoster.post(context, body, urlSet, listener);
+				facebookWallPoster.post(context, entity, body, urlSet, listener);
 				break;
 				
 			case LIKE:

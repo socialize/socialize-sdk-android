@@ -409,7 +409,7 @@
 				<entry>
 					<key value="OTHER"/>
 					<value ref="otherShareHandler"/>
-				</entry>					
+				</entry>
 			</map>
 		</property>	
 	</bean>
@@ -578,12 +578,18 @@
 	</bean>
 	
 	<bean 
+		id="facebookImageUtils" 
+		class="com.socialize.networks.facebook.FacebookImageUtils">
+	</bean>	
+	
+	<bean 
 		id="facebookWallPoster" 
 		class="com.socialize.networks.facebook.DefaultFacebookWallPoster">
 		<property name="logger" ref="logger"/>
 		<property name="config" ref="config"/>
 		<property name="appUtils" ref="appUtils"/>
 		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
+		<property name="facebookImageUtils" ref="facebookImageUtils"/>
 	</bean>	
 	
 	<bean 

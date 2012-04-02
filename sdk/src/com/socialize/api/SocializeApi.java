@@ -116,7 +116,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				Propagation localPropagation = null;
 				
 				for (SocialNetwork socialNetwork : shareTo) {
-					if(socialNetwork.isLocalPropagation()) {
+					if(socialNetwork.isLocalPropagation() || shareOptions.isSelfManaged()) {
 						if(localPropagation == null) {
 							localPropagation = newPropagation();
 						}

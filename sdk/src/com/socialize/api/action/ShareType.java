@@ -32,7 +32,7 @@ public enum ShareType {
 	FACEBOOK ("facebook", "Facebook", 2),
 	EMAIL ("email", "Email", 3),
 	SMS ("sms", "SMS", 4),
-	OTHER ("other", "",  101);
+	OTHER ("other", "Other",  101);
 	
 	private final String name; 
 	private final String displayName;

@@ -115,7 +115,7 @@ public class FacebookAuthProviderTest extends SocializeUnitTest {
 		
 		final String appId = "foobar";
 		
-		final Facebook facebook = AndroidMock.createMock(Facebook.class);
+		final Facebook facebook = AndroidMock.createMock(Facebook.class, "foobar");
 		
 		AndroidMock.expect(facebook.logout(getContext())).andReturn(null);
 		

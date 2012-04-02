@@ -46,6 +46,7 @@ public class FacebookService {
 	private DialogFactory dialogFactory;
 	
 	protected static final String[] DEFAULT_PERMISSIONS = {"offline_access", "publish_stream"};
+	protected static final String[] PHOTO_PERMISSIONS = {"offline_access", "publish_stream", "photo_upload"};
 	
 	public FacebookService() {
 		super();
@@ -76,6 +77,16 @@ public class FacebookService {
 	public void authenticate(boolean sso) {
 		authenticate(DEFAULT_PERMISSIONS, sso);
 	}
+	
+	public void authenticate(boolean sso, boolean photos) {
+		if(photos) {
+			authenticate(PHOTO_PERMISSIONS, sso);
+		}
+		else {
+			authenticate(DEFAULT_PERMISSIONS, sso);
+		}
+	}
+	
 	
 	/**
 	 * Authenticates with Single Sign On.

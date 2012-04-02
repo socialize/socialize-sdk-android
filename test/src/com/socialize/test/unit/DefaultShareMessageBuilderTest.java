@@ -73,7 +73,7 @@ public class DefaultShareMessageBuilderTest extends SocializeUnitTest {
 		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
 		AndroidMock.expect(config.isBrandingEnabled()).andReturn(true);
 		AndroidMock.replay(config);
-		doTestBuildShareMessage(config, "foobar_comment<br/><br/>foobar_entity_link<br/><br/>Shared from <a href=\"foo_url\">bar_name</a> using <a href=\"http://www.getsocialize.com\">Socialize for Android</a>.");
+		doTestBuildShareMessage(config, "foobar_comment<br/><br/>foobar_entity_link<br/><br/>Sent from <a href=\"foo_url\">bar_name</a> using <a href=\"http://www.getsocialize.com\">Socialize for Android</a>.");
 		AndroidMock.verify(config);
 	}
 
@@ -81,7 +81,7 @@ public class DefaultShareMessageBuilderTest extends SocializeUnitTest {
 		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
 		AndroidMock.expect(config.isBrandingEnabled()).andReturn(false);
 		AndroidMock.replay(config);
-		doTestBuildShareMessage(config, "foobar_comment<br/><br/>foobar_entity_link<br/><br/>Shared from <a href=\"foo_url\">bar_name</a>");
+		doTestBuildShareMessage(config, "foobar_comment<br/><br/>foobar_entity_link<br/><br/>Sent from <a href=\"foo_url\">bar_name</a>");
 		AndroidMock.verify(config);
 	}
 

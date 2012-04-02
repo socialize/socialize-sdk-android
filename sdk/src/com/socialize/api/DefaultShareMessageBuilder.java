@@ -133,7 +133,7 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 		if(includeSocialize) {
 			builder.append(getNewLine(html));
 			builder.append(getNewLine(html));
-			builder.append("Shared from ");
+			builder.append("Sent from ");
 			
 			if(html) {
 				builder.append("<a href=\"");
@@ -144,6 +144,9 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 			}
 			else {
 				builder.append(appUtils.getAppName());
+				builder.append(" (");
+				builder.append(urlSet.getAppUrl());
+				builder.append(")");
 			}
 			
 			if(config.isBrandingEnabled()) {

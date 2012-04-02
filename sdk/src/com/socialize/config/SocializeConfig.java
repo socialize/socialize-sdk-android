@@ -66,6 +66,7 @@ public class SocializeConfig {
 	 * true if Single Sign On is enabled.  Default is true.
 	 */
 	public static final String FACEBOOK_SSO_ENABLED = "facebook.sso.enabled";
+	public static final String FACEBOOK_PHOTOS_ENABLED = "facebook.photos.enabled";
 	public static final String FACEBOOK_APP_ID = "facebook.app.id";
 	public static final String FACEBOOK_USER_ID = "facebook.user.id";
 	public static final String FACEBOOK_USER_TOKEN = "facebook.user.token";

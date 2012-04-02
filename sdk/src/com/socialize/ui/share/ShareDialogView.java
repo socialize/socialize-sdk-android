@@ -136,7 +136,7 @@ public class ShareDialogView extends BaseView implements ShareInfoProvider {
 			otherOptionsLayout.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
 			
 			otherOptions.setLayoutParams(otherOptionsLayout);
-			otherOptions.setOnClickListener(shareClickListenerFactory.getBean(entity, ShareType.OTHER, this));
+			otherOptions.setOnClickListener(shareClickListenerFactory.getBean(entity, ShareType.OTHER, this, onActionBarEventListener, actionBarView));
 			
 			shareLabelLayout.addView(otherOptions);
 		}

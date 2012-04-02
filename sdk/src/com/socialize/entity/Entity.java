@@ -22,7 +22,6 @@
 package com.socialize.entity;
 
 import java.io.Serializable;
-
 import com.socialize.util.StringUtils;
 
 
@@ -86,7 +85,7 @@ public class Entity extends SocializeObject implements Serializable {
 	protected void setEntityStats(EntityStats stats) {
 		this.entityStats = stats;
 	}
-
+	
 	public static Entity newInstance(String key, String name) {
 		Entity e = new Entity();
 		e.setKey(key);

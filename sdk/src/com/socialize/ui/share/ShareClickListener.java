@@ -85,8 +85,6 @@ public class ShareClickListener implements OnClickListener {
 			@Override
 			public void onCreate(Share share) {
 				dialog.dismiss();
-				alertDialogFactory.showToast(context, "Share successful!");
-				
 				if(onActionBarEventListener != null) {
 					onActionBarEventListener.onPostShare(actionBarView, share);
 				}

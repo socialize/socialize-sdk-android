@@ -34,6 +34,7 @@ public class ShareOptions {
 	private SocialNetwork[] shareTo;
 	private SocialNetworkListener listener;
 	private Location location;
+	private boolean selfManaged = false;
 	
 	/**
 	 * If true and if available, the user's location is shared.
@@ -102,4 +103,19 @@ public class ShareOptions {
 	public void setAutoAuth(boolean autoAuth) {
 		this.autoAuth = autoAuth;
 	}
+
+	
+	public boolean isSelfManaged() {
+		return selfManaged;
+	}
+
+	/**
+	 * Set to true if the sharing to 3rd party networks will be handled by the client (default: false)
+	 * @param selfManaged
+	 */
+	public void setSelfManaged(boolean selfManaged) {
+		this.selfManaged = selfManaged;
+	}
+	
+	
 }
