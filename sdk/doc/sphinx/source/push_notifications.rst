@@ -60,7 +60,7 @@ The full **AndroidManifest.xml** should look something like this
 
 .. include:: snippets/notification_manifest.txt
 
-I already have a BroadcastReceiver defined!
+I already have a BroadcastReceiver defined
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you already have a BroadcastReceiver defined in your application, you can simply call the Socialize handler
@@ -70,6 +70,17 @@ in your existing broadcast receiver's **onReceive()** method:
 
 Make sure however, that you add the intent filters and permissions required by Socialize to your existing receiver definition.
 
+I am already using Google C2DM for Push Notifications
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you are already using Google's C2DM for push notifications you will need to enter your C2DM sender credentials into the 
+Socialize website.  This is due to a limitation of Google's C2DM service which does not allow multiple senders for the same 
+app.
+
+.. note:: You will still need to configure SmartAlerts for Socialize in your app (follow the instructions in the BroadcastReceiver section above)
+
+.. image:: images/c2dm.png 
+
 Step 3: Create an Entity Loader
 -------------------------------
 
@@ -77,5 +88,34 @@ In order for Socialize to know how to handle a notification it needs an "Entity 
 provided by you which tells Socialize how to load content in your app.
 
 Refer to the :ref:`entity_loader` section for details on how to implement a Socialize Entity Loader.
+
+Testing SmartAlerts
+-------------------
+
+When implementing SmartAlerts it is useful to know whether all the setup steps have been completed successfully and that messages
+are indeed being sent.  
+
+The simplest way to verify that SmartAlerts are working for your app is to send a test message from the Socialize website.  
+
+
+This can be found in the dashboard for your app:
+
+.. image:: images/smart_alert.png 
+
+Locating your Device Token
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+If you are still experiencing problems and want to post a question to our support forum, it is useful to include your device token 
+when posting any question.  To determine your device token you will first need to enable the **INFO** level logging in Socialize.  
+
+Refer to the :ref:`debug_logs` section for more information on enabling logs.
+
+Once info logging is enabled, a **new** instance of your app should produce log entries that look something like this::
+	
+	INFO/Socialize(15860): Not registered with C2DM, sending registration request...
+	INFO/Socialize(15860): Registration with C2DM successful: APA91bHd0aL-d75F6_7NcDf_nil8...OBg5-Ixk_8c9rg9b14fsVwvMXTy4
+	INFO/Socialize(15860): Registration with Socialize for C2DM successful.	
+
+The "Registration with C2DM successful" log entry shows the device token used for SmartAlerts
+
 
 .. include:: footer.inc

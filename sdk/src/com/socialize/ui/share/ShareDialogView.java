@@ -32,6 +32,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.action.ShareType;
 import com.socialize.entity.Entity;
@@ -51,9 +52,9 @@ public class ShareDialogView extends BaseView implements ShareInfoProvider {
 	private SocializeButton twitterShareButton;
 	private SocializeButton emailShareButton;
 	private SocializeButton smsShareButton;
+	private IBeanFactory<ShareClickListener> shareClickListenerFactory;
 	
 	private OnActionBarEventListener onActionBarEventListener;
-	private IBeanFactory<ShareClickListener> shareClickListenerFactory;
 	
 	private DisplayUtils displayUtils;
 	private ActionBarView actionBarView;
@@ -91,7 +92,10 @@ public class ShareDialogView extends BaseView implements ShareInfoProvider {
 		LayoutParams commentFieldParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
 		setOrientation(LinearLayout.VERTICAL);
-		setBackgroundDrawable(drawables.getDrawable("slate.png", true, true, true));
+		
+		if(drawables != null) {
+			setBackgroundDrawable(drawables.getDrawable("slate.png", true, true, true));
+		}
 		
 		TextView otherOptions = null;
 		
@@ -120,7 +124,7 @@ public class ShareDialogView extends BaseView implements ShareInfoProvider {
 		
 		final Entity entity = actionBarView.getEntity();
 		
-		if(displayUtils.getOrientation() == Configuration.ORIENTATION_PORTRAIT && Socialize.getSocialize().canShare(getActivity(), ShareType.OTHER)) {
+		if(displayUtils.getOrientation() == Configuration.ORIENTATION_PORTRAIT && getSocialize().canShare(getActivity(), ShareType.OTHER)) {
 			setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
 			commentField.setLines(4);
 			
@@ -151,25 +155,25 @@ public class ShareDialogView extends BaseView implements ShareInfoProvider {
 		setLayoutParams(fill);
 		setPadding(padding, padding, padding, padding);
 		
-		if(facebookShareButton != null && Socialize.getSocialize().canShare(getActivity(), ShareType.FACEBOOK)) {
+		if(facebookShareButton != null && getSocialize().canShare(getActivity(), ShareType.FACEBOOK)) {
 			ShareClickListener facebookShareClickListener = shareClickListenerFactory.getBean(entity, ShareType.FACEBOOK, this, onActionBarEventListener, actionBarView);
 			facebookShareButton.setCustomClickListener(facebookShareClickListener);
 			buttonLayout.addView(facebookShareButton);
 		}
 		
-		if(twitterShareButton != null && Socialize.getSocialize().canShare(getActivity(), ShareType.TWITTER)) {
+		if(twitterShareButton != null && getSocialize().canShare(getActivity(), ShareType.TWITTER)) {
 			ShareClickListener twitterShareClickListener = shareClickListenerFactory.getBean(entity, ShareType.TWITTER, this, onActionBarEventListener, actionBarView);
 			twitterShareButton.setCustomClickListener(twitterShareClickListener);
 			buttonLayout.addView(twitterShareButton);
 		}		
 		
-		if(emailShareButton != null && Socialize.getSocialize().canShare(getActivity(), ShareType.EMAIL)) {
+		if(emailShareButton != null && getSocialize().canShare(getActivity(), ShareType.EMAIL)) {
 			ShareClickListener emailShareClickListener = shareClickListenerFactory.getBean(entity, ShareType.EMAIL, this, onActionBarEventListener, actionBarView);
 			emailShareButton.setCustomClickListener(emailShareClickListener);
 			buttonLayout.addView(emailShareButton);
 		}
 		
-		if(smsShareButton != null && Socialize.getSocialize().canShare(getActivity(), ShareType.SMS)) {
+		if(smsShareButton != null && getSocialize().canShare(getActivity(), ShareType.SMS)) {
 			ShareClickListener smsShareClickListener = shareClickListenerFactory.getBean(entity, ShareType.SMS, this, onActionBarEventListener, actionBarView);
 			smsShareButton.setCustomClickListener(smsShareClickListener);
 			buttonLayout.addView(smsShareButton);
@@ -179,6 +183,10 @@ public class ShareDialogView extends BaseView implements ShareInfoProvider {
 		addView(commentField);
 		addView(shareLabelLayout);
 		addView(buttonLayout);
+	}
+	
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
 	}
 
 	public void setDisplayUtils(DisplayUtils deviceUtils) {
