@@ -50,7 +50,7 @@ public class ActivityLauncherTest extends SocializeUnitTest {
 		AndroidMock.expect(appUtils.isActivityAvailable(activity, activityClass)).andReturn(true);
 		AndroidMock.expect(intent.putExtras(extras)).andReturn(intent);
 		activity.startActivity(intent);
-		utils.initEntityLoader();
+		AndroidMock.expect(utils.initEntityLoader()).andReturn(null);
 
 		AndroidMock.replay(appUtils, utils, intent, activity);
 

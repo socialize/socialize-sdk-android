@@ -1,5 +1,7 @@
 package com.socialize.test.ui.util;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -21,6 +23,7 @@ import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.test.ui.ResultHolder;
 import com.socialize.ui.view.CustomCheckbox;
+import com.socialize.util.IOUtils;
 
 public class TestUtils {
 	
@@ -474,6 +477,11 @@ public class TestUtils {
 		else {
 			SocializeAccess.setBeanOverrides((String[]) null);
 		}
+	}
+	
+	public static String loadStream(InputStream in) throws IOException {
+		IOUtils utils = new IOUtils();
+		return utils.read(in);
 	}
 	
 }

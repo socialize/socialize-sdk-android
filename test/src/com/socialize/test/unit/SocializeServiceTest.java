@@ -195,8 +195,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		AndroidMock.expect(container.getBean("entityLoaderUtils")).andReturn(entityLoaderUtils);
 		AndroidMock.expect(container.getBean("authProviderInfoBuilder")).andReturn(authProviderInfoBuilder);
 		AndroidMock.expect(container.getBean("notificationChecker")).andReturn(notificationChecker);
-		
-		entityLoaderUtils.initEntityLoader();
+		AndroidMock.expect(entityLoaderUtils.initEntityLoader()).andReturn(null);
 		notificationChecker.checkRegistrations(getContext());
 		
 		AndroidMock.expect(authProviderInfoBuilder.validateAll()).andReturn(true);

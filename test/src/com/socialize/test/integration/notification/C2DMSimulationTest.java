@@ -23,20 +23,23 @@ package com.socialize.test.integration.notification;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Notification;
-import android.app.PendingIntent.CanceledException;
+import android.app.PendingIntent;
+import android.app.PendingIntent.OnFinished;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import com.socialize.android.ioc.ProxyObject;
 import com.socialize.config.SocializeConfig;
+import com.socialize.launcher.LaunchAction;
 import com.socialize.notifications.C2DMCallback;
 import com.socialize.notifications.NotificationManagerFacade;
 import com.socialize.notifications.NotificationsAccess;
 import com.socialize.notifications.SocializeC2DMReceiver;
 import com.socialize.test.SocializeUnitTest;
+import com.socialize.ui.SocializeLaunchActivity;
 
 
 /**
@@ -65,10 +68,11 @@ public abstract class C2DMSimulationTest extends SocializeUnitTest {
 		receiver.onCreate();
 	}
 	
-	public void testOnMessage() throws JSONException, InterruptedException, CanceledException {
+	public void testOnMessage() throws Exception {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
+		// Override the behaviour of the notification manager so it doesn't actually post a status bar notification.
 		ProxyObject<NotificationManagerFacade> proxy = NotificationsAccess.getProxy(receiver, "notificationManagerFacade");
 		
 		proxy.setDelegate(new NotificationManagerFacade() {
@@ -84,6 +88,7 @@ public abstract class C2DMSimulationTest extends SocializeUnitTest {
 		
 		JSONObject json = getNotificationMessagePacket();
 		Intent intent = getMessageIntent(json);
+		
 		receiver.onMessage(getContext(), intent);
 		
 		latch.await(10, TimeUnit.SECONDS);
@@ -96,6 +101,41 @@ public abstract class C2DMSimulationTest extends SocializeUnitTest {
 		assertNotNull(id);
 		assertNotNull(notification);
 		assertNotNull(notification.contentIntent);
+		
+		final CountDownLatch intentLatch = new CountDownLatch(1);
+		
+		notification.contentIntent.send(0, new OnFinished() {
+			
+			@Override
+			public void onSendFinished(PendingIntent pendingIntent, Intent intent, int resultCode, String resultData, Bundle resultExtras) {
+				addResult(3, intent);
+				intentLatch.countDown();
+			}
+		}, null);
+		
+		intentLatch.await(10, TimeUnit.SECONDS);
+		
+		Intent intentAfterNotify = getResult(3);
+		
+		assertNotNull(intentAfterNotify);
+		
+		Bundle extras = intentAfterNotify.getExtras();
+		
+		assertNotNull(extras);
+		
+		// Expect the launch activity to be launched.
+		ComponentName expected = new ComponentName(getContext(), SocializeLaunchActivity.class);
+		
+		assertEquals(expected, intentAfterNotify.getComponent());
+		
+		String launchAction = extras.getString(SocializeLaunchActivity.LAUNCH_ACTION);
+		
+		assertNotNull(launchAction);
+		LaunchAction action = LaunchAction.valueOf(launchAction.toUpperCase());
+		
+		assertEquals(getExpectedLaunchAction(), action);
+		
+		assertNotificationBundle(extras);
 	}
 
 
@@ -113,5 +153,15 @@ public abstract class C2DMSimulationTest extends SocializeUnitTest {
 		return intent;
 	}
 	
-	protected abstract JSONObject getNotificationMessagePacket() throws JSONException;
+	protected abstract String getLauncherBeanName();
+	
+	protected abstract JSONObject getNotificationMessagePacket() throws Exception;
+	
+	/**
+	 * Asserts that the extras bundle sent to the launch activity contains what we need for the notification.
+	 * @param extras
+	 */
+	protected abstract void assertNotificationBundle(Bundle extras) throws Exception;
+	
+	protected abstract LaunchAction getExpectedLaunchAction();
 }

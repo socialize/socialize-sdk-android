@@ -42,6 +42,7 @@ import com.socialize.test.SocializeUnitTest;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class SocializeActionMessageTranslatorTest extends SocializeUnitTest{
 
 	@UsesMocks ({

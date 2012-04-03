@@ -21,70 +21,38 @@
  */
 package com.socialize.launcher;
 
+import com.socialize.Socialize;
+import com.socialize.log.SocializeLogger;
+import com.socialize.util.StringUtils;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import com.socialize.Socialize;
-import com.socialize.entity.Entity;
-import com.socialize.log.SocializeLogger;
-import com.socialize.ui.SocializeEntityLoader;
-import com.socialize.util.EntityLoaderUtils;
+
 
 /**
  * @author Jason Polites
  *
  */
-public class EntityLauncher implements Launcher {
+public class UrlLauncher implements Launcher {
 	
-	private EntityLoaderUtils entityLoaderUtils;
 	private SocializeLogger logger;
-	
+
 	/* (non-Javadoc)
 	 * @see com.socialize.launcher.Launcher#launch(android.app.Activity, android.os.Bundle)
 	 */
 	@Override
 	public boolean launch(Activity context, Bundle data) {
-		
-		if(entityLoaderUtils != null) {
-			SocializeEntityLoader entityLoader = entityLoaderUtils.initEntityLoader();
-			
-			if(entityLoader != null) {
-				Entity entity = (Entity) data.getSerializable(Socialize.ENTITY_OBJECT);
-				
-				if(entity != null) {
-					if(entityLoader.canLoad(context, entity)) {
-						
-						if(logger != null && logger.isInfoEnabled()) {
-							logger.info("Calling entity loader for entity with key [" +
-									entity.getKey() +
-									"]");
-						}
-						
-						entityLoader.loadEntity(context, entity);
-						
-						return true;
-					}
-					else {
-						if(logger != null && logger.isDebugEnabled()) {
-							logger.debug("Entity loaded indicates that entity with key [" +
-									entity.getKey() +
-									"] cannot be loaded");
-						}
-					}
-				}
-				else {
-					handleWarn("No entity object found under key [" +
-							Socialize.ENTITY_OBJECT +
-							"] in EntityLaucher");
-					
-				}
-			}
-			else {
-				handleWarn("No entity loader found.  Entity based notification cannot be handled");
-			}
+		String url = data.getString(Socialize.DIRECT_URL);
+		if(!StringUtils.isEmpty(url)) {
+			// TODO: Handle URL
 		}
-		
+		else {
+			handleWarn("No url found under key [" +
+					Socialize.DIRECT_URL +
+					"]");
+		}
 		return false;
+
 	}
 	
 	protected void handleWarn(String msg) {
@@ -94,21 +62,23 @@ public class EntityLauncher implements Launcher {
 		else {
 			System.err.println(msg);
 		}
-	}
-	
-	public void setEntityLoaderUtils(EntityLoaderUtils entityLoaderUtils) {
-		this.entityLoaderUtils = entityLoaderUtils;
+	}	
+
+	/* (non-Javadoc)
+	 * @see com.socialize.launcher.Launcher#onResult(android.app.Activity, int, int, android.content.Intent, android.content.Intent)
+	 */
+	@Override
+	public void onResult(Activity context, int requestCode, int resultCode, Intent returnedIntent, Intent originalIntent) {}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.launcher.Launcher#shouldFinish()
+	 */
+	@Override
+	public boolean shouldFinish() {
+		return false;
 	}
 	
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
-
-	@Override
-	public boolean shouldFinish() {
-		return true;
-	}
-
-	@Override
-	public void onResult(Activity context, int requestCode, int resultCode, Intent returnedIntent, Intent originalIntent) {}
 }

@@ -6,4 +6,10 @@
 	<proxy ref="notificationAuthenticator" />
 	<proxy ref="notificationAuthenticator" />
 	<proxy ref="notificationManagerFacade" />
+
+	<proxy ref="actionLauncher" />
+	<proxy ref="homeLauncher" />
+	<proxy ref="urlLauncher" />
+	<proxy ref="entityLauncher" />
+
 </beans>

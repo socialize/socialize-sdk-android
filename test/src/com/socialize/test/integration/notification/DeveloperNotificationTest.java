@@ -21,10 +21,8 @@
  */
 package com.socialize.test.integration.notification;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import android.os.Bundle;
-import com.socialize.Socialize;
 import com.socialize.launcher.LaunchAction;
 import com.socialize.notifications.NotificationType;
 
@@ -33,36 +31,38 @@ import com.socialize.notifications.NotificationType;
  * @author Jason Polites
  *
  */
-public class DirectUrlNotificationTest extends C2DMSimulationTest {
+public class DeveloperNotificationTest extends C2DMSimulationTest {
+
+	final String actionId = "123";
 	
-	final String url = "http://www.getsocialize.com";
-	
-	// https://docs.google.com/a/getsocialize.com/document/d/1KlsIM4VFyNkJY7g4E9VdH3rv_FxuNJhn3VCiStWGyEY/edit?authkey=CK223CU#heading=h.t8xa2p6i4big
+	/* (non-Javadoc)
+	 * @see com.socialize.test.integration.notification.C2DMSimulationTest#getNotificationMessagePacket()
+	 */
 	@Override
-	protected JSONObject getNotificationMessagePacket() throws JSONException {
+	protected JSONObject getNotificationMessagePacket() throws Exception {
 		JSONObject data = new JSONObject();
-		data.put("message", "Test DirectURL message");
-		data.put("url", url);
+		data.put("message", "Test Developer message");
 		data.put("source", "socialize");
-		data.put("notification_type", NotificationType.DEVELOPER_DIRECT_URL.name().toLowerCase());
+		data.put("notification_type", NotificationType.DEVELOPER_NOTIFICATION.name().toLowerCase());
 		return data;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.socialize.test.integration.notification.C2DMSimulationTest#assertNotificationBundle(android.os.Bundle)
+	 */
 	@Override
 	protected void assertNotificationBundle(Bundle extras) throws Exception {
-		String urlAfter = extras.getString(Socialize.DIRECT_URL);
-		assertNotNull(urlAfter);
-		assertEquals(url, urlAfter);
 	}
 
 	@Override
 	protected LaunchAction getExpectedLaunchAction() {
-		return LaunchAction.URL;
+		return LaunchAction.HOME;
 	}
-	
+
 	@Override
 	protected String getLauncherBeanName() {
-		return "urlLauncher";
+		return "homeLauncher";
 	}
+	
 	
 }
