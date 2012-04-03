@@ -26,7 +26,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.R;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Bundle;
 import com.socialize.api.SocializeSession;
@@ -56,6 +55,7 @@ public class SocializeC2DMCallback implements C2DMCallback {
 	private Map<String, NotificationMessageBuilder> messageBuilders;
 	private NotificationRegistrationState notificationRegistrationState;
 	private NotificationRegistrationSystem notificationRegistrationSystem;
+	private NotificationManagerFacade notificationManagerFacade;
 
 	@Override
 	public void onRegister(Context context, String registrationId)  {
@@ -216,16 +216,26 @@ public class SocializeC2DMCallback implements C2DMCallback {
 	}
 	
 	protected void doNotify(Context context, String tag, int id, Notification notification) {
-		NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-		mNotificationManager.notify(tag, id, notification);
+		notificationManagerFacade.notify(context, tag, id, notification);
 	}
 	
-	protected String getNotificationTag(NotificationMessage notificationMessage) {
-		return String.valueOf(notificationMessage.getEntityId());
+	protected String getNotificationTag(NotificationMessage message) {
+		if(message.getEntityId() != null) {
+			return String.valueOf(message.getEntityId().longValue());
+		}
+		else if(message.getUrl() != null) {
+			return message.getUrl();
+		}
+		else {
+			return String.valueOf(message.getActionId());
+		}
 	}
 	
 	protected int getNotificationId(NotificationMessage message) {
-		return (int) message.getEntityId();
+		if(message.getEntityId() != null) {
+			return message.getEntityId().intValue();
+		}
+		return 0;
 	}
 	
 	protected JSONObject newJSONObject(String json) throws JSONException {
@@ -307,4 +317,9 @@ public class SocializeC2DMCallback implements C2DMCallback {
 	public void setUserSystem(UserSystem userSystem) {
 		this.userSystem = userSystem;
 	}
+	
+	public void setNotificationManagerFacade(NotificationManagerFacade notificationManagerFacade) {
+		this.notificationManagerFacade = notificationManagerFacade;
+	}
+	
 }

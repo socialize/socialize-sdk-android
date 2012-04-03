@@ -21,35 +21,14 @@
  */
 package com.socialize.notifications;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.app.Notification;
+import android.content.Context;
 
-import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
+ *
  */
-public class DeveloperNotificationMessageFactory extends BaseNotificationMessageFactory {
-	
-	@Override
-	protected void fromJSON(JSONObject from, NotificationMessage to) throws JSONException {
-		
-		to.setText(getString(from, "message"));
-		to.setUrl(getString(from, "url"));
-		to.setEntityId(getLongObject(from, "entity_id"));
-		
-		String notificationType = getString(from, "notification_type");
-		
-		if(!StringUtils.isEmpty(notificationType)) {
-			try {
-				to.setNotificationType(NotificationType.valueOf(notificationType.trim().toUpperCase()));
-			} catch (Exception e) {
-				String msg = "Invalid notification type [" +
-						notificationType +
-						"]";
-				handleError(msg, e);
-				to.setNotificationType(NotificationType.DEVELOPER_NOTIFICATION);
-			}
-		}
-	}
+public interface NotificationManagerFacade {
+	public void notify(Context context, String tag, int id, Notification notification);
 }

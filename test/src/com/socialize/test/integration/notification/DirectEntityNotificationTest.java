@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,37 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.notifications;
+package com.socialize.test.integration.notification;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.socialize.notifications.NotificationType;
 
-import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
+ *
  */
-public class DeveloperNotificationMessageFactory extends BaseNotificationMessageFactory {
+public class DirectEntityNotificationTest extends C2DMSimulationTest {
 	
+	// https://docs.google.com/a/getsocialize.com/document/d/1KlsIM4VFyNkJY7g4E9VdH3rv_FxuNJhn3VCiStWGyEY/edit?authkey=CK223CU#heading=h.t8xa2p6i4big
 	@Override
-	protected void fromJSON(JSONObject from, NotificationMessage to) throws JSONException {
-		
-		to.setText(getString(from, "message"));
-		to.setUrl(getString(from, "url"));
-		to.setEntityId(getLongObject(from, "entity_id"));
-		
-		String notificationType = getString(from, "notification_type");
-		
-		if(!StringUtils.isEmpty(notificationType)) {
-			try {
-				to.setNotificationType(NotificationType.valueOf(notificationType.trim().toUpperCase()));
-			} catch (Exception e) {
-				String msg = "Invalid notification type [" +
-						notificationType +
-						"]";
-				handleError(msg, e);
-				to.setNotificationType(NotificationType.DEVELOPER_NOTIFICATION);
-			}
-		}
+	protected JSONObject getNotificationMessagePacket() throws JSONException {
+		JSONObject data = new JSONObject();
+		data.put("message", "Test DirectEntity message");
+		data.put("entity_id", 123);
+		data.put("source", "socialize");
+		data.put("notification_type", NotificationType.DEVELOPER_DIRECT_ENTITY.name().toLowerCase());
+		return data;
 	}
 }

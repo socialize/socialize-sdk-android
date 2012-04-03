@@ -44,7 +44,7 @@ public class ActionNotificationMessageFactoryTest extends SocializeUnitTest {
 		final String user = "foo_user";
 		final String entity = "foo_entity";
 		final long activity_id = 69L;
-		final long entity_id = 3142L;
+		final Long entity_id = 3142L;
 		final String activity_type = ActionType.COMMENT.name();
 		final String notification_type = NotificationType.DEVELOPER_NOTIFICATION.name();
 		

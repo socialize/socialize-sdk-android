@@ -111,7 +111,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		AndroidMock.expect(provider.list(mockSession, endpoint, key, ids, start, end)).andReturn(returned);
 		AndroidMock.replay(provider);
 
-		api.list(mockSession, endpoint, key, ids, start, end);
+		api.list(mockSession, endpoint, key, start, end, ids);
 
 		AndroidMock.verify(provider);
 	}

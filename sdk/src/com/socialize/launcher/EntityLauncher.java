@@ -19,30 +19,62 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.config;
+package com.socialize.launcher;
 
-import android.content.Context;
-
-import com.socialize.error.SocializeException;
-import com.socialize.launcher.LaunchTask;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import com.socialize.entity.Entity;
+import com.socialize.ui.SocializeEntityLoader;
+import com.socialize.util.EntityLoaderUtils;
 
 /**
  * @author Jason Polites
  *
  */
-public class NotificationsConfigLaunchTask implements LaunchTask {
-
-	private SocializeConfig config;
+public class EntityLauncher implements Launcher {
+	
+	private EntityLoaderUtils entityLoaderUtils;
 	
 	/* (non-Javadoc)
-	 * @see com.socialize.launcher.SocializeLaunchTask#execute(android.content.Context)
+	 * @see com.socialize.launcher.Launcher#launch(android.app.Activity, android.os.Bundle)
 	 */
 	@Override
-	public void execute(Context context) throws SocializeException {
-		config.setEntityLoaderCheckEnabled(false);
+	public boolean launch(Activity context, Bundle data) {
+		
+		if(entityLoaderUtils != null) {
+			SocializeEntityLoader entityLoader = entityLoaderUtils.initEntityLoader();
+			
+			if(entityLoader != null) {
+				
+				
+				Entity entity = null;
+				
+				if(entityLoader.canLoad(context, entity)) {
+					entityLoader.loadEntity(context, entity);
+					return true;
+				}
+				else {
+					
+				}
+			}
+			else {
+				
+			}
+		}
+		return false;
 	}
 
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
+	
+	public void setEntityLoaderUtils(EntityLoaderUtils entityLoaderUtils) {
+		this.entityLoaderUtils = entityLoaderUtils;
 	}
+
+	@Override
+	public boolean shouldFinish() {
+		return true;
+	}
+
+	@Override
+	public void onResult(Activity context, int requestCode, int resultCode, Intent returnedIntent, Intent originalIntent) {}
 }

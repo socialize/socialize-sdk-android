@@ -23,7 +23,6 @@ package com.socialize.api.action;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
@@ -45,7 +44,18 @@ public class SocializeEntitySystem extends SocializeApi<Entity, SocializeProvide
 		super(provider);
 	}
 	
-	
+	@Override
+	public Entity getEntity(SocializeSession session, long id) throws SocializeException {
+		ListResult<Entity> list = list(session, ENDPOINT, null, 0, 1, String.valueOf(id));
+		if(list != null) {
+			List<Entity> items = list.getItems();
+			if(items != null && items.size() > 0) {
+				return items.get(0);
+			}
+		}
+		return null;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.api.action.EntitySystem#addEntity(com.socialize.api.SocializeSession, com.socialize.entity.Entity, com.socialize.listener.entity.EntityListener)

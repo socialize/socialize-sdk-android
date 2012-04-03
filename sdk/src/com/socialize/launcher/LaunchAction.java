@@ -26,5 +26,5 @@ package com.socialize.launcher;
  *
  */
 public enum LaunchAction {
-	COMMENT_LIST, ENTITY, ACTION, LOCAL_SHARE, HOME
+	COMMENT_LIST, ENTITY, ACTION, LOCAL_SHARE, HOME, URL
 }

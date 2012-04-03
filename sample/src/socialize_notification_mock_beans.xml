@@ -4,5 +4,6 @@
 	<proxy ref="activitySystem" />
 	<proxy ref="deviceRegistrationSystem" />
 	<proxy ref="notificationAuthenticator" />
-	
+	<proxy ref="notificationAuthenticator" />
+	<proxy ref="notificationManagerFacade" />
 </beans>

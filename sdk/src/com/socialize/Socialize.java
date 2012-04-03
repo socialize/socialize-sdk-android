@@ -42,6 +42,7 @@ public class Socialize {
 	public static final Map<String, SocializeListener> STATIC_LISTENERS = new HashMap<String, SocializeListener>();
 	
 	public static final String ACTION_ID = "socialize.action.id";
+	public static final String DIRECT_URL = "socialize.direct.url";
 	
 	public static final String LOG_KEY = "Socialize";
 	public static final String USER_ID = "socialize.user.id";

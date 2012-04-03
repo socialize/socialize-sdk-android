@@ -519,6 +519,8 @@
 	
 	<bean id="actionLauncher" class="com.socialize.launcher.SocializeActionLauncher" extends="activityLauncher"/>
 	<bean id="homeLauncher" class="com.socialize.launcher.HomeLauncher"/>
+	<bean id="urlLauncher" class="com.socialize.launcher.HomeLauncher"/>
+	<bean id="entityLauncher" class="com.socialize.launcher.HomeLauncher"/>
 	
 	<!-- 
 	<bean id="shareLauncher" class="com.socialize.launcher.ShareLauncher">
@@ -539,6 +541,14 @@
 					<key value="HOME"/>
 					<value ref="homeLauncher"/>
 				</entry>
+				<entry>
+					<key value="URL"/>
+					<value ref="urlLauncher"/>
+				</entry>	
+				<entry>
+					<key value="ENTITY"/>
+					<value ref="entityLauncher"/>
+				</entry>	
 				<!-- 			
 				<entry>
 					<key value="LOCAL_SHARE"/>

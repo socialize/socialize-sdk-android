@@ -12,13 +12,14 @@ public class EntityLoaderUtils {
 	private ObjectUtils objectUtils;
 	private SocializeLogger logger;
 
-	public void initEntityLoader() {
+	public SocializeEntityLoader initEntityLoader() {
+		SocializeEntityLoader entityLoader = Socialize.getSocialize().getEntityLoader();
 		
-		if(Socialize.getSocialize().getEntityLoader() == null) {
+		if(entityLoader == null) {
 
-			String entityLoader = config.getProperty(SocializeConfig.SOCIALIZE_ENTITY_LOADER);
+			String entityLoaderClassName = config.getProperty(SocializeConfig.SOCIALIZE_ENTITY_LOADER);
 			
-			if(!StringUtils.isEmpty(entityLoader)) {
+			if(!StringUtils.isEmpty(entityLoaderClassName)) {
 				try {
 					if(logger != null && logger.isDebugEnabled()) {
 						logger.debug("Instantiating entity loader [" +
@@ -26,10 +27,12 @@ public class EntityLoaderUtils {
 								"]");
 					}
 					
-					Object loader = objectUtils.construct(entityLoader);
+					Object loader = objectUtils.construct(entityLoaderClassName);
 					
 					if(loader instanceof SocializeEntityLoader) {
-						Socialize.getSocialize().setEntityLoader((SocializeEntityLoader)loader);
+						entityLoader = (SocializeEntityLoader)loader;
+						
+						Socialize.getSocialize().setEntityLoader(entityLoader);
 					}
 					else {
 						if(logger != null) {
@@ -55,6 +58,8 @@ public class EntityLoaderUtils {
 				}	
 			}		
 		}
+		
+		return entityLoader;
 	}
 
 	public void setConfig(SocializeConfig config) {

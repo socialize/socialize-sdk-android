@@ -51,15 +51,13 @@ public class SocializeC2DMReceiver extends BaseC2DMReceiver {
 		if(logger != null) {
 			logger.error("C2DM registration failed with error: " + errorId);
 		}
-//		if(assertInitialized()) {
-			
-			if(notificationCallback != null) {
-				notificationCallback.onError(context, errorId);
-			}
-			else {
-				logWarn("No notificationCallback found in C2DM receiver.  Initialization may have failed.");
-			}			
-//		}
+		
+		if(notificationCallback != null) {
+			notificationCallback.onError(context, errorId);
+		}
+		else {
+			logWarn("No notificationCallback found in C2DM receiver.  Initialization may have failed.");
+		}			
 	}
 	
 	@Override

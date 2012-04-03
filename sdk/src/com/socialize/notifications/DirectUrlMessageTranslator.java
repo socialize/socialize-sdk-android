@@ -21,35 +21,34 @@
  */
 package com.socialize.notifications;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.socialize.util.StringUtils;
+import android.content.Context;
+import android.os.Bundle;
+import com.socialize.Socialize;
+import com.socialize.error.SocializeException;
 
 /**
  * @author Jason Polites
+ *
  */
-public class DeveloperNotificationMessageFactory extends BaseNotificationMessageFactory {
-	
+public class DirectUrlMessageTranslator implements MessageTranslator<SimpleNotificationMessage> {
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.notifications.MessageTranslator#translateTo(android.content.Context, android.os.Bundle, com.socialize.notifications.NotificationMessage)
+	 */
 	@Override
-	protected void fromJSON(JSONObject from, NotificationMessage to) throws JSONException {
-		
-		to.setText(getString(from, "message"));
-		to.setUrl(getString(from, "url"));
-		to.setEntityId(getLongObject(from, "entity_id"));
-		
-		String notificationType = getString(from, "notification_type");
-		
-		if(!StringUtils.isEmpty(notificationType)) {
-			try {
-				to.setNotificationType(NotificationType.valueOf(notificationType.trim().toUpperCase()));
-			} catch (Exception e) {
-				String msg = "Invalid notification type [" +
-						notificationType +
-						"]";
-				handleError(msg, e);
-				to.setNotificationType(NotificationType.DEVELOPER_NOTIFICATION);
-			}
+	public SimpleNotificationMessage translate(Context context, Bundle data, NotificationMessage message) throws SocializeException {
+		SimpleNotificationMessage notify = new SimpleNotificationMessage();
+		notify.setTitle(message.getText());
+		String url = message.getUrl();
+		if(url != null) {
+			notify.setText(url);
+			data.putString(Socialize.DIRECT_URL, url);
 		}
+		else {
+			throw new SocializeException("No url found in notification of type [" +
+					message.getNotificationType() +
+					"]");
+		}		
+		return notify;
 	}
 }

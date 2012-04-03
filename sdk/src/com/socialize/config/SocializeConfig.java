@@ -358,11 +358,11 @@ public class SocializeConfig {
 		return new Properties();
 	}
 
-	public boolean isENTITY_LOADER_CHECK_ENABLED() {
+	public boolean isEntityLoaderCheckEnabled() {
 		return ENTITY_LOADER_CHECK_ENABLED;
 	}
 
-	protected void setENTITY_LOADER_CHECK_ENABLED(boolean entityLoaderCheckEnabled) {
+	protected void setEntityLoaderCheckEnabled(boolean entityLoaderCheckEnabled) {
 		ENTITY_LOADER_CHECK_ENABLED = entityLoaderCheckEnabled;
 	}
 }

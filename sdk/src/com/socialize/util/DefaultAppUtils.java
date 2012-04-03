@@ -225,7 +225,7 @@ public class DefaultAppUtils implements AppUtils {
 					ok = false;
 				}			
 				
-				if(config.isENTITY_LOADER_CHECK_ENABLED() && Socialize.getSocialize().getEntityLoader() == null) {
+				if(config.isEntityLoaderCheckEnabled() && Socialize.getSocialize().getEntityLoader() == null) {
 					lastNotificationWarning = "Notifications not available. Entity loader not found.";
 					if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
 					ok = false;

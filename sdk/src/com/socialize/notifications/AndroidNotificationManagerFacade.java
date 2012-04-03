@@ -21,35 +21,26 @@
  */
 package com.socialize.notifications;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 
-import com.socialize.util.StringUtils;
 
 /**
+ * Just provides a facade to the Android NotificationManager so we can mock/inject this class.
  * @author Jason Polites
+ *
  */
-public class DeveloperNotificationMessageFactory extends BaseNotificationMessageFactory {
-	
-	@Override
-	protected void fromJSON(JSONObject from, NotificationMessage to) throws JSONException {
-		
-		to.setText(getString(from, "message"));
-		to.setUrl(getString(from, "url"));
-		to.setEntityId(getLongObject(from, "entity_id"));
-		
-		String notificationType = getString(from, "notification_type");
-		
-		if(!StringUtils.isEmpty(notificationType)) {
-			try {
-				to.setNotificationType(NotificationType.valueOf(notificationType.trim().toUpperCase()));
-			} catch (Exception e) {
-				String msg = "Invalid notification type [" +
-						notificationType +
-						"]";
-				handleError(msg, e);
-				to.setNotificationType(NotificationType.DEVELOPER_NOTIFICATION);
-			}
-		}
+public class AndroidNotificationManagerFacade implements NotificationManagerFacade {
+	/**
+	 * Calls the Android NotificationManager.
+	 * @param context
+	 * @param tag
+	 * @param id
+	 * @param notification
+	 */
+	public void notify(Context context, String tag, int id, Notification notification) {
+		NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		mNotificationManager.notify(tag, id, notification);
 	}
 }
