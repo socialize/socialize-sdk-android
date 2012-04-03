@@ -5,19 +5,23 @@ import com.socialize.android.ioc.ProxyObject;
 
 public class NotificationsAccess {
 	
-	public static <T extends Object> T getBean(SocializeC2DMReceiver receiver, String beanName) {
+	public static <T extends Object> T getBean(SocializeC2DMReceiverHandler receiver, String beanName) {
 		return receiver.getNotificationContainer().getContainer().getBean(beanName);
 	}
 	
-	public static <T extends Object> ProxyObject<T> getProxy(SocializeC2DMReceiver receiver,String beanName) {
+	public static <T extends Object> ProxyObject<T> getProxy(SocializeC2DMReceiverHandler receiver,String beanName) {
 		return receiver.getNotificationContainer().getContainer().getProxy(beanName);
 	}
 	
-	public static IOCContainer getContainer(SocializeC2DMReceiver receiver) {
+	public static IOCContainer getContainer(SocializeC2DMReceiverHandler receiver) {
 		return receiver.getNotificationContainer().getContainer();
 	}
 
-	public static void setBeanOverrides(SocializeC2DMReceiver receiver, String...override) {
+	public static void setBeanOverrides(SocializeC2DMReceiverHandler receiver, String...override) {
 		receiver.getNotificationContainer().setConfigPaths(override);
+	}
+	
+	public static void destroy(SocializeC2DMReceiverHandler receiver) {
+		receiver.getNotificationContainer().getContainer().destroy();
 	}
 }

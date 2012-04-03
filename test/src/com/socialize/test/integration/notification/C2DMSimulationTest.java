@@ -31,14 +31,16 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import com.socialize.Socialize;
 import com.socialize.android.ioc.ProxyObject;
 import com.socialize.config.SocializeConfig;
 import com.socialize.launcher.LaunchAction;
+import com.socialize.log.SocializeLogger.LogLevel;
 import com.socialize.notifications.C2DMCallback;
 import com.socialize.notifications.NotificationManagerFacade;
 import com.socialize.notifications.NotificationsAccess;
-import com.socialize.notifications.SocializeC2DMReceiver;
-import com.socialize.test.SocializeUnitTest;
+import com.socialize.notifications.SocializeC2DMReceiverHandler;
+import com.socialize.test.SocializeActivityTest;
 import com.socialize.ui.SocializeLaunchActivity;
 
 
@@ -46,27 +48,26 @@ import com.socialize.ui.SocializeLaunchActivity;
  * Base class for c2dm integration tests.
  * @author Jason Polites
  */
-public abstract class C2DMSimulationTest extends SocializeUnitTest {
+public abstract class C2DMSimulationTest extends SocializeActivityTest {
 
-	SocializeC2DMReceiver receiver;
+	SocializeC2DMReceiverHandler receiver;
 	
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		
-		receiver = new SocializeC2DMReceiver() {
-			@Override
-			protected Context getContext() {
-				return C2DMSimulationTest.this.getContext();
-			}
-		};
+		Socialize.DEFAULT_LOG_LEVEL = LogLevel.DEBUG;
+		
+		receiver = new SocializeC2DMReceiverHandler();
 		
 		// Set override
 		NotificationsAccess.setBeanOverrides(receiver, new String[]{SocializeConfig.SOCIALIZE_CORE_BEANS_PATH, SocializeConfig.SOCIALIZE_NOTIFICATION_BEANS_PATH, "socialize_notification_mock_beans.xml"});
 		
 		// Create the receiver
-		receiver.onCreate();
+		receiver.onCreate(getContext());
 	}
+	
+	
 	
 	public void testOnMessage() throws Exception {
 		
@@ -138,9 +139,10 @@ public abstract class C2DMSimulationTest extends SocializeUnitTest {
 		assertNotificationBundle(extras);
 	}
 
-
 	@Override
 	protected void tearDown() throws Exception {
+		Socialize.getSocialize().destroy(true);
+		NotificationsAccess.destroy(receiver);
 		super.tearDown();
 	}
 	

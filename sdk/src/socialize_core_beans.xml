@@ -55,7 +55,7 @@
 		<property name="builder" ref="beanBuilder"/>
 	</bean>
 	
-	<bean id="entityLoaderUtils" class="com.socialize.util.EntityLoaderUtils">
+	<bean id="entityLoaderUtils" class="com.socialize.util.SocializeEntityLoaderUtils">
 		<property name="objectUtils" ref="objectUtils"/>
 		<property name="logger" ref="logger"/>
 		<property name="config" ref="config"/>

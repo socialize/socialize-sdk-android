@@ -19,20 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.util;
+package com.socialize.notifications;
 
-import com.socialize.ui.SocializeEntityLoader;
+import android.content.Context;
+import android.content.Intent;
 
 /**
  * @author Jason Polites
  *
  */
-public interface EntityLoaderUtils {
+public interface C2DMReceiverHandler {
 
-	/**
-	 * 
-	 * @return
-	 */
-	public SocializeEntityLoader initEntityLoader();
+	public void onMessage(Context context, Intent intent);
+
+	public void onError(Context context, String errorId);
+
+	public void onRegistrered(Context context, String registrationId);
+
+	public void onUnregistered(Context context);
+
+	public void onCreate(Context context);
+
+	public void onDestroy(Context context);
 
 }

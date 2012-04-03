@@ -43,10 +43,19 @@ public class SocializeLogger {
 	public static final int NO_UDID = 4;
 	public static final int ERROR_CODE_LOAD_FAIL = 5;
 	
-	private LogLevel logLevel = LogLevel.INFO;
+	private LogLevel logLevel = LogLevel.WARN;
 	private SocializeConfig config;
 	private boolean logThread = true;
 	
+	public SocializeLogger() {
+		super();
+	}
+	
+	public SocializeLogger(LogLevel level) {
+		super();
+		this.logLevel = level;
+	}
+
 	public void init(SocializeConfig config) {
 		String ll = config.getProperty(SocializeConfig.LOG_LEVEL);
 		logThread = config.getBooleanProperty(SocializeConfig.LOG_THREAD, true);
@@ -64,6 +73,10 @@ public class SocializeLogger {
 		this.config = config;
 	}
 	
+	public void setLogLevel(LogLevel logLevel) {
+		this.logLevel = logLevel;
+	}
+
 	public void debug(int messageId) {
 		debug(getMessage(messageId));
 	}

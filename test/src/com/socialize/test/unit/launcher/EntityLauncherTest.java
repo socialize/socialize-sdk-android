@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,20 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.util;
+package com.socialize.test.unit.launcher;
 
-import com.socialize.ui.SocializeEntityLoader;
+import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.test.SocializeUnitTest;
+import com.socialize.util.EntityLoaderUtils;
+
 
 /**
  * @author Jason Polites
  *
  */
-public interface EntityLoaderUtils {
+public class EntityLauncherTest extends SocializeUnitTest {
 
-	/**
-	 * 
-	 * @return
-	 */
-	public SocializeEntityLoader initEntityLoader();
-
+	@UsesMocks ({EntityLoaderUtils.class})
+	public void testLaunch() {
+		
+	}
+	
 }

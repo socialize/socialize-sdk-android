@@ -1414,7 +1414,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		SocializeServiceImpl socialize = AndroidMock.createMock(SocializeServiceImpl.class);
 		String[] paths = { "foo", "bar" };
 
-		AndroidMock.expect(socialize.initWithContainer(context, paths)).andReturn(null);
+		AndroidMock.expect(socialize.initWithContainer(context, null, paths)).andReturn(null);
 
 		AndroidMock.replay(socialize);
 
@@ -1422,7 +1422,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertTrue(AsyncTask.class.isAssignableFrom(task.getClass()));
 
-		task.doInBackground((Void[]) null);
+		task.doInBackground();
 
 		AndroidMock.verify(socialize);
 
@@ -1458,7 +1458,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		SocializeException error = new SocializeException();
 		String[] paths = { "foo", "bar" };
 
-		AndroidMock.expect(socialize.initWithContainer(context, paths)).andThrow(error);
+		AndroidMock.expect(socialize.initWithContainer(context, null, paths)).andThrow(error);
 
 		listener.onError(error);
 

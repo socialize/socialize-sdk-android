@@ -24,7 +24,6 @@ package com.socialize.launcher;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-
 import com.socialize.util.AppUtils;
 import com.socialize.util.EntityLoaderUtils;
 
