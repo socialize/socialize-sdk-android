@@ -21,12 +21,15 @@
  */
 package com.socialize.launcher;
 
-import com.socialize.Socialize;
-import com.socialize.log.SocializeLogger;
-import com.socialize.util.StringUtils;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import com.socialize.Socialize;
+import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.log.SocializeLogger;
+import com.socialize.ui.dialog.FullScreenDialogFactory;
+import com.socialize.ui.notiifcations.DirectUrlWebView;
+import com.socialize.util.StringUtils;
 
 
 /**
@@ -36,6 +39,8 @@ import android.os.Bundle;
 public class UrlLauncher implements Launcher {
 	
 	private SocializeLogger logger;
+	private FullScreenDialogFactory dialogFactory;
+	private IBeanFactory<DirectUrlWebView> directUrlWebViewFactory;
 
 	/* (non-Javadoc)
 	 * @see com.socialize.launcher.Launcher#launch(android.app.Activity, android.os.Bundle)
@@ -44,6 +49,16 @@ public class UrlLauncher implements Launcher {
 	public boolean launch(Activity context, Bundle data) {
 		String url = data.getString(Socialize.DIRECT_URL);
 		if(!StringUtils.isEmpty(url)) {
+			
+//			DirectUrlWebView webView = directUrlWebViewFactory.getBean(context);
+//			Dialog build = dialogFactory.build(webView);
+//			build.setOnCancelListener(new OnCancelListener() {
+//				
+//				@Override
+//				public void onCancel(DialogInterface dialog) {
+//				}
+//			});
+			
 			// TODO: Handle URL
 		}
 		else {
@@ -53,6 +68,10 @@ public class UrlLauncher implements Launcher {
 		}
 		return false;
 
+	}
+	
+	protected void handleCloseEvent(Activity context) {
+		
 	}
 	
 	protected void handleWarn(String msg) {
