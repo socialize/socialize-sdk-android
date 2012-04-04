@@ -21,83 +21,15 @@
  */
 package com.socialize.launcher;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import com.socialize.Socialize;
-import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.log.SocializeLogger;
-import com.socialize.ui.dialog.FullScreenDialogFactory;
-import com.socialize.ui.notiifcations.DirectUrlWebView;
-import com.socialize.util.StringUtils;
+import com.socialize.ui.notifications.DirectUrlListener;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class UrlLauncher implements Launcher {
+public interface UrlLauncher extends Launcher {
 	
-	private SocializeLogger logger;
-	private FullScreenDialogFactory dialogFactory;
-	private IBeanFactory<DirectUrlWebView> directUrlWebViewFactory;
-
-	/* (non-Javadoc)
-	 * @see com.socialize.launcher.Launcher#launch(android.app.Activity, android.os.Bundle)
-	 */
-	@Override
-	public boolean launch(Activity context, Bundle data) {
-		String url = data.getString(Socialize.DIRECT_URL);
-		if(!StringUtils.isEmpty(url)) {
-			
-//			DirectUrlWebView webView = directUrlWebViewFactory.getBean(context);
-//			Dialog build = dialogFactory.build(webView);
-//			build.setOnCancelListener(new OnCancelListener() {
-//				
-//				@Override
-//				public void onCancel(DialogInterface dialog) {
-//				}
-//			});
-			
-			// TODO: Handle URL
-		}
-		else {
-			handleWarn("No url found under key [" +
-					Socialize.DIRECT_URL +
-					"]");
-		}
-		return false;
-
-	}
+	public void setDirectUrlListener(DirectUrlListener directWebViewListener);
 	
-	protected void handleCloseEvent(Activity context) {
-		
-	}
-	
-	protected void handleWarn(String msg) {
-		if(logger != null) {
-			logger.warn(msg);
-		}
-		else {
-			System.err.println(msg);
-		}
-	}	
-
-	/* (non-Javadoc)
-	 * @see com.socialize.launcher.Launcher#onResult(android.app.Activity, int, int, android.content.Intent, android.content.Intent)
-	 */
-	@Override
-	public void onResult(Activity context, int requestCode, int resultCode, Intent returnedIntent, Intent originalIntent) {}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.launcher.Launcher#shouldFinish()
-	 */
-	@Override
-	public boolean shouldFinish() {
-		return false;
-	}
-	
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
-	}
 }

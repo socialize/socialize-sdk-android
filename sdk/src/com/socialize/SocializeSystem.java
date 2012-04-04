@@ -63,25 +63,12 @@ public class SocializeSystem {
 				config = CORE_CONFIG;
 			}
 		}
-		
-		for (String path : config) {
-			System.out.println(Thread.currentThread().getName() + ": Returning config with path [" +
-					path +
-					"]");
-		}
-		
-		System.out.println(Thread.currentThread().getName() + ": bean overrides is [" +
-				beanOverrides +
-				"]");
-		
 		return config;
 	}
 	
 	public void destroy() {
 		initListener = null;
 		beanOverrides = null;
-		
-		System.out.println(Thread.currentThread().getName() + ": System destroyed");
 	}
 	
 	public SocializeInitListener getSystemInitListener() {

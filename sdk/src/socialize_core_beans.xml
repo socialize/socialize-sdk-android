@@ -510,68 +510,6 @@
 	
 <!-- End Device Registration API -->
 
-<!--  Launcher -->
-
-	<bean id="activityLauncher" abstract="true">
-		<property name="appUtils" ref="appUtils"/>
-		<property name="entityLoaderUtils" ref="entityLoaderUtils"/>
-	</bean>
-	
-	<bean id="actionLauncher" class="com.socialize.launcher.SocializeActionLauncher" extends="activityLauncher"/>
-	
-	<bean id="homeLauncher" class="com.socialize.launcher.HomeLauncher"/>
-	
-	<bean id="urlLauncher" class="com.socialize.launcher.UrlLauncher">
-		<property name="logger" ref="logger"/>
-	</bean>
-	
-	<bean id="entityLauncher" class="com.socialize.launcher.EntityLauncher">
-		<property name="entityLoaderUtils" ref="entityLoaderUtils"/>
-		<property name="entitySystem" ref="entitySystem"/>
-		<property name="notificationAuthenticator" ref="notificationAuthenticator"/>		
-		<property name="logger" ref="logger"/>
-	</bean>
-	
-	<!-- 
-	<bean id="shareLauncher" class="com.socialize.launcher.ShareLauncher">
-		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
-		<property name="listenerHolder" ref="listenerHolder"/>
-	</bean>
-	 -->
-
-	<bean id="launchManager" class="com.socialize.launcher.SocializeLaunchManager">
-		<property name="logger" ref="logger"/>
-		<property name="launchers">
-			<map>
-				<entry>
-					<key value="ACTION"/>
-					<value ref="actionLauncher"/>
-				</entry>
-				<entry>
-					<key value="HOME"/>
-					<value ref="homeLauncher"/>
-				</entry>
-				<entry>
-					<key value="URL"/>
-					<value ref="urlLauncher"/>
-				</entry>	
-				<entry>
-					<key value="ENTITY"/>
-					<value ref="entityLauncher"/>
-				</entry>	
-				<!-- 			
-				<entry>
-					<key value="LOCAL_SHARE"/>
-					<value ref="shareLauncher"/>
-				</entry>
-				 -->					
-			</map>
-		</property>
-	</bean>
-
-<!-- End Launcher -->
-
-
 <!-- Facebook -->
 	<bean id="shareMessageBuilder" class="com.socialize.api.DefaultShareMessageBuilder">
 		<property name="appUtils" ref="appUtils"/>

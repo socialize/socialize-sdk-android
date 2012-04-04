@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Socialize Inc.
+ * Copyright (c) 2011 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,22 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test.unit.launcher;
+package com.socialize.ui.notifications;
 
-import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.test.SocializeUnitTest;
-import com.socialize.util.EntityLoaderUtils;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class EntityLauncherTest extends SocializeUnitTest {
+public interface DirectUrlListener {
 
-	@UsesMocks ({EntityLoaderUtils.class})
-	public void testLaunch() {
-		
-	}
+	public boolean onBeforePageLoaded(DirectUrlWebView view, String url);
+	
+	public void onAfterPageLoaded(DirectUrlWebView view, String url);
+	
+	public void onDialogClose();
 	
 }

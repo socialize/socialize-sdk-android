@@ -22,10 +22,21 @@
 package com.socialize.ui.dialog;
 
 import android.R;
+import android.app.Activity;
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.view.Gravity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
+import android.widget.LinearLayout;
+import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.ui.view.SocializeButton;
+import com.socialize.util.DisplayUtils;
+import com.socialize.util.Drawables;
 
 
 /**
@@ -33,16 +44,72 @@ import android.view.Window;
  *
  */
 public class FullScreenDialogFactory {
+	
+	private DisplayUtils displayUtils;
+	private IBeanFactory<SocializeButton> buttonFactory;
+	private Drawables drawables;
 
-	public Dialog build(View contentView) {
-		Dialog dialog = new Dialog(contentView.getContext(), R.style.Theme_Dialog);
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setContentView(contentView);
-		dialog.getWindow().setLayout(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+	public Dialog build(Activity context, View contentView, boolean includeCloseButton) {
 		
+		final Dialog dialog = new Dialog(contentView.getContext(), R.style.Theme_Dialog);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
+		if(includeCloseButton) {
+			
+			Drawable viewBg = drawables.getDrawable("action_bar_button.png", true, false, true);
+			
+			LinearLayout layout = new LinearLayout(context);
+			layout.setOrientation(LinearLayout.VERTICAL);
+			
+			LinearLayout.LayoutParams master = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
+			
+			layout.setLayoutParams(master);
+			
+			LinearLayout toolbar = new LinearLayout(context);
+			
+			LinearLayout.LayoutParams toolbarParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, displayUtils.getDIP(44));
+			
+			toolbar.setLayoutParams(toolbarParams);
+			toolbar.setGravity(Gravity.CENTER_VERTICAL|Gravity.RIGHT);
+			toolbar.setBackgroundDrawable(viewBg);
+			
+			SocializeButton button = buttonFactory.getBean();
+			button.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					dialog.dismiss();
+				}
+			});
+			
+			toolbar.addView(button);
+			layout.addView(toolbar);
+			layout.addView(contentView);
+			
+			dialog.setContentView(layout);
+		}
+		else {
+			dialog.setContentView(contentView);
+		}
+		
+		ColorDrawable cd = new ColorDrawable(Color.BLACK);
+		dialog.getWindow().setBackgroundDrawable(cd);
+		dialog.getWindow().setLayout(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+
 		// Register to prevent window leakage
 		DialogRegistration.register(contentView.getContext(), dialog);
 		
 		return dialog;
+	}
+
+	public void setDisplayUtils(DisplayUtils displayUtils) {
+		this.displayUtils = displayUtils;
+	}
+	
+	public void setButtonFactory(IBeanFactory<SocializeButton> buttonFactory) {
+		this.buttonFactory = buttonFactory;
+	}
+
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
 	}
 }

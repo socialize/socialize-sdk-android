@@ -41,6 +41,12 @@ public abstract class SocializeActivityTest extends ActivityInstrumentationTestC
 		super.setUp();
 	}
 	
+	@Override
+	protected void tearDown() throws Exception {
+		holder.clear();
+		super.tearDown();
+	}
+
 	protected void addResult(Object obj) {
 		holder.addResult(obj);
 	}

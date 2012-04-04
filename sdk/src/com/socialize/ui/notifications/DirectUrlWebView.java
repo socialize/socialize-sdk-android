@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.notiifcations;
+package com.socialize.ui.notifications;
 
 import android.content.Context;
 import android.view.ViewGroup;
@@ -37,6 +37,7 @@ import com.socialize.log.SocializeLogger;
 public class DirectUrlWebView extends WebView {
 	
 	private SocializeLogger logger;
+	private DirectUrlListener listener;
 	
 	public DirectUrlWebView(Context context) {
 		super(context);
@@ -46,6 +47,11 @@ public class DirectUrlWebView extends WebView {
 		FrameLayout.LayoutParams FILL = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
 		
 		getSettings().setJavaScriptEnabled(true);
+		getSettings().setLoadWithOverviewMode(true);
+        getSettings().setUseWideViewPort(true);
+        getSettings().setSupportZoom(true);
+        getSettings().setBuiltInZoomControls(true);
+        
 		setLayoutParams(FILL);
 		setWebChromeClient(newWebChromeClient());
 		setWebViewClient(newWebViewClient());
@@ -73,16 +79,43 @@ public class DirectUrlWebView extends WebView {
 			@Override
 			public void onPageFinished(WebView view, String url) {
 				if(logger != null && logger.isInfoEnabled()) {
-					logger.info("Loaded page: " + url);
+					logger.info("Direct URL loaded page: " + url);
 				}				
+				
+				
+				if(listener != null) {
+					listener.onAfterPageLoaded(DirectUrlWebView.this, url);
+				}
+				
 				super.onPageFinished(view, url);
 			}
 		};
 		
 		return client;
 	}
+	
+	
+
+//	@Override
+//	public boolean onTouchEvent(MotionEvent ev) {
+//		
+//		if(ev.getAction() == MotionEvent.ACTION_DOWN) {
+//			if(ev.getPointerCount() > 1) {
+//				;
+//			}
+//			else {
+//				getSettings().setSupportZoom(false);
+//			}			
+//		}
+//		
+//		return super.onTouchEvent(ev);
+//	}
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
+	}
+	
+	public void setListener(DirectUrlListener listener) {
+		this.listener = listener;
 	}
 }

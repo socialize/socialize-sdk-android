@@ -100,6 +100,7 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 				
 				@Override
 				public void onError(SocializeException error) {
+					error.printStackTrace();
 					fail();
 				}
 				
