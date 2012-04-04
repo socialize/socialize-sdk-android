@@ -93,7 +93,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		
 		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeActionListener listener) {
+			public void listAsync(SocializeSession session, String endpoint, String key, SocializeActionListener listener, String...ids) {
 				addResult(key);
 			}
 		};
@@ -113,7 +113,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		
 		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
+			public void listAsync(SocializeSession session, String endpoint, String key, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
 				addResult(key);
 				addResult(startIndex);
 				addResult(endIndex);
@@ -187,7 +187,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		
 		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
+			public void listAsync(SocializeSession session, String endpoint, String key, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
 				addResult(ids);
 			}
 		};
@@ -240,7 +240,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		
 		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
+			public void listAsync(SocializeSession session, String endpoint, String key, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
 				LikeListener ll = (LikeListener) listener;
 				ll.onList(listResult);
 			}
@@ -306,7 +306,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		
 		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
+			public void listAsync(SocializeSession session, String endpoint, String key, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
 				LikeListener ll = (LikeListener) listener;
 				ll.onList(listResult);
 			}
@@ -408,7 +408,7 @@ public class LikeApiTest extends SocializeUnitTest {
 		
 		SocializeLikeSystem api = new SocializeLikeSystem(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
+			public void listAsync(SocializeSession session, String endpoint, String key, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
 				addResult(key);
 				addResult(endpoint);
 			}

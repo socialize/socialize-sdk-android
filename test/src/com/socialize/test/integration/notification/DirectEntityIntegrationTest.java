@@ -43,23 +43,9 @@ import com.socialize.util.EntityLoaderUtils;
  */
 public class DirectEntityIntegrationTest extends DirectEntityNotificationTest {
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		
-		System.out.println(Thread.currentThread().getName() + ": Starting DirectEntityIntegrationTest setup");
-		// The notification will be handled by Socialize, not notification container.
-		SocializeAccess.setBeanOverrides("socialize_notification_mock_beans.xml");
-	}
-
 	@UsesMocks ({EntityLoaderUtils.class})
 	@Override
 	public void testOnMessage() throws Exception {
-		
-		getInstrumentation().waitForIdleSync();
-		
-		System.out.println(Thread.currentThread().getName() + ": Starting DirectEntityIntegrationTest test");
-		SocializeAccess.setBeanOverrides("socialize_notification_mock_beans.xml");
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
@@ -112,6 +98,8 @@ public class DirectEntityIntegrationTest extends DirectEntityNotificationTest {
 		assertEquals(getEntityId(), entity.getId().longValue());
 	}
 
-	
-	
+	@Override
+	protected boolean disableLauncher() {
+		return false;
+	}
 }

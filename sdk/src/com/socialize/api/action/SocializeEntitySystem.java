@@ -55,7 +55,7 @@ public class SocializeEntitySystem extends SocializeApi<Entity, SocializeProvide
 		}
 		return null;
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.api.action.EntitySystem#addEntity(com.socialize.api.SocializeSession, com.socialize.entity.Entity, com.socialize.listener.entity.EntityListener)
@@ -67,13 +67,8 @@ public class SocializeEntitySystem extends SocializeApi<Entity, SocializeProvide
 		postAsync(session, ENDPOINT, list, listener);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.api.action.EnitySystem#getEntity(com.socialize.api.SocializeSession, java.lang.String, com.socialize.listener.entity.EntityListener)
-	 */
-	@Override
-	public void getEntity(SocializeSession session, final String key, final EntityListener listener) {
-		
-		listAsync(session, ENDPOINT, key, null, 0, 1, new EntityListListener() {
+	protected EntityListListener getListenerForGet(final EntityListener listener, final String notFoundMessage) {
+		return new EntityListListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -97,12 +92,23 @@ public class SocializeEntitySystem extends SocializeApi<Entity, SocializeProvide
 				}
 				
 				if(is404) {
-					onError(new SocializeApiError(404, "No entity found with key [" +
-							key +
-							"]"));
+					onError(new SocializeApiError(404, notFoundMessage));
 				}
 			}
-		});
+		};
+	}
+	
+	@Override
+	public void getEntity(SocializeSession session, long id, EntityListener listener) {
+		listAsync(session, ENDPOINT, null, 0, 1, getListenerForGet(listener, "No entity found with id [" + id + "]"), String.valueOf(id));
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.socialize.api.action.EnitySystem#getEntity(com.socialize.api.SocializeSession, java.lang.String, com.socialize.listener.entity.EntityListener)
+	 */
+	@Override
+	public void getEntity(SocializeSession session, final String key, final EntityListener listener) {
+		listAsync(session, ENDPOINT, key, null, 0, 1, getListenerForGet(listener, "No entity found with key [" + key + "]"));
 	}
 
 	/* (non-Javadoc)
@@ -110,7 +116,7 @@ public class SocializeEntitySystem extends SocializeApi<Entity, SocializeProvide
 	 */
 	@Override
 	public void listEntities(SocializeSession session, EntityListener listener, String...keys) {
-		listAsync(session, ENDPOINT, null, keys, 0, SocializeConfig.MAX_LIST_RESULTS, listener);
+		listAsync(session, ENDPOINT, null, "entity_key", 0, SocializeConfig.MAX_LIST_RESULTS, listener, keys);
 	}
 	
 }

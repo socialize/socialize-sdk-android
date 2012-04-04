@@ -18,6 +18,11 @@ public class MockEntitySystem implements EntitySystem {
 		entity.setKey("http://entity1.com");
 		entity.setId(0L);
 	}
+	
+	@Override
+	public void getEntity(SocializeSession session, long id, EntityListener listener) {
+		if(listener != null) listener.onGet(entity);
+	}
 
 	@Override
 	public Entity getEntity(SocializeSession session, long id) throws SocializeException {

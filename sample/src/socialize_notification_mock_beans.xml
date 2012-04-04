@@ -8,4 +8,10 @@
 	<proxy ref="notificationManagerFacade" />
 	<proxy ref="entityLoaderUtils" />
 
+	<proxy ref="homeLauncher" />
+	<proxy ref="actionLauncher" />
+	<proxy ref="urlLauncher" />
+	<proxy ref="entityLauncher" />
+				
+
 </beans>

@@ -24,6 +24,7 @@ package com.socialize.test.integration.notification;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.json.JSONObject;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.PendingIntent.OnFinished;
@@ -32,9 +33,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import com.socialize.Socialize;
+import com.socialize.SocializeAccess;
+import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
 import com.socialize.config.SocializeConfig;
+import com.socialize.error.SocializeException;
 import com.socialize.launcher.LaunchAction;
+import com.socialize.launcher.Launcher;
+import com.socialize.listener.SocializeInitListener;
 import com.socialize.log.SocializeLogger.LogLevel;
 import com.socialize.notifications.C2DMCallback;
 import com.socialize.notifications.NotificationManagerFacade;
@@ -62,16 +68,16 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 		
 		// Set override
 		NotificationsAccess.setBeanOverrides(receiver, new String[]{SocializeConfig.SOCIALIZE_CORE_BEANS_PATH, SocializeConfig.SOCIALIZE_NOTIFICATION_BEANS_PATH, "socialize_notification_mock_beans.xml"});
+		SocializeAccess.setBeanOverrides("socialize_notification_mock_beans.xml");
 		
 		// Create the receiver
 		receiver.onCreate(getContext());
 	}
 	
-	
-	
 	public void testOnMessage() throws Exception {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
+		final CountDownLatch launchLock = new CountDownLatch(1);
 		
 		// Override the behaviour of the notification manager so it doesn't actually post a status bar notification.
 		ProxyObject<NotificationManagerFacade> proxy = NotificationsAccess.getProxy(receiver, "notificationManagerFacade");
@@ -86,6 +92,41 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 				latch.countDown();
 			}
 		});
+		
+		if(disableLauncher()) {
+			
+			// Launcher is triggered in normal socialize context, not notification context.
+			SocializeAccess.setInitListener(new SocializeInitListener() {
+				
+				@Override
+				public void onError(SocializeException error) {
+					fail();
+				}
+				
+				@Override
+				public void onInit(Context context, IOCContainer container) {
+					ProxyObject<Launcher> launcherProxy = container.getProxy(getLauncherBeanName());
+
+					launcherProxy.setDelegate(new Launcher() {
+						@Override
+						public boolean shouldFinish() {
+							return true;
+						}
+						
+						@Override
+						public void onResult(Activity context, int requestCode, int resultCode, Intent returnedIntent, Intent originalIntent) {}
+						
+						@Override
+						public boolean launch(Activity context, Bundle data) {
+							// TODO Add assertions
+							addResult(4, "launch");
+							launchLock.countDown();
+							return true;
+						}
+					});
+				}
+			});
+		}
 		
 		JSONObject json = getNotificationMessagePacket();
 		Intent intent = getMessageIntent(json);
@@ -137,6 +178,11 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 		assertEquals(getExpectedLaunchAction(), action);
 		
 		assertNotificationBundle(extras);
+		
+		if(disableLauncher()) {
+			launchLock.await(10, TimeUnit.SECONDS);
+			assertNotNull(getResult(4));
+		}
 	}
 
 	@Override
@@ -166,4 +212,8 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 	protected abstract void assertNotificationBundle(Bundle extras) throws Exception;
 	
 	protected abstract LaunchAction getExpectedLaunchAction();
+	
+	protected boolean disableLauncher() {
+		return true;
+	}
 }

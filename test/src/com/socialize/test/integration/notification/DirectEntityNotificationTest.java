@@ -28,7 +28,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.os.Bundle;
 import com.socialize.Socialize;
-import com.socialize.entity.Entity;
 import com.socialize.launcher.LaunchAction;
 import com.socialize.notifications.NotificationType;
 import com.socialize.test.ui.util.TestUtils;
@@ -55,9 +54,10 @@ public class DirectEntityNotificationTest extends C2DMSimulationTest {
 	
 	@Override
 	protected void assertNotificationBundle(Bundle extras) throws IOException, JSONException {
-		Entity entity = (Entity)extras.getSerializable(Socialize.ENTITY_OBJECT);
-		assertNotNull(entity);
-		assertEquals(getEntityId(), entity.getId().longValue());
+		Object id = extras.get(Socialize.ENTITY_ID);
+		assertNotNull(id);
+		assertTrue(id instanceof Long);
+		assertEquals(getEntityId(), ((Long)id).longValue());
 	}
 
 	/**

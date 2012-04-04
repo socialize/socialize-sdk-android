@@ -1481,7 +1481,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		final SocializeIOC socializeIOC = AndroidMock.createMock(SocializeIOC.class);
 		final ClassLoaderProvider classLoaderProvider = AndroidMock.createMock(ClassLoaderProvider.class);
 		final ResourceLocator resourceLocator = AndroidMock.createMock(ResourceLocator.class);
-		final SocializeLogger logger = AndroidMock.createMock(SocializeLogger.class);
+		final SocializeLogger logger = new SocializeLogger();
 
 		final Context context = new MockContext();
 

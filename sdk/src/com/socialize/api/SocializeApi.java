@@ -225,11 +225,11 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return provider.putAsPost(session, endpoint, object);
 	}
 	
-	public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
-		listAsync(session, endpoint, key, ids, "id", startIndex, endIndex, listener);
+	public void listAsync(SocializeSession session, String endpoint, String key, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
+		listAsync(session, endpoint, key,  "id", startIndex, endIndex, listener, ids);
 	}
 	
-	public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, String idKey, int startIndex, int endIndex, SocializeActionListener listener) {
+	public void listAsync(SocializeSession session, String endpoint, String key, String idKey, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
 		AsyncGetter getter = new AsyncGetter(RequestType.LIST, session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
 		request.setEndpoint(endpoint);
@@ -241,8 +241,8 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		getter.execute(request);
 	}
 	
-	public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, SocializeActionListener listener) {
-		listAsync(session, endpoint, key, ids, 0, SocializeConfig.MAX_LIST_RESULTS, listener);
+	public void listAsync(SocializeSession session, String endpoint, String key, SocializeActionListener listener, String...ids) {
+		listAsync(session, endpoint, key, 0, SocializeConfig.MAX_LIST_RESULTS, listener, ids);
 	}
 	
 	public void listAsync(SocializeSession session, String endpoint, int startIndex, int endIndex, SocializeActionListener listener) {

@@ -1035,6 +1035,17 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	
 	/*
 	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#getEntityById(long, com.socialize.listener.entity.EntityGetListener)
+	 */
+	@Override
+	public void getEntityById(long id, EntityGetListener listener) {
+		if(assertAuthenticated(listener)) {
+			entitySystem.getEntity(session, id, listener);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#getUser(int, com.socialize.listener.user.UserGetListener)
 	 */
 	@Override

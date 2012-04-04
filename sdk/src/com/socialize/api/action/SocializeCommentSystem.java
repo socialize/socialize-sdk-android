@@ -74,7 +74,7 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 	 */
 	@Override
 	public void getCommentsByEntity(SocializeSession session, String key, CommentListener listener) {
-		listAsync(session, ENDPOINT, key, null, listener);
+		listAsync(session, ENDPOINT, key, listener);
 	}
 	
 	/* (non-Javadoc)
@@ -115,7 +115,7 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 		}
 		
 		// No need for pagination here really
-		listAsync(session, ENDPOINT, null, strIds, 0, SocializeConfig.MAX_LIST_RESULTS, listener);
+		listAsync(session, ENDPOINT, null, 0, SocializeConfig.MAX_LIST_RESULTS, listener, strIds);
 	}
 	
 	/* (non-Javadoc)

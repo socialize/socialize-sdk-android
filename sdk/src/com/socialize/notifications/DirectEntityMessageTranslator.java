@@ -24,9 +24,6 @@ package com.socialize.notifications;
 import android.content.Context;
 import android.os.Bundle;
 import com.socialize.Socialize;
-import com.socialize.api.SocializeSession;
-import com.socialize.api.action.EntitySystem;
-import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 
 /**
@@ -34,48 +31,25 @@ import com.socialize.error.SocializeException;
  *
  */
 public class DirectEntityMessageTranslator implements MessageTranslator<SimpleNotificationMessage> {
-	
-	private EntitySystem entitySystem;
-	private NotificationAuthenticator notificationAuthenticator;
-
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.notifications.MessageTranslator#translateTo(android.content.Context, android.os.Bundle, com.socialize.notifications.NotificationMessage)
 	 */
 	@Override
 	public SimpleNotificationMessage translate(Context context, Bundle data, NotificationMessage message) throws SocializeException {
-		
 		SimpleNotificationMessage notify = new SimpleNotificationMessage();
-		notify.setTitle(message.getText());
-		
-		Entity entity = null;
+
 		if(message.getEntityId() != null) {
-			SocializeSession session = notificationAuthenticator.authenticate(context);
-			entity = entitySystem.getEntity(session, message.getEntityId().longValue());
-			if(entity != null) {
-				notify.setText(entity.getDisplayName());
-				data.putSerializable( Socialize.ENTITY_OBJECT , entity);
-			}
-			else {
-				throw new SocializeException("No entity object found with id [" +
-						message.getEntityId() +
-						"]");
-			}			
+			notify.setTitle(message.getText());
+			notify.setText(message.getText());
+			
+			data.putLong( Socialize.ENTITY_ID , message.getEntityId());
 		}
 		else {
 			throw new SocializeException("No entity id found in notification of type [" +
 					message.getNotificationType() +
 					"]");
 		}		
-
 		return notify;
-	}
-	
-	public void setEntitySystem(EntitySystem entitySystem) {
-		this.entitySystem = entitySystem;
-	}
-
-	public void setNotificationAuthenticator(NotificationAuthenticator notificationAuthenticator) {
-		this.notificationAuthenticator = notificationAuthenticator;
 	}
 }

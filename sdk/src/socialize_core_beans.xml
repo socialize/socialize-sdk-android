@@ -518,12 +518,17 @@
 	</bean>
 	
 	<bean id="actionLauncher" class="com.socialize.launcher.SocializeActionLauncher" extends="activityLauncher"/>
+	
 	<bean id="homeLauncher" class="com.socialize.launcher.HomeLauncher"/>
+	
 	<bean id="urlLauncher" class="com.socialize.launcher.UrlLauncher">
 		<property name="logger" ref="logger"/>
 	</bean>
+	
 	<bean id="entityLauncher" class="com.socialize.launcher.EntityLauncher">
 		<property name="entityLoaderUtils" ref="entityLoaderUtils"/>
+		<property name="entitySystem" ref="entitySystem"/>
+		<property name="notificationAuthenticator" ref="notificationAuthenticator"/>		
 		<property name="logger" ref="logger"/>
 	</bean>
 	

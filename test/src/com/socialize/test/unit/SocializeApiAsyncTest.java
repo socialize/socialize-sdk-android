@@ -274,7 +274,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				api.listAsync(mockSession, endpoint, key, ids, listener);
+				api.listAsync(mockSession, endpoint, key, listener, ids);
 			}
 		});
 
@@ -308,7 +308,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				api.listAsync(mockSession, endpoint, key, ids, start, end, listener);
+				api.listAsync(mockSession, endpoint, key, start, end, listener, ids);
 			}
 		});
 
@@ -333,7 +333,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				api.listAsync(mockSession, endpoint, key, ids, listener);
+				api.listAsync(mockSession, endpoint, key, listener, ids);
 			}
 		});
 
@@ -358,7 +358,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		runTestOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				api.listAsync(mockSession, endpoint, key, ids, start, end, listener);
+				api.listAsync(mockSession, endpoint, key, start, end, listener, ids);
 			}
 		});
 

@@ -39,6 +39,7 @@ public class Socialize {
 	public static final String VERSION = "1.5.6";
 	
 	public static final String ENTITY_OBJECT = "socialize.entity";
+	public static final String ENTITY_ID = "socialize.entity.id";
 	
 	public static final Map<String, SocializeListener> STATIC_LISTENERS = new HashMap<String, SocializeListener>();
 	

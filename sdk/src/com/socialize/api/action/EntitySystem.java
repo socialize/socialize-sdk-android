@@ -45,6 +45,8 @@ public interface EntitySystem {
 	 * @return
 	 */
 	public Entity getEntity(SocializeSession session, long id) throws SocializeException;		
+	
+	public void getEntity(SocializeSession session, long id, EntityListener listener);
 
 	@DelegateOnly
 	public void getEntity(SocializeSession session, String entityKey, EntityListener listener);

@@ -21,11 +21,7 @@
 	</bean>
 	
 	<bean id="directUrlMessageTranslator" class="com.socialize.notifications.DirectUrlMessageTranslator"/>
-	
-	<bean id="directEntityMessageTranslator" class="com.socialize.notifications.DirectEntityMessageTranslator">
-		<property name="entitySystem" ref="entitySystem"/>
-		<property name="notificationAuthenticator" ref="notificationAuthenticator"/>
-	</bean>
+	<bean id="directEntityMessageTranslator" class="com.socialize.notifications.DirectEntityMessageTranslator"/>
 	
 	<bean id="actionNotificationMessageBuilder" class="com.socialize.notifications.SocializeActionNotificationMessageBuilder">
 		<property name="appUtils" ref="appUtils"/>
