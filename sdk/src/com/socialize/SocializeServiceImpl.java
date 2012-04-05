@@ -115,6 +115,7 @@ import com.socialize.ui.comment.CommentView;
 import com.socialize.ui.comment.OnCommentViewActionListener;
 import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.ui.profile.UserProfile;
+import com.socialize.util.AppUtils;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.Drawables;
 import com.socialize.util.EntityLoaderUtils;
@@ -145,6 +146,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private Drawables drawables;
 	private AuthProviders authProviders;
 	private NotificationChecker notificationChecker;
+	private AppUtils appUtils;
 	
 	private SocializeSystem system = SocializeSystem.getInstance();
 	private SocializeConfig config = new SocializeConfig();
@@ -424,6 +426,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.authProviders = container.getBean("authProviders");
 				this.authProviderInfoBuilder = container.getBean("authProviderInfoBuilder");
 				this.notificationChecker = container.getBean("notificationChecker");
+				this.appUtils = container.getBean("appUtils");
 				
 				SocializeConfig mainConfig = container.getBean("config");
 				
@@ -438,6 +441,9 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				initEntityLoader();
 				
 				initNotifications(context);
+				
+				// Check we are configured ok
+				appUtils.checkAndroidManifest(context);
 				
 				ActivityIOCProvider.getInstance().setContainer(container);
 				

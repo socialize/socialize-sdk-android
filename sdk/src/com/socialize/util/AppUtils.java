@@ -23,6 +23,7 @@ package com.socialize.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 
 /**
  * @author Jason Polites
@@ -37,6 +38,8 @@ public interface AppUtils {
 	public boolean isIntentAvailable(Context context, Intent intent);
 
 	public boolean isServiceAvailable(Context context, Class<?> cls);
+	
+	public ActivityInfo getActivityInfo(Context context, Class<?> cls);
 
 	public boolean isReceiverAvailable(Context context, Class<?> cls);
 
@@ -57,5 +60,7 @@ public interface AppUtils {
 	public String getAppStoreAbbreviation(String appStore);
 	
 	public String getUserAgentString();
+	
+	public void checkAndroidManifest(Context context);
 
 }

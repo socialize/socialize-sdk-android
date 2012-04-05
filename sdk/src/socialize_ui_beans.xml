@@ -877,7 +877,6 @@
 		<property name="imageOn" value="icon_notify.png#large"/>
 		<property name="imageOff" value="icon_notify_disabled.png#large"/>
 		<property name="padding" value="4" type="integer"/>
-		<property name="forceDefaultDensity" value="true" type="boolean"/>
 		<property name="borderOn" value="false" type="boolean"/>
 	</bean>		
 	
