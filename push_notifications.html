@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>SmartAlerts (Push Notifications) &mdash; Socialize Android SDK v1.5.6 documentation</title>
+    <title>SmartAlerts (Push Notifications) &mdash; Socialize Android SDK v1.6 documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'v1.5.6',
+        VERSION:     'v1.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,21 +26,21 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="shortcut icon" href="static/favicon.ico"/>
-    <link rel="top" title="Socialize Android SDK v1.5.6 documentation" href="index.html?v=v1.5.6" />
-    <link rel="next" title="Entity Loaders" href="entity_loader.html?v=v1.5.6" />
-    <link rel="prev" title="Socialize Comments" href="comment_view.html?v=v1.5.6" /> 
+    <link rel="top" title="Socialize Android SDK v1.6 documentation" href="index.html?v=v1.6" />
+    <link rel="next" title="Entity Loaders" href="entity_loader.html?v=v1.6" />
+    <link rel="prev" title="Socialize Comments" href="comment_view.html?v=v1.6" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="entity_loader.html?v=v1.5.6" title="Entity Loaders"
+          <a href="entity_loader.html?v=v1.6" title="Entity Loaders"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="comment_view.html?v=v1.5.6" title="Socialize Comments"
+          <a href="comment_view.html?v=v1.6" title="Socialize Comments"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html?v=v1.5.6">Socialize Android SDK v1.5.6 documentation</a> &raquo;</li> 
+        <li><a href="index.html?v=v1.6">Socialize Android SDK v1.6 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -116,7 +116,7 @@
                 &lt;application...>
 
                         &lt;!-- Activities Required for Socialize Push Notifications -->
-                        &lt;activity android:name="com.socialize.ui.SocializeLaunchActivity" android:launchMode="singleTop"/>
+                        &lt;activity android:name="com.socialize.ui.SocializeLaunchActivity" android:noHistory="true"/>
 
                         &lt;!-- Socialize Notification Receiver -->
                         &lt;service android:name="com.socialize.notifications.SocializeC2DMReceiver"/>
@@ -161,7 +161,7 @@
                         &lt;activity android:name="com.socialize.auth.facebook.FacebookActivity"/>
 
                         &lt;!-- Activities Required for Socialize Push Notifications -->
-                        &lt;activity android:name="com.socialize.ui.SocializeLaunchActivity" android:launchMode="singleTop"/>
+                        &lt;activity android:name="com.socialize.ui.SocializeLaunchActivity" android:noHistory="true"/>
 
                         &lt;!-- Socialize Notification Receiver -->
                         &lt;service android:name="com.socialize.notifications.SocializeC2DMReceiver"/>
@@ -231,7 +231,37 @@ app.</p>
 <h2>Step 3: Create an Entity Loader<a class="headerlink" href="#step-3-create-an-entity-loader" title="Permalink to this headline">¶</a></h2>
 <p>In order for Socialize to know how to handle a notification it needs an &#8220;Entity Loader&#8221;.  This is a class
 provided by you which tells Socialize how to load content in your app.</p>
-<p>Refer to the <a class="reference internal" href="entity_loader.html?v=v1.5.6#entity-loader"><em>Entity Loaders</em></a> section for details on how to implement a Socialize Entity Loader.</p>
+<p>Refer to the <a class="reference internal" href="entity_loader.html?v=v1.6#entity-loader"><em>Entity Loaders</em></a> section for details on how to implement a Socialize Entity Loader.</p>
+</div>
+<div class="section" id="step-4-registering-for-google-c2dm">
+<h2>Step 4: Registering for Google C2DM<a class="headerlink" href="#step-4-registering-for-google-c2dm" title="Permalink to this headline">¶</a></h2>
+<p>Socialize provides a default quota of SmartAlerts that should satisfy the needs of most users, however if you are experiencing issues with SmartAlerts quota
+you can always simply register your own C2DM token with Socialize.</p>
+<p>Google&#8217;s Cloud To Device (C2DM) system allows any app developer to register and obtain a token. Configuring your application for SmartAlerts using your own C2DM token is a 3 step process:</p>
+<div class="section" id="step-1-register-with-google-for-c2dm">
+<h3>Step 1: Register with Google for C2DM<a class="headerlink" href="#step-1-register-with-google-for-c2dm" title="Permalink to this headline">¶</a></h3>
+<p>To register your app with Google&#8217;s C2DM system, just go to <a class="reference external" href="http://code.google.com/android/c2dm">http://code.google.com/android/c2dm</a> and select: &#8220;Sign Up for C2DM&#8221;:</p>
+<img alt="images/c2dm_signup0.png" src="images/c2dm_signup0.png" />
+<p>Fill out all the required information and submit, you should see a message like this:</p>
+<img alt="images/c2dm_signup1.png" src="images/c2dm_signup1.png" />
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Make sure you retain the Sender ID you used during this sign up process (it will most likely be your Google email address), you will need this in the next step.</p>
+</div>
+</div>
+<div class="section" id="step-2-add-your-c2dm-sender-id-to-your-socialize-properties-file">
+<h3>Step 2: Add your C2DM sender ID to your <strong>socialize.properties</strong> file<a class="headerlink" href="#step-2-add-your-c2dm-sender-id-to-your-socialize-properties-file" title="Permalink to this headline">¶</a></h3>
+<p>The Socialize SDK needs to know who will be sending SmartAlerts to the device.  Simply add your C2DM Sender ID to your <strong>socialize.properties</strong> file
+under the key <strong>socialize.c2dm.sender.id</strong></p>
+<pre class="brush: java-properties">
+# Your C2DM Sender ID
+socialize.c2dm.sender.id=myaccount@gmail.com
+</pre></div>
+<div class="section" id="step-3-add-your-c2dm-token-to-the-socialize-website">
+<h3>Step 3: Add your C2DM token to the Socialize website<a class="headerlink" href="#step-3-add-your-c2dm-token-to-the-socialize-website" title="Permalink to this headline">¶</a></h3>
+<p>Once you receive your C2DM token from Google, simply add it to your account on the getsocialize.com website:</p>
+<img alt="images/c2dm.png" src="images/c2dm.png" />
+</div>
 </div>
 <div class="section" id="testing-smartalerts">
 <h2>Testing SmartAlerts<a class="headerlink" href="#testing-smartalerts" title="Permalink to this headline">¶</a></h2>
@@ -242,9 +272,13 @@ are indeed being sent.</p>
 <img alt="images/smart_alert.png" src="images/smart_alert.png" />
 <div class="section" id="locating-your-device-token">
 <h3>Locating your Device Token<a class="headerlink" href="#locating-your-device-token" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The Device Token is DIFFERENT to the C2DM Token.  Each Device has a unique token whereas your C2DM token (if you have one) corresponds to your Sender ID</p>
+</div>
 <p>If you are still experiencing problems and want to post a question to our support forum, it is useful to include your device token
 when posting any question.  To determine your device token you will first need to enable the <strong>INFO</strong> level logging in Socialize.</p>
-<p>Refer to the <a class="reference internal" href="troubleshooting.html?v=v1.5.6#debug-logs"><em>Displaying debug logs in LogCat</em></a> section for more information on enabling logs.</p>
+<p>Refer to the <a class="reference internal" href="troubleshooting.html?v=v1.6#debug-logs"><em>Displaying debug logs in LogCat</em></a> section for more information on enabling logs.</p>
 <p>Once info logging is enabled, a <strong>new</strong> instance of your app should produce log entries that look something like this:</p>
 <div class="highlight-python"><pre>INFO/Socialize(15860): Not registered with C2DM, sending registration request...
 INFO/Socialize(15860): Registration with C2DM successful: APA91bHd0aL-d75F6_7NcDf_nil8...OBg5-Ixk_8c9rg9b14fsVwvMXTy4
@@ -266,7 +300,7 @@ INFO/Socialize(15860): Registration with Socialize for C2DM successful.</pre>
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="search.html?v=v1.5.6" method="get">
+    <form class="search" action="search.html?v=v1.6" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -277,15 +311,15 @@ INFO/Socialize(15860): Registration with Socialize for C2DM successful.</pre>
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-<h3><a href="index.html?v=v1.5.6">Table Of Contents</a></h3>
+<h3><a href="index.html?v=v1.6">Table Of Contents</a></h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v1.5.6">What&#8217;s New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v1.5.6">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v1.5.6">Facebook Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v1.5.6">Twitter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v1.5.6">Socialize Action Bar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v1.5.6">Socialize Like Button</a></li>
-<li class="toctree-l1"><a class="reference internal" href="comment_view.html?v=v1.5.6">Socialize Comments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html?v=v1.6">What&#8217;s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html?v=v1.6">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facebook.html?v=v1.6">Facebook Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="twitter.html?v=v1.6">Twitter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="action_bar.html?v=v1.6">Socialize Action Bar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="like_button.html?v=v1.6">Socialize Like Button</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comment_view.html?v=v1.6">Socialize Comments</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">SmartAlerts (Push Notifications)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#smartalerts-in-comment-threads">SmartAlerts in Comment Threads</a></li>
@@ -298,19 +332,25 @@ INFO/Socialize(15860): Registration with Socialize for C2DM successful.</pre>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#step-3-create-an-entity-loader">Step 3: Create an Entity Loader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-registering-for-google-c2dm">Step 4: Registering for Google C2DM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-register-with-google-for-c2dm">Step 1: Register with Google for C2DM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-add-your-c2dm-sender-id-to-your-socialize-properties-file">Step 2: Add your C2DM sender ID to your <strong>socialize.properties</strong> file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-3-add-your-c2dm-token-to-the-socialize-website">Step 3: Add your C2DM token to the Socialize website</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#testing-smartalerts">Testing SmartAlerts</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#locating-your-device-token">Locating your Device Token</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v1.5.6">Entity Loaders</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v1.5.6">Socialize SDK (Advanced) Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html?v=v1.5.6">Configuration Settings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v1.5.6">Amazon AppStore URLs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v1.5.6">ProGuard Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v1.5.6">Troubleshooting &amp; Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v1.5.6">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity_loader.html?v=v1.6">Entity Loaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdk_user_guide.html?v=v1.6">Socialize SDK (Advanced) Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html?v=v1.6">Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amazon.html?v=v1.6">Amazon AppStore URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proguard.html?v=v1.6">ProGuard Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html?v=v1.6">Troubleshooting &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html?v=v1.6">Change Log</a></li>
 </ul>
 
         </div>
@@ -321,12 +361,12 @@ INFO/Socialize(15860): Registration with Socialize for C2DM successful.</pre>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="entity_loader.html?v=v1.5.6" title="Entity Loaders"
+          <a href="entity_loader.html?v=v1.6" title="Entity Loaders"
              >next</a></li>
         <li class="right" >
-          <a href="comment_view.html?v=v1.5.6" title="Socialize Comments"
+          <a href="comment_view.html?v=v1.6" title="Socialize Comments"
              >previous</a> |</li>
-        <li><a href="index.html?v=v1.5.6">Socialize Android SDK v1.5.6 documentation</a> &raquo;</li> 
+        <li><a href="index.html?v=v1.6">Socialize Android SDK v1.6 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
