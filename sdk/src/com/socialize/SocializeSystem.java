@@ -32,6 +32,14 @@ import com.socialize.util.StringUtils;
 public class SocializeSystem {
 	private String[] beanOverrides;
 	private SocializeInitListener initListener;
+	private boolean configChanged = false;
+	private String[] config = null;
+	
+	static final SocializeSystem instance = new SocializeSystem();
+	
+	public static final SocializeSystem getInstance() {
+		return instance;
+	}
 	
 	static final String[] CORE_CONFIG = {
 		SocializeConfig.SOCIALIZE_CORE_BEANS_PATH,
@@ -39,23 +47,22 @@ public class SocializeSystem {
 	};
 	
 	public String[] getBeanConfig() {
-		String[] config = null;
-		
-		if(!StringUtils.isEmpty(beanOverrides)) {
-			config = new String[beanOverrides.length + CORE_CONFIG.length];
-			
-			for (int i = 0; i < CORE_CONFIG.length; i++) {
-				config[i] = CORE_CONFIG[i];
+		if(config == null || configChanged) {
+			if(!StringUtils.isEmpty(beanOverrides)) {
+				config = new String[beanOverrides.length + CORE_CONFIG.length];
+				
+				for (int i = 0; i < CORE_CONFIG.length; i++) {
+					config[i] = CORE_CONFIG[i];
+				}
+				
+				for (int i = 0; i < beanOverrides.length; i++) {
+					config[i+CORE_CONFIG.length] = beanOverrides[i];
+				}
 			}
-			
-			for (int i = 0; i < beanOverrides.length; i++) {
-				config[i+CORE_CONFIG.length] = beanOverrides[i];
+			else {
+				config = CORE_CONFIG;
 			}
 		}
-		else {
-			config = CORE_CONFIG;
-		}
-		
 		return config;
 	}
 	
@@ -82,5 +89,11 @@ public class SocializeSystem {
 	 */
 	void setBeanOverrides(String...beanOverrides) {
 		this.beanOverrides = beanOverrides;
+		this.configChanged = true;
+		
+		System.out.println(Thread.currentThread().getName() + ": set bean overrides is [" +
+				beanOverrides +
+				"]");
+		
 	}
 }

@@ -35,6 +35,9 @@ public class DeveloperNotificationMessageFactory extends BaseNotificationMessage
 	protected void fromJSON(JSONObject from, NotificationMessage to) throws JSONException {
 		
 		to.setText(getString(from, "message"));
+		to.setUrl(getString(from, "url"));
+		to.setEntityId(getLongObject(from, "entity_id"));
+		
 		String notificationType = getString(from, "notification_type");
 		
 		if(!StringUtils.isEmpty(notificationType)) {

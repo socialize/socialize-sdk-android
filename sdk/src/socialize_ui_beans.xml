@@ -877,7 +877,6 @@
 		<property name="imageOn" value="icon_notify.png#large"/>
 		<property name="imageOff" value="icon_notify_disabled.png#large"/>
 		<property name="padding" value="4" type="integer"/>
-		<property name="forceDefaultDensity" value="true" type="boolean"/>
 		<property name="borderOn" value="false" type="boolean"/>
 	</bean>		
 	
@@ -1477,5 +1476,100 @@
 <!--  End ActionButton  -->
 
 
+<!--  Launcher -->
+
+	<bean id="activityLauncher" abstract="true">
+		<property name="appUtils" ref="appUtils"/>
+		<property name="entityLoaderUtils" ref="entityLoaderUtils"/>
+	</bean>
+	
+	<bean id="actionLauncher" class="com.socialize.launcher.SocializeActionLauncher" extends="activityLauncher"/>
+	
+	<bean id="homeLauncher" class="com.socialize.launcher.HomeLauncher"/>
+	
+	<bean id="entityLauncher" class="com.socialize.launcher.EntityLauncher">
+		<property name="entityLoaderUtils" ref="entityLoaderUtils"/>
+		<property name="entitySystem" ref="entitySystem"/>
+		<property name="notificationAuthenticator" ref="notificationAuthenticator"/>		
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<!-- URL Launcher -->
+	<bean id="fullScreenDialogFactory" class="com.socialize.ui.dialog.FullScreenDialogFactory">
+		<property name="displayUtils" ref="displayUtils"/>
+		<property name="buttonFactory" ref="closeDialogButtonFactory"/>
+		<property name="drawables" ref="drawables"/>
+	</bean>
+	
+	<bean 
+		id="closeDialogButton" 
+		singleton="false"
+		extends="socializeButton">
+		<constructor-arg type="activity"/>
+		<property name="text" value="Close"/>
+		<property name="height" value="32" type="integer"/>
+		<property name="width" value="64" type="integer"/>
+		<property name="textSize" value="11" type="integer"/>
+		<property name="textAlign" value="center"/>
+		<property name="padding" value="2" type="integer"/>
+		<property name="bold" value="true" type="boolean"/>
+	</bean>	
+	
+	<factory id="closeDialogButtonFactory" makes="closeDialogButton"/>
+
+	<bean id="urlLauncher" class="com.socialize.launcher.SocializeUrlLauncher">
+		<property name="logger" ref="logger"/>
+		<property name="directUrlWebViewFactory" ref="directUrlWebViewFactory"/>
+		<property name="dialogFactory" ref="fullScreenDialogFactory"/>
+	</bean>
+
+	<bean id="directUrlWebView" class="com.socialize.ui.notifications.DirectUrlWebView" singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="logger" ref="logger"/>
+		<init-method name="init"/>
+	</bean>
+	
+	<factory id="directUrlWebViewFactory" makes="directUrlWebView"/>
+
+<!-- End Web View -->	
+
+	<!-- 
+	<bean id="shareLauncher" class="com.socialize.launcher.ShareLauncher">
+		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
+		<property name="listenerHolder" ref="listenerHolder"/>
+	</bean>
+	 -->
+
+	<bean id="launchManager" class="com.socialize.launcher.SocializeLaunchManager">
+		<property name="logger" ref="logger"/>
+		<property name="launchers">
+			<map>
+				<entry>
+					<key value="ACTION"/>
+					<value ref="actionLauncher"/>
+				</entry>
+				<entry>
+					<key value="HOME"/>
+					<value ref="homeLauncher"/>
+				</entry>
+				<entry>
+					<key value="URL"/>
+					<value ref="urlLauncher"/>
+				</entry>	
+				<entry>
+					<key value="ENTITY"/>
+					<value ref="entityLauncher"/>
+				</entry>	
+				<!-- 			
+				<entry>
+					<key value="LOCAL_SHARE"/>
+					<value ref="shareLauncher"/>
+				</entry>
+				 -->					
+			</map>
+		</property>
+	</bean>
+
+<!-- End Launcher -->
 
 </beans>

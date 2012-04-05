@@ -89,7 +89,7 @@ public class CommentApiTest extends SocializeUnitTest {
 		
 		SocializeCommentSystem api = new SocializeCommentSystem(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
+			public void listAsync(SocializeSession session, String endpoint, String key, String idKey, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
 				addResult(key);
 				addResult(startIndex);
 				addResult(endIndex);
@@ -177,7 +177,7 @@ public class CommentApiTest extends SocializeUnitTest {
 		
 		SocializeCommentSystem api = new SocializeCommentSystem(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
+			public void listAsync(SocializeSession session, String endpoint, String key, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
 				addResult(ids);
 			}
 		};

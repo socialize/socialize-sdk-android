@@ -23,7 +23,6 @@ package com.socialize.notifications;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.socialize.api.action.ActionType;
 import com.socialize.util.StringUtils;
 
@@ -39,7 +38,7 @@ public class ActionNotificationMessageFactory extends BaseNotificationMessageFac
 		to.setUser(getString(from, "user"));
 		to.setEntity(getString(from, "entity"));
 		to.setActionId(getLong(from, "activity_id"));
-		to.setEntityId(getLong(from, "entity_id", to.getActionId()));
+		to.setEntityId(getLongObject(from, "entity_id"));
 		
 		String actionType = getString(from, "activity_type");
 		String notificationType = getString(from, "notification_type");

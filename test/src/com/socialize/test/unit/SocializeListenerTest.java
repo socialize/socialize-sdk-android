@@ -369,7 +369,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 
 		runTestOnUiThread(new Runnable() {
 			public void run() {
-				api.listAsync(session, endpoint, key, ids, listener);
+				api.listAsync(session, endpoint, key, listener, ids);
 			}
 		});
 
@@ -425,7 +425,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 
 		runTestOnUiThread(new Runnable() {
 			public void run() {
-				api.listAsync(session, key, key, ids, start, end, listener);
+				api.listAsync(session, key, key, start, end, listener, ids);
 			}
 		});
 

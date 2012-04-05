@@ -21,7 +21,6 @@
  */
 package com.socialize.share;
 
-import java.util.Map;
 import android.app.Activity;
 import android.location.Location;
 import com.socialize.Socialize;
@@ -51,37 +50,28 @@ public abstract class AbstractShareHandler implements ShareHandler {
 		PropagationInfoResponse propagationInfoResponse = action.getPropagationInfoResponse();
 		
 		if(propagationInfoResponse != null) {
-			Map<ShareType, PropagationInfo> urlSets = propagationInfoResponse.getUrlSets();
+			PropagationInfo propagationInfo = propagationInfoResponse.getPropagationInfo(getShareType());
 			
-			if(urlSets != null) {
-				PropagationInfo propagationInfo = urlSets.get(getShareType());
-				
-				if(propagationInfo != null) {
-					try {
-						if(listener != null) {
-							listener.onBeforePost(context);
-						}						
-						
-						handle(context, action, text, propagationInfo, listener);
-						
-						if(listener != null) {
-							listener.onAfterPost(context, action);
-						}
-					}
-					catch (Exception e) {
-						if(logger != null) {
-							logger.error("Error handling share", e);
-						}
-						
-						if(listener != null) {
-							listener.onError(context, action, "Error handling share", e);
-						}
+			if(propagationInfo != null) {
+				try {
+					if(listener != null) {
+						listener.onBeforePost(context);
+					}						
+					
+					handle(context, action, text, propagationInfo, listener);
+					
+					if(listener != null) {
+						listener.onAfterPost(context, action);
 					}
 				}
-				else {
-					logError(context, action, "No propagation info found for share type [" +
-									getShareType() +
-									"].  Share will not propagate", listener);
+				catch (Exception e) {
+					if(logger != null) {
+						logger.error("Error handling share", e);
+					}
+					
+					if(listener != null) {
+						listener.onError(context, action, "Error handling share", e);
+					}
 				}
 			}
 			else {

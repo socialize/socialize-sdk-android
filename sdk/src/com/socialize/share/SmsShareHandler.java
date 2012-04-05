@@ -25,7 +25,6 @@ import android.app.Activity;
 import android.content.Intent;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ShareType;
-import com.socialize.config.SocializeConfig;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.SocializeAction;
 
@@ -36,14 +35,13 @@ import com.socialize.entity.SocializeAction;
 public class SmsShareHandler extends IntentShareHandler {
 
 	private ShareMessageBuilder shareMessageBuilder;
-	private SocializeConfig config;
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.share.AbstractShareHandler#handle(android.app.Activity, com.socialize.entity.SocializeAction, java.lang.String, com.socialize.entity.PropagationInfo, com.socialize.share.ShareHandlerListener)
 	 */
 	@Override
 	protected void handle(Activity context, SocializeAction action, String text, PropagationInfo info, ShareHandlerListener listener) throws Exception {
-		String body = shareMessageBuilder.buildShareMessage(action.getEntity(), info, text, false, config.getBooleanProperty(SocializeConfig.SOCIALIZE_BRANDING_ENABLED, true));
+		String body = shareMessageBuilder.buildShareMessage(action.getEntity(), info, text, false, true);
 		Intent sendIntent = getIntent();
 		sendIntent.putExtra("sms_body", body); 
 		context.startActivity(sendIntent);
@@ -66,10 +64,6 @@ public class SmsShareHandler extends IntentShareHandler {
 	@Override
 	protected ShareType getShareType() {
 		return ShareType.SMS;
-	}
-
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
 	}
 
 	public void setShareMessageBuilder(ShareMessageBuilder shareMessageBuilder) {

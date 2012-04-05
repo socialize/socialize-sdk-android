@@ -26,6 +26,7 @@ import android.app.ProgressDialog;
 import android.view.View;
 import android.view.View.OnClickListener;
 import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.api.action.ShareType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
@@ -51,6 +52,11 @@ public class ShareClickListener implements OnClickListener {
 	private AlertDialogFactory alertDialogFactory;
 	private OnActionBarEventListener onActionBarEventListener;
 	private ActionBarView actionBarView;
+	
+	public ShareClickListener(Activity context) {
+		super();
+		this.context = context;
+	}
 
 	public ShareClickListener(
 			Activity context, 
@@ -59,9 +65,7 @@ public class ShareClickListener implements OnClickListener {
 			ShareInfoProvider provider,
 			OnActionBarEventListener onActionBarEventListener,
 			ActionBarView actionBarView) {
-		super();
-		
-		this.context = context;
+		this(context);
 		this.shareType = shareType;
 		this.entity = entity;
 		this.provider = provider;
@@ -74,8 +78,8 @@ public class ShareClickListener implements OnClickListener {
 	 */
 	@Override
 	public void onClick(View view) {
-		final ProgressDialog dialog = progressDialogFactory.show(context, "Share", "Sharing via " + shareType.getDisplayName() + "...");
-		Socialize.getSocialize().share(context, entity, provider.getShareText(), shareType, new ShareAddListener() {
+		final ProgressDialog dialog = progressDialogFactory.show(view.getContext(), "Share", "Sharing via " + shareType.getDisplayName() + "...");
+		getSocialize().share(context, entity, provider.getShareText(), shareType, new ShareAddListener() {
 			@Override
 			public void onError(SocializeException error) {
 				dialog.dismiss();
@@ -99,4 +103,29 @@ public class ShareClickListener implements OnClickListener {
 	public void setAlertDialogFactory(AlertDialogFactory alertDialogFactory) {
 		this.alertDialogFactory = alertDialogFactory;
 	}
+	
+	public void setShareType(ShareType shareType) {
+		this.shareType = shareType;
+	}
+	
+	public void setEntity(Entity entity) {
+		this.entity = entity;
+	}
+	
+	public void setProvider(ShareInfoProvider provider) {
+		this.provider = provider;
+	}
+
+	public void setOnActionBarEventListener(OnActionBarEventListener onActionBarEventListener) {
+		this.onActionBarEventListener = onActionBarEventListener;
+	}
+	
+	public void setActionBarView(ActionBarView actionBarView) {
+		this.actionBarView = actionBarView;
+	}
+	
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
+	}
+	
 }

@@ -12,7 +12,7 @@
 				&lt;activity android:name="com.socialize.auth.facebook.FacebookActivity"/>
 				
 				&lt;!-- Activities Required for Socialize Push Notifications -->			
-				&lt;activity android:name="com.socialize.ui.SocializeLaunchActivity" android:launchMode="singleTop"/>
+				&lt;activity android:name="com.socialize.ui.SocializeLaunchActivity" android:noHistory="true"/>
 		
 				&lt;!-- Socialize Notification Receiver -->
 				&lt;service android:name="com.socialize.notifications.SocializeC2DMReceiver"/>

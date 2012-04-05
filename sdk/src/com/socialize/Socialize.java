@@ -27,6 +27,7 @@ import java.util.Map;
 import android.content.Context;
 
 import com.socialize.listener.SocializeListener;
+import com.socialize.log.SocializeLogger.LogLevel;
 
 /**
  * Singleton helper class to make accessing the socialize service easier.
@@ -35,17 +36,21 @@ import com.socialize.listener.SocializeListener;
 public class Socialize {
 	
 	// This will be set during the build process
-	public static final String VERSION = "1.5.6";
+	public static final String VERSION = "1.6";
 	
 	public static final String ENTITY_OBJECT = "socialize.entity";
+	public static final String ENTITY_ID = "socialize.entity.id";
 	
 	public static final Map<String, SocializeListener> STATIC_LISTENERS = new HashMap<String, SocializeListener>();
 	
 	public static final String ACTION_ID = "socialize.action.id";
+	public static final String DIRECT_URL = "socialize.direct.url";
 	
 	public static final String LOG_KEY = "Socialize";
 	public static final String USER_ID = "socialize.user.id";
 	public static final String DEFAULT_USER_ICON = "default_user_icon.png";
+	
+	public static LogLevel DEFAULT_LOG_LEVEL = LogLevel.WARN;
 	
 	private static final SocializeServiceImpl instance = new SocializeServiceImpl();
 

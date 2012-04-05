@@ -27,8 +27,10 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.telephony.TelephonyManager;
@@ -37,6 +39,7 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.log.SocializeLogger;
 import com.socialize.notifications.SocializeBroadcastReceiver;
 import com.socialize.notifications.SocializeC2DMReceiver;
+import com.socialize.ui.SocializeLaunchActivity;
 
 /**
  * @author Jason Polites
@@ -156,6 +159,26 @@ public class DefaultAppUtils implements AppUtils {
 	    return packageManager.queryIntentServices(intent, PackageManager.MATCH_DEFAULT_ONLY).size() > 0;
 	}
 	
+	@Override
+	public ActivityInfo getActivityInfo(Context context, Class<?> cls) {
+		try {
+			final PackageManager packageManager = context.getPackageManager();
+			return packageManager.getActivityInfo(new ComponentName(context, cls), 0);
+		}
+		catch (NameNotFoundException e) {
+			if(logger != null) {
+				logger.error("Failed to locate info for activity [" +
+						cls.getName() +
+						"]", e);
+			}
+			else {
+				e.printStackTrace();
+			}
+		}
+		
+		return null;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.util.IAppUtils#isReceiverAvailable(android.content.Context, java.lang.Class)
 	 */
@@ -225,7 +248,7 @@ public class DefaultAppUtils implements AppUtils {
 					ok = false;
 				}			
 				
-				if(config.isENTITY_LOADER_CHECK_ENABLED() && Socialize.getSocialize().getEntityLoader() == null) {
+				if(config.isEntityLoaderCheckEnabled() && Socialize.getSocialize().getEntityLoader() == null) {
 					lastNotificationWarning = "Notifications not available. Entity loader not found.";
 					if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
 					ok = false;
@@ -249,8 +272,23 @@ public class DefaultAppUtils implements AppUtils {
 
 		return notificationsAvailable;
 	}
-
 	
+	@Override
+	public void checkAndroidManifest(Context context) {
+		// Check the launch activity config
+		ActivityInfo info = getActivityInfo(context, SocializeLaunchActivity.class);
+		if(info != null) {
+			if((info.flags & ActivityInfo.FLAG_NO_HISTORY) != ActivityInfo.FLAG_NO_HISTORY) {
+				logger.warn("Activity flag android:noHistory=\"true\" not found for " + SocializeLaunchActivity.class.getSimpleName() + ".  Please ensure this is added to the declaration of this activity in your AndroidManifest.xml");
+			}
+			
+			
+			if((info.launchMode & ActivityInfo.LAUNCH_SINGLE_TOP) == ActivityInfo.LAUNCH_SINGLE_TOP) {
+				logger.warn("Activity flag android:launchMode=\"singleTop\" found for " + SocializeLaunchActivity.class.getSimpleName() + ".  This should be removed from the declaration of this activity in your AndroidManifest.xml");
+			}
+		}		
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.util.IAppUtils#hasPermission(android.content.Context, java.lang.String)
 	 */

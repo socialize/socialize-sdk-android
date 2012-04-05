@@ -4,6 +4,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.action.EntitySystem;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.entity.EntityListener;
 
 public class MockEntitySystem implements EntitySystem {
@@ -16,6 +17,16 @@ public class MockEntitySystem implements EntitySystem {
 		entity = new Entity();
 		entity.setKey("http://entity1.com");
 		entity.setId(0L);
+	}
+	
+	@Override
+	public void getEntity(SocializeSession session, long id, EntityListener listener) {
+		if(listener != null) listener.onGet(entity);
+	}
+
+	@Override
+	public Entity getEntity(SocializeSession session, long id) throws SocializeException {
+		return entity;
 	}
 
 	@Override

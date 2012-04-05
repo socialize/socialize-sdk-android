@@ -33,8 +33,9 @@ import com.socialize.error.SocializeException;
 
 /**
  * @author Jason Polites
- *
+ * @deprecated Not used
  */
+@Deprecated
 public class SocializeActionMessageTranslator implements MessageTranslator<SocializeAction> {
 	
 	private ActivitySystem activitySystem;

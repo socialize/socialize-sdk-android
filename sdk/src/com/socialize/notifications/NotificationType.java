@@ -27,5 +27,7 @@ package com.socialize.notifications;
  */
 public enum NotificationType {
 	NEW_COMMENTS,
-	DEVELOPER_NOTIFICATION
+	DEVELOPER_NOTIFICATION,
+	DEVELOPER_DIRECT_ENTITY,
+	DEVELOPER_DIRECT_URL
 }

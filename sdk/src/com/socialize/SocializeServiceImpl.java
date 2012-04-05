@@ -115,6 +115,7 @@ import com.socialize.ui.comment.CommentView;
 import com.socialize.ui.comment.OnCommentViewActionListener;
 import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.ui.profile.UserProfile;
+import com.socialize.util.AppUtils;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.Drawables;
 import com.socialize.util.EntityLoaderUtils;
@@ -145,8 +146,9 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private Drawables drawables;
 	private AuthProviders authProviders;
 	private NotificationChecker notificationChecker;
+	private AppUtils appUtils;
 	
-	private SocializeSystem system = new SocializeSystem();
+	private SocializeSystem system = SocializeSystem.getInstance();
 	private SocializeConfig config = new SocializeConfig();
 	
 	private SocializeEntityLoader entityLoader;
@@ -154,6 +156,11 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private String[] initPaths = null;
 	private int initCount = 0;
 	
+	public SocializeServiceImpl() {
+		super();
+		this.logger = newLogger();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#handleBroadcastIntent(android.content.Context, android.content.Intent)
@@ -206,7 +213,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public IOCContainer init(Context context) {
-		return init(context, SocializeConfig.SOCIALIZE_CORE_BEANS_PATH);
+		return init(context, getSystem().getBeanConfig());
 	}
 	
 	/* (non-Javadoc)
@@ -235,7 +242,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public void initAsync(Context context, SocializeInitListener listener) {
-		initAsync(context, listener, SocializeConfig.SOCIALIZE_CORE_BEANS_PATH);
+		initAsync(context, listener, getSystem().getBeanConfig());
 	}
 
 	/*
@@ -244,21 +251,25 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public void initAsync(Context context, SocializeInitListener listener, String... paths) {
-		new InitTask(this, context, paths, listener, logger).execute((Void)null);
+		new InitTask(this, context, paths, listener, logger).execute();
 	}
 
 	public synchronized IOCContainer initWithContainer(Context context, String...paths) throws Exception {
+		return initWithContainer(context, getSystem().getSystemInitListener(), paths);
+	}
+	
+	public synchronized IOCContainer initWithContainer(Context context, SocializeInitListener listener, String...paths) throws Exception {
 		boolean init = false;
 		
-		String[] locatPaths = getInitPaths();
+		String[] localPaths = getInitPaths();
 		
 		if(paths != null) {
-			
+
 			if(isInitialized()) {
 				
-				if(locatPaths != null) {
+				if(localPaths != null) {
 					for (String path : paths) {
-						if(binarySearch(locatPaths, path) < 0) {
+						if(binarySearch(localPaths, path) < 0) {
 							
 							if(logger != null && logger.isInfoEnabled()) {
 								logger.info("New path found for beans [" +
@@ -312,6 +323,15 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 					
 					locator.setClassLoaderProvider(provider);
 					
+					if(logger != null && logger.isDebugEnabled()) {
+						
+						for (String path : paths) {
+							logger.debug("Initializing Socialize with path [" +
+									path +
+									"]");
+						}
+					}			
+					
 					container.init(context, locator, paths);
 					
 					init(context, container); // initCount incremented here
@@ -359,7 +379,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	
 	// So we can mock
 	protected SocializeLogger newLogger() {
-		return new SocializeLogger();
+		return new SocializeLogger(Socialize.DEFAULT_LOG_LEVEL);
 	}
 	
 	// So we can mock
@@ -382,6 +402,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public synchronized void init(Context context, final IOCContainer container) {
+		init(context, container, getSystem().getSystemInitListener());
+	}
+	
+	public void init(Context context, final IOCContainer container, SocializeInitListener listener) {
 		if(!isInitialized()) {
 			try {
 				this.container = container;
@@ -402,6 +426,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.authProviders = container.getBean("authProviders");
 				this.authProviderInfoBuilder = container.getBean("authProviderInfoBuilder");
 				this.notificationChecker = container.getBean("notificationChecker");
+				this.appUtils = container.getBean("appUtils");
 				
 				SocializeConfig mainConfig = container.getBean("config");
 				
@@ -417,7 +442,14 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				
 				initNotifications(context);
 				
+				// Check we are configured ok
+				appUtils.checkAndroidManifest(context);
+				
 				ActivityIOCProvider.getInstance().setContainer(container);
+				
+				if(listener != null) {
+					listener.onInit(context, container);
+				}
 			}
 			catch (Exception e) {
 				if(logger != null) {
@@ -1009,6 +1041,17 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	
 	/*
 	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#getEntityById(long, com.socialize.listener.entity.EntityGetListener)
+	 */
+	@Override
+	public void getEntityById(long id, EntityGetListener listener) {
+		if(assertAuthenticated(listener)) {
+			entitySystem.getEntity(session, id, listener);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#getUser(int, com.socialize.listener.user.UserGetListener)
 	 */
 	@Override
@@ -1204,14 +1247,19 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			}
 			else {
 				if(listener != null) {
-					if(logger != null) {
+					if(logger != null && logger.isInitialized()) {
 						listener.onError(new SocializeException(logger.getMessage(SocializeLogger.NOT_AUTHENTICATED)));
 					}
 					else {
 						listener.onError(new SocializeException("Not authenticated"));
 					}
 				}
-				if(logger != null) logger.error(SocializeLogger.NOT_AUTHENTICATED);
+				if(logger != null && logger.isInitialized()) {
+					logger.error(SocializeLogger.NOT_AUTHENTICATED);
+				}
+				else {
+					System.err.println("Not authenticated");
+				}
 			}
 		}
 		
@@ -1294,7 +1342,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		@Override
 		public IOCContainer doInBackground(Void... params) {
 			try {
-				return service.initWithContainer(context, paths);
+				// Force null listener.  This will be called in postExecute
+				return service.initWithContainer(context, null, paths);
 			}
 			catch (Exception e) {
 				error = e;

@@ -39,7 +39,7 @@ public class NotificationsConfigLaunchTask implements LaunchTask {
 	 */
 	@Override
 	public void execute(Context context) throws SocializeException {
-		config.setENTITY_LOADER_CHECK_ENABLED(false);
+		config.setEntityLoaderCheckEnabled(false);
 	}
 
 	public void setConfig(SocializeConfig config) {

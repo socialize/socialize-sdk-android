@@ -90,7 +90,7 @@ public class EntityApiTest extends SocializeUnitTest {
 		
 		SocializeEntitySystem api = new SocializeEntitySystem(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
+			public void listAsync(SocializeSession session, String endpoint, String key, String idKey, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
 				addResult(key);
 			}
 		};
@@ -109,7 +109,7 @@ public class EntityApiTest extends SocializeUnitTest {
 		
 		SocializeEntitySystem api = new SocializeEntitySystem(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
+			public void listAsync(SocializeSession session, String endpoint, String key, String idKey, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
 				addResult(ids);
 				assertNull(key);
 			}
@@ -134,7 +134,7 @@ public class EntityApiTest extends SocializeUnitTest {
 		
 		SocializeEntitySystem api = new SocializeEntitySystem(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
+			public void listAsync(SocializeSession session, String endpoint, String key, String idKey, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
 				addResult(listener);
 			}
 		};
@@ -180,7 +180,7 @@ public class EntityApiTest extends SocializeUnitTest {
 		
 		SocializeEntitySystem api = new SocializeEntitySystem(provider) {
 			@Override
-			public void listAsync(SocializeSession session, String endpoint, String key, String[] ids, int startIndex, int endIndex, SocializeActionListener listener) {
+			public void listAsync(SocializeSession session, String endpoint, String key, String idKey, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
 				addResult(listener);
 			}
 		};

@@ -350,6 +350,13 @@ public interface SocializeService {
 	public void getEntity(String key, EntityGetListener entityGetListener);
 	
 	/**
+	 * Retrieves a single entity based on its ID.
+	 * @param id The ID of the entity.
+	 * @param entityGetListener A listener to handle callbacks from the get.
+	 */
+	public void getEntityById(long id, EntityGetListener entityGetListener);
+	
+	/**
 	 * Lists entities matching the given keys.
 	 * @param entityListListener A listener to handle callbacks from the post.
 	 * @param keys Array of keys corresponding to the entities to return, or null to return all.

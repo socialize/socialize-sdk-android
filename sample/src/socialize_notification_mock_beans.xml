@@ -4,5 +4,14 @@
 	<proxy ref="activitySystem" />
 	<proxy ref="deviceRegistrationSystem" />
 	<proxy ref="notificationAuthenticator" />
-	
+	<proxy ref="notificationAuthenticator" />
+	<proxy ref="notificationManagerFacade" />
+	<proxy ref="entityLoaderUtils" />
+
+	<proxy ref="homeLauncher" />
+	<proxy ref="actionLauncher" />
+	<proxy ref="urlLauncher" />
+	<proxy ref="entityLauncher" />
+				
+
 </beans>

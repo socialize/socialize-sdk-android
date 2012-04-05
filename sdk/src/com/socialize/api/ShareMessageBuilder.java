@@ -9,5 +9,5 @@ public interface ShareMessageBuilder {
 	
 	public String getEntityLink(Entity entity, PropagationInfo urlSet, boolean html);
 
-	public String buildShareMessage(Entity entity, PropagationInfo urlSet, String comment, boolean html, boolean includeSocialize);
+	public String buildShareMessage(Entity entity, PropagationInfo urlSet, String comment, boolean html, boolean includeAppLink);
 }

@@ -23,6 +23,7 @@ package com.socialize.api.action;
 
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Entity;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.entity.EntityListener;
 import com.socialize.util.DelegateOnly;
 
@@ -35,6 +36,17 @@ public interface EntitySystem {
 	public static final String ENDPOINT = "/entity/";
 
 	public void addEntity(SocializeSession session, Entity entity, EntityListener listener);
+	
+	/**
+	 * Gets a socialize entity.  This call is SYNCHRONOUS!
+	 * @param session
+	 * @param id
+	 * @throws SocializeException
+	 * @return
+	 */
+	public Entity getEntity(SocializeSession session, long id) throws SocializeException;		
+	
+	public void getEntity(SocializeSession session, long id, EntityListener listener);
 
 	@DelegateOnly
 	public void getEntity(SocializeSession session, String entityKey, EntityListener listener);

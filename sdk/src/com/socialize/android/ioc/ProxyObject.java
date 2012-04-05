@@ -6,10 +6,11 @@ import java.lang.reflect.Method;
 public class ProxyObject<T> implements InvocationHandler {
 
 	private T delegate;
+	private MethodInvocationListener methodInvocationListener;
 	
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		if(delegate != null) {
+		if(delegate != null && (methodInvocationListener == null || methodInvocationListener.isDelegate(method))) {
 			return method.invoke(delegate, args);
 		}
 		else {
@@ -24,4 +25,14 @@ public class ProxyObject<T> implements InvocationHandler {
 	public void setDelegate(T delegate) {
 		this.delegate = delegate;
 	}
+
+	
+	public MethodInvocationListener getMethodInvocationListener() {
+		return methodInvocationListener;
+	}
+	
+	public void setMethodInvocationListener(MethodInvocationListener methodInvocationListener) {
+		this.methodInvocationListener = methodInvocationListener;
+	}
+	
 }

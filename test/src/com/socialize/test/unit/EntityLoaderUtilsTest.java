@@ -28,8 +28,8 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.ui.SocializeEntityLoader;
-import com.socialize.util.EntityLoaderUtils;
 import com.socialize.util.ObjectUtils;
+import com.socialize.util.SocializeEntityLoaderUtils;
 
 /**
  * @author Jason Polites
@@ -48,7 +48,7 @@ public class EntityLoaderUtilsTest extends SocializeUnitTest {
 		
 		AndroidMock.replay(config, objectUtils);
 		
-		EntityLoaderUtils utils = new EntityLoaderUtils();
+		SocializeEntityLoaderUtils utils = new SocializeEntityLoaderUtils();
 		utils.setConfig(config);
 		utils.setObjectUtils(objectUtils);
 		

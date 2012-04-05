@@ -58,8 +58,17 @@ public abstract class BaseNotificationMessageBuilder<M extends NotificationMessa
 				case NEW_COMMENTS:
 					notificationIntent.putExtra(SocializeLaunchActivity.LAUNCH_ACTION, LaunchAction.ACTION.name());
 					break;
+					
 				case DEVELOPER_NOTIFICATION:
 					notificationIntent.putExtra(SocializeLaunchActivity.LAUNCH_ACTION, LaunchAction.HOME.name());
+					break;
+					
+				case DEVELOPER_DIRECT_ENTITY:
+					notificationIntent.putExtra(SocializeLaunchActivity.LAUNCH_ACTION, LaunchAction.ENTITY.name());
+					break;
+					
+				case DEVELOPER_DIRECT_URL:
+					notificationIntent.putExtra(SocializeLaunchActivity.LAUNCH_ACTION, LaunchAction.URL.name());
 					break;
 			}
 
@@ -137,7 +146,11 @@ public abstract class BaseNotificationMessageBuilder<M extends NotificationMessa
 	}
 	
 	protected int getNotificationId(NotificationMessage message) {
-		return (int) message.getEntityId();
+		Long entityId = message.getEntityId();
+		if(entityId != null) {
+			return entityId.intValue();
+		}
+		return 0;
 	}
 
 	/**

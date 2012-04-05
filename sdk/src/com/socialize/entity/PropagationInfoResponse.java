@@ -20,6 +20,10 @@ public class PropagationInfoResponse implements Serializable {
 		this.urlSets = urlSets;
 	}
 	
+	public PropagationInfo getPropagationInfo(ShareType shareType) {
+		return (urlSets == null) ? null : urlSets.get(shareType);
+	}
+	
 	public synchronized void addUrlSet(ShareType network, PropagationInfo set) {
 		if(urlSets == null) {
 			urlSets = new HashMap<ShareType, PropagationInfo>();

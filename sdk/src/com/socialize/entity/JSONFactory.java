@@ -123,6 +123,13 @@ public abstract class JSONFactory<T extends Object> {
 		return defaultValue;
 	}	
 	
+	protected Long getLongObject(JSONObject obj, String key) throws JSONException {
+		if(exists(obj, key)) {
+			return Long.valueOf(obj.getLong(key));
+		}
+		return null;
+	}	
+	
 	// This SHOULD return the generic type "T" but because javassist (via AndroidMock) doesn't seem to 
 	// want to create methods with generic return types we can't do it :/
 	public abstract Object instantiateObject(JSONObject object);

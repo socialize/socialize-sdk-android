@@ -23,38 +23,30 @@ package com.socialize.test.unit.notifications;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.android.ioc.IOCContainer;
 import com.socialize.notifications.C2DMCallback;
-import com.socialize.notifications.NotificationContainer;
 import com.socialize.notifications.SocializeC2DMReceiver;
+import com.socialize.notifications.SocializeC2DMReceiverHandler;
 import com.socialize.test.SocializeUnitTest;
 
 /**
  * @author Jason Polites
  *
  */
-@UsesMocks ({NotificationContainer.class, C2DMCallback.class, IOCContainer.class})
+@UsesMocks ({SocializeC2DMReceiverHandler.class, C2DMCallback.class})
 public class SocializeC2DMReceiverTest extends SocializeUnitTest {
 
-	public void test_init() throws Exception {
-		final NotificationContainer container = AndroidMock.createMock(NotificationContainer.class);
-		IOCContainer ioc = AndroidMock.createMock(IOCContainer.class);
+	public void test_onCreate() throws Exception {
+		final SocializeC2DMReceiverHandler container = AndroidMock.createMock(SocializeC2DMReceiverHandler.class);
 
 		container.onCreate(getContext());
-		AndroidMock.expect(container.getContainer()).andReturn(ioc);
 		
-		AndroidMock.expect( ioc.getBean("logger")).andReturn(null);
-		AndroidMock.expect( ioc.getBean("notificationCallback")).andReturn(null);
-		
-		AndroidMock.replay(container, ioc);
+		AndroidMock.replay(container);
 		
 		SocializeC2DMReceiver receiver = new SocializeC2DMReceiver() {
 			@Override
-			protected NotificationContainer newNotificationContainer() {
+			protected SocializeC2DMReceiverHandler newC2DMReceiverHandler() {
 				return container;
 			}
 
@@ -62,26 +54,25 @@ public class SocializeC2DMReceiverTest extends SocializeUnitTest {
 			protected Context getContext() {
 				return SocializeC2DMReceiverTest.this.getContext();
 			}
+			
 		};
 		
 		receiver.onCreate();
 		
-		AndroidMock.verify(container, ioc);
-		
-//		assertTrue(receiver.isInitialized());
-		
+		AndroidMock.verify(container);
 	}
 	
 	public void test_onDestroy() {
-		final NotificationContainer container = AndroidMock.createMock(NotificationContainer.class);
+		final SocializeC2DMReceiverHandler container = AndroidMock.createMock(SocializeC2DMReceiverHandler.class);
 
 		container.onDestroy(getContext());
 		
 		AndroidMock.replay(container);
 		
 		SocializeC2DMReceiver receiver = new SocializeC2DMReceiver() {
+			
 			@Override
-			protected NotificationContainer newNotificationContainer() {
+			protected SocializeC2DMReceiverHandler newC2DMReceiverHandler() {
 				return container;
 			}
 
@@ -100,103 +91,109 @@ public class SocializeC2DMReceiverTest extends SocializeUnitTest {
 		
 		AndroidMock.verify(container);
 		
-//		assertFalse(receiver.isInitialized());
-		
 		Object nextResult = getNextResult();
 		
 		assertNotNull(nextResult);
 		assertEquals("superOnDestroy", nextResult);
 	}
 	
-	public void test_onError() {
+	
+	public void test_onError() throws Exception {
+		final SocializeC2DMReceiverHandler container = AndroidMock.createMock(SocializeC2DMReceiverHandler.class);
 		final String errorId = "foobar";
+		container.onError(getContext(), errorId);
 		
-		C2DMCallback notificationCallback = AndroidMock.createMock(C2DMCallback.class);
+		AndroidMock.replay(container);
 		
-		notificationCallback.onError(getContext(), errorId);
-		
-		AndroidMock.replay(notificationCallback);
-		
-		PublicSocializeC2DMReceiver receiver = new PublicSocializeC2DMReceiver() {
+		SocializeC2DMReceiver receiver = new SocializeC2DMReceiver() {
 			@Override
-			public Context getContext() {
+			protected SocializeC2DMReceiverHandler newC2DMReceiverHandler() {
+				return container;
+			}
+
+			@Override
+			protected Context getContext() {
 				return SocializeC2DMReceiverTest.this.getContext();
 			}
 		};
 		
-		receiver.setNotificationCallback(notificationCallback);
 		receiver.onError(getContext(), errorId);
 		
-		AndroidMock.verify(notificationCallback);
-	}
+		AndroidMock.verify(container);
+	}	
 	
 	@UsesMocks({Intent.class})
 	public void test_onMessage() {
 	
 		Intent intent = AndroidMock.createMock(Intent.class);
-		C2DMCallback notificationCallback = AndroidMock.createMock(C2DMCallback.class);
 		
-		Bundle bundle = new Bundle();
+		final SocializeC2DMReceiverHandler container = AndroidMock.createMock(SocializeC2DMReceiverHandler.class);
+		container.onMessage(getContext(), intent);
 		
-		AndroidMock.expect(intent.getExtras()).andReturn(bundle);
+		AndroidMock.replay(container);
 		
-		notificationCallback.onMessage(getContext(), bundle);
-		
-		AndroidMock.replay(intent, notificationCallback);
-		
-		PublicSocializeC2DMReceiver receiver = new PublicSocializeC2DMReceiver() {
+		SocializeC2DMReceiver receiver = new SocializeC2DMReceiver() {
 			@Override
-			public Context getContext() {
+			protected SocializeC2DMReceiverHandler newC2DMReceiverHandler() {
+				return container;
+			}
+
+			@Override
+			protected Context getContext() {
 				return SocializeC2DMReceiverTest.this.getContext();
 			}
 		};
 		
-		receiver.setNotificationCallback(notificationCallback);
 		receiver.onMessage(getContext(), intent);
 		
-		AndroidMock.verify(notificationCallback);
+		AndroidMock.verify(container);		
 	}
 	
 	public void test_onRegistrered() {
-		final String registrationId = "foobar";
 		
-		C2DMCallback notificationCallback = AndroidMock.createMock(C2DMCallback.class);
+		final SocializeC2DMReceiverHandler container = AndroidMock.createMock(SocializeC2DMReceiverHandler.class);
+		final String errorId = "foobar";
+		container.onRegistrered(getContext(), errorId);
 		
-		notificationCallback.onRegister(getContext(), registrationId);
+		AndroidMock.replay(container);
 		
-		AndroidMock.replay(notificationCallback);
-		
-		PublicSocializeC2DMReceiver receiver = new PublicSocializeC2DMReceiver() {
+		SocializeC2DMReceiver receiver = new SocializeC2DMReceiver() {
 			@Override
-			public Context getContext() {
+			protected SocializeC2DMReceiverHandler newC2DMReceiverHandler() {
+				return container;
+			}
+
+			@Override
+			protected Context getContext() {
 				return SocializeC2DMReceiverTest.this.getContext();
 			}
 		};
 		
-		receiver.setNotificationCallback(notificationCallback);
-		receiver.onRegistrered(getContext(), registrationId);
+		receiver.onRegistrered(getContext(), errorId);
 		
-		AndroidMock.verify(notificationCallback);
+		AndroidMock.verify(container);		
 	}
 	
 	public void test_onUnregistered() {
+		final SocializeC2DMReceiverHandler container = AndroidMock.createMock(SocializeC2DMReceiverHandler.class);
+		container.onUnregistered(getContext());
 		
-		C2DMCallback notificationCallback = AndroidMock.createMock(C2DMCallback.class);
+		AndroidMock.replay(container);
 		
-		notificationCallback.onUnregister(getContext());
-		
-		AndroidMock.replay(notificationCallback);
-		
-		PublicSocializeC2DMReceiver receiver = new PublicSocializeC2DMReceiver() {
+		SocializeC2DMReceiver receiver = new SocializeC2DMReceiver() {
 			@Override
-			public Context getContext() {
+			protected SocializeC2DMReceiverHandler newC2DMReceiverHandler() {
+				return container;
+			}
+
+			@Override
+			protected Context getContext() {
 				return SocializeC2DMReceiverTest.this.getContext();
 			}
 		};
 		
-		receiver.setNotificationCallback(notificationCallback);
 		receiver.onUnregistered(getContext());
 		
-		AndroidMock.verify(notificationCallback);
+		AndroidMock.verify(container);	
 	}
 }

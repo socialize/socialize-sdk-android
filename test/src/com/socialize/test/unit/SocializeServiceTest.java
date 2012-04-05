@@ -93,6 +93,7 @@ import com.socialize.test.SocializeActivityTest;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.profile.UserProfile;
+import com.socialize.util.AppUtils;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.Drawables;
 import com.socialize.util.EntityLoaderUtils;
@@ -121,7 +122,8 @@ import com.socialize.util.ResourceLocator;
 	AuthProviders.class,
 	EntityLoaderUtils.class,
 	AuthProviderInfoBuilder.class, 
-	NotificationChecker.class})
+	NotificationChecker.class, 
+	AppUtils.class})
 public class SocializeServiceTest extends SocializeActivityTest {
 
 	IOCContainer container;
@@ -138,6 +140,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 	SocializeProvider<?> provider;
 	AuthProviders authProviders;
 	NotificationChecker notificationChecker;
+	AppUtils appUtils;
 
 	SocializeLogger logger;
 	IBeanFactory<AuthProviderData> authProviderDataFactory;
@@ -173,6 +176,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		entityLoaderUtils = AndroidMock.createMock(EntityLoaderUtils.class);
 		authProviderInfoBuilder = AndroidMock.createMock(AuthProviderInfoBuilder.class);
 		notificationChecker = AndroidMock.createMock(NotificationChecker.class);
+		appUtils = AndroidMock.createMock(AppUtils.class);
 	}
 
 	private void setupDefaultMocks() {
@@ -195,9 +199,12 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		AndroidMock.expect(container.getBean("entityLoaderUtils")).andReturn(entityLoaderUtils);
 		AndroidMock.expect(container.getBean("authProviderInfoBuilder")).andReturn(authProviderInfoBuilder);
 		AndroidMock.expect(container.getBean("notificationChecker")).andReturn(notificationChecker);
+		AndroidMock.expect(container.getBean("appUtils")).andReturn(appUtils);
 		
-		entityLoaderUtils.initEntityLoader();
+		AndroidMock.expect(entityLoaderUtils.initEntityLoader()).andReturn(null);
+		
 		notificationChecker.checkRegistrations(getContext());
+		appUtils.checkAndroidManifest(getContext());
 		
 		AndroidMock.expect(authProviderInfoBuilder.validateAll()).andReturn(true);
 		
@@ -1415,7 +1422,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		SocializeServiceImpl socialize = AndroidMock.createMock(SocializeServiceImpl.class);
 		String[] paths = { "foo", "bar" };
 
-		AndroidMock.expect(socialize.initWithContainer(context, paths)).andReturn(null);
+		AndroidMock.expect(socialize.initWithContainer(context, null, paths)).andReturn(null);
 
 		AndroidMock.replay(socialize);
 
@@ -1423,7 +1430,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertTrue(AsyncTask.class.isAssignableFrom(task.getClass()));
 
-		task.doInBackground((Void[]) null);
+		task.doInBackground();
 
 		AndroidMock.verify(socialize);
 
@@ -1459,7 +1466,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		SocializeException error = new SocializeException();
 		String[] paths = { "foo", "bar" };
 
-		AndroidMock.expect(socialize.initWithContainer(context, paths)).andThrow(error);
+		AndroidMock.expect(socialize.initWithContainer(context, null, paths)).andThrow(error);
 
 		listener.onError(error);
 
@@ -1482,7 +1489,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		final SocializeIOC socializeIOC = AndroidMock.createMock(SocializeIOC.class);
 		final ClassLoaderProvider classLoaderProvider = AndroidMock.createMock(ClassLoaderProvider.class);
 		final ResourceLocator resourceLocator = AndroidMock.createMock(ResourceLocator.class);
-		final SocializeLogger logger = AndroidMock.createMock(SocializeLogger.class);
+		final SocializeLogger logger = new SocializeLogger();
 
 		final Context context = new MockContext();
 

@@ -20,6 +20,9 @@
 		<property name="appUtils" ref="appUtils"/>
 	</bean>
 	
+	<bean id="directUrlMessageTranslator" class="com.socialize.notifications.DirectUrlMessageTranslator"/>
+	<bean id="directEntityMessageTranslator" class="com.socialize.notifications.DirectEntityMessageTranslator"/>
+	
 	<bean id="actionNotificationMessageBuilder" class="com.socialize.notifications.SocializeActionNotificationMessageBuilder">
 		<property name="appUtils" ref="appUtils"/>
 		<property name="logger" ref="logger"/>
@@ -32,6 +35,20 @@
 		<property name="messageTranslator" ref="developerMessageTranslator"/>
 	</bean>	
 	
+	<bean id="directEntityNotificationMessageBuilder" class="com.socialize.notifications.SimpleNotificationMessageBuilder">
+		<property name="appUtils" ref="appUtils"/>
+		<property name="logger" ref="logger"/>
+		<property name="messageTranslator" ref="directEntityMessageTranslator"/>
+	</bean>	
+	
+	<bean id="directUrlNotificationMessageBuilder" class="com.socialize.notifications.SimpleNotificationMessageBuilder">
+		<property name="appUtils" ref="appUtils"/>
+		<property name="logger" ref="logger"/>
+		<property name="messageTranslator" ref="directUrlMessageTranslator"/>
+	</bean>
+	
+	<bean id="notificationManagerFacade" class="com.socialize.notifications.AndroidNotificationManagerFacade"/>
+	
 	<bean id="notificationCallback" class="com.socialize.notifications.SocializeC2DMCallback">
 		<property name="logger" ref="logger"/>
 		<property name="config" ref="config"/>
@@ -39,6 +56,7 @@
 		<property name="userSystem" ref="userSystem"/>
 		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
 		<property name="notificationRegistrationSystem" ref="notificationRegistrationSystem"/>
+		<property name="notificationManagerFacade" ref="notificationManagerFacade"/>
 		<property name="messageBuilders">
 			<map>
 				<entry>
@@ -48,7 +66,15 @@
 				<entry>
 					<key value="DEVELOPER_NOTIFICATION"/>
 					<value ref="developerNotificationMessageBuilder"/>
-				</entry>				
+				</entry>	
+				<entry>
+					<key value="DEVELOPER_DIRECT_ENTITY"/>
+					<value ref="directEntityNotificationMessageBuilder"/>
+				</entry>
+				<entry>
+					<key value="DEVELOPER_DIRECT_URL"/>
+					<value ref="directUrlNotificationMessageBuilder"/>
+				</entry>											
 			</map>
 		</property>	
 		
@@ -61,7 +87,15 @@
 				<entry>
 					<key value="DEVELOPER_NOTIFICATION"/>
 					<value ref="developerNotificationMessageFactory"/>
-				</entry>				
+				</entry>
+				<entry>
+					<key value="DEVELOPER_DIRECT_ENTITY"/>
+					<value ref="developerNotificationMessageFactory"/>
+				</entry>	
+				<entry>
+					<key value="DEVELOPER_DIRECT_URL"/>
+					<value ref="developerNotificationMessageFactory"/>
+				</entry>													
 			</map>
 		</property>				
 	</bean>

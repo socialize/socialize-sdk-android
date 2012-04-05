@@ -9,6 +9,7 @@ import android.util.Log;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.log.SocializeLogger;
+import com.socialize.ui.dialog.DialogRegistration;
 import com.socialize.util.Drawables;
 import com.socialize.util.StringUtils;
 
@@ -58,6 +59,9 @@ public class DialogErrorHandler implements SocializeErrorHandler {
 			});
 			
 			AlertDialog alert = builder.create();
+			
+			DialogRegistration.register(context, alert);
+			
 			alert.show();
 		}
 		catch (Exception e) {

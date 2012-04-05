@@ -21,26 +21,19 @@
  */
 package com.socialize.test.unit.notifications;
 
-import android.content.Context;
-
 import com.socialize.log.SocializeLogger;
 import com.socialize.notifications.C2DMCallback;
 import com.socialize.notifications.NotificationContainer;
-import com.socialize.notifications.SocializeC2DMReceiver;
+import com.socialize.notifications.SocializeC2DMReceiverHandler;
 
 /**
  * @author Jason Polites
  *
  */
-public class PublicSocializeC2DMReceiver extends SocializeC2DMReceiver {
+public class PublicSocializeC2DMReceiver extends SocializeC2DMReceiverHandler {
 
 	public PublicSocializeC2DMReceiver() {
 		super();
-	}
-
-	@Override
-	public Context getContext() {
-		return super.getContext();
 	}
 
 	@Override

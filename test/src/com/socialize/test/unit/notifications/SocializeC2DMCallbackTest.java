@@ -109,7 +109,7 @@ public class SocializeC2DMCallbackTest extends SocializeUnitTest {
 		AndroidMock.expect(messageBuilders.get(NotificationType.NEW_COMMENTS.name())).andReturn(builder);
 		AndroidMock.expect(messageFactories.get(NotificationType.NEW_COMMENTS.name())).andReturn(factory);
 		AndroidMock.expect(builder.build(context, data, notificationMessage, icon)).andReturn(notification);
-		AndroidMock.expect(notificationMessage.getEntityId()).andReturn(entityId);
+		AndroidMock.expect(notificationMessage.getEntityId()).andReturn(entityId).anyTimes();
 	
 		AndroidMock.replay(user, message, factory, messageBuilders, messageFactories, builder, context, notificationMessage);
 		

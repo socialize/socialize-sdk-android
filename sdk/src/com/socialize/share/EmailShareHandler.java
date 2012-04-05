@@ -26,10 +26,9 @@ import android.content.Intent;
 import android.text.Html;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ShareType;
-import com.socialize.config.SocializeConfig;
+import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.SocializeAction;
-
 
 /**
  * @author Jason Polites
@@ -37,16 +36,18 @@ import com.socialize.entity.SocializeAction;
 public class EmailShareHandler extends IntentShareHandler {
 
 	private ShareMessageBuilder shareMessageBuilder;
-	private SocializeConfig config;
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.share.AbstractShareHandler#handle(android.app.Activity, com.socialize.entity.SocializeAction, java.lang.String, com.socialize.entity.PropagationInfo, com.socialize.share.ShareHandlerListener)
 	 */
 	@Override
 	protected void handle(Activity context, SocializeAction action, String text, PropagationInfo info, ShareHandlerListener listener) throws Exception {
+		
+		Entity entity = action.getEntity();
+		
 		String title = "Share";
-		String subject = shareMessageBuilder.buildShareSubject(action.getEntity());
-		String body = shareMessageBuilder.buildShareMessage(action.getEntity(), info, text, isHtml(), config.getBooleanProperty(SocializeConfig.SOCIALIZE_BRANDING_ENABLED, true));
+		String subject = shareMessageBuilder.buildShareSubject(entity);
+		String body = shareMessageBuilder.buildShareMessage(entity, info, text, isHtml(), true);
 		Intent msg = getIntent();
 		msg.putExtra(Intent.EXTRA_TITLE, title);
 		
@@ -58,7 +59,12 @@ public class EmailShareHandler extends IntentShareHandler {
 		}
 		
 		msg.putExtra(Intent.EXTRA_SUBJECT, subject);
-		context.startActivity(Intent.createChooser(msg, title));
+		
+		startActivity(context, msg, title);
+	}
+	
+	protected void startActivity(Activity context, Intent intent, String title) {
+		context.startActivity(Intent.createChooser(intent, title));
 	}
 	
 	@Override
@@ -76,10 +82,6 @@ public class EmailShareHandler extends IntentShareHandler {
 	@Override
 	protected ShareType getShareType() {
 		return ShareType.EMAIL;
-	}
-
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
 	}
 
 	public void setShareMessageBuilder(ShareMessageBuilder shareMessageBuilder) {
