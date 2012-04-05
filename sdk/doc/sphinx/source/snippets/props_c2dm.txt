@@ -1,0 +1,6 @@
+.. raw:: html
+
+	<pre class="brush: java-properties">
+	# Your C2DM Sender ID
+	socialize.c2dm.sender.id=myaccount@gmail.com
+	</pre>
