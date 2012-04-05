@@ -46,6 +46,7 @@ public class SocializeLogger {
 	private LogLevel logLevel = LogLevel.WARN;
 	private SocializeConfig config;
 	private boolean logThread = true;
+	private boolean initialized = false;
 	
 	public SocializeLogger() {
 		super();
@@ -71,6 +72,7 @@ public class SocializeLogger {
 		}
 		
 		this.config = config;
+		this.initialized = true;
 	}
 	
 	public void setLogLevel(LogLevel logLevel) {
@@ -145,6 +147,10 @@ public class SocializeLogger {
 		return logLevel.ordinal() <= LogLevel.WARN.ordinal();
 	}
 	
+	public boolean isInitialized() {
+		return initialized;
+	}
+
 	protected String getMessage(String message) {
 		if(logThread) {
 			return "Thread[" +

@@ -1247,14 +1247,19 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			}
 			else {
 				if(listener != null) {
-					if(logger != null) {
+					if(logger != null && logger.isInitialized()) {
 						listener.onError(new SocializeException(logger.getMessage(SocializeLogger.NOT_AUTHENTICATED)));
 					}
 					else {
 						listener.onError(new SocializeException("Not authenticated"));
 					}
 				}
-				if(logger != null) logger.error(SocializeLogger.NOT_AUTHENTICATED);
+				if(logger != null && logger.isInitialized()) {
+					logger.error(SocializeLogger.NOT_AUTHENTICATED);
+				}
+				else {
+					System.err.println("Not authenticated");
+				}
 			}
 		}
 		

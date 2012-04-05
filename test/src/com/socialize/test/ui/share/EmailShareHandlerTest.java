@@ -54,7 +54,6 @@ public class EmailShareHandlerTest extends SocializeActivityTest {
 		final SocializeAction action = AndroidMock.createMock(SocializeAction.class);
 		final Entity entity = AndroidMock.createMock(Entity.class);
 		final PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
-		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
 		final String text = "foobar";
 		final String subject = "foo_subject";
 		final String body = "foo_body";
@@ -81,23 +80,22 @@ public class EmailShareHandlerTest extends SocializeActivityTest {
 			
 			
 		};
-		handler.setConfig(config);
+		
 		handler.setShareMessageBuilder(shareMessageBuilder);
 		
 		AndroidMock.expect(action.getEntity()).andReturn(entity);
 		AndroidMock.expect(shareMessageBuilder.buildShareSubject(entity)).andReturn(subject);
-		AndroidMock.expect(config.getBooleanProperty(SocializeConfig.SOCIALIZE_BRANDING_ENABLED, true)).andReturn(true);
 		AndroidMock.expect(shareMessageBuilder.buildShareMessage(entity, info, text, false, true)).andReturn(body);
 		
 		AndroidMock.expect(msg.putExtra(Intent.EXTRA_TITLE, title)).andReturn(msg);
 		AndroidMock.expect(msg.putExtra(Intent.EXTRA_TEXT, body)).andReturn(msg);
 		AndroidMock.expect(msg.putExtra(Intent.EXTRA_SUBJECT, subject)).andReturn(msg);
 		
-		AndroidMock.replay(action, shareMessageBuilder, config, msg);
+		AndroidMock.replay(action, shareMessageBuilder, msg);
 		
 		handler.handle(context, action, text, info, null);
 		
-		AndroidMock.verify(action, shareMessageBuilder, config, msg);
+		AndroidMock.verify(action, shareMessageBuilder, msg);
 		
 		Intent intent = getResult(0);
 		String titleAfter = getResult(1);

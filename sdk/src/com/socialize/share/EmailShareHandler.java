@@ -26,11 +26,9 @@ import android.content.Intent;
 import android.text.Html;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ShareType;
-import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.SocializeAction;
-
 
 /**
  * @author Jason Polites
@@ -38,7 +36,6 @@ import com.socialize.entity.SocializeAction;
 public class EmailShareHandler extends IntentShareHandler {
 
 	private ShareMessageBuilder shareMessageBuilder;
-	private SocializeConfig config;
 	
 	/* (non-Javadoc)
 	 * @see com.socialize.share.AbstractShareHandler#handle(android.app.Activity, com.socialize.entity.SocializeAction, java.lang.String, com.socialize.entity.PropagationInfo, com.socialize.share.ShareHandlerListener)
@@ -50,7 +47,7 @@ public class EmailShareHandler extends IntentShareHandler {
 		
 		String title = "Share";
 		String subject = shareMessageBuilder.buildShareSubject(entity);
-		String body = shareMessageBuilder.buildShareMessage(entity, info, text, isHtml(), config.getBooleanProperty(SocializeConfig.SOCIALIZE_BRANDING_ENABLED, true));
+		String body = shareMessageBuilder.buildShareMessage(entity, info, text, isHtml(), true);
 		Intent msg = getIntent();
 		msg.putExtra(Intent.EXTRA_TITLE, title);
 		
@@ -85,10 +82,6 @@ public class EmailShareHandler extends IntentShareHandler {
 	@Override
 	protected ShareType getShareType() {
 		return ShareType.EMAIL;
-	}
-
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
 	}
 
 	public void setShareMessageBuilder(ShareMessageBuilder shareMessageBuilder) {

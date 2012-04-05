@@ -245,7 +245,7 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		final String body = "foobar_body";
 		final Entity entity = Entity.newInstance("blah", null);
 		
-		AndroidMock.expect(shareMessageBuilder.buildShareMessage( entity, info, comment, false, true)).andReturn(body);
+		AndroidMock.expect(shareMessageBuilder.buildShareMessage( entity, info, comment, false, false)).andReturn(body);
 		facebookWallPoster.post(getActivity(), entity, body, info, listener);
 		
 		AndroidMock.replay(facebookWallPoster, shareMessageBuilder, listener, info);

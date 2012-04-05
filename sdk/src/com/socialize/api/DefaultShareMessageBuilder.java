@@ -118,7 +118,7 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 	}
 	
 	@Override
-	public String buildShareMessage(Entity entity, PropagationInfo urlSet, String comment, boolean html, boolean includeSocialize) {
+	public String buildShareMessage(Entity entity, PropagationInfo urlSet, String comment, boolean html, boolean includeAppLink) {
 	
 		StringBuilder builder = new StringBuilder();
 		
@@ -130,7 +130,7 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 		
 		builder.append(getEntityLink(entity, urlSet, html));
 		
-		if(includeSocialize) {
+		if(includeAppLink) {
 			builder.append(getNewLine(html));
 			builder.append(getNewLine(html));
 			builder.append("Sent from ");
@@ -158,6 +158,19 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 				else {
 					builder.append("Socialize for Android. http://www.getsocialize.com");
 				}
+			}
+		}
+		else if(config.isBrandingEnabled()) {
+			builder.append(getNewLine(html));
+			builder.append(getNewLine(html));
+			
+			builder.append(" Sent using ");
+			
+			if(html) {
+				builder.append("<a href=\"http://www.getsocialize.com\">Socialize for Android</a>.");
+			}
+			else {
+				builder.append("Socialize for Android. http://www.getsocialize.com");
 			}
 		}
 		

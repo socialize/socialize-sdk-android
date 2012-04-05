@@ -368,13 +368,11 @@
 	
 	<bean id="emailShareHandler" class="com.socialize.share.EmailShareHandler">
 		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
-		<property name="config" ref="config"/>
 		<property name="logger" ref="logger"/>
 	</bean>
 	
 	<bean id="smsShareHandler" class="com.socialize.share.SmsShareHandler">
 		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
-		<property name="config" ref="config"/>
 		<property name="logger" ref="logger"/>
 	</bean>
 	
