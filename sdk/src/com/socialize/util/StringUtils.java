@@ -72,7 +72,7 @@ public class StringUtils {
 	 * @return The cleaned string.
 	 */
 	public static String replaceNewLines(String src, int from, int to) {
-		if(from > 0 && to < from) {
+		if(src != null && from > 0 && to < from) {
 			
 			String strFrom = "";
 			String strTo = "";

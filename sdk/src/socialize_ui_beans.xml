@@ -301,26 +301,6 @@
 	</bean>		
 	
 <!-- Authenticate -->
-
-<!--
-	<factory id="authRequestDialogFactory" makes="authRequestDialog"/>
-	<factory id="authConfirmDialogFactory" makes="authConfirmDialog"/>
-	<factory id="authRequestDialogViewFactory" makes="authRequestDialogView"/>
-	<factory id="authConfirmDialogViewFactory" makes="authConfirmDialogView"/>
-	-->
-	<!-- 
-		<factory id="authConfirmDialogHeaderFactory" makes="authConfirmDialogHeader"/>
-	
-		<bean 
-			id="authConfirmDialogHeader" 
-			class="com.socialize.ui.auth.AuthConfirmDialogHeader"		
-			singleton="false">
-			<constructor-arg type="activity"/>
-			<property name="displayUtils" ref="displayUtils"/>
-			<property name="drawables" ref="drawables"/>
-			<init-method name="init"/>
-		</bean>
-	 -->
 	 
 	<bean 
 		id="authRequestDialogFactory" 
@@ -331,40 +311,6 @@
 		<property name="drawables" ref="drawables"/>
 		<property name="displayUtils" ref="displayUtils"/>
 	</bean>
-	
-	<!-- 
-	<bean 
-		id="authConfirmDialog" 
-		class="com.socialize.ui.auth.AuthConfirmDialogFactory"		
-		singleton="false">
-		<property name="logger" ref="logger"/>
-		<property name="authConfirmDialogViewFactory" ref="authConfirmDialogViewFactory"/>
-		<property name="drawables" ref="drawables"/>
-	</bean>
-	 -->
-	<!-- 
-	<bean 
-		id="authRequestDialogView" 
-		class="com.socialize.ui.auth.AuthRequestDialogView"		
-		singleton="false">
-		<constructor-arg type="activity"/>
-		<property name="displayUtils" ref="displayUtils"/>
-		<property name="facebookSignInButton" ref="facebookSignInButton"/>
-		<property name="text" value="Sign in with Facebook to ensure your comment is saved."/>
-		<init-method name="init"/>
-	</bean>
-	
-	<bean 
-		id="authConfirmDialogView" 
-		class="com.socialize.ui.auth.AuthConfirmDialogView"		
-		singleton="false">
-		<constructor-arg type="activity"/>
-		<property name="displayUtils" ref="displayUtils"/>
-		<property name="socializeSkipAuthButton" ref="socializeSkipAuthButton"/>
-		<property name="text" value="Your data is safe with us, but you can still post anonymously if you're shy."/>
-		<init-method name="init"/>
-	</bean>
-	 -->
 	 
 	<bean 
 		id="anonCell" 
@@ -1271,55 +1217,6 @@
 		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
 		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>				
 	</bean>	
-	
-	<!-- 
-	
-	<bean id="shareClickListener" abstract="true">
-		<property name="logger" ref="logger"/>
-		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
-		<property name="errorHandler" ref="socializeUIErrorHandler"/>
-	</bean>
-	
-	<bean 
-		id="facebookShareClickListener" 
-		class="com.socialize.ui.share.FacebookShareClickListener" 
-		extends="shareClickListener"
-		singleton="false">
-		<property name="facebookSharer" ref="facebookSharer"/>
-		<property name="progressDialogFactory" ref="progressDialogFactory"/>
-		<property name="alertDialogFactory" ref="alertDialogFactory"/>
-	</bean>
-	
-	<bean 
-		id="twitterShareClickListener" 
-		class="com.socialize.ui.share.TwitterShareClickListener" 
-		extends="shareClickListener"
-		singleton="false">
-		<property name="progressDialogFactory" ref="progressDialogFactory"/>
-		<property name="alertDialogFactory" ref="alertDialogFactory"/>
-	</bean>	
-		
-	<bean 
-		id="emailShareClickListener" 
-		class="com.socialize.ui.share.EmailShareClickListener" 
-		extends="shareClickListener"
-		singleton="false"/>
-		
-	<bean 
-		id="smsShareClickListener" 
-		class="com.socialize.ui.share.SmsShareClickListener" 
-		extends="shareClickListener"
-		singleton="false"/>		
-		
-	<bean 
-		id="otherShareClickListener" 
-		class="com.socialize.ui.share.OtherShareClickListener" 
-		extends="shareClickListener"
-		singleton="false">
-		<property name="listenerHolder" ref="listenerHolder"/>
-	</bean>
-	
-	 -->
 	 
 	<bean 
 		id="shareClickListener" 
@@ -1345,25 +1242,9 @@
 		<property name="smsShareButton" ref="smsShareButton"/>
 		<property name="shareClickListenerFactory" ref="shareClickListenerFactory"/>
 		
-		<!-- 
-		<property name="facebookShareClickListenerFactory" ref="facebookShareClickListenerFactory"/>
-		<property name="twitterShareClickListenerFactory" ref="twitterShareClickListenerFactory"/>
-		<property name="emailShareClickListenerFactory" ref="emailShareClickListenerFactory"/>
-		<property name="smsShareClickListenerFactory" ref="smsShareClickListenerFactory"/>
-		<property name="otherShareClickListenerFactory" ref="otherShareClickListenerFactory"/>
-		
-		-->
-		
 		<init-method name="init"/>
 	</bean>	
 	
-	<!-- 
-	<factory id="facebookShareClickListenerFactory" makes="facebookShareClickListener"/>
-	<factory id="twitterShareClickListenerFactory" makes="twitterShareClickListener"/>
-	<factory id="emailShareClickListenerFactory" makes="emailShareClickListener"/>
-	<factory id="smsShareClickListenerFactory" makes="smsShareClickListener"/>
-	<factory id="otherShareClickListenerFactory" makes="otherShareClickListener"/>	
-	 -->	
 	<factory id="shareDialogViewFactory" makes="shareDialogView"/>
 	
 <!-- End Share UI -->	
@@ -1485,6 +1366,19 @@
 	
 	<bean id="actionLauncher" class="com.socialize.launcher.SocializeActionLauncher" extends="activityLauncher"/>
 	
+	<bean id="commentListLauncher" class="com.socialize.launcher.CommentListLauncher">
+		<property name="entityLoaderUtils" ref="entityLoaderUtils"/>
+		<property name="activitySystem" ref="activitySystem"/>
+		<property name="notificationAuthenticator" ref="notificationAuthenticator"/>		
+		<property name="logger" ref="logger"/>
+	</bean>
+	
+	<bean id="actionLauncherDelegate" class="com.socialize.launcher.ActionDelegateLauncher">
+		<property name="logger" ref="logger"/>
+		<property name="actionLauncher" ref="actionLauncher"/>
+		<property name="commentListLauncher" ref="commentListLauncher"/>
+	</bean>
+	
 	<bean id="homeLauncher" class="com.socialize.launcher.HomeLauncher"/>
 	
 	<bean id="entityLauncher" class="com.socialize.launcher.EntityLauncher">
@@ -1533,20 +1427,13 @@
 
 <!-- End Web View -->	
 
-	<!-- 
-	<bean id="shareLauncher" class="com.socialize.launcher.ShareLauncher">
-		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
-		<property name="listenerHolder" ref="listenerHolder"/>
-	</bean>
-	 -->
-
 	<bean id="launchManager" class="com.socialize.launcher.SocializeLaunchManager">
 		<property name="logger" ref="logger"/>
 		<property name="launchers">
 			<map>
 				<entry>
 					<key value="ACTION"/>
-					<value ref="actionLauncher"/>
+					<value ref="actionLauncherDelegate"/>
 				</entry>
 				<entry>
 					<key value="HOME"/>
@@ -1560,12 +1447,6 @@
 					<key value="ENTITY"/>
 					<value ref="entityLauncher"/>
 				</entry>	
-				<!-- 			
-				<entry>
-					<key value="LOCAL_SHARE"/>
-					<value ref="shareLauncher"/>
-				</entry>
-				 -->					
 			</map>
 		</property>
 	</bean>

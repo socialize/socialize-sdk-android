@@ -45,7 +45,7 @@ public class DirectEntityIntegrationTest extends DirectEntityNotificationTest {
 
 	@UsesMocks ({EntityLoaderUtils.class})
 	@Override
-	public void testOnMessage() throws Exception {
+	public void testOnMessage() throws Throwable {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		

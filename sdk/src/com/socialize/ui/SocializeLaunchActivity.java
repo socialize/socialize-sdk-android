@@ -184,15 +184,25 @@ public class SocializeLaunchActivity extends Activity {
 						if(launchManager != null) {
 							launcher = launchManager.getLaucher(action);
 							if(launcher != null) {
-								if(launcher.launch(SocializeLaunchActivity.this, extras)) {
-									if(!launcher.shouldFinish()) {
-										return; // Don't finish
-									}
+								
+								if(launcher.getLaunchListener() != null) {
+									launcher.getLaunchListener().onBeforeLaunch(SocializeLaunchActivity.this, extras);
+								}
+								
+								boolean launched = launcher.launch(SocializeLaunchActivity.this, extras);
+								
+								if(launcher.getLaunchListener() != null) {
+									launcher.getLaunchListener().onAfterLaunch(launched);
+								}
+								
+								if(launched && !launcher.shouldFinish()) {
+									return; // Don't finish
 								}
 							}
 						}
 					}
 				}	
+				
 				finish();
 			}
 		};

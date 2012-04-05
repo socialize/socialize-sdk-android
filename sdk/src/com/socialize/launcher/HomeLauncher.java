@@ -22,28 +22,17 @@
 package com.socialize.launcher;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-
 import com.socialize.util.DefaultAppUtils;
 
 /**
  * @author Jason Polites
  *
  */
-public class HomeLauncher implements Launcher {
+public class HomeLauncher extends BaseLauncher {
 	
 	@Override
 	public boolean launch(Activity context, Bundle data) {
 		return DefaultAppUtils.launchMainApp(context);
 	}
-
-	@Override
-	public void onResult(Activity context, int requestCode, int resultCode, Intent returnedIntent, Intent originalIntent) {}
-
-	@Override
-	public boolean shouldFinish() {
-		return true;
-	}
-
 }

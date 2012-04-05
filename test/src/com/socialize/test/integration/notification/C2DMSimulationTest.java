@@ -21,8 +21,12 @@
  */
 package com.socialize.test.integration.notification;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;
 import android.app.Notification;
@@ -38,6 +42,7 @@ import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
+import com.socialize.launcher.BaseLauncher;
 import com.socialize.launcher.LaunchAction;
 import com.socialize.launcher.Launcher;
 import com.socialize.listener.SocializeInitListener;
@@ -47,6 +52,7 @@ import com.socialize.notifications.NotificationManagerFacade;
 import com.socialize.notifications.NotificationsAccess;
 import com.socialize.notifications.SocializeC2DMReceiverHandler;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.SocializeLaunchActivity;
 
 
@@ -57,6 +63,8 @@ import com.socialize.ui.SocializeLaunchActivity;
 public abstract class C2DMSimulationTest extends SocializeActivityTest {
 
 	SocializeC2DMReceiverHandler receiver;
+	protected long entityId = -1;
+	protected long commentId = -1;
 	
 	@Override
 	protected void setUp() throws Exception {
@@ -74,7 +82,7 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 		receiver.onCreate(getContext());
 	}
 	
-	public void testOnMessage() throws Exception {
+	public void testOnMessage() throws Throwable {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		final CountDownLatch launchLock = new CountDownLatch(1);
@@ -108,7 +116,7 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 				public void onInit(Context context, IOCContainer container) {
 					ProxyObject<Launcher> launcherProxy = container.getProxy(getLauncherBeanName());
 
-					launcherProxy.setDelegate(new Launcher() {
+					launcherProxy.setDelegate(new BaseLauncher() {
 						@Override
 						public boolean shouldFinish() {
 							return true;
@@ -217,4 +225,51 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 	protected boolean disableLauncher() {
 		return true;
 	}
+	
+	/**
+	 * Loads an entity from the JSON file written to disk after the initial python setup script (sdk-cleanup.py)
+	 * @return
+	 * @throws IOException 
+	 * @throws JSONException 
+	 */
+	protected long getEntityId() throws IOException, JSONException {
+		if(entityId < 0) {
+			InputStream in = null;
+			try {
+				in = getContext().getAssets().open("existing-data/entities.json");
+				String json = TestUtils.loadStream(in);
+				JSONObject obj = new JSONObject(json);
+				JSONArray jsonArray = obj.getJSONArray("items");
+				entityId = jsonArray.getJSONObject(0).getLong("id");
+			}
+			finally {
+				if(in != null) {
+					in.close();
+				}
+			}
+		}
+		
+		return entityId;
+	}
+	
+	protected long getCommentId() throws IOException, JSONException {
+		if(commentId < 0) {
+			InputStream in = null;
+			try {
+				in = getContext().getAssets().open("existing-data/comments.json");
+				String json = TestUtils.loadStream(in);
+				JSONObject obj = new JSONObject(json);
+				JSONArray jsonArray = obj.getJSONArray("items");
+				commentId = jsonArray.getJSONObject(0).getLong("id");
+			}
+			finally {
+				if(in != null) {
+					in.close();
+				}
+			}
+		}
+		
+		return commentId;
+	}
+
 }

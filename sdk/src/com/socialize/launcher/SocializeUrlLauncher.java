@@ -26,14 +26,15 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
-import android.content.Intent;
+import android.content.DialogInterface.OnKeyListener;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.dialog.FullScreenDialogFactory;
-import com.socialize.ui.notifications.DirectUrlWebView;
 import com.socialize.ui.notifications.DirectUrlListener;
+import com.socialize.ui.notifications.DirectUrlWebView;
 import com.socialize.util.DefaultAppUtils;
 import com.socialize.util.StringUtils;
 
@@ -42,7 +43,7 @@ import com.socialize.util.StringUtils;
  * @author Jason Polites
  *
  */
-public class SocializeUrlLauncher implements UrlLauncher {
+public class SocializeUrlLauncher extends BaseLauncher implements UrlLauncher {
 	
 	private SocializeLogger logger;
 	private FullScreenDialogFactory dialogFactory;
@@ -58,21 +59,36 @@ public class SocializeUrlLauncher implements UrlLauncher {
 		
 		if(!StringUtils.isEmpty(url)) {
 			
-			DirectUrlWebView webView = directUrlWebViewFactory.getBean();
+			final DirectUrlWebView webView = directUrlWebViewFactory.getBean();
 			webView.setListener(directUrlListener);
 			
 			Dialog dialog = dialogFactory.build(context, webView, true);
+			
 			dialog.setOnCancelListener(new OnCancelListener() {
 				@Override
 				public void onCancel(DialogInterface dialog) {
 					handleCloseEvent(context);
 				}
 			});
+			
 			dialog.setOnDismissListener(new OnDismissListener() {
 				
 				@Override
 				public void onDismiss(DialogInterface dialog) {
 					handleCloseEvent(context);
+				}
+			});
+			
+			dialog.setOnKeyListener(new OnKeyListener() {
+				@Override
+				public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+					if(keyCode == KeyEvent.KEYCODE_BACK) {
+						if(webView.canGoBack()) {
+							webView.goBack();
+							return true;
+						}
+					}
+					return false;
 				}
 			});
 		
@@ -119,16 +135,11 @@ public class SocializeUrlLauncher implements UrlLauncher {
 	}	
 
 	/* (non-Javadoc)
-	 * @see com.socialize.launcher.Launcher#onResult(android.app.Activity, int, int, android.content.Intent, android.content.Intent)
-	 */
-	@Override
-	public void onResult(Activity context, int requestCode, int resultCode, Intent returnedIntent, Intent originalIntent) {}
-
-	/* (non-Javadoc)
 	 * @see com.socialize.launcher.Launcher#shouldFinish()
 	 */
 	@Override
 	public boolean shouldFinish() {
+		// Don't finish!
 		return false;
 	}
 	
