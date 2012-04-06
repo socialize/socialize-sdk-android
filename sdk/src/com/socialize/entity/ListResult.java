@@ -68,7 +68,7 @@ public class ListResult<T> {
 	public void setSingleObject(T singleObject) {
 		this.singleObject = singleObject;
 	}
-	
+
 	public int size() {
 		if(items != null) {
 			return items.size();

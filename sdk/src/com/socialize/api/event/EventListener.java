@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,42 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api;
+package com.socialize.api.event;
 
-import java.util.List;
+import com.socialize.api.SocializeApi.RequestType;
+import com.socialize.api.SocializeResponse;
+import com.socialize.listener.SocializeActionListener;
+
 
 /**
  * @author Jason Polites
  *
- * @param <T>
  */
-public class SocializePutRequest<T> extends SocializeRequest {
+public abstract class EventListener implements SocializeActionListener {
 
-	private List<T> objects;
-	private T object;
-	private boolean jsonResponse = true;
-
-	public List<T> getObjects() {
-		return objects;
+	@Override
+	public void onResult(RequestType type, SocializeResponse response) {
+		onPost();
 	}
 
-	public void setObjects(List<T> objects) {
-		this.objects = objects;
-	}
-
-	public T getObject() {
-		return object;
-	}
-
-	public void setObject(T object) {
-		this.object = object;
-	}
-
-	public boolean isJsonResponse() {
-		return jsonResponse;
-	}
+	public abstract void onPost();
 	
-	public void setJsonResponse(boolean jsonResponse) {
-		this.jsonResponse = jsonResponse;
-	}
 }

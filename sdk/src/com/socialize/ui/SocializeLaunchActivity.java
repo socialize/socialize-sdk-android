@@ -34,6 +34,7 @@ import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.event.EventSystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.error.SocializeException;
@@ -58,6 +59,7 @@ public class SocializeLaunchActivity extends Activity {
 	protected SocializeLogger logger;
 	protected SocializeErrorHandler errorHandler;
 	protected Intent originalIntent;
+	protected EventSystem eventSystem;
 	
 	@Override
 	protected void onNewIntent(Intent intent) {
@@ -105,6 +107,7 @@ public class SocializeLaunchActivity extends Activity {
 		container = getContainer();
 		logger = container.getBean("logger");
 		errorHandler = container.getBean("socializeUIErrorHandler");
+		eventSystem = container.getBean("eventSystem");
 	}
 	
 	protected void doAuthenticate() {
@@ -157,7 +160,7 @@ public class SocializeLaunchActivity extends Activity {
 											"]");
 								}								
 								
-								launchTask.execute(SocializeLaunchActivity.this);
+								launchTask.execute(SocializeLaunchActivity.this, extras);
 							} 
 							catch (Throwable e) {
 								if(logger != null) {

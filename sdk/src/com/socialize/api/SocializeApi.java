@@ -213,12 +213,16 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		return provider.put(session, endpoint, objects);
 	}
 
-	public ListResult<T> post(SocializeSession session, String endpoint, T object) throws SocializeException {
-		return provider.post(session, endpoint, object);
+	public ListResult<T> post(SocializeSession session, String endpoint, T object, boolean isJSONResponse) throws SocializeException {
+		return provider.post(session, endpoint, object, isJSONResponse);
 	}
 	
 	public ListResult<T> post(SocializeSession session, String endpoint, List<T> objects) throws SocializeException {
-		return provider.post(session, endpoint, objects);
+		return post(session, endpoint, objects, true);
+	}
+	
+	public ListResult<T> post(SocializeSession session, String endpoint, List<T> objects, boolean isJSONResponse) throws SocializeException {
+		return provider.post(session, endpoint, objects, isJSONResponse);
 	}
 	
 	public T putAsPost(SocializeSession session, String endpoint, T object) throws SocializeException {
@@ -301,21 +305,30 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		poster.execute(request);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void postAsync(SocializeSession session, String endpoint, T object, SocializeActionListener listener) {
+		postAsync(session, endpoint, object, true, listener);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void postAsync(SocializeSession session, String endpoint, T object, boolean jsonResponse, SocializeActionListener listener) {
 		AsyncPutter poster = new AsyncPutter(RequestType.POST, session, listener);
 		SocializePutRequest<T> request = new SocializePutRequest<T>();
 		request.setEndpoint(endpoint);
 		request.setObject(object);
+		request.setJsonResponse(jsonResponse);
 		poster.execute(request);
 	}
 
-	@SuppressWarnings("unchecked")
 	public void postAsync(SocializeSession session, String endpoint, List<T> objects, SocializeActionListener listener) {
+		postAsync(session, endpoint, objects, true, listener);
+	}
+	@SuppressWarnings("unchecked")
+	public void postAsync(SocializeSession session, String endpoint, List<T> objects, boolean jsonResponse, SocializeActionListener listener) {
 		AsyncPutter poster = new AsyncPutter(RequestType.POST, session, listener);
 		SocializePutRequest<T> request = new SocializePutRequest<T>();
 		request.setEndpoint(endpoint);
 		request.setObjects(objects);
+		request.setJsonResponse(jsonResponse);
 		poster.execute(request);
 	}
 
@@ -754,6 +767,8 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			else {
 				response = new SocializeEntityResponse<T>();
 			}
+			
+			response.setResultsExpected( request.isJsonResponse() );
 
 			ListResult<T> results = null;
 
@@ -762,10 +777,10 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			case POST:
 				
 				if(request.getObjects() != null) {
-					results = SocializeApi.this.post(session, request.getEndpoint(), request.getObjects());
+					results = SocializeApi.this.post(session, request.getEndpoint(), request.getObjects(), request.isJsonResponse());
 				}
 				else if(request.getObject() != null) {
-					results = SocializeApi.this.post(session, request.getEndpoint(), request.getObject());
+					results = SocializeApi.this.post(session, request.getEndpoint(), request.getObject(), request.isJsonResponse());
 				}
 				
 				response.setResults(results);
@@ -809,7 +824,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 						List<T> items = results.getItems();
 						List<ActionError> errors = results.getErrors();
 						
-						if(items == null || items.size() == 0){
+						if((items == null || items.size() == 0) && result.isResultsExpected()){
 							if(errors != null && errors.size() > 0) {
 								listener.onError(new SocializeException(errors.get(0).getMessage()));
 							}
@@ -831,7 +846,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 							listener.onResult(requestType, result);
 						}
 					}
-					else {
+					else if(result.isResultsExpected()) {
 						listener.onError(new SocializeException("No results found in response"));
 					}
 				}

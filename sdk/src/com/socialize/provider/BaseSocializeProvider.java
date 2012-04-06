@@ -416,10 +416,10 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	}
 	
 	@Override
-	public ListResult<T> post(SocializeSession session, String endpoint, T object) throws SocializeException {
+	public ListResult<T> post(SocializeSession session, String endpoint, T object, boolean jsonResponse) throws SocializeException {
 		endpoint = prepareEndpoint(session, endpoint);
 		HttpUriRequest request = requestFactory.getPostRequest(session, endpoint, object);
-		return doListTypeRequest(request, ActionType.UNKNOWN);
+		return doListTypeRequest(request, ActionType.UNKNOWN, jsonResponse);
 	}
 
 	@Override
@@ -429,13 +429,14 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 		return doGetTypeRequest(request, ActionType.UNKNOWN);
 	}
 
+	
 	@Override
-	public ListResult<T> post(SocializeSession session, String endpoint, Collection<T> objects) throws SocializeException {
+	public ListResult<T> post(SocializeSession session, String endpoint, Collection<T> objects, boolean isJSONResponse) throws SocializeException {
 		endpoint = prepareEndpoint(session, endpoint);
 		HttpUriRequest request = requestFactory.getPostRequest(session, endpoint, objects);
 		return doListTypeRequest(request, ActionType.UNKNOWN);
 	}
-	
+
 	private T doGetTypeRequest(HttpUriRequest request, ActionType actionType) throws SocializeException {
 		HttpEntity entity = null;
 		
@@ -481,6 +482,10 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	}
 
 	private ListResult<T> doListTypeRequest(HttpUriRequest request, ActionType type) throws SocializeException {
+		return doListTypeRequest(request, type, true);	
+	}
+
+	private ListResult<T> doListTypeRequest(HttpUriRequest request, ActionType type, boolean isJSONResponse) throws SocializeException {
 		List<T> results = null;
 		List<ActionError> errors = null;
 		HttpEntity entity = null;
@@ -514,51 +519,55 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 					throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
 				}
 				else {
-					
+				
 					result = new ListResult<T>();
 					
-					// Read the json just for logging
-					String json = ioUtils.readSafe(entity.getContent());
-					
-					if(logger != null && logger.isDebugEnabled()) {
-						logger.debug("JSON Response: " + json);
-					}
-					
-					JSONObject object = jsonParser.parseObject(json);
-					
-					if(object.has(JSON_ATTR_ERRORS) && !object.isNull(JSON_ATTR_ERRORS)) {
+					if(isJSONResponse) {
+						// Read the json just for logging
+						String json = ioUtils.readSafe(entity.getContent());
 						
-						JSONArray errorList = object.getJSONArray(JSON_ATTR_ERRORS);
-						
-						int length = errorList.length();
-						
-						errors = new ArrayList<ActionError>(length);
-						
-						for (int i = 0; i < length; i++) {
-							JSONObject jsonObject = errorList.getJSONObject(i);
-							ActionError error = errorFactory.fromJSON(jsonObject);
-							errors.add(error);
+						if(logger != null && logger.isDebugEnabled()) {
+							logger.debug("JSON Response: " + json);
 						}
 						
-						result.setErrors(errors);
-					}
-					
-					if(object.has(JSON_ATTR_ITEMS) && !object.isNull(JSON_ATTR_ITEMS)) {
-						JSONArray list = object.getJSONArray(JSON_ATTR_ITEMS);
-						
-						int length = list.length();
-						
-						results = new ArrayList<T>(length);
-						
-						for (int i = 0; i < length; i++) {
-							results.add(fromJSON(list.getJSONObject(i), type));
+						if(!StringUtils.isEmpty(json)) {
+							JSONObject object = jsonParser.parseObject(json);
+							
+							if(object.has(JSON_ATTR_ERRORS) && !object.isNull(JSON_ATTR_ERRORS)) {
+								
+								JSONArray errorList = object.getJSONArray(JSON_ATTR_ERRORS);
+								
+								int length = errorList.length();
+								
+								errors = new ArrayList<ActionError>(length);
+								
+								for (int i = 0; i < length; i++) {
+									JSONObject jsonObject = errorList.getJSONObject(i);
+									ActionError error = errorFactory.fromJSON(jsonObject);
+									errors.add(error);
+								}
+								
+								result.setErrors(errors);
+							}
+							
+							if(object.has(JSON_ATTR_ITEMS) && !object.isNull(JSON_ATTR_ITEMS)) {
+								JSONArray list = object.getJSONArray(JSON_ATTR_ITEMS);
+								
+								int length = list.length();
+								
+								results = new ArrayList<T>(length);
+								
+								for (int i = 0; i < length; i++) {
+									results.add(fromJSON(list.getJSONObject(i), type));
+								}
+								
+								result.setItems(results);
+							}
+							
+							if(object.has(JSON_ATTR_COUNT) && !object.isNull(JSON_ATTR_COUNT)) {
+								result.setTotalCount(object.getInt(JSON_ATTR_COUNT));
+							}
 						}
-						
-						result.setItems(results);
-					}
-					
-					if(object.has(JSON_ATTR_COUNT) && !object.isNull(JSON_ATTR_COUNT)) {
-						result.setTotalCount(object.getInt(JSON_ATTR_COUNT));
 					}
 				}
 			}
@@ -578,8 +587,8 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 			
 			return null;
 		}		
-	}
-
+	}	
+	
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;

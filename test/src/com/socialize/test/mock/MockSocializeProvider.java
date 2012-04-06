@@ -112,10 +112,7 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 		return makeListResult(object);
 	}
 
-	@Override
-	public ListResult<T> post(SocializeSession session, String endpoint, T object) throws SocializeException {
-		return makeListResult(object);
-	}
+
 
 	@Override
 	public ListResult<T> put(SocializeSession session, String endpoint, Collection<T> objects) throws SocializeException {
@@ -123,7 +120,12 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 	}
 
 	@Override
-	public ListResult<T> post(SocializeSession session, String endpoint, Collection<T> object) throws SocializeException {
+	public ListResult<T> post(SocializeSession session, String endpoint, T object, boolean isJSONResponse) throws SocializeException {
+		return makeListResult(object);
+	}
+
+	@Override
+	public ListResult<T> post(SocializeSession session, String endpoint, Collection<T> object, boolean isJSONResponse) throws SocializeException {
 		return makeListResult(object);
 	}
 

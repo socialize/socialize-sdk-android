@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,42 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api;
+package com.socialize.entity;
 
-import java.util.List;
+import org.json.JSONException;
+import org.json.JSONObject;
+import com.socialize.api.event.SocializeEvent;
+
 
 /**
  * @author Jason Polites
  *
- * @param <T>
  */
-public class SocializePutRequest<T> extends SocializeRequest {
+public class EventFactory extends SocializeObjectFactory<SocializeEvent> {
 
-	private List<T> objects;
-	private T object;
-	private boolean jsonResponse = true;
-
-	public List<T> getObjects() {
-		return objects;
+	@Override
+	protected void postFromJSON(JSONObject from, SocializeEvent to) throws JSONException {
+		// Never happens
 	}
 
-	public void setObjects(List<T> objects) {
-		this.objects = objects;
+	@Override
+	protected void postToJSON(SocializeEvent from, JSONObject to) throws JSONException {
+		to.put("bucket", from.getBucket().toUpperCase());
+		to.put("values", from.getData());
 	}
 
-	public T getObject() {
-		return object;
+	@Override
+	public Object instantiateObject(JSONObject object) {
+		return new SocializeEvent();
 	}
 
-	public void setObject(T object) {
-		this.object = object;
-	}
-
-	public boolean isJsonResponse() {
-		return jsonResponse;
-	}
-	
-	public void setJsonResponse(boolean jsonResponse) {
-		this.jsonResponse = jsonResponse;
-	}
 }

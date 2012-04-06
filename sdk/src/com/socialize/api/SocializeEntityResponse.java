@@ -34,7 +34,8 @@ import com.socialize.entity.ListResult;
 public class SocializeEntityResponse<T> implements SocializeResponse {
 
 	private ListResult<T> results;
-
+	private boolean resultsExpected = true;
+	
 	public ListResult<T> getResults() {
 		return results;
 	}
@@ -72,4 +73,11 @@ public class SocializeEntityResponse<T> implements SocializeResponse {
 		return null;
 	}
 	
+	public boolean isResultsExpected() {
+		return resultsExpected;
+	}
+	
+	public void setResultsExpected(boolean resultsExpected) {
+		this.resultsExpected = resultsExpected;
+	}
 }

@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,42 +19,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api;
+package com.socialize.api.event;
 
-import java.util.List;
+import com.socialize.api.SocializeApi;
+import com.socialize.api.SocializeSession;
+import com.socialize.provider.SocializeProvider;
+
 
 /**
  * @author Jason Polites
  *
- * @param <T>
  */
-public class SocializePutRequest<T> extends SocializeRequest {
+public class SocializeEventSystem extends SocializeApi<SocializeEvent, SocializeProvider<SocializeEvent>> implements EventSystem {
 
-	private List<T> objects;
-	private T object;
-	private boolean jsonResponse = true;
-
-	public List<T> getObjects() {
-		return objects;
+	public SocializeEventSystem(SocializeProvider<SocializeEvent> provider) {
+		super(provider);
 	}
 
-	public void setObjects(List<T> objects) {
-		this.objects = objects;
+	/* (non-Javadoc)
+	 * @see com.socialize.api.event.EventSystem#addEvent(com.socialize.api.SocializeSession, com.socialize.api.event.SocializeEvent, com.socialize.api.event.EventListener)
+	 */
+	@Override
+	public void addEvent(SocializeSession session, SocializeEvent event, EventListener eventListener) {
+		postAsync(session, ENDPOINT, event, false, eventListener);		
 	}
 
-	public T getObject() {
-		return object;
-	}
-
-	public void setObject(T object) {
-		this.object = object;
-	}
-
-	public boolean isJsonResponse() {
-		return jsonResponse;
-	}
-	
-	public void setJsonResponse(boolean jsonResponse) {
-		this.jsonResponse = jsonResponse;
-	}
 }

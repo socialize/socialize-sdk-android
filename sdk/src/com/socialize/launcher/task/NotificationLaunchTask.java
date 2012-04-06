@@ -19,31 +19,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.config;
+package com.socialize.launcher.task;
 
+import java.util.List;
 import android.content.Context;
 import android.os.Bundle;
-
 import com.socialize.error.SocializeException;
 import com.socialize.launcher.LaunchTask;
+import com.socialize.log.SocializeLogger;
+
 
 /**
  * @author Jason Polites
  *
  */
-public class NotificationsConfigLaunchTask implements LaunchTask {
-
-	private SocializeConfig config;
+public class NotificationLaunchTask implements LaunchTask {
 	
+	private List<LaunchTask> tasks;
+	private SocializeLogger logger;
+
 	/* (non-Javadoc)
-	 * @see com.socialize.launcher.SocializeLaunchTask#execute(android.content.Context)
+	 * @see com.socialize.launcher.LaunchTask#execute(android.content.Context, android.os.Bundle)
 	 */
 	@Override
 	public void execute(Context context, Bundle extras) throws SocializeException {
-		config.setEntityLoaderCheckEnabled(false);
+		if(tasks != null) {
+			for (LaunchTask task : tasks) {
+				try {
+					task.execute(context, extras);
+				}
+				catch (SocializeException e) {
+					if(logger != null) {
+						logger.error("Error executing launcher task", e);
+					}
+					else {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+	
+	public void setTasks(List<LaunchTask> tasks) {
+		this.tasks = tasks;
 	}
 
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
+
+	
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
 	}
+	
+	
+	
 }

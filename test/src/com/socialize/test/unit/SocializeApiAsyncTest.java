@@ -392,7 +392,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		final String endpoint = "foobar";
 		final SocializeObject object = new SocializeObject();
 
-		AndroidMock.expect(provider.post(mockSession, endpoint, object)).andReturn(null);
+		AndroidMock.expect(provider.post(mockSession, endpoint, object, true)).andReturn(null);
 		AndroidMock.replay(provider);
 
 		runTestOnUiThread(new Runnable() {
@@ -412,7 +412,7 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 		final String endpoint = "foobar";
 		final List<SocializeObject> objects = new ArrayList<SocializeObject>();
 
-		AndroidMock.expect(provider.post(mockSession, endpoint, objects)).andReturn(null);
+		AndroidMock.expect(provider.post(mockSession, endpoint, objects, true)).andReturn(null);
 		AndroidMock.replay(provider);
 
 		runTestOnUiThread(new Runnable() {

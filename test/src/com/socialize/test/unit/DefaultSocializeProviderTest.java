@@ -807,7 +807,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 
 		DefaultSocializeProvider<SocializeObject> provider = getNewProvider();
 
-		ListResult<SocializeObject> list = provider.post(session, endpoint, object);
+		ListResult<SocializeObject> list = provider.post(session, endpoint, object, true);
 
 		AndroidMock.verify(session);
 		AndroidMock.verify(sessionFactory);
@@ -889,7 +889,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 
 		DefaultSocializeProvider<SocializeObject> provider = getNewProvider();
 
-		ListResult<SocializeObject> list = provider.post(session, endpoint, objects);
+		ListResult<SocializeObject> list = provider.post(session, endpoint, objects, true);
 
 		assertEquals(objects.size(), list.getItems().size());
 
