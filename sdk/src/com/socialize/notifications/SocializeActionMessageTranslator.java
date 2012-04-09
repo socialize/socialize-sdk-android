@@ -33,7 +33,7 @@ import com.socialize.error.SocializeException;
 
 /**
  * @author Jason Polites
- * @deprecated Not used
+ * @deprecated Not used and we shouldn't be doing api access at this level.
  */
 @Deprecated
 public class SocializeActionMessageTranslator implements MessageTranslator<SocializeAction> {

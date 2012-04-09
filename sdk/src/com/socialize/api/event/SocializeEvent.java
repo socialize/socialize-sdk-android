@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Socialize Inc.
+ * Copyright (c) 2011 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,35 +19,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.notifications;
+package com.socialize.api.event;
 
-import android.content.Context;
-import android.os.Bundle;
+import org.json.JSONObject;
+import com.socialize.entity.SocializeObject;
 
-import com.socialize.Socialize;
-import com.socialize.error.SocializeException;
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class BaseMessageTranslator<T> implements MessageTranslator<T> {
+public class SocializeEvent extends SocializeObject {
 
-	/* (non-Javadoc)
-	 * @see com.socialize.notifications.MessageTranslator#translate(android.content.Context, android.os.Bundle, com.socialize.notifications.NotificationMessage)
-	 */
-	@Override
-	public T translate(Context context, Bundle data, NotificationMessage message) throws SocializeException {
-		
-		data.putString( Socialize.ACTION_ID , String.valueOf( message.getActionId() ));
-		data.putString( Socialize.ACTION_TYPE , String.valueOf( message.getActionType().name() ));
-		
-		// The action detail view expects this, but will handle the -1 case.
-		data.putString( Socialize.USER_ID , "-1");
-		
-		return translate(context, message);
+	private static final long serialVersionUID = -8531785910742052280L;
+	
+	private String bucket;
+	private JSONObject data;
+	
+	public String getBucket() {
+		return bucket;
 	}
 	
-	public abstract T translate(Context context, NotificationMessage message) throws SocializeException;
-
+	public void setBucket(String bundle) {
+		this.bucket = bundle;
+	}
+	
+	public JSONObject getData() {
+		return data;
+	}
+	
+	public void setData(JSONObject data) {
+		this.data = data;
+	}
 }

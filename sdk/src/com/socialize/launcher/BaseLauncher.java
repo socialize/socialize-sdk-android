@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Socialize Inc.
+ * Copyright (c) 2011 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,35 +19,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.notifications;
+package com.socialize.launcher;
 
-import android.content.Context;
-import android.os.Bundle;
+import android.app.Activity;
+import android.content.Intent;
 
-import com.socialize.Socialize;
-import com.socialize.error.SocializeException;
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class BaseMessageTranslator<T> implements MessageTranslator<T> {
+public abstract class BaseLauncher implements Launcher {
+	
+	protected LaunchListener launchListener;
 
 	/* (non-Javadoc)
-	 * @see com.socialize.notifications.MessageTranslator#translate(android.content.Context, android.os.Bundle, com.socialize.notifications.NotificationMessage)
+	 * @see com.socialize.launcher.Launcher#onResult(android.app.Activity, int, int, android.content.Intent, android.content.Intent)
 	 */
 	@Override
-	public T translate(Context context, Bundle data, NotificationMessage message) throws SocializeException {
-		
-		data.putString( Socialize.ACTION_ID , String.valueOf( message.getActionId() ));
-		data.putString( Socialize.ACTION_TYPE , String.valueOf( message.getActionType().name() ));
-		
-		// The action detail view expects this, but will handle the -1 case.
-		data.putString( Socialize.USER_ID , "-1");
-		
-		return translate(context, message);
-	}
-	
-	public abstract T translate(Context context, NotificationMessage message) throws SocializeException;
+	public void onResult(Activity context, int requestCode, int resultCode, Intent returnedIntent, Intent originalIntent) {}
 
+	/* (non-Javadoc)
+	 * @see com.socialize.launcher.Launcher#shouldFinish()
+	 */
+	@Override
+	public boolean shouldFinish() {
+		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.launcher.Launcher#getLaunchListener()
+	 */
+	@Override
+	public LaunchListener getLaunchListener() {
+		return launchListener;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.launcher.Launcher#setLaunchListener(com.socialize.launcher.LaunchListener)
+	 */
+	@Override
+	public void setLaunchListener(LaunchListener listener) {
+		this.launchListener = listener;
+	}
 }

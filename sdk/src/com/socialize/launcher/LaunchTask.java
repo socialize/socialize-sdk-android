@@ -22,7 +22,7 @@
 package com.socialize.launcher;
 
 import android.content.Context;
-
+import android.os.Bundle;
 import com.socialize.error.SocializeException;
 
 /**
@@ -31,6 +31,6 @@ import com.socialize.error.SocializeException;
  */
 public interface LaunchTask {
 
-	public void execute(Context context) throws SocializeException;
+	public void execute(Context context, Bundle extras) throws SocializeException;
 	
 }

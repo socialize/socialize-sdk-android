@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Socialize Inc.
+ * Copyright (c) 2011 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,35 +19,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.notifications;
+package com.socialize.launcher.task;
 
+import java.util.List;
 import android.content.Context;
 import android.os.Bundle;
-
-import com.socialize.Socialize;
 import com.socialize.error.SocializeException;
+import com.socialize.launcher.LaunchTask;
+import com.socialize.log.SocializeLogger;
+
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class BaseMessageTranslator<T> implements MessageTranslator<T> {
+public class NotificationLaunchTask implements LaunchTask {
+	
+	private List<LaunchTask> tasks;
+	private SocializeLogger logger;
 
 	/* (non-Javadoc)
-	 * @see com.socialize.notifications.MessageTranslator#translate(android.content.Context, android.os.Bundle, com.socialize.notifications.NotificationMessage)
+	 * @see com.socialize.launcher.LaunchTask#execute(android.content.Context, android.os.Bundle)
 	 */
 	@Override
-	public T translate(Context context, Bundle data, NotificationMessage message) throws SocializeException {
-		
-		data.putString( Socialize.ACTION_ID , String.valueOf( message.getActionId() ));
-		data.putString( Socialize.ACTION_TYPE , String.valueOf( message.getActionType().name() ));
-		
-		// The action detail view expects this, but will handle the -1 case.
-		data.putString( Socialize.USER_ID , "-1");
-		
-		return translate(context, message);
+	public void execute(Context context, Bundle extras) throws SocializeException {
+		if(tasks != null) {
+			for (LaunchTask task : tasks) {
+				try {
+					task.execute(context, extras);
+				}
+				catch (SocializeException e) {
+					if(logger != null) {
+						logger.error("Error executing launcher task", e);
+					}
+					else {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 	}
 	
-	public abstract T translate(Context context, NotificationMessage message) throws SocializeException;
+	public void setTasks(List<LaunchTask> tasks) {
+		this.tasks = tasks;
+	}
 
+
+	
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
+	
+	
+	
 }

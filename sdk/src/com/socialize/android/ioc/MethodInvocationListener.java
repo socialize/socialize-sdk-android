@@ -9,6 +9,6 @@ import java.lang.reflect.Method;
  */
 public interface MethodInvocationListener {
 
-	public boolean isDelegate(Method m);
+	public boolean useDelegate(Method m);
 	
 }

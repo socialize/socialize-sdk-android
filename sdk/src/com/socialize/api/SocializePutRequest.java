@@ -32,6 +32,7 @@ public class SocializePutRequest<T> extends SocializeRequest {
 
 	private List<T> objects;
 	private T object;
+	private boolean jsonResponse = true;
 
 	public List<T> getObjects() {
 		return objects;
@@ -47,5 +48,13 @@ public class SocializePutRequest<T> extends SocializeRequest {
 
 	public void setObject(T object) {
 		this.object = object;
+	}
+
+	public boolean isJsonResponse() {
+		return jsonResponse;
+	}
+	
+	public void setJsonResponse(boolean jsonResponse) {
+		this.jsonResponse = jsonResponse;
 	}
 }

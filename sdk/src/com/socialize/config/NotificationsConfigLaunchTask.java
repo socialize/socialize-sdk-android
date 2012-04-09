@@ -22,6 +22,7 @@
 package com.socialize.config;
 
 import android.content.Context;
+import android.os.Bundle;
 
 import com.socialize.error.SocializeException;
 import com.socialize.launcher.LaunchTask;
@@ -38,7 +39,7 @@ public class NotificationsConfigLaunchTask implements LaunchTask {
 	 * @see com.socialize.launcher.SocializeLaunchTask#execute(android.content.Context)
 	 */
 	@Override
-	public void execute(Context context) throws SocializeException {
+	public void execute(Context context, Bundle extras) throws SocializeException {
 		config.setEntityLoaderCheckEnabled(false);
 	}
 

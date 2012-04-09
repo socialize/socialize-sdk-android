@@ -31,7 +31,6 @@ public class TestUtils {
 	static ActivityMonitor monitor;
 	static Instrumentation instrumentation;
 	static ActivityInstrumentationTestCase2<?> testCase;
-//	static Activity testActivity;
 	
 	public static void addResult(Object obj) {
 		holder.addResult(obj);

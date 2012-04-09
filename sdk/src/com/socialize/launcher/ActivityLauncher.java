@@ -31,7 +31,7 @@ import com.socialize.util.EntityLoaderUtils;
  * @author Jason Polites
  *
  */
-public abstract class ActivityLauncher implements Launcher {
+public abstract class ActivityLauncher extends BaseLauncher {
 	
 	private AppUtils appUtils;
 	private EntityLoaderUtils entityLoaderUtils;
@@ -83,16 +83,7 @@ public abstract class ActivityLauncher implements Launcher {
 	protected Intent newIntent(Activity context, Class<?> activityClass) {
 		return new Intent(context, activityClass);
 	}
-	
-	@Override
-	public boolean shouldFinish() {
-		return true;
-	}
-	
-	// Subclasses override
-	@Override
-	public void onResult(Activity context, int requestCode, int resultCode, Intent data, Intent originalIntent) {}
-	
+
 	protected void handleIntent(Activity context, Intent intent, Bundle data) {}
 	
 	public abstract Class<?>[] getActivityClasses();

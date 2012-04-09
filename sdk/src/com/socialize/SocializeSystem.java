@@ -90,10 +90,5 @@ public class SocializeSystem {
 	void setBeanOverrides(String...beanOverrides) {
 		this.beanOverrides = beanOverrides;
 		this.configChanged = true;
-		
-		System.out.println(Thread.currentThread().getName() + ": set bean overrides is [" +
-				beanOverrides +
-				"]");
-		
 	}
 }

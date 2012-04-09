@@ -55,4 +55,8 @@ public interface Launcher {
 	 */
 	public boolean shouldFinish();
 	
+	public LaunchListener getLaunchListener();
+	
+	public void setLaunchListener(LaunchListener listener);
+	
 }

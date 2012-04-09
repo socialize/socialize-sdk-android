@@ -43,19 +43,6 @@ public class ActionNotificationMessageFactory extends BaseNotificationMessageFac
 		String actionType = getString(from, "activity_type");
 		String notificationType = getString(from, "notification_type");
 		
-		if(!StringUtils.isEmpty(actionType)) {
-			try {
-				to.setActionType(ActionType.valueOf(actionType.trim().toUpperCase()));
-			} catch (Exception e) {
-				String msg = "Invalid action type [" +
-						actionType +
-						"]";
-				handleError(msg, e);
-				
-				to.setActionType(ActionType.UNKNOWN);
-			}
-		}
-		
 		if(!StringUtils.isEmpty(notificationType)) {
 			try {
 				to.setNotificationType(NotificationType.valueOf(notificationType.trim().toUpperCase()));
@@ -69,5 +56,25 @@ public class ActionNotificationMessageFactory extends BaseNotificationMessageFac
 				to.setNotificationType(NotificationType.NEW_COMMENTS);
 			}
 		}
+		
+		if(!StringUtils.isEmpty(actionType)) {
+			try {
+				to.setActionType(ActionType.valueOf(actionType.trim().toUpperCase()));
+			} 
+			catch (Exception e) {
+				String msg = "Invalid action type [" +
+						actionType +
+						"]";
+				
+				handleError(msg, e);
+				
+				if(to.getNotificationType().equals(NotificationType.NEW_COMMENTS)) {
+					to.setActionType(ActionType.COMMENT);
+				}
+				else {
+					to.setActionType(ActionType.UNKNOWN);
+				}
+			}
+		}		
 	}
 }

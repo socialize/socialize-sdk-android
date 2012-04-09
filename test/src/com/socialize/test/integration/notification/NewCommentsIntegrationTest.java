@@ -23,29 +23,29 @@ package com.socialize.test.integration.notification;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
+import com.socialize.android.ioc.ProxyObject;
+import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
-import com.socialize.launcher.UrlLauncher;
+import com.socialize.launcher.BaseLauncher;
+import com.socialize.launcher.Launcher;
 import com.socialize.listener.SocializeInitListener;
-import com.socialize.ui.notifications.DirectUrlListener;
-import com.socialize.ui.notifications.DirectUrlWebView;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class DirectUrlIntegrationTest extends DirectUrlNotificationTest {
+public abstract class NewCommentsIntegrationTest extends NewCommentsNotificationTest {
 	
-	
+	protected void doTest(final String launcherName, final boolean listEnabled) throws Throwable {
+		
+		final CountDownLatch launchLatch = new CountDownLatch(1);
 
-	@Override
-	public void testOnMessage() throws Throwable {
-		
-		final CountDownLatch webViewLatch = new CountDownLatch(1);
-		
 		// Launcher is triggered in normal socialize context, not notification context.
 		SocializeAccess.setInitListener(new SocializeInitListener() {
 			
@@ -57,33 +57,32 @@ public class DirectUrlIntegrationTest extends DirectUrlNotificationTest {
 			
 			@Override
 			public void onInit(Context context, IOCContainer container) {
-				UrlLauncher urlLauncher = container.getBean(getLauncherBeanName());
-				urlLauncher.setDirectUrlListener(new DirectUrlListener() {
+				SocializeConfig config = container.getBean("config");
+				config.setProperty(SocializeConfig.SOCIALIZE_SHOW_COMMENT_LIST_ON_NOTIFY, String.valueOf(listEnabled));
+				
+				ProxyObject<Launcher> launcherProxy = container.getProxy(launcherName);
+				launcherProxy.setDelegate(new BaseLauncher() {
 					
 					@Override
-					public boolean onBeforePageLoaded(DirectUrlWebView view, String url) {
-						addResult(4, url);
-						webViewLatch.countDown();
-						return false;
+					public boolean launch(Activity context, Bundle data) {
+						addResult(4, true);
+						launchLatch.countDown();
+						return true;
 					}
-
-					@Override
-					public void onAfterPageLoaded(DirectUrlWebView view, String url) {}
-
-					@Override
-					public void onDialogClose() {}
 				});
 			}
 		});
 		
 		super.testOnMessage();
 		
-		webViewLatch.await(10, TimeUnit.SECONDS);
+		launchLatch.await(20, TimeUnit.SECONDS);
 		
-		String urlAfter = getResult(4);
+		Boolean after = getResult(4);
 		
-		assertNotNull(urlAfter);
-		assertEquals(url, urlAfter);
+		assertNotNull(after);
+		assertEquals(true, after.booleanValue());
+		
+		getInstrumentation().waitForIdleSync();
 	}
 
 	@Override

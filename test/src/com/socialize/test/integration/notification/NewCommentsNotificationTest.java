@@ -23,6 +23,7 @@ package com.socialize.test.integration.notification;
 
 import org.json.JSONObject;
 import com.socialize.Socialize;
+import com.socialize.api.action.ActionType;
 import com.socialize.launcher.LaunchAction;
 import com.socialize.notifications.NotificationType;
 import android.os.Bundle;
@@ -34,8 +35,6 @@ import android.os.Bundle;
  */
 public class NewCommentsNotificationTest extends C2DMSimulationTest {
 
-	final String actionId = "123";
-	
 	/* (non-Javadoc)
 	 * @see com.socialize.test.integration.notification.C2DMSimulationTest#getNotificationMessagePacket()
 	 */
@@ -43,9 +42,10 @@ public class NewCommentsNotificationTest extends C2DMSimulationTest {
 	protected JSONObject getNotificationMessagePacket() throws Exception {
 		JSONObject data = new JSONObject();
 		data.put("message", "Test New Comments message");
-		data.put("activity_id", actionId);
+		data.put("activity_id", String.valueOf(getCommentId()));
 		data.put("source", "socialize");
 		data.put("notification_type", NotificationType.NEW_COMMENTS.name().toLowerCase());
+		data.put("activity_type", ActionType.COMMENT.name().toLowerCase());
 		return data;
 	}
 
@@ -56,7 +56,7 @@ public class NewCommentsNotificationTest extends C2DMSimulationTest {
 	protected void assertNotificationBundle(Bundle extras) throws Exception {
 		String object = extras.getString(Socialize.ACTION_ID);
 		assertNotNull(object);
-		assertEquals(actionId, object);
+		assertEquals(String.valueOf(getCommentId()), object);
 	}
 
 	@Override
@@ -66,6 +66,6 @@ public class NewCommentsNotificationTest extends C2DMSimulationTest {
 	
 	@Override
 	protected String getLauncherBeanName() {
-		return "actionLauncher";
+		return "actionLauncherDelegate";
 	}
 }

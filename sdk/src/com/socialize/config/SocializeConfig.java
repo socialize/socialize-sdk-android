@@ -62,6 +62,8 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_FORCE_AUTH = "socialize.force.auth";
 	
+	public static final String SOCIALIZE_SHOW_COMMENT_LIST_ON_NOTIFY = "socialize.comments.on.notify";
+	
 	/**
 	 * true if Single Sign On is enabled.  Default is true.
 	 */

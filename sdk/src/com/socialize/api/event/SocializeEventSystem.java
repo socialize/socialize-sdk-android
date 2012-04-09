@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Socialize Inc.
+ * Copyright (c) 2011 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,35 +19,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.notifications;
+package com.socialize.api.event;
 
-import android.content.Context;
-import android.os.Bundle;
+import com.socialize.api.SocializeApi;
+import com.socialize.api.SocializeSession;
+import com.socialize.provider.SocializeProvider;
 
-import com.socialize.Socialize;
-import com.socialize.error.SocializeException;
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class BaseMessageTranslator<T> implements MessageTranslator<T> {
+public class SocializeEventSystem extends SocializeApi<SocializeEvent, SocializeProvider<SocializeEvent>> implements EventSystem {
+
+	public SocializeEventSystem(SocializeProvider<SocializeEvent> provider) {
+		super(provider);
+	}
 
 	/* (non-Javadoc)
-	 * @see com.socialize.notifications.MessageTranslator#translate(android.content.Context, android.os.Bundle, com.socialize.notifications.NotificationMessage)
+	 * @see com.socialize.api.event.EventSystem#addEvent(com.socialize.api.SocializeSession, com.socialize.api.event.SocializeEvent, com.socialize.api.event.EventListener)
 	 */
 	@Override
-	public T translate(Context context, Bundle data, NotificationMessage message) throws SocializeException {
-		
-		data.putString( Socialize.ACTION_ID , String.valueOf( message.getActionId() ));
-		data.putString( Socialize.ACTION_TYPE , String.valueOf( message.getActionType().name() ));
-		
-		// The action detail view expects this, but will handle the -1 case.
-		data.putString( Socialize.USER_ID , "-1");
-		
-		return translate(context, message);
+	public void addEvent(SocializeSession session, SocializeEvent event, EventListener eventListener) {
+		postAsync(session, ENDPOINT, event, false, eventListener);		
 	}
-	
-	public abstract T translate(Context context, NotificationMessage message) throws SocializeException;
 
 }

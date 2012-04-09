@@ -10,8 +10,9 @@
 
 	<proxy ref="homeLauncher" />
 	<proxy ref="actionLauncher" />
+	<proxy ref="actionLauncherDelegate" />
+	<proxy ref="commentListLauncher" />
 	<proxy ref="urlLauncher" />
 	<proxy ref="entityLauncher" />
-				
 
 </beans>

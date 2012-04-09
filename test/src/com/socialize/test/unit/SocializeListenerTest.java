@@ -147,7 +147,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 
 		listener.onError((SocializeException) AndroidMock.anyObject());
 
-		AndroidMock.expect(provider.post(session, id, object)).andReturn(result);
+		AndroidMock.expect(provider.post(session, id, object, true)).andReturn(result);
 
 		AndroidMock.expect(result.getItems()).andReturn(null);
 		AndroidMock.expect(result.getErrors()).andReturn(errors);
@@ -195,7 +195,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 
 		listener.onError((SocializeException) AndroidMock.anyObject());
 
-		AndroidMock.expect(provider.post(session, id, object)).andReturn(result);
+		AndroidMock.expect(provider.post(session, id, object, true)).andReturn(result);
 
 		AndroidMock.expect(result.getItems()).andReturn(items);
 		AndroidMock.expect(result.getErrors()).andReturn(errors);
@@ -483,7 +483,7 @@ public class SocializeListenerTest extends SocializeActivityTest {
 		ListResult<SocializeObject> listResult = new ListResult<SocializeObject>();
 		listResult.setItems(items);
 
-		AndroidMock.expect(provider.post(session, endpoint, obj)).andReturn(listResult);
+		AndroidMock.expect(provider.post(session, endpoint, obj, true)).andReturn(listResult);
 		AndroidMock.replay(provider);
 
 		runTestOnUiThread(new Runnable() {

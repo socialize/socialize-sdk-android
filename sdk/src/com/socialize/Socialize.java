@@ -36,7 +36,7 @@ import com.socialize.log.SocializeLogger.LogLevel;
 public class Socialize {
 	
 	// This will be set during the build process
-	public static final String VERSION = "1.6";
+	public static final String VERSION = "1.6.1";
 	
 	public static final String ENTITY_OBJECT = "socialize.entity";
 	public static final String ENTITY_ID = "socialize.entity.id";
@@ -44,6 +44,7 @@ public class Socialize {
 	public static final Map<String, SocializeListener> STATIC_LISTENERS = new HashMap<String, SocializeListener>();
 	
 	public static final String ACTION_ID = "socialize.action.id";
+	public static final String ACTION_TYPE = "socialize.action.type";
 	public static final String DIRECT_URL = "socialize.direct.url";
 	
 	public static final String LOG_KEY = "Socialize";

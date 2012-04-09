@@ -24,102 +24,72 @@ package com.socialize.launcher;
 import android.app.Activity;
 import android.os.Bundle;
 import com.socialize.Socialize;
-import com.socialize.SocializeService;
+import com.socialize.SocializeUI;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.EntitySystem;
-import com.socialize.entity.Entity;
+import com.socialize.api.action.ActionType;
+import com.socialize.api.action.ActivitySystem;
+import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
 import com.socialize.notifications.NotificationAuthenticator;
-import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.util.EntityLoaderUtils;
+import com.socialize.util.StringUtils;
+
 
 /**
+ * Loads the comment list.
  * @author Jason Polites
- *
  */
-public class EntityLauncher extends BaseLauncher {
+public class CommentListLauncher extends BaseLauncher {
 	
 	private EntityLoaderUtils entityLoaderUtils;
 	private SocializeLogger logger;
-	private EntitySystem entitySystem;
+	private ActivitySystem activitySystem;
 	private NotificationAuthenticator notificationAuthenticator;
-	
+
 	/* (non-Javadoc)
 	 * @see com.socialize.launcher.Launcher#launch(android.app.Activity, android.os.Bundle)
 	 */
 	@Override
-	public boolean launch(final Activity context, Bundle data) {
+	public boolean launch(Activity context, Bundle data) {
 		
 		if(entityLoaderUtils != null) {
-			SocializeEntityLoader entityLoader = entityLoaderUtils.initEntityLoader();
+			entityLoaderUtils.initEntityLoader();
+		}
+		
+		// Expect an action id
+		Object idObj = data.get(Socialize.ACTION_ID);
+		String actionType = data.getString(Socialize.ACTION_TYPE);
+		
+		if(idObj != null && !StringUtils.isEmpty(actionType)) {
 			
-			if(entityLoader != null) {
+			long id = Long.parseLong(idObj.toString());
+			
+			try {
+				ActionType type = ActionType.valueOf(actionType);
 				
-				Object idObj = data.get(Socialize.ENTITY_ID);
+				SocializeSession session = notificationAuthenticator.authenticate(context);
+				SocializeAction action = activitySystem.getAction(session, id, type);
 				
-				if(idObj != null) {
-					long id = Long.parseLong(idObj.toString());
-					try {
-						SocializeSession session = notificationAuthenticator.authenticate(context);
-						Entity entity = entitySystem.getEntity(session, id);
-						return loadEntity(context, entityLoader, entity);
-					}
-					catch (SocializeException e) {
-						handleError("Failed to load entity", e);
-					}
+				if(action != null) {
+					getSocializeUI().showCommentView(context, action.getEntity());
+					return true;
 				}
 				else {
-					handleWarn("No entity id found.  Entity based notification cannot be handled");
+					handleWarn("No action found for id [" +
+							id +
+							"].");
 				}
 			}
-			else {
-				handleWarn("No entity loader found.  Entity based notification cannot be handled");
-			}
-		}
-		
-		return false;
-	}
-	
-	protected boolean loadEntity(Activity context, SocializeEntityLoader entityLoader, Entity entity) {
-		if(entity != null) {
-			if(entityLoader.canLoad(context, entity)) {
-				
-				if(logger != null && logger.isInfoEnabled()) {
-					logger.info("Calling entity loader for entity with key [" +
-							entity.getKey() +
-							"]");
-				}
-				
-				entityLoader.loadEntity(context, entity);
-				
-				return true;
-			}
-			else {
-				if(logger != null && logger.isDebugEnabled()) {
-					logger.debug("Entity loaded indicates that entity with key [" +
-							entity.getKey() +
-							"] cannot be loaded");
-				}
+			catch (SocializeException e) {
+				handleError("Failed to load entity", e);
 			}
 		}
 		else {
-			handleWarn("No entity object found under key [" +
-					Socialize.ENTITY_OBJECT +
-					"] in EntityLaucher");
-			
-		}
+			handleWarn("No action id found.  Action based notification cannot be handled");
+		}		
 		
 		return false;
-	}
-	
-	protected void handleWarn(String msg) {
-		if(logger != null) {
-			logger.warn(msg);
-		}
-		else {
-			System.err.println(msg);
-		}
 	}
 	
 	protected void handleError(String msg, Exception e) {
@@ -130,12 +100,22 @@ public class EntityLauncher extends BaseLauncher {
 			System.err.println(msg);
 			e.printStackTrace();
 		}
-	}	
+	}		
 	
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
+	protected void handleWarn(String msg) {
+		if(logger != null) {
+			logger.warn(msg);
+		}
+		else {
+			System.err.println(msg);
+		}
 	}
 	
+	// Mockable
+	protected SocializeUI getSocializeUI() {
+		return Socialize.getSocializeUI();
+	}
+
 	public void setEntityLoaderUtils(EntityLoaderUtils entityLoaderUtils) {
 		this.entityLoaderUtils = entityLoaderUtils;
 	}
@@ -144,10 +124,10 @@ public class EntityLauncher extends BaseLauncher {
 		this.logger = logger;
 	}
 	
-	public void setEntitySystem(EntitySystem entitySystem) {
-		this.entitySystem = entitySystem;
+	public void setActivitySystem(ActivitySystem activitySystem) {
+		this.activitySystem = activitySystem;
 	}
-
+	
 	public void setNotificationAuthenticator(NotificationAuthenticator notificationAuthenticator) {
 		this.notificationAuthenticator = notificationAuthenticator;
 	}

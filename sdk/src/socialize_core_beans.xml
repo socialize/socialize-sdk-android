@@ -508,6 +508,26 @@
 	
 <!-- End Device Registration API -->
 
+<!-- Event API -->
+
+	<bean id="eventFactory" class="com.socialize.entity.EventFactory"/>
+	
+	<bean id="eventRequestFactory" extends="defaultRequestFactory">
+		<property name="objectFactory" ref="eventFactory"/>
+	</bean>		
+	
+	<bean id="eventProvider" extends="defaultProvider">
+		<property name="objectFactory" ref="eventFactory"/>
+		<property name="requestFactory" ref="eventRequestFactory"/>
+	</bean>
+	
+	<bean id="eventSystem" class="com.socialize.api.event.SocializeEventSystem" extends="socializeApi">
+		<constructor-arg ref="eventProvider"/>
+	</bean>
+	
+<!-- End Event API -->
+
+
 <!-- Facebook -->
 	<bean id="shareMessageBuilder" class="com.socialize.api.DefaultShareMessageBuilder">
 		<property name="appUtils" ref="appUtils"/>
@@ -677,7 +697,24 @@
 		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
 	</bean>	
 	
-	<bean id="notificationLaunchTask" class="com.socialize.config.NotificationsConfigLaunchTask">
+	<bean id="notificationConfigLaunchTask" class="com.socialize.config.NotificationsConfigLaunchTask">
 		<property name="config" ref="config"/>
 	</bean>	
+	
+	<bean id="notificationOpenEventTask" class="com.socialize.launcher.task.NotificationOpenEventTask">
+		<property name="logger" ref="logger"/>
+		<property name="eventSystem" ref="eventSystem"/>
+		<property name="notificationAuthenticator" ref="notificationAuthenticator"/>
+	</bean>		
+	
+	<bean id="notificationLaunchTask" class="com.socialize.launcher.task.NotificationLaunchTask">
+		<property name="logger" ref="logger"/>
+		<property name="tasks">
+			<list>
+				<ref id="notificationConfigLaunchTask"/>
+				<ref id="notificationOpenEventTask"/>
+			</list>
+		</property>		
+	</bean>		
+	
 </beans>

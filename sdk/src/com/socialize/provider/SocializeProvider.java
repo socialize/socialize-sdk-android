@@ -71,13 +71,13 @@ public interface SocializeProvider<T> {
 	
 	public ListResult<T> put(SocializeSession session, String endpoint, T object) throws SocializeException;
 
-	public ListResult<T> post(SocializeSession session, String endpoint, T object) throws SocializeException;
-	
 	public T putAsPost(SocializeSession session, String endpoint, T object) throws SocializeException;
 	
 	public ListResult<T> put(SocializeSession session, String endpoint, Collection<T> object) throws SocializeException;
 
-	public ListResult<T> post(SocializeSession session, String endpoint, Collection<T> object) throws SocializeException;
+	public ListResult<T> post(SocializeSession session, String endpoint, T object, boolean isJSONResponse) throws SocializeException;
+	
+	public ListResult<T> post(SocializeSession session, String endpoint, Collection<T> object, boolean isJSONResponse) throws SocializeException;
 	
 	public void delete(SocializeSession session, String endpoint, String id) throws SocializeException;
 }
