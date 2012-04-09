@@ -60,7 +60,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	private SocializeLogger logger;
 	private AppUtils appUtils;
 	private ShareMessageBuilder shareMessageBuilder;
-	private SocializeConfig config;
+//	private SocializeConfig config;
 	private FacebookImageUtils facebookImageUtils;
 	
 	@Override
@@ -75,9 +75,9 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		builder.append("Posted from ");
 		builder.append(linkName);
 		
-		if(config.isBrandingEnabled()) {
-			builder.append(" using Socialize for Android. http://www.getsocialize.com");
-		}
+//		if(config.isBrandingEnabled()) {
+//			builder.append(" using Socialize for Android. http://www.getsocialize.com");
+//		}
 		
 		post(parent, entity, builder.toString(), propInfo, listener);		
 	}
@@ -95,9 +95,9 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		builder.append("Posted from ");
 		builder.append(linkName);
 		
-		if(config.isBrandingEnabled()) {
-			builder.append(" using Socialize for Android. http://www.getsocialize.com");
-		}
+//		if(config.isBrandingEnabled()) {
+//			builder.append(" using Socialize for Android. http://www.getsocialize.com");
+//		}
 		
 		post(parent, entity, builder.toString(), propInfo, listener);		
 	}
@@ -122,10 +122,9 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	@Override
 	public void postPhoto(Activity parent, Share share, String comment, Uri photoUri, SocialNetworkListener listener) {
 		PropagationInfoResponse propagationInfoResponse = share.getPropagationInfoResponse();
-		PropagationInfo propInfo = propagationInfoResponse.getUrlSets().get(ShareType.FACEBOOK);
+		PropagationInfo propInfo = propagationInfoResponse.getPropagationInfo(ShareType.FACEBOOK);
 		
 		if(propInfo != null) {
-//			String caption = "Download the app now to join the conversation.";
 			String link = propInfo.getAppUrl();
 			String appId = getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
 			
@@ -143,34 +142,12 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		}
 		
 	}
-
-	@Override
-	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, final SocialNetworkListener listener) {
-		Bundle params = new Bundle();
-		params.putString("name", linkName);
-		params.putString("message", message);
-		params.putString("link", link);
-		params.putString("caption", caption);
-		
-		Facebook fb = newFacebook(appId);
-		
-		final FacebookSessionStore store = newFacebookSessionStore();
-		
-		store.restore(fb, parent);
-		
-		AsyncFacebookRunner runner = newAsyncFacebookRunner(fb);
-		
-		RequestListener requestListener = newRequestListener(parent, listener);
-		
-		runner.request("me/feed", params, "POST", requestListener, null);	
-	}
 	
 	@Override
 	public void postPhoto(Activity parent, String appId, String link, String caption, Uri photoUri, SocialNetworkListener listener) {
 
 		try {
 			Bundle params = new Bundle();
-//			params.putString("name", linkName);
 			params.putString("caption", caption + ": " + link);
 			params.putByteArray("photo", facebookImageUtils.scaleImage(parent, photoUri));
 			
@@ -199,7 +176,29 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			}
 		}
 	}
+	
 
+	@Override
+	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, final SocialNetworkListener listener) {
+		Bundle params = new Bundle();
+		params.putString("name", linkName);
+		params.putString("message", message);
+		params.putString("link", link);
+		params.putString("caption", caption);
+		
+		Facebook fb = newFacebook(appId);
+		
+		final FacebookSessionStore store = newFacebookSessionStore();
+		
+		store.restore(fb, parent);
+		
+		AsyncFacebookRunner runner = newAsyncFacebookRunner(fb);
+		
+		RequestListener requestListener = newRequestListener(parent, listener);
+		
+		runner.request("me/feed", params, "POST", requestListener, null);	
+	}
+	
 	// So we can mock
 	protected Facebook newFacebook(String appId) {
 		return new Facebook(appId);
@@ -304,9 +303,9 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		this.appUtils = appUtils;
 	}
 
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
-	}
+//	public void setConfig(SocializeConfig config) {
+//		this.config = config;
+//	}
 
 	protected void onError(final Activity parent, final String msg, final Throwable e, final SocialNetworkListener listener) {
 		

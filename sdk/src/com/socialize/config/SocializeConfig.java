@@ -245,6 +245,7 @@ public class SocializeConfig {
 		return defaultValue;
 	}
 	
+	@Deprecated
 	public boolean isBrandingEnabled() {
 		return getBooleanProperty(SOCIALIZE_BRANDING_ENABLED, true);
 	}

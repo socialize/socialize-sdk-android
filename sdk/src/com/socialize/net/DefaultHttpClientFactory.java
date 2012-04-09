@@ -38,6 +38,7 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
@@ -52,6 +53,8 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 	private HttpParams params;
 	private ClientConnectionManager connectionManager;
 	private SocializeLogger logger;
+	
+	private IBeanFactory<DefaultHttpClient> apacheHttpClientFactory;
 	
 	private DefaultHttpClient client; // This should be thread safe
 	
@@ -133,7 +136,12 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 	@Override
 	public synchronized HttpClient getClient() {
 		if(client == null) {
-			client = new DefaultHttpClient(connectionManager, params);
+			if(apacheHttpClientFactory != null) {
+				client = apacheHttpClientFactory.getBean(connectionManager, params);
+			}
+			else {
+				client = new DefaultHttpClient(connectionManager, params);
+			}
 		}
 		else {
 			monitor.trigger();
@@ -149,4 +157,9 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 	public boolean isDestroyed() {
 		return destroyed;
 	}
+	
+	public void setApacheHttpClientFactory(IBeanFactory<DefaultHttpClient> apacheHttpClientFactory) {
+		this.apacheHttpClientFactory = apacheHttpClientFactory;
+	}
+	
 }

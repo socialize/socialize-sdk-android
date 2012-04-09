@@ -46,7 +46,7 @@ public class SampleActivity2 extends Activity {
 		txtTW_Key.setText(Socialize.getSocialize().getConfig().getProperty(SocializeConfig.TWITTER_CONSUMER_KEY));
 		txtTW_Sec.setText(Socialize.getSocialize().getConfig().getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET));
 
-		final Button btn = (Button) findViewById(R.id.btnCommentView);
+		final Button btnCommentView = (Button) findViewById(R.id.btnCommentView);
 		final Button btnClearCache = (Button) findViewById(R.id.btnClearCache);
 		final Button btnActionViewAuto = (Button) findViewById(R.id.btnActionViewAuto);
 		final Button btnActionViewManual = (Button) findViewById(R.id.btnActionViewManual);
@@ -65,7 +65,7 @@ public class SampleActivity2 extends Activity {
 			}
 		};
 		
-		btn.setOnClickListener(new OnClickListener() {
+		btnCommentView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				setupOverrides();

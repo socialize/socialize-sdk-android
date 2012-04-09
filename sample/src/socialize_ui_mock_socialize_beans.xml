@@ -18,6 +18,8 @@
 	<proxy ref="appUtils" />
 	<proxy ref="alertDialogFactory" />
 	<proxy ref="actionButtonHandlers" />
+	
+	<proxy ref="apacheHttpClient" />	
 
 	<bean id="initializationAsserter" class="com.socialize.test.mock.MockInitializationAsserter" />
 </beans>

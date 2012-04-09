@@ -70,23 +70,23 @@ public class DefaultShareMessageBuilderTest extends SocializeUnitTest {
 	}
 
 	public void test_buildShareMessage() {
-		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-		AndroidMock.expect(config.isBrandingEnabled()).andReturn(true);
-		AndroidMock.replay(config);
-		doTestBuildShareMessage(config, "foobar_comment<br/><br/>foobar_entity_link<br/><br/>Sent from <a href=\"foo_url\">bar_name</a> using <a href=\"http://www.getsocialize.com\">Socialize for Android</a>.");
-		AndroidMock.verify(config);
+//		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+//		AndroidMock.expect(config.isBrandingEnabled()).andReturn(true);
+//		AndroidMock.replay(config);
+		doTestBuildShareMessage("foobar_comment<br/><br/>foobar_entity_link<br/><br/>Sent from <a href=\"foo_url\">bar_name</a>");
+//		AndroidMock.verify(config);
 	}
 
-	public void test_buildShareMessageNoBranding() {
-		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-		AndroidMock.expect(config.isBrandingEnabled()).andReturn(false);
-		AndroidMock.replay(config);
-		doTestBuildShareMessage(config, "foobar_comment<br/><br/>foobar_entity_link<br/><br/>Sent from <a href=\"foo_url\">bar_name</a>");
-		AndroidMock.verify(config);
-	}
+//	public void test_buildShareMessageNoBranding() {
+////		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+////		AndroidMock.expect(config.isBrandingEnabled()).andReturn(false);
+////		AndroidMock.replay(config);
+////		doTestBuildShareMessage("foobar_comment<br/><br/>foobar_entity_link<br/><br/>Sent from <a href=\"foo_url\">bar_name</a>");
+////		AndroidMock.verify(config);
+//	}
 
 	@UsesMocks({ AppUtils.class, PropagationInfo.class })
-	private void doTestBuildShareMessage(SocializeConfig config, String expected) {
+	private void doTestBuildShareMessage(String expected) {
 
 		AppUtils appUtils = AndroidMock.createMock(AppUtils.class);
 		PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
@@ -109,7 +109,6 @@ public class DefaultShareMessageBuilderTest extends SocializeUnitTest {
 		};
 
 		builder.setAppUtils(appUtils);
-		builder.setConfig(config);
 
 		String actual = builder.buildShareMessage(null, info, comment, true, true);
 

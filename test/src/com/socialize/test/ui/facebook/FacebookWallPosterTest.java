@@ -27,18 +27,22 @@ import java.net.MalformedURLException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.facebook.FacebookSessionStore;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
+import com.socialize.entity.PropagationInfoResponse;
+import com.socialize.entity.Share;
 import com.socialize.facebook.AsyncFacebookRunner;
 import com.socialize.facebook.Facebook;
 import com.socialize.facebook.FacebookError;
@@ -46,7 +50,9 @@ import com.socialize.facebook.RequestListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.DefaultFacebookWallPoster;
+import com.socialize.networks.facebook.FacebookImageUtils;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 import com.socialize.util.AppUtils;
 
 /**
@@ -63,38 +69,38 @@ import com.socialize.util.AppUtils;
 public class FacebookWallPosterTest extends SocializeActivityTest {
 
 	public void testPostLike() {
-		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-		AndroidMock.expect(config.isBrandingEnabled()).andReturn(true);
-		AndroidMock.replay(config);
-		doTestPostLike(config, "Likes foobar_link\n\nPosted from foobar_appname using Socialize for Android. http://www.getsocialize.com");
-		AndroidMock.verify(config);
+//		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+//		AndroidMock.expect(config.isBrandingEnabled()).andReturn(true);
+//		AndroidMock.replay(config);
+		doTestPostLike("Likes foobar_link\n\nPosted from foobar_appname");
+//		AndroidMock.verify(config);
 	}
 	
 	public void testPostComment() {
-		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-		AndroidMock.expect(config.isBrandingEnabled()).andReturn(true);
-		AndroidMock.replay(config);
-		testPostComment(config, "foobar_link\n\nfoobar_comment\n\nPosted from foobar_appname using Socialize for Android. http://www.getsocialize.com");
-		AndroidMock.verify(config);
+//		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+//		AndroidMock.expect(config.isBrandingEnabled()).andReturn(true);
+//		AndroidMock.replay(config);
+		testPostComment("foobar_link\n\nfoobar_comment\n\nPosted from foobar_appname");
+//		AndroidMock.verify(config);
 	}
 	
-	public void testPostLikeNoBranding() {
-		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-		AndroidMock.expect(config.isBrandingEnabled()).andReturn(false);
-		AndroidMock.replay(config);
-		doTestPostLike(config, "Likes foobar_link\n\nPosted from foobar_appname");
-		AndroidMock.verify(config);
-	}
+//	public void testPostLikeNoBranding() {
+//		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+//		AndroidMock.expect(config.isBrandingEnabled()).andReturn(false);
+//		AndroidMock.replay(config);
+//		doTestPostLike(config, "Likes foobar_link\n\nPosted from foobar_appname");
+//		AndroidMock.verify(config);
+//	}
+//	
+//	public void testPostCommentNoBranding() {
+//		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+//		AndroidMock.expect(config.isBrandingEnabled()).andReturn(false);
+//		AndroidMock.replay(config);
+//		testPostComment("foobar_link\n\nfoobar_comment\n\nPosted from foobar_appname");
+//		AndroidMock.verify(config);
+//	}	
 	
-	public void testPostCommentNoBranding() {
-		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-		AndroidMock.expect(config.isBrandingEnabled()).andReturn(false);
-		AndroidMock.replay(config);
-		testPostComment(config, "foobar_link\n\nfoobar_comment\n\nPosted from foobar_appname");
-		AndroidMock.verify(config);
-	}	
-	
-	public void doTestPostLike(SocializeConfig config, String expectedString) {
+	public void doTestPostLike(String expectedString) {
 		
 		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
 		AppUtils appUtils = AndroidMock.createMock(AppUtils.class);
@@ -127,7 +133,6 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		AndroidMock.replay(appUtils);
 		AndroidMock.replay(builder);
 		
-		poster.setConfig(config);
 		poster.setAppUtils(appUtils);
 		poster.setShareMessageBuilder(builder);
 		poster.postLike(parent, entity, info, listener);
@@ -146,7 +151,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		assertSame(parent, parentAfter);
 	}	
 	
-	public void testPostComment(SocializeConfig config, String expectedString) {
+	public void testPostComment(String expectedString) {
 		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
 		AppUtils appUtils = AndroidMock.createMock(AppUtils.class);
 		ShareMessageBuilder builder = AndroidMock.createMock(ShareMessageBuilder.class);
@@ -178,7 +183,6 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		
 		AndroidMock.replay(appUtils, builder, info);
 		
-		poster.setConfig(config);
 		poster.setAppUtils(appUtils);
 		poster.setShareMessageBuilder(builder);
 		poster.postComment(parent, entity, comment, info, listener);
@@ -341,6 +345,147 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		assertEquals(link, params.getString("link"));
 		assertEquals(caption, params.getString("caption"));
 	}
+	
+	@UsesMocks ({
+		Share.class, 
+		PropagationInfoResponse.class, 
+		PropagationInfo.class, 
+		SocializeService.class,
+		SocialNetworkListener.class,
+		SocializeConfig.class})
+	public void testPostPhoto() throws IOException {
+		
+		final Share share = AndroidMock.createMock(Share.class);
+		final PropagationInfoResponse propagationInfoResponse = AndroidMock.createMock(PropagationInfoResponse.class);
+		final PropagationInfo propInfo = AndroidMock.createMock(PropagationInfo.class);
+		final SocializeService socializeService = AndroidMock.createMock(SocializeService.class);
+		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+		final SocialNetworkListener socialNetworkListener = AndroidMock.createMock(SocialNetworkListener.class);
+		
+		final String link = "foobar_url";
+		final String appId = "foobar_appId";
+		final String caption = "foobar_caption";
+		final Uri photoUri = Uri.parse("http://www.getsocialize.com");
+		
+		AndroidMock.expect(share.getPropagationInfoResponse()).andReturn(propagationInfoResponse);
+		AndroidMock.expect(propagationInfoResponse.getPropagationInfo(ShareType.FACEBOOK)).andReturn(propInfo);
+		AndroidMock.expect(propInfo.getAppUrl()).andReturn(link);
+		AndroidMock.expect(socializeService.getConfig()).andReturn(config);
+		AndroidMock.expect(config.getProperty(SocializeConfig.FACEBOOK_APP_ID)).andReturn(appId);
+		
+		AndroidMock.replay(share,propagationInfoResponse,propInfo,socializeService,config);
+		
+		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
+			@Override
+			protected SocializeService getSocialize() {
+				return socializeService;
+			}
+
+			@Override
+			public void postPhoto(Activity parent, String appId, String link, String caption, Uri photoUri, SocialNetworkListener listener) {
+				addResult(0, appId);
+				addResult(1, link);
+				addResult(2, caption);
+				addResult(3, photoUri);
+				addResult(4, listener);
+			}
+		};
+		
+		poster.postPhoto(getActivity(), share, caption, photoUri, socialNetworkListener);
+		
+		AndroidMock.verify(share,propagationInfoResponse,propInfo,socializeService,config);
+		
+		assertEquals(appId, getResult(0));
+		assertEquals(link, getResult(1));
+		assertEquals(caption, getResult(2));
+		assertEquals(photoUri, getResult(3));
+		assertSame(socialNetworkListener, getResult(4));
+	}
+	
+	@UsesMocks ({
+		AsyncFacebookRunner.class,
+		Facebook.class,
+		FacebookSessionStore.class,
+		RequestListener.class,
+		SocialNetworkListener.class,
+		FacebookImageUtils.class
+	})
+	public void testPostPhoto2() throws IOException {
+		
+		final String fbId = "foobar";
+		final String link = "foobar_url";
+		final String caption = "foobar_caption";
+		final Uri photoUri = Uri.parse("http://www.getsocialize.com");
+		final byte[] image = new byte[]{69};
+		
+		final Facebook fb  = AndroidMock.createMock(Facebook.class, fbId);
+		final SocialNetworkListener socialNetworkListener = AndroidMock.createMock(SocialNetworkListener.class);
+		final FacebookSessionStore store = AndroidMock.createMock(FacebookSessionStore.class);
+		final RequestListener requestListener = AndroidMock.createMock(RequestListener.class);
+		final FacebookImageUtils facebookImageUtils = AndroidMock.createMock(FacebookImageUtils.class);
+		
+		final AsyncFacebookRunner runner = new AsyncFacebookRunner(fb) {
+			@Override
+			public void request(String graphPath, Bundle parameters, String httpMethod, RequestListener listener, Object state) {
+				addResult(0, graphPath);
+				addResult(1, parameters);
+				addResult(2, httpMethod);
+				addResult(3, listener);
+			}
+		};
+		
+		AndroidMock.expect( store.restore(fb, getActivity()) ).andReturn(true);
+		AndroidMock.expect(facebookImageUtils.scaleImage(getActivity(), photoUri)).andReturn(image);
+		
+		AndroidMock.replay(store, facebookImageUtils);
+		
+		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
+
+			@Override
+			protected Facebook newFacebook(String appId) {
+				return fb;
+			}
+
+			@Override
+			protected AsyncFacebookRunner newAsyncFacebookRunner(Facebook fb) {
+				return runner;
+			}
+
+			@Override
+			protected FacebookSessionStore newFacebookSessionStore() {
+				return store;
+			}
+
+			@Override
+			protected RequestListener newRequestListener(Activity parent, SocialNetworkListener listener) {
+				addResult(4, listener);
+				return requestListener;
+			}
+		};	
+		
+		poster.setFacebookImageUtils(facebookImageUtils);
+		
+		poster.postPhoto(getActivity(), fbId, link, caption, photoUri, socialNetworkListener);
+		
+		AndroidMock.verify(store, facebookImageUtils);
+		
+		String graphPath = getResult(0);
+		Bundle params = getResult(1);
+		String httpMethod = getResult(2);
+		RequestListener listener = getResult(3);
+		SocialNetworkListener socListener = getResult(4);
+		
+		assertEquals("me/photos", graphPath);
+		assertEquals("POST", httpMethod);
+		assertSame(requestListener, listener);
+		assertSame(socialNetworkListener, socListener);
+		
+		assertNotNull(params);
+		
+		assertEquals(caption + ": " + link, params.getString("caption"));
+		TestUtils.assertByteArrayEquals(image, params.getByteArray("photo"));
+	}	
+	
 	
 	@UsesMocks ({JSONObject.class, SocializeService.class, SocializeSession.class, AuthProvider.class, SocialNetworkListener.class})
 	public void testRequestListenerWithError() throws JSONException {

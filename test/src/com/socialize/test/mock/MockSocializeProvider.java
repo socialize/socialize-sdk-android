@@ -112,8 +112,6 @@ public class MockSocializeProvider<T extends SocializeObject> implements Sociali
 		return makeListResult(object);
 	}
 
-
-
 	@Override
 	public ListResult<T> put(SocializeSession session, String endpoint, Collection<T> objects) throws SocializeException {
 		return makeListResult(objects);

@@ -12,12 +12,27 @@ public class ProxyObject<T> implements InvocationHandler {
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		if(methodDelegate != null && (methodInvocationListener == null || methodInvocationListener.useDelegate(method))) {
+			
+			if(methodInvocationListener != null) {
+				methodInvocationListener.onMethod(methodDelegate, method, args);
+			}
+			
 			return method.invoke(methodDelegate, args);
 		}
 		else if(delegate != null) {
+			
+			if(methodInvocationListener != null) {
+				methodInvocationListener.onMethod(delegate, method, args);
+			}
+			
 			return method.invoke(delegate, args);
 		}
 		else {
+			
+			if(methodInvocationListener != null) {
+				methodInvocationListener.onMethod(proxy, method, args);
+			}
+			
 			return method.invoke(proxy, args);
 		}
 	}
