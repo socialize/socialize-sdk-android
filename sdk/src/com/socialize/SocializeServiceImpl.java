@@ -405,7 +405,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		init(context, container, getSystem().getSystemInitListener());
 	}
 	
-	public void init(Context context, final IOCContainer container, SocializeInitListener listener) {
+	public synchronized void init(Context context, final IOCContainer container, SocializeInitListener listener) {
 		if(!isInitialized()) {
 			try {
 				this.container = container;
@@ -468,13 +468,13 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	/**
 	 * @param context
 	 */
-	protected void initNotifications(Context context) {
+	protected synchronized void initNotifications(Context context) {
 		if(notificationChecker != null) {
 			notificationChecker.checkRegistrations(context);
 		}
 	}
 
-	protected void initEntityLoader() {
+	protected synchronized void initEntityLoader() {
 		EntityLoaderUtils entityLoaderUtils = container.getBean("entityLoaderUtils");
 		entityLoaderUtils.initEntityLoader();
 	}
@@ -559,7 +559,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#destroy(boolean)
 	 */
 	@Override
-	public void destroy(boolean force) {
+	public synchronized void destroy(boolean force) {
 		if(force) {
 			if(container != null) {
 				if(logger != null && logger.isDebugEnabled()) {
@@ -580,7 +580,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	}
 	
 	@Override
-	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, SocializeAuthListener authListener) {
+	public synchronized void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, SocializeAuthListener authListener) {
 		AuthProviderData data = this.authProviderDataFactory.getBean();
 		data.setAuthProviderInfo(authProviderInfo);
 		authenticate(context, consumerKey, consumerSecret, data, authListener, true);	
@@ -591,14 +591,14 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#authenticate(android.content.Context, com.socialize.listener.SocializeAuthListener)
 	 */
 	@Override
-	public void authenticate(Context context, SocializeAuthListener authListener) {
+	public synchronized void authenticate(Context context, SocializeAuthListener authListener) {
 		SocializeConfig config = getConfig();
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 		authenticate(context, consumerKey, consumerSecret, authListener);
 	}
 	
-	public SocializeSession authenticateSynchronous(Context context) throws SocializeException {
+	public synchronized SocializeSession authenticateSynchronous(Context context) throws SocializeException {
 		SocializeConfig config = getConfig();
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);		
@@ -611,7 +611,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	}
 
 	@Override
-	public void authenticate(Context context, AuthProviderType authProviderType, SocializeAuthListener authListener) {
+	public synchronized void authenticate(Context context, AuthProviderType authProviderType, SocializeAuthListener authListener) {
 		SocializeConfig config = getConfig();
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
@@ -620,7 +620,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	}
 
 	@Override
-	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
+	public synchronized void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
 		if(assertInitialized(authListener)) {
 			AuthProviderData data = this.authProviderDataFactory.getBean();
 			SocializeAuthProviderInfo info = newSocializeAuthProviderInfo();
@@ -635,7 +635,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	}
 	
 	@Override
-	public void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, UserProviderCredentials userProviderCredentials, SocializeAuthListener authListener) {
+	public synchronized void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, UserProviderCredentials userProviderCredentials, SocializeAuthListener authListener) {
 		if(assertInitialized(authListener)) {
 			AuthProviderData authProviderData = this.authProviderDataFactory.getBean();
 			authProviderData.setAuthProviderInfo(authProviderInfo);
@@ -646,7 +646,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 
-	protected void authenticate(
+	protected synchronized void authenticate(
 			Context context,
 			String consumerKey, 
 			String consumerSecret, 
@@ -1273,14 +1273,21 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		
 		if(!isInitialized()) {
 			if(listener != null) {
-				if(logger != null) {
+				if(logger != null && logger.isInitialized()) {
 					listener.onError(new SocializeException(logger.getMessage(SocializeLogger.NOT_INITIALIZED)));
 				}
 				else {
 					listener.onError(new SocializeException("Not initialized"));
 				}
 			}
-			if(logger != null) logger.error(SocializeLogger.NOT_INITIALIZED);
+			if(logger != null) {
+				if(logger.isInitialized()) {
+					logger.error(SocializeLogger.NOT_INITIALIZED);
+				}
+				else {
+					logger.error("Socialize Not initialized!");
+				}
+			}
 		}
 		
 		return isInitialized();		

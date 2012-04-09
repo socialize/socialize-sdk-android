@@ -241,7 +241,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	}
 
 	@Override
-	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
+	public synchronized SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
 		
 		WritableSession session = loadSession(endpoint, key, secret);
 		
@@ -283,6 +283,12 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 			
 			try {
 				HttpUriRequest request = requestFactory.getAuthRequest(session, endpoint, uuid, data);
+				
+				if(logger != null && logger.isDebugEnabled()) {
+					logger.debug("Calling authenticate endpoint for device [" +
+							uuid +
+							"]");
+				}
 				
 				HttpResponse response = client.execute(request);
 				
