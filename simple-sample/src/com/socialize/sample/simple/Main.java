@@ -88,9 +88,12 @@ public class Main extends Activity {
 					}
 
 					@Override
-					public void onClick(ActionBarView actionBar, ActionBarEvent evt) {
+					public boolean onClick(ActionBarView actionBar, ActionBarEvent evt) {
 						// Called when the user clicks on the action bar 
 						Log.i(LOG_KEY, "onClick called for " + evt);
+						
+						// Return true ONLY if you do not want the click to propagate.
+						return false;
 					}
 				});
 			}
