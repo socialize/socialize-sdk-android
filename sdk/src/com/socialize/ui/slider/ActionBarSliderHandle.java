@@ -25,6 +25,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.util.FloatMath;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -125,7 +126,7 @@ public class ActionBarSliderHandle extends ActionBarSliderViewChild {
 		Rect rect = new Rect();
 		closeButton.getHitRect(rect);
 		adjustHitRect(rect);
-		if(rect.contains((int)Math.ceil(ev.getX()), (int)Math.ceil(ev.getY()))) {
+		if(rect.contains((int)FloatMath.ceil(ev.getX()), (int)FloatMath.ceil(ev.getY()))) {
 			getSlider().close();
 		}
 		else {

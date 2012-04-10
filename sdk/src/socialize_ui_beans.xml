@@ -1021,12 +1021,14 @@
 
 <!-- User Activity UI -->
 
+<!-- 
 	<bean 
 		id="userActivityUtils" 
 		singleton="false"
 		class="com.socialize.ui.profile.activity.UserActivityUtils">
 	</bean>
-
+ 
+ 
 	<bean 
 		id="userActivityActionHtml" 
 		singleton="false"
@@ -1038,6 +1040,7 @@
 	</bean>
 	
 	<factory id="userActivityActionHtmlFactory" makes="userActivityActionHtml"/>
+-->
 	
 	<bean 
 		id="userActivityActionText" 
@@ -1070,6 +1073,7 @@
 	
 	<factory id="userActivityListItemFactory" makes="userActivityListItem"/>
 	
+	<!-- 
 	<bean 
 		id="userActivityListAdapter" 
 		singleton="false"
@@ -1078,7 +1082,7 @@
 	</bean>
 	
 	<factory id="userActivityListAdapterFactory" makes="userActivityListAdapter"/>
-
+ 	-->
 	<bean 
 		id="userActivityView" 
 		singleton="false"

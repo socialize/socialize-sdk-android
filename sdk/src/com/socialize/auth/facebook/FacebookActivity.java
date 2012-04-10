@@ -24,7 +24,6 @@ package com.socialize.auth.facebook;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
-
 import com.socialize.ui.SocializeActivity;
 
 /**
@@ -36,17 +35,16 @@ public class FacebookActivity extends SocializeActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		superOnCreate(savedInstanceState);
 		service = getFacebookActivityService();
 		service.onCreate();
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public <E> E getBean(String name) {
-		return (E) super.getBean(name);
+		return super.getBean(name);
 	}
-	
+
 	@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -55,6 +53,11 @@ public class FacebookActivity extends SocializeActivity {
     
     public FacebookActivityService getFacebookActivityService() {
     	return new FacebookActivityService(this);
+    }
+    
+    // Mockable
+    protected void superOnCreate(Bundle savedInstanceState) {
+    	super.onCreate(savedInstanceState);
     }
 
 	@Override

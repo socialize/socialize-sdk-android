@@ -21,7 +21,6 @@
  */
 package com.socialize.ui.dialog;
 
-import android.R;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
@@ -48,7 +47,7 @@ public abstract class BaseAuthDialogFactory implements AuthDialogFactory  {
 	
 	// So we can mock
 	protected Dialog newDialog(Context context) {
-		Dialog dialog = new Dialog(context, R.style.Theme_Dialog);
+		Dialog dialog = new Dialog(context, android.R.style.Theme_Dialog);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		// Register to prevent window leakage

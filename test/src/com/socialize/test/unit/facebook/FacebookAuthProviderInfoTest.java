@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,49 +21,30 @@
  */
 package com.socialize.test.unit.facebook;
 
-import android.os.Bundle;
-import com.google.android.testing.mocking.AndroidMock;
-import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.auth.facebook.FacebookActivity;
-import com.socialize.auth.facebook.FacebookActivityService;
-import com.socialize.test.SocializeActivityTest;
+import com.socialize.auth.facebook.FacebookAuthProviderInfo;
+import com.socialize.test.SocializeUnitTest;
+
 
 /**
  * @author Jason Polites
  *
  */
-public class FacebookActivityTest extends SocializeActivityTest {
+public class FacebookAuthProviderInfoTest extends SocializeUnitTest {
 
-	
-	@UsesMocks ({FacebookActivityService.class})
-	public void testOnCreate() {
+	public void testEquals() {
+		FacebookAuthProviderInfo info0 = new FacebookAuthProviderInfo();
+		FacebookAuthProviderInfo info1 = new FacebookAuthProviderInfo();
+		FacebookAuthProviderInfo info2 = new FacebookAuthProviderInfo();
 		
-		final Bundle bundle = new Bundle();
-		final FacebookActivityService service = AndroidMock.createMock(FacebookActivityService.class);
+		info0.setAppId("abc");
+		info1.setAppId("abc");
+		info2.setAppId("def");
 		
-		FacebookActivity activity = new FacebookActivity() {
-			@Override
-			public FacebookActivityService getFacebookActivityService() {
-				return service;
-			}
-
-			@Override
-			protected void superOnCreate(Bundle bundle) {
-				addResult(0, bundle);
-			}
-		};
-
-		service.onCreate();
+		assertTrue(info0.equals(info0));
+		assertTrue(info0.equals(info1));
+		assertFalse(info0.equals(info2));
 		
-		AndroidMock.replay(service);
 		
-		activity.onCreate(bundle);
-		
-		AndroidMock.verify(service);
-		
-		Bundle after = getResult(0);
-		
-		assertNotNull(after);
-		assertSame(bundle, after);
 	}
+	
 }

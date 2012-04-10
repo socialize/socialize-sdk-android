@@ -21,6 +21,7 @@
  */
 package com.socialize.ui;
 
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -63,6 +64,11 @@ public abstract class SocializeActivity extends Activity implements DialogRegist
 		dialogs.add(dialog);
 	}
 	
+	@Override
+	public Collection<Dialog> getDialogs() {
+		return dialogs;
+	}
+
 	@Override
 	protected void onDestroy() {
 		destroySocialize();

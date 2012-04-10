@@ -1,31 +1,33 @@
 package com.socialize.test.ui.util;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Instrumentation;
 import android.app.Instrumentation.ActivityMonitor;
+import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.test.ui.ResultHolder;
+import com.socialize.ui.dialog.DialogRegister;
 import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.util.IOUtils;
-
-import static junit.framework.Assert.*;
 
 public class TestUtils {
 	
@@ -94,6 +96,35 @@ public class TestUtils {
 		return null;
 	}
 	
+	public static boolean waitForDialogToShow(Dialog dialog, int timeout) {
+		long timeWaited = 0;
+		while(!dialog.isShowing()) {
+			sleep((timeout / 10));
+			timeWaited += 10;
+			
+			if(timeWaited >= timeout) {
+				break;
+			}
+		}
+		
+		return dialog.isShowing();
+	}
+	
+	public static boolean waitForDialogToClose(Dialog dialog, int timeout) {
+		long timeWaited = 0;
+		while(dialog.isShowing()) {
+			int sleep = timeout/ 10;
+			sleep(sleep);
+			timeWaited += sleep;
+			
+			if(timeWaited >= timeout) {
+				break;
+			}
+		}
+		
+		return dialog.isShowing();
+	}
+	
 	public static void destroyActivity() {
 		if(monitor != null && monitor.getLastActivity() != null) {
 			monitor.getLastActivity().finish();
@@ -151,6 +182,24 @@ public class TestUtils {
 		V view = findView(activity.getWindow().getDecorView(), viewClass, timeoutMs);
 		return view;
 	}
+	
+	public static <V extends View> V findViewInDialog(Context activity, Class<V> viewClass, long timeoutMs) {
+		
+		if(activity instanceof DialogRegister) {
+			DialogRegister dr = (DialogRegister) activity;
+			Collection<Dialog> dialogs = dr.getDialogs();
+			
+			if(dialogs != null) {
+				for (Dialog dialog : dialogs) {
+					V view = findView(dialog.getWindow().getDecorView(), viewClass, timeoutMs);
+					if(view != null) {
+						return view;
+					}
+				}
+			}
+		}
+		return null;
+	}	
 	
 	public static <V extends View> V findView(View view, Class<V> viewClass, long timeoutMs) {
 		if(view instanceof ViewGroup) {

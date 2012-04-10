@@ -25,6 +25,10 @@ public class FacebookActivityService {
 		this.activity = activity;
 	}
 
+	public FacebookActivityService() {
+		super();
+	}
+
 	public void onCreate() {
 		
 		Intent intent = activity.getIntent();
@@ -79,5 +83,9 @@ public class FacebookActivityService {
 
 	public void setFacebook(Facebook facebook) {
 		this.facebook = facebook;
+	}
+	
+	public void setActivity(FacebookActivity activity) {
+		this.activity = activity;
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,19 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.dialog;
+package com.socialize.test.ui;
 
-import java.util.Collection;
-import android.app.Dialog;
+import android.app.AlertDialog;
+import android.test.UiThreadTest;
+import com.socialize.ui.dialog.AlertDialogFactory;
+
 
 /**
- * Allows activities to dismiss dialogs on destroy to prevent window leaking.
  * @author Jason Polites
  *
  */
-public interface DialogRegister {
-	
-	public void register(Dialog dialog);
-	
-	public Collection<Dialog> getDialogs();
+public class AlertDialogFactoryTest extends SocializeUIActivityTest {
+
+	@UiThreadTest
+	public void testShow() throws Throwable {
+		final AlertDialogFactory factory = new AlertDialogFactory();
+		final AlertDialog dialog = factory.show(getActivity(), "foobar_title", "foobar_message");
+		assertTrue(dialog.isShowing());
+	}
+
 }
