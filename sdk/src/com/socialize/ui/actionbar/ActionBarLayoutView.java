@@ -327,7 +327,10 @@ public class ActionBarLayoutView extends BaseView {
 			}
 			else {
 				// Like
-				if(getSocialize().getConfig().isForcedAuth() && (!getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) || !getSocialize().isAuthenticated(AuthProviderType.TWITTER))) {
+				if(getSocialize().getConfig().isAuthRequired() && 
+					(getSocialize().isSupported(AuthProviderType.FACEBOOK) || getSocialize().isSupported(AuthProviderType.FACEBOOK)) &&
+					(!getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) || !getSocialize().isAuthenticated(AuthProviderType.TWITTER))) {
+					
 					authRequestDialogFactory.show(button, new AuthRequestListener() {
 						@Override
 						public void onResult(Dialog dialog, SocialNetwork... networks) {

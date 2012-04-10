@@ -21,62 +21,15 @@
  */
 package com.socialize.auth;
 
-import java.util.Collection;
-import java.util.Map;
-
-import com.socialize.error.SocializeException;
-import com.socialize.log.SocializeLogger;
 
 /**
  * @author Jason Polites
  */
-public class AuthProviderInfoBuilder {
-
-	private Map<String, AuthProviderInfoFactory<?>> factories;
-	private SocializeLogger logger;
-
-	public void setFactories(Map<String, AuthProviderInfoFactory<?>> factories) {
-		this.factories = factories;
-	}
+public interface AuthProviderInfoBuilder {
 	
-	@SuppressWarnings("unchecked")
-	public <I extends AuthProviderInfo> AuthProviderInfoFactory<I> getFactory(AuthProviderType type) {
-		return (AuthProviderInfoFactory<I>) factories.get(type.name());
-	}
+	public <I extends AuthProviderInfo> AuthProviderInfoFactory<I> getFactory(AuthProviderType type);
 	
-	public boolean validateAll() {
-		boolean valid = true;
-		Collection<AuthProviderInfoFactory<?>> values = factories.values();
-		for (AuthProviderInfoFactory<?> factory : values) {
-			AuthProviderInfo instance = factory.getInstance();
-			try {
-				instance.validate();
-			} 
-			catch (SocializeException e) {
-				if(logger != null) {
-					logger.debug("Failed to validate auth provider [" +
-							instance.getType() +
-							"] with error [" +
-							e.getMessage() +
-							"]");
-				}
-				valid = false;
-			}
-		}
-		return valid;
-	}
+	public boolean validateAll();
 	
-	public boolean isSupported(AuthProviderType type) {
-		AuthProviderInfoFactory<AuthProviderInfo> factory = getFactory(type);
-		if(factory != null) {
-			return factory.getInstance().isValid();
-		}
-		return false;
-	}
-
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
-	}
-	
-	
+	public boolean isSupported(AuthProviderType type);
 }

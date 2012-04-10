@@ -650,7 +650,7 @@
 	
 	<bean 
 		id="authProviderInfoBuilder" 
-		class="com.socialize.auth.AuthProviderInfoBuilder">
+		class="com.socialize.auth.DefaultAuthProviderInfoBuilder">
 		<property name="logger" ref="logger"/>
 		<property name="factories">
 			<map>

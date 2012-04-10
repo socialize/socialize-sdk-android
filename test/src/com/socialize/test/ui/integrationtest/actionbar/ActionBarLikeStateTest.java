@@ -102,7 +102,7 @@ public class ActionBarLikeStateTest extends ActivityInstrumentationTestCase2<Act
 				
 				// Disable auth prompt for this test
 				SocializeConfig bean = container.getBean("config");
-				bean.setProperty(SocializeConfig.SOCIALIZE_FORCE_AUTH, "false");			
+				bean.setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");			
 				
 				ProxyObject<LikeSystem> likeSystemProxy = container.getProxy("likeSystem");
 				ProxyObject<EntitySystem> entitySystemProxy = container.getProxy("entitySystem");

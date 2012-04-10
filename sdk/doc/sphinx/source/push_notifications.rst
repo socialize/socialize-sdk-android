@@ -131,7 +131,6 @@ are indeed being sent.
 
 The simplest way to verify that SmartAlerts are working for your app is to send a test message from the Socialize website.  
 
-
 This can be found in the dashboard for your app:
 
 .. image:: images/smart_alert.png 

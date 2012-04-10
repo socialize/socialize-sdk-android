@@ -56,11 +56,12 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_USE_ACTION_WEBVIEW = "socialize.use.action.webview";
 	
+	@Deprecated
 	public static final String SOCIALIZE_BRANDING_ENABLED = "socialize.branding.enabled";
 	
 	public static final String SOCIALIZE_ENTITY_LOADER = "socialize.entity.loader";
 	
-	public static final String SOCIALIZE_FORCE_AUTH = "socialize.force.auth";
+	public static final String SOCIALIZE_REQUIRE_AUTH = "socialize.require.auth";
 	
 	public static final String SOCIALIZE_ALLOW_ANON = "socialize.allow.anon";
 	
@@ -293,8 +294,8 @@ public class SocializeConfig {
 		return getBooleanProperty(SOCIALIZE_ALLOW_ANON, false);
 	}
 	
-	public boolean isForcedAuth() {
-		return getBooleanProperty(SOCIALIZE_FORCE_AUTH, true);
+	public boolean isAuthRequired() {
+		return getBooleanProperty(SOCIALIZE_REQUIRE_AUTH, true);
 	}
 	
 	/**
