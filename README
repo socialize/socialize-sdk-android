@@ -12,6 +12,12 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v1.6.2
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Remove superfluous gs.com link on propagations
+[feature] prompt authentication on likes
+[feature] developer can hide/show 'id rather not' text on auth screen with parameter
+[feature] Developer can find information about auto-auth in the docs.
 
 v1.6.1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
