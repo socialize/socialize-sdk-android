@@ -40,7 +40,6 @@ public class SocializeBlackboxTest extends SocializeActivityTest {
 			@Override
 			public synchronized void init(Context context, IOCContainer container, SocializeInitListener listener) {
 				addResult(container);
-				super.init(context, container);
 			}
 		};
 		
