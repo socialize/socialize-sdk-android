@@ -6,6 +6,10 @@
 Configuration Settings
 ======================
 
+Socialize can be easily configured via a configuration file placed in the **assets** path of your project called **socialize.properties**
+
+.. image:: images/socialize.properties.png
+
 The following table lists the configuration options that can be specified in your **socialize.properties** file.
 
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
@@ -15,11 +19,15 @@ The following table lists the configuration options that can be specified in you
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | socialize.consumer.secret       | String  | None     | 9c313d12-f34c-4172-9909-180384c724fd   | Your Socialize consumer secret                                   |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
-| socialize.notification.app.icon | Boolean | true     |                                        | If true the app's icon will be used for notifications.           |
-+---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
-| socialize.use.action.webview    | Boolean | false    |                                        | If true activity views will use a WebView rather than a TextView |
-+---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | socialize.entity.loader         | String  | None     | com.mypackage.MyEntityLoader           | Fully qualified class name of your entity loader implementation  |
++---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
+| socialize.comments.on.notify    | Boolean | false    |                                        | Users are directed to the comment list for comment notifications |
++---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
+| socialize.require.auth          | Boolean | true     |                                        | Require users to authenticate with a 3rd party for social actions|
++---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
+| socialize.allow.anon            | Boolean | false    |                                        | Allow users to authenticate anonymously for social actions       |
++---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
+| socialize.c2dm.sender.id        | String  | None     | ``yoursender@gmail.com``               | Optional.  Use if you have your own C2DM sender ID               |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+
 | facebook.app.id                 | Integer | None     | 1234567890                             | Your facebook app ID                                             |
 +---------------------------------+---------+----------+----------------------------------------+------------------------------------------------------------------+

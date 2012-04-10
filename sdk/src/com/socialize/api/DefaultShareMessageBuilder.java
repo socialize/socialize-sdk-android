@@ -23,7 +23,6 @@ package com.socialize.api;
 
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
-import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.User;
@@ -37,7 +36,6 @@ import com.socialize.util.StringUtils;
 public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 	
 	private AppUtils appUtils;
-	private SocializeConfig config;
 
 	public DefaultShareMessageBuilder() {
 		super();
@@ -149,40 +147,36 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 				builder.append(")");
 			}
 			
-			if(config.isBrandingEnabled()) {
-				builder.append(" using ");
+//			if(config.isBrandingEnabled()) {
+//				builder.append(" using ");
 				
-				if(html) {
-					builder.append("<a href=\"http://www.getsocialize.com\">Socialize for Android</a>.");
-				}
-				else {
-					builder.append("Socialize for Android. http://www.getsocialize.com");
-				}
-			}
+//				if(html) {
+//					builder.append("<a href=\"http://www.getsocialize.com\">Socialize for Android</a>.");
+//				}
+//				else {
+//					builder.append("Socialize for Android");//. http://www.getsocialize.com");
+//				}
+//			}
 		}
-		else if(config.isBrandingEnabled()) {
-			builder.append(getNewLine(html));
-			builder.append(getNewLine(html));
-			
-			builder.append(" Sent using ");
-			
-			if(html) {
-				builder.append("<a href=\"http://www.getsocialize.com\">Socialize for Android</a>.");
-			}
-			else {
-				builder.append("Socialize for Android. http://www.getsocialize.com");
-			}
-		}
+//		else if(config.isBrandingEnabled()) {
+//			builder.append(getNewLine(html));
+//			builder.append(getNewLine(html));
+//			
+//			builder.append(" Sent using ");
+//			
+////			if(html) {
+////				builder.append("<a href=\"http://www.getsocialize.com\">Socialize for Android</a>.");
+////			}
+////			else {
+//				builder.append("Socialize for Android");//. http://www.getsocialize.com");
+////			}
+//		}
 		
 		return builder.toString();
 	}
 
 	public void setAppUtils(AppUtils appUtils) {
 		this.appUtils = appUtils;
-	}
-
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
 	}
 
 	protected String getNewLine(boolean html) {

@@ -131,7 +131,9 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 			}
 			
 			@Override
-			public void onClick(ActionBarView actionBar, ActionBarEvent evt) {}
+			public boolean onClick(ActionBarView actionBar, ActionBarEvent evt) {
+				return false;
+			}
 		});
 		
 		// Wait for initial load to complete

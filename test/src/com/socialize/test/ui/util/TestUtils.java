@@ -25,12 +25,22 @@ import com.socialize.test.ui.ResultHolder;
 import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.util.IOUtils;
 
+import static junit.framework.Assert.*;
+
 public class TestUtils {
 	
 	static ResultHolder holder;
 	static ActivityMonitor monitor;
 	static Instrumentation instrumentation;
 	static ActivityInstrumentationTestCase2<?> testCase;
+	
+	public static void incrementCount(String key) {
+		holder.incrementCount(key);
+		
+	}
+	public static int getCount(String key) {
+		return holder.getCount(key);
+	}
 	
 	public static void addResult(Object obj) {
 		holder.addResult(obj);
@@ -481,6 +491,15 @@ public class TestUtils {
 	public static String loadStream(InputStream in) throws IOException {
 		IOUtils utils = new IOUtils();
 		return utils.read(in);
+	}
+	
+	public static void assertByteArrayEquals(byte[] expected, byte[] actual) {
+		assertNotNull(expected);
+		assertNotNull(actual);
+		assertEquals(expected.length, actual.length);
+		for (int i = 0; i < actual.length; i++) {
+			assertEquals(expected[i], actual[i]);
+		}
 	}
 	
 }

@@ -157,37 +157,44 @@ public class SliderActionBarListener implements OnActionBarEventListener {
 	 * @see com.socialize.ui.actionbar.OnActionBarEventListener#onClick(com.socialize.ui.actionbar.ActionBarView, com.socialize.ui.actionbar.OnActionBarEventListener.ActionBarEvent)
 	 */
 	@Override
-	public void onClick(ActionBarView actionBar, ActionBarEvent evt) {
+	public boolean onClick(ActionBarView actionBar, ActionBarEvent evt) {
 		
-		boolean doEvent = true;
-		
-		if(lastEvent != null && lastEvent.equals(evt)) {
-			doEvent = !actionBar.getSlider().showLastItem();
-		}
-		
-		if(doEvent) {
-			ActionBarSliderItem item = null;
-			switch(evt) {
-				case SHARE:
-					if(shareSliderItemFactory != null) {
-						item = shareSliderItemFactory.getBean(actionBar, this);
-					}
-					break;
-			}
-			
-			if(item != null) {
-				actionBar.getSlider().showSliderItem(item);
-				lastEvent = evt;
-			}
-		}
+		boolean clickHandled = false;
 		
 		if(delegate != null)  {
 			try {
-				delegate.onClick(actionBar, evt);
-			} catch (Exception e) {
+				clickHandled = delegate.onClick(actionBar, evt);
+			} 
+			catch (Exception e) {
 				handleDelegateError(e);
 			}
+		}	
+		
+		if(!clickHandled) {
+			boolean doEvent = true;
+			
+			if(lastEvent != null && lastEvent.equals(evt)) {
+				doEvent = !actionBar.getSlider().showLastItem();
+			}
+			
+			if(doEvent) {
+				ActionBarSliderItem item = null;
+				switch(evt) {
+					case SHARE:
+						if(shareSliderItemFactory != null) {
+							item = shareSliderItemFactory.getBean(actionBar, this);
+						}
+						break;
+				}
+				
+				if(item != null) {
+					actionBar.getSlider().showSliderItem(item);
+					lastEvent = evt;
+				}
+			}
 		}
+		
+		return clickHandled;
 	}
 
 	public void setShareSliderItemFactory(IBeanFactory<ActionBarSliderItem> shareSliderItemFactory) {

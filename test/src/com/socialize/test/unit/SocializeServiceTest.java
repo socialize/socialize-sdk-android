@@ -1499,7 +1499,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		SocializeServiceImpl service = new SocializeServiceImpl() {
 
 			@Override
-			public void init(Context context, IOCContainer container) {
+			public synchronized void init(Context context, IOCContainer container, SocializeInitListener listener) {
 				addResult(0, context);
 				addResult(1, container);
 			}

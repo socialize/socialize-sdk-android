@@ -27,4 +27,14 @@ public class ActionBarLikeManualTest extends ActivityInstrumentationTestCase2<Ac
 		ActionBarTestUtils2 utils = new ActionBarTestUtils2();
 		utils.testLikeCallsApiHost(this);
 	}
+	
+	public void testLikePromotsForAuth() throws Throwable {
+		ActionBarTestUtils2 utils = new ActionBarTestUtils2();
+		utils.testLikePromptsForAuth(this);
+	}
+	
+	public void testLikeDoesNotPromptForAuthWhenNetworksNotSupported() throws Throwable {
+		ActionBarTestUtils2 utils = new ActionBarTestUtils2();
+		utils.testLikeDoesNotPromptForAuthWhenNetworksNotSupported(this);
+	}	
 }

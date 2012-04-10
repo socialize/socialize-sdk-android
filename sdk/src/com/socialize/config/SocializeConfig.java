@@ -56,11 +56,14 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_USE_ACTION_WEBVIEW = "socialize.use.action.webview";
 	
+	@Deprecated
 	public static final String SOCIALIZE_BRANDING_ENABLED = "socialize.branding.enabled";
 	
 	public static final String SOCIALIZE_ENTITY_LOADER = "socialize.entity.loader";
 	
-	public static final String SOCIALIZE_FORCE_AUTH = "socialize.force.auth";
+	public static final String SOCIALIZE_REQUIRE_AUTH = "socialize.require.auth";
+	
+	public static final String SOCIALIZE_ALLOW_ANON = "socialize.allow.anon";
 	
 	public static final String SOCIALIZE_SHOW_COMMENT_LIST_ON_NOTIFY = "socialize.comments.on.notify";
 	
@@ -245,6 +248,7 @@ public class SocializeConfig {
 		return defaultValue;
 	}
 	
+	@Deprecated
 	public boolean isBrandingEnabled() {
 		return getBooleanProperty(SOCIALIZE_BRANDING_ENABLED, true);
 	}
@@ -286,8 +290,12 @@ public class SocializeConfig {
 		setProperty(SocializeConfig.FACEBOOK_USER_TOKEN, token);
 	}
 	
-	public boolean isForcedAuth() {
-		return getBooleanProperty(SOCIALIZE_FORCE_AUTH, false);
+	public boolean isAllowAnonymousUser() {
+		return getBooleanProperty(SOCIALIZE_ALLOW_ANON, false);
+	}
+	
+	public boolean isAuthRequired() {
+		return getBooleanProperty(SOCIALIZE_REQUIRE_AUTH, true);
 	}
 	
 	/**

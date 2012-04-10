@@ -35,6 +35,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.config.SocializeConfig;
 import com.socialize.networks.facebook.FacebookSignInCell;
 import com.socialize.networks.twitter.TwitterSignInCell;
 import com.socialize.ui.util.Colors;
@@ -50,6 +51,7 @@ public class AuthPanelView extends BaseView {
 
 	private AuthRequestListener listener;
 	private Dialog dialog;
+	private SocializeConfig config;
 	
 	public AuthPanelView(Context context, AuthRequestListener listener, Dialog dialog) {
 		this(context);
@@ -175,29 +177,31 @@ public class AuthPanelView extends BaseView {
 		
 		cancelLayout.setLayoutParams(cancelParams);
 		
-		TextView cancelText = new TextView(getContext());
-		cancelText.setTextColor(Colors.parseColor("#97a6b1"));
-		cancelText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-		cancelText.setText("I'd rather not...");
-		
-		RelativeLayout.LayoutParams cancelTextParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		cancelTextParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-		
-		cancelText.setLayoutParams(cancelTextParams);
-		
-		cancelLayout.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				dialog.dismiss();
-				if(listener != null) {
-					listener.onResult(dialog);
+		if(config.isAllowAnonymousUser()) {
+			TextView cancelText = new TextView(getContext());
+			cancelText.setTextColor(Colors.parseColor("#97a6b1"));
+			cancelText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+			cancelText.setText("I'd rather not...");
+			
+			RelativeLayout.LayoutParams cancelTextParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			cancelTextParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+			
+			cancelText.setLayoutParams(cancelTextParams);
+			
+			cancelLayout.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					dialog.dismiss();
+					if(listener != null) {
+						listener.onResult(dialog);
+					}
 				}
-			}
-		});
-		
-		cancelLayout.addView(cancelText);
-		
-		contentLayout.addView(cancelLayout);
+			});
+			
+			cancelLayout.addView(cancelText);
+			
+			contentLayout.addView(cancelLayout);
+		}
 		
 		addView(header);
 		addView(contentLayout);
@@ -231,5 +235,7 @@ public class AuthPanelView extends BaseView {
 		this.anonCellFactory = anonCellFactory;
 	}
 	
-	
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
+	}
 }

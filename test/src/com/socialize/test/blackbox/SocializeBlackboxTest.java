@@ -26,6 +26,7 @@ import android.content.Context;
 import com.socialize.SocializeServiceImpl;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.ioc.SocializeIOC;
+import com.socialize.listener.SocializeInitListener;
 import com.socialize.test.SocializeActivityTest;
 
 /**
@@ -37,9 +38,8 @@ public class SocializeBlackboxTest extends SocializeActivityTest {
 	public void testDefaultSocializeInit() {
 		SocializeServiceImpl socialize = new SocializeServiceImpl() {
 			@Override
-			public void init(Context context, IOCContainer container) {
+			public synchronized void init(Context context, IOCContainer container, SocializeInitListener listener) {
 				addResult(container);
-				super.init(context, container);
 			}
 		};
 		

@@ -134,12 +134,17 @@
 	
 	<bean id="errorFactory" class="com.socialize.entity.ErrorFactory"/>
 	
+	<bean id="apacheHttpClient" class="org.apache.http.impl.client.DefaultHttpClient" singleton="false"/>
+	
+	<factory id="apacheHttpClientFactory" makes="apacheHttpClient"/>
+	
 	<bean id="clientFactory" class="com.socialize.net.DefaultHttpClientFactory">
 		<init-method name="init">
 			<arg ref="config"/>
 		</init-method>
 		<destroy-method name="destroy"/>
 		<property name="logger" ref="logger"/>
+		<property name="apacheHttpClientFactory" ref="apacheHttpClientFactory"/>
 	</bean>
 	
 	<bean id="sessionFactory" class="com.socialize.api.DefaultSocializeSessionFactory">
@@ -531,7 +536,6 @@
 <!-- Facebook -->
 	<bean id="shareMessageBuilder" class="com.socialize.api.DefaultShareMessageBuilder">
 		<property name="appUtils" ref="appUtils"/>
-		<property name="config" ref="config"/>
 	</bean>	
 
 	<bean id="facebookSessionStore" class="com.socialize.auth.facebook.FacebookSessionStore"/>
@@ -562,7 +566,6 @@
 		id="facebookWallPoster" 
 		class="com.socialize.networks.facebook.DefaultFacebookWallPoster">
 		<property name="logger" ref="logger"/>
-		<property name="config" ref="config"/>
 		<property name="appUtils" ref="appUtils"/>
 		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
 		<property name="facebookImageUtils" ref="facebookImageUtils"/>
@@ -647,7 +650,7 @@
 	
 	<bean 
 		id="authProviderInfoBuilder" 
-		class="com.socialize.auth.AuthProviderInfoBuilder">
+		class="com.socialize.auth.DefaultAuthProviderInfoBuilder">
 		<property name="logger" ref="logger"/>
 		<property name="factories">
 			<map>

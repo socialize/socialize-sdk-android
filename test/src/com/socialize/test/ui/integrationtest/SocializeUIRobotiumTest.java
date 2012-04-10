@@ -31,6 +31,7 @@ import android.widget.EditText;
 
 import com.jayway.android.robotium.solo.Solo;
 import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.sample.ui.SampleActivity2;
 import com.socialize.test.ui.util.TestUtils;
 
@@ -48,11 +49,15 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	public static final int BTN_FACEBOOK_SSO = 0;
 	public static final int BTN_MOCK_FACEBOOK = 1;
 	public static final int BTN_MOCK_SOCIALIZE = 2;
-	public static final int BTN_NOTIFICATIONS_ENABLED = 3;
+//	public static final int BTN_NOTIFICATIONS_ENABLED = 3;
 	
 	
 	public static final String BTN_CLEAR_CACHE = "Clear Auth Cache";
 	public static final String BTN_SHOW_COMMENTS = "Show Comments";
+	
+	
+	public static final String BTN_NOTIFICATIONS_ENABLED = "Notifications Enabled";
+	
 	public static final String BTN_SHOW_ACTION_BAR_AUTO = "Show Action Bar (auto)";
 	public static final String BTN_SHOW_ACTION_BAR_MANUAL = "Show Action Bar (manual)";
 	
@@ -114,14 +119,15 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	
 	protected void toggleNotificationsEnabled(boolean on) {
 		if(on) {
-			robotium.clickOnButton(BTN_NOTIFICATIONS_ENABLED);
+			TestUtils.clickOnButton(BTN_NOTIFICATIONS_ENABLED);
 		}
 	}		
 	
 	protected void clearAuthCache() {
 		TestUtils.clickOnButton(BTN_CLEAR_CACHE);
-		robotium.waitForDialogToClose(5000);
-		assertNull(Socialize.getSocialize().getSession());
+		robotium.waitForDialogToClose(10000);
+		SocializeService socialize = Socialize.getSocialize();
+		assertNull(socialize.getSession());
 	}
 	
 	protected void showComments() {
@@ -162,6 +168,14 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 		if(clearCache) clearAuthCache();
 	}
 
+	protected void incrementCount(String key) {
+		TestUtils.incrementCount(key);
+	}
+	
+	protected int getCount(String key) {
+		return TestUtils.getCount(key);
+	}
+	
 	protected void addResult(Object obj) {
 		TestUtils.addResult(obj);
 	}

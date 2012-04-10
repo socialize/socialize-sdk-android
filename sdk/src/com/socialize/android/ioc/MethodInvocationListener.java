@@ -11,4 +11,6 @@ public interface MethodInvocationListener {
 
 	public boolean useDelegate(Method m);
 	
+	public void onMethod(Object target, Method method, Object[] args);
+	
 }
