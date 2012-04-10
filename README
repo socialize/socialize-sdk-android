@@ -12,13 +12,21 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
+v1.6.1
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Direct URL WebView should not close when user hits back key if there is web history
+[feature] new_comment notification should open directly to comment list
+[feature] Device calls events endpoint on notification open
+[bug] SDK calls /authenticate multiple times on first init.
+
 v1.6
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Add documentation for getting device token from logs 
-User can receive direct_entity messages from developer as SmartAlert 
-User can receive direct_url messages from developer as SmartAlert 
-Add documentation for registering a C2DM account with google [ ]
-remove duplicate link to app in FB posts 
+[feature] Add documentation for getting device token from logs 
+[feature] User can receive direct_entity messages from developer as SmartAlert 
+[feature] User can receive direct_url messages from developer as SmartAlert 
+[feature] Add documentation for registering a C2DM account with google [ ]
+[bug] remove duplicate link to app in FB posts 
 
 v1.5.6
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
