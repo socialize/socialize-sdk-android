@@ -200,7 +200,7 @@ public class ShareDialogViewTest extends ActionBarAutoTest {
 			public void run() {
 				OnActionBarEventListener listener = AndroidMock.createMock(OnActionBarEventListener.class);
 				
-				listener.onClick(actionBarView, ActionBarEvent.SHARE);	
+				AndroidMock.expect(listener.onClick(actionBarView, ActionBarEvent.SHARE)).andReturn(false);	
 				
 				actionBar.setOnActionBarEventListener(listener);
 				

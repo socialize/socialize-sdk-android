@@ -22,6 +22,7 @@
 package com.socialize.ui.actionbar;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import com.socialize.Socialize;
@@ -43,8 +44,10 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.actionbar.OnActionBarEventListener.ActionBarEvent;
+import com.socialize.ui.auth.AuthRequestListener;
 import com.socialize.ui.cache.CacheableEntity;
 import com.socialize.ui.cache.EntityCache;
+import com.socialize.ui.dialog.AuthDialogFactory;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
@@ -77,6 +80,7 @@ public class ActionBarLayoutView extends BaseView {
 	private IBeanFactory<ActionBarItem> itemFactory;
 	
 	private ProgressDialogFactory progressDialogFactory;
+	private AuthDialogFactory authRequestDialogFactory;
 	
 	private String entityKey;
 	
@@ -149,20 +153,32 @@ public class ActionBarLayoutView extends BaseView {
 		commentButton.setListener(new ActionBarButtonListener() {
 			@Override
 			public void onClick(ActionBarButton button) {
+				boolean consumed = false;
+				
 				if(onActionBarEventListener != null) {
-					onActionBarEventListener.onClick(actionBarView, ActionBarEvent.COMMENT);
+					consumed = onActionBarEventListener.onClick(actionBarView, ActionBarEvent.COMMENT);
 				}
-				Socialize.getSocializeUI().showCommentView(getActivity(), actionBarView.getEntity());
+				
+				if(!consumed) {
+					Socialize.getSocializeUI().showCommentView(getActivity(), actionBarView.getEntity());
+				}
+				
 			}
 		});
 		
 		likeButton.setListener(new ActionBarButtonListener() {
 			@Override
 			public void onClick(ActionBarButton button) {
+				
+				boolean consumed = false;
+				
 				if(onActionBarEventListener != null) {
-					onActionBarEventListener.onClick(actionBarView, ActionBarEvent.LIKE);
+					consumed = onActionBarEventListener.onClick(actionBarView, ActionBarEvent.LIKE);
 				}
-				postLike(likeButton);
+				
+				if(!consumed) {
+					postLike(likeButton);
+				}
 			}
 		});
 		
@@ -178,10 +194,16 @@ public class ActionBarLayoutView extends BaseView {
 		ticker.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(android.view.View v) {
+				
+				boolean consumed = false;
+				
 				if(onActionBarEventListener != null) {
-					onActionBarEventListener.onClick(actionBarView, ActionBarEvent.VIEW);
-				}				
-				ticker.skipToNext();
+					consumed = onActionBarEventListener.onClick(actionBarView, ActionBarEvent.VIEW);
+				}	
+				
+				if(!consumed) {
+					ticker.skipToNext();
+				}
 			}
 		});
 		
@@ -299,71 +321,89 @@ public class ActionBarLayoutView extends BaseView {
 		final CacheableEntity localEntity = getLocalEntity();
 		
 		if(localEntity != null) {
-			
-			button.showLoading();
-			
 			if(localEntity.isLiked()) {
 				// Unlike
-				getSocialize().unlike(localEntity.getLikeId(), new LikeDeleteListener() {
-					
-					@Override
-					public void onError(SocializeException error) {
-						logError("Error deleting like", error);
-						localEntity.setLiked(false);
-						setEntityData(localEntity);
-						button.hideLoading();
-					}
-					
-					@Override
-					public void onDelete() {
-						localEntity.setLiked(false);
-						setEntityData(localEntity);
-						button.hideLoading();
-						if(onActionBarEventListener != null) {
-							onActionBarEventListener.onPostUnlike(actionBarView);
-						}
-					}
-				});
+				doUnLike(button, localEntity);
 			}
 			else {
 				// Like
-				ShareOptions options = new ShareOptions();
-				
-				if(getSocialize().getSession().getUser().isAutoPostToFacebook() && getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-					if(getSocialize().getSession().getUser().isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
-						options.setShareTo(SocialNetwork.FACEBOOK, SocialNetwork.TWITTER);
-					}
-					else {
-						options.setShareTo(SocialNetwork.FACEBOOK);
-					}
-					
-				}
-				else if(getSocialize().getSession().getUser().isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
-					options.setShareTo(SocialNetwork.TWITTER);
-				}
-				
-				getSocialize().like(getActivity(), localEntity.getEntity(), options, new LikeAddListener() {
-					
-					@Override
-					public void onError(SocializeException error) {
-						logError("Error posting like", error);
-						button.hideLoading();
-					}
-					
-					@Override
-					public void onCreate(Like entity) {
-						localEntity.setLiked(true);
-						localEntity.setLikeId(entity.getId());
-						button.hideLoading();
-						setEntityData(localEntity);
-						
-						if(onActionBarEventListener != null) {
-							onActionBarEventListener.onPostLike(actionBarView, entity);
+				if(getSocialize().getConfig().isForcedAuth() && (!getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) || !getSocialize().isAuthenticated(AuthProviderType.TWITTER))) {
+					authRequestDialogFactory.show(button, new AuthRequestListener() {
+						@Override
+						public void onResult(Dialog dialog, SocialNetwork... networks) {
+							doLike(button, localEntity);
 						}
-					}
-				});
+					});
+				}
+				else {
+					doLike(button, localEntity);
+				}				
 			}
 		}
+	}
+	
+	protected void doUnLike(final ActionBarButton button, final CacheableEntity localEntity) {
+		button.showLoading();
+		getSocialize().unlike(localEntity.getLikeId(), new LikeDeleteListener() {
+			@Override
+			public void onError(SocializeException error) {
+				logError("Error deleting like", error);
+				localEntity.setLiked(false);
+				setEntityData(localEntity);
+				button.hideLoading();
+			}
+			
+			@Override
+			public void onDelete() {
+				localEntity.setLiked(false);
+				setEntityData(localEntity);
+				button.hideLoading();
+				if(onActionBarEventListener != null) {
+					onActionBarEventListener.onPostUnlike(actionBarView);
+				}
+			}
+		});
+	}
+	
+	protected void doLike(final ActionBarButton button, final CacheableEntity localEntity) {
+		
+		button.showLoading();
+		
+		ShareOptions options = new ShareOptions();
+		
+		if(getSocialize().getSession().getUser().isAutoPostToFacebook() && getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+			if(getSocialize().getSession().getUser().isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
+				options.setShareTo(SocialNetwork.FACEBOOK, SocialNetwork.TWITTER);
+			}
+			else {
+				options.setShareTo(SocialNetwork.FACEBOOK);
+			}
+			
+		}
+		else if(getSocialize().getSession().getUser().isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
+			options.setShareTo(SocialNetwork.TWITTER);
+		}
+		
+		getSocialize().like(getActivity(), localEntity.getEntity(), options, new LikeAddListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				logError("Error posting like", error);
+				button.hideLoading();
+			}
+			
+			@Override
+			public void onCreate(Like entity) {
+				localEntity.setLiked(true);
+				localEntity.setLikeId(entity.getId());
+				button.hideLoading();
+				setEntityData(localEntity);
+				
+				if(onActionBarEventListener != null) {
+					onActionBarEventListener.onPostLike(actionBarView, entity);
+				}
+			}
+		});
 	}
 	
 	protected CacheableEntity getLocalEntity() {
@@ -551,5 +591,9 @@ public class ActionBarLayoutView extends BaseView {
 
 	public void setOnActionBarEventListener(OnActionBarEventListener onActionBarEventListener) {
 		this.onActionBarEventListener = onActionBarEventListener;
+	}
+
+	public void setAuthRequestDialogFactory(AuthDialogFactory authRequestDialogFactory) {
+		this.authRequestDialogFactory = authRequestDialogFactory;
 	}
 }

@@ -331,6 +331,7 @@
 		<constructor-arg type="activity"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="drawables" ref="drawables"/>
+		<property name="config" ref="config"/>
 		<property name="facebookSignInCellFactory" ref="facebookSignInCellFactory"/>
 		<property name="twitterSignInCellFactory" ref="twitterSignInCellFactory"/>
 		<property name="anonCellFactory" ref="anonCellFactory"/>
@@ -1114,6 +1115,8 @@
 		<property name="tickerFactory" ref="actionBarTickerFactory"/>
 		<property name="itemFactory" ref="actionBarItemFactory"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
+		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
+		
 	</bean>
 	
 	<bean 

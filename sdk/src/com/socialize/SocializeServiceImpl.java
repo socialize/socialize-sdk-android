@@ -334,7 +334,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 					
 					container.init(context, locator, paths);
 					
-					init(context, container); // initCount incremented here
+					init(context, container, listener); // initCount incremented here
 				}
 				catch (Exception e) {
 					throw e;

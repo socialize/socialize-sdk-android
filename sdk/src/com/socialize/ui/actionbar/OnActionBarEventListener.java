@@ -43,7 +43,13 @@ public interface OnActionBarEventListener {
 	
 	public void onGetEntity(ActionBarView actionBar, Entity entity);
 	
-	public void onClick(ActionBarView actionBar, ActionBarEvent evt);
+	/**
+	 * Called when a click event occurs on the ActionBar.
+	 * @param actionBar
+	 * @param evt
+	 * @return Return true if the event has been consumed and should NOT be propagated to the ActionBar
+	 */
+	public boolean onClick(ActionBarView actionBar, ActionBarEvent evt);
 	
 	public void onUpdate(ActionBarView actionBar);
 	

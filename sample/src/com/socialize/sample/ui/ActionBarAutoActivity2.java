@@ -59,7 +59,8 @@ public class ActionBarAutoActivity2 extends ActionBarActivity2 {
 					}
 					
 					@Override
-					public void onClick(ActionBarView actionBar, ActionBarEvent evt) {
+					public boolean onClick(ActionBarView actionBar, ActionBarEvent evt) {
+						return false;
 					}
 				});
 			}

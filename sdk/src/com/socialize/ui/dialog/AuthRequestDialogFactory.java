@@ -46,16 +46,16 @@ import com.socialize.util.DisplayUtils;
  * @author Jason Polites
  *
  */
-public class AuthRequestDialogFactory extends AuthDialogFactory  {
+public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 	
 	private IBeanFactory<AuthPanelView> authPanelViewFactory;
 	private DisplayUtils displayUtils;
 	
-	public Dialog create(View parent) {
-		return create(parent, null);
+	public Dialog show(View parent) {
+		return show(parent, null);
 	}
 	
-	public Dialog create(final View parent, final AuthRequestListener listener) {
+	public Dialog show(final View parent, final AuthRequestListener listener) {
 
 		final Dialog dialog = newDialog(parent.getContext());
 		final ProgressDialog progress = SafeProgressDialog.show(parent.getContext(), "", "Please wait...");
@@ -104,8 +104,6 @@ public class AuthRequestDialogFactory extends AuthDialogFactory  {
 				progress.dismiss();
 			}
 		}, listener, dialog);
-		
-//		AuthPanelView view = authPanelViewFactory.getBean(listener, dialog);
 		
 		return dialog;
 	}

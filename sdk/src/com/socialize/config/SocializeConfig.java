@@ -62,6 +62,8 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_FORCE_AUTH = "socialize.force.auth";
 	
+	public static final String SOCIALIZE_ALLOW_ANON = "socialize.allow.anon";
+	
 	public static final String SOCIALIZE_SHOW_COMMENT_LIST_ON_NOTIFY = "socialize.comments.on.notify";
 	
 	/**
@@ -287,8 +289,12 @@ public class SocializeConfig {
 		setProperty(SocializeConfig.FACEBOOK_USER_TOKEN, token);
 	}
 	
+	public boolean isAllowAnonymousUser() {
+		return getBooleanProperty(SOCIALIZE_ALLOW_ANON, false);
+	}
+	
 	public boolean isForcedAuth() {
-		return getBooleanProperty(SOCIALIZE_FORCE_AUTH, false);
+		return getBooleanProperty(SOCIALIZE_FORCE_AUTH, true);
 	}
 	
 	/**

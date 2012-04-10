@@ -8,6 +8,7 @@ public class ProxyObject<T> implements InvocationHandler {
 	private T delegate;
 	private T methodDelegate;
 	private MethodInvocationListener methodInvocationListener;
+	private boolean staticProxy = false; // Used for non singleton beans
 	
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -55,6 +56,14 @@ public class ProxyObject<T> implements InvocationHandler {
 	
 	public void setMethodInvocationListener(MethodInvocationListener methodInvocationListener) {
 		this.methodInvocationListener = methodInvocationListener;
+	}
+
+	public boolean isStaticProxy() {
+		return staticProxy;
+	}
+	
+	public void setStaticProxy(boolean staticProxy) {
+		this.staticProxy = staticProxy;
 	}
 	
 }

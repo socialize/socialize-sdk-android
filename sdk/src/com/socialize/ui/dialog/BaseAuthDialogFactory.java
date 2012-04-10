@@ -21,16 +21,58 @@
  */
 package com.socialize.ui.dialog;
 
+import android.R;
 import android.app.Dialog;
+import android.content.Context;
 import android.view.View;
+import android.view.Window;
+import com.socialize.error.SocializeException;
+import com.socialize.log.SocializeLogger;
 import com.socialize.ui.auth.AuthRequestListener;
+import com.socialize.util.Drawables;
 
 /**
  * @author Jason Polites
  *
  */
-public interface AuthDialogFactory {
+public abstract class BaseAuthDialogFactory implements AuthDialogFactory  {
+	
+	protected Drawables drawables;
+	protected SocializeLogger logger;
+	
+	/* (non-Javadoc)
+	 * @see com.socialize.ui.dialog.AuthDialogFactory#show(android.view.View, com.socialize.ui.auth.AuthRequestListener)
+	 */
+	@Override
+	public abstract Dialog show(View parent, AuthRequestListener listener);
+	
+	// So we can mock
+	protected Dialog newDialog(Context context) {
+		Dialog dialog = new Dialog(context, R.style.Theme_Dialog);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
+		// Register to prevent window leakage
+		DialogRegistration.register(context, dialog);
+		
+		return dialog;
+	}
+	
+	protected void handleError(String msg, SocializeException error) {
+		if(logger != null) {
+			logger.error(msg, error);
+		}
+		else {
+			error.printStackTrace();
+		}
+	}
 
-	public Dialog show(View parent, AuthRequestListener listener);
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
+	
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
+	}
+
 
 }

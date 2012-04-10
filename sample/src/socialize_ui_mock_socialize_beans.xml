@@ -19,7 +19,7 @@
 	<proxy ref="alertDialogFactory" />
 	<proxy ref="actionButtonHandlers" />
 	
-	<proxy ref="apacheHttpClient" />	
+	<proxy ref="authRequestDialogFactory" />	
 
 	<bean id="initializationAsserter" class="com.socialize.test.mock.MockInitializationAsserter" />
 </beans>

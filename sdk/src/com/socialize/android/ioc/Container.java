@@ -154,9 +154,12 @@ public class Container {
 							proxy = new ProxyObject<T>();
 							proxy.setDelegate(bean);
 							
-							if(beanRef.isSingleton()) {
+//							if(beanRef.isSingleton()) {
 								proxies.put(name, proxy);
-							}					
+//							}					
+						}
+						else if(!beanRef.isSingleton() && !proxy.isStaticProxy()) {
+							proxy.setDelegate(bean);
 						}
 						
 						return proxy;				
