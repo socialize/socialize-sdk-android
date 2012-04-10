@@ -6,6 +6,28 @@
 What's New
 ==========
 
+v1.6.2 Automatic Authentication
+-------------------------------
+v1.6.2 introduces *Automatic Authentication* for your users.  Our data indicates that users who authenticate with a 3rd party (e.g. Twitter or Facebook)
+are much more likely to introduce new users to your app via the viral effect of activity within your app propagating to these 
+3rd party networks.  From v1.6.2 onwards the Socialize SDK will default to requiring users authenticate with a 3rd party prior to performing 
+any social action (e.g. *Comment* or *Like*).
+
+This default behavior can be overridden by the developer (you) via configuration options in your **socialize.properties** file.
+
+Refer to the :ref:`config` section for details on the configuration settings required to override *Automatic Authentication*.
+
+v1.6 Direct SmartAlerts 
+-----------------------
+v1.6 of the Socialize SDK for Android adds support for direct SmartAlerts.  This allows developers to push SmartAlert notifications 
+to their user-base directly from the web.
+
+Simply log into your Socialize account at http://www.getsocialize.com and go to the dashboard for your app:
+
+.. image:: images/direct_alerts.png
+
+Refer to the :ref:`notifications` section for details on implementing SmartAlerts.
+
 
 v1.5 Twitter! 
 -------------

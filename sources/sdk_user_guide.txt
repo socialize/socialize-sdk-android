@@ -160,7 +160,7 @@ in your app are the most popular, and what is of most interest to your users.
 
 Creating a 'Like'
 ~~~~~~~~~~~~~~~~~
-To create a view, simply call the **like** method:
+To create a like, simply call the **like** method:
 
 .. include:: snippets/create_like.txt
 	
