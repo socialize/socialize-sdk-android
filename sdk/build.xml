@@ -168,7 +168,7 @@
 			classpathref="javadoc.classpath"
 			destdir="build/docs/javadoc" 
 			doctitle="${vendor} SDK v${version} Documentation" 
-			excludepackagenames="com.google.*,oauth.*">
+			excludepackagenames="com.google.*,oauth.*,com.socialize.google.*,com.socialize.facebook.*">
 			
 			<header>
 				<![CDATA[${vendor} SDK v${version} Documentation<br/>Copyright ${year} ${vendor}<br/>${website}]]>
