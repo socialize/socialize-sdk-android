@@ -23,7 +23,6 @@ package com.socialize.ui.slider;
 
 import android.content.Context;
 import android.view.MotionEvent;
-
 import com.socialize.ui.util.Colors;
 
 /**
@@ -33,6 +32,7 @@ import com.socialize.ui.util.Colors;
 public class ActionBarSliderContent extends ActionBarSliderViewChild {
 	
 	private int height;
+	private Colors colors;
 	
 	public ActionBarSliderContent(Context context, ActionBarSliderView parent, int height) {
 		super(context, parent);
@@ -40,7 +40,7 @@ public class ActionBarSliderContent extends ActionBarSliderViewChild {
 	}
 	
 	public void init() {
-		setBackgroundColor(Colors.parseColor("#313131"));
+		setBackgroundColor(colors.getColor(Colors.ACTION_BAR_SLIDER_CONTENT));
 		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, height);
 		params.setMargins(0,0,0,0);
 		setLayoutParams(params);	
@@ -50,5 +50,9 @@ public class ActionBarSliderContent extends ActionBarSliderViewChild {
 	@Override
 	public boolean onTouchEvent (MotionEvent event) {
 		return true;
+	}
+	
+	public void setColors(Colors colors) {
+		this.colors = colors;
 	}
 }

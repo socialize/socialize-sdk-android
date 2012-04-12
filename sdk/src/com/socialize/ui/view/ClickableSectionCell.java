@@ -88,7 +88,7 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	public void init() {
 		
 		if(strokeColor < 0) {
-			strokeColor = Colors.parseColor("#191f25");
+			strokeColor = colors.getColor(Colors.CLICKABLE_CELL_STROKE);
 		}
 		
 		topLeftRadius= displayUtils.getDIP(topLeftRadius);

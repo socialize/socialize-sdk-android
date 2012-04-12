@@ -95,6 +95,7 @@ public class UserApiTest extends SocializeUnitTest {
 		AndroidMock.expect(session.getUser()).andReturn(user);
 		AndroidMock.expect(user.getId()).andReturn(id);
 		AndroidMock.expect(user.isNotificationsEnabled()).andReturn(true);
+		AndroidMock.expect(user.isShareLocation()).andReturn(false);
 		
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
@@ -102,6 +103,7 @@ public class UserApiTest extends SocializeUnitTest {
 		user.setAutoPostToFacebook(true);
 		user.setAutoPostToTwitter(true);
 		user.setNotificationsEnabled(false);
+		user.setShareLocation(true);
 		
 		SocializeUserSystem api = new SocializeUserSystem(provider) {
 			@Override
@@ -120,6 +122,7 @@ public class UserApiTest extends SocializeUnitTest {
 		profile.setAutoPostFacebook(true);
 		profile.setAutoPostTwitter(true);
 		profile.setNotificationsEnabled(false);
+		profile.setLocationEnabled(true);
 		
 		api.saveUserProfile(context, session, profile, listener);
 		
@@ -151,6 +154,7 @@ public class UserApiTest extends SocializeUnitTest {
 		AndroidMock.expect(session.getUser()).andReturn(user).times(2);
 		AndroidMock.expect(user.getId()).andReturn(id);
 		AndroidMock.expect(user.isNotificationsEnabled()).andReturn(true);
+		AndroidMock.expect(user.isShareLocation()).andReturn(false);
 		
 		notificationRegistrationSystem.registerC2DMAsync(context);
 		
@@ -167,6 +171,7 @@ public class UserApiTest extends SocializeUnitTest {
 		user.setAutoPostToFacebook(true);
 		user.setAutoPostToTwitter(true);
 		user.setNotificationsEnabled(false);
+		user.setShareLocation(true);
 		
 		SocializeUserSystem api = new SocializeUserSystem(provider) {
 			@Override
@@ -186,6 +191,7 @@ public class UserApiTest extends SocializeUnitTest {
 		profile.setAutoPostFacebook(true);
 		profile.setAutoPostTwitter(true);
 		profile.setNotificationsEnabled(false);
+		profile.setLocationEnabled(true);
 		
 		api.setNotificationRegistrationSystem(notificationRegistrationSystem);
 		api.saveUserProfile(context, session, profile, listener);

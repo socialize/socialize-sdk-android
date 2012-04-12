@@ -50,6 +50,7 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 	
 	private IBeanFactory<AuthPanelView> authPanelViewFactory;
 	private DisplayUtils displayUtils;
+	private Colors colors;
 	
 	public Dialog show(View parent) {
 		return show(parent, null);
@@ -74,7 +75,7 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 				LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 				params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 				
-				GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Colors.parseColor("#323a43"), Colors.parseColor("#1d2227") });
+				GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { colors.getColor(Colors.AUTH_REQUEST_DIALOG_BOTTOM), colors.getColor(Colors.AUTH_REQUEST_DIALOG_TOP)});
 				
 				background.setCornerRadius(displayUtils.getDIP(4));
 				
@@ -150,5 +151,9 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 
 	public void setDisplayUtils(DisplayUtils deviceUtils) {
 		this.displayUtils = deviceUtils;
+	}
+	
+	public void setColors(Colors colors) {
+		this.colors = colors;
 	}
 }

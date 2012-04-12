@@ -91,11 +91,13 @@ public class ProfileContentView extends BaseView {
 	private CheckBox autoPostTwitter;
 	
 	private CustomCheckbox notificationsEnabledCheckbox;
+	private CustomCheckbox locationEnabledCheckbox;
 	
 	private SocialNetworkCheckbox facebookEnabledCheckbox;
 	private SocialNetworkCheckbox twitterEnabledCheckbox;
 	
 	private IBeanFactory<CustomCheckbox> notificationsEnabledCheckboxFactory;
+	private IBeanFactory<CustomCheckbox> locationEnabledCheckboxFactory;
 	
 	private IBeanFactory<SocialNetworkCheckbox> facebookEnabledCheckboxFactory;
 	private IBeanFactory<SocialNetworkCheckbox> twitterEnabledCheckboxFactory;
@@ -167,10 +169,15 @@ public class ProfileContentView extends BaseView {
 		master.addView(firstNameEdit);
 		master.addView(lastNameEdit);
 		
+		if(appUtils.isLocationAvaiable(getContext())) {
+			locationEnabledCheckbox = locationEnabledCheckboxFactory.getBean();
+			locationEnabledCheckbox.setLayoutParams(commonParams);
+			master.addView(locationEnabledCheckbox);
+		}
+		
 		if(appUtils.isNotificationsAvailable(getContext())) {
 			notificationsEnabledCheckbox = notificationsEnabledCheckboxFactory.getBean();
 			notificationsEnabledCheckbox.setLayoutParams(commonParams);
-			
 			master.addView(notificationsEnabledCheckbox);
 		}
 		
@@ -375,6 +382,10 @@ public class ProfileContentView extends BaseView {
 			notificationsEnabledCheckbox.setChecked(user.isNotificationsEnabled());
 		}
 		
+		if(locationEnabledCheckbox != null) {
+			locationEnabledCheckbox.setChecked(user.isShareLocation());
+		}
+		
 		onNetworksChanged();
 	}	
 	
@@ -498,6 +509,10 @@ public class ProfileContentView extends BaseView {
 		return notificationsEnabledCheckbox;
 	}
 	
+	protected CustomCheckbox getLocationEnabledCheckbox() {
+		return locationEnabledCheckbox;
+	}
+
 	protected SocialNetworkCheckbox getFacebookEnabledCheckbox() {
 		return facebookEnabledCheckbox;
 	}
@@ -508,6 +523,10 @@ public class ProfileContentView extends BaseView {
 	
 	public void setTwitterEnabledCheckboxFactory(IBeanFactory<SocialNetworkCheckbox> twitterEnabledCheckboxFactory) {
 		this.twitterEnabledCheckboxFactory = twitterEnabledCheckboxFactory;
+	}
+	
+	public void setLocationEnabledCheckboxFactory(IBeanFactory<CustomCheckbox> locationEnabledCheckboxFactory) {
+		this.locationEnabledCheckboxFactory = locationEnabledCheckboxFactory;
 	}
 
 	public void setDrawables(Drawables drawables) {

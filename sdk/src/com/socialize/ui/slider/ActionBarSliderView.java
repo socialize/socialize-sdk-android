@@ -30,7 +30,6 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.util.DisplayUtils;
-import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
 
 /**
@@ -42,8 +41,9 @@ public class ActionBarSliderView extends BaseView {
 	public enum DisplayState {CLOSE, MAXIMIZE, PEEK};
 	
 	private DisplayUtils displayUtils;
-	private Drawables drawables;
 	private IBeanFactory<SliderAnimationSet> sliderAnimationSetFactory;
+	private IBeanFactory<ActionBarSliderContent> actionBarSliderContentFactory;
+	private IBeanFactory<ActionBarSliderHandle> actionBarSliderHandleFactory;
 	
 	private Map<String, SliderAnimationSet> animations;
 	private SliderAnimationSet currentAnimationSet;
@@ -104,13 +104,8 @@ public class ActionBarSliderView extends BaseView {
 		
 		handleHeight = displayUtils.getDIP(handleHeight);
 		
-		handle = new ActionBarSliderHandle(getContext(), this, handleHeight);
-		content = new ActionBarSliderContent(getContext(), this, deviceHeight-handleHeight);
-		
-		handle.setDrawables(drawables);
-		
-		handle.init();
-		content.init();
+		content = actionBarSliderContentFactory.getBean(this, deviceHeight-handleHeight);
+		handle = actionBarSliderHandleFactory.getBean(this, handleHeight);
 		
 		addView(handle);
 		addView(content);
@@ -326,10 +321,6 @@ public class ActionBarSliderView extends BaseView {
 		this.displayUtils = deviceUtils;
 	}
 
-	public void setDrawables(Drawables drawables) {
-		this.drawables = drawables;
-	}
-
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
@@ -344,6 +335,14 @@ public class ActionBarSliderView extends BaseView {
 	
 	public void setSliderAnimationSetFactory(IBeanFactory<SliderAnimationSet> sliderAnimationSetFactory) {
 		this.sliderAnimationSetFactory = sliderAnimationSetFactory;
+	}
+
+	public void setActionBarSliderContentFactory(IBeanFactory<ActionBarSliderContent> actionBarSliderContentFactory) {
+		this.actionBarSliderContentFactory = actionBarSliderContentFactory;
+	}
+	
+	public void setActionBarSliderHandleFactory(IBeanFactory<ActionBarSliderHandle> actionBarSliderHandleFactory) {
+		this.actionBarSliderHandleFactory = actionBarSliderHandleFactory;
 	}
 
 	protected boolean isMoving() {

@@ -38,6 +38,7 @@ public class UserProfile {
 	private String encodedImage;
 	
 	private boolean notificationsEnabled = true;
+	private boolean locationEnabled = true;
 	
 	private boolean autoPostFacebook;
 	private boolean autoPostTwitter;
@@ -142,4 +143,13 @@ public class UserProfile {
 	public void setNotificationsEnabled(boolean notificationsEnabled) {
 		this.notificationsEnabled = notificationsEnabled;
 	}
+
+	public boolean isLocationEnabled() {
+		return locationEnabled;
+	}
+	
+	public void setLocationEnabled(boolean locationEnabled) {
+		this.locationEnabled = locationEnabled;
+	}
+	
 }

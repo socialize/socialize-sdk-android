@@ -23,7 +23,6 @@ package com.socialize.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.socialize.util.StringUtils;
 
 

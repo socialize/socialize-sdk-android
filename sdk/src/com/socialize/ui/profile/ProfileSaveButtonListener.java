@@ -77,6 +77,10 @@ public class ProfileSaveButtonListener implements OnClickListener {
 			profile.setNotificationsEnabled(view.getNotificationsEnabledCheckbox().isChecked());
 		}
 		
+		if(view.getLocationEnabledCheckbox() != null) {
+			profile.setLocationEnabled(view.getLocationEnabledCheckbox().isChecked());
+		}
+		
 		profileSaver.save(context, profile, new UserSaveListener() {
 			
 			@Override
