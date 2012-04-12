@@ -21,12 +21,12 @@
  */
 package com.socialize.util;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
+import com.socialize.google.gson.Gson;
+import com.socialize.google.gson.GsonBuilder;
 import com.socialize.gson.AuthProviderInfoSerializer;
 import com.socialize.gson.AuthProviderTypeSerializer;
 import com.socialize.gson.UserProviderCredentialsMapSerializer;
