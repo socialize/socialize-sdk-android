@@ -21,7 +21,6 @@
  */
 package com.socialize.auth.twitter;
 
-import android.R;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -86,7 +85,7 @@ public class TwitterUtils {
 	}
 	
 	protected Dialog newDialog(Context context) {
-		return new Dialog(context, R.style.Theme_Dialog);
+		return new Dialog(context, android.R.style.Theme_Dialog);
 	}
 	
 	protected TwitterAuthDialogListener newTwitterAuthDialogListener(Dialog dialog, final TwitterAuthListener listener) {

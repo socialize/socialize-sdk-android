@@ -52,6 +52,7 @@ public class AuthPanelView extends BaseView {
 	private AuthRequestListener listener;
 	private Dialog dialog;
 	private SocializeConfig config;
+	private Colors colors;
 	
 	public AuthPanelView(Context context, AuthRequestListener listener, Dialog dialog) {
 		this(context);
@@ -100,7 +101,7 @@ public class AuthPanelView extends BaseView {
 	
 		float headerRadius = displayUtils.getDIP(3);
 		
-		GradientDrawable headerBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[]{Colors.parseColor("#057498"), Colors.parseColor("#08ade4")});
+		GradientDrawable headerBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[]{colors.getColor(Colors.AUTH_PANEL_BOTTOM), colors.getColor(Colors.AUTH_PANEL_TOP)});
 		headerBG.setCornerRadii(new float[]{headerRadius, headerRadius, headerRadius, headerRadius, 0.0f, 0.0f, 0.0f, 0.0f});
 		header.setBackgroundDrawable(headerBG);
 		header.setText("Authenticate");
@@ -179,7 +180,7 @@ public class AuthPanelView extends BaseView {
 		
 		if(config.isAllowAnonymousUser()) {
 			TextView cancelText = new TextView(getContext());
-			cancelText.setTextColor(Colors.parseColor("#97a6b1"));
+			cancelText.setTextColor(colors.getColor(Colors.AUTH_PANEL_CANCEL_TEXT));
 			cancelText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
 			cancelText.setText("I'd rather not...");
 			
@@ -237,5 +238,9 @@ public class AuthPanelView extends BaseView {
 	
 	public void setConfig(SocializeConfig config) {
 		this.config = config;
+	}
+
+	public void setColors(Colors colors) {
+		this.colors = colors;
 	}
 }

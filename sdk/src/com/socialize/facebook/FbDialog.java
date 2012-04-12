@@ -16,7 +16,6 @@
 
 package com.socialize.facebook;
 
-import android.R;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -105,7 +104,7 @@ public class FbDialog extends Dialog {
 			}
 		});
 //		Drawable crossDrawable = getContext().getResources().getDrawable(R.drawable.close);
-		Drawable crossDrawable = getContext().getResources().getDrawable(R.drawable.btn_dialog);
+		Drawable crossDrawable = getContext().getResources().getDrawable(android.R.drawable.btn_dialog);
 		mCrossImage.setImageDrawable(crossDrawable);
 		/*
 		 * 'x' should not be visible while webview is loading make it visible

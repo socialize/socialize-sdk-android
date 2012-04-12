@@ -37,8 +37,6 @@ import android.telephony.TelephonyManager;
 import com.socialize.Socialize;
 import com.socialize.config.SocializeConfig;
 import com.socialize.log.SocializeLogger;
-import com.socialize.notifications.SocializeBroadcastReceiver;
-import com.socialize.notifications.SocializeC2DMReceiver;
 import com.socialize.ui.SocializeLaunchActivity;
 
 /**
@@ -228,25 +226,24 @@ public class DefaultAppUtils implements AppUtils {
 					ok = false;
 				}
 				
-				if(!isReceiverAvailable(context, SocializeBroadcastReceiver.class)) {
-					
-					lastNotificationWarning = "Notifications not available. Receiver [" +
-							SocializeBroadcastReceiver.class +
-							"] not configured in AndroidManifest.xml";
-					
-					if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
-					ok = false;
-				}
-				
-				if(!isServiceAvailable(context, SocializeC2DMReceiver.class)) {
-					
-					lastNotificationWarning = "Notifications not available. Service [" +
-							SocializeBroadcastReceiver.class +
-							"] not configured in AndroidManifest.xml";
-					
-					if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
-					ok = false;
-				}			
+//				if(!isReceiverAvailable(context, SocializeBroadcastReceiver.class)) {
+//					
+//					lastNotificationWarning = "Notifications not available. Receiver [" +
+//							SocializeBroadcastReceiver.class +
+//							"] not configured in AndroidManifest.xml";
+//					
+//					if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
+//					ok = false;
+//				}
+//				if(!isServiceAvailable(context, SocializeC2DMReceiver.class)) {
+//					
+//					lastNotificationWarning = "Notifications not available. Service [" +
+//							SocializeC2DMReceiver.class +
+//							"] not configured in AndroidManifest.xml";
+//					
+//					if(logger.isInfoEnabled()) logger.info(lastNotificationWarning);
+//					ok = false;
+//				}			
 				
 				if(config.isEntityLoaderCheckEnabled() && Socialize.getSocialize().getEntityLoader() == null) {
 					lastNotificationWarning = "Notifications not available. Entity loader not found.";

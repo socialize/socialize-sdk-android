@@ -208,6 +208,59 @@
 					<key value="GRAY_BTN_BOTTOM_STROKE"/>
 					<value value="#5e5e5e"/>
 				</entry>	
+				<entry>
+					<key value="ANON_CELL_TITLE"/>
+					<value value="#97a6b1"/>
+				</entry>
+				<entry>
+					<key value="ANON_CELL_TEXT"/>
+					<value value="#6e7b84"/>
+				</entry>
+				<entry>
+					<key value="AUTH_PANEL_TOP"/>
+					<value value="#08ade4"/>
+				</entry>
+				<entry>
+					<key value="AUTH_PANEL_BOTTOM"/>
+					<value value="#057498"/>
+				</entry>
+				<entry>
+					<key value="AUTH_REQUEST_DIALOG_TOP"/>
+					<value value="#1d2227"/>
+				</entry>
+				<entry>
+					<key value="AUTH_REQUEST_DIALOG_BOTTOM"/>
+					<value value="#323a43"/>
+				</entry>				
+				<entry>
+					<key value="AUTH_PANEL_CANCEL_TEXT"/>
+					<value value="#97a6b1"/>
+				</entry>
+				<entry>
+					<key value="COMMENT_ENTRY_TOP"/>
+					<value value="#88000000"/>
+				</entry>
+				<entry>
+					<key value="COMMENT_ENTRY_BOTTOM"/>
+					<value value="#44000000"/>
+				</entry>	
+				
+				<entry>
+					<key value="ACTION_BAR_SLIDER_CONTENT"/>
+					<value value="#313131"/>
+				</entry>	
+				<entry>
+					<key value="CHECKBOX_BORDER_BOTTOM"/>
+					<value value="#3f3f3f"/>
+				</entry>
+				<entry>
+					<key value="CHECKBOX_BORDER_TOP"/>
+					<value value="#5c5c5c"/>
+				</entry>
+				<entry>
+					<key value="CLICKABLE_CELL_STROKE"/>
+					<value value="#191f25"/>
+				</entry>
 			</map>
 		</property>
 	</bean>
@@ -295,6 +348,7 @@
 		singleton="false">
 		<constructor-arg type="activity"/>
 		<property name="drawables" ref="drawables"/>
+		<property name="colors" ref="colors"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="loadingViewFactory" ref="loadingViewFactory"/>
 		<init-method name="init"/>
@@ -310,6 +364,7 @@
 		<property name="authPanelViewFactory" ref="authPanelViewFactory"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="displayUtils" ref="displayUtils"/>
+		<property name="colors" ref="colors"/>
 	</bean>
 	 
 	<bean 
@@ -331,6 +386,7 @@
 		<constructor-arg type="activity"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="drawables" ref="drawables"/>
+		<property name="colors" ref="colors"/>
 		<property name="config" ref="config"/>
 		<property name="facebookSignInCellFactory" ref="facebookSignInCellFactory"/>
 		<property name="twitterSignInCellFactory" ref="twitterSignInCellFactory"/>
@@ -746,6 +802,7 @@
 		<property name="appUtils" ref="appUtils"/>
 		<property name="keyboardUtils" ref="keyboardUtils"/>
 		<property name="drawables" ref="drawables"/>
+		<property name="colors" ref="colors"/>
 		<property name="postCommentButton" ref="postCommentButton"/>
 		<property name="cancelCommentButton" ref="cancelCommentButton"/>
 		<property name="subscribeNotificationButton" ref="subscribeNotificationButton"/>
@@ -814,6 +871,19 @@
 		<property name="textOff" value="Push Notifications Disabled"/>
 		<property name="borderOn" value="true" type="boolean"/>
 		<property name="textSize" value="14" type="integer"/>
+	</bean>	
+	
+	<bean 
+		id="locationEnabledCheckbox" 
+		extends="customCheckbox"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="imageOn" value="icon_location.png"/>
+		<property name="imageOff" value="icon_location_disabled.png"/>
+		<property name="textOn" value="Location Sharing Enabled"/>
+		<property name="textOff" value="Location Sharing Disabled"/>
+		<property name="borderOn" value="true" type="boolean"/>
+		<property name="textSize" value="14" type="integer"/>
 	</bean>		
 	
 	<bean 
@@ -830,6 +900,7 @@
 	<factory id="notificationEnabledOptionNoBorderFactory" makes="notificationEnabledOptionNoBorder"/>	
 	<factory id="notificationEnabledOptionFactory" makes="notificationEnabledOption"/>	
 	<factory id="notificationsEnabledCheckboxFactory" makes="notificationsEnabledCheckbox"/>	
+	<factory id="locationEnabledCheckboxFactory" makes="locationEnabledCheckbox"/>	
 	
 <!--  End Comment UI -->
 	
@@ -887,6 +958,7 @@
 		
 		<property name="profileSaveButtonListenerFactory" ref="profileSaveButtonListenerFactory"/>	
 		<property name="notificationsEnabledCheckboxFactory" ref="notificationsEnabledCheckboxFactory"/>
+		<property name="locationEnabledCheckboxFactory" ref="locationEnabledCheckboxFactory"/>
 		
 		<property name="facebookEnabledCheckboxFactory" ref="facebookEnabledCheckboxFactory"/>
 		<property name="twitterEnabledCheckboxFactory" ref="twitterEnabledCheckboxFactory"/>
@@ -1021,12 +1093,14 @@
 
 <!-- User Activity UI -->
 
+<!-- 
 	<bean 
 		id="userActivityUtils" 
 		singleton="false"
 		class="com.socialize.ui.profile.activity.UserActivityUtils">
 	</bean>
-
+ 
+ 
 	<bean 
 		id="userActivityActionHtml" 
 		singleton="false"
@@ -1038,6 +1112,7 @@
 	</bean>
 	
 	<factory id="userActivityActionHtmlFactory" makes="userActivityActionHtml"/>
+-->
 	
 	<bean 
 		id="userActivityActionText" 
@@ -1070,6 +1145,7 @@
 	
 	<factory id="userActivityListItemFactory" makes="userActivityListItem"/>
 	
+	<!-- 
 	<bean 
 		id="userActivityListAdapter" 
 		singleton="false"
@@ -1078,7 +1154,7 @@
 	</bean>
 	
 	<factory id="userActivityListAdapterFactory" makes="userActivityListAdapter"/>
-
+ 	-->
 	<bean 
 		id="userActivityView" 
 		singleton="false"
@@ -1253,6 +1329,30 @@
 <!-- End Share UI -->	
 
 <!-- Socialize Slider -->
+
+	<bean 
+		id="actionBarSliderContent" 
+		class="com.socialize.ui.slider.ActionBarSliderContent" 
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="colors" ref="colors"/>
+		<init-method name="init"/>
+	</bean>
+	
+	<factory id="actionBarSliderContentFactory" makes="actionBarSliderContent"/>
+
+	<bean 
+		id="actionBarSliderHandle" 
+		class="com.socialize.ui.slider.ActionBarSliderHandle" 
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="drawables" ref="drawables"/>
+		<init-method name="init"/>
+	</bean>
+	
+	<factory id="actionBarSliderHandleFactory" makes="actionBarSliderHandle"/>
+	
+
 	<bean 
 		id="actionBarSliderFactory" 
 		class="com.socialize.ui.slider.DefaultActionBarSliderFactory">
@@ -1267,10 +1367,11 @@
 		
 		<constructor-arg type="activity"/>
 		
-		<property name="drawables" ref="drawables"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="logger" ref="logger"/>
 		<property name="sliderAnimationSetFactory" ref="sliderAnimationSetFactory"/>
+		<property name="actionBarSliderContentFactory" ref="actionBarSliderContentFactory"/>
+		<property name="actionBarSliderHandleFactory" ref="actionBarSliderHandleFactory"/>
 		
 		<init-method name="init"/>
 	</bean>

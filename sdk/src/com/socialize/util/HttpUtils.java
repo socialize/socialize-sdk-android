@@ -23,16 +23,12 @@ package com.socialize.util;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
 import org.apache.http.HttpResponse;
-
 import android.content.Context;
 import android.net.Uri;
-
+import android.util.SparseArray;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
@@ -47,7 +43,7 @@ public class HttpUtils {
 	private ResourceLocator resourceLocator;
 	private SocializeLogger logger;
 	
-	final Map<Integer, String> httpStatusCodes = new HashMap<Integer, String>();
+	final SparseArray<String> httpStatusCodes = new SparseArray<String>();
 	
 	public void init(Context context) {
 		InputStream in = null;

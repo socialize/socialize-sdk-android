@@ -21,7 +21,6 @@
  */
 package com.socialize.ui.dialog;
 
-import android.R;
 import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.Color;
@@ -51,7 +50,7 @@ public class FullScreenDialogFactory {
 
 	public Dialog build(Activity context, View contentView, boolean includeCloseButton) {
 		
-		final Dialog dialog = new Dialog(contentView.getContext(), R.style.Theme_Dialog);
+		final Dialog dialog = new Dialog(contentView.getContext(), android.R.style.Theme_Dialog);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		if(includeCloseButton) {

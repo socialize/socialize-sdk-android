@@ -100,8 +100,6 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 		runTestOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-
-				
 				boolean clicked = fbButton.performClick();
 				addResult(2, clicked);
 				addResult(3, twButton.performClick());

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,40 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.slider;
+package com.socialize.test.unit.facebook;
 
-import android.content.Context;
-import android.view.MotionEvent;
-import com.socialize.ui.util.Colors;
+import com.socialize.auth.facebook.FacebookAuthProviderInfo;
+import com.socialize.test.SocializeUnitTest;
+
 
 /**
  * @author Jason Polites
  *
  */
-public class ActionBarSliderContent extends ActionBarSliderViewChild {
-	
-	private int height;
-	private Colors colors;
-	
-	public ActionBarSliderContent(Context context, ActionBarSliderView parent, int height) {
-		super(context, parent);
-		this.height = height;
+public class FacebookAuthProviderInfoTest extends SocializeUnitTest {
+
+	public void testEquals() {
+		FacebookAuthProviderInfo info0 = new FacebookAuthProviderInfo();
+		FacebookAuthProviderInfo info1 = new FacebookAuthProviderInfo();
+		FacebookAuthProviderInfo info2 = new FacebookAuthProviderInfo();
+		
+		info0.setAppId("abc");
+		info1.setAppId("abc");
+		info2.setAppId("def");
+		
+		assertTrue(info0.equals(info0));
+		assertTrue(info0.equals(info1));
+		assertFalse(info0.equals(info2));
+		
+		
 	}
 	
-	public void init() {
-		setBackgroundColor(colors.getColor(Colors.ACTION_BAR_SLIDER_CONTENT));
-		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, height);
-		params.setMargins(0,0,0,0);
-		setLayoutParams(params);	
-		setOrientation(VERTICAL);
-	}
-	
-	@Override
-	public boolean onTouchEvent (MotionEvent event) {
-		return true;
-	}
-	
-	public void setColors(Colors colors) {
-		this.colors = colors;
-	}
 }

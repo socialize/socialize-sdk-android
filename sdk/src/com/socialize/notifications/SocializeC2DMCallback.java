@@ -24,7 +24,6 @@ package com.socialize.notifications;
 import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.R;
 import android.app.Notification;
 import android.content.Context;
 import android.os.Bundle;
@@ -44,7 +43,7 @@ import com.socialize.util.StringUtils;
  */
 public class SocializeC2DMCallback implements C2DMCallback {
 	
-	private int notificationIcon = R.drawable.sym_action_chat;
+	private int notificationIcon = android.R.drawable.sym_action_chat;
 	
 	private SocializeLogger logger;
 	private SocializeConfig config;

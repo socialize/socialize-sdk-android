@@ -43,8 +43,8 @@ public class AnonymousCell extends ClickableSectionCell {
 		title.setText("You are currently anonymous");
 		sub.setText("Authenticate with a service above");
 		
-		title.setTextColor(Colors.parseColor("#97a6b1"));
-		sub.setTextColor(Colors.parseColor("#6e7b84"));
+		title.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
+		sub.setTextColor(colors.getColor(Colors.ANON_CELL_TEXT));
 		
 		title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
 		sub.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);

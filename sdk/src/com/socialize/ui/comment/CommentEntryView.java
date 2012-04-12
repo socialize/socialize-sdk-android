@@ -64,6 +64,7 @@ public class CommentEntryView extends BaseView {
 	private DisplayUtils displayUtils;
 	private AppUtils appUtils;
 	private Drawables drawables;
+	private Colors colors;
 	private KeyboardUtils keyboardUtils;
 	private EditText commentField;
 	
@@ -303,7 +304,9 @@ public class CommentEntryView extends BaseView {
 			LayoutParams toolbarLayoutLeftParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 			LayoutParams toolbarLayoutRightParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 			
-			GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { Colors.parseColor("#44000000"), Colors.parseColor("#88000000") });
+			
+			
+			GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { colors.getColor(Colors.COMMENT_ENTRY_BOTTOM), colors.getColor(Colors.COMMENT_ENTRY_TOP) });
 			toolbarLayout.setBackgroundDrawable(background);
 			toolbarLayout.setPadding(padding, padding, padding, padding);		
 			
@@ -468,6 +471,10 @@ public class CommentEntryView extends BaseView {
 		this.drawables = drawables;
 	}
 	
+	public void setColors(Colors colors) {
+		this.colors = colors;
+	}
+
 	public void setAppUtils(AppUtils appUtils) {
 		this.appUtils = appUtils;
 	}

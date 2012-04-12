@@ -54,6 +54,25 @@ public class Colors {
 	public static final String STANDARD_BACKGROUND_COLOR = "STANDARD_BACKGROUND_COLOR";
 	public static final String LOADING_ITEM_BG = "LOADING_ITEM_BG";
 	
+	public static final String ANON_CELL_TITLE = "ANON_CELL_TITLE";
+	public static final String ANON_CELL_TEXT = "ANON_CELL_TEXT";
+	
+	public static final String AUTH_PANEL_TOP = "AUTH_PANEL_TOP";
+	public static final String AUTH_PANEL_BOTTOM = "AUTH_PANEL_BOTTOM";
+	public static final String AUTH_PANEL_CANCEL_TEXT = "AUTH_PANEL_CANCEL_TEXT";
+	
+	public static final String COMMENT_ENTRY_TOP = "COMMENT_ENTRY_TOP";
+	public static final String COMMENT_ENTRY_BOTTOM = "COMMENT_ENTRY_BOTTOM";
+	
+	public static final String AUTH_REQUEST_DIALOG_TOP = "AUTH_REQUEST_DIALOG_TOP";
+	public static final String AUTH_REQUEST_DIALOG_BOTTOM = "AUTH_REQUEST_DIALOG_BOTTOM";
+	
+	public static final String ACTION_BAR_SLIDER_CONTENT = "ACTION_BAR_SLIDER_CONTENT";
+	
+	public static final String CHECKBOX_BORDER_BOTTOM = "CHECKBOX_BORDER_BOTTOM";
+	public static final String CHECKBOX_BORDER_TOP = "CHECKBOX_BORDER_TOP";
+	public static final String CLICKABLE_CELL_STROKE = "CLICKABLE_CELL_STROKE";
+	
 	private Map<String, String> colorHexCodes;
 	private Map<String, Integer> colors;
 	

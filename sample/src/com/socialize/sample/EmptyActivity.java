@@ -21,12 +21,29 @@
  */
 package com.socialize.sample;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import com.socialize.ui.dialog.DialogRegister;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 
-public class EmptyActivity extends Activity {
+public class EmptyActivity extends Activity  implements DialogRegister {
 
+	private Set<Dialog> dialogs = new HashSet<Dialog>();	
+	
+	@Override
+	public void register(Dialog dialog) {
+		dialogs.add(dialog);
+	}
+
+	@Override
+	public Collection<Dialog> getDialogs() {
+		return dialogs;
+	}
+	
 	Bundle savedInstanceState;
 	
 	@Override

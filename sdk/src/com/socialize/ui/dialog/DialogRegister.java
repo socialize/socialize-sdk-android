@@ -21,6 +21,7 @@
  */
 package com.socialize.ui.dialog;
 
+import java.util.Collection;
 import android.app.Dialog;
 
 /**
@@ -29,5 +30,8 @@ import android.app.Dialog;
  *
  */
 public interface DialogRegister {
+	
 	public void register(Dialog dialog);
+	
+	public Collection<Dialog> getDialogs();
 }

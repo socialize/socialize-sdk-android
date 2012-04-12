@@ -132,6 +132,10 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 			resetC2DM = true;
 		}
 		
+		if(user.isShareLocation() != profile.isLocationEnabled()) {
+			user.setShareLocation(profile.isLocationEnabled());
+		}		
+		
 		saveUserProfile(context, session, user, resetC2DM, listener);
 	}
 	
