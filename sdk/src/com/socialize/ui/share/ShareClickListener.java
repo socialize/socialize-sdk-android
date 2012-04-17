@@ -26,7 +26,7 @@ import android.app.ProgressDialog;
 import android.view.View;
 import android.view.View.OnClickListener;
 import com.socialize.Socialize;
-import com.socialize.SocializeService;
+import com.socialize.SocializeSDK;
 import com.socialize.api.action.ShareType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
@@ -79,7 +79,7 @@ public class ShareClickListener implements OnClickListener {
 	@Override
 	public void onClick(View view) {
 		final ProgressDialog dialog = progressDialogFactory.show(view.getContext(), "Share", "Sharing via " + shareType.getDisplayName() + "...");
-		getSocialize().share(context, entity, provider.getShareText(), shareType, new ShareAddListener() {
+		getSDK().share(context, entity, provider.getShareText(), shareType, new ShareAddListener() {
 			@Override
 			public void onError(SocializeException error) {
 				dialog.dismiss();
@@ -124,8 +124,8 @@ public class ShareClickListener implements OnClickListener {
 		this.actionBarView = actionBarView;
 	}
 	
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
+	protected SocializeSDK getSDK() {
+		return Socialize.getSDK();
 	}
 	
 }

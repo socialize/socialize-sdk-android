@@ -124,7 +124,7 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 		
 		if(!StringUtils.isEmpty(registrationId)) {
 			
-			Socialize.getSocialize().authenticate(context, new SocializeAuthListener() {
+			Socialize.getSDK().authenticate(context, new SocializeAuthListener() {
 				
 				@Override
 				public void onError(SocializeException error) {

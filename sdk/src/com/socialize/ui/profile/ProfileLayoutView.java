@@ -5,9 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.LinearLayout;
-
 import com.socialize.Socialize;
-import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
@@ -58,10 +56,6 @@ public class ProfileLayoutView extends BaseView {
 		addView(content);
 	}
 	
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
-	}
-	
 	@Override
 	public void onViewLoad() {
 		super.onViewLoad();
@@ -77,7 +71,7 @@ public class ProfileLayoutView extends BaseView {
 		long id = Long.parseLong(userId);
 		dialog = progressDialogFactory.show(getContext(), "Loading", "Please wait...");
 		
-		getSocialize().getUser(id, new UserGetListener() {
+		getSDK().getUser(id, new UserGetListener() {
 			
 			@Override
 			public void onGet(User user) {

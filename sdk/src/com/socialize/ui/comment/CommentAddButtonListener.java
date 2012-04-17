@@ -22,9 +22,8 @@
 package com.socialize.ui.comment;
 
 import android.content.Context;
-
 import com.socialize.Socialize;
-import com.socialize.SocializeService;
+import com.socialize.SocializeSDK;
 import com.socialize.config.SocializeConfig;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.util.StringUtils;
@@ -52,12 +51,12 @@ public class CommentAddButtonListener {
 		this(context);
 		
 		this.callback = callback;
-		this.consumerKey = getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-		this.consumerSecret = getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+		this.consumerKey = getSDK().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		this.consumerSecret = getSDK().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 	}
 	
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
+	protected SocializeSDK getSDK() {
+		return Socialize.getSDK();
 	}
 	
 	public void onCancel() {
@@ -66,8 +65,8 @@ public class CommentAddButtonListener {
 
 	public void onComment(String comment, boolean shareLocation, boolean subscribe, SocialNetwork...networks) {
 		if(!StringUtils.isEmpty(comment)) {
-			if(!getSocialize().isAuthenticated()) {
-				getSocialize().authenticate(
+			if(!getSDK().isAuthenticated()) {
+				getSDK().authenticate(
 						context,
 						consumerKey, 
 						consumerSecret,

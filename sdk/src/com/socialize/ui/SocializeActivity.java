@@ -24,13 +24,11 @@ package com.socialize.ui;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
-
 import com.socialize.Socialize;
-import com.socialize.SocializeService;
+import com.socialize.SocializeSDK;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.ui.dialog.DialogRegister;
 
@@ -82,15 +80,15 @@ public abstract class SocializeActivity extends Activity implements DialogRegist
 	}
 	
 	protected void initSocialize() {
-		getSocialize().init(this);
+		getSDK().init(this);
 	}
 	
 	protected void destroySocialize() {
-		getSocialize().destroy();
+		getSDK().destroy();
 	}
 	
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
+	protected SocializeSDK getSDK() {
+		return Socialize.getSDK();
 	}
 	
 	protected void onPostSocializeInit(IOCContainer container) {}

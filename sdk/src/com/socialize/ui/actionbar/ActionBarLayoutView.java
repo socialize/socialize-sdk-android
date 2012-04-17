@@ -26,7 +26,6 @@ import android.app.Dialog;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import com.socialize.Socialize;
-import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Entity;
@@ -280,7 +279,7 @@ public class ActionBarLayoutView extends BaseView {
 		CacheableEntity localEntity = getLocalEntity();
 		
 		if(localEntity == null) {
-			getSocialize().view(getActivity(), entity, new ViewAddListener() {
+			getSDK().view(getActivity(), entity, new ViewAddListener() {
 				@Override
 				public void onError(SocializeException error) {
 					error.printStackTrace();
@@ -347,7 +346,7 @@ public class ActionBarLayoutView extends BaseView {
 	
 	protected void doUnLike(final ActionBarButton button, final CacheableEntity localEntity) {
 		button.showLoading();
-		getSocialize().unlike(localEntity.getLikeId(), new LikeDeleteListener() {
+		getSDK().unlike(localEntity.getLikeId(), new LikeDeleteListener() {
 			@Override
 			public void onError(SocializeException error) {
 				logError("Error deleting like", error);
@@ -387,7 +386,7 @@ public class ActionBarLayoutView extends BaseView {
 			options.setShareTo(SocialNetwork.TWITTER);
 		}
 		
-		getSocialize().like(getActivity(), localEntity.getEntity(), options, new LikeAddListener() {
+		getSDK().like(getActivity(), localEntity.getEntity(), options, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -420,7 +419,7 @@ public class ActionBarLayoutView extends BaseView {
 	protected void getLike(final String entityKey) {
 		
 		// Get the like
-		getSocialize().getLike(entityKey, new LikeGetListener() {
+		getSDK().getLike(entityKey, new LikeGetListener() {
 			
 			@Override
 			public void onGet(Like like) {
@@ -460,7 +459,7 @@ public class ActionBarLayoutView extends BaseView {
 	}
 	
 	protected void getEntity(String entityKey) {
-		getSocialize().getEntity(entityKey, new EntityGetListener() {
+		getSDK().getEntity(entityKey, new EntityGetListener() {
 			@Override
 			public void onGet(Entity entity) {
 				CacheableEntity putEntity = setLocalEntity(entity);
@@ -531,11 +530,6 @@ public class ActionBarLayoutView extends BaseView {
 		}
 	}
 	
-	// So we can mock for tests
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
-	}
-
 	public ActionBarButton getShareButton() {
 		return shareButton;
 	}

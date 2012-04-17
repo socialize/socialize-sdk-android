@@ -124,7 +124,7 @@ public abstract class SocializeBaseView extends BaseView {
 	}
 
 	protected void initSocialize(final SocializeInitListener listener) {
-		SocializeSystem system = getSocialize().getSystem();
+		SocializeSystem system = getSDK().getSystem();
 		String[] config = system.getBeanConfig();
 		
 		final SocializeInitListener systemListener = system.getSystemInitListener();
@@ -146,10 +146,10 @@ public abstract class SocializeBaseView extends BaseView {
 				}
 			};
 			
-			getSocialize().initAsync(getContext(), overrideListener, config);
+			getSDK().initAsync(getContext(), overrideListener, config);
 		}
 		else {
-			getSocialize().initAsync(getContext(), listener, config);
+			getSDK().initAsync(getContext(), listener, config);
 		}
 	}
 	

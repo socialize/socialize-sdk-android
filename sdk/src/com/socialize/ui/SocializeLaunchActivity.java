@@ -27,10 +27,10 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.RelativeLayout.LayoutParams;
-
+import android.widget.TextView;
 import com.socialize.Socialize;
+import com.socialize.SocializeSDK;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
@@ -112,7 +112,7 @@ public class SocializeLaunchActivity extends Activity {
 	
 	protected void doAuthenticate() {
 		// Authenticate the user
-		getSocialize().authenticate(this, getAuthListener(container));
+		getSDK().authenticate(this, getAuthListener(container));
 	}
 	
 	protected SocializeAuthListener getAuthListener(final IOCContainer container) {
@@ -248,9 +248,12 @@ public class SocializeLaunchActivity extends Activity {
 	}
 	
 	protected void initSocialize() {
-		getSocialize().init(this);
+		getSDK().init(this);
 	}
 	
+	protected SocializeSDK getSDK() {
+		return Socialize.getSDK();
+	}
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();
 	}

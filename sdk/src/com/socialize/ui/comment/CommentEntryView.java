@@ -395,7 +395,7 @@ public class CommentEntryView extends BaseView {
 					}
 					else {
 						// Show auth
-						getSocialize().authenticate(getContext(), authProviderType, new SocializeAuthListener() {
+						getSDK().authenticate(getContext(), authProviderType, new SocializeAuthListener() {
 
 							@Override
 							public void onError(SocializeException error) {

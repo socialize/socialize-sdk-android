@@ -22,9 +22,6 @@
 package com.socialize.networks.facebook;
 
 import android.app.Activity;
-
-import com.socialize.Socialize;
-import com.socialize.SocializeService;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ActionType;
 import com.socialize.entity.Entity;
@@ -70,10 +67,5 @@ public class FacebookSharer extends AbstractSocialNetworkSharer {
 
 	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
 		this.facebookWallPoster = facebookWallPoster;
-	}
-
-	// So we can mock
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
 	}
 }

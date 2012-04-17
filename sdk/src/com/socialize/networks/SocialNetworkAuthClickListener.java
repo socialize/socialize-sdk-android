@@ -24,9 +24,8 @@ package com.socialize.networks;
 import android.app.ProgressDialog;
 import android.view.View;
 import android.view.View.OnClickListener;
-
 import com.socialize.Socialize;
-import com.socialize.SocializeService;
+import com.socialize.SocializeSDK;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.config.SocializeConfig;
@@ -57,7 +56,7 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 		
 		AuthProviderInfo fbInfo = getAuthProviderInfo();
 		
-		getSocialize().authenticate(view.getContext(), consumerKey, consumerSecret, fbInfo, new SocializeAuthListener() {
+		getSDK().authenticate(view.getContext(), consumerKey, consumerSecret, fbInfo, new SocializeAuthListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -99,8 +98,8 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 
 	protected abstract AuthProviderInfo getAuthProviderInfo();
 	
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
+	protected SocializeSDK getSDK() {
+		return Socialize.getSDK();
 	}
 
 	public void setConfig(SocializeConfig config) {

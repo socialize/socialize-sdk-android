@@ -74,7 +74,7 @@ public class CommentActivity extends SocializeUIActivity {
 				}
 			}
 			
-			Socialize.getSocialize().destroy();
+			Socialize.getSDK().destroy();
 			
 			if(isTaskRoot()) {
 				if (DefaultAppUtils.launchMainApp(this)) {

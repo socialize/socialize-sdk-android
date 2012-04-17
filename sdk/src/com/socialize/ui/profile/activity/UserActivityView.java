@@ -69,7 +69,7 @@ public class UserActivityView extends BaseView {
 	
 	public void loadUserActivity(long userId, final SocializeAction current) {
 		itemView.showLoading();
-		Socialize.getSocialize().listActivityByUser(userId, 0, numItems, new UserActivityListListener() {
+		Socialize.getSDK().listActivityByUser(userId, 0, numItems, new UserActivityListListener() {
 			@Override
 			public void onList(ListResult<SocializeAction> entities) {
 				if(entities != null) {

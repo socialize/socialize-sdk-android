@@ -31,8 +31,6 @@ import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.socialize.Socialize;
-import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.action.ShareType;
 import com.socialize.entity.Entity;
@@ -185,10 +183,6 @@ public class ShareDialogView extends BaseView implements ShareInfoProvider {
 		addView(buttonLayout);
 	}
 	
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
-	}
-
 	public void setDisplayUtils(DisplayUtils deviceUtils) {
 		this.displayUtils = deviceUtils;
 	}

@@ -80,4 +80,8 @@ public class Socialize {
 	public static final SocializeUI getSocializeUI() {
 		return instance;
 	}
+	
+	public static final SocializeSDK getSDK() {
+		return instance;
+	}
 }

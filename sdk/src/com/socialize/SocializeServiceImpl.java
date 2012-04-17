@@ -125,7 +125,7 @@ import com.socialize.util.StringUtils;
 /**
  * @author Jason Polites
  */
-public class SocializeServiceImpl implements SocializeSessionConsumer, SocializeService , SocializeUI {
+public class SocializeServiceImpl implements SocializeSessionConsumer, SocializeSDK, SocializeUI {
 	
 	static final String receiver = SocializeC2DMReceiver.class.getName();
 	

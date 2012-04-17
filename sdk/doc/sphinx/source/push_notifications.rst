@@ -102,8 +102,8 @@ provided by you which tells Socialize how to load content in your app.
 
 Refer to the :ref:`entity_loader` section for details on how to implement a Socialize Entity Loader.
 
-Step 4: Registering for Google C2DM
------------------------------------
+Step 4: Registering for Google C2DM (Optional)
+----------------------------------------------
 
 Socialize provides a default quota of SmartAlerts that should satisfy the needs of most users, however if you are experiencing issues with SmartAlerts quota 
 you can always simply register your own C2DM token with Socialize.
