@@ -429,6 +429,25 @@ public class TestUtils {
 		return null;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static <V extends View> V findViewById(Activity activity, final int id) {
+		View view = activity.getWindow().getDecorView();
+		
+		if(view instanceof ViewGroup) {
+			return findViewById((ViewGroup)view, id);
+		}
+		return (V) ((view.getId() == id) ? view : null);
+	}
+	
+	public static <V extends View> V findViewById(ViewGroup view, final int id) {
+		return findView(view, new ViewMatcher() {
+			@Override
+			public boolean matches(View view) {
+				return view.getId() == id;
+			}
+		});
+	}
+	
 	public static <V extends View> List<V> findViews(ViewGroup view,final Class<?> viewClass) {
 		return findViews(view, new ViewMatcher() {
 			@Override

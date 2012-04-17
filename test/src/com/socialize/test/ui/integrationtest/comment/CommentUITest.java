@@ -70,7 +70,9 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		// Wait for view to show
 		Thread.sleep(2000);		
 		
-		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(LoadingListView.LIST_VIEW_ID);
+		ListView comments = TestUtils.findViewById(robotium.getCurrentActivity(), LoadingListView.LIST_VIEW_ID);
+		
+		assertNotNull(comments);
 		
 		int count = comments.getCount();
 		
