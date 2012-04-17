@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.SocializeSDK;
 import com.socialize.SocializeService;
 import com.socialize.SocializeServiceImpl;
 import com.socialize.api.SocializeSession;
@@ -349,7 +350,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
 			@Override
-			protected SocializeService getSocialize() {
+			public SocializeSDK getSDK() {
 				return socialize;
 			}
 
@@ -450,7 +451,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		// Because of the use of an anonymous inner class as the callback
 		// we need to override the SocializeService instance to capture the callback
 		// class and call it directly
-		final SocializeService socialize = new SocializeServiceImpl() {
+		final SocializeSDK socialize = new SocializeServiceImpl() {
 			@Override
 			public void listCommentsByEntity(String url, int startIndex, int endIndex, CommentListListener commentListListener) {
 				commentListListener.onList(entities);
@@ -459,7 +460,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
 			@Override
-			protected SocializeService getSocialize() {
+			public SocializeSDK getSDK() {
 				return socialize;
 			}
 			
@@ -527,7 +528,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		// Because of the use of an anonymous inner class as the callback
 		// we need to override the SocializeService instance to capture the callback
 		// class and call it directly
-		final SocializeService socialize = new SocializeServiceImpl() {
+		final SocializeSDK socialize = new SocializeServiceImpl() {
 			@Override
 			public void listCommentsByEntity(String url, int startIndex, int endIndex, CommentListListener commentListListener) {
 				commentListListener.onList(entities);
@@ -536,7 +537,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
 			@Override
-			protected SocializeService getSocialize() {
+			public SocializeSDK getSDK() {
 				return socialize;
 			}
 
@@ -589,7 +590,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		// Because of the use of an anonymous inner class as the callback
 		// we need to override the SocializeService instance to capture the callback
 		// class and call it directly
-		final SocializeService socialize = new SocializeServiceImpl() {
+		final SocializeSDK socialize = new SocializeServiceImpl() {
 			@Override
 			public void listCommentsByEntity(String url, int startIndex, int endIndex, CommentListListener commentListListener) {
 				commentListListener.onError(error);
@@ -598,7 +599,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		PublicCommentListView view = new PublicCommentListView(getContext()) {
 			@Override
-			protected SocializeService getSocialize() {
+			public SocializeSDK getSDK() {
 				return socialize;
 			}
 

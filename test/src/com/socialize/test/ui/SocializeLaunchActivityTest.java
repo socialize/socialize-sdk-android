@@ -28,7 +28,6 @@ import android.os.Bundle;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeSDK;
-import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.event.EventSystem;
@@ -77,7 +76,7 @@ public class SocializeLaunchActivityTest extends SocializeUIActivityTest {
 			}
 
 			@Override
-			public SocializeService getSocialize() {
+			public SocializeSDK getSDK() {
 				return socialize;
 			}
 

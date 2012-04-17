@@ -235,7 +235,7 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 		
 		PublicView activity = new PublicView(getActivity()) {
 			@Override
-			protected SocializeService getSocialize() {
+			public SocializeSDK getSDK() {
 				return socialize;
 			}
 		};
