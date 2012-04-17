@@ -32,6 +32,7 @@ import com.socialize.test.SocializeUnitTest;
 public class AuthProviderDataTest extends SocializeUnitTest {
 
 	// No value in mocking a data bean.. so just assert in/out
+	@SuppressWarnings("deprecation")
 	public void testAuthProviderData() {
 	
 		AuthProviderData data = new AuthProviderData();

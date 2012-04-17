@@ -70,7 +70,7 @@ public class ViewActivity extends SocializeActivity {
 					Entity entity = Entity.newInstance(key, "test entity");
 					
 					if(!StringUtils.isEmpty(key)) {
-						Socialize.getSocialize().view(ViewActivity.this, entity, new ViewAddListener() {
+						Socialize.getSDK().view(ViewActivity.this, entity, new ViewAddListener() {
 							
 							@Override
 							public void onError(SocializeException error) {

@@ -93,7 +93,7 @@ public class CommentGetActivity extends CommentBaseActivity {
 			
 			try {
 				
-				Socialize.getSocialize().getCommentById(Integer.parseInt(id), new CommentGetListener() {
+				Socialize.getSDK().getCommentById(Integer.parseInt(id), new CommentGetListener() {
 					
 					@Override
 					public void onError(SocializeException error) {

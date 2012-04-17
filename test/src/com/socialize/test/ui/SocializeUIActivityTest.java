@@ -42,7 +42,7 @@ public abstract class SocializeUIActivityTest extends ActivityInstrumentationTes
 	
 	@Override
 	protected void tearDown() throws Exception {
-		Socialize.getSocialize().destroy(true);
+		Socialize.getSDK().destroy(true);
 		super.tearDown();
 	}
 	

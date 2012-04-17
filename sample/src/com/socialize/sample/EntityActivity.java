@@ -76,7 +76,7 @@ public class EntityActivity extends SocializeActivity {
 					Entity entity = Entity.newInstance(key, name);
 					entity.setMetaData(txtMeta.getText().toString());
 					
-					Socialize.getSocialize().addEntity(EntityActivity.this, entity, new EntityAddListener() {
+					Socialize.getSDK().addEntity(EntityActivity.this, entity, new EntityAddListener() {
 						
 						@Override
 						public void onError(SocializeException error) {
@@ -111,7 +111,7 @@ public class EntityActivity extends SocializeActivity {
 					if(!StringUtils.isEmpty(key)) {
 						final ProgressDialog progress = SafeProgressDialog.show(v.getContext(), "Retrieving", "Please wait...");
 						
-						Socialize.getSocialize().getEntity(key, new EntityGetListener() {
+						Socialize.getSDK().getEntity(key, new EntityGetListener() {
 							
 							@Override
 							public void onError(SocializeException error) {

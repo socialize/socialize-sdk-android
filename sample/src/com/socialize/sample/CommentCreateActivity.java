@@ -68,7 +68,7 @@ public class CommentCreateActivity extends CommentBaseActivity {
 					
 					Entity entity = Entity.newInstance(key, "Test Entity");
 					
-					Socialize.getSocialize().addComment(CommentCreateActivity.this, entity, name, new CommentAddListener() {
+					Socialize.getSDK().addComment(CommentCreateActivity.this, entity, name, new CommentAddListener() {
 						@Override
 						public void onError(SocializeException error) {
 							btnCommentCreate.setEnabled(true);

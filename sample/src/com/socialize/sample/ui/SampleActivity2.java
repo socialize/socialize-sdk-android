@@ -40,7 +40,7 @@ public class SampleActivity2 extends Activity {
 		final CheckBox chkSSO = (CheckBox) findViewById(R.id.chkFacebook);
 		final CheckBox chkNotifications = (CheckBox) findViewById(R.id.chkNotifications);
 		
-		Socialize.getSocialize().init(this);
+		Socialize.getSDK().init(this);
 		txtFB.setText(Socialize.getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID));
 		
 		txtTW_Key.setText(Socialize.getSocialize().getConfig().getProperty(SocializeConfig.TWITTER_CONSUMER_KEY));
@@ -90,8 +90,8 @@ public class SampleActivity2 extends Activity {
 
 					@Override
 					protected Void doInBackground(Void... params) {
-						Socialize.getSocialize().init(SampleActivity2.this);
-						Socialize.getSocialize().clearSessionCache(SampleActivity2.this);
+						Socialize.getSDK().init(SampleActivity2.this);
+						Socialize.getSDK().clearSessionCache(SampleActivity2.this);
 						return null;
 					}
 

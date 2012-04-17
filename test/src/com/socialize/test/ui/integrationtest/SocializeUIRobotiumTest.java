@@ -87,7 +87,7 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	@Override
 	protected void tearDown() throws Exception {
 		
-		Socialize.getSocialize().destroy(true);
+		Socialize.getSDK().destroy(true);
 		
 		try {
 			robotium.finish();

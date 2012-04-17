@@ -68,7 +68,7 @@ public interface SocializeService {
 	/**
 	 * Initializes a SocializeService instance with default settings.  Should be called during the onCreate() method of your Activity.
 	 * @param context The current Android context (or Activity)
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public IOCContainer init(Context context);
@@ -78,7 +78,7 @@ public interface SocializeService {
 	 * @param context The current Android context (Activity)
 	 * @param paths List of paths to config files.  Beans in paths to the right overwrite beans in paths to the left.
 	 * @see "https://github.com/socialize/android-ioc"
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public IOCContainer init(Context context, String... paths);
@@ -87,7 +87,7 @@ public interface SocializeService {
 	 * Initializes a SocializeService instance asynchronously with default settings.  Should be called during the onCreate() method of your Activity.
 	 * @param context The current Android context (Activity)
 	 * @param listener A listener to handle callbacks from the init.  Any access to Socialize objects must be done AFTER successful init.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void initAsync(Context context, SocializeInitListener listener);
@@ -98,7 +98,7 @@ public interface SocializeService {
 	 * @param listener A listener to handle callbacks from the init.  Any access to Socialize objects must be done AFTER successful init.
 	 * @param paths List of paths to config files.  Beans in paths to the right overwrite beans in paths to the left.
 	 * @see "https://github.com/socialize/android-ioc"
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void initAsync(Context context, SocializeInitListener listener, String... paths);
@@ -108,14 +108,14 @@ public interface SocializeService {
 	 * @param context The current Android context (or Activity)
 	 * @param container A reference to an IOC container
 	 * @see "https://github.com/socialize/android-ioc"
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void init(Context context, final IOCContainer container);
 
 	/**
 	 * Destroys the SocializeService instance.  Should be called during the onDestroy() method of your Activity.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void destroy();
@@ -123,7 +123,7 @@ public interface SocializeService {
 	/**
 	 * Force destroy (Expert only)
 	 * @param force
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void destroy(boolean force);
@@ -133,7 +133,7 @@ public interface SocializeService {
 	 * NOTE:  This assumes the consumer key/secret have been specified in assets/socialize.properties
 	 * @param context The current context.
 	 * @param authListener The callback for authentication outcomes.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void authenticate(Context context, SocializeAuthListener authListener);
@@ -144,7 +144,7 @@ public interface SocializeService {
 	 * @param consumerKey The consumer key, obtained from registration at http://www.getsocialize.com.
 	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
 	 * @param authListener The callback for authentication outcomes.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener authListener);
@@ -155,7 +155,7 @@ public interface SocializeService {
 	 * @param context The current context.
 	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
 	 * @param authListener The callback for authentication outcomes.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void authenticate(Context context, AuthProviderType authProvider, SocializeAuthListener authListener);
@@ -167,7 +167,7 @@ public interface SocializeService {
 	 * @param consumerSecret The consumer secret, obtained from registration at http://www.getsocialize.com.
 	 * @param authProviderInfo Information about the auth provider to be used.  May be null.
 	 * @param authListener The callback for authentication outcomes.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, SocializeAuthListener authListener);
@@ -180,7 +180,7 @@ public interface SocializeService {
 	 * @param authProviderInfo Information about the auth provider to be used. 
 	 * @param userProviderCredentials Information about the user being authed.
 	 * @param authListener The callback for authentication outcomes.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, UserProviderCredentials userProviderCredentials, SocializeAuthListener authListener);
@@ -190,7 +190,7 @@ public interface SocializeService {
 	 * @param activity The current Activity.
 	 * @param entity The entity being liked.
 	 * @param likeAddListener A listener to handle callbacks from the post.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void like(Activity activity, Entity entity, LikeAddListener likeAddListener);
@@ -201,7 +201,7 @@ public interface SocializeService {
 	 * @param entity The entity being liked.
 	 * @param shareOptions Options for posting to external networks.
 	 * @param likeAddListener A listener to handle callbacks from the post.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void like(Activity activity, Entity entity, ShareOptions shareOptions, LikeAddListener likeAddListener);
@@ -211,7 +211,7 @@ public interface SocializeService {
 	 * @param activity The current Activity.
 	 * @param entity The entity being viewed.
 	 * @param viewAddListener A listener to handle callbacks from the post.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void view(Activity activity, Entity entity, ViewAddListener viewAddListener);	
@@ -222,7 +222,7 @@ public interface SocializeService {
 	 * @param entity The entity being viewed.
 	 * @param location The location of the device at the time the call was made.
 	 * @param viewAddListener A listener to handle callbacks from the post.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void view(Activity activity, Entity entity, Location location, ViewAddListener viewAddListener);
@@ -231,7 +231,7 @@ public interface SocializeService {
 	 * Removes a specific LIKE based on it's unique ID.  The ID would be returned from the original creation call.
 	 * @param id The ID of the like to be deleted.
 	 * @param likeDeleteListener A listener to handle callbacks from the delete.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void unlike(long id, LikeDeleteListener likeDeleteListener);
@@ -243,7 +243,7 @@ public interface SocializeService {
 	 * @param text The text being shared.
 	 * @param options Options for the share
 	 * @param shareAddListener A listener to handle callbacks from the post.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void share(Activity activity, Entity entity, String text, ShareOptions options, ShareAddListener shareAddListener);
@@ -256,7 +256,7 @@ public interface SocializeService {
 	 * @param shareType The type of the share.
 	 * @param location The location (may be null)
 	 * @param shareAddListener A listener to handle callbacks from the post.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void share(Activity activity, Entity entity, String text, ShareType shareType, Location location, ShareAddListener shareAddListener);
@@ -268,7 +268,7 @@ public interface SocializeService {
 	 * @param text The text being shared.
 	 * @param shareType The type of the share.
 	 * @param shareAddListener A listener to handle callbacks from the post.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void share(Activity activity, Entity entity, String text, ShareType shareType, ShareAddListener shareAddListener);
@@ -283,7 +283,7 @@ public interface SocializeService {
 	 * @param shareType  The social network on which the share occurred. 
 	 * @param location
 	 * @param shareAddListener A listener to handle callbacks from the post.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void addShare(Activity activity, Entity entity, String text, ShareType shareType, Location location, ShareAddListener shareAddListener);
@@ -297,7 +297,7 @@ public interface SocializeService {
 	 * @param text The share text provided by the user.
 	 * @param shareType  The social network on which the share occurred. 
 	 * @param shareAddListener A listener to handle callbacks from the post.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void addShare(Activity activity, Entity entity, String text, ShareType shareType, ShareAddListener shareAddListener);
@@ -306,7 +306,7 @@ public interface SocializeService {
 	 * Retrieves a single like previously associated with an entity.
 	 * @param key The entity to which the like was originally associated. 
 	 * @param likeGetListener
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void getLike(String key, LikeGetListener likeGetListener);
@@ -315,7 +315,7 @@ public interface SocializeService {
 	 * Retrieves a single like.
 	 * @param id The ID of the like
 	 * @param likeGetListener A listener to handle callbacks from the get.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void getLikeById(long id, LikeGetListener likeGetListener);
@@ -324,7 +324,7 @@ public interface SocializeService {
 	 * Lists all the likes associated with the given ids.
 	 * @param likeListListener A listener to handle callbacks from the get.
 	 * @param ids
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void listLikesById(LikeListListener likeListListener, long...ids);
@@ -333,7 +333,7 @@ public interface SocializeService {
 	 * Lists the likes associated with a single user.
 	 * @param userId The user
 	 * @param likeListListener A listener to handle callbacks from the get.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void listLikesByUser(long userId, LikeListListener likeListListener);
@@ -344,7 +344,7 @@ public interface SocializeService {
 	 * @param startIndex The starting index of the results for pagination.
 	 * @param endIndex The ending index of the results for pagination.
 	 * @param likeListListener A listener to handle callbacks from the get.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void listLikesByUser(long userId, int startIndex, int endIndex, LikeListListener likeListListener);	
@@ -353,7 +353,7 @@ public interface SocializeService {
 	 * Lists the comments associated with a key.
 	 * @param key The entity to which the comments are associated. 
 	 * @param commentListListener A listener to handle callbacks from the post.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void listCommentsByEntity(String key, CommentListListener commentListListener);
@@ -364,7 +364,7 @@ public interface SocializeService {
 	 * @param startIndex The starting index of the results for pagination.
 	 * @param endIndex The ending index of the results for pagination.
 	 * @param commentListListener A listener to handle callbacks from the get.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void listCommentsByEntity(String key, int startIndex, int endIndex, CommentListListener commentListListener);
@@ -373,7 +373,7 @@ public interface SocializeService {
 	 * Lists the comments associated with a single user.
 	 * @param userId The user
 	 * @param commentListListener A listener to handle callbacks from the get.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void listCommentsByUser(long userId, CommentListListener commentListListener);
@@ -384,7 +384,7 @@ public interface SocializeService {
 	 * @param startIndex The starting index of the results for pagination.
 	 * @param endIndex The ending index of the results for pagination.
 	 * @param commentListListener A listener to handle callbacks from the get.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void listCommentsByUser(long userId, int startIndex, int endIndex, CommentListListener commentListListener);
@@ -393,7 +393,7 @@ public interface SocializeService {
 	 * Lists the comments by comment ID.
 	 * @param commentListListener A listener to handle callbacks from the post.
 	 * @param ids Array of IDs corresponding to pre-existing comments.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void listCommentsById(CommentListListener commentListListener, long...ids);
@@ -402,7 +402,7 @@ public interface SocializeService {
 	 * Retrieves a single comment based on its ID.
 	 * @param id The ID of the comment, returned when it was originally created.
 	 * @param commentGetListener A listener to handle callbacks from the get.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void getCommentById(long id, CommentGetListener commentGetListener);
@@ -411,7 +411,7 @@ public interface SocializeService {
 	 * Retrieves a single entity.
 	 * @param key The unique key associated with this entity. 
 	 * @param entityGetListener A listener to handle callbacks from the get.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void getEntity(String key, EntityGetListener entityGetListener);
@@ -420,7 +420,7 @@ public interface SocializeService {
 	 * Retrieves a single entity based on its ID.
 	 * @param id The ID of the entity.
 	 * @param entityGetListener A listener to handle callbacks from the get.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void getEntityById(long id, EntityGetListener entityGetListener);
@@ -429,7 +429,7 @@ public interface SocializeService {
 	 * Lists entities matching the given keys.
 	 * @param entityListListener A listener to handle callbacks from the post.
 	 * @param keys Array of keys corresponding to the entities to return, or null to return all.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void listEntitiesByKey(EntityListListener entityListListener, String...keys);
@@ -439,7 +439,7 @@ public interface SocializeService {
 	 * @param activity The current activity.
 	 * @param entity The entity to create.
 	 * @param entityAddListener A listener to handle callbacks from the post.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void addEntity(Activity activity, Entity entity, EntityAddListener entityAddListener);
@@ -451,7 +451,7 @@ public interface SocializeService {
 	 * @param location The location of the device at the time the call was made.
 	 * @param shareOptions Options for sharing to facebook and sharing location.
 	 * @param commentAddListener A listener to handle callbacks from the post.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void addComment(Activity activity, Comment comment, ShareOptions shareOptions, CommentAddListener commentAddListener);	
@@ -462,7 +462,7 @@ public interface SocializeService {
 	 * @param entity The entity to which the comment is associated. Defined when first creating an entity.
 	 * @param comment The comment to add.
 	 * @param commentAddListener A listener to handle callbacks from the post.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void addComment(Activity activity, Entity entity, String comment, CommentAddListener commentAddListener);
@@ -474,7 +474,7 @@ public interface SocializeService {
 	 * @param comment The comment to add.	
 	 * @param shareOptions Options for sharing to facebook and sharing location.
 	 * @param commentAddListener A listener to handle callbacks from the post.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void addComment(Activity activity, Entity entity, String comment, ShareOptions shareOptions, CommentAddListener commentAddListener);	
@@ -483,7 +483,7 @@ public interface SocializeService {
 	 * Retrieves a Socialize User based on their Socialize user ID.
 	 * @param id The id of the user.
 	 * @param userGetListener A listener to handle callbacks from the get.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void getUser(long id, UserGetListener userGetListener);
@@ -493,7 +493,7 @@ public interface SocializeService {
 	 * @param context The current context.
 	 * @param profile The profile for the user.
 	 * @param listener A listener to handle callbacks from the post.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void saveCurrentUserProfile(Context context, UserProfile profile, UserSaveListener listener);
@@ -535,7 +535,7 @@ public interface SocializeService {
 	/**
 	 * Clears the local cache of session data.  This will cause a full authenticate 
 	 * to be required upon the next call to the Socialize API.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void clearSessionCache(Context context);
@@ -556,7 +556,7 @@ public interface SocializeService {
 	 * Lists a user's activity.
 	 * @param userId The ID of the user for whom activity will be listed.
 	 * @param activityListListener A listener to handle callbacks from the get.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void listActivityByUser(long userId, UserActivityListListener activityListListener);
@@ -567,7 +567,7 @@ public interface SocializeService {
 	 * @param startIndex The starting index of the results for pagination.
 	 * @param endIndex The ending index of the results for pagination.
 	 * @param activityListListener A listener to handle callbacks from the get.
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void listActivityByUser(long userId, int startIndex, int endIndex, UserActivityListListener activityListListener);
@@ -577,7 +577,7 @@ public interface SocializeService {
 	 * @param context
 	 * @param entity
 	 * @param subscriptionAddListener
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void subscribe(Context context, Entity entity, NotificationType type, SubscriptionAddListener subscriptionAddListener);
@@ -588,7 +588,7 @@ public interface SocializeService {
 	 * @param context
 	 * @param entity
 	 * @param subscriptionAddListener
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void unsubscribe(Context context, Entity entity, NotificationType type, SubscriptionAddListener subscriptionAddListener);	
@@ -596,7 +596,7 @@ public interface SocializeService {
 	/**
 	 * Lists subscriptions for the current user.
 	 * @param subscriptionListListener
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void listSubscriptions(SubscriptionListListener subscriptionListListener);
@@ -604,7 +604,7 @@ public interface SocializeService {
 	/**
 	 * Lists subscriptions for the current user with pagination
 	 * @param subscriptionListListener
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void listSubscriptions(int startIndex, int endIndex, SubscriptionListListener subscriptionListListener);	
@@ -613,7 +613,7 @@ public interface SocializeService {
 	 * Retrieves a current subscription for the user if available.
 	 * @param entity
 	 * @param subscriptionGetListener
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public void getSubscription(Entity entity, SubscriptionGetListener subscriptionGetListener);
@@ -655,7 +655,7 @@ public interface SocializeService {
 	/**
 	 * Returns the internal system config for Socialize. (Expert Only)
 	 * @return
-	 * @deprecated use SocializeSDK instance
+	 * @deprecated use SocializeSDK instance.  Will be removed in v2.0.
 	 */
 	@Deprecated
 	public SocializeSystem getSystem();

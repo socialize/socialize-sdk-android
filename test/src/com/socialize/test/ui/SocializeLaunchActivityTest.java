@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.SocializeSDK;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
@@ -44,11 +45,11 @@ import com.socialize.ui.SocializeLaunchActivity;
  */
 public class SocializeLaunchActivityTest extends SocializeUIActivityTest {
 
-	@UsesMocks ({IOCContainer.class, SocializeErrorHandler.class, SocializeService.class, SocializeAuthListener.class, EventSystem.class})
+	@UsesMocks ({IOCContainer.class, SocializeErrorHandler.class, SocializeSDK.class, SocializeAuthListener.class, EventSystem.class})
 	public void testOnCreate() throws Throwable {
 		
 		final IOCContainer mockContainer = AndroidMock.createMock(IOCContainer.class);
-		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
+		final SocializeSDK socialize = AndroidMock.createMock(SocializeSDK.class);
 		final SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
 		final EventSystem eventSystem = AndroidMock.createMock(EventSystem.class);
 		

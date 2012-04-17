@@ -32,7 +32,7 @@ public class UserActivityListActivity extends ListActivity {
 				
 				final ProgressDialog progress = SafeProgressDialog.show(this, "Retrieving", "Please wait...");
 				
-				Socialize.getSocialize().listActivityByUser(key, new UserActivityListListener() {
+				Socialize.getSDK().listActivityByUser(key, new UserActivityListListener() {
 
 					@Override
 					public void onError(SocializeException error) {

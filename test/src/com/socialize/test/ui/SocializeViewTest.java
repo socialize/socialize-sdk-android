@@ -2,9 +2,9 @@ package com.socialize.test.ui;
 
 import android.content.Context;
 import android.view.View;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.SocializeSDK;
 import com.socialize.SocializeService;
 import com.socialize.SocializeSystem;
 import com.socialize.android.ioc.IOCContainer;
@@ -216,10 +216,10 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 	}
 	
 
-	@UsesMocks ({ SocializeInitListener.class, SocializeService.class, SocializeSystem.class})
+	@UsesMocks ({ SocializeInitListener.class, SocializeSDK.class, SocializeSystem.class})
 	public void testInitSocialize() {
 		final SocializeInitListener listener = AndroidMock.createMock(SocializeInitListener.class);
-		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
+		final SocializeSDK socialize = AndroidMock.createMock(SocializeSDK.class);
 		final SocializeSystem system = AndroidMock.createMock(SocializeSystem.class);
 		
 		final String[] config = {"foo", "bar"};
