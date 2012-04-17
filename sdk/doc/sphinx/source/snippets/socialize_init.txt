@@ -1,14 +1,9 @@
-.. raw:: html
+import com.socialize.Socialize;
 
-	<pre class="brush: java">
-	import com.socialize.Socialize;
+protected void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
 
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	Socialize.init(this);
 
-		Socialize.init(this);
-
-		// Your code goes here
-	}
-
-	</pre>
+	// Your code goes here
+}	

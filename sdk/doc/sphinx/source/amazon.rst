@@ -11,8 +11,10 @@ your Amazon App listing rather than the default Android Market url.
 
 To do this, simply add a configuration entry to your **socialize.properties** file
 
-.. include:: snippets/props_amazon.txt
-
+.. literalinclude:: snippets/props_amazon.txt
+   :language: properties
+   :linenos:
+   
 The value for the Amazon AppStore is "amazon" (lowercase)
 
 .. include:: footer.inc

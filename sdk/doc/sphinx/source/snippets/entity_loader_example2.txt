@@ -1,7 +1,1 @@
-.. raw:: html
-
-	<pre class="brush: java">
-	
-	Socialize.getSocialize().setEntityLoader(new MyEntityLoader());
-	
-	</pre>
+Socialize.getSocialize().setEntityLoader(new MyEntityLoader());	

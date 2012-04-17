@@ -16,7 +16,6 @@ In v1.3 of Socialize we introduced SmartAlerts_.  This provides your app with a 
 .. image:: images/comment.png
 .. image:: images/subscribe.png
 
-
 SmartAlerts in Comment Threads
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -50,15 +49,27 @@ The default configuration for Socialize needs to be augmented slightly for push 
 
 Add the following additional configurations to the **<application.../>** element of your **AndroidManifest.xml**
 
-.. include:: snippets/notification_manifest_snippet0.txt
+.. literalinclude:: snippets/notification_manifest_snippet0.txt
+   :language: xml
+   :linenos:
+   :emphasize-lines: 15,19
+   :tab-width: 4
 
 Add the following additional configurations to the **<manifest.../>** element of your **AndroidManifest.xml**
 
-.. include:: snippets/notification_manifest_snippet1.txt
+.. literalinclude:: snippets/notification_manifest_snippet1.txt
+   :language: xml
+   :linenos:
+   :emphasize-lines: 5,7
+   :tab-width: 4
 
 The full **AndroidManifest.xml** should look something like this
 
-.. include:: snippets/notification_manifest.txt
+.. literalinclude:: snippets/notification_manifest.txt
+   :language: xml
+   :linenos:
+   :emphasize-lines: 21,25,42,44
+   :tab-width: 4
 
 I already have a BroadcastReceiver defined
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -66,7 +77,9 @@ I already have a BroadcastReceiver defined
 If you already have a BroadcastReceiver defined in your application, you can simply call the Socialize handler
 in your existing broadcast receiver's **onReceive()** method:
 
-.. include:: snippets/broadcast_handle.txt
+.. literalinclude:: snippets/broadcast_handle.txt
+   :language: java
+   :linenos:
 
 Make sure however, that you add the intent filters and permissions required by Socialize to your existing receiver definition.
 
@@ -115,7 +128,9 @@ Step 2: Add your C2DM sender ID to your **socialize.properties** file
 The Socialize SDK needs to know who will be sending SmartAlerts to the device.  Simply add your C2DM Sender ID to your **socialize.properties** file 
 under the key **socialize.c2dm.sender.id**
 
-.. include:: snippets/props_c2dm.txt
+.. literalinclude:: snippets/props_c2dm.txt
+   :language: properties
+   :linenos:
 
 Step 3: Add your C2DM token to the Socialize website
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

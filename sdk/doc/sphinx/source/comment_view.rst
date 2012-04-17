@@ -18,17 +18,23 @@ Displaying the Comment View
 
 When you want to launch the comment view, simply call **showCommentView** from the SocializeUI instance:
 
-.. include:: snippets/show_comment.txt
+.. literalinclude:: snippets/show_comment.txt
+   :language: java
+   :linenos:
 
 Here's an example of calling it on a button click:
 
-.. include:: snippets/show_comment_onclick.txt
+.. literalinclude:: snippets/show_comment_onclick.txt
+   :language: java
+   :linenos:
 
 A Complete Example
 ~~~~~~~~~~~~~~~~~~
 
 Here's a complete example in an Activity:
 
-.. include:: snippets/show_comment_full.txt
+.. literalinclude:: snippets/show_comment_full.txt
+   :language: java
+   :linenos:
 
 .. include:: footer.inc	

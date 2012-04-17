@@ -1,15 +1,11 @@
-.. raw:: html
+# Add the Socalize JAR file as a library jar
+-libraryjars libs/socialize-xxx.jar
 
-	<pre class="brush: java-properties">
-	# Add the Socalize JAR file as a library jar
-	-libraryjars libs/socialize-xxx.jar
-	
-	# Ignore Socialize warnings
-	-dontwarn com.socialize.**
-	
-	# Keep Socialize classes
-	-keep public class com.socialize.** { *; }
-	-keep public class oauth.signpost.** {  *; }
-	-keep public class oauth.socialize.** {  *; }
-	-keep public class com.google.** { *; }
-	</pre>
+# Ignore Socialize warnings
+-dontwarn com.socialize.**
+
+# Keep Socialize classes
+-keep public class com.socialize.** { *; }
+-keep public class oauth.signpost.** {  *; }
+-keep public class oauth.socialize.** {  *; }
+-keep public class com.google.** { *; }

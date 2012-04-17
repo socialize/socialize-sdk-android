@@ -16,11 +16,15 @@ The Like Button can either be included via standard Android XML Layout files, or
 Using XML layout
 ################
 
-.. include:: snippets/action_button_xml.txt
+.. literalinclude:: snippets/action_button_xml.txt
+   :language: xml
+   :linenos:
 
 If you don't want to (or can't) set the entity key as a fixed value in XML, you can set it at runtime in code:
 
-.. include:: snippets/action_button_xml_code.txt
+.. literalinclude:: snippets/action_button_xml_code.txt
+   :language: java
+   :linenos:
 
 Customization Options
 ---------------------
@@ -64,6 +68,8 @@ Using programmatic configuration
 
 If you prefer to do things the old-fashioned way, you can set all the parameters programmatically.
 
-.. include:: snippets/action_button_programmatic.txt
+.. literalinclude:: snippets/action_button_programmatic.txt
+   :language: java
+   :linenos:
 	
 .. include:: footer.inc	

@@ -65,7 +65,9 @@ the **assets** path of your project called **socialize.properties**
 
 Within this file, enter your Socialize consumer key and secret:
 
-.. include:: snippets/props.txt
+.. literalinclude:: snippets/props.txt
+   :language: properties
+   :linenos:
 
 (Replace 00000000-0000-0000-000000000000 with your key/secret from your Socialize account)
 
@@ -73,11 +75,15 @@ Within this file, enter your Socialize consumer key and secret:
 =====================================
 Add the following lines to your AndroidManifest.xml under the **<application...>** element
 
-.. include:: snippets/manifest.txt
+.. literalinclude:: snippets/manifest.txt
+   :language: xml
+   :linenos:
 
 Add the following lines to your AndroidManifest.xml under the **<manifest...>** element
 
-.. include:: snippets/permissions.txt
+.. literalinclude:: snippets/permissions.txt
+   :language: xml
+   :linenos:
 	
 4. Configure Facebook Integration (Optional)
 ============================================
@@ -97,7 +103,9 @@ If you already have a Facebook app, you can skip this section, otherwise refer t
 
 Once you have your facebook app ID, you can add it to the **socialize.properties** config file:
 
-.. include:: snippets/props_fb.txt
+.. literalinclude:: snippets/props_fb.txt
+   :language: properties
+   :linenos:
 	
 5. Include Socialize in your App!
 =================================
@@ -123,7 +131,9 @@ however entities *can* be created manually.
 The Action Bar is designed to automatically "pin" iteself to the bottom of your view.  
 Adding the Action Bar to your app is done with a simple call to **showActionBar** from the SocializeUI instance:
 
-.. include:: snippets/action_bar.txt
+.. literalinclude:: snippets/action_bar.txt
+   :language: java
+   :linenos:
 
 Next Steps...
 =============

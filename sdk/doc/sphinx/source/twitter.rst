@@ -56,7 +56,9 @@ Configuring Twitter in Socialize
 --------------------------------
 Once you have a twitter application, simply add your Twitter consumer key and secret to your **socialize.properties** file:
 
-.. include:: snippets/props_twitter.txt
+.. literalinclude:: snippets/props_twitter.txt
+   :language: properties
+   :linenos:
 
 Propagating Socialize Actions to Twitter
 -----------------------------------------
@@ -70,6 +72,8 @@ Social actions such as Comment and Like can optionally be propagated to Twitter 
 
 The following example shows posting a comment and simultaneously tweeting the comment on the user's twitter feed.
 
-.. include:: snippets/create_comment_tw.txt
+.. literalinclude:: snippets/create_comment_tw.txt
+   :language: java
+   :linenos:
 
 .. include:: footer.inc	

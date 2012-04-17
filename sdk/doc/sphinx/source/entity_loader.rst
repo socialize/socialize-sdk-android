@@ -24,22 +24,30 @@ Creating the Entity Loader
 
 There is only one Entity Loader per application and it can be set on the Socialize instance:
 
-.. include:: snippets/entity_loader.txt
+.. literalinclude:: snippets/entity_loader.txt
+   :language: java
+   :linenos:
 
 The **loadEntity** method will be called by Socialize when the user selects an item rendered by Socialize which corresponds directly to 
 content in your app.
 
 For example you may want to start an activity in the entity loader:
 
-.. include:: snippets/entity_loader_example0.txt
+.. literalinclude:: snippets/entity_loader_example0.txt
+   :language: java
+   :linenos:
 
 Once you have an entity loader, simply set it on the Socialize instance
 
-.. include:: snippets/entity_loader_example2.txt
+.. literalinclude:: snippets/entity_loader_example2.txt
+   :language: java
+   :linenos:
 
 The entity loader would usually be specified when you instantiate the ActionBar, for example:
 
-.. include:: snippets/entity_loader_example1.txt
+.. literalinclude:: snippets/entity_loader_example1.txt
+   :language: java
+   :linenos:
 
 Configuring the Entity Loader for SmartAlerts
 ---------------------------------------------
@@ -47,7 +55,9 @@ Configuring the Entity Loader for SmartAlerts
 When your app receives a SmartAlert, Socialize needs to know how to access your entity loader.  This is done via the 
 **socialize.entity.loader** property in your **socialize.properties** configuration file:
 
-.. include:: snippets/props_entity_loader.txt
+.. literalinclude:: snippets/props_entity_loader.txt
+   :language: properties
+   :linenos:
 
 Replace **com.mypackage.MyEntityLoader** with the fully qualified class name of your entity loader.
 

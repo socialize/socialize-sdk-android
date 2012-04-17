@@ -1,0 +1,19 @@
+Sharing
+-------
+
+In Socialize a *Share* occurs when an end user wants to share an item of content with their friends or contacts.  Socialize supports 4 basic share types:
+
+- Facebook
+- Twitter
+- Email
+- SMS
+
+To invoke a share, simply call this line of code from anywhere in your app:
+
+.. literalinclude:: snippets/2.0/share_button.txt
+   :language: java
+   :linenos:
+
+This method will present the user with a share dialog:
+
+.. image:: images/share_mockup.png

@@ -1,22 +1,17 @@
-.. raw:: html
+import com.socialize.Socialize;
+import com.socialize.entity.Entity;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.entity.EntityAddListener;
 
-	<pre class="brush: java">
-	
-	import com.socialize.Socialize;
-	import com.socialize.entity.Entity;
-	import com.socialize.error.SocializeException;
-	import com.socialize.listener.entity.EntityAddListener;
+if(Socialize.getSocialize().isAuthenticated()) {
+	Socialize.getSocialize().getEntity("http://someurl.com", new EntityGetListener() {
 
-	if(Socialize.getSocialize().isAuthenticated()) {
-		Socialize.getSocialize().getEntity("http://someurl.com", new EntityGetListener() {
+		public void onError(SocializeException error) {
+			// Handle error
+		}
 
-			public void onError(SocializeException error) {
-				// Handle error
-			}
-
-			public void onGet(Entity entity) {
-				// Handle success
-			}
-		});
-	}
-	</pre>
+		public void onGet(Entity entity) {
+			// Handle success
+		}
+	});
+}

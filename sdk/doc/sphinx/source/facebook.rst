@@ -58,8 +58,9 @@ Configuring Facebook in Socialize
 ---------------------------------
 Once you have a facebook application, simply add your Facebook app Id your **socialize.properties** file:
 
-.. include:: snippets/props_facebook.txt
-
+.. literalinclude:: snippets/props_facebook.txt
+   :language: properties
+   :linenos:
 
 .. _propagate_fb:
 
@@ -75,7 +76,9 @@ Social actions such as Comment and Like can optionally be propagated to Facebook
 
 The following example shows posting a comment and simultaneously sharing the comment to the user's facebook wall.
 
-.. include:: snippets/create_comment_fb.txt
+.. literalinclude:: snippets/create_comment_fb.txt
+   :language: java
+   :linenos:
 
 Facebook Single Sign On (SSO)
 -----------------------------
@@ -84,6 +87,8 @@ Some users have reported having problems with the Single Sign On implementation 
 
 If you have experienced problems with this (e.g. the "invalid_key" error), you can easily disable this feature:
 
-.. include:: snippets/no_sso.txt
+.. literalinclude:: snippets/no_sso.txt
+   :language: java
+   :linenos:
 
 .. include:: footer.inc	
