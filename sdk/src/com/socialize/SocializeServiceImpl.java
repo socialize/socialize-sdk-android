@@ -109,7 +109,7 @@ import com.socialize.ui.action.ActionDetailActivity;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.actionbar.ActionBarView;
-import com.socialize.ui.actionbutton.SocializeLikeButton;
+import com.socialize.ui.actionbutton.SocializeLikeButtonNew;
 import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.comment.CommentDetailActivity;
 import com.socialize.ui.comment.CommentView;
@@ -1629,7 +1629,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 
 
 	@Override
-	public SocializeLikeButton createLikeButton(Activity context, Entity entity) {
+	public SocializeLikeButtonNew createLikeButton(Activity context, Entity entity) {
 		return null;
 	}
 

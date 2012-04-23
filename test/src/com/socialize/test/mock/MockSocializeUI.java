@@ -3,14 +3,13 @@ package com.socialize.test.mock;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.view.View;
-
 import com.socialize.SocializeUI;
 import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
-import com.socialize.ui.actionbutton.SocializeLikeButton;
+import com.socialize.ui.actionbutton.SocializeLikeButtonNew;
 import com.socialize.ui.comment.OnCommentViewActionListener;
 
 public class MockSocializeUI implements SocializeUI {
@@ -81,7 +80,7 @@ public class MockSocializeUI implements SocializeUI {
 	}
 
 	@Override
-	public SocializeLikeButton createLikeButton(Activity context, Entity entity) {
+	public SocializeLikeButtonNew createLikeButton(Activity context, Entity entity) {
 		return null;
 	}
 }
