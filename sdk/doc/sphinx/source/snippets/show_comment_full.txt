@@ -32,7 +32,7 @@ public class CommentViewActivity extends Activity {
 				
 				Socialize.getSocialize().getConfig().setSocializeCredentials(consumerKey, consumerSecret);
 				Socialize.getSocialize().getConfig().setFacebookAppId(facebookAppId);
-				Socialize.getSocializeUI().showCommentView(CommentViewActivity.this, entity);
+				Socialize.getSocialize().showCommentView(CommentViewActivity.this, entity);
 			}
 		});
 	}

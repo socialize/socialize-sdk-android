@@ -124,7 +124,7 @@ public abstract class SocializeBaseView extends BaseView {
 	}
 
 	protected void initSocialize(final SocializeInitListener listener) {
-		SocializeSystem system = getSDK().getSystem();
+		SocializeSystem system = getSocialize().getSystem();
 		String[] config = system.getBeanConfig();
 		
 		final SocializeInitListener systemListener = system.getSystemInitListener();
@@ -146,10 +146,10 @@ public abstract class SocializeBaseView extends BaseView {
 				}
 			};
 			
-			getSDK().initAsync(getContext(), overrideListener, config);
+			getSocialize().initAsync(getContext(), overrideListener, config);
 		}
 		else {
-			getSDK().initAsync(getContext(), listener, config);
+			getSocialize().initAsync(getContext(), listener, config);
 		}
 	}
 	
@@ -162,12 +162,12 @@ public abstract class SocializeBaseView extends BaseView {
 	protected void createOptionsMenuItem(final Activity source, Menu menu) {
 		if(Socialize.getSocialize().isAuthenticated()) {
 			MenuItem add = menu.add("Settings");
-			add.setIcon(Socialize.getSocializeUI().getDrawable("ic_menu_preferences.png"));
+			add.setIcon(Socialize.getSocialize().getDrawable("ic_menu_preferences.png"));
 			add.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 				@Override
 				public boolean onMenuItemClick(MenuItem item) {
 					final Long userId = Socialize.getSocialize().getSession().getUser().getId();
-					Socialize.getSocializeUI().showUserProfileViewForResult(source, userId, CommentActivity.PROFILE_UPDATE);
+					Socialize.getSocialize().showUserProfileViewForResult(source, userId, CommentActivity.PROFILE_UPDATE);
 					return true;
 				}
 			});

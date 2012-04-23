@@ -21,6 +21,8 @@
  */
 package com.socialize.api;
 
+import com.socialize.api.SocializeApi.RequestType;
+
 /**
  * @author Jason Polites
  *
@@ -28,11 +30,51 @@ package com.socialize.api;
 public class SocializeRequest {
 
 	private String endpoint;
-
+	private RequestType requestType;
+	
 	public String getEndpoint() {
 		return endpoint;
 	}
 	public void setEndpoint(String endpoint) {
 		this.endpoint = endpoint;
 	}
+	
+	
+	public RequestType getRequestType() {
+		return requestType;
+	}
+	
+	public void setRequestType(RequestType requestType) {
+		this.requestType = requestType;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((endpoint == null) ? 0 : endpoint.hashCode());
+		result = prime * result + ((requestType == null) ? 0 : requestType.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SocializeRequest other = (SocializeRequest) obj;
+		if (endpoint == null) {
+			if (other.endpoint != null)
+				return false;
+		}
+		else if (!endpoint.equals(other.endpoint))
+			return false;
+		if (requestType != other.requestType)
+			return false;
+		return true;
+	}
+	
+
 }

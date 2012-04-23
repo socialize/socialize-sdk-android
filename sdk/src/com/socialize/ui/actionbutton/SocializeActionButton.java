@@ -35,6 +35,7 @@ import com.socialize.util.StringUtils;
 /**
  * @author Jason Polites
  */
+@Deprecated
 public class SocializeActionButton<A extends SocializeAction> extends AuthenticatedView {
 	
 	private ActionButtonConfig config;

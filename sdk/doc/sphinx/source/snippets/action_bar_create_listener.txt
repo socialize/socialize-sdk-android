@@ -2,7 +2,7 @@ import com.socialize.Socialize;
 import com.socialize.entity.Entity;
 import com.socialize.ui.actionbar.ActionBarListener;
 
-Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity, new ActionBarListener() {
+Socialize.getSocialize().showActionBar(this, R.layout.your_layout, entity, new ActionBarListener() {
 	public void onCreate(ActionBarView actionBar) {
 		// The ActionBar is really just a fancy LinearLayout
 	}

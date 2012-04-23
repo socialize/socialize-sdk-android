@@ -25,7 +25,7 @@ public class SampleActionBarActivity extends Activity {
 		
 		// Wrap your existing view with the action bar.
 		// your_layout refers to the resource ID of your current layout.
-		View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity);
+		View actionBarWrapped = Socialize.getSocialize().showActionBar(this, R.layout.your_layout, entity);
 		
 		// Now set the view for your activity to be the wrapped view.
 		setContentView(actionBarWrapped);

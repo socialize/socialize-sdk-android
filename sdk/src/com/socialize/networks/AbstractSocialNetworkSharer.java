@@ -23,7 +23,7 @@ package com.socialize.networks;
 
 import android.app.Activity;
 import com.socialize.Socialize;
-import com.socialize.SocializeSDK;
+import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ActionType;
 import com.socialize.auth.AuthProviderInfo;
@@ -50,9 +50,9 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 
 		AuthProviderType authProviderType = AuthProviderType.valueOf(getNetwork());
 		
-		if(getSDK().isSupported(authProviderType)) {
+		if(getSocialize().isSupported(authProviderType)) {
 			
-			if(getSDK().isAuthenticated(authProviderType)) {
+			if(getSocialize().isAuthenticated(authProviderType)) {
 				doShare(context, entity, urlSet, comment, listener, type);
 			}
 			else if(autoAuth) {
@@ -62,7 +62,7 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 				
 				AuthProviderInfo authProviderInfo = authProviderInfoFactory.getInstance();
 				
-				getSDK().authenticate(context, consumerKey, consumerSecret, authProviderInfo, new SocializeAuthListener() {
+				getSocialize().authenticate(context, consumerKey, consumerSecret, authProviderInfo, new SocializeAuthListener() {
 
 					@Override
 					public void onError(SocializeException error) {
@@ -123,10 +123,8 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 	public void setAuthProviderInfoFactory(AuthProviderInfoFactory<AuthProviderInfo> authProviderInfoFactory) {
 		this.authProviderInfoFactory = authProviderInfoFactory;
 	}
-
-	// So we can mock
-	protected SocializeSDK getSDK() {
-		return Socialize.getSDK();
+	
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
 	}
-
 }

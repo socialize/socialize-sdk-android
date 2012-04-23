@@ -28,7 +28,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import com.socialize.Socialize;
-import com.socialize.SocializeSDK;
+import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.ui.dialog.DialogRegister;
 
@@ -80,15 +80,15 @@ public abstract class SocializeActivity extends Activity implements DialogRegist
 	}
 	
 	protected void initSocialize() {
-		getSDK().init(this);
+		getSocialize().init(this);
 	}
 	
 	protected void destroySocialize() {
-		getSDK().destroy();
+		getSocialize().destroy();
 	}
 	
-	protected SocializeSDK getSDK() {
-		return Socialize.getSDK();
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
 	}
 	
 	protected void onPostSocializeInit(IOCContainer container) {}

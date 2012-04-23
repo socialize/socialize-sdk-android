@@ -24,10 +24,8 @@ package com.socialize.test.unit.facebook;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.View;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.SocializeSDK;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderInfo;
@@ -149,7 +147,7 @@ public class FacebookAuthClickListenerTest extends SocializeUnitTest {
 			
 		FacebookAuthClickListener facebookAuthClickListener = new FacebookAuthClickListener() {
 			@Override
-			public SocializeSDK getSDK() {
+			public SocializeService getSocialize() {
 				return socialize;
 			}
 		};

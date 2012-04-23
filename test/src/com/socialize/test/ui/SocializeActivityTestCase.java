@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.SocializeSDK;
+import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.sample.ui.SampleSocializeActivity;
 import com.socialize.sample.ui.TestActivityCallbackHolder;
@@ -49,9 +49,9 @@ public class SocializeActivityTestCase extends SocializeUIActivityTest {
 		AndroidMock.verify(callback);
 	}
 	
-	@UsesMocks ({SocializeSDK.class})
+	@UsesMocks ({SocializeService.class})
 	public void testInitSocialize() {
-		final SocializeSDK socialize = AndroidMock.createMock(SocializeSDK.class);
+		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		
 		AndroidMock.expect(socialize.init((Context) AndroidMock.anyObject())).andReturn(null);
 		
@@ -59,7 +59,7 @@ public class SocializeActivityTestCase extends SocializeUIActivityTest {
 		
 		PublicActivity activity = new PublicActivity() {
 			@Override
-			public SocializeSDK getSDK() {
+			public SocializeService getSocialize() {
 				return socialize;
 			}
 		};
@@ -69,9 +69,9 @@ public class SocializeActivityTestCase extends SocializeUIActivityTest {
 		AndroidMock.verify(socialize);
 	}
 	
-	@UsesMocks ({SocializeSDK.class})
+	@UsesMocks ({SocializeService.class})
 	public void testDestroySocialize() {
-		final SocializeSDK socialize = AndroidMock.createMock(SocializeSDK.class);
+		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		
 		socialize.destroy();
 		
@@ -79,7 +79,7 @@ public class SocializeActivityTestCase extends SocializeUIActivityTest {
 		
 		PublicActivity activity = new PublicActivity() {
 			@Override
-			public SocializeSDK getSDK() {
+			public SocializeService getSocialize() {
 				return socialize;
 			}
 		};

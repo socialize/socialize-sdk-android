@@ -19,7 +19,7 @@ public class SimpleTest {
 			int endIndex = 10;
 			
 			// List all activity for a single user
-			Socialize.getSDK().listActivityByUser(
+			Socialize.getSocialize().listActivityByUser(
 				userId, 
 				startIndex,
 				endIndex,

@@ -109,6 +109,7 @@ import com.socialize.ui.action.ActionDetailActivity;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.actionbar.ActionBarView;
+import com.socialize.ui.actionbutton.SocializeLikeButton;
 import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.comment.CommentDetailActivity;
 import com.socialize.ui.comment.CommentView;
@@ -125,11 +126,12 @@ import com.socialize.util.StringUtils;
 /**
  * @author Jason Polites
  */
-public class SocializeServiceImpl implements SocializeSessionConsumer, SocializeSDK, SocializeUI {
+public class SocializeServiceImpl implements SocializeSessionConsumer, SocializeService {
 	
 	static final String receiver = SocializeC2DMReceiver.class.getName();
 	
 	private SocializeLogger logger;
+	private Drawables drawables;
 	private IOCContainer container;
 	private SocializeSession session;
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
@@ -143,7 +145,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private ActivitySystem activitySystem;
 	private EntitySystem entitySystem;
 	private SubscriptionSystem subscriptionSystem;
-	private Drawables drawables;
+
 	private AuthProviders authProviders;
 	private NotificationChecker notificationChecker;
 	private AppUtils appUtils;
@@ -1406,6 +1408,41 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		return container;
 	}
 
+
+	
+	@Override
+	public boolean canShare(Context context, ShareType shareType) {
+		return shareSystem.canShare(context, shareType);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#getEntityLoader()
+	 */
+	@Override
+	public SocializeEntityLoader getEntityLoader() {
+		return entityLoader;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#getSystem()
+	 */
+	@Override
+	public SocializeSystem getSystem() {
+		return system;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#setEntityLoader(com.socialize.ui.SocializeEntityLoader)
+	 */
+	@Override
+	public void setEntityLoader(SocializeEntityLoader entityLoader) {
+		this.entityLoader = entityLoader;
+	}
+	
+
 	@Override
 	public View showActionBar(Activity parent, int resId, Entity entity) {
 		return showActionBar(parent, resId, entity, null, null);
@@ -1501,35 +1538,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		
 		return parentRelLyout;
 	}
-
-	protected ActionBarView newActionBarView(Activity parent) {
-		return new ActionBarView(parent);
-	}
-
-	protected Intent newIntent(Activity context, Class<?> cls) {
-		return new Intent(context, cls);
-	}
-
-	protected LayoutParams newLayoutParams(int width, int height) {
-		return new LayoutParams(width, height);
-	}
 	
-	protected RelativeLayout.LayoutParams newLayoutParams(android.view.ViewGroup.LayoutParams source) {
-		return new RelativeLayout.LayoutParams(source);
-	}
-
-	protected RelativeLayout newRelativeLayout(Activity parent) {
-		return new RelativeLayout(parent);
-	}
-
-	protected ScrollView newScrollView(Activity parent) {
-		return new ScrollView(parent);
-	}
-
-	protected View inflateView(Activity parent, int resId) {
-		LayoutInflater layoutInflater = (LayoutInflater) parent.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
-		return layoutInflater.inflate(resId, null);
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -1618,9 +1627,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}	
 	}
 
+
 	@Override
-	public boolean canShare(Context context, ShareType shareType) {
-		return shareSystem.canShare(context, shareType);
+	public SocializeLikeButton createLikeButton(Activity context, Entity entity) {
+		return null;
 	}
 
 	/*
@@ -1631,6 +1641,11 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	public Drawable getDrawable(String name, boolean eternal) {
 		return (drawables != null) ? drawables.getDrawable(name, eternal) : null;
 	}
+	
+	@Override
+	public SocializeLogger getLogger() {
+		return logger;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -1639,34 +1654,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public Drawable getDrawable(String name) {
 		return (drawables != null) ? drawables.getDrawable(name) : null; 
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#getEntityLoader()
-	 */
-	@Override
-	public SocializeEntityLoader getEntityLoader() {
-		return entityLoader;
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#getSystem()
-	 */
-	@Override
-	public SocializeSystem getSystem() {
-		return system;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#setEntityLoader(com.socialize.ui.SocializeEntityLoader)
-	 */
-	@Override
-	public void setEntityLoader(SocializeEntityLoader entityLoader) {
-		this.entityLoader = entityLoader;
-	}
+	}	
 
 	protected void setCommentSystem(CommentSystem commentSystem) {
 		this.commentSystem = commentSystem;
@@ -1706,5 +1694,34 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 
 	protected void setAuthProviderInfoBuilder(AuthProviderInfoBuilder authProviderInfoBuilder) {
 		this.authProviderInfoBuilder = authProviderInfoBuilder;
+	}
+	
+	protected LayoutParams newLayoutParams(int width, int height) {
+		return new LayoutParams(width, height);
+	}
+	
+	protected RelativeLayout.LayoutParams newLayoutParams(android.view.ViewGroup.LayoutParams source) {
+		return new RelativeLayout.LayoutParams(source);
+	}
+	
+	protected Intent newIntent(Activity context, Class<?> cls) {
+		return new Intent(context, cls);
+	}
+
+	protected RelativeLayout newRelativeLayout(Activity parent) {
+		return new RelativeLayout(parent);
+	}
+
+	protected ScrollView newScrollView(Activity parent) {
+		return new ScrollView(parent);
+	}
+
+	protected ActionBarView newActionBarView(Activity parent) {
+		return new ActionBarView(parent);
+	}
+
+	protected View inflateView(Activity parent, int resId) {
+		LayoutInflater layoutInflater = (LayoutInflater) parent.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
+		return layoutInflater.inflate(resId, null);
 	}
 }

@@ -55,4 +55,10 @@ public interface AuthProviderInfo extends Serializable {
 	 */
 	public boolean matches(AuthProviderInfo info);
 	
+	public int hashCode();
+	
+	public boolean equals(Object obj);
+	
+	
+	
 }

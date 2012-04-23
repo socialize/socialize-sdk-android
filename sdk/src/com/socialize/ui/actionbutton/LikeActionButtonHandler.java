@@ -23,7 +23,7 @@ package com.socialize.ui.actionbutton;
 
 import android.app.Activity;
 import com.socialize.Socialize;
-import com.socialize.SocializeSDK;
+import com.socialize.SocializeService;
 import com.socialize.entity.Entity;
 import com.socialize.entity.EntityStats;
 import com.socialize.entity.Like;
@@ -41,6 +41,7 @@ import com.socialize.ui.cache.EntityCache;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 
 	private boolean liked = false;
@@ -218,7 +219,7 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 		return 0;
 	}
 
-	protected SocializeSDK getSocialize() {
-		return Socialize.getSDK();
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
 	}
 }

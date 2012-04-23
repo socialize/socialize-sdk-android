@@ -21,6 +21,7 @@
  */
 package com.socialize.api;
 
+import com.socialize.api.SocializeApi.RequestType;
 import com.socialize.auth.AuthProviderData;
 
 /**
@@ -33,6 +34,11 @@ public class SocializeAuthRequest extends SocializeRequest {
 	private String udid;
 	private AuthProviderData authProviderData;
 	
+	public SocializeAuthRequest() {
+		super();
+		setRequestType(RequestType.AUTH);
+	}
+
 	public String getUdid() {
 		return udid;
 	}
@@ -64,4 +70,52 @@ public class SocializeAuthRequest extends SocializeRequest {
 	public void setAuthProviderData(AuthProviderData authProviderData) {
 		this.authProviderData = authProviderData;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((authProviderData == null) ? 0 : authProviderData.hashCode());
+		result = prime * result + ((consumerKey == null) ? 0 : consumerKey.hashCode());
+		result = prime * result + ((consumerSecret == null) ? 0 : consumerSecret.hashCode());
+		result = prime * result + ((udid == null) ? 0 : udid.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SocializeAuthRequest other = (SocializeAuthRequest) obj;
+		if (authProviderData == null) {
+			if (other.authProviderData != null)
+				return false;
+		}
+		else if (!authProviderData.equals(other.authProviderData))
+			return false;
+		if (consumerKey == null) {
+			if (other.consumerKey != null)
+				return false;
+		}
+		else if (!consumerKey.equals(other.consumerKey))
+			return false;
+		if (consumerSecret == null) {
+			if (other.consumerSecret != null)
+				return false;
+		}
+		else if (!consumerSecret.equals(other.consumerSecret))
+			return false;
+		if (udid == null) {
+			if (other.udid != null)
+				return false;
+		}
+		else if (!udid.equals(other.udid))
+			return false;
+		return true;
+	}
+	
 }

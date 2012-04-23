@@ -19,7 +19,7 @@ public class MyActionBarListener implements ActionBarListener {
 MyActionBarListener listener = new MyActionBarListener();
 
 // Use the listener when you show the action bar
-Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity, listener);
+Socialize.getSocialize().showActionBar(this, R.layout.your_layout, entity, listener);
 
 // Later (After the action bar has loaded!), you can reference the view to refresh
 ActionBarView view = listener.getActionBarView();

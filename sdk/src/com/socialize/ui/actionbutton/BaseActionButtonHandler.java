@@ -33,6 +33,7 @@ import com.socialize.networks.ShareOptions;
  * @author Jason Polites
  *
  */
+@Deprecated
 public abstract class BaseActionButtonHandler<A extends SocializeAction> implements ActionButtonHandler<A> {
 
 	private SocializeLogger logger;

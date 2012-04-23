@@ -86,7 +86,7 @@ public class LikeActivity extends SocializeActivity {
 					Entity entity = Entity.newInstance(key, "test entity");
 					
 					if(!StringUtils.isEmpty(key)) {
-						Socialize.getSDK().like(LikeActivity.this, entity, new LikeAddListener() {
+						Socialize.getSocialize().like(LikeActivity.this, entity, new LikeAddListener() {
 							
 							@Override
 							public void onError(SocializeException error) {
@@ -140,7 +140,7 @@ public class LikeActivity extends SocializeActivity {
 					String key = txtKey.getText().toString();
 					
 					if(!StringUtils.isEmpty(key)) {
-						Socialize.getSDK().getLike(key, new LikeGetListener() {
+						Socialize.getSocialize().getLike(key, new LikeGetListener() {
 							
 							@Override
 							public void onError(SocializeException error) {
@@ -183,7 +183,7 @@ public class LikeActivity extends SocializeActivity {
 					clearLikeData();
 					
 					if(!StringUtils.isEmpty(id)) {
-						Socialize.getSDK().unlike(Integer.parseInt(id), new LikeDeleteListener() {
+						Socialize.getSocialize().unlike(Integer.parseInt(id), new LikeDeleteListener() {
 							
 							@Override
 							public void onError(SocializeException error) {
@@ -219,7 +219,7 @@ public class LikeActivity extends SocializeActivity {
 					
 					long userId = Socialize.getSocialize().getSession().getUser().getId();
 					
-					Socialize.getSDK().listLikesByUser(userId, new LikeListListener() {
+					Socialize.getSocialize().listLikesByUser(userId, new LikeListListener() {
 						
 						@Override
 						public void onList(ListResult<Like> entities) {

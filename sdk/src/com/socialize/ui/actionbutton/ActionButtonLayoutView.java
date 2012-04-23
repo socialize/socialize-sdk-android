@@ -40,6 +40,7 @@ import com.socialize.view.BaseView;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class ActionButtonLayoutView<A extends SocializeAction> extends BaseView implements ActionButton<A> {
 	
 	private Entity entity;

@@ -158,7 +158,7 @@ public class AuthenticateActivity extends SocializeActivity {
 						@Override
 						protected Void doInBackground(Void... params) {
 							
-							Socialize.getSDK().clearSessionCache(v.getContext());
+							Socialize.getSocialize().clearSessionCache(v.getContext());
 							return null;
 						}
 
@@ -260,10 +260,10 @@ public class AuthenticateActivity extends SocializeActivity {
 			if(fb) {
 				FacebookAuthProviderInfo fbInfo = new FacebookAuthProviderInfo();
 				fbInfo.setAppId(facebookAppId);
-				Socialize.getSDK().authenticate(AuthenticateActivity.this, consumerKey, consumerSecret, fbInfo, new AuthListener(v, authProgress));
+				Socialize.getSocialize().authenticate(AuthenticateActivity.this, consumerKey, consumerSecret, fbInfo, new AuthListener(v, authProgress));
 			}
 			else {
-				Socialize.getSDK().authenticate(AuthenticateActivity.this, consumerKey, consumerSecret, new AuthListener(v, authProgress));
+				Socialize.getSocialize().authenticate(AuthenticateActivity.this, consumerKey, consumerSecret, new AuthListener(v, authProgress));
 			}
 		}
 

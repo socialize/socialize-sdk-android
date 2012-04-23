@@ -42,10 +42,10 @@ public class SocializeAccess {
 	}
 	
 	public static void setBeanOverrides(String...override) {
-		Socialize.getSDK().getSystem().setBeanOverrides(override);
+		Socialize.getSocialize().getSystem().setBeanOverrides(override);
 	}
 	
 	public static void setInitListener(SocializeInitListener listener) {
-		Socialize.getSDK().getSystem().setSystemInitListener(listener);
+		Socialize.getSocialize().getSystem().setSystemInitListener(listener);
 	}
 }

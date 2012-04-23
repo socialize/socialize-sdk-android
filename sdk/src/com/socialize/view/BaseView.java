@@ -10,7 +10,6 @@ import android.view.ViewParent;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.socialize.Socialize;
-import com.socialize.SocializeSDK;
 import com.socialize.SocializeService;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.log.SocializeLogger;
@@ -55,10 +54,6 @@ public abstract class BaseView extends LinearLayout implements SocializeView {
 
 	public void setErrorHandler(SocializeErrorHandler errorHandler) {
 		this.errorHandler = errorHandler;
-	}
-	
-	protected SocializeSDK getSDK() {
-		return Socialize.getSDK();
 	}
 	
 	protected SocializeService getSocialize() {

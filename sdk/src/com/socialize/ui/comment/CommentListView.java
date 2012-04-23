@@ -294,7 +294,7 @@ public class CommentListView extends BaseView {
 		comment.setNotificationsEnabled(subscribe);
 		comment.setEntity(entity);
 		
-		getSDK().addComment(getActivity(), comment, options, new CommentAddListener() {
+		getSocialize().addComment(getActivity(), comment, options, new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -382,7 +382,7 @@ public class CommentListView extends BaseView {
 		final List<Comment> comments = commentAdapter.getComments();
 
 		if(update || comments == null || comments.size() == 0) {
-			getSDK().listCommentsByEntity(entity.getKey(), 
+			getSocialize().listCommentsByEntity(entity.getKey(), 
 					startIndex,
 					endIndex,
 					new CommentListListener() {
@@ -462,7 +462,7 @@ public class CommentListView extends BaseView {
 		final ProgressDialog dialog = progressDialogFactory.show(getContext(), "Notifications", "Please wait...");
 		
 		if(notifyBox.isChecked()) {
-			getSDK().subscribe(getContext(), entity, NotificationType.NEW_COMMENTS, new SubscriptionAddListener() {
+			getSocialize().subscribe(getContext(), entity, NotificationType.NEW_COMMENTS, new SubscriptionAddListener() {
 				@Override
 				public void onError(SocializeException error) {
 					if(dialog != null) dialog.dismiss();
@@ -481,7 +481,7 @@ public class CommentListView extends BaseView {
 			});
 		}
 		else {
-			getSDK().unsubscribe(getContext(), entity, NotificationType.NEW_COMMENTS, new SubscriptionAddListener() {
+			getSocialize().unsubscribe(getContext(), entity, NotificationType.NEW_COMMENTS, new SubscriptionAddListener() {
 				@Override
 				public void onError(SocializeException error) {
 					if(dialog != null) dialog.dismiss();
@@ -506,7 +506,7 @@ public class CommentListView extends BaseView {
 			notifyBox.showLoading();
 			
 			// Now load the subscription status for the user
-			getSDK().getSubscription(entity, new SubscriptionGetListener() {
+			getSocialize().getSubscription(entity, new SubscriptionGetListener() {
 				
 				@Override
 				public void onGet(Subscription subscription) {
@@ -572,7 +572,7 @@ public class CommentListView extends BaseView {
 			}
 		}
 
-		getSDK().listCommentsByEntity(entity.getKey(), 
+		getSocialize().listCommentsByEntity(entity.getKey(), 
 				startIndex,
 				endIndex,
 				new CommentListListener() {

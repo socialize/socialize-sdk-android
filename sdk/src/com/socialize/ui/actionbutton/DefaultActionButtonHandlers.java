@@ -29,6 +29,7 @@ import com.socialize.entity.SocializeAction;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class DefaultActionButtonHandlers implements ActionButtonHandlers {
 	private Map<String, ActionButtonHandler<?>> handlers;
 

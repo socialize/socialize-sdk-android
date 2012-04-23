@@ -37,7 +37,7 @@ public abstract class AuthenticatedView extends SocializeBaseView {
 		
 		onBeforeAuthenticate(container);
 		
-		getSDK().authenticate(
+		getSocialize().authenticate(
 				getContext(),
 				consumerKey, 
 				consumerSecret, 

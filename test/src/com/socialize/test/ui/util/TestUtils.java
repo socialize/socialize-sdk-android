@@ -65,7 +65,7 @@ public class TestUtils {
 		holder = new ResultHolder();
 		holder.setUp();
 		instrumentation = testCase.getInstrumentation();
-		Socialize.getSDK().destroy(true);
+		Socialize.getSocialize().destroy(true);
 	}
 	
 	public static void tearDown() {
@@ -81,7 +81,7 @@ public class TestUtils {
 		
 		monitor = null;
 		
-		Socialize.getSDK().destroy(true);
+		Socialize.getSocialize().destroy(true);
 	}
 	
 	public static void setUpActivityMonitor(Class<?> activityClass) {

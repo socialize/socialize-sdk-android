@@ -37,8 +37,8 @@ import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
- *
  */
+@Deprecated
 public class ActionButtonConfig {
 	
 	private static final String androidns="http://schemas.android.com/apk/res/android";

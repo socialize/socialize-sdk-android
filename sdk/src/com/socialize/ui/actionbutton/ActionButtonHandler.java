@@ -30,6 +30,7 @@ import com.socialize.entity.SocializeAction;
  * @author Jason Polites
  *
  */
+@Deprecated
 public interface ActionButtonHandler<A extends SocializeAction> {
 
 	public void handleLoad(Activity context, ActionButton<A> button);

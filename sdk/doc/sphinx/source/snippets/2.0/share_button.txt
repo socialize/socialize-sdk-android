@@ -2,4 +2,4 @@
 Entity entity = Entity.newInstance("http://www.someurl.com", "my_entity_name");
 
 // Call the Socialize share method (the "this" parameter refers to your current Activity context)
-Socialize.getSocializeUI().share(this, entity);
+Socialize.getSocialize().share(this, entity);

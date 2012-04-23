@@ -3,7 +3,7 @@ import com.socialize.entity.Entity;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 
-Socialize.getSocializeUI().showActionBar(this, R.layout.your_layout, entity, new ActionBarListener() {
+Socialize.getSocialize().showActionBar(this, R.layout.your_layout, entity, new ActionBarListener() {
 
 	@Override
 	public void onCreate(ActionBarView actionBar) {

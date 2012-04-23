@@ -36,6 +36,6 @@ public class CommentUserListActivity<T extends SocializeObject> extends CommentB
 			userId = Long.valueOf(key);
 		}
 		
-		Socialize.getSDK().listCommentsByUser(userId, iStart, iEnd, listener);
+		Socialize.getSocialize().listCommentsByUser(userId, iStart, iEnd, listener);
 	}
 }

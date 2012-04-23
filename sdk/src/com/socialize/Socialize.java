@@ -23,9 +23,7 @@ package com.socialize;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import android.content.Context;
-
 import com.socialize.listener.SocializeListener;
 import com.socialize.log.SocializeLogger.LogLevel;
 
@@ -77,11 +75,12 @@ public class Socialize {
 		return instance;
 	}
 	
+	/**
+	 * @deprecated All methods available from standard Socialize instance.
+	 * @return
+	 */
+	@Deprecated
 	public static final SocializeUI getSocializeUI() {
-		return instance;
-	}
-	
-	public static final SocializeSDK getSDK() {
 		return instance;
 	}
 }

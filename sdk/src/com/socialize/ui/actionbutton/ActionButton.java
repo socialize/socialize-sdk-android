@@ -3,6 +3,7 @@ package com.socialize.ui.actionbutton;
 import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;
 
+@Deprecated
 public interface ActionButton<A extends SocializeAction> {
 
 	public Entity getEntity();

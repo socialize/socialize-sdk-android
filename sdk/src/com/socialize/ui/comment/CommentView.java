@@ -110,7 +110,7 @@ public class CommentView extends EntityView {
 
 		MenuItem add2 = menu.add("Refresh");
 		
-		add2.setIcon(Socialize.getSocializeUI().getDrawable("ic_menu_refresh.png"));
+		add2.setIcon(Socialize.getSocialize().getDrawable("ic_menu_refresh.png"));
 		
 		add2.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override

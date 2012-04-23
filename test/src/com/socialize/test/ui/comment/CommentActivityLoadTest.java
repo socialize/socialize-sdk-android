@@ -25,11 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.KeyEvent;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
@@ -133,7 +131,7 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 			}
 		});		
 		
-		Socialize.getSocializeUI().showCommentView(getActivity(), entity1, new OnCommentViewActionListener() {
+		Socialize.getSocialize().showCommentView(getActivity(), entity1, new OnCommentViewActionListener() {
 			public void onError(SocializeException error) {
 				error.printStackTrace();
 				lock.countDown();
@@ -187,7 +185,7 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 			}
 		});		
 		
-		Socialize.getSocializeUI().showCommentView(getActivity(), entity2, new OnCommentViewActionListener() {
+		Socialize.getSocialize().showCommentView(getActivity(), entity2, new OnCommentViewActionListener() {
 			public void onError(SocializeException error) {
 				error.printStackTrace();
 				lock2.countDown();

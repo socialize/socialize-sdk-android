@@ -47,7 +47,7 @@ public class NotificationChecker {
 	
 	public void checkRegistrations(final Context context) {
 		if(!checked) {
-			Socialize.getSDK().authenticate(context, new SocializeAuthListener() {
+			Socialize.getSocialize().authenticate(context, new SocializeAuthListener() {
 				@Override
 				public void onError(SocializeException error) {
 					logError(error);

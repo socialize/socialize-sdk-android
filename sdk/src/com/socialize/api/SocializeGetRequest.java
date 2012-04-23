@@ -21,6 +21,8 @@
  */
 package com.socialize.api;
 
+import java.util.Arrays;
+
 /**
  * @author Jason Polites
  *
@@ -73,4 +75,48 @@ public class SocializeGetRequest extends SocializeRequest {
 	public void setIdKey(String idKey) {
 		this.idKey = idKey;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + endIndex;
+		result = prime * result + ((idKey == null) ? 0 : idKey.hashCode());
+		result = prime * result + Arrays.hashCode(ids);
+		result = prime * result + ((key == null) ? 0 : key.hashCode());
+		result = prime * result + startIndex;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SocializeGetRequest other = (SocializeGetRequest) obj;
+		if (endIndex != other.endIndex)
+			return false;
+		if (idKey == null) {
+			if (other.idKey != null)
+				return false;
+		}
+		else if (!idKey.equals(other.idKey))
+			return false;
+		if (!Arrays.equals(ids, other.ids))
+			return false;
+		if (key == null) {
+			if (other.key != null)
+				return false;
+		}
+		else if (!key.equals(other.key))
+			return false;
+		if (startIndex != other.startIndex)
+			return false;
+		return true;
+	}
+	
+	
 }

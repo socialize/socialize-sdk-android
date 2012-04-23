@@ -112,7 +112,7 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 				doShare(session, entity, text, shareType, network, location, listener);
 			}
 			else {
-				Socialize.getSDK().authenticate(context, authType, new SocializeAuthListener() {
+				Socialize.getSocialize().authenticate(context, authType, new SocializeAuthListener() {
 					@Override
 					public void onError(SocializeException error) {
 						if(listener != null) {

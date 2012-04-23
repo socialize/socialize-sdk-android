@@ -86,4 +86,63 @@ public class AuthProviderData {
 	public void setAuthProviderInfo(AuthProviderInfo authProviderInfo) {
 		this.authProviderInfo = authProviderInfo;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((appId3rdParty == null) ? 0 : appId3rdParty.hashCode());
+		result = prime * result + ((authProviderInfo == null) ? 0 : authProviderInfo.hashCode());
+		result = prime * result + ((authProviderType == null) ? 0 : authProviderType.hashCode());
+		result = prime * result + ((secret3rdParty == null) ? 0 : secret3rdParty.hashCode());
+		result = prime * result + ((token3rdParty == null) ? 0 : token3rdParty.hashCode());
+		result = prime * result + ((userId3rdParty == null) ? 0 : userId3rdParty.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AuthProviderData other = (AuthProviderData) obj;
+		if (appId3rdParty == null) {
+			if (other.appId3rdParty != null)
+				return false;
+		}
+		else if (!appId3rdParty.equals(other.appId3rdParty))
+			return false;
+		if (authProviderInfo == null) {
+			if (other.authProviderInfo != null)
+				return false;
+		}
+		else if (!authProviderInfo.equals(other.authProviderInfo))
+			return false;
+		if (authProviderType != other.authProviderType)
+			return false;
+		if (secret3rdParty == null) {
+			if (other.secret3rdParty != null)
+				return false;
+		}
+		else if (!secret3rdParty.equals(other.secret3rdParty))
+			return false;
+		if (token3rdParty == null) {
+			if (other.token3rdParty != null)
+				return false;
+		}
+		else if (!token3rdParty.equals(other.token3rdParty))
+			return false;
+		if (userId3rdParty == null) {
+			if (other.userId3rdParty != null)
+				return false;
+		}
+		else if (!userId3rdParty.equals(other.userId3rdParty))
+			return false;
+		return true;
+	}
+	
+	
 }

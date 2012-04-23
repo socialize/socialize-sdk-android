@@ -27,6 +27,7 @@ import com.socialize.entity.SocializeAction;
  * @author Jason Polites
  *
  */
+@Deprecated
 public interface ActionButtonHandlers {
 	public <A extends SocializeAction> ActionButtonHandler<A> getHandler(String key);
 }

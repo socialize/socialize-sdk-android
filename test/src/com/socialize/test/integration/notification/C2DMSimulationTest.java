@@ -196,7 +196,7 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 
 	@Override
 	protected void tearDown() throws Exception {
-		Socialize.getSDK().destroy(true);
+		Socialize.getSocialize().destroy(true);
 		NotificationsAccess.destroy(receiver);
 		super.tearDown();
 	}

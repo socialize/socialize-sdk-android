@@ -2,7 +2,7 @@
 Entity entity = Entity.newInstance("http://www.someurl.com", "my_entity_name");
 
 // Launch the share dialog with a listener
-Socialize.getSocializeUI().share(this, entity, ShareType.FACEBOOK, new OnShareListener() {
+Socialize.getSocialize().share(this, entity, ShareType.FACEBOOK, new OnShareListener() {
 
 	@Override
 	public void onBeforeShare(Share share, ShareInfo info) {

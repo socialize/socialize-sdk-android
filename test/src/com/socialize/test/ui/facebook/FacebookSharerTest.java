@@ -25,7 +25,7 @@ import android.app.Activity;
 import android.content.Context;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.SocializeSDK;
+import com.socialize.SocializeService;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ActionType;
 import com.socialize.auth.AuthProviderInfo;
@@ -51,9 +51,9 @@ import com.socialize.test.ui.SocializeActivityTestCase;
 public class FacebookSharerTest extends SocializeActivityTestCase {
 
 	@SuppressWarnings("unchecked")
-	@UsesMocks ({SocializeSDK.class, SocializeConfig.class, AuthProviderInfoFactory.class, AuthProviderInfo.class})
+	@UsesMocks ({SocializeService.class, SocializeConfig.class, AuthProviderInfoFactory.class, AuthProviderInfo.class})
 	public void testShareNotAuthenticated() {
-		final SocializeSDK socialize = AndroidMock.createMock(SocializeSDK.class);
+		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
 		final AuthProviderInfoFactory<AuthProviderInfo> authProviderInfoFactory = AndroidMock.createMock(AuthProviderInfoFactory.class);
 		final AuthProviderInfo authProviderInfo = AndroidMock.createMock(AuthProviderInfo.class);
@@ -78,7 +78,7 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		
 		PublicFacebookSharer sharer = new PublicFacebookSharer() {
 			@Override
-			public SocializeSDK getSDK() {
+			public SocializeService getSocialize() {
 				return socialize;
 			}
 		};
@@ -134,7 +134,7 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		PublicFacebookSharer sharer = new PublicFacebookSharer() {
 			
 			@Override
-			public SocializeSDK getSDK() {
+			public SocializeService getSocialize() {
 				return socialize;
 			}
 
@@ -289,8 +289,8 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		}
 		
 		@Override
-		public SocializeSDK getSDK() {
-			return super.getSDK();
+		public SocializeService getSocialize() {
+			return super.getSocialize();
 		}
 	}
 }

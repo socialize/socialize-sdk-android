@@ -134,7 +134,7 @@ public class ActionDetailLayoutView extends BaseView {
 			int id = Integer.parseInt(actionId);
 			
 			// TODO: this should be able to process generic actions.
-			getSDK().getCommentById(id, new CommentGetListener() {
+			getSocialize().getCommentById(id, new CommentGetListener() {
 				@Override
 				public void onError(SocializeException error) {
 					countdown();
@@ -171,7 +171,7 @@ public class ActionDetailLayoutView extends BaseView {
 	protected void doGetUserProfile(final long userId, final SocializeAction action) {
 		
 		if(userId >= 0) {
-			getSDK().getUser(userId, new UserGetListener() {
+			getSocialize().getUser(userId, new UserGetListener() {
 				
 				@Override
 				public void onGet(User user) {

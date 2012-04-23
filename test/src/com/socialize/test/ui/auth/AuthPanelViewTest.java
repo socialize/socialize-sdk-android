@@ -46,7 +46,7 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 
 	public void testAuthPanelViewRenderAndClick() throws Throwable {
 		
-		Socialize.getSDK().destroy(true);
+		Socialize.getSocialize().destroy(true);
 
 		FacebookAuthClickListener mockFBListener = new FacebookAuthClickListener() {
 			@Override
@@ -66,10 +66,10 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 		SocializeIOC.registerStub("facebookAuthClickListener", mockFBListener);
 		SocializeIOC.registerStub("twitterAuthClickListener", mockTWListener);
 		
-		SocializeSystem system = Socialize.getSDK().getSystem();
+		SocializeSystem system = Socialize.getSocialize().getSystem();
 		String[] config = system.getBeanConfig();
 		
-		Socialize.getSDK().init(getContext(), config);
+		Socialize.getSocialize().init(getContext(), config);
 		
 		// For some reason, this test fails when run in a suite because
 		// the twitter button is not shown.  Forcing twitter config here

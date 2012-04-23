@@ -1,14 +1,14 @@
 <manifest...>
 
-<application.../>
-
-<uses-permission android:name="android.permission.INTERNET"/>
-
-<!-- Optional but recommended -->
-<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
-<!-- Optionally add ONE of the following to include location data in comments -->
-<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+	<uses-permission android:name="android.permission.INTERNET"/>
+	
+	<!-- Optional but recommended -->
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	
+	<!-- Optionally add ONE of the following to include location data in comments -->
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+	
+	<application.../>
 
 </manifest>	

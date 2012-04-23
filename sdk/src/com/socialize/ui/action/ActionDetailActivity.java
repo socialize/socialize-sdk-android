@@ -99,7 +99,7 @@ public class ActionDetailActivity extends SocializeUIActivity {
 			if(isTaskRoot() && view != null) {
 				SocializeAction currentAction = view.getCurrentAction();
 				if(currentAction != null) {
-					Socialize.getSocializeUI().showCommentView(this, currentAction.getEntity());
+					Socialize.getSocialize().showCommentView(this, currentAction.getEntity());
 					finish();
 					return true;
 				}

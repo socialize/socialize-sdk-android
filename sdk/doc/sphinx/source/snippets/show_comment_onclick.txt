@@ -5,6 +5,6 @@ btn.setOnClickListener(new OnClickListener() {
 	public void onClick(View v) {
 		// Create or retrieve your entity object
 		Entity entity = Entity.newInstance("http://someurl.com", "My Entity");					
-		Socialize.getSocializeUI().showCommentView(SocializeActivity.this, entity);		
+		Socialize.getSocialize().showCommentView(SocializeActivity.this, entity);		
 	}
 });	

@@ -3,7 +3,6 @@ package com.socialize.test.ui;
 import android.view.View;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
-import com.socialize.SocializeSDK;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.config.SocializeConfig;
@@ -12,11 +11,11 @@ import com.socialize.ui.view.AuthenticatedView;
 
 public class AuthenticatedViewTest extends SocializeUIActivityTest {
 
-	@UsesMocks ({IOCContainer.class, SocializeSDK.class, SocializeAuthListener.class, SocializeConfig.class})
+	@UsesMocks ({IOCContainer.class, SocializeService.class, SocializeAuthListener.class, SocializeConfig.class})
 	public void testOnViewLoad() {
 		
 		final IOCContainer container = AndroidMock.createMock(IOCContainer.class);
-		final SocializeSDK socialize = AndroidMock.createMock(SocializeSDK.class);
+		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		final SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
 		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
 		
@@ -41,11 +40,6 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 			@Override
 			public View getLoadingView() {
 				return null;
-			}
-
-			@Override
-			public SocializeSDK getSDK() {
-				return socialize;
 			}
 
 			@Override

@@ -40,7 +40,7 @@ public class SampleActivity2 extends Activity {
 		final CheckBox chkSSO = (CheckBox) findViewById(R.id.chkFacebook);
 		final CheckBox chkNotifications = (CheckBox) findViewById(R.id.chkNotifications);
 		
-		Socialize.getSDK().init(this);
+		Socialize.getSocialize().init(this);
 		txtFB.setText(Socialize.getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID));
 		
 		txtTW_Key.setText(Socialize.getSocialize().getConfig().getProperty(SocializeConfig.TWITTER_CONSUMER_KEY));
@@ -77,7 +77,7 @@ public class SampleActivity2 extends Activity {
 				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
 				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				Socialize.getSocialize().getConfig().setTwitterKeySecret(txtTW_Key.getText().toString(), txtTW_Sec.getText().toString());
-				Socialize.getSocializeUI().showCommentView(SampleActivity2.this, entity);
+				Socialize.getSocialize().showCommentView(SampleActivity2.this, entity);
 			}
 		});
 		
@@ -90,8 +90,8 @@ public class SampleActivity2 extends Activity {
 
 					@Override
 					protected Void doInBackground(Void... params) {
-						Socialize.getSDK().init(SampleActivity2.this);
-						Socialize.getSDK().clearSessionCache(SampleActivity2.this);
+						Socialize.getSocialize().init(SampleActivity2.this);
+						Socialize.getSocialize().clearSessionCache(SampleActivity2.this);
 						return null;
 					}
 
