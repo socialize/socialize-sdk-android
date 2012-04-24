@@ -26,6 +26,7 @@ import android.app.Activity;
 import com.socialize.api.action.like.LikeUtilsProxy;
 import com.socialize.entity.Entity;
 import com.socialize.entity.User;
+import com.socialize.listener.like.IsLikedListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
@@ -68,12 +69,22 @@ public class LikeUtils {
 	}
 	
 	/**
-	 * Retrieves a like for an entity.
+	 * Retrieves a like for an entity and the current user.
 	 * @param context The current context.
 	 * @param e The entity that was liked.
 	 * @param listener A listener to handle the result.
 	 */
 	public static void getLike (Activity context, Entity e, LikeGetListener listener) {
+		proxy.getLike(context, e, listener);
+	}
+	
+	/**
+	 * Determines if the given entity has been liked by the current user.
+	 * @param context The current context.
+	 * @param e The entity that was liked.
+	 * @param listener listener A listener to handle the result.
+	 */
+	public static void isLiked(Activity context, Entity e, IsLikedListener listener) {
 		proxy.getLike(context, e, listener);
 	}
 	

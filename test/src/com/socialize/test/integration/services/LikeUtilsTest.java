@@ -28,6 +28,7 @@ import com.socialize.Socialize;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.like.IsLikedListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.test.SocializeActivityTest;
@@ -52,7 +53,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 	}
 
 	public void testAddLike() throws InterruptedException {
-		Entity entity = Entity.newInstance("LikeUtilsTest", "LikeUtilsTest");
+		Entity entity = Entity.newInstance("testAddLike", "testAddLike");
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
@@ -111,33 +112,70 @@ public class LikeUtilsTest extends SocializeActivityTest {
 	}
 	
 	public void testGetLikeExists() throws InterruptedException {
+		
+		final Entity entity = Entity.newInstance("testGetLikeExists", "testGetLikeExists");
+		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		Entity e = Entity.newInstance("http://entity1.com", "http://entity1.com");
-		LikeUtils.getLike(getActivity(), e, new LikeGetListener() {
-			
-			@Override
-			public void onGet(Like entity) {
-				addResult(0, entity);
-				latch.countDown();
-			}
+		LikeUtils.like(getActivity(), entity, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
 				error.printStackTrace();
+				addResult(0, error);
+				latch.countDown();
+			}
+			
+			@Override
+			public void onCreate(Like like) {
+				LikeUtils.getLike(getActivity(), entity, new LikeGetListener() {
+					
+					@Override
+					public void onGet(Like entity) {
+						addResult(0, entity);
+						latch.countDown();
+					}
+					
+					@Override
+					public void onError(SocializeException error) {
+						error.printStackTrace();
+						latch.countDown();
+					}
+				});
+			}
+		});		
+		
+		latch.await(20, TimeUnit.SECONDS);
+		
+		Like like = getResult(0);
+		assertNotNull(like);
+		assertEquals(entity.getKey(), like.getEntityKey());
+	}
+	
+	public void testGetLikeDoesNotExist() throws InterruptedException {
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		Entity e = Entity.newInstance("testGetLikeDoesNotExist", "testGetLikeDoesNotExist");
+		
+		LikeUtils.isLiked(getActivity(), e, new IsLikedListener() {
+			
+			@Override
+			public void onLiked(Like like) {
+				fail();
+			}
+
+			@Override
+			public void onNotLiked() {
+				addResult("success");
 				latch.countDown();
 			}
 		});
 		
 		latch.await(20, TimeUnit.SECONDS);
 		
-		Like like = getResult(0);
-		assertNotNull(like);
-		assertEquals(e.getKey(), like.getEntityKey());
-	}
-	
-	public void testGetLikeDoesNotExist() {
-		
+		String success = getResult(0);
+		assertNotNull(success);
+		assertEquals("success", success);
 	}
 	
 	public void testUnlike() {
