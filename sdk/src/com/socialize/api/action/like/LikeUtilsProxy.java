@@ -50,7 +50,7 @@ public interface LikeUtilsProxy {
 	 * @param e The entity that was liked.
 	 * @param listener A listener to handle the result.
 	 */
-	public void unlike (Entity e, LikeDeleteListener listener);
+	public void unlike (Activity context, Entity e, LikeDeleteListener listener);
 	
 	/**
 	 * Retrieves a like for an entity.
@@ -58,7 +58,7 @@ public interface LikeUtilsProxy {
 	 * @param e The entity that was liked.
 	 * @param listener A listener to handle the result.
 	 */
-	public void getLike (Entity e, LikeGetListener listener);
+	public void getLike (Activity context, Entity e, LikeGetListener listener);
 	
 	/**
 	 * Lists all likes for the given user.
@@ -68,5 +68,5 @@ public interface LikeUtilsProxy {
 	 * @param end The last index (for pagination)
 	 * @param listener A listener to handle the result.
 	 */
-	public void getLikesByUser (User user, int start, int end, LikeListListener listener);
+	public void getLikesByUser (Activity context, User user, int start, int end, LikeListListener listener);
 }

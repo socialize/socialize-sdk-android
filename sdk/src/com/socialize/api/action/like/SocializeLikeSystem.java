@@ -215,7 +215,7 @@ public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Li
 	}
 
 	@Override
-	public void unlike(Entity e, final LikeDeleteListener listener) {
+	public void unlike(Activity context, Entity e, final LikeDeleteListener listener) {
 		final SocializeSession session = getSocialize().getSession();
 		// Get the like based on the key
 		getLike(session, e.getKey(), new LikeGetListener() {
@@ -252,13 +252,13 @@ public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Li
 
 
 	@Override
-	public void getLike(Entity e, LikeGetListener listener) {
+	public void getLike(Activity context, Entity e, LikeGetListener listener) {
 		final SocializeSession session = getSocialize().getSession();
 		getLike(session, e.getKey(), listener);
 	}
 
 	@Override
-	public void getLikesByUser(User user, int start, int end, LikeListListener listener) {
+	public void getLikesByUser(Activity context, User user, int start, int end, LikeListListener listener) {
 		final SocializeSession session = getSocialize().getSession();
 		getLikesByUser(session, user.getId(), start, end, listener);
 	}

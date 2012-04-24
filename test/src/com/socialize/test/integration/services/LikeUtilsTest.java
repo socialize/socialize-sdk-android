@@ -38,6 +38,18 @@ import com.socialize.test.SocializeActivityTest;
  *
  */
 public class LikeUtilsTest extends SocializeActivityTest {
+	
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		Socialize.getSocialize().destroy(true);
+	}
+
+	@Override
+	protected void tearDown() throws Exception {
+		Socialize.getSocialize().destroy(true);
+		super.tearDown();
+	}
 
 	public void testAddLike() throws InterruptedException {
 		Entity entity = Entity.newInstance("LikeUtilsTest", "LikeUtilsTest");
@@ -96,6 +108,41 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		assertNotNull(after);
 		assertEquals(like.getId(), after.getId());
 		assertEquals(entity.getKey(), after.getEntityKey());
+	}
+	
+	public void testGetLikeExists() throws InterruptedException {
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		Entity e = Entity.newInstance("http://entity1.com", "http://entity1.com");
+		LikeUtils.getLike(getActivity(), e, new LikeGetListener() {
+			
+			@Override
+			public void onGet(Like entity) {
+				addResult(0, entity);
+				latch.countDown();
+			}
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+		});
+		
+		latch.await(20, TimeUnit.SECONDS);
+		
+		Like like = getResult(0);
+		assertNotNull(like);
+		assertEquals(e.getKey(), like.getEntityKey());
+	}
+	
+	public void testGetLikeDoesNotExist() {
+		
+	}
+	
+	public void testUnlike() {
+		
+		
 	}
 	
 }

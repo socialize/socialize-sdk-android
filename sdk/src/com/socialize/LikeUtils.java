@@ -63,8 +63,8 @@ public class LikeUtils {
 	 * @param e The entity that was liked.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void unlike (Entity e, LikeDeleteListener listener) {
-		proxy.unlike(e, listener);
+	public static void unlike (Activity context, Entity e, LikeDeleteListener listener) {
+		proxy.unlike(context, e, listener);
 	}
 	
 	/**
@@ -73,8 +73,8 @@ public class LikeUtils {
 	 * @param e The entity that was liked.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void getLike (Entity e, LikeGetListener listener) {
-		proxy.getLike(e, listener);
+	public static void getLike (Activity context, Entity e, LikeGetListener listener) {
+		proxy.getLike(context, e, listener);
 	}
 	
 	/**
@@ -85,7 +85,7 @@ public class LikeUtils {
 	 * @param end The last index (for pagination)
 	 * @param listener A listener to handle the result.
 	 */
-	public static void getLikesByUser (User user, int start, int end, LikeListListener listener) {
-		proxy.getLikesByUser(user, start, end, listener);
+	public static void getLikesByUser (Activity context, User user, int start, int end, LikeListListener listener) {
+		proxy.getLikesByUser(context, user, start, end, listener);
 	}
 }
