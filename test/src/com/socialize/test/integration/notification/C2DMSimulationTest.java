@@ -111,7 +111,7 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 					error.printStackTrace();
 					fail();
 				}
-				
+
 				@Override
 				public void onInit(Context context, IOCContainer container) {
 					ProxyObject<Launcher> launcherProxy = container.getProxy(getLauncherBeanName());

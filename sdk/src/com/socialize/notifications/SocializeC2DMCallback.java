@@ -28,7 +28,7 @@ import android.app.Notification;
 import android.content.Context;
 import android.os.Bundle;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.UserSystem;
+import com.socialize.api.action.user.UserSystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.JSONFactory;
 import com.socialize.entity.User;

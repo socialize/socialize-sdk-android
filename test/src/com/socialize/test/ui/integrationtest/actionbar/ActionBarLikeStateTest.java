@@ -11,8 +11,8 @@ import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.EntitySystem;
-import com.socialize.api.action.LikeSystem;
+import com.socialize.api.action.entity.EntitySystem;
+import com.socialize.api.action.like.LikeSystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
@@ -96,7 +96,6 @@ public class ActionBarLikeStateTest extends ActivityInstrumentationTestCase2<Act
 				error.printStackTrace();
 				fail();
 			}
-			
 			@Override
 			public void onInit(Context context, IOCContainer container) {
 				

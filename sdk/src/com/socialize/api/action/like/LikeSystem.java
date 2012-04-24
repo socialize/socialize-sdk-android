@@ -19,39 +19,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action;
+package com.socialize.api.action.like;
 
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Entity;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.entity.EntityListener;
-import com.socialize.util.DelegateOnly;
+import com.socialize.listener.like.LikeListener;
+import com.socialize.networks.ShareOptions;
 
 /**
  * @author Jason Polites
  *
  */
-public interface EntitySystem {
+public interface LikeSystem {
 	
-	public static final String ENDPOINT = "/entity/";
+	public static final String ENDPOINT = "/like/";
 
-	public void addEntity(SocializeSession session, Entity entity, EntityListener listener);
+	public void addLike(SocializeSession session, Entity entity, ShareOptions shareOptions, LikeListener listener);
 	
+	public void deleteLike(SocializeSession session, long id, LikeListener listener);
+
+	public void getLikesByEntity(SocializeSession session, String entityKey, LikeListener listener);
+
+	public void getLikesByEntity(SocializeSession session, String entityKey, int startIndex, int endIndex, LikeListener listener);
+
 	/**
-	 * Gets a socialize entity.  This call is SYNCHRONOUS!
+	 * Retrieves a like for the current user based on the entity URL provided.
 	 * @param session
-	 * @param id
-	 * @throws SocializeException
-	 * @return
+	 * @param entityKey
+	 * @param listener
 	 */
-	public Entity getEntity(SocializeSession session, long id) throws SocializeException;		
+	public void getLike(SocializeSession session, String entityKey, LikeListener listener);
+
+	public void getLikesById(SocializeSession session, LikeListener listener, long... ids);
+
+	public void getLike(SocializeSession session, long id, LikeListener listener);
 	
-	public void getEntity(SocializeSession session, long id, EntityListener listener);
-
-	@DelegateOnly
-	public void getEntity(SocializeSession session, String entityKey, EntityListener listener);
-
-	@DelegateOnly
-	public void listEntities(SocializeSession session, EntityListener listener, String... entityKeys);
-
+	public void getLikesByUser(SocializeSession session, long userId, LikeListener listener);
+	
+	public void getLikesByUser(SocializeSession session, long userId, int startIndex, int endIndex, LikeListener listener);
 }

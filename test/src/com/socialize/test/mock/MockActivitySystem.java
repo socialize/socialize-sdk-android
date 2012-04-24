@@ -2,7 +2,7 @@ package com.socialize.test.mock;
 
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ActionType;
-import com.socialize.api.action.ActivitySystem;
+import com.socialize.api.action.activity.ActivitySystem;
 import com.socialize.entity.Comment;
 import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;

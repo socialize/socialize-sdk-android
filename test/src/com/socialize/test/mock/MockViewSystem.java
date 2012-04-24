@@ -1,9 +1,8 @@
 package com.socialize.test.mock;
 
 import android.location.Location;
-
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.ViewSystem;
+import com.socialize.api.action.view.ViewSystem;
 import com.socialize.entity.Entity;
 import com.socialize.entity.View;
 import com.socialize.listener.view.ViewListener;

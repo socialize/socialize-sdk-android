@@ -23,12 +23,9 @@ package com.socialize.test.blackbox;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
-
 import android.test.mock.MockContext;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.config.SocializeConfig;

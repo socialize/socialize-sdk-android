@@ -28,16 +28,13 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.jayway.android.robotium.solo.Solo;
 import com.socialize.sample.Main;
 

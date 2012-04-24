@@ -22,7 +22,6 @@
 package com.socialize.test.ui;
 
 import android.test.ActivityInstrumentationTestCase2;
-
 import com.socialize.Socialize;
 import com.socialize.sample.EmptyActivity;
 

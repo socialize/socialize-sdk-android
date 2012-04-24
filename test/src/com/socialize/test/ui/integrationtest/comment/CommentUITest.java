@@ -2,7 +2,6 @@ package com.socialize.test.ui.integrationtest.comment;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -10,14 +9,13 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.CommentSystem;
-import com.socialize.api.action.SubscriptionSystem;
+import com.socialize.api.action.comment.CommentSystem;
+import com.socialize.api.action.comment.SubscriptionSystem;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
@@ -199,7 +197,6 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 			public void onError(SocializeException error) {
 				ActivityInstrumentationTestCase2.fail();
 			}
-			
 			@Override
 			public void onInit(Context context, IOCContainer container) {
 				ProxyObject<SubscriptionSystem> proxy = container.getProxy("subscriptionSystem");

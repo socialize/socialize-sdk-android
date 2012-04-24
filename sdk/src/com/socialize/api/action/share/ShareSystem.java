@@ -19,18 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action;
+package com.socialize.api.action.share;
 
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ShareType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.share.ShareHandlerListener;
-import com.socialize.util.DelegateOnly;
+
 
 /**
  * @author Jason Polites
@@ -44,10 +45,8 @@ public interface ShareSystem {
 	
 	public void addShare(Context context, SocializeSession session, Entity entity, String text, SocialNetwork network, Location location, ShareListener listener);
 	
-	@DelegateOnly
 	public void getSharesByEntity(SocializeSession session, String key, int startIndex, int endIndex, ShareListener listener);
-
-	@DelegateOnly
+	
 	public void getSharesByUser(SocializeSession session, long userId, ShareListener listener);
 	
 	/**

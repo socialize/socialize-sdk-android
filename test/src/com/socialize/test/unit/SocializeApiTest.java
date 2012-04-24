@@ -24,9 +24,7 @@ package com.socialize.test.unit;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
 import android.content.Context;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.android.ioc.IBeanFactory;

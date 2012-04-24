@@ -1,7 +1,6 @@
 package com.socialize.test.ui;
 
 import android.graphics.drawable.GradientDrawable;
-
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.test.mock.MockLayoutParams;
 import com.socialize.ui.util.Colors;

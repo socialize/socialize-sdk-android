@@ -1,10 +1,9 @@
 package com.socialize.test.mock;
 
 import android.content.Context;
-
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
-import com.socialize.api.action.UserSystem;
+import com.socialize.api.action.user.UserSystem;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;

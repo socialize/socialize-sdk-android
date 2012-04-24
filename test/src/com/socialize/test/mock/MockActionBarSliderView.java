@@ -23,7 +23,6 @@ package com.socialize.test.mock;
 
 import android.content.Context;
 import android.view.animation.Animation;
-
 import com.socialize.ui.slider.ActionBarSliderContent;
 import com.socialize.ui.slider.ActionBarSliderHandle;
 import com.socialize.ui.slider.ActionBarSliderView;

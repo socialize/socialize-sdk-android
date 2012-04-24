@@ -23,12 +23,11 @@ package com.socialize.test.ui.profile;
 
 import android.app.Activity;
 import android.content.Context;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
-import com.socialize.api.action.UserSystem;
+import com.socialize.api.action.user.UserSystem;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;

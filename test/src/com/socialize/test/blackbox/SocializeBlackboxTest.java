@@ -22,7 +22,6 @@
 package com.socialize.test.blackbox;
 
 import android.content.Context;
-
 import com.socialize.SocializeServiceImpl;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.ioc.SocializeIOC;

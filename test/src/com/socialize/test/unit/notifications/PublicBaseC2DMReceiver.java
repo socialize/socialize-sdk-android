@@ -23,7 +23,6 @@ package com.socialize.test.unit.notifications;
 
 import android.content.Context;
 import android.content.Intent;
-
 import com.socialize.notifications.BaseC2DMReceiver;
 
 /**

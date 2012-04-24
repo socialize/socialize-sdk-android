@@ -1,7 +1,7 @@
 package com.socialize.test.mock;
 
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.EntitySystem;
+import com.socialize.api.action.entity.EntitySystem;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;

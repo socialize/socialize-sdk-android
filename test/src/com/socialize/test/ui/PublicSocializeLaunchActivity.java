@@ -23,7 +23,6 @@ package com.socialize.test.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.listener.SocializeAuthListener;

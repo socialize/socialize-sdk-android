@@ -28,7 +28,7 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.Socialize;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ActionType;
-import com.socialize.api.action.ActivitySystem;
+import com.socialize.api.action.activity.ActivitySystem;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;

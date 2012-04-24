@@ -19,10 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action;
+package com.socialize.api.action.activity;
 
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ActionType;
+import com.socialize.api.action.comment.CommentSystem;
+import com.socialize.api.action.like.LikeSystem;
+import com.socialize.api.action.share.ShareSystem;
+import com.socialize.api.action.view.ViewSystem;
 import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.activity.UserActivityListener;

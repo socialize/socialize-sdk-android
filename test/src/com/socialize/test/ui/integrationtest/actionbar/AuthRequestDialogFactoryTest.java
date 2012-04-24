@@ -23,6 +23,7 @@ package com.socialize.test.ui.integrationtest.actionbar;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import junit.framework.Assert;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,7 +33,7 @@ import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.LikeSystem;
+import com.socialize.api.action.like.LikeSystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
@@ -74,7 +75,6 @@ public class AuthRequestDialogFactoryTest extends ActionBarAutoTest {
 			public void onError(SocializeException error) {
 				ActivityInstrumentationTestCase2.fail();
 			}
-			
 			@Override
 			public void onInit(Context context, IOCContainer container) {
 				

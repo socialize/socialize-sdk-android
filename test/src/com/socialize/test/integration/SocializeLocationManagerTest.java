@@ -26,7 +26,6 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.location.SocializeLocationManager;

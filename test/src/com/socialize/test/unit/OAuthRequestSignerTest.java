@@ -24,9 +24,7 @@ package com.socialize.test.unit;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.signature.SigningStrategy;
 import oauth.socialize.OAuthSignListener;
-
 import org.apache.http.client.methods.HttpUriRequest;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.DefaultSocializeRequestFactory;

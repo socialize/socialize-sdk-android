@@ -19,16 +19,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.util;
+package com.socialize.api.action.entity;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import com.socialize.api.SocializeSession;
+import com.socialize.entity.Entity;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.entity.EntityListener;
+
 
 /**
- * Indicates that a wrapped delegate class should ONLY execute the delegate method
  * @author Jason Polites
+ *
  */
-@Retention(RetentionPolicy.RUNTIME) 
-public @interface DelegateOnly {
+public interface EntitySystem {
+	
+	public static final String ENDPOINT = "/entity/";
+
+	public void addEntity(SocializeSession session, Entity entity, EntityListener listener);
+	
+	/**
+	 * Gets a socialize entity.  This call is SYNCHRONOUS!
+	 * @param session
+	 * @param id
+	 * @throws SocializeException
+	 * @return
+	 */
+	public Entity getEntity(SocializeSession session, long id) throws SocializeException;		
+	
+	public void getEntity(SocializeSession session, long id, EntityListener listener);
+
+	
+	public void getEntity(SocializeSession session, String entityKey, EntityListener listener);
+
+	
+	public void listEntities(SocializeSession session, EntityListener listener, String... entityKeys);
 
 }

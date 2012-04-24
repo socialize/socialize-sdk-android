@@ -22,7 +22,6 @@
 package com.socialize.test.mock;
 
 import android.content.Context;
-
 import com.socialize.entity.Entity;
 import com.socialize.entity.EntityStatsImpl;
 

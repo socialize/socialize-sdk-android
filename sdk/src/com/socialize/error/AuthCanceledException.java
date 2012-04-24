@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Socialize Inc.
+ * Copyright (c) 2011 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,28 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action;
+package com.socialize.error;
 
-import com.socialize.api.SocializeSession;
-import com.socialize.entity.Entity;
-import com.socialize.listener.subscription.SubscriptionListener;
-import com.socialize.notifications.NotificationType;
 
 /**
  * @author Jason Polites
  *
  */
-public interface SubscriptionSystem {
-	
-	public static final String ENDPOINT = "/user/subscription/";
+public class AuthCanceledException extends SocializeException {
 
-	public void getSubscription(SocializeSession session, Entity entity, SubscriptionListener listener);
-	
-	public void listSubscriptions(SocializeSession session, int startIndex, int endIndex, SubscriptionListener listener);
-	
-	public void listSubscriptions(SocializeSession session, SubscriptionListener listener);
-	
-	public void addSubscription(SocializeSession session, Entity entity, NotificationType type, SubscriptionListener listener);
-	
-	public void removeSubscription(SocializeSession session, Entity entity, NotificationType type, SubscriptionListener listener);
+	private static final long serialVersionUID = 7733086673525453885L;
+
+	public AuthCanceledException() {
+		super();
+	}
+
+	public AuthCanceledException(String detailMessage, Throwable throwable) {
+		super(detailMessage, throwable);
+	}
+
+	public AuthCanceledException(String detailMessage) {
+		super(detailMessage);
+	}
+
+	public AuthCanceledException(Throwable throwable) {
+		super(throwable);
+	}
 }

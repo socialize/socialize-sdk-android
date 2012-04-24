@@ -24,7 +24,7 @@ package com.socialize.test.unit.api;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.SocializeActivitySystem;
+import com.socialize.api.action.activity.SocializeActivitySystem;
 import com.socialize.entity.SocializeAction;
 import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.activity.UserActivityListener;

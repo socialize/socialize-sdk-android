@@ -21,6 +21,7 @@
  */
 package com.socialize.test.ui.integrationtest.actionbar;
 
+import junit.framework.Assert;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -31,7 +32,7 @@ import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.LikeSystem;
+import com.socialize.api.action.like.LikeSystem;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderInfoBuilder;
 import com.socialize.auth.AuthProviderInfoFactory;
@@ -87,7 +88,6 @@ public class ActionBarTestUtils2 {
 			public void onError(SocializeException error) {
 				ActivityInstrumentationTestCase2.fail();
 			}
-			
 			@Override
 			public void onInit(Context context, IOCContainer container) {
 				
@@ -160,7 +160,6 @@ public class ActionBarTestUtils2 {
 			public void onError(SocializeException error) {
 				ActivityInstrumentationTestCase2.fail();
 			}
-			
 			@Override
 			public void onInit(Context context, IOCContainer container) {
 				
@@ -249,7 +248,6 @@ public class ActionBarTestUtils2 {
 			public void onError(SocializeException error) {
 				ActivityInstrumentationTestCase2.fail();
 			}
-			
 			@Override
 			public void onInit(Context context, IOCContainer container) {
 				

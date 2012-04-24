@@ -25,7 +25,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.test.mock.MockContext;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.android.ioc.IBeanFactory;

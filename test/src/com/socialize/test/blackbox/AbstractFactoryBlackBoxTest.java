@@ -23,7 +23,6 @@ package com.socialize.test.blackbox;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.IOUtils;
 

@@ -22,11 +22,11 @@
 package com.socialize.test.integration.notification;
 
 import org.json.JSONObject;
+import android.os.Bundle;
 import com.socialize.Socialize;
 import com.socialize.api.action.ActionType;
 import com.socialize.launcher.LaunchAction;
 import com.socialize.notifications.NotificationType;
-import android.os.Bundle;
 
 
 /**

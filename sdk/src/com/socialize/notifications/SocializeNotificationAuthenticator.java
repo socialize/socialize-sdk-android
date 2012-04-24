@@ -3,7 +3,7 @@ package com.socialize.notifications;
 import android.content.Context;
 
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.UserSystem;
+import com.socialize.api.action.user.UserSystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;

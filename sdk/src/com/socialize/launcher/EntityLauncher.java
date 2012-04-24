@@ -26,7 +26,7 @@ import android.os.Bundle;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.EntitySystem;
+import com.socialize.api.action.entity.EntitySystem;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;

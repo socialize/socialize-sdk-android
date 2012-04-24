@@ -2,7 +2,6 @@ package com.socialize.test.mock;
 
 import android.app.Activity;
 import android.net.Uri;
-
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.Share;

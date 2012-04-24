@@ -80,6 +80,9 @@ public abstract class AbstractSocializeListener<T extends SocializeObject> imple
 	public abstract void onCreate(T entity);
 	
 	public abstract void onDelete();
+	
+	// Subclasses override
+	public void onCancel() {}
 
 	@Override
 	public abstract void onError(SocializeException error);

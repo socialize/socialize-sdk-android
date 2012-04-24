@@ -1,7 +1,7 @@
 package com.socialize.test.mock;
 
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.SubscriptionSystem;
+import com.socialize.api.action.comment.SubscriptionSystem;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.Subscription;

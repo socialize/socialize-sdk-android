@@ -27,7 +27,5 @@ import com.socialize.error.SocializeException;
  * @author Jason Polites
  */
 public interface SocializeListener {
-
 	public void onError(SocializeException error);
-	
 }

@@ -23,11 +23,9 @@ package com.socialize.test.unit;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.test.mock.MockContext;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.Socialize;

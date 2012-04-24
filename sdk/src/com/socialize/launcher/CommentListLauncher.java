@@ -27,7 +27,7 @@ import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ActionType;
-import com.socialize.api.action.ActivitySystem;
+import com.socialize.api.action.activity.ActivitySystem;
 import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;

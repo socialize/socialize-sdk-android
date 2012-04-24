@@ -83,6 +83,7 @@ public class NotificationOpenEventTask implements LaunchTask {
 							logError(error);
 						}
 						
+
 						@Override
 						public void onPost() {
 							if(logger != null && logger.isDebugEnabled()) {

@@ -24,7 +24,6 @@ package com.socialize.test.unit;
 import android.app.Activity;
 import android.location.Criteria;
 import android.location.Location;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.android.ioc.IBeanFactory;

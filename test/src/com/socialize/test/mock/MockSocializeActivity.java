@@ -22,7 +22,6 @@
 package com.socialize.test.mock;
 
 import android.os.Bundle;
-
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.SocializeActivity;
 

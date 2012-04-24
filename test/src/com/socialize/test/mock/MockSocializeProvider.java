@@ -24,9 +24,7 @@ package com.socialize.test.mock;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import android.content.Context;
-
 import com.socialize.api.SocializeSession;
 import com.socialize.api.WritableSession;
 import com.socialize.api.action.ActionType;

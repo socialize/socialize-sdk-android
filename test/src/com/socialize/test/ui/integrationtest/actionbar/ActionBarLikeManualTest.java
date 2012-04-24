@@ -1,7 +1,6 @@
 package com.socialize.test.ui.integrationtest.actionbar;
 
 import android.test.ActivityInstrumentationTestCase2;
-
 import com.socialize.sample.ui.ActionBarManualActivity2;
 import com.socialize.test.ui.util.TestUtils;
 

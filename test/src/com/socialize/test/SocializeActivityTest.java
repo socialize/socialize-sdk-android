@@ -46,6 +46,10 @@ public abstract class SocializeActivityTest extends ActivityInstrumentationTestC
 		holder.clear();
 		super.tearDown();
 	}
+	
+	protected void clearResults() {
+		holder.clear();
+	}
 
 	protected void addResult(Object obj) {
 		holder.addResult(obj);

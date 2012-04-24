@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action;
+package com.socialize.api.action.share;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +29,7 @@ import android.location.Location;
 import com.socialize.Socialize;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Share;

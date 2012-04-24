@@ -22,11 +22,10 @@
 package com.socialize.test.unit.api;
 
 import java.util.List;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.SocializeEntitySystem;
+import com.socialize.api.action.entity.SocializeEntitySystem;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeApiError;

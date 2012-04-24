@@ -24,12 +24,10 @@ package com.socialize.test.unit;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.test.SocializeUnitTest;

@@ -23,7 +23,6 @@ package com.socialize.test.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.Socialize;

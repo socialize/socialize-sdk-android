@@ -19,12 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action;
+package com.socialize.api.action.like;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.app.Activity;
+import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
@@ -32,15 +36,19 @@ import com.socialize.entity.ListResult;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.like.LikeAddListener;
+import com.socialize.listener.like.LikeDeleteListener;
+import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.like.LikeListener;
 import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.provider.SocializeProvider;
 
 /**
  * @author Jason Polites
  */
-public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Like>> implements LikeSystem {
+public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Like>> implements LikeSystem, LikeUtilsProxy {
 	
 	public SocializeLikeSystem(SocializeProvider<Like> provider) {
 		super(provider);
@@ -183,4 +191,81 @@ public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Li
 		getAsync(session, ENDPOINT, String.valueOf(id), listener);
 	}
 
+
+	@Override
+	public void like(Activity context, Entity e, LikeAddListener listener) {
+		SocializeSession session = getSocialize().getSession();
+		User user = session.getUser();
+		ShareOptions options = new ShareOptions();
+		
+		if(user.isAutoPostToFacebook() && getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+			if(user.isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
+				options.setShareTo(SocialNetwork.FACEBOOK, SocialNetwork.TWITTER);
+			}
+			else {
+				options.setShareTo(SocialNetwork.FACEBOOK);
+			}
+			
+		}
+		else if(user.isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
+			options.setShareTo(SocialNetwork.TWITTER);
+		}		
+		
+		addLike(session, e, options, listener);
+	}
+
+	@Override
+	public void unlike(Entity e, final LikeDeleteListener listener) {
+		final SocializeSession session = getSocialize().getSession();
+		// Get the like based on the key
+		getLike(session, e.getKey(), new LikeGetListener() {
+			@Override
+			public void onGet(Like entity) {
+				if(entity != null) {
+					deleteLike(session, entity.getId(), listener);
+				}
+				else {
+					if(listener != null) {
+						listener.onDelete();
+					}
+				}
+			}
+			
+			@Override
+			public void onError(SocializeException error) {
+				
+				if(error instanceof SocializeApiError) {
+					if(((SocializeApiError)error).getResultCode() == 404) {
+						if(listener != null) {
+							listener.onDelete();
+						}
+						return;
+					}
+				}
+				
+				if(listener != null) {
+					listener.onError(error);
+				}
+			}
+		});
+	}
+
+
+	@Override
+	public void getLike(Entity e, LikeGetListener listener) {
+		final SocializeSession session = getSocialize().getSession();
+		getLike(session, e.getKey(), listener);
+	}
+
+	@Override
+	public void getLikesByUser(User user, int start, int end, LikeListListener listener) {
+		final SocializeSession session = getSocialize().getSession();
+		getLikesByUser(session, user.getId(), start, end, listener);
+	}
+	
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
+	}
 }
+	
+	

@@ -23,7 +23,6 @@ package com.socialize.test.unit;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-
 import com.socialize.test.SocializeUnitTest;
 import com.socialize.util.BitmapBuilder;
 import com.socialize.util.BitmapUtils;

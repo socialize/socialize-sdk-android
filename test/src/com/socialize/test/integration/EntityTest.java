@@ -1,7 +1,6 @@
 package com.socialize.test.integration;
 
 import android.widget.TextView;
-
 import com.socialize.sample.R;
 
 
