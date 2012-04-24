@@ -21,6 +21,7 @@
  */
 package com.socialize.api.action.user;
 
+import android.app.Activity;
 import android.content.Context;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
@@ -140,6 +141,11 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 		saveUserProfile(context, session, user, resetC2DM, listener);
 	}
 	
+	@Override
+	public void saveUserSettings(Activity context, User user, UserSaveListener listener) {
+		saveUserProfile(context, getSocialize().getSession(), user, true, listener);
+	}
+
 	protected void saveUserProfile(final Context context, final SocializeSession session, User user, final boolean resetC2DM, final UserListener listener) {
 
 		String endpoint = ENDPOINT + user.getId() + "/";

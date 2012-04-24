@@ -22,10 +22,12 @@
 package com.socialize;
 
 import java.lang.reflect.Proxy;
+import android.app.Activity;
 import android.content.Context;
 import com.socialize.api.action.user.UserUtilsProxy;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.user.UserSaveListener;
 
 
 /**
@@ -44,8 +46,41 @@ public class UserUtils {
 	}
 	
 
+	/**
+	 * Returns the current logged in user.  If no user is currently authenticated this will authenticate synchronously.
+	 * @param context
+	 * @return
+	 * @throws SocializeException
+	 */
 	public static User getCurrentUser(Context context) throws SocializeException {
 		return proxy.getCurrentUser(context);
 	}
 	
+	/**
+	 * Shows the user profile UI for the given user.
+	 * @param context
+	 * @param user
+	 */
+	public static void showUserProfile (Activity context, User user) {
+		Socialize.getSocialize().showUserProfileView(context, user.getId());
+	}
+	
+	/**
+	 * Shows the settings UI for the current user.
+	 * @param context
+	 * @throws SocializeException If the current user could not be found or authenticated.
+	 */
+	public static void showUserSettings (Activity context) throws SocializeException {
+		Socialize.getSocialize().showUserProfileView(context, UserUtils.getCurrentUser(context).getId());
+	}
+	
+	/**
+	 * Saves the profile for the given user.
+	 * @param context
+	 * @param user
+	 * @param listener
+	 */
+	public static void saveUserSettings (Activity context, User user, UserSaveListener listener) {
+		proxy.saveUserSettings(context, user, listener);
+	}
 }

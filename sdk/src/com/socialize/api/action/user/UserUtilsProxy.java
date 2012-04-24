@@ -21,10 +21,12 @@
  */
 package com.socialize.api.action.user;
 
+import android.app.Activity;
 import android.content.Context;
 import com.socialize.annotations.Synchronous;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.user.UserSaveListener;
 
 
 /**
@@ -43,4 +45,12 @@ public interface UserUtilsProxy {
 	 */
 	@Synchronous
 	public User getCurrentUser(Context context) throws SocializeException;
+	
+	/**
+	 * Saves the current user's settings;
+	 * @param context
+	 * @param user
+	 * @param listener
+	 */
+	public void saveUserSettings (Activity context, User user, UserSaveListener listener);
 }
