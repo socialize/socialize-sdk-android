@@ -21,6 +21,7 @@
  */
 package com.socialize.sample;
 
+import java.util.List;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
@@ -28,11 +29,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.socialize.Socialize;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
-import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
@@ -222,9 +221,9 @@ public class LikeActivity extends SocializeActivity {
 					Socialize.getSocialize().listLikesByUser(userId, new LikeListListener() {
 						
 						@Override
-						public void onList(ListResult<Like> entities) {
+						public void onList(List<Like> items, int totalSize) {
 							txtLikeCreateResult.setText("SUCCESS");
-							txtMisc.setText(String.valueOf(entities.getItems().size()));
+							txtMisc.setText(String.valueOf(items.size()));
 							txtLikeIdCreated.setText("");
 							txtLikeDateCreated.setText("");
 							progress.dismiss();

@@ -27,6 +27,7 @@ import org.apache.http.MethodNotSupportedException;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.android.ioc.IOCContainer;
+import com.socialize.annotations.Synchronous;
 import com.socialize.api.SocializeSession;
 import com.socialize.error.AuthCanceledException;
 import com.socialize.error.SocializeException;
@@ -38,11 +39,11 @@ import com.socialize.listener.SocializeListener;
 /**
  * @author Jason Polites
  */
-public class SocializeActionDelegate implements InvocationHandler {
+public class SocializeActionProxy implements InvocationHandler {
 
 	private String delegateBean;
 	
-	public SocializeActionDelegate(String delegateBean) {
+	public SocializeActionProxy(String delegateBean) {
 		super();
 		this.delegateBean = delegateBean;
 	}
@@ -52,26 +53,54 @@ public class SocializeActionDelegate implements InvocationHandler {
 	 */
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		Activity context = findContext(args);
-		if(context != null) {
-			SocializeListener listener = findListener(args);
-			if(listener != null) {
-				invoke(context, listener, delegateBean, method, args);
+		try {
+			if(method.isAnnotationPresent(Synchronous.class)) {
+				if(!Socialize.getSocialize().isInitialized()) {
+					Context context = findContext(args);
+					if(context != null) {
+						synchronized (this) {
+							if(!Socialize.getSocialize().isInitialized()) {
+								Socialize.getSocialize().init(context);
+							}
+						}
+					}
+					else {
+						throw new MethodNotSupportedException("No context found in method arguments for method [" +
+								method.getName() +
+								"]");
+					}				
+				}
+				
+				return method.invoke(Socialize.getBean(delegateBean), args);
 			}
 			else {
-				throw new MethodNotSupportedException("No Socialize Listener found in method arguments for method [" +
-						method.getName() +
-						"]");
+				Activity context = findActivity(args);
+				if(context != null) {
+					SocializeListener listener = findListener(args);
+					if(listener != null) {
+						invoke(context, listener, delegateBean, method, args);
+					}
+					else {
+						throw new MethodNotSupportedException("No Socialize Listener found in method arguments for method [" +
+								method.getName() +
+								"]");
+					}
+				}
+				else {
+					throw new MethodNotSupportedException("No activity found in method arguments for method [" +
+							method.getName() +
+							"]");
+				}
+				
 			}
+			
+			// Always void
+			return null;
 		}
-		else {
-			throw new MethodNotSupportedException("No activity found in method arguments for method [" +
-					method.getName() +
-					"]");
+		catch (Throwable e) {
+			e.printStackTrace();
+			throw e;
 		}
-		
-		// Always void
-		return null;
 	}
 	
 	protected void invoke(Activity context, SocializeListener listener, String delegateBean, Method method, Object[] args) throws Throwable {
@@ -88,7 +117,7 @@ public class SocializeActionDelegate implements InvocationHandler {
 		}		
 	}
 	
-	protected Activity findContext(Object[] args) {
+	protected Activity findActivity(Object[] args) {
 		for (Object object : args) {
 			if(object instanceof Activity) {
 				return (Activity) object;
@@ -96,6 +125,15 @@ public class SocializeActionDelegate implements InvocationHandler {
 		}
 		return null;
 	}
+	
+	protected Context findContext(Object[] args) {
+		for (Object object : args) {
+			if(object instanceof Context) {
+				return (Context) object;
+			}
+		}
+		return null;
+	}	
 	
 	protected SocializeListener findListener(Object[] args) {
 		for (Object object : args) {
@@ -111,37 +149,43 @@ public class SocializeActionDelegate implements InvocationHandler {
 		final SocializeService service = getSocialize();
 		
 		if(!service.isInitialized()) {
-			
-			context.runOnUiThread(new Runnable() {
-				
-				@Override
-				public void run() {
-
-					service.initAsync(context, new SocializeInitListener() {
+			synchronized (this) {
+				if(!service.isInitialized()) {
+					context.runOnUiThread(new Runnable() {
 						
 						@Override
-						public void onError(SocializeException error) {
-							if(listener != null) {
-								listener.onError(error);
-							}
-						}
+						public void run() {
 
-						@Override
-						public void onInit(Context ctx, IOCContainer container) {
-							// Recurse
-							try {
-								invoke(context, listener, delegateBean, method, args);
-							}
-							catch (Throwable e) {
-								if(listener != null) {
-									listener.onError(SocializeException.wrap(e));
+							service.initAsync(context, new SocializeInitListener() {
+								
+								@Override
+								public void onError(SocializeException error) {
+									if(listener != null) {
+										listener.onError(error);
+									}
 								}
-							}
-						}
-					});					
-				}
-			});
 
+								@Override
+								public void onInit(Context ctx, IOCContainer container) {
+									// Recurse
+									try {
+										invoke(context, listener, delegateBean, method, args);
+									}
+									catch (Throwable e) {
+										if(listener != null) {
+											listener.onError(SocializeException.wrap(e));
+										}
+									}
+								}
+							});					
+						}
+					});
+				}
+				else {
+					// Recurse
+					invoke(context, listener, delegateBean, method, args);
+				}
+			}
 		}
 		else {
 			// Recurse
@@ -154,49 +198,57 @@ public class SocializeActionDelegate implements InvocationHandler {
 		
 		if(!service.isAuthenticated()) {
 			
-			context.runOnUiThread(new Runnable() {
-				
-				@Override
-				public void run() {
-
-					service.authenticate(context, new SocializeAuthListener() {
+			synchronized (this) {
+				if(!service.isAuthenticated()) {
+					context.runOnUiThread(new Runnable() {
 						
 						@Override
-						public void onError(SocializeException error) {
-							if(listener != null) {
-								listener.onError(error);
-							}
-						}
-						
-						@Override
-						public void onCancel() {
-							if(listener != null) {
-								listener.onError(new AuthCanceledException("Authentication was canceled by the user"));
-							}
-						}
+						public void run() {
 
-						@Override
-						public void onAuthSuccess(SocializeSession session) {
-							// Recurse
-							try {
-								invoke(context, listener, delegateBean, method, args);
-							}
-							catch (Throwable e) {
-								if(listener != null) {
-									listener.onError(SocializeException.wrap(e));
+							service.authenticate(context, new SocializeAuthListener() {
+								
+								@Override
+								public void onError(SocializeException error) {
+									if(listener != null) {
+										listener.onError(error);
+									}
 								}
-							}
+								
+								@Override
+								public void onCancel() {
+									if(listener != null) {
+										listener.onError(new AuthCanceledException("Authentication was canceled by the user"));
+									}
+								}
+
+								@Override
+								public void onAuthSuccess(SocializeSession session) {
+									// Recurse
+									try {
+										invoke(context, listener, delegateBean, method, args);
+									}
+									catch (Throwable e) {
+										if(listener != null) {
+											listener.onError(SocializeException.wrap(e));
+										}
+									}
+								}
+								
+								@Override
+								public void onAuthFail(SocializeException error) {
+									if(listener != null) {
+										listener.onError(error);
+									}
+								}
+							});	
 						}
-						
-						@Override
-						public void onAuthFail(SocializeException error) {
-							if(listener != null) {
-								listener.onError(error);
-							}
-						}
-					});	
+					});
 				}
-			});
+				else {
+					// Recurse
+					invoke(context, listener, delegateBean, method, args);
+				}
+			}
 		}
 		else {
 			// Recurse

@@ -32,7 +32,6 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
-import com.socialize.entity.ListResult;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
@@ -118,11 +117,12 @@ public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Li
 			
 			String endpoint = "/user/" + userId.toString() + ENDPOINT;
 			listAsync(session, endpoint, entityUrl, null, 0, 1, new LikeListListener() {
+				
 				@Override
-				public void onList(ListResult<Like> entities) {
+				public void onList(List<Like> items, int totalSize) {
+	
 					boolean is404 = false;
-					if(entities != null) {
-						List<Like> items = entities.getItems();
+					if(items != null) {
 						if(items != null && items.size() > 0) {
 							Like like = items.get(0);
 							if(like != null) {

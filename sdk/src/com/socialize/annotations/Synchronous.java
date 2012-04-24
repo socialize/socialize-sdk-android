@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,36 +19,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.listener.like;
+package com.socialize.annotations;
 
-import java.util.List;
-import com.socialize.entity.Like;
-import com.socialize.entity.ListResult;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 
 /**
+ * Indicates that the method with this annotation is synchronous.  Used when proxying method calls.
  * @author Jason Polites
  *
  */
-public abstract class LikeListListener extends LikeListener {
- 
-	@Override
-	public final void onCreate(Like entity) {}
-
-	@Override
-	public final void onGet(Like entity) {}
-
-	@Override
-	public final void onUpdate(Like entity) {}
-	
-	@Override
-	public final void onDelete() {}
-	
-	@Override
-	public final void onList(ListResult<Like> entities) {
-		onList(entities.getItems(), entities.getTotalCount());
-	}
-
-	public abstract void onList(List<Like> items, int totalSize);
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface Synchronous {
 
 }

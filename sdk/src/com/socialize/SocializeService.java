@@ -34,6 +34,7 @@ import com.socialize.auth.UserProviderCredentials;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.activity.UserActivityListListener;
@@ -114,6 +115,13 @@ public interface SocializeService extends SocializeUI {
 	 * @param force
 	 */
 	public void destroy(boolean force);
+	
+	/**
+	 * Authenticates the application against the API as an anonymous user synchronously.
+	 * NOTE:  This assumes the consumer key/secret have been specified in assets/socialize.properties
+	 * @param context The current context.
+	 */
+	public SocializeSession authenticateSynchronous(Context context) throws SocializeException;
 	
 	/**
 	 * Authenticates the application against the API as an anonymous user.

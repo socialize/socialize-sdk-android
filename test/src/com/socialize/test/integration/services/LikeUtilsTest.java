@@ -21,16 +21,21 @@
  */
 package com.socialize.test.integration.services;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import com.socialize.LikeUtils;
 import com.socialize.Socialize;
+import com.socialize.UserUtils;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
+import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.like.IsLikedListener;
 import com.socialize.listener.like.LikeAddListener;
+import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
+import com.socialize.listener.like.LikeListListener;
 import com.socialize.test.SocializeActivityTest;
 
 
@@ -122,7 +127,6 @@ public class LikeUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onError(SocializeException error) {
 				error.printStackTrace();
-				addResult(0, error);
 				latch.countDown();
 			}
 			
@@ -178,9 +182,86 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		assertEquals("success", success);
 	}
 	
-	public void testUnlike() {
+	public void testUnlike() throws InterruptedException {
+		final Entity entity = Entity.newInstance("testUnlike", "testUnlike");
 		
+		final CountDownLatch latch = new CountDownLatch(1);
 		
+		LikeUtils.like(getActivity(), entity, new LikeAddListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+			
+			@Override
+			public void onCreate(Like like) {
+				
+				LikeUtils.unlike(getActivity(), entity, new LikeDeleteListener() {
+					
+					@Override
+					public void onError(SocializeException error) {
+						error.printStackTrace();
+						fail();
+					}
+					
+					@Override
+					public void onDelete() {
+						addResult("success");
+						latch.countDown();
+					}
+				});
+			}
+		});		
+		
+		latch.await(20, TimeUnit.SECONDS);
+		
+		String success = getResult(0);
+		assertNotNull(success);
+		assertEquals("success", success);
 	}
 	
+	public void testGetLikesByUser() throws SocializeException, InterruptedException {
+		final User user = UserUtils.getCurrentUser(getActivity());
+		
+		final Entity entity = Entity.newInstance("testGetLikesByUser", "testGetLikesByUser");
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		LikeUtils.like(getActivity(), entity, new LikeAddListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+			
+			@Override
+			public void onCreate(Like like) {
+				
+				LikeUtils.getLikesByUser(getActivity(), user, 0, 100, new LikeListListener() {
+					
+					@Override
+					public void onList(List<Like> items, int totalSize) {
+						addResult(items);
+						latch.countDown();
+					}
+					
+					@Override
+					public void onError(SocializeException error) {
+						error.printStackTrace();
+						fail();
+					}
+				});
+				
+			}
+		});		
+		
+		latch.await(20, TimeUnit.SECONDS);
+		
+		List<Like> items = getResult(0);
+		assertNotNull(items);
+		assertTrue(items.size() >= 1);
+	}
 }

@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,36 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.listener.like;
+package com.socialize;
 
-import java.util.List;
-import com.socialize.entity.Like;
-import com.socialize.entity.ListResult;
+import java.lang.reflect.Proxy;
+import android.content.Context;
+import com.socialize.api.action.user.UserUtilsProxy;
+import com.socialize.entity.User;
+import com.socialize.error.SocializeException;
 
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class LikeListListener extends LikeListener {
- 
-	@Override
-	public final void onCreate(Like entity) {}
-
-	@Override
-	public final void onGet(Like entity) {}
-
-	@Override
-	public final void onUpdate(Like entity) {}
+public class UserUtils {
 	
-	@Override
-	public final void onDelete() {}
+	static UserUtilsProxy proxy;
 	
-	@Override
-	public final void onList(ListResult<Like> entities) {
-		onList(entities.getItems(), entities.getTotalCount());
+	static {
+		proxy = (UserUtilsProxy) Proxy.newProxyInstance(
+				UserUtilsProxy.class.getClassLoader(),
+				new Class[]{UserUtilsProxy.class},
+				new SocializeActionProxy("userSystem"));	// Bean name
 	}
+	
 
-	public abstract void onList(List<Like> items, int totalSize);
-
+	public static User getCurrentUser(Context context) throws SocializeException {
+		return proxy.getCurrentUser(context);
+	}
+	
 }

@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,36 +19,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.listener.like;
+package com.socialize.api.action.user;
 
-import java.util.List;
-import com.socialize.entity.Like;
-import com.socialize.entity.ListResult;
+import android.content.Context;
+import com.socialize.annotations.Synchronous;
+import com.socialize.entity.User;
+import com.socialize.error.SocializeException;
 
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class LikeListListener extends LikeListener {
- 
-	@Override
-	public final void onCreate(Like entity) {}
+public interface UserUtilsProxy {
 
-	@Override
-	public final void onGet(Like entity) {}
-
-	@Override
-	public final void onUpdate(Like entity) {}
-	
-	@Override
-	public final void onDelete() {}
-	
-	@Override
-	public final void onList(ListResult<Like> entities) {
-		onList(entities.getItems(), entities.getTotalCount());
-	}
-
-	public abstract void onList(List<Like> items, int totalSize);
-
+	/**
+	 * Synchronously returns the current user.  
+	 * If the Socialize instance has not been initialized it will be initialized synchronously here.
+	 * If the Socialize instance has not authenticated it will be authenticated synchronously here.
+	 * @param context The current context.
+	 * @return The current user.
+	 * @throws SocializeException
+	 */
+	@Synchronous
+	public User getCurrentUser(Context context) throws SocializeException;
 }

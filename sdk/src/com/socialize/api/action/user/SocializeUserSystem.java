@@ -22,7 +22,8 @@
 package com.socialize.api.action.user;
 
 import android.content.Context;
-
+import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
@@ -45,7 +46,7 @@ import com.socialize.util.StringUtils;
 /**
  * @author Jason Polites
  */
-public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<User>> implements UserSystem {
+public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<User>> implements UserSystem, UserUtilsProxy {
 
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	private SocializeSessionPersister sessionPersister;
@@ -197,4 +198,27 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	public void setNotificationRegistrationSystem(NotificationRegistrationSystem notificationRegistrationSystem) {
 		this.notificationRegistrationSystem = notificationRegistrationSystem;
 	}
+
+	@Override
+	public User getCurrentUser(Context context) throws SocializeException {
+		SocializeService service = getSocialize();
+		SocializeSession session = null;
+		
+		if(!service.isInitialized()) {
+			service.init(context);
+		}
+		
+		if(!service.isAuthenticated()) {
+			session = service.authenticateSynchronous(context);
+		}
+		else {
+			session = service.getSession();
+		}
+		return session.getUser();
+	}
+	
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
+	}
+	
 }
