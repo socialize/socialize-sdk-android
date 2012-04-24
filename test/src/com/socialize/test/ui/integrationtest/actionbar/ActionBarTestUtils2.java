@@ -21,7 +21,6 @@
  */
 package com.socialize.test.ui.integrationtest.actionbar;
 
-import junit.framework.Assert;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;

@@ -37,6 +37,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.jayway.android.robotium.solo.Solo;
 import com.socialize.sample.Main;
+import com.socialize.test.ui.util.TestUtils;
 
 /**
  * @author Jason Polites
@@ -135,8 +136,8 @@ public abstract class SocializeRobotiumTest extends ActivityInstrumentationTestC
 		// progress dialog is closed, resulting in an abnormal abort
 		// which causes a test failure.
 		// Add a sleep to hack it
-		robotium.waitForDialogToClose(4000);
-		assertTrue(robotium.waitForText("SUCCESS", 1, DEFAULT_TIMEOUT_MILLISECONDS));
+//		TestUtils.waitForDialogToClose(getActivity(), 4000);
+		TestUtils.waitForText(getActivity(), "SUCCESS", 1, DEFAULT_TIMEOUT_MILLISECONDS);
 	}
 
 	/**

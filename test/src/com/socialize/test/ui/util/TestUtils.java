@@ -36,6 +36,7 @@ public class TestUtils {
 	static Instrumentation instrumentation;
 	static ActivityInstrumentationTestCase2<?> testCase;
 	
+	
 	public static void incrementCount(String key) {
 		holder.incrementCount(key);
 		
@@ -110,19 +111,100 @@ public class TestUtils {
 		return dialog.isShowing();
 	}
 	
-	public static boolean waitForDialogToClose(Dialog dialog, int timeout) {
-		long timeWaited = 0;
-		while(dialog.isShowing()) {
-			int sleep = timeout/ 10;
-			sleep(sleep);
-			timeWaited += sleep;
-			
-			if(timeWaited >= timeout) {
-				break;
-			}
-		}
-		
-		return dialog.isShowing();
+	//	public static boolean waitForDialogToClose(Dialog dialog, int timeout) {
+	//		long timeWaited = 0;
+	//		while(dialog.isShowing()) {
+	//			int sleep = timeout/ 10;
+	//			sleep(sleep);
+	//			timeWaited += sleep;
+	//			
+	//			if(timeWaited >= timeout) {
+	//				break;
+	//			}
+	//		}
+	//		
+	//		return dialog.isShowing();
+	//	}
+	//	
+	//	public static void waitForDialogToClose(Activity activity, long timeout) {
+	//		getActiveDialog(activity);
+	//	}
+	//	
+	//	public static Dialog getActiveDialog(Activity activity) {
+	////		activity.getWindow().;
+	//		
+	//		try {
+	//			getDialogs(activity);
+	//		}
+	//		catch (Exception e) {
+	//			e.printStackTrace();
+	//		}
+	//		return null;
+	//	}
+	//	
+	//	public static List<Dialog> getDialogs(Activity activity) throws Exception {
+	//		List<Dialog> dialogs = new ArrayList<Dialog>();
+	//		WindowManager mWindowManager = (WindowManager)activity.getSystemService("window");
+	//		Field instanceField = mWindowManager.getClass().getDeclaredField(getWindowManagerString());
+	//		
+	//		instanceField.setAccessible(true);
+	//		
+	//		Object instance = instanceField.get(mWindowManager);
+	//		
+	//		Field viewsField = instance.getClass().getDeclaredField("mViews");
+	//		viewsField.setAccessible(true);
+	//		View[] views = (View[]) viewsField.get(instance);
+	//		if(views != null) {
+	//			for (View view : views) {
+	//				Field mCallbackField = view.getClass().getDeclaredField("mCallback");
+	//				if(mCallbackField != null) {
+	//					Object cb = mCallbackField.get(view);
+	//					if(cb instanceof Dialog) {
+	//						dialogs.add((Dialog) cb);
+	//					}
+	//				}
+	//			}
+	//		}
+	//		
+	//		return dialogs;
+	//	}
+	//	
+	//	public static View[] getWindowDecorViews(Activity activity)
+	//	{
+	//		Field viewsField;
+	//		Field instanceField;
+	//		try {
+	//			viewsField = windowManager.getDeclaredField("mViews");
+	//			instanceField = windowManager.getDeclaredField(getWindowManagerString());
+	//			viewsField.setAccessible(true);
+	//			instanceField.setAccessible(true);
+	//			Object instance = instanceField.get(null);
+	//			return (View[]) viewsField.get(instance);
+	//		} catch (SecurityException e) {
+	//			e.printStackTrace();
+	//		} catch (NoSuchFieldException e) {
+	//			e.printStackTrace();
+	//		} catch (IllegalArgumentException e) {
+	//			e.printStackTrace();
+	//		} catch (IllegalAccessException e) {
+	//			e.printStackTrace();
+	//		}
+	//		return null;
+	//	}
+	//	
+	//	private static String getWindowManagerString(){
+	//
+	//		if(android.os.Build.VERSION.SDK_INT >= 13)
+	//			return "sWindowManager";
+	//
+	//		else
+	//			return  "mWindowManager";
+	//	}
+	
+	
+	public static boolean waitForText(Activity activity, String text, int minimumNumberOfMatches, long timeoutMS) {
+		View view = findViewWithText(activity, View.class, text, timeoutMS);
+		return view != null;
 	}
 	
 	public static void destroyActivity() {

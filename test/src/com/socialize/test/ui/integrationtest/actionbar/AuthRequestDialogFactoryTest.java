@@ -23,7 +23,6 @@ package com.socialize.test.ui.integrationtest.actionbar;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import junit.framework.Assert;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;

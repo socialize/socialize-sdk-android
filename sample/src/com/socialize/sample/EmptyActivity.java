@@ -24,11 +24,11 @@ package com.socialize.sample;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import com.socialize.ui.dialog.DialogRegister;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import com.socialize.ui.dialog.DialogRegister;
 
 public class EmptyActivity extends Activity  implements DialogRegister {
 
