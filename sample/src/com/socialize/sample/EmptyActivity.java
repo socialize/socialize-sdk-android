@@ -49,6 +49,15 @@ public class EmptyActivity extends Activity  implements DialogRegister {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		this.savedInstanceState = savedInstanceState;
+		
+		// Force async tasks static handler to be created on the main UI thread
+		try {
+			Class.forName("android.os.AsyncTask");
+		}
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
 		super.onCreate(savedInstanceState);
 	}
 	

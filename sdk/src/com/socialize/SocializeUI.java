@@ -24,13 +24,11 @@ package com.socialize;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.view.View;
-
 import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
-import com.socialize.ui.actionbutton.SocializeLikeButtonNew;
 import com.socialize.ui.comment.OnCommentViewActionListener;
 
 /**
@@ -158,14 +156,6 @@ public interface SocializeUI {
 	 */
 	public void showActionDetailViewForResult(Activity context, User user, SocializeAction action, int requestCode);
 	
-	/**
-	 * Creates a default Socialize Like Button.
-	 * @param context
-	 * @param entity
-	 * @return
-	 */
-	public SocializeLikeButtonNew createLikeButton(Activity context, Entity entity);
-
 	public Drawable getDrawable(String name);
 	
 	public Drawable getDrawable(String name, boolean eternal);

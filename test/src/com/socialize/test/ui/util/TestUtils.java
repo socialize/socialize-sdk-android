@@ -2,16 +2,21 @@ package com.socialize.test.ui.util;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import org.json.JSONObject;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Instrumentation;
@@ -35,6 +40,7 @@ public class TestUtils {
 	static ActivityMonitor monitor;
 	static Instrumentation instrumentation;
 	static ActivityInstrumentationTestCase2<?> testCase;
+	static Map<String, JSONObject> jsons = new HashMap<String, JSONObject>();
 	
 	
 	public static void incrementCount(String key) {
@@ -90,9 +96,10 @@ public class TestUtils {
 		instrumentation.addMonitor(monitor);
 	}
 	
-	public static Activity waitForActivity(long timeout) {
+	@SuppressWarnings("unchecked")
+	public static <A extends Activity> A waitForActivity(long timeout) {
 		if(monitor != null) {
-			return monitor.waitForActivityWithTimeout(timeout);
+			return (A) monitor.waitForActivityWithTimeout(timeout);
 		}
 		return null;
 	}
@@ -320,6 +327,10 @@ public class TestUtils {
 		}
 	}
 	
+	public static boolean findText(Activity activity, final String text, final long timeoutMs) {
+		return findViewWithText(activity.getWindow().getDecorView(), View.class, text, timeoutMs) != null;
+	}
+	
 	public static <V extends View> V findViewWithText(Activity activity, final Class<V> viewClass, final String text, final long timeoutMs) {
 		return findViewWithText(activity.getWindow().getDecorView(), viewClass, text, timeoutMs);
 	}
@@ -476,7 +487,7 @@ public class TestUtils {
 	public static boolean isCheckboxWithImage(View view, String text) {
 		if(view instanceof CustomCheckbox) {
 			CustomCheckbox cbx = (CustomCheckbox) view;
-			return cbx.getImageOn().equals(text) || cbx.getImageOff().equals(text);
+			return cbx.getImageOn().contains(text) || cbx.getImageOff().contains(text);
 		}
 		return false;
 	}
@@ -485,7 +496,7 @@ public class TestUtils {
 		if(viewClass.isAssignableFrom(view.getClass())) {
 			TextView textView = findView(view, TextView.class);
 			if(textView != null) {
-				return textView.getText().toString().equals(text);
+				return textView.getText().toString().contains(text);
 			}
 		}
 		return false;
@@ -584,6 +595,14 @@ public class TestUtils {
 		});
 	}
 	
+	public static boolean findText(Activity view, String text) {
+		View decorView = view.getWindow().getDecorView();
+		if(decorView instanceof ViewGroup) {
+			return findText((ViewGroup) decorView, text);
+		}
+		return false;
+	}
+	
 	public static boolean findText(ViewGroup view, String text) {
 		
 		int count = view.getChildCount();
@@ -598,7 +617,7 @@ public class TestUtils {
 			}
 			else {
 				if(child instanceof TextView) {
-					if(((TextView)child).getText().toString().equals(text)) {
+					if(((TextView)child).getText().toString().contains(text)) {
 						return true;
 					}
 				}
@@ -650,6 +669,58 @@ public class TestUtils {
 		for (int i = 0; i < actual.length; i++) {
 			assertEquals(expected[i], actual[i]);
 		}
+	}
+	
+	public static final JSONObject getJSON(Context context, String path)  {
+		InputStream in = null;
+		
+		path = path.trim();
+		
+		if(!path.startsWith("existing-data")) {
+			path  = "existing-data/" + path;
+		}
+		
+		JSONObject json = jsons.get(path);
+
+		if(json == null) {
+			try {
+				in = context.getAssets().open(path);
+
+				if(in == null) {
+					throw new IOException("No file with path [" +
+							path +
+					"] on device");
+				}
+
+				InputStreamReader reader = new InputStreamReader(in);
+				BufferedReader breader = new BufferedReader(reader);
+
+				StringBuilder builder = new StringBuilder();
+				String line = breader.readLine();
+
+				while(line != null) {
+					builder.append(line);
+					builder.append("\n");
+					line = breader.readLine();
+				}
+
+				json = new JSONObject(builder.toString());
+				
+				jsons.put(path, json);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			finally {
+				if(in != null) {
+					try {
+						in.close();
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					}
+				}
+			}
+		}		
+		return json;
 	}
 	
 }

@@ -9,7 +9,6 @@ import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
-import com.socialize.ui.actionbutton.SocializeLikeButtonNew;
 import com.socialize.ui.comment.OnCommentViewActionListener;
 
 public class MockSocializeUI implements SocializeUI {
@@ -76,11 +75,6 @@ public class MockSocializeUI implements SocializeUI {
 
 	@Override
 	public Drawable getDrawable(String name) {
-		return null;
-	}
-
-	@Override
-	public SocializeLikeButtonNew createLikeButton(Activity context, Entity entity) {
 		return null;
 	}
 }

@@ -109,7 +109,6 @@ import com.socialize.ui.action.ActionDetailActivity;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
 import com.socialize.ui.actionbar.ActionBarView;
-import com.socialize.ui.actionbutton.SocializeLikeButtonNew;
 import com.socialize.ui.comment.CommentActivity;
 import com.socialize.ui.comment.CommentDetailActivity;
 import com.socialize.ui.comment.CommentView;
@@ -600,15 +599,22 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		authenticate(context, consumerKey, consumerSecret, authListener);
 	}
 	
-	public synchronized SocializeSession authenticateSynchronous(Context context) throws SocializeException {
+	public synchronized SocializeSession authenticateSynchronous(Context context) {
 		SocializeConfig config = getConfig();
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);		
-		if(checkKeys(consumerKey, consumerSecret)) {
-			return userSystem.authenticateSynchronous(context, consumerKey, consumerSecret, this);
+		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);	
+		
+		try {
+			if(checkKeys(consumerKey, consumerSecret)) {
+				return userSystem.authenticateSynchronous(context, consumerKey, consumerSecret, this);
+			}
+			else {
+				throw new SocializeException("Consumer key and/or secret not provided");
+			}
 		}
-		else {
-			throw new SocializeException("Consumer key and/or secret not provided");
+		catch (Exception e) {
+			logError("Error during synchronous authentication", e);
+			return null;
 		}
 	}
 
@@ -683,6 +689,16 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			return true;	
 		}
 	}
+	protected void logError(String message, Throwable error) {
+		if(logger != null) {
+			logger.error(message, error);
+		}
+		else {
+			System.err.println(message);
+			error.printStackTrace();
+		}
+	}
+	
 	protected void logErrorMessage(String message) {
 		if(logger != null) {
 			logger.error(message);
@@ -1625,12 +1641,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		catch (ActivityNotFoundException e) {
 			Log.e(Socialize.LOG_KEY, "Could not find ProfileActivity.  Make sure you have added this to your AndroidManifest.xml");
 		}	
-	}
-
-
-	@Override
-	public SocializeLikeButtonNew createLikeButton(Activity context, Entity entity) {
-		return null;
 	}
 
 	/*

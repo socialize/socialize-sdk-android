@@ -19,64 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test.integration.services;
+package com.socialize.test.integration;
 
 import com.socialize.Socialize;
-import com.socialize.UserUtils;
-import com.socialize.entity.User;
-import com.socialize.error.SocializeException;
 import com.socialize.test.SocializeActivityTest;
-import com.socialize.test.ui.util.TestUtils;
-import com.socialize.ui.profile.ProfileActivity;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class UserUtilsTest extends SocializeActivityTest {
+public abstract class SDKIntegrationTest extends SocializeActivityTest {
+	public static final String DEFAULT_ENTITY_URL = "http://socialize.integration.tests.com?somekey=somevalue&anotherkey=anothervalue";
+	public static final String DEFAULT_GET_ENTITY = "http://entity1.com";
+	public static final int NUM_COMMENTS = 30;
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		Socialize.getSocialize().destroy(true);
 	}
-
 	@Override
 	protected void tearDown() throws Exception {
 		Socialize.getSocialize().destroy(true);
 		super.tearDown();
 	}
 	
-	public void testGetCurrentUser() throws Exception {
-		
-		User user = UserUtils.getCurrentUser(getActivity());
-		
-		assertNotNull(user);
-		
-		Socialize.getSocialize().destroy(true);
-		
-		User user2 = UserUtils.getCurrentUser(getActivity());
-		
-		assertEquals(user, user2);
-		
-	}
 	
-	public void testShowUserProfile() throws SocializeException {
-		TestUtils.setUp(this);
-		
-		TestUtils.setUpActivityMonitor(ProfileActivity.class);
-		
-		UserUtils.showUserSettings(getActivity());
-		
-		ProfileActivity profile = TestUtils.waitForActivity(20000);
-		
-		assertNotNull(profile);
-		
-		User currentUser = UserUtils.getCurrentUser(getActivity());
-		
-		// Look for the ID
-		assertTrue(TestUtils.findText(profile, String.valueOf(currentUser.getId()), 20000));
-		
-		profile.finish();
-	}
 }
