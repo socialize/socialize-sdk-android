@@ -314,6 +314,7 @@
 	
 	<bean id="likeSystem" class="com.socialize.api.action.like.SocializeLikeSystem" extends="socializeApi">
 		<constructor-arg ref="likeProvider"/>
+		authRequestDialogFactory
 	</bean>
 	
 <!-- End Like API -->	

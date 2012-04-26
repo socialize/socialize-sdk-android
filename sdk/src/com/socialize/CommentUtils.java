@@ -46,12 +46,12 @@ public class CommentUtils {
 		commentUtils = (CommentUtilsProxy) Proxy.newProxyInstance(
 				CommentUtilsProxy.class.getClassLoader(),
 				new Class[]{CommentUtilsProxy.class},
-				new SocializeActionProxy("commentSystem"));	// Bean name
+				new SocializeActionProxy("commentUtils"));	// Bean name
 		
 		subscriptionUtils = (SubscriptionUtilsProxy) Proxy.newProxyInstance(
 				SubscriptionUtilsProxy.class.getClassLoader(),
 				new Class[]{SubscriptionUtilsProxy.class},
-				new SocializeActionProxy("subscriptionSystem"));	// Bean name		
+				new SocializeActionProxy("subscriptionUtils"));	// Bean name		
 	}
 	
 

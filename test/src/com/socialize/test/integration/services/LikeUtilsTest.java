@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import com.socialize.LikeUtils;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.User;
@@ -61,6 +62,9 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		Entity entity = Entity.newInstance("testAddLike", "testAddLike");
 		
 		final CountDownLatch latch = new CountDownLatch(1);
+		
+		// Force no config
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
 		LikeUtils.like(getActivity(), entity, new LikeAddListener() {
 			

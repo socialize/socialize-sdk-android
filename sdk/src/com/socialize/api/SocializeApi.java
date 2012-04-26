@@ -26,7 +26,6 @@ import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
 import com.socialize.Socialize;
-import com.socialize.SocializeService;
 import com.socialize.api.action.ActionType;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProvider;
@@ -41,7 +40,6 @@ import com.socialize.entity.ListResult;
 import com.socialize.entity.Propagation;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.SocializeObject;
-import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.SocializeActionListener;
@@ -109,6 +107,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			notificationChecker.checkRegistrations(context, session);
 		}
 	}
+	
 	
 	protected void setPropagationData(SocializeAction action, ShareOptions shareOptions) {
 		if(shareOptions != null) {
@@ -782,30 +781,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		setLocation(action, location);
 	}	
 	
-	protected ShareOptions getDefaultShareOptions() {
-		SocializeSession session = getSocialize().getSession();
-		User user = session.getUser();
-		ShareOptions options = new ShareOptions();
-		
-		if(user.isAutoPostToFacebook() && getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-			if(user.isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
-				options.setShareTo(SocialNetwork.FACEBOOK, SocialNetwork.TWITTER);
-			}
-			else {
-				options.setShareTo(SocialNetwork.FACEBOOK);
-			}
-		}
-		else if(user.isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
-			options.setShareTo(SocialNetwork.TWITTER);
-		}	
-		
-		return options;
-	}
-	
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
-	}
-
 	class AsyncPutter extends AbstractAsyncProcess<SocializePutRequest<T>, Void, SocializeEntityResponse<T>> {
 
 		@Deprecated

@@ -21,14 +21,20 @@
  */
 package com.socialize.ui.auth;
 
-import com.socialize.networks.SocialNetwork;
-
 import android.app.Dialog;
+import com.socialize.error.SocializeException;
+import com.socialize.networks.SocialNetwork;
 
 /**
  * @author Jason Polites
  *
  */
-public interface AuthRequestListener {
-	public void onResult(Dialog dialog, SocialNetwork...networks);
+public interface AuthRequestDialogListener {
+	
+	public void onAuthSuccess(Dialog dialog, SocialNetwork...networks);
+	
+	public void onAuthFail(Dialog dialog, SocializeException error);
+	
+	public void onCancel(Dialog dialog);
+	
 }

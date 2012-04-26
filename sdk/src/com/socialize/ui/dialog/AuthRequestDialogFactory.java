@@ -23,6 +23,7 @@ package com.socialize.ui.dialog;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.view.Gravity;
@@ -38,7 +39,7 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.facebook.FacebookSignInCell;
 import com.socialize.networks.twitter.TwitterSignInCell;
 import com.socialize.ui.auth.AuthPanelView;
-import com.socialize.ui.auth.AuthRequestListener;
+import com.socialize.ui.auth.AuthRequestDialogListener;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DisplayUtils;
 
@@ -56,10 +57,14 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 		return show(parent, null);
 	}
 	
-	public Dialog show(final View parent, final AuthRequestListener listener) {
+	public Dialog show(final View parent, final AuthRequestDialogListener listener) {
+		return show(parent.getContext(), listener);
+	}
+	
+	public Dialog show(final Context context, final AuthRequestDialogListener listener) {
 
-		final Dialog dialog = newDialog(parent.getContext());
-		final ProgressDialog progress = SafeProgressDialog.show(parent.getContext(), "", "Please wait...");
+		final Dialog dialog = newDialog(context);
+		final ProgressDialog progress = SafeProgressDialog.show(context, "", "Please wait...");
 		
 		authPanelViewFactory.getBeanAsync(new BeanCreationListener<AuthPanelView>() {
 			
@@ -109,7 +114,7 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 		return dialog;
 	}
 	
-	protected SocializeAuthListener getAuthClickListener(final Dialog alertDialog, final AuthRequestListener listener, final SocialNetwork network) {
+	protected SocializeAuthListener getAuthClickListener(final Dialog alertDialog, final AuthRequestDialogListener listener, final SocialNetwork network) {
 		return new SocializeAuthListener() {
 			
 			@Override
@@ -117,7 +122,7 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 				handleError("Error during auth", error);
 				alertDialog.dismiss();
 				if(listener != null) {
-					listener.onResult(alertDialog);
+					listener.onAuthFail(alertDialog, error);
 				}
 			}
 			
@@ -125,7 +130,7 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 			public void onAuthSuccess(SocializeSession session) {
 				alertDialog.dismiss();
 				if(listener != null) {
-					listener.onResult(alertDialog, network);
+					listener.onAuthSuccess(alertDialog, network);
 				}
 			}
 			
@@ -134,13 +139,15 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 				handleError("Error during auth", error);
 				alertDialog.dismiss();
 				if(listener != null) {
-					listener.onResult(alertDialog);
+					listener.onAuthFail(alertDialog, error);
 				}
 			}
 
 			@Override
 			public void onCancel() {
-				// Do nothing
+				if(listener != null) {
+					listener.onCancel(alertDialog);
+				}
 			}
 		};
 	}

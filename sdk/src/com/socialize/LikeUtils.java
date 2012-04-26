@@ -45,7 +45,7 @@ public class LikeUtils {
 		proxy = (LikeUtilsProxy) Proxy.newProxyInstance(
 				LikeUtilsProxy.class.getClassLoader(),
 				new Class[]{LikeUtilsProxy.class},
-				new SocializeActionProxy("likeSystem"));	// Bean name
+				new SocializeActionProxy("likeUtils"));	// Bean name
 	}
 
 	/**

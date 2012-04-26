@@ -25,7 +25,7 @@ import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.test.PublicSocialize;
 import com.socialize.test.ui.SocializeUIActivityTest;
-import com.socialize.ui.auth.AuthRequestListener;
+import com.socialize.ui.auth.AuthRequestDialogListener;
 import com.socialize.ui.comment.CommentAdapter;
 import com.socialize.ui.comment.CommentAddButtonListener;
 import com.socialize.ui.comment.CommentListView;
@@ -63,7 +63,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 	
 	@UsesMocks ({
 		AuthRequestDialogFactory.class, 
-		AuthRequestListener.class,
+		AuthRequestDialogListener.class,
 		SocializeService.class,
 		Dialog.class})
 	public void testGetCommentAddListenerNotAuthed() {
@@ -71,7 +71,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		AuthRequestDialogFactory authRequestDialogFactory = AndroidMock.createMock(AuthRequestDialogFactory.class);
 		Dialog dialog = AndroidMock.createMock(Dialog.class, getContext());
 		
-		final AuthRequestListener listener = AndroidMock.createMock(AuthRequestListener.class);
+		final AuthRequestDialogListener listener = AndroidMock.createMock(AuthRequestDialogListener.class);
 		final SocializeService socializeService = AndroidMock.createMock(SocializeService.class);
 		
 		AndroidMock.expect(socializeService.isSupported(AuthProviderType.FACEBOOK)).andReturn(true);
@@ -87,7 +87,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 			}
 
 			@Override
-			public AuthRequestListener getCommentAuthListener(String text, boolean shareLocation, boolean subscribe, SocialNetwork... networks) {
+			public AuthRequestDialogListener getCommentAuthListener(String text, boolean shareLocation, boolean subscribe, SocialNetwork... networks) {
 				addResult(0, text);
 				return listener;
 			}
@@ -816,7 +816,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		}
 
 		@Override
-		public AuthRequestListener getCommentAuthListener(String text, boolean shareLocation, boolean subscribe, SocialNetwork... networks) {
+		public AuthRequestDialogListener getCommentAuthListener(String text, boolean shareLocation, boolean subscribe, SocialNetwork... networks) {
 			return super.getCommentAuthListener(text, shareLocation, subscribe, networks);
 		}
 

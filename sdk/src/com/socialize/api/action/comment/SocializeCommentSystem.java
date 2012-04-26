@@ -23,16 +23,11 @@ package com.socialize.api.action.comment;
 
 import java.util.ArrayList;
 import java.util.List;
-import android.app.Activity;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
-import com.socialize.entity.User;
-import com.socialize.listener.comment.CommentAddListener;
-import com.socialize.listener.comment.CommentGetListener;
-import com.socialize.listener.comment.CommentListListener;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.networks.ShareOptions;
 import com.socialize.provider.SocializeProvider;
@@ -40,7 +35,7 @@ import com.socialize.provider.SocializeProvider;
 /**
  * @author Jason Polites
  */
-public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvider<Comment>> implements CommentSystem, CommentUtilsProxy {
+public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvider<Comment>> implements CommentSystem {
 	
 	public SocializeCommentSystem(SocializeProvider<Comment> provider) {
 		super(provider);
@@ -131,28 +126,4 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 		getAsync(session, ENDPOINT, String.valueOf(id), listener);
 	}
 
-	@Override
-	public void addComment(Activity context, Entity e, String text, CommentAddListener listener) {
-		addComment(getSocialize().getSession(), e, text, getDefaultShareOptions(), listener);
-	}
-
-	@Override
-	public void getComment(Activity context, long id, CommentGetListener listener) {
-		getComment(getSocialize().getSession(), id, listener);
-	}
-
-	@Override
-	public void getComments(Activity context, CommentListListener listener, long... ids) {
-		getCommentsById(getSocialize().getSession(), listener, ids);
-	}
-
-	@Override
-	public void getCommentsByUser(Activity context, User user, int start, int end, CommentListListener listener) {
-		getCommentsByUser(getSocialize().getSession(), user.getId(), start, end, listener);
-	}
-
-	@Override
-	public void getCommentsByEntity(Activity context, Entity e, int start, int end, CommentListListener listener) {
-		getCommentsByEntity(getSocialize().getSession(), e.getKey(), start, end, listener);
-	}
 }

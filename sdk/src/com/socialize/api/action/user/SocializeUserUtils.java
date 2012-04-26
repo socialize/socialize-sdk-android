@@ -19,18 +19,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.dialog;
+package com.socialize.api.action.user;
 
-import android.app.Dialog;
-import android.view.View;
-import com.socialize.ui.auth.AuthRequestDialogListener;
+import android.app.Activity;
+import android.content.Context;
+import com.socialize.SocializeService;
+import com.socialize.api.SocializeSession;
+import com.socialize.api.action.SocializeActionUtilsBase;
+import com.socialize.entity.User;
+import com.socialize.listener.user.UserSaveListener;
+
 
 /**
  * @author Jason Polites
  *
  */
-public interface AuthDialogFactory {
+public class SocializeUserUtils extends SocializeActionUtilsBase implements UserUtilsProxy {
 
-	public Dialog show(View parent, AuthRequestDialogListener listener);
+	private UserSystem userSystem;
+	
+	@Override
+	public User getCurrentUser(Context context)  {
+		SocializeService service = getSocialize();
+		SocializeSession session = null;
+		
+		if(!service.isInitialized()) {
+			service.init(context);
+		}
+		
+		if(!service.isAuthenticated()) {
+			session = service.authenticateSynchronous(context);
+		}
+		else {
+			session = service.getSession();
+		}
+		return session.getUser();
+	}
 
+	@Override
+	public void saveUserSettings(Activity context, User user, UserSaveListener listener) {
+		userSystem.saveUserProfile(context, getSocialize().getSession(), user, true, listener);
+	}
+
+	public void setUserSystem(UserSystem userSystem) {
+		this.userSystem = userSystem;
+	}
+	
 }

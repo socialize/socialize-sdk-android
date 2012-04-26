@@ -42,7 +42,7 @@ public class UserUtils {
 		proxy = (UserUtilsProxy) Proxy.newProxyInstance(
 				UserUtilsProxy.class.getClassLoader(),
 				new Class[]{UserUtilsProxy.class},
-				new SocializeActionProxy("userSystem"));	// Bean name
+				new SocializeActionProxy("userUtils"));	// Bean name
 	}
 	
 

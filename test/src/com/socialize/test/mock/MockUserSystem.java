@@ -59,6 +59,11 @@ public class MockUserSystem implements UserSystem {
 	public void saveUserProfile(Context context, SocializeSession session, UserProfile profile, UserListener listener) {
 		listener.onUpdate(user);
 	}
+	
+	@Override
+	public void saveUserProfile(Context context, SocializeSession session, User user, boolean resetC2DM, UserListener listener) {
+		listener.onUpdate(user);
+	}
 
 	@Override
 	public void saveSession(Context context, SocializeSession session) {}

@@ -1557,4 +1557,24 @@
 
 <!-- End Launcher -->
 
+<!--  Socialize 2.0 -->
+
+	<bean id="likeUtils" class="com.socialize.api.action.like.SocializeLikeUtils">
+		<property name="likeSystem" ref="likeSystem"/>
+		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
+	</bean>
+	
+	<bean id="commentUtils" class="com.socialize.api.action.comment.SocializeCommentUtils">
+		<property name="commentSystem" ref="commentSystem"/>
+		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
+	</bean>
+	
+	<bean id="subscriptionUtils" class="com.socialize.api.action.comment.SocializeSubscriptionUtils">
+		<property name="subscriptionSystem" ref="subscriptionSystem"/>
+	</bean>
+
+	<bean id="userUtils" class="com.socialize.api.action.user.SocializeUserUtils">
+		<property name="userSystem" ref="userSystem"/>
+	</bean>
+
 </beans>

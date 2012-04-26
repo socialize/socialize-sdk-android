@@ -29,7 +29,7 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.notifications.NotificationType;
-import com.socialize.ui.auth.AuthRequestListener;
+import com.socialize.ui.auth.AuthRequestDialogListener;
 import com.socialize.ui.dialog.AuthRequestDialogFactory;
 import com.socialize.ui.dialog.DialogFactory;
 import com.socialize.ui.header.SocializeHeader;
@@ -271,12 +271,22 @@ public class CommentListView extends BaseView {
 		});
 	}
 	
-	protected AuthRequestListener getCommentAuthListener(final String text, final boolean shareLocation, final boolean subscribe, final SocialNetwork...networks) {
-		return new AuthRequestListener() {
+	protected AuthRequestDialogListener getCommentAuthListener(final String text, final boolean shareLocation, final boolean subscribe, final SocialNetwork...networks) {
+		return new AuthRequestDialogListener() {
+			
 			@Override
-			public void onResult(Dialog dialog, SocialNetwork... n) {
-				doPostComment(text, shareLocation, subscribe, n);
+			public void onAuthSuccess(Dialog dialog, SocialNetwork... networks) {
+				doPostComment(text, shareLocation, subscribe, networks);
 			}
+
+			@Override
+			public void onAuthFail(Dialog dialog, SocializeException error) {
+				doPostComment(text, shareLocation, subscribe);
+			}
+
+			@Override
+			public void onCancel(Dialog dialog) {}
+
 		};
 	}
 	

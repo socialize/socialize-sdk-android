@@ -49,12 +49,12 @@ import com.socialize.view.BaseView;
  */
 public class AuthPanelView extends BaseView {
 
-	private AuthRequestListener listener;
+	private AuthRequestDialogListener listener;
 	private Dialog dialog;
 	private SocializeConfig config;
 	private Colors colors;
 	
-	public AuthPanelView(Context context, AuthRequestListener listener, Dialog dialog) {
+	public AuthPanelView(Context context, AuthRequestDialogListener listener, Dialog dialog) {
 		this(context);
 		this.listener = listener;
 		this.dialog = dialog;
@@ -194,7 +194,7 @@ public class AuthPanelView extends BaseView {
 				public void onClick(View v) {
 					dialog.dismiss();
 					if(listener != null) {
-						listener.onResult(dialog);
+						listener.onCancel(dialog);
 					}
 				}
 			});

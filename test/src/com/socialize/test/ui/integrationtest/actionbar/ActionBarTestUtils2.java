@@ -45,7 +45,7 @@ import com.socialize.networks.ShareOptions;
 import com.socialize.test.mock.MockLikeSystem;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarLayoutView;
-import com.socialize.ui.auth.AuthRequestListener;
+import com.socialize.ui.auth.AuthRequestDialogListener;
 import com.socialize.ui.dialog.AuthDialogFactory;
 import com.socialize.ui.dialog.AuthRequestDialogFactory;
 
@@ -63,7 +63,7 @@ public class ActionBarTestUtils2 {
 		
 		final AuthRequestDialogFactory mockFactory = new AuthRequestDialogFactory() {
 			@Override
-			public Dialog show(View parent, AuthRequestListener listener) {
+			public Dialog show(View parent, AuthRequestDialogListener listener) {
 				TestUtils.addResult("success");
 				return null;
 			}
@@ -206,7 +206,7 @@ public class ActionBarTestUtils2 {
 		
 		final AuthRequestDialogFactory mockFactory = new AuthRequestDialogFactory() {
 			@Override
-			public Dialog show(View parent, AuthRequestListener listener) {
+			public Dialog show(View parent, AuthRequestDialogListener listener) {
 				TestUtils.addResult("fail");
 				return null;
 			}

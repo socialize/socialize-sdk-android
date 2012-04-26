@@ -21,9 +21,7 @@
  */
 package com.socialize.api.action.user;
 
-import android.app.Activity;
 import android.content.Context;
-import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
@@ -46,7 +44,7 @@ import com.socialize.util.StringUtils;
 /**
  * @author Jason Polites
  */
-public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<User>> implements UserSystem, UserUtilsProxy {
+public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<User>> implements UserSystem {
 
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	private SocializeSessionPersister sessionPersister;
@@ -140,12 +138,7 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 		saveUserProfile(context, session, user, resetC2DM, listener);
 	}
 	
-	@Override
-	public void saveUserSettings(Activity context, User user, UserSaveListener listener) {
-		saveUserProfile(context, getSocialize().getSession(), user, true, listener);
-	}
-
-	protected void saveUserProfile(final Context context, final SocializeSession session, User user, final boolean resetC2DM, final UserListener listener) {
+	public void saveUserProfile(final Context context, final SocializeSession session, User user, final boolean resetC2DM, final UserListener listener) {
 
 		String endpoint = ENDPOINT + user.getId() + "/";
 		
@@ -204,21 +197,5 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 		this.notificationRegistrationSystem = notificationRegistrationSystem;
 	}
 
-	@Override
-	public User getCurrentUser(Context context)  {
-		SocializeService service = getSocialize();
-		SocializeSession session = null;
-		
-		if(!service.isInitialized()) {
-			service.init(context);
-		}
-		
-		if(!service.isAuthenticated()) {
-			session = service.authenticateSynchronous(context);
-		}
-		else {
-			session = service.getSession();
-		}
-		return session.getUser();
-	}
+
 }

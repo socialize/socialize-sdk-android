@@ -23,7 +23,6 @@ package com.socialize.api.action.like;
 
 import java.util.ArrayList;
 import java.util.List;
-import android.app.Activity;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
@@ -32,9 +31,6 @@ import com.socialize.entity.Like;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.like.LikeAddListener;
-import com.socialize.listener.like.LikeDeleteListener;
-import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.like.LikeListener;
 import com.socialize.networks.ShareOptions;
@@ -43,7 +39,7 @@ import com.socialize.provider.SocializeProvider;
 /**
  * @author Jason Polites
  */
-public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Like>> implements LikeSystem, LikeUtilsProxy {
+public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Like>> implements LikeSystem {
 	
 	public SocializeLikeSystem(SocializeProvider<Like> provider) {
 		super(provider);
@@ -185,62 +181,6 @@ public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Li
 	@Override
 	public void getLike(SocializeSession session, long id, LikeListener listener) {
 		getAsync(session, ENDPOINT, String.valueOf(id), listener);
-	}
-
-
-	@Override
-	public void like(Activity context, Entity e, LikeAddListener listener) {
-		SocializeSession session = getSocialize().getSession();
-		addLike(session, e, getDefaultShareOptions(), listener);
-	}
-
-	@Override
-	public void unlike(Activity context, Entity e, final LikeDeleteListener listener) {
-		final SocializeSession session = getSocialize().getSession();
-		// Get the like based on the key
-		getLike(session, e.getKey(), new LikeGetListener() {
-			@Override
-			public void onGet(Like entity) {
-				if(entity != null) {
-					deleteLike(session, entity.getId(), listener);
-				}
-				else {
-					if(listener != null) {
-						listener.onDelete();
-					}
-				}
-			}
-			
-			@Override
-			public void onError(SocializeException error) {
-				
-				if(error instanceof SocializeApiError) {
-					if(((SocializeApiError)error).getResultCode() == 404) {
-						if(listener != null) {
-							listener.onDelete();
-						}
-						return;
-					}
-				}
-				
-				if(listener != null) {
-					listener.onError(error);
-				}
-			}
-		});
-	}
-
-
-	@Override
-	public void getLike(Activity context, Entity e, LikeGetListener listener) {
-		final SocializeSession session = getSocialize().getSession();
-		getLike(session, e.getKey(), listener);
-	}
-
-	@Override
-	public void getLikesByUser(Activity context, User user, int start, int end, LikeListListener listener) {
-		final SocializeSession session = getSocialize().getSession();
-		getLikesByUser(session, user.getId(), start, end, listener);
 	}
 }
 	
