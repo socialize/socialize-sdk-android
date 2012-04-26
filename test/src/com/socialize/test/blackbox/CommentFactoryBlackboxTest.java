@@ -23,7 +23,6 @@ package com.socialize.test.blackbox;
 
 import java.util.ArrayList;
 import java.util.List;
-import oauth.socialize.OAuthSignListener;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.NameValuePair;
@@ -43,6 +42,7 @@ import com.socialize.entity.EntityFactory;
 import com.socialize.entity.UserFactory;
 import com.socialize.error.SocializeException;
 import com.socialize.oauth.OAuthRequestSigner;
+import com.socialize.oauth.OAuthSignListener;
 import com.socialize.test.util.JsonAssert;
 
 /**

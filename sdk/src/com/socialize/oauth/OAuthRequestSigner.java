@@ -21,7 +21,6 @@
  */
 package com.socialize.oauth;
 
-import oauth.socialize.OAuthSignListener;
 
 import org.apache.http.client.methods.HttpUriRequest;
 

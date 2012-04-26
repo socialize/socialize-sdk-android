@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,16 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.oauth;
+package com.socialize.oauth.signpost;
 
-import com.socialize.oauth.signpost.OAuthConsumer;
+import com.socialize.oauth.signpost.http.HttpParameters;
 
 /**
+ * Custom listener to get access to token responses.
  * @author Jason Polites
- *
  */
-public interface OAuthConsumerFactory {
-
-	public OAuthConsumer createConsumer(String key, String secret);
-	
+public interface OAuthTokenListener {
+	public void onResponse(HttpParameters parameters);
+	public void onError(Exception e);
 }

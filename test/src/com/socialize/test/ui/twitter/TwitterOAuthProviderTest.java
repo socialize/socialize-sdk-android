@@ -23,17 +23,15 @@ package com.socialize.test.ui.twitter;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
-import oauth.signpost.OAuthConsumer;
-import oauth.signpost.exception.OAuthCommunicationException;
-import oauth.signpost.exception.OAuthExpectationFailedException;
-import oauth.signpost.exception.OAuthMessageSignerException;
-import oauth.signpost.exception.OAuthNotAuthorizedException;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.twitter.OAuthRequestTokenUrlListener;
 import com.socialize.auth.twitter.TwitterOAuthProvider;
+import com.socialize.oauth.signpost.OAuthConsumer;
+import com.socialize.oauth.signpost.exception.OAuthCommunicationException;
+import com.socialize.oauth.signpost.exception.OAuthExpectationFailedException;
+import com.socialize.oauth.signpost.exception.OAuthMessageSignerException;
+import com.socialize.oauth.signpost.exception.OAuthNotAuthorizedException;
 import com.socialize.test.SocializeActivityTest;
 
 /**

@@ -41,6 +41,7 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.net.DefaultHttpClientFactory;
 import com.socialize.oauth.CommonsHttpOAuthConsumerFactory;
 import com.socialize.oauth.DefaultOauthRequestSigner;
+import com.socialize.oauth.signpost.signature.AuthorizationHeaderSigningStrategy;
 import com.socialize.provider.DefaultSocializeProvider;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.ClassLoaderProvider;
@@ -79,7 +80,7 @@ public class SocializeIOCTest extends SocializeActivityTest {
 		checkBeanType(ioc, "clientFactory", DefaultHttpClientFactory.class);
 		checkBeanType(ioc, "sessionFactory", DefaultSocializeSessionFactory.class);
 		checkBeanType(ioc, "oauthConsumerFactory", CommonsHttpOAuthConsumerFactory.class);
-		checkBeanType(ioc, "oauthSigningStrategy", oauth.signpost.signature.AuthorizationHeaderSigningStrategy.class);
+		checkBeanType(ioc, "oauthSigningStrategy", AuthorizationHeaderSigningStrategy.class);
 		checkBeanType(ioc, "oauthSigner", DefaultOauthRequestSigner.class);
 		checkBeanType(ioc, "commentFactory", CommentFactory.class);
 		checkBeanType(ioc, "commentRequestFactory", DefaultSocializeRequestFactory.class);

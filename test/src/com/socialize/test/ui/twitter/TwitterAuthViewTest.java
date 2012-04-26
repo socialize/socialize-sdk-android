@@ -24,7 +24,6 @@ package com.socialize.test.ui.twitter;
 import android.content.Context;
 import android.view.View;
 import android.widget.RelativeLayout.LayoutParams;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.twitter.ITwitterAuthWebView;
