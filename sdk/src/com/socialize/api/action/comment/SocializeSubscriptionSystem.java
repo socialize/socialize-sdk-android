@@ -24,11 +24,14 @@ package com.socialize.api.action.comment;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Subscription;
+import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionListener;
+import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.notifications.NotificationType;
 import com.socialize.provider.SocializeProvider;
 
@@ -36,7 +39,7 @@ import com.socialize.provider.SocializeProvider;
  * @author Jason Polites
  *
  */
-public class SocializeSubscriptionSystem extends SocializeApi<Subscription, SocializeProvider<Subscription>> implements SubscriptionSystem {
+public class SocializeSubscriptionSystem extends SocializeApi<Subscription, SocializeProvider<Subscription>> implements SubscriptionSystem, SubscriptionUtilsProxy {
 
 	public SocializeSubscriptionSystem(SocializeProvider<Subscription> provider) {
 		super(provider);
@@ -67,6 +70,21 @@ public class SocializeSubscriptionSystem extends SocializeApi<Subscription, Soci
 		doSubscribe(session, entity, type, listener, false);	
 	}
 	
+	@Override
+	public void subscribe(Activity context, Entity e, SubscriptionResultListener listener) {
+		addSubscription(getSocialize().getSession(), e, NotificationType.NEW_COMMENTS, listener);
+	}
+
+	@Override
+	public void unsubscribe(Activity context, Entity e, SubscriptionResultListener listener) {
+		removeSubscription(getSocialize().getSession(), e, NotificationType.NEW_COMMENTS, listener);
+	}
+	
+	@Override
+	public void isSubscribed(Activity context, Entity e, SubscriptionGetListener listener) {
+		getSubscription(getSocialize().getSession(), e, listener);
+	}
+
 	protected void doSubscribe(SocializeSession session, Entity entity, NotificationType type, SubscriptionListener listener, boolean subscribed) {
 		Subscription c = new Subscription();
 		c.setUser(session.getUser());

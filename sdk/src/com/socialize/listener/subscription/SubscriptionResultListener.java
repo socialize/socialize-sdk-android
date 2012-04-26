@@ -28,24 +28,24 @@ import com.socialize.entity.Subscription;
  * @author Jason Polites
  *
  */
-public abstract class SubscriptionAddListener extends SubscriptionListener {
+public abstract class SubscriptionResultListener extends SubscriptionListener {
 
 	/* (non-Javadoc)
 	 * @see com.socialize.listener.AbstractSocializeListener#onGet(com.socialize.entity.SocializeObject)
 	 */
 	@Override
-	public void onGet(Subscription entity) {}
+	public final void onGet(Subscription entity) {}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.listener.AbstractSocializeListener#onList(com.socialize.entity.ListResult)
 	 */
 	@Override
-	public void onList(ListResult<Subscription> entities) {}
+	public final void onList(ListResult<Subscription> entities) {}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.listener.AbstractSocializeListener#onUpdate(com.socialize.entity.SocializeObject)
 	 */
 	@Override
-	public void onUpdate(Subscription entity) {}
+	public final void onUpdate(Subscription entity) {}
 
 }

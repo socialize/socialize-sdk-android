@@ -23,7 +23,6 @@ package com.socialize.api.action.user;
 
 import android.app.Activity;
 import android.content.Context;
-import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeApi;
@@ -206,7 +205,7 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	}
 
 	@Override
-	public User getCurrentUser(Context context) throws SocializeException {
+	public User getCurrentUser(Context context)  {
 		SocializeService service = getSocialize();
 		SocializeSession session = null;
 		
@@ -222,9 +221,4 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 		}
 		return session.getUser();
 	}
-	
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
-	}
-	
 }

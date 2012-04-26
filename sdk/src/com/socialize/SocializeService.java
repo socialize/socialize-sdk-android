@@ -48,7 +48,7 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.share.ShareAddListener;
-import com.socialize.listener.subscription.SubscriptionAddListener;
+import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionListListener;
 import com.socialize.listener.user.UserGetListener;
@@ -496,7 +496,7 @@ public interface SocializeService extends SocializeUI {
 	 * @param entity
 	 * @param subscriptionAddListener
 	 */
-	public void subscribe(Context context, Entity entity, NotificationType type, SubscriptionAddListener subscriptionAddListener);
+	public void subscribe(Context context, Entity entity, NotificationType type, SubscriptionResultListener subscriptionAddListener);
 	
 	/**
 	 * Unsubscribes the currently logged in user from notifications for the given entity.
@@ -505,7 +505,7 @@ public interface SocializeService extends SocializeUI {
 	 * @param entity
 	 * @param subscriptionAddListener
 	 */
-	public void unsubscribe(Context context, Entity entity, NotificationType type, SubscriptionAddListener subscriptionAddListener);	
+	public void unsubscribe(Context context, Entity entity, NotificationType type, SubscriptionResultListener subscriptionAddListener);	
 	
 	/**
 	 * Lists subscriptions for the current user.

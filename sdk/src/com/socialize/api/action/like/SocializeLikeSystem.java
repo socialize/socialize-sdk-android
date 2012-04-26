@@ -24,11 +24,8 @@ package com.socialize.api.action.like;
 import java.util.ArrayList;
 import java.util.List;
 import android.app.Activity;
-import com.socialize.Socialize;
-import com.socialize.SocializeService;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
-import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
@@ -41,7 +38,6 @@ import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.like.LikeListener;
 import com.socialize.networks.ShareOptions;
-import com.socialize.networks.SocialNetwork;
 import com.socialize.provider.SocializeProvider;
 
 /**
@@ -195,23 +191,7 @@ public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Li
 	@Override
 	public void like(Activity context, Entity e, LikeAddListener listener) {
 		SocializeSession session = getSocialize().getSession();
-		User user = session.getUser();
-		ShareOptions options = new ShareOptions();
-		
-		if(user.isAutoPostToFacebook() && getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-			if(user.isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
-				options.setShareTo(SocialNetwork.FACEBOOK, SocialNetwork.TWITTER);
-			}
-			else {
-				options.setShareTo(SocialNetwork.FACEBOOK);
-			}
-			
-		}
-		else if(user.isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
-			options.setShareTo(SocialNetwork.TWITTER);
-		}		
-		
-		addLike(session, e, options, listener);
+		addLike(session, e, getDefaultShareOptions(), listener);
 	}
 
 	@Override
@@ -261,10 +241,6 @@ public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Li
 	public void getLikesByUser(Activity context, User user, int start, int end, LikeListListener listener) {
 		final SocializeSession session = getSocialize().getSession();
 		getLikesByUser(session, user.getId(), start, end, listener);
-	}
-	
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
 	}
 }
 	

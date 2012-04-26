@@ -45,6 +45,7 @@ import com.socialize.sample.util.ErrorHandler;
 import com.socialize.ui.SocializeActivity;
 import com.socialize.ui.dialog.SafeProgressDialog;
 
+@Deprecated
 public class AuthenticateActivity extends SocializeActivity {
 
 //	protected Properties properties;

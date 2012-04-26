@@ -23,7 +23,7 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
-import com.socialize.listener.subscription.SubscriptionAddListener;
+import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
@@ -462,7 +462,7 @@ public class CommentListView extends BaseView {
 		final ProgressDialog dialog = progressDialogFactory.show(getContext(), "Notifications", "Please wait...");
 		
 		if(notifyBox.isChecked()) {
-			getSocialize().subscribe(getContext(), entity, NotificationType.NEW_COMMENTS, new SubscriptionAddListener() {
+			getSocialize().subscribe(getContext(), entity, NotificationType.NEW_COMMENTS, new SubscriptionResultListener() {
 				@Override
 				public void onError(SocializeException error) {
 					if(dialog != null) dialog.dismiss();
@@ -481,7 +481,7 @@ public class CommentListView extends BaseView {
 			});
 		}
 		else {
-			getSocialize().unsubscribe(getContext(), entity, NotificationType.NEW_COMMENTS, new SubscriptionAddListener() {
+			getSocialize().unsubscribe(getContext(), entity, NotificationType.NEW_COMMENTS, new SubscriptionResultListener() {
 				@Override
 				public void onError(SocializeException error) {
 					if(dialog != null) dialog.dismiss();

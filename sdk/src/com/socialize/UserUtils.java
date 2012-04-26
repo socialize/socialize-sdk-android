@@ -52,7 +52,7 @@ public class UserUtils {
 	 * @return
 	 * @throws SocializeException
 	 */
-	public static User getCurrentUser(Context context) throws SocializeException {
+	public static User getCurrentUser(Context context)  {
 		return proxy.getCurrentUser(context);
 	}
 	
@@ -70,7 +70,7 @@ public class UserUtils {
 	 * @param context
 	 * @throws SocializeException If the current user could not be found or authenticated.
 	 */
-	public static void showUserSettings (Activity context) throws SocializeException {
+	public static void showUserSettings (Activity context)  {
 		Socialize.getSocialize().showUserProfileView(context, UserUtils.getCurrentUser(context).getId());
 	}
 	
@@ -82,5 +82,17 @@ public class UserUtils {
 	 */
 	public static void saveUserSettings (Activity context, User user, UserSaveListener listener) {
 		proxy.saveUserSettings(context, user, listener);
+	}
+	
+	/**
+	 * Clears the saved session state for the user.  
+	 * WARNING: This will wipe any locally saved preferences for this user.
+	 * @param context
+	 */
+	public static void clearCache(Context context) {
+		if(!Socialize.getSocialize().isInitialized()) {
+			Socialize.getSocialize().init(context);
+		}
+		Socialize.getSocialize().clearSessionCache(context);
 	}
 }

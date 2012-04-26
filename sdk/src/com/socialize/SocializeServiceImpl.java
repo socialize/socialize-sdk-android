@@ -87,7 +87,7 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.share.ShareAddListener;
-import com.socialize.listener.subscription.SubscriptionAddListener;
+import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionListListener;
 import com.socialize.listener.user.UserGetListener;
@@ -1170,14 +1170,14 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	
 
 	@Override
-	public void subscribe(Context context, Entity entity, NotificationType type, SubscriptionAddListener subscriptionAddListener) {
+	public void subscribe(Context context, Entity entity, NotificationType type, SubscriptionResultListener subscriptionAddListener) {
 		if(assertAuthenticated(subscriptionAddListener)) {
 			subscriptionSystem.addSubscription(session, entity, type, subscriptionAddListener);
 		}		
 	}
 
 	@Override
-	public void unsubscribe(Context context, Entity entity, NotificationType type, SubscriptionAddListener subscriptionAddListener) {
+	public void unsubscribe(Context context, Entity entity, NotificationType type, SubscriptionResultListener subscriptionAddListener) {
 		if(assertAuthenticated(subscriptionAddListener)) {
 			subscriptionSystem.removeSubscription(session, entity, type, subscriptionAddListener);
 		}				

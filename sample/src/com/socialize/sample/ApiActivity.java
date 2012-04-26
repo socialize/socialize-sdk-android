@@ -29,6 +29,7 @@ import android.widget.Button;
 
 import com.socialize.ui.SocializeActivity;
 
+@Deprecated
 public class ApiActivity extends SocializeActivity {
 
 	@Override

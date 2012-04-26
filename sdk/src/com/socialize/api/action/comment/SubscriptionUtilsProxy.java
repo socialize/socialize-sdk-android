@@ -19,38 +19,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action.user;
+package com.socialize.api.action.comment;
 
 import android.app.Activity;
-import android.content.Context;
-import com.socialize.annotations.Synchronous;
-import com.socialize.entity.User;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.user.UserSaveListener;
+import com.socialize.entity.Entity;
+import com.socialize.listener.subscription.SubscriptionGetListener;
+import com.socialize.listener.subscription.SubscriptionResultListener;
 
 
 /**
  * @author Jason Polites
  *
  */
-public interface UserUtilsProxy {
-
+public interface SubscriptionUtilsProxy {
 	/**
-	 * Synchronously returns the current user.  
-	 * If the Socialize instance has not been initialized it will be initialized synchronously here.
-	 * If the Socialize instance has not authenticated it will be authenticated synchronously here.
+	 * Subscribes the current user to notifications for new comments on this entity.
 	 * @param context The current context.
-	 * @return The current user.
-	 * @throws SocializeException
+	 * @param e The entity.
+	 * @param listener A listener to handle the result.
 	 */
-	@Synchronous
-	public User getCurrentUser(Context context);
+	public void subscribe (Activity context, Entity e, SubscriptionResultListener listener);
 	
 	/**
-	 * Saves the current user's settings;
-	 * @param context
-	 * @param user
-	 * @param listener
+	 * Un-Subscribes the current user from notifications for new comments on this entity.
+	 * @param context The current context.
+	 * @param e The entity.
+	 * @param listener A listener to handle the result.
 	 */
-	public void saveUserSettings (Activity context, User user, UserSaveListener listener);
+	public void unsubscribe (Activity context, Entity e, SubscriptionResultListener listener);
+	
+	/**
+	 * Determines if the current user is subscribed to notifications on new comments for the given entity.
+	 * @param context The current context.
+	 * @param e The entity.
+	 * @param listener A listener to handle the result.
+	 */
+	public void isSubscribed (Activity context, Entity e, SubscriptionGetListener listener);
 }

@@ -21,10 +21,13 @@
  */
 package com.socialize.test.integration.services;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.user.UserSaveListener;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.profile.ProfileActivity;
@@ -61,7 +64,7 @@ public class UserUtilsTest extends SocializeActivityTest {
 		
 	}
 	
-	public void testShowUserProfile() throws SocializeException {
+	public void testShowUserProfile()  {
 		TestUtils.setUp(this);
 		
 		TestUtils.setUpActivityMonitor(ProfileActivity.class);
@@ -78,5 +81,41 @@ public class UserUtilsTest extends SocializeActivityTest {
 		assertTrue(TestUtils.findText(profile, String.valueOf(currentUser.getId()), 20000));
 		
 		profile.finish();
+	}
+	
+	public void testSaveUser() throws InterruptedException  {
+		
+		User user = UserUtils.getCurrentUser(getActivity());
+		String name = "foobar" + Math.random();
+		user.setFirstName(name);
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		UserUtils.saveUserSettings(getContext(), user, new UserSaveListener() {
+			
+			@Override
+			public void onUpdate(User entity) {
+				latch.countDown();
+			}
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+		});
+		
+		
+		latch.await(20, TimeUnit.SECONDS);
+		
+		Socialize.getSocialize().destroy(true);
+		
+		User after = UserUtils.getCurrentUser(getActivity());
+		
+		String firstName = after.getFirstName();
+		
+		assertNotNull(firstName);
+		assertEquals(name, firstName);
+		
 	}
 }
