@@ -12,6 +12,14 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v1.6.4
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] Fixed GSON package naming for HTC Desire users
+
+v1.6.3
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[feature] Add client side settings option to disable location 
+
 v1.6.2
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [feature] Remove superfluous gs.com link on propagations
