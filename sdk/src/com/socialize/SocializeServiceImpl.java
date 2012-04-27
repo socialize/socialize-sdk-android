@@ -93,6 +93,7 @@ import com.socialize.listener.subscription.SubscriptionListListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
+import com.socialize.location.SocializeLocationProvider;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
@@ -148,6 +149,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private AuthProviders authProviders;
 	private NotificationChecker notificationChecker;
 	private AppUtils appUtils;
+	private SocializeLocationProvider locationProvider;
 	
 	private SocializeSystem system = SocializeSystem.getInstance();
 	private SocializeConfig config = new SocializeConfig();
@@ -428,6 +430,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.authProviderInfoBuilder = container.getBean("authProviderInfoBuilder");
 				this.notificationChecker = container.getBean("notificationChecker");
 				this.appUtils = container.getBean("appUtils");
+				this.locationProvider = container.getBean("locationProvider");
 				
 				SocializeConfig mainConfig = container.getBean("config");
 				
@@ -1669,6 +1672,16 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	public Drawable getDrawable(String name) {
 		return (drawables != null) ? drawables.getDrawable(name) : null; 
 	}	
+
+	@Override
+	public void onPause(Context context) {
+		locationProvider.pause(context);
+	}
+
+	@Override
+	public void onResume(Context context) {
+		locationProvider.resume(context);
+	}
 
 	protected void setCommentSystem(CommentSystem commentSystem) {
 		this.commentSystem = commentSystem;

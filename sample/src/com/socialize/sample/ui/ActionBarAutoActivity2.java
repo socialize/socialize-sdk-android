@@ -67,4 +67,18 @@ public class ActionBarAutoActivity2 extends ActionBarActivity2 {
 		});
 		setContentView(actionBarWrapped);
 	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Socialize.onPause(this);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Socialize.onResume(this);
+	}
+	
+	
 }

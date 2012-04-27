@@ -34,7 +34,7 @@ import com.socialize.log.SocializeLogger.LogLevel;
 public class Socialize {
 	
 	// This will be set during the build process
-	public static final String VERSION = "1.6.4";
+	public static final String VERSION = "1.6.5";
 	
 	public static final String ENTITY_OBJECT = "socialize.entity";
 	public static final String ENTITY_ID = "socialize.entity.id";
@@ -86,5 +86,13 @@ public class Socialize {
 	
 	static Object getBean(String name) {
 		return instance.getContainer().getBean(name);
+	}
+
+	public static void onPause(Context context) {
+		instance.onPause(context);
+	}
+	
+	public static void onResume(Context context) {
+		instance.onResume(context);
 	}
 }

@@ -70,6 +70,7 @@
 	
 	<bean id="locationProvider" class="com.socialize.location.DefaultLocationProvider">
 		<property name="appUtils" ref="appUtils"/>
+		<property name="logger" ref="logger"/>
 		<property name="locationManager" ref="locationManager"/>
 		<property name="locationListenerFactory" ref="locationListenerFactory"/>
 		
@@ -82,6 +83,7 @@
 	
 	<bean id="locationListener" class="com.socialize.location.SocializeLocationListener" singleton="false">
 		<property name="locationProvider" ref="locationProvider"/>
+		<property name="logger" ref="logger"/>
 	</bean>
 	
 	<bean id="initializationAsserter" class="com.socialize.init.DefaultInitializationAsserter">

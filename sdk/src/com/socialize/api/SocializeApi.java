@@ -762,7 +762,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	
 	protected void setLocation(SocializeAction action, Location location) {
 		if(location == null && locationProvider != null) {
-			location = locationProvider.getLocation();
+			location = locationProvider.getLastKnownLocation();
 		}
 		if(location != null) {
 			action.setLon(location.getLongitude());

@@ -24,6 +24,7 @@ package com.socialize.auth.facebook;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -55,37 +56,54 @@ public abstract class FacebookDialogListener implements DialogListener {
 	}
 
 	@Override
-	public void onComplete(Bundle values) {
+	public void onComplete(final Bundle values) {
 		facebookSessionStore.save(facebook, context);
-		try {
-			String json = facebook.request("me");
-
-			JSONObject obj = new JSONObject(json);
-			
-			String id = obj.getString("id");
-			String token = values.getString("access_token");
-			
-			if(listener != null) {
-				AuthProviderResponse response = new AuthProviderResponse();
-				response.setUserId(id);
-				response.setToken(token);
-				listener.onAuthSuccess(response);
-			}
-			else {
-				// TODO: log error
-			}
-		}
-		catch (Exception e) {
-			if(listener != null) {
-				listener.onError(new SocializeException(e));
-			}
-			else {
-				// TODO: log error
-				e.printStackTrace();
-			}
-		}
 		
-		onFinish();
+		new AsyncTask<Void, Void, Void>() {
+			
+			String id;
+			String token;
+			Exception error;
+			
+			@Override
+			protected Void doInBackground(Void... params) {
+				try {
+					String json = facebook.request("me");
+					JSONObject obj = new JSONObject(json);
+					id = obj.getString("id");
+					token = values.getString("access_token");
+				}
+				catch (Exception e) {
+					error = e;
+				}
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(Void result) {
+				if(error != null) {
+					if(listener != null) {
+						listener.onError(new SocializeException(error));
+					}
+					else {
+						error.printStackTrace();
+					}					
+				}
+				else {
+					if(listener != null) {
+						AuthProviderResponse response = new AuthProviderResponse();
+						response.setUserId(id);
+						response.setToken(token);
+						listener.onAuthSuccess(response);
+					}
+					else {
+						// TODO: log error
+					}
+				}
+				onFinish();
+			}
+		}.execute();
+		
 	}
 	
 	@Override
