@@ -12,6 +12,13 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v1.6.5
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] Oauth namespace conflicts and causes crashes on some devices
+[bug] Facebook accesses network on main thread
+[bug] Location Services do not stop after location is received
+[feature] Added onPause/onResume calls to Socialize instance
+
 v1.6.4
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [bug] Fixed GSON package naming for HTC Desire users
