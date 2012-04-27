@@ -23,6 +23,8 @@ package com.socialize.ui.profile;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -63,7 +65,12 @@ public class ProfileSaveButtonListener implements OnClickListener {
 		UserProfile profile = new UserProfile();
 		profile.setFirstName(view.getFirstNameEdit().getText().toString().trim());
 		profile.setLastName(view.getLastNameEdit().getText().toString().trim());
-		profile.setImage(view.getProfilePictureEditView().getImage());
+		
+		Drawable imageOn = view.getProfilePictureEditView().getImageOn();
+		
+		if(imageOn instanceof BitmapDrawable) {
+			profile.setImage(((BitmapDrawable)imageOn).getBitmap());
+		}
 		
 		if(view.getAutoPostFacebook() != null) {
 			profile.setAutoPostFacebook(view.getAutoPostFacebook().isChecked());

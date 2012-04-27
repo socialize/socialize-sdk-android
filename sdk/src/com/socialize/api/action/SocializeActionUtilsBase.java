@@ -79,6 +79,8 @@ public abstract class SocializeActionUtilsBase {
 			options.setShareTo(SocialNetwork.TWITTER);
 		}	
 		
+		options.setShareLocation(user.isShareLocation());
+		
 		return options;
 	}
 	

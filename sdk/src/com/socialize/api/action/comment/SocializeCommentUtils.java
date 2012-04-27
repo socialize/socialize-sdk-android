@@ -53,12 +53,12 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 		if(isDisplayAuthDialog()) {
 			authRequestDialogFactory.show(context, new AuthRequestDialogListener() {
 				@Override
-				public void onAuthSuccess(Dialog dialog, SocialNetwork... networks) {
+				public void onContinue(Dialog dialog, SocialNetwork... networks) {
 					commentSystem.addComment(session, e, text, getDefaultShareOptions(), listener);
 				}
 
 				@Override
-				public void onAuthFail(Dialog dialog, SocializeException error) {
+				public void onAuthFail(Dialog dialog, SocialNetwork network, SocializeException error) {
 					commentSystem.addComment(session, e, text, getDefaultShareOptions(), listener);
 				}
 

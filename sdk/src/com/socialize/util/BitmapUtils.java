@@ -23,7 +23,6 @@ package com.socialize.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-
 import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
 

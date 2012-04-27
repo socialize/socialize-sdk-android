@@ -19,29 +19,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks.facebook;
+package com.socialize.listener.share;
 
-import android.content.Context;
-import android.widget.ImageView;
+import com.socialize.entity.Share;
 
-import com.socialize.ui.view.ClickableSectionCell;
 
 /**
  * @author Jason Polites
+ *
  */
-public abstract class FacebookCell extends ClickableSectionCell {
-	
-	public FacebookCell(Context context) {
-		super(context);
-	}
-	
+public abstract class ShareListListener extends ShareListener {
+
 	/* (non-Javadoc)
-	 * @see com.socialize.ui.view.ClickableSectionCell#makeImage()
+	 * @see com.socialize.listener.AbstractSocializeListener#onGet(com.socialize.entity.SocializeObject)
 	 */
 	@Override
-	protected ImageView makeImage() {
-		setImageOn(drawables.getDrawable("icon_facebook.png"));
-		setImageOff(drawables.getDrawable("icon_facebook_disabled.png"));
-		return  new ImageView(getContext());
-	}
+	public final void onGet(Share entity) {}
+
+
+	/* (non-Javadoc)
+	 * @see com.socialize.listener.AbstractSocializeListener#onUpdate(com.socialize.entity.SocializeObject)
+	 */
+	@Override
+	public final void onUpdate(Share entity) {}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.listener.AbstractSocializeListener#onCreate(com.socialize.entity.SocializeObject)
+	 */
+	@Override
+	public final void onCreate(Share entity) {}
+
 }

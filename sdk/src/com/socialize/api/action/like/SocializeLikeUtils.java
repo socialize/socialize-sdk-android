@@ -58,12 +58,12 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 		if(isDisplayAuthDialog()) {
 			authRequestDialogFactory.show(context, new AuthRequestDialogListener() {
 				@Override
-				public void onAuthSuccess(Dialog dialog, SocialNetwork... networks) {
+				public void onContinue(Dialog dialog, SocialNetwork... networks) {
 					likeSystem.addLike(session, e, SocializeLikeUtils.this.getDefaultShareOptions(), listener);
 				}
 
 				@Override
-				public void onAuthFail(Dialog dialog, SocializeException error) {
+				public void onAuthFail(Dialog dialog, SocialNetwork network, SocializeException error) {
 					likeSystem.addLike(session, e, SocializeLikeUtils.this.getDefaultShareOptions(), listener);
 				}
 

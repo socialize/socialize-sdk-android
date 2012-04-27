@@ -23,12 +23,14 @@ package com.socialize.ui.view;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.R;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -56,6 +58,7 @@ public class SocializeButton extends LinearLayout {
 	private Integer width = null;
 	private int textSize = 12;
 	private int padding = 0;
+	private int textColor = Color.WHITE;
 	
 	private int buttonWidth;
 	private int buttonHeight;
@@ -85,6 +88,8 @@ public class SocializeButton extends LinearLayout {
 	private int textPadding;
 	private int cornerRadius = 2;
 	
+	private int computedRadius;
+	
 	public SocializeButton(Context context) {
 		super(context);
 	}
@@ -92,41 +97,11 @@ public class SocializeButton extends LinearLayout {
 	public void init() {
 		
 		int dipPadding = displayUtils.getDIP(padding);
-		int radius = displayUtils.getDIP(cornerRadius);
+		computedRadius = displayUtils.getDIP(cornerRadius);
 		
 		textPadding = displayUtils.getDIP(4);
 	
 		OnClickListener onClickListener = getOnClickListener();
-		
-		if(backgroundVisible) {
-			
-			int bottom = colors.getColor(bottomColor);
-			int top = colors.getColor(topColor);
-			int strokeTop = colors.getColor(strokeTopColor);
-			int strokeBottom = colors.getColor(strokeBottomColor);
-			int bgColor = Color.BLACK;
-			
-			if(!StringUtils.isEmpty(backgroundColor)) {
-				bgColor = colors.getColor(backgroundColor);
-			}
-			
-			GradientDrawable base = makeGradient(bgColor, bgColor);
-			base.setCornerRadius(radius+displayUtils.getDIP(2)); // Add 2 pixels to make it look nicer
-			
-			GradientDrawable stroke = makeGradient(strokeBottom, strokeTop);
-			stroke.setCornerRadius(radius+displayUtils.getDIP(1)); // Add 1 pixel to make it look nicer
-			
-			GradientDrawable background = makeGradient(bottom, top);
-			
-			background.setCornerRadius(radius);
-			
-			LayerDrawable layers = new LayerDrawable(new Drawable[] {base, stroke, background});
-			
-			layers.setLayerInset(1, 1, 1, 1, 1);
-			layers.setLayerInset(2, 2, 2, 2, 2);			
-			
-			setBackgroundDrawable(layers);
-		}
 		
 		buttonWidth = LinearLayout.LayoutParams.WRAP_CONTENT;
 		buttonHeight = LinearLayout.LayoutParams.WRAP_CONTENT;
@@ -185,7 +160,7 @@ public class SocializeButton extends LinearLayout {
 		LayoutParams textLayout = makeLayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		
 		textView = makeTextView();
-		textView.setTextColor(Color.WHITE);
+		textView.setTextColor(textColor);
 		
 		if(bold) {
 			if(italic) {
@@ -225,9 +200,58 @@ public class SocializeButton extends LinearLayout {
 			textView.setPadding(0, 0, 0, 0);
 		}
 		
+		if(backgroundVisible) {
+			StateListDrawable state = new StateListDrawable();
+			state.addState(new int[]{R.attr.state_enabled}, makeEnabledBackgroundDrawable());
+			state.addState(new int[]{-R.attr.state_enabled}, makeDisabledBackgroundDrawable());
+			setBackgroundDrawable(state);
+		}
+		
 		addView(textView);
 			
 		setOnClickListener(onClickListener);
+	}
+	
+	protected Drawable makeEnabledBackgroundDrawable() {
+		int bottom = colors.getColor(bottomColor);
+		int top = colors.getColor(topColor);
+		int strokeTop = colors.getColor(strokeTopColor);
+		int strokeBottom = colors.getColor(strokeBottomColor);
+		int bgColor = Color.BLACK;
+		
+		if(!StringUtils.isEmpty(backgroundColor)) {
+			bgColor = colors.getColor(backgroundColor);
+		}
+		
+		return makeBackgroundDrawable(bgColor, computedRadius, strokeBottom, strokeTop, bottom, top);
+	}
+	
+	protected Drawable makeDisabledBackgroundDrawable() {
+		int bottom = colors.getColor(Colors.BUTTON_DISABLED_BOTTOM);
+		int top = colors.getColor(Colors.BUTTON_DISABLED_TOP);
+		int strokeTop = colors.getColor(Colors.BUTTON_DISABLED_STROKE);
+		int strokeBottom = colors.getColor(Colors.BUTTON_DISABLED_STROKE);
+		int bgColor = colors.getColor(Colors.BUTTON_DISABLED_BACKGROUND);
+		return makeBackgroundDrawable(bgColor, computedRadius, strokeBottom, strokeTop, bottom, top);
+	}
+	
+	protected Drawable makeBackgroundDrawable(int bgColor, float radius, int strokeBottom, int strokeTop, int bottom, int top) {
+		GradientDrawable base = makeGradient(bgColor, bgColor);
+		base.setCornerRadius(radius+displayUtils.getDIP(2)); // Add 2 pixels to make it look nicer
+		
+		GradientDrawable stroke = makeGradient(strokeBottom, strokeTop);
+		stroke.setCornerRadius(radius+displayUtils.getDIP(1)); // Add 1 pixel to make it look nicer
+		
+		GradientDrawable background = makeGradient(bottom, top);
+		
+		background.setCornerRadius(radius);
+		
+		LayerDrawable layers = new LayerDrawable(new Drawable[] {base, stroke, background});
+		
+		layers.setLayerInset(1, 1, 1, 1, 1);
+		layers.setLayerInset(2, 2, 2, 2, 2);	
+		
+		return layers;
 	}
 	
 	protected OnClickListener getOnClickListener() {
@@ -390,5 +414,21 @@ public class SocializeButton extends LinearLayout {
 		}
 		
 		beforeListeners.add(listener);
+	}
+
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+
+		if(enabled) {
+			textColor = Color.WHITE;
+		}
+		else {
+			textColor = colors.getColor(Colors.BUTTON_DISABLED_TEXT);
+		}
+		
+		if(textView != null) {
+			textView.setTextColor(textColor);
+		}
 	}
 }

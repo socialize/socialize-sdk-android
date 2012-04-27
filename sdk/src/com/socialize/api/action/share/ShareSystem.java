@@ -49,6 +49,13 @@ public interface ShareSystem {
 	
 	public void getSharesByUser(SocializeSession session, long userId, ShareListener listener);
 	
+	public void getSharesByUser(SocializeSession session, long userId, int startIndex, int endIndex, ShareListener listener);
+	
+	
+	public void getSharesById(SocializeSession session, ShareListener listener, long... ids);
+	
+	public void getShare(SocializeSession session, long id, ShareListener listener);
+	
 	/**
 	 * Returns true if sharing to the given share type is supported on this device.
 	 * @param shareType

@@ -332,12 +332,12 @@ public class ActionBarLayoutView extends BaseView {
 					authRequestDialogFactory.show(button, new AuthRequestDialogListener() {
 						
 						@Override
-						public void onAuthSuccess(Dialog dialog, SocialNetwork... networks) {
-							doLike(button, localEntity);
+						public void onContinue(Dialog dialog, SocialNetwork...networks) {
+							doLike(button, localEntity, networks);
 						}
 
 						@Override
-						public void onAuthFail(Dialog dialog, SocializeException error) {
+						public void onAuthFail(Dialog dialog, SocialNetwork network, SocializeException error) {
 							showError(button.getContext(), error);
 						}
 
@@ -375,23 +375,28 @@ public class ActionBarLayoutView extends BaseView {
 		});
 	}
 	
-	protected void doLike(final ActionBarButton button, final CacheableEntity localEntity) {
+	protected void doLike(final ActionBarButton button, final CacheableEntity localEntity, SocialNetwork...networks) {
 		
 		button.showLoading();
 		
 		ShareOptions options = new ShareOptions();
 		
-		if(getSocialize().getSession().getUser().isAutoPostToFacebook() && getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-			if(getSocialize().getSession().getUser().isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
-				options.setShareTo(SocialNetwork.FACEBOOK, SocialNetwork.TWITTER);
+		if(networks == null) {
+			if(getSocialize().getSession().getUser().isAutoPostToFacebook() && getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+				if(getSocialize().getSession().getUser().isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
+					options.setShareTo(SocialNetwork.FACEBOOK, SocialNetwork.TWITTER);
+				}
+				else {
+					options.setShareTo(SocialNetwork.FACEBOOK);
+				}
+
 			}
-			else {
-				options.setShareTo(SocialNetwork.FACEBOOK);
+			else if(getSocialize().getSession().getUser().isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
+				options.setShareTo(SocialNetwork.TWITTER);
 			}
-			
 		}
-		else if(getSocialize().getSession().getUser().isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
-			options.setShareTo(SocialNetwork.TWITTER);
+		else {
+			options.setShareTo(networks);
 		}
 		
 		getSocialize().like(getActivity(), localEntity.getEntity(), options, new LikeAddListener() {

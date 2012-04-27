@@ -19,29 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks.facebook;
+package com.socialize;
 
-import android.content.Context;
-import android.widget.ImageView;
+import android.app.Activity;
+import com.socialize.api.action.ShareType;
+import com.socialize.entity.Entity;
+import com.socialize.entity.User;
+import com.socialize.listener.share.ShareAddListener;
+import com.socialize.listener.share.ShareGetListener;
+import com.socialize.listener.share.ShareListListener;
 
-import com.socialize.ui.view.ClickableSectionCell;
 
 /**
  * @author Jason Polites
+ *
  */
-public abstract class FacebookCell extends ClickableSectionCell {
-	
-	public FacebookCell(Context context) {
-		super(context);
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.socialize.ui.view.ClickableSectionCell#makeImage()
-	 */
-	@Override
-	protected ImageView makeImage() {
-		setImageOn(drawables.getDrawable("icon_facebook.png"));
-		setImageOff(drawables.getDrawable("icon_facebook_disabled.png"));
-		return  new ImageView(getContext());
-	}
+public class ShareUtils {
+	public static void share (Activity context, Entity e, ShareAddListener listener) {}
+	public static void share (Activity context, Entity e, ShareType type, ShareAddListener listener) {}
+	public static void share (Activity context, Entity e, ShareType type, String text, ShareAddListener listener) {}
+	public static void getShare (Activity context, int start, int end, ShareGetListener listener, long id) {}
+	public static void getShares (Activity context, int start, int end, ShareListListener listener, long...id) {}
+	public static void getSharesByUser (Activity context, User user, int start, int end, ShareListListener listener) {}
+	public static void getSharesByEntity (Activity context, Entity e, int start, int end, ShareListListener listener) {}
 }

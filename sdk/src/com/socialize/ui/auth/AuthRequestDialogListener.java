@@ -27,13 +27,12 @@ import com.socialize.networks.SocialNetwork;
 
 /**
  * @author Jason Polites
- *
  */
 public interface AuthRequestDialogListener {
 	
-	public void onAuthSuccess(Dialog dialog, SocialNetwork...networks);
+	public void onContinue(Dialog dialog, SocialNetwork...networks);
 	
-	public void onAuthFail(Dialog dialog, SocializeException error);
+	public void onAuthFail(Dialog dialog, SocialNetwork network, SocializeException error);
 	
 	public void onCancel(Dialog dialog);
 	

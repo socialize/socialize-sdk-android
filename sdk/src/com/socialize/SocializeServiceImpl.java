@@ -812,6 +812,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}			
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#share(android.app.Activity, com.socialize.entity.Entity, java.lang.String, com.socialize.networks.ShareOptions, com.socialize.listener.share.ShareAddListener)
+	 */
 	@Override
 	public void share(final Activity activity, final Entity entity, final String text, final ShareOptions shareOptions, final ShareAddListener shareAddListener) {
 		if(assertAuthenticated(shareAddListener)) {

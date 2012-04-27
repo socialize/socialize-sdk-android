@@ -34,18 +34,23 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.facebook.FacebookSignInCell;
 import com.socialize.networks.twitter.TwitterSignInCell;
 import com.socialize.ui.util.Colors;
+import com.socialize.ui.view.ClickableSectionCell;
+import com.socialize.ui.view.SocializeButton;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
 
 /**
  * @author Jason Polites
- *
  */
 public class AuthPanelView extends BaseView {
 
@@ -53,6 +58,9 @@ public class AuthPanelView extends BaseView {
 	private Dialog dialog;
 	private SocializeConfig config;
 	private Colors colors;
+	
+	private SocializeButton continueButton;
+	private SocializeButton cancelButton;
 	
 	public AuthPanelView(Context context, AuthRequestDialogListener listener, Dialog dialog) {
 		this(context);
@@ -80,6 +88,7 @@ public class AuthPanelView extends BaseView {
 		
 		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		LayoutParams contentParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		LayoutParams buttonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		LayoutParams anonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		LayoutParams headerParams = new LayoutParams(LayoutParams.FILL_PARENT, displayUtils.getDIP(45));
 		RelativeLayout.LayoutParams badgeParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -114,6 +123,12 @@ public class AuthPanelView extends BaseView {
 		contentLayout.setPadding(padding, padding, padding, padding);
 		contentLayout.setOrientation(VERTICAL);
 		contentLayout.setLayoutParams(contentParams);
+		
+		LinearLayout buttonLayout = new LinearLayout(getContext());
+		buttonLayout.setPadding(padding, padding, padding, padding);
+		buttonLayout.setOrientation(HORIZONTAL);
+		buttonLayout.setLayoutParams(buttonParams);
+		buttonLayout.setGravity(Gravity.CENTER_VERTICAL|Gravity.RIGHT);
 		
 		RelativeLayout badgeLayout = new RelativeLayout(getContext());
 		badgeLayout.setLayoutParams(badgeLayoutParams);
@@ -154,6 +169,16 @@ public class AuthPanelView extends BaseView {
 			twitterSignInCell.setPadding(padding, padding, padding, padding);
 		}
 		
+		if(facebookSignInCell != null) {
+			facebookSignInCell.setToggled(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK));
+			facebookSignInCell.setAuthListener(getAuthClickListener(facebookSignInCell, SocialNetwork.FACEBOOK));
+		}
+		
+		if(twitterSignInCell != null) {
+			twitterSignInCell.setToggled(getSocialize().isAuthenticated(AuthProviderType.TWITTER));
+			twitterSignInCell.setAuthListener(getAuthClickListener(twitterSignInCell, SocialNetwork.TWITTER));
+		}
+		
 		badgeLayout.addView(authBadge);
 		contentLayout.addView(badgeLayout);
 		
@@ -182,7 +207,7 @@ public class AuthPanelView extends BaseView {
 			TextView cancelText = new TextView(getContext());
 			cancelText.setTextColor(colors.getColor(Colors.AUTH_PANEL_CANCEL_TEXT));
 			cancelText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-			cancelText.setText("I'd rather not...");
+			cancelText.setText("I'd rather remain anonymous...");
 			
 			RelativeLayout.LayoutParams cancelTextParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			cancelTextParams.addRule(RelativeLayout.CENTER_IN_PARENT);
@@ -200,12 +225,56 @@ public class AuthPanelView extends BaseView {
 			});
 			
 			cancelLayout.addView(cancelText);
-			
 			contentLayout.addView(cancelLayout);
+		}
+		
+		if(cancelButton != null) {
+			
+			cancelButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if(listener != null) {
+						dialog.dismiss();
+						listener.onCancel(dialog);
+					}
+				}
+			});
+			
+			buttonLayout.addView(cancelButton);
+		}
+		
+		if(continueButton != null) {
+			continueButton.setEnabled(false);
+			continueButton.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					
+					SocialNetwork[] networks = null;
+					
+					// Get the number of networks enabled
+					if(facebookSignInCell.isToggled()) {
+						if(twitterSignInCell.isToggled()) {
+							networks = new SocialNetwork[]{SocialNetwork.FACEBOOK, SocialNetwork.TWITTER};
+						}
+						else {
+							networks = new SocialNetwork[]{SocialNetwork.FACEBOOK};
+						}
+					}
+					else if(twitterSignInCell.isToggled()) {
+						networks = new SocialNetwork[]{SocialNetwork.TWITTER};
+					}
+					
+					listener.onContinue(dialog, networks);
+				}
+			});
+			
+			buttonLayout.addView(continueButton);
 		}
 		
 		addView(header);
 		addView(contentLayout);
+		addView(buttonLayout);
 	}
 
 	public void setFacebookSignInCellFactory(IBeanFactory<FacebookSignInCell> facebookSignInCellFactory) {
@@ -243,4 +312,41 @@ public class AuthPanelView extends BaseView {
 	public void setColors(Colors colors) {
 		this.colors = colors;
 	}
+	
+	public void setContinueButton(SocializeButton continueButton) {
+		this.continueButton = continueButton;
+	}
+	
+	public void setCancelButton(SocializeButton cancelButton) {
+		this.cancelButton = cancelButton;
+	}
+
+	protected SocializeAuthListener getAuthClickListener(final ClickableSectionCell cell, final SocialNetwork network) {
+		return new SocializeAuthListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				cell.setEnabled(false);
+				if(listener != null) {
+					listener.onAuthFail(dialog, network, error);
+				}
+			}
+			
+			@Override
+			public void onAuthSuccess(SocializeSession session) {
+				cell.setToggled(!cell.isToggled());
+			}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				cell.setEnabled(false);
+				if(listener != null) {
+					listener.onAuthFail(dialog, network, error);
+				}
+			}
+
+			@Override
+			public void onCancel() {}
+		};
+	}	
 }

@@ -230,13 +230,13 @@
 <!-- OAUTH -->
 	
 	<bean id="oauthConsumerFactory" class="com.socialize.oauth.CommonsHttpOAuthConsumerFactory"/>
-	<bean id="oauthSigningStrategy" class="oauth.signpost.signature.AuthorizationHeaderSigningStrategy"/>
+	<bean id="oauthSigningStrategy" class="com.socialize.oauth.signpost.signature.AuthorizationHeaderSigningStrategy"/>
 	<bean id="oauthSigner" class="com.socialize.oauth.DefaultOauthRequestSigner">
 		<constructor-arg ref="oauthConsumerFactory"/>
 		<constructor-arg ref="oauthSigningStrategy"/>
 	</bean>
 	
-	<bean id="signListener" class="oauth.socialize.LoggingOauthSignListener">
+	<bean id="signListener" class="com.socialize.oauth.LoggingOauthSignListener">
 		<property name="logger" ref="logger"/>
 	</bean>
 	

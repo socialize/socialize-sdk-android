@@ -40,8 +40,8 @@ public abstract class TwitterCell extends ClickableSectionCell {
 	 */
 	@Override
 	protected ImageView makeImage() {
-		ImageView view = new ImageView(getContext());
-		view.setImageDrawable(drawables.getDrawable("icon_twitter.png"));
-		return view;
+		setImageOn(drawables.getDrawable("icon_twitter.png"));
+		setImageOff(drawables.getDrawable("icon_twitter_disabled.png"));
+		return  new ImageView(getContext());		
 	}
 }

@@ -261,6 +261,26 @@
 					<key value="CLICKABLE_CELL_STROKE"/>
 					<value value="#191f25"/>
 				</entry>
+				<entry>
+					<key value="BUTTON_DISABLED_BACKGROUND"/>
+					<value value="#00000000"/>
+				</entry>				
+				<entry>
+					<key value="BUTTON_DISABLED_BOTTOM"/>
+					<value value="#88cacaca"/>
+				</entry>
+				<entry>
+					<key value="BUTTON_DISABLED_TOP"/>
+					<value value="#88eeecec"/>
+				</entry>
+				<entry>
+					<key value="BUTTON_DISABLED_TEXT"/>
+					<value value="#8f8f8f"/>
+				</entry>
+				<entry>
+					<key value="BUTTON_DISABLED_STROKE"/>
+					<value value="#8f8f8f"/>
+				</entry>																	
 			</map>
 		</property>
 	</bean>
@@ -377,7 +397,39 @@
 		<property name="bgAlpha" value="255" type="integer"/>
 	</bean>	
 	
-	<factory id="anonCellFactory" makes="anonCell"/>	
+	<factory id="anonCellFactory" makes="anonCell"/>
+	
+	
+	<bean 
+		id="authContinueButton" 
+		singleton="false"
+		extends="socializeButton">
+		<constructor-arg type="activity"/>
+		<property name="text" value="Continue"/>
+		<property name="height" value="34" type="integer"/>
+		<property name="width" value="80" type="integer"/>
+		<property name="textSize" value="11" type="integer"/>
+		<property name="textAlign" value="center"/>
+		<property name="padding" value="2" type="integer"/>
+		<property name="bold" value="true" type="boolean"/>
+	</bean>
+	
+	<bean 
+		id="authCancelButton" 
+		singleton="false"
+		extends="socializeButton">
+		<constructor-arg type="activity"/>
+		<property name="text" value="Cancel"/>
+		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
+		<property name="topColor" value="GRAY_BTN_TOP"/>
+		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
+		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>
+		<property name="height" value="34" type="integer"/>
+		<property name="width" value="60" type="integer"/>
+		<property name="textSize" value="11" type="integer"/>
+		<property name="textAlign" value="center"/>
+		<property name="padding" value="2" type="integer"/>
+	</bean>			
 	 
 	<bean 
 		id="authPanelView" 
@@ -391,6 +443,10 @@
 		<property name="facebookSignInCellFactory" ref="facebookSignInCellFactory"/>
 		<property name="twitterSignInCellFactory" ref="twitterSignInCellFactory"/>
 		<property name="anonCellFactory" ref="anonCellFactory"/>
+		
+		<property name="cancelButton" ref="authCancelButton"/>
+		<property name="continueButton" ref="authContinueButton"/>
+		
 		<init-method name="init"/>
 	</bean>
 	
@@ -521,6 +577,7 @@
 
 	<factory id="facebookSignOutClickListenerFactory" makes="facebookSignOutClickListener"/>
 	
+	<!-- 
 	<bean 
 		id="facebookSignInButton" 
 		class="com.socialize.networks.facebook.FacebookButton"		
@@ -538,7 +595,7 @@
 		<property name="height" value="42" type="integer"/>
 		<property name="textSize" value="16" type="integer"/>
 	</bean>
-
+ -->
 	<bean 
 		id="facebookEnabledCheckbox" 
 		extends="customCheckbox" 

@@ -31,6 +31,7 @@ import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.entity.SocializeAction;
@@ -193,7 +194,48 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		String endpoint = "/user/" + userId + ENDPOINT;
 		listAsync(session, endpoint, listener);
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareSystem#getSharesByUser(com.socialize.api.SocializeSession, long, int, int, com.socialize.listener.share.ShareListener)
+	 */
+	@Override
+	public void getSharesByUser(SocializeSession session, long userId, int startIndex, int endIndex, ShareListener listener) {
+		String endpoint = "/user/" + userId + ENDPOINT;
+		listAsync(session, endpoint, startIndex, endIndex, listener);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareSystem#getShare(com.socialize.api.SocializeSession, long, com.socialize.listener.share.ShareListener)
+	 */
+	@Override
+	public void getShare(SocializeSession session, long id, ShareListener listener) {
+		getAsync(session, ENDPOINT, String.valueOf(id), listener);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.share.ShareSystem#getSharesById(com.socialize.api.SocializeSession, com.socialize.listener.share.ShareListener, long[])
+	 */
+	@Override
+	public void getSharesById(SocializeSession session, ShareListener listener, long... ids) {
+		if(ids != null) {
+			String[] strIds = new String[ids.length];
+			
+			for (int i = 0; i < ids.length; i++) {
+				strIds[i] = String.valueOf(ids[i]);
+			}
+			
+			listAsync(session, ENDPOINT, null, 0, SocializeConfig.MAX_LIST_RESULTS, listener, strIds);
+		}
+		else {
+			if(listener != null) {
+				listener.onError(new SocializeException("No ids supplied"));
+			}
+		}		
+	}
+
 	@Override
 	public void share(Activity context, SocializeSession session, SocializeAction action, String comment, Location location, ShareType destination, boolean autoAuth, ShareHandlerListener listener) {
 		ShareHandler sharer = getSharer(destination);

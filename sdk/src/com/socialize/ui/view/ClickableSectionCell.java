@@ -22,7 +22,6 @@
 package com.socialize.ui.view;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
@@ -58,7 +57,8 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	private int strokeColor = -1;
 	private int bgAlpha = 128;
 	
-	private Bitmap image;
+	private Drawable imageOn;
+	private Drawable imageOff;
 	
 	private float topLeftRadius = 8.0f;
 	private float topRightRadius = 8.0f;
@@ -66,6 +66,7 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	private float bottomRightRadius = 8.0f;
 	
 	private boolean canClick = true;
+	private boolean toggled = true;
 	
 	private int topStroke = 1;
 	private int rightStroke = 1;
@@ -80,6 +81,8 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	private GradientDrawable background;
 	private GradientDrawable stroke;
 	private LayerDrawable bgLayer;
+	
+	private ImageView arrowIcon;
 	
 	public ClickableSectionCell(Context context) {
 		super(context);
@@ -141,6 +144,7 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		text.setLayoutParams(textParams);
 		
 		imageView = makeImage();
+		imageView.setImageDrawable(imageOn);
 		
 		master.setLayoutParams(masterParams);
 		
@@ -153,7 +157,7 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		master.addView(text);
 		
 		if(canClick) {
-			ImageView arrowIcon = new ImageView(getContext());
+			arrowIcon = new ImageView(getContext());
 			arrowIcon.setImageDrawable(drawables.getDrawable("arrow.png"));
 			arrowIcon.setLayoutParams(iconParams);			
 			master.addView(arrowIcon);
@@ -235,15 +239,20 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		}
 	}
 	
-	public void setImage(Bitmap image) {
-		this.image = image;
-		if(imageView != null) {
-			imageView.setImageBitmap(image);
-		}
+	public void setImageOn(Drawable image) {
+		this.imageOn = image;
 	}	
+	
+	public Drawable getImageOff() {
+		return imageOff;
+	}
 
-	public Bitmap getImage() {
-		return image;
+	public void setImageOff(Drawable imageOff) {
+		this.imageOff = imageOff;
+	}
+
+	public Drawable getImageOn() {
+		return imageOn;
 	}
 	
 	public void setBackgroundData(float [] radii, int[] strokes, int strokeColor) {
@@ -281,6 +290,33 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		return new GradientDrawable(
 				GradientDrawable.Orientation.BOTTOM_TOP,
 				new int[] { bottom, top });
-	}	
+	}
 
+	public boolean isToggled() {
+		return toggled;
+	}
+	
+	public void setToggled(boolean enabled) {
+		this.toggled = enabled;
+		
+		if(enabled) {
+			if(imageOn != null) {
+				imageView.setImageDrawable(imageOn);
+			}
+			
+			if(arrowIcon != null) {
+				arrowIcon.setImageDrawable(drawables.getDrawable("tick.png"));
+			}
+		}
+		else if(!enabled) {
+			
+			if(imageOff != null) {
+				imageView.setImageDrawable(imageOff);
+			}
+			
+			if(arrowIcon != null) {
+				arrowIcon.setImageDrawable(drawables.getDrawable("arrow.png"));
+			}
+		}
+	}	
 }

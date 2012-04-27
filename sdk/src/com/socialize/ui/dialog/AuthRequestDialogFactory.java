@@ -32,12 +32,6 @@ import android.view.WindowManager;
 import android.widget.LinearLayout.LayoutParams;
 import com.socialize.android.ioc.BeanCreationListener;
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.api.SocializeSession;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
-import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.facebook.FacebookSignInCell;
-import com.socialize.networks.twitter.TwitterSignInCell;
 import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.auth.AuthRequestDialogListener;
 import com.socialize.ui.util.Colors;
@@ -87,17 +81,6 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 				view.setBackgroundDrawable(background);				
 				dialog.setContentView(view, params);
 				
-				FacebookSignInCell facebookSignInCell = view.getFacebookSignInCell();
-				TwitterSignInCell twitterSignInCell = view.getTwitterSignInCell();
-				
-				if(facebookSignInCell != null) {
-					facebookSignInCell.setAuthListener(getAuthClickListener(dialog, listener, SocialNetwork.FACEBOOK));
-				}
-				
-				if(twitterSignInCell != null) {
-					twitterSignInCell.setAuthListener(getAuthClickListener(dialog, listener, SocialNetwork.TWITTER));
-				}	
-				
 				WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
 			    lp.copyFrom(dialog.getWindow().getAttributes());
 			    lp.width = WindowManager.LayoutParams.FILL_PARENT;
@@ -114,43 +97,6 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 		return dialog;
 	}
 	
-	protected SocializeAuthListener getAuthClickListener(final Dialog alertDialog, final AuthRequestDialogListener listener, final SocialNetwork network) {
-		return new SocializeAuthListener() {
-			
-			@Override
-			public void onError(SocializeException error) {
-				handleError("Error during auth", error);
-				alertDialog.dismiss();
-				if(listener != null) {
-					listener.onAuthFail(alertDialog, error);
-				}
-			}
-			
-			@Override
-			public void onAuthSuccess(SocializeSession session) {
-				alertDialog.dismiss();
-				if(listener != null) {
-					listener.onAuthSuccess(alertDialog, network);
-				}
-			}
-			
-			@Override
-			public void onAuthFail(SocializeException error) {
-				handleError("Error during auth", error);
-				alertDialog.dismiss();
-				if(listener != null) {
-					listener.onAuthFail(alertDialog, error);
-				}
-			}
-
-			@Override
-			public void onCancel() {
-				if(listener != null) {
-					listener.onCancel(alertDialog);
-				}
-			}
-		};
-	}
 
 	public void setAuthPanelViewFactory(IBeanFactory<AuthPanelView> authPanelViewFactory) {
 		this.authPanelViewFactory = authPanelViewFactory;

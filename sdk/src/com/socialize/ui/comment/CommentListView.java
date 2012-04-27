@@ -275,12 +275,12 @@ public class CommentListView extends BaseView {
 		return new AuthRequestDialogListener() {
 			
 			@Override
-			public void onAuthSuccess(Dialog dialog, SocialNetwork... networks) {
+			public void onContinue(Dialog dialog, SocialNetwork...network) {
 				doPostComment(text, shareLocation, subscribe, networks);
 			}
 
 			@Override
-			public void onAuthFail(Dialog dialog, SocializeException error) {
+			public void onAuthFail(Dialog dialog, SocialNetwork network, SocializeException error) {
 				doPostComment(text, shareLocation, subscribe);
 			}
 
