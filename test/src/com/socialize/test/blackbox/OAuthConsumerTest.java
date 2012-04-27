@@ -21,10 +21,9 @@
  */
 package com.socialize.test.blackbox;
 
-import oauth.signpost.OAuthConsumer;
-import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
-
 import com.socialize.oauth.CommonsHttpOAuthConsumerFactory;
+import com.socialize.oauth.signpost.OAuthConsumer;
+import com.socialize.oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import com.socialize.test.SocializeUnitTest;
 
 /**

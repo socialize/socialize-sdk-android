@@ -21,10 +21,10 @@
  */
 package com.socialize.auth.twitter;
 
-import oauth.signpost.OAuthConsumer;
-import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 
 import org.apache.http.client.HttpClient;
+import com.socialize.oauth.signpost.OAuthConsumer;
+import com.socialize.oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 
 import android.os.AsyncTask;
 

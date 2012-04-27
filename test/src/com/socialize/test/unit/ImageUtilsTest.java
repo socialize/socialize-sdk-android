@@ -22,7 +22,6 @@
 package com.socialize.test.unit;
 
 import java.io.IOException;
-
 import com.socialize.test.SocializeActivityTest;
 
 /**

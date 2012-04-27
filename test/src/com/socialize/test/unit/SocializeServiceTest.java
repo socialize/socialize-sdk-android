@@ -83,6 +83,8 @@ import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
+import com.socialize.location.DefaultLocationProvider;
+import com.socialize.location.SocializeLocationProvider;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
@@ -123,7 +125,8 @@ import com.socialize.util.ResourceLocator;
 	EntityLoaderUtils.class,
 	AuthProviderInfoBuilder.class, 
 	NotificationChecker.class, 
-	AppUtils.class})
+	AppUtils.class,
+	SocializeLocationProvider.class})
 public class SocializeServiceTest extends SocializeActivityTest {
 
 	IOCContainer container;
@@ -141,6 +144,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 	AuthProviders authProviders;
 	NotificationChecker notificationChecker;
 	AppUtils appUtils;
+	SocializeLocationProvider locationProvider;
 
 	SocializeLogger logger;
 	IBeanFactory<AuthProviderData> authProviderDataFactory;
@@ -177,6 +181,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		authProviderInfoBuilder = AndroidMock.createMock(AuthProviderInfoBuilder.class);
 		notificationChecker = AndroidMock.createMock(NotificationChecker.class);
 		appUtils = AndroidMock.createMock(AppUtils.class);
+		locationProvider = AndroidMock.createMock(SocializeLocationProvider.class);
 	}
 
 	private void setupDefaultMocks() {
@@ -200,6 +205,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		AndroidMock.expect(container.getBean("authProviderInfoBuilder")).andReturn(authProviderInfoBuilder);
 		AndroidMock.expect(container.getBean("notificationChecker")).andReturn(notificationChecker);
 		AndroidMock.expect(container.getBean("appUtils")).andReturn(appUtils);
+		AndroidMock.expect(container.getBean("locationProvider")).andReturn(locationProvider);
 		
 		AndroidMock.expect(entityLoaderUtils.initEntityLoader()).andReturn(null);
 		

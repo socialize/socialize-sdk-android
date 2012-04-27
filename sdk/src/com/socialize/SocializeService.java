@@ -559,4 +559,14 @@ public interface SocializeService {
 	 * @return
 	 */
 	public SocializeSystem getSystem();
+	
+	/**
+	 * Should be called in the onPause method of the containing activity
+	 */
+	public void onPause(Context context);
+	
+	/**
+	 * Should be called in the onResume method of the containing activity
+	 */
+	public void onResume(Context context);
 }

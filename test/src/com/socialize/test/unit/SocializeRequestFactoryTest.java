@@ -24,9 +24,6 @@ package com.socialize.test.unit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import oauth.socialize.OAuthSignListener;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -39,7 +36,6 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.DefaultSocializeRequestFactory;
@@ -55,6 +51,7 @@ import com.socialize.entity.SocializeObject;
 import com.socialize.entity.SocializeObjectFactory;
 import com.socialize.error.SocializeException;
 import com.socialize.oauth.OAuthRequestSigner;
+import com.socialize.oauth.OAuthSignListener;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.util.UrlBuilder;
 

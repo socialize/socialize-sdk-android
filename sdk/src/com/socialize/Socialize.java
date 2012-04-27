@@ -80,4 +80,12 @@ public class Socialize {
 	public static final SocializeUI getSocializeUI() {
 		return instance;
 	}
+	
+	public static void onPause(Context context) {
+		instance.onPause(context);
+	}
+	
+	public static void onResume(Context context) {
+		instance.onResume(context);
+	}
 }

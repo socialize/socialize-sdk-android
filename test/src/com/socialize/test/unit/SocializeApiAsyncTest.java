@@ -27,10 +27,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
 import android.app.ProgressDialog;
 import android.content.Context;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeApi;

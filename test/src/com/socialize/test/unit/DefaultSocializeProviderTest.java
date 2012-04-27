@@ -24,7 +24,6 @@ package com.socialize.test.unit;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -32,10 +31,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import android.content.Context;
 import android.test.mock.MockContext;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.android.ioc.IBeanFactory;

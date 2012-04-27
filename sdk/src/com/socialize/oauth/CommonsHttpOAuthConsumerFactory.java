@@ -21,8 +21,8 @@
  */
 package com.socialize.oauth;
 
-import oauth.signpost.OAuthConsumer;
-import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
+import com.socialize.oauth.signpost.OAuthConsumer;
+import com.socialize.oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 
 /**
  * @author Jason Polites

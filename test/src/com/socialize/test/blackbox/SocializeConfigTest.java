@@ -26,9 +26,7 @@ import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
-
 import junit.framework.Assert;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.config.SocializeConfig;

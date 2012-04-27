@@ -4,7 +4,6 @@
 package com.socialize.test.unit;
 
 import android.content.Context;
-
 import com.socialize.cache.ISuicidal;
 
 /**

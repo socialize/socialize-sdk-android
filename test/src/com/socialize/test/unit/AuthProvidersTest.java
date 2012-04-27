@@ -22,7 +22,6 @@
 package com.socialize.test.unit;
 
 import java.util.Map;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.AuthProvider;

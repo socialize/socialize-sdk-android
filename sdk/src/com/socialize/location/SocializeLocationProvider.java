@@ -21,6 +21,7 @@
  */
 package com.socialize.location;
 
+import android.content.Context;
 import android.location.Location;
 
 /**
@@ -29,6 +30,11 @@ import android.location.Location;
  */
 public interface SocializeLocationProvider {
 
-	public Location getLocation();
+	public Location getLastKnownLocation();
+	
+	public Location getLocation(Context context);
+	
+	public void pause(Context context);
 
+	public void resume(Context context);
 }

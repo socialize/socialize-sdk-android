@@ -21,17 +21,8 @@
  */
 package com.socialize.test.ui.twitter;
 
-import oauth.signpost.OAuth;
-import oauth.signpost.OAuthTokenListener;
-import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
-import oauth.signpost.exception.OAuthCommunicationException;
-import oauth.signpost.exception.OAuthExpectationFailedException;
-import oauth.signpost.exception.OAuthMessageSignerException;
-import oauth.signpost.exception.OAuthNotAuthorizedException;
-import oauth.signpost.http.HttpParameters;
 import android.content.Context;
 import android.webkit.WebViewClient;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.auth.twitter.OAuthRequestListener;
@@ -41,6 +32,14 @@ import com.socialize.auth.twitter.TwitterAuthWebView;
 import com.socialize.auth.twitter.TwitterOAuthProvider;
 import com.socialize.auth.twitter.TwitterWebViewClient;
 import com.socialize.error.SocializeException;
+import com.socialize.oauth.signpost.OAuth;
+import com.socialize.oauth.signpost.OAuthTokenListener;
+import com.socialize.oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
+import com.socialize.oauth.signpost.exception.OAuthCommunicationException;
+import com.socialize.oauth.signpost.exception.OAuthExpectationFailedException;
+import com.socialize.oauth.signpost.exception.OAuthMessageSignerException;
+import com.socialize.oauth.signpost.exception.OAuthNotAuthorizedException;
+import com.socialize.oauth.signpost.http.HttpParameters;
 import com.socialize.test.SocializeUnitTest;
 
 /**

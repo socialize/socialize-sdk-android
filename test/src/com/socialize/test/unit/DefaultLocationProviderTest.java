@@ -24,7 +24,6 @@ package com.socialize.test.unit;
 import android.app.Activity;
 import android.location.Criteria;
 import android.location.Location;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.android.ioc.IBeanFactory;
@@ -73,7 +72,7 @@ public class DefaultLocationProviderTest extends SocializeActivityTest {
 		provider.setLocationListenerFactory(locationListenerFactory);
 		provider.init(context);
 
-		assertNull(provider.getLocation());
+		assertNull(provider.getLastKnownLocation());
 
 		AndroidMock.verify(appUtils);
 		AndroidMock.verify(locationListenerFactory);
@@ -88,6 +87,9 @@ public class DefaultLocationProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(appUtils.hasPermission(context, "android.permission.ACCESS_FINE_LOCATION")).andReturn(true);
 		AndroidMock.expect(locationManager.getBestProvider((Criteria) AndroidMock.anyObject(), AndroidMock.eq(true))).andReturn(strProvider);
 		AndroidMock.expect(locationManager.getLastKnownLocation(strProvider)).andReturn(location);
+		
+		locationManager.removeUpdates(listener);
+		
 		AndroidMock.expect(locationListenerFactory.getBean()).andReturn(listener);
 
 		AndroidMock.replay(appUtils);
@@ -100,7 +102,7 @@ public class DefaultLocationProviderTest extends SocializeActivityTest {
 		provider.setLocationListenerFactory(locationListenerFactory);
 		provider.init(context);
 
-		Location loc = provider.getLocation();
+		Location loc = provider.getLocation(getContext());
 
 		AndroidMock.verify(appUtils);
 		AndroidMock.verify(locationManager);
@@ -121,7 +123,6 @@ public class DefaultLocationProviderTest extends SocializeActivityTest {
 		AndroidMock.expect(locationListenerFactory.getBean()).andReturn(listener).anyTimes();
 
 		locationManager.requestLocationUpdates(context, strProvider, 1L, 0.0f, listener);
-		locationManager.requestLocationUpdates(context, strProvider, 1L, 0.0f, listener);
 
 		AndroidMock.replay(locationListenerFactory);
 		AndroidMock.replay(appUtils);
@@ -133,7 +134,7 @@ public class DefaultLocationProviderTest extends SocializeActivityTest {
 		provider.setLocationListenerFactory(locationListenerFactory);
 		provider.init(context);
 
-		Location loc = provider.getLocation();
+		Location loc = provider.getLastKnownLocation();
 
 		AndroidMock.verify(locationListenerFactory);
 		AndroidMock.verify(appUtils);

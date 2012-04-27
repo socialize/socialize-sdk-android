@@ -23,12 +23,10 @@ package com.socialize.test.unit;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import android.graphics.Bitmap;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.test.SocializeActivityTest;

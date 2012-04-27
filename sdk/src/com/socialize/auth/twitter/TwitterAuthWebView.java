@@ -21,15 +21,15 @@
  */
 package com.socialize.auth.twitter;
 
-import oauth.signpost.OAuth;
-import oauth.signpost.OAuthTokenListener;
-import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
-import oauth.signpost.http.HttpParameters;
 import android.content.Context;
 import android.view.View;
 import android.webkit.WebView;
 
 import com.socialize.error.SocializeException;
+import com.socialize.oauth.signpost.OAuth;
+import com.socialize.oauth.signpost.OAuthTokenListener;
+import com.socialize.oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
+import com.socialize.oauth.signpost.http.HttpParameters;
 
 /**
  * @author Jason Polites

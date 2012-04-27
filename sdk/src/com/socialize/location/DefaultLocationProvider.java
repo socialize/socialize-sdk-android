@@ -27,6 +27,7 @@ import android.location.Criteria;
 import android.location.Location;
 
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.log.SocializeLogger;
 import com.socialize.util.AppUtils;
 import com.socialize.util.StringUtils;
 
@@ -37,31 +38,56 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 
 	private AppUtils appUtils;
 	private Location location;
-	private Context context;
 	private SocializeLocationManager locationManager;
 	private IBeanFactory<SocializeLocationListener> locationListenerFactory;
 	private SocializeLocationListener listener = null;
+	private SocializeLogger logger;
 	
 	public DefaultLocationProvider() {
 		super();
 	}
 	
 	public void init(Context context) {
-		this.context = context;
 		if(locationListenerFactory != null) {
 			listener = locationListenerFactory.getBean();
 		}
-		getLocation();
+		getLocation(context);
 	}
 	
 	public void destroy() {
+		stop();
+	}
+	
+	@Override
+	public void pause(Context context) {
+		stop();
+	}
+
+	@Override
+	public void resume(Context context) {
+		getLocation(context);
+	}
+
+	public void stop() {
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("LocationProvider ceasing location updates");
+		}				
 		if(locationManager != null && listener != null) {
 			locationManager.removeUpdates(listener);
 		}
 	}
+	
+	@Override
+	public Location getLastKnownLocation() {
+		return location;
+	}
 
 	@Override
-	public Location getLocation() {
+	public Location getLocation(Context context) {
+		
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("LocationProvider Requesting location...");
+		}			
 
 		if(location == null) {
 			if(appUtils.hasPermission(context, "android.permission.ACCESS_FINE_LOCATION")) {
@@ -71,11 +97,19 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 				requestLocation(context, Criteria.ACCURACY_COARSE);
 			}
 		}
+		else if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("LocationProvider got location");
+		}
 
 		return location;
 	}
 
-	private void requestLocation(Context context, int accuracy) {
+	protected void requestLocation(Context context, int accuracy) {
+		
+		if(logger != null && logger.isDebugEnabled()) {
+			logger.debug("LocationProvider requesting location...");
+		}
+		
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(accuracy);
 		
@@ -85,9 +119,20 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 			Location mostRecentLocation = locationManager.getLastKnownLocation(provider);
 			
 			if(mostRecentLocation != null) {
+				
+				if(logger != null && logger.isDebugEnabled()) {
+					logger.debug("Got location from last known provider");
+				}
+				
 				location = mostRecentLocation;
+				locationManager.removeUpdates(listener);
 			}
 			else if(locationManager.isProviderEnabled(provider) && listener != null) {
+				
+				if(logger != null && logger.isDebugEnabled()) {
+					logger.debug("No last known location, requesting from device...");
+				}
+				
 				if(context instanceof Activity) {
 					locationManager.requestLocationUpdates((Activity) context, provider, 1, 0, listener);
 				}
@@ -114,4 +159,10 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 	public void setLocationListenerFactory(IBeanFactory<SocializeLocationListener> listenerFactory) {
 		this.locationListenerFactory = listenerFactory;
 	}
+
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
+	
+	
 }
