@@ -165,7 +165,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		}
 		catch (IOException e) {
 			if(listener != null) {
-				listener.onError(parent, SocialNetwork.FACEBOOK, "Unable to scale image for upload", e);
+				listener.onNetworkError(parent, SocialNetwork.FACEBOOK, e);
 			}
 			 
 			if(logger != null) {
@@ -328,7 +328,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			parent.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					listener.onError(parent, SocialNetwork.FACEBOOK, msg, e);
+					listener.onNetworkError(parent, SocialNetwork.FACEBOOK, e);
 				}
 			});
 		}

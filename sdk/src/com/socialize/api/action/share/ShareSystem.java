@@ -45,12 +45,13 @@ public interface ShareSystem {
 	
 	public void addShare(Context context, SocializeSession session, Entity entity, String text, SocialNetwork network, Location location, ShareListener listener);
 	
+	public void addShare(Context context, SocializeSession session, Entity entity, ShareType shareType, ShareListener listener, SocialNetwork...network);
+	
 	public void getSharesByEntity(SocializeSession session, String key, int startIndex, int endIndex, ShareListener listener);
 	
 	public void getSharesByUser(SocializeSession session, long userId, ShareListener listener);
 	
 	public void getSharesByUser(SocializeSession session, long userId, int startIndex, int endIndex, ShareListener listener);
-	
 	
 	public void getSharesById(SocializeSession session, ShareListener listener, long... ids);
 	

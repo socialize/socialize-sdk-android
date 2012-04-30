@@ -33,6 +33,10 @@ public interface SocialNetworkListener {
 
 	public void onAfterPost(Activity parent, SocialNetwork network);
 	
-	public void onError(Activity parent, SocialNetwork network, String message, Throwable error);
+	public void onNetworkError(Activity parent, SocialNetwork network, Throwable error);
+	
+	public void onError(Activity parent, Throwable error);
+	
+	public void onCancel();
 	
 }

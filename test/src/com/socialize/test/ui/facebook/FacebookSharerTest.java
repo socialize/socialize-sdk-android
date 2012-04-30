@@ -195,7 +195,7 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		SocializeException error = new SocializeException("foobar");
 		
 		logger.error(msg, error);
-		listener.onError(getActivity(), SocialNetwork.FACEBOOK, msg, error);
+		listener.onNetworkError(getActivity(), SocialNetwork.FACEBOOK, error);
 		
 		AndroidMock.replay(logger);
 		AndroidMock.replay(listener);

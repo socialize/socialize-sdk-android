@@ -111,7 +111,7 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		if(network != null) {
 			AuthProviderType authType = AuthProviderType.valueOf(network);
 			if(Socialize.getSocialize().isAuthenticated(authType)) {
-				doShare(session, entity, text, shareType, network, location, listener);
+				addShare(session, entity, text, shareType, location, listener, network);
 			}
 			else {
 				Socialize.getSocialize().authenticate(context, authType, new SocializeAuthListener() {
@@ -125,12 +125,12 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 					@Override
 					public void onCancel() {
 						// no network
-						doShare(session, entity, text, fshareType, null, location, listener);
+						addShare(session, entity, text, fshareType, location, listener);
 					}
 					
 					@Override
 					public void onAuthSuccess(SocializeSession session) {
-						doShare(session, entity, text, fshareType, fnetwork, location, listener);
+						addShare(session, entity, text, fshareType, location, listener, fnetwork);
 					}
 					
 					@Override
@@ -144,11 +144,15 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		}
 		else {
 			// no network
-			doShare(session, entity, text, fshareType, null, location, listener);	
+			addShare(session, entity, text, fshareType, location, listener);	
 		}
 	}
 	
-	protected void doShare(SocializeSession session, Entity entity, String text, ShareType shareType, SocialNetwork network, Location location, ShareListener listener) {
+	public void addShare(Context context, SocializeSession session, Entity entity, ShareType shareType, ShareListener listener, SocialNetwork...network) {
+		addShare(session, entity, "", shareType, null, listener, network);
+	}
+	
+	public void addShare(SocializeSession session, Entity entity, String text, ShareType shareType, Location location, ShareListener listener, SocialNetwork...network) {
 		
 		if(StringUtils.isEmpty(text)) {
 			text = entity.getDisplayName();
@@ -244,9 +248,9 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		}
 		else {
 			if(listener != null) {
-				listener.onError(context, action, "Unable to share to [" +
+				listener.onError(context, action, new SocializeException("Unable to share to [" +
 						destination.getDisplayName() +
-						"]", new SocializeException("No sharer defined for type"));
+						"] No sharer defined for type"));
 			}
 			 
 			if(logger != null) {

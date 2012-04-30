@@ -70,7 +70,7 @@ public abstract class AbstractShareHandler implements ShareHandler {
 					}
 					
 					if(listener != null) {
-						listener.onError(context, action, "Error handling share", e);
+						listener.onError(context, action, e);
 					}
 				}
 			}
@@ -96,7 +96,7 @@ public abstract class AbstractShareHandler implements ShareHandler {
 		}
 		
 		if(listener != null) {
-			listener.onError(context, action, "Error handling share", new SocializeException(msg));
+			listener.onError(context, action, new SocializeException(msg));
 		}
 	}
 

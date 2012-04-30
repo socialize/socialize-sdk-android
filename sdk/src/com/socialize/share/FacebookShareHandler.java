@@ -43,10 +43,19 @@ public class FacebookShareHandler extends AbstractShareHandler {
 	@Override
 	protected void handle(Activity context, final SocializeAction action, String text, PropagationInfo info, final ShareHandlerListener listener) throws Exception {
 		facebookSharer.share(context, action.getEntity(), info, text, true, action.getActionType(), new SocialNetworkListener() {
+			
 			@Override
-			public void onError(Activity parent, SocialNetwork network, String message, Throwable error) {
-				listener.onError(parent, action, message, error);
+			public void onNetworkError(Activity parent, SocialNetwork network, Throwable error) {
+				listener.onError(parent, action, error);
 			}
+
+			@Override
+			public void onError(Activity parent, Throwable error) {
+				listener.onError(parent, action, error);
+			}
+
+			@Override
+			public void onCancel() {}
 			
 			@Override
 			public void onBeforePost(Activity parent, SocialNetwork network) {}
