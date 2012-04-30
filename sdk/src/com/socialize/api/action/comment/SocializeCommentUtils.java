@@ -23,6 +23,7 @@ package com.socialize.api.action.comment;
 
 import android.app.Activity;
 import android.app.Dialog;
+import com.socialize.ShareUtils;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.SocializeActionUtilsBase;
 import com.socialize.entity.Entity;
@@ -64,7 +65,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 
 				@Override
 				public void onCancel(Dialog dialog) {}
-			});
+			}, ShareUtils.FACEBOOK | ShareUtils.TWITTER);
 		}
 		else {
 			commentSystem.addComment(session, e, text, getDefaultShareOptions(), listener);

@@ -27,9 +27,9 @@ public class PropagationInfoResponseFactory extends JSONFactory<PropagationInfoR
 			for (int i = 0; i < length; i++) {
 				String name = names.get(i).toString().trim();
 				
-				// Make sure the name is a valid share type
+				// Make sure the name is a valid network
 				try {
-					ShareType shareType = ShareType.valueOf(name.toUpperCase());
+					ShareType network = ShareType.valueOf(name.toUpperCase());
 					
 					JSONObject jsonObject = getJSONObject(from, name);
 					
@@ -37,7 +37,7 @@ public class PropagationInfoResponseFactory extends JSONFactory<PropagationInfoR
 						PropagationInfo set = new PropagationInfo();
 						set.setAppUrl(getString(jsonObject, "application_url"));
 						set.setEntityUrl(getString(jsonObject, "entity_url"));
-						to.addUrlSet(shareType, set);
+						to.addUrlSet(network, set);
 					}				
 				}
 				catch (Exception ignore) {

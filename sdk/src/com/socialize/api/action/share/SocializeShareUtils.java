@@ -23,6 +23,7 @@ package com.socialize.api.action.share;
 
 import android.app.Activity;
 import android.app.Dialog;
+import com.socialize.ShareUtils;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeActionUtilsBase;
@@ -86,7 +87,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 			public void onAuthFail(Dialog dialog, SocialNetwork network, SocializeException error) {
 				listener.onNetworkError(context, network, error);
 			}
-		});
+		}, ShareUtils.FACEBOOK | ShareUtils.TWITTER);
 	}
 	
 	protected void handleActionShare(Activity activity, final SocializeSession session, final SocialNetwork socialNetwork, SocializeAction action, final SocialNetworkListener listener) {

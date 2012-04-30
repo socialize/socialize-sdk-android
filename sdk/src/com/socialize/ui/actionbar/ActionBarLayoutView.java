@@ -25,6 +25,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
+import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.auth.AuthProviderType;
@@ -343,7 +344,7 @@ public class ActionBarLayoutView extends BaseView {
 
 						@Override
 						public void onCancel(Dialog dialog) {}
-					});
+					}, ShareUtils.FACEBOOK | ShareUtils.TWITTER);
 				}
 				else {
 					doLike(button, localEntity);

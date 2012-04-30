@@ -47,15 +47,15 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 	private DisplayUtils displayUtils;
 	private Colors colors;
 	
-	public Dialog show(View parent) {
-		return show(parent, null);
+	public Dialog show(View parent, int displayOptions) {
+		return show(parent, null, displayOptions);
 	}
 	
-	public Dialog show(final View parent, final AuthRequestDialogListener listener) {
-		return show(parent.getContext(), listener);
+	public Dialog show(final View parent, final AuthRequestDialogListener listener, int displayOptions) {
+		return show(parent.getContext(), listener, displayOptions);
 	}
-	
-	public Dialog show(final Context context, final AuthRequestDialogListener listener) {
+
+	public Dialog show(final Context context, final AuthRequestDialogListener listener, int displayOptions) {
 
 		final Dialog dialog = newDialog(context);
 		final ProgressDialog progress = SafeProgressDialog.show(context, "", "Please wait...");
@@ -92,7 +92,7 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 			    
 				progress.dismiss();
 			}
-		}, listener, dialog);
+		}, listener, dialog, displayOptions);
 		
 		return dialog;
 	}

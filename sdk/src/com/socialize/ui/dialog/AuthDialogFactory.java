@@ -31,6 +31,6 @@ import com.socialize.ui.auth.AuthRequestDialogListener;
  */
 public interface AuthDialogFactory {
 
-	public Dialog show(View parent, AuthRequestDialogListener listener);
+	public Dialog show(View parent, AuthRequestDialogListener listener, int displayOptions);
 
 }

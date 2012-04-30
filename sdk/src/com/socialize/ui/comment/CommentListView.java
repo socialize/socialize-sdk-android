@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
@@ -257,7 +258,7 @@ public class CommentListView extends BaseView {
 					}
 					
 					if(showAuth && authSupported) {
-						authRequestDialogFactory.show(CommentListView.this, getCommentAuthListener(text, shareLocation, subscribe, networks));
+						authRequestDialogFactory.show(CommentListView.this, getCommentAuthListener(text, shareLocation, subscribe, networks), ShareUtils.FACEBOOK | ShareUtils.TWITTER);
 					}
 					else {
 						// Post as anon

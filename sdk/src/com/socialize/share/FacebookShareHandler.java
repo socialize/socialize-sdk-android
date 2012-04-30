@@ -64,12 +64,12 @@ public class FacebookShareHandler extends AbstractShareHandler {
 			public void onAfterPost(Activity parent, SocialNetwork network) {}
 		});
 	}
-
+	
 	@Override
 	protected ShareType getShareType() {
 		return ShareType.FACEBOOK;
 	}
-	
+
 	@Override
 	public boolean isAvailableOnDevice(Context parent) {
 		return getSocialize().isSupported(AuthProviderType.FACEBOOK);

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.ShareUtils;
 import com.socialize.SocializeService;
 import com.socialize.SocializeServiceImpl;
 import com.socialize.api.SocializeSession;
@@ -100,7 +101,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		view.setAuthRequestDialogFactory(authRequestDialogFactory);
 		
-		AndroidMock.expect(authRequestDialogFactory.show(view, listener)).andReturn(dialog);
+		AndroidMock.expect(authRequestDialogFactory.show(view, listener, ShareUtils.FACEBOOK | ShareUtils.TWITTER)).andReturn(dialog);
 		
 		AndroidMock.replay(authRequestDialogFactory);
 		AndroidMock.replay(socializeService);

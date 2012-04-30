@@ -63,7 +63,7 @@ public class ActionBarTestUtils2 {
 		
 		final AuthRequestDialogFactory mockFactory = new AuthRequestDialogFactory() {
 			@Override
-			public Dialog show(View parent, AuthRequestDialogListener listener) {
+			public Dialog show(View parent, AuthRequestDialogListener listener, int displayOptions) {
 				TestUtils.addResult("success");
 				return null;
 			}
@@ -206,7 +206,7 @@ public class ActionBarTestUtils2 {
 		
 		final AuthRequestDialogFactory mockFactory = new AuthRequestDialogFactory() {
 			@Override
-			public Dialog show(View parent, AuthRequestDialogListener listener) {
+			public Dialog show(View parent, AuthRequestDialogListener listener, int displayOptions) {
 				TestUtils.addResult("fail");
 				return null;
 			}

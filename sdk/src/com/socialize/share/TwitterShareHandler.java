@@ -66,5 +66,4 @@ public class TwitterShareHandler extends AbstractShareHandler {
 	protected ShareType getShareType() {
 		return ShareType.TWITTER;
 	}
-
 }

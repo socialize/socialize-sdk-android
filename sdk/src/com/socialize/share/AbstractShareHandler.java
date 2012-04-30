@@ -75,13 +75,13 @@ public abstract class AbstractShareHandler implements ShareHandler {
 				}
 			}
 			else {
-				logError(context, action, "No propagation info found for share type [" +
+				logError(context, action, "No propagation info found for type [" +
 								getShareType() +
 								"].  Share will not propagate", listener);
 			}
 		}
 		else {
-			logError(context, action, "No propagation info found for share type [" +
+			logError(context, action, "No propagation info found for type [" +
 							getShareType() +
 							"].  Share will not propagate", listener);
 		}

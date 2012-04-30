@@ -43,7 +43,7 @@ public abstract class BaseAuthDialogFactory implements AuthDialogFactory  {
 	 * @see com.socialize.ui.dialog.AuthDialogFactory#show(android.view.View, com.socialize.ui.auth.AuthRequestListener)
 	 */
 	@Override
-	public abstract Dialog show(View parent, AuthRequestDialogListener listener);
+	public abstract Dialog show(View parent, AuthRequestDialogListener listener, int displayOptions);
 	
 	// So we can mock
 	protected Dialog newDialog(Context context) {

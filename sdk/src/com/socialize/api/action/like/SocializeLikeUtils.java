@@ -23,6 +23,7 @@ package com.socialize.api.action.like;
 
 import android.app.Activity;
 import android.app.Dialog;
+import com.socialize.ShareUtils;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.SocializeActionUtilsBase;
 import com.socialize.entity.Entity;
@@ -69,7 +70,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 
 				@Override
 				public void onCancel(Dialog dialog) {}
-			});
+			}, ShareUtils.FACEBOOK | ShareUtils.TWITTER);
 		}
 		else {
 			likeSystem.addLike(session, e, SocializeLikeUtils.this.getDefaultShareOptions(), listener);

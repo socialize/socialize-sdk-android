@@ -62,10 +62,13 @@ public class AuthPanelView extends BaseView {
 	private SocializeButton continueButton;
 	private SocializeButton cancelButton;
 	
-	public AuthPanelView(Context context, AuthRequestDialogListener listener, Dialog dialog) {
+	private int displayOptions;
+	
+	public AuthPanelView(Context context, AuthRequestDialogListener listener, Dialog dialog, int displayOptions) {
 		this(context);
 		this.listener = listener;
 		this.dialog = dialog;
+		this.displayOptions = displayOptions;
 	}
 
 	public AuthPanelView(Context context) {
