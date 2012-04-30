@@ -602,11 +602,33 @@
 	</bean>		
 	
 	<bean 
+		id="twitterWebViewClient" 
+		class="com.socialize.auth.twitter.TwitterWebViewClient"
+		singleton="false">
+	</bean>		
+	
+	<factory id="twitterWebViewClientFactory" makes="twitterWebViewClient"/>		
+	
+	<bean 
+		id="twitterAuthWebView" 
+		class="com.socialize.auth.twitter.TwitterAuthWebView"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<init-method name="init"/>
+		
+		<property name="twitterWebViewClientFactory" ref="twitterWebViewClientFactory"/>
+	</bean>		
+	
+	<factory id="twitterAuthWebViewFactory" makes="twitterAuthWebView"/>		
+	
+	<bean 
 		id="twitterAuthView" 
 		class="com.socialize.auth.twitter.TwitterAuthView"
 		singleton="false">
 		<constructor-arg type="activity"/>
 		<init-method name="init"/>
+		
+		<property name="twitterAuthWebViewFactory" ref="twitterAuthWebViewFactory"/>
 	</bean>	
 	
 	<factory id="twitterAuthViewFactory" makes="twitterAuthView"/>	

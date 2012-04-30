@@ -24,7 +24,11 @@ package com.socialize.provider;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -54,6 +58,7 @@ import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
 import com.socialize.entity.SocializeObjectFactory;
 import com.socialize.entity.User;
+import com.socialize.entity.UserAuthData;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
@@ -313,6 +318,38 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 					session.setConsumerToken(json.getString("oauth_token"));
 					session.setConsumerTokenSecret(json.getString("oauth_token_secret"));
 					session.setUser(user);
+					
+					// Ensure the user credentials match the user auth data returned from the server
+					List<UserAuthData> authData = user.getAuthData();
+					UserProviderCredentialsMap credentials = session.getUserProviderCredentials();
+						
+					if(credentials != null) {
+
+						if(authData != null) {
+							Map<AuthProviderType, UserProviderCredentials> validCreds = new LinkedHashMap<AuthProviderType, UserProviderCredentials>();
+							for (UserAuthData userAuthData : authData) {
+								UserProviderCredentials creds = credentials.get(userAuthData.getAuthProviderType());
+								if(creds != null) {
+									validCreds.put(userAuthData.getAuthProviderType(), creds);
+								}
+							}
+							
+							// Clear and reset
+							credentials.removeAll();
+							
+							Set<Entry<AuthProviderType, UserProviderCredentials>> entrySet = validCreds.entrySet();
+							
+							for (Entry<AuthProviderType, UserProviderCredentials> entry : entrySet) {
+								credentials.put(entry.getKey(), entry.getValue());
+							}
+						}
+						else {
+							credentials.removeAll();
+						}
+
+						// Set back to session
+						session.setUserProviderCredentials(credentials);								
+					}
 					
 					saveSession(session);
 				}

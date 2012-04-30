@@ -21,11 +21,12 @@
  */
 package com.socialize.auth.twitter;
 
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
+import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.util.StringUtils;
 
 /**
@@ -37,6 +38,8 @@ public class TwitterWebViewClient extends WebViewClient {
 	private OAuthRequestListener oAuthRequestListener;
 	private boolean called = false;
 	
+	private Dialog progress;
+	
 	public TwitterWebViewClient() {
 		super();
 	}
@@ -46,7 +49,18 @@ public class TwitterWebViewClient extends WebViewClient {
 	}
 	
 	@Override
+	public void onPageFinished(WebView view, String url) {
+		super.onPageFinished(view, url);
+		if(progress != null) {
+			progress.dismiss();
+		}
+	}
+
+	@Override
 	public void onPageStarted(WebView view, String url, Bitmap favicon) {
+		
+		progress = SafeProgressDialog.show(view.getContext());
+		
 		if(url.trim().toLowerCase().startsWith(TwitterOAuthProvider.OAUTH_CALLBACK_URL.toLowerCase())) {
 			
 			if(!called) {
@@ -71,11 +85,13 @@ public class TwitterWebViewClient extends WebViewClient {
 					}
 				}
 			}
-			
+			progress.dismiss();
 			view.stopLoading();
 		}
 		else {
 			super.onPageStarted(view, url, favicon);
 		}
 	}
+	
+	
 }

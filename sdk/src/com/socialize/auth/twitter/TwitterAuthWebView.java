@@ -25,6 +25,7 @@ import android.content.Context;
 import android.view.View;
 import android.webkit.WebView;
 
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.error.SocializeException;
 import com.socialize.oauth.signpost.OAuth;
 import com.socialize.oauth.signpost.OAuthTokenListener;
@@ -37,6 +38,7 @@ import com.socialize.oauth.signpost.http.HttpParameters;
 public class TwitterAuthWebView extends WebView implements ITwitterAuthWebView {
 	
 	private TwitterWebViewClient twitterWebViewClient;
+	private IBeanFactory<TwitterWebViewClient> twitterWebViewClientFactory;
 	
 	public TwitterAuthWebView(Context context) {
 		super(context);
@@ -61,17 +63,12 @@ public class TwitterAuthWebView extends WebView implements ITwitterAuthWebView {
 		twitterWebViewClient.setOauthRequestListener(oAuthRequestListener);
 		
 		provider.retrieveRequestTokenAsync(consumer, TwitterOAuthProvider.OAUTH_CALLBACK_URL, newOAuthRequestTokenUrlListener(listener));
-		
-//		try {
-//			String retrieveRequestToken = provider.retrieveRequestToken(consumer, TwitterOAuthProvider.OAUTH_CALLBACK_URL);
-//		} 
-//		catch (Exception e) {
-//			if(listener != null) {
-//				listener.onError(SocializeException.wrap(e));
-//			}
-//		}		
 	}
 	
+	public void setTwitterWebViewClientFactory(IBeanFactory<TwitterWebViewClient> twitterWebViewClientFactory) {
+		this.twitterWebViewClientFactory = twitterWebViewClientFactory;
+	}
+
 	protected OAuthRequestTokenUrlListener newOAuthRequestTokenUrlListener(final TwitterAuthListener listener) {
 		return new OAuthRequestTokenUrlListener() {
 			@Override
@@ -138,6 +135,9 @@ public class TwitterAuthWebView extends WebView implements ITwitterAuthWebView {
 	}
 	
 	protected TwitterWebViewClient newTwitterWebViewClient() {
+		if(twitterWebViewClientFactory != null) {
+			return twitterWebViewClientFactory.getBean();
+		}
 		return new TwitterWebViewClient();
 	}
 	

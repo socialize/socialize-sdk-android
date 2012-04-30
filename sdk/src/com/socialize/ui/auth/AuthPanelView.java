@@ -195,38 +195,37 @@ public class AuthPanelView extends BaseView {
 		anonLayout.addView(anonCell);
 		
 		contentLayout.addView(anonLayout);
+
 		
-		LayoutParams cancelParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		cancelParams.setMargins(0, padding * 2, 0, 0);
+//		if(config.isAllowAnonymousUser()) {
 		
-		RelativeLayout cancelLayout = new RelativeLayout(getContext());
-		
-		cancelLayout.setLayoutParams(cancelParams);
-		
-		if(config.isAllowAnonymousUser()) {
-			TextView cancelText = new TextView(getContext());
-			cancelText.setTextColor(colors.getColor(Colors.AUTH_PANEL_CANCEL_TEXT));
-			cancelText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-			cancelText.setText("I'd rather remain anonymous...");
-			
-			RelativeLayout.LayoutParams cancelTextParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			cancelTextParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-			
-			cancelText.setLayoutParams(cancelTextParams);
-			
-			cancelLayout.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					dialog.dismiss();
-					if(listener != null) {
-						listener.onCancel(dialog);
-					}
-				}
-			});
-			
-			cancelLayout.addView(cancelText);
-			contentLayout.addView(cancelLayout);
-		}
+//			LayoutParams cancelParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+//			cancelParams.setMargins(0, padding * 2, 0, 0);		
+//			RelativeLayout cancelLayout = new RelativeLayout(getContext());
+//			cancelLayout.setLayoutParams(cancelParams);	
+//			TextView cancelText = new TextView(getContext());
+//			cancelText.setTextColor(colors.getColor(Colors.AUTH_PANEL_CANCEL_TEXT));
+//			cancelText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+//			cancelText.setText("I'd rather remain anonymous...");
+//			
+//			RelativeLayout.LayoutParams cancelTextParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+//			cancelTextParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+//			
+//			cancelText.setLayoutParams(cancelTextParams);
+//			
+//			cancelLayout.setOnClickListener(new OnClickListener() {
+//				@Override
+//				public void onClick(View v) {
+//					dialog.dismiss();
+//					if(listener != null) {
+//						listener.onCancel(dialog);
+//					}
+//				}
+//			});
+//			
+//			cancelLayout.addView(cancelText);
+//			contentLayout.addView(cancelLayout);
+//		}
 		
 		if(cancelButton != null) {
 			
@@ -275,6 +274,8 @@ public class AuthPanelView extends BaseView {
 		addView(header);
 		addView(contentLayout);
 		addView(buttonLayout);
+		
+		toggleContinueButton();
 	}
 
 	public void setFacebookSignInCellFactory(IBeanFactory<FacebookSignInCell> facebookSignInCellFactory) {
@@ -320,6 +321,15 @@ public class AuthPanelView extends BaseView {
 	public void setCancelButton(SocializeButton cancelButton) {
 		this.cancelButton = cancelButton;
 	}
+	
+	protected void toggleContinueButton() {
+		if(config.isAllowAnonymousUser()) {
+			continueButton.setEnabled(true);
+		}
+		else {
+			continueButton.setEnabled(twitterSignInCell.isToggled() || facebookSignInCell.isToggled());
+		}
+	}
 
 	protected SocializeAuthListener getAuthClickListener(final ClickableSectionCell cell, final SocialNetwork network) {
 		return new SocializeAuthListener() {
@@ -335,6 +345,7 @@ public class AuthPanelView extends BaseView {
 			@Override
 			public void onAuthSuccess(SocializeSession session) {
 				cell.setToggled(!cell.isToggled());
+				toggleContinueButton();
 			}
 			
 			@Override

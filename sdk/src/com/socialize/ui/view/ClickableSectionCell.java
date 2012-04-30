@@ -60,6 +60,9 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	private Drawable imageOn;
 	private Drawable imageOff;
 	
+	private String toggledDrawableName = "arrow.png";
+	private String untoggledDrawableName = "arrow.png";
+	
 	private float topLeftRadius = 8.0f;
 	private float topRightRadius = 8.0f;
 	private float bottomLeftRadius = 8.0f;
@@ -158,7 +161,7 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		
 		if(canClick) {
 			arrowIcon = new ImageView(getContext());
-			arrowIcon.setImageDrawable(drawables.getDrawable("arrow.png"));
+			arrowIcon.setImageDrawable(drawables.getDrawable(toggledDrawableName));
 			arrowIcon.setLayoutParams(iconParams);			
 			master.addView(arrowIcon);
 		}
@@ -284,6 +287,14 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	public void setStrokeColor(int strokeColor) {
 		this.strokeColor = strokeColor;
 	}
+	
+	public void setToggledDrawableName(String toggledDrawableName) {
+		this.toggledDrawableName = toggledDrawableName;
+	}
+	
+	public void setUntoggledDrawableName(String untoggledDrawableName) {
+		this.untoggledDrawableName = untoggledDrawableName;
+	}
 
 	// So we can mock
 	protected GradientDrawable makeGradient(int bottom, int top) {
@@ -296,26 +307,26 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		return toggled;
 	}
 	
-	public void setToggled(boolean enabled) {
-		this.toggled = enabled;
+	public void setToggled(boolean toggled) {
+		this.toggled = toggled;
 		
-		if(enabled) {
+		if(toggled) {
 			if(imageOn != null) {
 				imageView.setImageDrawable(imageOn);
 			}
 			
 			if(arrowIcon != null) {
-				arrowIcon.setImageDrawable(drawables.getDrawable("tick.png"));
+				arrowIcon.setImageDrawable(drawables.getDrawable(toggledDrawableName));
 			}
 		}
-		else if(!enabled) {
+		else if(!toggled) {
 			
 			if(imageOff != null) {
 				imageView.setImageDrawable(imageOff);
 			}
 			
 			if(arrowIcon != null) {
-				arrowIcon.setImageDrawable(drawables.getDrawable("arrow.png"));
+				arrowIcon.setImageDrawable(drawables.getDrawable(untoggledDrawableName));
 			}
 		}
 	}	

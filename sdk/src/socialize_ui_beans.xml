@@ -518,6 +518,8 @@
 		<property name="displayText" value="Twitter"/>
 		<property name="backgroundColor" value="#3d464c"/>
 		<property name="bgAlpha" value="255" type="integer"/>
+		<property name="toggledDrawableName" value="tick_on.png"/>
+		<property name="untoggledDrawableName" value="tick_off.png"/>
 	</bean>	
 	
 	<factory id="twitterSignInCellFactory" makes="twitterSignInCell"/>	
@@ -650,6 +652,8 @@
 		<property name="displayText" value="Facebook"/>
 		<property name="backgroundColor" value="#3d464c"/>
 		<property name="bgAlpha" value="255" type="integer"/>
+		<property name="toggledDrawableName" value="tick_on.png"/>
+		<property name="untoggledDrawableName" value="tick_off.png"/>
 	</bean>	
 	
 	<factory id="facebookSignInCellFactory" makes="facebookSignInCell"/>	

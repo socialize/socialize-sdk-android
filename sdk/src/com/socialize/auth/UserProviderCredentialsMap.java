@@ -36,4 +36,6 @@ public interface UserProviderCredentialsMap {
 	
 	public void remove(AuthProviderType type);
 	
+	public void removeAll();
+	
 }

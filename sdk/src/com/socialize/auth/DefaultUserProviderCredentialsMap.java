@@ -69,4 +69,9 @@ public class DefaultUserProviderCredentialsMap implements UserProviderCredential
 	public void remove(AuthProviderType type) {
 		map.remove(type);
 	}
+
+	@Override
+	public void removeAll() {
+		map.clear();
+	}
 }

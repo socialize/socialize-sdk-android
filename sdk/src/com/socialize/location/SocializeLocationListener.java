@@ -25,11 +25,9 @@ public class SocializeLocationListener implements LocationListener {
 	
 	@Override
 	public void onLocationChanged(Location location) {
-		
 		if(logger != null && logger.isDebugEnabled()) {
 			logger.debug("Found location from device, ceasing updates");
 		}		
-		
 		if(locationProvider != null) {
 			locationProvider.setLocation(location);
 			locationProvider.getLocationManager().removeUpdates(this);
@@ -39,10 +37,8 @@ public class SocializeLocationListener implements LocationListener {
 	public void setLocationProvider(DefaultLocationProvider locationProvider) {
 		this.locationProvider = locationProvider;
 	}
-
 	
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
-	
 }

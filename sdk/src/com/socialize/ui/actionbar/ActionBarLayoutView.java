@@ -381,7 +381,7 @@ public class ActionBarLayoutView extends BaseView {
 		
 		ShareOptions options = new ShareOptions();
 		
-		if(networks == null) {
+		if(networks == null || networks.length == 0) {
 			if(getSocialize().getSession().getUser().isAutoPostToFacebook() && getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 				if(getSocialize().getSession().getUser().isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
 					options.setShareTo(SocialNetwork.FACEBOOK, SocialNetwork.TWITTER);

@@ -163,6 +163,4 @@ public class DefaultLocationProvider implements SocializeLocationProvider {
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}
-	
-	
 }

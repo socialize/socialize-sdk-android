@@ -162,4 +162,10 @@ public class MockSocializeSession implements WritableSession {
 	@Override
 	public void setUserProviderCredentials(AuthProviderType type, UserProviderCredentials data) {
 	}
+
+	@Override
+	public void setUserProviderCredentials(UserProviderCredentialsMap data) {
+	}
+	
+	
 }
