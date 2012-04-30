@@ -42,7 +42,7 @@ public class ShareUtils {
 	public static final int SMS = 1<<1;
 	public static final int FACEBOOK = 1<<2;
 	public static final int TWITTER = 1<<3;
-	public static final int ALL = EMAIL & SMS & FACEBOOK & TWITTER;
+	public static final int ALL = EMAIL|SMS|FACEBOOK|TWITTER;
 	
 	static ShareUtilsProxy proxy;
 	

@@ -33,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.socialize.ShareUtils;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
@@ -141,8 +142,8 @@ public class AuthPanelView extends BaseView {
 		authBadge.setLayoutParams(badgeParams);
 		authBadge.setPadding(0, 0, 0, padding);
 		
-		boolean fbOK = getSocialize().isSupported(AuthProviderType.FACEBOOK);
-		boolean twOK = getSocialize().isSupported(AuthProviderType.TWITTER);
+		boolean fbOK = getSocialize().isSupported(AuthProviderType.FACEBOOK) && ((displayOptions & ShareUtils.FACEBOOK) != 0);
+		boolean twOK = getSocialize().isSupported(AuthProviderType.TWITTER) && ((displayOptions & ShareUtils.TWITTER) != 0);
 		
 		float radii = displayUtils.getDIP(8);
 		
