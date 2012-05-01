@@ -19,65 +19,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action.like;
+package com.socialize.api.action.view;
 
 import android.app.Activity;
 import com.socialize.entity.Entity;
 import com.socialize.entity.User;
-import com.socialize.listener.like.LikeAddListener;
-import com.socialize.listener.like.LikeDeleteListener;
-import com.socialize.listener.like.LikeGetListener;
-import com.socialize.listener.like.LikeListListener;
-
+import com.socialize.listener.view.ViewAddListener;
+import com.socialize.listener.view.ViewGetListener;
+import com.socialize.listener.view.ViewListListener;
 
 /**
  * @author Jason Polites
- *
  */
-public interface LikeUtilsProxy {
+public interface ViewUtilsProxy {
 
 	/**
-	 * Records a like against the given entity for the current user.
+	 * Records a view against the given entity for the current user.
 	 * @param context The current context.
-	 * @param e The entity to be liked.
+	 * @param e The entity to be viewd.
 	 * @param listener A listener to handle the result.
 	 */
-	public void like (Activity context, Entity e, LikeAddListener listener);
+	public void view (Activity context, Entity e, ViewAddListener listener);
 	
 	/**
-	 * Removes a like previously created for the current user.
+	 * Retrieves a view for an entity.
 	 * @param context The current context.
-	 * @param e The entity that was liked.
+	 * @param e The entity that was viewd.
 	 * @param listener A listener to handle the result.
 	 */
-	public void unlike (Activity context, Entity e, LikeDeleteListener listener);
+	public void getView (Activity context, Entity e, ViewGetListener listener);
 	
 	/**
-	 * Retrieves a like for an entity.
+	 * Lists all views for the given user.
 	 * @param context The current context.
-	 * @param e The entity that was liked.
-	 * @param listener A listener to handle the result.
-	 */
-	public void getLike (Activity context, Entity e, LikeGetListener listener);
-	
-	/**
-	 * Lists all likes for the given user.
-	 * @param context The current context.
-	 * @param user The user for whom likes will be queried.
+	 * @param user The user for whom views will be queried.
 	 * @param start The first index (for pagination), starting at 0
 	 * @param end The last index (for pagination)
 	 * @param listener A listener to handle the result.
 	 */
-	public void getLikesByUser (Activity context, User user, int start, int end, LikeListListener listener);
-	
+	public void getViewsByUser (Activity context, User user, int start, int end, ViewListListener listener);
 	
 	/**
-	 * Lists all likes for the given entity.
+	 * Lists all views for the given entity.
 	 * @param context The current context.
-	 * @param entity The entity for which likes will be queried.
+	 * @param entity The entity for which views will be queried.
 	 * @param start The first index (for pagination), starting at 0
 	 * @param end The last index (for pagination)
 	 * @param listener A listener to handle the result.
 	 */
-	public void getLikesByEntity (Activity context, Entity entity, int start, int end, LikeListListener listener);
+	public void getViewsByEntity (Activity context, Entity entity, int start, int end, ViewListListener listener);
 }

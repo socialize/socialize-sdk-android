@@ -99,4 +99,16 @@ public class LikeUtils {
 	public static void getLikesByUser (Activity context, User user, int start, int end, LikeListListener listener) {
 		proxy.getLikesByUser(context, user, start, end, listener);
 	}
+	
+	/**
+	 * Lists all likes for the given entity.
+	 * @param context The current context.
+	 * @param entity The entity for whom likes will be queried.
+	 * @param start The first index (for pagination), starting at 0
+	 * @param end The last index (for pagination)
+	 * @param listener A listener to handle the result.
+	 */
+	public static void getLikesByEntity (Activity context, Entity entity, int start, int end, LikeListListener listener) {
+		proxy.getLikesByEntity(context, entity, start, end, listener);
+	}	
 }

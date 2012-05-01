@@ -19,65 +19,75 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action.like;
+package com.socialize;
 
+import java.lang.reflect.Proxy;
 import android.app.Activity;
+import com.socialize.api.action.view.ViewUtilsProxy;
 import com.socialize.entity.Entity;
 import com.socialize.entity.User;
-import com.socialize.listener.like.LikeAddListener;
-import com.socialize.listener.like.LikeDeleteListener;
-import com.socialize.listener.like.LikeGetListener;
-import com.socialize.listener.like.LikeListListener;
+import com.socialize.listener.view.ViewAddListener;
+import com.socialize.listener.view.ViewGetListener;
+import com.socialize.listener.view.ViewListListener;
 
 
 /**
  * @author Jason Polites
  *
  */
-public interface LikeUtilsProxy {
+public class ViewUtils {
+	
+	static ViewUtilsProxy proxy;
+	
+	static {
+		proxy = (ViewUtilsProxy) Proxy.newProxyInstance(
+				ViewUtilsProxy.class.getClassLoader(),
+				new Class[]{ViewUtilsProxy.class},
+				new SocializeActionProxy("viewUtils"));	// Bean name
+	}
 
 	/**
-	 * Records a like against the given entity for the current user.
+	 * Records a view against the given entity for the current user.
 	 * @param context The current context.
-	 * @param e The entity to be liked.
+	 * @param e The entity to be viewd.
 	 * @param listener A listener to handle the result.
 	 */
-	public void like (Activity context, Entity e, LikeAddListener listener);
+	public static void view (Activity context, Entity e, ViewAddListener listener) {
+		proxy.view(context, e, listener);
+	}
 	
 	/**
-	 * Removes a like previously created for the current user.
+	 * Retrieves a view for an entity and the current user.
 	 * @param context The current context.
-	 * @param e The entity that was liked.
+	 * @param e The entity that was viewd.
 	 * @param listener A listener to handle the result.
 	 */
-	public void unlike (Activity context, Entity e, LikeDeleteListener listener);
+	public static void getView (Activity context, Entity e, ViewGetListener listener) {
+		proxy.getView(context, e, listener);
+	}
+	
 	
 	/**
-	 * Retrieves a like for an entity.
+	 * Lists all views for the given user.
 	 * @param context The current context.
-	 * @param e The entity that was liked.
-	 * @param listener A listener to handle the result.
-	 */
-	public void getLike (Activity context, Entity e, LikeGetListener listener);
-	
-	/**
-	 * Lists all likes for the given user.
-	 * @param context The current context.
-	 * @param user The user for whom likes will be queried.
+	 * @param user The user for whom views will be queried.
 	 * @param start The first index (for pagination), starting at 0
 	 * @param end The last index (for pagination)
 	 * @param listener A listener to handle the result.
 	 */
-	public void getLikesByUser (Activity context, User user, int start, int end, LikeListListener listener);
-	
+	public static void getViewsByUser (Activity context, User user, int start, int end, ViewListListener listener) {
+		proxy.getViewsByUser(context, user, start, end, listener);
+	}
 	
 	/**
-	 * Lists all likes for the given entity.
+	 * Lists all views for the given entity.
 	 * @param context The current context.
-	 * @param entity The entity for which likes will be queried.
+	 * @param entity The entity for whom views will be queried.
 	 * @param start The first index (for pagination), starting at 0
 	 * @param end The last index (for pagination)
 	 * @param listener A listener to handle the result.
 	 */
-	public void getLikesByEntity (Activity context, Entity entity, int start, int end, LikeListListener listener);
+	public static void getViewsByEntity (Activity context, Entity entity, int start, int end, ViewListListener listener) {
+		proxy.getViewsByEntity(context, entity, start, end, listener);
+	}	
 }

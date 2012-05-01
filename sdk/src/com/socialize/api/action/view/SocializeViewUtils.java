@@ -21,27 +21,43 @@
  */
 package com.socialize.api.action.view;
 
-import android.location.Location;
-import com.socialize.api.SocializeSession;
+import android.app.Activity;
+import com.socialize.Socialize;
 import com.socialize.entity.Entity;
-import com.socialize.listener.view.ViewListener;
+import com.socialize.entity.User;
+import com.socialize.listener.view.ViewAddListener;
+import com.socialize.listener.view.ViewGetListener;
+import com.socialize.listener.view.ViewListListener;
+
 
 /**
  * @author Jason Polites
- *
  */
-public interface ViewSystem {
-
-	public static final String ENDPOINT = "/view/";
+public class SocializeViewUtils implements ViewUtilsProxy {
 	
-	public void addView(SocializeSession session, Entity entity, Location location, ViewListener listener);
+	private ViewSystem viewSystem;
 	
-	public void getView(SocializeSession session, Entity entity, ViewListener listener);
-	
-	public void getView(SocializeSession session, long id, ViewListener listener);
+	@Override
+	public void view(Activity context, Entity e, ViewAddListener listener) {
+		viewSystem.addView(Socialize.getSocialize().getSession(), e, null, listener);
+	}
 
-	public void getViewsByEntity(SocializeSession session, String entityKey, int startIndex, int endIndex, ViewListener listener);
+	@Override
+	public void getView(Activity context, Entity e, ViewGetListener listener) {
+		viewSystem.getView(Socialize.getSocialize().getSession(), e, listener);
+	}
 
-	public void getViewsByUser(SocializeSession session, long userId, int startIndex, int endIndex, ViewListener listener);
+	@Override
+	public void getViewsByUser(Activity context, User user, int start, int end, ViewListListener listener) {
+		viewSystem.getViewsByUser(Socialize.getSocialize().getSession(), user.getId(), start, end, listener);
+	}
 
+	@Override
+	public void getViewsByEntity(Activity context, Entity entity, int start, int end, ViewListListener listener) {
+		viewSystem.getViewsByEntity(Socialize.getSocialize().getSession(), entity.getKey(), start, end, listener);
+	}
+
+	public void setViewSystem(ViewSystem viewSystem) {
+		this.viewSystem = viewSystem;
+	}
 }

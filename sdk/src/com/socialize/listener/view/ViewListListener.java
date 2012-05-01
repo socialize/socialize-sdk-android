@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2011 Socialize Inc. 
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,29 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action.view;
+package com.socialize.listener.view;
 
-import android.location.Location;
-import com.socialize.api.SocializeSession;
-import com.socialize.entity.Entity;
-import com.socialize.listener.view.ViewListener;
+import java.util.List;
+import com.socialize.entity.View;
+import com.socialize.entity.ListResult;
+
 
 /**
  * @author Jason Polites
  *
  */
-public interface ViewSystem {
+public abstract class ViewListListener extends ViewListener {
+ 
+	@Override
+	public final void onCreate(View entity) {}
 
-	public static final String ENDPOINT = "/view/";
+	@Override
+	public final void onGet(View entity) {}
 	
-	public void addView(SocializeSession session, Entity entity, Location location, ViewListener listener);
-	
-	public void getView(SocializeSession session, Entity entity, ViewListener listener);
-	
-	public void getView(SocializeSession session, long id, ViewListener listener);
+	@Override
+	public final void onList(ListResult<View> entities) {
+		onList(entities.getItems(), entities.getTotalCount());
+	}
 
-	public void getViewsByEntity(SocializeSession session, String entityKey, int startIndex, int endIndex, ViewListener listener);
-
-	public void getViewsByUser(SocializeSession session, long userId, int startIndex, int endIndex, ViewListener listener);
+	public abstract void onList(List<View> items, int totalSize);
 
 }

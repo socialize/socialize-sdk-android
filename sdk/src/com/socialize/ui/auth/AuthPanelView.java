@@ -36,6 +36,7 @@ import android.widget.TextView;
 import com.socialize.ShareUtils;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
@@ -78,6 +79,8 @@ public class AuthPanelView extends BaseView {
 	
 	private IBeanFactory<FacebookSignInCell> facebookSignInCellFactory;
 	private IBeanFactory<TwitterSignInCell> twitterSignInCellFactory;
+	private IBeanFactory<EmailCell> emailCellFactory;
+	private IBeanFactory<SMSCell> smsCellFactory;
 	private IBeanFactory<AnonymousCell> anonCellFactory; 
 	
 	private Drawables drawables;
@@ -85,6 +88,9 @@ public class AuthPanelView extends BaseView {
 	
 	private FacebookSignInCell facebookSignInCell;
 	private TwitterSignInCell twitterSignInCell;
+	
+	private EmailCell emailCell;
+	private SMSCell smsCell;
 
 	public void init() {
 		
@@ -144,6 +150,8 @@ public class AuthPanelView extends BaseView {
 		
 		boolean fbOK = getSocialize().isSupported(AuthProviderType.FACEBOOK) && ((displayOptions & ShareUtils.FACEBOOK) != 0);
 		boolean twOK = getSocialize().isSupported(AuthProviderType.TWITTER) && ((displayOptions & ShareUtils.TWITTER) != 0);
+		boolean emailOK = ((displayOptions & ShareUtils.EMAIL) != 0) && getSocialize().canShare(getContext(), ShareType.EMAIL);
+		boolean smsOK = ((displayOptions & ShareUtils.SMS) != 0) && getSocialize().canShare(getContext(), ShareType.SMS);
 		
 		float radii = displayUtils.getDIP(8);
 		
@@ -173,6 +181,18 @@ public class AuthPanelView extends BaseView {
 			twitterSignInCell.setPadding(padding, padding, padding, padding);
 		}
 		
+		if(emailOK) {
+			emailCell = emailCellFactory.getBean();
+			emailCell.setLayoutParams(cellParams);
+			emailCell.setPadding(padding, padding, padding, padding);
+		}
+		
+		if(smsOK) {
+			smsCell = smsCellFactory.getBean();
+			smsCell.setLayoutParams(cellParams);
+			smsCell.setPadding(padding, padding, padding, padding);
+		}		
+		
 		if(facebookSignInCell != null) {
 			facebookSignInCell.setToggled(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK));
 			facebookSignInCell.setAuthListener(getAuthClickListener(facebookSignInCell, SocialNetwork.FACEBOOK));
@@ -188,6 +208,8 @@ public class AuthPanelView extends BaseView {
 		
 		if(fbOK) contentLayout.addView(facebookSignInCell);
 		if(twOK) contentLayout.addView(twitterSignInCell);
+		if(emailOK) contentLayout.addView(emailCell);
+		if(smsOK) contentLayout.addView(smsCell);
 		
 		LinearLayout anonLayout = new LinearLayout(getContext());
 		anonLayout.setPadding(0, padding, 0, padding);

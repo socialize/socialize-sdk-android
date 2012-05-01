@@ -38,6 +38,4 @@ public abstract class ViewAddListener extends ViewListener {
 	@Override
 	public final void onList(ListResult<View> entities) {}
 
-	@Override
-	public final void onUpdate(View entity) {}
 }

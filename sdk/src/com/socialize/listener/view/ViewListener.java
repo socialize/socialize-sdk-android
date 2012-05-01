@@ -31,4 +31,6 @@ import com.socialize.listener.AbstractSocializeListener;
 public abstract class ViewListener extends AbstractSocializeListener<View> {
 	@Override
 	public final void onDelete() {}
+	@Override
+	public final void onUpdate(View entity) {}
 }

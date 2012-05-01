@@ -93,6 +93,7 @@ import com.socialize.listener.subscription.SubscriptionListListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
+import com.socialize.listener.view.ViewGetListener;
 import com.socialize.location.SocializeLocationProvider;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
@@ -1030,6 +1031,17 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#getViewById(long, com.socialize.listener.view.ViewGetListener)
+	 */
+	@Override
+	public void getViewById(long id, ViewGetListener viewGetListener) {
+		if(assertAuthenticated(viewGetListener)) {
+			viewSystem.getView(session, id, viewGetListener);
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#getLike(java.lang.String, com.socialize.listener.like.LikeGetListener)

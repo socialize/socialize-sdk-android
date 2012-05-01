@@ -48,12 +48,13 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.share.ShareAddListener;
-import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionListListener;
+import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
+import com.socialize.listener.view.ViewGetListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.notifications.NotificationType;
@@ -187,6 +188,13 @@ public interface SocializeService extends SocializeUI {
 	public void like(Activity activity, Entity entity, ShareOptions shareOptions, LikeAddListener likeAddListener);
 	
 	/**
+	 * Removes a specific LIKE based on it's unique ID.  The ID would be returned from the original creation call.
+	 * @param id The ID of the like to be deleted.
+	 * @param likeDeleteListener A listener to handle callbacks from the delete.
+	 */
+	public void unlike(long id, LikeDeleteListener likeDeleteListener);
+	
+	/**
 	 * Adds a new view and associates it with the key described.
 	 * @param activity The current Activity.
 	 * @param entity The entity being viewed.
@@ -201,14 +209,14 @@ public interface SocializeService extends SocializeUI {
 	 * @param location The location of the device at the time the call was made.
 	 * @param viewAddListener A listener to handle callbacks from the post.
 	 */
-	public void view(Activity activity, Entity entity, Location location, ViewAddListener viewAddListener);
-
+	public void view(Activity activity, Entity entity, Location location, ViewAddListener viewAddListener);	
+	
 	/**
-	 * Removes a specific LIKE based on it's unique ID.  The ID would be returned from the original creation call.
-	 * @param id The ID of the like to be deleted.
-	 * @param likeDeleteListener A listener to handle callbacks from the delete.
+	 * Retrieves a single view.
+	 * @param id The ID of the view
+	 * @param viewGetListener A listener to handle callbacks from the get.
 	 */
-	public void unlike(long id, LikeDeleteListener likeDeleteListener);
+	public void getViewById(long id, ViewGetListener viewGetListener);
 	
 	/**
 	 * Records a share event against the given key. 

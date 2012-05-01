@@ -19,29 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action.view;
+package com.socialize.ui.auth;
 
-import android.location.Location;
-import com.socialize.api.SocializeSession;
-import com.socialize.entity.Entity;
-import com.socialize.listener.view.ViewListener;
+import android.content.Context;
+import android.widget.ImageView;
+import com.socialize.ui.view.ClickableSectionCell;
+
 
 /**
  * @author Jason Polites
  *
  */
-public interface ViewSystem {
+public class EmailCell extends ClickableSectionCell {
 
-	public static final String ENDPOINT = "/view/";
-	
-	public void addView(SocializeSession session, Entity entity, Location location, ViewListener listener);
-	
-	public void getView(SocializeSession session, Entity entity, ViewListener listener);
-	
-	public void getView(SocializeSession session, long id, ViewListener listener);
+	public EmailCell(Context context) {
+		super(context);
+	}
 
-	public void getViewsByEntity(SocializeSession session, String entityKey, int startIndex, int endIndex, ViewListener listener);
-
-	public void getViewsByUser(SocializeSession session, long userId, int startIndex, int endIndex, ViewListener listener);
+	/* (non-Javadoc)
+	 * @see com.socialize.ui.view.ClickableSectionCell#makeImage()
+	 */
+	@Override
+	protected ImageView makeImage() {
+		setImageOn(drawables.getDrawable("icon_email.png"));
+		return  new ImageView(getContext());
+	}
 
 }

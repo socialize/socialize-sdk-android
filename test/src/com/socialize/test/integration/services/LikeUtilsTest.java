@@ -268,4 +268,45 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		assertNotNull(items);
 		assertTrue(items.size() >= 1);
 	}
+	
+	public void testGetLikesByEntity() throws SocializeException, InterruptedException {
+		final Entity entity = Entity.newInstance("testGetLikesByEntity", "testGetLikesByEntity");
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		LikeUtils.like(getActivity(), entity, new LikeAddListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+			
+			@Override
+			public void onCreate(Like like) {
+				
+				LikeUtils.getLikesByEntity(getActivity(), entity, 0, 100, new LikeListListener() {
+					
+					@Override
+					public void onList(List<Like> items, int totalSize) {
+						addResult(items);
+						latch.countDown();
+					}
+					
+					@Override
+					public void onError(SocializeException error) {
+						error.printStackTrace();
+						fail();
+					}
+				});
+				
+			}
+		});		
+		
+		latch.await(20, TimeUnit.SECONDS);
+		
+		List<Like> items = getResult(0);
+		assertNotNull(items);
+		assertTrue(items.size() >= 1);
+	}	
 }

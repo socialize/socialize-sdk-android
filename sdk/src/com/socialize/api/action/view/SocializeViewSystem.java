@@ -23,13 +23,14 @@ package com.socialize.api.action.view;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import android.location.Location;
-
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Entity;
+import com.socialize.entity.User;
 import com.socialize.entity.View;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.view.ViewListListener;
 import com.socialize.listener.view.ViewListener;
 import com.socialize.provider.SocializeProvider;
 
@@ -70,8 +71,44 @@ public class SocializeViewSystem extends SocializeApi<View, SocializeProvider<Vi
 	 * @see com.socialize.api.action.ViewSystem#getViewsByUser(com.socialize.api.SocializeSession, long, com.socialize.listener.view.ViewListener)
 	 */
 	@Override
-	public void getViewsByUser(SocializeSession session, long userId, ViewListener listener) {
+	public void getViewsByUser(SocializeSession session, long userId, int startIndex, int endIndex, ViewListener listener) {
 		String endpoint = "/user/" + userId + ENDPOINT;
-		listAsync(session, endpoint, listener);
-	}		
+		listAsync(session, endpoint, startIndex, endIndex, listener);
+	}
+
+	@Override
+	public void getView(SocializeSession session, Entity entity, final ViewListener listener) {
+		final User user = session.getUser();
+		if(user != null) {
+			
+			final Long userId = user.getId();
+			
+			String endpoint = "/user/" + userId.toString() + ENDPOINT;
+			listAsync(session, endpoint, entity.getKey(), null, 0, 1, new ViewListListener() {
+				
+				@Override
+				public void onError(SocializeException error) {
+					listener.onError(error);
+				}
+				
+				@Override
+				public void onList(List<View> items, int totalSize) {
+					if(items != null && items.size() > 0) {
+						listener.onGet(items.get(0));
+					}
+					else {
+						listener.onGet(null);
+					}
+				}
+			});
+		}
+		else {
+			listener.onError(new SocializeException("Invalid session [No user object found]"));
+		}
+	}
+
+	@Override
+	public void getView(SocializeSession session, long id, ViewListener listener) {
+		getAsync(session, ENDPOINT, String.valueOf(id), listener);
+	}	
 }

@@ -137,6 +137,16 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 		final SocializeSession session = getSocialize().getSession();
 		likeSystem.getLikesByUser(session, user.getId(), start, end, listener);
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.like.LikeUtilsProxy#getLikesByEntity(android.app.Activity, com.socialize.entity.Entity, int, int, com.socialize.listener.like.LikeListListener)
+	 */
+	@Override
+	public void getLikesByEntity(Activity context, Entity entity, int start, int end, LikeListListener listener) {
+		final SocializeSession session = getSocialize().getSession();
+		likeSystem.getLikesByEntity(session, entity.getKey(), start, end, listener);
+	}
 
 	public void setAuthRequestDialogFactory(AuthRequestDialogFactory authRequestDialogFactory) {
 		this.authRequestDialogFactory = authRequestDialogFactory;
