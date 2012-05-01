@@ -25,16 +25,25 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import android.app.Dialog;
 import com.socialize.ShareUtils;
 import com.socialize.Socialize;
+import com.socialize.api.action.share.SocialNetworkDialogListener;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.Share;
 import com.socialize.entity.User;
+import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
+import com.socialize.networks.facebook.FacebookSignInCell;
+import com.socialize.networks.twitter.TwitterSignInCell;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
+import com.socialize.ui.auth.AuthPanelView;
+import com.socialize.ui.auth.EmailCell;
+import com.socialize.ui.auth.SMSCell;
 
 
 /**
@@ -54,6 +63,68 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		Socialize.getSocialize().destroy(true);
 		super.tearDown();
 	}
+	
+	public void testGetShareExists() throws Exception {
+		
+		JSONObject json = TestUtils.getJSON(getContext(), "shares.json");
+		JSONArray jsonArray = json.getJSONArray("items");
+		JSONObject jsonObject = (JSONObject) jsonArray.get(0);
+		String id = jsonObject.getString("id");
+		
+		long shareId = Long.parseLong(id);
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		ShareUtils.getShare(getActivity(), new ShareGetListener() {
+			
+			@Override
+			public void onGet(Share entity) {
+				addResult(0, entity);
+				latch.countDown();
+			}
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+		}, shareId);
+		
+		latch.await(20, TimeUnit.SECONDS);
+		
+		Share share = getResult(0);
+		assertNotNull(share);
+		assertEquals(shareId, share.getId().longValue());
+	}
+	
+	public void testGetShareDoesNotExist() throws InterruptedException {
+		
+		long shareId = 69696966;
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		ShareUtils.getShare(getActivity(), new ShareGetListener() {
+			
+			@Override
+			public void onGet(Share entity) {
+				latch.countDown();
+			}
+			
+			@Override
+			public void onError(SocializeException error) {
+				addResult(0, error);
+				latch.countDown();
+			}
+		}, shareId);
+		
+		latch.await(20, TimeUnit.SECONDS);
+		
+		SocializeException error = getResult(0);
+		assertNotNull(error);
+		assertTrue((error instanceof SocializeApiError));
+		assertEquals(404,  ((SocializeApiError)error).getResultCode());
+	}
+	
 
 	public void testGetSharesByUser() throws Exception {
 		final User user = new User();
@@ -116,4 +187,34 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		assertNotNull(items);
 		assertEquals(1, items.size());
 	}	
+	
+	public void testShowAuthDialog() throws Exception {
+		final Entity entity = Entity.newInstance("http://entity1.com", "http://entity1.com");
+		final CountDownLatch latch0 = new CountDownLatch(1);
+		
+		ShareUtils.showShareDialog(getContext(), entity, ShareUtils.ALL, new SocialNetworkDialogListener() {
+
+			@Override
+			public void onShow(Dialog dialog, AuthPanelView dialogView) {
+				addResult(0, dialogView);
+				latch0.countDown();
+			}
+		});
+		
+		latch0.await(20, TimeUnit.SECONDS);
+		
+		AuthPanelView view = getResult(0);
+		
+		assertNotNull(view);
+		
+		final FacebookSignInCell fbButton = TestUtils.findView(view, FacebookSignInCell.class);
+		final TwitterSignInCell twButton = TestUtils.findView(view, TwitterSignInCell.class);
+		final EmailCell emailCell = TestUtils.findView(view, EmailCell.class);
+		final SMSCell smsCell = TestUtils.findView(view, SMSCell.class);
+		
+		assertNotNull(fbButton);
+		assertNotNull(twButton);
+		assertNotNull(emailCell);
+		assertNotNull(smsCell);
+	}
 }

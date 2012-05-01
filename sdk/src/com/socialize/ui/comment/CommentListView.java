@@ -30,6 +30,7 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.notifications.NotificationType;
+import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.auth.ShareDialogListener;
 import com.socialize.ui.dialog.AuthRequestDialogFactory;
 import com.socialize.ui.dialog.DialogFactory;
@@ -258,7 +259,7 @@ public class CommentListView extends BaseView {
 					}
 					
 					if(showAuth && authSupported) {
-						authRequestDialogFactory.show(CommentListView.this, getCommentAuthListener(text, shareLocation, subscribe, networks), ShareUtils.FACEBOOK | ShareUtils.TWITTER);
+						authRequestDialogFactory.show(CommentListView.this, null, getCommentAuthListener(text, shareLocation, subscribe, networks), ShareUtils.FACEBOOK | ShareUtils.TWITTER);
 					}
 					else {
 						// Post as anon
@@ -274,6 +275,8 @@ public class CommentListView extends BaseView {
 	
 	protected ShareDialogListener getCommentAuthListener(final String text, final boolean shareLocation, final boolean subscribe, final SocialNetwork...networks) {
 		return new ShareDialogListener() {
+			@Override
+			public void onShow(Dialog dialog, AuthPanelView dialogView) {}
 			
 			@Override
 			public void onContinue(Dialog dialog, SocialNetwork...network) {
@@ -281,13 +284,7 @@ public class CommentListView extends BaseView {
 			}
 
 			@Override
-			public void onAuthFail(Dialog dialog, SocialNetwork network, SocializeException error) {
-				doPostComment(text, shareLocation, subscribe);
-			}
-
-			@Override
 			public void onCancel(Dialog dialog) {}
-
 		};
 	}
 	

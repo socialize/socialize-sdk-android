@@ -23,10 +23,10 @@ package com.socialize.networks.facebook;
 
 import android.app.Activity;
 import android.net.Uri;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.Share;
-import com.socialize.networks.SocialNetworkShareListener;
 
 /**
  * @author Jason Polites

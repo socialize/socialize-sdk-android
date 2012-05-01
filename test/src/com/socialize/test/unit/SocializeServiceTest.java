@@ -83,7 +83,6 @@ import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
-import com.socialize.location.DefaultLocationProvider;
 import com.socialize.location.SocializeLocationProvider;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;

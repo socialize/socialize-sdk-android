@@ -26,6 +26,7 @@ import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ActionType;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderInfoFactory;
 import com.socialize.auth.AuthProviderType;

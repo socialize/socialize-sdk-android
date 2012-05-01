@@ -41,6 +41,7 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookSignInCell;
 import com.socialize.networks.twitter.TwitterSignInCell;
 import com.socialize.ui.util.Colors;
@@ -56,6 +57,7 @@ import com.socialize.view.BaseView;
 public class AuthPanelView extends BaseView {
 
 	private ShareDialogListener listener;
+	private SocialNetworkListener socialNetworkListener;
 	private Dialog dialog;
 	private SocializeConfig config;
 	private Colors colors;
@@ -64,6 +66,14 @@ public class AuthPanelView extends BaseView {
 	private SocializeButton cancelButton;
 	
 	private int displayOptions;
+	
+	public AuthPanelView(Context context, SocialNetworkListener socialNetworkListener, ShareDialogListener listener, Dialog dialog, int displayOptions) {
+		this(context);
+		this.listener = listener;
+		this.socialNetworkListener = socialNetworkListener;
+		this.dialog = dialog;
+		this.displayOptions = displayOptions;
+	}
 	
 	public AuthPanelView(Context context, ShareDialogListener listener, Dialog dialog, int displayOptions) {
 		this(context);
@@ -374,8 +384,9 @@ public class AuthPanelView extends BaseView {
 			@Override
 			public void onError(SocializeException error) {
 				cell.setEnabled(false);
-				if(listener != null) {
-					listener.onAuthFail(dialog, network, error);
+				
+				if(socialNetworkListener != null) {
+					socialNetworkListener.onSocialNetworkError(network, error);
 				}
 			}
 			
@@ -388,8 +399,9 @@ public class AuthPanelView extends BaseView {
 			@Override
 			public void onAuthFail(SocializeException error) {
 				cell.setEnabled(false);
-				if(listener != null) {
-					listener.onAuthFail(dialog, network, error);
+				
+				if(socialNetworkListener != null) {
+					socialNetworkListener.onSocialNetworkError(network, error);
 				}
 			}
 

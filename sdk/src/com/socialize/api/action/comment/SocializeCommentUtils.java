@@ -28,11 +28,11 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.action.SocializeActionUtilsBase;
 import com.socialize.entity.Entity;
 import com.socialize.entity.User;
-import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.auth.ShareDialogListener;
 import com.socialize.ui.dialog.AuthRequestDialogFactory;
 
@@ -53,13 +53,12 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 		
 		if(isDisplayAuthDialog()) {
 			authRequestDialogFactory.show(context, new ShareDialogListener() {
+				
+				@Override
+				public void onShow(Dialog dialog, AuthPanelView dialogView) {}
+				
 				@Override
 				public void onContinue(Dialog dialog, SocialNetwork... networks) {
-					commentSystem.addComment(session, e, text, getDefaultShareOptions(), listener);
-				}
-
-				@Override
-				public void onAuthFail(Dialog dialog, SocialNetwork network, SocializeException error) {
 					commentSystem.addComment(session, e, text, getDefaultShareOptions(), listener);
 				}
 

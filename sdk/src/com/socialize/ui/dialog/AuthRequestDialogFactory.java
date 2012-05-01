@@ -32,6 +32,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout.LayoutParams;
 import com.socialize.android.ioc.BeanCreationListener;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.networks.SocialNetworkListener;
 import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.auth.ShareDialogListener;
 import com.socialize.ui.util.Colors;
@@ -48,10 +49,10 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 	private Colors colors;
 	
 	public Dialog show(View parent, int displayOptions) {
-		return show(parent, null, displayOptions);
+		return show(parent, null, null, displayOptions);
 	}
 	
-	public Dialog show(final View parent, final ShareDialogListener listener, int displayOptions) {
+	public Dialog show(final View parent, SocialNetworkListener socialNetworkListener, final ShareDialogListener listener, int displayOptions) {
 		return show(parent.getContext(), listener, displayOptions);
 	}
 
@@ -91,6 +92,10 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 			    dialog.show();
 			    
 				progress.dismiss();
+				
+				if(listener != null) {
+					listener.onShow(dialog, view);
+				}
 			}
 		}, listener, dialog, displayOptions);
 		

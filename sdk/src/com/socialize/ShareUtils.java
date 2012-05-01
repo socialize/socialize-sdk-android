@@ -24,12 +24,13 @@ package com.socialize;
 import java.lang.reflect.Proxy;
 import android.app.Activity;
 import com.socialize.api.action.share.ShareUtilsProxy;
+import com.socialize.api.action.share.SocialNetworkDialogListener;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.entity.Entity;
 import com.socialize.entity.User;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
-import com.socialize.networks.SocialNetworkShareListener;
 
 
 /**
@@ -54,8 +55,8 @@ public class ShareUtils {
 				new SocializeActionProxy("shareUtils")); // Bean name
 	}
 	
-	public static void showShareDialog (Activity context, Entity e, int options, SocialNetworkShareListener listener) {
-		proxy.showShareDialog(context, e, options, listener);
+	public static void showShareDialog (Activity context, Entity e, int options, SocialNetworkDialogListener listener) {
+		proxy.showShareDialog(context, e, options, listener, listener);
 	};
 	
 	public static void shareViaEmail(Activity context, Entity e, ShareAddListener listener) {

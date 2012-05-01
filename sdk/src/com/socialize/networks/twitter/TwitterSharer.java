@@ -23,11 +23,11 @@ package com.socialize.networks.twitter;
 
 import android.app.Activity;
 import com.socialize.api.action.ActionType;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.networks.AbstractSocialNetworkSharer;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkShareListener;
 
 /**
  * @author Jason Polites

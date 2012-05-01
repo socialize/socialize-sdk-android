@@ -25,7 +25,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
-import android.view.View;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
@@ -63,7 +62,7 @@ public class ActionBarTestUtils2 {
 		
 		final AuthRequestDialogFactory mockFactory = new AuthRequestDialogFactory() {
 			@Override
-			public Dialog show(View parent, ShareDialogListener listener, int displayOptions) {
+			public Dialog show(Context parent, ShareDialogListener listener, int displayOptions) {
 				TestUtils.addResult("success");
 				return null;
 			}
@@ -206,7 +205,7 @@ public class ActionBarTestUtils2 {
 		
 		final AuthRequestDialogFactory mockFactory = new AuthRequestDialogFactory() {
 			@Override
-			public Dialog show(View parent, ShareDialogListener listener, int displayOptions) {
+			public Dialog show(Context parent, ShareDialogListener listener, int displayOptions) {
 				TestUtils.addResult("fail");
 				return null;
 			}

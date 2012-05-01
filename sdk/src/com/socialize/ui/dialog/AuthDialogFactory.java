@@ -23,6 +23,7 @@ package com.socialize.ui.dialog;
 
 import android.app.Dialog;
 import android.view.View;
+import com.socialize.networks.SocialNetworkListener;
 import com.socialize.ui.auth.ShareDialogListener;
 
 /**
@@ -31,6 +32,6 @@ import com.socialize.ui.auth.ShareDialogListener;
  */
 public interface AuthDialogFactory {
 
-	public Dialog show(View parent, ShareDialogListener listener, int displayOptions);
+	public Dialog show(View parent, SocialNetworkListener socialNetworkListener, ShareDialogListener listener, int displayOptions);
 
 }

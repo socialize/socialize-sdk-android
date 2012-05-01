@@ -44,6 +44,7 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.actionbar.OnActionBarEventListener.ActionBarEvent;
+import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.auth.ShareDialogListener;
 import com.socialize.ui.cache.CacheableEntity;
 import com.socialize.ui.cache.EntityCache;
@@ -330,16 +331,13 @@ public class ActionBarLayoutView extends BaseView {
 					(getSocialize().isSupported(AuthProviderType.FACEBOOK) || getSocialize().isSupported(AuthProviderType.FACEBOOK)) &&
 					(!getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) || !getSocialize().isAuthenticated(AuthProviderType.TWITTER))) {
 					
-					authRequestDialogFactory.show(button, new ShareDialogListener() {
-						
+					authRequestDialogFactory.show(button, null, new ShareDialogListener() {
+						@Override
+						public void onShow(Dialog dialog, AuthPanelView dialogView) {}
+
 						@Override
 						public void onContinue(Dialog dialog, SocialNetwork...networks) {
 							doLike(button, localEntity, networks);
-						}
-
-						@Override
-						public void onAuthFail(Dialog dialog, SocialNetwork network, SocializeException error) {
-							showError(button.getContext(), error);
 						}
 
 						@Override

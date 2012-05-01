@@ -37,6 +37,7 @@ import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ShareType;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.facebook.FacebookSessionStore;
 import com.socialize.config.SocializeConfig;
@@ -51,7 +52,6 @@ import com.socialize.facebook.FacebookError;
 import com.socialize.facebook.RequestListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkShareListener;
 import com.socialize.util.AppUtils;
 import com.socialize.util.StringUtils;
 

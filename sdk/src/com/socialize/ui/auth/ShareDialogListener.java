@@ -22,7 +22,6 @@
 package com.socialize.ui.auth;
 
 import android.app.Dialog;
-import com.socialize.error.SocializeException;
 import com.socialize.networks.SocialNetwork;
 
 /**
@@ -30,9 +29,9 @@ import com.socialize.networks.SocialNetwork;
  */
 public interface ShareDialogListener {
 	
-	public void onContinue(Dialog dialog, SocialNetwork...networks);
+	public void onShow(Dialog dialog, AuthPanelView dialogView);
 	
-	public void onAuthFail(Dialog dialog, SocialNetwork network, SocializeException error);
+	public void onContinue(Dialog dialog, SocialNetwork...networks);
 	
 	public void onCancel(Dialog dialog);
 	

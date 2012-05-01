@@ -25,13 +25,13 @@ import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.api.action.ShareType;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.Share;
 import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkShareListener;
 import com.socialize.networks.facebook.FacebookSharer;
 
 

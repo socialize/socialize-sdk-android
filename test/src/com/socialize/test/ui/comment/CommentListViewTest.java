@@ -101,7 +101,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		view.setAuthRequestDialogFactory(authRequestDialogFactory);
 		
-		AndroidMock.expect(authRequestDialogFactory.show(view, listener, ShareUtils.FACEBOOK | ShareUtils.TWITTER)).andReturn(dialog);
+		AndroidMock.expect(authRequestDialogFactory.show(getContext(), listener, ShareUtils.FACEBOOK | ShareUtils.TWITTER)).andReturn(dialog);
 		
 		AndroidMock.replay(authRequestDialogFactory);
 		AndroidMock.replay(socializeService);

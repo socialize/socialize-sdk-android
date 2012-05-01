@@ -19,11 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks;
+package com.socialize.api.action.share;
 
 import java.util.Map;
 import android.app.Activity;
 import com.socialize.listener.share.ShareAddListener;
+import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
 
 
 /**

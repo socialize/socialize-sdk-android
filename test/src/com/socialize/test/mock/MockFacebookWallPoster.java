@@ -2,11 +2,11 @@ package com.socialize.test.mock;
 
 import android.app.Activity;
 import android.net.Uri;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.Share;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkShareListener;
 import com.socialize.networks.facebook.FacebookWallPoster;
 
 public class MockFacebookWallPoster implements FacebookWallPoster {

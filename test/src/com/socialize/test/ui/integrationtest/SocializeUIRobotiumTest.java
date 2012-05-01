@@ -22,13 +22,11 @@
 package com.socialize.test.ui.integrationtest;
 
 import java.util.ArrayList;
-
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-
 import com.jayway.android.robotium.solo.Solo;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
