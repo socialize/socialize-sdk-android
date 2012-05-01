@@ -27,7 +27,7 @@ import android.view.View;
 import android.view.Window;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
-import com.socialize.ui.auth.AuthRequestDialogListener;
+import com.socialize.ui.auth.ShareDialogListener;
 import com.socialize.util.Drawables;
 
 /**
@@ -43,7 +43,7 @@ public abstract class BaseAuthDialogFactory implements AuthDialogFactory  {
 	 * @see com.socialize.ui.dialog.AuthDialogFactory#show(android.view.View, com.socialize.ui.auth.AuthRequestListener)
 	 */
 	@Override
-	public abstract Dialog show(View parent, AuthRequestDialogListener listener, int displayOptions);
+	public abstract Dialog show(View parent, ShareDialogListener listener, int displayOptions);
 	
 	// So we can mock
 	protected Dialog newDialog(Context context) {

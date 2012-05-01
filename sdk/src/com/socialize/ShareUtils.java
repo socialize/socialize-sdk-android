@@ -29,7 +29,7 @@ import com.socialize.entity.User;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
-import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.SocialNetworkShareListener;
 
 
 /**
@@ -42,6 +42,7 @@ public class ShareUtils {
 	public static final int SMS = 1<<1;
 	public static final int FACEBOOK = 1<<2;
 	public static final int TWITTER = 1<<3;
+	public static final int SOCIAL = FACEBOOK|TWITTER;
 	public static final int ALL = EMAIL|SMS|FACEBOOK|TWITTER;
 	
 	static ShareUtilsProxy proxy;
@@ -53,8 +54,8 @@ public class ShareUtils {
 				new SocializeActionProxy("shareUtils")); // Bean name
 	}
 	
-	public static void showShareDialog (Activity context, Entity e, ShareAddListener listener) {
-		proxy.showShareDialog(context, e, listener);
+	public static void showShareDialog (Activity context, Entity e, int options, SocialNetworkShareListener listener) {
+		proxy.showShareDialog(context, e, options, listener);
 	};
 	
 	public static void shareViaEmail(Activity context, Entity e, ShareAddListener listener) {
@@ -65,7 +66,7 @@ public class ShareUtils {
 		proxy.shareViaSMS(context, e, listener);
 	};
 
-	public static void shareViaSocialNetworks(Activity context, Entity e, SocialNetworkListener listener) {
+	public static void shareViaSocialNetworks(Activity context, Entity e, SocialNetworkShareListener listener) {
 		proxy.shareViaSocialNetworks(context, e, listener);
 	};
 	

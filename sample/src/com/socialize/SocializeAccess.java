@@ -5,14 +5,14 @@ import com.socialize.android.ioc.ProxyObject;
 import com.socialize.listener.SocializeInitListener;
 
 public class SocializeAccess {
-	public static <T extends Object> T getBean(String beanName) {
-		return getBean(Socialize.getSocialize(), beanName);
+	public static <T extends Object> T getBean(String beanName, Object...args) {
+		return getBean(Socialize.getSocialize(), beanName, args);
 	}
 	
-	public static <T extends Object> T getBean(SocializeService socialize, String beanName) {
+	public static <T extends Object> T getBean(SocializeService socialize, String beanName, Object...args) {
 		if(socialize instanceof SocializeServiceImpl) {
 			SocializeServiceImpl impl = (SocializeServiceImpl) socialize;
-			return impl.getContainer().getBean(beanName);
+			return impl.getContainer().getBean(beanName, args);
 		}
 		return null;
 	}

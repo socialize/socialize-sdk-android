@@ -28,7 +28,7 @@ import com.socialize.networks.SocialNetwork;
 /**
  * @author Jason Polites
  */
-public interface AuthRequestDialogListener {
+public interface ShareDialogListener {
 	
 	public void onContinue(Dialog dialog, SocialNetwork...networks);
 	

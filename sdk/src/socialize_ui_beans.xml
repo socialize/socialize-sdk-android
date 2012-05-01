@@ -401,6 +401,32 @@
 	
 	
 	<bean 
+		id="emailCell" 
+		class="com.socialize.ui.auth.EmailCell" 
+		singleton="false"
+		extends="clickableSectionCell">
+		<constructor-arg type="activity"/>	
+		<property name="backgroundColor" value="#293036"/>
+		<property name="bgAlpha" value="255" type="integer"/>
+		<property name="displayText" value="Email"/>
+	</bean>	
+	
+	<factory id="emailCellFactory" makes="emailCell"/>
+	
+	<bean 
+		id="smsCell" 
+		class="com.socialize.ui.auth.SMSCell" 
+		singleton="false"
+		extends="clickableSectionCell">
+		<constructor-arg type="activity"/>	
+		<property name="backgroundColor" value="#293036"/>
+		<property name="bgAlpha" value="255" type="integer"/>
+		<property name="displayText" value="SMS"/>
+	</bean>			
+	
+	<factory id="smsCellFactory" makes="smsCell"/>
+	
+	<bean 
 		id="authContinueButton" 
 		singleton="false"
 		extends="socializeButton">
@@ -443,6 +469,8 @@
 		<property name="facebookSignInCellFactory" ref="facebookSignInCellFactory"/>
 		<property name="twitterSignInCellFactory" ref="twitterSignInCellFactory"/>
 		<property name="anonCellFactory" ref="anonCellFactory"/>
+		<property name="emailCellFactory" ref="emailCellFactory"/>
+		<property name="smsCellFactory" ref="smsCellFactory"/>
 		
 		<property name="cancelButton" ref="authCancelButton"/>
 		<property name="continueButton" ref="authContinueButton"/>

@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import android.view.View;
 
+import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.SocializeSystem;
@@ -37,6 +38,8 @@ import com.socialize.networks.twitter.TwitterSignInCell;
 import com.socialize.test.ui.SocializeUIActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.auth.AuthPanelView;
+import com.socialize.ui.auth.EmailCell;
+import com.socialize.ui.auth.SMSCell;
 
 /**
  * @author Jason Polites
@@ -75,7 +78,8 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 		// the twitter button is not shown.  Forcing twitter config here
 		Socialize.getSocialize().getConfig().setTwitterKeySecret("foo", "bar");
 		
-		final AuthPanelView view = SocializeAccess.getBean("authPanelView");
+		final AuthPanelView view = SocializeAccess.getBean("authPanelView", ShareUtils.ALL);
+		
 		
 		final CountDownLatch latch0 = new CountDownLatch(1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
@@ -90,12 +94,15 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 		
 		latch0.await(10, TimeUnit.SECONDS);
 		
-		
 		final FacebookSignInCell fbButton = TestUtils.findView(view, FacebookSignInCell.class);
 		final TwitterSignInCell twButton = TestUtils.findView(view, TwitterSignInCell.class);
+		final EmailCell emailCell = TestUtils.findView(view, EmailCell.class);
+		final SMSCell smsCell = TestUtils.findView(view, SMSCell.class);
 		
 		assertNotNull(fbButton);
 		assertNotNull(twButton);
+		assertNotNull(emailCell);
+		assertNotNull(smsCell);
 		
 		runTestOnUiThread(new Runnable() {
 			@Override

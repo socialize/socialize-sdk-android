@@ -33,7 +33,7 @@ import android.widget.LinearLayout.LayoutParams;
 import com.socialize.android.ioc.BeanCreationListener;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.ui.auth.AuthPanelView;
-import com.socialize.ui.auth.AuthRequestDialogListener;
+import com.socialize.ui.auth.ShareDialogListener;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DisplayUtils;
 
@@ -51,11 +51,11 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 		return show(parent, null, displayOptions);
 	}
 	
-	public Dialog show(final View parent, final AuthRequestDialogListener listener, int displayOptions) {
+	public Dialog show(final View parent, final ShareDialogListener listener, int displayOptions) {
 		return show(parent.getContext(), listener, displayOptions);
 	}
 
-	public Dialog show(final Context context, final AuthRequestDialogListener listener, int displayOptions) {
+	public Dialog show(final Context context, final ShareDialogListener listener, int displayOptions) {
 
 		final Dialog dialog = newDialog(context);
 		final ProgressDialog progress = SafeProgressDialog.show(context, "", "Please wait...");

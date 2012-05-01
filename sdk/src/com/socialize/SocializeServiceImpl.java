@@ -87,9 +87,9 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.share.ShareAddListener;
-import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionListListener;
+import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
@@ -888,7 +888,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	protected void handleActionShare(Activity activity, final ShareType shareType, final Share share, String shareText, Location location, boolean autoAuth, final ShareAddListener shareAddListener) {
 		shareSystem.share(activity, session, share, shareText, location, shareType, autoAuth, new ShareHandlerListener() {
 			@Override
-			public void onError(Activity parent, SocializeAction action, Throwable error) {
+			public void onError(Activity parent, SocializeAction action, Exception error) {
 				if(logger != null) {
 					logger.error("Failed to share action to [" +
 							shareType +
@@ -915,7 +915,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	protected void handleActionShare(Activity activity, final SocialNetwork socialNetwork, SocializeAction action, String shareText, Location location, boolean autoAuth, final SocialNetworkListener listener) {
 		shareSystem.share(activity, session, action, shareText, location, ShareType.valueOf(socialNetwork), autoAuth, new ShareHandlerListener() {
 			@Override
-			public void onError(Activity parent, SocializeAction action, Throwable error) {
+			public void onError(Activity parent, SocializeAction action, Exception error) {
 				if(logger != null) {
 					logger.error("Failed to share action to [" +
 							socialNetwork +
@@ -923,23 +923,15 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				}
 				
 				if(listener != null) {
-					listener.onNetworkError(parent, socialNetwork, error);
+					listener.onSocialNetworkError(socialNetwork, error);
 				}
 			}
 			
 			@Override
-			public void onBeforePost(Activity parent) {
-				if(listener != null) {
-					listener.onBeforePost(parent, socialNetwork);
-				}
-			}
+			public void onBeforePost(Activity parent) {}
 			
 			@Override
-			public void onAfterPost(Activity parent, SocializeAction action) {
-				if(listener != null) {
-					listener.onAfterPost(parent, socialNetwork);
-				}
-			}
+			public void onAfterPost(Activity parent, SocializeAction action) {}
 		});	
 	}
 

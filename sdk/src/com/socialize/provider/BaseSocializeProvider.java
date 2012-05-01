@@ -320,36 +320,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 					session.setUser(user);
 					
 					// Ensure the user credentials match the user auth data returned from the server
-					List<UserAuthData> authData = user.getAuthData();
-					UserProviderCredentialsMap credentials = session.getUserProviderCredentials();
-						
-					if(credentials != null) {
-
-						if(authData != null) {
-							Map<AuthProviderType, UserProviderCredentials> validCreds = new LinkedHashMap<AuthProviderType, UserProviderCredentials>();
-							for (UserAuthData userAuthData : authData) {
-								UserProviderCredentials creds = credentials.get(userAuthData.getAuthProviderType());
-								if(creds != null) {
-									validCreds.put(userAuthData.getAuthProviderType(), creds);
-								}
-							}
-							
-							// Clear and reset
-							credentials.removeAll();
-							
-							Set<Entry<AuthProviderType, UserProviderCredentials>> entrySet = validCreds.entrySet();
-							
-							for (Entry<AuthProviderType, UserProviderCredentials> entry : entrySet) {
-								credentials.put(entry.getKey(), entry.getValue());
-							}
-						}
-						else {
-							credentials.removeAll();
-						}
-
-						// Set back to session
-						session.setUserProviderCredentials(credentials);								
-					}
+					verifyProiderCredentialsForUser(session, user);
 					
 					saveSession(session);
 				}
@@ -369,6 +340,39 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 		
 		
 		return session;
+	}
+	
+	protected void verifyProiderCredentialsForUser(WritableSession session, User user) {
+		List<UserAuthData> authData = user.getAuthData();
+		UserProviderCredentialsMap credentials = session.getUserProviderCredentials();
+			
+		if(credentials != null) {
+
+			if(authData != null) {
+				Map<AuthProviderType, UserProviderCredentials> validCreds = new LinkedHashMap<AuthProviderType, UserProviderCredentials>();
+				for (UserAuthData userAuthData : authData) {
+					UserProviderCredentials creds = credentials.get(userAuthData.getAuthProviderType());
+					if(creds != null) {
+						validCreds.put(userAuthData.getAuthProviderType(), creds);
+					}
+				}
+				
+				// Clear and reset
+				credentials.removeAll();
+				
+				Set<Entry<AuthProviderType, UserProviderCredentials>> entrySet = validCreds.entrySet();
+				
+				for (Entry<AuthProviderType, UserProviderCredentials> entry : entrySet) {
+					credentials.put(entry.getKey(), entry.getValue());
+				}
+			}
+			else {
+				credentials.removeAll();
+			}
+
+			// Set back to session
+			session.setUserProviderCredentials(credentials);								
+		}
 	}
 
 	@Override

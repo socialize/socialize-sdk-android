@@ -46,7 +46,7 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 	private AuthProviderInfoFactory<AuthProviderInfo> authProviderInfoFactory;
 		
 	@Override
-	public void share(final Activity context, final Entity entity, final PropagationInfo urlSet, final String comment, boolean autoAuth, final ActionType type, final SocialNetworkListener listener) {
+	public void share(final Activity context, final Entity entity, final PropagationInfo urlSet, final String comment, boolean autoAuth, final ActionType type, final SocialNetworkShareListener listener) {
 
 		AuthProviderType authProviderType = AuthProviderType.valueOf(getNetwork());
 		
@@ -71,11 +71,6 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 
 					@Override
 					public void onAuthSuccess(SocializeSession session) {
-						
-						if(listener != null) {
-							listener.onBeforePost(context, getNetwork());
-						}
-						
 						doShare(context, entity, urlSet, comment, listener, type);
 					}
 
@@ -93,7 +88,7 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 		}	
 	}
 	
-	protected void doError(SocializeException e, Activity parent, SocialNetworkListener listener) {
+	protected void doError(SocializeException e, Activity parent, SocialNetworkShareListener listener) {
 		String msg = "Error sharing to " + getNetwork().name();
 		
 		if(logger != null) {
@@ -104,13 +99,13 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 		}
 		
 		if(listener != null) {
-			listener.onNetworkError(parent, getNetwork(), e);
+			listener.onSocialNetworkError(getNetwork(), e);
 		}
 	}
 	
 	protected abstract SocialNetwork getNetwork();
 	
-	protected abstract void doShare(final Activity context, Entity entity, PropagationInfo urlSet, String comment, final SocialNetworkListener listener, ActionType type);
+	protected abstract void doShare(final Activity context, Entity entity, PropagationInfo urlSet, String comment, final SocialNetworkShareListener listener, ActionType type);
 	
 	public void setConfig(SocializeConfig config) {
 		this.config = config;

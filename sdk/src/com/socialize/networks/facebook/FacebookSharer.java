@@ -28,7 +28,7 @@ import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.networks.AbstractSocialNetworkSharer;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.SocialNetworkShareListener;
 
 /**
  * @author Jason Polites
@@ -44,7 +44,7 @@ public class FacebookSharer extends AbstractSocialNetworkSharer {
 	}
 	
 	@Override
-	protected void doShare(Activity context, Entity entity, PropagationInfo urlSet, String comment, SocialNetworkListener listener, ActionType type) {
+	protected void doShare(Activity context, Entity entity, PropagationInfo urlSet, String comment, SocialNetworkShareListener listener, ActionType type) {
 		switch (type) {
 			case COMMENT:
 				facebookWallPoster.postComment(context, entity, comment, urlSet, listener);

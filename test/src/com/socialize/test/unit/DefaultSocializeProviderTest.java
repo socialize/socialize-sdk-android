@@ -153,6 +153,14 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 			protected AuthProviderData newAuthProviderData() {
 				return authProviderData;
 			}
+
+			@Override
+			protected void verifyProiderCredentialsForUser(WritableSession session, User user) {
+				// Do nothing for now
+				// TODO: Add test for this.
+			}
+			
+			
 		};
 		provider.init(mockContext);
 		provider.setSessionPersister(sessionPersister);

@@ -23,7 +23,7 @@ package com.socialize.ui.dialog;
 
 import android.app.Dialog;
 import android.view.View;
-import com.socialize.ui.auth.AuthRequestDialogListener;
+import com.socialize.ui.auth.ShareDialogListener;
 
 /**
  * @author Jason Polites
@@ -31,6 +31,6 @@ import com.socialize.ui.auth.AuthRequestDialogListener;
  */
 public interface AuthDialogFactory {
 
-	public Dialog show(View parent, AuthRequestDialogListener listener, int displayOptions);
+	public Dialog show(View parent, ShareDialogListener listener, int displayOptions);
 
 }

@@ -36,9 +36,9 @@ import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.SocialNetworkShareListener;
 import com.socialize.share.ShareHandlerListener;
-import com.socialize.ui.auth.AuthRequestDialogListener;
+import com.socialize.ui.auth.ShareDialogListener;
 import com.socialize.ui.dialog.AuthRequestDialogFactory;
 
 /**
@@ -48,15 +48,10 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	
 	private ShareSystem shareSystem;
 	private AuthRequestDialogFactory authRequestDialogFactory;
-
-	@Override
-	public void showShareDialog(Activity context, Entity e, ShareAddListener listener) {
-
-	}
 	
 	@Override
-	public void shareViaSocialNetworks(final Activity context, final Entity e, final SocialNetworkListener listener) {
-		authRequestDialogFactory.show(context, new AuthRequestDialogListener() {
+	public void showShareDialog(final Activity context, final Entity e, int options, final SocialNetworkShareListener listener) {
+		authRequestDialogFactory.show(context, new ShareDialogListener() {
 			@Override
 			public void onCancel(Dialog dialog) {
 				listener.onCancel();
@@ -68,53 +63,53 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 					@Override
 					public void onError(SocializeException error) {
 						if(listener != null) {
-							listener.onError(context, error);
+							listener.onError(error);
 						}
 					}
 					
 					@Override
 					public void onCreate(Share share) {
+						if(listener != null) {
+							listener.onCreate(share);
+						}
+						
 						if(share != null && shareSystem != null) {
 							for (SocialNetwork network : networks) {
 								handleActionShare(context, getSocialize().getSession(), network, share, listener);	
 							}
 						}
 					}
-				});				
+				});
 			}
 			
 			@Override
 			public void onAuthFail(Dialog dialog, SocialNetwork network, SocializeException error) {
-				listener.onNetworkError(context, network, error);
+				listener.onSocialNetworkError(network, error);
 			}
-		}, ShareUtils.FACEBOOK | ShareUtils.TWITTER);
+		}, options);		
+	}
+
+	@Override
+	public void shareViaSocialNetworks(final Activity context, final Entity e, final SocialNetworkShareListener listener) {
+		showShareDialog(context, e, ShareUtils.FACEBOOK | ShareUtils.TWITTER, listener);
 	}
 	
-	protected void handleActionShare(Activity activity, final SocializeSession session, final SocialNetwork socialNetwork, SocializeAction action, final SocialNetworkListener listener) {
+	protected void handleActionShare(Activity activity, final SocializeSession session, final SocialNetwork socialNetwork, SocializeAction action, final SocialNetworkShareListener listener) {
 		shareSystem.share(activity, session, action, "", null, ShareType.valueOf(socialNetwork), false, new ShareHandlerListener() {
 			@Override
-			public void onError(Activity parent, SocializeAction action, Throwable error) {
+			public void onError(Activity parent, SocializeAction action, Exception error) {
 				if(listener != null) {
-					listener.onNetworkError(parent, socialNetwork, error);
+					listener.onSocialNetworkError(socialNetwork, error);
 				}
 			}
 			
 			@Override
-			public void onBeforePost(Activity parent) {
-				if(listener != null) {
-					listener.onBeforePost(parent, socialNetwork);
-				}
-			}
+			public void onBeforePost(Activity parent) {}
 			
 			@Override
-			public void onAfterPost(Activity parent, SocializeAction action) {
-				if(listener != null) {
-					listener.onAfterPost(parent, socialNetwork);
-				}
-			}
+			public void onAfterPost(Activity parent, SocializeAction action) {}
 		});	
 	}
-	
 
 	@Override
 	public void shareViaEmail(Activity context, Entity e, ShareAddListener listener) {

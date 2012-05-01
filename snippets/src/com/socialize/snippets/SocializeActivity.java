@@ -1,11 +1,12 @@
 package com.socialize.snippets;
 
+import java.util.List;
+import java.util.Map;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-
 import com.socialize.Socialize;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
@@ -279,7 +280,8 @@ public class SocializeActivity extends Activity {
 					// Handle error
 				}
 
-				public void onList(ListResult<Like> likes) {
+				@Override
+				public void onList(List<Like> items, int totalSize) {
 					// Handle success
 				}
 			});
@@ -328,15 +330,17 @@ public class SocializeActivity extends Activity {
 			
 			// Listen for the outcome of the facebook post
 			options.setListener(new SocialNetworkListener() {
-				
-				public void onError(Activity activity, SocialNetwork network, String message, Throwable e) {
+				@Override
+				public void onSocialNetworkError(SocialNetwork network, Exception error) {
 					// Handle error
 				}
-				
-				public void onBeforePost(Activity activity, SocialNetwork network) {
+
+				@Override
+				public void onBeforePost(Activity parent, SocialNetwork socialNetwork, Map<String, String> params) {
 					// Handle before post
 				}
-				
+
+				@Override
 				public void onAfterPost(Activity activity, SocialNetwork network) {
 					// Handle after post
 				}

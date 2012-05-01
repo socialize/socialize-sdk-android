@@ -36,7 +36,7 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.ui.auth.AuthRequestDialogListener;
+import com.socialize.ui.auth.ShareDialogListener;
 import com.socialize.ui.dialog.AuthRequestDialogFactory;
 
 /**
@@ -57,7 +57,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 		final SocializeSession session = getSocialize().getSession();
 		
 		if(isDisplayAuthDialog()) {
-			authRequestDialogFactory.show(context, new AuthRequestDialogListener() {
+			authRequestDialogFactory.show(context, new ShareDialogListener() {
 				@Override
 				public void onContinue(Dialog dialog, SocialNetwork... networks) {
 					likeSystem.addLike(session, e, SocializeLikeUtils.this.getDefaultShareOptions(), listener);

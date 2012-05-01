@@ -21,14 +21,17 @@
  */
 package com.socialize.share;
 
+import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.PropagationInfo;
+import com.socialize.entity.Share;
 import com.socialize.entity.SocializeAction;
+import com.socialize.error.SocializeException;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.SocialNetworkShareListener;
 import com.socialize.networks.facebook.FacebookSharer;
 
 
@@ -41,27 +44,35 @@ public class FacebookShareHandler extends AbstractShareHandler {
 	private FacebookSharer facebookSharer;
 	
 	@Override
-	protected void handle(Activity context, final SocializeAction action, String text, PropagationInfo info, final ShareHandlerListener listener) throws Exception {
-		facebookSharer.share(context, action.getEntity(), info, text, true, action.getActionType(), new SocialNetworkListener() {
+	protected void handle(final Activity context, final SocializeAction action, String text, PropagationInfo info, final ShareHandlerListener listener) throws Exception {
+		facebookSharer.share(context, action.getEntity(), info, text, true, action.getActionType(), new SocialNetworkShareListener() {
 			
 			@Override
-			public void onNetworkError(Activity parent, SocialNetwork network, Throwable error) {
-				listener.onError(parent, action, error);
-			}
+			public void onCreate(Share entity) {}
 
 			@Override
-			public void onError(Activity parent, Throwable error) {
-				listener.onError(parent, action, error);
+			public void onError(SocializeException error) {
+				if(listener != null) {
+					listener.onError(context, action, error);
+				}
 			}
 
 			@Override
 			public void onCancel() {}
 			
 			@Override
-			public void onBeforePost(Activity parent, SocialNetwork network) {}
+			public void onBeforePost(Activity parent, SocialNetwork network, Map<String, String> params) {
+				if(listener != null) {
+					listener.onBeforePost(parent);
+				}
+			}
 			
 			@Override
-			public void onAfterPost(Activity parent, SocialNetwork network) {}
+			public void onAfterPost(Activity parent, SocialNetwork network) {
+				if(listener != null) {
+					listener.onAfterPost(parent, action);
+				}
+			}
 		});
 	}
 	

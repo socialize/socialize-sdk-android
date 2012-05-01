@@ -29,7 +29,6 @@ import android.graphics.drawable.GradientDrawable.Orientation;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -56,7 +55,7 @@ import com.socialize.view.BaseView;
  */
 public class AuthPanelView extends BaseView {
 
-	private AuthRequestDialogListener listener;
+	private ShareDialogListener listener;
 	private Dialog dialog;
 	private SocializeConfig config;
 	private Colors colors;
@@ -66,15 +65,20 @@ public class AuthPanelView extends BaseView {
 	
 	private int displayOptions;
 	
-	public AuthPanelView(Context context, AuthRequestDialogListener listener, Dialog dialog, int displayOptions) {
+	public AuthPanelView(Context context, ShareDialogListener listener, Dialog dialog, int displayOptions) {
 		this(context);
 		this.listener = listener;
 		this.dialog = dialog;
 		this.displayOptions = displayOptions;
 	}
-
+	
 	public AuthPanelView(Context context) {
+		this(context, ShareUtils.SOCIAL);
+	}
+	
+	public AuthPanelView(Context context, int displayOptions) {
 		super(context);
+		this.displayOptions = displayOptions;
 	}
 	
 	private IBeanFactory<FacebookSignInCell> facebookSignInCellFactory;
@@ -123,7 +127,7 @@ public class AuthPanelView extends BaseView {
 		GradientDrawable headerBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[]{colors.getColor(Colors.AUTH_PANEL_BOTTOM), colors.getColor(Colors.AUTH_PANEL_TOP)});
 		headerBG.setCornerRadii(new float[]{headerRadius, headerRadius, headerRadius, headerRadius, 0.0f, 0.0f, 0.0f, 0.0f});
 		header.setBackgroundDrawable(headerBG);
-		header.setText("Authenticate");
+		header.setText("Choose a Destination");
 		header.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
 		header.setTextColor(Color.WHITE);
 		header.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
@@ -143,10 +147,10 @@ public class AuthPanelView extends BaseView {
 		RelativeLayout badgeLayout = new RelativeLayout(getContext());
 		badgeLayout.setLayoutParams(badgeLayoutParams);
 
-		ImageView authBadge = new ImageView(getContext());
-		authBadge.setImageDrawable(drawables.getDrawable("auth_badge.png"));
-		authBadge.setLayoutParams(badgeParams);
-		authBadge.setPadding(0, 0, 0, padding);
+//		ImageView authBadge = new ImageView(getContext());
+//		authBadge.setImageDrawable(drawables.getDrawable("auth_badge.png"));
+//		authBadge.setLayoutParams(badgeParams);
+//		authBadge.setPadding(0, 0, 0, padding);
 		
 		boolean fbOK = getSocialize().isSupported(AuthProviderType.FACEBOOK) && ((displayOptions & ShareUtils.FACEBOOK) != 0);
 		boolean twOK = getSocialize().isSupported(AuthProviderType.TWITTER) && ((displayOptions & ShareUtils.TWITTER) != 0);
@@ -203,7 +207,7 @@ public class AuthPanelView extends BaseView {
 			twitterSignInCell.setAuthListener(getAuthClickListener(twitterSignInCell, SocialNetwork.TWITTER));
 		}
 		
-		badgeLayout.addView(authBadge);
+//		badgeLayout.addView(authBadge);
 		contentLayout.addView(badgeLayout);
 		
 		if(fbOK) contentLayout.addView(facebookSignInCell);
@@ -221,7 +225,6 @@ public class AuthPanelView extends BaseView {
 		anonLayout.addView(anonCell);
 		
 		contentLayout.addView(anonLayout);
-
 		
 //		if(config.isAllowAnonymousUser()) {
 		
@@ -348,6 +351,14 @@ public class AuthPanelView extends BaseView {
 		this.cancelButton = cancelButton;
 	}
 	
+	public void setEmailCellFactory(IBeanFactory<EmailCell> emailCellFactory) {
+		this.emailCellFactory = emailCellFactory;
+	}
+	
+	public void setSmsCellFactory(IBeanFactory<SMSCell> smsCellFactory) {
+		this.smsCellFactory = smsCellFactory;
+	}
+
 	protected void toggleContinueButton() {
 		if(config.isAllowAnonymousUser()) {
 			continueButton.setEnabled(true);

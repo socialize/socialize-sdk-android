@@ -21,6 +21,7 @@
  */
 package com.socialize.networks;
 
+import java.util.Map;
 import android.app.Activity;
 
 /**
@@ -29,14 +30,10 @@ import android.app.Activity;
  */
 public interface SocialNetworkListener {
 	
-	public void onBeforePost(Activity parent, SocialNetwork network);
+	public void onSocialNetworkError(SocialNetwork network, Exception error);
 
-	public void onAfterPost(Activity parent, SocialNetwork network);
-	
-	public void onNetworkError(Activity parent, SocialNetwork network, Throwable error);
-	
-	public void onError(Activity parent, Throwable error);
-	
-	public void onCancel();
+	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, Map<String, String> params);
+
+	public void onAfterPost(Activity parent, SocialNetwork socialNetwork);
 	
 }

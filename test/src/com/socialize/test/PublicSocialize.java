@@ -173,45 +173,39 @@ public class PublicSocialize extends SocializeServiceImpl {
 		super.handleActionShare(activity, shareType, share, shareText, location, autoAuth, shareAddListener);
 	}
 
+
 	@Override
 	public void handleActionShare(Activity activity, SocialNetwork socialNetwork, SocializeAction action, String shareText, Location location, boolean autoAuth, SocialNetworkListener listener) {
-
 		super.handleActionShare(activity, socialNetwork, action, shareText, location, autoAuth, listener);
 	}
 
 	@Override
 	public boolean isAuthenticatedLegacy(AuthProviderType providerType) {
-
 		return super.isAuthenticatedLegacy(providerType);
 	}
 
 	@Override
 	public boolean assertAuthenticated(SocializeListener listener) {
-
 		return super.assertAuthenticated(listener);
 	}
 
 	@Override
 	public boolean assertInitialized(SocializeListener listener) {
-
 		return super.assertInitialized(listener);
 	}
 
 	@Override
 	public ActionBarView newActionBarView(Activity parent) {
-
 		return super.newActionBarView(parent);
 	}
 
 	@Override
 	public Intent newIntent(Activity context, Class<?> cls) {
-
 		return super.newIntent(context, cls);
 	}
 
 	@Override
 	public LayoutParams newLayoutParams(int width, int height) {
-
 		return super.newLayoutParams(width, height);
 	}
 

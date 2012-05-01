@@ -1,5 +1,6 @@
 package com.socialize.snippets;
 
+import java.util.Map;
 import android.app.Activity;
 
 import com.socialize.Socialize;
@@ -31,18 +32,22 @@ public class Twitter extends Activity {
 
 			// Listen for the outcome of the twitter post
 			options.setListener(new SocialNetworkListener() {
-
-				public void onError(Activity activity, SocialNetwork network, String message, Throwable e) {
+				@Override
+				public void onSocialNetworkError(SocialNetwork network, Exception error) {
 					// Handle error
 				}
 
-				public void onBeforePost(Activity activity, SocialNetwork network) {
+				@Override
+				public void onBeforePost(Activity parent, SocialNetwork socialNetwork, Map<String, String> params) {
 					// Handle before post
 				}
 
-				public void onAfterPost(Activity activity, SocialNetwork network) {
-					// Handle after post
+				
+				@Override
+				public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
+					// Handle before post
 				}
+				
 			});
 
 			// Add a comment to an entity

@@ -71,7 +71,7 @@ public class ShareOptions {
 	public void setListener(SocialNetworkListener listener) {
 		this.listener = listener;
 	}
-
+	
 	public boolean isShareTo(SocialNetwork destination) {
 		if(shareTo != null) {
 			for (SocialNetwork d : shareTo) {

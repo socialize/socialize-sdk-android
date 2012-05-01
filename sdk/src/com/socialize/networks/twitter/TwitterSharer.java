@@ -22,13 +22,12 @@
 package com.socialize.networks.twitter;
 
 import android.app.Activity;
-
 import com.socialize.api.action.ActionType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.networks.AbstractSocialNetworkSharer;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.SocialNetworkShareListener;
 
 /**
  * @author Jason Polites
@@ -44,12 +43,20 @@ public class TwitterSharer extends AbstractSocialNetworkSharer {
 		return SocialNetwork.TWITTER;
 	}
 
+	@Override
+	public void share(Activity context, Entity entity, PropagationInfo urlSet, String comment, boolean autoAuth, ActionType type, SocialNetworkShareListener listener) {
+		if(listener != null) {
+			listener.onBeforePost(context, getNetwork(), null);
+		}
+		super.share(context, entity, urlSet, comment, autoAuth, type, listener);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.networks.AbstractSocialNetworkSharer#doShare(android.app.Activity, com.socialize.entity.Entity, com.socialize.entity.PropagationUrlSet, java.lang.String, com.socialize.networks.SocialNetworkListener, com.socialize.api.action.ActionType)
 	 */
 	@Override
-	protected void doShare(Activity context, Entity entity, PropagationInfo urlSet, String comment, SocialNetworkListener listener, ActionType type) {
+	protected void doShare(Activity context, Entity entity, PropagationInfo urlSet, String comment, SocialNetworkShareListener listener, ActionType type) {
 		// Sharing done on server
 		if(listener != null) {
 			listener.onAfterPost(context, getNetwork());

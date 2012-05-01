@@ -35,5 +35,5 @@ public interface ShareHandlerListener {
 
 	public void onAfterPost(Activity parent, SocializeAction action);
 	
-	public void onError(Activity parent, SocializeAction action, Throwable error);
+	public void onError(Activity parent, SocializeAction action, Exception error);
 }

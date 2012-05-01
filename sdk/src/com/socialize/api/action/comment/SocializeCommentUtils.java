@@ -33,7 +33,7 @@ import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.ui.auth.AuthRequestDialogListener;
+import com.socialize.ui.auth.ShareDialogListener;
 import com.socialize.ui.dialog.AuthRequestDialogFactory;
 
 
@@ -52,7 +52,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 		final SocializeSession session = getSocialize().getSession();
 		
 		if(isDisplayAuthDialog()) {
-			authRequestDialogFactory.show(context, new AuthRequestDialogListener() {
+			authRequestDialogFactory.show(context, new ShareDialogListener() {
 				@Override
 				public void onContinue(Dialog dialog, SocialNetwork... networks) {
 					commentSystem.addComment(session, e, text, getDefaultShareOptions(), listener);

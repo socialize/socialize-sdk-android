@@ -21,28 +21,20 @@
  */
 package com.socialize.networks;
 
+import java.util.Map;
 import android.app.Activity;
+import com.socialize.listener.share.ShareAddListener;
 
-import com.socialize.api.action.ActionType;
-import com.socialize.entity.Entity;
-import com.socialize.entity.PropagationInfo;
 
 /**
- * Shares entities to a social network.
  * @author Jason Polites
- *
  */
-public interface SocialNetworkSharer {
-	
-	/**
-	 * Shares a like against the given entity to the given social network.
-	 * @param context The current context.
-	 * @param entity The entity to be shared.
-	 * @param urlSet The set of urls to be used in the share.
-	 * @param comment The comment provided by the user.
-	 * @param autoAuth If true authentication will be attempted automatically.
-	 * @param listener A listener to handle callbacks from the post.
-	 */
-	public void share(Activity context, Entity entity, PropagationInfo urlSet, String comment, boolean autoAuth, ActionType type, SocialNetworkShareListener listener);
-	
+public abstract class SocialNetworkShareListener extends ShareAddListener implements SocialNetworkListener {
+
+	public void onSocialNetworkError(SocialNetwork network, Exception error) {}
+
+	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, Map<String, String> params) {}
+
+	public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {}
+
 }
