@@ -259,7 +259,7 @@ public class CommentListView extends BaseView {
 					}
 					
 					if(showAuth && authSupported) {
-						authRequestDialogFactory.show(CommentListView.this, null, getCommentAuthListener(text, shareLocation, subscribe, networks), ShareUtils.FACEBOOK | ShareUtils.TWITTER);
+						authRequestDialogFactory.show(CommentListView.this.getContext(), getCommentAuthListener(text, shareLocation, subscribe, networks), ShareUtils.FACEBOOK | ShareUtils.TWITTER);
 					}
 					else {
 						// Post as anon

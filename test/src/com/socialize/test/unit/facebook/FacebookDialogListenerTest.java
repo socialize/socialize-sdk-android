@@ -22,6 +22,8 @@
 package com.socialize.test.unit.facebook;
 
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -50,7 +52,7 @@ import com.socialize.test.SocializeActivityTest;
 public class FacebookDialogListenerTest extends SocializeActivityTest {
 
 	
-	public void testOnCompleteSuccess() throws Exception {
+	public void testOnCompleteSuccess() throws Throwable {
 		
 		final String appId = "foobar";
 		final String id = "foo";
@@ -61,8 +63,10 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		Facebook facebook = AndroidMock.createMock(Facebook.class, appId);
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
 		
+		final CountDownLatch latch = new CountDownLatch(1);
+		
 		// Can't mock bundle, so create one with the data we expect.
-		Bundle bundle = new Bundle();
+		final Bundle bundle = new Bundle();
 		bundle.putString("access_token", token);
 		
 		AuthProviderListener listener = new AuthProviderListener() {
@@ -78,7 +82,6 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 				assertNotNull(response);
 				assertEquals(token, response.getToken());
 				assertEquals(id, response.getUserId());
-//				assertEquals(encodedProfileImage, response.getImageData());
 			}
 			
 			@Override
@@ -94,14 +97,14 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		};
 		
 		AndroidMock.expect(facebookSessionStore.save(facebook, context)).andReturn(true);
-//		AndroidMock.expect(facebookImageRetriever.getEncodedProfileImage(id)).andReturn(encodedProfileImage);
 		AndroidMock.expect(facebook.request("me")).andReturn(json);
 		
-		FacebookDialogListener dListener = new FacebookDialogListener(context, facebook, facebookSessionStore, listener) {
+		final FacebookDialogListener dListener = new FacebookDialogListener(context, facebook, facebookSessionStore, listener) {
 			
 			@Override
 			public void onFinish() {
 				addResult(true);
+				latch.countDown();
 			}
 			
 			@Override
@@ -110,16 +113,20 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 			}
 		};
 		
-//		dListener.setFacebookImageRetriever(facebookImageRetriever);
 		
 		AndroidMock.replay(facebookSessionStore);
-//		AndroidMock.replay(facebookImageRetriever);
 		AndroidMock.replay(facebook);
 		
-		dListener.onComplete(bundle);
+		runTestOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				dListener.onComplete(bundle);
+			}
+		});
+		
+		latch.await(20, TimeUnit.SECONDS);
 		
 		AndroidMock.verify(facebookSessionStore);
-//		AndroidMock.verify(facebookImageRetriever);
 		AndroidMock.verify(facebook);
 		
 		Boolean result = getNextResult();
@@ -128,7 +135,7 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 	}
 	
 	
-	public void testOnCompleteFail() throws Exception {
+	public void testOnCompleteFail() throws Throwable {
 		
 		final String appId = "foobar";
 		final String token = "bar";
@@ -138,11 +145,13 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
 		
 		// Can't mock bundle, so create one with the data we expect.
-		Bundle bundle = new Bundle();
+		final Bundle bundle = new Bundle();
 		bundle.putString("access_token", token);
 		
 		final String errorMessage = "foobar";
 		final IOException mockError = new IOException(errorMessage);
+		
+		final CountDownLatch latch = new CountDownLatch(1);
 		
 		AuthProviderListener listener = new AuthProviderListener() {
 			
@@ -172,11 +181,12 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		AndroidMock.expect(facebookSessionStore.save(facebook, context)).andReturn(true);
 		AndroidMock.expect(facebook.request("me")).andThrow(mockError);
 		
-		FacebookDialogListener dListener = new FacebookDialogListener(context, facebook, facebookSessionStore, listener) {
+		final FacebookDialogListener dListener = new FacebookDialogListener(context, facebook, facebookSessionStore, listener) {
 			
 			@Override
 			public void onFinish() {
 				addResult(true);
+				latch.countDown();
 			}
 			
 			@Override
@@ -188,7 +198,15 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		AndroidMock.replay(facebookSessionStore);
 		AndroidMock.replay(facebook);
 		
-		dListener.onComplete(bundle);
+		runTestOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				dListener.onComplete(bundle);
+			}
+		});
+		
+		latch.await(20, TimeUnit.SECONDS);
 		
 		AndroidMock.verify(facebookSessionStore);
 		AndroidMock.verify(facebook);
