@@ -159,8 +159,6 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 				// Do nothing for now
 				// TODO: Add test for this.
 			}
-			
-			
 		};
 		provider.init(mockContext);
 		provider.setSessionPersister(sessionPersister);

@@ -1657,6 +1657,11 @@
 		<property name="viewSystem" ref="viewSystem"/>
 	</bean>	
 	
+	<bean id="shareUtils" class="com.socialize.api.action.share.SocializeShareUtils">
+		<property name="shareSystem" ref="shareSystem"/>
+		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
+	</bean>		
+	
 	<bean id="commentUtils" class="com.socialize.api.action.comment.SocializeCommentUtils">
 		<property name="commentSystem" ref="commentSystem"/>
 		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
