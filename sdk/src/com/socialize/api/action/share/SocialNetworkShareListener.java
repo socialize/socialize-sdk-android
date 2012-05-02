@@ -21,9 +21,9 @@
  */
 package com.socialize.api.action.share;
 
-import java.util.Map;
 import android.app.Activity;
 import com.socialize.listener.share.ShareAddListener;
+import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 
@@ -35,7 +35,7 @@ public abstract class SocialNetworkShareListener extends ShareAddListener implem
 
 	public void onSocialNetworkError(SocialNetwork network, Exception error) {}
 
-	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, Map<String, String> params) {}
+	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {}
 
 	public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {}
 

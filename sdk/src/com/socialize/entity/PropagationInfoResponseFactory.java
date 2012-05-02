@@ -34,7 +34,7 @@ public class PropagationInfoResponseFactory extends JSONFactory<PropagationInfoR
 					JSONObject jsonObject = getJSONObject(from, name);
 					
 					if(jsonObject != null) {
-						PropagationInfo set = new PropagationInfo();
+						DefaultPropagationInfo set = new DefaultPropagationInfo();
 						set.setAppUrl(getString(jsonObject, "application_url"));
 						set.setEntityUrl(getString(jsonObject, "entity_url"));
 						to.addUrlSet(network, set);

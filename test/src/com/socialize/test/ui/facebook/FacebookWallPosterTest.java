@@ -35,7 +35,6 @@ import com.socialize.SocializeService;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
-import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.facebook.FacebookSessionStore;
@@ -49,6 +48,7 @@ import com.socialize.facebook.Facebook;
 import com.socialize.facebook.FacebookError;
 import com.socialize.facebook.RequestListener;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.DefaultFacebookWallPoster;
 import com.socialize.networks.facebook.FacebookImageUtils;
 import com.socialize.test.SocializeActivityTest;
@@ -60,7 +60,7 @@ import com.socialize.util.AppUtils;
  *
  */
 @UsesMocks ({
-	SocialNetworkShareListener.class,
+	SocialNetworkListener.class,
 	AppUtils.class,
 	ShareMessageBuilder.class,
 	SocializeConfig.class,
@@ -102,7 +102,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 	
 	public void doTestPostLike(String expectedString) {
 		
-		SocialNetworkShareListener listener = AndroidMock.createMock(SocialNetworkShareListener.class);
+		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
 		AppUtils appUtils = AndroidMock.createMock(AppUtils.class);
 		ShareMessageBuilder builder = AndroidMock.createMock(ShareMessageBuilder.class);
 		final PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
@@ -122,7 +122,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
 			
 			@Override
-			public void post(Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkShareListener listener) {
+			public void post(Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkListener listener) {
 				addResult(0, parent);
 				addResult(1, message);
 				addResult(2, listener);
@@ -137,7 +137,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		poster.setShareMessageBuilder(builder);
 		poster.postLike(parent, entity, info, listener);
 		
-		SocialNetworkShareListener listenerAfter = getResult(2);
+		SocialNetworkListener listenerAfter = getResult(2);
 		String messageAfter = getResult(1);
 		Activity parentAfter = getResult(0);
 		PropagationInfo infoAfter = getResult(3);
@@ -152,7 +152,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 	}	
 	
 	public void testPostComment(String expectedString) {
-		SocialNetworkShareListener listener = AndroidMock.createMock(SocialNetworkShareListener.class);
+		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
 		AppUtils appUtils = AndroidMock.createMock(AppUtils.class);
 		ShareMessageBuilder builder = AndroidMock.createMock(ShareMessageBuilder.class);
 		final PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
@@ -173,7 +173,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
 
 			@Override
-			public void post(Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkShareListener listener) {
+			public void post(Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkListener listener) {
 				addResult(0, parent);
 				addResult(1, message);
 				addResult(2, listener);
@@ -187,7 +187,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		poster.setShareMessageBuilder(builder);
 		poster.postComment(parent, entity, comment, info, listener);
 		
-		SocialNetworkShareListener listenerAfter = getResult(2);
+		SocialNetworkListener listenerAfter = getResult(2);
 		String messageAfter = getResult(1);
 		Activity parentAfter = getResult(0);
 		PropagationInfo infoAfter = getResult(3);
@@ -203,7 +203,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 	@UsesMocks ({
 		SocializeConfig.class,
 		AppUtils.class,
-		SocialNetworkShareListener.class,
+		SocialNetworkListener.class,
 		SocializeService.class,
 		PropagationInfo.class
 	})
@@ -216,7 +216,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		
 		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
 		AppUtils appUtils = AndroidMock.createMock(AppUtils.class);
-		SocialNetworkShareListener listener = AndroidMock.createMock(SocialNetworkShareListener.class);
+		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		final PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
 		
@@ -227,7 +227,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		
 		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
 			@Override
-			public void post(Activity parent, String appId, String linkName, String message, String link, String caption, SocialNetworkShareListener listener) {
+			public void post(Activity parent, String appId, String linkName, String message, String link, String caption, SocialNetworkListener listener) {
 				addResult(0, appId);
 				addResult(1, linkName);
 				addResult(2, message);
@@ -255,7 +255,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		String messageAfter = getResult(2);
 		String linkAfter = getResult(3);
 		String captionAfter = getResult(4);
-		SocialNetworkShareListener listenerAfter = getResult(5);
+		SocialNetworkListener listenerAfter = getResult(5);
 		
 		assertEquals(fbId, fbIdAfter);
 		assertEquals(linkName, linkNameAfter);
@@ -270,8 +270,9 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		Facebook.class,
 		FacebookSessionStore.class,
 		RequestListener.class,
-		SocialNetworkShareListener.class
+		SocialNetworkListener.class
 	})
+	@Deprecated
 	public void testPost2() {
 		
 		final String fbId = "foobar";
@@ -281,7 +282,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		final String caption = "foobar_caption";
 		
 		final Facebook fb  = AndroidMock.createMock(Facebook.class, fbId);
-		final SocialNetworkShareListener socialNetworkListener = AndroidMock.createMock(SocialNetworkShareListener.class);
+		final SocialNetworkListener socialNetworkListener = AndroidMock.createMock(SocialNetworkListener.class);
 		final FacebookSessionStore store = AndroidMock.createMock(FacebookSessionStore.class);
 		final RequestListener requestListener = AndroidMock.createMock(RequestListener.class);
 		
@@ -317,7 +318,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			}
 
 			@Override
-			protected RequestListener newRequestListener(Activity parent, SocialNetworkShareListener listener) {
+			protected RequestListener newRequestListener(Activity parent, SocialNetworkListener listener) {
 				addResult(4, listener);
 				return requestListener;
 			}
@@ -331,7 +332,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		Bundle params = getResult(1);
 		String httpMethod = getResult(2);
 		RequestListener listener = getResult(3);
-		SocialNetworkShareListener socListener = getResult(4);
+		SocialNetworkListener socListener = getResult(4);
 		
 		assertEquals("me/feed", graphPath);
 		assertEquals("POST", httpMethod);
@@ -351,7 +352,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		PropagationInfoResponse.class, 
 		PropagationInfo.class, 
 		SocializeService.class,
-		SocialNetworkShareListener.class,
+		SocialNetworkListener.class,
 		SocializeConfig.class})
 	public void testPostPhoto() throws IOException {
 		
@@ -360,7 +361,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		final PropagationInfo propInfo = AndroidMock.createMock(PropagationInfo.class);
 		final SocializeService socializeService = AndroidMock.createMock(SocializeService.class);
 		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-		final SocialNetworkShareListener socialNetworkListener = AndroidMock.createMock(SocialNetworkShareListener.class);
+		final SocialNetworkListener socialNetworkListener = AndroidMock.createMock(SocialNetworkListener.class);
 		
 		final String link = "foobar_url";
 		final String appId = "foobar_appId";
@@ -382,7 +383,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			}
 
 			@Override
-			public void postPhoto(Activity parent, String appId, String link, String caption, Uri photoUri, SocialNetworkShareListener listener) {
+			public void postPhoto(Activity parent, String appId, String link, String caption, Uri photoUri, SocialNetworkListener listener) {
 				addResult(0, appId);
 				addResult(1, link);
 				addResult(2, caption);
@@ -407,7 +408,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		Facebook.class,
 		FacebookSessionStore.class,
 		RequestListener.class,
-		SocialNetworkShareListener.class,
+		SocialNetworkListener.class,
 		FacebookImageUtils.class
 	})
 	public void testPostPhoto2() throws IOException {
@@ -419,7 +420,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		final byte[] image = new byte[]{69};
 		
 		final Facebook fb  = AndroidMock.createMock(Facebook.class, fbId);
-		final SocialNetworkShareListener socialNetworkListener = AndroidMock.createMock(SocialNetworkShareListener.class);
+		final SocialNetworkListener socialNetworkListener = AndroidMock.createMock(SocialNetworkListener.class);
 		final FacebookSessionStore store = AndroidMock.createMock(FacebookSessionStore.class);
 		final RequestListener requestListener = AndroidMock.createMock(RequestListener.class);
 		final FacebookImageUtils facebookImageUtils = AndroidMock.createMock(FacebookImageUtils.class);
@@ -457,7 +458,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			}
 
 			@Override
-			protected RequestListener newRequestListener(Activity parent, SocialNetworkShareListener listener) {
+			protected RequestListener newRequestListener(Activity parent, SocialNetworkListener listener) {
 				addResult(4, listener);
 				return requestListener;
 			}
@@ -473,7 +474,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		Bundle params = getResult(1);
 		String httpMethod = getResult(2);
 		RequestListener listener = getResult(3);
-		SocialNetworkShareListener socListener = getResult(4);
+		SocialNetworkListener socListener = getResult(4);
 		
 		assertEquals("me/photos", graphPath);
 		assertEquals("POST", httpMethod);
@@ -487,14 +488,14 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 	}	
 	
 	
-	@UsesMocks ({JSONObject.class, SocializeService.class, SocializeSession.class, AuthProvider.class, SocialNetworkShareListener.class})
+	@UsesMocks ({JSONObject.class, SocializeService.class, SocializeSession.class, AuthProvider.class, SocialNetworkListener.class})
 	public void testRequestListenerWithError() throws JSONException {
 		
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		final JSONObject json = AndroidMock.createMock(JSONObject.class);
 		final JSONObject error = AndroidMock.createMock(JSONObject.class);
 		final SocializeSession session = AndroidMock.createMock(SocializeSession.class);
-		final SocialNetworkShareListener listener = AndroidMock.createMock(SocialNetworkShareListener.class);
+		final SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
 		final String errorMessage = "foobar_error";
 		final String responseData = "foobar_repsonse";
 		
@@ -521,7 +522,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			}
 
 			@Override
-			protected void onError(Activity parent, String msg, Throwable e, SocialNetworkShareListener listener) {
+			protected void onError(Activity parent, String msg, Throwable e, SocialNetworkListener listener) {
 				addResult(1, msg);
 				addResult(2, e);
 				addResult(3, listener);
@@ -547,7 +548,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		String response = getResult(0);
 		String msg = getResult(1);
 		Exception e = getResult(2);
-		SocialNetworkShareListener listenerAfter = getResult(3);
+		SocialNetworkListener listenerAfter = getResult(3);
 		
 		assertEquals(responseData, response);
 		assertEquals(errorMessage, msg);
@@ -555,12 +556,12 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		assertSame(listener, listenerAfter);
 	}
 	
-	@UsesMocks ({JSONObject.class, SocializeService.class, SocializeSession.class, AuthProvider.class, SocialNetworkShareListener.class})
+	@UsesMocks ({JSONObject.class, SocializeService.class, SocializeSession.class, AuthProvider.class, SocialNetworkListener.class})
 	public void testRequestListenerCalledOnSuccess() throws Throwable {
 		
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		final JSONObject json = AndroidMock.createMock(JSONObject.class);
-		final SocialNetworkShareListener listener = AndroidMock.createMock(SocialNetworkShareListener.class);
+		final SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
 		final String responseData = "foobar_repsonse";
 		
 		AndroidMock.expect(json.has("error")).andReturn(false);
@@ -578,7 +579,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 				return socialize;
 			}
 
-			protected void onError(Activity parent, String msg, Throwable e, SocialNetworkShareListener listener) {
+			protected void onError(Activity parent, String msg, Throwable e, SocialNetworkListener listener) {
 				fail();
 			}
 		};
@@ -607,7 +608,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 	
 	public void testRequestListenerErrorCallFlow() throws Throwable {
 		final PublicFacebookWallPoster poster = new PublicFacebookWallPoster() {
-			protected void onError(Activity parent, String msg, Throwable e, SocialNetworkShareListener listener) {
+			protected void onError(Activity parent, String msg, Throwable e, SocialNetworkListener listener) {
 				count++;
 			}
 		};
@@ -625,7 +626,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 	public class PublicFacebookWallPoster extends DefaultFacebookWallPoster {
 		public int count = 0;
 		@Override
-		public RequestListener newRequestListener(Activity parent, SocialNetworkShareListener listener) {
+		public RequestListener newRequestListener(Activity parent, SocialNetworkListener listener) {
 			return super.newRequestListener(parent, listener);
 		}
 	}

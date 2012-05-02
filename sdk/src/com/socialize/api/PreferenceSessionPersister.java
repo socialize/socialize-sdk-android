@@ -252,6 +252,7 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 		
 		WritableSession session = sessionFactory.create(key, secret, userProviderCredentials);
 			
+		session.setRestored(true);
 		session.setConsumerToken(prefs.getString("consumer_token", null));
 		session.setConsumerTokenSecret(prefs.getString("consumer_token_secret", null));
 		

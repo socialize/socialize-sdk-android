@@ -37,7 +37,6 @@ import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ShareType;
-import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.facebook.FacebookSessionStore;
 import com.socialize.config.SocializeConfig;
@@ -51,7 +50,10 @@ import com.socialize.facebook.Facebook;
 import com.socialize.facebook.FacebookError;
 import com.socialize.facebook.RequestListener;
 import com.socialize.log.SocializeLogger;
+import com.socialize.networks.DefaultPostData;
+import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
 import com.socialize.util.AppUtils;
 import com.socialize.util.StringUtils;
 
@@ -64,11 +66,10 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	private SocializeLogger logger;
 	private AppUtils appUtils;
 	private ShareMessageBuilder shareMessageBuilder;
-//	private SocializeConfig config;
 	private FacebookImageUtils facebookImageUtils;
 	
 	@Override
-	public void postLike(Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkShareListener listener) {
+	public void postLike(Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkListener listener) {
 		String linkName = appUtils.getAppName();
 		
 		StringBuilder builder = new StringBuilder();
@@ -82,11 +83,9 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	}
 
 	@Override
-	public void postComment(Activity parent, Entity entity, String comment, PropagationInfo propInfo, SocialNetworkShareListener listener) {
+	public void postComment(Activity parent, Entity entity, String comment, PropagationInfo propInfo, SocialNetworkListener listener) {
 		String linkName = appUtils.getAppName();
-		
 		StringBuilder builder = new StringBuilder();
-			
 		builder.append(shareMessageBuilder.getEntityLink(entity, propInfo, false));
 		builder.append("\n\n");
 		builder.append(comment);
@@ -97,7 +96,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	}
 
 	@Override
-	public void post(Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkShareListener listener) {
+	public void post(Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkListener listener) {
 		
 		String caption = "Download the app now to join the conversation.";
 		String linkName = appUtils.getAppName();
@@ -105,7 +104,18 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		String appId = getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
 		
 		if(!StringUtils.isEmpty(appId)) {
-			post(parent, appId, linkName, message, link, caption, listener);
+			
+			final Map<String, String> params = new HashMap<String, String>();
+			params.put("name", linkName);
+			params.put("message", message);
+			params.put("link", link);
+			params.put("caption", caption);
+			
+			DefaultPostData postData = new DefaultPostData();
+			postData.setPostValues(params);
+			postData.setPropagationInfo(propInfo);			
+			
+			post(parent, appId, listener, postData);
 		}
 		else {
 			String msg = "Cannot post message to Facebook.  No app id found.  Make sure you specify facebook.app.id in socialize.properties";
@@ -113,8 +123,64 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		}		
 	}
 
+	@Deprecated
 	@Override
-	public void postPhoto(Activity parent, Share share, String comment, Uri photoUri, SocialNetworkShareListener listener) {
+	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, final SocialNetworkListener listener) {
+		final Map<String, String> params = new HashMap<String, String>();
+		params.put("name", linkName);
+		params.put("message", message);
+		params.put("link", link);
+		params.put("caption", caption);
+		DefaultPostData postData = new DefaultPostData();
+		postData.setPostValues(params);
+		post(parent, appId, listener, postData);
+	}
+	
+	@Override
+	public void postShare(Activity parent, Share share, SocialNetworkListener listener) {
+		PropagationInfo propInfo = share.getPropagationInfoResponse().getPropagationInfo(ShareType.FACEBOOK);
+		final Map<String, String> params = new HashMap<String, String>();
+		params.put("name", share.getEntityDisplayName());
+		params.put("link", propInfo.getEntityUrl());
+		params.put("message", share.getText());
+		
+		DefaultPostData postData = new DefaultPostData();
+		postData.setPostValues(params);
+		postData.setPropagationInfo(propInfo);
+		
+		post(parent, getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID), listener, postData);
+	}
+
+	@Override
+	public void post(Activity parent, String appId, SocialNetworkListener listener, PostData postData) {
+		if(listener != null) {
+			listener.onBeforePost(parent, SocialNetwork.FACEBOOK , postData);
+		}
+		
+		Bundle bundle = new Bundle();
+		
+		Set<Entry<String, String>> entries = postData.getPostValues().entrySet();
+		
+		for (Entry<String, String> entry : entries) {
+			bundle.putString(entry.getKey(), entry.getValue());
+		}
+		
+		Facebook fb = newFacebook(appId);
+		
+		final FacebookSessionStore store = newFacebookSessionStore();
+		
+		store.restore(fb, parent);
+		
+		AsyncFacebookRunner runner = newAsyncFacebookRunner(fb);
+		
+		RequestListener requestListener = newRequestListener(parent, listener);
+		
+		runner.request("me/feed", bundle, "POST", requestListener, null);	
+	}
+	
+
+	@Override
+	public void postPhoto(Activity parent, Share share, String comment, Uri photoUri, SocialNetworkListener listener) {
 		PropagationInfoResponse propagationInfoResponse = share.getPropagationInfoResponse();
 		PropagationInfo propInfo = propagationInfoResponse.getPropagationInfo(ShareType.FACEBOOK);
 		
@@ -138,7 +204,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	}
 	
 	@Override
-	public void postPhoto(Activity parent, String appId, String link, String caption, Uri photoUri, SocialNetworkShareListener listener) {
+	public void postPhoto(Activity parent, String appId, String link, String caption, Uri photoUri, SocialNetworkListener listener) {
 
 		try {
 			Bundle params = new Bundle();
@@ -170,49 +236,15 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			}
 		}
 	}
-	
+		
 
-	@Override
-	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, final SocialNetworkShareListener listener) {
-		final Map<String, String> params = new HashMap<String, String>();
-		
-		params.put("name", linkName);
-		params.put("message", message);
-		params.put("link", link);
-		params.put("caption", caption);
-		
-		if(listener != null) {
-			listener.onBeforePost(parent, SocialNetwork.FACEBOOK , params);
-		}
-		
-		Bundle bundle = new Bundle();
-		
-		Set<Entry<String, String>> entries = params.entrySet();
-		
-		for (Entry<String, String> entry : entries) {
-			bundle.putString(entry.getKey(), entry.getValue());
-		}
-		
-		Facebook fb = newFacebook(appId);
-		
-		final FacebookSessionStore store = newFacebookSessionStore();
-		
-		store.restore(fb, parent);
-		
-		AsyncFacebookRunner runner = newAsyncFacebookRunner(fb);
-		
-		RequestListener requestListener = newRequestListener(parent, listener);
-		
-		runner.request("me/feed", bundle, "POST", requestListener, null);	
-	}
-	
 	// So we can mock
 	protected Facebook newFacebook(String appId) {
 		return new Facebook(appId);
 	}
 	
 	// So we can mock
-	protected RequestListener newRequestListener(final Activity parent, final SocialNetworkShareListener listener) {
+	protected RequestListener newRequestListener(final Activity parent, final SocialNetworkListener listener) {
 		final String defaultErrorMessage = "Facebook Error";
 		
 		return new RequestListener() {
@@ -273,7 +305,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		};
 	}
 	
-	protected void handleFacebookError(final Activity parent, String msg, Throwable e, SocialNetworkShareListener listener) {
+	protected void handleFacebookError(final Activity parent, String msg, Throwable e, SocialNetworkListener listener) {
 		// Clear the session cache
 		getSocialize().clear3rdPartySession(parent, AuthProviderType.FACEBOOK);
 		onError(parent, msg, e, listener);
@@ -310,7 +342,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		this.appUtils = appUtils;
 	}
 
-	protected void onError(final Activity parent, final String msg, final Throwable e, final SocialNetworkShareListener listener) {
+	protected void onError(final Activity parent, final String msg, final Throwable e, final SocialNetworkListener listener) {
 		
 		if(logger != null) {
 			if(e != null) {

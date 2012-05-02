@@ -19,32 +19,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.auth.facebook;
+package com.socialize.networks.facebook;
 
-import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.auth.BaseAuthProviderInfoFactory;
-import com.socialize.config.SocializeConfig;
+import android.app.Activity;
+import android.content.Context;
+import com.socialize.annotations.Synchronous;
+import com.socialize.entity.Entity;
+import com.socialize.listener.SocializeAuthListener;
+import com.socialize.networks.SocialNetworkListener;
 
 /**
  * @author Jason Polites
- *
  */
-public class FacebookAuthProviderInfoFactory extends BaseAuthProviderInfoFactory<FacebookAuthProviderInfo> {
-
-	private IBeanFactory<FacebookAuthProviderInfo> facebookAuthProviderInfoInstanceFactory;
+public interface FacebookUtilsProxy {
+	public void link (Activity context, SocializeAuthListener listener);
+	public void link (Activity context, String token, SocializeAuthListener listener);
+	public void unlink (Activity context);
 	
-	@Override
-	protected FacebookAuthProviderInfo initInstance() {
-		FacebookAuthProviderInfo info = facebookAuthProviderInfoInstanceFactory.getBean();
-		return info;
-	}
-
-	@Override
-	protected void update(FacebookAuthProviderInfo info) {
-		info.setAppId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
-	}
-
-	public void setFacebookAuthProviderInfoInstanceFactory(IBeanFactory<FacebookAuthProviderInfo> facebookAuthProviderInfoInstanceFactory) {
-		this.facebookAuthProviderInfoInstanceFactory = facebookAuthProviderInfoInstanceFactory;
-	}
+	@Synchronous
+	public boolean isLinked(Context context);
+	
+	@Synchronous
+	public boolean isAvailable(Context context);
+	
+	@Synchronous
+	public void setAppId(Context context, String appId);
+	
+	@Synchronous
+	public String getAccessToken(Context context);
+	
+	public void post(Activity context, Entity entity, String text, SocialNetworkListener listener);
 }

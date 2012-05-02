@@ -42,6 +42,7 @@ public class SocializeSessionImpl implements WritableSession {
 	private String consumerToken;
 	private String consumerTokenSecret;
 	private String host;
+	private boolean restored;
 	
 	private UserProviderCredentialsMap userProviderCredentials;
 	
@@ -196,5 +197,14 @@ public class SocializeSessionImpl implements WritableSession {
 	public UserProviderCredentials getUserProviderCredentials(AuthProviderType type) {
 		return userProviderCredentials.get(type);
 	}
+
+	@Override
+	public boolean isRestored() {
+		return restored;
+	}
 	
+	@Override
+	public void setRestored(boolean restored) {
+		this.restored = restored;
+	}
 }

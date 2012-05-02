@@ -26,7 +26,14 @@ import java.util.concurrent.TimeUnit;
 import android.app.Activity;
 import com.socialize.Socialize;
 import com.socialize.api.SocializeSession;
+import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.DefaultUserProviderCredentials;
+import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.entity.User;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
+import com.socialize.test.ui.util.TestUtils;
 
 
 /**
@@ -69,4 +76,69 @@ public class AuthenticateSDKTest extends SDKIntegrationTest {
 		assertEquals(user1, user2);
 	}
 	
+	
+	public void testAuthenticateKnownUser() throws Throwable {
+		final CountDownLatch latch = new CountDownLatch(1);
+		final Activity context = getContext();
+		
+		Socialize.getSocialize().init(context);
+		
+		final String token = TestUtils.DUMMY_FB_TOKEN;
+		
+		runTestOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+		
+				DefaultUserProviderCredentials credentials = new DefaultUserProviderCredentials();
+				credentials.setAccessToken(token);
+				
+				FacebookAuthProviderInfo fbInfo = new FacebookAuthProviderInfo();
+				fbInfo.setAppId("foobar_app_id");
+				
+				credentials.setAuthProviderInfo(fbInfo);
+				
+				Socialize.getSocialize().authenticateKnownUser(context, credentials, new SocializeAuthListener() {
+					
+					@Override
+					public void onError(SocializeException error) {
+						error.printStackTrace();
+						fail();
+					}
+					
+					@Override
+					public void onCancel() {
+						fail();
+					}
+					
+					@Override
+					public void onAuthSuccess(SocializeSession session) {
+						addResult(0, session);
+						latch.countDown();
+					}
+					
+					@Override
+					public void onAuthFail(SocializeException error) {
+						error.printStackTrace();
+						fail();
+					}
+				});
+			}
+		});
+		
+		latch.await(20, TimeUnit.SECONDS);
+		
+		SocializeSession session = getResult(0);
+		
+		assertNotNull(session);
+		UserProviderCredentials creds = session.getUserProviderCredentials(AuthProviderType.FACEBOOK);
+		
+		assertNotNull(creds);
+		assertEquals(token, creds.getAccessToken());
+		
+		FacebookAuthProviderInfo authProviderInfo = (FacebookAuthProviderInfo) creds.getAuthProviderInfo();
+		
+		assertNotNull(authProviderInfo);
+		assertEquals("foobar_app_id", authProviderInfo.getAppId());
+	}
 }

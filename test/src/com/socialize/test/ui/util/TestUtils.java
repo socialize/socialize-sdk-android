@@ -42,6 +42,7 @@ public class TestUtils {
 	static ActivityInstrumentationTestCase2<?> testCase;
 	static Map<String, JSONObject> jsons = new HashMap<String, JSONObject>();
 	
+	public static final String DUMMY_FB_TOKEN = "AAAAAAITEghMBADIiX8ZByvHiAUaZBF5gcztkDW4LodJyOoFlcmgVX3yD2KuZCRpJNKuVsxsZBFZCZBgedu2qPcsHMHAAd1Ycqyy9Vjf9XGOEKWqQZAtPJBe";
 	
 	public static void incrementCount(String key) {
 		holder.incrementCount(key);

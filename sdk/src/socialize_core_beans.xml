@@ -660,7 +660,15 @@
 		id="facebookAuthProviderInfoFactory" 
 		class="com.socialize.auth.facebook.FacebookAuthProviderInfoFactory"
 		extends="baseAuthProviderInfoFactory">
-	</bean>	
+		<property name="facebookAuthProviderInfoInstanceFactory" ref="facebookAuthProviderInfoInstanceFactory"/>
+	</bean>
+	
+	<bean 
+		id="facebookAuthProviderInfo" 
+		class="com.socialize.auth.facebook.FacebookAuthProviderInfo"
+		singleton="false"/>
+		
+	<factory id="facebookAuthProviderInfoInstanceFactory" makes="facebookAuthProviderInfo"/>
 	
 	<bean 
 		id="twitterAuthProviderInfoFactory" 

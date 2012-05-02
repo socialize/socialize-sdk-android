@@ -1,7 +1,6 @@
 package com.socialize.snippets;
 
 import java.util.List;
-import java.util.Map;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -31,6 +30,7 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.view.ViewAddListener;
+import com.socialize.networks.PostData;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
@@ -335,8 +335,9 @@ public class SocializeActivity extends Activity {
 					// Handle error
 				}
 
+				
 				@Override
-				public void onBeforePost(Activity parent, SocialNetwork socialNetwork, Map<String, String> params) {
+				public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 					// Handle before post
 				}
 

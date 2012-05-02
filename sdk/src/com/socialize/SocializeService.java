@@ -168,8 +168,18 @@ public interface SocializeService extends SocializeUI {
 	 * @param userProviderCredentials Information about the user being authed.
 	 * @param authListener The callback for authentication outcomes.
 	 */
+	@Deprecated
 	public void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, UserProviderCredentials userProviderCredentials, SocializeAuthListener authListener);
 
+	/**
+	 * Authenticates the application against the API as a user known to your app from a given 3rd party provider.
+	 * @param context The current context.
+	 * @param userProviderCredentials Information about the user being authed.
+	 * @param authListener The callback for authentication outcomes.
+	 */
+	public void authenticateKnownUser(Context context, UserProviderCredentials userProviderCredentials, SocializeAuthListener authListener);
+
+	
 	/**
 	 * Adds a new like and associates it with the entity described.
 	 * @param activity The current Activity.

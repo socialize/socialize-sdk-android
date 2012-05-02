@@ -155,7 +155,7 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 			}
 
 			@Override
-			protected void verifyProiderCredentialsForUser(WritableSession session, User user) {
+			protected void verifyProviderCredentialsForUser(WritableSession session, User user) {
 				// Do nothing for now
 				// TODO: Add test for this.
 			}

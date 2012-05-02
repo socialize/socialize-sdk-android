@@ -218,9 +218,13 @@ public class SocializeConfig {
 			properties = createProperties();
 		}
 		
-		if(value != null) value = value.trim();
-		
-		properties.put(key, value);
+		if(value != null) {
+			value = value.trim();
+			properties.put(key, value);
+		}
+		else {
+			properties.remove(key);
+		}
 	}
 	
 	/**

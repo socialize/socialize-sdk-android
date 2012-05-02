@@ -166,6 +166,13 @@ public class MockSocializeSession implements WritableSession {
 	@Override
 	public void setUserProviderCredentials(UserProviderCredentialsMap data) {
 	}
-	
+
+	@Override
+	public boolean isRestored() {
+		return false;
+	}
+
+	@Override
+	public void setRestored(boolean restored) {}
 	
 }

@@ -19,32 +19,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.auth.facebook;
+package com.socialize.networks;
 
-import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.auth.BaseAuthProviderInfoFactory;
-import com.socialize.config.SocializeConfig;
+import java.util.Map;
+import com.socialize.entity.PropagationInfo;
+
 
 /**
  * @author Jason Polites
  *
  */
-public class FacebookAuthProviderInfoFactory extends BaseAuthProviderInfoFactory<FacebookAuthProviderInfo> {
-
-	private IBeanFactory<FacebookAuthProviderInfo> facebookAuthProviderInfoInstanceFactory;
+public class DefaultPostData implements PostData {
 	
-	@Override
-	protected FacebookAuthProviderInfo initInstance() {
-		FacebookAuthProviderInfo info = facebookAuthProviderInfoInstanceFactory.getBean();
-		return info;
-	}
+	private PropagationInfo propagationInfo;
+	private Map<String, String> postValues;
 
 	@Override
-	protected void update(FacebookAuthProviderInfo info) {
-		info.setAppId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
+	public PropagationInfo getPropagationInfo() {
+		return propagationInfo;
 	}
 
-	public void setFacebookAuthProviderInfoInstanceFactory(IBeanFactory<FacebookAuthProviderInfo> facebookAuthProviderInfoInstanceFactory) {
-		this.facebookAuthProviderInfoInstanceFactory = facebookAuthProviderInfoInstanceFactory;
+	/* (non-Javadoc)
+	 * @see com.socialize.networks.PostData#getPostValues()
+	 */
+	@Override
+	public Map<String, String> getPostValues() {
+		return postValues;
+	}
+	
+	public void setPropagationInfo(PropagationInfo propagationInfo) {
+		this.propagationInfo = propagationInfo;
+	}
+	
+	public void setPostValues(Map<String, String> postValues) {
+		this.postValues = postValues;
 	}
 }

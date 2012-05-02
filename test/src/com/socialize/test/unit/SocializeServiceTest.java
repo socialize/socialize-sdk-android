@@ -1211,7 +1211,6 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertTrue(socialize.isInitialized());
 
-
 		DefaultUserProviderCredentials creds = new DefaultUserProviderCredentials();
 		creds.setAccessToken(authToken3rdParty);
 		creds.setUserId(authUserId3rdParty);
@@ -1220,7 +1219,6 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		socialize.authenticateKnownUser(getActivity(), consumerKey, consumerSecret, fb, creds, authListener);
 
 		verifyDefaultMocks();
-
 	}
 
 	public void testIsAuthenticatedWithProviderLegacy() {

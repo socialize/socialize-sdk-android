@@ -23,10 +23,11 @@ package com.socialize.networks.facebook;
 
 import android.app.Activity;
 import android.net.Uri;
-import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.Share;
+import com.socialize.networks.PostData;
+import com.socialize.networks.SocialNetworkListener;
 
 /**
  * @author Jason Polites
@@ -34,18 +35,21 @@ import com.socialize.entity.Share;
  */
 public interface FacebookWallPoster {
 
-	public void postLike(final Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkShareListener listener);
+	public void postShare(final Activity parent, Share share, SocialNetworkListener listener);
+	
+	public void postLike(final Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkListener listener);
 
-	public void postComment(final Activity parent, Entity entity, String comment, PropagationInfo propInfo, SocialNetworkShareListener listener);	
+	public void postComment(final Activity parent, Entity entity, String comment, PropagationInfo propInfo, SocialNetworkListener listener);	
 		
-	public void postPhoto(final Activity parent, Share share, String comment, Uri photoUri, SocialNetworkShareListener listener);
+	public void postPhoto(final Activity parent, Share share, String comment, Uri photoUri, SocialNetworkListener listener);
 	
-	public void postPhoto(final Activity parent, String appId, String link, String caption, Uri photoUri, SocialNetworkShareListener listener);
+	public void postPhoto(final Activity parent, String appId, String link, String caption, Uri photoUri, SocialNetworkListener listener);
 	
-	public void post(final Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkShareListener listener);
+	@Deprecated
+	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, final SocialNetworkListener listener);
 	
-	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, SocialNetworkShareListener listener);
-
+	public void post(final Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkListener listener);
 	
+	public void post(final Activity parent, String appId, SocialNetworkListener listener, PostData postData);
 
 }

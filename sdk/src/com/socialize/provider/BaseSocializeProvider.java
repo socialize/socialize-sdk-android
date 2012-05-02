@@ -256,21 +256,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 				return session;
 			}
 			else {
-				AuthProviderInfo info = data.getAuthProviderInfo();
-				
-				if(info != null) {
-					DefaultUserProviderCredentials userProviderCredentials = new DefaultUserProviderCredentials();
-					userProviderCredentials.setAccessToken(data.getToken3rdParty());
-					userProviderCredentials.setTokenSecret(data.getSecret3rdParty());
-					userProviderCredentials.setUserId(data.getUserId3rdParty());
-					userProviderCredentials.setAuthProviderInfo(data.getAuthProviderInfo());
-					
-					session.getUserProviderCredentials().put(info.getType(), userProviderCredentials);
-				}
-				else {
-					// Legacy
-					session = null;
-				}
+				session = setProviderCredentialsForUser(data, session);
 			}
 		}
 		
@@ -319,8 +305,10 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 					session.setConsumerTokenSecret(json.getString("oauth_token_secret"));
 					session.setUser(user);
 					
+					setProviderCredentialsForUser(data, session);
+					
 					// Ensure the user credentials match the user auth data returned from the server
-					verifyProiderCredentialsForUser(session, user);
+					verifyProviderCredentialsForUser(session, user);
 					
 					saveSession(session);
 				}
@@ -342,7 +330,27 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 		return session;
 	}
 	
-	protected void verifyProiderCredentialsForUser(WritableSession session, User user) {
+	protected WritableSession setProviderCredentialsForUser(AuthProviderData data, WritableSession session) {
+		AuthProviderInfo info = data.getAuthProviderInfo();
+		
+		if(info != null) {
+			DefaultUserProviderCredentials userProviderCredentials = new DefaultUserProviderCredentials();
+			userProviderCredentials.setAccessToken(data.getToken3rdParty());
+			userProviderCredentials.setTokenSecret(data.getSecret3rdParty());
+			userProviderCredentials.setUserId(data.getUserId3rdParty());
+			userProviderCredentials.setAuthProviderInfo(data.getAuthProviderInfo());
+			
+			session.getUserProviderCredentials().put(info.getType(), userProviderCredentials);
+		}
+		else {
+			// Legacy
+			session = null;
+		}
+		
+		return session;
+	}
+	
+	protected void verifyProviderCredentialsForUser(WritableSession session, User user) {
 		List<UserAuthData> authData = user.getAuthData();
 		UserProviderCredentialsMap credentials = session.getUserProviderCredentials();
 			

@@ -21,7 +21,6 @@
  */
 package com.socialize.share;
 
-import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.api.action.ShareType;
@@ -31,6 +30,7 @@ import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.Share;
 import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;
+import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.facebook.FacebookSharer;
 
@@ -61,7 +61,7 @@ public class FacebookShareHandler extends AbstractShareHandler {
 			public void onCancel() {}
 			
 			@Override
-			public void onBeforePost(Activity parent, SocialNetwork network, Map<String, String> params) {
+			public void onBeforePost(Activity parent, SocialNetwork network, PostData postData) {
 				if(listener != null) {
 					listener.onBeforePost(parent);
 				}

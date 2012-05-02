@@ -367,7 +367,7 @@ public class SocializeApiTest extends SocializeActivityTest {
 		}
 
 		@Override
-		protected void handleRegularAuth(Context context, SocializeAuthRequest request, SocializeActionListener wrapper, SocializeAuthListener listener, String key, String secret, boolean force) {
+		protected void handleRegularAuth(Context context, SocializeAuthRequest request, SocializeActionListener wrapper, SocializeAuthListener listener, String key, String secret) {
 			addResult(3, "handleRegularAuth");
 		}
 

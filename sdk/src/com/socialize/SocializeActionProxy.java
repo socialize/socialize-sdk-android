@@ -54,13 +54,17 @@ public class SocializeActionProxy implements InvocationHandler {
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		try {
-			if(method.isAnnotationPresent(Synchronous.class)) {
+			if(method.isAnnotationPresent(Synchronous.class) || !isVoidMethod(method)) {
 				if(!Socialize.getSocialize().isInitialized()) {
 					Context context = findContext(args);
 					if(context != null) {
 						synchronized (this) {
 							if(!Socialize.getSocialize().isInitialized()) {
 								Socialize.getSocialize().init(context);
+							}
+							
+							if(!Socialize.getSocialize().isAuthenticated()) {
+								Socialize.getSocialize().authenticateSynchronous(context);
 							}
 						}
 					}
@@ -77,21 +81,13 @@ public class SocializeActionProxy implements InvocationHandler {
 				Activity context = findActivity(args);
 				if(context != null) {
 					SocializeListener listener = findListener(args);
-					if(listener != null) {
-						invoke(context, listener, delegateBean, method, args);
-					}
-					else {
-						throw new MethodNotSupportedException("No Socialize Listener found in method arguments for method [" +
-								method.getName() +
-								"]");
-					}
+					invoke(context, listener, delegateBean, method, args);
 				}
 				else {
 					throw new MethodNotSupportedException("No activity found in method arguments for method [" +
 							method.getName() +
 							"]");
 				}
-				
 			}
 			
 			// Always void
@@ -103,14 +99,19 @@ public class SocializeActionProxy implements InvocationHandler {
 		}
 	}
 	
+	protected boolean isVoidMethod(Method method) {
+		Class<?> returnType = method.getReturnType();
+		return (returnType == null || returnType.equals(Void.TYPE));
+	}
+	
 	protected void invoke(Activity context, SocializeListener listener, String delegateBean, Method method, Object[] args) throws Throwable {
 		SocializeService service = getSocialize();
 		
 		if(!service.isInitialized()) {
-			doInit(context, listener, delegateBean, method, args);
+			doInitAsync(context, listener, delegateBean, method, args);
 		}
 		else if(!service.isAuthenticated()) {
-			doAuth(context, listener, delegateBean, method, args);
+			doAuthAsync(context, listener, delegateBean, method, args);
 		}
 		else {
 			method.invoke(Socialize.getBean(delegateBean), args);
@@ -144,7 +145,7 @@ public class SocializeActionProxy implements InvocationHandler {
 		return null;
 	}
 
-	protected synchronized <L extends SocializeListener> void doInit(final Activity context, final SocializeListener listener, final String delegateBean, final Method method, final Object[] args) throws Throwable {
+	protected synchronized <L extends SocializeListener> void doInitAsync(final Activity context, final SocializeListener listener, final String delegateBean, final Method method, final Object[] args) throws Throwable {
 		
 		final SocializeService service = getSocialize();
 		
@@ -193,7 +194,7 @@ public class SocializeActionProxy implements InvocationHandler {
 		}
 	}	
 	
-	protected synchronized <L extends SocializeListener> void doAuth(final Activity context, final SocializeListener listener, final String delegateBean, final Method method, final Object[] args) throws Throwable {
+	protected synchronized <L extends SocializeListener> void doAuthAsync(final Activity context, final SocializeListener listener, final String delegateBean, final Method method, final Object[] args) throws Throwable {
 		final SocializeService service = getSocialize();
 		
 		if(!service.isAuthenticated()) {

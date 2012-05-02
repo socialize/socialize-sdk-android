@@ -86,10 +86,7 @@ public abstract class SocializeAction extends SocializeObject {
 	
 	public String getEntityDisplayName() {
 		if(entity != null) {
-			if(!StringUtils.isEmpty(entity.getName())) {
-				return entity.getName();
-			}
-			return entity.getKey();
+			return entity.getDisplayName();
 		}
 		return entityKey;
 	}

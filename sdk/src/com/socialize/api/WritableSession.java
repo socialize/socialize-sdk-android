@@ -39,5 +39,7 @@ public interface WritableSession extends SocializeSession {
 	public void setUserProviderCredentials(UserProviderCredentialsMap data);
 	
 	public void setUserProviderCredentials(AuthProviderType type, UserProviderCredentials data);
+	
+	public void setRestored(boolean restored);
 
 }

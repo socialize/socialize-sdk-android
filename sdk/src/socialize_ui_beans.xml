@@ -1674,5 +1674,11 @@
 	<bean id="userUtils" class="com.socialize.api.action.user.SocializeUserUtils">
 		<property name="userSystem" ref="userSystem"/>
 	</bean>
+	
+	<bean id="facebookUtils" class="com.socialize.networks.facebook.FacebookUtilsImpl">
+		<property name="userSystem" ref="userSystem"/>
+		<property name="shareSystem" ref="shareSystem"/>
+		<property name="facebookWallPoster" ref="facebookWallPoster"/>
+	</bean>
 
 </beans>

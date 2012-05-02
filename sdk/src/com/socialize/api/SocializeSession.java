@@ -67,5 +67,11 @@ public interface SocializeSession extends Serializable, OAuthAuthorizer {
 	public AuthProvider<?> getAuthProvider();
 	
 	public void clear(AuthProviderType type);
+	
+	/**
+	 * Returns true if this session was restored from a previously saved session
+	 * @return
+	 */
+	public boolean isRestored();
 
 }

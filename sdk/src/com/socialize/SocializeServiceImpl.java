@@ -646,11 +646,19 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		return new SocializeAuthProviderInfo();
 	}
 	
+	@Deprecated
 	@Override
 	public synchronized void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, UserProviderCredentials userProviderCredentials, SocializeAuthListener authListener) {
+		authenticateKnownUser(context, userProviderCredentials, authListener);
+	}
+
+	@Override
+	public void authenticateKnownUser(Context context, UserProviderCredentials userProviderCredentials, SocializeAuthListener authListener) {
 		if(assertInitialized(authListener)) {
+			String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+			String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 			AuthProviderData authProviderData = this.authProviderDataFactory.getBean();
-			authProviderData.setAuthProviderInfo(authProviderInfo);
+			authProviderData.setAuthProviderInfo(userProviderCredentials.getAuthProviderInfo());
 			authProviderData.setToken3rdParty(userProviderCredentials.getAccessToken());
 			authProviderData.setSecret3rdParty(userProviderCredentials.getTokenSecret());
 			authProviderData.setUserId3rdParty(userProviderCredentials.getUserId());
