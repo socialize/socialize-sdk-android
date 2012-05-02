@@ -35,6 +35,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
@@ -67,6 +68,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	private AppUtils appUtils;
 	private ShareMessageBuilder shareMessageBuilder;
 	private FacebookImageUtils facebookImageUtils;
+	private IBeanFactory<AsyncFacebookRunner> facebookRunnerFactory;
 	
 	@Override
 	public void postLike(Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkListener listener) {
@@ -317,7 +319,11 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	
 	// So we can mock
 	protected AsyncFacebookRunner newAsyncFacebookRunner(Facebook fb) {
-		return new AsyncFacebookRunner(fb);
+		if(facebookRunnerFactory != null) {
+			return facebookRunnerFactory.getBean(fb);
+		}
+		return  new AsyncFacebookRunner(fb);
+	
 	}
 
 	// So we can mock
@@ -372,4 +378,10 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	public void setFacebookImageUtils(FacebookImageUtils facebookImageUtils) {
 		this.facebookImageUtils = facebookImageUtils;
 	}
+	
+	public void setFacebookRunnerFactory(IBeanFactory<AsyncFacebookRunner> facebookRunnerFactory) {
+		this.facebookRunnerFactory = facebookRunnerFactory;
+	}
+	
+	
 }

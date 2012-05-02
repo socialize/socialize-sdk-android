@@ -21,19 +21,35 @@
  */
 package com.socialize.test.integration.services;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import android.app.Activity;
+import android.os.Bundle;
+import com.socialize.ShareUtils;
 import com.socialize.Socialize;
+import com.socialize.UserUtils;
 import com.socialize.api.SocializeSession;
+import com.socialize.auth.AuthProviderResponse;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.facebook.FacebookAuthProvider;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
+import com.socialize.config.SocializeConfig;
+import com.socialize.entity.Entity;
+import com.socialize.entity.ListResult;
+import com.socialize.entity.PropagationInfo;
+import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
+import com.socialize.facebook.AsyncFacebookRunner;
+import com.socialize.facebook.RequestListener;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.listener.share.ShareListListener;
+import com.socialize.networks.PostData;
+import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookUtils;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
@@ -156,11 +172,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		SocializeIOC.unregisterStub("facebookProvider");
 	}
 	
-	public void test_unlink () {}
-	public void test_isLinked() {}
 	public void test_isAvailable() {
-		
-		Socialize.getSocialize().init(getContext());
 		
 		Socialize.getSocialize().getConfig().setFacebookAppId("foobar");
 		
@@ -169,10 +181,174 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		Socialize.getSocialize().getConfig().setFacebookAppId(null);
 		
 		assertFalse(FacebookUtils.isAvailable(getContext()));
-		
 	}
-	public void test_setAppId() {}
-	public void test_getAccessToken() {}
-	public void test_post() {}
+	
+	public void test_setAppId() {
+		String appId = "foobar";
+		FacebookUtils.setAppId(getContext(), appId);
+		assertEquals(appId, Socialize.getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID));
+	}
+	
+	
+	public void test_post_authed() throws InterruptedException {
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		// Stub in the FacebookAuthProvider
+		FacebookAuthProvider mockFacebookAuthProvider = new FacebookAuthProvider() {
+			@Override
+			public void authenticate(FacebookAuthProviderInfo info, AuthProviderListener listener) {
+				AuthProviderResponse response = new AuthProviderResponse();
+				response.setToken(TestUtils.DUMMY_FB_TOKEN);
+				listener.onAuthSuccess(response);
+			}
+		};
+		
+		SocializeIOC.registerStub("facebookProvider", mockFacebookAuthProvider);
+		
+		FacebookUtils.link(getContext(), new SocializeAuthListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				fail();
+			}
+			
+			@Override
+			public void onCancel() {
+				fail();	
+			}
+			
+			@Override
+			public void onAuthSuccess(SocializeSession session) {
+				latch.countDown();
+			}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+		});
+		
+		latch.await(20, TimeUnit.SECONDS);
+		do_test_post();
+	}
+	
+	public void test_post_not_authed() throws InterruptedException {
+		Socialize.getSocialize().clearSessionCache(getContext());
+		do_test_post();
+	}
+	
+	protected void do_test_post() throws InterruptedException {
+		String entityKeyRandom = "foobar" + Math.random();
+		Entity entity = Entity.newInstance(entityKeyRandom, "foobar");
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		// Stub in the fb runner
+		AsyncFacebookRunner mockRunner = new AsyncFacebookRunner(null) {
+		    public void request(
+		    		final String graphPath,
+                    final Bundle parameters,
+                    final String httpMethod,
+                    final RequestListener listener,
+                    final Object state) {
+		    	
+		    	addResult(0, parameters);
+		    	
+		    	// Ensure the listener is called so we get onAfterPost
+		    	listener.onComplete(null, state);
+		    	
+		    	latch.countDown();
+		    }
+		};
+		
+		// Stub in the FacebookAuthProvider
+		FacebookAuthProvider mockFacebookAuthProvider = new FacebookAuthProvider() {
+			@Override
+			public void authenticate(FacebookAuthProviderInfo info, AuthProviderListener listener) {
+				AuthProviderResponse response = new AuthProviderResponse();
+				response.setToken(TestUtils.DUMMY_FB_TOKEN);
+				listener.onAuthSuccess(response);
+			}
+		};
+		
+		SocializeIOC.registerStub("facebookRunner", mockRunner);
+		SocializeIOC.registerStub("facebookProvider", mockFacebookAuthProvider);
+
+		FacebookUtils.post(getActivity(), entity, "test", new SocialNetworkListener() {
+			
+			@Override
+			public void onSocialNetworkError(SocialNetwork network, Exception error) {
+				error.printStackTrace();
+				latch.countDown();
+			}
+			
+			@Override
+			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+				// Add some extra data
+				postData.getPostValues().put("foo", "bar");
+				postData.getPostValues().put("foo2", "bar2");
+				
+				addResult(3, postData.getPropagationInfo());
+			}
+			
+			@Override
+			public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
+				addResult(1, "onAfterPost");
+			}
+		});
+		
+		latch.await(20, TimeUnit.SECONDS);
+		
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		
+		// Make sure we have a share object
+		ShareUtils.getSharesByUser(getContext(), UserUtils.getCurrentUser(getContext()), 0, 100, new ShareListListener() {
+			@Override
+			public void onList(ListResult<Share> entities) {
+				addResult(2, entities);
+				latch2.countDown();
+			}
+			
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				latch2.countDown();
+			}
+		});
+		
+		latch2.await(20, TimeUnit.SECONDS);
+		
+		SocializeIOC.unregisterStub("facebookRunner");
+		SocializeIOC.unregisterStub("facebookProvider");
+		
+		// Now verify the shares and the extra info sent to FB
+		Bundle params = getResult(0);
+		String onAfterPost = getResult(1);
+		ListResult<Share> shares = getResult(2);
+		PropagationInfo propagationInfo = getResult(3);
+		
+		assertNotNull(params);
+		assertNotNull(onAfterPost);
+		assertNotNull(shares);
+		assertNotNull(propagationInfo);
+		assertNotNull(propagationInfo.getEntityUrl());
+		assertNotNull(propagationInfo.getAppUrl());
+		
+		// Find the share
+		assertTrue(shares.size() > 0);
+		
+		List<Share> items = shares.getItems();
+		Share match = null;
+		for (Share share : items) {
+			if(share.getEntity().getKey().equals(entityKeyRandom)) {
+				match = share;
+				break;
+			}
+		}
+		
+		assertNotNull(match);
+	}
 	
 }
