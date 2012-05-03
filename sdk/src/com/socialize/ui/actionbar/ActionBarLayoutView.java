@@ -327,9 +327,12 @@ public class ActionBarLayoutView extends BaseView {
 			}
 			else {
 				// Like
-				if(getSocialize().getConfig().isAuthRequired() && 
-					(getSocialize().isSupported(AuthProviderType.FACEBOOK) || getSocialize().isSupported(AuthProviderType.FACEBOOK)) &&
-					(!getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) || !getSocialize().isAuthenticated(AuthProviderType.TWITTER))) {
+				SocializeService socialize = getSocialize();
+				
+				if(socialize.getConfig().isAuthRequired() && 
+					(socialize.isSupported(AuthProviderType.TWITTER) && !socialize.isAuthenticated(AuthProviderType.TWITTER))
+					&&
+					(socialize.isSupported(AuthProviderType.FACEBOOK) && !socialize.isAuthenticated(AuthProviderType.FACEBOOK))) {
 					
 					authRequestDialogFactory.show(button, new AuthRequestListener() {
 						@Override

@@ -1673,12 +1673,16 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 
 	@Override
 	public void onPause(Context context) {
-		locationProvider.pause(context);
+		if(locationProvider != null) {
+			locationProvider.pause(context);	
+		}
 	}
 
 	@Override
 	public void onResume(Context context) {
-		locationProvider.resume(context);
+		if(locationProvider != null) {
+			locationProvider.resume(context);
+		}
 	}
 
 	protected void setCommentSystem(CommentSystem commentSystem) {

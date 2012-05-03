@@ -21,11 +21,15 @@
  */
 package com.socialize.test.ui.integrationtest.actionbar;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
+import com.google.android.testing.mocking.AndroidMock;
+import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
@@ -36,6 +40,7 @@ import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderInfoBuilder;
 import com.socialize.auth.AuthProviderInfoFactory;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.UserProviderCredentials;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
@@ -308,5 +313,132 @@ public class ActionBarTestUtils2 {
 			}
 		});				
 	}	
+	
+	@UsesMocks ({SocializeSession.class, UserProviderCredentials.class})
+	public void testLikeDoesNotPromptForAuthWhenUserIsAuthenticated(final ActivityInstrumentationTestCase2<?> testCase) throws Throwable {
+		
+		TestUtils.setupSocializeOverrides(true, true);
+		
+//		final SocializeSession session = AndroidMock.createMock(SocializeSession.class);
+		final UserProviderCredentials creds = AndroidMock.createMock(UserProviderCredentials.class);
+		
+//		AndroidMock.expect(session.getUserProviderCredentials((AuthProviderType)AndroidMock.anyObject())).andReturn(creds).anyTimes();
+//		AndroidMock.replay(session);
+		
+		Entity entity = Entity.newInstance("http://entity1.com", "no name");
+		
+		final AuthRequestDialogFactory mockFactory = new AuthRequestDialogFactory() {
+			@Override
+			public Dialog show(View parent, AuthRequestListener listener) {
+				TestUtils.addResult("fail");
+				return null;
+			}
+		};
+		
+		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
+			@Override
+			public void addLike(SocializeSession session, Entity entity, ShareOptions options, LikeListener listener) {
+				TestUtils.addResult("success");
+			}
+
+			@Override
+			public void getLike(SocializeSession session, String entityKey, LikeListener listener) {
+				listener.onGet(null); // not liked
+			}
+		};		
+		
+		final AuthProviderInfoBuilder mockAuthProviderInfoBuilder = new AuthProviderInfoBuilder() {
+			@Override
+			public <I extends AuthProviderInfo> AuthProviderInfoFactory<I> getFactory(AuthProviderType type) {
+				return null;
+			}
+
+			@Override
+			public boolean validateAll() {
+				return false;
+			}
+
+			@Override
+			public boolean isSupported(AuthProviderType type) {
+				return true;
+			}
+		};
+		
+		SocializeAccess.setInitListener(new SocializeInitListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				ActivityInstrumentationTestCase2.fail();
+			}
+			
+			@Override
+			public void onInit(Context context, IOCContainer container) {
+				
+				// Enable auth prompt for this test
+				SocializeConfig bean = container.getBean("config");
+				bean.setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "true");
+				
+				ProxyObject<AuthDialogFactory> proxy = container.getProxy("authRequestDialogFactory");
+				if(proxy != null) {
+					proxy.setDelegate(mockFactory);
+					proxy.setStaticProxy(true);
+				}
+				else {
+					System.err.println("Proxy is null!!");
+				}
+				
+				ProxyObject<LikeSystem> proxyLike = container.getProxy("likeSystem");
+				if(proxyLike != null) {
+					proxyLike.setDelegate(mockLikeSystem);
+				}
+				else {
+					System.err.println("proxyLike is null!!");
+				}
+				
+				ProxyObject<AuthProviderInfoBuilder> proxyAuthProviderInfoBuilder = container.getProxy("authProviderInfoBuilder");
+				
+				if(proxyLike != null) {
+					proxyAuthProviderInfoBuilder.setDelegate(mockAuthProviderInfoBuilder);
+				}
+				else {
+					System.err.println("proxyAuthProviderInfoBuilder is null!!");
+				}
+			}
+		});		
+		
+		Intent intent = new Intent();
+		intent.putExtra(Socialize.ENTITY_OBJECT, entity);
+		testCase.setActivityIntent(intent);
+		
+		testCase.getInstrumentation().waitForIdleSync();
+		
+		final ActionBarLayoutView actionBar = TestUtils.findView(testCase.getActivity(), ActionBarLayoutView.class, 25000);	
+		
+		ActivityInstrumentationTestCase2.assertNotNull(actionBar);
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		
+		testCase.runTestOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				// Dummy session
+				Socialize.getSocialize().getSession().getUserProviderCredentials().put(AuthProviderType.TWITTER, creds);
+				
+				ActivityInstrumentationTestCase2.assertTrue(actionBar.getLikeButton().performClick());
+				TestUtils.sleep(1000);
+				latch.countDown();
+			}
+		});		
+		
+		latch.await(20, TimeUnit.SECONDS);
+		
+		String result = TestUtils.getNextResult();
+		ActivityInstrumentationTestCase2.assertNotNull(result);
+		ActivityInstrumentationTestCase2.assertEquals("success", result);
+		
+		Socialize.getSocialize().getSession().getUserProviderCredentials().remove(AuthProviderType.TWITTER);
+		
+//		AndroidMock.verify(session);
+	}		
 	
 }

@@ -24,6 +24,7 @@ package com.socialize.test.mock;
 import com.socialize.api.WritableSession;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.DefaultUserProviderCredentialsMap;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.entity.User;
@@ -42,6 +43,8 @@ public class MockSocializeSession implements WritableSession {
 	String tok = "base";
 	String toksec = "belongs";
 	String host = "to";
+	
+	private UserProviderCredentialsMap map = new DefaultUserProviderCredentialsMap();
 	
 	public MockSocializeSession() {
 		super();
@@ -129,12 +132,12 @@ public class MockSocializeSession implements WritableSession {
 
 	@Override
 	public UserProviderCredentialsMap getUserProviderCredentials() {
-		return null;
+		return map;
 	}
 
 	@Override
 	public UserProviderCredentials getUserProviderCredentials(AuthProviderType type) {
-		return null;
+		return map.get(type);
 	}
 
 	/* (non-Javadoc)
@@ -161,5 +164,8 @@ public class MockSocializeSession implements WritableSession {
 
 	@Override
 	public void setUserProviderCredentials(AuthProviderType type, UserProviderCredentials data) {
+		map.put(type, data);
 	}
+	
+	
 }
