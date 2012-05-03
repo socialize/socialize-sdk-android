@@ -27,6 +27,7 @@ import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import com.socialize.ShareUtils;
 import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Entity;
@@ -327,9 +328,12 @@ public class ActionBarLayoutView extends BaseView {
 			}
 			else {
 				// Like
-				if(getSocialize().getConfig().isAuthRequired() && 
-					(getSocialize().isSupported(AuthProviderType.FACEBOOK) || getSocialize().isSupported(AuthProviderType.FACEBOOK)) &&
-					(!getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) || !getSocialize().isAuthenticated(AuthProviderType.TWITTER))) {
+				SocializeService socialize = getSocialize();
+				
+				if(socialize.getConfig().isAuthRequired() && 
+					(socialize.isSupported(AuthProviderType.TWITTER) && !socialize.isAuthenticated(AuthProviderType.TWITTER))
+					&&
+					(socialize.isSupported(AuthProviderType.FACEBOOK) && !socialize.isAuthenticated(AuthProviderType.FACEBOOK))) {
 					
 					authRequestDialogFactory.show(button, null, new ShareDialogListener() {
 						@Override

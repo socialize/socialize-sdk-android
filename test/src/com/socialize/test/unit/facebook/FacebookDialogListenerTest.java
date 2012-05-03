@@ -63,8 +63,6 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		Facebook facebook = AndroidMock.createMock(Facebook.class, appId);
 		FacebookSessionStore facebookSessionStore = AndroidMock.createMock(FacebookSessionStore.class);
 		
-		final CountDownLatch latch = new CountDownLatch(1);
-		
 		// Can't mock bundle, so create one with the data we expect.
 		final Bundle bundle = new Bundle();
 		bundle.putString("access_token", token);
@@ -99,6 +97,7 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		AndroidMock.expect(facebookSessionStore.save(facebook, context)).andReturn(true);
 		AndroidMock.expect(facebook.request("me")).andReturn(json);
 		
+		final CountDownLatch latch = new CountDownLatch(1);
 		final FacebookDialogListener dListener = new FacebookDialogListener(context, facebook, facebookSessionStore, listener) {
 			
 			@Override
@@ -112,7 +111,6 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 				fail();
 			}
 		};
-		
 		
 		AndroidMock.replay(facebookSessionStore);
 		AndroidMock.replay(facebook);
@@ -151,8 +149,6 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		final String errorMessage = "foobar";
 		final IOException mockError = new IOException(errorMessage);
 		
-		final CountDownLatch latch = new CountDownLatch(1);
-		
 		AuthProviderListener listener = new AuthProviderListener() {
 			
 			@Override
@@ -181,6 +177,7 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		AndroidMock.expect(facebookSessionStore.save(facebook, context)).andReturn(true);
 		AndroidMock.expect(facebook.request("me")).andThrow(mockError);
 		
+		final CountDownLatch latch = new CountDownLatch(1);
 		final FacebookDialogListener dListener = new FacebookDialogListener(context, facebook, facebookSessionStore, listener) {
 			
 			@Override
@@ -199,7 +196,6 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		AndroidMock.replay(facebook);
 		
 		runTestOnUiThread(new Runnable() {
-			
 			@Override
 			public void run() {
 				dListener.onComplete(bundle);

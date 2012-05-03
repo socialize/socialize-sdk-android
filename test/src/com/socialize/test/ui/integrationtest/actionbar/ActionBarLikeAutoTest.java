@@ -17,4 +17,9 @@ public class ActionBarLikeAutoTest extends ActionBarAutoTest {
 		ActionBarTestUtils2 utils = new ActionBarTestUtils2();
 		utils.testLikeDoesNotPromptForAuthWhenNetworksNotSupported(this);
 	}	
+	
+	public void testLikeDoesNotPromptForAuthWhenUserIsAuthenticated() throws Throwable {
+		ActionBarTestUtils2 utils = new ActionBarTestUtils2();
+		utils.testLikeDoesNotPromptForAuthWhenUserIsAuthenticated(this);
+	}	
 }
