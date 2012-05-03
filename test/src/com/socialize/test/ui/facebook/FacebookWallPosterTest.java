@@ -24,6 +24,7 @@ package com.socialize.test.ui.facebook;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;
@@ -47,6 +48,7 @@ import com.socialize.facebook.AsyncFacebookRunner;
 import com.socialize.facebook.Facebook;
 import com.socialize.facebook.FacebookError;
 import com.socialize.facebook.RequestListener;
+import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.DefaultFacebookWallPoster;
@@ -69,36 +71,12 @@ import com.socialize.util.AppUtils;
 public class FacebookWallPosterTest extends SocializeActivityTest {
 
 	public void testPostLike() {
-//		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-//		AndroidMock.expect(config.isBrandingEnabled()).andReturn(true);
-//		AndroidMock.replay(config);
 		doTestPostLike("Likes foobar_link\n\nPosted from foobar_appname");
-//		AndroidMock.verify(config);
 	}
 	
 	public void testPostComment() {
-//		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-//		AndroidMock.expect(config.isBrandingEnabled()).andReturn(true);
-//		AndroidMock.replay(config);
 		testPostComment("foobar_link\n\nfoobar_comment\n\nPosted from foobar_appname");
-//		AndroidMock.verify(config);
 	}
-	
-//	public void testPostLikeNoBranding() {
-//		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-//		AndroidMock.expect(config.isBrandingEnabled()).andReturn(false);
-//		AndroidMock.replay(config);
-//		doTestPostLike(config, "Likes foobar_link\n\nPosted from foobar_appname");
-//		AndroidMock.verify(config);
-//	}
-//	
-//	public void testPostCommentNoBranding() {
-//		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-//		AndroidMock.expect(config.isBrandingEnabled()).andReturn(false);
-//		AndroidMock.replay(config);
-//		testPostComment("foobar_link\n\nfoobar_comment\n\nPosted from foobar_appname");
-//		AndroidMock.verify(config);
-//	}	
 	
 	public void doTestPostLike(String expectedString) {
 		
@@ -226,16 +204,14 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		AndroidMock.expect(info.getAppUrl()).andReturn(link);
 		
 		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
+			
 			@Override
-			public void post(Activity parent, String appId, String linkName, String message, String link, String caption, SocialNetworkListener listener) {
+			public void post(Activity parent, String appId, SocialNetworkListener listener, PostData postData) {
 				addResult(0, appId);
-				addResult(1, linkName);
-				addResult(2, message);
-				addResult(3, link);
-				addResult(4, caption);
-				addResult(5, listener);
+				addResult(1, postData);
+				addResult(2, listener);
 			}
-
+			
 			@Override
 			protected SocializeService getSocialize() {
 				return socialize;
@@ -251,11 +227,18 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		AndroidMock.verify(socialize, config, appUtils, info);
 		
 		String fbIdAfter = getResult(0);
-		String linkNameAfter = getResult(1);
-		String messageAfter = getResult(2);
-		String linkAfter = getResult(3);
-		String captionAfter = getResult(4);
-		SocialNetworkListener listenerAfter = getResult(5);
+		PostData data = getResult(1);
+		SocialNetworkListener listenerAfter = getResult(2);
+		
+		assertNotNull(data);
+		Map<String, String> postValues = data.getPostValues();
+		
+		assertNotNull(postValues);
+		
+		String linkNameAfter = postValues.get("name");
+		String messageAfter = postValues.get("message");
+		String linkAfter = postValues.get("link");
+		String captionAfter = postValues.get("caption");
 		
 		assertEquals(fbId, fbIdAfter);
 		assertEquals(linkName, linkNameAfter);

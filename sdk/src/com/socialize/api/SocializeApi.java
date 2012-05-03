@@ -642,20 +642,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		SocializeActionListener listener = null;
 		Context context;
 		
-		@Deprecated
-		public AbstractAsyncProcess(Context context, RequestType requestType, SocializeSession session, SocializeActionListener listener) {
-			this(requestType, session, listener);
-			this.context = context;
-		}		
-		
-		@Deprecated
-		public AbstractAsyncProcess(RequestType requestType, SocializeSession session, SocializeActionListener listener) {
-			super();
-			this.requestType = requestType;
-			this.session = session;
-			this.listener = listener;
-		}
-		
 		public AbstractAsyncProcess(Context context, SocializeSession session, SocializeActionListener listener) {
 			this(session, listener);
 			this.context = context;
@@ -699,11 +685,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}
 	
 	class AsyncAuthenicator extends AbstractAsyncProcess<SocializeAuthRequest, Void, SocializeAuthResponse> {
-
-		@Deprecated
-		public AsyncAuthenicator(Context context, RequestType requestType, SocializeSession session, SocializeActionListener listener) {
-			super(context, requestType, session, listener);
-		}
 
 		public AsyncAuthenicator(Context context, SocializeSession session, SocializeActionListener listener) {
 			super(context, session, listener);
@@ -760,12 +741,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}	
 	
 	class AsyncPutter extends AbstractAsyncProcess<SocializePutRequest<T>, Void, SocializeEntityResponse<T>> {
-
-		@Deprecated
-		public AsyncPutter(RequestType requestType, SocializeSession session, SocializeActionListener listener) {
-			super(requestType, session, listener);
-		}
-		
 		public AsyncPutter(SocializeSession session, SocializeActionListener listener) {
 			super(session, listener);
 		}		
@@ -870,11 +845,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 
 	class AsyncGetter extends AbstractAsyncProcess<SocializeGetRequest, Void, SocializeEntityResponse<T>> {
 
-		@Deprecated
-		public AsyncGetter(RequestType requestType, SocializeSession session, SocializeActionListener listener) {
-			super(requestType, session, listener);
-		}
-		
 		public AsyncGetter(SocializeSession session, SocializeActionListener listener) {
 			super(session, listener);
 		}

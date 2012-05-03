@@ -38,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.content.Context;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.api.SessionLock;
 import com.socialize.api.SocializeRequestFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionFactory;
@@ -246,88 +247,93 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	}
 
 	@Override
-	public synchronized SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
-		
-		WritableSession session = loadSession(endpoint, key, secret);
-		
-		if(session != null) {
-			
-			if(validateSession(session, data)) {
-				return session;
-			}
-			else {
-				session = setProviderCredentialsForUser(data, session);
-			}
-		}
-		
-		if(session == null) {
-			session = sessionFactory.create(key, secret, data);
-		}
-		
-		endpoint = prepareEndpoint(session, endpoint, true);
-		
-		if(!clientFactory.isDestroyed()) {
+	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
+		try {
+			SessionLock.lock();
 
-			HttpClient client = clientFactory.getClient();
+			WritableSession session = loadSession(endpoint, key, secret);
 			
-			HttpEntity entity = null;
-			
-			try {
-				HttpUriRequest request = requestFactory.getAuthRequest(session, endpoint, uuid, data);
+			if(session != null) {
 				
-				if(logger != null && logger.isDebugEnabled()) {
-					logger.debug("Calling authenticate endpoint for device [" +
-							uuid +
-							"]");
-				}
-				
-				HttpResponse response = client.execute(request);
-				
-				entity = response.getEntity();
-				
-				if(httpUtils.isHttpError(response)) {
-					
-					if(sessionPersister != null && httpUtils.isAuthError(response)) {
-						sessionPersister.delete(context);
-					}
-					
-					String msg = ioUtils.readSafe(entity.getContent());
-					
-					throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
+				if(validateSession(session, data)) {
+					return session;
 				}
 				else {
-					
-					JSONObject json = jsonParser.parseObject(entity.getContent());
-					
-					User user = userFactory.fromJSON(json.getJSONObject("user"));
-
-					session.setConsumerToken(json.getString("oauth_token"));
-					session.setConsumerTokenSecret(json.getString("oauth_token_secret"));
-					session.setUser(user);
-					
-					setProviderCredentialsForUser(data, session);
-					
-					// Ensure the user credentials match the user auth data returned from the server
-					verifyProviderCredentialsForUser(session, user);
-					
-					saveSession(session);
+					session = setProviderCredentialsForUser(data, session);
 				}
 			}
-			catch (Exception e) {
-				throw SocializeException.wrap(e);
+			
+			if(session == null) {
+				session = sessionFactory.create(key, secret, data);
 			}
-			finally {
-				closeEntity(entity);
+			
+			endpoint = prepareEndpoint(session, endpoint, true);
+			
+			if(!clientFactory.isDestroyed()) {
+
+				HttpClient client = clientFactory.getClient();
+				
+				HttpEntity entity = null;
+				
+				try {
+					HttpUriRequest request = requestFactory.getAuthRequest(session, endpoint, uuid, data);
+					
+					if(logger != null && logger.isDebugEnabled()) {
+						logger.debug("Calling authenticate endpoint for device [" +
+								uuid +
+								"]");
+					}
+					
+					HttpResponse response = client.execute(request);
+					
+					entity = response.getEntity();
+					
+					if(httpUtils.isHttpError(response)) {
+						
+						if(sessionPersister != null && httpUtils.isAuthError(response)) {
+							sessionPersister.delete(context);
+						}
+						
+						String msg = ioUtils.readSafe(entity.getContent());
+						
+						throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
+					}
+					else {
+						
+						JSONObject json = jsonParser.parseObject(entity.getContent());
+						
+						User user = userFactory.fromJSON(json.getJSONObject("user"));
+
+						session.setConsumerToken(json.getString("oauth_token"));
+						session.setConsumerTokenSecret(json.getString("oauth_token_secret"));
+						session.setUser(user);
+						
+						setProviderCredentialsForUser(data, session);
+						
+						// Ensure the user credentials match the user auth data returned from the server
+						verifyProviderCredentialsForUser(session, user);
+						
+						saveSession(session);
+					}
+				}
+				catch (Exception e) {
+					throw SocializeException.wrap(e);
+				}
+				finally {
+					closeEntity(entity);
+				}
 			}
+			else {
+				if(logger != null) {
+					logger.warn("Attempt to access HttpClientFactory that was already destroyed");
+				}
+			}
+			
+			return session;			
 		}
-		else {
-			if(logger != null) {
-				logger.warn("Attempt to access HttpClientFactory that was already destroyed");
-			}
+		finally {
+			SessionLock.unlock();
 		}
-		
-		
-		return session;
 	}
 	
 	protected WritableSession setProviderCredentialsForUser(AuthProviderData data, WritableSession session) {

@@ -23,6 +23,7 @@ package com.socialize.test.integration.services;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import android.util.Log;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
 import com.socialize.entity.User;
@@ -89,12 +90,27 @@ public class UserUtilsTest extends SocializeActivityTest {
 		String name = "foobar" + Math.random();
 		user.setFirstName(name);
 		
+		Log.e("Socialize", "Wants to set user with Name [" +
+				user.getFirstName() +
+				"] in Test [" +
+				Thread.currentThread().getName() +
+				"]");
+		
+		long idBefore = user.getId();
+		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		UserUtils.saveUserSettings(getContext(), user, new UserSaveListener() {
 			
 			@Override
 			public void onUpdate(User entity) {
+				
+				Log.e("Socialize", "User updated with Name [" +
+						entity.getFirstName() +
+						"] in Test [" +
+						Thread.currentThread().getName() +
+						"]");				
+				
 				latch.countDown();
 			}
 			
@@ -108,14 +124,27 @@ public class UserUtilsTest extends SocializeActivityTest {
 		
 		latch.await(20, TimeUnit.SECONDS);
 		
+		
+		Log.e("Socialize", "Destroying Socialize in Test [" +
+				Thread.currentThread().getName() +
+				"]");	
+		
 		Socialize.getSocialize().destroy(true);
 		
 		User after = UserUtils.getCurrentUser(getActivity());
 		
+		long idAfter = after.getId();
+		
 		String firstName = after.getFirstName();
 		
-		assertNotNull(firstName);
-		assertEquals(name, firstName);
+		Log.e("Socialize", "Got name [" +
+				firstName +
+				"] from Socialize after Test [" +
+				Thread.currentThread().getName() +
+				"]");			
 		
+		assertNotNull(firstName);
+		assertEquals(idBefore, idAfter);
+		assertEquals(name, firstName);
 	}
 }

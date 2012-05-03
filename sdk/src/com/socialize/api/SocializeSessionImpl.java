@@ -21,6 +21,7 @@
  */
 package com.socialize.api;
 
+import android.util.Log;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.DefaultUserProviderCredentialsMap;
@@ -57,9 +58,14 @@ public class SocializeSessionImpl implements WritableSession {
 	@SuppressWarnings("rawtypes")
 	private AuthProvider authProvider;
 	
-	public SocializeSessionImpl() {
+	private static final SocializeSessionImpl instance = new SocializeSessionImpl();
+	
+	public static final SocializeSessionImpl getInstance() {
+		return instance;
+	}
+	
+	SocializeSessionImpl() {
 		super();
-		
 		userProviderCredentials = new DefaultUserProviderCredentialsMap();
 	}
 	
@@ -93,6 +99,15 @@ public class SocializeSessionImpl implements WritableSession {
 	}
 
 	public void setUser(User user) {
+		
+		Log.e("Socialize", "Set user with Name [" +
+				user.getFirstName() +
+				"] from Thread [" +
+				Thread.currentThread().getName() +
+				"] with instance [" +
+				toString() +
+				"]");
+		
 		this.user = user;
 	}
 

@@ -59,7 +59,7 @@ public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 
 	@Override
 	public WritableSession create(String key, String secret, UserProviderCredentials userProviderCredentials) {
-		SocializeSessionImpl session = new SocializeSessionImpl();
+		SocializeSessionImpl session = SocializeSessionImpl.getInstance();
 		session.setConsumerKey(key);
 		session.setConsumerSecret(secret);
 		
@@ -76,7 +76,7 @@ public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 	
 	@Override
 	public WritableSession create(String key, String secret, UserProviderCredentialsMap userProviderCredentialsMap) {
-		SocializeSessionImpl session = new SocializeSessionImpl();
+		SocializeSessionImpl session = SocializeSessionImpl.getInstance();
 		session.setConsumerKey(key);
 		session.setConsumerSecret(secret);
 		session.setUserProviderCredentials(userProviderCredentialsMap);

@@ -19,35 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action.user;
+package com.socialize.api;
 
-import android.app.Activity;
-import android.content.Context;
-import com.socialize.api.action.SocializeActionUtilsBase;
-import com.socialize.entity.User;
-import com.socialize.listener.user.UserSaveListener;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class SocializeUserUtils extends SocializeActionUtilsBase implements UserUtilsProxy {
+public class SessionLock {
 
-	private UserSystem userSystem;
-
-	@Override
-	public User getCurrentUser(Context context)  {
-		return getSocialize().getSession().getUser();
+	private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+	
+	public static void lock() {
+		lock.writeLock().lock();
 	}
-
-	@Override
-	public void saveUserSettings(Activity context, User user, UserSaveListener listener) {
-		userSystem.saveUserProfile(context, getSocialize().getSession(), user, true, listener);
-	}
-
-	public void setUserSystem(UserSystem userSystem) {
-		this.userSystem = userSystem;
+	
+	public static void unlock() {
+		lock.writeLock().unlock();
 	}
 	
 }

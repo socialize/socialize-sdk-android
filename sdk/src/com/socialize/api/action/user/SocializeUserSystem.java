@@ -23,6 +23,7 @@ package com.socialize.api.action.user;
 
 import android.content.Context;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.api.SessionLock;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
@@ -165,16 +166,24 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	}
 	
 	protected void handleUserUpdate(final Context context, final SocializeSession session, User savedUser, final UserListener listener) {
-		// Update local in-memory user
-		User sessionUser = session.getUser();
-		sessionUser.merge(savedUser);
 		
-		// Save this user to the local session for next load
-		if(sessionPersister != null) {
-			sessionPersister.saveUser(context, sessionUser);
+		try {
+			SessionLock.lock();
+			
+			// Update local in-memory user
+			User sessionUser = session.getUser();
+			sessionUser.merge(savedUser);
+			
+			// Save this user to the local session for next load
+			if(sessionPersister != null) {
+				sessionPersister.saveUser(context, sessionUser);
+			}
+			
+			listener.onUpdate(sessionUser);
 		}
-		
-		listener.onUpdate(sessionUser);
+		finally {
+			SessionLock.unlock();
+		}
 	}
 	
 	public void setSessionPersister(SocializeSessionPersister sessionPersister) {
