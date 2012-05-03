@@ -74,7 +74,7 @@ public class SocializeLocationManager {
 	}
 
 	public void removeUpdates(final LocationListener listener) {
-		if(lm != null) {
+		if(lm != null && listener != null) {
 			lm.removeUpdates(listener);
 		}
 	}
