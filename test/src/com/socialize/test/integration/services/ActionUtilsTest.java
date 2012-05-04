@@ -102,7 +102,13 @@ public class ActionUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		User user = new User();
-		user.setId(58175552L); // from comments.json
+		
+		JSONObject json = TestUtils.getJSON(getContext(), "comments.json");
+		JSONArray jsonArray = json.getJSONArray("items");
+		JSONObject jsonObject = (JSONObject) jsonArray.get(0);
+		JSONObject userObject = jsonObject.getJSONObject("user");
+		String userId = userObject.getString("id");			
+		user.setId(Long.parseLong(userId)); // from comments.json
 		
 		ActionUtils.getActionsByUser(getContext(), user, 0, 100, new ActionListListener() {
 			@Override
@@ -287,7 +293,7 @@ public class ActionUtilsTest extends SocializeActivityTest {
 		
 		assertEquals("No all items of type [" +
 				type.getSimpleName() +
-				"] found in action list", 0, ids.size());
+				"] found in action list", ids.size(), 0);
 	}
 	
 }
