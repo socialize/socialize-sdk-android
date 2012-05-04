@@ -574,10 +574,10 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			}
 			
 			system.destroy();
-			
 			initCount = 0;
 			initPaths = null;
 			entityLoader = null;
+			session = null;
 		}
 		else {
 			destroy();
