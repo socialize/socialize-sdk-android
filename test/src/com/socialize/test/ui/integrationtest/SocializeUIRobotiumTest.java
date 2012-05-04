@@ -94,6 +94,8 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 			e.printStackTrace();
 		}
 		
+		TestUtils.tearDown();
+		
 		super.tearDown();
 	}	
 	

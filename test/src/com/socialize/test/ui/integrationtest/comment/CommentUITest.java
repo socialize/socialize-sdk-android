@@ -29,6 +29,7 @@ import com.socialize.test.mock.MockCommentSystem;
 import com.socialize.test.mock.MockSubscriptionSystem;
 import com.socialize.test.ui.integrationtest.SocializeUIRobotiumTest;
 import com.socialize.test.ui.util.TestUtils;
+import com.socialize.ui.comment.CommentDetailActivity;
 import com.socialize.ui.comment.CommentEditField;
 import com.socialize.ui.comment.CommentEntryView;
 import com.socialize.ui.dialog.AlertDialogFactory;
@@ -273,6 +274,8 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		
 		int pageSize = 20;
 		
+		TestUtils.setUpActivityMonitor(CommentDetailActivity.class);
+		
 		Socialize.getSocialize().getConfig().setProperty("comment.page.size", String.valueOf(pageSize));
 		
 		startWithoutFacebook();
@@ -289,7 +292,9 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		// Click on the first comment in list. 
 		robotium.clickInList(0);
 		
-		robotium.waitForActivity("CommentDetailActivity");
+		TestUtils.waitForActivity(10000);
+		
+//		robotium.waitForActivity("CommentDetailActivity");
 		
 		// Make sure we have user name, comment, image and location
 		TextView userDisplayName = robotium.getText(0);

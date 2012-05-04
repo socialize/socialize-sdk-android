@@ -803,7 +803,7 @@ public class CommentListView extends BaseView {
 		
 		User user = Socialize.getSocialize().getSession().getUser();
 		
-		if(notifyBox != null) {
+		if(notifyBox != null && user != null) {
 			if(user.isNotificationsEnabled()) {
 				notifyBox.setVisibility(View.VISIBLE);
 			}

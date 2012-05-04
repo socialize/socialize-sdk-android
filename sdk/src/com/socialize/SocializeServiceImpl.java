@@ -577,7 +577,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			initCount = 0;
 			initPaths = null;
 			entityLoader = null;
-			session = null;
 		}
 		else {
 			destroy();

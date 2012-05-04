@@ -105,6 +105,7 @@ public class ViewUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(View view) {
 				addResult(0, view);
+				addResult(1, view.getEntity());
 				latch.countDown();
 			}
 		});
@@ -119,29 +120,7 @@ public class ViewUtilsTest extends SocializeActivityTest {
 		View view = (View) result;
 		assertTrue("View ID is not greater than 0", view.getId() > 0);
 		
-		// get the entity again.
-		clearResults();
-		
-		final CountDownLatch latch2 = new CountDownLatch(1);
-		
-		Socialize.getSocialize().getEntity(randomKey, new EntityGetListener() {
-			
-			@Override
-			public void onGet(Entity entity) {
-				addResult(0, entity);
-				latch2.countDown();
-			}
-			
-			@Override
-			public void onError(SocializeException error) {
-				error.printStackTrace();
-				latch2.countDown();
-			}
-		});		
-		
-		latch2.await(20, TimeUnit.SECONDS);
-		
-		Entity entityAfter = getResult(0);
+		Entity entityAfter = getResult(1);
 		assertNotNull(entityAfter);
 		assertEquals(entityAfter.getKey(), randomKey);
 		assertNotNull(entityAfter.getEntityStats());

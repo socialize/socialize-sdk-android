@@ -535,28 +535,32 @@ public class CommentEntryView extends BaseView {
 			notifyCheckBox.setChecked(notificationsEnabled);
 		}
 		
-		User user = Socialize.getSocialize().getSession().getUser();
+		SocializeSession session = Socialize.getSocialize().getSession();
 		
-		if(facebookCheckbox != null) {
-			if(!facebookCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-				facebookCheckbox.setChecked(user.isAutoPostToFacebook());
+		if(session != null) {
+			User user = session.getUser();
+			
+			if(facebookCheckbox != null) {
+				if(!facebookCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+					facebookCheckbox.setChecked(user.isAutoPostToFacebook());
+				}
+				else {
+					facebookCheckbox.setChecked(false);
+				}
 			}
-			else {
-				facebookCheckbox.setChecked(false);
+			
+			if(twitterCheckbox != null) {
+				if(!twitterCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
+					twitterCheckbox.setChecked(user.isAutoPostToTwitter());
+				}
+				else {
+					twitterCheckbox.setChecked(false);
+				}
+			}		
+			
+			if(locationCheckBox != null && !locationCheckBox.isChanged()) {
+				locationCheckBox.setChecked(user.isShareLocation());
 			}
-		}
-		
-		if(twitterCheckbox != null) {
-			if(!twitterCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
-				twitterCheckbox.setChecked(user.isAutoPostToTwitter());
-			}
-			else {
-				twitterCheckbox.setChecked(false);
-			}
-		}		
-		
-		if(locationCheckBox != null && !locationCheckBox.isChanged()) {
-			locationCheckBox.setChecked(user.isShareLocation());
 		}
 	}
 	
@@ -591,10 +595,13 @@ public class CommentEntryView extends BaseView {
 			locationCheckBox.setChanged(false);
 		}
 		
-		User user = Socialize.getSocialize().getSession().getUser();
+		SocializeSession session = Socialize.getSocialize().getSession();
 		
-		if(user != null) {
-			notificationsAvailable = user.isNotificationsEnabled() && appUtils.isNotificationsAvailable(getContext());
+		if(session != null) {
+			User user = session.getUser();
+			if(user != null) {
+				notificationsAvailable = user.isNotificationsEnabled() && appUtils.isNotificationsAvailable(getContext());
+			}
 		}
 		
 		updateUI();
