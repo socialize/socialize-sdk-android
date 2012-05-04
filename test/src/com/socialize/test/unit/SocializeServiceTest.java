@@ -1176,8 +1176,6 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		assertTrue(socialize.isInitialized());
 		
-
-
 		socialize.authenticate(getActivity(), key, secret, fb, listener);
 
 		verifyDefaultMocks();
@@ -1193,6 +1191,9 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
 		
+		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(consumerKey);
+		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET)).andReturn(consumerSecret);
+		
 		FacebookAuthProviderInfo fb = new FacebookAuthProviderInfo();
 		fb.setAppId(authProviderId);
 
@@ -1202,7 +1203,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		authProviderData.setAuthProviderInfo(fb);
 
 		SocializeServiceImpl socialize = new SocializeServiceImpl();
-
+		
 		userSystem.authenticate(getActivity(), consumerKey, consumerSecret, authProviderData, authListener, socialize, false);
 
 		replayDefaultMocks();
@@ -1215,6 +1216,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		creds.setAccessToken(authToken3rdParty);
 		creds.setUserId(authUserId3rdParty);
 		creds.setTokenSecret(secret3rdParty);
+		creds.setAuthProviderInfo(fb);
 		
 		socialize.authenticateKnownUser(getActivity(), consumerKey, consumerSecret, fb, creds, authListener);
 

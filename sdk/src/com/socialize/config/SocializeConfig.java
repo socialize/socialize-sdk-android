@@ -73,7 +73,11 @@ public class SocializeConfig {
 	public static final String FACEBOOK_SSO_ENABLED = "facebook.sso.enabled";
 	public static final String FACEBOOK_PHOTOS_ENABLED = "facebook.photos.enabled";
 	public static final String FACEBOOK_APP_ID = "facebook.app.id";
+	
+	@Deprecated
 	public static final String FACEBOOK_USER_ID = "facebook.user.id";
+	
+	@Deprecated
 	public static final String FACEBOOK_USER_TOKEN = "facebook.user.token";
 	
 	public static final String TWITTER_CONSUMER_KEY = "twitter.consumer.key";
@@ -288,7 +292,9 @@ public class SocializeConfig {
 	 * Sets the FB credentials for the current user if available.
 	 * @param userId
 	 * @param token
+	 * @deprecated No longer used. Any values set here will be ignored.  Use FacebookUtils to link a known user.
 	 */
+	@Deprecated
 	public void setFacebookUserCredentials(String userId, String token) {
 		setProperty(SocializeConfig.FACEBOOK_USER_ID, userId);
 		setProperty(SocializeConfig.FACEBOOK_USER_TOKEN, token);

@@ -2,11 +2,12 @@ import oauth2 as oauth
 import simplejson
 import random as rand
 import os,sys
+import urllib
 
 config_file_path='../sample/assets/socialize.properties'
 assets_file_path='../sample/assets/existing-data/'
 
-def create_android_config(key,secret,url,fb_user_id,fb_token):
+def create_android_config(key,secret,url,fb_token):
     print '#'*20
     print '## CREATE conf.js ##'
     print '#'*20           
@@ -20,8 +21,8 @@ def create_android_config(key,secret,url,fb_user_id,fb_token):
     text+= '\nlog.level=DEBUG'
     text+= '\nsocialize.register.notification=false'
     text+= '\nfacebook.app.id=209798315709193'
-    text+= '\nfacebook.user.id='+fb_user_id
-    text+= '\nfacebook.token='+fb_token 
+#    text+= '\nfacebook.user.id='+fb_user_id
+    text+= '\nfacebook.token='+fb_token
     text+= '\ntwitter.consumer.key=U18LUnVjULkkpGoJ6CoP3A' 
     text+= '\ntwitter.consumer.secret=RiIljnFq4RWV9LEaCM1ZLsAHf053vX2KyhJhmCOlBE' 
     text+= '\ntest_value=sample'
@@ -80,7 +81,36 @@ def print_json(item, fname=None):
         
         f = open(fname, 'w')
         f.write(simplejson.dumps(item,sort_keys=True, indent=4))
-        f.close()                                          
+        f.close()    
+        
+def get_fb_user_access_token():
+	fb_app_id = '209798315709193'
+	fb_app_secret = '7fd60d3caab47f3b45e9ffc99cd3c749'
+	fb_access_token = get_fb_access_token(fb_app_id,fb_app_secret)
+	users = get_fb_test_user(fb_app_id,fb_app_secret,fb_access_token)
+	return users[0]['access_token']
+
+        
+def get_fb_access_token(fb_app_id, fb_app_secret):
+    req_url= 'https://graph.facebook.com/oauth/access_token?'
+    params = {'client_id': fb_app_id,
+        'client_secret': fb_app_secret,
+        'grant_type':'client_credentials'}
+    fb_auth_req = req_url + urllib.urlencode(params) 
+    fb_consumer = oauth.Consumer( fb_app_id, fb_app_secret)        
+    client = oauth.Client(fb_consumer)
+    resp = client.request(fb_auth_req, method='GET')
+    return resp[1][len('access_token='):]   
+
+def get_fb_test_user(fb_app_id, fb_app_secret, fb_access_token):
+    req_url='https://graph.facebook.com/%s/accounts/test-users?'%fb_app_id
+    params = {'access_token':fb_access_token}
+    req_url = req_url + urllib.urlencode(params)
+    fb_consumer = oauth.Consumer( fb_app_id, fb_app_secret)       
+    client = oauth.Client(fb_consumer)                        
+    resp = client.request(req_url, method='GET')
+    cont = simplejson.loads(resp[1])
+    return cont['data']                                     
 
 def remove(fname):
     try:
@@ -114,10 +144,6 @@ def main(key,secret,url):
     like_url='like/'
     view_url='view/'
     udid = '1234566788'
-
-#    key='f04f5af0-5be0-4ae6-a1f1-8d418c0d7e6b'
-    #secret= '7a9a2b20-d4de-4d46-9c0b-f1653f0f1089'
-    #url= 'http://stage.getsocialize.com/v1'
 
     auth_url = url+auth_url
     print auth_url
@@ -211,10 +237,10 @@ if __name__ == "__main__":
     key = args[1]
     secret = args[2]
     url = args[3]             
-    if len(args)>=6:
-        fb_user_id = args[4]
-        fb_token = args[5]
-    create_android_config(key, secret, url, fb_user_id, fb_token)
+#    if len(args)>=6:
+#        fb_user_id = args[4]
+#        fb_token = args[5]
+    create_android_config(key, secret, url, get_fb_user_access_token())
     key, secret, url = read_android_config()
     if url[-1]!='/':
         url+='/'

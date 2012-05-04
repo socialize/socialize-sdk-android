@@ -112,7 +112,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		SocializeIOC.unregisterStub("facebookProvider");
 	}
 	
-	public void test_link_with_token () throws InterruptedException {
+	public void test_link_with_token () throws Exception {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Activity context = getActivity();
@@ -130,7 +130,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		// Set a mock FB ID
 		FacebookUtils.setAppId(getActivity(), "foobar");
 		
-		FacebookUtils.link(context, TestUtils.DUMMY_FB_TOKEN, new SocializeAuthListener() {
+		FacebookUtils.link(context, TestUtils.getDummyFBToken(getContext()), new SocializeAuthListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -165,9 +165,9 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		UserProviderCredentials userProviderCredentials = session.getUserProviderCredentials(AuthProviderType.FACEBOOK);
 		
 		assertNotNull(userProviderCredentials);
-		assertEquals(TestUtils.DUMMY_FB_TOKEN, userProviderCredentials.getAccessToken());
+		assertEquals(TestUtils.getDummyFBToken(getContext()), userProviderCredentials.getAccessToken());
 		assertTrue(FacebookUtils.isLinked(context));
-		assertEquals(TestUtils.DUMMY_FB_TOKEN, FacebookUtils.getAccessToken(context));
+		assertEquals(TestUtils.getDummyFBToken(getContext()), FacebookUtils.getAccessToken(context));
 		
 		SocializeIOC.unregisterStub("facebookProvider");
 	}
@@ -190,15 +190,15 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 	}
 	
 	
-	public void test_post_authed() throws InterruptedException {
+	public void test_post_authed() throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);
-		
+		final String token = TestUtils.getDummyFBToken(getContext());
 		// Stub in the FacebookAuthProvider
 		FacebookAuthProvider mockFacebookAuthProvider = new FacebookAuthProvider() {
 			@Override
 			public void authenticate(FacebookAuthProviderInfo info, AuthProviderListener listener) {
 				AuthProviderResponse response = new AuthProviderResponse();
-				response.setToken(TestUtils.DUMMY_FB_TOKEN);
+				response.setToken(token);
 				listener.onAuthSuccess(response);
 			}
 		};
@@ -234,12 +234,12 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		do_test_post();
 	}
 	
-	public void test_post_not_authed() throws InterruptedException {
+	public void test_post_not_authed() throws Exception {
 		Socialize.getSocialize().clearSessionCache(getContext());
 		do_test_post();
 	}
 	
-	protected void do_test_post() throws InterruptedException {
+	protected void do_test_post() throws Exception {
 		String entityKeyRandom = "foobar" + Math.random();
 		Entity entity = Entity.newInstance(entityKeyRandom, "foobar");
 		
@@ -263,12 +263,14 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		    }
 		};
 		
+		final String token = TestUtils.getDummyFBToken(getContext());
+		
 		// Stub in the FacebookAuthProvider
 		FacebookAuthProvider mockFacebookAuthProvider = new FacebookAuthProvider() {
 			@Override
 			public void authenticate(FacebookAuthProviderInfo info, AuthProviderListener listener) {
 				AuthProviderResponse response = new AuthProviderResponse();
-				response.setToken(TestUtils.DUMMY_FB_TOKEN);
+				response.setToken(token);
 				listener.onAuthSuccess(response);
 			}
 		};

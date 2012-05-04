@@ -100,6 +100,7 @@ public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 		session.setConsumerToken(token);
 		session.setConsumerTokenSecret(tokenSecret);
 		session.setUser(user);
+		session.setRestored(true);
 
 		AndroidMock.replay(context);
 		AndroidMock.replay(prefs);

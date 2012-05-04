@@ -65,6 +65,8 @@ public class ViewUtilsTest extends SocializeActivityTest {
 		
 		// Get the entity to ensure there are no views
 		Socialize.getSocialize().init(getContext());
+		Socialize.getSocialize().authenticateSynchronous(getContext());
+		
 		Socialize.getSocialize().getEntity(randomKey, new EntityGetListener() {
 			
 			@Override
@@ -75,6 +77,7 @@ public class ViewUtilsTest extends SocializeActivityTest {
 			
 			@Override
 			public void onError(SocializeException error) {
+				error.printStackTrace();
 				addResult(0, 0);
 				entityLatch.countDown();
 			}

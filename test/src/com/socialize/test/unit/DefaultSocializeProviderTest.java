@@ -211,7 +211,8 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		authProviderData.setAuthProviderInfo(authProviderInfo);
 
 		AndroidMock.expect(session.getHost()).andReturn(host);
-
+		AndroidMock.expect(authProviderData.getAuthProviderInfo()).andReturn(null);
+		
 		// Expect save
 		sessionPersister.save(mockContext, session);
 

@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -42,7 +43,26 @@ public class TestUtils {
 	static ActivityInstrumentationTestCase2<?> testCase;
 	static Map<String, JSONObject> jsons = new HashMap<String, JSONObject>();
 	
-	public static final String DUMMY_FB_TOKEN = "AAAAAAITEghMBAIbDCXuiEjfIYD7tLNa7QRXKWXg6iaTjPgpo2n2HW8b3mSAQucVvD1TVkZAmE87FbLvSuvZBUffVeRMFETBiOqlxzgDdPiQAZC58tax";
+	private static String fb_token = null;
+	
+	public static final String getDummyFBToken(Context context) throws IOException {
+		if(fb_token == null) {
+			InputStream in = null;
+			try {
+				in = context.getAssets().open("socialize.properties");
+				Properties props = new Properties();
+				props.load(in);
+				fb_token = props.getProperty("facebook.token");
+			}
+			finally {
+				if(in != null) {
+					in.close();
+				}
+			}
+		}
+		
+		return fb_token;
+	}
 	
 	public static void incrementCount(String key) {
 		holder.incrementCount(key);

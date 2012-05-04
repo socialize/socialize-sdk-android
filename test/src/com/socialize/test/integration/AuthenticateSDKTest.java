@@ -83,7 +83,7 @@ public class AuthenticateSDKTest extends SDKIntegrationTest {
 		
 		Socialize.getSocialize().init(context);
 		
-		final String token = TestUtils.DUMMY_FB_TOKEN;
+		final String token = TestUtils.getDummyFBToken(getContext());
 		
 		runTestOnUiThread(new Runnable() {
 			

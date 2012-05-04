@@ -6,7 +6,6 @@ import com.socialize.auth.AuthProviderResponse;
 import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.listener.AuthProviderListener;
-import com.socialize.test.ui.util.TestUtils;
 
 public class MockFacebookAuthProvider implements AuthProvider<FacebookAuthProviderInfo> {
 
@@ -17,7 +16,7 @@ public class MockFacebookAuthProvider implements AuthProvider<FacebookAuthProvid
 	
 	public void init() {
 		userId = config.getProperty("facebook.user.id");
-		token = TestUtils.DUMMY_FB_TOKEN;
+		token = config.getProperty("facebook.token");
 	}
 
 	@Override

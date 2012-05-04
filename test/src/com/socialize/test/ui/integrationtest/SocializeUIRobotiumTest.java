@@ -122,9 +122,8 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	}		
 	
 	protected void clearAuthCache() {
-		TestUtils.clickOnButton(BTN_CLEAR_CACHE);
-		robotium.waitForDialogToClose(10000);
 		SocializeService socialize = Socialize.getSocialize();
+		socialize.clearSessionCache(getActivity());
 		assertNull(socialize.getSession());
 	}
 	
