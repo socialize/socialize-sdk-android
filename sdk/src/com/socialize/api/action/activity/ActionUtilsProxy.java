@@ -19,11 +19,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.listener.activity;
+package com.socialize.api.action.activity;
+
+import android.app.Activity;
+import com.socialize.entity.Entity;
+import com.socialize.entity.User;
+import com.socialize.listener.activity.ActionListListener;
+
 
 /**
  * @author Jason Polites
- * @deprecated Use ActionListListener
+ *
  */
-@Deprecated
-public abstract class UserActivityListListener extends ActionListListener {}
+public interface ActionUtilsProxy {
+	public void getActionsByApplication (Activity context, int start, int end, ActionListListener listener);
+	public void getActionsByUser (Activity context, User user, int start, int end, ActionListListener listener);
+	public void getActionsByEntity (Activity context, Entity e, int start, int end, ActionListListener listener);
+	public void getActionsByUserAndEntity (Activity context, User user, Entity e, int start, int end, ActionListListener listener);
+}

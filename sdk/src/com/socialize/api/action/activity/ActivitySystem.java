@@ -25,7 +25,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ActionType;
 import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.activity.UserActivityListener;
+import com.socialize.listener.activity.ActionListener;
 
 
 /**
@@ -33,8 +33,8 @@ import com.socialize.listener.activity.UserActivityListener;
  */
 public interface ActivitySystem {
 
-	public static final String ENDPOINT = "/user/";
-	public static final String ENDPOINT_SUFFIX = "/activity/";
+	public static final String USER_ENDPOINT = "/user/";
+	public static final String ACTIVITY_ENDPOINT = "/activity/";
 	
 	/**
 	 * Gets a socialize action.  This call is SYNCHRONOUS!
@@ -46,10 +46,14 @@ public interface ActivitySystem {
 	 */
 	public SocializeAction getAction(SocializeSession session, long id, ActionType type) throws SocializeException;	
 	
+	public void getActivityByUser(SocializeSession session, long id, ActionListener listener);
 	
-	public void getActivityByUser(SocializeSession session, long id, UserActivityListener listener);
-
+	public void getActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, ActionListener listener);
 	
-	public void getActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, UserActivityListener listener);
+	public void getActivityByApplication(SocializeSession session, int startIndex, int endIndex, ActionListener listener);
+	
+	public void getActivityByEntity(SocializeSession session, String entityKey, int startIndex, int endIndex, ActionListener listener);
+	
+	public void getActivityByUserAndEntity(SocializeSession session, long userId, String entityKey, int startIndex, int endIndex, ActionListener listener);
 
 }

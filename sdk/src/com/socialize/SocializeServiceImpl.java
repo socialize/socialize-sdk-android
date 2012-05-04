@@ -75,7 +75,7 @@ import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.SocializeListener;
-import com.socialize.listener.activity.UserActivityListListener;
+import com.socialize.listener.activity.ActionListListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -1146,7 +1146,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#listActivityByUser(int, com.socialize.listener.activity.ActivityListListener)
 	 */
 	@Override
-	public void listActivityByUser(long userId, UserActivityListListener activityListListener) {
+	public void listActivityByUser(long userId, ActionListListener activityListListener) {
 		if(assertAuthenticated(activityListListener)) {
 			activitySystem.getActivityByUser(session, userId, activityListListener);
 		}
@@ -1157,7 +1157,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#listActivityByUser(int, int, int, com.socialize.listener.activity.ActivityListListener)
 	 */
 	@Override
-	public void listActivityByUser(long userId, int startIndex, int endIndex, UserActivityListListener activityListListener) {
+	public void listActivityByUser(long userId, int startIndex, int endIndex, ActionListListener activityListListener) {
 		if(assertAuthenticated(activityListListener)) {
 			activitySystem.getActivityByUser(session, userId, startIndex, endIndex, activityListListener);
 		}

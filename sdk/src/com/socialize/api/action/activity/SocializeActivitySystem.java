@@ -30,7 +30,7 @@ import com.socialize.api.action.share.ShareSystem;
 import com.socialize.api.action.view.ViewSystem;
 import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.activity.UserActivityListener;
+import com.socialize.listener.activity.ActionListener;
 import com.socialize.provider.SocializeProvider;
 
 /**
@@ -72,7 +72,7 @@ public class SocializeActivitySystem extends SocializeApi<SocializeAction, Socia
 	 * @see com.socialize.api.action.ActivitySystem#getActivityByUser(com.socialize.api.SocializeSession, long, com.socialize.listener.activity.UserActivityListener)
 	 */
 	@Override
-	public void getActivityByUser(SocializeSession session, long id, UserActivityListener listener) {
+	public void getActivityByUser(SocializeSession session, long id, ActionListener listener) {
 		String userId = String.valueOf(id);
 		String endpoint = getEndpoint(userId);
 		listAsync(session, endpoint, listener);
@@ -82,13 +82,30 @@ public class SocializeActivitySystem extends SocializeApi<SocializeAction, Socia
 	 * @see com.socialize.api.action.ActivitySystem#getActivityByUser(com.socialize.api.SocializeSession, long, int, int, com.socialize.listener.activity.UserActivityListener)
 	 */
 	@Override
-	public void getActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, UserActivityListener listener) {
+	public void getActivityByUser(SocializeSession session, long id, int startIndex, int endIndex, ActionListener listener) {
 		String userId = String.valueOf(id);
 		String endpoint = getEndpoint(userId);
 		listAsync(session, endpoint, startIndex, endIndex, listener);
 	}
 	
+	@Override
+	public void getActivityByUserAndEntity(SocializeSession session, long userId, String entityKey, int startIndex, int endIndex, ActionListener listener) {
+		String strId = String.valueOf(userId);
+		String endpoint = getEndpoint(strId);
+		listAsync(session, endpoint, entityKey, startIndex, endIndex, listener);
+	}
+
+	@Override
+	public void getActivityByApplication(SocializeSession session, int startIndex, int endIndex, ActionListener listener) {
+		listAsync(session, ACTIVITY_ENDPOINT, startIndex, endIndex, listener);
+	}
+
+	@Override
+	public void getActivityByEntity(SocializeSession session, String entityKey, int startIndex, int endIndex, ActionListener listener) {
+		listAsync(session, ACTIVITY_ENDPOINT, entityKey, startIndex, endIndex, listener);
+	}
+
 	protected String getEndpoint(String id) {
-		return ENDPOINT + id + ENDPOINT_SUFFIX;
+		return USER_ENDPOINT + id + ACTIVITY_ENDPOINT;
 	}
 }

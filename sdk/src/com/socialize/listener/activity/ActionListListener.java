@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2011 Socialize Inc. 
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -21,9 +21,23 @@
  */
 package com.socialize.listener.activity;
 
+import com.socialize.entity.SocializeAction;
+
 /**
+ * Used when listing activity for a user.
  * @author Jason Polites
- * @deprecated Use ActionListListener
  */
-@Deprecated
-public abstract class UserActivityListListener extends ActionListListener {}
+public abstract class ActionListListener extends ActionListener {
+
+	@Override
+	public final void onGet(SocializeAction entity) {}
+
+	@Override
+	public final void onUpdate(SocializeAction entity) {}
+
+	@Override
+	public final void onCreate(SocializeAction entity) {}
+
+	@Override
+	public final void onDelete() {}
+}

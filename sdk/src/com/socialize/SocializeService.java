@@ -36,7 +36,7 @@ import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
-import com.socialize.listener.activity.UserActivityListListener;
+import com.socialize.listener.activity.ActionListListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -497,7 +497,7 @@ public interface SocializeService extends SocializeUI {
 	 * @param userId The ID of the user for whom activity will be listed.
 	 * @param activityListListener A listener to handle callbacks from the get.
 	 */
-	public void listActivityByUser(long userId, UserActivityListListener activityListListener);
+	public void listActivityByUser(long userId, ActionListListener activityListListener);
 	
 	/**
 	 * Lists a user's activity with pagination.
@@ -506,7 +506,7 @@ public interface SocializeService extends SocializeUI {
 	 * @param endIndex The ending index of the results for pagination.
 	 * @param activityListListener A listener to handle callbacks from the get.
 	 */
-	public void listActivityByUser(long userId, int startIndex, int endIndex, UserActivityListListener activityListListener);
+	public void listActivityByUser(long userId, int startIndex, int endIndex, ActionListListener activityListListener);
 	
 	/**
 	 * Subscribes the currently logged in user to notifications for the given entity.
