@@ -1648,6 +1648,10 @@
 
 <!--  Socialize 2.0 -->
 
+	<bean id="entityUtils" class="com.socialize.api.action.entity.SocializeEntityUtils">
+		<property name="entitySystem" ref="entitySystem"/>
+	</bean>
+
 	<bean id="likeUtils" class="com.socialize.api.action.like.SocializeLikeUtils">
 		<property name="likeSystem" ref="likeSystem"/>
 		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>

@@ -1115,7 +1115,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public void listEntitiesByKey(EntityListListener entityListListener, String...keys) {
 		if(assertAuthenticated(entityListListener)) {
-			entitySystem.listEntities(session, entityListListener, keys);
+			entitySystem.getEntities(session, entityListListener, keys);
 		}
 	}
 

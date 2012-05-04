@@ -19,9 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action.entity;
+package com.socialize;
 
+import java.lang.reflect.Proxy;
 import android.app.Activity;
+import com.socialize.api.action.entity.EntityUtilsProxy;
 import com.socialize.entity.Entity;
 import com.socialize.listener.entity.EntityAddListener;
 import com.socialize.listener.entity.EntityGetListener;
@@ -30,10 +32,59 @@ import com.socialize.listener.entity.EntityListListener;
 
 /**
  * @author Jason Polites
+ *
  */
-public interface EntityUtilsProxy {
-	public void addEntity (Activity context, Entity e, EntityAddListener listener);
-	public void getEntity (Activity context, String key, EntityGetListener listener);
-	public void getEntities (Activity context, int start, int end, EntityListListener listener);
-	public void getEntities (Activity context, EntityListListener listener, String...key);
+public class EntityUtils {
+	
+	static EntityUtilsProxy proxy;
+	
+	static {
+		proxy = (EntityUtilsProxy) Proxy.newProxyInstance(
+				EntityUtilsProxy.class.getClassLoader(),
+				new Class[]{EntityUtilsProxy.class},
+				new SocializeActionProxy("entityUtils"));	// Bean name
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param e
+	 * @param listener
+	 */
+	public static void addEntity (Activity context, Entity e, EntityAddListener listener) {
+		proxy.addEntity(context, e, listener);
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param key
+	 * @param listener
+	 */
+	public static void getEntity (Activity context, String key, EntityGetListener listener) {
+		proxy.getEntity(context, key, listener);
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param start
+	 * @param end
+	 * @param listener
+	 */
+	public static void getEntities (Activity context, int start, int end, EntityListListener listener) {
+		proxy.getEntities(context, start, end, listener);
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param start
+	 * @param end
+	 * @param listener
+	 * @param key
+	 */
+	public static void getEntities (Activity context, EntityListListener listener, String...keys) {
+		proxy.getEntities(context, listener, keys);	
+	}
 }

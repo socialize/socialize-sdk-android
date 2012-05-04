@@ -62,7 +62,7 @@ public class EntityLauncher extends BaseLauncher {
 					long id = Long.parseLong(idObj.toString());
 					try {
 						SocializeSession session = notificationAuthenticator.authenticate(context);
-						Entity entity = entitySystem.getEntity(session, id);
+						Entity entity = entitySystem.getEntitySynchronous(session, id);
 						return loadEntity(context, entityLoader, entity);
 					}
 					catch (SocializeException e) {

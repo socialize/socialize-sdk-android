@@ -1341,7 +1341,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		setupDefaultMocks();
 
-		entitySystem.listEntities(session, listener, ids);
+		entitySystem.getEntities(session, listener, ids);
 
 		replayDefaultMocks();
 

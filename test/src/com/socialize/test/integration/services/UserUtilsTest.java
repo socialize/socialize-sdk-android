@@ -23,7 +23,6 @@ package com.socialize.test.integration.services;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import android.util.Log;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
 import com.socialize.entity.User;

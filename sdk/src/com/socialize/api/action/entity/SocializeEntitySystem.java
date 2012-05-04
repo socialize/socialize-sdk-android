@@ -45,7 +45,7 @@ public class SocializeEntitySystem extends SocializeApi<Entity, SocializeProvide
 	}
 	
 	@Override
-	public Entity getEntity(SocializeSession session, long id) throws SocializeException {
+	public Entity getEntitySynchronous(SocializeSession session, long id) throws SocializeException {
 		ListResult<Entity> list = list(session, ENDPOINT, null, 0, 1, String.valueOf(id));
 		if(list != null) {
 			List<Entity> items = list.getItems();
@@ -115,8 +115,25 @@ public class SocializeEntitySystem extends SocializeApi<Entity, SocializeProvide
 	 * @see com.socialize.api.action.EnitySystem#listEntities(com.socialize.api.SocializeSession, com.socialize.listener.entity.EntityListener, java.lang.String)
 	 */
 	@Override
-	public void listEntities(SocializeSession session, EntityListener listener, String...keys) {
+	public void getEntities(SocializeSession session, EntityListener listener, String...keys) {
 		listAsync(session, ENDPOINT, null, "entity_key", 0, SocializeConfig.MAX_LIST_RESULTS, listener, keys);
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.entity.EntitySystem#getEntities(com.socialize.api.SocializeSession, int, int, com.socialize.listener.entity.EntityListener, java.lang.String[])
+	 */
+	@Override
+	public void getEntities(SocializeSession session, int start, int end, EntityListener listener, String... entityKeys) {
+		listAsync(session, ENDPOINT, null, "entity_key", start, end, listener, entityKeys);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.entity.EntitySystem#getEntities(com.socialize.api.SocializeSession, int, int, com.socialize.listener.entity.EntityListener)
+	 */
+	@Override
+	public void getAllEntities(SocializeSession session, int start, int end, EntityListener listener) {
+		listAsync(session, ENDPOINT, start, end, listener);
+	}
 }

@@ -44,14 +44,17 @@ public interface EntitySystem {
 	 * @throws SocializeException
 	 * @return
 	 */
-	public Entity getEntity(SocializeSession session, long id) throws SocializeException;		
+	public Entity getEntitySynchronous(SocializeSession session, long id) throws SocializeException;		
 	
 	public void getEntity(SocializeSession session, long id, EntityListener listener);
 
 	
 	public void getEntity(SocializeSession session, String entityKey, EntityListener listener);
 
+	public void getEntities(SocializeSession session, int start, int end, EntityListener listener, String... entityKeys);
 	
-	public void listEntities(SocializeSession session, EntityListener listener, String... entityKeys);
+	public void getAllEntities(SocializeSession session, int start, int end, EntityListener listener);
+	
+	public void getEntities(SocializeSession session, EntityListener listener, String... entityKeys);
 
 }
