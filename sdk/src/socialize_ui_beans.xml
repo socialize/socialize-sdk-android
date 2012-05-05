@@ -406,7 +406,7 @@
 		singleton="false"
 		extends="clickableSectionCell">
 		<constructor-arg type="activity"/>	
-		<property name="backgroundColor" value="#293036"/>
+		<property name="backgroundColor" value="#3d464c"/>
 		<property name="bgAlpha" value="255" type="integer"/>
 		<property name="displayText" value="Email"/>
 	</bean>	
@@ -419,7 +419,7 @@
 		singleton="false"
 		extends="clickableSectionCell">
 		<constructor-arg type="activity"/>	
-		<property name="backgroundColor" value="#293036"/>
+		<property name="backgroundColor" value="#3d464c"/>
 		<property name="bgAlpha" value="255" type="integer"/>
 		<property name="displayText" value="SMS"/>
 	</bean>			
@@ -433,7 +433,7 @@
 		<constructor-arg type="activity"/>
 		<property name="text" value="Continue"/>
 		<property name="height" value="34" type="integer"/>
-		<property name="width" value="80" type="integer"/>
+		<property name="width" value="160" type="integer"/>
 		<property name="textSize" value="11" type="integer"/>
 		<property name="textAlign" value="center"/>
 		<property name="padding" value="2" type="integer"/>

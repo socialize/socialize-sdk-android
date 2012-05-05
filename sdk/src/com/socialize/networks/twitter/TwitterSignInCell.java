@@ -22,8 +22,9 @@
 package com.socialize.networks.twitter;
 
 import android.content.Context;
-
+import android.view.View;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.ui.auth.AuthPanelView;
 
 /**
  * @author Jason Polites
@@ -32,15 +33,35 @@ import com.socialize.listener.SocializeAuthListener;
 public class TwitterSignInCell extends TwitterCell {
 
 	private TwitterAuthClickListener twitterAuthClickListener;
+	private AuthPanelView authPanelView;
 
 	public TwitterSignInCell(Context context) {
 		super(context);
+	}
+	
+	public TwitterSignInCell(Context context, AuthPanelView authPanelView) {
+		super(context);
+		this.authPanelView = authPanelView;
 	}
 
 	@Override
 	public void init() {
 		super.init();
-		setOnClickListener(twitterAuthClickListener);
+		
+		super.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(isToggled()) {
+					setToggled(false);
+					if(authPanelView != null) {
+						authPanelView.toggleContinueButton();
+					}					
+				}
+				else {
+					twitterAuthClickListener.onClick(v);
+				}
+			}
+		});		
 	}
 
 	public void setAuthListener(SocializeAuthListener listener) {

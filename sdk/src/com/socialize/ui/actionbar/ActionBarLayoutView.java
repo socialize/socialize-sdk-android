@@ -23,12 +23,14 @@ package com.socialize.ui.actionbar;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.api.action.share.SocialNetworkDialogListener;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.EntityStats;
@@ -51,6 +53,7 @@ import com.socialize.ui.cache.CacheableEntity;
 import com.socialize.ui.cache.EntityCache;
 import com.socialize.ui.dialog.AuthDialogFactory;
 import com.socialize.ui.dialog.ProgressDialogFactory;
+import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
@@ -186,9 +189,11 @@ public class ActionBarLayoutView extends BaseView {
 		shareButton.setListener(new ActionBarButtonListener() {
 			@Override
 			public void onClick(ActionBarButton button) {
-				if(onActionBarEventListener != null) {
-					onActionBarEventListener.onClick(actionBarView, ActionBarEvent.SHARE);
-				}
+				ShareUtils.showShareDialog(getActivity(), actionBarView.getEntity(), null);
+				
+//				if(onActionBarEventListener != null) {
+//					onActionBarEventListener.onClick(actionBarView, ActionBarEvent.SHARE);
+//				}
 			}
 		});
 		

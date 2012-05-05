@@ -192,14 +192,14 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		final Entity entity = Entity.newInstance("http://entity1.com", "http://entity1.com");
 		final CountDownLatch latch0 = new CountDownLatch(1);
 		
-		ShareUtils.showShareDialog(getContext(), entity, ShareUtils.ALL, new SocialNetworkDialogListener() {
+		ShareUtils.showShareDialog(getContext(), entity, new SocialNetworkDialogListener() {
 
 			@Override
 			public void onShow(Dialog dialog, AuthPanelView dialogView) {
 				addResult(0, dialogView);
 				latch0.countDown();
 			}
-		});
+		}, ShareUtils.ALL);
 		
 		latch0.await(20, TimeUnit.SECONDS);
 		

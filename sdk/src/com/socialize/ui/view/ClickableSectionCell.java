@@ -60,8 +60,8 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	private Drawable imageOn;
 	private Drawable imageOff;
 	
-	private String toggledDrawableName = "arrow.png";
-	private String untoggledDrawableName = "arrow.png";
+	private String toggledDrawableName = null;
+	private String untoggledDrawableName = null;
 	
 	private float topLeftRadius = 8.0f;
 	private float topRightRadius = 8.0f;
@@ -159,7 +159,7 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		
 		master.addView(text);
 		
-		if(canClick) {
+		if(canClick && toggledDrawableName != null) {
 			arrowIcon = new ImageView(getContext());
 			arrowIcon.setImageDrawable(drawables.getDrawable(toggledDrawableName));
 			arrowIcon.setLayoutParams(iconParams);			
@@ -315,7 +315,7 @@ public abstract class ClickableSectionCell extends LinearLayout {
 				imageView.setImageDrawable(imageOn);
 			}
 			
-			if(arrowIcon != null) {
+			if(arrowIcon != null && toggledDrawableName != null) {
 				arrowIcon.setImageDrawable(drawables.getDrawable(toggledDrawableName));
 			}
 		}
@@ -325,7 +325,7 @@ public abstract class ClickableSectionCell extends LinearLayout {
 				imageView.setImageDrawable(imageOff);
 			}
 			
-			if(arrowIcon != null) {
+			if(arrowIcon != null && untoggledDrawableName != null) {
 				arrowIcon.setImageDrawable(drawables.getDrawable(untoggledDrawableName));
 			}
 		}
