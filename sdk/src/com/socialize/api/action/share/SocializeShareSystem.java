@@ -148,6 +148,11 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		}
 	}
 	
+	@Override
+	public void addShare(Context context, SocializeSession session, Entity entity, String text, ShareType shareType, ShareListener listener, SocialNetwork... network) {
+		addShare(session, entity, text, shareType, null, listener, network);
+	}
+
 	public void addShare(Context context, SocializeSession session, Entity entity, ShareType shareType, ShareListener listener, SocialNetwork...network) {
 		addShare(session, entity, "", shareType, null, listener, network);
 	}

@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import android.app.Activity;
-import android.os.Bundle;
 import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
@@ -38,7 +37,6 @@ import com.socialize.auth.twitter.TwitterAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
-import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
 import com.socialize.ioc.SocializeIOC;
@@ -133,6 +131,9 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		final String token = TestUtils.getDummyTwitterToken(getContext());
 		final String secret = TestUtils.getDummyTwitterSecret(getContext());
 		
+		assertNotNull(token);
+		assertNotNull(secret);
+		
 		TwitterUtils.link(context, token, secret, new SocializeAuthListener() {
 			
 			@Override
@@ -199,13 +200,15 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 	
 	public void test_post_authed() throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);
-		final String token = TestUtils.getDummyFBToken(getContext());
+		final String token = TestUtils.getDummyTwitterToken(getContext());
+		final String secret = TestUtils.getDummyTwitterSecret(getContext());
 		// Stub in the TwitterAuthProvider
 		TwitterAuthProvider mockTwitterAuthProvider = new TwitterAuthProvider() {
 			@Override
 			public void authenticate(TwitterAuthProviderInfo info, AuthProviderListener listener) {
 				AuthProviderResponse response = new AuthProviderResponse();
 				response.setToken(token);
+				response.setSecret(secret);
 				listener.onAuthSuccess(response);
 			}
 		};
@@ -268,7 +271,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		
 		SocializeIOC.registerStub("twitterProvider", mockTwitterAuthProvider);
 
-		TwitterUtils.tweet(getActivity(), entity, "test", new SocialNetworkListener() {
+		TwitterUtils.tweet(getActivity(), entity, "AndroidSDK Test", new SocialNetworkListener() {
 			
 			@Override
 			public void onSocialNetworkError(SocialNetwork network, Exception error) {
@@ -278,12 +281,13 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 			
 			@Override
 			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-				addResult(3, postData.getPropagationInfo());
+				addResult(3, "onBeforePost");
 			}
 			
 			@Override
 			public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
 				addResult(1, "onAfterPost");
+				latch.countDown();
 			}
 		});
 		
@@ -310,18 +314,13 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		
 		SocializeIOC.unregisterStub("twitterProvider");
 		
-		// Now verify the shares and the extra info sent to FB
-		Bundle params = getResult(0);
 		String onAfterPost = getResult(1);
 		ListResult<Share> shares = getResult(2);
-		PropagationInfo propagationInfo = getResult(3);
+		String onBeforePost = getResult(3);
 		
-		assertNotNull(params);
 		assertNotNull(onAfterPost);
 		assertNotNull(shares);
-		assertNotNull(propagationInfo);
-		assertNotNull(propagationInfo.getEntityUrl());
-		assertNotNull(propagationInfo.getAppUrl());
+		assertNotNull(onBeforePost);
 		
 		// Find the share
 		assertTrue(shares.size() > 0);

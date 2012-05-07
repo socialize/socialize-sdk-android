@@ -8,31 +8,30 @@ config_file_path='../sample/assets/socialize.properties'
 assets_file_path='../sample/assets/existing-data/'
 
 def create_android_config(key,secret,url,fb_token):
-    print '#'*20
-    print '## CREATE conf.js ##'
-    print '#'*20           
-    
-    f = open(config_file_path,'w')
-    text = 'socialize.consumer.key='+key
-    text+= '\nsocialize.consumer.secret='+secret
-    text+= '\nsocialize.entity.loader=com.socialize.sample.ui.EntityLoader'
-    text+= '\napi.host='+url
-    text+= '\nredirect.host=http://stage.getsocialize.com'
-    text+= '\nlog.level=DEBUG'
-    text+= '\nsocialize.register.notification=false'
-    text+= '\nfacebook.app.id=209798315709193'
-#    text+= '\nfacebook.user.id='+fb_user_id
-    text+= '\nfacebook.token='+fb_token
+	print '#'*20
+	print '## CREATE conf.js ##'
+	print '#'*20           
+	
+	f = open(config_file_path,'w')
+	text = 'socialize.consumer.key='+key
+	text+= '\nsocialize.consumer.secret='+secret
+	text+= '\nsocialize.entity.loader=com.socialize.sample.ui.EntityLoader'
+	text+= '\napi.host='+url
+	text+= '\nredirect.host=http://stage.getsocialize.com'
+	text+= '\nlog.level=DEBUG'
+	text+= '\nsocialize.register.notification=false'
+	text+= '\nfacebook.app.id=209798315709193'
+	text+= '\nfacebook.token='+fb_token
 	text+= '\ntwitter.token=353351555-8L6E6HOphntfE5oUYDdPllX7x4gaXaWKHuRqqA'
 	text+= '\ntwitter.secret=a5BNRkL9gmWcnnIUDq3pSSoeQ5fuidB0fxWWTvLxk8'
-    text+= '\ntwitter.consumer.key=DRaBDMT6hzyLO1WAOehvfA' 
-    text+= '\ntwitter.consumer.secret=HhoT2YvgJDJildHnSsEAuuJ3crDFg9VLkae0PGNI' 
-    text+= '\ntest_value=sample'
-    text+= '\nuntrimmed=value '
-    text+= '\n'
-    f.write(text)
-    print text
-    f.close()
+	text+= '\ntwitter.consumer.key=DRaBDMT6hzyLO1WAOehvfA' 
+	text+= '\ntwitter.consumer.secret=HhoT2YvgJDJildHnSsEAuuJ3crDFg9VLkae0PGNI' 
+	text+= '\ntest_value=sample'
+	text+= '\nuntrimmed=value '
+	text+= '\n'
+	f.write(text)
+	print text
+	f.close()
 
 def read_android_config():
     file = open(config_file_path,'r')

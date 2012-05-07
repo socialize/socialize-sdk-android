@@ -57,7 +57,7 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	 */
 	@Override
 	public void link(Activity context, SocializeAuthListener listener) {
-		getSocialize().authenticate(context, AuthProviderType.FACEBOOK, listener);
+		getSocialize().authenticate(context, AuthProviderType.TWITTER, listener);
 	}
 
 	/* (non-Javadoc)
@@ -148,11 +148,19 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	 * @see com.socialize.networks.twitter.TwitterUtilsProxy#tweet(android.app.Activity, com.socialize.entity.Entity, java.lang.String, com.socialize.networks.SocialNetworkListener)
 	 */
 	@Override
-	public void tweet(Activity context, Entity entity, String text, final SocialNetworkListener listener) {
-		shareSystem.addShare(context, getSocialize().getSession(), entity, ShareType.TWITTER, new ShareAddListener() {
+	public void tweet(final Activity context, Entity entity, String text, final SocialNetworkListener listener) {
+		
+		if(listener != null) {
+			listener.onBeforePost(context, SocialNetwork.TWITTER, null);
+		}
+		
+		shareSystem.addShare(context, getSocialize().getSession(), entity, text, ShareType.TWITTER, new ShareAddListener() {
 			@Override
 			public void onCreate(Share share) {
 				// Server does tweet.
+				if(listener != null) {
+					listener.onAfterPost(context, SocialNetwork.TWITTER);
+				}
 			}
 
 			@Override
