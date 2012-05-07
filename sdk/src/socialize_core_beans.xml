@@ -641,13 +641,13 @@
 	
 	<factory id="twitterAuthViewFactory" makes="twitterAuthView"/>	
 
-	<bean id="twitterUtils" class="com.socialize.auth.twitter.TwitterUtils">
+	<bean id="twitterAuthUtils" class="com.socialize.auth.twitter.TwitterAuthUtils">
 		<property name="config" ref="config"/>
 		<property name="twitterAuthViewFactory" ref="twitterAuthViewFactory"/>
 	</bean>
 
 	<bean id="twitterProvider" class="com.socialize.auth.twitter.TwitterAuthProvider">
-		<property name="twitterUtils" ref="twitterUtils"/>
+		<property name="twitterAuthUtils" ref="twitterAuthUtils"/>
 		<init-method name="init">
 			<arg type="context"/>
 		</init-method>

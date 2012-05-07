@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,34 +19,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks.facebook;
+package com.socialize.test.ui.twitter;
 
-import android.app.Activity;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.content.Context;
-import com.socialize.annotations.Synchronous;
-import com.socialize.entity.Entity;
-import com.socialize.listener.SocializeAuthListener;
-import com.socialize.networks.SocialNetworkListener;
+import android.content.DialogInterface.OnCancelListener;
+import com.socialize.auth.twitter.TwitterAuthDialogListener;
+import com.socialize.auth.twitter.TwitterAuthListener;
+import com.socialize.auth.twitter.TwitterAuthUtils;
+import com.socialize.auth.twitter.TwitterAuthView;
+
 
 /**
  * @author Jason Polites
+ *
  */
-public interface FacebookUtilsProxy {
-	public void link (Activity context, SocializeAuthListener listener);
-	public void link (Activity context, String token, SocializeAuthListener listener);
-	public void unlink (Activity context);
-	
-	@Synchronous
-	public boolean isLinked(Context context);
-	
-	@Synchronous
-	public boolean isAvailable(Context context);
-	
-	@Synchronous
-	public void setAppId(Context context, String appId);
-	
-	@Synchronous
-	public String getAccessToken();
-	
-	public void post(Activity context, Entity entity, String text, SocialNetworkListener listener);
+public class PublicTwitterAuthUtils extends TwitterAuthUtils {
+
+	@Override
+	public OnCancelListener newOnCancelListener(TwitterAuthListener listener) {
+		return super.newOnCancelListener(listener);
+	}
+
+	@Override
+	public Dialog newDialog(Context context) {
+		return super.newDialog(context);
+	}
+
+	@Override
+	public TwitterAuthDialogListener newTwitterAuthDialogListener(Dialog dialog, TwitterAuthListener listener) {
+		return super.newTwitterAuthDialogListener(dialog, listener);
+	}
+
+	@Override
+	public Builder newAlertDialogBuilder(Context context) {
+		return super.newAlertDialogBuilder(context);
+	}
+
+	@Override
+	public TwitterAuthView newTwitterAuthView(Context context) {
+		return super.newTwitterAuthView(context);
+	}
+
 }

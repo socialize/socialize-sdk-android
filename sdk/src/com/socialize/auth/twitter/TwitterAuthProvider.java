@@ -34,7 +34,7 @@ import com.socialize.listener.AuthProviderListener;
 public class TwitterAuthProvider implements AuthProvider<TwitterAuthProviderInfo> {
 	
 	private Context context;
-	private TwitterUtils twitterUtils;
+	private TwitterAuthUtils twitterAuthUtils;
 	
 	public void init(Context context) {
 		this.context = context;
@@ -45,7 +45,7 @@ public class TwitterAuthProvider implements AuthProvider<TwitterAuthProviderInfo
 	 */
 	@Override
 	public void authenticate(TwitterAuthProviderInfo info, final AuthProviderListener listener) {
-		 twitterUtils.showAuthDialog(context, info, newTwitterAuthListener(listener));
+		 twitterAuthUtils.showAuthDialog(context, info, newTwitterAuthListener(listener));
 	}
 	
 	protected TwitterAuthListener newTwitterAuthListener(final AuthProviderListener listener) {
@@ -86,7 +86,7 @@ public class TwitterAuthProvider implements AuthProvider<TwitterAuthProviderInfo
 	@Override
 	public void clearCache(Context context, TwitterAuthProviderInfo info) {}
 
-	public void setTwitterUtils(TwitterUtils twitterUtils) {
-		this.twitterUtils = twitterUtils;
+	public void setTwitterAuthUtils(TwitterAuthUtils twitterUtils) {
+		this.twitterAuthUtils = twitterUtils;
 	}
 }

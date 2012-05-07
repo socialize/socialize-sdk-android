@@ -33,16 +33,14 @@ import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderResponse;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserProviderCredentials;
-import com.socialize.auth.facebook.FacebookAuthProvider;
-import com.socialize.auth.facebook.FacebookAuthProviderInfo;
+import com.socialize.auth.twitter.TwitterAuthProvider;
+import com.socialize.auth.twitter.TwitterAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
-import com.socialize.facebook.AsyncFacebookRunner;
-import com.socialize.facebook.RequestListener;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.AuthProviderListener;
 import com.socialize.listener.SocializeAuthListener;
@@ -50,7 +48,7 @@ import com.socialize.listener.share.ShareListListener;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
-import com.socialize.networks.facebook.FacebookUtils;
+import com.socialize.networks.twitter.TwitterUtils;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 
@@ -59,7 +57,7 @@ import com.socialize.test.ui.util.TestUtils;
  * @author Jason Polites
  *
  */
-public class FacebookUtilsTest extends SocializeActivityTest {
+public class TwitterUtilsTest extends SocializeActivityTest {
 	
 	@Override
 	protected void setUp() throws Exception {
@@ -78,38 +76,40 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Activity context = getActivity();
 		
-		// Stub in the FacebookAuthProvider
-		FacebookAuthProvider mockFacebookAuthProvider = new FacebookAuthProvider() {
+		// Stub in the TwitterAuthProvider
+		TwitterAuthProvider mockTwitterAuthProvider = new TwitterAuthProvider() {
 			@Override
-			public void authenticate(FacebookAuthProviderInfo info, AuthProviderListener listener) {
+			public void authenticate(TwitterAuthProviderInfo info, AuthProviderListener listener) {
 				addResult(0, info);
 				latch.countDown();
 			}
 		};
 		
-		SocializeIOC.registerStub("facebookProvider", mockFacebookAuthProvider);
+		SocializeIOC.registerStub("twitterProvider", mockTwitterAuthProvider);
 		
-		// Set a mock FB ID
-		FacebookUtils.setAppId(getActivity(), "foobar");
+		// Set a mock key/secret
+		TwitterUtils.setCredentials(getActivity(), "foo", "bar");
 		
 		// Ensure we don't have a session
-		FacebookUtils.unlink(getActivity());
+		TwitterUtils.unlink(getActivity());
 		
 		// Validate
-		assertFalse(FacebookUtils.isLinked(getContext()));
+		assertFalse(TwitterUtils.isLinked(getContext()));
 		
 		// Now Link
-		FacebookUtils.link(context, null);
+		TwitterUtils.link(context, null);
 		
 		latch.await(20, TimeUnit.SECONDS);
 		
-		FacebookAuthProviderInfo data = getResult(0);
+		TwitterAuthProviderInfo data = getResult(0);
 		
 		assertNotNull(data);
-		assertEquals(AuthProviderType.FACEBOOK, data.getType());
-		assertEquals("foobar", data.getAppId());
+		assertEquals(AuthProviderType.TWITTER, data.getType());
 		
-		SocializeIOC.unregisterStub("facebookProvider");
+		assertEquals("foo", data.getConsumerKey());
+		assertEquals("bar", data.getConsumerSecret());
+		
+		SocializeIOC.unregisterStub("twitterProvider");
 	}
 	
 	public void test_link_with_token () throws Exception {
@@ -117,20 +117,23 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Activity context = getActivity();
 		
-		// Stub in the FacebookAuthProvider to ensure we DON'T auth with FB
-		FacebookAuthProvider mockFacebookAuthProvider = new FacebookAuthProvider() {
+		// Stub in the TwitterAuthProvider to ensure we DON'T auth with TW
+		TwitterAuthProvider mockTwitterAuthProvider = new TwitterAuthProvider() {
 			@Override
-			public void authenticate(FacebookAuthProviderInfo info, AuthProviderListener listener) {
+			public void authenticate(TwitterAuthProviderInfo info, AuthProviderListener listener) {
 				fail();
 			}
 		};
 		
-		SocializeIOC.registerStub("facebookProvider", mockFacebookAuthProvider);
+		SocializeIOC.registerStub("twitterProvider", mockTwitterAuthProvider);
 		
-		// Set a mock FB ID
-		FacebookUtils.setAppId(getActivity(), "foobar");
+		// Set a mock key/secret
+		TwitterUtils.setCredentials(getActivity(), "foo", "bar");
 		
-		FacebookUtils.link(context, TestUtils.getDummyFBToken(getContext()), new SocializeAuthListener() {
+		final String token = TestUtils.getDummyTwitterToken(getContext());
+		final String secret = TestUtils.getDummyTwitterSecret(getContext());
+		
+		TwitterUtils.link(context, token, secret, new SocializeAuthListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -162,50 +165,54 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		
 		assertNotNull(session);
 		
-		UserProviderCredentials userProviderCredentials = session.getUserProviderCredentials(AuthProviderType.FACEBOOK);
+		UserProviderCredentials userProviderCredentials = session.getUserProviderCredentials(AuthProviderType.TWITTER);
 		
 		assertNotNull(userProviderCredentials);
-		assertEquals(TestUtils.getDummyFBToken(getContext()), userProviderCredentials.getAccessToken());
-		assertTrue(FacebookUtils.isLinked(context));
-		assertEquals(TestUtils.getDummyFBToken(getContext()), FacebookUtils.getAccessToken());
+		assertEquals(token, userProviderCredentials.getAccessToken());
+		assertEquals(secret, userProviderCredentials.getTokenSecret());
+		assertTrue(TwitterUtils.isLinked(context));
+		assertEquals(token, TwitterUtils.getAccessToken());
+		assertEquals(secret, TwitterUtils.getTokenSecret());
 		
-		SocializeIOC.unregisterStub("facebookProvider");
+		SocializeIOC.unregisterStub("twitterProvider");
 	}
 	
 	public void test_isAvailable() {
 		
-		Socialize.getSocialize().getConfig().setFacebookAppId("foobar");
+		Socialize.getSocialize().getConfig().setTwitterKeySecret("foo", "bar");
 		
-		assertTrue(FacebookUtils.isAvailable(getContext()));
+		assertTrue(TwitterUtils.isAvailable(getContext()));
 		
-		Socialize.getSocialize().getConfig().setFacebookAppId(null);
+		Socialize.getSocialize().getConfig().setTwitterKeySecret(null, null);
 		
-		assertFalse(FacebookUtils.isAvailable(getContext()));
+		assertFalse(TwitterUtils.isAvailable(getContext()));
 	}
 	
-	public void test_setAppId() {
-		String appId = "foobar";
-		FacebookUtils.setAppId(getContext(), appId);
-		assertEquals(appId, Socialize.getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID));
+	public void test_setCredentials() {
+		String consumerKey = "foo";
+		String consumerSecret = "bar";
+		TwitterUtils.setCredentials(getContext(), consumerKey, consumerSecret);
+		assertEquals(consumerKey, Socialize.getSocialize().getConfig().getProperty(SocializeConfig.TWITTER_CONSUMER_KEY));
+		assertEquals(consumerSecret, Socialize.getSocialize().getConfig().getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET));
 	}
 	
 	
 	public void test_post_authed() throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final String token = TestUtils.getDummyFBToken(getContext());
-		// Stub in the FacebookAuthProvider
-		FacebookAuthProvider mockFacebookAuthProvider = new FacebookAuthProvider() {
+		// Stub in the TwitterAuthProvider
+		TwitterAuthProvider mockTwitterAuthProvider = new TwitterAuthProvider() {
 			@Override
-			public void authenticate(FacebookAuthProviderInfo info, AuthProviderListener listener) {
+			public void authenticate(TwitterAuthProviderInfo info, AuthProviderListener listener) {
 				AuthProviderResponse response = new AuthProviderResponse();
 				response.setToken(token);
 				listener.onAuthSuccess(response);
 			}
 		};
 		
-		SocializeIOC.registerStub("facebookProvider", mockFacebookAuthProvider);
+		SocializeIOC.registerStub("twitterProvider", mockTwitterAuthProvider);
 		
-		FacebookUtils.link(getContext(), new SocializeAuthListener() {
+		TwitterUtils.link(getContext(), new SocializeAuthListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -245,40 +252,23 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		// Stub in the fb runner
-		AsyncFacebookRunner mockRunner = new AsyncFacebookRunner(null) {
-		    public void request(
-		    		final String graphPath,
-                    final Bundle parameters,
-                    final String httpMethod,
-                    final RequestListener listener,
-                    final Object state) {
-		    	
-		    	addResult(0, parameters);
-		    	
-		    	// Ensure the listener is called so we get onAfterPost
-		    	listener.onComplete(null, state);
-		    	
-		    	latch.countDown();
-		    }
-		};
+		final String token = TestUtils.getDummyTwitterToken(getContext());
+		final String secret = TestUtils.getDummyTwitterSecret(getContext());
 		
-		final String token = TestUtils.getDummyFBToken(getContext());
-		
-		// Stub in the FacebookAuthProvider
-		FacebookAuthProvider mockFacebookAuthProvider = new FacebookAuthProvider() {
+		// Stub in the TwitterAuthProvider
+		TwitterAuthProvider mockTwitterAuthProvider = new TwitterAuthProvider() {
 			@Override
-			public void authenticate(FacebookAuthProviderInfo info, AuthProviderListener listener) {
+			public void authenticate(TwitterAuthProviderInfo info, AuthProviderListener listener) {
 				AuthProviderResponse response = new AuthProviderResponse();
 				response.setToken(token);
+				response.setSecret(secret);
 				listener.onAuthSuccess(response);
 			}
 		};
 		
-		SocializeIOC.registerStub("facebookRunner", mockRunner);
-		SocializeIOC.registerStub("facebookProvider", mockFacebookAuthProvider);
+		SocializeIOC.registerStub("twitterProvider", mockTwitterAuthProvider);
 
-		FacebookUtils.post(getActivity(), entity, "test", new SocialNetworkListener() {
+		TwitterUtils.tweet(getActivity(), entity, "test", new SocialNetworkListener() {
 			
 			@Override
 			public void onSocialNetworkError(SocialNetwork network, Exception error) {
@@ -288,10 +278,6 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 			
 			@Override
 			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-				// Add some extra data
-				postData.getPostValues().put("foo", "bar");
-				postData.getPostValues().put("foo2", "bar2");
-				
 				addResult(3, postData.getPropagationInfo());
 			}
 			
@@ -322,8 +308,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		
 		latch2.await(20, TimeUnit.SECONDS);
 		
-		SocializeIOC.unregisterStub("facebookRunner");
-		SocializeIOC.unregisterStub("facebookProvider");
+		SocializeIOC.unregisterStub("twitterProvider");
 		
 		// Now verify the shares and the extra info sent to FB
 		Bundle params = getResult(0);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Socialize Inc.
+ * Copyright (c) 2011 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,47 +19,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test.ui.twitter;
+package com.socialize;
 
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface.OnCancelListener;
-import com.socialize.auth.twitter.TwitterAuthDialogListener;
-import com.socialize.auth.twitter.TwitterAuthListener;
-import com.socialize.auth.twitter.TwitterAuthView;
-import com.socialize.auth.twitter.TwitterUtils;
+import android.content.Intent;
 
 
 /**
+ * Utility class to assist in overriding the default behavior of smart alerts.
  * @author Jason Polites
- *
  */
-public class PublicTwitterUtils extends TwitterUtils {
+public class SmartAlertUtils {
 
-	@Override
-	public OnCancelListener newOnCancelListener(TwitterAuthListener listener) {
-		return super.newOnCancelListener(listener);
+	/**
+	 * Handles a broadcast intent recieved by a Broadcast Receiver on Android.
+	 * Call this method if you already have a broadcast reciever defined but want to also utilize Socialize SmartAlerts.
+	 * @param context The current context.
+	 * @param intent The broadcast intent provided by Android.
+	 * @return Returns true if Socialize handled the intent.  This indicates the intent was designed to be handled by Socialize and you do not need to handle it yourself.
+	 */
+	public static boolean handleBroadcastIntent(Context context, Intent intent) {
+		return Socialize.getSocialize().handleBroadcastIntent(context, intent);
 	}
-
-	@Override
-	public Dialog newDialog(Context context) {
-		return super.newDialog(context);
-	}
-
-	@Override
-	public TwitterAuthDialogListener newTwitterAuthDialogListener(Dialog dialog, TwitterAuthListener listener) {
-		return super.newTwitterAuthDialogListener(dialog, listener);
-	}
-
-	@Override
-	public Builder newAlertDialogBuilder(Context context) {
-		return super.newAlertDialogBuilder(context);
-	}
-
-	@Override
-	public TwitterAuthView newTwitterAuthView(Context context) {
-		return super.newTwitterAuthView(context);
-	}
-
 }

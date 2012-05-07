@@ -104,8 +104,8 @@ public class FacebookUtils {
 	 * @param context
 	 * @return The access token or null if the user is not linked to Facebook.
 	 */
-	public static String getAccessToken(Context context){
-		return proxy.getAccessToken(context);
+	public static String getAccessToken(){
+		return proxy.getAccessToken();
 	}
 	
 	/**

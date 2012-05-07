@@ -1688,5 +1688,14 @@
 		<property name="shareSystem" ref="shareSystem"/>
 		<property name="facebookWallPoster" ref="facebookWallPoster"/>
 	</bean>
+	
+	<bean id="twitterUtils" class="com.socialize.networks.twitter.TwitterUtilsImpl">
+		<property name="userSystem" ref="userSystem"/>
+		<property name="shareSystem" ref="shareSystem"/>
+	</bean>	
+
+	<bean id="locationUtils" class="com.socialize.location.SocializeLocationUtils">
+		<property name="locationProvider" ref="locationProvider"/>
+	</bean>	
 
 </beans>

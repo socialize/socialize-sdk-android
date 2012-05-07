@@ -33,8 +33,8 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.auth.twitter.TwitterAuthDialogListener;
 import com.socialize.auth.twitter.TwitterAuthListener;
 import com.socialize.auth.twitter.TwitterAuthProviderInfo;
+import com.socialize.auth.twitter.TwitterAuthUtils;
 import com.socialize.auth.twitter.TwitterAuthView;
-import com.socialize.auth.twitter.TwitterUtils;
 import com.socialize.error.SocializeException;
 import com.socialize.test.SocializeActivityTest;
 
@@ -43,7 +43,7 @@ import com.socialize.test.SocializeActivityTest;
  * @author Jason Polites
  *
  */
-public class TwitterUtilsTest extends SocializeActivityTest {
+public class TwitterAuthUtilsTest extends SocializeActivityTest {
 
 	@SuppressWarnings("unchecked")
 	@UsesMocks ({IBeanFactory.class, TwitterAuthListener.class, TwitterAuthProviderInfo.class})
@@ -72,7 +72,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		
 		AndroidMock.replay(info, twitterAuthViewFactory, listener);
 		
-		final TwitterUtils utils = new TwitterUtils();
+		final TwitterAuthUtils utils = new TwitterAuthUtils();
 		
 		utils.setTwitterAuthViewFactory(twitterAuthViewFactory);
 		
@@ -118,7 +118,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 	@UsesMocks ({Dialog.class, TwitterAuthListener.class})
 	public void test_newTwitterAuthDialogListener() {
 		
-		PublicTwitterUtils utils = new PublicTwitterUtils();
+		PublicTwitterAuthUtils utils = new PublicTwitterAuthUtils();
 		
 		final String token = "foobar_token";
 		final String secret = "foobar_secret";

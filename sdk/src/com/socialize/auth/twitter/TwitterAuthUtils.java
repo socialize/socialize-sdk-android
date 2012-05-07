@@ -38,7 +38,7 @@ import com.socialize.ui.dialog.DialogRegistration;
  * @author Jason Polites
  *
  */
-public class TwitterUtils {
+public class TwitterAuthUtils {
 	
 	private SocializeConfig config;
 	private TwitterAuthProviderInfo info;

@@ -19,34 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks.facebook;
+package com.socialize.location;
 
-import android.app.Activity;
-import android.content.Context;
+import android.location.Location;
 import com.socialize.annotations.Synchronous;
-import com.socialize.entity.Entity;
-import com.socialize.listener.SocializeAuthListener;
-import com.socialize.networks.SocialNetworkListener;
+
 
 /**
  * @author Jason Polites
+ *
  */
-public interface FacebookUtilsProxy {
-	public void link (Activity context, SocializeAuthListener listener);
-	public void link (Activity context, String token, SocializeAuthListener listener);
-	public void unlink (Activity context);
-	
+public interface LocationUtilsProxy {
+
 	@Synchronous
-	public boolean isLinked(Context context);
+	public Location getLastKnownLocation();
 	
-	@Synchronous
-	public boolean isAvailable(Context context);
-	
-	@Synchronous
-	public void setAppId(Context context, String appId);
-	
-	@Synchronous
-	public String getAccessToken();
-	
-	public void post(Activity context, Entity entity, String text, SocialNetworkListener listener);
 }

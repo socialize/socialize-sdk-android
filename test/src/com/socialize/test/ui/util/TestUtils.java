@@ -45,6 +45,47 @@ public class TestUtils {
 	
 	private static String fb_token = null;
 	
+	private static String tw_token = null;
+	private static String tw_secret = null;
+	
+	public static final String getDummyTwitterToken(Context context) throws IOException {
+		if(tw_token == null) {
+			InputStream in = null;
+			try {
+				in = context.getAssets().open("socialize.properties");
+				Properties props = new Properties();
+				props.load(in);
+				tw_token = props.getProperty("twitter.token");
+			}
+			finally {
+				if(in != null) {
+					in.close();
+				}
+			}
+		}
+		
+		return tw_token;
+	}
+	
+	public static final String getDummyTwitterSecret(Context context) throws IOException {
+		if(tw_secret == null) {
+			InputStream in = null;
+			try {
+				in = context.getAssets().open("socialize.properties");
+				Properties props = new Properties();
+				props.load(in);
+				tw_secret = props.getProperty("twitter.secret");
+			}
+			finally {
+				if(in != null) {
+					in.close();
+				}
+			}
+		}
+		
+		return tw_secret;
+	}
+	
 	public static final String getDummyFBToken(Context context) throws IOException {
 		if(fb_token == null) {
 			InputStream in = null;

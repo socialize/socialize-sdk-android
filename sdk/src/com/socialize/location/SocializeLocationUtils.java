@@ -19,34 +19,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks.facebook;
+package com.socialize.location;
 
-import android.app.Activity;
-import android.content.Context;
-import com.socialize.annotations.Synchronous;
-import com.socialize.entity.Entity;
-import com.socialize.listener.SocializeAuthListener;
-import com.socialize.networks.SocialNetworkListener;
+import android.location.Location;
+
 
 /**
  * @author Jason Polites
+ *
  */
-public interface FacebookUtilsProxy {
-	public void link (Activity context, SocializeAuthListener listener);
-	public void link (Activity context, String token, SocializeAuthListener listener);
-	public void unlink (Activity context);
+public class SocializeLocationUtils implements LocationUtilsProxy {
 	
-	@Synchronous
-	public boolean isLinked(Context context);
-	
-	@Synchronous
-	public boolean isAvailable(Context context);
-	
-	@Synchronous
-	public void setAppId(Context context, String appId);
-	
-	@Synchronous
-	public String getAccessToken();
-	
-	public void post(Activity context, Entity entity, String text, SocialNetworkListener listener);
+	private SocializeLocationProvider locationProvider;
+
+	/* (non-Javadoc)
+	 * @see com.socialize.location.LocationUtilsProxy#getLastKnownLocation()
+	 */
+	@Override
+	public Location getLastKnownLocation() {
+		return locationProvider.getLastKnownLocation();
+	}
+
+	public void setLocationProvider(SocializeLocationProvider locationProvider) {
+		this.locationProvider = locationProvider;
+	}
 }

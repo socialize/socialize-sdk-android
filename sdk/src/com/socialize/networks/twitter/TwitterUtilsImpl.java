@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks.facebook;
+package com.socialize.networks.twitter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -32,10 +32,9 @@ import com.socialize.api.action.user.UserSystem;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.DefaultUserProviderCredentials;
 import com.socialize.auth.UserProviderCredentials;
-import com.socialize.auth.facebook.FacebookAuthProviderInfo;
+import com.socialize.auth.twitter.TwitterAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
-import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
@@ -48,14 +47,13 @@ import com.socialize.networks.SocialNetworkListener;
  * @author Jason Polites
  *
  */
-public class FacebookUtilsImpl implements FacebookUtilsProxy {
+public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	
 	private UserSystem userSystem;
 	private ShareSystem shareSystem;
-	private FacebookWallPoster facebookWallPoster;
 
 	/* (non-Javadoc)
-	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#link(android.app.Activity, com.socialize.listener.SocializeAuthListener)
+	 * @see com.socialize.networks.twitter.TwitterUtilsProxy#link(android.app.Activity, com.socialize.listener.SocializeAuthListener)
 	 */
 	@Override
 	public void link(Activity context, SocializeAuthListener listener) {
@@ -63,103 +61,118 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#link(android.app.Activity, java.lang.String, com.socialize.listener.SocializeAuthListener)
+	 * @see com.socialize.networks.twitter.TwitterUtilsProxy#link(android.app.Activity, java.lang.String, java.lang.String, com.socialize.listener.SocializeAuthListener)
 	 */
 	@Override
-	public void link(Activity context, String token, SocializeAuthListener listener) {
+	public void link(Activity context, String token, String secret, SocializeAuthListener listener) {
+		
 		SocializeConfig config = getSocialize().getConfig();
-		FacebookAuthProviderInfo fbInfo = new FacebookAuthProviderInfo();
-		fbInfo.setAppId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
+		TwitterAuthProviderInfo twInfo = new TwitterAuthProviderInfo();
+		twInfo.setConsumerKey(config.getProperty(SocializeConfig.TWITTER_CONSUMER_KEY));
+		twInfo.setConsumerSecret(config.getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET));
 		
 		DefaultUserProviderCredentials credentials = new DefaultUserProviderCredentials();
-		credentials.setAuthProviderInfo(fbInfo);
+		credentials.setAuthProviderInfo(twInfo);
 		credentials.setAccessToken(token);
+		credentials.setTokenSecret(secret);
 		
 		getSocialize().authenticateKnownUser(
 				context, 
 				credentials, 
-				listener);
+				listener);		
+		
 	}
 
 	/* (non-Javadoc)
-	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#unlink(android.app.Activity)
+	 * @see com.socialize.networks.twitter.TwitterUtilsProxy#unlink(android.app.Activity)
 	 */
 	@Override
 	public void unlink(Activity context) {
 		SocializeSession session = getSocialize().getSession();
-		session.clear(AuthProviderType.FACEBOOK);
-		userSystem.saveSession(context, session);
+		session.clear(AuthProviderType.TWITTER);
+		userSystem.saveSession(context, session);		
 	}
 
 	/* (non-Javadoc)
-	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#isLinked(android.content.Context)
+	 * @see com.socialize.networks.twitter.TwitterUtilsProxy#isLinked(android.content.Context)
 	 */
 	@Override
 	public boolean isLinked(Context context) {
-		return getSocialize().isAuthenticated(AuthProviderType.FACEBOOK);
+		return getSocialize().isAuthenticated(AuthProviderType.TWITTER);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#isAvailable(android.content.Context)
+	 * @see com.socialize.networks.twitter.TwitterUtilsProxy#isAvailable(android.content.Context)
 	 */
 	@Override
 	public boolean isAvailable(Context context) {
-		return getSocialize().isSupported(AuthProviderType.FACEBOOK);
+		return getSocialize().isSupported(AuthProviderType.TWITTER);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#setAppId(android.content.Context, java.lang.String)
+	 * @see com.socialize.networks.twitter.TwitterUtilsProxy#setCredentials(android.content.Context, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void setAppId(Context context, String appId) {
+	public void setCredentials(Context context, String consumerKey, String consumerSecret) {
 		SocializeConfig config = getSocialize().getConfig();
-		config.setFacebookAppId(appId);
+		config.setTwitterKeySecret(consumerKey, consumerSecret);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#getAccessToken(android.content.Context)
+	 * @see com.socialize.networks.twitter.TwitterUtilsProxy#getAccessToken()
 	 */
 	@Override
 	public String getAccessToken() {
-		UserProviderCredentials creds = getSocialize().getSession().getUserProviderCredentials(AuthProviderType.FACEBOOK);
+		UserProviderCredentials creds = getSocialize().getSession().getUserProviderCredentials(AuthProviderType.TWITTER);
 		if(creds != null) {
 			return creds.getAccessToken();
 		}
 		return null;
+
 	}
 
+	/* (non-Javadoc)
+	 * @see com.socialize.networks.twitter.TwitterUtilsProxy#getTokenSecret()
+	 */
 	@Override
-	public void post(final Activity context, final Entity entity, final String text, final SocialNetworkListener listener) {
-		shareSystem.addShare(context, getSocialize().getSession(), entity, ShareType.FACEBOOK, new ShareAddListener() {
+	public String getTokenSecret() {
+		UserProviderCredentials creds = getSocialize().getSession().getUserProviderCredentials(AuthProviderType.TWITTER);
+		if(creds != null) {
+			return creds.getTokenSecret();
+		}
+		return null;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.networks.twitter.TwitterUtilsProxy#tweet(android.app.Activity, com.socialize.entity.Entity, java.lang.String, com.socialize.networks.SocialNetworkListener)
+	 */
+	@Override
+	public void tweet(Activity context, Entity entity, String text, final SocialNetworkListener listener) {
+		shareSystem.addShare(context, getSocialize().getSession(), entity, ShareType.TWITTER, new ShareAddListener() {
 			@Override
 			public void onCreate(Share share) {
-				PropagationInfo propInfo = share.getPropagationInfoResponse().getPropagationInfo(ShareType.FACEBOOK);
-				facebookWallPoster.post(context, entity, text, propInfo, listener);
+				// Server does tweet.
 			}
 
 			@Override
 			public void onError(SocializeException error) {
 				if(listener != null) {
-					listener.onSocialNetworkError(SocialNetwork.FACEBOOK, error);
+					listener.onSocialNetworkError(SocialNetwork.TWITTER, error);
 				}
 			}
-		}, SocialNetwork.FACEBOOK);
-	}
-
-	public void setUserSystem(UserSystem userSystem) {
-		this.userSystem = userSystem;
-	}
-
-	public void setShareSystem(ShareSystem shareSystem) {
-		this.shareSystem = shareSystem;
-	}
-
-	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
-		this.facebookWallPoster = facebookWallPoster;
+		}, SocialNetwork.TWITTER);
 	}
 
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();
 	}
-
+	
+	public void setUserSystem(UserSystem userSystem) {
+		this.userSystem = userSystem;
+	}
+	
+	public void setShareSystem(ShareSystem shareSystem) {
+		this.shareSystem = shareSystem;
+	}
 }

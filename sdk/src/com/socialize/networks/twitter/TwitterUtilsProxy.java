@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks.facebook;
+package com.socialize.networks.twitter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -28,12 +28,17 @@ import com.socialize.entity.Entity;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetworkListener;
 
+
 /**
  * @author Jason Polites
+ *
  */
-public interface FacebookUtilsProxy {
+public interface TwitterUtilsProxy {
+	
 	public void link (Activity context, SocializeAuthListener listener);
-	public void link (Activity context, String token, SocializeAuthListener listener);
+	
+	public void link (Activity context, String token, String secret, SocializeAuthListener listener);
+	
 	public void unlink (Activity context);
 	
 	@Synchronous
@@ -43,10 +48,13 @@ public interface FacebookUtilsProxy {
 	public boolean isAvailable(Context context);
 	
 	@Synchronous
-	public void setAppId(Context context, String appId);
+	public void setCredentials(Context context, String consumerKey, String consumerSecret);
 	
 	@Synchronous
 	public String getAccessToken();
 	
-	public void post(Activity context, Entity entity, String text, SocialNetworkListener listener);
+	@Synchronous
+	public String getTokenSecret();
+	
+	public void tweet(final Activity context, final Entity entity, final String text, final SocialNetworkListener listener);
 }

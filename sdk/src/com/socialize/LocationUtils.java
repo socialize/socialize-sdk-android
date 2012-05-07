@@ -19,34 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks.facebook;
+package com.socialize;
 
-import android.app.Activity;
-import android.content.Context;
-import com.socialize.annotations.Synchronous;
-import com.socialize.entity.Entity;
-import com.socialize.listener.SocializeAuthListener;
-import com.socialize.networks.SocialNetworkListener;
+import java.lang.reflect.Proxy;
+import android.location.Location;
+import com.socialize.location.LocationUtilsProxy;
+
 
 /**
+ * Provides a simple way to access the device's location.
  * @author Jason Polites
  */
-public interface FacebookUtilsProxy {
-	public void link (Activity context, SocializeAuthListener listener);
-	public void link (Activity context, String token, SocializeAuthListener listener);
-	public void unlink (Activity context);
+public class LocationUtils {
 	
-	@Synchronous
-	public boolean isLinked(Context context);
+	static LocationUtilsProxy proxy;
 	
-	@Synchronous
-	public boolean isAvailable(Context context);
+	static {
+		proxy = (LocationUtilsProxy) Proxy.newProxyInstance(
+				LocationUtilsProxy.class.getClassLoader(),
+				new Class[]{LocationUtilsProxy.class},
+				new SocializeActionProxy("locationUtils")); // Bean name
+	}
 	
-	@Synchronous
-	public void setAppId(Context context, String appId);
-	
-	@Synchronous
-	public String getAccessToken();
-	
-	public void post(Activity context, Entity entity, String text, SocialNetworkListener listener);
+	/**
+	 * Returns the last known location of the device.  May return null if the location has not yet been obtained from the device.
+	 * @return The current Location, or null if the location has not been, or cannot be determined.
+	 */
+	public static Location getLastKnownLocation() {
+		return proxy.getLastKnownLocation();
+	}
 }
