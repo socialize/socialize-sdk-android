@@ -21,6 +21,7 @@
  */
 package com.socialize.location;
 
+import android.content.Context;
 import android.location.Location;
 
 
@@ -36,7 +37,7 @@ public class SocializeLocationUtils implements LocationUtilsProxy {
 	 * @see com.socialize.location.LocationUtilsProxy#getLastKnownLocation()
 	 */
 	@Override
-	public Location getLastKnownLocation() {
+	public Location getLastKnownLocation(Context context) {
 		return locationProvider.getLastKnownLocation();
 	}
 

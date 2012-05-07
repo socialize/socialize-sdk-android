@@ -21,6 +21,7 @@
  */
 package com.socialize.location;
 
+import android.content.Context;
 import android.location.Location;
 import com.socialize.annotations.Synchronous;
 
@@ -32,6 +33,6 @@ import com.socialize.annotations.Synchronous;
 public interface LocationUtilsProxy {
 
 	@Synchronous
-	public Location getLastKnownLocation();
+	public Location getLastKnownLocation(Context context);
 	
 }

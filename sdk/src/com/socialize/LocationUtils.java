@@ -22,6 +22,7 @@
 package com.socialize;
 
 import java.lang.reflect.Proxy;
+import android.content.Context;
 import android.location.Location;
 import com.socialize.location.LocationUtilsProxy;
 
@@ -43,9 +44,10 @@ public class LocationUtils {
 	
 	/**
 	 * Returns the last known location of the device.  May return null if the location has not yet been obtained from the device.
+	 * @param context The current context.
 	 * @return The current Location, or null if the location has not been, or cannot be determined.
 	 */
-	public static Location getLastKnownLocation() {
-		return proxy.getLastKnownLocation();
+	public static Location getLastKnownLocation(Context context) {
+		return proxy.getLastKnownLocation(context);
 	}
 }
