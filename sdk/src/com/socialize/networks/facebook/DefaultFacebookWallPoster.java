@@ -55,7 +55,6 @@ import com.socialize.networks.DefaultPostData;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
-import com.socialize.util.AppUtils;
 import com.socialize.util.StringUtils;
 
 /**
@@ -65,45 +64,49 @@ import com.socialize.util.StringUtils;
 public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	
 	private SocializeLogger logger;
-	private AppUtils appUtils;
+//	private AppUtils appUtils;
 	private ShareMessageBuilder shareMessageBuilder;
 	private FacebookImageUtils facebookImageUtils;
 	private IBeanFactory<AsyncFacebookRunner> facebookRunnerFactory;
 	
 	@Override
 	public void postLike(Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkListener listener) {
-		String linkName = appUtils.getAppName();
+//		String linkName = appUtils.getAppName();
 		
 		StringBuilder builder = new StringBuilder();
 		
 		builder.append("Likes ");
 		builder.append(shareMessageBuilder.getEntityLink(entity, propInfo, false));
-		builder.append("\n\n");
-		builder.append("Posted from ");
-		builder.append(linkName);
+//		builder.append("\n\n");
+//		builder.append("Posted from ");
+//		builder.append(linkName);
 		post(parent, entity, builder.toString(), propInfo, listener);		
 	}
 
 	@Override
 	public void postComment(Activity parent, Entity entity, String comment, PropagationInfo propInfo, SocialNetworkListener listener) {
-		String linkName = appUtils.getAppName();
+//		String linkName = appUtils.getAppName();
 		StringBuilder builder = new StringBuilder();
-		builder.append(shareMessageBuilder.getEntityLink(entity, propInfo, false));
-		builder.append("\n\n");
+//		builder.append(shareMessageBuilder.getEntityLink(entity, propInfo, false));
+//		builder.append("\n\n");
 		builder.append(comment);
-		builder.append("\n\n");
-		builder.append("Posted from ");
-		builder.append(linkName);
+//		builder.append("\n\n");
+//		builder.append("Posted from ");
+//		builder.append(linkName);
 		post(parent, entity, builder.toString(), propInfo, listener);		
 	}
 
 	@Override
 	public void post(Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkListener listener) {
 		
-		String caption = "Download the app now to join the conversation.";
-		String linkName = appUtils.getAppName();
-		String link = propInfo.getAppUrl();
+		String entityUrl = propInfo.getEntityUrl();
+		String linkName = entityUrl;
+		String link = entityUrl;
 		String appId = getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
+		
+		if(entity != null) {
+			linkName = entity.getDisplayName();
+		}
 		
 		if(!StringUtils.isEmpty(appId)) {
 			
@@ -111,7 +114,6 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			params.put("name", linkName);
 			params.put("message", message);
 			params.put("link", link);
-			params.put("caption", caption);
 			
 			DefaultPostData postData = new DefaultPostData();
 			postData.setPostValues(params);
@@ -344,9 +346,9 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		this.shareMessageBuilder = shareMessageBuilder;
 	}
 
-	public void setAppUtils(AppUtils appUtils) {
-		this.appUtils = appUtils;
-	}
+//	public void setAppUtils(AppUtils appUtils) {
+//		this.appUtils = appUtils;
+//	}
 
 	protected void onError(final Activity parent, final String msg, final Throwable e, final SocialNetworkListener listener) {
 		

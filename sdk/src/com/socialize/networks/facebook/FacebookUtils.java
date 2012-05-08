@@ -74,7 +74,7 @@ public class FacebookUtils {
 	/**
 	 * Returns true if the current user is already linked to Facebook.
 	 * @param context The current context.
-	 * @return
+	 * @return True if the current user has linked their Facebook account.
 	 */
 	public static boolean isLinked(Context context){
 		return proxy.isLinked(context);
@@ -83,7 +83,7 @@ public class FacebookUtils {
 	/**
 	 * Returns true if this application has Facebook configured.  Minimum requirement is a Facebook app ID.
 	 * @param context The current context.
-	 * @return
+	 * @return True if the Facebook has been configured for this application.
 	 */
 	public static boolean isAvailable(Context context){
 		return proxy.isAvailable(context);
@@ -101,7 +101,6 @@ public class FacebookUtils {
 	
 	/**
 	 * Returns the Facebook access token for the current user.
-	 * @param context
 	 * @return The access token or null if the user is not linked to Facebook.
 	 */
 	public static String getAccessToken(){
@@ -109,7 +108,7 @@ public class FacebookUtils {
 	}
 	
 	/**
-	 * Posts a message to the user's Facebook wall.  Post data can be customized by implementing the onBeforePost method in the given SocialNetworkListener
+	 * Posts an entity to the user's Facebook wall.  Post data can be customized by implementing the onBeforePost method in the given SocialNetworkListener.
 	 * @param context The current context.
 	 * @param entity The Socialize entity to which the post corresponds (Required)
 	 * @param text The text for the post.

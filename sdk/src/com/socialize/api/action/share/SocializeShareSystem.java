@@ -168,7 +168,7 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		c.setText(text);
 		c.setShareType(shareType);
 		
-		if(network != null) {
+		if(network != null && network.length > 0) {
 			ShareOptions shareOptions = new ShareOptions();
 			shareOptions.setShareTo(network);
 			shareOptions.setShareLocation(true);

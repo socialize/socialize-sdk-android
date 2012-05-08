@@ -22,6 +22,7 @@
 package com.socialize.ui.auth;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -48,6 +49,7 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookSignInCell;
 import com.socialize.networks.twitter.TwitterSignInCell;
+import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.view.ClickableSectionCell;
 import com.socialize.ui.view.SocializeButton;
@@ -67,7 +69,7 @@ public class AuthPanelView extends BaseView {
 	private Colors colors;
 	
 	private SocializeButton continueButton;
-	private SocializeButton cancelButton;
+//	private SocializeButton cancelButton;
 	
 	private int displayOptions;
 	
@@ -208,7 +210,7 @@ public class AuthPanelView extends BaseView {
 		buttonLayout.setPadding(padding, 0, padding, padding);
 		buttonLayout.setOrientation(HORIZONTAL);
 		buttonLayout.setLayoutParams(buttonParams);
-		buttonLayout.setGravity(Gravity.CENTER_VERTICAL|Gravity.RIGHT);
+		buttonLayout.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);
 		
 		RelativeLayout badgeLayout = new RelativeLayout(getContext());
 		badgeLayout.setLayoutParams(badgeLayoutParams);
@@ -283,22 +285,47 @@ public class AuthPanelView extends BaseView {
 		
 		if(emailCell != null) {
 			emailCell.setOnClickListener(new OnClickListener() {
-				
 				@Override
-				public void onClick(View v) {
+				public void onClick(final View v) {
+					final ProgressDialog progress = SafeProgressDialog.show(v.getContext());
 					ShareUtils.shareViaEmail(getActivity(), entity, new ShareAddListener() {
 						
 						@Override
 						public void onError(SocializeException error) {
+							progress.dismiss();
+							showError(v.getContext(), error);
 						}
 						
 						@Override
 						public void onCreate(Share entity) {
+							progress.dismiss();
 						}
 					});
 				}
 			});
 		}
+		
+		if(smsCell != null) {
+			smsCell.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(final View v) {
+					final ProgressDialog progress = SafeProgressDialog.show(v.getContext());
+					ShareUtils.shareViaSMS(getActivity(), entity, new ShareAddListener() {
+						
+						@Override
+						public void onError(SocializeException error) {
+							progress.dismiss();
+							showError(v.getContext(), error);
+						}
+						
+						@Override
+						public void onCreate(Share entity) {
+							progress.dismiss();
+						}
+					});
+				}
+			});
+		}		
 		
 		
 		if(drawables != null) {
@@ -373,20 +400,20 @@ public class AuthPanelView extends BaseView {
 //			contentLayout.addView(cancelLayout);
 //		}
 		
-		if(cancelButton != null) {
-			
-			cancelButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if(listener != null) {
-						dialog.dismiss();
-						listener.onCancel(dialog);
-					}
-				}
-			});
-			
-			buttonLayout.addView(cancelButton);
-		}
+//		if(cancelButton != null) {
+//			
+//			cancelButton.setOnClickListener(new OnClickListener() {
+//				@Override
+//				public void onClick(View v) {
+//					if(listener != null) {
+//						dialog.dismiss();
+//						listener.onCancel(dialog);
+//					}
+//				}
+//			});
+//			
+//			buttonLayout.addView(cancelButton);
+//		}
 		
 		if(continueButton != null) {
 			continueButton.setEnabled(false);
@@ -476,9 +503,9 @@ public class AuthPanelView extends BaseView {
 		this.continueButton = continueButton;
 	}
 	
-	public void setCancelButton(SocializeButton cancelButton) {
-		this.cancelButton = cancelButton;
-	}
+//	public void setCancelButton(SocializeButton cancelButton) {
+//		this.cancelButton = cancelButton;
+//	}
 	
 	public void setEmailCellFactory(IBeanFactory<EmailCell> emailCellFactory) {
 		this.emailCellFactory = emailCellFactory;
@@ -510,7 +537,9 @@ public class AuthPanelView extends BaseView {
 			
 			@Override
 			public void onError(SocializeException error) {
-				cell.setEnabled(false);
+				error.printStackTrace();
+				
+				showErrorToast(getContext(), error);
 				
 				if(socialNetworkListener != null) {
 					socialNetworkListener.onSocialNetworkError(network, error);
@@ -526,7 +555,9 @@ public class AuthPanelView extends BaseView {
 			
 			@Override
 			public void onAuthFail(SocializeException error) {
-				cell.setEnabled(false);
+				error.printStackTrace();
+				
+				showError(getContext(), error);
 				
 				if(socialNetworkListener != null) {
 					socialNetworkListener.onSocialNetworkError(network, error);

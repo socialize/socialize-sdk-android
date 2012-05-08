@@ -431,15 +431,16 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="Continue"/>
-		<property name="height" value="34" type="integer"/>
-		<property name="width" value="160" type="integer"/>
-		<property name="textSize" value="11" type="integer"/>
+		<property name="text" value="Share"/>
+		<property name="height" value="38" type="integer"/>
+		<property name="width" value="180" type="integer"/>
+		<property name="textSize" value="13" type="integer"/>
 		<property name="textAlign" value="center"/>
 		<property name="padding" value="2" type="integer"/>
 		<property name="bold" value="true" type="boolean"/>
 	</bean>
 	
+	<!-- 
 	<bean 
 		id="authCancelButton" 
 		singleton="false"
@@ -456,7 +457,7 @@
 		<property name="textAlign" value="center"/>
 		<property name="padding" value="2" type="integer"/>
 	</bean>			
-	 
+	-->
 	<bean 
 		id="authPanelView" 
 		class="com.socialize.ui.auth.AuthPanelView"		
@@ -472,7 +473,7 @@
 		<property name="emailCellFactory" ref="emailCellFactory"/>
 		<property name="smsCellFactory" ref="smsCellFactory"/>
 		
-		<property name="cancelButton" ref="authCancelButton"/>
+		<!-- <property name="cancelButton" ref="authCancelButton"/> -->
 		<property name="continueButton" ref="authContinueButton"/>
 		
 		<init-method name="init"/>

@@ -23,6 +23,8 @@ package com.socialize.test.ui.auth;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import android.app.Activity;
+import android.content.Intent;
 import android.view.View;
 import com.socialize.ShareUtils;
 import com.socialize.Socialize;
@@ -122,6 +124,61 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 		assertTrue((Boolean)getResult(2));
 		assertTrue((Boolean)getResult(3));
 	}
+	
+	public void testEmailLaunchesEmailClient() throws Throwable {
+		
+		TestUtils.setUp(this);
+		
+		Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
+		sendIntent.setType("message/rfc822");
+		
+		Class<?> activityClass = TestUtils.getActivityForIntent(getContext(), sendIntent);
+		
+		TestUtils.setUpActivityMonitor(activityClass);
+
+		final Entity entity = Entity.newInstance("http://entity1.com", "http://entity1.com");
+		
+		SocializeSystem system = Socialize.getSocialize().getSystem();
+		String[] config = system.getBeanConfig();
+		
+		Socialize.getSocialize().init(getContext(), config);
+		
+		final AuthPanelView view = SocializeAccess.getBean("authPanelView", entity, ShareUtils.ALL);
+		
+		final CountDownLatch latch0 = new CountDownLatch(1);
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		
+		runTestOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				getActivity().setContentView(view);
+				latch0.countDown();
+			}
+		});
+		
+		latch0.await(10, TimeUnit.SECONDS);
+		
+		final EmailCell emailCell = TestUtils.findView(view, EmailCell.class);
+		
+		assertNotNull(emailCell);
+		
+		runTestOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				addResult(0, emailCell.performClick());
+				latch1.countDown();
+			}
+		});		
+		
+		latch1.await(10, TimeUnit.SECONDS);
+		
+		assertTrue((Boolean)getResult(0));
+		
+		Activity mailActivity = TestUtils.waitForActivity(10000);
+		
+		assertNotNull(mailActivity);
+		
+	}	
 
 	@Override
 	protected void tearDown() throws Exception {

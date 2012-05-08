@@ -23,6 +23,9 @@ import android.app.Dialog;
 import android.app.Instrumentation;
 import android.app.Instrumentation.ActivityMonitor;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.view.ViewGroup;
@@ -784,4 +787,23 @@ public class TestUtils {
 		return json;
 	}
 	
+	
+	public static Class<?> getActivityForIntent(Context context, Intent intent) throws ClassNotFoundException {
+		PackageManager packageManager = context.getPackageManager();
+		List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+		if(list != null && list.size() > 0) {
+			ResolveInfo resolveInfo = list.get(0);
+			
+			String name = resolveInfo.activityInfo.name;
+			String packageName = resolveInfo.activityInfo.packageName;
+			
+			if(!name.startsWith(packageName)) {
+				name = packageName + name;
+			}
+			
+			return Class.forName(name);
+		}
+		return null;
+		
+	}
 }
