@@ -39,7 +39,7 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.share.ShareHandlerListener;
 import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.auth.ShareDialogListener;
-import com.socialize.ui.dialog.AuthRequestDialogFactory;
+import com.socialize.ui.dialog.AuthDialogFactory;
 import com.socialize.ui.dialog.SafeProgressDialog;
 
 /**
@@ -48,11 +48,11 @@ import com.socialize.ui.dialog.SafeProgressDialog;
 public class SocializeShareUtils extends SocializeActionUtilsBase implements ShareUtilsProxy {
 	
 	private ShareSystem shareSystem;
-	private AuthRequestDialogFactory authRequestDialogFactory;
+	private AuthDialogFactory authRequestDialogFactory;
 	
 	@Override
 	public void showShareDialog(final Activity context, final Entity e, int options, final SocialNetworkShareListener socialNetworkListener, final ShareDialogListener dialogListener) {
-		authRequestDialogFactory.show(context, new ShareDialogListener() {
+		authRequestDialogFactory.show(context, e, socialNetworkListener, new ShareDialogListener() {
 			@Override
 			public void onCancel(Dialog dialog) {
 				if(dialogListener != null) {
@@ -174,7 +174,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 		this.shareSystem = shareSystem;
 	}
 
-	public void setAuthRequestDialogFactory(AuthRequestDialogFactory authRequestDialogFactory) {
+	public void setAuthRequestDialogFactory(AuthDialogFactory authRequestDialogFactory) {
 		this.authRequestDialogFactory = authRequestDialogFactory;
 	}
 }

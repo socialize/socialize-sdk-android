@@ -34,7 +34,7 @@ import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.auth.ShareDialogListener;
-import com.socialize.ui.dialog.AuthRequestDialogFactory;
+import com.socialize.ui.dialog.AuthDialogFactory;
 
 
 /**
@@ -44,7 +44,7 @@ import com.socialize.ui.dialog.AuthRequestDialogFactory;
 public class SocializeCommentUtils extends SocializeActionUtilsBase implements CommentUtilsProxy {
 	
 	private CommentSystem commentSystem;
-	private AuthRequestDialogFactory authRequestDialogFactory;
+	private AuthDialogFactory authRequestDialogFactory;
 
 	@Override
 	public void addComment(Activity context, final Entity e, final String text, final CommentAddListener listener) {
@@ -95,7 +95,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 		this.commentSystem = commentSystem;
 	}
 	
-	public void setAuthRequestDialogFactory(AuthRequestDialogFactory authRequestDialogFactory) {
+	public void setAuthRequestDialogFactory(AuthDialogFactory authRequestDialogFactory) {
 		this.authRequestDialogFactory = authRequestDialogFactory;
 	}
 	

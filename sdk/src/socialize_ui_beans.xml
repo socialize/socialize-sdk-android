@@ -533,7 +533,7 @@
 		class="com.socialize.networks.twitter.TwitterAuthClickListener"		
 		singleton="false"
 		extends="socialNetworkAuthClickListener">
-		<property name="twitterUtils" ref="twitterUtils"/>
+		<property name="twitterAuthUtils" ref="twitterAuthUtils"/>
 	</bean>	
 	
 	<bean 
@@ -1397,6 +1397,7 @@
 	
 	<factory id="shareClickListenerFactory" makes="shareClickListener"/> 
 	
+	<!-- Deprecated
 	<bean 
 		id="shareDialogView" 
 		class="com.socialize.ui.share.ShareDialogView" 
@@ -1415,10 +1416,26 @@
 	
 	<factory id="shareDialogViewFactory" makes="shareDialogView"/>
 	
+	 
+	<bean 
+		id="sliderActionBarListener" 
+		class="com.socialize.ui.actionbar.SliderActionBarListener">
+		<property name="logger" ref="logger"/>
+		<property name="shareSliderItemFactory" ref="shareSliderItemFactory"/>
+	</bean>		
+	
+	<bean 
+		id="shareSliderItem" 
+		class="com.socialize.ui.actionbar.slider.share.ShareSliderItem" 
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="viewFactory" ref="shareDialogViewFactory"/>
+	</bean>	 
+	<factory id="shareSliderItemFactory" makes="shareSliderItem"/>
+	 -->
 <!-- End Share UI -->	
 
 <!-- Socialize Slider -->
-
 	<bean 
 		id="actionBarSliderContent" 
 		class="com.socialize.ui.slider.ActionBarSliderContent" 
@@ -1441,7 +1458,6 @@
 	
 	<factory id="actionBarSliderHandleFactory" makes="actionBarSliderHandle"/>
 	
-
 	<bean 
 		id="actionBarSliderFactory" 
 		class="com.socialize.ui.slider.DefaultActionBarSliderFactory">
@@ -1464,21 +1480,6 @@
 		
 		<init-method name="init"/>
 	</bean>
-		
-	<bean 
-		id="sliderActionBarListener" 
-		class="com.socialize.ui.actionbar.SliderActionBarListener">
-		<property name="logger" ref="logger"/>
-		<property name="shareSliderItemFactory" ref="shareSliderItemFactory"/>
-	</bean>		
-	
-	<bean 
-		id="shareSliderItem" 
-		class="com.socialize.ui.actionbar.slider.share.ShareSliderItem" 
-		singleton="false">
-		<constructor-arg type="activity"/>
-		<property name="viewFactory" ref="shareDialogViewFactory"/>
-	</bean>
 
 	<bean 
 		id="sliderAnimationSet" 
@@ -1488,9 +1489,8 @@
 	</bean>		
 	
 	<factory id="actionBarSliderViewFactory" makes="actionBarSliderView"/>
-	<factory id="shareSliderItemFactory" makes="shareSliderItem"/>
 	<factory id="sliderAnimationSetFactory" makes="sliderAnimationSet"/>
-	
+
 <!-- End Socialize Slider -->
 
 <!--  Image Loader  -->

@@ -49,7 +49,7 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 
 	@Override
 	protected void tearDown() throws Exception {
-		TestUtils.destroyActivity();
+//		TestUtils.destroyActivity();
 		TestUtils.tearDown();
 		super.tearDown();
 	}

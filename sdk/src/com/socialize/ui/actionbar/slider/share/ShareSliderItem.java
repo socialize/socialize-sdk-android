@@ -34,6 +34,7 @@ import com.socialize.ui.slider.ActionBarSliderView.DisplayState;
 /**
  * @author Jason Polites
  */
+@Deprecated
 public class ShareSliderItem extends AbstractSliderItem {
 
 	private IBeanFactory<ShareDialogView> viewFactory;

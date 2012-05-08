@@ -55,6 +55,10 @@ public class ShareUtils {
 				new SocializeActionProxy("shareUtils")); // Bean name
 	}
 	
+	public static void showShareDialog (Activity context, Entity e) {
+		proxy.showShareDialog(context, e, ALL, null, null);
+	};	
+	
 	public static void showShareDialog (Activity context, Entity e, SocialNetworkDialogListener listener) {
 		proxy.showShareDialog(context, e, ALL, listener, listener);
 	};	

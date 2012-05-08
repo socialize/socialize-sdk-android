@@ -135,6 +135,7 @@ public class TestUtils {
 		holder.setUp();
 		instrumentation = testCase.getInstrumentation();
 		Socialize.getSocialize().destroy(true);
+		SocializeAccess.clearBeanOverrides();
 	}
 	
 	public static void tearDown() {
@@ -149,8 +150,6 @@ public class TestUtils {
 		}
 		
 		monitor = null;
-		
-		Socialize.getSocialize().destroy(true);
 	}
 	
 	public static void setUpActivityMonitor(Class<?> activityClass) {

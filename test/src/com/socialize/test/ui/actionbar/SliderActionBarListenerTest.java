@@ -21,23 +21,20 @@
  */
 package com.socialize.test.ui.actionbar;
 
-import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.test.mock.MockActionBarSliderView;
 import com.socialize.test.mock.MockActionBarView;
 import com.socialize.test.ui.SocializeUIActivityTest;
-import com.socialize.ui.actionbar.OnActionBarEventListener.ActionBarEvent;
-import com.socialize.ui.actionbar.SliderActionBarListener;
 import com.socialize.ui.slider.ActionBarSliderItem;
 
 /**
  * @author Jason Polites
  *
  */
+@Deprecated
 public class SliderActionBarListenerTest extends SocializeUIActivityTest {
 
-	@SuppressWarnings("unchecked")
 	@UsesMocks ({
 		ActionBarSliderItem.class,
 		IBeanFactory.class,
@@ -46,29 +43,29 @@ public class SliderActionBarListenerTest extends SocializeUIActivityTest {
 	})
 	public void testSliderActionBarListenerShare() {
 		
-		SliderActionBarListener listener = new SliderActionBarListener();
-		
-		IBeanFactory<ActionBarSliderItem> shareSliderItemFactory = AndroidMock.createMock(IBeanFactory.class);
-		ActionBarSliderItem item = AndroidMock.createMock(ActionBarSliderItem.class);
-		MockActionBarView actionBarView = AndroidMock.createMock(MockActionBarView.class, getContext());
-		MockActionBarSliderView actionBarSliderView = AndroidMock.createMock(MockActionBarSliderView.class, getContext());
-		
-		AndroidMock.expect(shareSliderItemFactory.getBean(actionBarView, listener)).andReturn(item);
-		AndroidMock.expect(actionBarView.getSlider()).andReturn(actionBarSliderView);
-		
-		actionBarSliderView.showSliderItem(item);
-		
-		AndroidMock.replay(shareSliderItemFactory);
-		AndroidMock.replay(actionBarView);
-		AndroidMock.replay(actionBarSliderView);
-	
-		listener.setShareSliderItemFactory(shareSliderItemFactory);
-		
-		listener.onClick(actionBarView, ActionBarEvent.SHARE);
-		
-		AndroidMock.verify(shareSliderItemFactory);
-		AndroidMock.verify(actionBarView);
-		AndroidMock.verify(actionBarSliderView);
+//		SliderActionBarListener listener = new SliderActionBarListener();
+//		
+//		IBeanFactory<ActionBarSliderItem> shareSliderItemFactory = AndroidMock.createMock(IBeanFactory.class);
+//		ActionBarSliderItem item = AndroidMock.createMock(ActionBarSliderItem.class);
+//		MockActionBarView actionBarView = AndroidMock.createMock(MockActionBarView.class, getContext());
+//		MockActionBarSliderView actionBarSliderView = AndroidMock.createMock(MockActionBarSliderView.class, getContext());
+//		
+//		AndroidMock.expect(shareSliderItemFactory.getBean(actionBarView, listener)).andReturn(item);
+//		AndroidMock.expect(actionBarView.getSlider()).andReturn(actionBarSliderView);
+//		
+//		actionBarSliderView.showSliderItem(item);
+//		
+//		AndroidMock.replay(shareSliderItemFactory);
+//		AndroidMock.replay(actionBarView);
+//		AndroidMock.replay(actionBarSliderView);
+//	
+//		listener.setShareSliderItemFactory(shareSliderItemFactory);
+//		
+//		listener.onClick(actionBarView, ActionBarEvent.SHARE);
+//		
+//		AndroidMock.verify(shareSliderItemFactory);
+//		AndroidMock.verify(actionBarView);
+//		AndroidMock.verify(actionBarSliderView);
 	}
 	
 }

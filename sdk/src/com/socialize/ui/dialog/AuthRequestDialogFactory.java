@@ -32,6 +32,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout.LayoutParams;
 import com.socialize.android.ioc.BeanCreationListener;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.entity.Entity;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.auth.ShareDialogListener;
@@ -48,15 +49,23 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 	private DisplayUtils displayUtils;
 	private Colors colors;
 	
+	@Override
 	public Dialog show(View parent, int displayOptions) {
 		return show(parent, null, null, displayOptions);
 	}
 	
+	@Override
 	public Dialog show(final View parent, SocialNetworkListener socialNetworkListener, final ShareDialogListener listener, int displayOptions) {
 		return show(parent.getContext(), listener, displayOptions);
 	}
-
+	
+	@Override
 	public Dialog show(final Context context, final ShareDialogListener listener, int displayOptions) {
+		return show(context, null, null, listener, displayOptions);
+	}
+
+	@Override
+	public Dialog show(final Context context, Entity entity, final SocialNetworkListener socialNetworkListener, final ShareDialogListener shareDialoglistener, int displayOptions) {
 
 		final Dialog dialog = newDialog(context);
 		final ProgressDialog progress = SafeProgressDialog.show(context, "", "Please wait...");
@@ -89,15 +98,23 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 			    
 			    dialog.getWindow().setAttributes(lp);				
 				
-			    dialog.show();
-			    
 				progress.dismiss();
 				
-				if(listener != null) {
-					listener.onShow(dialog, view);
+				try {
+					dialog.show();
+					
+					if(shareDialoglistener != null) {
+						shareDialoglistener.onShow(dialog, view);
+					}
 				}
+				catch (Exception e) {
+					// TODO: log error
+					e.printStackTrace();
+				}
+				
+	
 			}
-		}, listener, dialog, displayOptions);
+		}, entity, socialNetworkListener, shareDialoglistener, dialog, displayOptions);
 		
 		return dialog;
 	}

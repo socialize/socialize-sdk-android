@@ -44,6 +44,7 @@ import com.socialize.view.BaseView;
 /**
  * @author Jason Polites
  */
+@Deprecated
 public class ShareDialogView extends BaseView implements ShareInfoProvider {
 
 	private SocializeButton facebookShareButton;

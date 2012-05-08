@@ -25,8 +25,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
+import com.socialize.CommentUtils;
 import com.socialize.ShareUtils;
-import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.auth.AuthProviderType;
@@ -162,7 +162,7 @@ public class ActionBarLayoutView extends BaseView {
 				}
 				
 				if(!consumed) {
-					Socialize.getSocialize().showCommentView(getActivity(), actionBarView.getEntity());
+					CommentUtils.showCommentView(getActivity(), actionBarView.getEntity());
 				}
 			}
 		});
@@ -186,10 +186,16 @@ public class ActionBarLayoutView extends BaseView {
 		shareButton.setListener(new ActionBarButtonListener() {
 			@Override
 			public void onClick(ActionBarButton button) {
-				ShareUtils.showShareDialog(getActivity(), actionBarView.getEntity(), null);
-//				if(onActionBarEventListener != null) {
-//					onActionBarEventListener.onClick(actionBarView, ActionBarEvent.SHARE);
-//				}
+				
+				boolean consumed = false;
+				
+				if(onActionBarEventListener != null) {
+					consumed = onActionBarEventListener.onClick(actionBarView, ActionBarEvent.SHARE);
+				}
+				
+				if(!consumed) {
+					ShareUtils.showShareDialog(getActivity(), actionBarView.getEntity());
+				}
 			}
 		});
 		
@@ -252,29 +258,37 @@ public class ActionBarLayoutView extends BaseView {
 	
 	protected void doLoadSequence(boolean reload) {
 		final Entity userProvidedEntity = actionBarView.getEntity();
-		this.entityKey = userProvidedEntity.getKey();
 		
-		if(reload) {
-			ticker.resetTicker();
-			viewsItem.setText(loadingText);
-			commentsItem.setText(loadingText);
-			likesItem.setText(loadingText);
-			sharesItem.setText(loadingText);
-			likeButton.setText(loadingText);
+		if(userProvidedEntity != null) {
+			this.entityKey = userProvidedEntity.getKey();
 			
-			if(onActionBarEventListener != null) {
-				onActionBarEventListener.onUpdate(actionBarView);
-			}	
+			if(reload) {
+				ticker.resetTicker();
+				viewsItem.setText(loadingText);
+				commentsItem.setText(loadingText);
+				likesItem.setText(loadingText);
+				sharesItem.setText(loadingText);
+				likeButton.setText(loadingText);
+				
+				if(onActionBarEventListener != null) {
+					onActionBarEventListener.onUpdate(actionBarView);
+				}	
+			}
+			else {
+				ticker.startTicker();
+				
+				if(onActionBarEventListener != null) {
+					onActionBarEventListener.onLoad(actionBarView);
+				}	
+			}
+			
+			updateEntity(userProvidedEntity, reload);
 		}
 		else {
-			ticker.startTicker();
-			
-			if(onActionBarEventListener != null) {
-				onActionBarEventListener.onLoad(actionBarView);
-			}	
+			if(logger != null) {
+				logger.warn("No entity provided to ActionBar.  Load sequence aborted.");
+			}
 		}
-		
-		updateEntity(userProvidedEntity, reload);
 	}
 	
 	protected void updateEntity(final Entity entity, boolean reload) {

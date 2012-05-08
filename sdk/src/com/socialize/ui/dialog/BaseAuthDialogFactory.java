@@ -23,12 +23,9 @@ package com.socialize.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.view.View;
 import android.view.Window;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
-import com.socialize.networks.SocialNetworkListener;
-import com.socialize.ui.auth.ShareDialogListener;
 import com.socialize.util.Drawables;
 
 /**
@@ -39,12 +36,6 @@ public abstract class BaseAuthDialogFactory implements AuthDialogFactory  {
 	
 	protected Drawables drawables;
 	protected SocializeLogger logger;
-	
-	/* (non-Javadoc)
-	 * @see com.socialize.ui.dialog.AuthDialogFactory#show(android.view.View, com.socialize.ui.auth.AuthRequestListener)
-	 */
-	@Override
-	public abstract Dialog show(View parent, SocialNetworkListener socialNetworkListener, ShareDialogListener listener, int displayOptions);
 	
 	// So we can mock
 	protected Dialog newDialog(Context context) {
@@ -73,6 +64,4 @@ public abstract class BaseAuthDialogFactory implements AuthDialogFactory  {
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;
 	}
-
-
 }

@@ -22,7 +22,6 @@
 package com.socialize.ui.actionbar;
 
 import android.util.Log;
-
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
@@ -34,10 +33,13 @@ import com.socialize.ui.slider.ActionBarSliderItem;
  * @author Jason Polites
  *
  */
+@Deprecated
 public class SliderActionBarListener implements OnActionBarEventListener {
 	
+	@SuppressWarnings("unused")
 	private ActionBarEvent lastEvent;
 
+	@SuppressWarnings("unused")
 	private IBeanFactory<ActionBarSliderItem> shareSliderItemFactory;
 	
 	private OnActionBarEventListener delegate;
@@ -91,7 +93,7 @@ public class SliderActionBarListener implements OnActionBarEventListener {
 	 */
 	@Override
 	public void onPostShare(ActionBarView actionBar, Share share) {
-		actionBar.getSlider().close();
+//		actionBar.getSlider().close();
 		
 		if(delegate != null)  {
 			try {
@@ -118,7 +120,7 @@ public class SliderActionBarListener implements OnActionBarEventListener {
 	
 	@Override
 	public void onUpdate(ActionBarView actionBar) {
-		actionBar.getSlider().close();
+//		actionBar.getSlider().close();
 		
 		if(delegate != null)  {
 			try {
@@ -132,7 +134,7 @@ public class SliderActionBarListener implements OnActionBarEventListener {
 	@Override
 	public void onLoad(ActionBarView actionBar) {
 
-		actionBar.getSlider().close();
+//		actionBar.getSlider().close();
 		
 		if(delegate != null)  {
 			try {
@@ -170,29 +172,29 @@ public class SliderActionBarListener implements OnActionBarEventListener {
 			}
 		}	
 		
-		if(!clickHandled) {
-			boolean doEvent = true;
-			
-			if(lastEvent != null && lastEvent.equals(evt)) {
-				doEvent = !actionBar.getSlider().showLastItem();
-			}
-			
-			if(doEvent) {
-				ActionBarSliderItem item = null;
-				switch(evt) {
-					case SHARE:
-						if(shareSliderItemFactory != null) {
-							item = shareSliderItemFactory.getBean(actionBar, this);
-						}
-						break;
-				}
-				
-				if(item != null) {
-					actionBar.getSlider().showSliderItem(item);
-					lastEvent = evt;
-				}
-			}
-		}
+//		if(!clickHandled) {
+//			boolean doEvent = true;
+//			
+//			if(lastEvent != null && lastEvent.equals(evt)) {
+//				doEvent = !actionBar.getSlider().showLastItem();
+//			}
+//			
+//			if(doEvent) {
+//				ActionBarSliderItem item = null;
+//				switch(evt) {
+//					case SHARE:
+//						if(shareSliderItemFactory != null) {
+//							item = shareSliderItemFactory.getBean(actionBar, this);
+//						}
+//						break;
+//				}
+//				
+//				if(item != null) {
+//					actionBar.getSlider().showSliderItem(item);
+//					lastEvent = evt;
+//				}
+//			}
+//		}
 		
 		return clickHandled;
 	}

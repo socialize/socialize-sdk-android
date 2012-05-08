@@ -37,6 +37,7 @@ public abstract class SocializeActivityTest extends ActivityInstrumentationTestC
 
 	@Override
 	protected void setUp() throws Exception {
+		getInstrumentation().waitForIdleSync();
 		holder.setUp();
 		super.setUp();
 	}

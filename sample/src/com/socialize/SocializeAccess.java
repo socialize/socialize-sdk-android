@@ -41,6 +41,10 @@ public class SocializeAccess {
 		return null;
 	}
 	
+	public static void clearBeanOverrides() {
+		Socialize.getSocialize().getSystem().setBeanOverrides();
+	}
+	
 	public static void setBeanOverrides(String...override) {
 		Socialize.getSocialize().getSystem().setBeanOverrides(override);
 	}

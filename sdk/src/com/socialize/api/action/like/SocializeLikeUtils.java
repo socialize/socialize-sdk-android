@@ -38,14 +38,14 @@ import com.socialize.listener.like.LikeListListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.auth.ShareDialogListener;
-import com.socialize.ui.dialog.AuthRequestDialogFactory;
+import com.socialize.ui.dialog.AuthDialogFactory;
 
 /**
  * @author Jason Polites
  */
 public class SocializeLikeUtils extends SocializeActionUtilsBase implements LikeUtilsProxy {
 	
-	private AuthRequestDialogFactory authRequestDialogFactory;
+	private AuthDialogFactory authRequestDialogFactory;
 	private LikeSystem likeSystem;
 
 	/*
@@ -148,7 +148,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 		likeSystem.getLikesByEntity(session, entity.getKey(), start, end, listener);
 	}
 
-	public void setAuthRequestDialogFactory(AuthRequestDialogFactory authRequestDialogFactory) {
+	public void setAuthRequestDialogFactory(AuthDialogFactory authRequestDialogFactory) {
 		this.authRequestDialogFactory = authRequestDialogFactory;
 	}
 

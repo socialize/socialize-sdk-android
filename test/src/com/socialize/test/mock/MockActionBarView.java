@@ -25,7 +25,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import com.socialize.ui.actionbar.ActionBarView;
-import com.socialize.ui.slider.ActionBarSliderView;
 
 /**
  * @author Jason Polites
@@ -45,11 +44,6 @@ public class MockActionBarView extends ActionBarView {
 	@Override
 	public void setListeners() {
 		super.setListeners();
-	}
-
-	@Override
-	public ActionBarSliderView getSlider() {
-		return super.getSlider();
 	}
 
 	@Override

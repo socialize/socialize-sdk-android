@@ -23,13 +23,12 @@ package com.socialize.test.ui.auth;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
 import android.view.View;
-
 import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.SocializeSystem;
+import com.socialize.entity.Entity;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.networks.facebook.FacebookAuthClickListener;
 import com.socialize.networks.facebook.FacebookSignInCell;
@@ -65,6 +64,8 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 			}
 		};	
 		
+		final Entity entity = Entity.newInstance("http://entity1.com", "http://entity1.com");
+		
 		// Stub in click handlers
 		SocializeIOC.registerStub("facebookAuthClickListener", mockFBListener);
 		SocializeIOC.registerStub("twitterAuthClickListener", mockTWListener);
@@ -78,7 +79,7 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 		// the twitter button is not shown.  Forcing twitter config here
 		Socialize.getSocialize().getConfig().setTwitterKeySecret("foo", "bar");
 		
-		final AuthPanelView view = SocializeAccess.getBean("authPanelView", ShareUtils.ALL);
+		final AuthPanelView view = SocializeAccess.getBean("authPanelView", entity, ShareUtils.ALL);
 		
 		
 		final CountDownLatch latch0 = new CountDownLatch(1);

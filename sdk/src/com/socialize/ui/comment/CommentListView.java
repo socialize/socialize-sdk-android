@@ -1,7 +1,6 @@
 package com.socialize.ui.comment;
 
 import java.util.List;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
 import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
@@ -24,15 +22,15 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
-import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.listener.subscription.SubscriptionGetListener;
+import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.notifications.NotificationType;
 import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.auth.ShareDialogListener;
-import com.socialize.ui.dialog.AuthRequestDialogFactory;
+import com.socialize.ui.dialog.AuthDialogFactory;
 import com.socialize.ui.dialog.DialogFactory;
 import com.socialize.ui.header.SocializeHeader;
 import com.socialize.ui.image.ImageLoader;
@@ -77,7 +75,7 @@ public class CommentListView extends BaseView {
 	private View field;
 	private SocializeHeader header;
 	private LoadingListView content;
-	private AuthRequestDialogFactory authRequestDialogFactory;
+	private AuthDialogFactory authRequestDialogFactory;
 	
 	private IBeanFactory<CommentEntrySliderItem> commentEntryFactory;
 	
@@ -787,7 +785,7 @@ public class CommentListView extends BaseView {
 		return commentAdapter.getTotalCount();
 	}
 
-	public void setAuthRequestDialogFactory(AuthRequestDialogFactory authRequestDialogFactory) {
+	public void setAuthRequestDialogFactory(AuthDialogFactory authRequestDialogFactory) {
 		this.authRequestDialogFactory = authRequestDialogFactory;
 	}
 	

@@ -32,6 +32,7 @@ import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
+import com.socialize.ui.comment.OnCommentViewActionListener;
 
 /**
  * @author Jason Polites
@@ -142,4 +143,23 @@ public class CommentUtils {
 		subscriptionUtils.isSubscribed(context, e, listener);
 	}
 
+	
+	/**
+	 * Shows the comments for an entity.
+	 * @param context
+	 * @param entity
+	 * @param listener
+	 */
+	public static void showCommentView(Activity context, Entity entity, OnCommentViewActionListener listener) {
+		Socialize.getSocialize().showCommentView(context, entity, listener);
+	}
+
+	/**
+	 * Shows the comments for an entity.
+	 * @param context
+	 * @param entity
+	 */
+	public static void showCommentView(Activity context, Entity entity) {
+		Socialize.getSocialize().showCommentView(context, entity);
+	}
 }
