@@ -30,7 +30,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import com.socialize.ui.dialog.DialogRegister;
 
-public class EmptyActivity extends Activity  implements DialogRegister {
+public class EmptyActivity extends Activity implements DialogRegister {
 
 	private Set<Dialog> dialogs = new HashSet<Dialog>();	
 	

@@ -36,12 +36,12 @@ public abstract class SocializeUIActivityTest extends ActivityInstrumentationTes
 	@Override
 	protected void setUp() throws Exception {
 		holder.setUp();
+		Socialize.getSocialize().destroy(true);
 		super.setUp();
 	}
 	
 	@Override
 	protected void tearDown() throws Exception {
-		Socialize.getSocialize().destroy(true);
 		super.tearDown();
 	}
 	

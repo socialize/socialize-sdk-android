@@ -181,7 +181,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		
 		ListResult<Share> items = getResult(0);
 		assertNotNull(items);
-		assertTrue(items.size() > 1);
+		assertTrue(items.size() >= 1);
 	}	
 	
 	public void testShowAuthDialog() throws Exception {
