@@ -166,8 +166,6 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		ShareUtils.getSharesByEntity(getActivity(), entity, 0, 100, new ShareListListener() {
-			
-			
 			@Override
 			public void onList(ListResult<Share> entities) {
 				addResult(entities);

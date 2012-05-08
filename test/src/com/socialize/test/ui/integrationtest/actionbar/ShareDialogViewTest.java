@@ -10,9 +10,11 @@ import android.view.View;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.Socialize;
+import com.socialize.api.action.share.ShareSystem;
 import com.socialize.entity.Entity;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.networks.SocialNetworkListener;
+import com.socialize.test.mock.MockShareSystem;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarLayoutView;
 import com.socialize.ui.actionbar.ActionBarView;
@@ -27,7 +29,7 @@ public class ShareDialogViewTest extends ActionBarAutoTest {
 		
 		Intent intent = new Intent();
 		Bundle extras = new Bundle();
-		Entity entity = Entity.newInstance("http://entity1.com", "http://entity1.com");
+		Entity entity = Entity.newInstance("testShareButtonLoadsShareView", "testShareButtonLoadsShareView");
 		extras.putSerializable(Socialize.ENTITY_OBJECT, entity);
 		intent.putExtras(extras);
 		setActivityIntent(intent);
@@ -59,6 +61,9 @@ public class ShareDialogViewTest extends ActionBarAutoTest {
 			}
 		};
 		
+		final ShareSystem mockShareSystem = new MockShareSystem();
+		
+		SocializeIOC.registerStub("shareSystem", mockShareSystem);
 		SocializeIOC.registerStub("authRequestDialogFactory", mockAuthDialogFactory);
 		
 		TestUtils.setupSocializeOverrides(true, true);
@@ -80,6 +85,7 @@ public class ShareDialogViewTest extends ActionBarAutoTest {
 		latch.await(10, TimeUnit.SECONDS);
 		
 		SocializeIOC.unregisterStub("authRequestDialogFactory");
+		SocializeIOC.unregisterStub("shareSystem");
 		
 		String result = getResult(0);
 		
@@ -90,14 +96,19 @@ public class ShareDialogViewTest extends ActionBarAutoTest {
 	@UsesMocks({OnActionBarEventListener.class})
 	public void testShareButtonCallsActionBarListener() throws Throwable {
 		
-		TestUtils.setupSocializeOverrides(true, true);
-		
 		Intent intent = new Intent();
 		Bundle extras = new Bundle();
-		Entity entity = Entity.newInstance("http://entity1.com", "http://entity1.com");
+		Entity entity = Entity.newInstance("testShareButtonCallsActionBarListener", "testShareButtonCallsActionBarListener");
 		extras.putSerializable(Socialize.ENTITY_OBJECT, entity);
 		intent.putExtras(extras);
 		setActivityIntent(intent);
+		
+		
+		final ShareSystem mockShareSystem = new MockShareSystem();
+		
+		SocializeIOC.registerStub("shareSystem", mockShareSystem);
+		
+		TestUtils.setupSocializeOverrides(true, true);
 		
 		getInstrumentation().waitForIdleSync();
 		
@@ -120,6 +131,8 @@ public class ShareDialogViewTest extends ActionBarAutoTest {
 				AndroidMock.replay(listener);
 				
 				assertTrue(actionBar.getShareButton().performClick());
+				
+				SocializeIOC.unregisterStub("shareSystem");
 				
 				AndroidMock.verify(listener);	
 			}
