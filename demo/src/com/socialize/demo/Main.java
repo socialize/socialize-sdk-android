@@ -40,6 +40,8 @@ public class Main extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        handler.sendEmptyMessageDelayed(0, 3000);
+        
+        
+        handler.sendEmptyMessageDelayed(0, 5000);
     }
 }
