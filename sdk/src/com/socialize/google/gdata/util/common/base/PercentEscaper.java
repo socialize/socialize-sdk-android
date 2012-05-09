@@ -14,7 +14,7 @@
  */
 
 
-package com.google.gdata.util.common.base;
+package com.socialize.google.gdata.util.common.base;
 
 /**
  * A {@code UnicodeEscaper} that escapes some set of Java characters using

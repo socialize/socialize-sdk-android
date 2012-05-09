@@ -14,7 +14,7 @@
  */
 
 
-package com.google.gdata.util.common.base;
+package com.socialize.google.gdata.util.common.base;
 
 /**
  * An object that converts literal text into a format safe for inclusion in a

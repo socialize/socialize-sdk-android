@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.gdata.util.common.base.PercentEscaper;
+import com.socialize.google.gdata.util.common.base.PercentEscaper;
 import com.socialize.oauth.signpost.http.HttpParameters;
 
 
