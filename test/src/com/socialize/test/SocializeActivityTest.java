@@ -24,6 +24,7 @@ package com.socialize.test;
 import java.util.List;
 import android.test.ActivityInstrumentationTestCase2;
 
+import com.socialize.Socialize;
 import com.socialize.sample.EmptyActivity;
 import com.socialize.test.ui.ResultHolder;
 
@@ -46,6 +47,7 @@ public abstract class SocializeActivityTest extends ActivityInstrumentationTestC
 	protected void tearDown() throws Exception {
 		holder.clear();
 		super.tearDown();
+		Socialize.getSocialize().destroy(true);
 	}
 	
 	protected void clearResults() {
