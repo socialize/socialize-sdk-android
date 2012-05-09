@@ -100,4 +100,8 @@ public class DisplayUtils {
 	public int getOrientation() {
 		return orientation;
 	}
+	
+	public boolean isLandscape() {
+		return orientation == Configuration.ORIENTATION_LANDSCAPE;
+	}
 }

@@ -69,7 +69,6 @@ public class AuthPanelView extends BaseView {
 	private Colors colors;
 	
 	private SocializeButton continueButton;
-//	private SocializeButton cancelButton;
 	
 	private int displayOptions;
 	
@@ -138,89 +137,190 @@ public class AuthPanelView extends BaseView {
 	int padding = 8;
 	int headerHeight = 45;
 	float headerRadius = 3;
+	int landscapeButtonWidth = 200;
 	
 	private final float[] fbRadii = new float[]{radii, radii, radii, radii, 0.0f, 0.0f, 0.0f, 0.0f};
 	private final int[] fbStroke = new int[]{1, 1, 0, 1};
 	
 	private final float[] twRadii = new float[]{0.0f, 0.0f, 0.0f, 0.0f, radii, radii, radii, radii};
 	private final int[] twStroke = new int[]{1, 1, 1, 1};
-
 	
 	public void init() {
+		
+		boolean landscape = false;
 		
 		if(displayUtils != null) {
 			padding = displayUtils.getDIP(12);
 			headerRadius = displayUtils.getDIP(3);
 			headerHeight = displayUtils.getDIP(45);
 			radii = displayUtils.getDIP(8);
+			landscape = displayUtils.isLandscape();
+			landscapeButtonWidth = displayUtils.getDIP(landscapeButtonWidth);
 		}
 		
 		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		LayoutParams contentParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		LayoutParams buttonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		LayoutParams headerParams = new LayoutParams(LayoutParams.FILL_PARENT, headerHeight);
-		RelativeLayout.LayoutParams badgeParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		LayoutParams cellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		LayoutParams badgeLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		
-		badgeLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 		masterParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
-		badgeParams.addRule(RelativeLayout.CENTER_IN_PARENT);
 		
 		setLayoutParams(masterParams);
 		setOrientation(VERTICAL);
 		
-		contentParams.setMargins(padding, padding, padding, padding);
-		contentParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
-		contentParams.weight = 1.0f;
+		RelativeLayout container = new RelativeLayout(getContext());
+		LayoutParams containerParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		containerParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
+		containerParams.weight = 1.0f;
+		container.setLayoutParams(containerParams);
 		
-		TextView header = new TextView(getContext());
-	
-		if(colors != null) {
-			GradientDrawable headerBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[]{colors.getColor(Colors.AUTH_PANEL_BOTTOM), colors.getColor(Colors.AUTH_PANEL_TOP)});
-			headerBG.setCornerRadii(new float[]{headerRadius, headerRadius, headerRadius, headerRadius, 0.0f, 0.0f, 0.0f, 0.0f});
-			header.setBackgroundDrawable(headerBG);
-		}
-
-		header.setText("Share To...");
-		header.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-		header.setTextColor(Color.WHITE);
-		header.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-		header.setLayoutParams(headerParams);
+		makeShareButtons();
+		
+		View continueButtonLayout = makeContinueButton();
+		View header = makeHeaderView(headerHeight, headerRadius);
+		
+		RelativeLayout.LayoutParams contentParams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		contentParams.setMargins(padding, padding, padding, padding);
+		contentParams.addRule(RelativeLayout.CENTER_IN_PARENT);
 		
 		LinearLayout contentLayout = new LinearLayout(getContext());
 		contentLayout.setPadding(padding, padding, padding, padding);
-		contentLayout.setOrientation(VERTICAL);
 		contentLayout.setLayoutParams(contentParams);
+		contentLayout.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
 		
-		LayoutParams socialNetworkButtonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		LayoutParams socialNetworkButtonParams = null;
+		LayoutParams emailSMSButtonParams = null;
+		
+		if(landscape) {
+			socialNetworkButtonParams = new LayoutParams(landscapeButtonWidth, LayoutParams.WRAP_CONTENT);
+			emailSMSButtonParams = new LayoutParams(landscapeButtonWidth, LayoutParams.WRAP_CONTENT);
+			contentLayout.setOrientation(HORIZONTAL);
+			
+			socialNetworkButtonParams.setMargins(0, 0, padding, 0);
+			emailSMSButtonParams.setMargins(padding, 0, 0, 0);
+		}
+		else {
+			socialNetworkButtonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			emailSMSButtonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			emailSMSButtonParams.setMargins(0, padding, 0, 0);
+			contentLayout.setOrientation(VERTICAL);
+		}
+		
 		LinearLayout socialNetworkButtonLayout = new LinearLayout(getContext());
 		socialNetworkButtonLayout.setPadding(0, 0, 0, 0);
 		socialNetworkButtonLayout.setOrientation(VERTICAL);
 		socialNetworkButtonLayout.setLayoutParams(socialNetworkButtonParams);	
-		
-		LayoutParams emailSMSButtonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		emailSMSButtonParams.setMargins(0, padding, 0, 0);
+
 		LinearLayout emailSMSButtonLayout = new LinearLayout(getContext());
 		emailSMSButtonLayout.setPadding(0, 0, 0, 0);
 		emailSMSButtonLayout.setOrientation(VERTICAL);
-		emailSMSButtonLayout.setLayoutParams(emailSMSButtonParams);		
+		emailSMSButtonLayout.setLayoutParams(emailSMSButtonParams);	
+		
+		if(!landscape) {
+			View shareBadge = makeShareBadge();
+			contentLayout.addView(shareBadge);
+		}
+		
+		if(facebookSignInCell != null || twitterSignInCell != null) {
+			if(facebookSignInCell != null) {
+				socialNetworkButtonLayout.addView(facebookSignInCell);
+			}
+			if(twitterSignInCell != null) {
+				socialNetworkButtonLayout.addView(twitterSignInCell);
+			}
+			contentLayout.addView(socialNetworkButtonLayout);
+		}
+		
+		if(emailCell != null || smsCell != null) {
+			if(emailCell != null) {
+				emailSMSButtonLayout.addView(emailCell);
+			}
+			if(smsCell != null) {
+				emailSMSButtonLayout.addView(smsCell);
+			}
+			contentLayout.addView(emailSMSButtonLayout);
+		}		
+		
+		container.addView(contentLayout);
+		
+		addView(header);
+		addView(container);
+		addView(continueButtonLayout);
+		
+		toggleContinueButton();
+		updateNetworkButtonState();
+	}
+	
+	protected View makeContinueButton() {
 		
 		LinearLayout buttonLayout = new LinearLayout(getContext());
-		buttonLayout.setPadding(padding, 0, padding, padding);
-		buttonLayout.setOrientation(HORIZONTAL);
-		buttonLayout.setLayoutParams(buttonParams);
-		buttonLayout.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);
+		
+		if(continueButton != null) {
+
+			LayoutParams buttonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			
+			buttonLayout.setPadding(padding, 0, padding, padding);
+			buttonLayout.setOrientation(HORIZONTAL);
+			buttonLayout.setLayoutParams(buttonParams);
+			buttonLayout.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);		
+			
+			continueButton.setEnabled(false);
+			continueButton.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					
+					SocialNetwork[] networks = null;
+					
+					// Get the number of networks enabled
+					if(facebookSignInCell != null && facebookSignInCell.isToggled()) {
+						if(twitterSignInCell != null && twitterSignInCell.isToggled()) {
+							networks = new SocialNetwork[]{SocialNetwork.FACEBOOK, SocialNetwork.TWITTER};
+						}
+						else {
+							networks = new SocialNetwork[]{SocialNetwork.FACEBOOK};
+						}
+					}
+					else if(twitterSignInCell != null && twitterSignInCell.isToggled()) {
+						networks = new SocialNetwork[]{SocialNetwork.TWITTER};
+					}
+					
+					listener.onContinue(dialog, networks);
+				}
+			});
+			
+			buttonLayout.addView(continueButton);
+		}
+		
+		return buttonLayout;
+	}
+	
+	protected View makeShareBadge() {
+		RelativeLayout.LayoutParams badgeParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		
+		LayoutParams badgeLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		
+		badgeLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		
+		badgeParams.addRule(RelativeLayout.CENTER_IN_PARENT);		
 		
 		RelativeLayout badgeLayout = new RelativeLayout(getContext());
 		badgeLayout.setLayoutParams(badgeLayoutParams);
+		
+		if(drawables != null) {
+			ImageView authBadge = new ImageView(getContext());
+			authBadge.setImageDrawable(drawables.getDrawable("share_badge.png"));
+			authBadge.setLayoutParams(badgeParams);
+			authBadge.setPadding(0, 0, 0, padding);
+			badgeLayout.addView(authBadge);
+		}
+		
+		return badgeLayout;
+	}
+	
+	protected void makeShareButtons() {
+		LayoutParams cellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		
 		boolean fbOK = getSocialize().isSupported(AuthProviderType.FACEBOOK) && ((displayOptions & ShareUtils.FACEBOOK) != 0) && facebookSignInCellFactory != null;
 		boolean twOK = getSocialize().isSupported(AuthProviderType.TWITTER) && ((displayOptions & ShareUtils.TWITTER) != 0) && twitterSignInCellFactory != null;
 		boolean emailOK = (entity != null && (displayOptions & ShareUtils.EMAIL) != 0) && getSocialize().canShare(getContext(), ShareType.EMAIL) && emailCellFactory != null;
 		boolean smsOK = (entity != null && (displayOptions & ShareUtils.SMS) != 0) && getSocialize().canShare(getContext(), ShareType.SMS) && smsCellFactory != null;
-		
-		
 		
 		if(fbOK) {
 			facebookSignInCell = facebookSignInCellFactory.getBean(this);
@@ -246,7 +346,6 @@ public class AuthPanelView extends BaseView {
 				twitterSignInCell.setLayoutParams(cellParams);
 				twitterSignInCell.setPadding(padding, padding, padding, padding);
 			}
-	
 		}
 		
 		if(emailOK) {
@@ -326,131 +425,26 @@ public class AuthPanelView extends BaseView {
 				}
 			});
 		}		
+	}
+	
+	protected View makeHeaderView(int headerHeight, float headerRadius) {
+		LayoutParams headerParams = new LayoutParams(LayoutParams.FILL_PARENT, headerHeight);
 		
+		TextView header = new TextView(getContext());
 		
-		if(drawables != null) {
-			ImageView authBadge = new ImageView(getContext());
-			authBadge.setImageDrawable(drawables.getDrawable("share_badge.png"));
-			authBadge.setLayoutParams(badgeParams);
-			authBadge.setPadding(0, 0, 0, padding);
-			badgeLayout.addView(authBadge);
+		if(colors != null) {
+			GradientDrawable headerBG = new GradientDrawable(Orientation.BOTTOM_TOP, new int[]{colors.getColor(Colors.AUTH_PANEL_BOTTOM), colors.getColor(Colors.AUTH_PANEL_TOP)});
+			headerBG.setCornerRadii(new float[]{headerRadius, headerRadius, headerRadius, headerRadius, 0.0f, 0.0f, 0.0f, 0.0f});
+			header.setBackgroundDrawable(headerBG);
 		}
+
+		header.setText("Share To...");
+		header.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+		header.setTextColor(Color.WHITE);
+		header.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+		header.setLayoutParams(headerParams);
 		
-		contentLayout.addView(badgeLayout);
-		
-		if(fbOK || twOK) {
-			if(fbOK && facebookSignInCell != null) {
-				socialNetworkButtonLayout.addView(facebookSignInCell);
-			}
-			if(twOK && twitterSignInCell != null) {
-				socialNetworkButtonLayout.addView(twitterSignInCell);
-			}
-			contentLayout.addView(socialNetworkButtonLayout);
-		}
-		
-		if(emailOK || smsOK) {
-			if(emailOK && emailCell != null) {
-				emailSMSButtonLayout.addView(emailCell);
-			}
-			if(smsOK && smsCell != null) {
-				emailSMSButtonLayout.addView(smsCell);
-			}
-			contentLayout.addView(emailSMSButtonLayout);
-		}		
-		
-//		if(config.isAllowAnonymousUser()) {
-		
-//			LayoutParams anonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-//			LinearLayout anonLayout = new LinearLayout(getContext());
-//			anonLayout.setPadding(0, padding, 0, padding);
-//			anonLayout.setOrientation(VERTICAL);
-//			anonLayout.setLayoutParams(anonParams);		
-//			
-//			AnonymousCell anonCell = anonCellFactory.getBean();
-//			
-//			anonLayout.addView(anonCell);
-//			
-//			contentLayout.addView(anonLayout);
-		
-//			LayoutParams cancelParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-//			cancelParams.setMargins(0, padding * 2, 0, 0);		
-//			RelativeLayout cancelLayout = new RelativeLayout(getContext());
-//			cancelLayout.setLayoutParams(cancelParams);	
-//			TextView cancelText = new TextView(getContext());
-//			cancelText.setTextColor(colors.getColor(Colors.AUTH_PANEL_CANCEL_TEXT));
-//			cancelText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-//			cancelText.setText("I'd rather remain anonymous...");
-//			
-//			RelativeLayout.LayoutParams cancelTextParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-//			cancelTextParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-//			
-//			cancelText.setLayoutParams(cancelTextParams);
-//			
-//			cancelLayout.setOnClickListener(new OnClickListener() {
-//				@Override
-//				public void onClick(View v) {
-//					dialog.dismiss();
-//					if(listener != null) {
-//						listener.onCancel(dialog);
-//					}
-//				}
-//			});
-//			
-//			cancelLayout.addView(cancelText);
-//			contentLayout.addView(cancelLayout);
-//		}
-		
-//		if(cancelButton != null) {
-//			
-//			cancelButton.setOnClickListener(new OnClickListener() {
-//				@Override
-//				public void onClick(View v) {
-//					if(listener != null) {
-//						dialog.dismiss();
-//						listener.onCancel(dialog);
-//					}
-//				}
-//			});
-//			
-//			buttonLayout.addView(cancelButton);
-//		}
-		
-		if(continueButton != null) {
-			continueButton.setEnabled(false);
-			continueButton.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					
-					SocialNetwork[] networks = null;
-					
-					// Get the number of networks enabled
-					if(facebookSignInCell.isToggled()) {
-						if(twitterSignInCell.isToggled()) {
-							networks = new SocialNetwork[]{SocialNetwork.FACEBOOK, SocialNetwork.TWITTER};
-						}
-						else {
-							networks = new SocialNetwork[]{SocialNetwork.FACEBOOK};
-						}
-					}
-					else if(twitterSignInCell.isToggled()) {
-						networks = new SocialNetwork[]{SocialNetwork.TWITTER};
-					}
-					
-					listener.onContinue(dialog, networks);
-				}
-			});
-			
-			buttonLayout.addView(continueButton);
-			
-			toggleContinueButton();
-		}
-		
-		addView(header);
-		addView(contentLayout);
-		addView(buttonLayout);
-		
-		updateNetworkButtonState();
+		return header;
 	}
 	
 	public void updateNetworkButtonState() {
@@ -524,11 +518,13 @@ public class AuthPanelView extends BaseView {
 	}
 
 	public void toggleContinueButton() {
-		if(config.isAllowAnonymousUser()) {
-			continueButton.setEnabled(true);
-		}
-		else {
-			continueButton.setEnabled(twitterSignInCell.isToggled() || facebookSignInCell.isToggled());
+		if(continueButton != null) {
+			if(config.isAllowAnonymousUser()) {
+				continueButton.setEnabled(true);
+			}
+			else {
+				continueButton.setEnabled(twitterSignInCell.isToggled() || facebookSignInCell.isToggled());
+			}
 		}
 	}
 

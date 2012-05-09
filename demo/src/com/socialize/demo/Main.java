@@ -22,10 +22,21 @@
 package com.socialize.demo;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.widget.TextView;
+import com.socialize.Socialize;
+import com.socialize.android.ioc.IOCContainer;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeInitListener;
 
 public class Main extends Activity {
     final Handler handler = new Handler() {
@@ -36,12 +47,43 @@ public class Main extends Activity {
 			finish();
 		}
     };
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        final TextView version = (TextView) findViewById(R.id.txtVersion);
+        final View viewContainer = findViewById(R.id.container);
+        final Animation fadeOut = new AlphaAnimation(1, 0);
+        fadeOut.setInterpolator(new AccelerateInterpolator()); 
+        fadeOut.setDuration(2500);
+        fadeOut.setFillAfter(true);
         
-        handler.sendEmptyMessageDelayed(0, 5000);
+        fadeOut.setAnimationListener(new AnimationListener() {
+			@Override
+			public void onAnimationStart(Animation animation) {}
+			@Override
+			public void onAnimationRepeat(Animation animation) {}
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				handler.sendEmptyMessageDelayed(0, 1000);
+			}
+		});
+        
+        // Initialize Socialize asynchronously
+        Socialize.initAsync(this, new SocializeInitListener() {
+			@Override
+			public void onError(SocializeException error) {
+				error.printStackTrace();
+				DemoUtils.showErrorDialog(Main.this, error);
+			}
+			
+			@Override
+			public void onInit(Context context, IOCContainer container) {
+				version.setText("Socialize v" + Socialize.VERSION);
+				viewContainer.startAnimation(fadeOut);
+			}
+		});
     }
 }

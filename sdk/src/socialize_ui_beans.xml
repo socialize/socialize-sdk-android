@@ -409,6 +409,7 @@
 		<property name="backgroundColor" value="#3d464c"/>
 		<property name="bgAlpha" value="255" type="integer"/>
 		<property name="displayText" value="Email"/>
+		<property name="toggledDrawableName" value="arrow.png"/>
 	</bean>	
 	
 	<factory id="emailCellFactory" makes="emailCell"/>
@@ -422,6 +423,7 @@
 		<property name="backgroundColor" value="#3d464c"/>
 		<property name="bgAlpha" value="255" type="integer"/>
 		<property name="displayText" value="SMS"/>
+		<property name="toggledDrawableName" value="arrow.png"/>
 	</bean>			
 	
 	<factory id="smsCellFactory" makes="smsCell"/>

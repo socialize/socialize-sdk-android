@@ -19,51 +19,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo;
+package com.socialize.demo.examples;
 
-import com.socialize.ActionBarUtils;
-import com.socialize.demo.examples.CommentActivity;
-import com.socialize.entity.Entity;
+import com.socialize.demo.R;
 import android.app.ListActivity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
+
 
 /**
  * @author Jason Polites
- * 
+ *
  */
-public class DemoList extends ListActivity {
-
-	final String[] values = new String[] { "Action Bar", "Entities", "Comments", "Sharing", "Likes", "Views", "Actions (Activity)", "Subscriptions", "Location"};
-	final Class<?>[] activities = new Class<?>[] { null, null, CommentActivity.class, null, null, null, null, null, null, null};
+public class CommentActivity extends ListActivity {
+	final String[] values = new String[] { "Get All Comments", "Get Comments By User", "Get Comments By Entity", "Get Comment By ID"};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		// Your entity key.  May be passed as a Bundle parameter to your activity
-		final String entityKey = "http://getsocialize.com";
-		
-		// Create an entity object, including a name.
-		final Entity entity = Entity.newInstance(entityKey, "Socialize");
-		
-		View view = ActionBarUtils.showActionBar(this, R.layout.demo_list, entity);
-		
-		setContentView(view);
-		
+		setContentView(R.layout.demo_list);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
 		setListAdapter(adapter);
-	}
-
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Class<?> activityClass = activities[position];
-		if(activityClass != null) {
-			Intent intent = new Intent(this, activityClass);
-			startActivity(intent);
-		}
 	}
 }

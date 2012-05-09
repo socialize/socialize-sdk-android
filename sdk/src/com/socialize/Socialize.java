@@ -24,6 +24,7 @@ package com.socialize;
 import java.util.HashMap;
 import java.util.Map;
 import android.content.Context;
+import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.SocializeListener;
 import com.socialize.log.SocializeLogger.LogLevel;
 
@@ -63,6 +64,10 @@ public class Socialize {
 
 	public static final void init(Context context) {
 		instance.init(context);
+	}
+	
+	public static final void initAsync(Context context, SocializeInitListener listener) {
+		instance.initAsync(context, listener);
 	}
 
 	public static final void destroy(Context context) {
