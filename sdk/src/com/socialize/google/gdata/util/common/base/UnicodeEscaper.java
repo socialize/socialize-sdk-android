@@ -14,9 +14,9 @@
  */
 
 
-package com.google.gdata.util.common.base;
+package com.socialize.google.gdata.util.common.base;
 
-import static com.google.gdata.util.common.base.Preconditions.checkNotNull;
+import static com.socialize.google.gdata.util.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.gdata.util.common.base;
+package com.socialize.google.gdata.util.common.base;
 
 import java.util.Collection;
 import java.util.NoSuchElementException;
