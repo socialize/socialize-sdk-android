@@ -84,6 +84,10 @@ public class DisplayUtils {
 		}
 		return pixels;
 	}
+	
+	public boolean isLowRes() {
+		return density <= 1.0f;
+	}
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;

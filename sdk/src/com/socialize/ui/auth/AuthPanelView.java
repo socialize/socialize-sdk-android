@@ -137,7 +137,7 @@ public class AuthPanelView extends BaseView {
 	int padding = 8;
 	int headerHeight = 45;
 	float headerRadius = 3;
-	int landscapeButtonWidth = 200;
+	int landscapeButtonWidth = 190;
 	
 	private final float[] fbRadii = new float[]{radii, radii, radii, radii, 0.0f, 0.0f, 0.0f, 0.0f};
 	private final int[] fbStroke = new int[]{1, 1, 0, 1};
@@ -148,6 +148,7 @@ public class AuthPanelView extends BaseView {
 	public void init() {
 		
 		boolean landscape = false;
+		boolean lowRes = false;
 		
 		if(displayUtils != null) {
 			padding = displayUtils.getDIP(12);
@@ -155,6 +156,7 @@ public class AuthPanelView extends BaseView {
 			headerHeight = displayUtils.getDIP(45);
 			radii = displayUtils.getDIP(8);
 			landscape = displayUtils.isLandscape();
+			lowRes = displayUtils.isLowRes();
 			landscapeButtonWidth = displayUtils.getDIP(landscapeButtonWidth);
 		}
 		
@@ -176,11 +178,11 @@ public class AuthPanelView extends BaseView {
 		View header = makeHeaderView(headerHeight, headerRadius);
 		
 		RelativeLayout.LayoutParams contentParams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		contentParams.setMargins(padding, padding, padding, padding);
+		contentParams.setMargins(padding, padding, padding, 0);
 		contentParams.addRule(RelativeLayout.CENTER_IN_PARENT);
 		
 		LinearLayout contentLayout = new LinearLayout(getContext());
-		contentLayout.setPadding(padding, padding, padding, padding);
+		contentLayout.setPadding(padding, padding, padding, 0);
 		contentLayout.setLayoutParams(contentParams);
 		contentLayout.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
 		
@@ -192,8 +194,8 @@ public class AuthPanelView extends BaseView {
 			emailSMSButtonParams = new LayoutParams(landscapeButtonWidth, LayoutParams.WRAP_CONTENT);
 			contentLayout.setOrientation(HORIZONTAL);
 			
-			socialNetworkButtonParams.setMargins(0, 0, padding, 0);
-			emailSMSButtonParams.setMargins(padding, 0, 0, 0);
+			socialNetworkButtonParams.setMargins(0, 0, padding/2, 0);
+			emailSMSButtonParams.setMargins(padding/2, 0, 0, 0);
 		}
 		else {
 			socialNetworkButtonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
@@ -212,7 +214,7 @@ public class AuthPanelView extends BaseView {
 		emailSMSButtonLayout.setOrientation(VERTICAL);
 		emailSMSButtonLayout.setLayoutParams(emailSMSButtonParams);	
 		
-		if(!landscape) {
+		if(!landscape && !lowRes) {
 			View shareBadge = makeShareBadge();
 			contentLayout.addView(shareBadge);
 		}
@@ -319,7 +321,8 @@ public class AuthPanelView extends BaseView {
 		
 		boolean fbOK = getSocialize().isSupported(AuthProviderType.FACEBOOK) && ((displayOptions & ShareUtils.FACEBOOK) != 0) && facebookSignInCellFactory != null;
 		boolean twOK = getSocialize().isSupported(AuthProviderType.TWITTER) && ((displayOptions & ShareUtils.TWITTER) != 0) && twitterSignInCellFactory != null;
-		boolean emailOK = (entity != null && (displayOptions & ShareUtils.EMAIL) != 0) && getSocialize().canShare(getContext(), ShareType.EMAIL) && emailCellFactory != null;
+//		boolean emailOK = (entity != null && (displayOptions & ShareUtils.EMAIL) != 0) && getSocialize().canShare(getContext(), ShareType.EMAIL) && emailCellFactory != null;
+		boolean emailOK = true;
 		boolean smsOK = (entity != null && (displayOptions & ShareUtils.SMS) != 0) && getSocialize().canShare(getContext(), ShareType.SMS) && smsCellFactory != null;
 		
 		if(fbOK) {

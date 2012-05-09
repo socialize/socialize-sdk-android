@@ -24,6 +24,7 @@ package com.socialize.auth.twitter;
 import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import com.socialize.ui.dialog.SafeProgressDialog;
@@ -77,6 +78,8 @@ public class TwitterWebViewClient extends WebViewClient {
 					}
 				}
 				else {
+					view.setVisibility(View.GONE);
+					
 					String token = uri.getQueryParameter("oauth_token");
 					String verifier = uri.getQueryParameter("oauth_verifier");
 

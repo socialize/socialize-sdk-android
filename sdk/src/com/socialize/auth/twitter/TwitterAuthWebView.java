@@ -98,7 +98,7 @@ public class TwitterAuthWebView extends WebView implements ITwitterAuthWebView {
 			@Override
 			public void onRequestToken(String token, String verifier) {
 				try {
-					provider.retrieveAccessToken(consumer, verifier, newOAuthTokenListener(listener));
+					provider.retrieveAccessTokenAsync(consumer, verifier, newOAuthTokenListener(listener));
 				} 
 				catch (Exception e) {
 					if(listener != null) {
