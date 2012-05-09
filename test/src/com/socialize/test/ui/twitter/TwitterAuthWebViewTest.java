@@ -134,7 +134,7 @@ public class TwitterAuthWebViewTest extends SocializeUnitTest {
 		
 		
 		listener.onCancel();
-		provider.retrieveAccessToken(consumer, verifier, tokenListener);
+		provider.retrieveAccessTokenAsync(consumer, verifier, tokenListener);
 		
 		AndroidMock.replay(listener, provider);
 		
