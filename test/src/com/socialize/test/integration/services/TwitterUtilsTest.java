@@ -172,8 +172,8 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		assertEquals(token, userProviderCredentials.getAccessToken());
 		assertEquals(secret, userProviderCredentials.getTokenSecret());
 		assertTrue(TwitterUtils.isLinked(context));
-		assertEquals(token, TwitterUtils.getAccessToken());
-		assertEquals(secret, TwitterUtils.getTokenSecret());
+		assertEquals(token, TwitterUtils.getAccessToken(context));
+		assertEquals(secret, TwitterUtils.getTokenSecret(context));
 		
 		SocializeIOC.unregisterStub("twitterProvider");
 	}

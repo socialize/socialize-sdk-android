@@ -103,12 +103,12 @@ public class AuthenticateSDKTest extends SDKIntegrationTest {
 					@Override
 					public void onError(SocializeException error) {
 						error.printStackTrace();
-						fail();
+						latch.countDown();
 					}
 					
 					@Override
 					public void onCancel() {
-						fail();
+						latch.countDown();
 					}
 					
 					@Override
@@ -120,7 +120,7 @@ public class AuthenticateSDKTest extends SDKIntegrationTest {
 					@Override
 					public void onAuthFail(SocializeException error) {
 						error.printStackTrace();
-						fail();
+						latch.countDown();
 					}
 				});
 			}

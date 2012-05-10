@@ -18,7 +18,7 @@ public class NotificationsAccess {
 	}
 
 	public static void setBeanOverrides(SocializeC2DMReceiverHandler receiver, String...override) {
-		receiver.getNotificationContainer().setConfigPaths(override);
+		NotificationContainer.NotificationBeans = override;
 	}
 	
 	public static void destroy(SocializeC2DMReceiverHandler receiver) {

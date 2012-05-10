@@ -19,11 +19,13 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.ui.slider.ActionBarSliderView;
 import com.socialize.ui.view.EntityView;
+import com.socialize.util.Drawables;
 
 public class CommentView extends EntityView {
 	
 	private Dialog progress;
 	private CommentListView commentListView;
+	private Drawables drawables;
 	
 	public static final String COMMENT_LISTENER = "socialize.comment.listener";
 	
@@ -38,6 +40,10 @@ public class CommentView extends EntityView {
 	@Override
 	protected View getView(Bundle bundle, Object...entityKey) {
 		if (entityKey != null) {
+			
+			if(drawables == null) {
+				drawables = container.getBean("drawables");
+			}
 			
 			// TODO: always create?
 			if(commentListView == null) {
@@ -110,7 +116,9 @@ public class CommentView extends EntityView {
 
 		MenuItem add2 = menu.add("Refresh");
 		
-		add2.setIcon(Socialize.getSocialize().getDrawable("ic_menu_refresh.png"));
+		if(drawables != null) {
+			add2.setIcon(drawables.getDrawable("ic_menu_refresh.png"));
+		}
 		
 		add2.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override

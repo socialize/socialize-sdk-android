@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.location.Location;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
@@ -65,7 +66,7 @@ import com.socialize.ui.profile.UserProfile;
  * The main Socialize Service.  This is the simplest entry point into the Socialize API.
  * @author Jason Polites
  */
-public interface SocializeService extends SocializeUI {
+public interface SocializeService extends SocializeUI, SocializeSessionConsumer {
 
 	/**
 	 * Initializes a SocializeService instance with default settings.  Should be called during the onCreate() method of your Activity.

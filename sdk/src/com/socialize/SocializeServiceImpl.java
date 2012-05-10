@@ -39,11 +39,9 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ScrollView;
-import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.Logger;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.activity.ActivitySystem;
 import com.socialize.api.action.comment.CommentSystem;
@@ -54,7 +52,6 @@ import com.socialize.api.action.share.ShareSystem;
 import com.socialize.api.action.user.UserSystem;
 import com.socialize.api.action.view.ViewSystem;
 import com.socialize.auth.AuthProvider;
-import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderInfoBuilder;
 import com.socialize.auth.AuthProviderType;
@@ -119,23 +116,19 @@ import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.ui.profile.UserProfile;
 import com.socialize.util.AppUtils;
 import com.socialize.util.ClassLoaderProvider;
-import com.socialize.util.Drawables;
 import com.socialize.util.EntityLoaderUtils;
 import com.socialize.util.ResourceLocator;
-import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
  */
-public class SocializeServiceImpl implements SocializeSessionConsumer, SocializeService {
+public class SocializeServiceImpl implements SocializeService {
 	
 	static final String receiver = SocializeC2DMReceiver.class.getName();
 	
 	private SocializeLogger logger;
-	private Drawables drawables;
 	private IOCContainer container;
 	private SocializeSession session;
-	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	private AuthProviderInfoBuilder authProviderInfoBuilder;
 	private SocializeInitializationAsserter asserter;
 	private CommentSystem commentSystem;
@@ -424,8 +417,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.activitySystem = container.getBean("activitySystem");
 				this.entitySystem = container.getBean("entitySystem");
 				this.subscriptionSystem = container.getBean("subscriptionSystem");
-				this.drawables = container.getBean("drawables");
-				this.authProviderDataFactory = container.getBean("authProviderDataFactory");
 				this.asserter = container.getBean("initializationAsserter");
 				this.authProviders = container.getBean("authProviders");
 				this.authProviderInfoBuilder = container.getBean("authProviderInfoBuilder");
@@ -585,9 +576,9 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	
 	@Override
 	public synchronized void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, SocializeAuthListener authListener) {
-		AuthProviderData data = this.authProviderDataFactory.getBean();
-		data.setAuthProviderInfo(authProviderInfo);
-		authenticate(context, consumerKey, consumerSecret, data, authListener, true);	
+		if(assertInitialized(context, authListener)) {
+			userSystem.authenticate(context, consumerKey, consumerSecret, authProviderInfo, authListener, this);
+		}
 	}
 	
 	/*
@@ -596,29 +587,15 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public synchronized void authenticate(Context context, SocializeAuthListener authListener) {
-		SocializeConfig config = getConfig();
-		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-		authenticate(context, consumerKey, consumerSecret, authListener);
+		if(assertInitialized(context, authListener)) {
+			userSystem.authenticate(context, authListener, this);
+		}
 	}
 	
 	public synchronized SocializeSession authenticateSynchronous(Context context) {
-		SocializeConfig config = getConfig();
-		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);	
-		
-		try {
-			if(checkKeys(consumerKey, consumerSecret)) {
-				return userSystem.authenticateSynchronous(context, consumerKey, consumerSecret, this);
-			}
-			else {
-				throw new SocializeException("Consumer key and/or secret not provided");
-			}
-		}
-		catch (Exception e) {
-			logError("Error during synchronous authentication", e);
-			return null;
-		}
+		SocializeSession session = userSystem.authenticateSynchronous(context);
+		this.session = session;
+		return session;
 	}
 
 	@Override
@@ -633,10 +610,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public synchronized void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
 		if(assertInitialized(context, authListener)) {
-			AuthProviderData data = this.authProviderDataFactory.getBean();
-			SocializeAuthProviderInfo info = newSocializeAuthProviderInfo();
-			data.setAuthProviderInfo(info);
-			authenticate(context, consumerKey, consumerSecret, data, authListener, false);
+			userSystem.authenticate(context, consumerKey, consumerSecret, authListener, this);
 		}
 	}
 	
@@ -654,52 +628,43 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public void authenticateKnownUser(Context context, UserProviderCredentials userProviderCredentials, SocializeAuthListener authListener) {
 		if(assertInitialized(context, authListener)) {
-			String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-			String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-			AuthProviderData authProviderData = this.authProviderDataFactory.getBean();
-			authProviderData.setAuthProviderInfo(userProviderCredentials.getAuthProviderInfo());
-			authProviderData.setToken3rdParty(userProviderCredentials.getAccessToken());
-			authProviderData.setSecret3rdParty(userProviderCredentials.getTokenSecret());
-			authProviderData.setUserId3rdParty(userProviderCredentials.getUserId());
-			authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, false);	
+			userSystem.authenticateKnownUser(context, userProviderCredentials, authListener, this);
 		}
 	}
 
-	protected synchronized void authenticate(
-			Context context,
-			String consumerKey, 
-			String consumerSecret, 
-			AuthProviderData authProviderData,
-			SocializeAuthListener authListener, 
-			boolean do3rdPartyAuth) {
-		
-		if(checkKeys(consumerKey, consumerSecret, authListener)) {
-			if(assertInitialized(context, authListener)) {
-				userSystem.authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, this, do3rdPartyAuth);
-			}
-		}
-	}
+//	protected synchronized void authenticate(
+//			Context context,
+//			String consumerKey, 
+//			String consumerSecret, 
+//			AuthProviderData authProviderData,
+//			SocializeAuthListener authListener, 
+//			boolean do3rdPartyAuth) {
+//		
+//		if(assertInitialized(context, authListener)) {
+//			userSystem.authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, this, do3rdPartyAuth);
+//		}
+//	}
 
-	protected boolean checkKeys(String consumerKey, String consumerSecret) {
-		return checkKeys(consumerKey, consumerSecret, null);
-	}
-	
-	protected boolean checkKeys(String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
-		return  checkKey("consumer key", consumerKey, authListener) &&
-				checkKey("consumer secret", consumerSecret, authListener);
-	}
-	protected boolean checkKey(String name, String key, SocializeAuthListener authListener) {
-		if(StringUtils.isEmpty(key)) {
-			String msg = "No key specified in authenticate";
-			if(authListener != null) {
-				authListener.onError(new SocializeException(msg));
-			}
-			logErrorMessage(msg);
-			return false;
-		} else {
-			return true;	
-		}
-	}
+//	protected boolean checkKeys(String consumerKey, String consumerSecret) {
+//		return checkKeys(consumerKey, consumerSecret, null);
+//	}
+//	
+//	protected boolean checkKeys(String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
+//		return  checkKey("consumer key", consumerKey, authListener) &&
+//				checkKey("consumer secret", consumerSecret, authListener);
+//	}
+//	protected boolean checkKey(String name, String key, SocializeAuthListener authListener) {
+//		if(StringUtils.isEmpty(key)) {
+//			String msg = "No key specified in authenticate";
+//			if(authListener != null) {
+//				authListener.onError(new SocializeException(msg));
+//			}
+//			logErrorMessage(msg);
+//			return false;
+//		} else {
+//			return true;	
+//		}
+//	}
 	protected void logError(String message, Throwable error) {
 		if(logger != null) {
 			logger.error(message, error);
@@ -908,8 +873,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			}
 
 			@Override
-			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-			}
+			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {}
 
 			@Override
 			public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
@@ -1654,24 +1618,26 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeUI#getDrawable(java.lang.String, boolean)
 	 */
+	@Deprecated
 	@Override
 	public Drawable getDrawable(String name, boolean eternal) {
-		return (drawables != null) ? drawables.getDrawable(name, eternal) : null;
-	}
-	
-	@Override
-	public SocializeLogger getLogger() {
-		return logger;
+		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeUI#getDrawable(java.lang.String)
 	 */
+	@Deprecated
 	@Override
 	public Drawable getDrawable(String name) {
-		return (drawables != null) ? drawables.getDrawable(name) : null; 
+		return null; 
 	}	
+	
+	@Override
+	public SocializeLogger getLogger() {
+		return logger;
+	}
 
 	@Override
 	public void onPause(Context context) {

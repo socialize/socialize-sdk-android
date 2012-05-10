@@ -29,13 +29,19 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.api.SocializeSessionPersister;
 import com.socialize.auth.AuthProviderData;
+import com.socialize.auth.AuthProviderInfo;
+import com.socialize.auth.AuthProviderInfoBuilder;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.SocializeAuthProviderInfo;
 import com.socialize.auth.SocializeAuthProviderInfoFactory;
+import com.socialize.auth.UserProviderCredentials;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.user.UserListener;
 import com.socialize.listener.user.UserSaveListener;
+import com.socialize.log.SocializeLogger;
 import com.socialize.notifications.NotificationRegistrationSystem;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.ui.profile.UserProfile;
@@ -50,6 +56,9 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	private SocializeSessionPersister sessionPersister;
 	private DeviceUtils deviceUtils;
+	private SocializeConfig config;
+	private SocializeLogger logger;
+	private AuthProviderInfoBuilder authProviderInfoBuilder;
 	private SocializeAuthProviderInfoFactory socializeAuthProviderInfoFactory;
 	private NotificationRegistrationSystem notificationRegistrationSystem;
 	
@@ -58,18 +67,31 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	}
 	
 	@Override
-	public SocializeSession authenticateSynchronous(Context ctx, String consumerKey, String consumerSecret, SocializeSessionConsumer sessionConsumer) throws SocializeException {
-		String udid = deviceUtils.getUDID(ctx);
-		
-		SocializeSession session = authenticate(ctx, "/authenticate/",consumerKey, consumerSecret, udid);
-		
-		if(sessionConsumer != null) {
-			sessionConsumer.setSession(session);
-		}
-		
-		return session;
+	public void authenticate(Context context, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
+		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+		authenticate(context, consumerKey, consumerSecret, listener, sessionConsumer);
 	}
 
+	@Override
+	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
+		AuthProviderData data = this.authProviderDataFactory.getBean();
+		data.setAuthProviderInfo(authProviderInfo);
+		authenticate(context, consumerKey, consumerSecret, data, listener, sessionConsumer, true);	
+	}
+
+	@Override
+	public void authenticateKnownUser(Context context, UserProviderCredentials userProviderCredentials, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
+		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+		AuthProviderData authProviderData = this.authProviderDataFactory.getBean();
+		authProviderData.setAuthProviderInfo(userProviderCredentials.getAuthProviderInfo());
+		authProviderData.setToken3rdParty(userProviderCredentials.getAccessToken());
+		authProviderData.setSecret3rdParty(userProviderCredentials.getTokenSecret());
+		authProviderData.setUserId3rdParty(userProviderCredentials.getUserId());
+		authenticate(context, consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, false);	
+	}
+	
 	@Override
 	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
 		AuthProviderData authProviderData = authProviderDataFactory.getBean();
@@ -77,6 +99,60 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 		authenticate(context, consumerKey, consumerSecret, authProviderData, listener, sessionConsumer, false);	
 	}
 	
+
+	@Override
+	public void authenticate(Context context, AuthProviderType authProviderType, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer) {
+		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+		AuthProviderInfo authProviderInfo = authProviderInfoBuilder.getFactory(authProviderType).getInstance();
+		authenticate(context, consumerKey, consumerSecret, authProviderInfo, listener, sessionConsumer);
+	}
+	
+
+	@Override
+	public void authenticate(Context ctx, String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
+		if(checkKeys(consumerKey, consumerSecret, listener)) {
+			String udid = deviceUtils.getUDID(ctx);
+			
+			// TODO: create test case for this
+			if(StringUtils.isEmpty(udid)) {
+				if(listener != null) {
+					listener.onError(new SocializeException("No UDID provided"));
+				}
+			}
+			else {
+				// All Api instances have authenticate, so we can just use any old one
+				authenticateAsync(ctx, consumerKey, consumerSecret, udid, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
+			}	
+		}
+	}
+
+	@Override
+	public SocializeSession authenticateSynchronous(Context context) {
+		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);	
+		try {
+			if(checkKeys(consumerKey, consumerSecret)) {
+				return authenticateSynchronous(context, consumerKey, consumerSecret);
+			}
+			else {
+				throw new SocializeException("Consumer key and/or secret not provided");
+			}
+		}
+		catch (Exception e) {
+			logError("Error during synchronous authentication", e);
+			return null;
+		}
+	}
+
+	@Override
+	public SocializeSession authenticateSynchronous(Context ctx, String consumerKey, String consumerSecret) throws SocializeException {
+		String udid = deviceUtils.getUDID(ctx);
+		SocializeSession session = authenticate(ctx, "/authenticate/",consumerKey, consumerSecret, udid);
+		return session;
+	}
+
+
 	@Override
 	public void saveSession(Context context, SocializeSession session) {
 		if(sessionPersister != null) {
@@ -89,21 +165,6 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 		return new SocializeAuthProviderInfo();
 	}
 
-	@Override
-	public void authenticate(Context ctx, String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth) {
-		String udid = deviceUtils.getUDID(ctx);
-		
-		// TODO: create test case for this
-		if(StringUtils.isEmpty(udid)) {
-			if(listener != null) {
-				listener.onError(new SocializeException("No UDID provided"));
-			}
-		}
-		else {
-			// All Api instances have authenticate, so we can just use any old one
-			authenticateAsync(ctx, consumerKey, consumerSecret, udid, authProviderData, listener, sessionConsumer, do3rdPartyAuth);
-		}	
-	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.api.action.UserSystem#getUser(com.socialize.api.SocializeSession, long, com.socialize.listener.user.UserListener)
@@ -186,6 +247,45 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 		}
 	}
 	
+	protected boolean checkKeys(String consumerKey, String consumerSecret) {
+		return checkKeys(consumerKey, consumerSecret, null);
+	}
+	
+	protected boolean checkKeys(String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
+		return  checkKey("consumer key", consumerKey, authListener) &&
+				checkKey("consumer secret", consumerSecret, authListener);
+	}
+	protected boolean checkKey(String name, String key, SocializeAuthListener authListener) {
+		if(StringUtils.isEmpty(key)) {
+			String msg = "No key specified in authenticate";
+			if(authListener != null) {
+				authListener.onError(new SocializeException(msg));
+			}
+			logErrorMessage(msg);
+			return false;
+		} else {
+			return true;	
+		}
+	}
+	protected void logError(String message, Throwable error) {
+		if(logger != null) {
+			logger.error(message, error);
+		}
+		else {
+			System.err.println(message);
+			error.printStackTrace();
+		}
+	}
+	
+	protected void logErrorMessage(String message) {
+		if(logger != null) {
+			logger.error(message);
+		}
+		else {
+			System.err.println(message);
+		}
+	}	
+	
 	public void setSessionPersister(SocializeSessionPersister sessionPersister) {
 		this.sessionPersister = sessionPersister;
 	}
@@ -197,6 +297,18 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	public void setDeviceUtils(DeviceUtils deviceUtils) {
 		this.deviceUtils = deviceUtils;
 	}
+	
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
+	}
+	
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
+	
+	public void setAuthProviderInfoBuilder(AuthProviderInfoBuilder authProviderInfoBuilder) {
+		this.authProviderInfoBuilder = authProviderInfoBuilder;
+	}
 
 	public void setSocializeAuthProviderInfoFactory(SocializeAuthProviderInfoFactory socializeAuthProviderInfoFactory) {
 		this.socializeAuthProviderInfoFactory = socializeAuthProviderInfoFactory;
@@ -205,6 +317,4 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	public void setNotificationRegistrationSystem(NotificationRegistrationSystem notificationRegistrationSystem) {
 		this.notificationRegistrationSystem = notificationRegistrationSystem;
 	}
-
-
 }

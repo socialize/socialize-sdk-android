@@ -103,8 +103,8 @@ public class FacebookUtils {
 	 * Returns the Facebook access token for the current user.
 	 * @return The access token or null if the user is not linked to Facebook.
 	 */
-	public static String getAccessToken(){
-		return proxy.getAccessToken();
+	public static String getAccessToken(Context context){
+		return proxy.getAccessToken(context);
 	}
 	
 	/**

@@ -51,10 +51,10 @@ public interface TwitterUtilsProxy {
 	public void setCredentials(Context context, String consumerKey, String consumerSecret);
 	
 	@Synchronous
-	public String getAccessToken();
+	public String getAccessToken(Context context);
 	
 	@Synchronous
-	public String getTokenSecret();
+	public String getTokenSecret(Context context);
 	
 	public void tweet(final Activity context, final Entity entity, final String text, final SocialNetworkListener listener);
 }

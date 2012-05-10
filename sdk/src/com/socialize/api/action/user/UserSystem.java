@@ -26,7 +26,9 @@ import android.content.Context;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.auth.AuthProviderData;
+import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.UserProviderCredentials;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
@@ -43,9 +45,19 @@ public interface UserSystem {
 	
 	public void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer);
 
-	public SocializeSession authenticateSynchronous(Context context, String consumerKey, String consumerSecret, SocializeSessionConsumer sessionConsumer) throws SocializeException;
-	
 	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer, boolean do3rdPartyAuth);
+	
+	public void authenticate(Context context, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer);
+
+	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer);
+	
+	public void authenticateKnownUser(Context context, UserProviderCredentials userProviderCredentials, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer);
+
+	public void authenticate(Context context, AuthProviderType authProviderType, SocializeAuthListener listener, SocializeSessionConsumer sessionConsumer);
+
+	public SocializeSession authenticateSynchronous(Context context, String consumerKey, String consumerSecret) throws SocializeException;
+
+	public SocializeSession authenticateSynchronous(Context context);	
 	
 	public void clearSession();
 	

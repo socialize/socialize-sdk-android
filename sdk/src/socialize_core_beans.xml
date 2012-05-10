@@ -439,9 +439,12 @@
 		<constructor-arg ref="userProvider"/>
 		<property name="sessionPersister" ref="sessionPersister"/>
 		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
-		<property name="deviceUtils" ref="deviceUtils"/>	
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="config" ref="config"/>	
+		<property name="logger" ref="logger"/>	
 		<property name="socializeAuthProviderInfoFactory" ref="socializeAuthProviderInfoFactory"/>
 		<property name="notificationRegistrationSystem" ref="notificationRegistrationSystem"/>	
+		<property name="authProviderInfoBuilder" ref="authProviderInfoBuilder"/>
 	</bean>
 	
 <!-- End User API -->
@@ -730,6 +733,7 @@
 		<property name="logger" ref="logger"/>
 		<property name="deviceRegistrationFactory" ref="deviceRegistrationObjectFactory"/>
 		<property name="deviceRegistrationSystem" ref="deviceRegistrationSystem"/>
+		<property name="userSystem" ref="userSystem"/>
 		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
 	</bean>
 	

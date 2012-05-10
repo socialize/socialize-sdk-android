@@ -156,7 +156,20 @@ public interface SocializeUI {
 	 */
 	public void showActionDetailViewForResult(Activity context, User user, SocializeAction action, int requestCode);
 	
+	/**
+	 * No longer supported.  Returns null
+	 * @param name
+	 * @return
+	 */
+	@Deprecated
 	public Drawable getDrawable(String name);
 	
+	/**
+	 * No longer supported.  Returns null
+	 * @param name
+	 * @param eternal
+	 * @return
+	 */
+	@Deprecated
 	public Drawable getDrawable(String name, boolean eternal);
 }

@@ -39,7 +39,8 @@ import com.socialize.util.ResourceLocator;
 public class NotificationContainer {
 
 	private SocializeIOC container;
-	private String[] configPaths = {SocializeConfig.SOCIALIZE_CORE_BEANS_PATH, SocializeConfig.SOCIALIZE_NOTIFICATION_BEANS_PATH};
+	
+	static String[] NotificationBeans = {SocializeConfig.SOCIALIZE_CORE_BEANS_PATH, SocializeConfig.SOCIALIZE_NOTIFICATION_BEANS_PATH};
 	
 	public void onCreate(Context context) throws Exception {
 		Logger.LOG_KEY = Socialize.LOG_KEY;
@@ -49,7 +50,7 @@ public class NotificationContainer {
 		locator.setLogger(newLogger());
 		ClassLoaderProvider provider = newClassLoaderProvider();
 		locator.setClassLoaderProvider(provider);
-		container.init(context, locator, configPaths);
+		container.init(context, locator, NotificationBeans);
 	}
 	
 	public void onDestroy(Context context) {}
@@ -76,13 +77,5 @@ public class NotificationContainer {
 	// So we can mock
 	protected ClassLoaderProvider newClassLoaderProvider() {
 		return new ClassLoaderProvider();
-	}
-	
-	/**
-	 * Expert only (not documented)
-	 * @param paths
-	 */
-	void setConfigPaths(String[] paths) {
-		this.configPaths = paths;
 	}
 }

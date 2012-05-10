@@ -70,12 +70,12 @@ public class TwitterUtils {
 		proxy.setCredentials(context, consumerKey, consumerSecret);
 	}
 
-	public static String getAccessToken() {
-		return proxy.getAccessToken();
+	public static String getAccessToken(Context context) {
+		return proxy.getAccessToken(context);
 	}
 
-	public static String getTokenSecret() {
-		return proxy.getTokenSecret();
+	public static String getTokenSecret(Context context) {
+		return proxy.getTokenSecret(context);
 	}
 	
 	public static void tweet(final Activity context, final Entity entity, final String text, final SocialNetworkListener listener) {

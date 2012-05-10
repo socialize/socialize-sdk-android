@@ -36,7 +36,6 @@ import com.socialize.SocializeServiceImpl.InitTask;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.activity.SocializeActivitySystem;
 import com.socialize.api.action.comment.SocializeCommentSystem;
@@ -90,6 +89,7 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.notifications.NotificationChecker;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.test.PublicSocialize;
+import com.socialize.test.PublicUserSystem;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.ui.actionbar.ActionBarListener;
 import com.socialize.ui.actionbar.ActionBarOptions;
@@ -194,10 +194,8 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		AndroidMock.expect(container.getBean("activitySystem")).andReturn(activitySystem);
 		AndroidMock.expect(container.getBean("entitySystem")).andReturn(entitySystem);
 		AndroidMock.expect(container.getBean("subscriptionSystem")).andReturn(subscriptionSystem);
-		AndroidMock.expect(container.getBean("drawables")).andReturn(drawables);
 		AndroidMock.expect(container.getBean("config")).andReturn(config);
 		AndroidMock.expect(container.getBean("authProviders")).andReturn(authProviders);
-		AndroidMock.expect(container.getBean("authProviderDataFactory")).andReturn(authProviderDataFactory);
 		AndroidMock.expect(container.getBean("logger")).andReturn(logger);
 		AndroidMock.expect(container.getBean("initializationAsserter")).andReturn(null);
 		AndroidMock.expect(container.getBean("entityLoaderUtils")).andReturn(entityLoaderUtils);
@@ -507,7 +505,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	@UsesMocks({ SocializeAuthListener.class })
 	public void testCheckKeys() {
-		PublicSocialize socializeService = new PublicSocialize();
+		PublicUserSystem socializeService = new PublicUserSystem(null);
 		SocializeAuthListener mockAuthListener = AndroidMock.createMock(SocializeAuthListener.class);
 		mockAuthListener.onError((SocializeException) AndroidMock.anyObject());
 		AndroidMock.replay(mockAuthListener);
@@ -937,8 +935,8 @@ public class SocializeServiceTest extends SocializeActivityTest {
 			}
 		};
 
-		userSystem.authenticate(getActivity(), key, secret, authProviderData, listener, socialize, false);
-
+		userSystem.authenticate(getActivity(), key, secret, listener, socialize);
+		
 		replayDefaultMocks();
 
 		socialize.init(getContext(), container);
@@ -952,21 +950,17 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	public PublicSocialize newSocializeServiceForAuth() {
 		return new PublicSocialize() {
-
-			@Override
-			public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener authListener, boolean do3rdPartyAuth) {
-				addResult(0, context);
-				addResult(1, consumerKey);
-				addResult(2, consumerSecret);
-				addResult(3, authProviderData);
-				addResult(4, authListener);
-				addResult(5, do3rdPartyAuth);
-			}
-
-			@Override
-			public boolean checkKeys(String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
-				return true;
-			}
+			
+//			
+//			@Override
+//			public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener authListener, boolean do3rdPartyAuth) {
+//				addResult(0, context);
+//				addResult(1, consumerKey);
+//				addResult(2, consumerSecret);
+//				addResult(3, authProviderData);
+//				addResult(4, authListener);
+//				addResult(5, do3rdPartyAuth);
+//			}
 
 			@Override
 			public void logErrorMessage(String msg) {
@@ -982,11 +976,6 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	public PublicSocialize newSocializeServiceForShare() {
 		return new PublicSocialize() {
-			@Override
-			public boolean checkKeys(String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
-				return true;
-			}
-
 			@Override
 			public boolean assertAuthenticated(SocializeListener listener) {
 				addResult(0, listener);
@@ -1070,7 +1059,8 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		SocializeSession mockSession = AndroidMock.createMock(SocializeSession.class);
 		UserSystem mockUserSystem = AndroidMock.createMock(UserSystem.class);
-		AndroidMock.expect(mockUserSystem.authenticateSynchronous((Context) AndroidMock.anyObject(), (String) AndroidMock.anyObject(), (String) AndroidMock.anyObject(), (SocializeSessionConsumer) AndroidMock.anyObject())).andReturn(mockSession);
+		
+		AndroidMock.expect(mockUserSystem.authenticateSynchronous(getContext())).andReturn(mockSession);
 
 		publicSocialize.setUserSystem(mockUserSystem);
 		AndroidMock.replay(mockUserSystem, mockSession);
@@ -1201,22 +1191,23 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		authProviderData.setUserId3rdParty(authUserId3rdParty);
 		authProviderData.setSecret3rdParty(secret3rdParty);
 		authProviderData.setAuthProviderInfo(fb);
-
-		SocializeServiceImpl socialize = new SocializeServiceImpl();
 		
-		userSystem.authenticate(getActivity(), consumerKey, consumerSecret, authProviderData, authListener, socialize, false);
-
-		replayDefaultMocks();
-
-		socialize.init(getContext(), container);
-
-		assertTrue(socialize.isInitialized());
 
 		DefaultUserProviderCredentials creds = new DefaultUserProviderCredentials();
 		creds.setAccessToken(authToken3rdParty);
 		creds.setUserId(authUserId3rdParty);
 		creds.setTokenSecret(secret3rdParty);
 		creds.setAuthProviderInfo(fb);
+
+		SocializeServiceImpl socialize = new SocializeServiceImpl();
+		
+		userSystem.authenticateKnownUser(getActivity(), creds, authListener, socialize);
+
+		replayDefaultMocks();
+
+		socialize.init(getContext(), container);
+
+		assertTrue(socialize.isInitialized());
 		
 		socialize.authenticateKnownUser(getActivity(), consumerKey, consumerSecret, fb, creds, authListener);
 

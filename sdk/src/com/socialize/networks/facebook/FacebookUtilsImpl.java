@@ -120,7 +120,7 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#getAccessToken(android.content.Context)
 	 */
 	@Override
-	public String getAccessToken() {
+	public String getAccessToken(Context context) {
 		UserProviderCredentials creds = getSocialize().getSession().getUserProviderCredentials(AuthProviderType.FACEBOOK);
 		if(creds != null) {
 			return creds.getAccessToken();

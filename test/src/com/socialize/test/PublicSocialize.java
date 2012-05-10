@@ -39,7 +39,6 @@ import com.socialize.api.action.like.LikeSystem;
 import com.socialize.api.action.share.ShareSystem;
 import com.socialize.api.action.user.UserSystem;
 import com.socialize.api.action.view.ViewSystem;
-import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderInfoBuilder;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
@@ -48,7 +47,6 @@ import com.socialize.entity.Comment;
 import com.socialize.entity.Share;
 import com.socialize.entity.SocializeAction;
 import com.socialize.ioc.SocializeIOC;
-import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeListener;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.log.SocializeLogger;
@@ -127,32 +125,22 @@ public class PublicSocialize extends SocializeServiceImpl {
 
 	@Override
 	public SocializeAuthProviderInfo newSocializeAuthProviderInfo() {
-
 		return super.newSocializeAuthProviderInfo();
 	}
 
 	@Override
-	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener authListener, boolean do3rdPartyAuth) {
-
-		super.authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, do3rdPartyAuth);
+	public synchronized void initNotifications(Context context) {
+		super.initNotifications(context);
 	}
 
 	@Override
-	public boolean checkKeys(String consumerKey, String consumerSecret) {
-
-		return super.checkKeys(consumerKey, consumerSecret);
+	public synchronized void initEntityLoader() {
+		super.initEntityLoader();
 	}
 
 	@Override
-	public boolean checkKeys(String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
-
-		return super.checkKeys(consumerKey, consumerSecret, authListener);
-	}
-
-	@Override
-	public boolean checkKey(String name, String key, SocializeAuthListener authListener) {
-
-		return super.checkKey(name, key, authListener);
+	public void logError(String message, Throwable error) {
+		super.logError(message, error);
 	}
 
 	@Override

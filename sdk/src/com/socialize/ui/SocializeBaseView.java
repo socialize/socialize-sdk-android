@@ -37,6 +37,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.ui.comment.CommentActivity;
+import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
 
 /**
@@ -45,6 +46,7 @@ import com.socialize.view.BaseView;
 public abstract class SocializeBaseView extends BaseView {
 
 	protected IOCContainer container;
+	private Drawables drawables;
 	
 	public SocializeBaseView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -81,6 +83,7 @@ public abstract class SocializeBaseView extends BaseView {
 			@Override
 			public void onInit(Context context, IOCContainer c) {
 				container = c;
+				drawables = c.getBean("drawables");
 				onViewLoad(container);
 			}
 		};
@@ -97,6 +100,7 @@ public abstract class SocializeBaseView extends BaseView {
 			@Override
 			public void onInit(Context context, IOCContainer c) {
 				container = c;
+				drawables = c.getBean("drawables");
 				onViewUpdate(container);
 			}
 		};
@@ -162,7 +166,11 @@ public abstract class SocializeBaseView extends BaseView {
 	protected void createOptionsMenuItem(final Activity source, Menu menu) {
 		if(Socialize.getSocialize().isAuthenticated()) {
 			MenuItem add = menu.add("Settings");
-			add.setIcon(Socialize.getSocialize().getDrawable("ic_menu_preferences.png"));
+			
+			if(drawables != null) {
+				add.setIcon(drawables.getDrawable("ic_menu_preferences.png"));
+			}
+			
 			add.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 				@Override
 				public boolean onMenuItemClick(MenuItem item) {

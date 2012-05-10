@@ -2,6 +2,7 @@ package com.socialize.notifications;
 
 import android.content.Context;
 
+import com.socialize.Socialize;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.user.UserSystem;
 import com.socialize.config.SocializeConfig;
@@ -18,7 +19,7 @@ public class SocializeNotificationAuthenticator implements NotificationAuthentic
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);		
 		if(checkKeys(consumerKey, consumerSecret)) {
-			return userSystem.authenticateSynchronous(context, consumerKey, consumerSecret, null);
+			return userSystem.authenticateSynchronous(context, consumerKey, consumerSecret);
 		}
 		else {
 			throw new SocializeException("Consumer key and/or secret not provided");
@@ -30,7 +31,7 @@ public class SocializeNotificationAuthenticator implements NotificationAuthentic
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);		
 		if(checkKeys(consumerKey, consumerSecret)) {
-			userSystem.authenticate(context, consumerKey, consumerSecret, listener, null);
+			userSystem.authenticate(context, consumerKey, consumerSecret, listener, Socialize.getSocialize());
 		}
 	}
 

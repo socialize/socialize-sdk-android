@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,41 +19,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.listener.like;
+package com.socialize.test;
 
-import java.util.List;
-import com.socialize.entity.Like;
-import com.socialize.entity.ListResult;
+import com.socialize.api.action.user.SocializeUserSystem;
+import com.socialize.entity.User;
+import com.socialize.listener.SocializeAuthListener;
+import com.socialize.provider.SocializeProvider;
 
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class LikeListListener extends LikeListener {
- 
-	@Override
-	public final void onCreate(Like entity) {}
+public class PublicUserSystem extends SocializeUserSystem {
 
-	@Override
-	public final void onGet(Like entity) {}
-
-	@Override
-	public final void onUpdate(Like entity) {}
-	
-	@Override
-	public final void onDelete() {}
-	
-	@Override
-	public final void onList(ListResult<Like> entities) {
-		if(entities != null) {
-			onList(entities.getItems(), entities.getTotalCount());
-		}
-		else {
-			onList(null, 0);
-		}
+	public PublicUserSystem(SocializeProvider<User> provider) {
+		super(provider);
 	}
 
-	public abstract void onList(List<Like> items, int totalSize);
+	@Override
+	public boolean checkKeys(String consumerKey, String consumerSecret) {
+		return super.checkKeys(consumerKey, consumerSecret);
+	}
 
+	@Override
+	public boolean checkKeys(String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
+		return super.checkKeys(consumerKey, consumerSecret, authListener);
+	}
+
+	@Override
+	public boolean checkKey(String name, String key, SocializeAuthListener authListener) {
+		return super.checkKey(name, key, authListener);
+	}
 }

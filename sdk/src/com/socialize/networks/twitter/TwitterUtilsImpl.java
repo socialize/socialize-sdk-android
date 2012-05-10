@@ -122,7 +122,7 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	 * @see com.socialize.networks.twitter.TwitterUtilsProxy#getAccessToken()
 	 */
 	@Override
-	public String getAccessToken() {
+	public String getAccessToken(Context context) {
 		UserProviderCredentials creds = getSocialize().getSession().getUserProviderCredentials(AuthProviderType.TWITTER);
 		if(creds != null) {
 			return creds.getAccessToken();
@@ -135,7 +135,7 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	 * @see com.socialize.networks.twitter.TwitterUtilsProxy#getTokenSecret()
 	 */
 	@Override
-	public String getTokenSecret() {
+	public String getTokenSecret(Context context) {
 		UserProviderCredentials creds = getSocialize().getSession().getUserProviderCredentials(AuthProviderType.TWITTER);
 		if(creds != null) {
 			return creds.getTokenSecret();

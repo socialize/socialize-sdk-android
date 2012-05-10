@@ -167,7 +167,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		assertNotNull(userProviderCredentials);
 		assertEquals(TestUtils.getDummyFBToken(getContext()), userProviderCredentials.getAccessToken());
 		assertTrue(FacebookUtils.isLinked(context));
-		assertEquals(TestUtils.getDummyFBToken(getContext()), FacebookUtils.getAccessToken());
+		assertEquals(TestUtils.getDummyFBToken(getContext()), FacebookUtils.getAccessToken(context));
 		
 		SocializeIOC.unregisterStub("facebookProvider");
 	}
