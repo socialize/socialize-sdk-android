@@ -190,8 +190,8 @@ public class PublicSocialize extends SocializeServiceImpl {
 	}
 
 	@Override
-	public boolean assertInitialized(SocializeListener listener) {
-		return super.assertInitialized(listener);
+	public boolean assertInitialized(Context context, SocializeListener listener) {
+		return super.assertInitialized(context, listener);
 	}
 
 	@Override

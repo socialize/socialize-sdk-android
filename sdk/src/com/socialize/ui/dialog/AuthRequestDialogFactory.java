@@ -92,6 +92,8 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 				dialog.setContentView(view, params);
 				
 				WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+				
+				
 			    lp.copyFrom(dialog.getWindow().getAttributes());
 			    
 			    if(displayUtils.isLandscape()) {
@@ -102,7 +104,7 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 			    	lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
 			    	lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
 			    }
-			 
+			    
 			    lp.horizontalMargin = 0.0f;
 			    lp.verticalMargin = 0.0f;
 			    

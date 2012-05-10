@@ -632,7 +632,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 
 	@Override
 	public synchronized void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
-		if(assertInitialized(authListener)) {
+		if(assertInitialized(context, authListener)) {
 			AuthProviderData data = this.authProviderDataFactory.getBean();
 			SocializeAuthProviderInfo info = newSocializeAuthProviderInfo();
 			data.setAuthProviderInfo(info);
@@ -653,7 +653,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 
 	@Override
 	public void authenticateKnownUser(Context context, UserProviderCredentials userProviderCredentials, SocializeAuthListener authListener) {
-		if(assertInitialized(authListener)) {
+		if(assertInitialized(context, authListener)) {
 			String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 			String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 			AuthProviderData authProviderData = this.authProviderDataFactory.getBean();
@@ -674,7 +674,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 			boolean do3rdPartyAuth) {
 		
 		if(checkKeys(consumerKey, consumerSecret, authListener)) {
-			if(assertInitialized(authListener)) {
+			if(assertInitialized(context, authListener)) {
 				userSystem.authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, this, do3rdPartyAuth);
 			}
 		}
@@ -1230,6 +1230,14 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		return this.initCount > 0;
 	}
 	
+	
+	
+	@Override
+	public boolean isInitialized(Context context) {
+		return this.initCount > 0 && container.getContext() == context;
+		
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#isAuthenticated()
 	 */
@@ -1277,34 +1285,33 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		if(asserter != null) {
 			return asserter.assertAuthenticated(this, session, listener);
 		}
-		if(assertInitialized(listener)) {
-			if(session != null) {
-				return true;
-			}
-			else {
-				if(listener != null) {
-					if(logger != null && logger.isInitialized()) {
-						listener.onError(new SocializeException(logger.getMessage(SocializeLogger.NOT_AUTHENTICATED)));
-					}
-					else {
-						listener.onError(new SocializeException("Not authenticated"));
-					}
-				}
+		
+		if(session != null) {
+			return true;
+		}
+		else {
+			if(listener != null) {
 				if(logger != null && logger.isInitialized()) {
-					logger.error(SocializeLogger.NOT_AUTHENTICATED);
+					listener.onError(new SocializeException(logger.getMessage(SocializeLogger.NOT_AUTHENTICATED)));
 				}
 				else {
-					System.err.println("Not authenticated");
+					listener.onError(new SocializeException("Not authenticated"));
 				}
+			}
+			if(logger != null && logger.isInitialized()) {
+				logger.error(SocializeLogger.NOT_AUTHENTICATED);
+			}
+			else {
+				System.err.println("Not authenticated");
 			}
 		}
 		
 		return false;
 	}
 	
-	protected boolean assertInitialized(SocializeListener listener) {
+	protected boolean assertInitialized(Context context, SocializeListener listener) {
 		if(asserter != null) {
-			return asserter.assertInitialized(this, listener);
+			return asserter.assertInitialized(context, this, listener);
 		}
 		
 		if(!isInitialized()) {

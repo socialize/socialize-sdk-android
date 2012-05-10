@@ -55,25 +55,24 @@ public class SocializeActionProxy implements InvocationHandler {
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		try {
 			if(method.isAnnotationPresent(Synchronous.class) || !isVoidMethod(method)) {
-				if(!Socialize.getSocialize().isInitialized()) {
-					Context context = findContext(args);
-					if(context != null) {
-						synchronized (this) {
-							if(!Socialize.getSocialize().isInitialized()) {
-								Socialize.getSocialize().init(context);
-							}
-							
-							if(!Socialize.getSocialize().isAuthenticated()) {
-								Socialize.getSocialize().authenticateSynchronous(context);
-							}
+				
+				Context context = findContext(args);
+					
+				if(context != null) {
+					synchronized (this) {
+						// Always init to set the context
+						Socialize.getSocialize().init(context);
+						
+						if(!Socialize.getSocialize().isAuthenticated()) {
+							Socialize.getSocialize().authenticateSynchronous(context);
 						}
 					}
-					else {
-						throw new MethodNotSupportedException("No context found in method arguments for method [" +
-								method.getName() +
-								"]");
-					}				
 				}
+				else {
+					throw new MethodNotSupportedException("No context found in method arguments for method [" +
+							method.getName() +
+							"]");
+				}				
 				
 				return method.invoke(Socialize.getBean(delegateBean), args);
 			}
@@ -107,7 +106,7 @@ public class SocializeActionProxy implements InvocationHandler {
 	protected void invoke(Activity context, SocializeListener listener, String delegateBean, Method method, Object[] args) throws Throwable {
 		SocializeService service = getSocialize();
 		
-		if(!service.isInitialized()) {
+		if(!service.isInitialized(context)) {
 			doInitAsync(context, listener, delegateBean, method, args);
 		}
 		else if(!service.isAuthenticated()) {
@@ -149,9 +148,9 @@ public class SocializeActionProxy implements InvocationHandler {
 		
 		final SocializeService service = getSocialize();
 		
-		if(!service.isInitialized()) {
+		if(!service.isInitialized(context)) {
 			synchronized (this) {
-				if(!service.isInitialized()) {
+				if(!service.isInitialized(context)) {
 					context.runOnUiThread(new Runnable() {
 						
 						@Override

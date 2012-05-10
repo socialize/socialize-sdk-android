@@ -444,8 +444,17 @@ public interface SocializeService extends SocializeUI {
 	 * Returns true if this SocializeService instance has been initialized.  
 	 * PLEASE NOTE: Init should always be called so that each corresponding call to destroy is matched.
 	 * @return true if this SocializeService instance has been initialized.  
+	 * @deprecated
 	 */
 	public boolean isInitialized();
+	
+	
+	/**
+	 * Returns true if this SocializeService instance has been initialized.  
+	 * @param context The current context.
+	 * @return true if this SocializeService instance has been initialized.  
+	 */
+	public boolean isInitialized(Context context);
 
 	/**
 	 * Returns true if the current session is authenticated.

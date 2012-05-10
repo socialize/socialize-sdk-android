@@ -22,6 +22,7 @@ package com.socialize.init;
  */
 
 
+import android.content.Context;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
 import com.socialize.listener.SocializeListener;
@@ -34,5 +35,5 @@ public interface SocializeInitializationAsserter {
 
 	public boolean assertAuthenticated(SocializeService service, SocializeSession session, SocializeListener listener);
 	
-	public boolean assertInitialized(SocializeService service, SocializeListener listener);
+	public boolean assertInitialized(Context context, SocializeService service, SocializeListener listener);
 }

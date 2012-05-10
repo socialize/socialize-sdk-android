@@ -134,5 +134,11 @@ public interface IOCContainer {
 	 * @param context
 	 */
 	public void setContext(Context context);
+	
+	/**
+	 * Gets the current context registered in the container.
+	 * @return
+	 */
+	public Context getContext();
 
 }

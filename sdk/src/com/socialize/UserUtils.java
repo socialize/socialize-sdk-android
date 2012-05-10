@@ -90,7 +90,7 @@ public class UserUtils {
 	 * @param context
 	 */
 	public static void clearCache(Context context) {
-		if(!Socialize.getSocialize().isInitialized()) {
+		if(!Socialize.getSocialize().isInitialized(context)) {
 			Socialize.getSocialize().init(context);
 		}
 		Socialize.getSocialize().clearSessionCache(context);

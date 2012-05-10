@@ -21,6 +21,7 @@
  */
 package com.socialize.test.unit;
 
+import android.content.Context;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
@@ -40,13 +41,13 @@ public class InitializationAsserterTest extends SocializeUnitTest {
 		SocializeListener listener = AndroidMock.createMock(SocializeListener.class);
 		SocializeService service = AndroidMock.createMock(SocializeService.class);
 
-		AndroidMock.expect(service.isInitialized()).andReturn(false);
+		AndroidMock.expect(service.isInitialized(getContext())).andReturn(false);
 		listener.onError((SocializeException) AndroidMock.anyObject());
 
 		AndroidMock.replay(service, listener);
 
 		DefaultInitializationAsserter asserter = new DefaultInitializationAsserter();
-		asserter.assertInitialized(service, listener);
+		asserter.assertInitialized(getContext(), service, listener);
 
 		AndroidMock.verify(service, listener);
 	}
@@ -60,7 +61,7 @@ public class InitializationAsserterTest extends SocializeUnitTest {
 
 		DefaultInitializationAsserter asserter = new DefaultInitializationAsserter() {
 			@Override
-			public boolean assertInitialized(SocializeService service, SocializeListener listener) {
+			public boolean assertInitialized(Context context, SocializeService service, SocializeListener listener) {
 				return true;
 			}
 		};

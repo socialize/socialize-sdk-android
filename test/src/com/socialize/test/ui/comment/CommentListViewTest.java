@@ -251,7 +251,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 			}
 
 			@Override
-			public boolean assertInitialized(SocializeListener listener) {
+			public boolean assertInitialized(Context context, SocializeListener listener) {
 				return true;
 			}
 

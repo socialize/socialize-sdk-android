@@ -30,10 +30,21 @@ public class AndroidIOC implements IOCContainer {
 	private Container container;
 	private boolean initialized = false;
 	
+	/**
+	 * Registers a static proxy for the bean with the given name.
+	 * This method should be called BEFORE the container is initialized.  
+	 * Calling this method after container initialization will do nothing.
+	 * @param name
+	 * @param proxy
+	 */
 	public static void registerProxy(String name, Object proxy) {
 		Container.registerProxy(name, proxy);
 	}
 	
+	/**
+	 * Remove a previously registered proxy.
+	 * @param name
+	 */
 	public static void unregisterProxy(String name) {
 		Container.unregisterProxy(name);
 	}	
@@ -134,5 +145,10 @@ public class AndroidIOC implements IOCContainer {
 	@Override
 	public void setContext(Context context) {
 		container.setContext(context);
+	}
+
+	@Override
+	public Context getContext() {
+		return container.getContext();
 	}
 }
