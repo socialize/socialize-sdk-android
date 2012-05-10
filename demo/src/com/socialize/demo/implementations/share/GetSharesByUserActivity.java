@@ -19,57 +19,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo.implementations.entity;
+package com.socialize.demo.implementations.share;
 
-import android.os.Bundle;
-import com.socialize.EntityUtils;
+import com.socialize.ShareUtils;
+import com.socialize.UserUtils;
 import com.socialize.demo.SDKDemoActivity;
-import com.socialize.entity.Entity;
+import com.socialize.entity.ListResult;
+import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.entity.EntityGetListener;
+import com.socialize.listener.share.ShareListListener;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class GetEntityByKeyActivity extends SDKDemoActivity {
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		entryText.setText(entity.getKey());
-	}
+public class GetSharesByUserActivity extends SDKDemoActivity {
 
 	/* (non-Javadoc)
 	 * @see com.socialize.demo.DemoActivity#executeDemo()
 	 */
 	@Override
-	public void executeDemo(final String text) {
+	public void executeDemo(String text) {
 		
-		EntityUtils.getEntity(this, text, new EntityGetListener() {
+		ShareUtils.getSharesByUser(this, UserUtils.getCurrentUser(this), 0, 50, new ShareListListener() {
+			
 			@Override
-			public void onGet(Entity entity) {
-				handleBasicSocializeResult(entity);
+			public void onList(ListResult<Share> shares) {
+				handleSocializeResult(shares);
 			}
 			
 			@Override
 			public void onError(SocializeException error) {
-				if(isNotFoundError(error)) {
-					handleResult("No entity found with key [" +
-							text +
-							"]");
-				}
-				else {
-					handleError(error);
-				}
+				handleError(error);
 			}
 		});
 	}
 	
 	@Override
 	public boolean isTextEntryRequired() {
-		return true;
+		return false;
 	}
 
 	/* (non-Javadoc)
@@ -77,6 +66,6 @@ public class GetEntityByKeyActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public String getButtonText() {
-		return "Get Entity by Key";
+		return "List 50 Shares for Current User";
 	}
 }

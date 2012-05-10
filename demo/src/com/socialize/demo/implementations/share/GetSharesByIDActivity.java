@@ -19,57 +19,62 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo.implementations.entity;
+package com.socialize.demo.implementations.share;
 
-import android.os.Bundle;
-import com.socialize.EntityUtils;
+import com.socialize.ShareUtils;
 import com.socialize.demo.SDKDemoActivity;
-import com.socialize.entity.Entity;
+import com.socialize.entity.ListResult;
+import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.entity.EntityGetListener;
+import com.socialize.listener.share.ShareGetListener;
+import com.socialize.listener.share.ShareListListener;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class GetEntityByKeyActivity extends SDKDemoActivity {
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		entryText.setText(entity.getKey());
-	}
+public class GetSharesByIDActivity extends SDKDemoActivity {
 
 	/* (non-Javadoc)
 	 * @see com.socialize.demo.DemoActivity#executeDemo()
 	 */
 	@Override
-	public void executeDemo(final String text) {
+	public void executeDemo(String text) {
 		
-		EntityUtils.getEntity(this, text, new EntityGetListener() {
+		// We are going to list shares just so we can get the ID for a single share
+		// Usually you would NOT do this as you would usually already have an ID (e.g. from a click on a list view)
+		ShareUtils.getSharesByEntity(this, entity, 0, 1, new ShareListListener() {
+			
 			@Override
-			public void onGet(Entity entity) {
-				handleBasicSocializeResult(entity);
+			public void onList(ListResult<Share> shares) {
+				
+				// Use the id from the first share
+				if(shares.getTotalCount() > 0) {
+					ShareUtils.getShare(GetSharesByIDActivity.this, new ShareGetListener() {
+						@Override
+						public void onGet(Share share) {
+							handleSocializeResult(share);
+						}
+						
+						@Override
+						public void onError(SocializeException error) {
+							handleError(error);
+						}
+					}, shares.getItems().get(0).getId());
+				}
 			}
 			
 			@Override
 			public void onError(SocializeException error) {
-				if(isNotFoundError(error)) {
-					handleResult("No entity found with key [" +
-							text +
-							"]");
-				}
-				else {
-					handleError(error);
-				}
+				handleError(error);
 			}
 		});
 	}
 	
 	@Override
 	public boolean isTextEntryRequired() {
-		return true;
+		return false;
 	}
 
 	/* (non-Javadoc)
@@ -77,6 +82,6 @@ public class GetEntityByKeyActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public String getButtonText() {
-		return "Get Entity by Key";
+		return "Get Last Share by ID";
 	}
 }

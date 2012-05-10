@@ -72,13 +72,13 @@ public abstract class AbstractSocializeListener<T extends SocializeObject> imple
 		}
 	}
 
-	public abstract void onGet(T entity);
+	public abstract void onGet(T result);
 
-	public abstract void onList(ListResult<T> entities);
+	public abstract void onList(ListResult<T> result);
 
-	public abstract void onUpdate(T entity);
+	public abstract void onUpdate(T result);
 
-	public abstract void onCreate(T entity);
+	public abstract void onCreate(T result);
 	
 	public abstract void onDelete();
 	

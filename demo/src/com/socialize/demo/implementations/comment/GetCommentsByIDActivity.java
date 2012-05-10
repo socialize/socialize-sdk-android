@@ -22,7 +22,7 @@
 package com.socialize.demo.implementations.comment;
 
 import com.socialize.CommentUtils;
-import com.socialize.demo.DemoActivity;
+import com.socialize.demo.SDKDemoActivity;
 import com.socialize.entity.Comment;
 import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
@@ -34,7 +34,7 @@ import com.socialize.listener.comment.CommentListListener;
  * @author Jason Polites
  *
  */
-public class GetCommentsByIDActivity extends DemoActivity {
+public class GetCommentsByIDActivity extends SDKDemoActivity {
 
 	/* (non-Javadoc)
 	 * @see com.socialize.demo.DemoActivity#executeDemo()
@@ -51,7 +51,7 @@ public class GetCommentsByIDActivity extends DemoActivity {
 				
 				// Use the id from the first comment
 				if(comments.getTotalCount() > 0) {
-					CommentUtils.getComment(GetCommentsByIDActivity.this, comments.getItems().get(0).getId(), new CommentGetListener() {
+					CommentUtils.getComment(GetCommentsByIDActivity.this, new CommentGetListener() {
 						@Override
 						public void onGet(Comment comment) {
 							handleSocializeResult(comment);
@@ -61,7 +61,7 @@ public class GetCommentsByIDActivity extends DemoActivity {
 						public void onError(SocializeException error) {
 							handleError(error);
 						}
-					});
+					}, comments.getItems().get(0).getId());
 				}
 			}
 			

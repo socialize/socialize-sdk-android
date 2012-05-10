@@ -19,64 +19,51 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo.implementations.entity;
+package com.socialize.demo.implementations.share;
 
+import android.app.Activity;
 import android.os.Bundle;
-import com.socialize.EntityUtils;
-import com.socialize.demo.SDKDemoActivity;
-import com.socialize.entity.Entity;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.entity.EntityGetListener;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import com.socialize.ShareUtils;
+import com.socialize.api.action.share.SocialNetworkDialogListener;
+import com.socialize.demo.DemoActivity;
+import com.socialize.demo.DemoUtils;
+import com.socialize.demo.R;
+import com.socialize.networks.SocialNetwork;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class GetEntityByKeyActivity extends SDKDemoActivity {
-	
+public class ShareButtonsActivity extends DemoActivity {
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		entryText.setText(entity.getKey());
-	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.demo.DemoActivity#executeDemo()
-	 */
-	@Override
-	public void executeDemo(final String text) {
+		setContentView(R.layout.share_buttons_activity);
 		
-		EntityUtils.getEntity(this, text, new EntityGetListener() {
-			@Override
-			public void onGet(Entity entity) {
-				handleBasicSocializeResult(entity);
-			}
+		Button btnShare = (Button) findViewById(R.id.btnShare);
+		Button btnShareSocialNetwork = (Button) findViewById(R.id.btnShareSocialNetwork);
+		Button btnShareFacebook = (Button) findViewById(R.id.btnShareFacebook);
+		Button btnShareTwitter = (Button) findViewById(R.id.btnShareTwitter);
+		
+		
+		btnShare.setOnClickListener(new OnClickListener() {
 			
 			@Override
-			public void onError(SocializeException error) {
-				if(isNotFoundError(error)) {
-					handleResult("No entity found with key [" +
-							text +
-							"]");
-				}
-				else {
-					handleError(error);
-				}
+			public void onClick(View v) {
+				ShareUtils.showShareDialog(ShareButtonsActivity.this, entity);
+//				ShareUtils.showShareDialog(ShareButtonsActivity.this, entity, new SocialNetworkDialogListener() {
+//					@Override
+//					public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
+//						DemoUtils.showToast(parent, "Shared to " + socialNetwork.name());
+//					}
+//				});
 			}
 		});
 	}
-	
-	@Override
-	public boolean isTextEntryRequired() {
-		return true;
-	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.demo.DemoActivity#getButtonText()
-	 */
-	@Override
-	public String getButtonText() {
-		return "Get Entity by Key";
-	}
 }

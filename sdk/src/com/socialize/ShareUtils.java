@@ -25,7 +25,6 @@ import java.lang.reflect.Proxy;
 import android.app.Activity;
 import com.socialize.api.action.share.ShareUtilsProxy;
 import com.socialize.api.action.share.SocialNetworkDialogListener;
-import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.entity.Entity;
 import com.socialize.entity.User;
 import com.socialize.listener.share.ShareAddListener;
@@ -75,10 +74,6 @@ public class ShareUtils {
 		proxy.shareViaSMS(context, e, listener);
 	};
 
-	public static void shareViaSocialNetworks(Activity context, Entity e, SocialNetworkShareListener listener) {
-		proxy.shareViaSocialNetworks(context, e, listener);
-	};
-	
 	public static void getShare (Activity context, ShareGetListener listener, long id) {
 		proxy.getShare(context, listener, id);
 	};

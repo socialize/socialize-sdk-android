@@ -79,7 +79,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 			public void onCreate(Comment entity) {
 				addResult(0, entity);
 				// Now get
-				CommentUtils.getComment(getActivity(), entity.getId(), new CommentGetListener() {
+				CommentUtils.getComment(getActivity(), new CommentGetListener() {
 
 					@Override
 					public void onGet(Comment entity) {
@@ -92,7 +92,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 						error.printStackTrace();
 						latch.countDown();
 					}
-				});
+				}, entity.getId());
 			}
 		});
 

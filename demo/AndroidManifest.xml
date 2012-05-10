@@ -35,12 +35,21 @@
             android:name=".DemoList">
         </activity> 
         
+        <!-- Comment -->
         <activity android:name=".implementations.comment.CommentActivity"/>
         <activity android:name=".implementations.comment.AddCommentActivity"/>
         <activity android:name=".implementations.comment.GetCommentsByEntityActivity"/>
         <activity android:name=".implementations.comment.GetCommentsByUserActivity"/>
         <activity android:name=".implementations.comment.GetCommentsByIDActivity"/>
         
+        <!-- Share -->
+        <activity android:name=".implementations.share.ShareActivity"/>
+        <activity android:name=".implementations.share.GetSharesByEntityActivity"/>
+        <activity android:name=".implementations.share.GetSharesByUserActivity"/>
+        <activity android:name=".implementations.share.GetSharesByIDActivity"/>
+        <activity android:name=".implementations.share.ShareButtonsActivity"/>
+        
+        <!-- Entity -->
         <activity android:name=".implementations.entity.EntityActivity"/>
         <activity android:name=".implementations.entity.AddEntityActivity"/>
         <activity android:name=".implementations.entity.GetEntityByKeyActivity"/>

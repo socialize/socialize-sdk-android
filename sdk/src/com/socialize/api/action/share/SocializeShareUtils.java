@@ -24,7 +24,6 @@ package com.socialize.api.action.share;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import com.socialize.ShareUtils;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeActionUtilsBase;
 import com.socialize.entity.Entity;
@@ -125,11 +124,6 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 		}, options);		
 	}
 
-	@Override
-	public void shareViaSocialNetworks(final Activity context, final Entity e, final SocialNetworkShareListener listener) {
-		showShareDialog(context, e, ShareUtils.FACEBOOK | ShareUtils.TWITTER, listener, null);
-	}
-	
 	@Override
 	public void shareViaEmail(Activity context, Entity e, ShareAddListener listener) {
 		getSocialize().share(context, e, "", ShareType.EMAIL, listener);

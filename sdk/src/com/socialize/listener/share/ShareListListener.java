@@ -34,19 +34,19 @@ public abstract class ShareListListener extends ShareListener {
 	 * @see com.socialize.listener.AbstractSocializeListener#onGet(com.socialize.entity.SocializeObject)
 	 */
 	@Override
-	public final void onGet(Share entity) {}
+	public final void onGet(Share share) {}
 
 
 	/* (non-Javadoc)
 	 * @see com.socialize.listener.AbstractSocializeListener#onUpdate(com.socialize.entity.SocializeObject)
 	 */
 	@Override
-	public final void onUpdate(Share entity) {}
+	public final void onUpdate(Share share) {}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.listener.AbstractSocializeListener#onCreate(com.socialize.entity.SocializeObject)
 	 */
 	@Override
-	public final void onCreate(Share entity) {}
+	public final void onCreate(Share share) {}
 
 }

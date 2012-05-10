@@ -24,6 +24,7 @@ package com.socialize.demo;
 import com.socialize.ActionBarUtils;
 import com.socialize.demo.implementations.comment.CommentActivity;
 import com.socialize.demo.implementations.entity.EntityActivity;
+import com.socialize.demo.implementations.share.ShareActivity;
 import com.socialize.entity.Entity;
 import com.socialize.ui.actionbar.ActionBarOptions;
 import android.app.ListActivity;
@@ -40,7 +41,7 @@ import android.widget.ListView;
 public class DemoList extends ListActivity {
 
 	final String[] values = new String[] { "Action Bar", "Entities", "Comments", "Sharing", "Likes", "Views", "Actions (User Activity)", "Subscriptions", "Location"};
-	final Class<?>[] activities = new Class<?>[] { null, EntityActivity.class, CommentActivity.class, null, null, null, null, null, null, null};
+	final Class<?>[] activities = new Class<?>[] { null, EntityActivity.class, CommentActivity.class, ShareActivity.class, null, null, null, null, null, null};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

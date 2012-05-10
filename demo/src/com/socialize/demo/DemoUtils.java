@@ -25,6 +25,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.widget.Toast;
 
 
 /**
@@ -32,6 +33,9 @@ import android.content.DialogInterface.OnClickListener;
  *
  */
 public class DemoUtils {
+	
+	static Toast toast;
+	
 	public static void showErrorDialog(Context context, Exception e) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle("Oops!");
@@ -43,5 +47,26 @@ public class DemoUtils {
 			}
 		});
 		builder.create().show();
+	}
+	
+	public static void showSuccessDialog(Context context) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle("Success");
+		builder.setMessage("Success!");
+		builder.setPositiveButton("OK", new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		builder.create().show();
+	}	
+	
+	public static void showToast(Context context, String text) {
+		if(toast != null) {
+			toast.cancel();
+		}
+		toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+		toast.show();
 	}
 }

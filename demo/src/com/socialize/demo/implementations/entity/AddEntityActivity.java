@@ -22,7 +22,7 @@
 package com.socialize.demo.implementations.entity;
 
 import com.socialize.EntityUtils;
-import com.socialize.demo.DemoActivity;
+import com.socialize.demo.SDKDemoActivity;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.entity.EntityAddListener;
@@ -32,7 +32,7 @@ import com.socialize.listener.entity.EntityAddListener;
  * @author Jason Polites
  *
  */
-public class AddEntityActivity extends DemoActivity {
+public class AddEntityActivity extends SDKDemoActivity {
 
 	/* (non-Javadoc)
 	 * @see com.socialize.demo.DemoActivity#executeDemo()

@@ -19,64 +19,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo.implementations.entity;
+package com.socialize.demo.implementations.share;
 
+import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
-import com.socialize.EntityUtils;
-import com.socialize.demo.SDKDemoActivity;
-import com.socialize.entity.Entity;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.entity.EntityGetListener;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import com.socialize.demo.R;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class GetEntityByKeyActivity extends SDKDemoActivity {
+public class ShareActivity extends ListActivity {
+	final String[] values = new String[] { "Share Buttons & UI", "Get Shares By Entity", "Get Shares By User", "Get Share By ID"};
+	final Class<?>[] activities = new Class<?>[] { ShareButtonsActivity.class, GetSharesByEntityActivity.class, GetSharesByUserActivity.class, GetSharesByIDActivity.class};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		entryText.setText(entity.getKey());
-	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.demo.DemoActivity#executeDemo()
-	 */
-	@Override
-	public void executeDemo(final String text) {
-		
-		EntityUtils.getEntity(this, text, new EntityGetListener() {
-			@Override
-			public void onGet(Entity entity) {
-				handleBasicSocializeResult(entity);
-			}
-			
-			@Override
-			public void onError(SocializeException error) {
-				if(isNotFoundError(error)) {
-					handleResult("No entity found with key [" +
-							text +
-							"]");
-				}
-				else {
-					handleError(error);
-				}
-			}
-		});
+		setContentView(R.layout.demo_list);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
+		setListAdapter(adapter);
 	}
 	
-	@Override
-	public boolean isTextEntryRequired() {
-		return true;
-	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.demo.DemoActivity#getButtonText()
-	 */
 	@Override
-	public String getButtonText() {
-		return "Get Entity by Key";
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		Class<?> activityClass = activities[position];
+		if(activityClass != null) {
+			Intent intent = new Intent(this, activityClass);
+			startActivity(intent);
+		}
 	}
 }

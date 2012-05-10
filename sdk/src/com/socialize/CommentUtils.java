@@ -73,7 +73,7 @@ public class CommentUtils {
 	 * @param id
 	 * @param listener A listener to handle the result.
 	 */
-	public static void getComment (Activity context, long id, CommentGetListener listener) {
+	public static void getComment (Activity context, CommentGetListener listener, long id) {
 		commentUtils.getComment(context, id, listener);
 	}
 	

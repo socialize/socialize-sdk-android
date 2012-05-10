@@ -16,6 +16,10 @@ public final class R {
     }
     public static final class id {
         public static final int btnDemo=0x7f050001;
+        public static final int btnShare=0x7f050008;
+        public static final int btnShareFacebook=0x7f05000a;
+        public static final int btnShareSocialNetwork=0x7f050009;
+        public static final int btnShareTwitter=0x7f05000b;
         public static final int container=0x7f050005;
         public static final int imgLogo=0x7f050006;
         public static final int label=0x7f050002;
@@ -28,6 +32,7 @@ public final class R {
         public static final int demo_activity=0x7f030000;
         public static final int demo_list=0x7f030001;
         public static final int main=0x7f030002;
+        public static final int share_buttons_activity=0x7f030003;
     }
     public static final class string {
         public static final int app_name=0x7f040001;

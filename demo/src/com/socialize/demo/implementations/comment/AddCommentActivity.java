@@ -22,7 +22,7 @@
 package com.socialize.demo.implementations.comment;
 
 import com.socialize.CommentUtils;
-import com.socialize.demo.DemoActivity;
+import com.socialize.demo.SDKDemoActivity;
 import com.socialize.entity.Comment;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
@@ -32,7 +32,7 @@ import com.socialize.listener.comment.CommentAddListener;
  * @author Jason Polites
  *
  */
-public class AddCommentActivity extends DemoActivity {
+public class AddCommentActivity extends SDKDemoActivity {
 
 	/* (non-Javadoc)
 	 * @see com.socialize.demo.DemoActivity#executeDemo()
