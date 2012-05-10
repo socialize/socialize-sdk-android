@@ -21,19 +21,16 @@
  */
 package com.socialize.ui.auth;
 
-import android.app.Dialog;
-import com.socialize.networks.SocialNetwork;
 
 /**
+ * Allows developers to override the flow control of the share dialog.
  * @author Jason Polites
+ *
  */
-public interface ShareDialogListener {
+public interface ShareDialogFlowController {
+
+	public void onContinue(String text);
 	
-	public void onShow(Dialog dialog, AuthPanelView dialogView);
+	public void onCancel();
 	
-	public boolean onContinue(Dialog dialog, SocialNetwork...networks);
-	
-	public void onFlowInterrupted(ShareDialogFlowController controller);
-	
-	public void onCancel(Dialog dialog);
 }

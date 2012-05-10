@@ -26,12 +26,12 @@ import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.auth.AuthPanelView;
+import com.socialize.ui.auth.ShareDialogFlowController;
 import com.socialize.ui.auth.ShareDialogListener;
 
 
 /**
  * @author Jason Polites
- *
  */
 public abstract class SocialNetworkDialogListener extends SocialNetworkShareListener implements ShareDialogListener {
 
@@ -45,7 +45,16 @@ public abstract class SocialNetworkDialogListener extends SocialNetworkShareList
 	 * @see com.socialize.ui.auth.ShareDialogListener#onContinue(android.app.Dialog, com.socialize.networks.SocialNetwork[])
 	 */
 	@Override
-	public void onContinue(Dialog dialog, SocialNetwork... networks) {}
+	public boolean onContinue(Dialog dialog, SocialNetwork... networks) {
+		return false;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.ui.auth.ShareDialogListener#onFlowInterrupted(com.socialize.ui.auth.ShareDialogFlowController)
+	 */
+	@Override
+	public void onFlowInterrupted(ShareDialogFlowController controller) {}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.ui.auth.ShareDialogListener#onCancel(android.app.Dialog)

@@ -46,6 +46,7 @@ import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.actionbar.OnActionBarEventListener.ActionBarEvent;
 import com.socialize.ui.auth.AuthPanelView;
+import com.socialize.ui.auth.ShareDialogFlowController;
 import com.socialize.ui.auth.ShareDialogListener;
 import com.socialize.ui.cache.CacheableEntity;
 import com.socialize.ui.cache.EntityCache;
@@ -355,8 +356,12 @@ public class ActionBarLayoutView extends BaseView {
 						public void onShow(Dialog dialog, AuthPanelView dialogView) {}
 
 						@Override
-						public void onContinue(Dialog dialog, SocialNetwork...networks) {
+						public void onFlowInterrupted(ShareDialogFlowController controller) {}
+
+						@Override
+						public boolean onContinue(Dialog dialog, SocialNetwork...networks) {
 							doLike(button, localEntity, networks);
+							return false;
 						}
 
 						@Override

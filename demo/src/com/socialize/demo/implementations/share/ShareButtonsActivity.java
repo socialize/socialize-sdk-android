@@ -22,6 +22,10 @@
 package com.socialize.demo.implementations.share;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,6 +36,7 @@ import com.socialize.demo.DemoActivity;
 import com.socialize.demo.DemoUtils;
 import com.socialize.demo.R;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.ui.auth.ShareDialogFlowController;
 
 
 /**
@@ -46,24 +51,77 @@ public class ShareButtonsActivity extends DemoActivity {
 		setContentView(R.layout.share_buttons_activity);
 		
 		Button btnShare = (Button) findViewById(R.id.btnShare);
+		Button btnShareWithComment = (Button) findViewById(R.id.btnShareWithComment);
 		Button btnShareSocialNetwork = (Button) findViewById(R.id.btnShareSocialNetwork);
 		Button btnShareFacebook = (Button) findViewById(R.id.btnShareFacebook);
 		Button btnShareTwitter = (Button) findViewById(R.id.btnShareTwitter);
 		
 		
 		btnShare.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
-				ShareUtils.showShareDialog(ShareButtonsActivity.this, entity);
-//				ShareUtils.showShareDialog(ShareButtonsActivity.this, entity, new SocialNetworkDialogListener() {
-//					@Override
-//					public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
-//						DemoUtils.showToast(parent, "Shared to " + socialNetwork.name());
-//					}
-//				});
+				ShareUtils.showShareDialog(ShareButtonsActivity.this, entity, new SocialNetworkDialogListener() {
+					@Override
+					public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
+						DemoUtils.showToast(parent, "Shared to " + socialNetwork.name());
+					}
+				});
 			}
 		});
+		
+		btnShareSocialNetwork.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ShareUtils.showShareDialog(ShareButtonsActivity.this, entity, new SocialNetworkDialogListener() {
+					@Override
+					public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
+						DemoUtils.showToast(parent, "Shared to " + socialNetwork.name());
+					}
+				}, ShareUtils.SOCIAL);
+			}
+		});
+		
+		btnShareWithComment.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ShareUtils.showShareDialog(ShareButtonsActivity.this, entity, new SocialNetworkDialogListener() {
+					
+					@Override
+					public boolean onContinue(Dialog dialog, SocialNetwork... networks) {
+						return true;
+					}
+					
+					@Override
+					public void onFlowInterrupted(ShareDialogFlowController controller) {
+						showSuccessDialog(ShareButtonsActivity.this, controller);
+					}
+
+					@Override
+					public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
+						DemoUtils.showToast(parent, "Shared to " + socialNetwork.name());
+					}
+				});
+			}
+		});		
 	}
 
+	
+	public void showSuccessDialog(Context context, final ShareDialogFlowController controller) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle("Click to share");
+		builder.setMessage("Click to share");
+		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				controller.onContinue("testing");
+			}
+		});
+		builder.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				controller.onCancel();
+			}
+		});
+		builder.create().show();
+	}	
 }

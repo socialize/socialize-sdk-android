@@ -33,6 +33,7 @@ import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.auth.AuthPanelView;
+import com.socialize.ui.auth.ShareDialogFlowController;
 import com.socialize.ui.auth.ShareDialogListener;
 import com.socialize.ui.dialog.AuthDialogFactory;
 
@@ -58,8 +59,12 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 				public void onShow(Dialog dialog, AuthPanelView dialogView) {}
 				
 				@Override
-				public void onContinue(Dialog dialog, SocialNetwork... networks) {
+				public void onFlowInterrupted(ShareDialogFlowController controller) {}
+				
+				@Override
+				public boolean onContinue(Dialog dialog, SocialNetwork... networks) {
 					commentSystem.addComment(session, e, text, getDefaultShareOptions(), listener);
+					return false;
 				}
 
 				@Override

@@ -37,6 +37,7 @@ import com.socialize.listener.share.ShareListListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.share.ShareHandlerListener;
 import com.socialize.ui.auth.AuthPanelView;
+import com.socialize.ui.auth.ShareDialogFlowController;
 import com.socialize.ui.auth.ShareDialogListener;
 import com.socialize.ui.dialog.AuthDialogFactory;
 import com.socialize.ui.dialog.SafeProgressDialog;
@@ -65,63 +66,93 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 					dialogListener.onShow(dialog, dialogView);
 				}				
 			}
+			
+			@Override
+			public void onFlowInterrupted(ShareDialogFlowController controller) {
+				// Will not be called.
+			}
 
 			@Override
-			public void onContinue(final Dialog dialog, final SocialNetwork... networks) {
+			public boolean onContinue(final Dialog dialog, final SocialNetwork... networks) {
+				boolean consumed = true;
 				
 				if(dialogListener != null) {
-					dialogListener.onContinue(dialog, networks);
+					consumed = dialogListener.onContinue(dialog, networks);
 				}					
 				
-				final ProgressDialog progress = SafeProgressDialog.show(context);
-				
-				shareSystem.addShare(context, getSocialize().getSession(), e, ShareType.OTHER, new ShareAddListener() {
-					@Override
-					public void onError(SocializeException error) {
-						if(socialNetworkListener != null) {
-							socialNetworkListener.onError(error);
-						}
+				if(!consumed) {
+					doShare(dialog, context, e, socialNetworkListener, "", networks);
+				}
+				else {
+					dialogListener.onFlowInterrupted(new ShareDialogFlowController() {
 						
-						progress.dismiss();
-						dialog.dismiss();
-					}
-					
-					@Override
-					public void onCreate(Share share) {
-						if(socialNetworkListener != null) {
-							socialNetworkListener.onCreate(share);
+						@Override
+						public void onContinue(String text) {
+							doShare(dialog, context, e, socialNetworkListener, text, networks);
 						}
-						
-						if(share != null && shareSystem != null && networks != null && networks.length > 0) {
-							for (int i = 0; i < networks.length; i++) {
-							
-								final SocialNetwork network = networks[i];
-								
-								shareSystem.share(context, getSocialize().getSession(), share, "", null, ShareType.valueOf(network), false, new ShareHandlerListener() {
-									@Override
-									public void onError(Activity parent, SocializeAction action, Exception error) {
-										if(socialNetworkListener != null) {
-											socialNetworkListener.onSocialNetworkError(network, error);
-										}
-									}
-									
-									@Override
-									public void onBeforePost(Activity parent) {}
-									
-									@Override
-									public void onAfterPost(Activity parent, SocializeAction action) {
-									
-									}
-								});									
+
+						@Override
+						public void onCancel() {
+							if(dialogListener != null) {
+								dialogListener.onCancel(dialog);
 							}
 						}
-						
-						progress.dismiss();
-						dialog.dismiss();
-					}
-				}, networks);
+					});
+				}
+				
+				return false;
 			}
 		}, options);		
+	}
+	
+	protected void doShare(final Dialog dialog, final Activity context, final Entity e, final SocialNetworkShareListener socialNetworkListener, final String text, final SocialNetwork... networks) {
+		final ProgressDialog progress = SafeProgressDialog.show(context);
+		
+		shareSystem.addShare(context, getSocialize().getSession(), e, text, ShareType.OTHER, new ShareAddListener() {
+			@Override
+			public void onError(SocializeException error) {
+				if(socialNetworkListener != null) {
+					socialNetworkListener.onError(error);
+				}
+				
+				progress.dismiss();
+				dialog.dismiss();
+			}
+			
+			@Override
+			public void onCreate(Share share) {
+				if(socialNetworkListener != null) {
+					socialNetworkListener.onCreate(share);
+				}
+				
+				if(share != null && shareSystem != null && networks != null && networks.length > 0) {
+					for (int i = 0; i < networks.length; i++) {
+					
+						final SocialNetwork network = networks[i];
+						
+						shareSystem.share(context, getSocialize().getSession(), share, text, null, ShareType.valueOf(network), false, new ShareHandlerListener() {
+							@Override
+							public void onError(Activity parent, SocializeAction action, Exception error) {
+								if(socialNetworkListener != null) {
+									socialNetworkListener.onSocialNetworkError(network, error);
+								}
+							}
+							
+							@Override
+							public void onBeforePost(Activity parent) {}
+							
+							@Override
+							public void onAfterPost(Activity parent, SocializeAction action) {
+							
+							}
+						});									
+					}
+				}
+				
+				progress.dismiss();
+				dialog.dismiss();
+			}
+		}, networks);
 	}
 
 	@Override

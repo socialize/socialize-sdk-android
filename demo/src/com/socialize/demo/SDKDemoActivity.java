@@ -35,7 +35,6 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
-import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.SocializeObject;

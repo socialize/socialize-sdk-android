@@ -29,6 +29,7 @@ import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.notifications.NotificationType;
 import com.socialize.ui.auth.AuthPanelView;
+import com.socialize.ui.auth.ShareDialogFlowController;
 import com.socialize.ui.auth.ShareDialogListener;
 import com.socialize.ui.dialog.AuthDialogFactory;
 import com.socialize.ui.dialog.DialogFactory;
@@ -277,8 +278,12 @@ public class CommentListView extends BaseView {
 			public void onShow(Dialog dialog, AuthPanelView dialogView) {}
 			
 			@Override
-			public void onContinue(Dialog dialog, SocialNetwork...network) {
+			public void onFlowInterrupted(ShareDialogFlowController controller) {}
+			
+			@Override
+			public boolean onContinue(Dialog dialog, SocialNetwork...network) {
 				doPostComment(text, shareLocation, subscribe, networks);
+				return false;
 			}
 
 			@Override

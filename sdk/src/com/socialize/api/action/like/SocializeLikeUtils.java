@@ -37,6 +37,7 @@ import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.auth.AuthPanelView;
+import com.socialize.ui.auth.ShareDialogFlowController;
 import com.socialize.ui.auth.ShareDialogListener;
 import com.socialize.ui.dialog.AuthDialogFactory;
 
@@ -64,8 +65,12 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 				public void onShow(Dialog dialog, AuthPanelView dialogView) {}
 				
 				@Override
-				public void onContinue(Dialog dialog, SocialNetwork... networks) {
+				public void onFlowInterrupted(ShareDialogFlowController controller) {}
+				
+				@Override
+				public boolean onContinue(Dialog dialog, SocialNetwork... networks) {
 					likeSystem.addLike(session, e, SocializeLikeUtils.this.getDefaultShareOptions(), listener);
+					return false;
 				}
 
 				@Override

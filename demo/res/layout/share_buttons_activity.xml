@@ -9,28 +9,35 @@
 
     <Button 
         android:id="@+id/btnShare"
-        android:layout_width="200dip"
+        android:layout_width="260dip"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="Default Share Dialog"/>
     
     <Button 
+        android:id="@+id/btnShareWithComment"
+        android:layout_width="260dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Default Share Dialog With Comment"/>
+    
+    <Button 
         android:id="@+id/btnShareSocialNetwork"
-        android:layout_width="200dip"
+        android:layout_width="260dip"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="Share to Social Networks"/>
     
     <Button 
         android:id="@+id/btnShareFacebook"
-        android:layout_width="200dip"
+        android:layout_width="260dip"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="Share to Facebook"/>
     
     <Button 
         android:id="@+id/btnShareTwitter"
-        android:layout_width="200dip"
+        android:layout_width="260dip"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="Share to Twitter"/>    
