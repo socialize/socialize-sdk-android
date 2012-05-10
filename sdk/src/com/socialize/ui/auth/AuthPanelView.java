@@ -540,7 +540,7 @@ public class AuthPanelView extends BaseView {
 				showErrorToast(getContext(), error);
 				
 				if(socialNetworkListener != null) {
-					socialNetworkListener.onSocialNetworkError(network, error);
+					socialNetworkListener.onError(getActivity(), network, error);
 				}
 			}
 			
@@ -558,7 +558,7 @@ public class AuthPanelView extends BaseView {
 				showError(getContext(), error);
 				
 				if(socialNetworkListener != null) {
-					socialNetworkListener.onSocialNetworkError(network, error);
+					socialNetworkListener.onError(getActivity(), network, error);
 				}
 			}
 

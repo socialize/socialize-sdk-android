@@ -30,7 +30,7 @@ import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.share.ShareHandlerListener;
+import com.socialize.networks.SocialNetworkListener;
 
 
 /**
@@ -79,5 +79,5 @@ public interface ShareSystem {
 	 * @param actionType The type of action being shared.
 	 * @param listener A listener to handle callbacks from the post.
 	 */
-	public void share(Activity context, SocializeSession session, SocializeAction action, String comment, Location location, ShareType destination, boolean autoAuth, ShareHandlerListener listener);
+	public void share(Activity context, SocializeSession session, SocializeAction action, String comment, Location location, ShareType destination, boolean autoAuth, SocialNetworkListener listener);
 }

@@ -31,6 +31,8 @@ import com.socialize.entity.PropagationInfoResponse;
 import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
+import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
 
 
 /**
@@ -45,8 +47,8 @@ public abstract class AbstractShareHandler implements ShareHandler {
 	 * @see com.socialize.share.ShareHandler#handle(android.app.Activity, com.socialize.entity.Share, com.socialize.share.ShareHandlerListener)
 	 */
 	@Override
-	public void handle(Activity context, SocializeAction action, Location location, String text, ShareHandlerListener listener) {
-		
+	public void handle(Activity context, SocializeAction action, Location location, String text, SocialNetworkListener listener) {
+		final SocialNetwork network = SocialNetwork.valueOf(getShareType());
 		PropagationInfoResponse propagationInfoResponse = action.getPropagationInfoResponse();
 		
 		if(propagationInfoResponse != null) {
@@ -54,15 +56,7 @@ public abstract class AbstractShareHandler implements ShareHandler {
 			
 			if(propagationInfo != null) {
 				try {
-					if(listener != null) {
-						listener.onBeforePost(context);
-					}						
-					
 					handle(context, action, text, propagationInfo, listener);
-					
-					if(listener != null) {
-						listener.onAfterPost(context, action);
-					}
 				}
 				catch (Exception e) {
 					if(logger != null) {
@@ -70,24 +64,24 @@ public abstract class AbstractShareHandler implements ShareHandler {
 					}
 					
 					if(listener != null) {
-						listener.onError(context, action, e);
+						listener.onError(context, network, e);
 					}
 				}
 			}
 			else {
-				logError(context, action, "No propagation info found for type [" +
+				logError(context, network, action, "No propagation info found for type [" +
 								getShareType() +
 								"].  Share will not propagate", listener);
 			}
 		}
 		else {
-			logError(context, action, "No propagation info found for type [" +
+			logError(context, network, action, "No propagation info found for type [" +
 							getShareType() +
 							"].  Share will not propagate", listener);
 		}
 	}
 	
-	protected void logError(Activity context, SocializeAction action, String msg, ShareHandlerListener listener) {
+	protected void logError(Activity context, SocialNetwork network, SocializeAction action, String msg, SocialNetworkListener listener) {
 		if(logger != null) {
 			logger.warn(msg);
 		}
@@ -96,7 +90,7 @@ public abstract class AbstractShareHandler implements ShareHandler {
 		}
 		
 		if(listener != null) {
-			listener.onError(context, action, new SocializeException(msg));
+			listener.onError(context, network, new SocializeException(msg));
 		}
 	}
 
@@ -104,7 +98,7 @@ public abstract class AbstractShareHandler implements ShareHandler {
 		this.logger = logger;
 	}
 	
-	protected abstract void handle(Activity context, SocializeAction action, String text, PropagationInfo info, ShareHandlerListener listener) throws Exception;
+	protected abstract void handle(Activity context, SocializeAction action, String text, PropagationInfo info, SocialNetworkListener listener) throws Exception;
 	
 	protected abstract ShareType getShareType();
 	

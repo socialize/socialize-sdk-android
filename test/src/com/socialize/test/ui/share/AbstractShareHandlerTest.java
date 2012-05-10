@@ -29,8 +29,9 @@ import com.socialize.api.action.ShareType;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.PropagationInfoResponse;
 import com.socialize.entity.SocializeAction;
+import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
 import com.socialize.share.AbstractShareHandler;
-import com.socialize.share.ShareHandlerListener;
 import com.socialize.test.SocializeActivityTest;
 
 
@@ -40,11 +41,11 @@ import com.socialize.test.SocializeActivityTest;
  */
 public class AbstractShareHandlerTest extends SocializeActivityTest {
 
-	@UsesMocks ({SocializeAction.class, ShareHandlerListener.class, PropagationInfoResponse.class, PropagationInfo.class})
+	@UsesMocks ({SocializeAction.class, SocialNetworkListener.class, PropagationInfoResponse.class, PropagationInfo.class})
 	public void testHandle() {
 		PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
 		PropagationInfoResponse response = AndroidMock.createMock(PropagationInfoResponse.class);
-		ShareHandlerListener listener = AndroidMock.createMock(ShareHandlerListener.class);
+		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
 		SocializeAction action = AndroidMock.createMock(SocializeAction.class);
 		
 		final ShareType shareType = ShareType.FACEBOOK;
@@ -54,8 +55,8 @@ public class AbstractShareHandlerTest extends SocializeActivityTest {
 		AndroidMock.expect(action.getPropagationInfoResponse()).andReturn(response);
 		AndroidMock.expect(response.getPropagationInfo(shareType)).andReturn(info);
 		
-		listener.onBeforePost(context);
-		listener.onAfterPost(context, action);
+		listener.onBeforePost(context, SocialNetwork.FACEBOOK, null);
+		listener.onAfterPost(context, SocialNetwork.FACEBOOK);
 		
 		AndroidMock.replay(action, response, listener);
 		
@@ -67,7 +68,7 @@ public class AbstractShareHandlerTest extends SocializeActivityTest {
 			}
 			
 			@Override
-			protected void handle(Activity context, SocializeAction action, String text, PropagationInfo info, ShareHandlerListener listener) throws Exception {
+			protected void handle(Activity context, SocializeAction action, String text, PropagationInfo info, SocialNetworkListener listener) throws Exception {
 				addResult(0, action);
 				addResult(1, text);
 				addResult(2, info);

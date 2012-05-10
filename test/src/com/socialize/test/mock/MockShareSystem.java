@@ -11,7 +11,7 @@ import com.socialize.entity.Share;
 import com.socialize.entity.SocializeAction;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.share.ShareHandlerListener;
+import com.socialize.networks.SocialNetworkListener;
 
 public class MockShareSystem extends MockSystem<Share> implements ShareSystem {
 
@@ -50,8 +50,8 @@ public class MockShareSystem extends MockSystem<Share> implements ShareSystem {
 	}
 	
 	@Override
-	public void share(Activity context, SocializeSession session, SocializeAction action, String comment, Location location, ShareType destination, boolean autoAuth, ShareHandlerListener listener) {
-		if(listener != null) listener.onAfterPost(context, action);
+	public void share(Activity context, SocializeSession session, SocializeAction action, String comment, Location location, ShareType destination, boolean autoAuth, SocialNetworkListener listener) {
+		if(listener != null) listener.onAfterPost(context, SocialNetwork.valueOf(destination));
 	}
 
 	@Override

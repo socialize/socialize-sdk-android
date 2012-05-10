@@ -41,9 +41,9 @@ import com.socialize.listener.share.ShareListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.share.ShareHandler;
-import com.socialize.share.ShareHandlerListener;
 import com.socialize.share.ShareHandlers;
 import com.socialize.util.StringUtils;
 
@@ -246,16 +246,17 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 	}
 
 	@Override
-	public void share(Activity context, SocializeSession session, SocializeAction action, String comment, Location location, ShareType destination, boolean autoAuth, ShareHandlerListener listener) {
+	public void share(Activity context, SocializeSession session, SocializeAction action, String comment, Location location, ShareType destination, boolean autoAuth, SocialNetworkListener listener) {
 		ShareHandler sharer = getSharer(destination);
 		if(sharer != null) {
 			sharer.handle(context, action, location, comment, listener);
 		}
 		else {
 			if(listener != null) {
-				listener.onError(context, action, new SocializeException("Unable to share to [" +
+				listener.onError(context, SocialNetwork.valueOf(destination), new SocializeException("Unable to share to [" +
 						destination.getDisplayName() +
 						"] No sharer defined for type"));
+				
 			}
 			 
 			if(logger != null) {

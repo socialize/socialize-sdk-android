@@ -330,12 +330,12 @@ public class SocializeActivity extends Activity {
 			
 			// Listen for the outcome of the facebook post
 			options.setListener(new SocialNetworkListener() {
+				
 				@Override
-				public void onSocialNetworkError(SocialNetwork network, Exception error) {
+				public void onError(Activity context, SocialNetwork network, Exception error) {
 					// Handle error
 				}
 
-				
 				@Override
 				public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 					// Handle before post

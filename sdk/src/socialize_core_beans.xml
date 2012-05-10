@@ -389,7 +389,9 @@
 		<property name="logger" ref="logger"/>
 	</bean>
 	
-	<bean id="twitterShareHandler" class="com.socialize.share.TwitterShareHandler"/>
+	<bean id="twitterShareHandler" class="com.socialize.share.TwitterShareHandler">
+		<property name="twitterSharer" ref="twitterSharer"/>
+	</bean>
 	
 	<bean id="otherShareHandler" class="com.socialize.share.OtherShareHandler" extends="emailShareHandler"/>
 	
@@ -605,7 +607,6 @@
 		id="twitterSharer" 
 		class="com.socialize.networks.twitter.TwitterSharer"
 		extends="socialNetworkSharer">
-		<property name="authProviderInfoFactory" ref="twitterAuthProviderInfoFactory"/>
 	</bean>		
 	
 	<bean 

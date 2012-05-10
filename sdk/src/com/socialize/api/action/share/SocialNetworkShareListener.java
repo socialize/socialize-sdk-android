@@ -33,7 +33,7 @@ import com.socialize.networks.SocialNetworkListener;
  */
 public abstract class SocialNetworkShareListener extends ShareAddListener implements SocialNetworkListener {
 
-	public void onSocialNetworkError(SocialNetwork network, Exception error) {}
+	public void onError(Activity context, SocialNetwork network, Exception error) {}
 
 	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {}
 

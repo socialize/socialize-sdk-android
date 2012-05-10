@@ -166,7 +166,7 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 			@Override
 			public void onError(SocializeException error) {
 				if(listener != null) {
-					listener.onSocialNetworkError(SocialNetwork.TWITTER, error);
+					listener.onError(context, SocialNetwork.TWITTER, error);
 				}
 			}
 		}, SocialNetwork.TWITTER);

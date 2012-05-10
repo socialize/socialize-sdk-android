@@ -274,7 +274,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		TwitterUtils.tweet(getActivity(), entity, "AndroidSDK Test", new SocialNetworkListener() {
 			
 			@Override
-			public void onSocialNetworkError(SocialNetwork network, Exception error) {
+			public void onError(Activity context, SocialNetwork network, Exception error) {
 				error.printStackTrace();
 				latch.countDown();
 			}

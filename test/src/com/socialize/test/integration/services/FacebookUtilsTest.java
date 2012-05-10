@@ -281,7 +281,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		FacebookUtils.post(getActivity(), entity, "test", new SocialNetworkListener() {
 			
 			@Override
-			public void onSocialNetworkError(SocialNetwork network, Exception error) {
+			public void onError(Activity context, SocialNetwork network, Exception error) {
 				error.printStackTrace();
 				latch.countDown();
 			}

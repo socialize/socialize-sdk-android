@@ -25,6 +25,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import com.socialize.entity.SocializeAction;
+import com.socialize.networks.SocialNetworkListener;
 
 
 /**
@@ -41,7 +42,7 @@ public interface ShareHandler {
 	 * @param text The text entered by the user.
 	 * @param listener
 	 */
-	public void handle(Activity context, SocializeAction action, Location location, String text, ShareHandlerListener listener);
+	public void handle(Activity context, SocializeAction action, Location location, String text, SocialNetworkListener listener);
 	
 	public boolean isAvailableOnDevice(Context context);
 	

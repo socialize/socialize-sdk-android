@@ -29,6 +29,7 @@ import com.socialize.api.action.ShareType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.SocializeAction;
+import com.socialize.networks.SocialNetworkListener;
 
 /**
  * @author Jason Polites
@@ -41,7 +42,7 @@ public class EmailShareHandler extends IntentShareHandler {
 	 * @see com.socialize.share.AbstractShareHandler#handle(android.app.Activity, com.socialize.entity.SocializeAction, java.lang.String, com.socialize.entity.PropagationInfo, com.socialize.share.ShareHandlerListener)
 	 */
 	@Override
-	protected void handle(Activity context, SocializeAction action, String text, PropagationInfo info, ShareHandlerListener listener) throws Exception {
+	protected void handle(Activity context, SocializeAction action, String text, PropagationInfo info, SocialNetworkListener listener) throws Exception {
 		
 		Entity entity = action.getEntity();
 		

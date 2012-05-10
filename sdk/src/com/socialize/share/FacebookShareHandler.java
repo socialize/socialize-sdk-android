@@ -24,14 +24,10 @@ package com.socialize.share;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.api.action.ShareType;
-import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.PropagationInfo;
-import com.socialize.entity.Share;
 import com.socialize.entity.SocializeAction;
-import com.socialize.error.SocializeException;
-import com.socialize.networks.PostData;
-import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookSharer;
 
 
@@ -44,36 +40,8 @@ public class FacebookShareHandler extends AbstractShareHandler {
 	private FacebookSharer facebookSharer;
 	
 	@Override
-	protected void handle(final Activity context, final SocializeAction action, String text, PropagationInfo info, final ShareHandlerListener listener) throws Exception {
-		facebookSharer.share(context, action.getEntity(), info, text, true, action.getActionType(), new SocialNetworkShareListener() {
-			
-			@Override
-			public void onCreate(Share entity) {}
-
-			@Override
-			public void onError(SocializeException error) {
-				if(listener != null) {
-					listener.onError(context, action, error);
-				}
-			}
-
-			@Override
-			public void onCancel() {}
-			
-			@Override
-			public void onBeforePost(Activity parent, SocialNetwork network, PostData postData) {
-				if(listener != null) {
-					listener.onBeforePost(parent);
-				}
-			}
-			
-			@Override
-			public void onAfterPost(Activity parent, SocialNetwork network) {
-				if(listener != null) {
-					listener.onAfterPost(parent, action);
-				}
-			}
-		});
+	protected void handle(final Activity context, final SocializeAction action, String text, PropagationInfo info, final SocialNetworkListener listener) throws Exception {
+		facebookSharer.share(context, action.getEntity(), info, text, true, action.getActionType(), listener);
 	}
 	
 	@Override

@@ -140,7 +140,7 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 			@Override
 			public void onError(SocializeException error) {
 				if(listener != null) {
-					listener.onSocialNetworkError(SocialNetwork.FACEBOOK, error);
+					listener.onError(context, SocialNetwork.FACEBOOK, error);
 				}
 			}
 		}, SocialNetwork.FACEBOOK);

@@ -31,9 +31,9 @@ public class Twitter extends Activity {
 
 			// Listen for the outcome of the twitter post
 			options.setListener(new SocialNetworkListener() {
+				
 				@Override
-				public void onSocialNetworkError(SocialNetwork network, Exception error) {
-					// Handle error
+				public void onError(Activity context, SocialNetwork network, Exception error) {
 				}
 
 				@Override

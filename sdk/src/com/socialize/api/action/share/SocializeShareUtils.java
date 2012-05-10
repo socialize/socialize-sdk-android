@@ -28,14 +28,12 @@ import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeActionUtilsBase;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
-import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.share.ShareHandlerListener;
 import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.auth.ShareDialogFlowController;
 import com.socialize.ui.auth.ShareDialogListener;
@@ -127,25 +125,8 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 				
 				if(share != null && shareSystem != null && networks != null && networks.length > 0) {
 					for (int i = 0; i < networks.length; i++) {
-					
 						final SocialNetwork network = networks[i];
-						
-						shareSystem.share(context, getSocialize().getSession(), share, text, null, ShareType.valueOf(network), false, new ShareHandlerListener() {
-							@Override
-							public void onError(Activity parent, SocializeAction action, Exception error) {
-								if(socialNetworkListener != null) {
-									socialNetworkListener.onSocialNetworkError(network, error);
-								}
-							}
-							
-							@Override
-							public void onBeforePost(Activity parent) {}
-							
-							@Override
-							public void onAfterPost(Activity parent, SocializeAction action) {
-							
-							}
-						});									
+						shareSystem.share(context, getSocialize().getSession(), share, text, null, ShareType.valueOf(network), false, socialNetworkListener);									
 					}
 				}
 				

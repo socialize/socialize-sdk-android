@@ -37,12 +37,12 @@ import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.entity.SocializeAction;
 import com.socialize.ioc.SocializeIOC;
+import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookAuthClickListener;
 import com.socialize.networks.facebook.FacebookSignInCell;
 import com.socialize.networks.twitter.TwitterAuthClickListener;
 import com.socialize.networks.twitter.TwitterSignInCell;
 import com.socialize.share.ShareHandler;
-import com.socialize.share.ShareHandlerListener;
 import com.socialize.test.ui.SocializeUIActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.auth.AuthPanelView;
@@ -145,7 +145,7 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 			}
 			
 			@Override
-			public void handle(Activity context, SocializeAction action, Location location, String text, ShareHandlerListener listener) {
+			public void handle(Activity context, SocializeAction action, Location location, String text, SocialNetworkListener listener) {
 				addResult(1, action);
 				latch1.countDown();
 			}
@@ -214,7 +214,7 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 			}
 			
 			@Override
-			public void handle(Activity context, SocializeAction action, Location location, String text, ShareHandlerListener listener) {
+			public void handle(Activity context, SocializeAction action, Location location, String text, SocialNetworkListener listener) {
 				addResult(1, action);
 				latch1.countDown();
 			}

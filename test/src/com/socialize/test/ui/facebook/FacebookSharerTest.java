@@ -39,6 +39,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookSharer;
 import com.socialize.networks.facebook.FacebookWallPoster;
 import com.socialize.test.PublicSocialize;
@@ -139,12 +140,12 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 			}
 
 			@Override
-			public void doError(SocializeException e, Activity parent, SocialNetworkShareListener listener) {
+			public void doError(SocializeException e, Activity parent, SocialNetworkListener listener) {
 				addResult("doError");
 			}
 
 			@Override
-			public void doShare(Activity context, Entity entity, PropagationInfo urlSet, String comment, SocialNetworkShareListener listener, ActionType type) {
+			public void doShare(Activity context, Entity entity, PropagationInfo urlSet, String comment, SocialNetworkListener listener, ActionType type) {
 				addResult("doShare");
 			}
 		};
@@ -195,7 +196,7 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		SocializeException error = new SocializeException("foobar");
 		
 		logger.error(msg, error);
-		listener.onSocialNetworkError(SocialNetwork.FACEBOOK, error);
+		listener.onError(getContext(), SocialNetwork.FACEBOOK, error);
 		
 		AndroidMock.replay(logger);
 		AndroidMock.replay(listener);
@@ -279,12 +280,12 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 	public class PublicFacebookSharer extends FacebookSharer {
 
 		@Override
-		public void doShare(Activity context, Entity entity, PropagationInfo urlSet, String comment, SocialNetworkShareListener listener, ActionType type) {
+		public void doShare(Activity context, Entity entity, PropagationInfo urlSet, String comment, SocialNetworkListener listener, ActionType type) {
 			super.doShare(context, entity, urlSet, comment, listener, type);
 		}
 
 		@Override
-		public void doError(SocializeException e, Activity parent, SocialNetworkShareListener listener) {
+		public void doError(SocializeException e, Activity parent, SocialNetworkListener listener) {
 			super.doError(e, parent, listener);
 		}
 		
