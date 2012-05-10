@@ -19,51 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo;
+package com.socialize.demo.implementations.comment;
 
-import com.socialize.ActionBarUtils;
-import com.socialize.demo.implementations.comment.CommentActivity;
-import com.socialize.demo.implementations.entity.EntityActivity;
-import com.socialize.entity.Entity;
-import com.socialize.ui.actionbar.ActionBarOptions;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.socialize.demo.R;
+
 
 /**
  * @author Jason Polites
- * 
+ *
  */
-public class DemoList extends ListActivity {
-
-	final String[] values = new String[] { "Action Bar", "Entities", "Comments", "Sharing", "Likes", "Views", "Actions (User Activity)", "Subscriptions", "Location"};
-	final Class<?>[] activities = new Class<?>[] { null, EntityActivity.class, CommentActivity.class, null, null, null, null, null, null, null};
+public class CommentActivity extends ListActivity {
+	final String[] values = new String[] { "Add Comment", "Get Comments By Entity", "Get Comments By User", "Get Comment By ID"};
+	final Class<?>[] activities = new Class<?>[] { AddCommentActivity.class, GetCommentsByEntityActivity.class, GetCommentsByUserActivity.class, GetCommentsByIDActivity.class};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		// Your entity key.  May be passed as a Bundle parameter to your activity
-		final String entityKey = "http://getsocialize.com";
-		
-		// Create an entity object, including a name.
-		final Entity entity = Entity.newInstance(entityKey, "Socialize");
-		
-		// Disable scroll view because we are on a list view which already scrolls
-		ActionBarOptions options = new ActionBarOptions();
-		options.setAddScrollView(false);
-		
-		// No need for a listener, so just pass null.
-		View view = ActionBarUtils.showActionBar(this, R.layout.demo_list, entity, options, null);
-		
-		setContentView(view);
-		
+		setContentView(R.layout.demo_list);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
 		setListAdapter(adapter);
 	}
+	
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {

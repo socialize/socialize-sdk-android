@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2011 Socialize Inc.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,27 +19,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.listener.comment;
+package com.socialize.demo.implementations.comment;
 
+import com.socialize.CommentUtils;
+import com.socialize.demo.DemoActivity;
 import com.socialize.entity.Comment;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.comment.CommentAddListener;
 
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class CommentListListener extends CommentListener {
- 
-	@Override
-	public final void onCreate(Comment comment) {}
+public class AddCommentActivity extends DemoActivity {
 
+	/* (non-Javadoc)
+	 * @see com.socialize.demo.DemoActivity#executeDemo()
+	 */
 	@Override
-	public final void onGet(Comment comment) {}
-
-	@Override
-	public final void onUpdate(Comment comment) {}
+	public void executeDemo(String text) {
+		CommentUtils.addComment(this, entity, text , new CommentAddListener() {
+			@Override
+			public void onError(SocializeException error) {
+				handleError(error);
+			}
+			
+			@Override
+			public void onCreate(Comment comment) {
+				handleSocializeResult(comment);
+			}
+		});
+	}
 	
 	@Override
-	public final void onDelete() {}
+	public boolean isTextEntryRequired() {
+		return true;
+	}
 
+	/* (non-Javadoc)
+	 * @see com.socialize.demo.DemoActivity#getButtonText()
+	 */
+	@Override
+	public String getButtonText() {
+		return "Add Comment";
+	}
 }

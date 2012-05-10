@@ -33,13 +33,13 @@ import com.socialize.entity.ListResult;
 public abstract class CommentAddListener extends CommentListener {
 
 	@Override
-	public final void onGet(Comment entity) {}
+	public final void onGet(Comment comment) {}
 
 	@Override
-	public final void onList(ListResult<Comment> entities) {}
+	public final void onList(ListResult<Comment> comments) {}
 
 	@Override
-	public final void onUpdate(Comment entity) {}
+	public final void onUpdate(Comment comment) {}
 
 	@Override
 	public final void onDelete() {}

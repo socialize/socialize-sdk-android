@@ -19,29 +19,54 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo;
+package com.socialize.demo.implementations.entity;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+import com.socialize.EntityUtils;
+import com.socialize.demo.DemoActivity;
+import com.socialize.entity.Entity;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.entity.EntityAddListener;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class DemoUtils {
-	public static void showErrorDialog(Context context, Exception e) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle("Oops!");
-		builder.setMessage("An error occurred.  Check the device logs (logcat)\n\n[" + e.getMessage() + "]");
-		builder.setPositiveButton("OK", new OnClickListener() {
+public class AddEntityActivity extends DemoActivity {
+
+	/* (non-Javadoc)
+	 * @see com.socialize.demo.DemoActivity#executeDemo()
+	 */
+	@Override
+	public void executeDemo(String text) {
+		
+		// usually the name parameter would be a human readable name (i.e. not the same as the key).
+		Entity e = Entity.newInstance(text, text);
+		
+		EntityUtils.addEntity(this, e, new EntityAddListener() {
+			
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
+			public void onError(SocializeException error) {
+				handleError(error);
+			}
+			
+			@Override
+			public void onCreate(Entity entity) {
+				handleBasicSocializeResult(entity);
 			}
 		});
-		builder.create().show();
+	}
+	
+	@Override
+	public boolean isTextEntryRequired() {
+		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.demo.DemoActivity#getButtonText()
+	 */
+	@Override
+	public String getButtonText() {
+		return "Add Entity";
 	}
 }

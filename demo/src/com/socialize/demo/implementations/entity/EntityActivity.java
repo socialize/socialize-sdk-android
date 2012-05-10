@@ -19,29 +19,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo;
+package com.socialize.demo.implementations.entity;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+import android.app.ListActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import com.socialize.demo.R;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class DemoUtils {
-	public static void showErrorDialog(Context context, Exception e) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle("Oops!");
-		builder.setMessage("An error occurred.  Check the device logs (logcat)\n\n[" + e.getMessage() + "]");
-		builder.setPositiveButton("OK", new OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-			}
-		});
-		builder.create().show();
+public class EntityActivity extends ListActivity {
+	final String[] values = new String[] { "Add Entity", "Get Entity By Key", "Get All Entities"};
+	final Class<?>[] activities = new Class<?>[] { AddEntityActivity.class, GetEntityByKeyActivity.class, GetAllEntitiesActivity.class};
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.demo_list);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
+		setListAdapter(adapter);
+	}
+	
+
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		Class<?> activityClass = activities[position];
+		if(activityClass != null) {
+			Intent intent = new Intent(this, activityClass);
+			startActivity(intent);
+		}
 	}
 }

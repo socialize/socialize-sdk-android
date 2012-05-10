@@ -27,6 +27,7 @@ import com.socialize.api.SocializeResponse;
 import com.socialize.api.SocializeApi.RequestType;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
+import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 
 
@@ -86,5 +87,17 @@ public abstract class AbstractSocializeListener<T extends SocializeObject> imple
 
 	@Override
 	public abstract void onError(SocializeException error);
+	
+	/**
+	 * Returns true if the error reported is a 404 (not found)
+	 * @param error
+	 * @return
+	 */
+	protected boolean isNotFoundError(SocializeException error) {
+		if(error instanceof SocializeApiError) {
+			return ((SocializeApiError)error).getResultCode() == 404;
+		}
+		return false;
+	}
 
 }

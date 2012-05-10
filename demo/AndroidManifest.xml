@@ -35,9 +35,16 @@
             android:name=".DemoList">
         </activity> 
         
-        <activity
-            android:name=".examples.CommentActivity">
-        </activity>
+        <activity android:name=".implementations.comment.CommentActivity"/>
+        <activity android:name=".implementations.comment.AddCommentActivity"/>
+        <activity android:name=".implementations.comment.GetCommentsByEntityActivity"/>
+        <activity android:name=".implementations.comment.GetCommentsByUserActivity"/>
+        <activity android:name=".implementations.comment.GetCommentsByIDActivity"/>
+        
+        <activity android:name=".implementations.entity.EntityActivity"/>
+        <activity android:name=".implementations.entity.AddEntityActivity"/>
+        <activity android:name=".implementations.entity.GetEntityByKeyActivity"/>
+        <activity android:name=".implementations.entity.GetAllEntitiesActivity"/>
         
        	<!-- Base Activities Required by Socialize UI -->
        	<activity android:name="com.socialize.ui.comment.CommentActivity"/>

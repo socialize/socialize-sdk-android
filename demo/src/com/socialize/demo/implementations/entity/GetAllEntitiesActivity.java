@@ -19,26 +19,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo.examples;
+package com.socialize.demo.implementations.entity;
 
-import com.socialize.demo.R;
-import android.app.ListActivity;
-import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import com.socialize.EntityUtils;
+import com.socialize.demo.DemoActivity;
+import com.socialize.entity.Entity;
+import com.socialize.entity.ListResult;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.entity.EntityListListener;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class CommentActivity extends ListActivity {
-	final String[] values = new String[] { "Get All Comments", "Get Comments By User", "Get Comments By Entity", "Get Comment By ID"};
+public class GetAllEntitiesActivity extends DemoActivity {
+
+	/* (non-Javadoc)
+	 * @see com.socialize.demo.DemoActivity#executeDemo()
+	 */
+	@Override
+	public void executeDemo(String text) {
+		
+		EntityUtils.getEntities(this, 0, 50, new EntityListListener() {
+			
+			@Override
+			public void onList(ListResult<Entity> entities) {
+				handleBasicSocializeResult(entities);
+			}
+			
+			@Override
+			public void onError(SocializeException error) {
+				handleError(error);
+			}
+		});
+	}
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.demo_list);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
-		setListAdapter(adapter);
+	public boolean isTextEntryRequired() {
+		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.demo.DemoActivity#getButtonText()
+	 */
+	@Override
+	public String getButtonText() {
+		return "List 50 Entities";
 	}
 }

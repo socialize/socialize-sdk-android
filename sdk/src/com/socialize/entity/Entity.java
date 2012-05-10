@@ -92,4 +92,8 @@ public class Entity extends SocializeObject implements Serializable {
 		e.setName(name);
 		return e;
 	}
+	@Override
+	public String toString() {
+		return getDisplayName();
+	}
 }

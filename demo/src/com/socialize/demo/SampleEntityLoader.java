@@ -1,4 +1,4 @@
-package com.socialize.demo.examples;
+package com.socialize.demo;
 
 import android.app.Activity;
 import android.content.Context;

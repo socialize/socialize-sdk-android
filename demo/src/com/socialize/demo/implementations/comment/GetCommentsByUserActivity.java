@@ -19,29 +19,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo;
+package com.socialize.demo.implementations.comment;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+import com.socialize.CommentUtils;
+import com.socialize.UserUtils;
+import com.socialize.demo.DemoActivity;
+import com.socialize.entity.Comment;
+import com.socialize.entity.ListResult;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.comment.CommentListListener;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class DemoUtils {
-	public static void showErrorDialog(Context context, Exception e) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle("Oops!");
-		builder.setMessage("An error occurred.  Check the device logs (logcat)\n\n[" + e.getMessage() + "]");
-		builder.setPositiveButton("OK", new OnClickListener() {
+public class GetCommentsByUserActivity extends DemoActivity {
+
+	/* (non-Javadoc)
+	 * @see com.socialize.demo.DemoActivity#executeDemo()
+	 */
+	@Override
+	public void executeDemo(String text) {
+		
+		CommentUtils.getCommentsByUser(this, UserUtils.getCurrentUser(this), 0, 50, new CommentListListener() {
+			
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
+			public void onList(ListResult<Comment> comments) {
+				handleSocializeResult(comments);
+			}
+			
+			@Override
+			public void onError(SocializeException error) {
+				handleError(error);
 			}
 		});
-		builder.create().show();
+	}
+	
+	@Override
+	public boolean isTextEntryRequired() {
+		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.demo.DemoActivity#getButtonText()
+	 */
+	@Override
+	public String getButtonText() {
+		return "List 50 Comments for Current User";
 	}
 }
