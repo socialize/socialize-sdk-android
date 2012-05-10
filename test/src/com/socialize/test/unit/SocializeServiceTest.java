@@ -924,16 +924,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		setupDefaultMocks();
 
-		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
-
-		authProviderData.setAuthProviderInfo(info);
-
-		SocializeServiceImpl socialize = new SocializeServiceImpl() {
-			@Override
-			protected SocializeAuthProviderInfo newSocializeAuthProviderInfo() {
-				return info;
-			}
-		};
+		SocializeServiceImpl socialize = new SocializeServiceImpl() ;
 
 		userSystem.authenticate(getActivity(), key, secret, listener, socialize);
 		
@@ -1070,24 +1061,25 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 	@UsesMocks({ SocializeAuthListener.class })
 	public void testAuthenticateWithContextAndListener() {
+		
+		SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
+
 		setupDefaultMocks();
 
-		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
-		authProviderData.setAuthProviderInfo(info);
+		SocializeServiceImpl socialize = new SocializeServiceImpl() ;
 
-		SocializeAuthListener mockListener = AndroidMock.createMock(SocializeAuthListener.class);
-
+		userSystem.authenticate(getActivity(), listener, socialize);
+		
 		replayDefaultMocks();
-		AndroidMock.replay(mockListener);
 
-		PublicSocialize socializeService = newSocializeServiceForAuth();
-		// we have to call this method to initialize the service object
-		socializeService.init(getContext(), container);
-		socializeService.authenticate(getContext(), mockListener);
+		socialize.init(getContext(), container);
 
-		verifyDefaultMocks();
-		assertEquals(getContext(), getResult(0));
-		assertEquals(mockListener, getResult(4));
+		assertTrue(socialize.isInitialized());
+
+		socialize.authenticate(getActivity(), listener);
+
+		verifyDefaultMocks();		
+		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -1141,34 +1133,32 @@ public class SocializeServiceTest extends SocializeActivityTest {
 	}
 
 	public void testAuthenticateWithExtraParamsCallAuthenticate() throws SocializeException {
-
+		
 		SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
 
 		final String key = "foo", secret = "bar";
 		final String appId = "foobar";
-
+		
 		setupDefaultMocks();
 		
 		FacebookAuthProviderInfo fb = new FacebookAuthProviderInfo();
 		fb.setAppId(appId);
 
-		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
 
-		authProviderData.setAuthProviderInfo(fb);
+		SocializeServiceImpl socialize = new SocializeServiceImpl() ;
 
-		SocializeServiceImpl socialize = new SocializeServiceImpl();
-
-		userSystem.authenticate(getActivity(), key, secret, authProviderData, listener, socialize, true);
-
+		userSystem.authenticate(getActivity(), key, secret, fb, listener, socialize);
+		
 		replayDefaultMocks();
 
 		socialize.init(getContext(), container);
 
 		assertTrue(socialize.isInitialized());
-		
+
 		socialize.authenticate(getActivity(), key, secret, fb, listener);
 
-		verifyDefaultMocks();
+		verifyDefaultMocks();			
+		
 	}
 
 	public void testAuthenticateKnownUser() throws SocializeException {
@@ -1178,20 +1168,9 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		final String authProviderId = "foobar", authUserId3rdParty = "foobar_user", authToken3rdParty = "foobar_token", secret3rdParty = "foobar_secret";
 
 		setupDefaultMocks();
-
-		AndroidMock.expect(authProviderDataFactory.getBean()).andReturn(authProviderData);
-		
-		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(consumerKey);
-		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET)).andReturn(consumerSecret);
 		
 		FacebookAuthProviderInfo fb = new FacebookAuthProviderInfo();
 		fb.setAppId(authProviderId);
-
-		authProviderData.setToken3rdParty(authToken3rdParty);
-		authProviderData.setUserId3rdParty(authUserId3rdParty);
-		authProviderData.setSecret3rdParty(secret3rdParty);
-		authProviderData.setAuthProviderInfo(fb);
-		
 
 		DefaultUserProviderCredentials creds = new DefaultUserProviderCredentials();
 		creds.setAccessToken(authToken3rdParty);

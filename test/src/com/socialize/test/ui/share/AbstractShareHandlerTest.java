@@ -55,9 +55,6 @@ public class AbstractShareHandlerTest extends SocializeActivityTest {
 		AndroidMock.expect(action.getPropagationInfoResponse()).andReturn(response);
 		AndroidMock.expect(response.getPropagationInfo(shareType)).andReturn(info);
 		
-		listener.onBeforePost(context, SocialNetwork.FACEBOOK, null);
-		listener.onAfterPost(context, SocialNetwork.FACEBOOK);
-		
 		AndroidMock.replay(action, response, listener);
 		
 		AbstractShareHandler handler = new AbstractShareHandler() {
