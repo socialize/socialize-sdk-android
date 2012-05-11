@@ -57,8 +57,6 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 
 	public void testAuthPanelViewRenderAndClick() throws Throwable {
 		
-		Socialize.getSocialize().destroy(true);
-
 		FacebookAuthClickListener mockFBListener = new FacebookAuthClickListener() {
 			@Override
 			public void onClick(View view) {
