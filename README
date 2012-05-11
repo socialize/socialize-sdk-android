@@ -12,6 +12,10 @@ Quick Start Guide
 Release Notes 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+v1.6.8
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[bug] Duplicate file (socialize.properties) error on some platforms
+
 v1.6.7
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [bug] Namespace conflict on Google Gdata libraries

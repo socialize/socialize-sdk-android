@@ -65,7 +65,7 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		
 		try {
 			// Load the file manually...
-			in = Thread.currentThread().getContextClassLoader().getResourceAsStream(config.getDefaultPropertiesFileName()); 
+			in = Thread.currentThread().getContextClassLoader().getResourceAsStream(SocializeConfig.DEFAULT_PROPERTIES_PATH); 
 			
 			props.load(in);
 			
@@ -113,7 +113,7 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		final String noFile = "does.not.exist";
 		ResourceLocator mockProvider = AndroidMock.createMock(ResourceLocator.class);
 		
-		AndroidMock.expect(mockProvider.locateInClassPath(getActivity(), noFile)).andReturn(null);
+		AndroidMock.expect(mockProvider.locateInClassPath(getActivity(), SocializeConfig.DEFAULT_PROPERTIES_PATH)).andReturn(null);
 		AndroidMock.expect(mockProvider.locateInAssets(getActivity(), noFile)).andReturn(null);
 		
 		AndroidMock.replay(mockProvider);
@@ -166,7 +166,7 @@ public class SocializeConfigTest extends SocializeActivityTest {
 		
 		ResourceLocator mockProvider = AndroidMock.createMock(ResourceLocator.class);
 		
-		AndroidMock.expect(mockProvider.locateInClassPath(getActivity(), noFile)).andReturn(primary);
+		AndroidMock.expect(mockProvider.locateInClassPath(getActivity(), SocializeConfig.DEFAULT_PROPERTIES_PATH)).andReturn(primary);
 		AndroidMock.expect(mockProvider.locateInAssets(getActivity(), noFile)).andReturn(secondary);
 		
 		AndroidMock.replay(primary);
