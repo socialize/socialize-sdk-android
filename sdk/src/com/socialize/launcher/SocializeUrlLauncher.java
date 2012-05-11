@@ -112,7 +112,6 @@ public class SocializeUrlLauncher extends BaseLauncher implements UrlLauncher {
 		}
 		
 		return false;
-
 	}
 	
 	protected void handleCloseEvent(Activity context) {

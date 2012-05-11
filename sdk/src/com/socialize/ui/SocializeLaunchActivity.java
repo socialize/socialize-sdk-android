@@ -37,6 +37,8 @@ import com.socialize.api.event.EventSystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.error.SocializeException;
+import com.socialize.launcher.AsyncLauncher;
+import com.socialize.launcher.LaunchListener;
 import com.socialize.launcher.LaunchManager;
 import com.socialize.launcher.LaunchTask;
 import com.socialize.launcher.Launcher;
@@ -186,31 +188,41 @@ public class SocializeLaunchActivity extends Activity {
 						if(launchManager != null) {
 							launcher = launchManager.getLaucher(action);
 							if(launcher != null) {
-								
-								if(launcher.getLaunchListener() != null) {
-									launcher.getLaunchListener().onBeforeLaunch(SocializeLaunchActivity.this, extras);
-								}
-								
-								boolean launched = launcher.launch(SocializeLaunchActivity.this, extras);
-								
-								if(launcher.getLaunchListener() != null) {
-									launcher.getLaunchListener().onAfterLaunch(launched);
-								}
-								
-								if(launched && !launcher.shouldFinish()) {
-									return; // Don't finish
-								}
+								new AsyncLauncher(SocializeLaunchActivity.this, launcher, extras, new LaunchListener() {
+									
+									@Override
+									public void onError(Exception error) {
+										handleError(error);
+									}
+									
+									@Override
+									public void onAfterLaunch(boolean launched) {
+										if(!launched || launcher.shouldFinish()) {
+											finish();
+										}
+									}
+								}).execute();
+							}
+							else {
+								finish();
 							}
 						}
+						else {
+							finish();
+						}
+					}
+					else {
+						finish();
 					}
 				}	
-				
-				finish();
+				else {
+					finish();
+				}
 			}
 		};
 	}
 	
-	protected void handleError(SocializeException error) {
+	protected void handleError(Exception error) {
 		error.printStackTrace();
 		if(errorHandler != null) {
 			errorHandler.handleError(SocializeLaunchActivity.this, error);

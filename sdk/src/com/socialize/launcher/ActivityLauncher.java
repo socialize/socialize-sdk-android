@@ -57,14 +57,10 @@ public abstract class ActivityLauncher extends BaseLauncher {
 		}
 		
 		if(activityClass != null) {
-			
-			onBeforeLaunch(context, data, activityClass);
-			
 			Intent intent = newIntent(context, activityClass);
 			intent.putExtras(data);
 			handleIntent(context, intent, data);
 			context.startActivity(intent);
-			
 			return true;
 		}
 		
@@ -88,6 +84,4 @@ public abstract class ActivityLauncher extends BaseLauncher {
 	
 	public abstract Class<?>[] getActivityClasses();
 	
-	// Subclasses override
-	public void onBeforeLaunch(Activity context, Bundle data, Class<?> activityClass) {};
 }

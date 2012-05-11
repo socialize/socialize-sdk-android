@@ -28,7 +28,6 @@ import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.entity.EntitySystem;
 import com.socialize.entity.Entity;
-import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
 import com.socialize.notifications.NotificationAuthenticator;
 import com.socialize.ui.SocializeEntityLoader;
@@ -52,7 +51,7 @@ public class EntityLauncher extends BaseLauncher {
 	public boolean launch(final Activity context, Bundle data) {
 		
 		if(entityLoaderUtils != null) {
-			SocializeEntityLoader entityLoader = entityLoaderUtils.initEntityLoader();
+			final SocializeEntityLoader entityLoader = entityLoaderUtils.initEntityLoader();
 			
 			if(entityLoader != null) {
 				
@@ -65,7 +64,7 @@ public class EntityLauncher extends BaseLauncher {
 						Entity entity = entitySystem.getEntitySynchronous(session, id);
 						return loadEntity(context, entityLoader, entity);
 					}
-					catch (SocializeException e) {
+					catch (Exception e) {
 						handleError("Failed to load entity", e);
 					}
 				}

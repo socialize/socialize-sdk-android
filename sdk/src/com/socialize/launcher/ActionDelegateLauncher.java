@@ -93,16 +93,6 @@ public class ActionDelegateLauncher extends BaseLauncher {
 
 		return actionLauncher;
 	}
-	
-	@Override
-	public LaunchListener getLaunchListener() {
-		return getLauncher().getLaunchListener();
-	}
-
-	@Override
-	public void setLaunchListener(LaunchListener listener) {
-		getLauncher().setLaunchListener(listener);
-	}
 
 	// Mockable
 	protected SocializeConfig getConfig() {

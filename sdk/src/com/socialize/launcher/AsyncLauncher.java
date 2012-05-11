@@ -22,36 +22,56 @@
 package com.socialize.launcher;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+
 /**
- * Defines the logic for launching a launch action.
  * @author Jason Polites
+ *
  */
-public interface Launcher {
-
-	/**
-	 * Launches an activity (or anything really) based on the bundle of data provided.
-	 * @param context
-	 * @param data
-	 */
-	public boolean launch(Activity context, Bundle data);
-
-	/**
-	 * Handles the result from the launch in the activity callback
-	 * @param context
-	 * @param requestCode
-	 * @param resultCode
-	 * @param returnedIntent The intent returned from the activity.
-	 * @param originalIntent The original intent that launched the activity.
-	 */
-	public void onResult(Activity context, int requestCode, int resultCode, Intent returnedIntent, Intent originalIntent);
-
-	/**
-	 * Returns true if the launcher activity should call finish after launch.
-	 * @return
-	 */
-	public boolean shouldFinish();
+public class AsyncLauncher extends AsyncTask<Void, Void, Boolean> {
 	
+	private Bundle extras;
+	private LaunchListener listener;
+	private Activity context;
+	private Launcher launcher;
+	
+	private Exception error;
+	
+
+	public AsyncLauncher(Activity context, Launcher launcher, Bundle extras, LaunchListener listener) {
+		super();
+		this.launcher = launcher;
+		this.extras = extras;
+		this.listener = listener;
+		this.context = context;
+	}
+
+	/* (non-Javadoc)
+	 * @see android.os.AsyncTask#doInBackground(Params[])
+	 */
+	@Override
+	protected Boolean doInBackground(Void... params) {
+		try {
+			return launcher.launch(context, extras);
+		}
+		catch (Exception e) {
+			error = e;
+		}
+		
+		return false;
+	}
+
+	@Override
+	protected void onPostExecute(Boolean result) {
+		if(listener != null) {
+			if(error != null) {
+				listener.onError(error);
+			}
+			else {
+				listener.onAfterLaunch(result);
+			}
+		}
+	}
 }

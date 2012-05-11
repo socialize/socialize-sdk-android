@@ -38,7 +38,7 @@ public interface EntitySystem {
 	public void addEntity(SocializeSession session, Entity entity, EntityListener listener);
 	
 	/**
-	 * Gets a socialize entity.  This call is SYNCHRONOUS!
+	 * Gets a socialize entity.  This call is SYNCHRONOUS!  Do not call from the main UI thread.
 	 * @param session
 	 * @param id
 	 * @throws SocializeException
