@@ -54,4 +54,6 @@ public interface Launcher {
 	 */
 	public boolean shouldFinish();
 	
+	public boolean isAsync();
+	
 }

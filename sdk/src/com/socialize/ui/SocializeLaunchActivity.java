@@ -188,20 +188,29 @@ public class SocializeLaunchActivity extends Activity {
 						if(launchManager != null) {
 							launcher = launchManager.getLaucher(action);
 							if(launcher != null) {
-								new AsyncLauncher(SocializeLaunchActivity.this, launcher, extras, new LaunchListener() {
-									
-									@Override
-									public void onError(Exception error) {
-										handleError(error);
-									}
-									
-									@Override
-									public void onAfterLaunch(boolean launched) {
-										if(!launched || launcher.shouldFinish()) {
-											finish();
+								
+								if(launcher.isAsync()) {
+									new AsyncLauncher(SocializeLaunchActivity.this, launcher, extras, new LaunchListener() {
+										
+										@Override
+										public void onError(Exception error) {
+											handleError(error);
 										}
+										
+										@Override
+										public void onAfterLaunch(boolean launched) {
+											if(!launched || launcher.shouldFinish()) {
+												finish();
+											}
+										}
+									}).execute();
+								}
+								else {
+									boolean launched = launcher.launch(SocializeLaunchActivity.this, extras);
+									if(!launched || launcher.shouldFinish()) {
+										finish();
 									}
-								}).execute();
+								}
 							}
 							else {
 								finish();

@@ -142,6 +142,11 @@ public class SocializeUrlLauncher extends BaseLauncher implements UrlLauncher {
 		return false;
 	}
 	
+	@Override
+	public boolean isAsync() {
+		return false;
+	}
+	
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
 	}

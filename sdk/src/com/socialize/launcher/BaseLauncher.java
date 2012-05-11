@@ -44,4 +44,11 @@ public abstract class BaseLauncher implements Launcher {
 	public boolean shouldFinish() {
 		return true;
 	}
+
+	@Override
+	public boolean isAsync() {
+		return true;
+	}
+	
+	
 }

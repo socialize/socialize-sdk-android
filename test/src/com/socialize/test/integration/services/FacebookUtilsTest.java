@@ -135,12 +135,12 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onError(SocializeException error) {
 				error.printStackTrace();
-				fail();
+				latch.countDown();
 			}
 			
 			@Override
 			public void onCancel() {
-				fail();
+				latch.countDown();
 			}
 			
 			@Override
@@ -152,7 +152,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onAuthFail(SocializeException error) {
 				error.printStackTrace();
-				fail();
+				latch.countDown();
 			}
 		});
 		
