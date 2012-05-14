@@ -357,21 +357,6 @@
 		<constructor-arg ref="shareProvider"/>
 		<property name="logger" ref="logger"/>
 		<property name="shareHandlers" ref="shareHandlers"/>
-		
-		<!-- 
-		<property name="sharers">
-			<map>
-				<entry>
-					<key value="facebook"/>
-					<value ref="facebookSharer"/>
-				</entry>
-				<entry>
-					<key value="twitter"/>
-					<value ref="twitterSharer"/>
-				</entry>				
-			</map>
-		</property>	
-		 -->	
 	</bean>
 	
 	<bean id="emailShareHandler" class="com.socialize.share.EmailShareHandler">

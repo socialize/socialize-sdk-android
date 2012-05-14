@@ -21,7 +21,6 @@
  */
 package com.socialize.ui.share;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -39,7 +38,6 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
-import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
@@ -47,89 +45,58 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
-import com.socialize.networks.facebook.FacebookSignInCell;
-import com.socialize.networks.twitter.TwitterSignInCell;
-import com.socialize.ui.auth.AnonymousCell;
+import com.socialize.networks.facebook.FacebookShareCell;
+import com.socialize.networks.twitter.TwitterShareCell;
+import com.socialize.ui.dialog.DialogPanelView;
 import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.view.ClickableSectionCell;
 import com.socialize.ui.view.SocializeButton;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
-import com.socialize.view.BaseView;
 
 /**
  * @author Jason Polites
  */
-public class SharePanelView extends BaseView {
+public class SharePanelView extends DialogPanelView {
 
-	private ShareDialogListener listener;
+	private ShareDialogListener shareDialogListener;
 	private SocialNetworkListener socialNetworkListener;
-	private Dialog dialog;
-	private SocializeConfig config;
 	private Colors colors;
 	
 	private SocializeButton continueButton;
+	private SocializeButton cancelButton;
 	
 	private int displayOptions;
 	
 	private Entity entity;
 	
-	public SharePanelView(Context context, SocialNetworkListener socialNetworkListener, ShareDialogListener listener, Dialog dialog, int displayOptions) {
-		this(context);
-		this.listener = listener;
+	public SharePanelView(Context context, Entity entity, ShareDialogListener listener, int displayOptions) {
+		this(context, entity, null, listener, displayOptions);
+	}
+	
+	public SharePanelView(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener listener, int displayOptions) {
+		super(context);
+		this.shareDialogListener = listener;
 		this.socialNetworkListener = socialNetworkListener;
-		this.dialog = dialog;
 		this.displayOptions = displayOptions;
-	}
-	
-	public SharePanelView(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener listener, Dialog dialog, int displayOptions) {
-		this(context, socialNetworkListener, listener, dialog, displayOptions);
 		this.entity = entity;
-	}
-	
-	public SharePanelView(Context context, Entity entity, SocialNetworkListener socialNetworkListener, Dialog dialog, int displayOptions) {
-		this(context, entity, socialNetworkListener, null, dialog, displayOptions);
-	}
-	
-	public SharePanelView(Context context, Entity entity, Dialog dialog, int displayOptions) {
-		this(context, entity, null, null, dialog, displayOptions);
-	}
-	
-	public SharePanelView(Context context, Entity entity, ShareDialogListener listener, Dialog dialog, int displayOptions) {
-		this(context, entity, null, listener, dialog, displayOptions);
-	}
-	
-	public SharePanelView(Context context, ShareDialogListener listener, Dialog dialog, int displayOptions) {
-		this(context);
-		this.listener = listener;
-		this.dialog = dialog;
-		this.displayOptions = displayOptions;
 	}
 	
 	public SharePanelView(Context context) {
-		this(context, null, ShareUtils.SOCIAL);
+		this(context, null, null, null, ShareUtils.SOCIAL);
 	}
 	
-	public SharePanelView(Context context, Entity entity, int displayOptions) {
-		super(context);
-		this.displayOptions = displayOptions;
-		this.entity = entity;
-	}
-	
-	private IBeanFactory<FacebookSignInCell> facebookSignInCellFactory;
-	private IBeanFactory<TwitterSignInCell> twitterSignInCellFactory;
+	private IBeanFactory<FacebookShareCell> facebookShareCellFactory;
+	private IBeanFactory<TwitterShareCell> twitterShareCellFactory;
 	private IBeanFactory<EmailCell> emailCellFactory;
 	private IBeanFactory<SMSCell> smsCellFactory;
-	
-	@SuppressWarnings("unused")
-	private IBeanFactory<AnonymousCell> anonCellFactory; 
 	
 	private Drawables drawables;
 	private DisplayUtils displayUtils;
 	
-	private FacebookSignInCell facebookSignInCell;
-	private TwitterSignInCell twitterSignInCell;
+	private FacebookShareCell facebookShareCell;
+	private TwitterShareCell twitterShareCell;
 	
 	private EmailCell emailCell;
 	private SMSCell smsCell;
@@ -162,7 +129,7 @@ public class SharePanelView extends BaseView {
 		}
 		
 		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-		masterParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		masterParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
 		
 		setLayoutParams(masterParams);
 		setOrientation(VERTICAL);
@@ -178,14 +145,14 @@ public class SharePanelView extends BaseView {
 		View continueButtonLayout = makeContinueButton();
 		View header = makeHeaderView(headerHeight, headerRadius);
 		
-		RelativeLayout.LayoutParams contentParams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		RelativeLayout.LayoutParams contentParams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		contentParams.setMargins(padding, padding, padding, 0);
 		contentParams.addRule(RelativeLayout.CENTER_IN_PARENT);
 		
 		LinearLayout contentLayout = new LinearLayout(getContext());
 		contentLayout.setPadding(padding, padding, padding, 0);
 		contentLayout.setLayoutParams(contentParams);
-		contentLayout.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+		contentLayout.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.TOP);
 		
 		LayoutParams socialNetworkButtonParams = null;
 		LayoutParams emailSMSButtonParams = null;
@@ -220,12 +187,12 @@ public class SharePanelView extends BaseView {
 			contentLayout.addView(shareBadge);
 		}
 		
-		if(facebookSignInCell != null || twitterSignInCell != null) {
-			if(facebookSignInCell != null) {
-				socialNetworkButtonLayout.addView(facebookSignInCell);
+		if(facebookShareCell != null || twitterShareCell != null) {
+			if(facebookShareCell != null) {
+				socialNetworkButtonLayout.addView(facebookShareCell);
 			}
-			if(twitterSignInCell != null) {
-				socialNetworkButtonLayout.addView(twitterSignInCell);
+			if(twitterShareCell != null) {
+				socialNetworkButtonLayout.addView(twitterShareCell);
 			}
 			contentLayout.addView(socialNetworkButtonLayout);
 		}
@@ -246,7 +213,6 @@ public class SharePanelView extends BaseView {
 		addView(container);
 		addView(continueButtonLayout);
 		
-		toggleContinueButton();
 		updateNetworkButtonState();
 	}
 	
@@ -263,7 +229,6 @@ public class SharePanelView extends BaseView {
 			buttonLayout.setLayoutParams(buttonParams);
 			buttonLayout.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);		
 			
-			continueButton.setEnabled(false);
 			continueButton.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -272,22 +237,31 @@ public class SharePanelView extends BaseView {
 					SocialNetwork[] networks = null;
 					
 					// Get the number of networks enabled
-					if(facebookSignInCell != null && facebookSignInCell.isToggled()) {
-						if(twitterSignInCell != null && twitterSignInCell.isToggled()) {
+					if(facebookShareCell != null && facebookShareCell.isToggled()) {
+						if(twitterShareCell != null && twitterShareCell.isToggled()) {
 							networks = new SocialNetwork[]{SocialNetwork.FACEBOOK, SocialNetwork.TWITTER};
 						}
 						else {
 							networks = new SocialNetwork[]{SocialNetwork.FACEBOOK};
 						}
 					}
-					else if(twitterSignInCell != null && twitterSignInCell.isToggled()) {
+					else if(twitterShareCell != null && twitterShareCell.isToggled()) {
 						networks = new SocialNetwork[]{SocialNetwork.TWITTER};
 					}
 					
-					listener.onContinue(dialog, networks);
+					shareDialogListener.onContinue(dialog, networks);
 				}
 			});
 			
+			cancelButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					dialog.dismiss();
+					shareDialogListener.onCancel(dialog);
+				}
+			});
+			
+			buttonLayout.addView(cancelButton);
 			buttonLayout.addView(continueButton);
 		}
 		
@@ -320,34 +294,34 @@ public class SharePanelView extends BaseView {
 	protected void makeShareButtons() {
 		LayoutParams cellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		
-		boolean fbOK = getSocialize().isSupported(AuthProviderType.FACEBOOK) && ((displayOptions & ShareUtils.FACEBOOK) != 0) && facebookSignInCellFactory != null;
-		boolean twOK = getSocialize().isSupported(AuthProviderType.TWITTER) && ((displayOptions & ShareUtils.TWITTER) != 0) && twitterSignInCellFactory != null;
+		boolean fbOK = getSocialize().isSupported(AuthProviderType.FACEBOOK) && ((displayOptions & ShareUtils.FACEBOOK) != 0) && facebookShareCellFactory != null;
+		boolean twOK = getSocialize().isSupported(AuthProviderType.TWITTER) && ((displayOptions & ShareUtils.TWITTER) != 0) && twitterShareCellFactory != null;
 		boolean emailOK = (entity != null && (displayOptions & ShareUtils.EMAIL) != 0) && getSocialize().canShare(getContext(), ShareType.EMAIL) && emailCellFactory != null;
 		boolean smsOK = (entity != null && (displayOptions & ShareUtils.SMS) != 0) && getSocialize().canShare(getContext(), ShareType.SMS) && smsCellFactory != null;
 		
 		if(fbOK) {
-			facebookSignInCell = facebookSignInCellFactory.getBean(this);
+			facebookShareCell = facebookShareCellFactory.getBean();
 			
-			if(facebookSignInCell != null) {
-				facebookSignInCell.setLayoutParams(cellParams);
-				facebookSignInCell.setPadding(padding, padding, padding, padding);
+			if(facebookShareCell != null) {
+				facebookShareCell.setLayoutParams(cellParams);
+				facebookShareCell.setPadding(padding, padding, padding, padding);
 				
 				if(twOK) {
-					twitterSignInCell = twitterSignInCellFactory.getBean(this);
-					twitterSignInCell.setPadding(padding, padding, padding, padding);
-					twitterSignInCell.setLayoutParams(cellParams);
+					twitterShareCell = twitterShareCellFactory.getBean();
+					twitterShareCell.setPadding(padding, padding, padding, padding);
+					twitterShareCell.setLayoutParams(cellParams);
 					
-					facebookSignInCell.setBackgroundData(fbRadii, fbStroke, Color.BLACK);
-					twitterSignInCell.setBackgroundData(twRadii, twStroke, Color.BLACK);
+					facebookShareCell.setBackgroundData(fbRadii, fbStroke, Color.BLACK);
+					twitterShareCell.setBackgroundData(twRadii, twStroke, Color.BLACK);
 				}
 			}
 		}
 		else if(twOK) {
-			twitterSignInCell = twitterSignInCellFactory.getBean();
+			twitterShareCell = twitterShareCellFactory.getBean();
 			
-			if(twitterSignInCell != null) {
-				twitterSignInCell.setLayoutParams(cellParams);
-				twitterSignInCell.setPadding(padding, padding, padding, padding);
+			if(twitterShareCell != null) {
+				twitterShareCell.setLayoutParams(cellParams);
+				twitterShareCell.setPadding(padding, padding, padding, padding);
 			}
 		}
 		
@@ -377,12 +351,12 @@ public class SharePanelView extends BaseView {
 			}
 		}		
 		
-		if(facebookSignInCell != null) {
-			facebookSignInCell.setAuthListener(getAuthClickListener(facebookSignInCell, SocialNetwork.FACEBOOK));
+		if(facebookShareCell != null) {
+			facebookShareCell.setAuthListener(getAuthClickListener(facebookShareCell, SocialNetwork.FACEBOOK));
 		}
 		
-		if(twitterSignInCell != null) {
-			twitterSignInCell.setAuthListener(getAuthClickListener(twitterSignInCell, SocialNetwork.TWITTER));
+		if(twitterShareCell != null) {
+			twitterShareCell.setAuthListener(getAuthClickListener(twitterShareCell, SocialNetwork.TWITTER));
 		}
 		
 		if(emailCell != null) {
@@ -451,21 +425,21 @@ public class SharePanelView extends BaseView {
 	}
 	
 	public void updateNetworkButtonState() {
-		if(facebookSignInCell != null) {
-			facebookSignInCell.setToggled(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) );
+		if(facebookShareCell != null) {
+			facebookShareCell.setToggled(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) );
 		}
 		
-		if(twitterSignInCell != null) {
-			twitterSignInCell.setToggled(getSocialize().isAuthenticated(AuthProviderType.TWITTER));
+		if(twitterShareCell != null) {
+			twitterShareCell.setToggled(getSocialize().isAuthenticated(AuthProviderType.TWITTER));
 		}
 	}
 
-	public void setFacebookSignInCellFactory(IBeanFactory<FacebookSignInCell> facebookSignInCellFactory) {
-		this.facebookSignInCellFactory = facebookSignInCellFactory;
+	public void setFacebookShareCellFactory(IBeanFactory<FacebookShareCell> facebookSignInCellFactory) {
+		this.facebookShareCellFactory = facebookSignInCellFactory;
 	}
 
-	public void setTwitterSignInCellFactory(IBeanFactory<TwitterSignInCell> twitterSignInCellFactory) {
-		this.twitterSignInCellFactory = twitterSignInCellFactory;
+	public void setTwitterShareCellFactory(IBeanFactory<TwitterShareCell> twitterSignInCellFactory) {
+		this.twitterShareCellFactory = twitterSignInCellFactory;
 	}
 
 	public void setDrawables(Drawables drawables) {
@@ -476,20 +450,12 @@ public class SharePanelView extends BaseView {
 		this.displayUtils = deviceUtils;
 	}
 
-	public FacebookSignInCell getFacebookSignInCell() {
-		return facebookSignInCell;
+	public FacebookShareCell getFacebookShareCell() {
+		return facebookShareCell;
 	}
 
-	public TwitterSignInCell getTwitterSignInCell() {
-		return twitterSignInCell;
-	}
-
-	public void setAnonCellFactory(IBeanFactory<AnonymousCell> anonCellFactory) {
-		this.anonCellFactory = anonCellFactory;
-	}
-	
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
+	public TwitterShareCell getTwitterShareCell() {
+		return twitterShareCell;
 	}
 
 	public void setColors(Colors colors) {
@@ -500,10 +466,14 @@ public class SharePanelView extends BaseView {
 		this.continueButton = continueButton;
 	}
 	
-//	public void setCancelButton(SocializeButton cancelButton) {
-//		this.cancelButton = cancelButton;
-//	}
-	
+	public void setCancelButton(SocializeButton cancelButton) {
+		this.cancelButton = cancelButton;
+	}
+
+	public void setShareDialogListener(ShareDialogListener shareDialogListener) {
+		this.shareDialogListener = shareDialogListener;
+	}
+
 	public void setEmailCellFactory(IBeanFactory<EmailCell> emailCellFactory) {
 		this.emailCellFactory = emailCellFactory;
 	}
@@ -518,17 +488,6 @@ public class SharePanelView extends BaseView {
 	
 	public void setEntity(Entity entity) {
 		this.entity = entity;
-	}
-
-	public void toggleContinueButton() {
-		if(continueButton != null) {
-			if(config.isAllowAnonymousUser()) {
-				continueButton.setEnabled(true);
-			}
-			else {
-				continueButton.setEnabled(twitterSignInCell.isToggled() || facebookSignInCell.isToggled());
-			}
-		}
 	}
 
 	protected SocializeAuthListener getAuthClickListener(final ClickableSectionCell cell, final SocialNetwork network) {
@@ -548,7 +507,6 @@ public class SharePanelView extends BaseView {
 			@Override
 			public void onAuthSuccess(SocializeSession session) {
 				cell.setToggled(!cell.isToggled());
-				toggleContinueButton();
 				updateNetworkButtonState();
 			}
 			

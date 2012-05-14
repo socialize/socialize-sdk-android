@@ -33,7 +33,7 @@ import com.socialize.ui.comment.CommentDetailActivity;
 import com.socialize.ui.comment.CommentEditField;
 import com.socialize.ui.comment.CommentEntryView;
 import com.socialize.ui.dialog.AlertDialogFactory;
-import com.socialize.ui.dialog.DialogFactory;
+import com.socialize.ui.dialog.SimpleDialogFactory;
 import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.LoadingListView;
 import com.socialize.ui.view.SocializeButton;
@@ -169,7 +169,7 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 			}
 		};
 		
-		final DialogFactory<AlertDialog> dialogFactory = new AlertDialogFactory() {
+		final SimpleDialogFactory<AlertDialog> dialogFactory = new AlertDialogFactory() {
 			@Override
 			public AlertDialog show(Context context, String title, String message) {
 				addResult(0, title);
@@ -216,7 +216,7 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 					System.err.println("AppUtils Proxy is null!!");
 				}	
 				
-				ProxyObject<DialogFactory<AlertDialog>> alertDialogFactoryProxy = container.getProxy("alertDialogFactory");
+				ProxyObject<SimpleDialogFactory<AlertDialog>> alertDialogFactoryProxy = container.getProxy("alertDialogFactory");
 				if(proxy != null) {
 					alertDialogFactoryProxy.setDelegate(dialogFactory);
 				}

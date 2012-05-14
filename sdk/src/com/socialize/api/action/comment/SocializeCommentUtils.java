@@ -28,24 +28,29 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.action.SocializeActionUtilsBase;
 import com.socialize.entity.Entity;
 import com.socialize.entity.User;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
+import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.ui.dialog.DialogFactory;
+import com.socialize.ui.auth.AuthDialogFactory;
+import com.socialize.ui.auth.AuthDialogListener;
+import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.share.DialogFlowController;
+import com.socialize.ui.share.ShareDialogFactory;
 import com.socialize.ui.share.ShareDialogListener;
 import com.socialize.ui.share.SharePanelView;
 
 
 /**
  * @author Jason Polites
- *
  */
 public class SocializeCommentUtils extends SocializeActionUtilsBase implements CommentUtilsProxy {
 	
 	private CommentSystem commentSystem;
-	private DialogFactory authRequestDialogFactory;
+	private AuthDialogFactory authDialogFactory;
+	private ShareDialogFactory shareDialogFactory;
 
 	@Override
 	public void addComment(Activity context, final Entity e, final String text, final CommentAddListener listener) {
@@ -53,28 +58,63 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 		final SocializeSession session = getSocialize().getSession();
 		
 		if(isDisplayAuthDialog()) {
-			authRequestDialogFactory.show(context, new ShareDialogListener() {
+			authDialogFactory.show(context, new AuthDialogListener() {
 				
 				@Override
-				public void onShow(Dialog dialog, SharePanelView dialogView) {}
+				public void onShow(Dialog dialog, AuthPanelView dialogView) {}
 				
 				@Override
-				public void onFlowInterrupted(DialogFlowController controller) {}
-				
-				@Override
-				public boolean onContinue(Dialog dialog, SocialNetwork... networks) {
-					commentSystem.addComment(session, e, text, getDefaultShareOptions(), listener);
-					return false;
+				public void onCancel(Dialog dialog) {
+					if(listener != null) {
+						listener.onCancel();
+					}
 				}
-
+				
 				@Override
-				public void onCancel(Dialog dialog) {}
-			}, ShareUtils.FACEBOOK | ShareUtils.TWITTER);
+				public void onError(Activity context, Dialog dialog, Exception error) {
+					dialog.dismiss();
+					
+					if(listener != null) {
+						listener.onError(SocializeException.wrap(error));
+					}
+					
+					// TODO: Show error
+				}
+				
+				@Override
+				public void onAuthenticate(Activity context, Dialog dialog, SocialNetwork network) {
+					
+					dialog.dismiss();
+					
+					doCommentWithShare(context, session, e, text, listener);
+				}
+			});
 		}
 		else {
-			commentSystem.addComment(session, e, text, getDefaultShareOptions(), listener);
+			doCommentWithShare(context, session, e, text, listener);
 		}		
 	}
+	
+	protected void doCommentWithShare(Activity context, final SocializeSession session, final Entity e, final String text, final CommentAddListener listener) {
+		shareDialogFactory.show(context, e, null,  new ShareDialogListener() {
+			@Override
+			public void onShow(Dialog dialog, SharePanelView dialogView) {}
+			
+			@Override
+			public void onFlowInterrupted(DialogFlowController controller) {}
+			
+			@Override
+			public boolean onContinue(Dialog dialog, SocialNetwork... networks) {
+				ShareOptions options = new ShareOptions();
+				options.setShareLocation(session.getUser().isShareLocation());
+				options.setShareTo(networks);
+				commentSystem.addComment(session, e, text, options, listener);
+				return false;
+			}
+			@Override
+			public void onCancel(Dialog dialog) {}
+		}, ShareUtils.FACEBOOK | ShareUtils.TWITTER);
+	}	
 
 	@Override
 	public void getComment(Activity context, long id, CommentGetListener listener) {
@@ -100,9 +140,11 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 		this.commentSystem = commentSystem;
 	}
 	
-	public void setAuthRequestDialogFactory(DialogFactory authRequestDialogFactory) {
-		this.authRequestDialogFactory = authRequestDialogFactory;
+	public void setAuthDialogFactory(AuthDialogFactory authDialogFactory) {
+		this.authDialogFactory = authDialogFactory;
 	}
-	
-	
+
+	public void setShareDialogFactory(ShareDialogFactory shareDialogFactory) {
+		this.shareDialogFactory = shareDialogFactory;
+	}
 }

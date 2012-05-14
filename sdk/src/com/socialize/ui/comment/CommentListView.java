@@ -2,18 +2,16 @@ package com.socialize.ui.comment;
 
 import java.util.List;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import com.socialize.ShareUtils;
+import com.socialize.CommentUtils;
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
-import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
@@ -28,13 +26,9 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.notifications.NotificationType;
-import com.socialize.ui.dialog.DialogFactory;
 import com.socialize.ui.dialog.SimpleDialogFactory;
 import com.socialize.ui.header.SocializeHeader;
 import com.socialize.ui.image.ImageLoader;
-import com.socialize.ui.share.DialogFlowController;
-import com.socialize.ui.share.ShareDialogListener;
-import com.socialize.ui.share.SharePanelView;
 import com.socialize.ui.slider.ActionBarSliderFactory;
 import com.socialize.ui.slider.ActionBarSliderFactory.ZOrder;
 import com.socialize.ui.slider.ActionBarSliderView;
@@ -76,7 +70,7 @@ public class CommentListView extends BaseView {
 	private View field;
 	private SocializeHeader header;
 	private LoadingListView content;
-	private DialogFactory authRequestDialogFactory;
+//	private AuthDialogFactory authDialogFactory;
 	
 	private IBeanFactory<CommentEntrySliderItem> commentEntryFactory;
 	
@@ -154,7 +148,7 @@ public class CommentListView extends BaseView {
 		content = commentContentViewFactory.getBean();
 		
 		if(commentEntryFactory != null) {
-			commentEntrySliderItem = commentEntryFactory.getBean(getCommentAddListener());
+			commentEntrySliderItem = commentEntryFactory.getBean(getCommentAddButtonListener());
 		}
 		
 		boolean notificationsAvailable = appUtils.isNotificationsAvailable(getContext());		
@@ -217,7 +211,7 @@ public class CommentListView extends BaseView {
 		});
 	}
 	
-	protected CommentAddButtonListener getCommentAddListener() {
+	protected CommentAddButtonListener getCommentAddButtonListener() {
 		return new CommentAddButtonListener(getContext(), new CommentButtonCallback() {
 			
 			@Override
@@ -240,30 +234,36 @@ public class CommentListView extends BaseView {
 				text = StringUtils.replaceNewLines(text, 3, 2);
 				
 				if(networks == null || networks.length == 0) {
-					// No networks requested, ensure we are authed with at least one
-					boolean showAuth = true;
-					boolean authSupported = false;
 					
-					SocialNetwork[] all = SocialNetwork.values();
+					CommentUtils.addComment(CommentListView.this.getActivity(), entity, text, getCommentAddListener(subscribe));
 					
-					for (SocialNetwork socialNetwork : all) {
-						AuthProviderType type = AuthProviderType.valueOf(socialNetwork);
-						if(getSocialize().isSupported(type)) {
-							authSupported = true;
-							if(getSocialize().isAuthenticated(type)) {
-								showAuth = false;
-								break;
-							}
-						}
-					}
-					
-					if(showAuth && authSupported) {
-						authRequestDialogFactory.show(CommentListView.this.getContext(), getCommentAuthListener(text, shareLocation, subscribe, networks), ShareUtils.FACEBOOK | ShareUtils.TWITTER);
-					}
-					else {
-						// Post as anon
-						doPostComment(text, shareLocation, subscribe);
-					}
+//					// No networks requested, ensure we are authed with at least one
+//					boolean showAuth = true;
+//					boolean authSupported = false;
+//					
+//					SocialNetwork[] all = SocialNetwork.values();
+//					
+//					for (SocialNetwork socialNetwork : all) {
+//						AuthProviderType type = AuthProviderType.valueOf(socialNetwork);
+//						if(getSocialize().isSupported(type)) {
+//							authSupported = true;
+//							if(getSocialize().isAuthenticated(type)) {
+//								showAuth = false;
+//								break;
+//							}
+//						}
+//					}
+//					
+//					if(showAuth && authSupported) {
+//						
+//						authDialogFactory.show(CommentListView.this.getContext(), getCommentAuthListener(text, shareLocation, subscribe, networks));
+//						
+//						
+//					}
+//					else {
+//						// Post as anon
+//						doPostComment(text, shareLocation, subscribe);
+//					}
 				}
 				else {
 					doPostComment(text, shareLocation, subscribe, networks);
@@ -272,24 +272,23 @@ public class CommentListView extends BaseView {
 		});
 	}
 	
-	protected ShareDialogListener getCommentAuthListener(final String text, final boolean shareLocation, final boolean subscribe, final SocialNetwork...networks) {
-		return new ShareDialogListener() {
-			@Override
-			public void onShow(Dialog dialog, SharePanelView dialogView) {}
-			
-			@Override
-			public void onFlowInterrupted(DialogFlowController controller) {}
-			
-			@Override
-			public boolean onContinue(Dialog dialog, SocialNetwork...network) {
-				doPostComment(text, shareLocation, subscribe, networks);
-				return false;
-			}
-
-			@Override
-			public void onCancel(Dialog dialog) {}
-		};
-	}
+//	protected AuthDialogListener getCommentAuthListener(final String text, final boolean shareLocation, final boolean subscribe, final SocialNetwork...networks) {
+//		return new AuthDialogListener() {
+//			@Override
+//			public void onShow(Dialog dialog, AuthPanelView dialogView) {}
+//
+//			@Override
+//			public void onAuthenticate(Activity context, SocialNetwork network) {
+//				doPostComment(text, shareLocation, subscribe, network);
+//			}
+//
+//			@Override
+//			public void onError(Activity context, Exception error) {}
+//
+//			@Override
+//			public void onCancel(Dialog dialog) {}
+//		};
+//	}
 	
 	public void doPostComment(String text, boolean shareLocation, final boolean subscribe, SocialNetwork...networks) {
 				
@@ -305,7 +304,20 @@ public class CommentListView extends BaseView {
 		comment.setNotificationsEnabled(subscribe);
 		comment.setEntity(entity);
 		
-		getSocialize().addComment(getActivity(), comment, options, new CommentAddListener() {
+		getSocialize().addComment(getActivity(), comment, options, getCommentAddListener(subscribe));
+		
+		// Won't persist.. but that's ok.
+		SocializeSession session = getSocialize().getSession();
+		
+		if(session != null && session.getUser() != null) {
+			// TODO: set options
+//			session.getUser().setAutoPostCommentsFacebook(autoPostToFacebook);
+			session.getUser().setShareLocation(shareLocation);
+		}
+	}
+	
+	protected CommentAddListener getCommentAddListener(final boolean subscribe) {
+		return new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -356,16 +368,7 @@ public class CommentListView extends BaseView {
 					onCommentViewActionListener.onPostComment(entity);
 				}
 			}
-		});
-		
-		// Won't persist.. but that's ok.
-		SocializeSession session = getSocialize().getSession();
-		
-		if(session != null && session.getUser() != null) {
-			// TODO: set options
-//			session.getUser().setAutoPostCommentsFacebook(autoPostToFacebook);
-			session.getUser().setShareLocation(shareLocation);
-		}
+		};
 	}
 	
 	public void reload() {
@@ -790,9 +793,9 @@ public class CommentListView extends BaseView {
 		return commentAdapter.getTotalCount();
 	}
 
-	public void setAuthRequestDialogFactory(DialogFactory authRequestDialogFactory) {
-		this.authRequestDialogFactory = authRequestDialogFactory;
-	}
+//	public void setAuthDialogFactory(AuthDialogFactory authDialogFactory) {
+//		this.authDialogFactory = authDialogFactory;
+//	}
 	
 	/**
 	 * Called when the current logged in user updates their profile.

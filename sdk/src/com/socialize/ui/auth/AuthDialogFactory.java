@@ -21,13 +21,21 @@
  */
 package com.socialize.ui.auth;
 
-import com.socialize.ui.dialog.DialogFactory;
-
+import android.content.Context;
+import com.socialize.ui.dialog.AsyncDialogFactory;
 
 /**
  * @author Jason Polites
  *
  */
-public interface AuthDialogFactory extends DialogFactory<AuthPanelView> {
+public class AuthDialogFactory extends AsyncDialogFactory<AuthPanelView, AuthDialogListener>
+{
+	public void show(Context context, AuthDialogListener listener) {
+		makeDialog(context, listener);
+	}
 
+	@Override
+	public void setListener(AuthPanelView view, AuthDialogListener listener) {
+		view.setAuthDialogListener(listener);
+	}
 }

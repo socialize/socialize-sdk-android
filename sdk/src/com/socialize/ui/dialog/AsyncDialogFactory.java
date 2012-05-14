@@ -24,15 +24,15 @@ package com.socialize.ui.dialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.view.Gravity;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout.LayoutParams;
 import com.socialize.android.ioc.BeanCreationListener;
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.entity.Entity;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DisplayUtils;
 
@@ -40,13 +40,13 @@ import com.socialize.util.DisplayUtils;
  * @author Jason Polites
  *
  */
-public abstract class AsyncDialogFactory<V extends View> extends BaseDialogFactory  {
+public abstract class AsyncDialogFactory<V extends DialogPanelView, L extends SocializeDialogListener<V>> extends BaseDialogFactory  {
 	
 	private IBeanFactory<V> panelViewFactory;
 	private DisplayUtils displayUtils;
 	private Colors colors;
 	
-	protected void makeDialog(final Context context, Entity entity, final DialogFactoryListener<V> listener, Object...args) {
+	protected void makeDialog(final Context context, final L listener, Object...args) {
 		
 		final Dialog dialog = newDialog(context);
 		final ProgressDialog progress = SafeProgressDialog.show(context, "", "Please wait...");
@@ -62,6 +62,11 @@ public abstract class AsyncDialogFactory<V extends View> extends BaseDialogFacto
 			
 			@Override
 			public void onCreate(V view) {
+				
+				view.setDialog(dialog);
+				
+				setListener(view, listener);
+				
 				LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 				params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 				
@@ -74,17 +79,28 @@ public abstract class AsyncDialogFactory<V extends View> extends BaseDialogFacto
 				
 				WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
 				
+				dialog.setOnCancelListener(new OnCancelListener() {
+					@Override
+					public void onCancel(DialogInterface dlg) {
+						if(listener != null) {
+							listener.onCancel(dialog);
+						}
+					}
+				});
 				
 			    lp.copyFrom(dialog.getWindow().getAttributes());
 			    
-			    if(displayUtils.isLandscape()) {
-			    	lp.width = WindowManager.LayoutParams.FILL_PARENT;
-			    	lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-			    }
-			    else {
-			    	lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
-			    	lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-			    }
+//			    if(displayUtils.isLandscape()) {
+//			    	lp.width = WindowManager.LayoutParams.FILL_PARENT;
+//			    	lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+//			    }
+//			    else {
+//			    	lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+//			    	lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+//			    }
+			    
+			    lp.width = WindowManager.LayoutParams.FILL_PARENT;
+		    	lp.height = WindowManager.LayoutParams.FILL_PARENT;
 			    
 			    lp.horizontalMargin = 0.0f;
 			    lp.verticalMargin = 0.0f;
@@ -104,8 +120,10 @@ public abstract class AsyncDialogFactory<V extends View> extends BaseDialogFacto
 					e.printStackTrace();
 				}
 			}
-		}, entity, args);
+		}, args);
 	}
+	
+	public abstract void setListener(V view, L listener);
 
 	public void setPanelViewFactory(IBeanFactory<V> panelViewFactory) {
 		this.panelViewFactory = panelViewFactory;

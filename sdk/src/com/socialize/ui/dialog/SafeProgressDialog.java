@@ -30,6 +30,8 @@ import android.content.Context;
  */
 public class SafeProgressDialog extends ProgressDialog {
 
+	private int dismissCount = 0;
+	
 	public SafeProgressDialog(Context context, int theme) {
 		super(context, theme);
 	}
@@ -38,11 +40,21 @@ public class SafeProgressDialog extends ProgressDialog {
 		super(context);
 	}
 
+	public void dismissAll() {
+		dismissCount = 0;
+		dismiss();
+	}
+	
 	@Override
 	public void dismiss() {
 		try {
-			if(isShowing()) {
-				super.dismiss();
+			if(dismissCount <= 1) {
+				if(isShowing()) {
+					super.dismiss();
+				}
+			}
+			else {
+				dismissCount--;
 			}
 		}
 		catch (Exception ignore) {
@@ -61,12 +73,22 @@ public class SafeProgressDialog extends ProgressDialog {
 		}
 	}
 	
-	public static ProgressDialog show(Context context) {
+	public static SafeProgressDialog show(Context context, int dismissCount) {
+		return show(context, "", "Loading...", dismissCount);
+	}
+	
+	public static SafeProgressDialog show(Context context) {
 		return show(context, "", "Loading...");
 	}
 	
-	public static ProgressDialog show(Context context, String title, String message) {
-		ProgressDialog dialog = makeDialog(context);
+	public static SafeProgressDialog show(Context context, String title, String message, int dismissCount) {
+		SafeProgressDialog dlg = show(context, title, message);
+		dlg.dismissCount = dismissCount;
+		return dlg;
+	}
+	
+	public static SafeProgressDialog show(Context context, String title, String message) {
+		SafeProgressDialog dialog = makeDialog(context);
 		dialog.setTitle(title);
 		dialog.setMessage(message);
 		dialog.show();
@@ -76,7 +98,7 @@ public class SafeProgressDialog extends ProgressDialog {
 		return dialog;
 	}
 	
-	protected static ProgressDialog makeDialog(Context context) {
+	protected static SafeProgressDialog makeDialog(Context context) {
 		return new SafeProgressDialog(context);
 	}
 

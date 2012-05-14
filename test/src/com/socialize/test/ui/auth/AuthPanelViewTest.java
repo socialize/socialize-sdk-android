@@ -46,8 +46,8 @@ import com.socialize.share.ShareHandler;
 import com.socialize.test.ui.SocializeUIActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.auth.AuthPanelView;
-import com.socialize.ui.auth.EmailCell;
-import com.socialize.ui.auth.SMSCell;
+import com.socialize.ui.share.EmailCell;
+import com.socialize.ui.share.SMSCell;
 
 /**
  * @author Jason Polites
@@ -104,13 +104,9 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 		
 		final FacebookSignInCell fbButton = TestUtils.findView(view, FacebookSignInCell.class);
 		final TwitterSignInCell twButton = TestUtils.findView(view, TwitterSignInCell.class);
-		final EmailCell emailCell = TestUtils.findView(view, EmailCell.class);
-		final SMSCell smsCell = TestUtils.findView(view, SMSCell.class);
 		
 		assertNotNull(fbButton);
 		assertNotNull(twButton);
-		assertNotNull(emailCell);
-		assertNotNull(smsCell);
 		
 		runTestOnUiThread(new Runnable() {
 			@Override

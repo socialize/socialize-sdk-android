@@ -36,7 +36,7 @@ import com.socialize.demo.DemoActivity;
 import com.socialize.demo.DemoUtils;
 import com.socialize.demo.R;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.ui.auth.ShareDialogFlowController;
+import com.socialize.ui.share.DialogFlowController;
 
 
 /**
@@ -92,7 +92,7 @@ public class ShareButtonsActivity extends DemoActivity {
 					}
 					
 					@Override
-					public void onFlowInterrupted(ShareDialogFlowController controller) {
+					public void onFlowInterrupted(DialogFlowController controller) {
 						showSuccessDialog(ShareButtonsActivity.this, controller);
 					}
 
@@ -106,7 +106,7 @@ public class ShareButtonsActivity extends DemoActivity {
 	}
 
 	
-	public void showSuccessDialog(Context context, final ShareDialogFlowController controller) {
+	public void showSuccessDialog(Context context, final DialogFlowController controller) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle("Click to share");
 		builder.setMessage("Click to share");

@@ -19,33 +19,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.share;
+package com.socialize.networks.facebook;
 
 import android.content.Context;
-import com.socialize.entity.Entity;
-import com.socialize.networks.SocialNetworkListener;
-import com.socialize.ui.dialog.AsyncDialogFactory;
-
+import android.view.View;
+import com.socialize.listener.SocializeAuthListener;
 
 /**
  * @author Jason Polites
  *
  */
-public class ShareDialogFactory extends AsyncDialogFactory<SharePanelView, ShareDialogListener> {
+public class FacebookShareCell extends FacebookCell {
 
-	public void show(
-			Context context, 
-			Entity entity, 
-			SocialNetworkListener socialNetworkListener, 
-			ShareDialogListener shareDialoglistener, 
-			int displayOptions) {
-		makeDialog(context, shareDialoglistener, entity, socialNetworkListener, shareDialoglistener, displayOptions);
+	private FacebookAuthClickListener facebookAuthClickListener;
+
+	public FacebookShareCell(Context context) {
+		super(context);
 	}
-
-	@Override
-	public void setListener(SharePanelView view, ShareDialogListener listener) {
-		view.setShareDialogListener(listener);
-	}
-
 	
+	@Override
+	public void init() {
+		super.init();
+		super.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(isToggled()) {
+					setToggled(false);
+				}
+				else {
+					facebookAuthClickListener.onClick(v);
+				}
+			}
+		});
+	}
+
+	public void setAuthListener(SocializeAuthListener listener) {
+		facebookAuthClickListener.setListener(listener);
+	}
+
+	public void setFacebookAuthClickListener(FacebookAuthClickListener facebookAuthClickListener) {
+		this.facebookAuthClickListener = facebookAuthClickListener;
+	}
+
 }

@@ -2,30 +2,27 @@ package com.socialize.test.ui.integrationtest.actionbar;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.Socialize;
 import com.socialize.api.action.share.ShareSystem;
 import com.socialize.entity.Entity;
 import com.socialize.ioc.SocializeIOC;
-import com.socialize.networks.SocialNetworkListener;
 import com.socialize.test.mock.MockShareSystem;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarLayoutView;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 import com.socialize.ui.actionbar.OnActionBarEventListener.ActionBarEvent;
-import com.socialize.ui.auth.ShareDialogListener;
-import com.socialize.ui.dialog.AuthDialogFactory;
+import com.socialize.ui.auth.AuthDialogFactory;
+import com.socialize.ui.auth.AuthDialogListener;
 
 public class ShareDialogViewTest extends ActionBarAutoTest {
 	
-	public void testShareButtonLoadsShareView() throws Throwable {
+	public void testShareButtonLoadsAuthView() throws Throwable {
 		
 		Intent intent = new Intent();
 		Bundle extras = new Bundle();
@@ -39,25 +36,9 @@ public class ShareDialogViewTest extends ActionBarAutoTest {
 		final AuthDialogFactory mockAuthDialogFactory = new AuthDialogFactory() {
 			
 			@Override
-			public Dialog show(View parent, int displayOptions) {
-				return new Dialog(parent.getContext());
-			}
-			
-			@Override
-			public Dialog show(View parent, SocialNetworkListener socialNetworkListener, ShareDialogListener listener, int displayOptions) {
-				return new Dialog(parent.getContext());
-			}
-			
-			@Override
-			public Dialog show(Context context, ShareDialogListener listener, int displayOptions) {
-				return new Dialog(context);
-			}
-			
-			@Override
-			public Dialog show(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener shareDialoglistener, int displayOptions) {
+			public void show(Context context, AuthDialogListener listener) {
 				addResult(0, "success");
 				latch.countDown();
-				return new Dialog(context);
 			}
 		};
 		

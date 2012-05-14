@@ -31,6 +31,7 @@ import com.socialize.networks.SocialNetworkListener;
  * @author Jason Polites
  *
  */
+@Deprecated
 public interface DialogFactory<V extends View> {
 
 	public Dialog show(final Context context, Entity entity, final SocialNetworkListener socialNetworkListener, final SocializeDialogListener<V> shareDialoglistener, int displayOptions);

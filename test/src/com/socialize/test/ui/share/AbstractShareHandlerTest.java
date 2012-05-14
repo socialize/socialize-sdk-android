@@ -29,7 +29,6 @@ import com.socialize.api.action.ShareType;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.PropagationInfoResponse;
 import com.socialize.entity.SocializeAction;
-import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.share.AbstractShareHandler;
 import com.socialize.test.SocializeActivityTest;

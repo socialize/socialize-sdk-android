@@ -42,8 +42,9 @@ import com.socialize.networks.twitter.TwitterSignInCell;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.auth.AuthPanelView;
-import com.socialize.ui.auth.EmailCell;
-import com.socialize.ui.auth.SMSCell;
+import com.socialize.ui.share.EmailCell;
+import com.socialize.ui.share.SMSCell;
+import com.socialize.ui.share.SharePanelView;
 
 
 /**
@@ -190,7 +191,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		
 		ShareUtils.showShareDialog(getContext(), entity, new SocialNetworkDialogListener() {
 			@Override
-			public void onShow(Dialog dialog, AuthPanelView dialogView) {
+			public void onShow(Dialog dialog, SharePanelView dialogView) {
 				addResult(0, dialogView);
 				latch0.countDown();
 			}

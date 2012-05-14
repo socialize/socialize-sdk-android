@@ -37,7 +37,7 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.facebook.FacebookAuthClickListener;
 import com.socialize.test.PublicSocialize;
 import com.socialize.test.SocializeUnitTest;
-import com.socialize.ui.dialog.DialogFactory;
+import com.socialize.ui.dialog.SimpleDialogFactory;
 
 /**
  * @author Jason Polites
@@ -46,7 +46,7 @@ import com.socialize.ui.dialog.DialogFactory;
 @UsesMocks ({
 	SocializeConfig.class,
 	SocializeAuthListener.class,
-	DialogFactory.class,
+	SimpleDialogFactory.class,
 	ProgressDialog.class,
 	View.class,
 	SocializeService.class,
@@ -81,7 +81,7 @@ public class FacebookAuthClickListenerTest extends SocializeUnitTest {
 		
 		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
 		SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
-		DialogFactory<ProgressDialog> dialogFactory = AndroidMock.createMock(DialogFactory.class);
+		SimpleDialogFactory<ProgressDialog> dialogFactory = AndroidMock.createMock(SimpleDialogFactory.class);
 		ProgressDialog dialog = AndroidMock.createMock(ProgressDialog.class, getContext());
 		View view = AndroidMock.createMock(View.class, getContext());
 		final SocializeSession session = AndroidMock.createMock(SocializeSession.class);

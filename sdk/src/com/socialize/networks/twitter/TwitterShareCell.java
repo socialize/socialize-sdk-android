@@ -19,16 +19,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.dialog;
+package com.socialize.networks.twitter;
 
-import android.app.Dialog;
+import android.content.Context;
 import android.view.View;
-
+import com.socialize.listener.SocializeAuthListener;
 
 /**
  * @author Jason Polites
  *
  */
-public interface DialogFactoryListener<V extends View> {
-	public void onShow(Dialog dialog, V dialogView);
+public class TwitterShareCell extends TwitterCell {
+
+	private TwitterAuthClickListener twitterAuthClickListener;
+
+	public TwitterShareCell(Context context) {
+		super(context);
+	}
+	
+	@Override
+	public void init() {
+		super.init();
+		
+		super.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(isToggled()) {
+					setToggled(false);
+				}
+				else {
+					twitterAuthClickListener.onClick(v);
+				}
+			}
+		});		
+	}
+
+	public void setAuthListener(SocializeAuthListener listener) {
+		twitterAuthClickListener.setListener(listener);
+	}
+
+	public void setTwitterAuthClickListener(TwitterAuthClickListener twitterAuthClickListener) {
+		this.twitterAuthClickListener = twitterAuthClickListener;
+	}
 }

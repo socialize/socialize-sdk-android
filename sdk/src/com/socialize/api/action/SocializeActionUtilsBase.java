@@ -42,8 +42,9 @@ public abstract class SocializeActionUtilsBase {
 		boolean authSupported = false;
 		
 		if(authRequired) {
-			AuthProviderType[] all = AuthProviderType.values();
-			for (AuthProviderType type : all) {
+			SocialNetwork[] all = SocialNetwork.values();
+			for (SocialNetwork network : all) {
+				AuthProviderType type = AuthProviderType.valueOf(network);
 				if(getSocialize().isSupported(type)) {
 					authSupported = true;
 					if(getSocialize().isAuthenticated(type)) {

@@ -82,7 +82,6 @@ public class NotificationOpenEventTask implements LaunchTask {
 						public void onError(SocializeException error) {
 							logError(error);
 						}
-						
 
 						@Override
 						public void onPost() {

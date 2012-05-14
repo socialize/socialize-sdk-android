@@ -374,35 +374,68 @@
 		<init-method name="init"/>
 	</bean>		
 	
-<!-- Authenticate -->
+<!-- Authenticate and Share -->
+
+	<bean 
+		id="authPanelView" 
+		class="com.socialize.ui.auth.AuthPanelView"		
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="colors" ref="colors"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="displayUtils" ref="displayUtils"/>
+		<property name="facebookSignInCellFactory" ref="facebookSignInCellFactory"/>
+		<property name="twitterSignInCellFactory" ref="twitterSignInCellFactory"/>
+		<property name="anonCellFactory" ref="anonCellFactory"/>
+		
+		<init-method name="init"/>
+	</bean>
+	
+	<factory id="authPanelViewFactory" makes="authPanelView"/>	
 	 
 	<bean 
-		id="authRequestDialogFactory" 
-		class="com.socialize.ui.dialog.AuthRequestDialogFactory"		
+		id="authDialogFactory" 
+		class="com.socialize.ui.auth.AuthDialogFactory"		
 		singleton="false">
 		<property name="logger" ref="logger"/>
-		<property name="sharePanelViewFactory" ref="sharePanelViewFactory"/>
-		<property name="drawables" ref="drawables"/>
+		<property name="panelViewFactory" ref="authPanelViewFactory"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
 	</bean>
-	 
+	
 	<bean 
-		id="anonCell" 
-		class="com.socialize.ui.auth.AnonymousCell" 
-		singleton="false"
-		extends="clickableSectionCell">
-		<constructor-arg type="activity"/>	
-		<property name="backgroundColor" value="#293036"/>
-		<property name="bgAlpha" value="255" type="integer"/>
+		id="sharePanelView" 
+		class="com.socialize.ui.share.SharePanelView"		
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="displayUtils" ref="displayUtils"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="colors" ref="colors"/>
+		<property name="facebookShareCellFactory" ref="facebookShareCellFactory"/>
+		<property name="twitterShareCellFactory" ref="twitterShareCellFactory"/>
+		<property name="emailCellFactory" ref="emailCellFactory"/>
+		<property name="smsCellFactory" ref="smsCellFactory"/>
+		<property name="continueButton" ref="authContinueButton"/>
+		<property name="cancelButton" ref="authCancelButton"/>
+		<init-method name="init"/>
+	</bean>
+	
+	<factory id="sharePanelViewFactory" makes="sharePanelView"/>		
+	
+	<bean 
+		id="shareDialogFactory" 
+		class="com.socialize.ui.share.ShareDialogFactory"		
+		singleton="false">
+		<property name="logger" ref="logger"/>
+		<property name="panelViewFactory" ref="sharePanelViewFactory"/>
+		<property name="displayUtils" ref="displayUtils"/>
+		<property name="colors" ref="colors"/>
 	</bean>	
-	
-	<factory id="anonCellFactory" makes="anonCell"/>
-	
+	 
 	
 	<bean 
 		id="emailCell" 
-		class="com.socialize.ui.auth.EmailCell" 
+		class="com.socialize.ui.share.EmailCell" 
 		singleton="false"
 		extends="clickableSectionCell">
 		<constructor-arg type="activity"/>	
@@ -416,7 +449,7 @@
 	
 	<bean 
 		id="smsCell" 
-		class="com.socialize.ui.auth.SMSCell" 
+		class="com.socialize.ui.share.SMSCell" 
 		singleton="false"
 		extends="clickableSectionCell">
 		<constructor-arg type="activity"/>	
@@ -429,20 +462,31 @@
 	<factory id="smsCellFactory" makes="smsCell"/>
 	
 	<bean 
+		id="anonCell" 
+		class="com.socialize.ui.auth.AnonymousCell" 
+		singleton="false"
+		extends="clickableSectionCell">
+		<constructor-arg type="activity"/>	
+		<property name="backgroundColor" value="#293036"/>
+		<property name="bgAlpha" value="255" type="integer"/>
+	</bean>	
+	
+	<factory id="anonCellFactory" makes="anonCell"/>	
+	
+	<bean 
 		id="authContinueButton" 
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="Share"/>
+		<property name="text" value="Continue"/>
 		<property name="height" value="38" type="integer"/>
-		<property name="width" value="180" type="integer"/>
+		<property name="width" value="120" type="integer"/>
 		<property name="textSize" value="13" type="integer"/>
 		<property name="textAlign" value="center"/>
 		<property name="padding" value="2" type="integer"/>
 		<property name="bold" value="true" type="boolean"/>
 	</bean>
 	
-	<!-- 
 	<bean 
 		id="authCancelButton" 
 		singleton="false"
@@ -453,35 +497,13 @@
 		<property name="topColor" value="GRAY_BTN_TOP"/>
 		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
 		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>
-		<property name="height" value="34" type="integer"/>
-		<property name="width" value="60" type="integer"/>
+		<property name="height" value="38" type="integer"/>
+		<property name="width" value="120" type="integer"/>
 		<property name="textSize" value="11" type="integer"/>
 		<property name="textAlign" value="center"/>
 		<property name="padding" value="2" type="integer"/>
-	</bean>			
-	-->
-	<bean 
-		id="sharePanelView" 
-		class="com.socialize.ui.share.SharePanelView"		
-		singleton="false">
-		<constructor-arg type="activity"/>
-		<property name="displayUtils" ref="displayUtils"/>
-		<property name="drawables" ref="drawables"/>
-		<property name="colors" ref="colors"/>
-		<property name="config" ref="config"/>
-		<property name="facebookSignInCellFactory" ref="facebookSignInCellFactory"/>
-		<property name="twitterSignInCellFactory" ref="twitterSignInCellFactory"/>
-		<property name="anonCellFactory" ref="anonCellFactory"/>
-		<property name="emailCellFactory" ref="emailCellFactory"/>
-		<property name="smsCellFactory" ref="smsCellFactory"/>
-		
-		<!-- <property name="cancelButton" ref="authCancelButton"/> -->
-		<property name="continueButton" ref="authContinueButton"/>
-		
-		<init-method name="init"/>
-	</bean>
+	</bean>	
 	
-	<factory id="sharePanelViewFactory" makes="sharePanelView"/>	
 	
 <!-- Social Network Base Classes -->	
 	
@@ -540,8 +562,8 @@
 	</bean>	
 	
 	<bean 
-		id="twitterSignInCell" 
-		class="com.socialize.networks.twitter.TwitterSignInCell" 
+		id="twitterShareCell" 
+		class="com.socialize.networks.twitter.TwitterShareCell" 
 		singleton="false"
 		extends="clickableSectionCell">
 		<constructor-arg type="activity"/>	
@@ -553,8 +575,24 @@
 		<property name="untoggledDrawableName" value="tick_off.png"/>
 	</bean>	
 	
-	<factory id="twitterSignInCellFactory" makes="twitterSignInCell"/>	
+	<factory id="twitterShareCellFactory" makes="twitterShareCell"/>
 	
+	
+	<bean 
+		id="twitterSignInCell" 
+		class="com.socialize.networks.twitter.TwitterSignInCell" 
+		singleton="false"
+		extends="clickableSectionCell">
+		<constructor-arg type="activity"/>	
+		<property name="twitterAuthClickListener" ref="twitterAuthClickListener"/>
+		<property name="displayText" value="Twitter"/>
+		<property name="backgroundColor" value="#3d464c"/>
+		<property name="bgAlpha" value="255" type="integer"/>
+		<property name="toggledDrawableName" value="arrow.png"/>
+	</bean>	
+	
+	<factory id="twitterSignInCellFactory" makes="twitterSignInCell"/>		
+		
 	<bean 
 		id="autoPostTwitterOption" 
 		extends="customCheckbox"
@@ -674,8 +712,8 @@
 	<factory id="autoPostFacebookOptionFactory" makes="autoPostFacebookOption"/>
 	
 	<bean 
-		id="facebookSignInCell" 
-		class="com.socialize.networks.facebook.FacebookSignInCell" 
+		id="facebookShareCell" 
+		class="com.socialize.networks.facebook.FacebookShareCell" 
 		singleton="false"
 		extends="clickableSectionCell">
 		<constructor-arg type="activity"/>	
@@ -687,7 +725,22 @@
 		<property name="untoggledDrawableName" value="tick_off.png"/>
 	</bean>	
 	
-	<factory id="facebookSignInCellFactory" makes="facebookSignInCell"/>	
+	<factory id="facebookShareCellFactory" makes="facebookShareCell"/>	
+	
+	<bean 
+		id="facebookSignInCell" 
+		class="com.socialize.networks.facebook.FacebookSignInCell" 
+		singleton="false"
+		extends="clickableSectionCell">
+		<constructor-arg type="activity"/>	
+		<property name="facebookAuthClickListener" ref="facebookAuthClickListener"/>
+		<property name="displayText" value="Facebook"/>
+		<property name="backgroundColor" value="#3d464c"/>
+		<property name="bgAlpha" value="255" type="integer"/>
+		<property name="toggledDrawableName" value="arrow.png"/>
+	</bean>	
+	
+	<factory id="facebookSignInCellFactory" makes="facebookSignInCell"/>		
 	
 <!-- End Facebook -->
 	
@@ -784,7 +837,6 @@
 		<property name="commentHeaderFactory" ref="commentHeaderFactory"/>
 		<property name="commentEditFieldFactory" ref="commentEditFieldFactory"/>
 		<property name="commentContentViewFactory" ref="loadingListViewFactory"/>
-		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
 		<property name="commentEntryFactory" ref="commentEntrySliderItemFactory"/>
 		<property name="notificationEnabledOptionFactory" ref="notificationEnabledOptionNoBorderFactory"/>
 		<property name="sliderFactory" ref="actionBarSliderFactory"/>
@@ -1283,7 +1335,6 @@
 		<property name="tickerFactory" ref="actionBarTickerFactory"/>
 		<property name="itemFactory" ref="actionBarItemFactory"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
-		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
 		
 	</bean>
 	
@@ -1657,7 +1708,9 @@
 
 	<bean id="likeUtils" class="com.socialize.api.action.like.SocializeLikeUtils">
 		<property name="likeSystem" ref="likeSystem"/>
-		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
+		<property name="authDialogFactory" ref="authDialogFactory"/>
+		<property name="shareDialogFactory" ref="shareDialogFactory"/>
+		<property name="shareHandlers" ref="shareHandlers"/>
 	</bean>
 	
 	<bean id="viewUtils" class="com.socialize.api.action.view.SocializeViewUtils">
@@ -1666,12 +1719,13 @@
 	
 	<bean id="shareUtils" class="com.socialize.api.action.share.SocializeShareUtils">
 		<property name="shareSystem" ref="shareSystem"/>
-		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
+		<property name="shareDialogFactory" ref="shareDialogFactory"/>
 	</bean>		
 	
 	<bean id="commentUtils" class="com.socialize.api.action.comment.SocializeCommentUtils">
 		<property name="commentSystem" ref="commentSystem"/>
-		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
+		<property name="authDialogFactory" ref="authDialogFactory"/>
+		<property name="shareDialogFactory" ref="shareDialogFactory"/>
 	</bean>
 	
 	<bean id="subscriptionUtils" class="com.socialize.api.action.comment.SocializeSubscriptionUtils">

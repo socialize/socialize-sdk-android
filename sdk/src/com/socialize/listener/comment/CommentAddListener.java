@@ -22,15 +22,20 @@
 package com.socialize.listener.comment;
 
 
+import android.app.Activity;
 import com.socialize.entity.Comment;
 import com.socialize.entity.ListResult;
+import com.socialize.error.SocializeException;
+import com.socialize.networks.PostData;
+import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
 
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class CommentAddListener extends CommentListener {
+public abstract class CommentAddListener extends CommentListener implements SocialNetworkListener {
 
 	@Override
 	public final void onGet(Comment comment) {}
@@ -44,4 +49,14 @@ public abstract class CommentAddListener extends CommentListener {
 	@Override
 	public final void onDelete() {}
 
+	@Override
+	public void onError(Activity context, SocialNetwork network, Exception error) {
+		onError(SocializeException.wrap(error));
+	}
+
+	@Override
+	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {}
+
+	@Override
+	public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {}
 }

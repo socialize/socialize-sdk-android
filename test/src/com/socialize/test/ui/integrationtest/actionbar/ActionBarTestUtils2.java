@@ -23,11 +23,9 @@ package com.socialize.test.ui.integrationtest.actionbar;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
-import android.view.View;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.Socialize;
@@ -47,13 +45,11 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.like.LikeListener;
 import com.socialize.networks.ShareOptions;
-import com.socialize.networks.SocialNetworkListener;
 import com.socialize.test.mock.MockLikeSystem;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarLayoutView;
-import com.socialize.ui.auth.ShareDialogListener;
-import com.socialize.ui.dialog.AuthDialogFactory;
-import com.socialize.ui.dialog.AuthRequestDialogFactory;
+import com.socialize.ui.auth.AuthDialogFactory;
+import com.socialize.ui.auth.AuthDialogListener;
 
 /**
  * @author Jason Polites
@@ -67,11 +63,10 @@ public class ActionBarTestUtils2 {
 		
 		Entity entity = Entity.newInstance("http://entity1.com", "no name");
 		
-		final AuthRequestDialogFactory mockFactory = new AuthRequestDialogFactory() {
+		final AuthDialogFactory mockFactory = new AuthDialogFactory() {
 			@Override
-			public Dialog show(Context parent, ShareDialogListener listener, int displayOptions) {
+			public void show(Context parent, AuthDialogListener listener) {
 				TestUtils.addResult("success");
-				return null;
 			}
 		};
 		
@@ -100,7 +95,7 @@ public class ActionBarTestUtils2 {
 				SocializeConfig bean = container.getBean("config");
 				bean.setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "true");
 				
-				ProxyObject<AuthDialogFactory> proxy = container.getProxy("authRequestDialogFactory");
+				ProxyObject<AuthDialogFactory> proxy = container.getProxy("authDialogFactory");
 				if(proxy != null) {
 					proxy.setDelegate(mockFactory);
 					proxy.setStaticProxy(true);
@@ -210,11 +205,10 @@ public class ActionBarTestUtils2 {
 		
 		Entity entity = Entity.newInstance("http://entity1.com", "no name");
 		
-		final AuthRequestDialogFactory mockFactory = new AuthRequestDialogFactory() {
+		final AuthDialogFactory mockFactory = new AuthDialogFactory() {
 			@Override
-			public Dialog show(Context parent, ShareDialogListener listener, int displayOptions) {
+			public void show(Context parent, AuthDialogListener listener) {
 				TestUtils.addResult("fail");
-				return null;
 			}
 		};
 		
@@ -260,7 +254,7 @@ public class ActionBarTestUtils2 {
 				SocializeConfig bean = container.getBean("config");
 				bean.setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "true");
 				
-				ProxyObject<AuthDialogFactory> proxy = container.getProxy("authRequestDialogFactory");
+				ProxyObject<AuthDialogFactory> proxy = container.getProxy("authDialogFactory");
 				if(proxy != null) {
 					proxy.setDelegate(mockFactory);
 					proxy.setStaticProxy(true);
@@ -325,24 +319,10 @@ public class ActionBarTestUtils2 {
 		
 		Entity entity = Entity.newInstance("http://entity1.com", "no name");
 		
-		final AuthRequestDialogFactory mockFactory = new AuthRequestDialogFactory() {
-			
+		final AuthDialogFactory mockFactory = new AuthDialogFactory() {
 			@Override
-			public Dialog show(View parent, int displayOptions) {
+			public void show(Context context, AuthDialogListener listener) {
 				TestUtils.addResult("fail");
-				return null;
-			}
-
-			@Override
-			public Dialog show(View parent, SocialNetworkListener socialNetworkListener, ShareDialogListener listener, int displayOptions) {
-				TestUtils.addResult("fail");
-				return null;
-			}
-
-			@Override
-			public Dialog show(Context context, ShareDialogListener listener, int displayOptions) {
-				TestUtils.addResult("fail");
-				return null;
 			}
 		};
 		
@@ -389,7 +369,7 @@ public class ActionBarTestUtils2 {
 				SocializeConfig bean = container.getBean("config");
 				bean.setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "true");
 				
-				ProxyObject<AuthDialogFactory> proxy = container.getProxy("authRequestDialogFactory");
+				ProxyObject<AuthDialogFactory> proxy = container.getProxy("authDialogFactory");
 				if(proxy != null) {
 					proxy.setDelegate(mockFactory);
 					proxy.setStaticProxy(true);

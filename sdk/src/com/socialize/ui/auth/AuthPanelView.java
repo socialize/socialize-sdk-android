@@ -21,8 +21,6 @@
  */
 package com.socialize.ui.auth;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -34,111 +32,51 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.socialize.ShareUtils;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
-import com.socialize.config.SocializeConfig;
-import com.socialize.entity.Entity;
-import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.listener.share.ShareAddListener;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookSignInCell;
 import com.socialize.networks.twitter.TwitterSignInCell;
-import com.socialize.ui.dialog.SafeProgressDialog;
-import com.socialize.ui.dialog.SocializeDialogListener;
-import com.socialize.ui.share.EmailCell;
-import com.socialize.ui.share.SMSCell;
+import com.socialize.ui.dialog.DialogPanelView;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.view.ClickableSectionCell;
-import com.socialize.ui.view.SocializeButton;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
-import com.socialize.view.BaseView;
 
 /**
  * @author Jason Polites
  */
-public class AuthPanelView extends BaseView {
+public class AuthPanelView extends DialogPanelView {
 
-	private AuthDialogListener listener;
-	private SocialNetworkListener socialNetworkListener;
-	private Dialog dialog;
-	private SocializeConfig config;
 	private Colors colors;
-	
-	private SocializeButton continueButton;
-	
-	private int displayOptions;
-	
-	private Entity entity;
-	
-	public AuthPanelView(Context context, AuthDialogListener listener, Dialog dialog) {
-		this(context);
-		this.listener = listener;
-		this.dialog = dialog;
-	}
-	
-	public AuthPanelView(Context context, Entity entity, SocialNetworkListener socialNetworkListener, SocializeDialogListener listener, Dialog dialog, int displayOptions) {
-		this(context, socialNetworkListener, listener, dialog, displayOptions);
-		this.entity = entity;
-	}
-	
-	public AuthPanelView(Context context, Entity entity, SocialNetworkListener socialNetworkListener, Dialog dialog, int displayOptions) {
-		this(context, entity, socialNetworkListener, null, dialog, displayOptions);
-	}
-	
-	public AuthPanelView(Context context, Entity entity, Dialog dialog, int displayOptions) {
-		this(context, entity, null, null, dialog, displayOptions);
-	}
-	
-	public AuthPanelView(Context context, Entity entity, SocializeDialogListener listener, Dialog dialog, int displayOptions) {
-		this(context, entity, null, listener, dialog, displayOptions);
-	}
-	
-	public AuthPanelView(Context context, SocializeDialogListener listener, Dialog dialog, int displayOptions) {
-		this(context);
-		this.listener = listener;
-		this.dialog = dialog;
-		this.displayOptions = displayOptions;
-	}
-	
-	public AuthPanelView(Context context) {
-		this(context, null, ShareUtils.SOCIAL);
-	}
-	
-	public AuthPanelView(Context context, Entity entity, int displayOptions) {
-		super(context);
-		this.displayOptions = displayOptions;
-		this.entity = entity;
-	}
-	
-	private IBeanFactory<FacebookSignInCell> facebookSignInCellFactory;
-	private IBeanFactory<TwitterSignInCell> twitterSignInCellFactory;
-	private IBeanFactory<EmailCell> emailCellFactory;
-	private IBeanFactory<SMSCell> smsCellFactory;
-	
-	@SuppressWarnings("unused")
-	private IBeanFactory<AnonymousCell> anonCellFactory; 
-	
 	private Drawables drawables;
 	private DisplayUtils displayUtils;
+	private IBeanFactory<FacebookSignInCell> facebookSignInCellFactory;
+	private IBeanFactory<TwitterSignInCell> twitterSignInCellFactory;
+	private IBeanFactory<AnonymousCell> anonCellFactory;
 	
+	public AuthPanelView(Context context) {
+		super(context);
+	}
+
+	public AuthPanelView(Context context, AuthDialogListener listener) {
+		super(context);
+		this.authDialogListener = listener;
+	}
+	
+	private AuthDialogListener authDialogListener;
 	private FacebookSignInCell facebookSignInCell;
 	private TwitterSignInCell twitterSignInCell;
-	
-	private EmailCell emailCell;
-	private SMSCell smsCell;
+	private AnonymousCell anonymousCell;
 	
 	float radii = 6;
 	int padding = 8;
 	int headerHeight = 45;
 	float headerRadius = 3;
-	int landscapeButtonWidth = 190;
+//	int landscapeButtonWidth = 190;
 	
 	private final float[] fbRadii = new float[]{radii, radii, radii, radii, 0.0f, 0.0f, 0.0f, 0.0f};
 	private final int[] fbStroke = new int[]{1, 1, 0, 1};
@@ -158,7 +96,6 @@ public class AuthPanelView extends BaseView {
 			radii = displayUtils.getDIP(8);
 			landscape = displayUtils.isLandscape();
 			lowRes = displayUtils.isLowRes();
-			landscapeButtonWidth = displayUtils.getDIP(landscapeButtonWidth);
 		}
 		
 		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
@@ -173,48 +110,27 @@ public class AuthPanelView extends BaseView {
 		containerParams.weight = 1.0f;
 		container.setLayoutParams(containerParams);
 		
-		makeShareButtons();
+		makeAuthButtons();
 		
-		View continueButtonLayout = makeContinueButton();
 		View header = makeHeaderView(headerHeight, headerRadius);
 		
-		RelativeLayout.LayoutParams contentParams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		RelativeLayout.LayoutParams contentParams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		contentParams.setMargins(padding, padding, padding, 0);
 		contentParams.addRule(RelativeLayout.CENTER_IN_PARENT);
 		
 		LinearLayout contentLayout = new LinearLayout(getContext());
 		contentLayout.setPadding(padding, padding, padding, 0);
 		contentLayout.setLayoutParams(contentParams);
-		contentLayout.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
+		contentLayout.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.TOP);
 		
-		LayoutParams socialNetworkButtonParams = null;
-		LayoutParams emailSMSButtonParams = null;
-		
-		if(landscape) {
-			socialNetworkButtonParams = new LayoutParams(landscapeButtonWidth, LayoutParams.WRAP_CONTENT);
-			emailSMSButtonParams = new LayoutParams(landscapeButtonWidth, LayoutParams.WRAP_CONTENT);
-			contentLayout.setOrientation(HORIZONTAL);
-			
-			socialNetworkButtonParams.setMargins(0, 0, padding/2, 0);
-			emailSMSButtonParams.setMargins(padding/2, 0, 0, 0);
-		}
-		else {
-			socialNetworkButtonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-			emailSMSButtonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-			emailSMSButtonParams.setMargins(0, padding, 0, 0);
-			contentLayout.setOrientation(VERTICAL);
-		}
+		LayoutParams socialNetworkButtonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		contentLayout.setOrientation(VERTICAL);
 		
 		LinearLayout socialNetworkButtonLayout = new LinearLayout(getContext());
 		socialNetworkButtonLayout.setPadding(0, 0, 0, 0);
 		socialNetworkButtonLayout.setOrientation(VERTICAL);
 		socialNetworkButtonLayout.setLayoutParams(socialNetworkButtonParams);	
 
-		LinearLayout emailSMSButtonLayout = new LinearLayout(getContext());
-		emailSMSButtonLayout.setPadding(0, 0, 0, 0);
-		emailSMSButtonLayout.setOrientation(VERTICAL);
-		emailSMSButtonLayout.setLayoutParams(emailSMSButtonParams);	
-		
 		if(!landscape && !lowRes) {
 			View shareBadge = makeShareBadge();
 			contentLayout.addView(shareBadge);
@@ -230,68 +146,12 @@ public class AuthPanelView extends BaseView {
 			contentLayout.addView(socialNetworkButtonLayout);
 		}
 		
-		if(emailCell != null || smsCell != null) {
-			if(emailCell != null) {
-				emailSMSButtonLayout.addView(emailCell);
-			}
-			if(smsCell != null) {
-				emailSMSButtonLayout.addView(smsCell);
-			}
-			contentLayout.addView(emailSMSButtonLayout);
-		}		
+		contentLayout.addView(anonymousCell);
 		
 		container.addView(contentLayout);
 		
 		addView(header);
 		addView(container);
-		addView(continueButtonLayout);
-		
-		toggleContinueButton();
-		updateNetworkButtonState();
-	}
-	
-	protected View makeContinueButton() {
-		
-		LinearLayout buttonLayout = new LinearLayout(getContext());
-		
-		if(continueButton != null) {
-
-			LayoutParams buttonParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-			
-			buttonLayout.setPadding(padding, 0, padding, padding);
-			buttonLayout.setOrientation(HORIZONTAL);
-			buttonLayout.setLayoutParams(buttonParams);
-			buttonLayout.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);		
-			
-			continueButton.setEnabled(false);
-			continueButton.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					
-					SocialNetwork[] networks = null;
-					
-					// Get the number of networks enabled
-					if(facebookSignInCell != null && facebookSignInCell.isToggled()) {
-						if(twitterSignInCell != null && twitterSignInCell.isToggled()) {
-							networks = new SocialNetwork[]{SocialNetwork.FACEBOOK, SocialNetwork.TWITTER};
-						}
-						else {
-							networks = new SocialNetwork[]{SocialNetwork.FACEBOOK};
-						}
-					}
-					else if(twitterSignInCell != null && twitterSignInCell.isToggled()) {
-						networks = new SocialNetwork[]{SocialNetwork.TWITTER};
-					}
-					
-					listener.onContinue(dialog, networks);
-				}
-			});
-			
-			buttonLayout.addView(continueButton);
-		}
-		
-		return buttonLayout;
 	}
 	
 	protected View makeShareBadge() {
@@ -308,7 +168,7 @@ public class AuthPanelView extends BaseView {
 		
 		if(drawables != null) {
 			ImageView authBadge = new ImageView(getContext());
-			authBadge.setImageDrawable(drawables.getDrawable("share_badge.png"));
+			authBadge.setImageDrawable(drawables.getDrawable("auth_badge.png"));
 			authBadge.setLayoutParams(badgeParams);
 			authBadge.setPadding(0, 0, 0, padding);
 			badgeLayout.addView(authBadge);
@@ -317,23 +177,22 @@ public class AuthPanelView extends BaseView {
 		return badgeLayout;
 	}
 	
-	protected void makeShareButtons() {
+	protected void makeAuthButtons() {
+		
 		LayoutParams cellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		
-		boolean fbOK = getSocialize().isSupported(AuthProviderType.FACEBOOK) && ((displayOptions & ShareUtils.FACEBOOK) != 0) && facebookSignInCellFactory != null;
-		boolean twOK = getSocialize().isSupported(AuthProviderType.TWITTER) && ((displayOptions & ShareUtils.TWITTER) != 0) && twitterSignInCellFactory != null;
-		boolean emailOK = (entity != null && (displayOptions & ShareUtils.EMAIL) != 0) && getSocialize().canShare(getContext(), ShareType.EMAIL) && emailCellFactory != null;
-		boolean smsOK = (entity != null && (displayOptions & ShareUtils.SMS) != 0) && getSocialize().canShare(getContext(), ShareType.SMS) && smsCellFactory != null;
+		boolean fbOK = getSocialize().isSupported(AuthProviderType.FACEBOOK) && facebookSignInCellFactory != null;
+		boolean twOK = getSocialize().isSupported(AuthProviderType.TWITTER) && twitterSignInCellFactory != null;
 		
 		if(fbOK) {
-			facebookSignInCell = facebookSignInCellFactory.getBean(this);
+			facebookSignInCell = facebookSignInCellFactory.getBean();
 			
 			if(facebookSignInCell != null) {
 				facebookSignInCell.setLayoutParams(cellParams);
 				facebookSignInCell.setPadding(padding, padding, padding, padding);
 				
 				if(twOK) {
-					twitterSignInCell = twitterSignInCellFactory.getBean(this);
+					twitterSignInCell = twitterSignInCellFactory.getBean();
 					twitterSignInCell.setPadding(padding, padding, padding, padding);
 					twitterSignInCell.setLayoutParams(cellParams);
 					
@@ -351,32 +210,6 @@ public class AuthPanelView extends BaseView {
 			}
 		}
 		
-		if(emailOK) {
-			emailCell = emailCellFactory.getBean();
-			
-			if(emailCell != null) {
-				emailCell.setLayoutParams(cellParams);
-				emailCell.setPadding(padding, padding, padding, padding);
-				
-				if(smsOK) {
-					smsCell = smsCellFactory.getBean();
-					smsCell.setLayoutParams(cellParams);
-					smsCell.setPadding(padding, padding, padding, padding);
-
-					emailCell.setBackgroundData(fbRadii, fbStroke, Color.BLACK);
-					smsCell.setBackgroundData(twRadii, twStroke, Color.BLACK);
-				}
-			}
-		}
-		else if(smsOK) {
-			smsCell = smsCellFactory.getBean();
-			
-			if(smsCell != null) {
-				smsCell.setLayoutParams(cellParams);
-				smsCell.setPadding(padding, padding, padding, padding);
-			}
-		}		
-		
 		if(facebookSignInCell != null) {
 			facebookSignInCell.setAuthListener(getAuthClickListener(facebookSignInCell, SocialNetwork.FACEBOOK));
 		}
@@ -385,49 +218,10 @@ public class AuthPanelView extends BaseView {
 			twitterSignInCell.setAuthListener(getAuthClickListener(twitterSignInCell, SocialNetwork.TWITTER));
 		}
 		
-		if(emailCell != null) {
-			emailCell.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(final View v) {
-					final ProgressDialog progress = SafeProgressDialog.show(v.getContext());
-					ShareUtils.shareViaEmail(getActivity(), entity, new ShareAddListener() {
-						
-						@Override
-						public void onError(SocializeException error) {
-							progress.dismiss();
-							showError(v.getContext(), error);
-						}
-						
-						@Override
-						public void onCreate(Share entity) {
-							progress.dismiss();
-						}
-					});
-				}
-			});
-		}
-		
-		if(smsCell != null) {
-			smsCell.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(final View v) {
-					final ProgressDialog progress = SafeProgressDialog.show(v.getContext());
-					ShareUtils.shareViaSMS(getActivity(), entity, new ShareAddListener() {
-						
-						@Override
-						public void onError(SocializeException error) {
-							progress.dismiss();
-							showError(v.getContext(), error);
-						}
-						
-						@Override
-						public void onCreate(Share entity) {
-							progress.dismiss();
-						}
-					});
-				}
-			});
-		}		
+		anonymousCell = anonCellFactory.getBean();
+		LayoutParams anonCellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		anonCellParams.setMargins(0, padding, 0, 0);
+		anonymousCell.setLayoutParams(anonCellParams);
 	}
 	
 	protected View makeHeaderView(int headerHeight, float headerRadius) {
@@ -441,7 +235,7 @@ public class AuthPanelView extends BaseView {
 			header.setBackgroundDrawable(headerBG);
 		}
 
-		header.setText("Share To...");
+		header.setText("Sign in to post");
 		header.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
 		header.setTextColor(Color.WHITE);
 		header.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
@@ -450,16 +244,6 @@ public class AuthPanelView extends BaseView {
 		return header;
 	}
 	
-	public void updateNetworkButtonState() {
-		if(facebookSignInCell != null) {
-			facebookSignInCell.setToggled(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) );
-		}
-		
-		if(twitterSignInCell != null) {
-			twitterSignInCell.setToggled(getSocialize().isAuthenticated(AuthProviderType.TWITTER));
-		}
-	}
-
 	public void setFacebookSignInCellFactory(IBeanFactory<FacebookSignInCell> facebookSignInCellFactory) {
 		this.facebookSignInCellFactory = facebookSignInCellFactory;
 	}
@@ -483,52 +267,17 @@ public class AuthPanelView extends BaseView {
 	public TwitterSignInCell getTwitterSignInCell() {
 		return twitterSignInCell;
 	}
+	
+	public void setAuthDialogListener(AuthDialogListener authDialogListener) {
+		this.authDialogListener = authDialogListener;
+	}
 
 	public void setAnonCellFactory(IBeanFactory<AnonymousCell> anonCellFactory) {
 		this.anonCellFactory = anonCellFactory;
 	}
-	
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
-	}
 
 	public void setColors(Colors colors) {
 		this.colors = colors;
-	}
-	
-	public void setContinueButton(SocializeButton continueButton) {
-		this.continueButton = continueButton;
-	}
-	
-//	public void setCancelButton(SocializeButton cancelButton) {
-//		this.cancelButton = cancelButton;
-//	}
-	
-	public void setEmailCellFactory(IBeanFactory<EmailCell> emailCellFactory) {
-		this.emailCellFactory = emailCellFactory;
-	}
-	
-	public void setSmsCellFactory(IBeanFactory<SMSCell> smsCellFactory) {
-		this.smsCellFactory = smsCellFactory;
-	}
-	
-	public Entity getEntity() {
-		return entity;
-	}
-	
-	public void setEntity(Entity entity) {
-		this.entity = entity;
-	}
-
-	public void toggleContinueButton() {
-		if(continueButton != null) {
-			if(config.isAllowAnonymousUser()) {
-				continueButton.setEnabled(true);
-			}
-			else {
-				continueButton.setEnabled(twitterSignInCell.isToggled() || facebookSignInCell.isToggled());
-			}
-		}
 	}
 
 	protected SocializeAuthListener getAuthClickListener(final ClickableSectionCell cell, final SocialNetwork network) {
@@ -537,34 +286,34 @@ public class AuthPanelView extends BaseView {
 			@Override
 			public void onError(SocializeException error) {
 				error.printStackTrace();
-				
 				showErrorToast(getContext(), error);
-				
-				if(socialNetworkListener != null) {
-					socialNetworkListener.onError(getActivity(), network, error);
+				if(authDialogListener != null) {
+					authDialogListener.onError(getActivity(), dialog, error);
 				}
 			}
 			
 			@Override
 			public void onAuthSuccess(SocializeSession session) {
-				cell.setToggled(!cell.isToggled());
-				toggleContinueButton();
-				updateNetworkButtonState();
+				if(authDialogListener != null) {
+					authDialogListener.onAuthenticate(getActivity(), dialog, network);
+				}
 			}
 			
 			@Override
 			public void onAuthFail(SocializeException error) {
 				error.printStackTrace();
-				
-				showError(getContext(), error);
-				
-				if(socialNetworkListener != null) {
-					socialNetworkListener.onError(getActivity(), network, error);
+				showErrorToast(getContext(), error);
+				if(authDialogListener != null) {
+					authDialogListener.onError(getActivity(), dialog, error);
 				}
 			}
 
 			@Override
-			public void onCancel() {}
+			public void onCancel() {
+				if(authDialogListener != null) {
+					authDialogListener.onCancel(dialog);
+				}				
+			}
 		};
 	}	
 }
