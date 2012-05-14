@@ -19,49 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.dialog;
+package com.socialize.ui.auth;
 
-import android.app.Dialog;
-import android.content.Context;
-import android.view.Window;
-import com.socialize.error.SocializeException;
-import com.socialize.log.SocializeLogger;
-import com.socialize.util.Drawables;
+import com.socialize.ui.dialog.DialogFactory;
+
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class BaseAuthDialogFactory implements AuthDialogFactory  {
-	
-	protected Drawables drawables;
-	protected SocializeLogger logger;
-	
-	// So we can mock
-	protected Dialog newDialog(Context context) {
-		Dialog dialog = new Dialog(context, android.R.style.Theme_Dialog);
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		
-		// Register to prevent window leakage
-		DialogRegistration.register(context, dialog);
-		
-		return dialog;
-	}
-	
-	protected void handleError(String msg, SocializeException error) {
-		if(logger != null) {
-			logger.error(msg, error);
-		}
-		else {
-			error.printStackTrace();
-		}
-	}
+public interface AuthDialogFactory extends DialogFactory<AuthPanelView> {
 
-	public void setLogger(SocializeLogger logger) {
-		this.logger = logger;
-	}
-	
-	public void setDrawables(Drawables drawables) {
-		this.drawables = drawables;
-	}
 }

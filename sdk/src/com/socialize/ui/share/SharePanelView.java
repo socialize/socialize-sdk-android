@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.auth;
+package com.socialize.ui.share;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -49,10 +49,8 @@ import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookSignInCell;
 import com.socialize.networks.twitter.TwitterSignInCell;
+import com.socialize.ui.auth.AnonymousCell;
 import com.socialize.ui.dialog.SafeProgressDialog;
-import com.socialize.ui.dialog.SocializeDialogListener;
-import com.socialize.ui.share.EmailCell;
-import com.socialize.ui.share.SMSCell;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.view.ClickableSectionCell;
 import com.socialize.ui.view.SocializeButton;
@@ -63,9 +61,9 @@ import com.socialize.view.BaseView;
 /**
  * @author Jason Polites
  */
-public class AuthPanelView extends BaseView {
+public class SharePanelView extends BaseView {
 
-	private AuthDialogListener listener;
+	private ShareDialogListener listener;
 	private SocialNetworkListener socialNetworkListener;
 	private Dialog dialog;
 	private SocializeConfig config;
@@ -77,41 +75,43 @@ public class AuthPanelView extends BaseView {
 	
 	private Entity entity;
 	
-	public AuthPanelView(Context context, AuthDialogListener listener, Dialog dialog) {
+	public SharePanelView(Context context, SocialNetworkListener socialNetworkListener, ShareDialogListener listener, Dialog dialog, int displayOptions) {
 		this(context);
 		this.listener = listener;
+		this.socialNetworkListener = socialNetworkListener;
 		this.dialog = dialog;
+		this.displayOptions = displayOptions;
 	}
 	
-	public AuthPanelView(Context context, Entity entity, SocialNetworkListener socialNetworkListener, SocializeDialogListener listener, Dialog dialog, int displayOptions) {
+	public SharePanelView(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener listener, Dialog dialog, int displayOptions) {
 		this(context, socialNetworkListener, listener, dialog, displayOptions);
 		this.entity = entity;
 	}
 	
-	public AuthPanelView(Context context, Entity entity, SocialNetworkListener socialNetworkListener, Dialog dialog, int displayOptions) {
+	public SharePanelView(Context context, Entity entity, SocialNetworkListener socialNetworkListener, Dialog dialog, int displayOptions) {
 		this(context, entity, socialNetworkListener, null, dialog, displayOptions);
 	}
 	
-	public AuthPanelView(Context context, Entity entity, Dialog dialog, int displayOptions) {
+	public SharePanelView(Context context, Entity entity, Dialog dialog, int displayOptions) {
 		this(context, entity, null, null, dialog, displayOptions);
 	}
 	
-	public AuthPanelView(Context context, Entity entity, SocializeDialogListener listener, Dialog dialog, int displayOptions) {
+	public SharePanelView(Context context, Entity entity, ShareDialogListener listener, Dialog dialog, int displayOptions) {
 		this(context, entity, null, listener, dialog, displayOptions);
 	}
 	
-	public AuthPanelView(Context context, SocializeDialogListener listener, Dialog dialog, int displayOptions) {
+	public SharePanelView(Context context, ShareDialogListener listener, Dialog dialog, int displayOptions) {
 		this(context);
 		this.listener = listener;
 		this.dialog = dialog;
 		this.displayOptions = displayOptions;
 	}
 	
-	public AuthPanelView(Context context) {
+	public SharePanelView(Context context) {
 		this(context, null, ShareUtils.SOCIAL);
 	}
 	
-	public AuthPanelView(Context context, Entity entity, int displayOptions) {
+	public SharePanelView(Context context, Entity entity, int displayOptions) {
 		super(context);
 		this.displayOptions = displayOptions;
 		this.entity = entity;

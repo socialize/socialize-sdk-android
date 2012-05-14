@@ -19,26 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.dialog;
+package com.socialize.ui.share;
 
-import android.app.Dialog;
-import android.content.Context;
-import android.view.View;
-import com.socialize.entity.Entity;
-import com.socialize.networks.SocialNetworkListener;
 
 /**
+ * Allows developers to override the flow control of the share dialog.
  * @author Jason Polites
- *
  */
-public interface DialogFactory<V extends View> {
+public interface DialogFlowController {
 
-	public Dialog show(final Context context, Entity entity, final SocialNetworkListener socialNetworkListener, final SocializeDialogListener<V> shareDialoglistener, int displayOptions);
-
-	public Dialog show(final Context context, final SocializeDialogListener<V> listener, int displayOptions);
-
-	public Dialog show(final View parent, SocialNetworkListener socialNetworkListener, final SocializeDialogListener<V> listener, int displayOptions);
-
-	public Dialog show(View parent, int displayOptions);
-
+	public void onContinue(String text);
+	
+	public void onCancel();
+	
 }

@@ -28,13 +28,13 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.notifications.NotificationType;
-import com.socialize.ui.auth.AuthPanelView;
-import com.socialize.ui.auth.ShareDialogFlowController;
-import com.socialize.ui.auth.ShareDialogListener;
-import com.socialize.ui.dialog.AuthDialogFactory;
 import com.socialize.ui.dialog.DialogFactory;
+import com.socialize.ui.dialog.SimpleDialogFactory;
 import com.socialize.ui.header.SocializeHeader;
 import com.socialize.ui.image.ImageLoader;
+import com.socialize.ui.share.DialogFlowController;
+import com.socialize.ui.share.ShareDialogListener;
+import com.socialize.ui.share.SharePanelView;
 import com.socialize.ui.slider.ActionBarSliderFactory;
 import com.socialize.ui.slider.ActionBarSliderFactory.ZOrder;
 import com.socialize.ui.slider.ActionBarSliderView;
@@ -61,8 +61,8 @@ public class CommentListView extends BaseView {
 	private int endIndex = defaultGrabLength;
 	
 	private SocializeLogger logger;
-	private DialogFactory<ProgressDialog> progressDialogFactory;
-	private DialogFactory<AlertDialog> alertDialogFactory;
+	private SimpleDialogFactory<ProgressDialog> progressDialogFactory;
+	private SimpleDialogFactory<AlertDialog> alertDialogFactory;
 	private Drawables drawables;
 	private AppUtils appUtils;
 	private DisplayUtils displayUtils;
@@ -76,7 +76,7 @@ public class CommentListView extends BaseView {
 	private View field;
 	private SocializeHeader header;
 	private LoadingListView content;
-	private AuthDialogFactory authRequestDialogFactory;
+	private DialogFactory authRequestDialogFactory;
 	
 	private IBeanFactory<CommentEntrySliderItem> commentEntryFactory;
 	
@@ -275,10 +275,10 @@ public class CommentListView extends BaseView {
 	protected ShareDialogListener getCommentAuthListener(final String text, final boolean shareLocation, final boolean subscribe, final SocialNetwork...networks) {
 		return new ShareDialogListener() {
 			@Override
-			public void onShow(Dialog dialog, AuthPanelView dialogView) {}
+			public void onShow(Dialog dialog, SharePanelView dialogView) {}
 			
 			@Override
-			public void onFlowInterrupted(ShareDialogFlowController controller) {}
+			public void onFlowInterrupted(DialogFlowController controller) {}
 			
 			@Override
 			public boolean onContinue(Dialog dialog, SocialNetwork...network) {
@@ -702,11 +702,11 @@ public class CommentListView extends BaseView {
 		this.logger = logger;
 	}
 
-	public void setProgressDialogFactory(DialogFactory<ProgressDialog> progressDialogFactory) {
+	public void setProgressDialogFactory(SimpleDialogFactory<ProgressDialog> progressDialogFactory) {
 		this.progressDialogFactory = progressDialogFactory;
 	}
 
-	public void setAlertDialogFactory(DialogFactory<AlertDialog> alertDialogFactory) {
+	public void setAlertDialogFactory(SimpleDialogFactory<AlertDialog> alertDialogFactory) {
 		this.alertDialogFactory = alertDialogFactory;
 	}
 
@@ -790,7 +790,7 @@ public class CommentListView extends BaseView {
 		return commentAdapter.getTotalCount();
 	}
 
-	public void setAuthRequestDialogFactory(AuthDialogFactory authRequestDialogFactory) {
+	public void setAuthRequestDialogFactory(DialogFactory authRequestDialogFactory) {
 		this.authRequestDialogFactory = authRequestDialogFactory;
 	}
 	

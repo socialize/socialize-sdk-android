@@ -36,17 +36,17 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.ui.auth.AuthPanelView;
-import com.socialize.ui.auth.ShareDialogFlowController;
-import com.socialize.ui.auth.ShareDialogListener;
-import com.socialize.ui.dialog.AuthDialogFactory;
+import com.socialize.ui.dialog.DialogFactory;
+import com.socialize.ui.share.DialogFlowController;
+import com.socialize.ui.share.ShareDialogListener;
+import com.socialize.ui.share.SharePanelView;
 
 /**
  * @author Jason Polites
  */
 public class SocializeLikeUtils extends SocializeActionUtilsBase implements LikeUtilsProxy {
 	
-	private AuthDialogFactory authRequestDialogFactory;
+	private DialogFactory authRequestDialogFactory;
 	private LikeSystem likeSystem;
 
 	/*
@@ -62,10 +62,10 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 			authRequestDialogFactory.show(context, new ShareDialogListener() {
 				
 				@Override
-				public void onShow(Dialog dialog, AuthPanelView dialogView) {}
+				public void onShow(Dialog dialog, SharePanelView dialogView) {}
 				
 				@Override
-				public void onFlowInterrupted(ShareDialogFlowController controller) {}
+				public void onFlowInterrupted(DialogFlowController controller) {}
 				
 				@Override
 				public boolean onContinue(Dialog dialog, SocialNetwork... networks) {
@@ -153,7 +153,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 		likeSystem.getLikesByEntity(session, entity.getKey(), start, end, listener);
 	}
 
-	public void setAuthRequestDialogFactory(AuthDialogFactory authRequestDialogFactory) {
+	public void setAuthRequestDialogFactory(DialogFactory authRequestDialogFactory) {
 		this.authRequestDialogFactory = authRequestDialogFactory;
 	}
 

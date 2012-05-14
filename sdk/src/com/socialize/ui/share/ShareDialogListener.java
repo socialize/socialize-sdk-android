@@ -19,26 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.dialog;
+package com.socialize.ui.share;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.view.View;
-import com.socialize.entity.Entity;
-import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.SocialNetwork;
+import com.socialize.ui.dialog.SocializeDialogListener;
+
 
 /**
  * @author Jason Polites
- *
  */
-public interface DialogFactory<V extends View> {
+public interface ShareDialogListener extends SocializeDialogListener<SharePanelView> {
 
-	public Dialog show(final Context context, Entity entity, final SocialNetworkListener socialNetworkListener, final SocializeDialogListener<V> shareDialoglistener, int displayOptions);
-
-	public Dialog show(final Context context, final SocializeDialogListener<V> listener, int displayOptions);
-
-	public Dialog show(final View parent, SocialNetworkListener socialNetworkListener, final SocializeDialogListener<V> listener, int displayOptions);
-
-	public Dialog show(View parent, int displayOptions);
-
+	public boolean onContinue(Dialog dialog, SocialNetwork...networks);
+	
+	public void onFlowInterrupted(DialogFlowController controller);
 }

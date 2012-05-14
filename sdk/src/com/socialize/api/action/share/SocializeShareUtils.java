@@ -34,11 +34,11 @@ import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.ui.auth.AuthPanelView;
-import com.socialize.ui.auth.ShareDialogFlowController;
-import com.socialize.ui.auth.ShareDialogListener;
-import com.socialize.ui.dialog.AuthDialogFactory;
+import com.socialize.ui.dialog.DialogFactory;
 import com.socialize.ui.dialog.SafeProgressDialog;
+import com.socialize.ui.share.DialogFlowController;
+import com.socialize.ui.share.ShareDialogListener;
+import com.socialize.ui.share.SharePanelView;
 
 /**
  * @author Jason Polites
@@ -46,7 +46,7 @@ import com.socialize.ui.dialog.SafeProgressDialog;
 public class SocializeShareUtils extends SocializeActionUtilsBase implements ShareUtilsProxy {
 	
 	private ShareSystem shareSystem;
-	private AuthDialogFactory authRequestDialogFactory;
+	private DialogFactory authRequestDialogFactory;
 	
 	@Override
 	public void showShareDialog(final Activity context, final Entity e, int options, final SocialNetworkShareListener socialNetworkListener, final ShareDialogListener dialogListener) {
@@ -59,14 +59,14 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 			}
 			
 			@Override
-			public void onShow(Dialog dialog, AuthPanelView dialogView) {
+			public void onShow(Dialog dialog, SharePanelView dialogView) {
 				if(dialogListener != null) {
 					dialogListener.onShow(dialog, dialogView);
 				}				
 			}
 			
 			@Override
-			public void onFlowInterrupted(ShareDialogFlowController controller) {
+			public void onFlowInterrupted(DialogFlowController controller) {
 				// Will not be called.
 			}
 
@@ -82,7 +82,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 					doShare(dialog, context, e, socialNetworkListener, "", networks);
 				}
 				else {
-					dialogListener.onFlowInterrupted(new ShareDialogFlowController() {
+					dialogListener.onFlowInterrupted(new DialogFlowController() {
 						
 						@Override
 						public void onContinue(String text) {
@@ -180,7 +180,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 		this.shareSystem = shareSystem;
 	}
 
-	public void setAuthRequestDialogFactory(AuthDialogFactory authRequestDialogFactory) {
+	public void setAuthRequestDialogFactory(DialogFactory authRequestDialogFactory) {
 		this.authRequestDialogFactory = authRequestDialogFactory;
 	}
 }

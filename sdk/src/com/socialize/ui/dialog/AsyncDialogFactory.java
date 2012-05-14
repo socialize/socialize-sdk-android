@@ -33,9 +33,6 @@ import android.widget.LinearLayout.LayoutParams;
 import com.socialize.android.ioc.BeanCreationListener;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Entity;
-import com.socialize.networks.SocialNetworkListener;
-import com.socialize.ui.auth.AuthPanelView;
-import com.socialize.ui.auth.ShareDialogListener;
 import com.socialize.ui.util.Colors;
 import com.socialize.util.DisplayUtils;
 
@@ -43,34 +40,18 @@ import com.socialize.util.DisplayUtils;
  * @author Jason Polites
  *
  */
-public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
+public abstract class AsyncDialogFactory<V extends View> extends BaseDialogFactory  {
 	
-	private IBeanFactory<AuthPanelView> authPanelViewFactory;
+	private IBeanFactory<V> panelViewFactory;
 	private DisplayUtils displayUtils;
 	private Colors colors;
 	
-	@Override
-	public Dialog show(View parent, int displayOptions) {
-		return show(parent, null, null, displayOptions);
-	}
-	
-	@Override
-	public Dialog show(final View parent, SocialNetworkListener socialNetworkListener, final ShareDialogListener listener, int displayOptions) {
-		return show(parent.getContext(), listener, displayOptions);
-	}
-	
-	@Override
-	public Dialog show(final Context context, final ShareDialogListener listener, int displayOptions) {
-		return show(context, null, null, listener, displayOptions);
-	}
-
-	@Override
-	public Dialog show(final Context context, Entity entity, final SocialNetworkListener socialNetworkListener, final ShareDialogListener shareDialoglistener, int displayOptions) {
-
+	protected void makeDialog(final Context context, Entity entity, final DialogFactoryListener<V> listener, Object...args) {
+		
 		final Dialog dialog = newDialog(context);
 		final ProgressDialog progress = SafeProgressDialog.show(context, "", "Please wait...");
 		
-		authPanelViewFactory.getBeanAsync(new BeanCreationListener<AuthPanelView>() {
+		panelViewFactory.getBeanAsync(new BeanCreationListener<V>() {
 			
 			@Override
 			public void onError(String name, Exception e) {
@@ -80,7 +61,7 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 			}
 			
 			@Override
-			public void onCreate(AuthPanelView view) {
+			public void onCreate(V view) {
 				LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 				params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 				
@@ -114,26 +95,20 @@ public class AuthRequestDialogFactory extends BaseAuthDialogFactory  {
 				
 				try {
 					dialog.show();
-					
-					if(shareDialoglistener != null) {
-						shareDialoglistener.onShow(dialog, view);
+					if(listener != null) {
+						listener.onShow(dialog, view);
 					}
 				}
 				catch (Exception e) {
 					// TODO: log error
 					e.printStackTrace();
 				}
-				
-	
 			}
-		}, entity, socialNetworkListener, shareDialoglistener, dialog, displayOptions);
-		
-		return dialog;
+		}, entity, args);
 	}
-	
 
-	public void setAuthPanelViewFactory(IBeanFactory<AuthPanelView> authPanelViewFactory) {
-		this.authPanelViewFactory = authPanelViewFactory;
+	public void setPanelViewFactory(IBeanFactory<V> panelViewFactory) {
+		this.panelViewFactory = panelViewFactory;
 	}
 
 	public void setDisplayUtils(DisplayUtils deviceUtils) {

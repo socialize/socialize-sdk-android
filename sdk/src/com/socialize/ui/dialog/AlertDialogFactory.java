@@ -33,7 +33,7 @@ import com.socialize.util.StringUtils;
  * @author Jason Polites
  *
  */
-public class AlertDialogFactory implements DialogFactory<AlertDialog> {
+public class AlertDialogFactory implements SimpleDialogFactory<AlertDialog> {
 
 	private Drawables drawables;
 	private Toast toast;

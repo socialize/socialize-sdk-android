@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.auth;
+package com.socialize.ui.share;
 
 import android.content.Context;
 import android.widget.ImageView;
@@ -28,10 +28,11 @@ import com.socialize.ui.view.ClickableSectionCell;
 
 /**
  * @author Jason Polites
+ *
  */
-public class SMSCell extends ClickableSectionCell {
+public class EmailCell extends ClickableSectionCell {
 
-	public SMSCell(Context context) {
+	public EmailCell(Context context) {
 		super(context);
 	}
 
@@ -40,7 +41,7 @@ public class SMSCell extends ClickableSectionCell {
 	 */
 	@Override
 	protected ImageView makeImage() {
-		setImageOn(drawables.getDrawable("icon_sms.png"));
+		setImageOn(drawables.getDrawable("icon_email.png"));
 		return  new ImageView(getContext());
 	}
 

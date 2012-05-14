@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.view.ClickableSectionCell;
 
+@Deprecated
 public class AnonymousCell extends ClickableSectionCell {
 
 	public AnonymousCell(Context context) {

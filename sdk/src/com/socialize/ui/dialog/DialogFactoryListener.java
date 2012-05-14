@@ -19,18 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.auth;
+package com.socialize.ui.dialog;
+
+import android.app.Dialog;
+import android.view.View;
 
 
 /**
- * Allows developers to override the flow control of the share dialog.
  * @author Jason Polites
  *
  */
-public interface ShareDialogFlowController {
-
-	public void onContinue(String text);
-	
-	public void onCancel();
-	
+public interface DialogFactoryListener<V extends View> {
+	public void onShow(Dialog dialog, V dialogView);
 }

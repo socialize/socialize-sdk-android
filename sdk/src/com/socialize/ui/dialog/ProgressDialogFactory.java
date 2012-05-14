@@ -31,7 +31,7 @@ import com.socialize.util.Drawables;
  * Safely renders progress dialogs
  * @author Jason Polites
  */
-public class ProgressDialogFactory implements DialogFactory<ProgressDialog> {
+public class ProgressDialogFactory implements SimpleDialogFactory<ProgressDialog> {
 	
 	private SocializeLogger logger;
 	private Drawables drawables;

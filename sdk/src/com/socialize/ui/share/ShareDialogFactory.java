@@ -19,30 +19,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.auth;
+package com.socialize.ui.share;
 
+import android.app.Dialog;
 import android.content.Context;
-import android.widget.ImageView;
-import com.socialize.ui.view.ClickableSectionCell;
+import android.view.View;
+import com.socialize.entity.Entity;
+import com.socialize.networks.SocialNetworkListener;
+import com.socialize.ui.dialog.AsyncDialogFactory;
+import com.socialize.ui.dialog.DialogFactory;
+import com.socialize.ui.dialog.SocializeDialogListener;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class EmailCell extends ClickableSectionCell {
+public class ShareDialogFactory extends AsyncDialogFactory<SharePanelView> implements DialogFactory<SharePanelView> {
 
-	public EmailCell(Context context) {
-		super(context);
+	@Override
+	public Dialog show(Context context, Entity entity, SocialNetworkListener socialNetworkListener, SocializeDialogListener<SharePanelView> shareDialoglistener, int displayOptions) {
+		return null;
+		
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.ui.view.ClickableSectionCell#makeImage()
-	 */
 	@Override
-	protected ImageView makeImage() {
-		setImageOn(drawables.getDrawable("icon_email.png"));
-		return  new ImageView(getContext());
+	public Dialog show(Context context, SocializeDialogListener<SharePanelView> listener, int displayOptions) {
+		return null;
+		
+	}
+
+	@Override
+	public Dialog show(View parent, SocialNetworkListener socialNetworkListener, SocializeDialogListener<SharePanelView> listener, int displayOptions) {
+		return null;
+		
+	}
+
+	@Override
+	public Dialog show(View parent, int displayOptions) {
+		return null;
+		
 	}
 
 }

@@ -19,26 +19,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.dialog;
+package com.socialize.ui.share;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.view.View;
-import com.socialize.entity.Entity;
-import com.socialize.networks.SocialNetworkListener;
+import android.widget.ImageView;
+import com.socialize.ui.view.ClickableSectionCell;
+
 
 /**
  * @author Jason Polites
- *
  */
-public interface DialogFactory<V extends View> {
+public class SMSCell extends ClickableSectionCell {
 
-	public Dialog show(final Context context, Entity entity, final SocialNetworkListener socialNetworkListener, final SocializeDialogListener<V> shareDialoglistener, int displayOptions);
+	public SMSCell(Context context) {
+		super(context);
+	}
 
-	public Dialog show(final Context context, final SocializeDialogListener<V> listener, int displayOptions);
-
-	public Dialog show(final View parent, SocialNetworkListener socialNetworkListener, final SocializeDialogListener<V> listener, int displayOptions);
-
-	public Dialog show(View parent, int displayOptions);
+	/* (non-Javadoc)
+	 * @see com.socialize.ui.view.ClickableSectionCell#makeImage()
+	 */
+	@Override
+	protected ImageView makeImage() {
+		setImageOn(drawables.getDrawable("icon_sms.png"));
+		return  new ImageView(getContext());
+	}
 
 }

@@ -381,7 +381,7 @@
 		class="com.socialize.ui.dialog.AuthRequestDialogFactory"		
 		singleton="false">
 		<property name="logger" ref="logger"/>
-		<property name="authPanelViewFactory" ref="authPanelViewFactory"/>
+		<property name="sharePanelViewFactory" ref="sharePanelViewFactory"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
@@ -461,8 +461,8 @@
 	</bean>			
 	-->
 	<bean 
-		id="authPanelView" 
-		class="com.socialize.ui.auth.AuthPanelView"		
+		id="sharePanelView" 
+		class="com.socialize.ui.share.SharePanelView"		
 		singleton="false">
 		<constructor-arg type="activity"/>
 		<property name="displayUtils" ref="displayUtils"/>
@@ -481,7 +481,7 @@
 		<init-method name="init"/>
 	</bean>
 	
-	<factory id="authPanelViewFactory" makes="authPanelView"/>	
+	<factory id="sharePanelViewFactory" makes="sharePanelView"/>	
 	
 <!-- Social Network Base Classes -->	
 	

@@ -24,7 +24,7 @@ package com.socialize.networks.facebook;
 import android.content.Context;
 import android.view.View;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.ui.auth.AuthPanelView;
+import com.socialize.ui.share.SharePanelView;
 
 /**
  * @author Jason Polites
@@ -33,13 +33,13 @@ import com.socialize.ui.auth.AuthPanelView;
 public class FacebookSignInCell extends FacebookCell {
 
 	private FacebookAuthClickListener facebookAuthClickListener;
-	private AuthPanelView authPanelView;
+	private SharePanelView authPanelView;
 
 	public FacebookSignInCell(Context context) {
 		super(context);
 	}
 	
-	public FacebookSignInCell(Context context, AuthPanelView authPanelView) {
+	public FacebookSignInCell(Context context, SharePanelView authPanelView) {
 		super(context);
 		this.authPanelView = authPanelView;
 	}

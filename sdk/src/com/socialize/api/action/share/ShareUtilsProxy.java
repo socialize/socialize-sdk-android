@@ -27,7 +27,7 @@ import com.socialize.entity.User;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
-import com.socialize.ui.auth.ShareDialogListener;
+import com.socialize.ui.share.ShareDialogListener;
 
 
 /**

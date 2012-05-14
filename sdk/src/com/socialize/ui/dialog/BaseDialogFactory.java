@@ -23,23 +23,45 @@ package com.socialize.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.view.View;
-import com.socialize.entity.Entity;
-import com.socialize.networks.SocialNetworkListener;
-import com.socialize.ui.auth.ShareDialogListener;
+import android.view.Window;
+import com.socialize.error.SocializeException;
+import com.socialize.log.SocializeLogger;
+import com.socialize.util.Drawables;
 
 /**
  * @author Jason Polites
  *
  */
-public interface AuthDialogFactory {
+public abstract class BaseDialogFactory {
+	
+	protected Drawables drawables;
+	protected SocializeLogger logger;
+	
+	// So we can mock
+	protected Dialog newDialog(Context context) {
+		Dialog dialog = new Dialog(context, android.R.style.Theme_Dialog);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
+		// Register to prevent window leakage
+		DialogRegistration.register(context, dialog);
+		
+		return dialog;
+	}
+	
+	protected void handleError(String msg, SocializeException error) {
+		if(logger != null) {
+			logger.error(msg, error);
+		}
+		else {
+			error.printStackTrace();
+		}
+	}
 
-	public Dialog show(final Context context, Entity entity, final SocialNetworkListener socialNetworkListener, final ShareDialogListener shareDialoglistener, int displayOptions);
-
-	public Dialog show(final Context context, final ShareDialogListener listener, int displayOptions);
-
-	public Dialog show(final View parent, SocialNetworkListener socialNetworkListener, final ShareDialogListener listener, int displayOptions);
-
-	public Dialog show(View parent, int displayOptions);
-
+	public void setLogger(SocializeLogger logger) {
+		this.logger = logger;
+	}
+	
+	public void setDrawables(Drawables drawables) {
+		this.drawables = drawables;
+	}
 }

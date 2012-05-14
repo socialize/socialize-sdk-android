@@ -45,13 +45,13 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.actionbar.OnActionBarEventListener.ActionBarEvent;
-import com.socialize.ui.auth.AuthPanelView;
-import com.socialize.ui.auth.ShareDialogFlowController;
-import com.socialize.ui.auth.ShareDialogListener;
+import com.socialize.ui.auth.AuthDialogFactory;
 import com.socialize.ui.cache.CacheableEntity;
 import com.socialize.ui.cache.EntityCache;
-import com.socialize.ui.dialog.AuthDialogFactory;
 import com.socialize.ui.dialog.ProgressDialogFactory;
+import com.socialize.ui.share.DialogFlowController;
+import com.socialize.ui.share.ShareDialogListener;
+import com.socialize.ui.share.SharePanelView;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
 import com.socialize.view.BaseView;
@@ -353,10 +353,10 @@ public class ActionBarLayoutView extends BaseView {
 					
 					authRequestDialogFactory.show(button, null, new ShareDialogListener() {
 						@Override
-						public void onShow(Dialog dialog, AuthPanelView dialogView) {}
+						public void onShow(Dialog dialog, SharePanelView dialogView) {}
 
 						@Override
-						public void onFlowInterrupted(ShareDialogFlowController controller) {}
+						public void onFlowInterrupted(DialogFlowController controller) {}
 
 						@Override
 						public boolean onContinue(Dialog dialog, SocialNetwork...networks) {

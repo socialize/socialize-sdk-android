@@ -23,22 +23,12 @@ package com.socialize.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.view.View;
-import com.socialize.entity.Entity;
-import com.socialize.networks.SocialNetworkListener;
 
 /**
  * @author Jason Polites
  *
  */
-public interface DialogFactory<V extends View> {
+public interface SimpleDialogFactory<D extends Dialog> {
 
-	public Dialog show(final Context context, Entity entity, final SocialNetworkListener socialNetworkListener, final SocializeDialogListener<V> shareDialoglistener, int displayOptions);
-
-	public Dialog show(final Context context, final SocializeDialogListener<V> listener, int displayOptions);
-
-	public Dialog show(final View parent, SocialNetworkListener socialNetworkListener, final SocializeDialogListener<V> listener, int displayOptions);
-
-	public Dialog show(View parent, int displayOptions);
-
+	public D show(Context context, String title, String message);
 }

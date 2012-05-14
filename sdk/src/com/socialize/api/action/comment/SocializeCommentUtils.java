@@ -32,10 +32,10 @@ import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.ui.auth.AuthPanelView;
-import com.socialize.ui.auth.ShareDialogFlowController;
-import com.socialize.ui.auth.ShareDialogListener;
-import com.socialize.ui.dialog.AuthDialogFactory;
+import com.socialize.ui.dialog.DialogFactory;
+import com.socialize.ui.share.DialogFlowController;
+import com.socialize.ui.share.ShareDialogListener;
+import com.socialize.ui.share.SharePanelView;
 
 
 /**
@@ -45,7 +45,7 @@ import com.socialize.ui.dialog.AuthDialogFactory;
 public class SocializeCommentUtils extends SocializeActionUtilsBase implements CommentUtilsProxy {
 	
 	private CommentSystem commentSystem;
-	private AuthDialogFactory authRequestDialogFactory;
+	private DialogFactory authRequestDialogFactory;
 
 	@Override
 	public void addComment(Activity context, final Entity e, final String text, final CommentAddListener listener) {
@@ -56,10 +56,10 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 			authRequestDialogFactory.show(context, new ShareDialogListener() {
 				
 				@Override
-				public void onShow(Dialog dialog, AuthPanelView dialogView) {}
+				public void onShow(Dialog dialog, SharePanelView dialogView) {}
 				
 				@Override
-				public void onFlowInterrupted(ShareDialogFlowController controller) {}
+				public void onFlowInterrupted(DialogFlowController controller) {}
 				
 				@Override
 				public boolean onContinue(Dialog dialog, SocialNetwork... networks) {
@@ -100,7 +100,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 		this.commentSystem = commentSystem;
 	}
 	
-	public void setAuthRequestDialogFactory(AuthDialogFactory authRequestDialogFactory) {
+	public void setAuthRequestDialogFactory(DialogFactory authRequestDialogFactory) {
 		this.authRequestDialogFactory = authRequestDialogFactory;
 	}
 	

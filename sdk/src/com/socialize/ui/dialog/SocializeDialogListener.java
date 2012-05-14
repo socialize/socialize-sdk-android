@@ -19,21 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.auth;
+package com.socialize.ui.dialog;
 
 import android.app.Dialog;
-import com.socialize.networks.SocialNetwork;
+import android.view.View;
 
 /**
  * @author Jason Polites
  */
-public interface ShareDialogListener {
+public interface SocializeDialogListener<V extends View> {
 	
-	public void onShow(Dialog dialog, AuthPanelView dialogView);
-	
-	public boolean onContinue(Dialog dialog, SocialNetwork...networks);
-	
-	public void onFlowInterrupted(ShareDialogFlowController controller);
+	public void onShow(Dialog dialog, V dialogView);
 	
 	public void onCancel(Dialog dialog);
 }
