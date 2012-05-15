@@ -39,7 +39,7 @@ import com.socialize.util.StringUtils;
 public class SocializeConfig {
 	
 	public static final String SOCIALIZE_PROPERTIES_PATH = "socialize.properties";
-	public static final String DEFAULT_PROPERTIES_PATH = "socialize.defaults";
+	public static final String DEFAULT_PROPERTIES_PATH = "default.socialize.properties";
 
 	public static final String SOCIALIZE_CORE_BEANS_PATH = "socialize_core_beans.xml";
 	public static final String SOCIALIZE_UI_BEANS_PATH = "socialize_ui_beans.xml";
@@ -149,6 +149,13 @@ public class SocializeConfig {
 						
 						if(old != null) {
 							merge(old, null);
+						}
+					}
+					else {
+						if(logger != null) {
+							logger.error("Could not locate config [" +
+									DEFAULT_PROPERTIES_PATH +
+									"] in classpath");
 						}
 					}
 				}

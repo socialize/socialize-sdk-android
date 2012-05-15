@@ -327,7 +327,10 @@ public class SocializeServiceImpl implements SocializeService {
 									path +
 									"]");
 						}
-					}			
+						
+						Logger.logLevel = Log.DEBUG;
+					}	
+					
 					
 					container.init(context, locator, paths);
 					
@@ -435,13 +438,13 @@ public class SocializeServiceImpl implements SocializeService {
 				
 				// Create the entity loader if we have one
 				initEntityLoader();
-				
-				initNotifications(context);
-				
+
 				// Check we are configured ok
 				appUtils.checkAndroidManifest(context);
 				
 				ActivityIOCProvider.getInstance().setContainer(container);
+				
+				initNotifications(context);
 				
 				if(listener != null) {
 					listener.onInit(context, container);
