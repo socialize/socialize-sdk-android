@@ -147,7 +147,10 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		text.setLayoutParams(textParams);
 		
 		imageView = makeImage();
-		imageView.setImageDrawable(imageOn);
+			
+		if(imageOn != null) {
+			imageView.setImageDrawable(imageOn);
+		}
 		
 		master.setLayoutParams(masterParams);
 		

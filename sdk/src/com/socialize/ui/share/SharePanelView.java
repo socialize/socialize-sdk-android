@@ -91,6 +91,7 @@ public class SharePanelView extends DialogPanelView {
 	private IBeanFactory<TwitterShareCell> twitterShareCellFactory;
 	private IBeanFactory<EmailCell> emailCellFactory;
 	private IBeanFactory<SMSCell> smsCellFactory;
+	private IBeanFactory<RememberCell> rememberCellFactory;
 	
 	private Drawables drawables;
 	private DisplayUtils displayUtils;
@@ -100,6 +101,7 @@ public class SharePanelView extends DialogPanelView {
 	
 	private EmailCell emailCell;
 	private SMSCell smsCell;
+	private RememberCell rememberCell;
 	
 	float radii = 6;
 	int padding = 8;
@@ -207,6 +209,10 @@ public class SharePanelView extends DialogPanelView {
 			contentLayout.addView(emailSMSButtonLayout);
 		}		
 		
+		if(rememberCell != null) {
+			contentLayout.addView(rememberCell);
+		}
+		
 		container.addView(contentLayout);
 		
 		addView(header);
@@ -298,6 +304,7 @@ public class SharePanelView extends DialogPanelView {
 		boolean twOK = getSocialize().isSupported(AuthProviderType.TWITTER) && ((displayOptions & ShareUtils.TWITTER) != 0) && twitterShareCellFactory != null;
 		boolean emailOK = (entity != null && (displayOptions & ShareUtils.EMAIL) != 0) && getSocialize().canShare(getContext(), ShareType.EMAIL) && emailCellFactory != null;
 		boolean smsOK = (entity != null && (displayOptions & ShareUtils.SMS) != 0) && getSocialize().canShare(getContext(), ShareType.SMS) && smsCellFactory != null;
+		boolean rememberOk = ((displayOptions & ShareUtils.SHOW_REMEMBER) != 0) && rememberCellFactory != null;
 		
 		if(fbOK) {
 			facebookShareCell = facebookShareCellFactory.getBean();
@@ -350,6 +357,13 @@ public class SharePanelView extends DialogPanelView {
 				smsCell.setPadding(padding, padding, padding, padding);
 			}
 		}		
+		
+		if(rememberOk) {
+			rememberCell = rememberCellFactory.getBean();
+			LayoutParams rememberCellParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			rememberCellParams.setMargins(0, padding, 0, 0);
+			rememberCell.setLayoutParams(rememberCellParams);
+		}
 		
 		if(facebookShareCell != null) {
 			facebookShareCell.setAuthListener(getAuthClickListener(facebookShareCell, SocialNetwork.FACEBOOK));
@@ -482,6 +496,10 @@ public class SharePanelView extends DialogPanelView {
 		this.smsCellFactory = smsCellFactory;
 	}
 	
+	public void setRememberCellFactory(IBeanFactory<RememberCell> rememberCellFactory) {
+		this.rememberCellFactory = rememberCellFactory;
+	}
+
 	public Entity getEntity() {
 		return entity;
 	}

@@ -154,7 +154,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 					listener.onCancel();
 				}
 			}
-		}, ShareUtils.SOCIAL);
+		}, ShareUtils.SOCIAL|ShareUtils.SHOW_REMEMBER);
 	}	
 
 	@Override

@@ -415,6 +415,7 @@
 		<property name="twitterShareCellFactory" ref="twitterShareCellFactory"/>
 		<property name="emailCellFactory" ref="emailCellFactory"/>
 		<property name="smsCellFactory" ref="smsCellFactory"/>
+		<property name="rememberCellFactory" ref="rememberCellFactory"/>
 		<property name="continueButton" ref="authContinueButton"/>
 		<property name="cancelButton" ref="authCancelButton"/>
 		<init-method name="init"/>
@@ -471,7 +472,22 @@
 		<property name="bgAlpha" value="255" type="integer"/>
 	</bean>	
 	
-	<factory id="anonCellFactory" makes="anonCell"/>	
+	<factory id="anonCellFactory" makes="anonCell"/>
+	
+	
+	<bean 
+		id="rememberCell" 
+		class="com.socialize.ui.share.RememberCell" 
+		singleton="false"
+		extends="clickableSectionCell">
+		<constructor-arg type="activity"/>	
+		<property name="backgroundColor" value="#293036"/>
+		<property name="bgAlpha" value="255" type="integer"/>
+		<property name="toggledDrawableName" value="tick_on.png"/>
+		<property name="untoggledDrawableName" value="tick_off.png"/>
+	</bean>	
+	
+	<factory id="rememberCellFactory" makes="rememberCell"/>			
 	
 	<bean 
 		id="authContinueButton" 
