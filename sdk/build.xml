@@ -74,7 +74,7 @@
 				<include name="socialize_notification_beans.xml"/>
 				<include name="socialize_ui_beans.xml"/>
 				<include name="socialize.errors.properties"/>
-				<include name="socialize.properties"/>
+				<include name="default.socialize.properties"/>
 			</fileset>
 		</copy>
 		
