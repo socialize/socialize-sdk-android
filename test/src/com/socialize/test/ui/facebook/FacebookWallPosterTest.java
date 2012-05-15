@@ -79,17 +79,17 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 	public void doTestPostLike(String expectedString) {
 		
 		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
-		ShareMessageBuilder builder = AndroidMock.createMock(ShareMessageBuilder.class);
+//		ShareMessageBuilder builder = AndroidMock.createMock(ShareMessageBuilder.class);
 		final PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
 		
 		Activity parent = getActivity();
 		final String entityKey = "foobar_key";
 		final String entityName = "foobar_name";
-		final String entityLink = "foobar_link";
+//		final String entityLink = "foobar_link";
 		
 		final Entity entity = Entity.newInstance(entityKey, entityName);
 		
-		AndroidMock.expect(builder.getEntityLink(entity, info, false)).andReturn(entityLink);
+//		AndroidMock.expect(builder.getEntityLink(entity, info, false)).andReturn(entityLink);
 		
 		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
 			
@@ -102,9 +102,9 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 			}
 		};
 		
-		AndroidMock.replay(builder);
+//		AndroidMock.replay(builder);
 		
-		poster.setShareMessageBuilder(builder);
+//		poster.setShareMessageBuilder(builder);
 		poster.postLike(parent, entity, info, listener);
 		
 		SocialNetworkListener listenerAfter = getResult(2);
@@ -112,7 +112,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		Activity parentAfter = getResult(0);
 		PropagationInfo infoAfter = getResult(3);
 		
-		AndroidMock.verify(builder);
+//		AndroidMock.verify(builder);
 		
 		assertSame(listener, listenerAfter);
 		assertSame(info, infoAfter);

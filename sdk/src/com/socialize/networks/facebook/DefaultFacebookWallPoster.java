@@ -36,7 +36,6 @@ import android.os.Bundle;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.facebook.FacebookSessionStore;
@@ -65,7 +64,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	
 	private SocializeLogger logger;
 //	private AppUtils appUtils;
-	private ShareMessageBuilder shareMessageBuilder;
+//	private ShareMessageBuilder shareMessageBuilder;
 	private FacebookImageUtils facebookImageUtils;
 	private IBeanFactory<AsyncFacebookRunner> facebookRunnerFactory;
 	
@@ -73,14 +72,14 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	public void postLike(Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkListener listener) {
 //		String linkName = appUtils.getAppName();
 		
-		StringBuilder builder = new StringBuilder();
+//		StringBuilder builder = new StringBuilder();
 		
-		builder.append("Likes ");
-		builder.append(shareMessageBuilder.getEntityLink(entity, propInfo, false));
+//		builder.append("Likes ");
+//		builder.append(shareMessageBuilder.getEntityLink(entity, propInfo, false));
 //		builder.append("\n\n");
 //		builder.append("Posted from ");
 //		builder.append(linkName);
-		post(parent, entity, builder.toString(), propInfo, listener);		
+		post(parent, entity, "", propInfo, listener);		
 	}
 
 	@Override
@@ -114,6 +113,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			params.put("name", linkName);
 			params.put("message", message);
 			params.put("link", link);
+			params.put("type", "link");
 			
 			DefaultPostData postData = new DefaultPostData();
 			postData.setPostValues(params);
@@ -134,6 +134,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		params.put("name", linkName);
 		params.put("message", message);
 		params.put("link", link);
+		params.put("type", "link");
 		params.put("caption", caption);
 		DefaultPostData postData = new DefaultPostData();
 		postData.setPostValues(params);
@@ -147,6 +148,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		params.put("name", share.getEntityDisplayName());
 		params.put("link", propInfo.getEntityUrl());
 		params.put("message", share.getText());
+		params.put("type", "link");
 		
 		DefaultPostData postData = new DefaultPostData();
 		postData.setPostValues(params);
@@ -179,7 +181,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		
 		RequestListener requestListener = newRequestListener(parent, listener);
 		
-		runner.request("me/feed", bundle, "POST", requestListener, null);	
+		runner.request("me/links", bundle, "POST", requestListener, null);	
 	}
 	
 
@@ -342,9 +344,9 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		this.logger = logger;
 	}
 
-	public void setShareMessageBuilder(ShareMessageBuilder shareMessageBuilder) {
-		this.shareMessageBuilder = shareMessageBuilder;
-	}
+//	public void setShareMessageBuilder(ShareMessageBuilder shareMessageBuilder) {
+//		this.shareMessageBuilder = shareMessageBuilder;
+//	}
 
 //	public void setAppUtils(AppUtils appUtils) {
 //		this.appUtils = appUtils;

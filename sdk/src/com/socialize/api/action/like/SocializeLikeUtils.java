@@ -25,7 +25,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import com.socialize.ShareUtils;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeActionUtilsBase;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
@@ -36,12 +35,8 @@ import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
-import com.socialize.networks.PostData;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
-import com.socialize.share.ShareHandler;
-import com.socialize.share.ShareHandlers;
 import com.socialize.ui.auth.AuthDialogFactory;
 import com.socialize.ui.auth.AuthDialogListener;
 import com.socialize.ui.auth.AuthPanelView;
@@ -59,7 +54,6 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 	private AuthDialogFactory authDialogFactory;
 	private ShareDialogFactory shareDialogFactory;
 	private LikeSystem likeSystem;
-	private ShareHandlers shareHandlers;
 
 	/*
 	 * (non-Javadoc)
@@ -116,6 +110,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 			public boolean onContinue(final Dialog dialog, final SocialNetwork... networks) {
 
 				int count = 0;
+				
 				if(networks != null) {
 					count = networks.length;
 				}
@@ -144,45 +139,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 							listener.onCreate(like);
 						}
 						
-						if(networks != null && networks.length > 0) {
-							for (SocialNetwork socialNetwork : networks) {
-								ShareHandler handler = shareHandlers.getShareHandler(ShareType.valueOf(socialNetwork));
-								if(handler != null) {
-									handler.handle(context, like, null, null, new SocialNetworkListener() {
-										@Override
-										public void onError(Activity context, SocialNetwork network, Exception error) {
-											if(listener != null) {
-												listener.onError(context, network, error);
-											}
-											
-											progress.dismiss();
-										}
-										
-										@Override
-										public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-											if(listener != null) {
-												listener.onBeforePost(parent, socialNetwork, postData);
-											}
-										}
-										
-										@Override
-										public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
-											if(listener != null) {
-												listener.onAfterPost(parent, socialNetwork);
-											}
-											progress.dismiss();
-										}
-									});
-								}
-								else {
-									// TODO: Log error!
-									progress.dismiss();
-								}
-							}
-						}
-						else {
-							progress.dismiss();
-						}
+						doActionShare(context, like, null, progress, listener, networks);
 						
 						dialog.dismiss();
 					}
@@ -198,7 +155,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 					listener.onCancel();
 				}
 			}
-		}, ShareUtils.FACEBOOK | ShareUtils.TWITTER);
+		}, ShareUtils.SOCIAL);
 	}
 
 	/*
@@ -282,10 +239,6 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 
 	public void setLikeSystem(LikeSystem likeSystem) {
 		this.likeSystem = likeSystem;
-	}
-	
-	public void setShareHandlers(ShareHandlers shareHandlers) {
-		this.shareHandlers = shareHandlers;
 	}
 }
 

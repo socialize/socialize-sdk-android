@@ -566,7 +566,6 @@
 		id="facebookWallPoster" 
 		class="com.socialize.networks.facebook.DefaultFacebookWallPoster">
 		<property name="logger" ref="logger"/>
-		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
 		<property name="facebookImageUtils" ref="facebookImageUtils"/>
 		<property name="facebookRunnerFactory" ref="facebookRunnerFactory"/>
 	</bean>	

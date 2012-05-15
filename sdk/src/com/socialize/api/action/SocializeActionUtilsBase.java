@@ -21,13 +21,20 @@
  */
 package com.socialize.api.action;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
+import com.socialize.networks.PostData;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
+import com.socialize.share.ShareHandler;
+import com.socialize.share.ShareHandlers;
 
 
 /**
@@ -35,6 +42,8 @@ import com.socialize.networks.SocialNetwork;
  *
  */
 public abstract class SocializeActionUtilsBase {
+	
+	private ShareHandlers shareHandlers;
 	
 	protected boolean isDisplayAuthDialog() {
 		
@@ -88,5 +97,53 @@ public abstract class SocializeActionUtilsBase {
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();
 	}
+	
+	protected void doActionShare(final Activity context, final SocializeAction action, final String text, final ProgressDialog progress, final SocialNetworkListener listener, final SocialNetwork...networks) {
 
+		if(networks != null && networks.length > 0) {
+			for (SocialNetwork socialNetwork : networks) {
+				ShareHandler handler = shareHandlers.getShareHandler(ShareType.valueOf(socialNetwork));
+				if(handler != null) {
+					handler.handle(context, action, null, text, new SocialNetworkListener() {
+						@Override
+						public void onError(Activity context, SocialNetwork network, Exception error) {
+							if(listener != null) {
+								listener.onError(context, network, error);
+							}
+							
+							progress.dismiss();
+						}
+						
+						@Override
+						public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+							if(listener != null) {
+								listener.onBeforePost(parent, socialNetwork, postData);
+							}
+						}
+						
+						@Override
+						public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
+							if(listener != null) {
+								listener.onAfterPost(parent, socialNetwork);
+							}
+							progress.dismiss();
+						}
+					});
+				}
+				else {
+					// TODO: Log error!
+					progress.dismiss();
+				}
+			}
+		}
+		else {
+			progress.dismiss();
+		}
+	}
+	
+	public void setShareHandlers(ShareHandlers shareHandlers) {
+		this.shareHandlers = shareHandlers;
+	}
+
+	
 }

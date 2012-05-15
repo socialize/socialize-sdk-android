@@ -1726,6 +1726,7 @@
 		<property name="commentSystem" ref="commentSystem"/>
 		<property name="authDialogFactory" ref="authDialogFactory"/>
 		<property name="shareDialogFactory" ref="shareDialogFactory"/>
+		<property name="shareHandlers" ref="shareHandlers"/>
 	</bean>
 	
 	<bean id="subscriptionUtils" class="com.socialize.api.action.comment.SocializeSubscriptionUtils">
