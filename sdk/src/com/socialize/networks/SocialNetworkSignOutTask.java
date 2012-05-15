@@ -24,9 +24,9 @@ package com.socialize.networks;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
-
-import com.socialize.Socialize;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.networks.facebook.FacebookUtils;
+import com.socialize.networks.twitter.TwitterUtils;
 import com.socialize.ui.dialog.ProgressDialogFactory;
 import com.socialize.util.IAsyncTask;
 
@@ -64,7 +64,14 @@ public class SocialNetworkSignOutTask extends AsyncTask<Void, Void, Void> implem
 	 */
 	@Override
 	protected Void doInBackground(Void... args) {
-		Socialize.getSocialize().clear3rdPartySession(context, type);
+		switch (type) {
+		case FACEBOOK:
+			FacebookUtils.unlink(context);
+			break;
+		case TWITTER:
+			TwitterUtils.unlink(context);
+			break;
+		}
 		return null;
 	}
 

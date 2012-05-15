@@ -60,5 +60,4 @@ public class FacebookShareCell extends FacebookCell {
 	public void setFacebookAuthClickListener(FacebookAuthClickListener facebookAuthClickListener) {
 		this.facebookAuthClickListener = facebookAuthClickListener;
 	}
-
 }

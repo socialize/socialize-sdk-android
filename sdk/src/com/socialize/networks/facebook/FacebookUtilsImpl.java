@@ -85,9 +85,10 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#unlink(android.app.Activity)
 	 */
 	@Override
-	public void unlink(Activity context) {
+	public void unlink(Context context) {
 		SocializeSession session = getSocialize().getSession();
 		session.clear(AuthProviderType.FACEBOOK);
+		session.getUser().setAutoPostToFacebook(false);
 		userSystem.saveSession(context, session);
 	}
 

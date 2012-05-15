@@ -50,7 +50,7 @@ public class LikeUtils {
 	/**
 	 * Records a like against the given entity for the current user.
 	 * @param context The current context.
-	 * @param e The entity to be liked.
+	 * @param entityKey The entity to be liked.
 	 * @param listener A listener to handle the result.
 	 */
 	public static void like (Activity context, String entityKey, LikeAddListener listener) {

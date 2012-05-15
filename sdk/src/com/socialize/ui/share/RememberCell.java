@@ -44,13 +44,13 @@ public class RememberCell extends ClickableSectionCell {
 		TextView title = new TextView(getContext());
 //		TextView sub = new TextView(getContext());
 		
-		title.setText("Remember this");
+		title.setText("Always post to these networks");
 //		sub.setText("You can always change these preferences in your settings later");
 		
 		title.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
 //		sub.setTextColor(colors.getColor(Colors.ANON_CELL_TEXT));
 		
-		title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+		title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
 //		sub.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
 	
 		layout.setLayoutParams(params);

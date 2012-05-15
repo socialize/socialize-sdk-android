@@ -27,6 +27,7 @@ import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
+import com.socialize.networks.ShareOptions;
 
 
 /**
@@ -79,4 +80,12 @@ public interface LikeUtilsProxy {
 	 * @param listener A listener to handle the result.
 	 */
 	public void getLikesByEntity (Activity context, String entityKey, int start, int end, LikeListListener listener);
+
+	/**
+	 * @param context
+	 * @param entityKey
+	 * @param shareOptions
+	 * @param listener
+	 */
+	public void like(Activity context, String entityKey, ShareOptions shareOptions, LikeAddListener listener);
 }

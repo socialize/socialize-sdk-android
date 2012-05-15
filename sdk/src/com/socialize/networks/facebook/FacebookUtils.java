@@ -67,7 +67,7 @@ public class FacebookUtils {
 	 * Removes the Facebook credentials from the current user.
 	 * @param context The current context.
 	 */
-	public static void unlink (Activity context){
+	public static void unlink (Context context){
 		proxy.unlink(context);
 	}
 	

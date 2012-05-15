@@ -67,9 +67,24 @@ public abstract class SocializeActionUtilsBase {
 				}
 			}
 		}
-		
 		return (authRequired && authSupported);
+	}
+	
+	protected boolean isDisplayShareDialog() {
 		
+		boolean shareRequired = true;
+		
+		User user = getSocialize().getSession().getUser();
+		
+		if(getSocialize().isSupported(AuthProviderType.TWITTER)) {
+			shareRequired &= !user.isAutoPostToTwitter();
+		}
+		
+		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
+			shareRequired &= !user.isAutoPostToFacebook();
+		}
+		
+		return shareRequired;
 	}
 	
 	protected ShareOptions getDefaultShareOptions() {
@@ -111,7 +126,10 @@ public abstract class SocializeActionUtilsBase {
 								listener.onError(context, network, error);
 							}
 							
-							progress.dismiss();
+							if(progress != null) {
+								progress.dismiss();
+							}
+							
 						}
 						
 						@Override
@@ -126,18 +144,25 @@ public abstract class SocializeActionUtilsBase {
 							if(listener != null) {
 								listener.onAfterPost(parent, socialNetwork);
 							}
-							progress.dismiss();
+							
+							if(progress != null) {
+								progress.dismiss();
+							}
 						}
 					});
 				}
 				else {
 					// TODO: Log error!
-					progress.dismiss();
+					if(progress != null) {
+						progress.dismiss();
+					}
 				}
 			}
 		}
 		else {
-			progress.dismiss();
+			if(progress != null) {
+				progress.dismiss();
+			}
 		}
 	}
 	

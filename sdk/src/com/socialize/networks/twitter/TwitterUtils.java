@@ -54,7 +54,7 @@ public class TwitterUtils {
 		proxy.link(context, token, secret, listener);
 	}
 	
-	public static void unlink (Activity context) {
+	public static void unlink (Context context) {
 		proxy.unlink(context);
 	}
 

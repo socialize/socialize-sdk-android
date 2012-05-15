@@ -45,7 +45,7 @@ public abstract class SocialNetworkDialogListener extends SocialNetworkShareList
 	 * @see com.socialize.ui.auth.ShareDialogListener#onContinue(android.app.Dialog, com.socialize.networks.SocialNetwork[])
 	 */
 	@Override
-	public boolean onContinue(Dialog dialog, SocialNetwork... networks) {
+	public boolean onContinue(Dialog dialog, boolean remember, SocialNetwork... networks) {
 		return false;
 	}
 	

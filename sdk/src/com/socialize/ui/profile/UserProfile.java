@@ -40,8 +40,8 @@ public class UserProfile {
 	private boolean notificationsEnabled = true;
 	private boolean locationEnabled = true;
 	
-	private boolean autoPostFacebook;
-	private boolean autoPostTwitter;
+	private boolean autoPostFacebook = false;
+	private boolean autoPostTwitter = false;
 	
 	public String getFullName() {
 		if(fullName == null) {

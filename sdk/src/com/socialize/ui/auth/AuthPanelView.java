@@ -71,12 +71,12 @@ public class AuthPanelView extends DialogPanelView {
 	private FacebookSignInCell facebookSignInCell;
 	private TwitterSignInCell twitterSignInCell;
 	private AnonymousCell anonymousCell;
+	private TextView skipAuth;
 	
 	float radii = 6;
 	int padding = 8;
 	int headerHeight = 45;
 	float headerRadius = 3;
-//	int landscapeButtonWidth = 190;
 	
 	private final float[] fbRadii = new float[]{radii, radii, radii, radii, 0.0f, 0.0f, 0.0f, 0.0f};
 	private final int[] fbStroke = new int[]{1, 1, 0, 1};
@@ -136,6 +136,7 @@ public class AuthPanelView extends DialogPanelView {
 			contentLayout.addView(shareBadge);
 		}
 		
+		
 		if(facebookSignInCell != null || twitterSignInCell != null) {
 			if(facebookSignInCell != null) {
 				socialNetworkButtonLayout.addView(facebookSignInCell);
@@ -147,6 +148,32 @@ public class AuthPanelView extends DialogPanelView {
 		}
 		
 		contentLayout.addView(anonymousCell);
+		
+		if(getSocialize().getConfig().isAllowAnonymousUser()) {
+			skipAuth = new TextView(getContext());
+			skipAuth.setText("I'd rather not...");
+			skipAuth.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+			skipAuth.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
+			skipAuth.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
+			skipAuth.setPadding(0, 0, 0, padding);
+			
+			LayoutParams skipAuthParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			skipAuthParams.gravity = Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
+			skipAuthParams.weight = 1.0f;
+			
+			skipAuth.setLayoutParams(skipAuthParams);
+			
+			skipAuth.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if(authDialogListener != null) {
+						authDialogListener.onSkipAuth(getActivity(), dialog);
+					}
+				}
+			});
+			
+			contentLayout.addView(skipAuth);
+		}		
 		
 		container.addView(contentLayout);
 		

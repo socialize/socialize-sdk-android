@@ -45,6 +45,4 @@ public class ShareDialogFactory extends AsyncDialogFactory<SharePanelView, Share
 	public void setListener(SharePanelView view, ShareDialogListener listener) {
 		view.setShareDialogListener(listener);
 	}
-
-	
 }

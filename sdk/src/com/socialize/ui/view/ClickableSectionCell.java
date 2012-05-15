@@ -52,6 +52,8 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	private String backgroundColor;
 	private String textColor;
 	
+	private OnToggleListener onToggleListener;
+	
 	private int bgColor;
 	private int txtColor;
 	private int strokeColor = -1;
@@ -63,10 +65,10 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	private String toggledDrawableName = null;
 	private String untoggledDrawableName = null;
 	
-	private float topLeftRadius = 8.0f;
-	private float topRightRadius = 8.0f;
-	private float bottomLeftRadius = 8.0f;
-	private float bottomRightRadius = 8.0f;
+	private float topLeftRadius = 6.0f;
+	private float topRightRadius = 6.0f;
+	private float bottomLeftRadius = 6.0f;
+	private float bottomRightRadius = 6.0f;
 	
 	private boolean canClick = true;
 	private boolean toggled = true;
@@ -298,6 +300,10 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	public void setUntoggledDrawableName(String untoggledDrawableName) {
 		this.untoggledDrawableName = untoggledDrawableName;
 	}
+	
+	public static interface OnToggleListener {
+		public void onToggle(boolean on);
+	}
 
 	// So we can mock
 	protected GradientDrawable makeGradient(int bottom, int top) {
@@ -310,6 +316,10 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		return toggled;
 	}
 	
+	public void setOnToggleListener(OnToggleListener onToggleListener) {
+		this.onToggleListener = onToggleListener;
+	}
+
 	public void setToggled(boolean toggled) {
 		this.toggled = toggled;
 		
@@ -331,6 +341,10 @@ public abstract class ClickableSectionCell extends LinearLayout {
 			if(arrowIcon != null && untoggledDrawableName != null) {
 				arrowIcon.setImageDrawable(drawables.getDrawable(untoggledDrawableName));
 			}
+		}
+		
+		if(onToggleListener != null) {
+			onToggleListener.onToggle(toggled);
 		}
 	}	
 }

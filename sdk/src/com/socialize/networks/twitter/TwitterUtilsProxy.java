@@ -39,7 +39,7 @@ public interface TwitterUtilsProxy {
 	
 	public void link (Activity context, String token, String secret, SocializeAuthListener listener);
 	
-	public void unlink (Activity context);
+	public void unlink (Context context);
 	
 	@Synchronous
 	public boolean isLinked(Context context);

@@ -87,9 +87,10 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	 * @see com.socialize.networks.twitter.TwitterUtilsProxy#unlink(android.app.Activity)
 	 */
 	@Override
-	public void unlink(Activity context) {
+	public void unlink(Context context) {
 		SocializeSession session = getSocialize().getSession();
 		session.clear(AuthProviderType.TWITTER);
+		session.getUser().setAutoPostToTwitter(false);
 		userSystem.saveSession(context, session);		
 	}
 

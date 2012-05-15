@@ -71,7 +71,7 @@ public class UserFactory extends SocializeObjectFactory<User> {
 	@Override
 	protected void postFromJSON(JSONObject object, User user) throws JSONException {
 		
-		boolean legacyAutoPost = getBoolean(object,AUTO_POST_COMMENTS_FACEBOOK, true) || getBoolean(object,AUTO_POST_LIKES_FACEBOOK, true);
+		boolean legacyAutoPost = getBoolean(object,AUTO_POST_COMMENTS_FACEBOOK, false) || getBoolean(object,AUTO_POST_LIKES_FACEBOOK, false);
 		
 		user.setMetaData(getString(object,META));
 		user.setFirstName(getString(object,FIRST_NAME));
@@ -84,7 +84,7 @@ public class UserFactory extends SocializeObjectFactory<User> {
 		user.setLargeImageUri(getString(object,LARGE_IMAGE_URI));
 		user.setProfilePicData(getString(object,IMAGE_DATA));
 		user.setAutoPostToFacebook(getBoolean(object,AUTO_POST_FACEBOOK, legacyAutoPost));
-		user.setAutoPostToTwitter(getBoolean(object,AUTO_POST_TWITTER, true));
+		user.setAutoPostToTwitter(getBoolean(object,AUTO_POST_TWITTER, false));
 		user.setShareLocation(getBoolean(object,SHARE_LOCATION, true));
 		user.setNotificationsEnabled(getBoolean(object,NOTIFICATIONS_ENABLED, true));
 		

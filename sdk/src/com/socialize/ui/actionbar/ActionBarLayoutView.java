@@ -352,10 +352,12 @@ public class ActionBarLayoutView extends BaseView {
 			
 			@Override
 			public void onCreate(Like entity) {
+				CacheableEntity localEntity = setLocalEntity(entity.getEntity());
 				localEntity.setLiked(true);
 				localEntity.setLikeId(entity.getId());
-				button.hideLoading();
 				setEntityData(localEntity);
+				
+				button.hideLoading();
 				
 				if(onActionBarEventListener != null) {
 					onActionBarEventListener.onPostLike(actionBarView, entity);
@@ -370,15 +372,22 @@ public class ActionBarLayoutView extends BaseView {
 			@Override
 			public void onError(SocializeException error) {
 				logError("Error deleting like", error);
-				localEntity.setLiked(false);
-				setEntityData(localEntity);
+				
+				if(localEntity != null) {
+					localEntity.setLiked(false);
+					setEntityData(localEntity);
+				}
+
 				button.hideLoading();
 			}
 			
 			@Override
 			public void onDelete() {
-				localEntity.setLiked(false);
-				setEntityData(localEntity);
+				if(localEntity != null) {
+					localEntity.setLiked(false);
+					setEntityData(localEntity);
+				}
+
 				button.hideLoading();
 				if(onActionBarEventListener != null) {
 					onActionBarEventListener.onPostUnlike(actionBarView);

@@ -68,13 +68,13 @@ public class CommentEntryView extends BaseView {
 	private KeyboardUtils keyboardUtils;
 	private EditText commentField;
 	
-	private IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory;
-	private IBeanFactory<CustomCheckbox> autoPostTwitterOptionFactory;
+//	private IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory;
+//	private IBeanFactory<CustomCheckbox> autoPostTwitterOptionFactory;
 	private IBeanFactory<CustomCheckbox> locationEnabledOptionFactory;
 	private IBeanFactory<CustomCheckbox> notificationEnabledOptionFactory;
 	
-	private CustomCheckbox facebookCheckbox;
-	private CustomCheckbox twitterCheckbox;
+//	private CustomCheckbox facebookCheckbox;
+//	private CustomCheckbox twitterCheckbox;
 	private CustomCheckbox locationCheckBox;
 	private CustomCheckbox notifyCheckBox;
 	
@@ -186,17 +186,17 @@ public class CommentEntryView extends BaseView {
 					boolean shareLocation = false;
 					SocialNetwork[] shareTo = null;
 					
-					if(facebookCheckbox != null && facebookCheckbox.isChecked()) {
-						if(twitterCheckbox != null && twitterCheckbox.isChecked()) {
-							shareTo = new SocialNetwork[] {SocialNetwork.FACEBOOK, SocialNetwork.TWITTER};
-						}
-						else {
-							shareTo = new SocialNetwork[] {SocialNetwork.FACEBOOK};
-						}
-					}
-					else if(twitterCheckbox != null && twitterCheckbox.isChecked()) {
-						shareTo = new SocialNetwork[] {SocialNetwork.TWITTER};
-					}
+//					if(facebookCheckbox != null && facebookCheckbox.isChecked()) {
+//						if(twitterCheckbox != null && twitterCheckbox.isChecked()) {
+//							shareTo = new SocialNetwork[] {SocialNetwork.FACEBOOK, SocialNetwork.TWITTER};
+//						}
+//						else {
+//							shareTo = new SocialNetwork[] {SocialNetwork.FACEBOOK};
+//						}
+//					}
+//					else if(twitterCheckbox != null && twitterCheckbox.isChecked()) {
+//						shareTo = new SocialNetwork[] {SocialNetwork.TWITTER};
+//					}
 					
 					if(locationCheckBox != null) {
 						shareLocation = locationCheckBox.isChecked(); 
@@ -291,8 +291,8 @@ public class CommentEntryView extends BaseView {
 		if(fbSupported || twSupported || locationSupported) {
 			
 			User user = Socialize.getSocialize().getSession().getUser();
-			final boolean fbOK = Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK);
-			final boolean twOK = Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER);
+//			final boolean fbOK = Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK);
+//			final boolean twOK = Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER);
 			
 			int padding = displayUtils.getDIP(4);
 			
@@ -303,8 +303,6 @@ public class CommentEntryView extends BaseView {
 			LayoutParams toolbarLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 			LayoutParams toolbarLayoutLeftParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 			LayoutParams toolbarLayoutRightParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-			
-			
 			
 			GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { colors.getColor(Colors.COMMENT_ENTRY_BOTTOM), colors.getColor(Colors.COMMENT_ENTRY_TOP) });
 			toolbarLayout.setBackgroundDrawable(background);
@@ -322,58 +320,58 @@ public class CommentEntryView extends BaseView {
 			toolbarLayout.addView(toolbarLayoutLeft);
 			toolbarLayout.addView(toolbarLayoutRight);		
 			
-			if(fbSupported) {
-				facebookCheckbox = autoPostFacebookOptionFactory.getBean();
-			}
-			
-			if(twSupported) {
-				twitterCheckbox = autoPostTwitterOptionFactory.getBean();
-			}
+//			if(fbSupported) {
+//				facebookCheckbox = autoPostFacebookOptionFactory.getBean();
+//			}
+//			
+//			if(twSupported) {
+//				twitterCheckbox = autoPostTwitterOptionFactory.getBean();
+//			}
 			
 			if(locationSupported) {
 				locationCheckBox = locationEnabledOptionFactory.getBean();
 			}		
 			
-			if(facebookCheckbox != null) {
-				
-				if(fbOK) {
-					facebookCheckbox.setChecked(user.isAutoPostToFacebook());
-				}
-				else {
-					facebookCheckbox.setChecked(false);
-				}
-				
-				facebookCheckbox.setOnClickListener(getSocialNetworkClickListener(facebookCheckbox, AuthProviderType.FACEBOOK, "Facebook sharing enabled", "Facebook sharing disabled"));
-			}
-			
-			if(twitterCheckbox != null) {
-				if(twOK) {
-					twitterCheckbox.setChecked(user.isAutoPostToTwitter());
-				}
-				else {
-					twitterCheckbox.setChecked(false);
-				}
-				twitterCheckbox.setOnClickListener(getSocialNetworkClickListener(twitterCheckbox, AuthProviderType.TWITTER, "Twitter sharing enabled", "Twitter sharing disabled"));
-			}		
+//			if(facebookCheckbox != null) {
+//				
+//				if(fbOK) {
+//					facebookCheckbox.setChecked(user.isAutoPostToFacebook());
+//				}
+//				else {
+//					facebookCheckbox.setChecked(false);
+//				}
+//				
+//				facebookCheckbox.setOnClickListener(getSocialNetworkClickListener(facebookCheckbox, AuthProviderType.FACEBOOK, "Facebook sharing enabled", "Facebook sharing disabled"));
+//			}
+//			
+//			if(twitterCheckbox != null) {
+//				if(twOK) {
+//					twitterCheckbox.setChecked(user.isAutoPostToTwitter());
+//				}
+//				else {
+//					twitterCheckbox.setChecked(false);
+//				}
+//				twitterCheckbox.setOnClickListener(getSocialNetworkClickListener(twitterCheckbox, AuthProviderType.TWITTER, "Twitter sharing enabled", "Twitter sharing disabled"));
+//			}		
 
 			if(locationCheckBox != null) {
 				locationCheckBox.setChecked(user.isShareLocation());
 			}		
 			
-			if(facebookCheckbox != null || twitterCheckbox != null || notifyCheckBox != null) {
-				
-				if(facebookCheckbox != null) {
-					toolbarLayoutRight.addView(facebookCheckbox);
-				}
-				
-				if(twitterCheckbox != null) {
-					toolbarLayoutRight.addView(twitterCheckbox);
-				}			
-				
-				if(notifyCheckBox != null && displayUtils.getOrientation() != Configuration.ORIENTATION_PORTRAIT) {
-					toolbarLayoutRight.addView(notifyCheckBox);
-				}
-			}	
+//			if(facebookCheckbox != null || twitterCheckbox != null) {
+//				
+//				if(facebookCheckbox != null) {
+//					toolbarLayoutRight.addView(facebookCheckbox);
+//				}
+//				
+//				if(twitterCheckbox != null) {
+//					toolbarLayoutRight.addView(twitterCheckbox);
+//				}			
+//			}	
+			
+			if(notifyCheckBox != null && displayUtils.getOrientation() != Configuration.ORIENTATION_PORTRAIT) {
+				toolbarLayoutRight.addView(notifyCheckBox);
+			}
 			
 			if(locationCheckBox != null) {
 				toolbarLayoutLeft.addView(locationCheckBox);
@@ -455,9 +453,9 @@ public class CommentEntryView extends BaseView {
 		this.cancelCommentButton = cancelCommentButton;
 	}
 	
-	public void setAutoPostFacebookOptionFactory(IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory) {
-		this.autoPostFacebookOptionFactory = autoPostFacebookOptionFactory;
-	}
+//	public void setAutoPostFacebookOptionFactory(IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory) {
+//		this.autoPostFacebookOptionFactory = autoPostFacebookOptionFactory;
+//	}
 	
 	public void setLocationEnabledOptionFactory(IBeanFactory<CustomCheckbox> locationEnabledOptionFactory) {
 		this.locationEnabledOptionFactory = locationEnabledOptionFactory;
@@ -483,9 +481,9 @@ public class CommentEntryView extends BaseView {
 		this.notificationEnabledOptionFactory = notificationOptionFactory;
 	}
 	
-	public void setAutoPostTwitterOptionFactory(IBeanFactory<CustomCheckbox> autoPostTwitterOptionFactory) {
-		this.autoPostTwitterOptionFactory = autoPostTwitterOptionFactory;
-	}
+//	public void setAutoPostTwitterOptionFactory(IBeanFactory<CustomCheckbox> autoPostTwitterOptionFactory) {
+//		this.autoPostTwitterOptionFactory = autoPostTwitterOptionFactory;
+//	}
 
 	public void setNotificationsEnabled(boolean enabled) {
 		notificationsEnabled = enabled;
@@ -540,23 +538,23 @@ public class CommentEntryView extends BaseView {
 		if(session != null) {
 			User user = session.getUser();
 			
-			if(facebookCheckbox != null) {
-				if(!facebookCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-					facebookCheckbox.setChecked(user.isAutoPostToFacebook());
-				}
-				else {
-					facebookCheckbox.setChecked(false);
-				}
-			}
-			
-			if(twitterCheckbox != null) {
-				if(!twitterCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
-					twitterCheckbox.setChecked(user.isAutoPostToTwitter());
-				}
-				else {
-					twitterCheckbox.setChecked(false);
-				}
-			}		
+//			if(facebookCheckbox != null) {
+//				if(!facebookCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+//					facebookCheckbox.setChecked(user.isAutoPostToFacebook());
+//				}
+//				else {
+//					facebookCheckbox.setChecked(false);
+//				}
+//			}
+//			
+//			if(twitterCheckbox != null) {
+//				if(!twitterCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
+//					twitterCheckbox.setChecked(user.isAutoPostToTwitter());
+//				}
+//				else {
+//					twitterCheckbox.setChecked(false);
+//				}
+//			}		
 			
 			if(locationCheckBox != null && !locationCheckBox.isChanged()) {
 				locationCheckBox.setChecked(user.isShareLocation());
@@ -583,13 +581,13 @@ public class CommentEntryView extends BaseView {
 	}
 	
 	public void update() {
-		if(facebookCheckbox != null) {
-			facebookCheckbox.setChanged(false);
-		}
-		
-		if(twitterCheckbox != null) {
-			twitterCheckbox.setChanged(false);
-		}
+//		if(facebookCheckbox != null) {
+//			facebookCheckbox.setChanged(false);
+//		}
+//		
+//		if(twitterCheckbox != null) {
+//			twitterCheckbox.setChanged(false);
+//		}
 		
 		if(locationCheckBox != null) {
 			locationCheckBox.setChanged(false);
@@ -611,9 +609,9 @@ public class CommentEntryView extends BaseView {
 		return commentField;
 	}
 
-	protected CustomCheckbox getFacebookCheckbox() {
-		return facebookCheckbox;
-	}
+//	protected CustomCheckbox getFacebookCheckbox() {
+//		return facebookCheckbox;
+//	}
 
 	protected CustomCheckbox getLocationCheckBox() {
 		return locationCheckBox;

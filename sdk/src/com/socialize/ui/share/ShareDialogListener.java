@@ -31,7 +31,7 @@ import com.socialize.ui.dialog.SocializeDialogListener;
  */
 public interface ShareDialogListener extends SocializeDialogListener<SharePanelView> {
 
-	public boolean onContinue(Dialog dialog, SocialNetwork...networks);
+	public boolean onContinue(Dialog dialog, boolean remember, SocialNetwork...networks);
 	
 	public void onFlowInterrupted(DialogFlowController controller);
 }

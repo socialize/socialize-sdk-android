@@ -24,6 +24,7 @@ package com.socialize.api.action.comment;
 import android.app.Activity;
 import android.app.Dialog;
 import com.socialize.ShareUtils;
+import com.socialize.UserUtils;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.SocializeActionUtilsBase;
 import com.socialize.entity.Comment;
@@ -72,21 +73,41 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 				}
 				
 				@Override
+				public void onSkipAuth(Activity context, Dialog dialog) {
+					dialog.dismiss();
+					final SafeProgressDialog progress = SafeProgressDialog.show(context);
+					commentSystem.addComment(session, entityKey, text, null, new CommentAddListener() {
+						
+						@Override
+						public void onError(SocializeException error) {
+							progress.dismiss();
+							if(listener != null) {
+								listener.onError(error);
+							}
+						}
+						
+						@Override
+						public void onCreate(Comment result) {
+							progress.dismiss();
+							if(listener != null) {
+								listener.onCreate(result);
+							}
+						}
+					});
+				}
+
+				@Override
 				public void onError(Activity context, Dialog dialog, Exception error) {
 					dialog.dismiss();
 					
 					if(listener != null) {
 						listener.onError(SocializeException.wrap(error));
 					}
-					
-					// TODO: Show error
 				}
-				
+
 				@Override
 				public void onAuthenticate(Activity context, Dialog dialog, SocialNetwork network) {
-					
 					dialog.dismiss();
-					
 					doCommentWithShare(context, session, entityKey, text, listener);
 				}
 			});
@@ -97,64 +118,96 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 	}
 	
 	protected void doCommentWithShare(final Activity context, final SocializeSession session, final String entityKey, final String text, final CommentAddListener listener) {
-		shareDialogFactory.show(context, entityKey, null,  new ShareDialogListener() {
-			@Override
-			public void onShow(Dialog dialog, SharePanelView dialogView) {}
-			
-			@Override
-			public void onFlowInterrupted(DialogFlowController controller) {}
-			
-			@Override
-			public boolean onContinue(final Dialog dialog, final SocialNetwork... networks) {
+		
+		if(isDisplayShareDialog()) {
+			shareDialogFactory.show(context, entityKey, null,  new ShareDialogListener() {
+				@Override
+				public void onShow(Dialog dialog, SharePanelView dialogView) {}
 				
-				int count = 0;
+				@Override
+				public void onFlowInterrupted(DialogFlowController controller) {}
 				
-				if(networks != null) {
-					count = networks.length;
-				}
-				
-				final SafeProgressDialog progress = SafeProgressDialog.show(context, count);
-
-				ShareOptions options = new ShareOptions();
-				options.setShareLocation(session.getUser().isShareLocation());
-				options.setShareTo(networks);
-
-				CommentAddListener overrideListener = new CommentAddListener() {
-
-					@Override
-					public void onError(SocializeException error) {
-						progress.dismissAll();
-						dialog.dismiss();
-						if(listener != null) {
-							listener.onError(error);
-						}
+				@Override
+				public boolean onContinue(final Dialog dialog, boolean remember, final SocialNetwork...networks) {
+					
+					int count = 0;
+					
+					User user = session.getUser();
+					
+					if(networks != null) {
+						count = networks.length;
+					}
+					
+					final SafeProgressDialog progress = SafeProgressDialog.show(context, count);
+					
+					if(remember && user.setAutoPostPreferences(networks)) {
+						UserUtils.saveUserSettings(context, user, null);
 					}
 
-					@Override
-					public void onCreate(Comment comment) {
-						
-						if(listener != null) {
-							listener.onCreate(comment);
+					ShareOptions options = new ShareOptions();
+					options.setShareLocation(user.isShareLocation());
+					options.setShareTo(networks);
+
+					CommentAddListener overrideListener = new CommentAddListener() {
+
+						@Override
+						public void onError(SocializeException error) {
+							progress.dismissAll();
+							dialog.dismiss();
+							if(listener != null) {
+								listener.onError(error);
+							}
 						}
-						
-						doActionShare(context, comment, text, progress, listener, networks);
-						
-						dialog.dismiss();
-					}
-				};
 
-				commentSystem.addComment(session, entityKey, text, options, overrideListener);
+						@Override
+						public void onCreate(Comment comment) {
+							
+							if(listener != null) {
+								listener.onCreate(comment);
+							}
+							
+							doActionShare(context, comment, text, progress, listener, networks);
+							
+							dialog.dismiss();
+						}
+					};
 
-				return false;				
-			}
-			@Override
-			public void onCancel(Dialog dialog) {
-				if(listener != null) {
-					listener.onCancel();
+					commentSystem.addComment(session, entityKey, text, options, overrideListener);
+
+					return false;				
 				}
-			}
-		}, ShareUtils.SOCIAL|ShareUtils.SHOW_REMEMBER);
+				@Override
+				public void onCancel(Dialog dialog) {
+					if(listener != null) {
+						listener.onCancel();
+					}
+				}
+			}, ShareUtils.SOCIAL|ShareUtils.SHOW_REMEMBER);
+		}
+		else {
+			doCommentWithoutShare(context, session, entityKey, text, listener);
+		}
 	}	
+	
+	protected void doCommentWithoutShare(final Activity context, final SocializeSession session, final String entityKey, final String text, final CommentAddListener listener) {
+		final ShareOptions defaultShareOptions = getDefaultShareOptions();
+		commentSystem.addComment(session, entityKey, text, defaultShareOptions, new CommentAddListener() {
+			@Override
+			public void onError(SocializeException error) {
+				if(listener != null) {
+					listener.onError(error);
+				}
+			}
+			
+			@Override
+			public void onCreate(Comment comment) {
+				if(listener != null) {
+					listener.onCreate(comment);
+				}
+				doActionShare(context, comment, text, null, listener, defaultShareOptions.getShareTo());
+			}
+		});		
+	}
 
 	@Override
 	public void getComment(Activity context, long id, CommentGetListener listener) {

@@ -34,7 +34,7 @@ import com.socialize.networks.SocialNetworkListener;
 public interface FacebookUtilsProxy {
 	public void link (Activity context, SocializeAuthListener listener);
 	public void link (Activity context, String token, SocializeAuthListener listener);
-	public void unlink (Activity context);
+	public void unlink (Context context);
 	
 	@Synchronous
 	public boolean isLinked(Context context);

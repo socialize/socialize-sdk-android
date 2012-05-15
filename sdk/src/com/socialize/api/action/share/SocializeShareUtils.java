@@ -70,11 +70,11 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 			}
 
 			@Override
-			public boolean onContinue(final Dialog dialog, final SocialNetwork... networks) {
+			public boolean onContinue(final Dialog dialog, boolean remember, final SocialNetwork... networks) {
 				boolean consumed = true;
 				
 				if(dialogListener != null) {
-					consumed = dialogListener.onContinue(dialog, networks);
+					consumed = dialogListener.onContinue(dialog, remember, networks);
 				}					
 				
 				if(!consumed) {

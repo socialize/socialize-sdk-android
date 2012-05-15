@@ -50,6 +50,7 @@ import com.socialize.ui.dialog.DialogPanelView;
 import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.view.ClickableSectionCell;
+import com.socialize.ui.view.ClickableSectionCell.OnToggleListener;
 import com.socialize.ui.view.SocializeButton;
 import com.socialize.util.DisplayUtils;
 import com.socialize.util.Drawables;
@@ -108,11 +109,11 @@ public class SharePanelView extends DialogPanelView {
 	float headerRadius = 3;
 	int landscapeButtonWidth = 190;
 	
-	private final float[] fbRadii = new float[]{radii, radii, radii, radii, 0.0f, 0.0f, 0.0f, 0.0f};
-	private final int[] fbStroke = new int[]{1, 1, 0, 1};
+	private float[] fbRadii = new float[]{radii, radii, radii, radii, 0.0f, 0.0f, 0.0f, 0.0f};
+	private int[] fbStroke = new int[]{1, 1, 0, 1};
 	
-	private final float[] twRadii = new float[]{0.0f, 0.0f, 0.0f, 0.0f, radii, radii, radii, radii};
-	private final int[] twStroke = new int[]{1, 1, 1, 1};
+	private float[] twRadii = new float[]{0.0f, 0.0f, 0.0f, 0.0f, radii, radii, radii, radii};
+	private int[] twStroke = new int[]{1, 1, 1, 1};
 	
 	public void init() {
 		
@@ -123,10 +124,12 @@ public class SharePanelView extends DialogPanelView {
 			padding = displayUtils.getDIP(12);
 			headerRadius = displayUtils.getDIP(3);
 			headerHeight = displayUtils.getDIP(45);
-			radii = displayUtils.getDIP(8);
+			radii = displayUtils.getDIP(radii);
 			landscape = displayUtils.isLandscape();
 			lowRes = displayUtils.isLowRes();
 			landscapeButtonWidth = displayUtils.getDIP(landscapeButtonWidth);
+			fbRadii = new float[]{radii, radii, radii, radii, 0.0f, 0.0f, 0.0f, 0.0f};
+			twRadii = new float[]{0.0f, 0.0f, 0.0f, 0.0f, radii, radii, radii, radii};
 		}
 		
 		LayoutParams masterParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
@@ -189,11 +192,31 @@ public class SharePanelView extends DialogPanelView {
 		}
 		
 		if(facebookShareCell != null || twitterShareCell != null) {
+			
+			OnToggleListener onToggleListener = new OnToggleListener() {
+				
+				@Override
+				public void onToggle(boolean on) {
+					if(rememberCell != null) {
+						boolean fbOK = facebookShareCell == null || facebookShareCell.isToggled();
+						boolean twOK = twitterShareCell == null || twitterShareCell.isToggled();
+						if(fbOK || twOK) {
+							rememberCell.setVisibility(View.VISIBLE);
+						}
+						else {
+							rememberCell.setVisibility(View.GONE);
+						}
+					}
+				}
+			};
+			
 			if(facebookShareCell != null) {
 				socialNetworkButtonLayout.addView(facebookShareCell);
+				facebookShareCell.setOnToggleListener(onToggleListener);
 			}
 			if(twitterShareCell != null) {
 				socialNetworkButtonLayout.addView(twitterShareCell);
+				twitterShareCell.setOnToggleListener(onToggleListener);
 			}
 			contentLayout.addView(socialNetworkButtonLayout);
 		}
@@ -254,7 +277,13 @@ public class SharePanelView extends DialogPanelView {
 						networks = new SocialNetwork[]{SocialNetwork.TWITTER};
 					}
 					
-					shareDialogListener.onContinue(dialog, networks);
+					boolean remember = false;
+					
+					if(rememberCell != null) {
+						remember = rememberCell.isToggled();
+					}
+					
+					shareDialogListener.onContinue(dialog, remember, networks);
 				}
 			});
 			
@@ -439,9 +468,8 @@ public class SharePanelView extends DialogPanelView {
 	
 	public void updateNetworkButtonState() {
 		if(facebookShareCell != null) {
-			facebookShareCell.setToggled(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK) );
+			facebookShareCell.setToggled(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK));
 		}
-		
 		if(twitterShareCell != null) {
 			twitterShareCell.setToggled(getSocialize().isAuthenticated(AuthProviderType.TWITTER));
 		}
@@ -523,7 +551,7 @@ public class SharePanelView extends DialogPanelView {
 			
 			@Override
 			public void onAuthSuccess(SocializeSession session) {
-				cell.setToggled(!cell.isToggled());
+				cell.setToggled(true);
 				updateNetworkButtonState();
 			}
 			

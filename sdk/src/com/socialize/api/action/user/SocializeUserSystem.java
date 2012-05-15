@@ -240,7 +240,9 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 				sessionPersister.saveUser(context, sessionUser);
 			}
 			
-			listener.onUpdate(sessionUser);
+			if(listener != null) {
+				listener.onUpdate(sessionUser);
+			}
 		}
 		finally {
 			SessionLock.unlock();

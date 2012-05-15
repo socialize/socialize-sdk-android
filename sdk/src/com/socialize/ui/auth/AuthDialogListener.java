@@ -32,6 +32,8 @@ import com.socialize.ui.dialog.SocializeDialogListener;
  */
 public interface AuthDialogListener extends SocializeDialogListener<AuthPanelView> {
 	
+	public void onSkipAuth(Activity context, Dialog dialog);
+	
 	public void onAuthenticate(Activity context, Dialog dialog, SocialNetwork network);
 	
 	public void onError(Activity context, Dialog dialog, Exception error);
