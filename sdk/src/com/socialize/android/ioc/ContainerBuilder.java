@@ -487,6 +487,9 @@ public class ContainerBuilder {
 							"] initialized.");
 				}
 			}
+			else {
+				// May be factory
+			}
 		}
 		
 		if(!doLaterBeans.isEmpty()) {

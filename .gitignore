@@ -7,6 +7,9 @@ sample/src_ext
 gh-pages
 *.pyc
 *.DS_Store
+demo/.settings
+demo/gen
+demo/bin
 sample/.settings
 sample/gen
 sample/bin
