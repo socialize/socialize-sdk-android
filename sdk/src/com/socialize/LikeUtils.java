@@ -24,7 +24,6 @@ package com.socialize;
 import java.lang.reflect.Proxy;
 import android.app.Activity;
 import com.socialize.api.action.like.LikeUtilsProxy;
-import com.socialize.entity.Entity;
 import com.socialize.entity.User;
 import com.socialize.listener.like.IsLikedListener;
 import com.socialize.listener.like.LikeAddListener;
@@ -54,38 +53,38 @@ public class LikeUtils {
 	 * @param e The entity to be liked.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void like (Activity context, Entity e, LikeAddListener listener) {
-		proxy.like(context, e, listener);
+	public static void like (Activity context, String entityKey, LikeAddListener listener) {
+		proxy.like(context, entityKey, listener);
 	}
 	
 	/**
 	 * Removes a like previously created for the current user.
 	 * @param context The current context.
-	 * @param e The entity that was liked.
+	 * @param entityKey The entity that was liked.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void unlike (Activity context, Entity e, LikeDeleteListener listener) {
-		proxy.unlike(context, e, listener);
+	public static void unlike (Activity context, String entityKey, LikeDeleteListener listener) {
+		proxy.unlike(context, entityKey, listener);
 	}
 	
 	/**
 	 * Retrieves a like for an entity and the current user.
 	 * @param context The current context.
-	 * @param e The entity that was liked.
+	 * @param entityKey The entity that was liked.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void getLike (Activity context, Entity e, LikeGetListener listener) {
-		proxy.getLike(context, e, listener);
+	public static void getLike (Activity context, String entityKey, LikeGetListener listener) {
+		proxy.getLike(context, entityKey, listener);
 	}
 	
 	/**
 	 * Determines if the given entity has been liked by the current user.
 	 * @param context The current context.
-	 * @param e The entity that was liked.
+	 * @param entityKey The entity that was liked.
 	 * @param listener listener A listener to handle the result.
 	 */
-	public static void isLiked(Activity context, Entity e, IsLikedListener listener) {
-		proxy.getLike(context, e, listener);
+	public static void isLiked(Activity context, String entityKey, IsLikedListener listener) {
+		proxy.getLike(context, entityKey, listener);
 	}
 	
 	/**
@@ -103,12 +102,12 @@ public class LikeUtils {
 	/**
 	 * Lists all likes for the given entity.
 	 * @param context The current context.
-	 * @param entity The entity for whom likes will be queried.
+	 * @param entityKey The entity for whom likes will be queried.
 	 * @param start The first index (for pagination), starting at 0
 	 * @param end The last index (for pagination)
 	 * @param listener A listener to handle the result.
 	 */
-	public static void getLikesByEntity (Activity context, Entity entity, int start, int end, LikeListListener listener) {
-		proxy.getLikesByEntity(context, entity, start, end, listener);
+	public static void getLikesByEntity (Activity context, String entityKey, int start, int end, LikeListListener listener) {
+		proxy.getLikesByEntity(context, entityKey, start, end, listener);
 	}	
 }

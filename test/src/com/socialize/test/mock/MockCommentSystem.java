@@ -4,7 +4,6 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.action.comment.CommentSystem;
 import com.socialize.entity.Application;
 import com.socialize.entity.Comment;
-import com.socialize.entity.Entity;
 import com.socialize.entity.User;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.networks.ShareOptions;
@@ -33,9 +32,10 @@ public class MockCommentSystem extends MockSystem<Comment> implements CommentSys
 	}
 
 	@Override
-	public void addComment(SocializeSession session, Entity entity, String comment, ShareOptions shareOptions, CommentListener listener) {
+	public void addComment(SocializeSession session, String entityKey, String comment, ShareOptions shareOptions, CommentListener listener) {
 		if(listener != null) listener.onCreate(action);
 	}
+
 
 	@Override
 	public void getCommentsByEntity(SocializeSession session, String entityKey, CommentListener listener) {

@@ -59,10 +59,10 @@ public class ActionBarLikeStateTest extends ActivityInstrumentationTestCase2<Act
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
 			
 			int callCount = 0;
-
+			
 			@Override
-			public void addLike(SocializeSession session, Entity entity, ShareOptions options, LikeListener listener) {
-				super.addLike(session, entity, options, listener);
+			public void addLike(SocializeSession session, String entityKey, ShareOptions shareOptions, LikeListener listener) {
+				super.addLike(session, entityKey, shareOptions, listener);
 			}
 
 			@Override

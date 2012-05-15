@@ -234,36 +234,7 @@ public class CommentListView extends BaseView {
 				text = StringUtils.replaceNewLines(text, 3, 2);
 				
 				if(networks == null || networks.length == 0) {
-					
-					CommentUtils.addComment(CommentListView.this.getActivity(), entity, text, getCommentAddListener(subscribe));
-					
-//					// No networks requested, ensure we are authed with at least one
-//					boolean showAuth = true;
-//					boolean authSupported = false;
-//					
-//					SocialNetwork[] all = SocialNetwork.values();
-//					
-//					for (SocialNetwork socialNetwork : all) {
-//						AuthProviderType type = AuthProviderType.valueOf(socialNetwork);
-//						if(getSocialize().isSupported(type)) {
-//							authSupported = true;
-//							if(getSocialize().isAuthenticated(type)) {
-//								showAuth = false;
-//								break;
-//							}
-//						}
-//					}
-//					
-//					if(showAuth && authSupported) {
-//						
-//						authDialogFactory.show(CommentListView.this.getContext(), getCommentAuthListener(text, shareLocation, subscribe, networks));
-//						
-//						
-//					}
-//					else {
-//						// Post as anon
-//						doPostComment(text, shareLocation, subscribe);
-//					}
+					CommentUtils.addComment(CommentListView.this.getActivity(), entity.getKey(), text, getCommentAddListener(subscribe));
 				}
 				else {
 					doPostComment(text, shareLocation, subscribe, networks);
@@ -271,24 +242,6 @@ public class CommentListView extends BaseView {
 			}
 		});
 	}
-	
-//	protected AuthDialogListener getCommentAuthListener(final String text, final boolean shareLocation, final boolean subscribe, final SocialNetwork...networks) {
-//		return new AuthDialogListener() {
-//			@Override
-//			public void onShow(Dialog dialog, AuthPanelView dialogView) {}
-//
-//			@Override
-//			public void onAuthenticate(Activity context, SocialNetwork network) {
-//				doPostComment(text, shareLocation, subscribe, network);
-//			}
-//
-//			@Override
-//			public void onError(Activity context, Exception error) {}
-//
-//			@Override
-//			public void onCancel(Dialog dialog) {}
-//		};
-//	}
 	
 	public void doPostComment(String text, boolean shareLocation, final boolean subscribe, SocialNetwork...networks) {
 				

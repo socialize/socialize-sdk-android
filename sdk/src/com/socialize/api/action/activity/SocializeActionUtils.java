@@ -23,7 +23,6 @@ package com.socialize.api.action.activity;
 
 import android.app.Activity;
 import com.socialize.Socialize;
-import com.socialize.entity.Entity;
 import com.socialize.entity.User;
 import com.socialize.listener.activity.ActionListListener;
 
@@ -56,16 +55,16 @@ public class SocializeActionUtils implements ActionUtilsProxy {
 	 * @see com.socialize.api.action.activity.ActivityUtilsProxy#getActivityByEntity(android.app.Activity, com.socialize.entity.Entity, int, int, com.socialize.listener.activity.UserActivityListListener)
 	 */
 	@Override
-	public void getActionsByEntity(Activity context, Entity e, int start, int end, ActionListListener listener) {
-		activitySystem.getActivityByEntity(Socialize.getSocialize().getSession(), e.getKey(), start, end, listener);
+	public void getActionsByEntity(Activity context, String entityKey, int start, int end, ActionListListener listener) {
+		activitySystem.getActivityByEntity(Socialize.getSocialize().getSession(), entityKey, start, end, listener);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.api.action.activity.ActivityUtilsProxy#getActivityByUserAndEntity(android.app.Activity, com.socialize.entity.User, com.socialize.entity.Entity, int, int, com.socialize.listener.activity.UserActivityListListener)
 	 */
 	@Override
-	public void getActionsByUserAndEntity(Activity context, User user, Entity e, int start, int end, ActionListListener listener) {
-		activitySystem.getActivityByUserAndEntity(Socialize.getSocialize().getSession(), user.getId(), e.getKey(), start, end, listener);
+	public void getActionsByUserAndEntity(Activity context, User user, String entityKey, int start, int end, ActionListListener listener) {
+		activitySystem.getActivityByUserAndEntity(Socialize.getSocialize().getSession(), user.getId(), entityKey, start, end, listener);
 	}
 	
 	public void setActivitySystem(ActivitySystem activitySystem) {

@@ -130,7 +130,7 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 
 	@Override
 	public void post(final Activity context, final Entity entity, final String text, final SocialNetworkListener listener) {
-		shareSystem.addShare(context, getSocialize().getSession(), entity, ShareType.FACEBOOK, new ShareAddListener() {
+		shareSystem.addShare(context, getSocialize().getSession(), entity.getKey(), ShareType.FACEBOOK, new ShareAddListener() {
 			@Override
 			public void onCreate(Share share) {
 				PropagationInfo propInfo = share.getPropagationInfoResponse().getPropagationInfo(ShareType.FACEBOOK);

@@ -26,7 +26,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeActionUtilsBase;
-import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
@@ -49,8 +48,8 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	private ShareDialogFactory shareDialogFactory;
 	
 	@Override
-	public void showShareDialog(final Activity context, final Entity e, int options, final SocialNetworkShareListener socialNetworkListener, final ShareDialogListener dialogListener) {
-		shareDialogFactory.show(context, e, socialNetworkListener, new ShareDialogListener() {
+	public void showShareDialog(final Activity context, final String entityKey, int options, final SocialNetworkShareListener socialNetworkListener, final ShareDialogListener dialogListener) {
+		shareDialogFactory.show(context, entityKey, socialNetworkListener, new ShareDialogListener() {
 			@Override
 			public void onCancel(Dialog dialog) {
 				if(dialogListener != null) {
@@ -79,14 +78,14 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 				}					
 				
 				if(!consumed) {
-					doShare(dialog, context, e, socialNetworkListener, "", networks);
+					doShare(dialog, context, entityKey, socialNetworkListener, "", networks);
 				}
 				else {
 					dialogListener.onFlowInterrupted(new DialogFlowController() {
 						
 						@Override
 						public void onContinue(String text) {
-							doShare(dialog, context, e, socialNetworkListener, text, networks);
+							doShare(dialog, context, entityKey, socialNetworkListener, text, networks);
 						}
 
 						@Override
@@ -103,10 +102,10 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 		}, options);		
 	}
 	
-	protected void doShare(final Dialog dialog, final Activity context, final Entity e, final SocialNetworkShareListener socialNetworkListener, final String text, final SocialNetwork... networks) {
+	protected void doShare(final Dialog dialog, final Activity context, final String entityKey, final SocialNetworkShareListener socialNetworkListener, final String text, final SocialNetwork... networks) {
 		final ProgressDialog progress = SafeProgressDialog.show(context);
 		
-		shareSystem.addShare(context, getSocialize().getSession(), e, text, ShareType.OTHER, new ShareAddListener() {
+		shareSystem.addShare(context, getSocialize().getSession(), entityKey, text, ShareType.OTHER, new ShareAddListener() {
 			@Override
 			public void onError(SocializeException error) {
 				if(socialNetworkListener != null) {
@@ -137,13 +136,13 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	}
 
 	@Override
-	public void shareViaEmail(Activity context, Entity e, ShareAddListener listener) {
-		getSocialize().share(context, e, "", ShareType.EMAIL, listener);
+	public void shareViaEmail(Activity context, String entityKey, ShareAddListener listener) {
+		getSocialize().share(context, entityKey, "", ShareType.EMAIL, listener);
 	}
 
 	@Override
-	public void shareViaSMS(Activity context, Entity e, ShareAddListener listener) {
-		getSocialize().share(context, e, "", ShareType.SMS, listener);
+	public void shareViaSMS(Activity context, String entityKey, ShareAddListener listener) {
+		getSocialize().share(context, entityKey, "", ShareType.SMS, listener);
 	}
 
 	@Override
@@ -162,8 +161,8 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	}
 
 	@Override
-	public void getSharesByEntity(Activity context, Entity e, int start, int end, ShareListListener listener) {
-		shareSystem.getSharesByEntity(getSocialize().getSession(), e.getKey(), start, end, listener);
+	public void getSharesByEntity(Activity context, String entityKey, int start, int end, ShareListListener listener) {
+		shareSystem.getSharesByEntity(getSocialize().getSession(), entityKey, start, end, listener);
 	}
 
 	@Override

@@ -22,7 +22,6 @@
 package com.socialize.api.action.like;
 
 import android.app.Activity;
-import com.socialize.entity.Entity;
 import com.socialize.entity.User;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
@@ -39,26 +38,26 @@ public interface LikeUtilsProxy {
 	/**
 	 * Records a like against the given entity for the current user.
 	 * @param context The current context.
-	 * @param e The entity to be liked.
+	 * @param entityKey The entity to be liked.
 	 * @param listener A listener to handle the result.
 	 */
-	public void like (Activity context, Entity e, LikeAddListener listener);
+	public void like (Activity context, String entityKey, LikeAddListener listener);
 	
 	/**
 	 * Removes a like previously created for the current user.
 	 * @param context The current context.
-	 * @param e The entity that was liked.
+	 * @param entityKey The entity that was liked.
 	 * @param listener A listener to handle the result.
 	 */
-	public void unlike (Activity context, Entity e, LikeDeleteListener listener);
+	public void unlike (Activity context, String entityKey, LikeDeleteListener listener);
 	
 	/**
 	 * Retrieves a like for an entity.
 	 * @param context The current context.
-	 * @param e The entity that was liked.
+	 * @param entityKey The entity that was liked.
 	 * @param listener A listener to handle the result.
 	 */
-	public void getLike (Activity context, Entity e, LikeGetListener listener);
+	public void getLike (Activity context, String entityKey, LikeGetListener listener);
 	
 	/**
 	 * Lists all likes for the given user.
@@ -74,10 +73,10 @@ public interface LikeUtilsProxy {
 	/**
 	 * Lists all likes for the given entity.
 	 * @param context The current context.
-	 * @param entity The entity for which likes will be queried.
+	 * @param entityKey The entity for which likes will be queried.
 	 * @param start The first index (for pagination), starting at 0
 	 * @param end The last index (for pagination)
 	 * @param listener A listener to handle the result.
 	 */
-	public void getLikesByEntity (Activity context, Entity entity, int start, int end, LikeListListener listener);
+	public void getLikesByEntity (Activity context, String entityKey, int start, int end, LikeListListener listener);
 }

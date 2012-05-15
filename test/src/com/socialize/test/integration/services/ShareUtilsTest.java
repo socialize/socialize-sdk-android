@@ -29,7 +29,6 @@ import android.app.Dialog;
 import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.api.action.share.SocialNetworkDialogListener;
-import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.Share;
 import com.socialize.entity.User;
@@ -161,11 +160,10 @@ public class ShareUtilsTest extends SocializeActivityTest {
 	}
 	
 	public void testGetSharesByEntity() throws SocializeException, InterruptedException {
-		final Entity entity = Entity.newInstance("http://entity1.com", "http://entity1.com");
-		
+		final String entityKey = "http://entity1.com";
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		ShareUtils.getSharesByEntity(getActivity(), entity, 0, 100, new ShareListListener() {
+		ShareUtils.getSharesByEntity(getActivity(), entityKey, 0, 100, new ShareListListener() {
 			@Override
 			public void onList(ListResult<Share> entities) {
 				addResult(entities);
@@ -186,10 +184,10 @@ public class ShareUtilsTest extends SocializeActivityTest {
 	}	
 	
 	public void testShowAuthDialog() throws Exception {
-		final Entity entity = Entity.newInstance("http://entity1.com", "http://entity1.com");
+		final String entityKey = "http://entity1.com";
 		final CountDownLatch latch0 = new CountDownLatch(1);
 		
-		ShareUtils.showShareDialog(getContext(), entity, new SocialNetworkDialogListener() {
+		ShareUtils.showShareDialog(getContext(), entityKey, new SocialNetworkDialogListener() {
 			@Override
 			public void onShow(Dialog dialog, SharePanelView dialogView) {
 				addResult(0, dialogView);

@@ -25,7 +25,6 @@ import java.lang.reflect.Proxy;
 import android.app.Activity;
 import com.socialize.api.action.share.ShareUtilsProxy;
 import com.socialize.api.action.share.SocialNetworkDialogListener;
-import com.socialize.entity.Entity;
 import com.socialize.entity.User;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.share.ShareGetListener;
@@ -56,24 +55,24 @@ public class ShareUtils {
 				new SocializeActionProxy("shareUtils")); // Bean name
 	}
 	
-	public static void showShareDialog (Activity context, Entity e) {
-		proxy.showShareDialog(context, e, ALL, null, null);
+	public static void showShareDialog (Activity context, String entityKey) {
+		proxy.showShareDialog(context, entityKey, ALL, null, null);
 	};	
 	
-	public static void showShareDialog (Activity context, Entity e, ShareDialogListener listener) {
-		proxy.showShareDialog(context, e, ALL, null, listener);
+	public static void showShareDialog (Activity context, String entityKey, ShareDialogListener listener) {
+		proxy.showShareDialog(context, entityKey, ALL, null, listener);
 	};	
 	
-	public static void showShareDialog (Activity context, Entity e, SocialNetworkDialogListener listener, int options) {
-		proxy.showShareDialog(context, e, options, listener, listener);
+	public static void showShareDialog (Activity context, String entityKey, SocialNetworkDialogListener listener, int options) {
+		proxy.showShareDialog(context, entityKey, options, listener, listener);
 	};
 	
-	public static void shareViaEmail(Activity context, Entity e, ShareAddListener listener) {
-		proxy.shareViaEmail(context, e, listener);
+	public static void shareViaEmail(Activity context, String entityKey, ShareAddListener listener) {
+		proxy.shareViaEmail(context, entityKey, listener);
 	};
 	
-	public static void shareViaSMS(Activity context, Entity e, ShareAddListener listener) {
-		proxy.shareViaSMS(context, e, listener);
+	public static void shareViaSMS(Activity context, String entityKey, ShareAddListener listener) {
+		proxy.shareViaSMS(context, entityKey, listener);
 	};
 
 	public static void getShare (Activity context, ShareGetListener listener, long id) {
@@ -88,8 +87,8 @@ public class ShareUtils {
 		proxy.getSharesByUser(context, user, start, end, listener);
 	};
 	
-	public static void getSharesByEntity (Activity context, Entity e, int start, int end, ShareListListener listener) {
-		proxy.getSharesByEntity(context, e, start, end, listener);
+	public static void getSharesByEntity (Activity context, String entityKey, int start, int end, ShareListListener listener) {
+		proxy.getSharesByEntity(context, entityKey, start, end, listener);
 	};
 	
 	public static boolean canShareViaEmail(Activity context) {

@@ -26,7 +26,6 @@ import android.app.Dialog;
 import com.socialize.ShareUtils;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.SocializeActionUtilsBase;
-import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeApiError;
@@ -60,7 +59,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 	 * @see com.socialize.api.action.like.LikeUtilsProxy#like(android.app.Activity, com.socialize.entity.Entity, com.socialize.listener.like.LikeAddListener)
 	 */
 	@Override
-	public void like(Activity context, final Entity e, final LikeAddListener listener) {
+	public void like(Activity context, final String entityKey, final LikeAddListener listener) {
 
 		final SocializeSession session = getSocialize().getSession();
 
@@ -88,17 +87,17 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 				@Override
 				public void onAuthenticate(Activity context, Dialog dialog, SocialNetwork network) {
 					dialog.dismiss();
-					doLikeWithShare(context, session, e, listener);
+					doLikeWithShare(context, session, entityKey, listener);
 				}
 			});
 		}
 		else {
-			doLikeWithShare(context, session, e, listener);
+			doLikeWithShare(context, session, entityKey, listener);
 		}
 	}
 
-	protected void doLikeWithShare(final Activity context, final SocializeSession session, final Entity e, final LikeAddListener listener) {
-		shareDialogFactory.show(context, e, null, new ShareDialogListener() {
+	protected void doLikeWithShare(final Activity context, final SocializeSession session, final String entityKey, final LikeAddListener listener) {
+		shareDialogFactory.show(context, entityKey, null, new ShareDialogListener() {
 
 			@Override
 			public void onShow(Dialog dialog, SharePanelView dialogView) {}
@@ -145,7 +144,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 					}
 				};
 
-				likeSystem.addLike(session, e, options, overrideListener);
+				likeSystem.addLike(session, entityKey, options, overrideListener);
 
 				return false;
 			}
@@ -163,10 +162,10 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 	 * @see com.socialize.api.action.like.LikeUtilsProxy#unlike(android.app.Activity, com.socialize.entity.Entity, com.socialize.listener.like.LikeDeleteListener)
 	 */
 	@Override
-	public void unlike(Activity context, Entity e, final LikeDeleteListener listener) {
+	public void unlike(Activity context, String entityKey, final LikeDeleteListener listener) {
 		final SocializeSession session = getSocialize().getSession();
 		// Get the like based on the key
-		likeSystem.getLike(session, e.getKey(), new LikeGetListener() {
+		likeSystem.getLike(session, entityKey , new LikeGetListener() {
 			@Override
 			public void onGet(Like entity) {
 				if(entity != null) {
@@ -204,9 +203,9 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 	 * @see com.socialize.api.action.like.LikeUtilsProxy#getLike(android.app.Activity, com.socialize.entity.Entity, com.socialize.listener.like.LikeGetListener)
 	 */
 	@Override
-	public void getLike(Activity context, Entity e, LikeGetListener listener) {
+	public void getLike(Activity context, String entityKey, LikeGetListener listener) {
 		final SocializeSession session = getSocialize().getSession();
-		likeSystem.getLike(session, e.getKey(), listener);
+		likeSystem.getLike(session, entityKey, listener);
 	}
 
 	/*
@@ -224,9 +223,9 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 	 * @see com.socialize.api.action.like.LikeUtilsProxy#getLikesByEntity(android.app.Activity, com.socialize.entity.Entity, int, int, com.socialize.listener.like.LikeListListener)
 	 */
 	@Override
-	public void getLikesByEntity(Activity context, Entity entity, int start, int end, LikeListListener listener) {
+	public void getLikesByEntity(Activity context, String entityKey, int start, int end, LikeListListener listener) {
 		final SocializeSession session = getSocialize().getSession();
-		likeSystem.getLikesByEntity(session, entity.getKey(), start, end, listener);
+		likeSystem.getLikesByEntity(session, entityKey, start, end, listener);
 	}
 
 	public void setAuthDialogFactory(AuthDialogFactory authDialogFactory) {

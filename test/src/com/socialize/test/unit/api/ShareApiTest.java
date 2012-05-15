@@ -28,7 +28,6 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.share.SocializeShareSystem;
-import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.entity.SocializeAction;
 import com.socialize.listener.SocializeActionListener;
@@ -78,7 +77,7 @@ public class ShareApiTest extends SocializeUnitTest {
 			}
 		};
 		
-		api.addShare(getContext(), session, Entity.newInstance(key, null), shareText, type, location, listener);
+		api.addShare(getContext(), session, key, shareText, type, location, listener);
 		
 		Location loc = getNextResult();
 		List<Share> shares = getNextResult();

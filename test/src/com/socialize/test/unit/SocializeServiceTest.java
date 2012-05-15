@@ -412,7 +412,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		final String key = "foo";
 
-		likeSystem.addLike(AndroidMock.eq(session), (Entity) AndroidMock.anyObject(), (ShareOptions) AndroidMock.anyObject(), AndroidMock.eq(listener));
+		likeSystem.addLike(AndroidMock.eq(session), (String) AndroidMock.anyObject(), (ShareOptions) AndroidMock.anyObject(), AndroidMock.eq(listener));
 
 		replayDefaultMocks();
 
@@ -525,7 +525,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		final String key = "foo";
 		final String text = "bar";
 
-		shareSystem.addShare(AndroidMock.eq(getContext()), AndroidMock.eq(session), (Entity) AndroidMock.anyObject(), AndroidMock.eq(text), AndroidMock.eq(ShareType.OTHER), AndroidMock.eq(location), AndroidMock.eq(listener));
+		shareSystem.addShare(AndroidMock.eq(getContext()), AndroidMock.eq(session), (String) AndroidMock.anyObject(), AndroidMock.eq(text), AndroidMock.eq(ShareType.OTHER), AndroidMock.eq(location), AndroidMock.eq(listener));
 
 		// shareSystem.addShare(session, key, text, ShareType.OTHER, location,
 		// listener);
@@ -553,7 +553,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		setupDefaultMocks();
 
-		shareSystem.addShare(AndroidMock.eq(getContext()), AndroidMock.eq(session), (Entity) AndroidMock.anyObject(), AndroidMock.eq(text), AndroidMock.eq(ShareType.OTHER), (Location) AndroidMock.isNull(), AndroidMock.eq(listener));
+		shareSystem.addShare(AndroidMock.eq(getContext()), AndroidMock.eq(session), (String) AndroidMock.anyObject(), AndroidMock.eq(text), AndroidMock.eq(ShareType.OTHER), (Location) AndroidMock.isNull(), AndroidMock.eq(listener));
 
 		replayDefaultMocks();
 
@@ -980,14 +980,14 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		// test to make sure that share gets called with null social networks
 		PublicSocialize socializeService = newSocializeServiceForShare();
 		Activity mockActivity = AndroidMock.createMock(Activity.class);
-		Entity mockEntity = AndroidMock.createMock(Entity.class);
+		String entityKey = "foobar";
 		String testString = "test string";
 		ShareAddListener shareListener = AndroidMock.createMock(ShareAddListener.class);
 
 		// mock share system, set it on the service obj and expect it gets
 		// called
 		ShareSystem shareSystem = AndroidMock.createMock(ShareSystem.class);
-		shareSystem.addShare(getContext(), socializeService.getSession(), mockEntity, testString, ShareType.OTHER, null, shareListener);
+		shareSystem.addShare(getContext(), socializeService.getSession(), entityKey, testString, ShareType.OTHER, null, shareListener);
 		socializeService.setShareSystem(shareSystem);
 
 		// mock and expect options to return null for the networks
@@ -998,13 +998,13 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		AndroidMock.expect(mockOptions.getLocation()).andReturn(null);
 
 		// replay all the mocks
-		AndroidMock.replay(mockActivity, mockEntity, mockOptions);
+		AndroidMock.replay(mockActivity, mockOptions);
 
 		// call actual method
-		socializeService.share(mockActivity, mockEntity, testString, mockOptions, shareListener);
+		socializeService.share(mockActivity, entityKey, testString, mockOptions, shareListener);
 
 		// verify all the mocks got called as expected and assert values
-		AndroidMock.verify(mockActivity, mockEntity, mockOptions);
+		AndroidMock.verify(mockActivity, mockOptions);
 		assertEquals(shareListener, getResult(0));
 	}
 
@@ -1013,7 +1013,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		// test to make sure that share gets called with null social networks
 		PublicSocialize socializeService = newSocializeServiceForShare();
 		Activity mockActivity = AndroidMock.createMock(Activity.class);
-		Entity mockEntity = AndroidMock.createMock(Entity.class);
+		String entityKey = "foobar";
 		String testString = "test string";
 		ShareAddListener shareListener = AndroidMock.createMock(ShareAddListener.class);
 
@@ -1021,7 +1021,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		// called
 		ShareSystem shareSystem = AndroidMock.createMock(ShareSystem.class);
 		
-		shareSystem.addShare(AndroidMock.eq(mockActivity), AndroidMock.eq(socializeService.getSession()), AndroidMock.eq(mockEntity), AndroidMock.eq(testString), AndroidMock.eq(SocialNetwork.FACEBOOK), (Location) AndroidMock.isNull(), (ShareListener) AndroidMock.anyObject());
+		shareSystem.addShare(AndroidMock.eq(mockActivity), AndroidMock.eq(socializeService.getSession()), AndroidMock.eq(entityKey), AndroidMock.eq(testString), AndroidMock.eq(SocialNetwork.FACEBOOK), (Location) AndroidMock.isNull(), (ShareListener) AndroidMock.anyObject());
 
 		socializeService.setShareSystem(shareSystem);
 
@@ -1034,13 +1034,13 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		AndroidMock.expect(mockOptions.getLocation()).andReturn(null);
 
 		// replay all the mocks
-		AndroidMock.replay(mockActivity, mockEntity, mockOptions, shareSystem);
+		AndroidMock.replay(mockActivity, mockOptions, shareSystem);
 
 		// call actual method
-		socializeService.share(mockActivity, mockEntity, testString, mockOptions, shareListener);
+		socializeService.share(mockActivity, entityKey, testString, mockOptions, shareListener);
 
 		// verify all the mocks got called as expected and assert values
-		AndroidMock.verify(mockActivity, mockEntity, mockOptions, shareSystem);
+		AndroidMock.verify(mockActivity, mockOptions, shareSystem);
 		assertEquals(shareListener, getResult(0));
 	}
 

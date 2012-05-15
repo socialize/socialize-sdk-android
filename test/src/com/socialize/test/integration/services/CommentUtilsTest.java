@@ -63,10 +63,10 @@ public class CommentUtilsTest extends SocializeActivityTest {
 	// Tests get comment too.
 	public void test_addComment() throws Exception {
 
-		final Entity e = Entity.newInstance("test_addComment","test_addComment");
+		final String entityKey = "test_addComment";
 		final CountDownLatch latch = new CountDownLatch(1);
 
-		CommentUtils.addComment(getActivity(), e, "foobar", new CommentAddListener() {
+		CommentUtils.addComment(getActivity(), entityKey, "foobar", new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -111,10 +111,10 @@ public class CommentUtilsTest extends SocializeActivityTest {
 	public void test_getComments() throws Exception {
 
 		// Create two comments.
-		final Entity e = Entity.newInstance("test_getComments" + Math.random(),"test_getComments");
+		final String entityKey = "test_getComments" + Math.random();
 		final CountDownLatch latch = new CountDownLatch(1);
 
-		CommentUtils.addComment(getActivity(), e, "foobar0", new CommentAddListener() {
+		CommentUtils.addComment(getActivity(), entityKey, "foobar0", new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -125,7 +125,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Comment entity) {
 				addResult(0, entity);
-				CommentUtils.addComment(getActivity(), e, "foobar1", new CommentAddListener() {
+				CommentUtils.addComment(getActivity(), entityKey, "foobar1", new CommentAddListener() {
 
 					@Override
 					public void onError(SocializeException error) {
@@ -189,10 +189,10 @@ public class CommentUtilsTest extends SocializeActivityTest {
 
 	public void test_getCommentsByEntity() throws Exception {
 		// Create two comments.
-		final Entity e = Entity.newInstance("test_getCommentsByEntity" + Math.random(),"test_getCommentsByEntity");
+		final String entityKey = "test_getCommentsByEntity" + Math.random();
 		final CountDownLatch latch = new CountDownLatch(1);
 
-		CommentUtils.addComment(getActivity(), e, "foobar0", new CommentAddListener() {
+		CommentUtils.addComment(getActivity(), entityKey, "foobar0", new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -203,7 +203,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Comment entity) {
 				addResult(0, entity);
-				CommentUtils.addComment(getActivity(), e, "foobar1", new CommentAddListener() {
+				CommentUtils.addComment(getActivity(), entityKey, "foobar1", new CommentAddListener() {
 
 					@Override
 					public void onError(SocializeException error) {
@@ -230,7 +230,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 
 		final CountDownLatch latch2 = new CountDownLatch(1);
 
-		CommentUtils.getCommentsByEntity(getActivity(), e, 0, 2, new CommentListListener() {
+		CommentUtils.getCommentsByEntity(getActivity(), entityKey, 0, 2, new CommentListListener() {
 
 			@Override
 			public void onList(ListResult<Comment> entities) {
@@ -264,10 +264,10 @@ public class CommentUtilsTest extends SocializeActivityTest {
 
 	public void test_getCommentsByUser() throws Exception {
 		// Create two comments.
-		final Entity e = Entity.newInstance("test_getCommentsByUser" + Math.random(),"test_getCommentsByUser");
+		final String entityKey = "test_getCommentsByUser" + Math.random();
 		final CountDownLatch latch = new CountDownLatch(1);
 
-		CommentUtils.addComment(getActivity(), e, "foobar0", new CommentAddListener() {
+		CommentUtils.addComment(getActivity(), entityKey, "foobar0", new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -278,7 +278,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Comment entity) {
 				addResult(0, entity);
-				CommentUtils.addComment(getActivity(), e, "foobar1", new CommentAddListener() {
+				CommentUtils.addComment(getActivity(), entityKey, "foobar1", new CommentAddListener() {
 
 					@Override
 					public void onError(SocializeException error) {

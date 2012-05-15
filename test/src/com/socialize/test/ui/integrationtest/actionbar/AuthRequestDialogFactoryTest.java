@@ -57,8 +57,9 @@ public class AuthRequestDialogFactoryTest extends ActionBarAutoTest {
 		
 		// Ensure there is no like
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
+			
 			@Override
-			public void addLike(SocializeSession session, Entity entity, ShareOptions options, LikeListener listener) {
+			public void addLike(SocializeSession session, String entityKey, ShareOptions shareOptions, LikeListener listener) {
 				TestUtils.addResult("fail");
 			}
 

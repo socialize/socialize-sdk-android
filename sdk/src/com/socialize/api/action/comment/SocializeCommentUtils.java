@@ -27,7 +27,6 @@ import com.socialize.ShareUtils;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.SocializeActionUtilsBase;
 import com.socialize.entity.Comment;
-import com.socialize.entity.Entity;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
@@ -55,7 +54,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 	private ShareDialogFactory shareDialogFactory;
 
 	@Override
-	public void addComment(Activity context, final Entity e, final String text, final CommentAddListener listener) {
+	public void addComment(Activity context, final String entityKey, final String text, final CommentAddListener listener) {
 		
 		final SocializeSession session = getSocialize().getSession();
 		
@@ -88,17 +87,17 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 					
 					dialog.dismiss();
 					
-					doCommentWithShare(context, session, e, text, listener);
+					doCommentWithShare(context, session, entityKey, text, listener);
 				}
 			});
 		}
 		else {
-			doCommentWithShare(context, session, e, text, listener);
+			doCommentWithShare(context, session, entityKey, text, listener);
 		}		
 	}
 	
-	protected void doCommentWithShare(final Activity context, final SocializeSession session, final Entity e, final String text, final CommentAddListener listener) {
-		shareDialogFactory.show(context, e, null,  new ShareDialogListener() {
+	protected void doCommentWithShare(final Activity context, final SocializeSession session, final String entityKey, final String text, final CommentAddListener listener) {
+		shareDialogFactory.show(context, entityKey, null,  new ShareDialogListener() {
 			@Override
 			public void onShow(Dialog dialog, SharePanelView dialogView) {}
 			
@@ -144,7 +143,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 					}
 				};
 
-				commentSystem.addComment(session, e, text, options, overrideListener);
+				commentSystem.addComment(session, entityKey, text, options, overrideListener);
 
 				return false;				
 			}
@@ -173,8 +172,8 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 	}
 
 	@Override
-	public void getCommentsByEntity(Activity context, Entity e, int start, int end, CommentListListener listener) {
-		commentSystem.getCommentsByEntity(getSocialize().getSession(), e.getKey(), start, end, listener);
+	public void getCommentsByEntity(Activity context, String entityKey, int start, int end, CommentListListener listener) {
+		commentSystem.getCommentsByEntity(getSocialize().getSession(), entityKey, start, end, listener);
 	}
 	
 	public void setCommentSystem(CommentSystem commentSystem) {

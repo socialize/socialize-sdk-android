@@ -145,9 +145,8 @@ public class ActionUtilsTest extends SocializeActivityTest {
 		final String entityKey = "testGetActionsByEntity" + Math.random();
 		
 		// Add some new actions to really make the test "real"
-		final Entity entity = Entity.newInstance(entityKey, "testGetActionsByEntity");
 		
-		LikeUtils.like(getContext(), entity, new LikeAddListener() {
+		LikeUtils.like(getContext(), entityKey, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -158,7 +157,7 @@ public class ActionUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Like like) {
 				actions.add(like);
-				CommentUtils.addComment(getContext(), entity, "Blah", new CommentAddListener() {
+				CommentUtils.addComment(getContext(), entityKey, "Blah", new CommentAddListener() {
 					
 					@Override
 					public void onError(SocializeException error) {
@@ -179,7 +178,7 @@ public class ActionUtilsTest extends SocializeActivityTest {
 		
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		
-		ActionUtils.getActionsByEntity(getContext(), entity, 0, 100, new ActionListListener() {
+		ActionUtils.getActionsByEntity(getContext(), entityKey, 0, 100, new ActionListListener() {
 			@Override
 			public void onList(ListResult<SocializeAction> entities) {
 				addResult(0, entities);
@@ -212,9 +211,7 @@ public class ActionUtilsTest extends SocializeActivityTest {
 		final String entityKey = "testGetActionsByUserAndEntity" + Math.random();
 		
 		// Add some new actions to really make the test "real"
-		final Entity entity = Entity.newInstance(entityKey, "testGetActionsByUserAndEntity");
-		
-		LikeUtils.like(getContext(), entity, new LikeAddListener() {
+		LikeUtils.like(getContext(), entityKey, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -225,7 +222,7 @@ public class ActionUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Like like) {
 				actions.add(like);
-				CommentUtils.addComment(getContext(), entity, "Blah", new CommentAddListener() {
+				CommentUtils.addComment(getContext(), entityKey, "Blah", new CommentAddListener() {
 					
 					@Override
 					public void onError(SocializeException error) {
@@ -248,7 +245,7 @@ public class ActionUtilsTest extends SocializeActivityTest {
 		
 		User user = UserUtils.getCurrentUser(getContext());
 		
-		ActionUtils.getActionsByUserAndEntity(getContext(), user, entity, 0, 100, new ActionListListener() {
+		ActionUtils.getActionsByUserAndEntity(getContext(), user, entityKey, 0, 100, new ActionListListener() {
 			@Override
 			public void onList(ListResult<SocializeAction> entities) {
 				addResult(0, entities);

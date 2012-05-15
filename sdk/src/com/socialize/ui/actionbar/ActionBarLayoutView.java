@@ -187,7 +187,7 @@ public class ActionBarLayoutView extends BaseView {
 				}
 				
 				if(!consumed) {
-					ShareUtils.showShareDialog(getActivity(), actionBarView.getEntity());
+					ShareUtils.showShareDialog(getActivity(), actionBarView.getEntity().getKey());
 				}
 			}
 		});
@@ -329,17 +329,15 @@ public class ActionBarLayoutView extends BaseView {
 	protected void doLike(final ActionBarButton button) {
 		final CacheableEntity localEntity = getLocalEntity();
 		
-		if(localEntity != null) {
-			if(localEntity.isLiked()) {
-				// Unlike
-				doUnLike(button, localEntity);
-				return;
-			}
+		if(localEntity != null && localEntity.isLiked()) {
+			// Unlike
+			doUnLike(button, localEntity);
+			return;
 		}
-				
+		
 		button.showLoading();
 		
-		LikeUtils.like(getActivity(), localEntity.getEntity(), new LikeAddListener() {
+		LikeUtils.like(getActivity(), entityKey, new LikeAddListener() {
 			
 			@Override
 			public void onCancel() {

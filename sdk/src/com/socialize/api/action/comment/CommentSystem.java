@@ -23,7 +23,6 @@ package com.socialize.api.action.comment;
 
 import com.socialize.api.SocializeSession;
 import com.socialize.entity.Comment;
-import com.socialize.entity.Entity;
 import com.socialize.listener.comment.CommentListener;
 import com.socialize.networks.ShareOptions;
 
@@ -38,8 +37,7 @@ public interface CommentSystem {
 
 	public void addComment(SocializeSession session, Comment comment, ShareOptions shareOptions, CommentListener listener);
 
-	public void addComment(SocializeSession session, Entity entity, String comment, ShareOptions shareOptions, CommentListener listener);
-
+	public void addComment(SocializeSession session, String entityKey, String comment, ShareOptions shareOptions, CommentListener listener);
 	
 	public void getCommentsByEntity(SocializeSession session, String entityKey, CommentListener listener);
 

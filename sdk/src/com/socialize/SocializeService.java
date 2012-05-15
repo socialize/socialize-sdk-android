@@ -261,6 +261,38 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	public void share(Activity activity, Entity entity, String text, ShareType shareType, ShareAddListener shareAddListener);
 	
 	/**
+	 * Records a share event against the given key. 
+	 * @param activity The current Activity.
+	 * @param entityKey The entity being shared.
+	 * @param text The text being shared.
+	 * @param shareType The type of the share.
+	 * @param location The location (may be null)
+	 * @param shareAddListener A listener to handle callbacks from the post.
+	 */
+	public void share(Activity activity, String entityKey, String text, ShareType shareType, Location location, ShareAddListener shareAddListener);
+	
+	/**
+	 * Records a share event against the given key. 
+	 * @param activity The current Activity.
+	 * @param entityKey The entity being shared.
+	 * @param text The text being shared.
+	 * @param shareType The type of the share.
+	 * @param shareAddListener A listener to handle callbacks from the post.
+	 */
+	public void share(Activity activity, String entityKey, String text, ShareType shareType, ShareAddListener shareAddListener);
+	
+	
+	/**
+	 * Records a share event against the given key. 
+	 * @param activity The current Activity.
+	 * @param entityKey The entity being shared.
+	 * @param text The text being shared.
+	 * @param options Options for the share
+	 * @param shareAddListener A listener to handle callbacks from the post.
+	 */
+	void share(Activity activity, String entityKey, String text, ShareOptions shareOptions, ShareAddListener shareAddListener);
+	
+	/**
 	 * Records a share event against the given key.  
 	 * NOTE: This does NOT perform sharing to any 3rd party social network.  
 	 * It simply records a share event within Socialize.
@@ -609,4 +641,6 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * Should be called in the onResume method of the containing activity
 	 */
 	public void onResume(Context context);
+
+
 }

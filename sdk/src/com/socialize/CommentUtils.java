@@ -59,12 +59,12 @@ public class CommentUtils {
 	/**
 	 * Adds a comment to the given entity.
 	 * @param context The current context.
-	 * @param e The entity on which the comment will be associated.
+	 * @param entityKey The entity on which the comment will be associated.
 	 * @param text The text of the comment.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void addComment (Activity context, Entity e, String text, CommentAddListener listener) {
-		commentUtils.addComment(context, e, text, listener);
+	public static void addComment (Activity context, String entityKey, String text, CommentAddListener listener) {
+		commentUtils.addComment(context, entityKey, text, listener);
 	}
 	
 	/**
@@ -104,13 +104,13 @@ public class CommentUtils {
 	/**
 	 * Retrieves all comments associated with the given entity.
 	 * @param context The current context.
-	 * @param e The entity on which the comment were associated.
+	 * @param entityKey The entity on which the comment were associated.
 	 * @param start The start index for pagination (from 0).
 	 * @param end The end index for pagination.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void getCommentsByEntity (Activity context, Entity e, int start, int end, CommentListListener listener) {
-		commentUtils.getCommentsByEntity(context, e, start, end, listener);
+	public static void getCommentsByEntity (Activity context, String entityKey, int start, int end, CommentListListener listener) {
+		commentUtils.getCommentsByEntity(context, entityKey, start, end, listener);
 	}
 	
 	/**

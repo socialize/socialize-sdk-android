@@ -71,8 +71,9 @@ public class ActionBarTestUtils2 {
 		};
 		
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
+			
 			@Override
-			public void addLike(SocializeSession session, Entity entity, ShareOptions options, LikeListener listener) {
+			public void addLike(SocializeSession session, String entityKey, ShareOptions shareOptions, LikeListener listener) {
 				TestUtils.addResult("fail");
 			}
 
@@ -143,8 +144,9 @@ public class ActionBarTestUtils2 {
 		Entity entity = Entity.newInstance("http://entity1.com", "no name");
 		
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
+			
 			@Override
-			public void addLike(SocializeSession session, Entity entity, ShareOptions options, LikeListener listener) {
+			public void addLike(SocializeSession session, String entityKey, ShareOptions shareOptions, LikeListener listener) {
 				TestUtils.addResult("success");
 			}
 
@@ -213,8 +215,9 @@ public class ActionBarTestUtils2 {
 		};
 		
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
+			
 			@Override
-			public void addLike(SocializeSession session, Entity entity, ShareOptions options, LikeListener listener) {
+			public void addLike(SocializeSession session, String entityKey, ShareOptions shareOptions, LikeListener listener) {
 				TestUtils.addResult("success");
 			}
 
@@ -328,7 +331,7 @@ public class ActionBarTestUtils2 {
 		
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
 			@Override
-			public void addLike(SocializeSession session, Entity entity, ShareOptions options, LikeListener listener) {
+			public void addLike(SocializeSession session, String entityKey, ShareOptions shareOptions, LikeListener listener) {
 				TestUtils.addResult("success");
 			}
 

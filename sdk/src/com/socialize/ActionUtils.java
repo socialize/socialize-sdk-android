@@ -24,7 +24,6 @@ package com.socialize;
 import java.lang.reflect.Proxy;
 import android.app.Activity;
 import com.socialize.api.action.activity.ActionUtilsProxy;
-import com.socialize.entity.Entity;
 import com.socialize.entity.User;
 import com.socialize.listener.activity.ActionListListener;
 
@@ -75,8 +74,8 @@ public class ActionUtils {
 	 * @param end
 	 * @param listener
 	 */
-	public static void getActionsByEntity (Activity context, Entity e, int start, int end, ActionListListener listener) {
-		proxy.getActionsByEntity(context, e, start, end, listener);
+	public static void getActionsByEntity (Activity context, String entityKey, int start, int end, ActionListListener listener) {
+		proxy.getActionsByEntity(context, entityKey, start, end, listener);
 	}
 	
 	/**
@@ -88,7 +87,7 @@ public class ActionUtils {
 	 * @param end
 	 * @param listener
 	 */
-	public static void getActionsByUserAndEntity (Activity context, User user, Entity e, int start, int end, ActionListListener listener) {
-		proxy.getActionsByUserAndEntity(context, user, e, start, end, listener);
+	public static void getActionsByUserAndEntity (Activity context, User user, String entityKey, int start, int end, ActionListListener listener) {
+		proxy.getActionsByUserAndEntity(context, user, entityKey, start, end, listener);
 	}
 }
