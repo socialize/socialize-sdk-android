@@ -6,6 +6,7 @@ import android.location.Location;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.share.ShareSystem;
+import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.entity.SocializeAction;
 import com.socialize.listener.share.ShareListener;
@@ -54,22 +55,22 @@ public class MockShareSystem extends MockSystem<Share> implements ShareSystem {
 	}
 	
 	@Override
-	public void addShare(Context context, SocializeSession session, String entityKey, String text, ShareType shareType, Location location, ShareListener listener) {
+	public void addShare(Context context, SocializeSession session, Entity entityKey, String text, ShareType shareType, Location location, ShareListener listener) {
 		if(listener != null) listener.onCreate(action);
 	}
 
 	@Override
-	public void addShare(Context context, SocializeSession session, String entityKey, String text, SocialNetwork network, Location location, ShareListener listener) {
+	public void addShare(Context context, SocializeSession session, Entity entityKey, String text, SocialNetwork network, Location location, ShareListener listener) {
 		if(listener != null) listener.onCreate(action);
 	}
 
 	@Override
-	public void addShare(Context context, SocializeSession session, String entityKey, String text, ShareType shareType, ShareListener listener, SocialNetwork... network) {
+	public void addShare(Context context, SocializeSession session, Entity entityKey, String text, ShareType shareType, ShareListener listener, SocialNetwork... network) {
 		if(listener != null) listener.onCreate(action);
 	}
 
 	@Override
-	public void addShare(Context context, SocializeSession session, String entityKey, ShareType shareType, ShareListener listener, SocialNetwork... network) {
+	public void addShare(Context context, SocializeSession session, Entity entityKey, ShareType shareType, ShareListener listener, SocialNetwork... network) {
 		if(listener != null) listener.onCreate(action);
 	}
 

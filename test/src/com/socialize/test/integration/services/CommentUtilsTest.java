@@ -62,8 +62,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 
 	// Tests get comment too.
 	public void test_addComment() throws Exception {
-
-		final String entityKey = "test_addComment";
+		final Entity entityKey = Entity.newInstance("test_addComment", "test_addComment");
 		final CountDownLatch latch = new CountDownLatch(1);
 
 		CommentUtils.addComment(getActivity(), entityKey, "foobar", new CommentAddListener() {
@@ -111,7 +110,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 	public void test_getComments() throws Exception {
 
 		// Create two comments.
-		final String entityKey = "test_getComments" + Math.random();
+		final Entity entityKey = Entity.newInstance("test_getComments" + Math.random(), "test_getComments");
 		final CountDownLatch latch = new CountDownLatch(1);
 
 		CommentUtils.addComment(getActivity(), entityKey, "foobar0", new CommentAddListener() {
@@ -189,7 +188,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 
 	public void test_getCommentsByEntity() throws Exception {
 		// Create two comments.
-		final String entityKey = "test_getCommentsByEntity" + Math.random();
+		final Entity entityKey = Entity.newInstance("test_getCommentsByEntity" + Math.random(), "test_getCommentsByEntity");
 		final CountDownLatch latch = new CountDownLatch(1);
 
 		CommentUtils.addComment(getActivity(), entityKey, "foobar0", new CommentAddListener() {
@@ -230,7 +229,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 
 		final CountDownLatch latch2 = new CountDownLatch(1);
 
-		CommentUtils.getCommentsByEntity(getActivity(), entityKey, 0, 2, new CommentListListener() {
+		CommentUtils.getCommentsByEntity(getActivity(), entityKey.getKey(), 0, 2, new CommentListListener() {
 
 			@Override
 			public void onList(ListResult<Comment> entities) {
@@ -264,7 +263,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 
 	public void test_getCommentsByUser() throws Exception {
 		// Create two comments.
-		final String entityKey = "test_getCommentsByUser" + Math.random();
+		final Entity entityKey = Entity.newInstance("test_getCommentsByUser" + Math.random(), "test_getCommentsByUser");
 		final CountDownLatch latch = new CountDownLatch(1);
 
 		CommentUtils.addComment(getActivity(), entityKey, "foobar0", new CommentAddListener() {

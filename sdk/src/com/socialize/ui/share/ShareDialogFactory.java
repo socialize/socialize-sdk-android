@@ -22,6 +22,7 @@
 package com.socialize.ui.share;
 
 import android.content.Context;
+import com.socialize.entity.Entity;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.ui.dialog.AsyncDialogFactory;
 
@@ -34,11 +35,11 @@ public class ShareDialogFactory extends AsyncDialogFactory<SharePanelView, Share
 
 	public void show(
 			Context context, 
-			String entityKey, 
+			Entity entity, 
 			SocialNetworkListener socialNetworkListener, 
 			ShareDialogListener shareDialoglistener, 
 			int displayOptions) {
-		makeDialog(context, shareDialoglistener, entityKey, socialNetworkListener, shareDialoglistener, displayOptions);
+		makeDialog(context, shareDialoglistener, entity, socialNetworkListener, shareDialoglistener, displayOptions);
 	}
 
 	@Override

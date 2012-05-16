@@ -118,6 +118,10 @@ public abstract class SDKDemoActivity extends DemoActivity {
 	
 	protected <A extends SocializeAction> void handleSocializeResult(ListResult<A> results) {
 		List<A> items = results.getItems();
+		handleSocializeResult(items);
+	}
+	
+	protected <A extends SocializeAction> void handleSocializeResult(List<A> items) {
 		Collection<String> strResults = new ArrayList<String>();
 		for (A socializeAction : items) {
 			strResults.add(socializeAction.getDisplayText());

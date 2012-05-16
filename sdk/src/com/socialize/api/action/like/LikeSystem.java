@@ -22,6 +22,7 @@
 package com.socialize.api.action.like;
 
 import com.socialize.api.SocializeSession;
+import com.socialize.entity.Entity;
 import com.socialize.listener.like.LikeListener;
 import com.socialize.networks.ShareOptions;
 
@@ -33,7 +34,7 @@ public interface LikeSystem {
 	
 	public static final String ENDPOINT = "/like/";
 
-	public void addLike(SocializeSession session, String entityKey, ShareOptions shareOptions, LikeListener listener);
+	public void addLike(SocializeSession session, Entity entity, ShareOptions shareOptions, LikeListener listener);
 	
 	public void deleteLike(SocializeSession session, long id, LikeListener listener);
 

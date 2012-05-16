@@ -26,6 +26,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeActionUtilsBase;
+import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
@@ -48,8 +49,8 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	private ShareDialogFactory shareDialogFactory;
 	
 	@Override
-	public void showShareDialog(final Activity context, final String entityKey, int options, final SocialNetworkShareListener socialNetworkListener, final ShareDialogListener dialogListener) {
-		shareDialogFactory.show(context, entityKey, socialNetworkListener, new ShareDialogListener() {
+	public void showShareDialog(final Activity context, final Entity entity, int options, final SocialNetworkShareListener socialNetworkListener, final ShareDialogListener dialogListener) {
+		shareDialogFactory.show(context, entity, socialNetworkListener, new ShareDialogListener() {
 			@Override
 			public void onCancel(Dialog dialog) {
 				if(dialogListener != null) {
@@ -78,7 +79,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 				}					
 				
 				if(!consumed) {
-					doShare(dialog, context, entityKey, socialNetworkListener, "", networks);
+					doShare(dialog, context, entity, socialNetworkListener, "", networks);
 				}
 				else {
 					if(dialogListener != null) {
@@ -86,7 +87,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 							
 							@Override
 							public void onContinue(String text) {
-								doShare(dialog, context, entityKey, socialNetworkListener, text, networks);
+								doShare(dialog, context, entity, socialNetworkListener, text, networks);
 							}
 
 							@Override
@@ -104,7 +105,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 		}, options);		
 	}
 	
-	protected void doShare(final Dialog dialog, final Activity context, final String entityKey, final SocialNetworkShareListener socialNetworkListener, final String text, final SocialNetwork... networks) {
+	protected void doShare(final Dialog dialog, final Activity context, final Entity entity, final SocialNetworkShareListener socialNetworkListener, final String text, final SocialNetwork... networks) {
 		final ProgressDialog progress = SafeProgressDialog.show(context);
 		
 		ShareType shareType = ShareType.OTHER;
@@ -113,7 +114,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 			shareType = ShareType.valueOf(networks[0]);
 		}
 		
-		shareSystem.addShare(context, getSocialize().getSession(), entityKey, text, shareType, new ShareAddListener() {
+		shareSystem.addShare(context, getSocialize().getSession(), entity, text, shareType, new ShareAddListener() {
 			@Override
 			public void onError(SocializeException error) {
 				if(socialNetworkListener != null) {
@@ -144,18 +145,18 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	}
 
 	@Override
-	public void shareViaEmail(Activity context, String entityKey, ShareAddListener listener) {
-		getSocialize().share(context, entityKey, "", ShareType.EMAIL, listener);
+	public void shareViaEmail(Activity context, Entity entity, ShareAddListener listener) {
+		getSocialize().share(context, entity, "", ShareType.EMAIL, listener);
 	}
 
 	@Override
-	public void shareViaOther(Activity context, String entityKey, ShareAddListener listener) {
-		getSocialize().share(context, entityKey, "", ShareType.OTHER, listener);
+	public void shareViaOther(Activity context, Entity entity, ShareAddListener listener) {
+		getSocialize().share(context, entity, "", ShareType.OTHER, listener);
 	}
 
 	@Override
-	public void shareViaSMS(Activity context, String entityKey, ShareAddListener listener) {
-		getSocialize().share(context, entityKey, "", ShareType.SMS, listener);
+	public void shareViaSMS(Activity context, Entity entity, ShareAddListener listener) {
+		getSocialize().share(context, entity, "", ShareType.SMS, listener);
 	}
 
 	@Override

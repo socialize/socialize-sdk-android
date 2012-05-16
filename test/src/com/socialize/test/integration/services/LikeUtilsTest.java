@@ -28,6 +28,7 @@ import com.socialize.LikeUtils;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
 import com.socialize.config.SocializeConfig;
+import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
@@ -58,7 +59,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 	}
 
 	public void testAddLike() throws InterruptedException {
-		final String entityKey = "testAddLike";
+		final Entity entityKey = Entity.newInstance("testAddLike", "testAddLike");
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		// Force no config
@@ -120,7 +121,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 	
 	public void testGetLikeExists() throws InterruptedException {
 		
-		final String entityKey = "testGetLikeExists";
+		final Entity entityKey = Entity.newInstance("testGetLikeExists", "testGetLikeExists");
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
@@ -134,7 +135,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 			
 			@Override
 			public void onCreate(Like like) {
-				LikeUtils.getLike(getActivity(), entityKey, new LikeGetListener() {
+				LikeUtils.getLike(getActivity(), entityKey.getKey(), new LikeGetListener() {
 					
 					@Override
 					public void onGet(Like entity) {
@@ -184,7 +185,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 	}
 	
 	public void testUnlike() throws InterruptedException {
-		final String entityKey = "testUnlike";
+		final Entity entityKey = Entity.newInstance("testUnlike", "testUnlike");
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
@@ -199,7 +200,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Like like) {
 				
-				LikeUtils.unlike(getActivity(), entityKey, new LikeDeleteListener() {
+				LikeUtils.unlike(getActivity(), entityKey.getKey(), new LikeDeleteListener() {
 					
 					@Override
 					public void onError(SocializeException error) {
@@ -225,8 +226,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 	
 	public void testGetLikesByUser() throws SocializeException, InterruptedException {
 		final User user = UserUtils.getCurrentUser(getActivity());
-		final String entityKey = "testGetLikesByUser";
-		
+		final Entity entityKey = Entity.newInstance("testGetLikesByUser", "testGetLikesByUser");
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		LikeUtils.like(getActivity(), entityKey, new LikeAddListener() {
@@ -266,7 +266,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 	}
 	
 	public void testGetLikesByEntity() throws SocializeException, InterruptedException {
-		final String entityKey = "testGetLikesByEntity";
+		final Entity entityKey = Entity.newInstance("testGetLikesByEntity", "testGetLikesByEntity");
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		LikeUtils.like(getActivity(), entityKey, new LikeAddListener() {
@@ -280,7 +280,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Like like) {
 				
-				LikeUtils.getLikesByEntity(getActivity(), entityKey, 0, 100, new LikeListListener() {
+				LikeUtils.getLikesByEntity(getActivity(), entityKey.getKey(), 0, 100, new LikeListListener() {
 					
 					@Override
 					public void onList(List<Like> items, int totalSize) {

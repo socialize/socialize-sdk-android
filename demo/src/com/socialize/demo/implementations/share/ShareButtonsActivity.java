@@ -115,7 +115,7 @@ public class ShareButtonsActivity extends DemoActivity {
 		btnShare.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ShareUtils.showShareDialog(ShareButtonsActivity.this, entityKey, new SocialNetworkDialogListener() {
+				ShareUtils.showShareDialog(ShareButtonsActivity.this, entity, new SocialNetworkDialogListener() {
 					@Override
 					public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
 						DemoUtils.showToast(parent, "Shared to " + socialNetwork.name());
@@ -127,7 +127,7 @@ public class ShareButtonsActivity extends DemoActivity {
 		btnShareSocialNetwork.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ShareUtils.showShareDialog(ShareButtonsActivity.this, entityKey, new SocialNetworkDialogListener() {
+				ShareUtils.showShareDialog(ShareButtonsActivity.this, entity, new SocialNetworkDialogListener() {
 					@Override
 					public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
 						DemoUtils.showToast(parent, "Shared to " + socialNetwork.name());
@@ -139,7 +139,7 @@ public class ShareButtonsActivity extends DemoActivity {
 		btnShareWithComment.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ShareUtils.showShareDialog(ShareButtonsActivity.this, entityKey, new SocialNetworkDialogListener() {
+				ShareUtils.showShareDialog(ShareButtonsActivity.this, entity, new SocialNetworkDialogListener() {
 					@Override
 					public boolean onContinue(Dialog dialog, boolean remember, SocialNetwork... networks) {
 						return true;

@@ -32,6 +32,7 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
+import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;
@@ -68,8 +69,8 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 	}
 
 	@Override
-	public void addShare(Context context, SocializeSession session, String entityKey, String text, SocialNetwork network, Location location, ShareListener listener) {
-		addShare(context, session, entityKey, text, null, network, location, listener);
+	public void addShare(Context context, SocializeSession session, Entity entity, String text, SocialNetwork network, Location location, ShareListener listener) {
+		addShare(context, session, entity, text, null, network, location, listener);
 	}
 
 	/*
@@ -77,14 +78,14 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 	 * @see com.socialize.api.action.ShareSystem#addShare(android.content.Context, com.socialize.api.SocializeSession, com.socialize.entityKey.Entity, java.lang.String, com.socialize.api.action.ShareType, android.location.Location, com.socialize.listener.share.ShareListener)
 	 */
 	@Override
-	public void addShare(Context context, SocializeSession session, String entityKey, String text, ShareType shareType, Location location, ShareListener listener) {
-		addShare(context, session, entityKey, text, shareType, null, location, listener);
+	public void addShare(Context context, SocializeSession session, Entity entity, String text, ShareType shareType, Location location, ShareListener listener) {
+		addShare(context, session, entity, text, shareType, null, location, listener);
 	}
 	
 	protected void addShare(
 			final Context context, 
 			final SocializeSession session, 
-			final String entityKey, 
+			final Entity entity, 
 			final String text, 
 			ShareType shareType, 
 			SocialNetwork network, 
@@ -109,7 +110,7 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		if(network != null) {
 			AuthProviderType authType = AuthProviderType.valueOf(network);
 			if(Socialize.getSocialize().isAuthenticated(authType)) {
-				addShare(session, entityKey, text, shareType, location, listener, network);
+				addShare(session, entity, text, shareType, location, listener, network);
 			}
 			else {
 				Socialize.getSocialize().authenticate(context, authType, new SocializeAuthListener() {
@@ -123,12 +124,12 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 					@Override
 					public void onCancel() {
 						// no network
-						addShare(session, entityKey, text, fshareType, location, listener);
+						addShare(session, entity, text, fshareType, location, listener);
 					}
 					
 					@Override
 					public void onAuthSuccess(SocializeSession session) {
-						addShare(session, entityKey, text, fshareType, location, listener, fnetwork);
+						addShare(session, entity, text, fshareType, location, listener, fnetwork);
 					}
 					
 					@Override
@@ -142,27 +143,27 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		}
 		else {
 			// no network
-			addShare(session, entityKey, text, fshareType, location, listener);	
+			addShare(session, entity, text, fshareType, location, listener);	
 		}
 	}
 	
 	@Override
-	public void addShare(Context context, SocializeSession session, String entityKey, String text, ShareType shareType, ShareListener listener, SocialNetwork... network) {
-		addShare(session, entityKey, text, shareType, null, listener, network);
+	public void addShare(Context context, SocializeSession session, Entity entity, String text, ShareType shareType, ShareListener listener, SocialNetwork... network) {
+		addShare(session, entity, text, shareType, null, listener, network);
 	}
 
-	public void addShare(Context context, SocializeSession session, String entityKey, ShareType shareType, ShareListener listener, SocialNetwork...network) {
-		addShare(session, entityKey, "", shareType, null, listener, network);
+	public void addShare(Context context, SocializeSession session, Entity entity, ShareType shareType, ShareListener listener, SocialNetwork...network) {
+		addShare(session, entity, "", shareType, null, listener, network);
 	}
 	
-	public void addShare(SocializeSession session, String entityKey, String text, ShareType shareType, Location location, ShareListener listener, SocialNetwork...network) {
+	public void addShare(SocializeSession session, Entity entity, String text, ShareType shareType, Location location, ShareListener listener, SocialNetwork...network) {
 		
 		if(text == null) {
 			text = "";
 		}
 		
 		Share c = new Share();
-		c.setEntityKey(entityKey);
+		c.setEntity(entity);
 		c.setText(text);
 		c.setShareType(shareType);
 		

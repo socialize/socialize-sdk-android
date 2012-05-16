@@ -142,7 +142,7 @@ public class ActionUtilsTest extends SocializeActivityTest {
 		
 		final List<SocializeAction> actions = new ArrayList<SocializeAction>();
 		
-		final String entityKey = "testGetActionsByEntity" + Math.random();
+		final Entity entityKey = Entity.newInstance("testGetActionsByEntity" + Math.random(), "testGetActionsByEntity");
 		
 		// Add some new actions to really make the test "real"
 		
@@ -178,7 +178,7 @@ public class ActionUtilsTest extends SocializeActivityTest {
 		
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		
-		ActionUtils.getActionsByEntity(getContext(), entityKey, 0, 100, new ActionListListener() {
+		ActionUtils.getActionsByEntity(getContext(), entityKey.getKey(), 0, 100, new ActionListListener() {
 			@Override
 			public void onList(ListResult<SocializeAction> entities) {
 				addResult(0, entities);
@@ -207,8 +207,7 @@ public class ActionUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		final List<SocializeAction> actions = new ArrayList<SocializeAction>();
-		
-		final String entityKey = "testGetActionsByUserAndEntity" + Math.random();
+		final Entity entityKey = Entity.newInstance("testGetActionsByUserAndEntity" + Math.random(), "testGetActionsByUserAndEntity");
 		
 		// Add some new actions to really make the test "real"
 		LikeUtils.like(getContext(), entityKey, new LikeAddListener() {
@@ -245,7 +244,7 @@ public class ActionUtilsTest extends SocializeActivityTest {
 		
 		User user = UserUtils.getCurrentUser(getContext());
 		
-		ActionUtils.getActionsByUserAndEntity(getContext(), user, entityKey, 0, 100, new ActionListListener() {
+		ActionUtils.getActionsByUserAndEntity(getContext(), user, entityKey.getKey(), 0, 100, new ActionListListener() {
 			@Override
 			public void onList(ListResult<SocializeAction> entities) {
 				addResult(0, entities);

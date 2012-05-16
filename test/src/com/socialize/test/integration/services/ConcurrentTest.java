@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 import android.app.Activity;
 import com.socialize.LikeUtils;
 import com.socialize.Socialize;
+import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.like.LikeAddListener;
@@ -39,7 +40,7 @@ import com.socialize.test.SocializeActivityTest;
 public class ConcurrentTest extends SocializeActivityTest {
 	
 	public void testConcurrentLikeIsSameUser() throws Throwable {
-		final String entityKey = "ConcurrentTest";
+		final Entity entityKey = Entity.newInstance("ConcurrentTest", "ConcurrentTest");
 		
 		final Activity context = getContext();
 		

@@ -77,8 +77,6 @@ public class ActionBarLayoutView extends BaseView {
 	private ProgressDialogFactory progressDialogFactory;
 //	private AuthDialogFactory authDialogFactory;
 	
-	private String entityKey;
-	
 	private DisplayUtils displayUtils;
 	
 	private ActionBarView actionBarView;
@@ -187,7 +185,7 @@ public class ActionBarLayoutView extends BaseView {
 				}
 				
 				if(!consumed) {
-					ShareUtils.showShareDialog(getActivity(), actionBarView.getEntity().getKey());
+					ShareUtils.showShareDialog(getActivity(), actionBarView.getEntity());
 				}
 			}
 		});
@@ -253,8 +251,6 @@ public class ActionBarLayoutView extends BaseView {
 		final Entity userProvidedEntity = actionBarView.getEntity();
 		
 		if(userProvidedEntity != null) {
-			this.entityKey = userProvidedEntity.getKey();
-			
 			if(reload) {
 				ticker.resetTicker();
 				viewsItem.setText(loadingText);
@@ -320,8 +316,8 @@ public class ActionBarLayoutView extends BaseView {
 	}
 	
 	public void reload() {
-		if(this.entityKey != null) {
-			entityCache.remove(this.entityKey);
+		if(actionBarView.getEntity() != null) {
+			entityCache.remove(actionBarView.getEntity().getKey());
 		}
 		doLoadSequence(true);
 	}
@@ -337,7 +333,7 @@ public class ActionBarLayoutView extends BaseView {
 		
 		button.showLoading();
 		
-		LikeUtils.like(getActivity(), entityKey, new LikeAddListener() {
+		LikeUtils.like(getActivity(), actionBarView.getEntity(), new LikeAddListener() {
 			
 			@Override
 			public void onCancel() {
@@ -443,7 +439,7 @@ public class ActionBarLayoutView extends BaseView {
 //	}
 	
 	protected CacheableEntity getLocalEntity() {
-		return entityCache.get(this.entityKey);
+		return entityCache.get(actionBarView.getEntity().getKey());
 	}
 	
 	protected CacheableEntity setLocalEntity(Entity entity) {

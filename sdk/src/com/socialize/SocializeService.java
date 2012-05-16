@@ -278,7 +278,9 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param text The text being shared.
 	 * @param shareType The type of the share.
 	 * @param shareAddListener A listener to handle callbacks from the post.
+	 * @deprecated
 	 */
+	@Deprecated
 	public void share(Activity activity, String entityKey, String text, ShareType shareType, ShareAddListener shareAddListener);
 	
 	
@@ -289,7 +291,9 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param text The text being shared.
 	 * @param options Options for the share
 	 * @param shareAddListener A listener to handle callbacks from the post.
+	 * @deprecated
 	 */
+	@Deprecated
 	void share(Activity activity, String entityKey, String text, ShareOptions shareOptions, ShareAddListener shareAddListener);
 	
 	/**

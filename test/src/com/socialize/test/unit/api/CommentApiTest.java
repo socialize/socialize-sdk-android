@@ -57,7 +57,7 @@ public class CommentApiTest extends SocializeUnitTest {
 	 * More specific test to ensure the comment is actually set.
 	 */
 	public void testAddComment() {
-		final String key = "foo";
+		final Entity key = Entity.newInstance("foo", "foo");
 		final String comment = "bar";
 		
 		SocializeCommentSystem api = new SocializeCommentSystem(provider){
@@ -77,7 +77,7 @@ public class CommentApiTest extends SocializeUnitTest {
 		assertNotNull(result);
 		assertEquals(comment, result.getText());
 		assertNotNull(result.getEntityKey());
-		assertEquals(key, result.getEntityKey());
+		assertEquals(key.getKey(), result.getEntityKey());
 	}
 	
 	public void testGetCommentsByEntity() {

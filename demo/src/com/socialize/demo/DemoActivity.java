@@ -39,12 +39,10 @@ public abstract class DemoActivity extends Activity implements DialogRegister {
 	
 	private List<Dialog> dialogs = new ArrayList<Dialog>();
 	protected Entity entity;
-	protected String entityKey;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		entityKey = "http://getsocialize.com";
-		entity = Entity.newInstance(entityKey, "Socialize");
+		entity = Entity.newInstance("http://getsocialize.com", "Socialize");
 	}
 	
 	/* (non-Javadoc)

@@ -233,7 +233,7 @@ public class CommentListView extends BaseView {
 			public void onComment(String text, boolean shareLocation, boolean subscribe, SocialNetwork... networks) {
 				text = StringUtils.replaceNewLines(text, 3, 2);
 				if(networks == null || networks.length == 0) {
-					CommentUtils.addComment(CommentListView.this.getActivity(), entity.getKey(), text, getCommentAddListener(subscribe));
+					CommentUtils.addComment(CommentListView.this.getActivity(), entity, text, getCommentAddListener(subscribe));
 				}
 				else {
 					doPostComment(text, shareLocation, subscribe, networks);

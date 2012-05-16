@@ -19,52 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo.implementations.share;
+package com.socialize.demo.implementations.view;
 
-import com.socialize.ShareUtils;
+import java.util.List;
+import com.socialize.ViewUtils;
 import com.socialize.demo.SDKDemoActivity;
-import com.socialize.entity.ListResult;
-import com.socialize.entity.Share;
+import com.socialize.entity.View;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.share.ShareGetListener;
-import com.socialize.listener.share.ShareListListener;
+import com.socialize.listener.view.ViewListListener;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class GetSharesByIDActivity extends SDKDemoActivity {
+public class GetViewsByEntityActivity extends SDKDemoActivity {
 
 	/* (non-Javadoc)
 	 * @see com.socialize.demo.DemoActivity#executeDemo()
 	 */
 	@Override
 	public void executeDemo(String text) {
-		
-		// We are going to list shares just so we can get the ID for a single share
-		// Usually you would NOT do this as you would usually already have an ID (e.g. from a click on a list view)
-		ShareUtils.getSharesByEntity(this, entity.getKey(), 0, 1, new ShareListListener() {
-			
+		ViewUtils.getViewsByEntity(this, entity, 0, 50, new ViewListListener() {
 			@Override
-			public void onList(ListResult<Share> shares) {
-				
-				// Use the id from the first share
-				if(shares.getTotalCount() > 0) {
-					ShareUtils.getShare(GetSharesByIDActivity.this, new ShareGetListener() {
-						@Override
-						public void onGet(Share share) {
-							handleSocializeResult(share);
-						}
-						
-						@Override
-						public void onError(SocializeException error) {
-							handleError(error);
-						}
-					}, shares.getItems().get(0).getId());
-				}
+			public void onList(List<View> items, int totalSize) {
+				handleSocializeResult(items);
 			}
-			
+
 			@Override
 			public void onError(SocializeException error) {
 				handleError(error);
@@ -82,6 +63,6 @@ public class GetSharesByIDActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public String getButtonText() {
-		return "Get Last Share by ID";
+		return "List 50 Views for Current Entity";
 	}
 }

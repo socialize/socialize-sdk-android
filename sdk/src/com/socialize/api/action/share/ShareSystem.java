@@ -26,6 +26,7 @@ import android.content.Context;
 import android.location.Location;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
+import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.networks.SocialNetwork;
@@ -40,13 +41,13 @@ public interface ShareSystem {
 
 	public static final String ENDPOINT = "/share/";
 	
-	public void addShare(Context context, SocializeSession session, String entityKey, String text, ShareType shareType, Location location, ShareListener listener);
+	public void addShare(Context context, SocializeSession session, Entity entity, String text, ShareType shareType, Location location, ShareListener listener);
 	
-	public void addShare(Context context, SocializeSession session, String entityKey, String text, SocialNetwork network, Location location, ShareListener listener);
+	public void addShare(Context context, SocializeSession session, Entity entity, String text, SocialNetwork network, Location location, ShareListener listener);
 	
-	public void addShare(Context context, SocializeSession session, String entityKey, String text, ShareType shareType, ShareListener listener, SocialNetwork...network);
+	public void addShare(Context context, SocializeSession session, Entity entity, String text, ShareType shareType, ShareListener listener, SocialNetwork...network);
 	
-	public void addShare(Context context, SocializeSession session, String entityKey, ShareType shareType, ShareListener listener, SocialNetwork...network);
+	public void addShare(Context context, SocializeSession session, Entity entity, ShareType shareType, ShareListener listener, SocialNetwork...network);
 	
 	public void getSharesByEntity(SocializeSession session, String key, int startIndex, int endIndex, ShareListener listener);
 	

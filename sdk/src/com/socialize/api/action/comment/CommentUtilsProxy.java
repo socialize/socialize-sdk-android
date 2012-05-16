@@ -22,6 +22,7 @@
 package com.socialize.api.action.comment;
 
 import android.app.Activity;
+import com.socialize.entity.Entity;
 import com.socialize.entity.User;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
@@ -37,11 +38,11 @@ public interface CommentUtilsProxy {
 	/**
 	 * Adds a comment to the given entity.
 	 * @param context The current context.
-	 * @param entityKey The entity on which the comment will be associated.
+	 * @param entity The entity on which the comment will be associated.
 	 * @param text The text of the comment.
 	 * @param listener A listener to handle the result.
 	 */
-	public void addComment (Activity context, String entityKey, String text, CommentAddListener listener);
+	public void addComment (Activity context, Entity entity, String text, CommentAddListener listener);
 	
 	/**
 	 * Retrieves a single comment based on ID.

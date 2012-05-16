@@ -756,10 +756,10 @@ public class SocializeServiceImpl implements SocializeService {
 				final SocialNetwork[] shareTo = shareOptions.getShareTo();
 				final boolean autoAuth = shareOptions.isAutoAuth();
 				if(shareTo == null || shareTo.length == 0) {
-					likeSystem.addLike(session, entity.getKey(), shareOptions, likeAddListener);
+					likeSystem.addLike(session, entity, shareOptions, likeAddListener);
 				}
 				else {
-					likeSystem.addLike(session, entity.getKey(), shareOptions, new LikeAddListener() {
+					likeSystem.addLike(session, entity, shareOptions, new LikeAddListener() {
 						@Override
 						public void onError(SocializeException error) {
 							if(likeAddListener != null) {
@@ -786,36 +786,28 @@ public class SocializeServiceImpl implements SocializeService {
 				}
 			}	
 			else {
-				likeSystem.addLike(session, entity.getKey(), shareOptions, likeAddListener);
+				likeSystem.addLike(session, entity, shareOptions, likeAddListener);
 			}
 		}			
 	}
 	
-	
-
-	
-	@Override
-	public void share(Activity activity, Entity entity, String text, ShareOptions options, ShareAddListener shareAddListener) {
-		share(activity, entity.getKey(), text, options, shareAddListener);
+	public void share(final Activity activity, final String entityKey, final String text, final ShareOptions shareOptions, final ShareAddListener shareAddListener) {
+		share(activity, Entity.newInstance(entityKey, null), text, shareOptions, shareAddListener);
 	}
 
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#share(android.app.Activity, com.socialize.entity.Entity, java.lang.String, com.socialize.networks.ShareOptions, com.socialize.listener.share.ShareAddListener)
-	 */
+	
 	@Override
-	public void share(final Activity activity, final String entityKey, final String text, final ShareOptions shareOptions, final ShareAddListener shareAddListener) {
+	public void share(final Activity activity, final Entity entity, final String text, final ShareOptions shareOptions, final ShareAddListener shareAddListener) {
 		if(assertAuthenticated(shareAddListener)) {
 			if(shareOptions != null) {
 				SocialNetwork[] shareTo = shareOptions.getShareTo();
 				final boolean autoAuth = shareOptions.isAutoAuth();
 				if(shareTo == null) {
-					shareSystem.addShare(activity, session, entityKey, text, ShareType.OTHER, shareOptions.getLocation(), shareAddListener);
+					shareSystem.addShare(activity, session, entity, text, ShareType.OTHER, shareOptions.getLocation(), shareAddListener);
 				}
 				else  {
 					for (final SocialNetwork socialNetwork : shareTo) {
-						shareSystem.addShare(activity, session, entityKey, text, socialNetwork, shareOptions.getLocation(), new ShareAddListener() {
+						shareSystem.addShare(activity, session, entity, text, socialNetwork, shareOptions.getLocation(), new ShareAddListener() {
 							@Override
 							public void onError(SocializeException error) {
 								if(shareAddListener != null) {
@@ -856,8 +848,13 @@ public class SocializeServiceImpl implements SocializeService {
 	
 	@Override
 	public void share(final Activity activity, final String entityKey, final String text, final ShareType shareType, final Location location, final ShareAddListener shareAddListener) {
+		share(activity, Entity.newInstance(entityKey, null), text, shareType, location, shareAddListener);
+	}
+	
+	@Override
+	public void share(final Activity activity, Entity entity, final String text, final ShareType shareType, final Location location, final ShareAddListener shareAddListener) {
 		if(assertAuthenticated(shareAddListener)) {
-			shareSystem.addShare(activity, session, entityKey, text, shareType, location, new ShareAddListener() {
+			shareSystem.addShare(activity, session, entity, text, shareType, location, new ShareAddListener() {
 				@Override
 				public void onError(SocializeException error) {
 					if(shareAddListener != null) {
@@ -875,11 +872,6 @@ public class SocializeServiceImpl implements SocializeService {
 		}	
 	}
 
-	@Override
-	public void share(final Activity activity, Entity entity, final String text, final ShareType shareType, final Location location, final ShareAddListener shareAddListener) {
-		share(activity, entity.getKey(), text, shareType, location, shareAddListener);
-	}
-	
 	protected void handleActionShare(Activity activity, final ShareType shareType, final Share share, String shareText, Location location, boolean autoAuth, final ShareAddListener shareAddListener) {
 		shareSystem.share(activity, session, share, shareText, location, shareType, autoAuth, new SocialNetworkListener() {
 			@Override
@@ -947,7 +939,7 @@ public class SocializeServiceImpl implements SocializeService {
 	@Override
 	public void addShare(Activity activity, Entity entity, String text, ShareType shareType, Location location, ShareAddListener shareAddListener) {
 		if(assertAuthenticated(shareAddListener)) {
-			shareSystem.addShare(activity, session, entity.getKey(), text, shareType, location, shareAddListener);
+			shareSystem.addShare(activity, session, entity, text, shareType, location, shareAddListener);
 		}
 	}
 

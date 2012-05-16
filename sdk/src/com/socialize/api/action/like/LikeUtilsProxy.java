@@ -22,12 +22,12 @@
 package com.socialize.api.action.like;
 
 import android.app.Activity;
+import com.socialize.entity.Entity;
 import com.socialize.entity.User;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
-import com.socialize.networks.ShareOptions;
 
 
 /**
@@ -39,10 +39,10 @@ public interface LikeUtilsProxy {
 	/**
 	 * Records a like against the given entity for the current user.
 	 * @param context The current context.
-	 * @param entityKey The entity to be liked.
+	 * @param entity The entity to be liked.
 	 * @param listener A listener to handle the result.
 	 */
-	public void like (Activity context, String entityKey, LikeAddListener listener);
+	public void like (Activity context, Entity entity, LikeAddListener listener);
 	
 	/**
 	 * Removes a like previously created for the current user.
@@ -80,12 +80,4 @@ public interface LikeUtilsProxy {
 	 * @param listener A listener to handle the result.
 	 */
 	public void getLikesByEntity (Activity context, String entityKey, int start, int end, LikeListListener listener);
-
-	/**
-	 * @param context
-	 * @param entityKey
-	 * @param shareOptions
-	 * @param listener
-	 */
-	public void like(Activity context, String entityKey, ShareOptions shareOptions, LikeAddListener listener);
 }

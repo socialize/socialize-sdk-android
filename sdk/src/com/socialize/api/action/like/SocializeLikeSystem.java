@@ -26,6 +26,7 @@ import java.util.List;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
 import com.socialize.config.SocializeConfig;
+import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeApiError;
@@ -49,9 +50,9 @@ public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Li
 	 * @see com.socialize.api.action.LikeSystem#addLike(com.socialize.api.SocializeSession, com.socialize.entity.Entity, android.location.Location, com.socialize.networks.ShareOptions, com.socialize.listener.like.LikeListener)
 	 */
 	@Override
-	public void addLike(SocializeSession session, String entityKey, ShareOptions shareOptions, LikeListener listener) {
+	public void addLike(SocializeSession session, Entity entity, ShareOptions shareOptions, LikeListener listener) {
 		Like c = new Like();
-		c.setEntityKey(entityKey);
+		c.setEntity(entity);
 		
 		setPropagationData(c, shareOptions);
 		setLocation(c, shareOptions);

@@ -61,7 +61,7 @@ public class ActionBarLikeStateTest extends ActivityInstrumentationTestCase2<Act
 			int callCount = 0;
 			
 			@Override
-			public void addLike(SocializeSession session, String entityKey, ShareOptions shareOptions, LikeListener listener) {
+			public void addLike(SocializeSession session, Entity entityKey, ShareOptions shareOptions, LikeListener listener) {
 				super.addLike(session, entityKey, shareOptions, listener);
 			}
 

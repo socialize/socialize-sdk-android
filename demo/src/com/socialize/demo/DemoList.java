@@ -21,18 +21,19 @@
  */
 package com.socialize.demo;
 
-import com.socialize.ActionBarUtils;
-import com.socialize.demo.implementations.comment.CommentActivity;
-import com.socialize.demo.implementations.entity.EntityActivity;
-import com.socialize.demo.implementations.share.ShareActivity;
-import com.socialize.entity.Entity;
-import com.socialize.ui.actionbar.ActionBarOptions;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.socialize.ActionBarUtils;
+import com.socialize.demo.implementations.comment.CommentActivity;
+import com.socialize.demo.implementations.entity.EntityActivity;
+import com.socialize.demo.implementations.share.ShareActivity;
+import com.socialize.demo.implementations.view.ViewActivity;
+import com.socialize.entity.Entity;
+import com.socialize.ui.actionbar.ActionBarOptions;
 
 /**
  * @author Jason Polites
@@ -41,7 +42,7 @@ import android.widget.ListView;
 public class DemoList extends ListActivity {
 
 	final String[] values = new String[] { "Action Bar", "Entities", "Comments", "Sharing", "Likes", "Views", "Actions (User Activity)", "Subscriptions", "Location"};
-	final Class<?>[] activities = new Class<?>[] { null, EntityActivity.class, CommentActivity.class, ShareActivity.class, null, null, null, null, null, null};
+	final Class<?>[] activities = new Class<?>[] { null, EntityActivity.class, CommentActivity.class, ShareActivity.class, null, ViewActivity.class, null, null, null, null};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

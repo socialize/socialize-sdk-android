@@ -38,6 +38,7 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
+import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
@@ -70,18 +71,18 @@ public class SharePanelView extends DialogPanelView {
 	
 	private int displayOptions;
 	
-	private String entityKey;
+	private Entity entity;
 	
-	public SharePanelView(Context context, String entityKey, ShareDialogListener listener, int displayOptions) {
-		this(context, entityKey, null, listener, displayOptions);
+	public SharePanelView(Context context, Entity entity, ShareDialogListener listener, int displayOptions) {
+		this(context, entity, null, listener, displayOptions);
 	}
 	
-	public SharePanelView(Context context, String entityKey, SocialNetworkListener socialNetworkListener, ShareDialogListener listener, int displayOptions) {
+	public SharePanelView(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener listener, int displayOptions) {
 		super(context);
 		this.shareDialogListener = listener;
 		this.socialNetworkListener = socialNetworkListener;
 		this.displayOptions = displayOptions;
-		this.entityKey = entityKey;
+		this.entity = entity;
 	}
 	
 	public SharePanelView(Context context) {
@@ -267,7 +268,7 @@ public class SharePanelView extends DialogPanelView {
 				@Override
 				public void onClick(View v) {
 					final SafeProgressDialog progress = SafeProgressDialog.show(getContext());
-					ShareUtils.shareViaOther(getActivity(), entityKey, new ShareAddListener() {
+					ShareUtils.shareViaOther(getActivity(), entity, new ShareAddListener() {
 						
 						@Override
 						public void onError(SocializeException error) {
@@ -381,8 +382,8 @@ public class SharePanelView extends DialogPanelView {
 		
 		boolean fbOK = getSocialize().isSupported(AuthProviderType.FACEBOOK) && ((displayOptions & ShareUtils.FACEBOOK) != 0) && facebookShareCellFactory != null;
 		boolean twOK = getSocialize().isSupported(AuthProviderType.TWITTER) && ((displayOptions & ShareUtils.TWITTER) != 0) && twitterShareCellFactory != null;
-		boolean emailOK = (entityKey != null && (displayOptions & ShareUtils.EMAIL) != 0) && getSocialize().canShare(getContext(), ShareType.EMAIL) && emailCellFactory != null;
-		boolean smsOK = (entityKey != null && (displayOptions & ShareUtils.SMS) != 0) && getSocialize().canShare(getContext(), ShareType.SMS) && smsCellFactory != null;
+		boolean emailOK = (entity != null && (displayOptions & ShareUtils.EMAIL) != 0) && getSocialize().canShare(getContext(), ShareType.EMAIL) && emailCellFactory != null;
+		boolean smsOK = (entity != null && (displayOptions & ShareUtils.SMS) != 0) && getSocialize().canShare(getContext(), ShareType.SMS) && smsCellFactory != null;
 		boolean rememberOk = ((displayOptions & ShareUtils.SHOW_REMEMBER) != 0) && rememberCellFactory != null;
 		
 		if(fbOK) {
@@ -457,7 +458,7 @@ public class SharePanelView extends DialogPanelView {
 				@Override
 				public void onClick(final View v) {
 					final ProgressDialog progress = SafeProgressDialog.show(v.getContext());
-					ShareUtils.shareViaEmail(getActivity(), entityKey, new ShareAddListener() {
+					ShareUtils.shareViaEmail(getActivity(), entity, new ShareAddListener() {
 						
 						@Override
 						public void onError(SocializeException error) {
@@ -479,7 +480,7 @@ public class SharePanelView extends DialogPanelView {
 				@Override
 				public void onClick(final View v) {
 					final ProgressDialog progress = SafeProgressDialog.show(v.getContext());
-					ShareUtils.shareViaSMS(getActivity(), entityKey, new ShareAddListener() {
+					ShareUtils.shareViaSMS(getActivity(), entity, new ShareAddListener() {
 						
 						@Override
 						public void onError(SocializeException error) {
@@ -587,12 +588,13 @@ public class SharePanelView extends DialogPanelView {
 		this.rememberCellFactory = rememberCellFactory;
 	}
 	
-	public String getEntityKey() {
-		return entityKey;
+	
+	public Entity getEntity() {
+		return entity;
 	}
 	
-	public void setEntityKey(String entityKey) {
-		this.entityKey = entityKey;
+	public void setEntity(Entity entity) {
+		this.entity = entity;
 	}
 
 	protected SocializeAuthListener getAuthClickListener(final ClickableSectionCell cell, final SocialNetwork network) {

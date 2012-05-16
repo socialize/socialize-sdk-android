@@ -29,6 +29,7 @@ import android.app.Dialog;
 import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.api.action.share.SocialNetworkDialogListener;
+import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.Share;
 import com.socialize.entity.User;
@@ -184,7 +185,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 	}	
 	
 	public void testShowAuthDialog() throws Exception {
-		final String entityKey = "http://entity1.com";
+		final Entity entityKey = Entity.newInstance("http://entity1.com", "http://entity1.com");
 		final CountDownLatch latch0 = new CountDownLatch(1);
 		
 		ShareUtils.showShareDialog(getContext(), entityKey, new SocialNetworkDialogListener() {

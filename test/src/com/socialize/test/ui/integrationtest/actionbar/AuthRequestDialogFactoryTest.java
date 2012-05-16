@@ -59,7 +59,7 @@ public class AuthRequestDialogFactoryTest extends ActionBarAutoTest {
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
 			
 			@Override
-			public void addLike(SocializeSession session, String entityKey, ShareOptions shareOptions, LikeListener listener) {
+			public void addLike(SocializeSession session, Entity entityKey, ShareOptions shareOptions, LikeListener listener) {
 				TestUtils.addResult("fail");
 			}
 

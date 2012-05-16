@@ -28,6 +28,7 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.share.SocializeShareSystem;
+import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.entity.SocializeAction;
 import com.socialize.listener.SocializeActionListener;
@@ -59,7 +60,7 @@ public class ShareApiTest extends SocializeUnitTest {
 	 */
 	@UsesMocks ({Location.class})
 	public void testAddShare() {
-		final String key = "foo";
+		final Entity key = Entity.newInstance("foo", "foo");
 		final String shareText = "foobar_text";
 		Location location = AndroidMock.createMock(Location.class, "foobar");
 		ShareType type = ShareType.OTHER;
@@ -92,7 +93,7 @@ public class ShareApiTest extends SocializeUnitTest {
 		
 		assertNotNull(result);
 		assertNotNull(result.getEntityKey());
-		assertEquals(key, result.getEntityKey());
+		assertEquals(key.getKey(), result.getEntityKey());
 		
 		assertNotNull(result.getText());
 		assertEquals(shareText, result.getText());

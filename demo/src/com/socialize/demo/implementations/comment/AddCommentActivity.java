@@ -39,7 +39,7 @@ public class AddCommentActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public void executeDemo(String text) {
-		CommentUtils.addComment(this, entityKey, text , new CommentAddListener() {
+		CommentUtils.addComment(this, entity, text , new CommentAddListener() {
 			@Override
 			public void onError(SocializeException error) {
 				handleError(error);

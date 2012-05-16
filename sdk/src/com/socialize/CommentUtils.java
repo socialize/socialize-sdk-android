@@ -59,12 +59,12 @@ public class CommentUtils {
 	/**
 	 * Adds a comment to the given entity.
 	 * @param context The current context.
-	 * @param entityKey The entity on which the comment will be associated.
+	 * @param entity The entity on which the comment will be associated.
 	 * @param text The text of the comment.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void addComment (Activity context, String entityKey, String text, CommentAddListener listener) {
-		commentUtils.addComment(context, entityKey, text, listener);
+	public static void addComment (Activity context, Entity entity, String text, CommentAddListener listener) {
+		commentUtils.addComment(context, entity, text, listener);
 	}
 	
 	/**

@@ -155,7 +155,7 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 			listener.onBeforePost(context, SocialNetwork.TWITTER, null);
 		}
 		
-		shareSystem.addShare(context, getSocialize().getSession(), entity.getKey(), text, ShareType.TWITTER, new ShareAddListener() {
+		shareSystem.addShare(context, getSocialize().getSession(), entity, text, ShareType.TWITTER, new ShareAddListener() {
 			@Override
 			public void onCreate(Share share) {
 				// Server does tweet.

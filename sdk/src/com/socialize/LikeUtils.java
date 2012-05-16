@@ -24,6 +24,7 @@ package com.socialize;
 import java.lang.reflect.Proxy;
 import android.app.Activity;
 import com.socialize.api.action.like.LikeUtilsProxy;
+import com.socialize.entity.Entity;
 import com.socialize.entity.User;
 import com.socialize.listener.like.IsLikedListener;
 import com.socialize.listener.like.LikeAddListener;
@@ -53,8 +54,8 @@ public class LikeUtils {
 	 * @param entityKey The entity to be liked.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void like (Activity context, String entityKey, LikeAddListener listener) {
-		proxy.like(context, entityKey, listener);
+	public static void like (Activity context, Entity entity, LikeAddListener listener) {
+		proxy.like(context, entity, listener);
 	}
 	
 	/**
