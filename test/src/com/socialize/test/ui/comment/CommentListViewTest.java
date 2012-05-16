@@ -266,7 +266,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		view.setCommentAdapter(commentAdapter);
 		view.setProgressDialogFactory(progressDialogFactory);
 		view.setHeader(header);
-		view.setField(field);
+		view.setCommentEntryField(field);
 		view.setContent(content);
 		view.setStartIndex(startIndex);
 		view.setEndIndex(endIndex);
@@ -750,8 +750,8 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		}
 
 		@Override
-		public void setField(View field) {
-			super.setField(field);
+		public void setCommentEntryField(View field) {
+			super.setCommentEntryField(field);
 		}
 
 		@Override

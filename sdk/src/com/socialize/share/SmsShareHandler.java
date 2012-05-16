@@ -46,6 +46,10 @@ public class SmsShareHandler extends IntentShareHandler {
 		Intent sendIntent = getIntent();
 		sendIntent.putExtra("sms_body", body); 
 		context.startActivity(sendIntent);
+		
+		if(listener != null) {
+			listener.onAfterPost(context, null);
+		}
 	}
 	
 	protected Intent getIntent() {

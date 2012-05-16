@@ -193,7 +193,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 						listener.onCancel();
 					}
 				}
-			}, ShareUtils.SOCIAL|ShareUtils.SHOW_REMEMBER);
+			}, ShareUtils.COMMENT_AND_LIKE|ShareUtils.SHOW_REMEMBER);
 		}
 		else {
 			final ShareOptions defaultShareOptions = getDefaultShareOptions();

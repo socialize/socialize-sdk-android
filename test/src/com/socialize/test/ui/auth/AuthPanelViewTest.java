@@ -86,7 +86,7 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 		// the twitter button is not shown.  Forcing twitter config here
 		Socialize.getSocialize().getConfig().setTwitterKeySecret("foo", "bar");
 		
-		final AuthPanelView view = SocializeAccess.getBean("authPanelView", entity, ShareUtils.ALL);
+		final AuthPanelView view = SocializeAccess.getBean("authPanelView", entity, ShareUtils.DEFAULT);
 		
 		
 		final CountDownLatch latch0 = new CountDownLatch(1);
@@ -157,7 +157,7 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 		
 		Socialize.getSocialize().init(getContext(), config);
 		
-		final AuthPanelView view = SocializeAccess.getBean("authPanelView", entity, ShareUtils.ALL);
+		final AuthPanelView view = SocializeAccess.getBean("authPanelView", entity, ShareUtils.DEFAULT);
 		
 		final CountDownLatch latch0 = new CountDownLatch(1);
 		
@@ -226,7 +226,7 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 		
 		Socialize.getSocialize().init(getContext(), config);
 		
-		final AuthPanelView view = SocializeAccess.getBean("authPanelView", entity, ShareUtils.ALL);
+		final AuthPanelView view = SocializeAccess.getBean("authPanelView", entity, ShareUtils.DEFAULT);
 		
 		final CountDownLatch latch0 = new CountDownLatch(1);
 		

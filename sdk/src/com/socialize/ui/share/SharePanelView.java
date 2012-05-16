@@ -66,6 +66,7 @@ public class SharePanelView extends DialogPanelView {
 	
 	private SocializeButton continueButton;
 	private SocializeButton cancelButton;
+	private TextView otherOptions;
 	
 	private int displayOptions;
 	
@@ -84,7 +85,7 @@ public class SharePanelView extends DialogPanelView {
 	}
 	
 	public SharePanelView(Context context) {
-		this(context, null, null, null, ShareUtils.SOCIAL);
+		this(context, null, null, null, ShareUtils.COMMENT_AND_LIKE);
 	}
 	
 	private IBeanFactory<FacebookShareCell> facebookShareCellFactory;
@@ -197,14 +198,27 @@ public class SharePanelView extends DialogPanelView {
 				
 				@Override
 				public void onToggle(boolean on) {
-					if(rememberCell != null) {
-						boolean fbOK = facebookShareCell == null || facebookShareCell.isToggled();
-						boolean twOK = twitterShareCell == null || twitterShareCell.isToggled();
-						if(fbOK || twOK) {
+				
+					boolean fbOK = facebookShareCell == null || facebookShareCell.isToggled();
+					boolean twOK = twitterShareCell == null || twitterShareCell.isToggled();
+					if(fbOK || twOK) {
+						if(rememberCell != null) {
 							rememberCell.setVisibility(View.VISIBLE);
 						}
-						else {
+						
+						if((displayOptions & ShareUtils.ALLOW_NONE) == 0) {
+							continueButton.setEnabled(true);
+						}
+						
+					}
+					else {
+						
+						if(rememberCell != null) {
 							rememberCell.setVisibility(View.GONE);
+						}
+						
+						if((displayOptions & ShareUtils.ALLOW_NONE) == 0) {
+							continueButton.setEnabled(false);
 						}
 					}
 				}
@@ -233,6 +247,43 @@ public class SharePanelView extends DialogPanelView {
 		
 		if(rememberCell != null) {
 			contentLayout.addView(rememberCell);
+		}
+		
+		if((displayOptions & ShareUtils.MORE_OPTIONS) != 0) {
+			otherOptions = new TextView(getContext());
+			otherOptions.setText("More options...");
+			otherOptions.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+			otherOptions.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
+			otherOptions.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
+			otherOptions.setPadding(0, 0, 0, padding);
+			
+			LayoutParams skipAuthParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			skipAuthParams.gravity = Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
+			skipAuthParams.weight = 1.0f;
+			
+			otherOptions.setLayoutParams(skipAuthParams);
+			
+			otherOptions.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					final SafeProgressDialog progress = SafeProgressDialog.show(getContext());
+					ShareUtils.shareViaOther(getActivity(), entityKey, new ShareAddListener() {
+						
+						@Override
+						public void onError(SocializeException error) {
+							progress.dismiss();
+							showErrorToast(getContext(), error);
+						}
+						
+						@Override
+						public void onCreate(Share result) {
+							progress.dismiss();
+						}
+					});
+				}
+			});
+			
+			contentLayout.addView(otherOptions);
 		}
 		
 		container.addView(contentLayout);
@@ -474,6 +525,15 @@ public class SharePanelView extends DialogPanelView {
 			twitterShareCell.setToggled(getSocialize().isAuthenticated(AuthProviderType.TWITTER));
 		}
 	}
+	
+	public void checkSupportedNetworkButtonState() {
+		if(facebookShareCell != null && facebookShareCell.isToggled()) {
+			facebookShareCell.setToggled(getSocialize().isAuthenticated(AuthProviderType.FACEBOOK));
+		}
+		if(twitterShareCell != null && twitterShareCell.isToggled()) {
+			twitterShareCell.setToggled(getSocialize().isAuthenticated(AuthProviderType.TWITTER));
+		}
+	}	
 
 	public void setFacebookShareCellFactory(IBeanFactory<FacebookShareCell> facebookSignInCellFactory) {
 		this.facebookShareCellFactory = facebookSignInCellFactory;
@@ -552,7 +612,7 @@ public class SharePanelView extends DialogPanelView {
 			@Override
 			public void onAuthSuccess(SocializeSession session) {
 				cell.setToggled(true);
-				updateNetworkButtonState();
+				checkSupportedNetworkButtonState();
 			}
 			
 			@Override

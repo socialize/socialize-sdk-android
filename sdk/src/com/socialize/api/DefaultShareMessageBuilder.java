@@ -125,6 +125,10 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 			builder.append(getNewLine(html));
 			builder.append(getNewLine(html));
 		}
+		else {
+			builder.append(getNewLine(html));
+			builder.append(getNewLine(html));
+		}
 		
 		builder.append(getEntityLink(entity, urlSet, html));
 		

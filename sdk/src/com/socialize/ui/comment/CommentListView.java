@@ -67,7 +67,7 @@ public class CommentListView extends BaseView {
 	private IBeanFactory<LoadingListView> commentContentViewFactory;
 	private IBeanFactory<CustomCheckbox> notificationEnabledOptionFactory;
 	
-	private View field;
+	private View commentEntryField;
 	private SocializeHeader header;
 	private LoadingListView content;
 //	private AuthDialogFactory authDialogFactory;
@@ -144,7 +144,7 @@ public class CommentListView extends BaseView {
 		sliderAnchor.setLayoutParams(bottomParams);
 
 		header = commentHeaderFactory.getBean();
-		field = commentEditFieldFactory.getBean();
+		commentEntryField = commentEditFieldFactory.getBean();
 		content = commentContentViewFactory.getBean();
 		
 		if(commentEntryFactory != null) {
@@ -181,7 +181,7 @@ public class CommentListView extends BaseView {
 		top.addView(header);
 		middle.addView(content);
 		
-		sliderAnchor.addView(field);
+		sliderAnchor.addView(commentEntryField);
 		
 		layoutAnchor.addView(top);
 		layoutAnchor.addView(middle);
@@ -232,11 +232,7 @@ public class CommentListView extends BaseView {
 			@Override
 			public void onComment(String text, boolean shareLocation, boolean subscribe, SocialNetwork... networks) {
 				text = StringUtils.replaceNewLines(text, 3, 2);
-				
-				dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
-				
 				if(networks == null || networks.length == 0) {
-					
 					CommentUtils.addComment(CommentListView.this.getActivity(), entity.getKey(), text, getCommentAddListener(subscribe));
 				}
 				else {
@@ -247,6 +243,7 @@ public class CommentListView extends BaseView {
 	}
 	
 	public void doPostComment(String text, boolean shareLocation, final boolean subscribe, SocialNetwork...networks) {
+		dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
 		
 		ShareOptions options = newShareOptions();
 		
@@ -615,7 +612,7 @@ public class CommentListView extends BaseView {
 			
 			commentEntrySlider.loadItem(commentEntrySliderItem);
 			
-			field.setOnClickListener(new OnClickListener() {
+			commentEntryField.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					if(commentEntrySlider != null) {
@@ -624,8 +621,8 @@ public class CommentListView extends BaseView {
 				}
 			});		
 		}
-		else if(field != null) {
-			field.setVisibility(GONE);
+		else if(commentEntryField != null) {
+			commentEntryField.setVisibility(GONE);
 		}
 		
 		if(getSocialize().isAuthenticated()) {
@@ -711,8 +708,8 @@ public class CommentListView extends BaseView {
 		this.loading = loading;
 	}
 
-	protected void setField(View field) {
-		this.field = field;
+	protected void setCommentEntryField(View field) {
+		this.commentEntryField = field;
 	}
 
 	protected void setHeader(SocializeHeader header) {

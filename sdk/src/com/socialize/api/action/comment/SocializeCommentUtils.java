@@ -138,7 +138,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 						count = networks.length;
 					}
 					
-					final SafeProgressDialog progress = SafeProgressDialog.show(context, count);
+					final SafeProgressDialog progress = SafeProgressDialog.show(context, "Posting comment", "Please wait...", count);
 					
 					if(remember && user.setAutoPostPreferences(networks)) {
 						UserUtils.saveUserSettings(context, user, null);
@@ -182,7 +182,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 						listener.onCancel();
 					}
 				}
-			}, ShareUtils.SOCIAL|ShareUtils.SHOW_REMEMBER);
+			}, ShareUtils.COMMENT_AND_LIKE|ShareUtils.SHOW_REMEMBER);
 		}
 		else {
 			doCommentWithoutShare(context, session, entityKey, text, listener);
@@ -190,10 +190,12 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 	}	
 	
 	protected void doCommentWithoutShare(final Activity context, final SocializeSession session, final String entityKey, final String text, final CommentAddListener listener) {
+		final SafeProgressDialog progress = SafeProgressDialog.show(context, "Posting comment", "Please wait...");
 		final ShareOptions defaultShareOptions = getDefaultShareOptions();
 		commentSystem.addComment(session, entityKey, text, defaultShareOptions, new CommentAddListener() {
 			@Override
 			public void onError(SocializeException error) {
+				progress.dismiss();
 				if(listener != null) {
 					listener.onError(error);
 				}
@@ -204,7 +206,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 				if(listener != null) {
 					listener.onCreate(comment);
 				}
-				doActionShare(context, comment, text, null, listener, defaultShareOptions.getShareTo());
+				doActionShare(context, comment, text, progress, listener, defaultShareOptions.getShareTo());
 			}
 		});		
 	}

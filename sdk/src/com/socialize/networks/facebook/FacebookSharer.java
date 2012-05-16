@@ -22,7 +22,6 @@
 package com.socialize.networks.facebook;
 
 import android.app.Activity;
-import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ActionType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
@@ -35,7 +34,6 @@ import com.socialize.networks.SocialNetworkListener;
  */
 public class FacebookSharer extends AbstractSocialNetworkSharer {
 	
-	private ShareMessageBuilder shareMessageBuilder;
 	private FacebookWallPoster facebookWallPoster;
 	
 	@Override
@@ -51,18 +49,13 @@ public class FacebookSharer extends AbstractSocialNetworkSharer {
 				break;
 				
 			case SHARE:
-				String body = shareMessageBuilder.buildShareMessage( entity, urlSet, comment, false, false);
-				facebookWallPoster.post(context, entity, body, urlSet, listener);
+				facebookWallPoster.post(context, entity, comment, urlSet, listener);
 				break;
 				
 			case LIKE:
 				facebookWallPoster.postLike(context, entity, urlSet, listener);
 				break;			
 		}		
-	}
-
-	public void setShareMessageBuilder(ShareMessageBuilder shareMessageBuilder) {
-		this.shareMessageBuilder = shareMessageBuilder;
 	}
 
 	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {

@@ -193,7 +193,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 				addResult(0, dialogView);
 				latch0.countDown();
 			}
-		}, ShareUtils.ALL);
+		}, ShareUtils.DEFAULT);
 		
 		latch0.await(20, TimeUnit.SECONDS);
 		

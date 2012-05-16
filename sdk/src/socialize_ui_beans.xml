@@ -275,7 +275,7 @@
 				</entry>
 				<entry>
 					<key value="BUTTON_DISABLED_TEXT"/>
-					<value value="#8f8f8f"/>
+					<value value="#696969"/>
 				</entry>
 				<entry>
 					<key value="BUTTON_DISABLED_STROKE"/>
@@ -508,7 +508,7 @@
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="text" value="Cancel"/>
+		<property name="text" value="Close"/>
 		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
 		<property name="topColor" value="GRAY_BTN_TOP"/>
 		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>

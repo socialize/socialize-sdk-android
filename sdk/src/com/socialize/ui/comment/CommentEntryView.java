@@ -622,7 +622,8 @@ public class CommentEntryView extends BaseView {
 	}
 	
 	protected void setNotifySubscribeState(boolean subscribed) {
-		notificationsEnabled = subscribed;
+		if(subscribed)
+			notificationsEnabled = subscribed;
 		if(notifyCheckBox != null) {
 			notifyCheckBox.setChecked(notificationsEnabled);
 			updateUI();

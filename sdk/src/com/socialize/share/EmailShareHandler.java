@@ -62,10 +62,16 @@ public class EmailShareHandler extends IntentShareHandler {
 		msg.putExtra(Intent.EXTRA_SUBJECT, subject);
 		
 		startActivity(context, msg, title);
+		
+		if(listener != null) {
+			listener.onAfterPost(context, null);
+		}
 	}
 	
 	protected void startActivity(Activity context, Intent intent, String title) {
-		context.startActivity(Intent.createChooser(intent, title));
+		Intent chooser = Intent.createChooser(intent, title);
+		chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		context.startActivity(chooser);
 	}
 	
 	@Override

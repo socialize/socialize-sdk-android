@@ -43,8 +43,11 @@ public class ShareUtils {
 	public static final int FACEBOOK = 1<<2;
 	public static final int TWITTER = 1<<3;
 	public static final int SHOW_REMEMBER = 1<<4;
+	public static final int ALLOW_NONE = 1<<5;
+	public static final int MORE_OPTIONS = 1<<6;
+	public static final int COMMENT_AND_LIKE = FACEBOOK|TWITTER|ALLOW_NONE;
 	public static final int SOCIAL = FACEBOOK|TWITTER;
-	public static final int ALL = EMAIL|SMS|FACEBOOK|TWITTER;
+	public static final int DEFAULT = EMAIL|SMS|FACEBOOK|TWITTER|MORE_OPTIONS;
 	
 	static ShareUtilsProxy proxy;
 	
@@ -56,11 +59,11 @@ public class ShareUtils {
 	}
 	
 	public static void showShareDialog (Activity context, String entityKey) {
-		proxy.showShareDialog(context, entityKey, ALL, null, null);
+		proxy.showShareDialog(context, entityKey, DEFAULT, null, null);
 	};	
 	
 	public static void showShareDialog (Activity context, String entityKey, ShareDialogListener listener) {
-		proxy.showShareDialog(context, entityKey, ALL, null, listener);
+		proxy.showShareDialog(context, entityKey, DEFAULT, null, listener);
 	};	
 	
 	public static void showShareDialog (Activity context, String entityKey, SocialNetworkDialogListener listener, int options) {
@@ -69,6 +72,10 @@ public class ShareUtils {
 	
 	public static void shareViaEmail(Activity context, String entityKey, ShareAddListener listener) {
 		proxy.shareViaEmail(context, entityKey, listener);
+	};
+	
+	public static void shareViaOther(Activity context, String entityKey, ShareAddListener listener) {
+		proxy.shareViaOther(context, entityKey, listener);
 	};
 	
 	public static void shareViaSMS(Activity context, String entityKey, ShareAddListener listener) {
