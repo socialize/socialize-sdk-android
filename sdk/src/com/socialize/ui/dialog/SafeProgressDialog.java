@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -74,11 +74,11 @@ public class SafeProgressDialog extends ProgressDialog {
 	}
 	
 	public static SafeProgressDialog show(Context context, int dismissCount) {
-		return show(context, "", "Loading...", dismissCount);
+		return show(context, "", "Please wait...", dismissCount);
 	}
 	
 	public static SafeProgressDialog show(Context context) {
-		return show(context, "", "Loading...");
+		return show(context, "", "Please wait...");
 	}
 	
 	public static SafeProgressDialog show(Context context, String title, String message, int dismissCount) {

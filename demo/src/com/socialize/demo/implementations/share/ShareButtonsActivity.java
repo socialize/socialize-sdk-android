@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,12 @@ import com.socialize.api.action.share.SocialNetworkDialogListener;
 import com.socialize.demo.DemoActivity;
 import com.socialize.demo.DemoUtils;
 import com.socialize.demo.R;
+import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.facebook.FacebookUtils;
+import com.socialize.networks.twitter.TwitterUtils;
+import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.ui.share.DialogFlowController;
 
 
@@ -56,6 +61,56 @@ public class ShareButtonsActivity extends DemoActivity {
 		Button btnShareFacebook = (Button) findViewById(R.id.btnShareFacebook);
 		Button btnShareTwitter = (Button) findViewById(R.id.btnShareTwitter);
 		
+		btnShareTwitter.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+				final SafeProgressDialog progress = SafeProgressDialog.show(v.getContext());
+				
+				TwitterUtils.tweet(ShareButtonsActivity.this, entity, "Test Message", new SocialNetworkListener() {
+					@Override
+					public void onError(Activity context, SocialNetwork network, Exception error) {
+						progress.dismiss();
+						DemoUtils.showErrorDialog(context, error);
+					}
+					
+					@Override
+					public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+					}
+					
+					@Override
+					public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
+						progress.dismiss();
+						DemoUtils.showToast(parent, "Shared to " + socialNetwork.name());
+					}
+				});
+				
+			}
+		});
+		
+		btnShareFacebook.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+				FacebookUtils.post(ShareButtonsActivity.this, entity, "Test Message", new SocialNetworkListener() {
+					
+					@Override
+					public void onError(Activity context, SocialNetwork network, Exception error) {
+						DemoUtils.showErrorDialog(context, error);
+					}
+					
+					@Override
+					public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+					}
+					
+					@Override
+					public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
+						DemoUtils.showToast(parent, "Shared to " + socialNetwork.name());
+					}
+				});
+				
+			}
+		});
 		
 		btnShare.setOnClickListener(new OnClickListener() {
 			@Override
