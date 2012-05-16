@@ -1,0 +1,5 @@
+Commons codec is required at compile time but should NOT be added to the libs of the project.
+This is because Android already pre-packages Commons Codec on device, but does not include it in the 
+standard SDK.
+
+Add the libext/commons-codec-1.4.jar path to your build path in eclipse to resolve any compilation errors relating to Commons Codec.
