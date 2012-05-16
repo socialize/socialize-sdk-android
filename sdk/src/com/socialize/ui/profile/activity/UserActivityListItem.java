@@ -38,7 +38,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
-import com.socialize.config.SocializeConfig;
 import com.socialize.entity.SocializeAction;
 import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.ui.util.Colors;
@@ -70,7 +69,6 @@ public class UserActivityListItem extends TableLayout {
 	private int contentFontSize = 12;
 	private int titleFontSize = 11;
 	
-	private IBeanFactory<UserActivityAction> userActivityActionHtmlFactory;
 	private IBeanFactory<UserActivityAction> userActivityActionTextFactory;
 	
 	public UserActivityListItem(Context context) {
@@ -88,10 +86,6 @@ public class UserActivityListItem extends TableLayout {
 		bottomColor = colors.getColor(Colors.LIST_ITEM_BOTTOM);
 		
 		int contentMargin = displayUtils.getDIP(4);
-		
-		if(Socialize.getSocialize().getConfig().getBooleanProperty(SocializeConfig.SOCIALIZE_USE_ACTION_WEBVIEW, false)) {
-			contentMargin = displayUtils.getDIP(10);
-		}
 		
 		setOrientation(LinearLayout.HORIZONTAL);
 		setGravity(Gravity.TOP);
@@ -150,14 +144,7 @@ public class UserActivityListItem extends TableLayout {
 	}
 	
 	protected View createTitle() {
-		
-		if(Socialize.getSocialize().getConfig().getBooleanProperty(SocializeConfig.SOCIALIZE_USE_ACTION_WEBVIEW, false)) {
-			actionText = userActivityActionHtmlFactory.getBean();
-		}
-		else {
-			actionText = userActivityActionTextFactory.getBean();
-		}
-		
+		actionText = userActivityActionTextFactory.getBean();
 		return (View) actionText;
 	}
 	
@@ -244,10 +231,6 @@ public class UserActivityListItem extends TableLayout {
 	
 	public void setDateUtils(DateUtils dateUtils) {
 		this.dateUtils = dateUtils;
-	}
-
-	public void setUserActivityActionHtmlFactory(IBeanFactory<UserActivityAction> userActivityActionHtmlFactory) {
-		this.userActivityActionHtmlFactory = userActivityActionHtmlFactory;
 	}
 
 	public void setUserActivityActionTextFactory(IBeanFactory<UserActivityAction> userActivityActionTextFactory) {

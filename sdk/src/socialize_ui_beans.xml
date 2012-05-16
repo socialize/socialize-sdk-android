@@ -609,6 +609,7 @@
 	
 	<factory id="twitterSignInCellFactory" makes="twitterSignInCell"/>		
 		
+	<!-- 
 	<bean 
 		id="autoPostTwitterOption" 
 		extends="customCheckbox"
@@ -623,7 +624,8 @@
 	</bean>	
 	
 	<factory id="autoPostTwitterOptionFactory" makes="autoPostTwitterOption"/>
-	
+	 -->
+	 
 	<bean 
 		id="twitterEnabledCheckbox" 
 		extends="customCheckbox" 
@@ -712,6 +714,7 @@
 	
 	<factory id="facebookSignOutTaskFactory" makes="facebookSignOutTask"/>
 	
+	<!-- 
 	<bean 
 		id="autoPostFacebookOption" 
 		extends="customCheckbox"
@@ -726,7 +729,7 @@
 	</bean>	
 	
 	<factory id="autoPostFacebookOptionFactory" makes="autoPostFacebookOption"/>
-	
+	 -->
 	<bean 
 		id="facebookShareCell" 
 		class="com.socialize.networks.facebook.FacebookShareCell" 
@@ -966,9 +969,6 @@
 		<property name="postCommentButton" ref="postCommentButton"/>
 		<property name="cancelCommentButton" ref="cancelCommentButton"/>
 		<property name="subscribeNotificationButton" ref="subscribeNotificationButton"/>
-		<property name="autoPostFacebookOptionFactory" ref="autoPostFacebookOptionFactory"/>
-		<property name="autoPostTwitterOptionFactory" ref="autoPostTwitterOptionFactory"/>
-		
 		<property name="locationEnabledOptionFactory" ref="locationEnabledOptionFactory"/>
 		<property name="notificationEnabledOptionFactory" ref="notificationEnabledOptionFactory"/>
 		
@@ -1297,7 +1297,6 @@
 		<property name="colors" ref="colors"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="dateUtils" ref="dateUtils"/>
-		<property name="userActivityActionHtmlFactory" ref="userActivityActionHtmlFactory"/>
 		<property name="userActivityActionTextFactory" ref="userActivityActionTextFactory"/>
 		
 		<init-method name="init"/>

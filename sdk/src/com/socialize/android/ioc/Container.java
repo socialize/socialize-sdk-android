@@ -318,7 +318,7 @@ public class Container {
 			
 			if(nullCount > 0) {
 				
-				Logger.w(getClass().getSimpleName(), "Some arguments passed to getBean were null for bean [" +
+				Logger.i(getClass().getSimpleName(), "Some arguments passed to getBean were null for bean [" +
 						beanName +
 						"].  Stripping nulls from argument list");				
 				
