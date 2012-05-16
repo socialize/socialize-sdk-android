@@ -24,8 +24,12 @@ package com.socialize.api.action.share;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import com.socialize.Socialize;
+import com.socialize.SocializeService;
+import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeActionUtilsBase;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.entity.User;
@@ -33,6 +37,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
+import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.ui.share.DialogFlowController;
@@ -47,6 +52,30 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	
 	private ShareSystem shareSystem;
 	private ShareDialogFactory shareDialogFactory;
+	
+	@Override
+	public ShareOptions getUserShareOptions() {
+		SocializeService socialize = Socialize.getSocialize();
+		SocializeSession session = socialize.getSession();
+		User user = session.getUser();
+		ShareOptions options = new ShareOptions();
+		
+		if(user.isAutoPostToFacebook() && socialize.isAuthenticated(AuthProviderType.FACEBOOK)) {
+			if(user.isAutoPostToTwitter() && socialize.isAuthenticated(AuthProviderType.TWITTER)) {
+				options.setShareTo(SocialNetwork.FACEBOOK, SocialNetwork.TWITTER);
+			}
+			else {
+				options.setShareTo(SocialNetwork.FACEBOOK);
+			}
+		}
+		else if(user.isAutoPostToTwitter() && socialize.isAuthenticated(AuthProviderType.TWITTER)) {
+			options.setShareTo(SocialNetwork.TWITTER);
+		}	
+		
+		options.setShareLocation(user.isShareLocation());
+		
+		return options;
+	}
 	
 	@Override
 	public void showShareDialog(final Activity context, final Entity entity, int options, final SocialNetworkShareListener socialNetworkListener, final ShareDialogListener dialogListener) {
@@ -134,7 +163,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 				if(share != null && shareSystem != null && networks != null && networks.length > 0) {
 					for (int i = 0; i < networks.length; i++) {
 						final SocialNetwork network = networks[i];
-						shareSystem.share(context, getSocialize().getSession(), share, text, null, ShareType.valueOf(network), false, socialNetworkListener);									
+						shareSystem.share(context, getSocialize().getSession(), share, text, null, ShareType.valueOf(network), socialNetworkListener);									
 					}
 				}
 				

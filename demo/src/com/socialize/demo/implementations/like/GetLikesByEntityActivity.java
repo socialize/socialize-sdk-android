@@ -19,47 +19,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo.implementations.comment;
+package com.socialize.demo.implementations.like;
 
-import com.socialize.CommentUtils;
+import java.util.List;
+import com.socialize.LikeUtils;
 import com.socialize.demo.SDKDemoActivity;
-import com.socialize.entity.Comment;
+import com.socialize.entity.Like;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.comment.CommentAddListener;
+import com.socialize.listener.like.LikeListListener;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class AddCommentActivity extends SDKDemoActivity {
+public class GetLikesByEntityActivity extends SDKDemoActivity {
 
 	/* (non-Javadoc)
 	 * @see com.socialize.demo.DemoActivity#executeDemo()
 	 */
 	@Override
 	public void executeDemo(String text) {
-		CommentUtils.addComment(this, entity, text , new CommentAddListener() {
+		LikeUtils.getLikesByEntity(this, entity.getKey(), 0, 50, new LikeListListener() {
 			@Override
-			public void onError(SocializeException error) {
-				handleError(error);
+			public void onList(List<Like> items, int totalSize) {
+				handleSocializeResult(items);
 			}
 			
 			@Override
-			public void onCreate(Comment comment) {
-				handleSocializeResult(comment);
-			}
-
-			@Override
-			public void onCancel() {
-				handleCancel();
+			public void onError(SocializeException error) {
+				handleError(error);
 			}
 		});
 	}
 	
 	@Override
 	public boolean isTextEntryRequired() {
-		return true;
+		return false;
 	}
 
 	/* (non-Javadoc)
@@ -67,6 +63,6 @@ public class AddCommentActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public String getButtonText() {
-		return "Add Comment";
+		return "List 50 Likes for Current Entity";
 	}
 }

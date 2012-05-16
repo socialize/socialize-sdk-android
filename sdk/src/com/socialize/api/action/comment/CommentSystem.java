@@ -43,16 +43,12 @@ public interface CommentSystem {
 	public void getCommentsByEntity(SocializeSession session, String entityKey, CommentListener listener);
 	
 	public void getCommentsByEntity(SocializeSession session, String entityKey, int startIndex, int endIndex, CommentListener listener);
-
 	
 	public void getCommentsByUser(SocializeSession session, long userId, CommentListener listener);
-
 	
 	public void getCommentsByUser(SocializeSession session, long userId, int startIndex, int endIndex, CommentListener listener);
-
 	
 	public void getCommentsById(SocializeSession session, CommentListener listener, long...ids);
-
 	
 	public void getComment(SocializeSession session, long id, CommentListener listener);
 

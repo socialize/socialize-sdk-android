@@ -28,6 +28,7 @@ import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
+import com.socialize.networks.ShareOptions;
 
 
 /**
@@ -36,48 +37,15 @@ import com.socialize.listener.like.LikeListListener;
  */
 public interface LikeUtilsProxy {
 
-	/**
-	 * Records a like against the given entity for the current user.
-	 * @param context The current context.
-	 * @param entity The entity to be liked.
-	 * @param listener A listener to handle the result.
-	 */
 	public void like (Activity context, Entity entity, LikeAddListener listener);
 	
-	/**
-	 * Removes a like previously created for the current user.
-	 * @param context The current context.
-	 * @param entityKey The entity that was liked.
-	 * @param listener A listener to handle the result.
-	 */
-	public void unlike (Activity context, String entityKey, LikeDeleteListener listener);
+	public void like (Activity context, Entity entity, ShareOptions shareOptions, LikeAddListener listener);
 	
-	/**
-	 * Retrieves a like for an entity.
-	 * @param context The current context.
-	 * @param entityKey The entity that was liked.
-	 * @param listener A listener to handle the result.
-	 */
+	public void unlike (Activity context, String entityKey, LikeDeleteListener listener);
+ 
 	public void getLike (Activity context, String entityKey, LikeGetListener listener);
 	
-	/**
-	 * Lists all likes for the given user.
-	 * @param context The current context.
-	 * @param user The user for whom likes will be queried.
-	 * @param start The first index (for pagination), starting at 0
-	 * @param end The last index (for pagination)
-	 * @param listener A listener to handle the result.
-	 */
 	public void getLikesByUser (Activity context, User user, int start, int end, LikeListListener listener);
 	
-	
-	/**
-	 * Lists all likes for the given entity.
-	 * @param context The current context.
-	 * @param entityKey The entity for which likes will be queried.
-	 * @param start The first index (for pagination), starting at 0
-	 * @param end The last index (for pagination)
-	 * @param listener A listener to handle the result.
-	 */
 	public void getLikesByEntity (Activity context, String entityKey, int start, int end, LikeListListener listener);
 }

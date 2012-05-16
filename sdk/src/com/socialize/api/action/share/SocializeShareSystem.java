@@ -178,7 +178,7 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 			setPropagationData(c, shareType);
 		}
 	
-		setLocation(c, location);
+		setLocation(c);
 		
 		List<Share> list = new ArrayList<Share>(1);
 		list.add(c);
@@ -245,7 +245,7 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 	}
 
 	@Override
-	public void share(Activity context, SocializeSession session, SocializeAction action, String comment, Location location, ShareType destination, boolean autoAuth, SocialNetworkListener listener) {
+	public void share(Activity context, SocializeSession session, SocializeAction action, String comment, Location location, ShareType destination, SocialNetworkListener listener) {
 		ShareHandler sharer = getSharer(destination);
 		if(sharer != null) {
 			sharer.handle(context, action, location, comment, listener);

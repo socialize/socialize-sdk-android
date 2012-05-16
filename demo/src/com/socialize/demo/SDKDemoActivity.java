@@ -91,11 +91,16 @@ public abstract class SDKDemoActivity extends DemoActivity {
 	
 	public abstract boolean isTextEntryRequired();
 	
+	protected void handleCancel() {
+		if(progress != null) {
+			progress.dismiss();
+		}
+	}
+	
 	protected void handleError(Exception error) {
 		if(progress != null) {
 			progress.dismiss();
 		}
-		
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		PrintWriter writer = new PrintWriter(out);
 		error.printStackTrace(writer);
@@ -103,7 +108,8 @@ public abstract class SDKDemoActivity extends DemoActivity {
 		String trace = new String(out.toByteArray());
 		resultText.setText(trace);
 		
-		DemoUtils.showErrorDialog(this, error);
+		super.handleError(error);
+		
 	}
 	
 	protected <A extends SocializeObject> void handleBasicSocializeResult(ListResult<A> results) {

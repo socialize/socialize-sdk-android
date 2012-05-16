@@ -714,7 +714,6 @@ public class SocializeServiceImpl implements SocializeService {
 		if(assertAuthenticated(commentAddListener)) {
 			if(shareOptions != null) {
 				final SocialNetwork[] shareTo = shareOptions.getShareTo();
-				final boolean autoAuth = shareOptions.isAutoAuth();
 				if(shareTo == null || shareTo.length == 0) {
 					commentSystem.addComment(session, comment, shareOptions, commentAddListener);
 				}
@@ -731,7 +730,7 @@ public class SocializeServiceImpl implements SocializeService {
 						public void onCreate(final Comment commentObject) {
 							try {
 								for (final SocialNetwork socialNetwork : shareTo) {
-									handleActionShare(activity, socialNetwork, commentObject, commentObject.getText(), shareOptions.getLocation(), autoAuth, shareOptions.getListener());
+									handleActionShare(activity, socialNetwork, commentObject, commentObject.getText(), shareOptions.getListener());
 								}
 							}
 							finally {
@@ -754,7 +753,6 @@ public class SocializeServiceImpl implements SocializeService {
 		if(assertAuthenticated(likeAddListener)) {
 			if(shareOptions != null) {
 				final SocialNetwork[] shareTo = shareOptions.getShareTo();
-				final boolean autoAuth = shareOptions.isAutoAuth();
 				if(shareTo == null || shareTo.length == 0) {
 					likeSystem.addLike(session, entity, shareOptions, likeAddListener);
 				}
@@ -772,7 +770,7 @@ public class SocializeServiceImpl implements SocializeService {
 							try {
 								if(like != null && shareSystem != null) {
 									for (final SocialNetwork socialNetwork : shareTo) {
-										handleActionShare(activity, socialNetwork, like, null, shareOptions.getLocation(), autoAuth, shareOptions.getListener());
+										handleActionShare(activity, socialNetwork, like, null, shareOptions.getListener());
 									}
 								}
 							}
@@ -801,13 +799,12 @@ public class SocializeServiceImpl implements SocializeService {
 		if(assertAuthenticated(shareAddListener)) {
 			if(shareOptions != null) {
 				SocialNetwork[] shareTo = shareOptions.getShareTo();
-				final boolean autoAuth = shareOptions.isAutoAuth();
 				if(shareTo == null) {
-					shareSystem.addShare(activity, session, entity, text, ShareType.OTHER, shareOptions.getLocation(), shareAddListener);
+					shareSystem.addShare(activity, session, entity, text, ShareType.OTHER, shareAddListener);
 				}
 				else  {
 					for (final SocialNetwork socialNetwork : shareTo) {
-						shareSystem.addShare(activity, session, entity, text, socialNetwork, shareOptions.getLocation(), new ShareAddListener() {
+						shareSystem.addShare(activity, session, entity, text, socialNetwork, null, new ShareAddListener() {
 							@Override
 							public void onError(SocializeException error) {
 								if(shareAddListener != null) {
@@ -819,7 +816,7 @@ public class SocializeServiceImpl implements SocializeService {
 							public void onCreate(Share share) {
 								try {
 									if(share != null && shareSystem != null && !shareOptions.isSelfManaged()) {
-										handleActionShare(activity, socialNetwork, share, text, shareOptions.getLocation(), autoAuth, shareOptions.getListener());
+										handleActionShare(activity, socialNetwork, share, text, shareOptions.getListener());
 									}
 								}
 								finally {
@@ -865,15 +862,15 @@ public class SocializeServiceImpl implements SocializeService {
 				@Override
 				public void onCreate(Share share) {
 					if(share != null && shareSystem != null) {
-						handleActionShare(activity, shareType, share, text, location, true, shareAddListener);
+						handleActionShare(activity, shareType, share, text, location, shareAddListener);
 					}
 				}
 			});
 		}	
 	}
 
-	protected void handleActionShare(Activity activity, final ShareType shareType, final Share share, String shareText, Location location, boolean autoAuth, final ShareAddListener shareAddListener) {
-		shareSystem.share(activity, session, share, shareText, location, shareType, autoAuth, new SocialNetworkListener() {
+	protected void handleActionShare(Activity activity, final ShareType shareType, final Share share, String shareText, Location location, final ShareAddListener shareAddListener) {
+		shareSystem.share(activity, session, share, shareText, location, shareType, new SocialNetworkListener() {
 			@Override
 			public void onError(Activity context, SocialNetwork network, Exception error) {
 				if(logger != null) {
@@ -899,8 +896,8 @@ public class SocializeServiceImpl implements SocializeService {
 		});	
 	}
 
-	protected void handleActionShare(final Activity activity, final SocialNetwork socialNetwork, SocializeAction action, String shareText, Location location, boolean autoAuth, final SocialNetworkListener listener) {
-		shareSystem.share(activity, session, action, shareText, location, ShareType.valueOf(socialNetwork), autoAuth, listener);	
+	protected void handleActionShare(final Activity activity, final SocialNetwork socialNetwork, SocializeAction action, String shareText, final SocialNetworkListener listener) {
+		shareSystem.share(activity, session, action, shareText, null, ShareType.valueOf(socialNetwork), listener);	
 	}
 
 	@Override

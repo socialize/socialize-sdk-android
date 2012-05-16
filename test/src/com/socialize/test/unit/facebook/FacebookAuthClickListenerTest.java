@@ -36,7 +36,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.facebook.FacebookAuthClickListener;
 import com.socialize.test.PublicSocialize;
-import com.socialize.test.SocializeUnitTest;
+import com.socialize.test.SocializeActivityTest;
 import com.socialize.ui.dialog.SimpleDialogFactory;
 
 /**
@@ -52,7 +52,7 @@ import com.socialize.ui.dialog.SimpleDialogFactory;
 	SocializeService.class,
 	SocializeSession.class
 })
-public class FacebookAuthClickListenerTest extends SocializeUnitTest {
+public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 
 	static enum AUTH_REPSONSE {SUCCESS, FAIL, ERROR, CANCEL};
 

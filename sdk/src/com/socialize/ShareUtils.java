@@ -30,6 +30,7 @@ import com.socialize.entity.User;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
+import com.socialize.networks.ShareOptions;
 import com.socialize.ui.share.ShareDialogListener;
 
 
@@ -57,6 +58,10 @@ public class ShareUtils {
 				ShareUtilsProxy.class.getClassLoader(),
 				new Class[]{ShareUtilsProxy.class},
 				new SocializeActionProxy("shareUtils")); // Bean name
+	}
+	
+	public static ShareOptions getUserShareOptions() {
+		return proxy.getUserShareOptions();
 	}
 	
 	public static void showShareDialog (Activity context, Entity entity) {

@@ -30,10 +30,8 @@ import android.location.Location;
 public class ShareOptions {
 	
 	private boolean shareLocation;
-	private boolean autoAuth = false;
 	private SocialNetwork[] shareTo;
 	private SocialNetworkListener listener;
-	private Location location;
 	private boolean selfManaged = false;
 	
 	/**
@@ -84,27 +82,6 @@ public class ShareOptions {
 		return false;
 	}
 	
-	public Location getLocation() {
-		return location;
-	}
-	
-	public void setLocation(Location location) {
-		this.location = location;
-	}
-
-	public boolean isAutoAuth() {
-		return autoAuth;
-	}
-
-	/**
-	 * If set to true any actions which can propagate will automatically attempt authentication on the target social network
-	 * @param autoAuth
-	 */
-	public void setAutoAuth(boolean autoAuth) {
-		this.autoAuth = autoAuth;
-	}
-
-	
 	public boolean isSelfManaged() {
 		return selfManaged;
 	}
@@ -116,6 +93,4 @@ public class ShareOptions {
 	public void setSelfManaged(boolean selfManaged) {
 		this.selfManaged = selfManaged;
 	}
-	
-	
 }

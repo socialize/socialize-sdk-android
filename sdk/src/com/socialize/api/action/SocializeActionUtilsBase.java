@@ -72,41 +72,19 @@ public abstract class SocializeActionUtilsBase {
 	
 	protected boolean isDisplayShareDialog() {
 		
-		boolean shareRequired = true;
+		boolean shareRequired = false;
 		
 		User user = getSocialize().getSession().getUser();
 		
 		if(getSocialize().isSupported(AuthProviderType.TWITTER)) {
-			shareRequired &= !user.isAutoPostToTwitter();
+			shareRequired |= !user.isAutoPostToTwitter();
 		}
 		
 		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
-			shareRequired &= !user.isAutoPostToFacebook();
+			shareRequired |= !user.isAutoPostToFacebook();
 		}
 		
 		return shareRequired;
-	}
-	
-	protected ShareOptions getDefaultShareOptions() {
-		SocializeSession session = getSocialize().getSession();
-		User user = session.getUser();
-		ShareOptions options = new ShareOptions();
-		
-		if(user.isAutoPostToFacebook() && getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-			if(user.isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
-				options.setShareTo(SocialNetwork.FACEBOOK, SocialNetwork.TWITTER);
-			}
-			else {
-				options.setShareTo(SocialNetwork.FACEBOOK);
-			}
-		}
-		else if(user.isAutoPostToTwitter() && getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
-			options.setShareTo(SocialNetwork.TWITTER);
-		}	
-		
-		options.setShareLocation(user.isShareLocation());
-		
-		return options;
 	}
 	
 	protected SocializeService getSocialize() {

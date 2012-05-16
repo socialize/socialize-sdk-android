@@ -416,8 +416,8 @@
 		<property name="emailCellFactory" ref="emailCellFactory"/>
 		<property name="smsCellFactory" ref="smsCellFactory"/>
 		<property name="rememberCellFactory" ref="rememberCellFactory"/>
-		<property name="continueButton" ref="authContinueButton"/>
-		<property name="cancelButton" ref="authCancelButton"/>
+		<property name="continueButton" ref="continueButton"/>
+		<property name="cancelButton" ref="cancelButton"/>
 		<init-method name="init"/>
 	</bean>
 	
@@ -490,7 +490,7 @@
 	<factory id="rememberCellFactory" makes="rememberCell"/>			
 	
 	<bean 
-		id="authContinueButton" 
+		id="continueButton" 
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
@@ -504,7 +504,7 @@
 	</bean>
 	
 	<bean 
-		id="authCancelButton" 
+		id="cancelButton" 
 		singleton="false"
 		extends="socializeButton">
 		<constructor-arg type="activity"/>
@@ -515,7 +515,7 @@
 		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>
 		<property name="height" value="38" type="integer"/>
 		<property name="width" value="120" type="integer"/>
-		<property name="textSize" value="11" type="integer"/>
+		<property name="textSize" value="13" type="integer"/>
 		<property name="textAlign" value="center"/>
 		<property name="padding" value="2" type="integer"/>
 	</bean>	
@@ -574,7 +574,6 @@
 		class="com.socialize.networks.twitter.TwitterAuthClickListener"		
 		singleton="false"
 		extends="socialNetworkAuthClickListener">
-		<property name="twitterAuthUtils" ref="twitterAuthUtils"/>
 	</bean>	
 	
 	<bean 

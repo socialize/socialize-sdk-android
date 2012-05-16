@@ -51,7 +51,7 @@ public class SocializeViewSystem extends SocializeApi<View, SocializeProvider<Vi
 		View c = new View();
 		c.setEntity(entity);
 		
-		setLocation(c, location);
+		setLocation(c);
 		
 		List<View> list = new ArrayList<View>(1);
 		list.add(c);

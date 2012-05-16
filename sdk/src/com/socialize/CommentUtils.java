@@ -32,6 +32,7 @@ import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
+import com.socialize.networks.ShareOptions;
 import com.socialize.ui.comment.OnCommentViewActionListener;
 
 /**
@@ -57,7 +58,7 @@ public class CommentUtils {
 	
 
 	/**
-	 * Adds a comment to the given entity.
+	 * Adds a comment to the given entity.  This method will also prompt the user to share their comment.
 	 * @param context The current context.
 	 * @param entity The entity on which the comment will be associated.
 	 * @param text The text of the comment.
@@ -65,6 +66,18 @@ public class CommentUtils {
 	 */
 	public static void addComment (Activity context, Entity entity, String text, CommentAddListener listener) {
 		commentUtils.addComment(context, entity, text, listener);
+	}
+	
+	/**
+	 * Adds a comment to the given entity.  This method will NOT prompt the user to share their comment.
+	 * @param context The current context.
+	 * @param entity The entity on which the comment will be associated.
+	 * @param text The text of the comment.
+	 * @param shareOptions Optional parameters to propagate the comment to external social networks.
+	 * @param listener A listener to handle the result.
+	 */
+	public static void addComment (Activity context, Entity entity, String text, ShareOptions shareOptions, CommentAddListener listener) {
+		commentUtils.addComment(context, entity, text, shareOptions, listener);
 	}
 	
 	/**

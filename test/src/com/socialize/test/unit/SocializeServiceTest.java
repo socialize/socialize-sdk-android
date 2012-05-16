@@ -348,9 +348,8 @@ public class SocializeServiceTest extends SocializeActivityTest {
 				addResult(0, activity);
 				addResult(1, entity);
 				addResult(2, comment);
-				addResult(3, shareOptions.getLocation());
-				addResult(4, shareOptions);
-				addResult(5, commentAddListener);
+				addResult(3, shareOptions);
+				addResult(4, commentAddListener);
 			}
 		};
 
@@ -359,9 +358,8 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		assertSame(activity, getResult(0));
 		assertSame(entity, getResult(1));
 		assertSame(comment, getResult(2));
-		assertNull(getResult(3));
-		assertSame(shareOptions, getResult(4));
-		assertSame(addListener, getResult(5));
+		assertSame(shareOptions, getResult(3));
+		assertSame(addListener, getResult(4));
 	}
 
 	@UsesMocks({ CommentAddListener.class, Comment.class, Entity.class })
@@ -993,9 +991,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		// mock and expect options to return null for the networks
 		ShareOptions mockOptions = AndroidMock.createMock(ShareOptions.class);
 
-		AndroidMock.expect(mockOptions.isAutoAuth()).andReturn(false);
 		AndroidMock.expect(mockOptions.getShareTo()).andReturn(null);
-		AndroidMock.expect(mockOptions.getLocation()).andReturn(null);
 
 		// replay all the mocks
 		AndroidMock.replay(mockActivity, mockOptions);
@@ -1030,8 +1026,6 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		SocialNetwork[] networks = { SocialNetwork.FACEBOOK };
 
 		AndroidMock.expect(mockOptions.getShareTo()).andReturn(networks);
-		AndroidMock.expect(mockOptions.isAutoAuth()).andReturn(true);
-		AndroidMock.expect(mockOptions.getLocation()).andReturn(null);
 
 		// replay all the mocks
 		AndroidMock.replay(mockActivity, mockOptions, shareSystem);

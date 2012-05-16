@@ -719,8 +719,9 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		}
 	}
 	
-	protected void setLocation(SocializeAction action, Location location) {
-		if(location == null && locationProvider != null) {
+	protected void setLocation(SocializeAction action) {
+		Location location = null;
+		if(locationProvider != null) {
 			location = locationProvider.getLastKnownLocation();
 		}
 		if(location != null) {
@@ -728,17 +729,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			action.setLat(location.getLatitude());
 		}
 	}
-	
-	protected void setLocation(SocializeAction action, ShareOptions shareOptions) {
-		
-		Location location = null;
-		
-		if(shareOptions != null) {
-			location = shareOptions.getLocation();
-		}
-		
-		setLocation(action, location);
-	}	
 	
 	class AsyncPutter extends AbstractAsyncProcess<SocializePutRequest<T>, Void, SocializeEntityResponse<T>> {
 		public AsyncPutter(SocializeSession session, SocializeActionListener listener) {

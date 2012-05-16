@@ -31,6 +31,7 @@ import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
+import com.socialize.networks.ShareOptions;
 
 
 /**
@@ -49,14 +50,26 @@ public class LikeUtils {
 	}
 
 	/**
-	 * Records a like against the given entity for the current user.
+	 * Records a like against the given entity for the current user. This method will also prompt the user to share their like.
 	 * @param context The current context.
-	 * @param entityKey The entity to be liked.
+	 * @param entity The entity to be liked.
 	 * @param listener A listener to handle the result.
 	 */
 	public static void like (Activity context, Entity entity, LikeAddListener listener) {
 		proxy.like(context, entity, listener);
 	}
+	
+	/**
+	 * Records a like against the given entity for the current user.  This method will NOT prompt the user to share their like.
+	 * @param context The current context.
+	 * @param entity The entity to be liked.
+	 * @param shareOptions Optional parameters to propagate the like to external social networks.
+	 * @param listener A listener to handle the result.
+	 */
+	public static void like (Activity context, Entity entity, ShareOptions shareOptions, LikeAddListener listener) {
+		proxy.like(context, entity, shareOptions, listener);
+	}
+		
 	
 	/**
 	 * Removes a like previously created for the current user.

@@ -19,54 +19,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo.implementations.comment;
+package com.socialize.demo.implementations.like;
 
-import com.socialize.CommentUtils;
-import com.socialize.demo.SDKDemoActivity;
-import com.socialize.entity.Comment;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.comment.CommentAddListener;
+import android.app.ListActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import com.socialize.demo.R;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class AddCommentActivity extends SDKDemoActivity {
-
-	/* (non-Javadoc)
-	 * @see com.socialize.demo.DemoActivity#executeDemo()
-	 */
-	@Override
-	public void executeDemo(String text) {
-		CommentUtils.addComment(this, entity, text , new CommentAddListener() {
-			@Override
-			public void onError(SocializeException error) {
-				handleError(error);
-			}
-			
-			@Override
-			public void onCreate(Comment comment) {
-				handleSocializeResult(comment);
-			}
-
-			@Override
-			public void onCancel() {
-				handleCancel();
-			}
-		});
-	}
+public class LikeActivity extends ListActivity {
+	final String[] values = new String[] { "Like Buttons & UI", "Get Likes By Entity", "Get Likes By User"};
+	final Class<?>[] activities = new Class<?>[] { LikeButtonsActivity.class, GetLikesByEntityActivity.class, GetLikesByUserActivity.class};
 	
 	@Override
-	public boolean isTextEntryRequired() {
-		return true;
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.demo_list);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
+		setListAdapter(adapter);
 	}
+	
 
-	/* (non-Javadoc)
-	 * @see com.socialize.demo.DemoActivity#getButtonText()
-	 */
 	@Override
-	public String getButtonText() {
-		return "Add Comment";
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		Class<?> activityClass = activities[position];
+		if(activityClass != null) {
+			Intent intent = new Intent(this, activityClass);
+			startActivity(intent);
+		}
 	}
 }

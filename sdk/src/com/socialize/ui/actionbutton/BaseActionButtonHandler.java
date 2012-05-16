@@ -107,8 +107,6 @@ public abstract class BaseActionButtonHandler<A extends SocializeAction> impleme
 					shareOptions.setShareTo(config.getShareToNetworks());
 				}
 				
-				shareOptions.setAutoAuth(config.isAutoAuth());
-				
 				button.setState(ActionButtonState.LOADING);
 				
 				handleAction(context, entity, shareOptions, new OnActionButtonEventListener<A>() {

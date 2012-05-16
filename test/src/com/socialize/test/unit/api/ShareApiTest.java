@@ -30,7 +30,6 @@ import com.socialize.api.action.ShareType;
 import com.socialize.api.action.share.SocializeShareSystem;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
-import com.socialize.entity.SocializeAction;
 import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.provider.SocializeProvider;
@@ -71,23 +70,14 @@ public class ShareApiTest extends SocializeUnitTest {
 			public void postAsync(SocializeSession session, String endpoint, List<Share> objects, SocializeActionListener listener) {
 				addResult(objects);
 			}
-
-			@Override
-			protected void setLocation(SocializeAction action, Location location) {
-				addResult(location);
-			}
 		};
 		
 		api.addShare(getContext(), session, key, shareText, type, location, listener);
 		
-		Location loc = getNextResult();
 		List<Share> shares = getNextResult();
 		
 		assertNotNull(shares);
 		assertEquals(1, shares.size());
-		
-		assertNotNull(loc);
-		assertSame(location, loc);
 		
 		Share result = shares.get(0);
 		

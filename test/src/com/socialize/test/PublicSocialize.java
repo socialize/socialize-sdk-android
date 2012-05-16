@@ -151,20 +151,17 @@ public class PublicSocialize extends SocializeServiceImpl {
 
 	@Override
 	public Comment newComment() {
-
 		return super.newComment();
 	}
 
 	@Override
-	public void handleActionShare(Activity activity, ShareType shareType, Share share, String shareText, Location location, boolean autoAuth, ShareAddListener shareAddListener) {
-
-		super.handleActionShare(activity, shareType, share, shareText, location, autoAuth, shareAddListener);
+	public void handleActionShare(Activity activity, ShareType shareType, Share share, String shareText, Location location, ShareAddListener shareAddListener) {
+		super.handleActionShare(activity, shareType, share, shareText, location, shareAddListener);
 	}
 
-
 	@Override
-	public void handleActionShare(Activity activity, SocialNetwork socialNetwork, SocializeAction action, String shareText, Location location, boolean autoAuth, SocialNetworkListener listener) {
-		super.handleActionShare(activity, socialNetwork, action, shareText, location, autoAuth, listener);
+	public void handleActionShare(Activity activity, SocialNetwork socialNetwork, SocializeAction action, String shareText, SocialNetworkListener listener) {
+		super.handleActionShare(activity, socialNetwork, action, shareText, listener);
 	}
 
 	@Override

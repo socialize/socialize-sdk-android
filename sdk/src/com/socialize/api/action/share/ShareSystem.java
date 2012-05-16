@@ -75,9 +75,8 @@ public interface ShareSystem {
 	 * @param comment The comment provided by the user.
 	 * @param location The location of the user (may be null).
 	 * @param destination The network on which to post the share.
-	 * @param autoAuth If true authentication will be attempted automatically.
 	 * @param actionType The type of action being shared.
 	 * @param listener A listener to handle callbacks from the post.
 	 */
-	public void share(Activity context, SocializeSession session, SocializeAction action, String comment, Location location, ShareType destination, boolean autoAuth, SocialNetworkListener listener);
+	public void share(Activity context, SocializeSession session, SocializeAction action, String comment, Location location, ShareType destination, SocialNetworkListener listener);
 }

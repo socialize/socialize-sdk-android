@@ -40,8 +40,6 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.util.KeyboardUtils;
@@ -381,51 +379,51 @@ public class CommentEntryView extends BaseView {
 		}
 	}
 	
-	protected OnClickListener getSocialNetworkClickListener(final CustomCheckbox chkbox, final AuthProviderType authProviderType, final String checkedMsg, final String uncheckedMsg) {
-		return new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				
-				if(chkbox.isChecked()) {
-					if(Socialize.getSocialize().isAuthenticated(authProviderType)) {
-						toast(checkedMsg);
-					}
-					else {
-						// Show auth
-						getSocialize().authenticate(getContext(), authProviderType, new SocializeAuthListener() {
-
-							@Override
-							public void onError(SocializeException error) {
-								chkbox.setChecked(false);
-								showErrorToast(getContext(), error);
-							}
-
-							@Override
-							public void onAuthSuccess(SocializeSession session) {
-								chkbox.setChecked(true);
-								toast(checkedMsg);
-							}
-
-							@Override
-							public void onAuthFail(SocializeException error) {
-								chkbox.setChecked(false);
-								showErrorToast(getContext(), error);
-							}
-
-							@Override
-							public void onCancel() {
-								chkbox.setChecked(false);
-							}
-						});
-					}	
-				}
-				else {
-					toast(uncheckedMsg);
-				}
-			}
-		};	
-	}
+//	protected OnClickListener getSocialNetworkClickListener(final CustomCheckbox chkbox, final AuthProviderType authProviderType, final String checkedMsg, final String uncheckedMsg) {
+//		return new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				
+//				if(chkbox.isChecked()) {
+//					if(Socialize.getSocialize().isAuthenticated(authProviderType)) {
+//						toast(checkedMsg);
+//					}
+//					else {
+//						// Show auth
+//						getSocialize().authenticate(getContext(), authProviderType, new SocializeAuthListener() {
+//
+//							@Override
+//							public void onError(SocializeException error) {
+//								chkbox.setChecked(false);
+//								showErrorToast(getContext(), error);
+//							}
+//
+//							@Override
+//							public void onAuthSuccess(SocializeSession session) {
+//								chkbox.setChecked(true);
+//								toast(checkedMsg);
+//							}
+//
+//							@Override
+//							public void onAuthFail(SocializeException error) {
+//								chkbox.setChecked(false);
+//								showErrorToast(getContext(), error);
+//							}
+//
+//							@Override
+//							public void onCancel() {
+//								chkbox.setChecked(false);
+//							}
+//						});
+//					}	
+//				}
+//				else {
+//					toast(uncheckedMsg);
+//				}
+//			}
+//		};	
+//	}
 	
 	protected void toggleNotifications() {
 		setNotificationsEnabled(!notificationsEnabled);

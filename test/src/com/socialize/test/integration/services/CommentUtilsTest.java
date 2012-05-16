@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import com.socialize.CommentUtils;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
@@ -46,26 +47,22 @@ import com.socialize.test.SocializeActivityTest;
  */
 public class CommentUtilsTest extends SocializeActivityTest {
 
-
-
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		Socialize.getSocialize().destroy(true);
 	}
 
-	@Override
-	protected void tearDown() throws Exception {
-		Socialize.getSocialize().destroy(true);
-		super.tearDown();
-	}
-
 	// Tests get comment too.
 	public void test_addComment() throws Exception {
+		
+		// Set auto auth off
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		
 		final Entity entityKey = Entity.newInstance("test_addComment", "test_addComment");
 		final CountDownLatch latch = new CountDownLatch(1);
 
-		CommentUtils.addComment(getActivity(), entityKey, "foobar", new CommentAddListener() {
+		CommentUtils.addComment(getActivity(), entityKey, "foobar", null, new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -113,7 +110,10 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		final Entity entityKey = Entity.newInstance("test_getComments" + Math.random(), "test_getComments");
 		final CountDownLatch latch = new CountDownLatch(1);
 
-		CommentUtils.addComment(getActivity(), entityKey, "foobar0", new CommentAddListener() {
+		// Set auto auth off
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		
+		CommentUtils.addComment(getActivity(), entityKey, "foobar0", null, new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -124,7 +124,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Comment entity) {
 				addResult(0, entity);
-				CommentUtils.addComment(getActivity(), entityKey, "foobar1", new CommentAddListener() {
+				CommentUtils.addComment(getActivity(), entityKey, "foobar1", null, new CommentAddListener() {
 
 					@Override
 					public void onError(SocializeException error) {
@@ -150,7 +150,6 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		assertNotNull(result1);
 
 		final CountDownLatch latch2 = new CountDownLatch(1);
-
 
 		CommentUtils.getComments(getActivity(), new CommentListListener() {
 
@@ -191,7 +190,10 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		final Entity entityKey = Entity.newInstance("test_getCommentsByEntity" + Math.random(), "test_getCommentsByEntity");
 		final CountDownLatch latch = new CountDownLatch(1);
 
-		CommentUtils.addComment(getActivity(), entityKey, "foobar0", new CommentAddListener() {
+		// Set auto auth off
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		
+		CommentUtils.addComment(getActivity(), entityKey, "foobar0", null, new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -202,7 +204,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Comment entity) {
 				addResult(0, entity);
-				CommentUtils.addComment(getActivity(), entityKey, "foobar1", new CommentAddListener() {
+				CommentUtils.addComment(getActivity(), entityKey, "foobar1", null, new CommentAddListener() {
 
 					@Override
 					public void onError(SocializeException error) {
@@ -245,7 +247,6 @@ public class CommentUtilsTest extends SocializeActivityTest {
 			}
 		});
 
-
 		latch2.await(20, TimeUnit.SECONDS);
 
 		ListResult<Comment> entities = getResult(3);
@@ -266,7 +267,10 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		final Entity entityKey = Entity.newInstance("test_getCommentsByUser" + Math.random(), "test_getCommentsByUser");
 		final CountDownLatch latch = new CountDownLatch(1);
 
-		CommentUtils.addComment(getActivity(), entityKey, "foobar0", new CommentAddListener() {
+		// Set auto auth off
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		
+		CommentUtils.addComment(getActivity(), entityKey, "foobar0", null, new CommentAddListener() {
 
 			@Override
 			public void onError(SocializeException error) {
@@ -277,7 +281,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Comment entity) {
 				addResult(0, entity);
-				CommentUtils.addComment(getActivity(), entityKey, "foobar1", new CommentAddListener() {
+				CommentUtils.addComment(getActivity(), entityKey, "foobar1", null, new CommentAddListener() {
 
 					@Override
 					public void onError(SocializeException error) {
