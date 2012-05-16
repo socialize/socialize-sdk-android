@@ -21,9 +21,7 @@
  */
 package com.socialize.networks.facebook;
 
-import com.socialize.auth.AuthProviderInfo;
-import com.socialize.auth.facebook.FacebookAuthProviderInfo;
-import com.socialize.config.SocializeConfig;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkAuthClickListener;
 
 /**
@@ -31,11 +29,19 @@ import com.socialize.networks.SocialNetworkAuthClickListener;
  *
  */
 public class FacebookAuthClickListener extends SocialNetworkAuthClickListener {
+//	@Override
+//	protected AuthProviderInfo getAuthProviderInfo() {
+//		String authProviderAppId = config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
+//		FacebookAuthProviderInfo fbInfo = new FacebookAuthProviderInfo();
+//		fbInfo.setAppId(authProviderAppId);
+//		return fbInfo;
+//	}
+
 	@Override
-	protected AuthProviderInfo getAuthProviderInfo() {
-		String authProviderAppId = config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
-		FacebookAuthProviderInfo fbInfo = new FacebookAuthProviderInfo();
-		fbInfo.setAppId(authProviderAppId);
-		return fbInfo;
+	protected SocialNetwork getSocialNetwork() {
+		return SocialNetwork.FACEBOOK;
+		
 	}
+	
+	
 }

@@ -21,8 +21,7 @@
  */
 package com.socialize.networks.twitter;
 
-import com.socialize.auth.AuthProviderInfo;
-import com.socialize.auth.twitter.TwitterAuthUtils;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkAuthClickListener;
 
 /**
@@ -31,14 +30,22 @@ import com.socialize.networks.SocialNetworkAuthClickListener;
  */
 public class TwitterAuthClickListener extends SocialNetworkAuthClickListener {
 
-	private TwitterAuthUtils twitterAuthUtils;
-	
-	@Override
-	protected AuthProviderInfo getAuthProviderInfo() {
-		return twitterAuthUtils.getAuthProviderInfo();
-	}
+//	private TwitterAuthUtils twitterAuthUtils;
+//	
+//	@Override
+//	protected AuthProviderInfo getAuthProviderInfo() {
+//		return twitterAuthUtils.getAuthProviderInfo();
+//	}
+//
+//	public void setTwitterAuthUtils(TwitterAuthUtils twitterAuthUtils) {
+//		this.twitterAuthUtils = twitterAuthUtils;
+//	}
 
-	public void setTwitterAuthUtils(TwitterAuthUtils twitterAuthUtils) {
-		this.twitterAuthUtils = twitterAuthUtils;
+	@Override
+	protected SocialNetwork getSocialNetwork() {
+		return SocialNetwork.TWITTER;
+		
 	}
+	
+	
 }

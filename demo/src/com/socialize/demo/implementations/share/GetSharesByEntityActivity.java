@@ -41,7 +41,7 @@ public class GetSharesByEntityActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		ShareUtils.getSharesByEntity(this, entity, 0, 50, new ShareListListener() {
+		ShareUtils.getSharesByEntity(this, entityKey, 0, 50, new ShareListListener() {
 			
 			@Override
 			public void onList(ListResult<Share> shares) {

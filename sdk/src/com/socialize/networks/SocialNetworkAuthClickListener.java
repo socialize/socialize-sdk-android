@@ -21,16 +21,18 @@
  */
 package com.socialize.networks;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.view.View;
 import android.view.View.OnClickListener;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
-import com.socialize.auth.AuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.networks.facebook.FacebookUtils;
+import com.socialize.networks.twitter.TwitterUtils;
 import com.socialize.ui.dialog.SimpleDialogFactory;
 
 /**
@@ -51,12 +53,20 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 		
 		dialog = dialogFactory.show(view.getContext(), "Authentication", "Authenticating...");
 		
-		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+		SocialNetwork network = getSocialNetwork();
 		
-		AuthProviderInfo fbInfo = getAuthProviderInfo();
-		
-		getSocialize().authenticate(view.getContext(), consumerKey, consumerSecret, fbInfo, new SocializeAuthListener() {
+		switch (network) {
+		case FACEBOOK:
+			FacebookUtils.link((Activity) view.getContext(), getAuthListener(view));
+			break;
+		case TWITTER:
+			TwitterUtils.link((Activity) view.getContext(), getAuthListener(view));
+			break;
+		}
+	}
+	
+	protected SocializeAuthListener getAuthListener(final View view) {
+		return new SocializeAuthListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -93,10 +103,10 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 				}
 				view.setEnabled(true);
 			}
-		});
+		};
 	}
 
-	protected abstract AuthProviderInfo getAuthProviderInfo();
+	protected abstract SocialNetwork getSocialNetwork();
 	
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();

@@ -44,7 +44,7 @@ public class GetSharesByIDActivity extends SDKDemoActivity {
 		
 		// We are going to list shares just so we can get the ID for a single share
 		// Usually you would NOT do this as you would usually already have an ID (e.g. from a click on a list view)
-		ShareUtils.getSharesByEntity(this, entity, 0, 1, new ShareListListener() {
+		ShareUtils.getSharesByEntity(this, entityKey, 0, 1, new ShareListListener() {
 			
 			@Override
 			public void onList(ListResult<Share> shares) {

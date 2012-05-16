@@ -44,7 +44,7 @@ public class GetCommentsByIDActivity extends SDKDemoActivity {
 		
 		// We are going to list comments just so we can get the ID for a single comment
 		// Usually you would NOT do this as you would usually already have an ID (e.g. from a click on a list view)
-		CommentUtils.getCommentsByEntity(this, entity, 0, 1, new CommentListListener() {
+		CommentUtils.getCommentsByEntity(this, entityKey, 0, 1, new CommentListListener() {
 			
 			@Override
 			public void onList(ListResult<Comment> comments) {

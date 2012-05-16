@@ -41,7 +41,7 @@ public class GetCommentsByEntityActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		CommentUtils.getCommentsByEntity(this, entity, 0, 50, new CommentListListener() {
+		CommentUtils.getCommentsByEntity(this, entityKey, 0, 50, new CommentListListener() {
 			
 			@Override
 			public void onList(ListResult<Comment> comments) {
