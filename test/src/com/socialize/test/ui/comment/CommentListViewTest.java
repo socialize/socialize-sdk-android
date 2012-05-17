@@ -242,7 +242,7 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		
 		comment.setText(commentString);
 		comment.setNotificationsEnabled(false);
-		comment.setEntity(entity);
+		comment.setEntitySafe(entity);
 		
 		AndroidMock.expect(comment.getText()).andReturn(commentString);
 		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);

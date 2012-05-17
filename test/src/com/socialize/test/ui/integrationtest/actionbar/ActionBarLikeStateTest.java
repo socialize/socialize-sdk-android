@@ -55,6 +55,11 @@ public class ActionBarLikeStateTest extends ActivityInstrumentationTestCase2<Act
 		
 		Entity entity = Entity.newInstance("http://entity23.com", "no name");
 		
+		// Ensure sharing is not supported
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, "");
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, "");
+		
 		final MockEntitySystem mockEntitySystem = new MockEntitySystem();
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
 			
