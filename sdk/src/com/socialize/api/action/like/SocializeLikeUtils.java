@@ -38,12 +38,12 @@ import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.ui.auth.AuthDialogFactory;
+import com.socialize.ui.auth.IAuthDialogFactory;
 import com.socialize.ui.auth.AuthDialogListener;
 import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.ui.share.DialogFlowController;
-import com.socialize.ui.share.ShareDialogFactory;
+import com.socialize.ui.share.IShareDialogFactory;
 import com.socialize.ui.share.ShareDialogListener;
 import com.socialize.ui.share.SharePanelView;
 
@@ -52,8 +52,8 @@ import com.socialize.ui.share.SharePanelView;
  */
 public class SocializeLikeUtils extends SocializeActionUtilsBase implements LikeUtilsProxy {
 
-	private AuthDialogFactory authDialogFactory;
-	private ShareDialogFactory shareDialogFactory;
+	private IAuthDialogFactory authDialogFactory;
+	private IShareDialogFactory shareDialogFactory;
 	private LikeSystem likeSystem;
 
 	/*
@@ -144,7 +144,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 	}
 
 	protected void doLikeWithoutShare(final Activity context, final SocializeSession session, final Entity entity, final LikeAddListener listener) {
-		doLikeWithoutShare(context, session, entity, ShareUtils.getUserShareOptions(), listener);
+		doLikeWithoutShare(context, session, entity, ShareUtils.getUserShareOptions(context), listener);
 	}
 	
 	protected void doLikeWithoutShare(final Activity context, final SocializeSession session, final Entity entity, final ShareOptions shareOptions, final LikeAddListener listener) {
@@ -315,11 +315,11 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 		likeSystem.getLikesByEntity(session, entityKey, start, end, listener);
 	}
 
-	public void setAuthDialogFactory(AuthDialogFactory authDialogFactory) {
+	public void setAuthDialogFactory(IAuthDialogFactory authDialogFactory) {
 		this.authDialogFactory = authDialogFactory;
 	}
 
-	public void setShareDialogFactory(ShareDialogFactory shareDialogFactory) {
+	public void setShareDialogFactory(IShareDialogFactory shareDialogFactory) {
 		this.shareDialogFactory = shareDialogFactory;
 	}
 

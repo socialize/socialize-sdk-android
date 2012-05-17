@@ -567,6 +567,7 @@ public class SocializeServiceImpl implements SocializeService {
 				container.destroy();
 			}
 			
+			config.destroy();
 			system.destroy();
 			initCount = 0;
 			initPaths = null;

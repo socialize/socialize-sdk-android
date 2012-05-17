@@ -141,6 +141,8 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 
 		AndroidMock.expect(json.has("meta")).andReturn(true);
 		
+		// Legacy
+		AndroidMock.expect(json.has("auto_post_likes_fb")).andReturn(false);
 		AndroidMock.expect(json.has("auto_post_comments_fb")).andReturn(false);
 
 		AndroidMock.expect(json.has(auto_post_facebook)).andReturn(true);

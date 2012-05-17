@@ -37,11 +37,10 @@ import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
-import com.socialize.networks.facebook.FacebookSignInCell;
-import com.socialize.networks.twitter.TwitterSignInCell;
+import com.socialize.networks.facebook.FacebookShareCell;
+import com.socialize.networks.twitter.TwitterShareCell;
 import com.socialize.test.SocializeActivityTest;
 import com.socialize.test.ui.util.TestUtils;
-import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.share.EmailCell;
 import com.socialize.ui.share.SMSCell;
 import com.socialize.ui.share.SharePanelView;
@@ -184,7 +183,7 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		assertTrue(items.size() >= 1);
 	}	
 	
-	public void testShowAuthDialog() throws Exception {
+	public void testShowShareDialogDefault() throws Exception {
 		final Entity entityKey = Entity.newInstance("http://entity1.com", "http://entity1.com");
 		final CountDownLatch latch0 = new CountDownLatch(1);
 		
@@ -198,12 +197,12 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		
 		latch0.await(20, TimeUnit.SECONDS);
 		
-		AuthPanelView view = getResult(0);
+		SharePanelView view = getResult(0);
 		
 		assertNotNull(view);
 		
-		final FacebookSignInCell fbButton = TestUtils.findView(view, FacebookSignInCell.class);
-		final TwitterSignInCell twButton = TestUtils.findView(view, TwitterSignInCell.class);
+		final FacebookShareCell fbButton = TestUtils.findView(view, FacebookShareCell.class);
+		final TwitterShareCell twButton = TestUtils.findView(view, TwitterShareCell.class);
 		final EmailCell emailCell = TestUtils.findView(view, EmailCell.class);
 		final SMSCell smsCell = TestUtils.findView(view, SMSCell.class);
 		
@@ -212,4 +211,33 @@ public class ShareUtilsTest extends SocializeActivityTest {
 		assertNotNull(emailCell);
 		assertNotNull(smsCell);
 	}
+	
+	public void testShowShareDialogSocial() throws Exception {
+		final Entity entityKey = Entity.newInstance("http://entity1.com", "http://entity1.com");
+		final CountDownLatch latch0 = new CountDownLatch(1);
+		
+		ShareUtils.showShareDialog(getContext(), entityKey, new SocialNetworkDialogListener() {
+			@Override
+			public void onShow(Dialog dialog, SharePanelView dialogView) {
+				addResult(0, dialogView);
+				latch0.countDown();
+			}
+		}, ShareUtils.SOCIAL);
+		
+		latch0.await(20, TimeUnit.SECONDS);
+		
+		SharePanelView view = getResult(0);
+		
+		assertNotNull(view);
+		
+		final FacebookShareCell fbButton = TestUtils.findView(view, FacebookShareCell.class);
+		final TwitterShareCell twButton = TestUtils.findView(view, TwitterShareCell.class);
+		final EmailCell emailCell = TestUtils.findView(view, EmailCell.class);
+		final SMSCell smsCell = TestUtils.findView(view, SMSCell.class);
+		
+		assertNotNull(fbButton);
+		assertNotNull(twButton);
+		assertNull(emailCell);
+		assertNull(smsCell);
+	}	
 }

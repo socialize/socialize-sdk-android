@@ -373,14 +373,16 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		final Comment commentObject = AndroidMock.createMock(Comment.class);
 		Entity entity = AndroidMock.createMock(Entity.class);
 
+		AndroidMock.expect(entity.getDisplayName()).andReturn("MockEntity").anyTimes();
+		
 		commentObject.setText(comment);
-		commentObject.setEntity(entity);
+		commentObject.setEntitySafe(entity);
 
 		commentSystem.addComment(AndroidMock.eq(session), AndroidMock.eq(commentObject), (ShareOptions) AndroidMock.isNull(), AndroidMock.eq(listener));
 
 		replayDefaultMocks();
 
-		AndroidMock.replay(commentObject);
+		AndroidMock.replay(commentObject, entity);
 
 		SocializeServiceImpl socialize = new SocializeServiceImpl() {
 

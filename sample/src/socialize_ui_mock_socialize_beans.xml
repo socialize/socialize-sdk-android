@@ -21,6 +21,7 @@
 	
 	<proxy ref="authProviderInfoBuilder" />	
 	<proxy ref="authDialogFactory" />
+	<proxy ref="shareDialogFactory" />
 	<proxy ref="userProvider" />
 
 	<bean id="initializationAsserter" class="com.socialize.test.mock.MockInitializationAsserter" />

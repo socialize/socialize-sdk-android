@@ -23,6 +23,7 @@ package com.socialize.test.ui;
 
 import android.test.ActivityInstrumentationTestCase2;
 import com.socialize.Socialize;
+import com.socialize.ioc.SocializeIOC;
 import com.socialize.sample.EmptyActivity;
 
 public abstract class SocializeUIActivityTest extends ActivityInstrumentationTestCase2<EmptyActivity> {
@@ -43,6 +44,7 @@ public abstract class SocializeUIActivityTest extends ActivityInstrumentationTes
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
+		SocializeIOC.clearStubs();
 	}
 	
 	protected void clearResults() {

@@ -46,11 +46,14 @@ import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.like.LikeListener;
 import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetworkListener;
 import com.socialize.test.mock.MockLikeSystem;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarLayoutView;
 import com.socialize.ui.auth.AuthDialogFactory;
 import com.socialize.ui.auth.AuthDialogListener;
+import com.socialize.ui.share.ShareDialogFactory;
+import com.socialize.ui.share.ShareDialogListener;
 
 import static android.test.ActivityInstrumentationTestCase2.*;
 
@@ -93,7 +96,6 @@ public class ActionBarTestUtils2 {
 		SocializeIOC.registerStub("authDialogFactory", mockFactory);
 		SocializeIOC.registerStub("likeSystem", mockLikeSystem);
 		
-		
 		Intent intent = new Intent();
 		intent.putExtra(Socialize.ENTITY_OBJECT, entity);
 		testCase.setActivityIntent(intent);
@@ -127,6 +129,11 @@ public class ActionBarTestUtils2 {
 		TestUtils.setupSocializeOverrides(true, true);
 		
 		Entity entity = Entity.newInstance("http://entity1.com", "no name");
+		
+		// Ensure FB/TW are not supported
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, "");
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, "");
 		
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
 			@Override
@@ -298,22 +305,14 @@ public class ActionBarTestUtils2 {
 		
 		TestUtils.setupSocializeOverrides(true, true);
 		
-//		final SocializeSession session = AndroidMock.createMock(SocializeSession.class);
 		final UserProviderCredentials creds = AndroidMock.createMock(UserProviderCredentials.class);
 		
-//		AndroidMock.expect(session.getUserProviderCredentials((AuthProviderType)AndroidMock.anyObject())).andReturn(creds).anyTimes();
-//		AndroidMock.replay(session);
+		Entity entity = Entity.newInstance("http://entity1.com" + Math.random(), "no name");
 		
-		Entity entity = Entity.newInstance("http://entity1.com", "no name");
-		
-		final AuthDialogFactory mockFactory = new AuthDialogFactory() {
-			@Override
-			public void show(Context context, AuthDialogListener listener) {
-				TestUtils.addResult("fail");
-			}
-		};
+		final CountDownLatch latch = new CountDownLatch(1);
 		
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
+			
 			@Override
 			public void addLike(SocializeSession session, Entity entityKey, ShareOptions shareOptions, LikeListener listener) {
 				TestUtils.addResult("success");
@@ -324,6 +323,23 @@ public class ActionBarTestUtils2 {
 				listener.onGet(null); // not liked
 			}
 		};		
+		
+		final AuthDialogFactory mockFactory = new AuthDialogFactory() {
+			@Override
+			public void show(Context context, AuthDialogListener listener) {
+				TestUtils.addResult("fail");
+				latch.countDown();
+			}
+		};
+		
+		final ShareDialogFactory mockShareDialogFactory = new ShareDialogFactory() {
+
+			@Override
+			public void show(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener shareDialoglistener, int displayOptions) {
+				TestUtils.addResult("success");
+				latch.countDown();
+			}
+		};
 		
 		final AuthProviderInfoBuilder mockAuthProviderInfoBuilder = new AuthProviderInfoBuilder() {
 			@Override
@@ -365,6 +381,24 @@ public class ActionBarTestUtils2 {
 					System.err.println("Proxy is null!!");
 				}
 				
+				ProxyObject<ShareDialogFactory> proxyShareDialogFactory = container.getProxy("shareDialogFactory");
+				if(proxyShareDialogFactory != null) {
+					proxyShareDialogFactory.setDelegate(mockShareDialogFactory);
+					proxyShareDialogFactory.setStaticProxy(true);
+				}
+				else {
+					System.err.println("Proxy is null!!");
+				}
+				
+				ProxyObject<AuthProviderInfoBuilder> proxyAuthProviderInfoBuilder = container.getProxy("authProviderInfoBuilder");
+				
+				if(proxyAuthProviderInfoBuilder != null) {
+					proxyAuthProviderInfoBuilder.setDelegate(mockAuthProviderInfoBuilder);
+				}
+				else {
+					System.err.println("proxyAuthProviderInfoBuilder is null!!");
+				}
+				
 				ProxyObject<LikeSystem> proxyLike = container.getProxy("likeSystem");
 				if(proxyLike != null) {
 					proxyLike.setDelegate(mockLikeSystem);
@@ -373,14 +407,6 @@ public class ActionBarTestUtils2 {
 					System.err.println("proxyLike is null!!");
 				}
 				
-				ProxyObject<AuthProviderInfoBuilder> proxyAuthProviderInfoBuilder = container.getProxy("authProviderInfoBuilder");
-				
-				if(proxyLike != null) {
-					proxyAuthProviderInfoBuilder.setDelegate(mockAuthProviderInfoBuilder);
-				}
-				else {
-					System.err.println("proxyAuthProviderInfoBuilder is null!!");
-				}
 			}
 		});		
 		
@@ -394,17 +420,12 @@ public class ActionBarTestUtils2 {
 		
 		assertNotNull(actionBar);
 		
-		final CountDownLatch latch = new CountDownLatch(1);
-		
 		testCase.runTestOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				// Dummy session
 				Socialize.getSocialize().getSession().getUserProviderCredentials().put(AuthProviderType.TWITTER, creds);
-				
 				assertTrue(actionBar.getLikeButton().performClick());
-				TestUtils.sleep(1000);
-				latch.countDown();
 			}
 		});		
 		
@@ -415,8 +436,6 @@ public class ActionBarTestUtils2 {
 		assertEquals("success", result);
 		
 		Socialize.getSocialize().getSession().getUserProviderCredentials().remove(AuthProviderType.TWITTER);
-		
-//		AndroidMock.verify(session);
 	}		
 	
 }

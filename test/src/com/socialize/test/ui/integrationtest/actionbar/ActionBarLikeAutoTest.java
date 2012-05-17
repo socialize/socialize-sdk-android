@@ -8,7 +8,7 @@ public class ActionBarLikeAutoTest extends ActionBarAutoTest {
 		utils.testLikeCallsApiHost(this);
 	}
 	
-	public void testLikePromotsForAuth() throws Throwable {
+	public void testLikePromptsForAuth() throws Throwable {
 		ActionBarTestUtils2 utils = new ActionBarTestUtils2();
 		utils.testLikePromptsForAuth(this);
 	}	

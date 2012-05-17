@@ -24,6 +24,7 @@ package com.socialize.api.action.share;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
@@ -41,7 +42,7 @@ import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.ui.share.DialogFlowController;
-import com.socialize.ui.share.ShareDialogFactory;
+import com.socialize.ui.share.IShareDialogFactory;
 import com.socialize.ui.share.ShareDialogListener;
 import com.socialize.ui.share.SharePanelView;
 
@@ -51,10 +52,10 @@ import com.socialize.ui.share.SharePanelView;
 public class SocializeShareUtils extends SocializeActionUtilsBase implements ShareUtilsProxy {
 	
 	private ShareSystem shareSystem;
-	private ShareDialogFactory shareDialogFactory;
+	private IShareDialogFactory shareDialogFactory;
 	
 	@Override
-	public ShareOptions getUserShareOptions() {
+	public ShareOptions getUserShareOptions(Context context) {
 		SocializeService socialize = Socialize.getSocialize();
 		SocializeSession session = socialize.getSession();
 		User user = session.getUser();
@@ -222,7 +223,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 		this.shareSystem = shareSystem;
 	}
 
-	public void setShareDialogFactory(ShareDialogFactory shareDialogFactory) {
+	public void setShareDialogFactory(IShareDialogFactory shareDialogFactory) {
 		this.shareDialogFactory = shareDialogFactory;
 	}
 }

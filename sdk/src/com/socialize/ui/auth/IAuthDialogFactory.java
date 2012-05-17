@@ -19,35 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.share;
+package com.socialize.ui.auth;
 
 import android.content.Context;
-import com.socialize.entity.Entity;
-import com.socialize.networks.SocialNetworkListener;
-import com.socialize.ui.dialog.AsyncDialogFactory;
-
 
 /**
  * @author Jason Polites
  *
  */
-public class ShareDialogFactory extends AsyncDialogFactory<SharePanelView, ShareDialogListener> implements IShareDialogFactory {
+public interface IAuthDialogFactory {
 
-	/* (non-Javadoc)
-	 * @see com.socialize.ui.share.IShareDialogFactory#show(android.content.Context, com.socialize.entity.Entity, com.socialize.networks.SocialNetworkListener, com.socialize.ui.share.ShareDialogListener, int)
-	 */
-	@Override
-	public void show(
-			Context context, 
-			Entity entity, 
-			SocialNetworkListener socialNetworkListener, 
-			ShareDialogListener shareDialoglistener, 
-			int displayOptions) {
-		makeDialog(context, shareDialoglistener, entity, socialNetworkListener, shareDialoglistener, displayOptions);
-	}
+	public void show(Context context, AuthDialogListener listener);
 
-	@Override
-	public void setListener(SharePanelView view, ShareDialogListener listener) {
-		view.setShareDialogListener(listener);
-	}
 }

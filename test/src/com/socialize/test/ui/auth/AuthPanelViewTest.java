@@ -28,12 +28,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.view.View;
-import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.SocializeSystem;
 import com.socialize.api.action.ShareType;
-import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
 import com.socialize.entity.SocializeAction;
 import com.socialize.ioc.SocializeIOC;
@@ -71,8 +69,6 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 			}
 		};	
 		
-		final Entity entity = Entity.newInstance("http://entity1.com", "http://entity1.com");
-		
 		// Stub in click handlers
 		SocializeIOC.registerStub("facebookAuthClickListener", mockFBListener);
 		SocializeIOC.registerStub("twitterAuthClickListener", mockTWListener);
@@ -86,7 +82,7 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 		// the twitter button is not shown.  Forcing twitter config here
 		Socialize.getSocialize().getConfig().setTwitterKeySecret("foo", "bar");
 		
-		final AuthPanelView view = SocializeAccess.getBean("authPanelView", entity, ShareUtils.DEFAULT);
+		final AuthPanelView view = SocializeAccess.getBean("authPanelView");
 		
 		
 		final CountDownLatch latch0 = new CountDownLatch(1);
@@ -126,144 +122,6 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 		assertTrue((Boolean)getResult(3));
 	}
 	
-	public void testEmailLaunchesEmailClient() throws Throwable {
-		
-		final CountDownLatch latch1 = new CountDownLatch(1);
-		
-		// Stub in email handler
-		ShareHandler mockEmailHandler = new ShareHandler() {
-			
-			@Override
-			public boolean isAvailableOnDevice(Context context) {
-				return true;
-			}
-			
-			@Override
-			public void handle(Activity context, SocializeAction action, Location location, String text, SocialNetworkListener listener) {
-				addResult(1, action);
-				latch1.countDown();
-			}
-		};
-		
-		SocializeIOC.registerStub("emailShareHandler", mockEmailHandler);
-		
-		Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
-		sendIntent.setType("message/rfc822");
-		
-		final Entity entity = Entity.newInstance("http://entity1.com", "http://entity1.com");
-		
-		SocializeSystem system = Socialize.getSocialize().getSystem();
-		String[] config = system.getBeanConfig();
-		
-		Socialize.getSocialize().init(getContext(), config);
-		
-		final AuthPanelView view = SocializeAccess.getBean("authPanelView", entity, ShareUtils.DEFAULT);
-		
-		final CountDownLatch latch0 = new CountDownLatch(1);
-		
-		runTestOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				getActivity().setContentView(view);
-				latch0.countDown();
-			}
-		});
-		
-		latch0.await(10, TimeUnit.SECONDS);
-		
-		final EmailCell emailCell = TestUtils.findView(view, EmailCell.class);
-		
-		assertNotNull(emailCell);
-		
-		runTestOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				addResult(0, emailCell.performClick());
-			}
-		});		
-		
-		latch1.await(10, TimeUnit.SECONDS);
-		
-		SocializeIOC.unregisterStub("emailShareHandler");
-		
-		assertTrue((Boolean)getResult(0));
-		
-		Share action = getResult(1);
-		
-		assertNotNull(action);
-		assertEquals(ShareType.EMAIL, action.getShareType());
-	
-	}	
-	
-	public void testSmsLaunchesSmsClient() throws Throwable {
-		
-		final CountDownLatch latch1 = new CountDownLatch(1);
-		
-		// Stub in email handler
-		ShareHandler mockSmsHandler = new ShareHandler() {
-			
-			@Override
-			public boolean isAvailableOnDevice(Context context) {
-				return true;
-			}
-			
-			@Override
-			public void handle(Activity context, SocializeAction action, Location location, String text, SocialNetworkListener listener) {
-				addResult(1, action);
-				latch1.countDown();
-			}
-		};
-		
-		SocializeIOC.registerStub("smsShareHandler", mockSmsHandler);
-		
-		Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
-		sendIntent.setType("message/rfc822");
-		
-		final Entity entity = Entity.newInstance("http://entity1.com", "http://entity1.com");
-		
-		SocializeSystem system = Socialize.getSocialize().getSystem();
-		String[] config = system.getBeanConfig();
-		
-		Socialize.getSocialize().init(getContext(), config);
-		
-		final AuthPanelView view = SocializeAccess.getBean("authPanelView", entity, ShareUtils.DEFAULT);
-		
-		final CountDownLatch latch0 = new CountDownLatch(1);
-		
-		runTestOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				getActivity().setContentView(view);
-				latch0.countDown();
-			}
-		});
-		
-		latch0.await(10, TimeUnit.SECONDS);
-		
-		final SMSCell cell = TestUtils.findView(view, SMSCell.class);
-		
-		assertNotNull(cell);
-		
-		runTestOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				addResult(0, cell.performClick());
-			}
-		});		
-		
-		latch1.await(10, TimeUnit.SECONDS);
-		
-		SocializeIOC.unregisterStub("smsShareHandler");
-		
-		assertTrue((Boolean)getResult(0));
-		
-		Share action = getResult(1);
-		
-		assertNotNull(action);
-		assertEquals(ShareType.SMS, action.getShareType());
-	
-	}		
-
 	@Override
 	protected void tearDown() throws Exception {
 		SocializeIOC.unregisterStub("facebookAuthClickListener");

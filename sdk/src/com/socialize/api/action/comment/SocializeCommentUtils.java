@@ -36,12 +36,12 @@ import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.ui.auth.AuthDialogFactory;
+import com.socialize.ui.auth.IAuthDialogFactory;
 import com.socialize.ui.auth.AuthDialogListener;
 import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.ui.share.DialogFlowController;
-import com.socialize.ui.share.ShareDialogFactory;
+import com.socialize.ui.share.IShareDialogFactory;
 import com.socialize.ui.share.ShareDialogListener;
 import com.socialize.ui.share.SharePanelView;
 
@@ -52,8 +52,8 @@ import com.socialize.ui.share.SharePanelView;
 public class SocializeCommentUtils extends SocializeActionUtilsBase implements CommentUtilsProxy {
 	
 	private CommentSystem commentSystem;
-	private AuthDialogFactory authDialogFactory;
-	private ShareDialogFactory shareDialogFactory;
+	private IAuthDialogFactory authDialogFactory;
+	private IShareDialogFactory shareDialogFactory;
 
 	@Override
 	public void addComment(Activity context, final Entity entity, final String text, final CommentAddListener listener) {
@@ -216,7 +216,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 	}	
 	
 	protected void doCommentWithoutShare(final Activity context, final SocializeSession session, final Entity entity, final String text, final CommentAddListener listener) {
-		doCommentWithoutShare(context, session, entity, text, ShareUtils.getUserShareOptions(), listener);
+		doCommentWithoutShare(context, session, entity, text, ShareUtils.getUserShareOptions(context), listener);
 	}
 	
 	protected void doCommentWithoutShare(final Activity context, final SocializeSession session, final Entity entity, final String text, final ShareOptions shareOptions, final CommentAddListener listener) {
@@ -267,11 +267,11 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 		this.commentSystem = commentSystem;
 	}
 	
-	public void setAuthDialogFactory(AuthDialogFactory authDialogFactory) {
+	public void setAuthDialogFactory(IAuthDialogFactory authDialogFactory) {
 		this.authDialogFactory = authDialogFactory;
 	}
 
-	public void setShareDialogFactory(ShareDialogFactory shareDialogFactory) {
+	public void setShareDialogFactory(IShareDialogFactory shareDialogFactory) {
 		this.shareDialogFactory = shareDialogFactory;
 	}
 }

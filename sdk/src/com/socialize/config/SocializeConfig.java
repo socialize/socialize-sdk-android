@@ -249,6 +249,12 @@ public class SocializeConfig {
 		return (properties == null) ? null : properties.getProperty(key);
 	}	
 	
+	public void destroy() {
+		if(properties != null) {
+			properties.clear();
+		}
+	}
+	
 	public int getIntProperty(String key, int defaultValue) {
 		String val = getProperty(key);
 		if(!StringUtils.isEmpty(val)) {

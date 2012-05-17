@@ -73,6 +73,10 @@ public class SharePanelView extends DialogPanelView {
 	
 	private Entity entity;
 	
+	public SharePanelView(Context context, Entity entity, int displayOptions) {
+		this(context, entity, null, null, displayOptions);
+	}
+	
 	public SharePanelView(Context context, Entity entity, ShareDialogListener listener, int displayOptions) {
 		this(context, entity, null, listener, displayOptions);
 	}

@@ -23,6 +23,7 @@ package com.socialize;
 
 import java.lang.reflect.Proxy;
 import android.app.Activity;
+import android.content.Context;
 import com.socialize.api.action.share.ShareUtilsProxy;
 import com.socialize.api.action.share.SocialNetworkDialogListener;
 import com.socialize.entity.Entity;
@@ -60,8 +61,8 @@ public class ShareUtils {
 				new SocializeActionProxy("shareUtils")); // Bean name
 	}
 	
-	public static ShareOptions getUserShareOptions() {
-		return proxy.getUserShareOptions();
+	public static ShareOptions getUserShareOptions(Context context) {
+		return proxy.getUserShareOptions(context);
 	}
 	
 	public static void showShareDialog (Activity context, Entity entity) {
