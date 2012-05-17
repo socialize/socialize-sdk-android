@@ -52,7 +52,7 @@ public class Socialize {
 	
 	public static LogLevel DEFAULT_LOG_LEVEL = LogLevel.WARN;
 	
-	private static final SocializeServiceImpl instance = new SocializeServiceImpl();
+	static SocializeServiceImpl instance = new SocializeServiceImpl();
 
 	private Socialize() {
 		super();

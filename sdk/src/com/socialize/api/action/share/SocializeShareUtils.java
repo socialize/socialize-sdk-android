@@ -222,7 +222,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 		this.shareSystem = shareSystem;
 	}
 
-	public void setShareDialogFactory(ShareDialogFactory authRequestDialogFactory) {
-		this.shareDialogFactory = authRequestDialogFactory;
+	public void setShareDialogFactory(ShareDialogFactory shareDialogFactory) {
+		this.shareDialogFactory = shareDialogFactory;
 	}
 }

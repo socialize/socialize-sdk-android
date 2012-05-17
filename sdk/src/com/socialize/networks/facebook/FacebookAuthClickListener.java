@@ -29,19 +29,9 @@ import com.socialize.networks.SocialNetworkAuthClickListener;
  *
  */
 public class FacebookAuthClickListener extends SocialNetworkAuthClickListener {
-//	@Override
-//	protected AuthProviderInfo getAuthProviderInfo() {
-//		String authProviderAppId = config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
-//		FacebookAuthProviderInfo fbInfo = new FacebookAuthProviderInfo();
-//		fbInfo.setAppId(authProviderAppId);
-//		return fbInfo;
-//	}
-
 	@Override
 	protected SocialNetwork getSocialNetwork() {
 		return SocialNetwork.FACEBOOK;
 		
 	}
-	
-	
 }

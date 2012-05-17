@@ -52,7 +52,7 @@ public class SocializeLikeSystem extends SocializeApi<Like, SocializeProvider<Li
 	@Override
 	public void addLike(SocializeSession session, Entity entity, ShareOptions shareOptions, LikeListener listener) {
 		Like c = new Like();
-		c.setEntity(entity);
+		c.setEntitySafe(entity);
 		
 		setPropagationData(c, shareOptions);
 		setLocation(c);

@@ -41,7 +41,6 @@ import com.socialize.ui.dialog.SimpleDialogFactory;
  */
 public abstract class SocialNetworkAuthClickListener implements OnClickListener {
 
-	protected SocializeConfig config;
 	private SocializeAuthListener listener;
 	private SimpleDialogFactory<ProgressDialog> dialogFactory;
 	private ProgressDialog dialog; 
@@ -110,10 +109,6 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 	
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();
-	}
-
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
 	}
 
 	public void setDialogFactory(SimpleDialogFactory<ProgressDialog> dialogFactory) {

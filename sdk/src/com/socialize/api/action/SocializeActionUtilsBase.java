@@ -25,12 +25,10 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
-import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.networks.PostData;
-import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.share.ShareHandler;
@@ -47,7 +45,7 @@ public abstract class SocializeActionUtilsBase {
 	
 	protected boolean isDisplayAuthDialog() {
 		
-		boolean authRequired = Socialize.getSocialize().getConfig().isAuthRequired();
+		boolean authRequired = getSocialize().getConfig().isAuthRequired();
 		boolean authSupported = false;
 		
 		if(authRequired) {

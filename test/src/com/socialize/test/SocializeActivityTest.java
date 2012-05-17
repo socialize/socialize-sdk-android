@@ -25,6 +25,7 @@ import java.util.List;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.socialize.Socialize;
+import com.socialize.ioc.SocializeIOC;
 import com.socialize.sample.EmptyActivity;
 import com.socialize.test.ui.ResultHolder;
 
@@ -48,6 +49,7 @@ public abstract class SocializeActivityTest extends ActivityInstrumentationTestC
 		holder.clear();
 		super.tearDown();
 		Socialize.getSocialize().destroy(true);
+		SocializeIOC.clearStubs();
 	}
 	
 	protected void clearResults() {

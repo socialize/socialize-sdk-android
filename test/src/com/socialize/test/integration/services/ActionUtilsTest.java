@@ -34,6 +34,7 @@ import com.socialize.CommentUtils;
 import com.socialize.LikeUtils;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
+import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
@@ -144,9 +145,12 @@ public class ActionUtilsTest extends SocializeActivityTest {
 		
 		final Entity entityKey = Entity.newInstance("testGetActionsByEntity" + Math.random(), "testGetActionsByEntity");
 		
+		// Set auto auth off
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		
 		// Add some new actions to really make the test "real"
 		
-		LikeUtils.like(getContext(), entityKey, new LikeAddListener() {
+		LikeUtils.like(getContext(), entityKey, null, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -157,7 +161,7 @@ public class ActionUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Like like) {
 				actions.add(like);
-				CommentUtils.addComment(getContext(), entityKey, "Blah", new CommentAddListener() {
+				CommentUtils.addComment(getContext(), entityKey, "Blah", null, new CommentAddListener() {
 					
 					@Override
 					public void onError(SocializeException error) {
@@ -209,8 +213,11 @@ public class ActionUtilsTest extends SocializeActivityTest {
 		final List<SocializeAction> actions = new ArrayList<SocializeAction>();
 		final Entity entityKey = Entity.newInstance("testGetActionsByUserAndEntity" + Math.random(), "testGetActionsByUserAndEntity");
 		
+		// Set auto auth off
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		
 		// Add some new actions to really make the test "real"
-		LikeUtils.like(getContext(), entityKey, new LikeAddListener() {
+		LikeUtils.like(getContext(), entityKey, null, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -221,7 +228,7 @@ public class ActionUtilsTest extends SocializeActivityTest {
 			@Override
 			public void onCreate(Like like) {
 				actions.add(like);
-				CommentUtils.addComment(getContext(), entityKey, "Blah", new CommentAddListener() {
+				CommentUtils.addComment(getContext(), entityKey, "Blah", null, new CommentAddListener() {
 					
 					@Override
 					public void onError(SocializeException error) {

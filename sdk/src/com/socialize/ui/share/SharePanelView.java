@@ -254,7 +254,11 @@ public class SharePanelView extends DialogPanelView {
 			otherOptions = new TextView(getContext());
 			otherOptions.setText("More options...");
 			otherOptions.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-			otherOptions.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
+			
+			if(colors != null) {
+				otherOptions.setTextColor(colors.getColor(Colors.ANON_CELL_TITLE));
+			}
+
 			otherOptions.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
 			otherOptions.setPadding(0, 0, 0, padding);
 			

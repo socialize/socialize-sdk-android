@@ -163,7 +163,7 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		}
 		
 		Share c = new Share();
-		c.setEntity(entity);
+		c.setEntitySafe(entity);
 		c.setText(text);
 		c.setShareType(shareType);
 		

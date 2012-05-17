@@ -65,7 +65,7 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 	public void addComment(SocializeSession session, Entity entity, String comment, ShareOptions shareOptions, CommentListener listener) {
 		Comment c = new Comment();
 		c.setText(comment);
-		c.setEntity(entity);
+		c.setEntitySafe(entity);
 		addComment(session, c, shareOptions, listener);
 	}
 

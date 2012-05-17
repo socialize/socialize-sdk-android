@@ -55,7 +55,11 @@ public class AndroidIOC implements IOCContainer {
 	
 	public static void unregisterStub(String name) {
 		Container.unregisterStub(name);
-	}			
+	}		
+	
+	public static void clearStubs() {
+		Container.clearStubs();
+	}
 	
 	@Override
 	public void init(Context context, InputStream...in) throws Exception {

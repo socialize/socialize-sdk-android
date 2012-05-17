@@ -69,7 +69,7 @@ import com.socialize.test.ui.util.TestUtils;
 public class FacebookWallPosterTest extends SocializeActivityTest {
 
 	public void testPostLike() {
-		doTestPostLike("Likes foobar_link");
+		doTestPostLike("");
 	}
 	
 	public void testPostComment() {
@@ -288,7 +288,7 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		RequestListener listener = getResult(3);
 		SocialNetworkListener socListener = getResult(4);
 		
-		assertEquals("me/feed", graphPath);
+		assertEquals("me/links", graphPath);
 		assertEquals("POST", httpMethod);
 		assertSame(requestListener, listener);
 		assertSame(socialNetworkListener, socListener);

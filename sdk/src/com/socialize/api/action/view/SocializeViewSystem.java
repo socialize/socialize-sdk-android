@@ -49,7 +49,7 @@ public class SocializeViewSystem extends SocializeApi<View, SocializeProvider<Vi
 	@Override
 	public void addView(SocializeSession session, Entity entity, Location location, ViewListener listener) {
 		View c = new View();
-		c.setEntity(entity);
+		c.setEntitySafe(entity);
 		
 		setLocation(c);
 		

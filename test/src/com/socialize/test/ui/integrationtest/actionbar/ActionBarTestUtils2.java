@@ -42,6 +42,7 @@ import com.socialize.auth.UserProviderCredentials;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
+import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.like.LikeListener;
 import com.socialize.networks.ShareOptions;
@@ -50,6 +51,8 @@ import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarLayoutView;
 import com.socialize.ui.auth.AuthDialogFactory;
 import com.socialize.ui.auth.AuthDialogListener;
+
+import static android.test.ActivityInstrumentationTestCase2.*;
 
 /**
  * @author Jason Polites
@@ -63,10 +66,13 @@ public class ActionBarTestUtils2 {
 		
 		Entity entity = Entity.newInstance("http://entity1.com", "no name");
 		
+		final CountDownLatch latch = new CountDownLatch(1);
+		
 		final AuthDialogFactory mockFactory = new AuthDialogFactory() {
 			@Override
 			public void show(Context parent, AuthDialogListener listener) {
 				TestUtils.addResult("success");
+				latch.countDown();
 			}
 		};
 		
@@ -83,37 +89,10 @@ public class ActionBarTestUtils2 {
 			}
 		};		
 		
-		SocializeAccess.setInitListener(new SocializeInitListener() {
-			
-			@Override
-			public void onError(SocializeException error) {
-				ActivityInstrumentationTestCase2.fail();
-			}
-			@Override
-			public void onInit(Context context, IOCContainer container) {
-				
-				// Enable auth prompt for this test
-				SocializeConfig bean = container.getBean("config");
-				bean.setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "true");
-				
-				ProxyObject<AuthDialogFactory> proxy = container.getProxy("authDialogFactory");
-				if(proxy != null) {
-					proxy.setDelegate(mockFactory);
-					proxy.setStaticProxy(true);
-				}
-				else {
-					System.err.println("Proxy is null!!");
-				}
-				
-				ProxyObject<LikeSystem> proxyLike = container.getProxy("likeSystem");
-				if(proxyLike != null) {
-					proxyLike.setDelegate(mockLikeSystem);
-				}
-				else {
-					System.err.println("proxyLike is null!!");
-				}
-			}
-		});		
+		// Add stubs
+		SocializeIOC.registerStub("authDialogFactory", mockFactory);
+		SocializeIOC.registerStub("likeSystem", mockLikeSystem);
+		
 		
 		Intent intent = new Intent();
 		intent.putExtra(Socialize.ENTITY_OBJECT, entity);
@@ -123,16 +102,22 @@ public class ActionBarTestUtils2 {
 		
 		final ActionBarLayoutView actionBar = TestUtils.findView(testCase.getActivity(), ActionBarLayoutView.class, 25000);	
 		
-		ActivityInstrumentationTestCase2.assertNotNull(actionBar);
+		assertNotNull(actionBar);
 		
 		testCase.runTestOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				ActivityInstrumentationTestCase2.assertTrue(actionBar.getLikeButton().performClick());
-				TestUtils.sleep(1000);
-				String result = TestUtils.getNextResult();
-				ActivityInstrumentationTestCase2.assertNotNull(result);
-				ActivityInstrumentationTestCase2.assertEquals("success", result);
+				assertTrue(actionBar.getLikeButton().performClick());
+				try {
+					assertTrue(latch.await(10, TimeUnit.SECONDS));
+					String result = TestUtils.getNextResult();
+					assertNotNull(result);
+					assertEquals("success", result);
+				}
+				catch (InterruptedException e) {
+					e.printStackTrace();
+					fail();
+				}
 			}
 		});				
 	}
@@ -144,7 +129,6 @@ public class ActionBarTestUtils2 {
 		Entity entity = Entity.newInstance("http://entity1.com", "no name");
 		
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
-			
 			@Override
 			public void addLike(SocializeSession session, Entity entityKey, ShareOptions shareOptions, LikeListener listener) {
 				TestUtils.addResult("success");
@@ -160,7 +144,7 @@ public class ActionBarTestUtils2 {
 			
 			@Override
 			public void onError(SocializeException error) {
-				ActivityInstrumentationTestCase2.fail();
+				fail();
 			}
 			@Override
 			public void onInit(Context context, IOCContainer container) {
@@ -187,16 +171,16 @@ public class ActionBarTestUtils2 {
 		
 		final ActionBarLayoutView actionBar = TestUtils.findView(testCase.getActivity(), ActionBarLayoutView.class, 25000);	
 		
-		ActivityInstrumentationTestCase2.assertNotNull(actionBar);
+		assertNotNull(actionBar);
 		
 		testCase.runTestOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				ActivityInstrumentationTestCase2.assertTrue(actionBar.getLikeButton().performClick());
+				assertTrue(actionBar.getLikeButton().performClick());
 				TestUtils.sleep(1000);
 				String result = TestUtils.getNextResult();
-				ActivityInstrumentationTestCase2.assertNotNull(result);
-				ActivityInstrumentationTestCase2.assertEquals("success", result);
+				assertNotNull(result);
+				assertEquals("success", result);
 			}
 		});		
 	}
@@ -248,7 +232,7 @@ public class ActionBarTestUtils2 {
 			
 			@Override
 			public void onError(SocializeException error) {
-				ActivityInstrumentationTestCase2.fail();
+				fail();
 			}
 			@Override
 			public void onInit(Context context, IOCContainer container) {
@@ -295,16 +279,16 @@ public class ActionBarTestUtils2 {
 		
 		final ActionBarLayoutView actionBar = TestUtils.findView(testCase.getActivity(), ActionBarLayoutView.class, 25000);	
 		
-		ActivityInstrumentationTestCase2.assertNotNull(actionBar);
+		assertNotNull(actionBar);
 		
 		testCase.runTestOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				ActivityInstrumentationTestCase2.assertTrue(actionBar.getLikeButton().performClick());
+				assertTrue(actionBar.getLikeButton().performClick());
 				TestUtils.sleep(1000);
 				String result = TestUtils.getNextResult();
-				ActivityInstrumentationTestCase2.assertNotNull(result);
-				ActivityInstrumentationTestCase2.assertEquals("success", result);
+				assertNotNull(result);
+				assertEquals("success", result);
 			}
 		});				
 	}	
@@ -362,7 +346,7 @@ public class ActionBarTestUtils2 {
 			
 			@Override
 			public void onError(SocializeException error) {
-				ActivityInstrumentationTestCase2.fail();
+				fail();
 			}
 			
 			@Override
@@ -408,7 +392,7 @@ public class ActionBarTestUtils2 {
 		
 		final ActionBarLayoutView actionBar = TestUtils.findView(testCase.getActivity(), ActionBarLayoutView.class, 25000);	
 		
-		ActivityInstrumentationTestCase2.assertNotNull(actionBar);
+		assertNotNull(actionBar);
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
@@ -418,7 +402,7 @@ public class ActionBarTestUtils2 {
 				// Dummy session
 				Socialize.getSocialize().getSession().getUserProviderCredentials().put(AuthProviderType.TWITTER, creds);
 				
-				ActivityInstrumentationTestCase2.assertTrue(actionBar.getLikeButton().performClick());
+				assertTrue(actionBar.getLikeButton().performClick());
 				TestUtils.sleep(1000);
 				latch.countDown();
 			}
@@ -427,8 +411,8 @@ public class ActionBarTestUtils2 {
 		latch.await(20, TimeUnit.SECONDS);
 		
 		String result = TestUtils.getNextResult();
-		ActivityInstrumentationTestCase2.assertNotNull(result);
-		ActivityInstrumentationTestCase2.assertEquals("success", result);
+		assertNotNull(result);
+		assertEquals("success", result);
 		
 		Socialize.getSocialize().getSession().getUserProviderCredentials().remove(AuthProviderType.TWITTER);
 		

@@ -65,7 +65,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		// Force no config
 		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
-		LikeUtils.like(getActivity(), entityKey, new LikeAddListener() {
+		LikeUtils.like(getActivity(), entityKey, null, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -116,7 +116,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		
 		assertNotNull(after);
 		assertEquals(like.getId(), after.getId());
-		assertEquals(entityKey, after.getEntityKey());
+		assertEquals(entityKey.getKey(), after.getEntityKey());
 	}
 	
 	public void testGetLikeExists() throws InterruptedException {
@@ -125,7 +125,11 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		LikeUtils.like(getActivity(), entityKey, new LikeAddListener() {
+		// Force no config
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+				
+		
+		LikeUtils.like(getActivity(), entityKey, null, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -156,7 +160,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		
 		Like like = getResult(0);
 		assertNotNull(like);
-		assertEquals(entityKey, like.getEntityKey());
+		assertEquals(entityKey.getKey(), like.getEntityKey());
 	}
 	
 	public void testGetLikeDoesNotExist() throws InterruptedException {
@@ -189,7 +193,10 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		LikeUtils.like(getActivity(), entityKey, new LikeAddListener() {
+		// Force no config
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		
+		LikeUtils.like(getActivity(), entityKey, null, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -229,7 +236,10 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		final Entity entityKey = Entity.newInstance("testGetLikesByUser", "testGetLikesByUser");
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		LikeUtils.like(getActivity(), entityKey, new LikeAddListener() {
+		// Force no config
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		
+		LikeUtils.like(getActivity(), entityKey, null, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -269,7 +279,10 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		final Entity entityKey = Entity.newInstance("testGetLikesByEntity", "testGetLikesByEntity");
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		LikeUtils.like(getActivity(), entityKey, new LikeAddListener() {
+		// Force no config
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		
+		LikeUtils.like(getActivity(), entityKey, null, new LikeAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {

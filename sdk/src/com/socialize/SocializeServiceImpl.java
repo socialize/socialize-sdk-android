@@ -690,7 +690,7 @@ public class SocializeServiceImpl implements SocializeService {
 	public void addComment(final Activity activity, Entity entity, final String comment, final ShareOptions shareOptions, final CommentAddListener commentAddListener) {
 		Comment c = newComment();
 		c.setText(comment);
-		c.setEntity(entity);
+		c.setEntitySafe(entity);
 		addComment(activity, c, shareOptions, commentAddListener);
 	}
 	

@@ -33,6 +33,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
+import com.socialize.ioc.SocializeIOC;
 import com.socialize.test.ui.ResultHolder;
 import com.socialize.ui.dialog.DialogRegister;
 import com.socialize.ui.view.CustomCheckbox;
@@ -139,6 +140,7 @@ public class TestUtils {
 		instrumentation = testCase.getInstrumentation();
 		Socialize.getSocialize().destroy(true);
 		SocializeAccess.clearBeanOverrides();
+		SocializeIOC.clearStubs();
 	}
 	
 	public static void tearDown() {

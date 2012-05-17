@@ -52,4 +52,8 @@ public class SocializeAccess {
 	public static void setInitListener(SocializeInitListener listener) {
 		Socialize.getSocialize().getSystem().setSystemInitListener(listener);
 	}
+	
+	public static void setSocialize(SocializeServiceImpl service) {
+		Socialize.instance = service;
+	}
 }

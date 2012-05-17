@@ -253,7 +253,7 @@ public class CommentListView extends BaseView {
 		Comment comment = newComment();
 		comment.setText(text);
 		comment.setNotificationsEnabled(subscribe);
-		comment.setEntity(entity);
+		comment.setEntitySafe(entity);
 		
 		getSocialize().addComment(getActivity(), comment, options, getCommentAddListener(subscribe));
 		

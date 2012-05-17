@@ -11,18 +11,19 @@ import com.socialize.Socialize;
 import com.socialize.api.action.share.ShareSystem;
 import com.socialize.entity.Entity;
 import com.socialize.ioc.SocializeIOC;
+import com.socialize.networks.SocialNetworkListener;
 import com.socialize.test.mock.MockShareSystem;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.actionbar.ActionBarLayoutView;
 import com.socialize.ui.actionbar.ActionBarView;
 import com.socialize.ui.actionbar.OnActionBarEventListener;
 import com.socialize.ui.actionbar.OnActionBarEventListener.ActionBarEvent;
-import com.socialize.ui.auth.AuthDialogFactory;
-import com.socialize.ui.auth.AuthDialogListener;
+import com.socialize.ui.share.ShareDialogFactory;
+import com.socialize.ui.share.ShareDialogListener;
 
 public class ShareDialogViewTest extends ActionBarAutoTest {
 	
-	public void testShareButtonLoadsAuthView() throws Throwable {
+	public void testShareButtonLoadsShareView() throws Throwable {
 		
 		Intent intent = new Intent();
 		Bundle extras = new Bundle();
@@ -33,10 +34,9 @@ public class ShareDialogViewTest extends ActionBarAutoTest {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
-		final AuthDialogFactory mockAuthDialogFactory = new AuthDialogFactory() {
-			
+		final ShareDialogFactory mockAuthDialogFactory = new ShareDialogFactory() {
 			@Override
-			public void show(Context context, AuthDialogListener listener) {
+			public void show(Context context, Entity entity, SocialNetworkListener socialNetworkListener, ShareDialogListener shareDialoglistener, int displayOptions) {
 				addResult(0, "success");
 				latch.countDown();
 			}
@@ -45,7 +45,7 @@ public class ShareDialogViewTest extends ActionBarAutoTest {
 		final ShareSystem mockShareSystem = new MockShareSystem();
 		
 		SocializeIOC.registerStub("shareSystem", mockShareSystem);
-		SocializeIOC.registerStub("authRequestDialogFactory", mockAuthDialogFactory);
+		SocializeIOC.registerStub("shareDialogFactory", mockAuthDialogFactory);
 		
 		TestUtils.setupSocializeOverrides(true, true);
 		
@@ -65,7 +65,7 @@ public class ShareDialogViewTest extends ActionBarAutoTest {
 		
 		latch.await(10, TimeUnit.SECONDS);
 		
-		SocializeIOC.unregisterStub("authRequestDialogFactory");
+		SocializeIOC.unregisterStub("shareDialogFactory");
 		SocializeIOC.unregisterStub("shareSystem");
 		
 		String result = getResult(0);

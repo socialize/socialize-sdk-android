@@ -72,15 +72,15 @@ public class SocializeActionProxy implements InvocationHandler {
 					throw new MethodNotSupportedException("No context found in method arguments for method [" +
 							method.getName() +
 							"]");
-				}				
+				}			
 				
-				return method.invoke(Socialize.getBean(delegateBean), args);
+				return method.invoke(getBean(), args);
 			}
 			else {
 				Activity context = findActivity(args);
 				if(context != null) {
 					SocializeListener listener = findListener(args);
-					invoke(context, listener, delegateBean, method, args);
+					invoke(context, listener, method, args);
 				}
 				else {
 					throw new MethodNotSupportedException("No activity found in method arguments for method [" +
@@ -103,17 +103,30 @@ public class SocializeActionProxy implements InvocationHandler {
 		return (returnType == null || returnType.equals(Void.TYPE));
 	}
 	
-	protected void invoke(Activity context, SocializeListener listener, String delegateBean, Method method, Object[] args) throws Throwable {
+	protected void invoke(Activity context, SocializeListener listener, Method method, Object[] args) throws Throwable {
 		SocializeService service = getSocialize();
 		
 		if(!service.isInitialized(context)) {
-			doInitAsync(context, listener, delegateBean, method, args);
+			doInitAsync(context, listener, method, args);
 		}
 		else if(!service.isAuthenticated()) {
-			doAuthAsync(context, listener, delegateBean, method, args);
+			doAuthAsync(context, listener, method, args);
 		}
 		else {
-			method.invoke(Socialize.getBean(delegateBean), args);
+			method.invoke(getBean(), args);
+		}		
+	}
+	
+	protected Object getBean() throws MethodNotSupportedException {
+		Object bean = Socialize.getBean(delegateBean);
+		
+		if(bean != null) {
+			return bean;
+		}
+		else {
+			throw new MethodNotSupportedException("No bean with name [" +
+					delegateBean +
+					"] found");
 		}		
 	}
 	
@@ -144,7 +157,7 @@ public class SocializeActionProxy implements InvocationHandler {
 		return null;
 	}
 
-	protected synchronized <L extends SocializeListener> void doInitAsync(final Activity context, final SocializeListener listener, final String delegateBean, final Method method, final Object[] args) throws Throwable {
+	protected synchronized <L extends SocializeListener> void doInitAsync(final Activity context, final SocializeListener listener, final Method method, final Object[] args) throws Throwable {
 		
 		final SocializeService service = getSocialize();
 		
@@ -169,7 +182,7 @@ public class SocializeActionProxy implements InvocationHandler {
 								public void onInit(Context ctx, IOCContainer container) {
 									// Recurse
 									try {
-										invoke(context, listener, delegateBean, method, args);
+										invoke(context, listener, method, args);
 									}
 									catch (Throwable e) {
 										if(listener != null) {
@@ -183,17 +196,17 @@ public class SocializeActionProxy implements InvocationHandler {
 				}
 				else {
 					// Recurse
-					invoke(context, listener, delegateBean, method, args);
+					invoke(context, listener, method, args);
 				}
 			}
 		}
 		else {
 			// Recurse
-			invoke(context, listener, delegateBean, method, args);
+			invoke(context, listener, method, args);
 		}
 	}	
 	
-	protected synchronized <L extends SocializeListener> void doAuthAsync(final Activity context, final SocializeListener listener, final String delegateBean, final Method method, final Object[] args) throws Throwable {
+	protected synchronized <L extends SocializeListener> void doAuthAsync(final Activity context, final SocializeListener listener, final Method method, final Object[] args) throws Throwable {
 		final SocializeService service = getSocialize();
 		
 		if(!service.isAuthenticated()) {
@@ -225,7 +238,7 @@ public class SocializeActionProxy implements InvocationHandler {
 								public void onAuthSuccess(SocializeSession session) {
 									// Recurse
 									try {
-										invoke(context, listener, delegateBean, method, args);
+										invoke(context, listener, method, args);
 									}
 									catch (Throwable e) {
 										if(listener != null) {
@@ -246,13 +259,13 @@ public class SocializeActionProxy implements InvocationHandler {
 				}
 				else {
 					// Recurse
-					invoke(context, listener, delegateBean, method, args);
+					invoke(context, listener, method, args);
 				}
 			}
 		}
 		else {
 			// Recurse
-			invoke(context, listener, delegateBean, method, args);
+			invoke(context, listener, method, args);
 		}
 	}
 	

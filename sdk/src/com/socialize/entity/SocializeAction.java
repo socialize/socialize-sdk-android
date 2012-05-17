@@ -59,6 +59,14 @@ public abstract class SocializeAction extends SocializeObject {
 	public void setEntity(Entity entity) {
 		this.entity = entity;
 	}
+	public void setEntitySafe(Entity entity) {
+		if(StringUtils.isEmpty(entity.getName())) {
+			setEntityKey(entity.getKey());
+		}
+		else {
+			setEntity(entity);
+		}
+	}
 	public User getUser() {
 		return user;
 	}

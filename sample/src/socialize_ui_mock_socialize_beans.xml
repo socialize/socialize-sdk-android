@@ -20,7 +20,7 @@
 	<proxy ref="actionButtonHandlers" />
 	
 	<proxy ref="authProviderInfoBuilder" />	
-	<proxy ref="authRequestDialogFactory" />
+	<proxy ref="authDialogFactory" />
 	<proxy ref="userProvider" />
 
 	<bean id="initializationAsserter" class="com.socialize.test.mock.MockInitializationAsserter" />

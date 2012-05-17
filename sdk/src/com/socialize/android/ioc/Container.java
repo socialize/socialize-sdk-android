@@ -79,6 +79,10 @@ public class Container {
 		staticProxiesRemoved.add(name);
 	}	
 	
+	protected static void clearStubs() {
+		staticStubs.clear();
+	}
+	
 	protected static void registerStub(String name, Object stub) {
 		staticStubs.put(name, stub);
 	}
