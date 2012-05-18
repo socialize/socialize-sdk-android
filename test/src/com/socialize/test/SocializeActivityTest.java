@@ -28,6 +28,7 @@ import com.socialize.Socialize;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.sample.EmptyActivity;
 import com.socialize.test.ui.ResultHolder;
+import com.socialize.test.ui.util.TestUtils;
 
 public abstract class SocializeActivityTest extends ActivityInstrumentationTestCase2<EmptyActivity> {
 	
@@ -39,18 +40,17 @@ public abstract class SocializeActivityTest extends ActivityInstrumentationTestC
 
 	@Override
 	protected void setUp() throws Exception {
-		getInstrumentation().waitForIdleSync();
-		holder.setUp();
 		super.setUp();
+		Socialize.getSocialize().destroy(true);
+		SocializeIOC.clearStubs();
+		holder.setUp();
 	}
 	
 	@Override
 	protected void tearDown() throws Exception {
 		holder.clear();
+		TestUtils.waitForIdleSync(this, 5000);
 		super.tearDown();
-		Socialize.getSocialize().clearSessionCache(getContext());
-		Socialize.getSocialize().destroy(true);
-		SocializeIOC.clearStubs();
 	}
 	
 	protected void clearResults() {

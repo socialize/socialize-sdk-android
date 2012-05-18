@@ -151,6 +151,7 @@ public class ActionBarTestUtils2 {
 			
 			@Override
 			public void onError(SocializeException error) {
+				error.printStackTrace();
 				fail();
 			}
 			@Override
@@ -158,7 +159,13 @@ public class ActionBarTestUtils2 {
 				
 				// Disable auth prompt for this test
 				SocializeConfig bean = container.getBean("config");
-				bean.setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+				
+				if(bean != null) {
+					bean.setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+				}
+				else {
+					System.err.println("No bean with name config!!!");
+				}
 				
 				ProxyObject<LikeSystem> proxy = container.getProxy("likeSystem");
 				if(proxy != null) {
@@ -167,6 +174,7 @@ public class ActionBarTestUtils2 {
 				else {
 					System.err.println("Proxy is null!!");
 				}
+				
 			}
 		});
 		
@@ -246,7 +254,13 @@ public class ActionBarTestUtils2 {
 				
 				// Enable auth prompt for this test
 				SocializeConfig bean = container.getBean("config");
-				bean.setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "true");
+				
+				if(bean != null) {
+					bean.setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "true");
+				}
+				else {
+					System.err.println("No bean with name config!!");
+				}
 				
 				ProxyObject<AuthDialogFactory> proxy = container.getProxy("authDialogFactory");
 				if(proxy != null) {

@@ -22,8 +22,6 @@
 package com.socialize.log;
 
 import android.util.Log;
-
-import com.socialize.android.ioc.Logger;
 import com.socialize.config.SocializeConfig;
 import com.socialize.util.StringUtils;
 
@@ -72,20 +70,20 @@ public class SocializeLogger {
 			LOG_TAG = tag;
 		}
 		
-		switch (logLevel) {
-			case DEBUG:
-				Logger.logLevel = Log.DEBUG;
-				break;
-			case INFO:
-				Logger.logLevel = Log.INFO;
-				break;
-			case WARN:
-				Logger.logLevel = Log.WARN;
-				break;
-			case ERROR:
-				Logger.logLevel = Log.ERROR;
-				break;			
-		}
+//		switch (logLevel) {
+//			case DEBUG:
+//				Logger.logLevel = Log.DEBUG;
+//				break;
+//			case INFO:
+//				Logger.logLevel = Log.INFO;
+//				break;
+//			case WARN:
+//				Logger.logLevel = Log.WARN;
+//				break;
+//			case ERROR:
+//				Logger.logLevel = Log.ERROR;
+//				break;			
+//		}
 		
 		this.config = config;
 		this.initialized = true;

@@ -72,6 +72,9 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 		
 		Socialize.DEFAULT_LOG_LEVEL = LogLevel.DEBUG;
 		
+		Socialize.getSocialize().destroy(true);
+		NotificationsAccess.destroy(receiver);		
+		
 		receiver = new SocializeC2DMReceiverHandler();
 		
 		// Set override
@@ -194,12 +197,6 @@ public abstract class C2DMSimulationTest extends SocializeActivityTest {
 		}
 	}
 
-	@Override
-	protected void tearDown() throws Exception {
-		Socialize.getSocialize().destroy(true);
-		NotificationsAccess.destroy(receiver);
-		super.tearDown();
-	}
 	
 	protected Intent getMessageIntent(JSONObject json) {
 		Intent intent = new Intent();

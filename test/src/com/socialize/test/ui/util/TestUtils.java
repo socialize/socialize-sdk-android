@@ -138,7 +138,6 @@ public class TestUtils {
 		holder = new ResultHolder();
 		holder.setUp();
 		instrumentation = testCase.getInstrumentation();
-		Socialize.getSocialize().clearSessionCache(test.getActivity());
 		Socialize.getSocialize().destroy(true);
 		SocializeAccess.clearBeanOverrides();
 		SocializeIOC.clearStubs();
@@ -808,5 +807,28 @@ public class TestUtils {
 		}
 		return null;
 		
+	}
+	
+	public static boolean waitForIdleSync(final ActivityInstrumentationTestCase2<?> test, long timeout) throws InterruptedException {
+		
+		final CountDownLatch latch = new CountDownLatch(1);
+		Thread thread = new Thread() {
+
+			@Override
+			public void run() {
+				test.getInstrumentation().waitForIdleSync();
+				latch.countDown();
+			}
+		};
+		
+		thread.start();
+		
+		boolean await = latch.await(timeout, TimeUnit.MILLISECONDS);
+		
+		if(!await) {
+			thread.interrupt();
+		}
+		
+		return await;
 	}
 }

@@ -141,7 +141,17 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	
 	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException {
+		
+		if(authProviderDataFactory == null) {
+			throw new SocializeException("Socialize not initialized");
+		}
+		
 		AuthProviderData data = authProviderDataFactory.getBean();
+		
+		if(data == null) {
+			throw new SocializeException("Socialize not initialized");
+		}
+		
 		data.setAuthProviderInfo(authProviderInfoBuilder.getFactory(AuthProviderType.SOCIALIZE).getInstance());
 		return authenticate(endpoint, key, secret, data, uuid);
 	}
@@ -157,16 +167,16 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 				
 				String loadedKey = loaded.getConsumerKey();
 				String loadedSecret = loaded.getConsumerSecret();
-//				String loadedHost = loaded.getHost();
+				String loadedHost = loaded.getHost();
 				
-//				String host = config.getProperty(SocializeConfig.API_HOST);
+				String host = config.getProperty(SocializeConfig.API_HOST);
 				
 				if(loadedKey != null && 
 						loadedKey.equals(key) &&
 						loadedSecret != null && 
-						loadedSecret.equals(secret)) {
-//						loadedHost != null && 
-//						loadedHost.equals(host)) {
+						loadedSecret.equals(secret) &&
+						loadedHost != null && 
+						loadedHost.equals(host)) {
 					
 					return loaded;
 				}

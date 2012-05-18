@@ -22,6 +22,8 @@ public class NotificationsAccess {
 	}
 	
 	public static void destroy(SocializeC2DMReceiverHandler receiver) {
-		receiver.getNotificationContainer().getContainer().destroy();
+		if(receiver != null) {
+			receiver.getNotificationContainer().getContainer().destroy();
+		}
 	}
 }

@@ -135,21 +135,4 @@ public class CommentFactoryBlackboxTest extends AbstractFactoryBlackBoxTest {
 		
 		JsonAssert.assertJsonArrayEquals(expected, actual);
 	}
-	
-	public void testListByIdRequest() {
-		
-	}
-	
-	public void testListByEntityRequest(){
-		
-	}
-	
-	public void testListResponse(){
-		
-	}
-	
-	public void testGetResponse(){
-		
-	}
-	
 }

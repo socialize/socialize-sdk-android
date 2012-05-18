@@ -97,13 +97,13 @@ public class CommentSDKTest extends SDKIntegrationTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Activity context = getContext();
 		
+		Socialize.getSocialize().init(context);
+		Socialize.getSocialize().authenticateSynchronous(context);
+		
 		runTestOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				Socialize.getSocialize().init(context);
-				Socialize.getSocialize().authenticateSynchronous(context);
-				
 				Socialize.getSocialize().addComment(getContext(), e, text, new CommentAddListener() {
 					
 					@Override

@@ -84,10 +84,6 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 
 	@Override
 	protected void tearDown() throws Exception {
-		
-		Socialize.getSocialize().clearSessionCache(getActivity());
-		Socialize.getSocialize().destroy(true);
-		
 		try {
 			robotium.finish();
 		} 

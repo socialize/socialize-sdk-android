@@ -13,13 +13,13 @@ public abstract class ActionBarAutoTest extends ActivityInstrumentationTestCase2
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		getInstrumentation().waitForIdleSync();
 		TestUtils.setUp(this);
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
 		TestUtils.tearDown();
+		TestUtils.waitForIdleSync(this, 5000);
 		super.tearDown();
 	}
 	

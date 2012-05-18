@@ -70,7 +70,10 @@ public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 		}
 		
 		if(config != null) {
-			session.setHost(config.getProperty(SocializeConfig.API_HOST).trim());
+			String host = config.getProperty(SocializeConfig.API_HOST);
+			if(host != null)  {
+				session.setHost(host.trim());
+			}
 		}
 		
 		return session;
@@ -83,7 +86,10 @@ public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 		session.setConsumerSecret(secret);
 		session.setUserProviderCredentials(userProviderCredentialsMap);
 		if(config != null) {
-			session.setHost(config.getProperty(SocializeConfig.API_HOST).trim());
+			String host = config.getProperty(SocializeConfig.API_HOST);
+			if(host != null)  {
+				session.setHost(host.trim());
+			}
 		}
 		return session;
 	}

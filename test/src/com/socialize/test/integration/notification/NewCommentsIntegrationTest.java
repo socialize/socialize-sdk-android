@@ -81,8 +81,6 @@ public abstract class NewCommentsIntegrationTest extends NewCommentsNotification
 		
 		assertNotNull(after);
 		assertEquals(true, after.booleanValue());
-		
-		getInstrumentation().waitForIdleSync();
 	}
 
 	@Override
