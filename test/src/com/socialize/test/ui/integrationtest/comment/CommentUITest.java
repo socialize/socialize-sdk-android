@@ -60,79 +60,79 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		sleep(2000);
 	}
 	
-	public void testCommentAddWithoutFacebook() throws Throwable {
-		
-		final String txtComment = "UI Integration Test Comment";
-
-		startWithoutFacebook();
-		
-		// Wait for view to show
-		Thread.sleep(2000);		
-		
-		ListView comments = TestUtils.findViewById(robotium.getCurrentActivity(), LoadingListView.LIST_VIEW_ID);
-		
-		assertNotNull(comments);
-		
-		int count = comments.getCount();
-		
-		final CommentEditField commentEditField = TestUtils.findView(robotium.getCurrentActivity(), CommentEditField.class, 10000);	
-
-		assertNotNull(commentEditField);
-		
-		final CountDownLatch latch = new CountDownLatch(1);
-		
-		// Junit test runs in non-ui thread
-		runTestOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				assertTrue(commentEditField.performClick());
-				latch.countDown();
-			}
-		});
-		
-		assertTrue(latch.await(10, TimeUnit.SECONDS));
-		
-		// Wait for view to show
-		Thread.sleep(2000);		
-		
-		CommentEntryView commentEntryView = TestUtils.findView(robotium.getCurrentActivity(), CommentEntryView.class, 10000);	
-		
-		final SocializeButton btnPost = TestUtils.findViewWithText(commentEntryView, SocializeButton.class, "Post Comment", 10000);
-		
-		robotium.enterText(0, txtComment);
-		
-		final CountDownLatch latch2 = new CountDownLatch(1);
-		
-		// Junit test runs in non-ui thread
-		runTestOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				assertTrue(btnPost.performClick());
-				latch2.countDown();
-			}
-		});
-		
-		assertTrue(latch.await(30, TimeUnit.SECONDS));		
-		
-		// Wait for view to refresh
-		Thread.sleep(2000);	
+//	public void testCommentAddWithoutFacebook() throws Throwable {
+//		
+//		final String txtComment = "UI Integration Test Comment";
+//
+//		startWithoutFacebook();
+//		
+//		// Wait for view to show
+//		Thread.sleep(2000);		
+//		
+//		ListView comments = TestUtils.findViewById(robotium.getCurrentActivity(), LoadingListView.LIST_VIEW_ID);
+//		
+//		assertNotNull(comments);
+//		
+//		int count = comments.getCount();
+//		
+//		final CommentEditField commentEditField = TestUtils.findView(robotium.getCurrentActivity(), CommentEditField.class, 10000);	
+//
+//		assertNotNull(commentEditField);
+//		
+//		final CountDownLatch latch = new CountDownLatch(1);
+//		
+//		// Junit test runs in non-ui thread
+//		runTestOnUiThread(new Runnable() {
+//			@Override
+//			public void run() {
+//				assertTrue(commentEditField.performClick());
+//				latch.countDown();
+//			}
+//		});
+//		
+//		assertTrue(latch.await(10, TimeUnit.SECONDS));
+//		
+//		// Wait for view to show
+//		Thread.sleep(2000);		
+//		
+//		CommentEntryView commentEntryView = TestUtils.findView(robotium.getCurrentActivity(), CommentEntryView.class, 10000);	
+//		
+//		final SocializeButton btnPost = TestUtils.findViewWithText(commentEntryView, SocializeButton.class, "Post Comment", 10000);
+//		
+//		robotium.enterText(0, txtComment);
+//		
+//		final CountDownLatch latch2 = new CountDownLatch(1);
+//		
+//		// Junit test runs in non-ui thread
+//		runTestOnUiThread(new Runnable() {
+//			@Override
+//			public void run() {
+//				assertTrue(btnPost.performClick());
+//				latch2.countDown();
+//			}
+//		});
+//		
+//		assertTrue(latch.await(30, TimeUnit.SECONDS));		
+//		
+//		// Wait for view to refresh
+//		Thread.sleep(2000);	
+//	
+//		assertNotNull(comments);
+//		assertEquals( count+1, comments.getCount());
+//		
+//		Comment item = (Comment) comments.getItemAtPosition(0);
+//		
+//		assertNotNull(item);
+//		
+//		String comment = item.getText();
+//		assertEquals(txtComment, comment);
+//		
+//	}
 	
-		assertNotNull(comments);
-		assertEquals( count+1, comments.getCount());
-		
-		Comment item = (Comment) comments.getItemAtPosition(0);
-		
-		assertNotNull(item);
-		
-		String comment = item.getText();
-		assertEquals(txtComment, comment);
-		
-	}
-	
-	public void testNotificationSubscribe() throws Throwable {
-		doSubscribeUnsubscribeTest(false, "Subscribe Successful", "We will notify you when someone posts a comment to this discussion.");
-	}
-	
+//	public void testNotificationSubscribe() throws Throwable {
+//		doSubscribeUnsubscribeTest(false, "Subscribe Successful", "We will notify you when someone posts a comment to this discussion.");
+//	}
+//	
 	public void testNotificationUnSubscribe() throws Throwable {
 		doSubscribeUnsubscribeTest(true, "Unsubscribe Successful", "You will no longer receive notifications for updates to this discussion.");
 	}
@@ -270,58 +270,55 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		assertEquals(dialogBody, bodyAfter);
 	}	
 	
-	public void testCommentListAndView() {
-		
-		int pageSize = 20;
-		
-		TestUtils.setUpActivityMonitor(CommentDetailActivity.class);
-		
-		Socialize.getSocialize().getConfig().setProperty("comment.page.size", String.valueOf(pageSize));
-		
-		startWithoutFacebook();
-		
-		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(LoadingListView.LIST_VIEW_ID);
-		
-		assertNotNull(comments);
-		assertTrue("Unexepected number of comments.  Expected >= " +
-				pageSize +
-				" but found " +
-				comments.getCount() +
-				"", comments.getCount() >= pageSize);
-		
-		// Click on the first comment in list. 
-		robotium.clickInList(0);
-		
-		TestUtils.waitForActivity(10000);
-		
-//		robotium.waitForActivity("CommentDetailActivity");
-		
-		// Make sure we have user name, comment, image and location
-		TextView userDisplayName = robotium.getText(0);
-		TextView comment = robotium.getText(1);
-		TextView date_location = robotium.getText(2);
-		ImageView userProfilePic = robotium.getImage(0);
-		
-		assertNotNull(userDisplayName);
-		assertNotNull(comment);
-		assertNotNull(userProfilePic);
-		assertNotNull(date_location);
-		
-		String name = userDisplayName.getText().toString();
-		String commentText = userDisplayName.getText().toString();
-		String location = date_location.getText().toString();
-		
-		Drawable drawable = userProfilePic.getDrawable();
-		
-		assertNotNull(name);
-		assertTrue(name.trim().length() > 0);
-		
-		assertNotNull(commentText);
-		assertTrue(commentText.trim().length() > 0);
-		
-		assertNotNull(location);
-		assertTrue(location.trim().length() > 0);
-		
-		assertNotNull(drawable);
-	}
+//	public void testCommentListAndView() {
+//		
+//		int pageSize = 20;
+//		
+//		TestUtils.setUpActivityMonitor(CommentDetailActivity.class);
+//		
+//		Socialize.getSocialize().getConfig().setProperty("comment.page.size", String.valueOf(pageSize));
+//		
+//		startWithoutFacebook();
+//		
+//		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(LoadingListView.LIST_VIEW_ID);
+//		
+//		assertNotNull(comments);
+//		assertTrue("Unexpected number of comments.  Expected >= " +
+//				pageSize +
+//				" but found " +
+//				comments.getCount(), comments.getCount() >= pageSize);
+//		
+//		// Click on the first comment in list. 
+//		robotium.clickInList(0);
+//		
+//		TestUtils.waitForActivity(10000);
+//		
+//		// Make sure we have user name, comment, image and location
+//		TextView userDisplayName = robotium.getText(0);
+//		TextView comment = robotium.getText(1);
+//		TextView date_location = robotium.getText(2);
+//		ImageView userProfilePic = robotium.getImage(0);
+//		
+//		assertNotNull(userDisplayName);
+//		assertNotNull(comment);
+//		assertNotNull(userProfilePic);
+//		assertNotNull(date_location);
+//		
+//		String name = userDisplayName.getText().toString();
+//		String commentText = userDisplayName.getText().toString();
+//		String location = date_location.getText().toString();
+//		
+//		Drawable drawable = userProfilePic.getDrawable();
+//		
+//		assertNotNull(name);
+//		assertTrue(name.trim().length() > 0);
+//		
+//		assertNotNull(commentText);
+//		assertTrue(commentText.trim().length() > 0);
+//		
+//		assertNotNull(location);
+//		assertTrue(location.trim().length() > 0);
+//		
+//		assertNotNull(drawable);
+//	}
 }

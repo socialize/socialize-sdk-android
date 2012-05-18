@@ -138,6 +138,7 @@ public class TestUtils {
 		holder = new ResultHolder();
 		holder.setUp();
 		instrumentation = testCase.getInstrumentation();
+		Socialize.getSocialize().clearSessionCache(test.getActivity());
 		Socialize.getSocialize().destroy(true);
 		SocializeAccess.clearBeanOverrides();
 		SocializeIOC.clearStubs();

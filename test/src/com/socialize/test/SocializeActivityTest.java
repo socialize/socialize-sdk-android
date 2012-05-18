@@ -48,6 +48,7 @@ public abstract class SocializeActivityTest extends ActivityInstrumentationTestC
 	protected void tearDown() throws Exception {
 		holder.clear();
 		super.tearDown();
+		Socialize.getSocialize().clearSessionCache(getContext());
 		Socialize.getSocialize().destroy(true);
 		SocializeIOC.clearStubs();
 	}

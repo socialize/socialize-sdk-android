@@ -157,16 +157,16 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 				
 				String loadedKey = loaded.getConsumerKey();
 				String loadedSecret = loaded.getConsumerSecret();
-				String loadedHost = loaded.getHost();
+//				String loadedHost = loaded.getHost();
 				
-				String host = config.getProperty(SocializeConfig.API_HOST);
+//				String host = config.getProperty(SocializeConfig.API_HOST);
 				
 				if(loadedKey != null && 
 						loadedKey.equals(key) &&
 						loadedSecret != null && 
-						loadedSecret.equals(secret) &&
-						loadedHost != null && 
-						loadedHost.equals(host)) {
+						loadedSecret.equals(secret)) {
+//						loadedHost != null && 
+//						loadedHost.equals(host)) {
 					
 					return loaded;
 				}
@@ -678,8 +678,8 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	private final String prepareEndpoint(String host, String endpoint, boolean secure) {
 		endpoint = endpoint.trim();
 		
-		if(host == null) {
-			logger.warn("The session did not have an endpoint configured, using the config");
+		if(StringUtils.isEmpty(host)) {
+			logger.warn("The session did not have a host configured, using the config");
 			host = config.getProperty(SocializeConfig.API_HOST);
 		}
 		
@@ -704,7 +704,6 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 			}
 				
 			endpoint = host + endpoint;
-			
 		}
 		else {
 			logger.error("Could not locate host property in session or config!");

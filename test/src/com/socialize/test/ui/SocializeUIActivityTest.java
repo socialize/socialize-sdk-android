@@ -37,7 +37,9 @@ public abstract class SocializeUIActivityTest extends ActivityInstrumentationTes
 	@Override
 	protected void setUp() throws Exception {
 		holder.setUp();
+		Socialize.getSocialize().clearSessionCache(getContext());
 		Socialize.getSocialize().destroy(true);
+		SocializeIOC.clearStubs();
 		super.setUp();
 	}
 	

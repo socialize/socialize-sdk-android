@@ -384,7 +384,11 @@ public class Container {
 		if(proxies != null) {
 			proxies.clear();
 			proxies = null;
-		}		
+		}	
+		
+		staticProxies.clear();
+		staticStubs.clear();
+		staticProxiesRemoved.clear();
 		
 		destroyed = true;
 	}

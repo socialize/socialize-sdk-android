@@ -60,12 +60,12 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
+		Socialize.getSocialize().clearSessionCache(getContext());
 		Socialize.getSocialize().destroy(true);
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
-		Socialize.getSocialize().destroy(true);
 		super.tearDown();
 	}
 	
