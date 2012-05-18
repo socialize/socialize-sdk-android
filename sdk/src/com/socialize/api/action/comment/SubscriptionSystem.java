@@ -34,7 +34,7 @@ public interface SubscriptionSystem {
 	
 	public static final String ENDPOINT = "/user/subscription/";
 
-	public void getSubscription(SocializeSession session, Entity entity, SubscriptionListener listener);
+	public void getSubscription(SocializeSession session, Entity entity, NotificationType type, SubscriptionListener listener);
 	
 	public void listSubscriptions(SocializeSession session, int startIndex, int endIndex, SubscriptionListener listener);
 	

@@ -42,7 +42,7 @@ public class SocializeSubscriptionSystem extends SocializeApi<Subscription, Soci
 	}
 
 	@Override
-	public void getSubscription(SocializeSession session, Entity entity, SubscriptionListener listener) {
+	public void getSubscription(SocializeSession session, Entity entity, NotificationType type, SubscriptionListener listener) {
 		getByEntityAsync(session, ENDPOINT, entity.getKey(), listener);
 	}
 

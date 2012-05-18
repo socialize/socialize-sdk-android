@@ -19,14 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo.implementations.view;
+package com.socialize.demo.implementations.location;
 
-import android.app.ListActivity;
-import android.content.Intent;
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.TextView;
+import com.socialize.LocationUtils;
+import com.socialize.demo.DemoActivity;
 import com.socialize.demo.R;
 
 
@@ -34,25 +38,41 @@ import com.socialize.demo.R;
  * @author Jason Polites
  *
  */
-public class ViewActivity extends ListActivity {
-	final String[] values = new String[] { "Add View", "Get Views By User"};//, "Get Views By Entity"};
-	final Class<?>[] activities = new Class<?>[] { AddViewActivity.class, GetViewsByUserActivity.class };//, GetViewsByEntityActivity.class};
-	
+public class LocationActivity extends DemoActivity {
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.demo_list);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
-		setListAdapter(adapter);
-	}
-	
 
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Class<?> activityClass = activities[position];
-		if(activityClass != null) {
-			Intent intent = new Intent(this, activityClass);
-			startActivity(intent);
+		setContentView(R.layout.location);
+
+		Location lastKnownLocation = LocationUtils.getLastKnownLocation(this);
+		TextView text = (TextView) findViewById(R.id.txtLocation);
+		Address geoCoded = null;
+		if(lastKnownLocation != null) {
+			try {
+				geoCoded = geoCode(lastKnownLocation);
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		if(geoCoded != null) {
+			text.setText(geoCoded.getLocality());
+		}
+		else {
+			text.setText("Unknown");
 		}
 	}
+
+
+	public Address geoCode(Location location) throws IOException  {
+		Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+		List<Address> fromLocation = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+		if(fromLocation != null && fromLocation.size() > 0) {
+			return fromLocation.get(0);
+		}
+		return null;
+	}	
 }

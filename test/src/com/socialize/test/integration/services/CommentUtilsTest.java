@@ -26,6 +26,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import com.socialize.CommentUtils;
 import com.socialize.Socialize;
+import com.socialize.SubscriptionUtils;
 import com.socialize.UserUtils;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
@@ -38,6 +39,7 @@ import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
+import com.socialize.notifications.NotificationType;
 import com.socialize.test.SocializeActivityTest;
 
 
@@ -343,7 +345,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 	public void test_subscribe_unsubscribe() throws Exception {
 		final Entity e = Entity.newInstance("test_unsubscribe" + Math.random(),"test_unsubscribe");
 		final CountDownLatch latch = new CountDownLatch(1);
-		CommentUtils.subscribe(getActivity(), e, new SubscriptionResultListener() {
+		SubscriptionUtils.subscribe(getActivity(), e, NotificationType.NEW_COMMENTS, new SubscriptionResultListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -367,7 +369,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		assertTrue(subscription.isSubscribed());
 		
 		final CountDownLatch latch2 = new CountDownLatch(1);
-		CommentUtils.isSubscribed(getActivity(), e, new SubscriptionGetListener() {
+		SubscriptionUtils.isSubscribed(getActivity(), e, NotificationType.NEW_COMMENTS, new SubscriptionGetListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -391,7 +393,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		assertTrue(subscription.isSubscribed());			
 		
 		final CountDownLatch latch3 = new CountDownLatch(1);
-		CommentUtils.unsubscribe(getActivity(), e, new SubscriptionResultListener() {
+		SubscriptionUtils.unsubscribe(getActivity(), e, NotificationType.NEW_COMMENTS, new SubscriptionResultListener() {
 			
 			@Override
 			public void onError(SocializeException error) {

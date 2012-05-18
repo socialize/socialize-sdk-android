@@ -58,14 +58,29 @@
         <!-- View -->
         <activity android:name=".implementations.view.ViewActivity"/>
         <activity android:name=".implementations.view.AddViewActivity"/>
-        <activity android:name=".implementations.view.GetViewsByEntityActivity"/>
         <activity android:name=".implementations.view.GetViewsByUserActivity"/> 
         
         <!-- Like -->
         <activity android:name=".implementations.like.LikeActivity"/>
         <activity android:name=".implementations.like.LikeButtonsActivity"/>
         <activity android:name=".implementations.like.GetLikesByEntityActivity"/>
-        <activity android:name=".implementations.like.GetLikesByUserActivity"/>         
+        <activity android:name=".implementations.like.GetLikesByUserActivity"/>      
+        
+        <!-- ActionBar -->
+        <activity android:name=".implementations.actionbar.ActionBarActivity"/>
+        
+        <!-- User Activity -->
+        <activity android:name=".implementations.action.ActionActivity"/>
+        <activity android:name=".implementations.action.GetActionsByEntityActivity"/>
+        <activity android:name=".implementations.action.GetActionsByUserActivity"/>    
+        <activity android:name=".implementations.action.GetActionsByUserEntityActivity"/>
+        
+        <!--  Subscription -->
+        <activity android:name=".implementations.subscribe.SubscriptionActivity"/>
+        <activity android:name=".implementations.subscribe.SubscriptionButtonsActivity"/>
+        
+        <!-- Location -->
+        <activity android:name=".implementations.location.LocationActivity"/>        
         
        	<!-- Base Activities Required by Socialize UI -->
        	<activity android:name="com.socialize.ui.comment.CommentActivity"/>

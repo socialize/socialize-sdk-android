@@ -141,7 +141,7 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		
 		final MockSubscriptionSystem mockSystem = new MockSubscriptionSystem() {
 			@Override
-			public void getSubscription(SocializeSession session, Entity entity, SubscriptionListener listener) {
+			public void getSubscription(SocializeSession session, Entity entity, NotificationType type, SubscriptionListener listener) {
 				Subscription sub = new Subscription();
 				sub.setSubscribed(isSubscribed);
 				listener.onGet(sub);

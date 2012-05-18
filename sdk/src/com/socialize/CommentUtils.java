@@ -24,14 +24,11 @@ package com.socialize;
 import java.lang.reflect.Proxy;
 import android.app.Activity;
 import com.socialize.api.action.comment.CommentUtilsProxy;
-import com.socialize.api.action.comment.SubscriptionUtilsProxy;
 import com.socialize.entity.Entity;
 import com.socialize.entity.User;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
-import com.socialize.listener.subscription.SubscriptionGetListener;
-import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.networks.ShareOptions;
 import com.socialize.ui.comment.OnCommentViewActionListener;
 
@@ -42,18 +39,12 @@ import com.socialize.ui.comment.OnCommentViewActionListener;
 public class CommentUtils {
 	
 	static CommentUtilsProxy commentUtils;
-	static SubscriptionUtilsProxy subscriptionUtils;
 	
 	static {
 		commentUtils = (CommentUtilsProxy) Proxy.newProxyInstance(
 				CommentUtilsProxy.class.getClassLoader(),
 				new Class[]{CommentUtilsProxy.class},
 				new SocializeActionProxy("commentUtils"));	// Bean name
-		
-		subscriptionUtils = (SubscriptionUtilsProxy) Proxy.newProxyInstance(
-				SubscriptionUtilsProxy.class.getClassLoader(),
-				new Class[]{SubscriptionUtilsProxy.class},
-				new SocializeActionProxy("subscriptionUtils"));	// Bean name		
 	}
 	
 
@@ -124,36 +115,6 @@ public class CommentUtils {
 	 */
 	public static void getCommentsByEntity (Activity context, String entityKey, int start, int end, CommentListListener listener) {
 		commentUtils.getCommentsByEntity(context, entityKey, start, end, listener);
-	}
-	
-	/**
-	 * Subscribes the current user to notifications for new comments on this entity.
-	 * @param context The current context.
-	 * @param e The entity.
-	 * @param listener A listener to handle the result.
-	 */
-	public static void subscribe (Activity context, Entity e, SubscriptionResultListener listener) {
-		subscriptionUtils.subscribe(context, e, listener);
-	}
-	
-	/**
-	 * Un-Subscribes the current user from notifications for new comments on this entity.
-	 * @param context The current context.
-	 * @param e The entity.
-	 * @param listener A listener to handle the result.
-	 */
-	public static void unsubscribe (Activity context, Entity e, SubscriptionResultListener listener) {
-		subscriptionUtils.unsubscribe(context, e, listener);
-	}
-	
-	/**
-	 * Determines if the current user is subscribed to notifications on new comments for the given entity.
-	 * @param context The current context.
-	 * @param e The entity.
-	 * @param listener A listener to handle the result.
-	 */
-	public static void isSubscribed (Activity context, Entity e, SubscriptionGetListener listener) {
-		subscriptionUtils.isSubscribed(context, e, listener);
 	}
 	
 	/**

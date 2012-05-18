@@ -1177,7 +1177,7 @@ public class SocializeServiceImpl implements SocializeService {
 	@Override
 	public void getSubscription(Entity entity, SubscriptionGetListener subscriptionGetListener) {
 		if(assertAuthenticated(subscriptionGetListener)) {
-			subscriptionSystem.getSubscription(session, entity, subscriptionGetListener);
+			subscriptionSystem.getSubscription(session, entity, NotificationType.NEW_COMMENTS, subscriptionGetListener);
 		}
 	}
 

@@ -144,7 +144,7 @@ public class SubscriptionApiTest extends SocializeUnitTest {
 			}
 		};
 		
-		api.getSubscription(session, Entity.newInstance(entityKey, null), listener);
+		api.getSubscription(session, Entity.newInstance(entityKey, null), NotificationType.NEW_COMMENTS, listener);
 		
 		String strId = getNextResult();
 		

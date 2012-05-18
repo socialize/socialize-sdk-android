@@ -19,50 +19,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo.implementations.view;
+package com.socialize.demo.implementations.actionbar;
 
-import java.util.List;
-import com.socialize.ViewUtils;
-import com.socialize.demo.SDKDemoActivity;
-import com.socialize.entity.View;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.view.ViewListListener;
+import android.os.Bundle;
+import android.view.View;
+import com.socialize.ActionBarUtils;
+import com.socialize.demo.DemoActivity;
+import com.socialize.demo.R;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class GetViewsByEntityActivity extends SDKDemoActivity {
+public class ActionBarActivity extends DemoActivity {
 
-	/* (non-Javadoc)
-	 * @see com.socialize.demo.DemoActivity#executeDemo()
-	 */
 	@Override
-	public void executeDemo(String text) {
-		ViewUtils.getViewsByEntity(this, entity, 0, 50, new ViewListListener() {
-			@Override
-			public void onList(List<View> items, int totalSize) {
-				handleSocializeResult(items);
-			}
-
-			@Override
-			public void onError(SocializeException error) {
-				handleError(error);
-			}
-		});
-	}
-	
-	@Override
-	public boolean isTextEntryRequired() {
-		return false;
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		View actionBar = ActionBarUtils.showActionBar(this, R.layout.actionbar, entity);
+		setContentView(actionBar);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.demo.DemoActivity#getButtonText()
-	 */
-	@Override
-	public String getButtonText() {
-		return "List 50 Views for Current Entity";
-	}
 }

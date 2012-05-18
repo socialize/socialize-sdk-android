@@ -20,7 +20,7 @@ public class MockSubscriptionSystem implements SubscriptionSystem {
 	}
 	
 	@Override
-	public void getSubscription(SocializeSession session, Entity entity, SubscriptionListener listener) {
+	public void getSubscription(SocializeSession session, Entity entity, NotificationType type, SubscriptionListener listener) {
 		if(listener != null) listener.onGet(subscription);
 	}
 

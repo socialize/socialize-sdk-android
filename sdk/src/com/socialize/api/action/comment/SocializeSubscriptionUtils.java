@@ -38,18 +38,18 @@ public class SocializeSubscriptionUtils extends SocializeActionUtilsBase impleme
 	private SubscriptionSystem subscriptionSystem;
 
 	@Override
-	public void subscribe(Activity context, Entity e, SubscriptionResultListener listener) {
-		subscriptionSystem.addSubscription(getSocialize().getSession(), e, NotificationType.NEW_COMMENTS, listener);
+	public void subscribe(Activity context, Entity e, NotificationType type, SubscriptionResultListener listener) {
+		subscriptionSystem.addSubscription(getSocialize().getSession(), e, type, listener);
 	}
 
 	@Override
-	public void unsubscribe(Activity context, Entity e, SubscriptionResultListener listener) {
-		subscriptionSystem.removeSubscription(getSocialize().getSession(), e, NotificationType.NEW_COMMENTS, listener);
+	public void unsubscribe(Activity context, Entity e, NotificationType type, SubscriptionResultListener listener) {
+		subscriptionSystem.removeSubscription(getSocialize().getSession(), e, type, listener);
 	}
 	
 	@Override
-	public void isSubscribed(Activity context, Entity e, SubscriptionGetListener listener) {
-		subscriptionSystem.getSubscription(getSocialize().getSession(), e, listener);
+	public void isSubscribed(Activity context, Entity e, NotificationType type, SubscriptionGetListener listener) {
+		subscriptionSystem.getSubscription(getSocialize().getSession(), e, type, listener);
 	}
 
 	public void setSubscriptionSystem(SubscriptionSystem subscriptionSystem) {

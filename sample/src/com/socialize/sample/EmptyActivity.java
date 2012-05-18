@@ -65,7 +65,10 @@ public class EmptyActivity extends Activity implements DialogRegister {
 	protected void onDestroy() {
 		if(dialogs != null) {
 			for (Dialog dialog : dialogs) {
-				dialog.dismiss();
+				try {
+					dialog.dismiss();
+				}
+				catch (Throwable ignore) {}
 			}
 			dialogs.clear();
 		}

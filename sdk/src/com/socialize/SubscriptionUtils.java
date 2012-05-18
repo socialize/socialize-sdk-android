@@ -19,9 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action.comment;
+package com.socialize;
 
+import java.lang.reflect.Proxy;
 import android.app.Activity;
+import com.socialize.api.action.comment.SubscriptionUtilsProxy;
 import com.socialize.entity.Entity;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
@@ -32,14 +34,25 @@ import com.socialize.notifications.NotificationType;
  * @author Jason Polites
  *
  */
-public interface SubscriptionUtilsProxy {
+public class SubscriptionUtils {
+	static SubscriptionUtilsProxy subscriptionUtils;
+	static {
+		subscriptionUtils = (SubscriptionUtilsProxy) Proxy.newProxyInstance(
+				SubscriptionUtilsProxy.class.getClassLoader(),
+				new Class[]{SubscriptionUtilsProxy.class},
+				new SocializeActionProxy("subscriptionUtils"));	// Bean name		
+	}	
+	
+
 	/**
 	 * Subscribes the current user to notifications for new comments on this entity.
 	 * @param context The current context.
 	 * @param e The entity.
 	 * @param listener A listener to handle the result.
 	 */
-	public void subscribe (Activity context, Entity e, NotificationType type, SubscriptionResultListener listener);
+	public static void subscribe (Activity context, Entity e, NotificationType type, SubscriptionResultListener listener) {
+		subscriptionUtils.subscribe(context, e, type, listener);
+	}
 	
 	/**
 	 * Un-Subscribes the current user from notifications for new comments on this entity.
@@ -47,7 +60,9 @@ public interface SubscriptionUtilsProxy {
 	 * @param e The entity.
 	 * @param listener A listener to handle the result.
 	 */
-	public void unsubscribe (Activity context, Entity e, NotificationType type, SubscriptionResultListener listener);
+	public static void unsubscribe (Activity context, Entity e, NotificationType type, SubscriptionResultListener listener) {
+		subscriptionUtils.unsubscribe(context, e, type, listener);
+	}
 	
 	/**
 	 * Determines if the current user is subscribed to notifications on new comments for the given entity.
@@ -55,5 +70,8 @@ public interface SubscriptionUtilsProxy {
 	 * @param e The entity.
 	 * @param listener A listener to handle the result.
 	 */
-	public void isSubscribed (Activity context, Entity e, NotificationType type, SubscriptionGetListener listener);
+	public static void isSubscribed (Activity context, Entity e, NotificationType type, SubscriptionGetListener listener) {
+		subscriptionUtils.isSubscribed(context, e, type, listener);
+	}
+		
 }

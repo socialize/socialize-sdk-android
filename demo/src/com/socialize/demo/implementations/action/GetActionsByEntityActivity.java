@@ -19,40 +19,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo.implementations.view;
+package com.socialize.demo.implementations.action;
 
-import android.app.ListActivity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import com.socialize.demo.R;
+import com.socialize.ActionUtils;
+import com.socialize.demo.SDKDemoActivity;
+import com.socialize.entity.ListResult;
+import com.socialize.entity.SocializeAction;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.activity.ActionListListener;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class ViewActivity extends ListActivity {
-	final String[] values = new String[] { "Add View", "Get Views By User"};//, "Get Views By Entity"};
-	final Class<?>[] activities = new Class<?>[] { AddViewActivity.class, GetViewsByUserActivity.class };//, GetViewsByEntityActivity.class};
-	
+public class GetActionsByEntityActivity extends SDKDemoActivity {
+
+	/* (non-Javadoc)
+	 * @see com.socialize.demo.DemoActivity#executeDemo()
+	 */
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.demo_list);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
-		setListAdapter(adapter);
+	public void executeDemo(String text) {
+		
+		ActionUtils.getActionsByEntity(this, entity.getKey(), 0, 50, new ActionListListener() {
+			
+			@Override
+			public void onList(ListResult<SocializeAction> result) {
+				handleSocializeResult(result);
+			}
+			
+			@Override
+			public void onError(SocializeException error) {
+				handleError(error);
+			}
+		});
 	}
 	
-
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Class<?> activityClass = activities[position];
-		if(activityClass != null) {
-			Intent intent = new Intent(this, activityClass);
-			startActivity(intent);
-		}
+	public boolean isTextEntryRequired() {
+		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.demo.DemoActivity#getButtonText()
+	 */
+	@Override
+	public String getButtonText() {
+		return "List 50 Actions for Current Entity";
 	}
 }

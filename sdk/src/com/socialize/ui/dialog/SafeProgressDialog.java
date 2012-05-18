@@ -68,7 +68,7 @@ public class SafeProgressDialog extends ProgressDialog {
 		try {
 			super.show();
 		}
-		catch (Exception ignore) {
+		catch (Throwable ignore) {
 			ignore.printStackTrace();
 		}
 	}

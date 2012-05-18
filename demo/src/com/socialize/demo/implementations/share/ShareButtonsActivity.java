@@ -27,6 +27,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -38,8 +39,9 @@ import com.socialize.demo.DemoActivity;
 import com.socialize.demo.DemoUtils;
 import com.socialize.demo.R;
 import com.socialize.networks.PostData;
-import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.facebook.FacebookUtils;
+import com.socialize.networks.twitter.TwitterUtils;
 import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.ui.share.DialogFlowController;
 
@@ -67,10 +69,7 @@ public class ShareButtonsActivity extends DemoActivity {
 				
 				final SafeProgressDialog progress = SafeProgressDialog.show(v.getContext());
 				
-				ShareOptions options = new ShareOptions();
-				options.setShareTo(SocialNetwork.TWITTER);
-				
-				ShareUtils.shareViaSocialNetworks(ShareButtonsActivity.this, entity, "Test Message", options, new SocialNetworkShareListener() {
+				TwitterUtils.tweetEntity(ShareButtonsActivity.this, entity, "Test Message", new SocialNetworkShareListener() {
 
 					@Override
 					public void onPostError(Activity context, SocialNetwork network, Exception error) {
@@ -96,10 +95,7 @@ public class ShareButtonsActivity extends DemoActivity {
 				
 				final SafeProgressDialog progress = SafeProgressDialog.show(v.getContext());
 				
-				ShareOptions options = new ShareOptions();
-				options.setShareTo(SocialNetwork.FACEBOOK);
-				
-				ShareUtils.shareViaSocialNetworks(ShareButtonsActivity.this, entity, "Test Message", options, new SocialNetworkShareListener() {
+				FacebookUtils.postEntity(ShareButtonsActivity.this, entity, "Test Message", new SocialNetworkShareListener() {
 
 					@Override
 					public void onPostError(Activity context, SocialNetwork network, Exception error) {
@@ -170,10 +166,12 @@ public class ShareButtonsActivity extends DemoActivity {
 	public void showShareCommentDialog(Context context, final DialogFlowController controller) {
 		
 		final EditText text = new EditText(context);
+		text.setMinLines(5);
+		text.setGravity(Gravity.TOP);
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle("Click to share");
-		builder.setMessage("Click to share");
+		builder.setTitle("Share");
+		builder.setMessage("Enter a comment (Optional)");
 		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

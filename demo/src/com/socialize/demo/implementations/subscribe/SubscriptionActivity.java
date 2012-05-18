@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo;
+package com.socialize.demo.implementations.subscribe;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -27,23 +27,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import com.socialize.demo.implementations.action.ActionActivity;
-import com.socialize.demo.implementations.actionbar.ActionBarActivity;
-import com.socialize.demo.implementations.comment.CommentActivity;
-import com.socialize.demo.implementations.entity.EntityActivity;
-import com.socialize.demo.implementations.like.LikeActivity;
-import com.socialize.demo.implementations.location.LocationActivity;
-import com.socialize.demo.implementations.share.ShareActivity;
-import com.socialize.demo.implementations.subscribe.SubscriptionActivity;
-import com.socialize.demo.implementations.view.ViewActivity;
+import com.socialize.demo.R;
+
 
 /**
  * @author Jason Polites
+ *
  */
-public class DemoList extends ListActivity {
-
-	final String[] values = new String[] { "Action Bar", "Sharing", "Comments", "Likes", "Views", "Entities", "Actions (User Activity)", "Subscriptions", "Location"};
-	final Class<?>[] activities = new Class<?>[] { ActionBarActivity.class, ShareActivity.class, CommentActivity.class, LikeActivity.class, ViewActivity.class, EntityActivity.class, ActionActivity.class, SubscriptionActivity.class, LocationActivity.class};
+public class SubscriptionActivity extends ListActivity {
+	final String[] values = new String[] { "Subscription Buttons & UI"};
+	final Class<?>[] activities = new Class<?>[] { SubscriptionButtonsActivity.class };
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +45,7 @@ public class DemoList extends ListActivity {
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
 		setListAdapter(adapter);
 	}
+	
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {

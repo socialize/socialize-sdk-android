@@ -79,15 +79,15 @@ public class ViewUtils {
 		proxy.getViewsByUser(context, user, start, end, listener);
 	}
 	
-	/**
-	 * Lists all views for the given entity.
-	 * @param context The current context.
-	 * @param entity The entity for whom views will be queried.
-	 * @param start The first index (for pagination), starting at 0
-	 * @param end The last index (for pagination)
-	 * @param listener A listener to handle the result.
-	 */
-	public static void getViewsByEntity (Activity context, Entity entity, int start, int end, ViewListListener listener) {
-		proxy.getViewsByEntity(context, entity, start, end, listener);
-	}	
+//	/**
+//	 * Lists all views for the given entity.
+//	 * @param context The current context.
+//	 * @param entity The entity for whom views will be queried.
+//	 * @param start The first index (for pagination), starting at 0
+//	 * @param end The last index (for pagination)
+//	 * @param listener A listener to handle the result.
+//	 */
+//	public static void getViewsByEntity (Activity context, Entity entity, int start, int end, ViewListListener listener) {
+//		proxy.getViewsByEntity(context, entity, start, end, listener);
+//	}	
 }
