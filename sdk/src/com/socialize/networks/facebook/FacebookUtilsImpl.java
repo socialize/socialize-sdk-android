@@ -130,7 +130,7 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	}
 
 	@Override
-	public void post(final Activity context, final Entity entity, final String text, final SocialNetworkListener listener) {
+	public void postEntity(final Activity context, final Entity entity, final String text, final SocialNetworkListener listener) {
 		shareSystem.addShare(context, getSocialize().getSession(), entity, ShareType.FACEBOOK, new ShareAddListener() {
 			@Override
 			public void onCreate(Share share) {
@@ -141,7 +141,7 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 			@Override
 			public void onError(SocializeException error) {
 				if(listener != null) {
-					listener.onError(context, SocialNetwork.FACEBOOK, error);
+					listener.onPostError(context, SocialNetwork.FACEBOOK, error);
 				}
 			}
 		}, SocialNetwork.FACEBOOK);

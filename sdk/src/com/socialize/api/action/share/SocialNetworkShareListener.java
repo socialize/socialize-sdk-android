@@ -22,6 +22,8 @@
 package com.socialize.api.action.share;
 
 import android.app.Activity;
+import com.socialize.entity.Share;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
@@ -32,8 +34,16 @@ import com.socialize.networks.SocialNetworkListener;
  * @author Jason Polites
  */
 public abstract class SocialNetworkShareListener extends ShareAddListener implements SocialNetworkListener {
+	
+	@Override
+	public void onCreate(Share result) {}
 
-	public void onError(Activity context, SocialNetwork network, Exception error) {}
+	@Override
+	public void onError(SocializeException error) {}
+
+	public void onPostError(Activity context, SocialNetwork network, Exception error) {
+		onError(SocializeException.wrap(error));
+	}
 
 	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {}
 

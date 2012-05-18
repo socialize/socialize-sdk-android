@@ -50,7 +50,7 @@ public abstract class CommentAddListener extends CommentListener implements Soci
 	public final void onDelete() {}
 
 	@Override
-	public void onError(Activity context, SocialNetwork network, Exception error) {
+	public void onPostError(Activity context, SocialNetwork network, Exception error) {
 		onError(SocializeException.wrap(error));
 	}
 

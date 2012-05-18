@@ -46,6 +46,7 @@ public interface ShareUtilsProxy {
 	public void shareViaEmail(Activity context, Entity entity, ShareAddListener listener);
 	public void shareViaOther(Activity context, Entity entity, ShareAddListener listener);
 	public void shareViaSMS(Activity context, Entity entity, ShareAddListener listener);
+	public void shareViaSocialNetworks(Activity context, Entity entity, String text, ShareOptions shareOptions, SocialNetworkShareListener listener);
 	public void getShare (Activity context, ShareGetListener listener, long id);
 	public void getShares (Activity context, ShareListListener listener, long...ids);
 	public void getSharesByUser (Activity context, User user, int start, int end, ShareListListener listener);

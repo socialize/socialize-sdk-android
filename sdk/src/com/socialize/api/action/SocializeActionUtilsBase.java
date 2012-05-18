@@ -29,6 +29,7 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.networks.PostData;
+import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.share.ShareHandler;
@@ -42,6 +43,40 @@ import com.socialize.share.ShareHandlers;
 public abstract class SocializeActionUtilsBase {
 	
 	private ShareHandlers shareHandlers;
+	
+	protected boolean isDisplayAuthDialog(ShareOptions options) {
+		
+		if(options == null) {
+			return isDisplayAuthDialog();
+		}
+		
+		boolean authRequired = options.isAuthRequired();
+		boolean authSupported = false;
+		
+		if(authRequired) {
+			SocialNetwork[] all = options.getShareTo();
+			
+			if(all != null) {
+				for (SocialNetwork network : all) {
+					AuthProviderType type = AuthProviderType.valueOf(network);
+					if(getSocialize().isSupported(type)) {
+						authSupported = true;
+						if(getSocialize().isAuthenticated(type)) {
+							authRequired = false;
+							break;
+						}
+					}
+					
+					if(!authRequired) {
+						break;
+					}
+				}
+			}
+		}
+		
+		return (authRequired && authSupported);
+	}
+	
 	
 	protected boolean isDisplayAuthDialog() {
 		
@@ -66,7 +101,7 @@ public abstract class SocializeActionUtilsBase {
 			}
 		}
 		return (authRequired && authSupported);
-	}
+	}	
 	
 	protected boolean isDisplayShareDialog() {
 		
@@ -97,9 +132,9 @@ public abstract class SocializeActionUtilsBase {
 				if(handler != null) {
 					handler.handle(context, action, null, text, new SocialNetworkListener() {
 						@Override
-						public void onError(Activity context, SocialNetwork network, Exception error) {
+						public void onPostError(Activity context, SocialNetwork network, Exception error) {
 							if(listener != null) {
-								listener.onError(context, network, error);
+								listener.onPostError(context, network, error);
 							}
 							
 							if(progress != null) {

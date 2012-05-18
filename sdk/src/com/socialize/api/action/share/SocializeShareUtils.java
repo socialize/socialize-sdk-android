@@ -40,6 +40,9 @@ import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.ui.auth.AuthDialogListener;
+import com.socialize.ui.auth.AuthPanelView;
+import com.socialize.ui.auth.IAuthDialogFactory;
 import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.ui.share.DialogFlowController;
 import com.socialize.ui.share.IShareDialogFactory;
@@ -53,6 +56,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	
 	private ShareSystem shareSystem;
 	private IShareDialogFactory shareDialogFactory;
+	private IAuthDialogFactory authDialogFactory;
 	
 	@Override
 	public ShareOptions getUserShareOptions(Context context) {
@@ -73,6 +77,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 			options.setShareTo(SocialNetwork.TWITTER);
 		}	
 		
+		options.setAuthRequired(socialize.getConfig().isAuthRequired());
 		options.setShareLocation(user.isShareLocation());
 		
 		return options;
@@ -135,6 +140,10 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 		}, options);		
 	}
 	
+	protected void doShare(final Activity context, final Entity entity, final SocialNetworkShareListener socialNetworkListener, final String text, final SocialNetwork... networks) {
+		doShare(null, context, entity, socialNetworkListener, text, networks);
+	}	
+	
 	protected void doShare(final Dialog dialog, final Activity context, final Entity entity, final SocialNetworkShareListener socialNetworkListener, final String text, final SocialNetwork... networks) {
 		final ProgressDialog progress = SafeProgressDialog.show(context);
 		
@@ -152,7 +161,11 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 				}
 				
 				progress.dismiss();
-				dialog.dismiss();
+				
+				if(dialog != null) {
+					dialog.dismiss();
+				}
+				
 			}
 			
 			@Override
@@ -169,7 +182,10 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 				}
 				
 				progress.dismiss();
-				dialog.dismiss();
+				
+				if(dialog != null) {
+					dialog.dismiss();
+				}
 			}
 		}, networks);
 	}
@@ -187,6 +203,48 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	@Override
 	public void shareViaSMS(Activity context, Entity entity, ShareAddListener listener) {
 		getSocialize().share(context, entity, "", ShareType.SMS, listener);
+	}
+
+	@Override
+	public void shareViaSocialNetworks(Activity context, final Entity entity, final String text, final ShareOptions shareOptions, final SocialNetworkShareListener listener) {
+		if(isDisplayAuthDialog(shareOptions)) {
+			
+			authDialogFactory.show(context, new AuthDialogListener() {
+				
+				@Override
+				public void onShow(Dialog dialog, AuthPanelView dialogView) {}
+				
+				@Override
+				public void onCancel(Dialog dialog) {
+					if(listener != null) {
+						listener.onCancel();
+					}
+				}
+				
+				@Override
+				public void onSkipAuth(Activity context, Dialog dialog) {
+					dialog.dismiss();
+					doShare(context, entity, listener, text, shareOptions.getShareTo());
+				}
+
+				@Override
+				public void onError(Activity context, Dialog dialog, Exception error) {
+					dialog.dismiss();
+					if(listener != null) {
+						listener.onError(SocializeException.wrap(error));
+					}
+				}
+
+				@Override
+				public void onAuthenticate(Activity context, Dialog dialog, SocialNetwork network) {
+					dialog.dismiss();
+					doShare(context, entity, listener, text, shareOptions.getShareTo());
+				}
+			});
+		}
+		else {
+			doShare(context, entity, listener, text, shareOptions.getShareTo());
+		}			
 	}
 
 	@Override
@@ -225,5 +283,9 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 
 	public void setShareDialogFactory(IShareDialogFactory shareDialogFactory) {
 		this.shareDialogFactory = shareDialogFactory;
+	}
+	
+	public void setAuthDialogFactory(IAuthDialogFactory authDialogFactory) {
+		this.authDialogFactory = authDialogFactory;
 	}
 }

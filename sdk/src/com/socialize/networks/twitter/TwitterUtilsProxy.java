@@ -56,5 +56,5 @@ public interface TwitterUtilsProxy {
 	@Synchronous
 	public String getTokenSecret(Context context);
 	
-	public void tweet(final Activity context, final Entity entity, final String text, final SocialNetworkListener listener);
+	public void tweetEntity(final Activity context, final Entity entity, final String text, final SocialNetworkListener listener);
 }

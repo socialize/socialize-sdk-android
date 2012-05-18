@@ -61,6 +61,18 @@ public class EmptyActivity extends Activity implements DialogRegister {
 		super.onCreate(savedInstanceState);
 	}
 	
+	@Override
+	protected void onDestroy() {
+		if(dialogs != null) {
+			for (Dialog dialog : dialogs) {
+				dialog.dismiss();
+			}
+			dialogs.clear();
+		}
+		super.onDestroy();
+	}
+
+	
 	public Bundle getSavedInstanceState() {
 		return savedInstanceState;
 	}

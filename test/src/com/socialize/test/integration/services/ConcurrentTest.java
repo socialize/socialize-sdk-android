@@ -32,6 +32,7 @@ import com.socialize.entity.Like;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.test.SocializeActivityTest;
+import com.socialize.test.ui.util.TestUtils;
 
 
 /**
@@ -49,6 +50,8 @@ public class ConcurrentTest extends SocializeActivityTest {
 		Socialize.getSocialize().init(context);
 		Socialize.getSocialize().clearSessionCache(context);
 		Socialize.getSocialize().destroy(true);
+		
+		TestUtils.waitForIdleSync(this, 5000);
 		
 		// Force no auth
 		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
@@ -97,7 +100,7 @@ public class ConcurrentTest extends SocializeActivityTest {
 		});
 		
 		// Wait for threads to finish
-		assertTrue(completeLatch.await(20, TimeUnit.SECONDS));
+		assertTrue(completeLatch.await(30, TimeUnit.SECONDS));
 		
 		Like like0 = getResult(0);
 		Like like1 = getResult(1);

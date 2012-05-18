@@ -149,7 +149,7 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	 * @see com.socialize.networks.twitter.TwitterUtilsProxy#tweet(android.app.Activity, com.socialize.entity.Entity, java.lang.String, com.socialize.networks.SocialNetworkListener)
 	 */
 	@Override
-	public void tweet(final Activity context, Entity entity, String text, final SocialNetworkListener listener) {
+	public void tweetEntity(final Activity context, Entity entity, String text, final SocialNetworkListener listener) {
 		
 		if(listener != null) {
 			listener.onBeforePost(context, SocialNetwork.TWITTER, null);
@@ -167,7 +167,7 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 			@Override
 			public void onError(SocializeException error) {
 				if(listener != null) {
-					listener.onError(context, SocialNetwork.TWITTER, error);
+					listener.onPostError(context, SocialNetwork.TWITTER, error);
 				}
 			}
 		}, SocialNetwork.TWITTER);

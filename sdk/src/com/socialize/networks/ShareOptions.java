@@ -32,6 +32,7 @@ public class ShareOptions {
 	private SocialNetwork[] shareTo;
 	private SocialNetworkListener listener;
 	private boolean selfManaged = false;
+	private boolean authRequired = true;
 	
 	/**
 	 * If true and if available, the user's location is shared.
@@ -92,4 +93,20 @@ public class ShareOptions {
 	public void setSelfManaged(boolean selfManaged) {
 		this.selfManaged = selfManaged;
 	}
+
+	
+	public boolean isAuthRequired() {
+		return authRequired;
+	}
+
+	/**
+	 * Set to false if you DON'T want the authenticate dialog to show when sharing.
+	 * Defaults to socialize.require.auth config property.
+	 * @param requireAuth
+	 */
+	public void setAuthRequired(boolean requireAuth) {
+		this.authRequired = requireAuth;
+	}
+	
+	
 }

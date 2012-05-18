@@ -103,7 +103,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 	public void addComment(final Activity context, final Entity entity, final String text, final ShareOptions shareOptions, final CommentAddListener listener) {
 		final SocializeSession session = getSocialize().getSession();
 		
-		if(isDisplayAuthDialog()) {
+		if(isDisplayAuthDialog(shareOptions)) {
 			
 			authDialogFactory.show(context, new AuthDialogListener() {
 				

@@ -29,7 +29,7 @@ import android.app.Activity;
  */
 public interface SocialNetworkListener {
 	
-	public void onError(Activity context, SocialNetwork network, Exception error);
+	public void onPostError(Activity context, SocialNetwork network, Exception error);
 
 	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData);
 

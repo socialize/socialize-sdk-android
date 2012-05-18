@@ -93,7 +93,7 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 			public void setAppId(Context context, String appId) {}
 			
 			@Override
-			public void post(Activity context, Entity entity, String text, SocialNetworkListener listener) {}
+			public void postEntity(Activity context, Entity entity, String text, SocialNetworkListener listener) {}
 			
 			@Override
 			public void link(Activity context, String token, SocializeAuthListener listener) {}

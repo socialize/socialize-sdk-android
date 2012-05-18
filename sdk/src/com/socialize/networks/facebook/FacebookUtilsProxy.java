@@ -48,5 +48,5 @@ public interface FacebookUtilsProxy {
 	@Synchronous
 	public String getAccessToken(Context context);
 	
-	public void post(Activity context, Entity entity, String text, SocialNetworkListener listener);
+	public void postEntity(Activity context, Entity entity, String text, SocialNetworkListener listener);
 }

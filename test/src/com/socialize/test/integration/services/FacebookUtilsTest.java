@@ -278,10 +278,10 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 		SocializeIOC.registerStub("facebookRunner", mockRunner);
 		SocializeIOC.registerStub("facebookProvider", mockFacebookAuthProvider);
 
-		FacebookUtils.post(getActivity(), entity, "test", new SocialNetworkListener() {
+		FacebookUtils.postEntity(getActivity(), entity, "test", new SocialNetworkListener() {
 			
 			@Override
-			public void onError(Activity context, SocialNetwork network, Exception error) {
+			public void onPostError(Activity context, SocialNetwork network, Exception error) {
 				error.printStackTrace();
 				latch.countDown();
 			}

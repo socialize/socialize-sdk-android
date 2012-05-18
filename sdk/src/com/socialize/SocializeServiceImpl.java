@@ -873,7 +873,7 @@ public class SocializeServiceImpl implements SocializeService {
 	protected void handleActionShare(Activity activity, final ShareType shareType, final Share share, String shareText, Location location, final ShareAddListener shareAddListener) {
 		shareSystem.share(activity, session, share, shareText, location, shareType, new SocialNetworkListener() {
 			@Override
-			public void onError(Activity context, SocialNetwork network, Exception error) {
+			public void onPostError(Activity context, SocialNetwork network, Exception error) {
 				if(logger != null) {
 					logger.error("Failed to share action to [" +
 							shareType +

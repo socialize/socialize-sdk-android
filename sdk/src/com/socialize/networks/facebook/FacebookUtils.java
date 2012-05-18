@@ -114,8 +114,8 @@ public class FacebookUtils {
 	 * @param text The text for the post.
 	 * @param listener A listnener to handle callbacks from the post.
 	 */
-	public static void post(Activity context, Entity entity, String text, SocialNetworkListener listener){
-		proxy.post(context, entity, text, listener);
+	public static void postEntity(Activity context, Entity entity, String text, SocialNetworkListener listener){
+		proxy.postEntity(context, entity, text, listener);
 	}
 	
 }

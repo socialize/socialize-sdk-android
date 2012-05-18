@@ -231,7 +231,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		}
 		catch (IOException e) {
 			if(listener != null) {
-				listener.onError(parent, SocialNetwork.FACEBOOK, e);
+				listener.onPostError(parent, SocialNetwork.FACEBOOK, e);
 			}
 			 
 			if(logger != null) {
@@ -373,7 +373,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			parent.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					listener.onError(parent, SocialNetwork.FACEBOOK, SocializeException.wrap(e));
+					listener.onPostError(parent, SocialNetwork.FACEBOOK, SocializeException.wrap(e));
 				}
 			});
 		}

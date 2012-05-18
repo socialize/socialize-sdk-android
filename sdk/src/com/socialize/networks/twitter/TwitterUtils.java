@@ -78,7 +78,7 @@ public class TwitterUtils {
 		return proxy.getTokenSecret(context);
 	}
 	
-	public static void tweet(final Activity context, final Entity entity, final String text, final SocialNetworkListener listener) {
-		proxy.tweet(context, entity, text, listener);
+	public static void tweetEntity(final Activity context, final Entity entity, final String text, final SocialNetworkListener listener) {
+		proxy.tweetEntity(context, entity, text, listener);
 	}
 }

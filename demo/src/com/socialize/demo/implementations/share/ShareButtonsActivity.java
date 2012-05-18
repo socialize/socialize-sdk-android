@@ -30,16 +30,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import com.socialize.ShareUtils;
 import com.socialize.api.action.share.SocialNetworkDialogListener;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.demo.DemoActivity;
 import com.socialize.demo.DemoUtils;
 import com.socialize.demo.R;
 import com.socialize.networks.PostData;
+import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
-import com.socialize.networks.facebook.FacebookUtils;
-import com.socialize.networks.twitter.TwitterUtils;
 import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.ui.share.DialogFlowController;
 
@@ -67,24 +67,26 @@ public class ShareButtonsActivity extends DemoActivity {
 				
 				final SafeProgressDialog progress = SafeProgressDialog.show(v.getContext());
 				
-				TwitterUtils.tweet(ShareButtonsActivity.this, entity, "Test Message", new SocialNetworkListener() {
+				ShareOptions options = new ShareOptions();
+				options.setShareTo(SocialNetwork.TWITTER);
+				
+				ShareUtils.shareViaSocialNetworks(ShareButtonsActivity.this, entity, "Test Message", options, new SocialNetworkShareListener() {
+
 					@Override
-					public void onError(Activity context, SocialNetwork network, Exception error) {
+					public void onPostError(Activity context, SocialNetwork network, Exception error) {
 						progress.dismiss();
 						DemoUtils.showErrorDialog(context, error);
 					}
 					
 					@Override
-					public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-					}
+					public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {}
 					
 					@Override
 					public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
 						progress.dismiss();
 						DemoUtils.showToast(parent, "Shared to " + socialNetwork.name());
 					}
-				});
-				
+				});				
 			}
 		});
 		
@@ -92,23 +94,28 @@ public class ShareButtonsActivity extends DemoActivity {
 			@Override
 			public void onClick(View v) {
 				
-				FacebookUtils.post(ShareButtonsActivity.this, entity, "Test Message", new SocialNetworkListener() {
-					
+				final SafeProgressDialog progress = SafeProgressDialog.show(v.getContext());
+				
+				ShareOptions options = new ShareOptions();
+				options.setShareTo(SocialNetwork.FACEBOOK);
+				
+				ShareUtils.shareViaSocialNetworks(ShareButtonsActivity.this, entity, "Test Message", options, new SocialNetworkShareListener() {
+
 					@Override
-					public void onError(Activity context, SocialNetwork network, Exception error) {
+					public void onPostError(Activity context, SocialNetwork network, Exception error) {
+						progress.dismiss();
 						DemoUtils.showErrorDialog(context, error);
 					}
 					
 					@Override
-					public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-					}
+					public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {}
 					
 					@Override
 					public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
+						progress.dismiss();
 						DemoUtils.showToast(parent, "Shared to " + socialNetwork.name());
 					}
 				});
-				
 			}
 		});
 		
@@ -147,7 +154,7 @@ public class ShareButtonsActivity extends DemoActivity {
 					
 					@Override
 					public void onFlowInterrupted(DialogFlowController controller) {
-						showSuccessDialog(ShareButtonsActivity.this, controller);
+						showShareCommentDialog(ShareButtonsActivity.this, controller);
 					}
 
 					@Override
@@ -160,14 +167,17 @@ public class ShareButtonsActivity extends DemoActivity {
 	}
 
 	
-	public void showSuccessDialog(Context context, final DialogFlowController controller) {
+	public void showShareCommentDialog(Context context, final DialogFlowController controller) {
+		
+		final EditText text = new EditText(context);
+		
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle("Click to share");
 		builder.setMessage("Click to share");
 		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				controller.onContinue("testing");
+				controller.onContinue(text.getText().toString());
 			}
 		});
 		builder.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
@@ -176,6 +186,9 @@ public class ShareButtonsActivity extends DemoActivity {
 				controller.onCancel();
 			}
 		});
-		builder.create().show();
+		
+		AlertDialog dialog = builder.create();
+		dialog.setView(text);
+		dialog.show();
 	}	
 }

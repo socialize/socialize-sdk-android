@@ -99,7 +99,7 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 		}
 		
 		if(listener != null) {
-			listener.onError(parent, getNetwork(), e);
+			listener.onPostError(parent, getNetwork(), e);
 		}
 	}
 	

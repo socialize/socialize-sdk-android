@@ -271,10 +271,10 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		
 		SocializeIOC.registerStub("twitterProvider", mockTwitterAuthProvider);
 
-		TwitterUtils.tweet(getActivity(), entity, "AndroidSDK Test", new SocialNetworkListener() {
+		TwitterUtils.tweetEntity(getActivity(), entity, "AndroidSDK Test", new SocialNetworkListener() {
 			
 			@Override
-			public void onError(Activity context, SocialNetwork network, Exception error) {
+			public void onPostError(Activity context, SocialNetwork network, Exception error) {
 				error.printStackTrace();
 				latch.countDown();
 			}
