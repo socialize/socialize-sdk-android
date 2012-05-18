@@ -155,7 +155,6 @@ public class CommentUtils {
 	public static void isSubscribed (Activity context, Entity e, SubscriptionGetListener listener) {
 		subscriptionUtils.isSubscribed(context, e, listener);
 	}
-
 	
 	/**
 	 * Shows the comments for an entity.

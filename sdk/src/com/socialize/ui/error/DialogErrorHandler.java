@@ -21,18 +21,18 @@ public class DialogErrorHandler implements SocializeErrorHandler {
 	@Override
 	public void handleError(Context context, Exception e) {
 		Log.e(SocializeLogger.LOG_TAG, "", e);
-			String message = "An unexpected error occurred.  Please try again";
-			if(e instanceof SocializeApiError) {
-				int code = ((SocializeApiError)e).getResultCode();
-				if(code == 500) {
-					message += "\n\nServer Error (" + code + ")";
-				}
-				else {
-					message += "\n\n" + e.getMessage();
-				}
+		String message = "An unexpected error occurred.  Please try again";
+		if(e instanceof SocializeApiError) {
+			int code = ((SocializeApiError)e).getResultCode();
+			if(code == 500) {
+				message += "\n\nServer Error (" + code + ")";
 			}
-			
-			handleError(context, message);
+			else {
+				message += "\n\n" + e.getMessage();
+			}
+		}
+		
+		handleError(context, message);
 	}
 
 	protected void handleError(Context context, String message) {

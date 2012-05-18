@@ -21,7 +21,6 @@
  */
 package com.socialize.networks;
 
-import android.location.Location;
 
 /**
  * Allows for the specification of options for sharing.

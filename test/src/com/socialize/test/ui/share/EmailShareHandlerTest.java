@@ -76,9 +76,6 @@ public class EmailShareHandlerTest extends SocializeActivityTest {
 				addResult(0, intent);
 				addResult(1, title);
 			}
-			
-			
-			
 		};
 		
 		handler.setShareMessageBuilder(shareMessageBuilder);
