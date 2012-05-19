@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,8 +21,7 @@
  */
 package com.socialize.networks.twitter;
 
-import com.socialize.auth.AuthProviderInfo;
-import com.socialize.auth.twitter.TwitterUtils;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkAuthClickListener;
 
 /**
@@ -31,14 +30,22 @@ import com.socialize.networks.SocialNetworkAuthClickListener;
  */
 public class TwitterAuthClickListener extends SocialNetworkAuthClickListener {
 
-	private TwitterUtils twitterUtils;
-	
-	@Override
-	protected AuthProviderInfo getAuthProviderInfo() {
-		return twitterUtils.getAuthProviderInfo();
-	}
+//	private TwitterAuthUtils twitterAuthUtils;
+//	
+//	@Override
+//	protected AuthProviderInfo getAuthProviderInfo() {
+//		return twitterAuthUtils.getAuthProviderInfo();
+//	}
+//
+//	public void setTwitterAuthUtils(TwitterAuthUtils twitterAuthUtils) {
+//		this.twitterAuthUtils = twitterAuthUtils;
+//	}
 
-	public void setTwitterUtils(TwitterUtils twitterUtils) {
-		this.twitterUtils = twitterUtils;
+	@Override
+	protected SocialNetwork getSocialNetwork() {
+		return SocialNetwork.TWITTER;
+		
 	}
+	
+	
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,9 +26,8 @@ import android.os.Bundle;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.EntitySystem;
+import com.socialize.api.action.entity.EntitySystem;
 import com.socialize.entity.Entity;
-import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
 import com.socialize.notifications.NotificationAuthenticator;
 import com.socialize.ui.SocializeEntityLoader;
@@ -52,7 +51,7 @@ public class EntityLauncher extends BaseLauncher {
 	public boolean launch(final Activity context, Bundle data) {
 		
 		if(entityLoaderUtils != null) {
-			SocializeEntityLoader entityLoader = entityLoaderUtils.initEntityLoader();
+			final SocializeEntityLoader entityLoader = entityLoaderUtils.initEntityLoader();
 			
 			if(entityLoader != null) {
 				
@@ -62,10 +61,10 @@ public class EntityLauncher extends BaseLauncher {
 					long id = Long.parseLong(idObj.toString());
 					try {
 						SocializeSession session = notificationAuthenticator.authenticate(context);
-						Entity entity = entitySystem.getEntity(session, id);
+						Entity entity = entitySystem.getEntitySynchronous(session, id);
 						return loadEntity(context, entityLoader, entity);
 					}
-					catch (SocializeException e) {
+					catch (Exception e) {
 						handleError("Failed to load entity", e);
 					}
 				}

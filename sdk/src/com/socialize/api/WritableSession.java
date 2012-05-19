@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@ package com.socialize.api;
 
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserProviderCredentials;
+import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.entity.User;
 
 public interface WritableSession extends SocializeSession {
@@ -35,6 +36,10 @@ public interface WritableSession extends SocializeSession {
 	
 	public void setHost(String host);
 	
+	public void setUserProviderCredentials(UserProviderCredentialsMap data);
+	
 	public void setUserProviderCredentials(AuthProviderType type, UserProviderCredentials data);
+	
+	public void setRestored(boolean restored);
 
 }

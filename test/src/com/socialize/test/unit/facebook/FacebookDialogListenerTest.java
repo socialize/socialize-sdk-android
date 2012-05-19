@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -116,7 +116,6 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		AndroidMock.replay(facebook);
 		
 		runTestOnUiThread(new Runnable() {
-			
 			@Override
 			public void run() {
 				dListener.onComplete(bundle);
@@ -177,7 +176,6 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		
 		AndroidMock.expect(facebookSessionStore.save(facebook, context)).andReturn(true);
 		AndroidMock.expect(facebook.request("me")).andThrow(mockError);
-		
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		final FacebookDialogListener dListener = new FacebookDialogListener(context, facebook, facebookSessionStore, listener) {

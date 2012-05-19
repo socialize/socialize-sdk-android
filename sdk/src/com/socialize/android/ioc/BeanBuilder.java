@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -88,16 +88,24 @@ public class BeanBuilder {
 			if(args != null) {
 				int index = 0;
 				for (Object arg : args) {
-					if(arg != null) {
-						builder.append(arg.getClass().getSimpleName());
-					}
-					else {
-						builder.append("null");
-					}
 					
 					if(index > 0) {
 						builder.append(",");
 					}
+					
+					if(arg != null) {
+						String name = arg.getClass().getSimpleName();
+						
+						if(name == null || name.trim().length() == 0) {
+							name = arg.getClass().getName();
+						}
+						
+						builder.append(name);
+					}
+					else {
+						builder.append("null");
+					}
+			
 					index++;
 				}
 			}

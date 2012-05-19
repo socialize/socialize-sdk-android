@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 package com.socialize.networks.twitter;
 
 import android.content.Context;
-
+import android.view.View;
 import com.socialize.listener.SocializeAuthListener;
 
 /**
@@ -36,11 +36,18 @@ public class TwitterSignInCell extends TwitterCell {
 	public TwitterSignInCell(Context context) {
 		super(context);
 	}
+	
 
 	@Override
 	public void init() {
 		super.init();
-		setOnClickListener(twitterAuthClickListener);
+		
+		super.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				twitterAuthClickListener.onClick(v);
+			}
+		});		
 	}
 
 	public void setAuthListener(SocializeAuthListener listener) {

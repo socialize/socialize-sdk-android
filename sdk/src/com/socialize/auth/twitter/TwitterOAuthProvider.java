@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,9 @@ package com.socialize.auth.twitter;
 
 import org.apache.http.client.HttpClient;
 import com.socialize.oauth.signpost.OAuthConsumer;
+import com.socialize.oauth.signpost.OAuthTokenListener;
 import com.socialize.oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
+import com.socialize.oauth.signpost.http.HttpParameters;
 
 import android.os.AsyncTask;
 
@@ -81,4 +83,48 @@ public class TwitterOAuthProvider extends CommonsHttpOAuthProvider {
 			}
 		}.execute();
 	}
+	
+
+	public void retrieveAccessTokenAsync(final OAuthConsumer consumer, final String oauthVerifier, final OAuthTokenListener listener) {
+		
+		new AsyncTask<Void, Void, Void>() {
+			
+			HttpParameters httpParameters = new HttpParameters();
+			Exception error;
+
+			@Override
+			protected Void doInBackground(Void... params) {
+				try {
+					retrieveAccessToken(consumer, oauthVerifier, new OAuthTokenListener() {
+						@Override
+						public void onResponse(HttpParameters parameters) {
+							httpParameters.merge(parameters);
+						}
+
+						@Override
+						public void onError(Exception e) {
+							error = e;
+						}
+					});
+				} 
+				catch (Exception e) {
+					error = e;
+				}
+			
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(Void result) {
+				if(listener != null) {
+					if(error != null)  {
+						listener.onError(error);
+					}
+					else {
+						listener.onResponse(httpParameters);
+					}
+				}
+			}
+		}.execute();
+	}	
 }

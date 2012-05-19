@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,6 @@ import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.SocializeAction;
-import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookSharer;
 
@@ -41,26 +40,15 @@ public class FacebookShareHandler extends AbstractShareHandler {
 	private FacebookSharer facebookSharer;
 	
 	@Override
-	protected void handle(Activity context, final SocializeAction action, String text, PropagationInfo info, final ShareHandlerListener listener) throws Exception {
-		facebookSharer.share(context, action.getEntity(), info, text, true, action.getActionType(), new SocialNetworkListener() {
-			@Override
-			public void onError(Activity parent, SocialNetwork network, String message, Throwable error) {
-				listener.onError(parent, action, message, error);
-			}
-			
-			@Override
-			public void onBeforePost(Activity parent, SocialNetwork network) {}
-			
-			@Override
-			public void onAfterPost(Activity parent, SocialNetwork network) {}
-		});
+	protected void handle(final Activity context, final SocializeAction action, String text, PropagationInfo info, final SocialNetworkListener listener) throws Exception {
+		facebookSharer.share(context, action.getEntity(), info, text, true, action.getActionType(), listener);
 	}
-
+	
 	@Override
 	protected ShareType getShareType() {
 		return ShareType.FACEBOOK;
 	}
-	
+
 	@Override
 	public boolean isAvailableOnDevice(Context parent) {
 		return getSocialize().isSupported(AuthProviderType.FACEBOOK);

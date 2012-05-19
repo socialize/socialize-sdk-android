@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -59,6 +59,14 @@ public abstract class SocializeAction extends SocializeObject {
 	public void setEntity(Entity entity) {
 		this.entity = entity;
 	}
+	public void setEntitySafe(Entity entity) {
+		if(StringUtils.isEmpty(entity.getName())) {
+			setEntityKey(entity.getKey());
+		}
+		else {
+			setEntity(entity);
+		}
+	}
 	public User getUser() {
 		return user;
 	}
@@ -86,10 +94,7 @@ public abstract class SocializeAction extends SocializeObject {
 	
 	public String getEntityDisplayName() {
 		if(entity != null) {
-			if(!StringUtils.isEmpty(entity.getName())) {
-				return entity.getName();
-			}
-			return entity.getKey();
+			return entity.getDisplayName();
 		}
 		return entityKey;
 	}

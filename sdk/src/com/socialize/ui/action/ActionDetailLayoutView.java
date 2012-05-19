@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,9 +27,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
 import com.socialize.Socialize;
-import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Comment;
 import com.socialize.entity.SocializeAction;
@@ -100,10 +98,6 @@ public class ActionDetailLayoutView extends BaseView {
 		addView(content);
 	}
 	
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
-	}
-
 	@Override
 	public void onViewLoad() {
 		super.onViewLoad();

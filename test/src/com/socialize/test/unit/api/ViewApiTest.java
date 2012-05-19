@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,11 +22,10 @@
 package com.socialize.test.unit.api;
 
 import java.util.List;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.SocializeViewSystem;
+import com.socialize.api.action.view.SocializeViewSystem;
 import com.socialize.entity.Entity;
 import com.socialize.entity.View;
 import com.socialize.listener.SocializeActionListener;

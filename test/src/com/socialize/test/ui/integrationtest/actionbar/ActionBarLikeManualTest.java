@@ -1,7 +1,6 @@
 package com.socialize.test.ui.integrationtest.actionbar;
 
 import android.test.ActivityInstrumentationTestCase2;
-
 import com.socialize.sample.ui.ActionBarManualActivity2;
 import com.socialize.test.ui.util.TestUtils;
 
@@ -28,7 +27,7 @@ public class ActionBarLikeManualTest extends ActivityInstrumentationTestCase2<Ac
 		utils.testLikeCallsApiHost(this);
 	}
 	
-	public void testLikePromotsForAuth() throws Throwable {
+	public void testLikePromptsForAuth() throws Throwable {
 		ActionBarTestUtils2 utils = new ActionBarTestUtils2();
 		utils.testLikePromptsForAuth(this);
 	}

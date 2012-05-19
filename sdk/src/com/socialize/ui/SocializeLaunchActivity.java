@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,9 +27,8 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.RelativeLayout.LayoutParams;
-
+import android.widget.TextView;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
@@ -38,6 +37,8 @@ import com.socialize.api.event.EventSystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeErrorHandler;
 import com.socialize.error.SocializeException;
+import com.socialize.launcher.AsyncLauncher;
+import com.socialize.launcher.LaunchListener;
 import com.socialize.launcher.LaunchManager;
 import com.socialize.launcher.LaunchTask;
 import com.socialize.launcher.Launcher;
@@ -188,30 +189,49 @@ public class SocializeLaunchActivity extends Activity {
 							launcher = launchManager.getLaucher(action);
 							if(launcher != null) {
 								
-								if(launcher.getLaunchListener() != null) {
-									launcher.getLaunchListener().onBeforeLaunch(SocializeLaunchActivity.this, extras);
+								if(launcher.isAsync()) {
+									new AsyncLauncher(SocializeLaunchActivity.this, launcher, extras, new LaunchListener() {
+										
+										@Override
+										public void onError(Exception error) {
+											handleError(error);
+										}
+										
+										@Override
+										public void onAfterLaunch(boolean launched) {
+											if(!launched || launcher.shouldFinish()) {
+												finish();
+											}
+										}
+									}).execute();
 								}
-								
-								boolean launched = launcher.launch(SocializeLaunchActivity.this, extras);
-								
-								if(launcher.getLaunchListener() != null) {
-									launcher.getLaunchListener().onAfterLaunch(launched);
-								}
-								
-								if(launched && !launcher.shouldFinish()) {
-									return; // Don't finish
+								else {
+									boolean launched = launcher.launch(SocializeLaunchActivity.this, extras);
+									if(!launched || launcher.shouldFinish()) {
+										finish();
+									}
 								}
 							}
+							else {
+								finish();
+							}
+						}
+						else {
+							finish();
 						}
 					}
+					else {
+						finish();
+					}
 				}	
-				
-				finish();
+				else {
+					finish();
+				}
 			}
 		};
 	}
 	
-	protected void handleError(SocializeException error) {
+	protected void handleError(Exception error) {
 		error.printStackTrace();
 		if(errorHandler != null) {
 			errorHandler.handleError(SocializeLaunchActivity.this, error);

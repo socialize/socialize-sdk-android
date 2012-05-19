@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -141,6 +141,8 @@ public class UserFactoryTest extends AbstractSocializeObjectFactoryTest<User, Us
 
 		AndroidMock.expect(json.has("meta")).andReturn(true);
 		
+		// Legacy
+		AndroidMock.expect(json.has("auto_post_likes_fb")).andReturn(false);
 		AndroidMock.expect(json.has("auto_post_comments_fb")).andReturn(false);
 
 		AndroidMock.expect(json.has(auto_post_facebook)).andReturn(true);

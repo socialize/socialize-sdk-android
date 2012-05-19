@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,7 @@ import com.socialize.entity.Like;
 /**
  * @author Jason Polites
  */
+@Deprecated
 public class SocializeLikeButton extends SocializeActionButton<Like> {
 
 	public SocializeLikeButton(Context context, ActionButtonConfig config) {

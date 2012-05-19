@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,9 @@ package com.socialize.ui;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;

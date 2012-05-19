@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,6 @@
 package com.socialize.networks;
 
 import android.app.Activity;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
@@ -72,11 +71,6 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 
 					@Override
 					public void onAuthSuccess(SocializeSession session) {
-						
-						if(listener != null) {
-							listener.onBeforePost(context, getNetwork());
-						}
-						
 						doShare(context, entity, urlSet, comment, listener, type);
 					}
 
@@ -105,7 +99,7 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 		}
 		
 		if(listener != null) {
-			listener.onError(parent, getNetwork(), msg, e);
+			listener.onPostError(parent, getNetwork(), e);
 		}
 	}
 	
@@ -124,10 +118,8 @@ public abstract class AbstractSocialNetworkSharer implements SocialNetworkSharer
 	public void setAuthProviderInfoFactory(AuthProviderInfoFactory<AuthProviderInfo> authProviderInfoFactory) {
 		this.authProviderInfoFactory = authProviderInfoFactory;
 	}
-
-	// So we can mock
+	
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();
 	}
-
 }

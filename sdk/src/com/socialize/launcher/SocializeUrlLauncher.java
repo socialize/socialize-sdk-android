@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -112,7 +112,6 @@ public class SocializeUrlLauncher extends BaseLauncher implements UrlLauncher {
 		}
 		
 		return false;
-
 	}
 	
 	protected void handleCloseEvent(Activity context) {
@@ -140,6 +139,11 @@ public class SocializeUrlLauncher extends BaseLauncher implements UrlLauncher {
 	@Override
 	public boolean shouldFinish() {
 		// Don't finish!
+		return false;
+	}
+	
+	@Override
+	public boolean isAsync() {
 		return false;
 	}
 	

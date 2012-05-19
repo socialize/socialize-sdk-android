@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -100,6 +100,7 @@ public class PreferenceSessionPersisterTest extends SocializeActivityTest {
 		session.setConsumerToken(token);
 		session.setConsumerTokenSecret(tokenSecret);
 		session.setUser(user);
+		session.setRestored(true);
 
 		AndroidMock.replay(context);
 		AndroidMock.replay(prefs);

@@ -155,7 +155,7 @@ public class SocializeLaunchActivityTest extends SocializeUIActivityTest {
 		AndroidMock.expect(intent.getExtras()).andReturn(extras);
 		AndroidMock.expect(mockContainer.getBean("launchManager")).andReturn(launchManager);
 		AndroidMock.expect(launchManager.getLaucher(action)).andReturn(launcher);
-		AndroidMock.expect(launcher.getLaunchListener()).andReturn(null).anyTimes();
+		AndroidMock.expect(launcher.isAsync()).andReturn(false);
 		AndroidMock.expect(launcher.launch(activity, extras)).andReturn(true);
 		AndroidMock.expect(launcher.shouldFinish()).andReturn(true);
 		
@@ -174,7 +174,7 @@ public class SocializeLaunchActivityTest extends SocializeUIActivityTest {
 		
 		PublicSocializeLaunchActivity activity = new PublicSocializeLaunchActivity() {
 			@Override
-			protected void handleError(SocializeException error) {
+			protected void handleError(Exception error) {
 				addResult(0, error);
 			}
 		};
@@ -192,7 +192,7 @@ public class SocializeLaunchActivityTest extends SocializeUIActivityTest {
 		
 		PublicSocializeLaunchActivity activity = new PublicSocializeLaunchActivity() {
 			@Override
-			protected void handleError(SocializeException error) {
+			protected void handleError(Exception error) {
 				addResult(0, error);
 			}
 		};

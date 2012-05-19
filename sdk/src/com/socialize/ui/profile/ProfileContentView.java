@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,7 @@ package com.socialize.ui.profile;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.text.InputFilter;
 import android.util.TypedValue;
@@ -438,7 +439,7 @@ public class ProfileContentView extends BaseView {
 	}
 
 	public void onProfilePictureChange(Bitmap image) {
-		profilePictureEditView.setImage(image);
+		profilePictureEditView.setImageOn(new BitmapDrawable(image));
 	}
 
 	public User getCurrentUser() {

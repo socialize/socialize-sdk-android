@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,6 +21,7 @@
  */
 package com.socialize.init;
 
+import android.content.Context;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
 import com.socialize.error.SocializeException;
@@ -40,29 +41,26 @@ public class DefaultInitializationAsserter implements SocializeInitializationAss
 	 */
 	@Override
 	public boolean assertAuthenticated(SocializeService service, SocializeSession session, SocializeListener listener) {
-		if(assertInitialized(service, listener)) {
-			if(session != null) {
-				return true;
-			}
-			else {
-				if(listener != null) {
-					if(logger != null) {
-						listener.onError(new SocializeException(logger.getMessage(SocializeLogger.NOT_AUTHENTICATED)));
-					}
-					else {
-						listener.onError(new SocializeException("Not authenticated"));
-					}
-				}
-				if(logger != null) logger.error(SocializeLogger.NOT_AUTHENTICATED);
-			}
+		if(session != null) {
+			return true;
 		}
-		
+		else {
+			if(listener != null) {
+				if(logger != null) {
+					listener.onError(new SocializeException(logger.getMessage(SocializeLogger.NOT_AUTHENTICATED)));
+				}
+				else {
+					listener.onError(new SocializeException("Not authenticated"));
+				}
+			}
+			if(logger != null) logger.error(SocializeLogger.NOT_AUTHENTICATED);
+		}
 		return false;
 	}
 
 	@Override
-	public boolean assertInitialized(SocializeService service, SocializeListener listener) {
-		boolean initialized = service.isInitialized();
+	public boolean assertInitialized(Context context, SocializeService service, SocializeListener listener) {
+		boolean initialized = service.isInitialized(context);
 		if(!initialized) {
 			if(listener != null) {
 				if(logger != null) {

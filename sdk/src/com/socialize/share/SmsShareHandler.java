@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ShareType;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.SocializeAction;
+import com.socialize.networks.SocialNetworkListener;
 
 
 /**
@@ -40,11 +41,15 @@ public class SmsShareHandler extends IntentShareHandler {
 	 * @see com.socialize.share.AbstractShareHandler#handle(android.app.Activity, com.socialize.entity.SocializeAction, java.lang.String, com.socialize.entity.PropagationInfo, com.socialize.share.ShareHandlerListener)
 	 */
 	@Override
-	protected void handle(Activity context, SocializeAction action, String text, PropagationInfo info, ShareHandlerListener listener) throws Exception {
+	protected void handle(Activity context, SocializeAction action, String text, PropagationInfo info, SocialNetworkListener listener) throws Exception {
 		String body = shareMessageBuilder.buildShareMessage(action.getEntity(), info, text, false, true);
 		Intent sendIntent = getIntent();
 		sendIntent.putExtra("sms_body", body); 
 		context.startActivity(sendIntent);
+		
+		if(listener != null) {
+			listener.onAfterPost(context, null);
+		}
 	}
 	
 	protected Intent getIntent() {

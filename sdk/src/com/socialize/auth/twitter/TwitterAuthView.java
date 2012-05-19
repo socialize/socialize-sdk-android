@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.error.SocializeException;
 
 /**
@@ -38,6 +39,8 @@ public class TwitterAuthView extends RelativeLayout {
 	private String consumerKey; 
 	private String consumerSecret;
 	private TwitterAuthListener twitterAuthListener;
+	
+	private IBeanFactory<ITwitterAuthWebView> twitterAuthWebViewFactory;
 
 	public TwitterAuthView(Context context) {
 		super(context);
@@ -65,6 +68,9 @@ public class TwitterAuthView extends RelativeLayout {
 	
 	// So we can mock	
 	protected ITwitterAuthWebView newTwitterAuthWebView(Context context) {
+		if(twitterAuthWebViewFactory != null) {
+			return twitterAuthWebViewFactory.getBean();
+		}
 		return new TwitterAuthWebView(context);
 	}
 	
@@ -78,6 +84,10 @@ public class TwitterAuthView extends RelativeLayout {
 
 	public void setTwitterAuthListener(TwitterAuthListener twitterAuthListener) {
 		this.twitterAuthListener = twitterAuthListener;
+	}
+	
+	public void setTwitterAuthWebViewFactory(IBeanFactory<ITwitterAuthWebView> twitterAuthWebViewFactory) {
+		this.twitterAuthWebViewFactory = twitterAuthWebViewFactory;
 	}
 
 	public void authenticate() {

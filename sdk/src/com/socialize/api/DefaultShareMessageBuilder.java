@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -122,6 +122,10 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 		
 		if(!StringUtils.isEmpty(comment)) {
 			builder.append(comment);
+			builder.append(getNewLine(html));
+			builder.append(getNewLine(html));
+		}
+		else {
 			builder.append(getNewLine(html));
 			builder.append(getNewLine(html));
 		}

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,7 @@ import com.socialize.api.action.ShareType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.SocializeAction;
+import com.socialize.networks.SocialNetworkListener;
 
 /**
  * @author Jason Polites
@@ -41,7 +42,7 @@ public class EmailShareHandler extends IntentShareHandler {
 	 * @see com.socialize.share.AbstractShareHandler#handle(android.app.Activity, com.socialize.entity.SocializeAction, java.lang.String, com.socialize.entity.PropagationInfo, com.socialize.share.ShareHandlerListener)
 	 */
 	@Override
-	protected void handle(Activity context, SocializeAction action, String text, PropagationInfo info, ShareHandlerListener listener) throws Exception {
+	protected void handle(Activity context, SocializeAction action, String text, PropagationInfo info, SocialNetworkListener listener) throws Exception {
 		
 		Entity entity = action.getEntity();
 		
@@ -61,10 +62,16 @@ public class EmailShareHandler extends IntentShareHandler {
 		msg.putExtra(Intent.EXTRA_SUBJECT, subject);
 		
 		startActivity(context, msg, title);
+		
+		if(listener != null) {
+			listener.onAfterPost(context, null);
+		}
 	}
 	
 	protected void startActivity(Activity context, Intent intent, String title) {
-		context.startActivity(Intent.createChooser(intent, title));
+		Intent chooser = Intent.createChooser(intent, title);
+		chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		context.startActivity(chooser);
 	}
 	
 	@Override

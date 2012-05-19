@@ -23,7 +23,7 @@ public class ActionBarAutoActivity2 extends ActionBarActivity2 {
 		
 		Socialize.getSocialize().setEntityLoader(new EntityLoader());
 		
-		View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.action_bar_auto, entity, options, new ActionBarListener() {
+		View actionBarWrapped = Socialize.getSocialize().showActionBar(this, R.layout.action_bar_auto, entity, options, new ActionBarListener() {
 			
 			@Override
 			public void onCreate(ActionBarView view) {

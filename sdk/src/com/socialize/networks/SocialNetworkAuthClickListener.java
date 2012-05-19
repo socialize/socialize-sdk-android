@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,18 +21,19 @@
  */
 package com.socialize.networks;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.view.View;
 import android.view.View.OnClickListener;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
-import com.socialize.auth.AuthProviderInfo;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.ui.dialog.DialogFactory;
+import com.socialize.networks.facebook.FacebookUtils;
+import com.socialize.networks.twitter.TwitterUtils;
+import com.socialize.ui.dialog.SimpleDialogFactory;
 
 /**
  * @author Jason Polites
@@ -40,9 +41,8 @@ import com.socialize.ui.dialog.DialogFactory;
  */
 public abstract class SocialNetworkAuthClickListener implements OnClickListener {
 
-	protected SocializeConfig config;
 	private SocializeAuthListener listener;
-	private DialogFactory<ProgressDialog> dialogFactory;
+	private SimpleDialogFactory<ProgressDialog> dialogFactory;
 	private ProgressDialog dialog; 
 
 	@Override
@@ -52,12 +52,20 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 		
 		dialog = dialogFactory.show(view.getContext(), "Authentication", "Authenticating...");
 		
-		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+		SocialNetwork network = getSocialNetwork();
 		
-		AuthProviderInfo fbInfo = getAuthProviderInfo();
-		
-		getSocialize().authenticate(view.getContext(), consumerKey, consumerSecret, fbInfo, new SocializeAuthListener() {
+		switch (network) {
+		case FACEBOOK:
+			FacebookUtils.link((Activity) view.getContext(), getAuthListener(view));
+			break;
+		case TWITTER:
+			TwitterUtils.link((Activity) view.getContext(), getAuthListener(view));
+			break;
+		}
+	}
+	
+	protected SocializeAuthListener getAuthListener(final View view) {
+		return new SocializeAuthListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -94,20 +102,16 @@ public abstract class SocialNetworkAuthClickListener implements OnClickListener 
 				}
 				view.setEnabled(true);
 			}
-		});
+		};
 	}
 
-	protected abstract AuthProviderInfo getAuthProviderInfo();
+	protected abstract SocialNetwork getSocialNetwork();
 	
 	protected SocializeService getSocialize() {
 		return Socialize.getSocialize();
 	}
 
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
-	}
-
-	public void setDialogFactory(DialogFactory<ProgressDialog> dialogFactory) {
+	public void setDialogFactory(SimpleDialogFactory<ProgressDialog> dialogFactory) {
 		this.dialogFactory = dialogFactory;
 	}
 

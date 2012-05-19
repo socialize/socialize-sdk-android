@@ -24,9 +24,8 @@ public class AnonymousCell extends ClickableSectionCell {
 
 	@Override
 	protected ImageView makeImage() {
-		ImageView view = new ImageView(getContext());
-		view.setImageDrawable(drawables.getDrawable("user_icon.png"));
-		return view;
+		setImageOn(drawables.getDrawable("user_icon.png"));
+		return new ImageView(getContext());		
 	}
 
 	@Override

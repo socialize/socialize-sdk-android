@@ -2,7 +2,6 @@ package com.socialize.test.ui.integrationtest.comment;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -10,14 +9,13 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.CommentSystem;
-import com.socialize.api.action.SubscriptionSystem;
+import com.socialize.api.action.comment.CommentSystem;
+import com.socialize.api.action.comment.SubscriptionSystem;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
@@ -31,10 +29,11 @@ import com.socialize.test.mock.MockCommentSystem;
 import com.socialize.test.mock.MockSubscriptionSystem;
 import com.socialize.test.ui.integrationtest.SocializeUIRobotiumTest;
 import com.socialize.test.ui.util.TestUtils;
+import com.socialize.ui.comment.CommentDetailActivity;
 import com.socialize.ui.comment.CommentEditField;
 import com.socialize.ui.comment.CommentEntryView;
 import com.socialize.ui.dialog.AlertDialogFactory;
-import com.socialize.ui.dialog.DialogFactory;
+import com.socialize.ui.dialog.SimpleDialogFactory;
 import com.socialize.ui.view.CustomCheckbox;
 import com.socialize.ui.view.LoadingListView;
 import com.socialize.ui.view.SocializeButton;
@@ -70,7 +69,9 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		// Wait for view to show
 		Thread.sleep(2000);		
 		
-		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(LoadingListView.LIST_VIEW_ID);
+		ListView comments = TestUtils.findViewById(robotium.getCurrentActivity(), LoadingListView.LIST_VIEW_ID);
+		
+		assertNotNull(comments);
 		
 		int count = comments.getCount();
 		
@@ -131,7 +132,7 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 	public void testNotificationSubscribe() throws Throwable {
 		doSubscribeUnsubscribeTest(false, "Subscribe Successful", "We will notify you when someone posts a comment to this discussion.");
 	}
-	
+
 	public void testNotificationUnSubscribe() throws Throwable {
 		doSubscribeUnsubscribeTest(true, "Unsubscribe Successful", "You will no longer receive notifications for updates to this discussion.");
 	}
@@ -140,7 +141,7 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		
 		final MockSubscriptionSystem mockSystem = new MockSubscriptionSystem() {
 			@Override
-			public void getSubscription(SocializeSession session, Entity entity, SubscriptionListener listener) {
+			public void getSubscription(SocializeSession session, Entity entity, NotificationType type, SubscriptionListener listener) {
 				Subscription sub = new Subscription();
 				sub.setSubscribed(isSubscribed);
 				listener.onGet(sub);
@@ -168,7 +169,7 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 			}
 		};
 		
-		final DialogFactory<AlertDialog> dialogFactory = new AlertDialogFactory() {
+		final SimpleDialogFactory<AlertDialog> dialogFactory = new AlertDialogFactory() {
 			@Override
 			public AlertDialog show(Context context, String title, String message) {
 				addResult(0, title);
@@ -197,7 +198,6 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 			public void onError(SocializeException error) {
 				ActivityInstrumentationTestCase2.fail();
 			}
-			
 			@Override
 			public void onInit(Context context, IOCContainer container) {
 				ProxyObject<SubscriptionSystem> proxy = container.getProxy("subscriptionSystem");
@@ -216,7 +216,7 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 					System.err.println("AppUtils Proxy is null!!");
 				}	
 				
-				ProxyObject<DialogFactory<AlertDialog>> alertDialogFactoryProxy = container.getProxy("alertDialogFactory");
+				ProxyObject<SimpleDialogFactory<AlertDialog>> alertDialogFactoryProxy = container.getProxy("alertDialogFactory");
 				if(proxy != null) {
 					alertDialogFactoryProxy.setDelegate(dialogFactory);
 				}
@@ -274,6 +274,8 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		
 		int pageSize = 20;
 		
+		TestUtils.setUpActivityMonitor(CommentDetailActivity.class);
+		
 		Socialize.getSocialize().getConfig().setProperty("comment.page.size", String.valueOf(pageSize));
 		
 		startWithoutFacebook();
@@ -281,16 +283,15 @@ public class CommentUITest extends SocializeUIRobotiumTest {
 		ListView comments = (ListView) robotium.getCurrentActivity().findViewById(LoadingListView.LIST_VIEW_ID);
 		
 		assertNotNull(comments);
-		assertTrue("Unexepected number of comments.  Expected >= " +
+		assertTrue("Unexpected number of comments.  Expected >= " +
 				pageSize +
 				" but found " +
-				comments.getCount() +
-				"", comments.getCount() >= pageSize);
+				comments.getCount(), comments.getCount() >= pageSize);
 		
 		// Click on the first comment in list. 
 		robotium.clickInList(0);
 		
-		robotium.waitForActivity("CommentDetailActivity");
+		TestUtils.waitForActivity(10000);
 		
 		// Make sure we have user name, comment, image and location
 		TextView userDisplayName = robotium.getText(0);

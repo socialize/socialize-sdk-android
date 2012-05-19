@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@ package com.socialize.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.util.StringUtils;
 
 
@@ -46,8 +47,8 @@ public class User extends SocializeObject {
 	private String displayName;
 	private String profilePicData;
 	
-	private boolean autoPostToFacebook = true;
-	private boolean autoPostToTwitter = true;
+	private boolean autoPostToFacebook = false;
+	private boolean autoPostToTwitter = false;
 	
 	private boolean shareLocation = true;
 	private boolean notificationsEnabled = true;
@@ -241,5 +242,31 @@ public class User extends SocializeObject {
 	@Override
 	public boolean equals(Object obj) {
 		return super.equals(obj);
+	}
+	
+	/**
+	 * Sets the auto post preferences for the user.
+	 * @param networks
+	 * @return true if the new settings differed from the old ones.
+	 */
+	public boolean setAutoPostPreferences(SocialNetwork...networks) {
+		
+		boolean tw = isAutoPostToTwitter();
+		boolean fb = isAutoPostToFacebook();
+		
+		setAutoPostToFacebook(false);
+		setAutoPostToTwitter(false);
+		if(networks != null) {
+			for (SocialNetwork network : networks) {
+				if(network.equals(SocialNetwork.FACEBOOK)) {
+					setAutoPostToFacebook(true);
+				}
+				else if(network.equals(SocialNetwork.TWITTER)) {
+					setAutoPostToTwitter(true);
+				}
+			}
+		}
+		
+		return tw != isAutoPostToTwitter() || fb != isAutoPostToFacebook();
 	}
 }

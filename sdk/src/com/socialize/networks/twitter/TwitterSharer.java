@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,6 @@
 package com.socialize.networks.twitter;
 
 import android.app.Activity;
-
 import com.socialize.api.action.ActionType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
@@ -42,6 +41,14 @@ public class TwitterSharer extends AbstractSocialNetworkSharer {
 	@Override
 	protected SocialNetwork getNetwork() {
 		return SocialNetwork.TWITTER;
+	}
+
+	@Override
+	public void share(Activity context, Entity entity, PropagationInfo urlSet, String comment, boolean autoAuth, ActionType type, SocialNetworkListener listener) {
+		if(listener != null) {
+			listener.onBeforePost(context, getNetwork(), null);
+		}
+		super.share(context, entity, urlSet, comment, autoAuth, type, listener);
 	}
 
 	/*

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,13 +26,13 @@ import com.socialize.api.DefaultSocializeRequestFactory;
 import com.socialize.api.DefaultSocializeResponseFactory;
 import com.socialize.api.DefaultSocializeSessionFactory;
 import com.socialize.api.PreferenceSessionPersister;
-import com.socialize.api.action.SocializeActivitySystem;
-import com.socialize.api.action.SocializeCommentSystem;
-import com.socialize.api.action.SocializeEntitySystem;
-import com.socialize.api.action.SocializeLikeSystem;
-import com.socialize.api.action.SocializeShareSystem;
-import com.socialize.api.action.SocializeUserSystem;
-import com.socialize.api.action.SocializeViewSystem;
+import com.socialize.api.action.activity.SocializeActivitySystem;
+import com.socialize.api.action.comment.SocializeCommentSystem;
+import com.socialize.api.action.entity.SocializeEntitySystem;
+import com.socialize.api.action.like.SocializeLikeSystem;
+import com.socialize.api.action.share.SocializeShareSystem;
+import com.socialize.api.action.user.SocializeUserSystem;
+import com.socialize.api.action.view.SocializeViewSystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.CommentFactory;
 import com.socialize.entity.UserFactory;

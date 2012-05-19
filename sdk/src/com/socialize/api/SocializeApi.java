@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -92,13 +92,18 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	
 	public SocializeSession authenticate(Context context, String endpoint, String key, String secret, String uuid) throws SocializeException {
 		SocializeSession session = provider.authenticate(endpoint, key, secret, uuid);
-		checkNotifications(context, session);
+		if(!session.isRestored()) {
+			checkNotifications(context, session);
+		}
+		
 		return session;
 	}
 	
 	public SocializeSession authenticate(Context context, String endpoint, String key, String secret, AuthProviderData data, String udid) throws SocializeException {
 		SocializeSession session = provider.authenticate(endpoint, key, secret, data, udid);
-		checkNotifications(context, session);
+		if(!session.isRestored()) {
+			checkNotifications(context, session);
+		}
 		return session;
 	}
 	
@@ -107,6 +112,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			notificationChecker.checkRegistrations(context, session);
 		}
 	}
+	
 	
 	protected void setPropagationData(SocializeAction action, ShareOptions shareOptions) {
 		if(shareOptions != null) {
@@ -234,9 +240,10 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}
 	
 	public void listAsync(SocializeSession session, String endpoint, String key, String idKey, int startIndex, int endIndex, SocializeActionListener listener, String...ids) {
-		AsyncGetter getter = new AsyncGetter(RequestType.LIST, session, listener);
+		AsyncGetter getter = new AsyncGetter(session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
 		request.setEndpoint(endpoint);
+		request.setRequestType(RequestType.LIST);
 		request.setKey(key);
 		request.setIds(ids);
 		request.setIdKey(idKey);
@@ -250,8 +257,9 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}
 	
 	public void listAsync(SocializeSession session, String endpoint, int startIndex, int endIndex, SocializeActionListener listener) {
-		AsyncGetter getter = new AsyncGetter(RequestType.LIST_WITHOUT_ENTITY, session, listener);
+		AsyncGetter getter = new AsyncGetter(session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
+		request.setRequestType(RequestType.LIST_WITHOUT_ENTITY);
 		request.setEndpoint(endpoint);
 		request.setStartIndex(startIndex);
 		request.setEndIndex(endIndex);
@@ -263,8 +271,9 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}
 
 	public void getByEntityAsync(SocializeSession session, String endpoint, String key, SocializeActionListener listener) {
-		AsyncGetter getter = new AsyncGetter(RequestType.LIST_AS_GET, session, listener);
+		AsyncGetter getter = new AsyncGetter(session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
+		request.setRequestType(RequestType.LIST_AS_GET);
 		request.setEndpoint(endpoint);
 		request.setKey(key);
 		getter.execute(request);
@@ -272,16 +281,18 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	
 	
 	public void getAsync(SocializeSession session, String endpoint, String id, SocializeActionListener listener) {
-		AsyncGetter getter = new AsyncGetter(RequestType.GET, session, listener);
+		AsyncGetter getter = new AsyncGetter(session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
+		request.setRequestType(RequestType.GET);
 		request.setEndpoint(endpoint);
 		request.setIds(id);
 		getter.execute(request);
 	}
 	
 	public void deleteAsync(SocializeSession session, String endpoint, String id, SocializeActionListener listener) {
-		AsyncGetter getter = new AsyncGetter(RequestType.DELETE, session, listener);
+		AsyncGetter getter = new AsyncGetter(session, listener);
 		SocializeGetRequest request = new SocializeGetRequest();
+		request.setRequestType(RequestType.DELETE);
 		request.setEndpoint(endpoint);
 		request.setIds(id);
 		getter.execute(request);
@@ -289,8 +300,9 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 
 	@SuppressWarnings("unchecked")
 	public void putAsync(SocializeSession session, String endpoint, T object, SocializeActionListener listener) {
-		AsyncPutter poster = new AsyncPutter(RequestType.PUT, session, listener);
+		AsyncPutter poster = new AsyncPutter(session, listener);
 		SocializePutRequest<T> request = new SocializePutRequest<T>();
+		request.setRequestType(RequestType.PUT);
 		request.setEndpoint(endpoint);
 		request.setObject(object);
 		poster.execute(request);
@@ -298,8 +310,9 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	
 	@SuppressWarnings("unchecked")
 	public void putAsync(SocializeSession session, String endpoint, List<T> objects, SocializeActionListener listener) {
-		AsyncPutter poster = new AsyncPutter(RequestType.PUT, session, listener);
+		AsyncPutter poster = new AsyncPutter(session, listener);
 		SocializePutRequest<T> request = new SocializePutRequest<T>();
+		request.setRequestType(RequestType.PUT);
 		request.setEndpoint(endpoint);
 		request.setObjects(objects);
 		poster.execute(request);
@@ -311,8 +324,9 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	
 	@SuppressWarnings("unchecked")
 	public void postAsync(SocializeSession session, String endpoint, T object, boolean jsonResponse, SocializeActionListener listener) {
-		AsyncPutter poster = new AsyncPutter(RequestType.POST, session, listener);
+		AsyncPutter poster = new AsyncPutter(session, listener);
 		SocializePutRequest<T> request = new SocializePutRequest<T>();
+		request.setRequestType(RequestType.POST);
 		request.setEndpoint(endpoint);
 		request.setObject(object);
 		request.setJsonResponse(jsonResponse);
@@ -324,8 +338,9 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}
 	@SuppressWarnings("unchecked")
 	public void postAsync(SocializeSession session, String endpoint, List<T> objects, boolean jsonResponse, SocializeActionListener listener) {
-		AsyncPutter poster = new AsyncPutter(RequestType.POST, session, listener);
+		AsyncPutter poster = new AsyncPutter(session, listener);
 		SocializePutRequest<T> request = new SocializePutRequest<T>();
+		request.setRequestType(RequestType.POST);
 		request.setEndpoint(endpoint);
 		request.setObjects(objects);
 		request.setJsonResponse(jsonResponse);
@@ -341,8 +356,9 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	 */
 	@SuppressWarnings("unchecked")
 	public void putAsPostAsync(SocializeSession session, String endpoint, T object, SocializeActionListener listener) {
-		AsyncPutter poster = new AsyncPutter(RequestType.PUT_AS_POST, session, listener);
+		AsyncPutter poster = new AsyncPutter(session, listener);
 		SocializePutRequest<T> request = new SocializePutRequest<T>();
+		request.setRequestType(RequestType.PUT_AS_POST);
 		request.setEndpoint(endpoint);
 		request.setObject(object);
 		poster.execute(request);
@@ -438,7 +454,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		}
 		else {
 			// Do normal auth
-			handleRegularAuth(context, request, wrapper, localListener, key, secret, false);
+			handleRegularAuth(context, request, wrapper, localListener, key, secret);
 		}
 	}
 	
@@ -481,36 +497,9 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		}
 	}
 	
-	protected void handleRegularAuth(Context context, SocializeAuthRequest request, SocializeActionListener wrapper, SocializeAuthListener listener, String key, String secret, boolean force) {
-		SocializeSession session = null;
-		
-		if(!force) {
-			// Try loading the session first
-			
-			try {
-				session = loadSession(request.getEndpoint(), key, secret);
-			}
-			catch (SocializeException e) {
-				// No need to throw this, just log it
-				logger.warn("Failed to load saved session data", e);
-			}
-		}
-		
-		if(session != null) {
-			if(logger != null && logger.isDebugEnabled()) {
-				logger.debug("Loaded saved session for user [" +
-						session.getUser().getId() +
-						"]");
-			}
-			
-			if(listener != null) {
-				listener.onAuthSuccess(session);
-			}
-		}
-		else {
-			AsyncAuthenicator authenicator = new AsyncAuthenicator(context, RequestType.AUTH, null, wrapper);
-			authenicator.execute(request);
-		}
+	protected void handleRegularAuth(Context context, SocializeAuthRequest request, SocializeActionListener wrapper, SocializeAuthListener listener, String key, String secret) {
+		AsyncAuthenicator authenicator = new AsyncAuthenicator(context, null, wrapper);
+		authenicator.execute(request);
 	}
 	
 	protected void handle3rdPartyAuth(
@@ -571,7 +560,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 						authProviderData.setSecret3rdParty(response.getSecret());
 						
 						// Do normal auth (forced)
-						handleRegularAuth(context, request, wrapper, listener, key, secret, true);
+						handleRegularAuth(context, request, wrapper, listener, key, secret);
 					}
 					
 					@Override
@@ -645,7 +634,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		this.locationProvider = locationProvider;
 	}
 
-	abstract class AbstractAsyncProcess<Params, Progress, Result extends SocializeResponse> extends AsyncTask<Params, Progress, Result> {
+	abstract class AbstractAsyncProcess<Params extends SocializeRequest, Progress, Result extends SocializeResponse> extends AsyncTask<Params, Progress, Result> {
 
 		RequestType requestType;
 		SocializeSession session;
@@ -653,21 +642,22 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		SocializeActionListener listener = null;
 		Context context;
 		
-		public AbstractAsyncProcess(Context context, RequestType requestType, SocializeSession session, SocializeActionListener listener) {
-			this(requestType, session, listener);
+		public AbstractAsyncProcess(Context context, SocializeSession session, SocializeActionListener listener) {
+			this(session, listener);
 			this.context = context;
 		}		
 		
-		public AbstractAsyncProcess(RequestType requestType, SocializeSession session, SocializeActionListener listener) {
+		public AbstractAsyncProcess(SocializeSession session, SocializeActionListener listener) {
 			super();
-			this.requestType = requestType;
 			this.session = session;
 			this.listener = listener;
-		}
+		}		
 
 		@Override
 		protected final Result doInBackground(Params... params) {
 			Params request = params[0];
+			this.requestType = request.getRequestType();
+			
 			Result result = null;
 			try {
 				result = doInBackground(request);
@@ -696,10 +686,10 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	
 	class AsyncAuthenicator extends AbstractAsyncProcess<SocializeAuthRequest, Void, SocializeAuthResponse> {
 
-		public AsyncAuthenicator(Context context, RequestType requestType, SocializeSession session, SocializeActionListener listener) {
-			super(context, requestType, session, listener);
+		public AsyncAuthenicator(Context context, SocializeSession session, SocializeActionListener listener) {
+			super(context, session, listener);
 		}
-
+		
 		@Override
 		protected SocializeAuthResponse doInBackground(final SocializeAuthRequest request) throws SocializeException {
 			SocializeAuthResponse response = null;
@@ -729,8 +719,9 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		}
 	}
 	
-	protected void setLocation(SocializeAction action, Location location) {
-		if(location == null && locationProvider != null) {
+	protected void setLocation(SocializeAction action) {
+		Location location = null;
+		if(locationProvider != null) {
 			location = locationProvider.getLastKnownLocation();
 		}
 		if(location != null) {
@@ -739,22 +730,10 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		}
 	}
 	
-	protected void setLocation(SocializeAction action, ShareOptions shareOptions) {
-		
-		Location location = null;
-		
-		if(shareOptions != null) {
-			location = shareOptions.getLocation();
-		}
-		
-		setLocation(action, location);
-	}	
-
 	class AsyncPutter extends AbstractAsyncProcess<SocializePutRequest<T>, Void, SocializeEntityResponse<T>> {
-
-		public AsyncPutter(RequestType requestType, SocializeSession session, SocializeActionListener listener) {
-			super(requestType, session, listener);
-		}
+		public AsyncPutter(SocializeSession session, SocializeActionListener listener) {
+			super(session, listener);
+		}		
 
 		@Override
 		protected SocializeEntityResponse<T> doInBackground(SocializePutRequest<T> request) throws SocializeException {
@@ -856,8 +835,8 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 
 	class AsyncGetter extends AbstractAsyncProcess<SocializeGetRequest, Void, SocializeEntityResponse<T>> {
 
-		public AsyncGetter(RequestType requestType, SocializeSession session, SocializeActionListener listener) {
-			super(requestType, session, listener);
+		public AsyncGetter(SocializeSession session, SocializeActionListener listener) {
+			super(session, listener);
 		}
 
 		@Override

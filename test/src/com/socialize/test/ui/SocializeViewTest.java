@@ -2,7 +2,6 @@ package com.socialize.test.ui;
 
 import android.content.Context;
 import android.view.View;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
@@ -235,7 +234,7 @@ public class SocializeViewTest extends SocializeUIActivityTest {
 		
 		PublicView activity = new PublicView(getActivity()) {
 			@Override
-			protected SocializeService getSocialize() {
+			public SocializeService getSocialize() {
 				return socialize;
 			}
 		};

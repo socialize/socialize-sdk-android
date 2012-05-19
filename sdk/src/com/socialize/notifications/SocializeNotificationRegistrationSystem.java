@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,6 +30,7 @@ import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.DeviceRegistrationSystem;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.user.UserSystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.DeviceRegistration;
 import com.socialize.entity.User;
@@ -51,6 +52,7 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 	private SocializeConfig config;
 	private SocializeLogger logger;
 	private DeviceRegistrationSystem deviceRegistrationSystem;
+	private UserSystem userSystem;
 	private IBeanFactory<DeviceRegistration> deviceRegistrationFactory;
 	private NotificationRegistrationState notificationRegistrationState;
 	
@@ -123,8 +125,7 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 		notificationRegistrationState.save(context);
 		
 		if(!StringUtils.isEmpty(registrationId)) {
-			
-			Socialize.getSocialize().authenticate(context, new SocializeAuthListener() {
+			userSystem.authenticate(context, new SocializeAuthListener() {
 				
 				@Override
 				public void onError(SocializeException error) {
@@ -147,7 +148,7 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 				public void onAuthFail(SocializeException error) {
 					logError(error);
 				}
-			});
+			}, Socialize.getSocialize());
 		}
 	}
 	
@@ -209,5 +210,9 @@ public class SocializeNotificationRegistrationSystem implements NotificationRegi
 
 	public void setDeviceRegistrationFactory(IBeanFactory<DeviceRegistration> deviceRegistrationFactory) {
 		this.deviceRegistrationFactory = deviceRegistrationFactory;
+	}
+	
+	public void setUserSystem(UserSystem userSystem) {
+		this.userSystem = userSystem;
 	}
 }

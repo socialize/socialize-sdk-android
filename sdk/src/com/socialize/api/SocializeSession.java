@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -67,5 +67,11 @@ public interface SocializeSession extends Serializable, OAuthAuthorizer {
 	public AuthProvider<?> getAuthProvider();
 	
 	public void clear(AuthProviderType type);
+	
+	/**
+	 * Returns true if this session was restored from a previously saved session
+	 * @return
+	 */
+	public boolean isRestored();
 
 }

@@ -5,9 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.LinearLayout;
-
 import com.socialize.Socialize;
-import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
@@ -56,10 +54,6 @@ public class ProfileLayoutView extends BaseView {
 
 		addView(header);
 		addView(content);
-	}
-	
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
 	}
 	
 	@Override

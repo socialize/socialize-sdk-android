@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.location.Location;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
@@ -36,7 +37,7 @@ import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
-import com.socialize.listener.activity.UserActivityListListener;
+import com.socialize.listener.activity.ActionListListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -48,12 +49,14 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.share.ShareAddListener;
-import com.socialize.listener.subscription.SubscriptionAddListener;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionListListener;
+import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
+import com.socialize.listener.view.ViewGetListener;
+import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.notifications.NotificationType;
 import com.socialize.ui.SocializeEntityLoader;
@@ -63,7 +66,7 @@ import com.socialize.ui.profile.UserProfile;
  * The main Socialize Service.  This is the simplest entry point into the Socialize API.
  * @author Jason Polites
  */
-public interface SocializeService {
+public interface SocializeService extends SocializeUI, SocializeSessionConsumer {
 
 	/**
 	 * Initializes a SocializeService instance with default settings.  Should be called during the onCreate() method of your Activity.
@@ -115,6 +118,13 @@ public interface SocializeService {
 	public void destroy(boolean force);
 	
 	/**
+	 * Authenticates the application against the API as an anonymous user synchronously.
+	 * NOTE:  This assumes the consumer key/secret have been specified in assets/socialize.properties
+	 * @param context The current context.
+	 */
+	public SocializeSession authenticateSynchronous(Context context);
+	
+	/**
 	 * Authenticates the application against the API as an anonymous user.
 	 * NOTE:  This assumes the consumer key/secret have been specified in assets/socialize.properties
 	 * @param context The current context.
@@ -159,8 +169,18 @@ public interface SocializeService {
 	 * @param userProviderCredentials Information about the user being authed.
 	 * @param authListener The callback for authentication outcomes.
 	 */
+	@Deprecated
 	public void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, UserProviderCredentials userProviderCredentials, SocializeAuthListener authListener);
 
+	/**
+	 * Authenticates the application against the API as a user known to your app from a given 3rd party provider.
+	 * @param context The current context.
+	 * @param userProviderCredentials Information about the user being authed.
+	 * @param authListener The callback for authentication outcomes.
+	 */
+	public void authenticateKnownUser(Context context, UserProviderCredentials userProviderCredentials, SocializeAuthListener authListener);
+
+	
 	/**
 	 * Adds a new like and associates it with the entity described.
 	 * @param activity The current Activity.
@@ -179,6 +199,13 @@ public interface SocializeService {
 	public void like(Activity activity, Entity entity, ShareOptions shareOptions, LikeAddListener likeAddListener);
 	
 	/**
+	 * Removes a specific LIKE based on it's unique ID.  The ID would be returned from the original creation call.
+	 * @param id The ID of the like to be deleted.
+	 * @param likeDeleteListener A listener to handle callbacks from the delete.
+	 */
+	public void unlike(long id, LikeDeleteListener likeDeleteListener);
+	
+	/**
 	 * Adds a new view and associates it with the key described.
 	 * @param activity The current Activity.
 	 * @param entity The entity being viewed.
@@ -193,14 +220,14 @@ public interface SocializeService {
 	 * @param location The location of the device at the time the call was made.
 	 * @param viewAddListener A listener to handle callbacks from the post.
 	 */
-	public void view(Activity activity, Entity entity, Location location, ViewAddListener viewAddListener);
-
+	public void view(Activity activity, Entity entity, Location location, ViewAddListener viewAddListener);	
+	
 	/**
-	 * Removes a specific LIKE based on it's unique ID.  The ID would be returned from the original creation call.
-	 * @param id The ID of the like to be deleted.
-	 * @param likeDeleteListener A listener to handle callbacks from the delete.
+	 * Retrieves a single view.
+	 * @param id The ID of the view
+	 * @param viewGetListener A listener to handle callbacks from the get.
 	 */
-	public void unlike(long id, LikeDeleteListener likeDeleteListener);
+	public void getViewById(long id, ViewGetListener viewGetListener);
 	
 	/**
 	 * Records a share event against the given key. 
@@ -233,6 +260,41 @@ public interface SocializeService {
 	 */
 	public void share(Activity activity, Entity entity, String text, ShareType shareType, ShareAddListener shareAddListener);
 	
+	/**
+	 * Records a share event against the given key. 
+	 * @param activity The current Activity.
+	 * @param entityKey The entity being shared.
+	 * @param text The text being shared.
+	 * @param shareType The type of the share.
+	 * @param location The location (may be null)
+	 * @param shareAddListener A listener to handle callbacks from the post.
+	 */
+	public void share(Activity activity, String entityKey, String text, ShareType shareType, Location location, ShareAddListener shareAddListener);
+	
+	/**
+	 * Records a share event against the given key. 
+	 * @param activity The current Activity.
+	 * @param entityKey The entity being shared.
+	 * @param text The text being shared.
+	 * @param shareType The type of the share.
+	 * @param shareAddListener A listener to handle callbacks from the post.
+	 * @deprecated
+	 */
+	@Deprecated
+	public void share(Activity activity, String entityKey, String text, ShareType shareType, ShareAddListener shareAddListener);
+	
+	
+	/**
+	 * Records a share event against the given key. 
+	 * @param activity The current Activity.
+	 * @param entityKey The entity being shared.
+	 * @param text The text being shared.
+	 * @param options Options for the share
+	 * @param shareAddListener A listener to handle callbacks from the post.
+	 * @deprecated
+	 */
+	@Deprecated
+	void share(Activity activity, String entityKey, String text, ShareOptions shareOptions, ShareAddListener shareAddListener);
 	
 	/**
 	 * Records a share event against the given key.  
@@ -332,7 +394,7 @@ public interface SocializeService {
 	 * Lists the comments by comment ID.
 	 * @param commentListListener A listener to handle callbacks from the post.
 	 * @param ids Array of IDs corresponding to pre-existing comments.
-	 */	
+	 */
 	public void listCommentsById(CommentListListener commentListListener, long...ids);
 	
 	/**
@@ -419,8 +481,17 @@ public interface SocializeService {
 	 * Returns true if this SocializeService instance has been initialized.  
 	 * PLEASE NOTE: Init should always be called so that each corresponding call to destroy is matched.
 	 * @return true if this SocializeService instance has been initialized.  
+	 * @deprecated
 	 */
 	public boolean isInitialized();
+	
+	
+	/**
+	 * Returns true if this SocializeService instance has been initialized.  
+	 * @param context The current context.
+	 * @return true if this SocializeService instance has been initialized.  
+	 */
+	public boolean isInitialized(Context context);
 
 	/**
 	 * Returns true if the current session is authenticated.
@@ -472,7 +543,7 @@ public interface SocializeService {
 	 * @param userId The ID of the user for whom activity will be listed.
 	 * @param activityListListener A listener to handle callbacks from the get.
 	 */
-	public void listActivityByUser(long userId, UserActivityListListener activityListListener);
+	public void listActivityByUser(long userId, ActionListListener activityListListener);
 	
 	/**
 	 * Lists a user's activity with pagination.
@@ -481,7 +552,7 @@ public interface SocializeService {
 	 * @param endIndex The ending index of the results for pagination.
 	 * @param activityListListener A listener to handle callbacks from the get.
 	 */
-	public void listActivityByUser(long userId, int startIndex, int endIndex, UserActivityListListener activityListListener);
+	public void listActivityByUser(long userId, int startIndex, int endIndex, ActionListListener activityListListener);
 	
 	/**
 	 * Subscribes the currently logged in user to notifications for the given entity.
@@ -489,8 +560,7 @@ public interface SocializeService {
 	 * @param entity
 	 * @param subscriptionAddListener
 	 */
-	public void subscribe(Context context, Entity entity, NotificationType type, SubscriptionAddListener subscriptionAddListener);
-	
+	public void subscribe(Context context, Entity entity, NotificationType type, SubscriptionResultListener subscriptionAddListener);
 	
 	/**
 	 * Unsubscribes the currently logged in user from notifications for the given entity.
@@ -499,7 +569,7 @@ public interface SocializeService {
 	 * @param entity
 	 * @param subscriptionAddListener
 	 */
-	public void unsubscribe(Context context, Entity entity, NotificationType type, SubscriptionAddListener subscriptionAddListener);	
+	public void unsubscribe(Context context, Entity entity, NotificationType type, SubscriptionResultListener subscriptionAddListener);	
 	
 	/**
 	 * Lists subscriptions for the current user.
@@ -561,6 +631,12 @@ public interface SocializeService {
 	public SocializeSystem getSystem();
 	
 	/**
+	 * Returns the logger used by Socialize.
+	 * @return
+	 */
+	public SocializeLogger getLogger();
+	
+	/**
 	 * Should be called in the onPause method of the containing activity
 	 */
 	public void onPause(Context context);
@@ -569,4 +645,6 @@ public interface SocializeService {
 	 * Should be called in the onResume method of the containing activity
 	 */
 	public void onResume(Context context);
+
+
 }

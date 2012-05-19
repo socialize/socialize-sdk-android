@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,6 +33,7 @@ import com.socialize.networks.ShareOptions;
  * @author Jason Polites
  *
  */
+@Deprecated
 public abstract class BaseActionButtonHandler<A extends SocializeAction> implements ActionButtonHandler<A> {
 
 	private SocializeLogger logger;
@@ -105,8 +106,6 @@ public abstract class BaseActionButtonHandler<A extends SocializeAction> impleme
 				if(config.getShareToNetworks() != null) {
 					shareOptions.setShareTo(config.getShareToNetworks());
 				}
-				
-				shareOptions.setAutoAuth(config.isAutoAuth());
 				
 				button.setState(ActionButtonState.LOADING);
 				

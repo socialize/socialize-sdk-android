@@ -1,37 +1,32 @@
-.. raw:: html
+import com.socialize.Socialize;
+import com.socialize.api.SocializeSession;
+import com.socialize.auth.AuthProviderType;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeAuthListener;
+import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 
-	<pre class="brush: java">
-	
-	import com.socialize.Socialize;
-	import com.socialize.api.SocializeSession;
-	import com.socialize.auth.AuthProviderType;
-	import com.socialize.error.SocializeException;
-	import com.socialize.listener.SocializeAuthListener;
-	import com.socialize.auth.facebook.FacebookAuthProviderInfo;
+// The "this" reference below refers to a Context object
 
-	// The "this" reference below refers to a Context object
+FacebookAuthProviderInfo info = new FacebookAuthProviderInfo();
+info.setAppId(facebookAppId); // Your facebook app ID
 
-	FacebookAuthProviderInfo info = new FacebookAuthProviderInfo();
-	info.setAppId(facebookAppId); // Your facebook app ID
+Socialize.getSocialize().authenticate(
+	this,
+	consumerKey, // From your account at getsocialize.com
+	consumerSecret, // From your account at getsocialize.com
+	info, 
+	new SocializeAuthListener() {
+		public void onAuthSuccess(SocializeSession session) {
+			// Success!
+		}
+		public void onAuthFail(SocializeException error) {
+			// Handle auth fail
+		}
+		public void onError(SocializeException error) {
+			// Handle error
+		}
+		public void onCancel() {
+			// Handle cancel
+		}
 
-	Socialize.getSocialize().authenticate(
-		this,
-		consumerKey, // From your account at getsocialize.com
-		consumerSecret, // From your account at getsocialize.com
-		info, 
-		new SocializeAuthListener() {
-			public void onAuthSuccess(SocializeSession session) {
-				// Success!
-			}
-			public void onAuthFail(SocializeException error) {
-				// Handle auth fail
-			}
-			public void onError(SocializeException error) {
-				// Handle error
-			}
-			public void onCancel() {
-				// Handle cancel
-			}
-
-		});		
-	</pre>
+	});		

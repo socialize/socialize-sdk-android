@@ -1,7 +1,6 @@
 package com.socialize.test.mock;
 
 import android.location.Location;
-
 import com.socialize.location.DefaultLocationProvider;
 import com.socialize.location.SocializeLocationManager;
 

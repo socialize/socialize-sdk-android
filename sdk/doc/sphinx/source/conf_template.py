@@ -82,7 +82,7 @@ exclude_patterns = []
 #show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+pygments_style = 'vs'
 
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []
@@ -102,7 +102,9 @@ html_theme_options = {
     "sidebarbgcolor" : "#cccccc",
     "sidebartextcolor" : "#21435f",
     "sidebarlinkcolor" : "#21435f",
-    "relbarbgcolor" : "#0092c7"
+    "relbarbgcolor" : "#0092c7",
+    "codebgcolor" : "#fafafa",
+    
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -213,7 +215,6 @@ latex_documents = [
 
 # If false, no module index is generated.
 #latex_domain_indices = True
-
 
 # -- Options for manual page output --------------------------------------------
 

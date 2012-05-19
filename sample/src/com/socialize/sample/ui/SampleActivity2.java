@@ -77,7 +77,7 @@ public class SampleActivity2 extends Activity {
 				Socialize.getSocialize().getConfig().setFacebookAppId(txtFB.getText().toString());
 				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkSSO.isChecked());
 				Socialize.getSocialize().getConfig().setTwitterKeySecret(txtTW_Key.getText().toString(), txtTW_Sec.getText().toString());
-				Socialize.getSocializeUI().showCommentView(SampleActivity2.this, entity);
+				Socialize.getSocialize().showCommentView(SampleActivity2.this, entity);
 			}
 		});
 		

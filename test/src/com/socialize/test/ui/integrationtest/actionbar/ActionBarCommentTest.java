@@ -3,7 +3,6 @@ package com.socialize.test.ui.integrationtest.actionbar;
 import android.app.Activity;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
-
 import com.socialize.Socialize;
 import com.socialize.entity.Entity;
 import com.socialize.sample.ui.ActionBarManualActivity2;

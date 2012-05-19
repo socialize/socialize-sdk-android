@@ -1,7 +1,7 @@
 package com.socialize.test.mock;
 
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.EntitySystem;
+import com.socialize.api.action.entity.EntitySystem;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
@@ -23,11 +23,27 @@ public class MockEntitySystem implements EntitySystem {
 	public void getEntity(SocializeSession session, long id, EntityListener listener) {
 		if(listener != null) listener.onGet(entity);
 	}
-
+	
 	@Override
-	public Entity getEntity(SocializeSession session, long id) throws SocializeException {
+	public Entity getEntitySynchronous(SocializeSession session, long id) throws SocializeException {
 		return entity;
 	}
+
+	@Override
+	public void getEntities(SocializeSession session, int start, int end, EntityListener listener, String... entityKeys) {
+		if(listener != null) listener.onList(entityList);
+	}
+
+	@Override
+	public void getAllEntities(SocializeSession session, int start, int end, EntityListener listener) {
+		if(listener != null) listener.onList(entityList);
+	}
+
+	@Override
+	public void getEntities(SocializeSession session, EntityListener listener, String... entityKeys) {
+		if(listener != null) listener.onList(entityList);
+	}
+
 
 	@Override
 	public void addEntity(SocializeSession session, Entity entity, EntityListener listener) {
@@ -37,11 +53,6 @@ public class MockEntitySystem implements EntitySystem {
 	@Override
 	public void getEntity(SocializeSession session, String entityKey, EntityListener listener) {
 		if(listener != null) listener.onGet(entity);
-	}
-
-	@Override
-	public void listEntities(SocializeSession session, EntityListener listener, String... entityKeys) {
-		if(listener != null) listener.onList(entityList);
 	}
 
 	public void setEntity(Entity view) {

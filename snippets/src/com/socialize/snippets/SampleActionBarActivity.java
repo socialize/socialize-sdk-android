@@ -94,8 +94,10 @@ public class SampleActionBarActivity extends Activity {
 					}
 
 					@Override
-					public void onClick(ActionBarView actionBar, ActionBarEvent evt) {
+					public boolean onClick(ActionBarView actionBar, ActionBarEvent evt) {
 						// Called when the user clicks on the action bar
+						// Return true if the event has been consumed and should NOT be propagated to the ActionBar
+						return false;
 					}
 				});
 			}

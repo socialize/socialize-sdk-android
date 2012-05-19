@@ -1,37 +1,33 @@
-.. raw:: html
-
-	<pre class="brush: xml;">
-	&lt;?xml version="1.0" encoding="utf-8"?>
-	&lt;RelativeLayout
-		xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	
+	<ScrollView
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_above="@+id/socializeActionBar"
+		android:fillViewport="true"
+		android:isScrollContainer="false">
+	
+		<LinearLayout
+		android:orientation="vertical"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent">
 		
-		&lt;ScrollView
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-			android:layout_above="@+id/socializeActionBar"
-			android:fillViewport="true"
-			android:isScrollContainer="false">
 		
-			&lt;LinearLayout
-			android:orientation="vertical"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent">
-			
-			
-			&lt;!-- Your existing content goes here -->
-			
-			&lt;/LinearLayout>
-			
-		&lt;/ScrollView>
+		<!-- Your existing content goes here -->
 		
-		&lt;!-- The ActionBar MUST appear AFTER your content in your layout -->
-		&lt;com.socialize.ui.actionbar.ActionBarView
-			android:id="@id/socializeActionBar"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:layout_alignParentBottom="true"/>
+		</LinearLayout>
 		
-	&lt;/RelativeLayout>
-	</pre>
+	</ScrollView>
+	
+	<!-- The ActionBar MUST appear AFTER your content in your layout -->
+	<com.socialize.ui.actionbar.ActionBarView
+		android:id="@id/socializeActionBar"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"/>
+	
+</RelativeLayout>

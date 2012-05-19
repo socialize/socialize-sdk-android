@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,26 +22,41 @@
 package com.socialize.listener.comment;
 
 
+import android.app.Activity;
 import com.socialize.entity.Comment;
 import com.socialize.entity.ListResult;
+import com.socialize.error.SocializeException;
+import com.socialize.networks.PostData;
+import com.socialize.networks.SocialNetwork;
+import com.socialize.networks.SocialNetworkListener;
 
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class CommentAddListener extends CommentListener {
+public abstract class CommentAddListener extends CommentListener implements SocialNetworkListener {
 
 	@Override
-	public final void onGet(Comment entity) {}
+	public final void onGet(Comment comment) {}
 
 	@Override
-	public final void onList(ListResult<Comment> entities) {}
+	public final void onList(ListResult<Comment> comments) {}
 
 	@Override
-	public final void onUpdate(Comment entity) {}
+	public final void onUpdate(Comment comment) {}
 
 	@Override
 	public final void onDelete() {}
 
+	@Override
+	public void onPostError(Activity context, SocialNetwork network, Exception error) {
+		onError(SocializeException.wrap(error));
+	}
+
+	@Override
+	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {}
+
+	@Override
+	public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {}
 }

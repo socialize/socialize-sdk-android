@@ -316,12 +316,6 @@
 	        				<arg value="package" />
 	        				<arg value="${test.package}" />
                     	
-                    	<!--
-        				<arg value="-e" />
-	        				<arg value="emma" />
-	        				<arg value="true" />        
-                    	-->
-                    	
         				<arg value="-e" />
 	        				<arg value="coverage" />
 	        				<arg value="true" />                       	

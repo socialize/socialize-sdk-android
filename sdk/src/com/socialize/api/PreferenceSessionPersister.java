@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,11 +23,9 @@ package com.socialize.api;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-
 import com.socialize.Socialize;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.DefaultUserProviderCredentials;
@@ -142,11 +140,12 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 		editor.putString("consumer_secret", session.getConsumerSecret());
 		editor.putString("consumer_token", session.getConsumerToken());
 		editor.putString("consumer_token_secret", session.getConsumerTokenSecret());
+
+		editor.putString(SOCIALIZE_VERSION, Socialize.VERSION);
 		
 		String userProviderCredentials = jsonUtils.toJSON(session.getUserProviderCredentials());
 		
-		editor.putString(USER_AUTH_DATA, userProviderCredentials);
-		editor.putString(SOCIALIZE_VERSION, Socialize.VERSION);
+		editor.putString(USER_AUTH_DATA, userProviderCredentials);	
 		
 		User user = session.getUser();
 		
@@ -253,6 +252,7 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 		
 		WritableSession session = sessionFactory.create(key, secret, userProviderCredentials);
 			
+		session.setRestored(true);
 		session.setConsumerToken(prefs.getString("consumer_token", null));
 		session.setConsumerTokenSecret(prefs.getString("consumer_token_secret", null));
 		

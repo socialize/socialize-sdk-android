@@ -23,20 +23,29 @@ package com.socialize.test.ui.auth;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.location.Location;
 import android.view.View;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.SocializeSystem;
+import com.socialize.api.action.ShareType;
+import com.socialize.entity.Share;
+import com.socialize.entity.SocializeAction;
 import com.socialize.ioc.SocializeIOC;
+import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookAuthClickListener;
 import com.socialize.networks.facebook.FacebookSignInCell;
 import com.socialize.networks.twitter.TwitterAuthClickListener;
 import com.socialize.networks.twitter.TwitterSignInCell;
+import com.socialize.share.ShareHandler;
 import com.socialize.test.ui.SocializeUIActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.auth.AuthPanelView;
+import com.socialize.ui.share.EmailCell;
+import com.socialize.ui.share.SMSCell;
 
 /**
  * @author Jason Polites
@@ -46,8 +55,6 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 
 	public void testAuthPanelViewRenderAndClick() throws Throwable {
 		
-		Socialize.getSocialize().destroy(true);
-
 		FacebookAuthClickListener mockFBListener = new FacebookAuthClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -77,6 +84,7 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 		
 		final AuthPanelView view = SocializeAccess.getBean("authPanelView");
 		
+		
 		final CountDownLatch latch0 = new CountDownLatch(1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		
@@ -89,7 +97,6 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 		});
 		
 		latch0.await(10, TimeUnit.SECONDS);
-		
 		
 		final FacebookSignInCell fbButton = TestUtils.findView(view, FacebookSignInCell.class);
 		final TwitterSignInCell twButton = TestUtils.findView(view, TwitterSignInCell.class);
@@ -114,7 +121,7 @@ public class AuthPanelViewTest extends SocializeUIActivityTest {
 		assertTrue((Boolean)getResult(2));
 		assertTrue((Boolean)getResult(3));
 	}
-
+	
 	@Override
 	protected void tearDown() throws Exception {
 		SocializeIOC.unregisterStub("facebookAuthClickListener");

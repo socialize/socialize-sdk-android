@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,6 @@ package com.socialize.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-
 import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
 

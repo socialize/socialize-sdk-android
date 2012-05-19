@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,11 +21,13 @@
  */
 package com.socialize.auth.twitter;
 
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
+import com.socialize.ui.dialog.SafeProgressDialog;
 import com.socialize.util.StringUtils;
 
 /**
@@ -37,6 +39,8 @@ public class TwitterWebViewClient extends WebViewClient {
 	private OAuthRequestListener oAuthRequestListener;
 	private boolean called = false;
 	
+	private Dialog progress;
+	
 	public TwitterWebViewClient() {
 		super();
 	}
@@ -46,7 +50,18 @@ public class TwitterWebViewClient extends WebViewClient {
 	}
 	
 	@Override
+	public void onPageFinished(WebView view, String url) {
+		super.onPageFinished(view, url);
+		if(progress != null) {
+			progress.dismiss();
+		}
+	}
+
+	@Override
 	public void onPageStarted(WebView view, String url, Bitmap favicon) {
+		
+		progress = SafeProgressDialog.show(view.getContext());
+		
 		if(url.trim().toLowerCase().startsWith(TwitterOAuthProvider.OAUTH_CALLBACK_URL.toLowerCase())) {
 			
 			if(!called) {
@@ -63,6 +78,8 @@ public class TwitterWebViewClient extends WebViewClient {
 					}
 				}
 				else {
+					view.setVisibility(View.GONE);
+					
 					String token = uri.getQueryParameter("oauth_token");
 					String verifier = uri.getQueryParameter("oauth_verifier");
 
@@ -71,11 +88,13 @@ public class TwitterWebViewClient extends WebViewClient {
 					}
 				}
 			}
-			
+			progress.dismiss();
 			view.stopLoading();
 		}
 		else {
 			super.onPageStarted(view, url, favicon);
 		}
 	}
+	
+	
 }

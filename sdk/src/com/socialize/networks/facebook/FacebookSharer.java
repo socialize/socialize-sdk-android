@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,6 @@
 package com.socialize.networks.facebook;
 
 import android.app.Activity;
-
-import com.socialize.Socialize;
-import com.socialize.SocializeService;
-import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ActionType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
@@ -38,7 +34,6 @@ import com.socialize.networks.SocialNetworkListener;
  */
 public class FacebookSharer extends AbstractSocialNetworkSharer {
 	
-	private ShareMessageBuilder shareMessageBuilder;
 	private FacebookWallPoster facebookWallPoster;
 	
 	@Override
@@ -54,8 +49,7 @@ public class FacebookSharer extends AbstractSocialNetworkSharer {
 				break;
 				
 			case SHARE:
-				String body = shareMessageBuilder.buildShareMessage( entity, urlSet, comment, false, false);
-				facebookWallPoster.post(context, entity, body, urlSet, listener);
+				facebookWallPoster.post(context, entity, comment, urlSet, listener);
 				break;
 				
 			case LIKE:
@@ -64,16 +58,7 @@ public class FacebookSharer extends AbstractSocialNetworkSharer {
 		}		
 	}
 
-	public void setShareMessageBuilder(ShareMessageBuilder shareMessageBuilder) {
-		this.shareMessageBuilder = shareMessageBuilder;
-	}
-
 	public void setFacebookWallPoster(FacebookWallPoster facebookWallPoster) {
 		this.facebookWallPoster = facebookWallPoster;
-	}
-
-	// So we can mock
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
 	}
 }

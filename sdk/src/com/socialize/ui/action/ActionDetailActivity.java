@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -99,7 +99,7 @@ public class ActionDetailActivity extends SocializeUIActivity {
 			if(isTaskRoot() && view != null) {
 				SocializeAction currentAction = view.getCurrentAction();
 				if(currentAction != null) {
-					Socialize.getSocializeUI().showCommentView(this, currentAction.getEntity());
+					Socialize.getSocialize().showCommentView(this, currentAction.getEntity());
 					finish();
 					return true;
 				}

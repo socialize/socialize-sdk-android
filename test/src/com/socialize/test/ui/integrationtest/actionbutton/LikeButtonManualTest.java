@@ -23,19 +23,17 @@ package com.socialize.test.ui.integrationtest.actionbutton;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
-import com.socialize.api.action.EntitySystem;
-import com.socialize.api.action.LikeSystem;
+import com.socialize.api.action.entity.EntitySystem;
+import com.socialize.api.action.like.LikeSystem;
 import com.socialize.entity.Entity;
 import com.socialize.entity.EntityStats;
 import com.socialize.entity.Like;
@@ -109,7 +107,6 @@ public class LikeButtonManualTest extends ActivityInstrumentationTestCase2<Empty
 				error.printStackTrace();
 				fail();
 			}
-			
 			@Override
 			public void onInit(Context context, IOCContainer container) {
 				ProxyObject<LikeSystem> likeSystemProxy = container.getProxy("likeSystem");

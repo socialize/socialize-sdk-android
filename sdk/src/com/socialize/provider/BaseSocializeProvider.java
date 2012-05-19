@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,11 @@ package com.socialize.provider;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -34,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.content.Context;
 import com.socialize.android.ioc.IBeanFactory;
+import com.socialize.api.SessionLock;
 import com.socialize.api.SocializeRequestFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionFactory;
@@ -54,6 +59,7 @@ import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
 import com.socialize.entity.SocializeObjectFactory;
 import com.socialize.entity.User;
+import com.socialize.entity.UserAuthData;
 import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
@@ -135,7 +141,17 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	
 	@Override
 	public SocializeSession authenticate(String endpoint, String key, String secret, String uuid) throws SocializeException {
+		
+		if(authProviderDataFactory == null) {
+			throw new SocializeException("Socialize not initialized");
+		}
+		
 		AuthProviderData data = authProviderDataFactory.getBean();
+		
+		if(data == null) {
+			throw new SocializeException("Socialize not initialized");
+		}
+		
 		data.setAuthProviderInfo(authProviderInfoBuilder.getFactory(AuthProviderType.SOCIALIZE).getInstance());
 		return authenticate(endpoint, key, secret, data, uuid);
 	}
@@ -241,97 +257,146 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	}
 
 	@Override
-	public synchronized SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
-		
-		WritableSession session = loadSession(endpoint, key, secret);
-		
-		if(session != null) {
+	public SocializeSession authenticate(String endpoint, String key, String secret, AuthProviderData data, String uuid) throws SocializeException {
+		try {
+			SessionLock.lock();
+
+			WritableSession session = loadSession(endpoint, key, secret);
 			
-			if(validateSession(session, data)) {
-				return session;
-			}
-			else {
-				AuthProviderInfo info = data.getAuthProviderInfo();
+			if(session != null) {
 				
-				if(info != null) {
-					DefaultUserProviderCredentials userProviderCredentials = new DefaultUserProviderCredentials();
-					userProviderCredentials.setAccessToken(data.getToken3rdParty());
-					userProviderCredentials.setTokenSecret(data.getSecret3rdParty());
-					userProviderCredentials.setUserId(data.getUserId3rdParty());
-					userProviderCredentials.setAuthProviderInfo(data.getAuthProviderInfo());
-					
-					session.getUserProviderCredentials().put(info.getType(), userProviderCredentials);
+				if(validateSession(session, data)) {
+					return session;
 				}
 				else {
-					// Legacy
-					session = null;
+					session = setProviderCredentialsForUser(data, session);
 				}
 			}
-		}
-		
-		if(session == null) {
-			session = sessionFactory.create(key, secret, data);
-		}
-		
-		endpoint = prepareEndpoint(session, endpoint, true);
-		
-		if(!clientFactory.isDestroyed()) {
+			
+			if(session == null) {
+				session = sessionFactory.create(key, secret, data);
+			}
+			
+			endpoint = prepareEndpoint(session, endpoint, true);
+			
+			if(!clientFactory.isDestroyed()) {
 
-			HttpClient client = clientFactory.getClient();
-			
-			HttpEntity entity = null;
-			
-			try {
-				HttpUriRequest request = requestFactory.getAuthRequest(session, endpoint, uuid, data);
+				HttpClient client = clientFactory.getClient();
 				
-				if(logger != null && logger.isDebugEnabled()) {
-					logger.debug("Calling authenticate endpoint for device [" +
-							uuid +
-							"]");
-				}
+				HttpEntity entity = null;
 				
-				HttpResponse response = client.execute(request);
-				
-				entity = response.getEntity();
-				
-				if(httpUtils.isHttpError(response)) {
+				try {
+					HttpUriRequest request = requestFactory.getAuthRequest(session, endpoint, uuid, data);
 					
-					if(sessionPersister != null && httpUtils.isAuthError(response)) {
-						sessionPersister.delete(context);
+					if(logger != null && logger.isDebugEnabled()) {
+						logger.debug("Calling authenticate endpoint for device [" +
+								uuid +
+								"]");
 					}
 					
-					String msg = ioUtils.readSafe(entity.getContent());
+					HttpResponse response = client.execute(request);
 					
-					throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
-				}
-				else {
+					entity = response.getEntity();
 					
-					JSONObject json = jsonParser.parseObject(entity.getContent());
-					
-					User user = userFactory.fromJSON(json.getJSONObject("user"));
+					if(httpUtils.isHttpError(response)) {
+						
+						if(sessionPersister != null && httpUtils.isAuthError(response)) {
+							sessionPersister.delete(context);
+						}
+						
+						String msg = ioUtils.readSafe(entity.getContent());
+						
+						throw new SocializeApiError(httpUtils, response.getStatusLine().getStatusCode(), msg);
+					}
+					else {
+						
+						JSONObject json = jsonParser.parseObject(entity.getContent());
+						
+						User user = userFactory.fromJSON(json.getJSONObject("user"));
 
-					session.setConsumerToken(json.getString("oauth_token"));
-					session.setConsumerTokenSecret(json.getString("oauth_token_secret"));
-					session.setUser(user);
-					
-					saveSession(session);
+						session.setConsumerToken(json.getString("oauth_token"));
+						session.setConsumerTokenSecret(json.getString("oauth_token_secret"));
+						session.setUser(user);
+						
+						setProviderCredentialsForUser(data, session);
+						
+						// Ensure the user credentials match the user auth data returned from the server
+						verifyProviderCredentialsForUser(session, user);
+						
+						saveSession(session);
+					}
+				}
+				catch (Exception e) {
+					throw SocializeException.wrap(e);
+				}
+				finally {
+					closeEntity(entity);
 				}
 			}
-			catch (Exception e) {
-				throw SocializeException.wrap(e);
+			else {
+				if(logger != null) {
+					logger.warn("Attempt to access HttpClientFactory that was already destroyed");
+				}
 			}
-			finally {
-				closeEntity(entity);
-			}
+			
+			return session;			
+		}
+		finally {
+			SessionLock.unlock();
+		}
+	}
+	
+	protected WritableSession setProviderCredentialsForUser(AuthProviderData data, WritableSession session) {
+		AuthProviderInfo info = data.getAuthProviderInfo();
+		
+		if(info != null) {
+			DefaultUserProviderCredentials userProviderCredentials = new DefaultUserProviderCredentials();
+			userProviderCredentials.setAccessToken(data.getToken3rdParty());
+			userProviderCredentials.setTokenSecret(data.getSecret3rdParty());
+			userProviderCredentials.setUserId(data.getUserId3rdParty());
+			userProviderCredentials.setAuthProviderInfo(data.getAuthProviderInfo());
+			
+			session.getUserProviderCredentials().put(info.getType(), userProviderCredentials);
 		}
 		else {
-			if(logger != null) {
-				logger.warn("Attempt to access HttpClientFactory that was already destroyed");
-			}
+			// Legacy
+			session = null;
 		}
 		
-		
 		return session;
+	}
+	
+	protected void verifyProviderCredentialsForUser(WritableSession session, User user) {
+		List<UserAuthData> authData = user.getAuthData();
+		UserProviderCredentialsMap credentials = session.getUserProviderCredentials();
+			
+		if(credentials != null) {
+
+			if(authData != null) {
+				Map<AuthProviderType, UserProviderCredentials> validCreds = new LinkedHashMap<AuthProviderType, UserProviderCredentials>();
+				for (UserAuthData userAuthData : authData) {
+					UserProviderCredentials creds = credentials.get(userAuthData.getAuthProviderType());
+					if(creds != null) {
+						validCreds.put(userAuthData.getAuthProviderType(), creds);
+					}
+				}
+				
+				// Clear and reset
+				credentials.removeAll();
+				
+				Set<Entry<AuthProviderType, UserProviderCredentials>> entrySet = validCreds.entrySet();
+				
+				for (Entry<AuthProviderType, UserProviderCredentials> entry : entrySet) {
+					credentials.put(entry.getKey(), entry.getValue());
+				}
+			}
+			else {
+				credentials.removeAll();
+			}
+
+			// Set back to session
+			session.setUserProviderCredentials(credentials);								
+		}
 	}
 
 	@Override
@@ -623,8 +688,8 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 	private final String prepareEndpoint(String host, String endpoint, boolean secure) {
 		endpoint = endpoint.trim();
 		
-		if(host == null) {
-			logger.warn("The session did not have an endpoint configured, using the config");
+		if(StringUtils.isEmpty(host)) {
+			logger.warn("The session did not have a host configured, using the config");
 			host = config.getProperty(SocializeConfig.API_HOST);
 		}
 		
@@ -649,7 +714,6 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 			}
 				
 			endpoint = host + endpoint;
-			
 		}
 		else {
 			logger.error("Could not locate host property in session or config!");

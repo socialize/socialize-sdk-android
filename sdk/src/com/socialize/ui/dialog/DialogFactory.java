@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,12 +23,23 @@ package com.socialize.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.view.View;
+import com.socialize.entity.Entity;
+import com.socialize.networks.SocialNetworkListener;
 
 /**
  * @author Jason Polites
  *
  */
-public interface DialogFactory<D extends Dialog> {
+@Deprecated
+public interface DialogFactory<V extends View> {
 
-	public D show(Context context, String title, String message);
+	public Dialog show(final Context context, Entity entity, final SocialNetworkListener socialNetworkListener, final SocializeDialogListener<V> shareDialoglistener, int displayOptions);
+
+	public Dialog show(final Context context, final SocializeDialogListener<V> listener, int displayOptions);
+
+	public Dialog show(final View parent, SocialNetworkListener socialNetworkListener, final SocializeDialogListener<V> listener, int displayOptions);
+
+	public Dialog show(View parent, int displayOptions);
+
 }

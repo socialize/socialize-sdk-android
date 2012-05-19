@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,16 +30,15 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ScrollView;
 import com.socialize.SocializeServiceImpl;
-import com.socialize.api.action.ActivitySystem;
-import com.socialize.api.action.CommentSystem;
-import com.socialize.api.action.EntitySystem;
-import com.socialize.api.action.LikeSystem;
-import com.socialize.api.action.ShareSystem;
 import com.socialize.api.action.ShareType;
-import com.socialize.api.action.SubscriptionSystem;
-import com.socialize.api.action.UserSystem;
-import com.socialize.api.action.ViewSystem;
-import com.socialize.auth.AuthProviderData;
+import com.socialize.api.action.activity.ActivitySystem;
+import com.socialize.api.action.comment.CommentSystem;
+import com.socialize.api.action.comment.SubscriptionSystem;
+import com.socialize.api.action.entity.EntitySystem;
+import com.socialize.api.action.like.LikeSystem;
+import com.socialize.api.action.share.ShareSystem;
+import com.socialize.api.action.user.UserSystem;
+import com.socialize.api.action.view.ViewSystem;
 import com.socialize.auth.AuthProviderInfoBuilder;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.AuthProviders;
@@ -48,7 +47,6 @@ import com.socialize.entity.Comment;
 import com.socialize.entity.Share;
 import com.socialize.entity.SocializeAction;
 import com.socialize.ioc.SocializeIOC;
-import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeListener;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.log.SocializeLogger;
@@ -127,32 +125,22 @@ public class PublicSocialize extends SocializeServiceImpl {
 
 	@Override
 	public SocializeAuthProviderInfo newSocializeAuthProviderInfo() {
-
 		return super.newSocializeAuthProviderInfo();
 	}
 
 	@Override
-	public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderData authProviderData, SocializeAuthListener authListener, boolean do3rdPartyAuth) {
-
-		super.authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, do3rdPartyAuth);
+	public synchronized void initNotifications(Context context) {
+		super.initNotifications(context);
 	}
 
 	@Override
-	public boolean checkKeys(String consumerKey, String consumerSecret) {
-
-		return super.checkKeys(consumerKey, consumerSecret);
+	public synchronized void initEntityLoader() {
+		super.initEntityLoader();
 	}
 
 	@Override
-	public boolean checkKeys(String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
-
-		return super.checkKeys(consumerKey, consumerSecret, authListener);
-	}
-
-	@Override
-	public boolean checkKey(String name, String key, SocializeAuthListener authListener) {
-
-		return super.checkKey(name, key, authListener);
+	public void logError(String message, Throwable error) {
+		super.logError(message, error);
 	}
 
 	@Override
@@ -163,55 +151,46 @@ public class PublicSocialize extends SocializeServiceImpl {
 
 	@Override
 	public Comment newComment() {
-
 		return super.newComment();
 	}
 
 	@Override
-	public void handleActionShare(Activity activity, ShareType shareType, Share share, String shareText, Location location, boolean autoAuth, ShareAddListener shareAddListener) {
-
-		super.handleActionShare(activity, shareType, share, shareText, location, autoAuth, shareAddListener);
+	public void handleActionShare(Activity activity, ShareType shareType, Share share, String shareText, Location location, ShareAddListener shareAddListener) {
+		super.handleActionShare(activity, shareType, share, shareText, location, shareAddListener);
 	}
 
 	@Override
-	public void handleActionShare(Activity activity, SocialNetwork socialNetwork, SocializeAction action, String shareText, Location location, boolean autoAuth, SocialNetworkListener listener) {
-
-		super.handleActionShare(activity, socialNetwork, action, shareText, location, autoAuth, listener);
+	public void handleActionShare(Activity activity, SocialNetwork socialNetwork, SocializeAction action, String shareText, SocialNetworkListener listener) {
+		super.handleActionShare(activity, socialNetwork, action, shareText, listener);
 	}
 
 	@Override
 	public boolean isAuthenticatedLegacy(AuthProviderType providerType) {
-
 		return super.isAuthenticatedLegacy(providerType);
 	}
 
 	@Override
 	public boolean assertAuthenticated(SocializeListener listener) {
-
 		return super.assertAuthenticated(listener);
 	}
 
 	@Override
-	public boolean assertInitialized(SocializeListener listener) {
-
-		return super.assertInitialized(listener);
+	public boolean assertInitialized(Context context, SocializeListener listener) {
+		return super.assertInitialized(context, listener);
 	}
 
 	@Override
 	public ActionBarView newActionBarView(Activity parent) {
-
 		return super.newActionBarView(parent);
 	}
 
 	@Override
 	public Intent newIntent(Activity context, Class<?> cls) {
-
 		return super.newIntent(context, cls);
 	}
 
 	@Override
 	public LayoutParams newLayoutParams(int width, int height) {
-
 		return super.newLayoutParams(width, height);
 	}
 

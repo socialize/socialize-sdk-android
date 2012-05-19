@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ import com.socialize.api.SocializeResponse;
 import com.socialize.api.SocializeApi.RequestType;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeObject;
+import com.socialize.error.SocializeApiError;
 import com.socialize.error.SocializeException;
 
 
@@ -71,17 +72,32 @@ public abstract class AbstractSocializeListener<T extends SocializeObject> imple
 		}
 	}
 
-	public abstract void onGet(T entity);
+	public abstract void onGet(T result);
 
-	public abstract void onList(ListResult<T> entities);
+	public abstract void onList(ListResult<T> result);
 
-	public abstract void onUpdate(T entity);
+	public abstract void onUpdate(T result);
 
-	public abstract void onCreate(T entity);
+	public abstract void onCreate(T result);
 	
 	public abstract void onDelete();
+	
+	// Subclasses override
+	public void onCancel() {}
 
 	@Override
 	public abstract void onError(SocializeException error);
+	
+	/**
+	 * Returns true if the error reported is a 404 (not found)
+	 * @param error
+	 * @return
+	 */
+	protected boolean isNotFoundError(SocializeException error) {
+		if(error instanceof SocializeApiError) {
+			return ((SocializeApiError)error).getResultCode() == 404;
+		}
+		return false;
+	}
 
 }

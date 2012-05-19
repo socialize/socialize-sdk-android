@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,10 @@ package com.socialize.launcher;
 import android.app.Activity;
 import android.os.Bundle;
 import com.socialize.Socialize;
-import com.socialize.SocializeUI;
+import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ActionType;
-import com.socialize.api.action.ActivitySystem;
+import com.socialize.api.action.activity.ActivitySystem;
 import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
@@ -72,7 +72,7 @@ public class CommentListLauncher extends BaseLauncher {
 				SocializeAction action = activitySystem.getAction(session, id, type);
 				
 				if(action != null) {
-					getSocializeUI().showCommentView(context, action.getEntity());
+					getSocialize().showCommentView(context, action.getEntity());
 					return true;
 				}
 				else {
@@ -112,8 +112,8 @@ public class CommentListLauncher extends BaseLauncher {
 	}
 	
 	// Mockable
-	protected SocializeUI getSocializeUI() {
-		return Socialize.getSocializeUI();
+	protected SocializeService getSocialize() {
+		return Socialize.getSocialize();
 	}
 
 	public void setEntityLoaderUtils(EntityLoaderUtils entityLoaderUtils) {

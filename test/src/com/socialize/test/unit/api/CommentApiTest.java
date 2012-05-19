@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,11 +22,10 @@
 package com.socialize.test.unit.api;
 
 import java.util.List;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.SocializeCommentSystem;
+import com.socialize.api.action.comment.SocializeCommentSystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
@@ -58,7 +57,7 @@ public class CommentApiTest extends SocializeUnitTest {
 	 * More specific test to ensure the comment is actually set.
 	 */
 	public void testAddComment() {
-		final String key = "foo";
+		final Entity key = Entity.newInstance("foo", "foo");
 		final String comment = "bar";
 		
 		SocializeCommentSystem api = new SocializeCommentSystem(provider){
@@ -68,7 +67,7 @@ public class CommentApiTest extends SocializeUnitTest {
 			}
 		};
 		
-		api.addComment(session, Entity.newInstance(key, null), comment, null, listener);
+		api.addComment(session, key, comment, null, listener);
 		
 		List<Comment> list = getNextResult();
 		assertNotNull(list);
@@ -78,7 +77,7 @@ public class CommentApiTest extends SocializeUnitTest {
 		assertNotNull(result);
 		assertEquals(comment, result.getText());
 		assertNotNull(result.getEntityKey());
-		assertEquals(key, result.getEntityKey());
+		assertEquals(key.getKey(), result.getEntityKey());
 	}
 	
 	public void testGetCommentsByEntity() {

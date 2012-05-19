@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.error.SocializeErrorHandler;

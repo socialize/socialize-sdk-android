@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,9 @@
  */
 package com.socialize.listener.like;
 
+import java.util.List;
 import com.socialize.entity.Like;
+import com.socialize.entity.ListResult;
 
 
 /**
@@ -41,5 +43,17 @@ public abstract class LikeListListener extends LikeListener {
 	
 	@Override
 	public final void onDelete() {}
+	
+	@Override
+	public final void onList(ListResult<Like> entities) {
+		if(entities != null) {
+			onList(entities.getItems(), entities.getTotalCount());
+		}
+		else {
+			onList(null, 0);
+		}
+	}
+
+	public abstract void onList(List<Like> items, int totalSize);
 
 }

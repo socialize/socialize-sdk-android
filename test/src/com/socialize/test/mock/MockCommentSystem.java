@@ -1,7 +1,7 @@
 package com.socialize.test.mock;
 
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.CommentSystem;
+import com.socialize.api.action.comment.CommentSystem;
 import com.socialize.entity.Application;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;

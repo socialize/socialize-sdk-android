@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -39,22 +39,19 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ScrollView;
-import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.Logger;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.SocializeSessionConsumer;
-import com.socialize.api.action.ActivitySystem;
-import com.socialize.api.action.CommentSystem;
-import com.socialize.api.action.EntitySystem;
-import com.socialize.api.action.LikeSystem;
-import com.socialize.api.action.ShareSystem;
 import com.socialize.api.action.ShareType;
-import com.socialize.api.action.SubscriptionSystem;
-import com.socialize.api.action.UserSystem;
-import com.socialize.api.action.ViewSystem;
+import com.socialize.api.action.activity.ActivitySystem;
+import com.socialize.api.action.comment.CommentSystem;
+import com.socialize.api.action.comment.SubscriptionSystem;
+import com.socialize.api.action.entity.EntitySystem;
+import com.socialize.api.action.like.LikeSystem;
+import com.socialize.api.action.share.ShareSystem;
+import com.socialize.api.action.user.UserSystem;
+import com.socialize.api.action.view.ViewSystem;
 import com.socialize.auth.AuthProvider;
-import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderInfoBuilder;
 import com.socialize.auth.AuthProviderType;
@@ -75,7 +72,7 @@ import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.SocializeListener;
-import com.socialize.listener.activity.UserActivityListListener;
+import com.socialize.listener.activity.ActionListListener;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
@@ -87,14 +84,16 @@ import com.socialize.listener.like.LikeDeleteListener;
 import com.socialize.listener.like.LikeGetListener;
 import com.socialize.listener.like.LikeListListener;
 import com.socialize.listener.share.ShareAddListener;
-import com.socialize.listener.subscription.SubscriptionAddListener;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionListListener;
+import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.listener.view.ViewAddListener;
+import com.socialize.listener.view.ViewGetListener;
 import com.socialize.location.SocializeLocationProvider;
 import com.socialize.log.SocializeLogger;
+import com.socialize.networks.PostData;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
@@ -103,7 +102,6 @@ import com.socialize.notifications.NotificationChecker;
 import com.socialize.notifications.NotificationType;
 import com.socialize.notifications.SocializeC2DMReceiver;
 import com.socialize.notifications.WakeLock;
-import com.socialize.share.ShareHandlerListener;
 import com.socialize.ui.ActivityIOCProvider;
 import com.socialize.ui.SocializeEntityLoader;
 import com.socialize.ui.action.ActionDetailActivity;
@@ -118,22 +116,19 @@ import com.socialize.ui.profile.ProfileActivity;
 import com.socialize.ui.profile.UserProfile;
 import com.socialize.util.AppUtils;
 import com.socialize.util.ClassLoaderProvider;
-import com.socialize.util.Drawables;
 import com.socialize.util.EntityLoaderUtils;
 import com.socialize.util.ResourceLocator;
-import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
  */
-public class SocializeServiceImpl implements SocializeSessionConsumer, SocializeService , SocializeUI {
+public class SocializeServiceImpl implements SocializeService {
 	
 	static final String receiver = SocializeC2DMReceiver.class.getName();
 	
 	private SocializeLogger logger;
 	private IOCContainer container;
 	private SocializeSession session;
-	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	private AuthProviderInfoBuilder authProviderInfoBuilder;
 	private SocializeInitializationAsserter asserter;
 	private CommentSystem commentSystem;
@@ -144,7 +139,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	private ActivitySystem activitySystem;
 	private EntitySystem entitySystem;
 	private SubscriptionSystem subscriptionSystem;
-	private Drawables drawables;
+
 	private AuthProviders authProviders;
 	private NotificationChecker notificationChecker;
 	private AppUtils appUtils;
@@ -425,8 +420,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				this.activitySystem = container.getBean("activitySystem");
 				this.entitySystem = container.getBean("entitySystem");
 				this.subscriptionSystem = container.getBean("subscriptionSystem");
-				this.drawables = container.getBean("drawables");
-				this.authProviderDataFactory = container.getBean("authProviderDataFactory");
 				this.asserter = container.getBean("initializationAsserter");
 				this.authProviders = container.getBean("authProviders");
 				this.authProviderInfoBuilder = container.getBean("authProviderInfoBuilder");
@@ -574,8 +567,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				container.destroy();
 			}
 			
+			config.destroy();
 			system.destroy();
-			
 			initCount = 0;
 			initPaths = null;
 			entityLoader = null;
@@ -587,9 +580,9 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	
 	@Override
 	public synchronized void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, SocializeAuthListener authListener) {
-		AuthProviderData data = this.authProviderDataFactory.getBean();
-		data.setAuthProviderInfo(authProviderInfo);
-		authenticate(context, consumerKey, consumerSecret, data, authListener, true);	
+		if(assertInitialized(context, authListener)) {
+			userSystem.authenticate(context, consumerKey, consumerSecret, authProviderInfo, authListener, this);
+		}
 	}
 	
 	/*
@@ -598,22 +591,15 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 */
 	@Override
 	public synchronized void authenticate(Context context, SocializeAuthListener authListener) {
-		SocializeConfig config = getConfig();
-		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-		authenticate(context, consumerKey, consumerSecret, authListener);
+		if(assertInitialized(context, authListener)) {
+			userSystem.authenticate(context, authListener, this);
+		}
 	}
 	
-	public synchronized SocializeSession authenticateSynchronous(Context context) throws SocializeException {
-		SocializeConfig config = getConfig();
-		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);		
-		if(checkKeys(consumerKey, consumerSecret)) {
-			return userSystem.authenticateSynchronous(context, consumerKey, consumerSecret, this);
-		}
-		else {
-			throw new SocializeException("Consumer key and/or secret not provided");
-		}
+	public synchronized SocializeSession authenticateSynchronous(Context context) {
+		SocializeSession session = userSystem.authenticateSynchronous(context);
+		this.session = session;
+		return session;
 	}
 
 	@Override
@@ -627,11 +613,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 
 	@Override
 	public synchronized void authenticate(Context context, String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
-		if(assertInitialized(authListener)) {
-			AuthProviderData data = this.authProviderDataFactory.getBean();
-			SocializeAuthProviderInfo info = newSocializeAuthProviderInfo();
-			data.setAuthProviderInfo(info);
-			authenticate(context, consumerKey, consumerSecret, data, authListener, false);
+		if(assertInitialized(context, authListener)) {
+			userSystem.authenticate(context, consumerKey, consumerSecret, authListener, this);
 		}
 	}
 	
@@ -640,53 +623,62 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		return new SocializeAuthProviderInfo();
 	}
 	
+	@Deprecated
 	@Override
 	public synchronized void authenticateKnownUser(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, UserProviderCredentials userProviderCredentials, SocializeAuthListener authListener) {
-		if(assertInitialized(authListener)) {
-			AuthProviderData authProviderData = this.authProviderDataFactory.getBean();
-			authProviderData.setAuthProviderInfo(authProviderInfo);
-			authProviderData.setToken3rdParty(userProviderCredentials.getAccessToken());
-			authProviderData.setSecret3rdParty(userProviderCredentials.getTokenSecret());
-			authProviderData.setUserId3rdParty(userProviderCredentials.getUserId());
-			authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, false);	
+		authenticateKnownUser(context, userProviderCredentials, authListener);
+	}
+
+	@Override
+	public void authenticateKnownUser(Context context, UserProviderCredentials userProviderCredentials, SocializeAuthListener authListener) {
+		if(assertInitialized(context, authListener)) {
+			userSystem.authenticateKnownUser(context, userProviderCredentials, authListener, this);
 		}
 	}
 
-	protected synchronized void authenticate(
-			Context context,
-			String consumerKey, 
-			String consumerSecret, 
-			AuthProviderData authProviderData,
-			SocializeAuthListener authListener, 
-			boolean do3rdPartyAuth) {
-		
-		if(checkKeys(consumerKey, consumerSecret, authListener)) {
-			if(assertInitialized(authListener)) {
-				userSystem.authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, this, do3rdPartyAuth);
-			}
-		}
-	}
+//	protected synchronized void authenticate(
+//			Context context,
+//			String consumerKey, 
+//			String consumerSecret, 
+//			AuthProviderData authProviderData,
+//			SocializeAuthListener authListener, 
+//			boolean do3rdPartyAuth) {
+//		
+//		if(assertInitialized(context, authListener)) {
+//			userSystem.authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, this, do3rdPartyAuth);
+//		}
+//	}
 
-	protected boolean checkKeys(String consumerKey, String consumerSecret) {
-		return checkKeys(consumerKey, consumerSecret, null);
+//	protected boolean checkKeys(String consumerKey, String consumerSecret) {
+//		return checkKeys(consumerKey, consumerSecret, null);
+//	}
+//	
+//	protected boolean checkKeys(String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
+//		return  checkKey("consumer key", consumerKey, authListener) &&
+//				checkKey("consumer secret", consumerSecret, authListener);
+//	}
+//	protected boolean checkKey(String name, String key, SocializeAuthListener authListener) {
+//		if(StringUtils.isEmpty(key)) {
+//			String msg = "No key specified in authenticate";
+//			if(authListener != null) {
+//				authListener.onError(new SocializeException(msg));
+//			}
+//			logErrorMessage(msg);
+//			return false;
+//		} else {
+//			return true;	
+//		}
+//	}
+	protected void logError(String message, Throwable error) {
+		if(logger != null) {
+			logger.error(message, error);
+		}
+		else {
+			System.err.println(message);
+			error.printStackTrace();
+		}
 	}
 	
-	protected boolean checkKeys(String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
-		return  checkKey("consumer key", consumerKey, authListener) &&
-				checkKey("consumer secret", consumerSecret, authListener);
-	}
-	protected boolean checkKey(String name, String key, SocializeAuthListener authListener) {
-		if(StringUtils.isEmpty(key)) {
-			String msg = "No key specified in authenticate";
-			if(authListener != null) {
-				authListener.onError(new SocializeException(msg));
-			}
-			logErrorMessage(msg);
-			return false;
-		} else {
-			return true;	
-		}
-	}
 	protected void logErrorMessage(String message) {
 		if(logger != null) {
 			logger.error(message);
@@ -699,7 +691,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	public void addComment(final Activity activity, Entity entity, final String comment, final ShareOptions shareOptions, final CommentAddListener commentAddListener) {
 		Comment c = newComment();
 		c.setText(comment);
-		c.setEntity(entity);
+		c.setEntitySafe(entity);
 		addComment(activity, c, shareOptions, commentAddListener);
 	}
 	
@@ -723,7 +715,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		if(assertAuthenticated(commentAddListener)) {
 			if(shareOptions != null) {
 				final SocialNetwork[] shareTo = shareOptions.getShareTo();
-				final boolean autoAuth = shareOptions.isAutoAuth();
 				if(shareTo == null || shareTo.length == 0) {
 					commentSystem.addComment(session, comment, shareOptions, commentAddListener);
 				}
@@ -740,7 +731,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 						public void onCreate(final Comment commentObject) {
 							try {
 								for (final SocialNetwork socialNetwork : shareTo) {
-									handleActionShare(activity, socialNetwork, commentObject, commentObject.getText(), shareOptions.getLocation(), autoAuth, shareOptions.getListener());
+									handleActionShare(activity, socialNetwork, commentObject, commentObject.getText(), shareOptions.getListener());
 								}
 							}
 							finally {
@@ -763,7 +754,6 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		if(assertAuthenticated(likeAddListener)) {
 			if(shareOptions != null) {
 				final SocialNetwork[] shareTo = shareOptions.getShareTo();
-				final boolean autoAuth = shareOptions.isAutoAuth();
 				if(shareTo == null || shareTo.length == 0) {
 					likeSystem.addLike(session, entity, shareOptions, likeAddListener);
 				}
@@ -781,7 +771,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 							try {
 								if(like != null && shareSystem != null) {
 									for (final SocialNetwork socialNetwork : shareTo) {
-										handleActionShare(activity, socialNetwork, like, null, shareOptions.getLocation(), autoAuth, shareOptions.getListener());
+										handleActionShare(activity, socialNetwork, like, null, shareOptions.getListener());
 									}
 								}
 							}
@@ -800,18 +790,22 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}			
 	}
 	
+	public void share(final Activity activity, final String entityKey, final String text, final ShareOptions shareOptions, final ShareAddListener shareAddListener) {
+		share(activity, Entity.newInstance(entityKey, null), text, shareOptions, shareAddListener);
+	}
+
+	
 	@Override
 	public void share(final Activity activity, final Entity entity, final String text, final ShareOptions shareOptions, final ShareAddListener shareAddListener) {
 		if(assertAuthenticated(shareAddListener)) {
 			if(shareOptions != null) {
 				SocialNetwork[] shareTo = shareOptions.getShareTo();
-				final boolean autoAuth = shareOptions.isAutoAuth();
 				if(shareTo == null) {
-					shareSystem.addShare(activity, session, entity, text, ShareType.OTHER, shareOptions.getLocation(), shareAddListener);
+					shareSystem.addShare(activity, session, entity, text, ShareType.OTHER, shareAddListener);
 				}
 				else  {
 					for (final SocialNetwork socialNetwork : shareTo) {
-						shareSystem.addShare(activity, session, entity, text, socialNetwork, shareOptions.getLocation(), new ShareAddListener() {
+						shareSystem.addShare(activity, session, entity, text, socialNetwork, null, new ShareAddListener() {
 							@Override
 							public void onError(SocializeException error) {
 								if(shareAddListener != null) {
@@ -823,7 +817,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 							public void onCreate(Share share) {
 								try {
 									if(share != null && shareSystem != null && !shareOptions.isSelfManaged()) {
-										handleActionShare(activity, socialNetwork, share, text, shareOptions.getLocation(), autoAuth, shareOptions.getListener());
+										handleActionShare(activity, socialNetwork, share, text, shareOptions.getListener());
 									}
 								}
 								finally {
@@ -839,11 +833,22 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}
 	}
 	
+
+	@Override
+	public void share(Activity activity, String entityKey, String text, ShareType shareType, ShareAddListener shareAddListener) {
+		share(activity, entityKey, text, shareType, null, shareAddListener);
+	}
+	
 	@Override
 	public void share(Activity activity, Entity entity, String text, ShareType shareType, ShareAddListener shareAddListener) {
-		share(activity, entity, text, shareType, null, shareAddListener);
+		share(activity, entity.getKey(), text, shareType, null, shareAddListener);
 	}
-
+	
+	@Override
+	public void share(final Activity activity, final String entityKey, final String text, final ShareType shareType, final Location location, final ShareAddListener shareAddListener) {
+		share(activity, Entity.newInstance(entityKey, null), text, shareType, location, shareAddListener);
+	}
+	
 	@Override
 	public void share(final Activity activity, Entity entity, final String text, final ShareType shareType, final Location location, final ShareAddListener shareAddListener) {
 		if(assertAuthenticated(shareAddListener)) {
@@ -858,17 +863,17 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 				@Override
 				public void onCreate(Share share) {
 					if(share != null && shareSystem != null) {
-						handleActionShare(activity, shareType, share, text, location, true, shareAddListener);
+						handleActionShare(activity, shareType, share, text, location, shareAddListener);
 					}
 				}
 			});
-		}		
+		}	
 	}
-	
-	protected void handleActionShare(Activity activity, final ShareType shareType, final Share share, String shareText, Location location, boolean autoAuth, final ShareAddListener shareAddListener) {
-		shareSystem.share(activity, session, share, shareText, location, shareType, autoAuth, new ShareHandlerListener() {
+
+	protected void handleActionShare(Activity activity, final ShareType shareType, final Share share, String shareText, Location location, final ShareAddListener shareAddListener) {
+		shareSystem.share(activity, session, share, shareText, location, shareType, new SocialNetworkListener() {
 			@Override
-			public void onError(Activity parent, SocializeAction action, String message, Throwable error) {
+			public void onPostError(Activity context, SocialNetwork network, Exception error) {
 				if(logger != null) {
 					logger.error("Failed to share action to [" +
 							shareType +
@@ -879,12 +884,12 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 					shareAddListener.onError(SocializeException.wrap(error));
 				}
 			}
-			
+
 			@Override
-			public void onBeforePost(Activity parent) {}
-			
+			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {}
+
 			@Override
-			public void onAfterPost(Activity parent, SocializeAction action) {
+			public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
 				if(shareAddListener != null) {
 					shareAddListener.onCreate(share);
 				}
@@ -892,35 +897,8 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		});	
 	}
 
-	protected void handleActionShare(Activity activity, final SocialNetwork socialNetwork, SocializeAction action, String shareText, Location location, boolean autoAuth, final SocialNetworkListener listener) {
-		shareSystem.share(activity, session, action, shareText, location, ShareType.valueOf(socialNetwork), autoAuth, new ShareHandlerListener() {
-			@Override
-			public void onError(Activity parent, SocializeAction action, String message, Throwable error) {
-				if(logger != null) {
-					logger.error("Failed to share action to [" +
-							socialNetwork +
-							"]", error);
-				}
-				
-				if(listener != null) {
-					listener.onError(parent, socialNetwork, message, error);
-				}
-			}
-			
-			@Override
-			public void onBeforePost(Activity parent) {
-				if(listener != null) {
-					listener.onBeforePost(parent, socialNetwork);
-				}
-			}
-			
-			@Override
-			public void onAfterPost(Activity parent, SocializeAction action) {
-				if(listener != null) {
-					listener.onAfterPost(parent, socialNetwork);
-				}
-			}
-		});	
+	protected void handleActionShare(final Activity activity, final SocialNetwork socialNetwork, SocializeAction action, String shareText, final SocialNetworkListener listener) {
+		shareSystem.share(activity, session, action, shareText, null, ShareType.valueOf(socialNetwork), listener);	
 	}
 
 	@Override
@@ -1013,6 +991,17 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	
 	/*
 	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#getViewById(long, com.socialize.listener.view.ViewGetListener)
+	 */
+	@Override
+	public void getViewById(long id, ViewGetListener viewGetListener) {
+		if(assertAuthenticated(viewGetListener)) {
+			viewSystem.getView(session, id, viewGetListener);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * @see com.socialize.SocializeService#getLike(java.lang.String, com.socialize.listener.like.LikeGetListener)
 	 */
 	@Override
@@ -1085,7 +1074,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public void listEntitiesByKey(EntityListListener entityListListener, String...keys) {
 		if(assertAuthenticated(entityListListener)) {
-			entitySystem.listEntities(session, entityListListener, keys);
+			entitySystem.getEntities(session, entityListListener, keys);
 		}
 	}
 
@@ -1116,7 +1105,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#listActivityByUser(int, com.socialize.listener.activity.ActivityListListener)
 	 */
 	@Override
-	public void listActivityByUser(long userId, UserActivityListListener activityListListener) {
+	public void listActivityByUser(long userId, ActionListListener activityListListener) {
 		if(assertAuthenticated(activityListListener)) {
 			activitySystem.getActivityByUser(session, userId, activityListListener);
 		}
@@ -1127,7 +1116,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	 * @see com.socialize.SocializeService#listActivityByUser(int, int, int, com.socialize.listener.activity.ActivityListListener)
 	 */
 	@Override
-	public void listActivityByUser(long userId, int startIndex, int endIndex, UserActivityListListener activityListListener) {
+	public void listActivityByUser(long userId, int startIndex, int endIndex, ActionListListener activityListListener) {
 		if(assertAuthenticated(activityListListener)) {
 			activitySystem.getActivityByUser(session, userId, startIndex, endIndex, activityListListener);
 		}
@@ -1158,14 +1147,14 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	
 
 	@Override
-	public void subscribe(Context context, Entity entity, NotificationType type, SubscriptionAddListener subscriptionAddListener) {
+	public void subscribe(Context context, Entity entity, NotificationType type, SubscriptionResultListener subscriptionAddListener) {
 		if(assertAuthenticated(subscriptionAddListener)) {
 			subscriptionSystem.addSubscription(session, entity, type, subscriptionAddListener);
 		}		
 	}
 
 	@Override
-	public void unsubscribe(Context context, Entity entity, NotificationType type, SubscriptionAddListener subscriptionAddListener) {
+	public void unsubscribe(Context context, Entity entity, NotificationType type, SubscriptionResultListener subscriptionAddListener) {
 		if(assertAuthenticated(subscriptionAddListener)) {
 			subscriptionSystem.removeSubscription(session, entity, type, subscriptionAddListener);
 		}				
@@ -1188,7 +1177,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 	@Override
 	public void getSubscription(Entity entity, SubscriptionGetListener subscriptionGetListener) {
 		if(assertAuthenticated(subscriptionGetListener)) {
-			subscriptionSystem.getSubscription(session, entity, subscriptionGetListener);
+			subscriptionSystem.getSubscription(session, entity, NotificationType.NEW_COMMENTS, subscriptionGetListener);
 		}
 	}
 
@@ -1200,6 +1189,14 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		return this.initCount > 0;
 	}
 	
+	
+	
+	@Override
+	public boolean isInitialized(Context context) {
+		return this.initCount > 0 && container.getContext() == context;
+		
+	}
+
 	/* (non-Javadoc)
 	 * @see com.socialize.SocializeService#isAuthenticated()
 	 */
@@ -1247,34 +1244,33 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		if(asserter != null) {
 			return asserter.assertAuthenticated(this, session, listener);
 		}
-		if(assertInitialized(listener)) {
-			if(session != null) {
-				return true;
-			}
-			else {
-				if(listener != null) {
-					if(logger != null && logger.isInitialized()) {
-						listener.onError(new SocializeException(logger.getMessage(SocializeLogger.NOT_AUTHENTICATED)));
-					}
-					else {
-						listener.onError(new SocializeException("Not authenticated"));
-					}
-				}
+		
+		if(session != null) {
+			return true;
+		}
+		else {
+			if(listener != null) {
 				if(logger != null && logger.isInitialized()) {
-					logger.error(SocializeLogger.NOT_AUTHENTICATED);
+					listener.onError(new SocializeException(logger.getMessage(SocializeLogger.NOT_AUTHENTICATED)));
 				}
 				else {
-					System.err.println("Not authenticated");
+					listener.onError(new SocializeException("Not authenticated"));
 				}
+			}
+			if(logger != null && logger.isInitialized()) {
+				logger.error(SocializeLogger.NOT_AUTHENTICATED);
+			}
+			else {
+				System.err.println("Not authenticated");
 			}
 		}
 		
 		return false;
 	}
 	
-	protected boolean assertInitialized(SocializeListener listener) {
+	protected boolean assertInitialized(Context context, SocializeListener listener) {
 		if(asserter != null) {
-			return asserter.assertInitialized(this, listener);
+			return asserter.assertInitialized(context, this, listener);
 		}
 		
 		if(!isInitialized()) {
@@ -1412,6 +1408,41 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		return container;
 	}
 
+
+	
+	@Override
+	public boolean canShare(Context context, ShareType shareType) {
+		return shareSystem.canShare(context, shareType);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#getEntityLoader()
+	 */
+	@Override
+	public SocializeEntityLoader getEntityLoader() {
+		return entityLoader;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#getSystem()
+	 */
+	@Override
+	public SocializeSystem getSystem() {
+		return system;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.SocializeService#setEntityLoader(com.socialize.ui.SocializeEntityLoader)
+	 */
+	@Override
+	public void setEntityLoader(SocializeEntityLoader entityLoader) {
+		this.entityLoader = entityLoader;
+	}
+	
+
 	@Override
 	public View showActionBar(Activity parent, int resId, Entity entity) {
 		return showActionBar(parent, resId, entity, null, null);
@@ -1507,35 +1538,7 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		
 		return parentRelLyout;
 	}
-
-	protected ActionBarView newActionBarView(Activity parent) {
-		return new ActionBarView(parent);
-	}
-
-	protected Intent newIntent(Activity context, Class<?> cls) {
-		return new Intent(context, cls);
-	}
-
-	protected LayoutParams newLayoutParams(int width, int height) {
-		return new LayoutParams(width, height);
-	}
 	
-	protected RelativeLayout.LayoutParams newLayoutParams(android.view.ViewGroup.LayoutParams source) {
-		return new RelativeLayout.LayoutParams(source);
-	}
-
-	protected RelativeLayout newRelativeLayout(Activity parent) {
-		return new RelativeLayout(parent);
-	}
-
-	protected ScrollView newScrollView(Activity parent) {
-		return new ScrollView(parent);
-	}
-
-	protected View inflateView(Activity parent, int resId) {
-		LayoutInflater layoutInflater = (LayoutInflater) parent.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
-		return layoutInflater.inflate(resId, null);
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -1624,54 +1627,29 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 		}	
 	}
 
-	@Override
-	public boolean canShare(Context context, ShareType shareType) {
-		return shareSystem.canShare(context, shareType);
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeUI#getDrawable(java.lang.String, boolean)
 	 */
+	@Deprecated
 	@Override
 	public Drawable getDrawable(String name, boolean eternal) {
-		return (drawables != null) ? drawables.getDrawable(name, eternal) : null;
+		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeUI#getDrawable(java.lang.String)
 	 */
+	@Deprecated
 	@Override
 	public Drawable getDrawable(String name) {
-		return (drawables != null) ? drawables.getDrawable(name) : null; 
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#getEntityLoader()
-	 */
-	@Override
-	public SocializeEntityLoader getEntityLoader() {
-		return entityLoader;
-	}
+		return null; 
+	}	
 	
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#getSystem()
-	 */
 	@Override
-	public SocializeSystem getSystem() {
-		return system;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.SocializeService#setEntityLoader(com.socialize.ui.SocializeEntityLoader)
-	 */
-	@Override
-	public void setEntityLoader(SocializeEntityLoader entityLoader) {
-		this.entityLoader = entityLoader;
+	public SocializeLogger getLogger() {
+		return logger;
 	}
 
 	@Override
@@ -1726,5 +1704,34 @@ public class SocializeServiceImpl implements SocializeSessionConsumer, Socialize
 
 	protected void setAuthProviderInfoBuilder(AuthProviderInfoBuilder authProviderInfoBuilder) {
 		this.authProviderInfoBuilder = authProviderInfoBuilder;
+	}
+	
+	protected LayoutParams newLayoutParams(int width, int height) {
+		return new LayoutParams(width, height);
+	}
+	
+	protected RelativeLayout.LayoutParams newLayoutParams(android.view.ViewGroup.LayoutParams source) {
+		return new RelativeLayout.LayoutParams(source);
+	}
+	
+	protected Intent newIntent(Activity context, Class<?> cls) {
+		return new Intent(context, cls);
+	}
+
+	protected RelativeLayout newRelativeLayout(Activity parent) {
+		return new RelativeLayout(parent);
+	}
+
+	protected ScrollView newScrollView(Activity parent) {
+		return new ScrollView(parent);
+	}
+
+	protected ActionBarView newActionBarView(Activity parent) {
+		return new ActionBarView(parent);
+	}
+
+	protected View inflateView(Activity parent, int resId) {
+		LayoutInflater layoutInflater = (LayoutInflater) parent.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
+		return layoutInflater.inflate(resId, null);
 	}
 }

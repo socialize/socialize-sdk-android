@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,9 +23,8 @@ package com.socialize;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import android.content.Context;
-
+import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.SocializeListener;
 import com.socialize.log.SocializeLogger.LogLevel;
 
@@ -36,7 +35,7 @@ import com.socialize.log.SocializeLogger.LogLevel;
 public class Socialize {
 	
 	// This will be set during the build process
-	public static final String VERSION = "1.6.9";
+	public static final String VERSION = "2.0";
 	
 	public static final String ENTITY_OBJECT = "socialize.entity";
 	public static final String ENTITY_ID = "socialize.entity.id";
@@ -53,7 +52,7 @@ public class Socialize {
 	
 	public static LogLevel DEFAULT_LOG_LEVEL = LogLevel.WARN;
 	
-	private static final SocializeServiceImpl instance = new SocializeServiceImpl();
+	static SocializeServiceImpl instance = new SocializeServiceImpl();
 
 	private Socialize() {
 		super();
@@ -66,6 +65,10 @@ public class Socialize {
 	public static final void init(Context context) {
 		instance.init(context);
 	}
+	
+	public static final void initAsync(Context context, SocializeInitListener listener) {
+		instance.initAsync(context, listener);
+	}
 
 	public static final void destroy(Context context) {
 		if(instance != null) {
@@ -77,10 +80,19 @@ public class Socialize {
 		return instance;
 	}
 	
+	/**
+	 * @deprecated All methods available from standard Socialize instance.
+	 * @return
+	 */
+	@Deprecated
 	public static final SocializeUI getSocializeUI() {
 		return instance;
 	}
 	
+	static Object getBean(String name) {
+		return instance.getContainer().getBean(name);
+	}
+
 	public static void onPause(Context context) {
 		instance.onPause(context);
 	}

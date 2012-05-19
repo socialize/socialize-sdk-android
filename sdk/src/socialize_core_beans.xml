@@ -273,7 +273,7 @@
 		<property name="requestFactory" ref="commentRequestFactory"/>
 	</bean>
 	
-	<bean id="commentSystem" class="com.socialize.api.action.SocializeCommentSystem" extends="socializeApi">
+	<bean id="commentSystem" class="com.socialize.api.action.comment.SocializeCommentSystem" extends="socializeApi">
 		<constructor-arg ref="commentProvider"/>
 	</bean>
 	
@@ -293,7 +293,7 @@
 		<property name="requestFactory" ref="entityRequestFactory"/>
 	</bean>
 	
-	<bean id="entitySystem" class="com.socialize.api.action.SocializeEntitySystem" extends="socializeApi">
+	<bean id="entitySystem" class="com.socialize.api.action.entity.SocializeEntitySystem" extends="socializeApi">
 		<constructor-arg ref="entityProvider"/>
 	</bean>
 
@@ -314,7 +314,7 @@
 		<property name="requestFactory" ref="likeRequestFactory"/>
 	</bean>
 	
-	<bean id="likeSystem" class="com.socialize.api.action.SocializeLikeSystem" extends="socializeApi">
+	<bean id="likeSystem" class="com.socialize.api.action.like.SocializeLikeSystem" extends="socializeApi">
 		<constructor-arg ref="likeProvider"/>
 	</bean>
 	
@@ -333,7 +333,7 @@
 		<property name="requestFactory" ref="viewRequestFactory"/>
 	</bean>
 	
-	<bean id="viewSystem" class="com.socialize.api.action.SocializeViewSystem" extends="socializeApi">
+	<bean id="viewSystem" class="com.socialize.api.action.view.SocializeViewSystem" extends="socializeApi">
 		<constructor-arg ref="viewProvider"/>
 	</bean>
 	
@@ -352,25 +352,10 @@
 		<property name="requestFactory" ref="shareRequestFactory"/>
 	</bean>
 	
-	<bean id="shareSystem" class="com.socialize.api.action.SocializeShareSystem" extends="socializeApi">
+	<bean id="shareSystem" class="com.socialize.api.action.share.SocializeShareSystem" extends="socializeApi">
 		<constructor-arg ref="shareProvider"/>
 		<property name="logger" ref="logger"/>
 		<property name="shareHandlers" ref="shareHandlers"/>
-		
-		<!-- 
-		<property name="sharers">
-			<map>
-				<entry>
-					<key value="facebook"/>
-					<value ref="facebookSharer"/>
-				</entry>
-				<entry>
-					<key value="twitter"/>
-					<value ref="twitterSharer"/>
-				</entry>				
-			</map>
-		</property>	
-		 -->	
 	</bean>
 	
 	<bean id="emailShareHandler" class="com.socialize.share.EmailShareHandler">
@@ -388,7 +373,9 @@
 		<property name="logger" ref="logger"/>
 	</bean>
 	
-	<bean id="twitterShareHandler" class="com.socialize.share.TwitterShareHandler"/>
+	<bean id="twitterShareHandler" class="com.socialize.share.TwitterShareHandler">
+		<property name="twitterSharer" ref="twitterSharer"/>
+	</bean>
 	
 	<bean id="otherShareHandler" class="com.socialize.share.OtherShareHandler" extends="emailShareHandler"/>
 	
@@ -432,13 +419,16 @@
 		<property name="requestFactory" ref="userRequestFactory"/>
 	</bean>
 	
-	<bean id="userSystem" class="com.socialize.api.action.SocializeUserSystem" extends="socializeApi">
+	<bean id="userSystem" class="com.socialize.api.action.user.SocializeUserSystem" extends="socializeApi">
 		<constructor-arg ref="userProvider"/>
 		<property name="sessionPersister" ref="sessionPersister"/>
 		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
-		<property name="deviceUtils" ref="deviceUtils"/>	
+		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="config" ref="config"/>	
+		<property name="logger" ref="logger"/>	
 		<property name="socializeAuthProviderInfoFactory" ref="socializeAuthProviderInfoFactory"/>
 		<property name="notificationRegistrationSystem" ref="notificationRegistrationSystem"/>	
+		<property name="authProviderInfoBuilder" ref="authProviderInfoBuilder"/>
 	</bean>
 	
 <!-- End User API -->
@@ -467,7 +457,7 @@
 		<property name="requestFactory" ref="activityRequestFactory"/>
 	</bean>
 	
-	<bean id="activitySystem" class="com.socialize.api.action.SocializeActivitySystem" extends="socializeApi">
+	<bean id="activitySystem" class="com.socialize.api.action.activity.SocializeActivitySystem" extends="socializeApi">
 		<constructor-arg ref="activityProvider"/>
 	</bean>
 	
@@ -485,7 +475,7 @@
 		<property name="requestFactory" ref="subscriptionRequestFactory"/>
 	</bean>
 	
-	<bean id="subscriptionSystem" class="com.socialize.api.action.SocializeSubscriptionSystem" extends="socializeApi">
+	<bean id="subscriptionSystem" class="com.socialize.api.action.comment.SocializeSubscriptionSystem" extends="socializeApi">
 		<constructor-arg ref="subscriptionProvider"/>
 	</bean>
 	
@@ -565,12 +555,18 @@
 	</bean>	
 	
 	<bean 
+		id="facebookRunner" 
+		class="com.socialize.facebook.AsyncFacebookRunner"
+		singleton="false"/>
+		
+	<factory id="facebookRunnerFactory" makes="facebookRunner"/>	
+	
+	<bean 
 		id="facebookWallPoster" 
 		class="com.socialize.networks.facebook.DefaultFacebookWallPoster">
 		<property name="logger" ref="logger"/>
-		<property name="appUtils" ref="appUtils"/>
-		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
 		<property name="facebookImageUtils" ref="facebookImageUtils"/>
+		<property name="facebookRunnerFactory" ref="facebookRunnerFactory"/>
 	</bean>	
 	
 	<bean 
@@ -584,7 +580,6 @@
 		id="facebookSharer" 
 		class="com.socialize.networks.facebook.FacebookSharer"
 		extends="socialNetworkSharer">
-		<property name="shareMessageBuilder" ref="shareMessageBuilder"/>
 		<property name="facebookWallPoster" ref="facebookWallPoster"/>
 		<property name="authProviderInfoFactory" ref="facebookAuthProviderInfoFactory"/>
 	</bean>		
@@ -597,8 +592,27 @@
 		id="twitterSharer" 
 		class="com.socialize.networks.twitter.TwitterSharer"
 		extends="socialNetworkSharer">
-		<property name="authProviderInfoFactory" ref="twitterAuthProviderInfoFactory"/>
 	</bean>		
+	
+	<bean 
+		id="twitterWebViewClient" 
+		class="com.socialize.auth.twitter.TwitterWebViewClient"
+		singleton="false">
+	</bean>		
+	
+	<factory id="twitterWebViewClientFactory" makes="twitterWebViewClient"/>		
+	
+	<bean 
+		id="twitterAuthWebView" 
+		class="com.socialize.auth.twitter.TwitterAuthWebView"
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<init-method name="init"/>
+		
+		<property name="twitterWebViewClientFactory" ref="twitterWebViewClientFactory"/>
+	</bean>		
+	
+	<factory id="twitterAuthWebViewFactory" makes="twitterAuthWebView"/>		
 	
 	<bean 
 		id="twitterAuthView" 
@@ -606,17 +620,19 @@
 		singleton="false">
 		<constructor-arg type="activity"/>
 		<init-method name="init"/>
+		
+		<property name="twitterAuthWebViewFactory" ref="twitterAuthWebViewFactory"/>
 	</bean>	
 	
 	<factory id="twitterAuthViewFactory" makes="twitterAuthView"/>	
 
-	<bean id="twitterUtils" class="com.socialize.auth.twitter.TwitterUtils">
+	<bean id="twitterAuthUtils" class="com.socialize.auth.twitter.TwitterAuthUtils">
 		<property name="config" ref="config"/>
 		<property name="twitterAuthViewFactory" ref="twitterAuthViewFactory"/>
 	</bean>
 
 	<bean id="twitterProvider" class="com.socialize.auth.twitter.TwitterAuthProvider">
-		<property name="twitterUtils" ref="twitterUtils"/>
+		<property name="twitterAuthUtils" ref="twitterAuthUtils"/>
 		<init-method name="init">
 			<arg type="context"/>
 		</init-method>
@@ -637,7 +653,15 @@
 		id="facebookAuthProviderInfoFactory" 
 		class="com.socialize.auth.facebook.FacebookAuthProviderInfoFactory"
 		extends="baseAuthProviderInfoFactory">
-	</bean>	
+		<property name="facebookAuthProviderInfoInstanceFactory" ref="facebookAuthProviderInfoInstanceFactory"/>
+	</bean>
+	
+	<bean 
+		id="facebookAuthProviderInfo" 
+		class="com.socialize.auth.facebook.FacebookAuthProviderInfo"
+		singleton="false"/>
+		
+	<factory id="facebookAuthProviderInfoInstanceFactory" makes="facebookAuthProviderInfo"/>
 	
 	<bean 
 		id="twitterAuthProviderInfoFactory" 
@@ -691,6 +715,7 @@
 		<property name="logger" ref="logger"/>
 		<property name="deviceRegistrationFactory" ref="deviceRegistrationObjectFactory"/>
 		<property name="deviceRegistrationSystem" ref="deviceRegistrationSystem"/>
+		<property name="userSystem" ref="userSystem"/>
 		<property name="notificationRegistrationState" ref="notificationRegistrationState"/>
 	</bean>
 	

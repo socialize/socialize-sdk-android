@@ -1,7 +1,6 @@
 package com.socialize.test.ui;
 
 import android.view.View;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
@@ -44,7 +43,7 @@ public class AuthenticatedViewTest extends SocializeUIActivityTest {
 			}
 
 			@Override
-			public SocializeService getSocialize() {
+			protected SocializeService getSocialize() {
 				return socialize;
 			}
 

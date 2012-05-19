@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -40,8 +40,8 @@ public class UserProfile {
 	private boolean notificationsEnabled = true;
 	private boolean locationEnabled = true;
 	
-	private boolean autoPostFacebook;
-	private boolean autoPostTwitter;
+	private boolean autoPostFacebook = false;
+	private boolean autoPostTwitter = false;
 	
 	public String getFullName() {
 		if(fullName == null) {

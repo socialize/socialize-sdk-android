@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,13 +24,13 @@ package com.socialize.sample;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import com.socialize.ui.dialog.DialogRegister;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import com.socialize.ui.dialog.DialogRegister;
 
-public class EmptyActivity extends Activity  implements DialogRegister {
+public class EmptyActivity extends Activity implements DialogRegister {
 
 	private Set<Dialog> dialogs = new HashSet<Dialog>();	
 	
@@ -49,8 +49,32 @@ public class EmptyActivity extends Activity  implements DialogRegister {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		this.savedInstanceState = savedInstanceState;
+		
+		// Force async tasks static handler to be created on the main UI thread
+		try {
+			Class.forName("android.os.AsyncTask");
+		}
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
 		super.onCreate(savedInstanceState);
 	}
+	
+	@Override
+	protected void onDestroy() {
+		if(dialogs != null) {
+			for (Dialog dialog : dialogs) {
+				try {
+					dialog.dismiss();
+				}
+				catch (Throwable ignore) {}
+			}
+			dialogs.clear();
+		}
+		super.onDestroy();
+	}
+
 	
 	public Bundle getSavedInstanceState() {
 		return savedInstanceState;

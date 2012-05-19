@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -77,8 +77,6 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 
 		mockSession = AndroidMock.createMock(SocializeSession.class);
 
-		AndroidMock.replay(mockSession);
-
 		listener = new SocializeActionListener() {
 
 			@Override
@@ -147,13 +145,13 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 
 	public void testApiAsyncCallsAuthenticateOnProvider() throws Throwable {
 
-		AndroidMock.expect(provider.loadSession("/authenticate/", "test_key", "test_secret")).andReturn(null);
 		AndroidMock.expect(provider.authenticate("/authenticate/", "test_key", "test_secret", "test_uuid")).andReturn(mockSession);
+		
+		AndroidMock.expect(mockSession.isRestored()).andReturn(true);
 		
 		mockSessionConsumer.setSession(mockSession);
 
-		AndroidMock.replay(provider);
-		AndroidMock.replay(mockSessionConsumer);
+		AndroidMock.replay(provider, mockSessionConsumer, mockSession);
 
 		final SocializeAuthListener alistener = new SocializeAuthListener() {
 
@@ -195,8 +193,8 @@ public class SocializeApiAsyncTest extends SocializeActivityTest {
 
 		assertTrue("Timeout waiting for countdown latch", signal.await(timeout, TimeUnit.SECONDS));
 
-		AndroidMock.verify(provider);
-		AndroidMock.verify(mockSessionConsumer);
+		AndroidMock.verify(provider, mockSessionConsumer, mockSession);
+
 	}
 
 	public void testApiAsyncCallsGetOnProvider() throws Throwable {

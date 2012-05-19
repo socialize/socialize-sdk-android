@@ -3,7 +3,6 @@ package com.socialize.test.mock;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.view.View;
-
 import com.socialize.SocializeUI;
 import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;

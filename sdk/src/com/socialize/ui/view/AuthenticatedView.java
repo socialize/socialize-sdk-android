@@ -3,9 +3,6 @@ package com.socialize.ui.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-
-import com.socialize.Socialize;
-import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.config.SocializeConfig;
 import com.socialize.error.SocializeErrorHandler;
@@ -69,10 +66,6 @@ public abstract class AuthenticatedView extends SocializeBaseView {
 	
 	protected String getFacebookAppId(IOCContainer container) {
 		return getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
-	}
-
-	public SocializeService getSocialize() {
-		return Socialize.getSocialize();
 	}
 
 	public SocializeAuthListener getAuthListener(IOCContainer container) {

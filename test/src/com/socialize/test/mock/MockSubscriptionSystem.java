@@ -1,7 +1,7 @@
 package com.socialize.test.mock;
 
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.SubscriptionSystem;
+import com.socialize.api.action.comment.SubscriptionSystem;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.Subscription;
@@ -20,7 +20,7 @@ public class MockSubscriptionSystem implements SubscriptionSystem {
 	}
 	
 	@Override
-	public void getSubscription(SocializeSession session, Entity entity, SubscriptionListener listener) {
+	public void getSubscription(SocializeSession session, Entity entity, NotificationType type, SubscriptionListener listener) {
 		if(listener != null) listener.onGet(subscription);
 	}
 

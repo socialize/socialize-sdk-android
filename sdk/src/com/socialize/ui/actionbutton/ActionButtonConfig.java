@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,8 +37,8 @@ import com.socialize.util.StringUtils;
 
 /**
  * @author Jason Polites
- *
  */
+@Deprecated
 public class ActionButtonConfig {
 	
 	private static final String androidns="http://schemas.android.com/apk/res/android";

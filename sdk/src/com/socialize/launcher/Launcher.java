@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,6 @@ public interface Launcher {
 	 * Launches an activity (or anything really) based on the bundle of data provided.
 	 * @param context
 	 * @param data
-	 * @return True if the launch was successful.
 	 */
 	public boolean launch(Activity context, Bundle data);
 
@@ -55,8 +54,6 @@ public interface Launcher {
 	 */
 	public boolean shouldFinish();
 	
-	public LaunchListener getLaunchListener();
-	
-	public void setLaunchListener(LaunchListener listener);
+	public boolean isAsync();
 	
 }

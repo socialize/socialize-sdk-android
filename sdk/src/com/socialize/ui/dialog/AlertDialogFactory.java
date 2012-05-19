@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ import com.socialize.util.StringUtils;
  * @author Jason Polites
  *
  */
-public class AlertDialogFactory implements DialogFactory<AlertDialog> {
+public class AlertDialogFactory implements SimpleDialogFactory<AlertDialog> {
 
 	private Drawables drawables;
 	private Toast toast;

@@ -22,11 +22,10 @@
 package com.socialize.test.unit.api;
 
 import java.util.List;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.SocializeSubscriptionSystem;
+import com.socialize.api.action.comment.SocializeSubscriptionSystem;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Subscription;
 import com.socialize.listener.SocializeActionListener;
@@ -145,7 +144,7 @@ public class SubscriptionApiTest extends SocializeUnitTest {
 			}
 		};
 		
-		api.getSubscription(session, Entity.newInstance(entityKey, null), listener);
+		api.getSubscription(session, Entity.newInstance(entityKey, null), NotificationType.NEW_COMMENTS, listener);
 		
 		String strId = getNextResult();
 		

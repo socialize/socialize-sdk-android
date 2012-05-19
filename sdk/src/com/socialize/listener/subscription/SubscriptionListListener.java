@@ -33,18 +33,18 @@ public abstract class SubscriptionListListener extends SubscriptionListener {
 	 * @see com.socialize.listener.AbstractSocializeListener#onGet(com.socialize.entity.SocializeObject)
 	 */
 	@Override
-	public void onGet(Subscription entity) {}
+	public final void onGet(Subscription entity) {}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.listener.AbstractSocializeListener#onUpdate(com.socialize.entity.SocializeObject)
 	 */
 	@Override
-	public void onUpdate(Subscription entity) {}
+	public final void onUpdate(Subscription entity) {}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.listener.AbstractSocializeListener#onCreate(com.socialize.entity.SocializeObject)
 	 */
 	@Override
-	public void onCreate(Subscription entity) {}
+	public final void onCreate(Subscription entity) {}
 
 }

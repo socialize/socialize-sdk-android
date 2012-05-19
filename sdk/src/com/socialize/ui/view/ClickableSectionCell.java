@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,6 @@
 package com.socialize.ui.view;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
@@ -53,19 +52,26 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	private String backgroundColor;
 	private String textColor;
 	
+	private OnToggleListener onToggleListener;
+	
 	private int bgColor;
 	private int txtColor;
 	private int strokeColor = -1;
 	private int bgAlpha = 128;
 	
-	private Bitmap image;
+	private Drawable imageOn;
+	private Drawable imageOff;
 	
-	private float topLeftRadius = 8.0f;
-	private float topRightRadius = 8.0f;
-	private float bottomLeftRadius = 8.0f;
-	private float bottomRightRadius = 8.0f;
+	private String toggledDrawableName = null;
+	private String untoggledDrawableName = null;
+	
+	private float topLeftRadius = 6.0f;
+	private float topRightRadius = 6.0f;
+	private float bottomLeftRadius = 6.0f;
+	private float bottomRightRadius = 6.0f;
 	
 	private boolean canClick = true;
+	private boolean toggled = true;
 	
 	private int topStroke = 1;
 	private int rightStroke = 1;
@@ -80,6 +86,8 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	private GradientDrawable background;
 	private GradientDrawable stroke;
 	private LayerDrawable bgLayer;
+	
+	private ImageView arrowIcon;
 	
 	public ClickableSectionCell(Context context) {
 		super(context);
@@ -141,6 +149,10 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		text.setLayoutParams(textParams);
 		
 		imageView = makeImage();
+			
+		if(imageOn != null) {
+			imageView.setImageDrawable(imageOn);
+		}
 		
 		master.setLayoutParams(masterParams);
 		
@@ -152,9 +164,9 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		
 		master.addView(text);
 		
-		if(canClick) {
-			ImageView arrowIcon = new ImageView(getContext());
-			arrowIcon.setImageDrawable(drawables.getDrawable("arrow.png"));
+		if(canClick && toggledDrawableName != null) {
+			arrowIcon = new ImageView(getContext());
+			arrowIcon.setImageDrawable(drawables.getDrawable(toggledDrawableName));
 			arrowIcon.setLayoutParams(iconParams);			
 			master.addView(arrowIcon);
 		}
@@ -235,15 +247,20 @@ public abstract class ClickableSectionCell extends LinearLayout {
 		}
 	}
 	
-	public void setImage(Bitmap image) {
-		this.image = image;
-		if(imageView != null) {
-			imageView.setImageBitmap(image);
-		}
+	public void setImageOn(Drawable image) {
+		this.imageOn = image;
 	}	
+	
+	public Drawable getImageOff() {
+		return imageOff;
+	}
 
-	public Bitmap getImage() {
-		return image;
+	public void setImageOff(Drawable imageOff) {
+		this.imageOff = imageOff;
+	}
+
+	public Drawable getImageOn() {
+		return imageOn;
 	}
 	
 	public void setBackgroundData(float [] radii, int[] strokes, int strokeColor) {
@@ -275,12 +292,59 @@ public abstract class ClickableSectionCell extends LinearLayout {
 	public void setStrokeColor(int strokeColor) {
 		this.strokeColor = strokeColor;
 	}
+	
+	public void setToggledDrawableName(String toggledDrawableName) {
+		this.toggledDrawableName = toggledDrawableName;
+	}
+	
+	public void setUntoggledDrawableName(String untoggledDrawableName) {
+		this.untoggledDrawableName = untoggledDrawableName;
+	}
+	
+	public static interface OnToggleListener {
+		public void onToggle(boolean on);
+	}
 
 	// So we can mock
 	protected GradientDrawable makeGradient(int bottom, int top) {
 		return new GradientDrawable(
 				GradientDrawable.Orientation.BOTTOM_TOP,
 				new int[] { bottom, top });
-	}	
+	}
 
+	public boolean isToggled() {
+		return toggled;
+	}
+	
+	public void setOnToggleListener(OnToggleListener onToggleListener) {
+		this.onToggleListener = onToggleListener;
+	}
+
+	public void setToggled(boolean toggled) {
+		this.toggled = toggled;
+		
+		if(toggled) {
+			if(imageOn != null) {
+				imageView.setImageDrawable(imageOn);
+			}
+			
+			if(arrowIcon != null && toggledDrawableName != null) {
+				arrowIcon.setImageDrawable(drawables.getDrawable(toggledDrawableName));
+			}
+		}
+		else if(!toggled) {
+			
+			if(imageOff != null) {
+				imageView.setImageDrawable(imageOff);
+			}
+			
+			if(arrowIcon != null && untoggledDrawableName != null) {
+				arrowIcon.setImageDrawable(drawables.getDrawable(untoggledDrawableName));
+			}
+		}
+		
+		if(onToggleListener != null) {
+			onToggleListener.onToggle(toggled);
+		}
+	}	
 }

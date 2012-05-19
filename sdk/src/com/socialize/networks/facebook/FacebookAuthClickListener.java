@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,9 +21,7 @@
  */
 package com.socialize.networks.facebook;
 
-import com.socialize.auth.AuthProviderInfo;
-import com.socialize.auth.facebook.FacebookAuthProviderInfo;
-import com.socialize.config.SocializeConfig;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkAuthClickListener;
 
 /**
@@ -32,10 +30,8 @@ import com.socialize.networks.SocialNetworkAuthClickListener;
  */
 public class FacebookAuthClickListener extends SocialNetworkAuthClickListener {
 	@Override
-	protected AuthProviderInfo getAuthProviderInfo() {
-		String authProviderAppId = config.getProperty(SocializeConfig.FACEBOOK_APP_ID);
-		FacebookAuthProviderInfo fbInfo = new FacebookAuthProviderInfo();
-		fbInfo.setAppId(authProviderAppId);
-		return fbInfo;
+	protected SocialNetwork getSocialNetwork() {
+		return SocialNetwork.FACEBOOK;
+		
 	}
 }

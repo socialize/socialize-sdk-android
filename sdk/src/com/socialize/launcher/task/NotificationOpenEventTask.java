@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -82,7 +82,7 @@ public class NotificationOpenEventTask implements LaunchTask {
 						public void onError(SocializeException error) {
 							logError(error);
 						}
-						
+
 						@Override
 						public void onPost() {
 							if(logger != null && logger.isDebugEnabled()) {

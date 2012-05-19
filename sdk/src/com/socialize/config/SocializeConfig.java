@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -55,6 +55,7 @@ public class SocializeConfig {
 	
 	public static final String SOCIALIZE_C2DM_SENDER_ID = "socialize.c2dm.sender.id";
 	
+	@Deprecated
 	public static final String SOCIALIZE_USE_ACTION_WEBVIEW = "socialize.use.action.webview";
 	
 	@Deprecated
@@ -74,7 +75,11 @@ public class SocializeConfig {
 	public static final String FACEBOOK_SSO_ENABLED = "facebook.sso.enabled";
 	public static final String FACEBOOK_PHOTOS_ENABLED = "facebook.photos.enabled";
 	public static final String FACEBOOK_APP_ID = "facebook.app.id";
+	
+	@Deprecated
 	public static final String FACEBOOK_USER_ID = "facebook.user.id";
+	
+	@Deprecated
 	public static final String FACEBOOK_USER_TOKEN = "facebook.user.token";
 	
 	public static final String TWITTER_CONSUMER_KEY = "twitter.consumer.key";
@@ -226,9 +231,13 @@ public class SocializeConfig {
 			properties = createProperties();
 		}
 		
-		if(value != null) value = value.trim();
-		
-		properties.put(key, value);
+		if(value != null) {
+			value = value.trim();
+			properties.put(key, value);
+		}
+		else {
+			properties.remove(key);
+		}
 	}
 	
 	/**
@@ -239,6 +248,12 @@ public class SocializeConfig {
 	public String getProperty(String key) {
 		return (properties == null) ? null : properties.getProperty(key);
 	}	
+	
+	public void destroy() {
+		if(properties != null) {
+			properties.clear();
+		}
+	}
 	
 	public int getIntProperty(String key, int defaultValue) {
 		String val = getProperty(key);
@@ -292,7 +307,9 @@ public class SocializeConfig {
 	 * Sets the FB credentials for the current user if available.
 	 * @param userId
 	 * @param token
+	 * @deprecated No longer used. Any values set here will be ignored.  Use FacebookUtils to link a known user.
 	 */
+	@Deprecated
 	public void setFacebookUserCredentials(String userId, String token) {
 		setProperty(SocializeConfig.FACEBOOK_USER_ID, userId);
 		setProperty(SocializeConfig.FACEBOOK_USER_TOKEN, token);

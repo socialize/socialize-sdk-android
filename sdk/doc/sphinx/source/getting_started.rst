@@ -49,55 +49,53 @@ If you're using eclipse, you'll need to add the socialize-x.x.x.jar as a referen
 
 .. image:: images/library_refs.png
 
-.. note:: Applications targeting older versions of Android (1.6 and below)**
-
-Socialize does not support Android versions below v2.1-update1
+.. note:: Socialize supports Android v2.1 and above
 
 2. Set up your Socialize Keys
 =============================
 Once you have registered on the GetSocialize.com website and created an application, you will have
-been given two "oAuth" authentication keys.  A "consumer key", and a "consumer secret".
+been given two "oAuth" authentication keys, a *consumer key* and a *consumer secret*.
 
-The recommended, and simples way to authenticate with Socialize is to create a configuration file in 
-the **assets** path of your project called **socialize.properties**
+Create a configuration file in the **assets** path of your project called **socialize.properties**
 
 .. image:: images/socialize.properties.png
 
 Within this file, enter your Socialize consumer key and secret:
 
-.. include:: snippets/props.txt
+.. literalinclude:: snippets/props.txt
+   :language: properties
+   :linenos:
 
 (Replace 00000000-0000-0000-000000000000 with your key/secret from your Socialize account)
 
 3. Configure your AndroidManifest.xml
 =====================================
-Add the following lines to your AndroidManifest.xml under the **<application...>** element
 
-.. include:: snippets/manifest.txt
+Add the following lines to your AndroidManifest.xml within the **<manifest...>** element (above the <application...> element)
 
-Add the following lines to your AndroidManifest.xml under the **<manifest...>** element
+.. literalinclude:: snippets/permissions.txt
+   :language: xml
+   :linenos:
+   :tab-width: 4
 
-.. include:: snippets/permissions.txt
+Add the following lines to your AndroidManifest.xml within the **<application...>** element
+
+.. literalinclude:: snippets/manifest.txt
+   :language: xml
+   :linenos:
+   :tab-width: 4
 	
-4. Configure Facebook Integration (Optional)
-============================================
-It is strongly recommended that users be able to authenticate with Facebook when using Socialize so as to 
-maximize the exposure and promotion of your app.
-
-This provides significant benefits to both your application and your users including:
-
-1. Improved user experience through personalized comments
-2. Automatic profile creation (user name and profile picture)
-3. Ability to automatically post user comments and likes to Facebook
-4. Promotes your app on Facebook by associating your app with comments
-
+4. Configure Facebook Integration
+=================================
 To add Facebook authentication, you'll need a Facebook App ID.
   
 If you already have a Facebook app, you can skip this section, otherwise refer to :doc:`facebook` for more information.
 
 Once you have your facebook app ID, you can add it to the **socialize.properties** config file:
 
-.. include:: snippets/props_fb.txt
+.. literalinclude:: snippets/props_fb.txt
+   :language: properties
+   :linenos:
 	
 5. Include Socialize in your App!
 =================================
@@ -123,7 +121,10 @@ however entities *can* be created manually.
 The Action Bar is designed to automatically "pin" iteself to the bottom of your view.  
 Adding the Action Bar to your app is done with a simple call to **showActionBar** from the SocializeUI instance:
 
-.. include:: snippets/action_bar.txt
+.. literalinclude:: snippets/action_bar.txt
+   :language: java
+   :linenos:
+   :tab-width: 4
 
 Next Steps...
 =============

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,13 +31,13 @@ import com.socialize.entity.Comment;
 public abstract class CommentListListener extends CommentListener {
  
 	@Override
-	public final void onCreate(Comment entity) {}
+	public final void onCreate(Comment comment) {}
 
 	@Override
-	public final void onGet(Comment entity) {}
+	public final void onGet(Comment comment) {}
 
 	@Override
-	public final void onUpdate(Comment entity) {}
+	public final void onUpdate(Comment comment) {}
 	
 	@Override
 	public final void onDelete() {}

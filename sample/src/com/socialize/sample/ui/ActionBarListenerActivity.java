@@ -10,7 +10,7 @@ import com.socialize.sample.R;
 public class ActionBarListenerActivity extends ActionBarActivity2 {
 	@Override
 	protected void onCreate(Bundle savedInstanceState, Entity entity) {
-		View actionBarWrapped = Socialize.getSocializeUI().showActionBar(this, R.layout.action_bar_auto, entity, ActionBarListenerHolder.listener);
+		View actionBarWrapped = Socialize.getSocialize().showActionBar(this, R.layout.action_bar_auto, entity, ActionBarListenerHolder.listener);
 		setContentView(actionBarWrapped);
 	}
 }

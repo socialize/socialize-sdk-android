@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -72,6 +72,12 @@ public class Colors {
 	public static final String CHECKBOX_BORDER_BOTTOM = "CHECKBOX_BORDER_BOTTOM";
 	public static final String CHECKBOX_BORDER_TOP = "CHECKBOX_BORDER_TOP";
 	public static final String CLICKABLE_CELL_STROKE = "CLICKABLE_CELL_STROKE";
+	
+	public static final String BUTTON_DISABLED_BOTTOM = "BUTTON_DISABLED_BOTTOM";
+	public static final String BUTTON_DISABLED_TOP = "BUTTON_DISABLED_TOP";
+	public static final String BUTTON_DISABLED_TEXT = "BUTTON_DISABLED_TEXT";
+	public static final String BUTTON_DISABLED_STROKE = "BUTTON_DISABLED_STROKE";
+	public static final String BUTTON_DISABLED_BACKGROUND = "BUTTON_DISABLED_BACKGROUND";
 	
 	private Map<String, String> colorHexCodes;
 	private Map<String, Integer> colors;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,6 @@
 package com.socialize.networks;
 
 import android.app.Activity;
-
 import com.socialize.api.action.ActionType;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
@@ -35,7 +34,7 @@ import com.socialize.entity.PropagationInfo;
 public interface SocialNetworkSharer {
 	
 	/**
-	 * Shares a like against the given entity to the given social network.
+	 * Shares the given entity to the given social network.
 	 * @param context The current context.
 	 * @param entity The entity to be shared.
 	 * @param urlSet The set of urls to be used in the share.
@@ -43,6 +42,6 @@ public interface SocialNetworkSharer {
 	 * @param autoAuth If true authentication will be attempted automatically.
 	 * @param listener A listener to handle callbacks from the post.
 	 */
-	public void share(Activity context, Entity entity, PropagationInfo urlSet, String comment, boolean autoAuth, ActionType type,SocialNetworkListener listener);
+	public void share(Activity context, Entity entity, PropagationInfo urlSet, String comment, boolean autoAuth, ActionType type, SocialNetworkListener listener);
 	
 }

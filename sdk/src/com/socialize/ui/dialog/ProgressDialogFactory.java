@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@ import com.socialize.util.Drawables;
  * Safely renders progress dialogs
  * @author Jason Polites
  */
-public class ProgressDialogFactory implements DialogFactory<ProgressDialog> {
+public class ProgressDialogFactory implements SimpleDialogFactory<ProgressDialog> {
 	
 	private SocializeLogger logger;
 	private Drawables drawables;

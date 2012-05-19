@@ -3,7 +3,6 @@ package com.socialize.test.ui;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.ui.dialog.ProgressDialogFactory;

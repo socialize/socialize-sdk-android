@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -84,6 +84,10 @@ public class DisplayUtils {
 		}
 		return pixels;
 	}
+	
+	public boolean isLowRes() {
+		return density <= 1.0f;
+	}
 
 	public void setLogger(SocializeLogger logger) {
 		this.logger = logger;
@@ -99,5 +103,9 @@ public class DisplayUtils {
 
 	public int getOrientation() {
 		return orientation;
+	}
+	
+	public boolean isLandscape() {
+		return orientation == Configuration.ORIENTATION_LANDSCAPE;
 	}
 }

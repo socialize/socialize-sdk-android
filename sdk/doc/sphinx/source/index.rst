@@ -10,6 +10,8 @@ Contents:
    getting_started
    facebook
    twitter
+   social_actions
+   sharing_adv
    action_bar
    like_button
    comment_view

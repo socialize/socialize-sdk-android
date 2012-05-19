@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,7 @@ import android.app.Notification;
 import android.content.Context;
 import android.os.Bundle;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.UserSystem;
+import com.socialize.api.action.user.UserSystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.JSONFactory;
 import com.socialize.entity.User;

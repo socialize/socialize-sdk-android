@@ -1,0 +1,5 @@
+// Create a reference to your entity if you don't already have one
+Entity entity = Entity.newInstance("http://www.someurl.com", "my_entity_name");
+
+// Call the Socialize share method (the "this" parameter refers to your current Activity context)
+Socialize.getSocialize().share(this, entity);

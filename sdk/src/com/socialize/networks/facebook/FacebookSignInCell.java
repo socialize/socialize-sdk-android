@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 package com.socialize.networks.facebook;
 
 import android.content.Context;
-
+import android.view.View;
 import com.socialize.listener.SocializeAuthListener;
 
 /**
@@ -40,7 +40,12 @@ public class FacebookSignInCell extends FacebookCell {
 	@Override
 	public void init() {
 		super.init();
-		setOnClickListener(facebookAuthClickListener);
+		super.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				facebookAuthClickListener.onClick(v);
+			}
+		});
 	}
 
 	public void setAuthListener(SocializeAuthListener listener) {
@@ -50,5 +55,4 @@ public class FacebookSignInCell extends FacebookCell {
 	public void setFacebookAuthClickListener(FacebookAuthClickListener facebookAuthClickListener) {
 		this.facebookAuthClickListener = facebookAuthClickListener;
 	}
-
 }

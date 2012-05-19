@@ -28,6 +28,7 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.action.ActionType;
+import com.socialize.api.action.share.SocialNetworkShareListener;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderInfoFactory;
 import com.socialize.auth.AuthProviderType;
@@ -132,7 +133,7 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		AndroidMock.expect(authProviderInfoFactory.getInstance()).andReturn(authProviderInfo);
 		
 		PublicFacebookSharer sharer = new PublicFacebookSharer() {
-
+			
 			@Override
 			public SocializeService getSocialize() {
 				return socialize;
@@ -185,17 +186,17 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		assertEquals("doError", doError1);
 	}
 	
-	@UsesMocks ({SocialNetworkListener.class, SocializeLogger.class})
+	@UsesMocks ({SocialNetworkShareListener.class, SocializeLogger.class})
 	public void testDoError() {
 		
 		final String msg = "Error sharing to FACEBOOK";
 		
 		SocializeLogger logger = AndroidMock.createMock(SocializeLogger.class);
-		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
+		SocialNetworkShareListener listener = AndroidMock.createMock(SocialNetworkShareListener.class);
 		SocializeException error = new SocializeException("foobar");
 		
 		logger.error(msg, error);
-		listener.onError(getActivity(), SocialNetwork.FACEBOOK, msg, error);
+		listener.onPostError(getContext(), SocialNetwork.FACEBOOK, error);
 		
 		AndroidMock.replay(logger);
 		AndroidMock.replay(listener);
@@ -209,10 +210,10 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		AndroidMock.verify(listener);
 	}
 	
-	@UsesMocks({SocialNetworkListener.class, FacebookWallPoster.class, PropagationInfo.class}) 
+	@UsesMocks({SocialNetworkShareListener.class, FacebookWallPoster.class, PropagationInfo.class}) 
 	public void testDoShareComment() {
 		FacebookWallPoster facebookWallPoster = AndroidMock.createMock(FacebookWallPoster.class);
-		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
+		SocialNetworkShareListener listener = AndroidMock.createMock(SocialNetworkShareListener.class);
 		PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
 		
 		PublicFacebookSharer sharer = new PublicFacebookSharer();
@@ -230,35 +231,31 @@ public class FacebookSharerTest extends SocializeActivityTestCase {
 		AndroidMock.verify(facebookWallPoster, listener, info);
 	}
 	
-	@UsesMocks({SocialNetworkListener.class, FacebookWallPoster.class, ShareMessageBuilder.class, PropagationInfo.class}) 
+	@UsesMocks({SocialNetworkShareListener.class, FacebookWallPoster.class, ShareMessageBuilder.class, PropagationInfo.class}) 
 	public void testDoShareShare() {
 		FacebookWallPoster facebookWallPoster = AndroidMock.createMock(FacebookWallPoster.class);
-		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
-		ShareMessageBuilder shareMessageBuilder = AndroidMock.createMock(ShareMessageBuilder.class);
+		SocialNetworkShareListener listener = AndroidMock.createMock(SocialNetworkShareListener.class);
 		PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
 		
 		PublicFacebookSharer sharer = new PublicFacebookSharer();
 		sharer.setFacebookWallPoster(facebookWallPoster);
-		sharer.setShareMessageBuilder(shareMessageBuilder);
 		
 		final String comment = "foobar";
-		final String body = "foobar_body";
 		final Entity entity = Entity.newInstance("blah", null);
 		
-		AndroidMock.expect(shareMessageBuilder.buildShareMessage( entity, info, comment, false, false)).andReturn(body);
-		facebookWallPoster.post(getActivity(), entity, body, info, listener);
+		facebookWallPoster.post(getActivity(), entity, comment, info, listener);
 		
-		AndroidMock.replay(facebookWallPoster, shareMessageBuilder, listener, info);
+		AndroidMock.replay(facebookWallPoster, listener, info);
 
 		sharer.doShare(getActivity(), entity, info, comment, listener, ActionType.SHARE);
 		
-		AndroidMock.verify(facebookWallPoster, shareMessageBuilder, listener, info);
+		AndroidMock.verify(facebookWallPoster, listener, info);
 	}
 	
-	@UsesMocks({SocialNetworkListener.class, FacebookWallPoster.class, PropagationInfo.class}) 
+	@UsesMocks({SocialNetworkShareListener.class, FacebookWallPoster.class, PropagationInfo.class}) 
 	public void testDoShareLike() {
 		FacebookWallPoster facebookWallPoster = AndroidMock.createMock(FacebookWallPoster.class);
-		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
+		SocialNetworkShareListener listener = AndroidMock.createMock(SocialNetworkShareListener.class);
 		PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
 		
 		PublicFacebookSharer sharer = new PublicFacebookSharer();

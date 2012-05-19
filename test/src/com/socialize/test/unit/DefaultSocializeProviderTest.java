@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -153,6 +153,12 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 			protected AuthProviderData newAuthProviderData() {
 				return authProviderData;
 			}
+
+			@Override
+			protected void verifyProviderCredentialsForUser(WritableSession session, User user) {
+				// Do nothing for now
+				// TODO: Add test for this.
+			}
 		};
 		provider.init(mockContext);
 		provider.setSessionPersister(sessionPersister);
@@ -205,7 +211,8 @@ public class DefaultSocializeProviderTest extends SocializeActivityTest {
 		authProviderData.setAuthProviderInfo(authProviderInfo);
 
 		AndroidMock.expect(session.getHost()).andReturn(host);
-
+		AndroidMock.expect(authProviderData.getAuthProviderInfo()).andReturn(null);
+		
 		// Expect save
 		sessionPersister.save(mockContext, session);
 

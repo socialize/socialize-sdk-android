@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,8 @@ import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.SocializeAction;
+import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.twitter.TwitterSharer;
 
 
 /**
@@ -35,6 +37,8 @@ import com.socialize.entity.SocializeAction;
  */
 public class TwitterShareHandler extends AbstractShareHandler {
 
+	private TwitterSharer twitterSharer;
+	
 	/* (non-Javadoc)
 	 * @see com.socialize.share.ShareHandler#isAvailableOnDevice(android.content.Context)
 	 */
@@ -47,16 +51,8 @@ public class TwitterShareHandler extends AbstractShareHandler {
 	 * @see com.socialize.share.AbstractShareHandler#handle(android.app.Activity, com.socialize.entity.SocializeAction, java.lang.String, com.socialize.entity.PropagationInfo, com.socialize.share.ShareHandlerListener)
 	 */
 	@Override
-	protected void handle(Activity context, SocializeAction action, String text, PropagationInfo info, ShareHandlerListener listener) throws Exception {
-		// Nothing.. share is done on server
-		if(listener != null) {
-			try {
-				listener.onBeforePost(context);
-			}
-			finally {
-				listener.onAfterPost(context, action);
-			}
-		}
+	protected void handle(Activity context, SocializeAction action, String text, PropagationInfo info, SocialNetworkListener listener) throws Exception {
+		twitterSharer.share(context, action.getEntity(), info, text, true, action.getActionType(), listener);
 	}
 
 	/* (non-Javadoc)
@@ -66,5 +62,8 @@ public class TwitterShareHandler extends AbstractShareHandler {
 	protected ShareType getShareType() {
 		return ShareType.TWITTER;
 	}
-
+	
+	public void setTwitterSharer(TwitterSharer twitterSharer) {
+		this.twitterSharer = twitterSharer;
+	}
 }

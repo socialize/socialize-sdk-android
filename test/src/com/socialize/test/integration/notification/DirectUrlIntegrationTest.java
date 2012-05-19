@@ -39,8 +39,6 @@ import com.socialize.ui.notifications.DirectUrlWebView;
  */
 public class DirectUrlIntegrationTest extends DirectUrlNotificationTest {
 	
-	
-
 	@Override
 	public void testOnMessage() throws Throwable {
 		

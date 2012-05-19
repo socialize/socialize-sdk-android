@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -79,6 +79,10 @@ public class Container {
 		staticProxiesRemoved.add(name);
 	}	
 	
+	protected static void clearStubs() {
+		staticStubs.clear();
+	}
+	
 	protected static void registerStub(String name, Object stub) {
 		staticStubs.put(name, stub);
 	}
@@ -86,6 +90,10 @@ public class Container {
 	protected static void unregisterStub(String name) {
 		staticStubs.remove(name);
 	}		
+	
+	public <T extends Object> void setStaticRuntimeProxy(String name, T bean) {
+		setRuntimeProxyInternal(name, bean, true);
+	}
 	
 	public <T extends Object> void setRuntimeProxy(String name, T bean) {
 		setRuntimeProxyInternal(name, bean, false);
@@ -108,6 +116,7 @@ public class Container {
 				
 				ProxyObject<T> proxy = new ProxyObject<T>();
 				proxy.setDelegate(bean);
+				proxy.setStaticProxy(isStatic);
 				
 				proxies.put(name, proxy);
 			}
@@ -313,7 +322,7 @@ public class Container {
 			
 			if(nullCount > 0) {
 				
-				Logger.w(getClass().getSimpleName(), "Some arguments passed to getBean were null for bean [" +
+				Logger.i(getClass().getSimpleName(), "Some arguments passed to getBean were null for bean [" +
 						beanName +
 						"].  Stripping nulls from argument list");				
 				
@@ -375,7 +384,11 @@ public class Container {
 		if(proxies != null) {
 			proxies.clear();
 			proxies = null;
-		}		
+		}	
+		
+		staticProxies.clear();
+		staticStubs.clear();
+		staticProxiesRemoved.clear();
 		
 		destroyed = true;
 	}
@@ -458,6 +471,10 @@ public class Container {
 		}
 	}
 	
+	public Context getContext() {
+		return context;
+	}
+
 	protected Class<?>[] getAllInterfacesAsArray(Class<?> cls) {
 		List<Class<?>> interfaces = getAllInterfaces(cls);
 		if(interfaces != null) {

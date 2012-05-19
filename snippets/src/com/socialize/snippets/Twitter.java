@@ -1,12 +1,12 @@
 package com.socialize.snippets;
 
 import android.app.Activity;
-
 import com.socialize.Socialize;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.comment.CommentAddListener;
+import com.socialize.networks.PostData;
 import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
@@ -31,18 +31,21 @@ public class Twitter extends Activity {
 
 			// Listen for the outcome of the twitter post
 			options.setListener(new SocialNetworkListener() {
-
-				public void onError(Activity activity, SocialNetwork network, String message, Throwable e) {
-					// Handle error
+				
+				@Override
+				public void onError(Activity context, SocialNetwork network, Exception error) {
 				}
 
-				public void onBeforePost(Activity activity, SocialNetwork network) {
+				@Override
+				public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 					// Handle before post
 				}
-
-				public void onAfterPost(Activity activity, SocialNetwork network) {
-					// Handle after post
+				
+				@Override
+				public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
+					// Handle before post
 				}
+				
 			});
 
 			// Add a comment to an entity

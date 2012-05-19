@@ -21,24 +21,26 @@
  */
 package com.socialize.test.unit.facebook;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.View;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
-import com.socialize.auth.AuthProviderInfo;
-import com.socialize.auth.AuthProviderType;
-import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.config.SocializeConfig;
+import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
+import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.facebook.FacebookAuthClickListener;
-import com.socialize.test.PublicSocialize;
-import com.socialize.test.SocializeUnitTest;
-import com.socialize.ui.dialog.DialogFactory;
+import com.socialize.networks.facebook.FacebookUtilsProxy;
+import com.socialize.test.SocializeActivityTest;
+import com.socialize.ui.dialog.SimpleDialogFactory;
 
 /**
  * @author Jason Polites
@@ -47,83 +49,103 @@ import com.socialize.ui.dialog.DialogFactory;
 @UsesMocks ({
 	SocializeConfig.class,
 	SocializeAuthListener.class,
-	DialogFactory.class,
+	SimpleDialogFactory.class,
 	ProgressDialog.class,
 	View.class,
 	SocializeService.class,
 	SocializeSession.class
 })
-public class FacebookAuthClickListenerTest extends SocializeUnitTest {
+public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 
 	static enum AUTH_REPSONSE {SUCCESS, FAIL, ERROR, CANCEL};
 
-	public void testOnClickWithAuthSuccess() {
+	public void testOnClickWithAuthSuccess() throws Exception {
 		doOnClickTest(AUTH_REPSONSE.SUCCESS);
 	}
 	
-	public void testOnClickWithAuthFail() {
+	public void testOnClickWithAuthFail() throws Exception {
 		doOnClickTest(AUTH_REPSONSE.FAIL);
 	}
 	
-	public void testOnClickWithAuthError() {
+	public void testOnClickWithAuthError() throws Exception {
 		doOnClickTest(AUTH_REPSONSE.ERROR);
 	}
 	
-	public void testOnClickWithCancel() {
+	public void testOnClickWithCancel() throws Exception {
 		doOnClickTest(AUTH_REPSONSE.CANCEL);
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected void doOnClickTest(final AUTH_REPSONSE response) {
+	protected void doOnClickTest(final AUTH_REPSONSE response) throws Exception {
 		
-		final String consumerKey = "foo";
-		final String consumerSecret = "bar";
-		final String fbId = "foobar_FB";
+		final CountDownLatch latch = new CountDownLatch(1);
 		
-		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-		SocializeAuthListener listener = AndroidMock.createMock(SocializeAuthListener.class);
-		DialogFactory<ProgressDialog> dialogFactory = AndroidMock.createMock(DialogFactory.class);
+		SocializeAuthListener listener = null;
+		SimpleDialogFactory<ProgressDialog> dialogFactory = AndroidMock.createMock(SimpleDialogFactory.class);
 		ProgressDialog dialog = AndroidMock.createMock(ProgressDialog.class, getContext());
 		View view = AndroidMock.createMock(View.class, getContext());
+		FacebookUtilsProxy facebookUtils = new FacebookUtilsProxy() {
+			
+			@Override
+			public void unlink(Context context) {}
+			
+			@Override
+			public void setAppId(Context context, String appId) {}
+			
+			@Override
+			public void postEntity(Activity context, Entity entity, String text, SocialNetworkListener listener) {}
+			
+			@Override
+			public void link(Activity context, String token, SocializeAuthListener listener) {}
+			
+			@Override
+			public void link(Activity context, SocializeAuthListener listener) {
+				addResult(0, listener);
+				latch.countDown();
+			}
+			
+			@Override
+			public boolean isLinked(Context context) {
+				return false;
+			}
+			
+			@Override
+			public boolean isAvailable(Context context) {
+				return true;
+			}
+			
+			@Override
+			public String getAccessToken(Context context) {
+				return null;
+			}
+		};
+		
+		// Stub in facebook utils
+		SocializeIOC.registerStub("facebookUtils", facebookUtils);
+		
 		final SocializeSession session = AndroidMock.createMock(SocializeSession.class);
 		final SocializeException error = new SocializeException("DUMMY - IGNORE ME"); 
 		
-		final PublicSocialize socialize = new PublicSocialize() {
-			
-			@Override
-			public void authenticate(Context context, String consumerKey, String consumerSecret, AuthProviderInfo authProviderInfo, SocializeAuthListener listener) {
-				addResult(0, consumerKey);
-				addResult(1, consumerSecret);
-				addResult(2, authProviderInfo);
-				
-				// Call each method of the listener for the test
-				switch (response) {
-					case SUCCESS:
-						listener.onAuthSuccess(session);
-						break;
-					case CANCEL:
-						listener.onCancel();
-						break;
-					case ERROR:
-						listener.onError(error);
-						break;
-					case FAIL:
-						listener.onAuthFail(error);
-						break;					
-				}
-			}
-			
-		};
-		
 		view.setEnabled(false);
 		
-		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY)).andReturn(consumerKey);
-		AndroidMock.expect(config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET)).andReturn(consumerSecret);
-		AndroidMock.expect(config.getProperty(SocializeConfig.FACEBOOK_APP_ID)).andReturn(fbId);
 		AndroidMock.expect(dialogFactory.show(getContext(), "Authentication", "Authenticating...")).andReturn(dialog);
 		
 		dialog.dismiss();
+		
 		view.setEnabled(true);
+		
+		AndroidMock.replay(dialogFactory,dialog,view);
+			
+		FacebookAuthClickListener facebookAuthClickListener = new FacebookAuthClickListener();
+		facebookAuthClickListener.setDialogFactory(dialogFactory);
+		facebookAuthClickListener.setListener(listener);
+		facebookAuthClickListener.onClick(view);
+
+		assertTrue(latch.await(20, TimeUnit.SECONDS));
+		
+		listener = getResult(0);
+		
+		assertNotNull(listener);
 		
 		switch (response) {
 			case SUCCESS:
@@ -138,47 +160,9 @@ public class FacebookAuthClickListenerTest extends SocializeUnitTest {
 			case FAIL:
 				listener.onAuthFail(error);
 				break;					
-		}
-		
-		AndroidMock.replay(config);
-		AndroidMock.replay(dialogFactory);
-		AndroidMock.replay(dialog);
-		AndroidMock.replay(view);
-		AndroidMock.replay(listener);
+		}		
 			
-		FacebookAuthClickListener facebookAuthClickListener = new FacebookAuthClickListener() {
-			@Override
-			protected SocializeService getSocialize() {
-				return socialize;
-			}
-		};
-		
-		facebookAuthClickListener.setConfig(config);
-		facebookAuthClickListener.setDialogFactory(dialogFactory);
-		facebookAuthClickListener.setListener(listener);
-		
-		facebookAuthClickListener.onClick(view);
-		
-		AndroidMock.verify(config);
-		AndroidMock.verify(dialogFactory);
-		AndroidMock.verify(dialog);
-		AndroidMock.verify(view);
-		AndroidMock.verify(listener);
-		
-		
-		final String consumerKeyAfter = getResult(0);
-		final String consumerSecretAfter = getResult(1);
-		final AuthProviderInfo authProviderInfo = getResult(2);
-		
-		assertEquals(consumerKey, consumerKeyAfter);
-		assertEquals(consumerSecret, consumerSecretAfter);
-		
-		assertTrue((authProviderInfo instanceof FacebookAuthProviderInfo));
-		
-		FacebookAuthProviderInfo fba = (FacebookAuthProviderInfo) authProviderInfo;
-		
-		assertEquals(AuthProviderType.FACEBOOK, fba.getType());
-		assertEquals(fbId, fba.getAppId());
+		AndroidMock.verify(dialogFactory,dialog,view);
 	}
 	
 }

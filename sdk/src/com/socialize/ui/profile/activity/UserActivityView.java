@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.activity.UserActivityListListener;
+import com.socialize.listener.activity.ActionListListener;
 import com.socialize.ui.view.LoadingItemView;
 import com.socialize.view.BaseView;
 
@@ -69,7 +69,7 @@ public class UserActivityView extends BaseView {
 	
 	public void loadUserActivity(long userId, final SocializeAction current) {
 		itemView.showLoading();
-		Socialize.getSocialize().listActivityByUser(userId, 0, numItems, new UserActivityListListener() {
+		Socialize.getSocialize().listActivityByUser(userId, 0, numItems, new ActionListListener() {
 			@Override
 			public void onList(ListResult<SocializeAction> entities) {
 				if(entities != null) {

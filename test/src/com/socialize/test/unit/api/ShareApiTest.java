@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,17 +22,14 @@
 package com.socialize.test.unit.api;
 
 import java.util.List;
-
 import android.location.Location;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.SocializeShareSystem;
 import com.socialize.api.action.ShareType;
+import com.socialize.api.action.share.SocializeShareSystem;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
-import com.socialize.entity.SocializeAction;
 import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.provider.SocializeProvider;
@@ -62,7 +59,7 @@ public class ShareApiTest extends SocializeUnitTest {
 	 */
 	@UsesMocks ({Location.class})
 	public void testAddShare() {
-		final String key = "foo";
+		final Entity key = Entity.newInstance("foo", "foo");
 		final String shareText = "foobar_text";
 		Location location = AndroidMock.createMock(Location.class, "foobar");
 		ShareType type = ShareType.OTHER;
@@ -73,29 +70,20 @@ public class ShareApiTest extends SocializeUnitTest {
 			public void postAsync(SocializeSession session, String endpoint, List<Share> objects, SocializeActionListener listener) {
 				addResult(objects);
 			}
-
-			@Override
-			protected void setLocation(SocializeAction action, Location location) {
-				addResult(location);
-			}
 		};
 		
-		api.addShare(getContext(), session, Entity.newInstance(key, null), shareText, type, location, listener);
+		api.addShare(getContext(), session, key, shareText, type, location, listener);
 		
-		Location loc = getNextResult();
 		List<Share> shares = getNextResult();
 		
 		assertNotNull(shares);
 		assertEquals(1, shares.size());
 		
-		assertNotNull(loc);
-		assertSame(location, loc);
-		
 		Share result = shares.get(0);
 		
 		assertNotNull(result);
 		assertNotNull(result.getEntityKey());
-		assertEquals(key, result.getEntityKey());
+		assertEquals(key.getKey(), result.getEntityKey());
 		
 		assertNotNull(result.getText());
 		assertEquals(shareText, result.getText());

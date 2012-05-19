@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,8 +22,8 @@
 package com.socialize.test.ui;
 
 import android.test.ActivityInstrumentationTestCase2;
-
 import com.socialize.Socialize;
+import com.socialize.ioc.SocializeIOC;
 import com.socialize.sample.EmptyActivity;
 
 public abstract class SocializeUIActivityTest extends ActivityInstrumentationTestCase2<EmptyActivity> {
@@ -37,13 +37,16 @@ public abstract class SocializeUIActivityTest extends ActivityInstrumentationTes
 	@Override
 	protected void setUp() throws Exception {
 		holder.setUp();
+		Socialize.getSocialize().clearSessionCache(getContext());
+		Socialize.getSocialize().destroy(true);
+		SocializeIOC.clearStubs();
 		super.setUp();
 	}
 	
 	@Override
 	protected void tearDown() throws Exception {
-		Socialize.getSocialize().destroy(true);
 		super.tearDown();
+		SocializeIOC.clearStubs();
 	}
 	
 	protected void clearResults() {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,11 @@
 package com.socialize.test.ui.integrationtest;
 
 import java.util.ArrayList;
-
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-
 import com.jayway.android.robotium.solo.Solo;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
@@ -86,15 +84,14 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 
 	@Override
 	protected void tearDown() throws Exception {
-		
-		Socialize.getSocialize().destroy(true);
-		
 		try {
 			robotium.finish();
 		} 
 		catch (Throwable e) {
 			e.printStackTrace();
 		}
+		
+		TestUtils.tearDown();
 		
 		super.tearDown();
 	}	
@@ -124,9 +121,8 @@ public abstract class SocializeUIRobotiumTest extends ActivityInstrumentationTes
 	}		
 	
 	protected void clearAuthCache() {
-		TestUtils.clickOnButton(BTN_CLEAR_CACHE);
-		robotium.waitForDialogToClose(10000);
 		SocializeService socialize = Socialize.getSocialize();
+		socialize.clearSessionCache(getActivity());
 		assertNull(socialize.getSession());
 	}
 	

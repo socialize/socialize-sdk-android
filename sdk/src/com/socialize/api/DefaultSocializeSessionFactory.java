@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -59,7 +59,7 @@ public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 
 	@Override
 	public WritableSession create(String key, String secret, UserProviderCredentials userProviderCredentials) {
-		SocializeSessionImpl session = new SocializeSessionImpl();
+		SocializeSessionImpl session = SocializeSessionImpl.getInstance();
 		session.setConsumerKey(key);
 		session.setConsumerSecret(secret);
 		
@@ -69,18 +69,28 @@ public class DefaultSocializeSessionFactory implements SocializeSessionFactory {
 			session.setUserProviderCredentials(authProviderInfo.getType(), userProviderCredentials);
 		}
 		
-		session.setHost(config.getProperty(SocializeConfig.API_HOST).trim());
+		if(config != null) {
+			String host = config.getProperty(SocializeConfig.API_HOST);
+			if(host != null)  {
+				session.setHost(host.trim());
+			}
+		}
 		
 		return session;
 	}
 	
 	@Override
 	public WritableSession create(String key, String secret, UserProviderCredentialsMap userProviderCredentialsMap) {
-		SocializeSessionImpl session = new SocializeSessionImpl();
+		SocializeSessionImpl session = SocializeSessionImpl.getInstance();
 		session.setConsumerKey(key);
 		session.setConsumerSecret(secret);
 		session.setUserProviderCredentials(userProviderCredentialsMap);
-		session.setHost(config.getProperty(SocializeConfig.API_HOST).trim());
+		if(config != null) {
+			String host = config.getProperty(SocializeConfig.API_HOST);
+			if(host != null)  {
+				session.setHost(host.trim());
+			}
+		}
 		return session;
 	}
 }

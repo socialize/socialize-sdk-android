@@ -30,8 +30,8 @@ import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.SocializeAction;
+import com.socialize.networks.SocialNetworkListener;
 import com.socialize.share.EmailShareHandler;
-import com.socialize.share.ShareHandlerListener;
 import com.socialize.test.SocializeActivityTest;
 
 
@@ -76,9 +76,6 @@ public class EmailShareHandlerTest extends SocializeActivityTest {
 				addResult(0, intent);
 				addResult(1, title);
 			}
-			
-			
-			
 		};
 		
 		handler.setShareMessageBuilder(shareMessageBuilder);
@@ -110,7 +107,7 @@ public class EmailShareHandlerTest extends SocializeActivityTest {
 	class PublicEmailShareHandler extends EmailShareHandler {
 
 		@Override
-		public void handle(Activity context, SocializeAction action, String text, PropagationInfo info, ShareHandlerListener listener) throws Exception {
+		public void handle(Activity context, SocializeAction action, String text, PropagationInfo info, SocialNetworkListener listener) throws Exception {
 			super.handle(context, action, text, info, listener);
 		}
 		

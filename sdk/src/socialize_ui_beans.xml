@@ -261,6 +261,26 @@
 					<key value="CLICKABLE_CELL_STROKE"/>
 					<value value="#191f25"/>
 				</entry>
+				<entry>
+					<key value="BUTTON_DISABLED_BACKGROUND"/>
+					<value value="#00000000"/>
+				</entry>				
+				<entry>
+					<key value="BUTTON_DISABLED_BOTTOM"/>
+					<value value="#88cacaca"/>
+				</entry>
+				<entry>
+					<key value="BUTTON_DISABLED_TOP"/>
+					<value value="#88eeecec"/>
+				</entry>
+				<entry>
+					<key value="BUTTON_DISABLED_TEXT"/>
+					<value value="#696969"/>
+				</entry>
+				<entry>
+					<key value="BUTTON_DISABLED_STROKE"/>
+					<value value="#8f8f8f"/>
+				</entry>																	
 			</map>
 		</property>
 	</bean>
@@ -354,19 +374,94 @@
 		<init-method name="init"/>
 	</bean>		
 	
-<!-- Authenticate -->
+<!-- Authenticate and Share -->
+
+	<bean 
+		id="authPanelView" 
+		class="com.socialize.ui.auth.AuthPanelView"		
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="colors" ref="colors"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="displayUtils" ref="displayUtils"/>
+		<property name="facebookSignInCellFactory" ref="facebookSignInCellFactory"/>
+		<property name="twitterSignInCellFactory" ref="twitterSignInCellFactory"/>
+		<property name="anonCellFactory" ref="anonCellFactory"/>
+		
+		<init-method name="init"/>
+	</bean>
+	
+	<factory id="authPanelViewFactory" makes="authPanelView"/>	
 	 
 	<bean 
-		id="authRequestDialogFactory" 
-		class="com.socialize.ui.dialog.AuthRequestDialogFactory"		
+		id="authDialogFactory" 
+		class="com.socialize.ui.auth.AuthDialogFactory"		
 		singleton="false">
 		<property name="logger" ref="logger"/>
-		<property name="authPanelViewFactory" ref="authPanelViewFactory"/>
-		<property name="drawables" ref="drawables"/>
+		<property name="panelViewFactory" ref="authPanelViewFactory"/>
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="colors" ref="colors"/>
 	</bean>
+	
+	<bean 
+		id="sharePanelView" 
+		class="com.socialize.ui.share.SharePanelView"		
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="displayUtils" ref="displayUtils"/>
+		<property name="drawables" ref="drawables"/>
+		<property name="colors" ref="colors"/>
+		<property name="facebookShareCellFactory" ref="facebookShareCellFactory"/>
+		<property name="twitterShareCellFactory" ref="twitterShareCellFactory"/>
+		<property name="emailCellFactory" ref="emailCellFactory"/>
+		<property name="smsCellFactory" ref="smsCellFactory"/>
+		<property name="rememberCellFactory" ref="rememberCellFactory"/>
+		<property name="continueButton" ref="continueButton"/>
+		<property name="cancelButton" ref="cancelButton"/>
+		<init-method name="init"/>
+	</bean>
+	
+	<factory id="sharePanelViewFactory" makes="sharePanelView"/>		
+	
+	<bean 
+		id="shareDialogFactory" 
+		class="com.socialize.ui.share.ShareDialogFactory"		
+		singleton="false">
+		<property name="logger" ref="logger"/>
+		<property name="panelViewFactory" ref="sharePanelViewFactory"/>
+		<property name="displayUtils" ref="displayUtils"/>
+		<property name="colors" ref="colors"/>
+	</bean>	
 	 
+	
+	<bean 
+		id="emailCell" 
+		class="com.socialize.ui.share.EmailCell" 
+		singleton="false"
+		extends="clickableSectionCell">
+		<constructor-arg type="activity"/>	
+		<property name="backgroundColor" value="#3d464c"/>
+		<property name="bgAlpha" value="255" type="integer"/>
+		<property name="displayText" value="Email"/>
+		<property name="toggledDrawableName" value="arrow.png"/>
+	</bean>	
+	
+	<factory id="emailCellFactory" makes="emailCell"/>
+	
+	<bean 
+		id="smsCell" 
+		class="com.socialize.ui.share.SMSCell" 
+		singleton="false"
+		extends="clickableSectionCell">
+		<constructor-arg type="activity"/>	
+		<property name="backgroundColor" value="#3d464c"/>
+		<property name="bgAlpha" value="255" type="integer"/>
+		<property name="displayText" value="SMS"/>
+		<property name="toggledDrawableName" value="arrow.png"/>
+	</bean>			
+	
+	<factory id="smsCellFactory" makes="smsCell"/>
+	
 	<bean 
 		id="anonCell" 
 		class="com.socialize.ui.auth.AnonymousCell" 
@@ -377,24 +472,54 @@
 		<property name="bgAlpha" value="255" type="integer"/>
 	</bean>	
 	
-	<factory id="anonCellFactory" makes="anonCell"/>	
-	 
+	<factory id="anonCellFactory" makes="anonCell"/>
+	
+	
 	<bean 
-		id="authPanelView" 
-		class="com.socialize.ui.auth.AuthPanelView"		
-		singleton="false">
+		id="rememberCell" 
+		class="com.socialize.ui.share.RememberCell" 
+		singleton="false"
+		extends="clickableSectionCell">
+		<constructor-arg type="activity"/>	
+		<property name="backgroundColor" value="#293036"/>
+		<property name="bgAlpha" value="255" type="integer"/>
+		<property name="toggledDrawableName" value="tick_on.png"/>
+		<property name="untoggledDrawableName" value="tick_off.png"/>
+	</bean>	
+	
+	<factory id="rememberCellFactory" makes="rememberCell"/>			
+	
+	<bean 
+		id="continueButton" 
+		singleton="false"
+		extends="socializeButton">
 		<constructor-arg type="activity"/>
-		<property name="displayUtils" ref="displayUtils"/>
-		<property name="drawables" ref="drawables"/>
-		<property name="colors" ref="colors"/>
-		<property name="config" ref="config"/>
-		<property name="facebookSignInCellFactory" ref="facebookSignInCellFactory"/>
-		<property name="twitterSignInCellFactory" ref="twitterSignInCellFactory"/>
-		<property name="anonCellFactory" ref="anonCellFactory"/>
-		<init-method name="init"/>
+		<property name="text" value="Continue"/>
+		<property name="height" value="38" type="integer"/>
+		<property name="width" value="120" type="integer"/>
+		<property name="textSize" value="13" type="integer"/>
+		<property name="textAlign" value="center"/>
+		<property name="padding" value="2" type="integer"/>
+		<property name="bold" value="true" type="boolean"/>
 	</bean>
 	
-	<factory id="authPanelViewFactory" makes="authPanelView"/>	
+	<bean 
+		id="cancelButton" 
+		singleton="false"
+		extends="socializeButton">
+		<constructor-arg type="activity"/>
+		<property name="text" value="Close"/>
+		<property name="bottomColor" value="GRAY_BTN_BOTTOM"/>
+		<property name="topColor" value="GRAY_BTN_TOP"/>
+		<property name="strokeTopColor" value="GRAY_BTN_TOP_STROKE"/>
+		<property name="strokeBottomColor" value="GRAY_BTN_BOTTOM_STROKE"/>
+		<property name="height" value="38" type="integer"/>
+		<property name="width" value="120" type="integer"/>
+		<property name="textSize" value="13" type="integer"/>
+		<property name="textAlign" value="center"/>
+		<property name="padding" value="2" type="integer"/>
+	</bean>	
+	
 	
 <!-- Social Network Base Classes -->	
 	
@@ -449,8 +574,24 @@
 		class="com.socialize.networks.twitter.TwitterAuthClickListener"		
 		singleton="false"
 		extends="socialNetworkAuthClickListener">
-		<property name="twitterUtils" ref="twitterUtils"/>
 	</bean>	
+	
+	<bean 
+		id="twitterShareCell" 
+		class="com.socialize.networks.twitter.TwitterShareCell" 
+		singleton="false"
+		extends="clickableSectionCell">
+		<constructor-arg type="activity"/>	
+		<property name="twitterAuthClickListener" ref="twitterAuthClickListener"/>
+		<property name="displayText" value="Twitter"/>
+		<property name="backgroundColor" value="#3d464c"/>
+		<property name="bgAlpha" value="255" type="integer"/>
+		<property name="toggledDrawableName" value="tick_on.png"/>
+		<property name="untoggledDrawableName" value="tick_off.png"/>
+	</bean>	
+	
+	<factory id="twitterShareCellFactory" makes="twitterShareCell"/>
+	
 	
 	<bean 
 		id="twitterSignInCell" 
@@ -462,10 +603,12 @@
 		<property name="displayText" value="Twitter"/>
 		<property name="backgroundColor" value="#3d464c"/>
 		<property name="bgAlpha" value="255" type="integer"/>
+		<property name="toggledDrawableName" value="arrow.png"/>
 	</bean>	
 	
-	<factory id="twitterSignInCellFactory" makes="twitterSignInCell"/>	
-	
+	<factory id="twitterSignInCellFactory" makes="twitterSignInCell"/>		
+		
+	<!-- 
 	<bean 
 		id="autoPostTwitterOption" 
 		extends="customCheckbox"
@@ -480,7 +623,8 @@
 	</bean>	
 	
 	<factory id="autoPostTwitterOptionFactory" makes="autoPostTwitterOption"/>
-	
+	 -->
+	 
 	<bean 
 		id="twitterEnabledCheckbox" 
 		extends="customCheckbox" 
@@ -521,6 +665,7 @@
 
 	<factory id="facebookSignOutClickListenerFactory" makes="facebookSignOutClickListener"/>
 	
+	<!-- 
 	<bean 
 		id="facebookSignInButton" 
 		class="com.socialize.networks.facebook.FacebookButton"		
@@ -538,7 +683,7 @@
 		<property name="height" value="42" type="integer"/>
 		<property name="textSize" value="16" type="integer"/>
 	</bean>
-
+ -->
 	<bean 
 		id="facebookEnabledCheckbox" 
 		extends="customCheckbox" 
@@ -568,6 +713,7 @@
 	
 	<factory id="facebookSignOutTaskFactory" makes="facebookSignOutTask"/>
 	
+	<!-- 
 	<bean 
 		id="autoPostFacebookOption" 
 		extends="customCheckbox"
@@ -582,6 +728,22 @@
 	</bean>	
 	
 	<factory id="autoPostFacebookOptionFactory" makes="autoPostFacebookOption"/>
+	 -->
+	<bean 
+		id="facebookShareCell" 
+		class="com.socialize.networks.facebook.FacebookShareCell" 
+		singleton="false"
+		extends="clickableSectionCell">
+		<constructor-arg type="activity"/>	
+		<property name="facebookAuthClickListener" ref="facebookAuthClickListener"/>
+		<property name="displayText" value="Facebook"/>
+		<property name="backgroundColor" value="#3d464c"/>
+		<property name="bgAlpha" value="255" type="integer"/>
+		<property name="toggledDrawableName" value="tick_on.png"/>
+		<property name="untoggledDrawableName" value="tick_off.png"/>
+	</bean>	
+	
+	<factory id="facebookShareCellFactory" makes="facebookShareCell"/>	
 	
 	<bean 
 		id="facebookSignInCell" 
@@ -593,9 +755,10 @@
 		<property name="displayText" value="Facebook"/>
 		<property name="backgroundColor" value="#3d464c"/>
 		<property name="bgAlpha" value="255" type="integer"/>
+		<property name="toggledDrawableName" value="arrow.png"/>
 	</bean>	
 	
-	<factory id="facebookSignInCellFactory" makes="facebookSignInCell"/>	
+	<factory id="facebookSignInCellFactory" makes="facebookSignInCell"/>		
 	
 <!-- End Facebook -->
 	
@@ -692,7 +855,6 @@
 		<property name="commentHeaderFactory" ref="commentHeaderFactory"/>
 		<property name="commentEditFieldFactory" ref="commentEditFieldFactory"/>
 		<property name="commentContentViewFactory" ref="loadingListViewFactory"/>
-		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
 		<property name="commentEntryFactory" ref="commentEntrySliderItemFactory"/>
 		<property name="notificationEnabledOptionFactory" ref="notificationEnabledOptionNoBorderFactory"/>
 		<property name="sliderFactory" ref="actionBarSliderFactory"/>
@@ -806,9 +968,6 @@
 		<property name="postCommentButton" ref="postCommentButton"/>
 		<property name="cancelCommentButton" ref="cancelCommentButton"/>
 		<property name="subscribeNotificationButton" ref="subscribeNotificationButton"/>
-		<property name="autoPostFacebookOptionFactory" ref="autoPostFacebookOptionFactory"/>
-		<property name="autoPostTwitterOptionFactory" ref="autoPostTwitterOptionFactory"/>
-		
 		<property name="locationEnabledOptionFactory" ref="locationEnabledOptionFactory"/>
 		<property name="notificationEnabledOptionFactory" ref="notificationEnabledOptionFactory"/>
 		
@@ -1137,7 +1296,6 @@
 		<property name="colors" ref="colors"/>
 		<property name="drawables" ref="drawables"/>
 		<property name="dateUtils" ref="dateUtils"/>
-		<property name="userActivityActionHtmlFactory" ref="userActivityActionHtmlFactory"/>
 		<property name="userActivityActionTextFactory" ref="userActivityActionTextFactory"/>
 		
 		<init-method name="init"/>
@@ -1191,7 +1349,6 @@
 		<property name="tickerFactory" ref="actionBarTickerFactory"/>
 		<property name="itemFactory" ref="actionBarItemFactory"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
-		<property name="authRequestDialogFactory" ref="authRequestDialogFactory"/>
 		
 	</bean>
 	
@@ -1308,6 +1465,7 @@
 	
 	<factory id="shareClickListenerFactory" makes="shareClickListener"/> 
 	
+	<!-- Deprecated
 	<bean 
 		id="shareDialogView" 
 		class="com.socialize.ui.share.ShareDialogView" 
@@ -1326,10 +1484,26 @@
 	
 	<factory id="shareDialogViewFactory" makes="shareDialogView"/>
 	
+	 
+	<bean 
+		id="sliderActionBarListener" 
+		class="com.socialize.ui.actionbar.SliderActionBarListener">
+		<property name="logger" ref="logger"/>
+		<property name="shareSliderItemFactory" ref="shareSliderItemFactory"/>
+	</bean>		
+	
+	<bean 
+		id="shareSliderItem" 
+		class="com.socialize.ui.actionbar.slider.share.ShareSliderItem" 
+		singleton="false">
+		<constructor-arg type="activity"/>
+		<property name="viewFactory" ref="shareDialogViewFactory"/>
+	</bean>	 
+	<factory id="shareSliderItemFactory" makes="shareSliderItem"/>
+	 -->
 <!-- End Share UI -->	
 
 <!-- Socialize Slider -->
-
 	<bean 
 		id="actionBarSliderContent" 
 		class="com.socialize.ui.slider.ActionBarSliderContent" 
@@ -1352,7 +1526,6 @@
 	
 	<factory id="actionBarSliderHandleFactory" makes="actionBarSliderHandle"/>
 	
-
 	<bean 
 		id="actionBarSliderFactory" 
 		class="com.socialize.ui.slider.DefaultActionBarSliderFactory">
@@ -1375,21 +1548,6 @@
 		
 		<init-method name="init"/>
 	</bean>
-		
-	<bean 
-		id="sliderActionBarListener" 
-		class="com.socialize.ui.actionbar.SliderActionBarListener">
-		<property name="logger" ref="logger"/>
-		<property name="shareSliderItemFactory" ref="shareSliderItemFactory"/>
-	</bean>		
-	
-	<bean 
-		id="shareSliderItem" 
-		class="com.socialize.ui.actionbar.slider.share.ShareSliderItem" 
-		singleton="false">
-		<constructor-arg type="activity"/>
-		<property name="viewFactory" ref="shareDialogViewFactory"/>
-	</bean>
 
 	<bean 
 		id="sliderAnimationSet" 
@@ -1399,9 +1557,8 @@
 	</bean>		
 	
 	<factory id="actionBarSliderViewFactory" makes="actionBarSliderView"/>
-	<factory id="shareSliderItemFactory" makes="shareSliderItem"/>
 	<factory id="sliderAnimationSetFactory" makes="sliderAnimationSet"/>
-	
+
 <!-- End Socialize Slider -->
 
 <!--  Image Loader  -->
@@ -1556,5 +1713,61 @@
 	</bean>
 
 <!-- End Launcher -->
+
+<!--  Socialize 2.0 -->
+
+	<bean id="entityUtils" class="com.socialize.api.action.entity.SocializeEntityUtils">
+		<property name="entitySystem" ref="entitySystem"/>
+	</bean>
+
+	<bean id="likeUtils" class="com.socialize.api.action.like.SocializeLikeUtils">
+		<property name="likeSystem" ref="likeSystem"/>
+		<property name="authDialogFactory" ref="authDialogFactory"/>
+		<property name="shareDialogFactory" ref="shareDialogFactory"/>
+		<property name="shareHandlers" ref="shareHandlers"/>
+	</bean>
+	
+	<bean id="viewUtils" class="com.socialize.api.action.view.SocializeViewUtils">
+		<property name="viewSystem" ref="viewSystem"/>
+	</bean>	
+	
+	<bean id="shareUtils" class="com.socialize.api.action.share.SocializeShareUtils">
+		<property name="shareSystem" ref="shareSystem"/>
+		<property name="shareDialogFactory" ref="shareDialogFactory"/>
+	</bean>		
+	
+	<bean id="commentUtils" class="com.socialize.api.action.comment.SocializeCommentUtils">
+		<property name="commentSystem" ref="commentSystem"/>
+		<property name="authDialogFactory" ref="authDialogFactory"/>
+		<property name="shareDialogFactory" ref="shareDialogFactory"/>
+		<property name="shareHandlers" ref="shareHandlers"/>
+	</bean>
+	
+	<bean id="subscriptionUtils" class="com.socialize.api.action.comment.SocializeSubscriptionUtils">
+		<property name="subscriptionSystem" ref="subscriptionSystem"/>
+	</bean>
+
+	<bean id="userUtils" class="com.socialize.api.action.user.SocializeUserUtils">
+		<property name="userSystem" ref="userSystem"/>
+	</bean>
+	
+	<bean id="actionUtils" class="com.socialize.api.action.activity.SocializeActionUtils">
+		<property name="activitySystem" ref="activitySystem"/>
+	</bean>	
+	
+	<bean id="facebookUtils" class="com.socialize.networks.facebook.FacebookUtilsImpl">
+		<property name="userSystem" ref="userSystem"/>
+		<property name="shareSystem" ref="shareSystem"/>
+		<property name="facebookWallPoster" ref="facebookWallPoster"/>
+	</bean>
+	
+	<bean id="twitterUtils" class="com.socialize.networks.twitter.TwitterUtilsImpl">
+		<property name="userSystem" ref="userSystem"/>
+		<property name="shareSystem" ref="shareSystem"/>
+	</bean>	
+
+	<bean id="locationUtils" class="com.socialize.location.SocializeLocationUtils">
+		<property name="locationProvider" ref="locationProvider"/>
+	</bean>	
 
 </beans>

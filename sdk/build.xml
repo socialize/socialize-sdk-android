@@ -168,7 +168,7 @@
 			classpathref="javadoc.classpath"
 			destdir="build/docs/javadoc" 
 			doctitle="${vendor} SDK v${version} Documentation" 
-			excludepackagenames="com.google.*,oauth.*">
+			excludepackagenames="com.google.*,oauth.*,com.socialize.google.*,com.socialize.facebook.*">
 			
 			<header>
 				<![CDATA[${vendor} SDK v${version} Documentation<br/>Copyright ${year} ${vendor}<br/>${website}]]>
@@ -196,7 +196,7 @@
 		<delete dir="${sample_dir}"/>
 		<mkdir dir="${sample_dir}"/>
 		<copy todir="${sample_dir}">
-			<fileset dir="../simple-sample/" excludes="gen/**,bin/**,build/**,codetemplates.xml"/>
+			<fileset dir="../demo/" excludes="gen/**,bin/**,build/**,codetemplates.xml"/>
 		</copy>
 		<copy todir="${sample_dir}/libs">
 			<fileset dir="build" includes="*.jar"/>

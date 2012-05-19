@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
@@ -60,7 +59,7 @@ public class SocializeActivityTestCase extends SocializeUIActivityTest {
 		
 		PublicActivity activity = new PublicActivity() {
 			@Override
-			protected SocializeService getSocialize() {
+			public SocializeService getSocialize() {
 				return socialize;
 			}
 		};
@@ -80,7 +79,7 @@ public class SocializeActivityTestCase extends SocializeUIActivityTest {
 		
 		PublicActivity activity = new PublicActivity() {
 			@Override
-			protected SocializeService getSocialize() {
+			public SocializeService getSocialize() {
 				return socialize;
 			}
 		};

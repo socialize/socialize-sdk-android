@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -166,6 +166,18 @@ public class MockSocializeSession implements WritableSession {
 	public void setUserProviderCredentials(AuthProviderType type, UserProviderCredentials data) {
 		map.put(type, data);
 	}
-	
+
+	@Override
+	public void setUserProviderCredentials(UserProviderCredentialsMap data) {
+		this.map = data;
+	}
+
+	@Override
+	public boolean isRestored() {
+		return false;
+	}
+
+	@Override
+	public void setRestored(boolean restored) {}
 	
 }

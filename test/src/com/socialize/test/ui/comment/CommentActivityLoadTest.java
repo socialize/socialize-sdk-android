@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,16 +25,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.KeyEvent;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
-import com.socialize.api.action.CommentSystem;
+import com.socialize.api.action.comment.CommentSystem;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
@@ -133,7 +131,7 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 			}
 		});		
 		
-		Socialize.getSocializeUI().showCommentView(getActivity(), entity1, new OnCommentViewActionListener() {
+		Socialize.getSocialize().showCommentView(getActivity(), entity1, new OnCommentViewActionListener() {
 			public void onError(SocializeException error) {
 				error.printStackTrace();
 				lock.countDown();
@@ -187,7 +185,7 @@ public class CommentActivityLoadTest extends SocializeActivityTest {
 			}
 		});		
 		
-		Socialize.getSocializeUI().showCommentView(getActivity(), entity2, new OnCommentViewActionListener() {
+		Socialize.getSocialize().showCommentView(getActivity(), entity2, new OnCommentViewActionListener() {
 			public void onError(SocializeException error) {
 				error.printStackTrace();
 				lock2.countDown();

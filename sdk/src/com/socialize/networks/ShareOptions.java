@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,6 @@
  */
 package com.socialize.networks;
 
-import android.location.Location;
 
 /**
  * Allows for the specification of options for sharing.
@@ -30,11 +29,10 @@ import android.location.Location;
 public class ShareOptions {
 	
 	private boolean shareLocation;
-	private boolean autoAuth = false;
 	private SocialNetwork[] shareTo;
 	private SocialNetworkListener listener;
-	private Location location;
 	private boolean selfManaged = false;
+	private boolean authRequired = true;
 	
 	/**
 	 * If true and if available, the user's location is shared.
@@ -71,7 +69,7 @@ public class ShareOptions {
 	public void setListener(SocialNetworkListener listener) {
 		this.listener = listener;
 	}
-
+	
 	public boolean isShareTo(SocialNetwork destination) {
 		if(shareTo != null) {
 			for (SocialNetwork d : shareTo) {
@@ -84,27 +82,6 @@ public class ShareOptions {
 		return false;
 	}
 	
-	public Location getLocation() {
-		return location;
-	}
-	
-	public void setLocation(Location location) {
-		this.location = location;
-	}
-
-	public boolean isAutoAuth() {
-		return autoAuth;
-	}
-
-	/**
-	 * If set to true any actions which can propagate will automatically attempt authentication on the target social network
-	 * @param autoAuth
-	 */
-	public void setAutoAuth(boolean autoAuth) {
-		this.autoAuth = autoAuth;
-	}
-
-	
 	public boolean isSelfManaged() {
 		return selfManaged;
 	}
@@ -115,6 +92,20 @@ public class ShareOptions {
 	 */
 	public void setSelfManaged(boolean selfManaged) {
 		this.selfManaged = selfManaged;
+	}
+
+	
+	public boolean isAuthRequired() {
+		return authRequired;
+	}
+
+	/**
+	 * Set to false if you DON'T want the authenticate dialog to show when sharing.
+	 * Defaults to socialize.require.auth config property.
+	 * @param requireAuth
+	 */
+	public void setAuthRequired(boolean requireAuth) {
+		this.authRequired = requireAuth;
 	}
 	
 	

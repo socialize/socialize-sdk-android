@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -40,8 +40,6 @@ import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.util.Colors;
 import com.socialize.ui.util.KeyboardUtils;
@@ -68,13 +66,13 @@ public class CommentEntryView extends BaseView {
 	private KeyboardUtils keyboardUtils;
 	private EditText commentField;
 	
-	private IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory;
-	private IBeanFactory<CustomCheckbox> autoPostTwitterOptionFactory;
+//	private IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory;
+//	private IBeanFactory<CustomCheckbox> autoPostTwitterOptionFactory;
 	private IBeanFactory<CustomCheckbox> locationEnabledOptionFactory;
 	private IBeanFactory<CustomCheckbox> notificationEnabledOptionFactory;
 	
-	private CustomCheckbox facebookCheckbox;
-	private CustomCheckbox twitterCheckbox;
+//	private CustomCheckbox facebookCheckbox;
+//	private CustomCheckbox twitterCheckbox;
 	private CustomCheckbox locationCheckBox;
 	private CustomCheckbox notifyCheckBox;
 	
@@ -186,17 +184,17 @@ public class CommentEntryView extends BaseView {
 					boolean shareLocation = false;
 					SocialNetwork[] shareTo = null;
 					
-					if(facebookCheckbox != null && facebookCheckbox.isChecked()) {
-						if(twitterCheckbox != null && twitterCheckbox.isChecked()) {
-							shareTo = new SocialNetwork[] {SocialNetwork.FACEBOOK, SocialNetwork.TWITTER};
-						}
-						else {
-							shareTo = new SocialNetwork[] {SocialNetwork.FACEBOOK};
-						}
-					}
-					else if(twitterCheckbox != null && twitterCheckbox.isChecked()) {
-						shareTo = new SocialNetwork[] {SocialNetwork.TWITTER};
-					}
+//					if(facebookCheckbox != null && facebookCheckbox.isChecked()) {
+//						if(twitterCheckbox != null && twitterCheckbox.isChecked()) {
+//							shareTo = new SocialNetwork[] {SocialNetwork.FACEBOOK, SocialNetwork.TWITTER};
+//						}
+//						else {
+//							shareTo = new SocialNetwork[] {SocialNetwork.FACEBOOK};
+//						}
+//					}
+//					else if(twitterCheckbox != null && twitterCheckbox.isChecked()) {
+//						shareTo = new SocialNetwork[] {SocialNetwork.TWITTER};
+//					}
 					
 					if(locationCheckBox != null) {
 						shareLocation = locationCheckBox.isChecked(); 
@@ -291,8 +289,8 @@ public class CommentEntryView extends BaseView {
 		if(fbSupported || twSupported || locationSupported) {
 			
 			User user = Socialize.getSocialize().getSession().getUser();
-			final boolean fbOK = Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK);
-			final boolean twOK = Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER);
+//			final boolean fbOK = Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK);
+//			final boolean twOK = Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER);
 			
 			int padding = displayUtils.getDIP(4);
 			
@@ -303,8 +301,6 @@ public class CommentEntryView extends BaseView {
 			LayoutParams toolbarLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 			LayoutParams toolbarLayoutLeftParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 			LayoutParams toolbarLayoutRightParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-			
-			
 			
 			GradientDrawable background = new GradientDrawable(Orientation.BOTTOM_TOP, new int[] { colors.getColor(Colors.COMMENT_ENTRY_BOTTOM), colors.getColor(Colors.COMMENT_ENTRY_TOP) });
 			toolbarLayout.setBackgroundDrawable(background);
@@ -322,58 +318,58 @@ public class CommentEntryView extends BaseView {
 			toolbarLayout.addView(toolbarLayoutLeft);
 			toolbarLayout.addView(toolbarLayoutRight);		
 			
-			if(fbSupported) {
-				facebookCheckbox = autoPostFacebookOptionFactory.getBean();
-			}
-			
-			if(twSupported) {
-				twitterCheckbox = autoPostTwitterOptionFactory.getBean();
-			}
+//			if(fbSupported) {
+//				facebookCheckbox = autoPostFacebookOptionFactory.getBean();
+//			}
+//			
+//			if(twSupported) {
+//				twitterCheckbox = autoPostTwitterOptionFactory.getBean();
+//			}
 			
 			if(locationSupported) {
 				locationCheckBox = locationEnabledOptionFactory.getBean();
 			}		
 			
-			if(facebookCheckbox != null) {
-				
-				if(fbOK) {
-					facebookCheckbox.setChecked(user.isAutoPostToFacebook());
-				}
-				else {
-					facebookCheckbox.setChecked(false);
-				}
-				
-				facebookCheckbox.setOnClickListener(getSocialNetworkClickListener(facebookCheckbox, AuthProviderType.FACEBOOK, "Facebook sharing enabled", "Facebook sharing disabled"));
-			}
-			
-			if(twitterCheckbox != null) {
-				if(twOK) {
-					twitterCheckbox.setChecked(user.isAutoPostToTwitter());
-				}
-				else {
-					twitterCheckbox.setChecked(false);
-				}
-				twitterCheckbox.setOnClickListener(getSocialNetworkClickListener(twitterCheckbox, AuthProviderType.TWITTER, "Twitter sharing enabled", "Twitter sharing disabled"));
-			}		
+//			if(facebookCheckbox != null) {
+//				
+//				if(fbOK) {
+//					facebookCheckbox.setChecked(user.isAutoPostToFacebook());
+//				}
+//				else {
+//					facebookCheckbox.setChecked(false);
+//				}
+//				
+//				facebookCheckbox.setOnClickListener(getSocialNetworkClickListener(facebookCheckbox, AuthProviderType.FACEBOOK, "Facebook sharing enabled", "Facebook sharing disabled"));
+//			}
+//			
+//			if(twitterCheckbox != null) {
+//				if(twOK) {
+//					twitterCheckbox.setChecked(user.isAutoPostToTwitter());
+//				}
+//				else {
+//					twitterCheckbox.setChecked(false);
+//				}
+//				twitterCheckbox.setOnClickListener(getSocialNetworkClickListener(twitterCheckbox, AuthProviderType.TWITTER, "Twitter sharing enabled", "Twitter sharing disabled"));
+//			}		
 
 			if(locationCheckBox != null) {
 				locationCheckBox.setChecked(user.isShareLocation());
 			}		
 			
-			if(facebookCheckbox != null || twitterCheckbox != null || notifyCheckBox != null) {
-				
-				if(facebookCheckbox != null) {
-					toolbarLayoutRight.addView(facebookCheckbox);
-				}
-				
-				if(twitterCheckbox != null) {
-					toolbarLayoutRight.addView(twitterCheckbox);
-				}			
-				
-				if(notifyCheckBox != null && displayUtils.getOrientation() != Configuration.ORIENTATION_PORTRAIT) {
-					toolbarLayoutRight.addView(notifyCheckBox);
-				}
-			}	
+//			if(facebookCheckbox != null || twitterCheckbox != null) {
+//				
+//				if(facebookCheckbox != null) {
+//					toolbarLayoutRight.addView(facebookCheckbox);
+//				}
+//				
+//				if(twitterCheckbox != null) {
+//					toolbarLayoutRight.addView(twitterCheckbox);
+//				}			
+//			}	
+			
+			if(notifyCheckBox != null && displayUtils.getOrientation() != Configuration.ORIENTATION_PORTRAIT) {
+				toolbarLayoutRight.addView(notifyCheckBox);
+			}
 			
 			if(locationCheckBox != null) {
 				toolbarLayoutLeft.addView(locationCheckBox);
@@ -383,51 +379,51 @@ public class CommentEntryView extends BaseView {
 		}
 	}
 	
-	protected OnClickListener getSocialNetworkClickListener(final CustomCheckbox chkbox, final AuthProviderType authProviderType, final String checkedMsg, final String uncheckedMsg) {
-		return new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				
-				if(chkbox.isChecked()) {
-					if(Socialize.getSocialize().isAuthenticated(authProviderType)) {
-						toast(checkedMsg);
-					}
-					else {
-						// Show auth
-						getSocialize().authenticate(getContext(), authProviderType, new SocializeAuthListener() {
-
-							@Override
-							public void onError(SocializeException error) {
-								chkbox.setChecked(false);
-								showErrorToast(getContext(), error);
-							}
-
-							@Override
-							public void onAuthSuccess(SocializeSession session) {
-								chkbox.setChecked(true);
-								toast(checkedMsg);
-							}
-
-							@Override
-							public void onAuthFail(SocializeException error) {
-								chkbox.setChecked(false);
-								showErrorToast(getContext(), error);
-							}
-
-							@Override
-							public void onCancel() {
-								chkbox.setChecked(false);
-							}
-						});
-					}	
-				}
-				else {
-					toast(uncheckedMsg);
-				}
-			}
-		};	
-	}
+//	protected OnClickListener getSocialNetworkClickListener(final CustomCheckbox chkbox, final AuthProviderType authProviderType, final String checkedMsg, final String uncheckedMsg) {
+//		return new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				
+//				if(chkbox.isChecked()) {
+//					if(Socialize.getSocialize().isAuthenticated(authProviderType)) {
+//						toast(checkedMsg);
+//					}
+//					else {
+//						// Show auth
+//						getSocialize().authenticate(getContext(), authProviderType, new SocializeAuthListener() {
+//
+//							@Override
+//							public void onError(SocializeException error) {
+//								chkbox.setChecked(false);
+//								showErrorToast(getContext(), error);
+//							}
+//
+//							@Override
+//							public void onAuthSuccess(SocializeSession session) {
+//								chkbox.setChecked(true);
+//								toast(checkedMsg);
+//							}
+//
+//							@Override
+//							public void onAuthFail(SocializeException error) {
+//								chkbox.setChecked(false);
+//								showErrorToast(getContext(), error);
+//							}
+//
+//							@Override
+//							public void onCancel() {
+//								chkbox.setChecked(false);
+//							}
+//						});
+//					}	
+//				}
+//				else {
+//					toast(uncheckedMsg);
+//				}
+//			}
+//		};	
+//	}
 	
 	protected void toggleNotifications() {
 		setNotificationsEnabled(!notificationsEnabled);
@@ -455,9 +451,9 @@ public class CommentEntryView extends BaseView {
 		this.cancelCommentButton = cancelCommentButton;
 	}
 	
-	public void setAutoPostFacebookOptionFactory(IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory) {
-		this.autoPostFacebookOptionFactory = autoPostFacebookOptionFactory;
-	}
+//	public void setAutoPostFacebookOptionFactory(IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory) {
+//		this.autoPostFacebookOptionFactory = autoPostFacebookOptionFactory;
+//	}
 	
 	public void setLocationEnabledOptionFactory(IBeanFactory<CustomCheckbox> locationEnabledOptionFactory) {
 		this.locationEnabledOptionFactory = locationEnabledOptionFactory;
@@ -483,9 +479,9 @@ public class CommentEntryView extends BaseView {
 		this.notificationEnabledOptionFactory = notificationOptionFactory;
 	}
 	
-	public void setAutoPostTwitterOptionFactory(IBeanFactory<CustomCheckbox> autoPostTwitterOptionFactory) {
-		this.autoPostTwitterOptionFactory = autoPostTwitterOptionFactory;
-	}
+//	public void setAutoPostTwitterOptionFactory(IBeanFactory<CustomCheckbox> autoPostTwitterOptionFactory) {
+//		this.autoPostTwitterOptionFactory = autoPostTwitterOptionFactory;
+//	}
 
 	public void setNotificationsEnabled(boolean enabled) {
 		notificationsEnabled = enabled;
@@ -535,28 +531,32 @@ public class CommentEntryView extends BaseView {
 			notifyCheckBox.setChecked(notificationsEnabled);
 		}
 		
-		User user = Socialize.getSocialize().getSession().getUser();
+		SocializeSession session = Socialize.getSocialize().getSession();
 		
-		if(facebookCheckbox != null) {
-			if(!facebookCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
-				facebookCheckbox.setChecked(user.isAutoPostToFacebook());
+		if(session != null) {
+			User user = session.getUser();
+			
+//			if(facebookCheckbox != null) {
+//				if(!facebookCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
+//					facebookCheckbox.setChecked(user.isAutoPostToFacebook());
+//				}
+//				else {
+//					facebookCheckbox.setChecked(false);
+//				}
+//			}
+//			
+//			if(twitterCheckbox != null) {
+//				if(!twitterCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
+//					twitterCheckbox.setChecked(user.isAutoPostToTwitter());
+//				}
+//				else {
+//					twitterCheckbox.setChecked(false);
+//				}
+//			}		
+			
+			if(locationCheckBox != null && !locationCheckBox.isChanged()) {
+				locationCheckBox.setChecked(user.isShareLocation());
 			}
-			else {
-				facebookCheckbox.setChecked(false);
-			}
-		}
-		
-		if(twitterCheckbox != null) {
-			if(!twitterCheckbox.isChanged() && Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
-				twitterCheckbox.setChecked(user.isAutoPostToTwitter());
-			}
-			else {
-				twitterCheckbox.setChecked(false);
-			}
-		}		
-		
-		if(locationCheckBox != null && !locationCheckBox.isChanged()) {
-			locationCheckBox.setChecked(user.isShareLocation());
 		}
 	}
 	
@@ -579,22 +579,25 @@ public class CommentEntryView extends BaseView {
 	}
 	
 	public void update() {
-		if(facebookCheckbox != null) {
-			facebookCheckbox.setChanged(false);
-		}
-		
-		if(twitterCheckbox != null) {
-			twitterCheckbox.setChanged(false);
-		}
+//		if(facebookCheckbox != null) {
+//			facebookCheckbox.setChanged(false);
+//		}
+//		
+//		if(twitterCheckbox != null) {
+//			twitterCheckbox.setChanged(false);
+//		}
 		
 		if(locationCheckBox != null) {
 			locationCheckBox.setChanged(false);
 		}
 		
-		User user = Socialize.getSocialize().getSession().getUser();
+		SocializeSession session = Socialize.getSocialize().getSession();
 		
-		if(user != null) {
-			notificationsAvailable = user.isNotificationsEnabled() && appUtils.isNotificationsAvailable(getContext());
+		if(session != null) {
+			User user = session.getUser();
+			if(user != null) {
+				notificationsAvailable = user.isNotificationsEnabled() && appUtils.isNotificationsAvailable(getContext());
+			}
 		}
 		
 		updateUI();
@@ -604,9 +607,9 @@ public class CommentEntryView extends BaseView {
 		return commentField;
 	}
 
-	protected CustomCheckbox getFacebookCheckbox() {
-		return facebookCheckbox;
-	}
+//	protected CustomCheckbox getFacebookCheckbox() {
+//		return facebookCheckbox;
+//	}
 
 	protected CustomCheckbox getLocationCheckBox() {
 		return locationCheckBox;
@@ -617,7 +620,8 @@ public class CommentEntryView extends BaseView {
 	}
 	
 	protected void setNotifySubscribeState(boolean subscribed) {
-		notificationsEnabled = subscribed;
+		if(subscribed)
+			notificationsEnabled = subscribed;
 		if(notifyCheckBox != null) {
 			notifyCheckBox.setChecked(notificationsEnabled);
 			updateUI();

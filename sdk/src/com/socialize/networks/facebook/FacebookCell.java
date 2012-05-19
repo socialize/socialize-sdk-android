@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -40,8 +40,8 @@ public abstract class FacebookCell extends ClickableSectionCell {
 	 */
 	@Override
 	protected ImageView makeImage() {
-		ImageView view = new ImageView(getContext());
-		view.setImageDrawable(drawables.getDrawable("icon_facebook.png"));
-		return view;
+		setImageOn(drawables.getDrawable("icon_facebook.png"));
+		setImageOff(drawables.getDrawable("icon_facebook_disabled.png"));
+		return  new ImageView(getContext());
 	}
 }

@@ -1,5 +1,6 @@
 package com.socialize.test.mock;
 
+import android.content.Context;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
 import com.socialize.init.SocializeInitializationAsserter;
@@ -13,7 +14,7 @@ public class MockInitializationAsserter implements SocializeInitializationAssert
 	}
 
 	@Override
-	public boolean assertInitialized(SocializeService service, SocializeListener listener) {
+	public boolean assertInitialized(Context context, SocializeService service, SocializeListener listener) {
 		return true;
 	}
 }

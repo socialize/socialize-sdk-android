@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,6 @@ package com.socialize.ui.profile;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.listener.user.UserSaveListener;

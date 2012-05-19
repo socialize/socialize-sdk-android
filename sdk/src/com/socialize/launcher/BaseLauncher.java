@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,8 +31,6 @@ import android.content.Intent;
  */
 public abstract class BaseLauncher implements Launcher {
 	
-	protected LaunchListener launchListener;
-
 	/* (non-Javadoc)
 	 * @see com.socialize.launcher.Launcher#onResult(android.app.Activity, int, int, android.content.Intent, android.content.Intent)
 	 */
@@ -47,19 +45,10 @@ public abstract class BaseLauncher implements Launcher {
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.launcher.Launcher#getLaunchListener()
-	 */
 	@Override
-	public LaunchListener getLaunchListener() {
-		return launchListener;
+	public boolean isAsync() {
+		return true;
 	}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.launcher.Launcher#setLaunchListener(com.socialize.launcher.LaunchListener)
-	 */
-	@Override
-	public void setLaunchListener(LaunchListener listener) {
-		this.launchListener = listener;
-	}
+	
+	
 }

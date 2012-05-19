@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,6 +21,7 @@
  */
 package com.socialize.auth.facebook;
 
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.auth.BaseAuthProviderInfoFactory;
 import com.socialize.config.SocializeConfig;
 
@@ -30,14 +31,20 @@ import com.socialize.config.SocializeConfig;
  */
 public class FacebookAuthProviderInfoFactory extends BaseAuthProviderInfoFactory<FacebookAuthProviderInfo> {
 
+	private IBeanFactory<FacebookAuthProviderInfo> facebookAuthProviderInfoInstanceFactory;
+	
 	@Override
 	protected FacebookAuthProviderInfo initInstance() {
-		FacebookAuthProviderInfo info = new FacebookAuthProviderInfo();
+		FacebookAuthProviderInfo info = facebookAuthProviderInfoInstanceFactory.getBean();
 		return info;
 	}
 
 	@Override
 	protected void update(FacebookAuthProviderInfo info) {
 		info.setAppId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
+	}
+
+	public void setFacebookAuthProviderInfoInstanceFactory(IBeanFactory<FacebookAuthProviderInfo> facebookAuthProviderInfoInstanceFactory) {
+		this.facebookAuthProviderInfoInstanceFactory = facebookAuthProviderInfoInstanceFactory;
 	}
 }

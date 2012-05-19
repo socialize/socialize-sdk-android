@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,10 @@ package com.socialize.networks.facebook;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;
@@ -31,7 +35,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
-import com.socialize.api.ShareMessageBuilder;
+import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.facebook.FacebookSessionStore;
@@ -46,9 +50,10 @@ import com.socialize.facebook.Facebook;
 import com.socialize.facebook.FacebookError;
 import com.socialize.facebook.RequestListener;
 import com.socialize.log.SocializeLogger;
+import com.socialize.networks.DefaultPostData;
+import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
-import com.socialize.util.AppUtils;
 import com.socialize.util.StringUtils;
 
 /**
@@ -58,66 +63,127 @@ import com.socialize.util.StringUtils;
 public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	
 	private SocializeLogger logger;
-	private AppUtils appUtils;
-	private ShareMessageBuilder shareMessageBuilder;
-//	private SocializeConfig config;
+//	private AppUtils appUtils;
+//	private ShareMessageBuilder shareMessageBuilder;
 	private FacebookImageUtils facebookImageUtils;
+	private IBeanFactory<AsyncFacebookRunner> facebookRunnerFactory;
 	
 	@Override
 	public void postLike(Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkListener listener) {
-		String linkName = appUtils.getAppName();
+//		String linkName = appUtils.getAppName();
 		
-		StringBuilder builder = new StringBuilder();
+//		StringBuilder builder = new StringBuilder();
 		
-		builder.append("Likes ");
-		builder.append(shareMessageBuilder.getEntityLink(entity, propInfo, false));
-		builder.append("\n\n");
-		builder.append("Posted from ");
-		builder.append(linkName);
-		
-//		if(config.isBrandingEnabled()) {
-//			builder.append(" using Socialize for Android. http://www.getsocialize.com");
-//		}
-		
-		post(parent, entity, builder.toString(), propInfo, listener);		
+//		builder.append("Likes ");
+//		builder.append(shareMessageBuilder.getEntityLink(entity, propInfo, false));
+//		builder.append("\n\n");
+//		builder.append("Posted from ");
+//		builder.append(linkName);
+		post(parent, entity, "", propInfo, listener);		
 	}
 
 	@Override
 	public void postComment(Activity parent, Entity entity, String comment, PropagationInfo propInfo, SocialNetworkListener listener) {
-		String linkName = appUtils.getAppName();
-		
+//		String linkName = appUtils.getAppName();
 		StringBuilder builder = new StringBuilder();
-			
-		builder.append(shareMessageBuilder.getEntityLink(entity, propInfo, false));
-		builder.append("\n\n");
+//		builder.append(shareMessageBuilder.getEntityLink(entity, propInfo, false));
+//		builder.append("\n\n");
 		builder.append(comment);
-		builder.append("\n\n");
-		builder.append("Posted from ");
-		builder.append(linkName);
-		
-//		if(config.isBrandingEnabled()) {
-//			builder.append(" using Socialize for Android. http://www.getsocialize.com");
-//		}
-		
+//		builder.append("\n\n");
+//		builder.append("Posted from ");
+//		builder.append(linkName);
 		post(parent, entity, builder.toString(), propInfo, listener);		
 	}
 
 	@Override
 	public void post(Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkListener listener) {
 		
-		String caption = "Download the app now to join the conversation.";
-		String linkName = appUtils.getAppName();
-		String link = propInfo.getAppUrl();
+		String entityUrl = propInfo.getEntityUrl();
+		String linkName = entityUrl;
+		String link = entityUrl;
 		String appId = getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
 		
+		if(entity != null) {
+			linkName = entity.getDisplayName();
+		}
+		
 		if(!StringUtils.isEmpty(appId)) {
-			post(parent, appId, linkName, message, link, caption, listener);
+			
+			final Map<String, String> params = new HashMap<String, String>();
+			params.put("name", linkName);
+			params.put("message", message);
+			params.put("link", link);
+			params.put("type", "link");
+			
+			DefaultPostData postData = new DefaultPostData();
+			postData.setPostValues(params);
+			postData.setPropagationInfo(propInfo);			
+			
+			post(parent, appId, listener, postData);
 		}
 		else {
 			String msg = "Cannot post message to Facebook.  No app id found.  Make sure you specify facebook.app.id in socialize.properties";
 			onError(parent, msg, new SocializeException(msg), listener);
 		}		
 	}
+
+	@Deprecated
+	@Override
+	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, final SocialNetworkListener listener) {
+		final Map<String, String> params = new HashMap<String, String>();
+		params.put("name", linkName);
+		params.put("message", message);
+		params.put("link", link);
+		params.put("type", "link");
+		params.put("caption", caption);
+		DefaultPostData postData = new DefaultPostData();
+		postData.setPostValues(params);
+		post(parent, appId, listener, postData);
+	}
+	
+	@Override
+	public void postShare(Activity parent, Share share, SocialNetworkListener listener) {
+		PropagationInfo propInfo = share.getPropagationInfoResponse().getPropagationInfo(ShareType.FACEBOOK);
+		final Map<String, String> params = new HashMap<String, String>();
+		params.put("name", share.getEntityDisplayName());
+		params.put("link", propInfo.getEntityUrl());
+		params.put("message", share.getText());
+		params.put("type", "link");
+		
+		DefaultPostData postData = new DefaultPostData();
+		postData.setPostValues(params);
+		postData.setPropagationInfo(propInfo);
+		
+		post(parent, getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID), listener, postData);
+	}
+
+	@Override
+	public void post(Activity parent, String appId, SocialNetworkListener listener, PostData postData) {
+		if(listener != null) {
+			listener.onBeforePost(parent, SocialNetwork.FACEBOOK , postData);
+		}
+		
+		Bundle bundle = new Bundle();
+		
+		Set<Entry<String, String>> entries = postData.getPostValues().entrySet();
+		
+		for (Entry<String, String> entry : entries) {
+			bundle.putString(entry.getKey(), entry.getValue());
+		}
+		
+		Facebook fb = newFacebook(appId);
+		
+		final FacebookSessionStore store = newFacebookSessionStore();
+		
+		store.restore(fb, parent);
+		
+		AsyncFacebookRunner runner = newAsyncFacebookRunner(fb);
+		
+		RequestListener requestListener = newRequestListener(parent, listener);
+		
+		runner.request("me/links", bundle, "POST", requestListener, null);	
+	}
+	
 
 	@Override
 	public void postPhoto(Activity parent, Share share, String comment, Uri photoUri, SocialNetworkListener listener) {
@@ -165,7 +231,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		}
 		catch (IOException e) {
 			if(listener != null) {
-				listener.onError(parent, SocialNetwork.FACEBOOK, "Unable to scale image for upload", e);
+				listener.onPostError(parent, SocialNetwork.FACEBOOK, e);
 			}
 			 
 			if(logger != null) {
@@ -176,29 +242,8 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			}
 		}
 	}
-	
+		
 
-	@Override
-	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, final SocialNetworkListener listener) {
-		Bundle params = new Bundle();
-		params.putString("name", linkName);
-		params.putString("message", message);
-		params.putString("link", link);
-		params.putString("caption", caption);
-		
-		Facebook fb = newFacebook(appId);
-		
-		final FacebookSessionStore store = newFacebookSessionStore();
-		
-		store.restore(fb, parent);
-		
-		AsyncFacebookRunner runner = newAsyncFacebookRunner(fb);
-		
-		RequestListener requestListener = newRequestListener(parent, listener);
-		
-		runner.request("me/feed", params, "POST", requestListener, null);	
-	}
-	
 	// So we can mock
 	protected Facebook newFacebook(String appId) {
 		return new Facebook(appId);
@@ -278,7 +323,11 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	
 	// So we can mock
 	protected AsyncFacebookRunner newAsyncFacebookRunner(Facebook fb) {
-		return new AsyncFacebookRunner(fb);
+		if(facebookRunnerFactory != null) {
+			return facebookRunnerFactory.getBean(fb);
+		}
+		return  new AsyncFacebookRunner(fb);
+	
 	}
 
 	// So we can mock
@@ -295,16 +344,12 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		this.logger = logger;
 	}
 
-	public void setShareMessageBuilder(ShareMessageBuilder shareMessageBuilder) {
-		this.shareMessageBuilder = shareMessageBuilder;
-	}
+//	public void setShareMessageBuilder(ShareMessageBuilder shareMessageBuilder) {
+//		this.shareMessageBuilder = shareMessageBuilder;
+//	}
 
-	public void setAppUtils(AppUtils appUtils) {
-		this.appUtils = appUtils;
-	}
-
-//	public void setConfig(SocializeConfig config) {
-//		this.config = config;
+//	public void setAppUtils(AppUtils appUtils) {
+//		this.appUtils = appUtils;
 //	}
 
 	protected void onError(final Activity parent, final String msg, final Throwable e, final SocialNetworkListener listener) {
@@ -328,7 +373,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			parent.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					listener.onError(parent, SocialNetwork.FACEBOOK, msg, e);
+					listener.onPostError(parent, SocialNetwork.FACEBOOK, SocializeException.wrap(e));
 				}
 			});
 		}
@@ -337,4 +382,10 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	public void setFacebookImageUtils(FacebookImageUtils facebookImageUtils) {
 		this.facebookImageUtils = facebookImageUtils;
 	}
+	
+	public void setFacebookRunnerFactory(IBeanFactory<AsyncFacebookRunner> facebookRunnerFactory) {
+		this.facebookRunnerFactory = facebookRunnerFactory;
+	}
+	
+	
 }

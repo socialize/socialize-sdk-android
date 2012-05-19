@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,10 +29,10 @@ import android.app.Activity;
  */
 public interface SocialNetworkListener {
 	
-	public void onBeforePost(Activity parent, SocialNetwork network);
+	public void onPostError(Activity context, SocialNetwork network, Exception error);
 
-	public void onAfterPost(Activity parent, SocialNetwork network);
-	
-	public void onError(Activity parent, SocialNetwork network, String message, Throwable error);
+	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData);
+
+	public void onAfterPost(Activity parent, SocialNetwork socialNetwork);
 	
 }

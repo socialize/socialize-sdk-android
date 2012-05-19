@@ -1,27 +1,22 @@
-.. raw:: html
+// Defined in your app
+public class MyEntityLoader implements SocializeEntityLoader {
 
-	<pre class="brush: java">
-	
-	// Defined in your app
-	public class MyEntityLoader implements SocializeEntityLoader {
-	
-		// MUST define a parameterless constructor
-		public MyEntityLoader() {
-			super();
-		}
-	
-		public void loadEntity(Activity activity, Entity entity) {
-			// Launch an activity from here...
-			Intent intent = new Intent(activity, MyContentActivity.class);
-			
-			// Add the key from the entity
-			intent.putExtra("some_key", entity.getKey());
-			activity.startActivity(intent);
-		}
+	// MUST define a parameterless constructor
+	public MyEntityLoader() {
+		super();
+	}
+
+	public void loadEntity(Activity activity, Entity entity) {
+		// Launch an activity from here...
+		Intent intent = new Intent(activity, MyContentActivity.class);
 		
-		public boolean canLoad(Context context, Entity entity) {
-			return true; // always load in this case	
-		}
+		// Add the key from the entity
+		intent.putExtra("some_key", entity.getKey());
+		activity.startActivity(intent);
 	}
 	
-	</pre>
+	public boolean canLoad(Context context, Entity entity) {
+		return true; // always load in this case	
+	}
+}
+

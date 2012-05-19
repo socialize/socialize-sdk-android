@@ -11,8 +11,8 @@ import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.EntitySystem;
-import com.socialize.api.action.LikeSystem;
+import com.socialize.api.action.entity.EntitySystem;
+import com.socialize.api.action.like.LikeSystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
@@ -55,14 +55,19 @@ public class ActionBarLikeStateTest extends ActivityInstrumentationTestCase2<Act
 		
 		Entity entity = Entity.newInstance("http://entity23.com", "no name");
 		
+		// Ensure sharing is not supported
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_APP_ID, "");
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, "");
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, "");
+		
 		final MockEntitySystem mockEntitySystem = new MockEntitySystem();
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
 			
 			int callCount = 0;
-
+			
 			@Override
-			public void addLike(SocializeSession session, Entity entity, ShareOptions options, LikeListener listener) {
-				super.addLike(session, entity, options, listener);
+			public void addLike(SocializeSession session, Entity entityKey, ShareOptions shareOptions, LikeListener listener) {
+				super.addLike(session, entityKey, shareOptions, listener);
 			}
 
 			@Override
@@ -96,7 +101,6 @@ public class ActionBarLikeStateTest extends ActivityInstrumentationTestCase2<Act
 				error.printStackTrace();
 				fail();
 			}
-			
 			@Override
 			public void onInit(Context context, IOCContainer container) {
 				

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@ import android.net.Uri;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.Share;
+import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetworkListener;
 
 /**
@@ -34,6 +35,8 @@ import com.socialize.networks.SocialNetworkListener;
  */
 public interface FacebookWallPoster {
 
+	public void postShare(final Activity parent, Share share, SocialNetworkListener listener);
+	
 	public void postLike(final Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkListener listener);
 
 	public void postComment(final Activity parent, Entity entity, String comment, PropagationInfo propInfo, SocialNetworkListener listener);	
@@ -42,10 +45,11 @@ public interface FacebookWallPoster {
 	
 	public void postPhoto(final Activity parent, String appId, String link, String caption, Uri photoUri, SocialNetworkListener listener);
 	
+	@Deprecated
+	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, final SocialNetworkListener listener);
+	
 	public void post(final Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkListener listener);
 	
-	public void post(final Activity parent, String appId, String linkName, String message, String link, String caption, SocialNetworkListener listener);
-
-	
+	public void post(final Activity parent, String appId, SocialNetworkListener listener, PostData postData);
 
 }

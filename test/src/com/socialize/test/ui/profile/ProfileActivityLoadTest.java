@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc.
+ * Copyright (c) 2012 Socialize Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,12 +23,11 @@ package com.socialize.test.ui.profile;
 
 import android.app.Activity;
 import android.content.Context;
-
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
-import com.socialize.api.action.UserSystem;
+import com.socialize.api.action.user.UserSystem;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeInitListener;
@@ -87,7 +86,7 @@ public class ProfileActivityLoadTest extends SocializeUIActivityTest {
 		Socialize.getSocialize().getConfig().setFacebookAppId("1234567890");
 		Socialize.getSocialize().getConfig().setTwitterKeySecret("U18LUnVjULkkpGoJ6CoP3A", "RiIljnFq4RWV9LEaCM1ZLsAHf053vX2KyhJhmCOlBE");
 		
-		Socialize.getSocializeUI().showUserProfileView(getActivity(), 69L);
+		Socialize.getSocialize().showUserProfileView(getActivity(), 69L);
 		
 		Activity waitForActivity = TestUtils.waitForActivity(5000);
 		

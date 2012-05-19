@@ -6,8 +6,8 @@ import android.content.Intent;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.ProxyObject;
-import com.socialize.api.action.LikeSystem;
-import com.socialize.api.action.ViewSystem;
+import com.socialize.api.action.like.LikeSystem;
+import com.socialize.api.action.view.ViewSystem;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
@@ -49,7 +49,7 @@ public class ActionBarListenerTest extends SocializeActivityTest {
 
 	@Override
 	protected void tearDown() throws Exception {
-		TestUtils.destroyActivity();
+//		TestUtils.destroyActivity();
 		TestUtils.tearDown();
 		super.tearDown();
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Socialize Inc. 
+ * Copyright (c) 2012 Socialize Inc. 
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy 
  * of this software and associated documentation files (the "Software"), to deal
@@ -42,6 +42,7 @@ public class SocializeSessionImpl implements WritableSession {
 	private String consumerToken;
 	private String consumerTokenSecret;
 	private String host;
+	private boolean restored;
 	
 	private UserProviderCredentialsMap userProviderCredentials;
 	
@@ -56,9 +57,14 @@ public class SocializeSessionImpl implements WritableSession {
 	@SuppressWarnings("rawtypes")
 	private AuthProvider authProvider;
 	
+	private static final SocializeSessionImpl instance = new SocializeSessionImpl();
+	
+	public static final SocializeSessionImpl getInstance() {
+		return instance;
+	}
+	
 	public SocializeSessionImpl() {
 		super();
-		
 		userProviderCredentials = new DefaultUserProviderCredentialsMap();
 	}
 	
@@ -196,5 +202,14 @@ public class SocializeSessionImpl implements WritableSession {
 	public UserProviderCredentials getUserProviderCredentials(AuthProviderType type) {
 		return userProviderCredentials.get(type);
 	}
+
+	@Override
+	public boolean isRestored() {
+		return restored;
+	}
 	
+	@Override
+	public void setRestored(boolean restored) {
+		this.restored = restored;
+	}
 }
