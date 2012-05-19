@@ -196,7 +196,7 @@
 		<delete dir="${sample_dir}"/>
 		<mkdir dir="${sample_dir}"/>
 		<copy todir="${sample_dir}">
-			<fileset dir="../simple-sample/" excludes="gen/**,bin/**,build/**,codetemplates.xml"/>
+			<fileset dir="../demo/" excludes="gen/**,bin/**,build/**,codetemplates.xml"/>
 		</copy>
 		<copy todir="${sample_dir}/libs">
 			<fileset dir="build" includes="*.jar"/>
