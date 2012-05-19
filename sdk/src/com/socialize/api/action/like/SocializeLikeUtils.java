@@ -166,6 +166,11 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 				if(shareOptions != null && shareOptions.getShareTo() != null) {
 					doActionShare(context, like, null, progress, listener, shareOptions.getShareTo());
 				}
+				else {
+					if(progress != null) {
+						progress.dismiss();
+					}
+				}
 			}
 		});		
 	}	

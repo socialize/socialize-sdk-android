@@ -238,7 +238,11 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 				if(shareOptions != null && shareOptions.getShareTo() != null) {
 					doActionShare(context, comment, text, progress, listener, shareOptions.getShareTo());
 				}
-				
+				else {
+					if(progress != null) {
+						progress.dismiss();
+					}
+				}
 			}
 		});		
 	}	
