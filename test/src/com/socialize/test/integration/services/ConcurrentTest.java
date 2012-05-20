@@ -67,7 +67,7 @@ public class ConcurrentTest extends SocializeActivityTest {
 					@Override
 					public void onError(SocializeException error) {
 						error.printStackTrace();
-						addResult(error);
+						addResult(3, error);
 						completeLatch.countDown();
 					}
 					
@@ -88,7 +88,7 @@ public class ConcurrentTest extends SocializeActivityTest {
 					@Override
 					public void onError(SocializeException error) {
 						error.printStackTrace();
-						addResult(error);
+						addResult(3, error);
 						completeLatch.countDown();
 					}
 					
@@ -104,7 +104,7 @@ public class ConcurrentTest extends SocializeActivityTest {
 		// Wait for threads to finish
 		assertTrue(completeLatch.await(30, TimeUnit.SECONDS));
 		
-		SocializeException error = getNextResult();
+		SocializeException error = getResult(3);
 		
 		if(error != null) {
 			fail("Like was not posted.  Last error was " + error.getMessage());
