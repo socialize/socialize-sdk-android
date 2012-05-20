@@ -80,7 +80,11 @@
         <activity android:name=".implementations.subscribe.SubscriptionButtonsActivity"/>
         
         <!-- Location -->
-        <activity android:name=".implementations.location.LocationActivity"/>        
+        <activity android:name=".implementations.location.LocationActivity"/>  
+        
+        <!-- Auth -->
+        <activity android:name=".implementations.auth.AuthButtonsActivity"/>  
+        
         
        	<!-- Base Activities Required by Socialize UI -->
        	<activity android:name="com.socialize.ui.comment.CommentActivity"/>

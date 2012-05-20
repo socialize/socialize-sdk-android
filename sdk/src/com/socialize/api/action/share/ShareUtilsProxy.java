@@ -30,6 +30,7 @@ import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
 import com.socialize.networks.ShareOptions;
+import com.socialize.ui.auth.AuthDialogListener;
 import com.socialize.ui.share.ShareDialogListener;
 
 
@@ -42,6 +43,7 @@ public interface ShareUtilsProxy {
 	@Synchronous
 	public ShareOptions getUserShareOptions(Context context);
 	
+	public void showLinkDialog (Activity context, AuthDialogListener listener);
 	public void showShareDialog (Activity context, Entity entity, int options, SocialNetworkShareListener listener, ShareDialogListener dialogListener);
 	public void shareViaEmail(Activity context, Entity entity, ShareAddListener listener);
 	public void shareViaOther(Activity context, Entity entity, ShareAddListener listener);

@@ -64,7 +64,7 @@ public class EmailShareHandler extends IntentShareHandler {
 		startActivity(context, msg, title);
 		
 		if(listener != null) {
-			listener.onAfterPost(context, null);
+			listener.onAfterPost(context, null, null);
 		}
 	}
 	

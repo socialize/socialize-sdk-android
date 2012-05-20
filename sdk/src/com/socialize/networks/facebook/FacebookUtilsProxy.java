@@ -21,12 +21,14 @@
  */
 package com.socialize.networks.facebook;
 
+import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.annotations.Synchronous;
 import com.socialize.entity.Entity;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.SocialNetworkPostListener;
 
 /**
  * @author Jason Polites
@@ -49,4 +51,10 @@ public interface FacebookUtilsProxy {
 	public String getAccessToken(Context context);
 	
 	public void postEntity(Activity context, Entity entity, String text, SocialNetworkListener listener);
+	
+	public void post(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener);
+	
+	public void get(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener);
+	
+	public void delete(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener);
 }

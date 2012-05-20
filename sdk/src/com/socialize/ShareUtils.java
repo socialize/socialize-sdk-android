@@ -33,6 +33,7 @@ import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
 import com.socialize.networks.ShareOptions;
+import com.socialize.ui.auth.AuthDialogListener;
 import com.socialize.ui.share.ShareDialogListener;
 
 
@@ -64,6 +65,10 @@ public class ShareUtils {
 	
 	public static ShareOptions getUserShareOptions(Context context) {
 		return proxy.getUserShareOptions(context);
+	}
+	
+	public static void showLinkDialog (Activity context, AuthDialogListener listener) {
+		proxy.showLinkDialog(context, listener);
 	}
 	
 	public static void showShareDialog (Activity context, Entity entity) {

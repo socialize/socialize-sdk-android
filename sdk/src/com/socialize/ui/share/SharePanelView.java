@@ -615,7 +615,7 @@ public class SharePanelView extends DialogPanelView {
 				showErrorToast(getContext(), error);
 				
 				if(socialNetworkListener != null) {
-					socialNetworkListener.onPostError(getActivity(), network, error);
+					socialNetworkListener.onNetworkError(getActivity(), network, error);
 				}
 			}
 			
@@ -632,7 +632,7 @@ public class SharePanelView extends DialogPanelView {
 				showError(getContext(), error);
 				
 				if(socialNetworkListener != null) {
-					socialNetworkListener.onPostError(getActivity(), network, error);
+					socialNetworkListener.onNetworkError(getActivity(), network, error);
 				}
 			}
 

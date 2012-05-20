@@ -21,6 +21,7 @@
  */
 package com.socialize.networks.facebook;
 
+import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.Socialize;
@@ -42,6 +43,7 @@ import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.SocialNetworkPostListener;
 
 
 /**
@@ -141,10 +143,28 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 			@Override
 			public void onError(SocializeException error) {
 				if(listener != null) {
-					listener.onPostError(context, SocialNetwork.FACEBOOK, error);
+					listener.onNetworkError(context, SocialNetwork.FACEBOOK, error);
 				}
 			}
 		}, SocialNetwork.FACEBOOK);
+	}
+
+	@Override
+	public void post(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {
+		SocializeConfig config = getSocialize().getConfig();
+		facebookWallPoster.post(context, graphPath, config.getProperty(SocializeConfig.FACEBOOK_APP_ID), postData, listener);
+	}
+
+	@Override
+	public void get(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {
+		SocializeConfig config = getSocialize().getConfig();
+		facebookWallPoster.get(context, graphPath, config.getProperty(SocializeConfig.FACEBOOK_APP_ID), postData, listener);
+	}
+
+	@Override
+	public void delete(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {
+		SocializeConfig config = getSocialize().getConfig();
+		facebookWallPoster.delete(context, graphPath, config.getProperty(SocializeConfig.FACEBOOK_APP_ID), postData, listener);
 	}
 
 	public void setUserSystem(UserSystem userSystem) {

@@ -21,6 +21,7 @@
  */
 package com.socialize.api.action;
 
+import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import com.socialize.Socialize;
@@ -132,9 +133,9 @@ public abstract class SocializeActionUtilsBase {
 				if(handler != null) {
 					handler.handle(context, action, null, text, new SocialNetworkListener() {
 						@Override
-						public void onPostError(Activity context, SocialNetwork network, Exception error) {
+						public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
 							if(listener != null) {
-								listener.onPostError(context, network, error);
+								listener.onNetworkError(context, network, error);
 							}
 							
 							if(progress != null) {
@@ -151,9 +152,9 @@ public abstract class SocializeActionUtilsBase {
 						}
 						
 						@Override
-						public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
+						public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
 							if(listener != null) {
-								listener.onAfterPost(parent, socialNetwork);
+								listener.onAfterPost(parent, socialNetwork, responseObject);
 							}
 							
 							if(progress != null) {

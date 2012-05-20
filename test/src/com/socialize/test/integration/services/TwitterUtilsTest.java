@@ -24,6 +24,7 @@ package com.socialize.test.integration.services;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import org.json.JSONObject;
 import android.app.Activity;
 import com.socialize.ShareUtils;
 import com.socialize.Socialize;
@@ -274,7 +275,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		TwitterUtils.tweetEntity(getActivity(), entity, "AndroidSDK Test", new SocialNetworkListener() {
 			
 			@Override
-			public void onPostError(Activity context, SocialNetwork network, Exception error) {
+			public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
 				error.printStackTrace();
 				latch.countDown();
 			}
@@ -285,7 +286,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 			}
 			
 			@Override
-			public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
+			public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject response) {
 				addResult(1, "onAfterPost");
 				latch.countDown();
 			}

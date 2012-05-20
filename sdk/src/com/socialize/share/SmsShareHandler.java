@@ -48,7 +48,7 @@ public class SmsShareHandler extends IntentShareHandler {
 		context.startActivity(sendIntent);
 		
 		if(listener != null) {
-			listener.onAfterPost(context, null);
+			listener.onAfterPost(context, null, null);
 		}
 	}
 	

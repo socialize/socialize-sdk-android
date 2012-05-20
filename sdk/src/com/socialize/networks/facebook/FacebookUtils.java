@@ -22,12 +22,14 @@
 package com.socialize.networks.facebook;
 
 import java.lang.reflect.Proxy;
+import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.SocializeActionProxy;
 import com.socialize.entity.Entity;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.SocialNetworkPostListener;
 
 
 /**
@@ -118,4 +120,42 @@ public class FacebookUtils {
 		proxy.postEntity(context, entity, text, listener);
 	}
 	
+	/**
+	 * Calls the Facebook graph API directly with a POST.  This will NOT create a share object in Socialize and is simply a raw call to Facebook.
+	 * NOTE: The current user must first be authenticated using a call to 'link'.
+	 * This method is asynchronous and can be run from the main UI thread.
+	 * @param context The current context.
+	 * @param graphPath The path on the Facebook graph api to be called for the CURRENT user.  E.g. me/feed
+	 * @param postData The data to be posted.
+	 * @param listener A listener to handle the result.
+	 */
+	public static void post(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {
+		proxy.post(context, graphPath, postData, listener);
+	}
+	
+	/**
+	 * Calls the Facebook graph API directly with a GET.  This will NOT create a share object in Socialize and is simply a raw call to Facebook.
+	 * NOTE: The current user must first be authenticated using a call to 'link'.
+	 * This method is asynchronous and can be run from the main UI thread.
+	 * @param context The current context.
+	 * @param graphPath The path on the Facebook graph api to be called for the CURRENT user.  E.g. me/feed
+	 * @param postData The data to be posted.
+	 * @param listener A listener to handle the result.
+	 */
+	public static void get(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {
+		proxy.get(context, graphPath, postData, listener);
+	}
+	
+	/**
+	 * Calls the Facebook graph API directly with a DELETE.  This will NOT create a share object in Socialize and is simply a raw call to Facebook.
+	 * NOTE: The current user must first be authenticated using a call to 'link'.
+	 * This method is asynchronous and can be run from the main UI thread.
+	 * @param context The current context.
+	 * @param graphPath The path on the Facebook graph api to be called for the CURRENT user.  E.g. me/feed
+	 * @param postData The data to be posted.
+	 * @param listener A listener to handle the result.
+	 */
+	public static void delete(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {
+		proxy.delete(context, graphPath, postData, listener);
+	}
 }

@@ -21,6 +21,7 @@
  */
 package com.socialize.networks.facebook;
 
+import java.util.Map;
 import android.app.Activity;
 import android.net.Uri;
 import com.socialize.entity.Entity;
@@ -28,6 +29,7 @@ import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.Share;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.SocialNetworkPostListener;
 
 /**
  * @author Jason Polites
@@ -51,5 +53,10 @@ public interface FacebookWallPoster {
 	public void post(final Activity parent, Entity entity, String message, PropagationInfo propInfo, SocialNetworkListener listener);
 	
 	public void post(final Activity parent, String appId, SocialNetworkListener listener, PostData postData);
+	
+	public void post(final Activity parent, String graphPath, String appId, Map<String, String> postData, SocialNetworkPostListener listener);
 
+	public void get(final Activity parent, String graphPath, String appId, Map<String, String> postData, SocialNetworkPostListener listener);
+	
+	public void delete(final Activity parent, String graphPath, String appId, Map<String, String> postData, SocialNetworkPostListener listener);
 }
