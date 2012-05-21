@@ -19,14 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo.implementations.action;
+package com.socialize.demo.implementations.actionbar;
 
-import android.app.ListActivity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import com.socialize.ActionBarUtils;
+import com.socialize.demo.DemoActivity;
 import com.socialize.demo.R;
 
 
@@ -34,26 +32,13 @@ import com.socialize.demo.R;
  * @author Jason Polites
  *
  */
-public class ActionActivity extends ListActivity {
+public class DefaultActionBarActivity extends DemoActivity {
 
-	final String[] values = new String[] { "Get Actions By Entity", "Get Actions By User", "Get Actions By User & Entity"};
-	final Class<?>[] activities = new Class<?>[] { GetActionsByEntityActivity.class, GetActionsByUserActivity.class, GetActionsByUserEntityActivity.class};
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.demo_list);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
-		setListAdapter(adapter);
+		View actionBar = ActionBarUtils.showActionBar(this, R.layout.actionbar, entity);
+		setContentView(actionBar);
 	}
-	
 
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Class<?> activityClass = activities[position];
-		if(activityClass != null) {
-			Intent intent = new Intent(this, activityClass);
-			startActivity(intent);
-		}
-	}
 }
