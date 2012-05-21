@@ -59,7 +59,7 @@ public class TwitterSharer extends AbstractSocialNetworkSharer {
 	protected void doShare(Activity context, Entity entity, PropagationInfo urlSet, String comment, SocialNetworkListener listener, ActionType type) {
 		// Sharing done on server
 		if(listener != null) {
-			listener.onAfterPost(context, getNetwork());
+			listener.onAfterPost(context, getNetwork(), null);
 		}
 	}
 

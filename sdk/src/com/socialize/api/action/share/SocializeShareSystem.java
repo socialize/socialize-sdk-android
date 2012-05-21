@@ -252,7 +252,7 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		}
 		else {
 			if(listener != null) {
-				listener.onPostError(context, SocialNetwork.valueOf(destination), new SocializeException("Unable to share to [" +
+				listener.onNetworkError(context, SocialNetwork.valueOf(destination), new SocializeException("Unable to share to [" +
 						destination.getDisplayName() +
 						"] No sharer defined for type"));
 				

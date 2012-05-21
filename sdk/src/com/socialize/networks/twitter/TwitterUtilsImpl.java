@@ -160,14 +160,14 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 			public void onCreate(Share share) {
 				// Server does tweet.
 				if(listener != null) {
-					listener.onAfterPost(context, SocialNetwork.TWITTER);
+					listener.onAfterPost(context, SocialNetwork.TWITTER, null);
 				}
 			}
 
 			@Override
 			public void onError(SocializeException error) {
 				if(listener != null) {
-					listener.onPostError(context, SocialNetwork.TWITTER, error);
+					listener.onNetworkError(context, SocialNetwork.TWITTER, error);
 				}
 			}
 		}, SocialNetwork.TWITTER);

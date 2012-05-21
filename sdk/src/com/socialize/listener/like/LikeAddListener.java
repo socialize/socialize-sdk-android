@@ -22,6 +22,7 @@
 package com.socialize.listener.like;
 
 
+import org.json.JSONObject;
 import android.app.Activity;
 import com.socialize.entity.Like;
 import com.socialize.entity.ListResult;
@@ -50,7 +51,7 @@ public abstract class LikeAddListener extends LikeListener implements SocialNetw
 	public final void onDelete() {}
 
 	@Override
-	public void onPostError(Activity context, SocialNetwork network, Exception error) {
+	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
 		onError(SocializeException.wrap(error));
 	}
 
@@ -58,6 +59,6 @@ public abstract class LikeAddListener extends LikeListener implements SocialNetw
 	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {}
 
 	@Override
-	public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {}
+	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {}
 
 }

@@ -21,6 +21,7 @@
  */
 package com.socialize.demo.implementations.share;
 
+import org.json.JSONObject;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -72,7 +73,7 @@ public class ShareButtonsActivity extends DemoActivity {
 				TwitterUtils.tweetEntity(ShareButtonsActivity.this, entity, "Test Message", new SocialNetworkShareListener() {
 
 					@Override
-					public void onPostError(Activity context, SocialNetwork network, Exception error) {
+					public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
 						progress.dismiss();
 						DemoUtils.showErrorDialog(context, error);
 					}
@@ -81,7 +82,7 @@ public class ShareButtonsActivity extends DemoActivity {
 					public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {}
 					
 					@Override
-					public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
+					public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject response) {
 						progress.dismiss();
 						DemoUtils.showToast(parent, "Shared to " + socialNetwork.name());
 					}
@@ -98,7 +99,7 @@ public class ShareButtonsActivity extends DemoActivity {
 				FacebookUtils.postEntity(ShareButtonsActivity.this, entity, "Test Message", new SocialNetworkShareListener() {
 
 					@Override
-					public void onPostError(Activity context, SocialNetwork network, Exception error) {
+					public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
 						progress.dismiss();
 						DemoUtils.showErrorDialog(context, error);
 					}
@@ -107,7 +108,7 @@ public class ShareButtonsActivity extends DemoActivity {
 					public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {}
 					
 					@Override
-					public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
+					public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject response) {
 						progress.dismiss();
 						DemoUtils.showToast(parent, "Shared to " + socialNetwork.name());
 					}
@@ -120,7 +121,7 @@ public class ShareButtonsActivity extends DemoActivity {
 			public void onClick(View v) {
 				ShareUtils.showShareDialog(ShareButtonsActivity.this, entity, new SocialNetworkDialogListener() {
 					@Override
-					public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
+					public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject response) {
 						DemoUtils.showToast(parent, "Shared to " + socialNetwork.name());
 					}
 				});
@@ -132,7 +133,7 @@ public class ShareButtonsActivity extends DemoActivity {
 			public void onClick(View v) {
 				ShareUtils.showShareDialog(ShareButtonsActivity.this, entity, new SocialNetworkDialogListener() {
 					@Override
-					public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
+					public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject response) {
 						DemoUtils.showToast(parent, "Shared to " + socialNetwork.name());
 					}
 				}, ShareUtils.SOCIAL);
@@ -154,7 +155,7 @@ public class ShareButtonsActivity extends DemoActivity {
 					}
 
 					@Override
-					public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
+					public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject response) {
 						DemoUtils.showToast(parent, "Shared to " + socialNetwork.name());
 					}
 				});

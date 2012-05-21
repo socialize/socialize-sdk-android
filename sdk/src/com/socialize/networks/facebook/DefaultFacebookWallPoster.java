@@ -54,6 +54,7 @@ import com.socialize.networks.DefaultPostData;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.util.StringUtils;
 
 /**
@@ -231,7 +232,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		}
 		catch (IOException e) {
 			if(listener != null) {
-				listener.onPostError(parent, SocialNetwork.FACEBOOK, e);
+				listener.onNetworkError(parent, SocialNetwork.FACEBOOK, e);
 			}
 			 
 			if(logger != null) {
@@ -242,7 +243,39 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			}
 		}
 	}
-		
+
+	@Override
+	public void post(Activity parent, String graphPath, String appId, Map<String, String> postData, SocialNetworkPostListener listener) {
+		doFacebookCall(parent, appId, postData, graphPath, "POST", listener);
+	}
+
+	@Override
+	public void get(Activity parent, String graphPath, String appId, Map<String, String> postData, SocialNetworkPostListener listener) {
+		doFacebookCall(parent, appId, postData, graphPath, "GET", listener);
+	}
+
+	@Override
+	public void delete(Activity parent, String graphPath, String appId, Map<String, String> postData, SocialNetworkPostListener listener) {
+		doFacebookCall(parent, appId, postData, graphPath, "DELETE", listener);
+	}
+	
+	protected void doFacebookCall(Activity parent, String appId, Map<String, String> postData, String graphPath, String method, SocialNetworkPostListener listener) {
+		Bundle bundle = new Bundle();
+		Set<Entry<String, String>> entries = postData.entrySet();
+		for (Entry<String, String> entry : entries) {
+			bundle.putString(entry.getKey(), entry.getValue());
+		}
+		doFacebookCall(parent, appId, bundle, graphPath, method, listener);
+	}
+	
+	protected void doFacebookCall(Activity parent, String appId, Bundle data, String graphPath, String method, SocialNetworkPostListener listener) {
+		Facebook fb = newFacebook(appId);
+		FacebookSessionStore store = newFacebookSessionStore();
+		store.restore(fb, parent);
+		AsyncFacebookRunner runner = newAsyncFacebookRunner(fb);
+		RequestListener requestListener = newRequestListener(parent, listener);
+		runner.request(graphPath, data, method, requestListener, null);			
+	}
 
 	// So we can mock
 	protected Facebook newFacebook(String appId) {
@@ -250,7 +283,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	}
 	
 	// So we can mock
-	protected RequestListener newRequestListener(final Activity parent, final SocialNetworkListener listener) {
+	protected RequestListener newRequestListener(final Activity parent, final SocialNetworkPostListener listener) {
 		final String defaultErrorMessage = "Facebook Error";
 		
 		return new RequestListener() {
@@ -267,9 +300,11 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 				handleFacebookError(parent, defaultErrorMessage, e, listener);
 			}
 			public void onComplete(final String response, Object state) {
+				
+				JSONObject responseObject = null;
 				if(!StringUtils.isEmpty(response)) {
 					try {
-						JSONObject responseObject = newJSONObject(response);
+						responseObject = newJSONObject(response);
 						
 						if(responseObject.has("error")) {
 							
@@ -300,10 +335,11 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 				}
 				
 				if(listener != null) {
+					final JSONObject fResponse = responseObject;
 					parent.runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
-							listener.onAfterPost(parent, SocialNetwork.FACEBOOK);
+							listener.onAfterPost(parent, SocialNetwork.FACEBOOK, fResponse);
 						}
 					});
 				}
@@ -311,7 +347,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		};
 	}
 	
-	protected void handleFacebookError(final Activity parent, String msg, Throwable e, SocialNetworkListener listener) {
+	protected void handleFacebookError(final Activity parent, String msg, Throwable e, SocialNetworkPostListener listener) {
 		// Clear the session cache
 		getSocialize().clear3rdPartySession(parent, AuthProviderType.FACEBOOK);
 		onError(parent, msg, e, listener);
@@ -352,7 +388,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 //		this.appUtils = appUtils;
 //	}
 
-	protected void onError(final Activity parent, final String msg, final Throwable e, final SocialNetworkListener listener) {
+	protected void onError(final Activity parent, final String msg, final Throwable e, final SocialNetworkPostListener listener) {
 		
 		if(logger != null) {
 			if(e != null) {
@@ -373,7 +409,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 			parent.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					listener.onPostError(parent, SocialNetwork.FACEBOOK, SocializeException.wrap(e));
+					listener.onNetworkError(parent, SocialNetwork.FACEBOOK, SocializeException.wrap(e));
 				}
 			});
 		}

@@ -23,6 +23,7 @@ package com.socialize;
 
 import java.util.Arrays;
 import java.util.Collection;
+import org.json.JSONObject;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -873,7 +874,7 @@ public class SocializeServiceImpl implements SocializeService {
 	protected void handleActionShare(Activity activity, final ShareType shareType, final Share share, String shareText, Location location, final ShareAddListener shareAddListener) {
 		shareSystem.share(activity, session, share, shareText, location, shareType, new SocialNetworkListener() {
 			@Override
-			public void onPostError(Activity context, SocialNetwork network, Exception error) {
+			public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
 				if(logger != null) {
 					logger.error("Failed to share action to [" +
 							shareType +
@@ -889,7 +890,7 @@ public class SocializeServiceImpl implements SocializeService {
 			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {}
 
 			@Override
-			public void onAfterPost(Activity parent, SocialNetwork socialNetwork) {
+			public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
 				if(shareAddListener != null) {
 					shareAddListener.onCreate(share);
 				}

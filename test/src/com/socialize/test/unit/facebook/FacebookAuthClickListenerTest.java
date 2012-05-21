@@ -21,6 +21,7 @@
  */
 package com.socialize.test.unit.facebook;
 
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import android.app.Activity;
@@ -37,6 +38,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.networks.SocialNetworkListener;
+import com.socialize.networks.SocialNetworkPostListener;
 import com.socialize.networks.facebook.FacebookAuthClickListener;
 import com.socialize.networks.facebook.FacebookUtilsProxy;
 import com.socialize.test.SocializeActivityTest;
@@ -118,6 +120,15 @@ public class FacebookAuthClickListenerTest extends SocializeActivityTest {
 			public String getAccessToken(Context context) {
 				return null;
 			}
+
+			@Override
+			public void post(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {}
+
+			@Override
+			public void get(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {}
+
+			@Override
+			public void delete(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {}
 		};
 		
 		// Stub in facebook utils

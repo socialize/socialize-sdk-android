@@ -1734,6 +1734,7 @@
 	<bean id="shareUtils" class="com.socialize.api.action.share.SocializeShareUtils">
 		<property name="shareSystem" ref="shareSystem"/>
 		<property name="shareDialogFactory" ref="shareDialogFactory"/>
+		<property name="authDialogFactory" ref="authDialogFactory"/>
 	</bean>		
 	
 	<bean id="commentUtils" class="com.socialize.api.action.comment.SocializeCommentUtils">

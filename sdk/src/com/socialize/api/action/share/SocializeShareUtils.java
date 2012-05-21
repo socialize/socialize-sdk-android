@@ -84,6 +84,11 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	}
 	
 	@Override
+	public void showLinkDialog(Activity context, AuthDialogListener listener) {
+		authDialogFactory.show(context, listener);
+	}
+
+	@Override
 	public void showShareDialog(final Activity context, final Entity entity, int options, final SocialNetworkShareListener socialNetworkListener, final ShareDialogListener dialogListener) {
 		shareDialogFactory.show(context, entity, socialNetworkListener, new ShareDialogListener() {
 			@Override

@@ -27,12 +27,8 @@ import android.app.Activity;
  * Handles callbacks from posts to social networks like facebook.
  * @author Jason Polites
  */
-public interface SocialNetworkListener {
+public interface SocialNetworkListener extends SocialNetworkPostListener {
 	
-	public void onPostError(Activity context, SocialNetwork network, Exception error);
-
 	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData);
-
-	public void onAfterPost(Activity parent, SocialNetwork socialNetwork);
 	
 }

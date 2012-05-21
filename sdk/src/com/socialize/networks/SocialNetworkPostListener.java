@@ -19,35 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.api.action.share;
+package com.socialize.networks;
 
 import org.json.JSONObject;
 import android.app.Activity;
-import com.socialize.entity.Share;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.share.ShareAddListener;
-import com.socialize.networks.PostData;
-import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
-
 
 /**
+ * Handles callbacks from posts to social networks like facebook.
  * @author Jason Polites
  */
-public abstract class SocialNetworkShareListener extends ShareAddListener implements SocialNetworkListener {
+public interface SocialNetworkPostListener {
 	
-	@Override
-	public void onCreate(Share result) {}
+	public void onNetworkError(Activity context, SocialNetwork network, Exception error);
 
-	@Override
-	public void onError(SocializeException error) {}
-
-	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
-		onError(SocializeException.wrap(error));
-	}
-
-	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {}
-
-	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {}
-
+	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject);
+	
 }
