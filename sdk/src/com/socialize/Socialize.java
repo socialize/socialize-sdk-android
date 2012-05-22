@@ -66,6 +66,10 @@ public class Socialize {
 		instance.init(context);
 	}
 	
+	public static final void initAsync(Context context) {
+		instance.initAsync(context, null);
+	}
+	
 	public static final void initAsync(Context context, SocializeInitListener listener) {
 		instance.initAsync(context, listener);
 	}

@@ -19,21 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks;
+package com.socialize.demo.snippets;
 
-import org.json.JSONObject;
-import android.app.Activity;
 
 /**
- * Handles callbacks from posts to social networks like facebook.
  * @author Jason Polites
+ *
  */
-public interface SocialNetworkPostListener {
-	
-	public void onCancel();
-	
-	public void onNetworkError(Activity context, SocialNetwork network, Exception error);
+public class LikeSnippets {
 
-	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject);
-	
 }

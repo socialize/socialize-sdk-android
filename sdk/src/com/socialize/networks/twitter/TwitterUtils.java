@@ -25,8 +25,11 @@ import java.lang.reflect.Proxy;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.SocializeActionProxy;
+import com.socialize.api.SocializeSession;
 import com.socialize.entity.Entity;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 
 
@@ -79,6 +82,38 @@ public class TwitterUtils {
 	}
 	
 	public static void tweetEntity(final Activity context, final Entity entity, final String text, final SocialNetworkListener listener) {
-		proxy.tweetEntity(context, entity, text, listener);
+		if(proxy.isLinked(context)) {
+			proxy.tweetEntity(context, entity, text, listener);
+		}
+		else {
+			proxy.link(context, new SocializeAuthListener() {
+				
+				@Override
+				public void onError(SocializeException error) {
+					if(listener != null) {
+						listener.onNetworkError(context, SocialNetwork.TWITTER, error);
+					}
+				}
+				
+				@Override
+				public void onCancel() {
+					if(listener != null) {
+						listener.onCancel();
+					}
+				}
+				
+				@Override
+				public void onAuthSuccess(SocializeSession session) {
+					proxy.tweetEntity(context, entity, text, listener);
+				}
+				
+				@Override
+				public void onAuthFail(SocializeException error) {
+					if(listener != null) {
+						listener.onNetworkError(context, SocialNetwork.TWITTER, error);
+					}
+				}
+			});
+		}			
 	}
 }

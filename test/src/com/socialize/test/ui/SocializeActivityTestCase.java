@@ -69,26 +69,6 @@ public class SocializeActivityTestCase extends SocializeUIActivityTest {
 		AndroidMock.verify(socialize);
 	}
 	
-	@UsesMocks ({SocializeService.class})
-	public void testDestroySocialize() {
-		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
-		
-		socialize.destroy();
-		
-		AndroidMock.replay(socialize);
-		
-		PublicActivity activity = new PublicActivity() {
-			@Override
-			public SocializeService getSocialize() {
-				return socialize;
-			}
-		};
-		
-		activity.destroySocialize();
-		
-		AndroidMock.verify(socialize);
-	}
-	
 	@UsesMocks ({IOCContainer.class})
 	public void testGetBeanSocialize() {
 		final String name = "foobar";
@@ -116,11 +96,6 @@ public class SocializeActivityTestCase extends SocializeUIActivityTest {
 		@Override
 		public void initSocialize() {
 			super.initSocialize();
-		}
-
-		@Override
-		public void destroySocialize() {
-			super.destroySocialize();
 		}
 	}
 }

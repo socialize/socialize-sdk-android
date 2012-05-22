@@ -21,6 +21,14 @@ Initializing Socialize
 ----------------------
 The Socialize SDK should be initialized in the **onCreate()** method of your Activity.
 
+
+.. include:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
+	:language: java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
+	:emphasize-lines: 9-10
+
+
 .. literalinclude:: snippets/socialize_init.txt
    :language: java
    :linenos:

@@ -885,6 +885,13 @@ public class SocializeServiceImpl implements SocializeService {
 					shareAddListener.onError(SocializeException.wrap(error));
 				}
 			}
+			
+			@Override
+			public void onCancel() {
+				if(shareAddListener != null) {
+					shareAddListener.onCancel();
+				}
+			}			
 
 			@Override
 			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {}

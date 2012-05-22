@@ -126,7 +126,12 @@ public class FacebookService {
 	}
 	
 	public void cancel() {
-		Toast.makeText(context, "Request canceled", Toast.LENGTH_SHORT).show();
+		if(listener != null) {
+			listener.onCancel();
+		}
+		else {
+			Toast.makeText(context, "Request cancelled", Toast.LENGTH_SHORT).show();
+		}
 	}
 	
 	public void logout() {

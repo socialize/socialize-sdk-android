@@ -37,16 +37,21 @@ public class DemoUtils {
 	static Toast toast;
 	
 	public static void showErrorDialog(Context context, Exception e) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle("Oops!");
-		builder.setMessage("An error occurred.  Check the device logs (logcat)\n\n[" + e.getMessage() + "]");
-		builder.setPositiveButton("OK", new OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-			}
-		});
-		builder.create().show();
+		try {
+			AlertDialog.Builder builder = new AlertDialog.Builder(context);
+			builder.setTitle("Oops!");
+			builder.setMessage("An error occurred.  Check the device logs (logcat)\n\n[" + e.getMessage() + "]");
+			builder.setPositiveButton("OK", new OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			});
+			builder.create().show();
+		}
+		catch (Throwable t) {
+			showToast(context, "Error!  See logcat logs");
+		}
 	}
 	
 	public static void showSuccessDialog(Context context) {

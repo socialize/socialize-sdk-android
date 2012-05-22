@@ -26,8 +26,11 @@ import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.SocializeActionProxy;
+import com.socialize.api.SocializeSession;
 import com.socialize.entity.Entity;
+import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.networks.SocialNetworkPostListener;
 
@@ -116,8 +119,41 @@ public class FacebookUtils {
 	 * @param text The text for the post.
 	 * @param listener A listnener to handle callbacks from the post.
 	 */
-	public static void postEntity(Activity context, Entity entity, String text, SocialNetworkListener listener){
-		proxy.postEntity(context, entity, text, listener);
+	public static void postEntity(final Activity context, final Entity entity, final String text, final SocialNetworkListener listener){
+		
+		if(proxy.isLinked(context)) {
+			proxy.postEntity(context, entity, text, listener);	
+		}
+		else {
+			proxy.link(context, new SocializeAuthListener() {
+				
+				@Override
+				public void onError(SocializeException error) {
+					if(listener != null) {
+						listener.onNetworkError(context, SocialNetwork.FACEBOOK, error);
+					}
+				}
+				
+				@Override
+				public void onCancel() {
+					if(listener != null) {
+						listener.onCancel();
+					}
+				}
+				
+				@Override
+				public void onAuthSuccess(SocializeSession session) {
+					proxy.postEntity(context, entity, text, listener);	
+				}
+				
+				@Override
+				public void onAuthFail(SocializeException error) {
+					if(listener != null) {
+						listener.onNetworkError(context, SocialNetwork.FACEBOOK, error);
+					}
+				}
+			});
+		}
 	}
 	
 	/**
@@ -129,8 +165,41 @@ public class FacebookUtils {
 	 * @param postData The data to be posted.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void post(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {
-		proxy.post(context, graphPath, postData, listener);
+	public static void post(final Activity context, final String graphPath, final Map<String, String> postData, final SocialNetworkPostListener listener) {
+		
+		if(proxy.isLinked(context)) {
+			proxy.post(context, graphPath, postData, listener);
+		}
+		else {
+			proxy.link(context, new SocializeAuthListener() {
+				
+				@Override
+				public void onError(SocializeException error) {
+					if(listener != null) {
+						listener.onNetworkError(context, SocialNetwork.FACEBOOK, error);
+					}
+				}
+				
+				@Override
+				public void onCancel() {
+					if(listener != null) {
+						listener.onCancel();
+					}
+				}
+				
+				@Override
+				public void onAuthSuccess(SocializeSession session) {
+					proxy.post(context, graphPath, postData, listener);
+				}
+				
+				@Override
+				public void onAuthFail(SocializeException error) {
+					if(listener != null) {
+						listener.onNetworkError(context, SocialNetwork.FACEBOOK, error);
+					}
+				}
+			});
+		}		
 	}
 	
 	/**
@@ -142,8 +211,41 @@ public class FacebookUtils {
 	 * @param postData The data to be posted.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void get(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {
-		proxy.get(context, graphPath, postData, listener);
+	public static void get(final Activity context, final String graphPath, final Map<String, String> postData, final SocialNetworkPostListener listener) {
+		
+		if(proxy.isLinked(context)) {
+			proxy.get(context, graphPath, postData, listener);
+		}
+		else {
+			proxy.link(context, new SocializeAuthListener() {
+				
+				@Override
+				public void onError(SocializeException error) {
+					if(listener != null) {
+						listener.onNetworkError(context, SocialNetwork.FACEBOOK, error);
+					}
+				}
+				
+				@Override
+				public void onCancel() {
+					if(listener != null) {
+						listener.onCancel();
+					}
+				}
+				
+				@Override
+				public void onAuthSuccess(SocializeSession session) {
+					proxy.get(context, graphPath, postData, listener);
+				}
+				
+				@Override
+				public void onAuthFail(SocializeException error) {
+					if(listener != null) {
+						listener.onNetworkError(context, SocialNetwork.FACEBOOK, error);
+					}
+				}
+			});
+		}			
 	}
 	
 	/**
@@ -155,7 +257,39 @@ public class FacebookUtils {
 	 * @param postData The data to be posted.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void delete(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {
-		proxy.delete(context, graphPath, postData, listener);
+	public static void delete(final Activity context, final String graphPath, final Map<String, String> postData, final SocialNetworkPostListener listener) {
+		if(proxy.isLinked(context)) {
+			proxy.delete(context, graphPath, postData, listener);
+		}
+		else {
+			proxy.link(context, new SocializeAuthListener() {
+				
+				@Override
+				public void onError(SocializeException error) {
+					if(listener != null) {
+						listener.onNetworkError(context, SocialNetwork.FACEBOOK, error);
+					}
+				}
+				
+				@Override
+				public void onCancel() {
+					if(listener != null) {
+						listener.onCancel();
+					}
+				}
+				
+				@Override
+				public void onAuthSuccess(SocializeSession session) {
+					proxy.delete(context, graphPath, postData, listener);
+				}
+				
+				@Override
+				public void onAuthFail(SocializeException error) {
+					if(listener != null) {
+						listener.onNetworkError(context, SocialNetwork.FACEBOOK, error);
+					}
+				}
+			});
+		}			
 	}
 }

@@ -19,72 +19,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui;
+package com.socialize.demo.snippets;
 
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import android.app.Activity;
-import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import com.socialize.Socialize;
-import com.socialize.SocializeService;
 import com.socialize.android.ioc.IOCContainer;
-import com.socialize.ui.dialog.DialogRegister;
+import com.socialize.error.SocializeException;
+import com.socialize.listener.SocializeInitListener;
+
 
 /**
  * @author Jason Polites
  */
-public abstract class SocializeActivity extends Activity implements DialogRegister {
+public class SocializeInitSnippetA extends Activity {
 
-	protected IOCContainer container;
-	private Set<Dialog> dialogs;
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		dialogs = new LinkedHashSet<Dialog>();
-		initSocialize();
-		container = ActivityIOCProvider.getInstance().getContainer();
-		onPostSocializeInit(container);
-	}
-	
-	protected <E extends Object> E getBean(String name) {
-		return container.getBean(name);
-	}
-	
-	public void setContainer(IOCContainer container) {
-		this.container = container;
-	}
-
-	@Override
-	public void register(Dialog dialog) {
-		dialogs.add(dialog);
-	}
-	
-	@Override
-	public Collection<Dialog> getDialogs() {
-		return dialogs;
-	}
-
-	@Override
-	protected void onDestroy() {
-		if(dialogs != null) {
-			for (Dialog dialog : dialogs) {
-				dialog.dismiss();
+		
+		// Initialize socialize
+		Socialize.initAsync(this, new SocializeInitListener() {
+			
+			@Override
+			public void onError(SocializeException error) {
+				// Handle error
 			}
-			dialogs.clear();
-		}		
-		super.onDestroy();
+			
+			@Override
+			public void onInit(Context context, IOCContainer container) {
+				// If you want to access Socialize directly, do it here
+			}
+		});
 	}
-	
-	protected void initSocialize() {
-		getSocialize().init(this);
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Socialize.onPause(this);
 	}
-	
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Socialize.onResume(this);
 	}
-	
-	protected void onPostSocializeInit(IOCContainer container) {}
 }

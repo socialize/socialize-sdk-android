@@ -290,6 +290,9 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 				addResult(1, "onAfterPost");
 				latch.countDown();
 			}
+			
+			@Override
+			public void onCancel() {}
 		});
 		
 		latch.await(20, TimeUnit.SECONDS);

@@ -19,6 +19,7 @@ package com.socialize.facebook;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -90,6 +91,13 @@ public class FbDialog extends Dialog {
 		 */
 		mContent.addView(mCrossImage, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		addContentView(mContent, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+		
+		setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				mListener.onCancel();
+			}
+		});
 	}
 
 	private void createCrossImage() {
@@ -179,7 +187,10 @@ public class FbDialog extends Dialog {
 		public void onPageStarted(WebView view, String url, Bitmap favicon) {
 			Util.logd("Facebook-WebView", "Webview loading URL: " + url);
 			super.onPageStarted(view, url, favicon);
-			mSpinner.show();
+			try {
+				mSpinner.show();
+			}
+			catch (Throwable ignore) {}
 		}
 
 		@Override
