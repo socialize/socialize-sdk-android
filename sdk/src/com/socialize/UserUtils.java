@@ -27,6 +27,7 @@ import android.content.Context;
 import com.socialize.api.action.user.UserUtilsProxy;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
+import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 
 
@@ -54,6 +55,16 @@ public class UserUtils {
 	 */
 	public static User getCurrentUser(Context context)  {
 		return proxy.getCurrentUser(context);
+	}
+	
+	/**
+	 * Retrieves a User based on the given ID.
+	 * @param context
+	 * @param id
+	 * @param listener
+	 */
+	public static void getUser(Context context, long id, UserGetListener listener) {
+		proxy.getUser(context, id, listener);
 	}
 	
 	/**

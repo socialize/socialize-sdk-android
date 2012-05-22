@@ -47,213 +47,210 @@ import com.socialize.ui.comment.OnCommentViewActionListener;
  */
 public class CommentSnippets extends Activity{
 
-	public void addCommentWithAutoShare() {
-		
-		// begin-snippet-0
-		
-		Entity entity = Entity.newInstance("http://myentity.com", "My Name");
-		
-		CommentUtils.addComment(this, entity, "This the comment", new CommentAddListener() {
-			@Override
-			public void onError(SocializeException error) {
-				// Handle error
-			}
-			
-			@Override
-			public void onCreate(Comment result) {
-				// Comment was created
-			}
-		});
-		
-		// end-snippet-0
-	}
-	
-	public void addCommentWithManualShare() {
-		
-		Entity entity = Entity.newInstance("http://myentity.com", "My Name");
-		
-		// Create share options to share the comment without displaying the share dialog
-		ShareOptions shareOptions = new ShareOptions();
-		
-		// If true the user will be prompted for auth if not already
-		shareOptions.setAuthRequired(true); 
-		
-		// If true the user's location will be send in the comment.
-		shareOptions.setShareLocation(true); 
-		
-		shareOptions.setShareTo(SocialNetwork.FACEBOOK, SocialNetwork.TWITTER); // Share to multiple networks simultaneously
-		
-		// Optionally add a listener to handle callbacks from the Social Networks.
-		shareOptions.setListener(new SocialNetworkListener() {
-			
-			@Override
-			public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
-				// Failed to share to the given network
-			}
-			
-			@Override
-			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-				// Called before the post to the given network is made
-			}
-			
-			@Override
-			public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
-				// Called after the post to the given network is made
-			}
+public void addCommentWithAutoShare() {
+// begin-snippet-0
+Entity entity = Entity.newInstance("http://myentity.com", "My Name");
 
-			@Override
-			public void onCancel() {
-				// Called if the user canceled the auth process
-			}			
-			
-			
-		});
-		
-		// Pass the share options in the call to create the comment.
-		CommentUtils.addComment(this, entity, "This the comment", shareOptions, new CommentAddListener() {
-			@Override
-			public void onError(SocializeException error) {
-				// Handle error
-			}
-			
-			@Override
-			public void onCreate(Comment result) {
-				// Comment was created
-			}
-		});
+CommentUtils.addComment(this, entity, "This the comment", new CommentAddListener() {
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
 	}
 	
+	@Override
+	public void onCreate(Comment result) {
+		// Comment was created
+	}
+});
+// end-snippet-0
+}
+
+public void addCommentWithManualShare() {
+
+Entity entity = Entity.newInstance("http://myentity.com", "My Name");
+
+// Create share options to share the comment without displaying the share dialog
+ShareOptions shareOptions = new ShareOptions();
+
+// If true the user will be prompted for auth if not already
+shareOptions.setAuthRequired(true); 
+
+// If true the user's location will be send in the comment.
+shareOptions.setShareLocation(true); 
+
+shareOptions.setShareTo(SocialNetwork.FACEBOOK, SocialNetwork.TWITTER); // Share to multiple networks simultaneously
+
+// Optionally add a listener to handle callbacks from the Social Networks.
+shareOptions.setListener(new SocialNetworkListener() {
 	
-	public void getCommentById() {
-		
-		long commentId = 123L; 
-		
-		CommentUtils.getComment(this, new CommentGetListener() {
-			
-			@Override
-			public void onGet(Comment result) {
-				// Comment found
-			}
-			
-			@Override
-			public void onError(SocializeException error) {
-				if(isNotFoundError(error)) {
-					// No comment with ID found
-				}
-				else {
-					// Some other error
-				}
-			}
-			
-		}, commentId);
+	@Override
+	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+		// Failed to share to the given network
 	}
 	
-	public void getCommentsById() {
-		
-		long commentId0 = 123;
-		long commentId1 = 456;
-		
-		CommentUtils.getComments(this, new CommentListListener() {
-			
-			@Override
-			public void onList(ListResult<Comment> result) {
-				// Found comments
-			}
-			
-			@Override
-			public void onError(SocializeException error) {
-				if(isNotFoundError(error)) {
-					// No comment with ID found
-				}
-				else {
-					// Some other error
-				}
-			}
-		}, commentId0, commentId1);
+	@Override
+	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+		// Called before the post to the given network is made
 	}
 	
-	public void getCommentsByEntity() {
-		
-		String entityKey = "http://getsocialize.com";
-		
-		// Get first 10 comments
-		CommentUtils.getCommentsByEntity(this, entityKey, 0, 10, new CommentListListener() {
-			
-			@Override
-			public void onList(ListResult<Comment> result) {
-				// Found comments
-			}
-			
-			@Override
-			public void onError(SocializeException error) {
-				// Handle error
-			}
-		});
+	@Override
+	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+		// Called after the post to the given network is made
+	}
+
+	@Override
+	public void onCancel() {
+		// Called if the user canceled the auth process
+	}			
+	
+	
+});
+
+// Pass the share options in the call to create the comment.
+CommentUtils.addComment(this, entity, "This the comment", shareOptions, new CommentAddListener() {
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
 	}
 	
-	public void getCommentsByUser() {
-		
-		User user = new User();
-		user.setId(123L);
-		
-		// Get first 10 comments by user
-		CommentUtils.getCommentsByUser(this, user, 0, 10, new CommentListListener() {
-			
-			@Override
-			public void onList(ListResult<Comment> result) {
-				// Found comments
-			}
-			
-			@Override
-			public void onError(SocializeException error) {
-				// Handle error
-			}
-		});
+	@Override
+	public void onCreate(Comment result) {
+		// Comment was created
+	}
+});
+}
+
+
+public void getCommentById() {
+
+long commentId = 123L; 
+
+CommentUtils.getComment(this, new CommentGetListener() {
+	
+	@Override
+	public void onGet(Comment result) {
+		// Comment found
 	}
 	
-	public void showCommentView() {
-		
-		Entity entity = Entity.newInstance("http://myentity.com", "My Name");
-		
-		// Show the comment list view
-		CommentUtils.showCommentView(this, entity);
+	@Override
+	public void onError(SocializeException error) {
+		if(isNotFoundError(error)) {
+			// No comment with ID found
+		}
+		else {
+			// Some other error
+		}
 	}
 	
-	public void showCommentViewWithListener() {
-		
-		Entity entity = Entity.newInstance("http://myentity.com", "My Name");
-		
-		CommentUtils.showCommentView(this, entity, new OnCommentViewActionListener() {
-			
-			@Override
-			public void onError(SocializeException error) {
-				// Handle error
-			}
-			
-			@Override
-			public void onRender(CommentListView view) {
-				// Called when the list view is rendered
-			}
-			
-			@Override
-			public void onReload(CommentListView view) {
-				// Called when a reload event is posted to the list view.
-			}
-			
-			@Override
-			public void onPostComment(Comment comment) {
-				// Called after a comment is posted.
-			}
-			
-			@Override
-			public void onCreate(CommentListView view) {
-				// Called when the list view component was created (but may not be shown)
-			}
-			
-			@Override
-			public void onCommentList(CommentListView view, List<Comment> comments, int start, int end) {
-				// Called when a list of comments is retrieved.
-			}
-		});
+}, commentId);
+}
+
+public void getCommentsById() {
+
+long commentId0 = 123;
+long commentId1 = 456;
+
+CommentUtils.getComments(this, new CommentListListener() {
+	
+	@Override
+	public void onList(ListResult<Comment> result) {
+		// Found comments
 	}
+	
+	@Override
+	public void onError(SocializeException error) {
+		if(isNotFoundError(error)) {
+			// No comment with ID found
+		}
+		else {
+			// Some other error
+		}
+	}
+}, commentId0, commentId1);
+}
+
+public void getCommentsByEntity() {
+
+String entityKey = "http://getsocialize.com";
+
+// Get first 10 comments
+CommentUtils.getCommentsByEntity(this, entityKey, 0, 10, new CommentListListener() {
+	
+	@Override
+	public void onList(ListResult<Comment> result) {
+		// Found comments
+	}
+	
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
+	}
+});
+}
+
+public void getCommentsByUser() {
+
+User user = new User();
+user.setId(123L);
+
+// Get first 10 comments by user
+CommentUtils.getCommentsByUser(this, user, 0, 10, new CommentListListener() {
+	
+	@Override
+	public void onList(ListResult<Comment> result) {
+		// Found comments
+	}
+	
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
+	}
+});
+}
+
+public void showCommentView() {
+
+Entity entity = Entity.newInstance("http://myentity.com", "My Name");
+
+// Show the comment list view
+CommentUtils.showCommentView(this, entity);
+}
+
+public void showCommentViewWithListener() {
+
+Entity entity = Entity.newInstance("http://myentity.com", "My Name");
+
+CommentUtils.showCommentView(this, entity, new OnCommentViewActionListener() {
+	
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
+	}
+	
+	@Override
+	public void onRender(CommentListView view) {
+		// Called when the list view is rendered
+	}
+	
+	@Override
+	public void onReload(CommentListView view) {
+		// Called when a reload event is posted to the list view.
+	}
+	
+	@Override
+	public void onPostComment(Comment comment) {
+		// Called after a comment is posted.
+	}
+	
+	@Override
+	public void onCreate(CommentListView view) {
+		// Called when the list view component was created (but may not be shown)
+	}
+	
+	@Override
+	public void onCommentList(CommentListView view, List<Comment> comments, int start, int end) {
+		// Called when a list of comments is retrieved.
+	}
+});
+}
 }

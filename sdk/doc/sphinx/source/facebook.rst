@@ -1,8 +1,8 @@
 .. include:: header.inc
 
-====================
-Facebook Integration
-====================
+==============
+Facebook Setup
+==============
 
 Introduction
 ------------

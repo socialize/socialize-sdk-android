@@ -22,48 +22,71 @@
 package com.socialize.demo.snippets;
 
 import android.app.Activity;
-import android.content.Context;
-import android.os.Bundle;
-import com.socialize.Socialize;
-import com.socialize.android.ioc.IOCContainer;
+import com.socialize.api.SocializeSession;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeInitListener;
+import com.socialize.listener.SocializeAuthListener;
+import com.socialize.networks.facebook.FacebookUtils;
 
 
 /**
  * @author Jason Polites
+ *
  */
-public class SocializeInitSnippetA extends Activity {
+public class FacebookSnippets extends Activity{
+public void linkFB() {
 // begin-snippet-0
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-	super.onCreate(savedInstanceState);
+FacebookUtils.link(this, new SocializeAuthListener() {
+
+	@Override
+	public void onCancel() {
+		// The user cancelled the operation.
+	}
 	
-	// Initialize socialize
-	Socialize.initAsync(this, new SocializeInitListener() {
-		
-		@Override
-		public void onError(SocializeException error) {
-			// Handle error
-		}
-		
-		@Override
-		public void onInit(Context context, IOCContainer container) {
-			// If you want to access Socialize directly, do it here
-		}
-	});
+	@Override
+	public void onAuthSuccess(SocializeSession session) {
+		// User was authed.
+	}
+	
+	@Override
+	public void onAuthFail(SocializeException error) {
+		// Handle error
+	}
+	
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
+	}
+});
+// end-snippet-0
 }
 
-@Override
-protected void onPause() {
-	super.onPause();
-	Socialize.onPause(this);
+public void linkFBWithToken() {
+// begin-snippet-1
+String fbToken = "The user's Facebook token";
+
+FacebookUtils.link(this, fbToken, new SocializeAuthListener() {
+
+	@Override
+	public void onCancel() {
+		// The user cancelled the operation.
+	}
+	
+	@Override
+	public void onAuthSuccess(SocializeSession session) {
+		// User was authed.
+	}
+	
+	@Override
+	public void onAuthFail(SocializeException error) {
+		// Handle error
+	}
+	
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
+	}
+});
+// end-snippet-1
 }
 
-@Override
-protected void onResume() {
-	super.onResume();
-	Socialize.onResume(this);
-}
-//end-snippet-0
 }

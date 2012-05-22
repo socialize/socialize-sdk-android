@@ -31,26 +31,27 @@ import com.socialize.Socialize;
  *
  */
 public class SocializeInitSnippetB extends Activity {
+// begin-snippet-0
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	
+	// Initialize socialize
+	Socialize.initAsync(this);
+	
+	// Your code here
+}
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		// Initialize socialize
-		Socialize.initAsync(this);
-		
-		// Your code here
-	}
+@Override
+protected void onPause() {
+	super.onPause();
+	Socialize.onPause(this);
+}
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		Socialize.onPause(this);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		Socialize.onResume(this);
-	}
+@Override
+protected void onResume() {
+	super.onResume();
+	Socialize.onResume(this);
+}
+// end-snippet-0
 }
