@@ -44,48 +44,48 @@ public class ActionUtils {
 	}	
 	
 	/**
-	 * 
-	 * @param context
-	 * @param start
-	 * @param end
-	 * @param listener
+	 * Gets the application-wide actions.
+	 * @param context The current context.
+	 * @param start The start index for pagination (0 based).
+	 * @param end The end index for pagination (0 based).
+	 * @param listener A listener to handle the result.
 	 */
 	public static void getActionsByApplication (Activity context, int start, int end, ActionListListener listener) {
 		proxy.getActionsByApplication(context, start, end, listener);
 	}
 	
 	/**
-	 * 
-	 * @param context
-	 * @param user
-	 * @param start
-	 * @param end
-	 * @param listener
+	 * Gets the actions of a single user.
+	 * @param context The current context.
+	 * @param user The user for whom the actions will be returned.
+	 * @param start The start index for pagination (0 based).
+	 * @param end The end index for pagination (0 based).
+	 * @param listener A listener to handle the result.
 	 */
 	public static void getActionsByUser (Activity context, User user, int start, int end, ActionListListener listener) {
 		proxy.getActionsByUser(context, user, start, end, listener);
 	}
 	
 	/**
-	 * 
-	 * @param context
-	 * @param e
-	 * @param start
-	 * @param end
-	 * @param listener
+	 * Gets the actions for a given entity. 
+	 * @param context The current context.
+	 * @param entityKey The entity key.
+	 * @param start The start index for pagination (0 based).
+	 * @param end The end index for pagination (0 based).
+	 * @param listener A listener to handle the result.
 	 */
 	public static void getActionsByEntity (Activity context, String entityKey, int start, int end, ActionListListener listener) {
 		proxy.getActionsByEntity(context, entityKey, start, end, listener);
 	}
 	
 	/**
-	 * 
-	 * @param context
-	 * @param user
-	 * @param e
-	 * @param start
-	 * @param end
-	 * @param listener
+	 * Gets the actions of a single user on a single entity.
+	 * @param context The current context.
+	 * @param user The user for whom the actions will be returned.
+	 * @param entityKey The entity key.
+	 * @param start The start index for pagination (0 based).
+	 * @param end The end index for pagination (0 based).
+	 * @param listener A listener to handle the result.
 	 */
 	public static void getActionsByUserAndEntity (Activity context, User user, String entityKey, int start, int end, ActionListListener listener) {
 		proxy.getActionsByUserAndEntity(context, user, entityKey, start, end, listener);

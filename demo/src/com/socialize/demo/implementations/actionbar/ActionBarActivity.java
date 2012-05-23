@@ -21,10 +21,12 @@
  */
 package com.socialize.demo.implementations.actionbar;
 
+import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import com.socialize.ActionBarUtils;
-import com.socialize.demo.DemoActivity;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import com.socialize.demo.R;
 
 
@@ -32,13 +34,27 @@ import com.socialize.demo.R;
  * @author Jason Polites
  *
  */
-public class ActionBarActivity extends DemoActivity {
-
+public class ActionBarActivity extends ListActivity {
+	
+	final String[] values = new String[] { "Default Action Bar", "Custom Action Bar"};
+	final Class<?>[] activities = new Class<?>[] { DefaultActionBarActivity.class, CustomActionBarActivity.class};
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		View actionBar = ActionBarUtils.showActionBar(this, R.layout.actionbar, entity);
-		setContentView(actionBar);
+		setContentView(R.layout.demo_list);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
+		setListAdapter(adapter);
 	}
+	
 
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		Class<?> activityClass = activities[position];
+		if(activityClass != null) {
+			Intent intent = new Intent(this, activityClass);
+			startActivity(intent);
+		}
+	}	
+	
 }

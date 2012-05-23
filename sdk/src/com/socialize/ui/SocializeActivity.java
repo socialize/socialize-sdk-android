@@ -69,7 +69,6 @@ public abstract class SocializeActivity extends Activity implements DialogRegist
 
 	@Override
 	protected void onDestroy() {
-		destroySocialize();
 		if(dialogs != null) {
 			for (Dialog dialog : dialogs) {
 				dialog.dismiss();
@@ -81,10 +80,6 @@ public abstract class SocializeActivity extends Activity implements DialogRegist
 	
 	protected void initSocialize() {
 		getSocialize().init(this);
-	}
-	
-	protected void destroySocialize() {
-		getSocialize().destroy();
 	}
 	
 	protected SocializeService getSocialize() {

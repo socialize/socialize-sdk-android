@@ -10,11 +10,7 @@ Contents:
    getting_started
    facebook
    twitter
-   social_actions
-   sharing_adv
    action_bar
-   like_button
-   comment_view
    push_notifications
    entity_loader
    sdk_user_guide

@@ -300,6 +300,9 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 			public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject response) {
 				addResult(1, "onAfterPost");
 			}
+
+			@Override
+			public void onCancel() {}
 		});
 		
 		latch.await(20, TimeUnit.SECONDS);

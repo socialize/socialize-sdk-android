@@ -145,6 +145,17 @@ public abstract class SocializeActionUtilsBase {
 						}
 						
 						@Override
+						public void onCancel() {
+							if(listener != null) {
+								listener.onCancel();
+							}
+							
+							if(progress != null) {
+								progress.dismiss();
+							}							
+						}
+
+						@Override
 						public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
 							if(listener != null) {
 								listener.onBeforePost(parent, socialNetwork, postData);

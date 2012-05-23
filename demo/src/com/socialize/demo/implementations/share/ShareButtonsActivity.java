@@ -71,6 +71,11 @@ public class ShareButtonsActivity extends DemoActivity {
 				final SafeProgressDialog progress = SafeProgressDialog.show(v.getContext());
 				
 				TwitterUtils.tweetEntity(ShareButtonsActivity.this, entity, "Test Message", new SocialNetworkShareListener() {
+					
+					@Override
+					public void onCancel() {
+						progress.dismiss();
+					}
 
 					@Override
 					public void onNetworkError(Activity context, SocialNetwork network, Exception error) {

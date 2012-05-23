@@ -41,13 +41,6 @@ public class SampleSocializeActivity extends SocializeActivity {
 	}
 
 	@Override
-	public void destroySocialize() {
-		if(localSocializeCallBack != null) {
-			localSocializeCallBack.destroySocialize();
-		}
-	}
-
-	@Override
 	public void onPostSocializeInit(IOCContainer container) {
 		if(localSocializeCallBack != null) {
 			localSocializeCallBack.onPostSocializeInit(container);

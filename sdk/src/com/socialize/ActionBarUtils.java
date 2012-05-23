@@ -38,7 +38,7 @@ public class ActionBarUtils {
 	 * @param parent The activity containing the view.
 	 * @param original The original View to which the ActionBar will be pinned.
 	 * @param entity The entity asssociated with the ActionBar.
-	 * @return
+	 * @return The final view including the ActionBar which can then be attached to your layout.
 	 */
 	public static View showActionBar(Activity parent, View original, Entity entity) {
 		return Socialize.getSocialize().showActionBar(parent, original, entity);
@@ -49,7 +49,7 @@ public class ActionBarUtils {
 	 * @param parent The activity containing the view.
 	 * @param resId The resource ID of the original View (layout) to which the ActionBar will be pinned.
 	 * @param entity The entity asssociated with the ActionBar.
-	 * @return
+	 * @return The final view including the ActionBar which can then be attached to your layout.
 	 */
 	public static View showActionBar(Activity parent, int resId, Entity entity) {
 		return Socialize.getSocialize().showActionBar(parent, resId, entity);

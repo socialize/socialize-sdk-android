@@ -37,139 +37,35 @@ import com.socialize.ui.comment.OnCommentViewActionListener;
  */
 public interface SocializeUI {
 
-	/**
-	 * Appends the Socialize Action Bar to the view provided.  The action bar will appear at the bottom of the view.
-	 * @param parent The current activity.
-	 * @param original The view to be wrapped.
-	 * @param entity The entity that will be bound to the action bar.
-	 * @return The original view with the action bar appended to the bottom.
-	 */
 	public View showActionBar(Activity parent, View original, Entity entity);
 	
-	/**
-	 * Appends the Socialize Action Bar to the view provided.  The action bar will appear at the bottom of the view.
-	 * @param parent The current activity.
-	 * @param original The view to be wrapped.
-	 * @param entity The entity that will be bound to the action bar.
-	 * @param options Display options for the action bar.
-	 * @return The original view with the action bar appended to the bottom.
-	 */
 	public View showActionBar(Activity parent, View original, Entity entity, ActionBarOptions options);
 	
-	/**
-	 * 
-	 * @param parent
-	 * @param original
-	 * @param entity
-	 * @param listener
-	 * @return
-	 */
 	public View showActionBar(Activity parent, View original, Entity entity, ActionBarListener listener);
 	
-	/**
-	 * 
-	 * @param parent
-	 * @param original
-	 * @param entity
-	 * @param options
-	 * @param listener
-	 * @return
-	 */
 	public View showActionBar(Activity parent, View original, Entity entity, ActionBarOptions options, ActionBarListener listener);
 
-	/**
-	 * 
-	 * @param parent
-	 * @param resId
-	 * @param entity
-	 * @param options
-	 * @param listener
-	 * @return
-	 */
 	public View showActionBar(Activity parent, int resId, Entity entity, ActionBarOptions options, ActionBarListener listener);
 
-	/**
-	 * 
-	 * @param parent
-	 * @param resId
-	 * @param entity
-	 * @param options
-	 * @return
-	 */
 	public View showActionBar(Activity parent, int resId, Entity entity, ActionBarOptions options);
 
-	/**
-	 * 
-	 * @param parent
-	 * @param resId
-	 * @param entity
-	 * @param listener
-	 * @return
-	 */
 	public View showActionBar(Activity parent, int resId, Entity entity, ActionBarListener listener);
 
-	/**
-	 * 
-	 * @param parent
-	 * @param resId
-	 * @param entity
-	 * @return
-	 */
 	public View showActionBar(Activity parent, int resId, Entity entity);
 
-	/**
-	 * 
-	 * @param context
-	 * @param userId
-	 * @param requestCode
-	 */
 	public void showUserProfileViewForResult(Activity context, Long userId, int requestCode);
 
-	/**
-	 * Shows the profile for a user.  If the user is the current logged in user this will allow the user to edit.
-	 * @param context
-	 * @param userId
-	 */
 	public void showUserProfileView(Activity context, Long userId);
 	
-	/**
-	 * Shows the comments for an entity.
-	 * @param context
-	 * @param entity
-	 * @param listener
-	 */
 	public void showCommentView(Activity context, Entity entity, OnCommentViewActionListener listener);
 
-	/**
-	 * Shows the comments for an entity.
-	 * @param context
-	 * @param entity
-	 */
 	public void showCommentView(Activity context, Entity entity);
 
-	/**
-	 * Shows the action detail view for a specific action.
-	 * @param context
-	 * @param user
-	 * @param action
-	 * @param requestCode
-	 */
 	public void showActionDetailViewForResult(Activity context, User user, SocializeAction action, int requestCode);
 	
-	/**
-	 * No longer supported.  Returns null
-	 * @param name
-	 * @return
-	 */
 	@Deprecated
 	public Drawable getDrawable(String name);
 	
-	/**
-	 * No longer supported.  Returns null
-	 * @param name
-	 * @param eternal
-	 * @return
-	 */
 	@Deprecated
 	public Drawable getDrawable(String name, boolean eternal);
 }

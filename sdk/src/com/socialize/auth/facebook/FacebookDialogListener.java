@@ -86,7 +86,7 @@ public abstract class FacebookDialogListener implements DialogListener {
 						listener.onError(new SocializeException(error));
 					}
 					else {
-						error.printStackTrace();
+						handleError(error);
 					}					
 				}
 				else {
@@ -99,8 +99,10 @@ public abstract class FacebookDialogListener implements DialogListener {
 					else {
 						// TODO: log error
 					}
+					
+					onFinish();
 				}
-				onFinish();
+				
 			}
 		}.execute();
 		
@@ -114,8 +116,6 @@ public abstract class FacebookDialogListener implements DialogListener {
 		else {
 			handleError(e);
 		}
-		
-		onFinish();
 	}
 	
 	@Override
@@ -126,8 +126,6 @@ public abstract class FacebookDialogListener implements DialogListener {
 		else {
 			handleError(e);
 		}
-		
-		onFinish();
 	}
 
 	@Override
@@ -136,7 +134,7 @@ public abstract class FacebookDialogListener implements DialogListener {
 			listener.onCancel();
 		}
 		else {
-			Toast.makeText(context, "Request canceled", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "Request cancelled", Toast.LENGTH_SHORT).show();
 		}
 		
 		onFinish();

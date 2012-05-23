@@ -30,6 +30,8 @@ import android.app.Activity;
  */
 public interface SocialNetworkPostListener {
 	
+	public void onCancel();
+	
 	public void onNetworkError(Activity context, SocialNetwork network, Exception error);
 
 	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject);

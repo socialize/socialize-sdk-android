@@ -155,7 +155,6 @@
 		
 		<path id="javadoc.sourcepath">
 			<pathelement path="src"/>
-			<pathelement path="../ui/src"/>
 		</path>		
 		
 		<mkdir dir="build/docs/javadoc"/>
@@ -164,11 +163,12 @@
 		</tstamp>
 
 		<javadoc 
+			packagenames="com.socialize"
 			sourcepathref="javadoc.sourcepath"
 			classpathref="javadoc.classpath"
 			destdir="build/docs/javadoc" 
 			doctitle="${vendor} SDK v${version} Documentation" 
-			excludepackagenames="com.google.*,oauth.*,com.socialize.google.*,com.socialize.facebook.*">
+			excludepackagenames="com.google.*,com.socialize.oauth.signpost.*,com.socialize.google.*,com.socialize.facebook.*">
 			
 			<header>
 				<![CDATA[${vendor} SDK v${version} Documentation<br/>Copyright ${year} ${vendor}<br/>${website}]]>
@@ -187,8 +187,10 @@
 		</javadoc>
 	</target>
 	
+	<!--
 	<target name="package" depends="javadoc, sphinx">
-		
+	-->
+	<target name="package" depends="javadoc">
 		<!-- Copy sample to tmp -->
 		
 		<property name="sample_dir" value="/tmp/sdk-sample"/>

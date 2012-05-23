@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import com.socialize.Socialize;
+import com.socialize.SocializeAccess;
 import com.socialize.sample.ui.SampleActivity2;
 import com.socialize.ui.dialog.SafeProgressDialog;
 
@@ -78,7 +79,7 @@ public class Main extends Activity {
 			protected Void doInBackground(Void... params) {
 				
 				if(isMock) {
-					Socialize.init(Main.this, "socialize_core_beans.xml", "socialize_mock_beans.xml");
+					SocializeAccess.init(Main.this, "socialize_core_beans.xml", "socialize_mock_beans.xml");
 				}
 				else {
 					Socialize.init(Main.this);

@@ -68,6 +68,8 @@
         
         <!-- ActionBar -->
         <activity android:name=".implementations.actionbar.ActionBarActivity"/>
+        <activity android:name=".implementations.actionbar.DefaultActionBarActivity"/>
+        <activity android:name=".implementations.actionbar.CustomActionBarActivity"/>
         
         <!-- User Activity -->
         <activity android:name=".implementations.action.ActionActivity"/>

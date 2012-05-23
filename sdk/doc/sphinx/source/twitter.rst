@@ -1,8 +1,8 @@
 .. include:: header.inc
 
-====================
-Twitter Integration
-====================
+=============
+Twitter Setup
+=============
 
 Introduction
 ------------

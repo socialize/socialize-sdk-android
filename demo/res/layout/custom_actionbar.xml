@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    
+	<LinearLayout 
+	    android:orientation="vertical"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:background="#ffffff">
+	    
+	    <ScrollView 
+	        android:layout_width="fill_parent"
+	   		android:layout_height="fill_parent"
+	   		android:isScrollContainer="false">
+	   		
+		   <TextView 
+		   		android:id="@+id/text"
+		   		android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vitae metus ac leo ultrices placerat. Curabitur vel ipsum vitae urna ultricies rhoncus. Proin tempus felis nec turpis feugiat vitae vestibulum arcu faucibus. Donec dapibus mi at nisl mattis a malesuada lectus feugiat. Etiam ultricies adipiscing nisi, sed scelerisque mauris ultricies sagittis. Proin blandit dignissim magna, id consectetur justo molestie in. Nullam id nunc et sem dictum malesuada ac et libero. Integer vitae mattis est. Nulla sodales dolor nec metus tempor a vestibulum nisl pellentesque. Suspendisse interdum, risus non pulvinar aliquet, tellus elit sodales ligula, vitae mollis nisi massa eget purus. Etiam pharetra consectetur ipsum, eu pretium est egestas eu. Vivamus varius tortor ac leo gravida tempus. Ut semper scelerisque vestibulum. Morbi pretium neque vel neque tempus tempus. Proin tellus tortor, posuere nec dignissim in, venenatis hendrerit augue. Etiam eget justo a nisl semper lobortis. Etiam cursus sodales ipsum non sagittis. Vivamus non metus augue, vehicula iaculis tortor. Aenean tristique orci id lorem consequat vitae commodo metus auctor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vitae metus ac leo ultrices placerat. Curabitur vel ipsum vitae urna ultricies rhoncus. Proin tempus felis nec turpis feugiat vitae vestibulum arcu faucibus. Donec dapibus mi at nisl mattis a malesuada lectus feugiat. Etiam ultricies adipiscing nisi, sed scelerisque mauris ultricies sagittis. Proin blandit dignissim magna, id consectetur justo molestie in. Nullam id nunc et sem dictum malesuada ac et libero. Integer vitae mattis est. Nulla sodales dolor nec metus tempor a vestibulum nisl pellentesque. Suspendisse interdum, risus non pulvinar aliquet, tellus elit sodales ligula, vitae mollis nisi massa eget purus. Etiam pharetra consectetur ipsum, eu pretium est egestas eu. Vivamus varius tortor ac leo gravida tempus. Ut semper scelerisque vestibulum. Morbi pretium neque vel neque tempus tempus. Proin tellus tortor, posuere nec dignissim in, venenatis hendrerit augue. Etiam eget justo a nisl semper lobortis. Etiam cursus sodales ipsum non sagittis. Vivamus non metus augue, vehicula iaculis tortor. Aenean tristique orci id lorem consequat vitae commodo metus auctor." 
+		   		android:layout_width="fill_parent"
+		   		android:layout_height="fill_parent"
+		   		android:textColor="#000000"/>
+	       
+	    </ScrollView>
+	
+	</LinearLayout>
+	
+	<LinearLayout 
+	    android:orientation="vertical"
+	    android:layout_width="50dip"
+	    android:layout_height="120dip"
+	    android:background="#bb000000"
+	    android:layout_alignParentLeft="true"
+	    android:layout_centerVertical="true">
+	    
+	    <ImageView 
+	        android:id="@+id/btnLike"
+	        android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:src="@drawable/icon_like"
+	    	android:layout_gravity="center_horizontal"
+	    	android:layout_marginBottom="6dip"
+	    	android:layout_marginTop="6dip"/>
+	   
+	    <ImageView 
+	        android:id="@+id/btnComment"
+	        android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:src="@drawable/icon_comment"
+	    	android:layout_gravity="center_horizontal"
+	    	android:layout_marginBottom="6dip"/>
+	    
+	    <ImageView 
+	        android:id="@+id/btnShare"
+	        android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:src="@drawable/icon_share"
+	    	android:layout_gravity="center_horizontal"
+	    	android:layout_marginBottom="6dip"/>	    
+	   
+	</LinearLayout>
+	
+</RelativeLayout>
+

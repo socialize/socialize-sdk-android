@@ -46,43 +46,41 @@ public class EntityUtils {
 	}
 	
 	/**
-	 * 
-	 * @param context
-	 * @param e
-	 * @param listener
+	 * Adds (creates) an entity
+	 * @param context The current context.
+	 * @param e The entity to be created.
+	 * @param listener A listener to handle the result.
 	 */
 	public static void addEntity (Activity context, Entity e, EntityAddListener listener) {
 		proxy.addEntity(context, e, listener);
 	}
 	
 	/**
-	 * 
-	 * @param context
-	 * @param key
-	 * @param listener
+	 * Retrieves an entity
+	 * @param context The current context.
+	 * @param key The entity key.
+	 * @param listener A listener to handle the result.
 	 */
 	public static void getEntity (Activity context, String key, EntityGetListener listener) {
 		proxy.getEntity(context, key, listener);
 	}
 	
 	/**
-	 * 
-	 * @param context
-	 * @param start
-	 * @param end
-	 * @param listener
+	 * Retrieves all entities sorted by creation date.
+	 * @param context The current context.
+	 * @param start The start index for pagination (0 based).
+	 * @param end The end index for pagination (0 based).
+	 * @param listener A listener to handle the result.
 	 */
 	public static void getEntities (Activity context, int start, int end, EntityListListener listener) {
 		proxy.getEntities(context, start, end, listener);
 	}
 	
 	/**
-	 * 
-	 * @param context
-	 * @param start
-	 * @param end
-	 * @param listener
-	 * @param key
+	 * Retrieves the entities designated by the given keys.
+	 * @param context The current context.
+	 * @param listener A listener to handle the result.
+	 * @param keys One or more entity keys.
 	 */
 	public static void getEntities (Activity context, EntityListListener listener, String...keys) {
 		proxy.getEntities(context, listener, keys);	

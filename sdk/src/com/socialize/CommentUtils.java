@@ -80,17 +80,15 @@ public class CommentUtils {
 	public static void getComment (Activity context, CommentGetListener listener, long id) {
 		commentUtils.getComment(context, id, listener);
 	}
-	
+
 	/**
 	 * Retrieves comments based on a set of IDs.
 	 * @param context The current context.
-	 * @param start The start index for pagination (from 0).
-	 * @param end The end index for pagination.
 	 * @param listener A listener to handle the result.
-	 * @param id An array of comment IDs
+	 * @param ids An array of comment IDs
 	 */
-	public static void getComments (Activity context, CommentListListener listener, long...id) {
-		commentUtils.getComments(context, listener, id);
+	public static void getComments (Activity context, CommentListListener listener, long...ids) {
+		commentUtils.getComments(context, listener, ids);
 	}
 	
 	/**
@@ -121,7 +119,7 @@ public class CommentUtils {
 	 * Shows the comments for an entity.
 	 * @param context
 	 * @param entity
-	 * @param listener
+	 * @param listener A listener to handle the result.
 	 */
 	public static void showCommentView(Activity context, Entity entity, OnCommentViewActionListener listener) {
 		Socialize.getSocialize().showCommentView(context, entity, listener);

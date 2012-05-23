@@ -87,6 +87,11 @@ public class LikeButtonsActivity extends DemoActivity {
 							progress.dismiss();
 							btnLike.setText("Unlike");
 						}
+
+						@Override
+						public void onCancel() {
+							progress.dismiss();
+						}
 					});
 				}
 				else {
