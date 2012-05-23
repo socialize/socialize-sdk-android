@@ -208,8 +208,7 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		AndroidMock.verify(facebook);
 		
 		Boolean result = getNextResult();
-		assertNotNull(result);
-		assertTrue(result);
+		assertNull(result);
 	}
 	
 	public void testOnFacebookError() throws Exception {
@@ -227,7 +226,7 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 			
 			@Override
 			public void onError(SocializeException error) {
-				addResult(true);
+				addResult(0, true);
 				assertNotNull(error);
 				assertNotNull(error.getCause());
 				assertEquals(errorMessage, error.getCause().getMessage());
@@ -253,7 +252,7 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 			
 			@Override
 			public void onFinish() {
-				addResult(true);
+				addResult(1, true);
 			}
 			
 			@Override
@@ -264,14 +263,13 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		
 		dListener.onFacebookError(error);
 		
-		Boolean result0 = getNextResult();
-		Boolean result1 = getNextResult();
+		Boolean result0 = getResult(0);
+		Boolean result1 = getResult(1);
 		
 		assertNotNull(result0);
-		assertNotNull(result1);
+		assertNull(result1);
 		
 		assertTrue(result0);
-		assertTrue(result1);
 	}
 	
 	
@@ -290,7 +288,7 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 			
 			@Override
 			public void onError(SocializeException error) {
-				addResult(true);
+				addResult(0, true);
 				assertNotNull(error);
 				assertNotNull(error.getCause());
 				assertEquals(errorMessage, error.getCause().getMessage());
@@ -316,7 +314,7 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 			
 			@Override
 			public void onFinish() {
-				addResult(true);
+				addResult(1, true);
 			}
 			
 			@Override
@@ -327,13 +325,12 @@ public class FacebookDialogListenerTest extends SocializeActivityTest {
 		
 		dListener.onError(error);
 		
-		Boolean result0 = getNextResult();
-		Boolean result1 = getNextResult();
+		Boolean result0 = getResult(0);
+		Boolean result1 = getResult(1);
 		
 		assertNotNull(result0);
-		assertNotNull(result1);
+		assertNull(result1);
 		
 		assertTrue(result0);
-		assertTrue(result1);
 	}
 }
