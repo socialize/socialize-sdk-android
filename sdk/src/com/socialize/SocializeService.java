@@ -270,29 +270,10 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param shareAddListener A listener to handle callbacks from the post.
 	 */
 	public void share(Activity activity, String entityKey, String text, ShareType shareType, Location location, ShareAddListener shareAddListener);
-	
-	/**
-	 * Records a share event against the given key. 
-	 * @param activity The current Activity.
-	 * @param entityKey The entity being shared.
-	 * @param text The text being shared.
-	 * @param shareType The type of the share.
-	 * @param shareAddListener A listener to handle callbacks from the post.
-	 * @deprecated
-	 */
+
 	@Deprecated
 	public void share(Activity activity, String entityKey, String text, ShareType shareType, ShareAddListener shareAddListener);
-	
-	
-	/**
-	 * Records a share event against the given key. 
-	 * @param activity The current Activity.
-	 * @param entityKey The entity being shared.
-	 * @param text The text being shared.
-	 * @param options Options for the share
-	 * @param shareAddListener A listener to handle callbacks from the post.
-	 * @deprecated
-	 */
+
 	@Deprecated
 	void share(Activity activity, String entityKey, String text, ShareOptions shareOptions, ShareAddListener shareAddListener);
 	
@@ -437,7 +418,6 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * Adds a new comment and associates it with the key described.
 	 * @param activity The current activity.
 	 * @param comment The comment object.  MUST contain an Entity object.
-	 * @param location The location of the device at the time the call was made.
 	 * @param shareOptions Options for sharing to facebook and sharing location.
 	 * @param commentAddListener A listener to handle callbacks from the post.
 	 */
@@ -593,7 +573,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	/**
 	 * Returns true if the given provider type is supported and has been configured correctly.
 	 * @param type
-	 * @return
+	 * @return True if the given provider type is supported and has been configured correctly.
 	 */
 	public boolean isSupported(AuthProviderType type);
 	
@@ -614,25 +594,25 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	/**
 	 * Returns true if sharing to the given share type is supported on this device.
 	 * @param shareType
-	 * @return
+	 * @return True if sharing to the given share type is supported on this device.
 	 */
 	public boolean canShare(Context context, ShareType shareType);
 	
 	/**
 	 * Returns the entity loader set in setEntityLoader.
-	 * @return
+	 * @return The entity loader set in setEntityLoader.
 	 */
 	public SocializeEntityLoader getEntityLoader();
 	
 	/**
 	 * Returns the internal system config for Socialize. (Expert Only)
-	 * @return
+	 * @return The internal system config for Socialize. (Expert Only)
 	 */
 	public SocializeSystem getSystem();
 	
 	/**
 	 * Returns the logger used by Socialize.
-	 * @return
+	 * @return The logger used by Socialize.
 	 */
 	public SocializeLogger getLogger();
 	

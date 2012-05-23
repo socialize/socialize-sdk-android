@@ -24,6 +24,7 @@ package com.socialize;
 import java.util.HashMap;
 import java.util.Map;
 import android.content.Context;
+import com.socialize.config.SocializeConfig;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.SocializeListener;
 import com.socialize.log.SocializeLogger.LogLevel;
@@ -58,49 +59,79 @@ public class Socialize {
 		super();
 	}
 
-	public static final void init(Context context, String...configPaths) {
-		instance.init(context, configPaths);
-	}
-
+	/**
+	 * Initialize Socialize synnchronously.  Should not be called from the main UI thread.
+	 * @param context
+	 */
 	public static final void init(Context context) {
 		instance.init(context);
 	}
 	
+	/**
+	 * Initialize Socialize asynnchronously.  Can be called from the main UI thread.
+	 * @param context
+	 */
 	public static final void initAsync(Context context) {
 		instance.initAsync(context, null);
 	}
 	
+	/**
+	 * Initialize Socialize asynnchronously.  Can be called from the main UI thread.
+	 * @param context
+	 * @param listener A listener which will be called after init.
+	 */
 	public static final void initAsync(Context context, SocializeInitListener listener) {
 		instance.initAsync(context, listener);
 	}
 
+	/**
+	 * Expert only.  Does not normally need to be called.
+	 * @param context
+	 */
 	public static final void destroy(Context context) {
 		if(instance != null) {
 			instance.destroy();
 		}
 	}
 
+	/**
+	 * Returns the Socialize singleton instance.
+	 * @return The Socialize singleton instance.
+	 */
 	public static final SocializeService getSocialize() {
 		return instance;
 	}
 	
 	/**
-	 * @deprecated All methods available from standard Socialize instance.
-	 * @return
+	 * Returns the global configuration object.
+	 * @return The global configuration object.
 	 */
+	public static SocializeConfig getConfig() {
+		return getSocialize().getConfig();
+	}
+	
 	@Deprecated
 	public static final SocializeUI getSocializeUI() {
 		return instance;
 	}
 	
+	
 	static Object getBean(String name) {
 		return instance.getContainer().getBean(name);
 	}
 
+	/**
+	 * Called by containing Activities in their onPause() method.
+	 * @param context
+	 */
 	public static void onPause(Context context) {
 		instance.onPause(context);
 	}
 	
+	/**
+	 * Called by containing Activities in their onResume() method.
+	 * @param context
+	 */
 	public static void onResume(Context context) {
 		instance.onResume(context);
 	}

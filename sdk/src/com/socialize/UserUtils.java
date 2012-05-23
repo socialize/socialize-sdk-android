@@ -49,8 +49,8 @@ public class UserUtils {
 
 	/**
 	 * Returns the current logged in user.  If no user is currently authenticated this will authenticate synchronously.
-	 * @param context
-	 * @return
+	 * @param context The current context.
+	 * @return The current logged in user.
 	 * @throws SocializeException
 	 */
 	public static User getCurrentUser(Context context)  {

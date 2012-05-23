@@ -1326,10 +1326,6 @@ public class SocializeServiceImpl implements SocializeService {
 		this.logger = logger;
 	}
 	
-	/**
-	 * Returns the configuration for this SocializeService instance.
-	 * @return
-	 */
 	public SocializeConfig getConfig() {
 		return config;
 	}
