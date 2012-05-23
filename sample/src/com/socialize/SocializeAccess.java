@@ -1,5 +1,6 @@
 package com.socialize;
 
+import android.content.Context;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
 import com.socialize.listener.SocializeInitListener;
@@ -55,5 +56,9 @@ public class SocializeAccess {
 	
 	public static void setSocialize(SocializeServiceImpl service) {
 		Socialize.instance = service;
+	}
+	
+	public static void init(Context context, String...paths) {
+		Socialize.instance.init(context, paths);
 	}
 }
