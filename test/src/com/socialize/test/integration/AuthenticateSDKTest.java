@@ -33,7 +33,6 @@ import com.socialize.auth.facebook.FacebookAuthProviderInfo;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
-import com.socialize.networks.facebook.FacebookUtils;
 import com.socialize.test.ui.util.TestUtils;
 
 

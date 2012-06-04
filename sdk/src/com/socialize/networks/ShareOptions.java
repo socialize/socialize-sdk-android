@@ -29,8 +29,13 @@ package com.socialize.networks;
 public class ShareOptions {
 	
 	private boolean shareLocation;
+	
+	@Deprecated
 	private SocialNetwork[] shareTo;
+	
+	@Deprecated
 	private SocialNetworkListener listener;
+	
 	private boolean selfManaged = false;
 	private boolean authRequired = true;
 	
@@ -50,14 +55,17 @@ public class ShareOptions {
 		this.shareLocation = shareLocation;
 	}
 	
+	@Deprecated
 	public SocialNetwork[] getShareTo() {
 		return shareTo;
 	}
 
+	@Deprecated
 	public void setShareTo(SocialNetwork...shareTo) {
 		this.shareTo = shareTo;
 	}
 
+	@Deprecated
 	public SocialNetworkListener getListener() {
 		return listener;
 	}
@@ -66,10 +74,12 @@ public class ShareOptions {
 	 * Allows for the capture of events when sharing on social networks like facebook.
 	 * @param listener
 	 */
+	@Deprecated
 	public void setListener(SocialNetworkListener listener) {
 		this.listener = listener;
 	}
 	
+	@Deprecated
 	public boolean isShareTo(SocialNetwork destination) {
 		if(shareTo != null) {
 			for (SocialNetwork d : shareTo) {
@@ -93,7 +103,6 @@ public class ShareOptions {
 	public void setSelfManaged(boolean selfManaged) {
 		this.selfManaged = selfManaged;
 	}
-
 	
 	public boolean isAuthRequired() {
 		return authRequired;
@@ -107,6 +116,4 @@ public class ShareOptions {
 	public void setAuthRequired(boolean requireAuth) {
 		this.authRequired = requireAuth;
 	}
-	
-	
 }
