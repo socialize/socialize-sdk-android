@@ -26,11 +26,11 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
+import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.SocializeAction;
 import com.socialize.entity.User;
 import com.socialize.networks.PostData;
-import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.share.ShareHandler;
@@ -45,7 +45,15 @@ public abstract class SocializeActionUtilsBase {
 	
 	private ShareHandlers shareHandlers;
 	
-	protected boolean isDisplayAuthDialog(ShareOptions options) {
+	protected void populateActionOptions(ActionOptions options) {
+		SocializeService socialize = Socialize.getSocialize();
+		SocializeSession session = socialize.getSession();
+		User user = session.getUser();
+		options.setAuthRequired(socialize.getConfig().isAuthRequired());
+		options.setShareLocation(user.isShareLocation());
+	}	
+	
+	protected boolean isDisplayAuthDialog(ActionOptions options, SocialNetwork...networks) {
 		
 		if(options == null) {
 			return isDisplayAuthDialog();
@@ -55,10 +63,9 @@ public abstract class SocializeActionUtilsBase {
 		boolean authSupported = false;
 		
 		if(authRequired) {
-			SocialNetwork[] all = options.getShareTo();
 			
-			if(all != null) {
-				for (SocialNetwork network : all) {
+			if(networks != null) {
+				for (SocialNetwork network : networks) {
 					AuthProviderType type = AuthProviderType.valueOf(network);
 					if(getSocialize().isSupported(type)) {
 						authSupported = true;

@@ -29,6 +29,7 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
+import com.socialize.networks.SocialNetwork;
 
 
 /**
@@ -46,6 +47,14 @@ public class UserUtils {
 				new SocializeActionProxy("userUtils"));	// Bean name
 	}
 	
+	/**
+	 * Gets the Social Networks the user has elected to auto-post to.
+	 * @param context The current context.
+	 * @return An array of SocialNetworks, or null if the user has not elected to auto post to any.
+	 */
+	public static SocialNetwork[] getAutoPostSocialNetworks(Context context) {
+		return proxy.getAutoPostSocialNetworks(context);
+	}
 
 	/**
 	 * Returns the current logged in user.  If no user is currently authenticated this will authenticate synchronously.

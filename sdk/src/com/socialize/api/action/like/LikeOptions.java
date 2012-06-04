@@ -19,17 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.networks;
+package com.socialize.api.action.like;
 
 import com.socialize.api.action.ActionOptions;
 
 
 /**
- * Allows for the specification of options for sharing.
  * @author Jason Polites
- * @deprecated use LikeOptions or ShareOptions.
+ *
  */
-@Deprecated
-public class ShareOptions extends ActionOptions {
-	
+public class LikeOptions extends ActionOptions {
+
 }

@@ -24,10 +24,13 @@ package com.socialize.api.action.user;
 import android.app.Activity;
 import android.content.Context;
 import com.socialize.Socialize;
+import com.socialize.SocializeService;
 import com.socialize.api.action.SocializeActionUtilsBase;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.User;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
+import com.socialize.networks.SocialNetwork;
 
 
 /**
@@ -37,6 +40,27 @@ import com.socialize.listener.user.UserSaveListener;
 public class SocializeUserUtils extends SocializeActionUtilsBase implements UserUtilsProxy {
 
 	private UserSystem userSystem;
+
+	@Override
+	public SocialNetwork[] getAutoPostSocialNetworks(Context context) {
+		SocializeService socialize = Socialize.getSocialize();
+		User user = getCurrentUser(context);
+		
+		SocialNetwork[] networks = null;
+		
+		if(user.isAutoPostToFacebook() && socialize.isAuthenticated(AuthProviderType.FACEBOOK)) {
+			if(user.isAutoPostToTwitter() && socialize.isAuthenticated(AuthProviderType.TWITTER)) {
+				networks = new SocialNetwork[]{SocialNetwork.FACEBOOK, SocialNetwork.TWITTER};
+			}
+			else {
+				networks = new SocialNetwork[]{SocialNetwork.FACEBOOK};
+			}
+		}
+		else if(user.isAutoPostToTwitter() && socialize.isAuthenticated(AuthProviderType.TWITTER)) {
+			networks = new SocialNetwork[]{SocialNetwork.TWITTER};
+		}
+		return networks;
+	}
 
 	@Override
 	public User getCurrentUser(Context context)  {

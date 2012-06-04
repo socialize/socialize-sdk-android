@@ -27,7 +27,9 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import com.socialize.CommentUtils;
 import com.socialize.Socialize;
+import com.socialize.UserUtils;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.Comment;
 import com.socialize.entity.SocializeAction;
@@ -134,7 +136,7 @@ public class ActionDetailLayoutView extends BaseView {
 			int id = Integer.parseInt(actionId);
 			
 			// TODO: this should be able to process generic actions.
-			getSocialize().getCommentById(id, new CommentGetListener() {
+			CommentUtils.getComment(getActivity(), new CommentGetListener() {
 				@Override
 				public void onError(SocializeException error) {
 					countdown();
@@ -152,7 +154,7 @@ public class ActionDetailLayoutView extends BaseView {
 						doGetUserProfile(Long.parseLong(userId), entity);
 					}
 				}
-			});
+			}, id);
 		}
 		else if(!StringUtils.isEmpty(userId)) {
 			doGetUserProfile(Long.parseLong(userId), null);
@@ -171,7 +173,8 @@ public class ActionDetailLayoutView extends BaseView {
 	protected void doGetUserProfile(final long userId, final SocializeAction action) {
 		
 		if(userId >= 0) {
-			getSocialize().getUser(userId, new UserGetListener() {
+			
+			UserUtils.getUser(getActivity(), userId, new UserGetListener() {
 				
 				@Override
 				public void onGet(User user) {

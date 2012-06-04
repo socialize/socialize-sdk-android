@@ -28,6 +28,7 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
+import com.socialize.networks.SocialNetwork;
 
 
 /**
@@ -47,6 +48,20 @@ public interface UserUtilsProxy {
 	@Synchronous
 	public User getCurrentUser(Context context);
 	
+	/**
+	 * Gets the Social Networks the user has elected to auto-post to.
+	 * @param context
+	 * @return
+	 */
+	@Synchronous
+	public SocialNetwork[] getAutoPostSocialNetworks(Context context);
+	
+	/**
+	 * 
+	 * @param context
+	 * @param id
+	 * @param listener
+	 */
 	public void getUser(Context context, long id, UserGetListener listener);
 	
 	/**

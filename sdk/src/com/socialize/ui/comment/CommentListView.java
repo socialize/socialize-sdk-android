@@ -12,6 +12,8 @@ import com.socialize.CommentUtils;
 import com.socialize.Socialize;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ActionOptions;
+import com.socialize.api.action.comment.CommentOptions;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
@@ -23,7 +25,6 @@ import com.socialize.listener.comment.CommentListListener;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.log.SocializeLogger;
-import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.notifications.NotificationType;
 import com.socialize.ui.dialog.SimpleDialogFactory;
@@ -245,17 +246,20 @@ public class CommentListView extends BaseView {
 	public void doPostComment(String text, boolean shareLocation, final boolean subscribe, SocialNetwork...networks) {
 		dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
 		
-		ShareOptions options = newShareOptions();
+		CommentOptions options = newShareOptions();
 		
-		options.setShareTo(networks);
+//		options.setShareTo(networks);
 		options.setShareLocation(shareLocation);
+		options.setSubscribeToUpdates(subscribe);
 		
 		Comment comment = newComment();
 		comment.setText(text);
-		comment.setNotificationsEnabled(subscribe);
+//		comment.setNotificationsEnabled(subscribe);
 		comment.setEntitySafe(entity);
 		
-		getSocialize().addComment(getActivity(), comment, options, getCommentAddListener(subscribe));
+		CommentUtils.addComment(getActivity(), entity, text, options, getCommentAddListener(subscribe), networks);
+		
+//		getSocialize().addComment(getActivity(), comment, options, getCommentAddListener(subscribe), networks);
 		
 		// Won't persist.. but that's ok.
 		SocializeSession session = getSocialize().getSession();
@@ -771,8 +775,8 @@ public class CommentListView extends BaseView {
 	}
 	
 	// So we can mock
-	protected ShareOptions newShareOptions() {
-		return new ShareOptions();
+	protected CommentOptions newShareOptions() {
+		return new CommentOptions();
 	}
 	
 	protected RelativeLayout getLayoutAnchor() {

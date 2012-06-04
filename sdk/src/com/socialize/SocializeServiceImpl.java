@@ -48,6 +48,7 @@ import com.socialize.api.action.activity.ActivitySystem;
 import com.socialize.api.action.comment.CommentSystem;
 import com.socialize.api.action.comment.SubscriptionSystem;
 import com.socialize.api.action.entity.EntitySystem;
+import com.socialize.api.action.like.LikeOptions;
 import com.socialize.api.action.like.LikeSystem;
 import com.socialize.api.action.share.ShareSystem;
 import com.socialize.api.action.user.UserSystem;
@@ -123,6 +124,7 @@ import com.socialize.util.ResourceLocator;
 /**
  * @author Jason Polites
  */
+@SuppressWarnings("deprecation")
 public class SocializeServiceImpl implements SocializeService {
 	
 	static final String receiver = SocializeC2DMReceiver.class.getName();
@@ -637,39 +639,6 @@ public class SocializeServiceImpl implements SocializeService {
 		}
 	}
 
-//	protected synchronized void authenticate(
-//			Context context,
-//			String consumerKey, 
-//			String consumerSecret, 
-//			AuthProviderData authProviderData,
-//			SocializeAuthListener authListener, 
-//			boolean do3rdPartyAuth) {
-//		
-//		if(assertInitialized(context, authListener)) {
-//			userSystem.authenticate(context, consumerKey, consumerSecret, authProviderData, authListener, this, do3rdPartyAuth);
-//		}
-//	}
-
-//	protected boolean checkKeys(String consumerKey, String consumerSecret) {
-//		return checkKeys(consumerKey, consumerSecret, null);
-//	}
-//	
-//	protected boolean checkKeys(String consumerKey, String consumerSecret, SocializeAuthListener authListener) {
-//		return  checkKey("consumer key", consumerKey, authListener) &&
-//				checkKey("consumer secret", consumerSecret, authListener);
-//	}
-//	protected boolean checkKey(String name, String key, SocializeAuthListener authListener) {
-//		if(StringUtils.isEmpty(key)) {
-//			String msg = "No key specified in authenticate";
-//			if(authListener != null) {
-//				authListener.onError(new SocializeException(msg));
-//			}
-//			logErrorMessage(msg);
-//			return false;
-//		} else {
-//			return true;	
-//		}
-//	}
 	protected void logError(String message, Throwable error) {
 		if(logger != null) {
 			logger.error(message, error);
@@ -688,6 +657,8 @@ public class SocializeServiceImpl implements SocializeService {
 			System.err.println(message);
 		}
 	}
+	
+	@Deprecated
  	@Override
 	public void addComment(final Activity activity, Entity entity, final String comment, final ShareOptions shareOptions, final CommentAddListener commentAddListener) {
 		Comment c = newComment();
@@ -701,16 +672,19 @@ public class SocializeServiceImpl implements SocializeService {
 		return new Comment();
 	}
 	
+	@Deprecated
 	@Override
 	public void addComment(Activity activity, Entity entity, String comment, CommentAddListener commentAddListener) {
 		addComment(activity, entity, comment, null, commentAddListener);
 	}
 
+	@Deprecated
 	@Override
 	public void like(Activity activity, Entity entity, LikeAddListener likeAddListener) {
 		like(activity, entity, null, likeAddListener);
 	}
 
+	@Deprecated
 	@Override
 	public void addComment(final Activity activity, final Comment comment, final ShareOptions shareOptions, final CommentAddListener commentAddListener) {
 		if(assertAuthenticated(commentAddListener)) {
@@ -750,16 +724,21 @@ public class SocializeServiceImpl implements SocializeService {
 		}				
 	}
 	
+	@Deprecated
 	@Override
 	public void like(final Activity activity, Entity entity, final ShareOptions shareOptions, final LikeAddListener likeAddListener) {
 		if(assertAuthenticated(likeAddListener)) {
 			if(shareOptions != null) {
+				
+				LikeOptions likeOptions = new LikeOptions();
+				likeOptions.merge(shareOptions);
+				
 				final SocialNetwork[] shareTo = shareOptions.getShareTo();
 				if(shareTo == null || shareTo.length == 0) {
-					likeSystem.addLike(session, entity, shareOptions, likeAddListener);
+					likeSystem.addLike(session, entity, likeOptions, likeAddListener);
 				}
 				else {
-					likeSystem.addLike(session, entity, shareOptions, new LikeAddListener() {
+					likeSystem.addLike(session, entity, likeOptions, new LikeAddListener() {
 						@Override
 						public void onError(SocializeException error) {
 							if(likeAddListener != null) {
@@ -786,16 +765,18 @@ public class SocializeServiceImpl implements SocializeService {
 				}
 			}	
 			else {
-				likeSystem.addLike(session, entity, shareOptions, likeAddListener);
+				likeSystem.addLike(session, entity, null, likeAddListener);
 			}
 		}			
 	}
 	
+	@Deprecated
 	public void share(final Activity activity, final String entityKey, final String text, final ShareOptions shareOptions, final ShareAddListener shareAddListener) {
 		share(activity, Entity.newInstance(entityKey, null), text, shareOptions, shareAddListener);
 	}
 
 	
+	@Deprecated
 	@Override
 	public void share(final Activity activity, final Entity entity, final String text, final ShareOptions shareOptions, final ShareAddListener shareAddListener) {
 		if(assertAuthenticated(shareAddListener)) {

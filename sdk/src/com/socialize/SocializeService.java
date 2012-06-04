@@ -66,6 +66,7 @@ import com.socialize.ui.profile.UserProfile;
  * The main Socialize Service.  This is the simplest entry point into the Socialize API.
  * @author Jason Polites
  */
+@SuppressWarnings("deprecation")
 public interface SocializeService extends SocializeUI, SocializeSessionConsumer {
 
 	/**
@@ -187,6 +188,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param entity The entity being liked.
 	 * @param likeAddListener A listener to handle callbacks from the post.
 	 */
+	@Deprecated
 	public void like(Activity activity, Entity entity, LikeAddListener likeAddListener);
 	
 	/**
@@ -196,6 +198,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param shareOptions Options for posting to external networks.
 	 * @param likeAddListener A listener to handle callbacks from the post.
 	 */
+	@Deprecated
 	public void like(Activity activity, Entity entity, ShareOptions shareOptions, LikeAddListener likeAddListener);
 	
 	/**
@@ -203,6 +206,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param id The ID of the like to be deleted.
 	 * @param likeDeleteListener A listener to handle callbacks from the delete.
 	 */
+	@Deprecated
 	public void unlike(long id, LikeDeleteListener likeDeleteListener);
 	
 	/**
@@ -211,6 +215,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param entity The entity being viewed.
 	 * @param viewAddListener A listener to handle callbacks from the post.
 	 */
+	@Deprecated
 	public void view(Activity activity, Entity entity, ViewAddListener viewAddListener);	
 	
 	/**
@@ -220,6 +225,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param location The location of the device at the time the call was made.
 	 * @param viewAddListener A listener to handle callbacks from the post.
 	 */
+	@Deprecated
 	public void view(Activity activity, Entity entity, Location location, ViewAddListener viewAddListener);	
 	
 	/**
@@ -227,6 +233,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param id The ID of the view
 	 * @param viewGetListener A listener to handle callbacks from the get.
 	 */
+	@Deprecated
 	public void getViewById(long id, ViewGetListener viewGetListener);
 	
 	/**
@@ -237,6 +244,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param options Options for the share
 	 * @param shareAddListener A listener to handle callbacks from the post.
 	 */
+	@Deprecated
 	public void share(Activity activity, Entity entity, String text, ShareOptions options, ShareAddListener shareAddListener);
 	
 	/**
@@ -248,6 +256,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param location The location (may be null)
 	 * @param shareAddListener A listener to handle callbacks from the post.
 	 */
+	@Deprecated
 	public void share(Activity activity, Entity entity, String text, ShareType shareType, Location location, ShareAddListener shareAddListener);
 	
 	/**
@@ -258,6 +267,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param shareType The type of the share.
 	 * @param shareAddListener A listener to handle callbacks from the post.
 	 */
+	@Deprecated
 	public void share(Activity activity, Entity entity, String text, ShareType shareType, ShareAddListener shareAddListener);
 	
 	/**
@@ -269,6 +279,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param location The location (may be null)
 	 * @param shareAddListener A listener to handle callbacks from the post.
 	 */
+	@Deprecated
 	public void share(Activity activity, String entityKey, String text, ShareType shareType, Location location, ShareAddListener shareAddListener);
 
 	@Deprecated
@@ -288,6 +299,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param location
 	 * @param shareAddListener A listener to handle callbacks from the post.
 	 */
+	@Deprecated
 	public void addShare(Activity activity, Entity entity, String text, ShareType shareType, Location location, ShareAddListener shareAddListener);
 	
 	/**
@@ -300,6 +312,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param shareType  The social network on which the share occurred. 
 	 * @param shareAddListener A listener to handle callbacks from the post.
 	 */
+	@Deprecated
 	public void addShare(Activity activity, Entity entity, String text, ShareType shareType, ShareAddListener shareAddListener);
 	
 	/**
@@ -307,6 +320,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param key The entity to which the like was originally associated. 
 	 * @param likeGetListener
 	 */
+	@Deprecated
 	public void getLike(String key, LikeGetListener likeGetListener);
 	
 	/**
@@ -314,6 +328,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param id The ID of the like
 	 * @param likeGetListener A listener to handle callbacks from the get.
 	 */
+	@Deprecated
 	public void getLikeById(long id, LikeGetListener likeGetListener);
 	
 	/**
@@ -321,6 +336,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param likeListListener A listener to handle callbacks from the get.
 	 * @param ids
 	 */
+	@Deprecated
 	public void listLikesById(LikeListListener likeListListener, long...ids);
 	
 	/**
@@ -328,6 +344,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param userId The user
 	 * @param likeListListener A listener to handle callbacks from the get.
 	 */
+	@Deprecated
 	public void listLikesByUser(long userId, LikeListListener likeListListener);
 	
 	/**
@@ -337,6 +354,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param endIndex The ending index of the results for pagination.
 	 * @param likeListListener A listener to handle callbacks from the get.
 	 */
+	@Deprecated
 	public void listLikesByUser(long userId, int startIndex, int endIndex, LikeListListener likeListListener);	
 	
 	/**
@@ -344,6 +362,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param key The entity to which the comments are associated. 
 	 * @param commentListListener A listener to handle callbacks from the post.
 	 */
+	@Deprecated
 	public void listCommentsByEntity(String key, CommentListListener commentListListener);
 	
 	/**
@@ -353,6 +372,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param endIndex The ending index of the results for pagination.
 	 * @param commentListListener A listener to handle callbacks from the get.
 	 */
+	@Deprecated
 	public void listCommentsByEntity(String key, int startIndex, int endIndex, CommentListListener commentListListener);
 	
 	/**
@@ -360,6 +380,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param userId The user
 	 * @param commentListListener A listener to handle callbacks from the get.
 	 */
+	@Deprecated
 	public void listCommentsByUser(long userId, CommentListListener commentListListener);
 	
 	/**
@@ -369,6 +390,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param endIndex The ending index of the results for pagination.
 	 * @param commentListListener A listener to handle callbacks from the get.
 	 */
+	@Deprecated
 	public void listCommentsByUser(long userId, int startIndex, int endIndex, CommentListListener commentListListener);
 	
 	/**
@@ -376,6 +398,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param commentListListener A listener to handle callbacks from the post.
 	 * @param ids Array of IDs corresponding to pre-existing comments.
 	 */
+	@Deprecated
 	public void listCommentsById(CommentListListener commentListListener, long...ids);
 	
 	/**
@@ -383,6 +406,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param id The ID of the comment, returned when it was originally created.
 	 * @param commentGetListener A listener to handle callbacks from the get.
 	 */
+	@Deprecated
 	public void getCommentById(long id, CommentGetListener commentGetListener);
 
 	/**
@@ -390,6 +414,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param key The unique key associated with this entity. 
 	 * @param entityGetListener A listener to handle callbacks from the get.
 	 */
+	@Deprecated
 	public void getEntity(String key, EntityGetListener entityGetListener);
 	
 	/**
@@ -397,6 +422,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param id The ID of the entity.
 	 * @param entityGetListener A listener to handle callbacks from the get.
 	 */
+	@Deprecated
 	public void getEntityById(long id, EntityGetListener entityGetListener);
 	
 	/**
@@ -404,6 +430,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param entityListListener A listener to handle callbacks from the post.
 	 * @param keys Array of keys corresponding to the entities to return, or null to return all.
 	 */
+	@Deprecated
 	public void listEntitiesByKey(EntityListListener entityListListener, String...keys);
 	
 	/**
@@ -412,6 +439,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param entity The entity to create.
 	 * @param entityAddListener A listener to handle callbacks from the post.
 	 */
+	@Deprecated
 	public void addEntity(Activity activity, Entity entity, EntityAddListener entityAddListener);
 	
 	/**
@@ -421,6 +449,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param shareOptions Options for sharing to facebook and sharing location.
 	 * @param commentAddListener A listener to handle callbacks from the post.
 	 */
+	@Deprecated
 	public void addComment(Activity activity, Comment comment, ShareOptions shareOptions, CommentAddListener commentAddListener);	
 	
 	/**
@@ -430,6 +459,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param comment The comment to add.
 	 * @param commentAddListener A listener to handle callbacks from the post.
 	 */
+	@Deprecated
 	public void addComment(Activity activity, Entity entity, String comment, CommentAddListener commentAddListener);
 	
 	/**
@@ -440,6 +470,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param shareOptions Options for sharing to facebook and sharing location.
 	 * @param commentAddListener A listener to handle callbacks from the post.
 	 */
+	@Deprecated
 	public void addComment(Activity activity, Entity entity, String comment, ShareOptions shareOptions, CommentAddListener commentAddListener);	
 
 	/**
@@ -447,6 +478,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param id The id of the user.
 	 * @param userGetListener A listener to handle callbacks from the get.
 	 */
+	@Deprecated
 	public void getUser(long id, UserGetListener userGetListener);
 	
 	/**
@@ -455,6 +487,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param profile The profile for the user.
 	 * @param listener A listener to handle callbacks from the post.
 	 */
+	@Deprecated
 	public void saveCurrentUserProfile(Context context, UserProfile profile, UserSaveListener listener);
 	
 	/**
@@ -523,6 +556,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param userId The ID of the user for whom activity will be listed.
 	 * @param activityListListener A listener to handle callbacks from the get.
 	 */
+	@Deprecated
 	public void listActivityByUser(long userId, ActionListListener activityListListener);
 	
 	/**
@@ -532,6 +566,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param endIndex The ending index of the results for pagination.
 	 * @param activityListListener A listener to handle callbacks from the get.
 	 */
+	@Deprecated
 	public void listActivityByUser(long userId, int startIndex, int endIndex, ActionListListener activityListListener);
 	
 	/**
@@ -540,6 +575,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param entity
 	 * @param subscriptionAddListener
 	 */
+	@Deprecated
 	public void subscribe(Context context, Entity entity, NotificationType type, SubscriptionResultListener subscriptionAddListener);
 	
 	/**
@@ -549,18 +585,21 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param entity
 	 * @param subscriptionAddListener
 	 */
+	@Deprecated
 	public void unsubscribe(Context context, Entity entity, NotificationType type, SubscriptionResultListener subscriptionAddListener);	
 	
 	/**
 	 * Lists subscriptions for the current user.
 	 * @param subscriptionListListener
 	 */
+	@Deprecated
 	public void listSubscriptions(SubscriptionListListener subscriptionListListener);
 	
 	/**
 	 * Lists subscriptions for the current user with pagination
 	 * @param subscriptionListListener
 	 */
+	@Deprecated
 	public void listSubscriptions(int startIndex, int endIndex, SubscriptionListListener subscriptionListListener);	
 
 	/**
@@ -568,6 +607,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param entity
 	 * @param subscriptionGetListener
 	 */
+	@Deprecated
 	public void getSubscription(Entity entity, SubscriptionGetListener subscriptionGetListener);
 	
 	/**

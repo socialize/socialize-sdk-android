@@ -22,12 +22,12 @@
 package com.socialize.ui.actionbutton;
 
 import android.app.Activity;
-
 import com.socialize.entity.Entity;
 import com.socialize.entity.SocializeAction;
 import com.socialize.error.SocializeException;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
 
 /**
  * @author Jason Polites
@@ -170,7 +170,7 @@ public abstract class BaseActionButtonHandler<A extends SocializeAction> impleme
 	
 	protected abstract void handleAfterLoad(Activity context, ActionButton<A> button, A action);
 
-	protected abstract void handleAction(Activity context, Entity entity, ShareOptions shareOptions, OnActionButtonEventListener<A> listener);
+	protected abstract void handleAction(Activity context, Entity entity, ShareOptions shareOptions, OnActionButtonEventListener<A> listener, SocialNetwork...networks);
 	
 	protected abstract void handleAfterAction(Activity context, ActionButton<A> button, A action);
 

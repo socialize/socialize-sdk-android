@@ -23,7 +23,7 @@ package com.socialize;
 
 import java.lang.reflect.Proxy;
 import android.app.Activity;
-import android.content.Context;
+import com.socialize.api.action.ActionOptions;
 import com.socialize.api.action.share.ShareUtilsProxy;
 import com.socialize.api.action.share.SocialNetworkDialogListener;
 import com.socialize.api.action.share.SocialNetworkShareListener;
@@ -32,7 +32,6 @@ import com.socialize.entity.User;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
-import com.socialize.networks.ShareOptions;
 import com.socialize.ui.auth.AuthDialogListener;
 import com.socialize.ui.share.ShareDialogListener;
 
@@ -63,10 +62,6 @@ public class ShareUtils {
 				new SocializeActionProxy("shareUtils")); // Bean name
 	}
 	
-	public static ShareOptions getUserShareOptions(Context context) {
-		return proxy.getUserShareOptions(context);
-	}
-	
 	public static void showLinkDialog (Activity context, AuthDialogListener listener) {
 		proxy.showLinkDialog(context, listener);
 	}
@@ -95,7 +90,7 @@ public class ShareUtils {
 		proxy.shareViaSMS(context, entity, listener);
 	};
 	
-	public static void shareViaSocialNetworks(Activity context, Entity entity, String text, ShareOptions shareOptions, SocialNetworkShareListener listener) {
+	public static void shareViaSocialNetworks(Activity context, Entity entity, String text, ActionOptions shareOptions, SocialNetworkShareListener listener) {
 		proxy.shareViaSocialNetworks(context, entity, text, shareOptions, listener);
 	}
 

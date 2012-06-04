@@ -29,6 +29,7 @@ import android.location.Location;
 import com.socialize.Socialize;
 import com.socialize.api.SocializeApi;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.ActionOptions;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
@@ -39,7 +40,6 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.share.ShareListener;
 import com.socialize.log.SocializeLogger;
-import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.provider.SocializeProvider;
@@ -168,7 +168,7 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		c.setShareType(shareType);
 		
 		if(network != null && network.length > 0) {
-			ShareOptions shareOptions = new ShareOptions();
+			ActionOptions shareOptions = new ActionOptions();
 			shareOptions.setShareTo(network);
 			shareOptions.setShareLocation(true);
 			setPropagationData(c, shareOptions);

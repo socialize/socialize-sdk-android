@@ -27,6 +27,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 import com.socialize.Socialize;
 import com.socialize.api.action.ActionType;
+import com.socialize.api.action.ActionOptions;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
@@ -46,7 +47,6 @@ import com.socialize.listener.SocializeActionListener;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.location.SocializeLocationProvider;
 import com.socialize.log.SocializeLogger;
-import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.notifications.NotificationChecker;
 import com.socialize.provider.SocializeProvider;
@@ -114,7 +114,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}
 	
 	
-	protected void setPropagationData(SocializeAction action, ShareOptions shareOptions) {
+	protected void setPropagationData(SocializeAction action, ActionOptions shareOptions) {
 		if(shareOptions != null) {
 			SocialNetwork[] shareTo = shareOptions.getShareTo();
 			if(shareTo != null) {
