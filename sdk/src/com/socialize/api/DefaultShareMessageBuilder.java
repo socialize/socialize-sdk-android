@@ -142,9 +142,8 @@ public class DefaultShareMessageBuilder implements ShareMessageBuilder {
 			}
 			else {
 				builder.append(appUtils.getAppName());
-				builder.append(" (");
+				builder.append(" ");
 				builder.append(urlSet.getAppUrl());
-				builder.append(")");
 			}
 			
 //			if(config.isBrandingEnabled()) {
