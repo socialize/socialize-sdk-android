@@ -109,7 +109,7 @@ public void getActivity() {
 User user = UserUtils.getCurrentUser(this);
 
 // Get the most recent 10 actions by this user
-ActionUtils.getActionsByUser(this, user, 0, 10, new ActionListListener() {
+ActionUtils.getActionsByUser(this, user.getId(), 0, 10, new ActionListListener() {
 	
 	@Override
 	public void onList(ListResult<SocializeAction> result) {

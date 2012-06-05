@@ -42,7 +42,7 @@ public class GetActionsByUserEntityActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		ActionUtils.getActionsByUserAndEntity(this, UserUtils.getCurrentUser(this), entity.getKey(), 0, 50, new ActionListListener() {
+		ActionUtils.getActionsByUserAndEntity(this, UserUtils.getCurrentUser(this).getId(), entity.getKey(), 0, 50, new ActionListListener() {
 			
 			
 			@Override

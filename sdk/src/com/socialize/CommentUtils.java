@@ -46,7 +46,7 @@ public class CommentUtils {
 		proxy = (CommentUtilsProxy) Proxy.newProxyInstance(
 				CommentUtilsProxy.class.getClassLoader(),
 				new Class[]{CommentUtilsProxy.class},
-				new SocializeActionProxy("proxy"));	// Bean name
+				new SocializeActionProxy("commentUtils"));	// Bean name
 	}
 	
 	/**

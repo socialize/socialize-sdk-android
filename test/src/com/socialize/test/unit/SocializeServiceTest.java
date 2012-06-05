@@ -38,9 +38,11 @@ import com.socialize.android.ioc.IOCContainer;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.activity.SocializeActivitySystem;
+import com.socialize.api.action.comment.CommentOptions;
 import com.socialize.api.action.comment.SocializeCommentSystem;
 import com.socialize.api.action.comment.SocializeSubscriptionSystem;
 import com.socialize.api.action.entity.SocializeEntitySystem;
+import com.socialize.api.action.like.LikeOptions;
 import com.socialize.api.action.like.SocializeLikeSystem;
 import com.socialize.api.action.share.ShareSystem;
 import com.socialize.api.action.share.SocializeShareSystem;
@@ -378,7 +380,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		commentObject.setText(comment);
 		commentObject.setEntitySafe(entity);
 
-		commentSystem.addComment(AndroidMock.eq(session), AndroidMock.eq(commentObject), (ShareOptions) AndroidMock.isNull(), AndroidMock.eq(listener));
+		commentSystem.addComment(AndroidMock.eq(session), AndroidMock.eq(commentObject), (CommentOptions) AndroidMock.isNull(), AndroidMock.eq(listener));
 
 		replayDefaultMocks();
 
@@ -412,7 +414,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		final String key = "foo";
 
-		likeSystem.addLike(AndroidMock.eq(session), (Entity) AndroidMock.anyObject(), (ShareOptions) AndroidMock.anyObject(), AndroidMock.eq(listener));
+		likeSystem.addLike(AndroidMock.eq(session), (Entity) AndroidMock.anyObject(), (LikeOptions) AndroidMock.anyObject(), AndroidMock.eq(listener));
 
 		replayDefaultMocks();
 

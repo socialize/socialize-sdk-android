@@ -15,6 +15,7 @@ import com.google.android.testing.mocking.UsesMocks;
 import com.socialize.SocializeService;
 import com.socialize.SocializeServiceImpl;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.comment.CommentOptions;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
@@ -849,10 +850,10 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		}
 
 		@Override
-		public ShareOptions newShareOptions() {
+		public CommentOptions newShareOptions() {
 			return super.newShareOptions();
 		}
-
+		
 		@Override
 		public Comment newComment() {
 			return super.newComment();

@@ -111,7 +111,7 @@ public class ActionUtilsTest extends SocializeActivityTest {
 		String userId = userObject.getString("id");			
 		user.setId(Long.parseLong(userId)); // from comments.json
 		
-		ActionUtils.getActionsByUser(getContext(), user, 0, 100, new ActionListListener() {
+		ActionUtils.getActionsByUser(getContext(), user.getId(), 0, 100, new ActionListListener() {
 			@Override
 			public void onList(ListResult<SocializeAction> entities) {
 				addResult(0, entities);
@@ -251,7 +251,7 @@ public class ActionUtilsTest extends SocializeActivityTest {
 		
 		User user = UserUtils.getCurrentUser(getContext());
 		
-		ActionUtils.getActionsByUserAndEntity(getContext(), user, entityKey.getKey(), 0, 100, new ActionListListener() {
+		ActionUtils.getActionsByUserAndEntity(getContext(), user.getId(), entityKey.getKey(), 0, 100, new ActionListListener() {
 			@Override
 			public void onList(ListResult<SocializeAction> entities) {
 				addResult(0, entities);

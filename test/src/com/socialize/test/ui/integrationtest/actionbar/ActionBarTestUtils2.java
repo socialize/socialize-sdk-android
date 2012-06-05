@@ -21,6 +21,10 @@
  */
 package com.socialize.test.ui.integrationtest.actionbar;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import android.content.Context;
@@ -33,6 +37,7 @@ import com.socialize.SocializeAccess;
 import com.socialize.android.ioc.IOCContainer;
 import com.socialize.android.ioc.ProxyObject;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.like.LikeOptions;
 import com.socialize.api.action.like.LikeSystem;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderInfoBuilder;
@@ -45,7 +50,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.like.LikeListener;
-import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.test.mock.MockLikeSystem;
 import com.socialize.test.ui.util.TestUtils;
@@ -54,8 +59,6 @@ import com.socialize.ui.auth.AuthDialogFactory;
 import com.socialize.ui.auth.AuthDialogListener;
 import com.socialize.ui.share.ShareDialogFactory;
 import com.socialize.ui.share.ShareDialogListener;
-
-import static android.test.ActivityInstrumentationTestCase2.*;
 
 /**
  * @author Jason Polites
@@ -82,7 +85,7 @@ public class ActionBarTestUtils2 {
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
 			
 			@Override
-			public void addLike(SocializeSession session, Entity entityKey, ShareOptions shareOptions, LikeListener listener) {
+			public void addLike(SocializeSession session, Entity entity, LikeOptions shareOptions, LikeListener listener, SocialNetwork... networks) {
 				TestUtils.addResult("fail");
 			}
 
@@ -137,7 +140,7 @@ public class ActionBarTestUtils2 {
 		
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
 			@Override
-			public void addLike(SocializeSession session, Entity entityKey, ShareOptions shareOptions, LikeListener listener) {
+			public void addLike(SocializeSession session, Entity entity, LikeOptions shareOptions, LikeListener listener, SocialNetwork... networks) {
 				TestUtils.addResult("success");
 			}
 
@@ -216,7 +219,7 @@ public class ActionBarTestUtils2 {
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
 			
 			@Override
-			public void addLike(SocializeSession session, Entity entityKey, ShareOptions shareOptions, LikeListener listener) {
+			public void addLike(SocializeSession session, Entity entity, LikeOptions shareOptions, LikeListener listener, SocialNetwork... networks) {
 				TestUtils.addResult("success");
 			}
 
@@ -328,7 +331,7 @@ public class ActionBarTestUtils2 {
 		final MockLikeSystem mockLikeSystem = new MockLikeSystem() {
 			
 			@Override
-			public void addLike(SocializeSession session, Entity entityKey, ShareOptions shareOptions, LikeListener listener) {
+			public void addLike(SocializeSession session, Entity entity, LikeOptions shareOptions, LikeListener listener, SocialNetwork... networks) {
 				TestUtils.addResult("success");
 			}
 

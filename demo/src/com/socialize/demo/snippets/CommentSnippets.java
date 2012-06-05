@@ -25,6 +25,7 @@ import java.util.List;
 import org.json.JSONObject;
 import android.app.Activity;
 import com.socialize.CommentUtils;
+import com.socialize.api.action.comment.CommentOptions;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
@@ -34,9 +35,7 @@ import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.PostData;
-import com.socialize.networks.ShareOptions;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
 import com.socialize.ui.comment.CommentListView;
 import com.socialize.ui.comment.OnCommentViewActionListener;
 
@@ -69,45 +68,17 @@ public void addCommentWithManualShare() {
 
 Entity entity = Entity.newInstance("http://myentity.com", "My Name");
 
-// Create share options to share the comment without displaying the share dialog
-ShareOptions shareOptions = new ShareOptions();
+// Create options to share the comment without displaying the share dialog
+CommentOptions commentOptions = new CommentOptions();
 
 // If true the user will be prompted for auth if not already
-shareOptions.setAuthRequired(true); 
+commentOptions.setAuthRequired(true); 
 
 // If true the user's location will be send in the comment.
-shareOptions.setShareLocation(true); 
-
-shareOptions.setShareTo(SocialNetwork.FACEBOOK, SocialNetwork.TWITTER); // Share to multiple networks simultaneously
-
-// Optionally add a listener to handle callbacks from the Social Networks.
-shareOptions.setListener(new SocialNetworkListener() {
-	
-	@Override
-	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
-		// Failed to share to the given network
-	}
-	
-	@Override
-	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-		// Called before the post to the given network is made
-	}
-	
-	@Override
-	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
-		// Called after the post to the given network is made
-	}
-
-	@Override
-	public void onCancel() {
-		// Called if the user canceled the auth process
-	}			
-	
-	
-});
+commentOptions.setShareLocation(true); 
 
 // Pass the share options in the call to create the comment.
-CommentUtils.addComment(this, entity, "This the comment", shareOptions, new CommentAddListener() {
+CommentUtils.addComment(this, entity, "This the comment", commentOptions, new CommentAddListener() {
 	@Override
 	public void onError(SocializeException error) {
 		// Handle error
@@ -117,7 +88,27 @@ CommentUtils.addComment(this, entity, "This the comment", shareOptions, new Comm
 	public void onCreate(Comment result) {
 		// Comment was created
 	}
-});
+
+	@Override
+	public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+		// Failed to share to the given network
+	}
+
+	@Override
+	public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+		// Called before the post to the given network is made
+	}
+
+	@Override
+	public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+		// Called after the post to the given network is made
+	}
+
+	@Override
+	public void onCancel() {
+		// Called if the user canceled the auth process for social networks
+	}
+}, SocialNetwork.FACEBOOK, SocialNetwork.TWITTER); // Share to multiple networks simultaneously
 }
 
 

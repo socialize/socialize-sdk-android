@@ -1,20 +1,21 @@
 package com.socialize.test.mock;
 
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.like.LikeOptions;
 import com.socialize.api.action.like.LikeSystem;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Like;
 import com.socialize.listener.like.LikeListener;
-import com.socialize.networks.ShareOptions;
+import com.socialize.networks.SocialNetwork;
 
 public class MockLikeSystem extends MockSystem<Like> implements LikeSystem {
 
 	public MockLikeSystem() {
 		super(new Like());
 	}
-
+	
 	@Override
-	public void addLike(SocializeSession session, Entity entityKey, ShareOptions shareOptions, LikeListener listener) {
+	public void addLike(SocializeSession session, Entity entity, LikeOptions shareOptions, LikeListener listener, SocialNetwork... networks) {
 		if(listener != null) listener.onCreate(action);
 	}
 
