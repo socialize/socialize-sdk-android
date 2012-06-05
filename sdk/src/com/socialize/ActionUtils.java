@@ -24,7 +24,6 @@ package com.socialize;
 import java.lang.reflect.Proxy;
 import android.app.Activity;
 import com.socialize.api.action.activity.ActionUtilsProxy;
-import com.socialize.entity.User;
 import com.socialize.listener.activity.ActionListListener;
 
 
@@ -57,13 +56,13 @@ public class ActionUtils {
 	/**
 	 * Gets the actions of a single user.
 	 * @param context The current context.
-	 * @param user The user for whom the actions will be returned.
+	 * @param userId The user for whom the actions will be returned.
 	 * @param start The start index for pagination (0 based).
 	 * @param end The end index for pagination (0 based).
 	 * @param listener A listener to handle the result.
 	 */
-	public static void getActionsByUser (Activity context, User user, int start, int end, ActionListListener listener) {
-		proxy.getActionsByUser(context, user, start, end, listener);
+	public static void getActionsByUser (Activity context, long userId, int start, int end, ActionListListener listener) {
+		proxy.getActionsByUser(context, userId, start, end, listener);
 	}
 	
 	/**
@@ -81,13 +80,13 @@ public class ActionUtils {
 	/**
 	 * Gets the actions of a single user on a single entity.
 	 * @param context The current context.
-	 * @param user The user for whom the actions will be returned.
+	 * @param userId The user for whom the actions will be returned.
 	 * @param entityKey The entity key.
 	 * @param start The start index for pagination (0 based).
 	 * @param end The end index for pagination (0 based).
 	 * @param listener A listener to handle the result.
 	 */
-	public static void getActionsByUserAndEntity (Activity context, User user, String entityKey, int start, int end, ActionListListener listener) {
-		proxy.getActionsByUserAndEntity(context, user, entityKey, start, end, listener);
+	public static void getActionsByUserAndEntity (Activity context, long userId, String entityKey, int start, int end, ActionListListener listener) {
+		proxy.getActionsByUserAndEntity(context, userId, entityKey, start, end, listener);
 	}
 }

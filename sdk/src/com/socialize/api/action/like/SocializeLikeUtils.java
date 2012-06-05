@@ -154,7 +154,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 		doLikeWithoutShare(context, session, entity, getUserLikeOptions(context), listener, UserUtils.getAutoPostSocialNetworks(context));
 	}
 	
-	protected void doLikeWithoutShare(final Activity context, final SocializeSession session, final Entity entity, final LikeOptions likeOptions, final LikeAddListener listener, final SocialNetwork...shareTo) {
+	protected void doLikeWithoutShare(final Activity context, final SocializeSession session, final Entity entity, final LikeOptions likeOptions, final LikeAddListener listener, final SocialNetwork...networks) {
 		final SafeProgressDialog progress = SafeProgressDialog.show(context, "Posting like", "Please wait...");
 		likeSystem.addLike(session, entity, likeOptions, new LikeAddListener() {
 			@Override
@@ -170,8 +170,8 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 				if(listener != null) {
 					listener.onCreate(like);
 				}
-				if(shareTo != null) {
-					doActionShare(context, like, null, progress, listener, shareTo);
+				if(networks != null) {
+					doActionShare(context, like, null, progress, listener, networks);
 				}
 				else {
 					if(progress != null) {
@@ -179,7 +179,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 					}
 				}
 			}
-		});		
+		}, networks);		
 	}	
 	
 	protected void doLikeWithShare(final Activity context, final SocializeSession session, final Entity entity, final LikeAddListener listener) {
@@ -239,7 +239,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 						}
 					};
 
-					likeSystem.addLike(session, entity, options, overrideListener);
+					likeSystem.addLike(session, entity, options, overrideListener, networks);
 
 					return false;
 				}

@@ -24,10 +24,8 @@ package com.socialize.ui.profile.activity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import android.content.Context;
-
-import com.socialize.Socialize;
+import com.socialize.ActionUtils;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.ListResult;
 import com.socialize.entity.SocializeAction;
@@ -69,7 +67,8 @@ public class UserActivityView extends BaseView {
 	
 	public void loadUserActivity(long userId, final SocializeAction current) {
 		itemView.showLoading();
-		Socialize.getSocialize().listActivityByUser(userId, 0, numItems, new ActionListListener() {
+		
+		ActionUtils.getActionsByUser(getActivity(), userId, 0, numItems, new ActionListListener() {
 			@Override
 			public void onList(ListResult<SocializeAction> entities) {
 				if(entities != null) {

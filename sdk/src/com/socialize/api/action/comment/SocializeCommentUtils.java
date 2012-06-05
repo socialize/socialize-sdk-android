@@ -205,7 +205,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 						}
 					};
 
-					commentSystem.addComment(session, entity, text, options, overrideListener);
+					commentSystem.addComment(session, entity, text, options, overrideListener, networks);
 
 					return false;				
 				}
@@ -251,7 +251,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 					}
 				}
 			}
-		});		
+		}, networks);		
 	}	
 
 	@Override

@@ -45,7 +45,6 @@ public abstract class SocializeAction extends SocializeObject {
 	private Long date;
 	private boolean locationShared;
 	
-	@Deprecated
 	private boolean notificationsEnabled;
 	
 	public Application getApplication() {
@@ -126,20 +125,10 @@ public abstract class SocializeAction extends SocializeObject {
 		this.locationShared = locationShared;
 	}
 	
-	/**
-	 * @deprecated Specified on CommentOptions when adding the comment.
-	 * @return
-	 */
-	@Deprecated
 	public boolean isNotificationsEnabled() {
 		return notificationsEnabled;
 	}
 	
-	/**
-	 * @deprecated Specified on CommentOptions when adding the comment.
-	 * @param notificationsEnabled
-	 */
-	@Deprecated
 	public void setNotificationsEnabled(boolean notificationsEnabled) {
 		this.notificationsEnabled = notificationsEnabled;
 	}

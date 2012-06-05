@@ -114,14 +114,13 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	}
 	
 	
-	protected void setPropagationData(SocializeAction action, ActionOptions shareOptions) {
+	protected void setPropagationData(SocializeAction action, ActionOptions shareOptions, SocialNetwork...networks) {
 		if(shareOptions != null) {
-			SocialNetwork[] shareTo = shareOptions.getShareTo();
-			if(shareTo != null) {
+			if(networks != null) {
 				Propagation propagation = null;
 				Propagation localPropagation = null;
 				
-				for (SocialNetwork socialNetwork : shareTo) {
+				for (SocialNetwork socialNetwork : networks) {
 					if(socialNetwork.isLocalPropagation() || shareOptions.isSelfManaged()) {
 						if(localPropagation == null) {
 							localPropagation = newPropagation();

@@ -45,6 +45,7 @@ import com.socialize.android.ioc.Logger;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.activity.ActivitySystem;
+import com.socialize.api.action.comment.CommentOptions;
 import com.socialize.api.action.comment.CommentSystem;
 import com.socialize.api.action.comment.SubscriptionSystem;
 import com.socialize.api.action.entity.EntitySystem;
@@ -689,12 +690,17 @@ public class SocializeServiceImpl implements SocializeService {
 	public void addComment(final Activity activity, final Comment comment, final ShareOptions shareOptions, final CommentAddListener commentAddListener) {
 		if(assertAuthenticated(commentAddListener)) {
 			if(shareOptions != null) {
+				
+				CommentOptions commentOptions = new CommentOptions();
+				commentOptions.merge(shareOptions);
+				commentOptions.setSubscribeToUpdates(comment.isNotificationsEnabled());
+				
 				final SocialNetwork[] shareTo = shareOptions.getShareTo();
 				if(shareTo == null || shareTo.length == 0) {
-					commentSystem.addComment(session, comment, shareOptions, commentAddListener);
+					commentSystem.addComment(session, comment, commentOptions, commentAddListener, shareOptions.getShareTo());
 				}
 				else {
-					commentSystem.addComment(session, comment, shareOptions, new CommentAddListener() {
+					commentSystem.addComment(session, comment, commentOptions, new CommentAddListener() {
 						@Override
 						public void onError(SocializeException error) {
 							if(commentAddListener != null) {
@@ -715,11 +721,11 @@ public class SocializeServiceImpl implements SocializeService {
 								}
 							}
 						}
-					});
+					}, shareOptions.getShareTo());
 				}
 			}	
 			else {
-				commentSystem.addComment(session, comment, shareOptions, commentAddListener);
+				commentSystem.addComment(session, comment, null, commentAddListener);
 			}
 		}				
 	}
@@ -735,7 +741,7 @@ public class SocializeServiceImpl implements SocializeService {
 				
 				final SocialNetwork[] shareTo = shareOptions.getShareTo();
 				if(shareTo == null || shareTo.length == 0) {
-					likeSystem.addLike(session, entity, likeOptions, likeAddListener);
+					likeSystem.addLike(session, entity, likeOptions, likeAddListener, shareTo);
 				}
 				else {
 					likeSystem.addLike(session, entity, likeOptions, new LikeAddListener() {
@@ -761,7 +767,7 @@ public class SocializeServiceImpl implements SocializeService {
 								}
 							}
 						}
-					});
+					}, shareTo);
 				}
 			}	
 			else {

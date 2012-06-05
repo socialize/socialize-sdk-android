@@ -169,9 +169,8 @@ public class SocializeShareSystem extends SocializeApi<Share, SocializeProvider<
 		
 		if(network != null && network.length > 0) {
 			ActionOptions shareOptions = new ActionOptions();
-			shareOptions.setShareTo(network);
 			shareOptions.setShareLocation(true);
-			setPropagationData(c, shareOptions);
+			setPropagationData(c, shareOptions, network);
 		}
 		else if(shareType != null) {
 			// Set propagation data for non-network share types

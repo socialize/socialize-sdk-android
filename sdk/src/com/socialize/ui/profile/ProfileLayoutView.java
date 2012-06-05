@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.LinearLayout;
 import com.socialize.Socialize;
+import com.socialize.UserUtils;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
@@ -71,7 +72,7 @@ public class ProfileLayoutView extends BaseView {
 		long id = Long.parseLong(userId);
 		dialog = progressDialogFactory.show(getContext(), "Loading", "Please wait...");
 		
-		getSocialize().getUser(id, new UserGetListener() {
+		UserUtils.getUser(getContext(), id, new UserGetListener() {
 			
 			@Override
 			public void onGet(User user) {
