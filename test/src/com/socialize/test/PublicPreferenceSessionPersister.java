@@ -22,8 +22,6 @@
 package com.socialize.test;
 
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-
 import com.socialize.api.PreferenceSessionPersister;
 import com.socialize.api.SocializeSessionFactory;
 import com.socialize.auth.DefaultUserProviderCredentials;
@@ -32,6 +30,7 @@ import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.entity.User;
 import com.socialize.entity.UserFactory;
+import com.socialize.ui.profile.UserSettings;
 
 /**
  * @author Jason Polites
@@ -48,8 +47,8 @@ public class PublicPreferenceSessionPersister extends PreferenceSessionPersister
 	}
 
 	@Override
-	public void saveUser(Editor editor, User user) {
-		super.saveUser(editor, user);
+	public UserSettings createSettingsLegacy(User user) {
+		return super.createSettingsLegacy(user);
 	}
 
 	@Override

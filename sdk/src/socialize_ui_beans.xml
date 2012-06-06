@@ -19,13 +19,6 @@
 		</init-method>
 	</bean>	
 	
-	<bean id="bitmapBuilder" class="com.socialize.util.BitmapBuilder"/>
-	
-	<bean id="bitmapUtils" class="com.socialize.util.BitmapUtils">
-		<property name="bitmapBuilder" ref="bitmapBuilder"/>
-		<property name="base64Utils" ref="base64Utils"/>
-	</bean>
-	
 	<bean id="drawables" class="com.socialize.util.Drawables">
 		<property name="classLoaderProvider" ref="classLoaderProvider"/>
 		<property name="cache" ref="cache"/>

@@ -24,17 +24,19 @@ package com.socialize.api.action;
 import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
+import com.socialize.UserUtils;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.SocializeAction;
-import com.socialize.entity.User;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
 import com.socialize.share.ShareHandler;
 import com.socialize.share.ShareHandlers;
+import com.socialize.ui.profile.UserSettings;
 
 
 /**
@@ -48,9 +50,9 @@ public abstract class SocializeActionUtilsBase {
 	protected void populateActionOptions(ActionOptions options) {
 		SocializeService socialize = Socialize.getSocialize();
 		SocializeSession session = socialize.getSession();
-		User user = session.getUser();
+		UserSettings settings = session.getUserSettings();
 		options.setAuthRequired(socialize.getConfig().isAuthRequired());
-		options.setShareLocation(user.isShareLocation());
+		options.setShareLocation(settings.isLocationEnabled());
 	}	
 	
 	protected boolean isDisplayAuthDialog(ActionOptions options, SocialNetwork...networks) {
@@ -111,18 +113,20 @@ public abstract class SocializeActionUtilsBase {
 		return (authRequired && authSupported);
 	}	
 	
-	protected boolean isDisplayShareDialog() {
+	protected boolean isDisplayShareDialog(Context context) {
 		
 		boolean shareRequired = false;
 		
-		User user = getSocialize().getSession().getUser();
+		UserSettings settings = UserUtils.getUserSettings(context);
+		
+//		User user = getSocialize().getSession().getUser();
 		
 		if(getSocialize().isSupported(AuthProviderType.TWITTER)) {
-			shareRequired |= !user.isAutoPostToTwitter();
+			shareRequired |= !settings.isAutoPostTwitter();
 		}
 		
 		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
-			shareRequired |= !user.isAutoPostToFacebook();
+			shareRequired |= !settings.isAutoPostFacebook();
 		}
 		
 		return shareRequired;

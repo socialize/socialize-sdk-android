@@ -44,7 +44,7 @@ import com.socialize.listener.user.UserSaveListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.notifications.NotificationRegistrationSystem;
 import com.socialize.provider.SocializeProvider;
-import com.socialize.ui.profile.UserProfile;
+import com.socialize.ui.profile.UserSettings;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.StringUtils;
 
@@ -178,30 +178,11 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	 * @see com.socialize.api.action.UserSystem#saveUserProfile(android.content.Context, com.socialize.api.SocializeSession, com.socialize.ui.profile.UserProfile, com.socialize.listener.user.UserListener)
 	 */
 	@Override
-	public void saveUserProfile(final Context context, final SocializeSession session, UserProfile profile, final UserListener listener) {
+	public void saveUserSettings(final Context context, final SocializeSession session, final UserSettings settings, final UserListener listener) {
 		User user = session.getUser();
-		user.setFirstName(profile.getFirstName());
-		user.setLastName(profile.getLastName());
-		user.setProfilePicData(profile.getEncodedImage());
-		user.setAutoPostToFacebook(profile.isAutoPostFacebook());
-		user.setAutoPostToTwitter(profile.isAutoPostTwitter());
+		user.setFirstName(settings.getFirstName());
+		user.setLastName(settings.getLastName());
 		
-		boolean resetC2DM = false;
-		
-		if(user.isNotificationsEnabled() != profile.isNotificationsEnabled()) {
-			user.setNotificationsEnabled(profile.isNotificationsEnabled());
-			resetC2DM = true;
-		}
-		
-		if(user.isShareLocation() != profile.isLocationEnabled()) {
-			user.setShareLocation(profile.isLocationEnabled());
-		}		
-		
-		saveUserProfile(context, session, user, resetC2DM, listener);
-	}
-	
-	public void saveUserProfile(final Context context, final SocializeSession session, User user, final boolean resetC2DM, final UserListener listener) {
-
 		String endpoint = ENDPOINT + user.getId() + "/";
 		
 		putAsPostAsync(session, endpoint, user, new UserSaveListener() {
@@ -213,7 +194,11 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 
 			@Override
 			public void onUpdate(User savedUser) {
-				
+				boolean resetC2DM = false;
+				UserSettings oldProfile = session.getUserSettings();
+				if(oldProfile.isNotificationsEnabled() != settings.isNotificationsEnabled()) {
+					resetC2DM = true;
+				}
 				if(resetC2DM) {
 					// Recreate c2dm registration
 					if(notificationRegistrationSystem != null) {
@@ -221,23 +206,23 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 					}
 				}
 				
-				handleUserUpdate(context, session, savedUser, listener);
+				handleUserUpdate(context, session, savedUser, settings, listener);
 			}
 		});
 	}
 	
-	protected void handleUserUpdate(final Context context, final SocializeSession session, User savedUser, final UserListener listener) {
+	protected void handleUserUpdate(final Context context, final SocializeSession session, User savedUser, UserSettings userSettings, final UserListener listener) {
 		
 		try {
 			SessionLock.lock();
 			
 			// Update local in-memory user
 			User sessionUser = session.getUser();
-			sessionUser.merge(savedUser);
+			sessionUser.update(savedUser);
 			
 			// Save this user to the local session for next load
 			if(sessionPersister != null) {
-				sessionPersister.saveUser(context, sessionUser);
+				sessionPersister.saveUser(context, sessionUser, userSettings);
 			}
 			
 			if(listener != null) {

@@ -348,12 +348,12 @@ public class ProfileContentView extends BaseView {
 		return buttons;
 	}
 
-	public void setUserDetails(User user) {
+	public void setUserDetails(User user, UserSettings settings) {
 		
 		profilePictureEditView.setUserDetails(user);
 		userId.setText("ID: "  + String.valueOf(user.getId()));
-		firstNameEdit.setText(user.getFirstName());
-		lastNameEdit.setText(user.getLastName());
+		firstNameEdit.setText(settings.getFirstName());
+		lastNameEdit.setText(settings.getLastName());
 		
 		User currentUser = userService.getCurrentUser();
 		
@@ -362,7 +362,7 @@ public class ProfileContentView extends BaseView {
 		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
 			if(Socialize.getSocialize().isAuthenticated(AuthProviderType.FACEBOOK)) {
 				facebookEnabledCheckbox.setChecked(true);
-				autoPostFacebook.setChecked(user.isAutoPostToFacebook());
+				autoPostFacebook.setChecked(settings.isAutoPostFacebook());
 			}
 			else {
 				facebookEnabledCheckbox.setChecked(false);
@@ -372,7 +372,7 @@ public class ProfileContentView extends BaseView {
 		if(getSocialize().isSupported(AuthProviderType.TWITTER)) {
 			if(Socialize.getSocialize().isAuthenticated(AuthProviderType.TWITTER)) {
 				twitterEnabledCheckbox.setChecked(true);
-				autoPostTwitter.setChecked(user.isAutoPostToTwitter());
+				autoPostTwitter.setChecked(settings.isAutoPostTwitter());
 			}
 			else {
 				twitterEnabledCheckbox.setChecked(false);
@@ -380,11 +380,11 @@ public class ProfileContentView extends BaseView {
 		}		
 		
 		if(notificationsEnabledCheckbox != null) {
-			notificationsEnabledCheckbox.setChecked(user.isNotificationsEnabled());
+			notificationsEnabledCheckbox.setChecked(settings.isNotificationsEnabled());
 		}
 		
 		if(locationEnabledCheckbox != null) {
-			locationEnabledCheckbox.setChecked(user.isShareLocation());
+			locationEnabledCheckbox.setChecked(settings.isLocationEnabled());
 		}
 		
 		onNetworksChanged();

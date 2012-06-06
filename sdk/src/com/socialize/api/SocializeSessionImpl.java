@@ -27,6 +27,7 @@ import com.socialize.auth.DefaultUserProviderCredentialsMap;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.entity.User;
+import com.socialize.ui.profile.UserSettings;
 
 /**
  * @author Jason Polites
@@ -37,6 +38,7 @@ public class SocializeSessionImpl implements WritableSession {
 	private static final long serialVersionUID = -6937693636536504716L;
 	
 	private User user;
+	private UserSettings userSettings;
 	private String consumerKey;
 	private String consumerSecret;
 	private String consumerToken;
@@ -79,14 +81,32 @@ public class SocializeSessionImpl implements WritableSession {
 		authProvider = null;
 	}
 
+	@Deprecated
 	@Override
 	public String get3rdPartyUserId() {
 		return userId3rdParty;
 	}
 	
+	@Deprecated
 	@Override
 	public String get3rdPartyToken() {
 		return token3rdParty;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.SocializeSession#getUserSettings()
+	 */
+	public UserSettings getUserSettings() {
+		return userSettings;
+	}
+
+	/*
+	 * 	(non-Javadoc)
+	 * @see com.socialize.api.WritableSession#setUserSettings(com.socialize.ui.profile.UserSettings)
+	 */
+	public void setUserSettings(UserSettings userSettings) {
+		this.userSettings = userSettings;
 	}
 
 	/* (non-Javadoc)
@@ -169,16 +189,19 @@ public class SocializeSessionImpl implements WritableSession {
 		this.host = host;
 	}
 
+	@Deprecated
 	@Override
 	public AuthProviderType getAuthProviderType() {
 		return authProviderType;
 	}
 
+	@Deprecated
 	@Override
 	public String get3rdPartyAppId() {
 		return appId3rdParty;
 	}
 
+	@Deprecated
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public AuthProvider getAuthProvider() {

@@ -23,6 +23,7 @@ package com.socialize.test;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.comment.CommentOptions;
@@ -61,8 +62,8 @@ public class PublicCommentUtils extends SocializeCommentUtils {
 	}
 
 	@Override
-	public boolean isDisplayShareDialog() {
-		return super.isDisplayShareDialog();
+	public boolean isDisplayShareDialog(Context context) {
+		return super.isDisplayShareDialog(context);
 	}
 
 	@Override

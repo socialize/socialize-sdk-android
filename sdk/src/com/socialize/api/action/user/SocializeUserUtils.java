@@ -21,7 +21,6 @@
  */
 package com.socialize.api.action.user;
 
-import android.app.Activity;
 import android.content.Context;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
@@ -31,6 +30,7 @@ import com.socialize.entity.User;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.ui.profile.UserSettings;
 
 
 /**
@@ -40,23 +40,30 @@ import com.socialize.networks.SocialNetwork;
 public class SocializeUserUtils extends SocializeActionUtilsBase implements UserUtilsProxy {
 
 	private UserSystem userSystem;
+	
+	
+
+	@Override
+	public UserSettings getUserSettings(Context context) {
+		return getSocialize().getSession().getUserSettings();
+	}
 
 	@Override
 	public SocialNetwork[] getAutoPostSocialNetworks(Context context) {
 		SocializeService socialize = Socialize.getSocialize();
-		User user = getCurrentUser(context);
+		UserSettings user = getUserSettings(context);
 		
 		SocialNetwork[] networks = null;
 		
-		if(user.isAutoPostToFacebook() && socialize.isAuthenticated(AuthProviderType.FACEBOOK)) {
-			if(user.isAutoPostToTwitter() && socialize.isAuthenticated(AuthProviderType.TWITTER)) {
+		if(user.isAutoPostFacebook() && socialize.isAuthenticated(AuthProviderType.FACEBOOK)) {
+			if(user.isAutoPostTwitter() && socialize.isAuthenticated(AuthProviderType.TWITTER)) {
 				networks = new SocialNetwork[]{SocialNetwork.FACEBOOK, SocialNetwork.TWITTER};
 			}
 			else {
 				networks = new SocialNetwork[]{SocialNetwork.FACEBOOK};
 			}
 		}
-		else if(user.isAutoPostToTwitter() && socialize.isAuthenticated(AuthProviderType.TWITTER)) {
+		else if(user.isAutoPostTwitter() && socialize.isAuthenticated(AuthProviderType.TWITTER)) {
 			networks = new SocialNetwork[]{SocialNetwork.TWITTER};
 		}
 		return networks;
@@ -73,8 +80,8 @@ public class SocializeUserUtils extends SocializeActionUtilsBase implements User
 	}
 
 	@Override
-	public void saveUserSettings(Activity context, User user, UserSaveListener listener) {
-		userSystem.saveUserProfile(context, getSocialize().getSession(), user, true, listener);
+	public void saveUserSettings(Context context, UserSettings userSettings, UserSaveListener listener) {
+		userSystem.saveUserSettings(context, getSocialize().getSession(), userSettings, listener);
 	}
 
 	public void setUserSystem(UserSystem userSystem) {

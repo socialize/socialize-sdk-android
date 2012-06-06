@@ -42,6 +42,7 @@ import com.socialize.ui.auth.AuthDialogListener;
 import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.auth.IAuthDialogFactory;
 import com.socialize.ui.dialog.SafeProgressDialog;
+import com.socialize.ui.profile.UserSettings;
 import com.socialize.ui.share.DialogFlowController;
 import com.socialize.ui.share.IShareDialogFactory;
 import com.socialize.ui.share.ShareDialogListener;
@@ -184,7 +185,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 	
 	protected void doLikeWithShare(final Activity context, final SocializeSession session, final Entity entity, final LikeAddListener listener) {
 		
-		if(isDisplayShareDialog()) {
+		if(isDisplayShareDialog(context)) {
 
 			shareDialogFactory.show(context, entity, null, new ShareDialogListener() {
 
@@ -199,7 +200,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 
 					int count = 0;
 					
-					User user = session.getUser();
+					UserSettings settings = session.getUserSettings();
 					
 					if(networks != null) {
 						count = networks.length;
@@ -207,13 +208,12 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 					
 					final SafeProgressDialog progress = SafeProgressDialog.show(context, count);
 					
-					if(remember && user.setAutoPostPreferences(networks)) {
-						UserUtils.saveUserSettings(context, user, null);
+					if(remember && settings.setAutoPostPreferences(networks)) {
+						UserUtils.saveUserSettings(context, settings, null);
 					}
 
 					LikeOptions options = new LikeOptions();
-					options.setShareLocation(user.isShareLocation());
-//					options.setShareTo(networks);
+					options.setShareLocation(settings.isLocationEnabled());
 
 					LikeAddListener overrideListener = new LikeAddListener() {
 

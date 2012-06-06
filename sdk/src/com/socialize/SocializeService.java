@@ -60,7 +60,7 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.networks.ShareOptions;
 import com.socialize.notifications.NotificationType;
 import com.socialize.ui.SocializeEntityLoader;
-import com.socialize.ui.profile.UserProfile;
+import com.socialize.ui.profile.UserSettings;
 
 /**
  * The main Socialize Service.  This is the simplest entry point into the Socialize API.
@@ -489,7 +489,7 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param listener A listener to handle callbacks from the post.
 	 */
 	@Deprecated
-	public void saveCurrentUserProfile(Context context, UserProfile profile, UserSaveListener listener);
+	public void saveCurrentUserProfile(Context context, UserSettings profile, UserSaveListener listener);
 	
 	/**
 	 * Returns true if this SocializeService instance has been initialized.  

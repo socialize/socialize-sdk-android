@@ -95,7 +95,7 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	public void unlink(Context context) {
 		SocializeSession session = getSocialize().getSession();
 		session.clear(AuthProviderType.FACEBOOK);
-		session.getUser().setAutoPostToFacebook(false);
+		session.getUserSettings().setAutoPostFacebook(false);
 		userSystem.saveSession(context, session);
 	}
 

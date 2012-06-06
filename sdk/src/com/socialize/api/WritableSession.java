@@ -25,6 +25,7 @@ import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.entity.User;
+import com.socialize.ui.profile.UserSettings;
 
 public interface WritableSession extends SocializeSession {
 	
@@ -33,6 +34,8 @@ public interface WritableSession extends SocializeSession {
 	public void setConsumerTokenSecret(String secret);
 	
 	public void setUser(User user);
+	
+	public void setUserSettings(UserSettings settings);
 	
 	public void setHost(String host);
 	

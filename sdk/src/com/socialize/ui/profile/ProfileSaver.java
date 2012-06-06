@@ -35,6 +35,6 @@ public interface ProfileSaver {
 	 * Saves user profile information for the current user.
 	 * @param profile
 	 */
-	public void save(Context context, UserProfile profile, UserSaveListener listener);
+	public void save(Context context, UserSettings profile, UserSaveListener listener);
 	
 }

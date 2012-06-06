@@ -117,13 +117,13 @@ public class UserApiTest extends SocializeUnitTest {
 		UserProfile profile = new UserProfile();
 		profile.setFirstName(firstName);
 		profile.setLastName(lastName);
-		profile.setEncodedImage(encodedImage);
+//		profile.setEncodedImage(encodedImage);
 		profile.setAutoPostFacebook(true);
 		profile.setAutoPostTwitter(true);
 		profile.setNotificationsEnabled(false);
 		profile.setLocationEnabled(true);
 		
-		api.saveUserProfile(context, session, profile, listener);
+		api.saveUserSettings(context, session, profile, listener);
 		
 		AndroidMock.verify(session);
 		AndroidMock.verify(user);
@@ -133,7 +133,7 @@ public class UserApiTest extends SocializeUnitTest {
 	}
 	
 	/**
-	 * Tests that the listener created in saveUserProfile behaves correctly.
+	 * Tests that the listener created in saveUserSettings behaves correctly.
 	 */
 	@UsesMocks ({SocializeException.class, SocializeSessionPersister.class, NotificationRegistrationSystem.class})
 	public void testSaveUserProfileListener() {
@@ -157,12 +157,12 @@ public class UserApiTest extends SocializeUnitTest {
 		
 		notificationRegistrationSystem.registerC2DMAsync(context);
 		
-		user.merge(user);
+		user.update(user);
 		
 		listener.onUpdate(user);
 		listener.onError(exception);
 		
-		sessionPersister.saveUser(context, user);
+		sessionPersister.saveUser(context, user, null);
 		
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
@@ -186,14 +186,14 @@ public class UserApiTest extends SocializeUnitTest {
 		UserProfile profile = new UserProfile();
 		profile.setFirstName(firstName);
 		profile.setLastName(lastName);
-		profile.setEncodedImage(encodedImage);
+//		profile.setEncodedImage(encodedImage);
 		profile.setAutoPostFacebook(true);
 		profile.setAutoPostTwitter(true);
 		profile.setNotificationsEnabled(false);
 		profile.setLocationEnabled(true);
 		
 		api.setNotificationRegistrationSystem(notificationRegistrationSystem);
-		api.saveUserProfile(context, session, profile, listener);
+		api.saveUserSettings(context, session, profile, listener);
 		
 		// This will fail if it's the wrong type
 		UserSaveListener listenerFound = getNextResult();

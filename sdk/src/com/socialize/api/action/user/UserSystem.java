@@ -22,18 +22,16 @@
 package com.socialize.api.action.user;
 
 import android.content.Context;
-
 import com.socialize.api.SocializeSession;
 import com.socialize.api.SocializeSessionConsumer;
 import com.socialize.auth.AuthProviderData;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserProviderCredentials;
-import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.user.UserListener;
-import com.socialize.ui.profile.UserProfile;
+import com.socialize.ui.profile.UserSettings;
 
 /**
  * @author Jason Polites
@@ -67,9 +65,5 @@ public interface UserSystem {
 
 	public void getUser(SocializeSession session, long id, UserListener listener);
 
-	public void saveUserProfile(Context context, SocializeSession session, UserProfile profile, UserListener listener);
-	
-	public void saveUserProfile(final Context context, final SocializeSession session, User user, final boolean resetC2DM, final UserListener listener);
-
-
+	public void saveUserSettings(Context context, SocializeSession session, UserSettings profile, UserListener listener);
 }

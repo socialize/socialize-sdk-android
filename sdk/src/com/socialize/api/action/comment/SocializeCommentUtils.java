@@ -41,6 +41,7 @@ import com.socialize.ui.auth.AuthDialogListener;
 import com.socialize.ui.auth.AuthPanelView;
 import com.socialize.ui.auth.IAuthDialogFactory;
 import com.socialize.ui.dialog.SafeProgressDialog;
+import com.socialize.ui.profile.UserSettings;
 import com.socialize.ui.share.DialogFlowController;
 import com.socialize.ui.share.IShareDialogFactory;
 import com.socialize.ui.share.ShareDialogListener;
@@ -154,7 +155,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 
 	protected void doCommentWithShare(final Activity context, final SocializeSession session, final Entity entity, final String text, final CommentAddListener listener) {
 		
-		if(isDisplayShareDialog()) {
+		if(isDisplayShareDialog(context)) {
 			shareDialogFactory.show(context, entity, null,  new ShareDialogListener() {
 				@Override
 				public void onShow(Dialog dialog, SharePanelView dialogView) {}
@@ -167,7 +168,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 					
 					int count = 0;
 					
-					User user = session.getUser();
+					UserSettings settings = session.getUserSettings();
 					
 					if(networks != null) {
 						count = networks.length;
@@ -175,8 +176,8 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 					
 					final SafeProgressDialog progress = SafeProgressDialog.show(context, "Posting comment", "Please wait...", count);
 					
-					if(remember && user.setAutoPostPreferences(networks)) {
-						UserUtils.saveUserSettings(context, user, null);
+					if(remember && settings.setAutoPostPreferences(networks)) {
+						UserUtils.saveUserSettings(context, settings, null);
 					}
 
 					CommentOptions options = getUserCommentOptions(context);

@@ -22,13 +22,13 @@
 package com.socialize.api;
 
 import java.io.Serializable;
-
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.UserProviderCredentials;
 import com.socialize.auth.UserProviderCredentialsMap;
 import com.socialize.entity.User;
 import com.socialize.oauth.OAuthAuthorizer;
+import com.socialize.ui.profile.UserSettings;
 
 /**
  * @author Jason Polites
@@ -37,6 +37,8 @@ import com.socialize.oauth.OAuthAuthorizer;
 public interface SocializeSession extends Serializable, OAuthAuthorizer {
 
 	public User getUser();
+	
+	public UserSettings getUserSettings();
 
 	public String getConsumerKey();
 
@@ -77,8 +79,10 @@ public interface SocializeSession extends Serializable, OAuthAuthorizer {
 	@Deprecated
 	public String get3rdPartyAppId();
 
+	@Deprecated
 	public AuthProviderType getAuthProviderType();
 	
+	@Deprecated
 	public AuthProvider<?> getAuthProvider();
 	
 	public void clear(AuthProviderType type);

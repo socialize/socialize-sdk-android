@@ -96,7 +96,7 @@ public class UserTest extends SocializeUnitTest {
 
 		AndroidMock.replay(mockUser);
 
-		realUser.merge(mockUser);
+		realUser.update(mockUser);
 
 		AndroidMock.verify(mockUser);
 

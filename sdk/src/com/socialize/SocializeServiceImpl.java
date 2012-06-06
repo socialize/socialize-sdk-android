@@ -116,7 +116,7 @@ import com.socialize.ui.comment.CommentDetailActivity;
 import com.socialize.ui.comment.CommentView;
 import com.socialize.ui.comment.OnCommentViewActionListener;
 import com.socialize.ui.profile.ProfileActivity;
-import com.socialize.ui.profile.UserProfile;
+import com.socialize.ui.profile.UserSettings;
 import com.socialize.util.AppUtils;
 import com.socialize.util.ClassLoaderProvider;
 import com.socialize.util.EntityLoaderUtils;
@@ -1056,9 +1056,9 @@ public class SocializeServiceImpl implements SocializeService {
 	 * @see com.socialize.SocializeService#saveCurrentUserProfile(android.content.Context, com.socialize.ui.profile.UserProfile, com.socialize.listener.user.UserSaveListener)
 	 */
 	@Override
-	public void saveCurrentUserProfile(Context context, UserProfile profile, UserSaveListener listener) {
+	public void saveCurrentUserProfile(Context context, UserSettings profile, UserSaveListener listener) {
 		if(assertAuthenticated(listener)) {
-			userSystem.saveUserProfile(context, session, profile, listener);
+			userSystem.saveUserSettings(context, session, profile, listener);
 		}
 	}
 

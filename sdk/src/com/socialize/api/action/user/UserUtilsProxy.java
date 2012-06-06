@@ -21,14 +21,13 @@
  */
 package com.socialize.api.action.user;
 
-import android.app.Activity;
 import android.content.Context;
 import com.socialize.annotations.Synchronous;
 import com.socialize.entity.User;
-import com.socialize.error.SocializeException;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.ui.profile.UserSettings;
 
 
 /**
@@ -43,10 +42,17 @@ public interface UserUtilsProxy {
 	 * If the Socialize instance has not authenticated it will be authenticated synchronously here.
 	 * @param context The current context.
 	 * @return The current user.
-	 * @throws SocializeException
 	 */
 	@Synchronous
 	public User getCurrentUser(Context context);
+	
+	/**
+	 * Returns the settings for the current user.
+	 * @param context The current context.
+	 * @return The settings for the current user.
+	 */
+	@Synchronous
+	public UserSettings getUserSettings(Context context);
 	
 	/**
 	 * Gets the Social Networks the user has elected to auto-post to.
@@ -67,8 +73,8 @@ public interface UserUtilsProxy {
 	/**
 	 * Saves the current user's settings;
 	 * @param context
-	 * @param user
+	 * @param settings
 	 * @param listener
 	 */
-	public void saveUserSettings (Activity context, User user, UserSaveListener listener);
+	public void saveUserSettings (Context context, UserSettings settings, UserSaveListener listener);
 }

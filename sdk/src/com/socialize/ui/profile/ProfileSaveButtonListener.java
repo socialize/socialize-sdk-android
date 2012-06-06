@@ -62,7 +62,7 @@ public class ProfileSaveButtonListener implements OnClickListener {
 		final ProgressDialog progress = progressDialogFactory.show(context, "Saving Profile", "Please wait...");
 		
 		// Get the updated info
-		UserProfile profile = new UserProfile();
+		UserSettings profile = new UserSettings();
 		profile.setFirstName(view.getFirstNameEdit().getText().toString().trim());
 		profile.setLastName(view.getLastNameEdit().getText().toString().trim());
 		

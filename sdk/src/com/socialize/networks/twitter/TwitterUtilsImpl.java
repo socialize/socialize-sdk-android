@@ -90,7 +90,7 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	public void unlink(Context context) {
 		SocializeSession session = getSocialize().getSession();
 		session.clear(AuthProviderType.TWITTER);
-		session.getUser().setAutoPostToTwitter(false);
+		session.getUserSettings().setAutoPostTwitter(false);
 		userSystem.saveSession(context, session);		
 	}
 

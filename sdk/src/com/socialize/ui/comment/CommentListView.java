@@ -30,6 +30,7 @@ import com.socialize.notifications.NotificationType;
 import com.socialize.ui.dialog.SimpleDialogFactory;
 import com.socialize.ui.header.SocializeHeader;
 import com.socialize.ui.image.ImageLoader;
+import com.socialize.ui.profile.UserSettings;
 import com.socialize.ui.slider.ActionBarSliderFactory;
 import com.socialize.ui.slider.ActionBarSliderFactory.ZOrder;
 import com.socialize.ui.slider.ActionBarSliderView;
@@ -164,7 +165,7 @@ public class CommentListView extends BaseView {
 				}
 			});
 			
-			User user = Socialize.getSocialize().getSession().getUser();
+			UserSettings user = Socialize.getSocialize().getSession().getUserSettings();
 			
 			if(user.isNotificationsEnabled()) {
 				notifyBox.setVisibility(View.VISIBLE);
@@ -264,10 +265,10 @@ public class CommentListView extends BaseView {
 		// Won't persist.. but that's ok.
 		SocializeSession session = getSocialize().getSession();
 		
-		if(session != null && session.getUser() != null) {
+		if(session != null && session.getUserSettings() != null) {
 			// TODO: set options
 //			session.getUser().setAutoPostCommentsFacebook(autoPostToFacebook);
-			session.getUser().setShareLocation(shareLocation);
+			session.getUserSettings().setLocationEnabled(shareLocation);
 		}
 	}
 	
@@ -763,7 +764,7 @@ public class CommentListView extends BaseView {
 			commentEntrySlider.updateContent();
 		}
 		
-		User user = Socialize.getSocialize().getSession().getUser();
+		UserSettings user = Socialize.getSocialize().getSession().getUserSettings();
 		
 		if(notifyBox != null && user != null) {
 			if(user.isNotificationsEnabled()) {

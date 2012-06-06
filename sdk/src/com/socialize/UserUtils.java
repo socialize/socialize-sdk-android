@@ -30,6 +30,7 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.user.UserGetListener;
 import com.socialize.listener.user.UserSaveListener;
 import com.socialize.networks.SocialNetwork;
+import com.socialize.ui.profile.UserSettings;
 
 
 /**
@@ -67,6 +68,15 @@ public class UserUtils {
 	}
 	
 	/**
+	 * Returns the settings for the current user.
+	 * @param context
+	 * @return
+	 */
+	public static UserSettings getUserSettings(Context context) {
+		return proxy.getUserSettings(context);
+	}
+	
+	/**
 	 * Retrieves a User based on the given ID.
 	 * @param context
 	 * @param id
@@ -100,8 +110,8 @@ public class UserUtils {
 	 * @param user
 	 * @param listener
 	 */
-	public static void saveUserSettings (Activity context, User user, UserSaveListener listener) {
-		proxy.saveUserSettings(context, user, listener);
+	public static void saveUserSettings (Context context, UserSettings userSettings, UserSaveListener listener) {
+		proxy.saveUserSettings(context, userSettings, listener);
 	}
 	
 	/**

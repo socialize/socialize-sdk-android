@@ -210,6 +210,7 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 		return false;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public boolean validateSessionAuthDataLegacy(SocializeSession loaded, AuthProviderData data) {
 		
 		if(data.getAuthProviderType().equals(AuthProviderType.SOCIALIZE)) {

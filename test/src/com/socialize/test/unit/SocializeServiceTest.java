@@ -455,7 +455,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		// we'll use the default mocks already created for sessions/userSystem
 		socializeService.setSession(session);
 		socializeService.setUserSystem(userSystem);
-		userSystem.saveUserProfile(getContext(), session, mockProfile, mockListener);
+		userSystem.saveUserSettings(getContext(), session, mockProfile, mockListener);
 
 		replayDefaultMocks();
 		

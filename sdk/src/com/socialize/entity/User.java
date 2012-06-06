@@ -47,15 +47,21 @@ public class User extends SocializeObject {
 	private String displayName;
 	private String profilePicData;
 	
+	@Deprecated
 	private boolean autoPostToFacebook = false;
+	
+	@Deprecated
 	private boolean autoPostToTwitter = false;
 	
+	@Deprecated
 	private boolean shareLocation = true;
+	
+	@Deprecated
 	private boolean notificationsEnabled = true;
 	
 	private String metaData;
 	
-	public void merge(User user) {
+	public void update(User user) {
 		setFirstName(user.getFirstName());
 		setLastName(user.getLastName());
 		setUsername(user.getUsername());
@@ -70,10 +76,6 @@ public class User extends SocializeObject {
 		
 		// Set to null to re-create
 		displayName = null;
-		
-		// These are local store only.. don't merge otherwise they will be overwritten on save.
-		// setNotificationsEnabled(user.isNotificationsEnabled());		
-		// setAutoPostToFacebook(user.isAutoPostToFacebook());
 	}
 	
 	public String getShortDisplayName() {
@@ -174,6 +176,7 @@ public class User extends SocializeObject {
 		this.profilePicData = profilePicData;
 	}
 
+	@Deprecated
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
@@ -193,35 +196,42 @@ public class User extends SocializeObject {
 		this.authData = authData;
 	}
 
-	
+	@Deprecated
 	public boolean isAutoPostToFacebook() {
 		return autoPostToFacebook;
 	}
 
+	@Deprecated
 	public void setAutoPostToFacebook(boolean autoPostToFacebook) {
 		this.autoPostToFacebook = autoPostToFacebook;
 	}
 
+	@Deprecated
 	public boolean isAutoPostToTwitter() {
 		return autoPostToTwitter;
 	}
 
+	@Deprecated
 	public void setAutoPostToTwitter(boolean autoPostToTwitter) {
 		this.autoPostToTwitter = autoPostToTwitter;
 	}
 
+	@Deprecated
 	public boolean isNotificationsEnabled() {
 		return notificationsEnabled;
 	}
 
+	@Deprecated
 	public void setNotificationsEnabled(boolean notificationsEnabled) {
 		this.notificationsEnabled = notificationsEnabled;
 	}
 
+	@Deprecated
 	public boolean isShareLocation() {
 		return shareLocation;
 	}
 
+	@Deprecated
 	public void setShareLocation(boolean shareLocation) {
 		this.shareLocation = shareLocation;
 	}
@@ -249,6 +259,7 @@ public class User extends SocializeObject {
 	 * @param networks
 	 * @return true if the new settings differed from the old ones.
 	 */
+	@Deprecated
 	public boolean setAutoPostPreferences(SocialNetwork...networks) {
 		
 		boolean tw = isAutoPostToTwitter();
