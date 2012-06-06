@@ -519,7 +519,6 @@
 	<bean 
 		id="socialNetworkAuthClickListener" 
 		abstract="true">
-		<property name="config" ref="config"/>
 		<property name="dialogFactory" ref="progressDialogFactory"/>
 	</bean>
 	
@@ -844,7 +843,7 @@
 		<property name="displayUtils" ref="displayUtils"/>
 		<property name="logger" ref="logger"/>
 		<property name="progressDialogFactory" ref="progressDialogFactory"/>
-		<property name="alertDialogFactory" ref="alertDialogFactory"/>
+		<!-- <property name="alertDialogFactory" ref="alertDialogFactory"/> -->
 		<property name="commentHeaderFactory" ref="commentHeaderFactory"/>
 		<property name="commentEditFieldFactory" ref="commentEditFieldFactory"/>
 		<property name="commentContentViewFactory" ref="loadingListViewFactory"/>
@@ -1222,9 +1221,7 @@
 	<bean 
 		id="profileSaver" 
 		singleton="true"
-		class="com.socialize.ui.profile.DefaultProfileSaver">
-		<property name="bitmapUtils" ref="bitmapUtils"/>
-	</bean>
+		class="com.socialize.ui.profile.DefaultProfileSaver"/>
 	
 	<bean 
 		id="profileSaveButtonListener" 

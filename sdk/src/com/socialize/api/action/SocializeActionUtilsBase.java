@@ -115,18 +115,16 @@ public abstract class SocializeActionUtilsBase {
 	
 	protected boolean isDisplayShareDialog(Context context) {
 		
-		boolean shareRequired = false;
+		boolean shareRequired = true;
 		
 		UserSettings settings = UserUtils.getUserSettings(context);
 		
-//		User user = getSocialize().getSession().getUser();
-		
 		if(getSocialize().isSupported(AuthProviderType.TWITTER)) {
-			shareRequired |= !settings.isAutoPostTwitter();
+			shareRequired &= !settings.isAutoPostTwitter();
 		}
 		
 		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
-			shareRequired |= !settings.isAutoPostFacebook();
+			shareRequired &= !settings.isAutoPostFacebook();
 		}
 		
 		return shareRequired;

@@ -94,6 +94,9 @@
         <activity android:name=".implementations.facebook.PostToWallActivity"/> 
         <activity android:name=".implementations.facebook.GetTokenActivity"/> 
         
+        <!-- User -->
+        <activity android:name=".implementations.user.UserActivity"/> 
+        
        	<!-- Base Activities Required by Socialize UI -->
        	<activity android:name="com.socialize.ui.comment.CommentActivity"/>
        	<activity android:name="com.socialize.ui.action.ActionDetailActivity"/>

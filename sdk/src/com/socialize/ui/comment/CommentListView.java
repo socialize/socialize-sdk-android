@@ -1,7 +1,6 @@
 package com.socialize.ui.comment;
 
 import java.util.List;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.View;
@@ -58,7 +57,7 @@ public class CommentListView extends BaseView {
 	
 	private SocializeLogger logger;
 	private SimpleDialogFactory<ProgressDialog> progressDialogFactory;
-	private SimpleDialogFactory<AlertDialog> alertDialogFactory;
+//	private SimpleDialogFactory<AlertDialog> alertDialogFactory;
 	private Drawables drawables;
 	private AppUtils appUtils;
 	private DisplayUtils displayUtils;
@@ -72,7 +71,6 @@ public class CommentListView extends BaseView {
 	private View commentEntryField;
 	private SocializeHeader header;
 	private LoadingListView content;
-//	private AuthDialogFactory authDialogFactory;
 	
 	private IBeanFactory<CommentEntrySliderItem> commentEntryFactory;
 	
@@ -429,16 +427,17 @@ public class CommentListView extends BaseView {
 
 	protected void doNotificationStatusSave() {
 		
-		final ProgressDialog dialog = progressDialogFactory.show(getContext(), "Notifications", "Please wait...");
+		
+		notifyBox.showLoading();
 		
 		if(notifyBox.isChecked()) {
 			
 			SubscriptionUtils.subscribe(getActivity(), entity, NotificationType.NEW_COMMENTS, new SubscriptionResultListener() {
 				@Override
 				public void onError(SocializeException error) {
-					if(dialog != null) dialog.dismiss();
 					showError(getContext(), error);
 					notifyBox.setChecked(false);
+					notifyBox.hideLoading();
 				}
 				
 				@Override
@@ -446,8 +445,7 @@ public class CommentListView extends BaseView {
 					if(commentEntrySliderItem != null) {
 						commentEntrySliderItem.getCommentEntryView().setNotifySubscribeState(true);
 					}
-					if(dialog != null) dialog.dismiss();
-					alertDialogFactory.show(getContext(), "Subscribe Successful", "We will notify you when someone posts a comment to this discussion.");
+					notifyBox.hideLoading();
 				}
 			});
 		}
@@ -455,9 +453,9 @@ public class CommentListView extends BaseView {
 			SubscriptionUtils.unsubscribe(getActivity(), entity, NotificationType.NEW_COMMENTS, new SubscriptionResultListener() {
 				@Override
 				public void onError(SocializeException error) {
-					if(dialog != null) dialog.dismiss();
 					showError(getContext(), error);
 					notifyBox.setChecked(true);
+					notifyBox.hideLoading();
 				}
 				
 				@Override
@@ -465,8 +463,7 @@ public class CommentListView extends BaseView {
 					if(commentEntrySliderItem != null) {
 						commentEntrySliderItem.getCommentEntryView().setNotifySubscribeState(false);
 					}
-					if(dialog != null) dialog.dismiss();
-					alertDialogFactory.show(getContext(), "Unsubscribe Successful", "You will no longer receive notifications for updates to this discussion.");
+					notifyBox.hideLoading();
 				}
 			});
 		}		
@@ -666,9 +663,9 @@ public class CommentListView extends BaseView {
 		this.progressDialogFactory = progressDialogFactory;
 	}
 
-	public void setAlertDialogFactory(SimpleDialogFactory<AlertDialog> alertDialogFactory) {
-		this.alertDialogFactory = alertDialogFactory;
-	}
+//	public void setAlertDialogFactory(SimpleDialogFactory<AlertDialog> alertDialogFactory) {
+//		this.alertDialogFactory = alertDialogFactory;
+//	}
 
 	public void setDrawables(Drawables drawables) {
 		this.drawables = drawables;

@@ -78,4 +78,8 @@ public class UserSettingsFactory extends JSONFactory<UserSettings> {
 		object.put(SHARE_LOCATION, user.isLocationEnabled());
 		object.put(NOTIFICATIONS_ENABLED, user.isNotificationsEnabled());
 	}
+
+	public void setBitmapUtils(BitmapUtils bitmapUtils) {
+		this.bitmapUtils = bitmapUtils;
+	}
 }

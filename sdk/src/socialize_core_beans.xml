@@ -435,6 +435,7 @@
 		<property name="sessionPersister" ref="sessionPersister"/>
 		<property name="authProviderDataFactory" ref="authProviderDataFactory"/>
 		<property name="deviceUtils" ref="deviceUtils"/>
+		<property name="bitmapUtils" ref="bitmapUtils"/>
 		<property name="config" ref="config"/>	
 		<property name="logger" ref="logger"/>	
 		<property name="socializeAuthProviderInfoFactory" ref="socializeAuthProviderInfoFactory"/>

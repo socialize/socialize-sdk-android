@@ -439,7 +439,7 @@ public class ProfileContentView extends BaseView {
 	}
 
 	public void onProfilePictureChange(Bitmap image) {
-		profilePictureEditView.setImageOn(new BitmapDrawable(image));
+		profilePictureEditView.setProfileImage(new BitmapDrawable(image));
 	}
 
 	public User getCurrentUser() {

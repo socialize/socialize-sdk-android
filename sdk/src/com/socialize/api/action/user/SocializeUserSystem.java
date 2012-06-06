@@ -45,6 +45,7 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.notifications.NotificationRegistrationSystem;
 import com.socialize.provider.SocializeProvider;
 import com.socialize.ui.profile.UserSettings;
+import com.socialize.util.BitmapUtils;
 import com.socialize.util.DeviceUtils;
 import com.socialize.util.StringUtils;
 
@@ -61,6 +62,7 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	private AuthProviderInfoBuilder authProviderInfoBuilder;
 	private SocializeAuthProviderInfoFactory socializeAuthProviderInfoFactory;
 	private NotificationRegistrationSystem notificationRegistrationSystem;
+	private BitmapUtils bitmapUtils;
 	
 	public SocializeUserSystem(SocializeProvider<User> provider) {
 		super(provider);
@@ -183,6 +185,10 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 		user.setFirstName(settings.getFirstName());
 		user.setLastName(settings.getLastName());
 		
+		if(settings.getImage() != null) {
+			user.setProfilePicData(bitmapUtils.encode(settings.getImage()));
+		}
+		
 		String endpoint = ENDPOINT + user.getId() + "/";
 		
 		putAsPostAsync(session, endpoint, user, new UserSaveListener() {
@@ -219,6 +225,9 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 			// Update local in-memory user
 			User sessionUser = session.getUser();
 			sessionUser.update(savedUser);
+			
+			UserSettings settings = session.getUserSettings();
+			settings.update(userSettings);
 			
 			// Save this user to the local session for next load
 			if(sessionPersister != null) {
@@ -303,5 +312,9 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	
 	public void setNotificationRegistrationSystem(NotificationRegistrationSystem notificationRegistrationSystem) {
 		this.notificationRegistrationSystem = notificationRegistrationSystem;
+	}
+
+	public void setBitmapUtils(BitmapUtils bitmapUtils) {
+		this.bitmapUtils = bitmapUtils;
 	}
 }

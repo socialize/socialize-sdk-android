@@ -19,30 +19,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.ui.profile;
+package com.socialize.demo.implementations.user;
 
-import android.content.Context;
-import com.socialize.Socialize;
-import com.socialize.SocializeService;
+import android.app.ListActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import com.socialize.UserUtils;
-import com.socialize.listener.user.UserSaveListener;
+import com.socialize.demo.R;
+
 
 /**
  * @author Jason Polites
  *
  */
-public class DefaultProfileSaver implements ProfileSaver {
+public class UserActivity extends ListActivity {
+	final String[] values = new String[] { "Show User Settings", "Show User Profile"};
 	
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.ui.profile.ProfileSaver#save(android.content.Context, java.lang.String, android.graphics.Bitmap, com.socialize.listener.user.UserSaveListener)
-	 */
 	@Override
-	public void save(Context context, UserSettings profile, UserSaveListener listener) {
-		UserUtils.saveUserSettings(context, profile, listener);
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.demo_list);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
+		setListAdapter(adapter);
 	}
+	
 
-	protected SocializeService getSocialize() {
-		return Socialize.getSocialize();
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		switch (position) {
+		case 0:
+			UserUtils.showUserSettings(this);
+			break;
+
+		case 1:
+			UserUtils.showUserProfile(this, UserUtils.getCurrentUser(this));
+			break;
+		}
 	}
 }

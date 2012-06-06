@@ -67,6 +67,9 @@ public class MockSocializeUI implements SocializeUI {
 
 	@Override
 	public void showActionDetailViewForResult(Activity context, User user, SocializeAction action, int requestCode) {}
+	
+	@Override
+	public void showActionDetailView(Activity context, User user, SocializeAction action) {}
 
 	@Override
 	public Drawable getDrawable(String name, boolean eternal) {

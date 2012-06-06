@@ -66,13 +66,9 @@ public class CommentEntryView extends BaseView {
 	private KeyboardUtils keyboardUtils;
 	private EditText commentField;
 	
-//	private IBeanFactory<CustomCheckbox> autoPostFacebookOptionFactory;
-//	private IBeanFactory<CustomCheckbox> autoPostTwitterOptionFactory;
 	private IBeanFactory<CustomCheckbox> locationEnabledOptionFactory;
 	private IBeanFactory<CustomCheckbox> notificationEnabledOptionFactory;
 	
-//	private CustomCheckbox facebookCheckbox;
-//	private CustomCheckbox twitterCheckbox;
 	private CustomCheckbox locationCheckBox;
 	private CustomCheckbox notifyCheckBox;
 	
@@ -183,19 +179,6 @@ public class CommentEntryView extends BaseView {
 					keyboardUtils.hideKeyboard(commentField);
 					boolean shareLocation = false;
 					SocialNetwork[] shareTo = null;
-					
-//					if(facebookCheckbox != null && facebookCheckbox.isChecked()) {
-//						if(twitterCheckbox != null && twitterCheckbox.isChecked()) {
-//							shareTo = new SocialNetwork[] {SocialNetwork.FACEBOOK, SocialNetwork.TWITTER};
-//						}
-//						else {
-//							shareTo = new SocialNetwork[] {SocialNetwork.FACEBOOK};
-//						}
-//					}
-//					else if(twitterCheckbox != null && twitterCheckbox.isChecked()) {
-//						shareTo = new SocialNetwork[] {SocialNetwork.TWITTER};
-//					}
-					
 					if(locationCheckBox != null) {
 						shareLocation = locationCheckBox.isChecked(); 
 					}
@@ -512,18 +495,10 @@ public class CommentEntryView extends BaseView {
 	protected void reset() {
 		keyboardUtils.hideKeyboard(commentField);
 		commentField.setText("");
-		update();
+//		update();
 	}
 	
 	public void update() {
-//		if(facebookCheckbox != null) {
-//			facebookCheckbox.setChanged(false);
-//		}
-//		
-//		if(twitterCheckbox != null) {
-//			twitterCheckbox.setChanged(false);
-//		}
-		
 		if(locationCheckBox != null) {
 			locationCheckBox.setChanged(false);
 		}

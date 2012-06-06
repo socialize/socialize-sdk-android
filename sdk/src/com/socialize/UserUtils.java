@@ -92,7 +92,7 @@ public class UserUtils {
 	 * @param user
 	 */
 	public static void showUserProfile (Activity context, User user) {
-		Socialize.getSocialize().showUserProfileView(context, user.getId());
+		Socialize.getSocialize().showActionDetailView(context, user, null);
 	}
 	
 	/**

@@ -157,6 +157,15 @@ public class UserSettings implements Serializable {
 		setLastName(user.getLastName());
 	}
 	
+	public void update(UserSettings other) {
+		setAutoPostFacebook(other.isAutoPostFacebook());
+		setAutoPostTwitter(other.isAutoPostTwitter());
+		setFirstName(other.getFirstName());
+		setLastName(other.getLastName());
+		setLocationEnabled(other.isLocationEnabled());
+		setNotificationsEnabled(other.isNotificationsEnabled());
+	}
+	
 	public boolean setAutoPostPreferences(SocialNetwork...networks) {
 		
 		boolean tw = isAutoPostTwitter();

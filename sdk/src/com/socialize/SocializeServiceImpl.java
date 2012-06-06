@@ -1535,30 +1535,38 @@ public class SocializeServiceImpl implements SocializeService {
 	 * (non-Javadoc)
 	 * @see com.socialize.SocializeUI#showActionDetailViewForResult(android.app.Activity, com.socialize.entity.User, com.socialize.entity.SocializeAction, int)
 	 */
+	@Deprecated
 	@Override
 	public void showActionDetailViewForResult(Activity context, User user, SocializeAction action, int requestCode) {
+		showActionDetailView(context, user, action);
+	}
+
+	@Override
+	public void showActionDetailView(Activity context, User user, SocializeAction action) {
 		Intent i = newIntent(context, ActionDetailActivity.class);
 		i.putExtra(Socialize.USER_ID, user.getId().toString());
-		i.putExtra(Socialize.ACTION_ID, action.getId().toString());
+		
+		if(action != null) {
+			i.putExtra(Socialize.ACTION_ID, action.getId().toString());
+		}
 		
 		try {
-			
 			// MUST be FLAG_ACTIVITY_SINGLE_TOP because we only code to onNewIntent
 			i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			
-			context.startActivityForResult(i, requestCode);
+			context.startActivity(i);
 		} 
 		catch (ActivityNotFoundException e) {
 			// Revert to legacy
 			i.setClass(context, CommentDetailActivity.class);
 			try {
-				context.startActivityForResult(i, requestCode);
+				context.startActivity(i);
 				Log.w(Socialize.LOG_KEY, "Using legacy CommentDetailActivity.  Please update your AndroidManifest.xml to use ActionDetailActivity");
 			} 
 			catch (ActivityNotFoundException e2) {
 				Log.e(Socialize.LOG_KEY, "Could not find ActionDetailActivity.  Make sure you have added this to your AndroidManifest.xml");
 			}
-		}
+		}		
 	}
 
 	/**
