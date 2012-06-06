@@ -63,6 +63,11 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	public void link(Activity context, SocializeAuthListener listener) {
 		getSocialize().authenticate(context, AuthProviderType.FACEBOOK, listener);
 	}
+	
+	@Override
+	public void link(Activity context, SocializeAuthListener listener, String... permissions) {
+		getSocialize().authenticate(context, AuthProviderType.FACEBOOK, listener, permissions);
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.facebook.FacebookUtilsProxy#link(android.app.Activity, java.lang.String, com.socialize.listener.SocializeAuthListener)

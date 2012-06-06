@@ -59,7 +59,7 @@ public class GetCommentsByIDActivity extends SDKDemoActivity {
 						
 						@Override
 						public void onError(SocializeException error) {
-							handleError(error);
+							handleError(GetCommentsByIDActivity.this, error);
 						}
 					}, comments.getItems().get(0).getId());
 				}
@@ -67,7 +67,7 @@ public class GetCommentsByIDActivity extends SDKDemoActivity {
 			
 			@Override
 			public void onError(SocializeException error) {
-				handleError(error);
+				handleError(GetCommentsByIDActivity.this, error);
 			}
 		});
 	}

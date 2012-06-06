@@ -19,22 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo.implementations.share;
+package com.socialize.demo.implementations.facebook;
 
-import com.socialize.ShareUtils;
+import com.socialize.api.SocializeSession;
+import com.socialize.auth.AuthProviderType;
+import com.socialize.auth.UserProviderCredentials;
 import com.socialize.demo.SDKDemoActivity;
-import com.socialize.entity.ListResult;
-import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
-import com.socialize.listener.share.ShareGetListener;
-import com.socialize.listener.share.ShareListListener;
+import com.socialize.listener.SocializeAuthListener;
+import com.socialize.networks.facebook.FacebookUtils;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class GetSharesByIDActivity extends SDKDemoActivity {
+public class GetTokenActivity extends SDKDemoActivity {
 
 	/* (non-Javadoc)
 	 * @see com.socialize.demo.DemoActivity#executeDemo()
@@ -42,32 +42,27 @@ public class GetSharesByIDActivity extends SDKDemoActivity {
 	@Override
 	public void executeDemo(String text) {
 		
-		// We are going to list shares just so we can get the ID for a single share
-		// Usually you would NOT do this as you would usually already have an ID (e.g. from a click on a list view)
-		ShareUtils.getSharesByEntity(this, entity.getKey(), 0, 1, new ShareListListener() {
-			
-			@Override
-			public void onList(ListResult<Share> shares) {
-				
-				// Use the id from the first share
-				if(shares.getTotalCount() > 0) {
-					ShareUtils.getShare(GetSharesByIDActivity.this, new ShareGetListener() {
-						@Override
-						public void onGet(Share share) {
-							handleSocializeResult(share);
-						}
-						
-						@Override
-						public void onError(SocializeException error) {
-							handleError(GetSharesByIDActivity.this, error);
-						}
-					}, shares.getItems().get(0).getId());
-				}
-			}
+		FacebookUtils.link(this, new SocializeAuthListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
-				handleError(GetSharesByIDActivity.this, error);
+				handleError(GetTokenActivity.this, error);
+			}
+			
+			@Override
+			public void onCancel() {
+				handleCancel();
+			}
+			
+			@Override
+			public void onAuthSuccess(SocializeSession session) {
+				UserProviderCredentials userProviderCredentials = session.getUserProviderCredentials(AuthProviderType.FACEBOOK);
+				handleResult(userProviderCredentials.getAccessToken());
+			}
+			
+			@Override
+			public void onAuthFail(SocializeException error) {
+				handleError(GetTokenActivity.this, error);
 			}
 		});
 	}
@@ -82,6 +77,6 @@ public class GetSharesByIDActivity extends SDKDemoActivity {
 	 */
 	@Override
 	public String getButtonText() {
-		return "Get Last Share by ID";
+		return "Get Access Token";
 	}
 }

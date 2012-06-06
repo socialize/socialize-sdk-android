@@ -70,7 +70,7 @@ public class SubscriptionButtonsActivity extends DemoActivity {
 			@Override
 			public void onError(SocializeException error) {
 				progress.dismiss();
-				handleError(error);
+				handleError(SubscriptionButtonsActivity.this, error);
 			}
 		});
 		
@@ -89,7 +89,7 @@ public class SubscriptionButtonsActivity extends DemoActivity {
 						@Override
 						public void onError(SocializeException error) {
 							progress.dismiss();
-							handleError(error);
+							handleError(SubscriptionButtonsActivity.this, error);
 						}
 						
 						@Override
@@ -108,7 +108,7 @@ public class SubscriptionButtonsActivity extends DemoActivity {
 						@Override
 						public void onError(SocializeException error) {
 							progress.dismiss();
-							handleError(error);
+							handleError(SubscriptionButtonsActivity.this, error);
 						}
 						
 						@Override

@@ -19,62 +19,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo;
+package com.socialize.demo.implementations.facebook;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import android.app.Activity;
-import android.app.Dialog;
+import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
-import com.socialize.entity.Entity;
-import com.socialize.ui.dialog.DialogRegister;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import com.socialize.demo.R;
 
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class DemoActivity extends Activity implements DialogRegister {
+public class FacebookActivity extends ListActivity {
+	final String[] values = new String[] { "Post to Wall", "List Friends", "List Checkins (alt. permissions)", "Get Access Token"};
+	final Class<?>[] activities = new Class<?>[] { PostToWallActivity.class, ListFriendsActivity.class, ListCheckinsActivity.class, GetTokenActivity.class};
 	
-	private List<Dialog> dialogs = new ArrayList<Dialog>();
-	protected Entity entity;
-	
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		entity = Entity.newInstance("http://getsocialize.com", "Socialize");
+		setContentView(R.layout.demo_list);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values);
+		setListAdapter(adapter);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.ui.dialog.DialogRegister#register(android.app.Dialog)
-	 */
-	@Override
-	public void register(Dialog dialog) {
-		dialogs.add(dialog);
-	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.ui.dialog.DialogRegister#getDialogs()
-	 */
 	@Override
-	public Collection<Dialog> getDialogs() {
-		return dialogs;
-	}
-	
-	protected void handleError(Activity context, Exception error) {
-		error.printStackTrace();
-		DemoUtils.showErrorDialog(context, error);
-	}
-
-	
-	@Override
-	protected void onDestroy() {
-		if(dialogs != null) {
-			for (Dialog dialog : dialogs) {
-				dialog.dismiss();
-			}
-			dialogs.clear();
-		}		
-		super.onDestroy();
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		Class<?> activityClass = activities[position];
+		if(activityClass != null) {
+			Intent intent = new Intent(this, activityClass);
+			startActivity(intent);
+		}
 	}
 }

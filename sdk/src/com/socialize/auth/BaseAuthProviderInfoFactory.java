@@ -37,15 +37,15 @@ public abstract class BaseAuthProviderInfoFactory<I extends AuthProviderInfo> im
 	}
 
 	@Override
-	public I getInstance() {
+	public I getInstance(String...permissions) {
 		if(instance == null) {
-			instance = initInstance();
+			instance = initInstance(permissions);
 		}
-		update(instance);
+		update(instance, permissions);
 		return instance;
 	}
 	
-	protected abstract I initInstance();
+	protected abstract I initInstance(String...permissions);
 	
-	protected abstract void update(I instance);
+	protected abstract void update(I instance, String... permissions);
 }

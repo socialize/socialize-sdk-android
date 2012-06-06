@@ -148,8 +148,9 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * @param context The current context.
 	 * @param authProvider The authentication provider.  Use AuthProviderType.SOCIALIZE for anonymous user auth.
 	 * @param authListener The callback for authentication outcomes.
+	 * @param permissions One or more custom permissions used by the call.  (Currently only used by FACEBOOK)
 	 */
-	public void authenticate(Context context, AuthProviderType authProvider, SocializeAuthListener authListener);
+	public void authenticate(Context context, AuthProviderType authProvider, SocializeAuthListener authListener, String...permissions);
 	
 	/**
 	 * Authenticates the application against the API.
@@ -665,6 +666,5 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * Should be called in the onResume method of the containing activity
 	 */
 	public void onResume(Context context);
-
 
 }

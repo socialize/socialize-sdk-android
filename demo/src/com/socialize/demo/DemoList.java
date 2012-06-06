@@ -40,6 +40,7 @@ import com.socialize.demo.implementations.actionbar.ActionBarActivity;
 import com.socialize.demo.implementations.auth.AuthButtonsActivity;
 import com.socialize.demo.implementations.comment.CommentActivity;
 import com.socialize.demo.implementations.entity.EntityActivity;
+import com.socialize.demo.implementations.facebook.FacebookActivity;
 import com.socialize.demo.implementations.like.LikeActivity;
 import com.socialize.demo.implementations.location.LocationActivity;
 import com.socialize.demo.implementations.share.ShareActivity;
@@ -51,8 +52,8 @@ import com.socialize.demo.implementations.view.ViewActivity;
  */
 public class DemoList extends ListActivity {
 
-	final String[] values = new String[] { "Config", "Linking Twitter & Facebook",  "Action Bar", "Sharing", "Comments", "Likes", "Views", "Entities", "Actions (User Activity)", "Subscriptions", "Location"};
-	final Class<?>[] activities = new Class<?>[] { AuthButtonsActivity.class, ActionBarActivity.class, ShareActivity.class, CommentActivity.class, LikeActivity.class, ViewActivity.class, EntityActivity.class, ActionActivity.class, SubscriptionActivity.class, LocationActivity.class};
+	final String[] values = new String[] { "Config", "Linking Twitter & Facebook", "Calling Facebook Directly",  "Action Bar", "Sharing", "Comments", "Likes", "Views", "Entities", "Actions (User Activity)", "Subscriptions", "Location"};
+	final Class<?>[] activities = new Class<?>[] { AuthButtonsActivity.class, FacebookActivity.class, ActionBarActivity.class, ShareActivity.class, CommentActivity.class, LikeActivity.class, ViewActivity.class, EntityActivity.class, ActionActivity.class, SubscriptionActivity.class, LocationActivity.class};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

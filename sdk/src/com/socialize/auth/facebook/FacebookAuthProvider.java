@@ -85,6 +85,11 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 		
 		Intent i = new Intent(context, FacebookActivity.class);
 		i.putExtra("appId", info.getAppId());
+		
+		if(info.getPermissions() != null) {
+			i.putExtra("permissions", info.getPermissions());
+		}
+		
 		context.startActivity(i);		
 	}
 

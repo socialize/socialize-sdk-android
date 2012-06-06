@@ -87,6 +87,12 @@
         <!-- Auth -->
         <activity android:name=".implementations.auth.AuthButtonsActivity"/>  
         
+        <!-- Facebook -->
+        <activity android:name=".implementations.facebook.FacebookActivity"/> 
+        <activity android:name=".implementations.facebook.ListFriendsActivity"/> 
+        <activity android:name=".implementations.facebook.ListCheckinsActivity"/> 
+        <activity android:name=".implementations.facebook.PostToWallActivity"/> 
+        <activity android:name=".implementations.facebook.GetTokenActivity"/> 
         
        	<!-- Base Activities Required by Socialize UI -->
        	<activity android:name="com.socialize.ui.comment.CommentActivity"/>

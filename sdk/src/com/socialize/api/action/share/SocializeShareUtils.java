@@ -27,12 +27,10 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.location.Location;
 import com.socialize.api.SocializeSession;
-import com.socialize.api.action.ActionOptions;
 import com.socialize.api.action.ShareType;
 import com.socialize.api.action.SocializeActionUtilsBase;
 import com.socialize.entity.Entity;
 import com.socialize.entity.Share;
-import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.share.ShareGetListener;
@@ -94,7 +92,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 				}					
 				
 				if(!consumed) {
-					doShare(dialog, context, entity, socialNetworkListener, "", networks);
+					doShare(dialog, context, entity, socialNetworkListener, networks);
 				}
 				else {
 					if(dialogListener != null) {
@@ -102,7 +100,11 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 							
 							@Override
 							public void onContinue(String text) {
-								doShare(dialog, context, entity, socialNetworkListener, text, networks);
+								
+								ShareOptions options = new ShareOptions();
+								options.setText(text);
+								
+								doShare(dialog, context, entity, socialNetworkListener, options, networks);
 							}
 
 							@Override
@@ -120,11 +122,15 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 		}, options);		
 	}
 	
-	protected void doShare(final Activity context, final Entity entity, final SocialNetworkShareListener socialNetworkListener, final String text, final SocialNetwork... networks) {
-		doShare(null, context, entity, socialNetworkListener, text, networks);
-	}	
+	protected void doShare(final Activity context, final Entity entity, final SocialNetworkShareListener socialNetworkListener, final ShareOptions shareOptions, final SocialNetwork... networks) {
+		doShare(null, context, entity, socialNetworkListener, shareOptions, networks);
+	}
 	
-	protected void doShare(final Dialog dialog, final Activity context, final Entity entity, final SocialNetworkShareListener socialNetworkListener, final String text, final SocialNetwork... networks) {
+	protected void doShare(final Dialog dialog, final Activity context, final Entity entity, final SocialNetworkShareListener socialNetworkListener, final SocialNetwork... networks) {
+		doShare(dialog, context, entity, socialNetworkListener, null, networks);
+	}
+	
+	protected void doShare(final Dialog dialog, final Activity context, final Entity entity, final SocialNetworkShareListener socialNetworkListener, final ShareOptions shareOptions, final SocialNetwork... networks) {
 		final ProgressDialog progress = SafeProgressDialog.show(context);
 		
 		ShareType shareType = ShareType.OTHER;
@@ -132,6 +138,18 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 		if(networks != null && networks.length == 1) {
 			shareType = ShareType.valueOf(networks[0]);
 		}
+		
+		String text = null;
+		
+		if(shareOptions != null) {
+			text = shareOptions.getText();
+		}
+		
+		if(text == null) {
+			text = "";
+		}
+		
+		final String fText = text;
 		
 		shareSystem.addShare(context, getSocialize().getSession(), entity, text, shareType, new ShareAddListener() {
 			@Override
@@ -157,7 +175,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 				if(share != null && shareSystem != null && networks != null && networks.length > 0) {
 					for (int i = 0; i < networks.length; i++) {
 						final SocialNetwork network = networks[i];
-						shareSystem.share(context, getSocialize().getSession(), share, text, null, ShareType.valueOf(network), socialNetworkListener);									
+						shareSystem.share(context, getSocialize().getSession(), share, fText, null, ShareType.valueOf(network), socialNetworkListener);									
 					}
 				}
 				
@@ -233,7 +251,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	}	
 
 	@Override
-	public void shareViaSocialNetworks(Activity context, final Entity entity, final String text, final ActionOptions shareOptions, final SocialNetworkShareListener listener, final SocialNetwork...networks) {
+	public void shareViaSocialNetworks(Activity context, final Entity entity, final ShareOptions shareOptions, final SocialNetworkShareListener listener, final SocialNetwork...networks) {
 		if(isDisplayAuthDialog(shareOptions, networks)) {
 			
 			authDialogFactory.show(context, new AuthDialogListener() {
@@ -251,7 +269,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 				@Override
 				public void onSkipAuth(Activity context, Dialog dialog) {
 					dialog.dismiss();
-					doShare(context, entity, listener, text, networks);
+					doShare(context, entity, listener, shareOptions, networks);
 				}
 
 				@Override
@@ -265,12 +283,12 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 				@Override
 				public void onAuthenticate(Activity context, Dialog dialog, SocialNetwork network) {
 					dialog.dismiss();
-					doShare(context, entity, listener, text, network);
+					doShare(context, entity, listener, shareOptions, network);
 				}
 			});
 		}
 		else {
-			doShare(context, entity, listener, text, networks);
+			doShare(context, entity, listener, shareOptions, networks);
 		}			
 	}
 
@@ -285,8 +303,8 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	}
 
 	@Override
-	public void getSharesByUser(Activity context, User user, int start, int end, ShareListListener listener) {
-		shareSystem.getSharesByUser(getSocialize().getSession(), user.getId(), start, end, listener);
+	public void getSharesByUser(Activity context, long userId, int start, int end, ShareListListener listener) {
+		shareSystem.getSharesByUser(getSocialize().getSession(), userId, start, end, listener);
 	}
 
 	@Override

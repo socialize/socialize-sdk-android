@@ -56,10 +56,25 @@ public interface SocializeSession extends Serializable, OAuthAuthorizer {
 	
 	public UserProviderCredentials getUserProviderCredentials(AuthProviderType type);
 	
+	/**
+	 * @deprecated use getUserProviderCredentials
+	 * @return
+	 */
+	@Deprecated
 	public String get3rdPartyUserId();
 	
+	/**
+	 * @deprecated use getUserProviderCredentials
+	 * @return
+	 */
+	@Deprecated
 	public String get3rdPartyToken();
 	
+	/**
+	 * @deprecated use getUserProviderCredentials
+	 * @return
+	 */
+	@Deprecated
 	public String get3rdPartyAppId();
 
 	public AuthProviderType getAuthProviderType();

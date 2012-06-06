@@ -23,9 +23,7 @@ package com.socialize.api.action.share;
 
 import android.app.Activity;
 import com.socialize.annotations.Synchronous;
-import com.socialize.api.action.ActionOptions;
 import com.socialize.entity.Entity;
-import com.socialize.entity.User;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
@@ -41,14 +39,23 @@ import com.socialize.ui.share.ShareDialogListener;
 public interface ShareUtilsProxy {
 	
 	public void showLinkDialog (Activity context, AuthDialogListener listener);
+	
 	public void showShareDialog (Activity context, Entity entity, int options, SocialNetworkShareListener listener, ShareDialogListener dialogListener);
+	
 	public void shareViaEmail(Activity context, Entity entity, ShareAddListener listener);
+	
 	public void shareViaOther(Activity context, Entity entity, ShareAddListener listener);
+	
 	public void shareViaSMS(Activity context, Entity entity, ShareAddListener listener);
-	public void shareViaSocialNetworks(Activity context, Entity entity, String text, ActionOptions shareOptions, SocialNetworkShareListener listener, SocialNetwork...networkss);
+	
+	public void shareViaSocialNetworks(Activity context, Entity entity, ShareOptions shareOptions, SocialNetworkShareListener listener, SocialNetwork...networkss);
+	
 	public void getShare (Activity context, ShareGetListener listener, long id);
+	
 	public void getShares (Activity context, ShareListListener listener, long...ids);
-	public void getSharesByUser (Activity context, User user, int start, int end, ShareListListener listener);
+	
+	public void getSharesByUser (Activity context, long userId, int start, int end, ShareListListener listener);
+	
 	public void getSharesByEntity (Activity context, String entityKey, int start, int end, ShareListListener listener);
 	
 	@Synchronous

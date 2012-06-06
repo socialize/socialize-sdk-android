@@ -300,7 +300,7 @@ public class TwitterUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		
 		// Make sure we have a share object
-		ShareUtils.getSharesByUser(getContext(), UserUtils.getCurrentUser(getContext()), 0, 100, new ShareListListener() {
+		ShareUtils.getSharesByUser(getContext(), UserUtils.getCurrentUser(getContext()).getId(), 0, 100, new ShareListListener() {
 			@Override
 			public void onList(ListResult<Share> entities) {
 				addResult(2, entities);

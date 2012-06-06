@@ -47,7 +47,7 @@ public class AddEntityActivity extends SDKDemoActivity {
 			
 			@Override
 			public void onError(SocializeException error) {
-				handleError(error);
+				handleError(AddEntityActivity.this, error);
 			}
 			
 			@Override

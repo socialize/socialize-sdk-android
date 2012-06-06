@@ -19,52 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.demo.implementations.action;
+package com.socialize.api.action.share;
 
-import com.socialize.ActionUtils;
-import com.socialize.demo.SDKDemoActivity;
-import com.socialize.entity.ListResult;
-import com.socialize.entity.SocializeAction;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.activity.ActionListListener;
+import com.socialize.api.action.ActionOptions;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class GetActionsByEntityActivity extends SDKDemoActivity {
+public class ShareOptions extends ActionOptions {
 
-	/* (non-Javadoc)
-	 * @see com.socialize.demo.DemoActivity#executeDemo()
-	 */
-	@Override
-	public void executeDemo(String text) {
-		
-		ActionUtils.getActionsByEntity(this, entity.getKey(), 0, 50, new ActionListListener() {
-			
-			@Override
-			public void onList(ListResult<SocializeAction> result) {
-				handleSocializeResult(result);
-			}
-			
-			@Override
-			public void onError(SocializeException error) {
-				handleError(GetActionsByEntityActivity.this, error);
-			}
-		});
-	}
-	
-	@Override
-	public boolean isTextEntryRequired() {
-		return false;
+	private String text;
+
+	public String getText() {
+		return text;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.demo.DemoActivity#getButtonText()
-	 */
-	@Override
-	public String getButtonText() {
-		return "List 50 Actions for Current Entity";
+	public void setText(String text) {
+		this.text = text;
 	}
 }

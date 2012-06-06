@@ -605,14 +605,14 @@ public class SocializeServiceImpl implements SocializeService {
 		this.session = session;
 		return session;
 	}
-
+	
 	@Override
-	public synchronized void authenticate(Context context, AuthProviderType authProviderType, SocializeAuthListener authListener) {
+	public void authenticate(Context context, AuthProviderType authProviderType, SocializeAuthListener authListener, String... permissions) {
 		SocializeConfig config = getConfig();
 		String consumerKey = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
 		String consumerSecret = config.getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
-		AuthProviderInfo authProviderInfo = authProviderInfoBuilder.getFactory(authProviderType).getInstance();
-		authenticate(context, consumerKey, consumerSecret, authProviderInfo, authListener);
+		AuthProviderInfo authProviderInfo = authProviderInfoBuilder.getFactory(authProviderType).getInstance(permissions);
+		authenticate(context, consumerKey, consumerSecret, authProviderInfo,  authListener);
 	}
 
 	@Override

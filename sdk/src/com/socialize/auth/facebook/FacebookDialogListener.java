@@ -116,6 +116,8 @@ public abstract class FacebookDialogListener implements DialogListener {
 		else {
 			handleError(e);
 		}
+		
+		onFinish();
 	}
 	
 	@Override
@@ -126,6 +128,8 @@ public abstract class FacebookDialogListener implements DialogListener {
 		else {
 			handleError(e);
 		}
+		
+		onFinish();
 	}
 
 	@Override

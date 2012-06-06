@@ -21,6 +21,7 @@
  */
 package com.socialize.auth.facebook;
 
+import java.util.Arrays;
 import com.socialize.auth.AuthProviderInfo;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.error.SocializeException;
@@ -34,6 +35,7 @@ public class FacebookAuthProviderInfo implements AuthProviderInfo {
 	private static final long serialVersionUID = -6472972851879738516L;
 	
 	private String appId;
+	private String[] permissions;
 
 	/* (non-Javadoc)
 	 * @see com.socialize.api.AuthProviderInfo#getType()
@@ -65,12 +67,21 @@ public class FacebookAuthProviderInfo implements AuthProviderInfo {
 	public void setAppId(String appId) {
 		this.appId = appId;
 	}
+	
+	public String[] getPermissions() {
+		return permissions;
+	}
+	
+	public void setPermissions(String[] permissions) {
+		this.permissions = permissions;
+	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((appId == null) ? 0 : appId.hashCode());
+		result = prime * result + Arrays.hashCode(permissions);
 		return result;
 	}
 
@@ -86,7 +97,10 @@ public class FacebookAuthProviderInfo implements AuthProviderInfo {
 		if (appId == null) {
 			if (other.appId != null)
 				return false;
-		} else if (!appId.equals(other.appId))
+		}
+		else if (!appId.equals(other.appId))
+			return false;
+		if (!Arrays.equals(permissions, other.permissions))
 			return false;
 		return true;
 	}

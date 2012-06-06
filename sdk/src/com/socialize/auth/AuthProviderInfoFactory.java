@@ -28,6 +28,6 @@ package com.socialize.auth;
  */
 public interface AuthProviderInfoFactory<I extends AuthProviderInfo> {
 
-	public I getInstance();
+	public I getInstance(String...permissions);
 	
 }

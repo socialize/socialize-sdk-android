@@ -51,7 +51,7 @@ public class GetActionsByUserActivity extends SDKDemoActivity {
 			
 			@Override
 			public void onError(SocializeException error) {
-				handleError(error);
+				handleError(GetActionsByUserActivity.this, error);
 			}
 		});
 	}

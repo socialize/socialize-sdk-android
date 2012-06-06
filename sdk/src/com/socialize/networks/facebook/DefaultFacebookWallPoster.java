@@ -261,10 +261,14 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	
 	protected void doFacebookCall(Activity parent, String appId, Map<String, String> postData, String graphPath, String method, SocialNetworkPostListener listener) {
 		Bundle bundle = new Bundle();
-		Set<Entry<String, String>> entries = postData.entrySet();
-		for (Entry<String, String> entry : entries) {
-			bundle.putString(entry.getKey(), entry.getValue());
+		
+		if(postData != null) {
+			Set<Entry<String, String>> entries = postData.entrySet();
+			for (Entry<String, String> entry : entries) {
+				bundle.putString(entry.getKey(), entry.getValue());
+			}	
 		}
+
 		doFacebookCall(parent, appId, bundle, graphPath, method, listener);
 	}
 	

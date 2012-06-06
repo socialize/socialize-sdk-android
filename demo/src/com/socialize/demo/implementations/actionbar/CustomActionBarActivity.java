@@ -88,7 +88,7 @@ public class CustomActionBarActivity extends DemoActivity {
 					LikeUtils.unlike(CustomActionBarActivity.this, entity.getKey(), new LikeDeleteListener() {
 						@Override
 						public void onError(SocializeException error) {
-							handleError(error);
+							handleError(CustomActionBarActivity.this, error);
 						}
 						
 						@Override
@@ -103,7 +103,7 @@ public class CustomActionBarActivity extends DemoActivity {
 						
 						@Override
 						public void onError(SocializeException error) {
-							handleError(error);
+							handleError(CustomActionBarActivity.this, error);
 						}
 						
 						@Override

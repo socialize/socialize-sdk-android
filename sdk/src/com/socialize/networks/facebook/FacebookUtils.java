@@ -59,6 +59,16 @@ public class FacebookUtils {
 	}
 	
 	/**
+	 * Links the current user to a facebook account with custom FB permissions.  The user will be presented with the Facebook authentication dialog.
+	 * @param context The current context.
+	 * @param listener A listener to handle the result.
+	 * @param permissions One or more permissions defined by http://developers.facebook.com/docs/authentication/permissions/
+	 */
+	public static void link (Activity context, SocializeAuthListener listener, String...permissions){
+		proxy.link(context, listener, permissions);
+	}	
+	
+	/**
 	 * Links an existing Facebook access token with the current user.  No authentication dialog will be shown.
 	 * @param context The current context.
 	 * @param token The Facebook access token.

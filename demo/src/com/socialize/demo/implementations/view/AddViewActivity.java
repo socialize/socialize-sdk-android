@@ -48,7 +48,7 @@ public class AddViewActivity extends SDKDemoActivity {
 			
 			@Override
 			public void onError(SocializeException error) {
-				handleError(error);
+				handleError(AddViewActivity.this, error);
 			}
 			
 			@Override

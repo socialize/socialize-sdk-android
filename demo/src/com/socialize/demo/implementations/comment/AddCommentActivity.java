@@ -42,7 +42,7 @@ public class AddCommentActivity extends SDKDemoActivity {
 		CommentUtils.addComment(this, entity, text , new CommentAddListener() {
 			@Override
 			public void onError(SocializeException error) {
-				handleError(error);
+				handleError(AddCommentActivity.this, error);
 			}
 			
 			@Override
