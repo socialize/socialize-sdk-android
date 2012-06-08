@@ -75,13 +75,12 @@ public class FacebookAuthProviderInfo implements AuthProviderInfo {
 	public void setPermissions(String[] permissions) {
 		this.permissions = permissions;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((appId == null) ? 0 : appId.hashCode());
-		result = prime * result + Arrays.hashCode(permissions);
 		return result;
 	}
 
@@ -100,13 +99,34 @@ public class FacebookAuthProviderInfo implements AuthProviderInfo {
 		}
 		else if (!appId.equals(other.appId))
 			return false;
-		if (!Arrays.equals(permissions, other.permissions))
-			return false;
 		return true;
 	}
 
 	@Override
 	public boolean matches(AuthProviderInfo info) {
-		return this.equals(info);
+		if(this.equals(info)) {
+			
+			if(info instanceof FacebookAuthProviderInfo) {
+				FacebookAuthProviderInfo that = (FacebookAuthProviderInfo) info;
+				
+				// Ensure THIS object contains all permissions of other object
+				if(Arrays.equals(permissions, that.permissions)) {
+					return true;
+				}
+				else if (permissions != null && that.permissions != null){
+					Arrays.sort(permissions);
+					
+					for (int i = 0; i < that.permissions.length; i++) {
+						if(Arrays.binarySearch(permissions, that.permissions[i]) < 0) {
+							return false;
+						}
+					}
+					
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 }

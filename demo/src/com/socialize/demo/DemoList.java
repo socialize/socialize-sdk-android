@@ -32,8 +32,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import com.socialize.Socialize;
+import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.demo.implementations.action.ActionActivity;
 import com.socialize.demo.implementations.actionbar.ActionBarActivity;
@@ -52,6 +55,11 @@ import com.socialize.demo.implementations.view.ViewActivity;
  * @author Jason Polites
  */
 public class DemoList extends ListActivity {
+	
+	
+	static String fbAppId;
+	static String twKey;
+	static String twSecret;
 
 	final String[] values = new String[] { "Config", "Linking Twitter & Facebook", "Facebook Direct",  "Action Bar", "Sharing", "Comments", "Likes", "Views", "Entities", "User Profile", "Actions (User Activity)", "Subscriptions", "Location"};
 	final Class<?>[] activities = new Class<?>[] { 
@@ -99,10 +107,45 @@ public class DemoList extends ListActivity {
 		final CheckBox chkRequireAuth = (CheckBox) layout.findViewById(R.id.chkRequireAuth);
 		final CheckBox chkAllowAnon = (CheckBox) layout.findViewById(R.id.chkAllowAnon);
 		final CheckBox chkFBSSO = (CheckBox) layout.findViewById(R.id.chkFBSSO);
+		final CheckBox chkFB = (CheckBox) layout.findViewById(R.id.chkFB);
+		final CheckBox chkTW = (CheckBox) layout.findViewById(R.id.chkTW);
 		
 		chkRequireAuth.setChecked(Socialize.getSocialize().getConfig().isAuthRequired());
 		chkAllowAnon.setChecked(Socialize.getSocialize().getConfig().isAllowAnonymousUser());
 		chkFBSSO.setChecked(Socialize.getSocialize().getConfig().getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true));
+		
+		chkFB.setChecked(Socialize.getSocialize().isSupported(AuthProviderType.FACEBOOK));
+		chkTW.setChecked(Socialize.getSocialize().isSupported(AuthProviderType.TWITTER));
+		
+		chkFB.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if(isChecked) {
+					Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_APP_ID, fbAppId);
+				}
+				else {
+					fbAppId = Socialize.getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
+					Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_APP_ID, null);
+				}
+			}
+		});
+		
+		chkTW.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if(isChecked) {
+					Socialize.getSocialize().getConfig().setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, twKey);
+					Socialize.getSocialize().getConfig().setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, twSecret);
+				}
+				else {
+					twKey = Socialize.getSocialize().getConfig().getProperty(SocializeConfig.TWITTER_CONSUMER_KEY);
+					twSecret = Socialize.getSocialize().getConfig().getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET);
+					
+					Socialize.getSocialize().getConfig().setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, null);
+					Socialize.getSocialize().getConfig().setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, null);
+				}
+			}
+		});		
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Socialize Config");
