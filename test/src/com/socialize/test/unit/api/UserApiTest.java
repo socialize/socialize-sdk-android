@@ -87,7 +87,7 @@ public class UserApiTest extends SocializeUnitTest {
 		Context context = new MockContext();
 		String firstName = "foo";
 		String lastName = "bar";
-		String encodedImage = "foobar_encoded";
+//		String encodedImage = "foobar_encoded";
 		
 		User user = AndroidMock.createMock(User.class);
 		
@@ -98,7 +98,7 @@ public class UserApiTest extends SocializeUnitTest {
 //		
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
-		user.setProfilePicData(encodedImage);
+//		user.setProfilePicData(encodedImage);
 //		user.setAutoPostToFacebook(true);
 //		user.setAutoPostToTwitter(true);
 //		user.setNotificationsEnabled(false);
