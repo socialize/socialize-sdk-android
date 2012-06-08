@@ -26,8 +26,8 @@ import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
 import com.socialize.Socialize;
-import com.socialize.api.action.ActionType;
 import com.socialize.api.action.ActionOptions;
+import com.socialize.api.action.ActionType;
 import com.socialize.api.action.ShareType;
 import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderData;
@@ -50,6 +50,7 @@ import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.notifications.NotificationChecker;
 import com.socialize.provider.SocializeProvider;
+import com.socialize.ui.profile.UserSettings;
 import com.socialize.util.AppUtils;
 import com.socialize.util.HttpUtils;
 import com.socialize.util.StringUtils;
@@ -115,45 +116,46 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	
 	
 	protected void setPropagationData(SocializeAction action, ActionOptions shareOptions, SocialNetwork...networks) {
-		if(shareOptions != null) {
-			if(networks != null) {
-				Propagation propagation = null;
-				Propagation localPropagation = null;
+		
+		boolean selfManaged = (shareOptions == null) ? false : shareOptions.isSelfManaged();
+		
+		if(networks != null) {
+			Propagation propagation = null;
+			Propagation localPropagation = null;
+			
+			for (SocialNetwork socialNetwork : networks) {
+				if(socialNetwork.isLocalPropagation() || selfManaged) {
+					if(localPropagation == null) {
+						localPropagation = newPropagation();
+					}
+					localPropagation.addThirdParty(socialNetwork);
+				}
+				else {
+					if(propagation == null) {
+						propagation = newPropagation();
+					}
+					propagation.addThirdParty(socialNetwork);
+				}
+			}
+			
+			SocializeConfig config = Socialize.getSocialize().getConfig();
+			String appStore = config.getProperty(SocializeConfig.REDIRECT_APP_STORE);
+			
+			if(!StringUtils.isEmpty(appStore)) {
 				
-				for (SocialNetwork socialNetwork : networks) {
-					if(socialNetwork.isLocalPropagation() || shareOptions.isSelfManaged()) {
-						if(localPropagation == null) {
-							localPropagation = newPropagation();
-						}
-						localPropagation.addThirdParty(socialNetwork);
-					}
-					else {
-						if(propagation == null) {
-							propagation = newPropagation();
-						}
-						propagation.addThirdParty(socialNetwork);
-					}
+				String abbrev = appUtils.getAppStoreAbbreviation(appStore);
+				
+				if(localPropagation != null) {
+					localPropagation.addExtraParam("f", abbrev);
 				}
 				
-				SocializeConfig config = Socialize.getSocialize().getConfig();
-				String appStore = config.getProperty(SocializeConfig.REDIRECT_APP_STORE);
-				
-				if(!StringUtils.isEmpty(appStore)) {
-					
-					String abbrev = appUtils.getAppStoreAbbreviation(appStore);
-					
-					if(localPropagation != null) {
-						localPropagation.addExtraParam("f", abbrev);
-					}
-					
-					if(propagation != null) {
-						propagation.addExtraParam("f", abbrev);
-					}
-				}		
-				
-				action.setPropagation(propagation);
-				action.setPropagationInfoRequest(localPropagation);
-			}
+				if(propagation != null) {
+					propagation.addExtraParam("f", abbrev);
+				}
+			}		
+			
+			action.setPropagation(propagation);
+			action.setPropagationInfoRequest(localPropagation);
 		}
 	}
 	
@@ -726,6 +728,12 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		if(location != null) {
 			action.setLon(location.getLongitude());
 			action.setLat(location.getLatitude());
+		}
+		
+		UserSettings settings = Socialize.getSocialize().getSession().getUserSettings();
+		
+		if(settings != null) {
+			action.setLocationShared(settings.isLocationEnabled());
 		}
 	}
 	

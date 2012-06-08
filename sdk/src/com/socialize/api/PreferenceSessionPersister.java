@@ -71,14 +71,14 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 	}
 	
 	@Override
-	public void saveUser(Context context, User user, UserSettings userSettings) {
+	public synchronized void saveUser(Context context, User user, UserSettings userSettings) {
 		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 		Editor editor = prefs.edit();
 		saveUser(editor, user, userSettings);
 		editor.commit();
 	}
 	
-	public void saveUser(Editor editor, User user, UserSettings userSettings) {
+	public synchronized void saveUser(Editor editor, User user, UserSettings userSettings) {
 		if(user != null) {
 			try {
 				String userJSON = userFactory.toJSON(user).toString();
@@ -118,7 +118,7 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 	 * @see com.socialize.api.SocializeSessionPersister#delete(android.content.Context, com.socialize.auth.AuthProviderType)
 	 */
 	@Override
-	public void delete(Context context, AuthProviderType type) {
+	public synchronized void delete(Context context, AuthProviderType type) {
 		
 		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 		
@@ -152,7 +152,7 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 	 * @see com.socialize.api.SocializeSessionPersister#save(android.content.Context, com.socialize.api.SocializeSession)
 	 */
 	@Override
-	public void save(Context context, SocializeSession session) {
+	public synchronized void save(Context context, SocializeSession session) {
 		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 		
 		Editor editor = prefs.edit();
@@ -263,7 +263,7 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 	 * @see com.socialize.api.SocializeSessionPersister#load(android.content.Context)
 	 */
 	@Override
-	public WritableSession load(Context context) {
+	public synchronized WritableSession load(Context context) {
 		
 		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 		
@@ -275,8 +275,16 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 		WritableSession session = sessionFactory.create(key, secret, userProviderCredentials);
 			
 		session.setRestored(true);
-		session.setConsumerToken(prefs.getString("consumer_token", null));
-		session.setConsumerTokenSecret(prefs.getString("consumer_token_secret", null));
+		
+		String oauth_token = prefs.getString("consumer_token", null);
+		String oauth_token_secret = prefs.getString("consumer_token_secret", null);
+		
+		if(StringUtils.isEmpty(oauth_token) || StringUtils.isEmpty(oauth_token_secret)) {
+			return null;
+		}
+
+		session.setConsumerToken(oauth_token);
+		session.setConsumerTokenSecret(oauth_token_secret);
 		
 		String userJson = prefs.getString("user", null);
 		
@@ -326,7 +334,7 @@ public class PreferenceSessionPersister implements SocializeSessionPersister {
 	 * @see com.socialize.api.SocializeSessionPersister#delete(android.content.Context)
 	 */
 	@Override
-	public void delete(Context context) {
+	public synchronized void delete(Context context) {
 		SharedPreferences prefs = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
 		prefs.edit().clear().commit();
 	}

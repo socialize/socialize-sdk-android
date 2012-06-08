@@ -29,5 +29,7 @@ import com.socialize.api.action.ActionOptions;
  *
  */
 public class LikeOptions extends ActionOptions {
-
+	protected LikeOptions() {
+		super();
+	}
 }

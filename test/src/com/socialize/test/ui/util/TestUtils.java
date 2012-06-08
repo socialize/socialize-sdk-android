@@ -140,6 +140,7 @@ public class TestUtils {
 		instrumentation = testCase.getInstrumentation();
 		Socialize.getSocialize().destroy(true);
 		SocializeAccess.clearBeanOverrides();
+		SocializeAccess.revertProxies();
 		SocializeIOC.clearStubs();
 	}
 	

@@ -23,6 +23,7 @@ package com.socialize;
 
 import java.lang.reflect.Proxy;
 import android.app.Activity;
+import android.content.Context;
 import com.socialize.api.action.share.ShareOptions;
 import com.socialize.api.action.share.ShareUtilsProxy;
 import com.socialize.api.action.share.SocialNetworkDialogListener;
@@ -99,6 +100,15 @@ public class ShareUtils {
 				new Class[]{ShareUtilsProxy.class},
 				new SocializeActionProxy("shareUtils")); // Bean name
 	}
+	
+	/**
+	 * Returns the default sharing options for the user.
+	 * @param context
+	 * @return
+	 */
+	public static ShareOptions getUserShareOptions(Context context) {
+		return proxy.getUserShareOptions(context);
+	}	
 	
 	/**
 	 * Displays the link dialog to allow the user to link to their Twitter or Facebook account.

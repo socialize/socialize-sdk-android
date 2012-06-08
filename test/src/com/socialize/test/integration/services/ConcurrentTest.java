@@ -41,10 +41,22 @@ import com.socialize.test.ui.util.TestUtils;
  */
 public class ConcurrentTest extends SocializeActivityTest {
 	
+	@Override
+	protected void tearDown() throws Exception {
+		System.clearProperty("debug");
+		super.tearDown();
+	}
+
 	public void testConcurrentLikeIsSameUser() throws Throwable {
+		
+		System.setProperty("debug", "true");
+		
 		final Entity entityKey = Entity.newInstance("ConcurrentTest", "ConcurrentTest");
 		
 		final Activity context = getContext();
+		
+		// Force no notifications
+		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_NOTIFICATIONS_ENABLED, "false");
 		
 		// Make sure we don't have a cached session
 		Socialize.getSocialize().init(context);

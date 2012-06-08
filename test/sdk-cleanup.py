@@ -21,6 +21,7 @@ def create_android_config(key,secret,url,fb_token):
 	text+= '\nredirect.host=http://stage.getsocialize.com'
 	text+= '\nlog.level=DEBUG'
 	text+= '\nsocialize.register.notification=false'
+	text+= '\nsocialize.notification.enabled=false'
 	text+= '\nfacebook.app.id=387684787937421'
 	text+= '\nfacebook.token='+fb_token
 	text+= '\ntwitter.token=353351555-8L6E6HOphntfE5oUYDdPllX7x4gaXaWKHuRqqA'

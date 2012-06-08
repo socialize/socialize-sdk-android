@@ -191,7 +191,6 @@ public class SocializeUIInstanceTests2 extends SocializeUIActivityTest {
 
 		final Long userId = 101L;
 		final Long actionId = 201L;
-		final int requestCode = 69;
 		
 		final User user = new User();
 		final SocializeAction action = new Comment();
@@ -208,9 +207,8 @@ public class SocializeUIInstanceTests2 extends SocializeUIActivityTest {
 		Activity context = new Activity() {
 
 			@Override
-			public void startActivityForResult(Intent intent, int requestCode) {
+			public void startActivity(Intent intent) {
 				addResult(intent);
-				addResult(requestCode);
 			}
 		};
 		
@@ -225,17 +223,15 @@ public class SocializeUIInstanceTests2 extends SocializeUIActivityTest {
 		
 		AndroidMock.replay(intent);
 		
-		socialize.showActionDetailViewForResult(context, user, action, requestCode);
+		socialize.showActionDetailView(context, user, action);
 		
 		AndroidMock.verify(intent);		
 		
 		Class<?> clsAfter = getNextResult();
 		Intent intentAfter = getNextResult();
-		Integer code = getNextResult();
 		
 		assertEquals(ActionDetailActivity.class, clsAfter);
 		assertSame(intent, intentAfter);
-		assertEquals(requestCode, code.intValue());			
 	}		
 	
 }

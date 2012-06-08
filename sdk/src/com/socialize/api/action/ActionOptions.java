@@ -21,8 +21,6 @@
  */
 package com.socialize.api.action;
 
-import com.socialize.networks.SocialNetwork;
-import com.socialize.networks.SocialNetworkListener;
 
 
 /**
@@ -31,70 +29,13 @@ import com.socialize.networks.SocialNetworkListener;
  */
 public class ActionOptions {
 	
-	private boolean shareLocation;
-	
-	@Deprecated
-	private SocialNetwork[] shareTo;
-	
-	@Deprecated
-	private SocialNetworkListener listener;
-	
 	private boolean selfManaged = false;
 	private boolean authRequired = true;
 	
-	/**
-	 * If true and if available, the user's location is shared.
-	 * @return
-	 */
-	public boolean isShareLocation() {
-		return shareLocation;
-	}
-	
-	/**
-	 * If true and if available, the user's location is shared.
-	 * @param shareLocation
-	 */
-	public void setShareLocation(boolean shareLocation) {
-		this.shareLocation = shareLocation;
-	}
-	
-	@Deprecated
-	public SocialNetwork[] getShareTo() {
-		return shareTo;
+	protected ActionOptions() {
+		super();
 	}
 
-	@Deprecated
-	public void setShareTo(SocialNetwork...shareTo) {
-		this.shareTo = shareTo;
-	}
-
-	@Deprecated
-	public SocialNetworkListener getListener() {
-		return listener;
-	}
-
-	/**
-	 * Allows for the capture of events when sharing on social networks like facebook.
-	 * @param listener
-	 */
-	@Deprecated
-	public void setListener(SocialNetworkListener listener) {
-		this.listener = listener;
-	}
-	
-	@Deprecated
-	public boolean isShareTo(SocialNetwork destination) {
-		if(shareTo != null) {
-			for (SocialNetwork d : shareTo) {
-				if(d.equals(destination)) {
-					return true;
-				}
-			}
-		}
-		
-		return false;
-	}
-	
 	public boolean isSelfManaged() {
 		return selfManaged;
 	}
@@ -107,6 +48,10 @@ public class ActionOptions {
 		this.selfManaged = selfManaged;
 	}
 	
+	/**
+	 * Returns true if auth is required for sharing.  Defaults to socialize.require.auth
+	 * @return
+	 */
 	public boolean isAuthRequired() {
 		return authRequired;
 	}
@@ -127,8 +72,5 @@ public class ActionOptions {
 	public void merge(ActionOptions other) {
 		setAuthRequired(other.isAuthRequired());
 		setSelfManaged(other.isSelfManaged());
-		setShareLocation(other.isShareLocation());
-		setListener(other.getListener());
-		setShareTo(other.getShareTo());
 	}
 }

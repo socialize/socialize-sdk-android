@@ -30,6 +30,10 @@ import com.socialize.api.action.ActionOptions;
  */
 public class ShareOptions extends ActionOptions {
 
+	protected ShareOptions() {
+		super();
+	}
+
 	private String text;
 
 	public String getText() {

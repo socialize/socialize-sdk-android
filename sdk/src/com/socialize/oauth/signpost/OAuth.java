@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.util.Log;
 import com.socialize.google.gdata.util.common.base.PercentEscaper;
 import com.socialize.oauth.signpost.http.HttpParameters;
 
@@ -303,7 +304,7 @@ public class OAuth {
 
     public static void debugOut(String key, String value) {
         if (System.getProperty("debug") != null) {
-            System.out.println("[SIGNPOST] " + key + ": " + value);
+        	Log.i("[SIGNPOST]", key + ": " + value);
         }
     }
 }

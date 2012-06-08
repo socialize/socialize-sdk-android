@@ -43,10 +43,10 @@ public class SocializeCommentSystem extends SocializeApi<Comment, SocializeProvi
 	
 	@Override
 	public void addComment(SocializeSession session, Comment comment, CommentOptions commentOptions, CommentListener listener, SocialNetwork... networks) {
-		boolean shareLocation = (commentOptions == null || commentOptions.isShareLocation());
 		
-		comment.setLocationShared(shareLocation);
-		comment.setNotificationsEnabled(commentOptions.isSubscribeToUpdates());
+		if(commentOptions != null) {
+			comment.setNotificationsEnabled(commentOptions.isSubscribeToUpdates());
+		}
 		
 		setPropagationData(comment, commentOptions, networks);
 		setLocation(comment);

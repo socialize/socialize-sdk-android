@@ -187,7 +187,7 @@ public class LikeActionButtonHandler extends BaseActionButtonHandler<Like> {
 		}
 		else {
 			
-			LikeOptions likeOptions = new LikeOptions();
+			LikeOptions likeOptions = LikeUtils.getUserLikeOptions(context);
 			likeOptions.merge(shareOptions);
 			
 			LikeUtils.like(context, entity, likeOptions, new LikeAddListener() {

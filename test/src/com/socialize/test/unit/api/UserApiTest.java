@@ -93,16 +93,16 @@ public class UserApiTest extends SocializeUnitTest {
 		
 		AndroidMock.expect(session.getUser()).andReturn(user);
 		AndroidMock.expect(user.getId()).andReturn(id);
-		AndroidMock.expect(user.isNotificationsEnabled()).andReturn(true);
-		AndroidMock.expect(user.isShareLocation()).andReturn(false);
-		
+//		AndroidMock.expect(user.isNotificationsEnabled()).andReturn(true);
+//		AndroidMock.expect(user.isShareLocation()).andReturn(false);
+//		
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setProfilePicData(encodedImage);
-		user.setAutoPostToFacebook(true);
-		user.setAutoPostToTwitter(true);
-		user.setNotificationsEnabled(false);
-		user.setShareLocation(true);
+//		user.setAutoPostToFacebook(true);
+//		user.setAutoPostToTwitter(true);
+//		user.setNotificationsEnabled(false);
+//		user.setShareLocation(true);
 		
 		SocializeUserSystem api = new SocializeUserSystem(provider) {
 			@Override

@@ -314,9 +314,20 @@ public abstract class BaseSocializeProvider<T extends SocializeObject> implement
 						JSONObject json = jsonParser.parseObject(entity.getContent());
 						
 						User user = userFactory.fromJSON(json.getJSONObject("user"));
-
-						session.setConsumerToken(json.getString("oauth_token"));
-						session.setConsumerTokenSecret(json.getString("oauth_token_secret"));
+						
+						String oauth_token = json.getString("oauth_token");
+						String oauth_token_secret = json.getString("oauth_token_secret");
+						
+						if(StringUtils.isEmpty(oauth_token)) {
+							throw new SocializeException("oauth_token was empty in response from server");
+						}
+						
+						if(StringUtils.isEmpty(oauth_token_secret)) {
+							throw new SocializeException("oauth_token_secret was empty in response from server");
+						}						
+						
+						session.setConsumerToken(oauth_token);
+						session.setConsumerTokenSecret(oauth_token_secret);
 						session.setUser(user);
 						
 						setProviderCredentialsForUser(data, session);

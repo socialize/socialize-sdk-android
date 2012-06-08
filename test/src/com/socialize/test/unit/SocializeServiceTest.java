@@ -208,7 +208,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		
 		AndroidMock.expect(entityLoaderUtils.initEntityLoader()).andReturn(null);
 		
-		notificationChecker.checkRegistrations(getContext());
+//		notificationChecker.checkRegistrations(getContext());
 		appUtils.checkAndroidManifest(getContext());
 		
 		AndroidMock.expect(authProviderInfoBuilder.validateAll()).andReturn(true);
@@ -379,8 +379,8 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		
 		commentObject.setText(comment);
 		commentObject.setEntitySafe(entity);
-
-		commentSystem.addComment(AndroidMock.eq(session), AndroidMock.eq(commentObject), (CommentOptions) AndroidMock.isNull(), AndroidMock.eq(listener));
+		
+		commentSystem.addComment(AndroidMock.eq(session), AndroidMock.eq(commentObject), (CommentOptions) AndroidMock.isNull(), AndroidMock.eq(listener), (SocialNetwork[]) AndroidMock.anyObject());
 
 		replayDefaultMocks();
 
@@ -414,7 +414,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 
 		final String key = "foo";
 
-		likeSystem.addLike(AndroidMock.eq(session), (Entity) AndroidMock.anyObject(), (LikeOptions) AndroidMock.anyObject(), AndroidMock.eq(listener));
+		likeSystem.addLike(AndroidMock.eq(session), (Entity) AndroidMock.anyObject(), (LikeOptions) AndroidMock.anyObject(), AndroidMock.eq(listener), (SocialNetwork[]) AndroidMock.anyObject());
 
 		replayDefaultMocks();
 

@@ -31,5 +31,81 @@ import com.socialize.api.action.ActionOptions;
  */
 @Deprecated
 public class ShareOptions extends ActionOptions {
+	@Deprecated
+	private boolean shareLocation;
 	
+	@Deprecated
+	private SocialNetwork[] shareTo;
+	
+	@Deprecated
+	private SocialNetworkListener listener;
+	
+
+	/**
+	 * If true and if available, the user's location is shared.
+	 * @return 
+	 * @deprecated The user's preference will be automatically used.
+	 */
+	@Deprecated
+	public boolean isShareLocation() {
+		return shareLocation;
+	}
+	
+	/**
+	 * If true and if available, the user's location is shared.
+	 * @param shareLocation
+	 * @deprecated The user's preference will be automatically used.
+	 */
+	@Deprecated
+	public void setShareLocation(boolean shareLocation) {
+		this.shareLocation = shareLocation;
+	}
+	
+	@Deprecated
+	public SocialNetwork[] getShareTo() {
+		return shareTo;
+	}
+
+	@Deprecated
+	public void setShareTo(SocialNetwork...shareTo) {
+		this.shareTo = shareTo;
+	}
+
+	@Deprecated
+	public SocialNetworkListener getListener() {
+		return listener;
+	}
+
+	/**
+	 * Allows for the capture of events when sharing on social networks like facebook.
+	 * @param listener
+	 */
+	@Deprecated
+	public void setListener(SocialNetworkListener listener) {
+		this.listener = listener;
+	}
+	
+	@Deprecated
+	public boolean isShareTo(SocialNetwork destination) {
+		if(shareTo != null) {
+			for (SocialNetwork d : shareTo) {
+				if(d.equals(destination)) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	@Override
+	public void merge(ActionOptions other) {
+		super.merge(other);
+		if(other instanceof ShareOptions) {
+			ShareOptions sOther = (ShareOptions) other;
+			setShareLocation(sOther.isShareLocation());
+			setListener(sOther.getListener());
+			setShareTo(sOther.getShareTo());
+		}
+	}
 }

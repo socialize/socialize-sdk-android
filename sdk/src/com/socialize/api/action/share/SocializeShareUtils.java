@@ -25,6 +25,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.location.Location;
 import com.socialize.api.SocializeSession;
 import com.socialize.api.action.ShareType;
@@ -56,6 +57,13 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	private IShareDialogFactory shareDialogFactory;
 	private IAuthDialogFactory authDialogFactory;
 	
+	@Override
+	public ShareOptions getUserShareOptions(Context context) {
+		ShareOptions options = new ShareOptions();
+		populateActionOptions(options);
+		return options;
+	}
+
 	@Override
 	public void showLinkDialog(Activity context, AuthDialogListener listener) {
 		authDialogFactory.show(context, listener);

@@ -246,26 +246,17 @@ public class CommentListView extends BaseView {
 		dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
 		
 		CommentOptions options = newShareOptions();
-		
-//		options.setShareTo(networks);
-		options.setShareLocation(shareLocation);
 		options.setSubscribeToUpdates(subscribe);
 		
 		Comment comment = newComment();
 		comment.setText(text);
-//		comment.setNotificationsEnabled(subscribe);
 		comment.setEntitySafe(entity);
 		
 		CommentUtils.addComment(getActivity(), entity, text, options, getCommentAddListener(subscribe), networks);
 		
-//		getSocialize().addComment(getActivity(), comment, options, getCommentAddListener(subscribe), networks);
-		
 		// Won't persist.. but that's ok.
 		SocializeSession session = getSocialize().getSession();
-		
 		if(session != null && session.getUserSettings() != null) {
-			// TODO: set options
-//			session.getUser().setAutoPostCommentsFacebook(autoPostToFacebook);
 			session.getUserSettings().setLocationEnabled(shareLocation);
 		}
 	}
@@ -775,7 +766,7 @@ public class CommentListView extends BaseView {
 	
 	// So we can mock
 	protected CommentOptions newShareOptions() {
-		return new CommentOptions();
+		return CommentUtils.getUserCommentOptions(getContext());
 	}
 	
 	protected RelativeLayout getLayoutAnchor() {

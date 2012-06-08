@@ -28,7 +28,6 @@ import android.content.Context;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.UserUtils;
-import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.entity.SocializeAction;
 import com.socialize.networks.PostData;
@@ -49,10 +48,7 @@ public abstract class SocializeActionUtilsBase {
 	
 	protected void populateActionOptions(ActionOptions options) {
 		SocializeService socialize = Socialize.getSocialize();
-		SocializeSession session = socialize.getSession();
-		UserSettings settings = session.getUserSettings();
 		options.setAuthRequired(socialize.getConfig().isAuthRequired());
-		options.setShareLocation(settings.isLocationEnabled());
 	}	
 	
 	protected boolean isDisplayAuthDialog(ActionOptions options, SocialNetwork...networks) {
@@ -115,16 +111,20 @@ public abstract class SocializeActionUtilsBase {
 	
 	protected boolean isDisplayShareDialog(Context context) {
 		
-		boolean shareRequired = true;
+		boolean fbSupported = getSocialize().isSupported(AuthProviderType.FACEBOOK);
+		boolean twSupported = getSocialize().isSupported(AuthProviderType.TWITTER);
+		boolean shareRequired = fbSupported || twSupported;
 		
-		UserSettings settings = UserUtils.getUserSettings(context);
-		
-		if(getSocialize().isSupported(AuthProviderType.TWITTER)) {
-			shareRequired &= !settings.isAutoPostTwitter();
-		}
-		
-		if(getSocialize().isSupported(AuthProviderType.FACEBOOK)) {
-			shareRequired &= !settings.isAutoPostFacebook();
+		if(shareRequired) {
+			UserSettings settings = UserUtils.getUserSettings(context);
+			
+			if(shareRequired && fbSupported) {
+				shareRequired &= !settings.isAutoPostFacebook();
+			}
+			
+			if(shareRequired && twSupported) {
+				shareRequired &= !settings.isAutoPostTwitter();
+			}	
 		}
 		
 		return shareRequired;

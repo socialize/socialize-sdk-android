@@ -68,14 +68,8 @@ public void addCommentWithManualShare() {
 
 Entity entity = Entity.newInstance("http://myentity.com", "My Name");
 
-// Create options to share the comment without displaying the share dialog
-CommentOptions commentOptions = new CommentOptions();
-
-// If true the user will be prompted for auth if not already
-commentOptions.setAuthRequired(true); 
-
-// If true the user's location will be send in the comment.
-commentOptions.setShareLocation(true); 
+// Get the default options for the user.
+CommentOptions commentOptions = CommentUtils.getUserCommentOptions(this);
 
 // Pass the share options in the call to create the comment.
 CommentUtils.addComment(this, entity, "This the comment", commentOptions, new CommentAddListener() {

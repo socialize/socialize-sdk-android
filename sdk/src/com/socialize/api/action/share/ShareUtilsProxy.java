@@ -22,6 +22,7 @@
 package com.socialize.api.action.share;
 
 import android.app.Activity;
+import android.content.Context;
 import com.socialize.annotations.Synchronous;
 import com.socialize.entity.Entity;
 import com.socialize.listener.share.ShareAddListener;
@@ -37,6 +38,9 @@ import com.socialize.ui.share.ShareDialogListener;
  *
  */
 public interface ShareUtilsProxy {
+	
+	@Synchronous
+	public ShareOptions getUserShareOptions(Context context);
 	
 	public void showLinkDialog (Activity context, AuthDialogListener listener);
 	

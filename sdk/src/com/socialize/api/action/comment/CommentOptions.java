@@ -29,6 +29,10 @@ import com.socialize.api.action.ActionOptions;
  *
  */
 public class CommentOptions extends ActionOptions {
+	
+	protected CommentOptions() {
+		super();
+	}
 
 	private boolean subscribeToUpdates = true;
 

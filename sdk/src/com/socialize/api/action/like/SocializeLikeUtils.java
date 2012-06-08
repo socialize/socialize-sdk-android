@@ -212,8 +212,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 						UserUtils.saveUserSettings(context, settings, null);
 					}
 
-					LikeOptions options = new LikeOptions();
-					options.setShareLocation(settings.isLocationEnabled());
+					LikeOptions options = getUserLikeOptions(context);
 
 					LikeAddListener overrideListener = new LikeAddListener() {
 

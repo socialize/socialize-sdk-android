@@ -472,8 +472,10 @@ public class SocializeServiceImpl implements SocializeService {
 	 * @param context
 	 */
 	protected synchronized void initNotifications(Context context) {
-		if(notificationChecker != null) {
-			notificationChecker.checkRegistrations(context);
+		if(config.isNotificationsEnabled()) {
+			if(notificationChecker != null) {
+				notificationChecker.checkRegistrations(context);
+			}
 		}
 	}
 
@@ -691,7 +693,7 @@ public class SocializeServiceImpl implements SocializeService {
 		if(assertAuthenticated(commentAddListener)) {
 			if(shareOptions != null) {
 				
-				CommentOptions commentOptions = new CommentOptions();
+				CommentOptions commentOptions = CommentUtils.getUserCommentOptions(activity);
 				commentOptions.merge(shareOptions);
 				commentOptions.setSubscribeToUpdates(comment.isNotificationsEnabled());
 				
@@ -736,7 +738,7 @@ public class SocializeServiceImpl implements SocializeService {
 		if(assertAuthenticated(likeAddListener)) {
 			if(shareOptions != null) {
 				
-				LikeOptions likeOptions = new LikeOptions();
+				LikeOptions likeOptions = LikeUtils.getUserLikeOptions(activity);
 				likeOptions.merge(shareOptions);
 				
 				final SocialNetwork[] shareTo = shareOptions.getShareTo();
