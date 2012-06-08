@@ -6,6 +6,7 @@ import com.socialize.android.ioc.ProxyObject;
 import com.socialize.api.action.comment.CommentUtilsProxy;
 import com.socialize.api.action.like.LikeUtilsProxy;
 import com.socialize.api.action.share.ShareUtilsProxy;
+import com.socialize.api.action.user.UserUtilsProxy;
 import com.socialize.api.action.view.ViewUtilsProxy;
 import com.socialize.listener.SocializeInitListener;
 
@@ -15,6 +16,7 @@ public class SocializeAccess {
 	private static LikeUtilsProxy originalLikeUtilsProxy = LikeUtils.proxy;
 	private static ShareUtilsProxy originalShareUtilsProxy = ShareUtils.proxy;
 	private static ViewUtilsProxy originalViewUtilsProxy = ViewUtils.proxy;
+	private static UserUtilsProxy originalUserUtilsProxy = UserUtils.proxy;
 	
 	public static <T extends Object> T getBean(String beanName, Object...args) {
 		return getBean(Socialize.getSocialize(), beanName, args);
@@ -88,6 +90,14 @@ public class SocializeAccess {
 		ViewUtils.proxy = proxy;
 	}
 	
+	public static void setUserUtilsProxy(UserUtilsProxy proxy) {
+		UserUtils.proxy = proxy;
+	}
+	
+	public static void revertUserUtilsProxy() {
+		UserUtils.proxy = originalUserUtilsProxy;
+	}
+	
 	public static void revertCommentUtilsProxy() {
 		CommentUtils.proxy = originalCommentUtilsProxy;
 	}
@@ -109,7 +119,7 @@ public class SocializeAccess {
 		revertLikeUtilsProxy();
 		revertShareUtilsProxy();
 		revertViewUtilsProxy();
-		
+		revertUserUtilsProxy();
 	}
 	
 }

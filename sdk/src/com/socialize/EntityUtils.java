@@ -56,7 +56,7 @@ public class EntityUtils {
 	}
 	
 	/**
-	 * Retrieves an entity
+	 * Retrieves an entity based on its key.
 	 * @param context The current context.
 	 * @param key The entity key.
 	 * @param listener A listener to handle the result.
@@ -64,6 +64,16 @@ public class EntityUtils {
 	public static void getEntity (Activity context, String key, EntityGetListener listener) {
 		proxy.getEntity(context, key, listener);
 	}
+	
+	/**
+	 * Retrieves an entity based on its id.
+	 * @param context The current context.
+	 * @param id The entity id.
+	 * @param listener A listener to handle the result.
+	 */
+	public static void getEntity (Activity context, long id, EntityGetListener listener) {
+		proxy.getEntity(context, id, listener);
+	}	
 	
 	/**
 	 * Retrieves all entities sorted by creation date.

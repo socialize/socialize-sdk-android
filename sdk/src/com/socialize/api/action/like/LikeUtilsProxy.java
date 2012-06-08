@@ -48,6 +48,8 @@ public interface LikeUtilsProxy {
 	
 	public void unlike (Activity context, String entityKey, LikeDeleteListener listener);
  
+	public void getLike (Activity context, long id, LikeGetListener listener);
+	
 	public void getLike (Activity context, String entityKey, LikeGetListener listener);
 	
 	public void getLikesByUser (Activity context, User user, int start, int end, LikeListListener listener);

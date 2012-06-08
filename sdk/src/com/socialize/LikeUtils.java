@@ -105,6 +105,16 @@ public class LikeUtils {
 	}
 	
 	/**
+	 * Retrieves a like based on its ID.
+	 * @param context The current context.
+	 * @param id The id of the like.
+	 * @param listener A listener to handle the result.
+	 */
+	public static void getLike (Activity context, long id, LikeGetListener listener) {
+		proxy.getLike(context, id, listener);
+	}
+	
+	/**
 	 * Determines if the given entity has been liked by the current user.
 	 * @param context The current context.
 	 * @param entityKey The entity that was liked.

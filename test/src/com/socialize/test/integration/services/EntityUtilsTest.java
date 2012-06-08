@@ -96,7 +96,8 @@ public class EntityUtilsTest extends SocializeActivityTest {
 		clearResults();
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		
-		Socialize.getSocialize().getEntityById(entityAfter.getId(), new EntityGetListener() {
+		
+		EntityUtils.getEntity(getActivity(), entityAfter.getId(), new EntityGetListener() {
 			
 			@Override
 			public void onGet(Entity entity) {

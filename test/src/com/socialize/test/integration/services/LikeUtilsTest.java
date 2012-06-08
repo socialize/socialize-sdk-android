@@ -95,7 +95,7 @@ public class LikeUtilsTest extends SocializeActivityTest {
 		clearResults();
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		
-		Socialize.getSocialize().getLikeById(like.getId(), new LikeGetListener() {
+		LikeUtils.getLike(getActivity(), like.getId(), new LikeGetListener() {
 			
 			@Override
 			public void onGet(Like entity) {

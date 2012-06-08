@@ -36,6 +36,11 @@ import com.socialize.listener.entity.EntityListListener;
 public class SocializeEntityUtils implements EntityUtilsProxy {
 	
 	private EntitySystem entitySystem;
+	
+	@Override
+	public void getEntity(Activity context, long id, EntityGetListener listener) {
+		entitySystem.getEntity(Socialize.getSocialize().getSession(), id, listener);
+	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.api.action.entity.EntityUtilsProxy#addEntity(android.app.Activity, com.socialize.entity.Entity, com.socialize.listener.entity.EntityAddListener)

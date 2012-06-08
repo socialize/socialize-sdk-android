@@ -25,13 +25,9 @@ import android.app.Activity;
 import android.content.Context;
 import com.socialize.Socialize;
 import com.socialize.SocializeAccess;
-import com.socialize.android.ioc.IOCContainer;
-import com.socialize.android.ioc.ProxyObject;
-import com.socialize.api.action.user.UserSystem;
+import com.socialize.api.action.user.SocializeUserUtils;
 import com.socialize.entity.User;
-import com.socialize.error.SocializeException;
-import com.socialize.listener.SocializeInitListener;
-import com.socialize.test.mock.MockUserSystem;
+import com.socialize.listener.user.UserGetListener;
 import com.socialize.test.ui.SocializeUIActivityTest;
 import com.socialize.test.ui.util.TestUtils;
 import com.socialize.ui.profile.ProfileActivity;
@@ -65,22 +61,36 @@ public class ProfileActivityLoadTest extends SocializeUIActivityTest {
 		dummy.setFirstName("foo");
 		dummy.setLastName("bar");
 		
-		SocializeAccess.setInitListener(new SocializeInitListener() {
-			
+		SocializeUserUtils userUtils = new SocializeUserUtils() {
 			@Override
-			public void onError(SocializeException error) {
-				error.printStackTrace();
-				addResult(error);
+			public void getUser(Context context, long id, UserGetListener listener) {
+				listener.onGet(dummy);
 			}
-			
+
 			@Override
-			public void onInit(Context context, IOCContainer container) {
-				ProxyObject<UserSystem> proxy = container.getProxy("userSystem");
-				MockUserSystem mock = new MockUserSystem();
-				mock.setUser(dummy);
-				proxy.setDelegate(mock);
+			public User getCurrentUser(Context context) {
+				return dummy;
 			}
-		});
+		};
+		
+		SocializeAccess.setUserUtilsProxy(userUtils);
+		
+//		SocializeAccess.setInitListener(new SocializeInitListener() {
+//			
+//			@Override
+//			public void onError(SocializeException error) {
+//				error.printStackTrace();
+//				addResult(error);
+//			}
+//			
+//			@Override
+//			public void onInit(Context context, IOCContainer container) {
+//				ProxyObject<UserSystem> proxy = container.getProxy("userSystem");
+//				MockUserSystem mock = new MockUserSystem();
+//				mock.setUser(dummy);
+//				proxy.setDelegate(mock);
+//			}
+//		});
 		
 		// Ensure facebook is enabled
 		Socialize.getSocialize().getConfig().setFacebookAppId("1234567890");
@@ -92,8 +102,8 @@ public class ProfileActivityLoadTest extends SocializeUIActivityTest {
 		
 		assertNotNull(waitForActivity);
 		
-		SocializeException error = getNextResult();
-		assertNull(error);		
+//		SocializeException error = getNextResult();
+//		assertNull(error);		
 		
 		// Check that the user's name is displayed
 		assertTrue(TestUtils.lookForText(waitForActivity, "foo", 10000));

@@ -71,7 +71,6 @@ public class ProfileLayoutView extends BaseView {
 		long id = Long.parseLong(userId);
 		dialog = progressDialogFactory.show(getContext(), "Loading", "Please wait...");
 		
-		
 		UserUtils.getUser(getContext(), id, new UserGetListener() {
 			
 			@Override

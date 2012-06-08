@@ -33,6 +33,7 @@ import com.socialize.listener.entity.EntityListListener;
  */
 public interface EntityUtilsProxy {
 	public void addEntity (Activity context, Entity e, EntityAddListener listener);
+	public void getEntity (Activity context, long id, EntityGetListener listener);
 	public void getEntity (Activity context, String key, EntityGetListener listener);
 	public void getEntities (Activity context, int start, int end, EntityListListener listener);
 	public void getEntities (Activity context, EntityListListener listener, String...key);

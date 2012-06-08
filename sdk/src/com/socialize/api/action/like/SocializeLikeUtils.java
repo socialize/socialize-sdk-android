@@ -295,7 +295,6 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 		});
 	}
 
-
 	/*
 	 * (non-Javadoc)
 	 * @see com.socialize.api.action.like.LikeUtilsProxy#getLike(android.app.Activity, com.socialize.entity.Entity, com.socialize.listener.like.LikeGetListener)
@@ -304,6 +303,16 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 	public void getLike(Activity context, String entityKey, LikeGetListener listener) {
 		final SocializeSession session = getSocialize().getSession();
 		likeSystem.getLike(session, entityKey, listener);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.api.action.like.LikeUtilsProxy#getLike(android.app.Activity, long, com.socialize.listener.like.LikeGetListener)
+	 */
+	@Override
+	public void getLike(Activity context, long id, LikeGetListener listener) {
+		final SocializeSession session = getSocialize().getSession();
+		likeSystem.getLike(session, id, listener);
 	}
 
 	/*
