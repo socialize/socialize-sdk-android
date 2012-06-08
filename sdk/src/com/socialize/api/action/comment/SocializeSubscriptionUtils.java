@@ -27,6 +27,7 @@ import com.socialize.entity.Entity;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.notifications.NotificationType;
+import com.socialize.notifications.SubscriptionType;
 
 
 /**
@@ -38,18 +39,18 @@ public class SocializeSubscriptionUtils extends SocializeActionUtilsBase impleme
 	private SubscriptionSystem subscriptionSystem;
 
 	@Override
-	public void subscribe(Activity context, Entity e, NotificationType type, SubscriptionResultListener listener) {
-		subscriptionSystem.addSubscription(getSocialize().getSession(), e, type, listener);
+	public void subscribe(Activity context, Entity e, SubscriptionType type, SubscriptionResultListener listener) {
+		subscriptionSystem.addSubscription(getSocialize().getSession(), e, NotificationType.valueOf(type), listener);
 	}
 
 	@Override
-	public void unsubscribe(Activity context, Entity e, NotificationType type, SubscriptionResultListener listener) {
-		subscriptionSystem.removeSubscription(getSocialize().getSession(), e, type, listener);
+	public void unsubscribe(Activity context, Entity e, SubscriptionType type, SubscriptionResultListener listener) {
+		subscriptionSystem.removeSubscription(getSocialize().getSession(), e, NotificationType.valueOf(type), listener);
 	}
 	
 	@Override
-	public void isSubscribed(Activity context, Entity e, NotificationType type, SubscriptionGetListener listener) {
-		subscriptionSystem.getSubscription(getSocialize().getSession(), e, type, listener);
+	public void isSubscribed(Activity context, Entity e, SubscriptionType type, SubscriptionGetListener listener) {
+		subscriptionSystem.getSubscription(getSocialize().getSession(), e, NotificationType.valueOf(type), listener);
 	}
 
 	public void setSubscriptionSystem(SubscriptionSystem subscriptionSystem) {

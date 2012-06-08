@@ -76,6 +76,7 @@ public class ShareClickListener implements OnClickListener {
 	/* (non-Javadoc)
 	 * @see android.view.View.OnClickListener#onClick(android.view.View)
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onClick(View view) {
 		final ProgressDialog dialog = progressDialogFactory.show(view.getContext(), "Share", "Sharing via " + shareType.getDisplayName() + "...");

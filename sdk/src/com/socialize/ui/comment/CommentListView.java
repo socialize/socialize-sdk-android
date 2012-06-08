@@ -25,7 +25,7 @@ import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
 import com.socialize.log.SocializeLogger;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.notifications.NotificationType;
+import com.socialize.notifications.SubscriptionType;
 import com.socialize.ui.dialog.SimpleDialogFactory;
 import com.socialize.ui.header.SocializeHeader;
 import com.socialize.ui.image.ImageLoader;
@@ -423,7 +423,7 @@ public class CommentListView extends BaseView {
 		
 		if(notifyBox.isChecked()) {
 			
-			SubscriptionUtils.subscribe(getActivity(), entity, NotificationType.NEW_COMMENTS, new SubscriptionResultListener() {
+			SubscriptionUtils.subscribe(getActivity(), entity, SubscriptionType.NEW_COMMENTS, new SubscriptionResultListener() {
 				@Override
 				public void onError(SocializeException error) {
 					showError(getContext(), error);
@@ -441,7 +441,7 @@ public class CommentListView extends BaseView {
 			});
 		}
 		else {
-			SubscriptionUtils.unsubscribe(getActivity(), entity, NotificationType.NEW_COMMENTS, new SubscriptionResultListener() {
+			SubscriptionUtils.unsubscribe(getActivity(), entity, SubscriptionType.NEW_COMMENTS, new SubscriptionResultListener() {
 				@Override
 				public void onError(SocializeException error) {
 					showError(getContext(), error);
@@ -465,7 +465,7 @@ public class CommentListView extends BaseView {
 			notifyBox.showLoading();
 			
 			// Now load the subscription status for the user
-			SubscriptionUtils.isSubscribed(getActivity(), entity, NotificationType.NEW_COMMENTS, new SubscriptionGetListener() {
+			SubscriptionUtils.isSubscribed(getActivity(), entity, SubscriptionType.NEW_COMMENTS, new SubscriptionGetListener() {
 				
 				@Override
 				public void onGet(Subscription subscription) {

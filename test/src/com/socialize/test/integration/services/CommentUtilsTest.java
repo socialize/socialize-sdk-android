@@ -39,7 +39,7 @@ import com.socialize.listener.comment.CommentGetListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.listener.subscription.SubscriptionGetListener;
 import com.socialize.listener.subscription.SubscriptionResultListener;
-import com.socialize.notifications.NotificationType;
+import com.socialize.notifications.SubscriptionType;
 import com.socialize.test.SocializeActivityTest;
 
 
@@ -345,7 +345,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 	public void test_subscribe_unsubscribe() throws Exception {
 		final Entity e = Entity.newInstance("test_unsubscribe" + Math.random(),"test_unsubscribe");
 		final CountDownLatch latch = new CountDownLatch(1);
-		SubscriptionUtils.subscribe(getActivity(), e, NotificationType.NEW_COMMENTS, new SubscriptionResultListener() {
+		SubscriptionUtils.subscribe(getActivity(), e, SubscriptionType.NEW_COMMENTS, new SubscriptionResultListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -369,7 +369,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		assertTrue(subscription.isSubscribed());
 		
 		final CountDownLatch latch2 = new CountDownLatch(1);
-		SubscriptionUtils.isSubscribed(getActivity(), e, NotificationType.NEW_COMMENTS, new SubscriptionGetListener() {
+		SubscriptionUtils.isSubscribed(getActivity(), e, SubscriptionType.NEW_COMMENTS, new SubscriptionGetListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
@@ -393,7 +393,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		assertTrue(subscription.isSubscribed());			
 		
 		final CountDownLatch latch3 = new CountDownLatch(1);
-		SubscriptionUtils.unsubscribe(getActivity(), e, NotificationType.NEW_COMMENTS, new SubscriptionResultListener() {
+		SubscriptionUtils.unsubscribe(getActivity(), e, SubscriptionType.NEW_COMMENTS, new SubscriptionResultListener() {
 			
 			@Override
 			public void onError(SocializeException error) {
