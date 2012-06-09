@@ -51,7 +51,6 @@ Add the following additional configurations to the **<application.../>** element
 
 .. literalinclude:: snippets/notification_manifest_snippet0.txt
    :language: xml
-   :linenos:
    :emphasize-lines: 15,19
    :tab-width: 4
 
@@ -59,7 +58,6 @@ Add the following additional configurations to the **<manifest.../>** element of
 
 .. literalinclude:: snippets/notification_manifest_snippet1.txt
    :language: xml
-   :linenos:
    :emphasize-lines: 5,7
    :tab-width: 4
 
@@ -67,7 +65,6 @@ The full **AndroidManifest.xml** should look something like this
 
 .. literalinclude:: snippets/notification_manifest.txt
    :language: xml
-   :linenos:
    :emphasize-lines: 21,25,42,44
    :tab-width: 4
 
@@ -79,7 +76,6 @@ in your existing broadcast receiver's **onReceive()** method:
 
 .. literalinclude:: snippets/broadcast_handle.txt
    :language: java
-   :linenos:
 
 Make sure however, that you add the intent filters and permissions required by Socialize to your existing receiver definition.
 
@@ -130,7 +126,6 @@ under the key **socialize.c2dm.sender.id**
 
 .. literalinclude:: snippets/props_c2dm.txt
    :language: properties
-   :linenos:
 
 Step 3: Add your C2DM token to the Socialize website
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

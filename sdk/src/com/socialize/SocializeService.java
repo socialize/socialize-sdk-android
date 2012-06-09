@@ -531,7 +531,9 @@ public interface SocializeService extends SocializeUI, SocializeSessionConsumer 
 	 * <br/>
 	 * This can be modified BEFORE calling init() if alternate config is required.
 	 * @return The current config object.
+	 * @deprecated use ConfigUtils
 	 */
+	@Deprecated
 	public SocializeConfig getConfig();
 	
 	/**

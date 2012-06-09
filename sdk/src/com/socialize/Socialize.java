@@ -24,7 +24,6 @@ package com.socialize;
 import java.util.HashMap;
 import java.util.Map;
 import android.content.Context;
-import com.socialize.config.SocializeConfig;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.SocializeListener;
 import com.socialize.log.SocializeLogger.LogLevel;
@@ -102,19 +101,10 @@ public class Socialize {
 		return instance;
 	}
 	
-	/**
-	 * Returns the global configuration object.
-	 * @return The global configuration object.
-	 */
-	public static SocializeConfig getConfig() {
-		return getSocialize().getConfig();
-	}
-	
 	@Deprecated
 	public static final SocializeUI getSocializeUI() {
 		return instance;
 	}
-	
 	
 	static Object getBean(String name) {
 		return instance.getContainer().getBean(name);

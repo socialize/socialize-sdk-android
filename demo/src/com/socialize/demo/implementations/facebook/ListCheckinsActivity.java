@@ -25,7 +25,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;
 import com.socialize.api.SocializeSession;
-import com.socialize.auth.AuthProviderType;
 import com.socialize.demo.SDKDemoActivity;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
@@ -63,8 +62,6 @@ public class ListCheckinsActivity extends SDKDemoActivity {
 			
 			@Override
 			public void onAuthSuccess(SocializeSession session) {
-				
-				System.err.println("Token is " + session.getUserProviderCredentials(AuthProviderType.FACEBOOK).getAccessToken());
 				
 				FacebookUtils.get(ListCheckinsActivity.this, "me/checkins", null, new SocialNetworkPostListener() {
 					

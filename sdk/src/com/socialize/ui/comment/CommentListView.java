@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import com.socialize.CommentUtils;
+import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SubscriptionUtils;
 import com.socialize.android.ioc.IBeanFactory;
@@ -189,7 +190,7 @@ public class CommentListView extends BaseView {
 		
 		addView(layoutAnchor);
 		
-		setDefaultGrabLength(Socialize.getSocialize().getConfig().getIntProperty("comment.page.size", 20));
+		setDefaultGrabLength(ConfigUtils.getConfig(getContext()).getIntProperty("comment.page.size", 20));
 	}
 	
 	protected CommentScrollListener getCommentScrollListener() {

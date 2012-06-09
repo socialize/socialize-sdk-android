@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
+import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.android.ioc.IBeanFactory;
@@ -102,7 +103,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		String entityUrl = propInfo.getEntityUrl();
 		String linkName = entityUrl;
 		String link = entityUrl;
-		String appId = getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
+		String appId = ConfigUtils.getConfig(parent).getProperty(SocializeConfig.FACEBOOK_APP_ID);
 		
 		if(entity != null) {
 			linkName = entity.getDisplayName();
@@ -155,7 +156,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		postData.setPostValues(params);
 		postData.setPropagationInfo(propInfo);
 		
-		post(parent, getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID), listener, postData);
+		post(parent, ConfigUtils.getConfig(parent).getProperty(SocializeConfig.FACEBOOK_APP_ID), listener, postData);
 	}
 
 	@Override
@@ -193,7 +194,7 @@ public class DefaultFacebookWallPoster implements FacebookWallPoster {
 		
 		if(propInfo != null) {
 			String link = propInfo.getAppUrl();
-			String appId = getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
+			String appId = ConfigUtils.getConfig(parent).getProperty(SocializeConfig.FACEBOOK_APP_ID);
 			
 			if(!StringUtils.isEmpty(appId)) {
 				postPhoto(parent, appId, link, comment, photoUri, listener);

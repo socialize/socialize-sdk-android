@@ -66,7 +66,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 
 		final SocializeSession session = getSocialize().getSession();
 
-		if(isDisplayAuthDialog()) {
+		if(isDisplayAuthDialog(context)) {
 			authDialogFactory.show(context, new AuthDialogListener() {
 				@Override
 				public void onShow(Dialog dialog, AuthPanelView dialogView) {}
@@ -107,7 +107,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 	public void like(final Activity context, final Entity entity, final LikeOptions likeOptions, final LikeAddListener listener, final SocialNetwork...networks) {
 		final SocializeSession session = getSocialize().getSession();
 
-		if(isDisplayAuthDialog(likeOptions, networks)) {
+		if(isDisplayAuthDialog(context, likeOptions, networks)) {
 			authDialogFactory.show(context, new AuthDialogListener() {
 				@Override
 				public void onShow(Dialog dialog, AuthPanelView dialogView) {}
@@ -147,7 +147,7 @@ public class SocializeLikeUtils extends SocializeActionUtilsBase implements Like
 	@Override
 	public LikeOptions getUserLikeOptions(Context context) {
 		LikeOptions options = new LikeOptions();
-		populateActionOptions(options);
+		populateActionOptions(context, options);
 		return options;
 	}
 

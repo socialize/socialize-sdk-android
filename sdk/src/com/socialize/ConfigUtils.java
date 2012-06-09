@@ -19,36 +19,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.launcher;
+package com.socialize;
 
-import android.app.Activity;
-import android.content.Intent;
+import java.lang.reflect.Proxy;
+import android.content.Context;
+import com.socialize.config.ConfigUtilsProxy;
+import com.socialize.config.SocializeConfig;
 
 
 /**
+ * Provides access to Socialize configuration (socialize.properties)
  * @author Jason Polites
- *
  */
-public abstract class BaseLauncher implements Launcher {
+public class ConfigUtils {
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.launcher.Launcher#onResult(android.app.Activity, int, int, android.content.Intent, android.content.Intent)
-	 */
-	@Override
-	public void onResult(Activity context, int requestCode, int resultCode, Intent returnedIntent, Intent originalIntent) {}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.launcher.Launcher#shouldFinish()
-	 */
-	@Override
-	public boolean shouldFinish(Activity context) {
-		return true;
-	}
-
-	@Override
-	public boolean isAsync() {
-		return true;
+	static ConfigUtilsProxy proxy;
+	
+	static {
+		proxy = (ConfigUtilsProxy) Proxy.newProxyInstance(
+				ConfigUtilsProxy.class.getClassLoader(),
+				new Class[]{ConfigUtilsProxy.class},
+				new SocializeActionProxy("configUtils"));	// Bean name
 	}
 	
-	
+	/**
+	 * Returns the internal Socialize configuration object.
+	 * @param context The current context.
+	 * @return
+	 */
+	public static SocializeConfig getConfig(Context context) {
+		return proxy.getConfig(context);
+	}
 }

@@ -22,6 +22,7 @@
 package com.socialize.ui.comment;
 
 import android.content.Context;
+import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.config.SocializeConfig;
@@ -51,8 +52,8 @@ public class CommentAddButtonListener {
 		this(context);
 		
 		this.callback = callback;
-		this.consumerKey = getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
-		this.consumerSecret = getSocialize().getConfig().getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
+		this.consumerKey = ConfigUtils.getConfig(context).getProperty(SocializeConfig.SOCIALIZE_CONSUMER_KEY);
+		this.consumerSecret = ConfigUtils.getConfig(context).getProperty(SocializeConfig.SOCIALIZE_CONSUMER_SECRET);
 	}
 	
 	

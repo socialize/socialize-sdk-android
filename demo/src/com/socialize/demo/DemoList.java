@@ -35,6 +35,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
+import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
@@ -110,9 +111,9 @@ public class DemoList extends ListActivity {
 		final CheckBox chkFB = (CheckBox) layout.findViewById(R.id.chkFB);
 		final CheckBox chkTW = (CheckBox) layout.findViewById(R.id.chkTW);
 		
-		chkRequireAuth.setChecked(Socialize.getSocialize().getConfig().isAuthRequired());
-		chkAllowAnon.setChecked(Socialize.getSocialize().getConfig().isAllowAnonymousUser());
-		chkFBSSO.setChecked(Socialize.getSocialize().getConfig().getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true));
+		chkRequireAuth.setChecked(ConfigUtils.getConfig(DemoList.this).isAuthRequired());
+		chkAllowAnon.setChecked(ConfigUtils.getConfig(DemoList.this).isAllowAnonymousUser());
+		chkFBSSO.setChecked(ConfigUtils.getConfig(DemoList.this).getBooleanProperty(SocializeConfig.FACEBOOK_SSO_ENABLED, true));
 		
 		chkFB.setChecked(Socialize.getSocialize().isSupported(AuthProviderType.FACEBOOK));
 		chkTW.setChecked(Socialize.getSocialize().isSupported(AuthProviderType.TWITTER));
@@ -121,11 +122,11 @@ public class DemoList extends ListActivity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked) {
-					Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_APP_ID, fbAppId);
+					ConfigUtils.getConfig(DemoList.this).setProperty(SocializeConfig.FACEBOOK_APP_ID, fbAppId);
 				}
 				else {
-					fbAppId = Socialize.getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID);
-					Socialize.getSocialize().getConfig().setProperty(SocializeConfig.FACEBOOK_APP_ID, null);
+					fbAppId = ConfigUtils.getConfig(DemoList.this).getProperty(SocializeConfig.FACEBOOK_APP_ID);
+					ConfigUtils.getConfig(DemoList.this).setProperty(SocializeConfig.FACEBOOK_APP_ID, null);
 				}
 			}
 		});
@@ -134,15 +135,15 @@ public class DemoList extends ListActivity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked) {
-					Socialize.getSocialize().getConfig().setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, twKey);
-					Socialize.getSocialize().getConfig().setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, twSecret);
+					ConfigUtils.getConfig(DemoList.this).setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, twKey);
+					ConfigUtils.getConfig(DemoList.this).setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, twSecret);
 				}
 				else {
-					twKey = Socialize.getSocialize().getConfig().getProperty(SocializeConfig.TWITTER_CONSUMER_KEY);
-					twSecret = Socialize.getSocialize().getConfig().getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET);
+					twKey = ConfigUtils.getConfig(DemoList.this).getProperty(SocializeConfig.TWITTER_CONSUMER_KEY);
+					twSecret = ConfigUtils.getConfig(DemoList.this).getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET);
 					
-					Socialize.getSocialize().getConfig().setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, null);
-					Socialize.getSocialize().getConfig().setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, null);
+					ConfigUtils.getConfig(DemoList.this).setProperty(SocializeConfig.TWITTER_CONSUMER_KEY, null);
+					ConfigUtils.getConfig(DemoList.this).setProperty(SocializeConfig.TWITTER_CONSUMER_SECRET, null);
 				}
 			}
 		});		
@@ -152,9 +153,9 @@ public class DemoList extends ListActivity {
 		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_ALLOW_ANON, String.valueOf(chkAllowAnon.isChecked()));
-				Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, String.valueOf(chkRequireAuth.isChecked()));
-				Socialize.getSocialize().getConfig().setFacebookSingleSignOnEnabled(chkFBSSO.isChecked());
+				ConfigUtils.getConfig(DemoList.this).setProperty(SocializeConfig.SOCIALIZE_ALLOW_ANON, String.valueOf(chkAllowAnon.isChecked()));
+				ConfigUtils.getConfig(DemoList.this).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, String.valueOf(chkRequireAuth.isChecked()));
+				ConfigUtils.getConfig(DemoList.this).setFacebookSingleSignOnEnabled(chkFBSSO.isChecked());
 			}
 		});
 		builder.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {

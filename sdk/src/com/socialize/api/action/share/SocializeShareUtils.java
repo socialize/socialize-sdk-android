@@ -60,7 +60,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	@Override
 	public ShareOptions getUserShareOptions(Context context) {
 		ShareOptions options = new ShareOptions();
-		populateActionOptions(options);
+		populateActionOptions(context, options);
 		return options;
 	}
 
@@ -260,7 +260,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 
 	@Override
 	public void shareViaSocialNetworks(Activity context, final Entity entity, final ShareOptions shareOptions, final SocialNetworkShareListener listener, final SocialNetwork...networks) {
-		if(isDisplayAuthDialog(shareOptions, networks)) {
+		if(isDisplayAuthDialog(context, shareOptions, networks)) {
 			
 			authDialogFactory.show(context, new AuthDialogListener() {
 				

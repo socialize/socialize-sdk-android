@@ -15,7 +15,7 @@ html_theme_options = {
 html_favicon = 'favicon.ico'
 html_static_path = ['_static']
 html_sidebars = {
-   '**': ['searchbox.html','globaltoc.html','localtoc.html']
+   '**': ['searchbox.html', 'globaltoc.html']
 }
 html_domain_indices = False
 html_use_index = False

@@ -228,6 +228,7 @@
 		<property name="locationProvider" ref="locationProvider"/>
 		<property name="notificationChecker" ref="notificationChecker"/>
 		<property name="appUtils" ref="appUtils"/>
+		<property name="config" ref="config"/>
 	</bean>
 	
 	<bean id="socializeActionFactory" class="com.socialize.entity.SocializeActionFactory" abstract="true">

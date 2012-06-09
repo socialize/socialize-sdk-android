@@ -1636,10 +1636,15 @@
 	<bean id="twitterUtils" class="com.socialize.networks.twitter.TwitterUtilsImpl">
 		<property name="userSystem" ref="userSystem"/>
 		<property name="shareSystem" ref="shareSystem"/>
+		<property name="config" ref="config"/>
 	</bean>	
 
 	<bean id="locationUtils" class="com.socialize.location.SocializeLocationUtils">
 		<property name="locationProvider" ref="locationProvider"/>
 	</bean>	
+	
+	<bean id="configUtils" class="com.socialize.config.SocializeConfigUtils">
+		<property name="config" ref="config"/>
+	</bean>
 
 </beans>

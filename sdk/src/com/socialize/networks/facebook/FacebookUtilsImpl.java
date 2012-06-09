@@ -24,6 +24,7 @@ package com.socialize.networks.facebook;
 import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
+import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.api.SocializeSession;
@@ -74,7 +75,7 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	 */
 	@Override
 	public void link(Activity context, String token, SocializeAuthListener listener) {
-		SocializeConfig config = getSocialize().getConfig();
+		SocializeConfig config = ConfigUtils.getConfig(context);
 		FacebookAuthProviderInfo fbInfo = new FacebookAuthProviderInfo();
 		fbInfo.setAppId(config.getProperty(SocializeConfig.FACEBOOK_APP_ID));
 		
@@ -120,7 +121,7 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 	 */
 	@Override
 	public void setAppId(Context context, String appId) {
-		SocializeConfig config = getSocialize().getConfig();
+		SocializeConfig config = ConfigUtils.getConfig(context);
 		config.setFacebookAppId(appId);
 	}
 
@@ -156,19 +157,19 @@ public class FacebookUtilsImpl implements FacebookUtilsProxy {
 
 	@Override
 	public void post(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {
-		SocializeConfig config = getSocialize().getConfig();
+		SocializeConfig config = ConfigUtils.getConfig(context);
 		facebookWallPoster.post(context, graphPath, config.getProperty(SocializeConfig.FACEBOOK_APP_ID), postData, listener);
 	}
 
 	@Override
 	public void get(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {
-		SocializeConfig config = getSocialize().getConfig();
+		SocializeConfig config = ConfigUtils.getConfig(context);
 		facebookWallPoster.get(context, graphPath, config.getProperty(SocializeConfig.FACEBOOK_APP_ID), postData, listener);
 	}
 
 	@Override
 	public void delete(Activity context, String graphPath, Map<String, String> postData, SocialNetworkPostListener listener) {
-		SocializeConfig config = getSocialize().getConfig();
+		SocializeConfig config = ConfigUtils.getConfig(context);
 		facebookWallPoster.delete(context, graphPath, config.getProperty(SocializeConfig.FACEBOOK_APP_ID), postData, listener);
 	}
 

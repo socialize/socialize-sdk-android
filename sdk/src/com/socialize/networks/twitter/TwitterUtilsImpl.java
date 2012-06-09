@@ -51,6 +51,7 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	
 	private UserSystem userSystem;
 	private ShareSystem shareSystem;
+	private SocializeConfig config;
 
 	/* (non-Javadoc)
 	 * @see com.socialize.networks.twitter.TwitterUtilsProxy#link(android.app.Activity, com.socialize.listener.SocializeAuthListener)
@@ -66,7 +67,6 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	@Override
 	public void link(Activity context, String token, String secret, SocializeAuthListener listener) {
 		
-		SocializeConfig config = getSocialize().getConfig();
 		TwitterAuthProviderInfo twInfo = new TwitterAuthProviderInfo();
 		twInfo.setConsumerKey(config.getProperty(SocializeConfig.TWITTER_CONSUMER_KEY));
 		twInfo.setConsumerSecret(config.getProperty(SocializeConfig.TWITTER_CONSUMER_SECRET));
@@ -115,7 +115,6 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	 */
 	@Override
 	public void setCredentials(Context context, String consumerKey, String consumerSecret) {
-		SocializeConfig config = getSocialize().getConfig();
 		config.setTwitterKeySecret(consumerKey, consumerSecret);
 	}
 
@@ -183,5 +182,9 @@ public class TwitterUtilsImpl implements TwitterUtilsProxy {
 	
 	public void setShareSystem(ShareSystem shareSystem) {
 		this.shareSystem = shareSystem;
+	}
+
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
 	}
 }

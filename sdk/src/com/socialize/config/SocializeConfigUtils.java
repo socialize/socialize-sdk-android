@@ -19,36 +19,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.launcher;
+package com.socialize.config;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
+
 
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class BaseLauncher implements Launcher {
+public class SocializeConfigUtils implements ConfigUtilsProxy {
 	
-	/* (non-Javadoc)
-	 * @see com.socialize.launcher.Launcher#onResult(android.app.Activity, int, int, android.content.Intent, android.content.Intent)
+	private SocializeConfig config;
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.socialize.config.ConfigUtilsProxy#getConfig()
 	 */
 	@Override
-	public void onResult(Activity context, int requestCode, int resultCode, Intent returnedIntent, Intent originalIntent) {}
-
-	/* (non-Javadoc)
-	 * @see com.socialize.launcher.Launcher#shouldFinish()
-	 */
-	@Override
-	public boolean shouldFinish(Activity context) {
-		return true;
+	public SocializeConfig getConfig(Context context) {
+		return config;
 	}
-
-	@Override
-	public boolean isAsync() {
-		return true;
-	}
-	
-	
 }

@@ -375,42 +375,4 @@ Retrieving Views
 	:start-after: begin-snippet-1
 	:end-before: end-snippet-1
 
-Facebook
---------
-
-Socialize provides a simple interface into the Facebook graph API, including linking users to their Facebook account.
-
-Linking with Facebook
-~~~~~~~~~~~~~~~~~~~~~
-
-.. note:: You must already have a Facebook application to enable Facebook authentication in Socialize.  Refer to :doc:`facebook` for more information 
-
-A Facebook application is nothing more than an account on Facebook which links your Android application to 
-a Facebook account and is required to "authorize" your Android app to access a user's Facebook profile.
-
-To link a user to their Facebook account, simply call the link method of **FacebookUtils**
-
-.. _fb_snippet:
-
-.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java
-	:start-after: begin-snippet-0
-	:end-before: end-snippet-0
-
-If you have already authenticated your user with Facebook you can link their account with Socialize by providing their Facebook token 
-in the link call
-
-.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java
-	:start-after: begin-snippet-1
-	:end-before: end-snippet-1
-	
-You can also elect to just render the default *Link* dialog
-
-.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ShareSnippets.java
-	:start-after: begin-snippet-4
-	:end-before: end-snippet-4
-
-
-Twitter
--------
-
 .. include:: footer.inc			

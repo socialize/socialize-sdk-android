@@ -19,36 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.launcher;
+package com.socialize.config;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
+import com.socialize.annotations.Synchronous;
 
 
 /**
  * @author Jason Polites
  *
  */
-public abstract class BaseLauncher implements Launcher {
-	
-	/* (non-Javadoc)
-	 * @see com.socialize.launcher.Launcher#onResult(android.app.Activity, int, int, android.content.Intent, android.content.Intent)
-	 */
-	@Override
-	public void onResult(Activity context, int requestCode, int resultCode, Intent returnedIntent, Intent originalIntent) {}
+public interface ConfigUtilsProxy {
 
-	/* (non-Javadoc)
-	 * @see com.socialize.launcher.Launcher#shouldFinish()
-	 */
-	@Override
-	public boolean shouldFinish(Activity context) {
-		return true;
-	}
-
-	@Override
-	public boolean isAsync() {
-		return true;
-	}
-	
-	
+	@Synchronous
+	public SocializeConfig getConfig(Context context);
 }

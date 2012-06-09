@@ -78,9 +78,11 @@ div.sphinxsidebar {
 }
 
 div.sphinxsidebarwrapper{
-    padding: 20px 0;
+    padding: 20px 0 0 0;
+    position:fixed;
+    width:300px;
 }
- 
+
 div.sphinxsidebar h3,
 div.sphinxsidebar h4 {
     font-family: Arial, sans-serif;

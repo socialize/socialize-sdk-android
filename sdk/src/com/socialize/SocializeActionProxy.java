@@ -62,22 +62,17 @@ public class SocializeActionProxy implements InvocationHandler {
 					synchronized (this) {
 						// Always init to set the context
 						Socialize.getSocialize().init(context);
-						
 						if(!Socialize.getSocialize().isAuthenticated()) {
 							Socialize.getSocialize().authenticateSynchronous(context);
 						}
 					}
 				}
-				else {
-					throw new MethodNotSupportedException("No context found in method arguments for method [" +
-							method.getName() +
-							"]");
-				}			
 				
 				return method.invoke(getBean(), args);
 			}
 			else {
 				Activity context = findActivity(args);
+				
 				if(context != null) {
 					SocializeListener listener = findListener(args);
 					invoke(context, listener, method, args);

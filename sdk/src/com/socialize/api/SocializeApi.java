@@ -71,6 +71,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	private SocializeLocationProvider locationProvider;
 	private NotificationChecker notificationChecker;
 	private AppUtils appUtils;
+	private SocializeConfig config;
 	
 	public static enum RequestType {AUTH,PUT,POST,PUT_AS_POST,GET,LIST,LIST_AS_GET,LIST_WITHOUT_ENTITY,DELETE};
 	
@@ -138,7 +139,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				}
 			}
 			
-			SocializeConfig config = Socialize.getSocialize().getConfig();
 			String appStore = config.getProperty(SocializeConfig.REDIRECT_APP_STORE);
 			
 			if(!StringUtils.isEmpty(appStore)) {
@@ -164,7 +164,6 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			Propagation localPropagation = newPropagation();
 			localPropagation.addThirdParty(shareType);
 			
-			SocializeConfig config = Socialize.getSocialize().getConfig();
 			String appStore = config.getProperty(SocializeConfig.REDIRECT_APP_STORE);
 			
 			if(!StringUtils.isEmpty(appStore)) {
@@ -615,6 +614,10 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		this.appUtils = appUtils;
 	}
 	
+	public void setConfig(SocializeConfig config) {
+		this.config = config;
+	}
+
 	public void setNotificationChecker(NotificationChecker notificationChecker) {
 		this.notificationChecker = notificationChecker;
 	}

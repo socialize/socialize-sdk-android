@@ -25,6 +25,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.UserUtils;
@@ -46,15 +47,14 @@ public abstract class SocializeActionUtilsBase {
 	
 	private ShareHandlers shareHandlers;
 	
-	protected void populateActionOptions(ActionOptions options) {
-		SocializeService socialize = Socialize.getSocialize();
-		options.setAuthRequired(socialize.getConfig().isAuthRequired());
+	protected void populateActionOptions(Context context, ActionOptions options) {
+		options.setAuthRequired(ConfigUtils.getConfig(context).isAuthRequired());
 	}	
 	
-	protected boolean isDisplayAuthDialog(ActionOptions options, SocialNetwork...networks) {
+	protected boolean isDisplayAuthDialog(Context context, ActionOptions options, SocialNetwork...networks) {
 		
 		if(options == null) {
-			return isDisplayAuthDialog();
+			return isDisplayAuthDialog(context);
 		}
 		
 		boolean authRequired = options.isAuthRequired();
@@ -84,9 +84,9 @@ public abstract class SocializeActionUtilsBase {
 	}
 	
 	
-	protected boolean isDisplayAuthDialog() {
+	protected boolean isDisplayAuthDialog(Context context) {
 		
-		boolean authRequired = getSocialize().getConfig().isAuthRequired();
+		boolean authRequired = ConfigUtils.getConfig(context).isAuthRequired();
 		boolean authSupported = false;
 		
 		if(authRequired) {

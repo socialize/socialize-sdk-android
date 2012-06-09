@@ -22,8 +22,10 @@
 package com.socialize.launcher;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SocializeService;
 import com.socialize.config.SocializeConfig;
@@ -45,7 +47,7 @@ public class ActionDelegateLauncher extends BaseLauncher {
 	 */
 	@Override
 	public boolean launch(Activity context, Bundle data) {
-		return getLauncher().launch(context, data);
+		return getLauncher(context).launch(context, data);
 	}
 
 	/* (non-Javadoc)
@@ -53,15 +55,15 @@ public class ActionDelegateLauncher extends BaseLauncher {
 	 */
 	@Override
 	public void onResult(Activity context, int requestCode, int resultCode, Intent returnedIntent, Intent originalIntent) {
-		getLauncher().onResult(context, requestCode, resultCode, returnedIntent, originalIntent);
+		getLauncher(context).onResult(context, requestCode, resultCode, returnedIntent, originalIntent);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.socialize.launcher.Launcher#shouldFinish()
 	 */
 	@Override
-	public boolean shouldFinish() {
-		return getLauncher().shouldFinish();
+	public boolean shouldFinish(Activity context) {
+		return getLauncher(context).shouldFinish(context);
 	}
 	
 	public void setActionLauncher(Launcher actionLauncher) {
@@ -76,9 +78,9 @@ public class ActionDelegateLauncher extends BaseLauncher {
 		this.logger = logger;
 	}
 
-	protected Launcher getLauncher() {
+	protected Launcher getLauncher(Context context) {
 		try {
-			if(getConfig().getBooleanProperty(SocializeConfig.SOCIALIZE_SHOW_COMMENT_LIST_ON_NOTIFY, false)) {
+			if(getConfig(context).getBooleanProperty(SocializeConfig.SOCIALIZE_SHOW_COMMENT_LIST_ON_NOTIFY, false)) {
 				return commentListLauncher;
 			}
 		}
@@ -95,8 +97,8 @@ public class ActionDelegateLauncher extends BaseLauncher {
 	}
 
 	// Mockable
-	protected SocializeConfig getConfig() {
-		return getSocialize().getConfig();
+	protected SocializeConfig getConfig(Context context) {
+		return ConfigUtils.getConfig(context);
 	}
 	
 	// Mockable

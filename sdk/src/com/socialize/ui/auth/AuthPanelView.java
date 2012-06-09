@@ -32,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.socialize.ConfigUtils;
 import com.socialize.android.ioc.IBeanFactory;
 import com.socialize.api.SocializeSession;
 import com.socialize.auth.AuthProviderType;
@@ -149,7 +150,7 @@ public class AuthPanelView extends DialogPanelView {
 		
 		contentLayout.addView(anonymousCell);
 		
-		if(getSocialize().getConfig().isAllowAnonymousUser()) {
+		if(ConfigUtils.getConfig(getContext()).isAllowAnonymousUser()) {
 			skipAuth = new TextView(getContext());
 			skipAuth.setText("I'd rather not...");
 			skipAuth.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);

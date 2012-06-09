@@ -60,7 +60,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 	@Override
 	public CommentOptions getUserCommentOptions(Context context) {
 		CommentOptions options = new CommentOptions();
-		populateActionOptions(options);
+		populateActionOptions(context, options);
 		options.setSubscribeToUpdates(true);
 		return options;		
 	}
@@ -70,7 +70,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 		
 		final SocializeSession session = getSocialize().getSession();
 		
-		if(isDisplayAuthDialog()) {
+		if(isDisplayAuthDialog(context)) {
 			authDialogFactory.show(context, new AuthDialogListener() {
 				
 				@Override
@@ -113,7 +113,7 @@ public class SocializeCommentUtils extends SocializeActionUtilsBase implements C
 	public void addComment(final Activity context, final Entity entity, final String text, final CommentOptions commentOptions, final CommentAddListener listener, SocialNetwork...networks) {
 		final SocializeSession session = getSocialize().getSession();
 		
-		if(isDisplayAuthDialog(commentOptions, networks)) {
+		if(isDisplayAuthDialog(context, commentOptions, networks)) {
 			
 			authDialogFactory.show(context, new AuthDialogListener() {
 				

@@ -1,2 +1,2 @@
-# Configure links to go to Amazon AppStore
-redirect.app.store=amazon
+# Facebook App ID
+facebook.app.id=1234567890
