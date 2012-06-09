@@ -4,7 +4,7 @@ Socialize Android SDK
 Contents:
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 1
    
    whats_new
    getting_started

@@ -1,8 +1,8 @@
 .. include:: header.inc
 	
-=========================
-Socialize Developer Guide
-=========================
+=================================
+Socialize Android Developer Guide
+=================================
 
 Introduction
 ------------
@@ -123,6 +123,15 @@ If you want a more complex data structure, we recommend using JSON as an object 
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/EntitySnippets.java
 	:start-after: begin-snippet-7
 	:end-before: end-snippet-7
+	
+Entity Activity
+~~~~~~~~~~~~~~~
+
+All actions performed on an entity (comment,share,like) can be retrieved using **ActionUtils**
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionSnippets.java
+	:start-after: begin-snippet-1
+	:end-before: end-snippet-1
 
 Users & User Activity
 ---------------------
@@ -175,6 +184,22 @@ Or retrieve the raw list of actions performed by a user using **ActionUtils**
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/UserSnippets.java
 	:start-after: begin-snippet-5
 	:end-before: end-snippet-5
+	
+Or get the list of actions by a user on a single entity
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionSnippets.java
+	:start-after: begin-snippet-2
+	:end-before: end-snippet-2
+	
+	
+Application Activity
+--------------------
+
+Using the **ActionUtils** class you can also retrieve application-wide activity
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionSnippets.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
 
 Sharing
 -------
@@ -229,11 +254,126 @@ implement the **onBeforePost** method of the listener you pass to the ShareUtils
 Comments
 --------
 
+Displaying the Comment List UI
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The standard Socialize Comment List UI is included with the :doc:`action_bar` however if you wanted to create your own ActionBar or
+simply want to launch the Comment List from elsewhere in your app this can simply be done with a few lines of code
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
+	:start-after: begin-snippet-1
+	:end-before: end-snippet-1	
+
+You can also display the UI with a listener to handle events
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
+	:start-after: begin-snippet-2
+	:end-before: end-snippet-2	
+
+Adding Comments
+~~~~~~~~~~~~~~~
+
+To create a comment programmatically you simply call the **addComment** method on **CommentUtils**
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
+
+You can also manually specify how the comment is to be propagated to 3rd party networks such as Facebook and Twitter 
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
+	:start-after: begin-snippet-4
+	:end-before: end-snippet-4
+
+
+Retreiving Comments
+~~~~~~~~~~~~~~~~~~~
+
+You can retrieve existing comments by User, Entity or directly using an ID
+
+List comments by User
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
+	:start-after: begin-snippet-5
+	:end-before: end-snippet-5
+	
+List comments by Entity
+	
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
+	:start-after: begin-snippet-6
+	:end-before: end-snippet-6
+	
+List comments by ID	
+	
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/CommentSnippets.java
+	:start-after: begin-snippet-7
+	:end-before: end-snippet-7
+
+
 Likes
 -----
 
+Liking
+~~~~~~~
+
+To create a like programmatically you simply call the **like** method on **LikeUtils**
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/LikeSnippets.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
+
+You can also manually specify how the like is to be propagated to 3rd party networks such as Facebook and Twitter 
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/LikeSnippets.java
+	:start-after: begin-snippet-4
+	:end-before: end-snippet-4
+
+Un-Liking
+~~~~~~~~~
+
+You can also remove a previous like from an entity
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/LikeSnippets.java
+	:start-after: begin-snippet-1
+	:end-before: end-snippet-1
+
+Retreiving Likes
+~~~~~~~~~~~~~~~~
+
+You can retrieve existing likes by User or Entity
+
+List likes by User
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/LikeSnippets.java
+	:start-after: begin-snippet-5
+	:end-before: end-snippet-5
+	
+List likes by Entity
+	
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/LikeSnippets.java
+	:start-after: begin-snippet-6
+	:end-before: end-snippet-6
+	
+
 Views
 -----
+
+A "view" represents the action of a user *viewing* an entity and is an extremely useful analytics tool
+
+Recording Views
+~~~~~~~~~~~~~~~
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ViewSnippets.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
+
+
+Retrieving Views
+~~~~~~~~~~~~~~~~
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ViewSnippets.java
+	:start-after: begin-snippet-1
+	:end-before: end-snippet-1
 
 Facebook
 --------
