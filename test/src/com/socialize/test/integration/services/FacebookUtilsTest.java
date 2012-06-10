@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import org.json.JSONObject;
 import android.app.Activity;
 import android.os.Bundle;
+import com.socialize.ConfigUtils;
 import com.socialize.ShareUtils;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
@@ -175,11 +176,11 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 	
 	public void test_isAvailable() {
 		
-		Socialize.getSocialize().getConfig().setFacebookAppId("foobar");
+		ConfigUtils.getConfig(getContext()).setFacebookAppId("foobar");
 		
 		assertTrue(FacebookUtils.isAvailable(getContext()));
 		
-		Socialize.getSocialize().getConfig().setFacebookAppId(null);
+		ConfigUtils.getConfig(getContext()).setFacebookAppId(null);
 		
 		assertFalse(FacebookUtils.isAvailable(getContext()));
 	}
@@ -187,7 +188,7 @@ public class FacebookUtilsTest extends SocializeActivityTest {
 	public void test_setAppId() {
 		String appId = "foobar";
 		FacebookUtils.setAppId(getContext(), appId);
-		assertEquals(appId, Socialize.getSocialize().getConfig().getProperty(SocializeConfig.FACEBOOK_APP_ID));
+		assertEquals(appId, ConfigUtils.getConfig(getContext()).getProperty(SocializeConfig.FACEBOOK_APP_ID));
 	}
 	
 	

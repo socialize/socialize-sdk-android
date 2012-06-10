@@ -19,31 +19,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.config;
+package com.socialize.demo.snippets;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
-
+import android.content.Intent;
+import com.socialize.SmartAlertUtils;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class SocializeConfigUtils implements ConfigUtilsProxy {
-	
-	private SocializeConfig config;
-	
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.config.ConfigUtilsProxy#getConfig()
-	 */
-	@Override
-	public SocializeConfig getConfig(Context context) {
-		return config;
+public class SmartAlertSnippets extends BroadcastReceiver {
+// begin-snippet-0
+/*
+ * (non-Javadoc)
+ * @see android.content.BroadcastReceiver#onReceive(android.content.Context, android.content.Intent)
+ */
+@Override
+public void onReceive(Context context, Intent intent) {
+	if(!SmartAlertUtils.handleBroadcastIntent(context, intent)) {
+		// Message was NOT handled by Socialize.
 	}
-	
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
-	}
-	
+}
+// end-snippet-0
 }

@@ -37,6 +37,8 @@ public abstract class AbstractEntityFactory<T extends Entity> extends SocializeO
 	private static final String COMMENTS = "comments";
 	private static final String VIEWS = "views";
 	
+	private static final String USER_ACTION_SUMMARY = "user_action_summary";
+	
 	public AbstractEntityFactory() {
 		super();
 	}
@@ -55,6 +57,22 @@ public abstract class AbstractEntityFactory<T extends Entity> extends SocializeO
 		stats.setViews(getInt(object, VIEWS));
 		
 		entry.setEntityStats(stats);
+		
+		if(object.has(USER_ACTION_SUMMARY) && !object.isNull(USER_ACTION_SUMMARY)) {
+			
+			JSONObject userStats = object.getJSONObject(USER_ACTION_SUMMARY);
+			
+			UserEntityStatsImpl userEntityStats = new UserEntityStatsImpl();
+			userEntityStats.setComments(getInt(userStats, COMMENTS));
+			userEntityStats.setShares(getInt(userStats, SHARES));
+			userEntityStats.setViews(getInt(userStats, "viewed"));
+			
+			int liked = getInt(userStats, "liked");
+			
+			userEntityStats.setLiked(liked>0);
+			
+			entry.setUserEntityStats(userEntityStats);
+		}
 	}
 
 	@Override

@@ -19,53 +19,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.test.ui;
-
-import android.content.Intent;
+package com.socialize.demo.snippets;
+import com.socialize.R;
+//begin-snippet-0
+import android.app.Activity;
 import android.os.Bundle;
-import com.socialize.SocializeService;
-import com.socialize.android.ioc.IOCContainer;
-import com.socialize.listener.SocializeAuthListener;
-import com.socialize.ui.SocializeLaunchActivity;
+import android.view.View;
+import com.socialize.ActionBarUtils;
+import com.socialize.entity.Entity;
+import com.socialize.ui.actionbar.ActionBarOptions;
 
-/**
- * @author Jason Polites
- *
- */
-public class PublicSocializeLaunchActivity extends SocializeLaunchActivity {
-
+public class ActionBarSampleNoScroll extends Activity {
+	
 	@Override
-	public void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-	}
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
-	}
-
-	@Override
-	public void superOnCreate(Bundle savedInstanceState) {
-		super.superOnCreate(savedInstanceState);
-	}
-
-	@Override
-	public IOCContainer getContainer() {
-		return super.getContainer();
-	}
-
-	@Override
-	public void initSocialize() {
-		super.initSocialize();
-	}
-
-	@Override
-	public SocializeService getSocialize() {
-		return super.getSocialize();
-	}
-
-	@Override
-	public SocializeAuthListener getAuthListener(IOCContainer container) {
-		return super.getAuthListener(container);
+		
+		// Your entity key. May be passed as a Bundle parameter to your activity
+		String entityKey = "http://www.getsocialize.com";
+		
+		// Create an entity object including a name
+		// The Entity object is Serializable, so you could also store the whole object in the Intent
+		Entity entity = Entity.newInstance(entityKey, "Socialize");
+		
+		// Add more options
+		ActionBarOptions options = new ActionBarOptions();
+		options.setAddScrollView(false); // Disable scroll view   		
+		
+		// Wrap your existing view with the action bar.
+		// your_layout refers to the resource ID of your current layout.
+		View actionBarWrapped = ActionBarUtils.showActionBar(this, R.layout.actionbar, entity, options);
+		
+		// Now set the view for your activity to be the wrapped view.
+		setContentView(actionBarWrapped);
 	}
 }
+//end-snippet-0
+
+

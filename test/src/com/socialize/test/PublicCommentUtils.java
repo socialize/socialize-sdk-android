@@ -57,8 +57,8 @@ public class PublicCommentUtils extends SocializeCommentUtils {
 	}
 
 	@Override
-	public boolean isDisplayAuthDialog() {
-		return super.isDisplayAuthDialog();
+	public boolean isDisplayAuthDialog(Context context) {
+		return super.isDisplayAuthDialog(context);
 	}
 
 	@Override

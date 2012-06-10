@@ -1,1 +1,0 @@
-Socialize.getSocialize().setEntityLoader(new MyEntityLoader());	

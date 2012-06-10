@@ -4,96 +4,67 @@
 Socialize Action Bar
 ====================
 
-Brand new in v0.7.0 of the Socialize SDK for Android is the "Action Bar" which provides a single 
-entry point into the entire set of Socialize features.
+The Socialize Action Bar is a single all inclusive control that can be easily added to any Android application.
 
-.. image:: images/action_bar.png	
-.. image:: images/share.png
-.. image:: images/add_comment.png	
+.. image:: images/action_bar.png
+
+The Action Bar provides immediate access to all Socialize features including
+
+- Commenting
+- Sharing vie Facebook, Twitter, Email and SMS
+- Liking
+- Recording Views 	
 
 Displaying the Action Bar
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Using socialize.properties configuration
-########################################
-
 Refer to the :doc:`getting_started` section for details on configuring your **socialize.properties** file.
 
-.. literalinclude:: snippets/action_bar.txt
-   :language: java
-   :linenos:
-
-Using programmatic configuration
-################################
-
-If you prefer to do things the old fashioned way, you can set all the parameters programmatically.
-
-.. literalinclude:: snippets/action_bar_programmatic.txt
-   :language: java
-   :linenos:
-	
-Advanced Features
-~~~~~~~~~~~~~~~~~
-
-Using the Entity Loader
-########################
-
-New in v1.1 of Socialize is the "Recent Activity" view shown in a user's profile.  This displays the recent actions
-performed by the user within the app.  To maximize the benefit of this it is recommended that an "Entity Loader" implementation 
-be provided to Socialize to that it knows how to load the original view for the entity.
-
-Developers should create an implementation of a SocializeEntityLoader and provide this implementation to the SocializeUI instance:
-
-.. literalinclude:: snippets/entity_loader.txt
-   :language: java
-   :linenos:
-
-Refer to the :doc:`entity_loader` section for more details.
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionBarSample.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
 
 Disabling the ScrollView
-########################
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 By default the ActionBar will create a ScrollView to house your existing content.  
 This is typically necessary so that the ActionBar doesn't impede the use of your existing content.
 
 If you don't want your content to be scrollable however, you can disable this feature by using **ActionBarOptions**
 
-.. literalinclude:: snippets/action_bar_noscroll.txt
-   :language: java
-   :linenos:
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionBarSampleNoScroll.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
 
-ActionBar Creation Listener
-###########################
+ActionBar Listener
+~~~~~~~~~~~~~~~~~~
 
 If you need or want to obtain a reference to the ActionBar view at runtime, you can use a creation listener to listen 
-for the "onCreate" event of the ActionBar:
-
-.. literalinclude:: snippets/action_bar_create_listener.txt
-   :language: java
-   :linenos:
-
-ActionBar Event Listener
-########################
+for the "onCreate" event of the ActionBar.
 
 If you want to attach your own events to user operations on the ActionBar you can bind an **OnActionBarEventListener** 
-to capture these:
+to capture these.
 
-.. literalinclude:: snippets/action_bar_event_listener.txt
-   :language: java
-   :linenos:
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionBarSampleListener.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
 
-Reloading the Action Bar (Changing its entity)
-##############################################
+Reloading the Action Bar
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you want to maintain a single action bar instance shared across multiple entities you can simply use the **refresh** method 
-to instruct the ActionBar to reload after you change the entity key:
+to instruct the ActionBar to reload after you change the entity key.
 
-.. literalinclude:: snippets/action_bar_reload.txt
-   :language: java
-   :linenos:
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionBarReload.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
+	
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionBarReload.java
+	:start-after: begin-snippet-1
+	:end-before: end-snippet-1
 
 XML Based Layout
-################
+~~~~~~~~~~~~~~~~
 
 If the "auto-pin" feature of the Action Bar is not to your liking, or doesn't play well with your existing layout 
 you can always just add the view manually.
@@ -108,12 +79,11 @@ Here is the recommended way to include the Action Bar in your XML layout:
 
 .. literalinclude:: snippets/action_bar_layout_xml.txt
    :language: xml
-   :linenos:
 
 In this case you will still need to set the entity in code:
 
-.. literalinclude:: snippets/action_bar_layout_xml_code.txt
-   :language: java
-   :linenos:
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/ActionBarSampleLayout.java
+	:start-after: begin-snippet-0
+	:end-before: end-snippet-0
 	
 .. include:: footer.inc	

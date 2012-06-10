@@ -31,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import com.socialize.ActionUtils;
 import com.socialize.CommentUtils;
+import com.socialize.ConfigUtils;
 import com.socialize.LikeUtils;
 import com.socialize.Socialize;
 import com.socialize.UserUtils;
@@ -146,7 +147,7 @@ public class ActionUtilsTest extends SocializeActivityTest {
 		final Entity entityKey = Entity.newInstance("testGetActionsByEntity" + Math.random(), "testGetActionsByEntity");
 		
 		// Set auto auth off
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
 		// Add some new actions to really make the test "real"
 		
@@ -214,7 +215,7 @@ public class ActionUtilsTest extends SocializeActivityTest {
 		final Entity entityKey = Entity.newInstance("testGetActionsByUserAndEntity" + Math.random(), "testGetActionsByUserAndEntity");
 		
 		// Set auto auth off
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
 		// Add some new actions to really make the test "real"
 		LikeUtils.like(getContext(), entityKey, null, new LikeAddListener() {

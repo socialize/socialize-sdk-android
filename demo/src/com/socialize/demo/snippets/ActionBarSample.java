@@ -19,31 +19,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.config;
+package com.socialize.demo.snippets;
 
-import android.content.Context;
+import com.socialize.R;
+//begin-snippet-0
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import com.socialize.ActionBarUtils;
+import com.socialize.entity.Entity;
 
-
-
-/**
- * @author Jason Polites
- *
- */
-public class SocializeConfigUtils implements ConfigUtilsProxy {
+public class ActionBarSample extends Activity {
 	
-	private SocializeConfig config;
-	
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.config.ConfigUtilsProxy#getConfig()
-	 */
 	@Override
-	public SocializeConfig getConfig(Context context) {
-		return config;
+	protected void onCreate(Bundle savedInstanceState) {
+		
+		super.onCreate(savedInstanceState);
+		
+		// Your entity key. May be passed as a Bundle parameter to your activity
+		String entityKey = "http://www.getsocialize.com";
+		
+		// Create an entity object including a name
+		// The Entity object is Serializable, so you could also store the whole object in the Intent
+		Entity entity = Entity.newInstance(entityKey, "Socialize");
+		
+		// Wrap your existing view with the action bar.
+		// your_layout refers to the resource ID of your current layout.
+		View actionBarWrapped = ActionBarUtils.showActionBar(this, R.layout.actionbar, entity);
+		
+		// Now set the view for your activity to be the wrapped view.
+		setContentView(actionBarWrapped);
 	}
-	
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
-	}
-	
 }
+//end-snippet-0
+
+

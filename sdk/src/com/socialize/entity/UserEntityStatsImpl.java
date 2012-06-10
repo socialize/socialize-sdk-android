@@ -19,31 +19,70 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.config;
-
-import android.content.Context;
-
+package com.socialize.entity;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class SocializeConfigUtils implements ConfigUtilsProxy {
+public class UserEntityStatsImpl implements UserEntityStats {
 	
-	private SocializeConfig config;
+	private Integer comments;
+	private Integer shares;
+	private Integer views;
+	private Boolean liked;
 	
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.config.ConfigUtilsProxy#getConfig()
+
+	/* (non-Javadoc)
+	 * @see com.socialize.entity.UserStats#getComments()
 	 */
 	@Override
-	public SocializeConfig getConfig(Context context) {
-		return config;
+	public Integer getComments() {
+		return comments;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.entity.UserStats#isLiked()
+	 */
+	@Override
+	public Boolean isLiked() {
+		return liked;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.entity.UserStats#getShares()
+	 */
+	@Override
+	public Integer getShares() {
+		return shares;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.socialize.entity.UserStats#getViews()
+	 */
+	@Override
+	public Integer getViews() {
+		return views;
+	}
+
+	public Boolean getLiked() {
+		return liked;
 	}
 	
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
+	public void setLiked(Boolean liked) {
+		this.liked = liked;
 	}
 	
+	public void setComments(Integer comments) {
+		this.comments = comments;
+	}
+	
+	public void setShares(Integer shares) {
+		this.shares = shares;
+	}
+	
+	public void setViews(Integer views) {
+		this.views = views;
+	}
 }

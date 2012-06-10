@@ -36,6 +36,8 @@ If you want to know about initialization success (e.g. if you want to access Soc
 	:start-after: begin-snippet-0
 	:end-before: end-snippet-0
 	
+.. _entities:	
+	
 Entities
 --------
 An entity is a single item of content in your app

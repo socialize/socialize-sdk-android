@@ -36,6 +36,7 @@ public class Entity extends SocializeObject implements Serializable {
 	private String key;
 	private String name;
 	private EntityStats entityStats;
+	private UserEntityStats userEntityStats;
 	
 	private String metaData;
 	
@@ -72,6 +73,14 @@ public class Entity extends SocializeObject implements Serializable {
 
 	public EntityStats getEntityStats() {
 		return entityStats;
+	}
+	
+	protected void setUserEntityStats(UserEntityStats userEntityStats) {
+		this.userEntityStats = userEntityStats;
+	}
+	
+	public UserEntityStats getUserEntityStats() {
+		return userEntityStats;
 	}
 	
 	public String getMetaData() {

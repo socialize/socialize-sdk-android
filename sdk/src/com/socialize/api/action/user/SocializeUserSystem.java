@@ -57,7 +57,6 @@ public class SocializeUserSystem extends SocializeApi<User, SocializeProvider<Us
 	private IBeanFactory<AuthProviderData> authProviderDataFactory;
 	private SocializeSessionPersister sessionPersister;
 	private DeviceUtils deviceUtils;
-	private SocializeConfig config;
 	private SocializeLogger logger;
 	private AuthProviderInfoBuilder authProviderInfoBuilder;
 	private SocializeAuthProviderInfoFactory socializeAuthProviderInfoFactory;

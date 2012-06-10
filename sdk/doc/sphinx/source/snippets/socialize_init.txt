@@ -1,9 +1,0 @@
-import com.socialize.Socialize;
-
-protected void onCreate(Bundle savedInstanceState) {
-	super.onCreate(savedInstanceState);
-
-	Socialize.init(this);
-
-	// Your code goes here
-}	

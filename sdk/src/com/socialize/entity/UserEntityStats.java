@@ -19,31 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.config;
-
-import android.content.Context;
-
+package com.socialize.entity;
 
 
 /**
  * @author Jason Polites
  *
  */
-public class SocializeConfigUtils implements ConfigUtilsProxy {
-	
-	private SocializeConfig config;
-	
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.config.ConfigUtilsProxy#getConfig()
-	 */
-	@Override
-	public SocializeConfig getConfig(Context context) {
-		return config;
-	}
-	
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
-	}
-	
+public interface UserEntityStats {
+	public Integer getComments();
+
+	public Boolean isLiked();
+
+	public Integer getShares();
+
+	public Integer getViews();
 }

@@ -19,31 +19,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.socialize.config;
+package com.socialize.demo.snippets;
 
-import android.content.Context;
+import com.socialize.R;
+//begin-snippet-0
+import android.app.Activity;
+import android.os.Bundle;
+import com.socialize.entity.Entity;
+import com.socialize.ui.actionbar.ActionBarView;
 
-
-
-/**
- * @author Jason Polites
- *
- */
-public class SocializeConfigUtils implements ConfigUtilsProxy {
+public class ActionBarSampleLayout extends Activity {
 	
-	private SocializeConfig config;
-	
-	/*
-	 * (non-Javadoc)
-	 * @see com.socialize.config.ConfigUtilsProxy#getConfig()
-	 */
 	@Override
-	public SocializeConfig getConfig(Context context) {
-		return config;
+	protected void onCreate(Bundle savedInstanceState) {
+		
+		super.onCreate(savedInstanceState);
+		
+		setContentView(R.layout.main);
+		ActionBarView socializeActionBarView = (ActionBarView) findViewById(R.id.socializeActionBar);
+		socializeActionBarView.setEntity(Entity.newInstance("foo", "bar"));
+		socializeActionBarView.refresh(); // Optional.. only if changing entity key.
 	}
-	
-	public void setConfig(SocializeConfig config) {
-		this.config = config;
-	}
-	
 }
+//end-snippet-0
+
+

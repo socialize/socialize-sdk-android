@@ -71,7 +71,7 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 	private SocializeLocationProvider locationProvider;
 	private NotificationChecker notificationChecker;
 	private AppUtils appUtils;
-	private SocializeConfig config;
+	protected SocializeConfig config;
 	
 	public static enum RequestType {AUTH,PUT,POST,PUT_AS_POST,GET,LIST,LIST_AS_GET,LIST_WITHOUT_ENTITY,DELETE};
 	

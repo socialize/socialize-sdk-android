@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import com.socialize.CommentUtils;
+import com.socialize.ConfigUtils;
 import com.socialize.Socialize;
 import com.socialize.SubscriptionUtils;
 import com.socialize.UserUtils;
@@ -60,7 +61,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 	public void test_addComment() throws Exception {
 		
 		// Set auto auth off
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
 		final Entity entityKey = Entity.newInstance("test_addComment", "test_addComment");
 		final CountDownLatch latch = new CountDownLatch(1);
@@ -114,7 +115,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 
 		// Set auto auth off
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
 		CommentUtils.addComment(getActivity(), entityKey, "foobar0", null, new CommentAddListener() {
 
@@ -194,7 +195,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 
 		// Set auto auth off
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
 		CommentUtils.addComment(getActivity(), entityKey, "foobar0", null, new CommentAddListener() {
 
@@ -271,7 +272,7 @@ public class CommentUtilsTest extends SocializeActivityTest {
 		final CountDownLatch latch = new CountDownLatch(1);
 
 		// Set auto auth off
-		Socialize.getSocialize().getConfig().setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
+		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
 		CommentUtils.addComment(getActivity(), entityKey, "foobar0", null, new CommentAddListener() {
 

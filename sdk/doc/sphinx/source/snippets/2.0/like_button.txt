@@ -1,6 +1,0 @@
-// Create a like button
-SocializeLikeButton button = Socialize.getSocialize().createLikeButton(this, entity);
-
-// Add the button to your view
-ViewGroup main = (ViewGroup) findViewById(R.id.your_layout);
-main.addView(button);
