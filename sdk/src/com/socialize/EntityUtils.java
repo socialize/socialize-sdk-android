@@ -46,13 +46,13 @@ public class EntityUtils {
 	}
 	
 	/**
-	 * Adds (creates) an entity
+	 * Saves or Creates an entity
 	 * @param context The current context.
 	 * @param e The entity to be created.
 	 * @param listener A listener to handle the result.
 	 */
-	public static void addEntity (Activity context, Entity e, EntityAddListener listener) {
-		proxy.addEntity(context, e, listener);
+	public static void saveEntity (Activity context, Entity e, EntityAddListener listener) {
+		proxy.saveEntity(context, e, listener);
 	}
 	
 	/**

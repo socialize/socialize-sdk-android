@@ -43,7 +43,7 @@ public class AddEntityActivity extends SDKDemoActivity {
 		// usually the name parameter would be a human readable name (i.e. not the same as the key).
 		Entity e = Entity.newInstance(text, text);
 		
-		EntityUtils.addEntity(this, e, new EntityAddListener() {
+		EntityUtils.saveEntity(this, e, new EntityAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {

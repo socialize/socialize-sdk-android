@@ -43,10 +43,10 @@ public class SocializeEntityUtils implements EntityUtilsProxy {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.socialize.api.action.entity.EntityUtilsProxy#addEntity(android.app.Activity, com.socialize.entity.Entity, com.socialize.listener.entity.EntityAddListener)
+	 * @see com.socialize.api.action.entity.EntityUtilsProxy#saveEntity(android.app.Activity, com.socialize.entity.Entity, com.socialize.listener.entity.EntityAddListener)
 	 */
 	@Override
-	public void addEntity(Activity context, Entity e, EntityAddListener listener) {
+	public void saveEntity(Activity context, Entity e, EntityAddListener listener) {
 		entitySystem.addEntity(Socialize.getSocialize().getSession(), e, listener);
 	}
 

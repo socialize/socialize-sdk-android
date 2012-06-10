@@ -86,7 +86,7 @@ public void createExplicit() {
 // begin-snippet-2
 Entity entity = Entity.newInstance("key", "name");
 
-EntityUtils.addEntity(this, entity, new EntityAddListener() {
+EntityUtils.saveEntity(this, entity, new EntityAddListener() {
 	
 	@Override
 	public void onError(SocializeException error) {
@@ -183,7 +183,7 @@ metaData.put("some_key", "some_value");
 
 entity.setMetaData(metaData.toString());
 
-EntityUtils.addEntity(this, entity, new EntityAddListener() {
+EntityUtils.saveEntity(this, entity, new EntityAddListener() {
 	
 	@Override
 	public void onError(SocializeException error) {
@@ -235,7 +235,7 @@ public void entityMetaDataWith() throws JSONException {
 Entity entity = Entity.newInstance("key", "name");
 entity.setMetaData("meta data");
 
-EntityUtils.addEntity(this, entity, new EntityAddListener() {
+EntityUtils.saveEntity(this, entity, new EntityAddListener() {
 	
 	@Override
 	public void onError(SocializeException error) {
