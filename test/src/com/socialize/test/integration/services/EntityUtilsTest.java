@@ -67,7 +67,7 @@ public class EntityUtilsTest extends SocializeActivityTest {
 		// Force no config
 		ConfigUtils.getConfig(getContext()).setProperty(SocializeConfig.SOCIALIZE_REQUIRE_AUTH, "false");
 		
-		EntityUtils.addEntity(getActivity(), entity, new EntityAddListener() {
+		EntityUtils.saveEntity(getActivity(), entity, new EntityAddListener() {
 			
 			@Override
 			public void onError(SocializeException error) {

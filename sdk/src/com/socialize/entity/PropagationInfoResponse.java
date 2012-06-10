@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import com.socialize.api.action.ShareType;
+import com.socialize.networks.SocialNetwork;
 
 
 public class PropagationInfoResponse implements Serializable {
@@ -22,6 +23,10 @@ public class PropagationInfoResponse implements Serializable {
 	
 	public PropagationInfo getPropagationInfo(ShareType shareType) {
 		return (urlSets == null) ? null : urlSets.get(shareType);
+	}
+	
+	public PropagationInfo getPropagationInfo(SocialNetwork socialNetwork) {
+		return getPropagationInfo(ShareType.valueOf(socialNetwork));
 	}
 	
 	public synchronized void addUrlSet(ShareType network, PropagationInfo set) {

@@ -122,6 +122,13 @@ Executing a **POST**
 	:start-after: begin-snippet-5
 	:end-before: end-snippet-5
 	
+If you want to take full advantage of Socialize SmartDownloads and post the auto-generated SmartDownload urls for your entity or app you can 
+do this by creating a simple share object without propagation first.
+
+.. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java
+	:start-after: begin-snippet-8
+	:end-before: end-snippet-8
+	
 Executing a **GET**
 
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/FacebookSnippets.java

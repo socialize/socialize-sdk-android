@@ -32,7 +32,6 @@ public class UserEntityStatsImpl implements UserEntityStats {
 	
 	private Integer comments;
 	private Integer shares;
-	private Integer views;
 	private Boolean liked;
 	
 
@@ -60,14 +59,6 @@ public class UserEntityStatsImpl implements UserEntityStats {
 		return shares;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.socialize.entity.UserStats#getViews()
-	 */
-	@Override
-	public Integer getViews() {
-		return views;
-	}
-
 	public Boolean getLiked() {
 		return liked;
 	}
@@ -82,9 +73,5 @@ public class UserEntityStatsImpl implements UserEntityStats {
 	
 	public void setShares(Integer shares) {
 		this.shares = shares;
-	}
-	
-	public void setViews(Integer views) {
-		this.views = views;
 	}
 }

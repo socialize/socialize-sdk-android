@@ -26,10 +26,16 @@ import java.util.Map;
 import org.json.JSONObject;
 import android.app.Activity;
 import com.socialize.ConfigUtils;
+import com.socialize.ShareUtils;
 import com.socialize.api.SocializeSession;
+import com.socialize.api.action.share.ShareOptions;
 import com.socialize.entity.Entity;
+import com.socialize.entity.PropagationInfo;
+import com.socialize.entity.PropagationInfoResponse;
+import com.socialize.entity.Share;
 import com.socialize.error.SocializeException;
 import com.socialize.listener.SocializeAuthListener;
+import com.socialize.listener.share.ShareAddListener;
 import com.socialize.networks.PostData;
 import com.socialize.networks.SocialNetwork;
 import com.socialize.networks.SocialNetworkListener;
@@ -40,7 +46,7 @@ import com.socialize.networks.facebook.FacebookUtils;
  * @author Jason Polites
  *
  */
-public class FacebookSnippets extends Activity{
+public class FacebookSnippets extends Activity {
 public void linkFB() {
 // begin-snippet-0
 FacebookUtils.link(this, new SocializeAuthListener() {
@@ -246,6 +252,71 @@ FacebookUtils.delete(this, graphPath, null, new SocialNetworkListener() {
 	}
 });
 // end-snippet-7
+}
+
+
+
+
+public void postWithUrl() {
+final Activity context = this;
+// begin-snippet-8
+// Create a simple share object to get the propagation data
+final Entity entity = Entity.newInstance("http://myentity.com", "My Name");
+
+ShareOptions options = ShareUtils.getUserShareOptions(this);
+
+ShareUtils.addShare(this, entity, options, new ShareAddListener() {
+	
+	@Override
+	public void onError(SocializeException error) {
+		// Handle error
+	}
+	
+	@Override
+	public void onCreate(Share share) {
+		
+		// Get the propagation info from the result
+		PropagationInfoResponse propagationInfoResponse = share.getPropagationInfoResponse();
+		
+		PropagationInfo propagationInfo = propagationInfoResponse.getPropagationInfo(SocialNetwork.FACEBOOK);
+		
+		// The graph API path to be called
+		String graphPath = "me/links";
+
+		// The data to be posted. This is based on the graphPath
+		// See http://developers.facebook.com/docs/reference/api/
+		Map<String, String> postData = new HashMap<String, String>();
+		postData.put("message", "A message to post");
+		postData.put("link", propagationInfo.getEntityUrl()); // Use the SmartDownload URL
+		postData.put("name", entity.getDisplayName());
+			
+		// Execute a POST on facebook
+		FacebookUtils.post(context, graphPath, postData, new SocialNetworkListener() {
+			
+			@Override
+			public void onNetworkError(Activity context, SocialNetwork network, Exception error) {
+				// Handle error
+			}
+			
+			@Override
+			public void onCancel() {
+				// The user cancelled the operation.
+			}
+			
+			@Override
+			public void onAfterPost(Activity parent, SocialNetwork socialNetwork, JSONObject responseObject) {
+				// Called after the post returned from Facebook.
+				// responseObject contains the raw JSON response from Facebook.
+			}
+			
+			@Override
+			public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+				// Called just prior to the post.
+			}
+		});		
+	}
+}, SocialNetwork.FACEBOOK);
+// end-snippet-8
 }
 
 }

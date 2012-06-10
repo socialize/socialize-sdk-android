@@ -1,5 +1,21 @@
 <manifest...>
 
+	<uses-permission android:name="android.permission.INTERNET"/>
+	
+	<!-- Optional but recommended -->
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	
+	<!-- Optionally add ONE of the following to include location data in comments -->
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+	
+	<!-- Permissions required for Push Notifications -->
+	<!-- Replace your_package_name with your app package name -->
+	<permission android:name="your_package_name.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+	
+	<uses-permission android:name="your_package_name.permission.C2D_MESSAGE" />
+	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />			
+
 	<application...>
 	
 		<!-- Base Activities Required by Socialize -->
@@ -27,21 +43,5 @@
 		</receiver>
 
 	</application>
-
-	<uses-permission android:name="android.permission.INTERNET"/>
-	
-	<!-- Optional but recommended -->
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-	
-	<!-- Optionally add ONE of the following to include location data in comments -->
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-	
-	<!-- Permissions required for Push Notifications -->
-	<!-- Replace your_package_name with your app package name -->
-	<permission android:name="your_package_name.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-	
-	<uses-permission android:name="your_package_name.permission.C2D_MESSAGE" />
-	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />			
 
 </manifest>

@@ -65,9 +65,7 @@ public abstract class AbstractEntityFactory<T extends Entity> extends SocializeO
 			UserEntityStatsImpl userEntityStats = new UserEntityStatsImpl();
 			userEntityStats.setComments(getInt(userStats, COMMENTS));
 			userEntityStats.setShares(getInt(userStats, SHARES));
-			userEntityStats.setViews(getInt(userStats, "viewed"));
-			
-			int liked = getInt(userStats, "liked");
+			int liked = getInt(userStats, LIKES);
 			
 			userEntityStats.setLiked(liked>0);
 			

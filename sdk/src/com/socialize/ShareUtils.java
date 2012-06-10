@@ -32,6 +32,7 @@ import com.socialize.entity.Entity;
 import com.socialize.listener.share.ShareAddListener;
 import com.socialize.listener.share.ShareGetListener;
 import com.socialize.listener.share.ShareListListener;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.auth.AuthDialogListener;
 import com.socialize.ui.share.ShareDialogListener;
 
@@ -235,6 +236,21 @@ public class ShareUtils {
 	public static void getSharesByEntity (Activity context, String entityKey, int start, int end, ShareListListener listener) {
 		proxy.getSharesByEntity(context, entityKey, start, end, listener);
 	};
+	
+	/**
+	 * Creates a simple Socialize Share object.  
+	 * NOTE: This does NOT perform any actual sharing (propagation).  It is used to simply record the fact that a share is taking place.
+	 * This is useful when you want to utilize the auto-generated entity links returned in the propagation info response to post directly 
+	 * to Facebook or Twitter.
+	 * @param context The current context.
+	 * @param entity The entity to be shared.
+	 * @param shareOptions Options for the share allowing text to be specified.
+	 * @param listener A listener to handle the result.
+	 * @param networks The Social Networks you intend to share to.
+	 */
+	public static void addShare(Activity context, Entity entity, ShareOptions shareOptions, ShareAddListener listener, SocialNetwork...networks)  {
+		proxy.addShare(context, entity, shareOptions, listener, networks);
+	}
 	
 	/**
 	 * Determines if the current device is capable of sharing via email.

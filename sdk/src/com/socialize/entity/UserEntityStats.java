@@ -35,6 +35,4 @@ public interface UserEntityStats extends Serializable {
 	public Boolean isLiked();
 
 	public Integer getShares();
-
-	public Integer getViews();
 }

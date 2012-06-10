@@ -62,6 +62,8 @@ public interface ShareUtilsProxy {
 	
 	public void getSharesByEntity (Activity context, String entityKey, int start, int end, ShareListListener listener);
 	
+	public void addShare(Activity context, Entity entity, ShareOptions shareOptions, ShareAddListener listener, SocialNetwork...networks);
+	
 	@Synchronous
 	public boolean canShareViaEmail(Activity context);
 	

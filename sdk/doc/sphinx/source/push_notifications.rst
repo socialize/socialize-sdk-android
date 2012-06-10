@@ -16,8 +16,8 @@ SmartAlerts (Push Notifications)
 									 	The Loop is a viral loop in your app that puts your users to work boosting 
 									 	downloads and re-engagement in your app.
 									 	<br/><br/> 
-									 	Use Socialize SmartAlerts to create a viral loop in your app where users' actions help 
-									 	bring users back into your app.
+									 	Use Socialize SmartAlerts to create a viral loop in your app where a users' actions help 
+									 	bring other users back into your app.
 										</div>
 
 =================================	==========================================================================================
@@ -65,7 +65,7 @@ The full **AndroidManifest.xml** should look something like this
 
 .. literalinclude:: snippets/notification_manifest.txt
    :language: xml
-   :emphasize-lines: 21,25,42,44
+   :emphasize-lines: 14,16,37,41
    :tab-width: 4
 
 Step 3: Create an Entity Loader
@@ -165,7 +165,7 @@ Refer to the :ref:`debug_logs` section for more information on enabling logs.
 Once info logging is enabled, a **new** instance of your app should produce log entries that look something like this::
 	
 	INFO/Socialize(15860): Not registered with C2DM, sending registration request...
-	INFO/Socialize(15860): Registration with C2DM successful: APA91bHd0aL~d75F6_7NcDf_nil8...OBg5~Ixk_8c9rg9b14fsVwvMXTy4
+	INFO/Socialize(15860): Registration with C2DM successful: APA91bHd0aL-d75F6_7NcDf_nil8...OBg5-Ixk_8c9rg9b14fsVwvMXTy4
 	INFO/Socialize(15860): Registration with Socialize for C2DM successful.	
 
 The "Registration with C2DM successful" log entry shows the device token used for SmartAlerts

@@ -28,8 +28,6 @@ You should also include the onPause and onResume methods.
 	:start-after: begin-snippet-0
 	:end-before: end-snippet-0
 	
-.. note:: Make sure that there are no operations on the Socialize instance before or while it is initializing!
-
 If you want to know about initialization success (e.g. if you want to access Socialize after init), you can also specify a listener
 
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/SocializeInitSnippetA.java
@@ -89,7 +87,7 @@ To create an entity, simply call the **saveEntity** method:
 Retrieving Entity Data
 ~~~~~~~~~~~~~~~~~~~~~~
 An existing entity can be retrieved via the **getEntity** method.  Entities obtained in this way will also 
-provide aggregate data on comments, likes, shares and views.  Refer to the `Entity object structure in the API Docs <http://www.getsocialize.com/docs/v1/#entity-object>`_.
+provide aggregate data on comments, likes, shares and views.  Refer to the `Entity object structure in the API Docs <http://api.getsocialize.com/docs/v1/#entity-object>`_.
 for more detail on these aggregate values.
 
 .. literalinclude:: ../../../../demo/src/com/socialize/demo/snippets/EntitySnippets.java
