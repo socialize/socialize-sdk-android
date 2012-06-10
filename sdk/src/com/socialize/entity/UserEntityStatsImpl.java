@@ -28,6 +28,8 @@ package com.socialize.entity;
  */
 public class UserEntityStatsImpl implements UserEntityStats {
 	
+	private static final long serialVersionUID = 8983099444428913787L;
+	
 	private Integer comments;
 	private Integer shares;
 	private Integer views;

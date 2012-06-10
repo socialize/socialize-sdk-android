@@ -21,12 +21,15 @@
  */
 package com.socialize.entity;
 
+import java.io.Serializable;
+
 
 /**
  * @author Jason Polites
  *
  */
-public interface UserEntityStats {
+public interface UserEntityStats extends Serializable {
+	
 	public Integer getComments();
 
 	public Boolean isLiked();
