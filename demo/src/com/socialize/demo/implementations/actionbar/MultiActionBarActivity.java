@@ -32,6 +32,7 @@ import com.socialize.CommentUtils;
 import com.socialize.EntityUtils;
 import com.socialize.LikeUtils;
 import com.socialize.ShareUtils;
+import com.socialize.api.action.share.SocialNetworkDialogListener;
 import com.socialize.demo.DemoActivity;
 import com.socialize.demo.R;
 import com.socialize.entity.Entity;
@@ -42,6 +43,8 @@ import com.socialize.error.SocializeException;
 import com.socialize.listener.entity.EntityListListener;
 import com.socialize.listener.like.LikeAddListener;
 import com.socialize.listener.like.LikeDeleteListener;
+import com.socialize.networks.PostData;
+import com.socialize.networks.SocialNetwork;
 import com.socialize.ui.dialog.SafeProgressDialog;
 
 
@@ -106,9 +109,9 @@ public class MultiActionBarActivity extends DemoActivity {
 				setCommentListener(R.id.btnComment1, entity1);
 				
 				// Setup share listeners
-				setShareListener(R.id.btnShare0, entity0);
-				setShareListener(R.id.btnShare1, entity1);
-				setShareListener(R.id.btnShare2, entity2);
+				setShareListener(R.id.btnShare0, 0, entity0);
+				setShareListener(R.id.btnShare1, 1,entity1);
+				setShareListener(R.id.btnShare2, 2,entity2);
 				
 				progress.dismiss();
 			}
@@ -178,12 +181,17 @@ public class MultiActionBarActivity extends DemoActivity {
 		});
 	}
 
-	protected void setShareListener(int viewId, final Entity entity) {
+	protected void setShareListener(int viewId, final int index, final Entity entity) {
 		final ImageView view = (ImageView) findViewById(viewId);
 		view.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ShareUtils.showShareDialog((Activity) v.getContext(), entity);
+				ShareUtils.showShareDialog((Activity) v.getContext(), entity, new SocialNetworkDialogListener() {
+					@Override
+					public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
+						postData.getPostValues().put("picture", entityKeys[index]);
+					}
+				}, ShareUtils.DEFAULT);
 			}
 		});
 	}

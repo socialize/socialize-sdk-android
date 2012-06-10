@@ -65,36 +65,17 @@ import com.socialize.util.StringUtils;
 public class DefaultFacebookWallPoster implements FacebookWallPoster {
 	
 	private SocializeLogger logger;
-//	private AppUtils appUtils;
-//	private ShareMessageBuilder shareMessageBuilder;
 	private FacebookImageUtils facebookImageUtils;
 	private IBeanFactory<AsyncFacebookRunner> facebookRunnerFactory;
 	
 	@Override
 	public void postLike(Activity parent, Entity entity, PropagationInfo propInfo, SocialNetworkListener listener) {
-//		String linkName = appUtils.getAppName();
-		
-//		StringBuilder builder = new StringBuilder();
-		
-//		builder.append("Likes ");
-//		builder.append(shareMessageBuilder.getEntityLink(entity, propInfo, false));
-//		builder.append("\n\n");
-//		builder.append("Posted from ");
-//		builder.append(linkName);
 		post(parent, entity, "", propInfo, listener);		
 	}
 
 	@Override
 	public void postComment(Activity parent, Entity entity, String comment, PropagationInfo propInfo, SocialNetworkListener listener) {
-//		String linkName = appUtils.getAppName();
-		StringBuilder builder = new StringBuilder();
-//		builder.append(shareMessageBuilder.getEntityLink(entity, propInfo, false));
-//		builder.append("\n\n");
-		builder.append(comment);
-//		builder.append("\n\n");
-//		builder.append("Posted from ");
-//		builder.append(linkName);
-		post(parent, entity, builder.toString(), propInfo, listener);		
+		post(parent, entity, comment, propInfo, listener);		
 	}
 
 	@Override
