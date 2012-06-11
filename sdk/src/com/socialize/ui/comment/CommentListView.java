@@ -233,25 +233,24 @@ public class CommentListView extends BaseView {
 			@Override
 			public void onComment(String text, boolean shareLocation, boolean subscribe, SocialNetwork... networks) {
 				text = StringUtils.replaceNewLines(text, 3, 2);
-				if(networks == null || networks.length == 0) {
-					CommentUtils.addComment(CommentListView.this.getActivity(), entity, text, getCommentAddListener(subscribe));
-				}
-				else {
-					doPostComment(text, shareLocation, subscribe, networks);
-				}
+				doPostComment(text, shareLocation, subscribe, networks);
+//				if(networks == null || networks.length == 0) {
+//					CommentUtils.addComment(CommentListView.this.getActivity(), entity, text, getCommentAddListener(subscribe));
+//				}
+//				else {
+//					doPostComment(text, shareLocation, subscribe, networks);
+//				}
 			}
 		});
 	}
 	
 	public void doPostComment(String text, boolean shareLocation, final boolean subscribe, SocialNetwork...networks) {
-		dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
+		if(progressDialogFactory != null) {
+			dialog = progressDialogFactory.show(getContext(), "Posting comment", "Please wait...");
+		}
 		
 		CommentOptions options = newShareOptions();
 		options.setSubscribeToUpdates(subscribe);
-		
-		Comment comment = newComment();
-		comment.setText(text);
-		comment.setEntitySafe(entity);
 		
 		CommentUtils.addComment(getActivity(), entity, text, options, getCommentAddListener(subscribe), networks);
 		

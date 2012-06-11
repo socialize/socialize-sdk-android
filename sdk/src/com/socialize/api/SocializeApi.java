@@ -139,20 +139,22 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 				}
 			}
 			
-			String appStore = config.getProperty(SocializeConfig.REDIRECT_APP_STORE);
-			
-			if(!StringUtils.isEmpty(appStore)) {
+			if(config != null) {
+				String appStore = config.getProperty(SocializeConfig.REDIRECT_APP_STORE);
 				
-				String abbrev = appUtils.getAppStoreAbbreviation(appStore);
-				
-				if(localPropagation != null) {
-					localPropagation.addExtraParam("f", abbrev);
-				}
-				
-				if(propagation != null) {
-					propagation.addExtraParam("f", abbrev);
-				}
-			}		
+				if(!StringUtils.isEmpty(appStore)) {
+					
+					String abbrev = appUtils.getAppStoreAbbreviation(appStore);
+					
+					if(localPropagation != null) {
+						localPropagation.addExtraParam("f", abbrev);
+					}
+					
+					if(propagation != null) {
+						propagation.addExtraParam("f", abbrev);
+					}
+				}	
+			}
 			
 			action.setPropagation(propagation);
 			action.setPropagationInfoRequest(localPropagation);

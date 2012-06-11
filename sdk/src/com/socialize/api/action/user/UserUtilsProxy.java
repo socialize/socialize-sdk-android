@@ -77,4 +77,6 @@ public interface UserUtilsProxy {
 	 * @param listener
 	 */
 	public void saveUserSettings (Context context, UserSettings settings, UserSaveListener listener);
+	
+	public void clearSession(Context context);
 }

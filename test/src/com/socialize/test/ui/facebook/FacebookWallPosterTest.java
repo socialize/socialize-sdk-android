@@ -28,10 +28,12 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import com.google.android.testing.mocking.AndroidMock;
 import com.google.android.testing.mocking.UsesMocks;
+import com.socialize.SocializeAccess;
 import com.socialize.SocializeService;
 import com.socialize.api.ShareMessageBuilder;
 import com.socialize.api.SocializeSession;
@@ -40,6 +42,7 @@ import com.socialize.auth.AuthProvider;
 import com.socialize.auth.AuthProviderType;
 import com.socialize.auth.facebook.FacebookSessionStore;
 import com.socialize.config.SocializeConfig;
+import com.socialize.config.SocializeConfigUtils;
 import com.socialize.entity.Entity;
 import com.socialize.entity.PropagationInfo;
 import com.socialize.entity.PropagationInfoResponse;
@@ -168,14 +171,23 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		final String link = "foobar_url";
 		final String message = "foobar_message";
 		
-		SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
+		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
 		SocialNetworkListener listener = AndroidMock.createMock(SocialNetworkListener.class);
 		final SocializeService socialize = AndroidMock.createMock(SocializeService.class);
 		final PropagationInfo info = AndroidMock.createMock(PropagationInfo.class);
 		
-		AndroidMock.expect(socialize.getConfig()).andReturn(config);
 		AndroidMock.expect(config.getProperty(SocializeConfig.FACEBOOK_APP_ID)).andReturn(fbId);
 		AndroidMock.expect(info.getEntityUrl()).andReturn(link);
+		
+		SocializeConfigUtils mockConfigUtils = new SocializeConfigUtils() {
+
+			@Override
+			public SocializeConfig getConfig(Context context) {
+				return config;
+			}
+		};
+		
+		SocializeAccess.setConfigUtilsProxy(mockConfigUtils);
 		
 		Entity entity = Entity.newInstance(link, linkName);
 		
@@ -326,10 +338,19 @@ public class FacebookWallPosterTest extends SocializeActivityTest {
 		AndroidMock.expect(share.getPropagationInfoResponse()).andReturn(propagationInfoResponse);
 		AndroidMock.expect(propagationInfoResponse.getPropagationInfo(ShareType.FACEBOOK)).andReturn(propInfo);
 		AndroidMock.expect(propInfo.getAppUrl()).andReturn(link);
-		AndroidMock.expect(socializeService.getConfig()).andReturn(config);
 		AndroidMock.expect(config.getProperty(SocializeConfig.FACEBOOK_APP_ID)).andReturn(appId);
 		
 		AndroidMock.replay(share,propagationInfoResponse,propInfo,socializeService,config);
+		
+		SocializeConfigUtils mockConfigUtils = new SocializeConfigUtils() {
+
+			@Override
+			public SocializeConfig getConfig(Context context) {
+				return config;
+			}
+		};
+		
+		SocializeAccess.setConfigUtilsProxy(mockConfigUtils);		
 		
 		DefaultFacebookWallPoster poster = new DefaultFacebookWallPoster() {
 			@Override

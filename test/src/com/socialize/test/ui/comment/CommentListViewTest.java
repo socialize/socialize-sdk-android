@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.View;
@@ -18,20 +17,15 @@ import com.socialize.api.SocializeSession;
 import com.socialize.api.action.comment.CommentOptions;
 import com.socialize.api.action.comment.CommentUtilsProxy;
 import com.socialize.api.action.comment.SocializeCommentUtils;
-import com.socialize.auth.AuthProviderType;
 import com.socialize.config.SocializeConfig;
 import com.socialize.entity.Comment;
 import com.socialize.entity.Entity;
 import com.socialize.entity.ListResult;
 import com.socialize.error.SocializeException;
-import com.socialize.ioc.SocializeIOC;
 import com.socialize.listener.comment.CommentAddListener;
 import com.socialize.listener.comment.CommentListListener;
 import com.socialize.networks.SocialNetwork;
-import com.socialize.test.PublicCommentUtils;
 import com.socialize.test.ui.SocializeUIActivityTest;
-import com.socialize.ui.auth.AuthDialogFactory;
-import com.socialize.ui.auth.AuthDialogListener;
 import com.socialize.ui.comment.CommentAdapter;
 import com.socialize.ui.comment.CommentAddButtonListener;
 import com.socialize.ui.comment.CommentListView;
@@ -66,86 +60,8 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		assertTrue(nextResult);
 	}
 	
-	@UsesMocks ({
-		AuthDialogFactory.class, 
-		AuthDialogListener.class,
-		SocializeService.class,
-		Dialog.class})
-	public void testGetCommentAddListenerNotAuthed() throws Exception {
-		
-		final SocializeService socializeService = AndroidMock.createMock(SocializeService.class);
-		final SocializeSession session = AndroidMock.createMock(SocializeSession.class);
-		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-		
-		AndroidMock.expect(socializeService.getConfig()).andReturn(config).anyTimes();
-		AndroidMock.expect(socializeService.getSession()).andReturn(session).anyTimes();
-		AndroidMock.expect(socializeService.isSupported(AuthProviderType.FACEBOOK)).andReturn(true);
-		AndroidMock.expect(socializeService.isSupported(AuthProviderType.TWITTER)).andReturn(true);
-		AndroidMock.expect(socializeService.isAuthenticated(AuthProviderType.FACEBOOK)).andReturn(false);
-		AndroidMock.expect(socializeService.isAuthenticated(AuthProviderType.TWITTER)).andReturn(false);
-		AndroidMock.expect(config.isAuthRequired()).andReturn(true);
-		
-		final CountDownLatch latch = new CountDownLatch(1);
-		
-		PublicCommentUtils commentUtils = new PublicCommentUtils() {
-			@Override
-			public SocializeService getSocialize() {
-				return socializeService;
-			}
-		};
-		
-		PublicCommentListView view = new PublicCommentListView(getContext()) {
-			
-			@Override
-			public void showError(Context context, Exception error) {
-				error.printStackTrace();
-			}
-
-			@Override
-			protected SocializeService getSocialize() {
-				return socializeService;
-			}
-		};		
-		
-		AuthDialogFactory authDialogFactory = new AuthDialogFactory() {
-			@Override
-			public void show(Context context, AuthDialogListener listener) {
-				latch.countDown();
-			}
-		};
-		
-		commentUtils.setAuthDialogFactory(authDialogFactory);
-		
-		SocializeIOC.registerStub("authDialogFactory", authDialogFactory);
-		SocializeIOC.registerStub("commentUtils", commentUtils);
-		
-		AndroidMock.replay(config, socializeService);
-		
-		CommentAddButtonListener commentScrollListener = view.getCommentAddButtonListener();
-		
-		assertNotNull(commentScrollListener.getCallback());
-		
-		commentScrollListener.getCallback().onComment("foobar", false, false);
-		
-		latch.await(10, TimeUnit.SECONDS);
-		
-		AndroidMock.verify(config, socializeService);
-	}
-	
 	@UsesMocks ({SocializeService.class, SocializeConfig.class, SocializeSession.class})
-	public void testGetCommentAddListenerAuthed() throws Throwable {
-		
-		final SocializeService socializeService = AndroidMock.createMock(SocializeService.class);
-		final SocializeSession session = AndroidMock.createMock(SocializeSession.class);
-		final SocializeConfig config = AndroidMock.createMock(SocializeConfig.class);
-		
-		AndroidMock.expect(socializeService.getConfig()).andReturn(config).anyTimes();
-		AndroidMock.expect(socializeService.getSession()).andReturn(session).anyTimes();
-		AndroidMock.expect(socializeService.isSupported(AuthProviderType.FACEBOOK)).andReturn(true);
-		AndroidMock.expect(socializeService.isAuthenticated(AuthProviderType.FACEBOOK)).andReturn(true);
-		AndroidMock.expect(config.isAuthRequired()).andReturn(true);
-		AndroidMock.replay(socializeService, config);
-		
+	public void testGetCommentAddListener() throws Throwable {
 		
 		final CountDownLatch latch = new CountDownLatch(1);
 		
@@ -155,28 +71,18 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 			public void showError(Context context, Exception message) {
 				addResult(1, message);
 			}
-
-			@Override
-			protected SocializeService getSocialize() {
-				return socializeService;
-			}
 		};
 		
-		final PublicCommentUtils commentUtils = new PublicCommentUtils() {
-			
+		
+		SocializeCommentUtils mockCommentUtils = new SocializeCommentUtils() {
 			@Override
-			public void doCommentWithShare(Activity context, SocializeSession session, Entity entity, String text, CommentAddListener listener) {
+			public void addComment(Activity context, Entity entity, String text, CommentOptions commentOptions, CommentAddListener listener, SocialNetwork... networks) {
 				addResult(0, text);
 				latch.countDown();
 			}
-
-			@Override
-			public SocializeService getSocialize() {
-				return socializeService;
-			}
 		};
 		
-		SocializeIOC.registerStub("commentUtils", commentUtils);
+		SocializeAccess.setCommentUtilsProxy(mockCommentUtils);
 		
 		final CommentAddButtonListener commentScrollListener = view.getCommentAddButtonListener();
 		
@@ -192,8 +98,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		});
 		
 		assertTrue(latch.await(20, TimeUnit.SECONDS));
-		
-		AndroidMock.verify(socializeService, config);
 		
 		String comment = getResult(0);
 		Exception message = getResult(1);
@@ -239,8 +143,8 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 
 		AndroidMock.expect(progressDialogFactory.show(getContext(), title, message)).andReturn(dialog);
 		
-		comment.setText(commentString);
-		comment.setEntitySafe(entity);
+//		comment.setText(commentString);
+//		comment.setEntitySafe(entity);
 		
 		AndroidMock.expect(comment.getText()).andReturn(commentString);
 		AndroidMock.expect(commentAdapter.getComments()).andReturn(comments);
@@ -262,11 +166,6 @@ public class CommentListViewTest extends SocializeUIActivityTest {
 		AndroidMock.replay(field);
 		AndroidMock.replay(content);
 		AndroidMock.replay(dialog);
-		
-		// Because of the use of an anonymous inner class as the callback
-		// we need to override the SocializeService instance to capture the callback
-		// class and call it directly
-		
 		
 		final CommentUtilsProxy mockCommentUtilsProxy = new SocializeCommentUtils() {
 			@Override

@@ -1621,6 +1621,7 @@
 
 	<bean id="userUtils" class="com.socialize.api.action.user.SocializeUserUtils">
 		<property name="userSystem" ref="userSystem"/>
+		<property name="sessionPersister" ref="sessionPersister"/>
 	</bean>
 	
 	<bean id="actionUtils" class="com.socialize.api.action.activity.SocializeActionUtils">

@@ -67,6 +67,7 @@ import com.socialize.entity.Entity;
 import com.socialize.error.SocializeException;
 import com.socialize.init.SocializeInitializationAsserter;
 import com.socialize.ioc.SocializeIOC;
+import com.socialize.listener.ListenerHolder;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.SocializeListener;
@@ -146,6 +147,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 	NotificationChecker notificationChecker;
 	AppUtils appUtils;
 	SocializeLocationProvider locationProvider;
+	ListenerHolder listenerHolder;
 
 	SocializeLogger logger;
 	IBeanFactory<AuthProviderData> authProviderDataFactory;
@@ -183,6 +185,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		notificationChecker = AndroidMock.createMock(NotificationChecker.class);
 		appUtils = AndroidMock.createMock(AppUtils.class);
 		locationProvider = AndroidMock.createMock(SocializeLocationProvider.class);
+		listenerHolder = AndroidMock.createMock(ListenerHolder.class);
 	}
 
 	private void setupDefaultMocks() {
@@ -205,6 +208,7 @@ public class SocializeServiceTest extends SocializeActivityTest {
 		AndroidMock.expect(container.getBean("notificationChecker")).andReturn(notificationChecker);
 		AndroidMock.expect(container.getBean("appUtils")).andReturn(appUtils);
 		AndroidMock.expect(container.getBean("locationProvider")).andReturn(locationProvider);
+		AndroidMock.expect(container.getBean("listenerHolder")).andReturn(listenerHolder);
 		
 		AndroidMock.expect(entityLoaderUtils.initEntityLoader()).andReturn(null);
 		
