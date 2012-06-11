@@ -63,11 +63,11 @@ public class FacebookAuthProviderTest extends SocializeUnitTest {
 			
 			@Override
 			public void remove(String key) {
+				addResult(key);
 			}
 
 			@Override
 			public <L extends SocializeListener> L pop(String key) {
-				addResult(key);
 				return null;
 			}
 		};
