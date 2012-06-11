@@ -62,7 +62,7 @@ public abstract class AbstractEntityFactory<T extends Entity> extends SocializeO
 			
 			JSONObject userStats = object.getJSONObject(USER_ACTION_SUMMARY);
 			
-			UserEntityStatsImpl userEntityStats = new UserEntityStatsImpl();
+			UserEntityStatsImpl userEntityStats = newUserEntityStatsImpl();
 			userEntityStats.setComments(getInt(userStats, COMMENTS));
 			userEntityStats.setShares(getInt(userStats, SHARES));
 			int liked = getInt(userStats, LIKES);
@@ -98,6 +98,11 @@ public abstract class AbstractEntityFactory<T extends Entity> extends SocializeO
 	// So we can mock.
 	protected EntityStatsImpl newEntityStatsImpl() {
 		return new EntityStatsImpl();
+	}
+	
+	// So we can mock.
+	protected UserEntityStatsImpl newUserEntityStatsImpl() {
+		return new UserEntityStatsImpl();
 	}
 	
 }

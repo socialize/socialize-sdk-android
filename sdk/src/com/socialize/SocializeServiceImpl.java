@@ -72,6 +72,7 @@ import com.socialize.entity.User;
 import com.socialize.error.SocializeException;
 import com.socialize.init.SocializeInitializationAsserter;
 import com.socialize.ioc.SocializeIOC;
+import com.socialize.listener.ListenerHolder;
 import com.socialize.listener.SocializeAuthListener;
 import com.socialize.listener.SocializeInitListener;
 import com.socialize.listener.SocializeListener;
@@ -153,6 +154,7 @@ public class SocializeServiceImpl implements SocializeService {
 	private SocializeConfig config = new SocializeConfig();
 	
 	private SocializeEntityLoader entityLoader;
+	private ListenerHolder listenerHolder;
 	
 	private String[] initPaths = null;
 	private int initCount = 0;
@@ -430,6 +432,7 @@ public class SocializeServiceImpl implements SocializeService {
 				this.notificationChecker = container.getBean("notificationChecker");
 				this.appUtils = container.getBean("appUtils");
 				this.locationProvider = container.getBean("locationProvider");
+				this.listenerHolder = container.getBean("listenerHolder");
 				
 				SocializeConfig mainConfig = container.getBean("config");
 				
@@ -1590,7 +1593,8 @@ public class SocializeServiceImpl implements SocializeService {
 	@Override
 	public void showCommentView(Activity context, Entity entity, OnCommentViewActionListener listener) {
 		if(listener != null) {
-			Socialize.STATIC_LISTENERS.put(CommentView.COMMENT_LISTENER, listener);
+			listenerHolder.push(CommentView.COMMENT_LISTENER, listener);
+//			Socialize.STATIC_LISTENERS.put(CommentView.COMMENT_LISTENER, listener);
 		}
 
 		try {

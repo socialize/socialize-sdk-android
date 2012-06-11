@@ -189,7 +189,7 @@ public class MultiActionBarActivity extends DemoActivity {
 				ShareUtils.showShareDialog((Activity) v.getContext(), entity, new SocialNetworkDialogListener() {
 					@Override
 					public void onBeforePost(Activity parent, SocialNetwork socialNetwork, PostData postData) {
-						postData.getPostValues().put("picture", entityKeys[index]);
+						postData.getPostValues().put("type", "photo");
 					}
 				}, ShareUtils.DEFAULT);
 			}

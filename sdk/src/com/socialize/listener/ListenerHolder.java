@@ -22,11 +22,7 @@
 package com.socialize.listener;
 
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.TreeMap;
-
-import com.socialize.Socialize;
 import com.socialize.log.SocializeLogger;
 
 /**
@@ -40,33 +36,32 @@ public class ListenerHolder {
 	private SocializeLogger logger;
 	
 	public void init() {
-		Map<String, SocializeListener> statics = Socialize.STATIC_LISTENERS;
-		if(!statics.isEmpty()) {
-			Set<Entry<String, SocializeListener>> entrySet = statics.entrySet();
-			for (Entry<String, SocializeListener> entry : entrySet) {
-				
-				if(logger != null && logger.isDebugEnabled()) {
-					logger.debug("Registering listener [" +
-							entry.getKey() +
-							"] from static scope");
-				}
-				
-				listeners.put(entry.getKey(), entry.getValue());
-			}
-		}
+//		Map<String, SocializeListener> statics = Socialize.STATIC_LISTENERS;
+//		if(!statics.isEmpty()) {
+//			Set<Entry<String, SocializeListener>> entrySet = statics.entrySet();
+//			for (Entry<String, SocializeListener> entry : entrySet) {
+//				
+//				if(logger != null && logger.isDebugEnabled()) {
+//					logger.debug("Registering listener [" +
+//							entry.getKey() +
+//							"] from static scope");
+//				}
+//				
+//				listeners.put(entry.getKey(), entry.getValue());
+//			}
+//		}
 	}
 	
-	public void put(String key, SocializeListener listener) {
+	public void push(String key, SocializeListener listener) {
 		listeners.put(key, listener);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public <L extends SocializeListener> L get(String key) {
-		return (L) listeners.get(key);
+	public void remove(String key) {
+		listeners.remove(key);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <L extends SocializeListener> L remove(String key) {
+	public <L extends SocializeListener> L pop(String key) {
 		return (L) listeners.remove(key);
 	}
 

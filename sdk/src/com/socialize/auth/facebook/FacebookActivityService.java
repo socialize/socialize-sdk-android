@@ -73,7 +73,7 @@ public class FacebookActivityService {
 	}
     
     public FacebookService getFacebookService() {
-    	service = new FacebookService(activity, facebook, facebookSessionStore, (AuthProviderListener) listenerHolder.get("auth"), dialogFactory);
+    	service = new FacebookService(activity, facebook, facebookSessionStore, (AuthProviderListener) listenerHolder.pop("auth"), dialogFactory);
     	return service;
     }
 	

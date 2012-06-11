@@ -57,12 +57,16 @@ public class FacebookAuthProviderTest extends SocializeUnitTest {
 		ListenerHolder holder = new ListenerHolder() {
 
 			@Override
-			public void put(String key, SocializeListener listener) {
+			public void push(String key, SocializeListener listener) {
 				addResult(listener);
+			}
+			
+			@Override
+			public void remove(String key) {
 			}
 
 			@Override
-			public <L extends SocializeListener> L remove(String key) {
+			public <L extends SocializeListener> L pop(String key) {
 				addResult(key);
 				return null;
 			}

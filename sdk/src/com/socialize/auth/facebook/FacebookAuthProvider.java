@@ -56,7 +56,7 @@ public class FacebookAuthProvider implements AuthProvider<FacebookAuthProviderIn
 
 		final String listenerKey = "auth";
 		
-		holder.put(listenerKey, new AuthProviderListener() {
+		holder.push(listenerKey, new AuthProviderListener() {
 			
 			@Override
 			public void onError(SocializeException error) {

@@ -163,13 +163,17 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 		if(shareType != null) {
 			Propagation localPropagation = newPropagation();
 			localPropagation.addThirdParty(shareType);
+			String appStore = null;
 			
-			String appStore = config.getProperty(SocializeConfig.REDIRECT_APP_STORE);
+			if(config != null) {
+				appStore = config.getProperty(SocializeConfig.REDIRECT_APP_STORE);
+			}
 			
 			if(!StringUtils.isEmpty(appStore)) {
 				String abbrev = appUtils.getAppStoreAbbreviation(appStore);
 				localPropagation.addExtraParam("f", abbrev);
-			}		
+			}	
+			
 			action.setPropagationInfoRequest(localPropagation);
 		}
 	}	
@@ -733,10 +737,14 @@ public class SocializeApi<T extends SocializeObject, P extends SocializeProvider
 			action.setLat(location.getLatitude());
 		}
 		
-		UserSettings settings = Socialize.getSocialize().getSession().getUserSettings();
+		SocializeSession session = Socialize.getSocialize().getSession();
 		
-		if(settings != null) {
-			action.setLocationShared(settings.isLocationEnabled());
+		if(session != null) {
+			UserSettings settings = session.getUserSettings();
+			
+			if(settings != null) {
+				action.setLocationShared(settings.isLocationEnabled());
+			}
 		}
 	}
 	
