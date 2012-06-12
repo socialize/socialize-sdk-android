@@ -265,7 +265,7 @@ final Entity entity = Entity.newInstance("http://myentity.com", "My Name");
 
 ShareOptions options = ShareUtils.getUserShareOptions(this);
 
-ShareUtils.addShare(this, entity, options, new ShareAddListener() {
+ShareUtils.registerShare(this, entity, options, new ShareAddListener() {
 	
 	@Override
 	public void onError(SocializeException error) {

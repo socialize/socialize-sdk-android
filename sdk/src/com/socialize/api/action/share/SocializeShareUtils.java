@@ -197,7 +197,7 @@ public class SocializeShareUtils extends SocializeActionUtilsBase implements Sha
 	}
 
 	@Override
-	public void addShare(Activity context, Entity entity, ShareOptions shareOptions, ShareAddListener listener, SocialNetwork...networks) {
+	public void registerShare(Activity context, Entity entity, ShareOptions shareOptions, ShareAddListener listener, SocialNetwork...networks) {
 		
 		String text = null;
 		if(shareOptions != null)  text = shareOptions.getText();
